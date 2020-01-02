@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
+import {Link} from 'react-router-dom';
 import styled from 'styled-components';
 import {MdAccountCircle} from 'react-icons/md';
 import {IoLogoDesignernews} from 'react-icons/io';
-
 import {Shelf, ShelfButton} from './DropDownMenu';
 
 const HeaderStyle = styled.div`
@@ -24,6 +24,8 @@ const LogoStyle = styled.div`
   font-weight: 800;
   margin-left: 60px;
   color: ${props => props.theme.secondary};
+  user-select: none;
+  cursor: pointer;
 
   & > svg {
     color: ${props => props.theme.primary}
@@ -35,7 +37,7 @@ const SearchStyle = styled.input`
   padding: 15px;
   background: ${props => props.theme.grey};
   margin: 0 0 10px 0;
-  width: 40%;
+  width: 100%;
   font-size: 30px;
 
   ::placeholder {
@@ -56,21 +58,35 @@ const ProfileStyle = styled.div`
   }
 `
 
-
-
-
-
-const ThangsHeader = ({children}) => {
+const ThangsHeader = () => {
   const [open, setOpen] = useState(false);
+  const [searchTerm,setSearchterm] = useState('');
+
+  const handleChange = (e) => {
+    e.persist();
+    setSearchterm(e.target.value);
+  }
+
+  const performSearch = (e) => {
+    alert(searchTerm);
+    setSearchterm('');
+    if (e) {
+      e.preventDefault();
+    }
+  }
 
     return (
       <>
         <HeaderStyle>
-            <LogoStyle>
-              <IoLogoDesignernews />
-              thangs
-            </LogoStyle>
-            <SearchStyle placeholder="Input search term" />
+            <Link to="/">
+              <LogoStyle>
+                <IoLogoDesignernews />
+                thangs
+              </LogoStyle>
+            </Link>
+            <form onSubmit={performSearch} style={{width: '50%'}}>
+            <SearchStyle placeholder="Input search term" value={searchTerm} onChange={handleChange} />
+            </form>
             <ProfileStyle>
               <ShelfButton open={open} setOpen={setOpen} />
               <MdAccountCircle />

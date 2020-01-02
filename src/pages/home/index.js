@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {DisplayCard} from '../../widgets';
 
@@ -9,6 +9,7 @@ const HomeBodyStyle = styled.div`
   left: 50%;
   margin-left:-42.5vw;
   background: ${props => props.theme.primary};
+  border-radius: 0 0 10px 10px;
 `
 
 const CardRow = styled.div`

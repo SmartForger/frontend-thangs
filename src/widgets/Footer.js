@@ -12,11 +12,12 @@ const FooterStyle = styled.div`
   border-radius: 20px 20px 0 0;
   z-index: 1;
   Text-align: center;
+  font-weight: 600;
 `
 const Footer = ({children}) => {
   return (
     <FooterStyle>
-      {children}
+      Feedback? Help us make this the best site for you
     </FooterStyle>
   )
 }
