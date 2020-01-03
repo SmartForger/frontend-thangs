@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, createContext, useState} from 'react'
 import {useLocalStorage} from './Storage';
-import {PhysnaServer} from '../utilities';
+import {PhysnaServer} from '@utilities';
 
 
 

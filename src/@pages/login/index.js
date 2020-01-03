@@ -1,9 +1,11 @@
 // Login Page Template
 import React, {useState} from 'react';
-import {useHistory } from 'react-router-dom';
-import {useForm} from '../../customHooks'
 import styled from 'styled-components';
 import axios from 'axios';
+import {useHistory } from 'react-router-dom';
+import {useForm} from '@customHooks';
+import {TextInput} from '@widgets';
+
 
 
 const LoginBodyStyle = styled.div`
@@ -14,7 +16,7 @@ const LoginBodyStyle = styled.div`
   top: 10%;
   margin-left:-42.5vw;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
 `
 
@@ -22,6 +24,9 @@ const LoginFormStyle = styled.form`
   width: 100%;
   display: flex;
   flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 `
 
 
@@ -35,20 +40,16 @@ const Login = () => {
     async function login() {
         setWaiting(true);
         setLogginErrorMessage(null);
-        try{
+       
           let response = await axios({
             method: 'post',
-            url:`https://localhost:44338/api/v1/auth/login`,
-            data: inputs
+            url:`https://localhost:44338/api/auth/login`,
+            data: {
+              email: inputs.email,
+              password: inputs.password
+            }
           });
-  
-          console.log(response);
-        }
-        catch(e) {
-          console.log(e);
-        }
-        
-      
+          setWaiting(false);
     }
 
     const LoginError = (response) => {
@@ -74,8 +75,8 @@ const Login = () => {
                         <h1>LOADING ...</h1>
                     </div> : null
             }
-          <input disabled={waiting}  type="text" name="email" label="E-Mail" onChange={handleChange} value={inputs.email} required/>
-          <input disabled={waiting} type="password" name="password" label="Password" onChange={handleChange} value={inputs.password}  required/>
+          <TextInput disabled={waiting}  type="text" name="email" label="E-Mail" onChange={handleChange} value={inputs.email} required/>
+          <TextInput disabled={waiting} type="password" name="password" label="Password" onChange={handleChange} value={inputs.password}  required/>
           <button type="submit"> Login</button>            
         </LoginFormStyle>
       </LoginBodyStyle>

@@ -1,11 +1,10 @@
 import React from 'react';
-import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
+import { Route, BrowserRouter as Router } from 'react-router-dom';
 import {ThemeProvider} from 'styled-components';
-import './App.css';
 
-import {ThangsHeader, Footer} from './widgets';
-import {Home, Login} from './pages';
-import {ThangsMain} from './themes';
+import {ThangsHeader, Footer} from '@widgets';
+import {Home, Login} from '@pages';
+import {ThangsMain} from '@themes';
 
 
 const App = () => {

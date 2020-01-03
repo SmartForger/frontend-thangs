@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import styled from 'styled-components';
 import {MdAccountCircle} from 'react-icons/md';
 import {IoLogoDesignernews} from 'react-icons/io';
-import {Shelf, ShelfButton} from './DropDownMenu';
+import {Shelf, ShelfButton} from '@widgets';
 
 const HeaderStyle = styled.div`
   position: fixed;    
