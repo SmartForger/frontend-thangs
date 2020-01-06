@@ -1,8 +1,10 @@
-import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {Link, useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 import {MdAccountCircle} from 'react-icons/md';
 import {IoLogoDesignernews} from 'react-icons/io';
+
+import { authenticationService } from '@services';
 import {Shelf, ShelfButton} from '@widgets';
 
 const HeaderStyle = styled.div`
@@ -61,6 +63,18 @@ const ProfileStyle = styled.div`
 const ThangsHeader = () => {
   const [open, setOpen] = useState(false);
   const [searchTerm,setSearchterm] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);
+  const history = useHistory();
+
+
+  useEffect(() => {
+    authenticationService.currentUser.subscribe(x => setCurrentUser(x))
+  })
+
+  const logout = () => {
+    authenticationService.logout();
+    history.push('/login');
+  }
 
   const handleChange = (e) => {
     e.persist();

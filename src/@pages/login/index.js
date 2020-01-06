@@ -1,8 +1,11 @@
 // Login Page Template
 import React, {useState} from 'react';
+import {useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
-import {useHistory } from 'react-router-dom';
+
+import {history} from '@helpers';
+import {authenticationService} from '@services';
 import {useForm} from '@customHooks';
 import {TextInput} from '@widgets';
 
@@ -40,6 +43,12 @@ const Login = () => {
     async function login() {
         setWaiting(true);
         setLogginErrorMessage(null);
+
+        authenticationService({
+          username: inputs.email,
+          password: inputs.password
+        })
+          .then()
        
           let response = await axios({
             method: 'post',

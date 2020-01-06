@@ -5,7 +5,7 @@ const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('
 
 
 
-const login = (username, password) => {
+const login = ({username, password}) => {
   const requestOptions = {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -37,3 +37,40 @@ const authenticationService = {
 }
 
 export {authenticationService};
+
+// const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+
+
+// const login = ({username, password}) => {
+//   const requestOptions = {
+//     method: 'POST',
+//     headers: {'Content-Type': 'application/json'},
+//     body: JSON.stringify({username,password})
+//   };
+
+//   return fetch (`${process.env.REACT_APP_API_KEY}/auth/login`, requestOptions)
+//   .then(handleResponse)
+//   .then(user => {
+//     localStorage.setItem('currentUser', JSON.stringify(user));
+//     currentUser = user;
+
+//     return user;
+//   })
+// }
+
+// const logout = () => {
+//   localStorage.removeItem('currentUser');
+//   currentUser = null;
+// }
+
+
+
+// const authenticationService = {
+//   login,
+//   logout,
+//   currentUser, 
+//   get currentUserValue () {return currentUser}
+// }
+
+// export {authenticationService};
