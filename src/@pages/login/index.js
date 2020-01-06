@@ -7,7 +7,7 @@ import axios from 'axios';
 import {history} from '@helpers';
 import {authenticationService} from '@services';
 import {useForm} from '@customHooks';
-import {TextInput} from '@widgets';
+import {TextInput, Spinner} from '@widgets';
 
 
 
@@ -75,7 +75,7 @@ const Login = () => {
             {
                 waiting && !loginErrorMessage ?
                     <div>
-                        <h1>LOADING ...</h1>
+                        <Spinner size="300" />
                     </div> : null
             }
           <TextInput disabled={waiting}  type="text" name="email" label="E-Mail" onChange={handleChange} value={inputs.email} required/>

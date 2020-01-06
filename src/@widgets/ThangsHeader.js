@@ -109,9 +109,6 @@ const ThangsHeader = () => {
                 <Button onClick={logout} name="Logout" /> :
                 <Button routeTo="/login" name="Login" />
               }
-              {/* <a href="#" onClick={currentUser ? logout : ()=>{history.push('/login')}}>
-                {currentUser ? 'Logout' : 'Login'}
-              </a> */}
             </ProfileStyle>
         </HeaderStyle>
         <Shelf open={open} setOpen={setOpen}/>

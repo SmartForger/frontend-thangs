@@ -5,3 +5,4 @@ export * from './TextInput';
 export * from './DropDownMenu';
 export * from './PrivateRoute';
 export * from './Button';
+export * from './Spinner';

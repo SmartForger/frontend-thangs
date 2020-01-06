@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const StyleCard = styled.div`
   width: ${props => props.size || 200}px;
   height: ${props => props.size || 200}px;
-  background: white;
+  background: none;
   overflow: hidden;
   border-radius: ${props => props.rounded ? '10%' : 0};
   box-shadow: ${props => props.shadow ? 'rgba(0,0,0,0.8) 0 0 10px' : 'black 0 0 0'};
@@ -20,26 +20,30 @@ const StyleCard = styled.div`
 const StyleCardHead = styled.div`
   width: 100%;
   height: ${props => props.percentage ? props.percentage : 76}%;
-
-  background-image:
-  linear-gradient(
-    ${props => props.gradientAngle || '180'}deg, 
-    ${props => props.gradientStart || 'rgba(0,0,0,0)'},
-    ${props => props.gradientEnd || 'rgba(0,0,0,0)'}),
-
-  ${props => {
-    if (props.imageUrl) return `url(${props.imageUrl})`;
-    if (props.bodyBg) return props.bodyBg;
-    return 'white'
-  }};
-
+  background: ${props => props.bodyBg || props.theme.white};
+  color: ${props => props.bodyColor || props.theme.secondary};
   background-size: contain;
+  font-size: ${props => props.fontSize || 1}rem;
 `
+
+/// Old background-image:
+// background-image:
+//   linear-gradient(
+//     ${props => props.gradientAngle || '180'}deg, 
+//     ${props => props.gradientStart || 'rgba(0,0,0,0)'},
+//     ${props => props.gradientEnd || 'rgba(0,0,0,0)'}),
+
+//   ${props => {
+//     if (props.imageUrl) return `url(${props.imageUrl})`;
+//     if (props.bodyBg) return props.bodyBg;
+//     return props.theme.secondary
+//   }};
 
 const StyleCardFoot = styled.div`
   width: 100%;
   height: ${props => props.percentage ? 100 - props.percentage : 24}%;
-  background: ${props => props.footerBg ? props.footerBg : '#e3e3e3'};
+  background: ${props => props.footerBg ? props.footerBg : props.theme.white};
+  color: ${props => props.footerColor || props.theme.secondary};
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
@@ -53,8 +57,10 @@ const DisplayCard = (props) => {
   const {size,
         imageUrl,
         bodyBg,
+        bodyColor,
         bodyContent,
         footerBg,
+        footerColor,
         footerContent,
         shadow,
         bordered,

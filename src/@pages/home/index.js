@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {DisplayCard} from '@widgets';
+import {DisplayCard, Spinner} from '@widgets';
 
 const HomeBodyStyle = styled.div`
   position: fixed;
@@ -20,7 +20,7 @@ const CardRow = styled.div`
   align-items: center;
   width: 100%;
   height: 40%;
-  top: 60%;
+  top: 57%;
 
 `
 
@@ -28,10 +28,10 @@ const Home = () => {
   return(
     <HomeBodyStyle>
       <CardRow>
-        <DisplayCard percentage="100" shadow size="250" />
-        <DisplayCard percentage="100" shadow size="250" />
-        <DisplayCard percentage="100" shadow size="250" />
-        <DisplayCard percentage="100" shadow size="250" />
+        <DisplayCard percentage="20" bodyContent="Most Viewed" fontSize="2" shadow size="300" />
+        <DisplayCard percentage="20" bodyContent="View Designs" fontSize="2" shadow size="300" />
+        <DisplayCard percentage="20" bodyContent="Community" fontSize="2" shadow size="300" />
+        <DisplayCard percentage="20" bodyContent="News" fontSize="2" shadow size="300" />
       </CardRow>
     </HomeBodyStyle>
   )
