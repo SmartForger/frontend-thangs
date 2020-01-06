@@ -5,14 +5,14 @@ const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('
 
 
 
-const login = ({username, password}) => {
+const login = ({email, password}) => {
   const requestOptions = {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({username,password})
+    body: JSON.stringify({email,password})
   };
 
-  return fetch (`${process.env.REACT_APP_API_KEY}/auth/login`, requestOptions)
+  return fetch (`${process.env.REACT_APP_API_KEY}auth/login`, requestOptions)
   .then(handleResponse)
   .then(user => {
     localStorage.setItem('currentUser', JSON.stringify(user));

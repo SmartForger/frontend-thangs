@@ -1,6 +1,6 @@
 import {authenticationService} from '@services';
 
-const handleResponse = (response) => {
+const handleResponse = async (response) => {
   return response.text().then(text=> {
     const data = text && JSON.parse(text);
     if(!response.ok) {

@@ -5,7 +5,7 @@ import {MdAccountCircle} from 'react-icons/md';
 import {IoLogoDesignernews} from 'react-icons/io';
 
 import { authenticationService } from '@services';
-import {Shelf, ShelfButton} from '@widgets';
+import {Shelf, ShelfButton, Button} from '@widgets';
 
 const HeaderStyle = styled.div`
   position: fixed;    
@@ -104,6 +104,14 @@ const ThangsHeader = () => {
             <ProfileStyle>
               <ShelfButton open={open} setOpen={setOpen} />
               <MdAccountCircle />
+              {
+                currentUser ? 
+                <Button onClick={logout} name="Logout" /> :
+                <Button routeTo="/login" name="Login" />
+              }
+              {/* <a href="#" onClick={currentUser ? logout : ()=>{history.push('/login')}}>
+                {currentUser ? 'Logout' : 'Login'}
+              </a> */}
             </ProfileStyle>
         </HeaderStyle>
         <Shelf open={open} setOpen={setOpen}/>

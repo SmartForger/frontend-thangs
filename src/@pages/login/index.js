@@ -44,21 +44,15 @@ const Login = () => {
         setWaiting(true);
         setLogginErrorMessage(null);
 
-        authenticationService({
-          username: inputs.email,
+        authenticationService.login({
+          email: inputs.email,
           password: inputs.password
         })
-          .then()
-       
-          let response = await axios({
-            method: 'post',
-            url:`https://localhost:44338/api/auth/login`,
-            data: {
-              email: inputs.email,
-              password: inputs.password
-            }
-          });
-          setWaiting(false);
+          .then(() => {
+            setWaiting(false);
+            history.push('/')
+          })
+        
     }
 
     const LoginError = (response) => {
