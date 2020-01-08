@@ -8,15 +8,17 @@ const BtnStyle = styled.button`
     max-width: 100px;
     height: 35px;
     margin: ${props => props.margin || '5px'};
-    border: 2px solid transparent;
+    border: none;
     border-radius: 0.5rem;
     background: ${props => props.theme.primary};
     color: ${props => props.theme.secondary};
+    box-shadow: inset 0 0 0 2px  black;
     font-size: 12px;
+    font-family: ${props => props.theme.mainFont};
     transition: .5s;
 
     &:hover {
-      border: 2px solid ${props => props.theme.primary};
+      border: 2px solid transparent;
       background-color: ${props => props.theme.secondary};
       color: ${props => props.theme.primary};
     }

@@ -6,4 +6,6 @@ export * from './ShelfMenu';
 export * from './PrivateRoute';
 export * from './Button';
 export * from './Spinner';
+export * from './Slides';
 export * from './Svg';
+export * from './BackgroundImage';

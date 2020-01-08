@@ -10,10 +10,10 @@ import {Shelf, ShelfButton, Button, SVG} from '@components';
 
 const HeaderStyle = styled.div`
   position: fixed;    
-  width: 100vw;
+  width: 90vw;
   height: 10vh;
   left: 50%;
-  margin-left:-42.5vw;
+  margin-left:-45vw;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;

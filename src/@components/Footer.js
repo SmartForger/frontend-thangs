@@ -7,7 +7,7 @@ const FooterStyle = styled.div`
   left: 50%;
   margin-left:-12.5vw;
   position: fixed;
-  bottom: 0;
+  bottom: -1vh;
   background: white;
   border-radius: 20px 20px 0 0;
   z-index: 1;

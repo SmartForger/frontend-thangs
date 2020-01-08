@@ -1,8 +1,8 @@
 export const ThangsMain = {
-  primary: '#f8bb3a',
-  secondary: '#2c3147',
+  primary: '#F7BB3D',
+  secondary: '#0D0D0D',
   white: '#FFFFFF',
-  grey: '#e8e8e8',
-  darkgrey: '#c8c8ca',
+  grey: '#D9D9D9',
+  darkgrey: '#999999',
   mainFont: `'Raleway' sans-serif`
 }

@@ -20,10 +20,11 @@ const StyleCard = styled.div`
 const StyleCardHead = styled.div`
   width: 100%;
   height: ${props => props.percentage ? props.percentage : 76}%;
-  background: ${props => props.bodyBg || props.theme.white};
-  color: ${props => props.bodyColor || props.theme.secondary};
+  background: ${props => props.headerBg || props.theme.white};
+  color: ${props => props.headerColor || props.theme.secondary};
   background-size: contain;
   font-size: ${props => props.fontSize || 1}rem;
+  padding: 0 5%;
 `
 
 /// Old background-image:
@@ -35,46 +36,44 @@ const StyleCardHead = styled.div`
 
 //   ${props => {
 //     if (props.imageUrl) return `url(${props.imageUrl})`;
-//     if (props.bodyBg) return props.bodyBg;
+//     if (props.headerBg) return props.headerBg;
 //     return props.theme.secondary
 //   }};
 
-const StyleCardFoot = styled.div`
+const StyleCardBody = styled.div`
   width: 100%;
   height: ${props => props.percentage ? 100 - props.percentage : 24}%;
-  background: ${props => props.footerBg ? props.footerBg : props.theme.white};
-  color: ${props => props.footerColor || props.theme.secondary};
+  background: ${props => props.bodyBg ? props.bodyBg : props.theme.white};
+  color: ${props => props.bodyColor || props.theme.secondary};
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
- 
-  padding: ${props => props.size/10 || 20}px;
   font-size: ${props => props.size/200}rem;
 `
 
 const DisplayCard = (props) => {
   const {size,
         imageUrl,
+        headerBg,
+        headerColor,
+        headerContent,
         bodyBg,
         bodyColor,
-        bodyContent,
-        footerBg,
-        footerColor,
-        footerContent,
         shadow,
         bordered,
         rounded,
         hover,
-        percentage} = props;
+        percentage,
+        children} = props;
   return(
     <StyleCard {...props}>
       <StyleCardHead {...props}>
-      {bodyContent ? bodyContent : null}
+      {headerContent ? headerContent : null}
       </StyleCardHead>
-      <StyleCardFoot {...props}>
-      {footerContent ? footerContent: null}
-      </StyleCardFoot>
+      <StyleCardBody {...props}>
+      {children ? children: null}
+      </StyleCardBody>
     </StyleCard>)
 }
 
