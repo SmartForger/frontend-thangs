@@ -3,13 +3,14 @@ import {Link, useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 import {MdAccountCircle} from 'react-icons/md';
 import {IoLogoDesignernews} from 'react-icons/io';
+import {ReactComponent as Logo} from '@svg/PHY_Thangs_Logo_Horz.svg'
 
 import { authenticationService } from '@services';
-import {Shelf, ShelfButton, Button} from '@widgets';
+import {Shelf, ShelfButton, Button, SVG} from '@components';
 
 const HeaderStyle = styled.div`
   position: fixed;    
-  width: 85vw;
+  width: 100vw;
   height: 10vh;
   left: 50%;
   margin-left:-42.5vw;
@@ -22,12 +23,13 @@ const HeaderStyle = styled.div`
 `
 
 const LogoStyle = styled.div`
-  font-size: 64px;
-  font-weight: 800;
+  font-size: 5px;
+  font-family: ${props => props.theme.mainFont};
   margin-left: 60px;
   color: ${props => props.theme.secondary};
   user-select: none;
   cursor: pointer;
+  text-decoration: none;
 
   & > svg {
     color: ${props => props.theme.primary}
@@ -92,12 +94,9 @@ const ThangsHeader = () => {
     return (
       <>
         <HeaderStyle>
-            <Link to="/">
-              <LogoStyle>
-                <IoLogoDesignernews />
-                thangs
-              </LogoStyle>
-            </Link>
+            <LogoStyle onClick={() => {history.push('/')}}>
+              <SVG/>
+            </LogoStyle>
             <form onSubmit={performSearch} style={{width: '50%'}}>
             <SearchStyle placeholder="Input search term" value={searchTerm} onChange={handleChange} />
             </form>
@@ -111,7 +110,14 @@ const ThangsHeader = () => {
               }
             </ProfileStyle>
         </HeaderStyle>
-        <Shelf open={open} setOpen={setOpen}/>
+        <Shelf open={open} setOpen={setOpen}>
+          <h1>Yo</h1>
+          <h1>Yo</h1>
+          <h1>Yo</h1>
+          <h1>Yo</h1>
+          <h1>Yo</h1>
+          <h1>Yo</h1>
+        </Shelf>
         </>);
     }
 export { ThangsHeader };

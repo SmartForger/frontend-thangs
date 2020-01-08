@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {DisplayCard, Spinner} from '@widgets';
+import {DisplayCard, Spinner} from '@components';
 
 const HomeBodyStyle = styled.div`
   position: fixed;

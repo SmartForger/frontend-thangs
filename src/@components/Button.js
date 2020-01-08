@@ -9,6 +9,7 @@ const BtnStyle = styled.button`
     height: 35px;
     margin: ${props => props.margin || '5px'};
     border: 2px solid transparent;
+    border-radius: 0.5rem;
     background: ${props => props.theme.primary};
     color: ${props => props.theme.secondary};
     font-size: 12px;

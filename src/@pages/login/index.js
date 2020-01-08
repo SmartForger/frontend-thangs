@@ -1,13 +1,9 @@
-// Login Page Template
 import React, {useState} from 'react';
-import {useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
-
-import {history} from '@helpers';
 import {authenticationService} from '@services';
 import {useForm} from '@customHooks';
-import {TextInput, Spinner} from '@widgets';
+import {TextInput, Spinner, Button} from '@components';
 
 
 
@@ -55,32 +51,18 @@ const Login = () => {
         
     }
 
-    const LoginError = (response) => {
-        if(response.data && !response.data.successfulLogin) {
-            setWaiting(false);
-            setLogginErrorMessage(response.data.message);
-        }
-
-        if(response.data.successfulLogin){
-            history.push("/");
-        }
-    }
-
-  
-
     return (
       <LoginBodyStyle>
         <LoginFormStyle onSubmit={handleSubmit}>
-            <h3>Welcome Back</h3>                               
+                                          
             {
-                waiting && !loginErrorMessage ?
-                    <div>
-                        <Spinner size="300" />
-                    </div> : null
+                waiting 
+                ? <Spinner size="300" />
+                : <h3>Welcome Back</h3> 
             }
           <TextInput disabled={waiting}  type="text" name="email" label="E-Mail" onChange={handleChange} value={inputs.email} required/>
           <TextInput disabled={waiting} type="password" name="password" label="Password" onChange={handleChange} value={inputs.password}  required/>
-          <button type="submit"> Login</button>            
+          <Button type="submit" name="Login"/>            
         </LoginFormStyle>
       </LoginBodyStyle>
     )

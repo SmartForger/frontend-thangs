@@ -4,5 +4,5 @@ export const ThangsMain = {
   white: '#FFFFFF',
   grey: '#e8e8e8',
   darkgrey: '#c8c8ca',
-  mainFont: ''
+  mainFont: `'Raleway' sans-serif`
 }
