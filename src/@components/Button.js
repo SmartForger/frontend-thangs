@@ -9,18 +9,17 @@ const BtnStyle = styled.button`
     height: 35px;
     margin: ${props => props.margin || '5px'};
     border: none;
-    border-radius: 0.5rem;
     background: ${props => props.theme.primary};
-    color: ${props => props.theme.secondary};
-    box-shadow: inset 0 0 0 2px  black;
+    color: ${props => props.theme.white};
+    box-shadow: inset 0 0 0 2px  ${props => props.theme.white};
     font-size: 12px;
     font-family: ${props => props.theme.mainFont};
     transition: .5s;
 
     &:hover {
-      border: 2px solid transparent;
-      background-color: ${props => props.theme.secondary};
-      color: ${props => props.theme.primary};
+      
+      background-color: ${props => props.theme.primary};
+      color: ${props => props.theme.secondary};
     }
     &:active {
       transform: scale(0.95);
