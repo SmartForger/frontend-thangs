@@ -25,32 +25,68 @@ const CardRow = styled.div`
 
 const Home = () => {
 
-  const fakeData = [
+  const modelData = [
     {
-      title: "eyy man",
-      description: "yooo dude",
+      title: "Fancy Screw",
+      owner: "CarlCPhysna",
       icon: "Woops"
     },
     {
-      title: "eyy man",
-      description: "yooo dude",
+      title: "Engine Block",
+      owner: "ColinCPhysna",
       icon: "Woops"
     },
     {
-      title: "eyy man",
-      description: "yooo dude",
+      title: "Cool Chair",
+      owner: "Info@physna.com",
       icon: "Woops"
+    }
+  ]
+
+  const userData = [
+    {
+      title: "CarlCPhysna",
+      owner: ""
+    },
+    {
+      title: "ColinCPhysna",
+      owner: ""
+    },
+    {
+      title: "Info@physna.com",
+      owner: ""
+    }
+  ]
+
+  const newsData = [
+    {
+      title: "Big news whoa",
+      owner: "lorem ipsum lorem ipsum"
+    },
+    {
+      title: "More news? thank you!",
+      owner: "lorem ipsum lorem ipsum"
+    },
+    {
+      title: "No news",
+      owner: "lorem ipsum lorem ipsum"
     }
   ]
   return(
     <HomeBodyStyle>
       <CardRow>
         <DisplayCard percentage="10" headerContent="Most Viewed" fontSize="2" shadow size="300">
-          <Slides data={fakeData} />
+          <Slides data={modelData} prefix="Uploaded By"/>
         </DisplayCard>
-        <DisplayCard percentage="20" headerContent="View Designs" fontSize="2" shadow size="300" />
-        <DisplayCard percentage="20" headerContent="Community" fontSize="2" shadow size="300" />
-        <DisplayCard percentage="20" headerContent="News" fontSize="2" shadow size="300" />
+        <DisplayCard percentage="10" headerContent="View Designs" fontSize="2" shadow size="300">
+          <Slides data={modelData} prefix="Uploaded By" />
+        </DisplayCard>
+        <DisplayCard percentage="10" headerContent="Community" fontSize="2" shadow size="300">
+          <Slides data={userData}  prefix="a user you could connect with" rounded/>
+        </DisplayCard>
+        <DisplayCard percentage="10" headerContent="News" fontSize="2" shadow size="300">
+          <Slides data={newsData}  text/>
+        </DisplayCard>
       </CardRow>
     </HomeBodyStyle>
   )

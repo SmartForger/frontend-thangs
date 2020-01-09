@@ -25,7 +25,7 @@ const ShelfStyle = styled.div`
   background: ${props => props.theme.grey};
   width: 17vw;
   height: 90vh;
-  right: 7.5vw;
+  right: 5vw;
   border-bottom: 2px solid ${props => props.theme.darkgrey};
   transform: ${props => props.open ? 'translateY(-1vh)' : 'translateY(-80vh)'};
   transition: 0.5s all;

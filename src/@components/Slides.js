@@ -14,17 +14,16 @@ const SlideStyle = styled.div`
   width: 100%;
   height: ${props => props.slideHeight || 30}%;
   display: grid;
-  grid-template-columns: 40% 60%;
+  grid-template-columns: ${props => props.text ? '15% 85%' : '40% 60%'};
   grid-template-rows: 50% 50%;
   grid-template-areas:
   "icon title"
-  "icon description" 
+  "icon owner" 
 `
 
 const SlideIconStyle = styled.img`
   border-radius: ${props => props.rounded ? 50 : 0}%;
-  box-shadow: inset 0 0 0 2px black;
-  background: green;
+  box-shadow: inset 0 0 0 2px ${props => props.rounded ? 'transparent' : 'black'};
   grid-area: icon;
   justify-self: center;
   align-self: center;
@@ -35,16 +34,14 @@ const SlideIconStyle = styled.img`
 const SlideTitleStyle = styled.div`
   font-weight: 600;
   font-size: 1.5rem;
-  background: red;
   grid-area: title;
   align-self: end;
 `
 
-const SlideDescriptionStyle = styled.div`
+const SlideownerStyle = styled.div`
   font-weight: 100;
   font-size: 0.75rem;
-  background: blue;
-  grid-area: description;
+  grid-area: owner;
 `
 
 const SlidesFooterStyle = styled.div`
@@ -53,24 +50,26 @@ const SlidesFooterStyle = styled.div`
 
 
 const Slide = (props) => {
-  const {height, title, description, icon, rounded} = props
+  const {height, title, owner, icon, rounded, text, prefix} = props
 
   return (
-    <SlideStyle slideHeight={height}>
-        <SlideIconStyle src={icon} rounded={rounded} alt="an icon" size={height/2}/>
+    <SlideStyle slideHeight={height} text={text}>
+        {text 
+        ? null
+        : <SlideIconStyle src={icon} rounded={rounded} alt="an icon" size={height/2}/>}
         <SlideTitleStyle>
           {title}
         </SlideTitleStyle>
-        <SlideDescriptionStyle>
-          {description}
-        </SlideDescriptionStyle>
+        <SlideownerStyle>
+          {prefix} <span style={{fontWeight:"900"}}>{owner}</span>
+        </SlideownerStyle>
       </SlideStyle>
   )
 }
 
 
 const Slides = (props) => {
-  const {data,footerContent,rounded} = props;
+  const {data,footerContent,rounded, text, prefix} = props;
   const slideAmount = props.data.length || 3;
   const slideHeight = 90/slideAmount;
 
@@ -81,9 +80,11 @@ const Slides = (props) => {
       <Slide 
         height={slideHeight} 
         title={i.title} 
-        description={i.description} 
+        owner={i.owner} 
         icon={i.icon} 
+        text={text}
         rounded={rounded}
+        prefix={prefix}
       />
     )): null}
     <SlidesFooterStyle>
