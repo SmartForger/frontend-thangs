@@ -9,3 +9,4 @@ export * from './Spinner';
 export * from './Slides';
 export * from './Svg';
 export * from './BackgroundImage';
+export * from './TagsBox';

@@ -65,7 +65,9 @@ const DisplayCard = (props) => {
         rounded,
         hover,
         percentage,
-        children} = props;
+        children,
+        ...rest //this makes eslint chill out
+      } = props;
   return(
     <StyleCard {...props}>
       <StyleCardHead {...props}>
