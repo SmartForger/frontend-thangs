@@ -4,21 +4,32 @@ import styled from 'styled-components';
 
 
 const StyledDetails = styled.div`
-  display: flex;
+  display: grid;
   position: fixed;
-  width: 90vw;
-  height: 100vh;
+  width: 85vw;
+  height: 90vh;
+  top: 10%;
   left: 50%;
-  margin-left:-45vw;
-  justify-content: center;
-  align-items: center;
+  margin-left:-42.5vw;
+  grid-template-columns: 85% 15%;
+  grid-template-rows: 10% 75% 15%;
+  grid-template-areas: 
+  "header header"
+  "viewer sidebar"
+  "footer footer"
+`
+
+const StyledViewer = styled.div`
+  display: flex;
+  background: blue;
+  grid-area: viewer;
 `
 
 const Details = (props) => {
 const {id} = useParams();
   return(
     <StyledDetails>
-      <h1>{id}</h1>
+      <StyledViewer />
     </StyledDetails>
   )
 }
