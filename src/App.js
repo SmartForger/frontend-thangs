@@ -7,7 +7,7 @@ import {
 
 import {ThemeProvider} from 'styled-components';
 import {ThangsHeader, Footer, PrivateRoute, BackgroundImage, } from '@components';
-import {Home, Login, Details} from '@pages';
+import {Home, Login, Details, Profile} from '@pages';
 import {ThangsMain, GlobalStyle} from '@themes';
 
 
@@ -21,6 +21,7 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/details/:id" component={Details} />
+          <Route path="/profile/:id" component={Profile} />
         <Footer />
       </ThemeProvider>
     </Router>
