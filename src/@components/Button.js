@@ -1,9 +1,10 @@
 import React from 'react';
 import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
+import {animated} from 'react-spring';
 
 
-const BtnStyle = styled.div`
+const BtnStyle = styled(animated.div)`
     width: 100%;
     max-width: ${props => props.maxWidth || '100px'};
     height: ${props => props.height || '35px'};

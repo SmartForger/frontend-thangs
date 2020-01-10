@@ -1,6 +1,7 @@
 import React from 'react';
 import {useParams} from 'react-router-dom';
 import styled from 'styled-components';
+import {useTransition, useTrail} from 'react-spring';
 
 import {Button, TagsBox} from '@components'
 
@@ -81,6 +82,19 @@ const tags = [
   {name: 'Yormy'},
   {name: 'Yormy'},
 ]
+
+ const names = [
+   {name:'Download'},
+   {name: 'Share'},
+   {name: 'Match'},
+   {name: 'Identify'}
+ ]
+
+const transitions = useTransition(names, name => name.name, {
+  from: {transform: 'translate(0,-500px)', opacity: 0},
+  enter: {transform: 'translate(0,0)', opacity: 1},
+  leave: {transform: 'translate(0,-500px)', opacity: 0},
+})
   return(
     <StyledDetails>
       <StyledHeader>
@@ -90,10 +104,12 @@ const tags = [
       </StyledHeader>
       <StyledViewer />
       <StyledMenu>
-        <Button name="Download" maxWidth="90%" height="10%" fontSize="2rem"/>
+        {transitions.map(({name, props, key}) =>
+        <Button key={key} style={props} name={names[key].name} maxWidth="90%" height="10%" fontSize="2rem"/>)}
+        {/* <Button name="Download" maxWidth="90%" height="10%" fontSize="2rem"/>
         <Button name="Share" maxWidth="90%" height="10%" fontSize="2rem"/>
         <Button name="Match" maxWidth="90%" height="10%" fontSize="2rem"/>
-        <Button name="Identify" maxWidth="90%" height="10%" fontSize="2rem"/>
+        <Button name="Identify" maxWidth="90%" height="10%" fontSize="2rem"/> */}
         <StyledTags>
           <TagsBox width="100%" height="100%" data={tags} />
         </StyledTags> 
