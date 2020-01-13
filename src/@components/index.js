@@ -10,3 +10,6 @@ export * from './Slides';
 export * from './Svg';
 export * from './BackgroundImage';
 export * from './TagsBox';
+export * from './ModelDisplay';
+export * from './HideOnRoutes';
+export * from './Tag';

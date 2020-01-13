@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Button} from '@components';
+import {Tag} from '@components';
 
 const BoxStyle = styled.div`
   width: ${props => props.width || '400px'};
@@ -15,7 +15,7 @@ const TagsBox = (props) => {
   const {data} = props;
   return(
     <BoxStyle {...props}>
-      {data.map((i,index) => <Button key={index} maxWidth="25%" height="25px" name={i.name} />)}
+      {data.sort((a,b) => a.length - b.length).map((i,index) => <Tag key={index}  name={i.name} />)}
     </BoxStyle>
   )
 }

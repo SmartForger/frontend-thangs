@@ -9,7 +9,7 @@ import { authenticationService } from '@services';
 import {Shelf, ShelfButton, Button, SVG} from '@components';
 
 const HeaderStyle = styled.div`
-  position: fixed;    
+  position: relative;    
   width: 90vw;
   height: 10vh;
   left: 50%;

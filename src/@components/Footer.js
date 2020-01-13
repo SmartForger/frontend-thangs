@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import {HideOnRoutes} from '@components';
 
 const FooterStyle = styled.div`
   width: 25vw;
@@ -15,10 +16,17 @@ const FooterStyle = styled.div`
   font-weight: 600;
 `
 const Footer = ({children}) => {
+
+  const hide = [
+    '/details',
+    '/profile'
+  ]
   return (
-    <FooterStyle>
-      Feedback? Help us make this the best site for you
-    </FooterStyle>
+    <HideOnRoutes routes={hide}>
+      <FooterStyle>
+        Feedback? Help us make this the best site for you
+      </FooterStyle>
+    </HideOnRoutes>
   )
 }
 

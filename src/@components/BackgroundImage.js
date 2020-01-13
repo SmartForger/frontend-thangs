@@ -9,7 +9,7 @@ const ChildStyle = styled.img`
 
 const StyledBackground = styled.div`
   width: 90vw;
-  height: 100vh;
+  height: 89vh;
   position: fixed;
   left: 50%;
   margin-left: -45vw;  

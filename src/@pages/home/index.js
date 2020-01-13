@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {DisplayCard, Spinner, Slides} from '@components';
+import {DisplayCard, Spinner, Slides, ModelDisplay} from '@components';
 
 const HomeBodyStyle = styled.div`
   position: fixed;
@@ -19,7 +19,7 @@ const CardRow = styled.div`
   align-items: center;
   width: 100%;
   height: 40%;
-  top: 57%;
+  top: 47%;
 `
 
 
