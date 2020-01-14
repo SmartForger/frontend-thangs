@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import {useTrail} from 'react-spring';
 import {Tag} from '@components';
 
 const BoxStyle = styled.div`
@@ -13,9 +14,21 @@ const BoxStyle = styled.div`
 
 const TagsBox = (props) => {
   const {data} = props;
+
+  const config = { mass: 4, tension: 2000, friction: 95 }
+  const [trail, set]= useTrail(data.length,() => ({
+   config,
+   to: {opacity: 1, transform: 'translate(0,0)'},
+   from: {opacity: 0, transform: 'translate(0,1000%)'}
+ }))
+
+ const Bounce = () => {
+   set({transform:'translate(0,100%)' })
+ }
   return(
     <BoxStyle {...props}>
-      {data.sort((a,b) => a.length - b.length).map((i,index) => <Tag key={index}  name={i.name} />)}
+    {/* <button onClick={Bounce}>Bounce</button> */}
+      {trail.map((props,index) => <Tag key={index} name={data[index].name} style={props} />)}
     </BoxStyle>
   )
 }

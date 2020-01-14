@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import {animated} from 'react-spring';
 
-const ModelDisplayStyled = styled.div`
+const ModelDisplayStyled = styled(animated.div)`
   width: ${props => props.width || '400px'};
   height: ${props => props.height || '300px'};
   background: ${props => props.imgURL || props.theme.white};

@@ -1,6 +1,7 @@
 import React from 'react';
 import {useParams} from 'react-router-dom';
 import styled from 'styled-components';
+import {useTrail} from 'react-spring';
 
 import {Button, ModelDisplay} from '@components';
 
@@ -21,12 +22,10 @@ const ProfileStyle = styled.div`
 `
 
 const HeaderStyled = styled.div`
-  background: blue;
   grid-area: header;
 `
 
 const SidebarStyled = styled.div`
-  background: rebeccapurple;
   grid-area: sidebar;
   display: flex;
   flex-flow: column nowrap;
@@ -57,7 +56,6 @@ const ProfilePicStyled = styled.div`
 `
 
 const ModelsStyled = styled.div`
-  background: orange;
   grid-area: models;
   display: flex;
   flex-flow: row wrap;
@@ -66,33 +64,41 @@ const ModelsStyled = styled.div`
 const Profile = () => {
   const {id} = useParams();
   const mockModels = [
-    'GGsdg',
-    'GGsdg',
-    'GGsdg',
-    'GGsdg',
-    'GGsdg',
-    'GGsdg',
-    'GGsdg',
-    'GGsdg',
-    'GGsdg',
-    'GGsdg',
-    'GGsdg',
-    'GGsdg',
-    'GGsdg',
-    'GGsdg',
-    'GGsdg',
+   {attachmentName: 'Yourgoy'},
+   {attachmentName: 'Yourgoy'},
+   {attachmentName: 'Yourgoy'},
+   {attachmentName: 'Yourgoy'},
+   {attachmentName: 'Yourgoy'},
+   {attachmentName: 'Yourgoy'},
+   {attachmentName: 'Yourgoy'},
+   {attachmentName: 'Yourgoy'},
+   {attachmentName: 'Yourgoy'},
+   {attachmentName: 'Yourgoy'},
+   {attachmentName: 'Yourgoy'},
+   {attachmentName: 'Yourgoy'},
+   {attachmentName: 'Yourgoy'},
+   {attachmentName: 'Yourgoy'},
+   {attachmentName: 'Yourgoy'},
   ]
+
+  const config = { mass: 6, tension: 2000, friction: 95, clamp: true }
+  const [trail] = useTrail(mockModels.length,() => ({
+    config,
+    to: {transform: 'translate(0,0) scale(1)'},
+    from: {transform: 'translate(1000%,0) scale(0.6)'}
+  }))
+
   return(
     <ProfileStyle>
       <HeaderStyled />
       <SidebarStyled>
         <SocialStyled>
           <ProfilePicStyled />
-          <Button name="Follow" margin="0 0 0 40px" maxWidth="150px" />
+          <Button name="Follow" margin="0 0 0 40px" maxWidth="150px" routeTo="/details/7574" />
         </SocialStyled>
       </SidebarStyled>
       <ModelsStyled>
-        {mockModels.map((i) => <ModelDisplay width="185px" height="135px" name={i} />)}
+        {trail.map((props, index) => <ModelDisplay style={props} width="185px" height="135px" name={mockModels[index].attachmentName} />)}
       </ModelsStyled>
     </ProfileStyle>
   )

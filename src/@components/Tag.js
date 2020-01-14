@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import {animated} from 'react-spring';
 
 
-const TagStyled = styled.div`
+const TagStyled = styled(animated.div)`
   width: fit-content;
   background: ${props => props.theme.primary};
   color: ${props => props.theme.secondary};
