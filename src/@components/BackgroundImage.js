@@ -8,11 +8,11 @@ const ChildStyle = styled.img`
 `
 
 const StyledBackground = styled.div`
-  width: 90vw;
-  height: 89vh;
+  width: 100vw;
+  height: 90vh;
   position: fixed;
   left: 50%;
-  margin-left: -45vw;  
+  margin-left: -50vw;  
   display: flex;
   justify-content: space-between;
   background: ${props => props.theme.primary};

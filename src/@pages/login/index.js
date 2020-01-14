@@ -9,11 +9,11 @@ import {TextInput, Spinner, Button} from '@components';
 
 const LoginBodyStyle = styled.div`
   position: fixed;
-  width: 85vw;
-  height: 98vh;
-  left: 50%;
-  top: 10%;
-  margin-left:-42.5vw;
+  width: ${props => props.theme.pageWidth};
+  height: ${props => props.theme.pageHeight};
+  top: ${props => props.theme.pageTop};
+  left: ${props => props.theme.pageLeft};
+  margin-left: ${props => props.theme.pageMarginLeft};
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -62,7 +62,8 @@ const Login = () => {
             }
           <TextInput disabled={waiting}  type="text" name="email" label="E-Mail" onChange={handleChange} value={inputs.email} required/>
           <TextInput disabled={waiting} type="password" name="password" label="Password" onChange={handleChange} value={inputs.password}  required/>
-          <Button type="submit" name="Login"/>            
+          <Button onClick={handleSubmit} name="Login"/>
+          <input type="submit" style={{position:"absolute",left: "-9999px"}}/>
         </LoginFormStyle>
       </LoginBodyStyle>
     )

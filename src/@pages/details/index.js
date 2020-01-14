@@ -7,13 +7,13 @@ import {Button, TagsBox} from '@components'
 
 
 const StyledDetails = styled.div`
+  width: ${props => props.theme.pageWidth};
+  height: ${props => props.theme.pageHeight};
+  top: ${props => props.theme.pageTop};
+  left: ${props => props.theme.pageLeft};
+  margin-left: ${props => props.theme.pageMarginLeft};
   display: grid;
   position: fixed;
-  width: 88vw;
-  height: 90vh;
-  top: 10%;
-  left: 50%;
-  margin-left:-44vw;
   grid-template-columns: 85% 15%;
   grid-template-rows: 10% 75% 15%;
   grid-template-areas: 

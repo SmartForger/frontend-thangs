@@ -4,10 +4,11 @@ import {DisplayCard, Spinner, Slides, ModelDisplay} from '@components';
 
 const HomeBodyStyle = styled.div`
   position: fixed;
-  width: 85vw;
-  height: 98vh;
-  left: 50%;
-  margin-left:-42.5vw;
+  width: ${props => props.theme.pageWidth};
+  height: ${props => props.theme.pageHeight};
+  top: ${props => props.theme.pageTop};
+  left: ${props => props.theme.pageLeft};
+  margin-left: ${props => props.theme.pageMarginLeft};
   border-radius: 0 0 10px 10px;
 `
 
