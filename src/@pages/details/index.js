@@ -107,7 +107,7 @@ const tags = [
       <StyledViewer />
       <StyledMenu>
         {trail.map((props, index) => {
-          return <Button key={names[index]} name={names[index]} style={props} maxWidth="90%" height="10%" fontSize="2rem"/>
+          return <Button key={names[index]} name={names[index]} style={props} maxwidth="90%" height="10%" fontSize="2rem"/>
         })}
         <StyledTags>
           <TagsBox width="100%" height="100%" data={tags} />

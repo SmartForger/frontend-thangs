@@ -54,12 +54,8 @@ const ProfileStyle = styled.div`
   background: ${props => props.theme.grey};
   display: flex;
   flex-flow: row nowrap;
-
-  & > svg{
-    height: 100%;
-    width: 100%;
-    color: ${props => props.theme.secondary};
-  }
+  justify-content: space-evenly;
+  align-items: center;
 `
 
 const ThangsHeader = () => {
@@ -102,11 +98,10 @@ const ThangsHeader = () => {
             </form>
             <ProfileStyle>
               <ShelfButton open={open} setOpen={setOpen} />
-              <MdAccountCircle />
               {
                 currentUser ? 
                 <Button onClick={logout} name="Logout" /> :
-                <Button routeTo="/login" name="Login" />
+                <Button routeto="/login" name="Login" />
               }
             </ProfileStyle>
         </HeaderStyle>

@@ -1,4 +1,5 @@
 import React from 'react';
+import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 
 const SlidesContainerStyle = styled.div`
@@ -13,6 +14,8 @@ const SlidesContainerStyle = styled.div`
 const SlideStyle = styled.div`
   width: 100%;
   height: ${props => props.slideHeight || 30}%;
+  user-select: none;
+  cursor: pointer;
   display: grid;
   grid-template-columns: ${props => props.text ? '15% 85%' : '40% 60%'};
   grid-template-rows: 50% 50%;
@@ -50,10 +53,11 @@ const SlidesFooterStyle = styled.div`
 
 
 const Slide = (props) => {
-  const {height, title, owner, icon, rounded, text, prefix} = props
+  const {height, title, owner, icon, rounded, text, prefix, route} = props
+  const history = useHistory();
 
   return (
-    <SlideStyle slideHeight={height} text={text}>
+    <SlideStyle slideHeight={height} text={text} onClick={() => {history.push(route)}}>
         {text 
         ? null
         : <SlideIconStyle src={icon} rounded={rounded} alt="an icon" size={height/2}/>}
@@ -78,10 +82,12 @@ const Slides = (props) => {
     {data ? 
     data.map(i => (
       <Slide 
+        key={i.title}
         height={slideHeight} 
         title={i.title} 
         owner={i.owner} 
-        icon={i.icon} 
+        icon={i.icon}
+        route={i.route || '#'} 
         text={text}
         rounded={rounded}
         prefix={prefix}

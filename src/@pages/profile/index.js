@@ -64,21 +64,21 @@ const ModelsStyled = styled.div`
 const Profile = () => {
   const {id} = useParams();
   const mockModels = [
-   {attachmentName: 'Yourgoy'},
-   {attachmentName: 'Yourgoy'},
-   {attachmentName: 'Yourgoy'},
-   {attachmentName: 'Yourgoy'},
-   {attachmentName: 'Yourgoy'},
-   {attachmentName: 'Yourgoy'},
-   {attachmentName: 'Yourgoy'},
-   {attachmentName: 'Yourgoy'},
-   {attachmentName: 'Yourgoy'},
-   {attachmentName: 'Yourgoy'},
-   {attachmentName: 'Yourgoy'},
-   {attachmentName: 'Yourgoy'},
-   {attachmentName: 'Yourgoy'},
-   {attachmentName: 'Yourgoy'},
-   {attachmentName: 'Yourgoy'},
+   {attachmentName: 'Yourgoy', route: '/details/634'},
+   {attachmentName: 'Yourgoy', route: '/details/634'},
+   {attachmentName: 'Yourgoy', route: '/details/634'},
+   {attachmentName: 'Yourgoy', route: '/details/634'},
+   {attachmentName: 'Yourgoy', route: '/details/634'},
+   {attachmentName: 'Yourgoy', route: '/details/634'},
+   {attachmentName: 'Yourgoy', route: '/details/634'},
+   {attachmentName: 'Yourgoy', route: '/details/634'},
+   {attachmentName: 'Yourgoy', route: '/details/634'},
+   {attachmentName: 'Yourgoy', route: '/details/634'},
+   {attachmentName: 'Yourgoy', route: '/details/634'},
+   {attachmentName: 'Yourgoy', route: '/details/634'},
+   {attachmentName: 'Yourgoy', route: '/details/634'},
+   {attachmentName: 'Yourgoy', route: '/details/634'},
+   {attachmentName: 'Yourgoy', route: '/details/634'},
   ]
 
   const config = { mass: 6, tension: 2000, friction: 95, clamp: true }
@@ -94,11 +94,11 @@ const Profile = () => {
       <SidebarStyled>
         <SocialStyled>
           <ProfilePicStyled />
-          <Button name="Follow" margin="0 0 0 40px" maxWidth="150px" routeTo="/details/7574" />
+          <Button name="Follow" margin="0 0 0 40px" maxwidth="150px" routeto="/details/7574" />
         </SocialStyled>
       </SidebarStyled>
       <ModelsStyled>
-        {trail.map((props, index) => <ModelDisplay style={props} width="185px" height="135px" name={mockModels[index].attachmentName} />)}
+        {trail.map((props, index) => <ModelDisplay style={props} width="185px" height="135px" key={index} route={mockModels[index].route} name={mockModels[index].attachmentName} />)}
       </ModelsStyled>
     </ProfileStyle>
   )

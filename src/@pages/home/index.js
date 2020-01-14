@@ -30,32 +30,38 @@ const Home = () => {
     {
       title: "Fancy Screw",
       owner: "CarlCPhysna",
-      icon: "Woops"
+      icon: "Woops",
+      route: '/details/5345'
     },
     {
       title: "Engine Block",
       owner: "ColinCPhysna",
-      icon: "Woops"
+      icon: "Woops",
+      route: '/details/5345'
     },
     {
       title: "Cool Chair",
       owner: "Info@physna.com",
-      icon: "Woops"
+      icon: "Woops",
+      route: '/details/5345'
     }
   ]
 
   const userData = [
     {
       title: "CarlCPhysna",
-      owner: ""
+      owner: "",
+      route: '/profile/5345'
     },
     {
       title: "ColinCPhysna",
-      owner: ""
+      owner: "",
+      route: '/profile/5345'
     },
     {
       title: "Info@physna.com",
-      owner: ""
+      owner: "",
+      route: '/profile/5345'
     }
   ]
 

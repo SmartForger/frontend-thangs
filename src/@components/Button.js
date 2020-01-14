@@ -6,7 +6,7 @@ import {animated} from 'react-spring';
 
 const BtnStyle = styled(animated.div)`
     width: 100%;
-    max-width: ${props => props.maxWidth || '100px'};
+    max-width: ${props => props.maxwidth || '100px'};
     height: ${props => props.height || '35px'};
     margin: ${props => props.margin || '5px'};
     border: none;
@@ -42,8 +42,8 @@ const BtnStyle = styled(animated.div)`
     const {
       name,
       onClick,
-      routeTo, 
-      maxWidth, 
+      routeto, 
+      maxwidth, 
       height, 
       margin,
       fontSize, 
@@ -53,7 +53,7 @@ const BtnStyle = styled(animated.div)`
     return <BtnStyle {...props} onClick={
       () => {
         if (onClick != null) props.onClick();
-        if (routeTo != null) history.push(routeTo);}
+        if (routeto != null) history.push(routeto);}
       }>{name}
       </BtnStyle>
 }

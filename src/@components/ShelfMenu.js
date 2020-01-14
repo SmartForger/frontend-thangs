@@ -5,7 +5,7 @@ const ButtonStyle = styled.div`
   background: ${props => props.theme.grey};
   width: 50px;
   height: 100%;
-  position: absolute;
+  position: relative;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-around;

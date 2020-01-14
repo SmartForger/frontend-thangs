@@ -1,4 +1,5 @@
 import React from 'react';
+import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 import {animated} from 'react-spring';
 
@@ -26,9 +27,10 @@ const ModelDisplayStyled = styled(animated.div)`
 `
 
 const ModelDisplay = (props) => {
-  const {name} = props;
+  const history = useHistory();
+  const {name, route} = props;
   return (
-    <ModelDisplayStyled {...props}>
+    <ModelDisplayStyled {...props} onClick={() => {history.push(route || '#')}}>
 <span>{name}</span>
     </ModelDisplayStyled>
   );
