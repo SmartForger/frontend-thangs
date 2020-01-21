@@ -13,3 +13,4 @@ export * from './TagsBox';
 export * from './ModelDisplay';
 export * from './HideOnRoutes';
 export * from './Tag';
+export * from './Viewer';

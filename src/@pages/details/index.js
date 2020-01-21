@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom';
 import styled from 'styled-components';
 import {useTransition, useTrail} from 'react-spring';
 
-import {Button, TagsBox} from '@components'
+import {Button, TagsBox, Viewer, Asset} from '@components'
 
 
 const StyledDetails = styled.div`
@@ -104,7 +104,9 @@ const tags = [
         <Vl />
         <h3>Uploaded by</h3>
       </StyledHeader>
-      <StyledViewer />
+      <StyledViewer>
+        <Viewer url="Parrot.glb" style={{"grid-area":"viewer"}} />
+      </StyledViewer>
       <StyledMenu>
         {trail.map((props, index) => {
           return <Button key={names[index]} name={names[index]} style={props} maxwidth="90%" height="10%" fontSize="2rem"/>

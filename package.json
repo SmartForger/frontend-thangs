@@ -17,8 +17,10 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
     "react-spring": "^8.0.27",
+    "react-three-fiber": "^4.0.10",
     "rxjs": "^6.5.4",
-    "styled-components": "^4.4.1"
+    "styled-components": "^4.4.1",
+    "three": "^0.112.1"
   },
   "scripts": {
     "start": "react-scripts start",
