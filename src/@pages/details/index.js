@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom';
 import styled from 'styled-components';
 import {useTransition, useTrail} from 'react-spring';
 
-import {Button, TagsBox, Viewer, Asset} from '@components'
+import {Button, TagsBox, Viewer, Asset} from '@components';
 
 
 const StyledDetails = styled.div`
@@ -20,6 +20,16 @@ const StyledDetails = styled.div`
   "header  header"
   "viewer  sidebar"
   "footer  footer"
+`
+const StyledInfo = styled.div`
+  position: absolute;
+  width: 300px;
+  height: 220px;
+  background: white;
+  z-index: 1;
+  top: 13%;
+  right: 16.5%;
+  box-shadow: inset 0 0 0 3px black;
 `
 
 const StyledHeader = styled.div`
@@ -41,8 +51,12 @@ const Vl = styled.div`
 const StyledViewer = styled.div`
   display: flex;
   box-shadow: inset 0 0 0 5px black;
-  background: ${props => props.theme.primary};
   grid-area: viewer;
+  pointer-events: none;
+
+  > div {
+    pointer-events: all;
+  }
 `
 
 const StyledMenu = styled.div`
@@ -61,7 +75,7 @@ const StyledTags = styled.div`
   margin-top: 5%;
 `
 
-const Details = (props) => {
+const Details = () => {
 const {id} = useParams();
 
 const tags = [
@@ -105,6 +119,7 @@ const tags = [
         <h3>Uploaded by</h3>
       </StyledHeader>
       <StyledViewer>
+        <StyledInfo />
         <Viewer url="Parrot.glb" style={{"grid-area":"viewer"}} />
       </StyledViewer>
       <StyledMenu>

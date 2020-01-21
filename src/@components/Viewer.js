@@ -7,7 +7,7 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 const Viewer = ({url,height="100%", width="100%"}) => {
 
   return (
-    <Canvas style={{height:height, width:width, boxShadow: "inset 0 0 0 5px black", background: "#D9D9D9"}}>
+    <Canvas style={{height:height, width:width, boxShadow: "inset 0 0 0 5px black", background: "#D9D9D9", zIndex: "-2"}}>
       <ambientLight intensity={0.9} />
       <pointLight intensity={1.12} position={[-1, 2, 1]} />
       <Suspense fallback={<HoverCube />}>
