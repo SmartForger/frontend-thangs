@@ -1,17 +1,12 @@
 import React from 'react';
 import {useParams} from 'react-router-dom';
 import styled from 'styled-components';
-import {useTransition, useTrail} from 'react-spring';
+import {useTrail} from 'react-spring';
+import {BasicPageStyle} from '@style'
+import {Button, TagsBox, Viewer} from '@components';
 
-import {Button, TagsBox, Viewer, Asset} from '@components';
 
-
-const StyledDetails = styled.div`
-  width: ${props => props.theme.pageWidth};
-  height: ${props => props.theme.pageHeight};
-  top: ${props => props.theme.pageTop};
-  left: ${props => props.theme.pageLeft};
-  margin-left: ${props => props.theme.pageMarginLeft};
+const StyledDetails = styled(BasicPageStyle)`
   display: grid;
   position: fixed;
   grid-template-columns: 85% 15%;
@@ -23,12 +18,30 @@ const StyledDetails = styled.div`
 `
 const StyledInfo = styled.div`
   position: absolute;
-  width: 300px;
-  height: 220px;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-around;
+  width: 12vw;
+  height: 13vw;
   background: white;
   z-index: 1;
   top: 13%;
   right: 16.5%;
+  box-shadow: inset 0 0 0 3px black;
+
+  > div {
+    margin-left: 1vw;
+  }
+`
+
+const StyledInteractions = styled.div`
+  position: absolute;
+  display: flex;
+  width: 12vw;
+  height: 7vw;
+  bottom: 17%;
+  right: 16%;
+  background: white;
   box-shadow: inset 0 0 0 3px black;
 `
 
@@ -75,6 +88,15 @@ const StyledTags = styled.div`
   margin-top: 5%;
 `
 
+const StyledInteractionButton = styled.div`
+  background: white;
+  box-shadow: inset 0 0 0 3px black;
+  width: 5vh;
+  height: 5vh;
+`
+
+// const InteractionDisplay = () 
+
 const Details = () => {
 const {id} = useParams();
 
@@ -119,8 +141,16 @@ const tags = [
         <h3>Uploaded by</h3>
       </StyledHeader>
       <StyledViewer>
-        <StyledInfo />
-        <Viewer url="Parrot.glb" style={{"grid-area":"viewer"}} />
+        <StyledInfo>
+          <div>Material: <strong>MAT</strong></div>
+          <div>Height: <strong>MAT</strong></div>
+          <div>Length: <strong>MAT</strong></div>
+          <div>Width: <strong>MAT</strong></div>
+          <div>Weight: <strong>MAT</strong></div>
+          <div>ANSI Compliant: <strong>MAT</strong></div>
+        </StyledInfo>
+        <StyledInteractions />
+        <Viewer url="http://127.0.0.1:8000/model" style={{"grid-area":"viewer"}} />
       </StyledViewer>
       <StyledMenu>
         {trail.map((props, index) => {

@@ -8,7 +8,7 @@ import {
 import {ThemeProvider} from 'styled-components';
 import {ThangsHeader, Footer, PrivateRoute, BackgroundImage, } from '@components';
 import {Home, Login, Details, Profile} from '@pages';
-import {ThangsMain, GlobalStyle} from '@themes';
+import {ThangsMain, GlobalStyle} from '@style';
 
 
 const App = () => {

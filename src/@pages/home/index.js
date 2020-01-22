@@ -1,14 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import {BasicPageStyle} from '@style'
 import {DisplayCard, Spinner, Slides, ModelDisplay} from '@components';
 
-const HomeBodyStyle = styled.div`
+const HomeBodyStyle = styled(BasicPageStyle)`
   position: fixed;
-  width: ${props => props.theme.pageWidth};
-  height: ${props => props.theme.pageHeight};
-  top: ${props => props.theme.pageTop};
-  left: ${props => props.theme.pageLeft};
-  margin-left: ${props => props.theme.pageMarginLeft};
   border-radius: 0 0 10px 10px;
 `
 

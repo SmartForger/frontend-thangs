@@ -1,6 +1,8 @@
 import React, {Suspense, useRef, useState, useCallback} from 'react';
-import {Canvas, useFrame, useLoader, useThree, extend} from 'react-three-fiber';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import {Canvas, useFrame, useThree, extend} from 'react-three-fiber';
+
+import * as THREE from 'three';
+import {useStl} from '@customHooks'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
 
@@ -77,20 +79,20 @@ function Controls() {
   );
 }
 
-function Asset({url}) {
-  const [time, setTime] = useState(0);
-  const mesh = useRef();
-  const gltf = useLoader(GLTFLoader, url);
+const Asset = ({url}) => {
+  const [stl, loading, error] = useStl(url);
+  const scene = new THREE.Scene();
 
-  useFrame(() => {
-    setTime (time+ 0.03);
-    if (mesh.current) {
-      mesh.current.position.y = Math.sin(time) * 0.4;
-    }
-  })
-  return (
-    <primitive object={gltf.scene} />
-  )
+  if (stl && !error && !loading) {
+    const material = new THREE.MeshStandardMaterial( {color: 0xff5553});
+    const stlMesh = new THREE.Mesh(stl,material);
+    const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+    scene.add( directionalLight );
+    scene.add(stlMesh);
+    return <primitive object={scene}  />
+  }
+
+  return <HoverCube />
 }
 
 export {Viewer}

@@ -3,17 +3,13 @@ import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 import {authenticationService} from '@services';
 import {useForm} from '@customHooks';
+import {BasicPageStyle} from '@style'
 import {TextInput, Spinner, Button} from '@components';
 
 
 
-const LoginBodyStyle = styled.div`
+const LoginBodyStyle = styled(BasicPageStyle)`
   position: fixed;
-  width: ${props => props.theme.pageWidth};
-  height: ${props => props.theme.pageHeight};
-  top: ${props => props.theme.pageTop};
-  left: ${props => props.theme.pageLeft};
-  margin-left: ${props => props.theme.pageMarginLeft};
   display: flex;
   justify-content: flex-end;
   align-items: center;
