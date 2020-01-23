@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useParams} from 'react-router-dom';
 import styled from 'styled-components';
 import {useTrail} from 'react-spring';
@@ -98,6 +98,7 @@ const StyledInteractionButton = styled.div`
 // const InteractionDisplay = () 
 
 const Details = () => {
+  const [mode, setMode] = useState('shaded');
 const {id} = useParams();
 
 const tags = [
@@ -126,6 +127,11 @@ const tags = [
  'Identify'
  ]
 
+ const changeMode = (targetMode) => {
+    setMode(targetMode);
+    
+ }
+
  const config = { mass: 5, tension: 2000, friction: 200 }
  const trail= useTrail(names.length,{
    config,
@@ -142,15 +148,18 @@ const tags = [
       </StyledHeader>
       <StyledViewer>
         <StyledInfo>
-          <div>Material: <strong>MAT</strong></div>
+          <Button onClick={() => {changeMode('shaded')}} name="Shaded" />
+          <Button onClick={() => {changeMode('wireframe')}} name="wireframe" />
+          <Button onClick={() => {changeMode('composite')}} name="Composite" />
+          {/* <div>Material: <strong>MAT</strong></div>
           <div>Height: <strong>MAT</strong></div>
           <div>Length: <strong>MAT</strong></div>
           <div>Width: <strong>MAT</strong></div>
           <div>Weight: <strong>MAT</strong></div>
-          <div>ANSI Compliant: <strong>MAT</strong></div>
+          <div>ANSI Compliant: <strong>MAT</strong></div> */}
         </StyledInfo>
         <StyledInteractions />
-        <Viewer url="http://127.0.0.1:8000/model" style={{"grid-area":"viewer"}} />
+        <Viewer url="http://127.0.0.1:8000/model" mode={mode} style={{"grid-area":"viewer"}} />
       </StyledViewer>
       <StyledMenu>
         {trail.map((props, index) => {

@@ -6,14 +6,14 @@ import {useStl} from '@customHooks'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
 
-const Viewer = ({url,height="100%", width="100%"}) => {
+const Viewer = ({url,height="100%", width="100%", mode='shaded'}) => {
 
   return (
-    <Canvas style={{height:height, width:width, boxShadow: "inset 0 0 0 5px black", background: "#D9D9D9", zIndex: "-2"}}>
+    <Canvas style={{height:height, width:width, boxShadow: "inset 0 0 0 5px black", background: "#999999", zIndex: "-2"}}>
       <ambientLight intensity={0.9} />
       <pointLight intensity={1.12} position={[-1, 2, 1]} />
       <Suspense fallback={<HoverCube />}>
-        <Asset url={url}/>
+        <Asset url={url} mode={mode}/>
       </Suspense>
       <Controls />
     </Canvas>
@@ -79,16 +79,46 @@ function Controls() {
   );
 }
 
-const Asset = ({url}) => {
+const Asset = ({url, mode='shaded'}) => {
   const [stl, loading, error] = useStl(url);
   const scene = new THREE.Scene();
 
   if (stl && !error && !loading) {
-    const material = new THREE.MeshStandardMaterial( {color: 0xff5553});
-    const stlMesh = new THREE.Mesh(stl,material);
+    const shadedMat = new THREE.MeshStandardMaterial( {color: 0xffffff});
+    const wireframeMat = new THREE.MeshBasicMaterial({wireframe: true})
+    const compositeMat = new THREE.MeshPhongMaterial({
+      color: 0xff0000,
+      polygonOffset: true,
+      polygonOffsetFactor: 1,
+      polygonOffsetUnits: 1
+    })
+    let currentMat;
+
+    switch(mode) {
+      case 'wireframe':
+        currentMat = wireframeMat;
+        break;
+      
+      case 'composite':
+        currentMat = compositeMat;
+        break;
+
+      default:
+        currentMat = shadedMat;
+    }
+
+    const stlMesh = new THREE.Mesh(stl,currentMat);
     const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
     scene.add( directionalLight );
     scene.add(stlMesh);
+
+    if (mode === 'composite') {
+      var geo = new THREE.EdgesGeometry( stlMesh.geometry ); // or WireframeGeometry
+      var mat = new THREE.LineBasicMaterial( { color: 0xffffff, linewidth: 2 } );
+      var wireframeCover = new THREE.LineSegments( geo, mat );
+      stlMesh.add( wireframeCover );
+    }
+
     return <primitive object={scene}  />
   }
 
