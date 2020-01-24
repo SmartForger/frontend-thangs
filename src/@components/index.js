@@ -14,3 +14,4 @@ export * from './ModelDisplay.jsx';
 export * from './HideOnRoutes.jsx';
 export * from './Tag.jsx';
 export * from './Viewer.jsx';
+export * from './ColorPicker';

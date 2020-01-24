@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom';
 import styled from 'styled-components';
 import {useTrail} from 'react-spring';
 import {BasicPageStyle} from '@style'
-import {Button, TagsBox, Viewer} from '@components';
+import {Button, TagsBox, Viewer, ColorPicker} from '@components';
 
 
 const StyledDetails = styled(BasicPageStyle)`
@@ -95,42 +95,70 @@ const StyledInteractionButton = styled.div`
   height: 5vh;
 `
 
+const StyledDisplayOptions = styled.div`
+  position: absolute;
+  bottom: 17%;
+  left: 1%;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-end;
+
+  > div {
+    margin-right: 15px;
+  }
+`
+
+const StyledColorDisplay = styled.div`
+  height: 75px;
+  width: 75px;
+  box-shadow: inset 0 0 0 5px black;
+`
+
 // const InteractionDisplay = () 
 
 const Details = () => {
   const [mode, setMode] = useState('shaded');
-const {id} = useParams();
+  const [meshColor, setMeshColor] = useState()
+  const [wireColor, setWireColor] = useState()
+  const {id} = useParams();
 
-const tags = [
-  {name: 'Yormy'},
-  {name: 'Grimgooorsh'},
-  {name: 'AB'},
-  {name: 'Longish'},
-  {name: 'Real long Tag'},
-  {name: 'Screw'},
-  {name: 'Bolt'},
-  {name: 'Automotive'},
-  {name: 'Clasp'},
-  {name: 'Physna'},
-  {name: 'Thangs.com'},
-  {name: 'Boat'},
-  {name: 'Trucks'},
-  {name: 'Civil Engineering'},
-  {name: '3D Printing'},
-  {name: 'Yormy'},
-]
+  const tags = [
+    {name: 'Yormy'},
+    {name: 'Grimgooorsh'},
+    {name: 'AB'},
+    {name: 'Longish'},
+    {name: 'Real long Tag'},
+    {name: 'Screw'},
+    {name: 'Bolt'},
+    {name: 'Automotive'},
+    {name: 'Clasp'},
+    {name: 'Physna'},
+    {name: 'Thangs.com'},
+    {name: 'Boat'},
+    {name: 'Trucks'},
+    {name: 'Civil Engineering'},
+    {name: '3D Printing'},
+    {name: 'Yormy'},
+  ]
 
- const names = [
- 'Download',
- 'Share',
-  'Match',
- 'Identify'
- ]
+  const names = [
+  'Download',
+  'Share',
+    'Match',
+  'Identify'
+  ]
 
- const changeMode = (targetMode) => {
+  const changeMode = (targetMode) => {
     setMode(targetMode);
-    
- }
+  }
+
+  const changeMeshColor = (color, event) => {
+    setMeshColor(color.hex);
+  }
+
+  const changeWireColor = (color, event) => {
+    setWireColor(color.hex);
+  }
 
  const config = { mass: 5, tension: 2000, friction: 200 }
  const trail= useTrail(names.length,{
@@ -159,7 +187,11 @@ const tags = [
           <div>ANSI Compliant: <strong>MAT</strong></div> */}
         </StyledInfo>
         <StyledInteractions />
-        <Viewer url="http://127.0.0.1:8000/model" mode={mode} style={{"grid-area":"viewer"}} />
+        <StyledDisplayOptions>
+          <ColorPicker color={meshColor} onChange={changeMeshColor} />
+          <ColorPicker color={wireColor} onChange={changeWireColor} />
+        </StyledDisplayOptions>
+        <Viewer url="http://127.0.0.1:8000/model" mode={mode} style={{"grid-area":"viewer"}} meshColor={meshColor} wireFrameColor={wireColor} />
       </StyledViewer>
       <StyledMenu>
         {trail.map((props, index) => {

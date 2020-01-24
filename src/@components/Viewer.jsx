@@ -6,14 +6,14 @@ import {useStl} from '@customHooks'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
 
-const Viewer = ({url,height="100%", width="100%", mode='shaded'}) => {
+const Viewer = ({url,height="100%", width="100%", mode='shaded', meshColor="#FF0000", wireFrameColor}) => {
 
   return (
     <Canvas style={{height:height, width:width, boxShadow: "inset 0 0 0 5px black", background: "#999999", zIndex: "-2"}}>
       <ambientLight intensity={0.9} />
       <pointLight intensity={1.12} position={[-1, 2, 1]} />
       <Suspense fallback={<HoverCube />}>
-        <Asset url={url} mode={mode}/>
+        <Asset url={url} mode={mode} meshColor={meshColor} wireFrameColor={wireFrameColor}/>
       </Suspense>
       <Controls />
     </Canvas>
@@ -79,15 +79,16 @@ function Controls() {
   );
 }
 
-const Asset = ({url, mode='shaded'}) => {
+const Asset = ({url, mode='shaded', meshColor, wireFrameColor}) => {
   const [stl, loading, error] = useStl(url);
   const scene = new THREE.Scene();
 
   if (stl && !error && !loading) {
-    const shadedMat = new THREE.MeshStandardMaterial( {color: 0xffffff});
+    const shadedMat = new THREE.MeshStandardMaterial( {color: meshColor});
     const wireframeMat = new THREE.MeshBasicMaterial({wireframe: true})
+    wireframeMat.color.set(wireFrameColor)
     const compositeMat = new THREE.MeshPhongMaterial({
-      color: 0xff0000,
+      color: meshColor,
       polygonOffset: true,
       polygonOffsetFactor: 1,
       polygonOffsetUnits: 1
@@ -114,7 +115,7 @@ const Asset = ({url, mode='shaded'}) => {
 
     if (mode === 'composite') {
       var geo = new THREE.EdgesGeometry( stlMesh.geometry ); // or WireframeGeometry
-      var mat = new THREE.LineBasicMaterial( { color: 0xffffff, linewidth: 2 } );
+      var mat = new THREE.LineBasicMaterial( { color: wireFrameColor, linewidth: 2 } );
       var wireframeCover = new THREE.LineSegments( geo, mat );
       stlMesh.add( wireframeCover );
     }
