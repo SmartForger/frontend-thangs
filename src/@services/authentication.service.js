@@ -1,5 +1,6 @@
 import {BehaviorSubject} from 'rxjs';
 import {handleResponse} from '@helpers';
+import jwtDecode from 'jwt-decode';
 
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
 
@@ -12,26 +13,56 @@ const login = ({email, password}) => {
     body: JSON.stringify({email,password})
   };
 
-  return fetch (`${process.env.REACT_APP_API_KEY}auth/login`, requestOptions)
+  return fetch (`${process.env.REACT_APP_API_KEY}login/`, requestOptions)
   .then(handleResponse)
-  .then(user => {
+  .then(({refresh,access}) => {
+    const user = jwtDecode(refresh)
+    console.log(jwtDecode(refresh))
+    delete user.token_type;
+    delete user.exp;
+    delete user.jti;
     localStorage.setItem('currentUser', JSON.stringify(user));
+    localStorage.setItem('refreshToken', refresh);
+    localStorage.setItem('accessToken', access);
+    user.accessToken = access;
+    user.refreshToken = refresh;
     currentUserSubject.next(user);
 
     return user;
   })
 }
 
+const signup = ({email,password}) => {
+  const requestOptions = {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({email,password})
+  };
+
+  return fetch (`${process.env.REACT_APP_API_KEY}users/`, requestOptions)
+  .then(handleResponse)
+  .then(user => {
+    // localStorage.setItem('currentUser', JSON.stringify(user));
+    // currentUserSubject.next(user);
+
+    // return user;
+  })
+}
+
 const logout = () => {
   localStorage.removeItem('currentUser');
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
   currentUserSubject.next(null);
 }
+
 
 
 
 const authenticationService = {
   login,
   logout,
+  signup,
   currentUser: currentUserSubject.asObservable(), 
   get currentUserValue () {return currentUserSubject.value}
 }

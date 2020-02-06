@@ -118,8 +118,8 @@ const StyledColorDisplay = styled.div`
 
 const Details = () => {
   const [mode, setMode] = useState('shaded');
-  const [meshColor, setMeshColor] = useState()
-  const [wireColor, setWireColor] = useState()
+  const [meshColor, setMeshColor] = useState('#FFFFFF')
+  const [wireColor, setWireColor] = useState('#000000')
   const {id} = useParams();
 
   const tags = [

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useHistory,Link} from 'react-router-dom';
+import {useHistory, Link} from 'react-router-dom';
 import styled from 'styled-components';
 import {authenticationService} from '@services';
 import {useForm} from '@customHooks';
@@ -8,14 +8,14 @@ import {TextInput, Spinner, Button} from '@components';
 
 
 
-const LoginBodyStyle = styled(BasicPageStyle)`
+const SignupBodyStyle = styled(BasicPageStyle)`
   position: fixed;
   display: flex;
   justify-content: flex-end;
   align-items: center;
 `
 
-const LoginFormStyle = styled.form`
+const SignupFormStyle = styled.form`
   width: 100%;
   display: flex;
   flex-flow: column nowrap;
@@ -25,52 +25,53 @@ const LoginFormStyle = styled.form`
 `
 
 
-const Login = () => {
+const Signup = () => {
     const [waiting,setWaiting] = useState(false);
-    const [loginErrorMessage,setLogginErrorMessage] = useState(null);
-    const {inputs, handleChange, handleSubmit} = useForm(login);
+    const [signupErrorMessage,setSignupErrorMessage] = useState(null);
+    const {inputs, handleChange, handleSubmit} = useForm(signup);
     const history = useHistory();
 
 
-    async function login() {
+    async function signup() {
         setWaiting(true);
-        setLogginErrorMessage(null);
+        setSignupErrorMessage(null);
 
-        authenticationService.login({
+        authenticationService.signup({
           email: inputs.email,
           password: inputs.password
         })
           .then(() => {
             setWaiting(false);
-            history.push('/')
+            history.push('/login')
           })
         
     }
 
-    const canLogin = () => {
-      if (inputs.password && inputs.email) {
+    const canSignup = () => {
+      if (inputs.password && inputs.email && inputs.password === inputs.confirmPass) {
         return false
       }
       return true;
     }
 
     return (
-      <LoginBodyStyle>
-        <LoginFormStyle onSubmit={handleSubmit}>
+      <SignupBodyStyle>
+        <SignupFormStyle onSubmit={handleSubmit}>
                                           
             {
                 waiting 
                 ? <Spinner size="300" />
-                : <h3>Welcome Back</h3> 
+                : <h3>Signup</h3> 
             }
           <TextInput disabled={waiting}  type="text" name="email" label="E-Mail" onChange={handleChange} value={inputs.email} placeholder="E-mail" required/>
           <TextInput disabled={waiting} type="password" name="password" label="Password" onChange={handleChange} value={inputs.password} placeholder="Password" required/>
-          <Button onClick={handleSubmit} name="Login"disabled={canLogin()}/>
+          <TextInput disabled={waiting} type="password" name="confirmPass" label="Password" onChange={handleChange} value={inputs.confirmPass} placeholder="Confirm password"  required/>
+          <Button onClick={handleSubmit} name="Signup" disabled={canSignup()}/>
           <input type="submit" style={{position:"absolute",left: "-9999px"}}/>
-          <Link to="/signup">Don't have an account? create one here! </Link>
-        </LoginFormStyle>
-      </LoginBodyStyle>
+          <Link to="/login">Already have an account?</Link>
+        </SignupFormStyle>
+      </SignupBodyStyle>
     )
 }
 
-export {Login}
+export {Signup}

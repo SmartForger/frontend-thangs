@@ -12,11 +12,11 @@ const BtnStyle = styled(animated.div)`
     border: none;
     text-align: center;
     user-select:none;
-    cursor: pointer;
+    cursor: ${props => props.disabled ? 'not-allowed' :'pointer'};
     display: flex;
     justify-content: center;
     align-items: center;
-    background: ${props => props.theme.primary};
+    background: ${props => props.disabled ? 'gray' : props.theme.primary};
     color: ${props => props.theme.white};
     box-shadow: inset 0 0 0 2px  ${props => props.theme.white};
     font-size: ${props => props.fontSize || '12px'};
@@ -25,8 +25,8 @@ const BtnStyle = styled(animated.div)`
 
     &:hover {
       
-      background-color: ${props => props.theme.primary};
-      color: ${props => props.theme.secondary};
+      background-color: ${props => props.disabled ? 'gray' : props.theme.primary};
+      color: ${props => props.disabled ? props.theme.white : props.theme.secondary};
     }
     &:active {
       transform: scale(0.95);
@@ -46,13 +46,14 @@ const BtnStyle = styled(animated.div)`
       maxwidth, 
       height, 
       margin,
-      fontSize, 
+      fontSize,
+      disabled, 
       ...rest //This is just to make eslint chill out
     } = props
     const history = useHistory();
     return <BtnStyle {...props} onClick={
       () => {
-        if (onClick != null) props.onClick();
+        if (onClick != null && !props.disabled) props.onClick();
         if (routeto != null) history.push(routeto);}
       }>{name}
       </BtnStyle>

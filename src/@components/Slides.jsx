@@ -26,7 +26,7 @@ const SlideStyle = styled.div`
 
 const SlideIconStyle = styled.img`
   border-radius: ${props => props.rounded ? 50 : 0}%;
-  box-shadow: inset 0 0 0 2px ${props => props.rounded ? 'transparent' : 'black'};
+  box-shadow: inset 0 0 0 2px ${props => props.rounded ? props.theme.darkgrey : 'black'};
   grid-area: icon;
   justify-self: center;
   align-self: center;
@@ -60,7 +60,7 @@ const Slide = (props) => {
     <SlideStyle slideHeight={height} text={text} onClick={() => {history.push(route)}}>
         {text 
         ? null
-        : <SlideIconStyle src={icon} rounded={rounded} alt="an icon" size={height/2}/>}
+        : <SlideIconStyle src={icon} rounded={rounded} alt="" size={height/2}/>}
         <SlideTitleStyle>
           {title}
         </SlideTitleStyle>

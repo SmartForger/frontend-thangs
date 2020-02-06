@@ -79,7 +79,7 @@ function Controls() {
   );
 }
 
-const Asset = ({url, mode='shaded', meshColor, wireFrameColor}) => {
+const Asset = ({url, mode='shaded', meshColor="0xFFFFFF", wireFrameColor="0x000000"}) => {
   const [stl, loading, error] = useStl(url);
   const scene = new THREE.Scene();
 

@@ -15,7 +15,7 @@ const StyledColorDisplay = styled.div`
 `
 
 const ColorPicker = ({color="#FFFFFF", onChange}) => {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
 
   const toggleVisible = () => {
     console.log("Visible Toggled")

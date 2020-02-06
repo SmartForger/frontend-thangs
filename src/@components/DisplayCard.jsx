@@ -11,10 +11,6 @@ const StyleCard = styled.div`
   border: ${props => props.bordered ? '2px solid black' : 'none'};
   transition: all 0.5s;
   margin: ${props => props.margin || '5px'};
-
-  &:hover {
-    transform: ${props => props.hover ? 'scale(1.05)' : 'scale(1)'};
-  }
 `
 
 const StyleCardHead = styled.div`
@@ -26,19 +22,6 @@ const StyleCardHead = styled.div`
   font-size: ${props => props.fontSize || 1}rem;
   padding: 0 5%;
 `
-
-/// Old background-image:
-// background-image:
-//   linear-gradient(
-//     ${props => props.gradientAngle || '180'}deg, 
-//     ${props => props.gradientStart || 'rgba(0,0,0,0)'},
-//     ${props => props.gradientEnd || 'rgba(0,0,0,0)'}),
-
-//   ${props => {
-//     if (props.imageUrl) return `url(${props.imageUrl})`;
-//     if (props.headerBg) return props.headerBg;
-//     return props.theme.secondary
-//   }};
 
 const StyleCardBody = styled.div`
   width: 100%;
