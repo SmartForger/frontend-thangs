@@ -3,7 +3,7 @@
 1. Clone the repository
 2. Run the following command in the root directory:
     <pre><code>yarn install</code></pre>
-3. create a file named ".env.development" in the root folder and make sure it contains the necessary details for your dev environment:
+3. create a file named <code>.env.development</code> in the root folder and make sure it contains the necessary details for your dev environment:
  <pre><code>
     REACT_APP_API_KEY=<Url pointing to the instance of "thangs-social-service" you are currently working with>
     REACT_APP_WEBSITE_NAME=<The Document Title you wish to display>
