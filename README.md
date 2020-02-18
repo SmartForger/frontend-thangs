@@ -12,4 +12,4 @@
     HTTPS=false
  </code></pre>
  4. run the following command in the terminal to start the app:
- <code>yarn start</code>
+ <pre><code>yarn start</code></pre>
