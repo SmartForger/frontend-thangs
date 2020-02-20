@@ -13,7 +13,8 @@ const login = ({email, password}) => {
     body: JSON.stringify({email,password})
   };
 
-  return fetch (`${process.env.REACT_APP_API_KEY}login/`, requestOptions)
+  const url = getApiUrl(`login`)
+  return fetch (url, requestOptions)
   .then(handleResponse)
   .then(({refresh,access}) => {
     const user = jwtDecode(refresh)
@@ -39,7 +40,8 @@ const signup = ({email,password}) => {
     body: JSON.stringify({email,password})
   };
 
-  return fetch (`${process.env.REACT_APP_API_KEY}users/`, requestOptions)
+  const url = getApiUrl('users')
+  return fetch (url, requestOptions)
   .then(handleResponse)
   .then(user => {
     // localStorage.setItem('currentUser', JSON.stringify(user));
@@ -56,14 +58,31 @@ const logout = () => {
   currentUserSubject.next(null);
 }
 
+const hasEndSlash = /\/$/
 
+function withEndSlash(path) {
+  if (hasEndSlash.test(path)) {
+    return path
+  }
+  return `${path}/`
+}
 
+function getBaseUrl() {
+  let url = process.env.REACT_APP_API_KEY
+  return withEndSlash(url)
+}
+
+function getApiUrl(path) {
+  const baseUrl = getBaseUrl()
+  const apiPath = withEndSlash(path)
+  return new URL(apiPath, baseUrl)
+}
 
 const authenticationService = {
   login,
   logout,
   signup,
-  currentUser: currentUserSubject.asObservable(), 
+  currentUser: currentUserSubject.asObservable(),
   get currentUserValue () {return currentUserSubject.value}
 }
 
