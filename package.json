@@ -9,6 +9,7 @@
     "axios": "^0.19.0",
     "axios-hooks": "^1.9.0",
     "babel-plugin-root-import": "^6.4.1",
+    "cypress": "^4.0.2",
     "history": "^4.10.1",
     "jwt-decode": "^2.2.0",
     "mdi-material-ui": "^6.10.0",
@@ -28,6 +29,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": " react-scripts test",
+    "test:cypress": "cypress run",
+    "cypress": "cypress open",
+    "ci": "start-server-and-test http-get://localhost:3000 test:cypress",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -44,5 +48,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint-plugin-cypress": "^2.10.3",
+    "start-server-and-test": "^1.10.8"
   }
 }
