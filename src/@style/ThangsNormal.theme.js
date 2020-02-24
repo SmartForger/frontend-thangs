@@ -1,17 +1,16 @@
 export const ThangsMain = {
-  primary: '#F7BB3D',
-  secondary: '#0D0D0D',
-  white: '#FFFFFF',
-  grey: '#D9D9D9',
-  darkgrey: '#999999',
-  mainFont: `'Raleway' sans-serif`,
-  pageWidth: '95vw',
-  pageHeight: '90vh',
-  pageTop: '10%',
-  pageLeft: '50%',
-  pageMarginLeft: '-47.5vw',
-}
-
+    primary: '#F7BB3D',
+    secondary: '#0D0D0D',
+    white: '#FFFFFF',
+    grey: '#D9D9D9',
+    darkgrey: '#999999',
+    mainFont: `'Raleway' sans-serif`,
+    pageWidth: '95vw',
+    pageHeight: '90vh',
+    pageTop: '10%',
+    pageLeft: '50%',
+    pageMarginLeft: '-47.5vw',
+};
 
 /** Styled for normal Pages
  *  
