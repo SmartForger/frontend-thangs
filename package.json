@@ -32,7 +32,7 @@
     "test:cypress": "cypress run",
     "cypress": "cypress open",
     "ci": "start-server-and-test http-get://localhost:3000 test:cypress",
-    "format": "prettier src/**/*.js",
+    "format": "prettier src/**/*.js --write",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
