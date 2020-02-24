@@ -45,3 +45,34 @@ Run Cypress tests headless with:
 ```bash
 yarn test:cypress
 ```
+
+## Formatting (with [Prettier](https://prettier.io/))
+
+Run manually with:
+
+```bash
+yarn format
+```
+
+### Editor configuration
+
+- [VSCode extension](https://prettier.io/docs/en/editors.html#visual-studio-code)
+
+```jsonc
+{
+    ...
+    "editor.formatOnSave": false,
+    // Only auto-format if a prettier.config.js file exists in project codebase
+    "prettier.requireConfig": true,
+    // Plain Javascript files
+    "[javascript]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    // React/JSX files
+    "[javascriptreact]": {
+        "editor.formatOnSave": true
+    },
+    ...
+}
+```
