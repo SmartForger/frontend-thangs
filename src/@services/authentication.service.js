@@ -2,53 +2,55 @@ import { BehaviorSubject } from 'rxjs';
 import { handleResponse } from '@helpers';
 import jwtDecode from 'jwt-decode';
 
-const currentUserSubject = new BehaviorSubject(
-    JSON.parse(localStorage.getItem('currentUser'))
-);
+const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
 
-const login = ({ email, password }) => {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-    };
 
-    const url = getApiUrl(`login`);
-    return fetch(url, requestOptions)
-        .then(handleResponse)
-        .then(({ refresh, access }) => {
-            const user = jwtDecode(refresh);
-            console.log(jwtDecode(refresh));
-            delete user.token_type;
-            delete user.exp;
-            delete user.jti;
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            localStorage.setItem('refreshToken', refresh);
-            localStorage.setItem('accessToken', access);
-            user.accessToken = access;
-            user.refreshToken = refresh;
-            currentUserSubject.next(user);
 
-            return user;
-        });
-};
+const login = ({email, password}) => {
+  const requestOptions = {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({email,password})
+  };
 
-const signup = ({ email, password }) => {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-    };
+  const url = getApiUrl(`login`)
+  return fetch (url, requestOptions)
+  .then(handleResponse)
+  .then(({refresh,access}) => {
+    const user = jwtDecode(refresh)
+    console.log(jwtDecode(refresh))
+    delete user.token_type;
+    delete user.exp;
+    delete user.jti;
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    localStorage.setItem('refreshToken', refresh);
+    localStorage.setItem('accessToken', access);
+    user.accessToken = access;
+    user.refreshToken = refresh;
+    currentUserSubject.next(user);
 
-    const url = getApiUrl('users');
-    return fetch(url, requestOptions)
-        .then(handleResponse)
-        .then(user => {
-            // localStorage.setItem('currentUser', JSON.stringify(user));
-            // currentUserSubject.next(user);
-            // return user;
-        });
-};
+    return user;
+  })
+}
+
+const signup = ({email,password, registration_code, first_name, last_name}) => {
+  const requestOptions = {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({email,password,registration_code,first_name,last_name})
+  };
+
+  const url = getApiUrl('users')
+  return fetch (url, requestOptions)
+  .then(handleResponse)
+  .then(user => {
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    currentUserSubject.next(user);
+
+    return user;
+  })
+  .catch(error => error)
+}
 
 const logout = () => {
     localStorage.removeItem('currentUser');

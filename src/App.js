@@ -20,7 +20,8 @@ const App = () => {
         <BackgroundImage />
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
-          <Route path="/signup" component={Signup} />
+          <Route path="/signup" component={Signup} exact/>
+          <Route path="/signup/:registration" component={Signup} />
           <Route path="/details/:id" component={Details} />
           <Route path="/profile/:id" component={Profile} />
         <Footer />

@@ -10,6 +10,7 @@ const handleResponse = async response => {
                 window.location.reload(true);
             }
 
+<<<<<<< HEAD
             const error = (data && data.message) || response.statusText;
             return Promise.reject(error);
         }
@@ -17,5 +18,13 @@ const handleResponse = async response => {
         return data;
     });
 };
+=======
+      const error = (data && data.message) || response.statusText;
+      return Promise.reject(error);
+    }
+    return data;
+  });
+}
+>>>>>>> First pass of Signup U/X
 
 export { handleResponse };
