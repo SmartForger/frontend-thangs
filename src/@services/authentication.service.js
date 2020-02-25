@@ -1,12 +1,13 @@
 import { BehaviorSubject } from 'rxjs';
 import { handleResponse } from '@helpers';
 import jwtDecode from 'jwt-decode';
+import axios from 'axios';
 
 const currentUserSubject = new BehaviorSubject(
     JSON.parse(localStorage.getItem('currentUser'))
 );
 
-const login = ({ email, password }) => {
+const login = async ({ email, password }) => {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -28,12 +29,11 @@ const login = ({ email, password }) => {
             user.accessToken = access;
             user.refreshToken = refresh;
             currentUserSubject.next(user);
-
             return user;
         });
 };
 
-const signup = ({
+const signup = async ({
     email,
     password,
     registration_code,
@@ -41,9 +41,10 @@ const signup = ({
     last_name,
 }) => {
     const requestOptions = {
+        url: getApiUrl('users'),
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        data: JSON.stringify({
             email,
             password,
             registration_code,
@@ -52,16 +53,19 @@ const signup = ({
         }),
     };
 
-    const url = getApiUrl('users');
-    return fetch(url, requestOptions)
-        .then(handleResponse)
-        .then(user => {
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            currentUserSubject.next(user);
+    return axios(requestOptions)
+        .then(data => data)
+        .catch(err => {
+            return err.response;
+        });
+    // return fetch(url, requestOptions)
+    //     .then(handleResponse)
+    //     .then(user => {
+    //         localStorage.setItem('currentUser', JSON.stringify(user));
+    //         currentUserSubject.next(user);
 
-            return user;
-        })
-        .catch(error => error);
+    //         return user;
+    //     });
 };
 
 const logout = () => {
