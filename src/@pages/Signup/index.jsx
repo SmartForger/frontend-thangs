@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory, useRouteMatch, Link } from 'react-router-dom';
 import styled from 'styled-components';
+import * as EmailValidator from 'email-validator';
 import { authenticationService } from '@services';
 import { useForm } from '@customHooks';
 import { BasicPageStyle } from '@style';
@@ -30,6 +31,7 @@ const ErrorTextStyle = styled.h3`
 const Signup = () => {
     const [waiting, setWaiting] = useState(false);
     const [signupErrorMessage, setSignupErrorMessage] = useState(null);
+    const [invalidFields, setInvalidFields] = useState([]);
     const { inputs, handleChange, handleSubmit } = useForm(signup);
     const history = useHistory();
     const match = useRouteMatch('/signup/:registrationCode');
@@ -51,11 +53,13 @@ const Signup = () => {
         if (response.status !== 201) {
             setWaiting(false);
             setSignupErrorMessage(response.data.reason);
+            setInvalidFields(response.data.fields || '');
         } else {
             const loginResponse = await authenticationService.login({
                 email: inputs.email,
                 password: inputs.password,
             });
+            setWaiting(false);
         }
 
         // .then(s => {
@@ -65,15 +69,53 @@ const Signup = () => {
         // });
     }
 
+    const isFieldInvalid = fieldName => {
+        return invalidFields.indexOf(fieldName) !== -1;
+    };
+
+    const setFieldToValid = fieldName => {
+        if (invalidFields.indexOf(fieldName) !== -1) {
+            const temp = [...invalidFields];
+            temp.splice(invalidFields.indexOf(fieldName), 1);
+            setInvalidFields(temp);
+            setSignupErrorMessage('');
+        }
+    };
+
     const canSignup = () => {
         if (
             inputs.password &&
             inputs.email &&
-            inputs.password === inputs.confirmPass
+            inputs.password === inputs.confirmPass &&
+            invalidFields.length == 0
         ) {
             return false;
         }
         return true;
+    };
+
+    const validateRegistration = () => {
+        setFieldToValid('registration_code');
+    };
+
+    const validatePasswords = () => {
+        if (inputs.confirmPass !== inputs.password) {
+            setInvalidFields(['password']);
+            setSignupErrorMessage('Please ensure that both passwords match');
+            return false;
+        } else {
+            setFieldToValid('password');
+            return true;
+        }
+    };
+
+    const validateEmail = () => {
+        if (!EmailValidator.validate(inputs.email)) {
+            setInvalidFields(['email']);
+            setSignupErrorMessage('Please enter a valid e-mail address');
+        } else {
+            setFieldToValid('email');
+        }
     };
 
     return (
@@ -101,7 +143,9 @@ const Signup = () => {
                         name="registrationCode"
                         label="Registration Code"
                         onChange={handleChange}
+                        onBlur={validateRegistration}
                         value={inputs.registrationCode}
+                        // invalid={isFieldInvalid('registration_code')}
                         placeholder="Registration Code"
                     />
                 )}
@@ -112,6 +156,7 @@ const Signup = () => {
                     label="First Name"
                     onChange={handleChange}
                     value={inputs.firstName}
+                    // invalid={isFieldInvalid('first_name')}
                     placeholder="First Name"
                 />
                 <TextInput
@@ -121,6 +166,7 @@ const Signup = () => {
                     label="Last Name"
                     onChange={handleChange}
                     value={inputs.lastName}
+                    // invalid={isFieldInvalid('last_name')}
                     placeholder="Last Name"
                 />
                 <TextInput
@@ -129,7 +175,9 @@ const Signup = () => {
                     name="email"
                     label="E-Mail"
                     onChange={handleChange}
+                    onBlur={validateEmail}
                     value={inputs.email}
+                    // invalid={isFieldInvalid('email')}
                     placeholder="E-mail"
                     required
                 />
@@ -140,6 +188,7 @@ const Signup = () => {
                     label="Password"
                     onChange={handleChange}
                     value={inputs.password}
+                    // invalid={isFieldInvalid('password')}
                     placeholder="Password"
                     required
                 />
@@ -149,7 +198,10 @@ const Signup = () => {
                     name="confirmPass"
                     label="Password"
                     onChange={handleChange}
+                    //onBlur={validatePasswords}
                     value={inputs.confirmPass}
+                    validator={validatePasswords}
+                    // invalid={isFieldInvalid('password')}
                     placeholder="Confirm password"
                     required
                 />
