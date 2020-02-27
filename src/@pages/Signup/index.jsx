@@ -64,12 +64,6 @@ const Signup = () => {
             });
             setWaiting(false);
         }
-
-        // .then(s => {
-        //     setWaiting(false);
-        //     setSignupErrorMessage(s.status);
-        //     history.push('/login');
-        // });
     }
 
     const setFieldToValid = fieldName => {
@@ -102,7 +96,6 @@ const Signup = () => {
     };
 
     const validateRegistration = () => {
-        console.log('Hey');
         setFieldToValid('registration_code');
     };
 

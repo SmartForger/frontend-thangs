@@ -23,6 +23,9 @@ const useForm = callback => {
         inputs,
     };
 };
+
+const useSignupValidation = setErrorMessage => {};
+
 /// Implementation
 //
 // const SignUp = () => {
