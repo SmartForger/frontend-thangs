@@ -1,31 +1,26 @@
-import React, { useEffect, useContext, createContext, useState} from 'react'
-import {useLocalStorage} from './Storage';
-import {PhysnaServer} from '@utilities';
-
-
+import React, { useEffect, useContext, createContext, useState } from 'react';
+import { useLocalStorage } from './Storage';
+import { PhysnaServer } from '@utilities';
 
 const AuthContext = createContext();
 
 // Provider component that wraps your app and makes auth object ...
 // ... available to any child component that calls useAuth().
 function ProvideAuth({ children }) {
-  const auth = useProvideAuth();
-  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+    const auth = useProvideAuth();
+    return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 }
 
 const useAuth = () => {
     return useContext(AuthContext);
-}
+};
 
 function useProvideAuth() {
-    const [user,setUser, clearUser] = useLocalStorage('user', null);
+    const [user, setUser, clearUser] = useLocalStorage('user', null);
     const [authenticated, setAuthenticated] = useState(false);
-
-    
 
     // Wrap auth methods we want to use, making sure to save the state
     const login = async (email, password, options) => {
-
         options = options || {};
         let rememberMe = options.rememberMe || false;
         let socialMediaLogin = options.socialMediaLogin || 'none';
@@ -34,13 +29,14 @@ function useProvideAuth() {
         let Name = options.Name || 'noname';
         let errorCallback = options.errorCallback || null;
 
-        let reqData = `Email=${email}&Password=${password}&RememberMe=${rememberMe}&SocialMediaLogin=${socialMediaLogin}&Avatar=${encodeURI(AvatarUrl)}&socialMediaPlatform=${socialMediaPlatform}&Name=${Name}`
+        let reqData = `Email=${email}&Password=${password}&RememberMe=${rememberMe}&SocialMediaLogin=${socialMediaLogin}&Avatar=${encodeURI(
+            AvatarUrl
+        )}&socialMediaPlatform=${socialMediaPlatform}&Name=${Name}`;
 
-        
         let response = await PhysnaServer({
             method: 'post',
-            url:`/auth/login`,
-            data: reqData
+            url: `/auth/login`,
+            data: reqData,
         });
 
         if (response.data.successfulLogin) {
@@ -49,71 +45,72 @@ function useProvideAuth() {
 
             //Old physna Auth logic for the time being
             window.PhysnaAuth.ClearSocialMediaResponse();
-            window.PhysnaAuth.PhysnaUser = response.data.user
-            
+            window.PhysnaAuth.PhysnaUser = response.data.user;
 
             return response;
         } else {
             errorCallback && errorCallback(response);
             return response;
         }
-    }
-
+    };
 
     const getCurrentUser = async () => {
-        if(!user) {
+        if (!user) {
             const userReq = await PhysnaServer({
                 method: 'GET',
-                url: '/users/currentuser'
-            })
+                url: '/users/currentuser',
+            });
 
             try {
                 setUser(userReq.data.response.user);
                 setAuthenticated(true);
             } catch (error) {
-                console.log('User is not Logged in')
+                console.log('User is not Logged in');
             }
         }
-    }
+    };
 
-    const ensureAuth = (response) => {
-        if(response.data) {
-            setAuthenticated(response.data.response.user.id && response.data.response.user.id !== "none")
-            setUser(response.data.response.user)
+    const ensureAuth = response => {
+        if (response.data) {
+            setAuthenticated(
+                response.data.response.user.id &&
+                    response.data.response.user.id !== 'none'
+            );
+            setUser(response.data.response.user);
         } else {
-            setAuthenticated(response)
+            setAuthenticated(response);
         }
-    }
+    };
 
-    const signup = async (signupData) => {
+    const signup = async signupData => {
         await PhysnaServer({
             method: 'post',
             url: `/Account/RegisterAccount/`,
-            data: signupData
-          })
-    }
+            data: signupData,
+        });
+    };
 
     const logout = async () => {
         await PhysnaServer({
             method: 'post',
             url: `/auth/logout`,
         });
-       clearUser();
-       ensureAuth(false);
-    }
+        clearUser();
+        ensureAuth(false);
+    };
 
-    const sendPasswordResetEmail = (email) => {
+    const sendPasswordResetEmail = email => {
         /*
             send email and return success 
         */
-    }
+    };
 
     const confirmPasswordReset = (code, password) => {
         /*
             reset password and return success 
         */
-    }
-    
+    };
+
     //Subscribe to the user on mount
     // Because this sets state in the callback it will cause any ...
     // ... component that utilizes this hook to re-render with the ...
@@ -121,7 +118,6 @@ function useProvideAuth() {
     useEffect(() => {
         getCurrentUser();
     });
-
 
     // the useProviderAuth returns an object containing these keys
     return {
@@ -139,4 +135,4 @@ function useProvideAuth() {
     };
 }
 
-export {ProvideAuth, useAuth};
+export { ProvideAuth, useAuth };

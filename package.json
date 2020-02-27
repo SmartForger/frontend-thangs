@@ -32,6 +32,7 @@
     "test:cypress": "cypress run",
     "cypress": "cypress open",
     "ci": "start-server-and-test http-get://localhost:3000 test:cypress",
+    "format": "prettier src/**/*.js --write",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -51,6 +52,7 @@
   },
   "devDependencies": {
     "eslint-plugin-cypress": "^2.10.3",
+    "prettier": "^1.19.1",
     "start-server-and-test": "^1.10.8"
   }
 }
