@@ -6,6 +6,11 @@ import { useForm } from '@customHooks';
 import { BasicPageStyle } from '@style';
 import { TextInput, Spinner, Button } from '@components';
 
+const ErrorTextStyle = styled.h3`
+    font-weight: bold;
+    color: red;
+`;
+
 const LoginBodyStyle = styled(BasicPageStyle)`
     position: fixed;
     display: flex;
@@ -36,10 +41,14 @@ const Login = () => {
             email: inputs.email,
             password: inputs.password,
         });
-        console.log(res);
 
         setWaiting(false);
-        //history.push('/')
+
+        if (res.status !== 200) {
+            setLogginErrorMessage(res.data.detail);
+        } else {
+            history.push('/');
+        }
     }
 
     const canLogin = () => {
@@ -53,6 +62,11 @@ const Login = () => {
         <LoginBodyStyle>
             <LoginFormStyle onSubmit={handleSubmit}>
                 {waiting ? <Spinner size="300" /> : <h3>Welcome Back</h3>}
+                {loginErrorMessage ? (
+                    <ErrorTextStyle>{loginErrorMessage}</ErrorTextStyle>
+                ) : (
+                    <></>
+                )}
                 <TextInput
                     disabled={waiting}
                     type="text"
