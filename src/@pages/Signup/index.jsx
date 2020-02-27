@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useHistory, useRouteMatch, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import * as EmailValidator from 'email-validator';
+import swearjar from 'swearjar-extended';
 import { authenticationService } from '@services';
 import { useForm } from '@customHooks';
 import { BasicPageStyle } from '@style';
@@ -48,12 +49,14 @@ const Signup = () => {
                 : inputs.registrationCode,
             first_name: inputs.firstName,
             last_name: inputs.lastName,
+            username: inputs.username,
         });
 
         if (response.status !== 201) {
             setWaiting(false);
-            setSignupErrorMessage(response.data.reason);
-            setInvalidFields(response.data.fields || '');
+            const fields = Object.keys(response.data);
+            setInvalidFields(fields);
+            setSignupErrorMessage(response.data[fields[0]]);
         } else {
             const loginResponse = await authenticationService.login({
                 email: inputs.email,
@@ -69,10 +72,6 @@ const Signup = () => {
         // });
     }
 
-    const isFieldInvalid = fieldName => {
-        return invalidFields.indexOf(fieldName) !== -1;
-    };
-
     const setFieldToValid = fieldName => {
         if (invalidFields.indexOf(fieldName) !== -1) {
             const temp = [...invalidFields];
@@ -82,12 +81,20 @@ const Signup = () => {
         }
     };
 
+    const needsCorrected = field => {
+        if (invalidFields.indexOf(field) !== -1) return true;
+        return false;
+    };
+
     const canSignup = () => {
         if (
-            inputs.password &&
+            inputs.firstName &&
+            inputs.lastName &&
+            inputs.username &&
             inputs.email &&
+            inputs.password &&
             inputs.password === inputs.confirmPass &&
-            invalidFields.length == 0
+            invalidFields.length === 0
         ) {
             return false;
         }
@@ -95,7 +102,32 @@ const Signup = () => {
     };
 
     const validateRegistration = () => {
+        console.log('Hey');
         setFieldToValid('registration_code');
+    };
+
+    const validateUsername = () => {
+        if (swearjar.profane(inputs.username)) {
+            setInvalidFields(['username']);
+            setSignupErrorMessage(
+                'Sorry, we detected profanity in your username!'
+            );
+            return false;
+        } else {
+            setFieldToValid('username');
+            return true;
+        }
+    };
+
+    const validateEmail = () => {
+        if (!EmailValidator.validate(inputs.email)) {
+            setInvalidFields(['email']);
+            setSignupErrorMessage('Please enter a valid e-mail address');
+            return false;
+        } else {
+            setFieldToValid('email');
+            return true;
+        }
     };
 
     const validatePasswords = () => {
@@ -106,15 +138,6 @@ const Signup = () => {
         } else {
             setFieldToValid('password');
             return true;
-        }
-    };
-
-    const validateEmail = () => {
-        if (!EmailValidator.validate(inputs.email)) {
-            setInvalidFields(['email']);
-            setSignupErrorMessage('Please enter a valid e-mail address');
-        } else {
-            setFieldToValid('email');
         }
     };
 
@@ -142,10 +165,10 @@ const Signup = () => {
                         type="text"
                         name="registrationCode"
                         label="Registration Code"
+                        incorrect={needsCorrected('registration_code')}
                         onChange={handleChange}
-                        onBlur={validateRegistration}
+                        onFocus={validateRegistration}
                         value={inputs.registrationCode}
-                        // invalid={isFieldInvalid('registration_code')}
                         placeholder="Registration Code"
                     />
                 )}
@@ -156,7 +179,6 @@ const Signup = () => {
                     label="First Name"
                     onChange={handleChange}
                     value={inputs.firstName}
-                    // invalid={isFieldInvalid('first_name')}
                     placeholder="First Name"
                 />
                 <TextInput
@@ -166,18 +188,29 @@ const Signup = () => {
                     label="Last Name"
                     onChange={handleChange}
                     value={inputs.lastName}
-                    // invalid={isFieldInvalid('last_name')}
                     placeholder="Last Name"
+                />
+                <TextInput
+                    disabled={waiting}
+                    type="text"
+                    name="username"
+                    label="Username"
+                    incorrect={needsCorrected('username')}
+                    onChange={handleChange}
+                    validator={validateUsername}
+                    value={inputs.username}
+                    placeholder="Username"
+                    required
                 />
                 <TextInput
                     disabled={waiting}
                     type="text"
                     name="email"
                     label="E-Mail"
+                    incorrect={needsCorrected('email')}
                     onChange={handleChange}
-                    onBlur={validateEmail}
+                    validator={validateEmail}
                     value={inputs.email}
-                    // invalid={isFieldInvalid('email')}
                     placeholder="E-mail"
                     required
                 />
@@ -188,7 +221,6 @@ const Signup = () => {
                     label="Password"
                     onChange={handleChange}
                     value={inputs.password}
-                    // invalid={isFieldInvalid('password')}
                     placeholder="Password"
                     required
                 />
@@ -198,10 +230,8 @@ const Signup = () => {
                     name="confirmPass"
                     label="Password"
                     onChange={handleChange}
-                    //onBlur={validatePasswords}
                     value={inputs.confirmPass}
                     validator={validatePasswords}
-                    // invalid={isFieldInvalid('password')}
                     placeholder="Confirm password"
                     required
                 />

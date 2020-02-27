@@ -39,6 +39,7 @@ const signup = async ({
     registration_code,
     first_name,
     last_name,
+    username,
 }) => {
     const requestOptions = {
         url: getApiUrl('users'),
@@ -50,6 +51,7 @@ const signup = async ({
             registration_code,
             first_name,
             last_name,
+            username,
         }),
     };
 
