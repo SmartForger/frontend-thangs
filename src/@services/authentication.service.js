@@ -2,7 +2,6 @@ import { BehaviorSubject } from 'rxjs';
 import { handleResponse } from '@helpers';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
-import axios from 'axios';
 
 const currentUserSubject = new BehaviorSubject(
     JSON.parse(localStorage.getItem('currentUser'))
