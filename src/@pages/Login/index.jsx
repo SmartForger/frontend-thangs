@@ -91,10 +91,12 @@ const Login = () => {
 
     return (
         <LoginBodyStyle>
-            <LoginFormStyle onSubmit={handleSubmit}>
+            <LoginFormStyle onSubmit={handleSubmit} data-cy="login-form">
                 {waiting ? <Spinner size="300" /> : <h3>Welcome Back</h3>}
                 {loginErrorMessage ? (
-                    <ErrorTextStyle>{loginErrorMessage}</ErrorTextStyle>
+                    <ErrorTextStyle data-cy="login-error">
+                        {loginErrorMessage}
+                    </ErrorTextStyle>
                 ) : (
                     <></>
                 )}
@@ -108,6 +110,7 @@ const Login = () => {
                     validator={validateEmail}
                     value={inputs.email}
                     placeholder="E-mail"
+                    data-cy="login-email"
                     required
                 />
                 <TextInput
@@ -118,6 +121,7 @@ const Login = () => {
                     onChange={handleChange}
                     value={inputs.password}
                     placeholder="Password"
+                    data-cy="login-password"
                     required
                 />
                 <Button
