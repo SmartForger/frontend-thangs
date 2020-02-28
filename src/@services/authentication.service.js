@@ -1,12 +1,13 @@
 import { BehaviorSubject } from 'rxjs';
 import { handleResponse } from '@helpers';
 import jwtDecode from 'jwt-decode';
+import axios from 'axios';
 
 const currentUserSubject = new BehaviorSubject(
     JSON.parse(localStorage.getItem('currentUser'))
 );
 
-const login = ({ email, password }) => {
+const login = async ({ email, password }) => {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -18,7 +19,6 @@ const login = ({ email, password }) => {
         .then(handleResponse)
         .then(({ refresh, access }) => {
             const user = jwtDecode(refresh);
-            console.log(jwtDecode(refresh));
             delete user.token_type;
             delete user.exp;
             delete user.jti;
@@ -28,26 +28,38 @@ const login = ({ email, password }) => {
             user.accessToken = access;
             user.refreshToken = refresh;
             currentUserSubject.next(user);
-
             return user;
         });
 };
 
-const signup = ({ email, password }) => {
+const signup = async ({
+    email,
+    password,
+    registration_code,
+    first_name,
+    last_name,
+    username,
+}) => {
     const requestOptions = {
+        url: getApiUrl('users'),
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        data: JSON.stringify({
+            email,
+            password,
+            registration_code,
+            first_name,
+            last_name,
+            username,
+        }),
     };
 
-    const url = getApiUrl('users');
-    return fetch(url, requestOptions)
-        .then(handleResponse)
-        .then(user => {
-            // localStorage.setItem('currentUser', JSON.stringify(user));
-            // currentUserSubject.next(user);
-            // return user;
-        });
+    try {
+        const data = await axios(requestOptions);
+        return data;
+    } catch (err) {
+        return err.response;
+    }
 };
 
 const logout = () => {
@@ -88,36 +100,3 @@ const authenticationService = {
 };
 
 export { authenticationService };
-
-// const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
-// const login = ({username, password}) => {
-//   const requestOptions = {
-//     method: 'POST',
-//     headers: {'Content-Type': 'application/json'},
-//     body: JSON.stringify({username,password})
-//   };
-
-//   return fetch (`${process.env.REACT_APP_API_KEY}/auth/login`, requestOptions)
-//   .then(handleResponse)
-//   .then(user => {
-//     localStorage.setItem('currentUser', JSON.stringify(user));
-//     currentUser = user;
-
-//     return user;
-//   })
-// }
-
-// const logout = () => {
-//   localStorage.removeItem('currentUser');
-//   currentUser = null;
-// }
-
-// const authenticationService = {
-//   login,
-//   logout,
-//   currentUser,
-//   get currentUserValue () {return currentUser}
-// }
-
-// export {authenticationService};

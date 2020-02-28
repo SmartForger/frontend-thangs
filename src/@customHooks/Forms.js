@@ -23,6 +23,7 @@ const useForm = callback => {
         inputs,
     };
 };
+
 /// Implementation
 //
 // const SignUp = () => {

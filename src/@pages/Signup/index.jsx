@@ -1,77 +1,246 @@
-import React, {useState} from 'react';
-import {useHistory, Link} from 'react-router-dom';
+import React, { useState } from 'react';
+import { useHistory, useRouteMatch, Link } from 'react-router-dom';
 import styled from 'styled-components';
-import {authenticationService} from '@services';
-import {useForm} from '@customHooks';
-import {BasicPageStyle} from '@style'
-import {TextInput, Spinner, Button} from '@components';
-
-
+import * as EmailValidator from 'email-validator';
+import swearjar from 'swearjar-extended';
+import { authenticationService } from '@services';
+import { useForm } from '@customHooks';
+import { BasicPageStyle } from '@style';
+import { TextInput, Spinner, Button } from '@components';
 
 const SignupBodyStyle = styled(BasicPageStyle)`
-  position: fixed;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-`
+    position: fixed;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+`;
 
 const SignupFormStyle = styled.form`
-  width: 100%;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-`
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+`;
 
+const ErrorTextStyle = styled.h3`
+    font-weight: bold;
+    color: red;
+`;
 
 const Signup = () => {
-    const [waiting,setWaiting] = useState(false);
-    const [signupErrorMessage,setSignupErrorMessage] = useState(null);
-    const {inputs, handleChange, handleSubmit} = useForm(signup);
+    const [waiting, setWaiting] = useState(false);
+    const [signupErrorMessage, setSignupErrorMessage] = useState(null);
+    const [invalidFields, setInvalidFields] = useState([]);
+    const { inputs, handleChange, handleSubmit } = useForm(signup);
     const history = useHistory();
-
+    const match = useRouteMatch('/signup/:registrationCode');
 
     async function signup() {
         setWaiting(true);
         setSignupErrorMessage(null);
 
-        authenticationService.signup({
-          email: inputs.email,
-          password: inputs.password
-        })
-          .then(() => {
+        const response = await authenticationService.signup({
+            email: inputs.email,
+            password: inputs.password,
+            registration_code: match
+                ? match.params.registrationCode
+                : inputs.registrationCode,
+            first_name: inputs.firstName,
+            last_name: inputs.lastName,
+            username: inputs.username,
+        });
+
+        if (response.status !== 201) {
             setWaiting(false);
-            history.push('/login')
-          })
-        
+            const fields = Object.keys(response.data);
+            setInvalidFields(fields);
+            setSignupErrorMessage(response.data[fields[0]]);
+        } else {
+            const loginResponse = await authenticationService.login({
+                email: inputs.email,
+                password: inputs.password,
+            });
+            setWaiting(false);
+        }
     }
+
+    const setFieldToValid = fieldName => {
+        if (invalidFields.indexOf(fieldName) !== -1) {
+            const temp = [...invalidFields];
+            temp.splice(invalidFields.indexOf(fieldName), 1);
+            setInvalidFields(temp);
+            setSignupErrorMessage('');
+        }
+    };
+
+    const needsCorrected = field => {
+        if (invalidFields.indexOf(field) !== -1) return true;
+        return false;
+    };
 
     const canSignup = () => {
-      if (inputs.password && inputs.email && inputs.password === inputs.confirmPass) {
-        return false
-      }
-      return true;
-    }
+        if (
+            inputs.firstName &&
+            inputs.lastName &&
+            inputs.username &&
+            inputs.email &&
+            inputs.password &&
+            inputs.password === inputs.confirmPass &&
+            invalidFields.length === 0
+        ) {
+            return false;
+        }
+        return true;
+    };
+
+    const validateRegistration = () => {
+        setFieldToValid('registration_code');
+    };
+
+    const validateUsername = () => {
+        if (swearjar.profane(inputs.username)) {
+            setInvalidFields(['username']);
+            setSignupErrorMessage(
+                'Sorry, we detected profanity in your username!'
+            );
+            return false;
+        } else {
+            setFieldToValid('username');
+            return true;
+        }
+    };
+
+    const validateEmail = () => {
+        if (!EmailValidator.validate(inputs.email)) {
+            setInvalidFields(['email']);
+            setSignupErrorMessage('Please enter a valid e-mail address');
+            return false;
+        } else {
+            setFieldToValid('email');
+            return true;
+        }
+    };
+
+    const validatePasswords = () => {
+        if (inputs.confirmPass !== inputs.password) {
+            setInvalidFields(['password']);
+            setSignupErrorMessage('Please ensure that both passwords match');
+            return false;
+        } else {
+            setFieldToValid('password');
+            return true;
+        }
+    };
 
     return (
-      <SignupBodyStyle>
-        <SignupFormStyle onSubmit={handleSubmit}>
-                                          
-            {
-                waiting 
-                ? <Spinner size="300" />
-                : <h3>Signup</h3> 
-            }
-          <TextInput disabled={waiting}  type="text" name="email" label="E-Mail" onChange={handleChange} value={inputs.email} placeholder="E-mail" required/>
-          <TextInput disabled={waiting} type="password" name="password" label="Password" onChange={handleChange} value={inputs.password} placeholder="Password" required/>
-          <TextInput disabled={waiting} type="password" name="confirmPass" label="Password" onChange={handleChange} value={inputs.confirmPass} placeholder="Confirm password"  required/>
-          <Button onClick={handleSubmit} name="Signup" disabled={canSignup()}/>
-          <input type="submit" style={{position:"absolute",left: "-9999px"}}/>
-          <Link to="/login">Already have an account?</Link>
-        </SignupFormStyle>
-      </SignupBodyStyle>
-    )
-}
+        <SignupBodyStyle>
+            <SignupFormStyle onSubmit={handleSubmit}>
+                {waiting ? <Spinner size="300" /> : <h3>Signup</h3>}
+                {signupErrorMessage ? (
+                    <ErrorTextStyle>{signupErrorMessage}</ErrorTextStyle>
+                ) : (
+                    <></>
+                )}
+                {match ? (
+                    <TextInput
+                        disabled={true}
+                        type="text"
+                        name="registrationCode"
+                        label="Registration Code"
+                        value={match.params.registrationCode}
+                        placeholder="Registration Code"
+                    />
+                ) : (
+                    <TextInput
+                        disabled={waiting}
+                        type="text"
+                        name="registrationCode"
+                        label="Registration Code"
+                        incorrect={needsCorrected('registration_code')}
+                        onChange={handleChange}
+                        onFocus={validateRegistration}
+                        value={inputs.registrationCode}
+                        placeholder="Registration Code"
+                    />
+                )}
+                <TextInput
+                    disabled={waiting}
+                    type="text"
+                    name="firstName"
+                    label="First Name"
+                    onChange={handleChange}
+                    value={inputs.firstName}
+                    placeholder="First Name"
+                />
+                <TextInput
+                    disabled={waiting}
+                    type="text"
+                    name="lastName"
+                    label="Last Name"
+                    onChange={handleChange}
+                    value={inputs.lastName}
+                    placeholder="Last Name"
+                />
+                <TextInput
+                    disabled={waiting}
+                    type="text"
+                    name="username"
+                    label="Username"
+                    incorrect={needsCorrected('username')}
+                    onChange={handleChange}
+                    validator={validateUsername}
+                    value={inputs.username}
+                    placeholder="Username"
+                    required
+                />
+                <TextInput
+                    disabled={waiting}
+                    type="text"
+                    name="email"
+                    label="E-Mail"
+                    incorrect={needsCorrected('email')}
+                    onChange={handleChange}
+                    validator={validateEmail}
+                    value={inputs.email}
+                    placeholder="E-mail"
+                    required
+                />
+                <TextInput
+                    disabled={waiting}
+                    type="password"
+                    name="password"
+                    label="Password"
+                    onChange={handleChange}
+                    value={inputs.password}
+                    placeholder="Password"
+                    required
+                />
+                <TextInput
+                    disabled={waiting}
+                    type="password"
+                    name="confirmPass"
+                    label="Password"
+                    onChange={handleChange}
+                    value={inputs.confirmPass}
+                    validator={validatePasswords}
+                    placeholder="Confirm password"
+                    required
+                />
+                <Button
+                    onClick={handleSubmit}
+                    name="Signup"
+                    disabled={canSignup()}
+                />
+                <input
+                    type="submit"
+                    style={{ position: 'absolute', left: '-9999px' }}
+                />
+                <Link to="/login">Already have an account?</Link>
+            </SignupFormStyle>
+        </SignupBodyStyle>
+    );
+};
 
-export {Signup}
+export { Signup };
