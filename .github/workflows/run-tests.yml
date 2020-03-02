@@ -15,5 +15,22 @@ jobs:
         CI: true
     - name: Cypress.io
       uses: cypress-io/github-action@v1.16.1
+      env:
+          REACT_APP_API_KEY: http://localhost:8000/api/
+          REACT_APP_WEBSITE_NAME: Thangs CI
+          REACT_APP_IMG_PATH: ""
+          NODE_PATH: src/
+          HTTPS: false
       with:
         start: yarn start
+        
+    - uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: cypress-videos
+        path: cypress/videos
+    - uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: cypress-screenshots
+        path: cypress/screenshots
