@@ -2,6 +2,8 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTrail } from 'react-spring';
+import { useQuery } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
 import { BasicPageStyle } from '@style';
 import { Button, ModelDisplay } from '@components';
 
@@ -56,6 +58,14 @@ const ModelsStyled = styled.div`
     flex-flow: row wrap;
 `;
 
+const EXCHANGE_RATES = gql`
+    {
+        rates(currency: "USD") {
+            currency
+        }
+    }
+`;
+
 const Profile = () => {
     const { id } = useParams();
     const mockModels = [
@@ -82,6 +92,24 @@ const Profile = () => {
         to: { transform: 'translate(0,0) scale(1)' },
         from: { transform: 'translate(1000%,0) scale(0.6)' },
     }));
+
+    const { loading, error, data } = useQuery(EXCHANGE_RATES);
+
+    if (loading) {
+        return (
+            <ProfileStyle>
+                <div>Loading...</div>
+            </ProfileStyle>
+        );
+    }
+
+    if (error) {
+        return (
+            <ProfileStyle>
+                <div>Error</div>
+            </ProfileStyle>
+        );
+    }
 
     return (
         <ProfileStyle>
