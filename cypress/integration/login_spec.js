@@ -24,7 +24,7 @@ describe('The Login Page', function() {
             .focus()
             .type('badPassword');
         cy.get('[data-cy=login-form]').submit();
-        cy.wait(30000);
+        cy.wait(5000);
         cy.get('[data-cy=login-error]');
     });
 
@@ -51,7 +51,7 @@ describe('The Login Page', function() {
             .focus()
             .type('goodPassword');
         cy.get('[data-cy=login-form]').submit();
-        cy.wait(30000);
+        cy.wait(5000);
         cy.location().should(loc => {
             expect(loc.pathname).to.eq('/');
         });
