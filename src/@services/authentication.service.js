@@ -29,7 +29,16 @@ const login = async ({ email, password }) => {
         currentUserSubject.next(user);
         return response;
     } catch (err) {
-        return err.response;
+        if (err.response) {
+            return err.response;
+        }
+        return {
+            status: 500,
+            data: {
+                detail: 'Internal Server Error, please try again'
+            }
+        }
+
     }
 };
 
