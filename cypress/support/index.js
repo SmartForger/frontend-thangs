@@ -17,8 +17,6 @@
 import './commands';
 // import { authenticationService } from '../../src/@services';
 
-beforeEach(function() {
-    cy.log('I run before every test in every spec file!!!!!!');
-});
+beforeEach(function() {});
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
