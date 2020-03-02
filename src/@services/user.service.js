@@ -1,4 +1,4 @@
-import { authHeader, handleResponse } from '@helpers';
+import { authHeader, handleResponse } from '../@helpers';
 
 const requestOptions = { method: 'GET', headers: authHeader() };
 

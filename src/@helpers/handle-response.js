@@ -1,4 +1,4 @@
-import { authenticationService } from '@services';
+import { authenticationService } from '../@services';
 
 const handleResponse = async response => {
     return response.text().then(text => {

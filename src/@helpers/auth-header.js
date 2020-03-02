@@ -1,4 +1,4 @@
-import { authenticationService } from '@services';
+import { authenticationService } from '../@services';
 
 const authHeader = () => {
     const currentUser = authenticationService.currentUser;
