@@ -15,8 +15,12 @@ describe('The Login Page', function() {
             },
         });
 
-        cy.get('[data-cy=login-email]').type('Info@physna.com');
-        cy.get('[data-cy=login-password]').type('badPassword');
+        cy.get('[data-cy=login-email]')
+            .focus()
+            .type('Info@physna.com');
+        cy.get('[data-cy=login-password]')
+            .focus()
+            .type('badPassword');
         cy.get('[data-cy=login-form]').submit();
         cy.wait(1000);
         cy.get('[data-cy=login-error');
@@ -34,9 +38,12 @@ describe('The Login Page', function() {
             },
         });
         cy.visit('/login');
-        cy.wait(400);
-        cy.get('[data-cy=login-email]').type('Info@physna.com');
-        cy.get('[data-cy=login-password]').type('goodPassword');
+        cy.get('[data-cy=login-email]')
+            .focus()
+            .type('Info@physna.com');
+        cy.get('[data-cy=login-password]')
+            .focus()
+            .type('goodPassword');
         cy.get('[data-cy=login-form]').submit();
         cy.wait(1000);
         cy.location().should(loc => {
