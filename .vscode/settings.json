@@ -1,0 +1,14 @@
+{
+  "editor.formatOnSave": false,
+    // Only auto-format if a prettier.config.js file exists in project codebase
+    "prettier.requireConfig": true,
+    // Plain Javascript files
+    "[javascript]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    // React/JSX files
+    "[javascriptreact]": {
+        "editor.formatOnSave": true
+    }
+  }

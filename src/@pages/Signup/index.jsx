@@ -63,6 +63,7 @@ const Signup = () => {
                 password: inputs.password,
             });
             setWaiting(false);
+            history.push('/');
         }
     }
 
