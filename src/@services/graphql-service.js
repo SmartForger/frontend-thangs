@@ -35,6 +35,8 @@ const useUserById = id => {
 };
 
 const getInstance = () => {
+    // Check the window to see if we have set up a mocked implementation. This
+    // allows us to mock these requests from inside the Cypress tests.
     if (window.Cypress && window['graphql-react']) {
         return window['graphql-react'];
     }
