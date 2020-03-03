@@ -23,3 +23,18 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+/*
+ * Enables us to mock a dependency through the window that will be shared
+ * between the Cypress context and the running application.
+ *
+ * Note that it is necessary to read the module from the window inside of the
+ * application code.
+ */
+Cypress.Commands.add('mockOnWindow', (mock = {}) => {
+    Cypress.on('window:before:load', win => {
+        for (let [key, value] of Object.entries(mock)) {
+            win[key] = value;
+        }
+    });
+});
