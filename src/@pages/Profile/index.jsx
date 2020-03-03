@@ -2,8 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTrail } from 'react-spring';
-import { useQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
+import { useGraphQL } from 'graphql-react';
 import { BasicPageStyle } from '@style';
 import { Button, ModelDisplay } from '@components';
 
@@ -58,13 +57,18 @@ const ModelsStyled = styled.div`
     flex-flow: row wrap;
 `;
 
-const EXCHANGE_RATES = gql`
-    {
-        rates(currency: "USD") {
-            currency
-        }
+const userQuery = id => `{
+  user(id: "${id}") {
+    id
+    username
+    email
+    firstName
+    lastName
+    profile {
+      description
+      avatar
     }
-`;
+}}`;
 
 const Profile = () => {
     const { id } = useParams();
@@ -93,20 +97,27 @@ const Profile = () => {
         from: { transform: 'translate(1000%,0) scale(0.6)' },
     }));
 
-    const { loading, error, data } = useQuery(EXCHANGE_RATES);
+    const { loading, cacheValue = {} } = useGraphQL({
+        fetchOptionsOverride(options) {
+            const access = localStorage.getItem('accessToken');
+            options.url = 'http://127.0.0.1:8000/graphql/';
+            options.headers = {
+                Authorization: `Bearer ${access}`,
+                'Content-Type': 'application/json',
+            };
+        },
+        operation: {
+            query: userQuery(id),
+        },
+        loadOnMount: true,
+        loadOnReload: true,
+        loadOnReset: true,
+    });
 
     if (loading) {
         return (
             <ProfileStyle>
                 <div>Loading...</div>
-            </ProfileStyle>
-        );
-    }
-
-    if (error) {
-        return (
-            <ProfileStyle>
-                <div>Error</div>
             </ProfileStyle>
         );
     }

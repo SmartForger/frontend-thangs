@@ -1,6 +1,5 @@
 import React from 'react';
-import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from '@apollo/react-hooks';
+import { GraphQL, GraphQLProvider } from 'graphql-react';
 
 import { Route, BrowserRouter as Router } from 'react-router-dom';
 
@@ -14,13 +13,11 @@ import {
 import { Home, Login, Signup, Details, Profile } from '@pages';
 import { ThangsMain, GlobalStyle } from '@style';
 
-const client = new ApolloClient({
-    uri: 'https://48p1r2roz4.sse.codesandbox.io',
-});
+const graphql = new GraphQL();
 
 const App = () => {
     return (
-        <ApolloProvider client={client}>
+        <GraphQLProvider graphql={graphql}>
             <Router>
                 <GlobalStyle />
                 <ThemeProvider theme={ThangsMain}>
@@ -35,7 +32,7 @@ const App = () => {
                     <Footer />
                 </ThemeProvider>
             </Router>
-        </ApolloProvider>
+        </GraphQLProvider>
     );
 };
 
