@@ -13,7 +13,7 @@ const ProfileStyle = styled(BasicPageStyle)`
     grid-template-columns: 30% 70%;
     grid-template-areas:
         '. .'
-        'header header'
+        'sidebar header'
         'sidebar models';
 `;
 
@@ -29,14 +29,12 @@ const SidebarStyled = styled.div`
 `;
 
 const SocialStyled = styled.div`
-    width: 600px;
-    height: 300px;
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
-    margin-top: -40%;
     z-index: 1;
     pointer-events: none;
+    flex-direction: column;
 
     > * {
         pointer-events: all;
@@ -55,6 +53,10 @@ const ModelsStyled = styled.div`
     grid-area: models;
     display: flex;
     flex-flow: row wrap;
+`;
+
+const UserDetails = styled.div`
+    margin-left: 75px;
 `;
 
 const userQuery = id => `{
@@ -122,12 +124,29 @@ const Profile = () => {
         );
     }
 
+    const user = cacheValue && cacheValue.data && cacheValue.data.user;
+    if (!user) {
+        return (
+            <div>
+                Error! We were not able to load your profile. Please try again
+                later.
+            </div>
+        );
+    }
+
     return (
         <ProfileStyle>
             <HeaderStyled />
             <SidebarStyled>
                 <SocialStyled>
                     <ProfilePicStyled />
+                    <UserDetails>
+                        <div>{user.username}</div>
+                        <div>{user.email}</div>
+                        <div>
+                            {user.firstName} {user.lastName}
+                        </div>
+                    </UserDetails>
                     <Button
                         name="Follow"
                         margin="0 0 0 40px"
