@@ -2,9 +2,9 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTrail } from 'react-spring';
-import { useGraphQL } from 'graphql-react';
 import { BasicPageStyle } from '@style';
 import { Button, ModelDisplay } from '@components';
+import * as GraphQLService from '@services/graphql-service';
 
 const ProfileStyle = styled(BasicPageStyle)`
     display: grid;
@@ -59,19 +59,6 @@ const UserDetails = styled.div`
     margin-left: 75px;
 `;
 
-const userQuery = id => `{
-  user(id: "${id}") {
-    id
-    username
-    email
-    firstName
-    lastName
-    profile {
-      description
-      avatar
-    }
-}}`;
-
 const Profile = () => {
     const { id } = useParams();
     const mockModels = [
@@ -99,22 +86,8 @@ const Profile = () => {
         from: { transform: 'translate(1000%,0) scale(0.6)' },
     }));
 
-    const { loading, cacheValue = {} } = useGraphQL({
-        fetchOptionsOverride(options) {
-            const access = localStorage.getItem('accessToken');
-            options.url = 'http://127.0.0.1:8000/graphql/';
-            options.headers = {
-                Authorization: `Bearer ${access}`,
-                'Content-Type': 'application/json',
-            };
-        },
-        operation: {
-            query: userQuery(id),
-        },
-        loadOnMount: true,
-        loadOnReload: true,
-        loadOnReset: true,
-    });
+    const graphQLService = GraphQLService.getInstance();
+    const { loading, user } = graphQLService.useUserById(id);
 
     if (loading) {
         return (
@@ -124,10 +97,9 @@ const Profile = () => {
         );
     }
 
-    const user = cacheValue && cacheValue.data && cacheValue.data.user;
     if (!user) {
         return (
-            <div>
+            <div data-cy="fetch-profile-error">
                 Error! We were not able to load your profile. Please try again
                 later.
             </div>
