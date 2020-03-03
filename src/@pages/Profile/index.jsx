@@ -99,7 +99,7 @@ const Profile = () => {
 
     if (!user) {
         return (
-            <div>
+            <div data-cy="fetch-profile-error">
                 Error! We were not able to load your profile. Please try again
                 later.
             </div>
