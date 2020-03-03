@@ -1,11 +1,11 @@
 import jwtDecode from 'jwt-decode';
 
-describe('The Login Page', function() {
-    it('successfully loads', function() {
+describe('The Login Page', () => {
+    it('successfully loads', () => {
         cy.visit('/login');
     });
 
-    it('fails to login, with incorrect credentials', function() {
+    it('fails to login, with incorrect credentials', () => {
         cy.server({
             method: 'POST',
         });
@@ -28,7 +28,7 @@ describe('The Login Page', function() {
         cy.get('[data-cy=login-error]');
     });
 
-    it('succeeds when logging in with proper credentials', function() {
+    it('succeeds when logging in with proper credentials', () => {
         cy.server({
             method: 'POST',
         });
