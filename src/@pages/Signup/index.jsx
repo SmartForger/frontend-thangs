@@ -137,10 +137,12 @@ const Signup = () => {
 
     return (
         <SignupBodyStyle>
-            <SignupFormStyle onSubmit={handleSubmit}>
+            <SignupFormStyle onSubmit={handleSubmit} data-cy="signup-form">
                 {waiting ? <Spinner size="300" /> : <h3>Signup</h3>}
                 {signupErrorMessage ? (
-                    <ErrorTextStyle>{signupErrorMessage}</ErrorTextStyle>
+                    <ErrorTextStyle data-cy="signup-error">
+                        {signupErrorMessage}
+                    </ErrorTextStyle>
                 ) : (
                     <></>
                 )}
@@ -164,6 +166,7 @@ const Signup = () => {
                         onFocus={validateRegistration}
                         value={inputs.registrationCode}
                         placeholder="Registration Code"
+                        data-cy="signup-registration"
                     />
                 )}
                 <TextInput
@@ -174,6 +177,7 @@ const Signup = () => {
                     onChange={handleChange}
                     value={inputs.firstName}
                     placeholder="First Name"
+                    data-cy="signup-first-name"
                 />
                 <TextInput
                     disabled={waiting}
@@ -183,6 +187,7 @@ const Signup = () => {
                     onChange={handleChange}
                     value={inputs.lastName}
                     placeholder="Last Name"
+                    data-cy="signup-last-name"
                 />
                 <TextInput
                     disabled={waiting}
@@ -194,6 +199,7 @@ const Signup = () => {
                     validator={validateUsername}
                     value={inputs.username}
                     placeholder="Username"
+                    data-cy="signup-username"
                     required
                 />
                 <TextInput
@@ -206,6 +212,7 @@ const Signup = () => {
                     validator={validateEmail}
                     value={inputs.email}
                     placeholder="E-mail"
+                    data-cy="signup-email"
                     required
                 />
                 <TextInput
@@ -216,6 +223,7 @@ const Signup = () => {
                     onChange={handleChange}
                     value={inputs.password}
                     placeholder="Password"
+                    data-cy="signup-password"
                     required
                 />
                 <TextInput
@@ -227,6 +235,7 @@ const Signup = () => {
                     value={inputs.confirmPass}
                     validator={validatePasswords}
                     placeholder="Confirm password"
+                    data-cy="signup-confirm-password"
                     required
                 />
                 <Button
