@@ -11,6 +11,7 @@
     "babel-plugin-root-import": "^6.4.1",
     "cypress": "^4.0.2",
     "email-validator": "^2.0.4",
+    "graphql-react": "^9.1.0",
     "history": "^4.10.1",
     "jwt-decode": "^2.2.0",
     "mdi-material-ui": "^6.10.0",
