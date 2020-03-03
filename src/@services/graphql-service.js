@@ -36,7 +36,7 @@ const useUserById = id => {
 
 const getInstance = () => {
     if (window.Cypress && window['graphql-react']) {
-        return window.Cypress && window['graphql-react'];
+        return window['graphql-react'];
     }
     return { useUserById };
 };
