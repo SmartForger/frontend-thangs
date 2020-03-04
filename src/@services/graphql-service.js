@@ -17,7 +17,7 @@ const useUserById = id => {
     const { loading, cacheValue = {} } = useGraphQL({
         fetchOptionsOverride(options) {
             const access = localStorage.getItem('accessToken');
-            options.url = 'http://127.0.0.1:8000/graphql/';
+            options.url = 'http://localhost:8000/graphql/';
             options.headers = {
                 Authorization: `Bearer ${access}`,
                 'Content-Type': 'application/json',

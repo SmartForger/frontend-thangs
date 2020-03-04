@@ -92,6 +92,12 @@ function getBaseUrl() {
     return withEndSlash(url);
 }
 
+function isGraphQLUrl(url) {
+    const baseUrl = getBaseUrl();
+    const graphqlUrl = baseUrl.replace('api', 'graphql');
+    return url.includes(graphqlUrl);
+}
+
 function getApiUrl(path) {
     const baseUrl = getBaseUrl();
     const apiPath = withEndSlash(path);
@@ -129,6 +135,7 @@ const authenticationService = {
     login,
     logout,
     signup,
+    isGraphQLUrl,
     refreshAccessToken,
     currentUser: currentUserSubject.asObservable(),
     get currentUserValue() {

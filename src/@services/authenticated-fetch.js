@@ -2,10 +2,9 @@ import { authenticationService } from '@services';
 
 const createAuthenticatedFetch = originalFetch => {
     return async (url, options) => {
-        // TODO: Need to implement this fallback in case of different endpoint.
-        // if (baseUrl(url) !== authenticationService.getApiUrl('/')) {
-        //     return window.fetch(url, options)
-        // }
+        if (!authenticationService.isGraphQLUrl(url)) {
+            return originalFetch(url, options);
+        }
 
         const response = await originalFetch(url, options);
         if (response.status === 401) {
