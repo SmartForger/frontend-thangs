@@ -8,9 +8,8 @@ const createAuthenticatedFetch = originalFetch => {
 
         const response = await originalFetch(url, options);
         if (response.status === 401) {
-            const accessToken = localStorage.getItem('accessToken');
-
             await authenticationService.refreshAccessToken();
+            const accessToken = localStorage.getItem('accessToken');
             return await originalFetch(url, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
