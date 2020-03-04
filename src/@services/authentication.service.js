@@ -1,6 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
+import { getGraphQLUrl } from './graphql-service';
 
 const currentUserSubject = new BehaviorSubject(
     JSON.parse(localStorage.getItem('currentUser')),
@@ -90,12 +91,6 @@ function withEndSlash(path) {
 function getBaseUrl() {
     let url = process.env.REACT_APP_API_KEY;
     return withEndSlash(url);
-}
-
-function getGraphQLUrl() {
-    const baseUrl = getBaseUrl();
-    const graphqlUrl = baseUrl.replace('api', 'graphql');
-    return graphqlUrl;
 }
 
 function isGraphQLUrl(url) {

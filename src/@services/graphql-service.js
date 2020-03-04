@@ -1,5 +1,19 @@
 import { useGraphQL } from 'graphql-react';
-import { authenticationService } from '@services/authentication.service';
+
+const hasEndSlash = /\/$/;
+
+function withEndSlash(path) {
+    if (hasEndSlash.test(path)) {
+        return path;
+    }
+    return `${path}/`;
+}
+
+function getGraphQLUrl() {
+    let url = process.env.REACT_APP_API_KEY;
+    const graphqlUrl = url.replace('api', 'graphql');
+    return withEndSlash(graphqlUrl);
+}
 
 const userQuery = id => `{
   user(id: "${id}") {
@@ -18,7 +32,7 @@ const useUserById = id => {
     const { loading, cacheValue = {} } = useGraphQL({
         fetchOptionsOverride(options) {
             const access = localStorage.getItem('accessToken');
-            options.url = authenticationService.getGraphQLUrl();
+            options.url = getGraphQLUrl();
             options.headers = {
                 Authorization: `Bearer ${access}`,
                 'Content-Type': 'application/json',
@@ -44,4 +58,4 @@ const getInstance = () => {
     return { useUserById };
 };
 
-export { getInstance };
+export { getInstance, getGraphQLUrl };
