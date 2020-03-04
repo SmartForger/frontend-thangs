@@ -92,9 +92,14 @@ function getBaseUrl() {
     return withEndSlash(url);
 }
 
-function isGraphQLUrl(url) {
+function getGraphQLUrl() {
     const baseUrl = getBaseUrl();
     const graphqlUrl = baseUrl.replace('api', 'graphql');
+    return graphqlUrl;
+}
+
+function isGraphQLUrl(url) {
+    const graphqlUrl = getGraphQLUrl();
     return url.includes(graphqlUrl);
 }
 
@@ -135,6 +140,7 @@ const authenticationService = {
     login,
     logout,
     signup,
+    getGraphQLUrl,
     isGraphQLUrl,
     refreshAccessToken,
     currentUser: currentUserSubject.asObservable(),

@@ -1,4 +1,5 @@
 import { useGraphQL } from 'graphql-react';
+import { authenticationService } from '@services/authentication.service';
 
 const userQuery = id => `{
   user(id: "${id}") {
@@ -17,7 +18,7 @@ const useUserById = id => {
     const { loading, cacheValue = {} } = useGraphQL({
         fetchOptionsOverride(options) {
             const access = localStorage.getItem('accessToken');
-            options.url = 'http://localhost:8000/graphql/';
+            options.url = authenticationService.getGraphQLUrl();
             options.headers = {
                 Authorization: `Bearer ${access}`,
                 'Content-Type': 'application/json',
