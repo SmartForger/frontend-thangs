@@ -12,8 +12,12 @@ import {
 } from '@components';
 import { Home, Login, Signup, Details, Profile } from '@pages';
 import { ThangsMain, GlobalStyle } from '@style';
+import { createAuthenticatedFetch } from '@services';
 
 const graphql = new GraphQL();
+
+const originalFetch = window.fetch;
+window.fetch = createAuthenticatedFetch(originalFetch);
 
 const App = () => {
     return (
