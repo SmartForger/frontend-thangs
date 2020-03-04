@@ -3,7 +3,7 @@ import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 
 const currentUserSubject = new BehaviorSubject(
-    JSON.parse(localStorage.getItem('currentUser'))
+    JSON.parse(localStorage.getItem('currentUser')),
 );
 
 const login = async ({ email, password }) => {
@@ -35,10 +35,9 @@ const login = async ({ email, password }) => {
         return {
             status: 500,
             data: {
-                detail: 'Internal Server Error, please try again'
-            }
-        }
-
+                detail: 'Internal Server Error, please try again',
+            },
+        };
     }
 };
 
@@ -99,10 +98,38 @@ function getApiUrl(path) {
     return new URL(apiPath, baseUrl);
 }
 
+// This singleton Promise acts as a mutex to ensure we only have one refresh
+// token request in-flight at any given time.
+let refreshingAccessToken = null;
+const refreshAccessToken = async () => {
+    if (!refreshingAccessToken) {
+        refreshingAccessToken = _refreshToken();
+    }
+    return await refreshingAccessToken;
+};
+
+const _refreshToken = async () => {
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    const url = getApiUrl(`token/refresh/`);
+
+    const response = await axios.post(url, { refresh: refreshToken });
+    const { access } = response.data;
+
+    // TODO: extract this away into an `updateUser()` function
+    const user = currentUserSubject.value;
+    user.accessToken = access;
+    currentUserSubject.next(user);
+    localStorage.setItem('accessToken', access);
+
+    return response;
+};
+
 const authenticationService = {
     login,
     logout,
     signup,
+    refreshAccessToken,
     currentUser: currentUserSubject.asObservable(),
     get currentUserValue() {
         return currentUserSubject.value;
