@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useTrail } from 'react-spring';
 import { BasicPageStyle } from '@style';
 import { Button, ModelDisplay } from '@components';
-import * as GraphQLService from '@services/graphql-service';
+import * as GraphqlService from '@services/graphql-service';
 
 const ProfileStyle = styled(BasicPageStyle)`
     display: grid;
@@ -86,18 +86,16 @@ const Profile = () => {
         from: { transform: 'translate(1000%,0) scale(0.6)' },
     }));
 
-    const graphQLService = GraphQLService.getInstance();
-    const { loading, user } = graphQLService.useUserById(id);
+    const graphqlService = GraphqlService.getInstance();
+    const { loading, error, data = {} } = graphqlService.useUserById(id);
 
     if (loading) {
-        return (
-            <ProfileStyle>
-                <div>Loading...</div>
-            </ProfileStyle>
-        );
+        return <div>Loading...</div>;
     }
 
-    if (!user) {
+    const { user } = data;
+
+    if (error || !user) {
         return (
             <div data-cy="fetch-profile-error">
                 Error! We were not able to load your profile. Please try again

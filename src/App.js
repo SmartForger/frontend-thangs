@@ -1,5 +1,5 @@
 import React from 'react';
-import { GraphQL, GraphQLProvider } from 'graphql-react';
+import { ApolloProvider } from '@apollo/react-hooks';
 
 import { Route, BrowserRouter as Router } from 'react-router-dom';
 
@@ -12,16 +12,14 @@ import {
 } from '@components';
 import { Home, Login, Signup, Details, Profile } from '@pages';
 import { ThangsMain, GlobalStyle } from '@style';
-import { createAuthenticatedFetch } from '@services';
-
-const graphql = new GraphQL();
+import { graphqlClient } from '@services';
 
 const originalFetch = window.fetch;
-window.fetch = createAuthenticatedFetch(originalFetch);
+const client = graphqlClient(originalFetch);
 
 const App = () => {
     return (
-        <GraphQLProvider graphql={graphql}>
+        <ApolloProvider client={client}>
             <Router>
                 <GlobalStyle />
                 <ThemeProvider theme={ThangsMain}>
@@ -36,7 +34,7 @@ const App = () => {
                     <Footer />
                 </ThemeProvider>
             </Router>
-        </GraphQLProvider>
+        </ApolloProvider>
     );
 };
 
