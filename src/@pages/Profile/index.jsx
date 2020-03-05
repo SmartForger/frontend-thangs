@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTrail } from 'react-spring';
 import { BasicPageStyle } from '@style';
-import { Button, ModelDisplay } from '@components';
+import { ProfileSidebar, ModelDisplay } from '@components';
 import * as GraphqlService from '@services/graphql-service';
 
 const ProfileStyle = styled(BasicPageStyle)`
@@ -21,42 +21,10 @@ const HeaderStyled = styled.div`
     grid-area: header;
 `;
 
-const SidebarStyled = styled.div`
-    grid-area: sidebar;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: flex-start;
-`;
-
-const SocialStyled = styled.div`
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    z-index: 1;
-    pointer-events: none;
-    flex-direction: column;
-
-    > * {
-        pointer-events: all;
-    }
-`;
-
-const ProfilePicStyled = styled.div`
-    background: grey;
-    border-radius: 50%;
-    height: 250px;
-    width: 250px;
-    margin-left: 75px;
-`;
-
 const ModelsStyled = styled.div`
     grid-area: models;
     display: flex;
     flex-flow: row wrap;
-`;
-
-const UserDetails = styled.div`
-    margin-left: 75px;
 `;
 
 const Profile = () => {
@@ -107,24 +75,7 @@ const Profile = () => {
     return (
         <ProfileStyle>
             <HeaderStyled />
-            <SidebarStyled>
-                <SocialStyled>
-                    <ProfilePicStyled />
-                    <UserDetails>
-                        <div>{user.username}</div>
-                        <div>{user.email}</div>
-                        <div>
-                            {user.firstName} {user.lastName}
-                        </div>
-                    </UserDetails>
-                    <Button
-                        name="Follow"
-                        margin="0 0 0 40px"
-                        maxwidth="150px"
-                        routeto="/details/7574"
-                    />
-                </SocialStyled>
-            </SidebarStyled>
+            <ProfileSidebar user={user} />
             <ModelsStyled>
                 {trail.map((props, index) => (
                     <ModelDisplay
