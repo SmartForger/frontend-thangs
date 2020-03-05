@@ -15,3 +15,4 @@ export * from './HideOnRoutes.jsx';
 export * from './Tag.jsx';
 export * from './Viewer.jsx';
 export * from './ColorPicker';
+export * from './ProfileSidebar';

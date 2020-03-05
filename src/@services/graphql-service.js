@@ -4,7 +4,7 @@ import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { ApolloLink } from 'apollo-link';
 import { gql } from 'apollo-boost';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { createAuthenticatedFetch } from '@services/authenticated-fetch';
 import { authenticationService } from '@services/authentication.service';
 
@@ -23,18 +23,41 @@ function getGraphQLUrl() {
     return withEndSlash(graphqlUrl);
 }
 
-const userQuery = id => gql`{
-  user(id: "${id}") {
-    id
-    username
-    email
-    firstName
-    lastName
-    profile {
-      description
-      avatar
+const USER_QUERY = gql`
+    query getUser($id: ID) {
+        user(id: $id) {
+            id
+            username
+            email
+            firstName
+            lastName
+            profile {
+                description
+                avatar
+            }
+        }
     }
-}}`;
+`;
+
+const UPDATE_USER_MUTATION = gql`
+    mutation updateUser($updateInput: UpdateUserInput!) {
+        updateUser(input: $updateInput) {
+            id
+            email
+            username
+            firstName
+            lastName
+            profile {
+                description
+                avatar
+            }
+            errors {
+                field
+                messages
+            }
+        }
+    }
+`;
 
 export const graphqlClient = originalFetch =>
     new ApolloClient({
@@ -59,8 +82,14 @@ export const graphqlClient = originalFetch =>
     });
 
 const useUserById = id => {
-    return useQuery(userQuery(id));
+    return useQuery(USER_QUERY, { variables: { id } });
 };
+
+function useUpdateUser() {
+    return useMutation(UPDATE_USER_MUTATION, {
+        // refetchQueries: [{ query: USER_QUERY }],
+    });
+}
 
 const getInstance = () => {
     // Check the window to see if we have set up a mocked implementation. This
@@ -68,7 +97,7 @@ const getInstance = () => {
     if (window.Cypress && window['graphql-react']) {
         return window['graphql-react'];
     }
-    return { useUserById };
+    return { useUserById, useUpdateUser };
 };
 
-export { getInstance, getGraphQLUrl };
+export { getInstance, getGraphQLUrl, USER_QUERY };
