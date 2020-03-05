@@ -16,11 +16,13 @@ describe('The Profile Page', () => {
             'graphql-react': {
                 useUserById: () => ({
                     loading: false,
-                    user: {
-                        username: 'test-username',
-                        email: 'test-email',
-                        firstName: 'test-firstName',
-                        lastName: 'test-lastName',
+                    data: {
+                        user: {
+                            username: 'test-username',
+                            email: 'test-email',
+                            firstName: 'test-firstName',
+                            lastName: 'test-lastName',
+                        },
                     },
                 }),
             },
@@ -36,7 +38,9 @@ describe('The Profile Page', () => {
             'graphql-react': {
                 useUserById: () => ({
                     loading: false,
-                    user: null,
+                    data: {
+                        user: null,
+                    },
                 }),
             },
         });
