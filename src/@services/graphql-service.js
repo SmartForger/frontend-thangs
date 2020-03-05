@@ -1,4 +1,12 @@
-import { useGraphQL } from 'graphql-react';
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http';
+import { onError } from 'apollo-link-error';
+import { ApolloLink } from 'apollo-link';
+import { gql } from 'apollo-boost';
+import { useQuery } from '@apollo/react-hooks';
+import { createAuthenticatedFetch } from '@services/authenticated-fetch';
+import { authenticationService } from '@services/authentication.service';
 
 const hasEndSlash = /\/$/;
 
@@ -15,7 +23,7 @@ function getGraphQLUrl() {
     return withEndSlash(graphqlUrl);
 }
 
-const userQuery = id => `{
+const userQuery = id => gql`{
   user(id: "${id}") {
     id
     username
@@ -28,25 +36,30 @@ const userQuery = id => `{
     }
 }}`;
 
-const useUserById = id => {
-    const { loading, cacheValue = {} } = useGraphQL({
-        fetchOptionsOverride(options) {
-            const access = localStorage.getItem('accessToken');
-            options.url = getGraphQLUrl();
-            options.headers = {
-                Authorization: `Bearer ${access}`,
-                'Content-Type': 'application/json',
-            };
-        },
-        operation: {
-            query: userQuery(id),
-        },
-        loadOnMount: true,
-        loadOnReload: true,
-        loadOnReset: true,
+export const graphqlClient = originalFetch =>
+    new ApolloClient({
+        link: ApolloLink.from([
+            onError(({ graphQLErrors, networkError }) => {
+                if (graphQLErrors)
+                    graphQLErrors.forEach(({ message, locations, path }) =>
+                        console.log(
+                            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+                        ),
+                    );
+                if (networkError)
+                    console.log(`[Network error]: ${networkError}`);
+            }),
+            new HttpLink({
+                uri: getGraphQLUrl(),
+                fetch: createAuthenticatedFetch(originalFetch),
+                credentials: 'same-origin',
+            }),
+        ]),
+        cache: new InMemoryCache(),
     });
-    const user = cacheValue && cacheValue.data && cacheValue.data.user;
-    return { user, loading };
+
+const useUserById = id => {
+    return useQuery(userQuery(id));
 };
 
 const getInstance = () => {
