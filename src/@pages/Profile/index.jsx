@@ -61,13 +61,7 @@ const Profile = () => {
         return <div>Loading...</div>;
     }
 
-    const {
-        // This field is never used, so it's helpful to remove it
-        __typename: _,
-        ...user
-    } = data.user;
-
-    if (error || !user) {
+    if (error || !data.user) {
         return (
             <div data-cy="fetch-profile-error">
                 Error! We were not able to load your profile. Please try again
@@ -75,6 +69,12 @@ const Profile = () => {
             </div>
         );
     }
+
+    const {
+        // This field is never used, so it's helpful to remove it
+        __typename: _,
+        ...user
+    } = data.user;
 
     return (
         <ProfileStyle>
