@@ -76,12 +76,20 @@ const TextArea = styled.textarea`
     border-radius: 4px;
 `;
 
-const EditProfileForm = ({ onSubmit, user }) => {
+const ButtonGroup = styled.div`
+    margin-top: 4px;
+    display: flex;
+`;
+
+const EditProfileForm = ({ onClose, user }) => {
     const { register, handleSubmit, watch, errors } = useForm();
 
     const graphqlService = GraphqlService.getInstance();
     const [updateUser, { called, loading }] = graphqlService.useUpdateUser();
 
+    function handleCancel() {
+        onClose();
+    }
     async function formSubmit(data, e) {
         e.preventDefault();
 
@@ -115,7 +123,7 @@ const EditProfileForm = ({ onSubmit, user }) => {
             console.error('Error when trying to update the user', error);
         }
 
-        onSubmit(data, e);
+        onClose(data, e);
     }
 
     return (
@@ -156,7 +164,10 @@ const EditProfileForm = ({ onSubmit, user }) => {
                 placeholder="Add a bio..."
             />
 
-            <Button name="Save" type="submit" margin="4px 0 0 0" />
+            <ButtonGroup>
+                <Button name="Save" type="submit" />
+                <Button name="Cancel" onClick={e => handleCancel(e)} />
+            </ButtonGroup>
         </FormStyled>
     );
 };
@@ -171,10 +182,7 @@ export const ProfileSidebar = ({ user }) => {
                 <ProfilePicStyled />
                 <UserDetails>
                     {isEditing ? (
-                        <EditProfileForm
-                            onSubmit={endEditProfile}
-                            user={user}
-                        />
+                        <EditProfileForm onClose={endEditProfile} user={user} />
                     ) : (
                         <>
                             <div>{user.username}</div>
