@@ -59,6 +59,11 @@ const NameField = styled.div`
     display: flex;
 `;
 
+const TextArea = styled.textarea`
+    width: 100%;
+    resize: vertical;
+`;
+
 const EditProfileForm = ({ onSubmit, user }) => {
     const { register, handleSubmit, watch, errors } = useForm();
 
@@ -67,15 +72,21 @@ const EditProfileForm = ({ onSubmit, user }) => {
 
     async function formSubmit(data, e) {
         e.preventDefault();
-        const update = { ...user, ...data };
+
+        const updateInput = {
+            id: user.id,
+            username: data.username,
+            email: data.email,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            profile: {
+                description: data.description,
+            },
+        };
+
         try {
             await updateUser({
-                variables: {
-                    updateInput: {
-                        ...update,
-                        profile: { description: 'description updated' },
-                    },
-                },
+                variables: { updateInput },
 
                 // We need this update mechanism because our user query returns a
                 // string id, while the user mutation returns an integer id.
@@ -123,6 +134,12 @@ const EditProfileForm = ({ onSubmit, user }) => {
                     placeholder="Last Name"
                 />
             </NameField>
+            <TextArea
+                name="description"
+                defaultValue={user.profile.description}
+                ref={register}
+                placeholder="Add a bio..."
+            />
 
             <Button name="Submit" type="submit" maxwidth="100%" />
         </FormStyled>
@@ -151,6 +168,7 @@ export const ProfileSidebar = ({ user }) => {
                                 {user.firstName} {user.lastName}
                             </div>
                             <FollowOrEditButton onClick={startEditProfile} />
+                            <div>{user.profile.description}</div>
                         </>
                     )}
                 </UserDetails>
