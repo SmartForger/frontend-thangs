@@ -40,6 +40,8 @@ const UserDetails = styled.div`
     width: 100%;
 `;
 
+const allowCssProp = props => (props.css ? props.css : '');
+
 const FollowOrEditButton = ({ onClick }) => {
     // TODO if the user on this page is the logged in user, we should render a
     // Follow button.
@@ -52,16 +54,26 @@ const FormStyled = styled.form`
 `;
 
 const FullWidthInput = styled.input`
-    width: 100%;
+    display: block;
+    flex-grow: 1;
+    border: 0;
+    padding: 4px;
+    margin-bottom: 4px;
+    border-radius: 4px;
+
+    ${allowCssProp};
 `;
 
 const NameField = styled.div`
     display: flex;
+    justify-content: space-between;
 `;
 
 const TextArea = styled.textarea`
-    width: 100%;
     resize: vertical;
+    border: 0;
+    padding: 4px;
+    border-radius: 4px;
 `;
 
 const EditProfileForm = ({ onSubmit, user }) => {
@@ -126,6 +138,9 @@ const EditProfileForm = ({ onSubmit, user }) => {
                     defaultValue={user.firstName}
                     ref={register}
                     placeholder="First Name"
+                    css={`
+                        margin-right: 4px;
+                    `}
                 />
                 <FullWidthInput
                     name="lastName"
@@ -141,7 +156,7 @@ const EditProfileForm = ({ onSubmit, user }) => {
                 placeholder="Add a bio..."
             />
 
-            <Button name="Submit" type="submit" maxwidth="100%" />
+            <Button name="Save" type="submit" margin="4px 0 0 0" />
         </FormStyled>
     );
 };
