@@ -28,6 +28,7 @@ const ProfilePicStyled = styled.div`
     border-radius: 50%;
     height: 250px;
     width: 250px;
+    cursor: pointer;
 `;
 
 const ModelsStyled = styled.div`
@@ -58,6 +59,22 @@ const FullWidthInput = styled.input`
 const NameField = styled.div`
     display: flex;
 `;
+
+const HiddenInput = styled.input`
+    visibility: hidden;
+    position: absolute;
+`;
+
+const ChangeablePicture = () => {
+    return (
+        <form>
+            <label htmlFor="avatar">
+                <ProfilePicStyled />
+            </label>
+            <HiddenInput type="file" name="Change Image" id="avatar" />
+        </form>
+    );
+};
 
 const EditProfileForm = ({ onSubmit, user }) => {
     const { register, handleSubmit, watch, errors } = useForm();
