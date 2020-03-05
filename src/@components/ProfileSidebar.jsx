@@ -23,14 +23,6 @@ const SocialStyled = styled.div`
     }
 `;
 
-const ProfilePicStyled = styled.div`
-    background: grey;
-    border-radius: 50%;
-    height: 250px;
-    width: 250px;
-    cursor: pointer;
-`;
-
 const ModelsStyled = styled.div`
     grid-area: models;
     display: flex;
@@ -59,22 +51,6 @@ const FullWidthInput = styled.input`
 const NameField = styled.div`
     display: flex;
 `;
-
-const HiddenInput = styled.input`
-    visibility: hidden;
-    position: absolute;
-`;
-
-const ChangeablePicture = () => {
-    return (
-        <form>
-            <label htmlFor="avatar">
-                <ProfilePicStyled />
-            </label>
-            <HiddenInput type="file" name="Change Image" id="avatar" />
-        </form>
-    );
-};
 
 const EditProfileForm = ({ onSubmit, user }) => {
     const { register, handleSubmit, watch, errors } = useForm();
@@ -153,7 +129,7 @@ export const ProfileSidebar = ({ user }) => {
     return (
         <SidebarStyled>
             <SocialStyled>
-                <ProfilePicStyled />
+                <ChangeablePicture />
                 <UserDetails>
                     {isEditing ? (
                         <EditProfileForm
