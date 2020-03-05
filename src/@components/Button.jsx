@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { animated } from 'react-spring';
 
-const BtnStyle = styled(animated.div)`
+const BtnStyle = styled(animated.button)`
     width: 100%;
     max-width: ${props => props.maxwidth || '100px'};
     height: ${props => props.height || '35px'};

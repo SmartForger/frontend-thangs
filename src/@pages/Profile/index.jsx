@@ -61,7 +61,11 @@ const Profile = () => {
         return <div>Loading...</div>;
     }
 
-    const { user } = data;
+    const {
+        // This field is never used, so it's helpful to remove it
+        __typename: _,
+        ...user
+    } = data.user;
 
     if (error || !user) {
         return (

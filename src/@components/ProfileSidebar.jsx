@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import { Button } from '@components';
+import * as GraphqlService from '@services/graphql-service';
 
 const SidebarStyled = styled.div`
     grid-area: sidebar;
@@ -60,8 +61,42 @@ const NameField = styled.div`
 
 const EditProfileForm = ({ onSubmit, user }) => {
     const { register, handleSubmit, watch, errors } = useForm();
+
+    const graphqlService = GraphqlService.getInstance();
+    const [updateUser, { called, loading }] = graphqlService.useUpdateUser();
+
+    async function formSubmit(data, e) {
+        e.preventDefault();
+        const update = { ...user, ...data };
+        try {
+            await updateUser({
+                variables: {
+                    updateInput: {
+                        ...update,
+                        profile: { description: 'description updated' },
+                    },
+                },
+
+                // We need this update mechanism because our user query returns a
+                // string id, while the user mutation returns an integer id.
+                // This messes up Apollo's caching, so we need to handle it ourselves.
+                update: (store, { data: { updateUser } }) => {
+                    store.writeQuery({
+                        query: GraphqlService.USER_QUERY,
+                        variables: { id: `${updateUser.id}`, test: 4 },
+                        data: { user: updateUser },
+                    });
+                },
+            });
+        } catch (error) {
+            console.error('Error when trying to update the user', error);
+        }
+
+        onSubmit(data, e);
+    }
+
     return (
-        <FormStyled onSubmit={handleSubmit(onSubmit)}>
+        <FormStyled onSubmit={(data, e) => handleSubmit(formSubmit)(data, e)}>
             <FullWidthInput
                 name="username"
                 defaultValue={user.username}
