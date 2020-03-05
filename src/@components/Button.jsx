@@ -1,8 +1,7 @@
 import React from 'react';
-import {useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import {animated} from 'react-spring';
-
+import { animated } from 'react-spring';
 
 const BtnStyle = styled(animated.div)`
     width: 100%;
@@ -11,52 +10,58 @@ const BtnStyle = styled(animated.div)`
     margin: ${props => props.margin || '5px'};
     border: none;
     text-align: center;
-    user-select:none;
-    cursor: ${props => props.disabled ? 'not-allowed' :'pointer'};
+    user-select: none;
+    cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
     display: flex;
     justify-content: center;
     align-items: center;
-    background: ${props => props.disabled ? 'gray' : props.theme.primary};
+    background: ${props => (props.disabled ? 'gray' : props.theme.primary)};
     color: ${props => props.theme.white};
-    box-shadow: inset 0 0 0 2px  ${props => props.theme.white};
+    box-shadow: inset 0 0 0 2px ${props => props.theme.white};
     font-size: ${props => props.fontSize || '12px'};
     font-weight: 700;
-    transition: .5s;
+    transition: 0.5s;
 
     &:hover {
-      
-      background-color: ${props => props.disabled ? 'gray' : props.theme.primary};
-      color: ${props => props.disabled ? props.theme.white : props.theme.secondary};
+        background-color: ${props =>
+            props.disabled ? 'gray' : props.theme.primary};
+        color: ${props =>
+            props.disabled ? props.theme.white : props.theme.secondary};
     }
     &:active {
-      transform: scale(0.95);
+        transform: scale(0.95);
     }
-  
+
     &:disabled {
-      background-color: gray;
-      cursor: not-allowed;
+        background-color: gray;
+        cursor: not-allowed;
     }
 `;
 
-  const Button = (props) => {
+const Button = props => {
     const {
-      name,
-      onClick,
-      routeto, 
-      maxwidth, 
-      height, 
-      margin,
-      fontSize,
-      disabled, 
-      ...rest //This is just to make eslint chill out
-    } = props
+        name,
+        onClick,
+        routeto,
+        maxwidth,
+        height,
+        margin,
+        fontSize,
+        disabled,
+        ...rest //This is just to make eslint chill out
+    } = props;
     const history = useHistory();
-    return <BtnStyle {...props} onClick={
-      () => {
-        if (onClick != null && !props.disabled) props.onClick();
-        if (routeto != null) history.push(routeto);}
-      }>{name}
-      </BtnStyle>
-}
+    return (
+        <BtnStyle
+            {...props}
+            onClick={() => {
+                if (onClick != null && !props.disabled) props.onClick();
+                if (routeto != null) history.push(routeto);
+            }}
+        >
+            {name}
+        </BtnStyle>
+    );
+};
 
-export {Button};
+export { Button };
