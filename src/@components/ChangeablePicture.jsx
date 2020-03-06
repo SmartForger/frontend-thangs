@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -61,6 +61,7 @@ export function ChangeablePicture({ userId }) {
     const [crop, setCrop] = useState({ unit: '%', width: 30, aspect: 1 / 1 });
     const [croppedImg, setCroppedImg] = useState(null);
     const [isCropping, setIsCropping] = useState(false);
+    const imageEl = useRef(null);
     const [
         uploadAvatar,
         { called, loading },
@@ -75,11 +76,18 @@ export function ChangeablePicture({ userId }) {
             // We need this update mechanism because our user query returns a
             // string id, while the user mutation returns an integer id.
             // This messes up Apollo's caching, so we need to handle it ourselves.
-            update: (store, { data: { updateUser } }) => {
+            update: (
+                store,
+                {
+                    data: {
+                        uploadUserProfileAvatar: { user },
+                    },
+                },
+            ) => {
                 store.writeQuery({
                     query: GraphqlService.USER_QUERY,
-                    variables: { id: `${updateUser.id}` },
-                    data: { user: updateUser },
+                    variables: { id: `${user.id}` },
+                    data: { user },
                 });
             },
         });
@@ -116,7 +124,7 @@ export function ChangeablePicture({ userId }) {
             const croppedImg = await getCroppedImage(
                 imageRef,
                 crop,
-                'newFile.jpeg',
+                imageEl.current.files[0].name,
             );
             setCroppedImg(croppedImg);
         }
@@ -165,6 +173,7 @@ export function ChangeablePicture({ userId }) {
                 id="avatar"
                 onChange={onSelectFile}
                 accept="image/x-png,image/jpeg"
+                ref={imageEl}
             />
             <ModalOverlayStyles />
             <ModalStyled
