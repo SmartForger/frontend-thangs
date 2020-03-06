@@ -42,6 +42,9 @@ const UserDetails = styled.div`
 
 const allowCssProp = props => (props.css ? props.css : '');
 
+const isEmpty = obj =>
+    Object.keys(obj).length === 0 && obj.constructor === Object;
+
 const FollowOrEditButton = ({ onClick }) => {
     // TODO if the user on this page is the logged in user, we should render a
     // Follow button.
@@ -91,6 +94,7 @@ const EditProfileForm = ({ onClose, user }) => {
     function handleCancel() {
         onClose();
     }
+
     async function formSubmit(data, e) {
         e.preventDefault();
 
@@ -132,20 +136,20 @@ const EditProfileForm = ({ onClose, user }) => {
             <FullWidthInput
                 name="username"
                 defaultValue={user.username}
-                ref={register}
+                ref={register({ required: true })}
                 placeholder="Username"
             />
             <FullWidthInput
                 name="email"
                 defaultValue={user.email}
-                ref={register}
+                ref={register({ required: true })}
                 placeholder="Email"
             />
             <NameField>
                 <FullWidthInput
                     name="firstName"
                     defaultValue={user.firstName}
-                    ref={register}
+                    ref={register({ required: true })}
                     placeholder="First Name"
                     css={`
                         margin-right: 4px;
@@ -154,19 +158,19 @@ const EditProfileForm = ({ onClose, user }) => {
                 <FullWidthInput
                     name="lastName"
                     defaultValue={user.lastName}
-                    ref={register}
+                    ref={register({ required: true })}
                     placeholder="Last Name"
                 />
             </NameField>
             <TextArea
                 name="description"
                 defaultValue={user.profile.description}
-                ref={register}
+                ref={register({ required: true })}
                 placeholder="Add a bio..."
             />
 
             <ButtonGroup>
-                <Button name="Save" type="submit" />
+                <Button name="Save" type="submit" disabled={!isEmpty(errors)} />
                 <Button name="Cancel" onClick={e => handleCancel(e)} />
             </ButtonGroup>
         </FormStyled>
