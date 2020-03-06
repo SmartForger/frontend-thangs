@@ -25,7 +25,8 @@ describe('The Profile Page', () => {
                             firstName: 'test-firstName',
                             lastName: 'test-lastName',
                             profile: {
-                                description: 'profile description text',
+                                description:
+                                    'test description of a user user profile',
                                 avatar: 'avatar-url',
                             },
                         },

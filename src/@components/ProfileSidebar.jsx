@@ -33,6 +33,8 @@ const UserDetails = styled.div`
     width: 100%;
 `;
 
+const allowCssProp = props => (props.css ? props.css : '');
+
 const FollowOrEditButton = ({ onClick }) => {
     // TODO if the user on this page is the logged in user, we should render a
     // Follow button.
@@ -45,30 +47,59 @@ const FormStyled = styled.form`
 `;
 
 const FullWidthInput = styled.input`
-    width: 100%;
+    display: block;
+    flex-grow: 1;
+    border: 0;
+    padding: 4px;
+    margin-bottom: 4px;
+    border-radius: 4px;
+
+    ${allowCssProp};
 `;
 
 const NameField = styled.div`
     display: flex;
+    justify-content: space-between;
 `;
 
-const EditProfileForm = ({ onSubmit, user }) => {
+const TextArea = styled.textarea`
+    resize: vertical;
+    border: 0;
+    padding: 4px;
+    border-radius: 4px;
+`;
+
+const ButtonGroup = styled.div`
+    margin-top: 4px;
+    display: flex;
+`;
+
+const EditProfileForm = ({ onClose, user }) => {
     const { register, handleSubmit, watch, errors } = useForm();
 
     const graphqlService = GraphqlService.getInstance();
     const [updateUser, { called, loading }] = graphqlService.useUpdateUser();
 
+    function handleCancel() {
+        onClose();
+    }
     async function formSubmit(data, e) {
         e.preventDefault();
-        const update = { ...user, ...data };
+
+        const updateInput = {
+            id: user.id,
+            username: data.username,
+            email: data.email,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            profile: {
+                description: data.description,
+            },
+        };
+
         try {
             await updateUser({
-                variables: {
-                    updateInput: {
-                        ...update,
-                        profile: { description: 'description updated' },
-                    },
-                },
+                variables: { updateInput },
 
                 // We need this update mechanism because our user query returns a
                 // string id, while the user mutation returns an integer id.
@@ -85,7 +116,7 @@ const EditProfileForm = ({ onSubmit, user }) => {
             console.error('Error when trying to update the user', error);
         }
 
-        onSubmit(data, e);
+        onClose(data, e);
     }
 
     return (
@@ -108,6 +139,9 @@ const EditProfileForm = ({ onSubmit, user }) => {
                     defaultValue={user.firstName}
                     ref={register}
                     placeholder="First Name"
+                    css={`
+                        margin-right: 4px;
+                    `}
                 />
                 <FullWidthInput
                     name="lastName"
@@ -116,8 +150,17 @@ const EditProfileForm = ({ onSubmit, user }) => {
                     placeholder="Last Name"
                 />
             </NameField>
+            <TextArea
+                name="description"
+                defaultValue={user.profile.description}
+                ref={register}
+                placeholder="Add a bio..."
+            />
 
-            <Button name="Submit" type="submit" maxwidth="100%" />
+            <ButtonGroup>
+                <Button name="Save" type="submit" />
+                <Button name="Cancel" onClick={e => handleCancel(e)} />
+            </ButtonGroup>
         </FormStyled>
     );
 };
@@ -132,10 +175,7 @@ export const ProfileSidebar = ({ user }) => {
                 <ChangeablePicture userId={user.id} />
                 <UserDetails>
                     {isEditing ? (
-                        <EditProfileForm
-                            onSubmit={endEditProfile}
-                            user={user}
-                        />
+                        <EditProfileForm onClose={endEditProfile} user={user} />
                     ) : (
                         <>
                             <div>{user.username}</div>
@@ -144,6 +184,7 @@ export const ProfileSidebar = ({ user }) => {
                                 {user.firstName} {user.lastName}
                             </div>
                             <FollowOrEditButton onClick={startEditProfile} />
+                            <div>{user.profile.description}</div>
                         </>
                     )}
                 </UserDetails>
