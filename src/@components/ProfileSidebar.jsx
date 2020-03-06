@@ -86,7 +86,7 @@ const ButtonGroup = styled.div`
 `;
 
 const EditProfileForm = ({ onClose, user }) => {
-    const { register, handleSubmit, watch, errors } = useForm();
+    const { register, handleSubmit, errors } = useForm();
 
     const graphqlService = GraphqlService.getInstance();
     const [updateUser, { called, loading }] = graphqlService.useUpdateUser();
