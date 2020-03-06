@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
+import Modal from 'react-modal';
 
 const ProfilePicStyled = styled.div`
     background: grey;
@@ -16,16 +17,46 @@ const HiddenInput = styled.input`
     position: absolute;
 `;
 
+const ModalStyled = styled(Modal)`
+    position: fixed;
+    border: 1px solid rgb(204, 204, 204);
+    background: rgb(255, 255, 255);
+    overflow: auto;
+    border-radius: 4px;
+    outline: none;
+    padding: 20px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+`;
+
+const ModalOverlayStyles = createGlobalStyle`
+    .img-cropper-modal-overlay {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        background-color: rgba(0, 0, 0, 0.75);
+    }
+    .ReactCrop__image {
+        max-height: 50vh;
+        max-width: 50vw;
+    }
+`;
+
 export function ChangeablePicture() {
     const [src, setSrc] = useState(null);
     const [crop, setCrop] = useState({ unit: '%', width: 30, aspect: 1 / 1 });
     const [croppedImgUrl, setCroppedImgUrl] = useState(null);
+    const [isCropping, setIsCropping] = useState(false);
 
     function onSelectFile(e) {
         if (e.target.files && e.target.files.length > 0) {
             const reader = new FileReader();
             reader.addEventListener('load', () => {
                 setSrc(reader.result);
+                setIsCropping(true);
             });
             reader.readAsDataURL(e.target.files[0]);
         }
@@ -101,7 +132,11 @@ export function ChangeablePicture() {
                 id="avatar"
                 onChange={onSelectFile}
             />
-            {src && (
+            <ModalOverlayStyles />
+            <ModalStyled
+                isOpen={isCropping}
+                overlayClassName="img-cropper-modal-overlay"
+            >
                 <ReactCrop
                     src={src}
                     crop={crop}
@@ -110,7 +145,7 @@ export function ChangeablePicture() {
                     onChange={onCropChange}
                     circularCrop={true}
                 />
-            )}
+            </ModalStyled>
         </form>
     );
 }
