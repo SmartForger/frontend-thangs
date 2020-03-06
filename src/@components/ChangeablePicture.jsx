@@ -3,6 +3,9 @@ import styled, { createGlobalStyle } from 'styled-components';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import Modal from 'react-modal';
+import { Button } from '@components';
+
+Modal.setAppElement('#root');
 
 const ProfilePicStyled = styled.div`
     background: grey;
@@ -45,11 +48,21 @@ const ModalOverlayStyles = createGlobalStyle`
     }
 `;
 
+const ButtonContainer = styled.div`
+    display: flex;
+    justify-content: center;
+`;
+
 export function ChangeablePicture() {
     const [src, setSrc] = useState(null);
     const [crop, setCrop] = useState({ unit: '%', width: 30, aspect: 1 / 1 });
     const [croppedImgUrl, setCroppedImgUrl] = useState(null);
     const [isCropping, setIsCropping] = useState(false);
+
+    const submitCrop = () => {
+        // croppedImgUrl
+        setIsCropping(false);
+    };
 
     function onSelectFile(e) {
         if (e.target.files && e.target.files.length > 0) {
@@ -69,7 +82,7 @@ export function ChangeablePicture() {
     }
 
     function onCropComplete(crop) {
-        setCrop(crop);
+        return makeClientCrop(crop);
     }
 
     function onCropChange(crop) {
@@ -77,6 +90,8 @@ export function ChangeablePicture() {
     }
 
     async function makeClientCrop(crop) {
+        console.log('imageRef', imageRef);
+        console.log('crop', crop);
         if (imageRef && crop.width && crop.height) {
             const croppedImageUrl = await getCroppedImage(
                 imageRef,
@@ -86,6 +101,8 @@ export function ChangeablePicture() {
             setCroppedImgUrl(croppedImageUrl);
         }
     }
+
+    let fileUrl = null;
 
     function getCroppedImage(image, crop, fileName) {
         const canvas = document.createElement('canvas');
@@ -114,9 +131,9 @@ export function ChangeablePicture() {
                     return;
                 }
                 blob.name = fileName;
-                window.URL.revokeObjectURL(this.fileUrl);
-                this.fileUrl = window.URL.createObjectURL(blob);
-                resolve(this.fileurl);
+                window.URL.revokeObjectURL(fileUrl);
+                fileUrl = window.URL.createObjectURL(blob);
+                resolve(fileUrl);
             });
         }, 'image/jpeg');
     }
@@ -145,6 +162,9 @@ export function ChangeablePicture() {
                     onChange={onCropChange}
                     circularCrop={true}
                 />
+                <ButtonContainer>
+                    <Button onClick={submitCrop} name="Save" />
+                </ButtonContainer>
             </ModalStyled>
         </form>
     );
