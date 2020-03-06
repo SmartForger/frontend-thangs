@@ -60,6 +60,7 @@ const FullWidthInput = styled.input`
     padding: 4px;
     margin-bottom: 4px;
     border-radius: 4px;
+    min-width: 0;
 
     ${allowCssProp};
 `;
