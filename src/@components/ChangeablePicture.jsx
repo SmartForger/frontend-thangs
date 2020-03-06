@@ -107,17 +107,11 @@ export function ChangeablePicture({ userId }) {
 
     let imageRef = null;
 
-    function onImageLoaded(image) {
-        imageRef = image;
-    }
+    const onImageLoaded = image => (imageRef = image);
 
-    function onCropComplete(crop) {
-        return makeClientCrop(crop);
-    }
+    const onCropComplete = crop => makeClientCrop(crop);
 
-    function onCropChange(crop) {
-        setCrop(crop);
-    }
+    const onCropChange = crop => setCrop(crop);
 
     async function makeClientCrop(crop) {
         if (imageRef && crop.width && crop.height) {
