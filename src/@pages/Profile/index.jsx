@@ -70,11 +70,7 @@ const Profile = () => {
         );
     }
 
-    const {
-        // This field is never used, so it's helpful to remove it
-        __typename: _,
-        ...user
-    } = data.user;
+    const { user } = data;
 
     return (
         <ProfileStyle>
