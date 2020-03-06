@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
-import { Button } from '@components';
+import { Button, ChangeablePicture } from '@components';
 import * as GraphqlService from '@services/graphql-service';
 
 const SidebarStyled = styled.div`
@@ -21,13 +21,6 @@ const SocialStyled = styled.div`
     > * {
         pointer-events: all;
     }
-`;
-
-const ProfilePicStyled = styled.div`
-    background: grey;
-    border-radius: 50%;
-    height: 250px;
-    width: 250px;
 `;
 
 const ModelsStyled = styled.div`
@@ -114,7 +107,7 @@ const EditProfileForm = ({ onClose, user }) => {
                 update: (store, { data: { updateUser } }) => {
                     store.writeQuery({
                         query: GraphqlService.USER_QUERY,
-                        variables: { id: `${updateUser.id}`, test: 4 },
+                        variables: { id: `${updateUser.id}` },
                         data: { user: updateUser },
                     });
                 },
@@ -179,7 +172,7 @@ export const ProfileSidebar = ({ user }) => {
     return (
         <SidebarStyled>
             <SocialStyled>
-                <ProfilePicStyled />
+                <ChangeablePicture userId={user.id} />
                 <UserDetails>
                     {isEditing ? (
                         <EditProfileForm onClose={endEditProfile} user={user} />

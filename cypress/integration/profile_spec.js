@@ -1,3 +1,5 @@
+const NOOP = () => null;
+
 describe('The Profile Page', () => {
     it('starts out in loading state', () => {
         cy.mockOnWindow({
@@ -25,11 +27,14 @@ describe('The Profile Page', () => {
                             profile: {
                                 description:
                                     'test description of a user user profile',
-                                avatar: '',
+                                avatar: 'avatar-url',
                             },
                         },
                     },
                 }),
+                useUploadUserAvatarMutation: () => {
+                    return [NOOP, {}];
+                },
             },
         });
         cy.visit('/profile/1');
