@@ -58,7 +58,7 @@ const ButtonContainer = styled.div`
     justify-content: center;
 `;
 
-export function ChangeablePicture({ userId }) {
+const ChangeablePicture = ({ userId }) => {
     const [src, setSrc] = useState(null);
     const [crop, setCrop] = useState({ unit: '%', width: 30, aspect: 1 / 1 });
     const [croppedImg, setCroppedImg] = useState(null);
@@ -126,7 +126,7 @@ export function ChangeablePicture({ userId }) {
         }
     }
 
-    function getCroppedImage(image, crop, fileName) {
+    const getCroppedImage = (image, crop, fileName) => {
         const canvas = document.createElement('canvas');
         const scaleX = image.naturalWidth / image.width;
         const scaleY = image.naturalHeight / image.height;
@@ -156,7 +156,7 @@ export function ChangeablePicture({ userId }) {
                 resolve(blob);
             });
         }, 'image/jpeg');
-    }
+    };
 
     return (
         <form>
@@ -190,4 +190,6 @@ export function ChangeablePicture({ userId }) {
             </ModalStyled>
         </form>
     );
-}
+};
+
+export { ChangeablePicture };
