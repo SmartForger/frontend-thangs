@@ -1,3 +1,5 @@
+const NOOP = () => null;
+
 describe('The Profile Page', () => {
     it('starts out in loading state', () => {
         cy.mockOnWindow({
