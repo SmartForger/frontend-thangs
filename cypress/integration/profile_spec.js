@@ -22,9 +22,16 @@ describe('The Profile Page', () => {
                             email: 'test-email',
                             firstName: 'test-firstName',
                             lastName: 'test-lastName',
+                            profile: {
+                                description: 'profile description text',
+                                avatar: 'avatar-url',
+                            },
                         },
                     },
                 }),
+                useUploadUserAvatarMutation: () => {
+                    return [NOOP, {}];
+                },
             },
         });
         cy.visit('/profile/1');
