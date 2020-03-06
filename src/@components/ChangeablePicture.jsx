@@ -164,6 +164,7 @@ export function ChangeablePicture({ userId }) {
                 name="Change Image"
                 id="avatar"
                 onChange={onSelectFile}
+                accept="image/x-png,image/jpeg"
             />
             <ModalOverlayStyles />
             <ModalStyled
