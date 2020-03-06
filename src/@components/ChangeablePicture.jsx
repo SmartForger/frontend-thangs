@@ -18,7 +18,7 @@ const HiddenInput = styled.input`
 
 export function ChangeablePicture() {
     const [src, setSrc] = useState(null);
-    const [crop, setCrop] = useState({ unit: '%', width: 30 });
+    const [crop, setCrop] = useState({ unit: '%', width: 30, aspect: 1 / 1 });
     const [croppedImgUrl, setCroppedImgUrl] = useState(null);
 
     function onSelectFile(e) {
