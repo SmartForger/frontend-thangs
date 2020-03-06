@@ -76,7 +76,7 @@ const EditProfileForm = ({ onSubmit, user }) => {
                 update: (store, { data: { updateUser } }) => {
                     store.writeQuery({
                         query: GraphqlService.USER_QUERY,
-                        variables: { id: `${updateUser.id}`, test: 4 },
+                        variables: { id: `${updateUser.id}` },
                         data: { user: updateUser },
                     });
                 },
@@ -129,7 +129,7 @@ export const ProfileSidebar = ({ user }) => {
     return (
         <SidebarStyled>
             <SocialStyled>
-                <ChangeablePicture />
+                <ChangeablePicture userId={user.id} />
                 <UserDetails>
                     {isEditing ? (
                         <EditProfileForm

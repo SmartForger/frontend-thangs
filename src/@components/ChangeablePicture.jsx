@@ -4,8 +4,11 @@ import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import Modal from 'react-modal';
 import { Button } from '@components';
+import * as GraphqlService from '@services/graphql-service';
 
 Modal.setAppElement('#root');
+
+const graphqlService = GraphqlService.getInstance();
 
 const ProfilePicStyled = styled.div`
     background: grey;
@@ -53,14 +56,33 @@ const ButtonContainer = styled.div`
     justify-content: center;
 `;
 
-export function ChangeablePicture() {
+export function ChangeablePicture({ userId }) {
     const [src, setSrc] = useState(null);
     const [crop, setCrop] = useState({ unit: '%', width: 30, aspect: 1 / 1 });
-    const [croppedImgUrl, setCroppedImgUrl] = useState(null);
+    const [croppedImg, setCroppedImg] = useState(null);
     const [isCropping, setIsCropping] = useState(false);
+    const [
+        uploadAvatar,
+        { called, loading },
+    ] = graphqlService.useUploadUserAvatarMutation();
 
     const submitCrop = () => {
-        // croppedImgUrl
+        uploadAvatar({
+            variables: {
+                file: croppedImg,
+                userId,
+            },
+            // We need this update mechanism because our user query returns a
+            // string id, while the user mutation returns an integer id.
+            // This messes up Apollo's caching, so we need to handle it ourselves.
+            update: (store, { data: { updateUser } }) => {
+                store.writeQuery({
+                    query: GraphqlService.USER_QUERY,
+                    variables: { id: `${updateUser.id}` },
+                    data: { user: updateUser },
+                });
+            },
+        });
         setIsCropping(false);
     };
 
@@ -90,19 +112,15 @@ export function ChangeablePicture() {
     }
 
     async function makeClientCrop(crop) {
-        console.log('imageRef', imageRef);
-        console.log('crop', crop);
         if (imageRef && crop.width && crop.height) {
-            const croppedImageUrl = await getCroppedImage(
+            const croppedImg = await getCroppedImage(
                 imageRef,
                 crop,
                 'newFile.jpeg',
             );
-            setCroppedImgUrl(croppedImageUrl);
+            setCroppedImg(croppedImg);
         }
     }
-
-    let fileUrl = null;
 
     function getCroppedImage(image, crop, fileName) {
         const canvas = document.createElement('canvas');
@@ -131,9 +149,7 @@ export function ChangeablePicture() {
                     return;
                 }
                 blob.name = fileName;
-                window.URL.revokeObjectURL(fileUrl);
-                fileUrl = window.URL.createObjectURL(blob);
-                resolve(fileUrl);
+                resolve(blob);
             });
         }, 'image/jpeg');
     }
