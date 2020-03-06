@@ -100,12 +100,13 @@ const EditProfileForm = ({ onClose, user }) => {
 
         const updateInput = {
             id: user.id,
-            username: data.username,
-            email: data.email,
+            username: user.username,
+            email: user.email,
             firstName: data.firstName,
             lastName: data.lastName,
             profile: {
                 description: data.description,
+                avatar: user.profile.avatar,
             },
         };
 
@@ -133,18 +134,6 @@ const EditProfileForm = ({ onClose, user }) => {
 
     return (
         <FormStyled onSubmit={(data, e) => handleSubmit(formSubmit)(data, e)}>
-            <FullWidthInput
-                name="username"
-                defaultValue={user.username}
-                ref={register({ required: true })}
-                placeholder="Username"
-            />
-            <FullWidthInput
-                name="email"
-                defaultValue={user.email}
-                ref={register({ required: true })}
-                placeholder="Email"
-            />
             <NameField>
                 <FullWidthInput
                     name="firstName"
@@ -186,12 +175,12 @@ export const ProfileSidebar = ({ user }) => {
             <SocialStyled>
                 <ProfilePicStyled />
                 <UserDetails>
+                    <div>{user.username}</div>
+                    <div>{user.email}</div>
                     {isEditing ? (
                         <EditProfileForm onClose={endEditProfile} user={user} />
                     ) : (
                         <>
-                            <div>{user.username}</div>
-                            <div>{user.email}</div>
                             <div>
                                 {user.firstName} {user.lastName}
                             </div>
