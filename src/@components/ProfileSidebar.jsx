@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
-import { Button } from '@components';
+import { Button, ChangeablePicture } from '@components';
 import * as GraphqlService from '@services/graphql-service';
 
 const SidebarStyled = styled.div`
