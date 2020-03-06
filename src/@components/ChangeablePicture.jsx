@@ -3,6 +3,8 @@ import styled, { createGlobalStyle } from 'styled-components';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import Modal from 'react-modal';
+import md5 from 'md5';
+
 import { Button } from '@components';
 import * as GraphqlService from '@services/graphql-service';
 
@@ -118,7 +120,7 @@ export function ChangeablePicture({ userId }) {
             const croppedImg = await getCroppedImage(
                 imageRef,
                 crop,
-                imageEl.current.files[0].name,
+                md5(imageEl.current.files[0].name),
             );
             setCroppedImg(croppedImg);
         }
