@@ -22,6 +22,11 @@ describe('The Profile Page', () => {
                             email: 'test-email',
                             firstName: 'test-firstName',
                             lastName: 'test-lastName',
+                            profile: {
+                                description:
+                                    'test description of a user user profile',
+                                avatar: '',
+                            },
                         },
                     },
                 }),
