@@ -29,12 +29,7 @@ const useStl = url => {
         }
     };
 
-    useEffect(
-        () => {
-            fetchData();
-        },
-        [url],
-    );
+    useEffect(fetchData, [url]);
     return [data, loading, error];
 };
 
