@@ -67,10 +67,7 @@ const ChangeablePicture = ({ userId, src }) => {
     const [img, setImg] = useState(null);
     const [isCropping, setIsCropping] = useState(false);
     const imageEl = useRef(null);
-    const [
-        uploadAvatar,
-        { called, loading },
-    ] = graphqlService.useUploadUserAvatarMutation();
+    const [uploadAvatar] = graphqlService.useUploadUserAvatarMutation();
 
     const submitCrop = () => {
         uploadAvatar({

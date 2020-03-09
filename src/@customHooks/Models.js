@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import * as THREE from 'three';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
 
 const useStl = url => {
@@ -30,9 +29,7 @@ const useStl = url => {
         }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, [url]);
+    useEffect(fetchData, [url]);
     return [data, loading, error];
 };
 

@@ -2,64 +2,52 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyleCard = styled.div`
-  width: ${props => props.size || 200}px;
-  height: ${props => props.size || 200}px;
-  background: none;
-  overflow: hidden;
-  border-radius: ${props => props.rounded ? '10%' : 0};
-  box-shadow: ${props => props.shadow ? 'rgba(0,0,0,0.8) 0 0 10px' : 'black 0 0 0'};
-  border: ${props => props.bordered ? '2px solid black' : 'none'};
-  transition: all 0.5s;
-  margin: ${props => props.margin || '5px'};
-`
+    width: ${props => props.size || 200}px;
+    height: ${props => props.size || 200}px;
+    background: none;
+    overflow: hidden;
+    border-radius: ${props => (props.rounded ? '10%' : 0)};
+    box-shadow: ${props =>
+        props.shadow ? 'rgba(0,0,0,0.8) 0 0 10px' : 'black 0 0 0'};
+    border: ${props => (props.bordered ? '2px solid black' : 'none')};
+    transition: all 0.5s;
+    margin: ${props => props.margin || '5px'};
+`;
 
 const StyleCardHead = styled.div`
-  width: 100%;
-  height: ${props => props.percentage ? props.percentage : 76}%;
-  background: ${props => props.headerBg || props.theme.white};
-  color: ${props => props.headerColor || props.theme.secondary};
-  background-size: contain;
-  font-size: ${props => props.fontSize || 1}rem;
-  padding: 0 5%;
-`
+    width: 100%;
+    height: ${props => (props.percentage ? props.percentage : 76)}%;
+    background: ${props => props.headerBg || props.theme.white};
+    color: ${props => props.headerColor || props.theme.secondary};
+    background-size: contain;
+    font-size: ${props => props.fontSize || 1}rem;
+    padding: 0 5%;
+`;
 
 const StyleCardBody = styled.div`
-  width: 100%;
-  height: ${props => props.percentage ? 100 - props.percentage : 24}%;
-  background: ${props => props.bodyBg ? props.bodyBg : props.theme.white};
-  color: ${props => props.bodyColor || props.theme.secondary};
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-  align-items: center;
-  font-size: ${props => props.size/200}rem;
-`
+    width: 100%;
+    height: ${props => (props.percentage ? 100 - props.percentage : 24)}%;
+    background: ${props => (props.bodyBg ? props.bodyBg : props.theme.white)};
+    color: ${props => props.bodyColor || props.theme.secondary};
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    font-size: ${props => props.size / 200}rem;
+`;
 
-const DisplayCard = (props) => {
-  const {size,
-        imageUrl,
-        headerBg,
-        headerColor,
-        headerContent,
-        bodyBg,
-        bodyColor,
-        shadow,
-        bordered,
-        rounded,
-        hover,
-        percentage,
-        children,
-        ...rest //this makes eslint chill out
-      } = props;
-  return(
-    <StyleCard {...props}>
-      <StyleCardHead {...props}>
-      {headerContent ? headerContent : null}
-      </StyleCardHead>
-      <StyleCardBody {...props}>
-      {children ? children: null}
-      </StyleCardBody>
-    </StyleCard>)
-}
+const DisplayCard = props => {
+    const { children, headerContent } = props;
+    return (
+        <StyleCard {...props}>
+            <StyleCardHead {...props}>
+                {headerContent ? headerContent : null}
+            </StyleCardHead>
+            <StyleCardBody {...props}>
+                {children ? children : null}
+            </StyleCardBody>
+        </StyleCard>
+    );
+};
 
-export {DisplayCard};
+export { DisplayCard };
