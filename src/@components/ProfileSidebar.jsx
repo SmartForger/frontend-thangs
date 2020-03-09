@@ -99,7 +99,6 @@ const EditProfileForm = ({ onClose, user }) => {
             lastName: data.lastName,
             profile: {
                 description: data.description,
-                avatar: user.profile.avatar,
             },
         };
 
@@ -166,7 +165,7 @@ export const ProfileSidebar = ({ user }) => {
     return (
         <SidebarStyled>
             <SocialStyled>
-                <ChangeablePicture userId={user.id} />
+                <ChangeablePicture userId={user.id} src={user.profile.avatar} />
                 <UserDetails>
                     <div>{user.username}</div>
                     <div>{user.email}</div>

@@ -12,7 +12,7 @@ Modal.setAppElement('#root');
 
 const graphqlService = GraphqlService.getInstance();
 
-const ProfilePicStyled = styled.div`
+const ProfilePicStyled = styled.img`
     background: grey;
     border-radius: 50%;
     height: 250px;
@@ -58,10 +58,13 @@ const ButtonContainer = styled.div`
     justify-content: center;
 `;
 
-const ChangeablePicture = ({ userId }) => {
-    const [src, setSrc] = useState(null);
-    const [crop, setCrop] = useState({ unit: '%', width: 30, aspect: 1 / 1 });
+const initialCrop = { unit: '%', width: 30, aspect: 1 / 1 };
+
+const ChangeablePicture = ({ userId, src }) => {
+    const [cropSrc, setCropSrc] = useState(null);
+    const [crop, setCrop] = useState();
     const [croppedImg, setCroppedImg] = useState(null);
+    const [img, setImg] = useState(null);
     const [isCropping, setIsCropping] = useState(false);
     const imageEl = useRef(null);
     const [
@@ -100,25 +103,29 @@ const ChangeablePicture = ({ userId }) => {
         if (e.target.files && e.target.files.length > 0) {
             const reader = new FileReader();
             reader.addEventListener('load', () => {
-                setSrc(reader.result);
+                setCropSrc(reader.result);
                 setIsCropping(true);
             });
             reader.readAsDataURL(e.target.files[0]);
         }
     }
 
-    let imageRef = null;
+    const onImageLoaded = img => {
+        setCrop(initialCrop);
+        setImg(img);
+        return false;
+    };
 
-    const onImageLoaded = image => (imageRef = image);
-
-    const onCropComplete = crop => makeClientCrop(crop);
+    const onCropComplete = async crop => {
+        await makeClientCrop(crop);
+    };
 
     const onCropChange = crop => setCrop(crop);
 
     async function makeClientCrop(crop) {
-        if (imageRef && crop.width && crop.height) {
+        if (img && crop.width && crop.height) {
             const croppedImg = await getCroppedImage(
-                imageRef,
+                img,
                 crop,
                 md5(imageEl.current.files[0].name),
             );
@@ -161,7 +168,7 @@ const ChangeablePicture = ({ userId }) => {
     return (
         <form>
             <label htmlFor="avatar">
-                <ProfilePicStyled />
+                <ProfilePicStyled src={src} />
             </label>
             <HiddenInput
                 type="file"
@@ -177,7 +184,7 @@ const ChangeablePicture = ({ userId }) => {
                 overlayClassName="img-cropper-modal-overlay"
             >
                 <ReactCrop
-                    src={src}
+                    src={cropSrc}
                     crop={crop}
                     onImageLoaded={onImageLoaded}
                     onComplete={onCropComplete}
