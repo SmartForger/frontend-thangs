@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory, useRouteMatch, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import * as EmailValidator from 'email-validator';
-import swearjar from 'swearjar-extended';
+import * as swearjar from '@utilities';
 import { authenticationService } from '@services';
 import { useForm } from '@customHooks';
 import { BasicPageStyle } from '@style';
