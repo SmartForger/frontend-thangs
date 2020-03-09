@@ -58,7 +58,7 @@ const Signup = () => {
             setInvalidFields(fields);
             setSignupErrorMessage(response.data[fields[0]]);
         } else {
-            const loginResponse = await authenticationService.login({
+            await authenticationService.login({
                 email: inputs.email,
                 password: inputs.password,
             });
@@ -104,7 +104,7 @@ const Signup = () => {
         if (swearjar.profane(inputs.username)) {
             setInvalidFields(['username']);
             setSignupErrorMessage(
-                'Sorry, we detected profanity in your username!'
+                'Sorry, we detected profanity in your username!',
             );
             return false;
         } else {

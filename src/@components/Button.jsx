@@ -39,17 +39,7 @@ const BtnStyle = styled(animated.button)`
 `;
 
 const Button = props => {
-    const {
-        name,
-        onClick,
-        routeto,
-        maxwidth,
-        height,
-        margin,
-        fontSize,
-        disabled,
-        ...rest //This is just to make eslint chill out
-    } = props;
+    const { name, onClick, routeto } = props;
     const history = useHistory();
     return (
         <BtnStyle

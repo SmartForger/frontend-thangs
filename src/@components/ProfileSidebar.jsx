@@ -23,12 +23,6 @@ const SocialStyled = styled.div`
     }
 `;
 
-const ModelsStyled = styled.div`
-    grid-area: models;
-    display: flex;
-    flex-flow: row wrap;
-`;
-
 const UserDetails = styled.div`
     width: 100%;
 `;
@@ -82,7 +76,7 @@ const EditProfileForm = ({ onClose, user }) => {
     const { register, handleSubmit, errors } = useForm();
 
     const graphqlService = GraphqlService.getInstance();
-    const [updateUser, { called, loading }] = graphqlService.useUpdateUser();
+    const [updateUser] = graphqlService.useUpdateUser();
 
     function handleCancel() {
         onClose();

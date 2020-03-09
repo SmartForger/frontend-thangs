@@ -1,129 +1,164 @@
-import React, {Suspense, useRef, useState, useCallback} from 'react';
-import {Canvas, useFrame, useThree, extend} from 'react-three-fiber';
+import React, { Suspense, useRef, useState, useCallback } from 'react';
+import { Canvas, useFrame, useThree, extend } from 'react-three-fiber';
 
 import * as THREE from 'three';
-import {useStl} from '@customHooks'
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
+import { useStl } from '@customHooks';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
+const Viewer = ({
+    url,
+    height = '100%',
+    width = '100%',
+    mode = 'shaded',
+    meshColor = '#FF0000',
+    wireFrameColor,
+}) => {
+    return (
+        <Canvas
+            style={{
+                height: height,
+                width: width,
+                boxShadow: 'inset 0 0 0 5px black',
+                background: '#999999',
+                zIndex: '-2',
+            }}
+        >
+            <ambientLight intensity={0.9} />
+            <pointLight intensity={1.12} position={[-1, 2, 1]} />
+            <Suspense fallback={<HoverCube />}>
+                <Asset
+                    url={url}
+                    mode={mode}
+                    meshColor={meshColor}
+                    wireFrameColor={wireFrameColor}
+                />
+            </Suspense>
+            <Controls />
+        </Canvas>
+    );
+};
 
-const Viewer = ({url,height="100%", width="100%", mode='shaded', meshColor="#FF0000", wireFrameColor}) => {
+function HoverCube({ position }) {
+    const mesh = useRef();
+    const [, setIsHovered] = useState(false);
+    const [isActive, setActive] = useState(false);
+    const [time, setTime] = useState(0);
 
-  return (
-    <Canvas style={{height:height, width:width, boxShadow: "inset 0 0 0 5px black", background: "#999999", zIndex: "-2"}}>
-      <ambientLight intensity={0.9} />
-      <pointLight intensity={1.12} position={[-1, 2, 1]} />
-      <Suspense fallback={<HoverCube />}>
-        <Asset url={url} mode={mode} meshColor={meshColor} wireFrameColor={wireFrameColor}/>
-      </Suspense>
-      <Controls />
-    </Canvas>
-  )
+    const color = isActive ? 0xf95b3c : 0xf7bb3d;
+
+    const onHover = useCallback(
+        (e, value) => {
+            e.stopPropagation();
+            setIsHovered(value);
+        },
+        [setIsHovered],
+    );
+
+    const onClick = useCallback(
+        e => {
+            e.stopPropagation();
+            setActive(v => !v);
+        },
+        [setActive],
+    );
+
+    useFrame(({ gl, scene, camera }) => {
+        mesh.current.rotation.y += 0.02;
+        setTime(time + 0.03);
+        if (mesh.current) {
+            // a ref is needed because useFrame creates a "closure" on the state
+            mesh.current.position.y = Math.sin(time) * 0.4;
+        }
+    });
+
+    return (
+        <mesh
+            ref={mesh}
+            position={position || [0, 0, 0]}
+            onClick={e => onClick(e)}
+            onPointerOver={e => onHover(e, true)}
+            onPointerOut={e => onHover(e, false)}
+        >
+            <boxBufferGeometry attach="geometry" args={[3, 3, 3]} />
+            <meshStandardMaterial color={color} attach="material" />
+        </mesh>
+    );
 }
 
-function HoverCube({position}) {
-  const mesh = useRef();
-  const [isHovered, setIsHovered] = useState(false);
-  const [isActive, setActive] = useState(false);
-  const [time, setTime] = useState(0);
-
-  const color = isActive ? 0xf95b3c : 0xF7BB3D;
-
-  const onHover = useCallback((e,value) => {
-    e.stopPropagation();
-    setIsHovered(value);
-  }, [setIsHovered])
-
-  const onClick = useCallback((e) => {
-    e.stopPropagation();
-    setActive(v => !v);
-  }, [setActive]);
-
-  useFrame( ({gl,scene,camera}) => {
-    mesh.current.rotation.y += 0.02;
-    setTime (time+ 0.03);
-    if (mesh.current) { // a ref is needed because useFrame creates a "closure" on the state
-      mesh.current.position.y = Math.sin(time) * 0.4;
-    }
-  })
-
-  return (
-  <mesh 
-  ref={mesh}
-  position={position || [0,0,0]}
-  onClick={e => onClick(e)}
-  onPointerOver={e => onHover(e, true)}
-  onPointerOut={e => onHover(e, false)}>
-    <boxBufferGeometry attach="geometry" args={[3, 3, 3]} />
-    <meshStandardMaterial color={color} attach="material" />
-  </mesh>)
-}
-  
-extend({OrbitControls});
+extend({ OrbitControls });
 function Controls() {
-  const controlsRef = useRef();
-  const {camera, gl} = useThree();
+    const controlsRef = useRef();
+    const { camera, gl } = useThree();
 
-  useFrame(() => controlsRef.current && controlsRef.current.update());
+    useFrame(() => controlsRef.current && controlsRef.current.update());
 
-  return (
-    <orbitControls
-      ref={controlsRef}
-      args={[camera, gl.domElement]}
-      enableRotate
-      enablePan={true}
-      maxDistance={100}
-      minDistance={5}
-      minPolarAngle={Math.PI / 10}
-      maxPolarAngle={Math.PI / 1}
-    />
-  );
+    return (
+        <orbitControls
+            ref={controlsRef}
+            args={[camera, gl.domElement]}
+            enableRotate
+            enablePan={true}
+            maxDistance={100}
+            minDistance={5}
+            minPolarAngle={Math.PI / 10}
+            maxPolarAngle={Math.PI / 1}
+        />
+    );
 }
 
-const Asset = ({url, mode='shaded', meshColor="0xFFFFFF", wireFrameColor="0x000000"}) => {
-  const [stl, loading, error] = useStl(url);
-  const scene = new THREE.Scene();
+const Asset = ({
+    url,
+    mode = 'shaded',
+    meshColor = '0xFFFFFF',
+    wireFrameColor = '0x000000',
+}) => {
+    const [stl, loading, error] = useStl(url);
+    const scene = new THREE.Scene();
 
-  if (stl && !error && !loading) {
-    const shadedMat = new THREE.MeshStandardMaterial( {color: meshColor});
-    const wireframeMat = new THREE.MeshBasicMaterial({wireframe: true})
-    wireframeMat.color.set(wireFrameColor)
-    const compositeMat = new THREE.MeshPhongMaterial({
-      color: meshColor,
-      polygonOffset: true,
-      polygonOffsetFactor: 1,
-      polygonOffsetUnits: 1
-    })
-    let currentMat;
+    if (stl && !error && !loading) {
+        const shadedMat = new THREE.MeshStandardMaterial({ color: meshColor });
+        const wireframeMat = new THREE.MeshBasicMaterial({ wireframe: true });
+        wireframeMat.color.set(wireFrameColor);
+        const compositeMat = new THREE.MeshPhongMaterial({
+            color: meshColor,
+            polygonOffset: true,
+            polygonOffsetFactor: 1,
+            polygonOffsetUnits: 1,
+        });
+        let currentMat;
 
-    switch(mode) {
-      case 'wireframe':
-        currentMat = wireframeMat;
-        break;
-      
-      case 'composite':
-        currentMat = compositeMat;
-        break;
+        switch (mode) {
+            case 'wireframe':
+                currentMat = wireframeMat;
+                break;
 
-      default:
-        currentMat = shadedMat;
+            case 'composite':
+                currentMat = compositeMat;
+                break;
+
+            default:
+                currentMat = shadedMat;
+        }
+
+        const stlMesh = new THREE.Mesh(stl, currentMat);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        scene.add(directionalLight);
+        scene.add(stlMesh);
+
+        if (mode === 'composite') {
+            var geo = new THREE.EdgesGeometry(stlMesh.geometry); // or WireframeGeometry
+            var mat = new THREE.LineBasicMaterial({
+                color: wireFrameColor,
+                linewidth: 2,
+            });
+            var wireframeCover = new THREE.LineSegments(geo, mat);
+            stlMesh.add(wireframeCover);
+        }
+
+        return <primitive object={scene} />;
     }
 
-    const stlMesh = new THREE.Mesh(stl,currentMat);
-    const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
-    scene.add( directionalLight );
-    scene.add(stlMesh);
+    return <HoverCube />;
+};
 
-    if (mode === 'composite') {
-      var geo = new THREE.EdgesGeometry( stlMesh.geometry ); // or WireframeGeometry
-      var mat = new THREE.LineBasicMaterial( { color: wireFrameColor, linewidth: 2 } );
-      var wireframeCover = new THREE.LineSegments( geo, mat );
-      stlMesh.add( wireframeCover );
-    }
-
-    return <primitive object={scene}  />
-  }
-
-  return <HoverCube />
-}
-
-export {Viewer}
+export { Viewer };
