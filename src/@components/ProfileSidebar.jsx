@@ -35,6 +35,9 @@ const UserDetails = styled.div`
 
 const allowCssProp = props => (props.css ? props.css : '');
 
+const isEmpty = obj =>
+    Object.keys(obj).length === 0 && obj.constructor === Object;
+
 const FollowOrEditButton = ({ onClick }) => {
     // TODO if the user on this page is the logged in user, we should render a
     // Follow button.
@@ -53,6 +56,7 @@ const FullWidthInput = styled.input`
     padding: 4px;
     margin-bottom: 4px;
     border-radius: 4px;
+    min-width: 0;
 
     ${allowCssProp};
 `;
@@ -75,7 +79,7 @@ const ButtonGroup = styled.div`
 `;
 
 const EditProfileForm = ({ onClose, user }) => {
-    const { register, handleSubmit, watch, errors } = useForm();
+    const { register, handleSubmit, errors } = useForm();
 
     const graphqlService = GraphqlService.getInstance();
     const [updateUser, { called, loading }] = graphqlService.useUpdateUser();
@@ -83,17 +87,19 @@ const EditProfileForm = ({ onClose, user }) => {
     function handleCancel() {
         onClose();
     }
+
     async function formSubmit(data, e) {
         e.preventDefault();
 
         const updateInput = {
             id: user.id,
-            username: data.username,
-            email: data.email,
+            username: user.username,
+            email: user.email,
             firstName: data.firstName,
             lastName: data.lastName,
             profile: {
                 description: data.description,
+                avatar: user.profile.avatar,
             },
         };
 
@@ -121,23 +127,11 @@ const EditProfileForm = ({ onClose, user }) => {
 
     return (
         <FormStyled onSubmit={(data, e) => handleSubmit(formSubmit)(data, e)}>
-            <FullWidthInput
-                name="username"
-                defaultValue={user.username}
-                ref={register}
-                placeholder="Username"
-            />
-            <FullWidthInput
-                name="email"
-                defaultValue={user.email}
-                ref={register}
-                placeholder="Email"
-            />
             <NameField>
                 <FullWidthInput
                     name="firstName"
                     defaultValue={user.firstName}
-                    ref={register}
+                    ref={register({ required: true })}
                     placeholder="First Name"
                     css={`
                         margin-right: 4px;
@@ -146,19 +140,19 @@ const EditProfileForm = ({ onClose, user }) => {
                 <FullWidthInput
                     name="lastName"
                     defaultValue={user.lastName}
-                    ref={register}
+                    ref={register({ required: true })}
                     placeholder="Last Name"
                 />
             </NameField>
             <TextArea
                 name="description"
                 defaultValue={user.profile.description}
-                ref={register}
+                ref={register({ required: true })}
                 placeholder="Add a bio..."
             />
 
             <ButtonGroup>
-                <Button name="Save" type="submit" />
+                <Button name="Save" type="submit" disabled={!isEmpty(errors)} />
                 <Button name="Cancel" onClick={e => handleCancel(e)} />
             </ButtonGroup>
         </FormStyled>
@@ -174,12 +168,12 @@ export const ProfileSidebar = ({ user }) => {
             <SocialStyled>
                 <ChangeablePicture userId={user.id} />
                 <UserDetails>
+                    <div>{user.username}</div>
+                    <div>{user.email}</div>
                     {isEditing ? (
                         <EditProfileForm onClose={endEditProfile} user={user} />
                     ) : (
                         <>
-                            <div>{user.username}</div>
-                            <div>{user.email}</div>
                             <div>
                                 {user.firstName} {user.lastName}
                             </div>
