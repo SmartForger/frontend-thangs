@@ -99,7 +99,6 @@ const EditProfileForm = ({ onClose, user }) => {
             lastName: data.lastName,
             profile: {
                 description: data.description,
-                avatar: user.profile.avatar,
             },
         };
 
