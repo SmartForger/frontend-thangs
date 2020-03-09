@@ -58,10 +58,13 @@ const ButtonContainer = styled.div`
     justify-content: center;
 `;
 
+const initialCrop = { unit: '%', width: 30, aspect: 1 / 1 };
+
 const ChangeablePicture = ({ userId, src }) => {
     const [cropSrc, setCropSrc] = useState(null);
-    const [crop, setCrop] = useState({ unit: '%', width: 30, aspect: 1 / 1 });
+    const [crop, setCrop] = useState();
     const [croppedImg, setCroppedImg] = useState(null);
+    const [img, setImg] = useState(null);
     const [isCropping, setIsCropping] = useState(false);
     const imageEl = useRef(null);
     const [
@@ -107,18 +110,22 @@ const ChangeablePicture = ({ userId, src }) => {
         }
     }
 
-    let imageRef = null;
+    const onImageLoaded = img => {
+        setCrop(initialCrop);
+        setImg(img);
+        return false;
+    };
 
-    const onImageLoaded = image => (imageRef = image);
-
-    const onCropComplete = crop => makeClientCrop(crop);
+    const onCropComplete = async crop => {
+        await makeClientCrop(crop);
+    };
 
     const onCropChange = crop => setCrop(crop);
 
     async function makeClientCrop(crop) {
-        if (imageRef && crop.width && crop.height) {
+        if (img && crop.width && crop.height) {
             const croppedImg = await getCroppedImage(
-                imageRef,
+                img,
                 crop,
                 md5(imageEl.current.files[0].name),
             );
