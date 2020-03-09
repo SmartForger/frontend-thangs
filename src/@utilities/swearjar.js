@@ -1,6 +1,11 @@
-// swearjar-node
-const path = require('path');
-
+/*
+ * swearjar-node
+ * copied from https://github.com/ahmedengu/swearjar-node
+ *
+ * The build that we receive from npm for this module was causing erros within
+ * our webpack build. Until those problems can be fixed upstream, it seemed
+ * easiest to pull the module into our codebase.
+ */
 const swearjar = {
     _badWords: {},
 
@@ -163,12 +168,6 @@ const swearjar = {
             wordCount,
             words,
         };
-    },
-
-    loadBadWords(relativePath) {
-        const basePath = path.dirname(module.parent.filename);
-        const fullPath = path.join(basePath, relativePath);
-        this._badWords = require(fullPath);
     },
 
     setBadWords(badWords) {
