@@ -12,7 +12,7 @@ Modal.setAppElement('#root');
 
 const graphqlService = GraphqlService.getInstance();
 
-const ProfilePicStyled = styled.div`
+const ProfilePicStyled = styled.img`
     background: grey;
     border-radius: 50%;
     height: 250px;
@@ -58,8 +58,8 @@ const ButtonContainer = styled.div`
     justify-content: center;
 `;
 
-const ChangeablePicture = ({ userId }) => {
-    const [src, setSrc] = useState(null);
+const ChangeablePicture = ({ userId, src }) => {
+    const [cropSrc, setCropSrc] = useState(null);
     const [crop, setCrop] = useState({ unit: '%', width: 30, aspect: 1 / 1 });
     const [croppedImg, setCroppedImg] = useState(null);
     const [isCropping, setIsCropping] = useState(false);
@@ -100,7 +100,7 @@ const ChangeablePicture = ({ userId }) => {
         if (e.target.files && e.target.files.length > 0) {
             const reader = new FileReader();
             reader.addEventListener('load', () => {
-                setSrc(reader.result);
+                setCropSrc(reader.result);
                 setIsCropping(true);
             });
             reader.readAsDataURL(e.target.files[0]);
@@ -161,7 +161,7 @@ const ChangeablePicture = ({ userId }) => {
     return (
         <form>
             <label htmlFor="avatar">
-                <ProfilePicStyled />
+                <ProfilePicStyled src={src} />
             </label>
             <HiddenInput
                 type="file"
@@ -177,7 +177,7 @@ const ChangeablePicture = ({ userId }) => {
                 overlayClassName="img-cropper-modal-overlay"
             >
                 <ReactCrop
-                    src={src}
+                    src={cropSrc}
                     crop={crop}
                     onImageLoaded={onImageLoaded}
                     onComplete={onCropComplete}

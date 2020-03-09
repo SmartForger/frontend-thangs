@@ -11,6 +11,12 @@ import { authenticationService } from '@services/authentication.service';
 
 const hasEndSlash = /\/$/;
 
+const media = path => {
+    const url = process.env.REACT_APP_API_KEY;
+    const mediaUrl = url.replace('api', 'media');
+    return `${mediaUrl}/${path}`;
+};
+
 function withEndSlash(path) {
     if (hasEndSlash.test(path)) {
         return path;
@@ -19,7 +25,7 @@ function withEndSlash(path) {
 }
 
 function getGraphQLUrl() {
-    let url = process.env.REACT_APP_API_KEY;
+    const url = process.env.REACT_APP_API_KEY;
     const graphqlUrl = url.replace('api', 'graphql');
     return withEndSlash(graphqlUrl);
 }
@@ -100,8 +106,27 @@ export const graphqlClient = originalFetch =>
         cache: new InMemoryCache(),
     });
 
+const parseUserPayload = data => {
+    if (!data || !data.user) {
+        return null;
+    }
+
+    return {
+        ...data.user,
+        profile: {
+            ...data.user.profile,
+            avatar: media(data.user.profile.avatar),
+        },
+    };
+};
+
 const useUserById = id => {
-    return useQuery(USER_QUERY, { variables: { id } });
+    const { loading, error, data } = useQuery(USER_QUERY, {
+        variables: { id },
+    });
+    const user = parseUserPayload(data);
+
+    return { loading, error, user };
 };
 
 function useUpdateUser() {
