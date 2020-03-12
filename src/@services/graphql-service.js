@@ -94,6 +94,10 @@ const MODEL_QUERY = gql`
                     lastName
                 }
             }
+            owner {
+                firstName
+                lastName
+            }
         }
     }
 `;

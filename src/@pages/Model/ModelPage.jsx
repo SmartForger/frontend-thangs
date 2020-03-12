@@ -10,10 +10,19 @@ const Likes = ({ likes }) => {
     return <div>Likes: {amount}</div>;
 };
 
+const Owner = ({ owner }) => {
+    return (
+        <div>
+            Created by: {owner.firstName} {owner.lastName}
+        </div>
+    );
+};
+
 const ModelPage = ({ model }) => {
     return (
         <div>
             <Name name={model.name} />
+            <Owner owner={model.owner} />
             <Likes likes={model.likes} />
         </div>
     );
