@@ -7,7 +7,18 @@ const Name = ({ name }) => {
 
 const Likes = ({ likes }) => {
     const amount = likes.filter(fields => fields.isLiked).length;
-    return <div>Likes: {amount}</div>;
+    return (
+        <div>
+            <div>Likes: {amount}</div>
+            <ul>
+                {likes.map(({ owner: { firstName, lastName } }) => (
+                    <li>
+                        {firstName} {lastName}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 };
 
 const Owner = ({ owner }) => {
