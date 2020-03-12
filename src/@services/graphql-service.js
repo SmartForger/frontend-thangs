@@ -116,8 +116,20 @@ const LIKE_MODEL_MUTATION = gql`
                 }
             }
             model {
-                name
                 id
+                name
+                likes {
+                    isLiked
+                    owner {
+                        id
+                        firstName
+                        lastName
+                    }
+                }
+                owner {
+                    firstName
+                    lastName
+                }
             }
             like {
                 id
@@ -139,8 +151,20 @@ const UNLIKE_MODEL_MUTATION = gql`
                 }
             }
             model {
-                name
                 id
+                name
+                likes {
+                    isLiked
+                    owner {
+                        id
+                        firstName
+                        lastName
+                    }
+                }
+                owner {
+                    firstName
+                    lastName
+                }
             }
             like {
                 id
@@ -222,12 +246,42 @@ const useUploadUserAvatarMutation = () => {
 };
 
 const useLikeModelMutation = (userId, modelId) => {
-    return useMutation(LIKE_MODEL_MUTATION, { variables: { userId, modelId } });
+    return useMutation(LIKE_MODEL_MUTATION, {
+        variables: { userId, modelId },
+        update: (
+            store,
+            {
+                data: {
+                    likeModel: { model },
+                },
+            },
+        ) => {
+            store.writeQuery({
+                query: MODEL_QUERY,
+                variables: { id: `${model.id}` },
+                data: { model },
+            });
+        },
+    });
 };
 
 const useUnlikeModelMutation = (userId, modelId) => {
     return useMutation(UNLIKE_MODEL_MUTATION, {
         variables: { userId, modelId },
+        update: (
+            store,
+            {
+                data: {
+                    unlikeModel: { model },
+                },
+            },
+        ) => {
+            store.writeQuery({
+                query: MODEL_QUERY,
+                variables: { id: `${model.id}` },
+                data: { model },
+            });
+        },
     });
 };
 

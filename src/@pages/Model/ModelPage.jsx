@@ -45,12 +45,28 @@ const hasLikedModel = (model, user) => {
 };
 
 const LikeButton = ({ model, user }) => {
+    const [likeModel] = graphqlService.useLikeModelMutation(user.id, model.id);
+    return <Button onClick={likeModel}>Like</Button>;
+};
+const DisabledLikeButton = () => {
+    return <Button disabled>Like</Button>;
+};
+
+const UnlikeButton = ({ model, user }) => {
+    const [unlikeModel] = graphqlService.useUnlikeModelMutation(
+        user.id,
+        model.id,
+    );
+    return <Button onClick={unlikeModel}>Unlike</Button>;
+};
+
+const ButtonForLikes = ({ model, user }) => {
     if (!user) {
-        return <Button disabled>Like</Button>;
+        return <DisabledLikeButton />;
     } else if (hasLikedModel(model, user)) {
-        return <Button>Unlike</Button>;
+        return <UnlikeButton model={model} user={user} />;
     }
-    return <Button>Like</Button>;
+    return <LikeButton model={model} user={user} />;
 };
 
 const ModelPage = ({ model, user }) => {
@@ -59,7 +75,7 @@ const ModelPage = ({ model, user }) => {
             <Name name={model.name} />
             <Owner owner={model.owner} />
             <Likes likes={model.likes} />
-            <LikeButton user={user} model={model} />
+            <ButtonForLikes user={user} model={model} />
         </div>
     );
 };
