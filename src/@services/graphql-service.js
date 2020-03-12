@@ -82,6 +82,22 @@ const UPLOAD_USER_PROFILE_AVATAR_MUTATION = gql`
     }
 `;
 
+const MODEL_QUERY = gql`
+    query getModel($id: ID) {
+        model(id: $id) {
+            id
+            name
+            likes {
+                isLiked
+                owner {
+                    firstName
+                    lastName
+                }
+            }
+        }
+    }
+`;
+
 export const graphqlClient = originalFetch =>
     new ApolloClient({
         link: ApolloLink.from([
@@ -118,6 +134,16 @@ const parseUserPayload = data => {
     };
 };
 
+const parseModelPayload = data => {
+    if (!data || !data.model) {
+        return null;
+    }
+
+    return {
+        ...data.model,
+    };
+};
+
 const useUserById = id => {
     const { loading, error, data } = useQuery(USER_QUERY, {
         variables: { id },
@@ -125,6 +151,15 @@ const useUserById = id => {
     const user = parseUserPayload(data);
 
     return { loading, error, user };
+};
+
+const useModelById = id => {
+    const { loading, error, data } = useQuery(MODEL_QUERY, {
+        variables: { id },
+    });
+    const model = parseModelPayload(data);
+
+    return { loading, error, model };
 };
 
 function useUpdateUser() {
@@ -141,7 +176,12 @@ const getInstance = () => {
     if (window.Cypress && window['graphql-react']) {
         return window['graphql-react'];
     }
-    return { useUserById, useUpdateUser, useUploadUserAvatarMutation };
+    return {
+        useUserById,
+        useUpdateUser,
+        useUploadUserAvatarMutation,
+        useModelById,
+    };
 };
 
 export { getInstance, getGraphQLUrl, USER_QUERY };
