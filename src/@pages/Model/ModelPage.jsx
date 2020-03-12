@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import * as R from 'ramda';
 import * as GraphqlService from '@services/graphql-service';
 import { Button } from '@components';
