@@ -39,7 +39,7 @@ const BtnStyle = styled(animated.button)`
 `;
 
 const Button = props => {
-    const { name, onClick, routeto } = props;
+    const { name, onClick, routeto, children } = props;
     const history = useHistory();
     return (
         <BtnStyle
@@ -49,7 +49,7 @@ const Button = props => {
                 if (routeto != null) history.push(routeto);
             }}
         >
-            {name}
+            {name || children}
         </BtnStyle>
     );
 };

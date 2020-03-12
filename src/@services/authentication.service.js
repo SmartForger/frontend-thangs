@@ -18,10 +18,13 @@ const login = async ({ email, password }) => {
     try {
         const response = await axios(requestOptions);
         const { refresh, access } = response.data;
-        const user = jwtDecode(refresh);
-        delete user.token_type;
-        delete user.exp;
-        delete user.jti;
+        const decoded = jwtDecode(refresh);
+        const user = {
+            id: `${decoded['user_id']}`,
+            username: decoded.username,
+            email: decoded.email,
+        };
+
         localStorage.setItem('currentUser', JSON.stringify(user));
         localStorage.setItem('refreshToken', refresh);
         localStorage.setItem('accessToken', access);

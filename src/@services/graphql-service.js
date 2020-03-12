@@ -90,6 +90,7 @@ const MODEL_QUERY = gql`
             likes {
                 isLiked
                 owner {
+                    id
                     firstName
                     lastName
                 }
@@ -97,6 +98,52 @@ const MODEL_QUERY = gql`
             owner {
                 firstName
                 lastName
+            }
+        }
+    }
+`;
+
+const LIKE_MODEL_MUTATION = gql`
+    mutation likeModel($userId: ID, $modelId: ID) {
+        likeModel(userId: $userId, modelId: $modelId) {
+            user {
+                id
+                firstName
+                lastName
+                profile {
+                    description
+                    avatar
+                }
+            }
+            model {
+                name
+                id
+            }
+            like {
+                id
+            }
+        }
+    }
+`;
+
+const UNLIKE_MODEL_MUTATION = gql`
+    mutation unlikeModel($userId: ID, $modelId: ID) {
+        unlikeModel(userId: $userId, modelId: $modelId) {
+            user {
+                id
+                firstName
+                lastName
+                profile {
+                    description
+                    avatar
+                }
+            }
+            model {
+                name
+                id
+            }
+            like {
+                id
             }
         }
     }
@@ -166,13 +213,23 @@ const useModelById = id => {
     return { loading, error, model };
 };
 
-function useUpdateUser() {
+const useUpdateUser = () => {
     return useMutation(UPDATE_USER_MUTATION);
-}
+};
 
-function useUploadUserAvatarMutation() {
+const useUploadUserAvatarMutation = () => {
     return useMutation(UPLOAD_USER_PROFILE_AVATAR_MUTATION);
-}
+};
+
+const useLikeModelMutation = (userId, modelId) => {
+    return useMutation(LIKE_MODEL_MUTATION, { variables: { userId, modelId } });
+};
+
+const useUnlikeModelMutation = (userId, modelId) => {
+    return useMutation(UNLIKE_MODEL_MUTATION, {
+        variables: { userId, modelId },
+    });
+};
 
 const getInstance = () => {
     // Check the window to see if we have set up a mocked implementation. This
@@ -185,6 +242,8 @@ const getInstance = () => {
         useUpdateUser,
         useUploadUserAvatarMutation,
         useModelById,
+        useLikeModelMutation,
+        useUnlikeModelMutation,
     };
 };
 
