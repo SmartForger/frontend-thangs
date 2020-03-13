@@ -82,6 +82,97 @@ const UPLOAD_USER_PROFILE_AVATAR_MUTATION = gql`
     }
 `;
 
+const MODEL_QUERY = gql`
+    query getModel($id: ID) {
+        model(id: $id) {
+            id
+            name
+            likes {
+                isLiked
+                owner {
+                    id
+                    firstName
+                    lastName
+                }
+            }
+            owner {
+                firstName
+                lastName
+            }
+        }
+    }
+`;
+
+const LIKE_MODEL_MUTATION = gql`
+    mutation likeModel($userId: ID, $modelId: ID) {
+        likeModel(userId: $userId, modelId: $modelId) {
+            user {
+                id
+                firstName
+                lastName
+                profile {
+                    description
+                    avatar
+                }
+            }
+            model {
+                id
+                name
+                likes {
+                    isLiked
+                    owner {
+                        id
+                        firstName
+                        lastName
+                    }
+                }
+                owner {
+                    firstName
+                    lastName
+                }
+            }
+            like {
+                id
+            }
+        }
+    }
+`;
+
+const UNLIKE_MODEL_MUTATION = gql`
+    mutation unlikeModel($userId: ID, $modelId: ID) {
+        unlikeModel(userId: $userId, modelId: $modelId) {
+            user {
+                id
+                firstName
+                lastName
+                profile {
+                    description
+                    avatar
+                }
+            }
+            model {
+                id
+                name
+                likes {
+                    isLiked
+                    owner {
+                        id
+                        firstName
+                        lastName
+                    }
+                }
+                owner {
+                    firstName
+                    lastName
+                }
+            }
+            like {
+                id
+            }
+        }
+    }
+`;
+
 export const graphqlClient = originalFetch =>
     new ApolloClient({
         link: ApolloLink.from([
@@ -118,6 +209,16 @@ const parseUserPayload = data => {
     };
 };
 
+const parseModelPayload = data => {
+    if (!data || !data.model) {
+        return null;
+    }
+
+    return {
+        ...data.model,
+    };
+};
+
 const useUserById = id => {
     const { loading, error, data } = useQuery(USER_QUERY, {
         variables: { id },
@@ -127,13 +228,62 @@ const useUserById = id => {
     return { loading, error, user };
 };
 
-function useUpdateUser() {
-    return useMutation(UPDATE_USER_MUTATION);
-}
+const useModelById = id => {
+    const { loading, error, data } = useQuery(MODEL_QUERY, {
+        variables: { id },
+    });
+    const model = parseModelPayload(data);
 
-function useUploadUserAvatarMutation() {
+    return { loading, error, model };
+};
+
+const useUpdateUser = () => {
+    return useMutation(UPDATE_USER_MUTATION);
+};
+
+const useUploadUserAvatarMutation = () => {
     return useMutation(UPLOAD_USER_PROFILE_AVATAR_MUTATION);
-}
+};
+
+const useLikeModelMutation = (userId, modelId) => {
+    return useMutation(LIKE_MODEL_MUTATION, {
+        variables: { userId, modelId },
+        update: (
+            store,
+            {
+                data: {
+                    likeModel: { model },
+                },
+            },
+        ) => {
+            store.writeQuery({
+                query: MODEL_QUERY,
+                variables: { id: `${model.id}` },
+                data: { model },
+            });
+        },
+    });
+};
+
+const useUnlikeModelMutation = (userId, modelId) => {
+    return useMutation(UNLIKE_MODEL_MUTATION, {
+        variables: { userId, modelId },
+        update: (
+            store,
+            {
+                data: {
+                    unlikeModel: { model },
+                },
+            },
+        ) => {
+            store.writeQuery({
+                query: MODEL_QUERY,
+                variables: { id: `${model.id}` },
+                data: { model },
+            });
+        },
+    });
+};
 
 const getInstance = () => {
     // Check the window to see if we have set up a mocked implementation. This
@@ -141,7 +291,14 @@ const getInstance = () => {
     if (window.Cypress && window['graphql-react']) {
         return window['graphql-react'];
     }
-    return { useUserById, useUpdateUser, useUploadUserAvatarMutation };
+    return {
+        useUserById,
+        useUpdateUser,
+        useUploadUserAvatarMutation,
+        useModelById,
+        useLikeModelMutation,
+        useUnlikeModelMutation,
+    };
 };
 
 export { getInstance, getGraphQLUrl, USER_QUERY };
