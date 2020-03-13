@@ -10,8 +10,6 @@ const ChildStyle = styled.img`
 const StyledBackground = styled.div`
     width: 100vw;
     position: absolute;
-    left: 50%;
-    margin-left: -50vw;
     display: flex;
     justify-content: space-between;
     background: ${props => props.theme.primary};
