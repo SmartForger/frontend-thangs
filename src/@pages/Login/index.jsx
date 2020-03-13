@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import * as EmailValidator from 'email-validator';
 import { authenticationService } from '@services';
 import { useForm } from '@customHooks';
-import { BasicPageStyle } from '@style';
 import { TextInput, Spinner, Button } from '@components';
 
 const ErrorTextStyle = styled.h3`
@@ -12,7 +11,7 @@ const ErrorTextStyle = styled.h3`
     color: red;
 `;
 
-const LoginBodyStyle = styled(BasicPageStyle)`
+const LoginBodyStyle = styled.div`
     position: fixed;
     display: flex;
     justify-content: flex-end;

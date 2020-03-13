@@ -5,10 +5,9 @@ import * as EmailValidator from 'email-validator';
 import * as swearjar from '@utilities';
 import { authenticationService } from '@services';
 import { useForm } from '@customHooks';
-import { BasicPageStyle } from '@style';
 import { TextInput, Spinner, Button } from '@components';
 
-const SignupBodyStyle = styled(BasicPageStyle)`
+const SignupBodyStyle = styled.div`
     position: fixed;
     display: flex;
     justify-content: flex-end;

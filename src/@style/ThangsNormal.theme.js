@@ -6,7 +6,6 @@ export const ThangsMain = {
     darkgrey: '#999999',
     mainFont: 'Raleway, sans-serif',
     pageWidth: '1012px',
-    pageHeight: '90vh',
     headerHeight: '64px',
 };
 

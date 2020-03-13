@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BasicPageStyle } from '@style';
 import { DisplayCard, Slides } from '@components';
 
-const HomeBodyStyle = styled(BasicPageStyle)`
+const HomeBodyStyle = styled.div`
     position: fixed;
     border-radius: 0 0 10px 10px;
 `;

@@ -2,11 +2,10 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTrail } from 'react-spring';
-import { BasicPageStyle } from '@style';
 import { ProfileSidebar, ModelDisplay } from '@components';
 import * as GraphqlService from '@services/graphql-service';
 
-const ProfileStyle = styled(BasicPageStyle)`
+const ProfileStyle = styled.div`
     display: grid;
     grid-template-rows: 5% 30% 65%;
     grid-template-columns: 30% 70%;

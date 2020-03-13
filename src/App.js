@@ -5,6 +5,7 @@ import { Route, BrowserRouter as Router } from 'react-router-dom';
 
 import { ThemeProvider } from 'styled-components';
 import { ThangsHeader, Footer, BackgroundImage } from '@components';
+import { Layout } from '@style';
 import { Home, Login, Signup, Details, Profile } from '@pages';
 import { ThangsMain, GlobalStyle } from '@style';
 import { graphqlClient } from '@services';
@@ -20,12 +21,17 @@ const App = () => {
                 <ThemeProvider theme={ThangsMain}>
                     <ThangsHeader />
                     <BackgroundImage />
-                    <Route exact path="/" component={Home} />
-                    <Route path="/login" component={Login} />
-                    <Route path="/signup" component={Signup} exact />
-                    <Route path="/signup/:registration" component={Signup} />
-                    <Route path="/details/:id" component={Details} />
-                    <Route path="/profile/:id" component={Profile} />
+                    <Layout>
+                        <Route exact path="/" component={Home} />
+                        <Route path="/login" component={Login} />
+                        <Route path="/signup" component={Signup} exact />
+                        <Route
+                            path="/signup/:registration"
+                            component={Signup}
+                        />
+                        <Route path="/details/:id" component={Details} />
+                        <Route path="/profile/:id" component={Profile} />
+                    </Layout>
                     <Footer />
                 </ThemeProvider>
             </Router>

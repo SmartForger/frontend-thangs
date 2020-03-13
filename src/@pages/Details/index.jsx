@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useTrail } from 'react-spring';
-import { BasicPageStyle } from '@style';
 import { Button, TagsBox, Viewer, ColorPicker } from '@components';
 
-const StyledDetails = styled(BasicPageStyle)`
+const StyledDetails = styled.div`
     display: grid;
     position: fixed;
     grid-template-columns: 85% 15%;
