@@ -22,15 +22,17 @@ const App = () => {
                     <ThangsHeader />
                     <BackgroundImage />
                     <Layout>
-                        <Route exact path="/" component={Home} />
-                        <Route path="/login" component={Login} />
-                        <Route path="/signup" component={Signup} exact />
-                        <Route
-                            path="/signup/:registration"
-                            component={Signup}
-                        />
-                        <Route path="/details/:id" component={Details} />
-                        <Route path="/profile/:id" component={Profile} />
+                        <div>
+                            <Route exact path="/" component={Home} />
+                            <Route path="/login" component={Login} />
+                            <Route path="/signup" component={Signup} exact />
+                            <Route
+                                path="/signup/:registration"
+                                component={Signup}
+                            />
+                            <Route path="/details/:id" component={Details} />
+                            <Route path="/profile/:id" component={Profile} />
+                        </div>
                     </Layout>
                     <Footer />
                 </ThemeProvider>

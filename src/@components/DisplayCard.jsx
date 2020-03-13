@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyleCard = styled.div`
-    width: ${props => props.size || 200}px;
+    max-width: ${props => props.size || 200}px;
     height: ${props => props.size || 200}px;
     background: none;
     overflow: hidden;

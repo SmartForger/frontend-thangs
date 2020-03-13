@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { DisplayCard, Slides } from '@components';
 
 const HomeBodyStyle = styled.div`
-    position: fixed;
-    border-radius: 0 0 10px 10px;
+    margin-top: 50px;
 `;
 
 const CardRow = styled.div`
