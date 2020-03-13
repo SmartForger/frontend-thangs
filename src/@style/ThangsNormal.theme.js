@@ -7,6 +7,7 @@ export const ThangsMain = {
     mainFont: 'Raleway, sans-serif',
     pageWidth: '1012px',
     pageHeight: '90vh',
+    headerHeight: '64px',
 };
 
 /** Styled for normal Pages

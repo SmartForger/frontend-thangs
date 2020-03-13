@@ -7,8 +7,9 @@ import { Shelf, ShelfButton, Button, SVG } from '@components';
 
 const HeaderStyle = styled.div`
     position: fixed;
+    top: 0;
     width: 100%;
-    height: 64px;
+    height: ${props => props.theme.headerHeight};
     background: ${props => props.theme.white};
     z-index: 10;
     display: flex;
