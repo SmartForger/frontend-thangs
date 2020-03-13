@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useTrail } from 'react-spring';
 import { Button, TagsBox, Viewer, ColorPicker } from '@components';
+import { WithFullScreenLayout } from '@style';
 
 const StyledDetails = styled.div`
     display: grid;
-    position: fixed;
     grid-template-columns: 85% 15%;
     grid-template-rows: 10% 75% 15%;
     grid-template-areas:
@@ -145,70 +145,78 @@ const Details = () => {
     });
 
     return (
-        <StyledDetails>
-            <StyledHeader>
-                <h1>Model Name</h1>
-                <Vl />
-                <h3>Uploaded by</h3>
-            </StyledHeader>
-            <StyledViewer>
-                <StyledInfo>
-                    <Button
-                        onClick={() => {
-                            changeMode('shaded');
-                        }}
-                        name="Shaded"
-                    />
-                    <Button
-                        onClick={() => {
-                            changeMode('wireframe');
-                        }}
-                        name="wireframe"
-                    />
-                    <Button
-                        onClick={() => {
-                            changeMode('composite');
-                        }}
-                        name="Composite"
-                    />
-                    {/* <div>Material: <strong>MAT</strong></div>
+        <WithFullScreenLayout>
+            <StyledDetails>
+                <StyledHeader>
+                    <h1>Model Name</h1>
+                    <Vl />
+                    <h3>Uploaded by</h3>
+                </StyledHeader>
+                <StyledViewer>
+                    <StyledInfo>
+                        <Button
+                            onClick={() => {
+                                changeMode('shaded');
+                            }}
+                            name="Shaded"
+                        />
+                        <Button
+                            onClick={() => {
+                                changeMode('wireframe');
+                            }}
+                            name="wireframe"
+                        />
+                        <Button
+                            onClick={() => {
+                                changeMode('composite');
+                            }}
+                            name="Composite"
+                        />
+                        {/* <div>Material: <strong>MAT</strong></div>
           <div>Height: <strong>MAT</strong></div>
           <div>Length: <strong>MAT</strong></div>
           <div>Width: <strong>MAT</strong></div>
           <div>Weight: <strong>MAT</strong></div>
           <div>ANSI Compliant: <strong>MAT</strong></div> */}
-                </StyledInfo>
-                <StyledInteractions />
-                <StyledDisplayOptions>
-                    <ColorPicker color={meshColor} onChange={changeMeshColor} />
-                    <ColorPicker color={wireColor} onChange={changeWireColor} />
-                </StyledDisplayOptions>
-                <Viewer
-                    url="http://127.0.0.1:8000/model"
-                    mode={mode}
-                    style={{ 'grid-area': 'viewer' }}
-                    meshColor={meshColor}
-                    wireFrameColor={wireColor}
-                />
-            </StyledViewer>
-            <StyledMenu>
-                {trail.map((props, index) => {
-                    return (
-                        <Button
-                            key={names[index]}
-                            name={names[index]}
-                            style={props}
-                            maxwidth="90%"
-                            height="10%"
-                            fontSize="2rem"
+                    </StyledInfo>
+                    <StyledInteractions />
+                    <StyledDisplayOptions>
+                        <ColorPicker
+                            color={meshColor}
+                            onChange={changeMeshColor}
                         />
-                    );
-                })}
-                <StyledTags>
-                    <TagsBox width="100%" height="100%" data={tags} />
-                </StyledTags>
-            </StyledMenu>
-        </StyledDetails>
+                        <ColorPicker
+                            color={wireColor}
+                            onChange={changeWireColor}
+                        />
+                    </StyledDisplayOptions>
+                    <Viewer
+                        url="http://127.0.0.1:8000/model"
+                        mode={mode}
+                        style={{ 'grid-area': 'viewer' }}
+                        meshColor={meshColor}
+                        wireFrameColor={wireColor}
+                    />
+                </StyledViewer>
+                <StyledMenu>
+                    {trail.map((props, index) => {
+                        return (
+                            <Button
+                                key={names[index]}
+                                name={names[index]}
+                                style={props}
+                                maxwidth="90%"
+                                height="10%"
+                                fontSize="2rem"
+                            />
+                        );
+                    })}
+                    <StyledTags>
+                        <TagsBox width="100%" height="100%" data={tags} />
+                    </StyledTags>
+                </StyledMenu>
+            </StyledDetails>
+        </WithFullScreenLayout>
     );
 };
 
