@@ -17,9 +17,6 @@ const ErrorTextStyle = styled.h3`
 `;
 
 const LoginBodyStyle = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
     width: 500px;
     margin: auto;
 `;
@@ -28,9 +25,8 @@ const LoginFormStyle = styled.form`
     width: 100%;
     display: flex;
     flex-flow: column nowrap;
-    justify-content: center;
     align-items: center;
-    text-align: center;
+    margin-top: 32px;
 `;
 
 const Login = () => {
