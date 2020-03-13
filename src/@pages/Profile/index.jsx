@@ -8,7 +8,6 @@ import * as GraphqlService from '@services/graphql-service';
 
 const ProfileStyle = styled(BasicPageStyle)`
     display: grid;
-    position: fixed;
     grid-template-rows: 5% 30% 65%;
     grid-template-columns: 30% 70%;
     grid-template-areas:
