@@ -6,16 +6,21 @@ import { authenticationService } from '@services';
 import { useForm } from '@customHooks';
 import { TextInput, Spinner, Button } from '@components';
 
+const LoginInput = styled(TextInput)`
+    width: 100%;
+`;
+
 const ErrorTextStyle = styled.h3`
     font-weight: bold;
     color: red;
 `;
 
 const LoginBodyStyle = styled.div`
-    position: fixed;
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    width: 500px;
+    margin: auto;
 `;
 
 const LoginFormStyle = styled.form`
@@ -99,7 +104,7 @@ const Login = () => {
                 ) : (
                     <></>
                 )}
-                <TextInput
+                <LoginInput
                     disabled={waiting}
                     type="text"
                     name="email"
@@ -112,7 +117,7 @@ const Login = () => {
                     data-cy="login-email"
                     required
                 />
-                <TextInput
+                <LoginInput
                     disabled={waiting}
                     type="password"
                     name="password"

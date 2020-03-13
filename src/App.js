@@ -3,7 +3,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 
 import { Route, BrowserRouter as Router } from 'react-router-dom';
 
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import { ThangsHeader, Footer, BackgroundImage } from '@components';
 import { Layout } from '@style';
 import { Home, Login, Signup, Details, Profile } from '@pages';
@@ -12,6 +12,10 @@ import { graphqlClient } from '@services';
 
 const originalFetch = window.fetch;
 const client = graphqlClient(originalFetch);
+
+const Content = styled.div`
+    width: 100%;
+`;
 
 const App = () => {
     return (
@@ -22,7 +26,7 @@ const App = () => {
                     <ThangsHeader />
                     <BackgroundImage />
                     <Layout>
-                        <div>
+                        <Content>
                             <Route exact path="/" component={Home} />
                             <Route path="/login" component={Login} />
                             <Route path="/signup" component={Signup} exact />
@@ -32,7 +36,7 @@ const App = () => {
                             />
                             <Route path="/details/:id" component={Details} />
                             <Route path="/profile/:id" component={Profile} />
-                        </div>
+                        </Content>
                     </Layout>
                     <Footer />
                 </ThemeProvider>
