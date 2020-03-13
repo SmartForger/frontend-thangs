@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import React from 'react';
 
 const Layout = styled.div`
     max-width: ${props => props.theme.pageWidth};
@@ -6,4 +7,17 @@ const Layout = styled.div`
     display: flex;
 `;
 
-export { Layout };
+const Content = styled.div`
+    width: 100%;
+    padding-top: 15px;
+`;
+
+const WithLayout = ({ children }) => {
+    return (
+        <Layout>
+            <Content>{children}</Content>
+        </Layout>
+    );
+};
+
+export { WithLayout };

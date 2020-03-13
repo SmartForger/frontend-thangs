@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { DisplayCard, Slides } from '@components';
+import { WithLayout } from '@style';
 
 const HomeBodyStyle = styled.div`
     margin-top: 50px;
@@ -72,50 +73,52 @@ const Home = () => {
         },
     ];
     return (
-        <HomeBodyStyle>
-            <CardRow>
-                <DisplayCard
-                    percentage="10"
-                    headerContent="Most Viewed"
-                    fontSize="2"
-                    shadow
-                    size="300"
-                >
-                    <Slides data={modelData} prefix="Uploaded By" />
-                </DisplayCard>
-                <DisplayCard
-                    percentage="10"
-                    headerContent="View Designs"
-                    fontSize="2"
-                    shadow
-                    size="300"
-                >
-                    <Slides data={modelData} prefix="Uploaded By" />
-                </DisplayCard>
-                <DisplayCard
-                    percentage="10"
-                    headerContent="Community"
-                    fontSize="2"
-                    shadow
-                    size="300"
-                >
-                    <Slides
-                        data={userData}
-                        prefix="a user you could connect with"
-                        rounded
-                    />
-                </DisplayCard>
-                <DisplayCard
-                    percentage="10"
-                    headerContent="News"
-                    fontSize="2"
-                    shadow
-                    size="300"
-                >
-                    <Slides data={newsData} text />
-                </DisplayCard>
-            </CardRow>
-        </HomeBodyStyle>
+        <WithLayout>
+            <HomeBodyStyle>
+                <CardRow>
+                    <DisplayCard
+                        percentage="10"
+                        headerContent="Most Viewed"
+                        fontSize="2"
+                        shadow
+                        size="300"
+                    >
+                        <Slides data={modelData} prefix="Uploaded By" />
+                    </DisplayCard>
+                    <DisplayCard
+                        percentage="10"
+                        headerContent="View Designs"
+                        fontSize="2"
+                        shadow
+                        size="300"
+                    >
+                        <Slides data={modelData} prefix="Uploaded By" />
+                    </DisplayCard>
+                    <DisplayCard
+                        percentage="10"
+                        headerContent="Community"
+                        fontSize="2"
+                        shadow
+                        size="300"
+                    >
+                        <Slides
+                            data={userData}
+                            prefix="a user you could connect with"
+                            rounded
+                        />
+                    </DisplayCard>
+                    <DisplayCard
+                        percentage="10"
+                        headerContent="News"
+                        fontSize="2"
+                        shadow
+                        size="300"
+                    >
+                        <Slides data={newsData} text />
+                    </DisplayCard>
+                </CardRow>
+            </HomeBodyStyle>
+        </WithLayout>
     );
 };
 

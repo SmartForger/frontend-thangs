@@ -5,17 +5,12 @@ import { Route, BrowserRouter as Router } from 'react-router-dom';
 
 import styled, { ThemeProvider } from 'styled-components';
 import { ThangsHeader, Footer, BackgroundImage } from '@components';
-import { Layout } from '@style';
 import { Home, Login, Signup, Details, Profile } from '@pages';
 import { ThangsMain, GlobalStyle } from '@style';
 import { graphqlClient } from '@services';
 
 const originalFetch = window.fetch;
 const client = graphqlClient(originalFetch);
-
-const Content = styled.div`
-    width: 100%;
-`;
 
 const App = () => {
     return (
@@ -25,19 +20,12 @@ const App = () => {
                 <ThemeProvider theme={ThangsMain}>
                     <ThangsHeader />
                     <BackgroundImage />
-                    <Layout>
-                        <Content>
-                            <Route exact path="/" component={Home} />
-                            <Route path="/login" component={Login} />
-                            <Route path="/signup" component={Signup} exact />
-                            <Route
-                                path="/signup/:registration"
-                                component={Signup}
-                            />
-                            <Route path="/details/:id" component={Details} />
-                            <Route path="/profile/:id" component={Profile} />
-                        </Content>
-                    </Layout>
+                    <Route exact path="/" component={Home} />
+                    <Route path="/login" component={Login} />
+                    <Route path="/signup" component={Signup} exact />
+                    <Route path="/signup/:registration" component={Signup} />
+                    <Route path="/details/:id" component={Details} />
+                    <Route path="/profile/:id" component={Profile} />
                     <Footer />
                 </ThemeProvider>
             </Router>

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useTrail } from 'react-spring';
 import { ProfileSidebar, ModelDisplay } from '@components';
 import * as GraphqlService from '@services/graphql-service';
+import { WithLayout } from '@style';
 
 const ProfileStyle = styled.div`
     display: grid;
@@ -59,35 +60,43 @@ const Profile = () => {
     const { loading, error, user } = graphqlService.useUserById(id);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <WithLayout>
+                <div>Loading...</div>
+            </WithLayout>
+        );
     }
 
     if (error || !user) {
         return (
-            <div data-cy="fetch-profile-error">
-                Error! We were not able to load your profile. Please try again
-                later.
-            </div>
+            <WithLayout>
+                <div data-cy="fetch-profile-error">
+                    Error! We were not able to load your profile. Please try
+                    again later.
+                </div>
+            </WithLayout>
         );
     }
 
     return (
-        <ProfileStyle>
-            <HeaderStyled />
-            <ProfileSidebar user={user} />
-            <ModelsStyled>
-                {trail.map((props, index) => (
-                    <ModelDisplay
-                        style={props}
-                        width="185px"
-                        height="135px"
-                        key={index}
-                        route={mockModels[index].route}
-                        name={mockModels[index].attachmentName}
-                    />
-                ))}
-            </ModelsStyled>
-        </ProfileStyle>
+        <WithLayout>
+            <ProfileStyle>
+                <HeaderStyled />
+                <ProfileSidebar user={user} />
+                <ModelsStyled>
+                    {trail.map((props, index) => (
+                        <ModelDisplay
+                            style={props}
+                            width="185px"
+                            height="135px"
+                            key={index}
+                            route={mockModels[index].route}
+                            name={mockModels[index].attachmentName}
+                        />
+                    ))}
+                </ModelsStyled>
+            </ProfileStyle>
+        </WithLayout>
     );
 };
 
