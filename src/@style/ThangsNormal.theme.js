@@ -4,7 +4,7 @@ export const ThangsMain = {
     white: '#FFFFFF',
     grey: '#D9D9D9',
     darkgrey: '#999999',
-    mainFont: `'Raleway' sans-serif`,
+    mainFont: 'Raleway, sans-serif',
     pageWidth: '1012px',
     pageHeight: '90vh',
 };
