@@ -24,6 +24,9 @@ const ModelsStyled = styled.div`
     grid-area: models;
     display: flex;
     flex-flow: row wrap;
+    justify-content: space-between;
+    overflow-y: scroll;
+    height: 100%;
 `;
 
 const Profile = () => {

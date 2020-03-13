@@ -16,6 +16,8 @@ const StyledBackground = styled.div`
     justify-content: space-between;
     background: ${props => props.theme.primary};
     z-index: -2;
+    height: 100%;
+    overflow: hidden;
 `;
 
 const BackgroundImage = () => (
