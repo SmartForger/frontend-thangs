@@ -34,10 +34,12 @@ const WithLayout = Component => props => {
     );
 };
 
-const WithFullScreenLayout = ({ children }) => {
+const WithFullScreenLayout = Component => props => {
     return (
         <Layout fullScreen>
-            <Content>{children}</Content>
+            <Content>
+                <Component {...props} />
+            </Content>
         </Layout>
     );
 };
