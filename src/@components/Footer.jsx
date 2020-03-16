@@ -5,7 +5,7 @@ import { HideOnRoutes } from '@components';
 const FooterStyle = styled.div`
     height: 5vh;
     left: 50%;
-    margin-left: -12.5vw;
+    transform: translateX(-50%);
     position: fixed;
     bottom: -1vh;
     background: white;
