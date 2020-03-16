@@ -4,6 +4,11 @@ import { useTrail } from 'react-spring';
 import { Button, TagsBox, Viewer, ColorPicker } from '@components';
 import { WithFullScreenLayout } from '@style';
 
+const DisplayButton = styled(Button)`
+    max-width: 100%;
+    width: auto;
+`;
+
 const StyledDetails = styled.div`
     display: grid;
     height: 100%;
@@ -156,19 +161,19 @@ const Details = () => {
                 </StyledHeader>
                 <StyledViewer>
                     <StyledInfo>
-                        <Button
+                        <DisplayButton
                             onClick={() => {
                                 changeMode('shaded');
                             }}
                             name="Shaded"
                         />
-                        <Button
+                        <DisplayButton
                             onClick={() => {
                                 changeMode('wireframe');
                             }}
                             name="wireframe"
                         />
-                        <Button
+                        <DisplayButton
                             onClick={() => {
                                 changeMode('composite');
                             }}
@@ -209,7 +214,7 @@ const Details = () => {
                                 style={props}
                                 maxwidth="90%"
                                 height="10%"
-                                fontSize="2rem"
+                                fontSize="1.5rem"
                             />
                         );
                     })}
