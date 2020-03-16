@@ -10,13 +10,25 @@ function withAuthHeader(options, accessToken) {
     };
 }
 
-const tryWithRefresh = async (originalFetch, url, options) => {
-    await authenticationService.refreshAccessToken();
-    const accessToken = localStorage.getItem('accessToken');
-    return await originalFetch(url, withAuthHeader(options, accessToken));
+const tryWithRefresh = async (originalFetch, history, url, options) => {
+    try {
+        await authenticationService.refreshAccessToken();
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await originalFetch(
+            url,
+            withAuthHeader(options, accessToken),
+        );
+
+        return response;
+    } catch {
+        console.log('in logout');
+        authenticationService.logout();
+        history.push('/login');
+        return null;
+    }
 };
 
-const createAuthenticatedFetch = originalFetch => {
+const createAuthenticatedFetch = (originalFetch, history) => {
     return async (url, options) => {
         if (!authenticationService.isGraphQLUrl(url)) {
             return originalFetch(url, options);
@@ -29,7 +41,7 @@ const createAuthenticatedFetch = originalFetch => {
         );
 
         if (response.status === 401) {
-            return tryWithRefresh(originalFetch, url, options);
+            return tryWithRefresh(originalFetch, history, url, options);
         }
         return response;
     };

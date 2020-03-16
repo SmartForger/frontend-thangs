@@ -173,7 +173,7 @@ const UNLIKE_MODEL_MUTATION = gql`
     }
 `;
 
-export const graphqlClient = originalFetch =>
+export const graphqlClient = (originalFetch, history) =>
     new ApolloClient({
         link: ApolloLink.from([
             onError(({ graphQLErrors, networkError }) => {
@@ -188,7 +188,7 @@ export const graphqlClient = originalFetch =>
             }),
             createUploadLink({
                 uri: getGraphQLUrl(),
-                fetch: createAuthenticatedFetch(originalFetch),
+                fetch: createAuthenticatedFetch(originalFetch, history),
                 credentials: 'same-origin',
             }),
         ]),
