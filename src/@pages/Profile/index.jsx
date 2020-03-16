@@ -60,21 +60,15 @@ const Page = () => {
     const { loading, error, user } = graphqlService.useUserById(id);
 
     if (loading) {
-        return (
-            <WithLayout>
-                <div>Loading...</div>
-            </WithLayout>
-        );
+        return <div>Loading...</div>;
     }
 
     if (error || !user) {
         return (
-            <WithLayout>
-                <div data-cy="fetch-profile-error">
-                    Error! We were not able to load your profile. Please try
-                    again later.
-                </div>
-            </WithLayout>
+            <div data-cy="fetch-profile-error">
+                Error! We were not able to load your profile. Please try again
+                later.
+            </div>
         );
     }
 
