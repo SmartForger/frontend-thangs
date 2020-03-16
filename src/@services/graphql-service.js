@@ -200,11 +200,13 @@ const parseUserPayload = data => {
         return null;
     }
 
+    const avatar = data.user.profile ? data.user.profile.avatar : '';
+
     return {
         ...data.user,
         profile: {
             ...data.user.profile,
-            avatar: media(data.user.profile.avatar),
+            avatar: media(avatar),
         },
     };
 };
