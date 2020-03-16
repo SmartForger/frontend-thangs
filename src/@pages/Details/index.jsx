@@ -6,6 +6,7 @@ import { WithFullScreenLayout } from '@style';
 
 const StyledDetails = styled.div`
     display: grid;
+    height: 100%;
     grid-template-columns: 85% 15%;
     grid-template-rows: 10% 75% 15%;
     grid-template-areas:
