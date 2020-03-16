@@ -243,10 +243,7 @@ const Page = () => {
                     onClick={handleSubmit}
                     name="Signup"
                     disabled={canSignup()}
-                />
-                <input
                     type="submit"
-                    style={{ position: 'absolute', left: '-9999px' }}
                 />
                 <Link to="/login">Already have an account?</Link>
             </SignupFormStyle>
