@@ -3,7 +3,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 
 import { Route, BrowserRouter as Router } from 'react-router-dom';
 
-import styled, { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import { ThangsHeader, Footer, BackgroundImage } from '@components';
 import { Home, Login, Signup, Details, Profile } from '@pages';
 import { ThangsMain, GlobalStyle } from '@style';
