@@ -5,14 +5,15 @@ import * as EmailValidator from 'email-validator';
 import * as swearjar from '@utilities';
 import { authenticationService } from '@services';
 import { useForm } from '@customHooks';
-import { BasicPageStyle } from '@style';
 import { TextInput, Spinner, Button } from '@components';
+import { WithLayout } from '@style';
 
-const SignupBodyStyle = styled(BasicPageStyle)`
-    position: fixed;
+const SignupBodyStyle = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    width: 500px;
+    margin: auto;
 `;
 
 const SignupFormStyle = styled.form`
@@ -29,7 +30,7 @@ const ErrorTextStyle = styled.h3`
     color: red;
 `;
 
-const Signup = () => {
+const Page = () => {
     const [waiting, setWaiting] = useState(false);
     const [signupErrorMessage, setSignupErrorMessage] = useState(null);
     const [invalidFields, setInvalidFields] = useState([]);
@@ -242,15 +243,14 @@ const Signup = () => {
                     onClick={handleSubmit}
                     name="Signup"
                     disabled={canSignup()}
-                />
-                <input
                     type="submit"
-                    style={{ position: 'absolute', left: '-9999px' }}
                 />
                 <Link to="/login">Already have an account?</Link>
             </SignupFormStyle>
         </SignupBodyStyle>
     );
 };
+
+const Signup = WithLayout(Page);
 
 export { Signup };

@@ -2,13 +2,12 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTrail } from 'react-spring';
-import { BasicPageStyle } from '@style';
 import { ProfileSidebar, ModelDisplay } from '@components';
 import * as GraphqlService from '@services/graphql-service';
+import { WithLayout } from '@style';
 
-const ProfileStyle = styled(BasicPageStyle)`
+const ProfileStyle = styled.div`
     display: grid;
-    position: fixed;
     grid-template-rows: 5% 30% 65%;
     grid-template-columns: 30% 70%;
     grid-template-areas:
@@ -25,9 +24,12 @@ const ModelsStyled = styled.div`
     grid-area: models;
     display: flex;
     flex-flow: row wrap;
+    justify-content: space-between;
+    overflow-y: scroll;
+    height: 100%;
 `;
 
-const Profile = () => {
+const Page = () => {
     const { id } = useParams();
     const mockModels = [
         { attachmentName: 'Yourgoy', route: '/details/634' },
@@ -89,5 +91,7 @@ const Profile = () => {
         </ProfileStyle>
     );
 };
+
+const Profile = WithLayout(Page);
 
 export { Profile };

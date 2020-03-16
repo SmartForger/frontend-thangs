@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const TextInputStyled = styled.input`
-    width: 20%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
@@ -35,7 +34,7 @@ const TextInput = props => {
 
 export { TextInput };
 
-/* 
+/*
 
 const validator = (fieldName,invalidFieldsArray) => {
 

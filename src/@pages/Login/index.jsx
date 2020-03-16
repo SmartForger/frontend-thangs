@@ -4,31 +4,32 @@ import styled from 'styled-components';
 import * as EmailValidator from 'email-validator';
 import { authenticationService } from '@services';
 import { useForm } from '@customHooks';
-import { BasicPageStyle } from '@style';
 import { TextInput, Spinner, Button } from '@components';
+import { WithLayout } from '@style';
+
+const LoginInput = styled(TextInput)`
+    width: 100%;
+`;
 
 const ErrorTextStyle = styled.h3`
     font-weight: bold;
     color: red;
 `;
 
-const LoginBodyStyle = styled(BasicPageStyle)`
-    position: fixed;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+const LoginBodyStyle = styled.div`
+    width: 500px;
+    margin: auto;
 `;
 
 const LoginFormStyle = styled.form`
     width: 100%;
     display: flex;
     flex-flow: column nowrap;
-    justify-content: center;
     align-items: center;
-    text-align: center;
+    margin-top: 32px;
 `;
 
-const Login = () => {
+const Page = () => {
     const [waiting, setWaiting] = useState(false);
     const [loginErrorMessage, setLoginErrorMessage] = useState(null);
     const { inputs, handleChange, handleSubmit } = useForm(login);
@@ -43,7 +44,6 @@ const Login = () => {
             setLoginErrorMessage('');
         }
     };
-
     const validateEmail = () => {
         if (!EmailValidator.validate(inputs.email)) {
             setInvalidFields(['email']);
@@ -100,7 +100,7 @@ const Login = () => {
                 ) : (
                     <></>
                 )}
-                <TextInput
+                <LoginInput
                     disabled={waiting}
                     type="text"
                     name="email"
@@ -113,7 +113,7 @@ const Login = () => {
                     data-cy="login-email"
                     required
                 />
-                <TextInput
+                <LoginInput
                     disabled={waiting}
                     type="password"
                     name="password"
@@ -140,5 +140,7 @@ const Login = () => {
         </LoginBodyStyle>
     );
 };
+
+const Login = WithLayout(Page);
 
 export { Login };

@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useTrail } from 'react-spring';
-import { BasicPageStyle } from '@style';
 import { Button, TagsBox, Viewer, ColorPicker } from '@components';
+import { WithFullScreenLayout } from '@style';
 
-const StyledDetails = styled(BasicPageStyle)`
+const DisplayButton = styled(Button)`
+    max-width: 100%;
+    width: auto;
+`;
+
+const StyledDetails = styled.div`
     display: grid;
-    position: fixed;
+    height: 100%;
+    position: relative;
     grid-template-columns: 85% 15%;
     grid-template-rows: 10% 75% 15%;
     grid-template-areas:
@@ -100,7 +106,7 @@ const StyledDisplayOptions = styled.div`
     }
 `;
 
-const Details = () => {
+const Page = () => {
     const [mode, setMode] = useState('shaded');
     const [meshColor, setMeshColor] = useState('#FFFFFF');
     const [wireColor, setWireColor] = useState('#000000');
@@ -154,19 +160,19 @@ const Details = () => {
             </StyledHeader>
             <StyledViewer>
                 <StyledInfo>
-                    <Button
+                    <DisplayButton
                         onClick={() => {
                             changeMode('shaded');
                         }}
                         name="Shaded"
                     />
-                    <Button
+                    <DisplayButton
                         onClick={() => {
                             changeMode('wireframe');
                         }}
                         name="wireframe"
                     />
-                    <Button
+                    <DisplayButton
                         onClick={() => {
                             changeMode('composite');
                         }}
@@ -201,7 +207,7 @@ const Details = () => {
                             style={props}
                             maxwidth="90%"
                             height="10%"
-                            fontSize="2rem"
+                            fontSize="1.5rem"
                         />
                     );
                 })}
@@ -212,5 +218,7 @@ const Details = () => {
         </StyledDetails>
     );
 };
+
+const Details = WithFullScreenLayout(Page);
 
 export { Details };

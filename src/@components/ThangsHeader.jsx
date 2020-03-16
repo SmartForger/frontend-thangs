@@ -6,43 +6,51 @@ import { authenticationService } from '@services';
 import { Shelf, ShelfButton, Button, SVG } from '@components';
 
 const HeaderStyle = styled.div`
-    position: relative;
-    width: 90vw;
-    height: 10vh;
-    left: 50%;
-    margin-left: -45vw;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: ${props => props.theme.headerHeight};
+    background: ${props => props.theme.white};
+    z-index: 10;
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
     align-items: center;
-    background: ${props => props.theme.white};
-    z-index: 10;
 `;
 
 const LogoStyle = styled.div`
-    font-size: 5px;
-    font-family: ${props => props.theme.mainFont};
-    margin-left: 60px;
-    color: ${props => props.theme.secondary};
+    margin-left: 160px;
     user-select: none;
     cursor: pointer;
     text-decoration: none;
+    width: 200px;
+    height: 100%;
+    overflow: hidden;
+`;
+
+const SvgContainer = styled.div`
+    position: relative;
+    height: 100%;
+    color: ${props => props.theme.secondary};
+    font-size: 5px;
+    font-family: ${props => props.theme.mainFont};
 
     & > svg {
+        position: absolute;
         color: ${props => props.theme.primary};
+        top: -60px;
     }
 `;
 
 const SearchStyle = styled.input`
     border: 0.5px solid ${props => props.theme.darkgrey};
-    padding: 15px;
+    padding: 0 15px;
     background: ${props => props.theme.grey};
-    margin: 0 0 10px 0;
     width: 100%;
     font-size: 30px;
 
     ::placeholder {
-        color: lightgrey;
+        color: ${props => props.theme.darkgrey};
     }
 `;
 const ProfileStyle = styled.div`
@@ -53,6 +61,12 @@ const ProfileStyle = styled.div`
     flex-flow: row nowrap;
     justify-content: space-evenly;
     align-items: center;
+`;
+
+const SearchForm = styled.form`
+    width: 50%;
+    height: 100%;
+    display: flex;
 `;
 
 const ThangsHeader = () => {
@@ -91,15 +105,17 @@ const ThangsHeader = () => {
                         history.push('/');
                     }}
                 >
-                    <SVG />
+                    <SvgContainer>
+                        <SVG />
+                    </SvgContainer>
                 </LogoStyle>
-                <form onSubmit={performSearch} style={{ width: '50%' }}>
+                <SearchForm onSubmit={performSearch}>
                     <SearchStyle
                         placeholder="Input search term"
                         value={searchTerm}
                         onChange={handleChange}
                     />
-                </form>
+                </SearchForm>
                 <ProfileStyle>
                     <ShelfButton open={open} setOpen={setOpen} />
                     {currentUser ? (

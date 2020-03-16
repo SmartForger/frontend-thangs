@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BasicPageStyle } from '@style';
 import { DisplayCard, Slides } from '@components';
+import { WithLayout } from '@style';
 
-const HomeBodyStyle = styled(BasicPageStyle)`
-    position: fixed;
-    border-radius: 0 0 10px 10px;
+const HomeBodyStyle = styled.div`
+    margin-top: 50px;
 `;
 
 const CardRow = styled.div`
@@ -19,7 +18,7 @@ const CardRow = styled.div`
     top: 47%;
 `;
 
-const Home = () => {
+const Page = () => {
     const modelData = [
         {
             title: 'Fancy Screw',
@@ -120,5 +119,7 @@ const Home = () => {
         </HomeBodyStyle>
     );
 };
+
+const Home = WithLayout(Page);
 
 export { Home };
