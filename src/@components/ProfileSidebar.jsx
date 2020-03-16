@@ -76,7 +76,7 @@ const EditProfileForm = ({ onClose, user }) => {
     const { register, handleSubmit, errors } = useForm();
 
     const graphqlService = GraphqlService.getInstance();
-    const [updateUser] = graphqlService.useUpdateUser();
+    const [updateUser] = graphqlService.useUpdateUser(user);
 
     function handleCancel() {
         onClose();
@@ -97,23 +97,6 @@ const EditProfileForm = ({ onClose, user }) => {
         try {
             await updateUser({
                 variables: { updateInput },
-
-                // We need this update mechanism because our user query returns a
-                // string id, while the user mutation returns an integer id.
-                // This messes up Apollo's caching, so we need to handle it ourselves.
-                update: (store, { data: { updateUser } }) => {
-                    store.writeQuery({
-                        query: GraphqlService.USER_QUERY,
-                        variables: { id: `${updateUser.id}` },
-                        data: {
-                            user: {
-                                ...updateUser,
-                                email: user.email,
-                                username: user.username,
-                            },
-                        },
-                    });
-                },
             });
         } catch (error) {
             console.error('Error when trying to update the user', error);

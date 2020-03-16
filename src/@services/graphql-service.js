@@ -235,8 +235,25 @@ const useModelById = id => {
     return { loading, error, model };
 };
 
-const useUpdateUser = () => {
-    return useMutation(UPDATE_USER_MUTATION);
+const useUpdateUser = user => {
+    return useMutation(UPDATE_USER_MUTATION, {
+        // We need this update mechanism because our user query returns a
+        // string id, while the user mutation returns an integer id.
+        // This messes up Apollo's caching, so we need to handle it ourselves.
+        update: (store, { data: { updateUser } }) => {
+            store.writeQuery({
+                query: USER_QUERY,
+                variables: { id: `${updateUser.id}` },
+                data: {
+                    user: {
+                        ...updateUser,
+                        email: user.email,
+                        username: user.username,
+                    },
+                },
+            });
+        },
+    });
 };
 
 const useUploadUserAvatarMutation = () => {
