@@ -1,21 +1,23 @@
 import React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
 
-import { Route, BrowserRouter as Router } from 'react-router-dom';
+import { Route, Router } from 'react-router-dom';
 
 import { ThemeProvider } from 'styled-components';
 import { ThangsHeader, Footer, BackgroundImage } from '@components';
 import { Home, Login, Signup, Details, Profile, Model } from '@pages';
 import { ThangsMain, GlobalStyle } from '@style';
 import { graphqlClient } from '@services';
+import { createBrowserHistory } from 'history';
 
+const history = createBrowserHistory();
 const originalFetch = window.fetch;
-const client = graphqlClient(originalFetch);
+const client = graphqlClient(originalFetch, history);
 
 const App = () => {
     return (
         <ApolloProvider client={client}>
-            <Router>
+            <Router history={history}>
                 <GlobalStyle />
                 <ThemeProvider theme={ThangsMain}>
                     <ThangsHeader />
