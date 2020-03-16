@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
-import { Button, ChangeablePicture } from '@components';
+import { Button, ChangeablePicture, Markdown } from '@components';
 import * as GraphqlService from '@services/graphql-service';
 
 const SidebarStyled = styled.div`
@@ -158,7 +158,7 @@ export const ProfileSidebar = ({ user }) => {
                                 {user.firstName} {user.lastName}
                             </div>
                             <FollowOrEditButton onClick={startEditProfile} />
-                            <div>{user.profile.description}</div>
+                            <Markdown>{user.profile.description}</Markdown>
                         </>
                     )}
                 </UserDetails>
