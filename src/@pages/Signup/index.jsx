@@ -6,12 +6,14 @@ import * as swearjar from '@utilities';
 import { authenticationService } from '@services';
 import { useForm } from '@customHooks';
 import { TextInput, Spinner, Button } from '@components';
+import { WithLayout } from '@style';
 
 const SignupBodyStyle = styled.div`
-    position: fixed;
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    width: 500px;
+    margin: auto;
 `;
 
 const SignupFormStyle = styled.form`
@@ -135,120 +137,122 @@ const Signup = () => {
     };
 
     return (
-        <SignupBodyStyle>
-            <SignupFormStyle onSubmit={handleSubmit} data-cy="signup-form">
-                {waiting ? <Spinner size="300" /> : <h3>Signup</h3>}
-                {signupErrorMessage ? (
-                    <ErrorTextStyle data-cy="signup-error">
-                        {signupErrorMessage}
-                    </ErrorTextStyle>
-                ) : (
-                    <></>
-                )}
-                {match ? (
-                    <TextInput
-                        disabled={true}
-                        type="text"
-                        name="registrationCode"
-                        label="Registration Code"
-                        value={match.params.registrationCode}
-                        placeholder="Registration Code"
-                    />
-                ) : (
+        <WithLayout>
+            <SignupBodyStyle>
+                <SignupFormStyle onSubmit={handleSubmit} data-cy="signup-form">
+                    {waiting ? <Spinner size="300" /> : <h3>Signup</h3>}
+                    {signupErrorMessage ? (
+                        <ErrorTextStyle data-cy="signup-error">
+                            {signupErrorMessage}
+                        </ErrorTextStyle>
+                    ) : (
+                        <></>
+                    )}
+                    {match ? (
+                        <TextInput
+                            disabled={true}
+                            type="text"
+                            name="registrationCode"
+                            label="Registration Code"
+                            value={match.params.registrationCode}
+                            placeholder="Registration Code"
+                        />
+                    ) : (
+                        <TextInput
+                            disabled={waiting}
+                            type="text"
+                            name="registrationCode"
+                            label="Registration Code"
+                            incorrect={needsCorrected('registration_code')}
+                            onChange={handleChange}
+                            onFocus={validateRegistration}
+                            value={inputs.registrationCode}
+                            placeholder="Registration Code"
+                            data-cy="signup-registration"
+                        />
+                    )}
                     <TextInput
                         disabled={waiting}
                         type="text"
-                        name="registrationCode"
-                        label="Registration Code"
-                        incorrect={needsCorrected('registration_code')}
+                        name="firstName"
+                        label="First Name"
                         onChange={handleChange}
-                        onFocus={validateRegistration}
-                        value={inputs.registrationCode}
-                        placeholder="Registration Code"
-                        data-cy="signup-registration"
+                        value={inputs.firstName}
+                        placeholder="First Name"
+                        data-cy="signup-first-name"
                     />
-                )}
-                <TextInput
-                    disabled={waiting}
-                    type="text"
-                    name="firstName"
-                    label="First Name"
-                    onChange={handleChange}
-                    value={inputs.firstName}
-                    placeholder="First Name"
-                    data-cy="signup-first-name"
-                />
-                <TextInput
-                    disabled={waiting}
-                    type="text"
-                    name="lastName"
-                    label="Last Name"
-                    onChange={handleChange}
-                    value={inputs.lastName}
-                    placeholder="Last Name"
-                    data-cy="signup-last-name"
-                />
-                <TextInput
-                    disabled={waiting}
-                    type="text"
-                    name="username"
-                    label="Username"
-                    incorrect={needsCorrected('username')}
-                    onChange={handleChange}
-                    validator={validateUsername}
-                    value={inputs.username}
-                    placeholder="Username"
-                    data-cy="signup-username"
-                    required
-                />
-                <TextInput
-                    disabled={waiting}
-                    type="text"
-                    name="email"
-                    label="E-Mail"
-                    incorrect={needsCorrected('email')}
-                    onChange={handleChange}
-                    validator={validateEmail}
-                    value={inputs.email}
-                    placeholder="E-mail"
-                    data-cy="signup-email"
-                    required
-                />
-                <TextInput
-                    disabled={waiting}
-                    type="password"
-                    name="password"
-                    label="Password"
-                    onChange={handleChange}
-                    value={inputs.password}
-                    placeholder="Password"
-                    data-cy="signup-password"
-                    required
-                />
-                <TextInput
-                    disabled={waiting}
-                    type="password"
-                    name="confirmPass"
-                    label="Password"
-                    onChange={handleChange}
-                    value={inputs.confirmPass}
-                    validator={validatePasswords}
-                    placeholder="Confirm password"
-                    data-cy="signup-confirm-password"
-                    required
-                />
-                <Button
-                    onClick={handleSubmit}
-                    name="Signup"
-                    disabled={canSignup()}
-                />
-                <input
-                    type="submit"
-                    style={{ position: 'absolute', left: '-9999px' }}
-                />
-                <Link to="/login">Already have an account?</Link>
-            </SignupFormStyle>
-        </SignupBodyStyle>
+                    <TextInput
+                        disabled={waiting}
+                        type="text"
+                        name="lastName"
+                        label="Last Name"
+                        onChange={handleChange}
+                        value={inputs.lastName}
+                        placeholder="Last Name"
+                        data-cy="signup-last-name"
+                    />
+                    <TextInput
+                        disabled={waiting}
+                        type="text"
+                        name="username"
+                        label="Username"
+                        incorrect={needsCorrected('username')}
+                        onChange={handleChange}
+                        validator={validateUsername}
+                        value={inputs.username}
+                        placeholder="Username"
+                        data-cy="signup-username"
+                        required
+                    />
+                    <TextInput
+                        disabled={waiting}
+                        type="text"
+                        name="email"
+                        label="E-Mail"
+                        incorrect={needsCorrected('email')}
+                        onChange={handleChange}
+                        validator={validateEmail}
+                        value={inputs.email}
+                        placeholder="E-mail"
+                        data-cy="signup-email"
+                        required
+                    />
+                    <TextInput
+                        disabled={waiting}
+                        type="password"
+                        name="password"
+                        label="Password"
+                        onChange={handleChange}
+                        value={inputs.password}
+                        placeholder="Password"
+                        data-cy="signup-password"
+                        required
+                    />
+                    <TextInput
+                        disabled={waiting}
+                        type="password"
+                        name="confirmPass"
+                        label="Password"
+                        onChange={handleChange}
+                        value={inputs.confirmPass}
+                        validator={validatePasswords}
+                        placeholder="Confirm password"
+                        data-cy="signup-confirm-password"
+                        required
+                    />
+                    <Button
+                        onClick={handleSubmit}
+                        name="Signup"
+                        disabled={canSignup()}
+                    />
+                    <input
+                        type="submit"
+                        style={{ position: 'absolute', left: '-9999px' }}
+                    />
+                    <Link to="/login">Already have an account?</Link>
+                </SignupFormStyle>
+            </SignupBodyStyle>
+        </WithLayout>
     );
 };
 
