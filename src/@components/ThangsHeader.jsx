@@ -47,11 +47,10 @@ const SearchStyle = styled.input`
     padding: 0 15px;
     background: ${props => props.theme.grey};
     width: 100%;
-    height: 100%;
     font-size: 30px;
 
     ::placeholder {
-        color: lightgrey;
+        color: ${props => props.theme.darkgrey};
     }
 `;
 const ProfileStyle = styled.div`
@@ -67,6 +66,7 @@ const ProfileStyle = styled.div`
 const SearchForm = styled.form`
     width: 50%;
     height: 100%;
+    display: flex;
 `;
 
 const ThangsHeader = () => {
