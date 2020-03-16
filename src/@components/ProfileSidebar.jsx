@@ -87,8 +87,6 @@ const EditProfileForm = ({ onClose, user }) => {
 
         const updateInput = {
             id: user.id,
-            username: user.username,
-            email: user.email,
             firstName: data.firstName,
             lastName: data.lastName,
             profile: {
@@ -107,7 +105,13 @@ const EditProfileForm = ({ onClose, user }) => {
                     store.writeQuery({
                         query: GraphqlService.USER_QUERY,
                         variables: { id: `${updateUser.id}` },
-                        data: { user: updateUser },
+                        data: {
+                            user: {
+                                ...updateUser,
+                                email: user.email,
+                                username: user.username,
+                            },
+                        },
                     });
                 },
             });

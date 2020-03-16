@@ -48,8 +48,6 @@ const UPDATE_USER_MUTATION = gql`
     mutation updateUser($updateInput: UpdateUserInput!) {
         updateUser(input: $updateInput) {
             id
-            email
-            username
             firstName
             lastName
             profile {
@@ -69,8 +67,6 @@ const UPLOAD_USER_PROFILE_AVATAR_MUTATION = gql`
         uploadUserProfileAvatar(userId: $userId, file: $file) {
             user {
                 id
-                username
-                email
                 firstName
                 lastName
                 profile {
