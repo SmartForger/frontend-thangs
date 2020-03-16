@@ -10,6 +10,12 @@ function withAuthHeader(options, accessToken) {
     };
 }
 
+const tryWithRefresh = async (originalFetch, url, options) => {
+    await authenticationService.refreshAccessToken();
+    const accessToken = localStorage.getItem('accessToken');
+    return await originalFetch(url, withAuthHeader(options, accessToken));
+};
+
 const createAuthenticatedFetch = originalFetch => {
     return async (url, options) => {
         if (!authenticationService.isGraphQLUrl(url)) {
@@ -23,12 +29,7 @@ const createAuthenticatedFetch = originalFetch => {
         );
 
         if (response.status === 401) {
-            await authenticationService.refreshAccessToken();
-            const accessToken = localStorage.getItem('accessToken');
-            return await originalFetch(
-                url,
-                withAuthHeader(options, accessToken),
-            );
+            return tryWithRefresh(originalFetch, url, options);
         }
         return response;
     };
