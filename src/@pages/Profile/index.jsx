@@ -29,7 +29,7 @@ const ModelsStyled = styled.div`
     height: 100%;
 `;
 
-const Profile = () => {
+const Page = () => {
     const { id } = useParams();
     const mockModels = [
         { attachmentName: 'Yourgoy', route: '/details/634' },
@@ -79,25 +79,25 @@ const Profile = () => {
     }
 
     return (
-        <WithLayout>
-            <ProfileStyle>
-                <HeaderStyled />
-                <ProfileSidebar user={user} />
-                <ModelsStyled>
-                    {trail.map((props, index) => (
-                        <ModelDisplay
-                            style={props}
-                            width="185px"
-                            height="135px"
-                            key={index}
-                            route={mockModels[index].route}
-                            name={mockModels[index].attachmentName}
-                        />
-                    ))}
-                </ModelsStyled>
-            </ProfileStyle>
-        </WithLayout>
+        <ProfileStyle>
+            <HeaderStyled />
+            <ProfileSidebar user={user} />
+            <ModelsStyled>
+                {trail.map((props, index) => (
+                    <ModelDisplay
+                        style={props}
+                        width="185px"
+                        height="135px"
+                        key={index}
+                        route={mockModels[index].route}
+                        name={mockModels[index].attachmentName}
+                    />
+                ))}
+            </ModelsStyled>
+        </ProfileStyle>
     );
 };
+
+const Profile = WithLayout(Page);
 
 export { Profile };

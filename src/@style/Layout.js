@@ -24,10 +24,12 @@ const Content = styled.div`
     padding-top: 15px;
 `;
 
-const WithLayout = ({ children }) => {
+const WithLayout = Component => props => {
     return (
         <Layout>
-            <Content>{children}</Content>
+            <Content>
+                <Component {...props} />
+            </Content>
         </Layout>
     );
 };

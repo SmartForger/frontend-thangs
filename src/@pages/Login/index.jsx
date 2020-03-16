@@ -29,7 +29,7 @@ const LoginFormStyle = styled.form`
     margin-top: 32px;
 `;
 
-const Login = () => {
+const Page = () => {
     const [waiting, setWaiting] = useState(false);
     const [loginErrorMessage, setLoginErrorMessage] = useState(null);
     const { inputs, handleChange, handleSubmit } = useForm(login);
@@ -90,57 +90,57 @@ const Login = () => {
     };
 
     return (
-        <WithLayout>
-            <LoginBodyStyle>
-                <LoginFormStyle onSubmit={handleSubmit} data-cy="login-form">
-                    {waiting ? <Spinner size="300" /> : <h3>Welcome Back</h3>}
-                    {loginErrorMessage ? (
-                        <ErrorTextStyle data-cy="login-error">
-                            {loginErrorMessage}
-                        </ErrorTextStyle>
-                    ) : (
-                        <></>
-                    )}
-                    <LoginInput
-                        disabled={waiting}
-                        type="text"
-                        name="email"
-                        label="E-Mail"
-                        incorrect={needsCorrected('email')}
-                        onChange={handleChange}
-                        validator={validateEmail}
-                        value={inputs.email}
-                        placeholder="E-mail"
-                        data-cy="login-email"
-                        required
-                    />
-                    <LoginInput
-                        disabled={waiting}
-                        type="password"
-                        name="password"
-                        label="Password"
-                        onChange={handleChange}
-                        value={inputs.password}
-                        placeholder="Password"
-                        data-cy="login-password"
-                        required
-                    />
-                    <Button
-                        onClick={handleSubmit}
-                        name="Login"
-                        disabled={canLogin()}
-                    />
-                    <input
-                        type="submit"
-                        style={{ position: 'absolute', left: '-9999px' }}
-                    />
-                    <Link to="/signup">
-                        Don't have an account? create one here!{' '}
-                    </Link>
-                </LoginFormStyle>
-            </LoginBodyStyle>
-        </WithLayout>
+        <LoginBodyStyle>
+            <LoginFormStyle onSubmit={handleSubmit} data-cy="login-form">
+                {waiting ? <Spinner size="300" /> : <h3>Welcome Back</h3>}
+                {loginErrorMessage ? (
+                    <ErrorTextStyle data-cy="login-error">
+                        {loginErrorMessage}
+                    </ErrorTextStyle>
+                ) : (
+                    <></>
+                )}
+                <LoginInput
+                    disabled={waiting}
+                    type="text"
+                    name="email"
+                    label="E-Mail"
+                    incorrect={needsCorrected('email')}
+                    onChange={handleChange}
+                    validator={validateEmail}
+                    value={inputs.email}
+                    placeholder="E-mail"
+                    data-cy="login-email"
+                    required
+                />
+                <LoginInput
+                    disabled={waiting}
+                    type="password"
+                    name="password"
+                    label="Password"
+                    onChange={handleChange}
+                    value={inputs.password}
+                    placeholder="Password"
+                    data-cy="login-password"
+                    required
+                />
+                <Button
+                    onClick={handleSubmit}
+                    name="Login"
+                    disabled={canLogin()}
+                />
+                <input
+                    type="submit"
+                    style={{ position: 'absolute', left: '-9999px' }}
+                />
+                <Link to="/signup">
+                    Don't have an account? create one here!{' '}
+                </Link>
+            </LoginFormStyle>
+        </LoginBodyStyle>
     );
 };
+
+const Login = WithLayout(Page);
 
 export { Login };
