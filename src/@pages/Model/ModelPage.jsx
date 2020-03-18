@@ -15,8 +15,8 @@ const Likes = ({ likes }) => {
         <div>
             <div>Likes: {amount}</div>
             <ul>
-                {likes.map(({ owner: { firstName, lastName } }) => (
-                    <li>
+                {likes.map(({ owner: { firstName, lastName } }, i) => (
+                    <li key={i}>
                         {firstName} {lastName}
                     </li>
                 ))}
