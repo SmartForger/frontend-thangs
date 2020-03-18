@@ -63,6 +63,26 @@ const CREATE_MODEL_COMMENT_MUTATION = gql`
 const useCreateModelCommentMutation = ({ ownerId, body, modelId }) => {
     return useMutation(CREATE_MODEL_COMMENT_MUTATION, {
         variables: { input: { ownerId, body, modelId } },
+        update: (
+            store,
+            {
+                data: {
+                    createModelComment: { comment },
+                },
+            },
+        ) => {
+            const { allModelComments } = store.readQuery({
+                query: ALL_MODEL_COMMENTS_QUERY,
+                variables: { modelId },
+            });
+            store.writeQuery({
+                query: ALL_MODEL_COMMENTS_QUERY,
+                variables: { modelId },
+                data: {
+                    allModelComments: allModelComments.concat(comment),
+                },
+            });
+        },
     });
 };
 
