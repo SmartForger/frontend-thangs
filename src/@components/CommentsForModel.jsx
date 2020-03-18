@@ -102,6 +102,9 @@ const Text = styled.div`
     }
 `;
 
+const valid = body => {
+    return !!body;
+};
 const NewComment = ({ modelId }) => {
     const userId = authenticationService.currentUserValue.id;
     const { loading, error, user } = graphqlService.useUserById(userId);
@@ -125,7 +128,9 @@ const NewComment = ({ modelId }) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             e.target.blur();
-            createModelComment();
+            if (valid(body)) {
+                createModelComment();
+            }
         }
     };
 
