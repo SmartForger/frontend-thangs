@@ -168,10 +168,6 @@ const CommentsForModel = ({ model }) => {
         model.id,
     );
 
-    if (!comments || comments.length === 0) {
-        return null;
-    }
-
     return (
         <Container>
             <Header>Comments</Header>
