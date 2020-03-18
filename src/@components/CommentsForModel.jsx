@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { formatDistance } from 'date-fns';
 import { authenticationService } from '@services';
 import * as GraphqlService from '@services/graphql-service';
 import { Markdown } from '@components';
@@ -56,7 +57,7 @@ const OwnerPicture = ({ owner }) => {
     return <Picture src={owner.profile.avatar} />;
 };
 
-const Date = styled.div`
+const TimeAgo = styled.div`
     color: ${props => props.theme.darkgrey};
 `;
 
@@ -69,6 +70,8 @@ const FlexGrow = styled.div`
 `;
 
 const Comment = ({ comment }) => {
+    const time = formatDistance(new Date(comment.created), new Date());
+
     return (
         <CommentStyled>
             <div>
@@ -80,7 +83,7 @@ const Comment = ({ comment }) => {
                         <Owner owner={comment.owner} />
                         <Markdown>{comment.body}</Markdown>
                     </Body>
-                    <Date>{comment.created}</Date>
+                    <TimeAgo>{time} ago</TimeAgo>
                 </Box>
             </FlexGrow>
         </CommentStyled>
