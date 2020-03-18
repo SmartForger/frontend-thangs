@@ -16,7 +16,7 @@ const Comments = styled.ul`
     padding: 0;
 
     > li {
-        margin-top: 2px;
+        margin-top: 4px;
     }
 `;
 
