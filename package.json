@@ -18,6 +18,7 @@
     "babel-plugin-root-import": "^6.4.1",
     "cypress": "^4.0.2",
     "email-validator": "^2.0.4",
+    "gh-pages": "^2.2.0",
     "graphql": "^14.6.0",
     "history": "^4.10.1",
     "jwt-decode": "^2.2.0",
@@ -37,18 +38,20 @@
     "react-spring": "^8.0.27",
     "react-three-fiber": "^4.0.10",
     "rxjs": "^6.5.4",
+    "serve": "^11.3.0",
     "styled-components": "^4.4.1",
     "three": "^0.112.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "serve -s build",
     "build": "react-scripts build",
     "test": " react-scripts test",
     "test:cypress": "cypress run",
     "cypress": "cypress open",
     "ci": "start-server-and-test http-get://localhost:3000 test:cypress",
     "format": "prettier src/**/*.js --write",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
