@@ -3,9 +3,19 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
 import { ApolloLink } from 'apollo-link';
 import { createUploadLink } from 'apollo-upload-client';
-import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { createAuthenticatedFetch } from '@services/authenticated-fetch';
+
+import {
+    USER_QUERY,
+    UPDATE_USER_MUTATION,
+    UPLOAD_USER_PROFILE_AVATAR_MUTATION,
+} from './users';
+import {
+    MODEL_QUERY,
+    LIKE_MODEL_MUTATION,
+    UNLIKE_MODEL_MUTATION,
+} from './models';
 
 const hasEndSlash = /\/$/;
 
@@ -27,147 +37,6 @@ function getGraphQLUrl() {
     const graphqlUrl = url.replace('api', 'graphql');
     return withEndSlash(graphqlUrl);
 }
-
-const USER_QUERY = gql`
-    query getUser($id: ID) {
-        user(id: $id) {
-            id
-            username
-            email
-            firstName
-            lastName
-            profile {
-                description
-                avatar
-            }
-        }
-    }
-`;
-
-const UPDATE_USER_MUTATION = gql`
-    mutation updateUser($updateInput: UpdateUserInput!) {
-        updateUser(input: $updateInput) {
-            id
-            firstName
-            lastName
-            profile {
-                description
-                avatar
-            }
-            errors {
-                field
-                messages
-            }
-        }
-    }
-`;
-
-const UPLOAD_USER_PROFILE_AVATAR_MUTATION = gql`
-    mutation uploadUserProfileAvatar($userId: ID, $file: Upload!) {
-        uploadUserProfileAvatar(userId: $userId, file: $file) {
-            user {
-                id
-                firstName
-                lastName
-                profile {
-                    description
-                    avatar
-                }
-            }
-        }
-    }
-`;
-
-const MODEL_QUERY = gql`
-    query getModel($id: ID) {
-        model(id: $id) {
-            id
-            name
-            likes {
-                isLiked
-                owner {
-                    id
-                    firstName
-                    lastName
-                }
-            }
-            owner {
-                firstName
-                lastName
-            }
-        }
-    }
-`;
-
-const LIKE_MODEL_MUTATION = gql`
-    mutation likeModel($userId: ID, $modelId: ID) {
-        likeModel(userId: $userId, modelId: $modelId) {
-            user {
-                id
-                firstName
-                lastName
-                profile {
-                    description
-                    avatar
-                }
-            }
-            model {
-                id
-                name
-                likes {
-                    isLiked
-                    owner {
-                        id
-                        firstName
-                        lastName
-                    }
-                }
-                owner {
-                    firstName
-                    lastName
-                }
-            }
-            like {
-                id
-            }
-        }
-    }
-`;
-
-const UNLIKE_MODEL_MUTATION = gql`
-    mutation unlikeModel($userId: ID, $modelId: ID) {
-        unlikeModel(userId: $userId, modelId: $modelId) {
-            user {
-                id
-                firstName
-                lastName
-                profile {
-                    description
-                    avatar
-                }
-            }
-            model {
-                id
-                name
-                likes {
-                    isLiked
-                    owner {
-                        id
-                        firstName
-                        lastName
-                    }
-                }
-                owner {
-                    firstName
-                    lastName
-                }
-            }
-            like {
-                id
-            }
-        }
-    }
-`;
 
 export const graphqlClient = (originalFetch, history) =>
     new ApolloClient({
