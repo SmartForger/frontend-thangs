@@ -48,8 +48,6 @@ const UPDATE_USER_MUTATION = gql`
     mutation updateUser($updateInput: UpdateUserInput!) {
         updateUser(input: $updateInput) {
             id
-            email
-            username
             firstName
             lastName
             profile {
@@ -69,8 +67,6 @@ const UPLOAD_USER_PROFILE_AVATAR_MUTATION = gql`
         uploadUserProfileAvatar(userId: $userId, file: $file) {
             user {
                 id
-                username
-                email
                 firstName
                 lastName
                 profile {
@@ -239,8 +235,25 @@ const useModelById = id => {
     return { loading, error, model };
 };
 
-const useUpdateUser = () => {
-    return useMutation(UPDATE_USER_MUTATION);
+const useUpdateUser = user => {
+    return useMutation(UPDATE_USER_MUTATION, {
+        // We need this update mechanism because our user query returns a
+        // different data representation than the profile mutation. This messes
+        // up Apollo's caching, so we need to handle it ourselves.
+        update: (store, { data: { updateUser } }) => {
+            store.writeQuery({
+                query: USER_QUERY,
+                variables: { id: updateUser.id },
+                data: {
+                    user: {
+                        ...updateUser,
+                        email: user.email,
+                        username: user.username,
+                    },
+                },
+            });
+        },
+    });
 };
 
 const useUploadUserAvatarMutation = () => {
