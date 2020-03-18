@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
 import { authenticationService } from '@services';
 import * as GraphqlService from '@services/graphql-service';
 
@@ -106,18 +105,27 @@ const Text = styled.div`
 const NewComment = () => {
     const userId = authenticationService.currentUserValue.id;
     const { loading, error, user } = graphqlService.useUserById(userId);
-    const { register, handleSubmit, errors } = useForm();
 
     if (!user) {
         return null;
     }
 
+    const NOOP = () => console.log('submitted');
+    const handleKeyPress = e => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            e.target.blur();
+            console.log('inSubmit');
+            NOOP();
+        }
+    };
+
     return (
         <CommentStyled
-            as="form"
             css={`
                 margin-top: 12px;
             `}
+            onKeyPress={handleKeyPress}
         >
             <div>
                 <OwnerPicture owner={user} />
