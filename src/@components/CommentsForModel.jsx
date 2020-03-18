@@ -132,8 +132,10 @@ const NewComment = ({ modelId }) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             e.target.blur();
+
             if (valid(body)) {
                 createModelComment();
+                setBody('');
             }
         }
     };
