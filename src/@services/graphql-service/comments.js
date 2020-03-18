@@ -42,4 +42,28 @@ const useAllModelComments = modelId => {
     return { loading, error, comments };
 };
 
-export { useAllModelComments };
+const CREATE_MODEL_COMMENT_MUTATION = gql`
+    mutation createModelComment($input: CreateModelCommentInput!) {
+        createModelComment(input: $input) {
+            comment {
+                id
+                body
+                created
+                owner {
+                    id
+                }
+                model {
+                    id
+                }
+            }
+        }
+    }
+`;
+
+const useCreateModelCommentMutation = ({ ownerId, body, modelId }) => {
+    return useMutation(CREATE_MODEL_COMMENT_MUTATION, {
+        variables: { input: { ownerId, body, modelId } },
+    });
+};
+
+export { useAllModelComments, useCreateModelCommentMutation };

@@ -16,7 +16,7 @@ import {
     useLikeModelMutation,
     useUnlikeModelMutation,
 } from './models';
-import { useAllModelComments } from './comments';
+import { useAllModelComments, useCreateModelCommentMutation } from './comments';
 import { getGraphQLUrl } from './utils';
 
 export const graphqlClient = (originalFetch, history) =>
@@ -55,6 +55,7 @@ const getInstance = () => {
         useLikeModelMutation,
         useUnlikeModelMutation,
         useAllModelComments,
+        useCreateModelCommentMutation,
     };
 };
 

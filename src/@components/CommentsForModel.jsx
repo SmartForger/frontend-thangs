@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { authenticationService } from '@services';
@@ -102,21 +102,30 @@ const Text = styled.div`
     }
 `;
 
-const NewComment = () => {
+const NewComment = ({ modelId }) => {
     const userId = authenticationService.currentUserValue.id;
     const { loading, error, user } = graphqlService.useUserById(userId);
+
+    const [body, setBody] = useState('');
+    const [createModelComment] = graphqlService.useCreateModelCommentMutation({
+        ownerId: userId,
+        body,
+        modelId,
+    });
 
     if (!user) {
         return null;
     }
 
-    const NOOP = () => console.log('submitted');
+    const handleInput = e => {
+        setBody(e.target.innerText);
+    };
+
     const handleKeyPress = e => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             e.target.blur();
-            console.log('inSubmit');
-            NOOP();
+            createModelComment();
         }
     };
 
@@ -135,6 +144,7 @@ const NewComment = () => {
                     <Text
                         contentEditable
                         data-placeholder="Write a comment..."
+                        onInput={handleInput}
                     />
                 </Box>
             </FlexGrow>
@@ -159,7 +169,7 @@ const CommentsForModel = ({ model }) => {
                     <Comment key={i} comment={comment} />
                 ))}
             </Comments>
-            <NewComment />
+            <NewComment modelId={model.id} />
         </Container>
     );
 };
