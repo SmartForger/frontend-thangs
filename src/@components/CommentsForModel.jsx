@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { formatDistance } from 'date-fns';
 import { authenticationService } from '@services';
@@ -50,10 +50,23 @@ const Owner = ({ owner }) => {
 const Picture = styled.img`
     border-radius: 100%;
     height: 50px;
+    width: 50px;
     margin-right: 8px;
+
+    ${allowCssProp};
 `;
 
 const OwnerPicture = ({ owner }) => {
+    if (!owner.profile.avatar) {
+        return (
+            <Picture
+                as="div"
+                css={css`
+                    background-color: ${props => props.theme.darkgrey};
+                `}
+            />
+        );
+    }
     return <Picture src={owner.profile.avatar} />;
 };
 

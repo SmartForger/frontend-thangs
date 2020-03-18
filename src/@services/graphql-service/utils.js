@@ -1,6 +1,9 @@
 const hasEndSlash = /\/$/;
 
 const media = path => {
+    if (!path) {
+        return null;
+    }
     const url = process.env.REACT_APP_API_KEY;
     const mediaUrl = url.replace('api', 'media');
     return `${mediaUrl}/${path}`;
