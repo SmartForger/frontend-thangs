@@ -1,9 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { authenticationService } from '@services';
 import * as GraphqlService from '@services/graphql-service';
 
 const graphqlService = GraphqlService.getInstance();
+
+const allowCssProp = props => (props.css ? props.css : '');
 
 const Comments = styled.ul`
     list-style-type: none;
@@ -13,6 +17,8 @@ const Comments = styled.ul`
 
 const CommentStyled = styled.li`
     display: flex;
+
+    ${allowCssProp};
 `;
 
 const Box = styled.div`
@@ -20,7 +26,6 @@ const Box = styled.div`
     border-radius: 4px;
     padding: 4px;
     background-color: ${props => props.theme.grey};
-    flex-grow: 1;
 `;
 
 const OwnerStyled = styled(Link)`
@@ -55,19 +60,25 @@ const Body = styled.div`
     margin-bottom: 4px;
 `;
 
-const Text = styled.span``;
+const FlexGrow = styled.div`
+    flex-grow: 1;
+`;
 
 const Comment = ({ comment }) => {
     return (
         <CommentStyled>
-            <OwnerPicture owner={comment.owner} />
-            <Box>
-                <Body>
-                    <Owner owner={comment.owner} />
-                    <Text>{comment.body}</Text>
-                </Body>
-                <Date>{comment.created}</Date>
-            </Box>
+            <div>
+                <OwnerPicture owner={comment.owner} />
+            </div>
+            <FlexGrow>
+                <Box>
+                    <Body>
+                        <Owner owner={comment.owner} />
+                        <span>{comment.body}</span>
+                    </Body>
+                    <Date>{comment.created}</Date>
+                </Box>
+            </FlexGrow>
         </CommentStyled>
     );
 };
@@ -80,6 +91,48 @@ const Header = styled.div`
 const Container = styled.div`
     max-width: 500px;
 `;
+
+const Text = styled.div`
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+
+    &:focus:before {
+        color: ${props => props.theme.darkgrey};
+    }
+`;
+
+const NewComment = () => {
+    const userId = authenticationService.currentUserValue.id;
+    const { loading, error, user } = graphqlService.useUserById(userId);
+    const { register, handleSubmit, errors } = useForm();
+
+    if (!user) {
+        return null;
+    }
+
+    return (
+        <CommentStyled
+            as="form"
+            css={`
+                margin-top: 12px;
+            `}
+        >
+            <div>
+                <OwnerPicture owner={user} />
+            </div>
+            <FlexGrow>
+                <Box>
+                    <Text
+                        contentEditable
+                        data-placeholder="Write a comment..."
+                    />
+                </Box>
+            </FlexGrow>
+        </CommentStyled>
+    );
+};
 
 const CommentsForModel = ({ model }) => {
     const { loading, erros, comments } = graphqlService.useAllModelComments(
@@ -98,6 +151,7 @@ const CommentsForModel = ({ model }) => {
                     <Comment key={i} comment={comment} />
                 ))}
             </Comments>
+            <NewComment />
         </Container>
     );
 };
