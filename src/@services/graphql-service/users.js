@@ -52,20 +52,23 @@ const UPLOAD_USER_PROFILE_AVATAR_MUTATION = gql`
     }
 `;
 
+const parseUser = user => {
+    const avatar = user.profile ? user.profile.avatar : '';
+    return {
+        ...user,
+        profile: {
+            ...user.profile,
+            avatar: media(avatar),
+        },
+    };
+};
+
 const parseUserPayload = data => {
     if (!data || !data.user) {
         return null;
     }
 
-    const avatar = data.user.profile ? data.user.profile.avatar : '';
-
-    return {
-        ...data.user,
-        profile: {
-            ...data.user.profile,
-            avatar: media(avatar),
-        },
-    };
+    return parseUser(data.user);
 };
 
 const useUserById = id => {
@@ -130,4 +133,4 @@ const useUploadUserAvatarMutation = (user, croppedImg) => {
     });
 };
 
-export { useUserById, useUpdateUser, useUploadUserAvatarMutation };
+export { useUserById, useUpdateUser, useUploadUserAvatarMutation, parseUser };

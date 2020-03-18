@@ -12,10 +12,15 @@ const Comments = styled.ul`
 `;
 
 const CommentStyled = styled.li`
+    display: flex;
+`;
+
+const Box = styled.div`
     border: 1px solid black;
     border-radius: 4px;
     padding: 4px;
     background-color: ${props => props.theme.grey};
+    flex-grow: 1;
 `;
 
 const OwnerStyled = styled(Link)`
@@ -32,6 +37,16 @@ const Owner = ({ owner }) => {
     );
 };
 
+const Picture = styled.img`
+    border-radius: 100%;
+    height: 50px;
+    margin-right: 8px;
+`;
+
+const OwnerPicture = ({ owner }) => {
+    return <Picture src={owner.profile.avatar} />;
+};
+
 const Date = styled.div`
     color: ${props => props.theme.darkgrey};
 `;
@@ -45,11 +60,14 @@ const Text = styled.span``;
 const Comment = ({ comment }) => {
     return (
         <CommentStyled>
-            <Body>
-                <Owner owner={comment.owner} />
-                <Text>{comment.body}</Text>
-            </Body>
-            <Date>{comment.created}</Date>
+            <OwnerPicture owner={comment.owner} />
+            <Box>
+                <Body>
+                    <Owner owner={comment.owner} />
+                    <Text>{comment.body}</Text>
+                </Body>
+                <Date>{comment.created}</Date>
+            </Box>
         </CommentStyled>
     );
 };
