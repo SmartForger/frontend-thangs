@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import * as GraphqlService from '@services/graphql-service';
 
 const graphqlService = GraphqlService.getInstance();
@@ -17,11 +18,19 @@ const CommentStyled = styled.li`
     background-color: ${props => props.theme.grey};
 `;
 
-const Owner = styled.span`
+const OwnerStyled = styled(Link)`
     font-weight: bold;
-    display: inline-block;
     margin-right: 4px;
+    text-decoration: none;
 `;
+
+const Owner = ({ owner }) => {
+    return (
+        <OwnerStyled to={`/profile/${owner.id}`}>
+            {owner.firstName} {owner.lastName}:
+        </OwnerStyled>
+    );
+};
 
 const Date = styled.div`
     color: ${props => props.theme.darkgrey};
@@ -37,9 +46,7 @@ const Comment = ({ comment }) => {
     return (
         <CommentStyled>
             <Body>
-                <Owner>
-                    {comment.owner.firstName} {comment.owner.lastName}:
-                </Owner>
+                <Owner owner={comment.owner} />
                 <Text>{comment.body}</Text>
             </Body>
             <Date>{comment.created}</Date>
