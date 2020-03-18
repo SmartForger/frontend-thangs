@@ -26,6 +26,9 @@ const Likes = ({ likes }) => {
 };
 
 const Owner = ({ owner }) => {
+    if (!owner) {
+        return null;
+    }
     return (
         <div>
             Created by: {owner.firstName} {owner.lastName}
