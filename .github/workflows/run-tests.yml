@@ -22,7 +22,7 @@ jobs:
           NODE_PATH: src/
           HTTPS: false
       with:
-        start: yarn start
+        start: yarn dev
         
     - uses: actions/upload-artifact@v1
       if: failure()
