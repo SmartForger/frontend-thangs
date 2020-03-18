@@ -143,10 +143,11 @@ export const ProfileSidebar = ({ user }) => {
     const [isEditing, setIsEditing] = useState(false);
     const startEditProfile = () => setIsEditing(true);
     const endEditProfile = () => setIsEditing(false);
+
     return (
         <SidebarStyled>
             <SocialStyled>
-                <ChangeablePicture userId={user.id} src={user.profile.avatar} />
+                <ChangeablePicture user={user} src={user.profile.avatar} />
                 <UserDetails>
                     <div>{user.username}</div>
                     <div>{user.email}</div>

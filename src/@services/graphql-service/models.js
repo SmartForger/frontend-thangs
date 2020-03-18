@@ -1,4 +1,5 @@
 import { gql } from 'apollo-boost';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
 const MODEL_QUERY = gql`
     query getModel($id: ID) {
@@ -91,4 +92,63 @@ const UNLIKE_MODEL_MUTATION = gql`
     }
 `;
 
-export { MODEL_QUERY, LIKE_MODEL_MUTATION, UNLIKE_MODEL_MUTATION };
+const parseModelPayload = data => {
+    if (!data || !data.model) {
+        return null;
+    }
+
+    return {
+        ...data.model,
+    };
+};
+
+const useModelById = id => {
+    const { loading, error, data } = useQuery(MODEL_QUERY, {
+        variables: { id },
+    });
+    const model = parseModelPayload(data);
+
+    return { loading, error, model };
+};
+
+const useLikeModelMutation = (userId, modelId) => {
+    return useMutation(LIKE_MODEL_MUTATION, {
+        variables: { userId, modelId },
+        update: (
+            store,
+            {
+                data: {
+                    likeModel: { model },
+                },
+            },
+        ) => {
+            store.writeQuery({
+                query: MODEL_QUERY,
+                variables: { id: `${model.id}` },
+                data: { model },
+            });
+        },
+    });
+};
+
+const useUnlikeModelMutation = (userId, modelId) => {
+    return useMutation(UNLIKE_MODEL_MUTATION, {
+        variables: { userId, modelId },
+        update: (
+            store,
+            {
+                data: {
+                    unlikeModel: { model },
+                },
+            },
+        ) => {
+            store.writeQuery({
+                query: MODEL_QUERY,
+                variables: { id: `${model.id}` },
+                data: { model },
+            });
+        },
+    });
+};
+
+export { useModelById, useLikeModelMutation, useUnlikeModelMutation };
