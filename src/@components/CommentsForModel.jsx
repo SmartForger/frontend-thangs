@@ -12,6 +12,10 @@ const Comments = styled.ul`
     list-style-type: none;
     margin: 0;
     padding: 0;
+
+    > li {
+        margin-top: 2px;
+    }
 `;
 
 const CommentStyled = styled.li`
