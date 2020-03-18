@@ -1,7 +1,7 @@
 import React from 'react';
 import * as R from 'ramda';
 import * as GraphqlService from '@services/graphql-service';
-import { Button } from '@components';
+import { Button, CommentsForModel } from '@components';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -78,6 +78,7 @@ const ModelPage = ({ model, user }) => {
             <Owner owner={model.owner} />
             <Likes likes={model.likes} />
             <ButtonForLikes user={user} model={model} />
+            <CommentsForModel model={model} />
         </div>
     );
 };
