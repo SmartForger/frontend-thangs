@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { authenticationService } from '@services';
 import * as GraphqlService from '@services/graphql-service';
+import { Markdown } from '@components';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -77,7 +78,7 @@ const Comment = ({ comment }) => {
                 <Box>
                     <Body>
                         <Owner owner={comment.owner} />
-                        <span>{comment.body}</span>
+                        <Markdown>{comment.body}</Markdown>
                     </Body>
                     <Date>{comment.created}</Date>
                 </Box>
@@ -109,6 +110,7 @@ const Text = styled.div`
 const valid = body => {
     return !!body;
 };
+
 const NewComment = ({ modelId }) => {
     const userId = authenticationService.currentUserValue.id;
     const { loading, error, user } = graphqlService.useUserById(userId);

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+import styled from 'styled-components';
 
 const allowedTypes = [
     'link',
@@ -12,9 +13,19 @@ const allowedTypes = [
     'text',
 ];
 
+const MarkdownStyled = styled(ReactMarkdown)`
+    p {
+        margin: 0;
+
+        ~ p {
+            margin-top: 8px;
+        }
+    }
+`;
+
 const Markdown = ({ children }) => {
     return (
-        <ReactMarkdown
+        <MarkdownStyled
             source={children}
             allowedTypes={allowedTypes}
             unwrapDisallowed
