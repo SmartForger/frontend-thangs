@@ -15,21 +15,27 @@ const useStl = url => {
         }
         return bytes.buffer;
     }
-    const fetchData = async () => {
-        try {
-            const response = await fetch('http://127.0.0.1:8000/model');
-            const json = await response.json();
+    useEffect(
+        () => {
+            async function fetchData() {
+                try {
+                    const response = await fetch('http://127.0.0.1:8000/model');
+                    const json = await response.json();
 
-            const loader = new STLLoader();
-            const geometry = loader.parse(_base64ToArrayBuffer(json.data));
-            setData(geometry);
-            setLoading(false);
-        } catch (e) {
-            setError(e);
-        }
-    };
-
-    useEffect(fetchData, [url]);
+                    const loader = new STLLoader();
+                    const geometry = loader.parse(
+                        _base64ToArrayBuffer(json.data),
+                    );
+                    setData(geometry);
+                    setLoading(false);
+                } catch (e) {
+                    setError(e);
+                }
+            }
+            fetchData();
+        },
+        [url],
+    );
     return [data, loading, error];
 };
 
