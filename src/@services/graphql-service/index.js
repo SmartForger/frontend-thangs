@@ -3,7 +3,6 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
 import { ApolloLink } from 'apollo-link';
 import { createUploadLink } from 'apollo-upload-client';
-import { useQuery, useMutation } from '@apollo/react-hooks';
 import { createAuthenticatedFetch } from '@services/authenticated-fetch';
 
 import {

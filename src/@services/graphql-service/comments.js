@@ -1,6 +1,5 @@
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { media } from './utils';
 import { parseUser } from './users';
 
 const ALL_MODEL_COMMENTS_QUERY = gql`

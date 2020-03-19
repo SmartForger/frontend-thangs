@@ -129,7 +129,11 @@ const valid = body => {
 
 const NewComment = ({ modelId }) => {
     const userId = authenticationService.currentUserValue.id;
-    const { loading, error, user } = graphqlService.useUserById(userId);
+    const {
+        // loading,
+        // error,
+        user,
+    } = graphqlService.useUserById(userId);
 
     const [body, setBody] = useState('');
     const [createModelComment] = graphqlService.useCreateModelCommentMutation({
@@ -182,9 +186,11 @@ const NewComment = ({ modelId }) => {
 };
 
 const CommentsForModel = ({ model }) => {
-    const { loading, erros, comments } = graphqlService.useAllModelComments(
-        model.id,
-    );
+    const {
+        // loading,
+        // errors,
+        comments,
+    } = graphqlService.useAllModelComments(model.id);
 
     return (
         <Container>
