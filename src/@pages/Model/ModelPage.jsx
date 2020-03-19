@@ -1,13 +1,21 @@
 import React from 'react';
 import * as R from 'ramda';
+import styled from 'styled-components';
 import * as GraphqlService from '@services/graphql-service';
 import { Button, CommentsForModel } from '@components';
 
 const graphqlService = GraphqlService.getInstance();
 
-const Name = ({ name }) => {
-    return <div>Name: {name}</div>;
-};
+const Name = styled.h1`
+    border-right: 2px solid ${props => props.theme.black};
+    padding-right: 8px;
+    margin: 0 8px 0 0;
+`;
+
+const OwnerStyled = styled.h3`
+    padding-top: 2px;
+    margin: 0;
+`;
 
 const Likes = ({ likes }) => {
     const amount = likes.filter(fields => fields.isLiked).length;
@@ -29,10 +37,26 @@ const Owner = ({ owner }) => {
     if (!owner) {
         return null;
     }
+
     return (
-        <div>
-            Created by: {owner.firstName} {owner.lastName}
-        </div>
+        <OwnerStyled>
+            Uploaded By: {owner.firstName} {owner.lastName}
+        </OwnerStyled>
+    );
+};
+
+const HeaderStyled = styled.div`
+    grid-area: header;
+    display: flex;
+    align-items: center;
+`;
+
+const Header = ({ owner, name }) => {
+    return (
+        <HeaderStyled>
+            <Name>{name}</Name>
+            <Owner owner={owner} />
+        </HeaderStyled>
     );
 };
 
@@ -74,8 +98,7 @@ const ButtonForLikes = ({ model, user }) => {
 const ModelPage = ({ model, user }) => {
     return (
         <div>
-            <Name name={model.name} />
-            <Owner owner={model.owner} />
+            <Header name={model.name} owner={model.owner} />
             <Likes likes={model.likes} />
             <ButtonForLikes user={user} model={model} />
             <CommentsForModel model={model} />
