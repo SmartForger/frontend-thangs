@@ -168,7 +168,7 @@ const DisplayButton = styled(Button)`
     width: auto;
 `;
 
-const Menu = styled.div`
+const MenuStyled = styled.div`
     display: flex;
     flex-flow: column nowrap;
     grid-area: sidebar;
@@ -176,6 +176,36 @@ const Menu = styled.div`
     justify-content: flex-start;
     align-items: center;
 `;
+
+const Menu = ({ tags }) => {
+    const names = ['Download', 'Share', 'Match', 'Identify'];
+    const config = { mass: 5, tension: 2000, friction: 200 };
+    const trail = useTrail(names.length, {
+        config,
+        to: { opacity: 1, transform: 'translate(0,0)' },
+        from: { opacity: -2, transform: 'translate(300%,0)' },
+    });
+
+    return (
+        <MenuStyled>
+            {trail.map((props, index) => {
+                return (
+                    <Button
+                        key={names[index]}
+                        name={names[index]}
+                        style={props}
+                        maxwidth="90%"
+                        height="10%"
+                        fontSize="1.5rem"
+                    />
+                );
+            })}
+            <Tags>
+                <TagsBox width="100%" height="100%" data={tags} />
+            </Tags>
+        </MenuStyled>
+    );
+};
 
 const Tags = styled.div`
     background: green;
@@ -189,27 +219,6 @@ const ModelViewer = ({ model, user }) => {
     const [meshColor, setMeshColor] = useState('#FFFFFF');
     const [wireColor, setWireColor] = useState('#000000');
 
-    const tags = [
-        { name: 'Yormy' },
-        { name: 'Grimgooorsh' },
-        { name: 'AB' },
-        { name: 'Longish' },
-        { name: 'Real long Tag' },
-        { name: 'Screw' },
-        { name: 'Bolt' },
-        { name: 'Automotive' },
-        { name: 'Clasp' },
-        { name: 'Physna' },
-        { name: 'Thangs.com' },
-        { name: 'Boat' },
-        { name: 'Trucks' },
-        { name: 'Civil Engineering' },
-        { name: '3D Printing' },
-        { name: 'Yormy' },
-    ];
-
-    const names = ['Download', 'Share', 'Match', 'Identify'];
-
     const changeMode = targetMode => {
         setMode(targetMode);
     };
@@ -221,13 +230,6 @@ const ModelViewer = ({ model, user }) => {
     const changeWireColor = (color, event) => {
         setWireColor(color.hex);
     };
-
-    const config = { mass: 5, tension: 2000, friction: 200 };
-    const trail = useTrail(names.length, {
-        config,
-        to: { opacity: 1, transform: 'translate(0,0)' },
-        from: { opacity: -2, transform: 'translate(300%,0)' },
-    });
 
     return (
         <>
@@ -258,29 +260,13 @@ const ModelViewer = ({ model, user }) => {
                     <ColorPicker color={wireColor} onChange={changeWireColor} />
                 </DisplayOptions>
                 <Viewer
-                    url="http://127.0.0.1:8000/model"
+                    url={model.url}
                     mode={mode}
                     meshColor={meshColor}
                     wireFrameColor={wireColor}
                 />
             </ViewerContainer>
-            <Menu>
-                {trail.map((props, index) => {
-                    return (
-                        <Button
-                            key={names[index]}
-                            name={names[index]}
-                            style={props}
-                            maxwidth="90%"
-                            height="10%"
-                            fontSize="1.5rem"
-                        />
-                    );
-                })}
-                <Tags>
-                    <TagsBox width="100%" height="100%" data={tags} />
-                </Tags>
-            </Menu>
+            <Menu tags={model.tags} />
         </>
     );
 };
