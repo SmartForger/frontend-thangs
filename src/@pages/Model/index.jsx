@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useLocalStorage } from '@customHooks/Storage';
 import * as GraphqlService from '@services/graphql-service';
 import { ModelPage } from './ModelPage';
-import { WithLayout } from '@style';
+import { WithFullScreenLayout } from '@style';
 
 const Page = () => {
     const { id } = useParams();
@@ -22,5 +22,5 @@ const Page = () => {
     return <ModelPage model={model} user={user} />;
 };
 
-const Model = WithLayout(Page);
+const Model = WithFullScreenLayout(Page);
 export { Model };
