@@ -1,7 +1,7 @@
 import React from 'react';
 import * as R from 'ramda';
 import * as GraphqlService from '@services/graphql-service';
-import { Button } from '@components';
+import { Button, CommentsForModel } from '@components';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -15,8 +15,8 @@ const Likes = ({ likes }) => {
         <div>
             <div>Likes: {amount}</div>
             <ul>
-                {likes.map(({ owner: { firstName, lastName } }) => (
-                    <li>
+                {likes.map(({ owner: { firstName, lastName } }, i) => (
+                    <li key={i}>
                         {firstName} {lastName}
                     </li>
                 ))}
@@ -26,6 +26,9 @@ const Likes = ({ likes }) => {
 };
 
 const Owner = ({ owner }) => {
+    if (!owner) {
+        return null;
+    }
     return (
         <div>
             Created by: {owner.firstName} {owner.lastName}
@@ -75,6 +78,7 @@ const ModelPage = ({ model, user }) => {
             <Owner owner={model.owner} />
             <Likes likes={model.likes} />
             <ButtonForLikes user={user} model={model} />
+            <CommentsForModel model={model} />
         </div>
     );
 };

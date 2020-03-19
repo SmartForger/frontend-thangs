@@ -60,39 +60,20 @@ const ButtonContainer = styled.div`
 
 const initialCrop = { unit: '%', width: 30, aspect: 1 / 1 };
 
-const ChangeablePicture = ({ userId, src }) => {
+const ChangeablePicture = ({ user, src }) => {
     const [cropSrc, setCropSrc] = useState(null);
     const [crop, setCrop] = useState();
     const [croppedImg, setCroppedImg] = useState(null);
     const [img, setImg] = useState(null);
     const [isCropping, setIsCropping] = useState(false);
     const imageEl = useRef(null);
-    const [uploadAvatar] = graphqlService.useUploadUserAvatarMutation();
+    const [uploadAvatar] = graphqlService.useUploadUserAvatarMutation(
+        user,
+        croppedImg,
+    );
 
     const submitCrop = () => {
-        uploadAvatar({
-            variables: {
-                file: croppedImg,
-                userId,
-            },
-            // We need this update mechanism because our user query returns a
-            // string id, while the user mutation returns an integer id.
-            // This messes up Apollo's caching, so we need to handle it ourselves.
-            update: (
-                store,
-                {
-                    data: {
-                        uploadUserProfileAvatar: { user },
-                    },
-                },
-            ) => {
-                store.writeQuery({
-                    query: GraphqlService.USER_QUERY,
-                    variables: { id: `${user.id}` },
-                    data: { user },
-                });
-            },
-        });
+        uploadAvatar();
         setIsCropping(false);
     };
 
