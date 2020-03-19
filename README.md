@@ -76,3 +76,28 @@ yarn format
     ...
 }
 ```
+
+## Deploying to Production
+
+1. Ensure you have the [Gcloud SDK](https://cloud.google.com/sdk/install) installed  
+  
+2. Initialize your [Gcloud](https://cloud.google.com/sdk/gcloud/reference/init)
+  
+3. Create a new [Gcloud Configuration](https://cloud.google.com/sdk/gcloud/reference/init) following the prompts to target the correct project 
+
+4. Build the project by running:
+```bash
+yarn build
+```
+  
+5. Run the following in the route directory to deploy:
+```bash
+gcloud app deploy
+```  
+  
+6. Once the app has finished deploying you can run the following to view the app in production:
+```bash
+gcloud app browse
+```
+
+
