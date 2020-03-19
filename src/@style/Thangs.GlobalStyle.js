@@ -13,7 +13,7 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     margin: 0;
     font-family: Raleway, sans-serif;
-    overflow: hidden;
+    background: ${props => props.theme.primary};
   }
 
   ${enablePlaceholderForContentEditable}

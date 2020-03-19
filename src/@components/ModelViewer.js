@@ -36,6 +36,7 @@ const ViewerContainer = styled.div`
 const Interactions = styled.div`
     position: absolute;
     display: flex;
+    z-index: 1;
     width: 12vw;
     height: 7vw;
     bottom: 17%;
@@ -51,6 +52,7 @@ const DisplayOptions = styled.div`
     display: flex;
     flex-flow: row nowrap;
     align-items: flex-end;
+    z-index: 1;
 
     > div {
         margin-right: 15px;

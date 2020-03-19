@@ -18,10 +18,9 @@ const App = () => {
     return (
         <ApolloProvider client={client}>
             <Router history={history}>
-                <GlobalStyle />
                 <ThemeProvider theme={ThangsMain}>
+                    <GlobalStyle />
                     <ThangsHeader />
-                    <BackgroundImage />
                     <Route exact path="/" component={Home} />
                     <Route path="/login" component={Login} />
                     <Route path="/signup" component={Signup} exact />
