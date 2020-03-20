@@ -70,7 +70,7 @@ const MenuStyled = styled.div`
     flex-flow: column nowrap;
     grid-area: sidebar;
     padding: 0 5%;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
 `;
 

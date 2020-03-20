@@ -47,12 +47,19 @@ const ButtonForLikes = ({ model, user }) => {
     return <LikeButton model={model} user={user} />;
 };
 
+const Container = styled.div`
+    display: flex;
+    flex-flow: column nowrap;
+    width: 100%;
+    align-items: center;
+`;
+
 const Likes = ({ model, user }) => {
     return (
-        <>
+        <Container>
             <LikesCount likes={model.likes} />
             <ButtonForLikes model={model} user={user} />
-        </>
+        </Container>
     );
 };
 
