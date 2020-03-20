@@ -69,10 +69,22 @@ const MenuStyled = styled.div`
     display: flex;
     flex-flow: column nowrap;
     grid-area: sidebar;
-    padding: 5%;
+    padding: 0 5%;
     justify-content: flex-start;
     align-items: center;
 `;
+
+const MenuButton = styled(Button)`
+    margin: 0 0 8px;
+    height: 100%;
+    max-width: 100%;
+`;
+
+const MenuButtonGroup = styled.div`
+    display: flex;
+    flex-flow: column nowrap;
+`;
+
 const Menu = ({ tags, model, user }) => {
     const names = ['Download', 'Share', 'Match', 'Identify'];
     const config = { mass: 5, tension: 2000, friction: 200 };
@@ -84,18 +96,20 @@ const Menu = ({ tags, model, user }) => {
 
     return (
         <MenuStyled>
-            {trail.map((props, index) => {
-                return (
-                    <Button
-                        key={names[index]}
-                        name={names[index]}
-                        style={props}
-                        maxwidth="90%"
-                        height="10%"
-                        fontSize="1.5rem"
-                    />
-                );
-            })}
+            <MenuButtonGroup>
+                {trail.map((props, index) => {
+                    return (
+                        <MenuButton
+                            key={names[index]}
+                            name={names[index]}
+                            style={props}
+                            maxwidth="90%"
+                            height="10%"
+                            fontSize="1.5rem"
+                        />
+                    );
+                })}
+            </MenuButtonGroup>
             <Tags>
                 <TagsBox width="100%" height="100%" data={tags} />
             </Tags>
