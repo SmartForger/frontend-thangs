@@ -109,7 +109,7 @@ const Menu = ({ tags, model, user }) => {
                     );
                 })}
             </MenuButtonGroup>
-            <Tags data={tags} />
+            <Tags items={tags} />
             <Likes model={model} user={user} />
         </MenuStyled>
     );
