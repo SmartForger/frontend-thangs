@@ -13,8 +13,8 @@ const Info = styled.div`
     height: 13vw;
     background: white;
     z-index: 1;
-    top: 13%;
-    right: 16.5%;
+    top: 32px;
+    right: 32px;
     box-shadow: inset 0 0 0 3px black;
 
     > div {
@@ -26,6 +26,7 @@ const ViewerContainer = styled.div`
     box-shadow: inset 0 0 0 5px black;
     pointer-events: none;
     grid-area: viewer;
+    position: relative;
     display: flex;
 
     > div {
@@ -39,16 +40,16 @@ const Interactions = styled.div`
     z-index: 1;
     width: 12vw;
     height: 7vw;
-    bottom: 17%;
-    right: 16%;
+    bottom: 32px;
+    right: 32px;
     background: white;
     box-shadow: inset 0 0 0 3px black;
 `;
 
 const DisplayOptions = styled.div`
     position: absolute;
-    bottom: 17%;
-    left: 1%;
+    bottom: 32px;
+    left: 32px;
     display: flex;
     flex-flow: row nowrap;
     align-items: flex-end;

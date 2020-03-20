@@ -11,11 +11,10 @@ const ViewerArea = styled.div`
     height: 100%;
     position: relative;
     grid-template-columns: 85% 15%;
-    grid-template-rows: 10% 75% 15%;
+    grid-template-rows: 60px 610px;
     grid-template-areas:
         'header  header'
-        'viewer  sidebar'
-        'footer  footer';
+        'viewer  sidebar';
 `;
 
 const Name = styled.h1`
@@ -30,7 +29,7 @@ const OwnerStyled = styled.h3`
 `;
 
 const Comments = styled(CommentsForModel)`
-    grid-area: footer;
+    margin: auto;
 `;
 
 const Likes = ({ likes }) => {
@@ -106,11 +105,13 @@ const userIdsWhoHaveLiked = R.pipe(
 
 const ModelPage = ({ model, user }) => {
     return (
-        <ViewerArea>
-            <Header model={model} user={user} />
-            <ModelViewer model={model} user={user} />
+        <>
+            <ViewerArea className="VIEWER">
+                <Header model={model} user={user} />
+                <ModelViewer model={model} user={user} />
+            </ViewerArea>
             <Comments model={model} />
-        </ViewerArea>
+        </>
     );
 };
 
