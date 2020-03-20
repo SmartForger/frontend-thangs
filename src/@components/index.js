@@ -20,3 +20,4 @@ export * from './ChangeablePicture';
 export * from './Markdown';
 export * from './CommentsForModel';
 export * from './ModelViewer';
+export * from './Likes';

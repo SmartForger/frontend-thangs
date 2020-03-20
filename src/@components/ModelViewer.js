@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useTrail } from 'react-spring';
 
-import { Button, TagsBox, Viewer, ColorPicker } from '@components';
+import { Button, TagsBox, Viewer, ColorPicker, Likes } from '@components';
 
 const Info = styled.div`
     position: absolute;
@@ -73,7 +73,7 @@ const MenuStyled = styled.div`
     justify-content: flex-start;
     align-items: center;
 `;
-const Menu = ({ tags }) => {
+const Menu = ({ tags, model, user }) => {
     const names = ['Download', 'Share', 'Match', 'Identify'];
     const config = { mass: 5, tension: 2000, friction: 200 };
     const trail = useTrail(names.length, {
@@ -99,6 +99,7 @@ const Menu = ({ tags }) => {
             <Tags>
                 <TagsBox width="100%" height="100%" data={tags} />
             </Tags>
+            <Likes model={model} user={user} />
         </MenuStyled>
     );
 };
@@ -162,7 +163,7 @@ const ModelViewer = ({ model, user }) => {
                     wireFrameColor={wireColor}
                 />
             </ViewerContainer>
-            <Menu tags={model.tags} />
+            <Menu tags={model.tags} model={model} user={user} />
         </>
     );
 };

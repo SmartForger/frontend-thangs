@@ -1,10 +1,6 @@
 import React from 'react';
-import * as R from 'ramda';
 import styled from 'styled-components';
-import * as GraphqlService from '@services/graphql-service';
 import { Button, CommentsForModel, ModelViewer } from '@components';
-
-const graphqlService = GraphqlService.getInstance();
 
 const ViewerArea = styled.div`
     display: grid;
@@ -32,11 +28,6 @@ const Comments = styled(CommentsForModel)`
     margin: auto;
 `;
 
-const Likes = ({ likes }) => {
-    const amount = likes.filter(fields => fields.isLiked).length;
-    return <div>Likes: {amount}</div>;
-};
-
 const Owner = ({ owner }) => {
     if (!owner) {
         return null;
@@ -61,47 +52,9 @@ const Header = ({ model, user }) => {
         <HeaderStyled>
             <Name>{name}</Name>
             <Owner owner={owner} />
-            <Likes likes={model.likes} />
-            <ButtonForLikes user={user} model={model} />
         </HeaderStyled>
     );
 };
-
-const hasLikedModel = (model, user) => {
-    return R.includes(user.id, userIdsWhoHaveLiked(model));
-};
-
-const LikeButton = ({ model, user }) => {
-    const [likeModel] = graphqlService.useLikeModelMutation(user.id, model.id);
-    return <Button onClick={likeModel}>Like</Button>;
-};
-
-const DisabledLikeButton = () => {
-    return <Button disabled>Like</Button>;
-};
-
-const UnlikeButton = ({ model, user }) => {
-    const [unlikeModel] = graphqlService.useUnlikeModelMutation(
-        user.id,
-        model.id,
-    );
-    return <Button onClick={unlikeModel}>Unlike</Button>;
-};
-
-const ButtonForLikes = ({ model, user }) => {
-    if (!user) {
-        return <DisabledLikeButton />;
-    } else if (hasLikedModel(model, user)) {
-        return <UnlikeButton model={model} user={user} />;
-    }
-    return <LikeButton model={model} user={user} />;
-};
-
-const userIdsWhoHaveLiked = R.pipe(
-    R.prop('likes'),
-    R.filter(R.propEq('isLiked', true)),
-    R.map(R.path(['owner', 'id'])),
-);
 
 const ModelPage = ({ model, user }) => {
     return (
