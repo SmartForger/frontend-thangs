@@ -83,6 +83,7 @@ const MenuButton = styled(Button)`
 const MenuButtonGroup = styled.div`
     display: flex;
     flex-flow: column nowrap;
+    width: 100%;
 `;
 
 const Menu = ({ tags, model, user }) => {
@@ -103,26 +104,19 @@ const Menu = ({ tags, model, user }) => {
                             key={names[index]}
                             name={names[index]}
                             style={props}
-                            maxwidth="90%"
-                            height="10%"
                             fontSize="1.5rem"
                         />
                     );
                 })}
             </MenuButtonGroup>
-            <Tags>
-                <TagsBox width="100%" height="100%" data={tags} />
-            </Tags>
+            <Tags data={tags} />
             <Likes model={model} user={user} />
         </MenuStyled>
     );
 };
 
-const Tags = styled.div`
-    background: green;
-    width: 90%;
+const Tags = styled(TagsBox)`
     height: 50%;
-    margin-top: 5%;
 `;
 
 const ModelViewer = ({ model, user }) => {

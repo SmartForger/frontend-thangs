@@ -4,12 +4,11 @@ import { useTrail } from 'react-spring';
 import { Tag } from '@components';
 
 const BoxStyle = styled.div`
-    width: ${props => props.width || '400px'};
-    height: ${props => props.height || '400px'};
     display: flex;
     flex-flow: row wrap;
     align-content: flex-start;
     background: ${props => props.theme.white};
+    padding: 8px;
 `;
 
 const TagsBox = props => {

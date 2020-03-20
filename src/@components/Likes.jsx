@@ -6,6 +6,10 @@ import * as GraphqlService from '@services/graphql-service';
 
 const graphqlService = GraphqlService.getInstance();
 
+const FullButton = styled(Button)`
+    max-width: 100%;
+`;
+
 const LikesCount = ({ likes }) => {
     const amount = likes.filter(fields => fields.isLiked).length;
     return <div>Likes: {amount}</div>;
@@ -23,11 +27,11 @@ const hasLikedModel = (model, user) => {
 
 const LikeButton = ({ model, user }) => {
     const [likeModel] = graphqlService.useLikeModelMutation(user.id, model.id);
-    return <Button onClick={likeModel}>Like</Button>;
+    return <FullButton onClick={likeModel}>Like</FullButton>;
 };
 
 const DisabledLikeButton = () => {
-    return <Button disabled>Like</Button>;
+    return <FullButton disabled>Like</FullButton>;
 };
 
 const UnlikeButton = ({ model, user }) => {
@@ -35,7 +39,7 @@ const UnlikeButton = ({ model, user }) => {
         user.id,
         model.id,
     );
-    return <Button onClick={unlikeModel}>Unlike</Button>;
+    return <FullButton onClick={unlikeModel}>Unlike</FullButton>;
 };
 
 const ButtonForLikes = ({ model, user }) => {
