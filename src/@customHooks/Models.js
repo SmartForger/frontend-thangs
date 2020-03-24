@@ -15,7 +15,8 @@ const useStl = url => {
         }
         return bytes.buffer;
     }
-    const fetchData = async () => {
+
+    async function fetchData() {
         try {
             const response = await fetch('http://127.0.0.1:8000/model');
             const json = await response.json();
@@ -27,9 +28,15 @@ const useStl = url => {
         } catch (e) {
             setError(e);
         }
-    };
+    }
 
-    useEffect(fetchData, [url]);
+    useEffect(
+        () => {
+            fetchData();
+        },
+        [url],
+    );
+
     return [data, loading, error];
 };
 

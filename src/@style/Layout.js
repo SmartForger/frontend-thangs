@@ -16,7 +16,6 @@ const frame = fullScreen => {
 const Layout = styled.div`
     ${props => frame(props.fullScreen)};
     margin: ${props => props.theme.headerHeight} auto 0;
-    display: flex;
 `;
 
 const Content = styled.div`

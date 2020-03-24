@@ -185,7 +185,7 @@ const NewComment = ({ modelId }) => {
     );
 };
 
-const CommentsForModel = ({ model }) => {
+const CommentsForModel = ({ model, className }) => {
     const {
         // loading,
         // errors,
@@ -193,7 +193,7 @@ const CommentsForModel = ({ model }) => {
     } = graphqlService.useAllModelComments(model.id);
 
     return (
-        <Container>
+        <Container className={className}>
             <Header>Comments</Header>
             <Comments>
                 {comments.map((comment, i) => (

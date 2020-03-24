@@ -4,7 +4,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { Route, Router } from 'react-router-dom';
 
 import { ThemeProvider } from 'styled-components';
-import { ThangsHeader, Footer, BackgroundImage } from '@components';
+import { ThangsHeader, Footer } from '@components';
 import { Home, Login, Signup, Details, Profile, Model } from '@pages';
 import { ThangsMain, GlobalStyle } from '@style';
 import { graphqlClient } from '@services';
@@ -18,10 +18,9 @@ const App = () => {
     return (
         <ApolloProvider client={client}>
             <Router history={history}>
-                <GlobalStyle />
                 <ThemeProvider theme={ThangsMain}>
+                    <GlobalStyle />
                     <ThangsHeader />
-                    <BackgroundImage />
                     <Route exact path="/" component={Home} />
                     <Route path="/login" component={Login} />
                     <Route path="/signup" component={Signup} exact />
