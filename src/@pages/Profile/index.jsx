@@ -9,21 +9,24 @@ import { WithLayout } from '@style';
 
 const ProfileStyle = styled.div`
     display: grid;
-    grid-template-rows: 5% 30% 65%;
+    margin-top: 50px;
+    grid-template-rows: 30% 70%;
     grid-template-columns: 30% 70%;
     grid-template-areas:
-        '. .'
         'sidebar models'
         'sidebar models';
 `;
 
-const ModelsStyled = styled.div`
+const ModelsArea = styled.div`
     grid-area: models;
+    padding-left: 32px;
+`;
+
+const ModelsStyled = styled.div`
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
     overflow-y: scroll;
-    height: 100%;
 `;
 
 const Models = ({ models }) => {
@@ -34,11 +37,17 @@ const Models = ({ models }) => {
         from: { transform: 'translate(1000%,0) scale(0.6)' },
     }));
     return (
-        <ModelsStyled>
-            {trail.map((props, index) => (
-                <ModelDisplay style={props} key={index} model={models[index]} />
-            ))}
-        </ModelsStyled>
+        <ModelsArea>
+            <ModelsStyled>
+                {trail.map((props, index) => (
+                    <ModelDisplay
+                        style={props}
+                        key={index}
+                        model={models[index]}
+                    />
+                ))}
+            </ModelsStyled>
+        </ModelsArea>
     );
 };
 
