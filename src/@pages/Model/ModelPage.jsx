@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, CommentsForModel, ModelViewer } from '@components';
+import { CommentsForModel, ModelViewer } from '@components';
 
 const ViewerArea = styled.div`
     display: grid;
