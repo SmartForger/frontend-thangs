@@ -27,9 +27,12 @@ const ModelName = styled.div`
     text-align: center;
 `;
 
-const ModelDisplay = ({ model }) => {
+const ModelDisplay = ({
+    model,
+    style, // This prop is used to attach react-spring animations
+}) => {
     return (
-        <LinkBox to={`/model/${model.id}`}>
+        <LinkBox to={`/model/${model.id}`} style={style}>
             <ModelDisplayStyled />
             <ModelName>{model.name}</ModelName>
         </LinkBox>
