@@ -22,7 +22,7 @@ const useStl = url => {
             const json = await response.json();
 
             const loader = new STLLoader();
-            const geometry = loader.parse(_base64ToArrayBuffer(json.data));
+            const geometry = loader.parse(_base64ToArrayBuffer(json.StlBinary));
             setData(geometry);
             setLoading(false);
         } catch (e) {
