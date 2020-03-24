@@ -6,6 +6,7 @@ import { ProfileSidebar, ModelDisplay } from '@components';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 import { WithLayout } from '@style';
+import * as R from 'ramda';
 
 const ProfileStyle = styled.div`
     display: grid;
@@ -78,7 +79,8 @@ const Page = () => {
     return (
         <ProfileStyle>
             <ProfileSidebar user={user} isCurrentUser={isCurrentUser} />
-            <Models models={user.models} />
+            {user.models &&
+                !R.isEmpty(user.models) && <Models models={user.models} />}
         </ProfileStyle>
     );
 };
