@@ -1,5 +1,4 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { animated } from 'react-spring';
 import { Link } from 'react-router-dom';
