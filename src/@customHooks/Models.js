@@ -18,7 +18,7 @@ const useStl = url => {
 
     async function fetchData() {
         try {
-            const response = await fetch('http://127.0.0.1:8000/model');
+            const response = await fetch(url);
             const json = await response.json();
 
             const loader = new STLLoader();
