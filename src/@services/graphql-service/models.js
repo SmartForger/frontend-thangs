@@ -18,6 +18,9 @@ const MODEL_QUERY = gql`
                 firstName
                 lastName
             }
+            attachment {
+                remoteId
+            }
         }
     }
 `;
@@ -48,6 +51,9 @@ const LIKE_MODEL_MUTATION = gql`
                 owner {
                     firstName
                     lastName
+                }
+                attachment {
+                    remoteId
                 }
             }
             like {
@@ -84,6 +90,9 @@ const UNLIKE_MODEL_MUTATION = gql`
                     firstName
                     lastName
                 }
+                attachment {
+                    remoteId
+                }
             }
             like {
                 id
@@ -97,9 +106,16 @@ const parseModelPayload = data => {
         return null;
     }
 
+    const url =
+        data.model.attachment && data.model.attachment.remoteId
+            ? `http://localhost:5000/get_attachment_full_data?attachmentid=${
+                  data.model.attachment.remoteId
+              }`
+            : null;
+
     return {
         ...data.model,
-        url: 'http://127.0.0.1:8000/model',
+        url,
         tags: [
             { name: 'Yormy' },
             { name: 'Grimgooorsh' },
