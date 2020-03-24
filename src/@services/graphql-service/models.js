@@ -1,5 +1,6 @@
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import * as R from 'ramda';
 
 const MODEL_QUERY = gql`
     query getModel($id: ID) {
@@ -101,20 +102,23 @@ const UNLIKE_MODEL_MUTATION = gql`
     }
 `;
 
+const getRemoteId = R.pathOr(null, ['attachment', 'remoteId']);
+const getModel = R.pathOr(null, ['model']);
+
 const parseModelPayload = data => {
-    if (!data || !data.model) {
+    const model = getModel(data);
+
+    if (!model) {
         return null;
     }
 
-    const url =
-        data.model.attachment && data.model.attachment.remoteId
-            ? `http://localhost:5000/get_attachment_full_data?attachmentid=${
-                  data.model.attachment.remoteId
-              }`
-            : null;
+    const remoteId = getRemoteId(model);
+    const url = remoteId
+        ? `http://localhost:5000/get_attachment_full_data?attachmentid=${remoteId}`
+        : null;
 
     return {
-        ...data.model,
+        ...model,
         url,
         tags: [
             { name: 'Yormy' },
