@@ -14,6 +14,10 @@ const USER_QUERY = gql`
                 description
                 avatar
             }
+            models {
+                id
+                name
+            }
         }
     }
 `;
@@ -31,6 +35,10 @@ const UPDATE_USER_MUTATION = gql`
             errors {
                 field
                 messages
+            }
+            models {
+                id
+                name
             }
         }
     }

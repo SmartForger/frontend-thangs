@@ -13,12 +13,8 @@ const ProfileStyle = styled.div`
     grid-template-columns: 30% 70%;
     grid-template-areas:
         '. .'
-        'sidebar header'
+        'sidebar models'
         'sidebar models';
-`;
-
-const HeaderStyled = styled.div`
-    grid-area: header;
 `;
 
 const ModelsStyled = styled.div`
@@ -40,14 +36,7 @@ const Models = ({ models }) => {
     return (
         <ModelsStyled>
             {trail.map((props, index) => (
-                <ModelDisplay
-                    style={props}
-                    width="185px"
-                    height="135px"
-                    key={index}
-                    route={models[index].route}
-                    name={models[index].attachmentName}
-                />
+                <ModelDisplay style={props} key={index} model={models[index]} />
             ))}
         </ModelsStyled>
     );
@@ -55,23 +44,6 @@ const Models = ({ models }) => {
 
 const Page = () => {
     const { id } = useParams();
-    const mockModels = [
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-    ];
 
     const graphqlService = GraphqlService.getInstance();
     const { loading, error, user } = graphqlService.useUserById(id);
@@ -96,9 +68,8 @@ const Page = () => {
 
     return (
         <ProfileStyle>
-            <HeaderStyled />
             <ProfileSidebar user={user} isCurrentUser={isCurrentUser} />
-            <Models models={mockModels} />
+            <Models models={user.models} />
         </ProfileStyle>
     );
 };
