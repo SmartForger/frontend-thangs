@@ -1,5 +1,6 @@
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import * as R from 'ramda';
 
 const MODEL_QUERY = gql`
     query getModel($id: ID) {
@@ -17,6 +18,9 @@ const MODEL_QUERY = gql`
             owner {
                 firstName
                 lastName
+            }
+            attachment {
+                remoteId
             }
         }
     }
@@ -48,6 +52,9 @@ const LIKE_MODEL_MUTATION = gql`
                 owner {
                     firstName
                     lastName
+                }
+                attachment {
+                    remoteId
                 }
             }
             like {
@@ -84,6 +91,9 @@ const UNLIKE_MODEL_MUTATION = gql`
                     firstName
                     lastName
                 }
+                attachment {
+                    remoteId
+                }
             }
             like {
                 id
@@ -92,14 +102,24 @@ const UNLIKE_MODEL_MUTATION = gql`
     }
 `;
 
+const getRemoteId = R.pathOr(null, ['attachment', 'remoteId']);
+const getModel = R.pathOr(null, ['model']);
+
 const parseModelPayload = data => {
-    if (!data || !data.model) {
+    const model = getModel(data);
+
+    if (!model) {
         return null;
     }
 
+    const remoteId = getRemoteId(model);
+    const url = remoteId
+        ? `http://localhost:5000/get_attachment_full_data?attachmentid=${remoteId}`
+        : null;
+
     return {
-        ...data.model,
-        url: 'http://127.0.0.1:8000/model',
+        ...model,
+        url,
         tags: [
             { name: 'Yormy' },
             { name: 'Grimgooorsh' },
