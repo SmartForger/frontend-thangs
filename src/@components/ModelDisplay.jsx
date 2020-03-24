@@ -31,7 +31,11 @@ const ModelDisplay = ({
     style, // This prop is used to attach react-spring animations
 }) => {
     return (
-        <LinkBox to={`/model/${model.id}`} style={style}>
+        <LinkBox
+            to={`/model/${model.id}`}
+            style={style}
+            data-cy="profile-model-link"
+        >
             <ModelDisplayStyled />
             <ModelName>{model.name}</ModelName>
         </LinkBox>
