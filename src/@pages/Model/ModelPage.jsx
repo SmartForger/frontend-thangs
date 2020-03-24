@@ -59,7 +59,7 @@ const Header = ({ model, user }) => {
 const ModelPage = ({ model, user }) => {
     return (
         <>
-            <ViewerArea className="VIEWER">
+            <ViewerArea>
                 <Header model={model} user={user} />
                 <ModelViewer model={model} user={user} />
             </ViewerArea>
