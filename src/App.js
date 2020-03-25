@@ -10,14 +10,21 @@ import { ThangsMain, GlobalStyle } from '@style';
 import { graphqlClient } from '@services';
 import { createBrowserHistory } from 'history';
 import * as pendo from '@vendors/pendo';
+import * as fullStory from '@vendors/full-story';
 
 const history = createBrowserHistory();
 const originalFetch = window.fetch;
 const client = graphqlClient(originalFetch, history);
 
-pendo.initialize(history);
+const initializeAnalytics = history => {
+    pendo.initialize(history);
+    fullStory.initialize();
+    fullStory.identify();
+};
 
 const App = () => {
+    initializeAnalytics(history);
+
     return (
         <ApolloProvider client={client}>
             <Router history={history}>
