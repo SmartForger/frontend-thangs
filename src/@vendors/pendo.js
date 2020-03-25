@@ -79,4 +79,4 @@ const trackPageview = location => {
     track('Viewed page', { pageName, query });
 };
 
-export { initialize, identify };
+export { initialize, identify, track };
