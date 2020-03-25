@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DisplayCard, Slides } from '@components';
+import { DisplayCard, Slides, Uploader } from '@components';
 import { WithLayout } from '@style';
 
 const HomeBodyStyle = styled.div`
@@ -115,6 +115,7 @@ const Page = () => {
                 >
                     <Slides data={newsData} text />
                 </DisplayCard>
+                <Uploader />
             </CardRow>
         </HomeBodyStyle>
     );
