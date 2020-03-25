@@ -1,1 +1,0 @@
-export { Pendo } from './Pendo';

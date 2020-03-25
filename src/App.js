@@ -4,20 +4,22 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { Route, Router } from 'react-router-dom';
 
 import { ThemeProvider } from 'styled-components';
-import { ThangsHeader, Footer, Pendo } from '@components';
+import { ThangsHeader, Footer } from '@components';
 import { Home, Login, Signup, Details, Profile, Model } from '@pages';
 import { ThangsMain, GlobalStyle } from '@style';
 import { graphqlClient } from '@services';
 import { createBrowserHistory } from 'history';
+import * as pendo from '@vendors/pendo';
 
 const history = createBrowserHistory();
 const originalFetch = window.fetch;
 const client = graphqlClient(originalFetch, history);
 
+pendo.initializeAnonymous(history);
+
 const App = () => {
     return (
         <ApolloProvider client={client}>
-            <Pendo />
             <Router history={history}>
                 <ThemeProvider theme={ThangsMain}>
                     <GlobalStyle />
