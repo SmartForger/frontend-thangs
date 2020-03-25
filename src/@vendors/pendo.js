@@ -1,6 +1,6 @@
 import { authenticationService } from '@services';
 
-const apiKey = '47d674c1-ab92-4edf-5c76-eb419cc0be5e';
+const apiKey = process.env.REACT_APP_PENDO_API_KEY;
 
 const shouldTrack = () => true;
 
