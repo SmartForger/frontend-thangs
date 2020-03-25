@@ -1,8 +1,10 @@
+import { authenticationService } from '@services';
+
 const apiKey = '47d674c1-ab92-4edf-5c76-eb419cc0be5e';
 
 const shouldTrack = () => true;
 
-const initializeAnonymous = history => {
+const initialize = history => {
     if (shouldTrack()) {
         (function(p, e, n, d, o) {
             var v, w, x, y, z;
@@ -26,6 +28,8 @@ const initializeAnonymous = history => {
             z.parentNode.insertBefore(y, z);
         })(window, document, 'script', 'pendo');
 
+        identify();
+
         window.pendo.initialize({
             events: {
                 ready() {
@@ -36,6 +40,31 @@ const initializeAnonymous = history => {
 
         history.listen(trackPageview);
     }
+};
+
+const identify = () => {
+    if (!shouldTrack()) {
+        return;
+    }
+
+    const user = authenticationService.currentUserValue;
+    const userDetails = user
+        ? {
+              visitor: {
+                  id: user.id,
+                  name: user.username,
+                  email: user.email,
+              },
+              // Accounts are a separate concept in Pendo's system, which group many
+              // users. Currently we don't have a concept for this, so we can just
+              // reuse user details.
+              account: {
+                  id: user.id,
+                  name: user.username,
+              },
+          }
+        : {};
+    window.pendo.identify(userDetails);
 };
 
 const track = (type, data) => {
@@ -50,4 +79,4 @@ const trackPageview = location => {
     track('Viewed page', { pageName, query });
 };
 
-export { initializeAnonymous };
+export { initialize, identify };

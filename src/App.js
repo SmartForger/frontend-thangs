@@ -15,7 +15,7 @@ const history = createBrowserHistory();
 const originalFetch = window.fetch;
 const client = graphqlClient(originalFetch, history);
 
-pendo.initializeAnonymous(history);
+pendo.initialize(history);
 
 const App = () => {
     return (
