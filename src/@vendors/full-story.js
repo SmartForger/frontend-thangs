@@ -1,3 +1,5 @@
+import { authenticationService } from '@services';
+
 const shouldTrack = () => true;
 
 const initialize = () => {
@@ -74,4 +76,23 @@ const initialize = () => {
     })(window, document, window['_fs_namespace'], 'script', 'user');
 };
 
-export { initialize };
+const identify = () => {
+    if (!shouldTrack()) {
+        return;
+    }
+
+    const user = authenticationService.currentUserValue;
+
+    if (!user) {
+        return;
+    }
+
+    const userDetails = {
+        name: user.username,
+        email: user.email,
+    };
+
+    window.FS.identify(user.id, userDetails);
+};
+
+export { initialize, identify };

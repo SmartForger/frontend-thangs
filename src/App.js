@@ -16,10 +16,15 @@ const history = createBrowserHistory();
 const originalFetch = window.fetch;
 const client = graphqlClient(originalFetch, history);
 
-pendo.initialize(history);
-fullStory.initialize();
+const initializeAnalytics = history => {
+    pendo.initialize(history);
+    fullStory.initialize();
+    fullStory.identify();
+};
 
 const App = () => {
+    initializeAnalytics(history);
+
     return (
         <ApolloProvider client={client}>
             <Router history={history}>
