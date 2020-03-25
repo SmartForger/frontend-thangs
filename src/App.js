@@ -9,10 +9,13 @@ import { Home, Login, Signup, Details, Profile, Model } from '@pages';
 import { ThangsMain, GlobalStyle } from '@style';
 import { graphqlClient } from '@services';
 import { createBrowserHistory } from 'history';
+import * as pendo from '@vendors/pendo';
 
 const history = createBrowserHistory();
 const originalFetch = window.fetch;
 const client = graphqlClient(originalFetch, history);
+
+pendo.initialize(history);
 
 const App = () => {
     return (
