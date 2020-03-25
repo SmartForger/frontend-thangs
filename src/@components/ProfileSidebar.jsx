@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
-import { Button, ChangeablePicture, Markdown } from '@components';
+import {
+    Button,
+    ProfilePicture,
+    ChangeablePicture,
+    Markdown,
+} from '@components';
 import * as GraphqlService from '@services/graphql-service';
 
 const SidebarStyled = styled.div`
@@ -32,10 +37,13 @@ const allowCssProp = props => (props.css ? props.css : '');
 const isEmpty = obj =>
     Object.keys(obj).length === 0 && obj.constructor === Object;
 
-const FollowOrEditButton = ({ onClick }) => {
-    // TODO if the user on this page is the logged in user, we should render a
-    // Follow button.
+const EditButton = ({ onClick }) => {
     return <Button name="Edit Profile" maxwidth="100%" onClick={onClick} />;
+};
+
+const FollowButton = () => {
+    // Currently disabled as we have not built out user following
+    return <Button name="Follow" maxwidth="100%" disabled />;
 };
 
 const FormStyled = styled.form`
@@ -139,30 +147,58 @@ const EditProfileForm = ({ onClose, user }) => {
     );
 };
 
-export const ProfileSidebar = ({ user }) => {
+const EditableProfile = ({ user }) => {
     const [isEditing, setIsEditing] = useState(false);
     const startEditProfile = () => setIsEditing(true);
     const endEditProfile = () => setIsEditing(false);
+    return (
+        <>
+            <ChangeablePicture user={user} src={user.profile.avatar} />
+            <UserDetails>
+                <div>{user.username}</div>
+                <div>{user.email}</div>
+                {isEditing ? (
+                    <EditProfileForm onClose={endEditProfile} user={user} />
+                ) : (
+                    <>
+                        <div>
+                            {user.firstName} {user.lastName}
+                        </div>
+                        <EditButton onClick={startEditProfile} />
+                        <Markdown>{user.profile.description}</Markdown>
+                    </>
+                )}
+            </UserDetails>
+        </>
+    );
+};
 
+const StaticProfile = ({ user }) => {
+    return (
+        <>
+            <ProfilePicture src={user.profile.avatar} />
+            <UserDetails>
+                <div>{user.username}</div>
+                <div>{user.email}</div>
+                <div>
+                    {user.firstName} {user.lastName}
+                </div>
+                <FollowButton />
+                <Markdown>{user.profile.description}</Markdown>
+            </UserDetails>
+        </>
+    );
+};
+
+export const ProfileSidebar = ({ user, isCurrentUser }) => {
     return (
         <SidebarStyled>
             <SocialStyled>
-                <ChangeablePicture user={user} src={user.profile.avatar} />
-                <UserDetails>
-                    <div>{user.username}</div>
-                    <div>{user.email}</div>
-                    {isEditing ? (
-                        <EditProfileForm onClose={endEditProfile} user={user} />
-                    ) : (
-                        <>
-                            <div>
-                                {user.firstName} {user.lastName}
-                            </div>
-                            <FollowOrEditButton onClick={startEditProfile} />
-                            <Markdown>{user.profile.description}</Markdown>
-                        </>
-                    )}
-                </UserDetails>
+                {isCurrentUser ? (
+                    <EditableProfile user={user} />
+                ) : (
+                    <StaticProfile user={user} />
+                )}
             </SocialStyled>
         </SidebarStyled>
     );

@@ -5,24 +5,22 @@ import 'react-image-crop/dist/ReactCrop.css';
 import Modal from 'react-modal';
 import md5 from 'md5';
 
-import { Button } from '@components';
+import { Button, ProfilePicture as p } from '@components';
+import { ProfilePicture } from '@components/ProfilePicture';
 import * as GraphqlService from '@services/graphql-service';
 
 Modal.setAppElement('#root');
 
 const graphqlService = GraphqlService.getInstance();
 
-const ProfilePicStyled = styled.img`
-    background: grey;
-    border-radius: 50%;
-    height: 250px;
-    width: 250px;
-    cursor: pointer;
-`;
-
 const HiddenInput = styled.input`
     visibility: hidden;
     position: absolute;
+`;
+
+console.log('p', p);
+const ClickablePicture = styled(ProfilePicture)`
+    cursor: pointer;
 `;
 
 const ModalStyled = styled(Modal)`
@@ -146,7 +144,7 @@ const ChangeablePicture = ({ user, src }) => {
     return (
         <form>
             <label htmlFor="avatar">
-                <ProfilePicStyled src={src} />
+                <ClickablePicture src={src} />
             </label>
             <HiddenInput
                 type="file"

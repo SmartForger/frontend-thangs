@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useTrail } from 'react-spring';
 import { ProfileSidebar, ModelDisplay } from '@components';
 import * as GraphqlService from '@services/graphql-service';
+import { authenticationService } from '@services';
 import { WithLayout } from '@style';
 
 const ProfileStyle = styled.div`
@@ -59,6 +60,8 @@ const Page = () => {
     const graphqlService = GraphqlService.getInstance();
     const { loading, error, user } = graphqlService.useUserById(id);
 
+    const currentUserId = authenticationService.currentUserValue.id;
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -66,16 +69,17 @@ const Page = () => {
     if (error || !user) {
         return (
             <div data-cy="fetch-profile-error">
-                Error! We were not able to load your profile. Please try again
-                later.
+                Error! We were not able to this profile. Please try again later.
             </div>
         );
     }
 
+    const isCurrentUser = currentUserId === user.id;
+
     return (
         <ProfileStyle>
             <HeaderStyled />
-            <ProfileSidebar user={user} />
+            <ProfileSidebar user={user} isCurrentUser={isCurrentUser} />
             <ModelsStyled>
                 {trail.map((props, index) => (
                     <ModelDisplay
