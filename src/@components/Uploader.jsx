@@ -67,11 +67,15 @@ const FileUpload = () => {
         });
 
         Promise.all(encodedFiles).then(values => {
-            axios.post('http://localhost:5000/upload_attachments', values, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            axios.post(
+                `${process.env.REACT_APP_MODEL_KEY}/upload_attachments`,
+                values,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
         });
     };
 
