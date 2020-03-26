@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import { WithLayout } from '@style/Layout';
 
 const Page = () => {
