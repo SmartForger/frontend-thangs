@@ -5,6 +5,7 @@ import { formatDistance } from 'date-fns';
 import { authenticationService } from '@services';
 import * as GraphqlService from '@services/graphql-service';
 import { Markdown } from '@components';
+import { Spinner } from '@components/Spinner';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -186,12 +187,25 @@ const NewComment = ({ modelId }) => {
 };
 
 const CommentsForModel = ({ model, className }) => {
-    const {
-        // loading,
-        // errors,
-        comments,
-    } = graphqlService.useAllModelComments(model.id);
+    const { loading, error, comments } = graphqlService.useAllModelComments(
+        model.id,
+    );
 
+    if (error) {
+        return (
+            <Container className={className}>
+                <div>Error loading comments</div>
+            </Container>
+        );
+    }
+
+    if (loading) {
+        return (
+            <Container className={className}>
+                <Spinner />
+            </Container>
+        );
+    }
     return (
         <Container className={className}>
             <Header>Comments</Header>
