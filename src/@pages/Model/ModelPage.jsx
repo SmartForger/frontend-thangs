@@ -25,7 +25,7 @@ const OwnerStyled = styled.h3`
 `;
 
 const Comments = styled(CommentsForModel)`
-    margin: auto;
+    margin: 32px auto 0;
 `;
 
 const Owner = ({ owner }) => {
