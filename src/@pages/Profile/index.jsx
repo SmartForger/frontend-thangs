@@ -60,7 +60,9 @@ const Page = () => {
     const graphqlService = GraphqlService.getInstance();
     const { loading, error, user } = graphqlService.useUserById(id);
 
-    const currentUserId = authenticationService.currentUserValue.id;
+    const currentUserId =
+        authenticationService.currentUserValue &&
+        authenticationService.currentUserValue.id;
 
     if (loading) {
         return <div>Loading...</div>;
