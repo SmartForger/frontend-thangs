@@ -20,7 +20,7 @@ const MODEL_QUERY = gql`
                 lastName
             }
             attachment {
-                remoteId
+                attachmentId
             }
         }
     }
@@ -54,7 +54,7 @@ const LIKE_MODEL_MUTATION = gql`
                     lastName
                 }
                 attachment {
-                    remoteId
+                    attachmentId
                 }
             }
             like {
@@ -92,7 +92,7 @@ const UNLIKE_MODEL_MUTATION = gql`
                     lastName
                 }
                 attachment {
-                    remoteId
+                    attachmentId
                 }
             }
             like {
@@ -102,7 +102,7 @@ const UNLIKE_MODEL_MUTATION = gql`
     }
 `;
 
-const getRemoteId = R.pathOr(null, ['attachment', 'remoteId']);
+const getAttachmentId = R.pathOr(null, ['attachment', 'attachmentId']);
 const getModel = R.pathOr(null, ['model']);
 
 const parseModelPayload = data => {
@@ -112,9 +112,9 @@ const parseModelPayload = data => {
         return null;
     }
 
-    const remoteId = getRemoteId(model);
-    const url = remoteId
-        ? `http://localhost:5000/get_attachment_full_data?attachmentid=${remoteId}`
+    const attachmentId = getAttachmentId(model);
+    const url = attachmentId
+        ? `http://localhost:5000/get_attachment_full_data?attachmentid=${attachmentId}`
         : null;
 
     return {
