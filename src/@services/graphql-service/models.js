@@ -104,14 +104,9 @@ const UNLIKE_MODEL_MUTATION = gql`
 
 const getAttachmentId = R.pathOr(null, ['attachment', 'attachmentId']);
 const getModel = R.pathOr(null, ['model']);
+const getModelsByDate = R.pathOr(null, ['modelsByDate']);
 
-const parseModelPayload = data => {
-    const model = getModel(data);
-
-    if (!model) {
-        return null;
-    }
-
+const parseModel = model => {
     const attachmentId = getAttachmentId(model);
     const url = attachmentId
         ? `http://localhost:5000/get_attachment_full_data?attachmentid=${attachmentId}`
@@ -139,6 +134,15 @@ const parseModelPayload = data => {
             { name: 'Yormy' },
         ],
     };
+};
+
+const parseModelsByDatePayload = data => {
+    const models = getModelsByDate(data);
+    if (!models) {
+        return null;
+    }
+
+    return models.map(parseModel);
 };
 
 const useModelById = id => {
@@ -190,4 +194,45 @@ const useUnlikeModelMutation = (userId, modelId) => {
     });
 };
 
-export { useModelById, useLikeModelMutation, useUnlikeModelMutation };
+const MODELS_BY_DATE_QUERY = gql`
+    query modelsByDate {
+        modelsByDate {
+            id
+            name
+            owner {
+                id
+                email
+            }
+            attachment {
+                id
+                filetype
+                fileSize
+            }
+        }
+    }
+`;
+
+const parseModelPayload = data => {
+    const model = getModel(data);
+
+    if (!model) {
+        return null;
+    }
+
+    return parseModel(model);
+};
+
+const useModelsByDate = () => {
+    const { error, loading, data } = useQuery(MODELS_BY_DATE_QUERY);
+
+    const models = parseModelsByDatePayload(data);
+
+    return { loading, error, models };
+};
+
+export {
+    useModelById,
+    useLikeModelMutation,
+    useUnlikeModelMutation,
+    useModelsByDate,
+};
