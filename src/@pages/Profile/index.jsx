@@ -76,7 +76,11 @@ const Page = () => {
     }
 
     if (!user) {
-        return <Page404 />;
+        return (
+            <div data-cy="fetch-profile-error">
+                <Page404 />
+            </div>
+        );
     }
 
     const isCurrentUser = currentUserId === user.id;
