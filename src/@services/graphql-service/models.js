@@ -16,10 +16,12 @@ const MODEL_QUERY = gql`
                 }
             }
             owner {
+                id
                 firstName
                 lastName
             }
             attachment {
+                id
                 attachmentId
             }
         }
@@ -50,10 +52,12 @@ const LIKE_MODEL_MUTATION = gql`
                     }
                 }
                 owner {
+                    id
                     firstName
                     lastName
                 }
                 attachment {
+                    id
                     attachmentId
                 }
             }
@@ -88,10 +92,12 @@ const UNLIKE_MODEL_MUTATION = gql`
                     }
                 }
                 owner {
+                    id
                     firstName
                     lastName
                 }
                 attachment {
+                    id
                     attachmentId
                 }
             }
