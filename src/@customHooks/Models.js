@@ -16,22 +16,23 @@ const useStl = url => {
         return bytes.buffer;
     }
 
-    async function fetchData() {
-        try {
-            const response = await fetch(url);
-            const json = await response.json();
-
-            const loader = new STLLoader();
-            const geometry = loader.parse(_base64ToArrayBuffer(json.StlBinary));
-            setData(geometry);
-            setLoading(false);
-        } catch (e) {
-            setError(e);
-        }
-    }
-
     useEffect(
         () => {
+            async function fetchData() {
+                try {
+                    const response = await fetch(url);
+                    const json = await response.json();
+
+                    const loader = new STLLoader();
+                    const geometry = loader.parse(
+                        _base64ToArrayBuffer(json.StlBinary),
+                    );
+                    setData(geometry);
+                    setLoading(false);
+                } catch (e) {
+                    setError(e);
+                }
+            }
             fetchData();
         },
         [url],
