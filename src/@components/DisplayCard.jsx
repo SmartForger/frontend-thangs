@@ -2,8 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyleCard = styled.div`
-    max-width: ${props => props.size || 200}px;
-    height: ${props => props.size || 200}px;
     background: none;
     overflow: hidden;
     border-radius: ${props => (props.rounded ? '10%' : 0)};
@@ -15,8 +13,6 @@ const StyleCard = styled.div`
 `;
 
 const StyleCardHead = styled.div`
-    width: 100%;
-    height: ${props => (props.percentage ? props.percentage : 76)}%;
     background: ${props => props.headerBg || props.theme.white};
     color: ${props => props.headerColor || props.theme.secondary};
     background-size: contain;
@@ -25,14 +21,8 @@ const StyleCardHead = styled.div`
 `;
 
 const StyleCardBody = styled.div`
-    width: 100%;
-    height: ${props => (props.percentage ? 100 - props.percentage : 24)}%;
     background: ${props => (props.bodyBg ? props.bodyBg : props.theme.white)};
     color: ${props => props.bodyColor || props.theme.secondary};
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
-    align-items: center;
     font-size: ${props => props.size / 200}rem;
 `;
 

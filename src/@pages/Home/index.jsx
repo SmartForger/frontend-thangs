@@ -42,7 +42,6 @@ const Page = () => {
                     headerContent="Most Viewed"
                     fontSize="2"
                     shadow
-                    size="300"
                 >
                     {error || loading || !models ? (
                         <div>Loading</div>

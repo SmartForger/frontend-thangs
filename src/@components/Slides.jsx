@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 const SlidesContainerStyle = styled.div`
-    height: 100%;
     width: 100%;
     display: flex;
     flex-flow: column nowrap;
@@ -13,7 +12,6 @@ const SlidesContainerStyle = styled.div`
 
 const SlideStyle = styled.div`
     width: 100%;
-    height: ${props => props.slideHeight || 30}%;
     user-select: none;
     cursor: pointer;
     display: grid;
@@ -51,24 +49,18 @@ const SlideownerStyle = styled.div`
 const SlidesFooterStyle = styled.div``;
 
 const Slide = props => {
-    const { height, title, owner, icon, rounded, text, prefix, route } = props;
+    const { title, owner, icon, rounded, text, prefix, route } = props;
     const history = useHistory();
 
     return (
         <SlideStyle
-            slideHeight={height}
             text={text}
             onClick={() => {
                 history.push(route);
             }}
         >
             {text ? null : (
-                <SlideIconStyle
-                    src={icon}
-                    rounded={rounded}
-                    alt=""
-                    size={height / 2}
-                />
+                <SlideIconStyle src={icon} rounded={rounded} alt="" />
             )}
             <SlideTitleStyle>{title}</SlideTitleStyle>
             <SlideownerStyle>
@@ -81,7 +73,6 @@ const Slide = props => {
 const Slides = props => {
     const { data, footerContent, rounded, text, prefix } = props;
     const slideAmount = props.data.length || 3;
-    const slideHeight = 90 / slideAmount;
 
     return (
         <SlidesContainerStyle>
@@ -89,7 +80,6 @@ const Slides = props => {
                 ? data.map(i => (
                       <Slide
                           key={i.title}
-                          height={slideHeight}
                           title={i.title}
                           owner={i.owner}
                           icon={i.icon}
