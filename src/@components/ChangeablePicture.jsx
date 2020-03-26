@@ -5,7 +5,7 @@ import 'react-image-crop/dist/ReactCrop.css';
 import Modal from 'react-modal';
 import md5 from 'md5';
 
-import { Button, ProfilePicture as p } from '@components';
+import { Button } from '@components';
 import { ProfilePicture } from '@components/ProfilePicture';
 import * as GraphqlService from '@services/graphql-service';
 
@@ -18,7 +18,6 @@ const HiddenInput = styled.input`
     position: absolute;
 `;
 
-console.log('p', p);
 const ClickablePicture = styled(ProfilePicture)`
     cursor: pointer;
 `;
