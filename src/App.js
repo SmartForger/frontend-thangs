@@ -5,7 +5,7 @@ import { Route, Router } from 'react-router-dom';
 
 import { ThemeProvider } from 'styled-components';
 import { ThangsHeader, Footer } from '@components';
-import { Home, Login, Signup, Details, Profile, Model } from '@pages';
+import { Home, Login, Signup, Profile, Model } from '@pages';
 import { ThangsMain, GlobalStyle } from '@style';
 import { graphqlClient } from '@services';
 import { createBrowserHistory } from 'history';
@@ -35,7 +35,6 @@ const App = () => {
                     <Route path="/login" component={Login} />
                     <Route path="/signup" component={Signup} exact />
                     <Route path="/signup/:registration" component={Signup} />
-                    <Route path="/details/:id" component={Details} />
                     <Route path="/profile/:id" component={Profile} />
                     <Route path="/model/:id" component={Model} />
                     <Footer />
