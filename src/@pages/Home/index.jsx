@@ -39,7 +39,7 @@ const Page = () => {
             <CardRow>
                 <DisplayCard
                     percentage="10"
-                    headerContent="Most Viewed"
+                    headerContent="New models"
                     fontSize="2"
                     shadow
                 >

@@ -2,22 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyleCard = styled.div`
-    background: none;
-    overflow: hidden;
-    border-radius: ${props => (props.rounded ? '10%' : 0)};
+    border-radius: 4px;
     box-shadow: ${props =>
         props.shadow ? 'rgba(0,0,0,0.8) 0 0 10px' : 'black 0 0 0'};
     border: ${props => (props.bordered ? '2px solid black' : 'none')};
-    transition: all 0.5s;
+    background: ${props => props.theme.white};
     margin: ${props => props.margin || '5px'};
 `;
 
 const StyleCardHead = styled.div`
-    background: ${props => props.headerBg || props.theme.white};
     color: ${props => props.headerColor || props.theme.secondary};
-    background-size: contain;
     font-size: ${props => props.fontSize || 1}rem;
     padding: 0 5%;
+    margin-bottom: 12px;
 `;
 
 const StyleCardBody = styled.div`

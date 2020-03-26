@@ -20,6 +20,7 @@ const SlideStyle = styled.div`
     grid-template-areas:
         'icon title'
         'icon owner';
+    margin-bottom: 12px;
 `;
 
 const SlideIconStyle = styled.img`
