@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const SlidesContainerStyle = styled.div`
@@ -10,11 +10,11 @@ const SlidesContainerStyle = styled.div`
     align-items: center;
 `;
 
-const SlideStyle = styled.div`
+const LinkBox = styled(Link)`
     width: 100%;
-    user-select: none;
-    cursor: pointer;
     display: grid;
+    text-decoration: none;
+    color: inherit;
     grid-template-columns: ${props => (props.text ? '15% 85%' : '40% 60%')};
     grid-template-rows: 50% 50%;
     grid-template-areas:
@@ -51,15 +51,9 @@ const SlidesFooterStyle = styled.div``;
 
 const Slide = props => {
     const { title, owner, icon, rounded, text, prefix, route } = props;
-    const history = useHistory();
 
     return (
-        <SlideStyle
-            text={text}
-            onClick={() => {
-                history.push(route);
-            }}
-        >
+        <LinkBox text={text} to={route}>
             {text ? null : (
                 <SlideIconStyle src={icon} rounded={rounded} alt="" />
             )}
@@ -67,7 +61,7 @@ const Slide = props => {
             <SlideownerStyle>
                 {prefix} <span style={{ fontWeight: '900' }}>{owner}</span>
             </SlideownerStyle>
-        </SlideStyle>
+        </LinkBox>
     );
 };
 
