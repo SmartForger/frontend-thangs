@@ -4,6 +4,7 @@ import { useLocalStorage } from '@customHooks/Storage';
 import * as GraphqlService from '@services/graphql-service';
 import { ModelPage } from './ModelPage';
 import { WithFullScreenLayout } from '@style';
+import { Spinner } from '@components/Spinner';
 
 const Page = () => {
     const { id } = useParams();
@@ -13,7 +14,7 @@ const Page = () => {
     const [user] = useLocalStorage('currentUser', null);
 
     if (loading) {
-        return <div>Loading</div>;
+        return <Spinner />;
     } else if (!model) {
         return <div>Model does not exist</div>;
     } else if (error) {
