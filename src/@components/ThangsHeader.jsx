@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { authenticationService } from '@services';
@@ -18,14 +18,10 @@ const HeaderStyle = styled.div`
     align-items: center;
 `;
 
-const LogoStyle = styled.div`
+const LogoLink = styled(Link)`
     margin-left: 160px;
-    user-select: none;
-    cursor: pointer;
-    text-decoration: none;
     width: 200px;
     height: 100%;
-    overflow: hidden;
 `;
 
 const SvgContainer = styled.div`
@@ -100,15 +96,11 @@ const ThangsHeader = () => {
     return (
         <>
             <HeaderStyle>
-                <LogoStyle
-                    onClick={() => {
-                        history.push('/');
-                    }}
-                >
+                <LogoLink to="/">
                     <SvgContainer>
                         <SVG />
                     </SvgContainer>
-                </LogoStyle>
+                </LogoLink>
                 <SearchForm onSubmit={performSearch}>
                     <SearchStyle
                         placeholder="Input search term"
