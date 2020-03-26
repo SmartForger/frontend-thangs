@@ -201,6 +201,8 @@ const MODELS_BY_DATE_QUERY = gql`
             name
             owner {
                 id
+                firstName
+                lastName
                 email
             }
             attachment {

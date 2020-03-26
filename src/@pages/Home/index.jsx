@@ -2,76 +2,38 @@ import React from 'react';
 import styled from 'styled-components';
 import { DisplayCard, Slides } from '@components';
 import { WithLayout } from '@style';
+import * as GraphqlService from '@services/graphql-service';
+
+const graphqlService = GraphqlService.getInstance();
 
 const HomeBodyStyle = styled.div`
     margin-top: 50px;
 `;
 
 const CardRow = styled.div`
-    position: relative;
     display: flex;
-    flex-flow: row nowrap;
     justify-content: space-around;
-    align-items: center;
-    width: 100%;
-    height: 40%;
-    top: 47%;
 `;
 
+const ModelSlides = ({ models }) => {
+    const modelData = models.map(model => {
+        const owner = model.owner
+            ? `${model.owner.firstName} ${model.owner.lastName}`
+            : null;
+
+        return {
+            title: model.name,
+            owner,
+            route: `/model/${model.id}`,
+        };
+    });
+
+    return <Slides data={modelData} prefix="New Uploads" />;
+};
+
 const Page = () => {
-    const modelData = [
-        {
-            title: 'Fancy Screw',
-            owner: 'CarlCPhysna',
-            icon: 'Woops',
-            route: '/details/5345',
-        },
-        {
-            title: 'Engine Block',
-            owner: 'ColinCPhysna',
-            icon: 'Woops',
-            route: '/details/5345',
-        },
-        {
-            title: 'Cool Chair',
-            owner: 'Info@physna.com',
-            icon: 'Woops',
-            route: '/details/5345',
-        },
-    ];
+    const { error, loading, models } = graphqlService.useModelsByDate();
 
-    const userData = [
-        {
-            title: 'CarlCPhysna',
-            owner: '',
-            route: '/profile/5345',
-        },
-        {
-            title: 'ColinCPhysna',
-            owner: '',
-            route: '/profile/5345',
-        },
-        {
-            title: 'Info@physna.com',
-            owner: '',
-            route: '/profile/5345',
-        },
-    ];
-
-    const newsData = [
-        {
-            title: 'Big news whoa',
-            owner: 'lorem ipsum lorem ipsum',
-        },
-        {
-            title: 'More news? thank you!',
-            owner: 'lorem ipsum lorem ipsum',
-        },
-        {
-            title: 'No news',
-            owner: 'lorem ipsum lorem ipsum',
-        },
-    ];
     return (
         <HomeBodyStyle>
             <CardRow>
@@ -82,38 +44,11 @@ const Page = () => {
                     shadow
                     size="300"
                 >
-                    <Slides data={modelData} prefix="Uploaded By" />
-                </DisplayCard>
-                <DisplayCard
-                    percentage="10"
-                    headerContent="View Designs"
-                    fontSize="2"
-                    shadow
-                    size="300"
-                >
-                    <Slides data={modelData} prefix="Uploaded By" />
-                </DisplayCard>
-                <DisplayCard
-                    percentage="10"
-                    headerContent="Community"
-                    fontSize="2"
-                    shadow
-                    size="300"
-                >
-                    <Slides
-                        data={userData}
-                        prefix="a user you could connect with"
-                        rounded
-                    />
-                </DisplayCard>
-                <DisplayCard
-                    percentage="10"
-                    headerContent="News"
-                    fontSize="2"
-                    shadow
-                    size="300"
-                >
-                    <Slides data={newsData} text />
+                    {error || loading || !models ? (
+                        <div>Loading</div>
+                    ) : (
+                        <ModelSlides models={models} />
+                    )}
                 </DisplayCard>
             </CardRow>
         </HomeBodyStyle>
