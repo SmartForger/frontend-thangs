@@ -28,7 +28,7 @@ const ModelSlides = ({ models }) => {
         };
     });
 
-    return <Slides data={modelData} prefix="New Uploads" />;
+    return <Slides data={modelData} />;
 };
 
 const Page = () => {
