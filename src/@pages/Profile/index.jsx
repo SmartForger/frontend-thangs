@@ -6,6 +6,7 @@ import { ProfileSidebar, ModelDisplay } from '@components';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 import { WithLayout } from '@style';
+import { Spinner } from '@components/Spinner';
 import * as R from 'ramda';
 
 const ProfileStyle = styled.div`
@@ -63,7 +64,7 @@ const Page = () => {
         authenticationService.currentUserValue.id;
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <Spinner />;
     }
 
     if (error || !user) {
