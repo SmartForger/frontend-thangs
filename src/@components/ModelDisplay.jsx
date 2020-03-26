@@ -1,39 +1,45 @@
 import React from 'react';
-import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
-import {animated} from 'react-spring';
+import { animated } from 'react-spring';
+import { Link } from 'react-router-dom';
 
 const ModelDisplayStyled = styled(animated.div)`
-  width: ${props => props.width || '400px'};
-  height: ${props => props.height || '300px'};
-  background: ${props => props.imgURL || props.theme.white};
-  margin: ${props => props.margin || '10px'};
-  background-repeat: no-repeat;
-  border-radius: 2%;
-  text-align: center;
-  box-shadow: inset 0 0 0 3px black;
-  transition: all 0.2s;
-  user-select: none;
-  cursor: pointer;
+    width: 185px;
+    height: 135px;
+    background: ${props => props.imgURL || props.theme.white};
+    margin: 10px;
+    border-radius: 2%;
+    text-align: center;
+    box-shadow: inset 0 0 0 3px black;
+`;
 
-  > span {
-    position: relative;
-    top: 105%;
-  }
+const LinkBox = styled(animated(Link))`
+    text-decoration: none;
+    transition: all 0.2s;
 
-  &:hover {
-    transform: scale(0.90)
-  }
-`
+    &:hover {
+        transform: scale(0.9);
+    }
+`;
 
-const ModelDisplay = (props) => {
-  const history = useHistory();
-  const {name, route} = props;
-  return (
-    <ModelDisplayStyled {...props} onClick={() => {history.push(route || '#')}}>
-<span>{name}</span>
-    </ModelDisplayStyled>
-  );
-}
+const ModelName = styled.div`
+    text-align: center;
+`;
 
-export {ModelDisplay};
+const ModelDisplay = ({
+    model,
+    style, // This prop is used to attach react-spring animations
+}) => {
+    return (
+        <LinkBox
+            to={`/model/${model.id}`}
+            style={style}
+            data-cy="profile-model-link"
+        >
+            <ModelDisplayStyled />
+            <ModelName>{model.name}</ModelName>
+        </LinkBox>
+    );
+};
+
+export { ModelDisplay };

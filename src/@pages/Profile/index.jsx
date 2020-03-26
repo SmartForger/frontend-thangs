@@ -6,56 +6,54 @@ import { ProfileSidebar, ModelDisplay } from '@components';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 import { WithLayout } from '@style';
+import * as R from 'ramda';
 
 const ProfileStyle = styled.div`
     display: grid;
-    grid-template-rows: 5% 30% 65%;
+    margin-top: 50px;
+    grid-template-rows: 30% 70%;
     grid-template-columns: 30% 70%;
     grid-template-areas:
-        '. .'
-        'sidebar header'
+        'sidebar models'
         'sidebar models';
 `;
 
-const HeaderStyled = styled.div`
-    grid-area: header;
+const ModelsArea = styled.div`
+    grid-area: models;
+    padding-left: 32px;
 `;
 
 const ModelsStyled = styled.div`
-    grid-area: models;
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
     overflow-y: scroll;
-    height: 100%;
 `;
 
-const Page = () => {
-    const { id } = useParams();
-    const mockModels = [
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-        { attachmentName: 'Yourgoy', route: '/details/634' },
-    ];
-
+const Models = ({ models }) => {
     const config = { mass: 6, tension: 2000, friction: 95, clamp: true };
-    const [trail] = useTrail(mockModels.length, () => ({
+    const [trail] = useTrail(models.length, () => ({
         config,
         to: { transform: 'translate(0,0) scale(1)' },
         from: { transform: 'translate(1000%,0) scale(0.6)' },
     }));
+    return (
+        <ModelsArea>
+            <ModelsStyled>
+                {trail.map((props, index) => (
+                    <ModelDisplay
+                        style={props}
+                        key={index}
+                        model={models[index]}
+                    />
+                ))}
+            </ModelsStyled>
+        </ModelsArea>
+    );
+};
+
+const Page = () => {
+    const { id } = useParams();
 
     const graphqlService = GraphqlService.getInstance();
     const { loading, error, user } = graphqlService.useUserById(id);
@@ -80,20 +78,9 @@ const Page = () => {
 
     return (
         <ProfileStyle>
-            <HeaderStyled />
             <ProfileSidebar user={user} isCurrentUser={isCurrentUser} />
-            <ModelsStyled>
-                {trail.map((props, index) => (
-                    <ModelDisplay
-                        style={props}
-                        width="185px"
-                        height="135px"
-                        key={index}
-                        route={mockModels[index].route}
-                        name={mockModels[index].attachmentName}
-                    />
-                ))}
-            </ModelsStyled>
+            {user.models &&
+                !R.isEmpty(user.models) && <Models models={user.models} />}
         </ProfileStyle>
     );
 };
