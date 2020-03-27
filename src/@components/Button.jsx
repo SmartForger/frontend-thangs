@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { animated } from 'react-spring';
 
@@ -40,13 +40,20 @@ const BtnStyle = styled(animated.button)`
 
 const Button = props => {
     const { name, onClick, routeto, children } = props;
-    const history = useHistory();
+
+    if (routeto) {
+        return (
+            <Link to={routeto}>
+                <BtnStyle {...props}>{name || children}</BtnStyle>
+            </Link>
+        );
+    }
+
     return (
         <BtnStyle
             {...props}
             onClick={() => {
                 if (onClick != null && !props.disabled) props.onClick();
-                if (routeto != null) history.push(routeto);
             }}
         >
             {name || children}
