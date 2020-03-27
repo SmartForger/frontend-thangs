@@ -48,6 +48,7 @@ const NEWSPOST_QUERY = gql`
                     avatar
                 }
             }
+            created
         }
     }
 `;

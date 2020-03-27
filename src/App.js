@@ -6,6 +6,7 @@ import { Route, Router, Switch } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { ThangsHeader, Footer } from '@components';
 import { Home, Login, Signup, Profile, Model } from '@pages';
+import { Newspost } from '@pages/Newspost';
 import { Page404 } from '@pages/404';
 import { ThangsMain, GlobalStyle } from '@style';
 import { graphqlClient } from '@services';
@@ -42,6 +43,7 @@ const App = () => {
                         />
                         <Route path="/profile/:id" component={Profile} />
                         <Route path="/model/:id" component={Model} />
+                        <Route path="/newspost/:id" component={Newspost} />
                         <Route path="*" component={Page404} status={404} />
                     </Switch>
                     <Footer />
