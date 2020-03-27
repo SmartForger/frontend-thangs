@@ -3,7 +3,8 @@ import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { authenticationService } from '@services';
-import { Shelf, ShelfButton, Button, SVG, SearchBar } from '@components';
+import { Shelf, ShelfButton, Button, SVG } from '@components';
+import { SearchBar } from '@components/SearchBar';
 
 const HeaderStyle = styled.div`
     position: fixed;
@@ -81,12 +82,11 @@ const ThangsHeader = () => {
                 </ProfileStyle>
             </HeaderStyle>
             <Shelf open={open} setOpen={setOpen}>
-                <h1>Yo</h1>
-                <h1>Yo</h1>
-                <h1>Yo</h1>
-                <h1>Yo</h1>
-                <h1>Yo</h1>
-                <h1>Yo</h1>
+                <ul>
+                    <li>Item 1</li>
+                    <li>Item 2</li>
+                    <li>Item 3</li>
+                </ul>
             </Shelf>
         </>
     );

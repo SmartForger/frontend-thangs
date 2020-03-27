@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 const SearchForm = styled.form`
     width: 50%;
@@ -20,17 +20,21 @@ const SearchStyle = styled.input`
     }
 `;
 
-function useSearch() {
-    const [searchQuery, setSearchQuery] = useState('');
+function useSearch(initialSearchQuery = '') {
+    const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
     const history = useHistory();
     const executeSearch = () => {
-        history.replace(`/search/${searchQuery}`);
+        history.push(`/search/${searchQuery}`);
     };
     return { searchQuery, setSearchQuery, executeSearch };
 }
 
 const SearchBar = props => {
-    const { searchQuery, setSearchQuery, executeSearch } = useSearch();
+    const params = useParams();
+    const initialSearchQuery = params.searchQuery;
+    const { searchQuery, setSearchQuery, executeSearch } = useSearch(
+        initialSearchQuery
+    );
 
     const handleChange = e => {
         e.persist();
