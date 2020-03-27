@@ -1,16 +1,14 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { useTrail } from 'react-spring';
-import * as R from 'ramda';
-import { ProfileSidebar, ModelDisplay } from '@components';
-import * as GraphqlService from '@services/graphql-service';
-import { authenticationService } from '@services';
 import { WithLayout } from '@style';
+import { useTrail } from 'react-spring';
+import { useParams } from 'react-router-dom';
+import * as GraphqlService from '@services/graphql-service';
+import * as R from 'ramda';
 import { Spinner } from '@components/Spinner';
-import { Page404 } from '../404';
+import { ModelDisplay } from '@components';
 
-const ProfileStyle = styled.div`
+const SearchResultsStyle = styled.div`
     display: grid;
     margin-top: 50px;
     grid-template-rows: 30% 70%;
@@ -55,14 +53,11 @@ const Models = ({ models }) => {
 };
 
 const Page = () => {
-    const { id } = useParams();
-
+    const { searchQuery } = useParams();
     const graphqlService = GraphqlService.getInstance();
-    const { loading, error, user } = graphqlService.useUserById(id);
-
-    const currentUserId =
-        authenticationService.currentUserValue &&
-        authenticationService.currentUserValue.id;
+    const { loading, error, models } = graphqlService.useSearchModels(
+        searchQuery
+    );
 
     if (loading) {
         return <Spinner />;
@@ -70,33 +65,19 @@ const Page = () => {
 
     if (error) {
         return (
-            <div data-cy="fetch-profile-error">
-                Error! We were not able to load this profile. Please try again
-                later.
+            <div data-cy="fetch-results-error">
+                Error! We were not able to load results. Please try again later.
             </div>
         );
     }
-
-    if (!user) {
-        return (
-            <div data-cy="fetch-profile-error">
-                <Page404 />
-            </div>
-        );
-    }
-
-    const isCurrentUser = currentUserId === user.id;
 
     return (
-        <ProfileStyle>
-            <ProfileSidebar user={user} isCurrentUser={isCurrentUser} />
-            {user.models && !R.isEmpty(user.models) && (
-                <Models models={user.models} />
-            )}
-        </ProfileStyle>
+        <SearchResultsStyle>
+            {!R.isEmpty(models) && <Models models={models} />}
+        </SearchResultsStyle>
     );
 };
 
-const Profile = WithLayout(Page);
+const SearchResults = WithLayout(Page);
 
-export { Profile };
+export { SearchResults };

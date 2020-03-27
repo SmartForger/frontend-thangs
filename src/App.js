@@ -13,6 +13,7 @@ import { graphqlClient } from '@services';
 import { createBrowserHistory } from 'history';
 import * as pendo from '@vendors/pendo';
 import * as fullStory from '@vendors/full-story';
+import { SearchResults } from '@pages/SearchResults';
 
 const history = createBrowserHistory();
 const originalFetch = window.fetch;
@@ -44,6 +45,10 @@ const App = () => {
                         <Route path="/profile/:id" component={Profile} />
                         <Route path="/model/:id" component={Model} />
                         <Route path="/newspost/:id" component={Newspost} />
+                        <Route
+                            path="/search/:searchQuery"
+                            component={SearchResults}
+                        />
                         <Route path="*" component={Page404} status={404} />
                     </Switch>
                     <Footer />
