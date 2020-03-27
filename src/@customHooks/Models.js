@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
+import { withAuthHeader } from '@services/authenticated-fetch';
 
 const useStl = url => {
     const [data, setData] = useState(null);
@@ -20,12 +21,16 @@ const useStl = url => {
         () => {
             async function fetchData() {
                 try {
-                    const response = await fetch(url);
+                    const accessToken = localStorage.getItem('accessToken');
+                    const response = await fetch(
+                        url,
+                        withAuthHeader({}, accessToken),
+                    );
                     const json = await response.json();
 
                     const loader = new STLLoader();
                     const geometry = loader.parse(
-                        _base64ToArrayBuffer(json.StlBinary),
+                        _base64ToArrayBuffer(json.data),
                     );
                     setData(geometry);
                     setLoading(false);

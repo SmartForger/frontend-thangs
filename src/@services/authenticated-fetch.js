@@ -47,4 +47,4 @@ const createAuthenticatedFetch = (originalFetch, history) => {
     };
 };
 
-export { createAuthenticatedFetch };
+export { createAuthenticatedFetch, withAuthHeader };
