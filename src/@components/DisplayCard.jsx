@@ -20,7 +20,6 @@ const StyleCardHead = styled.div`
 const StyleCardBody = styled.div`
     background: ${props => (props.bodyBg ? props.bodyBg : props.theme.white)};
     color: ${props => props.bodyColor || props.theme.secondary};
-    font-size: ${props => props.size / 200}rem;
 `;
 
 const DisplayCard = props => {
