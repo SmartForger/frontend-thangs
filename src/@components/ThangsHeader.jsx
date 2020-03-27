@@ -3,7 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { authenticationService } from '@services';
-import { Shelf, ShelfButton, Button, SVG } from '@components';
+import { Shelf, ShelfButton, Button, SVG, SearchBar } from '@components';
 
 const HeaderStyle = styled.div`
     position: fixed;
@@ -38,17 +38,6 @@ const SvgContainer = styled.div`
     }
 `;
 
-const SearchStyle = styled.input`
-    border: 0.5px solid ${props => props.theme.darkgrey};
-    padding: 0 15px;
-    background: ${props => props.theme.grey};
-    width: 100%;
-    font-size: 30px;
-
-    ::placeholder {
-        color: ${props => props.theme.darkgrey};
-    }
-`;
 const ProfileStyle = styled.div`
     width: 17vw;
     height: 100%;
@@ -59,15 +48,8 @@ const ProfileStyle = styled.div`
     align-items: center;
 `;
 
-const SearchForm = styled.form`
-    width: 50%;
-    height: 100%;
-    display: flex;
-`;
-
 const ThangsHeader = () => {
     const [open, setOpen] = useState(false);
-    const [searchTerm, setSearchterm] = useState('');
     const [currentUser, setCurrentUser] = useState(null);
     const history = useHistory();
 
@@ -80,19 +62,6 @@ const ThangsHeader = () => {
         history.push('/login');
     };
 
-    const handleChange = e => {
-        e.persist();
-        setSearchterm(e.target.value);
-    };
-
-    const performSearch = e => {
-        alert(searchTerm);
-        setSearchterm('');
-        if (e) {
-            e.preventDefault();
-        }
-    };
-
     return (
         <>
             <HeaderStyle>
@@ -101,13 +70,7 @@ const ThangsHeader = () => {
                         <SVG />
                     </SvgContainer>
                 </LogoLink>
-                <SearchForm onSubmit={performSearch}>
-                    <SearchStyle
-                        placeholder="Input search term"
-                        value={searchTerm}
-                        onChange={handleChange}
-                    />
-                </SearchForm>
+                <SearchBar />
                 <ProfileStyle>
                     <ShelfButton open={open} setOpen={setOpen} />
                     {currentUser ? (

@@ -9,13 +9,7 @@ import { Spinner } from '@components/Spinner';
 import { ModelDisplay } from '@components';
 
 const SearchResultsStyle = styled.div`
-    display: grid;
     margin-top: 50px;
-    grid-template-rows: 30% 70%;
-    grid-template-columns: 30% 70%;
-    grid-template-areas:
-        'sidebar models'
-        'sidebar models';
 `;
 
 const ModelsArea = styled.div`
@@ -26,7 +20,7 @@ const ModelsArea = styled.div`
 const ModelsStyled = styled.div`
     display: flex;
     flex-flow: row wrap;
-    justify-content: space-between;
+    justify-content: start;
     overflow-y: scroll;
 `;
 
