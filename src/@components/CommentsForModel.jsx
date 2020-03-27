@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { formatDistance } from 'date-fns';
@@ -137,6 +137,8 @@ const NewComment = ({ modelId }) => {
     } = graphqlService.useUserById(userId);
 
     const [body, setBody] = useState('');
+    const textRef = useRef(null);
+
     const [createModelComment] = graphqlService.useCreateModelCommentMutation({
         ownerId: userId,
         body,
@@ -159,6 +161,7 @@ const NewComment = ({ modelId }) => {
             if (valid(body)) {
                 createModelComment();
                 setBody('');
+                textRef.current.innerText = '';
             }
         }
     };
@@ -168,7 +171,6 @@ const NewComment = ({ modelId }) => {
             css={`
                 margin-top: 12px;
             `}
-            onKeyPress={handleKeyPress}
         >
             <div>
                 <OwnerPicture owner={user} />
@@ -179,6 +181,8 @@ const NewComment = ({ modelId }) => {
                         contentEditable
                         data-placeholder="Write a comment..."
                         onInput={handleInput}
+                        onKeyPress={handleKeyPress}
+                        ref={textRef}
                     />
                 </Box>
             </FlexGrow>
