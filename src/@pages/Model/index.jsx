@@ -4,6 +4,7 @@ import { useLocalStorage } from '@customHooks/Storage';
 import * as GraphqlService from '@services/graphql-service';
 import { ModelPage } from './ModelPage';
 import { WithFullScreenLayout } from '@style';
+import { Spinner } from '@components/Spinner';
 import { Page404 } from '../404';
 
 const Page = () => {
@@ -14,7 +15,7 @@ const Page = () => {
     const [user] = useLocalStorage('currentUser', null);
 
     if (loading) {
-        return <div>Loading</div>;
+        return <Spinner />;
     } else if (!model) {
         return <Page404 />;
     } else if (error) {
