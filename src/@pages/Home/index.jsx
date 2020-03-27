@@ -80,7 +80,13 @@ const Newsposts = () => {
                 percentage="10"
                 fontSize={2}
             >
-                <NewspostsSlides newsposts={newsposts} />
+                {loading ? (
+                    <Spinner />
+                ) : error || !newsposts ? (
+                    <div>Error</div>
+                ) : (
+                    <NewspostsSlides newsposts={newsposts} />
+                )}
             </DisplayCard>
         </div>
     );

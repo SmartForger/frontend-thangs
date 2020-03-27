@@ -1,5 +1,5 @@
 import { gql } from 'apollo-boost';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
 
 const ALL_NEWSPOSTS_QUERY = gql`
     query allNewsposts {
