@@ -8,6 +8,7 @@ import { createAuthenticatedFetch } from '@services/authenticated-fetch';
 import * as users from './users';
 import * as models from './models';
 import * as comments from './comments';
+import * as newsposts from './newsposts';
 import { getGraphQLUrl } from './utils';
 
 export const graphqlClient = (originalFetch, history) =>
@@ -42,6 +43,7 @@ const getInstance = () => {
         ...users,
         ...models,
         ...comments,
+        ...newsposts,
     };
 };
 
