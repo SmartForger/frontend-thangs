@@ -15,10 +15,10 @@ const StyleCardHead = styled.div`
     font-size: ${props => props.fontSize || 1}rem;
     padding: 0 5%;
     margin-bottom: 12px;
+    text-align: center;
 `;
 
 const StyleCardBody = styled.div`
-    background: ${props => (props.bodyBg ? props.bodyBg : props.theme.white)};
     color: ${props => props.bodyColor || props.theme.secondary};
 `;
 

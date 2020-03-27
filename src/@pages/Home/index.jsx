@@ -35,20 +35,22 @@ const ModelSlides = ({ models }) => {
 const Models = () => {
     const { error, loading, models } = graphqlService.useModelsByDate();
     return (
-        <DisplayCard
-            percentage="10"
-            headerContent="New models"
-            fontSize="2"
-            shadow
-        >
-            {loading ? (
-                <Spinner />
-            ) : error || !models ? (
-                <div>Error</div>
-            ) : (
-                <ModelSlides models={models} />
-            )}
-        </DisplayCard>
+        <div>
+            <DisplayCard
+                percentage="10"
+                headerContent="New models"
+                fontSize="2"
+                shadow
+            >
+                {loading ? (
+                    <Spinner />
+                ) : error || !models ? (
+                    <div>Error</div>
+                ) : (
+                    <ModelSlides models={models} />
+                )}
+            </DisplayCard>
+        </div>
     );
 };
 
@@ -71,9 +73,16 @@ const NewspostsSlides = ({ newsposts }) => {
 const Newsposts = () => {
     const { error, loading, newsposts } = graphqlService.useAllNewsposts();
     return (
-        <DisplayCard shadow headerContent="News" percentage="10" fontSize={2}>
-            <NewspostsSlides newsposts={newsposts} />
-        </DisplayCard>
+        <div>
+            <DisplayCard
+                shadow
+                headerContent="News"
+                percentage="10"
+                fontSize={2}
+            >
+                <NewspostsSlides newsposts={newsposts} />
+            </DisplayCard>
+        </div>
     );
 };
 
