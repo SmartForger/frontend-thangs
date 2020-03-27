@@ -169,7 +169,7 @@ const useLikeModelMutation = (userId, modelId) => {
                 data: {
                     likeModel: { model },
                 },
-            },
+            }
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
@@ -189,7 +189,7 @@ const useUnlikeModelMutation = (userId, modelId) => {
                 data: {
                     unlikeModel: { model },
                 },
-            },
+            }
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
