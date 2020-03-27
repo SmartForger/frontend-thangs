@@ -10,7 +10,7 @@ describe('The Profile Page', () => {
             },
         });
         cy.visit('/profile/1');
-        cy.contains('Loading');
+        cy.contains('[data-cy=loading-spinner]');
     });
 
     it('displays user details', () => {
