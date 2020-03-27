@@ -112,7 +112,13 @@ const getAttachmentId = R.pathOr(null, ['attachment', 'attachmentId']);
 const getModel = R.pathOr(null, ['model']);
 const getModelsByDate = R.pathOr(null, ['modelsByDate']);
 
-const parseModel = model => {
+const parseModelPayload = data => {
+    const model = getModel(data);
+
+    if (!model) {
+        return null;
+    }
+
     const attachmentId = getAttachmentId(model);
     const url = attachmentId
         ? `http://localhost:5000/get_attachment_full_data?attachmentid=${attachmentId}`
@@ -169,7 +175,7 @@ const useLikeModelMutation = (userId, modelId) => {
                 data: {
                     likeModel: { model },
                 },
-            },
+            }
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
@@ -189,7 +195,7 @@ const useUnlikeModelMutation = (userId, modelId) => {
                 data: {
                     unlikeModel: { model },
                 },
-            },
+            }
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
