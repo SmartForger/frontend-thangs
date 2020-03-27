@@ -162,11 +162,27 @@ const EditableProfile = ({ user }) => {
                         </div>
                         <EditButton onClick={startEditProfile} />
                         <Markdown>{user.profile.description}</Markdown>
+                        <InviteCode code={user.inviteCode} />
                     </>
                 )}
             </UserDetails>
         </>
     );
+};
+
+const InviteCodeBox = styled.div`
+    background-color: ${props => props.theme.white};
+    padding: 4px;
+    border-radius: 4px;
+    text-align: center;
+`;
+
+const InviteCode = ({ code }) => {
+    if (!code) {
+        return null;
+    }
+
+    return <InviteCodeBox>Share your invite code! {code}</InviteCodeBox>;
 };
 
 const StaticProfile = ({ user }) => {
@@ -181,6 +197,7 @@ const StaticProfile = ({ user }) => {
                 </div>
                 <FollowButton />
                 <Markdown>{user.profile.description}</Markdown>
+                <InviteCode code={user.inviteCode} />
             </UserDetails>
         </>
     );
