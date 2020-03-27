@@ -51,11 +51,38 @@ const Models = () => {
         </DisplayCard>
     );
 };
+
+const NewspostsSlides = ({ newsposts }) => {
+    const newspostData = newsposts.map(newspost => {
+        const owner = newspost.owner
+            ? `${newspost.owner.firstName} ${newspost.owner.lastName}`
+            : null;
+
+        return {
+            title: newspost.title,
+            owner,
+            route: `/newspost/${newspost.id}`,
+        };
+    });
+
+    return <Slides data={newspostData} />;
+};
+
+const Newsposts = () => {
+    const { error, loading, newsposts } = graphqlService.useAllNewsposts();
+    return (
+        <DisplayCard shadow headerContent="News" percentage="10" fontSize={2}>
+            <NewspostsSlides newsposts={newsposts} />
+        </DisplayCard>
+    );
+};
+
 const Page = () => {
     return (
         <HomeBodyStyle>
             <CardRow>
                 <Models />
+                <Newsposts />
             </CardRow>
         </HomeBodyStyle>
     );
