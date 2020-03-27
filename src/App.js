@@ -6,7 +6,7 @@ import { Route, Router, Switch } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { ThangsHeader, Footer } from '@components';
 import { Home, Login, Signup, Profile, Model } from '@pages';
-
+import { Page404 } from '@pages/404';
 import { ThangsMain, GlobalStyle } from '@style';
 import { graphqlClient } from '@services';
 import { createBrowserHistory } from 'history';
