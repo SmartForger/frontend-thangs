@@ -2,12 +2,13 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTrail } from 'react-spring';
+import * as R from 'ramda';
 import { ProfileSidebar, ModelDisplay } from '@components';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 import { WithLayout } from '@style';
 import { Spinner } from '@components/Spinner';
-import * as R from 'ramda';
+import { Page404 } from '../404';
 
 const ProfileStyle = styled.div`
     display: grid;
@@ -67,10 +68,18 @@ const Page = () => {
         return <Spinner />;
     }
 
-    if (error || !user) {
+    if (error) {
         return (
             <div data-cy="fetch-profile-error">
                 Error! We were not able to this profile. Please try again later.
+            </div>
+        );
+    }
+
+    if (!user) {
+        return (
+            <div data-cy="fetch-profile-error">
+                <Page404 />
             </div>
         );
     }

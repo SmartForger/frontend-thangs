@@ -5,17 +5,9 @@ import { ApolloLink } from 'apollo-link';
 import { createUploadLink } from 'apollo-upload-client';
 import { createAuthenticatedFetch } from '@services/authenticated-fetch';
 
-import {
-    useUserById,
-    useUpdateUser,
-    useUploadUserAvatarMutation,
-} from './users';
-import {
-    useModelById,
-    useLikeModelMutation,
-    useUnlikeModelMutation,
-} from './models';
-import { useAllModelComments, useCreateModelCommentMutation } from './comments';
+import * as users from './users';
+import * as models from './models';
+import * as comments from './comments';
 import { getGraphQLUrl } from './utils';
 
 export const graphqlClient = (originalFetch, history) =>
@@ -47,14 +39,9 @@ const getInstance = () => {
         return window['graphql-react'];
     }
     return {
-        useUserById,
-        useUpdateUser,
-        useUploadUserAvatarMutation,
-        useModelById,
-        useLikeModelMutation,
-        useUnlikeModelMutation,
-        useAllModelComments,
-        useCreateModelCommentMutation,
+        ...users,
+        ...models,
+        ...comments,
     };
 };
 

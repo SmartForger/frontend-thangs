@@ -5,6 +5,7 @@ import * as GraphqlService from '@services/graphql-service';
 import { ModelPage } from './ModelPage';
 import { WithFullScreenLayout } from '@style';
 import { Spinner } from '@components/Spinner';
+import { Page404 } from '../404';
 
 const Page = () => {
     const { id } = useParams();
@@ -16,7 +17,7 @@ const Page = () => {
     if (loading) {
         return <Spinner />;
     } else if (!model) {
-        return <div>Model does not exist</div>;
+        return <Page404 />;
     } else if (error) {
         return <div>Error loading Model</div>;
     }
