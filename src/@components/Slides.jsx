@@ -60,7 +60,6 @@ const Slide = props => {
 
 const Slides = props => {
     const { data, footerContent, rounded, text, prefix } = props;
-    const slideAmount = props.data.length || 3;
 
     return (
         <SlidesContainerStyle>
