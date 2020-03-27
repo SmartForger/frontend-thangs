@@ -16,11 +16,13 @@ const MODEL_QUERY = gql`
                 }
             }
             owner {
+                id
                 firstName
                 lastName
             }
             attachment {
-                remoteId
+                id
+                attachmentId
             }
         }
     }
@@ -50,11 +52,13 @@ const LIKE_MODEL_MUTATION = gql`
                     }
                 }
                 owner {
+                    id
                     firstName
                     lastName
                 }
                 attachment {
-                    remoteId
+                    id
+                    attachmentId
                 }
             }
             like {
@@ -88,11 +92,13 @@ const UNLIKE_MODEL_MUTATION = gql`
                     }
                 }
                 owner {
+                    id
                     firstName
                     lastName
                 }
                 attachment {
-                    remoteId
+                    id
+                    attachmentId
                 }
             }
             like {
@@ -102,19 +108,14 @@ const UNLIKE_MODEL_MUTATION = gql`
     }
 `;
 
-const getRemoteId = R.pathOr(null, ['attachment', 'remoteId']);
+const getAttachmentId = R.pathOr(null, ['attachment', 'attachmentId']);
 const getModel = R.pathOr(null, ['model']);
+const getModelsByDate = R.pathOr(null, ['modelsByDate']);
 
-const parseModelPayload = data => {
-    const model = getModel(data);
-
-    if (!model) {
-        return null;
-    }
-
-    const remoteId = getRemoteId(model);
-    const url = remoteId
-        ? `http://localhost:5000/get_attachment_full_data?attachmentid=${remoteId}`
+const parseModel = model => {
+    const attachmentId = getAttachmentId(model);
+    const url = attachmentId
+        ? `http://localhost:5000/get_attachment_full_data?attachmentid=${attachmentId}`
         : null;
 
     return {
@@ -139,6 +140,15 @@ const parseModelPayload = data => {
             { name: 'Yormy' },
         ],
     };
+};
+
+const parseModelsByDatePayload = data => {
+    const models = getModelsByDate(data);
+    if (!models) {
+        return null;
+    }
+
+    return models.map(parseModel);
 };
 
 const useModelById = id => {
@@ -190,4 +200,47 @@ const useUnlikeModelMutation = (userId, modelId) => {
     });
 };
 
-export { useModelById, useLikeModelMutation, useUnlikeModelMutation };
+const MODELS_BY_DATE_QUERY = gql`
+    query modelsByDate {
+        modelsByDate {
+            id
+            name
+            owner {
+                id
+                firstName
+                lastName
+                email
+            }
+            attachment {
+                id
+                filetype
+                fileSize
+            }
+        }
+    }
+`;
+
+const parseModelPayload = data => {
+    const model = getModel(data);
+
+    if (!model) {
+        return null;
+    }
+
+    return parseModel(model);
+};
+
+const useModelsByDate = () => {
+    const { error, loading, data } = useQuery(MODELS_BY_DATE_QUERY);
+
+    const models = parseModelsByDatePayload(data);
+
+    return { loading, error, models };
+};
+
+export {
+    useModelById,
+    useLikeModelMutation,
+    useUnlikeModelMutation,
+    useModelsByDate,
+};

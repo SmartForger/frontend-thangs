@@ -6,7 +6,6 @@ const frame = fullScreen => {
         ? css`
               padding-right: 32px;
               padding-left: 32px;
-              height: 100vh;
           `
         : css`
               max-width: ${props => props.theme.pageWidth};
