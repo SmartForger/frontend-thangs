@@ -112,13 +112,7 @@ const getAttachmentId = R.pathOr(null, ['attachment', 'attachmentId']);
 const getModel = R.pathOr(null, ['model']);
 const getModelsByDate = R.pathOr(null, ['modelsByDate']);
 
-const parseModelPayload = data => {
-    const model = getModel(data);
-
-    if (!model) {
-        return null;
-    }
-
+const parseModel = model => {
     const attachmentId = getAttachmentId(model);
     const url = attachmentId
         ? `http://localhost:5000/get_attachment_full_data?attachmentid=${attachmentId}`
