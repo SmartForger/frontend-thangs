@@ -31,24 +31,27 @@ const ModelSlides = ({ models }) => {
     return <Slides data={modelData} />;
 };
 
+const Models = () => {
+    return (
+        <DisplayCard
+            percentage="10"
+            headerContent="New models"
+            fontSize="2"
+            shadow
+        >
+            {error || loading || !models ? (
+                <div>Loading</div>
+            ) : (
+                <ModelSlides models={models} />
+            )}
+        </DisplayCard>
+    );
+};
 const Page = () => {
-    const { error, loading, models } = graphqlService.useModelsByDate();
-
     return (
         <HomeBodyStyle>
             <CardRow>
-                <DisplayCard
-                    percentage="10"
-                    headerContent="New models"
-                    fontSize="2"
-                    shadow
-                >
-                    {error || loading || !models ? (
-                        <div>Loading</div>
-                    ) : (
-                        <ModelSlides models={models} />
-                    )}
-                </DisplayCard>
+                <Models />
             </CardRow>
         </HomeBodyStyle>
     );
