@@ -36,10 +36,6 @@ const UPDATE_USER_MUTATION = gql`
                 field
                 messages
             }
-            models {
-                id
-                name
-            }
         }
     }
 `;
@@ -102,6 +98,7 @@ const useUpdateUser = user => {
                         ...updateUser,
                         email: user.email,
                         username: user.username,
+                        models: user.models,
                     },
                 },
             });
@@ -124,7 +121,7 @@ const useUploadUserAvatarMutation = (user, croppedImg) => {
                 data: {
                     uploadUserProfileAvatar: { user: updatedUser },
                 },
-            },
+            }
         ) => {
             store.writeQuery({
                 query: USER_QUERY,
@@ -134,6 +131,7 @@ const useUploadUserAvatarMutation = (user, croppedImg) => {
                         ...updatedUser,
                         email: user.email,
                         username: user.username,
+                        models: user.models,
                     },
                 },
             });
