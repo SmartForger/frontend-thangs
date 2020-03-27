@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Button, ChangeablePicture, Markdown } from '@components';
 import { ProfilePicture } from '@components/ProfilePicture';
 import * as GraphqlService from '@services/graphql-service';
@@ -162,10 +163,44 @@ const EditableProfile = ({ user }) => {
                         </div>
                         <EditButton onClick={startEditProfile} />
                         <Markdown>{user.profile.description}</Markdown>
+                        <InviteCode code={user.inviteCode} />
                     </>
                 )}
             </UserDetails>
         </>
+    );
+};
+
+const InviteCodeBox = styled.div`
+    background-color: ${props => props.theme.white};
+    padding: 4px;
+    border-radius: 4px;
+    text-align: center;
+`;
+
+const CopyButton = ({ code }) => {
+    const [copied, setCopied] = useState(false);
+
+    if (copied) {
+        return <button disabled>copied</button>;
+    }
+
+    const handleCopy = () => setCopied(true);
+    return (
+        <CopyToClipboard text={code} onCopy={handleCopy}>
+            <button>copy</button>
+        </CopyToClipboard>
+    );
+};
+const InviteCode = ({ code }) => {
+    if (!code) {
+        return null;
+    }
+
+    return (
+        <InviteCodeBox>
+            Share your invite code! {code} <CopyButton code={code} />
+        </InviteCodeBox>
     );
 };
 
@@ -181,6 +216,7 @@ const StaticProfile = ({ user }) => {
                 </div>
                 <FollowButton />
                 <Markdown>{user.profile.description}</Markdown>
+                <InviteCode code={user.inviteCode} />
             </UserDetails>
         </>
     );
