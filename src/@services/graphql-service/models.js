@@ -111,6 +111,7 @@ const UNLIKE_MODEL_MUTATION = gql`
 const getAttachmentId = R.pathOr(null, ['attachment', 'attachmentId']);
 const getModel = R.pathOr(null, ['model']);
 const getModelsByDate = R.pathOr(null, ['modelsByDate']);
+const getSearchModels = R.pathOr(null, ['searchModels']);
 
 const parseModel = model => {
     const attachmentId = getAttachmentId(model);
@@ -238,9 +239,49 @@ const useModelsByDate = () => {
     return { loading, error, models };
 };
 
+const SEARCH_MODELS_QUERY = gql`
+    query searchModels($query: String!) {
+        searchModels(query: $query) {
+            id
+            name
+            owner {
+                id
+                firstName
+                lastName
+            }
+            attachment {
+                id
+                fileSize
+                filetype
+            }
+        }
+    }
+`;
+
+const parseSeachModelsPayload = data => {
+    const models = getSearchModels(data);
+
+    if (!models) {
+        return null;
+    }
+
+    return models.map(parseModel);
+};
+
+const useSearchModels = searchQuery => {
+    const { error, loading, data } = useQuery(SEARCH_MODELS_QUERY, {
+        variables: { query: searchQuery },
+    });
+
+    const models = parseSeachModelsPayload(data);
+
+    return { loading, error, models };
+};
+
 export {
     useModelById,
     useLikeModelMutation,
     useUnlikeModelMutation,
     useModelsByDate,
+    useSearchModels,
 };

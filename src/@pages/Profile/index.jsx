@@ -71,7 +71,8 @@ const Page = () => {
     if (error) {
         return (
             <div data-cy="fetch-profile-error">
-                Error! We were not able to this profile. Please try again later.
+                Error! We were not able to load this profile. Please try again
+                later.
             </div>
         );
     }
@@ -89,8 +90,9 @@ const Page = () => {
     return (
         <ProfileStyle>
             <ProfileSidebar user={user} isCurrentUser={isCurrentUser} />
-            {user.models &&
-                !R.isEmpty(user.models) && <Models models={user.models} />}
+            {user.models && !R.isEmpty(user.models) && (
+                <Models models={user.models} />
+            )}
         </ProfileStyle>
     );
 };
