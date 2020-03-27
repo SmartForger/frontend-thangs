@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { DisplayCard, Slides } from '@components';
+import { Spinner } from '@components/Spinner';
 import { WithLayout } from '@style';
 import * as GraphqlService from '@services/graphql-service';
 
@@ -31,24 +32,72 @@ const ModelSlides = ({ models }) => {
     return <Slides data={modelData} />;
 };
 
-const Page = () => {
+const Models = () => {
     const { error, loading, models } = graphqlService.useModelsByDate();
+    return (
+        <div>
+            <DisplayCard
+                percentage="10"
+                headerContent="New models"
+                fontSize="2"
+                shadow
+            >
+                {loading ? (
+                    <Spinner />
+                ) : error || !models ? (
+                    <div>Error</div>
+                ) : (
+                    <ModelSlides models={models} />
+                )}
+            </DisplayCard>
+        </div>
+    );
+};
 
+const NewspostsSlides = ({ newsposts }) => {
+    const newspostData = newsposts.map(newspost => {
+        const owner = newspost.owner
+            ? `${newspost.owner.firstName} ${newspost.owner.lastName}`
+            : null;
+
+        return {
+            title: newspost.title,
+            owner,
+            route: `/newspost/${newspost.id}`,
+        };
+    });
+
+    return <Slides data={newspostData} />;
+};
+
+const Newsposts = () => {
+    const { error, loading, newsposts } = graphqlService.useAllNewsposts();
+    return (
+        <div>
+            <DisplayCard
+                shadow
+                headerContent="News"
+                percentage="10"
+                fontSize={2}
+            >
+                {loading ? (
+                    <Spinner />
+                ) : error || !newsposts ? (
+                    <div>Error</div>
+                ) : (
+                    <NewspostsSlides newsposts={newsposts} />
+                )}
+            </DisplayCard>
+        </div>
+    );
+};
+
+const Page = () => {
     return (
         <HomeBodyStyle>
             <CardRow>
-                <DisplayCard
-                    percentage="10"
-                    headerContent="New models"
-                    fontSize="2"
-                    shadow
-                >
-                    {error || loading || !models ? (
-                        <div>Loading</div>
-                    ) : (
-                        <ModelSlides models={models} />
-                    )}
-                </DisplayCard>
+                <Models />
+                <Newsposts />
             </CardRow>
         </HomeBodyStyle>
     );

@@ -3,48 +3,39 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const SlidesContainerStyle = styled.div`
-    width: 100%;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+    padding: 12px;
 `;
 
 const LinkBox = styled(Link)`
     width: 100%;
-    display: grid;
     text-decoration: none;
     color: inherit;
-    grid-template-columns: ${props => (props.text ? '15% 85%' : '40% 60%')};
-    grid-template-rows: 50% 50%;
-    grid-template-areas:
-        'icon title'
-        'icon owner';
     margin-bottom: 12px;
+    display: flex;
 `;
 
 const SlideIconStyle = styled.img`
     border-radius: ${props => (props.rounded ? 50 : 0)}%;
     box-shadow: inset 0 0 0 2px
         ${props => (props.rounded ? props.theme.darkgrey : 'black')};
-    grid-area: icon;
-    justify-self: center;
-    align-self: center;
     width: 75px;
     height: 75px;
+    margin-right: 12px;
 `;
 
 const SlideTitleStyle = styled.div`
     font-weight: 600;
     font-size: 1.5rem;
-    grid-area: title;
     align-self: end;
 `;
 
 const SlideownerStyle = styled.div`
     font-weight: 100;
     font-size: 0.75rem;
-    grid-area: owner;
 `;
 
 const SlidesFooterStyle = styled.div``;
@@ -57,10 +48,12 @@ const Slide = props => {
             {text ? null : (
                 <SlideIconStyle src={icon} rounded={rounded} alt="" />
             )}
-            <SlideTitleStyle>{title}</SlideTitleStyle>
-            <SlideownerStyle>
-                {prefix} <span style={{ fontWeight: '900' }}>{owner}</span>
-            </SlideownerStyle>
+            <div>
+                <SlideTitleStyle>{title}</SlideTitleStyle>
+                <SlideownerStyle>
+                    {prefix} <span style={{ fontWeight: '900' }}>{owner}</span>
+                </SlideownerStyle>
+            </div>
         </LinkBox>
     );
 };
