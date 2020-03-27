@@ -4,6 +4,7 @@ import { useLocalStorage } from '@customHooks/Storage';
 import * as GraphqlService from '@services/graphql-service';
 import { ModelPage } from './ModelPage';
 import { WithFullScreenLayout } from '@style';
+import { Page404 } from '../404';
 
 const Page = () => {
     const { id } = useParams();
@@ -15,7 +16,7 @@ const Page = () => {
     if (loading) {
         return <div>Loading</div>;
     } else if (!model) {
-        return <div>Model does not exist</div>;
+        return <Page404 />;
     } else if (error) {
         return <div>Error loading Model</div>;
     }

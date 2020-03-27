@@ -1,11 +1,12 @@
 import React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
 
-import { Route, Router } from 'react-router-dom';
+import { Route, Router, Switch } from 'react-router-dom';
 
 import { ThemeProvider } from 'styled-components';
 import { ThangsHeader, Footer } from '@components';
 import { Home, Login, Signup, Profile, Model } from '@pages';
+
 import { ThangsMain, GlobalStyle } from '@style';
 import { graphqlClient } from '@services';
 import { createBrowserHistory } from 'history';
@@ -31,12 +32,18 @@ const App = () => {
                 <ThemeProvider theme={ThangsMain}>
                     <GlobalStyle />
                     <ThangsHeader />
-                    <Route exact path="/" component={Home} />
-                    <Route path="/login" component={Login} />
-                    <Route path="/signup" component={Signup} exact />
-                    <Route path="/signup/:registration" component={Signup} />
-                    <Route path="/profile/:id" component={Profile} />
-                    <Route path="/model/:id" component={Model} />
+                    <Switch>
+                        <Route exact path="/" component={Home} />
+                        <Route path="/login" component={Login} />
+                        <Route path="/signup" component={Signup} exact />
+                        <Route
+                            path="/signup/:registration"
+                            component={Signup}
+                        />
+                        <Route path="/profile/:id" component={Profile} />
+                        <Route path="/model/:id" component={Model} />
+                        <Route path="*" component={Page404} status={404} />
+                    </Switch>
                     <Footer />
                 </ThemeProvider>
             </Router>
