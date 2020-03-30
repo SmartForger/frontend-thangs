@@ -22,4 +22,9 @@ const getGraphQLUrl = () => {
     return withEndSlash(graphqlUrl);
 };
 
-export { media, getGraphQLUrl };
+const getFileDataUrl = () => {
+    const url = `${process.env.REACT_APP_API_KEY}/model-data`;
+    return withEndSlash(url);
+};
+
+export { media, getGraphQLUrl, getFileDataUrl };

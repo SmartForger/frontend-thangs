@@ -1,6 +1,7 @@
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import * as R from 'ramda';
+import { getFileDataUrl } from './utils';
 
 const MODEL_QUERY = gql`
     query getModel($id: ID) {
@@ -116,7 +117,7 @@ const getSearchModels = R.pathOr(null, ['searchModels']);
 const parseModel = model => {
     const attachmentId = getAttachmentId(model);
     const url = attachmentId
-        ? `http://localhost:5000/get_attachment_full_data?attachmentid=${attachmentId}`
+        ? `${getFileDataUrl()}?attachment_id=${attachmentId}`
         : null;
 
     return {
@@ -170,7 +171,7 @@ const useLikeModelMutation = (userId, modelId) => {
                 data: {
                     likeModel: { model },
                 },
-            }
+            },
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
@@ -190,7 +191,7 @@ const useUnlikeModelMutation = (userId, modelId) => {
                 data: {
                     unlikeModel: { model },
                 },
-            }
+            },
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
