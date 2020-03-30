@@ -4,7 +4,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { Route, Router, Switch } from 'react-router-dom';
 
 import { ThemeProvider } from 'styled-components';
-import { ThangsHeader, Footer } from '@components';
+import { Footer } from '@components';
 import { Home, Login, Signup, Profile, Model } from '@pages';
 import { Newspost } from '@pages/Newspost';
 import { Page404 } from '@pages/404';
@@ -33,7 +33,6 @@ const App = () => {
             <Router history={history}>
                 <ThemeProvider theme={ThangsMain}>
                     <GlobalStyle />
-                    <ThangsHeader />
                     <Switch>
                         <Route exact path="/" component={Home} />
                         <Route path="/login" component={Login} />

@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import React from 'react';
+import { ThangsHeader } from '@components/ThangsHeader';
 
 const frame = fullScreen => {
     return fullScreen
@@ -24,21 +25,27 @@ const Content = styled.div`
 
 const WithLayout = Component => props => {
     return (
-        <Layout>
-            <Content>
-                <Component {...props} />
-            </Content>
-        </Layout>
+        <>
+            <ThangsHeader />
+            <Layout>
+                <Content>
+                    <Component {...props} />
+                </Content>
+            </Layout>
+        </>
     );
 };
 
 const WithFullScreenLayout = Component => props => {
     return (
-        <Layout fullScreen>
-            <Content>
-                <Component {...props} />
-            </Content>
-        </Layout>
+        <>
+            <ThangsHeader />
+            <Layout fullScreen>
+                <Content>
+                    <Component {...props} />
+                </Content>
+            </Layout>
+        </>
     );
 };
 export { WithLayout, WithFullScreenLayout };
