@@ -42,12 +42,18 @@ const WithLayout = Component => props => {
     );
 };
 
+const NewContent = styled.div`
+    margin-top: 170px;
+`;
+
 const WithNewThemeLayout = Component => props => {
     return (
         <ThemeProvider theme={NewTheme}>
             <NewGlobalStyle />
             <Header />
-            <Component {...props} />
+            <NewContent>
+                <Component {...props} />
+            </NewContent>
         </ThemeProvider>
     );
 };

@@ -10,9 +10,16 @@ const LogoPlaceholder = styled.div`
     margin-right: 12px;
 `;
 
+const FixedHeader = styled.div`
+    width: 100%;
+    position: fixed;
+    background: ${props => props.theme.backgroundColor};
+    top: 0;
+`;
+
 const Boundary = styled.div`
-    max-width: 1237px;
     margin: 50px auto 0;
+    max-width: 1237px;
 `;
 
 const Row = styled.div`
@@ -96,24 +103,26 @@ const Search = styled.input`
 
 const Header = () => {
     return (
-        <Boundary>
-            <Row>
-                <div>
-                    <Row>
-                        <LogoPlaceholder />
-                        <Name>THANGS</Name>
-                    </Row>
-                </div>
-                <div>
-                    <SignIn to="/login">Sign in</SignIn>
-                    <SignUp />
-                </div>
-            </Row>
-            <Row>
-                <MatchingButton disabled>Search by Model</MatchingButton>
-                <Search placeholder="Keyword Search" />
-            </Row>
-        </Boundary>
+        <FixedHeader>
+            <Boundary>
+                <Row>
+                    <div>
+                        <Row>
+                            <LogoPlaceholder />
+                            <Name>THANGS</Name>
+                        </Row>
+                    </div>
+                    <div>
+                        <SignIn to="/login">Sign in</SignIn>
+                        <SignUp />
+                    </div>
+                </Row>
+                <Row>
+                    <MatchingButton disabled>Search by Model</MatchingButton>
+                    <Search placeholder="Keyword Search" />
+                </Row>
+            </Boundary>
+        </FixedHeader>
     );
 };
 
