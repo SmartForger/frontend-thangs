@@ -33,7 +33,7 @@ const SearchBar = props => {
     const params = useParams();
     const initialSearchQuery = params.searchQuery;
     const { searchQuery, setSearchQuery, executeSearch } = useSearch(
-        initialSearchQuery
+        initialSearchQuery,
     );
 
     const handleChange = e => {
@@ -57,4 +57,54 @@ const SearchBar = props => {
     );
 };
 
-export { SearchBar };
+const SearchFormNew = styled.form`
+    flex-grow: 1;
+    background-color: ${props => props.theme.searchBackground};
+    border-radius: 8px;
+    margin-left: 12px;
+`;
+
+const SearchStyleNew = styled.input`
+    color: ${props => props.theme.searchColor};
+    border: none;
+    padding: 9px 16px;
+    background: none
+    width: 100%;
+    font-family: ${props => props.theme.buttonFont};
+    font-weight: bold;
+    font-size: 14px;
+
+    ::placeholder {
+        color: ${props => props.theme.searchColor};
+    }
+`;
+
+const SearchBarNew = props => {
+    const params = useParams();
+    const initialSearchQuery = params.searchQuery;
+    const { searchQuery, setSearchQuery, executeSearch } = useSearch(
+        initialSearchQuery,
+    );
+
+    const handleChange = e => {
+        e.persist();
+        setSearchQuery(e.target.value);
+    };
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        executeSearch();
+    };
+
+    return (
+        <SearchFormNew onSubmit={handleSubmit}>
+            <SearchStyleNew
+                placeholder="Input search term"
+                value={searchQuery}
+                onChange={handleChange}
+            />
+        </SearchFormNew>
+    );
+};
+
+export { SearchBar, SearchBarNew };

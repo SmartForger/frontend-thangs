@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { SearchBarNew } from '@components/SearchBar';
 
 const LogoPlaceholder = styled.div`
     height: 23px;
@@ -87,20 +88,6 @@ const MatchingButton = styled.button`
     ${props => props.theme.shadow};
 `;
 
-const Search = styled.input`
-    flex-grow: 1;
-    background-color: ${props => props.theme.searchBackground};
-    color: ${props => props.theme.searchColor};
-    border: none;
-    height: 100%;
-    padding: 9px 16px;
-    border-radius: 8px;
-    margin-left: 12px;
-    font-family: ${props => props.theme.buttonFont};
-    font-weight: bold;
-    font-size: 14px;
-`;
-
 const Header = () => {
     return (
         <FixedHeader>
@@ -119,7 +106,7 @@ const Header = () => {
                 </Row>
                 <Row>
                     <MatchingButton disabled>Search by Model</MatchingButton>
-                    <Search placeholder="Keyword Search" />
+                    <SearchBarNew />
                 </Row>
             </Boundary>
         </FixedHeader>
