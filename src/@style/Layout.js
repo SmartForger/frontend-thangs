@@ -21,6 +21,11 @@ const Layout = styled.div`
     margin: ${props => props.theme.headerHeight} auto 0;
 `;
 
+const NewLayout = styled.div`
+    margin: auto;
+    max-width: 1237px;
+`;
+
 const Content = styled.div`
     width: 100%;
     padding-top: 15px;
@@ -44,7 +49,9 @@ const WithLayout = Component => props => {
 const WithNewThemeLayout = Component => props => {
     return (
         <ThemeProvider theme={NewTheme}>
-            <Component {...props} />
+            <NewLayout>
+                <Component {...props} />
+            </NewLayout>
         </ThemeProvider>
     );
 };
