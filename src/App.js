@@ -3,7 +3,6 @@ import { ApolloProvider } from '@apollo/react-hooks';
 
 import { Route, Router, Switch } from 'react-router-dom';
 
-import { Footer } from '@components';
 import { Home, Login, Signup, Profile, Model } from '@pages';
 import { Newspost } from '@pages/Newspost';
 import { Page404 } from '@pages/404';
@@ -43,7 +42,6 @@ const App = () => {
                     />
                     <Route path="*" component={Page404} status={404} />
                 </Switch>
-                <Footer />
             </Router>
         </ApolloProvider>
     );

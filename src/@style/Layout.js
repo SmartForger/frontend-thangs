@@ -3,6 +3,7 @@ import React from 'react';
 import { ThangsHeader } from '@components/ThangsHeader';
 import { ThangsMain, NewTheme } from '@style/ThangsNormal.theme.js';
 import { GlobalStyle } from '@style/Thangs.GlobalStyle';
+import { Footer } from '@components/Footer';
 
 const frame = fullScreen => {
     return fullScreen
@@ -35,6 +36,7 @@ const WithLayout = Component => props => {
                     <Component {...props} />
                 </Content>
             </Layout>
+            <Footer />
         </ThemeProvider>
     );
 };
@@ -57,6 +59,7 @@ const WithFullScreenLayout = Component => props => {
                     <Component {...props} />
                 </Content>
             </Layout>
+            <Footer />
         </ThemeProvider>
     );
 };
