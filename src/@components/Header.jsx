@@ -23,6 +23,8 @@ const Row = styled.div`
 
 const Name = styled.div`
     color: ${props => props.theme.logoText};
+    font-family: ${props => props.theme.mainFont};
+    font-size: 20px;
 `;
 
 const SignIn = styled(Link)`
