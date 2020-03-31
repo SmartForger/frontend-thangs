@@ -51,7 +51,7 @@ const TextBox = styled.div`
 
 const SignUp = () => {
     return (
-        <Link>
+        <Link to="/signup">
             <Button>
                 <TextBox>Sign up</TextBox>
             </Button>
@@ -70,7 +70,7 @@ const Header = () => {
                     </Row>
                 </div>
                 <div>
-                    <SignIn>Sign in</SignIn>
+                    <SignIn to="/login">Sign in</SignIn>
                     <SignUp />
                 </div>
             </Row>
