@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 
