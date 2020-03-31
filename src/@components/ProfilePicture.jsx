@@ -8,7 +8,7 @@ const ProfilePicture = props => {
     const user = props.user;
     const size = props.size || DEFAULT_AVATAR_SIZE;
     const color = props.color || DEFAULT_AVATAR_COLOR;
-    const avatarName = getUserFullName(user);
+    const avatarName = user.fullName;
     return (
         <Avatar
             name={avatarName}
@@ -21,16 +21,3 @@ const ProfilePicture = props => {
 };
 
 export { ProfilePicture };
-
-function getUserFullName(user) {
-    const { firstName, lastName, username } = user;
-    if (firstName && lastName) {
-        return `${firstName} ${lastName}`;
-    } else if (firstName) {
-        return firstName;
-    } else if (lastName) {
-        return lastName;
-    } else {
-        return username;
-    }
-}

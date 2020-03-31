@@ -10,6 +10,7 @@ const USER_QUERY = gql`
             email
             firstName
             lastName
+            fullName
             profile {
                 description
                 avatarUrl
@@ -29,6 +30,7 @@ const UPDATE_USER_MUTATION = gql`
             id
             firstName
             lastName
+            fullName
             profile {
                 description
                 avatarUrl
@@ -48,6 +50,7 @@ const UPLOAD_USER_PROFILE_AVATAR_MUTATION = gql`
                 id
                 firstName
                 lastName
+                fullName
                 profile {
                     description
                     avatarUrl
