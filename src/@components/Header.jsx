@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { SearchBarNew } from '@components/SearchBar';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { useCurrentUser } from '@customHooks/Users';
+import { NotificationIcon } from '@svg/NotificationIcon';
 
 const LogoPlaceholder = styled.div`
     height: 23px;
@@ -90,14 +91,18 @@ const MatchingButton = styled.button`
     ${props => props.theme.shadow};
 `;
 
+const NotificationIconStyled = styled(NotificationIcon)`
+    margin: 0 32px;
+`;
 const UserNav = () => {
     const { user } = useCurrentUser();
 
     if (user) {
         return (
-            <div>
+            <Row>
                 <ProfilePicture user={user} size="50px" />
-            </div>
+                <NotificationIconStyled />
+            </Row>
         );
     }
 
