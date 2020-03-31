@@ -65,12 +65,3 @@ export const NewTheme = {
     backgroundColor: GREY_8,
     shadow,
 };
-
-/** Styled for normal Pages
- *
-  width: ${props => props.theme.pageWidth};
-  height: ${props => props.theme.pageHeight};
-  top: ${props => props.theme.pageTop};
-  left: ${props => props.theme.pageLeft};
-  margin-left: ${props => props.theme.pageMarginLeft};
- */
