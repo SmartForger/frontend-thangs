@@ -74,13 +74,14 @@ const ActivityCount = styled.span`
 `;
 
 function ModelCard(props) {
+    const className = props.className || '';
     const model = props.model;
     const showOwner =
         props.withOwner !== undefined && model.owner !== undefined
             ? true
             : false;
     return (
-        <CardContainer>
+        <CardContainer className={className}>
             <ModelThumbnail model={model} />
             <ModelName>{model.name}</ModelName>
             {showOwner && <InlineUser user={model.owner} />}

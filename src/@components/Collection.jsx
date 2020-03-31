@@ -7,6 +7,11 @@ const ModelsStyled = styled.div`
     flex-flow: row wrap;
     justify-content: start;
     overflow-y: scroll;
+    margin: -8px;
+`;
+
+const ModelCardStyled = styled(ModelCard)`
+    margin: 8px;
 `;
 
 export function Collection(props) {
@@ -14,7 +19,7 @@ export function Collection(props) {
     return (
         <ModelsStyled>
             {models.map((model, index) => (
-                <ModelCard key={index} model={model} />
+                <ModelCardStyled key={index} model={model} />
             ))}
         </ModelsStyled>
     );
