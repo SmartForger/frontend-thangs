@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { SearchBarNew } from '@components/SearchBar';
+import { useCurrentUser } from '@customHooks/Users';
 
 const LogoPlaceholder = styled.div`
     height: 23px;
@@ -88,6 +89,21 @@ const MatchingButton = styled.button`
     ${props => props.theme.shadow};
 `;
 
+const UserNav = () => {
+    const { user } = useCurrentUser();
+
+    if (user) {
+        return <div>LoggedIn</div>;
+    }
+
+    return (
+        <div>
+            <SignIn to="/login">Sign in</SignIn>
+            <SignUp />
+        </div>
+    );
+};
+
 const Header = () => {
     return (
         <FixedHeader>
@@ -99,10 +115,7 @@ const Header = () => {
                             <Name>THANGS</Name>
                         </Row>
                     </div>
-                    <div>
-                        <SignIn to="/login">Sign in</SignIn>
-                        <SignUp />
-                    </div>
+                    <UserNav />
                 </Row>
                 <Row>
                     <MatchingButton disabled>Search by Model</MatchingButton>
