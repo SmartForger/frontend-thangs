@@ -43,7 +43,7 @@ const WithLayout = Component => props => {
 };
 
 const NewContent = styled.div`
-    margin-top: 170px;
+    margin-top: 180px;
 `;
 
 const WithNewThemeLayout = Component => props => {
