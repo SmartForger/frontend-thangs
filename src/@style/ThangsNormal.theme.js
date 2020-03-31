@@ -46,6 +46,8 @@ const WHITE_2 = '#efecec';
 const fontMedium = 'helvetica';
 const fontMain = 'helvetica';
 
+const shadow = 'box-shadow: 0px 5px 10px 0px rgba(35, 37, 48, 0.25)';
+
 export const NewTheme = {
     logoText: BLACK_4,
     linkText: BLUE_2,
@@ -61,6 +63,7 @@ export const NewTheme = {
     buttonFont: fontMedium,
     mainFont: fontMain,
     backgroundColor: GREY_8,
+    shadow,
 };
 
 /** Styled for normal Pages

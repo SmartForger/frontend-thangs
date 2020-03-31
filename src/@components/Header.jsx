@@ -49,6 +49,8 @@ const Button = styled.button`
     border-radius: 8px;
     font-family: ${props => props.theme.buttonFont};
     font-weight: bold;
+
+    ${props => props.theme.shadow};
 `;
 
 const TextBox = styled.div`
@@ -74,6 +76,8 @@ const MatchingButton = styled.button`
     font-weight: bold;
     font-size: 14px;
     padding: 9px 24px;
+
+    ${props => props.theme.shadow};
 `;
 
 const Search = styled.input`
