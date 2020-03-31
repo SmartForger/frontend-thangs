@@ -4,10 +4,12 @@ import { Link } from 'react-router-dom';
 import { SearchBarNew } from '@components/SearchBar';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { useCurrentUser } from '@customHooks/Users';
-import { NotificationIcon } from '@svg/NotificationIcon';
+import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
 
 const NOTIFICATIONS_ENABLED = true;
 const NOTIFICATIONS_URL = '#';
+const UPLOAD_ENABLED = true;
+const UPLOAD_URL = '#';
 
 const LogoPlaceholder = styled.div`
     height: 23px;
@@ -99,14 +101,31 @@ const NotificationIconStyled = styled(NotificationIcon)`
 `;
 
 const NotificationsButton = () => {
-    if (NOTIFICATIONS_ENABLED) {
-        return (
-            <Link to={NOTIFICATIONS_URL}>
-                <NotificationIconStyled />
-            </Link>
-        );
+    if (!NOTIFICATIONS_ENABLED) {
+        return null;
     }
-    return null;
+    return (
+        <Link to={NOTIFICATIONS_URL}>
+            <NotificationIconStyled />
+        </Link>
+    );
+};
+
+const UploadText = styled.div`
+    width: 124px;
+`;
+
+const UploadButton = () => {
+    if (!UPLOAD_ENABLED) {
+        return null;
+    }
+    return (
+        <Link to={UPLOAD_URL}>
+            <Button>
+                <UploadText>Upload Model</UploadText>
+            </Button>
+        </Link>
+    );
 };
 
 const UserNav = () => {
@@ -117,6 +136,7 @@ const UserNav = () => {
             <Row>
                 <ProfilePicture user={user} size="50px" />
                 <NotificationsButton />
+                <UploadButton />
             </Row>
         );
     }
