@@ -20,4 +20,15 @@ const GlobalStyle = createGlobalStyle`
   ${enablePlaceholderForContentEditable}
 `;
 
-export { GlobalStyle };
+const NewGlobalStyle = createGlobalStyle`
+  body {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    background: ${props => props.theme.backgroundColor};
+  }
+
+  ${enablePlaceholderForContentEditable}
+`;
+
+export { GlobalStyle, NewGlobalStyle };

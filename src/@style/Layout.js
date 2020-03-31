@@ -2,7 +2,7 @@ import styled, { css, ThemeProvider } from 'styled-components';
 import React from 'react';
 import { ThangsHeader } from '@components/ThangsHeader';
 import { ThangsMain, NewTheme } from '@style/ThangsNormal.theme.js';
-import { GlobalStyle } from '@style/Thangs.GlobalStyle';
+import { GlobalStyle, NewGlobalStyle } from '@style/Thangs.GlobalStyle';
 import { Footer } from '@components/Footer';
 import { Header } from '@components/Header';
 
@@ -45,6 +45,7 @@ const WithLayout = Component => props => {
 const WithNewThemeLayout = Component => props => {
     return (
         <ThemeProvider theme={NewTheme}>
+            <NewGlobalStyle />
             <Header />
             <Component {...props} />
         </ThemeProvider>
