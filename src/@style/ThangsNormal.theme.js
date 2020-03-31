@@ -35,6 +35,15 @@ const BLUE_2 = '#1b8cf8';
 const BROWN = '#8b6400';
 const WHITE_1 = '#efecec';
 
+/*
+ * These will be the fonts we actually want to use, but we need to get them from
+ * our designer before we can use them.
+ */
+// const fontMedium = 'Montserrat-Medium';
+// const fontMain = 'Montserrat-regular;';
+const fontMedium = 'helvetica';
+const fontMain = 'helvetica';
+
 export const NewTheme = {
     logoText: BLACK_4,
     linkText: BLUE_2,
@@ -46,6 +55,8 @@ export const NewTheme = {
     searchText: GREY_4,
     textOnBrandColor: BROWN,
     emptyImageBackground: GREY_7,
+    buttonFont: fontMedium,
+    mainFont: fontMain,
 };
 
 /** Styled for normal Pages

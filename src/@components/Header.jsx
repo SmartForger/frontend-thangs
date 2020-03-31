@@ -29,6 +29,9 @@ const SignIn = styled(Link)`
     color: ${props => props.theme.linkText};
     text-decoration: none;
     font-size: 14px;
+    margin-right: 30px;
+    font-family: ${props => props.theme.buttonFont};
+    font-weight: bold;
 `;
 
 const Button = styled.button`
@@ -38,6 +41,8 @@ const Button = styled.button`
     padding: 9px 12px;
     border: none;
     border-radius: 8px;
+    font-family: ${props => props.theme.buttonFont};
+    font-weight: bold;
 `;
 
 const TextBox = styled.div`
