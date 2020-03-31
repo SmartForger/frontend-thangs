@@ -4,6 +4,7 @@ import { ThangsHeader } from '@components/ThangsHeader';
 import { ThangsMain, NewTheme } from '@style/ThangsNormal.theme.js';
 import { GlobalStyle } from '@style/Thangs.GlobalStyle';
 import { Footer } from '@components/Footer';
+import { Header } from '@components/Header';
 
 const frame = fullScreen => {
     return fullScreen
@@ -44,6 +45,7 @@ const WithLayout = Component => props => {
 const WithNewThemeLayout = Component => props => {
     return (
         <ThemeProvider theme={NewTheme}>
+            <Header />
             <Component {...props} />
         </ThemeProvider>
     );

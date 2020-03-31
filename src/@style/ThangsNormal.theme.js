@@ -33,13 +33,16 @@ const BLUE_2 = '#1b8cf8';
 // const BLUE_3 = '#014d7c';
 // const BLUE_4 = '#013047';
 const BROWN = '#8b6400';
+const WHITE_1 = '#efecec';
 
 export const NewTheme = {
     logoText: BLACK_4,
+    linkText: BLUE_2,
     brandColor: YELLOW_1,
     searchIcon: GREY_5,
     deleteButton: GREY_7,
     primaryButton: BLUE_2,
+    primaryButtonText: WHITE_1,
     searchText: GREY_4,
     textOnBrandColor: BROWN,
     emptyImageBackground: GREY_7,
