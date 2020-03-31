@@ -150,7 +150,7 @@ const EditableProfile = ({ user }) => {
     const endEditProfile = () => setIsEditing(false);
     return (
         <>
-            <ChangeablePicture user={user} src={user.profile.avatar} />
+            <ChangeablePicture user={user} />
             <UserDetails>
                 <div>{user.username}</div>
                 <div>{user.email}</div>
@@ -207,7 +207,7 @@ const InviteCode = ({ code }) => {
 const StaticProfile = ({ user }) => {
     return (
         <>
-            <ProfilePicture src={user.profile.avatar} />
+            <ProfilePicture user={user} />
             <UserDetails>
                 <div>{user.username}</div>
                 <div>{user.email}</div>

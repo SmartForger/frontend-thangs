@@ -57,7 +57,7 @@ const ButtonContainer = styled.div`
 
 const initialCrop = { unit: '%', width: 30, aspect: 1 / 1 };
 
-const ChangeablePicture = ({ user, src }) => {
+const ChangeablePicture = ({ user }) => {
     const [cropSrc, setCropSrc] = useState(null);
     const [crop, setCrop] = useState();
     const [croppedImg, setCroppedImg] = useState(null);
@@ -66,7 +66,7 @@ const ChangeablePicture = ({ user, src }) => {
     const imageEl = useRef(null);
     const [uploadAvatar] = graphqlService.useUploadUserAvatarMutation(
         user,
-        croppedImg,
+        croppedImg
     );
 
     const submitCrop = () => {
@@ -102,7 +102,7 @@ const ChangeablePicture = ({ user, src }) => {
             const croppedImg = await getCroppedImage(
                 img,
                 crop,
-                md5(imageEl.current.files[0].name),
+                md5(imageEl.current.files[0].name)
             );
             setCroppedImg(croppedImg);
         }
@@ -125,7 +125,7 @@ const ChangeablePicture = ({ user, src }) => {
             0,
             0,
             crop.width,
-            crop.height,
+            crop.height
         );
 
         return new Promise((resolve, reject) => {
@@ -143,7 +143,7 @@ const ChangeablePicture = ({ user, src }) => {
     return (
         <form>
             <label htmlFor="avatar">
-                <ClickablePicture src={src} />
+                <ClickablePicture user={user} />
             </label>
             <HiddenInput
                 type="file"
