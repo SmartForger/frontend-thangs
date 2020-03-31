@@ -1,7 +1,7 @@
 import styled, { css, ThemeProvider } from 'styled-components';
 import React from 'react';
 import { ThangsHeader } from '@components/ThangsHeader';
-import { ThangsMain } from '@style/ThangsNormal.theme.js';
+import { ThangsMain, NewTheme } from '@style/ThangsNormal.theme.js';
 import { GlobalStyle } from '@style/Thangs.GlobalStyle';
 
 const frame = fullScreen => {
@@ -39,6 +39,14 @@ const WithLayout = Component => props => {
     );
 };
 
+const WithNewThemeLayout = Component => props => {
+    return (
+        <ThemeProvider theme={NewTheme}>
+            <Component {...props} />
+        </ThemeProvider>
+    );
+};
+
 const WithFullScreenLayout = Component => props => {
     return (
         <ThemeProvider theme={ThangsMain}>
@@ -52,4 +60,4 @@ const WithFullScreenLayout = Component => props => {
         </ThemeProvider>
     );
 };
-export { WithLayout, WithFullScreenLayout };
+export { WithLayout, WithFullScreenLayout, WithNewThemeLayout };
