@@ -11,7 +11,7 @@ const ALL_MODEL_COMMENTS_QUERY = gql`
                 firstName
                 lastName
                 profile {
-                    avatar
+                    avatarUrl
                 }
             }
             body
@@ -68,7 +68,7 @@ const useCreateModelCommentMutation = ({ ownerId, body, modelId }) => {
                 data: {
                     createModelComment: { comment },
                 },
-            },
+            }
         ) => {
             const { allModelComments } = store.readQuery({
                 query: ALL_MODEL_COMMENTS_QUERY,

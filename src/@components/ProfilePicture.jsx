@@ -12,7 +12,7 @@ const ProfilePicture = props => {
     return (
         <Avatar
             name={avatarName}
-            src={user.profile.avatar}
+            src={user.profile.avatarUrl}
             color={color}
             size={size}
             round={true}

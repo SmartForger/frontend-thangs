@@ -38,7 +38,7 @@ const LIKE_MODEL_MUTATION = gql`
                 lastName
                 profile {
                     description
-                    avatar
+                    avatarUrl
                 }
             }
             model {
@@ -78,7 +78,7 @@ const UNLIKE_MODEL_MUTATION = gql`
                 lastName
                 profile {
                     description
-                    avatar
+                    avatarUrl
                 }
             }
             model {
@@ -171,7 +171,7 @@ const useLikeModelMutation = (userId, modelId) => {
                 data: {
                     likeModel: { model },
                 },
-            },
+            }
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
@@ -191,7 +191,7 @@ const useUnlikeModelMutation = (userId, modelId) => {
                 data: {
                     unlikeModel: { model },
                 },
-            },
+            }
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
