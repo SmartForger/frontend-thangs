@@ -19,6 +19,10 @@ const Row = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    :not(:last-of-type) {
+        margin-bottom: 45px;
+    }
 `;
 
 const Name = styled.div`
@@ -61,6 +65,31 @@ const SignUp = () => {
     );
 };
 
+const MatchingButton = styled.button`
+    background-color: ${props => props.theme.brandColor};
+    color: ${props => props.theme.textOnBrandColor};
+    border: none;
+    border-radius: 8px;
+    font-family: ${props => props.theme.buttonFont};
+    font-weight: bold;
+    font-size: 14px;
+    padding: 9px 24px;
+`;
+
+const Search = styled.input`
+    flex-grow: 1;
+    background-color: ${props => props.theme.searchBackground};
+    color: ${props => props.theme.searchColor};
+    border: none;
+    height: 100%;
+    padding: 9px 16px;
+    border-radius: 8px;
+    margin-left: 12px;
+    font-family: ${props => props.theme.buttonFont};
+    font-weight: bold;
+    font-size: 14px;
+`;
+
 const Header = () => {
     return (
         <Boundary>
@@ -75,6 +104,10 @@ const Header = () => {
                     <SignIn to="/login">Sign in</SignIn>
                     <SignUp />
                 </div>
+            </Row>
+            <Row>
+                <MatchingButton disabled>Search by Model</MatchingButton>
+                <Search placeholder="Keyword Search" />
             </Row>
         </Boundary>
     );

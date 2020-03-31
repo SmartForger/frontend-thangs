@@ -33,7 +33,8 @@ const BLUE_2 = '#1b8cf8';
 // const BLUE_3 = '#014d7c';
 // const BLUE_4 = '#013047';
 const BROWN = '#8b6400';
-const WHITE_1 = '#efecec';
+const WHITE_1 = '#ffffff';
+const WHITE_2 = '#efecec';
 
 /*
  * These will be the fonts we actually want to use, but we need to get them from
@@ -51,8 +52,9 @@ export const NewTheme = {
     searchIcon: GREY_5,
     deleteButton: GREY_7,
     primaryButton: BLUE_2,
-    primaryButtonText: WHITE_1,
+    primaryButtonText: WHITE_2,
     searchText: GREY_4,
+    searchBackground: WHITE_1,
     textOnBrandColor: BROWN,
     emptyImageBackground: GREY_7,
     buttonFont: fontMedium,
