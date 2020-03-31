@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory, useParams } from 'react-router-dom';
+import { ReactComponent as SearchIcon } from '@svg/search-icon.svg';
 
 const SearchForm = styled.form`
     width: 50%;
@@ -62,21 +63,28 @@ const SearchFormNew = styled.form`
     background-color: ${props => props.theme.searchBackground};
     border-radius: 8px;
     margin-left: 12px;
+    position: relative;
 `;
 
 const SearchStyleNew = styled.input`
-    color: ${props => props.theme.searchColor};
+    color: ${props => props.theme.searchColorIconColor};
     border: none;
-    padding: 9px 16px;
-    background: none
+    padding: 9px 0 9px 56px;
+    background: none;
     width: 100%;
     font-family: ${props => props.theme.buttonFont};
-    font-weight: bold;
     font-size: 14px;
 
     ::placeholder {
         color: ${props => props.theme.searchColor};
     }
+`;
+
+const SearchIconStyled = styled(SearchIcon)`
+    position: absolute;
+    top: 50%;
+    left: 17px;
+    transform: translateY(-50%);
 `;
 
 const SearchBarNew = props => {
@@ -98,6 +106,7 @@ const SearchBarNew = props => {
 
     return (
         <SearchFormNew onSubmit={handleSubmit}>
+            <SearchIconStyled />
             <SearchStyleNew
                 placeholder="Input search term"
                 value={searchQuery}

@@ -52,7 +52,7 @@ export const NewTheme = {
     logoText: BLACK_4,
     linkText: BLUE_2,
     brandColor: YELLOW_1,
-    searchIcon: GREY_5,
+    searchIconColor: GREY_5,
     deleteButton: GREY_7,
     primaryButton: BLUE_2,
     primaryButtonText: WHITE_2,
