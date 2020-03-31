@@ -6,7 +6,7 @@ import * as pendo from '@vendors/pendo';
 import * as fullStory from '@vendors/full-story';
 
 const currentUserSubject = new BehaviorSubject(
-    JSON.parse(localStorage.getItem('currentUser')),
+    JSON.parse(localStorage.getItem('currentUser'))
 );
 
 const login = async ({ email, password }) => {

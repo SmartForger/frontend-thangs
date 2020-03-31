@@ -12,7 +12,7 @@ const ALL_NEWSPOSTS_QUERY = gql`
                 firstName
                 lastName
                 profile {
-                    avatar
+                    avatarUrl
                 }
             }
             created
@@ -45,7 +45,7 @@ const NEWSPOST_QUERY = gql`
                 firstName
                 lastName
                 profile {
-                    avatar
+                    avatarUrl
                 }
             }
             created

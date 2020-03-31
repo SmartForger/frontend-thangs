@@ -1,6 +1,6 @@
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { media } from './utils';
+import { createAppUrl } from './utils';
 
 const USER_QUERY = gql`
     query getUser($id: ID) {
@@ -10,9 +10,10 @@ const USER_QUERY = gql`
             email
             firstName
             lastName
+            fullName
             profile {
                 description
-                avatar
+                avatarUrl
             }
             models {
                 id
@@ -29,9 +30,10 @@ const UPDATE_USER_MUTATION = gql`
             id
             firstName
             lastName
+            fullName
             profile {
                 description
-                avatar
+                avatarUrl
             }
             errors {
                 field
@@ -48,9 +50,10 @@ const UPLOAD_USER_PROFILE_AVATAR_MUTATION = gql`
                 id
                 firstName
                 lastName
+                fullName
                 profile {
                     description
-                    avatar
+                    avatarUrl
                 }
             }
         }
@@ -58,12 +61,15 @@ const UPLOAD_USER_PROFILE_AVATAR_MUTATION = gql`
 `;
 
 const parseUser = user => {
-    const avatar = user.profile ? user.profile.avatar : '';
+    const avatarUrl =
+        user.profile && user.profile.avatarUrl
+            ? createAppUrl(user.profile.avatarUrl)
+            : '';
     return {
         ...user,
         profile: {
             ...user.profile,
-            avatar: media(avatar),
+            avatarUrl,
         },
     };
 };
@@ -123,7 +129,7 @@ const useUploadUserAvatarMutation = (user, croppedImg) => {
                 data: {
                     uploadUserProfileAvatar: { user: updatedUser },
                 },
-            },
+            }
         ) => {
             store.writeQuery({
                 query: USER_QUERY,

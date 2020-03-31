@@ -58,7 +58,7 @@ const Picture = styled.img`
 `;
 
 const OwnerPicture = ({ owner }) => {
-    if (!owner.profile.avatar) {
+    if (!owner.profile.avatarUrl) {
         return (
             <Picture
                 as="div"
@@ -68,7 +68,7 @@ const OwnerPicture = ({ owner }) => {
             />
         );
     }
-    return <Picture src={owner.profile.avatar} />;
+    return <Picture src={owner.profile.avatarUrl} />;
 };
 
 const TimeAgo = styled.div`
@@ -192,7 +192,7 @@ const NewComment = ({ modelId }) => {
 
 const CommentsForModel = ({ model, className }) => {
     const { loading, error, comments } = graphqlService.useAllModelComments(
-        model.id,
+        model.id
     );
 
     if (error) {
