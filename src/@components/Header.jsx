@@ -12,7 +12,7 @@ const LogoPlaceholder = styled.div`
 
 const Boundary = styled.div`
     max-width: 1237px;
-    margin: auto;
+    margin: 50px auto 0;
 `;
 
 const Row = styled.div`
