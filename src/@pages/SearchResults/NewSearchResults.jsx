@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { WithLayout, WithNewThemeLayout } from '@style';
+import { WithNewThemeLayout } from '@style';
 import { useParams } from 'react-router-dom';
 import * as GraphqlService from '@services/graphql-service';
 import * as R from 'ramda';
