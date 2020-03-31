@@ -5,6 +5,7 @@ import { SearchBarNew } from '@components/SearchBar';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { useCurrentUser } from '@customHooks/Users';
 import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
+import { ReactComponent as MatchingIcon } from '@svg/matching-icon.svg';
 
 const NOTIFICATIONS_ENABLED = true;
 const NOTIFICATIONS_URL = '#';
@@ -84,6 +85,8 @@ const SignUp = () => {
 };
 
 const MatchingButton = styled.button`
+    display: flex;
+    align-items: center;
     background-color: ${props => props.theme.brandColor};
     color: ${props => props.theme.textOnBrandColor};
     border: none;
@@ -91,9 +94,13 @@ const MatchingButton = styled.button`
     font-family: ${props => props.theme.buttonFont};
     font-weight: bold;
     font-size: 14px;
-    padding: 9px 24px;
+    padding: 6px 24px 6px 32px;
 
     ${props => props.theme.shadow};
+`;
+
+const MatchingIconStyled = styled(MatchingIcon)`
+    margin-right: 8px;
 `;
 
 const NotificationIconStyled = styled(NotificationIcon)`
@@ -163,7 +170,10 @@ const Header = () => {
                     <UserNav />
                 </Row>
                 <Row>
-                    <MatchingButton disabled>Search by Model</MatchingButton>
+                    <MatchingButton disabled>
+                        <MatchingIconStyled />
+                        <span>Search by Model</span>
+                    </MatchingButton>
                     <SearchBarNew />
                 </Row>
             </Boundary>
