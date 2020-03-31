@@ -64,6 +64,7 @@ const SearchFormNew = styled.form`
     border-radius: 8px;
     margin-left: 12px;
     position: relative;
+    display: flex;
 `;
 
 const SearchStyleNew = styled.input`
