@@ -6,6 +6,9 @@ import { ProfilePicture } from '@components/ProfilePicture';
 import { useCurrentUser } from '@customHooks/Users';
 import { NotificationIcon } from '@svg/NotificationIcon';
 
+const NOTIFICATIONS_ENABLED = true;
+const NOTIFICATIONS_URL = '#';
+
 const LogoPlaceholder = styled.div`
     height: 23px;
     width: 73px;
@@ -94,6 +97,18 @@ const MatchingButton = styled.button`
 const NotificationIconStyled = styled(NotificationIcon)`
     margin: 0 32px;
 `;
+
+const NotificationsButton = () => {
+    if (NOTIFICATIONS_ENABLED) {
+        return (
+            <Link to={NOTIFICATIONS_URL}>
+                <NotificationIconStyled />
+            </Link>
+        );
+    }
+    return null;
+};
+
 const UserNav = () => {
     const { user } = useCurrentUser();
 
@@ -101,7 +116,7 @@ const UserNav = () => {
         return (
             <Row>
                 <ProfilePicture user={user} size="50px" />
-                <NotificationIconStyled />
+                <NotificationsButton />
             </Row>
         );
     }
