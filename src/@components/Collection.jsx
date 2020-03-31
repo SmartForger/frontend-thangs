@@ -14,12 +14,11 @@ const ModelCardStyled = styled(ModelCard)`
     margin: 8px;
 `;
 
-export function Collection(props) {
-    const models = props.models || [];
+export function Collection({ models = [] }) {
     return (
         <ModelsStyled>
             {models.map((model, index) => (
-                <ModelCardStyled key={index} model={model} />
+                <ModelCardStyled key={index} model={model} withOwner={true} />
             ))}
         </ModelsStyled>
     );

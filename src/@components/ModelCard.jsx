@@ -73,13 +73,8 @@ const ActivityCount = styled.span`
     margin: 8px 16px;
 `;
 
-function ModelCard(props) {
-    const className = props.className || '';
-    const model = props.model;
-    const showOwner =
-        props.withOwner !== undefined && model.owner !== undefined
-            ? true
-            : false;
+function ModelCard({ className, model, withOwner }) {
+    const showOwner = withOwner && model.owner;
     return (
         <CardContainer className={className}>
             <ModelThumbnail model={model} />
