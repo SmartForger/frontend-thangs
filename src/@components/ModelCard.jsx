@@ -31,7 +31,7 @@ function ModelThumbnail(props) {
     const src = model.thumbnailUrl;
     return (
         <ThumbnailContainer>
-            <img src={src} />
+            <img src={src} alt={model.name} />
         </ThumbnailContainer>
     );
 }
