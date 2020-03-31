@@ -9,24 +9,29 @@ export const ThangsMain = {
     headerHeight: '64px',
 };
 
-const GREY_1 = '#dbdbdf';
-const GREY_2 = '#d9d9d9';
-const GREY_3 = '#b9b9be';
+/*
+ * These colors are commented out for now to avoid unused variable errors in
+ * our build. That is because we haven't placed in the theme yet, but they are
+ * present in our designer's palette and we should account for them.
+ */
+// const GREY_1 = '#dbdbdf';
+// const GREY_2 = '#d9d9d9';
+// const GREY_3 = '#b9b9be';
 const GREY_4 = '#989898';
 const GREY_5 = '#88888b';
-const GREY_6 = '#7a7a7a';
+// const GREY_6 = '#7a7a7a';
 const GREY_7 = '#616168';
-const BLACK_1 = '#515151';
-const BLACK_2 = '#232530';
-const BLACK_3 = '#231f20';
+// const BLACK_1 = '#515151';
+// const BLACK_2 = '#232530';
+// const BLACK_3 = '#231f20';
 const BLACK_4 = '#464655';
 const YELLOW_1 = '#ffbc00';
-const YELLOW_2 = '#cd9602';
-const YELLOW_3 = '#b18002';
-const BLUE_1 = '#1cb2f5';
+// const YELLOW_2 = '#cd9602';
+// const YELLOW_3 = '#b18002';
+// const BLUE_1 = '#1cb2f5';
 const BLUE_2 = '#1b8cf8';
-const BLUE_3 = '#014d7c';
-const BLUE_4 = '#013047';
+// const BLUE_3 = '#014d7c';
+// const BLUE_4 = '#013047';
 const BROWN = '#8b6400';
 
 export const NewTheme = {
