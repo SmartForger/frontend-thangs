@@ -1,5 +1,9 @@
-import styled, { css } from 'styled-components';
+import styled, { css, ThemeProvider } from 'styled-components';
 import React from 'react';
+import { ThangsHeader } from '@components/ThangsHeader';
+import { ThangsMain, NewTheme } from '@style/ThangsNormal.theme.js';
+import { GlobalStyle } from '@style/Thangs.GlobalStyle';
+import { Footer } from '@components/Footer';
 
 const frame = fullScreen => {
     return fullScreen
@@ -24,21 +28,39 @@ const Content = styled.div`
 
 const WithLayout = Component => props => {
     return (
-        <Layout>
-            <Content>
-                <Component {...props} />
-            </Content>
-        </Layout>
+        <ThemeProvider theme={ThangsMain}>
+            <GlobalStyle />
+            <ThangsHeader />
+            <Layout>
+                <Content>
+                    <Component {...props} />
+                </Content>
+            </Layout>
+            <Footer />
+        </ThemeProvider>
+    );
+};
+
+const WithNewThemeLayout = Component => props => {
+    return (
+        <ThemeProvider theme={NewTheme}>
+            <Component {...props} />
+        </ThemeProvider>
     );
 };
 
 const WithFullScreenLayout = Component => props => {
     return (
-        <Layout fullScreen>
-            <Content>
-                <Component {...props} />
-            </Content>
-        </Layout>
+        <ThemeProvider theme={ThangsMain}>
+            <GlobalStyle />
+            <ThangsHeader />
+            <Layout fullScreen>
+                <Content>
+                    <Component {...props} />
+                </Content>
+            </Layout>
+            <Footer />
+        </ThemeProvider>
     );
 };
-export { WithLayout, WithFullScreenLayout };
+export { WithLayout, WithFullScreenLayout, WithNewThemeLayout };
