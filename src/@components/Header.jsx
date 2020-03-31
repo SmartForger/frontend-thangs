@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { SearchBarNew } from '@components/SearchBar';
+import { ProfilePicture } from '@components/ProfilePicture';
 import { useCurrentUser } from '@customHooks/Users';
 
 const LogoPlaceholder = styled.div`
@@ -93,7 +94,11 @@ const UserNav = () => {
     const { user } = useCurrentUser();
 
     if (user) {
-        return <div>LoggedIn</div>;
+        return (
+            <div>
+                <ProfilePicture user={user} size="50px" />
+            </div>
+        );
     }
 
     return (
