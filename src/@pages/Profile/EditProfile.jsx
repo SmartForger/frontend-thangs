@@ -25,10 +25,24 @@ const ProfilePictureStyled = styled(ProfilePicture)`
     margin-right: 24px;
 `;
 
+const UploadButton = styled.button``;
+const DeleteButton = styled.button``;
+
+function PictureForm({ user, className }) {
+    return (
+        <Row className={className}>
+            <ProfilePictureStyled user={user} size="80px" />
+            <UploadButton>Upload New Photo</UploadButton>
+            <DeleteButton>Delete</DeleteButton>
+        </Row>
+    );
+}
+
+const PictureFormStyled = styled(PictureForm)`
+    margin-top: 64px;
+`;
+
 function InlineProfile({ user }) {
-    if (!user) {
-        return null;
-    }
     return (
         <Row>
             <ProfilePictureStyled user={user} size="50px" />
@@ -40,9 +54,14 @@ function InlineProfile({ user }) {
 function Page() {
     const { user } = useCurrentUser();
 
+    if (!user) {
+        return null;
+    }
+
     return (
         <div>
             <InlineProfile user={user} />
+            <PictureFormStyled user={user} />
         </div>
     );
 }
