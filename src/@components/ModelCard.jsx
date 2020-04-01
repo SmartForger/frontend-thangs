@@ -8,18 +8,16 @@ const CardContainer = styled.div`
     display: flex;
     flex-direction: column;
 
-    background: rgb(255, 255, 255);
+    background: ${props => props.theme.cardBackground};
     box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
     border-radius: 8px;
-    /* height: 297px; */
     width: 297px;
 `;
 
 const ThumbnailContainer = styled.div`
-    background: rgb(245, 245, 245);
+    background: ${props => props.theme.modelThumbnailPlaceholder};
     border-radius: 8px 8px 0px 0px;
     height: 196px;
-    width: 297px;
     > img {
         width: 100%;
         height: 100%;
@@ -31,7 +29,7 @@ function ModelThumbnail(props) {
     const src = model.thumbnailUrl;
     return (
         <ThumbnailContainer>
-            <img src={src} alt={model.name} />
+            {src && <img src={src} alt={model.name} />}
         </ThumbnailContainer>
     );
 }
@@ -65,7 +63,7 @@ const ActivityCount = styled.span`
     display: flex;
     align-items: center;
 
-    color: rgb(155, 155, 155);
+    color: ${props => props.theme.activityCount};
     font-family: HelveticaNeueLTStd-Md;
     font-size: 14px;
     font-weight: md;

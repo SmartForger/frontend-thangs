@@ -14,9 +14,11 @@ export const ThangsMain = {
  * our build. That is because we haven't placed in the theme yet, but they are
  * present in our designer's palette and we should account for them.
  */
+const WHITE = '#FFF';
+const OFF_WHITE = '#f5f5f5';
 // const GREY_1 = '#dbdbdf';
 // const GREY_2 = '#d9d9d9';
-// const GREY_3 = '#b9b9be';
+const GREY_3 = '#b9b9be';
 const GREY_4 = '#989898';
 const GREY_5 = '#88888b';
 // const GREY_6 = '#7a7a7a';
@@ -43,6 +45,9 @@ export const NewTheme = {
     searchText: GREY_4,
     textOnBrandColor: BROWN,
     emptyImageBackground: GREY_7,
+    cardBackground: WHITE,
+    modelThumbnailPlaceholder: OFF_WHITE,
+    activityCount: GREY_3,
 };
 
 /** Styled for normal Pages
