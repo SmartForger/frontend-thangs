@@ -56,9 +56,6 @@
     "format": "prettier src/**/*.js --write",
     "eject": "react-scripts eject"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",

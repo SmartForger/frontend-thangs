@@ -11,6 +11,7 @@ import { createBrowserHistory } from 'history';
 import * as pendo from '@vendors/pendo';
 import * as fullStory from '@vendors/full-story';
 import { SearchResults } from '@pages/SearchResults';
+import { SearchResults as NewSearchResults } from '@pages/SearchResults/NewSearchResults';
 
 const history = createBrowserHistory();
 const originalFetch = window.fetch;
@@ -39,6 +40,10 @@ const App = () => {
                     <Route
                         path="/search/:searchQuery"
                         component={SearchResults}
+                    />
+                    <Route
+                        path="/new/search/:searchQuery"
+                        component={NewSearchResults}
                     />
                     <Route path="*" component={Page404} status={404} />
                 </Switch>
