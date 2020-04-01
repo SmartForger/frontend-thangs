@@ -7,6 +7,9 @@ import * as GraphqlService from '@services/graphql-service';
 import { Spinner } from '@components/Spinner';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { Page404 } from '../404';
+import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
+import { ReactComponent as AboutIcon } from '@svg/about-icon.svg';
+import { ReactComponent as ModelIcon } from '@svg/model-icon.svg';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -31,18 +34,53 @@ const TabTitle = styled.div`
     font-family: ${props => props.theme.mainFont};
     color: ${props => props.theme.profileTabColor};
     font-size: 18px;
+    display: flex;
+    align-items: center;
+
+    svg {
+        fill: ${props => props.theme.profileTabColor};
+    }
+`;
+
+const Icon = styled.div`
+    display: flex;
+    height: 24px;
+    width: 24px;
+    align-items: center;
+    margin-right: 8px;
 `;
 
 function Models() {
-    return <TabTitle>Models</TabTitle>;
+    return (
+        <TabTitle>
+            <Icon>
+                <ModelIcon />
+            </Icon>
+            <span>Models</span>
+        </TabTitle>
+    );
 }
 
 function Likes() {
-    return <TabTitle>Likes</TabTitle>;
+    return (
+        <TabTitle>
+            <Icon>
+                <HeartIcon />
+            </Icon>
+            <span>Likes</span>
+        </TabTitle>
+    );
 }
 
 function About() {
-    return <TabTitle>About</TabTitle>;
+    return (
+        <TabTitle>
+            <Icon>
+                <AboutIcon />
+            </Icon>
+            <span>About</span>
+        </TabTitle>
+    );
 }
 
 function Tabs() {

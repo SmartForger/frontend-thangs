@@ -70,5 +70,6 @@ export const NewTheme = {
     backgroundColor: GREY_8,
     profileNameColor: BLACK_5,
     profileTabColor: BLACK_1,
+    cardHeartColor: BLUE_2,
     shadow,
 };
