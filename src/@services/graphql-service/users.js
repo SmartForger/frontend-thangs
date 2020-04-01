@@ -18,10 +18,19 @@ const USER_QUERY = gql`
             models {
                 id
                 name
+                likesCount
+                commentsCount
             }
             inviteCode
-            likes {
+            likedModels {
                 id
+                name
+                likesCount
+                commentsCount
+                owner {
+                    id
+                    fullName
+                }
             }
         }
     }

@@ -85,11 +85,11 @@ function ModelCard({ className, model, withOwner }) {
             <ActivityIndicators>
                 <ActivityCount>
                     <ChatIcon />
-                    &nbsp;{model.numComments || 0}
+                    &nbsp;{model.commentsCount}
                 </ActivityCount>
                 <ActivityCount>
                     <HeartIconStyled />
-                    &nbsp;{model.numLikes || 0}
+                    &nbsp;{model.likesCount}
                 </ActivityCount>
             </ActivityIndicators>
         </CardContainer>
