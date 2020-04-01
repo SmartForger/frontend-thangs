@@ -38,6 +38,7 @@ const TabTitle = styled.div`
     font-size: 18px;
     display: flex;
     align-items: center;
+    margin-right: 56px;
 
     svg {
         fill: ${props => props.theme.profileTabColor};
