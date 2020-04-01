@@ -23,7 +23,7 @@ const GREY_5 = '#88888b';
 // const GREY_6 = '#7a7a7a';
 const GREY_7 = '#616168';
 const GREY_8 = '#e6e6e9';
-// const BLACK_1 = '#515151';
+const BLACK_1 = '#515151';
 // const BLACK_2 = '#232530';
 // const BLACK_3 = '#231f20';
 const BLACK_4 = '#464655';
@@ -69,5 +69,6 @@ export const NewTheme = {
     mainFont: fontMain,
     backgroundColor: GREY_8,
     profileNameColor: BLACK_5,
+    profileTabColor: BLACK_1,
     shadow,
 };

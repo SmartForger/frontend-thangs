@@ -22,6 +22,39 @@ const Name = styled.div`
     color: ${props => props.theme.profileNameColor};
 `;
 
+const TabGroup = styled.div`
+    display: flex;
+    align-self: start;
+`;
+
+const TabTitle = styled.div`
+    font-family: ${props => props.theme.mainFont};
+    color: ${props => props.theme.profileTabColor};
+    font-size: 18px;
+`;
+
+function Models() {
+    return <TabTitle>Models</TabTitle>;
+}
+
+function Likes() {
+    return <TabTitle>Likes</TabTitle>;
+}
+
+function About() {
+    return <TabTitle>About</TabTitle>;
+}
+
+function Tabs() {
+    return (
+        <TabGroup>
+            <Models />
+            <Likes />
+            <About />
+        </TabGroup>
+    );
+}
+
 function Page() {
     const { id } = useParams();
 
@@ -52,6 +85,7 @@ function Page() {
         <Centered>
             <ProfilePicture user={user} size="104px" />
             <Name>{user.fullName}</Name>
+            <Tabs />
         </Centered>
     );
 }
