@@ -8,6 +8,7 @@ import * as GraphqlService from '@services/graphql-service';
 import { useCurrentUser } from '@customHooks/Users';
 import { Spinner } from '@components/Spinner';
 import { ProfilePicture } from '@components/ProfilePicture';
+import { Markdown } from '@components/Markdown';
 import { Page404 } from '../404';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
 import { ReactComponent as AboutIcon } from '@svg/about-icon.svg';
@@ -106,11 +107,17 @@ const TabContent = styled.div`
     margin-top: 64px;
 `;
 
+const getDescription = R.pathOr(null, ['profile', 'description']);
+
 function AboutContent({ selected }) {
+    const { user } = useCurrentUser();
+
     if (!selected) {
         return null;
     }
-    return <div>Profile Info</div>;
+
+    const description = getDescription(user);
+    return <Markdown>{description}</Markdown>;
 }
 
 function ModelsContent({ selected }) {
