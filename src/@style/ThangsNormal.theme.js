@@ -69,7 +69,8 @@ export const NewTheme = {
     mainFont: fontMain,
     backgroundColor: GREY_8,
     profileNameColor: BLACK_5,
-    profileTabColor: BLACK_1,
+    selectedProfileTabColor: BLACK_1,
+    unselectedProfileTabColor: GREY_5,
     cardHeartColor: BLUE_2,
     shadow,
 };

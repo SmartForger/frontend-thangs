@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import * as R from 'ramda';
@@ -34,14 +34,21 @@ const TabGroup = styled.div`
 
 const TabTitle = styled.div`
     font-family: ${props => props.theme.mainFont};
-    color: ${props => props.theme.profileTabColor};
+    color: ${props =>
+        props.selected
+            ? props.theme.selectedProfileTabColor
+            : props.theme.unselectedProfileTabColor};
     font-size: 18px;
     display: flex;
     align-items: center;
     margin-right: 56px;
+    cursor: pointer;
 
     svg {
-        fill: ${props => props.theme.profileTabColor};
+        fill: ${props =>
+            props.selected
+                ? props.theme.selectedProfileTabColor
+                : props.theme.unselectedProfileTabColor};
     }
 `;
 
@@ -53,13 +60,13 @@ const Icon = styled.div`
     margin-right: 8px;
 `;
 
-function Models() {
+function Models({ selected, onClick }) {
     const { user } = useCurrentUser();
     const models = R.pathOr([], ['likes'])(user);
     const amount = models.length;
 
     return (
-        <TabTitle>
+        <TabTitle selected={selected} onClick={onClick}>
             <Icon>
                 <ModelIcon />
             </Icon>
@@ -68,13 +75,13 @@ function Models() {
     );
 }
 
-function Likes() {
+function Likes({ selected, onClick }) {
     const { user } = useCurrentUser();
     const likes = R.pathOr([], ['likes'])(user);
     const amount = likes.filter(fields => fields.isLiked).length;
 
     return (
-        <TabTitle>
+        <TabTitle selected={selected} onClick={onClick}>
             <Icon>
                 <HeartIcon />
             </Icon>
@@ -83,10 +90,10 @@ function Likes() {
     );
 }
 
-function About() {
+function About({ selected, onClick }) {
     const { user } = useCurrentUser();
     return (
-        <TabTitle>
+        <TabTitle selected={selected} onClick={onClick}>
             <Icon>
                 <AboutIcon />
             </Icon>
@@ -96,11 +103,17 @@ function About() {
 }
 
 function Tabs() {
+    const [selected, setSelected] = useState('models');
+
+    const selectModel = () => setSelected('models');
+    const selectLikes = () => setSelected('likes');
+    const selectAbout = () => setSelected('about');
+
     return (
         <TabGroup>
-            <Models />
-            <Likes />
-            <About />
+            <Models selected={selected === 'models'} onClick={selectModel} />
+            <Likes selected={selected === 'likes'} onClick={selectLikes} />
+            <About selected={selected === 'about'} onClick={selectAbout} />
         </TabGroup>
     );
 }
