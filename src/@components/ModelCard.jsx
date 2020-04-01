@@ -71,6 +71,10 @@ const ActivityCount = styled.span`
     margin: 8px 16px;
 `;
 
+const HeartIconStyled = styled(HeartIcon)`
+    fill: ${props => props.theme.cardHeartColor};
+`;
+
 function ModelCard({ className, model, withOwner }) {
     const showOwner = withOwner && model.owner;
     return (
@@ -81,11 +85,11 @@ function ModelCard({ className, model, withOwner }) {
             <ActivityIndicators>
                 <ActivityCount>
                     <ChatIcon />
-                    &nbsp;{model.numComments || 0}
+                    &nbsp;{model.commentsCount}
                 </ActivityCount>
                 <ActivityCount>
-                    <HeartIcon />
-                    &nbsp;{model.numLikes || 0}
+                    <HeartIconStyled />
+                    &nbsp;{model.likesCount}
                 </ActivityCount>
             </ActivityIndicators>
         </CardContainer>

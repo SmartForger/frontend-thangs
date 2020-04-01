@@ -12,6 +12,7 @@ import * as pendo from '@vendors/pendo';
 import * as fullStory from '@vendors/full-story';
 import { SearchResults } from '@pages/SearchResults';
 import { SearchResults as NewSearchResults } from '@pages/SearchResults/NewSearchResults';
+import { Profile as NewProfile } from '@pages/Profile/NewProfile';
 
 const history = createBrowserHistory();
 const originalFetch = window.fetch;
@@ -35,6 +36,7 @@ const App = () => {
                     <Route path="/signup" component={Signup} exact />
                     <Route path="/signup/:registration" component={Signup} />
                     <Route path="/profile/:id" component={Profile} />
+                    <Route path="/new/profile/:id" component={NewProfile} />
                     <Route path="/model/:id" component={Model} />
                     <Route path="/newspost/:id" component={Newspost} />
                     <Route
