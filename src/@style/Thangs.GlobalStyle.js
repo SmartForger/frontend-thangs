@@ -28,6 +28,10 @@ const NewGlobalStyle = createGlobalStyle`
     background: ${props => props.theme.backgroundColor};
   }
 
+  a {
+    text-decoration: none;
+  }
+
   ${enablePlaceholderForContentEditable}
 `;
 

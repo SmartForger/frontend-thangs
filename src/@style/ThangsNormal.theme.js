@@ -23,6 +23,7 @@ const GREY_5 = '#88888b';
 // const GREY_6 = '#7a7a7a';
 const GREY_7 = '#616168';
 const GREY_8 = '#e6e6e9';
+const GREY_9 = '#b9b9be';
 const BLACK_1 = '#515151';
 // const BLACK_2 = '#232530';
 // const BLACK_3 = '#231f20';
@@ -57,6 +58,8 @@ export const NewTheme = {
     searchIconColor: GREY_5,
     deleteButton: GREY_7,
     primaryButton: BLUE_2,
+    secondaryButton: GREY_9,
+    secondaryButtonText: WHITE_1,
     primaryButtonText: WHITE_2,
     searchText: GREY_4,
     searchBackground: WHITE_1,
