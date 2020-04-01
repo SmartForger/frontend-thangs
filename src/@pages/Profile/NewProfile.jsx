@@ -13,6 +13,7 @@ import { Page404 } from '../404';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
 import { ReactComponent as AboutIcon } from '@svg/about-icon.svg';
 import { ReactComponent as ModelIcon } from '@svg/model-icon.svg';
+import { ModelCollection } from '@components/ModelCollection';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -105,9 +106,14 @@ function About({ selected, onClick }) {
 
 const TabContent = styled.div`
     margin-top: 64px;
+    width: 100%;
+    display: flex;
+    color: ${props => props.theme.profileContentColor};
+    font-family: ${props => props.theme.mainFont};
 `;
 
 const getDescription = R.pathOr(null, ['profile', 'description']);
+const getModels = R.pathOr([], ['models']);
 
 function AboutContent({ selected }) {
     const { user } = useCurrentUser();
@@ -121,10 +127,13 @@ function AboutContent({ selected }) {
 }
 
 function ModelsContent({ selected }) {
-    if (!selected) {
+    const { user } = useCurrentUser();
+    const models = getModels(user);
+
+    if (!selected || R.isEmpty(models)) {
         return null;
     }
-    return <div>Models</div>;
+    return <ModelCollection models={models} />;
 }
 
 function LikesContent({ selected }) {
