@@ -9,10 +9,12 @@ const ProfilePicture = props => {
     const size = props.size || DEFAULT_AVATAR_SIZE;
     const color = props.color || DEFAULT_AVATAR_COLOR;
     const avatarName = user.fullName;
+    const src = user.profile && user.profile.avatarUrl;
+
     return (
         <Avatar
             name={avatarName}
-            src={user.profile.avatarUrl}
+            src={src}
             color={color}
             size={size}
             round={true}

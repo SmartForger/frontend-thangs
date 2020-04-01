@@ -4,7 +4,7 @@ const createAppUrl = path => {
     if (!path) {
         return null;
     }
-    return new URL(path, process.env.REACT_APP_API_KEY);
+    return new URL(path, process.env.REACT_APP_API_KEY).toString();
 };
 
 const withEndSlash = path => {
