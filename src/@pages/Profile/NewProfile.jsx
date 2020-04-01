@@ -64,7 +64,7 @@ const Icon = styled.div`
 
 function Models({ selected, onClick }) {
     const { user } = useCurrentUser();
-    const models = R.pathOr([], ['likes'])(user);
+    const models = R.pathOr([], ['models'])(user);
     const amount = models.length;
 
     return (
