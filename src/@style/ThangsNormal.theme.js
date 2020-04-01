@@ -27,6 +27,7 @@ const GREY_8 = '#e6e6e9';
 // const BLACK_2 = '#232530';
 // const BLACK_3 = '#231f20';
 const BLACK_4 = '#464655';
+const BLACK_5 = '#4a4a4a';
 const YELLOW_1 = '#ffbc00';
 // const YELLOW_2 = '#cd9602';
 // const YELLOW_3 = '#b18002';
@@ -67,5 +68,6 @@ export const NewTheme = {
     buttonFont: fontMedium,
     mainFont: fontMain,
     backgroundColor: GREY_8,
+    profileNameColor: BLACK_5,
     shadow,
 };
