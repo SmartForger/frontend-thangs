@@ -120,7 +120,7 @@ const useLikeModelMutation = (userId, modelId) => {
                 data: {
                     likeModel: { model },
                 },
-            },
+            }
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
@@ -140,7 +140,7 @@ const useUnlikeModelMutation = (userId, modelId) => {
                 data: {
                     unlikeModel: { model },
                 },
-            },
+            }
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
@@ -151,4 +151,23 @@ const useUnlikeModelMutation = (userId, modelId) => {
     });
 };
 
-export { useModelById, useLikeModelMutation, useUnlikeModelMutation };
+const UPLOAD_MODEL_MUTATION = gql`
+    mutation uploadModel($file: Upload!) {
+        uploadModel(file: $file) {
+            model {
+                id
+            }
+        }
+    }
+`;
+
+const useUploadModelMutation = () => {
+    return useMutation(UPLOAD_MODEL_MUTATION);
+};
+
+export {
+    useModelById,
+    useLikeModelMutation,
+    useUnlikeModelMutation,
+    useUploadModelMutation,
+};
