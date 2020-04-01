@@ -20,6 +20,9 @@ const USER_QUERY = gql`
                 name
             }
             inviteCode
+            likes {
+                id
+            }
         }
     }
 `;
@@ -102,11 +105,8 @@ const useUpdateUser = user => {
                 variables: { id: updateUser.id },
                 data: {
                     user: {
+                        ...user,
                         ...updateUser,
-                        email: user.email,
-                        username: user.username,
-                        models: user.models,
-                        inviteCode: user.inviteCode,
                     },
                 },
             });
@@ -129,18 +129,15 @@ const useUploadUserAvatarMutation = (user, croppedImg) => {
                 data: {
                     uploadUserProfileAvatar: { user: updatedUser },
                 },
-            }
+            },
         ) => {
             store.writeQuery({
                 query: USER_QUERY,
                 variables: { id: `${user.id}` },
                 data: {
                     user: {
+                        ...user,
                         ...updatedUser,
-                        email: user.email,
-                        username: user.username,
-                        models: user.models,
-                        inviteCode: user.inviteCode,
                     },
                 },
             });

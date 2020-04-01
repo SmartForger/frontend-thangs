@@ -1,9 +1,11 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import * as R from 'ramda';
 
 import { WithNewThemeLayout } from '@style';
 import * as GraphqlService from '@services/graphql-service';
+import { useCurrentUser } from '@customHooks/Users';
 import { Spinner } from '@components/Spinner';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { Page404 } from '../404';
@@ -51,28 +53,37 @@ const Icon = styled.div`
 `;
 
 function Models() {
+    const { user } = useCurrentUser();
+    const models = R.pathOr([], ['likes'])(user);
+    const amount = models.length;
+
     return (
         <TabTitle>
             <Icon>
                 <ModelIcon />
             </Icon>
-            <span>Models</span>
+            <span>Models {amount}</span>
         </TabTitle>
     );
 }
 
 function Likes() {
+    const { user } = useCurrentUser();
+    const likes = R.pathOr([], ['likes'])(user);
+    const amount = likes.filter(fields => fields.isLiked).length;
+
     return (
         <TabTitle>
             <Icon>
                 <HeartIcon />
             </Icon>
-            <span>Likes</span>
+            <span>Likes {amount}</span>
         </TabTitle>
     );
 }
 
 function About() {
+    const { user } = useCurrentUser();
     return (
         <TabTitle>
             <Icon>
