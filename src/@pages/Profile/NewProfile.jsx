@@ -201,7 +201,7 @@ function EditProfileButton({ viewedUser, className }) {
     }
 
     return (
-        <Link to={'/profile/edit'} className={className}>
+        <Link to={'/new/profile/edit'} className={className}>
             <Button>
                 <PencilIcon />Edit Profile
             </Button>
