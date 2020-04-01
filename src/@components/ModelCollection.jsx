@@ -14,7 +14,7 @@ const ModelCardStyled = styled(ModelCard)`
     margin: 8px;
 `;
 
-export function Collection({ models = [] }) {
+export function ModelCollection({ models = [] }) {
     return (
         <ModelsStyled>
             {models.map((model, index) => (
