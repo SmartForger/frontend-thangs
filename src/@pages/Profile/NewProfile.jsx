@@ -93,7 +93,6 @@ function Likes({ selected, onClick }) {
 }
 
 function About({ selected, onClick }) {
-    const { user } = useCurrentUser();
     return (
         <TabTitle selected={selected} onClick={onClick}>
             <Icon>
