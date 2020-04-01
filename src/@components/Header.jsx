@@ -6,17 +6,16 @@ import { ProfilePicture } from '@components/ProfilePicture';
 import { useCurrentUser } from '@customHooks/Users';
 import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
 import { ReactComponent as MatchingIcon } from '@svg/matching-icon.svg';
+import { ReactComponent as Logo } from '@svg/logo.svg';
 
 const NOTIFICATIONS_ENABLED = true;
 const NOTIFICATIONS_URL = '#';
 const UPLOAD_ENABLED = true;
 const UPLOAD_URL = '#';
 
-const LogoPlaceholder = styled.div`
-    height: 23px;
-    width: 73px;
-    border-radius: 13px;
-    background-color: yellow;
+// height: 23px;
+// width: 73px;
+const LogoStyled = styled(Logo)`
     margin-right: 12px;
 `;
 
@@ -163,7 +162,7 @@ const Header = () => {
                 <Row>
                     <div>
                         <Row>
-                            <LogoPlaceholder />
+                            <LogoStyled />
                             <Name>THANGS</Name>
                         </Row>
                     </div>
