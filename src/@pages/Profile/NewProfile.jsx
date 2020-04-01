@@ -79,8 +79,8 @@ function Models({ selected, onClick }) {
 
 function Likes({ selected, onClick }) {
     const { user } = useCurrentUser();
-    const likes = R.pathOr([], ['likes'])(user);
-    const amount = likes.filter(fields => fields.isLiked).length;
+    const likes = getLikedModels(user);
+    const amount = likes.length;
 
     return (
         <TabTitle selected={selected} onClick={onClick}>
@@ -113,6 +113,7 @@ const TabContent = styled.div`
 
 const getDescription = R.pathOr(null, ['profile', 'description']);
 const getModels = R.pathOr([], ['models']);
+const getLikedModels = R.pathOr([], ['likedModels']);
 
 function AboutContent({ selected }) {
     const { user } = useCurrentUser();
@@ -136,10 +137,12 @@ function ModelsContent({ selected }) {
 }
 
 function LikesContent({ selected }) {
+    const { user } = useCurrentUser();
     if (!selected) {
         return null;
     }
-    return <div>Likes</div>;
+    const models = getLikedModels(user);
+    return <ModelCollection models={models} />;
 }
 
 function Tabs() {
