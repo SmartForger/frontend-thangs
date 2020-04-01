@@ -8,6 +8,7 @@ export function ProfilePicture({
     user,
     size = DEFAULT_AVATAR_SIZE,
     color = DEFAULT_AVATAR_COLOR,
+    className,
 }) {
     const avatarName = user.fullName;
     const src = user.profile && user.profile.avatarUrl;
@@ -19,6 +20,7 @@ export function ProfilePicture({
             color={color}
             size={size}
             round={true}
+            className={className}
         />
     );
 }
