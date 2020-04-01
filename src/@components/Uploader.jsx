@@ -68,7 +68,8 @@ const FileUpload = () => {
 
         Promise.all(encodedFiles).then(values => {
             axios.post(
-                `${process.env.REACT_APP_MODEL_KEY}/upload_attachments`,
+                // `${process.env.REACT_APP_MODEL_KEY}upload_attachments`,
+                '/api/upload',
                 values,
                 {
                     headers: {
