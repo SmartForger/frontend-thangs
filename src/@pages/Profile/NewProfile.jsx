@@ -27,7 +27,7 @@ const Name = styled.div`
     color: ${props => props.theme.profileNameColor};
 `;
 
-const TabGroup = styled.div`
+const TabTitleGroup = styled.div`
     display: flex;
     align-self: start;
 `;
@@ -102,6 +102,31 @@ function About({ selected, onClick }) {
     );
 }
 
+const TabContent = styled.div`
+    margin-top: 64px;
+`;
+
+function AboutContent({ selected }) {
+    if (!selected) {
+        return null;
+    }
+    return <div>Profile Info</div>;
+}
+
+function ModelsContent({ selected }) {
+    if (!selected) {
+        return null;
+    }
+    return <div>Models</div>;
+}
+
+function LikesContent({ selected }) {
+    if (!selected) {
+        return null;
+    }
+    return <div>Likes</div>;
+}
+
 function Tabs() {
     const [selected, setSelected] = useState('models');
 
@@ -110,11 +135,21 @@ function Tabs() {
     const selectAbout = () => setSelected('about');
 
     return (
-        <TabGroup>
-            <Models selected={selected === 'models'} onClick={selectModel} />
-            <Likes selected={selected === 'likes'} onClick={selectLikes} />
-            <About selected={selected === 'about'} onClick={selectAbout} />
-        </TabGroup>
+        <>
+            <TabTitleGroup>
+                <Models
+                    selected={selected === 'models'}
+                    onClick={selectModel}
+                />
+                <Likes selected={selected === 'likes'} onClick={selectLikes} />
+                <About selected={selected === 'about'} onClick={selectAbout} />
+            </TabTitleGroup>
+            <TabContent>
+                <ModelsContent selected={selected === 'models'} />
+                <LikesContent selected={selected === 'likes'} />
+                <AboutContent selected={selected === 'about'} />
+            </TabContent>
+        </>
     );
 }
 
