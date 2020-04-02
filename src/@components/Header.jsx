@@ -28,6 +28,7 @@ const FixedHeader = styled.div`
 
 const Boundary = styled.div`
     margin: 50px auto 0;
+    padding: 0 16px;
     max-width: 1237px;
 `;
 

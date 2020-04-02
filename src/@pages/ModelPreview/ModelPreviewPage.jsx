@@ -1,0 +1,51 @@
+import React from 'react';
+import styled from 'styled-components';
+
+const Name = styled.h1`
+    border-right: 2px solid ${props => props.theme.black};
+    padding-right: 8px;
+    margin: 0 8px 0 0;
+`;
+
+const OwnerStyled = styled.h3`
+    padding-top: 2px;
+    margin: 0;
+`;
+
+const Owner = ({ owner }) => {
+    if (!owner) {
+        return null;
+    }
+
+    return (
+        <OwnerStyled>
+            Uploaded By: {owner.firstName} {owner.lastName}
+        </OwnerStyled>
+    );
+};
+
+const HeaderStyled = styled.div`
+    grid-area: header;
+    display: flex;
+    align-items: center;
+`;
+
+const Header = ({ model, user }) => {
+    const { owner, name } = model;
+    return (
+        <HeaderStyled>
+            <Name>{name}</Name>
+            <Owner owner={owner} />
+        </HeaderStyled>
+    );
+};
+
+const ModelPreviewPage = ({ model, user }) => {
+    return (
+        <>
+            <Header model={model} user={user} />
+        </>
+    );
+};
+
+export { ModelPreviewPage };
