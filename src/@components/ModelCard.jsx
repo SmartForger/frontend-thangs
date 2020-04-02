@@ -1,5 +1,6 @@
 import React from 'react';
 import { UserInline } from './UserInline';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
@@ -68,23 +69,25 @@ const HeartIconStyled = styled(HeartIcon)`
 function ModelCard({ className, model, withOwner }) {
     const showOwner = withOwner && model.owner;
     return (
-        <CardContainer className={className}>
-            <ModelThumbnail model={model} />
-            <CardContent>
-                <ModelName>{model.name}</ModelName>
-                {showOwner && <UserInline user={model.owner} />}
-                <ActivityIndicators>
-                    <ActivityCount>
-                        <ChatIcon />
-                        &nbsp;{model.commentsCount}
-                    </ActivityCount>
-                    <ActivityCount>
-                        <HeartIconStyled />
-                        &nbsp;{model.likesCount}
-                    </ActivityCount>
-                </ActivityIndicators>
-            </CardContent>
-        </CardContainer>
+        <Link to={`/new/preview/model/${model.id}`}>
+            <CardContainer className={className}>
+                <ModelThumbnail model={model} />
+                <CardContent>
+                    <ModelName>{model.name}</ModelName>
+                    {showOwner && <UserInline user={model.owner} />}
+                    <ActivityIndicators>
+                        <ActivityCount>
+                            <ChatIcon />
+                            &nbsp;{model.commentsCount}
+                        </ActivityCount>
+                        <ActivityCount>
+                            <HeartIconStyled />
+                            &nbsp;{model.likesCount}
+                        </ActivityCount>
+                    </ActivityIndicators>
+                </CardContent>
+            </CardContainer>
+        </Link>
     );
 }
 
