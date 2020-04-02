@@ -25,14 +25,46 @@ const ProfilePictureStyled = styled(ProfilePicture)`
     margin-right: 24px;
 `;
 
-const UploadButton = styled.button``;
-const DeleteButton = styled.button``;
+const allowCssProp = props => (props.css ? props.css : '');
+
+const UploadButton = styled.button`
+    color: ${props => props.theme.primaryButtonText};
+    background-color: ${props => props.theme.primaryButton};
+    font-size: 14px;
+    padding: 8px 36px;
+    border: none;
+    border-radius: 8px;
+    font-family: ${props => props.theme.buttonFont};
+    font-weight: bold;
+
+    ${props => props.theme.shadow};
+    ${allowCssProp};
+`;
+
+const DeleteButton = styled.button`
+    color: ${props => props.theme.primaryButtonText};
+    background-color: ${props => props.theme.deleteButton};
+    font-size: 14px;
+    padding: 8px 24px;
+    border: none;
+    border-radius: 8px;
+    font-family: ${props => props.theme.buttonFont};
+    font-weight: bold;
+
+    ${props => props.theme.shadow};
+`;
 
 function PictureForm({ user, className }) {
     return (
         <Row className={className}>
             <ProfilePictureStyled user={user} size="80px" />
-            <UploadButton>Upload New Photo</UploadButton>
+            <UploadButton
+                css={`
+                    margin-right: 8px;
+                `}
+            >
+                Upload New Photo
+            </UploadButton>
             <DeleteButton>Delete</DeleteButton>
         </Row>
     );
