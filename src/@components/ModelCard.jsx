@@ -1,5 +1,5 @@
 import React from 'react';
-import { ProfilePicture } from './ProfilePicture';
+import { UserInline } from './UserInline';
 import styled from 'styled-components';
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
@@ -12,6 +12,10 @@ const CardContainer = styled.div`
     box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
     border-radius: 8px;
     width: 297px;
+`;
+
+const CardContent = styled.div`
+    padding: 8px 16px;
 `;
 
 const ThumbnailContainer = styled.div`
@@ -35,28 +39,15 @@ function ModelThumbnail(props) {
 }
 
 const ModelName = styled.div`
-    margin: 8px 16px;
     text-align: center;
 `;
-
-const InlineUserContainer = styled.div`
-    margin: 8px 16px;
-`;
-
-function InlineUser(props) {
-    const user = props.user;
-    return (
-        <InlineUserContainer>
-            <ProfilePicture size="24px" user={user} />
-            &nbsp;
-            <span>{user.fullName}</span>
-        </InlineUserContainer>
-    );
-}
 
 const ActivityIndicators = styled.div`
     display: flex;
     flex-direction: row;
+    > span:not(:last-child) {
+        margin-right: 16px;
+    }
 `;
 
 const ActivityCount = styled.span`
@@ -68,7 +59,6 @@ const ActivityCount = styled.span`
     font-size: 14px;
     font-weight: md;
     letter-spacing: 0px;
-    margin: 8px 16px;
 `;
 
 const HeartIconStyled = styled(HeartIcon)`
@@ -80,18 +70,20 @@ function ModelCard({ className, model, withOwner }) {
     return (
         <CardContainer className={className}>
             <ModelThumbnail model={model} />
-            <ModelName>{model.name}</ModelName>
-            {showOwner && <InlineUser user={model.owner} />}
-            <ActivityIndicators>
-                <ActivityCount>
-                    <ChatIcon />
-                    &nbsp;{model.commentsCount}
-                </ActivityCount>
-                <ActivityCount>
-                    <HeartIconStyled />
-                    &nbsp;{model.likesCount}
-                </ActivityCount>
-            </ActivityIndicators>
+            <CardContent>
+                <ModelName>{model.name}</ModelName>
+                {showOwner && <UserInline user={model.owner} />}
+                <ActivityIndicators>
+                    <ActivityCount>
+                        <ChatIcon />
+                        &nbsp;{model.commentsCount}
+                    </ActivityCount>
+                    <ActivityCount>
+                        <HeartIconStyled />
+                        &nbsp;{model.likesCount}
+                    </ActivityCount>
+                </ActivityIndicators>
+            </CardContent>
         </CardContainer>
     );
 }
