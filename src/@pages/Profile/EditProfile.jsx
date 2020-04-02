@@ -74,6 +74,8 @@ function PictureForm({ user, className }) {
 
 const PictureFormStyled = styled(PictureForm)`
     margin-top: 64px;
+
+    ${allowCssProp};
 `;
 
 function InlineProfile({ user }) {
@@ -195,7 +197,12 @@ function Page() {
     return (
         <div>
             <InlineProfile user={user} />
-            <PictureFormStyled user={user} />
+            <PictureFormStyled
+                user={user}
+                css={`
+                    margin-bottom: 64px;
+                `}
+            />
             <EditProfileForm user={user} />
         </div>
     );
