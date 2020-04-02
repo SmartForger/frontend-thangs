@@ -187,8 +187,13 @@ function EditProfileForm({ user }) {
         setCurrentState('saved');
     }
 
+    const handleChange = () => setCurrentState('ready');
+
     return (
-        <FormStyled onSubmit={(data, e) => handleSubmit(formSubmit)(data, e)}>
+        <FormStyled
+            onSubmit={(data, e) => handleSubmit(formSubmit)(data, e)}
+            onChange={handleChange}
+        >
             <Field>
                 <Label htmlFor="firstName">First name</Label>
                 <FullWidthInput
@@ -230,9 +235,11 @@ function EditProfileForm({ user }) {
                 >
                     {currentState === 'waiting'
                         ? 'Saving...'
-                        : currentState === 'error'
-                            ? 'Error'
-                            : 'Save Changes'}
+                        : currentState === 'saved'
+                            ? 'Saved!'
+                            : currentState === 'error'
+                                ? 'Error'
+                                : 'Save Changes'}
                 </Button>
             </SaveButtonContainer>
         </FormStyled>
