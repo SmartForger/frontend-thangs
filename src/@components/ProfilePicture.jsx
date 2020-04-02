@@ -21,6 +21,7 @@ export function ProfilePicture({
             size={size}
             round={true}
             className={className}
+            maxInitials={2}
         />
     );
 }

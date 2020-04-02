@@ -67,6 +67,7 @@ export const NewTheme = {
     emptyImageBackground: GREY_7,
     cardBackground: WHITE_1,
     modelThumbnailPlaceholder: OFF_WHITE,
+    modelViewerPlaceholder: OFF_WHITE,
     activityCount: GREY_3,
     buttonFont: fontMedium,
     mainFont: fontMain,
@@ -77,5 +78,10 @@ export const NewTheme = {
     selectedProfileTabColor: BLACK_1,
     unselectedProfileTabColor: GREY_5,
     cardHeartColor: BLUE_2,
+    modelDetailLabel: GREY_5,
     shadow,
+    modelActionButtonText: WHITE_1,
+    modelActionButtonBackground: GREY_3,
+    modelPrimaryButtonBackground: BLUE_2,
+    modelPrimaryButtonText: WHITE_2,
 };
