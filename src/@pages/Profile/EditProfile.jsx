@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import * as R from 'ramda';
@@ -61,8 +60,6 @@ const DeleteButton = styled.button`
 `;
 
 function PictureForm({ user, className }) {
-    const handleClick = e => e.preventDefault();
-
     const buttonRef = useRef();
     return (
         <Row className={className}>
@@ -221,10 +218,19 @@ function EditProfileForm({ user }) {
 }
 
 function Page() {
-    const { user } = useCurrentUser();
+    const { loading, error, user } = useCurrentUser();
 
-    if (!user) {
-        return null;
+    if (loading) {
+        return <Spinner />;
+    }
+
+    if (error || !user) {
+        return (
+            <div data-cy="fetch-results-error">
+                Error! We were not able to load your profile. Please try again
+                later.
+            </div>
+        );
     }
 
     return (
