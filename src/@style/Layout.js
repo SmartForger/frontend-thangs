@@ -25,6 +25,7 @@ const Layout = styled.div`
 const NewLayout = styled.div`
     margin: 236px auto 0;
     max-width: 1237px;
+    padding: 0 16px;
 `;
 
 const Content = styled.div`

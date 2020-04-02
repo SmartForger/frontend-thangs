@@ -19,6 +19,7 @@ export function ProfilePicture({
             color={color}
             size={size}
             round={true}
+            maxInitials={2}
         />
     );
 }
