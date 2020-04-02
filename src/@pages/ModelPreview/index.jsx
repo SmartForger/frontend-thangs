@@ -12,7 +12,7 @@ function Page() {
 
     const graphqlService = GraphqlService.getInstance();
     const { loading, error, model } = graphqlService.useModelById(id);
-    const [user] = useLocalStorage('currentUser', null);
+    const [currentUser] = useLocalStorage('currentUser', null);
 
     if (loading) {
         return <Spinner />;
@@ -21,7 +21,7 @@ function Page() {
     } else if (error) {
         return <div>Error loading Model</div>;
     }
-    return <ModelPreviewPage model={model} user={user} />;
+    return <ModelPreviewPage model={model} currentUser={currentUser} />;
 }
 
 const ModelPreview = WithNewThemeLayout(Page);
