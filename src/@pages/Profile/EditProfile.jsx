@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
@@ -9,6 +9,7 @@ import { WithNewThemeLayout } from '@style/Layout';
 import { useCurrentUser } from '@customHooks/Users';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { Spinner } from '@components/Spinner';
+import { NewChangePicture } from '@components/ChangeablePicture';
 import * as GraphqlService from '@services/graphql-service';
 
 const graphqlService = GraphqlService.getInstance();
@@ -60,16 +61,21 @@ const DeleteButton = styled.button`
 `;
 
 function PictureForm({ user, className }) {
+    const handleClick = e => e.preventDefault();
+
+    const buttonRef = useRef();
     return (
         <Row className={className}>
             <ProfilePictureStyled user={user} size="80px" />
-            <Button
+            <NewChangePicture
+                user={user}
                 css={`
                     margin-right: 8px;
                 `}
-            >
-                Upload New Photo
-            </Button>
+                button={<Button ref={buttonRef}>Upload New Photo</Button>}
+                buttonRef={buttonRef}
+            />
+
             <DeleteButton>Delete</DeleteButton>
         </Row>
     );
@@ -169,7 +175,7 @@ function EditProfileForm({ user }) {
     return (
         <FormStyled onSubmit={(data, e) => handleSubmit(formSubmit)(data, e)}>
             <Field>
-                <Label for="firstName">First name</Label>
+                <Label htmlFor="firstName">First name</Label>
                 <FullWidthInput
                     name="firstName"
                     defaultValue={user.firstName}
@@ -177,7 +183,7 @@ function EditProfileForm({ user }) {
                     placeholder="First name"
                 />
             </Field>
-            <Field for="lastName">
+            <Field htmlFor="lastName">
                 <Label>Last name</Label>
                 <FullWidthInput
                     name="lastName"
@@ -186,7 +192,7 @@ function EditProfileForm({ user }) {
                     placeholder="Last name"
                 />
             </Field>
-            <Field for="description">
+            <Field htmlFor="description">
                 <Label>About</Label>
                 <TextArea
                     name="description"
