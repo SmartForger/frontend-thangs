@@ -5,6 +5,7 @@ import * as R from 'ramda';
 
 import { WithNewThemeLayout } from '@style';
 import * as GraphqlService from '@services/graphql-service';
+import { useCurrentUser } from '@customHooks/Users';
 import { Spinner } from '@components/Spinner';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { Markdown } from '@components/Markdown';
