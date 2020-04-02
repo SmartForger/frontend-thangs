@@ -126,6 +126,11 @@ const TextArea = styled(TextareaAutosize)`
     ${allowCssProp};
 `;
 
+const SaveButtonContainer = styled.div`
+    display: flex;
+    justify-content: flex-end;
+`;
+
 function EditProfileForm({ user }) {
     const { register, handleSubmit, errors } = useForm();
     const [updateUser] = graphqlService.useUpdateUser(user);
@@ -184,15 +189,17 @@ function EditProfileForm({ user }) {
                 `}
             />
 
-            <Button type="submit" disabled={!R.empty(errors)}>
-                {currentState === 'waiting' ? (
-                    <Spinner />
-                ) : currentState === 'error' ? (
-                    'Error'
-                ) : (
-                    'Save Changes'
-                )}
-            </Button>
+            <SaveButtonContainer>
+                <Button type="submit" disabled={!R.empty(errors)}>
+                    {currentState === 'waiting' ? (
+                        <Spinner />
+                    ) : currentState === 'error' ? (
+                        'Error'
+                    ) : (
+                        'Save Changes'
+                    )}
+                </Button>
+            </SaveButtonContainer>
         </FormStyled>
     );
 }
