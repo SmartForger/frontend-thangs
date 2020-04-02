@@ -50,10 +50,10 @@ const WithLayout = Component => props => {
 };
 
 function WithFlash({ children }) {
-    const [state] = useContext(FlashContext);
+    const [flash] = useContext(FlashContext);
     return (
         <>
-            {state.flash && <Flash>{state.flash}</Flash>}
+            {flash && <Flash>{flash}</Flash>}
             {children}
         </>
     );

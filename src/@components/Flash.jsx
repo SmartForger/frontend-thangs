@@ -10,10 +10,10 @@ export const Flash = styled.div`
 `;
 
 // export const FlashContext = React.createContext({ setFlash });
-export const FlashContext = React.createContext([{}, () => {}]);
+export const FlashContext = React.createContext([null, () => {}]);
 
 export const FlashContextProvider = props => {
-    const [state, setState] = useState({});
+    const [state, setState] = useState();
     return (
         <FlashContext.Provider value={[state, setState]}>
             {props.children}

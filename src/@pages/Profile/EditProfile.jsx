@@ -226,18 +226,14 @@ function EditProfileForm({ user }) {
 
 function Page() {
     const { loading, error, user } = useCurrentUser();
-    const [, setState] = useContext(FlashContext);
+    const [, setFlash] = useContext(FlashContext);
     useEffect(
         () => {
-            setState(state => {
-                return {
-                    ...state,
-                    flash:
-                        'Add information about yourself below to let others know your specialties, interests, etc.',
-                };
-            });
+            setFlash(
+                'Add information about yourself below to let others know your specialties, interests, etc.',
+            );
         },
-        [setState],
+        [setFlash],
     );
 
     if (loading) {
