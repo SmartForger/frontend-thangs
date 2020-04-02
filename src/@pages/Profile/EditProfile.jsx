@@ -96,9 +96,9 @@ const FormStyled = styled.form`
     max-width: 520px;
 `;
 
-const NameField = styled.div`
+const Field = styled.div`
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
 `;
 
 const FullWidthInput = styled.input`
@@ -133,6 +133,10 @@ const SaveButtonContainer = styled.div`
     justify-content: flex-end;
 `;
 
+const Label = styled.label`
+    margin: 8px 0;
+`;
+
 function EditProfileForm({ user }) {
     const { register, handleSubmit, errors } = useForm();
     const [updateUser] = graphqlService.useUpdateUser(user);
@@ -164,32 +168,36 @@ function EditProfileForm({ user }) {
 
     return (
         <FormStyled onSubmit={(data, e) => handleSubmit(formSubmit)(data, e)}>
-            <NameField>
+            <Field>
+                <Label for="firstName">First name</Label>
                 <FullWidthInput
                     name="firstName"
                     defaultValue={user.firstName}
                     ref={register({ required: true })}
-                    placeholder="First Name"
-                    css={`
-                        margin-right: 8px;
-                    `}
+                    placeholder="First name"
                 />
+            </Field>
+            <Field for="lastName">
+                <Label>Last name</Label>
                 <FullWidthInput
                     name="lastName"
                     defaultValue={user.lastName}
                     ref={register({ required: true })}
-                    placeholder="Last Name"
+                    placeholder="Last name"
                 />
-            </NameField>
-            <TextArea
-                name="description"
-                defaultValue={user.profile.description}
-                ref={register({ required: true })}
-                placeholder="Add a bio..."
-                css={`
-                    margin-bottom: 32px;
-                `}
-            />
+            </Field>
+            <Field for="description">
+                <Label>About</Label>
+                <TextArea
+                    name="description"
+                    defaultValue={user.profile.description}
+                    ref={register({ required: true })}
+                    placeholder="Add a bio..."
+                    css={`
+                        margin-bottom: 32px;
+                    `}
+                />
+            </Field>
 
             <SaveButtonContainer>
                 <Button type="submit" disabled={!R.empty(errors)}>

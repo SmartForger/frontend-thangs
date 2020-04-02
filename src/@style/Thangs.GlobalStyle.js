@@ -32,6 +32,12 @@ const NewGlobalStyle = createGlobalStyle`
     text-decoration: none;
   }
 
+  * {
+      font-family: ${props => props.theme.buttonFont};
+      font-size: 14px;
+      color: ${props => props.theme.mainFontColor};
+  }
+
   ${enablePlaceholderForContentEditable}
 `;
 
