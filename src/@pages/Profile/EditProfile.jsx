@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import * as R from 'ramda';
 
@@ -27,7 +28,7 @@ const ProfilePictureStyled = styled(ProfilePicture)`
 
 const allowCssProp = props => (props.css ? props.css : '');
 
-const UploadButton = styled.button`
+const Button = styled.button`
     color: ${props => props.theme.primaryButtonText};
     background-color: ${props => props.theme.primaryButton};
     font-size: 14px;
@@ -44,12 +45,12 @@ const UploadButton = styled.button`
 const DeleteButton = styled.button`
     color: ${props => props.theme.primaryButtonText};
     background-color: ${props => props.theme.deleteButton};
-    font-size: 14px;
     padding: 8px 24px;
     border: none;
     border-radius: 8px;
     font-family: ${props => props.theme.buttonFont};
     font-weight: bold;
+    font-size: 14px;
 
     ${props => props.theme.shadow};
 `;
@@ -58,13 +59,13 @@ function PictureForm({ user, className }) {
     return (
         <Row className={className}>
             <ProfilePictureStyled user={user} size="80px" />
-            <UploadButton
+            <Button
                 css={`
                     margin-right: 8px;
                 `}
             >
                 Upload New Photo
-            </UploadButton>
+            </Button>
             <DeleteButton>Delete</DeleteButton>
         </Row>
     );
@@ -83,6 +84,103 @@ function InlineProfile({ user }) {
     );
 }
 
+const FormStyled = styled.form`
+    display: flex;
+    flex-direction: column;
+    max-width: 520px;
+`;
+const NameField = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+const FullWidthInput = styled.input`
+    display: block;
+    flex-grow: 1;
+    border: 0;
+    padding: 8px 16px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    min-width: 0;
+    font-family: ${props => props.theme.buttonFont};
+    font-size: 14px;
+
+    ${allowCssProp};
+`;
+const TextArea = styled.textarea`
+    resize: vertical;
+    border: 0;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-family: ${props => props.theme.buttonFont};
+    font-size: 14px;
+
+    ${allowCssProp};
+`;
+
+function EditProfileForm({ user }) {
+    const { register, handleSubmit, errors } = useForm();
+    const [updateUser] = graphqlService.useUpdateUser(user);
+    const [saved, setSaved] = useState(false);
+
+    async function formSubmit(data, e) {
+        e.preventDefault();
+
+        const updateInput = {
+            id: user.id,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            profile: {
+                description: data.description,
+            },
+        };
+
+        try {
+            await updateUser({
+                variables: { updateInput },
+            });
+        } catch (error) {
+            console.error('Error when trying to update the user', error);
+        }
+
+        setSaved(true);
+    }
+
+    return (
+        <FormStyled onSubmit={(data, e) => handleSubmit(formSubmit)(data, e)}>
+            <NameField>
+                <FullWidthInput
+                    name="firstName"
+                    defaultValue={user.firstName}
+                    ref={register({ required: true })}
+                    placeholder="First Name"
+                    css={`
+                        margin-right: 8px;
+                    `}
+                />
+                <FullWidthInput
+                    name="lastName"
+                    defaultValue={user.lastName}
+                    ref={register({ required: true })}
+                    placeholder="Last Name"
+                />
+            </NameField>
+            <TextArea
+                name="description"
+                defaultValue={user.profile.description}
+                ref={register({ required: true })}
+                placeholder="Add a bio..."
+                css={`
+                    margin-bottom: 32px;
+                `}
+            />
+
+            <Button type="submit" disabled={R.empty(errors)}>
+                Save Changes
+            </Button>
+        </FormStyled>
+    );
+}
+
 function Page() {
     const { user } = useCurrentUser();
 
@@ -94,6 +192,7 @@ function Page() {
         <div>
             <InlineProfile user={user} />
             <PictureFormStyled user={user} />
+            <EditProfileForm user={user} />
         </div>
     );
 }
