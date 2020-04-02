@@ -41,6 +41,7 @@ const ModelViewer = styled.div`
 
 const Sidebar = styled.div`
     margin: 8px 0 0 8px;
+    min-width: 400px;
 
     > table {
         margin-bottom: 24px;
