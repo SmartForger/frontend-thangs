@@ -165,7 +165,6 @@ function EditProfileForm({ user }) {
 
     async function formSubmit(data, e) {
         e.preventDefault();
-        console.log('data', data);
 
         const updateInput = {
             id: user.id,
