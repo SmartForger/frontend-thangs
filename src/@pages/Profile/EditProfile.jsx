@@ -39,6 +39,7 @@ const Button = styled.button`
     border-radius: 8px;
     font-family: ${props => props.theme.buttonFont};
     font-weight: bold;
+    cursor: pointer;
 
     ${props => props.theme.shadow};
     ${allowCssProp};
@@ -53,6 +54,7 @@ const DeleteButton = styled.button`
     font-family: ${props => props.theme.buttonFont};
     font-weight: bold;
     font-size: 14px;
+    cursor: pointer;
 
     ${props => props.theme.shadow};
 `;

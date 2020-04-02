@@ -64,6 +64,7 @@ const Button = styled.button`
     border: none;
     border-radius: 8px;
     font-family: ${props => props.theme.buttonFont};
+    cursor: pointer;
     font-weight: bold;
 
     ${props => props.theme.shadow};
@@ -84,6 +85,8 @@ const SignUp = () => {
 };
 
 const MatchingButton = styled.button`
+    cursor: pointer;
+
     display: flex;
     align-items: center;
     background-color: ${props => props.theme.brandColor};
