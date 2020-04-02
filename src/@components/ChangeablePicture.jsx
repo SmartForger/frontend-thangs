@@ -199,6 +199,22 @@ const NewButton = styled.button`
     cursor: pointer;
 
     ${props => props.theme.shadow};
+    ${allowCssProp};
+`;
+
+const NewCancelButton = styled.button`
+    color: ${props => props.theme.primaryButtonText};
+    background-color: ${props => props.theme.deleteButton};
+    font-size: 14px;
+    padding: 8px 36px;
+    border: none;
+    border-radius: 8px;
+    font-family: ${props => props.theme.buttonFont};
+    font-weight: bold;
+    cursor: pointer;
+
+    ${props => props.theme.shadow};
+    ${allowCssProp};
 `;
 
 function NewChangePicture({ user, button, buttonRef, css }) {
@@ -208,6 +224,7 @@ function NewChangePicture({ user, button, buttonRef, css }) {
     const [img, setImg] = useState(null);
     const [isCropping, setIsCropping] = useState(false);
     const imageEl = useRef(null);
+    const formRef = useRef(null);
     const [uploadAvatar] = graphqlService.useUploadUserAvatarMutation(
         user,
         croppedImg,
@@ -215,6 +232,11 @@ function NewChangePicture({ user, button, buttonRef, css }) {
 
     const submitCrop = () => {
         uploadAvatar();
+        setIsCropping(false);
+    };
+
+    const cancel = () => {
+        formRef.current.reset();
         setIsCropping(false);
     };
 
@@ -290,7 +312,7 @@ function NewChangePicture({ user, button, buttonRef, css }) {
     };
 
     return (
-        <Form css={css}>
+        <Form css={css} ref={formRef}>
             <label htmlFor="avatar">{button}</label>
             <HiddenInput
                 type="file"
@@ -315,7 +337,15 @@ function NewChangePicture({ user, button, buttonRef, css }) {
                     circularCrop={true}
                 />
                 <ButtonContainer>
-                    <NewButton onClick={submitCrop}>Save</NewButton>
+                    <NewButton
+                        onClick={submitCrop}
+                        css={`
+                            margin-right: 8px;
+                        `}
+                    >
+                        Save
+                    </NewButton>
+                    <NewCancelButton onClick={cancel}>Cancel</NewCancelButton>
                 </ButtonContainer>
             </ModalStyled>
         </Form>
