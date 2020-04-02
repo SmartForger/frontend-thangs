@@ -142,6 +142,22 @@ const Label = styled.label`
     margin: 8px 0;
 `;
 
+function WarningOnEmptyProfile({ user }) {
+    const [, setFlash] = useContext(FlashContext);
+    useEffect(
+        () => {
+            if (!user.profile.description) {
+                setFlash(
+                    'Add information about yourself below to let others know your specialties, interests, etc.',
+                );
+            }
+        },
+        [setFlash, user],
+    );
+
+    return null;
+}
+
 function EditProfileForm({ user }) {
     const { register, handleSubmit, errors } = useForm();
     const [updateUser] = graphqlService.useUpdateUser(user);
@@ -226,15 +242,6 @@ function EditProfileForm({ user }) {
 
 function Page() {
     const { loading, error, user } = useCurrentUser();
-    const [, setFlash] = useContext(FlashContext);
-    useEffect(
-        () => {
-            setFlash(
-                'Add information about yourself below to let others know your specialties, interests, etc.',
-            );
-        },
-        [setFlash],
-    );
 
     if (loading) {
         return <Spinner />;
@@ -251,6 +258,7 @@ function Page() {
 
     return (
         <div>
+            <WarningOnEmptyProfile user={user} />
             <InlineProfile user={user} />
             <PictureFormStyled
                 user={user}
