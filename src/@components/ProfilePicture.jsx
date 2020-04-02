@@ -1,8 +1,16 @@
 import React from 'react';
 import Avatar from 'react-avatar';
+import styled from 'styled-components';
 
 const DEFAULT_AVATAR_SIZE = '250px';
 const DEFAULT_AVATAR_COLOR = '#616168';
+const TEXT_COLOR = '#dbdbdf';
+
+const AvatarStyled = styled(Avatar)`
+    span {
+        color: ${props => props.theme.avatarTextColor};
+    }
+`;
 
 export function ProfilePicture({
     user,
@@ -14,7 +22,7 @@ export function ProfilePicture({
     const src = user.profile && user.profile.avatarUrl;
 
     return (
-        <Avatar
+        <AvatarStyled
             name={avatarName}
             src={src}
             color={color}
