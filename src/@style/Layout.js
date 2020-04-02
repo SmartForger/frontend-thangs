@@ -1,10 +1,11 @@
 import styled, { css, ThemeProvider } from 'styled-components';
-import React from 'react';
+import React, { useContext } from 'react';
 import { ThangsHeader } from '@components/ThangsHeader';
 import { ThangsMain, NewTheme } from '@style/ThangsNormal.theme.js';
 import { GlobalStyle, NewGlobalStyle } from '@style/Thangs.GlobalStyle';
 import { Footer } from '@components/Footer';
 import { Header } from '@components/Header';
+import { Flash, FlashContext, FlashContextProvider } from '@components/Flash';
 
 const frame = fullScreen => {
     return fullScreen
@@ -48,15 +49,29 @@ const WithLayout = Component => props => {
     );
 };
 
+function WithFlash({ children }) {
+    const [state] = useContext(FlashContext);
+    return (
+        <>
+            {state.flash && <Flash>{state.flash}</Flash>}
+            {children}
+        </>
+    );
+}
+
 const WithNewThemeLayout = Component => props => {
     return (
-        <ThemeProvider theme={NewTheme}>
-            <NewGlobalStyle />
-            <Header />
-            <NewLayout>
-                <Component {...props} />
-            </NewLayout>
-        </ThemeProvider>
+        <FlashContextProvider>
+            <ThemeProvider theme={NewTheme}>
+                <NewGlobalStyle />
+                <Header />
+                <NewLayout>
+                    <WithFlash>
+                        <Component {...props} />
+                    </WithFlash>
+                </NewLayout>
+            </ThemeProvider>
+        </FlashContextProvider>
     );
 };
 

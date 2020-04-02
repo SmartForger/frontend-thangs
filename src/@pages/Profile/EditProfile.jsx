@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import * as R from 'ramda';
@@ -8,6 +8,7 @@ import { useCurrentUser } from '@customHooks/Users';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { Spinner } from '@components/Spinner';
 import { NewChangePicture } from '@components/ChangeablePicture';
+import { FlashContext } from '@components/Flash';
 import * as GraphqlService from '@services/graphql-service';
 
 const graphqlService = GraphqlService.getInstance();
@@ -225,6 +226,19 @@ function EditProfileForm({ user }) {
 
 function Page() {
     const { loading, error, user } = useCurrentUser();
+    const [, setState] = useContext(FlashContext);
+    useEffect(
+        () => {
+            setState(state => {
+                return {
+                    ...state,
+                    flash:
+                        'Add information about yourself below to let others know your specialties, interests, etc.',
+                };
+            });
+        },
+        [setState],
+    );
 
     if (loading) {
         return <Spinner />;
