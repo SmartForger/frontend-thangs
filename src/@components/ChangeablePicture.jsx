@@ -49,14 +49,15 @@ const ModalOverlayStyles = createGlobalStyle`
         background-color: rgba(0, 0, 0, 0.75);
     }
     .ReactCrop__image {
-        max-height: 50vh;
-        max-width: 50vw;
+        max-height: 80vh;
+        max-width: 80vw;
     }
 `;
 
 const ButtonContainer = styled.div`
     display: flex;
     justify-content: center;
+    margin-top: 8px;
 `;
 
 const initialCrop = { unit: '%', width: 30, aspect: 1 / 1 };
@@ -186,6 +187,20 @@ const Form = styled.form`
     ${allowCssProp};
 `;
 
+const NewButton = styled.button`
+    color: ${props => props.theme.primaryButtonText};
+    background-color: ${props => props.theme.primaryButton};
+    font-size: 14px;
+    padding: 8px 36px;
+    border: none;
+    border-radius: 8px;
+    font-family: ${props => props.theme.buttonFont};
+    font-weight: bold;
+    cursor: pointer;
+
+    ${props => props.theme.shadow};
+`;
+
 function NewChangePicture({ user, button, buttonRef, css }) {
     const [cropSrc, setCropSrc] = useState(null);
     const [crop, setCrop] = useState();
@@ -300,7 +315,7 @@ function NewChangePicture({ user, button, buttonRef, css }) {
                     circularCrop={true}
                 />
                 <ButtonContainer>
-                    <Button onClick={submitCrop} name="Save" />
+                    <NewButton onClick={submitCrop}>Save</NewButton>
                 </ButtonContainer>
             </ModalStyled>
         </Form>
