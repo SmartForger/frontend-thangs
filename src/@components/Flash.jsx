@@ -9,8 +9,9 @@ export const Flash = styled.div`
     margin-bottom: 48px;
 `;
 
-// export const FlashContext = React.createContext({ setFlash });
-export const FlashContext = React.createContext([null, () => {}]);
+const NOOP = () => null;
+
+export const FlashContext = React.createContext([null, NOOP]);
 
 export const FlashContextProvider = props => {
     const [state, setState] = useState();
