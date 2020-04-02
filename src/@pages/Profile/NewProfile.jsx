@@ -5,7 +5,6 @@ import * as R from 'ramda';
 
 import { WithNewThemeLayout } from '@style';
 import * as GraphqlService from '@services/graphql-service';
-import { useCurrentUser } from '@customHooks/Users';
 import { Spinner } from '@components/Spinner';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { Markdown } from '@components/Markdown';
@@ -62,8 +61,7 @@ const Icon = styled.div`
     margin-right: 8px;
 `;
 
-function Models({ selected, onClick }) {
-    const { user } = useCurrentUser();
+function Models({ selected, onClick, user }) {
     const models = R.pathOr([], ['models'])(user);
     const amount = models.length;
 
@@ -77,8 +75,7 @@ function Models({ selected, onClick }) {
     );
 }
 
-function Likes({ selected, onClick }) {
-    const { user } = useCurrentUser();
+function Likes({ selected, onClick, user }) {
     const likes = getLikedModels(user);
     const amount = likes.length;
 
@@ -92,7 +89,7 @@ function Likes({ selected, onClick }) {
     );
 }
 
-function About({ selected, onClick }) {
+function About({ selected, onClick, user }) {
     return (
         <TabTitle selected={selected} onClick={onClick}>
             <Icon>
@@ -115,9 +112,7 @@ const getDescription = R.pathOr(null, ['profile', 'description']);
 const getModels = R.pathOr([], ['models']);
 const getLikedModels = R.pathOr([], ['likedModels']);
 
-function AboutContent({ selected }) {
-    const { user } = useCurrentUser();
-
+function AboutContent({ selected, user }) {
     if (!selected) {
         return null;
     }
@@ -126,8 +121,7 @@ function AboutContent({ selected }) {
     return <Markdown>{description}</Markdown>;
 }
 
-function ModelsContent({ selected }) {
-    const { user } = useCurrentUser();
+function ModelsContent({ selected, user }) {
     const models = getModels(user);
 
     if (!selected || R.isEmpty(models)) {
@@ -136,8 +130,7 @@ function ModelsContent({ selected }) {
     return <ModelCollection models={models} />;
 }
 
-function LikesContent({ selected }) {
-    const { user } = useCurrentUser();
+function LikesContent({ selected, user }) {
     if (!selected) {
         return null;
     }
@@ -145,7 +138,7 @@ function LikesContent({ selected }) {
     return <ModelCollection models={models} />;
 }
 
-function Tabs() {
+function Tabs({ user }) {
     const [selected, setSelected] = useState('models');
 
     const selectModel = () => setSelected('models');
@@ -158,14 +151,23 @@ function Tabs() {
                 <Models
                     selected={selected === 'models'}
                     onClick={selectModel}
+                    user={user}
                 />
-                <Likes selected={selected === 'likes'} onClick={selectLikes} />
-                <About selected={selected === 'about'} onClick={selectAbout} />
+                <Likes
+                    selected={selected === 'likes'}
+                    onClick={selectLikes}
+                    user={user}
+                />
+                <About
+                    selected={selected === 'about'}
+                    onClick={selectAbout}
+                    user={user}
+                />
             </TabTitleGroup>
             <TabContent>
-                <ModelsContent selected={selected === 'models'} />
-                <LikesContent selected={selected === 'likes'} />
-                <AboutContent selected={selected === 'about'} />
+                <ModelsContent selected={selected === 'models'} user={user} />
+                <LikesContent selected={selected === 'likes'} user={user} />
+                <AboutContent selected={selected === 'about'} user={user} />
             </TabContent>
         </>
     );
@@ -201,7 +203,7 @@ function Page() {
         <Centered>
             <ProfilePicture user={user} size="104px" />
             <Name>{user.fullName}</Name>
-            <Tabs />
+            <Tabs user={user} />
         </Centered>
     );
 }
