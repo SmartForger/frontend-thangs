@@ -152,8 +152,19 @@ const useUnlikeModelMutation = (userId, modelId) => {
 };
 
 const UPLOAD_MODEL_MUTATION = gql`
-    mutation uploadModel($file: Upload!) {
-        uploadModel(file: $file) {
+    mutation uploadModel(
+        $file: Upload!
+        $name: String!
+        $size: Int!
+        $userEmail: String!
+    ) {
+        uploadModel(
+            file: $file
+            units: "mm"
+            name: $name
+            size: $size
+            userEmail: $userEmail
+        ) {
             model {
                 id
             }

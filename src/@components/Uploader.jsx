@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { TiUpload } from 'react-icons/ti';
 import * as GraphqlService from '@services/graphql-service';
+import { authenticationService } from '@services';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -48,10 +49,13 @@ const FileUpload = () => {
 
     const onSubmit = async e => {
         e.preventDefault();
-
+        console.log(draggedfiles[0]);
         uploadModel({
             variables: {
                 file: draggedfiles[0],
+                name: draggedfiles[0].name,
+                size: draggedfiles[0].size,
+                userEmail: authenticationService.currentUserValue.email,
             },
         });
 
