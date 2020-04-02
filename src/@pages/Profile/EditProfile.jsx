@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import * as R from 'ramda';
-import TextareaAutosize from 'react-textarea-autosize';
 
 import { WithNewThemeLayout } from '@style/Layout';
 import { useCurrentUser } from '@customHooks/Users';
@@ -121,8 +120,8 @@ const FullWidthInput = styled.input`
     ${allowCssProp};
 `;
 
-const TextArea = styled(TextareaAutosize)`
-    resize: none;
+const TextArea = styled.textarea`
+    resize: vertical;
     border: 0;
     padding: 8px 16px;
     border-radius: 8px;
@@ -149,6 +148,7 @@ function EditProfileForm({ user }) {
 
     async function formSubmit(data, e) {
         e.preventDefault();
+        console.log('data', data);
 
         const updateInput = {
             id: user.id,
