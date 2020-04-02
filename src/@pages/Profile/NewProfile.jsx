@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import * as R from 'ramda';
 
@@ -12,6 +12,7 @@ import { Page404 } from '../404';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
 import { ReactComponent as AboutIcon } from '@svg/about-icon.svg';
 import { ReactComponent as ModelIcon } from '@svg/model-icon.svg';
+import { ReactComponent as PencilIcon } from '@svg/pencil-icon.svg';
 import { ModelCollection } from '@components/ModelCollection';
 
 const graphqlService = GraphqlService.getInstance();
@@ -138,6 +139,11 @@ function LikesContent({ selected, user }) {
     return <ModelCollection models={models} />;
 }
 
+const TabGroupContainer = styled.div`
+    margin-top: 64px;
+    width: 100%;
+`;
+
 function Tabs({ user }) {
     const [selected, setSelected] = useState('models');
 
@@ -146,7 +152,7 @@ function Tabs({ user }) {
     const selectAbout = () => setSelected('about');
 
     return (
-        <>
+        <TabGroupContainer>
             <TabTitleGroup>
                 <Models
                     selected={selected === 'models'}
@@ -169,9 +175,45 @@ function Tabs({ user }) {
                 <LikesContent selected={selected === 'likes'} user={user} />
                 <AboutContent selected={selected === 'about'} user={user} />
             </TabContent>
-        </>
+        </TabGroupContainer>
     );
 }
+
+const Button = styled.button`
+    color: ${props => props.theme.secondaryButtonText};
+    background-color: ${props => props.theme.secondaryButton};
+    font-size: 14px;
+    padding: 8px 24px;
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+
+    svg {
+        margin-right: 8px;
+    }
+`;
+
+function EditProfileButton({ viewedUser, className }) {
+    const { user } = useCurrentUser();
+
+    if (!user || user.id !== viewedUser.id) {
+        return null;
+    }
+
+    return (
+        <Link to={'/new/profile/edit'} className={className}>
+            <Button>
+                <PencilIcon />Edit Profile
+            </Button>
+        </Link>
+    );
+}
+
+const EditProfileButtonStyled = styled(EditProfileButton)`
+    margin-top: 16px;
+`;
 
 function Page() {
     const { id } = useParams();
@@ -203,6 +245,7 @@ function Page() {
         <Centered>
             <ProfilePicture user={user} size="104px" />
             <Name>{user.fullName}</Name>
+            <EditProfileButtonStyled viewedUser={user} />
             <Tabs user={user} />
         </Centered>
     );

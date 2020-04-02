@@ -14,6 +14,7 @@ import * as fullStory from '@vendors/full-story';
 import { SearchResults } from '@pages/SearchResults';
 import { SearchResults as NewSearchResults } from '@pages/SearchResults/NewSearchResults';
 import { Profile as NewProfile } from '@pages/Profile/NewProfile';
+import { EditProfile } from '@pages/Profile/EditProfile';
 
 const history = createBrowserHistory();
 const originalFetch = window.fetch;
@@ -37,6 +38,11 @@ const App = () => {
                     <Route path="/signup" component={Signup} exact />
                     <Route path="/signup/:registration" component={Signup} />
                     <Route path="/profile/:id" component={Profile} />
+                    <Route
+                        exact
+                        path="/new/profile/edit"
+                        component={EditProfile}
+                    />
                     <Route path="/new/profile/:id" component={NewProfile} />
                     <Route path="/model/:id" component={Model} />
                     <Route

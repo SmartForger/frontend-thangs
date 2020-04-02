@@ -13,8 +13,8 @@ const NOTIFICATIONS_URL = '#';
 const UPLOAD_ENABLED = true;
 const UPLOAD_URL = '#';
 
-// height: 23px;
-// width: 73px;
+const allowCssProp = props => (props.css ? props.css : '');
+
 const LogoStyled = styled(Logo)`
     margin-right: 12px;
 `;
@@ -65,26 +65,30 @@ const Button = styled.button`
     border: none;
     border-radius: 8px;
     font-family: ${props => props.theme.buttonFont};
+    cursor: pointer;
     font-weight: bold;
 
     ${props => props.theme.shadow};
-`;
-
-const TextBox = styled.div`
-    width: 81px;
+    ${allowCssProp};
 `;
 
 const SignUp = () => {
     return (
         <Link to="/signup">
-            <Button>
-                <TextBox>Sign up</TextBox>
+            <Button
+                css={`
+                    width: 81px;
+                `}
+            >
+                Sign up
             </Button>
         </Link>
     );
 };
 
 const MatchingButton = styled.button`
+    cursor: pointer;
+
     display: flex;
     align-items: center;
     background-color: ${props => props.theme.brandColor};
@@ -118,18 +122,18 @@ const NotificationsButton = () => {
     );
 };
 
-const UploadText = styled.div`
-    width: 124px;
-`;
-
 const UploadButton = () => {
     if (!UPLOAD_ENABLED) {
         return null;
     }
     return (
         <Link to={UPLOAD_URL}>
-            <Button>
-                <UploadText>Upload Model</UploadText>
+            <Button
+                css={`
+                    width: 124px;
+                `}
+            >
+                Upload Model
             </Button>
         </Link>
     );
