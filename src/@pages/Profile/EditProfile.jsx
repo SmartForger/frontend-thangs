@@ -205,14 +205,18 @@ function EditProfileForm({ user }) {
             </Field>
 
             <SaveButtonContainer>
-                <Button type="submit" disabled={!R.empty(errors)}>
-                    {currentState === 'waiting' ? (
-                        <Spinner />
-                    ) : currentState === 'error' ? (
-                        'Error'
-                    ) : (
-                        'Save Changes'
-                    )}
+                <Button
+                    type="submit"
+                    disabled={!R.empty(errors)}
+                    css={`
+                        width: 168px;
+                    `}
+                >
+                    {currentState === 'waiting'
+                        ? 'Saving...'
+                        : currentState === 'error'
+                            ? 'Error'
+                            : 'Save Changes'}
                 </Button>
             </SaveButtonContainer>
         </FormStyled>
