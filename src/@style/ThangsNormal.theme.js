@@ -70,6 +70,7 @@ export const NewTheme = {
     activityCount: GREY_3,
     buttonFont: fontMedium,
     mainFont: fontMain,
+    mainFontColor: BLACK_5,
     backgroundColor: GREY_8,
     profileNameColor: BLACK_5,
     profileContentColor: BLACK_5,

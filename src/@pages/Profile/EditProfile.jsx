@@ -111,6 +111,7 @@ const FullWidthInput = styled.input`
     min-width: 0;
     font-family: ${props => props.theme.buttonFont};
     font-size: 14px;
+    color: ${props => props.theme.mainFontColor};
 
     ${allowCssProp};
 `;
@@ -122,6 +123,7 @@ const TextArea = styled(TextareaAutosize)`
     border-radius: 8px;
     font-family: ${props => props.theme.buttonFont};
     font-size: 14px;
+    color: ${props => props.theme.mainFontColor};
 
     ${allowCssProp};
 `;
