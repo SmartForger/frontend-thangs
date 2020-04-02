@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import * as R from 'ramda';
+import TextareaAutosize from 'react-textarea-autosize';
 
 import { WithNewThemeLayout } from '@style/Layout';
 import { useCurrentUser } from '@customHooks/Users';
@@ -89,10 +90,12 @@ const FormStyled = styled.form`
     flex-direction: column;
     max-width: 520px;
 `;
+
 const NameField = styled.div`
     display: flex;
     justify-content: space-between;
 `;
+
 const FullWidthInput = styled.input`
     display: block;
     flex-grow: 1;
@@ -106,8 +109,9 @@ const FullWidthInput = styled.input`
 
     ${allowCssProp};
 `;
-const TextArea = styled.textarea`
-    resize: vertical;
+
+const TextArea = styled(TextareaAutosize)`
+    resize: none;
     border: 0;
     padding: 8px 16px;
     border-radius: 8px;
