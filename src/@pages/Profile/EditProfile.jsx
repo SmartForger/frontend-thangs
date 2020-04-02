@@ -8,6 +8,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { WithNewThemeLayout } from '@style/Layout';
 import { useCurrentUser } from '@customHooks/Users';
 import { ProfilePicture } from '@components/ProfilePicture';
+import { Spinner } from '@components/Spinner';
 import * as GraphqlService from '@services/graphql-service';
 
 const graphqlService = GraphqlService.getInstance();
@@ -126,7 +127,7 @@ const TextArea = styled(TextareaAutosize)`
 function EditProfileForm({ user }) {
     const { register, handleSubmit, errors } = useForm();
     const [updateUser] = graphqlService.useUpdateUser(user);
-    const [saved, setSaved] = useState(false);
+    const [currentState, setCurrentState] = useState('ready');
 
     async function formSubmit(data, e) {
         e.preventDefault();
@@ -141,14 +142,15 @@ function EditProfileForm({ user }) {
         };
 
         try {
+            setCurrentState('waiting');
             await updateUser({
                 variables: { updateInput },
             });
         } catch (error) {
+            setCurrentState('error');
             console.error('Error when trying to update the user', error);
         }
-
-        setSaved(true);
+        setCurrentState('saved');
     }
 
     return (
@@ -180,8 +182,14 @@ function EditProfileForm({ user }) {
                 `}
             />
 
-            <Button type="submit" disabled={R.empty(errors)}>
-                Save Changes
+            <Button type="submit" disabled={!R.empty(errors)}>
+                {currentState === 'waiting' ? (
+                    <Spinner />
+                ) : currentState === 'error' ? (
+                    'Error'
+                ) : (
+                    'Save Changes'
+                )}
             </Button>
         </FormStyled>
     );
