@@ -1,11 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { useHistory, Link } from 'react-router-dom';
+import { ProfilePicture } from '@components/ProfilePicture';
 import { ModelCollection } from '@components/ModelCollection';
-import { UserInline } from '@components/UserInline';
-import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 import { ModelDetails } from './ModelDetailsPlaceholder';
+import { LikeModelButton } from '@components/LikeModelButton';
+
+const SHOW_OWNER = true;
+const SHOW_MODELS = true;
 
 const BackButton = styled.button`
     width: 48px;
@@ -59,7 +63,10 @@ const Sidebar = styled.div`
     }
 `;
 
-const Button = styled.button`
+const PrimaryButton = styled(Link)`
+    background: ${props => props.theme.modelPrimaryButtonBackground};
+    color: ${props => props.theme.modelPrimaryButtonText};
+
     margin-bottom: 24px;
     display: flex;
     align-items: center;
@@ -69,48 +76,85 @@ const Button = styled.button`
     font-size: 14px;
     font-weight: 500;
     border-radius: 8px;
-    border: none;
+    display: inline-block;
+    text-decoration: none;
 `;
 
-const ActionButton = styled(Button)`
-    background: ${props => props.theme.modelActionButtonBackground};
-    color: ${props => props.theme.modelActionButtonText};
-    > svg {
-        margin-right: 8px
-        fill: ${props => props.theme.modelActionButtonText};
-    }
+const ModelTitleContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 8px 0;
 `;
 
-const PrimaryButton = styled(Button)`
-    background: ${props => props.theme.modelPrimaryButtonBackground};
-    color: ${props => props.theme.modelPrimaryButtonText};
+const ModelTitleContent = styled.div`
+    flex-direction: column;
 `;
+
+const ModelOwnerProfilePicture = styled(ProfilePicture)`
+    margin-right: 16px;
+`;
+
+const ModelTitleText = styled.span`
+    display: block;
+    color: ${props => props.theme.modelTitleText};
+
+    font-family: Montserrat-Regular;
+    font-size: 24px;
+    font-weight: normal;
+`;
+
+const ModelOwnerLink = styled(Link)`
+    display: block;
+    color: ${props => props.theme.modelOwnerLink};
+
+    font-family: Montserrat-Medium;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+`;
+
+function ModelTitle({ model, className }) {
+    return (
+        <ModelTitleContainer className={className}>
+            {model.owner && (
+                <ModelOwnerProfilePicture size="48px" user={model.owner} />
+            )}
+            <ModelTitleContent>
+                <ModelTitleText>{model.name}</ModelTitleText>
+                {model.owner && (
+                    <ModelOwnerLink to={`/profile/${model.owner.id}`}>
+                        {model.owner.fullName}
+                    </ModelOwnerLink>
+                )}
+            </ModelTitleContent>
+        </ModelTitleContainer>
+    );
+}
 
 const ModelPreviewPage = ({ model, currentUser }) => {
     // Temporary placeholder data.
-    const relatedModels = createBatch(10, modelFactory);
-    model.owner = userFactory();
+    const relatedModels = SHOW_MODELS ? createBatch(10, modelFactory) : [];
+    model.owner = SHOW_OWNER ? userFactory() : undefined;
     model.attachment = attachmentFactory();
+    const history = useHistory();
 
     return (
         <>
             <HeaderStyled>
-                <BackButton>
+                <BackButton onClick={() => history.goBack()}>
                     <BackArrow />
                 </BackButton>
-                <h2>{model.name}</h2>
             </HeaderStyled>
             <ModelContainer>
                 <ModelViewer></ModelViewer>
                 <Sidebar>
-                    <ActionButton>
-                        <HeartIcon /> Like
-                    </ActionButton>
-                    {model.owner && (
-                        <UserInline size="48px" user={model.owner} />
-                    )}
+                    <LikeModelButton currentUser={currentUser} model={model} />
+                    <ModelTitle model={model} />
                     <ModelDetails model={model} />
-                    <PrimaryButton>View details</PrimaryButton>
+                    <PrimaryButton to={`/model/${model.id}`}>
+                        View details
+                    </PrimaryButton>
                 </Sidebar>
             </ModelContainer>
             <ModelCollection models={relatedModels} />
@@ -129,6 +173,7 @@ function createBatch(number, factory) {
 }
 
 const userFactory = (index = 1) => ({
+    id: index,
     fullName: `Test User ${index}`,
     profile: {},
 });
