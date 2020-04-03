@@ -117,6 +117,27 @@ const UNLIKE_MODEL_MUTATION = gql`
     }
 `;
 
+const MODELS_BY_DATE_QUERY = gql`
+    query modelsByDate {
+        modelsByDate {
+            id
+            name
+            owner {
+                id
+                firstName
+                lastName
+                fullName
+                email
+            }
+            attachment {
+                id
+                filetype
+                fileSize
+            }
+        }
+    }
+`;
+
 const getAttachmentId = R.pathOr(null, ['attachment', 'attachmentId']);
 const getModel = R.pathOr(null, ['model']);
 const getModelsByDate = R.pathOr(null, ['modelsByDate']);
@@ -209,26 +230,6 @@ const useUnlikeModelMutation = (userId, modelId) => {
         },
     });
 };
-
-const MODELS_BY_DATE_QUERY = gql`
-    query modelsByDate {
-        modelsByDate {
-            id
-            name
-            owner {
-                id
-                firstName
-                lastName
-                email
-            }
-            attachment {
-                id
-                filetype
-                fileSize
-            }
-        }
-    }
-`;
 
 const parseModelPayload = data => {
     const model = getModel(data);
