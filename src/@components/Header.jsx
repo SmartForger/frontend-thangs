@@ -180,7 +180,7 @@ const Header = ({ inverted }) => {
                 <Row>
                     <MatchingButton disabled>
                         <MatchingIconStyled />
-                        <span>Search by Model</span>
+                        Search by Model
                     </MatchingButton>
                     <SearchBarNew />
                 </Row>
