@@ -23,10 +23,14 @@ const Layout = styled.div`
     margin: ${props => props.theme.headerHeight} auto 0;
 `;
 
+const allowCssProp = props => (props.css ? props.css : '');
+
 const NewLayout = styled.div`
     margin: 256px auto 0;
     max-width: 1237px;
     padding: 0 16px;
+
+    ${allowCssProp};
 `;
 
 const Content = styled.div`
@@ -75,13 +79,24 @@ export const WithNewThemeLayout = Component => props => {
     );
 };
 
+const Hero = styled.div`
+    background-color: cyan;
+    width: 100%;
+    height: 400px;
+`;
+
 export const WithNewInvertedHeaderLayout = Component => props => {
     return (
         <FlashContextProvider>
             <ThemeProvider theme={NewTheme}>
                 <NewGlobalStyle />
                 <Header inverted />
-                <NewLayout>
+                <Hero />
+                <NewLayout
+                    css={`
+                        margin-top: 24px;
+                    `}
+                >
                     <WithFlash>
                         <Component {...props} />
                     </WithFlash>
