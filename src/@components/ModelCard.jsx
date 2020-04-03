@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { UserInline } from './UserInline';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
@@ -19,6 +20,7 @@ const CardContent = styled.div`
 `;
 
 const ThumbnailContainer = styled.div`
+    position: relative;
     background: ${props => props.theme.modelThumbnailPlaceholder};
     border-radius: 8px 8px 0px 0px;
     height: 196px;
@@ -28,18 +30,34 @@ const ThumbnailContainer = styled.div`
     }
 `;
 
-function ModelThumbnail(props) {
-    const model = props.model;
-    const src = model.thumbnailUrl;
+function ModelThumbnail({ model, thumbnailUrl: src, children }) {
     return (
         <ThumbnailContainer>
             {src && <img src={src} alt={model.name} />}
+            {children}
         </ThumbnailContainer>
     );
 }
 
-const ModelName = styled.div`
+const Overlay = styled.div`
+    position: absolute;
     text-align: center;
+    height: 86px;
+    width: 100%;
+    background: linear-gradient(
+        -180deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.2) 100%
+    );
+    bottom: 0;
+    display: flex;
+    align-items: flex-end;
+`;
+
+const ModelName = styled.div`
+    color: ${props => props.theme.modelActionButtonText};
+    font-weight: 500;
+    margin: 16px;
 `;
 
 const ActivityIndicators = styled.div`
@@ -67,24 +85,42 @@ const HeartIconStyled = styled(HeartIcon)`
 
 function ModelCard({ className, model, withOwner }) {
     const showOwner = withOwner && model.owner;
+    const [hovered, setHovered] = useState(false);
+
+    const handleMouseEnter = () => setHovered(true);
+    const handleMouseLeave = () => setHovered(false);
+
     return (
-        <CardContainer className={className}>
-            <ModelThumbnail model={model} />
-            <CardContent>
-                <ModelName>{model.name}</ModelName>
-                {showOwner && <UserInline user={model.owner} />}
-                <ActivityIndicators>
-                    <ActivityCount>
-                        <ChatIcon />
-                        &nbsp;{model.commentsCount}
-                    </ActivityCount>
-                    <ActivityCount>
-                        <HeartIconStyled />
-                        &nbsp;{model.likesCount}
-                    </ActivityCount>
-                </ActivityIndicators>
-            </CardContent>
-        </CardContainer>
+        <Link
+            to={`/new/preview/model/${model.id}`}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onFocus={handleMouseEnter}
+            onBlur={handleMouseLeave}
+        >
+            <CardContainer className={className}>
+                <ModelThumbnail model={model}>
+                    {hovered ? (
+                        <Overlay>
+                            <ModelName>{model.name}</ModelName>
+                        </Overlay>
+                    ) : null}
+                </ModelThumbnail>
+                <CardContent>
+                    {showOwner && <UserInline user={model.owner} />}
+                    <ActivityIndicators>
+                        <ActivityCount>
+                            <ChatIcon />
+                            &nbsp;{model.commentsCount}
+                        </ActivityCount>
+                        <ActivityCount>
+                            <HeartIconStyled />
+                            &nbsp;{model.likesCount}
+                        </ActivityCount>
+                    </ActivityIndicators>
+                </CardContent>
+            </CardContainer>
+        </Link>
     );
 }
 

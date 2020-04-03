@@ -24,6 +24,7 @@ const FixedHeader = styled.div`
     position: fixed;
     background: ${props => props.theme.backgroundColor};
     top: 0;
+    z-index: 1;
 `;
 
 const Boundary = styled.div`
