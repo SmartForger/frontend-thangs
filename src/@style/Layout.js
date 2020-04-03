@@ -4,7 +4,7 @@ import { ThangsHeader } from '@components/ThangsHeader';
 import { ThangsMain, NewTheme } from '@style/ThangsNormal.theme.js';
 import { GlobalStyle, NewGlobalStyle } from '@style/Thangs.GlobalStyle';
 import { Footer } from '@components/Footer';
-import { Header } from '@components/Header';
+import { Header, InvertedHeaderBackground } from '@components/Header';
 import { Flash, FlashContext, FlashContextProvider } from '@components/Flash';
 
 const frame = fullScreen => {
@@ -83,6 +83,8 @@ const Hero = styled.div`
     background-color: cyan;
     width: 100%;
     height: 400px;
+    z-index: 1;
+    position: relative;
 `;
 
 export const WithNewInvertedHeaderLayout = Component => props => {
@@ -91,6 +93,7 @@ export const WithNewInvertedHeaderLayout = Component => props => {
             <ThemeProvider theme={NewTheme}>
                 <NewGlobalStyle />
                 <Header inverted />
+                <InvertedHeaderBackground />
                 <Hero />
                 <NewLayout
                     css={`

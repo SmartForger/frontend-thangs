@@ -23,18 +23,25 @@ const LogoStyled = styled(Logo)`
 const FixedHeader = styled.div`
     width: 100%;
     position: fixed;
-    background: ${props =>
-        props.inverted
-            ? props.theme.invertedHeaderBackground
-            : props.theme.backgroundColor};
+    ${props =>
+        props.inverted ? '' : `background: ${props.theme.backgroundColor}`};
     top: 0;
-    z-index: 1;
+    z-index: 2;
+`;
+
+export const InvertedHeaderBackground = styled.div`
+    background: ${props => props.theme.invertedHeaderBackground};
+    height: 195px;
+    position: fixed;
+    width: 100%;
+    top: 0;
 `;
 
 const Boundary = styled.div`
     margin: 48px auto 16px;
     padding: 0 16px;
     max-width: 1237px;
+    position: relative;
 `;
 
 const Row = styled.div`
@@ -161,26 +168,28 @@ const UserNav = () => {
 
 const Header = ({ inverted }) => {
     return (
-        <FixedHeader inverted>
-            <Boundary>
-                <Row>
-                    <div>
-                        <Row>
-                            <LogoStyled />
-                            <LogoText />
-                        </Row>
-                    </div>
-                    <UserNav />
-                </Row>
-                <Row>
-                    <MatchingButton disabled>
-                        <MatchingIconStyled />
-                        Search by Model
-                    </MatchingButton>
-                    <SearchBarNew />
-                </Row>
-            </Boundary>
-        </FixedHeader>
+        <>
+            <FixedHeader inverted={inverted}>
+                <Boundary>
+                    <Row>
+                        <div>
+                            <Row>
+                                <LogoStyled />
+                                <LogoText />
+                            </Row>
+                        </div>
+                        <UserNav />
+                    </Row>
+                    <Row>
+                        <MatchingButton disabled>
+                            <MatchingIconStyled />
+                            Search by Model
+                        </MatchingButton>
+                        <SearchBarNew />
+                    </Row>
+                </Boundary>
+            </FixedHeader>
+        </>
     );
 };
 
