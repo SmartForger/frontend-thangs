@@ -26,15 +26,7 @@ const FixedHeader = styled.div`
     ${props =>
         props.inverted ? '' : `background: ${props.theme.backgroundColor}`};
     top: 0;
-    z-index: 2;
-`;
-
-export const InvertedHeaderBackground = styled.div`
     background: ${props => props.theme.invertedHeaderBackground};
-    height: 195px;
-    position: fixed;
-    width: 100%;
-    top: 0;
     z-index: 1;
 `;
 

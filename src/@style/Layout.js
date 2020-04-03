@@ -83,7 +83,6 @@ const Hero = styled.div`
     background: ${props => props.theme.invertedHeaderBackground};
     width: 100%;
     height: 756px;
-    z-index: 1;
     position: relative;
     display: flex;
     align-items: center;
@@ -121,7 +120,6 @@ export const WithNewInvertedHeaderLayout = Component => props => {
             <ThemeProvider theme={NewTheme}>
                 <NewGlobalStyle />
                 <Header inverted />
-                <InvertedHeaderBackground />
                 <Hero>
                     <TextContainer>
                         <PromotionalText>
