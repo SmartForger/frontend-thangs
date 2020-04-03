@@ -7,7 +7,7 @@ const DEFAULT_AVATAR_COLOR = '#616168';
 
 const AvatarStyled = styled(Avatar)`
     span {
-        color: ${props => props.theme.avatarTextColor};
+        color: ${props => props.theme.avatarInitialsColor};
     }
 `;
 
