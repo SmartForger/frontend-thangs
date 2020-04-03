@@ -2,7 +2,14 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useTrail } from 'react-spring';
 
-import { Button, TagsBox, Viewer, ColorPicker, Likes } from '@components';
+import {
+    Button,
+    TagsBox,
+    Viewer,
+    NewViewer,
+    ColorPicker,
+    Likes,
+} from '@components';
 
 const Info = styled.div`
     position: absolute;
@@ -22,6 +29,10 @@ const Info = styled.div`
     }
 `;
 
+const InfoNew = styled(Info)`
+    box-shadow: none;
+`;
+
 const ViewerContainer = styled.div`
     box-shadow: inset 0 0 0 5px black;
     pointer-events: none;
@@ -32,6 +43,11 @@ const ViewerContainer = styled.div`
     > div {
         pointer-events: all;
     }
+`;
+
+const ViewerContainerNew = styled(ViewerContainer)`
+    height: 100%;
+    box-shadow: none;
 `;
 
 const Interactions = styled.div`
@@ -176,4 +192,67 @@ const ModelViewer = ({ model, user }) => {
     );
 };
 
-export { ModelViewer };
+function NewModelViewer({ model }) {
+    const [mode, setMode] = useState('shaded');
+    const [meshColor, setMeshColor] = useState('#FFFFFF');
+    const [wireColor, setWireColor] = useState('#000000');
+
+    const changeMode = targetMode => {
+        setMode(targetMode);
+    };
+
+    const changeMeshColor = (color, event) => {
+        setMeshColor(color.hex);
+    };
+
+    const changeWireColor = (color, event) => {
+        setWireColor(color.hex);
+    };
+
+    return (
+        <ViewerContainerNew>
+            <InfoNew>
+                <DisplayButton
+                    onClick={() => {
+                        changeMode('shaded');
+                    }}
+                    name="Shaded"
+                />
+                <DisplayButton
+                    onClick={() => {
+                        changeMode('wireframe');
+                    }}
+                    name="wireframe"
+                />
+                <DisplayButton
+                    onClick={() => {
+                        changeMode('composite');
+                    }}
+                    name="Composite"
+                />
+            </InfoNew>
+            <Interactions />
+            <DisplayOptions>
+                <ColorPicker
+                    color={meshColor}
+                    onChange={changeMeshColor}
+                    newDesign
+                />
+                <ColorPicker
+                    color={wireColor}
+                    onChange={changeWireColor}
+                    newDesign
+                />
+            </DisplayOptions>
+            <Viewer
+                url={model.url}
+                mode={mode}
+                meshColor={meshColor}
+                wireFrameColor={wireColor}
+                boxShadow="none"
+            />
+        </ViewerContainerNew>
+    );
+}
+
+export { ModelViewer, NewModelViewer };
