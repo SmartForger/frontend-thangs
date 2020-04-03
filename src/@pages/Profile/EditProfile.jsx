@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import * as R from 'ramda';
@@ -8,6 +8,7 @@ import { useCurrentUser } from '@customHooks/Users';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { Spinner } from '@components/Spinner';
 import { NewChangePicture } from '@components/ChangeablePicture';
+import { FlashContext } from '@components/Flash';
 import * as GraphqlService from '@services/graphql-service';
 
 const graphqlService = GraphqlService.getInstance();
@@ -141,6 +142,22 @@ const Label = styled.label`
     margin: 8px 0;
 `;
 
+function WarningOnEmptyProfile({ user }) {
+    const [, setFlash] = useContext(FlashContext);
+    useEffect(
+        () => {
+            if (!user.profile.description) {
+                setFlash(
+                    'Add information about yourself below to let others know your specialties, interests, etc.',
+                );
+            }
+        },
+        [setFlash, user],
+    );
+
+    return null;
+}
+
 function EditProfileForm({ user }) {
     const { register, handleSubmit, errors } = useForm();
     const [updateUser] = graphqlService.useUpdateUser(user);
@@ -148,7 +165,6 @@ function EditProfileForm({ user }) {
 
     async function formSubmit(data, e) {
         e.preventDefault();
-        console.log('data', data);
 
         const updateInput = {
             id: user.id,
@@ -171,8 +187,13 @@ function EditProfileForm({ user }) {
         setCurrentState('saved');
     }
 
+    const handleChange = () => setCurrentState('ready');
+
     return (
-        <FormStyled onSubmit={(data, e) => handleSubmit(formSubmit)(data, e)}>
+        <FormStyled
+            onSubmit={(data, e) => handleSubmit(formSubmit)(data, e)}
+            onChange={handleChange}
+        >
             <Field>
                 <Label htmlFor="firstName">First name</Label>
                 <FullWidthInput
@@ -214,9 +235,11 @@ function EditProfileForm({ user }) {
                 >
                     {currentState === 'waiting'
                         ? 'Saving...'
-                        : currentState === 'error'
-                            ? 'Error'
-                            : 'Save Changes'}
+                        : currentState === 'saved'
+                            ? 'Saved!'
+                            : currentState === 'error'
+                                ? 'Error'
+                                : 'Save Changes'}
                 </Button>
             </SaveButtonContainer>
         </FormStyled>
@@ -241,6 +264,7 @@ function Page() {
 
     return (
         <div>
+            <WarningOnEmptyProfile user={user} />
             <InlineProfile user={user} />
             <PictureFormStyled
                 user={user}

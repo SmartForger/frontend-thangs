@@ -39,6 +39,7 @@ const BLUE_2 = '#1b8cf8';
 const BROWN = '#8b6400';
 const WHITE_1 = '#ffffff';
 const WHITE_2 = '#efecec';
+const WHITE_3 = '#e8e8ec';
 
 /*
  * These will be the fonts we actually want to use, but we need to get them from
@@ -79,6 +80,8 @@ export const NewTheme = {
     unselectedProfileTabColor: GREY_5,
     cardHeartColor: BLUE_2,
     modelDetailLabel: GREY_5,
+    flashColor: GREY_5,
+    flashColorText: WHITE_3,
     shadow,
     modelActionButtonText: WHITE_1,
     modelActionButtonBackground: GREY_3,
