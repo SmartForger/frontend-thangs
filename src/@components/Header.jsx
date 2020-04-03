@@ -7,6 +7,7 @@ import { useCurrentUser } from '@customHooks/Users';
 import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
 import { ReactComponent as MatchingIcon } from '@svg/matching-icon.svg';
 import { ReactComponent as Logo } from '@svg/logo.svg';
+import { ReactComponent as LogoText } from '@svg/logo-text.svg';
 
 const NOTIFICATIONS_ENABLED = true;
 const NOTIFICATIONS_URL = '#';
@@ -44,12 +45,6 @@ const Row = styled.div`
     :not(:last-of-type) {
         margin-bottom: 45px;
     }
-`;
-
-const Name = styled.div`
-    color: ${props => props.theme.logoText};
-    font-family: ${props => props.theme.mainFont};
-    font-size: 20px;
 `;
 
 const SignIn = styled(Link)`
@@ -172,7 +167,7 @@ const Header = ({ inverted }) => {
                     <div>
                         <Row>
                             <LogoStyled />
-                            <Name>THANGS</Name>
+                            <LogoText />
                         </Row>
                     </div>
                     <UserNav />
