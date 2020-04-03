@@ -25,7 +25,7 @@ const GREY_7 = '#616168';
 const GREY_8 = '#e6e6e9';
 const GREY_9 = '#b9b9be';
 const BLACK_1 = '#515151';
-// const BLACK_2 = '#232530';
+const BLACK_2 = '#232530';
 // const BLACK_3 = '#231f20';
 const BLACK_4 = '#464655';
 const BLACK_5 = '#4a4a4a';
@@ -88,4 +88,5 @@ export const NewTheme = {
     modelPrimaryButtonBackground: BLUE_2,
     modelPrimaryButtonText: WHITE_2,
     avatarTextColor: GREY_1,
+    invertedHeaderBackground: BLACK_2,
 };

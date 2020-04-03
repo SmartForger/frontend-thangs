@@ -14,6 +14,7 @@ import * as fullStory from '@vendors/full-story';
 import { SearchResults } from '@pages/SearchResults';
 import { SearchResults as NewSearchResults } from '@pages/SearchResults/NewSearchResults';
 import { Profile as NewProfile } from '@pages/Profile/NewProfile';
+import { Landing } from '@pages/Landing';
 import { EditProfile } from '@pages/Profile/EditProfile';
 
 const history = createBrowserHistory();
@@ -45,6 +46,7 @@ const App = () => {
                     />
                     <Route path="/new/profile/:id" component={NewProfile} />
                     <Route path="/model/:id" component={Model} />
+                    <Route exact path="/new/" component={Landing} />
                     <Route
                         path="/new/preview/model/:id"
                         component={ModelPreview}

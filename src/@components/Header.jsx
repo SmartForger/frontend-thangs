@@ -22,13 +22,16 @@ const LogoStyled = styled(Logo)`
 const FixedHeader = styled.div`
     width: 100%;
     position: fixed;
-    background: ${props => props.theme.backgroundColor};
+    background: ${props =>
+        props.inverted
+            ? props.theme.invertedHeaderBackground
+            : props.theme.backgroundColor};
     top: 0;
     z-index: 1;
 `;
 
 const Boundary = styled.div`
-    margin: 50px auto 0;
+    margin: 48px auto 16px;
     padding: 0 16px;
     max-width: 1237px;
 `;
@@ -161,9 +164,9 @@ const UserNav = () => {
     );
 };
 
-const Header = () => {
+const Header = ({ inverted }) => {
     return (
-        <FixedHeader>
+        <FixedHeader inverted>
             <Boundary>
                 <Row>
                     <div>

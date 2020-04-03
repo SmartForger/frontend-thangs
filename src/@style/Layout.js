@@ -24,7 +24,7 @@ const Layout = styled.div`
 `;
 
 const NewLayout = styled.div`
-    margin: 236px auto 0;
+    margin: 256px auto 0;
     max-width: 1237px;
     padding: 0 16px;
 `;
@@ -34,7 +34,7 @@ const Content = styled.div`
     padding-top: 15px;
 `;
 
-const WithLayout = Component => props => {
+export const WithLayout = Component => props => {
     return (
         <ThemeProvider theme={ThangsMain}>
             <GlobalStyle />
@@ -59,7 +59,7 @@ function WithFlash({ children }) {
     );
 }
 
-const WithNewThemeLayout = Component => props => {
+export const WithNewThemeLayout = Component => props => {
     return (
         <FlashContextProvider>
             <ThemeProvider theme={NewTheme}>
@@ -75,7 +75,23 @@ const WithNewThemeLayout = Component => props => {
     );
 };
 
-const WithFullScreenLayout = Component => props => {
+export const WithNewInvertedHeaderLayout = Component => props => {
+    return (
+        <FlashContextProvider>
+            <ThemeProvider theme={NewTheme}>
+                <NewGlobalStyle />
+                <Header inverted />
+                <NewLayout>
+                    <WithFlash>
+                        <Component {...props} />
+                    </WithFlash>
+                </NewLayout>
+            </ThemeProvider>
+        </FlashContextProvider>
+    );
+};
+
+export const WithFullScreenLayout = Component => props => {
     return (
         <ThemeProvider theme={ThangsMain}>
             <GlobalStyle />
@@ -89,4 +105,3 @@ const WithFullScreenLayout = Component => props => {
         </ThemeProvider>
     );
 };
-export { WithLayout, WithFullScreenLayout, WithNewThemeLayout };
