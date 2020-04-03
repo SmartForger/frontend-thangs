@@ -89,4 +89,6 @@ export const NewTheme = {
     modelPrimaryButtonText: WHITE_2,
     avatarTextColor: GREY_1,
     invertedHeaderBackground: BLACK_2,
+    promotionalTextColor: WHITE_1,
+    promotionalSecondaryTextColor: GREY_3,
 };
