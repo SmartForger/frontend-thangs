@@ -1,16 +1,35 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
+import * as R from 'ramda';
 
+import * as GraphqlService from '@services/graphql-service';
 import { WithNewInvertedHeaderLayout } from '@style/Layout';
+import { Spinner } from '@components/Spinner';
+import { ModelCollection } from '@components/ModelCollection';
 
 const Body = styled.div`
     height: 2000px;
 `;
+
+const graphqlService = GraphqlService.getInstance();
+
 function Page() {
+    const { error, loading, models } = graphqlService.useModelsByDate();
+
+    if (loading) {
+        return <Spinner />;
+    }
+
+    if (error) {
+        return (
+            <div data-cy="fetch-results-error">
+                Error! We were not able to load results. Please try again later.
+            </div>
+        );
+    }
+
     return (
-        <div>
-            <Body />
-        </div>
+        <div>{!R.isEmpty(models) && <ModelCollection models={models} />}</div>
     );
 }
 
