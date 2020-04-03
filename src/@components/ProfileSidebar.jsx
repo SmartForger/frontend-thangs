@@ -81,7 +81,7 @@ const EditProfileForm = ({ onClose, user }) => {
     const { register, handleSubmit, errors } = useForm();
 
     const graphqlService = GraphqlService.getInstance();
-    const [updateUser] = graphqlService.useUpdateUser(user);
+    const [updateUser] = graphqlService.useUpdateUser();
 
     function handleCancel() {
         onClose();
