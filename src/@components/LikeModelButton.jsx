@@ -30,7 +30,6 @@ const ActionButton = styled.button`
 
 const userIdsWhoHaveLiked = R.pipe(
     R.prop('likes'),
-    R.filter(R.propEq('isLiked', true)),
     R.map(R.path(['owner', 'id']))
 );
 
