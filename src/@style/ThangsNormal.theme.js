@@ -88,4 +88,6 @@ export const NewTheme = {
     modelPrimaryButtonBackground: BLUE_2,
     modelPrimaryButtonText: WHITE_2,
     avatarTextColor: GREY_1,
+    modelTitleText: BLACK_1,
+    modelOwnerLink: BLUE_2,
 };
