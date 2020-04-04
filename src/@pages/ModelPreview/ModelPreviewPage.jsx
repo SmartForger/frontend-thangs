@@ -8,6 +8,13 @@ import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 import { ModelDetails } from './ModelDetailsPlaceholder';
 import { LikeModelButton } from '@components/LikeModelButton';
 
+import {
+    createBatch,
+    userFactory,
+    modelFactory,
+    attachmentFactory,
+} from '@helpers/content-factories';
+
 const SHOW_OWNER = true;
 const SHOW_MODELS = true;
 
@@ -163,34 +170,3 @@ const ModelPreviewPage = ({ model, currentUser }) => {
 };
 
 export { ModelPreviewPage };
-
-function createBatch(number, factory) {
-    const batch = [];
-    for (let i = 1; i <= number; i++) {
-        batch.push(factory(i));
-    }
-    return batch;
-}
-
-const userFactory = (index = 1) => ({
-    id: index,
-    fullName: `Test User ${index}`,
-    profile: {},
-});
-
-const attachmentFactory = (index = 1) => ({
-    material: 'Aluminum',
-    height: 55.5,
-    length: 25.5,
-    width: 30,
-    weight: 300,
-    ansi: true,
-});
-
-const modelFactory = (index = 1) => ({
-    name: `Related model ${index}`,
-    owner: userFactory(),
-    likesCount: 2014,
-    commentsCount: 365,
-    attachment: attachmentFactory(),
-});

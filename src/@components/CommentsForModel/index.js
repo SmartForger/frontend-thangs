@@ -1,0 +1,1 @@
+export { CommentsForModel } from './CommentsForModel';

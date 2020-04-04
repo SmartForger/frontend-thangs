@@ -10,6 +10,7 @@ const ALL_MODEL_COMMENTS_QUERY = gql`
                 id
                 firstName
                 lastName
+                fullName
                 profile {
                     avatarUrl
                 }
@@ -59,9 +60,8 @@ const CREATE_MODEL_COMMENT_MUTATION = gql`
     }
 `;
 
-const useCreateModelCommentMutation = ({ ownerId, body, modelId }) => {
+const useCreateModelCommentMutation = ({ modelId }) => {
     return useMutation(CREATE_MODEL_COMMENT_MUTATION, {
-        variables: { input: { ownerId, body, modelId } },
         update: (
             store,
             {

@@ -7,6 +7,7 @@ import { ModelCollection } from '@components/ModelCollection';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 import { ModelDetails } from '../ModelPreview/ModelDetailsPlaceholder';
 import { LikeModelButton } from '@components/LikeModelButton';
+import { CommentsForModel } from '@components/CommentsForModel';
 
 import { useParams } from 'react-router-dom';
 import { useLocalStorage } from '@customHooks/Storage';
@@ -14,6 +15,13 @@ import * as GraphqlService from '@services/graphql-service';
 import { WithNewThemeLayout } from '@style';
 import { Spinner } from '@components/Spinner';
 import { Page404 } from '../404';
+
+import {
+    createBatch,
+    userFactory,
+    modelFactory,
+    attachmentFactory,
+} from '@helpers/content-factories';
 
 const SHOW_OWNER = true;
 const SHOW_MODELS = true;
@@ -48,12 +56,10 @@ const ScrollableColumn = styled.div`
 `;
 
 const ModelViewer = styled.div`
-    // flex-grow: 1;
     background: ${props => props.theme.modelViewerPlaceholder};
     border-radius: 8px;
     box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
     height: 416px;
-    // min-width: 50%;
     margin-top: 8px;
     margin-right: 56px;
     margin-bottom: 48px;
@@ -64,7 +70,6 @@ const Sidebar = styled(ScrollableColumn)`
     min-width: 440px;
 
     > table {
-        margin-bottom: 24px;
         font-family: Montserrat-Regular;
         font-size: 14px;
         font-weight: normal;
@@ -77,23 +82,6 @@ const Sidebar = styled(ScrollableColumn)`
         line-height: 24px;
         text-transform: uppercase;
     }
-`;
-
-const PrimaryButton = styled(Link)`
-    background: ${props => props.theme.modelPrimaryButtonBackground};
-    color: ${props => props.theme.modelPrimaryButtonText};
-
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 28px;
-    font-family: Montserrat-Medium;
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 8px;
-    display: inline-block;
-    text-decoration: none;
 `;
 
 const ModelTitleContainer = styled.div`
@@ -120,7 +108,9 @@ const ModelTitleText = styled.span`
     font-weight: normal;
 `;
 
-const ModelOwnerLink = styled(Link)`
+const ProfileLink = styled(Link).attrs(({ user }) => ({
+    to: `/profile/${user.id}`,
+}))`
     display: block;
     color: ${props => props.theme.modelOwnerLink};
 
@@ -134,19 +124,25 @@ function ModelTitle({ model, className }) {
     return (
         <ModelTitleContainer className={className}>
             {model.owner && (
-                <ModelOwnerProfilePicture size="48px" user={model.owner} />
+                <ProfileLink user={model.owner}>
+                    <ModelOwnerProfilePicture size="48px" user={model.owner} />
+                </ProfileLink>
             )}
             <ModelTitleContent>
                 <ModelTitleText>{model.name}</ModelTitleText>
                 {model.owner && (
-                    <ModelOwnerLink to={`/profile/${model.owner.id}`}>
+                    <ProfileLink user={model.owner}>
                         {model.owner.fullName}
-                    </ModelOwnerLink>
+                    </ProfileLink>
                 )}
             </ModelTitleContent>
         </ModelTitleContainer>
     );
 }
+
+const Comments = styled(CommentsForModel)`
+    margin-top: 48px;
+`;
 
 const ModelDetailPage = ({ model, currentUser }) => {
     // Temporary placeholder data.
@@ -171,23 +167,12 @@ const ModelDetailPage = ({ model, currentUser }) => {
                     <LikeModelButton currentUser={currentUser} model={model} />
                     <ModelTitle model={model} />
                     <ModelDetails model={model} />
-                    <PrimaryButton to={`/model/${model.id}`}>
-                        View details
-                    </PrimaryButton>
-                    {/* <Comments model={model} /> */}
+                    <Comments model={model} />
                 </Sidebar>
             </ModelContainer>
         </>
     );
 };
-
-function createBatch(number, factory) {
-    const batch = [];
-    for (let i = 1; i <= number; i++) {
-        batch.push(factory(i));
-    }
-    return batch;
-}
 
 function Page() {
     const { id } = useParams();
@@ -209,26 +194,3 @@ function Page() {
 const ModelDetail = WithNewThemeLayout(Page);
 
 export { ModelDetail };
-
-const userFactory = (index = 1) => ({
-    id: index,
-    fullName: `Test User ${index}`,
-    profile: {},
-});
-
-const attachmentFactory = (index = 1) => ({
-    material: 'Aluminum',
-    height: 55.5,
-    length: 25.5,
-    width: 30,
-    weight: 300,
-    ansi: true,
-});
-
-const modelFactory = (index = 1) => ({
-    name: `Related model ${index}`,
-    owner: userFactory(),
-    likesCount: 2014,
-    commentsCount: 365,
-    attachment: attachmentFactory(),
-});
