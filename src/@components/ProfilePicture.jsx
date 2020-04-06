@@ -7,15 +7,15 @@ const DEFAULT_AVATAR_COLOR = '#616168';
 
 const AvatarStyled = styled(Avatar)`
     span {
-        color: ${props => props.theme.avatarTextColor};
+        color: ${props => props.theme.avatarInitialsColor};
     }
 `;
 
 export function ProfilePicture({
+    className,
     user,
     size = DEFAULT_AVATAR_SIZE,
     color = DEFAULT_AVATAR_COLOR,
-    className,
 }) {
     const avatarName = user.fullName;
     const src = user.profile && user.profile.avatarUrl;

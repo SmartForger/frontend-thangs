@@ -5,6 +5,7 @@ import { Route, Router, Switch } from 'react-router-dom';
 
 import { Home, Login, Signup, Profile, Model } from '@pages';
 import { ModelPreview } from '@pages/ModelPreview';
+import { ModelDetail } from '@pages/Model/ModelDetail';
 import { Newspost } from '@pages/Newspost';
 import { Page404 } from '@pages/404';
 import { graphqlClient } from '@services';
@@ -47,6 +48,7 @@ const App = () => {
                     <Route path="/new/profile/:id" component={NewProfile} />
                     <Route path="/model/:id" component={Model} />
                     <Route exact path="/new/" component={Landing} />
+                    <Route path="/new/model/:id" component={ModelDetail} />
                     <Route
                         path="/new/preview/model/:id"
                         component={ModelPreview}
