@@ -51,7 +51,7 @@ const ModelContainer = styled.div`
 const ScrollableColumn = styled.div`
     overflow-y: scroll;
     overflow-x: hidden;
-    max-height: calc(100vh - 300px);
+    max-height: calc(100vh - 312px);
     ${allowCssProp};
 `;
 
@@ -60,17 +60,18 @@ const ModelViewer = styled.div`
     border-radius: 8px;
     box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
     height: 416px;
-    margin-top: 8px;
     margin-right: 56px;
     margin-bottom: 48px;
 `;
 
 const ModelColumn = styled(ScrollableColumn)`
     flex-grow: 1;
+    padding: 0 16px;
+    margin: 0 -16px;
 `;
 
 const Sidebar = styled(ScrollableColumn)`
-    margin: 8px 0 0 24px;
+    margin-left: 24px;
     width: 440px;
 
     > table {
