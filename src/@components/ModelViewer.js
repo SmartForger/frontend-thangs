@@ -44,6 +44,14 @@ const ViewerContainer = styled.div`
 const ViewerContainerNew = styled(ViewerContainer)`
     height: 100%;
     box-shadow: none;
+    border-radius: 8px;
+    overflow: hidden;
+
+    > div {
+        pointer-events: all;
+    }
+
+    ${props => props.theme.shadow};
 `;
 
 const Interactions = styled.div`
