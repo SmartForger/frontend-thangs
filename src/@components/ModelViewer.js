@@ -79,6 +79,20 @@ const DisplayOptions = styled.div`
     }
 `;
 
+const DisplayOptionsNew = styled.div`
+    position: absolute;
+    bottom: 16px;
+    left: 64px;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-end;
+    z-index: 1;
+
+    > div {
+        margin-right: 15px;
+    }
+`;
+
 const DisplayButton = styled(Button)`
     max-width: 100%;
     width: auto;
@@ -245,10 +259,10 @@ function NewModelViewer({ model }) {
                     Composite
                 </DisplayButtonNew>
             </InfoNew>
-            <DisplayOptions>
+            <DisplayOptionsNew>
                 <ColorPickerNew color={meshColor} onChange={changeMeshColor} />
                 <ColorPickerNew color={wireColor} onChange={changeWireColor} />
-            </DisplayOptions>
+            </DisplayOptionsNew>
             <Viewer
                 url={model.url}
                 mode={mode}
