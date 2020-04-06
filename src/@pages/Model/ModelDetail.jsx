@@ -65,8 +65,12 @@ const ModelViewer = styled.div`
     margin-bottom: 48px;
 `;
 
+const ModelColumn = styled(ScrollableColumn)`
+    flex-grow: 1;
+`;
+
 const Sidebar = styled(ScrollableColumn)`
-    margin: 8px 0 0 8px;
+    margin: 8px 0 0 24px;
     min-width: 440px;
 
     > table {
@@ -157,10 +161,10 @@ const ModelDetailPage = ({ model, currentUser }) => {
                 </BackButton>
             </HeaderStyled>
             <ModelContainer>
-                <ScrollableColumn>
-                    <ModelViewer></ModelViewer>
+                <ModelColumn>
+                    <ModelViewer />
                     <ModelCollection models={relatedModels} />
-                </ScrollableColumn>
+                </ModelColumn>
                 <Sidebar>
                     <LikeModelButton currentUser={currentUser} model={model} />
                     <ModelTitle model={model} />
