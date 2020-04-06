@@ -5,6 +5,7 @@ import styled from 'styled-components';
 const ModelsStyled = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-auto-rows: 250px;
     gap: 20px;
 `;
 
