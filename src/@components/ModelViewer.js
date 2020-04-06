@@ -31,6 +31,8 @@ const Info = styled.div`
 
 const InfoNew = styled(Info)`
     box-shadow: none;
+    background: none;
+    width: 100px;
 `;
 
 const ViewerContainer = styled.div`
@@ -79,6 +81,14 @@ const DisplayOptions = styled.div`
 const DisplayButton = styled(Button)`
     max-width: 100%;
     width: auto;
+`;
+
+const DisplayButtonNew = styled.button`
+    max-width: 100%;
+    width: auto;
+    border: none;
+    padding: 4px;
+    border-radius: 4px;
 `;
 
 const MenuStyled = styled.div`
@@ -212,26 +222,28 @@ function NewModelViewer({ model }) {
     return (
         <ViewerContainerNew>
             <InfoNew>
-                <DisplayButton
+                <DisplayButtonNew
                     onClick={() => {
                         changeMode('shaded');
                     }}
-                    name="Shaded"
-                />
-                <DisplayButton
+                >
+                    Shaded
+                </DisplayButtonNew>
+                <DisplayButtonNew
                     onClick={() => {
                         changeMode('wireframe');
                     }}
-                    name="wireframe"
-                />
-                <DisplayButton
+                >
+                    Wireframe
+                </DisplayButtonNew>
+                <DisplayButtonNew
                     onClick={() => {
                         changeMode('composite');
                     }}
-                    name="Composite"
-                />
+                >
+                    Composite
+                </DisplayButtonNew>
             </InfoNew>
-            <Interactions />
             <DisplayOptions>
                 <ColorPicker
                     color={meshColor}
