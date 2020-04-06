@@ -6,6 +6,7 @@ import { GlobalStyle, NewGlobalStyle } from '@style/Thangs.GlobalStyle';
 import { Footer } from '@components/Footer';
 import { Header } from '@components/Header';
 import { Flash, FlashContext, FlashContextProvider } from '@components/Flash';
+import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg';
 
 const frame = fullScreen => {
     return fullScreen
@@ -23,10 +24,14 @@ const Layout = styled.div`
     margin: ${props => props.theme.headerHeight} auto 0;
 `;
 
+const allowCssProp = props => (props.css ? props.css : '');
+
 const NewLayout = styled.div`
-    margin: 236px auto 0;
+    margin: 256px auto 0;
     max-width: 1237px;
     padding: 0 16px;
+
+    ${allowCssProp};
 `;
 
 const Content = styled.div`
@@ -34,7 +39,7 @@ const Content = styled.div`
     padding-top: 15px;
 `;
 
-const WithLayout = Component => props => {
+export const WithLayout = Component => props => {
     return (
         <ThemeProvider theme={ThangsMain}>
             <GlobalStyle />
@@ -59,7 +64,7 @@ function WithFlash({ children }) {
     );
 }
 
-const WithNewThemeLayout = Component => props => {
+export const WithNewThemeLayout = Component => props => {
     return (
         <FlashContextProvider>
             <ThemeProvider theme={NewTheme}>
@@ -75,7 +80,82 @@ const WithNewThemeLayout = Component => props => {
     );
 };
 
-const WithFullScreenLayout = Component => props => {
+const Hero = styled.div`
+    background: ${props => props.theme.invertedHeaderBackground};
+    width: 100%;
+    height: 756px;
+    position: relative;
+    display: flex;
+    align-items: center;
+`;
+
+const PromotionalText = styled.div`
+    margin: 0 16px;
+
+    * {
+        color: ${props => props.theme.promotionalTextColor};
+        text-decoration-color: ${props => props.theme.brandColor};
+        font-size: 72px;
+    }
+`;
+
+const TextContainer = styled.div`
+    margin: auto;
+    max-width: 1237px;
+    width: 100%;
+`;
+
+const PromotionalSecondaryText = styled.div`
+    margin: 0 16px;
+    max-width: 550px;
+
+    color: ${props => props.theme.promotionalSecondaryTextColor};
+    font-size: 32px;
+    font-family: Montserrat-Light;
+    font-weight: 300;
+`;
+
+const Background = styled(BackgroundSvg)`
+    position: absolute;
+    bottom: 0;
+    right: 0;
+`;
+
+export const WithNewInvertedHeaderLayout = Component => props => {
+    return (
+        <FlashContextProvider>
+            <ThemeProvider theme={NewTheme}>
+                <NewGlobalStyle />
+                <Header inverted />
+                <Hero>
+                    <Background />
+                    <TextContainer>
+                        <PromotionalText>
+                            <span>
+                                <u>Build</u> Thangs.
+                            </span>
+                        </PromotionalText>
+                        <PromotionalSecondaryText>
+                            3D model community for designers, engineers and
+                            enthusiasts
+                        </PromotionalSecondaryText>
+                    </TextContainer>
+                </Hero>
+                <NewLayout
+                    css={`
+                        margin-top: 24px;
+                    `}
+                >
+                    <WithFlash>
+                        <Component {...props} />
+                    </WithFlash>
+                </NewLayout>
+            </ThemeProvider>
+        </FlashContextProvider>
+    );
+};
+
+export const WithFullScreenLayout = Component => props => {
     return (
         <ThemeProvider theme={ThangsMain}>
             <GlobalStyle />
@@ -89,4 +169,3 @@ const WithFullScreenLayout = Component => props => {
         </ThemeProvider>
     );
 };
-export { WithLayout, WithFullScreenLayout, WithNewThemeLayout };

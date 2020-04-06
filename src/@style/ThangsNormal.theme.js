@@ -15,7 +15,7 @@ export const ThangsMain = {
  * present in our designer's palette and we should account for them.
  */
 const OFF_WHITE = '#f5f5f5';
-// const GREY_1 = '#dbdbdf';
+const GREY_1 = '#dbdbdf';
 // const GREY_2 = '#d9d9d9';
 const GREY_3 = '#b9b9be';
 const GREY_4 = '#989898';
@@ -26,7 +26,7 @@ const GREY_8 = '#e6e6e9';
 const GREY_9 = '#b9b9be';
 const GREY_10 = '#bfbfbf';
 const BLACK_1 = '#515151';
-// const BLACK_2 = '#232530';
+const BLACK_2 = '#232530';
 // const BLACK_3 = '#231f20';
 const BLACK_4 = '#464655';
 const BLACK_5 = '#4a4a4a';
@@ -88,6 +88,10 @@ export const NewTheme = {
     modelActionButtonBackground: GREY_3,
     modelPrimaryButtonBackground: BLUE_2,
     modelPrimaryButtonText: WHITE_2,
+    avatarTextColor: GREY_1,
+    invertedHeaderBackground: BLACK_2,
+    promotionalTextColor: WHITE_1,
+    promotionalSecondaryTextColor: GREY_3,
     modelTitleText: BLACK_1,
     modelOwnerLink: BLUE_2,
     avatarInitialsColor: GREY_10,

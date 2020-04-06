@@ -7,6 +7,7 @@ import { useCurrentUser } from '@customHooks/Users';
 import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
 import { ReactComponent as MatchingIcon } from '@svg/matching-icon.svg';
 import { ReactComponent as Logo } from '@svg/logo.svg';
+import { ReactComponent as LogoText } from '@svg/logo-text.svg';
 
 const NOTIFICATIONS_ENABLED = true;
 const NOTIFICATIONS_URL = '#';
@@ -22,15 +23,18 @@ const LogoStyled = styled(Logo)`
 const FixedHeader = styled.div`
     width: 100%;
     position: fixed;
-    background: ${props => props.theme.backgroundColor};
+    ${props =>
+        props.inverted ? '' : `background: ${props.theme.backgroundColor}`};
     top: 0;
+    background: ${props => props.theme.invertedHeaderBackground};
     z-index: 1;
 `;
 
 const Boundary = styled.div`
-    margin: 50px auto 0;
+    margin: 48px auto 16px;
     padding: 0 16px;
     max-width: 1237px;
+    position: relative;
 `;
 
 const Row = styled.div`
@@ -41,12 +45,6 @@ const Row = styled.div`
     :not(:last-of-type) {
         margin-bottom: 45px;
     }
-`;
-
-const Name = styled.div`
-    color: ${props => props.theme.logoText};
-    font-family: ${props => props.theme.mainFont};
-    font-size: 20px;
 `;
 
 const SignIn = styled(Link)`
@@ -161,28 +159,30 @@ const UserNav = () => {
     );
 };
 
-const Header = () => {
+const Header = ({ inverted }) => {
     return (
-        <FixedHeader>
-            <Boundary>
-                <Row>
-                    <div>
-                        <Row>
-                            <LogoStyled />
-                            <Name>THANGS</Name>
-                        </Row>
-                    </div>
-                    <UserNav />
-                </Row>
-                <Row>
-                    <MatchingButton disabled>
-                        <MatchingIconStyled />
-                        <span>Search by Model</span>
-                    </MatchingButton>
-                    <SearchBarNew />
-                </Row>
-            </Boundary>
-        </FixedHeader>
+        <>
+            <FixedHeader inverted={inverted}>
+                <Boundary>
+                    <Row>
+                        <div>
+                            <Row>
+                                <LogoStyled />
+                                <LogoText />
+                            </Row>
+                        </div>
+                        <UserNav />
+                    </Row>
+                    <Row>
+                        <MatchingButton disabled>
+                            <MatchingIconStyled />
+                            Search by Model
+                        </MatchingButton>
+                        <SearchBarNew />
+                    </Row>
+                </Boundary>
+            </FixedHeader>
+        </>
     );
 };
 
