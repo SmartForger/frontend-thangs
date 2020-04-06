@@ -21,6 +21,8 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const NewGlobalStyle = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap');
+
   body {
     padding: 0;
     margin: 0;
