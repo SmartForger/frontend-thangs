@@ -70,9 +70,6 @@ const Sidebar = styled(ScrollableColumn)`
     min-width: 440px;
 
     > table {
-        font-family: Montserrat-Regular;
-        font-size: 14px;
-        font-weight: normal;
         line-height: 18px;
     }
     > table td:first-child {
@@ -103,7 +100,6 @@ const ModelTitleText = styled.span`
     display: block;
     color: ${props => props.theme.modelTitleText};
 
-    font-family: Montserrat-Regular;
     font-size: 24px;
     font-weight: normal;
 `;
@@ -112,7 +108,6 @@ const ProfileLink = styled(Link)`
     display: block;
     color: ${props => props.theme.modelOwnerLink};
 
-    font-family: Montserrat-Medium;
     font-size: 16px;
     font-weight: 500;
     text-decoration: none;
