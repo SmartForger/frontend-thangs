@@ -10,8 +10,8 @@ const CardContainer = styled.div`
     flex-direction: column;
 
     background: ${props => props.theme.cardBackground};
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
     border-radius: 8px;
-    ${props => props.theme.lightShadow};
 `;
 
 const CardContent = styled.div`
