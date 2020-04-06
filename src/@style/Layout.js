@@ -6,6 +6,7 @@ import { GlobalStyle, NewGlobalStyle } from '@style/Thangs.GlobalStyle';
 import { Footer } from '@components/Footer';
 import { Header, InvertedHeaderBackground } from '@components/Header';
 import { Flash, FlashContext, FlashContextProvider } from '@components/Flash';
+import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg';
 
 const frame = fullScreen => {
     return fullScreen
@@ -114,6 +115,12 @@ const PromotionalSecondaryText = styled.div`
     font-weight: 300;
 `;
 
+const Background = styled(BackgroundSvg)`
+    position: absolute;
+    bottom: 0;
+    right: 0;
+`;
+
 export const WithNewInvertedHeaderLayout = Component => props => {
     return (
         <FlashContextProvider>
@@ -121,6 +128,7 @@ export const WithNewInvertedHeaderLayout = Component => props => {
                 <NewGlobalStyle />
                 <Header inverted />
                 <Hero>
+                    <Background />
                     <TextContainer>
                         <PromotionalText>
                             <span>
