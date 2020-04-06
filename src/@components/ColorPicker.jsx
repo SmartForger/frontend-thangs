@@ -5,7 +5,7 @@ import { BlockPicker } from 'react-color';
 const StyledColorDisplay = styled.div`
     height: 75px;
     width: 75px;
-    box-shadow: ${props => (props.newDesign ? 'none' : 'inset 0 0 0 5px black')}
+    box-shadow: inset 0 0 0 5px black;
     background: ${props => props.color};
 
     > div {
@@ -16,7 +16,22 @@ const StyledColorDisplay = styled.div`
     }
 `;
 
-const ColorPicker = ({ color = '#FFFFFF', onChange, newDesign }) => {
+const StyledColorDisplayNew = styled.div`
+    height: 24px;
+    width: 32px;
+    background: ${props => props.color};
+    border-radius: 4px;
+    cursor: pointer;
+
+    > div {
+        left: 0;
+        top: 100%;
+        transform: translate(calc(-50% + 16px), 10px);
+        display: ${props => (props.visible ? 'absolute' : 'none')};
+    }
+`;
+
+const ColorPicker = ({ color = '#FFFFFF', onChange }) => {
     const [visible, setVisible] = useState(false);
 
     const toggleVisible = () => {
@@ -40,5 +55,28 @@ const ColorPicker = ({ color = '#FFFFFF', onChange, newDesign }) => {
         </StyledColorDisplay>
     );
 };
+
+export function ColorPickerNew({ color = '#FFFFFF', onChange }) {
+    const [visible, setVisible] = useState(false);
+
+    const toggleVisible = () => {
+        setVisible(!visible);
+    };
+
+    const handleChange = (...args) => {
+        onChange(...args);
+        toggleVisible();
+    };
+
+    return (
+        <StyledColorDisplayNew
+            color={color}
+            onClick={toggleVisible}
+            visible={visible}
+        >
+            <BlockPicker color={color} onChange={handleChange} />
+        </StyledColorDisplayNew>
+    );
+}
 
 export { ColorPicker };

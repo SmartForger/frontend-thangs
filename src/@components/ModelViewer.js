@@ -10,6 +10,7 @@ import {
     ColorPicker,
     Likes,
 } from '@components';
+import { ColorPickerNew } from '@components/ColorPicker';
 
 const Info = styled.div`
     position: absolute;
@@ -245,16 +246,8 @@ function NewModelViewer({ model }) {
                 </DisplayButtonNew>
             </InfoNew>
             <DisplayOptions>
-                <ColorPicker
-                    color={meshColor}
-                    onChange={changeMeshColor}
-                    newDesign
-                />
-                <ColorPicker
-                    color={wireColor}
-                    onChange={changeWireColor}
-                    newDesign
-                />
+                <ColorPickerNew color={meshColor} onChange={changeMeshColor} />
+                <ColorPickerNew color={wireColor} onChange={changeWireColor} />
             </DisplayOptions>
             <Viewer
                 url={model.url}
