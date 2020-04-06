@@ -5,8 +5,16 @@ import { useHistory, Link } from 'react-router-dom';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { ModelCollection } from '@components/ModelCollection';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
-import { ModelDetails } from './ModelDetailsPlaceholder';
+import { ModelDetails } from '../ModelPreview/ModelDetailsPlaceholder';
 import { LikeModelButton } from '@components/LikeModelButton';
+import { CommentsForModel } from '@components/CommentsForModel';
+
+import { useParams } from 'react-router-dom';
+import { useLocalStorage } from '@customHooks/Storage';
+import * as GraphqlService from '@services/graphql-service';
+import { WithNewThemeLayout } from '@style';
+import { Spinner } from '@components/Spinner';
+import { Page404 } from '../404';
 
 import {
     createBatch,
@@ -17,6 +25,8 @@ import {
 
 const SHOW_OWNER = true;
 const SHOW_MODELS = true;
+
+const allowCssProp = props => (props.css ? props.css : '');
 
 const BackButton = styled.button`
     width: 48px;
@@ -38,24 +48,28 @@ const ModelContainer = styled.div`
     flex-direction: row;
 `;
 
+const ScrollableColumn = styled.div`
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: calc(100vh - 300px);
+    ${allowCssProp};
+`;
+
 const ModelViewer = styled.div`
-    flex-grow: 1;
     background: ${props => props.theme.modelViewerPlaceholder};
     border-radius: 8px;
     box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
     height: 416px;
-    min-width: 50%;
     margin-top: 8px;
     margin-right: 56px;
     margin-bottom: 48px;
 `;
 
-const Sidebar = styled.div`
+const Sidebar = styled(ScrollableColumn)`
     margin: 8px 0 0 8px;
-    min-width: 400px;
+    min-width: 440px;
 
     > table {
-        margin-bottom: 24px;
         font-family: Montserrat-Regular;
         font-size: 14px;
         font-weight: normal;
@@ -68,23 +82,6 @@ const Sidebar = styled.div`
         line-height: 24px;
         text-transform: uppercase;
     }
-`;
-
-const PrimaryButton = styled(Link)`
-    background: ${props => props.theme.modelPrimaryButtonBackground};
-    color: ${props => props.theme.modelPrimaryButtonText};
-
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 28px;
-    font-family: Montserrat-Medium;
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 8px;
-    display: inline-block;
-    text-decoration: none;
 `;
 
 const ModelTitleContainer = styled.div`
@@ -111,7 +108,7 @@ const ModelTitleText = styled.span`
     font-weight: normal;
 `;
 
-const ModelOwnerLink = styled(Link)`
+const ProfileLink = styled(Link)`
     display: block;
     color: ${props => props.theme.modelOwnerLink};
 
@@ -125,21 +122,27 @@ function ModelTitle({ model, className }) {
     return (
         <ModelTitleContainer className={className}>
             {model.owner && (
-                <ModelOwnerProfilePicture size="48px" user={model.owner} />
+                <ProfileLink to={`/new/profile/${model.owner.id}`}>
+                    <ModelOwnerProfilePicture size="48px" user={model.owner} />
+                </ProfileLink>
             )}
             <ModelTitleContent>
                 <ModelTitleText>{model.name}</ModelTitleText>
                 {model.owner && (
-                    <ModelOwnerLink to={`/profile/${model.owner.id}`}>
+                    <ProfileLink to={`/new/profile/${model.owner.id}`}>
                         {model.owner.fullName}
-                    </ModelOwnerLink>
+                    </ProfileLink>
                 )}
             </ModelTitleContent>
         </ModelTitleContainer>
     );
 }
 
-const ModelPreviewPage = ({ model, currentUser }) => {
+const Comments = styled(CommentsForModel)`
+    margin-top: 48px;
+`;
+
+const ModelDetailPage = ({ model, currentUser }) => {
     // Temporary placeholder data.
     const relatedModels = SHOW_MODELS ? createBatch(10, modelFactory) : [];
     model.owner = SHOW_OWNER ? userFactory() : undefined;
@@ -154,19 +157,38 @@ const ModelPreviewPage = ({ model, currentUser }) => {
                 </BackButton>
             </HeaderStyled>
             <ModelContainer>
-                <ModelViewer></ModelViewer>
+                <ScrollableColumn>
+                    <ModelViewer></ModelViewer>
+                    <ModelCollection models={relatedModels} />
+                </ScrollableColumn>
                 <Sidebar>
                     <LikeModelButton currentUser={currentUser} model={model} />
                     <ModelTitle model={model} />
                     <ModelDetails model={model} />
-                    <PrimaryButton to={`/model/${model.id}`}>
-                        View details
-                    </PrimaryButton>
+                    <Comments model={model} />
                 </Sidebar>
             </ModelContainer>
-            <ModelCollection models={relatedModels} />
         </>
     );
 };
 
-export { ModelPreviewPage };
+function Page() {
+    const { id } = useParams();
+
+    const graphqlService = GraphqlService.getInstance();
+    const { loading, error, model } = graphqlService.useModelById(id);
+    const [currentUser] = useLocalStorage('currentUser', null);
+
+    if (loading) {
+        return <Spinner />;
+    } else if (!model) {
+        return <Page404 />;
+    } else if (error) {
+        return <div>Error loading Model</div>;
+    }
+    return <ModelDetailPage model={model} currentUser={currentUser} />;
+}
+
+const ModelDetail = WithNewThemeLayout(Page);
+
+export { ModelDetail };
