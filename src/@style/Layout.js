@@ -4,7 +4,7 @@ import { ThangsHeader } from '@components/ThangsHeader';
 import { ThangsMain, NewTheme } from '@style/ThangsNormal.theme.js';
 import { GlobalStyle, NewGlobalStyle } from '@style/Thangs.GlobalStyle';
 import { Footer } from '@components/Footer';
-import { Header, InvertedHeaderBackground } from '@components/Header';
+import { Header } from '@components/Header';
 import { Flash, FlashContext, FlashContextProvider } from '@components/Flash';
 import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg';
 

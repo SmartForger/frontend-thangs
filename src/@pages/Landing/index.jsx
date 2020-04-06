@@ -1,15 +1,10 @@
-import React, { useContext } from 'react';
-import styled from 'styled-components';
+import React from 'react';
 import * as R from 'ramda';
 
 import * as GraphqlService from '@services/graphql-service';
 import { WithNewInvertedHeaderLayout } from '@style/Layout';
 import { Spinner } from '@components/Spinner';
 import { ModelCollection } from '@components/ModelCollection';
-
-const Body = styled.div`
-    height: 2000px;
-`;
 
 const graphqlService = GraphqlService.getInstance();
 

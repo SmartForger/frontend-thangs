@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 const DEFAULT_AVATAR_SIZE = '250px';
 const DEFAULT_AVATAR_COLOR = '#616168';
-const TEXT_COLOR = '#dbdbdf';
 
 const AvatarStyled = styled(Avatar)`
     span {
