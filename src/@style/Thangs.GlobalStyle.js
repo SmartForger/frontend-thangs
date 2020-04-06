@@ -26,16 +26,13 @@ const NewGlobalStyle = createGlobalStyle`
     margin: 0;
     overflow-x: hidden;
     background: ${props => props.theme.backgroundColor};
+    font-family: ${props => props.theme.buttonFont};
+    font-size: 14px;
+    color: ${props => props.theme.mainFontColor};
   }
 
   a {
     text-decoration: none;
-  }
-
-  * {
-      font-family: ${props => props.theme.buttonFont};
-      font-size: 14px;
-      color: ${props => props.theme.mainFontColor};
   }
 
   ${enablePlaceholderForContentEditable}
