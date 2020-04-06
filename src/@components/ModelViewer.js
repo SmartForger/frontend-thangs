@@ -218,7 +218,7 @@ const ModelViewer = ({ model, user }) => {
     );
 };
 
-function NewModelViewer({ model }) {
+function NewModelViewer({ model, className }) {
     const [mode, setMode] = useState('shaded');
     const [meshColor, setMeshColor] = useState('#FFFFFF');
     const [wireColor, setWireColor] = useState('#000000');
@@ -236,7 +236,7 @@ function NewModelViewer({ model }) {
     };
 
     return (
-        <ViewerContainerNew>
+        <ViewerContainerNew className={className}>
             <InfoNew>
                 <DisplayButtonNew
                     onClick={() => {
