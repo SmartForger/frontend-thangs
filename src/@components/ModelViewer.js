@@ -2,14 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useTrail } from 'react-spring';
 
-import {
-    Button,
-    TagsBox,
-    Viewer,
-    NewViewer,
-    ColorPicker,
-    Likes,
-} from '@components';
+import { Button, TagsBox, Viewer, ColorPicker, Likes } from '@components';
 import { ColorPickerNew } from '@components/ColorPicker';
 
 const Info = styled.div`
