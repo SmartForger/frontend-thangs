@@ -71,7 +71,7 @@ const ModelColumn = styled(ScrollableColumn)`
 
 const Sidebar = styled(ScrollableColumn)`
     margin: 8px 0 0 24px;
-    min-width: 440px;
+    width: 440px;
 
     > table {
         font-family: Montserrat-Regular;
