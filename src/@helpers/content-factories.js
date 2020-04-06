@@ -22,6 +22,7 @@ export const attachmentFactory = (index = 1) => ({
 });
 
 export const modelFactory = (index = 1) => ({
+    id: index,
     name: `Related model ${index}`,
     owner: userFactory(),
     likesCount: 2014,
