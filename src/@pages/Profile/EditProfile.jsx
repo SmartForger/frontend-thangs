@@ -144,23 +144,20 @@ const Label = styled.label`
 
 function WarningOnEmptyProfile({ user }) {
     const [, setFlash] = useContext(FlashContext);
-    useEffect(
-        () => {
-            if (!user.profile.description) {
-                setFlash(
-                    'Add information about yourself below to let others know your specialties, interests, etc.',
-                );
-            }
-        },
-        [setFlash, user],
-    );
+    useEffect(() => {
+        if (!user.profile.description) {
+            setFlash(
+                'Add information about yourself below to let others know your specialties, interests, etc.'
+            );
+        }
+    }, [setFlash, user]);
 
     return null;
 }
 
 function EditProfileForm({ user }) {
     const { register, handleSubmit, errors } = useForm();
-    const [updateUser] = graphqlService.useUpdateUser(user);
+    const [updateUser] = graphqlService.useUpdateUser();
     const [currentState, setCurrentState] = useState('ready');
 
     async function formSubmit(data, e) {
@@ -236,10 +233,10 @@ function EditProfileForm({ user }) {
                     {currentState === 'waiting'
                         ? 'Saving...'
                         : currentState === 'saved'
-                            ? 'Saved!'
-                            : currentState === 'error'
-                                ? 'Error'
-                                : 'Save Changes'}
+                        ? 'Saved!'
+                        : currentState === 'error'
+                        ? 'Error'
+                        : 'Save Changes'}
                 </Button>
             </SaveButtonContainer>
         </FormStyled>
