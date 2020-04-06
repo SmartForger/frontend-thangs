@@ -8,7 +8,7 @@ const TextInputStyled = styled.input`
     border: 1px solid ${props => (props.invalid ? 'red' : '#ccc')};
     border-radius: 4px;
     box-sizing: border-box;
-    font-size: 1.5rem;
+    font-size: 1rem;
     box-shadow: inset 0px 0px 0px 3px
         ${props => (props.invalid || props.incorrect ? 'red' : 'clear')};
     transition: 0.2s all;

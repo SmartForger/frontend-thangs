@@ -1,7 +1,11 @@
 import styled, { css, ThemeProvider } from 'styled-components';
 import React, { useContext } from 'react';
 import { ThangsHeader } from '@components/ThangsHeader';
-import { ThangsMain, NewTheme } from '@style/ThangsNormal.theme.js';
+import {
+    ThangsMain,
+    NewTheme,
+    NewDarkTheme,
+} from '@style/ThangsNormal.theme.js';
 import { GlobalStyle, NewGlobalStyle } from '@style/Thangs.GlobalStyle';
 import { Footer } from '@components/Footer';
 import { Header } from '@components/Header';
@@ -166,5 +170,21 @@ export const WithFullScreenLayout = Component => props => {
             </Layout>
             <Footer />
         </ThemeProvider>
+    );
+};
+
+export const WithNewSignupThemeLayout = Component => props => {
+    return (
+        <FlashContextProvider>
+            <ThemeProvider theme={NewDarkTheme}>
+                <NewGlobalStyle />
+                <Header variant="thin" />
+                <NewLayout>
+                    <WithFlash>
+                        <Component {...props} />
+                    </WithFlash>
+                </NewLayout>
+            </ThemeProvider>
+        </FlashContextProvider>
     );
 };

@@ -15,16 +15,21 @@ const BtnStyle = styled(animated.button)`
     display: flex;
     justify-content: center;
     align-items: center;
-    background: ${props => (props.disabled ? 'gray' : props.theme.primary)};
-    color: ${props => props.theme.white};
-    box-shadow: inset 0 0 0 2px ${props => props.theme.white};
+    background: ${props =>
+        props.disabled
+            ? 'gray'
+            : props.theme.primaryButton || props.theme.primaryButton};
+    color: ${props => (props.disabled ? 'darkgray' : props.theme.buttonColor)};
+    box-shadow: ${props => props.theme.buttonShadow};
     font-size: ${props => props.fontSize || '12px'};
     font-weight: 700;
-    transition: 0.5s;
+    transition: 0.3s;
 
     &:hover {
         background-color: ${props =>
-            props.disabled ? 'gray' : props.theme.primary};
+            props.disabled
+                ? 'gray'
+                : props.theme.primaryButton || props.theme.primary};
         color: ${props =>
             props.disabled ? props.theme.white : props.theme.secondary};
     }
