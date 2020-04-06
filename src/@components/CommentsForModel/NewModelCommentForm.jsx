@@ -13,17 +13,20 @@ const NewCommentContainer = styled.div`
 `;
 
 const NewCommentHeader = styled.div`
-    color: ${props => props.theme.BLACK_5};
-    font-family: LexendDeca-Regular;
     font-size: 18px;
     font-weight: normal;
-    line-height: 36px;
     margin-bottom: 16px;
 `;
 
 const PostCommentBodyTextarea = styled.textarea`
     width: 100%;
     margin-bottom: 24px;
+    resize: vertical;
+    min-height: 40px;
+    border: none;
+    box-sizing: border-box;
+    padding: 4px;
+    border-radius: 4px;
 `;
 
 const PostCommentButton = styled.button`

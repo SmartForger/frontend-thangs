@@ -108,9 +108,7 @@ const ModelTitleText = styled.span`
     font-weight: normal;
 `;
 
-const ProfileLink = styled(Link).attrs(({ user }) => ({
-    to: `/profile/${user.id}`,
-}))`
+const ProfileLink = styled(Link)`
     display: block;
     color: ${props => props.theme.modelOwnerLink};
 
@@ -124,14 +122,14 @@ function ModelTitle({ model, className }) {
     return (
         <ModelTitleContainer className={className}>
             {model.owner && (
-                <ProfileLink user={model.owner}>
+                <ProfileLink to={`/new/profile/${model.owner.id}`}>
                     <ModelOwnerProfilePicture size="48px" user={model.owner} />
                 </ProfileLink>
             )}
             <ModelTitleContent>
                 <ModelTitleText>{model.name}</ModelTitleText>
                 {model.owner && (
-                    <ProfileLink user={model.owner}>
+                    <ProfileLink to={`/new/profile/${model.owner.id}`}>
                         {model.owner.fullName}
                     </ProfileLink>
                 )}
