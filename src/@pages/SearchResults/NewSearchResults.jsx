@@ -11,11 +11,17 @@ const SearchResultsStyle = styled.div`
     margin-top: 50px;
 `;
 
+const Header = styled.div`
+    font-size: 24px;
+    line-height: 36px;
+    margin-bottom: 24px;
+`;
+
 const Page = () => {
     const { searchQuery } = useParams();
     const graphqlService = GraphqlService.getInstance();
     const { loading, error, models } = graphqlService.useSearchModels(
-        searchQuery
+        searchQuery,
     );
 
     if (loading) {
@@ -32,6 +38,7 @@ const Page = () => {
 
     return (
         <SearchResultsStyle>
+            <Header>Results for {searchQuery}</Header>
             {!R.isEmpty(models) && <ModelCollection models={models} />}
         </SearchResultsStyle>
     );
