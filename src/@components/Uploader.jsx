@@ -116,6 +116,11 @@ function Uploader() {
         history.push('/new/profile');
     };
 
+    const handleCancel = e => {
+        e.preventDefault();
+        history.goBack();
+    };
+
     return (
         <form onSubmit={onSubmit}>
             <Row>
@@ -163,6 +168,8 @@ function Uploader() {
                     css={`
                         margin-right: 8px;
                     `}
+                    onClick={handleCancel}
+                    type="button"
                 >
                     Cancel
                 </CancelButton>
