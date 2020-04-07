@@ -1,121 +1,104 @@
 import React from 'react';
 import styled from 'styled-components';
 import { DisplayCard, Slides, Uploader } from '@components';
+import { Spinner } from '@components/Spinner';
 import { WithLayout } from '@style';
+import * as GraphqlService from '@services/graphql-service';
+
+const graphqlService = GraphqlService.getInstance();
 
 const HomeBodyStyle = styled.div`
     margin-top: 50px;
 `;
 
 const CardRow = styled.div`
-    position: relative;
     display: flex;
-    flex-flow: row nowrap;
     justify-content: space-around;
-    align-items: center;
-    width: 100%;
-    height: 40%;
-    top: 47%;
 `;
 
+const ModelSlides = ({ models }) => {
+    const modelData = models.map(model => {
+        const owner = model.owner
+            ? `${model.owner.firstName} ${model.owner.lastName}`
+            : null;
+
+        return {
+            title: model.name,
+            owner,
+            route: `/model/${model.id}`,
+        };
+    });
+
+    return <Slides data={modelData} />;
+};
+
+const Models = () => {
+    const { error, loading, models } = graphqlService.useModelsByDate();
+    return (
+        <div>
+            <DisplayCard
+                percentage="10"
+                headerContent="New models"
+                fontSize="2"
+                shadow
+            >
+                {loading ? (
+                    <Spinner />
+                ) : error || !models ? (
+                    <div>Error</div>
+                ) : (
+                    <ModelSlides models={models} />
+                )}
+            </DisplayCard>
+        </div>
+    );
+};
+
+const NewspostsSlides = ({ newsposts }) => {
+    const newspostData = newsposts.map(newspost => {
+        const owner = newspost.owner
+            ? `${newspost.owner.firstName} ${newspost.owner.lastName}`
+            : null;
+
+        return {
+            title: newspost.title,
+            owner,
+            route: `/newspost/${newspost.id}`,
+        };
+    });
+
+    return <Slides data={newspostData} />;
+};
+
+const Newsposts = () => {
+    const { error, loading, newsposts } = graphqlService.useAllNewsposts();
+    return (
+        <div>
+            <DisplayCard
+                shadow
+                headerContent="News"
+                percentage="10"
+                fontSize={2}
+            >
+                {loading ? (
+                    <Spinner />
+                ) : error || !newsposts ? (
+                    <div>Error</div>
+                ) : (
+                    <NewspostsSlides newsposts={newsposts} />
+                )}
+            </DisplayCard>
+        </div>
+    );
+};
+
 const Page = () => {
-    const modelData = [
-        {
-            title: 'Fancy Screw',
-            owner: 'CarlCPhysna',
-            icon: 'Woops',
-            route: '/details/5345',
-        },
-        {
-            title: 'Engine Block',
-            owner: 'ColinCPhysna',
-            icon: 'Woops',
-            route: '/details/5345',
-        },
-        {
-            title: 'Cool Chair',
-            owner: 'Info@physna.com',
-            icon: 'Woops',
-            route: '/details/5345',
-        },
-    ];
-
-    const userData = [
-        {
-            title: 'CarlCPhysna',
-            owner: '',
-            route: '/profile/5345',
-        },
-        {
-            title: 'ColinCPhysna',
-            owner: '',
-            route: '/profile/5345',
-        },
-        {
-            title: 'Info@physna.com',
-            owner: '',
-            route: '/profile/5345',
-        },
-    ];
-
-    const newsData = [
-        {
-            title: 'Big news whoa',
-            owner: 'lorem ipsum lorem ipsum',
-        },
-        {
-            title: 'More news? thank you!',
-            owner: 'lorem ipsum lorem ipsum',
-        },
-        {
-            title: 'No news',
-            owner: 'lorem ipsum lorem ipsum',
-        },
-    ];
     return (
         <HomeBodyStyle>
             <CardRow>
-                <DisplayCard
-                    percentage="10"
-                    headerContent="Most Viewed"
-                    fontSize="2"
-                    shadow
-                    size="300"
-                >
-                    <Slides data={modelData} prefix="Uploaded By" />
-                </DisplayCard>
-                <DisplayCard
-                    percentage="10"
-                    headerContent="View Designs"
-                    fontSize="2"
-                    shadow
-                    size="300"
-                >
-                    <Slides data={modelData} prefix="Uploaded By" />
-                </DisplayCard>
-                <DisplayCard
-                    percentage="10"
-                    headerContent="Community"
-                    fontSize="2"
-                    shadow
-                    size="300"
-                >
-                    <Slides
-                        data={userData}
-                        prefix="a user you could connect with"
-                        rounded
-                    />
-                </DisplayCard>
-                <DisplayCard
-                    percentage="10"
-                    headerContent="News"
-                    fontSize="2"
-                    shadow
-                    size="300"
-                >
-                    <Slides data={newsData} text />
-                </DisplayCard>
                 <Uploader />
+                <Models />
+                <Newsposts />
             </CardRow>
         </HomeBodyStyle>
     );

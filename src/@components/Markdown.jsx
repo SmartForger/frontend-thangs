@@ -23,12 +23,13 @@ const MarkdownStyled = styled(ReactMarkdown)`
     }
 `;
 
-const Markdown = ({ children }) => {
+const Markdown = ({ children, className }) => {
     return (
         <MarkdownStyled
             source={children}
             allowedTypes={allowedTypes}
             unwrapDisallowed
+            className={className}
         />
     );
 };

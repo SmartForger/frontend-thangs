@@ -1,5 +1,7 @@
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import * as R from 'ramda';
+import { getFileDataUrl } from './utils';
 
 const MODEL_QUERY = gql`
     query getModel($id: ID) {
@@ -12,12 +14,21 @@ const MODEL_QUERY = gql`
                     id
                     firstName
                     lastName
+                    fullName
                 }
             }
             owner {
+                id
                 firstName
                 lastName
+                fullName
             }
+            attachment {
+                id
+                attachmentId
+            }
+            likesCount
+            commentsCount
         }
     }
 `;
@@ -29,9 +40,10 @@ const LIKE_MODEL_MUTATION = gql`
                 id
                 firstName
                 lastName
+                fullName
                 profile {
                     description
-                    avatar
+                    avatarUrl
                 }
             }
             model {
@@ -43,11 +55,18 @@ const LIKE_MODEL_MUTATION = gql`
                         id
                         firstName
                         lastName
+                        fullName
                     }
                 }
                 owner {
+                    id
                     firstName
                     lastName
+                    fullName
+                }
+                attachment {
+                    id
+                    attachmentId
                 }
             }
             like {
@@ -64,9 +83,10 @@ const UNLIKE_MODEL_MUTATION = gql`
                 id
                 firstName
                 lastName
+                fullName
                 profile {
                     description
-                    avatar
+                    avatarUrl
                 }
             }
             model {
@@ -78,11 +98,18 @@ const UNLIKE_MODEL_MUTATION = gql`
                         id
                         firstName
                         lastName
+                        fullName
                     }
                 }
                 owner {
+                    id
                     firstName
                     lastName
+                    fullName
+                }
+                attachment {
+                    id
+                    attachmentId
                 }
             }
             like {
@@ -92,14 +119,69 @@ const UNLIKE_MODEL_MUTATION = gql`
     }
 `;
 
-const parseModelPayload = data => {
-    if (!data || !data.model) {
+const MODELS_BY_DATE_QUERY = gql`
+    query modelsByDate {
+        modelsByDate {
+            id
+            name
+            owner {
+                id
+                firstName
+                lastName
+                fullName
+                email
+            }
+            attachment {
+                id
+                filetype
+                fileSize
+            }
+        }
+    }
+`;
+
+const getAttachmentId = R.pathOr(null, ['attachment', 'attachmentId']);
+const getModel = R.pathOr(null, ['model']);
+const getModelsByDate = R.pathOr(null, ['modelsByDate']);
+const getSearchModels = R.pathOr(null, ['searchModels']);
+
+const parseModel = model => {
+    const attachmentId = getAttachmentId(model);
+    const url = attachmentId
+        ? `${getFileDataUrl()}?attachment_id=${attachmentId}`
+        : null;
+
+    return {
+        ...model,
+        url,
+        tags: [
+            { name: 'Yormy' },
+            { name: 'Grimgooorsh' },
+            { name: 'AB' },
+            { name: 'Longish' },
+            { name: 'Real long Tag' },
+            { name: 'Screw' },
+            { name: 'Bolt' },
+            { name: 'Automotive' },
+            { name: 'Clasp' },
+            { name: 'Physna' },
+            { name: 'Thangs.com' },
+            { name: 'Boat' },
+            { name: 'Trucks' },
+            { name: 'Civil Engineering' },
+            { name: '3D Printing' },
+            { name: 'Yormy' },
+        ],
+    };
+};
+
+const parseModelsByDatePayload = data => {
+    const models = getModelsByDate(data);
+    if (!models) {
         return null;
     }
 
-    return {
-        ...data.model,
-    };
+    return models.map(parseModel);
 };
 
 const useModelById = id => {
@@ -120,7 +202,7 @@ const useLikeModelMutation = (userId, modelId) => {
                 data: {
                     likeModel: { model },
                 },
-            }
+            },
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
@@ -140,7 +222,7 @@ const useUnlikeModelMutation = (userId, modelId) => {
                 data: {
                     unlikeModel: { model },
                 },
-            }
+            },
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
@@ -172,8 +254,68 @@ const UPLOAD_MODEL_MUTATION = gql`
     }
 `;
 
+const parseModelPayload = data => {
+    const model = getModel(data);
+
+    if (!model) {
+        return null;
+    }
+
+    return parseModel(model);
+};
+
+const useModelsByDate = () => {
+    const { error, loading, data } = useQuery(MODELS_BY_DATE_QUERY);
+
+    const models = parseModelsByDatePayload(data);
+
+    return { loading, error, models };
+};
+
+const SEARCH_MODELS_QUERY = gql`
+    query searchModels($query: String!) {
+        searchModels(query: $query) {
+            id
+            name
+            owner {
+                id
+                firstName
+                lastName
+                fullName
+            }
+            attachment {
+                id
+                fileSize
+                filetype
+            }
+            likesCount
+            commentsCount
+        }
+    }
+`;
+
 const useUploadModelMutation = () => {
     return useMutation(UPLOAD_MODEL_MUTATION);
+};
+
+const parseSeachModelsPayload = data => {
+    const models = getSearchModels(data);
+
+    if (!models) {
+        return null;
+    }
+
+    return models.map(parseModel);
+};
+
+const useSearchModels = searchQuery => {
+    const { error, loading, data } = useQuery(SEARCH_MODELS_QUERY, {
+        variables: { query: searchQuery },
+    });
+
+    const models = parseSeachModelsPayload(data);
+
+    return { loading, error, models };
 };
 
 export {
@@ -181,4 +323,6 @@ export {
     useLikeModelMutation,
     useUnlikeModelMutation,
     useUploadModelMutation,
+    useModelsByDate,
+    useSearchModels,
 };

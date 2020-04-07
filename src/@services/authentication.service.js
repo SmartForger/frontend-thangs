@@ -2,9 +2,11 @@ import { BehaviorSubject } from 'rxjs';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import { getGraphQLUrl } from './graphql-service';
+import * as pendo from '@vendors/pendo';
+import * as fullStory from '@vendors/full-story';
 
 const currentUserSubject = new BehaviorSubject(
-    JSON.parse(localStorage.getItem('currentUser')),
+    JSON.parse(localStorage.getItem('currentUser'))
 );
 
 const login = async ({ email, password }) => {
@@ -31,6 +33,8 @@ const login = async ({ email, password }) => {
         user.accessToken = access;
         user.refreshToken = refresh;
         currentUserSubject.next(user);
+        pendo.identify();
+        fullStory.identify();
         return response;
     } catch (err) {
         if (err.response) {

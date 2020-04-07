@@ -1,4 +1,4 @@
-import React, { Suspense, useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import { Canvas, useFrame, useThree, extend } from 'react-three-fiber';
 
 import * as THREE from 'three';
@@ -12,27 +12,25 @@ const Viewer = ({
     mode = 'shaded',
     meshColor = '#FF0000',
     wireFrameColor,
+    boxShadow = 'inset 0 0 0 5px black',
 }) => {
     return (
         <Canvas
             style={{
                 height: height,
                 width: width,
-                boxShadow: 'inset 0 0 0 5px black',
+                boxShadow,
                 background: '#999999',
-                zIndex: '-2',
             }}
         >
             <ambientLight intensity={0.9} />
             <pointLight intensity={1.12} position={[-1, 2, 1]} />
-            <Suspense fallback={<HoverCube />}>
-                <Asset
-                    url={url}
-                    mode={mode}
-                    meshColor={meshColor}
-                    wireFrameColor={wireFrameColor}
-                />
-            </Suspense>
+            <Asset
+                url={url}
+                mode={mode}
+                meshColor={meshColor}
+                wireFrameColor={wireFrameColor}
+            />
             <Controls />
         </Canvas>
     );

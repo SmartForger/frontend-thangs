@@ -10,7 +10,7 @@ describe('The Profile Page', () => {
             },
         });
         cy.visit('/profile/1');
-        cy.contains('Loading');
+        cy.get('[data-cy=loading-spinner]');
     });
 
     it('displays user details', () => {
@@ -28,6 +28,11 @@ describe('The Profile Page', () => {
                                 'test description of a user user profile',
                             avatar: 'avatar-url',
                         },
+                        models: [
+                            { id: 1, name: 'test-model' },
+                            { id: 1, name: 'test-model' },
+                            { id: 1, name: 'test-model' },
+                        ],
                     },
                 }),
                 useUploadUserAvatarMutation: () => {
@@ -39,6 +44,7 @@ describe('The Profile Page', () => {
         cy.contains('test-username');
         cy.contains('test-email');
         cy.contains('test-firstName test-lastName');
+        cy.get('[data-cy=profile-model-link]').should('have.length', 3);
     });
 
     it('displays error if no user found', () => {

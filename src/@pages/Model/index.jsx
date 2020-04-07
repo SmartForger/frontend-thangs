@@ -3,7 +3,9 @@ import { useParams } from 'react-router-dom';
 import { useLocalStorage } from '@customHooks/Storage';
 import * as GraphqlService from '@services/graphql-service';
 import { ModelPage } from './ModelPage';
-import { WithLayout } from '@style';
+import { WithFullScreenLayout } from '@style';
+import { Spinner } from '@components/Spinner';
+import { Page404 } from '../404';
 
 const Page = () => {
     const { id } = useParams();
@@ -13,14 +15,14 @@ const Page = () => {
     const [user] = useLocalStorage('currentUser', null);
 
     if (loading) {
-        return <div>Loading</div>;
+        return <Spinner />;
     } else if (!model) {
-        return <div>Model does not exist</div>;
+        return <Page404 />;
     } else if (error) {
         return <div>Error loading Model</div>;
     }
     return <ModelPage model={model} user={user} />;
 };
 
-const Model = WithLayout(Page);
+const Model = WithFullScreenLayout(Page);
 export { Model };

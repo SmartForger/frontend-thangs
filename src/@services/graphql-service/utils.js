@@ -1,12 +1,10 @@
 const hasEndSlash = /\/$/;
 
-const media = path => {
+const createAppUrl = path => {
     if (!path) {
         return null;
     }
-    const url = process.env.REACT_APP_API_KEY;
-    const mediaUrl = url.replace('api', 'media');
-    return `${mediaUrl}/${path}`;
+    return new URL(path, process.env.REACT_APP_API_KEY).toString();
 };
 
 const withEndSlash = path => {
@@ -17,9 +15,11 @@ const withEndSlash = path => {
 };
 
 const getGraphQLUrl = () => {
-    const url = process.env.REACT_APP_API_KEY;
-    const graphqlUrl = url.replace('api', 'graphql');
-    return withEndSlash(graphqlUrl);
+    return withEndSlash(createAppUrl('/graphql'));
 };
 
-export { media, getGraphQLUrl };
+const getFileDataUrl = () => {
+    return withEndSlash(createAppUrl('/api/model-data'));
+};
+
+export { createAppUrl, getGraphQLUrl, getFileDataUrl };
