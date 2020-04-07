@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { WithNewThemeLayout } from '@style';
+import { WithNewThemeLayout } from '@style/Layout';
 
 const Header = styled.h1`
     font-family: ${props => props.theme.headerFont};
