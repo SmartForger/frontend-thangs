@@ -31,7 +31,10 @@ const Layout = styled.div`
 const allowCssProp = props => (props.css ? props.css : '');
 
 const NewLayout = styled.div`
-    margin: 256px auto 0;
+    ${props =>
+        props.variant === 'small-vertical-spacing'
+            ? 'margin: 88px auto 0'
+            : 'margin: 256px auto 0'};
     max-width: 1237px;
     padding: 0 16px;
 
@@ -68,13 +71,17 @@ function WithFlash({ children }) {
     );
 }
 
-export const WithNewThemeLayout = Component => props => {
+export const WithNewThemeLayout = (Component, options = {}) => props => {
+    const { logoOnly } = options;
+    const headerVariant = logoOnly && 'logo-only';
+    const layoutVariant = logoOnly && 'small-vertical-spacing';
+
     return (
         <FlashContextProvider>
             <ThemeProvider theme={NewTheme}>
                 <NewGlobalStyle />
-                <Header />
-                <NewLayout>
+                <Header variant={headerVariant} />
+                <NewLayout variant={layoutVariant}>
                     <WithFlash>
                         <Component {...props} />
                     </WithFlash>

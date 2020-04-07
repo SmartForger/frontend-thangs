@@ -6,6 +6,7 @@ import { Uploader } from '@components/Uploader';
 const Header = styled.h1`
     font-family: ${props => props.theme.headerFont};
     color: ${props => props.theme.headerColor};
+    margin-bottom: 24px;
 `;
 
 const Page = () => {
@@ -17,6 +18,6 @@ const Page = () => {
     );
 };
 
-const Upload = WithNewThemeLayout(Page);
+const Upload = WithNewThemeLayout(Page, { logoOnly: true });
 
 export { Upload };
