@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
+import { useHistory } from 'react-router-dom';
 import { ReactComponent as UploadIcon } from '@svg/upload-icon.svg';
 
 const StyledUploadBlock = styled.div`
@@ -85,6 +86,8 @@ const CancelButton = styled(Button)`
 `;
 
 function Uploader() {
+    const history = useHistory();
+
     const [draggedFile, setDraggedFile] = useState();
     const graphqlService = GraphqlService.getInstance();
     const [uploadModel] = graphqlService.useUploadModelMutation();
@@ -102,7 +105,7 @@ function Uploader() {
 
     const onSubmit = async e => {
         e.preventDefault();
-        uploadModel({
+        await uploadModel({
             variables: {
                 file: draggedFile,
                 name: draggedFile.name,
@@ -110,6 +113,7 @@ function Uploader() {
                 userEmail: authenticationService.currentUserValue.email,
             },
         });
+        history.push('/new/profile');
     };
 
     return (
