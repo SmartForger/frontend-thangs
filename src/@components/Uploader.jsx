@@ -135,7 +135,7 @@ function Uploader() {
                     `}
                 >
                     <div {...getRootProps()}>
-                        <input {...getInputProps()} />
+                        <input {...getInputProps({ multiple: false })} />
                         <StyledUploadBlock dragactive={isDragActive}>
                             {draggedFile ? (
                                 <div>File: {draggedFile.name}</div>
