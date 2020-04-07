@@ -8,6 +8,7 @@ import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 import { ModelDetails } from '../ModelPreview/ModelDetailsPlaceholder';
 import { LikeModelButton } from '@components/LikeModelButton';
 import { CommentsForModel } from '@components/CommentsForModel';
+import { NewModelViewer } from '@components/ModelViewer';
 
 import { useParams } from 'react-router-dom';
 import { useLocalStorage } from '@customHooks/Storage';
@@ -55,14 +56,9 @@ const ScrollableColumn = styled.div`
     ${allowCssProp};
 `;
 
-const ModelViewer = styled.div`
-    background: ${props => props.theme.modelViewerPlaceholder};
-    border-radius: 8px;
-    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
+const ModelViewerStyled = styled(NewModelViewer)`
     height: 416px;
-    margin-top: 8px;
-    margin-right: 56px;
-    margin-bottom: 48px;
+    margin: 8px 56px 48px 0;
 `;
 
 const Sidebar = styled(ScrollableColumn)`
@@ -158,7 +154,7 @@ const ModelDetailPage = ({ model, currentUser }) => {
             </HeaderStyled>
             <ModelContainer>
                 <ScrollableColumn>
-                    <ModelViewer></ModelViewer>
+                    <ModelViewerStyled model={model} />
                     <ModelCollection models={relatedModels} />
                 </ScrollableColumn>
                 <Sidebar>

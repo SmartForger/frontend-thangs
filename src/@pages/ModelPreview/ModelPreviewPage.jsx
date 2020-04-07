@@ -7,6 +7,7 @@ import { ModelCollection } from '@components/ModelCollection';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 import { ModelDetails } from './ModelDetailsPlaceholder';
 import { LikeModelButton } from '@components/LikeModelButton';
+import { NewModelViewer } from '@components/ModelViewer';
 
 import {
     createBatch,
@@ -38,9 +39,8 @@ const ModelContainer = styled.div`
     flex-direction: row;
 `;
 
-const ModelViewer = styled.div`
+const ModelViewerContainer = styled.div`
     flex-grow: 1;
-    background: ${props => props.theme.modelViewerPlaceholder};
     border-radius: 8px;
     box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
     height: 416px;
@@ -154,7 +154,9 @@ const ModelPreviewPage = ({ model, currentUser }) => {
                 </BackButton>
             </HeaderStyled>
             <ModelContainer>
-                <ModelViewer></ModelViewer>
+                <ModelViewerContainer>
+                    <NewModelViewer model={model} />
+                </ModelViewerContainer>
                 <Sidebar>
                     <LikeModelButton currentUser={currentUser} model={model} />
                     <ModelTitle model={model} />
