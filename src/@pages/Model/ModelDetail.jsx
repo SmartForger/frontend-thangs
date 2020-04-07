@@ -52,18 +52,25 @@ const ModelContainer = styled.div`
 const ScrollableColumn = styled.div`
     overflow-y: scroll;
     overflow-x: hidden;
-    max-height: calc(100vh - 300px);
+    max-height: calc(100vh - 312px);
     ${allowCssProp};
 `;
 
 const ModelViewerStyled = styled(NewModelViewer)`
     height: 416px;
-    margin: 8px 56px 48px 0;
+    margin-right: 56px;
+    margin-bottom: 48px;
+`;
+
+const ModelColumn = styled(ScrollableColumn)`
+    flex-grow: 1;
+    padding: 0 16px;
+    margin: 0 -16px;
 `;
 
 const Sidebar = styled(ScrollableColumn)`
-    margin: 8px 0 0 8px;
-    min-width: 440px;
+    margin-left: 24px;
+    width: 440px;
 
     > table {
         line-height: 18px;
@@ -148,10 +155,10 @@ const ModelDetailPage = ({ model, currentUser }) => {
                 </BackButton>
             </HeaderStyled>
             <ModelContainer>
-                <ScrollableColumn>
+                <ModelColumn>
                     <ModelViewerStyled model={model} />
                     <ModelCollection models={relatedModels} />
-                </ScrollableColumn>
+                </ModelColumn>
                 <Sidebar>
                     <LikeModelButton currentUser={currentUser} model={model} />
                     <ModelTitle model={model} />

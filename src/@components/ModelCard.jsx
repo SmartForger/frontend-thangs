@@ -12,7 +12,7 @@ const CardContainer = styled.div`
     background: ${props => props.theme.cardBackground};
     box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
     border-radius: 8px;
-    width: 297px;
+    height: 100%;
 `;
 
 const CardContent = styled.div`
@@ -23,7 +23,7 @@ const ThumbnailContainer = styled.div`
     position: relative;
     background: ${props => props.theme.modelThumbnailPlaceholder};
     border-radius: 8px 8px 0px 0px;
-    height: 196px;
+    height: 100%;
     > img {
         width: 100%;
         height: 100%;
