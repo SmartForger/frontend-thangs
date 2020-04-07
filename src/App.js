@@ -16,6 +16,7 @@ import * as fullStory from '@vendors/full-story';
 import { SearchResults } from '@pages/SearchResults';
 import { SearchResults as NewSearchResults } from '@pages/SearchResults/NewSearchResults';
 import { Profile as NewProfile } from '@pages/Profile/NewProfile';
+import { Upload } from '@pages/Upload';
 import { Landing } from '@pages/Landing';
 import { EditProfile } from '@pages/Profile/EditProfile';
 
@@ -68,6 +69,7 @@ const App = () => {
                         path="/new/search/:searchQuery"
                         component={NewSearchResults}
                     />
+                    <Route path="/new/upload" component={Upload} />
                     <Route path="*" component={Page404} status={404} />
                 </Switch>
             </Router>
