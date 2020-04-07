@@ -100,6 +100,9 @@ export const NewTheme = {
     shadow,
     textOnBrandColor: BROWN,
     unselectedProfileTabColor: GREY_5,
+    uploaderBackground: BLACK_2,
+    uploaderBackgroundActive: BLACK_4,
+    uploaderText: GREY_3,
 };
 
 export const NewDarkTheme = {
