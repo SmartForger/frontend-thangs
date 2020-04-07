@@ -11,8 +11,6 @@ import { ReactComponent as LogoText } from '@svg/logo-text.svg';
 
 const NOTIFICATIONS_ENABLED = true;
 const NOTIFICATIONS_URL = '#';
-const UPLOAD_ENABLED = true;
-const UPLOAD_URL = '#';
 
 const allowCssProp = props => (props.css ? props.css : '');
 
@@ -123,11 +121,8 @@ const NotificationsButton = () => {
 };
 
 const UploadButton = () => {
-    if (!UPLOAD_ENABLED) {
-        return null;
-    }
     return (
-        <Link to={UPLOAD_URL}>
+        <Link to={`/new/upload`}>
             <Button
                 css={`
                     width: 124px;
