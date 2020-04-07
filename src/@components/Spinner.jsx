@@ -9,7 +9,7 @@ const StyledSpinner = styled.svg`
     display: block;
 
     & .path {
-        stroke: ${props => props.theme.secondary};
+        stroke: ${props => props.theme.secondary || props.theme.mainFontColor};
         stroke-linecap: round;
         animation: dash 1.5s ease-in-out infinite;
     }
