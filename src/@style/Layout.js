@@ -111,7 +111,6 @@ const PromotionalSecondaryText = styled.div`
 
     color: ${props => props.theme.promotionalSecondaryTextColor};
     font-size: 32px;
-    font-family: Montserrat-Light;
     font-weight: 300;
 `;
 

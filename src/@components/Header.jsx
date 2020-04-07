@@ -23,10 +23,11 @@ const LogoStyled = styled(Logo)`
 const FixedHeader = styled.div`
     width: 100%;
     position: fixed;
-    ${props =>
-        props.inverted ? '' : `background: ${props.theme.backgroundColor}`};
+    background: ${props =>
+        props.inverted
+            ? props.theme.invertedHeaderBackground
+            : props.theme.backgroundColor};
     top: 0;
-    background: ${props => props.theme.invertedHeaderBackground};
     z-index: 1;
 `;
 
@@ -53,7 +54,7 @@ const SignIn = styled(Link)`
     font-size: 14px;
     margin-right: 30px;
     font-family: ${props => props.theme.buttonFont};
-    font-weight: bold;
+    font-weight: 500;
 `;
 
 const Button = styled.button`
@@ -65,7 +66,7 @@ const Button = styled.button`
     border-radius: 8px;
     font-family: ${props => props.theme.buttonFont};
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 500;
 
     ${props => props.theme.shadow};
     ${allowCssProp};
@@ -95,7 +96,7 @@ const MatchingButton = styled.button`
     border: none;
     border-radius: 8px;
     font-family: ${props => props.theme.buttonFont};
-    font-weight: bold;
+    font-weight: 500;
     font-size: 14px;
     padding: 6px 24px 6px 32px;
 

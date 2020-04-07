@@ -27,6 +27,8 @@ const MODEL_QUERY = gql`
                 id
                 attachmentId
             }
+            likesCount
+            commentsCount
         }
     }
 `;
@@ -265,6 +267,8 @@ const SEARCH_MODELS_QUERY = gql`
                 fileSize
                 filetype
             }
+            likesCount
+            commentsCount
         }
     }
 `;

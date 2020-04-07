@@ -8,6 +8,7 @@ import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 import { ModelDetails } from '../ModelPreview/ModelDetailsPlaceholder';
 import { LikeModelButton } from '@components/LikeModelButton';
 import { CommentsForModel } from '@components/CommentsForModel';
+import { NewModelViewer } from '@components/ModelViewer';
 
 import { useParams } from 'react-router-dom';
 import { useLocalStorage } from '@customHooks/Storage';
@@ -55,10 +56,7 @@ const ScrollableColumn = styled.div`
     ${allowCssProp};
 `;
 
-const ModelViewer = styled.div`
-    background: ${props => props.theme.modelViewerPlaceholder};
-    border-radius: 8px;
-    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
+const ModelViewerStyled = styled(NewModelViewer)`
     height: 416px;
     margin-right: 56px;
     margin-bottom: 48px;
@@ -75,9 +73,6 @@ const Sidebar = styled(ScrollableColumn)`
     width: 440px;
 
     > table {
-        font-family: Montserrat-Regular;
-        font-size: 14px;
-        font-weight: normal;
         line-height: 18px;
     }
     > table td:first-child {
@@ -108,7 +103,6 @@ const ModelTitleText = styled.span`
     display: block;
     color: ${props => props.theme.modelTitleText};
 
-    font-family: Montserrat-Regular;
     font-size: 24px;
     font-weight: normal;
 `;
@@ -117,7 +111,6 @@ const ProfileLink = styled(Link)`
     display: block;
     color: ${props => props.theme.modelOwnerLink};
 
-    font-family: Montserrat-Medium;
     font-size: 16px;
     font-weight: 500;
     text-decoration: none;
@@ -163,7 +156,7 @@ const ModelDetailPage = ({ model, currentUser }) => {
             </HeaderStyled>
             <ModelContainer>
                 <ModelColumn>
-                    <ModelViewer />
+                    <ModelViewerStyled model={model} />
                     <ModelCollection models={relatedModels} />
                 </ModelColumn>
                 <Sidebar>

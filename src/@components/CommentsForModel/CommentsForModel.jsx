@@ -30,7 +30,7 @@ const Box = styled.div`
 `;
 
 const ProfileLink = styled(Link)`
-    font-weight: bold;
+    font-weight: 500;
     text-decoration: none;
 `;
 
@@ -85,7 +85,7 @@ const Container = styled.div`
 
 const CommentsForModel = ({ model, className }) => {
     const { loading, error, comments } = graphqlService.useAllModelComments(
-        model.id
+        model.id,
     );
 
     if (error) {

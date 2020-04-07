@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useTrail } from 'react-spring';
 
 import { Button, TagsBox, Viewer, ColorPicker, Likes } from '@components';
+import { ColorPickerNew } from '@components/ColorPicker';
 
 const Info = styled.div`
     position: absolute;
@@ -22,6 +23,12 @@ const Info = styled.div`
     }
 `;
 
+const InfoNew = styled(Info)`
+    box-shadow: none;
+    background: none;
+    width: 100px;
+`;
+
 const ViewerContainer = styled.div`
     box-shadow: inset 0 0 0 5px black;
     pointer-events: none;
@@ -32,6 +39,19 @@ const ViewerContainer = styled.div`
     > div {
         pointer-events: all;
     }
+`;
+
+const ViewerContainerNew = styled(ViewerContainer)`
+    height: 100%;
+    box-shadow: none;
+    border-radius: 8px;
+    overflow: hidden;
+
+    > div {
+        pointer-events: all;
+    }
+
+    ${props => props.theme.shadow};
 `;
 
 const Interactions = styled.div`
@@ -60,9 +80,31 @@ const DisplayOptions = styled.div`
     }
 `;
 
+const DisplayOptionsNew = styled.div`
+    position: absolute;
+    bottom: 16px;
+    left: 64px;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-end;
+    z-index: 1;
+
+    > div {
+        margin-right: 15px;
+    }
+`;
+
 const DisplayButton = styled(Button)`
     max-width: 100%;
     width: auto;
+`;
+
+const DisplayButtonNew = styled.button`
+    max-width: 100%;
+    width: auto;
+    border: none;
+    padding: 4px;
+    border-radius: 4px;
 `;
 
 const MenuStyled = styled.div`
@@ -176,4 +218,61 @@ const ModelViewer = ({ model, user }) => {
     );
 };
 
-export { ModelViewer };
+function NewModelViewer({ model, className }) {
+    const [mode, setMode] = useState('shaded');
+    const [meshColor, setMeshColor] = useState('#FFFFFF');
+    const [wireColor, setWireColor] = useState('#000000');
+
+    const changeMode = targetMode => {
+        setMode(targetMode);
+    };
+
+    const changeMeshColor = (color, event) => {
+        setMeshColor(color.hex);
+    };
+
+    const changeWireColor = (color, event) => {
+        setWireColor(color.hex);
+    };
+
+    return (
+        <ViewerContainerNew className={className}>
+            <InfoNew>
+                <DisplayButtonNew
+                    onClick={() => {
+                        changeMode('shaded');
+                    }}
+                >
+                    Shaded
+                </DisplayButtonNew>
+                <DisplayButtonNew
+                    onClick={() => {
+                        changeMode('wireframe');
+                    }}
+                >
+                    Wireframe
+                </DisplayButtonNew>
+                <DisplayButtonNew
+                    onClick={() => {
+                        changeMode('composite');
+                    }}
+                >
+                    Composite
+                </DisplayButtonNew>
+            </InfoNew>
+            <DisplayOptionsNew>
+                <ColorPickerNew color={meshColor} onChange={changeMeshColor} />
+                <ColorPickerNew color={wireColor} onChange={changeWireColor} />
+            </DisplayOptionsNew>
+            <Viewer
+                url={model.url}
+                mode={mode}
+                meshColor={meshColor}
+                wireFrameColor={wireColor}
+                boxShadow="none"
+            />
+        </ViewerContainerNew>
+    );
+}
+
+export { ModelViewer, NewModelViewer };

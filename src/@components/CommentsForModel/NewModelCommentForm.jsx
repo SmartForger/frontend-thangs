@@ -39,7 +39,7 @@ const PostCommentButton = styled.button`
     border-radius: 8px;
     font-family: ${props => props.theme.buttonFont};
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 500;
     margin-bottom: 24px;
 
     ${props => props.theme.shadow};
