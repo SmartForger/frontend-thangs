@@ -77,6 +77,10 @@ const Button = styled.button`
     font-weight: 500;
     cursor: pointer;
 
+    :disabled {
+        cursor: not-allowed;
+    }
+
     ${props => props.theme.shadow};
     ${allowCssProp};
 `;
@@ -173,7 +177,9 @@ function Uploader() {
                 >
                     Cancel
                 </CancelButton>
-                <Button type="submit">Save Model</Button>
+                <Button type="submit" disabled={!draggedFile}>
+                    Save Model
+                </Button>
             </ButtonGroup>
         </form>
     );
