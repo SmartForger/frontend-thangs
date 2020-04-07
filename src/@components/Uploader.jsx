@@ -3,7 +3,6 @@ import { useDropzone } from 'react-dropzone';
 import { TiUpload } from 'react-icons/ti';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
-import axios from 'axios';
 import styled from 'styled-components';
 
 const StyledUploader = styled.div`
@@ -21,13 +20,16 @@ const StyledUploadBlock = styled.div`
 `;
 
 const FileUpload = () => {
-    const [draggedfiles, setDraggedFiles] = useState([]);
+    const [draggedFiles, setDraggedFiles] = useState([]);
     const graphqlService = GraphqlService.getInstance();
     const [uploadModel] = graphqlService.useUploadModelMutation();
 
-    const onDrop = useCallback(acceptedFiles => {
-        setDraggedFiles([...draggedfiles, ...acceptedFiles]);
-    });
+    const onDrop = useCallback(
+        acceptedFiles => {
+            setDraggedFiles([...draggedFiles, ...acceptedFiles]);
+        },
+        [setDraggedFiles, draggedFiles],
+    );
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
@@ -35,12 +37,11 @@ const FileUpload = () => {
 
     const onSubmit = async e => {
         e.preventDefault();
-        console.log(draggedfiles[0]);
         uploadModel({
             variables: {
-                file: draggedfiles[0],
-                name: draggedfiles[0].name,
-                size: draggedfiles[0].size,
+                file: draggedFiles[0],
+                name: draggedFiles[0].name,
+                size: draggedFiles[0].size,
                 userEmail: authenticationService.currentUserValue.email,
             },
         });
@@ -55,8 +56,8 @@ const FileUpload = () => {
                         <TiUpload size="300px" />
                     </StyledUploadBlock>
                 </div>
-                {draggedfiles.length > 0 ? (
-                    draggedfiles.map(file => <div>{file.name}</div>)
+                {draggedFiles.length > 0 ? (
+                    draggedFiles.map(file => <div>{file.name}</div>)
                 ) : (
                     <div>No Files yet</div>
                 )}
