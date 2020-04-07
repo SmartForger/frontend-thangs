@@ -14,7 +14,7 @@ const ActionButton = styled.button`
     align-items: center;
     justify-content: center;
     padding: 12px 28px;
-    font-family: Montserrat-Medium;
+    font-family: ${props => props.theme.buttonFont};
     font-size: 14px;
     font-weight: 500;
     border-radius: 8px;

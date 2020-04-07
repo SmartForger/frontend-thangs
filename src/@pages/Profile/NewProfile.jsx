@@ -189,7 +189,7 @@ const Button = styled.button`
     align-items: center;
     border-radius: 8px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 500;
 
     svg {
         margin-right: 8px;

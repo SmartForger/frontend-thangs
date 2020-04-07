@@ -56,9 +56,6 @@ const Sidebar = styled.div`
 
     > table {
         margin-bottom: 24px;
-        font-family: Montserrat-Regular;
-        font-size: 14px;
-        font-weight: normal;
         line-height: 18px;
     }
     > table td:first-child {
@@ -79,7 +76,6 @@ const PrimaryButton = styled(Link)`
     align-items: center;
     justify-content: center;
     padding: 12px 28px;
-    font-family: Montserrat-Medium;
     font-size: 14px;
     font-weight: 500;
     border-radius: 8px;
@@ -106,16 +102,13 @@ const ModelTitleText = styled.span`
     display: block;
     color: ${props => props.theme.modelTitleText};
 
-    font-family: Montserrat-Regular;
     font-size: 24px;
-    font-weight: normal;
 `;
 
 const ModelOwnerLink = styled(Link)`
     display: block;
     color: ${props => props.theme.modelOwnerLink};
 
-    font-family: Montserrat-Medium;
     font-size: 16px;
     font-weight: 500;
     text-decoration: none;

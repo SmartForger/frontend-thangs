@@ -46,11 +46,8 @@ const WHITE_3 = '#e8e8ec';
  * These will be the fonts we actually want to use, but we need to get them from
  * our designer before we can use them.
  */
-// const fontMedium = 'Montserrat-Medium';
-// const fontMain = 'Montserrat-regular;';
-const fontMedium = 'helvetica';
-const fontMain = 'helvetica';
-
+const fontMedium = "'Montserrat', sans-serif";
+const fontMain = "'Montserrat', sans-serif";
 const shadow = 'box-shadow: 0px 5px 10px 0px rgba(35, 37, 48, 0.25)';
 
 export const NewTheme = {

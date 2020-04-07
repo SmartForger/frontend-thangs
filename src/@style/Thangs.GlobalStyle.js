@@ -21,21 +21,20 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const NewGlobalStyle = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap');
+
   body {
     padding: 0;
     margin: 0;
     overflow-x: hidden;
     background: ${props => props.theme.backgroundColor};
+    font-family: ${props => props.theme.buttonFont};
+    font-size: 14px;
+    color: ${props => props.theme.mainFontColor};
   }
 
   a {
     text-decoration: none;
-  }
-
-  * {
-      font-family: ${props => props.theme.buttonFont};
-      font-size: 14px;
-      color: ${props => props.theme.mainFontColor};
   }
 
   ${enablePlaceholderForContentEditable}
