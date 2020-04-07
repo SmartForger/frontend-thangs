@@ -30,7 +30,7 @@ const GREY_9 = '#b9b9be';
 const GREY_10 = '#bfbfbf';
 const BLACK_1 = '#515151';
 const BLACK_2 = '#232530';
-// const BLACK_3 = '#231f20';
+const BLACK_3 = '#231f20';
 const BLACK_4 = '#464655';
 const BLACK_5 = '#4a4a4a';
 const YELLOW_1 = '#ffbc00';
@@ -52,6 +52,7 @@ const WHITE_3 = '#e8e8ec';
 const fontMedium = "'Montserrat', sans-serif";
 const fontMain = "'Montserrat', sans-serif";
 const shadow = 'box-shadow: 0px 5px 10px 0px rgba(35, 37, 48, 0.25)';
+const headerFont = 'Lexend Deca';
 
 export const NewTheme = {
     activityCount: GREY_3,
@@ -69,6 +70,8 @@ export const NewTheme = {
     flashColor: GREY_5,
     flashColorText: WHITE_3,
     invertedHeaderBackground: BLACK_2,
+    headerFont,
+    headerColor: BLACK_3,
     linkText: BLUE_2,
     logoText: BLACK_4,
     mainFont: fontMain,
