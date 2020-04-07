@@ -8,6 +8,7 @@ import { ModelPreview } from '@pages/ModelPreview';
 import { ModelDetail } from '@pages/Model/ModelDetail';
 import { Newspost } from '@pages/Newspost';
 import { NewSignup } from '@pages/Signup/NewSignup';
+import { NewLogin } from '@pages/Login/NewLogin';
 import { Page404 } from '@pages/404';
 import { graphqlClient } from '@services';
 import { createBrowserHistory } from 'history';
@@ -38,6 +39,7 @@ const App = () => {
                 <Switch>
                     <Route exact path="/" component={Home} />
                     <Route path="/login" component={Login} />
+                    <Route path="/new/login" component={NewLogin} />
                     <Route
                         path="/new/signup/:registrationCode"
                         component={NewSignup}
