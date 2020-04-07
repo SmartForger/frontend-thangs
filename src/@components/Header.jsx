@@ -172,9 +172,9 @@ const Header = ({ inverted, variant }) => {
                                 <LogoText />
                             </Row>
                         </div>
-                        {variant !== 'thin' && <UserNav />}
+                        {variant !== 'logo-only' && <UserNav />}
                     </Row>
-                    {variant !== 'thin' && (
+                    {variant !== 'logo-only' && (
                         <Row>
                             <MatchingButton disabled>
                                 <MatchingIconStyled />

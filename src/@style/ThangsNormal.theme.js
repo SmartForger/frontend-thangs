@@ -1,14 +1,15 @@
 export const ThangsMain = {
-    primary: '#F7BB3D',
-    secondary: '#0D0D0D',
-    white: '#FFFFFF',
-    grey: '#D9D9D9',
+    buttonColor: '#FFFFFF',
+    buttonShadow: 'inset 0 0 0 2px #FFFFFF',
     darkgrey: '#999999',
+    grey: '#D9D9D9',
+    headerHeight: '64px',
     mainFont: 'Raleway, sans-serif',
     pageWidth: '1012px',
-    headerHeight: '64px',
-    buttonShadow: 'inset 0 0 0 2px #FFFFFF',
-    buttonColor: '#FFFFFF',
+    primary: '#F7BB3D',
+    primaryButton: '#F7BB3D',
+    secondary: '#0D0D0D',
+    white: '#FFFFFF',
 };
 
 /*

@@ -16,9 +16,7 @@ const BtnStyle = styled(animated.button)`
     justify-content: center;
     align-items: center;
     background: ${props =>
-        props.disabled
-            ? 'gray'
-            : props.theme.primaryButton || props.theme.primaryButton};
+        props.disabled ? 'gray' : props.theme.primaryButton};
     color: ${props => (props.disabled ? 'darkgray' : props.theme.buttonColor)};
     box-shadow: ${props => props.theme.buttonShadow};
     font-size: ${props => props.fontSize || '12px'};
@@ -27,9 +25,7 @@ const BtnStyle = styled(animated.button)`
 
     &:hover {
         background-color: ${props =>
-            props.disabled
-                ? 'gray'
-                : props.theme.primaryButton || props.theme.primary};
+            props.disabled ? 'gray' : props.theme.primaryButton};
         color: ${props =>
             props.disabled ? props.theme.white : props.theme.secondary};
     }

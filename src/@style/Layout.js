@@ -178,13 +178,12 @@ export const WithNewSignupThemeLayout = Component => props => {
         <FlashContextProvider>
             <ThemeProvider theme={NewDarkTheme}>
                 <NewGlobalStyle />
-                <Header variant="thin" />
+                <Header variant="logo-only" />
                 <NewLayout
                     css={`
                         margin: 88px auto 0;
                     `}
                 >
-
                     <WithFlash>
                         <Component {...props} />
                     </WithFlash>
