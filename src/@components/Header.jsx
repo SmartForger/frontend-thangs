@@ -160,7 +160,7 @@ const UserNav = () => {
     );
 };
 
-const Header = ({ inverted }) => {
+const Header = ({ inverted, variant }) => {
     return (
         <>
             <FixedHeader inverted={inverted}>
@@ -172,15 +172,17 @@ const Header = ({ inverted }) => {
                                 <LogoText />
                             </Row>
                         </div>
-                        <UserNav />
+                        {variant !== 'logo-only' && <UserNav />}
                     </Row>
-                    <Row>
-                        <MatchingButton disabled>
-                            <MatchingIconStyled />
-                            Search by Model
-                        </MatchingButton>
-                        <SearchBarNew />
-                    </Row>
+                    {variant !== 'logo-only' && (
+                        <Row>
+                            <MatchingButton disabled>
+                                <MatchingIconStyled />
+                                Search by Model
+                            </MatchingButton>
+                            <SearchBarNew />
+                        </Row>
+                    )}
                 </Boundary>
             </FixedHeader>
         </>
