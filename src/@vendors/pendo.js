@@ -20,7 +20,7 @@ const initialize = history => {
                         o[m] ||
                         function() {
                             o._q[m === v[0] ? 'unshift' : 'push'](
-                                [m].concat([].slice.call(arguments, 0))
+                                [m].concat([].slice.call(arguments, 0)),
                             );
                         };
                 })(v[w]);
@@ -72,7 +72,15 @@ const identify = () => {
 
 const track = (type, data) => {
     if (shouldTrack()) {
-        window.pendo.track(type, data);
+        const { pendo } = window;
+
+        if (pendo && pendo.isReady && pendo.isReady()) {
+            return pendo.track(type, data);
+        }
+
+        setTimeout(function() {
+            track(type, data);
+        }, 500);
     }
 };
 

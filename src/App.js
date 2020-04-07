@@ -19,6 +19,7 @@ import { Profile as NewProfile } from '@pages/Profile/NewProfile';
 import { Upload } from '@pages/Upload';
 import { Landing } from '@pages/Landing';
 import { EditProfile } from '@pages/Profile/EditProfile';
+import { RedirectProfile } from '@pages/Profile/RedirectProfile';
 
 const history = createBrowserHistory();
 const originalFetch = window.fetch;
@@ -47,6 +48,11 @@ const App = () => {
                     <Route path="/signup" component={Signup} exact />
                     <Route path="/signup/:registration" component={Signup} />
                     <Route path="/profile/:id" component={Profile} />
+                    <Route
+                        exact
+                        path="/new/profile/"
+                        component={RedirectProfile}
+                    />
                     <Route
                         exact
                         path="/new/profile/edit"
