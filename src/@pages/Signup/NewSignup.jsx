@@ -170,7 +170,7 @@ const Page = () => {
                             name="firstName"
                             label="First Name"
                             onChange={handleChange}
-                            value={inputs.firstName}
+                            value={inputs.firstName || ''}
                             data-cy="signup-first-name"
                         />
                     </FormControl>
@@ -183,7 +183,7 @@ const Page = () => {
                             name="lastName"
                             label="Last Name"
                             onChange={handleChange}
-                            value={inputs.lastName}
+                            value={inputs.lastName || ''}
                             data-cy="signup-last-name"
                         />
                     </FormControl>
@@ -198,7 +198,7 @@ const Page = () => {
                             incorrect={needsCorrected('username')}
                             onChange={handleChange}
                             validator={validateUsername}
-                            value={inputs.username}
+                            value={inputs.username || ''}
                             data-cy="signup-username"
                             required
                         />
@@ -214,7 +214,7 @@ const Page = () => {
                             incorrect={needsCorrected('email')}
                             onChange={handleChange}
                             validator={validateEmail}
-                            value={inputs.email}
+                            value={inputs.email || ''}
                             data-cy="signup-email"
                             required
                         />
@@ -228,7 +228,7 @@ const Page = () => {
                             name="password"
                             label="Password"
                             onChange={handleChange}
-                            value={inputs.password}
+                            value={inputs.password || ''}
                             data-cy="signup-password"
                             required
                         />
@@ -244,7 +244,7 @@ const Page = () => {
                             name="confirmPass"
                             label="Password"
                             onChange={handleChange}
-                            value={inputs.confirmPass}
+                            value={inputs.confirmPass || ''}
                             validator={validatePasswords}
                             data-cy="signup-confirm-password"
                             required
