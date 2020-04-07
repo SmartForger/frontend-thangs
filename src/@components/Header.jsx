@@ -23,10 +23,11 @@ const LogoStyled = styled(Logo)`
 const FixedHeader = styled.div`
     width: 100%;
     position: fixed;
-    ${props =>
-        props.inverted ? '' : `background: ${props.theme.backgroundColor}`};
+    background: ${props =>
+        props.inverted
+            ? props.theme.invertedHeaderBackground
+            : props.theme.backgroundColor};
     top: 0;
-    background: ${props => props.theme.invertedHeaderBackground};
     z-index: 1;
 `;
 
