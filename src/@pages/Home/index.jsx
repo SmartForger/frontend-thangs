@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DisplayCard, Slides } from '@components';
+import { DisplayCard, Slides, Uploader } from '@components';
 import { Spinner } from '@components/Spinner';
 import { WithLayout } from '@style';
 import * as GraphqlService from '@services/graphql-service';
@@ -96,6 +96,7 @@ const Page = () => {
     return (
         <HomeBodyStyle>
             <CardRow>
+                <Uploader />
                 <Models />
                 <Newsposts />
             </CardRow>

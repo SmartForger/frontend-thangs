@@ -18,5 +18,7 @@ export * from './ColorPicker';
 export * from './ProfileSidebar';
 export * from './ChangeablePicture';
 export * from './Markdown';
+export * from './CommentsForModel';
+export * from './Uploader';
 export * from './ModelViewer';
 export * from './Likes';

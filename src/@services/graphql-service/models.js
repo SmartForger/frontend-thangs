@@ -233,6 +233,27 @@ const useUnlikeModelMutation = (userId, modelId) => {
     });
 };
 
+const UPLOAD_MODEL_MUTATION = gql`
+    mutation uploadModel(
+        $file: Upload!
+        $name: String!
+        $size: Int!
+        $userEmail: String!
+    ) {
+        uploadModel(
+            file: $file
+            units: "mm"
+            name: $name
+            size: $size
+            userEmail: $userEmail
+        ) {
+            model {
+                id
+            }
+        }
+    }
+`;
+
 const parseModelPayload = data => {
     const model = getModel(data);
 
@@ -273,6 +294,10 @@ const SEARCH_MODELS_QUERY = gql`
     }
 `;
 
+const useUploadModelMutation = () => {
+    return useMutation(UPLOAD_MODEL_MUTATION);
+};
+
 const parseSeachModelsPayload = data => {
     const models = getSearchModels(data);
 
@@ -297,6 +322,7 @@ export {
     useModelById,
     useLikeModelMutation,
     useUnlikeModelMutation,
+    useUploadModelMutation,
     useModelsByDate,
     useSearchModels,
 };
