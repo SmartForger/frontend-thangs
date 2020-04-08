@@ -1,4 +1,7 @@
-runtime: nodejs12
+#runtime: nodejs12
+runtime: python27
+api_version: 1
+threadsafe: true
 # This sample incurs costs to run on the App Engine flexible environment.
   # The settings below are to reduce costs during testing and are not appropriate
 # for production use. For more information, see:
@@ -11,3 +14,11 @@ resources:
   disk_size_gb: 10
 readiness_check:
   app_start_timeout_sec: 1000
+
+handlers:
+  - url: /static/(.*)
+    static_files: build/static/\1
+    upload: build/static/(.*)
+  - url: /(.*)
+    static_files: build/index.html
+    upload: build/index.html
