@@ -1,34 +1,106 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { TiUpload } from 'react-icons/ti';
+import styled from 'styled-components';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
-import styled from 'styled-components';
-
-const StyledUploader = styled.div`
-    width: 300px;
-    height: 200px;
-`;
+import { useHistory } from 'react-router-dom';
+import { ReactComponent as UploadIcon } from '@svg/upload-icon.svg';
 
 const StyledUploadBlock = styled.div`
-    background: orange;
-    height: 300px;
-    width: 300px;
-    border-radius: 25px;
-    transition: all 0.2s;
-    color: ${props => (props.dragactive ? 'black' : 'white')};
+    height: 560px;
+    border-radius: 8px;
+    background-color: ${props =>
+        props.dragactive
+            ? props.theme.uploaderBackgroundActive
+            : props.theme.uploaderBackground};
+    color: ${props => props.theme.uploaderText};
+    font-size: 24px;
+    line-height: 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 `;
 
-const FileUpload = () => {
-    const [draggedFiles, setDraggedFiles] = useState([]);
+const UploadIconStyled = styled(UploadIcon)`
+    margin-bottom: 32px;
+`;
+
+const LinkColor = styled.span`
+    color: ${props => props.theme.linkText};
+`;
+
+const Row = styled.div`
+    display: flex;
+`;
+
+const allowCssProp = props => (props.css ? props.css : '');
+
+const Column = styled.div`
+    ${allowCssProp};
+`;
+
+const Field = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const FullWidthInput = styled.input`
+    display: block;
+    flex-grow: 1;
+    border: 0;
+    padding: 8px 16px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+
+    ${allowCssProp};
+`;
+
+const Label = styled.label`
+    margin-bottom: 8px;
+`;
+
+const ButtonGroup = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 32px;
+`;
+
+const Button = styled.button`
+    color: ${props => props.theme.primaryButtonText};
+    background-color: ${props => props.theme.primaryButton};
+    font-size: 14px;
+    padding: 8px 36px;
+    border: none;
+    border-radius: 8px;
+    font-family: ${props => props.theme.buttonFont};
+    font-weight: 500;
+    cursor: pointer;
+
+    :disabled {
+        cursor: not-allowed;
+    }
+
+    ${props => props.theme.shadow};
+    ${allowCssProp};
+`;
+
+const CancelButton = styled(Button)`
+    background-color: ${props => props.theme.deleteButton};
+`;
+
+function Uploader() {
+    const history = useHistory();
+
+    const [draggedFile, setDraggedFile] = useState();
     const graphqlService = GraphqlService.getInstance();
     const [uploadModel] = graphqlService.useUploadModelMutation();
 
     const onDrop = useCallback(
         acceptedFiles => {
-            setDraggedFiles([...draggedFiles, ...acceptedFiles]);
+            setDraggedFile(acceptedFiles[0]);
         },
-        [setDraggedFiles, draggedFiles],
+        [setDraggedFile],
     );
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -37,42 +109,80 @@ const FileUpload = () => {
 
     const onSubmit = async e => {
         e.preventDefault();
-        uploadModel({
+        await uploadModel({
             variables: {
-                file: draggedFiles[0],
-                name: draggedFiles[0].name,
-                size: draggedFiles[0].size,
+                file: draggedFile,
+                name: draggedFile.name,
+                size: draggedFile.size,
                 userEmail: authenticationService.currentUserValue.email,
             },
         });
+        history.push('/new/profile');
+    };
+
+    const handleCancel = e => {
+        e.preventDefault();
+        history.goBack();
     };
 
     return (
-        <>
-            <form onSubmit={onSubmit}>
-                <div {...getRootProps()}>
-                    <input {...getInputProps()} />
-                    <StyledUploadBlock dragactive={isDragActive}>
-                        <TiUpload size="300px" />
-                    </StyledUploadBlock>
-                </div>
-                {draggedFiles.length > 0 ? (
-                    draggedFiles.map(file => <div>{file.name}</div>)
-                ) : (
-                    <div>No Files yet</div>
-                )}
-                <input type="submit" value="Upload" />
-            </form>
-        </>
+        <form onSubmit={onSubmit}>
+            <Row>
+                <Column
+                    css={`
+                        flex-grow: 1;
+                        margin-right: 32px;
+                    `}
+                >
+                    <div {...getRootProps()}>
+                        <input {...getInputProps({ multiple: false })} />
+                        <StyledUploadBlock dragactive={isDragActive}>
+                            {draggedFile ? (
+                                <div>File: {draggedFile.name}</div>
+                            ) : (
+                                <>
+                                    <UploadIconStyled />
+                                    <div>Drag & Drop model</div>
+                                    <div>
+                                        or <LinkColor>browse</LinkColor> to
+                                        choose file
+                                    </div>
+                                </>
+                            )}
+                        </StyledUploadBlock>
+                    </div>
+                </Column>
+                <Column
+                    css={`
+                        min-width: 336px;
+                    `}
+                >
+                    <Field>
+                        <Label htmlFor="name">Title</Label>
+                        <FullWidthInput
+                            name="name"
+                            defaultValue={draggedFile && draggedFile.name}
+                            placeholder="Model Name"
+                        />
+                    </Field>
+                </Column>
+            </Row>
+            <ButtonGroup>
+                <CancelButton
+                    css={`
+                        margin-right: 8px;
+                    `}
+                    onClick={handleCancel}
+                    type="button"
+                >
+                    Cancel
+                </CancelButton>
+                <Button type="submit" disabled={!draggedFile}>
+                    Save Model
+                </Button>
+            </ButtonGroup>
+        </form>
     );
-};
-
-const Uploader = () => {
-    return (
-        <StyledUploader>
-            <FileUpload />
-        </StyledUploader>
-    );
-};
+}
 
 export { Uploader };

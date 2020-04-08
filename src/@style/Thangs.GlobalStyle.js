@@ -21,7 +21,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const NewGlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca&family=Montserrat:wght@300;400;500;600;700&display=swap');
 
   body {
     padding: 0;
@@ -37,7 +37,9 @@ const NewGlobalStyle = createGlobalStyle`
     text-decoration: none;
   }
 
-  ${enablePlaceholderForContentEditable}
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+  }
 `;
 
 export { GlobalStyle, NewGlobalStyle };
