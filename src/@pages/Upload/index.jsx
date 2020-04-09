@@ -1,7 +1,69 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 import { WithNewThemeLayout } from '@style/Layout';
 import { Uploader } from '@components/Uploader';
+import * as GraphqlService from '@services/graphql-service';
+import { authenticationService } from '@services';
+
+const Row = styled.div`
+    display: flex;
+`;
+
+const allowCssProp = props => (props.css ? props.css : '');
+
+const Column = styled.div`
+    ${allowCssProp};
+`;
+
+const Field = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const FullWidthInput = styled.input`
+    display: block;
+    flex-grow: 1;
+    border: 0;
+    padding: 8px 16px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+
+    ${allowCssProp};
+`;
+
+const Label = styled.label`
+    margin-bottom: 8px;
+`;
+
+const ButtonGroup = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 32px;
+`;
+
+const Button = styled.button`
+    color: ${props => props.theme.primaryButtonText};
+    background-color: ${props => props.theme.primaryButton};
+    font-size: 14px;
+    padding: 8px 36px;
+    border: none;
+    border-radius: 8px;
+    font-family: ${props => props.theme.buttonFont};
+    font-weight: 500;
+    cursor: pointer;
+
+    :disabled {
+        cursor: not-allowed;
+    }
+
+    ${props => props.theme.shadow};
+    ${allowCssProp};
+`;
+
+const CancelButton = styled(Button)`
+    background-color: ${props => props.theme.deleteButton};
+`;
 
 const Header = styled.h1`
     font-family: ${props => props.theme.headerFont};
@@ -9,11 +71,75 @@ const Header = styled.h1`
     margin-bottom: 24px;
 `;
 
+const graphqlService = GraphqlService.getInstance();
+
 const Page = () => {
+    const history = useHistory();
+    const [file, setFile] = useState();
+
+    const [uploadModel] = graphqlService.useUploadModelMutation();
+
+    const onSubmit = async e => {
+        e.preventDefault();
+        await uploadModel({
+            variables: {
+                file,
+                name: file.name,
+                size: file.size,
+                userEmail: authenticationService.currentUserValue.email,
+            },
+        });
+        history.push('/new/profile');
+    };
+
+    const handleCancel = e => {
+        e.preventDefault();
+        history.goBack();
+    };
+
     return (
         <div>
             <Header>Upload Model</Header>
-            <Uploader />
+            <form onSubmit={onSubmit}>
+                <Row>
+                    <Column
+                        css={`
+                            flex-grow: 1;
+                            margin-right: 32px;
+                        `}
+                    >
+                        <Uploader file={file} setFile={setFile} />
+                    </Column>
+                    <Column
+                        css={`
+                            min-width: 336px;
+                        `}
+                    >
+                        <Field>
+                            <Label htmlFor="name">Title</Label>
+                            <FullWidthInput
+                                name="name"
+                                defaultValue={file && file.name}
+                                placeholder="Model Name"
+                            />
+                        </Field>
+                    </Column>
+                </Row>
+                <ButtonGroup>
+                    <CancelButton
+                        css={`
+                            margin-right: 8px;
+                        `}
+                        onClick={handleCancel}
+                        type="button"
+                    >
+                        Cancel
+                    </CancelButton>
+                    <Button type="submit" disabled={!file}>
+                        Save Model
+                    </Button>
+                </ButtonGroup>
+            </form>
         </div>
     );
 };

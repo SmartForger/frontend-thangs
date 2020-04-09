@@ -3,34 +3,56 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import * as R from 'ramda';
 import { getFileDataUrl } from './utils';
 
-const MODEL_QUERY = gql`
-    query getModel($id: ID) {
-        model(id: $id) {
-            id
-            name
-            likes {
-                isLiked
-                owner {
-                    id
-                    firstName
-                    lastName
-                    fullName
-                }
-            }
+const MODEL_FRAGMENT = gql`
+    fragment Model on ModelType {
+        id
+        name
+        likes {
+            isLiked
             owner {
                 id
                 firstName
                 lastName
                 fullName
             }
-            attachment {
-                id
-                attachmentId
+        }
+        owner {
+            id
+            firstName
+            lastName
+            fullName
+        }
+        attachment {
+            id
+            attachmentId
+        }
+        likesCount
+        commentsCount
+    }
+`;
+
+const MODEL_WITH_RELATED_QUERY = gql`
+    query getModel($id: ID) {
+        model(id: $id) {
+            id
+            uploadStatus
+            relatedModels {
+                ...Model
             }
-            likesCount
-            commentsCount
         }
     }
+
+    ${MODEL_FRAGMENT}
+`;
+
+const MODEL_QUERY = gql`
+    query getModel($id: ID) {
+        model(id: $id) {
+            ...Model
+        }
+    }
+
+    ${MODEL_FRAGMENT}
 `;
 
 const LIKE_MODEL_MUTATION = gql`
@@ -151,8 +173,13 @@ const parseModel = model => {
         ? `${getFileDataUrl()}?attachment_id=${attachmentId}`
         : null;
 
+    const relatedModels = model.relatedModels
+        ? model.relatedModels.map(parseModel)
+        : null;
+
     return {
         ...model,
+        relatedModels,
         url,
         tags: [
             { name: 'Yormy' },
@@ -192,6 +219,18 @@ const useModelById = id => {
 
     return { loading, error, model };
 };
+
+export function useModelByIdWithRelated(id) {
+    const { loading, error, data, startPolling, stopPolling } = useQuery(
+        MODEL_WITH_RELATED_QUERY,
+        {
+            variables: { id },
+        },
+    );
+    const model = parseModelPayload(data);
+
+    return { loading, error, model, startPolling, stopPolling };
+}
 
 const useLikeModelMutation = (userId, modelId) => {
     return useMutation(LIKE_MODEL_MUTATION, {
@@ -295,7 +334,18 @@ const SEARCH_MODELS_QUERY = gql`
 `;
 
 const useUploadModelMutation = () => {
-    return useMutation(UPLOAD_MODEL_MUTATION);
+    const [uploadModel] = useMutation(UPLOAD_MODEL_MUTATION);
+
+    async function uploadModelAndParseResults(...args) {
+        const response = await uploadModel(...args);
+        return (
+            response.data &&
+            response.data.uploadModel &&
+            parseModel(response.data.uploadModel.model)
+        );
+    }
+
+    return [uploadModelAndParseResults];
 };
 
 const parseSeachModelsPayload = data => {

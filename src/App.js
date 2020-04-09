@@ -17,12 +17,13 @@ import {
     Newspost,
     ModelDetail,
 } from '@pages';
+import { Upload } from '@pages/Upload';
+import { Matching } from '@pages/Matching';
 import { ModelPreview } from '@pages/ModelPreview';
 import { graphqlClient } from '@services';
 import { createBrowserHistory } from 'history';
 import * as pendo from '@vendors/pendo';
 import * as fullStory from '@vendors/full-story';
-import { Upload } from '@pages/Upload';
 
 const history = createBrowserHistory();
 const originalFetch = window.fetch;
@@ -67,6 +68,7 @@ const App = () => {
                         path="/search/:searchQuery"
                         component={SearchResults}
                     />
+                    <Route path="/matching" component={Matching} />
                     <Route path="/upload" component={Upload} />
                     <Route path="*" component={Page404} status={404} />
                 </Switch>
