@@ -36,7 +36,10 @@ const RULER = 'ruler';
 const PROTRACTOR = 'protractor';
 
 const IconContainer = styled.div`
+    height: 168px;
+    width: 168px;
     margin-top: 152px;
+    text-align: center;
 `;
 
 function Icons() {
@@ -55,7 +58,7 @@ function Icons() {
                 } else if (icon === PROTRACTOR) {
                     setIcon(LENS);
                 }
-            }, 1000);
+            }, 2000);
             return () => clearTimeout(timeout);
         },
         [icon, setIcon],
