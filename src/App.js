@@ -9,6 +9,7 @@ import { ModelDetail } from '@pages/Model/ModelDetail';
 import { Newspost } from '@pages/Newspost';
 import { NewSignup } from '@pages/Signup/NewSignup';
 import { NewLogin } from '@pages/Login/NewLogin';
+import { PasswordReset, ConfirmPasswordReset } from '@pages/PasswordReset';
 import { Page404 } from '@pages/404';
 import { graphqlClient } from '@services';
 import { createBrowserHistory } from 'history';
@@ -54,6 +55,15 @@ const App = () => {
                         exact
                         path="/new/profile/"
                         component={RedirectProfile}
+                    />
+                    <Route
+                        exact
+                        path="/password_reset"
+                        component={PasswordReset}
+                    />
+                    <Route
+                        path="/password_reset_confirm/:userId/:token"
+                        component={ConfirmPasswordReset}
                     />
                     <Route
                         exact

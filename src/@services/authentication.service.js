@@ -138,6 +138,26 @@ const _refreshToken = async () => {
     return response;
 };
 
+const resetPasswordForEmail = async email => {
+    const url = getApiUrl(`password_reset/`);
+    return axios.post(url, { email });
+};
+
+const setPasswordForReset = async ({
+    token,
+    userId,
+    password,
+    confirmPassword,
+}) => {
+    const url = getApiUrl(`password_reset_confirm/`);
+    return axios.post(url, {
+        token,
+        uidb64: userId,
+        password,
+        confirm_password: confirmPassword,
+    });
+};
+
 const authenticationService = {
     login,
     logout,
@@ -145,6 +165,8 @@ const authenticationService = {
     getGraphQLUrl,
     isGraphQLUrl,
     refreshAccessToken,
+    resetPasswordForEmail,
+    setPasswordForReset,
     currentUser: currentUserSubject.asObservable(),
     get currentUserValue() {
         return currentUserSubject.value;
