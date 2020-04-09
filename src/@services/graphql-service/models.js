@@ -295,7 +295,18 @@ const SEARCH_MODELS_QUERY = gql`
 `;
 
 const useUploadModelMutation = () => {
-    return useMutation(UPLOAD_MODEL_MUTATION);
+    const [uploadModel] = useMutation(UPLOAD_MODEL_MUTATION);
+
+    async function uploadModelAndParseResults(...args) {
+        const response = await uploadModel(...args);
+        return (
+            response.data &&
+            response.data.uploadModel &&
+            parseModel(response.data.uploadModel.model)
+        );
+    }
+
+    return [uploadModelAndParseResults];
 };
 
 const parseSeachModelsPayload = data => {

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 import { WithNewThemeLayout } from '@style/Layout';
 import { Uploader } from '@components/Uploader';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
-import { useHistory } from 'react-router-dom';
 
 const Row = styled.div`
     display: flex;
@@ -71,11 +71,12 @@ const Header = styled.h1`
     margin-bottom: 24px;
 `;
 
+const graphqlService = GraphqlService.getInstance();
+
 const Page = () => {
     const history = useHistory();
     const [file, setFile] = useState();
 
-    const graphqlService = GraphqlService.getInstance();
     const [uploadModel] = graphqlService.useUploadModelMutation();
 
     const onSubmit = async e => {
