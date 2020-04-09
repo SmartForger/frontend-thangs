@@ -27,13 +27,20 @@ function Loading() {
 }
 
 function Results({ modelId }) {
-    const { loading, error, model } = graphqlService.useModelByIdWithRelated(
-        modelId,
-    );
+    const {
+        loading,
+        error,
+        model,
+        startPolling,
+        stopPolling,
+    } = graphqlService.useModelByIdWithRelated(modelId);
 
     if (loading || (model && model.uploadStatus === PROCESSING)) {
+        startPolling(1000);
         return <Loading />;
     }
+
+    stopPolling();
 
     if (error || !model || model.uploadStatus === ERROR) {
         return (

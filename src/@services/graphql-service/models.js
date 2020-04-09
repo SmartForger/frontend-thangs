@@ -173,8 +173,13 @@ const parseModel = model => {
         ? `${getFileDataUrl()}?attachment_id=${attachmentId}`
         : null;
 
+    const relatedModels = model.relatedModels
+        ? model.relatedModels.map(parseModel)
+        : null;
+
     return {
         ...model,
+        relatedModels,
         url,
         tags: [
             { name: 'Yormy' },
@@ -216,12 +221,15 @@ const useModelById = id => {
 };
 
 export function useModelByIdWithRelated(id) {
-    const { loading, error, data } = useQuery(MODEL_WITH_RELATED_QUERY, {
-        variables: { id },
-    });
+    const { loading, error, data, startPolling, stopPolling } = useQuery(
+        MODEL_WITH_RELATED_QUERY,
+        {
+            variables: { id },
+        },
+    );
     const model = parseModelPayload(data);
 
-    return { loading, error, model };
+    return { loading, error, model, startPolling, stopPolling };
 }
 
 const useLikeModelMutation = (userId, modelId) => {
