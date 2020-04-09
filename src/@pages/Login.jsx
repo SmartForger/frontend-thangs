@@ -163,6 +163,4 @@ const Page = () => {
     );
 };
 
-const NewLogin = WithNewSignupThemeLayout(Page);
-
-export { NewLogin };
+export const Login = WithNewSignupThemeLayout(Page);

@@ -3,23 +3,24 @@ import { ApolloProvider } from '@apollo/react-hooks';
 
 import { Route, Router, Switch } from 'react-router-dom';
 
-import { Home, Login, Signup, Profile, Model } from '@pages';
+import {
+    Landing,
+    Login,
+    Signup,
+    PasswordReset,
+    ConfirmPasswordReset,
+    Page404,
+} from '@pages';
 import { ModelPreview } from '@pages/ModelPreview';
 import { ModelDetail } from '@pages/Model/ModelDetail';
 import { Newspost } from '@pages/Newspost';
-import { NewSignup } from '@pages/Signup/NewSignup';
-import { NewLogin } from '@pages/Login/NewLogin';
-import { PasswordReset, ConfirmPasswordReset } from '@pages/PasswordReset';
-import { Page404 } from '@pages/404';
 import { graphqlClient } from '@services';
 import { createBrowserHistory } from 'history';
 import * as pendo from '@vendors/pendo';
 import * as fullStory from '@vendors/full-story';
-import { SearchResults } from '@pages/SearchResults';
-import { SearchResults as NewSearchResults } from '@pages/SearchResults/NewSearchResults';
-import { Profile as NewProfile } from '@pages/Profile/NewProfile';
+import { SearchResults } from '@pages/SearchResults/NewSearchResults';
+import { Profile } from '@pages/Profile/NewProfile';
 import { Upload } from '@pages/Upload';
-import { Landing } from '@pages/Landing';
 import { EditProfile } from '@pages/Profile/EditProfile';
 import { RedirectProfile } from '@pages/Profile/RedirectProfile';
 
@@ -40,21 +41,12 @@ const App = () => {
         <ApolloProvider client={client}>
             <Router history={history}>
                 <Switch>
-                    <Route exact path="/" component={Home} />
+                    <Route exact path="/" component={Landing} />
                     <Route path="/login" component={Login} />
-                    <Route path="/new/login" component={NewLogin} />
                     <Route
-                        path="/new/signup/:registrationCode"
-                        component={NewSignup}
+                        path="/signup/:registrationCode"
+                        component={Signup}
                         exact
-                    />
-                    <Route path="/signup" component={Signup} exact />
-                    <Route path="/signup/:registration" component={Signup} />
-                    <Route path="/profile/:id" component={Profile} />
-                    <Route
-                        exact
-                        path="/new/profile/"
-                        component={RedirectProfile}
                     />
                     <Route
                         exact
@@ -65,29 +57,17 @@ const App = () => {
                         path="/password_reset_confirm/:userId/:token"
                         component={ConfirmPasswordReset}
                     />
-                    <Route
-                        exact
-                        path="/new/profile/edit"
-                        component={EditProfile}
-                    />
-                    <Route path="/new/profile/:id" component={NewProfile} />
-                    <Route path="/model/:id" component={Model} />
-                    <Route exact path="/new/" component={Landing} />
-                    <Route path="/new/model/:id" component={ModelDetail} />
-                    <Route
-                        path="/new/preview/model/:id"
-                        component={ModelPreview}
-                    />
+                    <Route exact path="/profile/edit" component={EditProfile} />
+                    <Route path="/profile/:id" component={Profile} />
+                    <Route exact path="/profile/" component={RedirectProfile} />
+                    <Route path="/model/:id" component={ModelDetail} />
+                    <Route path="/preview/model/:id" component={ModelPreview} />
                     <Route path="/newspost/:id" component={Newspost} />
                     <Route
                         path="/search/:searchQuery"
                         component={SearchResults}
                     />
-                    <Route
-                        path="/new/search/:searchQuery"
-                        component={NewSearchResults}
-                    />
-                    <Route path="/new/upload" component={Upload} />
+                    <Route path="/upload" component={Upload} />
                     <Route path="*" component={Page404} status={404} />
                 </Switch>
             </Router>

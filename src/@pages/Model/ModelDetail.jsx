@@ -120,14 +120,14 @@ function ModelTitle({ model, className }) {
     return (
         <ModelTitleContainer className={className}>
             {model.owner && (
-                <ProfileLink to={`/new/profile/${model.owner.id}`}>
+                <ProfileLink to={`/profile/${model.owner.id}`}>
                     <ModelOwnerProfilePicture size="48px" user={model.owner} />
                 </ProfileLink>
             )}
             <ModelTitleContent>
                 <ModelTitleText>{model.name}</ModelTitleText>
                 {model.owner && (
-                    <ProfileLink to={`/new/profile/${model.owner.id}`}>
+                    <ProfileLink to={`/profile/${model.owner.id}`}>
                         {model.owner.fullName}
                     </ProfileLink>
                 )}
