@@ -122,7 +122,7 @@ const NotificationsButton = () => {
 
 const UploadButton = () => {
     return (
-        <Link to={`/new/upload`}>
+        <Link to={`/upload`}>
             <Button
                 css={`
                     width: 124px;
@@ -140,7 +140,9 @@ const UserNav = () => {
     if (user) {
         return (
             <Row>
-                <ProfilePicture user={user} size="50px" />
+                <Link to="/profile/">
+                    <ProfilePicture user={user} size="50px" />
+                </Link>
                 <NotificationsButton />
                 <UploadButton />
             </Row>
@@ -163,8 +165,10 @@ const Header = ({ inverted, variant }) => {
                     <Row>
                         <div>
                             <Row>
-                                <LogoStyled />
-                                <LogoText />
+                                <Link to="/">
+                                    <LogoStyled />
+                                    <LogoText />
+                                </Link>
                             </Row>
                         </div>
                         {variant !== 'logo-only' && <UserNav />}

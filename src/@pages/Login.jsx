@@ -8,9 +8,6 @@ import { TextInput as BaseTextInput, Spinner, Button } from '@components';
 import { WithNewSignupThemeLayout } from '@style';
 import { ReactComponent as LoginIcon } from '@svg/user-login.svg';
 
-// FIXME: need a reset password route
-const HAS_RESET_PASSWORD_ROUTE = false;
-
 const TextInput = styled(BaseTextInput)`
     display: block;
     width: 100%;
@@ -158,17 +155,12 @@ const Page = () => {
                     onClick={handleSubmit}
                 />
             </form>
-            {HAS_RESET_PASSWORD_ROUTE && (
-                <div>
-                    Forgot password?{' '}
-                    <Link to="/reset-password">Click here</Link> to reset your
-                    password.
-                </div>
-            )}
+            <div>
+                Forgot password? <Link to="/password_reset">Click here</Link> to
+                reset your password.
+            </div>
         </LoginBodyStyle>
     );
 };
 
-const NewLogin = WithNewSignupThemeLayout(Page);
-
-export { NewLogin };
+export const Login = WithNewSignupThemeLayout(Page);

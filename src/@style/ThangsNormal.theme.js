@@ -1,17 +1,3 @@
-export const ThangsMain = {
-    buttonColor: '#FFFFFF',
-    buttonShadow: 'inset 0 0 0 2px #FFFFFF',
-    darkgrey: '#999999',
-    grey: '#D9D9D9',
-    headerHeight: '64px',
-    mainFont: 'Raleway, sans-serif',
-    pageWidth: '1012px',
-    primary: '#F7BB3D',
-    primaryButton: '#F7BB3D',
-    secondary: '#0D0D0D',
-    white: '#FFFFFF',
-};
-
 /*
  * These colors are commented out for now to avoid unused variable errors in
  * our build. That is because we haven't placed in the theme yet, but they are
@@ -38,12 +24,13 @@ const YELLOW_1 = '#ffbc00';
 // const YELLOW_3 = '#b18002';
 // const BLUE_1 = '#1cb2f5';
 const BLUE_2 = '#1b8cf8';
-// const BLUE_3 = '#014d7c';
+const BLUE_3 = '#014d7c';
 // const BLUE_4 = '#013047';
 const BROWN = '#8b6400';
 const WHITE_1 = '#ffffff';
 const WHITE_2 = '#efecec';
 const WHITE_3 = '#e8e8ec';
+const LIGHT_PURPLE = '#dd72dd';
 
 /*
  * These will be the fonts we actually want to use, but we need to get them from
@@ -73,6 +60,7 @@ export const NewTheme = {
     headerFont,
     headerColor: BLACK_3,
     linkText: BLUE_2,
+    linkTextVisited: BLUE_3,
     logoText: BLACK_4,
     mainFont: fontMain,
     mainFontColor: BLACK_5,
@@ -107,6 +95,7 @@ export const NewTheme = {
 
 export const NewDarkTheme = {
     ...NewTheme,
+    linkTextVisited: LIGHT_PURPLE,
     backgroundColor: BLACK_2,
     buttonShadow: 'none',
     mainFontColor: GREY_2,

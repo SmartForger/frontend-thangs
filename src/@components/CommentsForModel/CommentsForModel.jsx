@@ -57,13 +57,13 @@ const Comment = ({ comment }) => {
     const { owner, body } = comment;
     return (
         <CommentStyled>
-            <ProfileLink to={`/new/profile/${owner.id}`}>
+            <ProfileLink to={`/profile/${owner.id}`}>
                 <ProfilePictureStyled size="48px" user={owner} />
             </ProfileLink>
             <FlexGrow>
                 <Box>
                     <Body>
-                        <ProfileLink to={`/new/profile/${owner.id}`}>
+                        <ProfileLink to={`/profile/${owner.id}`}>
                             {owner.fullName}
                         </ProfileLink>
                         <TimeAgo>{time} ago</TimeAgo>
@@ -85,7 +85,7 @@ const Container = styled.div`
 
 const CommentsForModel = ({ model, className }) => {
     const { loading, error, comments } = graphqlService.useAllModelComments(
-        model.id,
+        model.id
     );
 
     if (error) {

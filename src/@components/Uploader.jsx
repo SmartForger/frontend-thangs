@@ -23,6 +23,7 @@ export function Uploader({ file, setFile }) {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
     });
+
     return (
         <div {...getRootProps()}>
             <input {...getInputProps({ multiple: false })} />

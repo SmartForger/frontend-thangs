@@ -21,7 +21,7 @@ const Page = () => {
     const { searchQuery } = useParams();
     const graphqlService = GraphqlService.getInstance();
     const { loading, error, models } = graphqlService.useSearchModels(
-        searchQuery,
+        searchQuery
     );
 
     if (loading) {
@@ -44,6 +44,4 @@ const Page = () => {
     );
 };
 
-const SearchResults = WithNewThemeLayout(Page);
-
-export { SearchResults };
+export const SearchResults = WithNewThemeLayout(Page);

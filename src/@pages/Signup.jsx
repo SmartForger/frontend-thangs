@@ -262,5 +262,4 @@ const Page = () => {
     );
 };
 
-const NewSignup = WithNewSignupThemeLayout(Page);
-export { NewSignup };
+export const Signup = WithNewSignupThemeLayout(Page);
