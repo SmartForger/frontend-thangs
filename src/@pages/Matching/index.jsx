@@ -4,6 +4,10 @@ import { WithNewThemeLayout } from '@style/Layout';
 import { Uploader } from '@components/Uploader';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
+import { ModelCollection } from '@components/ModelCollection';
+
+const PROCESSING = 'PROCESSING';
+const ERROR = 'ERROR';
 
 const Header = styled.h1`
     font-family: ${props => props.theme.headerFont};
@@ -18,7 +22,31 @@ const Subheader = styled.h4`
 
 const graphqlService = GraphqlService.getInstance();
 
-const Page = () => {
+function Loading() {
+    return <div>Loading</div>;
+}
+
+function Results({ modelId }) {
+    const { loading, error, model } = graphqlService.useModelByIdWithRelated(
+        modelId,
+    );
+
+    if (loading || (model && model.uploadStatus === PROCESSING)) {
+        return <Loading />;
+    }
+
+    if (error || !model || model.uploadStatus === ERROR) {
+        return (
+            <div>
+                There was an error analyzing your model. Please try again later.
+            </div>
+        );
+    }
+
+    return <ModelCollection models={model.relatedModels} />;
+}
+
+function Page() {
     const [currentModel, setCurrentModel] = useState();
     const [uploadModel] = graphqlService.useUploadModelMutation();
 
@@ -41,13 +69,16 @@ const Page = () => {
             <Subheader>
                 Upload your model to see other models with similar geometry.
             </Subheader>
-            <form>
-                <Uploader setFile={handleFile} />
-            </form>
-            {currentModel && currentModel.id}
+            {currentModel ? (
+                <Results modelId={currentModel.id} />
+            ) : (
+                <form>
+                    <Uploader setFile={handleFile} />
+                </form>
+            )}
         </div>
     );
-};
+}
 
 const Matching = WithNewThemeLayout(Page, { logoOnly: true });
 

@@ -3,34 +3,56 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import * as R from 'ramda';
 import { getFileDataUrl } from './utils';
 
-const MODEL_QUERY = gql`
-    query getModel($id: ID) {
-        model(id: $id) {
-            id
-            name
-            likes {
-                isLiked
-                owner {
-                    id
-                    firstName
-                    lastName
-                    fullName
-                }
-            }
+const MODEL_FRAGMENT = gql`
+    fragment Model on ModelType {
+        id
+        name
+        likes {
+            isLiked
             owner {
                 id
                 firstName
                 lastName
                 fullName
             }
-            attachment {
-                id
-                attachmentId
+        }
+        owner {
+            id
+            firstName
+            lastName
+            fullName
+        }
+        attachment {
+            id
+            attachmentId
+        }
+        likesCount
+        commentsCount
+    }
+`;
+
+const MODEL_WITH_RELATED_QUERY = gql`
+    query getModel($id: ID) {
+        model(id: $id) {
+            id
+            uploadStatus
+            relatedModels {
+                ...Model
             }
-            likesCount
-            commentsCount
         }
     }
+
+    ${MODEL_FRAGMENT}
+`;
+
+const MODEL_QUERY = gql`
+    query getModel($id: ID) {
+        model(id: $id) {
+            ...Model
+        }
+    }
+
+    ${MODEL_FRAGMENT}
 `;
 
 const LIKE_MODEL_MUTATION = gql`
@@ -192,6 +214,15 @@ const useModelById = id => {
 
     return { loading, error, model };
 };
+
+export function useModelByIdWithRelated(id) {
+    const { loading, error, data } = useQuery(MODEL_WITH_RELATED_QUERY, {
+        variables: { id },
+    });
+    const model = parseModelPayload(data);
+
+    return { loading, error, model };
+}
 
 const useLikeModelMutation = (userId, modelId) => {
     return useMutation(LIKE_MODEL_MUTATION, {
