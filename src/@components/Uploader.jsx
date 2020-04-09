@@ -100,7 +100,7 @@ function Uploader() {
         acceptedFiles => {
             setDraggedFile(acceptedFiles[0]);
         },
-        [setDraggedFile],
+        [setDraggedFile]
     );
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -117,7 +117,7 @@ function Uploader() {
                 userEmail: authenticationService.currentUserValue.email,
             },
         });
-        history.push('/new/profile');
+        history.push('/profile');
     };
 
     const handleCancel = e => {

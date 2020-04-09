@@ -28,6 +28,4 @@ function Page() {
     );
 }
 
-const Landing = WithNewInvertedHeaderLayout(Page);
-
-export { Landing };
+export const Landing = WithNewInvertedHeaderLayout(Page);

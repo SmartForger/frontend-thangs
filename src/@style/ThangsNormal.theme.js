@@ -1,17 +1,3 @@
-export const ThangsMain = {
-    buttonColor: '#FFFFFF',
-    buttonShadow: 'inset 0 0 0 2px #FFFFFF',
-    darkgrey: '#999999',
-    grey: '#D9D9D9',
-    headerHeight: '64px',
-    mainFont: 'Raleway, sans-serif',
-    pageWidth: '1012px',
-    primary: '#F7BB3D',
-    primaryButton: '#F7BB3D',
-    secondary: '#0D0D0D',
-    white: '#FFFFFF',
-};
-
 /*
  * These colors are commented out for now to avoid unused variable errors in
  * our build. That is because we haven't placed in the theme yet, but they are
