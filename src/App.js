@@ -14,10 +14,10 @@ import {
     Profile,
     EditProfile,
     RedirectProfile,
+    Newspost,
 } from '@pages';
 import { ModelPreview } from '@pages/ModelPreview';
 import { ModelDetail } from '@pages/Model/ModelDetail';
-import { Newspost } from '@pages/Newspost';
 import { graphqlClient } from '@services';
 import { createBrowserHistory } from 'history';
 import * as pendo from '@vendors/pendo';

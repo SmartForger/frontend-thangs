@@ -4,5 +4,6 @@ export * from './Signup';
 export * from './Profile';
 export * from './Model';
 export * from './SearchResults';
+export * from './Newspost';
 export * from './PasswordReset';
 export * from './404';
