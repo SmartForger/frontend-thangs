@@ -16,13 +16,14 @@ function Dots() {
     const [dots, setDots] = useState('.');
     useEffect(
         () => {
-            setTimeout(() => {
+            const timeout = setTimeout(() => {
                 if (dots.length < 3) {
                     setDots(`${dots}.`);
                 } else {
                     setDots('.');
                 }
             }, 500);
+            return () => clearTimeout(timeout);
         },
         [dots, setDots],
     );
