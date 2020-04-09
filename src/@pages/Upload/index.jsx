@@ -1,36 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { WithNewThemeLayout } from '@style/Layout';
 import { Uploader } from '@components/Uploader';
-import { useDropzone } from 'react-dropzone';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 import { useHistory } from 'react-router-dom';
-import { ReactComponent as UploadIcon } from '@svg/upload-icon.svg';
-
-const StyledUploadBlock = styled.div`
-    height: 560px;
-    border-radius: 8px;
-    background-color: ${props =>
-        props.dragactive
-            ? props.theme.uploaderBackgroundActive
-            : props.theme.uploaderBackground};
-    color: ${props => props.theme.uploaderText};
-    font-size: 24px;
-    line-height: 36px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-`;
-
-const UploadIconStyled = styled(UploadIcon)`
-    margin-bottom: 32px;
-`;
-
-const LinkColor = styled.span`
-    color: ${props => props.theme.linkText};
-`;
 
 const Row = styled.div`
     display: flex;
@@ -99,29 +73,18 @@ const Header = styled.h1`
 
 const Page = () => {
     const history = useHistory();
+    const [file, setFile] = useState();
 
-    const [draggedFile, setDraggedFile] = useState();
     const graphqlService = GraphqlService.getInstance();
     const [uploadModel] = graphqlService.useUploadModelMutation();
-
-    const onDrop = useCallback(
-        acceptedFiles => {
-            setDraggedFile(acceptedFiles[0]);
-        },
-        [setDraggedFile],
-    );
-
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop,
-    });
 
     const onSubmit = async e => {
         e.preventDefault();
         await uploadModel({
             variables: {
-                file: draggedFile,
-                name: draggedFile.name,
-                size: draggedFile.size,
+                file,
+                name: file.name,
+                size: file.size,
                 userEmail: authenticationService.currentUserValue.email,
             },
         });
@@ -144,24 +107,7 @@ const Page = () => {
                             margin-right: 32px;
                         `}
                     >
-                        <Uploader />
-                        <div {...getRootProps()}>
-                            <input {...getInputProps({ multiple: false })} />
-                            <StyledUploadBlock dragactive={isDragActive}>
-                                {draggedFile ? (
-                                    <div>File: {draggedFile.name}</div>
-                                ) : (
-                                    <>
-                                        <UploadIconStyled />
-                                        <div>Drag & Drop model</div>
-                                        <div>
-                                            or <LinkColor>browse</LinkColor> to
-                                            choose file
-                                        </div>
-                                    </>
-                                )}
-                            </StyledUploadBlock>
-                        </div>
+                        <Uploader file={file} setFile={setFile} />
                     </Column>
                     <Column
                         css={`
@@ -172,7 +118,7 @@ const Page = () => {
                             <Label htmlFor="name">Title</Label>
                             <FullWidthInput
                                 name="name"
-                                defaultValue={draggedFile && draggedFile.name}
+                                defaultValue={file && file.name}
                                 placeholder="Model Name"
                             />
                         </Field>
@@ -188,7 +134,7 @@ const Page = () => {
                     >
                         Cancel
                     </CancelButton>
-                    <Button type="submit" disabled={!draggedFile}>
+                    <Button type="submit" disabled={!file}>
                         Save Model
                     </Button>
                 </ButtonGroup>
