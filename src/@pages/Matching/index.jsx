@@ -8,7 +8,12 @@ import { authenticationService } from '@services';
 const Header = styled.h1`
     font-family: ${props => props.theme.headerFont};
     color: ${props => props.theme.headerColor};
+    margin-bottom: 16px;
+`;
+
+const Subheader = styled.h4`
     margin-bottom: 24px;
+    font-size: 18px;
 `;
 
 const graphqlService = GraphqlService.getInstance();
@@ -33,6 +38,9 @@ const Page = () => {
     return (
         <div>
             <Header>Search by Model</Header>
+            <Subheader>
+                Upload your model to see other models with similar geometry.
+            </Subheader>
             <form>
                 <Uploader setFile={handleFile} />
             </form>
