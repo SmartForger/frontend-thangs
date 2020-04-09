@@ -1,5 +1,4 @@
 export * from './ThangsHeader.jsx';
-export * from './Footer.jsx';
 export * from './DisplayCard.jsx';
 export * from './TextInput.jsx';
 export * from './ShelfMenu.jsx';
