@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+const allowCssProp = props => (props.css ? props.css : '');
+
 export const UploadFrame = styled.div`
     height: 560px;
     border-radius: 8px;
@@ -14,4 +16,6 @@ export const UploadFrame = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    ${allowCssProp};
 `;

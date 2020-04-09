@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import { UploadFrame } from '@components/UploadFrame';
 import { ReactComponent as CheckUploadingIcon } from '@svg/check-uploading-icon.svg';
 import { ReactComponent as LensUploadingIcon } from '@svg/lens-uploading-icon.svg';
 import { ReactComponent as GraphUploadingIcon } from '@svg/graph-uploading-icon.svg';
 import { ReactComponent as RulerUploadingIcon } from '@svg/ruler-uploading-icon.svg';
 import { ReactComponent as ProtractorUploadingIcon } from '@svg/protractor-uploading-icon.svg';
+
+const DotsContainer = styled.div`
+    margin-bottom: 160px;
+    width: 250px;
+`;
 
 function Dots() {
     const [dots, setDots] = useState('.');
@@ -20,7 +26,7 @@ function Dots() {
         },
         [dots, setDots],
     );
-    return <div>Searching matches{dots}</div>;
+    return <DotsContainer>Searching matches{dots}</DotsContainer>;
 }
 
 const CHECK = 'check';
@@ -29,8 +35,12 @@ const GRAPH = 'graph';
 const RULER = 'ruler';
 const PROTRACTOR = 'protractor';
 
+const IconContainer = styled.div`
+    margin-top: 152px;
+`;
+
 function Icons() {
-    const [icon, setIcon] = useState('check');
+    const [icon, setIcon] = useState(CHECK);
     useEffect(
         () => {
             const timeout = setTimeout(() => {
@@ -50,24 +60,35 @@ function Icons() {
         },
         [icon, setIcon],
     );
-    if (icon === CHECK) {
-        return <CheckUploadingIcon />;
-    } else if (icon === LENS) {
-        return <LensUploadingIcon />;
-    } else if (icon === GRAPH) {
-        return <GraphUploadingIcon />;
-    } else if (icon === RULER) {
-        return <RulerUploadingIcon />;
-    } else if (icon === PROTRACTOR) {
-        return <ProtractorUploadingIcon />;
-    }
+
+    return (
+        <IconContainer>
+            {icon === CHECK ? (
+                <CheckUploadingIcon />
+            ) : icon === LENS ? (
+                <LensUploadingIcon />
+            ) : icon === GRAPH ? (
+                <GraphUploadingIcon />
+            ) : icon === RULER ? (
+                <RulerUploadingIcon />
+            ) : (
+                <ProtractorUploadingIcon />
+            )}
+        </IconContainer>
+    );
 }
 
 export function UploadProgress() {
     return (
-        <UploadFrame>
-            <Dots />
+        <UploadFrame
+            css={`
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            `}
+        >
             <Icons />
+            <Dots />
         </UploadFrame>
     );
 }
