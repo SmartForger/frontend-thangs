@@ -175,10 +175,12 @@ const Header = ({ inverted, variant }) => {
                     </Row>
                     {variant !== 'logo-only' && (
                         <Row>
-                            <MatchingButton disabled>
-                                <MatchingIconStyled />
-                                Search by Model
-                            </MatchingButton>
+                            <Link to={'/matching'}>
+                                <MatchingButton>
+                                    <MatchingIconStyled />
+                                    Search by Model
+                                </MatchingButton>
+                            </Link>
                             <SearchBarNew />
                         </Row>
                     )}
