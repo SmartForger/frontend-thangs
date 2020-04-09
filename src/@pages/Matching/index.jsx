@@ -23,10 +23,6 @@ const Subheader = styled.h4`
 
 const graphqlService = GraphqlService.getInstance();
 
-function Loading() {
-    return <div>Loading</div>;
-}
-
 function Results({ modelId }) {
     const {
         loading,
