@@ -9,7 +9,7 @@ import { ReactComponent as ProtractorUploadingIcon } from '@svg/protractor-uploa
 
 const DotsContainer = styled.div`
     margin-bottom: 160px;
-    width: 250px;
+    width: 256px;
 `;
 
 function Dots() {
