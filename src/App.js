@@ -11,6 +11,9 @@ import {
     ConfirmPasswordReset,
     SearchResults,
     Page404,
+    Profile,
+    EditProfile,
+    RedirectProfile,
 } from '@pages';
 import { ModelPreview } from '@pages/ModelPreview';
 import { ModelDetail } from '@pages/Model/ModelDetail';
@@ -19,10 +22,7 @@ import { graphqlClient } from '@services';
 import { createBrowserHistory } from 'history';
 import * as pendo from '@vendors/pendo';
 import * as fullStory from '@vendors/full-story';
-import { Profile } from '@pages/Profile/NewProfile';
 import { Upload } from '@pages/Upload';
-import { EditProfile } from '@pages/Profile/EditProfile';
-import { RedirectProfile } from '@pages/Profile/RedirectProfile';
 
 const history = createBrowserHistory();
 const originalFetch = window.fetch;
