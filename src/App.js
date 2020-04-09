@@ -19,6 +19,7 @@ import { SearchResults as NewSearchResults } from '@pages/SearchResults/NewSearc
 import { Profile as NewProfile } from '@pages/Profile/NewProfile';
 import { Upload } from '@pages/Upload';
 import { Landing } from '@pages/Landing';
+import { Matching } from '@pages/Matching';
 import { EditProfile } from '@pages/Profile/EditProfile';
 import { RedirectProfile } from '@pages/Profile/RedirectProfile';
 
@@ -78,6 +79,7 @@ const App = () => {
                         component={NewSearchResults}
                     />
                     <Route path="/new/upload" component={Upload} />
+                    <Route path="/matching" component={Matching} />
                     <Route path="*" component={Page404} status={404} />
                 </Switch>
             </Router>
