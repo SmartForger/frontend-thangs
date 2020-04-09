@@ -15,9 +15,9 @@ import {
     EditProfile,
     RedirectProfile,
     Newspost,
+    ModelDetail,
 } from '@pages';
 import { ModelPreview } from '@pages/ModelPreview';
-import { ModelDetail } from '@pages/Model/ModelDetail';
 import { graphqlClient } from '@services';
 import { createBrowserHistory } from 'history';
 import * as pendo from '@vendors/pendo';
