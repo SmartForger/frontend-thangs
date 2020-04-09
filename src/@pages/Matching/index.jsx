@@ -5,6 +5,7 @@ import { Uploader } from '@components/Uploader';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 import { ModelCollection } from '@components/ModelCollection';
+import { UploadProgress } from '@components/UploadProgress';
 
 const PROCESSING = 'PROCESSING';
 const ERROR = 'ERROR';
@@ -37,7 +38,7 @@ function Results({ modelId }) {
 
     if (loading || (model && model.uploadStatus === PROCESSING)) {
         startPolling(1000);
-        return <Loading />;
+        return <UploadProgress />;
     }
 
     stopPolling();
