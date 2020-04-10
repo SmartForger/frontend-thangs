@@ -131,7 +131,6 @@ const Comments = styled(CommentsForModel)`
 `;
 
 const ModelDetailPage = ({ model, currentUser }) => {
-    const relatedModels = []; // FIXME: query actual stuff
     const history = useHistory();
 
     return (
@@ -144,7 +143,7 @@ const ModelDetailPage = ({ model, currentUser }) => {
             <ModelContainer>
                 <ModelColumn>
                     <ModelViewerStyled model={model} />
-                    <ModelCollection models={relatedModels} />
+                    <ModelCollection models={model.relatedModels || []} />
                 </ModelColumn>
                 <Sidebar>
                     <LikeModelButton currentUser={currentUser} model={model} />
@@ -161,7 +160,9 @@ function Page() {
     const { id } = useParams();
 
     const graphqlService = GraphqlService.getInstance();
-    const { loading, error, model } = graphqlService.useModelById(id);
+    const { loading, error, model } = graphqlService.useModelByIdWithRelated(
+        id
+    );
     const [currentUser] = useLocalStorage('currentUser', null);
 
     if (loading) {

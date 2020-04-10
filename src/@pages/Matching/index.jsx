@@ -30,7 +30,7 @@ function Results({ modelId }) {
         model,
         startPolling,
         stopPolling,
-    } = graphqlService.useModelByIdWithRelated(modelId);
+    } = graphqlService.useUploadedModelByIdWithRelated(modelId);
 
     if (loading || (model && model.uploadStatus === PROCESSING)) {
         startPolling(1000);

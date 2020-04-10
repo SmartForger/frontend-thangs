@@ -34,6 +34,19 @@ const MODEL_FRAGMENT = gql`
 const MODEL_WITH_RELATED_QUERY = gql`
     query getModel($id: ID) {
         model(id: $id) {
+            ...Model
+            relatedModels {
+                ...Model
+            }
+        }
+    }
+
+    ${MODEL_FRAGMENT}
+`;
+
+const UPLOADED_MODEL_WITH_RELATED_QUERY = gql`
+    query getModel($id: ID) {
+        model(id: $id) {
             id
             uploadStatus
             relatedModels {
@@ -225,7 +238,19 @@ export function useModelByIdWithRelated(id) {
         MODEL_WITH_RELATED_QUERY,
         {
             variables: { id },
-        },
+        }
+    );
+    const model = parseModelPayload(data);
+
+    return { loading, error, model, startPolling, stopPolling };
+}
+
+export function useUploadedModelByIdWithRelated(id) {
+    const { loading, error, data, startPolling, stopPolling } = useQuery(
+        UPLOADED_MODEL_WITH_RELATED_QUERY,
+        {
+            variables: { id },
+        }
     );
     const model = parseModelPayload(data);
 
@@ -241,7 +266,7 @@ const useLikeModelMutation = (userId, modelId) => {
                 data: {
                     likeModel: { model },
                 },
-            },
+            }
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
@@ -261,7 +286,7 @@ const useUnlikeModelMutation = (userId, modelId) => {
                 data: {
                     unlikeModel: { model },
                 },
-            },
+            }
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
