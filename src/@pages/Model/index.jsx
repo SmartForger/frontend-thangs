@@ -17,16 +17,6 @@ import { WithNewThemeLayout } from '@style';
 import { Spinner } from '@components/Spinner';
 import { Page404 } from '../404';
 
-import {
-    createBatch,
-    userFactory,
-    modelFactory,
-    attachmentFactory,
-} from '@helpers/content-factories';
-
-const SHOW_OWNER = true;
-const SHOW_MODELS = true;
-
 const allowCssProp = props => (props.css ? props.css : '');
 
 const BackButton = styled.button`
@@ -141,10 +131,6 @@ const Comments = styled(CommentsForModel)`
 `;
 
 const ModelDetailPage = ({ model, currentUser }) => {
-    // Temporary placeholder data.
-    const relatedModels = SHOW_MODELS ? createBatch(10, modelFactory) : [];
-    model.owner = SHOW_OWNER ? userFactory() : undefined;
-    model.attachment = attachmentFactory();
     const history = useHistory();
 
     return (
@@ -157,7 +143,7 @@ const ModelDetailPage = ({ model, currentUser }) => {
             <ModelContainer>
                 <ModelColumn>
                     <ModelViewerStyled model={model} />
-                    <ModelCollection models={relatedModels} />
+                    <ModelCollection models={model.relatedModels || []} />
                 </ModelColumn>
                 <Sidebar>
                     <LikeModelButton currentUser={currentUser} model={model} />
@@ -174,7 +160,9 @@ function Page() {
     const { id } = useParams();
 
     const graphqlService = GraphqlService.getInstance();
-    const { loading, error, model } = graphqlService.useModelById(id);
+    const { loading, error, model } = graphqlService.useModelByIdWithRelated(
+        id
+    );
     const [currentUser] = useLocalStorage('currentUser', null);
 
     if (loading) {

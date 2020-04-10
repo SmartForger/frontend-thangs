@@ -3,21 +3,10 @@ import styled from 'styled-components';
 
 import { useHistory, Link } from 'react-router-dom';
 import { ProfilePicture } from '@components/ProfilePicture';
-import { ModelCollection } from '@components/ModelCollection';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 import { ModelDetails } from './ModelDetailsPlaceholder';
 import { LikeModelButton } from '@components/LikeModelButton';
 import { NewModelViewer } from '@components/ModelViewer';
-
-import {
-    createBatch,
-    userFactory,
-    modelFactory,
-    attachmentFactory,
-} from '@helpers/content-factories';
-
-const SHOW_OWNER = true;
-const SHOW_MODELS = true;
 
 const BackButton = styled.button`
     width: 48px;
@@ -133,10 +122,6 @@ function ModelTitle({ model, className }) {
 }
 
 const ModelPreviewPage = ({ model, currentUser }) => {
-    // Temporary placeholder data.
-    const relatedModels = SHOW_MODELS ? createBatch(10, modelFactory) : [];
-    model.owner = SHOW_OWNER ? userFactory() : undefined;
-    model.attachment = attachmentFactory();
     const history = useHistory();
 
     return (
@@ -159,7 +144,6 @@ const ModelPreviewPage = ({ model, currentUser }) => {
                     </PrimaryButton>
                 </Sidebar>
             </ModelContainer>
-            <ModelCollection models={relatedModels} />
         </>
     );
 };

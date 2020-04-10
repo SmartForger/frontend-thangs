@@ -4,33 +4,35 @@ export function ModelDetails({ model }) {
     return (
         <table>
             <tbody>
-                <tr>
-                    <td>Material</td>
-                    <td>{model.attachment.material}</td>
-                </tr>
-                <tr>
-                    <td>Height</td>
-                    <td>{model.attachment.height}mm</td>
-                </tr>
-                <tr>
-                    <td>Length</td>
-                    <td>{model.attachment.length}mm</td>
-                </tr>
-                <tr>
-                    <td>Width</td>
-                    <td>{model.attachment.width}mm</td>
-                </tr>
-                <tr>
-                    <td>Weight</td>
-                    <td>{model.attachment.weight}g</td>
-                </tr>
-                <tr>
-                    <td>ANSI</td>
-                    <td>
-                        {model.attachment.ansi ? 'Compliant' : 'Not compliant'}
-                    </td>
-                </tr>
+                <AttrRow name="Material" value={model.attachment.material} />
+                <AttrRow name="Height" value={model.attachment.height} />
+                <AttrRow name="Length" value={model.attachment.length} />
+                <AttrRow name="Width" value={model.attachment.width} />
+                <AttrRow name="Weight" value={model.attachment.weight} />
+                <AttrRow
+                    name="ANSI"
+                    value={
+                        model.attachment.ansi == null
+                            ? null
+                            : model.attachment.ansi
+                            ? 'Compliant'
+                            : 'Not compliant'
+                    }
+                />
             </tbody>
         </table>
+    );
+}
+
+function AttrRow({ name, value }) {
+    if (value == null || name == null) {
+        return null;
+    }
+
+    return (
+        <tr>
+            <td>{name}</td>
+            <td>{value}</td>
+        </tr>
     );
 }
