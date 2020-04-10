@@ -17,16 +17,6 @@ import { WithNewThemeLayout } from '@style';
 import { Spinner } from '@components/Spinner';
 import { Page404 } from '../404';
 
-import {
-    createBatch,
-    userFactory,
-    modelFactory,
-    attachmentFactory,
-} from '@helpers/content-factories';
-
-const SHOW_OWNER = true;
-const SHOW_MODELS = true;
-
 const allowCssProp = props => (props.css ? props.css : '');
 
 const BackButton = styled.button`
@@ -141,10 +131,7 @@ const Comments = styled(CommentsForModel)`
 `;
 
 const ModelDetailPage = ({ model, currentUser }) => {
-    // Temporary placeholder data.
-    const relatedModels = SHOW_MODELS ? createBatch(10, modelFactory) : [];
-    model.owner = SHOW_OWNER ? userFactory() : undefined;
-    model.attachment = attachmentFactory();
+    const relatedModels = []; // FIXME: query actual stuff
     const history = useHistory();
 
     return (
