@@ -1,20 +1,21 @@
 import React from 'react';
 
 export function ModelDetails({ model }) {
+    const attachment = model.attachment || {};
     return (
         <table>
             <tbody>
-                <AttrRow name="Material" value={model.attachment.material} />
-                <AttrRow name="Height" value={model.attachment.height} />
-                <AttrRow name="Length" value={model.attachment.length} />
-                <AttrRow name="Width" value={model.attachment.width} />
-                <AttrRow name="Weight" value={model.attachment.weight} />
+                <AttrRow name="Material" value={attachment.material} />
+                <AttrRow name="Height" value={attachment.height} />
+                <AttrRow name="Length" value={attachment.length} />
+                <AttrRow name="Width" value={attachment.width} />
+                <AttrRow name="Weight" value={attachment.weight} />
                 <AttrRow
                     name="ANSI"
                     value={
-                        model.attachment.ansi == null
+                        attachment.ansi == null
                             ? null
-                            : model.attachment.ansi
+                            : attachment.ansi
                             ? 'Compliant'
                             : 'Not compliant'
                     }
