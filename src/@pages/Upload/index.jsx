@@ -89,7 +89,7 @@ const Page = () => {
                 userEmail: authenticationService.currentUserValue.email,
             },
         });
-        history.push('/new/profile');
+        history.push('/profile');
     };
 
     const handleCancel = e => {
