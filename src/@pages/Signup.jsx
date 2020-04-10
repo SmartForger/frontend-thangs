@@ -255,7 +255,6 @@ const Page = () => {
                     type="submit"
                     name="Signup"
                     disabled={canSignup()}
-                    onClick={handleSubmit}
                 />
             </form>
         </Container>

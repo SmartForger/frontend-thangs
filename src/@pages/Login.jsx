@@ -152,7 +152,6 @@ const Page = () => {
                     name="Sign In"
                     type="submit"
                     disabled={canLogin()}
-                    onClick={handleSubmit}
                 />
             </form>
             <div>
