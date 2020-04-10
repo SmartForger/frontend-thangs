@@ -133,24 +133,6 @@ const parseModel = model => {
         ...model,
         relatedModels,
         url,
-        tags: [
-            { name: 'Yormy' },
-            { name: 'Grimgooorsh' },
-            { name: 'AB' },
-            { name: 'Longish' },
-            { name: 'Real long Tag' },
-            { name: 'Screw' },
-            { name: 'Bolt' },
-            { name: 'Automotive' },
-            { name: 'Clasp' },
-            { name: 'Physna' },
-            { name: 'Thangs.com' },
-            { name: 'Boat' },
-            { name: 'Trucks' },
-            { name: 'Civil Engineering' },
-            { name: '3D Printing' },
-            { name: 'Yormy' },
-        ],
     };
 };
 
