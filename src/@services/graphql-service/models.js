@@ -69,33 +69,15 @@ const LIKE_MODEL_MUTATION = gql`
                 }
             }
             model {
-                id
-                name
-                likes {
-                    isLiked
-                    owner {
-                        id
-                        firstName
-                        lastName
-                        fullName
-                    }
-                }
-                owner {
-                    id
-                    firstName
-                    lastName
-                    fullName
-                }
-                attachment {
-                    id
-                    attachmentId
-                }
+                ...Model
             }
             like {
                 id
             }
         }
     }
+
+    ${MODEL_FRAGMENT}
 `;
 
 const UNLIKE_MODEL_MUTATION = gql`
@@ -112,54 +94,24 @@ const UNLIKE_MODEL_MUTATION = gql`
                 }
             }
             model {
-                id
-                name
-                likes {
-                    isLiked
-                    owner {
-                        id
-                        firstName
-                        lastName
-                        fullName
-                    }
-                }
-                owner {
-                    id
-                    firstName
-                    lastName
-                    fullName
-                }
-                attachment {
-                    id
-                    attachmentId
-                }
+                ...Model
             }
             like {
                 id
             }
         }
     }
+
+    ${MODEL_FRAGMENT}
 `;
 
 const MODELS_BY_DATE_QUERY = gql`
     query modelsByDate {
         modelsByDate {
-            id
-            name
-            owner {
-                id
-                firstName
-                lastName
-                fullName
-                email
-            }
-            attachment {
-                id
-                filetype
-                fileSize
-            }
+            ...Model
         }
     }
+    ${MODEL_FRAGMENT}
 `;
 
 const getAttachmentId = R.pathOr(null, ['attachment', 'attachmentId']);
@@ -314,23 +266,10 @@ const useModelsByDate = () => {
 const SEARCH_MODELS_QUERY = gql`
     query searchModels($query: String!) {
         searchModels(query: $query) {
-            id
-            name
-            owner {
-                id
-                firstName
-                lastName
-                fullName
-            }
-            attachment {
-                id
-                fileSize
-                filetype
-            }
-            likesCount
-            commentsCount
+            ...Model
         }
     }
+    ${MODEL_FRAGMENT}
 `;
 
 const useUploadModelMutation = () => {
