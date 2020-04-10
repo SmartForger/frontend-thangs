@@ -8,6 +8,10 @@ import { TextInput as BaseTextInput, Spinner, Button } from '@components';
 import { WithNewSignupThemeLayout } from '@style';
 import { ReactComponent as LoginIcon } from '@svg/user-login.svg';
 
+const InlinedSpinner = styled(Spinner)`
+    display: inline-block;
+`;
+
 const TextInput = styled(BaseTextInput)`
     display: block;
     width: 100%;
@@ -94,7 +98,7 @@ const Page = () => {
         }
     }
 
-    const canLogin = () => {
+    const invalidForm = () => {
         if (
             inputs.password &&
             inputs.email &&
@@ -107,9 +111,8 @@ const Page = () => {
 
     return (
         <LoginBodyStyle>
-            {waiting && <Spinner size="300" />}
             <LoginIcon />
-            <h1>Sign In</h1>
+            <h1>Sign In {waiting && <InlinedSpinner size="30" />}</h1>
             {!!loginErrorMessage && (
                 <ErrorTextStyle data-cy="login-error">
                     {loginErrorMessage}
@@ -121,7 +124,6 @@ const Page = () => {
                         <label>
                             E-Mail
                             <TextInput
-                                disabled={waiting}
                                 type="text"
                                 name="email"
                                 incorrect={needsCorrected('email')}
@@ -137,7 +139,6 @@ const Page = () => {
                         <label>
                             Password
                             <TextInput
-                                disabled={waiting}
                                 type="password"
                                 name="password"
                                 onChange={handleChange}
@@ -151,7 +152,7 @@ const Page = () => {
                 <SubmitButton
                     name="Sign In"
                     type="submit"
-                    disabled={canLogin()}
+                    disabled={waiting || invalidForm()}
                 />
             </form>
             <div>
