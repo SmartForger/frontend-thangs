@@ -25,6 +25,7 @@ const MODEL_FRAGMENT = gql`
         attachment {
             id
             attachmentId
+            imgSrc
         }
         likesCount
         commentsCount
