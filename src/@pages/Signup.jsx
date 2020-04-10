@@ -10,6 +10,10 @@ import { useForm } from '@customHooks';
 import { authenticationService } from '@services';
 import { ReactComponent as UserRegistrationIcon } from '@svg/user-registration.svg';
 
+const InlinedSpinner = styled(Spinner)`
+    display: inline-block;
+`;
+
 const Container = styled.div`
     display: flex;
     flex-flow: column nowrap;
@@ -96,7 +100,7 @@ const Page = () => {
         return false;
     };
 
-    const canSignup = () => {
+    const invalidForm = () => {
         if (!registrationCode) {
             return false;
         }
@@ -106,8 +110,7 @@ const Page = () => {
             inputs.username &&
             inputs.email &&
             inputs.password &&
-            inputs.password === inputs.confirmPass &&
-            invalidFields.length === 0
+            inputs.password === inputs.confirmPass
         ) {
             return false;
         }
@@ -152,9 +155,8 @@ const Page = () => {
     return (
         <Container>
             <form onSubmit={handleSubmit} data-cy="signup-form">
-                {waiting && <Spinner size="300" />}
                 <UserRegistrationIcon />
-                <h1>Register</h1>
+                <h1>Register {waiting && <InlinedSpinner size="30" />}</h1>
                 {!!signupErrorMessage && (
                     <ErrorTextStyle data-cy="signup-error">
                         {signupErrorMessage}
@@ -162,99 +164,103 @@ const Page = () => {
                 )}
                 <FieldContainer>
                     <FormControl>
-                        <label htmlFor="first-name-input">First Name</label>
-                        <TextInput
-                            id="first-name-input"
-                            disabled={waiting}
-                            type="text"
-                            name="firstName"
-                            label="First Name"
-                            onChange={handleChange}
-                            value={inputs.firstName || ''}
-                            data-cy="signup-first-name"
-                        />
-                    </FormControl>
-                    <FormControl>
-                        <label htmlFor="last-name-input">Last Name</label>
-                        <TextInput
-                            id="last-name-input"
-                            disabled={waiting}
-                            type="text"
-                            name="lastName"
-                            label="Last Name"
-                            onChange={handleChange}
-                            value={inputs.lastName || ''}
-                            data-cy="signup-last-name"
-                        />
-                    </FormControl>
-                    <FormControl>
-                        <label htmlFor="username-input">Username</label>
-                        <TextInput
-                            id="username-input"
-                            disabled={waiting}
-                            type="text"
-                            name="username"
-                            label="Username"
-                            incorrect={needsCorrected('username')}
-                            onChange={handleChange}
-                            validator={validateUsername}
-                            value={inputs.username || ''}
-                            data-cy="signup-username"
-                            required
-                        />
-                    </FormControl>
-                    <FormControl>
-                        <label htmlFor="email-input">Email</label>
-                        <TextInput
-                            id="email-input"
-                            disabled={waiting}
-                            type="text"
-                            name="email"
-                            label="E-Mail"
-                            incorrect={needsCorrected('email')}
-                            onChange={handleChange}
-                            validator={validateEmail}
-                            value={inputs.email || ''}
-                            data-cy="signup-email"
-                            required
-                        />
-                    </FormControl>
-                    <FormControl>
-                        <label htmlFor="password-input">Password</label>
-                        <TextInput
-                            id="password-input"
-                            disabled={waiting}
-                            type="password"
-                            name="password"
-                            label="Password"
-                            onChange={handleChange}
-                            value={inputs.password || ''}
-                            data-cy="signup-password"
-                            required
-                        />
-                    </FormControl>
-                    <FormControl>
-                        <label htmlFor="confirm-password-input">
-                            Confirm Password
+                        <label>
+                            First Name
+                            <TextInput
+                                id="first-name-input"
+                                type="text"
+                                name="firstName"
+                                label="First Name"
+                                onChange={handleChange}
+                                value={inputs.firstName || ''}
+                                data-cy="signup-first-name"
+                            />
                         </label>
-                        <TextInput
-                            id="confirm-password-input"
-                            disabled={waiting}
-                            type="password"
-                            name="confirmPass"
-                            label="Password"
-                            onChange={handleChange}
-                            value={inputs.confirmPass || ''}
-                            validator={validatePasswords}
-                            data-cy="signup-confirm-password"
-                            required
-                        />
+                    </FormControl>
+                    <FormControl>
+                        <label>
+                            Last Name
+                            <TextInput
+                                id="last-name-input"
+                                type="text"
+                                name="lastName"
+                                label="Last Name"
+                                onChange={handleChange}
+                                value={inputs.lastName || ''}
+                                data-cy="signup-last-name"
+                            />
+                        </label>
+                    </FormControl>
+                    <FormControl>
+                        <label>
+                            Username
+                            <TextInput
+                                id="username-input"
+                                type="text"
+                                name="username"
+                                label="Username"
+                                incorrect={needsCorrected('username')}
+                                onChange={handleChange}
+                                validator={validateUsername}
+                                value={inputs.username || ''}
+                                data-cy="signup-username"
+                                required
+                            />
+                        </label>
+                    </FormControl>
+                    <FormControl>
+                        <label>
+                            Email
+                            <TextInput
+                                id="email-input"
+                                type="text"
+                                name="email"
+                                label="E-Mail"
+                                incorrect={needsCorrected('email')}
+                                onChange={handleChange}
+                                validator={validateEmail}
+                                value={inputs.email || ''}
+                                data-cy="signup-email"
+                                required
+                            />
+                        </label>
+                    </FormControl>
+                    <FormControl>
+                        <label>
+                            Password
+                            <TextInput
+                                id="password-input"
+                                type="password"
+                                name="password"
+                                label="Password"
+                                onChange={handleChange}
+                                value={inputs.password || ''}
+                                data-cy="signup-password"
+                                required
+                            />
+                        </label>
+                    </FormControl>
+                    <FormControl>
+                        <label>
+                            Confirm Password
+                            <TextInput
+                                id="confirm-password-input"
+                                type="password"
+                                name="confirmPass"
+                                label="Password"
+                                onChange={handleChange}
+                                value={inputs.confirmPass || ''}
+                                validator={validatePasswords}
+                                data-cy="signup-confirm-password"
+                                required
+                            />
+                        </label>
                     </FormControl>
                 </FieldContainer>
                 <SubmitButton
                     type="submit"
                     name="Signup"
-                    disabled={canSignup()}
+                    disabled={waiting || invalidForm()}
                 />
             </form>
         </Container>
