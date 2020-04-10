@@ -2,8 +2,7 @@ import React from 'react';
 import * as R from 'ramda';
 import styled from 'styled-components';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
-// TODO: Update this import when we get the proper asset.
-import { ReactComponent as HeartFilledIcon } from '@svg/heart-icon.svg';
+import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg';
 import * as GraphqlService from '@services/graphql-service';
 
 const graphqlService = GraphqlService.getInstance();
