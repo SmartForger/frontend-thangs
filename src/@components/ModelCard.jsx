@@ -24,15 +24,18 @@ const ThumbnailContainer = styled.div`
     background: ${props => props.theme.modelThumbnailPlaceholder};
     border-radius: 8px 8px 0px 0px;
     height: 100%;
+    max-height: calc(100% - ${props => (props.showOwner ? '80px' : '40px')});
+    overflow: hidden;
+
     > img {
         width: 100%;
         height: 100%;
     }
 `;
 
-function ModelThumbnail({ model, thumbnailUrl: src, children }) {
+function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
     return (
-        <ThumbnailContainer>
+        <ThumbnailContainer showOwner={showOwner}>
             {src && <img src={src} alt={model.name} />}
             {children}
         </ThumbnailContainer>
@@ -99,7 +102,11 @@ function ModelCard({ className, model, withOwner }) {
             onBlur={handleMouseLeave}
         >
             <CardContainer className={className}>
-                <ModelThumbnail model={model}>
+                <ModelThumbnail
+                    model={model}
+                    thumbnailUrl={model.attachment && model.attachment.imgSrc}
+                    showOwner={showOwner}
+                >
                     {hovered ? (
                         <Overlay>
                             <ModelName>{model.name}</ModelName>

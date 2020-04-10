@@ -20,6 +20,10 @@ const USER_QUERY = gql`
                 name
                 likesCount
                 commentsCount
+                attachment {
+                    id
+                    imgSrc
+                }
             }
             inviteCode
             likedModels {
