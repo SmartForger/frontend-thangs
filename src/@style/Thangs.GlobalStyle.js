@@ -27,7 +27,8 @@ export const GlobalStyle = createGlobalStyle`
     font-weight: inherit;
   }
 
-  button {
+  input, button {
     font-size: inherit;
+    font-family: inherit;
   }
 `;
