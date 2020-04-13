@@ -26,3 +26,4 @@ handlers:
     static_files: build/index.html
     upload: build/index.html
     expiration: 1m
+    secure: always
