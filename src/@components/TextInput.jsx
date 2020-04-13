@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const TextInputStyled = styled.input`
-    padding: 12px 20px;
+    padding: 8px 12px;
     margin: 0;
     display: inline-block;
-    border: 1px solid ${props => (props.invalid ? 'red' : '#ccc')};
-    border-radius: 4px;
+    border: 1px solid ${props => (props.invalid ? 'red' : 'transparent')};
+    border-radius: 8px;
     box-sizing: border-box;
-    font-size: 1rem;
-    box-shadow: inset 0px 0px 0px 3px
-        ${props => (props.invalid || props.incorrect ? 'red' : 'clear')};
-    transition: 0.2s all;
+    line-height: 18px;
+    background-color: ${props => props.theme.textInputBackground};
 `;
 
 const TextInput = props => {

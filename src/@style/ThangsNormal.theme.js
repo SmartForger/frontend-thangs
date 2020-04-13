@@ -30,6 +30,7 @@ const BROWN = '#8b6400';
 const WHITE_1 = '#ffffff';
 const WHITE_2 = '#efecec';
 const WHITE_3 = '#e8e8ec';
+const WHITE_4 = '#ececec';
 const LIGHT_PURPLE = '#dd72dd';
 
 /*
@@ -86,6 +87,7 @@ export const NewTheme = {
     selectedProfileTabColor: BLACK_1,
     shadow,
     textOnBrandColor: BROWN,
+    textInputBackground: WHITE_4,
     unselectedProfileTabColor: GREY_5,
     uploaderBackground: BLACK_2,
     uploaderBackgroundActive: BLACK_4,
