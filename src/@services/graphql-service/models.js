@@ -1,7 +1,6 @@
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import * as R from 'ramda';
-import { getFileDataUrl } from './utils';
 
 const MODEL_FRAGMENT = gql`
     fragment Model on ModelType {
@@ -128,17 +127,11 @@ const MODELS_BY_DATE_QUERY = gql`
     ${MODEL_FRAGMENT}
 `;
 
-const getAttachmentId = R.pathOr(null, ['attachment', 'attachmentId']);
 const getModel = R.pathOr(null, ['model']);
 const getModelsByDate = R.pathOr(null, ['modelsByDate']);
 const getSearchModels = R.pathOr(null, ['searchModels']);
 
 const parseModel = model => {
-    const attachmentId = getAttachmentId(model);
-    const url = attachmentId
-        ? `${getFileDataUrl()}?attachment_id=${attachmentId}`
-        : null;
-
     const relatedModels = model.relatedModels
         ? model.relatedModels.map(parseModel)
         : null;
@@ -146,7 +139,6 @@ const parseModel = model => {
     return {
         ...model,
         relatedModels,
-        url,
     };
 };
 

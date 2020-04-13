@@ -18,8 +18,4 @@ const getGraphQLUrl = () => {
     return withEndSlash(createAppUrl('/graphql'));
 };
 
-const getFileDataUrl = () => {
-    return withEndSlash(createAppUrl('/api/model-data'));
-};
-
-export { createAppUrl, getGraphQLUrl, getFileDataUrl };
+export { createAppUrl, getGraphQLUrl };
