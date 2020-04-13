@@ -13,6 +13,35 @@ const LinkColor = styled.span`
     cursor: pointer;
 `;
 
+const MODEL_FILE_EXTS = [
+    '.3dxml', // THREE_D_XML
+    '.asab', // ACIS_Assembly_Binary
+    '.asat', // ACIS_Assembly
+    '.CATPart', // CATIAV5
+    '.CATProduct', // CATIAV5_Assembly
+    '.dwg',
+    '.dxf',
+    '.iges',
+    '.igs',
+    '.ipt', // Inventor
+    '.jt',
+    '.model', // CATIAV4
+    '.par', // SolidEdge
+    '.prt', // NX, ProE_Creo
+    '.sab', // ACIS_Binary
+    '.sat', // ACIS
+    '.sldasm', // SolidWorks_Assembly
+    '.sldprt', // SolidWorks
+    '.step',
+    '.stl',
+    '.stp',
+    '.vda',
+    '.x_b', // ParaSolid_Binary
+    '.x_t', // ParaSolid
+    '.xcgm',
+    '.xml', // XMLEBOM
+];
+
 export function Uploader({ file, setFile }) {
     const onDrop = useCallback(
         acceptedFiles => {
@@ -23,6 +52,7 @@ export function Uploader({ file, setFile }) {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
+        accept: MODEL_FILE_EXTS,
     });
 
     return (
