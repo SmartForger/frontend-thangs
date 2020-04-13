@@ -13,6 +13,19 @@ describe('The Profile Page', () => {
         cy.get('[data-cy=loading-spinner]');
     });
 
+    it('displays error if no user found', () => {
+        cy.mockOnWindow({
+            'graphql-react': {
+                useUserById: () => ({
+                    loading: false,
+                    user: null,
+                }),
+            },
+        });
+        cy.visit('/profile/1');
+        cy.get('[data-cy=fetch-profile-error]');
+    });
+
     it('displays user details', () => {
         cy.mockOnWindow({
             'graphql-react': {
@@ -21,6 +34,7 @@ describe('The Profile Page', () => {
                     user: {
                         username: 'test-username',
                         email: 'test-email',
+                        fullName: 'test-fullName',
                         firstName: 'test-firstName',
                         lastName: 'test-lastName',
                         profile: {
@@ -41,22 +55,7 @@ describe('The Profile Page', () => {
             },
         });
         cy.visit('/profile/1');
-        cy.contains('test-username');
-        cy.contains('test-email');
-        cy.contains('test-firstName test-lastName');
-        cy.get('[data-cy=profile-model-link]').should('have.length', 3);
-    });
-
-    it('displays error if no user found', () => {
-        cy.mockOnWindow({
-            'graphql-react': {
-                useUserById: () => ({
-                    loading: false,
-                    user: null,
-                }),
-            },
-        });
-        cy.visit('/profile/1');
-        cy.get('[data-cy=fetch-profile-error]');
+        cy.contains('test-fullName');
+        cy.contains('Models 3');
     });
 });
