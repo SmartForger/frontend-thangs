@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useHistory, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import * as R from 'ramda';
 
 import { WithNewThemeLayout } from '@style';
 import * as GraphqlService from '@services/graphql-service';
+import { authenticationService } from '@services';
 import { useCurrentUser } from '@customHooks/Users';
 import { Spinner } from '@components/Spinner';
+import { AnchorButton } from '@components/AnchorButton';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { Markdown } from '@components/Markdown';
 import { Page404 } from '../404';
@@ -20,6 +22,12 @@ export * from './EditProfile';
 export * from './RedirectProfile';
 
 const graphqlService = GraphqlService.getInstance();
+
+const Anchor = styled(AnchorButton)`
+    margin-top: 8px;
+    padding: 4px;
+    font-size: 16px;
+`;
 
 const Centered = styled.div`
     display: flex;
@@ -222,6 +230,7 @@ const EditProfileButtonStyled = styled(EditProfileButton)`
 
 function Page() {
     const { id } = useParams();
+    const history = useHistory();
 
     const { loading, error, user } = graphqlService.useUserById(id);
 
@@ -251,6 +260,14 @@ function Page() {
             <ProfilePicture user={user} size="104px" />
             <Name>{user.fullName}</Name>
             <EditProfileButtonStyled viewedUser={user} />
+            <Anchor
+                onClick={() => {
+                    authenticationService.logout();
+                    history.push('/login');
+                }}
+            >
+                Sign Out
+            </Anchor>
             <Tabs user={user} />
         </Centered>
     );
