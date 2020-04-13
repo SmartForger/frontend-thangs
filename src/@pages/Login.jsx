@@ -8,6 +8,10 @@ import { TextInput as BaseTextInput, Spinner, Button } from '@components';
 import { WithNewSignupThemeLayout } from '@style';
 import { ReactComponent as LoginIcon } from '@svg/user-login.svg';
 
+const PageHeader = styled.h1`
+    font-family: ${props => props.theme.headerFont};
+`;
+
 const InlinedSpinner = styled(Spinner)`
     display: inline-block;
 `;
@@ -116,7 +120,9 @@ const Page = () => {
     return (
         <LoginBodyStyle>
             <LoginIcon />
-            <h1>Sign In {waiting && <InlinedSpinner size="30" />}</h1>
+            <PageHeader>
+                Sign In {waiting && <InlinedSpinner size="30" />}
+            </PageHeader>
             {!!loginErrorMessage && (
                 <ErrorTextStyle data-cy="login-error">
                     {loginErrorMessage}
