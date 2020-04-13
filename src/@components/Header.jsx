@@ -9,7 +9,7 @@ import { ReactComponent as MatchingIcon } from '@svg/matching-icon.svg';
 import { ReactComponent as Logo } from '@svg/logo.svg';
 import { ReactComponent as LogoText } from '@svg/logo-text.svg';
 
-const NOTIFICATIONS_ENABLED = true;
+const NOTIFICATIONS_ENABLED = false;
 const NOTIFICATIONS_URL = '#';
 
 const allowCssProp = props => (props.css ? props.css : '');
@@ -106,7 +106,7 @@ const MatchingIconStyled = styled(MatchingIcon)`
 `;
 
 const NotificationIconStyled = styled(NotificationIcon)`
-    margin: 0 32px;
+    margin-left: 32px;
 `;
 
 const NotificationsButton = () => {
@@ -126,6 +126,7 @@ const UploadButton = () => {
             <Button
                 css={`
                     width: 124px;
+                    margin-left: 32px;
                 `}
             >
                 Upload Model
