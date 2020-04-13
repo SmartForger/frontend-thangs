@@ -47,6 +47,7 @@ const ModalOverlayStyles = createGlobalStyle`
         right: 0px;
         bottom: 0px;
         background-color: rgba(0, 0, 0, 0.75);
+        z-index: 1;
     }
     .ReactCrop__image {
         max-height: 80vh;
