@@ -15,6 +15,7 @@ export const GlobalStyle = createGlobalStyle`
 
   a {
     text-decoration: none;
+    color: ${props => props.theme.linkText};
   }
 
   a:visited {

@@ -22,7 +22,7 @@ const BLACK_5 = '#4a4a4a';
 const YELLOW_1 = '#ffbc00';
 // const YELLOW_2 = '#cd9602';
 // const YELLOW_3 = '#b18002';
-// const BLUE_1 = '#1cb2f5';
+const BLUE_1 = '#1cb2f5';
 const BLUE_2 = '#1b8cf8';
 const BLUE_3 = '#014d7c';
 // const BLUE_4 = '#013047';
@@ -95,6 +95,7 @@ export const NewTheme = {
 
 export const NewDarkTheme = {
     ...NewTheme,
+    linkText: BLUE_1,
     linkTextVisited: LIGHT_PURPLE,
     backgroundColor: BLACK_2,
     buttonShadow: 'none',
