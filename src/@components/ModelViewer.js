@@ -45,7 +45,6 @@ const ViewerContainerNew = styled(ViewerContainer)`
     height: 100%;
     box-shadow: none;
     border-radius: 8px;
-    overflow: hidden;
 
     > div {
         pointer-events: all;

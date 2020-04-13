@@ -21,6 +21,7 @@ const Viewer = ({
                 width: width,
                 boxShadow,
                 background: '#999999',
+                borderRadius: '8px',
             }}
         >
             <ambientLight intensity={0.9} />
