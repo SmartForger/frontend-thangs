@@ -9,12 +9,11 @@ import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg';
 const allowCssProp = props => (props.css ? props.css : '');
 
 const NewLayout = styled.div`
-    ${props =>
-        props.variant === 'small-vertical-spacing'
-            ? 'margin: 88px auto 0'
-            : 'margin: 256px auto 0'};
+    padding: ${props =>
+            props.variant === 'small-vertical-spacing' ? '96px' : '256px'}
+        16px;
+    margin: auto;
     max-width: 1237px;
-    padding: 0 16px;
 
     ${allowCssProp};
 `;
@@ -109,11 +108,7 @@ export const WithNewInvertedHeaderLayout = Component => props => {
                         </PromotionalSecondaryText>
                     </TextContainer>
                 </Hero>
-                <NewLayout
-                    css={`
-                        margin-top: 24px;
-                    `}
-                >
+                <NewLayout variant="small-vertical-spacing">
                     <WithFlash>
                         <Component {...props} />
                     </WithFlash>
@@ -129,11 +124,7 @@ export const WithNewSignupThemeLayout = Component => props => {
             <ThemeProvider theme={NewDarkTheme}>
                 <GlobalStyle />
                 <Header variant="logo-only" />
-                <NewLayout
-                    css={`
-                        margin: 88px auto 0;
-                    `}
-                >
+                <NewLayout variant="small-vertical-spacing">
                     <WithFlash>
                         <Component {...props} />
                     </WithFlash>

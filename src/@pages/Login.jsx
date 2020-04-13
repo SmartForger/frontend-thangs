@@ -27,6 +27,7 @@ const ErrorTextStyle = styled.h4`
 const LoginBodyStyle = styled.div`
     width: 500px;
     margin: auto;
+    margin-top: 104px;
 `;
 
 const LoginFieldsStyle = styled.div`
@@ -94,7 +95,7 @@ const Page = () => {
         if (res.status !== 200) {
             setLoginErrorMessage(
                 res.data.detail ||
-                    'Sorry, we encounteed an unexpected error.  Please try again.'
+                    'Sorry, we encounteed an unexpected error.  Please try again.',
             );
         } else {
             history.push('/');
