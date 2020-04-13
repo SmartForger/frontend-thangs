@@ -2,6 +2,8 @@ import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import * as R from 'ramda';
 
+import { USER_QUERY } from './users';
+
 const MODEL_FRAGMENT = gql`
     fragment Model on ModelType {
         id
@@ -166,7 +168,7 @@ export function useModelByIdWithRelated(id) {
         MODEL_WITH_RELATED_QUERY,
         {
             variables: { id },
-        }
+        },
     );
     const model = parseModelPayload(data);
 
@@ -178,7 +180,7 @@ export function useUploadedModelByIdWithRelated(id) {
         UPLOADED_MODEL_WITH_RELATED_QUERY,
         {
             variables: { id },
-        }
+        },
     );
     const model = parseModelPayload(data);
 
@@ -194,7 +196,7 @@ const useLikeModelMutation = (userId, modelId) => {
                 data: {
                     likeModel: { model },
                 },
-            }
+            },
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
@@ -214,7 +216,7 @@ const useUnlikeModelMutation = (userId, modelId) => {
                 data: {
                     unlikeModel: { model },
                 },
-            }
+            },
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
@@ -275,8 +277,10 @@ const SEARCH_MODELS_QUERY = gql`
     ${MODEL_FRAGMENT}
 `;
 
-const useUploadModelMutation = () => {
-    const [uploadModel] = useMutation(UPLOAD_MODEL_MUTATION);
+const useUploadModelMutation = userId => {
+    const [uploadModel] = useMutation(UPLOAD_MODEL_MUTATION, {
+        refetchQueries: [{ query: USER_QUERY, variables: { id: userId } }],
+    });
 
     async function uploadModelAndParseResults(...args) {
         const response = await uploadModel(...args);
