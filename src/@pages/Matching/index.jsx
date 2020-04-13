@@ -52,7 +52,10 @@ function Results({ modelId }) {
 
 function Page() {
     const [currentModel, setCurrentModel] = useState();
-    const [uploadModel] = graphqlService.useUploadModelMutation();
+    const [
+        uploadModel,
+        { loading: isUploading },
+    ] = graphqlService.useUploadModelMutation();
 
     async function handleFile(file) {
         const model = await uploadModel({
@@ -68,19 +71,35 @@ function Page() {
         setCurrentModel(model);
     }
 
+    // const handleCancel = e => {
+    //     e.preventDefault();
+    //     history.goBack();
+    // };
+
     return (
         <div>
             <Header>Search by Model</Header>
             <Subheader>
                 Upload your model to see other models with similar geometry.
             </Subheader>
-            {currentModel ? (
+            {isUploading ? (
+                <UploadProgress />
+            ) : currentModel ? (
                 <Results modelId={currentModel.id} />
             ) : (
                 <form>
                     <Uploader setFile={handleFile} />
                 </form>
             )}
+            {/* <CancelButton
+                css={`
+                    margin-right: 8px;
+                `}
+                onClick={handleCancel}
+                type="button"
+            >
+                Cancel
+            </CancelButton> */}
         </div>
     );
 }
