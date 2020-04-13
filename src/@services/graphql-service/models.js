@@ -1,7 +1,6 @@
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import * as R from 'ramda';
-import { getFileDataUrl } from './utils';
 
 const MODEL_FRAGMENT = gql`
     fragment Model on ModelType {
@@ -26,6 +25,7 @@ const MODEL_FRAGMENT = gql`
             id
             attachmentId
             imgSrc
+            dataSrc
         }
         likesCount
         commentsCount
@@ -128,17 +128,11 @@ const MODELS_BY_DATE_QUERY = gql`
     ${MODEL_FRAGMENT}
 `;
 
-const getAttachmentId = R.pathOr(null, ['attachment', 'attachmentId']);
 const getModel = R.pathOr(null, ['model']);
 const getModelsByDate = R.pathOr(null, ['modelsByDate']);
 const getSearchModels = R.pathOr(null, ['searchModels']);
 
 const parseModel = model => {
-    const attachmentId = getAttachmentId(model);
-    const url = attachmentId
-        ? `${getFileDataUrl()}?attachment_id=${attachmentId}`
-        : null;
-
     const relatedModels = model.relatedModels
         ? model.relatedModels.map(parseModel)
         : null;
@@ -146,7 +140,6 @@ const parseModel = model => {
     return {
         ...model,
         relatedModels,
-        url,
     };
 };
 
@@ -173,7 +166,7 @@ export function useModelByIdWithRelated(id) {
         MODEL_WITH_RELATED_QUERY,
         {
             variables: { id },
-        }
+        },
     );
     const model = parseModelPayload(data);
 
@@ -185,7 +178,7 @@ export function useUploadedModelByIdWithRelated(id) {
         UPLOADED_MODEL_WITH_RELATED_QUERY,
         {
             variables: { id },
-        }
+        },
     );
     const model = parseModelPayload(data);
 
@@ -201,7 +194,7 @@ const useLikeModelMutation = (userId, modelId) => {
                 data: {
                     likeModel: { model },
                 },
-            }
+            },
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
@@ -221,7 +214,7 @@ const useUnlikeModelMutation = (userId, modelId) => {
                 data: {
                     unlikeModel: { model },
                 },
-            }
+            },
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
