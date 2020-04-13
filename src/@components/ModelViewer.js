@@ -265,7 +265,7 @@ function NewModelViewer({ model, className }) {
                 <ColorPickerNew color={wireColor} onChange={changeWireColor} />
             </DisplayOptionsNew>
             <Viewer
-                url={model.url}
+                url={model.attachment && model.attachment.dataSrc}
                 mode={mode}
                 meshColor={meshColor}
                 wireFrameColor={wireColor}
