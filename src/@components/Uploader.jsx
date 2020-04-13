@@ -10,6 +10,7 @@ const UploadIconStyled = styled(UploadIcon)`
 
 const LinkColor = styled.span`
     color: ${props => props.theme.linkText};
+    cursor: pointer;
 `;
 
 export function Uploader({ file, setFile }) {
@@ -17,7 +18,7 @@ export function Uploader({ file, setFile }) {
         acceptedFiles => {
             setFile(acceptedFiles[0]);
         },
-        [setFile],
+        [setFile]
     );
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
