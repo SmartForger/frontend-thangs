@@ -88,6 +88,8 @@ export const NewTheme = {
     shadow,
     textOnBrandColor: BROWN,
     textInputBackground: WHITE_4,
+    textInputColor: BLACK_1,
+    textInputPlaceholderColor: GREY_4,
     unselectedProfileTabColor: GREY_5,
     uploaderBackground: BLACK_2,
     uploaderBackgroundActive: BLACK_4,

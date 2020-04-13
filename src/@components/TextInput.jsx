@@ -10,6 +10,11 @@ const TextInputStyled = styled.input`
     box-sizing: border-box;
     line-height: 18px;
     background-color: ${props => props.theme.textInputBackground};
+    color: ${props => props.theme.textInputColor};
+
+    ::placeholder {
+        color: ${props => props.theme.textInputPlaceholderColor};
+    }
 `;
 
 const TextInput = props => {
