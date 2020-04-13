@@ -61,6 +61,7 @@ function Page() {
                 name: file.name,
                 size: file.size,
                 userEmail: authenticationService.currentUserValue.email,
+                searchUpload: true,
             },
         });
 
