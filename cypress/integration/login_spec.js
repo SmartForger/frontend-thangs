@@ -24,23 +24,31 @@ describe('The Login Page', () => {
             .focus()
             .type('badPassword');
         cy.get('[data-cy=login-form]').submit();
-        cy.wait(5000);
         cy.get('[data-cy=login-error]');
+        cy.contains('No active account found with the given credentials');
     });
 
     it('succeeds when logging in with proper credentials', () => {
         cy.server({
             method: 'POST',
         });
+        const tokenBody = {
+            refresh:
+                'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTU4MzI2MjU4NSwianRpIjoiMmRlYTI4MDAyYTJlNGExMThjYWNiOTA2NjgxZmMwYjMiLCJ1c2VyX2lkIjo0LCJ1c2VybmFtZSI6IlRoYW5nc1Rlc3RlciIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSJ9.SloAiPBzaUMWlYFlGa8SXznmSIdgR54bTVHHfVJ_9p8',
+            access:
+                'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTgzMTc3MDg1LCJqdGkiOiJkZDRmM2Q0MWM1MTY0MDczYmIxMWJlYjMzZjQwN2Y4MyIsInVzZXJfaWQiOjQsInVzZXJuYW1lIjoiVGhhbmdzVGVzdGVyIiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIn0.5BauthGTQyWvxyU9PXsmHT4CemXwcUjSy_qq8UZUlQw',
+        };
+
         cy.route({
             url: '/api/login/',
             status: 200,
-            response: {
-                refresh:
-                    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTU4MzI2MjU4NSwianRpIjoiMmRlYTI4MDAyYTJlNGExMThjYWNiOTA2NjgxZmMwYjMiLCJ1c2VyX2lkIjo0LCJ1c2VybmFtZSI6IlRoYW5nc1Rlc3RlciIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSJ9.SloAiPBzaUMWlYFlGa8SXznmSIdgR54bTVHHfVJ_9p8',
-                access:
-                    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTgzMTc3MDg1LCJqdGkiOiJkZDRmM2Q0MWM1MTY0MDczYmIxMWJlYjMzZjQwN2Y4MyIsInVzZXJfaWQiOjQsInVzZXJuYW1lIjoiVGhhbmdzVGVzdGVyIiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIn0.5BauthGTQyWvxyU9PXsmHT4CemXwcUjSy_qq8UZUlQw',
-            },
+            response: tokenBody,
+        });
+
+        cy.route({
+            url: '/api/token/refresh',
+            status: 200,
+            response: tokenBody,
         });
 
         cy.visit('/login');
@@ -51,7 +59,6 @@ describe('The Login Page', () => {
             .focus()
             .type('goodPassword');
         cy.get('[data-cy=login-form]').submit();
-        cy.wait(5000);
         cy.location().should(loc => {
             expect(loc.pathname).to.eq('/');
         });
