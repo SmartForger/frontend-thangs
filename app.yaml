@@ -22,6 +22,12 @@ handlers:
   - url: /(manifest.json)
     static_files: build/\1
     upload: build/manifest.json
+  - url: /(.*)\.ico
+    static_files: build/\1.ico
+    upload: build/(.*).ico
+  - url: /(.*)\.png
+    static_files: build/\1.png
+    upload: build/(.*).png
   - url: /(.*)
     static_files: build/index.html
     upload: build/index.html
