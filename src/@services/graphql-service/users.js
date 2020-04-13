@@ -2,7 +2,7 @@ import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { createAppUrl } from './utils';
 
-const USER_QUERY = gql`
+export const USER_QUERY = gql`
     query getUser($id: ID) {
         user(id: $id) {
             id

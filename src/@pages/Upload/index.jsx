@@ -76,8 +76,10 @@ const graphqlService = GraphqlService.getInstance();
 const Page = () => {
     const history = useHistory();
     const [file, setFile] = useState();
+    const currentUser = authenticationService.currentUserValue;
+    const { id } = currentUser;
 
-    const [uploadModel] = graphqlService.useUploadModelMutation();
+    const [uploadModel] = graphqlService.useUploadModelMutation(id);
 
     const onSubmit = async e => {
         e.preventDefault();
@@ -86,7 +88,7 @@ const Page = () => {
                 file,
                 name: file.name,
                 size: file.size,
-                userEmail: authenticationService.currentUserValue.email,
+                userEmail: currentUser.email,
             },
         });
         history.push('/profile');
