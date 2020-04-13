@@ -10,6 +10,8 @@ import { ReactComponent as LoginIcon } from '@svg/user-login.svg';
 
 const PageHeader = styled.h1`
     font-family: ${props => props.theme.headerFont};
+    color: ${props => props.theme.headerColorOnDarkBackground};
+    margin-top: 8px;
 `;
 
 const InlinedSpinner = styled(Spinner)`
@@ -55,7 +57,12 @@ const FormControl = styled.div`
 `;
 
 const ForgotText = styled.div`
-    margin-top: 8px;
+    margin-top: 24px;
+    color: ${props => props.theme.textColorOnDarkBackground};
+`;
+
+const Label = styled.label`
+    color: ${props => props.theme.formLabelColor};
 `;
 
 const Page = () => {
@@ -135,7 +142,7 @@ const Page = () => {
             <form onSubmit={handleSubmit} data-cy="login-form">
                 <LoginFieldsStyle>
                     <FormControl>
-                        <label>
+                        <Label>
                             E-Mail
                             <TextInput
                                 type="text"
@@ -147,10 +154,10 @@ const Page = () => {
                                 data-cy="login-email"
                                 required
                             />
-                        </label>
+                        </Label>
                     </FormControl>
                     <FormControl>
-                        <label>
+                        <Label>
                             Password
                             <TextInput
                                 type="password"
@@ -160,7 +167,7 @@ const Page = () => {
                                 data-cy="login-password"
                                 required
                             />
-                        </label>
+                        </Label>
                     </FormControl>
                 </LoginFieldsStyle>
                 <SubmitButton
