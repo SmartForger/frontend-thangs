@@ -44,7 +44,6 @@ const LoginFieldsStyle = styled.div`
 `;
 
 const SubmitButton = styled(Button)`
-    border-radius: 2px;
     margin: 0;
     margin-top: 96px;
     float: right;

@@ -47,7 +47,6 @@ export const NewTheme = {
     avatarTextColor: GREY_1,
     backgroundColor: GREY_8,
     brandColor: YELLOW_1,
-    buttonColor: '#FFFFFF',
     buttonFont: fontMedium,
     buttonShadow: 'inset 0 0 0 2px #FFFFFF',
     cardBackground: WHITE_1,
@@ -98,6 +97,5 @@ export const NewDarkTheme = {
     linkText: BLUE_1,
     linkTextVisited: LIGHT_PURPLE,
     backgroundColor: BLACK_2,
-    buttonShadow: 'none',
     mainFontColor: GREY_2,
 };
