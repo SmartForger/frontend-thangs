@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const TextInputStyled = styled.input`
     padding: 12px 20px;
-    margin: 8px 0;
+    margin: 0;
     display: inline-block;
     border: 1px solid ${props => (props.invalid ? 'red' : '#ccc')};
     border-radius: 4px;

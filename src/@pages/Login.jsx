@@ -19,6 +19,7 @@ const InlinedSpinner = styled(Spinner)`
 const TextInput = styled(BaseTextInput)`
     display: block;
     width: 100%;
+    margin-top: 8px;
 `;
 
 const ErrorTextStyle = styled.h4`
@@ -45,13 +46,17 @@ const LoginFieldsStyle = styled.div`
 const SubmitButton = styled(Button)`
     border-radius: 2px;
     margin: 0;
-    margin-top: 32px;
+    margin-top: 96px;
     float: right;
 `;
 
 const FormControl = styled.div`
-    margin-top: 8px;
+    margin-top: 32px;
     width: 100%;
+`;
+
+const ForgotText = styled.div`
+    margin-top: 8px;
 `;
 
 const Page = () => {
@@ -165,10 +170,10 @@ const Page = () => {
                     disabled={waiting || invalidForm()}
                 />
             </form>
-            <div>
+            <ForgotText>
                 Forgot password? <Link to="/password_reset">Click here</Link> to
                 reset your password.
-            </div>
+            </ForgotText>
         </LoginBodyStyle>
     );
 };
