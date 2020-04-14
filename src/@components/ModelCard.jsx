@@ -44,8 +44,6 @@ const isProcessing = R.propEq('uploadStatus', 'processing');
 const isError = R.propEq('uploadStatus', 'error');
 
 function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
-    const { uploadStatus } = model;
-
     return (
         <ThumbnailContainer showOwner={showOwner}>
             {isProcessing(model) ? (
