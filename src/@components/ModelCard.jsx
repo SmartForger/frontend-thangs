@@ -25,7 +25,7 @@ const ThumbnailContainer = styled.div`
     height: 100%;
     max-height: calc(100% - ${props => (props.showOwner ? '80px' : '40px')});
     overflow: hidden;
-    margin: 8px 8px 0;
+    padding: 8px 8px 0;
 
     > img {
         margin: auto;
@@ -56,6 +56,7 @@ const Overlay = styled.div`
     bottom: 0;
     display: flex;
     align-items: flex-end;
+    margin: -8px -8px 0;
 `;
 
 const ModelName = styled.div`
