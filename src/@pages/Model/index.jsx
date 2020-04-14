@@ -49,7 +49,6 @@ const ScrollableColumn = styled.div`
 
 const ModelViewerStyled = styled(NewModelViewer)`
     height: 416px;
-    margin-right: 56px;
     margin-bottom: 48px;
 `;
 
