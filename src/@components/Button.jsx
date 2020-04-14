@@ -5,7 +5,7 @@ import { animated } from 'react-spring';
 
 const BtnStyle = styled(animated.button)`
     width: ${props => props.width || '100%'};
-    max-width: ${props => props.maxwidth || '100px'};
+    max-width: ${props => props.maxwidth || '114px'};
     border: none;
     text-align: center;
     user-select: none;
