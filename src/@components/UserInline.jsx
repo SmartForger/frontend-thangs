@@ -10,15 +10,15 @@ const UserContainerInline = styled.div`
 `;
 
 const UserNameInline = styled.span`
-    font-size: ${props => `calc(${props.size} / 2)`};
     margin-left: 16px;
+    font-weight: 500;
 `;
 
 export function UserInline({ user, className, size = '24px' }) {
     return (
         <UserContainerInline className={className}>
             <ProfilePicture size={size} user={user} />
-            <UserNameInline size={size}>{user.fullName}</UserNameInline>
+            <UserNameInline>{user.fullName}</UserNameInline>
         </UserContainerInline>
     );
 }

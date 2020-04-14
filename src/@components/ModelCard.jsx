@@ -87,6 +87,10 @@ const HeartIconStyled = styled(HeartIcon)`
     fill: ${props => props.theme.cardHeartColor};
 `;
 
+const LinkStyled = styled(Link)`
+    color: inherit;
+`;
+
 function ModelCard({ className, model, withOwner }) {
     const showOwner = withOwner && model.owner;
     const [hovered, setHovered] = useState(false);
@@ -95,7 +99,7 @@ function ModelCard({ className, model, withOwner }) {
     const handleMouseLeave = () => setHovered(false);
 
     return (
-        <Link
+        <LinkStyled
             to={`/model/${model.id}`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -128,7 +132,7 @@ function ModelCard({ className, model, withOwner }) {
                     </ActivityIndicators>
                 </CardContent>
             </CardContainer>
-        </Link>
+        </LinkStyled>
     );
 }
 
