@@ -76,7 +76,6 @@ export const NewTheme = {
     modelOwnerLink: BLUE_2,
     modelPrimaryButtonBackground: BLUE_2,
     modelPrimaryButtonText: WHITE_2,
-    modelThumbnailPlaceholder: OFF_WHITE,
     modelTitleText: BLACK_1,
     modelViewerPlaceholder: OFF_WHITE,
     primaryButton: BLUE_2,
