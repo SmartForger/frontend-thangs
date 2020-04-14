@@ -81,7 +81,7 @@ export function NewModelCommentForm({ modelId }) {
                         float: right;
                     `}
                 >
-                    Post comment
+                    Post Comment
                 </PostCommentButton>
             </form>
         </NewCommentContainer>
