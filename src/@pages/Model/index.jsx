@@ -49,7 +49,6 @@ const ScrollableColumn = styled.div`
 
 const ModelViewerStyled = styled(NewModelViewer)`
     height: 416px;
-    margin-bottom: 48px;
 `;
 
 const ModelColumn = styled(ScrollableColumn)`
@@ -133,6 +132,7 @@ const Comments = styled(CommentsForModel)`
 const Header = styled.div`
     font-size: 32px;
     font-family: ${props => props.theme.headerFont};
+    margin: 48px 0 24px;
 `;
 
 const ModelDetailPage = ({ model, currentUser }) => {
