@@ -71,6 +71,7 @@ const Overlay = styled.div`
         rgba(0, 0, 0, 0.2) 100%
     );
     bottom: 0;
+    left: 8px;
     display: flex;
     align-items: flex-end;
     margin: -8px -8px 0;
