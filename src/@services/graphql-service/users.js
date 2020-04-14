@@ -110,6 +110,14 @@ const useUploadUserAvatarMutation = (user, croppedImg) => {
             file: croppedImg,
             userId: user.id,
         },
+        refetchQueries: [
+            {
+                query: USER_QUERY,
+                variables: {
+                    id: user.id,
+                },
+            },
+        ],
     });
 };
 
