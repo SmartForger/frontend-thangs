@@ -173,6 +173,7 @@ const Page = () => {
                 <SubmitButton
                     name="Sign In"
                     type="submit"
+                    width="105px"
                     disabled={waiting || invalidForm()}
                 />
             </form>

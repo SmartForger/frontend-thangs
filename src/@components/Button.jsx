@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { animated } from 'react-spring';
 
 const BtnStyle = styled(animated.button)`
-    width: 100%;
+    width: ${props => props.width || '100%'};
     max-width: ${props => props.maxwidth || '100px'};
     border: none;
     text-align: center;
@@ -28,6 +28,7 @@ const BtnStyle = styled(animated.button)`
 
     &:disabled {
         cursor: not-allowed;
+        background: ${props => props.theme.primaryButtonDisabledColor};
         opacity: 0.8;
         &:hover {
             opacity: 1;

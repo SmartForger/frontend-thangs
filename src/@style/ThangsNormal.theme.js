@@ -77,6 +77,7 @@ export const NewTheme = {
     modelViewerPlaceholder: OFF_WHITE,
     primaryButton: BLUE_2,
     primaryButtonText: WHITE_2,
+    primaryButtonDisabledColor: GREY_9,
     profileContentColor: BLACK_5,
     profileNameColor: BLACK_5,
     promotionalSecondaryTextColor: GREY_3,
