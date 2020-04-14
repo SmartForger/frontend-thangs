@@ -5,6 +5,7 @@ import { WithNewThemeLayout } from '@style/Layout';
 import { Uploader } from '@components/Uploader';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
+import { Spinner } from '@components/Spinner';
 
 const Row = styled.div`
     display: flex;
@@ -79,7 +80,10 @@ const Page = () => {
     const currentUser = authenticationService.currentUserValue;
     const { id } = currentUser;
 
-    const [uploadModel] = graphqlService.useUploadModelMutation(id);
+    const [
+        uploadModel,
+        { loading: isUploading },
+    ] = graphqlService.useUploadModelMutation(id);
 
     const onSubmit = async e => {
         e.preventDefault();
@@ -102,46 +106,50 @@ const Page = () => {
     return (
         <div>
             <Header>Upload Model</Header>
-            <form onSubmit={onSubmit}>
-                <Row>
-                    <Column
-                        css={`
-                            flex-grow: 1;
-                            margin-right: 32px;
-                        `}
-                    >
-                        <Uploader file={file} setFile={setFile} />
-                    </Column>
-                    <Column
-                        css={`
-                            min-width: 336px;
-                        `}
-                    >
-                        <Field>
-                            <Label htmlFor="name">Title</Label>
-                            <FullWidthInput
-                                name="name"
-                                defaultValue={file && file.name}
-                                placeholder="Model Name"
-                            />
-                        </Field>
-                    </Column>
-                </Row>
-                <ButtonGroup>
-                    <CancelButton
-                        css={`
-                            margin-right: 8px;
-                        `}
-                        onClick={handleCancel}
-                        type="button"
-                    >
-                        Cancel
-                    </CancelButton>
-                    <Button type="submit" disabled={!file}>
-                        Save Model
-                    </Button>
-                </ButtonGroup>
-            </form>
+            {isUploading ? (
+                <Spinner />
+            ) : (
+                <form onSubmit={onSubmit}>
+                    <Row>
+                        <Column
+                            css={`
+                                flex-grow: 1;
+                                margin-right: 32px;
+                            `}
+                        >
+                            <Uploader file={file} setFile={setFile} />
+                        </Column>
+                        <Column
+                            css={`
+                                min-width: 336px;
+                            `}
+                        >
+                            <Field>
+                                <Label htmlFor="name">Title</Label>
+                                <FullWidthInput
+                                    name="name"
+                                    defaultValue={file && file.name}
+                                    placeholder="Model Name"
+                                />
+                            </Field>
+                        </Column>
+                    </Row>
+                    <ButtonGroup>
+                        <CancelButton
+                            css={`
+                                margin-right: 8px;
+                            `}
+                            onClick={handleCancel}
+                            type="button"
+                        >
+                            Cancel
+                        </CancelButton>
+                        <Button type="submit" disabled={!file}>
+                            Save Model
+                        </Button>
+                    </ButtonGroup>
+                </form>
+            )}
         </div>
     );
 };

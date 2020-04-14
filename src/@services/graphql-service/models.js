@@ -168,7 +168,7 @@ export function useModelByIdWithRelated(id) {
         MODEL_WITH_RELATED_QUERY,
         {
             variables: { id },
-        },
+        }
     );
     const model = parseModelPayload(data);
 
@@ -180,7 +180,7 @@ export function useUploadedModelByIdWithRelated(id) {
         UPLOADED_MODEL_WITH_RELATED_QUERY,
         {
             variables: { id },
-        },
+        }
     );
     const model = parseModelPayload(data);
 
@@ -196,7 +196,7 @@ const useLikeModelMutation = (userId, modelId) => {
                 data: {
                     likeModel: { model },
                 },
-            },
+            }
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
@@ -216,7 +216,7 @@ const useUnlikeModelMutation = (userId, modelId) => {
                 data: {
                     unlikeModel: { model },
                 },
-            },
+            }
         ) => {
             store.writeQuery({
                 query: MODEL_QUERY,
@@ -278,7 +278,7 @@ const SEARCH_MODELS_QUERY = gql`
 `;
 
 const useUploadModelMutation = userId => {
-    const [uploadModel] = useMutation(UPLOAD_MODEL_MUTATION, {
+    const [uploadModel, result] = useMutation(UPLOAD_MODEL_MUTATION, {
         refetchQueries: [{ query: USER_QUERY, variables: { id: userId } }],
     });
 
@@ -291,7 +291,7 @@ const useUploadModelMutation = userId => {
         );
     }
 
-    return [uploadModelAndParseResults];
+    return [uploadModelAndParseResults, result];
 };
 
 const parseSeachModelsPayload = data => {

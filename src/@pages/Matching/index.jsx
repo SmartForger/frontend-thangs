@@ -52,7 +52,10 @@ function Results({ modelId }) {
 
 function Page() {
     const [currentModel, setCurrentModel] = useState();
-    const [uploadModel] = graphqlService.useUploadModelMutation();
+    const [
+        uploadModel,
+        { loading: isUploading },
+    ] = graphqlService.useUploadModelMutation();
 
     async function handleFile(file) {
         const model = await uploadModel({
@@ -74,7 +77,9 @@ function Page() {
             <Subheader>
                 Upload your model to see other models with similar geometry.
             </Subheader>
-            {currentModel ? (
+            {isUploading ? (
+                <UploadProgress />
+            ) : currentModel ? (
                 <Results modelId={currentModel.id} />
             ) : (
                 <form>
