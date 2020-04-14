@@ -40,9 +40,6 @@ const ModelContainer = styled.div`
 `;
 
 const ScrollableColumn = styled.div`
-    overflow-y: scroll;
-    overflow-x: hidden;
-    max-height: calc(100vh - 261px);
     padding: 10px;
     margin: -10px;
 
