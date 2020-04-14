@@ -104,6 +104,9 @@ const FormStyled = styled.form`
 const Field = styled.div`
     display: flex;
     flex-direction: column;
+    margin-top: 16px;
+
+    ${allowCssProp};
 `;
 
 const FullWidthInput = styled.input`
@@ -116,7 +119,8 @@ const FullWidthInput = styled.input`
     min-width: 0;
     font-family: ${props => props.theme.buttonFont};
     font-size: 14px;
-    color: ${props => props.theme.mainFontColor};
+    color: ${props => props.theme.textInputColor};
+    background-color: ${props => props.theme.textInputBackground};
 
     ${allowCssProp};
 `;
@@ -128,7 +132,8 @@ const TextArea = styled.textarea`
     border-radius: 8px;
     font-family: ${props => props.theme.buttonFont};
     font-size: 14px;
-    color: ${props => props.theme.mainFontColor};
+    color: ${props => props.theme.textInputColor};
+    background-color: ${props => props.theme.textInputBackground};
 
     ${allowCssProp};
 `;
@@ -192,30 +197,36 @@ function EditProfileForm({ user }) {
             onChange={handleChange}
         >
             <Field>
-                <Label htmlFor="firstName">First name</Label>
+                <Label htmlFor="firstName">First Name</Label>
                 <FullWidthInput
                     name="firstName"
                     defaultValue={user.firstName}
                     ref={register({ required: true })}
-                    placeholder="First name"
+                    placeholder="Enter first name..."
                 />
             </Field>
             <Field htmlFor="lastName">
-                <Label>Last name</Label>
+                <Label>Last Name</Label>
                 <FullWidthInput
                     name="lastName"
                     defaultValue={user.lastName}
                     ref={register({ required: true })}
-                    placeholder="Last name"
+                    placeholder="Enter last name..."
                 />
             </Field>
-            <Field htmlFor="description">
+            <Field
+                htmlFor="description"
+                css={`
+                    margin-top: 48px;
+                `}
+            >
                 <Label>About</Label>
                 <TextArea
                     name="description"
                     defaultValue={user.profile.description}
                     ref={register({ required: true })}
                     placeholder="Add a bio..."
+                    rows={5}
                     css={`
                         margin-bottom: 32px;
                     `}
@@ -228,6 +239,7 @@ function EditProfileForm({ user }) {
                     disabled={!R.empty(errors)}
                     css={`
                         width: 168px;
+                        padding: 8px 30px;
                     `}
                 >
                     {currentState === 'waiting'

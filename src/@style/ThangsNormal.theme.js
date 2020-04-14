@@ -91,7 +91,7 @@ export const NewTheme = {
     shadow,
     textColorOnDarkBackground: GREY_4,
     textOnBrandColor: BROWN,
-    textInputBackground: WHITE_4,
+    textInputBackground: OFF_WHITE,
     textInputColor: BLACK_1,
     textInputPlaceholderColor: GREY_4,
     unselectedProfileTabColor: GREY_5,
@@ -102,8 +102,9 @@ export const NewTheme = {
 
 export const NewDarkTheme = {
     ...NewTheme,
+    backgroundColor: BLACK_2,
     linkText: BLUE_1,
     linkTextVisited: LIGHT_PURPLE,
-    backgroundColor: BLACK_2,
     mainFontColor: GREY_2,
+    textInputBackground: WHITE_4,
 };

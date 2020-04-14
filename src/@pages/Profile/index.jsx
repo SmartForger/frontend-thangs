@@ -39,6 +39,7 @@ const Name = styled.div`
     font-family: ${props => props.theme.mainFont};
     font-size: 24px;
     color: ${props => props.theme.profileNameColor};
+    margin-top: 16px;
 `;
 
 const TabTitleGroup = styled.div`
@@ -114,7 +115,7 @@ function About({ selected, onClick, user }) {
 }
 
 const TabContent = styled.div`
-    margin-top: 64px;
+    margin-top: 24px;
     width: 100%;
     display: flex;
     color: ${props => props.theme.profileContentColor};
@@ -152,7 +153,7 @@ function LikesContent({ selected, user }) {
 }
 
 const TabGroupContainer = styled.div`
-    margin-top: 64px;
+    margin-top: 72px;
     width: 100%;
 `;
 
@@ -209,18 +210,30 @@ const Button = styled.button`
 
 function EditProfileButton({ viewedUser, className }) {
     const { user } = useCurrentUser();
+    const history = useHistory();
 
     if (!user || user.id !== viewedUser.id) {
         return null;
     }
 
     return (
-        <Link to={'/profile/edit'} className={className}>
-            <Button>
-                <PencilIcon />
-                Edit Profile
-            </Button>
-        </Link>
+        <>
+            <Link to={'/profile/edit'} className={className}>
+                <Button>
+                    <PencilIcon />
+                    Edit Profile
+                </Button>
+            </Link>
+
+            <Anchor
+                onClick={() => {
+                    authenticationService.logout();
+                    history.push('/login');
+                }}
+            >
+                Sign Out
+            </Anchor>
+        </>
     );
 }
 
@@ -230,7 +243,6 @@ const EditProfileButtonStyled = styled(EditProfileButton)`
 
 function Page() {
     const { id } = useParams();
-    const history = useHistory();
 
     const { loading, error, user } = graphqlService.useUserById(id);
 
@@ -260,14 +272,6 @@ function Page() {
             <ProfilePicture user={user} size="104px" />
             <Name>{user.fullName}</Name>
             <EditProfileButtonStyled viewedUser={user} />
-            <Anchor
-                onClick={() => {
-                    authenticationService.logout();
-                    history.push('/login');
-                }}
-            >
-                Sign Out
-            </Anchor>
             <Tabs user={user} />
         </Centered>
     );

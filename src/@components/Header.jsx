@@ -42,7 +42,7 @@ const Row = styled.div`
     align-items: center;
 
     :not(:last-of-type) {
-        margin-bottom: 45px;
+        margin-bottom: 25px;
     }
 `;
 
@@ -87,7 +87,6 @@ const SignUp = () => {
         </Link>
     );
 };
-
 const MatchingButton = styled.button`
     cursor: pointer;
 
