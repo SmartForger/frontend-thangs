@@ -130,6 +130,11 @@ const Comments = styled(CommentsForModel)`
     margin-top: 48px;
 `;
 
+const Header = styled.div`
+    font-size: 32px;
+    font-family: ${props => props.theme.headerFont};
+`;
+
 const ModelDetailPage = ({ model, currentUser }) => {
     const history = useHistory();
 
@@ -143,6 +148,7 @@ const ModelDetailPage = ({ model, currentUser }) => {
             <ModelContainer>
                 <ModelColumn>
                     <ModelViewerStyled model={model} />
+                    <Header>Geometric Similar Matches</Header>
                     <ModelCollection
                         models={model.relatedModels || []}
                         maxPerRow={3}
