@@ -12,16 +12,17 @@ const InlinedSpinner = styled(Spinner)`
 `;
 
 const TextInput = styled(BaseTextInput)`
-    display: block;
     width: 100%;
+    margin-top: 8px;
 `;
 
 const ErrorTextStyle = styled.h4`
-    margin-top: 16px;
-    color: #c82020;
-    background-color: #ddb6b6;
-    padding: 4px;
-    border-radius: 2px;
+    margin-top: 24px;
+    color: ${props => props.theme.errorTextColor};
+    background-color: ${props => props.theme.errorTextBackground};
+    font-weight: 500;
+    padding: 10px 16px;
+    border-radius: 8px;
 `;
 
 const SuccessTextStyle = styled.h4`
@@ -32,28 +33,29 @@ const SuccessTextStyle = styled.h4`
     margin-top: 5px;
 `;
 
-const LoginBodyStyle = styled.div`
+const BodyStyle = styled.div`
     width: 500px;
     margin: auto;
+    margin-top: 104px;
 `;
 
-const LoginFieldsStyle = styled.div`
+const FieldsStyle = styled.div`
     width: 100%;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    margin-top: 32px;
 `;
 
 const SubmitButton = styled(Button)`
-    border-radius: 2px;
+    display: block;
     margin: 0;
     margin-top: 32px;
     float: right;
+    max-width: 156px;
 `;
 
 const FormControl = styled.div`
-    margin-top: 8px;
+    margin-top: 32px;
     width: 100%;
 `;
 
@@ -119,7 +121,7 @@ const ResetPage = () => {
     }
 
     return (
-        <LoginBodyStyle>
+        <BodyStyle>
             <h1>Reset Password {waiting && <InlinedSpinner size="30" />}</h1>
             {!!errorMessage && (
                 <ErrorTextStyle data-cy="reset-error">
@@ -130,7 +132,7 @@ const ResetPage = () => {
                 <SuccessTextStyle>Email with reset link sent!</SuccessTextStyle>
             )}
             <form onSubmit={handleSubmit} data-cy="reset-form">
-                <LoginFieldsStyle>
+                <FieldsStyle>
                     <FormControl>
                         <label>
                             E-Mail
@@ -146,7 +148,7 @@ const ResetPage = () => {
                             />
                         </label>
                     </FormControl>
-                </LoginFieldsStyle>
+                </FieldsStyle>
                 <SubmitButton
                     name={isSuccess ? 'Re-send Email' : 'Email Reset Link'}
                     type="submit"
@@ -155,7 +157,7 @@ const ResetPage = () => {
                     }
                 />
             </form>
-        </LoginBodyStyle>
+        </BodyStyle>
     );
 };
 
@@ -192,7 +194,7 @@ const ConfirmResetPage = () => {
     }
 
     return (
-        <LoginBodyStyle>
+        <BodyStyle>
             <h1>Set New Password {waiting && <InlinedSpinner size="30" />}</h1>
             {!!errorMessage && (
                 <ErrorTextStyle data-cy="confirm-reset-error">
@@ -200,7 +202,7 @@ const ConfirmResetPage = () => {
                 </ErrorTextStyle>
             )}
             <form onSubmit={handleSubmit} data-cy="confirm-reset-form">
-                <LoginFieldsStyle>
+                <FieldsStyle>
                     <FormControl>
                         <label>
                             Password
@@ -227,14 +229,14 @@ const ConfirmResetPage = () => {
                             />
                         </label>
                     </FormControl>
-                </LoginFieldsStyle>
+                </FieldsStyle>
                 <SubmitButton
                     name="Submit"
                     type="submit"
                     disabled={!(inputs.password && inputs.confirmPassword)}
                 />
             </form>
-        </LoginBodyStyle>
+        </BodyStyle>
     );
 };
 
