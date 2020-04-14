@@ -106,7 +106,7 @@ const CommentsForModel = ({ model, className }) => {
     }
 
     const commentsHeaderText =
-        comments.length > 1 || comments.length === 0 ? 'comments' : 'comment';
+        comments.length > 1 || comments.length === 0 ? 'Comments' : 'Comment';
     return (
         <Container className={className}>
             <Header>

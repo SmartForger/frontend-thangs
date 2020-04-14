@@ -50,7 +50,7 @@ const SearchBar = props => {
     return (
         <SearchForm onSubmit={handleSubmit}>
             <SearchStyle
-                placeholder="Input search term"
+                placeholder="Input Search Term"
                 value={searchQuery}
                 onChange={handleChange}
             />
