@@ -4,38 +4,35 @@ import styled from 'styled-components';
 import { animated } from 'react-spring';
 
 const BtnStyle = styled(animated.button)`
-    width: 100%;
+    width: ${props => props.width || '100%'};
     max-width: ${props => props.maxwidth || '100px'};
-    height: ${props => props.height || '35px'};
-    margin: ${props => props.margin || '5px'};
     border: none;
     text-align: center;
     user-select: none;
-    cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+    cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: ${props =>
-        props.disabled ? 'gray' : props.theme.primaryButton};
-    color: ${props => (props.disabled ? 'darkgray' : props.theme.buttonColor)};
-    box-shadow: ${props => props.theme.buttonShadow};
-    font-size: ${props => props.fontSize || '12px'};
-    font-weight: 700;
+    background: ${props => props.theme.primaryButton};
+    color: ${props => props.theme.primaryButtonText};
+    font-weight: 500;
     transition: 0.3s;
+    border-radius: 8px;
+    padding: 8px 12px;
 
-    &:hover {
-        background-color: ${props =>
-            props.disabled ? 'gray' : props.theme.primaryButton};
-        color: ${props =>
-            props.disabled ? props.theme.white : props.theme.secondary};
-    }
+    ${props => props.theme.shadow};
+
     &:active {
         transform: scale(0.95);
     }
 
     &:disabled {
-        background-color: gray;
         cursor: not-allowed;
+        background: ${props => props.theme.primaryButtonDisabledColor};
+        opacity: 0.8;
+        &:hover {
+            opacity: 1;
+        }
     }
 `;
 

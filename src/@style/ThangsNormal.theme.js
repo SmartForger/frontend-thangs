@@ -30,6 +30,7 @@ const BROWN = '#8b6400';
 const WHITE_1 = '#ffffff';
 const WHITE_2 = '#efecec';
 const WHITE_3 = '#e8e8ec';
+const WHITE_4 = '#ececec';
 const LIGHT_PURPLE = '#dd72dd';
 
 /*
@@ -47,7 +48,6 @@ export const NewTheme = {
     avatarTextColor: GREY_1,
     backgroundColor: GREY_8,
     brandColor: YELLOW_1,
-    buttonColor: '#FFFFFF',
     buttonFont: fontMedium,
     buttonShadow: 'inset 0 0 0 2px #FFFFFF',
     cardBackground: WHITE_1,
@@ -56,9 +56,11 @@ export const NewTheme = {
     emptyImageBackground: GREY_7,
     flashColor: GREY_5,
     flashColorText: WHITE_3,
+    formLabelColor: GREY_4,
     invertedHeaderBackground: BLACK_2,
     headerFont,
     headerColor: BLACK_3,
+    headerColorOnDarkBackground: WHITE_1,
     linkText: BLUE_2,
     linkTextVisited: BLUE_3,
     logoText: BLACK_4,
@@ -75,6 +77,7 @@ export const NewTheme = {
     modelViewerPlaceholder: OFF_WHITE,
     primaryButton: BLUE_2,
     primaryButtonText: WHITE_2,
+    primaryButtonDisabledColor: GREY_9,
     profileContentColor: BLACK_5,
     profileNameColor: BLACK_5,
     promotionalSecondaryTextColor: GREY_3,
@@ -86,7 +89,11 @@ export const NewTheme = {
     secondaryButtonText: WHITE_1,
     selectedProfileTabColor: BLACK_1,
     shadow,
+    textColorOnDarkBackground: GREY_4,
     textOnBrandColor: BROWN,
+    textInputBackground: WHITE_4,
+    textInputColor: BLACK_1,
+    textInputPlaceholderColor: GREY_4,
     unselectedProfileTabColor: GREY_5,
     uploaderBackground: BLACK_2,
     uploaderBackgroundActive: BLACK_4,
@@ -98,6 +105,5 @@ export const NewDarkTheme = {
     linkText: BLUE_1,
     linkTextVisited: LIGHT_PURPLE,
     backgroundColor: BLACK_2,
-    buttonShadow: 'none',
     mainFontColor: GREY_2,
 };

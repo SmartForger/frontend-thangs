@@ -8,6 +8,12 @@ import { TextInput as BaseTextInput, Spinner, Button } from '@components';
 import { WithNewSignupThemeLayout } from '@style';
 import { ReactComponent as LoginIcon } from '@svg/user-login.svg';
 
+const PageHeader = styled.h1`
+    font-family: ${props => props.theme.headerFont};
+    color: ${props => props.theme.headerColorOnDarkBackground};
+    margin-top: 8px;
+`;
+
 const InlinedSpinner = styled(Spinner)`
     display: inline-block;
 `;
@@ -15,6 +21,7 @@ const InlinedSpinner = styled(Spinner)`
 const TextInput = styled(BaseTextInput)`
     display: block;
     width: 100%;
+    margin-top: 8px;
 `;
 
 const ErrorTextStyle = styled.h4`
@@ -27,6 +34,7 @@ const ErrorTextStyle = styled.h4`
 const LoginBodyStyle = styled.div`
     width: 500px;
     margin: auto;
+    margin-top: 104px;
 `;
 
 const LoginFieldsStyle = styled.div`
@@ -38,15 +46,23 @@ const LoginFieldsStyle = styled.div`
 `;
 
 const SubmitButton = styled(Button)`
-    border-radius: 2px;
     margin: 0;
-    margin-top: 32px;
+    margin-top: 96px;
     float: right;
 `;
 
 const FormControl = styled.div`
-    margin-top: 8px;
+    margin-top: 32px;
     width: 100%;
+`;
+
+const ForgotText = styled.div`
+    margin-top: 24px;
+    color: ${props => props.theme.textColorOnDarkBackground};
+`;
+
+const Label = styled.label`
+    color: ${props => props.theme.formLabelColor};
 `;
 
 const Page = () => {
@@ -94,7 +110,7 @@ const Page = () => {
         if (res.status !== 200) {
             setLoginErrorMessage(
                 res.data.detail ||
-                    'Sorry, we encounteed an unexpected error.  Please try again.'
+                    'Sorry, we encounteed an unexpected error.  Please try again.',
             );
         } else {
             history.push('/');
@@ -115,7 +131,9 @@ const Page = () => {
     return (
         <LoginBodyStyle>
             <LoginIcon />
-            <h1>Sign In {waiting && <InlinedSpinner size="30" />}</h1>
+            <PageHeader>
+                Sign In {waiting && <InlinedSpinner size="30" />}
+            </PageHeader>
             {!!loginErrorMessage && (
                 <ErrorTextStyle data-cy="login-error">
                     {loginErrorMessage}
@@ -124,7 +142,7 @@ const Page = () => {
             <form onSubmit={handleSubmit} data-cy="login-form">
                 <LoginFieldsStyle>
                     <FormControl>
-                        <label>
+                        <Label>
                             E-Mail
                             <TextInput
                                 type="text"
@@ -136,10 +154,10 @@ const Page = () => {
                                 data-cy="login-email"
                                 required
                             />
-                        </label>
+                        </Label>
                     </FormControl>
                     <FormControl>
-                        <label>
+                        <Label>
                             Password
                             <TextInput
                                 type="password"
@@ -149,19 +167,20 @@ const Page = () => {
                                 data-cy="login-password"
                                 required
                             />
-                        </label>
+                        </Label>
                     </FormControl>
                 </LoginFieldsStyle>
                 <SubmitButton
                     name="Sign In"
                     type="submit"
+                    width="105px"
                     disabled={waiting || invalidForm()}
                 />
             </form>
-            <div>
+            <ForgotText>
                 Forgot password? <Link to="/password_reset">Click here</Link> to
                 reset your password.
-            </div>
+            </ForgotText>
         </LoginBodyStyle>
     );
 };

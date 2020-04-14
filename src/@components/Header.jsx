@@ -46,6 +46,10 @@ const Row = styled.div`
     }
 `;
 
+const TopRow = styled(Row)`
+    height: 50px;
+`;
+
 const SignIn = styled(Link)`
     color: ${props => props.theme.linkText};
     text-decoration: none;
@@ -151,10 +155,10 @@ const UserNav = () => {
     }
 
     return (
-        <div>
+        <Row>
             <SignIn to="/login">Sign in</SignIn>
             <SignUp />
-        </div>
+        </Row>
     );
 };
 
@@ -163,7 +167,7 @@ const Header = ({ inverted, variant }) => {
         <>
             <FixedHeader inverted={inverted}>
                 <Boundary>
-                    <Row>
+                    <TopRow>
                         <div>
                             <Row>
                                 <Link to="/">
@@ -173,7 +177,7 @@ const Header = ({ inverted, variant }) => {
                             </Row>
                         </div>
                         {variant !== 'logo-only' && <UserNav />}
-                    </Row>
+                    </TopRow>
                     {variant !== 'logo-only' && (
                         <Row>
                             <Link to={'/matching'}>

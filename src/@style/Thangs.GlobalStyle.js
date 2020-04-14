@@ -26,4 +26,9 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     font-weight: inherit;
   }
+
+  input, button {
+    font-size: inherit;
+    font-family: inherit;
+  }
 `;
