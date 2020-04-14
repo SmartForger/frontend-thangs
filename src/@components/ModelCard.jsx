@@ -95,7 +95,7 @@ function ModelCard({ className, model, withOwner }) {
 
     return (
         <Link
-            to={`/preview/model/${model.id}`}
+            to={`/model/${model.id}`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onFocus={handleMouseEnter}
