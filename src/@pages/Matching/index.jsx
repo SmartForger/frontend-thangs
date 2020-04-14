@@ -71,11 +71,6 @@ function Page() {
         setCurrentModel(model);
     }
 
-    // const handleCancel = e => {
-    //     e.preventDefault();
-    //     history.goBack();
-    // };
-
     return (
         <div>
             <Header>Search by Model</Header>
@@ -91,15 +86,6 @@ function Page() {
                     <Uploader setFile={handleFile} />
                 </form>
             )}
-            {/* <CancelButton
-                css={`
-                    margin-right: 8px;
-                `}
-                onClick={handleCancel}
-                type="button"
-            >
-                Cancel
-            </CancelButton> */}
         </div>
     );
 }
