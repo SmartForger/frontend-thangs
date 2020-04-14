@@ -15,10 +15,9 @@ const InlinedSpinner = styled(Spinner)`
 `;
 
 const Container = styled.div`
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    align-items: center;
+    width: 500px;
+    margin: auto;
+    margin-top: 104px;
 `;
 
 const FieldContainer = styled.div`
@@ -27,24 +26,25 @@ const FieldContainer = styled.div`
 `;
 
 const ErrorTextStyle = styled.h4`
-    color: #c82020;
-    background-color: #ddb6b6;
-    padding: 5px;
-    border-radius: 2px;
+    margin-top: 24px;
+    color: ${props => props.theme.errorTextColor};
+    background-color: ${props => props.theme.errorTextBackground};
+    font-weight: 500;
+    padding: 10px 16px;
+    border-radius: 8px;
 `;
 
 const TextInput = styled(BaseTextInput)`
-    display: block;
     width: 100%;
+    margin-top: 8px;
 `;
 
 const FormControl = styled.div`
-    margin-top: 8px;
-    width: 300px;
+    margin-top: 32px;
+    width: 100%;
 `;
 
 const SubmitButton = styled(Button)`
-    border-radius: 2px;
     margin: 0;
     margin-top: 32px;
     float: right;

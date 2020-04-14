@@ -27,6 +27,8 @@ const BLUE_2 = '#1b8cf8';
 const BLUE_3 = '#014d7c';
 // const BLUE_4 = '#013047';
 const BROWN = '#8b6400';
+const RED_1 = '#edd0d0';
+const RED_4 = '#ca2d2c';
 const WHITE_1 = '#ffffff';
 const WHITE_2 = '#efecec';
 const WHITE_3 = '#e8e8ec';
@@ -53,6 +55,8 @@ export const NewTheme = {
     cardBackground: WHITE_1,
     cardHeartColor: BLUE_2,
     deleteButton: GREY_7,
+    errorTextColor: RED_4,
+    errorTextBackground: RED_1,
     emptyImageBackground: GREY_7,
     flashColor: GREY_5,
     flashColorText: WHITE_3,

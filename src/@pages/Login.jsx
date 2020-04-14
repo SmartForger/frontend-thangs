@@ -19,16 +19,17 @@ const InlinedSpinner = styled(Spinner)`
 `;
 
 const TextInput = styled(BaseTextInput)`
-    display: block;
     width: 100%;
     margin-top: 8px;
 `;
 
 const ErrorTextStyle = styled.h4`
-    color: #c82020;
-    background-color: #ddb6b6;
-    padding: 5px;
-    border-radius: 2px;
+    margin-top: 24px;
+    color: ${props => props.theme.errorTextColor};
+    background-color: ${props => props.theme.errorTextBackground};
+    font-weight: 500;
+    padding: 10px 16px;
+    border-radius: 8px;
 `;
 
 const LoginBodyStyle = styled.div`
@@ -42,7 +43,6 @@ const LoginFieldsStyle = styled.div`
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    margin-top: 32px;
 `;
 
 const SubmitButton = styled(Button)`
