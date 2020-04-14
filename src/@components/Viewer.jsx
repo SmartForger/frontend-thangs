@@ -50,7 +50,7 @@ function HoverCube({ position }) {
             e.stopPropagation();
             setIsHovered(value);
         },
-        [setIsHovered],
+        [setIsHovered]
     );
 
     const onClick = useCallback(
@@ -58,7 +58,7 @@ function HoverCube({ position }) {
             e.stopPropagation();
             setActive(v => !v);
         },
-        [setActive],
+        [setActive]
     );
 
     useFrame(({ gl, scene, camera }) => {
@@ -97,8 +97,8 @@ function Controls() {
             args={[camera, gl.domElement]}
             enableRotate
             enablePan={true}
-            maxDistance={100}
-            minDistance={5}
+            maxDistance={200}
+            minDistance={15}
             minPolarAngle={Math.PI / 10}
             maxPolarAngle={Math.PI / 1}
         />

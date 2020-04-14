@@ -218,7 +218,7 @@ const ModelViewer = ({ model, user }) => {
 };
 
 function NewModelViewer({ model, className }) {
-    const [mode, setMode] = useState('shaded');
+    const [mode, setMode] = useState('wireframe');
     const [meshColor, setMeshColor] = useState('#FFFFFF');
     const [wireColor, setWireColor] = useState('#000000');
 
