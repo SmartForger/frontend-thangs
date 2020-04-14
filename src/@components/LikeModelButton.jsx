@@ -10,7 +10,7 @@ const graphqlService = GraphqlService.getInstance();
 
 const ActionButton = styled(Button)`
     margin-bottom: 24px;
-    padding: 8px 24px;
+    padding: 6px 24px;
     background: ${props => props.theme.modelActionButtonBackground};
     color: ${props => props.theme.modelActionButtonText};
 
