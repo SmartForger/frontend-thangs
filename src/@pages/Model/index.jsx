@@ -144,7 +144,10 @@ const ModelDetailPage = ({ model, currentUser }) => {
             <ModelContainer>
                 <ModelColumn>
                     <ModelViewerStyled model={model} />
-                    <ModelCollection models={model.relatedModels || []} />
+                    <ModelCollection
+                        models={model.relatedModels || []}
+                        maxPerRow={3}
+                    />
                 </ModelColumn>
                 <Sidebar>
                     <LikeModelButton currentUser={currentUser} model={model} />
