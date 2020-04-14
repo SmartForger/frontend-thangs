@@ -13,6 +13,7 @@ const ActionButton = styled(Button)`
     padding: 6px 24px;
     background: ${props => props.theme.modelActionButtonBackground};
     color: ${props => props.theme.modelActionButtonText};
+    box-shadow: none;
 
     > svg {
         margin-right: 8px;

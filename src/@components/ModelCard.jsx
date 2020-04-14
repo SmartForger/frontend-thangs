@@ -21,14 +21,15 @@ const CardContent = styled.div`
 
 const ThumbnailContainer = styled.div`
     position: relative;
-    background: ${props => props.theme.modelThumbnailPlaceholder};
     border-radius: 8px 8px 0px 0px;
     height: 100%;
     max-height: calc(100% - ${props => (props.showOwner ? '80px' : '40px')});
     overflow: hidden;
+    padding: 8px 8px 0;
 
     > img {
-        width: 100%;
+        margin: auto;
+        display: block;
         height: 100%;
     }
 `;
@@ -55,6 +56,7 @@ const Overlay = styled.div`
     bottom: 0;
     display: flex;
     align-items: flex-end;
+    margin: -8px -8px 0;
 `;
 
 const ModelName = styled.div`
@@ -76,14 +78,16 @@ const ActivityCount = styled.span`
     align-items: center;
 
     color: ${props => props.theme.activityCount};
-    font-family: Helvetica Neue;
-    font-size: 14px;
     font-weight: 500;
     letter-spacing: 0px;
 `;
 
 const HeartIconStyled = styled(HeartIcon)`
     fill: ${props => props.theme.cardHeartColor};
+`;
+
+const LinkStyled = styled(Link)`
+    color: inherit;
 `;
 
 function ModelCard({ className, model, withOwner }) {
@@ -94,7 +98,7 @@ function ModelCard({ className, model, withOwner }) {
     const handleMouseLeave = () => setHovered(false);
 
     return (
-        <Link
+        <LinkStyled
             to={`/model/${model.id}`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -127,7 +131,7 @@ function ModelCard({ className, model, withOwner }) {
                     </ActivityIndicators>
                 </CardContent>
             </CardContainer>
-        </Link>
+        </LinkStyled>
     );
 }
 

@@ -49,8 +49,6 @@ const ScrollableColumn = styled.div`
 
 const ModelViewerStyled = styled(NewModelViewer)`
     height: 416px;
-    margin-right: 56px;
-    margin-bottom: 48px;
 `;
 
 const ModelColumn = styled(ScrollableColumn)`
@@ -61,7 +59,7 @@ const ModelColumn = styled(ScrollableColumn)`
 
 const Sidebar = styled(ScrollableColumn)`
     margin-left: 24px;
-    width: 440px;
+    width: 420px;
 
     > table {
         line-height: 18px;
@@ -131,6 +129,12 @@ const Comments = styled(CommentsForModel)`
     margin-top: 48px;
 `;
 
+const Header = styled.div`
+    font-size: 32px;
+    font-family: ${props => props.theme.headerFont};
+    margin: 48px 0 24px;
+`;
+
 const ModelDetailPage = ({ model, currentUser }) => {
     const history = useHistory();
 
@@ -144,7 +148,11 @@ const ModelDetailPage = ({ model, currentUser }) => {
             <ModelContainer>
                 <ModelColumn>
                     <ModelViewerStyled model={model} />
-                    <ModelCollection models={model.relatedModels || []} />
+                    <Header>Geometric Similar Matches</Header>
+                    <ModelCollection
+                        models={model.relatedModels || []}
+                        maxPerRow={3}
+                    />
                 </ModelColumn>
                 <Sidebar>
                     <LikeModelButton currentUser={currentUser} model={model} />

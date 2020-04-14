@@ -69,7 +69,7 @@ export function NewModelCommentForm({ modelId }) {
 
     return (
         <NewCommentContainer>
-            <NewCommentHeader>Add comment</NewCommentHeader>
+            <NewCommentHeader>Add Comment</NewCommentHeader>
             <form onSubmit={(data, e) => handleSubmit(formSubmit)(data, e)}>
                 <PostCommentBodyTextarea
                     name="body"
