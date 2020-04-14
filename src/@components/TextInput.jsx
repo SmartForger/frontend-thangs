@@ -5,12 +5,17 @@ const TextInputStyled = styled.input`
     padding: 8px 12px;
     margin: 0;
     display: inline-block;
-    border: 1px solid ${props => (props.invalid ? 'red' : 'transparent')};
+    border: 2px solid
+        ${props => (props.invalid ? props.theme.errorTextColor : 'transparent')};
     border-radius: 8px;
     box-sizing: border-box;
     line-height: 18px;
+    font-weight: 500;
     background-color: ${props => props.theme.textInputBackground};
-    color: ${props => props.theme.textInputColor};
+    color: ${props =>
+        props.invalid
+            ? props.theme.errorTextColor
+            : props.theme.textInputColor};
 
     ::placeholder {
         color: ${props => props.theme.textInputPlaceholderColor};
