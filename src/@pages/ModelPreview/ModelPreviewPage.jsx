@@ -15,6 +15,7 @@ const BackButton = styled.button`
     padding: 0;
     border: 0;
     margin-right: 16px;
+    cursor: pointer;
 `;
 
 const HeaderStyled = styled.div`

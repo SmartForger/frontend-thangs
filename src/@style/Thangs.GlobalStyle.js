@@ -18,10 +18,6 @@ export const GlobalStyle = createGlobalStyle`
     color: ${props => props.theme.linkText};
   }
 
-  a:visited {
-    color: ${props => props.theme.linkTextVisited};
-  }
-
   h1, h2, h3, h4, h5, h6 {
     margin: 0;
     font-weight: inherit;

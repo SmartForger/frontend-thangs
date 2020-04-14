@@ -104,6 +104,7 @@ const DisplayButtonNew = styled.button`
     border: none;
     padding: 4px;
     border-radius: 4px;
+    cursor: pointer;
 `;
 
 const MenuStyled = styled.div`
