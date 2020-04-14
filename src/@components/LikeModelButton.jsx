@@ -15,7 +15,7 @@ const ActionButton = styled(Button)`
     color: ${props => props.theme.modelActionButtonText};
 
     > svg {
-        margin-right: 8px
+        margin-right: 8px;
         fill: ${props => props.theme.modelActionButtonText};
     }
 `;
@@ -39,11 +39,11 @@ export function LikeModelButton({ currentUser, model }) {
         model.id,
     );
     return hasLikedModel(model, currentUser) ? (
-        <ActionButton onClick={unlikeModel}>
+        <ActionButton onClick={unlikeModel} maxwidth="124px">
             <HeartFilledIcon /> Liked!
         </ActionButton>
     ) : (
-        <ActionButton onClick={likeModel}>
+        <ActionButton onClick={likeModel} maxwidth="124px">
             <HeartIcon /> Like
         </ActionButton>
     );
