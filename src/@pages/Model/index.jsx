@@ -59,7 +59,7 @@ const ModelColumn = styled(ScrollableColumn)`
 
 const Sidebar = styled(ScrollableColumn)`
     margin-left: 24px;
-    width: 440px;
+    width: 420px;
 
     > table {
         line-height: 18px;
