@@ -11,7 +11,7 @@ const allowCssProp = props => (props.css ? props.css : '');
 const NewLayout = styled.div`
     padding: ${props =>
             props.variant === 'small-vertical-spacing' ? '96px' : '195px'}
-        16px;
+        16px 0;
     margin: auto;
     max-width: 1237px;
 
