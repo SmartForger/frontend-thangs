@@ -51,7 +51,7 @@ function HoverCube({ position }) {
             e.stopPropagation();
             setIsHovered(value);
         },
-        [setIsHovered]
+        [setIsHovered],
     );
 
     const onClick = useCallback(
@@ -59,7 +59,7 @@ function HoverCube({ position }) {
             e.stopPropagation();
             setActive(v => !v);
         },
-        [setActive]
+        [setActive],
     );
 
     useFrame(({ gl, scene, camera }) => {
@@ -147,7 +147,7 @@ const Asset = ({
         scene.add(stlMesh);
 
         // Start Centering ///////////////////
-        const center = THREE.Vector3();
+        const center = new THREE.Vector3();
         stlMesh.geometry.computeBoundingBox();
         stlMesh.geometry.boundingBox.getCenter(center);
         stlMesh.geometry.center();
