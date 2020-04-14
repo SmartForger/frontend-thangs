@@ -31,7 +31,7 @@ const BackButton = styled.button`
 const HeaderStyled = styled.div`
     display: flex;
     align-items: center;
-    margin: 8px 0;
+    margin: 8px 0 16px;
 `;
 
 const ModelContainer = styled.div`
