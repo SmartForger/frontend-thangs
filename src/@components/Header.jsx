@@ -26,7 +26,7 @@ const FixedHeader = styled.div`
             ? props.theme.invertedHeaderBackground
             : props.theme.backgroundColor};
     top: 0;
-    z-index: 1;
+    z-index: 2;
 `;
 
 const Boundary = styled.div`

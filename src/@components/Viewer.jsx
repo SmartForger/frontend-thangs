@@ -16,6 +16,7 @@ const Viewer = ({
 }) => {
     return (
         <Canvas
+            orthographic="true"
             style={{
                 height: height,
                 width: width,
@@ -97,8 +98,8 @@ function Controls() {
             args={[camera, gl.domElement]}
             enableRotate
             enablePan={true}
-            maxDistance={100}
-            minDistance={5}
+            maxDistance={200}
+            minDistance={15}
             minPolarAngle={Math.PI / 10}
             maxPolarAngle={Math.PI / 1}
         />
@@ -141,8 +142,17 @@ const Asset = ({
 
         const stlMesh = new THREE.Mesh(stl, currentMat);
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+
         scene.add(directionalLight);
         scene.add(stlMesh);
+
+        // Start Centering ///////////////////
+        const center = new THREE.Vector3();
+        stlMesh.geometry.computeBoundingBox();
+        stlMesh.geometry.boundingBox.getCenter(center);
+        stlMesh.geometry.center();
+        stlMesh.position.copy(center);
+        ///////////////////// End Centering //
 
         if (mode === 'composite') {
             var geo = new THREE.EdgesGeometry(stlMesh.geometry); // or WireframeGeometry
