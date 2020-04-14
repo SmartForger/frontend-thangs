@@ -40,9 +40,9 @@ const ModelContainer = styled.div`
 `;
 
 const ScrollableColumn = styled.div`
-    overflow-y: scroll;
-    overflow-x: hidden;
-    max-height: calc(100vh - 312px);
+    padding: 10px;
+    margin: -10px;
+
     ${allowCssProp};
 `;
 
@@ -161,7 +161,7 @@ function Page() {
 
     const graphqlService = GraphqlService.getInstance();
     const { loading, error, model } = graphqlService.useModelByIdWithRelated(
-        id
+        id,
     );
     const [currentUser] = useLocalStorage('currentUser', null);
 

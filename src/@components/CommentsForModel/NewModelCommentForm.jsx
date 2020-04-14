@@ -14,7 +14,7 @@ const NewCommentContainer = styled.div`
 
 const NewCommentHeader = styled.div`
     font-size: 18px;
-    font-weight: normal;
+    font-family: ${props => props.theme.headerFont};
     margin-bottom: 16px;
 `;
 

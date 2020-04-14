@@ -4,32 +4,25 @@ import styled from 'styled-components';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
 import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg';
 import * as GraphqlService from '@services/graphql-service';
+import { Button } from '@components/Button';
 
 const graphqlService = GraphqlService.getInstance();
 
-const ActionButton = styled.button`
+const ActionButton = styled(Button)`
     margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 28px;
-    font-family: ${props => props.theme.buttonFont};
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 8px;
-    border: none;
-
+    padding: 6px 24px;
     background: ${props => props.theme.modelActionButtonBackground};
     color: ${props => props.theme.modelActionButtonText};
+
     > svg {
-        margin-right: 8px
+        margin-right: 8px;
         fill: ${props => props.theme.modelActionButtonText};
     }
 `;
 
 const userIdsWhoHaveLiked = R.pipe(
     R.prop('likes'),
-    R.map(R.path(['owner', 'id']))
+    R.map(R.path(['owner', 'id'])),
 );
 
 export const hasLikedModel = (model, user) => {
@@ -39,18 +32,18 @@ export const hasLikedModel = (model, user) => {
 export function LikeModelButton({ currentUser, model }) {
     const [likeModel] = graphqlService.useLikeModelMutation(
         currentUser.id,
-        model.id
+        model.id,
     );
     const [unlikeModel] = graphqlService.useUnlikeModelMutation(
         currentUser.id,
-        model.id
+        model.id,
     );
     return hasLikedModel(model, currentUser) ? (
-        <ActionButton onClick={unlikeModel}>
+        <ActionButton onClick={unlikeModel} maxwidth="124px">
             <HeartFilledIcon /> Liked!
         </ActionButton>
     ) : (
-        <ActionButton onClick={likeModel}>
+        <ActionButton onClick={likeModel} maxwidth="124px">
             <HeartIcon /> Like
         </ActionButton>
     );
