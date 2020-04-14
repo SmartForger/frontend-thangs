@@ -77,8 +77,6 @@ const ActivityCount = styled.span`
     align-items: center;
 
     color: ${props => props.theme.activityCount};
-    font-family: Helvetica Neue;
-    font-size: 14px;
     font-weight: 500;
     letter-spacing: 0px;
 `;
