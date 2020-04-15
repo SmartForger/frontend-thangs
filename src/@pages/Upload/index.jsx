@@ -101,11 +101,12 @@ const CATEGORIES = [
 const DropdownIndicator = styled.div`
     width: 0;
     height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
+    margin-right: 16px;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
 
     /* We unfortunately need to hardcode this value because of how react-select works */
-    border-top: 12px solid #f5f5f5;
+    border-top: 8px solid #f5f5f5;
 `;
 
 function ShowError({ message }) {
