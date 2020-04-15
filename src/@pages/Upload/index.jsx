@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import Select from 'react-select';
 import { WithNewThemeLayout } from '@style/Layout';
 import { Uploader } from '@components/Uploader';
 import * as GraphqlService from '@services/graphql-service';
@@ -75,6 +76,19 @@ const Header = styled.h1`
 const graphqlService = GraphqlService.getInstance();
 
 const sanitizeFileName = name => name.replace(/ /g, '_');
+
+const CATEGORIES = [
+    { value: 'automotive', label: 'Automotive' },
+    { value: 'aerospace', label: 'Aerospace' },
+    { value: 'healthcare', label: 'Healthcare' },
+    { value: 'industrial', label: 'Industrial' },
+    { value: 'home', label: 'Home' },
+    { value: 'safety', label: 'Safety' },
+    { value: 'characters', label: 'Characters' },
+    { value: 'architecture', label: 'Architecture' },
+    { value: 'technology', label: 'Technology' },
+    { value: 'hobbyist', label: 'Hobbyist' },
+];
 
 const Page = () => {
     const history = useHistory();
@@ -153,6 +167,15 @@ const Page = () => {
                                 <FullWidthInput
                                     name="description"
                                     placeholder="Description"
+                                />
+                            </Field>
+                            <Field>
+                                <Label htmlFor="category">Category</Label>
+                                <Select
+                                    name="category"
+                                    placeholder="Select Category"
+                                    isClearable
+                                    options={CATEGORIES}
                                 />
                             </Field>
                         </Column>
