@@ -74,6 +74,8 @@ const Header = styled.h1`
 
 const graphqlService = GraphqlService.getInstance();
 
+const sanitizeFileName = name => name.replace(/ /g, '_');
+
 const Page = () => {
     const history = useHistory();
     const [file, setFile] = useState();
@@ -90,7 +92,7 @@ const Page = () => {
         await uploadModel({
             variables: {
                 file,
-                name: file.name.replace(/ /g, '_'),
+                name: sanitizeFileName(file.name),
                 size: file.size,
                 userEmail: currentUser.email,
             },
