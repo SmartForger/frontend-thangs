@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { ensureScriptIsLoaded } from './ensureScriptIsLoaded';
 import { Spinner } from '@components/Spinner';
 
+const HOOPS_WS_ENDPOINT_URI = 'ws://localhost:11182/';
+
 const Container = styled.div`
     position: relative;
     width: 100%;
@@ -66,7 +68,7 @@ function HoopsModelViewer({ className, model }) {
 
         const viewer = new Communicator.WebViewer({
             container: viewerContainer.current,
-            endpointUri: 'ws://localhost:11182/',
+            endpointUri: HOOPS_WS_ENDPOINT_URI,
             model: 'microengine',
             rendererType: Communicator.RendererType.Client,
         });
