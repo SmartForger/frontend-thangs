@@ -7,6 +7,7 @@ import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 import { Spinner } from '@components/Spinner';
 import { UploadFrame } from '@components/UploadFrame';
+import { Dots } from '@components/UploadProgress';
 
 const Row = styled.div`
     display: flex;
@@ -81,6 +82,10 @@ const DarkBackgroundSpinner = styled(Spinner)`
     }
 `;
 
+const DotsStyled = styled(Dots)`
+    width: 139px;
+`;
+
 const Page = () => {
     const history = useHistory();
     const [file, setFile] = useState();
@@ -123,11 +128,12 @@ const Page = () => {
                         `}
                     >
                         {isUploading ? (
-                            <Uploader file={file} setFile={setFile} />
-                        ) : (
                             <UploadFrame>
                                 <DarkBackgroundSpinner />
+                                <DotsStyled text="Uploading" />
                             </UploadFrame>
+                        ) : (
+                            <Uploader file={file} setFile={setFile} />
                         )}
                     </Column>
                     <Column
