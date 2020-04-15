@@ -171,7 +171,7 @@ const Page = () => {
                                 >
                                     {ShowError}
                                 </ErrorMessage>
-                                <Label htmlFor="name">Title</Label>
+                                <Label htmlFor="name">Title *</Label>
                                 <FullWidthInput
                                     name="name"
                                     defaultValue={file && file.name}
@@ -203,7 +203,9 @@ const Page = () => {
                                 >
                                     {ShowError}
                                 </ErrorMessage>
-                                <Label htmlFor="description">Description</Label>
+                                <Label htmlFor="description">
+                                    Description *
+                                </Label>
                                 <FullWidthInput
                                     name="description"
                                     placeholder="Description"
