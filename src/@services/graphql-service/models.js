@@ -35,6 +35,7 @@ const MODEL_FRAGMENT = gql`
         description
         category
         weight
+        height
         material
     }
 `;
