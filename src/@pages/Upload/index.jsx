@@ -237,11 +237,30 @@ const Page = () => {
                                         DropdownIndicator,
                                     }}
                                     styles={{
-                                        control: (base, ...args) => {
-                                            console.log('args', args);
+                                        control: base => {
                                             return {
                                                 ...base,
+                                                borderRadius: '8px',
+                                                backgroundColor: '#616168',
                                                 border: 'none',
+                                            };
+                                        },
+                                        singleValue: base => {
+                                            return {
+                                                ...base,
+                                                color: '#f5f5f5',
+                                            };
+                                        },
+                                        placeholder: base => {
+                                            return {
+                                                ...base,
+                                                color: '#f5f5f5',
+                                            };
+                                        },
+                                        clearIndicator: base => {
+                                            return {
+                                                ...base,
+                                                color: '#f5f5f5',
                                             };
                                         },
                                     }}
