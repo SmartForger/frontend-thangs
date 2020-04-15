@@ -90,7 +90,7 @@ const Page = () => {
         await uploadModel({
             variables: {
                 file,
-                name: file.name,
+                name: file.name.replace(/ /g, '_'),
                 size: file.size,
                 userEmail: currentUser.email,
             },
