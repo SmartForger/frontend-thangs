@@ -31,6 +31,7 @@ const MODEL_FRAGMENT = gql`
         }
         likesCount
         commentsCount
+        uploadStatus
     }
 `;
 

@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { UserInline } from './UserInline';
 import { Link } from 'react-router-dom';
+import * as R from 'ramda';
 import styled from 'styled-components';
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
+import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg';
+import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg';
 
 const CardContainer = styled.div`
     display: flex;
@@ -26,6 +29,9 @@ const ThumbnailContainer = styled.div`
     max-height: calc(100% - ${props => (props.showOwner ? '80px' : '40px')});
     overflow: hidden;
     padding: 8px 8px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     > img {
         margin: auto;
@@ -34,10 +40,21 @@ const ThumbnailContainer = styled.div`
     }
 `;
 
+const isProcessing = R.propEq('uploadStatus', 'processing');
+const isError = R.propEq('uploadStatus', 'error');
+
 function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
+    const { uploadStatus } = model;
+
     return (
         <ThumbnailContainer showOwner={showOwner}>
-            {src && <img src={src} alt={model.name} />}
+            {isProcessing(model) ? (
+                <LoadingIcon />
+            ) : isError(model) || !src ? (
+                <ErrorIcon />
+            ) : (
+                <img src={src} alt={model.name} />
+            )}
             {children}
         </ThumbnailContainer>
     );
@@ -54,6 +71,7 @@ const Overlay = styled.div`
         rgba(0, 0, 0, 0.2) 100%
     );
     bottom: 0;
+    left: 8px;
     display: flex;
     align-items: flex-end;
     margin: -8px -8px 0;
