@@ -22,6 +22,7 @@ const Column = styled.div`
 const Field = styled.div`
     display: flex;
     flex-direction: column;
+    margin-bottom: 8px;
 `;
 
 const FullWidthInput = styled.input`
