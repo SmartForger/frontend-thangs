@@ -35,6 +35,10 @@ export const USER_QUERY = gql`
                     id
                     fullName
                 }
+                attachment {
+                    id
+                    imgSrc
+                }
             }
         }
     }
