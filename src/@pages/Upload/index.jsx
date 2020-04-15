@@ -134,6 +134,27 @@ const Page = () => {
                                     placeholder="Model Name"
                                 />
                             </Field>
+                            <Field>
+                                <Label htmlFor="material">Material</Label>
+                                <FullWidthInput
+                                    name="material"
+                                    placeholder="Material"
+                                />
+                            </Field>
+                            <Field>
+                                <Label htmlFor="weight">Weight</Label>
+                                <FullWidthInput
+                                    name="weight"
+                                    placeholder="Weight"
+                                />
+                            </Field>
+                            <Field>
+                                <Label htmlFor="description">Description</Label>
+                                <FullWidthInput
+                                    name="description"
+                                    placeholder="Description"
+                                />
+                            </Field>
                         </Column>
                     </Row>
                     <ButtonGroup>
