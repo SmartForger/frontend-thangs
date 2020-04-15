@@ -5,7 +5,9 @@ import * as R from 'ramda';
 import styled from 'styled-components';
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
-import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg';
+import ErrorImg, {
+    ReactComponent as ErrorIcon,
+} from '@svg/image-error-icon.svg';
 import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg';
 
 const CardContainer = styled.div`
@@ -37,6 +39,20 @@ const ThumbnailContainer = styled.div`
         margin: auto;
         display: block;
         height: 100%;
+
+        :before {
+            content: ' ';
+            display: block;
+            background-color: ${props => props.theme.cardBackground};
+            background-image: url(${ErrorImg});
+            background-repeat: no-repeat;
+            background-position: center center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+        }
     }
 `;
 
@@ -44,10 +60,8 @@ const isProcessing = R.propEq('uploadStatus', 'processing');
 const isError = R.propEq('uploadStatus', 'error');
 
 function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
-    const { uploadStatus } = model;
-
     return (
-        <ThumbnailContainer showOwner={showOwner}>
+        <ThumbnailContainer showOwner={showOwner} isError={isError(model)}>
             {isProcessing(model) ? (
                 <LoadingIcon />
             ) : isError(model) || !src ? (
