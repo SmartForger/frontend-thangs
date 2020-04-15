@@ -8,7 +8,7 @@ import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { LikeModelButton } from '@components/LikeModelButton';
 import { CommentsForModel } from '@components/CommentsForModel';
-import { ModelViewer } from '@components/ModelViewer';
+import { ModelViewer } from '@components/HoopsModelViewer';
 
 import { useParams } from 'react-router-dom';
 import { useLocalStorage } from '@customHooks/Storage';
