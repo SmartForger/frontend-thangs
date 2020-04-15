@@ -240,6 +240,7 @@ const Page = () => {
                                         control: base => {
                                             return {
                                                 ...base,
+                                                minHeight: 'auto',
                                                 borderRadius: '8px',
                                                 backgroundColor: '#616168',
                                                 border: 'none',
@@ -248,12 +249,14 @@ const Page = () => {
                                         singleValue: base => {
                                             return {
                                                 ...base,
+                                                margin: 0,
                                                 color: '#f5f5f5',
                                             };
                                         },
                                         placeholder: base => {
                                             return {
                                                 ...base,
+                                                margin: 0,
                                                 color: '#f5f5f5',
                                             };
                                         },
@@ -261,6 +264,20 @@ const Page = () => {
                                             return {
                                                 ...base,
                                                 color: '#f5f5f5',
+                                                padding: '7px',
+                                            };
+                                        },
+                                        input: base => {
+                                            return {
+                                                ...base,
+                                                margin: 0,
+                                                padding: 0,
+                                            };
+                                        },
+                                        valueContainer: base => {
+                                            return {
+                                                ...base,
+                                                padding: '8px 16px',
                                             };
                                         },
                                     }}
