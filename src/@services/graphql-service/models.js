@@ -32,6 +32,10 @@ const MODEL_FRAGMENT = gql`
         likesCount
         commentsCount
         uploadStatus
+        description
+        category
+        weight
+        material
     }
 `;
 
@@ -235,6 +239,7 @@ const UPLOAD_MODEL_MUTATION = gql`
         $size: Int!
         $description: String!
         $weight: String
+        $height: String
         $material: String
         $category: String
         $searchUpload: Boolean = false
@@ -247,6 +252,7 @@ const UPLOAD_MODEL_MUTATION = gql`
             description: $description
             category: $category
             weight: $weight
+            height: $height
             material: $material
             searchUpload: $searchUpload
         ) {

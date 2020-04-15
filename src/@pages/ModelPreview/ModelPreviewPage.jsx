@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useHistory, Link } from 'react-router-dom';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
-import { ModelDetails } from './ModelDetailsPlaceholder';
+import { ModelDetails } from './ModelDetails';
 import { LikeModelButton } from '@components/LikeModelButton';
 import { NewModelViewer } from '@components/ModelViewer';
 

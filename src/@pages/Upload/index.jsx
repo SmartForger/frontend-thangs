@@ -116,6 +116,7 @@ function ShowError({ message }) {
 const Page = () => {
     const history = useHistory();
     const [file, setFile] = useState();
+    const [category, setCategory] = useState();
     const currentUser = authenticationService.currentUserValue;
     const { id } = currentUser;
 
@@ -136,8 +137,9 @@ const Page = () => {
 
         const optionalVariables = {
             weight: data.weight,
+            height: data.height,
             material: data.material,
-            category: data.category,
+            category,
         };
 
         await uploadModel({
@@ -208,6 +210,14 @@ const Page = () => {
                                 />
                             </Field>
                             <Field>
+                                <Label htmlFor="height">Height</Label>
+                                <FullWidthInput
+                                    name="height"
+                                    placeholder="Height"
+                                    ref={register}
+                                />
+                            </Field>
+                            <Field>
                                 <ErrorMessage
                                     errors={errors}
                                     name="description"
@@ -231,7 +241,7 @@ const Page = () => {
                                     placeholder="Select Category"
                                     isClearable
                                     options={CATEGORIES}
-                                    ref={register}
+                                    onChange={({ value }) => setCategory(value)}
                                     components={{
                                         IndicatorSeparator: () => null,
                                         DropdownIndicator,

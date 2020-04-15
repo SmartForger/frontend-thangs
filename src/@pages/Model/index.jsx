@@ -5,7 +5,7 @@ import { useHistory, Link } from 'react-router-dom';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { ModelCollection } from '@components/ModelCollection';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
-import { ModelDetails } from '../ModelPreview/ModelDetailsPlaceholder';
+import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { LikeModelButton } from '@components/LikeModelButton';
 import { CommentsForModel } from '@components/CommentsForModel';
 import { NewModelViewer } from '@components/ModelViewer';
@@ -170,7 +170,7 @@ function Page() {
 
     const graphqlService = GraphqlService.getInstance();
     const { loading, error, model } = graphqlService.useModelByIdWithRelated(
-        id,
+        id
     );
     const [currentUser] = useLocalStorage('currentUser', null);
 
