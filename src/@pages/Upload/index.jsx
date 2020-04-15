@@ -77,6 +77,7 @@ const Header = styled.h1`
 const graphqlService = GraphqlService.getInstance();
 
 const DarkBackgroundSpinner = styled(Spinner)`
+    margin-top: 224px;
     & .path {
         stroke: ${props => props.theme.uploaderText};
     }
@@ -84,6 +85,7 @@ const DarkBackgroundSpinner = styled(Spinner)`
 
 const DotsStyled = styled(Dots)`
     width: 139px;
+    margin-bottom: 224px;
 `;
 
 const Page = () => {
