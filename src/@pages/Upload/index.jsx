@@ -6,6 +6,7 @@ import { Uploader } from '@components/Uploader';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 import { Spinner } from '@components/Spinner';
+import { UploadFrame } from '@components/UploadFrame';
 
 const Row = styled.div`
     display: flex;
@@ -74,6 +75,12 @@ const Header = styled.h1`
 
 const graphqlService = GraphqlService.getInstance();
 
+const DarkBackgroundSpinner = styled(Spinner)`
+    & .path {
+        stroke: ${props => props.theme.uploaderText};
+    }
+`;
+
 const Page = () => {
     const history = useHistory();
     const [file, setFile] = useState();
@@ -106,50 +113,53 @@ const Page = () => {
     return (
         <div>
             <Header>Upload Model</Header>
-            {isUploading ? (
-                <Spinner />
-            ) : (
-                <form onSubmit={onSubmit}>
-                    <Row>
-                        <Column
-                            css={`
-                                flex-grow: 1;
-                                margin-right: 32px;
-                            `}
-                        >
+
+            <form onSubmit={onSubmit}>
+                <Row>
+                    <Column
+                        css={`
+                            flex-grow: 1;
+                            margin-right: 32px;
+                        `}
+                    >
+                        {isUploading ? (
                             <Uploader file={file} setFile={setFile} />
-                        </Column>
-                        <Column
-                            css={`
-                                min-width: 336px;
-                            `}
-                        >
-                            <Field>
-                                <Label htmlFor="name">Title</Label>
-                                <FullWidthInput
-                                    name="name"
-                                    defaultValue={file && file.name}
-                                    placeholder="Model Name"
-                                />
-                            </Field>
-                        </Column>
-                    </Row>
-                    <ButtonGroup>
-                        <CancelButton
-                            css={`
-                                margin-right: 8px;
-                            `}
-                            onClick={handleCancel}
-                            type="button"
-                        >
-                            Cancel
-                        </CancelButton>
-                        <Button type="submit" disabled={!file}>
-                            Save Model
-                        </Button>
-                    </ButtonGroup>
-                </form>
-            )}
+                        ) : (
+                            <UploadFrame>
+                                <DarkBackgroundSpinner />
+                            </UploadFrame>
+                        )}
+                    </Column>
+                    <Column
+                        css={`
+                            min-width: 336px;
+                        `}
+                    >
+                        <Field>
+                            <Label htmlFor="name">Title</Label>
+                            <FullWidthInput
+                                name="name"
+                                defaultValue={file && file.name}
+                                placeholder="Model Name"
+                            />
+                        </Field>
+                    </Column>
+                </Row>
+                <ButtonGroup>
+                    <CancelButton
+                        css={`
+                            margin-right: 8px;
+                        `}
+                        onClick={handleCancel}
+                        type="button"
+                    >
+                        Cancel
+                    </CancelButton>
+                    <Button type="submit" disabled={!file}>
+                        Save Model
+                    </Button>
+                </ButtonGroup>
+            </form>
         </div>
     );
 };
