@@ -7,6 +7,13 @@ import { useForm } from '@customHooks';
 import { TextInput as BaseTextInput, Spinner, Button } from '@components';
 import { WithNewSignupThemeLayout } from '@style';
 
+const PageHeader = styled.h1`
+    font-family: ${props => props.theme.headerFont};
+    font-size: 48px;
+    color: ${props => props.theme.headerColorOnDarkBackground};
+    margin-top: 8px;
+`;
+
 const InlinedSpinner = styled(Spinner)`
     display: inline-block;
 `;
@@ -122,7 +129,9 @@ const ResetPage = () => {
 
     return (
         <BodyStyle>
-            <h1>Reset Password {waiting && <InlinedSpinner size="30" />}</h1>
+            <PageHeader>
+                Reset Password {waiting && <InlinedSpinner size="30" />}
+            </PageHeader>
             {!!errorMessage && (
                 <ErrorTextStyle data-cy="reset-error">
                     {errorMessage}
@@ -195,7 +204,9 @@ const ConfirmResetPage = () => {
 
     return (
         <BodyStyle>
-            <h1>Set New Password {waiting && <InlinedSpinner size="30" />}</h1>
+            <PageHeader>
+                Set New Password {waiting && <InlinedSpinner size="30" />}
+            </PageHeader>
             {!!errorMessage && (
                 <ErrorTextStyle data-cy="confirm-reset-error">
                     {errorMessage}

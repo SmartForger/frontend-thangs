@@ -16,6 +16,7 @@ import {
     RedirectProfile,
     Newspost,
     ModelDetail,
+    TermsAndConditions,
 } from '@pages';
 import { Upload } from '@pages/Upload';
 import { Matching } from '@pages/Matching';
@@ -44,6 +45,11 @@ const App = () => {
                 <Switch>
                     <Route exact path="/" component={Landing} />
                     <Route path="/login" component={Login} />
+                    <Route
+                        path="/terms_and_conditions"
+                        exact
+                        component={TermsAndConditions}
+                    />
                     <Route
                         path="/signup/:registrationCode"
                         component={Signup}

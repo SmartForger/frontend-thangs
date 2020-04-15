@@ -10,6 +10,7 @@ import { ReactComponent as LoginIcon } from '@svg/user-login.svg';
 
 const PageHeader = styled.h1`
     font-family: ${props => props.theme.headerFont};
+    font-size: 48px;
     color: ${props => props.theme.headerColorOnDarkBackground};
     margin-top: 8px;
 `;
@@ -110,7 +111,7 @@ const Page = () => {
         if (res.status !== 200) {
             setLoginErrorMessage(
                 res.data.detail ||
-                    'Sorry, we encounteed an unexpected error.  Please try again.',
+                    'Sorry, we encounteed an unexpected error.  Please try again.'
             );
         } else {
             history.push('/');

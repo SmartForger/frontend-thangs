@@ -108,6 +108,6 @@ export const NewDarkTheme = {
     backgroundColor: BLACK_2,
     linkText: BLUE_1,
     linkTextVisited: LIGHT_PURPLE,
-    mainFontColor: GREY_2,
+    mainFontColor: GREY_4,
     textInputBackground: WHITE_4,
 };

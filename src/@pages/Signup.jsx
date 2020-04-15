@@ -14,6 +14,13 @@ const InlinedSpinner = styled(Spinner)`
     display: inline-block;
 `;
 
+const PageHeader = styled.h1`
+    font-family: ${props => props.theme.headerFont};
+    font-size: 48px;
+    color: ${props => props.theme.headerColorOnDarkBackground};
+    margin-top: 8px;
+`;
+
 const Container = styled.div`
     width: 500px;
     margin: auto;
@@ -44,10 +51,15 @@ const FormControl = styled.div`
     width: 100%;
 `;
 
+const SubmitContainer = styled.div`
+    margin-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+`;
+
 const SubmitButton = styled(Button)`
     margin: 0;
-    margin-top: 32px;
-    float: right;
 `;
 
 const Page = () => {
@@ -156,7 +168,9 @@ const Page = () => {
         <Container>
             <form onSubmit={handleSubmit} data-cy="signup-form">
                 <UserRegistrationIcon />
-                <h1>Register {waiting && <InlinedSpinner size="30" />}</h1>
+                <PageHeader>
+                    Register {waiting && <InlinedSpinner size="30" />}
+                </PageHeader>
                 {!!signupErrorMessage && (
                     <ErrorTextStyle data-cy="signup-error">
                         {signupErrorMessage}
@@ -170,7 +184,6 @@ const Page = () => {
                                 id="first-name-input"
                                 type="text"
                                 name="firstName"
-                                label="First Name"
                                 onChange={handleChange}
                                 value={inputs.firstName || ''}
                                 data-cy="signup-first-name"
@@ -184,7 +197,6 @@ const Page = () => {
                                 id="last-name-input"
                                 type="text"
                                 name="lastName"
-                                label="Last Name"
                                 onChange={handleChange}
                                 value={inputs.lastName || ''}
                                 data-cy="signup-last-name"
@@ -198,7 +210,6 @@ const Page = () => {
                                 id="username-input"
                                 type="text"
                                 name="username"
-                                label="Username"
                                 incorrect={needsCorrected('username')}
                                 onChange={handleChange}
                                 validator={validateUsername}
@@ -215,7 +226,6 @@ const Page = () => {
                                 id="email-input"
                                 type="text"
                                 name="email"
-                                label="E-Mail"
                                 incorrect={needsCorrected('email')}
                                 onChange={handleChange}
                                 validator={validateEmail}
@@ -232,7 +242,6 @@ const Page = () => {
                                 id="password-input"
                                 type="password"
                                 name="password"
-                                label="Password"
                                 onChange={handleChange}
                                 value={inputs.password || ''}
                                 data-cy="signup-password"
@@ -247,7 +256,6 @@ const Page = () => {
                                 id="confirm-password-input"
                                 type="password"
                                 name="confirmPass"
-                                label="Password"
                                 onChange={handleChange}
                                 value={inputs.confirmPass || ''}
                                 validator={validatePasswords}
@@ -257,11 +265,21 @@ const Page = () => {
                         </label>
                     </FormControl>
                 </FieldContainer>
-                <SubmitButton
-                    type="submit"
-                    name="Signup"
-                    disabled={waiting || invalidForm()}
-                />
+                <SubmitContainer>
+                    <p>
+                        By clicking the submit button, you agree <br />
+                        to the{' '}
+                        <a href="/terms_and_conditions" target="_blank">
+                            terms and conditions
+                        </a>{' '}
+                        of this site.
+                    </p>
+                    <SubmitButton
+                        type="submit"
+                        name="Submit"
+                        disabled={waiting || invalidForm()}
+                    />
+                </SubmitContainer>
             </form>
         </Container>
     );

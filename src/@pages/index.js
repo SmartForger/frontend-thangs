@@ -6,4 +6,5 @@ export * from './Model';
 export * from './SearchResults';
 export * from './Newspost';
 export * from './PasswordReset';
+export * from './TermsAndConditions';
 export * from './404';
