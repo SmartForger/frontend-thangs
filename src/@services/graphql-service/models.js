@@ -233,7 +233,10 @@ const UPLOAD_MODEL_MUTATION = gql`
         $file: Upload!
         $name: String!
         $size: Int!
-        $userEmail: String!
+        $description: String!
+        $weight: String
+        $material: String
+        $category: String
         $searchUpload: Boolean = false
     ) {
         uploadModel(
@@ -241,7 +244,10 @@ const UPLOAD_MODEL_MUTATION = gql`
             units: "mm"
             name: $name
             size: $size
-            userEmail: $userEmail
+            description: $description
+            category: $category
+            weight: $weight
+            material: $material
             searchUpload: $searchUpload
         ) {
             model {

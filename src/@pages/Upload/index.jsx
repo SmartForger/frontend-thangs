@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
+import { useForm, ErrorMessage } from 'react-hook-form';
 import { WithNewThemeLayout } from '@style/Layout';
 import { Uploader } from '@components/Uploader';
 import * as GraphqlService from '@services/graphql-service';
@@ -73,6 +74,12 @@ const Header = styled.h1`
     margin-bottom: 24px;
 `;
 
+const ErrorStyled = styled.span`
+    margin: 8px 0;
+    color: ${props => props.theme.errorTextColor};
+    font-weight: 500;
+`;
+
 const graphqlService = GraphqlService.getInstance();
 
 const sanitizeFileName = name => name.replace(/ /g, '_');
@@ -90,6 +97,10 @@ const CATEGORIES = [
     { value: 'hobbyist', label: 'Hobbyist' },
 ];
 
+function ShowError({ message }) {
+    return <ErrorStyled>{message}</ErrorStyled>;
+}
+
 const Page = () => {
     const history = useHistory();
     const [file, setFile] = useState();
@@ -101,14 +112,26 @@ const Page = () => {
         { loading: isUploading },
     ] = graphqlService.useUploadModelMutation(id);
 
-    const onSubmit = async e => {
-        e.preventDefault();
+    const { register, handleSubmit, watch, errors } = useForm();
+
+    const onSubmit = async data => {
+        const requiredVariables = {
+            file,
+            name: sanitizeFileName(data.name),
+            size: file.size,
+            description: data.description,
+        };
+
+        const optionalVariables = {
+            weight: data.weight,
+            material: data.material,
+            category: data.category,
+        };
+
         await uploadModel({
             variables: {
-                file,
-                name: sanitizeFileName(file.name),
-                size: file.size,
-                userEmail: currentUser.email,
+                ...requiredVariables,
+                ...optionalVariables,
             },
         });
         history.push('/profile');
@@ -125,7 +148,7 @@ const Page = () => {
             {isUploading ? (
                 <Spinner />
             ) : (
-                <form onSubmit={onSubmit}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <Row>
                         <Column
                             css={`
@@ -141,11 +164,19 @@ const Page = () => {
                             `}
                         >
                             <Field>
+                                <ErrorMessage
+                                    errors={errors}
+                                    name="name"
+                                    message="Please enter a name for your model"
+                                >
+                                    {ShowError}
+                                </ErrorMessage>
                                 <Label htmlFor="name">Title</Label>
                                 <FullWidthInput
                                     name="name"
                                     defaultValue={file && file.name}
                                     placeholder="Model Name"
+                                    ref={register({ required: true })}
                                 />
                             </Field>
                             <Field>
@@ -153,6 +184,7 @@ const Page = () => {
                                 <FullWidthInput
                                     name="material"
                                     placeholder="Material"
+                                    ref={register}
                                 />
                             </Field>
                             <Field>
@@ -160,13 +192,22 @@ const Page = () => {
                                 <FullWidthInput
                                     name="weight"
                                     placeholder="Weight"
+                                    ref={register}
                                 />
                             </Field>
                             <Field>
+                                <ErrorMessage
+                                    errors={errors}
+                                    name="description"
+                                    message="Please enter a description for your model"
+                                >
+                                    {ShowError}
+                                </ErrorMessage>
                                 <Label htmlFor="description">Description</Label>
                                 <FullWidthInput
                                     name="description"
                                     placeholder="Description"
+                                    ref={register({ required: true })}
                                 />
                             </Field>
                             <Field>
@@ -176,6 +217,7 @@ const Page = () => {
                                     placeholder="Select Category"
                                     isClearable
                                     options={CATEGORIES}
+                                    ref={register}
                                 />
                             </Field>
                         </Column>
