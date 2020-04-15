@@ -105,6 +105,10 @@ const ProfileLink = styled(Link)`
     text-decoration: none;
 `;
 
+const Description = styled.div`
+    margin: 32px 0;
+`;
+
 function ModelTitle({ model, className }) {
     return (
         <ModelTitleContainer className={className}>
@@ -157,6 +161,7 @@ const ModelDetailPage = ({ model, currentUser }) => {
                 <Sidebar>
                     <LikeModelButton currentUser={currentUser} model={model} />
                     <ModelTitle model={model} />
+                    <Description>{model.description}</Description>
                     <ModelDetails model={model} />
                     <Comments model={model} />
                 </Sidebar>
