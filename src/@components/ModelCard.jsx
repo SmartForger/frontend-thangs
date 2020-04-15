@@ -32,8 +32,11 @@ const ThumbnailContainer = styled.div`
     overflow: hidden;
     padding: 8px 8px 0;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    color: ${props => props.theme.imagePlaceholderText};
+    font-weight: 500;
 
     > img {
         margin: auto;
@@ -46,14 +49,25 @@ const ThumbnailContainer = styled.div`
             background-color: ${props => props.theme.cardBackground};
             background-image: url(${ErrorImg});
             background-repeat: no-repeat;
-            background-position: center center;
+            background-position: center 37%;
             position: absolute;
             top: 0;
             left: 0;
             height: 100%;
             width: 100%;
         }
+
+        :after {
+            content: 'Image Error';
+            position: absolute;
+            display: block;
+            top: 72.5%;
+        }
     }
+`;
+
+const PlaceholderText = styled.div`
+    margin-top: 24px;
 `;
 
 const isProcessing = R.propEq('uploadStatus', 'processing');
@@ -63,9 +77,15 @@ function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
     return (
         <ThumbnailContainer showOwner={showOwner} isError={isError(model)}>
             {isProcessing(model) ? (
-                <LoadingIcon />
+                <>
+                    <LoadingIcon />
+                    <PlaceholderText>Processing</PlaceholderText>
+                </>
             ) : isError(model) || !src ? (
-                <ErrorIcon />
+                <>
+                    <ErrorIcon />
+                    <PlaceholderText>Image Error</PlaceholderText>
+                </>
             ) : (
                 <img src={src} alt={model.name} />
             )}
