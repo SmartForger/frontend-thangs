@@ -55,6 +55,8 @@ export const NewTheme = {
     cardBackground: WHITE_1,
     cardHeartColor: BLUE_2,
     deleteButton: GREY_7,
+    dropdownTextColor: OFF_WHITE,
+    dropdownBackgroundColor: GREY_7,
     errorTextColor: RED_4,
     errorTextBackground: RED_1,
     emptyImageBackground: GREY_7,

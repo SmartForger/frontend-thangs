@@ -98,6 +98,16 @@ const CATEGORIES = [
     { value: 'hobbyist', label: 'Hobbyist' },
 ];
 
+const DropdownIndicator = styled.div`
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+
+    /* We unfortunately need to hardcode this value because of how react-select works */
+    border-top: 12px solid #f5f5f5;
+`;
+
 function ShowError({ message }) {
     return <ErrorStyled>{message}</ErrorStyled>;
 }
@@ -221,6 +231,19 @@ const Page = () => {
                                     isClearable
                                     options={CATEGORIES}
                                     ref={register}
+                                    components={{
+                                        IndicatorSeparator: () => null,
+                                        DropdownIndicator,
+                                    }}
+                                    styles={{
+                                        control: (base, ...args) => {
+                                            console.log('args', args);
+                                            return {
+                                                ...base,
+                                                border: 'none',
+                                            };
+                                        },
+                                    }}
                                 />
                             </Field>
                         </Column>
