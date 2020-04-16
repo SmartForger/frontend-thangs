@@ -37,6 +37,7 @@ const MODEL_FRAGMENT = gql`
         weight
         height
         material
+        uploadedFile
     }
 `;
 
