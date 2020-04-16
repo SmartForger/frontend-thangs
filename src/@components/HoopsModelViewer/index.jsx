@@ -90,7 +90,7 @@ function HoopsModelViewer({ className, model }) {
                     setViewerInitStatus(ViewerInitStates.LoadingModel);
                 }
                 // return fetch(
-                //     `${MODEL_PREP_ENDPOINT_URI}/${model.filename}`
+                //     `${MODEL_PREP_ENDPOINT_URI}/${model.uploadedFile}`
                 // )
                 //     .then(response => response.json())
                 //     .then(({ ok, step }) => {
@@ -121,9 +121,7 @@ function HoopsModelViewer({ className, model }) {
         const viewer = new Communicator.WebViewer({
             container: viewerContainer.current,
             endpointUri: HOOPS_WS_ENDPOINT_URI,
-            // TODO: use model filename
-            // model: `${model.filename}.scz`,
-            model: 'microengine',
+            model: `${model.uploadedFile}.scz`,
             rendererType: Communicator.RendererType.Client,
         });
 
