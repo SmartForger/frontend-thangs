@@ -61,6 +61,7 @@ export const NewTheme = {
     flashColor: GREY_5,
     flashColorText: WHITE_3,
     formLabelColor: GREY_4,
+    imagePlaceholderText: GREY_3,
     invertedHeaderBackground: BLACK_2,
     headerFont,
     headerColor: BLACK_3,
