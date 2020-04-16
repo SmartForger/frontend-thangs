@@ -11,22 +11,6 @@ import { ReactComponent as CompositeIcon } from '@svg/icon-composite.svg';
 import { ReactComponent as WireframeIcon } from '@svg/icon-wireframe.svg';
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg';
 
-const Info = styled.div`
-    position: absolute;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: space-around;
-    height: 13vw;
-    width: 100px;
-    z-index: 1;
-    top: 32px;
-    right: 32px;
-
-    > div {
-        margin-left: 1vw;
-    }
-`;
-
 const ViewerContainer = styled.div`
     pointer-events: none;
     grid-area: viewer;
@@ -43,26 +27,7 @@ const ViewerContainer = styled.div`
     ${props => props.theme.shadow};
 `;
 
-const DisplayOptions = styled.div`
-    bottom: 32px;
-    left: 64px;
-    position: absolute;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: flex-end;
-    z-index: 1;
-
-    > div {
-        margin-right: 15px;
-    }
-`;
-
-const DisplayButton = styled.button`
-    max-width: 100%;
-    width: auto;
-    border: none;
-    padding: 4px;
-    border-radius: 4px;
+const DisplayButton = styled.div`
     cursor: pointer;
 `;
 
@@ -90,7 +55,7 @@ const ButtonGroup = styled.div`
     display: flex;
     align-items: center;
 
-    svg + svg {
+    div + div {
         margin-left: 16px;
     }
 `;
@@ -127,51 +92,46 @@ function ModelViewerDisplay({ model, className }) {
                 wireFrameColor={wireColor}
                 boxShadow="none"
             />
+
             <ControlBar>
                 <ButtonGroup>
                     <ControlText>MODEL VIEW</ControlText>
-                    <ShadedIcon />
-                    <WireframeIcon />
-                    <CompositeIcon />
+                    <DisplayButton
+                        onClick={() => {
+                            changeMode('shaded');
+                        }}
+                    >
+                        <ShadedIcon />
+                    </DisplayButton>
+                    <DisplayButton
+                        onClick={() => {
+                            changeMode('wireframe');
+                        }}
+                    >
+                        <WireframeIcon />
+                    </DisplayButton>
+                    <DisplayButton
+                        onClick={() => {
+                            changeMode('composite');
+                        }}
+                    >
+                        <CompositeIcon />
+                    </DisplayButton>
                 </ButtonGroup>
                 <ButtonGroup>
                     <ControlText>CHANGE COLOR</ControlText>
-                    <ColorIcon1 />
-                    <ColorIcon2 />
+                    <ColorPicker color={meshColor} onChange={changeMeshColor}>
+                        <ColorIcon1 />
+                    </ColorPicker>
+                    <ColorPicker color={wireColor} onChange={changeWireColor}>
+                        <ColorIcon2 />
+                    </ColorPicker>
                 </ButtonGroup>
                 <Placeholder />
             </ControlBar>
         </ViewerContainer>
     );
 }
-
-/* <Info> */
-/*   <DisplayButton */
-/*     onClick={() => { */
-/*       changeMode('shaded'); */
-/*     }} */
-/*   > */
-/*     Shaded */
-/*   </DisplayButton> */
-/*   <DisplayButton */
-/*     onClick={() => { */
-/*       changeMode('wireframe'); */
-/*     }} */
-/*   > */
-/*     Wireframe */
-/*   </DisplayButton> */
-/*   <DisplayButton */
-/*     onClick={() => { */
-/*       changeMode('composite'); */
-/*     }} */
-/*   > */
-/*     Composite */
-/*   </DisplayButton> */
-/* </Info> */
-/* <DisplayOptions> */
-/* <ColorPicker color={meshColor} onChange={changeMeshColor} /> */
-/* <ColorPicker color={wireColor} onChange={changeWireColor} /> */
-/* </DisplayOptions> */
 
 const HowToTextStyled = styled.div`
     max-width: 474px;
