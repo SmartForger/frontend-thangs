@@ -13,6 +13,7 @@ import { ReactComponent as EdgesColor } from '@svg/view-color-edges.svg';
 import { ReactComponent as ShadeColor } from '@svg/view-color-shade.svg';
 
 const HOOPS_WS_ENDPOINT_URI = 'ws://localhost:11182/';
+const MODEL_PREP_ENDPOINT_URI = 'http://localhost:8081/api/prepare-model';
 
 const Container = styled.div`
     border-radius: 5px;
@@ -39,14 +40,32 @@ const LoadingContainer = styled.div`
     align-items: center;
 `;
 
-const LoadingIndicator = ({ loading }) => {
-    if (!loading) {
+const ViewerInitStates = {
+    LoadingScript: 'loading-script',
+    Error: 'error',
+    LoadingModel: 'loading-model',
+    ModelLoaded: 'model-loaded',
+};
+
+const isLoadingState = status =>
+    status === ViewerInitStates.LoadingScript ||
+    status === ViewerInitStates.LoadingModel;
+
+const StatusIndicator = ({ status }) => {
+    if (status === ViewerInitStates.ModelLoaded) {
         return null;
     }
     return (
         <LoadingContainer>
-            <Spinner />
-            <p>Loading preview...</p>
+            {isLoadingState(status) && (
+                <>
+                    <Spinner />
+                    <p>Loading preview...</p>
+                </>
+            )}
+            {status === ViewerInitStates.Error && (
+                <div>Failed to load preview.</div>
+            )}
         </LoadingContainer>
     );
 };
@@ -54,42 +73,68 @@ const LoadingIndicator = ({ loading }) => {
 function HoopsModelViewer({ className, model }) {
     const viewerContainer = useRef();
     const webViewer = useRef();
-    const [viewerInitialized, setViewerInitialized] = useState(false);
-    const [loadingScene, setLoadingScene] = useState(true);
+    const [viewerInitStatus, setViewerInitStatus] = useState(
+        ViewerInitStates.LoadingScript
+    );
 
     useEffect(() => {
-        if (viewerInitialized) {
+        if (viewerInitStatus !== ViewerInitStates.LoadingScript) {
             return;
         }
 
         let isActive = true;
-        ensureScriptIsLoaded('vendors/hoops_web_viewer.js').then(() => {
-            if (isActive) {
-                setViewerInitialized(true);
-            }
-        });
+        ensureScriptIsLoaded('vendors/hoops_web_viewer.js')
+            .then(() => {
+                // TODO: replace this with the model-prepare API call below.
+                if (isActive) {
+                    setViewerInitStatus(ViewerInitStates.LoadingModel);
+                }
+                // return fetch(
+                //     `${MODEL_PREP_ENDPOINT_URI}/${model.filename}`
+                // )
+                //     .then(response => response.json())
+                //     .then(({ ok, step }) => {
+                //         if (!ok || step !== 6) {
+                //             throw new Error('Model preparation failed.');
+                //         }
+
+                //         if (isActive) {
+                //             setViewerInitStatus(ViewerInitStates.LoadingModel);
+                //         }
+                //     });
+            })
+            .catch(() => {
+                if (isActive) {
+                    setViewerInitStatus(ViewerInitStates.Error);
+                }
+            });
         return () => (isActive = false);
-    }, [viewerInitialized]);
+    }, [viewerInitStatus]);
+
+    useEffect(() => () => webViewer?.current?.shutdown?.(), []);
 
     useEffect(() => {
-        if (!viewerInitialized || !viewerContainer.current) {
+        if (viewerInitStatus !== ViewerInitStates.LoadingModel) {
             return;
         }
 
         const viewer = new Communicator.WebViewer({
             container: viewerContainer.current,
             endpointUri: HOOPS_WS_ENDPOINT_URI,
+            // TODO: use model filename
+            // model: `${model.filename}.scz`,
             model: 'microengine',
             rendererType: Communicator.RendererType.Client,
         });
-
-        webViewer.current = viewer;
 
         viewer.setCallbacks({
             sceneReady() {
                 // passing "null" sets the background to transparent
                 viewer.view.setBackgroundColor(null, null);
-                setLoadingScene(false);
+                setViewerInitStatus(ViewerInitStates.ModelLoaded);
+            },
+            modelLoadFailure(name, reason, e) {
+                setViewerInitStatus(ViewerInitStates.Error);
             },
         });
 
@@ -98,20 +143,20 @@ function HoopsModelViewer({ className, model }) {
         const handleResize = () => {
             viewer.resizeCanvas();
         };
-
         window.addEventListener('resize', handleResize);
 
+        webViewer.current = viewer;
         return () => {
             window.removeEventListener('resize', handleResize);
-            viewer.shutdown();
         };
-    }, [viewerInitialized]);
+    }, [viewerInitStatus]);
 
     const handleResetView = () => {
         if (webViewer.current) {
             webViewer.current.reset();
         }
     };
+
     const handleDrawModeChange = modeName => {
         if (webViewer.current) {
             switch (modeName) {
@@ -144,7 +189,7 @@ function HoopsModelViewer({ className, model }) {
     return (
         <Container>
             <WebViewContainer className={className}>
-                <LoadingIndicator loading={loadingScene} />
+                <StatusIndicator status={viewerInitStatus} />
                 <div ref={viewerContainer} />
             </WebViewContainer>
             <Toolbar
