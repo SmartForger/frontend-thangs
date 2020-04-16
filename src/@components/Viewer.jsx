@@ -9,8 +9,8 @@ const Viewer = ({
     url,
     height = 'calc( 100% - 80px )',
     width = '100%',
-    mode = 'shaded',
-    meshColor = '#FF0000',
+    mode,
+    meshColor,
     wireFrameColor,
     boxShadow = 'inset 0 0 0 5px black',
 }) => {
@@ -106,12 +106,7 @@ function Controls() {
     );
 }
 
-const Asset = ({
-    url,
-    mode = 'shaded',
-    meshColor = '0xFFFFFF',
-    wireFrameColor = '0x000000',
-}) => {
+const Asset = ({ url, mode, meshColor, wireFrameColor }) => {
     const [stl, loading, error] = useStl(url);
     const scene = new THREE.Scene();
 
