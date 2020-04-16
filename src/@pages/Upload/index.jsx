@@ -8,6 +8,8 @@ import { Uploader } from '@components/Uploader';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 import { Spinner } from '@components/Spinner';
+import { UploadFrame } from '@components/UploadFrame';
+import { Dots } from '@components/UploadProgress';
 
 const Row = styled.div`
     display: flex;
@@ -113,6 +115,18 @@ function ShowError({ message }) {
     return <ErrorStyled>{message}</ErrorStyled>;
 }
 
+const DarkBackgroundSpinner = styled(Spinner)`
+    margin-top: 224px;
+    & .path {
+        stroke: ${props => props.theme.uploaderText};
+    }
+`;
+
+const DotsStyled = styled(Dots)`
+    width: 139px;
+    margin-bottom: 224px;
+`;
+
 const Page = () => {
     const history = useHistory();
     const [file, setFile] = useState();
@@ -170,7 +184,14 @@ const Page = () => {
                                 margin-right: 32px;
                             `}
                         >
-                            <Uploader file={file} setFile={setFile} />
+                            {isUploading ? (
+                                <UploadFrame>
+                                    <DarkBackgroundSpinner />
+                                    <DotsStyled text="Uploading" />
+                                </UploadFrame>
+                            ) : (
+                                <Uploader file={file} setFile={setFile} />
+                            )}
                         </Column>
                         <Column
                             css={`

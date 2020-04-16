@@ -12,22 +12,24 @@ const DotsContainer = styled.div`
     width: 256px;
 `;
 
-function Dots() {
+export function Dots({ text, className }) {
     const [dots, setDots] = useState('.');
-    useEffect(
-        () => {
-            const timeout = setTimeout(() => {
-                if (dots.length < 3) {
-                    setDots(`${dots}.`);
-                } else {
-                    setDots('.');
-                }
-            }, 500);
-            return () => clearTimeout(timeout);
-        },
-        [dots, setDots],
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            if (dots.length < 3) {
+                setDots(`${dots}.`);
+            } else {
+                setDots('.');
+            }
+        }, 500);
+        return () => clearTimeout(timeout);
+    }, [dots, setDots]);
+    return (
+        <DotsContainer className={className}>
+            {text}
+            {dots}
+        </DotsContainer>
     );
-    return <DotsContainer>Searching matches{dots}</DotsContainer>;
 }
 
 const CHECK = 'check';
@@ -45,25 +47,22 @@ const IconContainer = styled.div`
 
 function Icons() {
     const [icon, setIcon] = useState(CHECK);
-    useEffect(
-        () => {
-            const timeout = setTimeout(() => {
-                if (icon === CHECK) {
-                    setIcon(LENS);
-                } else if (icon === LENS) {
-                    setIcon(GRAPH);
-                } else if (icon === GRAPH) {
-                    setIcon(RULER);
-                } else if (icon === RULER) {
-                    setIcon(PROTRACTOR);
-                } else if (icon === PROTRACTOR) {
-                    setIcon(LENS);
-                }
-            }, 2000);
-            return () => clearTimeout(timeout);
-        },
-        [icon, setIcon],
-    );
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            if (icon === CHECK) {
+                setIcon(LENS);
+            } else if (icon === LENS) {
+                setIcon(GRAPH);
+            } else if (icon === GRAPH) {
+                setIcon(RULER);
+            } else if (icon === RULER) {
+                setIcon(PROTRACTOR);
+            } else if (icon === PROTRACTOR) {
+                setIcon(LENS);
+            }
+        }, 2000);
+        return () => clearTimeout(timeout);
+    }, [icon, setIcon]);
 
     return (
         <IconContainer>
@@ -92,7 +91,7 @@ export function UploadProgress() {
             `}
         >
             <Icons />
-            <Dots />
+            <Dots text="Searching matches" />
         </UploadFrame>
     );
 }
