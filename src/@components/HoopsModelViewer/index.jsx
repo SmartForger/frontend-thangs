@@ -53,7 +53,7 @@ const LoadingIndicator = ({ loading }) => {
 
 function HoopsModelViewer({ className, model }) {
     const viewerContainer = useRef();
-    const webViewer = useRef();
+    const [webViewer, setWebViewer] = useState();
     const [viewerInitialized, setViewerInitialized] = useState(false);
     const [loadingScene, setLoadingScene] = useState(true);
 
@@ -82,6 +82,7 @@ function HoopsModelViewer({ className, model }) {
             model: 'microengine',
             rendererType: Communicator.RendererType.Client,
         });
+        setWebViewer(viewer);
 
         viewer.setCallbacks({
             sceneReady() {
@@ -91,41 +92,46 @@ function HoopsModelViewer({ className, model }) {
             },
         });
 
-        // TODO: handle window resize
-
         viewer.start();
-        webViewer.current = viewer;
 
         return () => {
             viewer.shutdown();
         };
     }, [viewerInitialized]);
 
+    useEffect(() => {
+        const handleResize = () => {
+            if (webViewer) {
+                webViewer.resizeCanvas();
+            }
+        };
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, [webViewer]);
+
     const handleResetView = () => {
-        if (webViewer.current) {
-            webViewer.current.view.setViewOrientation(
+        if (webViewer) {
+            webViewer.view.setViewOrientation(
                 Communicator.ViewOrientation.Iso,
                 400
             );
         }
     };
     const handleDrawModeChange = modeName => {
-        if (webViewer.current) {
+        if (webViewer) {
             switch (modeName) {
                 case 'shaded':
-                    webViewer.current.view.setDrawMode(
+                    webViewer.view.setDrawMode(
                         Communicator.DrawMode.WireframeOnShaded
                     );
                     break;
                 case 'wire':
-                    webViewer.current.view.setDrawMode(
-                        Communicator.DrawMode.Wireframe
-                    );
+                    webViewer.view.setDrawMode(Communicator.DrawMode.Wireframe);
                     break;
                 case 'xray':
-                    webViewer.current.view.setDrawMode(
-                        Communicator.DrawMode.XRay
-                    );
+                    webViewer.view.setDrawMode(Communicator.DrawMode.XRay);
                     break;
                 default:
                     console.error('Unsupported draw mode!', modeName);
