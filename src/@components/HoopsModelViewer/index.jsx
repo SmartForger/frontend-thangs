@@ -4,20 +4,19 @@ import styled from 'styled-components';
 
 import { ensureScriptIsLoaded } from './ensureScriptIsLoaded';
 import { Spinner } from '@components/Spinner';
+import { AnchorButton } from '@components/AnchorButton';
+
+import { ReactComponent as WireMode } from '@svg/view-mode-wire.svg';
+import { ReactComponent as ShadedMode } from '@svg/view-mode-shaded.svg';
+import { ReactComponent as XRayMode } from '@svg/view-mode-xray.svg';
+import { ReactComponent as EdgesColor } from '@svg/view-color-edges.svg';
+import { ReactComponent as ShadeColor } from '@svg/view-color-shade.svg';
 
 const HOOPS_WS_ENDPOINT_URI = 'ws://localhost:11182/';
 
 const Container = styled.div`
     border-radius: 5px;
     ${props => props.theme.shadow};
-`;
-
-const ToolbarContainer = styled.div`
-    background-color: #ffffff;
-    box-shadow: none;
-    border-radius: 0 0 5px 5px;
-    border-top: 1px solid #eeeeee;
-    padding: 8px;
 `;
 
 const WebViewContainer = styled.div`
@@ -54,6 +53,7 @@ const LoadingIndicator = ({ loading }) => {
 
 function HoopsModelViewer({ className, model }) {
     const viewerContainer = useRef();
+    const webViewer = useRef();
     const [viewerInitialized, setViewerInitialized] = useState(false);
     const [loadingScene, setLoadingScene] = useState(true);
 
@@ -91,12 +91,26 @@ function HoopsModelViewer({ className, model }) {
             },
         });
 
+        // TODO: handle window resize
+
         viewer.start();
+        webViewer.current = viewer;
 
         return () => {
             viewer.shutdown();
         };
     }, [viewerInitialized]);
+
+    // TODO: implement these
+    const handleResetView = () => {
+        console.log('EVENT: reset view!');
+    };
+    const handleDrawModeChange = modeName => {
+        console.log('EVENT: change draw mode: ', modeName);
+    };
+    const handleColorChange = (modeName, color) => {
+        console.log('EVENT: change color: ', modeName, ' ', color);
+    };
 
     return (
         <Container>
@@ -104,9 +118,88 @@ function HoopsModelViewer({ className, model }) {
                 <LoadingIndicator loading={loadingScene} />
                 <div ref={viewerContainer} />
             </WebViewContainer>
-            <ToolbarContainer>Toolbar</ToolbarContainer>
+            <Toolbar
+                onResetView={handleResetView}
+                onDrawModeChange={handleDrawModeChange}
+                onColorChange={handleColorChange}
+            />
         </Container>
     );
 }
 
 export { HoopsModelViewer as ModelViewer };
+
+const ToolbarContainer = styled.div`
+    background-color: #ffffff;
+    box-shadow: none;
+    border-radius: 0 0 5px 5px;
+    border-top: 1px solid #eeeeee;
+    padding: 24px;
+
+    display: flex;
+    justify-content: space-between;
+
+    color: rgb(152, 152, 152);
+    font-size: 12px;
+    font-weight: 500;
+`;
+
+const ToolGroup = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const ToolGroupTitle = styled.div`
+    margin-left: 16px;
+    text-transform: uppercase;
+`;
+
+const ToolButton = styled.button`
+    margin-left: 16px;
+    border: none;
+    background: none;
+    text-decoration: none;
+    cursor: pointer;
+`;
+
+const ResetButton = styled(AnchorButton)`
+    font-weight: 500;
+    font-size: 14px;
+`;
+
+function Toolbar({ onResetView, onDrawModeChange, onColorChange }) {
+    const makeDrawModeHandler = modeName => () => {
+        onDrawModeChange(modeName);
+    };
+
+    const makeColorHandler = (modeName, color) => () => {
+        onColorChange(modeName, color);
+    };
+
+    return (
+        <ToolbarContainer>
+            <ToolGroup>
+                <ToolGroupTitle>Model View</ToolGroupTitle>
+                <ToolButton onClick={makeDrawModeHandler('shaded')}>
+                    <ShadedMode />
+                </ToolButton>
+                <ToolButton onClick={makeDrawModeHandler('wire')}>
+                    <WireMode />
+                </ToolButton>
+                <ToolButton onClick={makeDrawModeHandler('xray')}>
+                    <XRayMode />
+                </ToolButton>
+            </ToolGroup>
+            <ToolGroup>
+                <ToolGroupTitle>Change Color</ToolGroupTitle>
+                <ToolButton onClick={makeColorHandler('edges', 'red')}>
+                    <EdgesColor />
+                </ToolButton>
+                <ToolButton onClick={makeColorHandler('shade', 'blue')}>
+                    <ShadeColor />
+                </ToolButton>
+            </ToolGroup>
+            <ResetButton onClick={onResetView}>Reset Image</ResetButton>
+        </ToolbarContainer>
+    );
+}
