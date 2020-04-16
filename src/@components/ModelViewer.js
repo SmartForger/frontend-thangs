@@ -194,8 +194,8 @@ const ExitIconStyled = styled.div`
     top: 32px;
 
     svg {
-        fill: #404040;
-        stroke: #404040;
+        fill: ${props => props.theme.viewerExitColor};
+        stroke: ${props => props.theme.viewerExitColor};
     }
 `;
 

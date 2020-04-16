@@ -106,6 +106,7 @@ export const NewTheme = {
     uploaderText: GREY_3,
     viewerText: GREY_6,
     viewerTitle: BLACK_1,
+    viewerExitColor: BLACK_3,
 };
 
 export const NewDarkTheme = {
