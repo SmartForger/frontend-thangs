@@ -62,6 +62,8 @@ const ThumbnailContainer = styled.div`
             position: absolute;
             display: block;
             top: 72.5%;
+            left: 50%;
+            transform: translateX(-50%);
         }
     }
 `;
