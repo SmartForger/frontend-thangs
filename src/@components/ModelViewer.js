@@ -58,7 +58,7 @@ const DisplayButton = styled.button`
     cursor: pointer;
 `;
 
-function ModelViewer({ model, className }) {
+function ModelViewerDisplay({ model, className }) {
     const [mode, setMode] = useState('wireframe');
     const [meshColor, setMeshColor] = useState('#FFFFFF');
     const [wireColor, setWireColor] = useState('#000000');
@@ -113,6 +113,10 @@ function ModelViewer({ model, className }) {
             />
         </ViewerContainer>
     );
+}
+
+function ModelViewer({ model, className }) {
+    return <ModelViewerDisplay model={model} className={className} />;
 }
 
 export { ModelViewer };
