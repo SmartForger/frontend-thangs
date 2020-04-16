@@ -139,7 +139,7 @@ const Page = () => {
         { loading: isUploading },
     ] = graphqlService.useUploadModelMutation(id);
 
-    const { register, handleSubmit, watch, errors } = useForm();
+    const { register, handleSubmit, errors } = useForm();
 
     const onSubmit = async data => {
         const requiredVariables = {

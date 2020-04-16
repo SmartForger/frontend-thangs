@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
-import { withAuthHeader } from '@services/authenticated-fetch';
 
 const useStl = url => {
     const [data, setData] = useState(null);
@@ -32,7 +31,7 @@ const useStl = url => {
             }
             fetchData();
         },
-        [url],
+        [url]
     );
 
     return [data, loading, error];

@@ -5,7 +5,7 @@
  */
 const OFF_WHITE = '#f5f5f5';
 const GREY_1 = '#dbdbdf';
-const GREY_2 = '#d9d9d9';
+// const GREY_2 = '#d9d9d9';
 const GREY_3 = '#b9b9be';
 const GREY_4 = '#989898';
 const GREY_5 = '#88888b';
