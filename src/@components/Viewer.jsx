@@ -7,7 +7,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const Viewer = ({
     url,
-    height = '100%',
+    height = 'calc( 100% - 80px )',
     width = '100%',
     mode = 'shaded',
     meshColor = '#FF0000',
@@ -21,8 +21,8 @@ const Viewer = ({
                 height: height,
                 width: width,
                 boxShadow,
-                background: '#999999',
-                borderRadius: '8px',
+                background: '#ffffff',
+                borderRadius: '8px 8px 0 0',
             }}
         >
             <ambientLight intensity={0.9} />
@@ -51,7 +51,7 @@ function HoverCube({ position }) {
             e.stopPropagation();
             setIsHovered(value);
         },
-        [setIsHovered],
+        [setIsHovered]
     );
 
     const onClick = useCallback(
@@ -59,7 +59,7 @@ function HoverCube({ position }) {
             e.stopPropagation();
             setActive(v => !v);
         },
-        [setActive],
+        [setActive]
     );
 
     useFrame(({ gl, scene, camera }) => {

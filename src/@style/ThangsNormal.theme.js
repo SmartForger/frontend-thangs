@@ -107,6 +107,8 @@ export const NewTheme = {
     viewerText: GREY_6,
     viewerTitle: BLACK_1,
     viewerExitColor: BLACK_3,
+    viewerControlBorderColor: GREY_1,
+    viewerControlText: GREY_4,
 };
 
 export const NewDarkTheme = {
