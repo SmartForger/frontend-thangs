@@ -3,6 +3,11 @@ import styled from 'styled-components';
 
 import { Viewer } from '@components/Viewer';
 import { ColorPicker } from '@components/ColorPicker';
+import { ReactComponent as ColorIcon1 } from '@svg/icon-color-1.svg';
+import { ReactComponent as ColorIcon2 } from '@svg/icon-color-2.svg';
+import { ReactComponent as ShadedIcon } from '@svg/icon-shaded.svg';
+import { ReactComponent as CompositeIcon } from '@svg/icon-composite.svg';
+import { ReactComponent as WireframeIcon } from '@svg/icon-wireframe.svg';
 
 const Info = styled.div`
     position: absolute;
@@ -151,12 +156,42 @@ function HowToTitle() {
     return <HowToTitleStyled>How to Use:</HowToTitleStyled>;
 }
 
+const IconSpacing = styled.div`
+    margin-left: 48px;
+`;
+
+const IconContainer = styled.div`
+    display: flex;
+
+    svg + svg {
+        margin-left: 24px;
+    }
+`;
+
+function HowToIcons() {
+    return (
+        <IconContainer>
+            <div>
+                <ShadedIcon />
+                <WireframeIcon />
+                <CompositeIcon />
+            </div>
+
+            <IconSpacing>
+                <ColorIcon1 />
+                <ColorIcon2 />
+            </IconSpacing>
+        </IconContainer>
+    );
+}
+
 function HowTo({ className }) {
     return (
         <ViewerContainer className={className}>
             <HowToContainer>
                 <HowToTitle />
                 <HowToText />
+                <HowToIcons />
             </HowToContainer>
         </ViewerContainer>
     );
