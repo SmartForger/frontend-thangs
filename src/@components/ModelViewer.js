@@ -3,11 +3,13 @@ import styled from 'styled-components';
 
 import { Viewer } from '@components/Viewer';
 import { ColorPicker } from '@components/ColorPicker';
+import { useLocalStorage } from '@customHooks/Storage';
 import { ReactComponent as ColorIcon1 } from '@svg/icon-color-1.svg';
 import { ReactComponent as ColorIcon2 } from '@svg/icon-color-2.svg';
 import { ReactComponent as ShadedIcon } from '@svg/icon-shaded.svg';
 import { ReactComponent as CompositeIcon } from '@svg/icon-composite.svg';
 import { ReactComponent as WireframeIcon } from '@svg/icon-wireframe.svg';
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg';
 
 const Info = styled.div`
     position: absolute;
@@ -185,9 +187,25 @@ function HowToIcons() {
     );
 }
 
-function HowTo({ className }) {
+const ExitIconStyled = styled.div`
+    cursor: pointer;
+    position: absolute;
+    right: 32px;
+    top: 32px;
+
+    svg {
+        fill: #404040;
+        stroke: #404040;
+    }
+`;
+
+function HowTo({ className, setSeenHowTo }) {
+    const handleClick = () => setSeenHowTo(true);
     return (
         <ViewerContainer className={className}>
+            <ExitIconStyled onClick={handleClick}>
+                <ExitIcon />
+            </ExitIconStyled>
             <HowToContainer>
                 <HowToTitle />
                 <HowToText />
@@ -198,11 +216,12 @@ function HowTo({ className }) {
 }
 
 function ModelViewer({ model, className }) {
-    const showHowTo = true;
-    return showHowTo ? (
-        <HowTo className={className} />
-    ) : (
+    const [seenHowTo, setSeenHowTo] = useLocalStorage('seenHowTo', false);
+
+    return seenHowTo ? (
         <ModelViewerDisplay model={model} className={className} />
+    ) : (
+        <HowTo className={className} setSeenHowTo={setSeenHowTo} />
     );
 }
 
