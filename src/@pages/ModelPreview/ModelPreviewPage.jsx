@@ -6,7 +6,7 @@ import { ProfilePicture } from '@components/ProfilePicture';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 import { ModelDetails } from './ModelDetails';
 import { LikeModelButton } from '@components/LikeModelButton';
-import { NewModelViewer } from '@components/ModelViewer';
+import { ModelViewer } from '@components/ModelViewer';
 
 const BackButton = styled.button`
     width: 48px;
@@ -134,7 +134,7 @@ const ModelPreviewPage = ({ model, currentUser }) => {
             </HeaderStyled>
             <ModelContainer>
                 <ModelViewerContainer>
-                    <NewModelViewer model={model} />
+                    <ModelViewer model={model} />
                 </ModelViewerContainer>
                 <Sidebar>
                     <LikeModelButton currentUser={currentUser} model={model} />
