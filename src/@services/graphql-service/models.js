@@ -32,6 +32,11 @@ const MODEL_FRAGMENT = gql`
         likesCount
         commentsCount
         uploadStatus
+        description
+        category
+        weight
+        height
+        material
     }
 `;
 
@@ -233,7 +238,11 @@ const UPLOAD_MODEL_MUTATION = gql`
         $file: Upload!
         $name: String!
         $size: Int!
-        $userEmail: String!
+        $description: String!
+        $weight: String
+        $height: String
+        $material: String
+        $category: String
         $searchUpload: Boolean = false
     ) {
         uploadModel(
@@ -241,7 +250,11 @@ const UPLOAD_MODEL_MUTATION = gql`
             units: "mm"
             name: $name
             size: $size
-            userEmail: $userEmail
+            description: $description
+            category: $category
+            weight: $weight
+            height: $height
+            material: $material
             searchUpload: $searchUpload
         ) {
             model {

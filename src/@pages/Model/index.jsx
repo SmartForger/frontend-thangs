@@ -5,7 +5,7 @@ import { useHistory, Link } from 'react-router-dom';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { ModelCollection } from '@components/ModelCollection';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
-import { ModelDetails } from '../ModelPreview/ModelDetailsPlaceholder';
+import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { LikeModelButton } from '@components/LikeModelButton';
 import { CommentsForModel } from '@components/CommentsForModel';
 import { NewModelViewer } from '@components/ModelViewer';
@@ -105,6 +105,10 @@ const ProfileLink = styled(Link)`
     text-decoration: none;
 `;
 
+const Description = styled.div`
+    margin: 32px 0;
+`;
+
 function ModelTitle({ model, className }) {
     return (
         <ModelTitleContainer className={className}>
@@ -157,6 +161,7 @@ const ModelDetailPage = ({ model, currentUser }) => {
                 <Sidebar>
                     <LikeModelButton currentUser={currentUser} model={model} />
                     <ModelTitle model={model} />
+                    <Description>{model.description}</Description>
                     <ModelDetails model={model} />
                     <Comments model={model} />
                 </Sidebar>
@@ -170,7 +175,7 @@ function Page() {
 
     const graphqlService = GraphqlService.getInstance();
     const { loading, error, model } = graphqlService.useModelByIdWithRelated(
-        id,
+        id
     );
     const [currentUser] = useLocalStorage('currentUser', null);
 
