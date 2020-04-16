@@ -9,7 +9,7 @@ const GREY_1 = '#dbdbdf';
 const GREY_3 = '#b9b9be';
 const GREY_4 = '#989898';
 const GREY_5 = '#88888b';
-// const GREY_6 = '#7a7a7a';
+const GREY_6 = '#7a7a7a';
 const GREY_7 = '#616168';
 const GREY_8 = '#e6e6e9';
 const GREY_9 = '#b9b9be';
@@ -104,6 +104,9 @@ export const NewTheme = {
     uploaderBackground: BLACK_2,
     uploaderBackgroundActive: BLACK_4,
     uploaderText: GREY_3,
+    viewerText: GREY_6,
+    viewerTitle: BLACK_1,
+    viewerExitColor: BLACK_3,
 };
 
 export const NewDarkTheme = {

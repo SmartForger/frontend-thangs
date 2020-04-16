@@ -3,6 +3,13 @@ import styled from 'styled-components';
 
 import { Viewer } from '@components/Viewer';
 import { ColorPicker } from '@components/ColorPicker';
+import { useLocalStorage } from '@customHooks/Storage';
+import { ReactComponent as ColorIcon1 } from '@svg/icon-color-1.svg';
+import { ReactComponent as ColorIcon2 } from '@svg/icon-color-2.svg';
+import { ReactComponent as ShadedIcon } from '@svg/icon-shaded.svg';
+import { ReactComponent as CompositeIcon } from '@svg/icon-composite.svg';
+import { ReactComponent as WireframeIcon } from '@svg/icon-wireframe.svg';
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg';
 
 const Info = styled.div`
     position: absolute;
@@ -58,7 +65,7 @@ const DisplayButton = styled.button`
     cursor: pointer;
 `;
 
-function ModelViewer({ model, className }) {
+function ModelViewerDisplay({ model, className }) {
     const [mode, setMode] = useState('wireframe');
     const [meshColor, setMeshColor] = useState('#FFFFFF');
     const [wireColor, setWireColor] = useState('#000000');
@@ -112,6 +119,109 @@ function ModelViewer({ model, className }) {
                 boxShadow="none"
             />
         </ViewerContainer>
+    );
+}
+
+const HowToTextStyled = styled.div`
+    max-width: 474px;
+    color: ${props => props.theme.viewerText};
+    margin-bottom: 72px;
+`;
+
+function HowToText() {
+    return (
+        <HowToTextStyled>
+            Model can be viewed as Wireframe, Shaded or Composite and changed
+            via the icons in the viewer. Wireframe color and shading color can
+            be changed using the paint icons in the viewer. Model can be zoomed
+            in and out and rotated 360 degrees.
+        </HowToTextStyled>
+    );
+}
+
+const HowToContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+`;
+
+const HowToTitleStyled = styled.h4`
+    font-size: 24px;
+    font-family: ${props => props.theme.headerFont};
+    color: ${props => props.theme.viewerTitle};
+    margin-bottom: 24px;
+`;
+
+function HowToTitle() {
+    return <HowToTitleStyled>How to Use:</HowToTitleStyled>;
+}
+
+const IconSpacing = styled.div`
+    margin-left: 48px;
+`;
+
+const IconContainer = styled.div`
+    display: flex;
+
+    svg + svg {
+        margin-left: 24px;
+    }
+`;
+
+function HowToIcons() {
+    return (
+        <IconContainer>
+            <div>
+                <ShadedIcon />
+                <WireframeIcon />
+                <CompositeIcon />
+            </div>
+
+            <IconSpacing>
+                <ColorIcon1 />
+                <ColorIcon2 />
+            </IconSpacing>
+        </IconContainer>
+    );
+}
+
+const ExitIconStyled = styled.div`
+    cursor: pointer;
+    position: absolute;
+    right: 32px;
+    top: 32px;
+
+    svg {
+        fill: ${props => props.theme.viewerExitColor};
+        stroke: ${props => props.theme.viewerExitColor};
+    }
+`;
+
+function HowTo({ className, setSeenHowTo }) {
+    const handleClick = () => setSeenHowTo(true);
+    return (
+        <ViewerContainer className={className}>
+            <ExitIconStyled onClick={handleClick}>
+                <ExitIcon />
+            </ExitIconStyled>
+            <HowToContainer>
+                <HowToTitle />
+                <HowToText />
+                <HowToIcons />
+            </HowToContainer>
+        </ViewerContainer>
+    );
+}
+
+function ModelViewer({ model, className }) {
+    const [seenHowTo, setSeenHowTo] = useLocalStorage('seenHowTo', false);
+
+    return seenHowTo ? (
+        <ModelViewerDisplay model={model} className={className} />
+    ) : (
+        <HowTo className={className} setSeenHowTo={setSeenHowTo} />
     );
 }
 
