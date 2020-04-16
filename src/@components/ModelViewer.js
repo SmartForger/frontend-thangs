@@ -115,13 +115,53 @@ function ModelViewerDisplay({ model, className }) {
     );
 }
 
+const HowToTextStyled = styled.div`
+    max-width: 474px;
+    color: ${props => props.theme.viewerText};
+    margin-bottom: 72px;
+`;
+
+function HowToText() {
+    return (
+        <HowToTextStyled>
+            Model can be viewed as Wireframe, Shaded or Composite and changed
+            via the icons in the viewer. Wireframe color and shading color can
+            be changed using the paint icons in the viewer. Model can be zoomed
+            in and out and rotated 360 degrees.
+        </HowToTextStyled>
+    );
+}
+
+const HowToContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+`;
+
+const HowToTitleStyled = styled.h4`
+    font-size: 24px;
+    font-family: ${props => props.theme.headerFont};
+    color: ${props => props.theme.viewerTitle};
+    margin-bottom: 24px;
+`;
+
+function HowToTitle() {
+    return <HowToTitleStyled>How to Use:</HowToTitleStyled>;
+}
+
 function HowTo({ className }) {
     return (
         <ViewerContainer className={className}>
-            <div>How to</div>
+            <HowToContainer>
+                <HowToTitle />
+                <HowToText />
+            </HowToContainer>
         </ViewerContainer>
     );
 }
+
 function ModelViewer({ model, className }) {
     const showHowTo = true;
     return showHowTo ? (
