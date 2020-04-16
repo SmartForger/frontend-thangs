@@ -147,15 +147,19 @@ const ToolbarContainer = styled.div`
 const ToolGroup = styled.div`
     display: flex;
     align-items: center;
+    margin: 0;
+    padding: 0;
 `;
 
 const ToolGroupTitle = styled.div`
-    margin-left: 16px;
     text-transform: uppercase;
+    margin: 0;
+    padding: 0;
 `;
 
 const ToolButton = styled.button`
     margin-left: 16px;
+    padding: 0;
     border: none;
     background: none;
     text-decoration: none;
