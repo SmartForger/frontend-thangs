@@ -115,8 +115,20 @@ function ModelViewerDisplay({ model, className }) {
     );
 }
 
+function HowTo({ className }) {
+    return (
+        <ViewerContainer className={className}>
+            <div>How to</div>
+        </ViewerContainer>
+    );
+}
 function ModelViewer({ model, className }) {
-    return <ModelViewerDisplay model={model} className={className} />;
+    const showHowTo = true;
+    return showHowTo ? (
+        <HowTo className={className} />
+    ) : (
+        <ModelViewerDisplay model={model} className={className} />
+    );
 }
 
 export { ModelViewer };
