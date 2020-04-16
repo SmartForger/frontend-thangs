@@ -55,7 +55,7 @@ const ButtonGroup = styled.div`
     display: flex;
     align-items: center;
 
-    div + div {
+    > div + div {
         margin-left: 16px;
     }
 `;
@@ -76,11 +76,11 @@ function ModelViewerDisplay({ model, className }) {
     };
 
     const changeMeshColor = (color, event) => {
-        setMeshColor(color.hex);
+        setMeshColor(color);
     };
 
     const changeWireColor = (color, event) => {
-        setWireColor(color.hex);
+        setWireColor(color);
     };
 
     return (
