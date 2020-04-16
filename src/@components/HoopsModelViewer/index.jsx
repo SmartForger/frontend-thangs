@@ -101,15 +101,41 @@ function HoopsModelViewer({ className, model }) {
         };
     }, [viewerInitialized]);
 
-    // TODO: implement these
     const handleResetView = () => {
-        console.log('EVENT: reset view!');
+        if (webViewer.current) {
+            webViewer.current.view.setViewOrientation(
+                Communicator.ViewOrientation.Iso,
+                400
+            );
+        }
     };
     const handleDrawModeChange = modeName => {
-        console.log('EVENT: change draw mode: ', modeName);
+        if (webViewer.current) {
+            switch (modeName) {
+                case 'shaded':
+                    webViewer.current.view.setDrawMode(
+                        Communicator.DrawMode.WireframeOnShaded
+                    );
+                    break;
+                case 'wire':
+                    webViewer.current.view.setDrawMode(
+                        Communicator.DrawMode.Wireframe
+                    );
+                    break;
+                case 'xray':
+                    webViewer.current.view.setDrawMode(
+                        Communicator.DrawMode.XRay
+                    );
+                    break;
+                default:
+                    console.error('Unsupported draw mode!', modeName);
+            }
+        }
     };
+
     const handleColorChange = (modeName, color) => {
         console.log('EVENT: change color: ', modeName, ' ', color);
+        // TODO: implement these
     };
 
     return (
