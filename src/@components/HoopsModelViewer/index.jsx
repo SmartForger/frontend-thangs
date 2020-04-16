@@ -8,19 +8,29 @@ import { Spinner } from '@components/Spinner';
 const HOOPS_WS_ENDPOINT_URI = 'ws://localhost:11182/';
 
 const Container = styled.div`
+    border-radius: 5px;
+    ${props => props.theme.shadow};
+`;
+
+const ToolbarContainer = styled.div`
+    background-color: #ffffff;
+    box-shadow: none;
+    border-radius: 0 0 5px 5px;
+    border-top: 1px solid #eeeeee;
+    padding: 8px;
+`;
+
+const WebViewContainer = styled.div`
     position: relative;
     width: 100%;
     height: 100%;
 
     background-color: #ffffff;
-    box-shadow: none;
-    border-radius: 8px;
+    border-radius: 5px 5px 0 0;
 
     > div {
         pointer-events: all;
     }
-
-    ${props => props.theme.shadow};
 `;
 
 const LoadingContainer = styled.div`
@@ -89,9 +99,12 @@ function HoopsModelViewer({ className, model }) {
     }, [viewerInitialized]);
 
     return (
-        <Container className={className}>
-            <LoadingIndicator loading={loadingScene} />
-            <div ref={viewerContainer} />
+        <Container>
+            <WebViewContainer className={className}>
+                <LoadingIndicator loading={loadingScene} />
+                <div ref={viewerContainer} />
+            </WebViewContainer>
+            <ToolbarContainer>Toolbar</ToolbarContainer>
         </Container>
     );
 }
