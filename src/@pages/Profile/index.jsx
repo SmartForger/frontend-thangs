@@ -141,7 +141,12 @@ function ModelsContent({ selected, user }) {
     if (!selected || R.isEmpty(models)) {
         return null;
     }
-    return <ModelCollection models={models} />;
+    return (
+        <ModelCollection
+            models={models}
+            noResultsText="This user has not uploaded any models yet"
+        />
+    );
 }
 
 function LikesContent({ selected, user }) {
@@ -149,7 +154,12 @@ function LikesContent({ selected, user }) {
         return null;
     }
     const models = getLikedModels(user);
-    return <ModelCollection models={models} />;
+    return (
+        <ModelCollection
+            models={models}
+            noResultsText="This user has not liked any models yet"
+        />
+    );
 }
 
 const TabGroupContainer = styled.div`

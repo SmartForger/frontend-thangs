@@ -1,5 +1,4 @@
 import React from 'react';
-import * as R from 'ramda';
 
 import * as GraphqlService from '@services/graphql-service';
 import { WithNewInvertedHeaderLayout } from '@style/Layout';
@@ -24,7 +23,11 @@ function Page() {
     }
 
     return (
-        <div>{!R.isEmpty(models) && <ModelCollection models={models} />}</div>
+        <ModelCollection
+            models={models}
+            noResultsText="We have no models to display right now"
+            noResultsSubtext="Please try again later."
+        />
     );
 }
 
