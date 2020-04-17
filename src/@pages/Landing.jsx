@@ -1,5 +1,4 @@
 import React from 'react';
-import * as R from 'ramda';
 
 import * as GraphqlService from '@services/graphql-service';
 import { WithNewInvertedHeaderLayout } from '@style/Layout';
@@ -23,9 +22,7 @@ function Page() {
         );
     }
 
-    return (
-        <div>{!R.isEmpty(models) && <ModelCollection models={models} />}</div>
-    );
+    return <ModelCollection models={models} />;
 }
 
 export const Landing = WithNewInvertedHeaderLayout(Page);

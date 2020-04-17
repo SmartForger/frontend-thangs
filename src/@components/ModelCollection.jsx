@@ -1,6 +1,8 @@
 import React from 'react';
 import { ModelCard } from './ModelCard';
 import styled from 'styled-components';
+import * as R from 'ramda';
+import { ReactComponent as NoResultsIcon } from '@svg/no-results-icon.svg';
 
 const ModelsStyled = styled.div`
     display: grid;
@@ -13,7 +15,44 @@ const ModelsStyled = styled.div`
     width: 100%;
 `;
 
+const NoResultsFrame = styled.div`
+    background-color: #dbdbdf;
+    color: #88888b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 136px;
+    padding-bottom: 168px;
+    border-radius: 8px;
+`;
+
+const Text = styled.div`
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 32px;
+    margin-bottom: 8px;
+`;
+
+function NoResultsDisplay({ text, subtext }) {
+    return (
+        <NoResultsFrame>
+            <NoResultsIcon />
+            <Text>{text}</Text>
+            <div>{subtext}</div>
+        </NoResultsFrame>
+    );
+}
+
 export function ModelCollection({ models = [], maxPerRow = 4 }) {
+    if (R.isEmpty(models)) {
+        return (
+            <NoResultsDisplay
+                text="No Geometric Similar Matches Found"
+                subtext="Try uploading a different model."
+            />
+        );
+    }
     return (
         <ModelsStyled singleRow={models.length < maxPerRow}>
             {models.map((model, index) => (
