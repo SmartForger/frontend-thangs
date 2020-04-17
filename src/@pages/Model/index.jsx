@@ -9,6 +9,7 @@ import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { LikeModelButton } from '@components/LikeModelButton';
 import { CommentsForModel } from '@components/CommentsForModel';
 import { ModelViewer } from '@components/HoopsModelViewer';
+import { ModelViewer as BackupViewer } from '@components/ModelViewer';
 
 import { useParams } from 'react-router-dom';
 import { useLocalStorage } from '@customHooks/Storage';
@@ -48,6 +49,10 @@ const ScrollableColumn = styled.div`
 `;
 
 const ModelViewerStyled = styled(ModelViewer)`
+    height: 416px;
+`;
+
+const BackupViewerStyled = styled(BackupViewer)`
     height: 416px;
 `;
 
@@ -143,7 +148,7 @@ const Header = styled.div`
     margin: 48px 0 24px;
 `;
 
-const ModelDetailPage = ({ model, currentUser }) => {
+const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
     const history = useHistory();
 
     return (
@@ -155,7 +160,11 @@ const ModelDetailPage = ({ model, currentUser }) => {
             </HeaderStyled>
             <ModelContainer>
                 <ModelColumn>
-                    <ModelViewerStyled model={model} />
+                    {showBackupViewer ? (
+                        <BackupViewerStyled model={model} />
+                    ) : (
+                        <ModelViewerStyled model={model} />
+                    )}
                     <Header>Geometric Similar Matches</Header>
                     <ModelCollection
                         models={model.relatedModels || []}
@@ -193,7 +202,13 @@ function Page() {
     } else if (error) {
         return <div>Error loading Model</div>;
     }
-    return <ModelDetailPage model={model} currentUser={currentUser} />;
+    return (
+        <ModelDetailPage
+            model={model}
+            currentUser={currentUser}
+            showBackupViewer={false}
+        />
+    );
 }
 
 export const ModelDetail = WithNewThemeLayout(Page);
