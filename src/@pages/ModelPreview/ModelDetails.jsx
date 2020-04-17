@@ -43,7 +43,7 @@ export function ModelDetails({ model }) {
 }
 
 function AttrRow({ name, value }) {
-    if (value == null || name == null) {
+    if (!value || !name) {
         return null;
     }
 
