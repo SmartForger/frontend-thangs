@@ -9,13 +9,14 @@ const titleCase = R.pipe(
 );
 
 const Table = styled.table`
-    line-height: 18px;
     border-spacing: 8px 0;
     margin: 0 -8px;
 `;
 
 const Cell = styled.td`
     padding: 0;
+    line-height: 18px;
+    vertical-align: middle;
 `;
 
 const FirstCell = styled(Cell)`
@@ -24,6 +25,10 @@ const FirstCell = styled(Cell)`
     font-weight: 600;
     line-height: 24px;
     text-transform: uppercase;
+`;
+
+const SecondCell = styled(Cell)`
+    padding-bottom: 1px;
 `;
 
 const Row = styled.tr``;
@@ -50,7 +55,7 @@ function AttrRow({ name, value }) {
     return (
         <Row>
             <FirstCell>{name}</FirstCell>
-            <Cell>{value}</Cell>
+            <SecondCell>{value}</SecondCell>
         </Row>
     );
 }
