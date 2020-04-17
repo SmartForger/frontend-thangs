@@ -6,7 +6,7 @@ import { ProfilePicture } from '@components/ProfilePicture';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 import { ModelDetails } from './ModelDetails';
 import { LikeModelButton } from '@components/LikeModelButton';
-import { ModelViewer } from '@components/ModelViewer';
+import { ModelViewer } from '@components/HoopsModelViewer';
 
 const BackButton = styled.button`
     width: 48px;
