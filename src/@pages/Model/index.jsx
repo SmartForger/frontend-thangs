@@ -60,17 +60,6 @@ const ModelColumn = styled(ScrollableColumn)`
 const Sidebar = styled(ScrollableColumn)`
     margin-left: 24px;
     width: 420px;
-
-    > table {
-        line-height: 18px;
-    }
-    > table td:first-child {
-        color: ${props => props.theme.modelDetailLabel};
-        font-size: 12px;
-        font-weight: 600;
-        line-height: 24px;
-        text-transform: uppercase;
-    }
 `;
 
 const ModelTitleContainer = styled.div`
