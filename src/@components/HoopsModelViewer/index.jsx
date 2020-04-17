@@ -6,6 +6,7 @@ import axios from 'axios';
 import { ensureScriptIsLoaded } from './ensureScriptIsLoaded';
 import { Spinner } from '@components/Spinner';
 import { Toolbar } from './Toolbar';
+import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg';
 
 // TODO: Set these to reasonable values for live site
 const MODEL_PREP_TIMEOUT = 5000;
@@ -31,6 +32,7 @@ const WebViewContainer = styled.div`
 `;
 
 const LoadingContainer = styled.div`
+    padding-top: 128px;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
@@ -47,25 +49,6 @@ const ViewerInitStates = {
 const isLoadingState = status =>
     status === ViewerInitStates.LoadingScript ||
     status === ViewerInitStates.LoadingModel;
-
-const StatusIndicator = ({ status }) => {
-    if (status === ViewerInitStates.ModelLoaded) {
-        return null;
-    }
-    return (
-        <LoadingContainer>
-            {isLoadingState(status) && (
-                <>
-                    <Spinner />
-                    <p>Loading preview...</p>
-                </>
-            )}
-            {status === ViewerInitStates.Error && (
-                <div>Failed to load preview.</div>
-            )}
-        </LoadingContainer>
-    );
-};
 
 function HoopsModelViewer({ className, model }) {
     const viewerContainer = useRef();
@@ -216,3 +199,32 @@ function HoopsModelViewer({ className, model }) {
 }
 
 export { HoopsModelViewer as ModelViewer };
+
+const PlaceholderText = styled.div`
+    font-weight: 500;
+    font-size: 16px;
+    margin-top: 24px;
+`;
+
+const StatusIndicator = ({ status }) => {
+    if (status === ViewerInitStates.ModelLoaded) {
+        return null;
+    }
+    return (
+        <LoadingContainer>
+            {isLoadingState(status) ? (
+                <>
+                    <Spinner />
+                    <PlaceholderText>Loading preview...</PlaceholderText>
+                </>
+            ) : (
+                status === ViewerInitStates.Error && (
+                    <>
+                        <ErrorIcon />
+                        <PlaceholderText>Error Loading Preview</PlaceholderText>
+                    </>
+                )
+            )}
+        </LoadingContainer>
+    );
+};
