@@ -53,6 +53,9 @@ const isLoadingState = status =>
 function HoopsModelViewer({ className, model }) {
     const viewerContainer = useRef();
     const webViewer = useRef();
+    const [meshColor, setMeshColor] = useState();
+    const [wireColor, setWireColor] = useState();
+
     const [viewerInitStatus, setViewerInitStatus] = useState(
         ViewerInitStates.LoadingScript
     );
@@ -178,9 +181,45 @@ function HoopsModelViewer({ className, model }) {
         }
     };
 
-    const handleColorChange = (modeName, color) => {
-        console.log('EVENT: change color: ', modeName, ' ', color);
-        // TODO: implement these
+    const handleColorChange = (modeName, colorStr) => {
+        if (!webViewer.current) {
+            return;
+        }
+        const hColor = new Communicator.Color(
+            ...colorStr
+                .substring(1)
+                .match(/.{1,2}/g)
+                .map(tuple => parseInt(tuple, 16))
+        );
+        const model = webViewer.current.model;
+
+        const gatherLeafNodeIds = nodes => {
+            return nodes.flatMap(node => {
+                const kids = model.getNodeChildren(node);
+                if (kids.length === 0) {
+                    return node;
+                }
+                return gatherLeafNodeIds(kids);
+            });
+        };
+
+        const nodeIds = gatherLeafNodeIds(
+            model.getNodeChildren(model.getAbsoluteRootNode())
+        );
+
+        try {
+            if (modeName === 'wire') {
+                model.setNodesLineColor(nodeIds, hColor);
+                setWireColor(colorStr);
+            } else if (modeName === 'mesh') {
+                model.setNodesFaceColor(nodeIds, hColor);
+                setMeshColor(colorStr);
+            } else {
+                console.error('Unsupported color mode:', modeName);
+            }
+        } catch (e) {
+            console.error('Caught HOOPS error setting color:', e);
+        }
     };
 
     return (
@@ -189,11 +228,15 @@ function HoopsModelViewer({ className, model }) {
                 <StatusIndicator status={viewerInitStatus} />
                 <div ref={viewerContainer} />
             </WebViewContainer>
-            <Toolbar
-                onResetView={handleResetView}
-                onDrawModeChange={handleDrawModeChange}
-                onColorChange={handleColorChange}
-            />
+            {viewerInitStatus === ViewerInitStates.ModelLoaded && (
+                <Toolbar
+                    onResetView={handleResetView}
+                    onDrawModeChange={handleDrawModeChange}
+                    onColorChange={handleColorChange}
+                    meshColor={meshColor}
+                    wireColor={wireColor}
+                />
+            )}
         </Container>
     );
 }

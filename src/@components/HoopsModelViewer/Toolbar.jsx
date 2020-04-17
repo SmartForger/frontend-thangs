@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { AnchorButton } from '@components/AnchorButton';
+import { ColorPicker } from '@components/ColorPicker';
 
 import { ReactComponent as WireMode } from '@svg/view-mode-wire.svg';
 import { ReactComponent as ShadedMode } from '@svg/view-mode-shaded.svg';
@@ -28,6 +29,10 @@ const ToolGroup = styled.div`
     align-items: center;
     margin: 0;
     padding: 0;
+
+    > div + div {
+        margin-left: 16px;
+    }
 `;
 
 const ToolGroupTitle = styled.div`
@@ -50,9 +55,19 @@ const ResetButton = styled(AnchorButton)`
     font-size: 14px;
 `;
 
-export function Toolbar({ onResetView, onDrawModeChange, onColorChange }) {
+export function Toolbar({
+    onResetView,
+    onDrawModeChange,
+    onColorChange,
+    meshColor,
+    wireColor,
+}) {
     const makeDrawModeHandler = modeName => () => {
         onDrawModeChange(modeName);
+    };
+
+    const makeColorHandler = modeName => color => {
+        onColorChange(modeName, color);
     };
 
     return (
@@ -69,17 +84,21 @@ export function Toolbar({ onResetView, onDrawModeChange, onColorChange }) {
                     <XRayMode />
                 </ToolButton>
             </ToolGroup>
-            {/* FIXME: enable with working colorPicker
-                <ToolGroup>
-                    <ToolGroupTitle>Change Color</ToolGroupTitle>
-                    <ToolButton onClick={makeColorHandler('edges', 'red')}>
+            <ToolGroup>
+                <ToolGroupTitle>Change Color</ToolGroupTitle>
+                <ColorPicker
+                    color={wireColor}
+                    onChange={makeColorHandler('wire')}
+                >
                     <EdgesColor />
-                    </ToolButton>
-                    <ToolButton onClick={makeColorHandler('shade', 'blue')}>
+                </ColorPicker>
+                <ColorPicker
+                    color={meshColor}
+                    onChange={makeColorHandler('mesh')}
+                >
                     <ShadeColor />
-                    </ToolButton>
-                </ToolGroup>
-            */}
+                </ColorPicker>
+            </ToolGroup>
             <ResetButton onClick={onResetView}>Reset Image</ResetButton>
         </ToolbarContainer>
     );
