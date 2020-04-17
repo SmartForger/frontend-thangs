@@ -39,7 +39,11 @@ const Page = () => {
     return (
         <SearchResultsStyle>
             <Header>Results for {searchQuery}</Header>
-            {!R.isEmpty(models) && <ModelCollection models={models} />}
+            <ModelCollection
+                models={models}
+                noResultsText="No search results"
+                noResultsSubtext="Try a different query."
+            />
         </SearchResultsStyle>
     );
 };

@@ -47,7 +47,13 @@ function Results({ modelId }) {
         );
     }
 
-    return <ModelCollection models={model.relatedModels} />;
+    return (
+        <ModelCollection
+            models={model.relatedModels}
+            noResultsText="No Geometric Similar Matches Found"
+            noResultsSubtext="Try uploading a different model."
+        />
+    );
 }
 
 function Page() {

@@ -22,7 +22,13 @@ function Page() {
         );
     }
 
-    return <ModelCollection models={models} />;
+    return (
+        <ModelCollection
+            models={models}
+            noResultsText="We have no models to display right now"
+            noResultsSubtext="Please try again later."
+        />
+    );
 }
 
 export const Landing = WithNewInvertedHeaderLayout(Page);

@@ -44,13 +44,15 @@ function NoResultsDisplay({ text, subtext }) {
     );
 }
 
-export function ModelCollection({ models = [], maxPerRow = 4 }) {
+export function ModelCollection({
+    models = [],
+    maxPerRow = 4,
+    noResultsText,
+    noResultsSubtext,
+}) {
     if (R.isEmpty(models)) {
         return (
-            <NoResultsDisplay
-                text="No Geometric Similar Matches Found"
-                subtext="Try uploading a different model."
-            />
+            <NoResultsDisplay text={noResultsText} subtext={noResultsSubtext} />
         );
     }
     return (
