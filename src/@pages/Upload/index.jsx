@@ -173,165 +173,159 @@ const Page = () => {
     return (
         <div>
             <Header>Upload Model</Header>
-            {isUploading ? (
-                <Spinner />
-            ) : (
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <Row>
-                        <Column
-                            css={`
-                                flex-grow: 1;
-                                margin-right: 32px;
-                            `}
-                        >
-                            {isUploading ? (
-                                <UploadFrame>
-                                    <DarkBackgroundSpinner />
-                                    <DotsStyled text="Uploading" />
-                                </UploadFrame>
-                            ) : (
-                                <Uploader file={file} setFile={setFile} />
-                            )}
-                        </Column>
-                        <Column
-                            css={`
-                                min-width: 336px;
-                            `}
-                        >
-                            <Field>
-                                <ErrorMessage
-                                    errors={errors}
-                                    name="name"
-                                    message="Please enter a name for your model"
-                                >
-                                    {ShowError}
-                                </ErrorMessage>
-                                <Label htmlFor="name">Title *</Label>
-                                <FullWidthInput
-                                    name="name"
-                                    defaultValue={file && file.name}
-                                    placeholder="Model Name"
-                                    ref={register({ required: true })}
-                                />
-                            </Field>
-                            <Field>
-                                <Label htmlFor="material">Material</Label>
-                                <FullWidthInput
-                                    name="material"
-                                    placeholder="Material"
-                                    ref={register}
-                                />
-                            </Field>
-                            <Field>
-                                <Label htmlFor="weight">Weight</Label>
-                                <FullWidthInput
-                                    name="weight"
-                                    placeholder="Weight"
-                                    ref={register}
-                                />
-                            </Field>
-                            <Field>
-                                <Label htmlFor="height">Height</Label>
-                                <FullWidthInput
-                                    name="height"
-                                    placeholder="Height"
-                                    ref={register}
-                                />
-                            </Field>
-                            <Field>
-                                <ErrorMessage
-                                    errors={errors}
-                                    name="description"
-                                    message="Please enter a description for your model"
-                                >
-                                    {ShowError}
-                                </ErrorMessage>
-                                <Label htmlFor="description">
-                                    Description *
-                                </Label>
-                                <FullWidthInput
-                                    name="description"
-                                    placeholder="Description"
-                                    ref={register({ required: true })}
-                                />
-                            </Field>
-                            <Field>
-                                <Label htmlFor="category">Category</Label>
-                                <Select
-                                    name="category"
-                                    placeholder="Select Category"
-                                    isClearable
-                                    options={CATEGORIES}
-                                    onChange={({ value }) => setCategory(value)}
-                                    components={{
-                                        IndicatorSeparator: () => null,
-                                        DropdownIndicator,
-                                    }}
-                                    styles={{
-                                        control: base => {
-                                            return {
-                                                ...base,
-                                                minHeight: 'auto',
-                                                borderRadius: '8px',
-                                                backgroundColor: '#616168',
-                                                border: 'none',
-                                            };
-                                        },
-                                        singleValue: base => {
-                                            return {
-                                                ...base,
-                                                margin: 0,
-                                                color: '#f5f5f5',
-                                            };
-                                        },
-                                        placeholder: base => {
-                                            return {
-                                                ...base,
-                                                margin: 0,
-                                                color: '#f5f5f5',
-                                            };
-                                        },
-                                        clearIndicator: base => {
-                                            return {
-                                                ...base,
-                                                color: '#f5f5f5',
-                                                padding: '7px',
-                                            };
-                                        },
-                                        input: base => {
-                                            return {
-                                                ...base,
-                                                margin: 0,
-                                                padding: 0,
-                                            };
-                                        },
-                                        valueContainer: base => {
-                                            return {
-                                                ...base,
-                                                padding: '8px 16px',
-                                            };
-                                        },
-                                    }}
-                                />
-                            </Field>
-                        </Column>
-                    </Row>
-                    <ButtonGroup>
-                        <CancelButton
-                            css={`
-                                margin-right: 8px;
-                            `}
-                            onClick={handleCancel}
-                            type="button"
-                        >
-                            Cancel
-                        </CancelButton>
-                        <Button type="submit" disabled={!file}>
-                            Save Model
-                        </Button>
-                    </ButtonGroup>
-                </form>
-            )}
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <Row>
+                    <Column
+                        css={`
+                            flex-grow: 1;
+                            margin-right: 32px;
+                        `}
+                    >
+                        {isUploading ? (
+                            <UploadFrame>
+                                <DarkBackgroundSpinner />
+                                <DotsStyled text="Uploading" />
+                            </UploadFrame>
+                        ) : (
+                            <Uploader file={file} setFile={setFile} />
+                        )}
+                    </Column>
+                    <Column
+                        css={`
+                            min-width: 336px;
+                        `}
+                    >
+                        <Field>
+                            <ErrorMessage
+                                errors={errors}
+                                name="name"
+                                message="Please enter a name for your model"
+                            >
+                                {ShowError}
+                            </ErrorMessage>
+                            <Label htmlFor="name">Title *</Label>
+                            <FullWidthInput
+                                name="name"
+                                defaultValue={file && file.name}
+                                placeholder="Model Name"
+                                ref={register({ required: true })}
+                            />
+                        </Field>
+                        <Field>
+                            <Label htmlFor="material">Material</Label>
+                            <FullWidthInput
+                                name="material"
+                                placeholder="Material"
+                                ref={register}
+                            />
+                        </Field>
+                        <Field>
+                            <Label htmlFor="weight">Weight</Label>
+                            <FullWidthInput
+                                name="weight"
+                                placeholder="Weight"
+                                ref={register}
+                            />
+                        </Field>
+                        <Field>
+                            <Label htmlFor="height">Height</Label>
+                            <FullWidthInput
+                                name="height"
+                                placeholder="Height"
+                                ref={register}
+                            />
+                        </Field>
+                        <Field>
+                            <ErrorMessage
+                                errors={errors}
+                                name="description"
+                                message="Please enter a description for your model"
+                            >
+                                {ShowError}
+                            </ErrorMessage>
+                            <Label htmlFor="description">Description *</Label>
+                            <FullWidthInput
+                                name="description"
+                                placeholder="Description"
+                                ref={register({ required: true })}
+                            />
+                        </Field>
+                        <Field>
+                            <Label htmlFor="category">Category</Label>
+                            <Select
+                                name="category"
+                                placeholder="Select Category"
+                                isClearable
+                                options={CATEGORIES}
+                                onChange={({ value }) => setCategory(value)}
+                                components={{
+                                    IndicatorSeparator: () => null,
+                                    DropdownIndicator,
+                                }}
+                                styles={{
+                                    control: base => {
+                                        return {
+                                            ...base,
+                                            minHeight: 'auto',
+                                            borderRadius: '8px',
+                                            backgroundColor: '#616168',
+                                            border: 'none',
+                                        };
+                                    },
+                                    singleValue: base => {
+                                        return {
+                                            ...base,
+                                            margin: 0,
+                                            color: '#f5f5f5',
+                                        };
+                                    },
+                                    placeholder: base => {
+                                        return {
+                                            ...base,
+                                            margin: 0,
+                                            color: '#f5f5f5',
+                                        };
+                                    },
+                                    clearIndicator: base => {
+                                        return {
+                                            ...base,
+                                            color: '#f5f5f5',
+                                            padding: '7px',
+                                        };
+                                    },
+                                    input: base => {
+                                        return {
+                                            ...base,
+                                            margin: 0,
+                                            padding: 0,
+                                        };
+                                    },
+                                    valueContainer: base => {
+                                        return {
+                                            ...base,
+                                            padding: '8px 16px',
+                                        };
+                                    },
+                                }}
+                            />
+                        </Field>
+                    </Column>
+                </Row>
+                <ButtonGroup>
+                    <CancelButton
+                        css={`
+                            margin-right: 8px;
+                        `}
+                        onClick={handleCancel}
+                        type="button"
+                    >
+                        Cancel
+                    </CancelButton>
+                    <Button type="submit" disabled={!file}>
+                        Save Model
+                    </Button>
+                </ButtonGroup>
+            </form>
         </div>
     );
 };
