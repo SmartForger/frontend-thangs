@@ -11,28 +11,13 @@ import { ReactComponent as CompositeIcon } from '@svg/icon-composite.svg';
 import { ReactComponent as WireframeIcon } from '@svg/icon-wireframe.svg';
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg';
 
-const Info = styled.div`
-    position: absolute;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: space-around;
-    height: 13vw;
-    width: 100px;
-    z-index: 1;
-    top: 32px;
-    right: 32px;
-
-    > div {
-        margin-left: 1vw;
-    }
-`;
-
 const ViewerContainer = styled.div`
     pointer-events: none;
     grid-area: viewer;
     position: relative;
     height: 100%;
     display: flex;
+    flex-direction: column;
     border-radius: 8px;
 
     > div {
@@ -42,75 +27,64 @@ const ViewerContainer = styled.div`
     ${props => props.theme.shadow};
 `;
 
-const DisplayOptions = styled.div`
-    bottom: 32px;
-    left: 64px;
-    position: absolute;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: flex-end;
-    z-index: 1;
-
-    > div {
-        margin-right: 15px;
-    }
-`;
-
-const DisplayButton = styled.button`
-    max-width: 100%;
-    width: auto;
-    border: none;
-    padding: 4px;
-    border-radius: 4px;
+const DisplayButton = styled.div`
     cursor: pointer;
 `;
 
+const ControlBar = styled.div`
+    width: 100%;
+    height: 80px;
+    background-color: ${props => props.theme.cardBackground};
+    border-radius: 0 0 8px 8px;
+    border-top: 1px ${props => props.theme.viewerControlBorderColor} solid;
+    display: flex;
+    padding: 24px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: space-between;
+`;
+
+const ControlText = styled.div`
+    margin-right: 16px;
+    font-weight: 500;
+    font-size: 12px;
+    color: ${props => props.theme.viewerControlText};
+`;
+
+const ButtonGroup = styled.div`
+    display: flex;
+    align-items: center;
+
+    > div + div {
+        margin-left: 16px;
+    }
+`;
+
+const Placeholder = styled.div`
+    height: 18px;
+    width: 88px;
+    margin-left: 152px;
+`;
+
 function ModelViewerDisplay({ model, className }) {
-    const [mode, setMode] = useState('wireframe');
-    const [meshColor, setMeshColor] = useState('#FFFFFF');
-    const [wireColor, setWireColor] = useState('#000000');
+    const [mode, setMode] = useState('composite');
+    const [meshColor, setMeshColor] = useState('#ffbc00');
+    const [wireColor, setWireColor] = useState('#014d7c');
 
     const changeMode = targetMode => {
         setMode(targetMode);
     };
 
     const changeMeshColor = (color, event) => {
-        setMeshColor(color.hex);
+        setMeshColor(color);
     };
 
     const changeWireColor = (color, event) => {
-        setWireColor(color.hex);
+        setWireColor(color);
     };
 
     return (
         <ViewerContainer className={className}>
-            <Info>
-                <DisplayButton
-                    onClick={() => {
-                        changeMode('shaded');
-                    }}
-                >
-                    Shaded
-                </DisplayButton>
-                <DisplayButton
-                    onClick={() => {
-                        changeMode('wireframe');
-                    }}
-                >
-                    Wireframe
-                </DisplayButton>
-                <DisplayButton
-                    onClick={() => {
-                        changeMode('composite');
-                    }}
-                >
-                    Composite
-                </DisplayButton>
-            </Info>
-            <DisplayOptions>
-                <ColorPicker color={meshColor} onChange={changeMeshColor} />
-                <ColorPicker color={wireColor} onChange={changeWireColor} />
-            </DisplayOptions>
             <Viewer
                 url={model.attachment && model.attachment.dataSrc}
                 mode={mode}
@@ -118,6 +92,43 @@ function ModelViewerDisplay({ model, className }) {
                 wireFrameColor={wireColor}
                 boxShadow="none"
             />
+
+            <ControlBar>
+                <ButtonGroup>
+                    <ControlText>MODEL VIEW</ControlText>
+                    <DisplayButton
+                        onClick={() => {
+                            changeMode('shaded');
+                        }}
+                    >
+                        <ShadedIcon />
+                    </DisplayButton>
+                    <DisplayButton
+                        onClick={() => {
+                            changeMode('wireframe');
+                        }}
+                    >
+                        <WireframeIcon />
+                    </DisplayButton>
+                    <DisplayButton
+                        onClick={() => {
+                            changeMode('composite');
+                        }}
+                    >
+                        <CompositeIcon />
+                    </DisplayButton>
+                </ButtonGroup>
+                <ButtonGroup>
+                    <ControlText>CHANGE COLOR</ControlText>
+                    <ColorPicker color={meshColor} onChange={changeMeshColor}>
+                        <ColorIcon1 />
+                    </ColorPicker>
+                    <ColorPicker color={wireColor} onChange={changeWireColor}>
+                        <ColorIcon2 />
+                    </ColorPicker>
+                </ButtonGroup>
+                <Placeholder />
+            </ControlBar>
         </ViewerContainer>
     );
 }

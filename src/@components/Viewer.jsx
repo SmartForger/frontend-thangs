@@ -7,10 +7,10 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const Viewer = ({
     url,
-    height = '100%',
+    height = 'calc( 100% - 80px )',
     width = '100%',
-    mode = 'shaded',
-    meshColor = '#FF0000',
+    mode,
+    meshColor,
     wireFrameColor,
     boxShadow = 'inset 0 0 0 5px black',
 }) => {
@@ -21,8 +21,8 @@ const Viewer = ({
                 height: height,
                 width: width,
                 boxShadow,
-                background: '#999999',
-                borderRadius: '8px',
+                background: '#ffffff',
+                borderRadius: '8px 8px 0 0',
             }}
         >
             <ambientLight intensity={0.9} />
@@ -51,7 +51,7 @@ function HoverCube({ position }) {
             e.stopPropagation();
             setIsHovered(value);
         },
-        [setIsHovered],
+        [setIsHovered]
     );
 
     const onClick = useCallback(
@@ -59,7 +59,7 @@ function HoverCube({ position }) {
             e.stopPropagation();
             setActive(v => !v);
         },
-        [setActive],
+        [setActive]
     );
 
     useFrame(({ gl, scene, camera }) => {
@@ -98,20 +98,15 @@ function Controls() {
             args={[camera, gl.domElement]}
             enableRotate
             enablePan={true}
-            maxDistance={200}
-            minDistance={15}
+            maxDistance={900}
+            minDistance={300}
             minPolarAngle={Math.PI / 10}
             maxPolarAngle={Math.PI / 1}
         />
     );
 }
 
-const Asset = ({
-    url,
-    mode = 'shaded',
-    meshColor = '0xFFFFFF',
-    wireFrameColor = '0x000000',
-}) => {
+const Asset = ({ url, mode, meshColor, wireFrameColor }) => {
     const [stl, loading, error] = useStl(url);
     const scene = new THREE.Scene();
 
