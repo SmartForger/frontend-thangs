@@ -67,7 +67,7 @@ const Placeholder = styled.div`
 `;
 
 function ModelViewerDisplay({ model, className }) {
-    const [mode, setMode] = useState('wireframe');
+    const [mode, setMode] = useState('composite');
     const [meshColor, setMeshColor] = useState('#ffbc00');
     const [wireColor, setWireColor] = useState('#014d7c');
 
