@@ -25,6 +25,7 @@ const NoResultsFrame = styled.div`
     padding-top: 136px;
     padding-bottom: 168px;
     border-radius: 8px;
+    width: 100%;
 `;
 
 const Text = styled.div`
