@@ -108,6 +108,10 @@ const ProfileLink = styled(Link)`
 const Description = styled.div`
     margin: 32px 0;
 `;
+const DownloadLink = styled.a`
+    font-size: 14px;
+    color: ${props => props.theme.primaryButton};
+`;
 
 function ModelTitle({ model, className }) {
     return (
@@ -163,6 +167,11 @@ const ModelDetailPage = ({ model, currentUser }) => {
                     <ModelTitle model={model} />
                     <Description>{model.description}</Description>
                     <ModelDetails model={model} />
+                    <DownloadLink
+                        href={`https://storage.cloud.google.com/thangs-headless-bucket${model.attachment.storageName}`}
+                    >
+                        Download Model
+                    </DownloadLink>
                     <Comments model={model} />
                 </Sidebar>
             </ModelContainer>
