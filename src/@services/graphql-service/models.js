@@ -37,6 +37,7 @@ const MODEL_FRAGMENT = gql`
         weight
         height
         material
+        uploadedFile
     }
 `;
 
@@ -238,7 +239,7 @@ const UPLOAD_MODEL_MUTATION = gql`
         $file: Upload!
         $name: String!
         $size: Int!
-        $description: String!
+        $description: String
         $weight: String
         $height: String
         $material: String

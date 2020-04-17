@@ -18,6 +18,8 @@ REACT_APP_WEBSITE_NAME=(The Document Title you wish to display)
 REACT_APP_IMG_PATH=(Url for the thumbnailer you are currently using **not currently relevant)
 NODE_PATH="src/"
 HTTPS=false
+REACT_APP_HOOPS_MODEL_PREP_ENDPOINT_URI=https://hoops-scs-dot-gcp-and-physna.uc.r.appspot.com/api/prepare-model
+REACT_APP_HOOPS_WS_ENDPOINT_URI=wss://hoops-scs-dot-gcp-and-physna.uc.r.appspot.com
 ```
 
 4. Run the following command in the terminal to start the app:

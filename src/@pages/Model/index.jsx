@@ -8,7 +8,7 @@ import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { LikeModelButton } from '@components/LikeModelButton';
 import { CommentsForModel } from '@components/CommentsForModel';
-import { ModelViewer } from '@components/ModelViewer';
+import { ModelViewer } from '@components/HoopsModelViewer';
 
 import { useParams } from 'react-router-dom';
 import { useLocalStorage } from '@customHooks/Storage';
@@ -108,6 +108,10 @@ const ProfileLink = styled(Link)`
 const Description = styled.div`
     margin: 32px 0;
 `;
+const DownloadLink = styled.a`
+    font-size: 14px;
+    color: ${props => props.theme.primaryButton};
+`;
 
 function ModelTitle({ model, className }) {
     return (
@@ -163,6 +167,9 @@ const ModelDetailPage = ({ model, currentUser }) => {
                     <ModelTitle model={model} />
                     <Description>{model.description}</Description>
                     <ModelDetails model={model} />
+                    <DownloadLink href={model.attachment.dataSrc}>
+                        Download Model
+                    </DownloadLink>
                     <Comments model={model} />
                 </Sidebar>
             </ModelContainer>
