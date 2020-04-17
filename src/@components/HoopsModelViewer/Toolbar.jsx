@@ -55,10 +55,6 @@ export function Toolbar({ onResetView, onDrawModeChange, onColorChange }) {
         onDrawModeChange(modeName);
     };
 
-    const makeColorHandler = (modeName, color) => () => {
-        onColorChange(modeName, color);
-    };
-
     return (
         <ToolbarContainer>
             <ToolGroup>
@@ -73,15 +69,17 @@ export function Toolbar({ onResetView, onDrawModeChange, onColorChange }) {
                     <XRayMode />
                 </ToolButton>
             </ToolGroup>
-            <ToolGroup>
-                <ToolGroupTitle>Change Color</ToolGroupTitle>
-                <ToolButton onClick={makeColorHandler('edges', 'red')}>
+            {/* FIXME: enable with working colorPicker
+                <ToolGroup>
+                    <ToolGroupTitle>Change Color</ToolGroupTitle>
+                    <ToolButton onClick={makeColorHandler('edges', 'red')}>
                     <EdgesColor />
-                </ToolButton>
-                <ToolButton onClick={makeColorHandler('shade', 'blue')}>
+                    </ToolButton>
+                    <ToolButton onClick={makeColorHandler('shade', 'blue')}>
                     <ShadeColor />
-                </ToolButton>
-            </ToolGroup>
+                    </ToolButton>
+                </ToolGroup>
+            */}
             <ResetButton onClick={onResetView}>Reset Image</ResetButton>
         </ToolbarContainer>
     );
