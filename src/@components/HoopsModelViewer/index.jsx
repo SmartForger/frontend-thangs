@@ -9,8 +9,9 @@ import { Toolbar } from './Toolbar';
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg';
 
 const MODEL_PREP_TIMEOUT = 5000;
-const MODEL_PREP_ENDPOINT_URI = process.env.HOOPS_MODEL_PREP_ENDPOINT_URI;
-const HOOPS_WS_ENDPOINT_URI = process.env.HOOPS_WS_ENDPOINT_URI;
+const MODEL_PREP_ENDPOINT_URI =
+    process.env.REACT_APP_HOOPS_MODEL_PREP_ENDPOINT_URI;
+const HOOPS_WS_ENDPOINT_URI = process.env.REACT_APP_HOOPS_WS_ENDPOINT_URI;
 
 const Container = styled.div`
     border-radius: 5px;
