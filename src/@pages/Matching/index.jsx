@@ -52,10 +52,12 @@ function Results({ modelId }) {
 
 function Page() {
     const [currentModel, setCurrentModel] = useState();
+    const currentUser = authenticationService.currentUserValue;
+    const { id } = currentUser;
     const [
         uploadModel,
         { loading: isUploading },
-    ] = graphqlService.useUploadModelMutation();
+    ] = graphqlService.useUploadModelMutation(id);
 
     async function handleFile(file) {
         const model = await uploadModel({
