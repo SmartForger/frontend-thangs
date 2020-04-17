@@ -188,6 +188,7 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
 
 function Page() {
     const { id } = useParams();
+    const [showBackupViewer] = useLocalStorage('showBackupViewer', false);
 
     const graphqlService = GraphqlService.getInstance();
     const { loading, error, model } = graphqlService.useModelByIdWithRelated(
@@ -206,7 +207,7 @@ function Page() {
         <ModelDetailPage
             model={model}
             currentUser={currentUser}
-            showBackupViewer={false}
+            showBackupViewer={showBackupViewer}
         />
     );
 }
