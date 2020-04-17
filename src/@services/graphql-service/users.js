@@ -24,6 +24,7 @@ export const USER_QUERY = gql`
                     id
                     imgSrc
                 }
+                uploadStatus
             }
             inviteCode
             likedModels {
@@ -31,6 +32,7 @@ export const USER_QUERY = gql`
                 name
                 likesCount
                 commentsCount
+                uploadStatus
                 owner {
                     id
                     fullName
