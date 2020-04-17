@@ -140,8 +140,18 @@ const MODELS_BY_DATE_QUERY = gql`
     ${MODEL_FRAGMENT}
 `;
 
+const MODELS_BY_LIKES_QUERY = gql`
+    query modelsByLikes {
+        modelsByLikes {
+            ...Model
+        }
+    }
+    ${MODEL_FRAGMENT}
+`;
+
 const getModel = R.pathOr(null, ['model']);
 const getModelsByDate = R.pathOr(null, ['modelsByDate']);
+const getModelsByLikes = R.pathOr(null, ['modelsByLikes']);
 const getSearchModels = R.pathOr(null, ['searchModels']);
 
 const parseModel = model => {
@@ -159,6 +169,15 @@ const parseModel = model => {
 
 const parseModelsByDatePayload = data => {
     const models = getModelsByDate(data);
+    if (!models) {
+        return null;
+    }
+
+    return models.map(parseModel);
+};
+
+const parseModelsByLikePayload = data => {
+    const models = getModelsByLikes(data);
     if (!models) {
         return null;
     }
@@ -288,6 +307,14 @@ const useModelsByDate = () => {
     return { loading, error, models };
 };
 
+const useModelsByLikes = () => {
+    const { error, loading, data } = useQuery(MODELS_BY_LIKES_QUERY);
+
+    const models = parseModelsByLikePayload(data);
+
+    return { loading, error, models };
+};
+
 const SEARCH_MODELS_QUERY = gql`
     query searchModels($query: String!) {
         searchModels(query: $query) {
@@ -340,5 +367,6 @@ export {
     useUnlikeModelMutation,
     useUploadModelMutation,
     useModelsByDate,
+    useModelsByLikes,
     useSearchModels,
 };

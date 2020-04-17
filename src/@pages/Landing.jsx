@@ -9,7 +9,7 @@ import { ModelCollection } from '@components/ModelCollection';
 const graphqlService = GraphqlService.getInstance();
 
 function Page() {
-    const { error, loading, models } = graphqlService.useModelsByDate();
+    const { error, loading, models } = graphqlService.useModelsByLikes();
 
     if (loading) {
         return <Spinner />;
