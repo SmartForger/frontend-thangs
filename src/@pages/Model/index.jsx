@@ -167,9 +167,7 @@ const ModelDetailPage = ({ model, currentUser }) => {
                     <ModelTitle model={model} />
                     <Description>{model.description}</Description>
                     <ModelDetails model={model} />
-                    <DownloadLink
-                        href={`https://storage.cloud.google.com/thangs-headless-bucket${model.attachment.storageName}`}
-                    >
+                    <DownloadLink href={model.attachment.dataSrc}>
                         Download Model
                     </DownloadLink>
                     <Comments model={model} />
