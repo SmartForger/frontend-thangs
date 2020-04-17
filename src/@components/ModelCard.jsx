@@ -72,8 +72,8 @@ const PlaceholderText = styled.div`
     margin-top: 24px;
 `;
 
-const isProcessing = R.propEq('uploadStatus', 'processing');
-const isError = R.propEq('uploadStatus', 'error');
+const isProcessing = R.propEq('uploadStatus', 'PROCESSING');
+const isError = R.propEq('uploadStatus', 'ERROR');
 
 function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
     return (
