@@ -138,9 +138,10 @@ function AboutContent({ selected, user }) {
 function ModelsContent({ selected, user }) {
     const models = getModels(user);
 
-    if (!selected || R.isEmpty(models)) {
+    if (!selected) {
         return null;
     }
+
     return (
         <ModelCollection
             models={models}
