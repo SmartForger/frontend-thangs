@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { WithNewThemeLayout } from '@style';
 import { useParams } from 'react-router-dom';
 import * as GraphqlService from '@services/graphql-service';
-import * as R from 'ramda';
 import { Spinner } from '@components/Spinner';
 import { ModelCollection } from '@components/ModelCollection';
 
