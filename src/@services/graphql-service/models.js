@@ -146,6 +146,7 @@ const MODELS_BY_LIKES_QUERY = gql`
             ...Model
         }
     }
+    ${MODEL_FRAGMENT}
 `;
 
 const getModel = R.pathOr(null, ['model']);
