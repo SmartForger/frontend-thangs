@@ -8,10 +8,9 @@ import { Spinner } from '@components/Spinner';
 import { Toolbar } from './Toolbar';
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg';
 
-// TODO: Set these to reasonable values for live site
 const MODEL_PREP_TIMEOUT = 5000;
-const MODEL_PREP_ENDPOINT_URI = 'http://localhost:8080/api/prepare-model';
-const HOOPS_WS_ENDPOINT_URI = 'ws://localhost:8081/';
+const MODEL_PREP_ENDPOINT_URI = process.env.HOOPS_MODEL_PREP_ENDPOINT_URI;
+const HOOPS_WS_ENDPOINT_URI = process.env.HOOPS_WS_ENDPOINT_URI;
 
 const Container = styled.div`
     border-radius: 5px;
