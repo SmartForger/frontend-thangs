@@ -2,7 +2,7 @@ import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import * as R from 'ramda';
 
-import { USER_QUERY } from './users';
+import { USER_QUERY, parseUser } from './users';
 
 const MODEL_FRAGMENT = gql`
     fragment Model on ModelType {
@@ -22,6 +22,9 @@ const MODEL_FRAGMENT = gql`
             firstName
             lastName
             fullName
+            profile {
+                avatarUrl
+            }
         }
         attachment {
             id
@@ -145,9 +148,11 @@ const parseModel = model => {
     const relatedModels = model.relatedModels
         ? model.relatedModels.map(parseModel)
         : null;
+    const owner = model.owner && parseUser(model.owner);
 
     return {
         ...model,
+        owner,
         relatedModels,
     };
 };
