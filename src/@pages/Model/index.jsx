@@ -108,9 +108,13 @@ const ProfileLink = styled(Link)`
 const Description = styled.div`
     margin: 32px 0;
 `;
+
 const DownloadLink = styled.a`
     font-size: 14px;
-    color: ${props => props.theme.primaryButton};
+    font-weight: 500;
+    color: ${props => props.theme.linkText};
+    margin-bottom: 24px;
+    display: block;
 `;
 
 function ModelTitle({ model, className }) {
@@ -166,10 +170,10 @@ const ModelDetailPage = ({ model, currentUser }) => {
                     <LikeModelButton currentUser={currentUser} model={model} />
                     <ModelTitle model={model} />
                     <Description>{model.description}</Description>
-                    <ModelDetails model={model} />
                     <DownloadLink href={model.attachment.dataSrc}>
                         Download Model
                     </DownloadLink>
+                    <ModelDetails model={model} />
                     <Comments model={model} />
                 </Sidebar>
             </ModelContainer>
