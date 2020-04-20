@@ -6,7 +6,7 @@ import { useCurrentUser } from '@customHooks/Users';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { Button as _Button } from '@components/Button';
 import { Spinner } from '@components/Spinner';
-import { ChangePicture } from '@components/ChangeablePicture';
+import { ChangeablePicture } from '@components/ChangeablePicture';
 import { FlashContext } from '@components/Flash';
 import { EditProfileForm } from '@components/EditProfileForm';
 
@@ -45,7 +45,7 @@ function PictureForm({ user, className }) {
     return (
         <Row className={className}>
             <ProfilePictureStyled user={user} size="80px" />
-            <ChangePicture
+            <ChangeablePicture
                 user={user}
                 css={`
                     margin-right: 8px;

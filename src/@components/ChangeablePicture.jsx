@@ -102,7 +102,7 @@ const NewCancelButton = styled.button`
     ${allowCssProp};
 `;
 
-export function ChangePicture({ user, button, buttonRef, css }) {
+export function ChangeablePicture({ user, button, buttonRef, css }) {
     const [cropSrc, setCropSrc] = useState(null);
     const [crop, setCrop] = useState();
     const [croppedImg, setCroppedImg] = useState(null);
