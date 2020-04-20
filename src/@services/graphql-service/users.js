@@ -127,7 +127,7 @@ const useUploadUserAvatarMutation = (user, croppedImg) => {
     });
 };
 
-export const useDeleteUserAvatarMutation = (user, croppedImg) => {
+export const useDeleteUserAvatarMutation = (user) => {
     return useMutation(
         gql`
             mutation deleteUserProfileAvatar($userId: ID) {
@@ -140,7 +140,6 @@ export const useDeleteUserAvatarMutation = (user, croppedImg) => {
         `,
         {
             variables: {
-                file: croppedImg,
                 userId: user.id,
             },
             refetchQueries: [
