@@ -201,6 +201,9 @@ export function ChangeablePicture({ user, button, css }) {
                         e.preventDefault();
                     }}
                     ref={buttonRef}
+                    css={`
+                        width: 197px;
+                    `}
                 >
                     Upload New Photo
                 </Button>
