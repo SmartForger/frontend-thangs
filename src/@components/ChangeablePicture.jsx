@@ -228,15 +228,16 @@ export function ChangeablePicture({ user, button, css }) {
                     circularCrop={true}
                 />
                 <ButtonContainer>
-                    <NewButton
+                    <Button
                         onClick={submitCrop}
                         css={`
                             margin-right: 8px;
+                            padding: 8px 36px;
                         `}
                     >
                         Save
-                    </NewButton>
-                    <NewCancelButton onClick={cancel}>Cancel</NewCancelButton>
+                    </Button>
+                    <CancelButton onClick={cancel}>Cancel</CancelButton>
                 </ButtonContainer>
             </ModalStyled>
         </Form>
