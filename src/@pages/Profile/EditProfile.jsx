@@ -51,7 +51,13 @@ function PictureForm({ user, className }) {
                     margin-right: 8px;
                 `}
                 button={
-                    <Button ref={buttonRef} maxwidth="100%">
+                    <Button
+                        ref={buttonRef}
+                        maxwidth="100%"
+                        onClick={e => {
+                            e.preventDefault();
+                        }}
+                    >
                         Upload New Photo
                     </Button>
                 }

@@ -36,8 +36,10 @@ const BtnStyle = styled(animated.button)`
     }
 `;
 
+const NOOP = () => null;
+
 const Button = props => {
-    const { name, onClick, routeto, children } = props;
+    const { name, onClick = NOOP, routeto, children } = props;
 
     if (routeto) {
         return (
@@ -48,12 +50,7 @@ const Button = props => {
     }
 
     return (
-        <BtnStyle
-            {...props}
-            onClick={() => {
-                if (onClick != null && !props.disabled) props.onClick();
-            }}
-        >
+        <BtnStyle {...props} onClick={onClick}>
             {name || children}
         </BtnStyle>
     );

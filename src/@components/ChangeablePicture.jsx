@@ -307,11 +307,6 @@ function NewChangePicture({ user, button, buttonRef, css }) {
         }, 'image/jpeg');
     };
 
-    const onButtonClick = e => {
-        buttonRef.current.focus();
-        e.persist();
-    };
-
     return (
         <Form css={css} ref={formRef}>
             <label htmlFor="avatar">{button}</label>
@@ -320,7 +315,6 @@ function NewChangePicture({ user, button, buttonRef, css }) {
                 name="Change Image"
                 id="avatar"
                 onChange={onSelectFile}
-                onClick={onButtonClick}
                 accept="image/x-png,image/jpeg"
                 ref={imageEl}
             />
