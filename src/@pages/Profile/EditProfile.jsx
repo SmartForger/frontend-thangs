@@ -6,6 +6,7 @@ import * as R from 'ramda';
 import { WithNewThemeLayout } from '@style/Layout';
 import { useCurrentUser } from '@customHooks/Users';
 import { ProfilePicture } from '@components/ProfilePicture';
+import { Button as _Button } from '@components/Button';
 import { Spinner } from '@components/Spinner';
 import { NewChangePicture } from '@components/ChangeablePicture';
 import { FlashContext } from '@components/Flash';
@@ -32,33 +33,17 @@ const ProfilePictureStyled = styled(ProfilePicture)`
 
 const allowCssProp = props => (props.css ? props.css : '');
 
-const Button = styled.button`
-    color: ${props => props.theme.primaryButtonText};
-    background-color: ${props => props.theme.primaryButton};
-    font-size: 14px;
+const Button = styled(_Button)`
     padding: 8px 36px;
-    border: none;
-    border-radius: 8px;
-    font-family: ${props => props.theme.buttonFont};
-    font-weight: 500;
-    cursor: pointer;
+    max-width: 100%;
 
-    ${props => props.theme.shadow};
     ${allowCssProp};
 `;
 
-const DeleteButton = styled.button`
+const DeleteButton = styled(_Button)`
     color: ${props => props.theme.primaryButtonText};
     background-color: ${props => props.theme.deleteButton};
     padding: 8px 24px;
-    border: none;
-    border-radius: 8px;
-    font-family: ${props => props.theme.buttonFont};
-    font-weight: 500;
-    font-size: 14px;
-    cursor: pointer;
-
-    ${props => props.theme.shadow};
 `;
 
 function PictureForm({ user, className }) {
@@ -71,7 +56,11 @@ function PictureForm({ user, className }) {
                 css={`
                     margin-right: 8px;
                 `}
-                button={<Button ref={buttonRef}>Upload New Photo</Button>}
+                button={
+                    <Button ref={buttonRef} maxwidth="100%">
+                        Upload New Photo
+                    </Button>
+                }
                 buttonRef={buttonRef}
             />
 
