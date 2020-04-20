@@ -34,7 +34,7 @@ const SearchBar = props => {
     const params = useParams();
     const initialSearchQuery = params.searchQuery;
     const { searchQuery, setSearchQuery, executeSearch } = useSearch(
-        initialSearchQuery,
+        initialSearchQuery
     );
 
     const handleChange = e => {
@@ -65,6 +65,7 @@ const SearchFormNew = styled.form`
     margin-left: 12px;
     position: relative;
     display: flex;
+    max-width: 1024px;
 `;
 
 const SearchStyleNew = styled.input`
@@ -92,7 +93,7 @@ const SearchBarNew = props => {
     const params = useParams();
     const initialSearchQuery = params.searchQuery;
     const { searchQuery, setSearchQuery, executeSearch } = useSearch(
-        initialSearchQuery,
+        initialSearchQuery
     );
 
     const handleChange = e => {
