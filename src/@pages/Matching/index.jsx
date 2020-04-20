@@ -21,6 +21,10 @@ const Subheader = styled.h4`
     font-size: 18px;
 `;
 
+const Frame = styled.div`
+    margin-top: 48px;
+`;
+
 const graphqlService = GraphqlService.getInstance();
 
 function Results({ modelId }) {
@@ -80,7 +84,7 @@ function Page() {
     }
 
     return (
-        <div>
+        <Frame>
             <Header>Search by Model</Header>
             <Subheader>
                 Upload your model to see other models with similar geometry.
@@ -94,7 +98,7 @@ function Page() {
                     <Uploader setFile={handleFile} />
                 </form>
             )}
-        </div>
+        </Frame>
     );
 }
 
