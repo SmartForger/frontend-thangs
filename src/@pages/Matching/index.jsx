@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 import { WithNewThemeLayout } from '@style/Layout';
+import { Button } from '@components/Button';
 import { Uploader } from '@components/Uploader';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
@@ -27,6 +29,12 @@ const Frame = styled.div`
 `;
 
 const graphqlService = GraphqlService.getInstance();
+
+const CancelButton = styled(Button)`
+    background-color: ${props => props.theme.deleteButton};
+    margin-top: 24px;
+    float: right;
+`;
 
 function Results({ modelId }) {
     const {
@@ -63,6 +71,7 @@ function Results({ modelId }) {
 
 function Page() {
     const [currentModel, setCurrentModel] = useState();
+    const history = useHistory();
     const currentUser = authenticationService.currentUserValue;
     const { id } = currentUser;
     const [
@@ -84,6 +93,8 @@ function Page() {
         setCurrentModel(model);
     }
 
+    const onCancel = () => history.goBack();
+
     return (
         <Frame>
             <Header>Search by Model</Header>
@@ -95,9 +106,12 @@ function Page() {
             ) : currentModel ? (
                 <Results modelId={currentModel.id} />
             ) : (
-                <form>
-                    <Uploader setFile={handleFile} />
-                </form>
+                <>
+                    <form>
+                        <Uploader setFile={handleFile} />
+                    </form>
+                    <CancelButton onClick={onCancel}>Cancel</CancelButton>
+                </>
             )}
         </Frame>
     );
