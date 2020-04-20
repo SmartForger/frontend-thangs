@@ -64,123 +64,6 @@ const ButtonContainer = styled.div`
 
 const initialCrop = { unit: '%', width: 30, aspect: 1 / 1 };
 
-const ChangeablePicture = ({ user }) => {
-    const [cropSrc, setCropSrc] = useState(null);
-    const [crop, setCrop] = useState();
-    const [croppedImg, setCroppedImg] = useState(null);
-    const [img, setImg] = useState(null);
-    const [isCropping, setIsCropping] = useState(false);
-    const imageEl = useRef(null);
-    const [uploadAvatar] = graphqlService.useUploadUserAvatarMutation(
-        user,
-        croppedImg
-    );
-
-    const submitCrop = () => {
-        uploadAvatar();
-        setIsCropping(false);
-    };
-
-    function onSelectFile(e) {
-        if (e.target.files && e.target.files.length > 0) {
-            const reader = new FileReader();
-            reader.addEventListener('load', () => {
-                setCropSrc(reader.result);
-                setIsCropping(true);
-            });
-            reader.readAsDataURL(e.target.files[0]);
-        }
-    }
-
-    const onImageLoaded = img => {
-        setCrop(initialCrop);
-        setImg(img);
-        return false;
-    };
-
-    const onCropComplete = async crop => {
-        await makeClientCrop(crop);
-    };
-
-    const onCropChange = crop => setCrop(crop);
-
-    async function makeClientCrop(crop) {
-        if (img && crop.width && crop.height) {
-            const croppedImg = await getCroppedImage(
-                img,
-                crop,
-                md5(imageEl.current.files[0].name)
-            );
-            setCroppedImg(croppedImg);
-        }
-    }
-
-    const getCroppedImage = (image, crop, fileName) => {
-        const canvas = document.createElement('canvas');
-        const scaleX = image.naturalWidth / image.width;
-        const scaleY = image.naturalHeight / image.height;
-        canvas.width = crop.width;
-        canvas.height = crop.height;
-        const ctx = canvas.getContext('2d');
-
-        ctx.drawImage(
-            image,
-            crop.x * scaleX,
-            crop.y * scaleY,
-            crop.width * scaleX,
-            crop.height * scaleY,
-            0,
-            0,
-            crop.width,
-            crop.height
-        );
-
-        return new Promise((resolve, reject) => {
-            canvas.toBlob(blob => {
-                if (!blob) {
-                    console.error('Canvas is empty');
-                    return;
-                }
-                blob.name = fileName;
-                resolve(blob);
-            });
-        }, 'image/jpeg');
-    };
-
-    return (
-        <form>
-            <label htmlFor="avatar">
-                <ClickablePicture user={user} />
-            </label>
-            <HiddenInput
-                type="file"
-                name="Change Image"
-                id="avatar"
-                onChange={onSelectFile}
-                accept="image/x-png,image/jpeg"
-                ref={imageEl}
-            />
-            <ModalOverlayStyles />
-            <ModalStyled
-                isOpen={isCropping}
-                overlayClassName="img-cropper-modal-overlay"
-            >
-                <ReactCrop
-                    src={cropSrc}
-                    crop={crop}
-                    onImageLoaded={onImageLoaded}
-                    onComplete={onCropComplete}
-                    onChange={onCropChange}
-                    circularCrop={true}
-                />
-                <ButtonContainer>
-                    <Button onClick={submitCrop} name="Save" />
-                </ButtonContainer>
-            </ModalStyled>
-        </form>
-    );
-};
-
 const allowCssProp = props => (props.css ? props.css : '');
 
 const Form = styled.form`
@@ -219,7 +102,7 @@ const NewCancelButton = styled.button`
     ${allowCssProp};
 `;
 
-function NewChangePicture({ user, button, buttonRef, css }) {
+export function ChangePicture({ user, button, buttonRef, css }) {
     const [cropSrc, setCropSrc] = useState(null);
     const [crop, setCrop] = useState();
     const [croppedImg, setCroppedImg] = useState(null);
@@ -347,5 +230,3 @@ function NewChangePicture({ user, button, buttonRef, css }) {
         </Form>
     );
 }
-
-export { ChangeablePicture, NewChangePicture };
