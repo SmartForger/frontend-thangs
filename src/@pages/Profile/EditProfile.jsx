@@ -14,8 +14,6 @@ import * as GraphqlService from '@services/graphql-service';
 
 const graphqlService = GraphqlService.getInstance();
 
-const DELETE_ENABLED = true;
-
 const Name = styled.div`
     font-family: ${props => props.theme.mainFont};
     font-size: 24px;
@@ -64,7 +62,7 @@ function PictureForm({ user, className }) {
                 buttonRef={buttonRef}
             />
 
-            {DELETE_ENABLED && <DeleteButton>Delete</DeleteButton>}
+            <DeleteButton>Delete</DeleteButton>
         </Row>
     );
 }
