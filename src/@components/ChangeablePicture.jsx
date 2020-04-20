@@ -6,7 +6,6 @@ import Modal from 'react-modal';
 import md5 from 'md5';
 
 import { Button } from '@components';
-import { ProfilePicture } from '@components/ProfilePicture';
 import * as GraphqlService from '@services/graphql-service';
 
 Modal.setAppElement('#root');
@@ -20,10 +19,6 @@ const HiddenInput = styled.input`
     opacity: 0;
     height: 100%;
     width: 100%;
-    cursor: pointer;
-`;
-
-const ClickablePicture = styled(ProfilePicture)`
     cursor: pointer;
 `;
 
@@ -102,7 +97,7 @@ const NewCancelButton = styled.button`
     ${allowCssProp};
 `;
 
-export function ChangeablePicture({ user, button, buttonRef, css }) {
+export function ChangeablePicture({ user, button, css }) {
     const [cropSrc, setCropSrc] = useState(null);
     const [crop, setCrop] = useState();
     const [croppedImg, setCroppedImg] = useState(null);
@@ -110,6 +105,7 @@ export function ChangeablePicture({ user, button, buttonRef, css }) {
     const [isCropping, setIsCropping] = useState(false);
     const imageEl = useRef(null);
     const formRef = useRef(null);
+    const buttonRef = useRef(null);
     const [uploadAvatar] = graphqlService.useUploadUserAvatarMutation(
         user,
         croppedImg
@@ -191,14 +187,30 @@ export function ChangeablePicture({ user, button, buttonRef, css }) {
         }, 'image/jpeg');
     };
 
+    const onButtonClick = e => {
+        buttonRef.current.focus();
+        e.persist();
+    };
+
     return (
         <Form css={css} ref={formRef}>
-            <label htmlFor="avatar">{button}</label>
+            <label htmlFor="avatar">
+                <Button
+                    maxwidth="100%"
+                    onClick={e => {
+                        e.preventDefault();
+                    }}
+                    ref={buttonRef}
+                >
+                    Upload New Photo
+                </Button>
+            </label>
             <HiddenInput
                 type="file"
                 name="Change Image"
                 id="avatar"
                 onChange={onSelectFile}
+                onClick={onButtonClick}
                 accept="image/x-png,image/jpeg"
                 ref={imageEl}
             />

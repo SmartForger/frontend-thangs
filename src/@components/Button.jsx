@@ -38,7 +38,7 @@ const BtnStyle = styled(animated.button)`
 
 const NOOP = () => null;
 
-const Button = props => {
+export const Button = React.forwardRef((props, ref = null) => {
     const { name, onClick = NOOP, routeto, children } = props;
 
     if (routeto) {
@@ -50,10 +50,8 @@ const Button = props => {
     }
 
     return (
-        <BtnStyle {...props} onClick={onClick}>
+        <BtnStyle {...props} onClick={onClick} ref={ref}>
             {name || children}
         </BtnStyle>
     );
-};
-
-export { Button };
+});

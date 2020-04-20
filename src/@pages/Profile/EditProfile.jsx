@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { WithNewThemeLayout } from '@style/Layout';
@@ -27,13 +27,6 @@ const ProfilePictureStyled = styled(ProfilePicture)`
 
 const allowCssProp = props => (props.css ? props.css : '');
 
-const Button = styled(_Button)`
-    padding: 8px 36px;
-    max-width: 100%;
-
-    ${allowCssProp};
-`;
-
 const DeleteButton = styled(_Button)`
     color: ${props => props.theme.primaryButtonText};
     background-color: ${props => props.theme.deleteButton};
@@ -41,7 +34,6 @@ const DeleteButton = styled(_Button)`
 `;
 
 function PictureForm({ user, className }) {
-    const buttonRef = useRef();
     return (
         <Row className={className}>
             <ProfilePictureStyled user={user} size="80px" />
@@ -50,18 +42,6 @@ function PictureForm({ user, className }) {
                 css={`
                     margin-right: 8px;
                 `}
-                button={
-                    <Button
-                        ref={buttonRef}
-                        maxwidth="100%"
-                        onClick={e => {
-                            e.preventDefault();
-                        }}
-                    >
-                        Upload New Photo
-                    </Button>
-                }
-                buttonRef={buttonRef}
             />
 
             <DeleteButton>Delete</DeleteButton>
