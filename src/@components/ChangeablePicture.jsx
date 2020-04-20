@@ -16,6 +16,7 @@ const graphqlService = GraphqlService.getInstance();
 const HiddenInput = styled.input`
     position: absolute;
     left: 0;
+    top: 0;
     opacity: 0;
     height: 100%;
     width: 100%;
