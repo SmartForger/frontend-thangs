@@ -37,8 +37,6 @@ const DeleteButton = styled(_Button)`
 `;
 
 function PictureForm({ user, className }) {
-    const buttonRef = useRef();
-
     const [
         deleteProfileAvatar,
         { loading },
@@ -46,6 +44,7 @@ function PictureForm({ user, className }) {
     const onDelete = () => deleteProfileAvatar();
     const deleteText = loading ? 'Deleting...' : 'Delete';
 
+    const currentAvatar = user && user.profile && user.profile.avatarUrl;
     return (
         <Row className={className}>
             <ProfilePictureStyled user={user} size="80px" />
@@ -56,9 +55,11 @@ function PictureForm({ user, className }) {
                 `}
             />
 
-            <DeleteButton onClick={onDelete} disabled={loading}>
-                {deleteText}
-            </DeleteButton>
+            {currentAvatar && (
+                <DeleteButton onClick={onDelete} disabled={loading}>
+                    {deleteText}
+                </DeleteButton>
+            )}
         </Row>
     );
 }
