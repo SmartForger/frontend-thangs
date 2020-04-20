@@ -72,7 +72,7 @@ const ChangeablePicture = ({ user }) => {
     const imageEl = useRef(null);
     const [uploadAvatar] = graphqlService.useUploadUserAvatarMutation(
         user,
-        croppedImg,
+        croppedImg
     );
 
     const submitCrop = () => {
@@ -108,7 +108,7 @@ const ChangeablePicture = ({ user }) => {
             const croppedImg = await getCroppedImage(
                 img,
                 crop,
-                md5(imageEl.current.files[0].name),
+                md5(imageEl.current.files[0].name)
             );
             setCroppedImg(croppedImg);
         }
@@ -131,7 +131,7 @@ const ChangeablePicture = ({ user }) => {
             0,
             0,
             crop.width,
-            crop.height,
+            crop.height
         );
 
         return new Promise((resolve, reject) => {
@@ -228,7 +228,7 @@ function NewChangePicture({ user, button, buttonRef, css }) {
     const formRef = useRef(null);
     const [uploadAvatar] = graphqlService.useUploadUserAvatarMutation(
         user,
-        croppedImg,
+        croppedImg
     );
 
     const submitCrop = () => {
@@ -269,7 +269,7 @@ function NewChangePicture({ user, button, buttonRef, css }) {
             const croppedImg = await getCroppedImage(
                 img,
                 crop,
-                md5(imageEl.current.files[0].name),
+                md5(imageEl.current.files[0].name)
             );
             setCroppedImg(croppedImg);
         }
@@ -292,7 +292,7 @@ function NewChangePicture({ user, button, buttonRef, css }) {
             0,
             0,
             crop.width,
-            crop.height,
+            crop.height
         );
 
         return new Promise((resolve, reject) => {
