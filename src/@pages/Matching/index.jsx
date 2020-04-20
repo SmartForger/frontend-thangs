@@ -19,6 +19,7 @@ const Header = styled.h1`
 const Subheader = styled.h4`
     margin-bottom: 24px;
     font-size: 18px;
+    color: ${props => props.theme.matchingSubheaderColor};
 `;
 
 const Frame = styled.div`

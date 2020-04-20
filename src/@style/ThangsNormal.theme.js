@@ -73,6 +73,7 @@ export const NewTheme = {
     logoText: BLACK_4,
     mainFont: fontMain,
     mainFontColor: BLACK_5,
+    matchingSubheaderColor: BLACK_1,
     modelActionButtonBackground: GREY_3,
     modelActionButtonText: WHITE_1,
     modelDetailLabel: GREY_5,
