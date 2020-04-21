@@ -93,7 +93,7 @@ function Page() {
         setCurrentModel(model);
     }
 
-    const onCancel = () => history.goBack();
+    const onCancel = () => history.push('/');
 
     return (
         <Frame>
