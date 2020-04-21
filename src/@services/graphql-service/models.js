@@ -399,5 +399,4 @@ export {
     useModelsByDate,
     useModelsByLikes,
     useSearchModels,
-    useCreateUploadUrlMutation,
 };
