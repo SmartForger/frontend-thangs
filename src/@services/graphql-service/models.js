@@ -1,5 +1,6 @@
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import axios from 'axios';
 import * as R from 'ramda';
 
 import { USER_QUERY, parseUser } from './users';
@@ -258,9 +259,20 @@ const useUnlikeModelMutation = (userId, modelId) => {
     });
 };
 
+const CREATE_UPLOAD_URL_MUTATION = gql`
+    mutation createUploadUrl($filename: String!) {
+        createUploadUrl(filename: $filename) {
+            uploadUrl
+            newFilename
+            originalFilename
+        }
+    }
+`;
+
 const UPLOAD_MODEL_MUTATION = gql`
     mutation uploadModel(
-        $file: Upload!
+        $filename: String!
+        $originalFilename: String!
         $name: String!
         $size: Int!
         $description: String
@@ -325,12 +337,30 @@ const SEARCH_MODELS_QUERY = gql`
 `;
 
 const useUploadModelMutation = userId => {
+    const [createUploadUrl] = useMutation(CREATE_UPLOAD_URL_MUTATION);
+
     const [uploadModel, result] = useMutation(UPLOAD_MODEL_MUTATION, {
         refetchQueries: [{ query: USER_QUERY, variables: { id: userId } }],
     });
 
     async function uploadModelAndParseResults(...args) {
-        const response = await uploadModel(...args);
+        const [{ variables }] = args;
+
+        const {
+            data: { originalFilename, newFilename, uploadUrl },
+        } = await createUploadUrl({
+            variables: {
+                filename: variables.file.name,
+            },
+        });
+
+        await axios.put(uploadUrl, variables.file);
+
+        delete variables.file;
+        variables.filename = newFilename;
+        variables.originalFilename = originalFilename;
+
+        const response = await uploadModel({ variables });
         return (
             response.data &&
             response.data.uploadModel &&
@@ -369,4 +399,5 @@ export {
     useModelsByDate,
     useModelsByLikes,
     useSearchModels,
+    useCreateUploadUrlMutation,
 };
