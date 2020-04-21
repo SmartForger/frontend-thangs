@@ -27,13 +27,15 @@ const FixedHeader = styled.div`
             : props.theme.backgroundColor};
     top: 0;
     z-index: 2;
+    display: flex;
+    justify-content: center;
 `;
 
 const Boundary = styled.div`
-    margin: 48px auto 16px;
-    padding: 0 16px;
-    max-width: 1237px;
+    margin: 48px 104px 16px;
+    max-width: 1952px;
     position: relative;
+    width: 100%;
 `;
 
 const Row = styled.div`
@@ -161,6 +163,10 @@ const UserNav = () => {
     );
 };
 
+const Flex = styled.div`
+    display: flex;
+`;
+
 const Header = ({ inverted, variant }) => {
     return (
         <>
@@ -178,7 +184,7 @@ const Header = ({ inverted, variant }) => {
                         {variant !== 'logo-only' && <UserNav />}
                     </TopRow>
                     {variant !== 'logo-only' && (
-                        <Row>
+                        <Flex>
                             <Link to={'/matching'}>
                                 <MatchingButton>
                                     <MatchingIconStyled />
@@ -186,7 +192,7 @@ const Header = ({ inverted, variant }) => {
                                 </MatchingButton>
                             </Link>
                             <SearchBarNew />
-                        </Row>
+                        </Flex>
                     )}
                 </Boundary>
             </FixedHeader>
