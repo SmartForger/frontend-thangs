@@ -68,9 +68,11 @@ function Page() {
     async function handleFile(file) {
         const model = await uploadModel({
             variables: {
+                // To do, clean up the calls to the upload mutation (e.g remove file param)
                 file,
                 name: file.name,
                 size: file.size,
+                units: 'mm',
                 userEmail: authenticationService.currentUserValue.email,
                 searchUpload: true,
             },

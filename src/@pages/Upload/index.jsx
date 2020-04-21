@@ -146,6 +146,7 @@ const Page = () => {
             file,
             name: sanitizeFileName(data.name),
             size: file.size,
+            units: 'mm',
             description: data.description,
         };
 

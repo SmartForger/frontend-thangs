@@ -283,7 +283,8 @@ const UPLOAD_MODEL_MUTATION = gql`
         $searchUpload: Boolean = false
     ) {
         uploadModel(
-            file: $file
+            filename: $filename
+            originalFilename: $originalFilename
             units: "mm"
             name: $name
             size: $size
@@ -347,14 +348,22 @@ const useUploadModelMutation = userId => {
         const [{ variables }] = args;
 
         const {
-            data: { originalFilename, newFilename, uploadUrl },
+            data: {
+                createUploadUrl: { originalFilename, newFilename, uploadUrl },
+            },
         } = await createUploadUrl({
             variables: {
                 filename: variables.file.name,
             },
         });
 
-        await axios.put(uploadUrl, variables.file);
+        // await axios.put(uploadUrl, variables.file);
+        console.log(uploadUrl);
+        await axios.put(uploadUrl, variables.file, {
+            headers: {
+                'Content-Type': 'application/octet-stream',
+            },
+        });
 
         delete variables.file;
         variables.filename = newFilename;
