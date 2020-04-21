@@ -24,15 +24,16 @@ export * from './RedirectProfile';
 const graphqlService = GraphqlService.getInstance();
 
 const Anchor = styled(AnchorButton)`
-    margin-top: 8px;
+    margin-top: 16px;
     padding: 4px;
     font-size: 16px;
 `;
 
-const Centered = styled.div`
+const Frame = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
+    margin-top: 16px;
 `;
 
 const Name = styled.div`
@@ -279,12 +280,12 @@ function Page() {
     }
 
     return (
-        <Centered>
+        <Frame>
             <ProfilePicture user={user} size="104px" />
             <Name>{user.fullName}</Name>
             <EditProfileButtonStyled viewedUser={user} />
             <Tabs user={user} />
-        </Centered>
+        </Frame>
     );
 }
 

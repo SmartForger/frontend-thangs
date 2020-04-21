@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { animated } from 'react-spring';
 
+const allowCssProp = props => (props.css ? props.css : '');
+
 const BtnStyle = styled(animated.button)`
     width: ${props => props.width || '100%'};
     max-width: ${props => props.maxwidth || '114px'};
@@ -34,6 +36,8 @@ const BtnStyle = styled(animated.button)`
             opacity: 1;
         }
     }
+
+    ${allowCssProp};
 `;
 
 const NOOP = () => null;

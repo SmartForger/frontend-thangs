@@ -67,34 +67,11 @@ const Form = styled.form`
     ${allowCssProp};
 `;
 
-const NewButton = styled.button`
-    color: ${props => props.theme.primaryButtonText};
-    background-color: ${props => props.theme.primaryButton};
-    font-size: 14px;
-    padding: 8px 36px;
-    border: none;
-    border-radius: 8px;
-    font-family: ${props => props.theme.buttonFont};
-    font-weight: bold;
-    cursor: pointer;
-
-    ${props => props.theme.shadow};
-    ${allowCssProp};
-`;
-
-const NewCancelButton = styled.button`
+const CancelButton = styled(Button)`
     color: ${props => props.theme.primaryButtonText};
     background-color: ${props => props.theme.deleteButton};
-    font-size: 14px;
     padding: 8px 36px;
-    border: none;
-    border-radius: 8px;
-    font-family: ${props => props.theme.buttonFont};
-    font-weight: bold;
-    cursor: pointer;
-
     ${props => props.theme.shadow};
-    ${allowCssProp};
 `;
 
 export function ChangeablePicture({ user, button, css }) {
@@ -201,6 +178,9 @@ export function ChangeablePicture({ user, button, css }) {
                         e.preventDefault();
                     }}
                     ref={buttonRef}
+                    css={`
+                        width: 197px;
+                    `}
                 >
                     Upload New Photo
                 </Button>
@@ -228,15 +208,16 @@ export function ChangeablePicture({ user, button, css }) {
                     circularCrop={true}
                 />
                 <ButtonContainer>
-                    <NewButton
+                    <Button
                         onClick={submitCrop}
                         css={`
                             margin-right: 8px;
+                            padding: 8px 36px;
                         `}
                     >
                         Save
-                    </NewButton>
-                    <NewCancelButton onClick={cancel}>Cancel</NewCancelButton>
+                    </Button>
+                    <CancelButton onClick={cancel}>Cancel</CancelButton>
                 </ButtonContainer>
             </ModalStyled>
         </Form>

@@ -9,6 +9,9 @@ import { Spinner } from '@components/Spinner';
 import { ChangeablePicture } from '@components/ChangeablePicture';
 import { FlashContext } from '@components/Flash';
 import { EditProfileForm } from '@components/EditProfileForm';
+import * as GraphqlService from '@services/graphql-service';
+
+const graphqlService = GraphqlService.getInstance();
 
 const Name = styled.div`
     font-family: ${props => props.theme.mainFont};
@@ -34,6 +37,14 @@ const DeleteButton = styled(_Button)`
 `;
 
 function PictureForm({ user, className }) {
+    const [
+        deleteProfileAvatar,
+        { loading },
+    ] = graphqlService.useDeleteUserAvatarMutation(user);
+    const onDelete = () => deleteProfileAvatar();
+    const deleteText = loading ? 'Deleting...' : 'Delete';
+
+    const currentAvatar = user && user.profile && user.profile.avatarUrl;
     return (
         <Row className={className}>
             <ProfilePictureStyled user={user} size="80px" />
@@ -44,7 +55,11 @@ function PictureForm({ user, className }) {
                 `}
             />
 
-            <DeleteButton>Delete</DeleteButton>
+            {currentAvatar && (
+                <DeleteButton onClick={onDelete} disabled={loading}>
+                    {deleteText}
+                </DeleteButton>
+            )}
         </Row>
     );
 }
