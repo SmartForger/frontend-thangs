@@ -129,6 +129,7 @@ const DotsStyled = styled(Dots)`
 
 const Page = () => {
     const history = useHistory();
+    const [uploadError, setUploadError] = useState();
     const [file, setFile] = useState();
     const [category, setCategory] = useState();
     const currentUser = authenticationService.currentUserValue;
@@ -142,26 +143,32 @@ const Page = () => {
     const { register, handleSubmit, errors } = useForm();
 
     const onSubmit = async data => {
-        const requiredVariables = {
-            name: sanitizeFileName(data.name),
-            size: file.size,
-            description: data.description,
-        };
+        setUploadError();
+        try {
+            const requiredVariables = {
+                name: sanitizeFileName(data.name),
+                size: file.size,
+                description: data.description,
+            };
 
-        const optionalVariables = {
-            weight: data.weight,
-            height: data.height,
-            material: data.material,
-            category,
-        };
+            const optionalVariables = {
+                weight: data.weight,
+                height: data.height,
+                material: data.material,
+                category,
+            };
 
-        await uploadModel(file, {
-            variables: {
-                ...requiredVariables,
-                ...optionalVariables,
-            },
-        });
-        history.push('/profile');
+            await uploadModel(file, {
+                variables: {
+                    ...requiredVariables,
+                    ...optionalVariables,
+                },
+            });
+            history.push('/profile');
+        } catch (e) {
+            setUploadError(e);
+            console.error('Upload failed with error:', e);
+        }
     };
 
     const handleCancel = e => {

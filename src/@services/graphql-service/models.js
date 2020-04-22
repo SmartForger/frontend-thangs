@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { uploadToSignedUrl } from '@services/storageService';
@@ -338,40 +339,50 @@ const SEARCH_MODELS_QUERY = gql`
 `;
 
 const useUploadModelMutation = userId => {
+    const [loading, setLoading] = useState(false);
     const [createUploadUrl] = useMutation(CREATE_UPLOAD_URL_MUTATION);
 
-    const [uploadModel, result] = useMutation(UPLOAD_MODEL_MUTATION, {
+    const [uploadModel] = useMutation(UPLOAD_MODEL_MUTATION, {
         refetchQueries: [{ query: USER_QUERY, variables: { id: userId } }],
     });
 
     async function uploadModelAndParseResults(file, { variables }) {
-        const {
-            data: {
-                createUploadUrl: { originalFilename, newFilename, uploadUrl },
-            },
-        } = await createUploadUrl({
-            variables: {
-                filename: file.name,
-            },
-        });
+        setLoading(true);
+        try {
+            const {
+                data: {
+                    createUploadUrl: {
+                        originalFilename,
+                        newFilename,
+                        uploadUrl,
+                    },
+                },
+            } = await createUploadUrl({
+                variables: {
+                    filename: file.name,
+                },
+            });
 
-        await uploadToSignedUrl(uploadUrl, file);
+            await uploadToSignedUrl(uploadUrl, file);
 
-        const response = await uploadModel({
-            variables: {
-                ...variables,
-                filename: newFilename,
-                originalFilename,
-            },
-        });
-        return (
-            response.data &&
-            response.data.uploadModel &&
-            parseModel(response.data.uploadModel.model)
-        );
+            const response = await uploadModel({
+                variables: {
+                    ...variables,
+                    filename: newFilename,
+                    originalFilename,
+                },
+            });
+            return (
+                response.data &&
+                response.data.uploadModel &&
+                parseModel(response.data.uploadModel.model)
+            );
+        } finally {
+            setLoading(false);
+        }
     }
 
-    return [uploadModelAndParseResults, result];
+    return [uploadModelAndParseResults, { loading }];
 };
 
 const parseSeachModelsPayload = data => {
