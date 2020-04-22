@@ -158,7 +158,7 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                     ) : (
                         <ModelViewerStyled model={model} />
                     )}
-                    <Header>Geometric Similar Matches</Header>
+                    <Header>Geometric Similar</Header>
                     <ModelCollection
                         models={model.relatedModels || []}
                         maxPerRow={3}
