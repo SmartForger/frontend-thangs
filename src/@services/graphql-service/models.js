@@ -357,11 +357,7 @@ const useUploadModelMutation = userId => {
             },
         });
 
-        await axios.put(uploadUrl, variables.file, {
-            headers: {
-                'Content-Type': 'application/octet-stream',
-            },
-        });
+        await uploadToSignedUrl(uploadUrl, variables.file);
 
         delete variables.file;
         variables.filename = newFilename;
