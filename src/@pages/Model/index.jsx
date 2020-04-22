@@ -165,7 +165,7 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                             <ModelCollection
                                 models={model.relatedModels}
                                 maxPerRow={3}
-                                noResultsText="No Geometric Similar Matches Found"
+                                noResultsText="No Geometrically Similar Matches Found"
                             />
                         </>
                     )}
