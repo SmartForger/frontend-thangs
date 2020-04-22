@@ -58,8 +58,6 @@ const Hero = styled.div`
 `;
 
 const PromotionalText = styled.div`
-    margin: 0 16px;
-
     * {
         color: ${props => props.theme.promotionalTextColor};
         text-decoration-color: ${props => props.theme.brandColor};
@@ -69,14 +67,13 @@ const PromotionalText = styled.div`
 
 const TextContainer = styled.div`
     margin: auto;
-    max-width: 1237px;
+    max-width: 1952px;
     width: 100%;
 `;
 
 const PromotionalSecondaryText = styled.div`
-    margin: 0 16px;
     max-width: 550px;
-
+    margin-top: 24px;
     color: ${props => props.theme.promotionalSecondaryTextColor};
     font-size: 32px;
     font-weight: 300;
