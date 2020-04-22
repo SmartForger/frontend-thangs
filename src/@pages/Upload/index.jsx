@@ -143,8 +143,6 @@ const Page = () => {
 
     const onSubmit = async data => {
         const requiredVariables = {
-            // To do, clean up the calls to the upload mutation (e.g remove file param)
-            file,
             name: sanitizeFileName(data.name),
             size: file.size,
             description: data.description,
@@ -157,7 +155,7 @@ const Page = () => {
             category,
         };
 
-        await uploadModel({
+        await uploadModel(file, {
             variables: {
                 ...requiredVariables,
                 ...optionalVariables,

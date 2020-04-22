@@ -344,26 +344,26 @@ const useUploadModelMutation = userId => {
         refetchQueries: [{ query: USER_QUERY, variables: { id: userId } }],
     });
 
-    async function uploadModelAndParseResults(...args) {
-        const [{ variables }] = args;
-
+    async function uploadModelAndParseResults(file, { variables }) {
         const {
             data: {
                 createUploadUrl: { originalFilename, newFilename, uploadUrl },
             },
         } = await createUploadUrl({
             variables: {
-                filename: variables.file.name,
+                filename: file.name,
             },
         });
 
-        await uploadToSignedUrl(uploadUrl, variables.file);
+        await uploadToSignedUrl(uploadUrl, file);
 
-        delete variables.file;
-        variables.filename = newFilename;
-        variables.originalFilename = originalFilename;
-
-        const response = await uploadModel({ variables });
+        const response = await uploadModel({
+            variables: {
+                ...variables,
+                filename: newFilename,
+                originalFilename,
+            },
+        });
         return (
             response.data &&
             response.data.uploadModel &&

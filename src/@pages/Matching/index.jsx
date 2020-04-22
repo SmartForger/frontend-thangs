@@ -66,10 +66,8 @@ function Page() {
     ] = graphqlService.useUploadModelMutation(id);
 
     async function handleFile(file) {
-        const model = await uploadModel({
+        const model = await uploadModel(file, {
             variables: {
-                // To do, clean up the calls to the upload mutation (e.g remove file param)
-                file,
                 name: file.name,
                 size: file.size,
                 userEmail: authenticationService.currentUserValue.email,
