@@ -44,6 +44,8 @@ const fontMain = "'Montserrat', sans-serif";
 const shadow = 'box-shadow: 0px 5px 10px 0px rgba(35, 37, 48, 0.25)';
 const headerFont = 'Lexend Deca';
 
+const maxWidth = '1237px;';
+
 export const NewTheme = {
     activityCount: GREY_3,
     avatarInitialsColor: GREY_10,
@@ -74,6 +76,7 @@ export const NewTheme = {
     mainFont: fontMain,
     mainFontColor: BLACK_5,
     matchingSubheaderColor: BLACK_1,
+    maxWidth,
     modelActionButtonBackground: GREY_3,
     modelActionButtonText: WHITE_1,
     modelDetailLabel: GREY_5,
