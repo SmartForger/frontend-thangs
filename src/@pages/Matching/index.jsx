@@ -72,7 +72,6 @@ function Page() {
                 file,
                 name: file.name,
                 size: file.size,
-                units: 'mm',
                 userEmail: authenticationService.currentUserValue.email,
                 searchUpload: true,
             },

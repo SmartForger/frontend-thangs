@@ -143,10 +143,10 @@ const Page = () => {
 
     const onSubmit = async data => {
         const requiredVariables = {
+            // To do, clean up the calls to the upload mutation (e.g remove file param)
             file,
             name: sanitizeFileName(data.name),
             size: file.size,
-            units: 'mm',
             description: data.description,
         };
 
