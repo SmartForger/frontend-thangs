@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import * as R from 'ramda';
 
 import { useHistory, Link } from 'react-router-dom';
 import { ProfilePicture } from '@components/ProfilePicture';
@@ -158,12 +159,16 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                     ) : (
                         <ModelViewerStyled model={model} />
                     )}
-                    <Header>Geometric Similar</Header>
-                    <ModelCollection
-                        models={model.relatedModels || []}
-                        maxPerRow={3}
-                        noResultsText="No Geometric Similar Matches Found"
-                    />
+                    {!R.isEmpty(model.relatedModels) && (
+                        <>
+                            <Header>Geometric Similar</Header>
+                            <ModelCollection
+                                models={model.relatedModels}
+                                maxPerRow={3}
+                                noResultsText="No Geometric Similar Matches Found"
+                            />
+                        </>
+                    )}
                 </ModelColumn>
                 <Sidebar>
                     <LikeModelButton currentUser={currentUser} model={model} />
