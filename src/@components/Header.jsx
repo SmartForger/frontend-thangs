@@ -27,15 +27,12 @@ const FixedHeader = styled.div`
             : props.theme.backgroundColor};
     top: 0;
     z-index: 2;
-    display: flex;
-    justify-content: center;
 `;
 
 const Boundary = styled.div`
-    margin: 48px 104px 16px;
-    max-width: 1952px;
+    margin: 48px auto 16px;
+    max-width: ${props => props.theme.maxWidth}
     position: relative;
-    width: 100%;
 `;
 
 const Row = styled.div`

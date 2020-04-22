@@ -10,10 +10,10 @@ const allowCssProp = props => (props.css ? props.css : '');
 
 const NewLayout = styled.div`
     padding: ${props =>
-        props.variant === 'small-vertical-spacing' ? '110px' : '195px'}
-        104px 32px;
-    margin: auto
-    max-width: 1952px;
+            props.variant === 'small-vertical-spacing' ? '110px' : '195px'}
+        16px 32px;
+    margin: auto;
+    max-width: ${props => props.theme.maxWidth};
 
     ${allowCssProp};
 `;
@@ -67,7 +67,7 @@ const PromotionalText = styled.div`
 
 const TextContainer = styled.div`
     margin: auto;
-    max-width: 1952px;
+    max-width: ${props => props.theme.maxWidth}
     width: 100%;
 `;
 
