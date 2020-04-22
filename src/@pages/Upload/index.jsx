@@ -187,6 +187,12 @@ const Page = () => {
                             margin-right: 32px;
                         `}
                     >
+                        {uploadError && (
+                            <p style={{ color: 'red' }}>
+                                Sorry. An error occurred uploading the file.
+                                Wait a moment and try again.
+                            </p>
+                        )}
                         {isUploading ? (
                             <UploadFrame>
                                 <DarkBackgroundSpinner />
