@@ -1,11 +1,19 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 import { ReactComponent as UploadIcon } from '@svg/upload-icon.svg';
+import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg';
 import { UploadFrame } from '@components/UploadFrame';
 
 const UploadIconStyled = styled(UploadIcon)`
     margin-bottom: 32px;
+`;
+
+const FlexColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 `;
 
 const LinkColor = styled.span`
@@ -42,10 +50,45 @@ const MODEL_FILE_EXTS = [
     '.xml', // XMLEBOM
 ];
 
-export function Uploader({ file, setFile }) {
-    const onDrop = useCallback(
+const FILE_SIZE_LIMITS = {
+    hard: {
+        size: 250_000_000,
+        pretty: '250MB',
+    },
+    soft: {
+        size: 50_000_000,
+        pretty: '50MB',
+    },
+};
+
+const InfoMessage = styled.div`
+    margin-top: 32px
+    text-align: center;
+    max-width: 400px;
+    font-size: 24px;
+    line-height: 28px;
+`;
+
+const SmallInfoMessage = styled(InfoMessage)`
+    font-size: 14px;
+    line-height: 18px;
+`;
+
+export function Uploader({ file, setFile, showError = true }) {
+    const [errorState, setErrorState] = React.useState();
+    const onDrop = React.useCallback(
         acceptedFiles => {
-            setFile(acceptedFiles[0]);
+            const file = acceptedFiles[0];
+            if (file.size >= FILE_SIZE_LIMITS.hard.size) {
+                setErrorState('TOO_BIG');
+                setFile(null);
+            } else if (file.size >= FILE_SIZE_LIMITS.soft.size) {
+                setErrorState('SIZE_WARNING');
+                setFile(file);
+            } else {
+                setErrorState(null);
+                setFile(file);
+            }
         },
         [setFile]
     );
@@ -59,17 +102,49 @@ export function Uploader({ file, setFile }) {
         <div {...getRootProps()}>
             <input {...getInputProps({ multiple: false })} />
             <UploadFrame dragactive={isDragActive}>
-                {file ? (
-                    <div>File: {file.name}</div>
+                {showError ? (
+                    <FlexColumn>
+                        <ErrorIcon />
+                        <InfoMessage>
+                            Sorry, an unexpected error occurred. Please wait a
+                            moment and try to save the model again.
+                        </InfoMessage>
+                    </FlexColumn>
+                ) : file ? (
+                    <FlexColumn>
+                        <InfoMessage>
+                            <strong>File:</strong> {file.name}
+                        </InfoMessage>
+                        {errorState === 'SIZE_WARNING' && (
+                            <InfoMessage>
+                                Notice: Files over{' '}
+                                {FILE_SIZE_LIMITS.soft.pretty} may take a long
+                                time to upload & process.
+                            </InfoMessage>
+                        )}
+                    </FlexColumn>
+                ) : errorState === 'TOO_BIG' ? (
+                    <FlexColumn>
+                        <ErrorIcon />
+                        <InfoMessage>
+                            File over {FILE_SIZE_LIMITS.hard.pretty}. Try{' '}
+                            <LinkColor>uploading</LinkColor> a different file.
+                        </InfoMessage>
+                    </FlexColumn>
                 ) : (
-                    <>
+                    <FlexColumn>
                         <UploadIconStyled />
                         <div>Drag & Drop model</div>
                         <div>
                             or <LinkColor>browse</LinkColor> to choose file
                         </div>
-                    </>
+                    </FlexColumn>
                 )}
+                <SmallInfoMessage>
+                    Files can be up to {FILE_SIZE_LIMITS.hard.pretty} each.
+                    Files above {FILE_SIZE_LIMITS.soft.pretty} may take longer
+                    to upload and process.
+                </SmallInfoMessage>
             </UploadFrame>
         </div>
     );

@@ -99,12 +99,6 @@ function Page() {
             <Subheader>
                 Upload your model to see other models with similar geometry.
             </Subheader>
-            {uploadError && (
-                <p style={{ color: 'red' }}>
-                    Sorry. An error occurred uploading the file. Wait a moment
-                    and try again.
-                </p>
-            )}
             {isUploading ? (
                 <UploadProgress />
             ) : currentModel ? (
@@ -112,7 +106,10 @@ function Page() {
             ) : (
                 <>
                     <form>
-                        <Uploader setFile={handleFile} />
+                        <Uploader
+                            showError={!!uploadError}
+                            setFile={handleFile}
+                        />
                     </form>
                     <CancelButton onClick={onCancel}>Cancel</CancelButton>
                 </>

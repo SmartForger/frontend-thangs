@@ -180,19 +180,17 @@ const Page = () => {
                             margin-right: 32px;
                         `}
                     >
-                        {uploadError && (
-                            <p style={{ color: 'red' }}>
-                                Sorry. An error occurred uploading the file.
-                                Wait a moment and try again.
-                            </p>
-                        )}
                         {isUploading ? (
                             <UploadFrame>
                                 <DarkBackgroundSpinner />
                                 <DotsStyled text="Uploading" />
                             </UploadFrame>
                         ) : (
-                            <Uploader file={file} setFile={setFile} />
+                            <Uploader
+                                showError={!!uploadError}
+                                file={file}
+                                setFile={setFile}
+                            />
                         )}
                     </Column>
                     <Column
