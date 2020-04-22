@@ -339,6 +339,7 @@ const SEARCH_MODELS_QUERY = gql`
 `;
 
 const useUploadModelMutation = userId => {
+    const [uploadError, setUploadError] = useState();
     const [loading, setLoading] = useState(false);
     const [createUploadUrl] = useMutation(CREATE_UPLOAD_URL_MUTATION);
 
@@ -348,6 +349,7 @@ const useUploadModelMutation = userId => {
 
     async function uploadModelAndParseResults(file, { variables }) {
         setLoading(true);
+        setUploadError();
         try {
             const {
                 data: {
@@ -377,12 +379,16 @@ const useUploadModelMutation = userId => {
                 response.data.uploadModel &&
                 parseModel(response.data.uploadModel.model)
             );
+        } catch (e) {
+            setUploadError(e);
+            console.error('Upload failed with error:', e);
+            throw e;
         } finally {
             setLoading(false);
         }
     }
 
-    return [uploadModelAndParseResults, { loading }];
+    return [uploadModelAndParseResults, { loading, error: uploadError }];
 };
 
 const parseSeachModelsPayload = data => {

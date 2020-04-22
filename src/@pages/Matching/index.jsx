@@ -58,30 +58,23 @@ function Results({ modelId }) {
 
 function Page() {
     const [currentModel, setCurrentModel] = useState();
-    const [uploadError, setUploadError] = useState();
     const currentUser = authenticationService.currentUserValue;
     const { id } = currentUser;
     const [
         uploadModel,
-        { loading: isUploading },
+        { loading: isUploading, error: uploadError },
     ] = graphqlService.useUploadModelMutation(id);
 
     async function handleFile(file) {
-        setUploadError();
-        try {
-            const model = await uploadModel(file, {
-                variables: {
-                    name: file.name,
-                    size: file.size,
-                    userEmail: authenticationService.currentUserValue.email,
-                    searchUpload: true,
-                },
-            });
-            setCurrentModel(model);
-        } catch (e) {
-            setUploadError(e);
-            console.error('Upload failed with error:', e);
-        }
+        const model = await uploadModel(file, {
+            variables: {
+                name: file.name,
+                size: file.size,
+                userEmail: authenticationService.currentUserValue.email,
+                searchUpload: true,
+            },
+        });
+        setCurrentModel(model);
     }
 
     return (
