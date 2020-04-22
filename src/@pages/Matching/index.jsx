@@ -76,20 +76,18 @@ function Page() {
     const { id } = currentUser;
     const [
         uploadModel,
-        { loading: isUploading },
+        { loading: isUploading, error: uploadError },
     ] = graphqlService.useUploadModelMutation(id);
 
     async function handleFile(file) {
-        const model = await uploadModel({
+        const model = await uploadModel(file, {
             variables: {
-                file,
                 name: file.name,
                 size: file.size,
                 userEmail: authenticationService.currentUserValue.email,
                 searchUpload: true,
             },
         });
-
         setCurrentModel(model);
     }
 
@@ -101,6 +99,12 @@ function Page() {
             <Subheader>
                 Upload your model to see other models with similar geometry.
             </Subheader>
+            {uploadError && (
+                <p style={{ color: 'red' }}>
+                    Sorry. An error occurred uploading the file. Wait a moment
+                    and try again.
+                </p>
+            )}
             {isUploading ? (
                 <UploadProgress />
             ) : currentModel ? (

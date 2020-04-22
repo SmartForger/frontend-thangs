@@ -136,14 +136,13 @@ const Page = () => {
 
     const [
         uploadModel,
-        { loading: isUploading },
+        { loading: isUploading, error: uploadError },
     ] = graphqlService.useUploadModelMutation(id);
 
     const { register, handleSubmit, errors } = useForm();
 
     const onSubmit = async data => {
         const requiredVariables = {
-            file,
             name: sanitizeFileName(data.name),
             size: file.size,
             description: data.description,
@@ -156,7 +155,7 @@ const Page = () => {
             category,
         };
 
-        await uploadModel({
+        await uploadModel(file, {
             variables: {
                 ...requiredVariables,
                 ...optionalVariables,
@@ -181,6 +180,12 @@ const Page = () => {
                             margin-right: 32px;
                         `}
                     >
+                        {uploadError && (
+                            <p style={{ color: 'red' }}>
+                                Sorry. An error occurred uploading the file.
+                                Wait a moment and try again.
+                            </p>
+                        )}
                         {isUploading ? (
                             <UploadFrame>
                                 <DarkBackgroundSpinner />

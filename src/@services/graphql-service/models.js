@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import { uploadToSignedUrl } from '@services/storageService';
 import * as R from 'ramda';
 
 import { USER_QUERY, parseUser } from './users';
@@ -258,9 +260,20 @@ const useUnlikeModelMutation = (userId, modelId) => {
     });
 };
 
+const CREATE_UPLOAD_URL_MUTATION = gql`
+    mutation createUploadUrl($filename: String!) {
+        createUploadUrl(filename: $filename) {
+            uploadUrl
+            newFilename
+            originalFilename
+        }
+    }
+`;
+
 const UPLOAD_MODEL_MUTATION = gql`
     mutation uploadModel(
-        $file: Upload!
+        $filename: String!
+        $originalFilename: String!
         $name: String!
         $size: Int!
         $description: String
@@ -271,7 +284,8 @@ const UPLOAD_MODEL_MUTATION = gql`
         $searchUpload: Boolean = false
     ) {
         uploadModel(
-            file: $file
+            filename: $filename
+            originalFilename: $originalFilename
             units: "mm"
             name: $name
             size: $size
@@ -325,20 +339,56 @@ const SEARCH_MODELS_QUERY = gql`
 `;
 
 const useUploadModelMutation = userId => {
-    const [uploadModel, result] = useMutation(UPLOAD_MODEL_MUTATION, {
+    const [uploadError, setUploadError] = useState();
+    const [loading, setLoading] = useState(false);
+    const [createUploadUrl] = useMutation(CREATE_UPLOAD_URL_MUTATION);
+
+    const [uploadModel] = useMutation(UPLOAD_MODEL_MUTATION, {
         refetchQueries: [{ query: USER_QUERY, variables: { id: userId } }],
     });
 
-    async function uploadModelAndParseResults(...args) {
-        const response = await uploadModel(...args);
-        return (
-            response.data &&
-            response.data.uploadModel &&
-            parseModel(response.data.uploadModel.model)
-        );
+    async function uploadModelAndParseResults(file, { variables }) {
+        setLoading(true);
+        setUploadError();
+        try {
+            const {
+                data: {
+                    createUploadUrl: {
+                        originalFilename,
+                        newFilename,
+                        uploadUrl,
+                    },
+                },
+            } = await createUploadUrl({
+                variables: {
+                    filename: file.name,
+                },
+            });
+
+            await uploadToSignedUrl(uploadUrl, file);
+
+            const response = await uploadModel({
+                variables: {
+                    ...variables,
+                    filename: newFilename,
+                    originalFilename,
+                },
+            });
+            return (
+                response.data &&
+                response.data.uploadModel &&
+                parseModel(response.data.uploadModel.model)
+            );
+        } catch (e) {
+            setUploadError(e);
+            console.error('Upload failed with error:', e);
+            throw e;
+        } finally {
+            setLoading(false);
+        }
     }
 
-    return [uploadModelAndParseResults, result];
+    return [uploadModelAndParseResults, { loading, error: uploadError }];
 };
 
 const parseSeachModelsPayload = data => {
