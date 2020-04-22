@@ -1,6 +1,6 @@
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import axios from 'axios';
+import { uploadToSignedUrl } from '@services/storageService';
 import * as R from 'ramda';
 
 import { USER_QUERY, parseUser } from './users';

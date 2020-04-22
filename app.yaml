@@ -1,5 +1,6 @@
 #runtime: nodejs12
 runtime: python27
+service: test-react
 api_version: 1
 threadsafe: true
 # This sample incurs costs to run on the App Engine flexible environment.
