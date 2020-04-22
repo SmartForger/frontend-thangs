@@ -161,7 +161,7 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                     )}
                     {!R.isEmpty(model.relatedModels) && (
                         <>
-                            <Header>Geometric Similar</Header>
+                            <Header>Geometrically Similar</Header>
                             <ModelCollection
                                 models={model.relatedModels}
                                 maxPerRow={3}
