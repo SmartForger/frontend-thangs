@@ -1,37 +1,8 @@
 import { css } from 'styled-components';
-import {
-    OFF_WHITE,
-    GREY_1,
-    GREY_3,
-    GREY_4,
-    GREY_5,
-    GREY_6,
-    GREY_7,
-    GREY_8,
-    GREY_9,
-    GREY_10,
-    GREY_11,
-    GREY_12,
-    BLACK_1,
-    BLACK_2,
-    BLACK_3,
-    BLACK_4,
-    BLACK_5,
-    YELLOW_1,
-    BLUE_1,
-    BLUE_2,
-    BLUE_3,
-    BROWN,
-    RED_1,
-    RED_4,
-    WHITE_1,
-    WHITE_2,
-    WHITE_3,
-    WHITE_4,
-    LIGHT_PURPLE,
-} from './colors';
+import { GREY_5, GREY_11, GREY_12, BLUE_2, WHITE_1, WHITE_3 } from './colors';
 
-const MONTSERRAT = "'Montserrat', sans-serif";
+export const MONTSERRAT = "'Montserrat', sans-serif";
+
 const LEXEND_DECA = 'Lexend Deca';
 
 export const modelCardHoverText = css`

@@ -37,11 +37,11 @@ import {
     formCalloutText,
     usernameText,
     subheaderText,
-    modelTitleText,
+    modelTitleText as _modelTitleText,
     pageTitleText,
     usernameLinkText,
     headerText,
-    logoText,
+    logoText as _logoText,
 } from './text';
 
 /*
@@ -133,11 +133,11 @@ export const NewTheme = {
     formCalloutText,
     usernameText,
     subheaderText,
-    modelTitleText,
+    _modelTitleText,
     pageTitleText,
     usernameLinkText,
     headerText,
-    logoText,
+    _logoText,
 };
 
 export const NewDarkTheme = {
