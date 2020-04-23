@@ -18,7 +18,11 @@ import { ReactComponent as ModelIcon } from '@svg/model-icon.svg';
 import { ReactComponent as PencilIcon } from '@svg/pencil-icon.svg';
 import { ModelCollection } from '@components/ModelCollection';
 import { SecondaryButton } from '@components/Button';
-import { subheaderText } from '@style/text';
+import {
+    subheaderText,
+    tabNavigationText,
+    activeTabNavigationText,
+} from '@style/text';
 
 export * from './EditProfile';
 export * from './RedirectProfile';
@@ -48,23 +52,12 @@ const TabTitleGroup = styled.div`
 `;
 
 const TabTitle = styled.div`
-    font-family: ${props => props.theme.mainFont};
-    color: ${props =>
-        props.selected
-            ? props.theme.selectedProfileTabColor
-            : props.theme.unselectedProfileTabColor};
-    font-size: 18px;
+    ${props => (props.selected ? activeTabNavigationText : tabNavigationText)};
+
     display: flex;
     align-items: center;
     margin-right: 56px;
     cursor: pointer;
-
-    svg {
-        fill: ${props =>
-            props.selected
-                ? props.theme.selectedProfileTabColor
-                : props.theme.unselectedProfileTabColor};
-    }
 `;
 
 const Icon = styled.div`

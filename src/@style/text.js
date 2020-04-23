@@ -4,6 +4,7 @@ import {
     GREY_11,
     GREY_12,
     BLUE_2,
+    BLACK_1,
     WHITE_1,
     WHITE_2,
     WHITE_3,
@@ -26,6 +27,15 @@ export const bodyCopyText = css``;
 export const tabNavigationText = css`
     color: ${GREY_5};
     font-size: 16px;
+    svg {
+        fill: ${GREY_5};
+    }
+`;
+export const activeTabNavigationText = css`
+    font-size: 16px;
+    svg {
+        fill: ${BLACK_1};
+    }
 `;
 export const cardNumbersText = css`
     color: ${GREY_11};
