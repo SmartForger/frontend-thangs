@@ -10,7 +10,8 @@ import { LikeModelButton } from '@components/LikeModelButton';
 import { CommentsForModel } from '@components/CommentsForModel';
 import { ModelViewer } from '@components/HoopsModelViewer';
 import { ModelViewer as BackupViewer } from '@components/ModelViewer';
-
+import { Button } from '@components/Button';
+import { useDownloadModel } from '@customHooks/Models';
 import { useParams } from 'react-router-dom';
 import { useLocalStorage } from '@customHooks/Storage';
 import * as GraphqlService from '@services/graphql-service';
@@ -103,15 +104,13 @@ const Description = styled.div`
     margin: 32px 0;
 `;
 
-const DownloadLink = styled.a`
-    font-size: 14px;
-    font-weight: 500;
-    color: ${props => props.theme.linkText};
-    margin-bottom: 24px;
-    display: block;
-`;
-
-const graphqlService = GraphqlService.getInstance();
+// const DownloadLink = styled.a`
+//     font-size: 14px;
+//     font-weight: 500;
+//     color: ${props => props.theme.linkText};
+//     margin-bottom: 24px;
+//     display: block;
+// `;
 
 function ModelTitle({ model, className }) {
     return (
@@ -145,14 +144,7 @@ const Header = styled.div`
 
 const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
     const history = useHistory();
-    const [createDownloadUrl] = graphqlService.useCreateDownloadUrlMutation(
-        model.id
-    );
-
-    async function downloadModel() {
-        const downloadUrl = await createDownloadUrl();
-        window.open(downloadUrl);
-    }
+    const [downloadModel] = useDownloadModel(model.id);
 
     return (
         <>
@@ -179,9 +171,7 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                     <LikeModelButton currentUser={currentUser} model={model} />
                     <ModelTitle model={model} />
                     <Description>{model.description}</Description>
-                    <DownloadLink href={'#'} onClick={downloadModel}>
-                        Download Model
-                    </DownloadLink>
+                    <Button name="Download" onClick={downloadModel} />
                     <ModelDetails model={model} />
                     <Comments model={model} />
                 </Sidebar>
