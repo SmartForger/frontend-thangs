@@ -5,6 +5,7 @@ import Select from 'react-select';
 import { useForm, ErrorMessage } from 'react-hook-form';
 import { WithNewThemeLayout } from '@style/Layout';
 import { Uploader } from '@components/Uploader';
+import { Button } from '@components/Button';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 import { Spinner } from '@components/Spinner';
@@ -48,16 +49,8 @@ const ButtonGroup = styled.div`
     margin-top: 32px;
 `;
 
-const Button = styled.button`
-    color: ${props => props.theme.primaryButtonText};
-    background-color: ${props => props.theme.primaryButton};
-    font-size: 14px;
+const SaveButton = styled(Button)`
     padding: 8px 36px;
-    border: none;
-    border-radius: 8px;
-    font-family: ${props => props.theme.buttonFont};
-    font-weight: 500;
-    cursor: pointer;
 
     :disabled {
         cursor: not-allowed;
@@ -324,9 +317,9 @@ const Page = () => {
                     >
                         Cancel
                     </CancelButton>
-                    <Button type="submit" disabled={!file}>
+                    <SaveButton type="submit" disabled={!file}>
                         Save Model
-                    </Button>
+                    </SaveButton>
                 </ButtonGroup>
             </form>
         </div>
