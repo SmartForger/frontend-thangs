@@ -67,3 +67,7 @@ export const primaryButtonText = css`
     color: ${WHITE_2};
     font-weight: 500;
 `;
+export const secondaryButtonText = css`
+    color: ${WHITE_1};
+    font-weight: 500;
+`;

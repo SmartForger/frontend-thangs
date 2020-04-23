@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { animated } from 'react-spring';
-import { primaryButtonText } from '@style/text';
+import { primaryButtonText, secondaryButtonText } from '@style/text';
 
 const allowCssProp = props => (props.css ? props.css : '');
 
@@ -40,6 +40,11 @@ const BtnStyle = styled(animated.button)`
     ${allowCssProp};
 `;
 
+const SecondaryBtnStyle = styled(BtnStyle)`
+    ${secondaryButtonText};
+    background-color: ${props => props.theme.secondaryButton};
+`;
+
 const NOOP = () => null;
 
 export const Button = React.forwardRef((props, ref) => {
@@ -57,5 +62,23 @@ export const Button = React.forwardRef((props, ref) => {
         <BtnStyle {...props} onClick={onClick} ref={ref}>
             {name || children}
         </BtnStyle>
+    );
+});
+
+export const SecondaryButton = React.forwardRef((props, ref) => {
+    const { name, onClick = NOOP, routeto, children } = props;
+
+    if (routeto) {
+        return (
+            <Link to={routeto}>
+                <BtnStyle {...props}>{name || children}</BtnStyle>
+            </Link>
+        );
+    }
+
+    return (
+        <SecondaryBtnStyle {...props} onClick={onClick} ref={ref}>
+            {name || children}
+        </SecondaryBtnStyle>
     );
 });
