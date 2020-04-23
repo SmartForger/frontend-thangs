@@ -14,7 +14,12 @@ import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 import { useLocalStorage } from '@customHooks/Storage';
 import * as GraphqlService from '@services/graphql-service';
 import { WithNewThemeLayout } from '@style/Layout';
-import { headerText, linkText, usernameLinkText } from '@style/text';
+import {
+    headerText,
+    linkText,
+    usernameLinkText,
+    modelTitleText,
+} from '@style/text';
 
 import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { Page404 } from '../404';
@@ -83,12 +88,9 @@ const ModelOwnerProfilePicture = styled(ProfilePicture)`
     margin-right: 16px;
 `;
 
-const ModelTitleText = styled.span`
-    display: block;
-    color: ${props => props.theme.modelTitleText};
-
-    font-size: 24px;
-    font-weight: normal;
+const ModelTitleText = styled.div`
+    ${modelTitleText};
+    margin-bottom: 8px;
 `;
 
 const ProfileLink = styled(Link)`
