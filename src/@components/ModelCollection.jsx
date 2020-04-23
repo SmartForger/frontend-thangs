@@ -18,32 +18,10 @@ const ModelsStyled = styled.div`
 const NoResultsFrame = styled.div`
     background-color: ${props => props.theme.zeroStateBackground};
     color: ${props => props.theme.zeroStateColor};
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding-top: 136px;
-    padding-bottom: 168px;
+    padding: 16px;
     border-radius: 8px;
     width: 100%;
 `;
-
-const Text = styled.div`
-    font-size: 18px;
-    font-weight: 500;
-    margin-top: 32px;
-    margin-bottom: 8px;
-`;
-
-function NoResultsDisplay({ text, subtext }) {
-    return (
-        <NoResultsFrame>
-            <NoResultsIcon />
-            <Text>{text}</Text>
-            <div>{subtext}</div>
-        </NoResultsFrame>
-    );
-}
 
 export function ModelCollection({
     models = [],
@@ -52,9 +30,7 @@ export function ModelCollection({
     noResultsSubtext,
 }) {
     if (R.isEmpty(models)) {
-        return (
-            <NoResultsDisplay text={noResultsText} subtext={noResultsSubtext} />
-        );
+        return <NoResultsFrame>{noResultsText}</NoResultsFrame>;
     }
     return (
         <ModelsStyled singleRow={models.length < maxPerRow}>
