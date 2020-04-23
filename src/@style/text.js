@@ -1,5 +1,13 @@
 import { css } from 'styled-components';
-import { GREY_5, GREY_11, GREY_12, BLUE_2, WHITE_1, WHITE_3 } from './colors';
+import {
+    GREY_5,
+    GREY_11,
+    GREY_12,
+    BLUE_2,
+    WHITE_1,
+    WHITE_2,
+    WHITE_3,
+} from './colors';
 
 export const MONTSERRAT = "'Montserrat', sans-serif";
 
@@ -54,4 +62,8 @@ export const headerText = css`
 `;
 export const logoText = css`
     color: ${GREY_12};
+`;
+export const primaryButtonText = css`
+    color: ${WHITE_2};
+    font-weight: 500;
 `;
