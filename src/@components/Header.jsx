@@ -8,12 +8,11 @@ import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
 import { ReactComponent as MatchingIcon } from '@svg/matching-icon.svg';
 import { ReactComponent as Logo } from '@svg/logo.svg';
 import { ReactComponent as LogoText } from '@svg/logo-text.svg';
-import { usernameLinkText, primaryButtonText } from '@style/text';
+import { usernameLinkText } from '@style/text';
+import { Button } from '@components/Button';
 
 const NOTIFICATIONS_ENABLED = false;
 const NOTIFICATIONS_URL = '#';
-
-const allowCssProp = props => (props.css ? props.css : '');
 
 const LogoStyled = styled(Logo)`
     margin-right: 12px;
@@ -55,19 +54,6 @@ const SignIn = styled(Link)`
     margin-right: 30px;
 `;
 
-const Button = styled.button`
-    ${primaryButtonText};
-
-    background-color: ${props => props.theme.primaryButton};
-    padding: 9px 12px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-
-    ${props => props.theme.shadow};
-    ${allowCssProp};
-`;
-
 const SignUp = () => {
     return (
         <Link to="/signup">
@@ -81,21 +67,11 @@ const SignUp = () => {
         </Link>
     );
 };
-const MatchingButton = styled.button`
-    cursor: pointer;
 
-    display: flex;
-    align-items: center;
+const MatchingButton = styled(Button)`
     background-color: ${props => props.theme.brandColor};
     color: ${props => props.theme.textOnBrandColor};
-    border: none;
-    border-radius: 8px;
-    font-family: ${props => props.theme.buttonFont};
-    font-weight: 500;
-    font-size: 14px;
     padding: 6px 24px 6px 32px;
-
-    ${props => props.theme.shadow};
 `;
 
 const MatchingIconStyled = styled(MatchingIcon)`
