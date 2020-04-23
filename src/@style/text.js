@@ -57,6 +57,9 @@ export const usernameLinkText = css`
     font-weight: 500;
     color: ${BLUE_2};
 `;
+export const linkText = css`
+    color: ${BLUE_2};
+`;
 export const headerText = css`
     line-height: 36px;
     font-size: 32px;

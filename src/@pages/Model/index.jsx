@@ -14,7 +14,7 @@ import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 import { useLocalStorage } from '@customHooks/Storage';
 import * as GraphqlService from '@services/graphql-service';
 import { WithNewThemeLayout } from '@style/Layout';
-import { headerText } from '@style/text';
+import { headerText, linkText } from '@style/text';
 
 import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { Page404 } from '../404';
@@ -105,9 +105,8 @@ const Description = styled.div`
 `;
 
 const DownloadLink = styled.a`
-    font-size: 14px;
+    ${linkText};
     font-weight: 500;
-    color: ${props => props.theme.linkText};
     margin-bottom: 24px;
     display: block;
 `;
