@@ -117,20 +117,10 @@ const NotificationsButton = () => {
     );
 };
 
-const UploadButton = () => {
-    return (
-        <Link to={`/upload`}>
-            <Button
-                css={`
-                    width: 124px;
-                    margin-left: 32px;
-                `}
-            >
-                Upload Model
-            </Button>
-        </Link>
-    );
-};
+const UploadButton = styled(Button)`
+    width: 124px;
+    margin-left: 32px;
+`;
 
 const UserNav = () => {
     const { user } = useCurrentUser();
@@ -142,7 +132,9 @@ const UserNav = () => {
                     <ProfilePicture user={user} size="50px" />
                 </Link>
                 <NotificationsButton />
-                <UploadButton />
+                <Link to={`/upload`}>
+                    <UploadButton>Upload Model</UploadButton>
+                </Link>
             </Row>
         );
     }
