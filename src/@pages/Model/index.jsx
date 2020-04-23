@@ -159,16 +159,12 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                     ) : (
                         <ModelViewerStyled model={model} />
                     )}
-                    {!R.isEmpty(model.relatedModels) && (
-                        <>
-                            <Header>Geometrically Similar</Header>
-                            <ModelCollection
-                                models={model.relatedModels}
-                                maxPerRow={3}
-                                noResultsText="There were no geometrically similar matches found."
-                            />
-                        </>
-                    )}
+                    <Header>Geometrically Similar</Header>
+                    <ModelCollection
+                        models={model.relatedModels}
+                        maxPerRow={3}
+                        noResultsText="There were no geometrically similar matches found."
+                    />
                 </ModelColumn>
                 <Sidebar>
                     <LikeModelButton currentUser={currentUser} model={model} />
