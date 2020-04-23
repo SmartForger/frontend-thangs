@@ -14,6 +14,7 @@ import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 import { useLocalStorage } from '@customHooks/Storage';
 import * as GraphqlService from '@services/graphql-service';
 import { WithNewThemeLayout } from '@style/Layout';
+import { headerText } from '@style/text';
 
 import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { Page404 } from '../404';
@@ -136,7 +137,7 @@ const Comments = styled(CommentsForModel)`
 `;
 
 const Header = styled.div`
-    ${props => props.theme.headerText};
+    ${headerText};
     margin: 48px 0 24px;
 `;
 

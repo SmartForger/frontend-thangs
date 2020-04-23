@@ -27,22 +27,6 @@ import {
     WHITE_4,
     LIGHT_PURPLE,
 } from './colors';
-import {
-    modelCardHoverText,
-    flashToastText,
-    zeroStateText,
-    bodyCopyText,
-    tabNavigationText,
-    cardNumbersText,
-    formCalloutText,
-    usernameText,
-    subheaderText,
-    modelTitleText as _modelTitleText,
-    pageTitleText,
-    usernameLinkText,
-    headerText,
-    logoText as _logoText,
-} from './text';
 
 /*
  * These will be the fonts we actually want to use, but we need to get them from
@@ -124,20 +108,6 @@ export const NewTheme = {
     viewerControlText: GREY_4,
     zeroStateColor: GREY_6,
     zeroStateBackground: GREY_1,
-    modelCardHoverText,
-    flashToastText,
-    zeroStateText,
-    bodyCopyText,
-    tabNavigationText,
-    cardNumbersText,
-    formCalloutText,
-    usernameText,
-    subheaderText,
-    _modelTitleText,
-    pageTitleText,
-    usernameLinkText,
-    headerText,
-    _logoText,
 };
 
 export const NewDarkTheme = {
