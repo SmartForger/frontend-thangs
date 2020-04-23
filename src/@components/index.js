@@ -6,7 +6,6 @@ export * from './PrivateRoute.jsx';
 export * from './Button.jsx';
 export * from './AnchorButton.jsx';
 export * from './Spinner.jsx';
-export * from './Slides.jsx';
 export * from './Svg.jsx';
 export * from './BackgroundImage.jsx';
 export * from './TagsBox.jsx';
