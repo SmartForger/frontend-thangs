@@ -104,8 +104,7 @@ const Description = styled.div`
 `;
 
 const DownloadLink = styled.a`
-    ${linkText};
-    font-weight: 500;
+    ${usernameLinkText};
     margin-bottom: 24px;
     display: block;
 `;
