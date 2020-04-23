@@ -21,6 +21,7 @@ const NoResultsFrame = styled.div`
     padding: 16px;
     border-radius: 8px;
     width: 100%;
+    box-sizing: border-box;
 `;
 
 export function ModelCollection({
