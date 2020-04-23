@@ -22,6 +22,7 @@ import {
     subheaderText,
     tabNavigationText,
     activeTabNavigationText,
+    profileAboutText,
 } from '@style/text';
 
 export * from './EditProfile';
@@ -111,8 +112,12 @@ const TabContent = styled.div`
     margin-top: 24px;
     width: 100%;
     display: flex;
-    color: ${props => props.theme.profileContentColor};
-    font-family: ${props => props.theme.mainFont};
+    ${profileAboutText};
+`;
+
+const MarkdownStyled = styled(Markdown)`
+    max-width: 600px;
+    margin: auto;
 `;
 
 const getDescription = R.pathOr(null, ['profile', 'description']);
@@ -125,7 +130,7 @@ function AboutContent({ selected, user }) {
     }
 
     const description = getDescription(user);
-    return <Markdown>{description}</Markdown>;
+    return <MarkdownStyled>{description}</MarkdownStyled>;
 }
 
 function ModelsContent({ selected, user }) {

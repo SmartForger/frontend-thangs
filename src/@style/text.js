@@ -5,6 +5,7 @@ import {
     GREY_12,
     BLUE_2,
     BLACK_1,
+    BLACK_5,
     WHITE_1,
     WHITE_2,
     WHITE_3,
@@ -36,6 +37,10 @@ export const activeTabNavigationText = css`
     svg {
         fill: ${BLACK_1};
     }
+`;
+export const profileAboutText = css`
+    font-size: 16px;
+    color: ${BLACK_5};
 `;
 export const cardNumbersText = css`
     color: ${GREY_11};
