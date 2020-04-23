@@ -113,6 +113,8 @@ export const NewTheme = {
     viewerExitColor: BLACK_3,
     viewerControlBorderColor: GREY_1,
     viewerControlText: GREY_4,
+    zeroStateColor: GREY_6,
+    zeroStateBackground: GREY_1,
 };
 
 export const NewDarkTheme = {
