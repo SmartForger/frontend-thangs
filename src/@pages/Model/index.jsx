@@ -1,21 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useHistory, Link, useParams } from 'react-router-dom';
 
-import { useHistory, Link } from 'react-router-dom';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { ModelCollection } from '@components/ModelCollection';
-import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
-import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { LikeModelButton } from '@components/LikeModelButton';
 import { CommentsForModel } from '@components/CommentsForModel';
 import { ModelViewer } from '@components/HoopsModelViewer';
 import { ModelViewer as BackupViewer } from '@components/ModelViewer';
+import { Spinner } from '@components/Spinner';
+import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 
-import { useParams } from 'react-router-dom';
 import { useLocalStorage } from '@customHooks/Storage';
 import * as GraphqlService from '@services/graphql-service';
-import { WithNewThemeLayout } from '@style';
-import { Spinner } from '@components/Spinner';
+import { WithNewThemeLayout } from '@style/Layout';
+
+import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { Page404 } from '../404';
 
 const allowCssProp = props => (props.css ? props.css : '');
