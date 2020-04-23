@@ -29,7 +29,7 @@ export function ModelCollection({
     noResultsText,
     noResultsSubtext,
 }) {
-    if (R.isEmpty(models)) {
+    if (!models || R.isEmpty(models)) {
         return <NoResultsFrame>{noResultsText}</NoResultsFrame>;
     }
     return (
