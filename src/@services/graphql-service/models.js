@@ -270,6 +270,14 @@ const CREATE_UPLOAD_URL_MUTATION = gql`
     }
 `;
 
+const CREATE_DOWNLOAD_URL_MUTATION = gql`
+    mutation createDownloadUrl($modelId: ID!) {
+        createDownloadUrl(modelId: $modelId) {
+            downloadUrl
+        }
+    }
+`;
+
 const UPLOAD_MODEL_MUTATION = gql`
     mutation uploadModel(
         $filename: String!
@@ -337,6 +345,23 @@ const SEARCH_MODELS_QUERY = gql`
     }
     ${MODEL_FRAGMENT}
 `;
+
+const useCreateDownloadUrlMutation = modelId => {
+    const [createDownloadUrl] = useMutation(CREATE_DOWNLOAD_URL_MUTATION);
+    async function fetchDownloadUrl() {
+        try {
+            const {
+                data: {
+                    createDownloadUrl: { downloadUrl },
+                },
+            } = await createDownloadUrl({ variables: { modelId: modelId } });
+            return downloadUrl;
+        } catch (e) {
+            console.log('Failled to get download link');
+        }
+    }
+    return [fetchDownloadUrl];
+};
 
 const useUploadModelMutation = userId => {
     const [uploadError, setUploadError] = useState();
@@ -416,6 +441,7 @@ export {
     useLikeModelMutation,
     useUnlikeModelMutation,
     useUploadModelMutation,
+    useCreateDownloadUrlMutation,
     useModelsByDate,
     useModelsByLikes,
     useSearchModels,

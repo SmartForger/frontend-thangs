@@ -111,6 +111,8 @@ const DownloadLink = styled.a`
     display: block;
 `;
 
+const graphqlService = GraphqlService.getInstance();
+
 function ModelTitle({ model, className }) {
     return (
         <ModelTitleContainer className={className}>
@@ -143,6 +145,14 @@ const Header = styled.div`
 
 const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
     const history = useHistory();
+    const [createDownloadUrl] = graphqlService.useCreateDownloadUrlMutation(
+        model.id
+    );
+
+    async function downloadModel() {
+        const downloadUrl = await createDownloadUrl();
+        window.open(downloadUrl);
+    }
 
     return (
         <>
@@ -169,7 +179,7 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                     <LikeModelButton currentUser={currentUser} model={model} />
                     <ModelTitle model={model} />
                     <Description>{model.description}</Description>
-                    <DownloadLink href={model.attachment.dataSrc}>
+                    <DownloadLink href={'#'} onClick={downloadModel}>
                         Download Model
                     </DownloadLink>
                     <ModelDetails model={model} />
