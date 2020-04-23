@@ -136,8 +136,7 @@ const Comments = styled(CommentsForModel)`
 `;
 
 const Header = styled.div`
-    font-size: 32px;
-    font-family: ${props => props.theme.headerFont};
+    ${props => props.theme.headerText};
     margin: 48px 0 24px;
 `;
 
