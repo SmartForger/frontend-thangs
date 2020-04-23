@@ -6,10 +6,10 @@ import { authenticationService } from '@services';
 import { useForm } from '@customHooks';
 import { TextInput as BaseTextInput, Spinner, Button } from '@components';
 import { WithNewSignupThemeLayout } from '@style';
+import { pageTitleText } from '@style/text';
 
 const PageHeader = styled.h1`
-    font-family: ${props => props.theme.headerFont};
-    font-size: 48px;
+    ${pageTitleText};
     color: ${props => props.theme.headerColorOnDarkBackground};
     margin-top: 8px;
 `;

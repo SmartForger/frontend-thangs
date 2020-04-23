@@ -9,14 +9,14 @@ import { WithNewSignupThemeLayout } from '@style';
 import { useForm } from '@customHooks';
 import { authenticationService } from '@services';
 import { ReactComponent as UserRegistrationIcon } from '@svg/user-registration.svg';
+import { pageTitleText } from '@style/text';
 
 const InlinedSpinner = styled(Spinner)`
     display: inline-block;
 `;
 
 const PageHeader = styled.h1`
-    font-family: ${props => props.theme.headerFont};
-    font-size: 48px;
+    ${pageTitleText};
     color: ${props => props.theme.headerColorOnDarkBackground};
     margin-top: 8px;
 `;
