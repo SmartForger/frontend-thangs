@@ -18,6 +18,7 @@ import { ReactComponent as ModelIcon } from '@svg/model-icon.svg';
 import { ReactComponent as PencilIcon } from '@svg/pencil-icon.svg';
 import { ModelCollection } from '@components/ModelCollection';
 import { SecondaryButton } from '@components/Button';
+import { subheaderText } from '@style/text';
 
 export * from './EditProfile';
 export * from './RedirectProfile';
@@ -37,9 +38,7 @@ const Frame = styled.div`
 `;
 
 const Name = styled.div`
-    font-family: ${props => props.theme.mainFont};
-    font-size: 24px;
-    color: ${props => props.theme.profileNameColor};
+    ${subheaderText};
     margin-top: 16px;
 `;
 
