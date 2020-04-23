@@ -27,7 +27,6 @@ const graphqlService = GraphqlService.getInstance();
 const Anchor = styled(AnchorButton)`
     margin-top: 16px;
     padding: 4px;
-    font-size: 16px;
 `;
 
 const Frame = styled.div`
