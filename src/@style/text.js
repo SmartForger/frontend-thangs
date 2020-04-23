@@ -1,5 +1,6 @@
 import { css } from 'styled-components';
 import {
+    GREY_3,
     GREY_5,
     GREY_11,
     GREY_12,
@@ -95,4 +96,15 @@ export const secondaryButtonText = css`
 export const darkButtonText = css`
     color: ${OFF_WHITE};
     font-weight: 500;
+`;
+export const smallInfoMessageText = css`
+    line-height: 18px;
+    font-style: italic;
+    color: ${GREY_5};
+`;
+export const infoMessageText = css`
+    font-size: 24px;
+    font-style: normal;
+    line-height: 28px;
+    color: ${GREY_3};
 `;
