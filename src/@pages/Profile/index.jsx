@@ -17,6 +17,7 @@ import { ReactComponent as AboutIcon } from '@svg/about-icon.svg';
 import { ReactComponent as ModelIcon } from '@svg/model-icon.svg';
 import { ReactComponent as PencilIcon } from '@svg/pencil-icon.svg';
 import { ModelCollection } from '@components/ModelCollection';
+import { Button as _Button } from '@components/Button';
 
 export * from './EditProfile';
 export * from './RedirectProfile';
@@ -204,16 +205,9 @@ function Tabs({ user }) {
     );
 }
 
-const Button = styled.button`
-    color: ${props => props.theme.secondaryButtonText};
+const Button = styled(_Button)`
     background-color: ${props => props.theme.secondaryButton};
-    font-size: 14px;
     padding: 8px 24px;
-    display: flex;
-    align-items: center;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
 
     svg {
         margin-right: 8px;
@@ -231,7 +225,7 @@ function EditProfileButton({ viewedUser, className }) {
     return (
         <>
             <Link to={'/profile/edit'} className={className}>
-                <Button>
+                <Button maxwidth="100%">
                     <PencilIcon />
                     Edit Profile
                 </Button>
