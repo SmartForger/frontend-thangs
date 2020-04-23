@@ -8,6 +8,7 @@ import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
 import { ReactComponent as MatchingIcon } from '@svg/matching-icon.svg';
 import { ReactComponent as Logo } from '@svg/logo.svg';
 import { ReactComponent as LogoText } from '@svg/logo-text.svg';
+import { usernameLinkText } from '@style/text';
 
 const NOTIFICATIONS_ENABLED = false;
 const NOTIFICATIONS_URL = '#';
@@ -50,12 +51,8 @@ const TopRow = styled(Row)`
 `;
 
 const SignIn = styled(Link)`
-    color: ${props => props.theme.linkText};
-    text-decoration: none;
-    font-size: 14px;
+    ${usernameLinkText};
     margin-right: 30px;
-    font-family: ${props => props.theme.buttonFont};
-    font-weight: 500;
 `;
 
 const Button = styled.button`

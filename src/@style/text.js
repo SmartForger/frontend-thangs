@@ -42,6 +42,7 @@ export const pageTitleText = css`
 `;
 export const usernameLinkText = css`
     font-weight: 500;
+    text-decoration: none;
     color: ${BLUE_2};
 `;
 export const linkText = css`
