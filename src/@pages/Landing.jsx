@@ -25,8 +25,7 @@ function Page() {
     return (
         <ModelCollection
             models={models}
-            noResultsText="We have no models to display right now"
-            noResultsSubtext="Please try again later."
+            noResultsText="We have no models to display right now. Please try again later."
         />
     );
 }

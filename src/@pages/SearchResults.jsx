@@ -40,8 +40,7 @@ const Page = () => {
             <Header>Results for {searchQuery}</Header>
             <ModelCollection
                 models={models}
-                noResultsText="No search results"
-                noResultsSubtext="Try a different query."
+                noResultsText="No results found. Try searching another keyword or search by model above."
             />
         </SearchResultsStyle>
     );

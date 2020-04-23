@@ -146,7 +146,7 @@ function ModelsContent({ selected, user }) {
     return (
         <ModelCollection
             models={models}
-            noResultsText="This user has not uploaded any models yet"
+            noResultsText="This user has not uploaded any models yet."
         />
     );
 }
@@ -159,7 +159,7 @@ function LikesContent({ selected, user }) {
     return (
         <ModelCollection
             models={models}
-            noResultsText="This user has not liked any models yet"
+            noResultsText="This user has not liked any models yet."
         />
     );
 }
