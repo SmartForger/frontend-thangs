@@ -2,7 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { animated } from 'react-spring';
-import { primaryButtonText, secondaryButtonText } from '@style/text';
+import {
+    primaryButtonText,
+    secondaryButtonText,
+    darkButtonText,
+} from '@style/text';
 
 const allowCssProp = props => (props.css ? props.css : '');
 
@@ -27,6 +31,7 @@ const BtnStyle = styled(animated.button)`
     }
 
     &:disabled {
+        ${secondaryButtonText};
         cursor: not-allowed;
         background: ${props => props.theme.primaryButtonDisabledColor};
         opacity: 0.8;
@@ -41,6 +46,11 @@ const BtnStyle = styled(animated.button)`
 const SecondaryBtnStyle = styled(BtnStyle)`
     ${secondaryButtonText};
     background-color: ${props => props.theme.secondaryButton};
+`;
+
+const DarkBtnStyle = styled(BtnStyle)`
+    ${darkButtonText};
+    background-color: ${props => props.theme.deleteButton};
 `;
 
 const NOOP = () => null;
@@ -63,20 +73,28 @@ export const Button = React.forwardRef((props, ref) => {
     );
 });
 
-export const SecondaryButton = React.forwardRef((props, ref) => {
-    const { name, onClick = NOOP, routeto, children } = props;
-
-    if (routeto) {
-        return (
-            <Link to={routeto}>
-                <BtnStyle {...props}>{name || children}</BtnStyle>
-            </Link>
-        );
-    }
-
+export const SecondaryButton = ({
+    className,
+    onClick = NOOP,
+    children,
+    css = '',
+}) => {
     return (
-        <SecondaryBtnStyle {...props} onClick={onClick} ref={ref}>
-            {name || children}
+        <SecondaryBtnStyle className={className} onClick={onClick} css={css}>
+            {children}
         </SecondaryBtnStyle>
     );
-});
+};
+
+export const DarkButton = ({
+    className,
+    onClick = NOOP,
+    children,
+    css = '',
+}) => {
+    return (
+        <DarkBtnStyle className={className} onClick={onClick} css={css}>
+            {children}
+        </DarkBtnStyle>
+    );
+};

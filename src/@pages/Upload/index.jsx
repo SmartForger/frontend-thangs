@@ -5,7 +5,7 @@ import Select from 'react-select';
 import { useForm, ErrorMessage } from 'react-hook-form';
 import { WithNewThemeLayout } from '@style/Layout';
 import { Uploader } from '@components/Uploader';
-import { Button } from '@components/Button';
+import { Button, DarkButton } from '@components/Button';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 import { Spinner } from '@components/Spinner';
@@ -53,8 +53,8 @@ const SaveButton = styled(Button)`
     padding: 8px 36px;
 `;
 
-const CancelButton = styled(Button)`
-    background-color: ${props => props.theme.deleteButton};
+const CancelButton = styled(DarkButton)`
+    padding: 8px 36px;
 `;
 
 const Header = styled.h1`

@@ -7,6 +7,7 @@ import {
     WHITE_1,
     WHITE_2,
     WHITE_3,
+    OFF_WHITE,
 } from './colors';
 
 export const MONTSERRAT = "'Montserrat', sans-serif";
@@ -69,5 +70,9 @@ export const primaryButtonText = css`
 `;
 export const secondaryButtonText = css`
     color: ${WHITE_1};
+    font-weight: 500;
+`;
+export const darkButtonText = css`
+    color: ${OFF_WHITE};
     font-weight: 500;
 `;
