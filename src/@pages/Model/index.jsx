@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import * as R from 'ramda';
 
 import { useHistory, Link } from 'react-router-dom';
 import { ProfilePicture } from '@components/ProfilePicture';
