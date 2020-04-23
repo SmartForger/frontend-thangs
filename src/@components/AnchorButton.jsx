@@ -1,11 +1,11 @@
 import styled from 'styled-components';
+import { usernameLinkText } from '@style/text';
 
 export const AnchorButton = styled.button`
+    ${usernameLinkText};
     margin: 0;
     padding: 0;
     border: none;
-    color: ${props => props.theme.linkText};
     background: none;
-    text-decoration: none;
     cursor: pointer;
 `;
