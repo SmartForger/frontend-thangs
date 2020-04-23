@@ -16,8 +16,8 @@ const ModelsStyled = styled.div`
 `;
 
 const NoResultsFrame = styled.div`
-    background-color: #dbdbdf;
-    color: #88888b;
+    background-color: ${props => props.theme.zeroStateBackground};
+    color: ${props => props.theme.zeroStateColor};
     display: flex;
     flex-direction: column;
     align-items: center;
