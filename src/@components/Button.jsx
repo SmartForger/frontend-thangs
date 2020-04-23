@@ -7,8 +7,6 @@ import { primaryButtonText, secondaryButtonText } from '@style/text';
 const allowCssProp = props => (props.css ? props.css : '');
 
 const BtnStyle = styled(animated.button)`
-    width: ${props => props.width || '100%'};
-    max-width: ${props => props.maxwidth || '114px'};
     border: none;
     text-align: center;
     user-select: none;
