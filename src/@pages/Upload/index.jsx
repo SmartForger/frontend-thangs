@@ -51,13 +51,6 @@ const ButtonGroup = styled.div`
 
 const SaveButton = styled(Button)`
     padding: 8px 36px;
-
-    :disabled {
-        cursor: not-allowed;
-    }
-
-    ${props => props.theme.shadow};
-    ${allowCssProp};
 `;
 
 const CancelButton = styled(Button)`
