@@ -58,6 +58,8 @@ const Hero = styled.div`
 `;
 
 const PromotionalText = styled.div`
+    font-family: ${props => props.theme.headerFont};
+
     * {
         color: ${props => props.theme.promotionalTextColor};
         text-decoration-color: ${props => props.theme.brandColor};
