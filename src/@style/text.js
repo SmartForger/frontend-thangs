@@ -57,6 +57,11 @@ export const subheaderText = css`
     font-size: 24px;
     font-family: ${LEXEND_DECA};
 `;
+export const resultsHeaderText = css`
+    font-size: 24px;
+    font-family: ${LEXEND_DECA};
+    color: BLACK_5;
+`;
 export const modelTitleText = css`
     font-size: 18px;
 `;
