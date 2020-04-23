@@ -11,6 +11,7 @@ import {
     GREY_9,
     GREY_10,
     GREY_11,
+    GREY_12,
     BLACK_1,
     BLACK_2,
     BLACK_3,
