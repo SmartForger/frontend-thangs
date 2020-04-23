@@ -2,7 +2,6 @@ import React from 'react';
 import { ModelCard } from './ModelCard';
 import styled from 'styled-components';
 import * as R from 'ramda';
-import { ReactComponent as NoResultsIcon } from '@svg/no-results-icon.svg';
 
 const ModelsStyled = styled.div`
     display: grid;
