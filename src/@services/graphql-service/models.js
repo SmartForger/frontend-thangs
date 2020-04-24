@@ -357,7 +357,7 @@ const useCreateDownloadUrlMutation = modelId => {
             } = await createDownloadUrl({ variables: { modelId: modelId } });
             return downloadUrl;
         } catch (e) {
-            console.log('Failled to get download link');
+            console.log('Failed to get download link');
         }
     }
     return [fetchDownloadUrl];
