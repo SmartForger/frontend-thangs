@@ -8,7 +8,7 @@ import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
 import { ReactComponent as MatchingIcon } from '@svg/matching-icon.svg';
 import { ReactComponent as Logo } from '@svg/logo.svg';
 import { ReactComponent as LogoText } from '@svg/logo-text.svg';
-import { linkText } from '@style/text';
+import { linkText, matchingButtonText } from '@style/text';
 import { Button } from '@components/Button';
 
 const NOTIFICATIONS_ENABLED = false;
@@ -69,8 +69,8 @@ const SignUp = () => {
 };
 
 const MatchingButton = styled(Button)`
+    ${matchingButtonText};
     background-color: ${props => props.theme.brandColor};
-    color: ${props => props.theme.textOnBrandColor};
     padding: 6px 24px 6px 32px;
 `;
 

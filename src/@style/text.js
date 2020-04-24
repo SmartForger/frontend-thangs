@@ -8,6 +8,7 @@ import {
     BLUE_2,
     BLACK_1,
     BLACK_5,
+    BROWN,
     RED_4,
     WHITE_1,
     WHITE_2,
@@ -147,4 +148,7 @@ export const formSuccessText = css`
 export const formErrorText = css`
     color: ${RED_4};
     font-weight: 500;
+`;
+export const matchingButtonText = css`
+    color: ${BROWN};
 `;
