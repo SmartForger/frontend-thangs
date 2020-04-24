@@ -6,31 +6,12 @@ import { ReactComponent as LensUploadingIcon } from '@svg/lens-uploading-icon.sv
 import { ReactComponent as GraphUploadingIcon } from '@svg/graph-uploading-icon.svg';
 import { ReactComponent as RulerUploadingIcon } from '@svg/ruler-uploading-icon.svg';
 import { ReactComponent as ProtractorUploadingIcon } from '@svg/protractor-uploading-icon.svg';
+import { ProgressText } from '@components/ProgressText';
 
-const DotsContainer = styled.div`
+const Dots = styled(ProgressText)`
     margin-bottom: 160px;
     width: 256px;
 `;
-
-export function Dots({ text, className }) {
-    const [dots, setDots] = useState('.');
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            if (dots.length < 3) {
-                setDots(`${dots}.`);
-            } else {
-                setDots('.');
-            }
-        }, 500);
-        return () => clearTimeout(timeout);
-    }, [dots, setDots]);
-    return (
-        <DotsContainer className={className}>
-            {text}
-            {dots}
-        </DotsContainer>
-    );
-}
 
 const CHECK = 'check';
 const LENS = 'lens';

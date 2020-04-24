@@ -349,18 +349,17 @@ const SEARCH_MODELS_QUERY = gql`
 `;
 
 const useCreateDownloadUrlMutation = modelId => {
-    const [createDownloadUrl] = useMutation(CREATE_DOWNLOAD_URL_MUTATION);
+    const [createDownloadUrl] = useMutation(CREATE_DOWNLOAD_URL_MUTATION, {
+        variables: { modelId: modelId },
+    });
+
     async function fetchDownloadUrl() {
-        try {
-            const {
-                data: {
-                    createDownloadUrl: { downloadUrl },
-                },
-            } = await createDownloadUrl({ variables: { modelId: modelId } });
-            return downloadUrl;
-        } catch (e) {
-            console.log('Failed to get download link');
-        }
+        const {
+            data: {
+                createDownloadUrl: { downloadUrl },
+            },
+        } = await createDownloadUrl();
+        return downloadUrl;
     }
     return [fetchDownloadUrl];
 };

@@ -10,6 +10,7 @@ import { ModelViewer } from '@components/HoopsModelViewer';
 import { ModelViewer as BackupViewer } from '@components/ModelViewer';
 import { TextButton } from '@components/Button';
 import { Spinner } from '@components/Spinner';
+import { ProgressText } from '@components/ProgressText';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 
 import { useLocalStorage } from '@customHooks/Storage';
@@ -133,15 +134,23 @@ const Header = styled.div`
 const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
     const history = useHistory();
     const [isDownloading, setIsDownloading] = useState();
+    const [hadError, setHadError] = useState();
     const [getDownloadUrl] = graphqlService.useCreateDownloadUrlMutation(
         model.id
     );
+
     const downloadModel = async e => {
         e.preventDefault();
         setIsDownloading(true);
-        const url = await getDownloadUrl();
+        try {
+            const url = await getDownloadUrl();
+            window.open(url);
+        } catch (e) {
+            console.log('e', e);
+            setHadError(true);
+        }
+
         setIsDownloading(false);
-        window.open(url);
     };
 
     return (
@@ -169,8 +178,20 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                     <LikeModelButton currentUser={currentUser} model={model} />
                     <ModelTitle model={model} />
                     <Description>{model.description}</Description>
-                    <TextButton onClick={downloadModel}>
-                        {isDownloading ? 'Downloading' : 'Download Model'}
+                    <TextButton
+                        onClick={downloadModel}
+                        css={`
+                            width: 122px;
+                            text-align: left;
+                        `}
+                    >
+                        {isDownloading ? (
+                            <ProgressText text="Downloading" />
+                        ) : hadError ? (
+                            'Server Error'
+                        ) : (
+                            'Download Model'
+                        )}
                     </TextButton>
                     <ModelDetails model={model} />
                     <Comments model={model} />

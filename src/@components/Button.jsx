@@ -106,8 +106,13 @@ const TextButtonStyled = styled.button`
     background: none;
     padding: 0;
     cursor: pointer;
+    ${allowCssProp};
 `;
 
-export function TextButton({ onClick = NOOP, children }) {
-    return <TextButtonStyled onClick={onClick}>{children}</TextButtonStyled>;
+export function TextButton({ onClick = NOOP, children, css }) {
+    return (
+        <TextButtonStyled onClick={onClick} css={css}>
+            {children}
+        </TextButtonStyled>
+    );
 }
