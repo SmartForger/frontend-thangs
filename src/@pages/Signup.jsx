@@ -65,6 +65,7 @@ const Page = () => {
     const [signupErrorMessage, setSignupErrorMessage] = React.useState(null);
     const [invalidFields, setInvalidFields] = React.useState([]);
     const { inputs, handleChange, handleSubmit } = useForm(signup);
+    const [acceptedTerms, setAcceptedTerms] = React.useState(false);
 
     const history = useHistory();
     const { registrationCode } = useParams();
@@ -115,6 +116,7 @@ const Page = () => {
             return false;
         }
         if (
+            acceptedTerms &&
             inputs.firstName &&
             inputs.lastName &&
             inputs.username &&
@@ -265,13 +267,19 @@ const Page = () => {
                 </FieldContainer>
                 <SubmitContainer>
                     <p>
-                        By clicking the submit button, you agree <br />
+                        By checking the box, you agree <br />
                         to the{' '}
                         <a href="/terms_and_conditions" target="_blank">
                             terms and conditions
                         </a>{' '}
-                        of this site.
+                        of this site.*
                     </p>
+                    <input
+                        type="checkbox"
+                        value="Accepted Terms and Conditions"
+                        checked={acceptedTerms}
+                        onChange={() => setAcceptedTerms(!acceptedTerms)}
+                    />
                     <SubmitButton
                         type="submit"
                         name="Submit"
