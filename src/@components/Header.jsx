@@ -8,7 +8,7 @@ import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
 import { ReactComponent as MatchingIcon } from '@svg/matching-icon.svg';
 import { ReactComponent as Logo } from '@svg/logo.svg';
 import { ReactComponent as LogoText } from '@svg/logo-text.svg';
-import { usernameLinkText } from '@style/text';
+import { linkText } from '@style/text';
 import { Button } from '@components/Button';
 
 const NOTIFICATIONS_ENABLED = false;
@@ -50,7 +50,7 @@ const TopRow = styled(Row)`
 `;
 
 const SignIn = styled(Link)`
-    ${usernameLinkText};
+    ${linkText};
     margin-right: 30px;
 `;
 

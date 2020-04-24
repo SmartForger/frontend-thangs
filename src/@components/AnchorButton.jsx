@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { usernameLinkText } from '@style/text';
+import { linkText } from '@style/text';
 
 export const AnchorButton = styled.button`
-    ${usernameLinkText};
+    ${linkText};
     margin: 0;
     padding: 0;
     border: none;

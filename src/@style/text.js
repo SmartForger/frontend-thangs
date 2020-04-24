@@ -70,7 +70,7 @@ export const pageTitleText = css`
     font-size: 48px;
     font-family: ${LEXEND_DECA};
 `;
-export const usernameLinkText = css`
+export const linkText = css`
     font-weight: 500;
     text-decoration: none;
     color: ${BLUE_2};

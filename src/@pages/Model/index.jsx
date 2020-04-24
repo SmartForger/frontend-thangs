@@ -14,7 +14,7 @@ import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 import { useLocalStorage } from '@customHooks/Storage';
 import * as GraphqlService from '@services/graphql-service';
 import { WithNewThemeLayout } from '@style/Layout';
-import { headerText, usernameLinkText, modelTitleText } from '@style/text';
+import { headerText, linkText, modelTitleText } from '@style/text';
 
 import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { Page404 } from '../404';
@@ -89,7 +89,7 @@ const ModelTitleText = styled.div`
 `;
 
 const ProfileLink = styled(Link)`
-    ${usernameLinkText};
+    ${linkText};
     display: block;
     text-decoration: none;
 `;
@@ -99,7 +99,7 @@ const Description = styled.div`
 `;
 
 const DownloadLink = styled.a`
-    ${usernameLinkText};
+    ${linkText};
     margin-bottom: 24px;
     display: block;
 `;
