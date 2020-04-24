@@ -8,6 +8,7 @@ import {
     BLUE_2,
     BLACK_1,
     BLACK_5,
+    RED_4,
     WHITE_1,
     WHITE_2,
     WHITE_3,
@@ -142,4 +143,8 @@ export const viewerLoadingText = css`
 `;
 export const formSuccessText = css`
     color: green;
+`;
+export const formErrorText = css`
+    color: ${RED_4};
+    font-weight: 500;
 `;

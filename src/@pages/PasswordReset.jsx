@@ -6,7 +6,7 @@ import { authenticationService } from '@services';
 import { useForm } from '@customHooks';
 import { TextInput as BaseTextInput, Spinner, Button } from '@components';
 import { WithNewSignupThemeLayout } from '@style';
-import { darkPageTitleText, formSuccessText } from '@style/text';
+import { darkPageTitleText, formSuccessText, formErrorText } from '@style/text';
 
 const PageHeader = styled.h1`
     ${darkPageTitleText};
@@ -23,10 +23,9 @@ const TextInput = styled(BaseTextInput)`
 `;
 
 const ErrorTextStyle = styled.h4`
+    ${formErrorText};
     margin-top: 24px;
-    color: ${props => props.theme.errorTextColor};
     background-color: ${props => props.theme.errorTextBackground};
-    font-weight: 500;
     padding: 10px 16px;
     border-radius: 8px;
 `;
