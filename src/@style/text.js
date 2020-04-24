@@ -96,6 +96,10 @@ export const primaryButtonText = css`
 export const secondaryButtonText = css`
     color: ${WHITE_1};
     font-weight: 500;
+
+    > svg {
+        fill: ${WHITE_1};
+    }
 `;
 export const darkButtonText = css`
     color: ${OFF_WHITE};
