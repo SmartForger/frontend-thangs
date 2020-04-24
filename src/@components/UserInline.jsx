@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ProfilePicture } from './ProfilePicture';
+import { usernameText } from '@style/text';
 
 const UserContainerInline = styled.div`
     display: flex;
@@ -10,8 +11,8 @@ const UserContainerInline = styled.div`
 `;
 
 const UserNameInline = styled.span`
+    ${usernameText};
     margin-left: 16px;
-    font-weight: 500;
 `;
 
 export function UserInline({ user, className, size = '24px' }) {

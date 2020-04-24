@@ -57,6 +57,7 @@ export const formCalloutText = css`
 `;
 export const usernameText = css`
     font-weight: 500;
+    color: ${BLACK_1};
 `;
 export const subheaderText = css`
     font-size: 24px;
