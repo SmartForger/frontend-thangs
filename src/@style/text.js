@@ -152,3 +152,11 @@ export const formErrorText = css`
 export const matchingButtonText = css`
     color: ${BROWN};
 `;
+export const thumbnailErrorText = css`
+    color: ${GREY_3};
+    font-weight: 500;
+`;
+export const thumbnailActivityCountText = css`
+    color: ${GREY_3};
+    font-weight: 500;
+`;

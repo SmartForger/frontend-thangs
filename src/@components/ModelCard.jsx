@@ -9,6 +9,11 @@ import ErrorImg, {
     ReactComponent as ErrorIcon,
 } from '@svg/image-error-icon.svg';
 import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg';
+import {
+    thumbnailErrorText,
+    modelCardHoverText,
+    thumbnailActivityCountText,
+} from '@style/text';
 
 const CardContainer = styled.div`
     display: flex;
@@ -25,6 +30,7 @@ const CardContent = styled.div`
 `;
 
 const ThumbnailContainer = styled.div`
+    ${thumbnailErrorText};
     position: relative;
     border-radius: 8px 8px 0px 0px;
     height: 100%;
@@ -35,8 +41,6 @@ const ThumbnailContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: ${props => props.theme.imagePlaceholderText};
-    font-weight: 500;
 
     > img {
         margin: auto;
@@ -114,8 +118,7 @@ const Overlay = styled.div`
 `;
 
 const ModelName = styled.div`
-    color: ${props => props.theme.modelActionButtonText};
-    font-weight: 500;
+    ${modelCardHoverText};
     margin: 16px;
 `;
 
@@ -128,20 +131,14 @@ const ActivityIndicators = styled.div`
 `;
 
 const ActivityCount = styled.span`
+    ${thumbnailActivityCountText};
     display: flex;
     align-items: center;
-
-    color: ${props => props.theme.activityCount};
-    font-weight: 500;
     letter-spacing: 0px;
 `;
 
 const HeartIconStyled = styled(HeartIcon)`
     fill: ${props => props.theme.cardHeartColor};
-`;
-
-const LinkStyled = styled(Link)`
-    color: inherit;
 `;
 
 function ModelCard({ className, model, withOwner }) {
@@ -152,7 +149,7 @@ function ModelCard({ className, model, withOwner }) {
     const handleMouseLeave = () => setHovered(false);
 
     return (
-        <LinkStyled
+        <Link
             to={`/model/${model.id}`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -185,7 +182,7 @@ function ModelCard({ className, model, withOwner }) {
                     </ActivityIndicators>
                 </CardContent>
             </CardContainer>
-        </LinkStyled>
+        </Link>
     );
 }
 
