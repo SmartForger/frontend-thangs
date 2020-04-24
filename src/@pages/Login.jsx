@@ -7,11 +7,10 @@ import { useForm } from '@customHooks';
 import { TextInput as BaseTextInput, Spinner, Button } from '@components';
 import { WithNewSignupThemeLayout } from '@style';
 import { ReactComponent as LoginIcon } from '@svg/user-login.svg';
-import { pageTitleText } from '@style/text';
+import { darkPageTitleText } from '@style/text';
 
 const PageHeader = styled.h1`
-    ${pageTitleText};
-    color: ${props => props.theme.headerColorOnDarkBackground};
+    ${darkPageTitleText};
     margin-top: 8px;
 `;
 

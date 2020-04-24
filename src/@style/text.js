@@ -70,6 +70,10 @@ export const pageTitleText = css`
     font-size: 48px;
     font-family: ${LEXEND_DECA};
 `;
+export const darkPageTitleText = css`
+    ${pageTitleText};
+    color: ${WHITE_1};
+`;
 export const linkText = css`
     font-weight: 500;
     text-decoration: none;
