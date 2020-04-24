@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { authenticationService } from '@services';
 import * as GraphqlService from '@services/graphql-service';
+import { formCalloutText } from '@style/text';
 
 const allowCssProp = props => (props.css ? props.css : '');
 
@@ -13,8 +14,7 @@ const NewCommentContainer = styled.div`
 `;
 
 const NewCommentHeader = styled.div`
-    font-size: 18px;
-    font-family: ${props => props.theme.headerFont};
+    ${formCalloutText};
     margin-bottom: 16px;
 `;
 
