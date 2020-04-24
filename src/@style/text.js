@@ -1,6 +1,7 @@
 import { css } from 'styled-components';
 import {
     GREY_3,
+    GREY_4,
     GREY_5,
     GREY_11,
     GREY_12,
@@ -133,4 +134,9 @@ export const landingPageSubtext = css`
 export const matchingSubheader = css`
     font-size: 18px;
     color: ${GREY_5};
+`;
+export const viewerToolbarText = css`
+    color: ${GREY_4}
+    font-size: 12px;
+    font-weight: 500;
 `;
