@@ -11,7 +11,7 @@ import { authenticationService } from '@services';
 import { Spinner } from '@components/Spinner';
 import { UploadFrame } from '@components/UploadFrame';
 import { Dots } from '@components/UploadProgress';
-import { pageTitleText } from '@style/text';
+import { pageTitleText, formErrorText } from '@style/text';
 
 const Row = styled.div`
     display: flex;
@@ -64,9 +64,8 @@ const Header = styled.h1`
 `;
 
 const ErrorStyled = styled.span`
+    ${formErrorText};
     margin: 8px 0;
-    color: ${props => props.theme.errorTextColor};
-    font-weight: 500;
 `;
 
 const graphqlService = GraphqlService.getInstance();
