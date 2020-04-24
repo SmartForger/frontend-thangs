@@ -50,6 +50,12 @@ const isLoadingState = status =>
     status === ViewerInitStates.LoadingScript ||
     status === ViewerInitStates.LoadingModel;
 
+const debug = message => {
+    if (process.env.REACT_APP_DEBUG) {
+        console.debug(message);
+    }
+};
+
 function HoopsModelViewer({ className, model }) {
     const viewerContainer = useRef();
     const webViewer = useRef();
@@ -62,15 +68,19 @@ function HoopsModelViewer({ className, model }) {
 
     const modelFilename = model.uploadedFile;
     useEffect(() => {
+        debug('1. Initialize Effect');
         if (viewerInitStatus !== ViewerInitStates.LoadingScript) {
+            debug('  * 1: Bailed');
             return;
         }
 
         let isActiveEffect = true;
         const prepCancelSource = axios.CancelToken.source();
 
+        debug('  * 1: Loading Script');
         ensureScriptIsLoaded('vendors/hoops_web_viewer.js')
             .then(async () => {
+                debug('  * 1: Preparing Model');
                 const resp = await axios.get(
                     `${MODEL_PREP_ENDPOINT_URI}/${modelFilename}`,
                     {
@@ -83,6 +93,7 @@ function HoopsModelViewer({ className, model }) {
                 }
 
                 if (isActiveEffect) {
+                    debug('  * 1: Done Prepping Model');
                     setViewerInitStatus(ViewerInitStates.LoadingModel);
                 }
             })
@@ -98,6 +109,7 @@ function HoopsModelViewer({ className, model }) {
         }, MODEL_PREP_TIMEOUT);
 
         return () => {
+            debug('  * 1: Cleanup. Cancel Prep request.');
             isActiveEffect = false;
             clearTimeout(timeoutId);
             prepCancelSource.cancel(
@@ -107,18 +119,30 @@ function HoopsModelViewer({ className, model }) {
     }, [viewerInitStatus, modelFilename]);
 
     useEffect(() => {
+        debug('2. HWV Shutdown registering');
         return () => {
             if (webViewer.current) {
-                webViewer.current.shutdown();
+                debug('  ** 2: Cleanup!  HWV Shutdown! **');
+                try {
+                    webViewer.current.shutdown();
+                } catch (e) {
+                    console.error('HWV failed to shutdown:', e);
+                } finally {
+                    webViewer.current = null;
+                }
+                setViewerInitStatus(ViewerInitStates.LoadingScript);
             }
         };
     }, [modelFilename]);
 
     useEffect(() => {
+        debug('3. HWV Creation');
         if (viewerInitStatus !== ViewerInitStates.LoadingModel) {
+            debug('  * 3: Bailed');
             return;
         }
 
+        debug('  * 3: Create HWV');
         const viewer = new Communicator.WebViewer({
             container: viewerContainer.current,
             endpointUri: HOOPS_WS_ENDPOINT_URI,
@@ -129,6 +153,7 @@ function HoopsModelViewer({ className, model }) {
         viewer.setCallbacks({
             sceneReady() {
                 // passing "null" sets the background to transparent
+                debug('  * 3: HWV Model Load');
                 viewer.view.setBackgroundColor(null, null);
                 setViewerInitStatus(ViewerInitStates.ModelLoaded);
             },
@@ -147,6 +172,7 @@ function HoopsModelViewer({ className, model }) {
 
         webViewer.current = viewer;
         return () => {
+            debug('  * 3: Cleanup! remove resizer');
             window.removeEventListener('resize', handleResize);
         };
     }, [viewerInitStatus, modelFilename]);
