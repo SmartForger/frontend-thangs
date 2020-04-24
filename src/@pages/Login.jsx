@@ -7,11 +7,7 @@ import { useForm } from '@customHooks';
 import { TextInput as BaseTextInput, Spinner, Button } from '@components';
 import { WithNewSignupThemeLayout } from '@style';
 import { ReactComponent as LoginIcon } from '@svg/user-login.svg';
-import {
-    darkPageTitleText,
-    formErrorText,
-    forgotPasswordText,
-} from '@style/text';
+import { darkPageTitleText, formErrorText, darkFormText } from '@style/text';
 
 const PageHeader = styled.h1`
     ${darkPageTitleText};
@@ -61,12 +57,12 @@ const FormControl = styled.div`
 `;
 
 const ForgotText = styled.div`
-    ${forgotPasswordText};
+    ${darkFormText};
     margin-top: 24px;
 `;
 
 const Label = styled.label`
-    color: ${props => props.theme.formLabelColor};
+    ${darkFormText};
 `;
 
 const Page = () => {
