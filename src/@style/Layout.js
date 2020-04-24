@@ -5,6 +5,7 @@ import { GlobalStyle } from '@style/Thangs.GlobalStyle';
 import { Header } from '@components/Header';
 import { Flash, FlashContext, FlashContextProvider } from '@components/Flash';
 import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg';
+import { landingPageText, landingPageSubtext } from '@style/text';
 
 const allowCssProp = props => (props.css ? props.css : '');
 
@@ -59,9 +60,7 @@ const Hero = styled.div`
 
 const PromotionalText = styled.div`
     * {
-        color: ${props => props.theme.promotionalTextColor};
-        text-decoration-color: ${props => props.theme.brandColor};
-        font-size: 72px;
+        ${landingPageText};
     }
 `;
 
@@ -72,11 +71,9 @@ const TextContainer = styled.div`
 `;
 
 const PromotionalSecondaryText = styled.div`
+    ${landingPageSubtext};
     max-width: 550px;
     margin-top: 24px;
-    color: ${props => props.theme.promotionalSecondaryTextColor};
-    font-size: 32px;
-    font-weight: 300;
 `;
 
 const Background = styled(BackgroundSvg)`

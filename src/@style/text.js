@@ -11,6 +11,7 @@ import {
     WHITE_2,
     WHITE_3,
     OFF_WHITE,
+    YELLOW_1,
 } from './colors';
 
 export const MONTSERRAT = "'Montserrat', sans-serif";
@@ -118,4 +119,15 @@ export const modelDetailsLabelText = css`
 `;
 export const inputPlaceholderText = css`
     color: ${GREY_5};
+`;
+export const landingPageText = css`
+    color: ${WHITE_1};
+    text-decoration-color: ${YELLOW_1};
+    font-size: 72px;
+`;
+
+export const landingPageSubtext = css`
+    color: ${GREY_3};
+    font-size: 32px;
+    font-weight: 300;
 `;
