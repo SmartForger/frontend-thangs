@@ -32,8 +32,6 @@ const Field = styled.div`
 `;
 
 const FullWidthInput = styled.input`
-    display: block;
-    flex-grow: 1;
     border: 0;
     padding: 8px 16px;
     margin-bottom: 8px;

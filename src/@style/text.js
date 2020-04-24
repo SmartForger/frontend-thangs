@@ -25,7 +25,9 @@ export const flashToastText = css`
     color: ${WHITE_3};
 `;
 export const zeroStateText = css``;
-export const bodyCopyText = css``;
+export const bodyCopyText = css`
+    color: ${BLACK_1};
+`;
 export const tabNavigationText = css`
     color: ${GREY_5};
     font-size: 16px;
