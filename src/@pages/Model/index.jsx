@@ -9,7 +9,6 @@ import { CommentsForModel } from '@components/CommentsForModel';
 import { ModelViewer } from '@components/HoopsModelViewer';
 import { ModelViewer as BackupViewer } from '@components/ModelViewer';
 import { TextButton } from '@components/Button';
-import { useDownloadModel } from '@customHooks/Models';
 import { Spinner } from '@components/Spinner';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 
@@ -22,6 +21,8 @@ import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { Page404 } from '../404';
 
 const allowCssProp = props => (props.css ? props.css : '');
+
+const graphqlService = GraphqlService.getInstance();
 
 const BackButton = styled.button`
     width: 48px;
@@ -131,7 +132,14 @@ const Header = styled.div`
 
 const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
     const history = useHistory();
-    const [downloadModel] = useDownloadModel(model.id);
+    const [getDownloadUrl] = graphqlService.useCreateDownloadUrlMutation(
+        model.id
+    );
+    const downloadModel = async e => {
+        e.preventDefault();
+        const url = await getDownloadUrl();
+        window.open(url);
+    };
 
     return (
         <>
@@ -173,7 +181,6 @@ function Page() {
     const { id } = useParams();
     const [showBackupViewer] = useLocalStorage('showBackupViewer', false);
 
-    const graphqlService = GraphqlService.getInstance();
     const { loading, error, model } = graphqlService.useModelByIdWithRelated(
         id
     );

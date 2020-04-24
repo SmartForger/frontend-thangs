@@ -331,14 +331,3 @@ export const useHoopsViewer = modelFilename => {
         },
     };
 };
-
-export const useDownloadModel = id => {
-    const [createDownloadUrl] = graphqlService.useCreateDownloadUrlMutation(id);
-
-    async function downloadModel() {
-        const downloadUrl = await createDownloadUrl();
-        window.open(downloadUrl);
-    }
-
-    return [downloadModel];
-};
