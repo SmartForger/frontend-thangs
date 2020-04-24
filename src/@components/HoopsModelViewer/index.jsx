@@ -7,6 +7,7 @@ import { ensureScriptIsLoaded } from './ensureScriptIsLoaded';
 import { Spinner } from '@components/Spinner';
 import { Toolbar } from './Toolbar';
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg';
+import { viewerLoadingText } from '@style/text';
 
 const MODEL_PREP_TIMEOUT = 15000;
 const MODEL_PREP_ENDPOINT_URI =
@@ -61,95 +62,104 @@ function HoopsModelViewer({ className, model }) {
     );
 
     const modelFilename = model.uploadedFile;
-    useEffect(() => {
-        if (viewerInitStatus !== ViewerInitStates.LoadingScript) {
-            return;
-        }
+    useEffect(
+        () => {
+            if (viewerInitStatus !== ViewerInitStates.LoadingScript) {
+                return;
+            }
 
-        let isActiveEffect = true;
-        const prepCancelSource = axios.CancelToken.source();
+            let isActiveEffect = true;
+            const prepCancelSource = axios.CancelToken.source();
 
-        ensureScriptIsLoaded('vendors/hoops_web_viewer.js')
-            .then(async () => {
-                const resp = await axios.get(
-                    `${MODEL_PREP_ENDPOINT_URI}/${modelFilename}`,
-                    {
-                        cancelToken: prepCancelSource.token,
+            ensureScriptIsLoaded('vendors/hoops_web_viewer.js')
+                .then(async () => {
+                    const resp = await axios.get(
+                        `${MODEL_PREP_ENDPOINT_URI}/${modelFilename}`,
+                        {
+                            cancelToken: prepCancelSource.token,
+                        }
+                    );
+
+                    if (!resp.data.ok) {
+                        throw new Error('Model preparation failed.');
                     }
+
+                    if (isActiveEffect) {
+                        setViewerInitStatus(ViewerInitStates.LoadingModel);
+                    }
+                })
+                .catch(err => {
+                    console.error('Failure initializing Viewer:', err);
+                    if (isActiveEffect) {
+                        setViewerInitStatus(ViewerInitStates.Error);
+                    }
+                });
+
+            const timeoutId = setTimeout(() => {
+                prepCancelSource.cancel('Model preparation exceeded timeout.');
+            }, MODEL_PREP_TIMEOUT);
+
+            return () => {
+                isActiveEffect = false;
+                clearTimeout(timeoutId);
+                prepCancelSource.cancel(
+                    'Model preparation canceled by user. (Effect cleanup)'
                 );
+            };
+        },
+        [viewerInitStatus, modelFilename]
+    );
 
-                if (!resp.data.ok) {
-                    throw new Error('Model preparation failed.');
+    useEffect(
+        () => {
+            return () => {
+                if (webViewer.current) {
+                    webViewer.current.shutdown();
                 }
+            };
+        },
+        [modelFilename]
+    );
 
-                if (isActiveEffect) {
-                    setViewerInitStatus(ViewerInitStates.LoadingModel);
-                }
-            })
-            .catch(err => {
-                console.error('Failure initializing Viewer:', err);
-                if (isActiveEffect) {
-                    setViewerInitStatus(ViewerInitStates.Error);
-                }
+    useEffect(
+        () => {
+            if (viewerInitStatus !== ViewerInitStates.LoadingModel) {
+                return;
+            }
+
+            const viewer = new Communicator.WebViewer({
+                container: viewerContainer.current,
+                endpointUri: HOOPS_WS_ENDPOINT_URI,
+                model: `${modelFilename}.scz`,
+                rendererType: Communicator.RendererType.Client,
             });
 
-        const timeoutId = setTimeout(() => {
-            prepCancelSource.cancel('Model preparation exceeded timeout.');
-        }, MODEL_PREP_TIMEOUT);
+            viewer.setCallbacks({
+                sceneReady() {
+                    // passing "null" sets the background to transparent
+                    viewer.view.setBackgroundColor(null, null);
+                    setViewerInitStatus(ViewerInitStates.ModelLoaded);
+                },
+                modelLoadFailure(name, reason, e) {
+                    console.error('HOOPS failed loading the model:', e);
+                    setViewerInitStatus(ViewerInitStates.Error);
+                },
+            });
 
-        return () => {
-            isActiveEffect = false;
-            clearTimeout(timeoutId);
-            prepCancelSource.cancel(
-                'Model preparation canceled by user. (Effect cleanup)'
-            );
-        };
-    }, [viewerInitStatus, modelFilename]);
+            viewer.start();
 
-    useEffect(() => {
-        return () => {
-            if (webViewer.current) {
-                webViewer.current.shutdown();
-            }
-        };
-    }, [modelFilename]);
+            const handleResize = () => {
+                viewer.resizeCanvas();
+            };
+            window.addEventListener('resize', handleResize);
 
-    useEffect(() => {
-        if (viewerInitStatus !== ViewerInitStates.LoadingModel) {
-            return;
-        }
-
-        const viewer = new Communicator.WebViewer({
-            container: viewerContainer.current,
-            endpointUri: HOOPS_WS_ENDPOINT_URI,
-            model: `${modelFilename}.scz`,
-            rendererType: Communicator.RendererType.Client,
-        });
-
-        viewer.setCallbacks({
-            sceneReady() {
-                // passing "null" sets the background to transparent
-                viewer.view.setBackgroundColor(null, null);
-                setViewerInitStatus(ViewerInitStates.ModelLoaded);
-            },
-            modelLoadFailure(name, reason, e) {
-                console.error('HOOPS failed loading the model:', e);
-                setViewerInitStatus(ViewerInitStates.Error);
-            },
-        });
-
-        viewer.start();
-
-        const handleResize = () => {
-            viewer.resizeCanvas();
-        };
-        window.addEventListener('resize', handleResize);
-
-        webViewer.current = viewer;
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, [viewerInitStatus, modelFilename]);
+            webViewer.current = viewer;
+            return () => {
+                window.removeEventListener('resize', handleResize);
+            };
+        },
+        [viewerInitStatus, modelFilename]
+    );
 
     const handleResetView = () => {
         if (webViewer.current) {
@@ -244,8 +254,7 @@ function HoopsModelViewer({ className, model }) {
 export { HoopsModelViewer as ModelViewer };
 
 const PlaceholderText = styled.div`
-    font-weight: 500;
-    font-size: 16px;
+    ${viewerLoadingText};
     margin-top: 24px;
 `;
 
