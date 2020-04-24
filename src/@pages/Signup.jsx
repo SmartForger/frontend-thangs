@@ -9,7 +9,7 @@ import { WithNewSignupThemeLayout } from '@style';
 import { useForm } from '@customHooks';
 import { authenticationService } from '@services';
 import { ReactComponent as UserRegistrationIcon } from '@svg/user-registration.svg';
-import { darkPageTitleText } from '@style/text';
+import { darkPageTitleText, formErrorText } from '@style/text';
 
 const InlinedSpinner = styled(Spinner)`
     display: inline-block;
@@ -32,10 +32,9 @@ const FieldContainer = styled.div`
 `;
 
 const ErrorTextStyle = styled.h4`
+    ${formErrorText};
     margin-top: 24px;
-    color: ${props => props.theme.errorTextColor};
     background-color: ${props => props.theme.errorTextBackground};
-    font-weight: 500;
     padding: 10px 16px;
     border-radius: 8px;
 `;
