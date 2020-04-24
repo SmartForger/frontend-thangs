@@ -42,7 +42,6 @@ const ProfilePictureStyled = styled(ProfilePicture)`
 const TimeAgo = styled.div`
     margin-bottom: 16px;
     font-style: italic;
-    color: ${props => props.theme.darkgrey};
 `;
 
 const Body = styled.div`
