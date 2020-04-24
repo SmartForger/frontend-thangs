@@ -168,3 +168,6 @@ export const thumbnailActivityCountText = css`
 export const zeroStateText = css`
     color: ${GREY_6};
 `;
+export const forgotPasswordText = css`
+    color: ${GREY_4};
+`;
