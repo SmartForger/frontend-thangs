@@ -5,7 +5,7 @@ import 'react-image-crop/dist/ReactCrop.css';
 import Modal from 'react-modal';
 import md5 from 'md5';
 
-import { Button } from '@components';
+import { Button, DarkButton } from '@components';
 import * as GraphqlService from '@services/graphql-service';
 
 Modal.setAppElement('#root');
@@ -67,11 +67,8 @@ const Form = styled.form`
     ${allowCssProp};
 `;
 
-const CancelButton = styled(Button)`
-    color: ${props => props.theme.primaryButtonText};
-    background-color: ${props => props.theme.deleteButton};
+const CancelButton = styled(DarkButton)`
     padding: 8px 36px;
-    ${props => props.theme.shadow};
 `;
 
 export function ChangeablePicture({ user, button, css }) {

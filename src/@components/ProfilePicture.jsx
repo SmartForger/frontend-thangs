@@ -1,13 +1,14 @@
 import React from 'react';
 import Avatar from 'react-avatar';
 import styled from 'styled-components';
+import { avatarDefaultText } from '@style/text';
 
 const DEFAULT_AVATAR_SIZE = '250px';
 const DEFAULT_AVATAR_COLOR = '#616168';
 
 const AvatarStyled = styled(Avatar)`
     span {
-        color: ${props => props.theme.avatarInitialsColor};
+        ${avatarDefaultText};
     }
 `;
 

@@ -7,6 +7,7 @@ import { Markdown } from '@components';
 import { Spinner } from '@components/Spinner';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { NewModelCommentForm } from './NewModelCommentForm';
+import { headerText } from '@style/text';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -41,7 +42,6 @@ const ProfilePictureStyled = styled(ProfilePicture)`
 const TimeAgo = styled.div`
     margin-bottom: 16px;
     font-style: italic;
-    color: ${props => props.theme.darkgrey};
 `;
 
 const Body = styled.div`
@@ -75,9 +75,8 @@ const Comment = ({ comment }) => {
     );
 };
 
-const Header = styled.div`
-    font-size: 32px;
-    font-family: ${props => props.theme.headerFont};
+const Header = styled.h2`
+    ${headerText};
 `;
 
 const Container = styled.div`
@@ -86,7 +85,7 @@ const Container = styled.div`
 
 const CommentsForModel = ({ model, className }) => {
     const { loading, error, comments } = graphqlService.useAllModelComments(
-        model.id,
+        model.id
     );
 
     if (error) {

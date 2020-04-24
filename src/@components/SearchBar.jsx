@@ -2,24 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory, useParams } from 'react-router-dom';
 import { ReactComponent as SearchIcon } from '@svg/search-icon.svg';
-
-const SearchForm = styled.form`
-    width: 50%;
-    height: 100%;
-    display: flex;
-`;
-
-const SearchStyle = styled.input`
-    border: 0.5px solid ${props => props.theme.darkgrey};
-    padding: 0 15px;
-    background: ${props => props.theme.grey};
-    width: 100%;
-    font-size: 30px;
-
-    ::placeholder {
-        color: ${props => props.theme.darkgrey};
-    }
-`;
+import { inputPlaceholderText } from '@style/text';
 
 function useSearch(initialSearchQuery = '') {
     const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
@@ -30,7 +13,35 @@ function useSearch(initialSearchQuery = '') {
     return { searchQuery, setSearchQuery, executeSearch };
 }
 
-const SearchBar = props => {
+const SearchForm = styled.form`
+    flex-grow: 1;
+    background-color: ${props => props.theme.searchBackground};
+    border-radius: 8px;
+    margin-left: 12px;
+    position: relative;
+    display: flex;
+    max-width: 1024px;
+`;
+
+const SearchStyle = styled.input`
+    border: none;
+    padding: 9px 0 9px 56px;
+    background: none;
+    width: 100%;
+
+    ::placeholder {
+        ${inputPlaceholderText};
+    }
+`;
+
+const SearchIconStyled = styled(SearchIcon)`
+    position: absolute;
+    top: 50%;
+    left: 17px;
+    transform: translateY(-50%);
+`;
+
+export function SearchBar(props) {
     const params = useParams();
     const initialSearchQuery = params.searchQuery;
     const { searchQuery, setSearchQuery, executeSearch } = useSearch(
@@ -49,73 +60,12 @@ const SearchBar = props => {
 
     return (
         <SearchForm onSubmit={handleSubmit}>
+            <SearchIconStyled />
             <SearchStyle
-                placeholder="Input Search Term"
+                placeholder="Input search term"
                 value={searchQuery}
                 onChange={handleChange}
             />
         </SearchForm>
     );
-};
-
-const SearchFormNew = styled.form`
-    flex-grow: 1;
-    background-color: ${props => props.theme.searchBackground};
-    border-radius: 8px;
-    margin-left: 12px;
-    position: relative;
-    display: flex;
-    max-width: 1024px;
-`;
-
-const SearchStyleNew = styled.input`
-    color: ${props => props.theme.searchColorIconColor};
-    border: none;
-    padding: 9px 0 9px 56px;
-    background: none;
-    width: 100%;
-    font-family: ${props => props.theme.buttonFont};
-    font-size: 14px;
-
-    ::placeholder {
-        color: ${props => props.theme.searchColor};
-    }
-`;
-
-const SearchIconStyled = styled(SearchIcon)`
-    position: absolute;
-    top: 50%;
-    left: 17px;
-    transform: translateY(-50%);
-`;
-
-const SearchBarNew = props => {
-    const params = useParams();
-    const initialSearchQuery = params.searchQuery;
-    const { searchQuery, setSearchQuery, executeSearch } = useSearch(
-        initialSearchQuery
-    );
-
-    const handleChange = e => {
-        e.persist();
-        setSearchQuery(e.target.value);
-    };
-
-    const handleSubmit = e => {
-        e.preventDefault();
-        executeSearch();
-    };
-
-    return (
-        <SearchFormNew onSubmit={handleSubmit}>
-            <SearchIconStyled />
-            <SearchStyleNew
-                placeholder="Input search term"
-                value={searchQuery}
-                onChange={handleChange}
-            />
-        </SearchFormNew>
-    );
-};
-
-export { SearchBar, SearchBarNew };
+}

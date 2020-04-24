@@ -31,16 +31,11 @@ const Field = styled.div`
 `;
 
 const FullWidthInput = styled.input`
-    display: block;
-    flex-grow: 1;
     border: 0;
     padding: 8px 16px;
     margin-bottom: 8px;
     border-radius: 8px;
     min-width: 0;
-    font-family: ${props => props.theme.buttonFont};
-    font-size: 14px;
-    color: ${props => props.theme.textInputColor};
     background-color: ${props => props.theme.textInputBackground};
 
     ${allowCssProp};
@@ -51,9 +46,6 @@ const TextArea = styled.textarea`
     border: 0;
     padding: 8px 16px;
     border-radius: 8px;
-    font-family: ${props => props.theme.buttonFont};
-    font-size: 14px;
-    color: ${props => props.theme.textInputColor};
     background-color: ${props => props.theme.textInputBackground};
 
     ${allowCssProp};

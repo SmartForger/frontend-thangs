@@ -1,17 +1,12 @@
-/* global Communicator */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 
-import { ensureScriptIsLoaded } from './ensureScriptIsLoaded';
 import { Spinner } from '@components/Spinner';
 import { Toolbar } from './Toolbar';
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg';
+import { viewerLoadingText } from '@style/text';
 
-const MODEL_PREP_TIMEOUT = 15000;
-const MODEL_PREP_ENDPOINT_URI =
-    process.env.REACT_APP_HOOPS_MODEL_PREP_ENDPOINT_URI;
-const HOOPS_WS_ENDPOINT_URI = process.env.REACT_APP_HOOPS_WS_ENDPOINT_URI;
+import { useHoopsViewer } from '@customHooks';
 
 const Container = styled.div`
     border-radius: 5px;
@@ -39,196 +34,38 @@ const LoadingContainer = styled.div`
     align-items: center;
 `;
 
-const ViewerInitStates = {
-    LoadingScript: 'loading-script',
-    Error: 'error',
-    LoadingModel: 'loading-model',
-    ModelLoaded: 'model-loaded',
-};
-
-const isLoadingState = status =>
-    status === ViewerInitStates.LoadingScript ||
-    status === ViewerInitStates.LoadingModel;
-
 function HoopsModelViewer({ className, model }) {
-    const viewerContainer = useRef();
-    const webViewer = useRef();
     const [meshColor, setMeshColor] = useState();
     const [wireColor, setWireColor] = useState();
 
-    const [viewerInitStatus, setViewerInitStatus] = useState(
-        ViewerInitStates.LoadingScript
-    );
-
-    const modelFilename = model.uploadedFile;
-    useEffect(() => {
-        if (viewerInitStatus !== ViewerInitStates.LoadingScript) {
-            return;
-        }
-
-        let isActiveEffect = true;
-        const prepCancelSource = axios.CancelToken.source();
-
-        ensureScriptIsLoaded('vendors/hoops_web_viewer.js')
-            .then(async () => {
-                const resp = await axios.get(
-                    `${MODEL_PREP_ENDPOINT_URI}/${modelFilename}`,
-                    {
-                        cancelToken: prepCancelSource.token,
-                    }
-                );
-
-                if (!resp.data.ok) {
-                    throw new Error('Model preparation failed.');
-                }
-
-                if (isActiveEffect) {
-                    setViewerInitStatus(ViewerInitStates.LoadingModel);
-                }
-            })
-            .catch(err => {
-                console.error('Failure initializing Viewer:', err);
-                if (isActiveEffect) {
-                    setViewerInitStatus(ViewerInitStates.Error);
-                }
-            });
-
-        const timeoutId = setTimeout(() => {
-            prepCancelSource.cancel('Model preparation exceeded timeout.');
-        }, MODEL_PREP_TIMEOUT);
-
-        return () => {
-            isActiveEffect = false;
-            clearTimeout(timeoutId);
-            prepCancelSource.cancel(
-                'Model preparation canceled by user. (Effect cleanup)'
-            );
-        };
-    }, [viewerInitStatus, modelFilename]);
-
-    useEffect(() => {
-        return () => {
-            if (webViewer.current) {
-                webViewer.current.shutdown();
-            }
-        };
-    }, [modelFilename]);
-
-    useEffect(() => {
-        if (viewerInitStatus !== ViewerInitStates.LoadingModel) {
-            return;
-        }
-
-        const viewer = new Communicator.WebViewer({
-            container: viewerContainer.current,
-            endpointUri: HOOPS_WS_ENDPOINT_URI,
-            model: `${modelFilename}.scz`,
-            rendererType: Communicator.RendererType.Client,
-        });
-
-        viewer.setCallbacks({
-            sceneReady() {
-                // passing "null" sets the background to transparent
-                viewer.view.setBackgroundColor(null, null);
-                setViewerInitStatus(ViewerInitStates.ModelLoaded);
-            },
-            modelLoadFailure(name, reason, e) {
-                console.error('HOOPS failed loading the model:', e);
-                setViewerInitStatus(ViewerInitStates.Error);
-            },
-        });
-
-        viewer.start();
-
-        const handleResize = () => {
-            viewer.resizeCanvas();
-        };
-        window.addEventListener('resize', handleResize);
-
-        webViewer.current = viewer;
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, [viewerInitStatus, modelFilename]);
+    const { containerRef, hoops } = useHoopsViewer(model.uploadedFile);
 
     const handleResetView = () => {
-        if (webViewer.current) {
-            webViewer.current.reset();
-        }
+        const [newWireColor, newMeshColor] = hoops.resetImage();
+        setWireColor(newWireColor);
+        setMeshColor(newMeshColor);
     };
 
     const handleDrawModeChange = modeName => {
-        if (webViewer.current) {
-            switch (modeName) {
-                case 'shaded':
-                    webViewer.current.view.setDrawMode(
-                        Communicator.DrawMode.WireframeOnShaded
-                    );
-                    break;
-                case 'wire':
-                    webViewer.current.view.setDrawMode(
-                        Communicator.DrawMode.Wireframe
-                    );
-                    break;
-                case 'xray':
-                    webViewer.current.view.setDrawMode(
-                        Communicator.DrawMode.XRay
-                    );
-                    break;
-                default:
-                    console.error('Unsupported draw mode!', modeName);
-            }
-        }
+        hoops.changeDrawMode(modeName);
     };
 
     const handleColorChange = (modeName, colorStr) => {
-        if (!webViewer.current) {
-            return;
-        }
-        const hColor = new Communicator.Color(
-            ...colorStr
-                .substring(1)
-                .match(/.{1,2}/g)
-                .map(tuple => parseInt(tuple, 16))
-        );
-        const model = webViewer.current.model;
-
-        const gatherLeafNodeIds = nodes => {
-            return nodes.flatMap(node => {
-                const kids = model.getNodeChildren(node);
-                if (kids.length === 0) {
-                    return node;
-                }
-                return gatherLeafNodeIds(kids);
-            });
-        };
-
-        const nodeIds = gatherLeafNodeIds(
-            model.getNodeChildren(model.getAbsoluteRootNode())
-        );
-
-        try {
-            if (modeName === 'wire') {
-                model.setNodesLineColor(nodeIds, hColor);
-                setWireColor(colorStr);
-            } else if (modeName === 'mesh') {
-                model.setNodesFaceColor(nodeIds, hColor);
-                setMeshColor(colorStr);
-            } else {
-                console.error('Unsupported color mode:', modeName);
-            }
-        } catch (e) {
-            console.error('Caught HOOPS error setting color:', e);
+        hoops.changeColor(modeName, colorStr);
+        if (modeName === 'wire') {
+            setWireColor(colorStr);
+        } else if (modeName === 'mesh') {
+            setMeshColor(colorStr);
         }
     };
 
     return (
         <Container>
             <WebViewContainer className={className}>
-                <StatusIndicator status={viewerInitStatus} />
-                <div ref={viewerContainer} />
+                <StatusIndicator status={hoops.status} />
+                <div ref={containerRef} />
             </WebViewContainer>
-            {viewerInitStatus === ViewerInitStates.ModelLoaded && (
+            {hoops.status.isReady && (
                 <Toolbar
                     onResetView={handleResetView}
                     onDrawModeChange={handleDrawModeChange}
@@ -244,24 +81,23 @@ function HoopsModelViewer({ className, model }) {
 export { HoopsModelViewer as ModelViewer };
 
 const PlaceholderText = styled.div`
-    font-weight: 500;
-    font-size: 16px;
+    ${viewerLoadingText};
     margin-top: 24px;
 `;
 
 const StatusIndicator = ({ status }) => {
-    if (status === ViewerInitStates.ModelLoaded) {
+    if (status.isReady) {
         return null;
     }
     return (
         <LoadingContainer>
-            {isLoadingState(status) ? (
+            {status.isPending ? (
                 <>
                     <Spinner />
                     <PlaceholderText>Loading preview...</PlaceholderText>
                 </>
             ) : (
-                status === ViewerInitStates.Error && (
+                status.isError && (
                     <>
                         <ErrorIcon />
                         <PlaceholderText>Error Loading Preview</PlaceholderText>

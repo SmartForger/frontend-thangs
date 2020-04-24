@@ -8,8 +8,10 @@ import { ReactComponent as ShadedMode } from '@svg/view-mode-shaded.svg';
 import { ReactComponent as XRayMode } from '@svg/view-mode-xray.svg';
 import { ReactComponent as EdgesColor } from '@svg/view-color-edges.svg';
 import { ReactComponent as ShadeColor } from '@svg/view-color-shade.svg';
+import { viewerToolbarText } from '@style/text';
 
 const ToolbarContainer = styled.div`
+    ${viewerToolbarText};
     background-color: #ffffff;
     box-shadow: none;
     border-radius: 0 0 5px 5px;
@@ -18,10 +20,6 @@ const ToolbarContainer = styled.div`
 
     display: flex;
     justify-content: space-between;
-
-    color: rgb(152, 152, 152);
-    font-size: 12px;
-    font-weight: 500;
 `;
 
 const ToolGroup = styled.div`
@@ -48,11 +46,6 @@ const ToolButton = styled.button`
     background: none;
     text-decoration: none;
     cursor: pointer;
-`;
-
-const ResetButton = styled(AnchorButton)`
-    font-weight: 500;
-    font-size: 14px;
 `;
 
 export function Toolbar({
@@ -99,7 +92,7 @@ export function Toolbar({
                     <ShadeColor />
                 </ColorPicker>
             </ToolGroup>
-            <ResetButton onClick={onResetView}>Reset Image</ResetButton>
+            <AnchorButton onClick={onResetView}>Reset Image</AnchorButton>
         </ToolbarContainer>
     );
 }

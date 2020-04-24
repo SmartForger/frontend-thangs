@@ -1,18 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { SearchBarNew } from '@components/SearchBar';
+import { SearchBar } from '@components/SearchBar';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { useCurrentUser } from '@customHooks/Users';
 import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
 import { ReactComponent as MatchingIcon } from '@svg/matching-icon.svg';
 import { ReactComponent as Logo } from '@svg/logo.svg';
 import { ReactComponent as LogoText } from '@svg/logo-text.svg';
+import { linkText, matchingButtonText } from '@style/text';
+import { Button } from '@components/Button';
 
 const NOTIFICATIONS_ENABLED = false;
 const NOTIFICATIONS_URL = '#';
-
-const allowCssProp = props => (props.css ? props.css : '');
 
 const LogoStyled = styled(Logo)`
     margin-right: 12px;
@@ -50,27 +50,8 @@ const TopRow = styled(Row)`
 `;
 
 const SignIn = styled(Link)`
-    color: ${props => props.theme.linkText};
-    text-decoration: none;
-    font-size: 14px;
+    ${linkText};
     margin-right: 30px;
-    font-family: ${props => props.theme.buttonFont};
-    font-weight: 500;
-`;
-
-const Button = styled.button`
-    color: ${props => props.theme.primaryButtonText};
-    background-color: ${props => props.theme.primaryButton};
-    font-size: 14px;
-    padding: 9px 12px;
-    border: none;
-    border-radius: 8px;
-    font-family: ${props => props.theme.buttonFont};
-    cursor: pointer;
-    font-weight: 500;
-
-    ${props => props.theme.shadow};
-    ${allowCssProp};
 `;
 
 const SignUp = () => {
@@ -86,21 +67,11 @@ const SignUp = () => {
         </Link>
     );
 };
-const MatchingButton = styled.button`
-    cursor: pointer;
 
-    display: flex;
-    align-items: center;
+const MatchingButton = styled(Button)`
+    ${matchingButtonText};
     background-color: ${props => props.theme.brandColor};
-    color: ${props => props.theme.textOnBrandColor};
-    border: none;
-    border-radius: 8px;
-    font-family: ${props => props.theme.buttonFont};
-    font-weight: 500;
-    font-size: 14px;
     padding: 6px 24px 6px 32px;
-
-    ${props => props.theme.shadow};
 `;
 
 const MatchingIconStyled = styled(MatchingIcon)`
@@ -122,20 +93,10 @@ const NotificationsButton = () => {
     );
 };
 
-const UploadButton = () => {
-    return (
-        <Link to={`/upload`}>
-            <Button
-                css={`
-                    width: 124px;
-                    margin-left: 32px;
-                `}
-            >
-                Upload Model
-            </Button>
-        </Link>
-    );
-};
+const UploadButton = styled(Button)`
+    width: 124px;
+    margin-left: 32px;
+`;
 
 const UserNav = () => {
     const { user } = useCurrentUser();
@@ -147,7 +108,9 @@ const UserNav = () => {
                     <ProfilePicture user={user} size="50px" />
                 </Link>
                 <NotificationsButton />
-                <UploadButton />
+                <Link to={`/upload`}>
+                    <UploadButton>Upload Model</UploadButton>
+                </Link>
             </Row>
         );
     }
@@ -188,7 +151,7 @@ const Header = ({ inverted, variant }) => {
                                     Search by Model
                                 </MatchingButton>
                             </Link>
-                            <SearchBarNew />
+                            <SearchBar />
                         </Flex>
                     )}
                 </Boundary>

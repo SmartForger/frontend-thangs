@@ -4,19 +4,18 @@ import styled from 'styled-components';
 import { WithNewThemeLayout } from '@style/Layout';
 import { useCurrentUser } from '@customHooks/Users';
 import { ProfilePicture } from '@components/ProfilePicture';
-import { Button as _Button } from '@components/Button';
+import { DarkButton } from '@components/Button';
 import { Spinner } from '@components/Spinner';
 import { ChangeablePicture } from '@components/ChangeablePicture';
 import { FlashContext } from '@components/Flash';
 import { EditProfileForm } from '@components/EditProfileForm';
 import * as GraphqlService from '@services/graphql-service';
+import { subheaderText } from '@style/text';
 
 const graphqlService = GraphqlService.getInstance();
 
 const Name = styled.div`
-    font-family: ${props => props.theme.mainFont};
-    font-size: 24px;
-    color: ${props => props.theme.profileNameColor};
+    ${subheaderText};
 `;
 
 const Row = styled.div`
@@ -28,11 +27,7 @@ const ProfilePictureStyled = styled(ProfilePicture)`
     margin-right: 24px;
 `;
 
-const allowCssProp = props => (props.css ? props.css : '');
-
-const DeleteButton = styled(_Button)`
-    color: ${props => props.theme.primaryButtonText};
-    background-color: ${props => props.theme.deleteButton};
+const DeleteButton = styled(DarkButton)`
     padding: 8px 24px;
 `;
 
@@ -66,8 +61,6 @@ function PictureForm({ user, className }) {
 
 const PictureFormStyled = styled(PictureForm)`
     margin-top: 64px;
-
-    ${allowCssProp};
 `;
 
 function InlineProfile({ user }) {

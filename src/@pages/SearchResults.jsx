@@ -5,14 +5,14 @@ import { useParams } from 'react-router-dom';
 import * as GraphqlService from '@services/graphql-service';
 import { Spinner } from '@components/Spinner';
 import { ModelCollection } from '@components/ModelCollection';
+import { subheaderText } from '@style/text';
 
 const SearchResultsStyle = styled.div`
     margin-top: 50px;
 `;
 
 const Header = styled.div`
-    font-size: 24px;
-    line-height: 36px;
+    ${subheaderText};
     margin-bottom: 24px;
 `;
 

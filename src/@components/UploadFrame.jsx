@@ -9,9 +9,6 @@ export const UploadFrame = styled.div`
         props.dragactive
             ? props.theme.uploaderBackgroundActive
             : props.theme.uploaderBackground};
-    color: ${props => props.theme.uploaderText};
-    font-size: 24px;
-    line-height: 36px;
     display: flex;
     flex-direction: column;
     align-items: center;

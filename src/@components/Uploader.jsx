@@ -4,6 +4,7 @@ import { useDropzone } from 'react-dropzone';
 import { ReactComponent as UploadIcon } from '@svg/upload-icon.svg';
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg';
 import { UploadFrame } from '@components/UploadFrame';
+import { infoMessageText, smallInfoMessageText, linkText } from '@style/text';
 
 const UploadIconStyled = styled(UploadIcon)`
     margin-bottom: 32px;
@@ -17,8 +18,7 @@ const FlexColumn = styled.div`
 `;
 
 const LinkColor = styled.span`
-    color: ${props => props.theme.linkText};
-    cursor: pointer;
+    ${linkText};
 `;
 
 const MODEL_FILE_EXTS = [
@@ -61,17 +61,15 @@ const FILE_SIZE_LIMITS = {
     },
 };
 
-const InfoMessage = styled.div`
+const SmallInfoMessage = styled.div`
+    ${smallInfoMessageText};
     margin-top: 32px
     text-align: center;
     max-width: 400px;
-    font-size: 24px;
-    line-height: 28px;
 `;
 
-const SmallInfoMessage = styled(InfoMessage)`
-    font-size: 14px;
-    line-height: 18px;
+const InfoMessage = styled(SmallInfoMessage)`
+    ${infoMessageText};
 `;
 
 export function Uploader({ file, setFile, showError = true }) {
@@ -134,10 +132,10 @@ export function Uploader({ file, setFile, showError = true }) {
                 ) : (
                     <FlexColumn>
                         <UploadIconStyled />
-                        <div>Drag & Drop model</div>
-                        <div>
-                            or <LinkColor>browse</LinkColor> to choose file
-                        </div>
+                        <InfoMessage>
+                            Drag & Drop model<br />or{' '}
+                            <LinkColor>browse</LinkColor> to choose file
+                        </InfoMessage>
                     </FlexColumn>
                 )}
                 <SmallInfoMessage>

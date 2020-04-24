@@ -1,39 +1,32 @@
-/*
- * These colors are commented out for now to avoid unused variable errors in
- * our build. That is because we haven't placed in the theme yet, but they are
- * present in our designer's palette and we should account for them.
- */
-const OFF_WHITE = '#f5f5f5';
-const GREY_1 = '#dbdbdf';
-// const GREY_2 = '#d9d9d9';
-const GREY_3 = '#b9b9be';
-const GREY_4 = '#989898';
-const GREY_5 = '#88888b';
-const GREY_6 = '#7a7a7a';
-const GREY_7 = '#616168';
-const GREY_8 = '#e6e6e9';
-const GREY_9 = '#b9b9be';
-const GREY_10 = '#bfbfbf';
-const BLACK_1 = '#515151';
-const BLACK_2 = '#232530';
-const BLACK_3 = '#231f20';
-const BLACK_4 = '#464655';
-const BLACK_5 = '#4a4a4a';
-const YELLOW_1 = '#ffbc00';
-// const YELLOW_2 = '#cd9602';
-// const YELLOW_3 = '#b18002';
-const BLUE_1 = '#1cb2f5';
-const BLUE_2 = '#1b8cf8';
-const BLUE_3 = '#014d7c';
-// const BLUE_4 = '#013047';
-const BROWN = '#8b6400';
-const RED_1 = '#edd0d0';
-const RED_4 = '#ca2d2c';
-const WHITE_1 = '#ffffff';
-const WHITE_2 = '#efecec';
-const WHITE_3 = '#e8e8ec';
-const WHITE_4 = '#ececec';
-const LIGHT_PURPLE = '#dd72dd';
+import {
+    OFF_WHITE,
+    GREY_1,
+    GREY_3,
+    GREY_4,
+    GREY_5,
+    GREY_6,
+    GREY_7,
+    GREY_8,
+    GREY_9,
+    GREY_10,
+    BLACK_1,
+    BLACK_2,
+    BLACK_3,
+    BLACK_4,
+    BLACK_5,
+    YELLOW_1,
+    BLUE_1,
+    BLUE_2,
+    BLUE_3,
+    BROWN,
+    RED_1,
+    RED_4,
+    WHITE_1,
+    WHITE_2,
+    WHITE_3,
+    WHITE_4,
+    LIGHT_PURPLE,
+} from './colors';
 
 /*
  * These will be the fonts we actually want to use, but we need to get them from

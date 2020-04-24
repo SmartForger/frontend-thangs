@@ -22,9 +22,7 @@ const Content = styled(Markdown)`
     margin-top: 12px;
 `;
 
-const OwnerStyled = styled.div`
-    font-size: 1.5rem;
-`;
+const OwnerStyled = styled.div``;
 
 const Owner = ({ owner }) => {
     return (
