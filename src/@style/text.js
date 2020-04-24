@@ -116,3 +116,6 @@ export const modelDetailsLabelText = css`
     font-weight: 600;
     color: ${GREY_5};
 `;
+export const inputPlaceholderText = css`
+    color: ${GREY_5};
+`;

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory, useParams } from 'react-router-dom';
 import { ReactComponent as SearchIcon } from '@svg/search-icon.svg';
+import { inputPlaceholderText, bodyCopyText } from '@style/text';
 
 function useSearch(initialSearchQuery = '') {
     const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
@@ -23,16 +24,14 @@ const SearchFormNew = styled.form`
 `;
 
 const SearchStyleNew = styled.input`
-    color: ${props => props.theme.searchColorIconColor};
+    ${bodyCopyText};
     border: none;
     padding: 9px 0 9px 56px;
     background: none;
     width: 100%;
-    font-family: ${props => props.theme.buttonFont};
-    font-size: 14px;
 
     ::placeholder {
-        color: ${props => props.theme.searchColor};
+        ${inputPlaceholderText};
     }
 `;
 
