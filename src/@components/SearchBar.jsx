@@ -13,7 +13,7 @@ function useSearch(initialSearchQuery = '') {
     return { searchQuery, setSearchQuery, executeSearch };
 }
 
-const SearchFormNew = styled.form`
+const SearchForm = styled.form`
     flex-grow: 1;
     background-color: ${props => props.theme.searchBackground};
     border-radius: 8px;
@@ -23,7 +23,7 @@ const SearchFormNew = styled.form`
     max-width: 1024px;
 `;
 
-const SearchStyleNew = styled.input`
+const SearchStyle = styled.input`
     ${bodyCopyText};
     border: none;
     padding: 9px 0 9px 56px;
@@ -42,7 +42,7 @@ const SearchIconStyled = styled(SearchIcon)`
     transform: translateY(-50%);
 `;
 
-const SearchBarNew = props => {
+export function SearchBar(props) {
     const params = useParams();
     const initialSearchQuery = params.searchQuery;
     const { searchQuery, setSearchQuery, executeSearch } = useSearch(
@@ -60,15 +60,13 @@ const SearchBarNew = props => {
     };
 
     return (
-        <SearchFormNew onSubmit={handleSubmit}>
+        <SearchForm onSubmit={handleSubmit}>
             <SearchIconStyled />
-            <SearchStyleNew
+            <SearchStyle
                 placeholder="Input search term"
                 value={searchQuery}
                 onChange={handleChange}
             />
-        </SearchFormNew>
+        </SearchForm>
     );
-};
-
-export { SearchBarNew };
+}

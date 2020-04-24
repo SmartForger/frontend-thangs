@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { SearchBarNew } from '@components/SearchBar';
+import { SearchBar } from '@components/SearchBar';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { useCurrentUser } from '@customHooks/Users';
 import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
@@ -151,7 +151,7 @@ const Header = ({ inverted, variant }) => {
                                     Search by Model
                                 </MatchingButton>
                             </Link>
-                            <SearchBarNew />
+                            <SearchBar />
                         </Flex>
                     )}
                 </Boundary>
