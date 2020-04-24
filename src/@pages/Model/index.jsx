@@ -1,21 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useHistory, Link, useParams } from 'react-router-dom';
 
-import { useHistory, Link } from 'react-router-dom';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { ModelCollection } from '@components/ModelCollection';
-import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
-import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { LikeModelButton } from '@components/LikeModelButton';
 import { CommentsForModel } from '@components/CommentsForModel';
 import { ModelViewer } from '@components/HoopsModelViewer';
 import { ModelViewer as BackupViewer } from '@components/ModelViewer';
+import { Spinner } from '@components/Spinner';
+import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 
-import { useParams } from 'react-router-dom';
 import { useLocalStorage } from '@customHooks/Storage';
 import * as GraphqlService from '@services/graphql-service';
-import { WithNewThemeLayout } from '@style';
-import { Spinner } from '@components/Spinner';
+import { WithNewThemeLayout } from '@style/Layout';
+import { headerText, linkText, modelTitleText } from '@style/text';
+
+import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { Page404 } from '../404';
 
 const allowCssProp = props => (props.css ? props.css : '');
@@ -82,20 +83,14 @@ const ModelOwnerProfilePicture = styled(ProfilePicture)`
     margin-right: 16px;
 `;
 
-const ModelTitleText = styled.span`
-    display: block;
-    color: ${props => props.theme.modelTitleText};
-
-    font-size: 24px;
-    font-weight: normal;
+const ModelTitleText = styled.div`
+    ${modelTitleText};
+    margin-bottom: 8px;
 `;
 
 const ProfileLink = styled(Link)`
+    ${linkText};
     display: block;
-    color: ${props => props.theme.modelOwnerLink};
-
-    font-size: 16px;
-    font-weight: 500;
     text-decoration: none;
 `;
 
@@ -104,9 +99,7 @@ const Description = styled.div`
 `;
 
 const DownloadLink = styled.a`
-    font-size: 14px;
-    font-weight: 500;
-    color: ${props => props.theme.linkText};
+    ${linkText};
     margin-bottom: 24px;
     display: block;
 `;
@@ -136,8 +129,7 @@ const Comments = styled(CommentsForModel)`
 `;
 
 const Header = styled.div`
-    font-size: 32px;
-    font-family: ${props => props.theme.headerFont};
+    ${headerText};
     margin: 48px 0 24px;
 `;
 

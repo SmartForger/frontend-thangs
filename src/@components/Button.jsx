@@ -2,12 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { animated } from 'react-spring';
+import {
+    primaryButtonText,
+    secondaryButtonText,
+    darkButtonText,
+} from '@style/text';
 
 const allowCssProp = props => (props.css ? props.css : '');
 
 const BtnStyle = styled(animated.button)`
-    width: ${props => props.width || '100%'};
-    max-width: ${props => props.maxwidth || '114px'};
     border: none;
     text-align: center;
     user-select: none;
@@ -16,11 +19,10 @@ const BtnStyle = styled(animated.button)`
     justify-content: center;
     align-items: center;
     background: ${props => props.theme.primaryButton};
-    color: ${props => props.theme.primaryButtonText};
-    font-weight: 500;
     transition: 0.3s;
     border-radius: 8px;
     padding: 8px 12px;
+    ${primaryButtonText};
 
     ${props => props.theme.shadow};
 
@@ -29,6 +31,7 @@ const BtnStyle = styled(animated.button)`
     }
 
     &:disabled {
+        ${secondaryButtonText};
         cursor: not-allowed;
         background: ${props => props.theme.primaryButtonDisabledColor};
         opacity: 0.8;
@@ -38,6 +41,16 @@ const BtnStyle = styled(animated.button)`
     }
 
     ${allowCssProp};
+`;
+
+const SecondaryBtnStyle = styled(BtnStyle)`
+    ${secondaryButtonText};
+    background-color: ${props => props.theme.secondaryButton};
+`;
+
+const DarkBtnStyle = styled(BtnStyle)`
+    ${darkButtonText};
+    background-color: ${props => props.theme.deleteButton};
 `;
 
 const NOOP = () => null;
@@ -59,3 +72,29 @@ export const Button = React.forwardRef((props, ref) => {
         </BtnStyle>
     );
 });
+
+export const SecondaryButton = ({
+    className,
+    onClick = NOOP,
+    children,
+    css = '',
+}) => {
+    return (
+        <SecondaryBtnStyle className={className} onClick={onClick} css={css}>
+            {children}
+        </SecondaryBtnStyle>
+    );
+};
+
+export const DarkButton = ({
+    className,
+    onClick = NOOP,
+    children,
+    css = '',
+}) => {
+    return (
+        <DarkBtnStyle className={className} onClick={onClick} css={css}>
+            {children}
+        </DarkBtnStyle>
+    );
+};

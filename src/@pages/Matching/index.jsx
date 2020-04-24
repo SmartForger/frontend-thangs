@@ -9,19 +9,19 @@ import { authenticationService } from '@services';
 import { ModelCollection } from '@components/ModelCollection';
 import { UploadProgress } from '@components/UploadProgress';
 
+import { pageTitleText, matchingSubheader } from '@style/text';
+
 const PROCESSING = 'PROCESSING';
 const ERROR = 'ERROR';
 
 const Header = styled.h1`
-    font-family: ${props => props.theme.headerFont};
-    color: ${props => props.theme.headerColor};
+    ${pageTitleText};
     margin-bottom: 16px;
 `;
 
 const Subheader = styled.h4`
+    ${matchingSubheader};
     margin-bottom: 24px;
-    font-size: 18px;
-    color: ${props => props.theme.matchingSubheaderColor};
 `;
 
 const Frame = styled.div`

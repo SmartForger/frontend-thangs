@@ -9,15 +9,14 @@ import { WithNewSignupThemeLayout } from '@style';
 import { useForm } from '@customHooks';
 import { authenticationService } from '@services';
 import { ReactComponent as UserRegistrationIcon } from '@svg/user-registration.svg';
+import { darkPageTitleText, formErrorText } from '@style/text';
 
 const InlinedSpinner = styled(Spinner)`
     display: inline-block;
 `;
 
 const PageHeader = styled.h1`
-    font-family: ${props => props.theme.headerFont};
-    font-size: 48px;
-    color: ${props => props.theme.headerColorOnDarkBackground};
+    ${darkPageTitleText};
     margin-top: 8px;
 `;
 
@@ -33,10 +32,9 @@ const FieldContainer = styled.div`
 `;
 
 const ErrorTextStyle = styled.h4`
+    ${formErrorText};
     margin-top: 24px;
-    color: ${props => props.theme.errorTextColor};
     background-color: ${props => props.theme.errorTextBackground};
-    font-weight: 500;
     padding: 10px 16px;
     border-radius: 8px;
 `;

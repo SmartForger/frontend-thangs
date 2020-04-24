@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { flashToastText } from '@style/text';
 
 export const Flash = styled.div`
-    color: ${props => props.theme.flashColorText};
+    ${flashToastText};
     background-color: ${props => props.theme.flashColor};
     border-radius: 8px;
     padding: 16px 24px;

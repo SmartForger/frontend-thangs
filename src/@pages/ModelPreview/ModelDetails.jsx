@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import * as R from 'ramda';
+import { modelDetailsLabelText } from '@style/text';
 
 const title = R.replace(/(^|\s)\S/g, R.toUpper);
 const titleCase = R.pipe(
@@ -20,10 +21,8 @@ const Cell = styled.td`
 `;
 
 const FirstCell = styled(Cell)`
-    color: ${props => props.theme.modelDetailLabel};
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 24px;
+    ${modelDetailsLabelText};
+    height: 24px;
     text-transform: uppercase;
 `;
 

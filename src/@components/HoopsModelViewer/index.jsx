@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { Spinner } from '@components/Spinner';
 import { Toolbar } from './Toolbar';
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg';
+import { viewerLoadingText } from '@style/text';
+
 import { useHoopsViewer } from '@customHooks';
 
 const Container = styled.div`
@@ -79,8 +81,7 @@ function HoopsModelViewer({ className, model }) {
 export { HoopsModelViewer as ModelViewer };
 
 const PlaceholderText = styled.div`
-    font-weight: 500;
-    font-size: 16px;
+    ${viewerLoadingText};
     margin-top: 24px;
 `;
 

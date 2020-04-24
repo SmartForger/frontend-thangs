@@ -17,6 +17,13 @@ import { ReactComponent as AboutIcon } from '@svg/about-icon.svg';
 import { ReactComponent as ModelIcon } from '@svg/model-icon.svg';
 import { ReactComponent as PencilIcon } from '@svg/pencil-icon.svg';
 import { ModelCollection } from '@components/ModelCollection';
+import { SecondaryButton } from '@components/Button';
+import {
+    subheaderText,
+    tabNavigationText,
+    activeTabNavigationText,
+    profileAboutText,
+} from '@style/text';
 
 export * from './EditProfile';
 export * from './RedirectProfile';
@@ -26,7 +33,6 @@ const graphqlService = GraphqlService.getInstance();
 const Anchor = styled(AnchorButton)`
     margin-top: 16px;
     padding: 4px;
-    font-size: 16px;
 `;
 
 const Frame = styled.div`
@@ -37,9 +43,7 @@ const Frame = styled.div`
 `;
 
 const Name = styled.div`
-    font-family: ${props => props.theme.mainFont};
-    font-size: 24px;
-    color: ${props => props.theme.profileNameColor};
+    ${subheaderText};
     margin-top: 16px;
 `;
 
@@ -49,23 +53,12 @@ const TabTitleGroup = styled.div`
 `;
 
 const TabTitle = styled.div`
-    font-family: ${props => props.theme.mainFont};
-    color: ${props =>
-        props.selected
-            ? props.theme.selectedProfileTabColor
-            : props.theme.unselectedProfileTabColor};
-    font-size: 18px;
+    ${props => (props.selected ? activeTabNavigationText : tabNavigationText)};
+
     display: flex;
     align-items: center;
     margin-right: 56px;
     cursor: pointer;
-
-    svg {
-        fill: ${props =>
-            props.selected
-                ? props.theme.selectedProfileTabColor
-                : props.theme.unselectedProfileTabColor};
-    }
 `;
 
 const Icon = styled.div`
@@ -119,8 +112,12 @@ const TabContent = styled.div`
     margin-top: 24px;
     width: 100%;
     display: flex;
-    color: ${props => props.theme.profileContentColor};
-    font-family: ${props => props.theme.mainFont};
+    ${profileAboutText};
+`;
+
+const MarkdownStyled = styled(Markdown)`
+    max-width: 600px;
+    margin: auto;
 `;
 
 const getDescription = R.pathOr(null, ['profile', 'description']);
@@ -133,7 +130,7 @@ function AboutContent({ selected, user }) {
     }
 
     const description = getDescription(user);
-    return <Markdown>{description}</Markdown>;
+    return <MarkdownStyled>{description}</MarkdownStyled>;
 }
 
 function ModelsContent({ selected, user }) {
@@ -204,16 +201,8 @@ function Tabs({ user }) {
     );
 }
 
-const Button = styled.button`
-    color: ${props => props.theme.secondaryButtonText};
-    background-color: ${props => props.theme.secondaryButton};
-    font-size: 14px;
-    padding: 8px 24px;
-    display: flex;
-    align-items: center;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
+const EditButton = styled(SecondaryButton)`
+    padding: 8px 16px;
 
     svg {
         margin-right: 8px;
@@ -231,10 +220,10 @@ function EditProfileButton({ viewedUser, className }) {
     return (
         <>
             <Link to={'/profile/edit'} className={className}>
-                <Button>
+                <EditButton maxwidth="100%">
                     <PencilIcon />
                     Edit Profile
-                </Button>
+                </EditButton>
             </Link>
 
             <Anchor

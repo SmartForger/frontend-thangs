@@ -5,11 +5,13 @@ import Select from 'react-select';
 import { useForm, ErrorMessage } from 'react-hook-form';
 import { WithNewThemeLayout } from '@style/Layout';
 import { Uploader } from '@components/Uploader';
+import { Button, DarkButton } from '@components/Button';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 import { Spinner } from '@components/Spinner';
 import { UploadFrame } from '@components/UploadFrame';
 import { Dots } from '@components/UploadProgress';
+import { pageTitleText, formErrorText } from '@style/text';
 
 const Row = styled.div`
     display: flex;
@@ -48,39 +50,22 @@ const ButtonGroup = styled.div`
     margin-top: 32px;
 `;
 
-const Button = styled.button`
-    color: ${props => props.theme.primaryButtonText};
-    background-color: ${props => props.theme.primaryButton};
-    font-size: 14px;
+const SaveButton = styled(Button)`
     padding: 8px 36px;
-    border: none;
-    border-radius: 8px;
-    font-family: ${props => props.theme.buttonFont};
-    font-weight: 500;
-    cursor: pointer;
-
-    :disabled {
-        cursor: not-allowed;
-    }
-
-    ${props => props.theme.shadow};
-    ${allowCssProp};
 `;
 
-const CancelButton = styled(Button)`
-    background-color: ${props => props.theme.deleteButton};
+const CancelButton = styled(DarkButton)`
+    padding: 8px 36px;
 `;
 
 const Header = styled.h1`
-    font-family: ${props => props.theme.headerFont};
-    color: ${props => props.theme.headerColor};
+    ${pageTitleText};
     margin-bottom: 24px;
 `;
 
 const ErrorStyled = styled.span`
+    ${formErrorText};
     margin: 8px 0;
-    color: ${props => props.theme.errorTextColor};
-    font-weight: 500;
 `;
 
 const graphqlService = GraphqlService.getInstance();
@@ -324,9 +309,9 @@ const Page = () => {
                     >
                         Cancel
                     </CancelButton>
-                    <Button type="submit" disabled={!file}>
+                    <SaveButton type="submit" disabled={!file}>
                         Save Model
-                    </Button>
+                    </SaveButton>
                 </ButtonGroup>
             </form>
         </div>
