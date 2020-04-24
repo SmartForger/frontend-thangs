@@ -11,6 +11,7 @@ import { authenticationService } from '@services';
 import { Spinner } from '@components/Spinner';
 import { UploadFrame } from '@components/UploadFrame';
 import { Dots } from '@components/UploadProgress';
+import { pageTitleText } from '@style/text';
 
 const Row = styled.div`
     display: flex;
@@ -58,8 +59,7 @@ const CancelButton = styled(DarkButton)`
 `;
 
 const Header = styled.h1`
-    font-family: ${props => props.theme.headerFont};
-    color: ${props => props.theme.headerColor};
+    ${pageTitleText};
     margin-bottom: 24px;
 `;
 
