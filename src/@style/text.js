@@ -111,3 +111,8 @@ export const infoMessageText = css`
     line-height: 28px;
     color: ${GREY_3};
 `;
+export const modelDetailsLabelText = css`
+    font-size: 12px;
+    font-weight: 600;
+    color: ${GREY_5};
+`;
