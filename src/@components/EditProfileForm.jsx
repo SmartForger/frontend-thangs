@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import * as R from 'ramda';
 import { Button as _Button } from '@components/Button';
 import * as GraphqlService from '@services/graphql-service';
+import { bodyCopyText } from '@style/text';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -38,10 +39,9 @@ const FullWidthInput = styled.input`
     margin-bottom: 8px;
     border-radius: 8px;
     min-width: 0;
-    font-family: ${props => props.theme.buttonFont};
-    font-size: 14px;
-    color: ${props => props.theme.textInputColor};
     background-color: ${props => props.theme.textInputBackground};
+
+    ${bodyCopyText};
 
     ${allowCssProp};
 `;
