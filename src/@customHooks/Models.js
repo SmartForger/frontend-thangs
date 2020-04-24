@@ -1,11 +1,9 @@
 /* global Communicator */
 import { useState, useCallback, useEffect, useReducer, useRef } from 'react';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
-import * as GraphqlService from '@services/graphql-service';
 
 import { colorHexStringToRGBArray, ensureScriptIsLoaded } from '@utilities';
 import axios from 'axios';
-const graphqlService = GraphqlService.getInstance();
 
 export const useStl = url => {
     const [data, setData] = useState(null);

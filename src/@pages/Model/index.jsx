@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory, Link, useParams } from 'react-router-dom';
 
@@ -132,12 +132,15 @@ const Header = styled.div`
 
 const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
     const history = useHistory();
+    const [isDownloading, setIsDownloading] = useState();
     const [getDownloadUrl] = graphqlService.useCreateDownloadUrlMutation(
         model.id
     );
     const downloadModel = async e => {
         e.preventDefault();
+        setIsDownloading(true);
         const url = await getDownloadUrl();
+        setIsDownloading(false);
         window.open(url);
     };
 
@@ -167,7 +170,7 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                     <ModelTitle model={model} />
                     <Description>{model.description}</Description>
                     <TextButton onClick={downloadModel}>
-                        Download Model
+                        {isDownloading ? 'Downloading' : 'Download Model'}
                     </TextButton>
                     <ModelDetails model={model} />
                     <Comments model={model} />
