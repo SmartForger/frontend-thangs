@@ -4,6 +4,7 @@ import {
     GREY_4,
     GREY_5,
     GREY_6,
+    GREY_10,
     GREY_11,
     GREY_12,
     BLUE_2,
@@ -170,4 +171,7 @@ export const zeroStateText = css`
 `;
 export const darkFormText = css`
     color: ${GREY_4};
+`;
+export const avatarDefaultText = css`
+    color: ${GREY_10};
 `;
