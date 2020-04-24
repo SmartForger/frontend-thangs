@@ -111,7 +111,7 @@ class HoopsStatus {
 const hoopsStatusReducer = (currentStatus, transition) => {
     debug(`> Reducer Action: ${currentStatus.state} -> ${transition}`);
     switch (transition) {
-        case TRANSITIONS.PREPARING_MODEL:
+        case TRANSITIONS.PrepareModelDone:
             return new HoopsStatus(STATES.PreparedModel);
         case TRANSITIONS.LoadingDone:
             return new HoopsStatus(STATES.Ready);
@@ -158,7 +158,7 @@ export const useHoopsViewer = modelFilename => {
 
                 if (isActiveEffect) {
                     debug('  * 1: Done Prepping Model');
-                    doTransition(TRANSITIONS.PREPARING_MODEL);
+                    doTransition(TRANSITIONS.PrepareModelDone);
                 }
             })
             .catch(err => {
