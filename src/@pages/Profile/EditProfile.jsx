@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { WithNewThemeLayout } from '@style/Layout';
 import { useCurrentUser } from '@customHooks/Users';
 import { ProfilePicture } from '@components/ProfilePicture';
-import { Button as _Button } from '@components/Button';
+import { DarkButton } from '@components/Button';
 import { Spinner } from '@components/Spinner';
 import { ChangeablePicture } from '@components/ChangeablePicture';
 import { FlashContext } from '@components/Flash';
@@ -27,9 +27,7 @@ const ProfilePictureStyled = styled(ProfilePicture)`
     margin-right: 24px;
 `;
 
-const DeleteButton = styled(_Button)`
-    color: ${props => props.theme.primaryButtonText};
-    background-color: ${props => props.theme.deleteButton};
+const DeleteButton = styled(DarkButton)`
     padding: 8px 24px;
 `;
 
