@@ -8,6 +8,8 @@ import { LikeModelButton } from '@components/LikeModelButton';
 import { CommentsForModel } from '@components/CommentsForModel';
 import { ModelViewer } from '@components/HoopsModelViewer';
 import { ModelViewer as BackupViewer } from '@components/ModelViewer';
+import { TextButton } from '@components/Button';
+import { useDownloadModel } from '@customHooks/Models';
 import { Spinner } from '@components/Spinner';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 
@@ -98,12 +100,6 @@ const Description = styled.div`
     margin: 32px 0;
 `;
 
-const DownloadLink = styled.a`
-    ${linkText};
-    margin-bottom: 24px;
-    display: block;
-`;
-
 function ModelTitle({ model, className }) {
     return (
         <ModelTitleContainer className={className}>
@@ -135,6 +131,7 @@ const Header = styled.div`
 
 const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
     const history = useHistory();
+    const [downloadModel] = useDownloadModel(model.id);
 
     return (
         <>
@@ -161,9 +158,9 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                     <LikeModelButton currentUser={currentUser} model={model} />
                     <ModelTitle model={model} />
                     <Description>{model.description}</Description>
-                    <DownloadLink href={model.attachment.dataSrc}>
+                    <TextButton onClick={downloadModel}>
                         Download Model
-                    </DownloadLink>
+                    </TextButton>
                     <ModelDetails model={model} />
                     <Comments model={model} />
                 </Sidebar>

@@ -6,6 +6,7 @@ import {
     primaryButtonText,
     secondaryButtonText,
     darkButtonText,
+    linkText,
 } from '@style/text';
 
 const allowCssProp = props => (props.css ? props.css : '');
@@ -98,3 +99,15 @@ export const DarkButton = ({
         </DarkBtnStyle>
     );
 };
+
+const TextButtonStyled = styled.button`
+    ${linkText};
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+`;
+
+export function TextButton({ onClick = NOOP, children }) {
+    return <TextButtonStyled onClick={onClick}>{children}</TextButtonStyled>;
+}
