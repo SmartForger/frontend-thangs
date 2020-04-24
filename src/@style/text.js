@@ -75,9 +75,6 @@ export const usernameLinkText = css`
     text-decoration: none;
     color: ${BLUE_2};
 `;
-export const linkText = css`
-    color: ${BLUE_2};
-`;
 export const headerText = css`
     font-size: 32px;
     font-family: ${LEXEND_DECA};
