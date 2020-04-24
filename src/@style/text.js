@@ -3,6 +3,7 @@ import {
     GREY_3,
     GREY_4,
     GREY_5,
+    GREY_6,
     GREY_11,
     GREY_12,
     BLUE_2,
@@ -159,4 +160,7 @@ export const thumbnailErrorText = css`
 export const thumbnailActivityCountText = css`
     color: ${GREY_3};
     font-weight: 500;
+`;
+export const zeroStateText = css`
+    color: ${GREY_6};
 `;

@@ -2,6 +2,7 @@ import React from 'react';
 import { ModelCard } from './ModelCard';
 import styled from 'styled-components';
 import * as R from 'ramda';
+import { zeroStateText } from '@style/text';
 
 const ModelsStyled = styled.div`
     display: grid;
@@ -15,8 +16,8 @@ const ModelsStyled = styled.div`
 `;
 
 const NoResultsFrame = styled.div`
+    ${zeroStateText};
     background-color: ${props => props.theme.zeroStateBackground};
-    color: ${props => props.theme.zeroStateColor};
     padding: 16px;
     border-radius: 8px;
     width: 100%;
