@@ -65,7 +65,7 @@ export const subheaderText = css`
 export const resultsHeaderText = css`
     font-size: 24px;
     font-family: ${LEXEND_DECA};
-    color: BLACK_5;
+    color: ${BLACK_5};
 `;
 export const modelTitleText = css`
     font-size: 18px;
