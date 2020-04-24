@@ -125,9 +125,12 @@ export const landingPageText = css`
     text-decoration-color: ${YELLOW_1};
     font-size: 72px;
 `;
-
 export const landingPageSubtext = css`
     color: ${GREY_3};
     font-size: 32px;
     font-weight: 300;
+`;
+export const matchingSubheader = css`
+    font-size: 18px;
+    color: ${GREY_5};
 `;
