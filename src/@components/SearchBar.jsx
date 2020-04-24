@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory, useParams } from 'react-router-dom';
 import { ReactComponent as SearchIcon } from '@svg/search-icon.svg';
-import { inputPlaceholderText, bodyCopyText } from '@style/text';
+import { inputPlaceholderText } from '@style/text';
 
 function useSearch(initialSearchQuery = '') {
     const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
@@ -24,7 +24,6 @@ const SearchForm = styled.form`
 `;
 
 const SearchStyle = styled.input`
-    ${bodyCopyText};
     border: none;
     padding: 9px 0 9px 56px;
     background: none;

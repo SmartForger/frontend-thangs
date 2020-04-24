@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import * as R from 'ramda';
 import { Button as _Button } from '@components/Button';
 import * as GraphqlService from '@services/graphql-service';
-import { bodyCopyText } from '@style/text';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -32,7 +31,6 @@ const Field = styled.div`
 `;
 
 const FullWidthInput = styled.input`
-    ${bodyCopyText};
     border: 0;
     padding: 8px 16px;
     margin-bottom: 8px;
@@ -44,7 +42,6 @@ const FullWidthInput = styled.input`
 `;
 
 const TextArea = styled.textarea`
-    ${bodyCopyText};
     resize: vertical;
     border: 0;
     padding: 8px 16px;

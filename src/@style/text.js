@@ -26,10 +26,6 @@ export const modelCardHoverText = css`
 export const flashToastText = css`
     color: ${WHITE_3};
 `;
-export const zeroStateText = css``;
-export const bodyCopyText = css`
-    color: ${BLACK_1};
-`;
 export const tabNavigationText = css`
     color: ${GREY_5};
     font-size: 16px;
@@ -59,7 +55,6 @@ export const usernameText = css`
     font-weight: 500;
 `;
 export const subheaderText = css`
-    color: ${BLACK_1};
     font-size: 24px;
     font-family: ${LEXEND_DECA};
 `;
