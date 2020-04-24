@@ -59,6 +59,8 @@ const Hero = styled.div`
 `;
 
 const PromotionalText = styled.div`
+    font-family: ${props => props.theme.headerFont};
+
     * {
         ${landingPageText};
     }
