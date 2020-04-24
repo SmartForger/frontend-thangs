@@ -57,6 +57,7 @@ export const formCalloutText = css`
 `;
 export const usernameText = css`
     font-weight: 500;
+    color: ${BLACK_1};
 `;
 export const subheaderText = css`
     font-size: 24px;
@@ -65,7 +66,7 @@ export const subheaderText = css`
 export const resultsHeaderText = css`
     font-size: 24px;
     font-family: ${LEXEND_DECA};
-    color: BLACK_5;
+    color: ${BLACK_5};
 `;
 export const modelTitleText = css`
     font-size: 18px;
