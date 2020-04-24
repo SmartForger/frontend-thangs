@@ -6,7 +6,7 @@ import { authenticationService } from '@services';
 import { useForm } from '@customHooks';
 import { TextInput as BaseTextInput, Spinner, Button } from '@components';
 import { WithNewSignupThemeLayout } from '@style';
-import { darkPageTitleText } from '@style/text';
+import { darkPageTitleText, formSuccessText } from '@style/text';
 
 const PageHeader = styled.h1`
     ${darkPageTitleText};
@@ -32,7 +32,7 @@ const ErrorTextStyle = styled.h4`
 `;
 
 const SuccessTextStyle = styled.h4`
-    color: green;
+    ${formSuccessText};
     background-color: lightgreen;
     padding: 5px;
     border-radius: 2px;
