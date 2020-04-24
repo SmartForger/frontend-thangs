@@ -28,8 +28,8 @@ const TextInput = styled(BaseTextInput)`
 `;
 
 const ErrorTextStyle = styled.h4`
+    ${formErrorText};
     margin-top: 24px;
-    color: ${props => props.theme.errorTextColor};
     background-color: ${props => props.theme.errorTextBackground};
     font-weight: 500;
     padding: 10px 16px;

@@ -30,6 +30,7 @@ export const BLUE_3 = '#014d7c';
 // const BLUE_4 = '#013047';
 export const BROWN = '#8b6400';
 export const RED_1 = '#edd0d0';
+export const RED_2 = '#cc1e1e';
 export const RED_4 = '#ca2d2c';
 export const WHITE_1 = '#ffffff';
 export const WHITE_2 = '#efecec';
