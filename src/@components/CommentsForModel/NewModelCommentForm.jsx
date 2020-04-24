@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { authenticationService } from '@services';
 import * as GraphqlService from '@services/graphql-service';
 import { formCalloutText } from '@style/text';
+import { Button } from '@components/Button';
 
 const allowCssProp = props => (props.css ? props.css : '');
 
@@ -29,21 +30,9 @@ const PostCommentBodyTextarea = styled.textarea`
     border-radius: 4px;
 `;
 
-const PostCommentButton = styled.button`
-    display: block;
-    color: ${props => props.theme.primaryButtonText};
-    background-color: ${props => props.theme.primaryButton};
-    font-size: 14px;
-    padding: 9px 12px;
-    border: none;
-    border-radius: 8px;
-    font-family: ${props => props.theme.buttonFont};
-    cursor: pointer;
-    font-weight: 500;
+const PostCommentButton = styled(Button)`
     margin-bottom: 24px;
-
-    ${props => props.theme.shadow};
-    ${allowCssProp};
+    float: right;
 `;
 
 export function NewModelCommentForm({ modelId }) {
@@ -75,12 +64,7 @@ export function NewModelCommentForm({ modelId }) {
                     name="body"
                     ref={register({ required: true })}
                 />
-                <PostCommentButton
-                    type="submit"
-                    css={`
-                        float: right;
-                    `}
-                >
+                <PostCommentButton type="submit">
                     Post Comment
                 </PostCommentButton>
             </form>
