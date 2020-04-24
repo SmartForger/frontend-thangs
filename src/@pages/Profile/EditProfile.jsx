@@ -27,8 +27,6 @@ const ProfilePictureStyled = styled(ProfilePicture)`
     margin-right: 24px;
 `;
 
-const allowCssProp = props => (props.css ? props.css : '');
-
 const DeleteButton = styled(_Button)`
     color: ${props => props.theme.primaryButtonText};
     background-color: ${props => props.theme.deleteButton};
@@ -65,8 +63,6 @@ function PictureForm({ user, className }) {
 
 const PictureFormStyled = styled(PictureForm)`
     margin-top: 64px;
-
-    ${allowCssProp};
 `;
 
 function InlineProfile({ user }) {

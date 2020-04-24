@@ -6,8 +6,6 @@ import * as GraphqlService from '@services/graphql-service';
 import { formCalloutText } from '@style/text';
 import { Button } from '@components/Button';
 
-const allowCssProp = props => (props.css ? props.css : '');
-
 const graphqlService = GraphqlService.getInstance();
 
 const NewCommentContainer = styled.div`
