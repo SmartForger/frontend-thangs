@@ -10,13 +10,12 @@ import { ChangeablePicture } from '@components/ChangeablePicture';
 import { FlashContext } from '@components/Flash';
 import { EditProfileForm } from '@components/EditProfileForm';
 import * as GraphqlService from '@services/graphql-service';
+import { subheaderText } from '@style/text';
 
 const graphqlService = GraphqlService.getInstance();
 
 const Name = styled.div`
-    font-family: ${props => props.theme.mainFont};
-    font-size: 24px;
-    color: ${props => props.theme.profileNameColor};
+    ${subheaderText};
 `;
 
 const Row = styled.div`

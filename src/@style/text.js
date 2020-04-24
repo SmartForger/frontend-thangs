@@ -57,6 +57,7 @@ export const usernameText = css`
     font-weight: 500;
 `;
 export const subheaderText = css`
+    color: ${BLACK_1};
     font-size: 24px;
     font-family: ${LEXEND_DECA};
 `;
