@@ -8,7 +8,7 @@ import { LikeModelButton } from '@components/LikeModelButton';
 import { CommentsForModel } from '@components/CommentsForModel';
 import { ModelViewer } from '@components/HoopsModelViewer';
 import { ModelViewer as BackupViewer } from '@components/ModelViewer';
-import { Button } from '@components/Button';
+import { TextButton } from '@components/Button';
 import { useDownloadModel } from '@customHooks/Models';
 import { Spinner } from '@components/Spinner';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
@@ -158,7 +158,9 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                     <LikeModelButton currentUser={currentUser} model={model} />
                     <ModelTitle model={model} />
                     <Description>{model.description}</Description>
-                    <Button name="Download" onClick={downloadModel} />
+                    <TextButton onClick={downloadModel}>
+                        Download Model
+                    </TextButton>
                     <ModelDetails model={model} />
                     <Comments model={model} />
                 </Sidebar>
