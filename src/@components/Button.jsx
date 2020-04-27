@@ -6,6 +6,7 @@ import {
     linkText,
     matchingButtonText,
 } from '@style/text';
+import { BLUE_2, BLUE_4 } from '@style/colors';
 
 const allowCssProp = props => (props.css ? props.css : '');
 
@@ -43,12 +44,15 @@ export const DarkButton = styled.button`
 export const Button = styled.button`
     ${BtnStyle};
     ${primaryButtonText};
-    background: ${props => props.theme.primaryButton};
+    background-color: ${BLUE_2};
     ${props => props.theme.shadow};
+
+    &:hover {
+        background-color: ${BLUE_4};
+    }
 
     &:disabled {
         ${secondaryButtonText};
-        background: ${props => props.theme.primaryButtonDisabledColor};
         opacity: 0.8;
         &:hover {
             opacity: 1;

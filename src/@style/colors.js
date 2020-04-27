@@ -27,6 +27,7 @@ export const YELLOW_1 = '#ffbc00';
 export const BLUE_1 = '#1cb2f5';
 export const BLUE_2 = '#1b8cf8';
 export const BLUE_3 = '#014d7c';
+export const BLUE_4 = '#014d7c';
 // const BLUE_4 = '#013047';
 export const BROWN = '#8b6400';
 export const RED_1 = '#edd0d0';
