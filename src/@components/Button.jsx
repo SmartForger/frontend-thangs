@@ -58,7 +58,7 @@ export const Button = styled.button`
     }
 `;
 
-const TextButtonStyled = styled.button`
+export const TextButton = styled.button`
     ${linkText};
     border: none;
     background: none;
@@ -66,11 +66,3 @@ const TextButtonStyled = styled.button`
     cursor: pointer;
     ${allowCssProp};
 `;
-
-export function TextButton({ onClick = NOOP, children, css }) {
-    return (
-        <TextButtonStyled onClick={onClick} css={css}>
-            {children}
-        </TextButtonStyled>
-    );
-}
