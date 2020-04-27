@@ -8,7 +8,7 @@ import { LikeModelButton } from '@components/LikeModelButton';
 import { CommentsForModel } from '@components/CommentsForModel';
 import { ModelViewer } from '@components/HoopsModelViewer';
 import { ModelViewer as BackupViewer } from '@components/ModelViewer';
-import { TextButton } from '@components/Button';
+import { TextButton, BackButton } from '@components/Button';
 import { Spinner } from '@components/Spinner';
 import { ProgressText } from '@components/ProgressText';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
@@ -25,16 +25,6 @@ import { Page404 } from '../404';
 const allowCssProp = props => (props.css ? props.css : '');
 
 const graphqlService = GraphqlService.getInstance();
-
-const BackButton = styled.button`
-    width: 48px;
-    height: 48px;
-    border-radius: 48px;
-    padding: 0;
-    border: 0;
-    margin-right: 16px;
-    cursor: pointer;
-`;
 
 const HeaderStyled = styled.div`
     display: flex;

@@ -4,19 +4,10 @@ import styled from 'styled-components';
 import { useHistory, Link } from 'react-router-dom';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
+import { BackButton } from '@components/Button';
 import { ModelDetails } from './ModelDetails';
 import { LikeModelButton } from '@components/LikeModelButton';
 import { ModelViewer } from '@components/HoopsModelViewer';
-
-const BackButton = styled.button`
-    width: 48px;
-    height: 48px;
-    border-radius: 48px;
-    padding: 0;
-    border: 0;
-    margin-right: 16px;
-    cursor: pointer;
-`;
 
 const HeaderStyled = styled.div`
     display: flex;

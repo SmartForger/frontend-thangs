@@ -97,3 +97,13 @@ export const BrandButton = styled.button`
         background-color: ${YELLOW_3};
     }
 `;
+
+export const BackButton = styled.button`
+    width: 48px;
+    height: 48px;
+    border-radius: 48px;
+    padding: 0;
+    border: 0;
+    margin-right: 16px;
+    cursor: pointer;
+`;
