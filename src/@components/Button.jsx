@@ -50,15 +50,7 @@ export const DarkButton = styled(BtnStyle)`
 
 const NOOP = () => null;
 
-export const Button = props => {
-    const { name, onClick = NOOP, children } = props;
-
-    return (
-        <BtnStyle {...props} onClick={onClick}>
-            {name || children}
-        </BtnStyle>
-    );
-};
+export const Button = styled(BtnStyle)``;
 
 const TextButtonStyled = styled.button`
     ${linkText};
