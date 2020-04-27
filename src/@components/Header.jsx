@@ -8,8 +8,8 @@ import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
 import { ReactComponent as MatchingIcon } from '@svg/matching-icon.svg';
 import { ReactComponent as Logo } from '@svg/logo.svg';
 import { ReactComponent as LogoText } from '@svg/logo-text.svg';
-import { linkText, matchingButtonText } from '@style/text';
-import { Button } from '@components/Button';
+import { linkText } from '@style/text';
+import { Button, BrandButton } from '@components/Button';
 
 const NOTIFICATIONS_ENABLED = false;
 const NOTIFICATIONS_URL = '#';
@@ -67,12 +67,6 @@ const SignUp = () => {
         </Link>
     );
 };
-
-const MatchingButton = styled(Button)`
-    ${matchingButtonText};
-    background-color: ${props => props.theme.brandColor};
-    padding: 6px 24px 6px 32px;
-`;
 
 const MatchingIconStyled = styled(MatchingIcon)`
     margin-right: 8px;
@@ -146,10 +140,10 @@ const Header = ({ inverted, variant }) => {
                     {variant !== 'logo-only' && (
                         <Flex>
                             <Link to={'/matching'}>
-                                <MatchingButton>
+                                <BrandButton>
                                     <MatchingIconStyled />
                                     Search by Model
-                                </MatchingButton>
+                                </BrandButton>
                             </Link>
                             <SearchBar />
                         </Flex>

@@ -1,17 +1,15 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import { animated } from 'react-spring';
+import styled, { css } from 'styled-components';
 import {
     primaryButtonText,
     secondaryButtonText,
     darkButtonText,
     linkText,
+    matchingButtonText,
 } from '@style/text';
 
 const allowCssProp = props => (props.css ? props.css : '');
 
-const BtnStyle = styled(animated.button)`
+const BtnStyle = css`
     border: none;
     text-align: center;
     user-select: none;
@@ -19,88 +17,46 @@ const BtnStyle = styled(animated.button)`
     display: flex;
     justify-content: center;
     align-items: center;
-    background: ${props => props.theme.primaryButton};
-    transition: 0.3s;
     border-radius: 8px;
     padding: 8px 12px;
-    ${primaryButtonText};
 
-    ${props => props.theme.shadow};
-
-    &:active {
-        transform: scale(0.95);
+    &:disabled {
+        cursor: not-allowed;
     }
+
+    ${allowCssProp};
+`;
+
+export const SecondaryButton = styled.button`
+    ${BtnStyle};
+    ${secondaryButtonText};
+    background-color: ${props => props.theme.secondaryButton};
+`;
+
+export const DarkButton = styled.button`
+    ${BtnStyle};
+    ${darkButtonText};
+    ${props => props.theme.shadow};
+    background-color: ${props => props.theme.deleteButton};
+`;
+
+export const Button = styled.button`
+    ${BtnStyle};
+    ${primaryButtonText};
+    background: ${props => props.theme.primaryButton};
+    ${props => props.theme.shadow};
 
     &:disabled {
         ${secondaryButtonText};
-        cursor: not-allowed;
         background: ${props => props.theme.primaryButtonDisabledColor};
         opacity: 0.8;
         &:hover {
             opacity: 1;
         }
     }
-
-    ${allowCssProp};
 `;
 
-const SecondaryBtnStyle = styled(BtnStyle)`
-    ${secondaryButtonText};
-    background-color: ${props => props.theme.secondaryButton};
-`;
-
-const DarkBtnStyle = styled(BtnStyle)`
-    ${darkButtonText};
-    background-color: ${props => props.theme.deleteButton};
-`;
-
-const NOOP = () => null;
-
-export const Button = React.forwardRef((props, ref) => {
-    const { name, onClick = NOOP, routeto, children } = props;
-
-    if (routeto) {
-        return (
-            <Link to={routeto}>
-                <BtnStyle {...props}>{name || children}</BtnStyle>
-            </Link>
-        );
-    }
-
-    return (
-        <BtnStyle {...props} onClick={onClick} ref={ref}>
-            {name || children}
-        </BtnStyle>
-    );
-});
-
-export const SecondaryButton = ({
-    className,
-    onClick = NOOP,
-    children,
-    css = '',
-}) => {
-    return (
-        <SecondaryBtnStyle className={className} onClick={onClick} css={css}>
-            {children}
-        </SecondaryBtnStyle>
-    );
-};
-
-export const DarkButton = ({
-    className,
-    onClick = NOOP,
-    children,
-    css = '',
-}) => {
-    return (
-        <DarkBtnStyle className={className} onClick={onClick} css={css}>
-            {children}
-        </DarkBtnStyle>
-    );
-};
-
-const TextButtonStyled = styled.button`
+export const TextButton = styled.button`
     ${linkText};
     border: none;
     background: none;
@@ -109,10 +65,10 @@ const TextButtonStyled = styled.button`
     ${allowCssProp};
 `;
 
-export function TextButton({ onClick = NOOP, children, css }) {
-    return (
-        <TextButtonStyled onClick={onClick} css={css}>
-            {children}
-        </TextButtonStyled>
-    );
-}
+export const BrandButton = styled.button`
+    ${BtnStyle};
+    ${matchingButtonText};
+    ${props => props.theme.shadow};
+    background-color: ${props => props.theme.brandColor};
+    padding: 6px 24px 6px 32px;
+`;
