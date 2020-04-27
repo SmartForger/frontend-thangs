@@ -1,0 +1,101 @@
+import React  from 'react';
+import styled from 'styled-components';
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg';
+import { ReactComponent as ColorIcon1 } from '@svg/icon-color-1.svg';
+import { ReactComponent as ColorIcon2 } from '@svg/icon-color-2.svg';
+import { ReactComponent as ShadedIcon } from '@svg/icon-shaded.svg';
+import { ReactComponent as CompositeIcon } from '@svg/icon-composite.svg';
+import { ReactComponent as WireframeIcon } from '@svg/icon-wireframe.svg';
+
+const TextStyled = styled.div`
+    max-width: 474px;
+    color: ${props => props.theme.viewerText};
+    margin-bottom: 72px;
+`;
+
+function Text() {
+    return (
+        <TextStyled>
+            Model can be viewed as Wireframe, Shaded or Composite and changed
+            via the icons in the viewer. Wireframe color and shading color can
+            be changed using the paint icons in the viewer. Model can be zoomed
+            in and out and rotated 360 degrees.
+        </TextStyled>
+    );
+}
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+`;
+
+const TitleStyled = styled.h4`
+    font-size: 24px;
+    font-family: ${props => props.theme.headerFont};
+    color: ${props => props.theme.viewerTitle};
+    margin-bottom: 24px;
+`;
+
+function Title() {
+    return <TitleStyled>How to Use:</TitleStyled>;
+}
+
+const IconSpacing = styled.div`
+    margin-left: 48px;
+`;
+
+const IconContainer = styled.div`
+    display: flex;
+
+    svg + svg {
+        margin-left: 24px;
+    }
+`;
+
+function Icons() {
+    return (
+        <IconContainer>
+            <div>
+                <ShadedIcon />
+                <WireframeIcon />
+                <CompositeIcon />
+            </div>
+
+            <IconSpacing>
+                <ColorIcon1 />
+                <ColorIcon2 />
+            </IconSpacing>
+        </IconContainer>
+    );
+}
+
+const ExitIconStyled = styled.div`
+    cursor: pointer;
+    position: absolute;
+    right: 32px;
+    top: 32px;
+
+    svg {
+        fill: ${props => props.theme.viewerExitColor};
+        stroke: ${props => props.theme.viewerExitColor};
+    }
+`;
+
+export function HowTo({  setSeenHowTo }) {
+  const handleClick = () => setSeenHowTo(true);
+  return (
+    <>
+      <ExitIconStyled onClick={handleClick}>
+        <ExitIcon />
+      </ExitIconStyled>
+    </>
+      <Container>
+        <Title />
+        <Text />
+        <Icons />
+      </Container>
+  );
+}
