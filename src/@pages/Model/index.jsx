@@ -166,6 +166,7 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                         css={`
                             width: 122px;
                             text-align: left;
+                            margin-bottom: 24px;
                         `}
                     >
                         {isDownloading ? (
