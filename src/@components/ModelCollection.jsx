@@ -10,7 +10,6 @@ const ModelsStyled = styled.div`
         ${props => (props.singleRow ? 'auto-fill' : 'auto-fit')},
         ${props => (props.singleRow ? '250px' : 'minmax(250px, 1fr)')}
     );
-    grid-auto-rows: 250px;
     gap: 16px;
     width: 100%;
 `;

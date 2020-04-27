@@ -34,7 +34,6 @@ const ThumbnailContainer = styled.div`
     position: relative;
     border-radius: 8px 8px 0px 0px;
     height: 100%;
-    max-height: calc(100% - ${props => (props.showOwner ? '80px' : '40px')});
     overflow: hidden;
     padding: 8px 8px 0;
     display: flex;
@@ -45,7 +44,8 @@ const ThumbnailContainer = styled.div`
     > img {
         margin: auto;
         display: block;
-        height: 100%;
+        max-width: calc(100% - 80px);
+        height: auto;
 
         :before {
             content: ' ';
