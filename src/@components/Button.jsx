@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
     primaryButtonText,
     secondaryButtonText,
@@ -10,7 +10,7 @@ import {
 
 const allowCssProp = props => (props.css ? props.css : '');
 
-const BtnStyle = styled.button`
+const BtnStyle = css`
     border: none;
     text-align: center;
     user-select: none;
@@ -30,21 +30,25 @@ const BtnStyle = styled.button`
     ${allowCssProp};
 `;
 
-export const SecondaryButton = styled(BtnStyle)`
+export const SecondaryButton = styled.button`
+    ${BtnStyle};
     ${secondaryButtonText};
     background-color: ${props => props.theme.secondaryButton};
 `;
 
-export const DarkButton = styled(BtnStyle)`
+export const DarkButton = styled.button`
+    ${BtnStyle};
     ${darkButtonText};
     background-color: ${props => props.theme.deleteButton};
 `;
 
 const NOOP = () => null;
 
-export const Button = styled(BtnStyle)`
-    background: ${props => props.theme.primaryButton};
+export const Button = styled.button`
+    ${BtnStyle};
     ${primaryButtonText};
+    background: ${props => props.theme.primaryButton};
+
     &:disabled {
         ${secondaryButtonText};
         background: ${props => props.theme.primaryButtonDisabledColor};
