@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { Spinner } from '@components/Spinner';
+import { HowTo } from '@components/HowTo';
+import { useLocalStorage } from '@customHooks/Storage';
 import { Toolbar } from './Toolbar';
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg';
 import { viewerLoadingText } from '@style/text';
 
 import { useHoopsViewer } from '@customHooks';
-
 const Container = styled.div`
     border-radius: 5px;
     ${props => props.theme.shadow};
@@ -37,6 +38,7 @@ const LoadingContainer = styled.div`
 function HoopsModelViewer({ className, model }) {
     const [meshColor, setMeshColor] = useState();
     const [wireColor, setWireColor] = useState();
+    const [seenHowTo, setSeenHowTo] = useLocalStorage('seenHowTo', false);
 
     const { containerRef, hoops } = useHoopsViewer(model.uploadedFile);
 
@@ -62,8 +64,14 @@ function HoopsModelViewer({ className, model }) {
     return (
         <Container>
             <WebViewContainer className={className}>
-                <StatusIndicator status={hoops.status} />
-                <div ref={containerRef} />
+                {seenHowTo ? (
+                    <HowTo setSeenHowTo={setSeenHowTo} />
+                ) : (
+                    <>
+                        <StatusIndicator status={hoops.status} />
+                        <div ref={containerRef} />
+                    </>
+                )}
             </WebViewContainer>
             {hoops.status.isReady && (
                 <Toolbar
