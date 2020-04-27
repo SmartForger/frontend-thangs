@@ -46,6 +46,14 @@ export const SecondaryButton = styled.button`
     }
 `;
 
+export const BackButton = styled(SecondaryButton)`
+    width: 48px;
+    height: 48px;
+    border-radius: 48px;
+    padding: 0;
+    margin-right: 16px;
+`;
+
 export const DarkButton = styled.button`
     ${BtnStyle};
     ${darkButtonText};
@@ -96,14 +104,4 @@ export const BrandButton = styled.button`
         ${matchingButtonHoverText};
         background-color: ${YELLOW_3};
     }
-`;
-
-export const BackButton = styled.button`
-    width: 48px;
-    height: 48px;
-    border-radius: 48px;
-    padding: 0;
-    border: 0;
-    margin-right: 16px;
-    cursor: pointer;
 `;
