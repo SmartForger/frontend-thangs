@@ -25,7 +25,6 @@ const BtnStyle = styled.button`
 
     ${props => props.theme.shadow};
 
-
     &:disabled {
         ${secondaryButtonText};
         cursor: not-allowed;
@@ -39,13 +38,12 @@ const BtnStyle = styled.button`
     ${allowCssProp};
 `;
 
-
-const SecondaryBtnStyle = styled(BtnStyle)`
+export const SecondaryButton = styled(BtnStyle)`
     ${secondaryButtonText};
     background-color: ${props => props.theme.secondaryButton};
 `;
 
-const DarkBtnStyle = styled(BtnStyle)`
+export const DarkButton = styled(BtnStyle)`
     ${darkButtonText};
     background-color: ${props => props.theme.deleteButton};
 `;
@@ -59,31 +57,6 @@ export const Button = props => {
         <BtnStyle {...props} onClick={onClick}>
             {name || children}
         </BtnStyle>
-    );
-
-export const SecondaryButton = ({
-    className,
-    onClick = NOOP,
-    children,
-    css = '',
-}) => {
-    return (
-        <SecondaryBtnStyle className={className} onClick={onClick} css={css}>
-            {children}
-        </SecondaryBtnStyle>
-    );
-};
-
-export const DarkButton = ({
-    className,
-    onClick = NOOP,
-    children,
-    css = '',
-}) => {
-    return (
-        <DarkBtnStyle className={className} onClick={onClick} css={css}>
-            {children}
-        </DarkBtnStyle>
     );
 };
 
