@@ -25,6 +25,7 @@ const BtnStyle = styled.button`
 
     ${props => props.theme.shadow};
 
+
     &:disabled {
         ${secondaryButtonText};
         cursor: not-allowed;
@@ -37,6 +38,7 @@ const BtnStyle = styled.button`
 
     ${allowCssProp};
 `;
+
 
 const SecondaryBtnStyle = styled(BtnStyle)`
     ${secondaryButtonText};
@@ -51,15 +53,7 @@ const DarkBtnStyle = styled(BtnStyle)`
 const NOOP = () => null;
 
 export const Button = React.forwardRef((props, ref) => {
-    const { name, onClick = NOOP, routeto, children } = props;
-
-    if (routeto) {
-        return (
-            <Link to={routeto}>
-                <BtnStyle {...props}>{name || children}</BtnStyle>
-            </Link>
-        );
-    }
+    const { name, onClick = NOOP, children } = props;
 
     return (
         <BtnStyle {...props} onClick={onClick} ref={ref}>
