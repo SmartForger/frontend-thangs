@@ -203,6 +203,7 @@ function Tabs({ user }) {
 
 const EditButton = styled(SecondaryButton)`
     padding: 8px 16px;
+    max-width: 100%;
 
     svg {
         margin-right: 8px;
@@ -220,7 +221,7 @@ function EditProfileButton({ viewedUser, className }) {
     return (
         <>
             <Link to={'/profile/edit'} className={className}>
-                <EditButton maxwidth="100%">
+                <EditButton>
                     <PencilIcon />
                     Edit Profile
                 </EditButton>
