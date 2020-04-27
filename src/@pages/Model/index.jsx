@@ -14,6 +14,7 @@ import { ProgressText } from '@components/ProgressText';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 
 import { useLocalStorage } from '@customHooks/Storage';
+import { useDownloadModel } from '@customHooks/Models';
 import * as GraphqlService from '@services/graphql-service';
 import { WithNewThemeLayout } from '@style/Layout';
 import { headerText, linkText, modelTitleText } from '@style/text';
@@ -133,25 +134,7 @@ const Header = styled.div`
 
 const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
     const history = useHistory();
-    const [isDownloading, setIsDownloading] = useState();
-    const [hadError, setHadError] = useState();
-    const [getDownloadUrl] = graphqlService.useCreateDownloadUrlMutation(
-        model.id
-    );
-
-    const downloadModel = async e => {
-        e.preventDefault();
-        setIsDownloading(true);
-        try {
-            const url = await getDownloadUrl();
-            window.open(url);
-        } catch (e) {
-            console.log('e', e);
-            setHadError(true);
-        }
-
-        setIsDownloading(false);
-    };
+    const [isDownloading, hadError, downloadModel] = useDownloadModel(model);
 
     return (
         <>

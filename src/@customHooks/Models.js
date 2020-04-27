@@ -1,9 +1,12 @@
 /* global Communicator */
 import { useState, useCallback, useEffect, useReducer, useRef } from 'react';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
+import * as GraphqlService from '@services/graphql-service';
 
 import { colorHexStringToRGBArray, ensureScriptIsLoaded } from '@utilities';
 import axios from 'axios';
+
+const graphqlService = GraphqlService.getInstance();
 
 export const useStl = url => {
     const [data, setData] = useState(null);
@@ -329,3 +332,27 @@ export const useHoopsViewer = modelFilename => {
         },
     };
 };
+
+export function useDownloadModel(model) {
+  const [isDownloading, setIsDownloading] = useState();
+  const [hadError, setHadError] = useState();
+  const [getDownloadUrl] = graphqlService.useCreateDownloadUrlMutation(
+    model.id
+  );
+
+  const downloadModel = async e => {
+    e.preventDefault();
+    setIsDownloading(true);
+    try {
+      const url = await getDownloadUrl();
+      window.open(url);
+    } catch (e) {
+      console.log('e', e);
+      setHadError(true);
+    }
+
+    setIsDownloading(false);
+  };
+  
+  return [isDownloading, hadError, downloadModel]
+}
