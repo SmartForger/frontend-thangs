@@ -6,7 +6,7 @@ import {
     linkText,
     matchingButtonText,
 } from '@style/text';
-import { BLUE_2, BLUE_4 } from '@style/colors';
+import { BLUE_2, BLUE_4, BLACK_4, GREY_7 } from '@style/colors';
 
 const allowCssProp = props => (props.css ? props.css : '');
 
@@ -38,7 +38,11 @@ export const DarkButton = styled.button`
     ${BtnStyle};
     ${darkButtonText};
     ${props => props.theme.shadow};
-    background-color: ${props => props.theme.deleteButton};
+    background-color: ${GREY_7};
+
+    &:hover {
+        background-color: ${BLACK_4};
+    }
 `;
 
 export const Button = styled.button`
