@@ -21,8 +21,6 @@ const BtnStyle = css`
     border-radius: 8px;
     padding: 8px 12px;
 
-    ${props => props.theme.shadow};
-
     &:disabled {
         cursor: not-allowed;
     }
@@ -39,6 +37,7 @@ export const SecondaryButton = styled.button`
 export const DarkButton = styled.button`
     ${BtnStyle};
     ${darkButtonText};
+    ${props => props.theme.shadow};
     background-color: ${props => props.theme.deleteButton};
 `;
 
@@ -48,6 +47,7 @@ export const Button = styled.button`
     ${BtnStyle};
     ${primaryButtonText};
     background: ${props => props.theme.primaryButton};
+    ${props => props.theme.shadow};
 
     &:disabled {
         ${secondaryButtonText};
