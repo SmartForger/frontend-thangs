@@ -18,21 +18,13 @@ const BtnStyle = styled.button`
     display: flex;
     justify-content: center;
     align-items: center;
-    background: ${props => props.theme.primaryButton};
     border-radius: 8px;
     padding: 8px 12px;
-    ${primaryButtonText};
 
     ${props => props.theme.shadow};
 
     &:disabled {
-        ${secondaryButtonText};
         cursor: not-allowed;
-        background: ${props => props.theme.primaryButtonDisabledColor};
-        opacity: 0.8;
-        &:hover {
-            opacity: 1;
-        }
     }
 
     ${allowCssProp};
@@ -50,7 +42,18 @@ export const DarkButton = styled(BtnStyle)`
 
 const NOOP = () => null;
 
-export const Button = styled(BtnStyle)``;
+export const Button = styled(BtnStyle)`
+    background: ${props => props.theme.primaryButton};
+    ${primaryButtonText};
+    &:disabled {
+        ${secondaryButtonText};
+        background: ${props => props.theme.primaryButtonDisabledColor};
+        opacity: 0.8;
+        &:hover {
+            opacity: 1;
+        }
+    }
+`;
 
 const TextButtonStyled = styled.button`
     ${linkText};
