@@ -84,18 +84,25 @@ const ExitIconStyled = styled.div`
     }
 `;
 
+const Frame = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+`
+
 export function HowTo({  setSeenHowTo }) {
   const handleClick = () => setSeenHowTo(true);
   return (
-    <>
+    <Frame>
       <ExitIconStyled onClick={handleClick}>
         <ExitIcon />
       </ExitIconStyled>
-    </>
       <Container>
         <Title />
         <Text />
         <Icons />
       </Container>
+    </Frame>
   );
 }
