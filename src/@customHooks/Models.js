@@ -5,6 +5,7 @@ import * as GraphqlService from '@services/graphql-service';
 
 import { colorHexStringToRGBArray, ensureScriptIsLoaded } from '@utilities';
 import axios from 'axios';
+
 const graphqlService = GraphqlService.getInstance();
 
 export const useStl = url => {
@@ -332,13 +333,26 @@ export const useHoopsViewer = modelFilename => {
     };
 };
 
-export const useDownloadModel = id => {
-    const [createDownloadUrl] = graphqlService.useCreateDownloadUrlMutation(id);
+export function useDownloadModel(model) {
+  const [isDownloading, setIsDownloading] = useState();
+  const [hadError, setHadError] = useState();
+  const [getDownloadUrl] = graphqlService.useCreateDownloadUrlMutation(
+    model.id
+  );
 
-    async function downloadModel() {
-        const downloadUrl = await createDownloadUrl();
-        window.open(downloadUrl);
+  const downloadModel = async e => {
+    e.preventDefault();
+    setIsDownloading(true);
+    try {
+      const url = await getDownloadUrl();
+      window.open(url);
+    } catch (e) {
+      console.log('e', e);
+      setHadError(true);
     }
 
-    return [downloadModel];
-};
+    setIsDownloading(false);
+  };
+  
+  return [isDownloading, hadError, downloadModel]
+}

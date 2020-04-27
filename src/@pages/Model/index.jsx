@@ -9,11 +9,12 @@ import { CommentsForModel } from '@components/CommentsForModel';
 import { ModelViewer } from '@components/HoopsModelViewer';
 import { ModelViewer as BackupViewer } from '@components/ModelViewer';
 import { TextButton } from '@components/Button';
-import { useDownloadModel } from '@customHooks/Models';
 import { Spinner } from '@components/Spinner';
+import { ProgressText } from '@components/ProgressText';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 
 import { useLocalStorage } from '@customHooks/Storage';
+import { useDownloadModel } from '@customHooks/Models';
 import * as GraphqlService from '@services/graphql-service';
 import { WithNewThemeLayout } from '@style/Layout';
 import { headerText, linkText, modelTitleText } from '@style/text';
@@ -22,6 +23,8 @@ import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { Page404 } from '../404';
 
 const allowCssProp = props => (props.css ? props.css : '');
+
+const graphqlService = GraphqlService.getInstance();
 
 const BackButton = styled.button`
     width: 48px;
@@ -131,7 +134,7 @@ const Header = styled.div`
 
 const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
     const history = useHistory();
-    const [downloadModel] = useDownloadModel(model.id);
+    const [isDownloading, hadError, downloadModel] = useDownloadModel(model);
 
     return (
         <>
@@ -158,8 +161,21 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                     <LikeModelButton currentUser={currentUser} model={model} />
                     <ModelTitle model={model} />
                     <Description>{model.description}</Description>
-                    <TextButton onClick={downloadModel}>
-                        Download Model
+                    <TextButton
+                        onClick={downloadModel}
+                        css={`
+                            width: 122px;
+                            text-align: left;
+                            margin-bottom: 24px;
+                        `}
+                    >
+                        {isDownloading ? (
+                            <ProgressText text="Downloading" />
+                        ) : hadError ? (
+                            'Server Error'
+                        ) : (
+                            'Download Model'
+                        )}
                     </TextButton>
                     <ModelDetails model={model} />
                     <Comments model={model} />
@@ -173,7 +189,6 @@ function Page() {
     const { id } = useParams();
     const [showBackupViewer] = useLocalStorage('showBackupViewer', false);
 
-    const graphqlService = GraphqlService.getInstance();
     const { loading, error, model } = graphqlService.useModelByIdWithRelated(
         id
     );

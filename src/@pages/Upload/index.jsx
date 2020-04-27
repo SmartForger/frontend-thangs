@@ -10,7 +10,7 @@ import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 import { Spinner } from '@components/Spinner';
 import { UploadFrame } from '@components/UploadFrame';
-import { Dots } from '@components/UploadProgress';
+import { ProgressText } from '@components/ProgressText';
 import { pageTitleText, formErrorText } from '@style/text';
 
 const Row = styled.div`
@@ -107,7 +107,7 @@ const DarkBackgroundSpinner = styled(Spinner)`
     }
 `;
 
-const DotsStyled = styled(Dots)`
+const DotsStyled = styled(ProgressText)`
     width: 139px;
     margin-bottom: 224px;
 `;
