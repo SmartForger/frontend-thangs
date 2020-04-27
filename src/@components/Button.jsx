@@ -52,15 +52,14 @@ const DarkBtnStyle = styled(BtnStyle)`
 
 const NOOP = () => null;
 
-export const Button = React.forwardRef((props, ref) => {
+export const Button = props => {
     const { name, onClick = NOOP, children } = props;
 
     return (
-        <BtnStyle {...props} onClick={onClick} ref={ref}>
+        <BtnStyle {...props} onClick={onClick}>
             {name || children}
         </BtnStyle>
     );
-});
 
 export const SecondaryButton = ({
     className,
