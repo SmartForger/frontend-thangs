@@ -65,12 +65,12 @@ function HoopsModelViewer({ className, model }) {
         <Container>
             <WebViewContainer className={className}>
                 {seenHowTo ? (
-                    <HowTo setSeenHowTo={setSeenHowTo} />
-                ) : (
                     <>
                         <StatusIndicator status={hoops.status} />
                         <div ref={containerRef} />
                     </>
+                ) : (
+                    <HowTo setSeenHowTo={setSeenHowTo} />
                 )}
             </WebViewContainer>
             {hoops.status.isReady && (
