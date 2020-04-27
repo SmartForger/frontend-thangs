@@ -5,7 +5,17 @@ import {
     darkButtonText,
     linkText,
     matchingButtonText,
+    matchingButtonHoverText,
 } from '@style/text';
+import {
+    BLUE_2,
+    BLUE_4,
+    BLACK_4,
+    GREY_3,
+    GREY_7,
+    YELLOW_1,
+    YELLOW_3,
+} from '@style/colors';
 
 const allowCssProp = props => (props.css ? props.css : '');
 
@@ -30,25 +40,43 @@ const BtnStyle = css`
 export const SecondaryButton = styled.button`
     ${BtnStyle};
     ${secondaryButtonText};
-    background-color: ${props => props.theme.secondaryButton};
+    background-color: ${GREY_3};
+    &:hover {
+        background-color: ${GREY_7};
+    }
+`;
+
+export const BackButton = styled(SecondaryButton)`
+    width: 48px;
+    height: 48px;
+    border-radius: 48px;
+    padding: 0;
+    margin-right: 16px;
 `;
 
 export const DarkButton = styled.button`
     ${BtnStyle};
     ${darkButtonText};
     ${props => props.theme.shadow};
-    background-color: ${props => props.theme.deleteButton};
+    background-color: ${GREY_7};
+
+    &:hover {
+        background-color: ${BLACK_4};
+    }
 `;
 
 export const Button = styled.button`
     ${BtnStyle};
     ${primaryButtonText};
-    background: ${props => props.theme.primaryButton};
+    background-color: ${BLUE_2};
     ${props => props.theme.shadow};
+
+    &:hover {
+        background-color: ${BLUE_4};
+    }
 
     &:disabled {
         ${secondaryButtonText};
-        background: ${props => props.theme.primaryButtonDisabledColor};
         opacity: 0.8;
         &:hover {
             opacity: 1;
@@ -69,6 +97,11 @@ export const BrandButton = styled.button`
     ${BtnStyle};
     ${matchingButtonText};
     ${props => props.theme.shadow};
-    background-color: ${props => props.theme.brandColor};
     padding: 6px 24px 6px 32px;
+    background-color: ${YELLOW_1};
+
+    &:hover {
+        ${matchingButtonHoverText};
+        background-color: ${YELLOW_3};
+    }
 `;

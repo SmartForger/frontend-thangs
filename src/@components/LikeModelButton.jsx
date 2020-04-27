@@ -5,16 +5,13 @@ import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
 import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg';
 import * as GraphqlService from '@services/graphql-service';
 import { SecondaryButton } from '@components/Button';
-import { secondaryButtonText } from '@style/text';
 
 const graphqlService = GraphqlService.getInstance();
 
 const ActionButton = styled(SecondaryButton)`
-    ${secondaryButtonText};
-
     margin-bottom: 24px;
+    max-width: 124px;
     padding: 6px 24px;
-    box-shadow: none;
 
     > svg {
         margin-right: 8px;
@@ -40,11 +37,11 @@ export function LikeModelButton({ currentUser, model }) {
         model.id
     );
     return hasLikedModel(model, currentUser) ? (
-        <ActionButton onClick={unlikeModel} maxwidth="124px">
+        <ActionButton onClick={unlikeModel}>
             <HeartFilledIcon /> Liked!
         </ActionButton>
     ) : (
-        <ActionButton onClick={likeModel} maxwidth="124px">
+        <ActionButton onClick={likeModel}>
             <HeartIcon /> Like
         </ActionButton>
     );

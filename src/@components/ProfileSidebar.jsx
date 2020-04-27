@@ -35,12 +35,15 @@ const isEmpty = obj =>
     Object.keys(obj).length === 0 && obj.constructor === Object;
 
 const EditButton = ({ onClick }) => {
-    return <Button name="Edit Profile" maxwidth="100%" onClick={onClick} />;
-};
-
-const FollowButton = () => {
-    // Currently disabled as we have not built out user following
-    return <Button name="Follow" maxwidth="100%" disabled />;
+    return (
+        <Button
+            name="Edit Profile"
+            css={`
+                max-width: 100%;
+            `}
+            onClick={onClick}
+        />
+    );
 };
 
 const FormStyled = styled.form`
@@ -214,7 +217,6 @@ const StaticProfile = ({ user }) => {
                 <div>
                     {user.firstName} {user.lastName}
                 </div>
-                <FollowButton />
                 <Markdown>{user.profile.description}</Markdown>
                 <InviteCode code={user.inviteCode} />
             </UserDetails>

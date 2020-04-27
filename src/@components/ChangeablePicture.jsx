@@ -170,13 +170,13 @@ export function ChangeablePicture({ user, button, css }) {
         <Form css={css} ref={formRef}>
             <label htmlFor="avatar">
                 <Button
-                    maxwidth="100%"
                     onClick={e => {
                         e.preventDefault();
                     }}
                     ref={buttonRef}
                     css={`
                         width: 197px;
+                        max-width: 100%;
                     `}
                 >
                     Upload New Photo
