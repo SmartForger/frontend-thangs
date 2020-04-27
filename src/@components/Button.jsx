@@ -1,4 +1,3 @@
-import React from 'react';
 import styled, { css } from 'styled-components';
 import {
     primaryButtonText,
@@ -39,8 +38,6 @@ export const DarkButton = styled.button`
     ${props => props.theme.shadow};
     background-color: ${props => props.theme.deleteButton};
 `;
-
-const NOOP = () => null;
 
 export const Button = styled.button`
     ${BtnStyle};
