@@ -73,7 +73,7 @@ function HoopsModelViewer({ className, model }) {
                     <HowTo setSeenHowTo={setSeenHowTo} />
                 )}
             </WebViewContainer>
-            {hoops.status.isReady && (
+            {seenHowTo && hoops.status.isReady && (
                 <Toolbar
                     onResetView={handleResetView}
                     onDrawModeChange={handleDrawModeChange}
