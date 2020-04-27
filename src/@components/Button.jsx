@@ -4,6 +4,7 @@ import {
     secondaryButtonText,
     darkButtonText,
     linkText,
+    matchingButtonText,
 } from '@style/text';
 
 const allowCssProp = props => (props.css ? props.css : '');
@@ -62,4 +63,12 @@ export const TextButton = styled.button`
     padding: 0;
     cursor: pointer;
     ${allowCssProp};
+`;
+
+export const BrandButton = styled.button`
+    ${BtnStyle};
+    ${matchingButtonText};
+    ${props => props.theme.shadow};
+    background-color: ${props => props.theme.brandColor};
+    padding: 6px 24px 6px 32px;
 `;
