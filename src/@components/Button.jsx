@@ -5,8 +5,17 @@ import {
     darkButtonText,
     linkText,
     matchingButtonText,
+    matchingButtonHoverText,
 } from '@style/text';
-import { BLUE_2, BLUE_4, BLACK_4, GREY_3, GREY_7 } from '@style/colors';
+import {
+    BLUE_2,
+    BLUE_4,
+    BLACK_4,
+    GREY_3,
+    GREY_7,
+    YELLOW_1,
+    YELLOW_3,
+} from '@style/colors';
 
 const allowCssProp = props => (props.css ? props.css : '');
 
@@ -80,6 +89,11 @@ export const BrandButton = styled.button`
     ${BtnStyle};
     ${matchingButtonText};
     ${props => props.theme.shadow};
-    background-color: ${props => props.theme.brandColor};
     padding: 6px 24px 6px 32px;
+    background-color: ${YELLOW_1};
+
+    &:hover {
+        ${matchingButtonHoverText};
+        background-color: ${YELLOW_3};
+    }
 `;

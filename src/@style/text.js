@@ -158,6 +158,18 @@ export const formErrorText = css`
 `;
 export const matchingButtonText = css`
     color: ${BROWN};
+    font-weight: 500;
+    svg {
+        fill: ${BROWN};
+    }
+`;
+export const matchingButtonHoverText = css`
+    color: ${YELLOW_1};
+    font-weight: 500;
+
+    svg {
+        fill: ${YELLOW_1};
+    }
 `;
 export const thumbnailErrorText = css`
     color: ${GREY_3};
