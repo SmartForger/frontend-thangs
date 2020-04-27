@@ -34,6 +34,7 @@ const ThumbnailContainer = styled.div`
     position: relative;
     border-radius: 8px 8px 0px 0px;
     height: 100%;
+    min-height: 205px;
     overflow: hidden;
     padding: 8px 8px 0;
     display: flex;
