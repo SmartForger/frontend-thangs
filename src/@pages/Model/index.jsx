@@ -122,6 +122,26 @@ const Header = styled.div`
     margin: 48px 0 24px;
 `;
 
+function RelatedModels({ modelId }) {
+    const { loading, error, model } = graphqlService.useModelByIdWithRelated(
+        modelId
+    );
+
+    if (loading) {
+        return <Spinner />;
+    } else if (error) {
+        return <div>Server error</div>;
+    }
+
+    return (
+        <ModelCollection
+            models={model.relatedModels}
+            maxPerRow={3}
+            noResultsText="There were no geometrically similar matches found."
+        />
+    );
+}
+
 const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
     const history = useHistory();
     const [isDownloading, hadError, downloadModel] = useDownloadModel(model);
@@ -141,11 +161,7 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                         <ModelViewerStyled model={model} />
                     )}
                     <Header>Geometrically Similar</Header>
-                    <ModelCollection
-                        models={model.relatedModels}
-                        maxPerRow={3}
-                        noResultsText="There were no geometrically similar matches found."
-                    />
+                    <RelatedModels modelId={model.id} />
                 </ModelColumn>
                 <Sidebar>
                     <LikeModelButton currentUser={currentUser} model={model} />
@@ -179,9 +195,7 @@ function Page() {
     const { id } = useParams();
     const [showBackupViewer] = useLocalStorage('showBackupViewer', false);
 
-    const { loading, error, model } = graphqlService.useModelByIdWithRelated(
-        id
-    );
+    const { loading, error, model } = graphqlService.useModelById(id);
     const [currentUser] = useLocalStorage('currentUser', null);
 
     if (loading) {
