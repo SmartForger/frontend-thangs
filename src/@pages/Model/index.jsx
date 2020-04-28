@@ -45,11 +45,11 @@ const ScrollableColumn = styled.div`
 `;
 
 const ModelViewerStyled = styled(ModelViewer)`
-    height: 416px;
+    height: 560px;
 `;
 
 const BackupViewerStyled = styled(BackupViewer)`
-    height: 416px;
+    height: 560px;
 `;
 
 const ModelColumn = styled(ScrollableColumn)`

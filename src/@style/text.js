@@ -188,3 +188,10 @@ export const darkFormText = css`
 export const avatarDefaultText = css`
     color: ${GREY_10};
 `;
+export const commentPostedText = css`
+    font-style: italic;
+`;
+export const commentUsername = css`
+    font-size: 16px;
+    font-weight: 500;
+`;

@@ -81,25 +81,132 @@ yarn format
 
 ## Deploying to Production
 
-1. Ensure you have the [Gcloud SDK](https://cloud.google.com/sdk/install) installed  
-  
+1. Ensure you have the [Gcloud SDK](https://cloud.google.com/sdk/install) installed
+
 2. Initialize your [Gcloud](https://cloud.google.com/sdk/gcloud/reference/init)
-  
-3. Create a new [Gcloud Configuration](https://cloud.google.com/sdk/gcloud/reference/init) following the prompts to target the correct project 
+
+3. Create a new [Gcloud Configuration](https://cloud.google.com/sdk/gcloud/reference/init) following the prompts to target the correct project
 
 4. Build the project by running:
 ```bash
 yarn build
 ```
-  
+
 5. Run the following in the route directory to deploy:
 ```bash
 gcloud app deploy
-```  
-  
+```
+
 6. Once the app has finished deploying you can run the following to view the app in production:
 ```bash
 gcloud app browse
 ```
 
+## HOOPS Communicator and Web Viewer
 
+https://docs.techsoft3d.com/communicator/latest/build/overview/getting-started.html
+
+> "HOOPS Communicator is an SDK for development of 3D engineering applications in a
+> web-browser. Its main component is the HOOPS Web Viewer, a powerful and flexible
+> JavaScript library purposely built for engineering data, and based on a graphics
+> kernel designed for high performance visualization."
+
+HOOPS Communicator utilizes its own proprietary file format called [Stream Cache
+(SC)](https://docs.techsoft3d.com/communicator/latest/build/prog_guide/viewing/data_model/stream_cache/overview.html).
+The HOOPS Stream Cache Server facilitates "fast, granular and intelligent"
+streaming via a direct WebSocket connection to the HOOPS Web Viewer component
+running in the browser.
+
+### Summary of Hoops Data Model
+
+A node is the basic building block of the model tree in the Web Viewer. All
+visible or non-visible geometry and attributes are always associated with a
+node. A node may contain many child nodes, or it can just encapsulate a single
+entity.
+
+Each node has a NodeId, a unique identifier generated when the model is
+authored, that will stay persistent when loading the same model multiple times.
+Functions that operate on nodes will either return a NodeId or will use it as
+input.
+
+The node hierarchy in the Web Viewer forms a tree like structure with a single
+root node at its top. The root node will always have one child node per loaded
+model with the hierarchy of each loaded model underneath it. Only the _leaf
+nodes_ of the model tree can contain mesh geometry and any nodes returned from a
+selection will always point to leaf nodes.
+
+**Hoops Data Model Docs:** https://docs.techsoft3d.com/communicator/latest/build/prog_guide/viewing/data_model/model-tree.html
+
+![Hoops data model node hierarchy tree](https://docs.techsoft3d.com/communicator/latest/build/prog_guide/viewing/data_model/images/model-tree-two-loaded-models.png)
+
+### Hoops Usage
+
+Create and start a Hoops WebViewer.
+
+- WebViewer API Ref: https://docs.techsoft3d.com/communicator/latest/build/api_ref/typedoc/classes/communicator.webviewer.html
+- Configuration docs: https://docs.techsoft3d.com/communicator/latest/build/prog_guide/viewing/configuration.html
+- Callback docs: https://docs.techsoft3d.com/communicator/latest/build/prog_guide/viewing/callbacks.html
+
+```javascript
+const viewer = new Communicator.WebViewer({
+  container: document.getElementById('#hoops-container'),
+  endpointUri: 'ws://hoops-stream-cache-server/websocket/uri',
+  model: `modelName.scz`,
+  rendererType: Communicator.RendererType.Client,
+  // see configuration docs...
+});
+
+viewer.setCallbacks({
+  sceneReady() {
+    console.log("Scene loaded!")
+  },
+  modelLoadFailure(name, reason, e) {
+    console.error('HOOPS failed loading the model:', e);
+  },
+  // see callback docs...
+});
+
+viewer.start()
+
+const handleResize = () => {
+  viewer.resizeCanvas();
+}
+
+window.addEventListener('resize', handleResize);
+
+setTimeout(function cleanup() {
+  window.removeEventListener('resize', handleResize);
+  viewer.shutdown() // release memory
+}, 5000)
+```
+
+For interacting with the display and canvas, look at the `viewer.view` object ([docs](https://docs.techsoft3d.com/communicator/latest/build/api_ref/typedoc/classes/communicator.view.html)).
+
+```javascript
+viewer.view.setDrawMode(
+  Communicator.DrawMode.WireframeOnShaded
+);
+```
+
+For interacting with the model data (nodes, faces, lines, meshes, geometry,
+colors), look at the `viewer.model` object ([docs](https://docs.techsoft3d.com/communicator/latest/build/api_ref/typedoc/classes/communicator.model.html)).
+
+```javascript
+/**
+ * Recursively walk the node hierarchy down to leaves
+ */
+function gatherLeafNodeIds(nodes) {
+  return nodes.flatMap(node => {
+    const kids = viewer.model.getNodeChildren(node);
+    if (kids.length === 0) {
+      return node;
+    }
+    return gatherLeafNodeIds(kids);
+  });
+};
+
+const rootNode = viewer.model.getAbsoluteRootNode();
+const topLevelModelNodes = viewer.model.getNodeChildren(rootNode); // one per loaded model
+
+const allLeafNodeIds = gatherLeafNodeIds(topLevelModelNodes);
+```

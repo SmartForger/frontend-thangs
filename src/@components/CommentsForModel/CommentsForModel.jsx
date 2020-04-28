@@ -7,7 +7,7 @@ import { Markdown } from '@components';
 import { Spinner } from '@components/Spinner';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { NewModelCommentForm } from './NewModelCommentForm';
-import { headerText } from '@style/text';
+import { subheaderText, commentPostedText, commentUsername } from '@style/text';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -30,26 +30,26 @@ const Box = styled.div`
     background-color: ${props => props.theme.grey};
 `;
 
-const ProfileLink = styled(Link)`
-    font-weight: 500;
-    text-decoration: none;
-`;
-
 const ProfilePictureStyled = styled(ProfilePicture)`
     margin-right: 16px;
 `;
 
 const TimeAgo = styled.div`
-    margin-bottom: 16px;
-    font-style: italic;
+    ${commentPostedText};
 `;
 
 const Body = styled.div`
     margin-bottom: 4px;
+    margin-top: 16px;
 `;
 
 const FlexGrow = styled.div`
     flex-grow: 1;
+`;
+
+const Name = styled.div`
+    ${commentUsername};
+    margin-bottom: 16px;
 `;
 
 const Comment = ({ comment }) => {
@@ -57,16 +57,14 @@ const Comment = ({ comment }) => {
     const { owner, body } = comment;
     return (
         <CommentStyled>
-            <ProfileLink to={`/profile/${owner.id}`}>
+            <Link to={`/profile/${owner.id}`}>
                 <ProfilePictureStyled size="48px" user={owner} />
-            </ProfileLink>
+            </Link>
             <FlexGrow>
                 <Box>
                     <Body>
-                        <ProfileLink to={`/profile/${owner.id}`}>
-                            {owner.fullName}
-                        </ProfileLink>
-                        <TimeAgo>{time} ago</TimeAgo>
+                        <Name>{owner.fullName}</Name>
+                        <TimeAgo>Posted {time} ago</TimeAgo>
                         <Markdown>{body}</Markdown>
                     </Body>
                 </Box>
@@ -76,7 +74,7 @@ const Comment = ({ comment }) => {
 };
 
 const Header = styled.h2`
-    ${headerText};
+    ${subheaderText};
 `;
 
 const Container = styled.div`

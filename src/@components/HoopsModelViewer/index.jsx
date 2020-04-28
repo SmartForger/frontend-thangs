@@ -10,18 +10,12 @@ import { viewerLoadingText } from '@style/text';
 
 import { useHoopsViewer } from '@customHooks';
 
-const Container = styled.div`
-    border-radius: 5px;
-    ${props => props.theme.shadow};
-`;
-
 const WebViewContainer = styled.div`
     position: relative;
     width: 100%;
     height: 100%;
 
     background-color: #ffffff;
-    border-radius: 5px 5px 0 0;
 
     > div {
         pointer-events: all;
@@ -62,7 +56,7 @@ function HoopsModelViewer({ className, model }) {
     };
 
     return (
-        <Container>
+        <div>
             <WebViewContainer className={className}>
                 <StatusIndicator status={hoops.status} />
                 <div ref={containerRef} />
@@ -76,7 +70,7 @@ function HoopsModelViewer({ className, model }) {
                     wireColor={wireColor}
                 />
             )}
-        </Container>
+        </div>
     );
 }
 
