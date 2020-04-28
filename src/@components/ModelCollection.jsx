@@ -3,6 +3,7 @@ import { ModelCard } from './ModelCard';
 import styled from 'styled-components';
 import * as R from 'ramda';
 import { zeroStateText } from '@style/text';
+import { isError } from '@utilities';
 
 const ModelsStyled = styled.div`
     display: grid;
@@ -28,13 +29,19 @@ export function ModelCollection({
     maxPerRow = 4,
     noResultsText,
     noResultsSubtext,
+    showModelsWithErrors,
 }) {
     if (!models || R.isEmpty(models)) {
         return <NoResultsFrame>{noResultsText}</NoResultsFrame>;
     }
+
+    const modelsToRender = showModelsWithErrors
+        ? models
+        : R.reject(isError, models);
+
     return (
         <ModelsStyled singleRow={models.length < maxPerRow}>
-            {models.map((model, index) => (
+            {modelsToRender.map((model, index) => (
                 <ModelCard key={index} model={model} withOwner={true} />
             ))}
         </ModelsStyled>
