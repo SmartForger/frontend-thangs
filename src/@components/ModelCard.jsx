@@ -88,25 +88,30 @@ const StatusOverlay = styled.div`
     top: -8px;
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 `;
 
 function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
     return (
         <ThumbnailContainer showOwner={showOwner}>
-            {isProcessing(model) ? (
-                <>
-                    <LoadingIcon />
-                    <PlaceholderText>Processing</PlaceholderText>
-                    <StatusOverlay />
-                </>
-            ) : isError(model) || !src ? (
+            {isError(model) || !src ? (
                 <>
                     <ErrorIcon />
                     <PlaceholderText>Image Error</PlaceholderText>
-                    <StatusOverlay />
                 </>
             ) : (
-                <img src={src} alt={model.name} />
+                <>
+                    <img src={src} alt={model.name} />
+                    {isProcessing(model) && (
+                        <StatusOverlay>
+                            <LoadingIcon />
+                            <PlaceholderText>Processing</PlaceholderText>
+                        </StatusOverlay>
+                    )}
+                </>
             )}
             {children}
         </ThumbnailContainer>
