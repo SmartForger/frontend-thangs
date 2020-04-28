@@ -188,3 +188,6 @@ export const darkFormText = css`
 export const avatarDefaultText = css`
     color: ${GREY_10};
 `;
+export const commentPostedText = css`
+    font-style: italic;
+`;

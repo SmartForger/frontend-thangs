@@ -7,7 +7,7 @@ import { Markdown } from '@components';
 import { Spinner } from '@components/Spinner';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { NewModelCommentForm } from './NewModelCommentForm';
-import { subheaderText } from '@style/text';
+import { subheaderText, commentPostedText } from '@style/text';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -40,8 +40,8 @@ const ProfilePictureStyled = styled(ProfilePicture)`
 `;
 
 const TimeAgo = styled.div`
+    ${commentPostedText};
     margin-bottom: 16px;
-    font-style: italic;
 `;
 
 const Body = styled.div`
