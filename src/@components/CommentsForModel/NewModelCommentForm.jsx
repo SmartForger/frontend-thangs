@@ -20,12 +20,19 @@ const NewCommentHeader = styled.div`
 const PostCommentBodyTextarea = styled.textarea`
     width: 100%;
     margin-bottom: 24px;
-    resize: vertical;
+    resize: none;
     min-height: 40px;
     border: none;
     box-sizing: border-box;
-    padding: 4px;
+    padding: 8px;
+    height: 24px;
+    line-height: 24px;
     border-radius: 4px;
+
+    &:focus {
+        outline: none;
+        ${props => props.theme.shadow};
+    }
 `;
 
 const PostCommentButton = styled(Button)`
