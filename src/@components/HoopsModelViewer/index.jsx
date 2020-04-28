@@ -9,6 +9,7 @@ import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg';
 import { viewerLoadingText } from '@style/text';
 
 import { useHoopsViewer } from '@customHooks';
+
 const Container = styled.div`
     border-radius: 5px;
     ${props => props.theme.shadow};
@@ -38,7 +39,6 @@ const LoadingContainer = styled.div`
 function HoopsModelViewer({ className, model }) {
     const [meshColor, setMeshColor] = useState();
     const [wireColor, setWireColor] = useState();
-    const [seenHowTo, setSeenHowTo] = useLocalStorage('seenHowTo', false);
 
     const { containerRef, hoops } = useHoopsViewer(model.uploadedFile);
 
@@ -64,16 +64,10 @@ function HoopsModelViewer({ className, model }) {
     return (
         <Container>
             <WebViewContainer className={className}>
-                {seenHowTo ? (
-                    <>
-                        <StatusIndicator status={hoops.status} />
-                        <div ref={containerRef} />
-                    </>
-                ) : (
-                    <HowTo setSeenHowTo={setSeenHowTo} />
-                )}
+                <StatusIndicator status={hoops.status} />
+                <div ref={containerRef} />
             </WebViewContainer>
-            {seenHowTo && hoops.status.isReady && (
+            {hoops.status.isReady && (
                 <Toolbar
                     onResetView={handleResetView}
                     onDrawModeChange={handleDrawModeChange}
@@ -86,7 +80,19 @@ function HoopsModelViewer({ className, model }) {
     );
 }
 
-export { HoopsModelViewer as ModelViewer };
+export function ModelViewer({ className, model }) {
+    const [seenHowTo, setSeenHowTo] = useLocalStorage('seenHowTo', false);
+
+    return seenHowTo ? (
+        <HoopsModelViewer className={className} model={model} />
+    ) : (
+        <Container>
+            <WebViewContainer className={className}>
+                <HowTo setSeenHowTo={setSeenHowTo} />
+            </WebViewContainer>
+        </Container>
+    );
+}
 
 const PlaceholderText = styled.div`
     ${viewerLoadingText};
