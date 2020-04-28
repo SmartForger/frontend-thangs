@@ -1,20 +1,11 @@
-#runtime: nodejs12
-runtime: python27
-api_version: 1
-service: test-thangs
-threadsafe: true
-# This sample incurs costs to run on the App Engine flexible environment.
-  # The settings below are to reduce costs during testing and are not appropriate
-# for production use. For more information, see:
-# https://cloud.google.com/appengine/docs/flexible/nodejs/configuring-your-app-with-app-yaml
-manual_scaling:
-  instances: 1
-resources:
-  cpu: 1
-  memory_gb: 0.5
-  disk_size_gb: 10
-readiness_check:
-  app_start_timeout_sec: 1000
+runtime: python37
+service: thangs-react-staging
+
+instance_class: F1
+# automatic_scaling:
+#   min_instances: 1
+  # TODO: Configure min_idle_instances if we need idle instances handy to scale.
+  # min_idle_instances: ...
 
 handlers:
   - url: /static/(.*)
@@ -32,6 +23,10 @@ handlers:
   - url: /(.*)\.png
     static_files: build/\1.png
     upload: build/(.*).png
+  - url: /(info.html)
+    static_files: build/\1
+    upload: build/info.html
+    expiration: 1s
   - url: /(.*)
     static_files: build/index.html
     upload: build/index.html
