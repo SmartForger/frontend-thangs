@@ -15,6 +15,7 @@ import {
     thumbnailActivityCountText,
 } from '@style/text';
 import { BLACK_2 } from '@style/colors';
+import { ProgressText } from '@components/ProgressText';
 
 const CardContainer = styled.div`
     display: flex;
@@ -74,8 +75,9 @@ const ThumbnailContainer = styled.div`
     }
 `;
 
-const PlaceholderText = styled.div`
+const PlaceholderText = styled(ProgressText)`
     margin-top: 24px;
+    width: 177px;
 `;
 
 const isProcessing = R.propEq('uploadStatus', 'PROCESSING');
@@ -108,7 +110,7 @@ function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
                     {isProcessing(model) && (
                         <StatusOverlay>
                             <LoadingIcon />
-                            <PlaceholderText>Processing</PlaceholderText>
+                            <PlaceholderText text="Processing for matches" />
                         </StatusOverlay>
                     )}
                 </>
