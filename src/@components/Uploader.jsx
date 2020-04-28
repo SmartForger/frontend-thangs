@@ -128,7 +128,7 @@ export function Uploader({ file, setFile, showError = true }) {
                         <ErrorIcon />
                         <InfoMessage>
                             File over {FILE_SIZE_LIMITS.hard.pretty}. Try{' '}
-                            <LinkColor>uploading</LinkColor> a different file.
+                            uploading a different file.
                         </InfoMessage>
                     </FlexColumn>
                 ) : (
