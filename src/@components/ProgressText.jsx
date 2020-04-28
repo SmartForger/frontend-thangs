@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 
-export function ProgressText({ text, className }) {
+const allowCssProp = props => (props.css ? props.css : '');
+
+const Text = styled.div`
+    ${allowCssProp};
+`;
+
+export function ProgressText({ text, className, css }) {
     const [dots, setDots] = useState('.');
 
     useEffect(() => {
@@ -15,9 +22,9 @@ export function ProgressText({ text, className }) {
     }, [dots, setDots]);
 
     return (
-        <div className={className}>
+        <Text className={className} css={css}>
             {text}
             {dots}
-        </div>
+        </Text>
     );
 }

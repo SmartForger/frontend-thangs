@@ -75,9 +75,8 @@ const ThumbnailContainer = styled.div`
     }
 `;
 
-const PlaceholderText = styled(ProgressText)`
+const PlaceholderText = styled.div`
     margin-top: 24px;
-    width: 177px;
 `;
 
 const isProcessing = R.propEq('uploadStatus', 'PROCESSING');
@@ -110,7 +109,14 @@ function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
                     {isProcessing(model) && (
                         <StatusOverlay>
                             <LoadingIcon />
-                            <PlaceholderText text="Processing for matches" />
+                            <PlaceholderText>
+                                <ProgressText
+                                    text="Processing for matches"
+                                    css={`
+                                        width: 177px;
+                                    `}
+                                />
+                            </PlaceholderText>
                         </StatusOverlay>
                     )}
                 </>
