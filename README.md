@@ -225,3 +225,21 @@ You can reference [dispatch.yaml syntax][1] for more information about this file
 
 [0]: https://cloud.google.com/appengine/docs/standard/python3/how-requests-are-routed#routing_with_a_dispatch_file "How requests are routed"
 [1]: https://cloud.google.com/appengine/docs/standard/python3/reference/dispatch-yaml#deploying_the_dispatch_file] "`dispatch.yaml` reference"
+
+## Updating CORS rules on Google Cloud Storage buckets
+
+The GCS CORS rules are defined in their respective `cors-<env>.json` files in this repository. To set these rules you must use `gsutil cors set <rules.json> <bucket-uri>`. You can fetch the applied rules with `gsutil cors get <bucket-uri>`.
+
+Below are some examples:
+
+Update the CORS rules on the production bucket:
+
+```bash
+gsutil cors set cors-production.json gs://gcp-and-physna.appspot.com
+```
+
+Update the CORS rules on the staging bucket:
+
+```bash
+gsutil cors set cors-staging.json gs://thangs-uploads-staging
+```
