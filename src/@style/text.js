@@ -191,3 +191,7 @@ export const avatarDefaultText = css`
 export const commentPostedText = css`
     font-style: italic;
 `;
+export const commentUsername = css`
+    font-size: 16px;
+    font-weight: 500;
+`;

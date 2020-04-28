@@ -7,7 +7,7 @@ import { Markdown } from '@components';
 import { Spinner } from '@components/Spinner';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { NewModelCommentForm } from './NewModelCommentForm';
-import { subheaderText, commentPostedText } from '@style/text';
+import { subheaderText, commentPostedText, commentUsername } from '@style/text';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -48,6 +48,10 @@ const FlexGrow = styled.div`
     flex-grow: 1;
 `;
 
+const Name = styled.div`
+    ${commentUsername};
+`;
+
 const Comment = ({ comment }) => {
     const time = formatDistance(new Date(comment.created), new Date());
     const { owner, body } = comment;
@@ -59,9 +63,7 @@ const Comment = ({ comment }) => {
             <FlexGrow>
                 <Box>
                     <Body>
-                        <Link to={`/profile/${owner.id}`}>
-                            {owner.fullName}
-                        </Link>
+                        <Name>{owner.fullName}</Name>
                         <TimeAgo>{time} ago</TimeAgo>
                         <Markdown>{body}</Markdown>
                     </Body>
