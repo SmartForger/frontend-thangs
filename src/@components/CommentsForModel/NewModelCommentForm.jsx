@@ -26,6 +26,11 @@ const PostCommentBodyTextarea = styled.textarea`
     box-sizing: border-box;
     padding: 4px;
     border-radius: 4px;
+
+    &:focus {
+        outline: none;
+        ${props => props.theme.shadow};
+    }
 `;
 
 const PostCommentButton = styled(Button)`
