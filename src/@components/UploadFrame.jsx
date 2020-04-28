@@ -4,7 +4,6 @@ const allowCssProp = props => (props.css ? props.css : '');
 
 export const UploadFrame = styled.div`
     height: 560px;
-    border-radius: 8px;
     background-color: ${props =>
         props.dragactive
             ? props.theme.uploaderBackgroundActive
