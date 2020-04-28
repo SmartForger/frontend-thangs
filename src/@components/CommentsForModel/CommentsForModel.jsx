@@ -64,7 +64,7 @@ const Comment = ({ comment }) => {
                 <Box>
                     <Body>
                         <Name>{owner.fullName}</Name>
-                        <TimeAgo>{time} ago</TimeAgo>
+                        <TimeAgo>Posted {time} ago</TimeAgo>
                         <Markdown>{body}</Markdown>
                     </Body>
                 </Box>
