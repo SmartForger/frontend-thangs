@@ -156,14 +156,16 @@ const getModelsByDate = R.pathOr(null, ['modelsByDate']);
 const getModelsByLikes = R.pathOr(null, ['modelsByLikes']);
 const getSearchModels = R.pathOr(null, ['searchModels']);
 
-const parseModel = model => {
+const parseModel = (model, idx) => {
     const relatedModels = model.relatedModels
         ? model.relatedModels.map(parseModel)
         : null;
     const owner = model.owner && parseUser(model.owner);
+    const uploadStatus = idx % 3 === 0 ? 'PROCESSING' : model.uploadStatus;
 
     return {
         ...model,
+        uploadStatus,
         owner,
         relatedModels,
     };

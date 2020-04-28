@@ -14,6 +14,7 @@ import {
     modelCardHoverText,
     thumbnailActivityCountText,
 } from '@style/text';
+import { BLACK_2 } from '@style/colors';
 
 const CardContainer = styled.div`
     display: flex;
@@ -80,18 +81,29 @@ const PlaceholderText = styled.div`
 const isProcessing = R.propEq('uploadStatus', 'PROCESSING');
 const isError = R.propEq('uploadStatus', 'ERROR');
 
+const StatusOverlay = styled.div`
+    position: absolute;
+    background-color: ${BLACK_2};
+    opacity: 0.85;
+    top: -8px;
+    width: 100%;
+    height: 100%;
+`;
+
 function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
     return (
-        <ThumbnailContainer showOwner={showOwner} isError={isError(model)}>
+        <ThumbnailContainer showOwner={showOwner}>
             {isProcessing(model) ? (
                 <>
                     <LoadingIcon />
                     <PlaceholderText>Processing</PlaceholderText>
+                    <StatusOverlay />
                 </>
             ) : isError(model) || !src ? (
                 <>
                     <ErrorIcon />
                     <PlaceholderText>Image Error</PlaceholderText>
+                    <StatusOverlay />
                 </>
             ) : (
                 <img src={src} alt={model.name} />
