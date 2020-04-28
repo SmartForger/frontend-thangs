@@ -1,3 +1,7 @@
 dispatch:
   - url: "thangs.com/*"
     service: thangs-react
+  - url: "app.thangs.com/*"
+    service: thangs-react
+  - url: "staging.thangs.com/*"
+    service: thangs-react
