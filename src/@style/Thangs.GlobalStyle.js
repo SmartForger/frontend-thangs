@@ -15,6 +15,7 @@ export const GlobalStyle = createGlobalStyle`
 
   a {
     text-decoration: none;
+    font-weight: 500;
     color: ${props => props.theme.linkText};
   }
 

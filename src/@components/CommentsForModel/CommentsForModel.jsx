@@ -30,11 +30,6 @@ const Box = styled.div`
     background-color: ${props => props.theme.grey};
 `;
 
-const ProfileLink = styled(Link)`
-    font-weight: 500;
-    text-decoration: none;
-`;
-
 const ProfilePictureStyled = styled(ProfilePicture)`
     margin-right: 16px;
 `;
@@ -57,15 +52,15 @@ const Comment = ({ comment }) => {
     const { owner, body } = comment;
     return (
         <CommentStyled>
-            <ProfileLink to={`/profile/${owner.id}`}>
+            <Link to={`/profile/${owner.id}`}>
                 <ProfilePictureStyled size="48px" user={owner} />
-            </ProfileLink>
+            </Link>
             <FlexGrow>
                 <Box>
                     <Body>
-                        <ProfileLink to={`/profile/${owner.id}`}>
+                        <Link to={`/profile/${owner.id}`}>
                             {owner.fullName}
-                        </ProfileLink>
+                        </Link>
                         <TimeAgo>{time} ago</TimeAgo>
                         <Markdown>{body}</Markdown>
                     </Body>
