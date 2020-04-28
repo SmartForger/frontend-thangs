@@ -102,7 +102,20 @@ gcloud app deploy
 gcloud app browse
 ```
 
-## HOOPS Web Viewer
+## HOOPS Communicator and Web Viewer
+
+https://docs.techsoft3d.com/communicator/latest/build/overview/getting-started.html
+
+> "HOOPS Communicator is an SDK for development of 3D engineering applications in a
+> web-browser. Its main component is the HOOPS Web Viewer, a powerful and flexible
+> JavaScript library purposely built for engineering data, and based on a graphics
+> kernel designed for high performance visualization."
+
+HOOPS Communicator utilizes its own proprietary file format called [Stream Cache
+(SC)](https://docs.techsoft3d.com/communicator/latest/build/prog_guide/viewing/data_model/stream_cache/overview.html).
+The HOOPS Stream Cache Server facilitates "fast, granular and intelligent"
+streaming via a direct WebSocket connection to the HOOPS Web Viewer component
+running in the browser.
 
 ### Summary of Hoops Data Model
 
@@ -137,7 +150,7 @@ Create and start a Hoops WebViewer.
 ```javascript
 const viewer = new Communicator.WebViewer({
   container: document.getElementById('#hoops-container'),
-  endpointUri: 'ws://hoops-backend-service',
+  endpointUri: 'ws://hoops-stream-cache-server/websocket/uri',
   model: `modelName.scz`,
   rendererType: Communicator.RendererType.Client,
   // see configuration docs...
