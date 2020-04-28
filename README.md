@@ -210,3 +210,20 @@ const topLevelModelNodes = viewer.model.getNodeChildren(rootNode); // one per lo
 
 const allLeafNodeIds = gatherLeafNodeIds(topLevelModelNodes);
 ```
+
+## GAE Routing
+
+We override GAE's default routing with a [dispatch file].
+
+Any changes to these rules need to be explicitly deployed, the following command will deploy your routing rules:
+
+```bash
+gcloud app deploy dispatch.yaml
+```
+
+You can reference [dispatch.yaml syntax] for more information about this file.
+
+### Links
+
+- [dispatch file]: https://cloud.google.com/appengine/docs/standard/python3/how-requests-are-routed#routing_with_a_dispatch_file
+- [dispatch.yaml syntax]: https://cloud.google.com/appengine/docs/standard/python3/reference/dispatch-yaml#deploying_the_dispatch_file]
