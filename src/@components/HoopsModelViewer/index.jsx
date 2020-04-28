@@ -80,11 +80,9 @@ export function ModelViewer({ className, model }) {
     return seenHowTo ? (
         <HoopsModelViewer className={className} model={model} />
     ) : (
-        <Container>
-            <WebViewContainer className={className}>
-                <HowTo setSeenHowTo={setSeenHowTo} />
-            </WebViewContainer>
-        </Container>
+        <WebViewContainer className={className}>
+            <HowTo setSeenHowTo={setSeenHowTo} />
+        </WebViewContainer>
     );
 }
 
