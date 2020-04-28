@@ -36,7 +36,6 @@ const ProfilePictureStyled = styled(ProfilePicture)`
 
 const TimeAgo = styled.div`
     ${commentPostedText};
-    margin-bottom: 16px;
 `;
 
 const Body = styled.div`
@@ -50,6 +49,7 @@ const FlexGrow = styled.div`
 
 const Name = styled.div`
     ${commentUsername};
+    margin-bottom: 16px;
 `;
 
 const Comment = ({ comment }) => {
