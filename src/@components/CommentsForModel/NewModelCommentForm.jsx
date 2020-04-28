@@ -24,7 +24,7 @@ const PostCommentBodyTextarea = styled.textarea`
     min-height: 40px;
     border: none;
     box-sizing: border-box;
-    padding: 4px;
+    padding: 8px;
     border-radius: 4px;
 
     &:focus {
