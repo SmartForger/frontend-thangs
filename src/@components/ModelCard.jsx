@@ -5,9 +5,8 @@ import * as R from 'ramda';
 import styled from 'styled-components';
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
-import ErrorImg, {
-    ReactComponent as ErrorIcon,
-} from '@svg/image-error-icon.svg';
+import ErrorImg from '@svg/image-error-icon.svg';
+import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg';
 import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg';
 import {
     thumbnailErrorText,
@@ -16,6 +15,10 @@ import {
 } from '@style/text';
 import { BLACK_2 } from '@style/colors';
 import { ProgressText } from '@components/ProgressText';
+
+const ErrorIconStyled = styled(ErrorIcon)`
+    height: 65px;
+`;
 
 const CardContainer = styled.div`
     display: flex;
@@ -102,7 +105,7 @@ function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
         <ThumbnailContainer showOwner={showOwner}>
             {isError(model) || !src ? (
                 <StatusOverlay>
-                    <ErrorIcon />
+                    <ErrorIconStyled />
                     <PlaceholderText>
                         <div>Error Procesing.</div>
                         <div>Try uploading model again.</div>
