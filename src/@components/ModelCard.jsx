@@ -138,7 +138,7 @@ function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
                                 <ProgressText
                                     text="Processing for matches"
                                     css={`
-                                        width: 177px;
+                                        width: 202px;
                                     `}
                                 />
                             </PlaceholderText>
