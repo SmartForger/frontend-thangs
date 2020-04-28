@@ -7,7 +7,7 @@ import { Markdown } from '@components';
 import { Spinner } from '@components/Spinner';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { NewModelCommentForm } from './NewModelCommentForm';
-import { headerText } from '@style/text';
+import { subheaderText } from '@style/text';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -76,7 +76,7 @@ const Comment = ({ comment }) => {
 };
 
 const Header = styled.h2`
-    ${headerText};
+    ${subheaderText};
 `;
 
 const Container = styled.div`
