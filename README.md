@@ -225,5 +225,5 @@ You can reference [dispatch.yaml syntax][1] for more information about this file
 
 ### Links
 
-- [0]: https://cloud.google.com/appengine/docs/standard/python3/how-requests-are-routed#routing_with_a_dispatch_file "How requests are routed"
-- [1]: https://cloud.google.com/appengine/docs/standard/python3/reference/dispatch-yaml#deploying_the_dispatch_file] "`dispatch.yaml` reference"
+[0]: https://cloud.google.com/appengine/docs/standard/python3/how-requests-are-routed#routing_with_a_dispatch_file "How requests are routed"
+[1]: https://cloud.google.com/appengine/docs/standard/python3/reference/dispatch-yaml#deploying_the_dispatch_file] "`dispatch.yaml` reference"
