@@ -67,7 +67,7 @@ export const NewTheme = {
     linkTextVisited: BLUE_3,
     logoText: BLACK_4,
     mainFont: fontMain,
-    mainFontColor: BLACK_5,
+    mainFontColor: BLACK_1,
     matchingSubheaderColor: BLACK_1,
     maxWidth,
     modelActionButtonBackground: GREY_3,
