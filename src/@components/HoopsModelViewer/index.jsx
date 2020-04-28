@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { Spinner } from '@components/Spinner';
+import { HowTo } from '@components/HowTo';
+import { useLocalStorage } from '@customHooks/Storage';
 import { Toolbar } from './Toolbar';
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg';
 import { viewerLoadingText } from '@style/text';
@@ -72,7 +74,17 @@ function HoopsModelViewer({ className, model }) {
     );
 }
 
-export { HoopsModelViewer as ModelViewer };
+export function ModelViewer({ className, model }) {
+    const [seenHowTo, setSeenHowTo] = useLocalStorage('seenHowTo', false);
+
+    return seenHowTo ? (
+        <HoopsModelViewer className={className} model={model} />
+    ) : (
+        <WebViewContainer className={className}>
+            <HowTo setSeenHowTo={setSeenHowTo} />
+        </WebViewContainer>
+    );
+}
 
 const PlaceholderText = styled.div`
     ${viewerLoadingText};
