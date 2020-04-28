@@ -20,7 +20,7 @@ const NewCommentHeader = styled.div`
 const PostCommentBodyTextarea = styled.textarea`
     width: 100%;
     margin-bottom: 24px;
-    resize: vertical;
+    resize: none;
     min-height: 40px;
     border: none;
     box-sizing: border-box;
