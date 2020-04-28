@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { UserInline } from './UserInline';
 import { Link } from 'react-router-dom';
-import * as R from 'ramda';
 import styled, { css } from 'styled-components';
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
@@ -15,6 +14,7 @@ import {
 } from '@style/text';
 import { BLACK_2 } from '@style/colors';
 import { ProgressText } from '@components/ProgressText';
+import { isError, isProcessing } from '@utilities';
 
 const ErrorIconStyled = styled(ErrorIcon)`
     height: 65px;
@@ -98,9 +98,6 @@ const PlaceholderText = styled.div`
     margin-top: 24px;
     text-align: center;
 `;
-
-const isProcessing = R.propEq('uploadStatus', 'PROCESSING');
-const isError = R.propEq('uploadStatus', 'ERROR');
 
 const StatusOverlayText = styled.div`
     top: 0;
