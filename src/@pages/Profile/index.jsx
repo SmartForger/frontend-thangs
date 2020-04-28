@@ -112,12 +112,12 @@ const TabContent = styled.div`
     margin-top: 24px;
     width: 100%;
     display: flex;
-    ${profileAboutText};
 `;
 
 const MarkdownStyled = styled(Markdown)`
     max-width: 600px;
     margin: auto;
+    ${profileAboutText};
 `;
 
 const getDescription = R.pathOr(null, ['profile', 'description']);
