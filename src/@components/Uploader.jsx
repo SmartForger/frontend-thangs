@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 import { ReactComponent as UploadIcon } from '@svg/upload-icon.svg';
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg';
+import { ReactComponent as ModelPyramid } from '@svg/model-pyramid.svg';
 import { UploadFrame } from '@components/UploadFrame';
 import { infoMessageText, smallInfoMessageText, linkText } from '@style/text';
 
@@ -110,6 +111,7 @@ export function Uploader({ file, setFile, showError = true }) {
                     </FlexColumn>
                 ) : file ? (
                     <FlexColumn>
+                        <ModelPyramid />
                         <InfoMessage>
                             <strong>File:</strong> {file.name}
                         </InfoMessage>
@@ -133,8 +135,9 @@ export function Uploader({ file, setFile, showError = true }) {
                     <FlexColumn>
                         <UploadIconStyled />
                         <InfoMessage>
-                            Drag & Drop model<br />or{' '}
-                            <LinkColor>browse</LinkColor> to choose file
+                            Drag & Drop model
+                            <br />
+                            or <LinkColor>browse</LinkColor> to choose file
                         </InfoMessage>
                     </FlexColumn>
                 )}
