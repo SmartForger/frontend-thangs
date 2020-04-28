@@ -14,7 +14,6 @@ const ToolbarContainer = styled.div`
     ${viewerToolbarText};
     background-color: #ffffff;
     box-shadow: none;
-    border-radius: 0 0 5px 5px;
     border-top: 1px solid #eeeeee;
     padding: 24px;
 
