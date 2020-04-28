@@ -87,6 +87,7 @@ const StatusOverlay = styled.div`
     background-color: ${BLACK_2};
     opacity: 0.85;
     top: -8px;
+    padding-top: 8px;
     width: 100%;
     height: 100%;
     display: flex;
