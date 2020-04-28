@@ -130,7 +130,7 @@ function RelatedModels({ modelId }) {
     if (loading) {
         return <Spinner />;
     } else if (error) {
-        return <div>Server error</div>;
+        console.error('error', error);
     }
 
     return (
