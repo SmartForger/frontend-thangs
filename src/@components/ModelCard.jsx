@@ -77,6 +77,7 @@ const ThumbnailContainer = styled.div`
 
 const PlaceholderText = styled.div`
     margin-top: 24px;
+    text-align: center;
 `;
 
 const isProcessing = R.propEq('uploadStatus', 'PROCESSING');
@@ -100,10 +101,13 @@ function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
     return (
         <ThumbnailContainer showOwner={showOwner}>
             {isError(model) || !src ? (
-                <>
+                <StatusOverlay>
                     <ErrorIcon />
-                    <PlaceholderText>Image Error</PlaceholderText>
-                </>
+                    <PlaceholderText>
+                        <div>Error Procesing.</div>
+                        <div>Try uploading model again.</div>
+                    </PlaceholderText>
+                </StatusOverlay>
             ) : (
                 <>
                     {src && <img src={src} alt={model.name} />}

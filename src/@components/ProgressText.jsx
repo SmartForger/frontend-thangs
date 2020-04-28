@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const allowCssProp = props => (props.css ? props.css : '');
 
 const Text = styled.div`
+    text-align: left;
     ${allowCssProp};
 `;
 
