@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { UserInline } from './UserInline';
 import { Link } from 'react-router-dom';
 import * as R from 'ramda';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
 import ErrorImg from '@svg/image-error-icon.svg';
@@ -34,6 +34,18 @@ const CardContent = styled.div`
     padding: 8px 16px;
 `;
 
+const StatusOverlay = css`
+    background-color: ${BLACK_2};
+    content: '';
+    display: block;
+    position: absolute;
+    opacity: 0.85;
+    top: -8px;
+    padding-top: 8px;
+    height: 100%;
+    width: 100%;
+`;
+
 const ThumbnailContainer = styled.div`
     ${thumbnailErrorText};
     position: relative;
@@ -46,6 +58,10 @@ const ThumbnailContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    :after {
+        ${props => props.showStatusOverlay && StatusOverlay};
+    }
 
     > img {
         margin: auto;
@@ -86,36 +102,37 @@ const PlaceholderText = styled.div`
 const isProcessing = R.propEq('uploadStatus', 'PROCESSING');
 const isError = R.propEq('uploadStatus', 'ERROR');
 
-const StatusOverlay = styled.div`
+const StatusOverlayText = styled.div`
+    top: 0;
     position: absolute;
-    background-color: ${BLACK_2};
-    opacity: 0.85;
-    top: -8px;
-    padding-top: 8px;
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    z-index: 1;
 `;
 
 function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
     return (
-        <ThumbnailContainer showOwner={showOwner}>
+        <ThumbnailContainer
+            showOwner={showOwner}
+            showStatusOverlay={isError(model) || isProcessing(model)}
+        >
             {isError(model) || !src ? (
-                <StatusOverlay>
+                <StatusOverlayText>
                     <ErrorIconStyled />
                     <PlaceholderText>
                         <div>Error Procesing.</div>
                         <div>Try uploading model again.</div>
                     </PlaceholderText>
-                </StatusOverlay>
+                </StatusOverlayText>
             ) : (
                 <>
                     {src && <img src={src} alt={model.name} />}
                     {isProcessing(model) && (
-                        <StatusOverlay>
+                        <StatusOverlayText>
                             <LoadingIcon />
                             <PlaceholderText>
                                 <ProgressText
@@ -125,7 +142,7 @@ function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
                                     `}
                                 />
                             </PlaceholderText>
-                        </StatusOverlay>
+                        </StatusOverlayText>
                     )}
                 </>
             )}
