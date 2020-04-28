@@ -1,0 +1,3 @@
+dispatch:
+  - url: "thangs.com/*"
+    service: thangs-react
