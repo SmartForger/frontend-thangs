@@ -446,13 +446,22 @@ const DELETE_MODEL_MUTATION = gql`
 `;
 
 const useDeleteModelMutation = (modelId, userId) => {
-    const { error, loading, data } = useMutation(DELETE_MODEL_MUTATION, {
+    const [deleteModel] = useMutation(DELETE_MODEL_MUTATION, {
         variables: {
             modelId,
         },
         refetchQueries: [{ query: USER_QUERY, variables: { id: userId } }],
     });
-    return { error, loading, data };
+
+    async function runDeleteModel() {
+        const {
+            data: {
+                deleteModel: { ok },
+            },
+        } = await deleteModel();
+        return ok;
+    }
+    return [runDeleteModel];
 };
 
 export {

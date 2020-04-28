@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { UserInline } from './UserInline';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
+import { useCurrentUser } from '@customHooks/Users';
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
 import ErrorImg from '@svg/image-error-icon.svg';
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg';
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg';
 import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg';
 import {
@@ -12,9 +14,12 @@ import {
     modelCardHoverText,
     thumbnailActivityCountText,
 } from '@style/text';
-import { BLACK_2 } from '@style/colors';
+import { BLACK_2, WHITE_3 } from '@style/colors';
 import { ProgressText } from '@components/ProgressText';
 import { isError, isProcessing } from '@utilities';
+import * as GraphqlService from '@services/graphql-service';
+
+const graphqlService = GraphqlService.getInstance();
 
 const ErrorIconStyled = styled(ErrorIcon)`
     height: 65px;
@@ -111,6 +116,39 @@ const StatusOverlayText = styled.div`
     z-index: 1;
 `;
 
+const ExitIconStyled = styled(ExitIcon)`
+    cursor: pointer;
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    fill: ${WHITE_3};
+    stroke: ${WHITE_3};
+`;
+
+function ErrorOverlay({ model }) {
+    const { user } = useCurrentUser();
+    const [deleteModel] = graphqlService.useDeleteModelMutation(
+        model.id,
+        user.id
+    );
+
+    const handleClick = e => {
+        e.preventDefault();
+        deleteModel();
+    };
+
+    return (
+        <StatusOverlayText>
+            <ExitIconStyled onClick={handleClick} />
+            <ErrorIconStyled />
+            <PlaceholderText>
+                <div>Error Procesing.</div>
+                <div>Try uploading model again.</div>
+            </PlaceholderText>
+        </StatusOverlayText>
+    );
+}
+
 function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
     return (
         <ThumbnailContainer
@@ -118,13 +156,7 @@ function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
             showStatusOverlay={isError(model) || isProcessing(model)}
         >
             {isError(model) || !src ? (
-                <StatusOverlayText>
-                    <ErrorIconStyled />
-                    <PlaceholderText>
-                        <div>Error Procesing.</div>
-                        <div>Try uploading model again.</div>
-                    </PlaceholderText>
-                </StatusOverlayText>
+                <ErrorOverlay model={model} />
             ) : (
                 <>
                     {src && <img src={src} alt={model.name} />}
