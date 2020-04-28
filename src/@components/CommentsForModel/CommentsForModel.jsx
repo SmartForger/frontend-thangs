@@ -41,6 +41,7 @@ const TimeAgo = styled.div`
 
 const Body = styled.div`
     margin-bottom: 4px;
+    margin-top: 16px;
 `;
 
 const FlexGrow = styled.div`
