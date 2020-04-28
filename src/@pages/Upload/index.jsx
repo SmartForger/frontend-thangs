@@ -11,7 +11,7 @@ import { authenticationService } from '@services';
 import { Spinner } from '@components/Spinner';
 import { UploadFrame } from '@components/UploadFrame';
 import { ProgressText } from '@components/ProgressText';
-import { pageTitleText, formErrorText } from '@style/text';
+import { pageTitleText, formErrorText, infoMessageText } from '@style/text';
 
 const Row = styled.div`
     display: flex;
@@ -108,6 +108,7 @@ const DarkBackgroundSpinner = styled(Spinner)`
 `;
 
 const DotsStyled = styled(ProgressText)`
+    ${infoMessageText};
     width: 139px;
     margin-bottom: 224px;
 `;
