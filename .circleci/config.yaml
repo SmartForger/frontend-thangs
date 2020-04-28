@@ -21,14 +21,20 @@ jobs:
         name: Restore Yarn Package Cache
         keys:
           - yarn-packages-{{ checksum "yarn.lock" }}
-    - run:
+      - run:
         name: Install Dependencies
         command: yarn install --frozen-lockfile
-    - save_cache:
+      - save_cache:
         name: Save Yarn Package Cache
         key: yarn-packages-{{ checksum "yarn.lock" }}
         paths:
           - ~/.cache/yarn
+      - run:
+        # Build staging release
+        # TODO: This needs to be pulled into a separate job & workflow so that
+        #       we can run staging steps in the deploy-staging workflow and
+        #       production steps in the deploy-production workflow.
+        yarn build:staging
       - run: |
           # Store service account
           echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcloud-service-key.json
@@ -44,4 +50,4 @@ workflows:
       - deploy:
           filters:
             branches:
-              only: circleci-setup-Do-Not-Run
+              only: circleci-setup

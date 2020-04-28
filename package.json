@@ -51,6 +51,7 @@
     "start": "serve -s build",
     "dev": "react-scripts start",
     "build": "react-scripts build && cp public/{engine.wasm,engine-wasm.js,engine-asmjs.js} build/static/js/",
+    "build:staging": "env-cmd -f .env.staging npm run build",
     "test": " react-scripts test",
     "test:cypress": "cypress run",
     "cypress": "cypress open",
@@ -71,6 +72,7 @@
     ]
   },
   "devDependencies": {
+    "env-cmd": "^10.1.0",
     "eslint-plugin-cypress": "^2.10.3",
     "prettier": "^1.19.1",
     "start-server-and-test": "^1.10.8"
