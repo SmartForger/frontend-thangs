@@ -240,10 +240,11 @@ const ConfirmResetPage = () => {
                     </FormControl>
                 </FieldsStyle>
                 <SubmitButton
-                    name="Submit"
                     type="submit"
                     disabled={!(inputs.password && inputs.confirmPassword)}
-                />
+                >
+                    Submit
+                </SubmitButton>
             </form>
         </BodyStyle>
     );
