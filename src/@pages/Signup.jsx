@@ -282,9 +282,10 @@ const Page = () => {
                     />
                     <SubmitButton
                         type="submit"
-                        name="Submit"
                         disabled={waiting || invalidForm()}
-                    />
+                    >
+                        Submit
+                    </SubmitButton>
                 </SubmitContainer>
             </form>
         </Container>
