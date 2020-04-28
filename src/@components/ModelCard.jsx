@@ -106,7 +106,7 @@ function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
                 </>
             ) : (
                 <>
-                    <img src={src} alt={model.name} />
+                    {src && <img src={src} alt={model.name} />}
                     {isProcessing(model) && (
                         <StatusOverlay>
                             <LoadingIcon />
