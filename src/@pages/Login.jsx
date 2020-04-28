@@ -49,6 +49,7 @@ const SubmitButton = styled(Button)`
     margin: 0;
     margin-top: 96px;
     float: right;
+    width: 105px;
 `;
 
 const FormControl = styled.div`
@@ -170,12 +171,9 @@ const Page = () => {
                         </Label>
                     </FormControl>
                 </LoginFieldsStyle>
-                <SubmitButton
-                    name="Sign In"
-                    type="submit"
-                    width="105px"
-                    disabled={waiting || invalidForm()}
-                />
+                <SubmitButton type="submit" disabled={waiting || invalidForm()}>
+                    Sign In
+                </SubmitButton>
             </form>
             <ForgotText>
                 Forgot password? <Link to="/password_reset">Click here</Link> to
