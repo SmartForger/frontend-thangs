@@ -1,5 +1,6 @@
 import { css } from 'styled-components';
 import {
+    GREY_1,
     GREY_3,
     GREY_4,
     GREY_5,
@@ -172,7 +173,7 @@ export const matchingButtonHoverText = css`
     }
 `;
 export const thumbnailErrorText = css`
-    color: ${GREY_3};
+    color: ${GREY_1};
     font-weight: 500;
 `;
 export const thumbnailActivityCountText = css`
