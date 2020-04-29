@@ -13,17 +13,17 @@ jobs:
         default: ${CIRCLE_BRANCH}
         type: string
     docker:
-      # - image: gcr.io/google-appengine/nodejs
-      - image: circleci/node:lts-jessie
+      - image: gcr.io/google-appengine/nodejs
+      # - image: circleci/node:lts-jessie
     steps:
       - checkout
       # TODO: Cache Google Cloud SDK
-      - run:
-          name: Install Google Cloud SDK
-          command: |
-            curl -o google-cloud-sdk.tar.gz https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-290.0.1-linux-x86_64.tar.gz
-            tar -xzf google-cloud-sdk.tar.gz
-            ./google-cloud-sdk/install.sh -q
+      # - run:
+      #     name: Install Google Cloud SDK
+      #     command: |
+      #       curl -o google-cloud-sdk.tar.gz https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-290.0.1-linux-x86_64.tar.gz
+      #       tar -xzf google-cloud-sdk.tar.gz
+      #       ./google-cloud-sdk/install.sh -q
       - run:
           name: Install yarn
           command: curl -o- -L https://yarnpkg.com/install.sh | bash
