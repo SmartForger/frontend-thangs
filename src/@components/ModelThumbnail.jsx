@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { isError, isProcessing } from '@utilities';
 import { ProgressText } from '@components/ProgressText';
 import { TextButton } from '@components/Button';
+import { Spinner } from '@components/Spinner';
 import { useCurrentUser } from '@customHooks/Users';
 import ErrorImg from '@svg/image-error-icon.svg';
 import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg';
@@ -117,18 +118,28 @@ const StatusOverlayText = styled.div`
     z-index: 1;
 `;
 
-const ExitIconStyled = styled(ExitIcon)`
-    cursor: pointer;
+const IconButton = styled(TextButton)`
     position: absolute;
     right: 8px;
     top: 8px;
-    fill: ${WHITE_3};
-    stroke: ${WHITE_3};
+    svg {
+        fill: ${WHITE_3};
+        stroke: ${WHITE_3};
+        color: ${WHITE_3};
+    }
+`;
+
+const SpinnerStyled = styled(Spinner)`
+    height: 24px;
+    width: 24px;
+    & .path {
+        stroke: currentColor;
+    }
 `;
 
 function ErrorOverlay({ model }) {
     const { user } = useCurrentUser();
-    const [deleteModel] = graphqlService.useDeleteModelMutation(
+    const [deleteModel, { loading }] = graphqlService.useDeleteModelMutation(
         model.id,
         user.id
     );
@@ -140,9 +151,13 @@ function ErrorOverlay({ model }) {
 
     return (
         <StatusOverlayText>
-            <TextButton>
-                <ExitIconStyled onClick={handleClick} />
-            </TextButton>
+            <IconButton disabled={loading}>
+                {loading ? (
+                    <SpinnerStyled />
+                ) : (
+                    <ExitIcon onClick={handleClick} />
+                )}
+            </IconButton>
             <ErrorIconStyled />
             <PlaceholderText>
                 <div>Error Procesing.</div>

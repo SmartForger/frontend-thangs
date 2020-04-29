@@ -88,6 +88,11 @@ export const TextButton = styled.button`
     background: none;
     padding: 0;
     cursor: pointer;
+
+    &:disabled {
+        cursor: not-allowed;
+    }
+
     ${allowCssProp};
 `;
 
