@@ -3,7 +3,7 @@ import { ModelCard } from './ModelCard';
 import styled from 'styled-components';
 import * as R from 'ramda';
 import { zeroStateText } from '@style/text';
-import { isError } from '@utilities';
+import { isError, isProcessing } from '@utilities';
 
 const ModelsStyled = styled.div`
     display: grid;
@@ -24,20 +24,25 @@ const NoResultsFrame = styled.div`
     box-sizing: border-box;
 `;
 
+const rejectErrorsAndProcessing = R.pipe(
+    R.reject(isError),
+    R.reject(isProcessing)
+);
+
 export function ModelCollection({
     models = [],
     maxPerRow = 4,
     noResultsText,
     noResultsSubtext,
-    showModelsWithErrors,
+    showAllModels,
 }) {
     if (!models || R.isEmpty(models)) {
         return <NoResultsFrame>{noResultsText}</NoResultsFrame>;
     }
 
-    const modelsToRender = showModelsWithErrors
+    const modelsToRender = showAllModels
         ? models
-        : R.reject(isError, models);
+        : rejectErrorsAndProcessing(models);
 
     return (
         <ModelsStyled singleRow={models.length < maxPerRow}>
