@@ -14,9 +14,10 @@ jobs:
         type: string
     docker:
       # - image: gcr.io/google-appengine/nodejs
-      - image: circleci/node:9.9
+      - image: circleci/node:lts-jessie
     steps:
       - checkout
+      # TODO: Cache Google Cloud SDK
       - run:
           name: Install Google Cloud SDK
           command: |
