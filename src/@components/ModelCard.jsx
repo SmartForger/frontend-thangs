@@ -6,6 +6,7 @@ import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
 import { thumbnailActivityCountText } from '@style/text';
 import { ModelThumbnail } from '@components/ModelThumbnail';
+import { isError, isProcessing } from '@utilities';
 
 const CardContainer = styled.div`
     display: flex;
@@ -40,12 +41,53 @@ const HeartIconStyled = styled(HeartIcon)`
     fill: ${props => props.theme.cardHeartColor};
 `;
 
+function CardContents({ className, model, showOwner, hovered }) {
+    return (
+        <CardContainer className={className}>
+            <ModelThumbnail
+                model={model}
+                thumbnailUrl={model.attachment && model.attachment.imgSrc}
+                showOwner={showOwner}
+                hovered={hovered}
+            ></ModelThumbnail>
+            <CardContent>
+                {showOwner && <UserInline user={model.owner} />}
+                <ActivityIndicators>
+                    <ActivityCount>
+                        <ChatIcon />
+                        &nbsp;{model.commentsCount}
+                    </ActivityCount>
+                    <ActivityCount>
+                        <HeartIconStyled />
+                        &nbsp;{model.likesCount}
+                    </ActivityCount>
+                </ActivityIndicators>
+            </CardContent>
+        </CardContainer>
+    );
+}
+
 function ModelCard({ className, model, withOwner }) {
     const showOwner = withOwner && model.owner;
     const [hovered, setHovered] = useState(false);
 
     const handleMouseEnter = () => setHovered(true);
     const handleMouseLeave = () => setHovered(false);
+
+    if (isError(model) || isProcessing(model)) {
+        return (
+            <CardContents
+                className={className}
+                model={model}
+                showOwner={showOwner}
+                hovered={hovered}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                onFocus={handleMouseEnter}
+                onBlur={handleMouseLeave}
+            />
+        );
+    }
 
     return (
         <Link
@@ -55,27 +97,12 @@ function ModelCard({ className, model, withOwner }) {
             onFocus={handleMouseEnter}
             onBlur={handleMouseLeave}
         >
-            <CardContainer className={className}>
-                <ModelThumbnail
-                    model={model}
-                    thumbnailUrl={model.attachment && model.attachment.imgSrc}
-                    showOwner={showOwner}
-                    hovered={hovered}
-                ></ModelThumbnail>
-                <CardContent>
-                    {showOwner && <UserInline user={model.owner} />}
-                    <ActivityIndicators>
-                        <ActivityCount>
-                            <ChatIcon />
-                            &nbsp;{model.commentsCount}
-                        </ActivityCount>
-                        <ActivityCount>
-                            <HeartIconStyled />
-                            &nbsp;{model.likesCount}
-                        </ActivityCount>
-                    </ActivityIndicators>
-                </CardContent>
-            </CardContainer>
+            <CardContents
+                className={className}
+                model={model}
+                showOwner={showOwner}
+                hovered={hovered}
+            />
         </Link>
     );
 }
