@@ -3,7 +3,6 @@ import {
     primaryButtonText,
     secondaryButtonText,
     darkButtonText,
-    linkText,
     matchingButtonText,
     matchingButtonHoverText,
 } from '@style/text';
