@@ -41,6 +41,11 @@ const ErrorIconStyled = styled(ErrorIcon)`
     height: 65px;
 `;
 
+const SmallErrorIconStyled = styled(ErrorIcon)`
+    width: 24px;
+    height: 24px;
+`;
+
 const PlaceholderText = styled.div`
     margin-top: 24px;
     text-align: center;
@@ -139,10 +144,10 @@ const SpinnerStyled = styled(Spinner)`
 
 function ErrorOverlay({ model }) {
     const { user } = useCurrentUser();
-    const [deleteModel, { loading }] = graphqlService.useDeleteModelMutation(
-        model.id,
-        user.id
-    );
+    const [
+        deleteModel,
+        { loading, error },
+    ] = graphqlService.useDeleteModelMutation(model.id, user.id);
 
     const handleClick = e => {
         e.preventDefault();
@@ -151,9 +156,11 @@ function ErrorOverlay({ model }) {
 
     return (
         <StatusOverlayText>
-            <IconButton disabled={loading}>
+            <IconButton disabled={loading || error}>
                 {loading ? (
                     <SpinnerStyled />
+                ) : error ? (
+                    <SmallErrorIconStyled />
                 ) : (
                     <ExitIcon onClick={handleClick} />
                 )}
