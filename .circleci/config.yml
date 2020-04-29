@@ -13,10 +13,14 @@ jobs:
         default: ${CIRCLE_BRANCH}
         type: string
     docker:
-      - image: gcr.io/google-appengine/nodejs
+      - image: google/cloud-sdk
+      # - image: gcr.io/google-appengine/nodejs
       # - image: circleci/node:lts-jessie
     steps:
       - checkout
+      - run:
+          name: Check node version
+          command: node -v
       # TODO: Cache Google Cloud SDK
       # - run:
       #     name: Install Google Cloud SDK
@@ -31,9 +35,6 @@ jobs:
           name: Restore yarn packages from cache
           keys:
             - yarn-packages-{{ checksum "yarn.lock" }}
-      - run:
-          name: Check node version
-          command: node -v
       - run:
           name: Install dependencies
           command: yarn install --frozen-lockfile
