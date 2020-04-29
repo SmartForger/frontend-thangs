@@ -1,5 +1,5 @@
 runtime: python37
-service: thangs-frontend-staging
+service: staging-thangs-frontend
 
 instance_class: F1
 # automatic_scaling:

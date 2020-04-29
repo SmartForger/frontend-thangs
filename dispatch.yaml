@@ -9,6 +9,6 @@ dispatch:
 
   # Staging routes
   - url: "staging.thangs.com/*"
-    service: thangs-frontend-staging
+    service: staging-thangs-frontend
   # - url: "staging-backend.thangs.com/*"
-  #   service: thangs-backend-staging
+  #   service: staging-thangs-backend
