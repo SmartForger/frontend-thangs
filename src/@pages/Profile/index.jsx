@@ -12,7 +12,7 @@ import { Spinner } from '@components/Spinner';
 import { AnchorButton } from '@components/AnchorButton';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { Markdown } from '@components/Markdown';
-import { Page404 } from '../404';
+import { Message404 } from '../404';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
 import { ReactComponent as AboutIcon } from '@svg/about-icon.svg';
 import { ReactComponent as ModelIcon } from '@svg/model-icon.svg';
@@ -279,7 +279,7 @@ function Page() {
     if (!user) {
         return (
             <div data-cy="fetch-profile-error">
-                <Page404 />
+                <Message404 />
             </div>
         );
     }

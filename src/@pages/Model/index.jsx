@@ -20,7 +20,7 @@ import { WithNewThemeLayout } from '@style/Layout';
 import { headerText, linkText, modelTitleText } from '@style/text';
 
 import { ModelDetails } from '../ModelPreview/ModelDetails';
-import { Page404 } from '../404';
+import { Message404 } from '../404';
 
 const allowCssProp = props => (props.css ? props.css : '');
 
@@ -202,7 +202,7 @@ function Page() {
     if (loading) {
         return <Spinner />;
     } else if (!model) {
-        return <Page404 />;
+        return <Message404 />;
     } else if (error) {
         return <div>Error loading Model</div>;
     }
