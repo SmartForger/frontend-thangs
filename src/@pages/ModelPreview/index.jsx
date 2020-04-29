@@ -5,7 +5,7 @@ import * as GraphqlService from '@services/graphql-service';
 import { ModelPreviewPage } from './ModelPreviewPage';
 import { WithNewThemeLayout } from '@style';
 import { Spinner } from '@components/Spinner';
-import { Page404 } from '../404';
+import { Message404 } from '../404';
 
 function Page() {
     const { id } = useParams();
@@ -17,7 +17,7 @@ function Page() {
     if (loading) {
         return <Spinner />;
     } else if (!model) {
-        return <Page404 />;
+        return <Message404 />;
     } else if (error) {
         return <div>Error loading Model</div>;
     }
