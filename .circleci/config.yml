@@ -13,7 +13,8 @@ jobs:
         default: ${CIRCLE_BRANCH}
         type: string
     docker:
-      - image: google/cloud-sdk
+      - image: gcr.io/google-appengine/nodejs
+      # - image: google/cloud-sdk
     steps:
       - checkout
       - run: curl -o- -L https://yarnpkg.com/install.sh | bash
