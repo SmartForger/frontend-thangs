@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import * as R from 'ramda';
 
 import { WithNewThemeLayout } from '@style';
+import { isError, isProcessing } from '@utilities';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 import { useCurrentUser } from '@customHooks/Users';
@@ -69,9 +70,21 @@ const Icon = styled.div`
     margin-right: 8px;
 `;
 
+const rejectErrorsAndProcessing = R.pipe(
+    R.reject(isError),
+    R.reject(isProcessing)
+);
+
 function Models({ selected, onClick, user }) {
     const models = R.pathOr([], ['models'])(user);
-    const amount = models.length;
+    const { user: currentUser } = useCurrentUser();
+    const showAllModels = user.id === currentUser.id;
+
+    const modelsToRender = showAllModels
+        ? models
+        : rejectErrorsAndProcessing(models);
+
+    const amount = modelsToRender.length;
 
     return (
         <TabTitle selected={selected} onClick={onClick}>
