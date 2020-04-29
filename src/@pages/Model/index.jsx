@@ -170,6 +170,7 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                     <TextButton
                         onClick={downloadModel}
                         css={`
+                            ${linkText};
                             width: 122px;
                             text-align: left;
                             margin-bottom: 24px;

@@ -85,7 +85,6 @@ export const Button = styled.button`
 `;
 
 export const TextButton = styled.button`
-    ${linkText};
     border: none;
     background: none;
     padding: 0;

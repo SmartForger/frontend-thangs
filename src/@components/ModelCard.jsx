@@ -16,6 +16,7 @@ import {
 } from '@style/text';
 import { BLACK_2, WHITE_3 } from '@style/colors';
 import { ProgressText } from '@components/ProgressText';
+import { TextButton } from '@components/Button';
 import { isError, isProcessing } from '@utilities';
 import * as GraphqlService from '@services/graphql-service';
 
@@ -139,7 +140,9 @@ function ErrorOverlay({ model }) {
 
     return (
         <StatusOverlayText>
-            <ExitIconStyled onClick={handleClick} />
+            <TextButton>
+                <ExitIconStyled onClick={handleClick} />
+            </TextButton>
             <ErrorIconStyled />
             <PlaceholderText>
                 <div>Error Procesing.</div>
