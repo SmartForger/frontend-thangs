@@ -38,7 +38,9 @@ jobs:
           #       we can run staging steps in the deploy-staging workflow and
           #       production steps in the deploy-production workflow.
           # command: yarn build:staging
-          command: ./node_modules/.bin/env-cmd -f .env.staging npm run build
+          command: |
+            ls -lah ./node_modules/
+            ./node_modules/.bin/env-cmd -f .env.staging npm run build
       - run:
           name: "Deploy build"
           command: |
