@@ -1,7 +1,14 @@
 dispatch:
+  # Production routes
   - url: "thangs.com/*"
     service: thangs-react
   - url: "app.thangs.com/*"
     service: thangs-react
+  # - url: "backend.thangs.com/*"
+  #   service: thangs-backend
+
+  # Staging routes
   - url: "staging.thangs.com/*"
     service: thangs-frontend-staging
+  # - url: "staging-backend.thangs.com/*"
+  #   service: thangs-backend-staging
