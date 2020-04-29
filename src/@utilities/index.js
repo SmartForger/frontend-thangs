@@ -1,3 +1,5 @@
+import * as R from 'ramda';
+
 export * from './PhysnaServer';
 export * from './ensureScriptIsLoaded';
 export * from './swearjar.js';
@@ -11,3 +13,6 @@ export const colorHexStringToRGBArray = colorStr =>
         .substring(1)
         .match(/.{1,2}/g)
         .map(tuple => parseInt(tuple, 16));
+
+export const isProcessing = R.propEq('uploadStatus', 'PROCESSING');
+export const isError = R.propEq('uploadStatus', 'ERROR');

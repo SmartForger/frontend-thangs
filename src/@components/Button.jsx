@@ -3,7 +3,6 @@ import {
     primaryButtonText,
     secondaryButtonText,
     darkButtonText,
-    linkText,
     matchingButtonText,
     matchingButtonHoverText,
 } from '@style/text';
@@ -85,11 +84,15 @@ export const Button = styled.button`
 `;
 
 export const TextButton = styled.button`
-    ${linkText};
     border: none;
     background: none;
     padding: 0;
     cursor: pointer;
+
+    &:disabled {
+        cursor: not-allowed;
+    }
+
     ${allowCssProp};
 `;
 

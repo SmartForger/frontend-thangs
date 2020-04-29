@@ -1,24 +1,11 @@
 import React, { useState } from 'react';
 import { UserInline } from './UserInline';
 import { Link } from 'react-router-dom';
-import * as R from 'ramda';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
-import ErrorImg from '@svg/image-error-icon.svg';
-import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg';
-import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg';
-import {
-    thumbnailErrorText,
-    modelCardHoverText,
-    thumbnailActivityCountText,
-} from '@style/text';
-import { BLACK_2 } from '@style/colors';
-import { ProgressText } from '@components/ProgressText';
-
-const ErrorIconStyled = styled(ErrorIcon)`
-    height: 65px;
-`;
+import { thumbnailActivityCountText } from '@style/text';
+import { ModelThumbnail } from '@components/ModelThumbnail';
 
 const CardContainer = styled.div`
     display: flex;
@@ -32,145 +19,6 @@ const CardContainer = styled.div`
 
 const CardContent = styled.div`
     padding: 8px 16px;
-`;
-
-const StatusOverlay = css`
-    background-color: ${BLACK_2};
-    content: '';
-    display: block;
-    position: absolute;
-    opacity: 0.85;
-    top: -8px;
-    padding-top: 8px;
-    height: 100%;
-    width: 100%;
-`;
-
-const ThumbnailContainer = styled.div`
-    ${thumbnailErrorText};
-    position: relative;
-    border-radius: 8px 8px 0px 0px;
-    height: 100%;
-    min-height: 205px;
-    overflow: hidden;
-    padding: 8px 8px 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    :after {
-        ${props => props.showStatusOverlay && StatusOverlay};
-    }
-
-    > img {
-        margin: auto;
-        display: block;
-        max-width: calc(100% - 80px);
-        height: auto;
-
-        :before {
-            content: ' ';
-            display: block;
-            background-color: ${props => props.theme.cardBackground};
-            background-image: url(${ErrorImg});
-            background-repeat: no-repeat;
-            background-position: center 37%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-        }
-
-        :after {
-            content: 'Image Error';
-            position: absolute;
-            display: block;
-            top: 72.5%;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-    }
-`;
-
-const PlaceholderText = styled.div`
-    margin-top: 24px;
-    text-align: center;
-`;
-
-const isProcessing = R.propEq('uploadStatus', 'PROCESSING');
-const isError = R.propEq('uploadStatus', 'ERROR');
-
-const StatusOverlayText = styled.div`
-    top: 0;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 1;
-`;
-
-function ModelThumbnail({ model, thumbnailUrl: src, children, showOwner }) {
-    return (
-        <ThumbnailContainer
-            showOwner={showOwner}
-            showStatusOverlay={isError(model) || isProcessing(model)}
-        >
-            {isError(model) || !src ? (
-                <StatusOverlayText>
-                    <ErrorIconStyled />
-                    <PlaceholderText>
-                        <div>Error Procesing.</div>
-                        <div>Try uploading model again.</div>
-                    </PlaceholderText>
-                </StatusOverlayText>
-            ) : (
-                <>
-                    {src && <img src={src} alt={model.name} />}
-                    {isProcessing(model) && (
-                        <StatusOverlayText>
-                            <LoadingIcon />
-                            <PlaceholderText>
-                                <ProgressText
-                                    text="Processing for matches"
-                                    css={`
-                                        width: 177px;
-                                    `}
-                                />
-                            </PlaceholderText>
-                        </StatusOverlayText>
-                    )}
-                </>
-            )}
-            {children}
-        </ThumbnailContainer>
-    );
-}
-
-const Overlay = styled.div`
-    position: absolute;
-    text-align: center;
-    height: 86px;
-    width: 100%;
-    background: linear-gradient(
-        -180deg,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.2) 100%
-    );
-    bottom: 0;
-    left: 8px;
-    display: flex;
-    align-items: flex-end;
-    margin: -8px -8px 0;
-`;
-
-const ModelName = styled.div`
-    ${modelCardHoverText};
-    margin: 16px;
 `;
 
 const ActivityIndicators = styled.div`
@@ -212,13 +60,8 @@ function ModelCard({ className, model, withOwner }) {
                     model={model}
                     thumbnailUrl={model.attachment && model.attachment.imgSrc}
                     showOwner={showOwner}
-                >
-                    {hovered ? (
-                        <Overlay>
-                            <ModelName>{model.name}</ModelName>
-                        </Overlay>
-                    ) : null}
-                </ModelThumbnail>
+                    hovered={hovered}
+                ></ModelThumbnail>
                 <CardContent>
                     {showOwner && <UserInline user={model.owner} />}
                     <ActivityIndicators>

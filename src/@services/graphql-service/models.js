@@ -437,6 +437,29 @@ const useSearchModels = searchQuery => {
     return { loading, error, models };
 };
 
+const DELETE_MODEL_MUTATION = gql`
+    mutation deleteModel($modelId: ID!) {
+        deleteModel(modelId: $modelId) {
+            ok
+        }
+    }
+`;
+
+const useDeleteModelMutation = (modelId, userId) => {
+    const [deleteModel, { loading, data, error }] = useMutation(
+        DELETE_MODEL_MUTATION,
+        {
+            variables: {
+                modelId,
+            },
+            refetchQueries: [{ query: USER_QUERY, variables: { id: userId } }],
+        }
+    );
+
+    const ok = data && data.deleteModel && data.deleteModel.ok;
+    return [deleteModel, { loading, ok, error }];
+};
+
 export {
     useModelById,
     useLikeModelMutation,
@@ -446,4 +469,5 @@ export {
     useModelsByDate,
     useModelsByLikes,
     useSearchModels,
+    useDeleteModelMutation,
 };

@@ -135,6 +135,7 @@ function AboutContent({ selected, user }) {
 
 function ModelsContent({ selected, user }) {
     const models = getModels(user);
+    const { user: currentUser } = useCurrentUser();
 
     if (!selected) {
         return null;
@@ -144,6 +145,7 @@ function ModelsContent({ selected, user }) {
         <ModelCollection
             models={models}
             noResultsText="This user has not uploaded any models yet."
+            showModelsWithErrors={user.id === currentUser.id}
         />
     );
 }
