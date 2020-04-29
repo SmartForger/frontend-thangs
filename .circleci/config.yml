@@ -14,31 +14,33 @@ jobs:
         type: string
     docker:
       - image: gcr.io/google-appengine/nodejs
-      # - image: google/cloud-sdk
     steps:
       - checkout
-      - run: curl -o- -L https://yarnpkg.com/install.sh | bash
+      - run:
+          name: Install yarn
+          command: curl -o- -L https://yarnpkg.com/install.sh | bash
       - restore_cache:
-          name: Restore Yarn Package Cache
+          name: Restore yarn packages from cache
           keys:
             - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
-          name: Install Dependencies
+          name: Install dependencies
           command: yarn install --frozen-lockfile
       - save_cache:
-          name: Save Yarn Package Cache
+          name: Save yarn packages to cache
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
       - run:
-          name: "Build Release"
+          name: "Build release"
           # Build staging release
           # TODO: This needs to be pulled into a separate job & workflow so that
           #       we can run staging steps in the deploy-staging workflow and
           #       production steps in the deploy-production workflow.
-          command: yarn build:staging
+          # command: yarn build:staging
+          command: ./node_modules/.bin/env-cmd -f .env.staging npm run build
       - run:
-          name: "Deploy Build"
+          name: "Deploy build"
           command: |
             # Store service account
             echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcloud-service-key.json
