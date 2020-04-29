@@ -145,7 +145,7 @@ function ModelsContent({ selected, user }) {
         <ModelCollection
             models={models}
             noResultsText="This user has not uploaded any models yet."
-            showModelsWithErrors={user.id === currentUser.id}
+            showAllModels={user.id === currentUser.id}
         />
     );
 }
