@@ -5,13 +5,13 @@ workflows:
   deploy-gcloud:
     jobs:
       - deploy:
+          context: gcp-and-physna
           filters:
             branches:
               only: circleci-setup
 
 jobs:
   deploy:
-    context: gcp-and-physna
     docker:
       - image: google/cloud-sdk
     parameters:
