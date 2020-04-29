@@ -19,28 +19,28 @@ jobs:
       - run:
           name: Install yarn
           command: curl -o- -L https://yarnpkg.com/install.sh | bash
-      # - restore_cache:
-      #     name: Restore yarn packages from cache
-      #     keys:
-      #       - yarn-packages-{{ checksum "yarn.lock" }}
+      - restore_cache:
+          name: Restore yarn packages from cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
           name: Install dependencies
           command: yarn install --frozen-lockfile
-      # - save_cache:
-      #     name: Save yarn packages to cache
-      #     key: yarn-packages-{{ checksum "yarn.lock" }}
-      #     paths:
-      #       - ~/.cache/yarn
+      - save_cache:
+          name: Save yarn packages to cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
       - run:
           name: "Build release"
           # Build staging release
           # TODO: This needs to be pulled into a separate job & workflow so that
           #       we can run staging steps in the deploy-staging workflow and
           #       production steps in the deploy-production workflow.
-          # command: yarn build:staging
-          command: |
-            ls -lah ./node_modules/ | grep env-cmd
-            ./node_modules/.bin/env-cmd -f .env.staging npm run build
+          command: yarn build:staging
+          # command: |
+          #   ls -lah ./node_modules/ | grep env-cmd
+          #   ./node_modules/.bin/env-cmd -f .env.staging npm run build
       - run:
           name: "Deploy build"
           command: |
