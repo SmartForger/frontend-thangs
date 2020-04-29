@@ -36,13 +36,17 @@ export function ModelCollection({
     noResultsSubtext,
     showAllModels,
 }) {
-    if (!models || R.isEmpty(models)) {
+    if (!models) {
         return <NoResultsFrame>{noResultsText}</NoResultsFrame>;
     }
 
     const modelsToRender = showAllModels
         ? models
         : rejectErrorsAndProcessing(models);
+
+    if (R.isEmpty(modelsToRender)) {
+        return <NoResultsFrame>{noResultsText}</NoResultsFrame>;
+    }
 
     return (
         <ModelsStyled singleRow={models.length < maxPerRow}>
