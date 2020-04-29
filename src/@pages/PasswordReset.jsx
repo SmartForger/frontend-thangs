@@ -157,12 +157,13 @@ const ResetPage = () => {
                     </FormControl>
                 </FieldsStyle>
                 <SubmitButton
-                    name={isSuccess ? 'Re-send Email' : 'Email Reset Link'}
                     type="submit"
                     disabled={
                         !(inputs.email && EmailValidator.validate(inputs.email))
                     }
-                />
+                >
+                    {isSuccess ? 'Re-send Email' : 'Email Reset Link'}
+                </SubmitButton>
             </form>
         </BodyStyle>
     );
