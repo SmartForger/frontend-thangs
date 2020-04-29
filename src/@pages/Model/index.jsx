@@ -119,7 +119,7 @@ function ModelTitle({ model, className }) {
 }
 
 const Comments = styled(CommentsForModel)`
-    margin-top: 48px;
+    margin-top: 56px;
 `;
 
 const Header = styled.div`
