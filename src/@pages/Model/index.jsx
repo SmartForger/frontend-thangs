@@ -207,7 +207,7 @@ function Page() {
     if (loading) {
         return <Spinner />;
     } else if (!model || isError(model) || isProcessing(model)) {
-        return <Page404 />;
+        return <Message404 />;
     } else if (error) {
         return <div>Error loading Model</div>;
     }
