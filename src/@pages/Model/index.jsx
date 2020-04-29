@@ -142,9 +142,29 @@ function RelatedModels({ modelId }) {
     );
 }
 
+const DownloadTextButton = styled(TextButton)`
+    ${linkText};
+    width: 122px;
+    text-align: left;
+    margin-bottom: 24px;
+`;
+
+function DownloadLink({ model }) {
+    const [isDownloading, hadError, downloadModel] = useDownloadModel(model);
+    return (
+        <DownloadTextButton onClick={downloadModel}>
+            {isDownloading ? (
+                <ProgressText text="Downloading" />
+            ) : hadError ? (
+                'Server Error'
+            ) : (
+                'Download Model'
+            )}
+        </DownloadTextButton>
+    );
+}
 const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
     const history = useHistory();
-    const [isDownloading, hadError, downloadModel] = useDownloadModel(model);
 
     return (
         <>
@@ -167,23 +187,7 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                     <LikeModelButton currentUser={currentUser} model={model} />
                     <ModelTitle model={model} />
                     <Description>{model.description}</Description>
-                    <TextButton
-                        onClick={downloadModel}
-                        css={`
-                            ${linkText};
-                            width: 122px;
-                            text-align: left;
-                            margin-bottom: 24px;
-                        `}
-                    >
-                        {isDownloading ? (
-                            <ProgressText text="Downloading" />
-                        ) : hadError ? (
-                            'Server Error'
-                        ) : (
-                            'Download Model'
-                        )}
-                    </TextButton>
+                    <DownloadLink model={model} />
                     <ModelDetails model={model} />
                     <Comments model={model} />
                 </Sidebar>
