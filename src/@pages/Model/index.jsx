@@ -12,6 +12,7 @@ import { TextButton, BackButton } from '@components/Button';
 import { Spinner } from '@components/Spinner';
 import { ProgressText } from '@components/ProgressText';
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
+import { isError, isProcessing } from '@utilities';
 
 import { useLocalStorage } from '@customHooks/Storage';
 import { useDownloadModel } from '@customHooks/Models';
@@ -201,7 +202,7 @@ function Page() {
 
     if (loading) {
         return <Spinner />;
-    } else if (!model) {
+    } else if (!model || isError(model) || isProcessing(model)) {
         return <Page404 />;
     } else if (error) {
         return <div>Error loading Model</div>;
