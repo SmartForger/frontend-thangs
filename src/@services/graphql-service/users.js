@@ -18,6 +18,7 @@ export const USER_QUERY = gql`
             models {
                 id
                 name
+                created
                 likesCount
                 commentsCount
                 attachment {

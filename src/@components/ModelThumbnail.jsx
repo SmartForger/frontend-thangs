@@ -16,6 +16,7 @@ import * as GraphqlService from '@services/graphql-service';
 const graphqlService = GraphqlService.getInstance();
 
 const Overlay = styled.div`
+    z-index: 1;
     position: absolute;
     text-align: center;
     height: 86px;

@@ -165,9 +165,15 @@ function ModelsContent({ selected, user }) {
         return <Spinner />;
     }
 
+    const sortedModels = models.sort((modelA, modelB) => {
+        if (modelA.created === modelB.created) return 0;
+        if (modelA.created > modelB.created) return -1;
+        else return 1;
+    });
+
     return (
         <ModelCollection
-            models={models}
+            models={sortedModels}
             noResultsText="This user has not uploaded any models yet."
             showAllModels={user.id === currentUser.id}
         />
