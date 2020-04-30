@@ -76,16 +76,19 @@ function ModelCard({ className, model, withOwner }) {
 
     if (isError(model) || isProcessing(model)) {
         return (
-            <CardContents
-                className={className}
-                model={model}
-                showOwner={showOwner}
-                hovered={hovered}
+            <div
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 onFocus={handleMouseEnter}
                 onBlur={handleMouseLeave}
-            />
+            >
+                <CardContents
+                    className={className}
+                    model={model}
+                    showOwner={showOwner}
+                    hovered={hovered}
+                />
+            </div>
         );
     }
 
