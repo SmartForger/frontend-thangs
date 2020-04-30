@@ -41,9 +41,9 @@ const App = () => {
     initializeAnalytics(history);
 
     return (
-        <ErrorBoundary>
-            <ApolloProvider client={client}>
-                <Router history={history}>
+        <ApolloProvider client={client}>
+            <Router history={history}>
+                <ErrorBoundary>
                     <Switch>
                         <Route exact path="/" component={Landing} />
                         <Route path="/login" component={Login} />
@@ -91,9 +91,9 @@ const App = () => {
                         <Route path="/upload" component={Upload} />
                         <Route path="*" component={Page404} status={404} />
                     </Switch>
-                </Router>
-            </ApolloProvider>
-        </ErrorBoundary>
+                </ErrorBoundary>
+            </Router>
+        </ApolloProvider>
     );
 };
 
