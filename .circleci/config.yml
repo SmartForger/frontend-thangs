@@ -16,7 +16,7 @@ jobs:
       - image: google/cloud-sdk
     parameters:
       NoPromote:
-        default: "--no-promote"
+        default: "" # "--no-promote"
         type: string
         description: "add --no-promote to deploy without routing traffic to new version"
       Version:
