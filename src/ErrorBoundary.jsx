@@ -13,7 +13,7 @@ function ErrorMessage() {
     );
 }
 
-const ErrorUI = WithNewThemeLayout(ErrorMessage);
+const ErrorUI = WithNewThemeLayout(ErrorMessage, { logoOnly: true });
 
 export class ErrorBoundary extends Component {
     constructor(props) {
