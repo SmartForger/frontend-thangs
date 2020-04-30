@@ -53,6 +53,10 @@ const BackupViewerStyled = styled(BackupViewer)`
     height: 560px;
 `;
 
+const SidebarSpacing = styled.div`
+    height: 560px;
+`;
+
 const ModelColumn = styled(ScrollableColumn)`
     flex-grow: 1;
     padding: 0 16px;
@@ -115,7 +119,7 @@ function ModelTitle({ model, className }) {
 }
 
 const Comments = styled(CommentsForModel)`
-    margin-top: 48px;
+    margin-top: 56px;
 `;
 
 const Header = styled.div`
@@ -185,11 +189,16 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                     <RelatedModels modelId={model.id} />
                 </ModelColumn>
                 <Sidebar>
-                    <LikeModelButton currentUser={currentUser} model={model} />
-                    <ModelTitle model={model} />
-                    <Description>{model.description}</Description>
-                    <DownloadLink model={model} />
-                    <ModelDetails model={model} />
+                    <SidebarSpacing>
+                        <LikeModelButton
+                            currentUser={currentUser}
+                            model={model}
+                        />
+                        <ModelTitle model={model} />
+                        <Description>{model.description}</Description>
+                        <DownloadLink model={model} />
+                        <ModelDetails model={model} />
+                    </SidebarSpacing>
                     <Comments model={model} />
                 </Sidebar>
             </ModelContainer>
