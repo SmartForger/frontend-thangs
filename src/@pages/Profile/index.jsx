@@ -75,9 +75,13 @@ const rejectErrorsAndProcessing = R.pipe(
     R.reject(isProcessing)
 );
 
-function Models({ selected, onClick, user }) {
+function ModelCount({ user }) {
     const models = R.pathOr([], ['models'])(user);
-    const { user: currentUser } = useCurrentUser();
+    const { user: currentUser, loading } = useCurrentUser();
+    if (loading || !currentUser) {
+        return <Spinner />;
+    }
+
     const showAllModels = user.id === currentUser.id;
 
     const modelsToRender = showAllModels
@@ -85,13 +89,16 @@ function Models({ selected, onClick, user }) {
         : rejectErrorsAndProcessing(models);
 
     const amount = modelsToRender.length;
+    return <span>Models {amount}</span>;
+}
 
+function Models({ selected, onClick, user }) {
     return (
         <TabTitle selected={selected} onClick={onClick}>
             <Icon>
                 <ModelIcon />
             </Icon>
-            <span>Models {amount}</span>
+            <ModelCount user={user} />
         </TabTitle>
     );
 }
@@ -148,10 +155,14 @@ function AboutContent({ selected, user }) {
 
 function ModelsContent({ selected, user }) {
     const models = getModels(user);
-    const { user: currentUser } = useCurrentUser();
+    const { user: currentUser, loading } = useCurrentUser();
 
     if (!selected) {
         return null;
+    }
+
+    if (loading || !currentUser) {
+        return <Spinner />;
     }
 
     return (
