@@ -142,7 +142,7 @@ function RelatedModels({ modelId }) {
 
     return (
         <ModelCollection
-            models={model.relatedModels}
+            models={model && model.relatedModels}
             maxPerRow={3}
             noResultsText="There were no geometrically similar matches found."
         />
