@@ -241,5 +241,7 @@ gsutil cors set cors-production.json gs://gcp-and-physna.appspot.com
 Update the CORS rules on the staging bucket:
 
 ```bash
-gsutil cors set cors-staging.json gs://thangs-uploads-staging
+gsutil cors set cors-staging.json gs://staging.gcp-and-physna.appspot.com
+# TODO: Update bucket name to be thangs-uploads-staging
+# gsutil cors set cors-staging.json gs://thangs-uploads-staging
 ```
