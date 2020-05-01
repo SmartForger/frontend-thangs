@@ -46,15 +46,17 @@ const ScrollableColumn = styled.div`
 `;
 
 const ModelViewerStyled = styled(ModelViewer)`
-    height: 560px;
+    height: 616px;
+    display: flex;
+    flex-direction: column;
 `;
 
 const BackupViewerStyled = styled(BackupViewer)`
-    height: 560px;
+    height: 616px;
 `;
 
 const SidebarSpacing = styled.div`
-    height: 560px;
+    height: 616px;
 `;
 
 const ModelColumn = styled(ScrollableColumn)`
