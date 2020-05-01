@@ -8,7 +8,9 @@ workflows:
           context: gcp-and-physna
           filters:
             branches:
-              only: circleci-setup
+              only:
+                - circleci-setup
+                - development
 
 jobs:
   deploy:
