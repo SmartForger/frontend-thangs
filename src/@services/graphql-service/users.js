@@ -27,6 +27,7 @@ export const USER_QUERY = gql`
                     imgSrc
                 }
                 uploadStatus
+                uploadedFilename
             }
             inviteCode
             likedModels {
@@ -43,6 +44,7 @@ export const USER_QUERY = gql`
                     id
                     imgSrc
                 }
+                uploadedFilename
             }
         }
     }
@@ -82,6 +84,8 @@ const parseUser = user => {
         user.profile && user.profile.avatarUrl
             ? createAppUrl(user.profile.avatarUrl)
             : '';
+    const models = user.models.map(parseModel);
+    const likedModels = user.likedModels.map(parseModel);
     return {
         ...user,
         models: user.models ? user.models.map(parseModel) : [],

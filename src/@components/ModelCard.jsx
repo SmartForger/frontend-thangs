@@ -52,7 +52,7 @@ function CardContents({
         <CardContainer className={className}>
             <ModelThumbnail
                 model={model}
-                thumbnailUrl={model.attachment && model.attachment.imgSrc}
+                thumbnailUrl={model.thumbnailUrl}
                 showOwner={showOwner}
                 hovered={hovered}
                 showStatusOverlay={showStatusOverlay}

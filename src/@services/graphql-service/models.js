@@ -4,6 +4,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import { uploadToSignedUrl } from '@services/storageService';
 import * as R from 'ramda';
 import { logger } from '../../logging';
+import { THUMBNAILS_HOST } from '@utilities/constants';
 
 import { USER_QUERY, parseUser } from './users';
 
@@ -32,8 +33,6 @@ const MODEL_FRAGMENT = gql`
         attachment {
             id
             attachmentId
-            imgSrc
-            dataSrc
         }
         likesCount
         commentsCount
@@ -43,7 +42,7 @@ const MODEL_FRAGMENT = gql`
         weight
         height
         material
-        uploadedFile
+        uploadedFilename
     }
 `;
 
@@ -157,18 +156,24 @@ const getModelsByDate = R.pathOr(null, ['modelsByDate']);
 const getModelsByLikes = R.pathOr(null, ['modelsByLikes']);
 const getSearchModels = R.pathOr(null, ['searchModels']);
 
-export const parseModel = model => {
+function parseThumbnailUrl(filename) {
+    return `${THUMBNAILS_HOST}/${filename}`;
+}
+
+export function parseModel(model) {
     const relatedModels = model.relatedModels
         ? model.relatedModels.map(parseModel)
         : null;
     const owner = model.owner && parseUser(model.owner);
+    const thumbnailUrl = parseThumbnailUrl(model.uploadedFilename);
 
     return {
         ...model,
         owner,
+        thumbnailUrl,
         relatedModels,
     };
-};
+}
 
 const parseModelsByDatePayload = data => {
     const models = getModelsByDate(data);
