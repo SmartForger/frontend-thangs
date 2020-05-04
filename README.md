@@ -243,3 +243,6 @@ Update the CORS rules on the staging bucket:
 ```bash
 gsutil cors set cors-staging.json gs://staging-thangs-uploads
 ```
+
+### CircleCi Staging Deploy
+*Coming Soon*
