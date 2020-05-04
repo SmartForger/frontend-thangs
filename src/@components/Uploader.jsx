@@ -6,6 +6,11 @@ import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg';
 import { ReactComponent as ModelPyramid } from '@svg/model-pyramid.svg';
 import { UploadFrame } from '@components/UploadFrame';
 import { infoMessageText, smallInfoMessageText, linkText } from '@style/text';
+import { GREY_3 } from '@style/colors';
+
+const ErrorIconStyled = styled(ErrorIcon)`
+    color: ${GREY_3};
+`;
 
 const UploadIconStyled = styled(UploadIcon)`
     margin-bottom: 32px;
@@ -125,7 +130,7 @@ export function Uploader({ file, setFile, showError = true }) {
                     </FlexColumn>
                 ) : errorState === 'TOO_BIG' ? (
                     <FlexColumn>
-                        <ErrorIcon />
+                        <ErrorIconStyled />
                         <InfoMessage>
                             File over {FILE_SIZE_LIMITS.hard.pretty}. Try{' '}
                             uploading a different file.
