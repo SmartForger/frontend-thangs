@@ -62,7 +62,7 @@ export function SearchBar(props) {
         <SearchForm onSubmit={handleSubmit}>
             <SearchIconStyled />
             <SearchStyle
-                placeholder="Input search term"
+                placeholder="Search models by name, description, owner, etc..."
                 value={searchQuery}
                 onChange={handleChange}
             />
