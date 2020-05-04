@@ -31,6 +31,7 @@ const FixedHeader = styled.div`
 
 const Boundary = styled.div`
     margin: 48px auto 16px;
+    padding: 0 16px;
     max-width: ${props => props.theme.maxWidth}
     position: relative;
 `;

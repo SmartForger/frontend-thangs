@@ -51,11 +51,11 @@ export const WithNewThemeLayout = (Component, options = {}) => props => {
 
 const Hero = styled.div`
     background: ${props => props.theme.invertedHeaderBackground};
-    width: 100%;
     height: 756px;
     position: relative;
     display: flex;
     align-items: center;
+    padding: 0 16px;
 `;
 
 const PromotionalText = styled.div`
