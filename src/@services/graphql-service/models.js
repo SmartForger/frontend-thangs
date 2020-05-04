@@ -42,7 +42,7 @@ const MODEL_FRAGMENT = gql`
         weight
         height
         material
-        uploadedFilename
+        uploadedFile
     }
 `;
 
@@ -165,7 +165,7 @@ export function parseModel(model) {
         ? model.relatedModels.map(parseModel)
         : null;
     const owner = model.owner && parseUser(model.owner);
-    const thumbnailUrl = parseThumbnailUrl(model.uploadedFilename);
+    const thumbnailUrl = parseThumbnailUrl(model.uploadedFile);
 
     return {
         ...model,

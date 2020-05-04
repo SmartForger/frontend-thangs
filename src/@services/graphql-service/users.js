@@ -27,7 +27,7 @@ export const USER_QUERY = gql`
                     imgSrc
                 }
                 uploadStatus
-                uploadedFilename
+                uploadedFile
             }
             inviteCode
             likedModels {
@@ -44,7 +44,7 @@ export const USER_QUERY = gql`
                     id
                     imgSrc
                 }
-                uploadedFilename
+                uploadedFile
             }
         }
     }
