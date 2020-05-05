@@ -10,6 +10,7 @@ import { ReactComponent as Logo } from '@svg/logo.svg';
 import { ReactComponent as LogoText } from '@svg/logo-text.svg';
 import { linkText } from '@style/text';
 import { Button, BrandButton } from '@components/Button';
+import { largerThanMd } from '@style/media-queries';
 
 const NOTIFICATIONS_ENABLED = false;
 const NOTIFICATIONS_URL = '#';
@@ -93,15 +94,21 @@ const UploadButton = styled(Button)`
     margin-left: 32px;
 `;
 
+function UserPicture({ user }) {
+    return (
+        <Link to="/profile/">
+            <ProfilePicture user={user} size="50px" />
+        </Link>
+    );
+}
+
 const UserNav = () => {
     const { user } = useCurrentUser();
 
     if (user) {
         return (
             <Row>
-                <Link to="/profile/">
-                    <ProfilePicture user={user} size="50px" />
-                </Link>
+                <UserPicture user={user} />
                 <NotificationsButton />
                 <Link to={`/upload`}>
                     <UploadButton>Upload Model</UploadButton>
@@ -122,34 +129,74 @@ const Flex = styled.div`
     display: flex;
 `;
 
+function DesktopHeader({ variant }) {
+    return (
+        <DesktopOnly>
+            <Boundary>
+                <TopRow>
+                    <div>
+                        <Row>
+                            <Link to="/">
+                                <LogoStyled />
+                                <LogoText />
+                            </Link>
+                        </Row>
+                    </div>
+                    {variant !== 'logo-only' && <UserNav />}
+                </TopRow>
+                {variant !== 'logo-only' && (
+                    <Flex>
+                        <Link to={'/matching'}>
+                            <BrandButton>
+                                <MatchingIconStyled />
+                                Search by Model
+                            </BrandButton>
+                        </Link>
+                        <SearchBar />
+                    </Flex>
+                )}
+            </Boundary>
+        </DesktopOnly>
+    );
+}
+
+const MobileOnly = styled.span`
+    ${largerThanMd} {
+        display: none;
+    }
+`;
+
+const DesktopOnly = styled.span`
+    display: none;
+
+    ${largerThanMd} {
+        display: block;
+    }
+`;
+
+function MobileHeader() {
+    const { user } = useCurrentUser();
+    return (
+        <MobileOnly>
+            <Boundary>
+                <TopRow>
+                    <Link to="/">
+                        <LogoStyled />
+                        <LogoText />
+                    </Link>
+                    {user && <UserPicture user={user} />}
+                </TopRow>
+            </Boundary>
+        </MobileOnly>
+    );
+}
+
 const Header = ({ inverted, variant }) => {
     return (
         <>
             <FixedHeader inverted={inverted}>
-                <Boundary>
-                    <TopRow>
-                        <div>
-                            <Row>
-                                <Link to="/">
-                                    <LogoStyled />
-                                    <LogoText />
-                                </Link>
-                            </Row>
-                        </div>
-                        {variant !== 'logo-only' && <UserNav />}
-                    </TopRow>
-                    {variant !== 'logo-only' && (
-                        <Flex>
-                            <Link to={'/matching'}>
-                                <BrandButton>
-                                    <MatchingIconStyled />
-                                    Search by Model
-                                </BrandButton>
-                            </Link>
-                            <SearchBar />
-                        </Flex>
-                    )}
-                </Boundary>
+                <MobileHeader />
+                <DesktopHeader />
             </FixedHeader>
         </>
     );
