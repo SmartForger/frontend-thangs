@@ -152,6 +152,9 @@ function Matching({ css }) {
             <BrandButton
                 css={`
                     width: 100%;
+                    ${largerThanMd} {
+                        padding: 6px 24px 6px 32px;
+                    }
                 `}
             >
                 <MatchingIconStyled />
@@ -226,7 +229,8 @@ function MobileHeader() {
                     <Matching
                         css={`
                             flex-basis: 50%;
-                            margin-right: 32px;
+                            margin-right: 24px;
+                            min-width: 180px;
                         `}
                     />
                     <Upload
