@@ -45,6 +45,7 @@
     "react-three-fiber": "^4.0.10",
     "rxjs": "^6.5.4",
     "serve": "^11.3.0",
+    "stackdriver-errors-js": "^0.8.0",
     "styled-components": "^4.4.1",
     "three": "^0.112.1"
   },
