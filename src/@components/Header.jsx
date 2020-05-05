@@ -37,14 +37,18 @@ const DesktopBoundary = styled.div`
     position: relative;
 `;
 
+const allowCssProp = props => (props.css ? props.css : '');
+
 const Row = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
 
     :not(:last-of-type) {
-        margin-bottom: 25px;
+        margin-bottom: 24px;
     }
+
+    ${allowCssProp};
 `;
 
 const TopRow = styled(Row)`
@@ -90,8 +94,12 @@ const NotificationsButton = () => {
 };
 
 const UploadButton = styled(Button)`
-    width: 124px;
-    margin-left: 32px;
+    width: 100%;
+
+    ${largerThanMd} {
+        margin-left: 32px;
+        width: 124px;
+    }
 `;
 
 function UserPicture({ user }) {
@@ -102,6 +110,13 @@ function UserPicture({ user }) {
     );
 }
 
+function Upload({ css }) {
+    return (
+        <LinkStyled to={`/upload`} css={css}>
+            <UploadButton>Upload Model</UploadButton>
+        </LinkStyled>
+    );
+}
 const UserNav = () => {
     const { user } = useCurrentUser();
 
@@ -110,9 +125,7 @@ const UserNav = () => {
             <Row>
                 <UserPicture user={user} />
                 <NotificationsButton />
-                <Link to={`/upload`}>
-                    <UploadButton>Upload Model</UploadButton>
-                </Link>
+                <Upload />
             </Row>
         );
     }
@@ -128,6 +141,25 @@ const UserNav = () => {
 const Flex = styled.div`
     display: flex;
 `;
+
+const LinkStyled = styled(Link)`
+    ${allowCssProp};
+`;
+
+function Matching({ css }) {
+    return (
+        <LinkStyled to={'/matching'} css={css}>
+            <BrandButton
+                css={`
+                    width: 100%;
+                `}
+            >
+                <MatchingIconStyled />
+                Search by Model
+            </BrandButton>
+        </LinkStyled>
+    );
+}
 
 function DesktopHeader({ variant }) {
     return (
@@ -146,12 +178,7 @@ function DesktopHeader({ variant }) {
                 </TopRow>
                 {variant !== 'logo-only' && (
                     <Flex>
-                        <Link to={'/matching'}>
-                            <BrandButton>
-                                <MatchingIconStyled />
-                                Search by Model
-                            </BrandButton>
-                        </Link>
+                        <Matching />
                         <SearchBar />
                     </Flex>
                 )}
@@ -191,6 +218,23 @@ function MobileHeader() {
                     </Link>
                     {user && <UserPicture user={user} />}
                 </TopRow>
+                <Row
+                    css={`
+                        margin-bottom: 16px;
+                    `}
+                >
+                    <Matching
+                        css={`
+                            flex-basis: 50%;
+                            margin-right: 32px;
+                        `}
+                    />
+                    <Upload
+                        css={`
+                            flex-basis: 50%;
+                        `}
+                    />
+                </Row>
                 <SearchBar />
             </MobileBoundary>
         </MobileOnly>
