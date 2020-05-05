@@ -20,6 +20,9 @@ NODE_PATH="src/"
 HTTPS=false
 REACT_APP_HOOPS_MODEL_PREP_ENDPOINT_URI=https://hoops-scs-dot-gcp-and-physna.uc.r.appspot.com/api/prepare-model
 REACT_APP_HOOPS_WS_ENDPOINT_URI=wss://hoops-scs-dot-gcp-and-physna.uc.r.appspot.com
+
+REACT_APP_GOOGLE_CLOUD_PROJECT_ID=gcp-and-physna
+REACT_APP_GOOGLE_CLOUD_ERROR_REPORTING_KEY=AIzaSyCUmGwa9UJArRbPKt5YvT8ogf8EnEJCRyQ
 ```
 
 4. Run the following command in the terminal to start the app:
