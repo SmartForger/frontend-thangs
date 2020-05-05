@@ -209,7 +209,7 @@ const MobileBoundary = styled.div`
     padding: 0 12px;
 `;
 
-function MobileHeader() {
+function MobileHeader({ variant }) {
     const { user } = useCurrentUser();
     return (
         <MobileOnly>
@@ -219,27 +219,33 @@ function MobileHeader() {
                         <LogoStyled />
                         <LogoText />
                     </Link>
-                    {user && <UserPicture user={user} />}
+                    {variant !== 'logo-only' && user && (
+                        <UserPicture user={user} />
+                    )}
                 </TopRow>
-                <Row
-                    css={`
-                        margin-bottom: 16px;
-                    `}
-                >
-                    <Matching
-                        css={`
-                            flex-basis: 50%;
-                            margin-right: 24px;
-                            min-width: 180px;
-                        `}
-                    />
-                    <Upload
-                        css={`
-                            flex-basis: 50%;
-                        `}
-                    />
-                </Row>
-                <SearchBar />
+                {variant !== 'logo-only' && (
+                    <>
+                        <Row
+                            css={`
+                                margin-bottom: 16px;
+                            `}
+                        >
+                            <Matching
+                                css={`
+                                    flex-basis: 50%;
+                                    margin-right: 24px;
+                                    min-width: 180px;
+                                `}
+                            />
+                            <Upload
+                                css={`
+                                    flex-basis: 50%;
+                                `}
+                            />
+                        </Row>
+                        <SearchBar />
+                    </>
+                )}
             </MobileBoundary>
         </MobileOnly>
     );
@@ -249,8 +255,8 @@ const Header = ({ inverted, variant }) => {
     return (
         <>
             <FixedHeader inverted={inverted}>
-                <MobileHeader />
-                <DesktopHeader />
+                <MobileHeader variant={variant} />
+                <DesktopHeader variant={variant} />
             </FixedHeader>
         </>
     );
