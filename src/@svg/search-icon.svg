@@ -1,1 +1,14 @@
-<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#88888B" stroke-width="2" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><path d="M17.714 10.857a6.858 6.858 0 00-13.714 0 6.858 6.858 0 0013.714 0zM16 17l3.8 3.8"/></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 64 (101010) - https://sketch.com -->
+    <title>f67fba2c-4cb3-4dde-9afc-a55b7d789532@1.00x</title>
+    <desc>Created with sketchtool.</desc>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="icon/Magnify-Glass" stroke="#88888B" stroke-width="2">
+            <g id="Group" transform="translate(4.000000, 4.000000)">
+                <path d="M13.7142857,6.85714286 C13.7142857,3.07075325 10.6435325,2.93098879e-14 6.85714286,2.93098879e-14 C3.07075325,2.93098879e-14 -1.98063788e-13,3.07075325 -1.98063788e-13,6.85714286 C-1.98063788e-13,10.6435325 3.07075325,13.7142857 6.85714286,13.7142857 C10.6435325,13.7142857 13.7142857,10.6435325 13.7142857,6.85714286 Z" id="Stroke-1"></path>
+                <line x1="12" y1="13" x2="15.8" y2="16.8" id="Stroke-3"></line>
+            </g>
+        </g>
+    </g>
+</svg>

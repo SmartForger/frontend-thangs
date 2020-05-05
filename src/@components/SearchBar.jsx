@@ -29,20 +29,31 @@ const SearchForm = styled.form`
 
 const SearchStyle = styled.input`
     border: none;
-    padding: 9px 0 9px 56px;
+    padding: 8px 8px 8px 40px;
     background: none;
     width: 100%;
 
     ::placeholder {
         ${inputPlaceholderText};
     }
+
+    ${largerThanMd} {
+        padding-left: 56px;
+    }
 `;
 
 const SearchIconStyled = styled(SearchIcon)`
     position: absolute;
     top: 50%;
-    left: 17px;
+    left: 16px;
     transform: translateY(-50%);
+    height: 18px;
+    width: 18px;
+
+    ${largerThanMd} {
+        height: 24px;
+        width: 24px;
+    }
 `;
 
 export function SearchBar(props) {
