@@ -10,12 +10,6 @@ export function initializeErrorReporter({
 }) {
     const errorReportingDisabled =
         environment === 'development' && overrideEnabled !== true;
-    console.debug(`initializeErrorReporter()`, {
-        googleCloudApiKey,
-        googleCloudProjectId,
-        environment,
-        errorReportingDisabled,
-    });
     errorHandler.start({
         key: googleCloudApiKey,
         projectId: googleCloudProjectId,
