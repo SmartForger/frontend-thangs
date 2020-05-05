@@ -191,6 +191,7 @@ function MobileHeader() {
                     </Link>
                     {user && <UserPicture user={user} />}
                 </TopRow>
+                <SearchBar />
             </MobileBoundary>
         </MobileOnly>
     );
