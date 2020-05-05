@@ -30,7 +30,7 @@ const FixedHeader = styled.div`
     z-index: 2;
 `;
 
-const Boundary = styled.div`
+const DesktopBoundary = styled.div`
     margin: 48px auto 16px;
     padding: 0 16px;
     max-width: ${props => props.theme.maxWidth}
@@ -132,7 +132,7 @@ const Flex = styled.div`
 function DesktopHeader({ variant }) {
     return (
         <DesktopOnly>
-            <Boundary>
+            <DesktopBoundary>
                 <TopRow>
                     <div>
                         <Row>
@@ -155,7 +155,7 @@ function DesktopHeader({ variant }) {
                         <SearchBar />
                     </Flex>
                 )}
-            </Boundary>
+            </DesktopBoundary>
         </DesktopOnly>
     );
 }
@@ -174,11 +174,16 @@ const DesktopOnly = styled.span`
     }
 `;
 
+const MobileBoundary = styled.div`
+    margin: 16px auto;
+    padding: 0 12px;
+`;
+
 function MobileHeader() {
     const { user } = useCurrentUser();
     return (
         <MobileOnly>
-            <Boundary>
+            <MobileBoundary>
                 <TopRow>
                     <Link to="/">
                         <LogoStyled />
@@ -186,7 +191,7 @@ function MobileHeader() {
                     </Link>
                     {user && <UserPicture user={user} />}
                 </TopRow>
-            </Boundary>
+            </MobileBoundary>
         </MobileOnly>
     );
 }
