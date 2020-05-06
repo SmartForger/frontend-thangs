@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useHistory, useParams } from 'react-router-dom';
 import { ReactComponent as SearchIcon } from '@svg/search-icon.svg';
 import { inputPlaceholderText } from '@style/text';
+import { largerThanMd } from '@style/media-queries';
 
 function useSearch(initialSearchQuery = '') {
     const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
@@ -17,28 +18,42 @@ const SearchForm = styled.form`
     flex-grow: 1;
     background-color: ${props => props.theme.searchBackground};
     border-radius: 8px;
-    margin-left: 12px;
     position: relative;
     display: flex;
     max-width: 1024px;
+
+    ${largerThanMd} {
+        margin-left: 12px;
+    }
 `;
 
 const SearchStyle = styled.input`
     border: none;
-    padding: 9px 0 9px 56px;
+    padding: 8px 8px 8px 40px;
     background: none;
     width: 100%;
 
     ::placeholder {
         ${inputPlaceholderText};
     }
+
+    ${largerThanMd} {
+        padding-left: 56px;
+    }
 `;
 
 const SearchIconStyled = styled(SearchIcon)`
     position: absolute;
     top: 50%;
-    left: 17px;
+    left: 16px;
     transform: translateY(-50%);
+    height: 18px;
+    width: 18px;
+
+    ${largerThanMd} {
+        height: 24px;
+        width: 24px;
+    }
 `;
 
 export function SearchBar(props) {
