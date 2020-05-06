@@ -14,6 +14,7 @@ export const UploadFrame = styled.div`
     justify-content: center;
     padding: 24px;
     position: relative;
+    cursor: ${props => (props.currentFile ? 'autor' : 'pointer')};
 
     ${allowCssProp};
 `;

@@ -111,8 +111,16 @@ export function Uploader({ file, setFile, showError = true }) {
         [setFile]
     );
 
+    const preventClickingWhileFull = e => {
+        if (file) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    };
+
     const cancelUpload = e => {
         e.preventDefault();
+        e.stopPropagation();
         setErrorState(null);
         setFile(null);
     };
@@ -122,9 +130,9 @@ export function Uploader({ file, setFile, showError = true }) {
     });
 
     return (
-        <div {...getRootProps()}>
+        <div {...getRootProps({ onClick: preventClickingWhileFull })}>
             <input {...getInputProps({ multiple: false })} />
-            <UploadFrame dragactive={isDragActive}>
+            <UploadFrame dragactive={isDragActive} currentFile={file}>
                 {showError ? (
                     <FlexColumn>
                         <IconButton onClick={cancelUpload}>
