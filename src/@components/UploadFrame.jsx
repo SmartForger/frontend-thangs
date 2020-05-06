@@ -13,6 +13,7 @@ export const UploadFrame = styled.div`
     align-items: center;
     justify-content: center;
     padding: 24px;
+    position: relative;
 
     ${allowCssProp};
 `;
