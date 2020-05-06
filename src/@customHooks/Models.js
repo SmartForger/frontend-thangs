@@ -32,7 +32,7 @@ export const useStl = url => {
                 setData(geometry);
                 setLoading(false);
             } catch (e) {
-                console.error('Could not load model data', e);
+                logger.error('Could not load model data', e);
 
                 setError(e);
             }
@@ -168,7 +168,7 @@ export const useHoopsViewer = modelFilename => {
                 }
             })
             .catch(err => {
-                console.error('Failure initializing Viewer:', err);
+                logger.error('Failure initializing Viewer:', err);
                 if (isActiveEffect) {
                     doTransition(TRANSITIONS.Error);
                 }
@@ -196,7 +196,7 @@ export const useHoopsViewer = modelFilename => {
                 try {
                     hoopsViewerRef.current.shutdown();
                 } catch (e) {
-                    console.error('HWV failed to shutdown:', e);
+                    logger.error('HWV failed to shutdown:', e);
                 } finally {
                     hoopsViewerRef.current = null;
                 }
@@ -272,7 +272,7 @@ export const useHoopsViewer = modelFilename => {
                 );
                 break;
             default:
-                console.error('Unsupported draw mode!', modeName);
+                logger.error('Unsupported draw mode!', modeName);
         }
     }, []);
 
@@ -308,7 +308,7 @@ export const useHoopsViewer = modelFilename => {
                 model.setNodesFaceColor(nodeIds, hColor);
             }
         } catch (e) {
-            console.error('Caught HOOPS error setting color:', e);
+            logger.error('Caught HOOPS error setting color:', e);
         }
     }, []);
 
@@ -342,14 +342,14 @@ export function useDownloadModel(model) {
         model.id
     );
 
-    const downloadModel = async e => {
-        e.preventDefault();
+    const downloadModel = async event => {
+        event.preventDefault();
         setIsDownloading(true);
         try {
             const url = await getDownloadUrl();
             window.open(url);
-        } catch (e) {
-            console.log('e', e);
+        } catch (error) {
+            logger.log(`Error getting model download url`, error);
             setHadError(true);
         }
 

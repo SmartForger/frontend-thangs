@@ -23,6 +23,8 @@ import { headerText, linkText, modelTitleText } from '@style/text';
 import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { Message404 } from '../404';
 
+import { logger } from '../../logging';
+
 const allowCssProp = props => (props.css ? props.css : '');
 
 const graphqlService = GraphqlService.getInstance();
@@ -137,7 +139,7 @@ function RelatedModels({ modelId }) {
     if (loading) {
         return <Spinner />;
     } else if (error) {
-        console.error('error', error);
+        logger.error('error', error);
     }
 
     return (

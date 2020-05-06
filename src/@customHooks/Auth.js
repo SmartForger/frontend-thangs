@@ -2,6 +2,8 @@ import React, { useEffect, useContext, createContext, useState } from 'react';
 import { useLocalStorage } from './Storage';
 import { PhysnaServer } from '@utilities';
 
+import { logger } from '../logging';
+
 const AuthContext = createContext();
 
 // Provider component that wraps your app and makes auth object ...
@@ -65,7 +67,7 @@ function useProvideAuth() {
                 setUser(userReq.data.response.user);
                 setAuthenticated(true);
             } catch (error) {
-                console.log('User is not Logged in');
+                logger.log('User is not Logged in');
             }
         }
     };

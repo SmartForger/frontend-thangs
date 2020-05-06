@@ -3,6 +3,7 @@ import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { uploadToSignedUrl } from '@services/storageService';
 import * as R from 'ramda';
+import { logger } from '../../logging';
 
 import { USER_QUERY, parseUser } from './users';
 
@@ -407,7 +408,7 @@ const useUploadModelMutation = userId => {
             );
         } catch (e) {
             setUploadError(e);
-            console.error('Upload failed with error:', e);
+            logger.error('Upload failed with error:', e);
             throw e;
         } finally {
             setLoading(false);

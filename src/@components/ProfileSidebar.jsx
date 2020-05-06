@@ -5,6 +5,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Button, ChangeablePicture, Markdown } from '@components';
 import { ProfilePicture } from '@components/ProfilePicture';
 import * as GraphqlService from '@services/graphql-service';
+import { logger } from '../logging';
 
 const SidebarStyled = styled.div`
     grid-area: sidebar;
@@ -107,7 +108,7 @@ const EditProfileForm = ({ onClose, user }) => {
                 variables: { updateInput },
             });
         } catch (error) {
-            console.error('Error when trying to update the user', error);
+            logger.error('Error when trying to update the user', error);
         }
 
         onClose(data, e);
