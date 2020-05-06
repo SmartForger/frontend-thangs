@@ -84,8 +84,8 @@ const parseUser = user => {
             : '';
     return {
         ...user,
-        models: user.models.map(parseModel),
-        likedModels: user.likedModels.map(parseModel),
+        models: user.models ? user.models.map(parseModel) : [],
+        likedModels: user.likedModels ? user.likedModels.map(parseModel) : [],
         profile: {
             ...user.profile,
             avatarUrl,
