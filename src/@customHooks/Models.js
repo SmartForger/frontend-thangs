@@ -336,25 +336,25 @@ export const useHoopsViewer = modelFilename => {
 };
 
 export function useDownloadModel(model) {
-  const [isDownloading, setIsDownloading] = useState();
-  const [hadError, setHadError] = useState();
-  const [getDownloadUrl] = graphqlService.useCreateDownloadUrlMutation(
-    model.id
-  );
+    const [isDownloading, setIsDownloading] = useState();
+    const [hadError, setHadError] = useState();
+    const [getDownloadUrl] = graphqlService.useCreateDownloadUrlMutation(
+        model.id
+    );
 
-  const downloadModel = async e => {
-    e.preventDefault();
-    setIsDownloading(true);
-    try {
-      const url = await getDownloadUrl();
-      window.open(url);
-    } catch (e) {
-      console.log('e', e);
-      setHadError(true);
-    }
+    const downloadModel = async e => {
+        e.preventDefault();
+        setIsDownloading(true);
+        try {
+            const url = await getDownloadUrl();
+            window.open(url);
+        } catch (e) {
+            console.log('e', e);
+            setHadError(true);
+        }
 
-    setIsDownloading(false);
-  };
-  
-  return [isDownloading, hadError, downloadModel]
+        setIsDownloading(false);
+    };
+
+    return [isDownloading, hadError, downloadModel];
 }
