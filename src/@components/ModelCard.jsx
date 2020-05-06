@@ -6,7 +6,7 @@ import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
 import { thumbnailActivityCountText } from '@style/text';
 import { ModelThumbnail } from '@components/ModelThumbnail';
-import { isError, isProcessing } from '@utilities';
+import { isCompleted } from '@utilities';
 
 const CardContainer = styled.div`
     display: flex;
@@ -41,7 +41,13 @@ const HeartIconStyled = styled(HeartIcon)`
     fill: ${props => props.theme.cardHeartColor};
 `;
 
-function CardContents({ className, model, showOwner, hovered }) {
+function CardContents({
+    className,
+    model,
+    showOwner,
+    hovered,
+    showStatusOverlay,
+}) {
     return (
         <CardContainer className={className}>
             <ModelThumbnail
@@ -49,6 +55,7 @@ function CardContents({ className, model, showOwner, hovered }) {
                 thumbnailUrl={model.attachment && model.attachment.imgSrc}
                 showOwner={showOwner}
                 hovered={hovered}
+                showStatusOverlay={showStatusOverlay}
             ></ModelThumbnail>
             <CardContent>
                 {showOwner && <UserInline user={model.owner} />}
@@ -74,7 +81,10 @@ function ModelCard({ className, model, withOwner }) {
     const handleMouseEnter = () => setHovered(true);
     const handleMouseLeave = () => setHovered(false);
 
-    if (isError(model) || isProcessing(model)) {
+    const hasCompletedSuccessfully =
+        isCompleted(model) && model.attachment && model.attachment.imgSrc;
+
+    if (!hasCompletedSuccessfully) {
         return (
             <div
                 onMouseEnter={handleMouseEnter}
@@ -87,6 +97,7 @@ function ModelCard({ className, model, withOwner }) {
                     model={model}
                     showOwner={showOwner}
                     hovered={hovered}
+                    showStatusOverlay
                 />
             </div>
         );

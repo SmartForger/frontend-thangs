@@ -181,11 +181,12 @@ export function ModelThumbnail({
     children,
     showOwner,
     hovered,
+    showStatusOverlay,
 }) {
     return (
         <ThumbnailContainer
             showOwner={showOwner}
-            showStatusOverlay={isError(model) || isProcessing(model)}
+            showStatusOverlay={showStatusOverlay}
         >
             {isError(model) || !src ? (
                 <ErrorOverlay model={model} />
