@@ -42,8 +42,7 @@ function initialize({
         });
     } else {
         errorReporter = {
-            report: (message, ...args) =>
-                console.warn(`[Error reporting] ${message}`, ...args),
+            report: console.error.bind(console),
         };
     }
 }
