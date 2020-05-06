@@ -1,6 +1,7 @@
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { createAppUrl } from './utils';
+import { parseModel } from './models';
 
 export const USER_QUERY = gql`
     query getUser($id: ID) {
@@ -83,6 +84,8 @@ const parseUser = user => {
             : '';
     return {
         ...user,
+        models: user.models.map(parseModel),
+        likedModels: user.likedModels.map(parseModel),
         profile: {
             ...user.profile,
             avatarUrl,
@@ -128,7 +131,7 @@ const useUploadUserAvatarMutation = (user, croppedImg) => {
     });
 };
 
-export const useDeleteUserAvatarMutation = (user) => {
+export const useDeleteUserAvatarMutation = user => {
     return useMutation(
         gql`
             mutation deleteUserProfileAvatar($userId: ID) {

@@ -157,7 +157,7 @@ const getModelsByDate = R.pathOr(null, ['modelsByDate']);
 const getModelsByLikes = R.pathOr(null, ['modelsByLikes']);
 const getSearchModels = R.pathOr(null, ['searchModels']);
 
-const parseModel = model => {
+export const parseModel = model => {
     const relatedModels = model.relatedModels
         ? model.relatedModels.map(parseModel)
         : null;
