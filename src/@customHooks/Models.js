@@ -6,6 +6,8 @@ import * as GraphqlService from '@services/graphql-service';
 import { colorHexStringToRGBArray, ensureScriptIsLoaded } from '@utilities';
 import axios from 'axios';
 
+import { logger } from '../logging';
+
 const graphqlService = GraphqlService.getInstance();
 
 export const useStl = url => {
@@ -48,7 +50,7 @@ const HOOPS_WS_ENDPOINT_URI = process.env.REACT_APP_HOOPS_WS_ENDPOINT_URI;
 
 const debug = (...args) => {
     if (process.env.REACT_APP_DEBUG) {
-        console.debug(...args);
+        logger.debug(...args);
     }
 };
 
