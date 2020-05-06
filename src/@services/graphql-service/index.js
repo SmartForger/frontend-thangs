@@ -11,18 +11,20 @@ import * as comments from './comments';
 import * as newsposts from './newsposts';
 import { getGraphQLUrl } from './utils';
 
+import { logger } from '../../logging';
+
 export const graphqlClient = (originalFetch, history) =>
     new ApolloClient({
         link: ApolloLink.from([
             onError(({ graphQLErrors, networkError }) => {
                 if (graphQLErrors)
                     graphQLErrors.forEach(({ message, locations, path }) =>
-                        console.log(
-                            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-                        ),
+                        logger.log(
+                            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+                        )
                     );
                 if (networkError)
-                    console.log(`[Network error]: ${networkError}`);
+                    logger.log(`[Network error]: ${networkError}`);
             }),
             createUploadLink({
                 uri: getGraphQLUrl(),

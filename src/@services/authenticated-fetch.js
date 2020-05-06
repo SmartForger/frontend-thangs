@@ -1,5 +1,7 @@
 import { authenticationService } from '@services';
 
+import { logger } from '../logging';
+
 function withAuthHeader(options, accessToken) {
     return {
         ...options,
@@ -16,12 +18,12 @@ const tryWithRefresh = async (originalFetch, history, url, options) => {
         const accessToken = localStorage.getItem('accessToken');
         const response = await originalFetch(
             url,
-            withAuthHeader(options, accessToken),
+            withAuthHeader(options, accessToken)
         );
 
         return response;
-    } catch {
-        console.log('in logout');
+    } catch (e) {
+        logger.error('Error refreshing token', e);
         authenticationService.logout();
         history.push('/login');
         return null;
@@ -37,7 +39,7 @@ const createAuthenticatedFetch = (originalFetch, history) => {
         const accessToken = localStorage.getItem('accessToken');
         const response = await originalFetch(
             url,
-            withAuthHeader(options, accessToken),
+            withAuthHeader(options, accessToken)
         );
 
         if (response.status === 401) {

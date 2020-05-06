@@ -6,6 +6,8 @@ import * as GraphqlService from '@services/graphql-service';
 import { colorHexStringToRGBArray, ensureScriptIsLoaded } from '@utilities';
 import axios from 'axios';
 
+import { logger } from '../logging';
+
 const graphqlService = GraphqlService.getInstance();
 
 export const useStl = url => {
@@ -30,7 +32,7 @@ export const useStl = url => {
                 setData(geometry);
                 setLoading(false);
             } catch (e) {
-                console.error('Could not load model data', e);
+                logger.error('Could not load model data', e);
 
                 setError(e);
             }
@@ -48,7 +50,7 @@ const HOOPS_WS_ENDPOINT_URI = process.env.REACT_APP_HOOPS_WS_ENDPOINT_URI;
 
 const debug = (...args) => {
     if (process.env.REACT_APP_DEBUG) {
-        console.debug(...args);
+        logger.debug(...args);
     }
 };
 
@@ -166,7 +168,7 @@ export const useHoopsViewer = modelFilename => {
                 }
             })
             .catch(err => {
-                console.error('Failure initializing Viewer:', err);
+                logger.error('Failure initializing Viewer:', err);
                 if (isActiveEffect) {
                     doTransition(TRANSITIONS.Error);
                 }
@@ -194,7 +196,7 @@ export const useHoopsViewer = modelFilename => {
                 try {
                     hoopsViewerRef.current.shutdown();
                 } catch (e) {
-                    console.error('HWV failed to shutdown:', e);
+                    logger.error('HWV failed to shutdown:', e);
                 } finally {
                     hoopsViewerRef.current = null;
                 }
@@ -270,7 +272,7 @@ export const useHoopsViewer = modelFilename => {
                 );
                 break;
             default:
-                console.error('Unsupported draw mode!', modeName);
+                logger.error('Unsupported draw mode!', modeName);
         }
     }, []);
 
@@ -306,7 +308,7 @@ export const useHoopsViewer = modelFilename => {
                 model.setNodesFaceColor(nodeIds, hColor);
             }
         } catch (e) {
-            console.error('Caught HOOPS error setting color:', e);
+            logger.error('Caught HOOPS error setting color:', e);
         }
     }, []);
 
@@ -334,25 +336,25 @@ export const useHoopsViewer = modelFilename => {
 };
 
 export function useDownloadModel(model) {
-  const [isDownloading, setIsDownloading] = useState();
-  const [hadError, setHadError] = useState();
-  const [getDownloadUrl] = graphqlService.useCreateDownloadUrlMutation(
-    model.id
-  );
+    const [isDownloading, setIsDownloading] = useState();
+    const [hadError, setHadError] = useState();
+    const [getDownloadUrl] = graphqlService.useCreateDownloadUrlMutation(
+        model.id
+    );
 
-  const downloadModel = async e => {
-    e.preventDefault();
-    setIsDownloading(true);
-    try {
-      const url = await getDownloadUrl();
-      window.open(url);
-    } catch (e) {
-      console.log('e', e);
-      setHadError(true);
-    }
+    const downloadModel = async event => {
+        event.preventDefault();
+        setIsDownloading(true);
+        try {
+            const url = await getDownloadUrl();
+            window.open(url);
+        } catch (error) {
+            logger.log(`Error getting model download url`, error);
+            setHadError(true);
+        }
 
-    setIsDownloading(false);
-  };
-  
-  return [isDownloading, hadError, downloadModel]
+        setIsDownloading(false);
+    };
+
+    return [isDownloading, hadError, downloadModel];
 }

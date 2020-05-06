@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { initializeErrorReporter } from 'errors';
+import { logger } from 'logging';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -11,7 +11,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-initializeErrorReporter({
+logger.init({
     googleCloudApiKey: process.env.REACT_APP_GOOGLE_CLOUD_ERROR_REPORTING_KEY,
     googleCloudProjectId: process.env.REACT_APP_GOOGLE_CLOUD_PROJECT_ID,
     environment: process.env.NODE_ENV,
