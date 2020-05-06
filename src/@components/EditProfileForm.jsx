@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import * as R from 'ramda';
 import { Button as _Button } from '@components/Button';
 import * as GraphqlService from '@services/graphql-service';
+import { logger } from '../logging';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -84,7 +85,7 @@ export function EditProfileForm({ user }) {
             });
         } catch (error) {
             setCurrentState('error');
-            console.error('Error when trying to update the user', error);
+            logger.error('Error when trying to update the user', error);
         }
         setCurrentState('saved');
     }

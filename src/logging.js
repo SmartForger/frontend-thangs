@@ -7,6 +7,7 @@ export const logger = {
     ensureInitialized,
     debug: console.debug.bind(console),
     info: console.info.bind(console),
+    log: console.log.bind(console),
     warn: console.warn.bind(console),
     error(message, ...args) {
         this.ensureInitialized();

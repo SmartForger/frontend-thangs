@@ -5,6 +5,8 @@ import 'react-image-crop/dist/ReactCrop.css';
 import Modal from 'react-modal';
 import md5 from 'md5';
 
+import { logger } from '../logging';
+
 import { Button, DarkButton } from '@components';
 import * as GraphqlService from '@services/graphql-service';
 
@@ -152,7 +154,7 @@ export function ChangeablePicture({ user, button, css }) {
         return new Promise((resolve, reject) => {
             canvas.toBlob(blob => {
                 if (!blob) {
-                    console.error('Canvas is empty');
+                    logger.error('Canvas is empty');
                     return;
                 }
                 blob.name = fileName;

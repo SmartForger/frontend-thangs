@@ -1,8 +1,9 @@
 import { authenticationService } from '@services';
+import { logger } from '../logging';
 
 const apiKey = process.env.REACT_APP_PENDO_API_KEY;
 if (apiKey === undefined) {
-    console.warn('Missing Pendo API key');
+    logger.warn('Missing Pendo API key');
 }
 
 const shouldTrack = () => apiKey !== undefined;
@@ -20,7 +21,7 @@ const initialize = history => {
                         o[m] ||
                         function() {
                             o._q[m === v[0] ? 'unshift' : 'push'](
-                                [m].concat([].slice.call(arguments, 0)),
+                                [m].concat([].slice.call(arguments, 0))
                             );
                         };
                 })(v[w]);
