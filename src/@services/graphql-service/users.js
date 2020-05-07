@@ -84,12 +84,14 @@ const parseUser = user => {
         user.profile && user.profile.avatarUrl
             ? createAppUrl(user.profile.avatarUrl)
             : '';
-    const models = user.models.map(parseModel);
-    const likedModels = user.likedModels.map(parseModel);
+    const models = user.models ? user.models.map(parseModel) : [];
+    const likedModels = user.likedModels
+        ? user.likedModels.map(parseModel)
+        : [];
     return {
         ...user,
-        models: user.models ? user.models.map(parseModel) : [],
-        likedModels: user.likedModels ? user.likedModels.map(parseModel) : [],
+        models,
+        likedModels,
         profile: {
             ...user.profile,
             avatarUrl,
