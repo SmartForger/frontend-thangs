@@ -8,6 +8,7 @@ import { ReactComponent as ShadedIcon } from '@svg/icon-shaded.svg';
 import { ReactComponent as CompositeIcon } from '@svg/icon-composite.svg';
 import { ReactComponent as WireframeIcon } from '@svg/icon-wireframe.svg';
 import { howToTitle } from '@style/text';
+import { BLACK_5 } from '@style/colors';
 
 const TextStyled = styled.div`
     max-width: 474px;
@@ -78,8 +79,8 @@ const ExitIconStyled = styled.div`
     top: 32px;
 
     svg {
-        fill: ${props => props.theme.viewerExitColor};
-        stroke: ${props => props.theme.viewerExitColor};
+        fill: ${BLACK_5};
+        stroke: ${BLACK_5};
     }
 `;
 
