@@ -7,6 +7,7 @@ import { ReactComponent as ColorIcon2 } from '@svg/icon-color-2.svg';
 import { ReactComponent as ShadedIcon } from '@svg/icon-shaded.svg';
 import { ReactComponent as CompositeIcon } from '@svg/icon-composite.svg';
 import { ReactComponent as WireframeIcon } from '@svg/icon-wireframe.svg';
+import { howToTitle } from '@style/text';
 
 const TextStyled = styled.div`
     max-width: 474px;
@@ -34,9 +35,7 @@ const Container = styled.div`
 `;
 
 const TitleStyled = styled.h4`
-    font-size: 24px;
-    font-family: ${props => props.theme.headerFont};
-    color: ${props => props.theme.viewerTitle};
+    ${howToTitle};
     margin-bottom: 24px;
 `;
 
