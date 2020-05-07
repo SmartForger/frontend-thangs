@@ -153,7 +153,7 @@ function AboutContent({ selected, user }) {
     return <MarkdownStyled>{description}</MarkdownStyled>;
 }
 
-function ModelsContent({ selected, user }) {
+function ModelsContent({ selected, user, stopPolling }) {
     const models = getModels(user);
     const { user: currentUser, loading } = useCurrentUser();
 
@@ -170,6 +170,10 @@ function ModelsContent({ selected, user }) {
         if (modelA.created > modelB.created) return -1;
         else return 1;
     });
+
+    if (R.none(isProcessing, models)) {
+        stopPolling();
+    }
 
     return (
         <ModelCollection
@@ -198,7 +202,7 @@ const TabGroupContainer = styled.div`
     width: 100%;
 `;
 
-function Tabs({ user }) {
+function Tabs({ user, stopPolling }) {
     const [selected, setSelected] = useState('models');
 
     const selectModel = () => setSelected('models');
@@ -225,7 +229,11 @@ function Tabs({ user }) {
                 />
             </TabTitleGroup>
             <TabContent>
-                <ModelsContent selected={selected === 'models'} user={user} />
+                <ModelsContent
+                    selected={selected === 'models'}
+                    user={user}
+                    stopPolling={stopPolling}
+                />
                 <LikesContent selected={selected === 'likes'} user={user} />
                 <AboutContent selected={selected === 'about'} user={user} />
             </TabContent>
@@ -278,7 +286,13 @@ const EditProfileButtonStyled = styled(EditProfileButton)`
 function Page() {
     const { id } = useParams();
 
-    const { loading, error, user } = graphqlService.useUserById(id);
+    const {
+        loading,
+        error,
+        user,
+        startPolling,
+        stopPolling,
+    } = graphqlService.useUserById(id);
 
     if (loading) {
         return <Spinner />;
@@ -301,12 +315,14 @@ function Page() {
         );
     }
 
+    startPolling(1000);
+
     return (
         <Frame>
             <ProfilePicture user={user} size="104px" />
             <Name>{user.fullName}</Name>
             <EditProfileButtonStyled viewedUser={user} />
-            <Tabs user={user} />
+            <Tabs user={user} stopPolling={stopPolling} />
         </Frame>
     );
 }

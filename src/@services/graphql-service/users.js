@@ -102,12 +102,15 @@ const parseUserPayload = data => {
 };
 
 const useUserById = id => {
-    const { loading, error, data } = useQuery(USER_QUERY, {
-        variables: { id },
-    });
+    const { loading, error, data, startPolling, stopPolling } = useQuery(
+        USER_QUERY,
+        {
+            variables: { id },
+        }
+    );
     const user = parseUserPayload(data);
 
-    return { loading, error, user };
+    return { loading, error, user, startPolling, stopPolling };
 };
 
 const useUpdateUser = () => {
