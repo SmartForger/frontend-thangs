@@ -104,6 +104,10 @@ export function Uploader({ file, setFile, showError = true }) {
         accept: MODEL_FILE_EXTS,
     });
 
+    const handleBrowseClick = e => {
+        e.preventDefault();
+    };
+
     return (
         <div {...getRootProps()}>
             <input {...getInputProps({ multiple: false })} />
@@ -145,7 +149,7 @@ export function Uploader({ file, setFile, showError = true }) {
                             Drag & Drop model
                             <br />
                             or{' '}
-                            <TextButton>
+                            <TextButton onClick={handleBrowseClick}>
                                 <LinkColor>browse</LinkColor>
                             </TextButton>{' '}
                             to choose file
