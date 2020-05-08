@@ -196,3 +196,8 @@ export const commentUsername = css`
     font-size: 16px;
     font-weight: 500;
 `;
+export const howToTitle = css`
+    font-size: 24px;
+    font-family: ${LEXEND_DECA};
+    color: ${BLACK_1};
+`;
