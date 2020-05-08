@@ -30,7 +30,7 @@ const tryWithRefresh = async (originalFetch, history, url, options) => {
 
         if (isErrorResponse(response)) {
             const error = new Error();
-            error.message = `Received ${response.status} when trying to refresh access token`;
+            error.message = `Received ${response.status} when trying to request with renewed access token`;
             throw error;
         }
 
