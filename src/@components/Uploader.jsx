@@ -108,7 +108,7 @@ export function Uploader({ file, setFile, showError = true }) {
             <UploadFrame dragactive={isDragActive}>
                 {showError ? (
                     <FlexColumn>
-                        <ErrorIcon />
+                        <ErrorIconStyled />
                         <InfoMessage>
                             Sorry, an unexpected error occurred. Please wait a
                             moment and try to save the model again.
