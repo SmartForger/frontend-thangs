@@ -129,6 +129,10 @@ export function Uploader({ file, setFile, showError = true }) {
         accept: MODEL_FILE_EXTS,
     });
 
+    const handleBrowseClick = e => {
+        e.preventDefault();
+    };
+
     return (
         <div {...getRootProps({ onClick: preventClickingWhileFull })}>
             <input {...getInputProps({ multiple: false })} />
@@ -136,9 +140,9 @@ export function Uploader({ file, setFile, showError = true }) {
                 {showError ? (
                     <FlexColumn>
                         <IconButton onClick={cancelUpload}>
-                            <ExitIcon />
+                            <ErrorIconStyled />
                         </IconButton>
-                        <ErrorIcon />
+
                         <InfoMessage>
                             Sorry, an unexpected error occurred. Please wait a
                             moment and try to save the model again.
@@ -178,7 +182,11 @@ export function Uploader({ file, setFile, showError = true }) {
                         <InfoMessage>
                             Drag & Drop model
                             <br />
-                            or <LinkColor>browse</LinkColor> to choose file
+                            or{' '}
+                            <TextButton onClick={handleBrowseClick}>
+                                <LinkColor>browse</LinkColor>
+                            </TextButton>{' '}
+                            to choose file
                         </InfoMessage>
                     </FlexColumn>
                 )}

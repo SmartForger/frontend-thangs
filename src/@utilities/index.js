@@ -16,3 +16,4 @@ export const colorHexStringToRGBArray = colorStr =>
 
 export const isProcessing = R.propEq('uploadStatus', 'PROCESSING');
 export const isError = R.propEq('uploadStatus', 'ERROR');
+export const isCompleted = R.propEq('uploadStatus', 'COMPLETED');

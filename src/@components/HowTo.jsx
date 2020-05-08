@@ -1,11 +1,14 @@
-import React  from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { TextButton } from '@components/Button';
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg';
 import { ReactComponent as ColorIcon1 } from '@svg/icon-color-1.svg';
 import { ReactComponent as ColorIcon2 } from '@svg/icon-color-2.svg';
 import { ReactComponent as ShadedIcon } from '@svg/icon-shaded.svg';
 import { ReactComponent as CompositeIcon } from '@svg/icon-composite.svg';
 import { ReactComponent as WireframeIcon } from '@svg/icon-wireframe.svg';
+import { howToTitle } from '@style/text';
+import { BLACK_5 } from '@style/colors';
 
 const TextStyled = styled.div`
     max-width: 474px;
@@ -33,9 +36,7 @@ const Container = styled.div`
 `;
 
 const TitleStyled = styled.h4`
-    font-size: 24px;
-    font-family: ${props => props.theme.headerFont};
-    color: ${props => props.theme.viewerTitle};
+    ${howToTitle};
     margin-bottom: 24px;
 `;
 
@@ -73,14 +74,13 @@ function Icons() {
 }
 
 const ExitIconStyled = styled.div`
-    cursor: pointer;
     position: absolute;
     right: 32px;
     top: 32px;
 
     svg {
-        fill: ${props => props.theme.viewerExitColor};
-        stroke: ${props => props.theme.viewerExitColor};
+        fill: ${BLACK_5};
+        stroke: ${BLACK_5};
     }
 `;
 
@@ -89,20 +89,23 @@ const Frame = styled.div`
     flex-direction: column;
     height: 100%;
     justify-content: center;
-`
+    cursor: pointer;
+`;
 
-export function HowTo({  setSeenHowTo }) {
-  const handleClick = () => setSeenHowTo(true);
-  return (
-    <Frame>
-      <ExitIconStyled onClick={handleClick}>
-        <ExitIcon />
-      </ExitIconStyled>
-      <Container>
-        <Title />
-        <Text />
-        <Icons />
-      </Container>
-    </Frame>
-  );
+export function HowTo({ setSeenHowTo }) {
+    const handleClick = () => setSeenHowTo(true);
+    return (
+        <Frame onClick={handleClick}>
+            <TextButton>
+                <ExitIconStyled>
+                    <ExitIcon />
+                </ExitIconStyled>
+            </TextButton>
+            <Container>
+                <Title />
+                <Text />
+                <Icons />
+            </Container>
+        </Frame>
+    );
 }
