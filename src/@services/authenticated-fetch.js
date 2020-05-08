@@ -1,3 +1,4 @@
+import * as R from 'ramda';
 import { authenticationService } from '@services';
 
 import { logger } from '../logging';
@@ -12,6 +13,12 @@ function withAuthHeader(options, accessToken) {
     };
 }
 
+const is500 = R.test(/^5../);
+const is400 = R.test(/^4../);
+
+function isErrorResponse(response) {
+    return is500(response.status) || is400(response.status);
+}
 const tryWithRefresh = async (originalFetch, history, url, options) => {
     try {
         await authenticationService.refreshAccessToken();
@@ -20,6 +27,12 @@ const tryWithRefresh = async (originalFetch, history, url, options) => {
             url,
             withAuthHeader(options, accessToken)
         );
+
+        if (isErrorResponse(response)) {
+            const error = new Error();
+            error.message = `Received ${response.status} when trying to refresh access token`;
+            throw error;
+        }
 
         return response;
     } catch (e) {
