@@ -100,11 +100,13 @@ export const BrandButton = styled.button`
     ${BtnStyle};
     ${matchingButtonText};
     ${props => props.theme.shadow};
-    padding: 6px 24px 6px 32px;
     background-color: ${YELLOW_1};
+    padding: 6px 12px;
 
     &:hover {
         ${matchingButtonHoverText};
         background-color: ${YELLOW_3};
     }
+
+    ${allowCssProp};
 `;

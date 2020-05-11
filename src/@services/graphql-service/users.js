@@ -27,6 +27,7 @@ export const USER_QUERY = gql`
                     imgSrc
                 }
                 uploadStatus
+                uploadedFile
             }
             inviteCode
             likedModels {
@@ -43,6 +44,7 @@ export const USER_QUERY = gql`
                     id
                     imgSrc
                 }
+                uploadedFile
             }
         }
     }
@@ -82,10 +84,14 @@ const parseUser = user => {
         user.profile && user.profile.avatarUrl
             ? createAppUrl(user.profile.avatarUrl)
             : '';
+    const models = user.models ? user.models.map(parseModel) : [];
+    const likedModels = user.likedModels
+        ? user.likedModels.map(parseModel)
+        : [];
     return {
         ...user,
-        models: user.models ? user.models.map(parseModel) : [],
-        likedModels: user.likedModels ? user.likedModels.map(parseModel) : [],
+        models,
+        likedModels,
         profile: {
             ...user.profile,
             avatarUrl,
@@ -102,12 +108,15 @@ const parseUserPayload = data => {
 };
 
 const useUserById = id => {
-    const { loading, error, data } = useQuery(USER_QUERY, {
-        variables: { id },
-    });
+    const { loading, error, data, startPolling, stopPolling } = useQuery(
+        USER_QUERY,
+        {
+            variables: { id },
+        }
+    );
     const user = parseUserPayload(data);
 
-    return { loading, error, user };
+    return { loading, error, user, startPolling, stopPolling };
 };
 
 const useUpdateUser = () => {

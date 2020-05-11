@@ -10,6 +10,7 @@ import { ReactComponent as Logo } from '@svg/logo.svg';
 import { ReactComponent as LogoText } from '@svg/logo-text.svg';
 import { linkText } from '@style/text';
 import { Button, BrandButton } from '@components/Button';
+import { largerThanMd } from '@style/media-queries';
 
 const NOTIFICATIONS_ENABLED = false;
 const NOTIFICATIONS_URL = '#';
@@ -29,11 +30,14 @@ const FixedHeader = styled.div`
     z-index: 2;
 `;
 
-const Boundary = styled.div`
+const DesktopBoundary = styled.div`
     margin: 48px auto 16px;
+    padding: 0 16px;
     max-width: ${props => props.theme.maxWidth}
     position: relative;
 `;
+
+const allowCssProp = props => (props.css ? props.css : '');
 
 const Row = styled.div`
     display: flex;
@@ -41,8 +45,10 @@ const Row = styled.div`
     align-items: center;
 
     :not(:last-of-type) {
-        margin-bottom: 25px;
+        margin-bottom: 24px;
     }
+
+    ${allowCssProp};
 `;
 
 const TopRow = styled(Row)`
@@ -88,23 +94,38 @@ const NotificationsButton = () => {
 };
 
 const UploadButton = styled(Button)`
-    width: 124px;
-    margin-left: 32px;
+    width: 100%;
+
+    ${largerThanMd} {
+        margin-left: 32px;
+        width: 124px;
+    }
 `;
 
+function UserPicture({ user }) {
+    return (
+        <Link to="/profile/">
+            <ProfilePicture user={user} size="50px" />
+        </Link>
+    );
+}
+
+function Upload({ css }) {
+    return (
+        <LinkStyled to={`/upload`} css={css}>
+            <UploadButton>Upload Model</UploadButton>
+        </LinkStyled>
+    );
+}
 const UserNav = () => {
     const { user } = useCurrentUser();
 
     if (user) {
         return (
             <Row>
-                <Link to="/profile/">
-                    <ProfilePicture user={user} size="50px" />
-                </Link>
+                <UserPicture user={user} />
                 <NotificationsButton />
-                <Link to={`/upload`}>
-                    <UploadButton>Upload Model</UploadButton>
-                </Link>
+                <Upload />
             </Row>
         );
     }
@@ -121,34 +142,121 @@ const Flex = styled.div`
     display: flex;
 `;
 
+const LinkStyled = styled(Link)`
+    ${allowCssProp};
+`;
+
+function Matching({ css }) {
+    return (
+        <LinkStyled to={'/matching'} css={css}>
+            <BrandButton
+                css={`
+                    width: 100%;
+                    ${largerThanMd} {
+                        padding: 6px 24px 6px 32px;
+                    }
+                `}
+            >
+                <MatchingIconStyled />
+                Search by Model
+            </BrandButton>
+        </LinkStyled>
+    );
+}
+
+function DesktopHeader({ variant }) {
+    return (
+        <DesktopOnly>
+            <DesktopBoundary>
+                <TopRow>
+                    <div>
+                        <Row>
+                            <Link to="/">
+                                <LogoStyled />
+                                <LogoText />
+                            </Link>
+                        </Row>
+                    </div>
+                    {variant !== 'logo-only' && <UserNav />}
+                </TopRow>
+                {variant !== 'logo-only' && (
+                    <Flex>
+                        <Matching />
+                        <SearchBar />
+                    </Flex>
+                )}
+            </DesktopBoundary>
+        </DesktopOnly>
+    );
+}
+
+const MobileOnly = styled.span`
+    ${largerThanMd} {
+        display: none;
+    }
+`;
+
+const DesktopOnly = styled.span`
+    display: none;
+
+    ${largerThanMd} {
+        display: block;
+    }
+`;
+
+const MobileBoundary = styled.div`
+    margin: 16px auto;
+    padding: 0 12px;
+`;
+
+function MobileHeader({ variant }) {
+    const { user } = useCurrentUser();
+    return (
+        <MobileOnly>
+            <MobileBoundary>
+                <TopRow>
+                    <Link to="/">
+                        <LogoStyled />
+                        <LogoText />
+                    </Link>
+                    {variant !== 'logo-only' && user && (
+                        <UserPicture user={user} />
+                    )}
+                </TopRow>
+                {variant !== 'logo-only' && (
+                    <>
+                        <Row
+                            css={`
+                                margin-bottom: 16px;
+                            `}
+                        >
+                            <Matching
+                                css={`
+                                    flex-basis: 50%;
+                                    margin-right: 24px;
+                                    min-width: 180px;
+                                `}
+                            />
+                            <Upload
+                                css={`
+                                    flex-basis: 50%;
+                                `}
+                            />
+                        </Row>
+                        <SearchBar />
+                    </>
+                )}
+            </MobileBoundary>
+        </MobileOnly>
+    );
+}
+
 const Header = ({ inverted, variant }) => {
     return (
         <>
             <FixedHeader inverted={inverted}>
-                <Boundary>
-                    <TopRow>
-                        <div>
-                            <Row>
-                                <Link to="/">
-                                    <LogoStyled />
-                                    <LogoText />
-                                </Link>
-                            </Row>
-                        </div>
-                        {variant !== 'logo-only' && <UserNav />}
-                    </TopRow>
-                    {variant !== 'logo-only' && (
-                        <Flex>
-                            <Link to={'/matching'}>
-                                <BrandButton>
-                                    <MatchingIconStyled />
-                                    Search by Model
-                                </BrandButton>
-                            </Link>
-                            <SearchBar />
-                        </Flex>
-                    )}
-                </Boundary>
+                <MobileHeader variant={variant} />
+                <DesktopHeader variant={variant} />
             </FixedHeader>
         </>
     );

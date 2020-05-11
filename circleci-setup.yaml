@@ -1,9 +1,9 @@
 runtime: python37
-service: thangs-react
+service: staging-thangs-frontend
 
 instance_class: F1
-automatic_scaling:
-  min_instances: 1
+# automatic_scaling:
+#   min_instances: 1
   # TODO: Configure min_idle_instances if we need idle instances handy to scale.
   # min_idle_instances: ...
 
@@ -23,9 +23,9 @@ handlers:
   - url: /(.*)\.png
     static_files: build/\1.png
     upload: build/(.*).png
-  - url: /(info.html)
-    static_files: build/\1
-    upload: build/info.html
+  - url: /info.html
+    static_files: build/info-staging.html
+    upload: build/info-staging.html
     expiration: 1s
   - url: /(.*)
     static_files: build/index.html

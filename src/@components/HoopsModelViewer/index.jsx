@@ -13,7 +13,7 @@ import { useHoopsViewer } from '@customHooks';
 const WebViewContainer = styled.div`
     position: relative;
     width: 100%;
-    height: 100%;
+    flex-grow: 1;
 
     background-color: #ffffff;
 
@@ -23,7 +23,7 @@ const WebViewContainer = styled.div`
 `;
 
 const LoadingContainer = styled.div`
-    padding-top: 128px;
+    padding-top: 264px;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
@@ -56,8 +56,8 @@ function HoopsModelViewer({ className, model }) {
     };
 
     return (
-        <div>
-            <WebViewContainer className={className}>
+        <div className={className}>
+            <WebViewContainer>
                 <StatusIndicator status={hoops.status} />
                 <div ref={containerRef} />
             </WebViewContainer>

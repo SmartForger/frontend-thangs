@@ -52,7 +52,7 @@ function CardContents({
         <CardContainer className={className}>
             <ModelThumbnail
                 model={model}
-                thumbnailUrl={model.attachment && model.attachment.imgSrc}
+                thumbnailUrl={model.thumbnailUrl}
                 showOwner={showOwner}
                 hovered={hovered}
                 showStatusOverlay={showStatusOverlay}
@@ -81,10 +81,7 @@ function ModelCard({ className, model, withOwner }) {
     const handleMouseEnter = () => setHovered(true);
     const handleMouseLeave = () => setHovered(false);
 
-    const hasCompletedSuccessfully =
-        isCompleted(model) && model.attachment && model.attachment.imgSrc;
-
-    if (!hasCompletedSuccessfully) {
+    if (!isCompleted(model)) {
         return (
             <div
                 onMouseEnter={handleMouseEnter}

@@ -5,7 +5,14 @@ import { ReactComponent as UploadIcon } from '@svg/upload-icon.svg';
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg';
 import { ReactComponent as ModelPyramid } from '@svg/model-pyramid.svg';
 import { UploadFrame } from '@components/UploadFrame';
+import { TextButton } from '@components/Button';
+
 import { infoMessageText, smallInfoMessageText, linkText } from '@style/text';
+import { GREY_3 } from '@style/colors';
+
+const ErrorIconStyled = styled(ErrorIcon)`
+    color: ${GREY_3};
+`;
 
 const UploadIconStyled = styled(UploadIcon)`
     margin-bottom: 32px;
@@ -97,13 +104,17 @@ export function Uploader({ file, setFile, showError = true }) {
         accept: MODEL_FILE_EXTS,
     });
 
+    const handleBrowseClick = e => {
+        e.preventDefault();
+    };
+
     return (
         <div {...getRootProps()}>
             <input {...getInputProps({ multiple: false })} />
             <UploadFrame dragactive={isDragActive}>
                 {showError ? (
                     <FlexColumn>
-                        <ErrorIcon />
+                        <ErrorIconStyled />
                         <InfoMessage>
                             Sorry, an unexpected error occurred. Please wait a
                             moment and try to save the model again.
@@ -125,7 +136,7 @@ export function Uploader({ file, setFile, showError = true }) {
                     </FlexColumn>
                 ) : errorState === 'TOO_BIG' ? (
                     <FlexColumn>
-                        <ErrorIcon />
+                        <ErrorIconStyled />
                         <InfoMessage>
                             File over {FILE_SIZE_LIMITS.hard.pretty}. Try{' '}
                             uploading a different file.
@@ -137,7 +148,11 @@ export function Uploader({ file, setFile, showError = true }) {
                         <InfoMessage>
                             Drag & Drop model
                             <br />
-                            or <LinkColor>browse</LinkColor> to choose file
+                            or{' '}
+                            <TextButton onClick={handleBrowseClick}>
+                                <LinkColor>browse</LinkColor>
+                            </TextButton>{' '}
+                            to choose file
                         </InfoMessage>
                     </FlexColumn>
                 )}

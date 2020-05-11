@@ -1,3 +1,4 @@
+import * as R from 'ramda';
 import { BehaviorSubject } from 'rxjs';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
@@ -121,13 +122,30 @@ const refreshAccessToken = async () => {
     return await refreshingAccessToken;
 };
 
+const is500 = R.test(/^5../);
+const is400 = R.test(/^4../);
+
+function isErrorResponse(response) {
+    return is500(response.status) || is400(response.status);
+}
 const _refreshToken = async () => {
     const refreshToken = localStorage.getItem('refreshToken');
 
     const url = getApiUrl(`token/refresh/`);
 
     const response = await axios.post(url, { refresh: refreshToken });
-    const { access } = response.data;
+
+    // Reset singleton so that we can enable future refreshes
+    refreshingAccessToken = null;
+
+    if (isErrorResponse(response)) {
+        const error = new Error();
+        error.message = `Received ${response.status} when trying to refresh access token`;
+        throw error;
+    }
+
+    const { access, refresh } = response.data;
+    localStorage.setItem('refreshToken', refresh);
 
     // TODO: extract this away into an `updateUser()` function
     const user = currentUserSubject.value;

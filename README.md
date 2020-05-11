@@ -23,6 +23,7 @@ REACT_APP_HOOPS_WS_ENDPOINT_URI=wss://hoops-scs-dot-gcp-and-physna.uc.r.appspot.
 
 REACT_APP_GOOGLE_CLOUD_PROJECT_ID=gcp-and-physna
 REACT_APP_GOOGLE_CLOUD_ERROR_REPORTING_KEY=AIzaSyCUmGwa9UJArRbPKt5YvT8ogf8EnEJCRyQ
+REACT_APP_THUMBNAILS_HOST=http://localhost:1000/convert
 ```
 
 4. Run the following command in the terminal to start the app:
@@ -244,5 +245,8 @@ gsutil cors set cors-production.json gs://gcp-and-physna.appspot.com
 Update the CORS rules on the staging bucket:
 
 ```bash
-gsutil cors set cors-staging.json gs://thangs-uploads-staging
+gsutil cors set cors-staging.json gs://staging-thangs-uploads
 ```
+
+### CircleCi Staging Deploy
+*Coming Soon*

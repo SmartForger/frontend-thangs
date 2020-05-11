@@ -84,7 +84,7 @@ const ThumbnailContainer = styled.div`
     > img {
         margin: auto;
         display: block;
-        max-width: calc(100% - 80px);
+        max-width: calc(100% - 24px);
         height: auto;
 
         :before {
