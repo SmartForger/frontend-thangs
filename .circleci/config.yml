@@ -4,16 +4,21 @@ workflows:
   version: 2
   deploy-gcloud:
     jobs:
-      - deploy:
+      - deploy-staging:
           context: gcp-and-physna
           filters:
             branches:
               only:
-                - circleci-setup
                 - development
+      - deploy-production:
+          context: gcp-and-physna
+          filters:
+            branches:
+              only:
+                - master
 
 jobs:
-  deploy:
+  deploy-staging:
     docker:
       - image: google/cloud-sdk
     parameters:
@@ -65,6 +70,69 @@ jobs:
           #       we can run staging steps in the deploy-staging workflow and
           #       production steps in the deploy-production workflow.
           command: yarn build:staging
+      - run:
+          name: "Deploy build"
+          command: |
+            # Store service account
+            echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcloud-service-key.json
+            # Initialize gcloud CLI
+            gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+            gcloud app deploy --quiet <<parameters.Stack>>.yaml <<parameters.NoPromote>> <<parameters.Version>>
+
+  deploy-production:
+    docker:
+      - image: google/cloud-sdk
+    parameters:
+      NoPromote:
+        default: "--no-promote"
+        type: string
+        description: "add --no-promote to deploy without routing traffic to new version"
+      Version:
+        default: ""
+        type: string
+        description: "add --version someVersionName if you want to assign a version"
+      Stack:
+        default: ${CIRCLE_BRANCH}
+        type: string
+    steps:
+      - checkout
+      - run:
+          name: Install node
+          command: |
+            curl -sL https://deb.nodesource.com/setup_12.x | bash -
+            apt-get install -y nodejs
+      - run:
+          name: Install yarn
+          command: |
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+            echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+            apt update && apt install yarn
+      - run:
+          name: Check node & yarn versions
+          command: |
+            node -v
+            yarn -v
+      - restore_cache:
+          name: Restore yarn packages from cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install dependencies
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          name: Save yarn packages to cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+      - run:
+          name: "Build release"
+          # Build staging release
+          # TODO: This needs to be pulled into a separate job & workflow so that
+          #       we can run staging steps in the deploy-staging workflow and
+          #       production steps in the deploy-production workflow.
+          command: yarn build
       - run:
           name: "Deploy build"
           command: |
