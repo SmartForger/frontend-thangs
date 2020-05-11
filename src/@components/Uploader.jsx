@@ -4,11 +4,11 @@ import { useDropzone } from 'react-dropzone';
 import { ReactComponent as UploadIcon } from '@svg/upload-icon.svg';
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg';
 import { ReactComponent as ModelPyramid } from '@svg/model-pyramid.svg';
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg';
 import { UploadFrame } from '@components/UploadFrame';
 import { TextButton } from '@components/Button';
-
 import { infoMessageText, smallInfoMessageText, linkText } from '@style/text';
-import { GREY_3 } from '@style/colors';
+import { GREY_3, WHITE_3 } from '@style/colors';
 
 const ErrorIconStyled = styled(ErrorIcon)`
     color: ${GREY_3};
@@ -27,6 +27,18 @@ const FlexColumn = styled.div`
 
 const LinkColor = styled.span`
     ${linkText};
+`;
+
+const IconButton = styled(TextButton)`
+    position: absolute;
+    right: 32px;
+    top: 32px;
+    svg {
+        fill: ${WHITE_3};
+        stroke: ${WHITE_3};
+        height: 48px;
+        width: 48px;
+    }
 `;
 
 const MODEL_FILE_EXTS = [
@@ -99,6 +111,19 @@ export function Uploader({ file, setFile, showError = true }) {
         [setFile]
     );
 
+    const preventClickingWhileFull = e => {
+        if (file) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    };
+
+    const cancelUpload = e => {
+        e.preventDefault();
+        e.stopPropagation();
+        setErrorState(null);
+        setFile(null);
+    };
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         accept: MODEL_FILE_EXTS,
@@ -109,12 +134,15 @@ export function Uploader({ file, setFile, showError = true }) {
     };
 
     return (
-        <div {...getRootProps()}>
+        <div {...getRootProps({ onClick: preventClickingWhileFull })}>
             <input {...getInputProps({ multiple: false })} />
-            <UploadFrame dragactive={isDragActive}>
+            <UploadFrame dragactive={isDragActive} currentFile={file}>
                 {showError ? (
                     <FlexColumn>
-                        <ErrorIconStyled />
+                        <IconButton onClick={cancelUpload}>
+                            <ErrorIconStyled />
+                        </IconButton>
+
                         <InfoMessage>
                             Sorry, an unexpected error occurred. Please wait a
                             moment and try to save the model again.
@@ -122,6 +150,9 @@ export function Uploader({ file, setFile, showError = true }) {
                     </FlexColumn>
                 ) : file ? (
                     <FlexColumn>
+                        <IconButton onClick={cancelUpload}>
+                            <ExitIcon />
+                        </IconButton>
                         <ModelPyramid />
                         <InfoMessage>
                             <strong>File:</strong> {file.name}
@@ -136,6 +167,9 @@ export function Uploader({ file, setFile, showError = true }) {
                     </FlexColumn>
                 ) : errorState === 'TOO_BIG' ? (
                     <FlexColumn>
+                        <IconButton onClick={cancelUpload}>
+                            <ExitIcon />
+                        </IconButton>
                         <ErrorIconStyled />
                         <InfoMessage>
                             File over {FILE_SIZE_LIMITS.hard.pretty}. Try{' '}
