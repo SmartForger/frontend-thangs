@@ -319,7 +319,11 @@ function Page() {
 
     return (
         <Frame>
-            <ProfilePicture user={user} size="104px" />
+            <ProfilePicture
+                size="104px"
+                name={user.fullName}
+                src={user.profile.avatarUrl}
+            />
             <Name>{user.fullName}</Name>
             <EditProfileButtonStyled viewedUser={user} />
             <Tabs user={user} stopPolling={stopPolling} />

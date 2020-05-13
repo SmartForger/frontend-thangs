@@ -58,7 +58,11 @@ const Comment = ({ comment }) => {
     return (
         <CommentStyled>
             <Link to={`/profile/${owner.id}`}>
-                <ProfilePictureStyled size="48px" user={owner} />
+                <ProfilePictureStyled
+                    size="48px"
+                    name={owner.fullName}
+                    src={owner.profile.avatarUrl}
+                />
             </Link>
             <FlexGrow>
                 <Box>

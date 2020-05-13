@@ -211,7 +211,7 @@ const InviteCode = ({ code }) => {
 const StaticProfile = ({ user }) => {
     return (
         <>
-            <ProfilePicture user={user} />
+            <ProfilePicture name={user.fullName} src={user.profile.avatarUrl} />
             <UserDetails>
                 <div>{user.username}</div>
                 <div>{user.email}</div>

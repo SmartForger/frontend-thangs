@@ -2,8 +2,8 @@ import React from 'react';
 import { ModelCard } from './ModelCard';
 import styled from 'styled-components';
 import * as R from 'ramda';
-import { zeroStateText } from '@style/text';
 import { isError, isProcessing } from '@utilities';
+import { NoResults } from '@components/NoResults';
 
 const ModelsStyled = styled.div`
     display: grid;
@@ -13,15 +13,6 @@ const ModelsStyled = styled.div`
     );
     gap: 16px;
     width: 100%;
-`;
-
-const NoResultsFrame = styled.div`
-    ${zeroStateText};
-    background-color: ${props => props.theme.zeroStateBackground};
-    padding: 16px;
-    border-radius: 8px;
-    width: 100%;
-    box-sizing: border-box;
 `;
 
 const rejectErrorsAndProcessing = R.pipe(
@@ -37,7 +28,7 @@ export function ModelCollection({
     showAllModels,
 }) {
     if (!models) {
-        return <NoResultsFrame>{noResultsText}</NoResultsFrame>;
+        return <NoResults>{noResultsText}</NoResults>;
     }
 
     const modelsToRender = showAllModels
@@ -45,7 +36,7 @@ export function ModelCollection({
         : rejectErrorsAndProcessing(models);
 
     if (R.isEmpty(modelsToRender)) {
-        return <NoResultsFrame>{noResultsText}</NoResultsFrame>;
+        return <NoResults>{noResultsText}</NoResults>;
     }
 
     return (

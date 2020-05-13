@@ -67,11 +67,9 @@ const StatusOverlay = css`
 const ThumbnailContainer = styled.div`
     ${thumbnailErrorText};
     position: relative;
-    border-radius: 8px 8px 0px 0px;
     height: 100%;
-    min-height: 205px;
     overflow: hidden;
-    padding: 8px 8px 0;
+    padding: 8px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -143,12 +141,12 @@ const SpinnerStyled = styled(Spinner)`
     }
 `;
 
-function ErrorOverlay({ model }) {
+function ErrorOverlay({ id }) {
     const { user } = useCurrentUser();
     const [
         deleteModel,
         { loading, error },
-    ] = graphqlService.useDeleteModelMutation(model.id, user.id);
+    ] = graphqlService.useDeleteModelMutation(id, user.id);
 
     const handleClick = e => {
         e.preventDefault();
@@ -176,24 +174,28 @@ function ErrorOverlay({ model }) {
 }
 
 export function ModelThumbnail({
-    model,
+    id,
+    uploadStatus,
+    name,
     thumbnailUrl: src,
     children,
     showOwner,
     hovered,
     showStatusOverlay,
+    className,
 }) {
     return (
         <ThumbnailContainer
             showOwner={showOwner}
             showStatusOverlay={showStatusOverlay}
+            className={className}
         >
-            {isError(model) || !src ? (
-                <ErrorOverlay model={model} />
+            {isError({ uploadStatus }) || !src ? (
+                <ErrorOverlay id={id} />
             ) : (
                 <>
-                    {src && <img src={src} alt={model.name} />}
-                    {isProcessing(model) && (
+                    {src && <img src={src} alt={name} />}
+                    {isProcessing({ uploadStatus }) && (
                         <StatusOverlayText>
                             <LoadingIcon />
                             <PlaceholderText>
@@ -210,7 +212,7 @@ export function ModelThumbnail({
             )}
             {hovered ? (
                 <Overlay>
-                    <ModelName>{model.name}</ModelName>
+                    <ModelName>{name}</ModelName>
                 </Overlay>
             ) : null}
         </ThumbnailContainer>

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { SearchBar } from '@components/SearchBar';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { useCurrentUser } from '@customHooks/Users';
+import { useHasUnreadNotifications } from '@customHooks/Notifications';
 import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
 import { ReactComponent as MatchingIcon } from '@svg/matching-icon.svg';
 import { ReactComponent as Logo } from '@svg/logo.svg';
@@ -11,9 +12,9 @@ import { ReactComponent as LogoText } from '@svg/logo-text.svg';
 import { linkText } from '@style/text';
 import { Button, BrandButton } from '@components/Button';
 import { largerThanMd } from '@style/media-queries';
+import { GREY_5, RED_2 } from '@style/colors';
 
-const NOTIFICATIONS_ENABLED = false;
-const NOTIFICATIONS_URL = '#';
+const NOTIFICATIONS_URL = '/notifications';
 
 const LogoStyled = styled(Logo)`
     margin-right: 12px;
@@ -80,15 +81,15 @@ const MatchingIconStyled = styled(MatchingIcon)`
 
 const NotificationIconStyled = styled(NotificationIcon)`
     margin-left: 32px;
+    color: ${props => (props.unread ? RED_2 : GREY_5)};
 `;
 
 const NotificationsButton = () => {
-    if (!NOTIFICATIONS_ENABLED) {
-        return null;
-    }
+    const { hasUnreadNotifications } = useHasUnreadNotifications();
+
     return (
         <Link to={NOTIFICATIONS_URL}>
-            <NotificationIconStyled />
+            <NotificationIconStyled unread={hasUnreadNotifications ? 1 : 0} />
         </Link>
     );
 };
@@ -105,7 +106,11 @@ const UploadButton = styled(Button)`
 function UserPicture({ user }) {
     return (
         <Link to="/profile/">
-            <ProfilePicture user={user} size="50px" />
+            <ProfilePicture
+                name={user.fullName}
+                src={user.profile.avatarUrl}
+                size="50px"
+            />
         </Link>
     );
 }
@@ -117,6 +122,7 @@ function Upload({ css }) {
         </LinkStyled>
     );
 }
+
 const UserNav = () => {
     const { user } = useCurrentUser();
 

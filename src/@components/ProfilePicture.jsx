@@ -14,16 +14,15 @@ const AvatarStyled = styled(Avatar)`
 
 export function ProfilePicture({
     className,
+    name,
+    src,
     user,
     size = DEFAULT_AVATAR_SIZE,
     color = DEFAULT_AVATAR_COLOR,
 }) {
-    const avatarName = user.fullName;
-    const src = user.profile && user.profile.avatarUrl;
-
     return (
         <AvatarStyled
-            name={avatarName}
+            name={name}
             src={src}
             color={color}
             size={size}

@@ -6,17 +6,8 @@ import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
 import { thumbnailActivityCountText } from '@style/text';
 import { ModelThumbnail } from '@components/ModelThumbnail';
+import { Card } from '@components/Card';
 import { isCompleted } from '@utilities';
-
-const CardContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-
-    background: ${props => props.theme.cardBackground};
-    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
-    border-radius: 8px;
-    height: 100%;
-`;
 
 const CardContent = styled.div`
     padding: 8px 16px;
@@ -41,6 +32,12 @@ const HeartIconStyled = styled(HeartIcon)`
     fill: ${props => props.theme.cardHeartColor};
 `;
 
+const ModelThumbnailStyled = styled(ModelThumbnail)`
+    padding-bottom: 0;
+    min-height: 205px;
+    border-radius: 8px 8px 0px 0px;
+`;
+
 function CardContents({
     className,
     model,
@@ -49,14 +46,16 @@ function CardContents({
     showStatusOverlay,
 }) {
     return (
-        <CardContainer className={className}>
-            <ModelThumbnail
-                model={model}
+        <Card className={className}>
+            <ModelThumbnailStyled
+                id={model.id}
+                uploadStatus={model.uploadStatus}
+                name={model.name}
                 thumbnailUrl={model.thumbnailUrl}
                 showOwner={showOwner}
                 hovered={hovered}
                 showStatusOverlay={showStatusOverlay}
-            ></ModelThumbnail>
+            ></ModelThumbnailStyled>
             <CardContent>
                 {showOwner && <UserInline user={model.owner} />}
                 <ActivityIndicators>
@@ -70,7 +69,7 @@ function CardContents({
                     </ActivityCount>
                 </ActivityIndicators>
             </CardContent>
-        </CardContainer>
+        </Card>
     );
 }
 

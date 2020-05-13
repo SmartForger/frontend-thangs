@@ -9,6 +9,7 @@ import * as users from './users';
 import * as models from './models';
 import * as comments from './comments';
 import * as newsposts from './newsposts';
+import * as notifications from './notifications';
 import { getGraphQLUrl } from './utils';
 
 import { logger } from '../../logging';
@@ -46,6 +47,7 @@ const getInstance = () => {
         ...models,
         ...comments,
         ...newsposts,
+        ...notifications,
     };
 };
 
