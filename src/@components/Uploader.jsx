@@ -127,7 +127,7 @@ export function Uploader({ file, setFile, showError = true }) {
         setErrorState(null);
         setFile(null);
     };
-    const { getRootProps, getInputProps, isDragActive, rejectedFiles} = useDropzone({
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         accept: MODEL_FILE_EXTS,
     });
