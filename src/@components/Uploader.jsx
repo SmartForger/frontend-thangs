@@ -181,6 +181,9 @@ export function Uploader({ file, setFile, showError = true }) {
                     </FlexColumn>
                 ) : errorState === 'FILE_EXT' ? (
                     <FlexColumn>
+                        <IconButton onClick={cancelUpload}>
+                            <ExitIcon />
+                        </IconButton>
                         <ErrorIconStyled />
                         <InfoMessage>
                             File extension not supported. Supported{' '}
