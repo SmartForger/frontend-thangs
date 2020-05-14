@@ -95,9 +95,12 @@ const InfoMessage = styled(SmallInfoMessage)`
 export function Uploader({ file, setFile, showError = true }) {
     const [errorState, setErrorState] = React.useState();
     const onDrop = React.useCallback(
-        acceptedFiles => {
+        (acceptedFiles, rejectedFiles, event) => {
             const file = acceptedFiles[0];
-            if (file.size >= FILE_SIZE_LIMITS.hard.size) {
+            if (rejectedFiles[0]) {
+                setErrorState('FILE_EXT');
+                setFile(null);
+            } else if (file.size >= FILE_SIZE_LIMITS.hard.size) {
                 setErrorState('TOO_BIG');
                 setFile(null);
             } else if (file.size >= FILE_SIZE_LIMITS.soft.size) {
@@ -174,6 +177,17 @@ export function Uploader({ file, setFile, showError = true }) {
                         <InfoMessage>
                             File over {FILE_SIZE_LIMITS.hard.pretty}. Try{' '}
                             uploading a different file.
+                        </InfoMessage>
+                    </FlexColumn>
+                ) : errorState === 'FILE_EXT' ? (
+                    <FlexColumn>
+                        <IconButton onClick={cancelUpload}>
+                            <ExitIcon />
+                        </IconButton>
+                        <ErrorIconStyled />
+                        <InfoMessage>
+                            File extension not supported. Supported{' '}
+                            file extensions include {MODEL_FILE_EXTS.map(e => e + ' ')}.
                         </InfoMessage>
                     </FlexColumn>
                 ) : (
