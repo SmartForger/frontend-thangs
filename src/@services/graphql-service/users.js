@@ -46,6 +46,7 @@ export const USER_QUERY = gql`
                 }
                 uploadedFile
             }
+            isBeingFollowedByRequester
         }
     }
 `;
@@ -154,6 +155,56 @@ export const useDeleteUserAvatarMutation = user => {
         {
             variables: {
                 userId: user.id,
+            },
+            refetchQueries: [
+                {
+                    query: USER_QUERY,
+                    variables: {
+                        id: user.id,
+                    },
+                },
+            ],
+        }
+    );
+};
+
+export const useFollowUserMutation = user => {
+    return useMutation(
+        gql`
+            mutation followUser($id: ID!) {
+                followUser(id: $id) {
+                    ok
+                }
+            }
+        `,
+        {
+            variables: {
+                id: user.id,
+            },
+            refetchQueries: [
+                {
+                    query: USER_QUERY,
+                    variables: {
+                        id: user.id,
+                    },
+                },
+            ],
+        }
+    );
+};
+
+export const useUnfollowUserMutation = user => {
+    return useMutation(
+        gql`
+            mutation unfollowUser($id: ID!) {
+                unfollowUser(id: $id) {
+                    ok
+                }
+            }
+        `,
+        {
+            variables: {
+                id: user.id,
             },
             refetchQueries: [
                 {
