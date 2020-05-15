@@ -143,10 +143,11 @@ const SpinnerStyled = styled(Spinner)`
 
 function ErrorOverlay({ id }) {
     const { user } = useCurrentUser();
+    const userId = user ? user.id : null;
     const [
         deleteModel,
         { loading, error },
-    ] = graphqlService.useDeleteModelMutation(id, user.id);
+    ] = graphqlService.useDeleteModelMutation(id, userId);
 
     const handleClick = e => {
         e.preventDefault();
