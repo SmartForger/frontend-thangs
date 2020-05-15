@@ -21,6 +21,7 @@ import {
 import { Upload } from '@pages/Upload';
 import { Matching } from '@pages/Matching';
 import { ModelPreview } from '@pages/ModelPreview';
+import { Notifications } from '@pages/Notifications';
 import { graphqlClient } from '@services';
 import { ErrorBoundary } from './ErrorBoundary';
 import { createBrowserHistory } from 'history';
@@ -89,6 +90,10 @@ const App = () => {
                         />
                         <Route path="/matching" component={Matching} />
                         <Route path="/upload" component={Upload} />
+                        <Route
+                            path="/notifications"
+                            component={Notifications}
+                        />
                         <Route path="*" component={Page404} status={404} />
                     </Switch>
                 </ErrorBoundary>

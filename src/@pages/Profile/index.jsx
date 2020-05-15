@@ -19,6 +19,7 @@ import { ReactComponent as ModelIcon } from '@svg/model-icon.svg';
 import { ReactComponent as PencilIcon } from '@svg/pencil-icon.svg';
 import { ModelCollection } from '@components/ModelCollection';
 import { SecondaryButton } from '@components/Button';
+import { ToggleFollowButton } from '@components/ToggleFollowButton';
 import {
     subheaderText,
     tabNavigationText,
@@ -250,12 +251,14 @@ const EditButton = styled(SecondaryButton)`
     }
 `;
 
-function EditProfileButton({ viewedUser, className }) {
+function ProfileButton({ viewedUser, className }) {
     const { user } = useCurrentUser();
     const history = useHistory();
 
     if (!user || user.id !== viewedUser.id) {
-        return null;
+        return (
+            <ToggleFollowButton viewedUser={viewedUser} className={className} />
+        );
     }
 
     return (
@@ -279,7 +282,7 @@ function EditProfileButton({ viewedUser, className }) {
     );
 }
 
-const EditProfileButtonStyled = styled(EditProfileButton)`
+const ProfileButtonStyled = styled(ProfileButton)`
     margin-top: 16px;
 `;
 
@@ -319,9 +322,13 @@ function Page() {
 
     return (
         <Frame>
-            <ProfilePicture user={user} size="104px" />
+            <ProfilePicture
+                size="104px"
+                name={user.fullName}
+                src={user.profile.avatarUrl}
+            />
             <Name>{user.fullName}</Name>
-            <EditProfileButtonStyled viewedUser={user} />
+            <ProfileButtonStyled viewedUser={user} />
             <Tabs user={user} stopPolling={stopPolling} />
         </Frame>
     );

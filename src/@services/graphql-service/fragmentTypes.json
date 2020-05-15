@@ -1,0 +1,1 @@
+{"__schema":{"types":[{"kind":"UNION","name":"ActorType","possibleTypes":[{"name":"UserType"},{"name":"ModelType"}]},{"kind":"UNION","name":"ActionObjectType","possibleTypes":[{"name":"ModelCommentType"},{"name":"ModelType"},{"name":"LikeType"}]},{"kind":"UNION","name":"TargetType","possibleTypes":[{"name":"UserType"},{"name":"ModelType"}]}]}}

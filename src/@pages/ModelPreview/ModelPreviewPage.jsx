@@ -99,7 +99,11 @@ function ModelTitle({ model, className }) {
     return (
         <ModelTitleContainer className={className}>
             {model.owner && (
-                <ModelOwnerProfilePicture size="48px" user={model.owner} />
+                <ModelOwnerProfilePicture
+                    size="48px"
+                    name={model.owner.fullName}
+                    src={model.owner.profile.avatarUrl}
+                />
             )}
             <ModelTitleContent>
                 <ModelTitleText>{model.name}</ModelTitleText>

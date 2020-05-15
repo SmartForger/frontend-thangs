@@ -18,7 +18,11 @@ const UserNameInline = styled.span`
 export function UserInline({ user, className, size = '24px' }) {
     return (
         <UserContainerInline className={className}>
-            <ProfilePicture size={size} user={user} />
+            <ProfilePicture
+                size={size}
+                name={user.fullName}
+                src={user.profile.avatarUrl}
+            />
             <UserNameInline>{user.fullName}</UserNameInline>
         </UserContainerInline>
     );

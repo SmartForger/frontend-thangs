@@ -42,7 +42,11 @@ function PictureForm({ user, className }) {
     const currentAvatar = user && user.profile && user.profile.avatarUrl;
     return (
         <Row className={className}>
-            <ProfilePictureStyled user={user} size="80px" />
+            <ProfilePictureStyled
+                size="80px"
+                name={user.fullName}
+                src={user.profile.avatarUrl}
+            />
             <ChangeablePicture
                 user={user}
                 css={`
@@ -74,16 +78,13 @@ function InlineProfile({ user }) {
 
 function WarningOnEmptyProfile({ user }) {
     const [, setFlash] = useContext(FlashContext);
-    useEffect(
-        () => {
-            if (!user.profile.description) {
-                setFlash(
-                    'Add information about yourself below to let others know your specialties, interests, etc.'
-                );
-            }
-        },
-        [setFlash, user]
-    );
+    useEffect(() => {
+        if (!user.profile.description) {
+            setFlash(
+                'Add information about yourself below to let others know your specialties, interests, etc.'
+            );
+        }
+    }, [setFlash, user]);
 
     return null;
 }

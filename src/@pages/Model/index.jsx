@@ -107,7 +107,11 @@ function ModelTitle({ model, className }) {
         <ModelTitleContainer className={className}>
             {model.owner && (
                 <ProfileLink to={`/profile/${model.owner.id}`}>
-                    <ModelOwnerProfilePicture size="48px" user={model.owner} />
+                    <ModelOwnerProfilePicture
+                        size="48px"
+                        name={model.owner.fullName}
+                        src={model.owner.profile.avatarUrl}
+                    />
                 </ProfileLink>
             )}
             <ModelTitleContent>

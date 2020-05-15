@@ -1,6 +1,6 @@
 [
     {
-      "origin": ["https://thangs.com", "https://app.thangs.com", "http://localhost:3000"],
+      "origin": ["https://thangs.com", "https://app.thangs.com", "https://*.appspot.com", "https://localhost:3000", "http://localhost:3000"],
       "responseHeader": ["Content-Type"],
       "method": ["PUT"],
       "maxAgeSeconds": 3600
