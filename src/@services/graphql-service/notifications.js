@@ -6,28 +6,66 @@ import { parseModel } from './models';
 
 const FIVE_MINUTES = 5 * 60 * 1000;
 
-function parseActor(actor) {
-    if (actor.__typename === 'UserType') {
+const USER_LIKED_MODEL = 'USER_LIKED_MODEL';
+const NOT_RECOGNIZED = 'NOT_RECOGNIZED';
+
+const VERB_TO_NOTIFICATION_TYPE = {
+    liked: USER_LIKED_MODEL,
+};
+
+const isUserLikedModel = R.equals(USER_LIKED_MODEL);
+
+function getNotificationType(verb) {
+    const type = VERB_TO_NOTIFICATION_TYPE[verb];
+    return type || NOT_RECOGNIZED;
+}
+
+function parseActor(actor, type) {
+    if (isUserLikedModel(type)) {
         return {
             name: actor.fullName,
+        };
+    }
+    return { name: null };
+}
+
+function parseTarget(target, type) {
+    if (isUserLikedModel(type)) {
+        const model = parseModel(target);
+        return { ...model, isModel: true };
+    }
+    return { name: null, isModel: false };
+}
+
+function parseSubject(actor, type) {
+    if (isUserLikedModel(type)) {
+        return {
+            name: actor.fullName,
+            id: actor.id,
             img: actor.profile && createAppUrl(actor.profile.avatarUrl),
         };
     }
     return { name: null, img: null };
 }
 
-function parseTarget(target) {
-    if (target.__typename === 'ModelType') {
-        return { ...parseModel(target), isModel: true };
+function parseObject(target, type) {
+    if (isUserLikedModel(type)) {
+        const model = parseModel(target);
+        return { ...model, img: model.thumbnailUrl, isModel: true };
     }
     return { name: null, img: null, isModel: false };
 }
 
 function parseNotification(notification) {
-    const actor = parseActor(notification.actor);
-    const target = parseTarget(notification.target);
+    const type = getNotificationType(notification.verb);
+
+    const actor = parseActor(notification.actor, type);
+    const subject = parseSubject(notification.actor, type);
+    const target = parseTarget(notification.target, type);
+    const object = parseObject(notification.target, type);
     const { verb, timestamp } = notification;
-    return { actor, verb, target, timestamp };
+
+    return { actor, subject, verb, target, object, timestamp };
 }
 
 const NOTIFICATIONS = gql`
@@ -60,8 +98,9 @@ const NOTIFICATIONS = gql`
     }
 `;
 
-function isHandledNotificationType({ actor, target }) {
-    return actor.__typename === 'UserType' && target.__typename === 'ModelType';
+function isHandledNotificationType(notification) {
+    const type = getNotificationType(notification.verb);
+    return isUserLikedModel(type);
 }
 
 function getAndParseHandledNotifications(data) {

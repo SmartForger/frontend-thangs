@@ -54,7 +54,7 @@ function formatDate(time) {
     return formatted.replace('a.m.', 'am').replace('p.m.', 'pm');
 }
 
-const TargetPicture = styled(Card)`
+const ObjectPicture = styled(Card)`
     width: 188px;
     height: 120px;
 `;
@@ -67,12 +67,26 @@ const Thumbnail = styled(ModelThumbnail)`
     }
 `;
 
-export function Notification({ timestamp, actor, verb, target, className }) {
+export function Notification({
+    timestamp,
+    actor,
+    subject,
+    verb,
+    target,
+    object,
+    className,
+}) {
     const time = formatDate(timestamp);
 
     return (
         <Item className={className}>
-            <ActorPicture name={actor.name} id={actor.id} img={actor.img} />
+            {subject && (
+                <ActorPicture
+                    name={subject.name}
+                    id={subject.id}
+                    img={subject.img}
+                />
+            )}
             <Content>
                 <ActorName>{actor.name}</ActorName>
                 <div>
@@ -80,16 +94,16 @@ export function Notification({ timestamp, actor, verb, target, className }) {
                     <Time>{time}</Time>
                 </div>
             </Content>
-            {target.isModel && (
-                <TargetPicture>
+            {object && (
+                <ObjectPicture>
                     <Thumbnail
-                        thumbnailUrl={target.thumbnailUrl}
-                        showStatusOverlay={!isCompleted(target)}
-                        id={target.id}
-                        uploadStatus={target.uploadStatus}
-                        name={target.name}
+                        thumbnailUrl={object.img}
+                        showStatusOverlay={!isCompleted(object)}
+                        id={object.id}
+                        uploadStatus={object.uploadStatus}
+                        name={object.name}
                     />
-                </TargetPicture>
+                </ObjectPicture>
             )}
         </Item>
     );

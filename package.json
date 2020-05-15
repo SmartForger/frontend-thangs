@@ -59,7 +59,8 @@
     "cypress": "cypress open",
     "ci": "start-server-and-test http-get://localhost:3000 test:cypress",
     "format": "prettier src/**/*.js --write",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "update-fragments": "env-cmd -f .env.development node scripts/update-fragments.js"
   },
   "browserslist": {
     "production": [

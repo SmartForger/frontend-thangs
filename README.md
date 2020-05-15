@@ -24,6 +24,10 @@ REACT_APP_HOOPS_WS_ENDPOINT_URI=wss://hoops-scs-dot-gcp-and-physna.uc.r.appspot.
 REACT_APP_GOOGLE_CLOUD_PROJECT_ID=gcp-and-physna
 REACT_APP_GOOGLE_CLOUD_ERROR_REPORTING_KEY=AIzaSyCUmGwa9UJArRbPKt5YvT8ogf8EnEJCRyQ
 REACT_APP_THUMBNAILS_HOST=http://localhost:1000/convert
+
+SCRIPTS_SOCIAL_SERVICE_URL=http://localhost:8000
+SCRIPTS_SOCIAL_SERVICE_EMAIL=user@email.com
+SCRIPTS_SOCIAL_SERVICE_PASSWORD=user
 ```
 
 4. Run the following command in the terminal to start the app:
@@ -250,3 +254,13 @@ gsutil cors set cors-staging.json gs://staging-thangs-uploads
 
 ### CircleCi Staging Deploy
 *Coming Soon*
+
+## Updating Query fragments
+
+> This was required in order to support union types for multiple notification
+> types.
+> https://www.apollographql.com/docs/react/data/fragments/#fragments-on-unions-and-interfaces
+
+- Make sure you have `thangs-social-service` running locally
+- Update your `.env.development` to include credentials for that service
+- Run `yarn update-fragments`

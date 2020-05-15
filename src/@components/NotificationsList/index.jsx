@@ -39,8 +39,10 @@ export function NotificationsList() {
                     key={i}
                     timestamp={notification.timestamp}
                     actor={notification.actor}
+                    subject={notification.subject}
                     verb={notification.verb}
                     target={notification.target}
+                    object={notification.object}
                     className="notification"
                 />
             ))}
