@@ -1,5 +1,10 @@
 # Thangs Front-end
 
+## Requirements
+
+- [NodeJs > 10.xx.x] (https://nodejs.org/en/)
+- [Yarn] (https://www.npmjs.com/package/yarn)
+
 ## Usage
 
 1. Clone the repository
