@@ -19,13 +19,17 @@ import { useDownloadModel } from '@customHooks/Models';
 import * as GraphqlService from '@services/graphql-service';
 import { WithNewThemeLayout } from '@style/Layout';
 import { headerText, linkText, modelTitleText } from '@style/text';
+import {
+    mediaSmPlus,
+    mediaMdPlus,
+    mediaLgPlus,
+    mediaXlPlus,
+} from '@style/media-queries';
 
 import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { Message404 } from '../404';
 
 import { logger } from '../../logging';
-
-const allowCssProp = props => (props.css ? props.css : '');
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -36,40 +40,55 @@ const HeaderStyled = styled.div`
 `;
 
 const ModelContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-`;
+    display: grid;
+    grid-template-areas:
+        'viewer'
+        'details'
+        'related'
+        'comments';
+    row-gap: 24px;
 
-const ScrollableColumn = styled.div`
-    padding: 10px;
-    margin: -10px;
-
-    ${allowCssProp};
+    ${mediaLgPlus} {
+        grid-template-columns: 62% auto;
+        column-gap: 24px;
+        row-gap: 48px;
+        grid-template-areas:
+            'viewer details'
+            'related comments';
+    }
 `;
 
 const ModelViewerStyled = styled(ModelViewer)`
-    height: 616px;
     display: flex;
+    overflow: hidden;
+
     flex-direction: column;
+    grid-area: viewer;
+    height: 375px;
+    margin: 0 -16px;
+    width: calc(100% + 32px);
+
+    ${mediaSmPlus} {
+        height: 460px;
+    }
+
+    ${mediaMdPlus} {
+        height: 600px;
+        margin: 0;
+    }
+
+    ${mediaLgPlus} {
+        height: 616px;
+        width: auto;
+    }
+
+    ${mediaXlPlus} {
+        height: 616px;
+    }
 `;
 
 const BackupViewerStyled = styled(BackupViewer)`
     height: 616px;
-`;
-
-const SidebarSpacing = styled.div`
-    height: 616px;
-`;
-
-const ModelColumn = styled(ScrollableColumn)`
-    flex-grow: 1;
-    padding: 0 16px;
-    margin: 0 -16px;
-`;
-
-const Sidebar = styled(ScrollableColumn)`
-    margin-left: 24px;
-    width: 420px;
 `;
 
 const ModelTitleContainer = styled.div`
@@ -127,12 +146,16 @@ function ModelTitle({ model, className }) {
 }
 
 const Comments = styled(CommentsForModel)`
-    margin-top: 56px;
+    grid-area: comments;
 `;
 
 const Header = styled.div`
     ${headerText};
-    margin: 48px 0 24px;
+    margin-bottom: 24px;
+`;
+
+const Related = styled.div`
+    grid-area: related;
 `;
 
 function RelatedModels({ modelId }) {
@@ -147,11 +170,15 @@ function RelatedModels({ modelId }) {
     }
 
     return (
-        <ModelCollection
-            models={model && model.relatedModels}
-            maxPerRow={3}
-            noResultsText="There were no geometrically similar matches found."
-        />
+        <Related>
+            <Header>Geometrically Similar</Header>
+
+            <ModelCollection
+                models={model && model.relatedModels}
+                maxPerRow={3}
+                noResultsText="There were no geometrically similar matches found."
+            />
+        </Related>
     );
 }
 
@@ -176,6 +203,11 @@ function DownloadLink({ model }) {
         </DownloadTextButton>
     );
 }
+
+const Details = styled.div`
+    grid-area: details;
+`;
+
 const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
     const history = useHistory();
 
@@ -187,28 +219,20 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                 </BackButton>
             </HeaderStyled>
             <ModelContainer>
-                <ModelColumn>
-                    {showBackupViewer ? (
-                        <BackupViewerStyled model={model} />
-                    ) : (
-                        <ModelViewerStyled model={model} />
-                    )}
-                    <Header>Geometrically Similar</Header>
-                    <RelatedModels modelId={model.id} />
-                </ModelColumn>
-                <Sidebar>
-                    <SidebarSpacing>
-                        <LikeModelButton
-                            currentUser={currentUser}
-                            model={model}
-                        />
-                        <ModelTitle model={model} />
-                        <Description>{model.description}</Description>
-                        <DownloadLink model={model} />
-                        <ModelDetails model={model} />
-                    </SidebarSpacing>
-                    <Comments model={model} />
-                </Sidebar>
+                {showBackupViewer ? (
+                    <BackupViewerStyled model={model} />
+                ) : (
+                    <ModelViewerStyled model={model} />
+                )}
+                <RelatedModels modelId={model.id} />
+                <Details>
+                    <LikeModelButton currentUser={currentUser} model={model} />
+                    <ModelTitle model={model} />
+                    <Description>{model.description}</Description>
+                    <DownloadLink model={model} />
+                    <ModelDetails model={model} />
+                </Details>
+                <Comments model={model} />
             </ModelContainer>
         </>
     );

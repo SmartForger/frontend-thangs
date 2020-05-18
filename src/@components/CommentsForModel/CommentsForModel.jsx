@@ -81,35 +81,27 @@ const Header = styled.h2`
     ${subheaderText};
 `;
 
-const Container = styled.div`
-    max-width: 500px;
-`;
-
 const CommentsForModel = ({ model, className }) => {
     const { loading, error, comments } = graphqlService.useAllModelComments(
         model.id
     );
 
     if (error) {
-        return (
-            <Container className={className}>
-                <div>Error loading comments</div>
-            </Container>
-        );
+        return <div className={className}>Error loading comments</div>;
     }
 
     if (loading) {
         return (
-            <Container className={className}>
+            <div className={className}>
                 <Spinner />
-            </Container>
+            </div>
         );
     }
 
     const commentsHeaderText =
         comments.length > 1 || comments.length === 0 ? 'Comments' : 'Comment';
     return (
-        <Container className={className}>
+        <div className={className}>
             <Header>
                 {comments.length} {commentsHeaderText}
             </Header>
@@ -119,7 +111,7 @@ const CommentsForModel = ({ model, className }) => {
                 ))}
             </Comments>
             <NewModelCommentForm modelId={model.id} />
-        </Container>
+        </div>
     );
 };
 

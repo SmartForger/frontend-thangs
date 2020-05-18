@@ -23,11 +23,14 @@ const WebViewContainer = styled.div`
 `;
 
 const LoadingContainer = styled.div`
-    padding-top: 264px;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 `;
 
 function HoopsModelViewer({ className, model }) {

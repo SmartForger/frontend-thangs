@@ -11,7 +11,7 @@ import { ReactComponent as Logo } from '@svg/logo.svg';
 import { ReactComponent as LogoText } from '@svg/logo-text.svg';
 import { linkText } from '@style/text';
 import { Button, BrandButton } from '@components/Button';
-import { largerThanMd } from '@style/media-queries';
+import { mediaMdPlus } from '@style/media-queries';
 import { GREY_5, RED_2 } from '@style/colors';
 
 const NOTIFICATIONS_URL = '/notifications';
@@ -34,7 +34,7 @@ const FixedHeader = styled.div`
 const DesktopBoundary = styled.div`
     margin: 48px auto 16px;
     padding: 0 16px;
-    max-width: ${props => props.theme.maxWidth}
+    max-width: 1480px;
     position: relative;
 `;
 
@@ -97,7 +97,7 @@ const NotificationsButton = () => {
 const UploadButton = styled(Button)`
     width: 100%;
 
-    ${largerThanMd} {
+    ${mediaMdPlus} {
         margin-left: 32px;
         width: 124px;
     }
@@ -158,7 +158,7 @@ function Matching({ css }) {
             <BrandButton
                 css={`
                     width: 100%;
-                    ${largerThanMd} {
+                    ${mediaMdPlus} {
                         padding: 6px 24px 6px 32px;
                     }
                 `}
@@ -197,7 +197,7 @@ function DesktopHeader({ variant }) {
 }
 
 const MobileOnly = styled.span`
-    ${largerThanMd} {
+    ${mediaMdPlus} {
         display: none;
     }
 `;
@@ -205,7 +205,7 @@ const MobileOnly = styled.span`
 const DesktopOnly = styled.span`
     display: none;
 
-    ${largerThanMd} {
+    ${mediaMdPlus} {
         display: block;
     }
 `;
