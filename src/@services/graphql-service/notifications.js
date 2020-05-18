@@ -14,6 +14,7 @@ const MODEL_FAILED_PROCESSING = 'MODEL_FAILED_PROCESSING';
 const MODEL_COMPLETED_PROCESSING = 'MODEL_COMPLETED_PROCESSING';
 const USER_COMMENTED_ON_MODEL = 'USER_COMMENTED_ON_MODEL';
 const USER_UPLOADED_MODEL = 'USER_UPLOADED_MODEL';
+const USER_STARTED_FOLLOWING_USER = 'USER_STARTED_FOLLOWING_USER';
 
 const COMPLETED = 'COMPLETED';
 const ERROR = 'ERROR';
@@ -24,6 +25,7 @@ const VERB_TO_NOTIFICATION_TYPE = {
     'changed status': MODEL_CHANGED_STATUS,
     commented: USER_COMMENTED_ON_MODEL,
     uploaded: USER_UPLOADED_MODEL,
+    'started following': USER_STARTED_FOLLOWING_USER,
 };
 
 export const isUserLikedModel = R.equals(USER_LIKED_MODEL);
@@ -33,6 +35,7 @@ export const isModelChangedStatus = R.equals(MODEL_CHANGED_STATUS);
 export const isModelFailedProcessing = R.equals(MODEL_FAILED_PROCESSING);
 export const isModelCompletedProcessing = R.equals(MODEL_COMPLETED_PROCESSING);
 export const isUserUploadedModel = R.equals(USER_UPLOADED_MODEL);
+export const isUserStartedFollowingUser = R.equals(USER_STARTED_FOLLOWING_USER);
 
 export const modelHasCompletedStatus = R.propEq('uploadStatus', COMPLETED);
 export const modelHasFailedStatus = R.propEq('uploadStatus', ERROR);
@@ -138,14 +141,15 @@ const NOTIFICATIONS = gql`
 `;
 
 function isHandledNotificationType({ notificationType }) {
-    return (
-        isUserLikedModel(notificationType) ||
-        isUserDownloadedModel(notificationType) ||
-        isModelCompletedProcessing(notificationType) ||
-        isModelFailedProcessing(notificationType) ||
-        isUserCommentedOnModel(notificationType) ||
-        isUserUploadedModel(notificationType)
-    );
+    return R.anyPass([
+        isUserLikedModel,
+        isUserDownloadedModel,
+        isModelCompletedProcessing,
+        isModelFailedProcessing,
+        isUserCommentedOnModel,
+        isUserUploadedModel,
+        isUserStartedFollowingUser,
+    ])(notificationType);
 }
 
 const prepareNotifications = R.pipe(

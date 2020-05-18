@@ -13,6 +13,7 @@ import {
     isModelFailedProcessing,
     isUserCommentedOnModel,
     isUserUploadedModel,
+    isUserStartedFollowingUser,
 } from '@services/graphql-service/notifications';
 import Logo from '@svg/logo.svg';
 import { BLACK_2 } from '@style/colors';
@@ -271,6 +272,34 @@ function UserLikedModel({
     );
 }
 
+function UserStartedFollowingUser({
+    className,
+    time,
+    actor,
+    verb,
+    target,
+    actionObject,
+}) {
+    return (
+        <Item className={className}>
+            <ActorPicture
+                name={actor.fullName}
+                id={actor.id}
+                img={actor.profile.avatarUrl}
+            />
+            <Content>
+                <ActorName>{actor.fullName}</ActorName>
+
+                <div>
+                    <Verb>{verb}</Verb>
+                    <TargetName>you</TargetName>
+                    <Time>{time}</Time>
+                </div>
+            </Content>
+        </Item>
+    );
+}
+
 export function Notification({
     timestamp,
     actor,
@@ -320,6 +349,19 @@ export function Notification({
     if (isUserUploadedModel(notificationType)) {
         return (
             <UserUploadedModel
+                className={className}
+                time={time}
+                actor={actor}
+                target={target}
+                actionObject={actionObject}
+                verb={verb}
+            />
+        );
+    }
+
+    if (isUserStartedFollowingUser(notificationType)) {
+        return (
+            <UserStartedFollowingUser
                 className={className}
                 time={time}
                 actor={actor}
