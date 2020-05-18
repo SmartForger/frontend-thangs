@@ -75,6 +75,7 @@ const ModelViewerStyled = styled(ModelViewer)`
     ${mediaMdPlus} {
         height: 600px;
         margin: 0;
+        width: 100%;
     }
 
     ${mediaLgPlus} {

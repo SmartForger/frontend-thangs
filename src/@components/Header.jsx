@@ -32,10 +32,13 @@ const FixedHeader = styled.div`
 `;
 
 const DesktopBoundary = styled.div`
-    margin: 48px auto 16px;
     padding: 0 16px;
-    max-width: 1480px;
     position: relative;
+    margin: 48px auto 16px;
+
+    ${mediaMdPlus} {
+        margin: 48px 100px 16px;
+    }
 `;
 
 const allowCssProp = props => (props.css ? props.css : '');
