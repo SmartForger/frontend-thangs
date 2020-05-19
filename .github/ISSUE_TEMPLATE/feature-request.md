@@ -2,7 +2,7 @@
 name: Feature Request
 about: A new feature for this project
 title: "[Feature] : "
-labels: Needs Designed, Feature Request
+labels: Feature Request, Needs Designed
 assignees: ''
 
 ---
