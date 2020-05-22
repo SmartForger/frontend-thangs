@@ -38,12 +38,16 @@ const initializeAnalytics = history => {
     fullStory.identify();
 };
 
+export function AppFrame({ children }) {
+    return <Router history={history}>{children}</Router>;
+}
+
 const App = () => {
     initializeAnalytics(history);
 
     return (
-        <ApolloProvider client={client}>
-            <Router history={history}>
+        <AppFrame>
+            <ApolloProvider client={client}>
                 <ErrorBoundary>
                     <Switch>
                         <Route exact path="/" component={Landing} />
@@ -97,8 +101,8 @@ const App = () => {
                         <Route path="*" component={Page404} status={404} />
                     </Switch>
                 </ErrorBoundary>
-            </Router>
-        </ApolloProvider>
+            </ApolloProvider>
+        </AppFrame>
     );
 };
 

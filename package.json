@@ -60,7 +60,9 @@
     "ci": "start-server-and-test http-get://localhost:3000 test:cypress",
     "format": "prettier src/**/*.js --write",
     "eject": "react-scripts eject",
-    "update-fragments": "env-cmd -f .env.development node scripts/update-fragments.js"
+    "update-fragments": "env-cmd -f .env.development node scripts/update-fragments.js",
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "browserslist": {
     "production": [
@@ -75,7 +77,13 @@
     ]
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^5.3.18",
+    "@storybook/addon-links": "^5.3.18",
+    "@storybook/addons": "^5.3.18",
+    "@storybook/preset-create-react-app": "^3.0.0",
+    "@storybook/react": "^5.3.18",
     "eslint-plugin-cypress": "^2.10.3",
+    "mock-apollo-client": "^0.4.0",
     "prettier": "^1.19.1",
     "start-server-and-test": "^1.10.8"
   }

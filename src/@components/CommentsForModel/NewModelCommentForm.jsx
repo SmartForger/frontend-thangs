@@ -41,7 +41,7 @@ const PostCommentButton = styled(Button)`
 `;
 
 export function NewModelCommentForm({ modelId }) {
-    const userId = authenticationService.currentUserValue.id;
+    const userId = authenticationService.getCurrentUserValue().id;
     const { user } = graphqlService.useUserById(userId);
 
     const { register, handleSubmit, reset } = useForm();

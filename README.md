@@ -276,3 +276,17 @@ With these considerations in mind, make sure to always follow our branching stra
 - Make sure you have `thangs-social-service` running locally
 - Update your `.env.development` to include credentials for that service
 - Run `yarn update-fragments`
+
+## Storybook
+
+This is a tool we use to make it easier to develop and iterate on components in
+isolation.
+
+The best place to keep stories is as siblings to the component they test, to
+encourage more focused stories.
+
+### How to run
+```
+yarn storybook
+```
+- Then open http://localhost:9009/

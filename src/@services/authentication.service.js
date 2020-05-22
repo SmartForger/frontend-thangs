@@ -189,6 +189,9 @@ const authenticationService = {
     get currentUserValue() {
         return currentUserSubject.value;
     },
+    getCurrentUserValue() {
+        return currentUserSubject.value;
+    },
 };
 
 export { authenticationService };
