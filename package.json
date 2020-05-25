@@ -52,7 +52,7 @@
   "scripts": {
     "start": "serve -s build",
     "dev": "react-scripts start",
-    "build": "react-scripts build && ./scripts/copy_files.sh",
+    "build": "react-scripts build",
     "build:staging": "env-cmd -f .env.staging npm run build",
     "test": " react-scripts test",
     "test:cypress": "cypress run",
