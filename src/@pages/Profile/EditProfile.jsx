@@ -70,7 +70,11 @@ const PictureFormStyled = styled(PictureForm)`
 function InlineProfile({ user }) {
     return (
         <Row>
-            <ProfilePictureStyled user={user} size="50px" />
+            <ProfilePictureStyled
+                name={user.fullName}
+                src={user.profile.avatarUrl}
+                size="50px"
+            />
             <Name>{user.fullName}</Name>
         </Row>
     );
