@@ -1,6 +1,5 @@
 import React from 'react';
 import { RelatedModels } from '.';
-import { authenticationService } from '@services';
 import { MODEL_WITH_RELATED_QUERY } from '../../@services/graphql-service/models';
 
 import { withApolloProvider } from '../../../.storybook/withApolloProvider';
@@ -53,11 +52,20 @@ const requestMockHandlers = {
     queries: [
         {
             type: MODEL_WITH_RELATED_QUERY,
-            data: {
-                model: {
-                    ...MOCK_MODEL,
-                    relatedModels: [],
-                },
+            data: ({ id }) => {
+                const uploadStatus =
+                    id === 'model-processing'
+                        ? 'PROCESSING'
+                        : id === 'model-complete'
+                        ? 'COMPLETE'
+                        : 'ERROR';
+                return {
+                    model: {
+                        ...MOCK_MODEL,
+                        uploadStatus,
+                        relatedModels: [],
+                    },
+                };
             },
         },
     ],
@@ -65,15 +73,15 @@ const requestMockHandlers = {
 };
 
 export function Processing() {
-    return <RelatedModels modelId="9999" />;
+    return <RelatedModels modelId="model-processing" />;
 }
 
 export function ProcessingComplete() {
-    return <RelatedModels modelId="9999" />;
+    return <RelatedModels modelId="model-complete" />;
 }
 
 export function ProcessingError() {
-    return <RelatedModels modelId="9999" />;
+    return <RelatedModels modelId="model-error" />;
 }
 
 export default {

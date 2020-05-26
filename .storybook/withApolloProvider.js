@@ -10,6 +10,9 @@ export const withApolloProvider = ({ requestMockHandlers }) => {
         mockClient.setRequestHandler(type, variables => {
             const name = type.definitions[0].name.value;
             action(`triggering mutation ${name}`)(variables);
+            if (typeof data === 'function') {
+                return Promise.resolve({ data: data(variables) });
+            }
             return Promise.resolve({ data });
         });
     });
@@ -17,6 +20,9 @@ export const withApolloProvider = ({ requestMockHandlers }) => {
         mockClient.setRequestHandler(type, variables => {
             const name = type.definitions[0].name.value;
             action(`triggering query ${name}`)(variables);
+            if (typeof data === 'function') {
+                return Promise.resolve({ data: data(variables) });
+            }
             return Promise.resolve({ data });
         });
     });
