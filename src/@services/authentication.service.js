@@ -18,7 +18,7 @@ function getCurrentUserFromLocalStorage() {
 
 function setCurrentUserInLocalStorage(user) {
     const currentUserStr = JSON.stringify(user);
-    localStorage.setItem(currentUserStr);
+    localStorage.setItem('currentUser', currentUserStr);
 }
 
 function clearCurrentUserFromLocalStorage() {

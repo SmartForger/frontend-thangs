@@ -117,13 +117,12 @@ const Page = () => {
     const history = useHistory();
     const [file, setFile] = useState();
     const [category, setCategory] = useState();
-    const currentUser = authenticationService.getCurrentUser();
-    const { id } = currentUser;
+    const currentUserId = authenticationService.getCurrentUserId();
 
     const [
         uploadModel,
         { loading: isUploading, error: uploadError },
-    ] = graphqlService.useUploadModelMutation(id);
+    ] = graphqlService.useUploadModelMutation(currentUserId);
 
     const { register, handleSubmit, errors } = useForm();
 
