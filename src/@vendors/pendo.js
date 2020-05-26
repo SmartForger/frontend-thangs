@@ -1,4 +1,3 @@
-import { authenticationService } from '@services';
 import { logger } from '../logging';
 
 const apiKey = process.env.REACT_APP_PENDO_API_KEY;

@@ -1,10 +1,10 @@
 import * as GraphqlService from '@services/graphql-service';
-import { getCurrentUserId } from './Users';
+import { authenticationService } from '@services';
 
 const graphqlService = GraphqlService.getInstance();
 
 export function useNotifications() {
-    const id = getCurrentUserId();
+    const id = authenticationService.getCurrentUserId();
     if (!id) {
         return { user: null };
     }
@@ -17,7 +17,7 @@ export function useNotifications() {
 }
 
 export function useHasUnreadNotifications() {
-    const id = getCurrentUserId();
+    const id = authenticationService.getCurrentUserId();
     if (!id) {
         return false;
     }
@@ -32,7 +32,7 @@ export function useHasUnreadNotifications() {
 }
 
 export function useUpdateLastCheckedNotifications() {
-    const id = getCurrentUserId();
+    const id = authenticationService.getCurrentUserId();
     if (!id) {
         return false;
     }
