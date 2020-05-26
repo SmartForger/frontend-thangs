@@ -7,7 +7,6 @@ import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
 import { thumbnailActivityCountText } from '@style/text';
 import { ModelThumbnail } from '@components/ModelThumbnail';
 import { Card } from '@components/Card';
-import { isCompleted } from '@utilities';
 
 const CardContent = styled.div`
     padding: 8px 16px;
@@ -38,23 +37,14 @@ const ModelThumbnailStyled = styled(ModelThumbnail)`
     border-radius: 8px 8px 0px 0px;
 `;
 
-function CardContents({
-    className,
-    model,
-    showOwner,
-    hovered,
-    showStatusOverlay,
-}) {
+function CardContents({ className, model, showOwner, hovered }) {
     return (
         <Card className={className}>
             <ModelThumbnailStyled
-                id={model.id}
-                uploadStatus={model.uploadStatus}
                 name={model.name}
                 thumbnailUrl={model.thumbnailUrl}
                 showOwner={showOwner}
                 hovered={hovered}
-                showStatusOverlay={showStatusOverlay}
             ></ModelThumbnailStyled>
             <CardContent>
                 {showOwner && <UserInline user={model.owner} />}
@@ -79,25 +69,6 @@ function ModelCard({ className, model, withOwner }) {
 
     const handleMouseEnter = () => setHovered(true);
     const handleMouseLeave = () => setHovered(false);
-
-    if (!isCompleted(model)) {
-        return (
-            <div
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-                onFocus={handleMouseEnter}
-                onBlur={handleMouseLeave}
-            >
-                <CardContents
-                    className={className}
-                    model={model}
-                    showOwner={showOwner}
-                    hovered={hovered}
-                    showStatusOverlay
-                />
-            </div>
-        );
-    }
 
     return (
         <Link

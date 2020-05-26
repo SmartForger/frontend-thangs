@@ -11,8 +11,13 @@ import { ModelViewer as BackupViewer } from '@components/ModelViewer';
 import { TextButton, BackButton } from '@components/Button';
 import { Spinner } from '@components/Spinner';
 import { ProgressText } from '@components/ProgressText';
-import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
 import { isError, isProcessing } from '@utilities';
+
+import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
+import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg';
+import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg';
+
+import { NoResults } from '@components/NoResults';
 
 import { useLocalStorage } from '@customHooks/Storage';
 import { useDownloadModel } from '@customHooks/Models';
@@ -122,6 +127,24 @@ const Description = styled.div`
     margin: 32px 0;
 `;
 
+const NoResultsStyled = styled(NoResults)`
+    display: flex;
+    align-items: center;
+    > svg {
+        margin-right: 8px;
+    }
+`;
+
+const SmallLoadingIconStyled = styled(LoadingIcon)`
+    width: 24px;
+    height: 24px;
+`;
+
+const SmallErrorIconStyled = styled(ErrorIcon)`
+    width: 24px;
+    height: 24px;
+`;
+
 function ModelTitle({ model, className }) {
     return (
         <ModelTitleContainer className={className}>
@@ -160,25 +183,48 @@ const Related = styled.div`
 `;
 
 function RelatedModels({ modelId }) {
-    const { loading, error, model } = graphqlService.useModelByIdWithRelated(
-        modelId
-    );
+    const {
+        loading,
+        error,
+        model,
+        startPolling,
+        stopPolling,
+    } = graphqlService.useModelByIdWithRelated(modelId);
 
     if (loading) {
         return <Spinner />;
     } else if (error) {
         logger.error('error', error);
+        return <Spinner />;
+    }
+
+    if (isProcessing(model)) {
+        startPolling(1000);
+    } else {
+        stopPolling();
     }
 
     return (
         <Related>
             <Header>Geometrically Similar</Header>
 
-            <ModelCollection
-                models={model && model.relatedModels}
-                maxPerRow={3}
-                noResultsText="There were no geometrically similar matches found."
-            />
+            {isProcessing(model) ? (
+                <NoResultsStyled>
+                    <SmallLoadingIconStyled />
+                    <ProgressText text="Processing for matches" />
+                </NoResultsStyled>
+            ) : isError(model) ? (
+                <NoResultsStyled>
+                    <SmallErrorIconStyled />
+                    An error occurred while processing for matches.
+                </NoResultsStyled>
+            ) : (
+                <ModelCollection
+                    models={model && model.relatedModels}
+                    maxPerRow={3}
+                    noResultsText="There were no geometrically similar matches found."
+                />
+            )}
         </Related>
     );
 }
@@ -248,7 +294,7 @@ function Page() {
 
     if (loading) {
         return <Spinner />;
-    } else if (!model || isError(model) || isProcessing(model)) {
+    } else if (!model) {
         return <Message404 />;
     } else if (error) {
         return <div>Error loading Model</div>;

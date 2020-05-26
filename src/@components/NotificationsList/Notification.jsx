@@ -7,7 +7,6 @@ import { ModelThumbnail } from '@components/ModelThumbnail';
 import { Card } from '@components/Card';
 import { commentUsername } from '@style/text';
 import { commentPostedText } from '@style/text';
-import { isCompleted } from '@utilities';
 import {
     isModelCompletedProcessing,
     isModelFailedProcessing,
@@ -118,9 +117,6 @@ function ModelCompletedProcessing({ className, time, actor }) {
                 <TargetPicture>
                     <Thumbnail
                         thumbnailUrl={actor.thumbnailUrl}
-                        showStatusOverlay={!isCompleted(actor)}
-                        id={actor.id}
-                        uploadStatus={actor.uploadStatus}
                         name={actor.name}
                     />
                 </TargetPicture>
@@ -143,9 +139,6 @@ function ModelFailedProcessing({ className, time, actor }) {
             <TargetPicture>
                 <Thumbnail
                     thumbnailUrl={actor.thumbnailUrl}
-                    showStatusOverlay={!isCompleted(actor)}
-                    id={actor.id}
-                    uploadStatus={actor.uploadStatus}
                     name={actor.name}
                 />
             </TargetPicture>
@@ -183,9 +176,6 @@ function UserCommentedOnModel({
                 <TargetPicture>
                     <Thumbnail
                         thumbnailUrl={target.thumbnailUrl}
-                        showStatusOverlay={!isCompleted(target)}
-                        id={target.id}
-                        uploadStatus={target.uploadStatus}
                         name={target.name}
                     />
                 </TargetPicture>
@@ -222,9 +212,6 @@ function UserUploadedModel({
                 <TargetPicture>
                     <Thumbnail
                         thumbnailUrl={actionObject.thumbnailUrl}
-                        showStatusOverlay={!isCompleted(actionObject)}
-                        id={actionObject.id}
-                        uploadStatus={actionObject.uploadStatus}
                         name={actionObject.name}
                     />
                 </TargetPicture>
@@ -261,9 +248,6 @@ function UserLikedModel({
                 <TargetPicture>
                     <Thumbnail
                         thumbnailUrl={target.thumbnailUrl}
-                        showStatusOverlay={!isCompleted(target)}
-                        id={target.id}
-                        uploadStatus={target.uploadStatus}
                         name={target.name}
                     />
                 </TargetPicture>

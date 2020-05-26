@@ -1,19 +1,7 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
-import { isError, isProcessing } from '@utilities';
-import { ProgressText } from '@components/ProgressText';
-import { TextButton } from '@components/Button';
-import { Spinner } from '@components/Spinner';
-import { useCurrentUser } from '@customHooks/Users';
+import styled from 'styled-components';
 import ErrorImg from '@svg/image-error-icon.svg';
-import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg';
-import { ReactComponent as ExitIcon } from '@svg/icon-X.svg';
-import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg';
-import { BLACK_2, WHITE_3 } from '@style/colors';
 import { thumbnailErrorText, modelCardHoverText } from '@style/text';
-import * as GraphqlService from '@services/graphql-service';
-
-const graphqlService = GraphqlService.getInstance();
 
 const Overlay = styled.div`
     z-index: 1;
@@ -38,32 +26,6 @@ const ModelName = styled.div`
     margin: 16px;
 `;
 
-const ErrorIconStyled = styled(ErrorIcon)`
-    height: 65px;
-`;
-
-const SmallErrorIconStyled = styled(ErrorIcon)`
-    width: 24px;
-    height: 24px;
-`;
-
-const PlaceholderText = styled.div`
-    margin-top: 24px;
-    text-align: center;
-`;
-
-const StatusOverlay = css`
-    background-color: ${BLACK_2};
-    content: '';
-    display: block;
-    position: absolute;
-    opacity: 0.85;
-    top: -8px;
-    padding-top: 8px;
-    height: 100%;
-    width: 100%;
-`;
-
 const ThumbnailContainer = styled.div`
     ${thumbnailErrorText};
     position: relative;
@@ -74,10 +36,6 @@ const ThumbnailContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
-    :after {
-        ${props => props.showStatusOverlay && StatusOverlay};
-    }
 
     > img {
         margin: auto;
@@ -110,107 +68,16 @@ const ThumbnailContainer = styled.div`
     }
 `;
 
-const StatusOverlayText = styled.div`
-    top: 0;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 1;
-`;
-
-const IconButton = styled(TextButton)`
-    position: absolute;
-    right: 8px;
-    top: 8px;
-    svg {
-        fill: ${WHITE_3};
-        stroke: ${WHITE_3};
-        color: ${WHITE_3};
-    }
-`;
-
-const SpinnerStyled = styled(Spinner)`
-    height: 24px;
-    width: 24px;
-    & .path {
-        stroke: currentColor;
-    }
-`;
-
-function ErrorOverlay({ id }) {
-    const { user } = useCurrentUser();
-    const userId = user ? user.id : null;
-    const [
-        deleteModel,
-        { loading, error },
-    ] = graphqlService.useDeleteModelMutation(id, userId);
-
-    const handleClick = e => {
-        e.preventDefault();
-        deleteModel();
-    };
-
-    return (
-        <StatusOverlayText>
-            <IconButton disabled={loading || error}>
-                {loading ? (
-                    <SpinnerStyled />
-                ) : error ? (
-                    <SmallErrorIconStyled />
-                ) : (
-                    <ExitIcon onClick={handleClick} />
-                )}
-            </IconButton>
-            <ErrorIconStyled />
-            <PlaceholderText>
-                <div>Error Procesing.</div>
-                <div>Try uploading model again.</div>
-            </PlaceholderText>
-        </StatusOverlayText>
-    );
-}
-
 export function ModelThumbnail({
-    id,
-    uploadStatus,
     name,
     thumbnailUrl: src,
-    children,
     showOwner,
     hovered,
-    showStatusOverlay,
     className,
 }) {
     return (
-        <ThumbnailContainer
-            showOwner={showOwner}
-            showStatusOverlay={showStatusOverlay}
-            className={className}
-        >
-            {isError({ uploadStatus }) || !src ? (
-                <ErrorOverlay id={id} />
-            ) : (
-                <>
-                    {src && <img src={src} alt={name} />}
-                    {isProcessing({ uploadStatus }) && (
-                        <StatusOverlayText>
-                            <LoadingIcon />
-                            <PlaceholderText>
-                                <ProgressText
-                                    text="Processing for matches"
-                                    css={`
-                                        width: 177px;
-                                    `}
-                                />
-                            </PlaceholderText>
-                        </StatusOverlayText>
-                    )}
-                </>
-            )}
+        <ThumbnailContainer showOwner={showOwner} className={className}>
+            {src && <img src={src} alt={name} />}
             {hovered ? (
                 <Overlay>
                     <ModelName>{name}</ModelName>

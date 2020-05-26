@@ -2,7 +2,6 @@ import React from 'react';
 import { ModelCard } from './ModelCard';
 import styled from 'styled-components';
 import * as R from 'ramda';
-import { isError, isProcessing } from '@utilities';
 import { NoResults } from '@components/NoResults';
 
 const ModelsStyled = styled.div`
@@ -15,33 +14,18 @@ const ModelsStyled = styled.div`
     width: 100%;
 `;
 
-const rejectErrorsAndProcessing = R.pipe(
-    R.reject(isError),
-    R.reject(isProcessing)
-);
-
-export function ModelCollection({
-    models = [],
-    maxPerRow = 4,
-    noResultsText,
-    noResultsSubtext,
-    showAllModels,
-}) {
+export function ModelCollection({ models = [], maxPerRow = 4, noResultsText }) {
     if (!models) {
         return <NoResults>{noResultsText}</NoResults>;
     }
 
-    const modelsToRender = showAllModels
-        ? models
-        : rejectErrorsAndProcessing(models);
-
-    if (R.isEmpty(modelsToRender)) {
+    if (R.isEmpty(models)) {
         return <NoResults>{noResultsText}</NoResults>;
     }
 
     return (
         <ModelsStyled singleRow={models.length < maxPerRow}>
-            {modelsToRender.map((model, index) => (
+            {models.map((model, index) => (
                 <ModelCard key={index} model={model} withOwner={true} />
             ))}
         </ModelsStyled>
