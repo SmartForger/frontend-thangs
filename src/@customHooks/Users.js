@@ -3,13 +3,6 @@ import { authenticationService } from '@services';
 
 const graphqlService = GraphqlService.getInstance();
 
-export function getCurrentUserId() {
-    return (
-        authenticationService.currentUserValue &&
-        authenticationService.currentUserValue.id
-    );
-}
-
 export function useCurrentUser() {
     const id = authenticationService.getCurrentUserId();
     if (!id) {
