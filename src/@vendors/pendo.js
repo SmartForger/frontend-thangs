@@ -32,8 +32,6 @@ const initialize = history => {
             z.parentNode.insertBefore(y, z);
         })(window, document, 'script', 'pendo');
 
-        identify();
-
         window.pendo.initialize({
             events: {
                 ready() {
@@ -46,12 +44,11 @@ const initialize = history => {
     }
 };
 
-const identify = () => {
+const identify = user => {
     if (!shouldTrack()) {
         return;
     }
 
-    const user = authenticationService.currentUserValue;
     const userDetails = user
         ? {
               visitor: {

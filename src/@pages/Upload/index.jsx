@@ -117,7 +117,7 @@ const Page = () => {
     const history = useHistory();
     const [file, setFile] = useState();
     const [category, setCategory] = useState();
-    const currentUser = authenticationService.currentUserValue;
+    const currentUser = authenticationService.getCurrentUser();
     const { id } = currentUser;
 
     const [

@@ -11,10 +11,11 @@ export function getCurrentUserId() {
 }
 
 export function useCurrentUser() {
-    const id = getCurrentUserId();
+    const id = authenticationService.getCurrentUserId();
     if (!id) {
-        return { user: null };
+        return { loading: false, error: undefined, user: undefined };
     }
+
     const { loading, error, user } = graphqlService.useUserById(id);
     return { loading, error, user };
 }

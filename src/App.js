@@ -1,5 +1,6 @@
 import React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
+import { authenticationService } from '@services';
 
 import { Route, Router, Switch } from 'react-router-dom';
 
@@ -33,9 +34,13 @@ const originalFetch = window.fetch;
 const client = graphqlClient(originalFetch, history);
 
 const initializeAnalytics = history => {
+    const user = authenticationService.getCurrentUser();
+
     pendo.initialize(history);
+    pendo.identify(user);
+
     fullStory.initialize();
-    fullStory.identify();
+    fullStory.identify(user);
 };
 
 export function AppFrame({ children }) {
