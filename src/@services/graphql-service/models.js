@@ -46,7 +46,7 @@ const MODEL_FRAGMENT = gql`
     }
 `;
 
-const MODEL_WITH_RELATED_QUERY = gql`
+export const MODEL_WITH_RELATED_QUERY = gql`
     query getModel($id: ID) {
         model(id: $id) {
             ...Model
