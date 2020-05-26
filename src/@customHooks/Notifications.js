@@ -1,12 +1,14 @@
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 
+const NOOP = () => undefined;
+
 const graphqlService = GraphqlService.getInstance();
 
 export function useNotifications() {
     const id = authenticationService.getCurrentUserId();
     if (!id) {
-        return { user: null };
+        return { loading: false, error: undefined, notifications: [] };
     }
     const {
         loading,
@@ -19,7 +21,11 @@ export function useNotifications() {
 export function useHasUnreadNotifications() {
     const id = authenticationService.getCurrentUserId();
     if (!id) {
-        return false;
+        return {
+            loading: false,
+            error: undefined,
+            hasUnreadNotifications: false,
+        };
     }
 
     const {
@@ -34,7 +40,11 @@ export function useHasUnreadNotifications() {
 export function useUpdateLastCheckedNotifications() {
     const id = authenticationService.getCurrentUserId();
     if (!id) {
-        return false;
+        const updateLastChecked = NOOP;
+        return [
+            updateLastChecked,
+            { loading: false, error: undefined, data: undefined },
+        ];
     }
 
     const [
