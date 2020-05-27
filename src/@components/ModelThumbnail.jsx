@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import ErrorImg from '@svg/image-error-icon.svg';
 import { thumbnailErrorText } from '@style/text';
+
+import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg';
 
 const ThumbnailContainer = styled.div`
     ${thumbnailErrorText};
@@ -18,6 +20,7 @@ const ThumbnailContainer = styled.div`
         margin: auto;
         display: block;
         max-width: calc(100% - 24px);
+        z-index: 1;
         height: auto;
 
         :before {
@@ -43,7 +46,17 @@ const ThumbnailContainer = styled.div`
             transform: translateX(-50%);
         }
     }
+    > svg {
+        display: block;
+        position: absolute;
+        height: 100%;
+        width: 80px;
+    }
 `;
+
+const LOADING = 'LOADING';
+const COMPLETE = 'COMPLETE';
+const ERROR = 'ERROR';
 
 export function ModelThumbnail({
     name,
@@ -51,9 +64,15 @@ export function ModelThumbnail({
     showOwner,
     className,
 }) {
+    const [loadingState, setLoadingState] = useState(LOADING);
+    const onLoad = () => setLoadingState(COMPLETE);
+    const onError = () => setLoadingState(ERROR);
     return (
         <ThumbnailContainer showOwner={showOwner} className={className}>
-            {src && <img src={src} alt={name} />}
+            {src && (
+                <img src={src} alt={name} onLoad={onLoad} onError={onError} />
+            )}
+            {loadingState === LOADING && <LoadingIcon />}
         </ThumbnailContainer>
     );
 }

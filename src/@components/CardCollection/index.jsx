@@ -36,10 +36,17 @@ export function CardCollection({
     return (
         <ModelsStyled singleRow={models.length < maxPerRow}>
             {models.map((model, index) => (
-                <ModelCard key={index} model={model} withOwner={true} />
+                <ModelCard
+                    key={`model-${model.id}:${index}`}
+                    model={model}
+                    withOwner={true}
+                />
             ))}
             {folders.map((folder, index) => (
-                <FolderCard key={index} folder={folder} />
+                <FolderCard
+                    key={`folder=${folder.id}:${index}`}
+                    folder={folder}
+                />
             ))}
         </ModelsStyled>
     );
