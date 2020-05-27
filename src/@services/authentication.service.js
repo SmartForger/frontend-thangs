@@ -56,7 +56,6 @@ const login = async ({ email, password }) => {
         const response = await axios(requestOptions);
         const { refresh, access } = response.data;
 
-        // TODO: Do we ever access these directly?
         localStorage.setItem('refreshToken', refresh);
         localStorage.setItem('accessToken', access);
 
@@ -120,7 +119,6 @@ const signup = async ({
 const logout = () => {
     clearCurrentUser();
 
-    // TODO: Do we ever access these directly?
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
 };
@@ -187,7 +185,6 @@ const _refreshToken = async () => {
     const user = getCurrentUser();
     setCurrentUser({ ...user, accessToken: access });
 
-    // TODO: Do we ever access these directly?
     localStorage.setItem('refreshToken', refresh);
     localStorage.setItem('accessToken', access);
 
