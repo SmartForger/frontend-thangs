@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useHistory, Link, useParams } from 'react-router-dom';
 
 import { ProfilePicture } from '@components/ProfilePicture';
-import { ModelCollection } from '@components/ModelCollection';
 import { LikeModelButton } from '@components/LikeModelButton';
 import { CommentsForModel } from '@components/CommentsForModel';
 import { ModelViewer } from '@components/HoopsModelViewer';
@@ -11,19 +10,15 @@ import { ModelViewer as BackupViewer } from '@components/ModelViewer';
 import { TextButton, BackButton } from '@components/Button';
 import { Spinner } from '@components/Spinner';
 import { ProgressText } from '@components/ProgressText';
-import { isError, isProcessing } from '@utilities';
+import { RelatedModels } from '@components/RelatedModels';
 
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
-import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg';
-import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg';
-
-import { NoResults } from '@components/NoResults';
 
 import { useLocalStorage } from '@customHooks/Storage';
 import { useDownloadModel } from '@customHooks/Models';
 import * as GraphqlService from '@services/graphql-service';
 import { WithNewThemeLayout } from '@style/Layout';
-import { headerText, linkText, modelTitleText } from '@style/text';
+import { linkText, modelTitleText } from '@style/text';
 import {
     mediaSmPlus,
     mediaMdPlus,
@@ -33,8 +28,6 @@ import {
 
 import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { Message404 } from '../404';
-
-import { logger } from '../../logging';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -127,24 +120,6 @@ const Description = styled.div`
     margin: 32px 0;
 `;
 
-const NoResultsStyled = styled(NoResults)`
-    display: flex;
-    align-items: center;
-    > svg {
-        margin-right: 8px;
-    }
-`;
-
-const SmallLoadingIconStyled = styled(LoadingIcon)`
-    width: 24px;
-    height: 24px;
-`;
-
-const SmallErrorIconStyled = styled(ErrorIcon)`
-    width: 24px;
-    height: 24px;
-`;
-
 function ModelTitle({ model, className }) {
     return (
         <ModelTitleContainer className={className}>
@@ -172,62 +147,6 @@ function ModelTitle({ model, className }) {
 const Comments = styled(CommentsForModel)`
     grid-area: comments;
 `;
-
-const Header = styled.div`
-    ${headerText};
-    margin-bottom: 24px;
-`;
-
-const Related = styled.div`
-    grid-area: related;
-`;
-
-function RelatedModels({ modelId }) {
-    const {
-        loading,
-        error,
-        model,
-        startPolling,
-        stopPolling,
-    } = graphqlService.useModelByIdWithRelated(modelId);
-
-    if (loading) {
-        return <Spinner />;
-    } else if (error) {
-        logger.error('error', error);
-        return <Spinner />;
-    }
-
-    if (isProcessing(model)) {
-        startPolling(1000);
-    } else {
-        stopPolling();
-    }
-
-    return (
-        <Related>
-            <Header>Geometrically Similar</Header>
-
-            {isProcessing(model) ? (
-                <NoResultsStyled>
-                    <SmallLoadingIconStyled />
-                    <ProgressText text="Processing for matches" />
-                </NoResultsStyled>
-            ) : isError(model) ? (
-                <NoResultsStyled>
-                    <SmallErrorIconStyled />
-                    An error occurred while processing for matches.
-                </NoResultsStyled>
-            ) : (
-                <ModelCollection
-                    models={model && model.relatedModels}
-                    maxPerRow={3}
-                    noResultsText="There were no geometrically similar matches found."
-                />
-            )}
-        </Related>
-    );
-}
 
 const DownloadTextButton = styled(TextButton)`
     ${linkText};
