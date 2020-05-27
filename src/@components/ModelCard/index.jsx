@@ -41,6 +41,7 @@ const ModelThumbnailStyled = styled(ModelThumbnail)`
     min-height: 195px;
     margin: auto;
     max-width: calc(100% - 118px);
+    width: 100%;
     border-radius: 8px 8px 0px 0px;
 `;
 

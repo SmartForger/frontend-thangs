@@ -47,7 +47,10 @@ const ThumbnailContainer = styled.div`
         }
     }
     > svg {
+        display: block;
         position: absolute;
+        height: 100%;
+        width: 80px;
     }
 `;
 
