@@ -1,14 +1,48 @@
 import * as R from 'ramda';
-import { BehaviorSubject } from 'rxjs';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import { getGraphQLUrl } from './graphql-service';
 import * as pendo from '@vendors/pendo';
 import * as fullStory from '@vendors/full-story';
 
-const currentUserSubject = new BehaviorSubject(
-    JSON.parse(localStorage.getItem('currentUser'))
-);
+function getCurrentUserFromLocalStorage() {
+    const currentUserStr = localStorage.getItem('currentUser');
+    if (currentUserStr) {
+        try {
+            return JSON.parse(currentUserStr);
+        } catch (e) {
+            clearCurrentUserFromLocalStorage();
+        }
+    }
+}
+
+function setCurrentUserInLocalStorage(user) {
+    const currentUserStr = JSON.stringify(user);
+    localStorage.setItem('currentUser', currentUserStr);
+}
+
+function clearCurrentUserFromLocalStorage() {
+    localStorage.removeItem('currentUser');
+}
+
+let currentUser = undefined;
+
+function getCurrentUser() {
+    if (!currentUser) {
+        currentUser = getCurrentUserFromLocalStorage();
+    }
+    return currentUser;
+}
+
+function setCurrentUser(user) {
+    setCurrentUserInLocalStorage(user);
+    currentUser = user;
+}
+
+function clearCurrentUser() {
+    clearCurrentUserFromLocalStorage();
+    currentUser = undefined;
+}
 
 const login = async ({ email, password }) => {
     const requestOptions = {
@@ -21,21 +55,23 @@ const login = async ({ email, password }) => {
     try {
         const response = await axios(requestOptions);
         const { refresh, access } = response.data;
+
+        localStorage.setItem('refreshToken', refresh);
+        localStorage.setItem('accessToken', access);
+
         const decoded = jwtDecode(refresh);
         const user = {
             id: `${decoded['user_id']}`,
             username: decoded.username,
             email: decoded.email,
+            accessToken: access,
+            refreshToken: refresh,
         };
+        setCurrentUser(user);
 
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        localStorage.setItem('refreshToken', refresh);
-        localStorage.setItem('accessToken', access);
-        user.accessToken = access;
-        user.refreshToken = refresh;
-        currentUserSubject.next(user);
-        pendo.identify();
-        fullStory.identify();
+        pendo.identify(user);
+        fullStory.identify(user);
+
         return response;
     } catch (err) {
         if (err.response) {
@@ -81,10 +117,10 @@ const signup = async ({
 };
 
 const logout = () => {
-    localStorage.removeItem('currentUser');
+    clearCurrentUser();
+
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    currentUserSubject.next(null);
 };
 
 const hasEndSlash = /\/$/;
@@ -145,12 +181,11 @@ const _refreshToken = async () => {
     }
 
     const { access, refresh } = response.data;
-    localStorage.setItem('refreshToken', refresh);
 
-    // TODO: extract this away into an `updateUser()` function
-    const user = currentUserSubject.value;
-    user.accessToken = access;
-    currentUserSubject.next(user);
+    const user = getCurrentUser();
+    setCurrentUser({ ...user, accessToken: access });
+
+    localStorage.setItem('refreshToken', refresh);
     localStorage.setItem('accessToken', access);
 
     return response;
@@ -185,12 +220,12 @@ const authenticationService = {
     refreshAccessToken,
     resetPasswordForEmail,
     setPasswordForReset,
-    currentUser: currentUserSubject.asObservable(),
-    get currentUserValue() {
-        return currentUserSubject.value;
-    },
-    getCurrentUserValue() {
-        return currentUserSubject.value;
+    getCurrentUser,
+    getCurrentUserId() {
+        const currentUser = getCurrentUser();
+        if (currentUser) {
+            return currentUser.id;
+        }
     },
 };
 

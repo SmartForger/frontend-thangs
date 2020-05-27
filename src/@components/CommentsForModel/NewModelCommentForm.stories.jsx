@@ -57,7 +57,7 @@ const requestMockHandlers = {
 };
 
 export function Story() {
-    authenticationService.getCurrentUserValue = () => ({ id: '1111' });
+    authenticationService.getCurrentUser = () => ({ id: '1111' });
 
     return <NewModelCommentForm modelId="9999" />;
 }

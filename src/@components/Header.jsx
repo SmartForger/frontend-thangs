@@ -127,7 +127,11 @@ function Upload({ css }) {
 }
 
 const UserNav = () => {
-    const { user } = useCurrentUser();
+    const { loading, user } = useCurrentUser();
+
+    if (loading) {
+        return <Row></Row>;
+    }
 
     if (user) {
         return (
@@ -219,7 +223,7 @@ const MobileBoundary = styled.div`
 `;
 
 function MobileHeader({ variant }) {
-    const { user } = useCurrentUser();
+    const { loading, user } = useCurrentUser();
     return (
         <MobileOnly>
             <MobileBoundary>
@@ -228,7 +232,7 @@ function MobileHeader({ variant }) {
                         <LogoStyled />
                         <LogoText />
                     </Link>
-                    {variant !== 'logo-only' && user && (
+                    {variant !== 'logo-only' && !loading && user && (
                         <UserPicture user={user} />
                     )}
                 </TopRow>
