@@ -1,9 +1,11 @@
 import React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
-import { authenticationService } from '@services';
-
 import { Route, Router, Switch } from 'react-router-dom';
 
+import * as pendo from '@vendors/pendo';
+import * as fullStory from '@vendors/full-story';
+import { authenticationService, graphqlClient } from '@services';
+import { history } from './history';
 import {
     Landing,
     Login,
@@ -23,13 +25,12 @@ import { Upload } from '@pages/Upload';
 import { Matching } from '@pages/Matching';
 import { ModelPreview } from '@pages/ModelPreview';
 import { Notifications } from '@pages/Notifications';
-import { graphqlClient } from '@services';
 import { ErrorBoundary } from './ErrorBoundary';
-import { createBrowserHistory } from 'history';
-import * as pendo from '@vendors/pendo';
-import * as fullStory from '@vendors/full-story';
+import {
+    routeRequiresAnon,
+    routeRequiresAuth,
+} from '@components/RouteComponent';
 
-const history = createBrowserHistory();
 const originalFetch = window.fetch;
 const client = graphqlClient(originalFetch, history);
 
@@ -55,8 +56,15 @@ const App = () => {
             <ApolloProvider client={client}>
                 <ErrorBoundary>
                     <Switch>
-                        <Route exact path="/" component={Landing} />
-                        <Route path="/login" component={Login} />
+                        <Route
+                            exact
+                            path="/"
+                            component={routeRequiresAuth(Landing)}
+                        />
+                        <Route
+                            path="/login"
+                            component={routeRequiresAnon(Login)}
+                        />
                         <Route
                             path="/terms_and_conditions"
                             exact
@@ -64,7 +72,7 @@ const App = () => {
                         />
                         <Route
                             path="/signup/:registrationCode"
-                            component={Signup}
+                            component={routeRequiresAnon(Signup)}
                             exact
                         />
                         <Route
@@ -79,29 +87,44 @@ const App = () => {
                         <Route
                             exact
                             path="/profile/edit"
-                            component={EditProfile}
+                            component={routeRequiresAuth(EditProfile)}
                         />
-                        <Route path="/profile/:id" component={Profile} />
+                        <Route
+                            path="/profile/:id"
+                            component={routeRequiresAuth(Profile)}
+                        />
                         <Route
                             exact
                             path="/profile/"
-                            component={RedirectProfile}
+                            component={routeRequiresAuth(RedirectProfile)}
                         />
-                        <Route path="/model/:id" component={ModelDetail} />
+                        <Route
+                            path="/model/:id"
+                            component={routeRequiresAuth(ModelDetail)}
+                        />
                         <Route
                             path="/preview/model/:id"
-                            component={ModelPreview}
+                            component={routeRequiresAuth(ModelPreview)}
                         />
-                        <Route path="/newspost/:id" component={Newspost} />
+                        <Route
+                            path="/newspost/:id"
+                            component={routeRequiresAuth(Newspost)}
+                        />
                         <Route
                             path="/search/:searchQuery"
-                            component={SearchResults}
+                            component={routeRequiresAuth(SearchResults)}
                         />
-                        <Route path="/matching" component={Matching} />
-                        <Route path="/upload" component={Upload} />
+                        <Route
+                            path="/matching"
+                            component={routeRequiresAuth(Matching)}
+                        />
+                        <Route
+                            path="/upload"
+                            component={routeRequiresAuth(Upload)}
+                        />
                         <Route
                             path="/notifications"
-                            component={Notifications}
+                            component={routeRequiresAuth(Notifications)}
                         />
                         <Route path="*" component={Page404} status={404} />
                     </Switch>
