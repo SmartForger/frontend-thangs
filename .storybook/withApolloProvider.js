@@ -4,8 +4,15 @@ import { createMockClient } from 'mock-apollo-client';
 import * as M from 'mock-apollo-client';
 import { action } from '@storybook/addon-actions';
 
-export const withApolloProvider = ({ requestMockHandlers }) => {
+export const withApolloProvider = (args = {}) => {
+    const {
+        requestMockHandlers = {
+            mutations: [],
+            queries: [],
+        },
+    } = args;
     const mockClient = createMockClient();
+
     requestMockHandlers.mutations.forEach(({ type, data }) => {
         mockClient.setRequestHandler(type, variables => {
             const name = type.definitions[0].name.value;
@@ -16,6 +23,7 @@ export const withApolloProvider = ({ requestMockHandlers }) => {
             return Promise.resolve({ data });
         });
     });
+
     requestMockHandlers.queries.forEach(({ type, data }) => {
         mockClient.setRequestHandler(type, variables => {
             const name = type.definitions[0].name.value;
@@ -26,6 +34,7 @@ export const withApolloProvider = ({ requestMockHandlers }) => {
             return Promise.resolve({ data });
         });
     });
+
     return storyFn => {
         return <ApolloProvider client={mockClient}>{storyFn()}</ApolloProvider>;
     };

@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
-import { UserInline } from './UserInline';
+import { UserInline } from '../UserInline';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
-import { thumbnailActivityCountText } from '@style/text';
+import { thumbnailActivityCountText, regularText } from '@style/text';
 import { ModelThumbnail } from '@components/ModelThumbnail';
 import { Card } from '@components/Card';
+import { BLUE_2 } from '../../@style/colors';
 
-const CardContent = styled.div`
+const Content = styled.div`
     padding: 8px 16px;
+`;
+
+const Row = styled.div`
+    display: flex;
+    justify-content: space-between;
 `;
 
 const ActivityIndicators = styled.div`
@@ -27,14 +33,19 @@ const ActivityCount = styled.span`
     letter-spacing: 0px;
 `;
 
-const HeartIconStyled = styled(HeartIcon)`
-    fill: ${props => props.theme.cardHeartColor};
-`;
+const HeartIconStyled = styled(HeartIcon)``;
+const ChatIconStyled = styled(ChatIcon)``;
 
 const ModelThumbnailStyled = styled(ModelThumbnail)`
     padding-bottom: 0;
-    min-height: 205px;
+    min-height: 195px;
+    margin: auto;
+    max-width: calc(100% - 118px);
     border-radius: 8px 8px 0px 0px;
+`;
+
+const Name = styled.div`
+    ${regularText};
 `;
 
 function CardContents({ className, model, showOwner, hovered }) {
@@ -44,21 +55,35 @@ function CardContents({ className, model, showOwner, hovered }) {
                 name={model.name}
                 thumbnailUrl={model.thumbnailUrl}
                 showOwner={showOwner}
-                hovered={hovered}
             ></ModelThumbnailStyled>
-            <CardContent>
-                {showOwner && <UserInline user={model.owner} />}
-                <ActivityIndicators>
-                    <ActivityCount>
-                        <ChatIcon />
-                        &nbsp;{model.commentsCount}
-                    </ActivityCount>
-                    <ActivityCount>
-                        <HeartIconStyled />
-                        &nbsp;{model.likesCount}
-                    </ActivityCount>
-                </ActivityIndicators>
-            </CardContent>
+            <Content>
+                <Name>{model.name}</Name>
+                <Row
+                    css={`
+                        margin-top: 8px;
+                    `}
+                >
+                    {showOwner && <UserInline user={model.owner} />}
+                    <ActivityIndicators>
+                        <ActivityCount>
+                            <ChatIconStyled
+                                css={`
+                                    fill: ${BLUE_2};
+                                `}
+                            />
+                            &nbsp;{model.commentsCount}
+                        </ActivityCount>
+                        <ActivityCount>
+                            <HeartIconStyled
+                                css={`
+                                    fill: ${BLUE_2};
+                                `}
+                            />
+                            &nbsp;{model.likesCount}
+                        </ActivityCount>
+                    </ActivityIndicators>
+                </Row>
+            </Content>
         </Card>
     );
 }

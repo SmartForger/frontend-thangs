@@ -16,7 +16,7 @@ import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
 import { ReactComponent as AboutIcon } from '@svg/about-icon.svg';
 import { ReactComponent as ModelIcon } from '@svg/model-icon.svg';
 import { ReactComponent as PencilIcon } from '@svg/pencil-icon.svg';
-import { ModelCollection } from '@components/ModelCollection';
+import { CardCollection } from '@components/CardCollection';
 import { SecondaryButton } from '@components/Button';
 import { ToggleFollowButton } from '@components/ToggleFollowButton';
 import {
@@ -161,7 +161,7 @@ function ModelsContent({ selected, user }) {
     });
 
     return (
-        <ModelCollection
+        <CardCollection
             models={sortedModels}
             noResultsText="This user has not uploaded any models yet."
         />
@@ -174,7 +174,7 @@ function LikesContent({ selected, user }) {
     }
     const models = getLikedModels(user);
     return (
-        <ModelCollection
+        <CardCollection
             models={models}
             noResultsText="This user has not liked any models yet."
         />

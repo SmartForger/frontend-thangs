@@ -6,7 +6,7 @@ import { Button } from '@components/Button';
 import { Uploader } from '@components/Uploader';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
-import { ModelCollection } from '@components/ModelCollection';
+import { CardCollection } from '@components/CardCollection';
 import { UploadProgress } from '@components/UploadProgress';
 
 import { pageTitleText, matchingSubheader } from '@style/text';
@@ -61,7 +61,7 @@ function Results({ modelId }) {
     }
 
     return (
-        <ModelCollection
+        <CardCollection
             models={model.relatedModels}
             noResultsText="No geometric similar matches found. Try uploading another model."
         />

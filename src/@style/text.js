@@ -177,7 +177,7 @@ export const thumbnailErrorText = css`
     font-weight: 500;
 `;
 export const thumbnailActivityCountText = css`
-    color: ${GREY_3};
+    color: ${GREY_11};
     font-weight: 500;
 `;
 export const zeroStateText = css`
@@ -200,4 +200,12 @@ export const howToTitle = css`
     font-size: 24px;
     font-family: ${LEXEND_DECA};
     color: ${BLACK_1};
+`;
+export const regularText = css`
+    font-size: 14px;
+    color: ${BLACK_1};
+`;
+export const cardSubtext = css`
+    font-size: 12px;
+    color: ${GREY_6};
 `;

@@ -1,30 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import ErrorImg from '@svg/image-error-icon.svg';
-import { thumbnailErrorText, modelCardHoverText } from '@style/text';
-
-const Overlay = styled.div`
-    z-index: 1;
-    position: absolute;
-    text-align: center;
-    height: 86px;
-    width: 100%;
-    background: linear-gradient(
-        -180deg,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.2) 100%
-    );
-    bottom: 0;
-    left: 8px;
-    display: flex;
-    align-items: flex-end;
-    margin: -8px -8px 0;
-`;
-
-const ModelName = styled.div`
-    ${modelCardHoverText};
-    margin: 16px;
-`;
+import { thumbnailErrorText } from '@style/text';
 
 const ThumbnailContainer = styled.div`
     ${thumbnailErrorText};
@@ -72,17 +49,11 @@ export function ModelThumbnail({
     name,
     thumbnailUrl: src,
     showOwner,
-    hovered,
     className,
 }) {
     return (
         <ThumbnailContainer showOwner={showOwner} className={className}>
             {src && <img src={src} alt={name} />}
-            {hovered ? (
-                <Overlay>
-                    <ModelName>{name}</ModelName>
-                </Overlay>
-            ) : null}
         </ThumbnailContainer>
     );
 }
