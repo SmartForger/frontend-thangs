@@ -1,4 +1,3 @@
-import { authenticationService } from '@services';
 import { logger } from '../logging';
 
 const apiKey = process.env.REACT_APP_PENDO_API_KEY;
@@ -32,8 +31,6 @@ const initialize = history => {
             z.parentNode.insertBefore(y, z);
         })(window, document, 'script', 'pendo');
 
-        identify();
-
         window.pendo.initialize({
             events: {
                 ready() {
@@ -46,12 +43,11 @@ const initialize = history => {
     }
 };
 
-const identify = () => {
+const identify = user => {
     if (!shouldTrack()) {
         return;
     }
 
-    const user = authenticationService.currentUserValue;
     const userDetails = user
         ? {
               visitor: {

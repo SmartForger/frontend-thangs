@@ -3,7 +3,7 @@ import React from 'react';
 import * as GraphqlService from '@services/graphql-service';
 import { WithNewInvertedHeaderLayout } from '@style/Layout';
 import { Spinner } from '@components/Spinner';
-import { ModelCollection } from '@components/ModelCollection';
+import { CardCollection } from '@components/CardCollection';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -23,7 +23,7 @@ function Page() {
     }
 
     return (
-        <ModelCollection
+        <CardCollection
             models={models}
             noResultsText="We have no models to display right now. Please try again later."
         />

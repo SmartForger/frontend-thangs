@@ -1,5 +1,3 @@
-import { authenticationService } from '@services';
-
 const shouldTrack = () => true;
 
 const initialize = () => {
@@ -16,7 +14,7 @@ const initialize = () => {
         if (e in m) {
             if (m.console && m.console.log) {
                 m.console.log(
-                    'FullStory namespace conflict. Please set window["_fs_namespace"].',
+                    'FullStory namespace conflict. Please set window["_fs_namespace"].'
                 );
             }
             return;
@@ -76,12 +74,10 @@ const initialize = () => {
     })(window, document, window['_fs_namespace'], 'script', 'user');
 };
 
-const identify = () => {
+const identify = user => {
     if (!shouldTrack()) {
         return;
     }
-
-    const user = authenticationService.currentUserValue;
 
     if (!user) {
         return;

@@ -46,7 +46,7 @@ const MODEL_FRAGMENT = gql`
     }
 `;
 
-const MODEL_WITH_RELATED_QUERY = gql`
+export const MODEL_WITH_RELATED_QUERY = gql`
     query getModel($id: ID) {
         model(id: $id) {
             ...Model
@@ -314,6 +314,16 @@ const UPLOAD_MODEL_MUTATION = gql`
         ) {
             model {
                 id
+                name
+                created
+                likesCount
+                commentsCount
+                attachment {
+                    id
+                    imgSrc
+                }
+                uploadStatus
+                uploadedFile
             }
         }
     }
@@ -377,6 +387,14 @@ const useUploadModelMutation = userId => {
 
     const [uploadModel] = useMutation(UPLOAD_MODEL_MUTATION, {
         refetchQueries: [{ query: USER_QUERY, variables: { id: userId } }],
+        update(cache, { data: mutationData }) {
+            const cachedData = cache.readQuery({
+                query: USER_QUERY,
+                variables: { id: userId },
+            });
+            cachedData.user.models.push(mutationData.uploadModel.model);
+            cache.writeQuery({ query: USER_QUERY, data: cachedData });
+        },
     });
 
     async function uploadModelAndParseResults(file, { variables }) {

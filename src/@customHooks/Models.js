@@ -148,7 +148,7 @@ export const useHoopsViewer = modelFilename => {
         const prepCancelSource = axios.CancelToken.source();
 
         debug('  * 1: Loading Script');
-        ensureScriptIsLoaded('vendors/hoops_web_viewer.js')
+        ensureScriptIsLoaded('vendors/hoops/hoops_web_viewer.js')
             .then(async () => {
                 debug('  * 1: Preparing Model');
                 const resp = await axios.get(
@@ -216,6 +216,7 @@ export const useHoopsViewer = modelFilename => {
         const viewer = new Communicator.WebViewer({
             container: containerRef.current,
             endpointUri: HOOPS_WS_ENDPOINT_URI,
+            enginePath: '/vendors/hoops',
             model: `${modelFilename}.scz`,
             rendererType: Communicator.RendererType.Client,
         });

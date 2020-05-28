@@ -6,7 +6,7 @@ import { Button } from '@components/Button';
 import { Uploader } from '@components/Uploader';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
-import { ModelCollection } from '@components/ModelCollection';
+import { CardCollection } from '@components/CardCollection';
 import { UploadProgress } from '@components/UploadProgress';
 
 import { pageTitleText, matchingSubheader } from '@style/text';
@@ -61,7 +61,7 @@ function Results({ modelId }) {
     }
 
     return (
-        <ModelCollection
+        <CardCollection
             models={model.relatedModels}
             noResultsText="No geometric similar matches found. Try uploading another model."
         />
@@ -71,19 +71,18 @@ function Results({ modelId }) {
 function Page() {
     const [currentModel, setCurrentModel] = useState();
     const history = useHistory();
-    const currentUser = authenticationService.currentUserValue;
-    const { id } = currentUser;
+    const currentUser = authenticationService.getCurrentUser();
     const [
         uploadModel,
         { loading: isUploading, error: uploadError },
-    ] = graphqlService.useUploadModelMutation(id);
+    ] = graphqlService.useUploadModelMutation(currentUser.id);
 
     async function handleFile(file) {
         const model = await uploadModel(file, {
             variables: {
                 name: file.name,
                 size: file.size,
-                userEmail: authenticationService.currentUserValue.email,
+                userEmail: currentUser.email,
                 searchUpload: true,
             },
         });

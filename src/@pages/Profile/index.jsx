@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import * as R from 'ramda';
 
 import { WithNewThemeLayout } from '@style';
-import { isError, isProcessing } from '@utilities';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 import { useCurrentUser } from '@customHooks/Users';
@@ -17,7 +16,7 @@ import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
 import { ReactComponent as AboutIcon } from '@svg/about-icon.svg';
 import { ReactComponent as ModelIcon } from '@svg/model-icon.svg';
 import { ReactComponent as PencilIcon } from '@svg/pencil-icon.svg';
-import { ModelCollection } from '@components/ModelCollection';
+import { CardCollection } from '@components/CardCollection';
 import { SecondaryButton } from '@components/Button';
 import { ToggleFollowButton } from '@components/ToggleFollowButton';
 import {
@@ -71,11 +70,6 @@ const Icon = styled.div`
     margin-right: 8px;
 `;
 
-const rejectErrorsAndProcessing = R.pipe(
-    R.reject(isError),
-    R.reject(isProcessing)
-);
-
 function ModelCount({ user }) {
     const models = R.pathOr([], ['models'])(user);
     const { user: currentUser, loading } = useCurrentUser();
@@ -83,13 +77,7 @@ function ModelCount({ user }) {
         return <Spinner />;
     }
 
-    const showAllModels = user.id === currentUser.id;
-
-    const modelsToRender = showAllModels
-        ? models
-        : rejectErrorsAndProcessing(models);
-
-    const amount = modelsToRender.length;
+    const amount = models.length;
     return <span>Models {amount}</span>;
 }
 
@@ -154,7 +142,7 @@ function AboutContent({ selected, user }) {
     return <MarkdownStyled>{description}</MarkdownStyled>;
 }
 
-function ModelsContent({ selected, user, stopPolling }) {
+function ModelsContent({ selected, user }) {
     const models = getModels(user);
     const { user: currentUser, loading } = useCurrentUser();
 
@@ -172,15 +160,10 @@ function ModelsContent({ selected, user, stopPolling }) {
         else return 1;
     });
 
-    if (R.none(isProcessing, models)) {
-        stopPolling();
-    }
-
     return (
-        <ModelCollection
+        <CardCollection
             models={sortedModels}
             noResultsText="This user has not uploaded any models yet."
-            showAllModels={user.id === currentUser.id}
         />
     );
 }
@@ -191,7 +174,7 @@ function LikesContent({ selected, user }) {
     }
     const models = getLikedModels(user);
     return (
-        <ModelCollection
+        <CardCollection
             models={models}
             noResultsText="This user has not liked any models yet."
         />
@@ -203,7 +186,7 @@ const TabGroupContainer = styled.div`
     width: 100%;
 `;
 
-function Tabs({ user, stopPolling }) {
+function Tabs({ user }) {
     const [selected, setSelected] = useState('models');
 
     const selectModel = () => setSelected('models');
@@ -230,11 +213,7 @@ function Tabs({ user, stopPolling }) {
                 />
             </TabTitleGroup>
             <TabContent>
-                <ModelsContent
-                    selected={selected === 'models'}
-                    user={user}
-                    stopPolling={stopPolling}
-                />
+                <ModelsContent selected={selected === 'models'} user={user} />
                 <LikesContent selected={selected === 'likes'} user={user} />
                 <AboutContent selected={selected === 'about'} user={user} />
             </TabContent>
@@ -289,13 +268,7 @@ const ProfileButtonStyled = styled(ProfileButton)`
 function Page() {
     const { id } = useParams();
 
-    const {
-        loading,
-        error,
-        user,
-        startPolling,
-        stopPolling,
-    } = graphqlService.useUserById(id);
+    const { loading, error, user } = graphqlService.useUserById(id);
 
     if (loading) {
         return <Spinner />;
@@ -318,8 +291,6 @@ function Page() {
         );
     }
 
-    startPolling(1000);
-
     return (
         <Frame>
             <ProfilePicture
@@ -329,7 +300,7 @@ function Page() {
             />
             <Name>{user.fullName}</Name>
             <ProfileButtonStyled viewedUser={user} />
-            <Tabs user={user} stopPolling={stopPolling} />
+            <Tabs user={user} />
         </Frame>
     );
 }

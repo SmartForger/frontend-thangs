@@ -2,7 +2,7 @@ import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { parseUser } from './users';
 
-const ALL_MODEL_COMMENTS_QUERY = gql`
+export const ALL_MODEL_COMMENTS_QUERY = gql`
     query allModelComments($modelId: ID) {
         allModelComments(modelId: $modelId) {
             id
@@ -42,7 +42,7 @@ const useAllModelComments = modelId => {
     return { loading, error, comments };
 };
 
-const CREATE_MODEL_COMMENT_MUTATION = gql`
+export const CREATE_MODEL_COMMENT_MUTATION = gql`
     mutation createModelComment($input: CreateModelCommentInput!) {
         createModelComment(input: $input) {
             comment {
@@ -62,26 +62,12 @@ const CREATE_MODEL_COMMENT_MUTATION = gql`
 
 const useCreateModelCommentMutation = ({ modelId }) => {
     return useMutation(CREATE_MODEL_COMMENT_MUTATION, {
-        update: (
-            store,
+        refetchQueries: [
             {
-                data: {
-                    createModelComment: { comment },
-                },
-            }
-        ) => {
-            const { allModelComments } = store.readQuery({
                 query: ALL_MODEL_COMMENTS_QUERY,
                 variables: { modelId },
-            });
-            store.writeQuery({
-                query: ALL_MODEL_COMMENTS_QUERY,
-                variables: { modelId },
-                data: {
-                    allModelComments: allModelComments.concat(comment),
-                },
-            });
-        },
+            },
+        ],
     });
 };
 

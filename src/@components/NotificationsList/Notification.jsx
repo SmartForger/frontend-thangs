@@ -7,13 +7,12 @@ import { ModelThumbnail } from '@components/ModelThumbnail';
 import { Card } from '@components/Card';
 import { commentUsername } from '@style/text';
 import { commentPostedText } from '@style/text';
-import { isCompleted } from '@utilities';
 import {
-    isModelChangedStatus,
     isModelCompletedProcessing,
     isModelFailedProcessing,
     isUserCommentedOnModel,
     isUserUploadedModel,
+    isUserStartedFollowingUser,
 } from '@services/graphql-service/notifications';
 import Logo from '@svg/logo.svg';
 import { BLACK_2 } from '@style/colors';
@@ -105,6 +104,186 @@ const Text = styled.div`
     margin-top: 16px;
 `;
 
+function ModelCompletedProcessing({ className, time, actor }) {
+    return (
+        <Item className={className}>
+            <ThangsPicture />
+            <Content>
+                <ActorName>Thangs</ActorName>
+                <Time>{time}</Time>
+                <Text>Your model upload is complete.</Text>
+            </Content>
+            <Link to={`/model/${actor.id}`}>
+                <TargetPicture>
+                    <Thumbnail
+                        thumbnailUrl={actor.thumbnailUrl}
+                        name={actor.name}
+                    />
+                </TargetPicture>
+            </Link>
+        </Item>
+    );
+}
+
+function ModelFailedProcessing({ className, time, actor }) {
+    return (
+        <Item className={className}>
+            <ThangsPicture />
+            <Content>
+                <ActorName>Thangs</ActorName>
+                <Time>{time}</Time>
+                <Text>
+                    We were unable to process your model. Please try again.
+                </Text>
+            </Content>
+            <TargetPicture>
+                <Thumbnail
+                    thumbnailUrl={actor.thumbnailUrl}
+                    name={actor.name}
+                />
+            </TargetPicture>
+        </Item>
+    );
+}
+
+function UserCommentedOnModel({
+    className,
+    time,
+    actor,
+    target,
+    actionObject,
+    verb,
+}) {
+    return (
+        <Item className={className}>
+            <ActorPicture
+                name={actor.fullName}
+                id={actor.id}
+                img={actor.profile.avatarUrl}
+            />
+            <Content>
+                <ActorName>{actor.fullName}</ActorName>
+
+                <div>
+                    <Verb>{verb}</Verb>
+                    <span>on</span>
+                    <TargetName>{target.name}</TargetName>
+                    <Time>{time}</Time>
+                </div>
+                <Text>{actionObject.body}</Text>
+            </Content>
+            <Link to={`/model/${target.id}`}>
+                <TargetPicture>
+                    <Thumbnail
+                        thumbnailUrl={target.thumbnailUrl}
+                        name={target.name}
+                    />
+                </TargetPicture>
+            </Link>
+        </Item>
+    );
+}
+
+function UserUploadedModel({
+    className,
+    time,
+    actor,
+    verb,
+    target,
+    actionObject,
+}) {
+    return (
+        <Item className={className}>
+            <ActorPicture
+                name={actor.fullName}
+                id={actor.id}
+                img={actor.profile.avatarUrl}
+            />
+            <Content>
+                <ActorName>{actor.fullName}</ActorName>
+
+                <div>
+                    <Verb>{verb}</Verb>
+                    <TargetName>{actionObject.name}</TargetName>
+                    <Time>{time}</Time>
+                </div>
+            </Content>
+            <Link to={`/model/${actionObject.id}`}>
+                <TargetPicture>
+                    <Thumbnail
+                        thumbnailUrl={actionObject.thumbnailUrl}
+                        name={actionObject.name}
+                    />
+                </TargetPicture>
+            </Link>
+        </Item>
+    );
+}
+
+function UserLikedModel({
+    className,
+    time,
+    actor,
+    verb,
+    target,
+    actionObject,
+}) {
+    return (
+        <Item className={className}>
+            <ActorPicture
+                name={actor.fullName}
+                id={actor.id}
+                img={actor.profile.avatarUrl}
+            />
+            <Content>
+                <ActorName>{actor.fullName}</ActorName>
+
+                <div>
+                    <Verb>{verb}</Verb>
+                    <TargetName>{target.name}</TargetName>
+                    <Time>{time}</Time>
+                </div>
+            </Content>
+            <Link to={`/model/${target.id}`}>
+                <TargetPicture>
+                    <Thumbnail
+                        thumbnailUrl={target.thumbnailUrl}
+                        name={target.name}
+                    />
+                </TargetPicture>
+            </Link>
+        </Item>
+    );
+}
+
+function UserStartedFollowingUser({
+    className,
+    time,
+    actor,
+    verb,
+    target,
+    actionObject,
+}) {
+    return (
+        <Item className={className}>
+            <ActorPicture
+                name={actor.fullName}
+                id={actor.id}
+                img={actor.profile.avatarUrl}
+            />
+            <Content>
+                <ActorName>{actor.fullName}</ActorName>
+
+                <div>
+                    <Verb>{verb}</Verb>
+                    <TargetName>you</TargetName>
+                    <Time>{time}</Time>
+                </div>
+            </Content>
+        </Item>
+    );
+}
+
 export function Notification({
     timestamp,
     actor,
@@ -116,98 +295,74 @@ export function Notification({
 }) {
     const time = formatDate(timestamp);
 
-    if (isModelChangedStatus(notificationType)) {
+    if (isModelFailedProcessing(notificationType)) {
         return (
-            <Item className={className}>
-                <ThangsPicture />
-                <Content>
-                    <ActorName>Thangs</ActorName>
-                    <Time>{time}</Time>
-                    <Text>
-                        {isModelCompletedProcessing(target)
-                            ? 'Your model upload is complete.'
-                            : isModelFailedProcessing(target)
-                            ? 'We were unable to process your model. Please try again.'
-                            : null}
-                    </Text>
-                </Content>
-                {isModelCompletedProcessing(target) ? (
-                    <Link to={`/model/${target.id}`}>
-                        <TargetPicture>
-                            <Thumbnail
-                                thumbnailUrl={target.img}
-                                showStatusOverlay={!isCompleted(target)}
-                                id={target.id}
-                                uploadStatus={target.uploadStatus}
-                                name={target.name}
-                            />
-                        </TargetPicture>
-                    </Link>
-                ) : isModelFailedProcessing(target) ? (
-                    <TargetPicture>
-                        <Thumbnail
-                            thumbnailUrl={target.img}
-                            showStatusOverlay={!isCompleted(target)}
-                            id={target.id}
-                            uploadStatus={target.uploadStatus}
-                            name={target.name}
-                        />
-                    </TargetPicture>
-                ) : null}
-            </Item>
+            <ModelFailedProcessing
+                className={className}
+                time={time}
+                actor={actor}
+                verb={verb}
+            />
+        );
+    }
+
+    if (isModelCompletedProcessing(notificationType)) {
+        return (
+            <ModelCompletedProcessing
+                className={className}
+                time={time}
+                actor={actor}
+                verb={verb}
+            />
+        );
+    }
+
+    if (isUserCommentedOnModel(notificationType)) {
+        return (
+            <UserCommentedOnModel
+                className={className}
+                time={time}
+                actor={actor}
+                target={target}
+                actionObject={actionObject}
+                verb={verb}
+            />
+        );
+    }
+
+    if (isUserUploadedModel(notificationType)) {
+        return (
+            <UserUploadedModel
+                className={className}
+                time={time}
+                actor={actor}
+                target={target}
+                actionObject={actionObject}
+                verb={verb}
+            />
+        );
+    }
+
+    if (isUserStartedFollowingUser(notificationType)) {
+        return (
+            <UserStartedFollowingUser
+                className={className}
+                time={time}
+                actor={actor}
+                target={target}
+                actionObject={actionObject}
+                verb={verb}
+            />
         );
     }
 
     return (
-        <Item className={className}>
-            {actor && (
-                <ActorPicture name={actor.name} id={actor.id} img={actor.img} />
-            )}
-            <Content>
-                <ActorName>{actor.name}</ActorName>
-                <div>
-                    <Verb>{verb}</Verb>
-                    {isUserCommentedOnModel(notificationType) && (
-                        <span>on</span>
-                    )}
-                    {isUserUploadedModel(notificationType) ? (
-                        <TargetName>{actionObject.name}</TargetName>
-                    ) : (
-                        <TargetName>{target.name}</TargetName>
-                    )}
-                    <Time>{time}</Time>
-                </div>
-                {isUserCommentedOnModel(notificationType) && (
-                    <Text>{actionObject.body}</Text>
-                )}
-            </Content>
-            {isUserUploadedModel(notificationType) ? (
-                <Link to={`/model/${actionObject.id}`}>
-                    <TargetPicture>
-                        <Thumbnail
-                            thumbnailUrl={actionObject.img}
-                            showStatusOverlay={!isCompleted(actionObject)}
-                            id={actionObject.id}
-                            uploadStatus={actionObject.uploadStatus}
-                            name={actionObject.name}
-                        />
-                    </TargetPicture>
-                </Link>
-            ) : (
-                target && (
-                    <Link to={`/model/${target.id}`}>
-                        <TargetPicture>
-                            <Thumbnail
-                                thumbnailUrl={target.img}
-                                showStatusOverlay={!isCompleted(target)}
-                                id={target.id}
-                                uploadStatus={target.uploadStatus}
-                                name={target.name}
-                            />
-                        </TargetPicture>
-                    </Link>
-                )
-            )}
-        </Item>
+        <UserLikedModel
+            className={className}
+            time={time}
+            actor={actor}
+            target={target}
+            verb={verb}
+        />
     );
 }

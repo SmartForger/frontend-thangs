@@ -1,6 +1,5 @@
 export * from './TextInput.jsx';
 export * from './ShelfMenu.jsx';
-export * from './PrivateRoute.jsx';
 export * from './Button.jsx';
 export * from './AnchorButton.jsx';
 export * from './Spinner.jsx';

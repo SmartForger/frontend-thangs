@@ -1,4 +1,4 @@
-import styled, { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider, css } from 'styled-components';
 import React, { useContext } from 'react';
 import { NewTheme, NewDarkTheme } from '@style/ThangsNormal.theme.js';
 import { GlobalStyle } from '@style/Thangs.GlobalStyle';
@@ -6,13 +6,24 @@ import { Header } from '@components/Header';
 import { Flash, FlashContext, FlashContextProvider } from '@components/Flash';
 import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg';
 import { landingPageText, landingPageSubtext } from '@style/text';
+import { mediaMdPlus } from '@style/media-queries';
 
 const allowCssProp = props => (props.css ? props.css : '');
 
-const NewLayout = styled.div`
+const Padding = css`
     padding: ${props =>
             props.variant === 'small-vertical-spacing' ? '110px' : '195px'}
         16px 32px;
+
+    ${mediaMdPlus} {
+        padding: ${props =>
+                props.variant === 'small-vertical-spacing' ? '110px' : '195px'}
+            100px 32px;
+    }
+`;
+
+const NewLayout = styled.div`
+    ${Padding};
     margin: auto;
     max-width: ${props => props.theme.maxWidth};
 

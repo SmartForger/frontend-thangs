@@ -90,6 +90,7 @@ const Frame = styled.div`
     height: 100%;
     justify-content: center;
     cursor: pointer;
+    padding: 16px;
 `;
 
 export function HowTo({ setSeenHowTo }) {

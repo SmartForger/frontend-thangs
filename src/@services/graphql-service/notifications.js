@@ -1,17 +1,20 @@
 import { gql } from 'apollo-boost';
 import * as R from 'ramda';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { createAppUrl } from './utils';
 import { parseModel } from './models';
+import { parseUser } from './users';
 
 const FIVE_MINUTES = 5 * 60 * 1000;
 
-const USER_LIKED_MODEL = 'USER_LIKED_MODEL';
-const NOT_RECOGNIZED = 'NOT_RECOGNIZED';
-const USER_DOWNLOADED_MODEL = 'USER_DOWNLOADED_MODEL';
-const MODEL_CHANGED_STATUS = 'MODEL_CHANGED_STATUS';
-const USER_COMMENTED_ON_MODEL = 'USER_COMMENTED_ON_MODEL';
-const USER_UPLOADED_MODEL = 'USER_UPLOADED_MODEL';
+export const USER_LIKED_MODEL = 'USER_LIKED_MODEL';
+export const NOT_RECOGNIZED = 'NOT_RECOGNIZED';
+export const USER_DOWNLOADED_MODEL = 'USER_DOWNLOADED_MODEL';
+export const MODEL_CHANGED_STATUS = 'MODEL_CHANGED_STATUS';
+export const MODEL_FAILED_PROCESSING = 'MODEL_FAILED_PROCESSING';
+export const MODEL_COMPLETED_PROCESSING = 'MODEL_COMPLETED_PROCESSING';
+export const USER_COMMENTED_ON_MODEL = 'USER_COMMENTED_ON_MODEL';
+export const USER_UPLOADED_MODEL = 'USER_UPLOADED_MODEL';
+export const USER_STARTED_FOLLOWING_USER = 'USER_STARTED_FOLLOWING_USER';
 
 const COMPLETED = 'COMPLETED';
 const ERROR = 'ERROR';
@@ -22,71 +25,61 @@ const VERB_TO_NOTIFICATION_TYPE = {
     'changed status': MODEL_CHANGED_STATUS,
     commented: USER_COMMENTED_ON_MODEL,
     uploaded: USER_UPLOADED_MODEL,
+    'started following': USER_STARTED_FOLLOWING_USER,
 };
 
 export const isUserLikedModel = R.equals(USER_LIKED_MODEL);
 export const isUserCommentedOnModel = R.equals(USER_COMMENTED_ON_MODEL);
 export const isUserDownloadedModel = R.equals(USER_DOWNLOADED_MODEL);
 export const isModelChangedStatus = R.equals(MODEL_CHANGED_STATUS);
+export const isModelFailedProcessing = R.equals(MODEL_FAILED_PROCESSING);
+export const isModelCompletedProcessing = R.equals(MODEL_COMPLETED_PROCESSING);
 export const isUserUploadedModel = R.equals(USER_UPLOADED_MODEL);
+export const isUserStartedFollowingUser = R.equals(USER_STARTED_FOLLOWING_USER);
 
-export const isModelCompletedProcessing = R.propEq('uploadStatus', COMPLETED);
-export const isModelFailedProcessing = R.propEq('uploadStatus', ERROR);
+export const modelHasCompletedStatus = R.propEq('uploadStatus', COMPLETED);
+export const modelHasFailedStatus = R.propEq('uploadStatus', ERROR);
 
-function getNotificationType(verb) {
+function getNotificationType(verb, actor) {
     const type = VERB_TO_NOTIFICATION_TYPE[verb];
-    return type || NOT_RECOGNIZED;
-}
-
-function parseActor({ actor }, type) {
-    if (
-        isUserLikedModel(type) ||
-        isUserDownloadedModel(type) ||
-        isUserCommentedOnModel(type) ||
-        isUserUploadedModel(type)
-    ) {
-        return {
-            name: actor.fullName,
-            id: actor.id,
-            img: actor.profile && createAppUrl(actor.profile.avatarUrl),
-        };
+    if (!type) {
+        return NOT_RECOGNIZED;
     }
-    return null;
-}
 
-function parseTarget({ target, actor }, type) {
-    if (
-        isUserLikedModel(type) ||
-        isUserDownloadedModel(type) ||
-        isUserCommentedOnModel(type)
-    ) {
-        const model = parseModel(target);
-        return { ...model, img: model.thumbnailUrl, isModel: true };
-    } else if (isModelChangedStatus(type)) {
-        const model = parseModel(actor);
-        return { ...model, img: model.thumbnailUrl, isModel: true };
+    if (isModelChangedStatus(type) && modelHasCompletedStatus(actor)) {
+        return MODEL_COMPLETED_PROCESSING;
     }
-    return null;
+
+    if (isModelChangedStatus(type) && modelHasFailedStatus(actor)) {
+        return MODEL_FAILED_PROCESSING;
+    }
+
+    return type;
 }
 
-function parseActionObject({ actionObject }, type) {
-    if (isUserCommentedOnModel(type)) {
-        return {
-            body: actionObject.body,
-        };
-    } else if (isUserUploadedModel(type)) {
-        const model = parseModel(actionObject);
-        return { ...model, img: model.thumbnailUrl, isModel: true };
+const isModel = R.propEq('__typename', 'ModelType');
+const isModelComment = R.propEq('__typename', 'ModelCommentType');
+const isUser = R.propEq('__typename', 'UserType');
+
+function parseGeneric(item) {
+    if (!item) {
+        return null;
+    } else if (isUser(item)) {
+        return parseUser(item);
+    } else if (isModel(item)) {
+        return parseModel(item);
+    } else if (isModelComment(item)) {
+        return item;
     }
     return null;
 }
 
 function parseNotification(notification) {
-    const type = getNotificationType(notification.verb);
+    const type = getNotificationType(notification.verb, notification.actor);
 
-    const actor = parseActor(notification, type);
-    const target = parseTarget(notification, type);
-    const actionObject = parseActionObject(notification, type);
+    const actor = parseGeneric(notification.actor);
+    const target = parseGeneric(notification.target);
+    const actionObject = parseGeneric(notification.actionObject);
     const { verb, timestamp } = notification;
 
     return {
@@ -147,27 +140,29 @@ const NOTIFICATIONS = gql`
     }
 `;
 
-function isHandledNotificationType(notification) {
-    const type = getNotificationType(notification.verb);
-    return (
-        isUserLikedModel(type) ||
-        isUserDownloadedModel(type) ||
-        (isModelChangedStatus(type) &&
-            isModelCompletedProcessing(notification.actor)) ||
-        (isModelChangedStatus(type) &&
-            isModelFailedProcessing(notification.actor)) ||
-        isUserCommentedOnModel(type) ||
-        isUserUploadedModel(type)
-    );
+function isHandledNotificationType({ notificationType }) {
+    return R.anyPass([
+        isUserLikedModel,
+        isUserDownloadedModel,
+        isModelCompletedProcessing,
+        isModelFailedProcessing,
+        isUserCommentedOnModel,
+        isUserUploadedModel,
+        isUserStartedFollowingUser,
+    ])(notificationType);
 }
 
+const prepareNotifications = R.pipe(
+    R.map(parseNotification),
+    R.filter(isHandledNotificationType)
+);
+
 function getAndParseHandledNotifications(data) {
-    return data && data.user
-        ? R.map(
-              parseNotification,
-              R.filter(isHandledNotificationType, data.user.notifications)
-          )
-        : [];
+    if (!data || !data.user) {
+        return [];
+    }
+
+    return prepareNotifications(data.user.notifications);
 }
 
 export function useNotificationsByUserId(id) {

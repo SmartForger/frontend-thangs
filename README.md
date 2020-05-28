@@ -1,5 +1,10 @@
 # Thangs Front-end
 
+## Requirements
+
+- [NodeJs (> 10.xx.x)](https://nodejs.org/en/)
+- [Yarn](https://www.npmjs.com/package/yarn)
+
 ## Usage
 
 1. Clone the repository
@@ -252,8 +257,15 @@ Update the CORS rules on the staging bucket:
 gsutil cors set cors-staging.json gs://staging-thangs-uploads
 ```
 
-### CircleCi Staging Deploy
-*Coming Soon*
+## Circle Ci
+
+This repo is managed by Circle Ci which comes with two considerations:
+
+1. Any commits to the `development` branch will be automatically deployed to the staging environment
+
+2. Any commits to the `master` branch will be automatically deployed to the production environment (with non promote flag, allowing some quick testing before going fully live)
+
+With these considerations in mind, make sure to always follow our branching strategy and create PR's for any changes, and when merging into `development` if there are possible breaking changes, let the team know in slack (others may be currently testing in staging)
 
 ## Updating Query fragments
 
@@ -264,3 +276,17 @@ gsutil cors set cors-staging.json gs://staging-thangs-uploads
 - Make sure you have `thangs-social-service` running locally
 - Update your `.env.development` to include credentials for that service
 - Run `yarn update-fragments`
+
+## Storybook
+
+This is a tool we use to make it easier to develop and iterate on components in
+isolation.
+
+The best place to keep stories is as siblings to the component they test, to
+encourage more focused stories.
+
+### How to run
+```
+yarn storybook
+```
+- Then open http://localhost:9009/

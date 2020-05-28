@@ -71,6 +71,9 @@ jobs:
           #       production steps in the deploy-production workflow.
           command: yarn build:staging
       - run:
+          name: "Build Storybook"
+          command: yarn build:storybook
+      - run:
           name: "Deploy build"
           command: |
             # Store service account

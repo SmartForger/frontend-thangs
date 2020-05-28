@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { AnchorButton } from '@components/AnchorButton';
 import { ColorPicker } from '@components/ColorPicker';
+import { TextButton } from '@components/Button';
 
 import { ReactComponent as WireMode } from '@svg/view-mode-wire.svg';
 import { ReactComponent as ShadedMode } from '@svg/view-mode-shaded.svg';
@@ -9,12 +10,21 @@ import { ReactComponent as XRayMode } from '@svg/view-mode-xray.svg';
 import { ReactComponent as EdgesColor } from '@svg/view-color-edges.svg';
 import { ReactComponent as ShadeColor } from '@svg/view-color-shade.svg';
 import { viewerToolbarText } from '@style/text';
+import { WHITE_1, GREY_1 } from '@style/colors';
+import { mediaMdPlus } from '@style/media-queries';
+
+const IconButton = styled(TextButton)`
+    height: 36px;
+    ${mediaMdPlus} {
+        margin-left: 16px;
+    }
+`;
 
 const ToolbarContainer = styled.div`
-    ${viewerToolbarText};
-    background-color: #ffffff;
+    position: relative;
+    background-color: ${WHITE_1};
     box-shadow: none;
-    border-top: 1px solid #eeeeee;
+    border-top: 1px solid ${GREY_1};
     padding: 24px;
 
     display: flex;
@@ -27,24 +37,21 @@ const ToolGroup = styled.div`
     margin: 0;
     padding: 0;
 
-    > div + div {
-        margin-left: 16px;
+    > button + button {
+        margin-left: 12px;
     }
 `;
 
 const ToolGroupTitle = styled.div`
+    ${viewerToolbarText};
+    display: none;
     text-transform: uppercase;
     margin: 0;
     padding: 0;
-`;
 
-const ToolButton = styled.button`
-    margin-left: 16px;
-    padding: 0;
-    border: none;
-    background: none;
-    text-decoration: none;
-    cursor: pointer;
+    ${mediaMdPlus} {
+        display: block;
+    }
 `;
 
 export function Toolbar({
@@ -66,32 +73,56 @@ export function Toolbar({
         <ToolbarContainer>
             <ToolGroup>
                 <ToolGroupTitle>Model View</ToolGroupTitle>
-                <ToolButton onClick={makeDrawModeHandler('shaded')}>
+                <IconButton onClick={makeDrawModeHandler('shaded')}>
                     <ShadedMode />
-                </ToolButton>
-                <ToolButton onClick={makeDrawModeHandler('wire')}>
+                </IconButton>
+                <IconButton onClick={makeDrawModeHandler('wire')}>
                     <WireMode />
-                </ToolButton>
-                <ToolButton onClick={makeDrawModeHandler('xray')}>
+                </IconButton>
+                <IconButton onClick={makeDrawModeHandler('xray')}>
                     <XRayMode />
-                </ToolButton>
+                </IconButton>
             </ToolGroup>
             <ToolGroup>
                 <ToolGroupTitle>Change Color</ToolGroupTitle>
-                <ColorPicker
-                    color={wireColor}
-                    onChange={makeColorHandler('wire')}
-                >
-                    <EdgesColor />
-                </ColorPicker>
-                <ColorPicker
-                    color={meshColor}
-                    onChange={makeColorHandler('mesh')}
-                >
-                    <ShadeColor />
-                </ColorPicker>
+                <IconButton>
+                    <ColorPicker
+                        color={wireColor}
+                        onChange={makeColorHandler('wire')}
+                    >
+                        <EdgesColor />
+                    </ColorPicker>
+                </IconButton>
+                <IconButton>
+                    <ColorPicker
+                        color={meshColor}
+                        onChange={makeColorHandler('mesh')}
+                    >
+                        <ShadeColor />
+                    </ColorPicker>
+                </IconButton>
             </ToolGroup>
-            <AnchorButton onClick={onResetView}>Reset Image</AnchorButton>
+            <AnchorButton
+                onClick={onResetView}
+                css={`
+                    ${mediaMdPlus} {
+                        display: none;
+                    }
+                `}
+            >
+                Reset
+            </AnchorButton>
+            <AnchorButton
+                onClick={onResetView}
+                css={`
+                    display: none;
+                    ${mediaMdPlus} {
+                        display: block;
+                    }
+                `}
+            >
+                Reset Image
+            </AnchorButton>
         </ToolbarContainer>
     );
 }

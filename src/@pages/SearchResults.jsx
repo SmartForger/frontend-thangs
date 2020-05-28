@@ -4,7 +4,7 @@ import { WithNewThemeLayout } from '@style';
 import { useParams } from 'react-router-dom';
 import * as GraphqlService from '@services/graphql-service';
 import { Spinner } from '@components/Spinner';
-import { ModelCollection } from '@components/ModelCollection';
+import { CardCollection } from '@components/CardCollection';
 import { subheaderText } from '@style/text';
 
 const SearchResultsStyle = styled.div`
@@ -38,7 +38,7 @@ const Page = () => {
     return (
         <SearchResultsStyle>
             <Header>Results for {searchQuery}</Header>
-            <ModelCollection
+            <CardCollection
                 models={models}
                 noResultsText="No results found. Try searching another keyword or search by model above."
             />
