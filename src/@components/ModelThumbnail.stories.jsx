@@ -29,7 +29,7 @@ export function ModelThumbnailComplete() {
         <Container>
             <ModelThumbnail
                 name="Example: Pikachu"
-                thumbnailUrl="http://slowwly.robertomurray.co.uk/delay/0/url/https://i.pinimg.com/originals/76/47/9d/76479dd91dc55c2768ddccfc30a4fbf5.png"
+                thumbnailUrl="https://i.pinimg.com/originals/76/47/9d/76479dd91dc55c2768ddccfc30a4fbf5.png"
             />
         </Container>
     );
