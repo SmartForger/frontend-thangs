@@ -61,7 +61,7 @@
     "eject": "react-scripts eject",
     "update-fragments": "env-cmd -f .env.development node scripts/update-fragments.js",
     "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build:storybook": "build-storybook -c .storybook -s public -o storybook"
   },
   "browserslist": {
     "production": [
