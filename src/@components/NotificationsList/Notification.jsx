@@ -111,7 +111,7 @@ function ModelCompletedProcessing({ className, time, actor }) {
             <Content>
                 <ActorName>Thangs</ActorName>
                 <Time>{time}</Time>
-                <Text>Your model upload is complete.</Text>
+                <Text>We have finished processing your model.</Text>
             </Content>
             <Link to={`/model/${actor.id}`}>
                 <TargetPicture>
@@ -136,12 +136,14 @@ function ModelFailedProcessing({ className, time, actor }) {
                     We were unable to process your model. Please try again.
                 </Text>
             </Content>
-            <TargetPicture>
-                <Thumbnail
-                    thumbnailUrl={actor.thumbnailUrl}
-                    name={actor.name}
-                />
-            </TargetPicture>
+            <Link to={`/model/${actor.id}`}>
+                <TargetPicture>
+                    <Thumbnail
+                        thumbnailUrl={actor.thumbnailUrl}
+                        name={actor.name}
+                    />
+                </TargetPicture>
+            </Link>
         </Item>
     );
 }
