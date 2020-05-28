@@ -209,3 +209,13 @@ export const cardSubtext = css`
     font-size: 12px;
     color: ${GREY_6};
 `;
+export const breadcrumbTextLight = css`
+    font-size: 20px;
+    font-family: ${LEXEND_DECA};
+    color: ${GREY_6};
+`;
+
+export const breadcrumbTextDark = css`
+    font-size: 20px;
+    font-family: ${LEXEND_DECA};
+`;
