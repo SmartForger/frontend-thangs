@@ -4,6 +4,8 @@ export const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca&family=Montserrat:wght@300;400;500;600;700&display=swap');
 
   body {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
     padding: 0;
     margin: 0;
     overflow-x: hidden;
