@@ -18,7 +18,11 @@ export const withApolloProvider = (args = {}) => {
             const name = type.definitions[0].name.value;
             action(`triggering mutation ${name}`)(variables);
             if (typeof data === 'function') {
-                return Promise.resolve({ data: data(variables) });
+                try {
+                    return Promise.resolve({ data: data(variables) });
+                } catch (e) {
+                    return Promise.reject({ errors: [e] });
+                }
             }
             return Promise.resolve({ data });
         });

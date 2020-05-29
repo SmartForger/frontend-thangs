@@ -23,6 +23,7 @@
     "gh-pages": "^2.2.0",
     "graphql": "^14.6.0",
     "history": "^4.10.1",
+    "joi": "^14.3.1",
     "jwt-decode": "^2.2.0",
     "md5": "^2.2.1",
     "mdi-material-ui": "^6.10.0",
