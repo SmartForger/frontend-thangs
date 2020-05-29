@@ -4,10 +4,7 @@ import * as R from 'ramda';
 import { modelDetailsLabelText } from '@style/text';
 
 const title = R.replace(/(^|\s)\S/g, R.toUpper);
-const titleCase = R.pipe(
-    R.toLower,
-    title
-);
+const titleCase = R.pipe(R.toLower, title);
 
 const Table = styled.table`
     border-spacing: 8px 0;
@@ -32,10 +29,10 @@ const SecondCell = styled(Cell)`
 
 const Row = styled.tr``;
 
-export function ModelDetails({ model }) {
+export function ModelDetails({ model, className }) {
     const category = model.category && titleCase(model.category);
     return (
-        <Table>
+        <Table className={className}>
             <tbody>
                 <AttrRow name="Material" value={model.material} />
                 <AttrRow name="Weight" value={model.weight} />

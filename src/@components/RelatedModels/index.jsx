@@ -43,7 +43,7 @@ const Related = styled.div`
     grid-area: related;
 `;
 
-export function RelatedModels({ modelId }) {
+export function RelatedModels({ modelId, className }) {
     const {
         loading,
         error,
@@ -66,7 +66,7 @@ export function RelatedModels({ modelId }) {
     }
 
     return (
-        <Related>
+        <Related className={className}>
             <Header>Geometrically Similar</Header>
 
             {isProcessing(model) ? (
