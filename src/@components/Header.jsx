@@ -34,7 +34,7 @@ const FixedHeader = styled.div`
 const DesktopBoundary = styled.div`
     position: relative;
     margin: 48px auto 16px;
-    max-width: 1440px;
+    max-width: ${props => props.theme.maxWidth};
     flex-grow: 1;
 
     ${mediaMdPlus} {
