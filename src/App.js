@@ -91,13 +91,13 @@ const App = () => {
                             component={routeRequiresAuth(EditProfile)}
                         />
                         <Route
+                            path="/profile/likes"
+                            component={routeRequiresAuth(Likes)}
+                        />
+                        <Route
                             exact
                             path="/profile/:id"
                             component={routeRequiresAuth(Profile)}
-                        />
-                        <Route
-                            path="/profile/:id/likes"
-                            component={routeRequiresAuth(Likes)}
                         />
                         <Route
                             exact
