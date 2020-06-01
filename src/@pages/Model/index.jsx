@@ -66,13 +66,13 @@ const Column = styled.div`
     }
 `;
 
-const MobileRow = styled(Row)`
+const OnlyMobileRow = styled(Row)`
     ${mediaLgPlus} {
         display: none;
     }
 `;
 
-const DesktopColumn = styled(Column)`
+const OnlyDesktopColumn = styled(Column)`
     display: none;
     ${mediaLgPlus} {
         display: block;
@@ -225,24 +225,24 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                             <ModelViewerStyled model={model} />
                         )}
                     </Row>
-                    <MobileRow>
+                    <OnlyMobileRow>
                         <Details currentUser={currentUser} model={model} />
-                    </MobileRow>
+                    </OnlyMobileRow>
                     <Row>
                         <RelatedModels modelId={model.id} />
                     </Row>
-                    <MobileRow>
+                    <OnlyMobileRow>
                         <CommentsForModel model={model} />
-                    </MobileRow>
+                    </OnlyMobileRow>
                 </Column>
-                <DesktopColumn>
+                <OnlyDesktopColumn>
                     <Row>
                         <Details currentUser={currentUser} model={model} />
                     </Row>
                     <Row>
                         <CommentsForModel model={model} />
                     </Row>
-                </DesktopColumn>
+                </OnlyDesktopColumn>
             </Row>
         </>
     );
