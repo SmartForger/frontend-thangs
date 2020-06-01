@@ -15,6 +15,7 @@ export const MODEL_COMPLETED_PROCESSING = 'MODEL_COMPLETED_PROCESSING';
 export const USER_COMMENTED_ON_MODEL = 'USER_COMMENTED_ON_MODEL';
 export const USER_UPLOADED_MODEL = 'USER_UPLOADED_MODEL';
 export const USER_STARTED_FOLLOWING_USER = 'USER_STARTED_FOLLOWING_USER';
+export const USER_STARTED_FOLLOWING_MODEL = 'USER_STARTED_FOLLOWING_MODEL';
 
 const COMPLETED = 'COMPLETED';
 const ERROR = 'ERROR';
@@ -25,7 +26,6 @@ const VERB_TO_NOTIFICATION_TYPE = {
     'changed status': MODEL_CHANGED_STATUS,
     commented: USER_COMMENTED_ON_MODEL,
     uploaded: USER_UPLOADED_MODEL,
-    'started following': USER_STARTED_FOLLOWING_USER,
 };
 
 export const isUserLikedModel = R.equals(USER_LIKED_MODEL);
@@ -40,10 +40,19 @@ export const isUserStartedFollowingUser = R.equals(USER_STARTED_FOLLOWING_USER);
 export const modelHasCompletedStatus = R.propEq('uploadStatus', COMPLETED);
 export const modelHasFailedStatus = R.propEq('uploadStatus', ERROR);
 
-function getNotificationType(verb, actor) {
+function getNotificationType(verb, actor, target) {
     const type = VERB_TO_NOTIFICATION_TYPE[verb];
     if (!type) {
         return NOT_RECOGNIZED;
+    }
+
+    if (verb === 'started following') {
+        if (isModel(target)) {
+            return USER_STARTED_FOLLOWING_MODEL;
+        }
+        if (isUser(target)) {
+            return USER_STARTED_FOLLOWING_USER;
+        }
     }
 
     if (isModelChangedStatus(type) && modelHasCompletedStatus(actor)) {
@@ -75,7 +84,11 @@ function parseGeneric(item) {
 }
 
 function parseNotification(notification) {
-    const type = getNotificationType(notification.verb, notification.actor);
+    const type = getNotificationType(
+        notification.verb,
+        notification.actor,
+        notification.target
+    );
 
     const actor = parseGeneric(notification.actor);
     const target = parseGeneric(notification.target);
