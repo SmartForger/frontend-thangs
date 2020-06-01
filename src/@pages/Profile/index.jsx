@@ -28,6 +28,7 @@ import {
 
 export * from './EditProfile';
 export * from './RedirectProfile';
+export * from './Likes';
 
 const graphqlService = GraphqlService.getInstance();
 

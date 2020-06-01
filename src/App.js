@@ -15,6 +15,7 @@ import {
     SearchResults,
     Page404,
     Profile,
+    Likes,
     EditProfile,
     RedirectProfile,
     Newspost,
@@ -90,6 +91,11 @@ const App = () => {
                             component={routeRequiresAuth(EditProfile)}
                         />
                         <Route
+                            path="/profile/likes"
+                            component={routeRequiresAuth(Likes)}
+                        />
+                        <Route
+                            exact
                             path="/profile/:id"
                             component={routeRequiresAuth(Profile)}
                         />
