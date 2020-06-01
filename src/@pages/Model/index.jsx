@@ -49,7 +49,7 @@ const Row = styled.div`
         margin-bottom: 48px;
     }
 
-    > * {
+    > div {
         flex-grow: 1;
     }
 `;
