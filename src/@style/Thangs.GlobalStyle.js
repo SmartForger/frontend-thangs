@@ -32,7 +32,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   ol, ul {
-    magin: 0;
+    margin: 0;
     padding: 0;
     list-style-type: none;
   }

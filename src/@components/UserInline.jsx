@@ -8,11 +8,18 @@ const UserContainerInline = styled.div`
     align-items: center;
 `;
 
-const UserNameInline = styled.span`
+const Info = styled.span`
     margin-left: 16px;
+    flex-grow: 1;
 `;
 
-export function UserInline({ user, className, size = '24px' }) {
+export function UserInline({
+    user,
+    className,
+    displayEmail,
+    size = '24px',
+    children,
+}) {
     return (
         <UserContainerInline className={className}>
             <ProfilePicture
@@ -20,7 +27,11 @@ export function UserInline({ user, className, size = '24px' }) {
                 name={user.fullName}
                 src={user.profile.avatarUrl}
             />
-            <UserNameInline>{user.fullName}</UserNameInline>
+            <Info>
+                <div>{user.fullName}</div>
+                {displayEmail && <div>{user.email}</div>}
+            </Info>
+            {children}
         </UserContainerInline>
     );
 }

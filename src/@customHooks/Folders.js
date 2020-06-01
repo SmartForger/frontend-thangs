@@ -11,3 +11,25 @@ export function useCreateFolder() {
 
     return [createFolder, { loading, error }];
 }
+
+export function useInviteToFolder(folderId) {
+    const [
+        inviteToFolder,
+        { loading, error },
+    ] = graphqlService.useInviteToFolderMutation(folderId);
+
+    return [inviteToFolder, { loading, error }];
+}
+
+export function useRevokeAccess(folderId, userId) {
+    const [
+        revokeAccess,
+        { loading, error },
+    ] = graphqlService.useRevokeAccessMutation(folderId, userId);
+    return [revokeAccess, { loading, error }];
+}
+
+export function useFolder(folderId) {
+    const { loading, error, folder } = graphqlService.useFolderById(folderId);
+    return { loading, error, folder };
+}

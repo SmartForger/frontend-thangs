@@ -219,7 +219,7 @@ export const breadcrumbTextLight = css`
     color: ${GREY_6};
 `;
 
-export const breadcrumbTextDark = css`
+export const smallHeaderText = css`
     font-size: 20px;
     font-family: ${LEXEND_DECA};
 `;

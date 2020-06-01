@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg';
 import { BLUE_2 } from '../../@style/colors';
-import { breadcrumbTextDark, breadcrumbTextLight } from '../../@style/text';
+import { smallHeaderText, breadcrumbTextLight } from '../../@style/text';
 
 const FolderIconStyled = styled(FolderIcon)`
     fill: ${BLUE_2};
@@ -38,7 +38,7 @@ export function Breadcrumbs({ modelsCount, folder }) {
             </Row>
             <Row
                 css={`
-                    ${breadcrumbTextDark};
+                    ${smallHeaderText};
                 `}
             >
                 <FolderIconStyled />

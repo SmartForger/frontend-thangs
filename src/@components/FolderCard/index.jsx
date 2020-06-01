@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
-import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg';
-import { regularText, cardSubtext } from '../../@style/text';
 import { ModelThumbnail } from '../ModelThumbnail';
+import { FolderInfo } from '../FolderInfo';
 import { Card } from '../Card';
-import { BLUE_2, GREY_13 } from '../../@style/colors';
+import { GREY_13 } from '../../@style/colors';
 
 const Grid = styled.div`
     display: grid;
@@ -17,50 +16,6 @@ const Grid = styled.div`
     grid-template-rows: 50% 50%;
     grid-gap: 4px;
 `;
-
-const Row = styled.div`
-    display: flex;
-`;
-const Background = styled.div`
-    ${regularText};
-    padding: 16px;
-`;
-
-const Subtext = styled.div`
-    ${cardSubtext};
-    display: flex;
-    > div + div {
-        margin-left: 4px;
-    }
-`;
-
-const FolderIconStyled = styled(FolderIcon)`
-    fill: ${BLUE_2};
-    margin-right: 16px;
-    margin-top: 4px;
-`;
-
-function FolderInfo({ name, members, models }) {
-    return (
-        <Background>
-            <Row>
-                <FolderIconStyled />
-                <div>
-                    <div>{name}</div>
-                    <Subtext>
-                        <div>
-                            {models.length} Model{models.length !== 1 && 's'}
-                        </div>
-                        <div>
-                            {members.length} Team Member
-                            {members.length !== 1 && 's'}
-                        </div>
-                    </Subtext>
-                </div>
-            </Row>
-        </Background>
-    );
-}
 
 const CardStyled = styled(Card)``;
 
