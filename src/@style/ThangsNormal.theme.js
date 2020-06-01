@@ -37,7 +37,7 @@ const fontMain = "'Montserrat', sans-serif";
 const shadow = 'box-shadow: 0px 5px 10px 0px rgba(35, 37, 48, 0.25)';
 const headerFont = 'Lexend Deca';
 
-const maxWidth = '1237px;';
+const maxWidth = '1440px;';
 
 export const NewTheme = {
     activityCount: GREY_3,

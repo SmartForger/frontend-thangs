@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
 import { SearchBar } from '@components/SearchBar';
 import { ProfilePicture } from '@components/ProfilePicture';
@@ -32,9 +32,10 @@ const FixedHeader = styled.div`
 `;
 
 const DesktopBoundary = styled.div`
-    padding: 0 16px;
     position: relative;
     margin: 48px auto 16px;
+    max-width: ${props => props.theme.maxWidth};
+    flex-grow: 1;
 
     ${mediaMdPlus} {
         margin: 48px 100px 16px;
@@ -213,7 +214,8 @@ const DesktopOnly = styled.span`
     display: none;
 
     ${mediaMdPlus} {
-        display: block;
+        display: flex;
+        justify-content: center;
     }
 `;
 

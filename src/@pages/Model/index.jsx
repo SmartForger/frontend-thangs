@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { useHistory, Link, useParams } from 'react-router-dom';
 
 import { ProfilePicture } from '@components/ProfilePicture';
@@ -37,22 +37,45 @@ const HeaderStyled = styled.div`
     margin: 8px 0 16px;
 `;
 
-const ModelContainer = styled.div`
-    display: grid;
-    grid-template-areas:
-        'viewer'
-        'details'
-        'related'
-        'comments';
-    row-gap: 24px;
+const Row = styled.div`
+    display: flex;
+    flex-direction: row;
+
+    margin-bottom: 24px;
+    :last-of-type {
+        margin-bottom: 0;
+    }
+    ${mediaLgPlus} {
+        margin-bottom: 48px;
+    }
+
+    > div {
+        flex-grow: 1;
+    }
+`;
+
+const Column = styled.div`
+    display: flex;
+    flex-direction: Column;
 
     ${mediaLgPlus} {
-        grid-template-columns: 62% auto;
-        column-gap: 24px;
-        row-gap: 48px;
-        grid-template-areas:
-            'viewer details'
-            'related comments';
+        margin-right: 24px;
+        :last-of-type {
+            margin-right: 0;
+        }
+    }
+`;
+
+const OnlyMobileRow = styled(Row)`
+    ${mediaLgPlus} {
+        display: none;
+    }
+`;
+
+const OnlyDesktopColumn = styled(Column)`
+    display: none;
+    ${mediaLgPlus} {
+        display: block;
     }
 `;
 
@@ -61,7 +84,6 @@ const ModelViewerStyled = styled(ModelViewer)`
     overflow: hidden;
 
     flex-direction: column;
-    grid-area: viewer;
     height: 375px;
     margin: 0 -16px;
     width: calc(100% + 32px);
@@ -144,10 +166,6 @@ function ModelTitle({ model, className }) {
     );
 }
 
-const Comments = styled(CommentsForModel)`
-    grid-area: comments;
-`;
-
 const DownloadTextButton = styled(TextButton)`
     ${linkText};
     width: 122px;
@@ -170,9 +188,17 @@ function DownloadLink({ model }) {
     );
 }
 
-const Details = styled.div`
-    grid-area: details;
-`;
+function Details({ currentUser, model, className }) {
+    return (
+        <div className={className}>
+            <LikeModelButton currentUser={currentUser} model={model} />
+            <ModelTitle model={model} />
+            <Description>{model.description}</Description>
+            <DownloadLink model={model} />
+            <ModelDetails model={model} />
+        </div>
+    );
+}
 
 const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
     const history = useHistory();
@@ -184,22 +210,40 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                     <BackArrow />
                 </BackButton>
             </HeaderStyled>
-            <ModelContainer>
-                {showBackupViewer ? (
-                    <BackupViewerStyled model={model} />
-                ) : (
-                    <ModelViewerStyled model={model} />
-                )}
-                <RelatedModels modelId={model.id} />
-                <Details>
-                    <LikeModelButton currentUser={currentUser} model={model} />
-                    <ModelTitle model={model} />
-                    <Description>{model.description}</Description>
-                    <DownloadLink model={model} />
-                    <ModelDetails model={model} />
-                </Details>
-                <Comments model={model} />
-            </ModelContainer>
+            <Row>
+                <Column
+                    css={`
+                        ${mediaLgPlus} {
+                            width: 65%;
+                        }
+                    `}
+                >
+                    <Row>
+                        {showBackupViewer ? (
+                            <BackupViewerStyled model={model} />
+                        ) : (
+                            <ModelViewerStyled model={model} />
+                        )}
+                    </Row>
+                    <OnlyMobileRow>
+                        <Details currentUser={currentUser} model={model} />
+                    </OnlyMobileRow>
+                    <Row>
+                        <RelatedModels modelId={model.id} />
+                    </Row>
+                    <OnlyMobileRow>
+                        <CommentsForModel model={model} />
+                    </OnlyMobileRow>
+                </Column>
+                <OnlyDesktopColumn>
+                    <Row>
+                        <Details currentUser={currentUser} model={model} />
+                    </Row>
+                    <Row>
+                        <CommentsForModel model={model} />
+                    </Row>
+                </OnlyDesktopColumn>
+            </Row>
         </>
     );
 };

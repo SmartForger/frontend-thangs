@@ -20,7 +20,6 @@ const SearchForm = styled.form`
     border-radius: 8px;
     position: relative;
     display: flex;
-    max-width: 1024px;
 
     ${mediaMdPlus} {
         margin-left: 12px;
