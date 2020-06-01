@@ -66,7 +66,7 @@ const Hero = styled.div`
     position: relative;
     display: flex;
     align-items: center;
-    padding: 0 16px;
+    padding: 0;
 `;
 
 const PromotionalText = styled.div`
@@ -78,7 +78,10 @@ const PromotionalText = styled.div`
 `;
 
 const TextContainer = styled.div`
-    margin: auto;
+    margin: auto 16px;
+    ${mediaMdPlus} {
+        margin: auto 100px;
+    }
     max-width: ${props => props.theme.maxWidth}
     width: 100%;
 `;
