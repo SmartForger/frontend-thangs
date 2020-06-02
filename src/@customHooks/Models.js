@@ -138,6 +138,12 @@ export const useHoopsViewer = modelFilename => {
         new HoopsStatus(STATES.UnpreparedModel)
     );
 
+    const handleResize = useCallback(() => {
+        if (hoopsViewerRef.current) {
+            hoopsViewerRef.current.resizeCanvas();
+        }
+    }, []);
+
     useEffect(() => {
         debug('1. Initialize Effect');
         if (!hoopsStatus.isUnpreparedModel) {
@@ -207,6 +213,10 @@ export const useHoopsViewer = modelFilename => {
 
     useEffect(() => {
         debug('3. HWV Creation Effect');
+
+        debug('  * 3: Add resizer');
+        window.addEventListener('resize', handleResize);
+
         if (!hoopsStatus.isPreparedModel) {
             debug('  * 3: Bailed');
             return;
@@ -236,17 +246,12 @@ export const useHoopsViewer = modelFilename => {
 
         viewer.start();
 
-        const handleResize = () => {
-            viewer.resizeCanvas();
-        };
-        window.addEventListener('resize', handleResize);
-
         hoopsViewerRef.current = viewer;
         return () => {
             debug('  * 3: Cleanup! remove resizer');
             window.removeEventListener('resize', handleResize);
         };
-    }, [hoopsStatus, modelFilename]);
+    }, [hoopsStatus, modelFilename, handleResize]);
 
     const ensureCurrentHoopsViewer = () => {
         if (!hoopsViewerRef.current) {
