@@ -14,9 +14,9 @@ const Row = styled.div`
     align-items: center;
 `;
 
-export function Breadcrumbs({ modelsCount, folder }) {
+export function Breadcrumbs({ modelsCount, folder, className }) {
     return (
-        <Row>
+        <Row className={className}>
             <Row
                 css={`
                     ${breadcrumbTextLight};

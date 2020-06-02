@@ -7,6 +7,7 @@ export const FOLDER_QUERY = gql`
         folder(id: $id) {
             id
             size
+            name
             models {
                 id
             }
@@ -18,6 +19,9 @@ export const FOLDER_QUERY = gql`
 `;
 
 function parseFolder(folder) {
+    if (!folder) {
+        return undefined;
+    }
     return { ...folder };
 }
 
@@ -98,3 +102,71 @@ export const useRevokeAccessMutation = (folderId, userId) => {
         ],
     });
 };
+
+const ADD_TO_FOLDER_MUTATION = gql`
+    mutation addToFolder(
+        $folderId: ID
+        $filename: String!
+        $originalFilename: String!
+        $name: String!
+        $size: Int!
+        $description: String
+        $weight: String
+        $height: String
+        $material: String
+        $category: String
+        $searchUpload: Boolean = false
+    ) {
+        addToFolder(
+            folderId: $folderId
+            filename: $filename
+            originalFilename: $originalFilename
+            units: "mm"
+            name: $name
+            size: $size
+            description: $description
+            category: $category
+            weight: $weight
+            height: $height
+            material: $material
+            searchUpload: $searchUpload
+        ) {
+            model {
+                id
+            }
+            folder {
+                id
+                size
+                name
+                models {
+                    id
+                }
+                members {
+                    id
+                }
+            }
+        }
+    }
+`;
+
+export function useAddToFolderMutation(folderId) {
+    const [addToFolder, { loading, error, data }] = useMutation(
+        ADD_TO_FOLDER_MUTATION,
+        {
+            variables: {
+                folderId,
+            },
+            refetchQueries: [
+                { query: FOLDER_QUERY, variables: { id: folderId } },
+            ],
+        }
+    );
+
+    const folder =
+        data &&
+        data.addToFolder &&
+        data.addToFolder.folder &&
+        parseFolder(data.addToFolder.folder);
+
+    return [addToFolder, { loading, error, folder }];
+}

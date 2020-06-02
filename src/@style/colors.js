@@ -39,4 +39,5 @@ export const WHITE_1 = '#ffffff';
 export const WHITE_2 = '#efecec';
 export const WHITE_3 = '#e8e8ec';
 export const WHITE_4 = '#ececec';
+export const WHITE_5 = '#f5f5f5';
 export const LIGHT_PURPLE = '#dd72dd';

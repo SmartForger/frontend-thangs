@@ -380,10 +380,14 @@ const useCreateDownloadUrlMutation = modelId => {
     return [fetchDownloadUrl];
 };
 
+export function useCreateUploadUrl() {
+    return useMutation(CREATE_UPLOAD_URL_MUTATION);
+}
+
 const useUploadModelMutation = userId => {
     const [uploadError, setUploadError] = useState();
     const [loading, setLoading] = useState(false);
-    const [createUploadUrl] = useMutation(CREATE_UPLOAD_URL_MUTATION);
+    const [createUploadUrl] = useCreateUploadUrl();
 
     const [uploadModel] = useMutation(UPLOAD_MODEL_MUTATION, {
         refetchQueries: [{ query: USER_QUERY, variables: { id: userId } }],

@@ -1,14 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
-import { ReactComponent as UploadIcon } from '@svg/upload-icon.svg';
-import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg';
-import { ReactComponent as ModelPyramid } from '@svg/model-pyramid.svg';
-import { ReactComponent as ExitIcon } from '@svg/icon-X.svg';
-import { UploadFrame } from '@components/UploadFrame';
-import { TextButton } from '@components/Button';
-import { infoMessageText, smallInfoMessageText, linkText } from '@style/text';
-import { GREY_3, WHITE_3 } from '@style/colors';
+import { ReactComponent as UploadIcon } from '../../@svg/upload-icon.svg';
+import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg';
+import { ReactComponent as ModelPyramid } from '../../@svg/model-pyramid.svg';
+import { ReactComponent as ExitIcon } from '../../@svg/icon-X.svg';
+import { UploadFrame } from '../UploadFrame';
+import { TextButton } from '../Button';
+import {
+    infoMessageText,
+    smallInfoMessageText,
+    linkText,
+} from '../../@style/text';
+import { GREY_3, WHITE_3 } from '../../@style/colors';
 
 const ErrorIconStyled = styled(ErrorIcon)`
     color: ${GREY_3};
@@ -186,8 +190,9 @@ export function Uploader({ file, setFile, showError = true }) {
                         </IconButton>
                         <ErrorIconStyled />
                         <InfoMessage>
-                            File extension not supported. Supported{' '}
-                            file extensions include {MODEL_FILE_EXTS.map(e => e + ' ')}.
+                            File extension not supported. Supported file
+                            extensions include{' '}
+                            {MODEL_FILE_EXTS.map(e => e + ' ')}.
                         </InfoMessage>
                     </FlexColumn>
                 ) : (

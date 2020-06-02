@@ -26,6 +26,7 @@ import { Upload } from '@pages/Upload';
 import { Matching } from '@pages/Matching';
 import { ModelPreview } from '@pages/ModelPreview';
 import { Notifications } from '@pages/Notifications';
+import { FolderUpload } from '@pages/FolderUpload';
 import { ErrorBoundary } from './ErrorBoundary';
 import {
     routeRequiresAnon,
@@ -111,6 +112,10 @@ const App = () => {
                         <Route
                             path="/preview/model/:id"
                             component={routeRequiresAuth(ModelPreview)}
+                        />
+                        <Route
+                            path="/folder/:id/upload"
+                            component={routeRequiresAuth(FolderUpload)}
                         />
                         <Route
                             path="/newspost/:id"
