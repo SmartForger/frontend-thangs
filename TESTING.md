@@ -131,7 +131,6 @@ Primary path:
 2. Click the "Download" button.
 3. Expect your browser to download the source model file.
 
-
 ## Comment on model
 
 Primary path:
@@ -152,12 +151,48 @@ Primary path:
 
 ## Notifications
 
+Most notifications have an Actor and optionally a Target. Each of these can be either a User or a Model. Depending on the notification type, the notifications should display:
+
+- A message indicating what event occurred.
+- A date & time (in the viewer's own timezone) indicating when the event occurred.
+- A thumbnail image representing the Actor for the notification.
+- A thumbnail image representing the Target for the notification.
+- The notification or thumbnail images _may_ be linked to the respective entity's page.
+
 Primary path(s):
+
+User followed you
+
+- Have two accounts: A and B.
+- While logged in as account B, visit account A's profile page: /profile/<userId>.
+- Click the "Follow User" button.
+- Log in as account A and navigate to notificaitons page: /notifications.
+- Expect to see notification indicating user B followed you.
+
+User uploaded model
+
+- Have two accounts: A and B.
+- Have account A follow account B.
+- While logged in as account B, upload a new model and wait for it to complete processing.
+- Log in as account A and navigate to notifications page: /notifications.
+- Expect to see notification indicating user B uploaded a new model.
+
+User commented on model
+
+- Have two accounts: A and B.
+- While logged in as account B, visit a model uploaded by account A and post a comment on the model page.
+- Log in as account A and navigate to the notifications page: /notifications.
+- Expect to see notification indicating user B commented on your model.
 
 Model processing complete
 
 - Upload model, once model processing is complete navigate to notifications page: /notifications.
 - Expect to see notification indicating model is complete.
+
+Model processing failed
+
+- Upload model, if model processing failed navigate to notifications page: /notifications.
+- Expect to see notification indicating model processing failed.
 
 Model liked
 
