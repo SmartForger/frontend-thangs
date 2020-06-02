@@ -2,14 +2,14 @@
 <svg width="45px" height="34px" viewBox="0 0 45 34" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>1225967C-2F40-4B74-85E5-4ABC4B50451C@1.00x</title>
     <g id="Beta-UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="New-Collection" transform="translate(-168.000000, -133.000000)" stroke="#515151">
+        <g id="New-Collection" transform="translate(-168.000000, -133.000000)" stroke="currentColor">
             <g id="Folder-Plus-Large" transform="translate(170.000000, 132.110884)">
                 <g id="Group">
                     <g id="Group-5" transform="translate(0.000000, 8.889116)" stroke-linecap="round" stroke-linejoin="round" stroke-width="3">
                         <path d="M14.0909091,5.36363636 L26.8181818,5.36363636 C27.3181818,5.36363636 27.7272727,5.77272727 27.7272727,6.27272727 L27.7272727,22.6363636 C27.7272727,23.1363636 27.3181818,23.5454545 26.8181818,23.5454545 L1.36363636,23.5454545 C0.863636364,23.5454545 0.454545455,23.1363636 0.454545455,22.6363636 L0.454545455,1.63902699 C0.454545455,1.13902699 0.863636364,0.72993608 1.36363636,0.72993608 L9.31480824,0.72993608" id="Stroke-1"></path>
                         <line x1="9.31480824" y1="0.858132102" x2="14.0909091" y2="5.36363636" id="Stroke-3"></line>
                     </g>
-                    <g id="icon/X" transform="translate(36.000000, 8.000000) rotate(-315.000000) translate(-36.000000, -8.000000) translate(31.000000, 3.000000)" fill="#515151">
+                    <g id="icon/X" transform="translate(36.000000, 8.000000) rotate(-315.000000) translate(-36.000000, -8.000000) translate(31.000000, 3.000000)" fill="currentColor">
                         <g id="Group-5" transform="translate(-0.000000, -0.000000)">
                             <polygon id="Fill-3" points="9.707 1.7065 8.293 0.2925 5 3.5855 1.707 0.2925 0.293 1.7065 3.586 4.9995 0.293 8.2925 1.707 9.7065 5 6.4145 8.293 9.7065 9.707 8.2925 6.414 4.9995"></polygon>
                         </g>

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { UserInline } from '../UserInline';
 import { Modal } from '../Modal';
-import { authenticationService } from '@services';
-import { TextButton } from '@components/Button';
+import { authenticationService } from '../../@services';
+import { TextButton } from '../Button';
 import { mediaMdPlus } from '../../@style/media-queries';
 import { InviteUsersForm, DisplayErrors } from '../FolderForm';
 import { FolderInfo } from '../FolderInfo';
@@ -11,6 +11,7 @@ import { Spinner } from '../Spinner';
 import { ReactComponent as TrashCanIcon } from '../../@svg/trash-can-icon.svg';
 import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg';
 import { useRevokeAccess } from '../../@customHooks/Folders';
+import { GREY_12 } from '../../@style/colors';
 
 const SpinnerStyled = styled(Spinner)`
     width: 18px;
@@ -68,6 +69,10 @@ function RevokeAccessButton({ folderId, targetUserId, children }) {
     );
 }
 
+const TrashCanIconStyled = styled(TrashCanIcon)`
+    color: ${GREY_12};
+`;
+
 function UserList({ users, folderId }) {
     const currentUserId = authenticationService.getCurrentUserId();
 
@@ -89,7 +94,7 @@ function UserList({ users, folderId }) {
                                     targetUserId={user.id}
                                     folderId={folderId}
                                 >
-                                    <TrashCanIcon />
+                                    <TrashCanIconStyled />
                                 </RevokeAccessButton>
                             )}
                         </UserInline>

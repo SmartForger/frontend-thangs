@@ -17,6 +17,7 @@ export const GREY_10 = '#bfbfbf';
 export const GREY_11 = '#9b9b9b';
 export const GREY_12 = '#7b7b82';
 export const GREY_13 = '#f5f5f7';
+export const GREY_14 = '#757575';
 export const BLACK_1 = '#515151';
 export const BLACK_2 = '#232530';
 export const BLACK_3 = '#231f20';
