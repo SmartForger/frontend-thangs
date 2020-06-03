@@ -131,6 +131,9 @@ export function FolderManagementModal({
                 models={folder.models}
                 boldName
                 hideModels
+                css={`
+                    padding: 0;
+                `}
             />
             <DisplayErrors
                 errors={errors}
@@ -145,6 +148,7 @@ export function FolderManagementModal({
                 `}
             >
                 <InviteUsersForm
+                    folderId={folder.id}
                     onErrorReceived={setErrors}
                     afterInvite={afterInvite}
                     onCancel={onCancel}

@@ -77,3 +77,8 @@ export function useAddToFolder(folderId) {
         },
     ];
 }
+
+export function useDeleteFolder(folderId) {
+    const currentUserId = authenticationService.getCurrentUserId();
+    return graphqlService.useDeleteFolderMutation(folderId, currentUserId);
+}

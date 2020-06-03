@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { TextButton } from '../Button';
-import { WHITE_1, BLACK_1, GREY_14 } from '../../@style/colors';
+import { WHITE_1, GREY_14 } from '../../@style/colors';
 import { regularText } from '../../@style/text';
 import { ReactComponent as DotStackIcon } from '../../@svg/dot-stack-icon.svg';
 
@@ -16,12 +16,13 @@ const Menu = styled.div`
     position: absolute;
     right: 12px;
     top: 40px;
+    z-index: 2;
 `;
 
 const Item = styled(Link)`
     ${regularText};
     line-height: 32px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
 
     svg {
@@ -52,7 +53,13 @@ export function DropdownMenu({ children, className, noIcons }) {
 
     return (
         <Container className={className}>
-            <TextButton onClick={toggleOpen} onBlur={() => setIsOpen(false)}>
+            <TextButton
+                onClick={toggleOpen}
+                css={`
+                    display: flex;
+                    align-items: center;
+                `}
+            >
                 <DotStackIcon />
             </TextButton>
             {isOpen && <Menu noIcons={noIcons}>{children}</Menu>}

@@ -24,6 +24,7 @@ import {
 } from '@pages';
 import { Upload } from '@pages/Upload';
 import { Matching } from '@pages/Matching';
+import { FolderPage } from '@pages/Folder';
 import { ModelPreview } from '@pages/ModelPreview';
 import { Notifications } from '@pages/Notifications';
 import { FolderUpload } from '@pages/FolderUpload';
@@ -62,6 +63,10 @@ const App = () => {
                             exact
                             path="/"
                             component={routeRequiresAuth(Landing)}
+                        />
+                        <Route
+                            path="/folder/:id"
+                            component={routeRequiresAuth(FolderPage)}
                         />
                         <Route
                             path="/login"

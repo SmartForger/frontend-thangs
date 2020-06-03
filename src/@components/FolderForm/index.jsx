@@ -208,6 +208,7 @@ export function CreateFolderForm({
 }
 
 export function InviteUsersForm({
+    folderId,
     onErrorReceived,
     afterInvite,
     onCancel,
@@ -241,7 +242,7 @@ export function InviteUsersForm({
         reValidateMode: 'onSubmit',
     });
 
-    const [inviteToFolder, { loading }] = useInviteToFolder();
+    const [inviteToFolder, { loading }] = useInviteToFolder(folderId);
 
     const handleSave = async (data, e) => {
         e.preventDefault();

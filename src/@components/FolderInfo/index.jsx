@@ -31,9 +31,16 @@ const Name = styled.div`
     ${props => props.bold && smallHeaderText};
 `;
 
-export function FolderInfo({ name, members, models, boldName, hideModels }) {
+export function FolderInfo({
+    name,
+    members,
+    models,
+    boldName,
+    hideModels,
+    className,
+}) {
     return (
-        <Background>
+        <Background className={className}>
             <Row>
                 <FolderIconStyled />
                 <div>
