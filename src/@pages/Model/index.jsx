@@ -59,7 +59,7 @@ const Column = styled.div`
     flex-direction: Column;
 
     ${mediaLgPlus} {
-        margin-right: 24px;
+        margin-right: 48px;
         :last-of-type {
             margin-right: 0;
         }
