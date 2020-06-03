@@ -78,7 +78,7 @@ const ErrorTextStyle = styled.h4`
     border-radius: 8px;
 `;
 
-export function DisplayErrors({ errors, className }) {
+export function DisplayErrors({ errors, className, serverErrorMsg }) {
     const messages = R.toPairs(errors);
 
     return messages.map((error, i) => {
@@ -97,7 +97,7 @@ export function DisplayErrors({ errors, className }) {
         } else if (isServerError(error)) {
             return (
                 <ErrorTextStyle className={className} key={i}>
-                    Unable to create folder. Please try again later.
+                    {serverErrorMsg}
                 </ErrorTextStyle>
             );
         }
@@ -108,7 +108,7 @@ export function DisplayErrors({ errors, className }) {
 
 export function CreateFolderForm({
     onErrorReceived,
-    onSave,
+    afterCreate,
     onCancel,
     membersLabel,
 }) {
@@ -152,7 +152,7 @@ export function CreateFolderForm({
             await createFolder({
                 variables,
             });
-            onSave(data);
+            afterCreate(data);
         } catch (error) {
             onErrorReceived({
                 server: error,
@@ -209,7 +209,7 @@ export function CreateFolderForm({
 
 export function InviteUsersForm({
     onErrorReceived,
-    onSave,
+    afterInvite,
     onCancel,
     membersLabel,
 }) {
@@ -250,7 +250,7 @@ export function InviteUsersForm({
             await inviteToFolder({
                 variables,
             });
-            onSave(data);
+            afterInvite(data);
         } catch (error) {
             onErrorReceived({
                 server: error,

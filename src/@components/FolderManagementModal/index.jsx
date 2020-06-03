@@ -105,12 +105,18 @@ function UserList({ users, folderId }) {
     );
 }
 
-export function FolderManagementModal({ folder, onSave, onCancel, className }) {
+export function FolderManagementModal({
+    isOpen,
+    folder,
+    afterInvite,
+    onCancel,
+    className,
+}) {
     const [errors, setErrors] = useState();
 
     return (
         <Modal
-            isOpen
+            isOpen={isOpen}
             className={className}
             css={`
                 width: 100%;
@@ -131,6 +137,7 @@ export function FolderManagementModal({ folder, onSave, onCancel, className }) {
                 css={`
                     margin-bottom: 16px;
                 `}
+                serverErrorMsg="Unable to invite users. Please try again later."
             />
             <Row
                 css={`
@@ -139,7 +146,7 @@ export function FolderManagementModal({ folder, onSave, onCancel, className }) {
             >
                 <InviteUsersForm
                     onErrorReceived={setErrors}
-                    onSave={onSave}
+                    afterInvite={afterInvite}
                     onCancel={onCancel}
                     membersLabel="Add Members"
                 />

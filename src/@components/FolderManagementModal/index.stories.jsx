@@ -100,7 +100,8 @@ export function WithOtherUsers() {
         <FolderManagementModal
             folder={folderFixture}
             onCancel={action('cancel button clicked')}
-            onSave={action('save button clicked')}
+            afterInvite={action('save button clicked')}
+            isOpen
         />
     );
 }
@@ -114,7 +115,8 @@ export function WithServerError() {
         <FolderManagementModal
             folder={folderFixture}
             onCancel={action('cancel button clicked')}
-            onSave={action('save button clicked')}
+            afterInvite={action('save button clicked')}
+            isOpen
         />
     );
 }

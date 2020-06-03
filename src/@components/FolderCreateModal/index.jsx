@@ -17,10 +17,10 @@ const Row = styled.div`
     display: flex;
 `;
 
-export function FolderCreateModal({ onCancel, onSave }) {
+export function FolderCreateModal({ isOpen, onCancel, afterCreate }) {
     const [errors, setErrors] = useState();
     return (
-        <Modal isOpen>
+        <Modal isOpen={isOpen}>
             <NewFolderIcon
                 css={`
                     margin-bottom: 16px;
@@ -42,6 +42,7 @@ export function FolderCreateModal({ onCancel, onSave }) {
                 css={`
                     margin-bottom: 16px;
                 `}
+                serverErrorMsg="Unable to create folder. Please try again later."
             />
             <Row
                 css={`
@@ -50,7 +51,7 @@ export function FolderCreateModal({ onCancel, onSave }) {
             >
                 <CreateFolderForm
                     onErrorReceived={setErrors}
-                    onSave={onSave}
+                    afterCreate={afterCreate}
                     onCancel={onCancel}
                     membersLabel="Share Folder"
                     includeNameField

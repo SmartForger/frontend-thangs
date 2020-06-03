@@ -15,8 +15,9 @@ export function Successful() {
     authenticationService.getCurrentUserId = () => '1111';
     return (
         <FolderCreateModal
+            isOpen
             onCancel={action('cancel button clicked')}
-            onSave={action('save button clicked')}
+            afterCreate={action('save button clicked')}
         ></FolderCreateModal>
     );
 }
@@ -41,7 +42,8 @@ export function Error() {
     return (
         <FolderCreateModal
             onCancel={action('cancel button clicked')}
-            onSave={action('save button clicked')}
+            afterCreate={action('save button clicked')}
+            isOpen
         ></FolderCreateModal>
     );
 }
