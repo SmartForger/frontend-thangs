@@ -21,6 +21,7 @@ import {
     Newspost,
     ModelDetail,
     TermsAndConditions,
+    Home,
 } from '@pages';
 import { Upload } from '@pages/Upload';
 import { Matching } from '@pages/Matching';
@@ -76,6 +77,10 @@ const App = () => {
                             path="/terms_and_conditions"
                             exact
                             component={TermsAndConditions}
+                        />
+                        <Route
+                            path="/home"
+                            component={routeRequiresAuth(Home)}
                         />
                         <Route
                             path="/signup/:registrationCode"

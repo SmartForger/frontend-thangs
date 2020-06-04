@@ -36,7 +36,7 @@ export const FOLDER_QUERY = gql`
     }
 `;
 
-function parseFolder(folder) {
+export function parseFolder(folder) {
     if (!folder) {
         return undefined;
     }

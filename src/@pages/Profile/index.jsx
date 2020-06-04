@@ -29,6 +29,7 @@ import {
 export * from './EditProfile';
 export * from './RedirectProfile';
 export * from './Likes';
+export * from './Home';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -56,7 +57,6 @@ const TabTitleGroup = styled.div`
 
 const TabTitle = styled.div`
     ${props => (props.selected ? activeTabNavigationText : tabNavigationText)};
-
     display: flex;
     align-items: center;
     margin-right: 56px;
@@ -225,7 +225,6 @@ function Tabs({ user }) {
 const EditButton = styled(SecondaryButton)`
     padding: 8px 16px;
     max-width: 100%;
-
     svg {
         margin-right: 8px;
     }
@@ -261,16 +260,12 @@ function ProfileButton({ viewedUser, className }) {
         </>
     );
 }
-
 const ProfileButtonStyled = styled(ProfileButton)`
     margin-top: 16px;
 `;
-
 function Page() {
     const { id } = useParams();
-
     const { loading, error, user } = graphqlService.useUserById(id);
-
     if (loading) {
         return <Spinner />;
     }

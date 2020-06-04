@@ -109,7 +109,7 @@ const UploadButton = styled(Button)`
 
 function UserPicture({ user }) {
     return (
-        <Link to="/profile/">
+        <Link to="/home/">
             <ProfilePicture
                 name={user.fullName}
                 src={user.profile.avatarUrl}
