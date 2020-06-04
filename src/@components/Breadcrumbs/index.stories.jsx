@@ -1,9 +1,11 @@
 import React from 'react';
+import { withApolloProvider } from '../../../.storybook/withApolloProvider';
 import { Breadcrumbs } from './';
 
 export default {
     title: 'Breadcrumbs',
     component: Breadcrumbs,
+    decorators: [withApolloProvider()],
 };
 
 export function FolderBreadcrumbs() {

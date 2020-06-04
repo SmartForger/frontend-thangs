@@ -1,4 +1,4 @@
-import styled, { ThemeProvider, css } from 'styled-components';
+import styled, { ThemeProvider, css } from 'styled-components/macro';
 import React, { useContext } from 'react';
 import { NewTheme, NewDarkTheme } from '@style/ThangsNormal.theme.js';
 import { GlobalStyle } from '@style/Thangs.GlobalStyle';

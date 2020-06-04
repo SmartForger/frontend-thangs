@@ -17,7 +17,7 @@ export default {
     component: DropdownMenu,
 };
 
-export function WithOnlyText() {
+export function WithOnlyTextUncontrolled() {
     return (
         <div>
             <DropdownMenu
@@ -34,13 +34,61 @@ export function WithOnlyText() {
     );
 }
 
-export function WithIcons() {
+export function WithOnlyTextControlledOpen() {
+    return (
+        <div>
+            <DropdownMenu
+                noIcons
+                css={`
+                    margin: auto;
+                `}
+                isOpen={true}
+            >
+                <DropdownItem to="/">Invite users</DropdownItem>
+                <DropdownItem to="/">Edit Profile</DropdownItem>
+                <DropdownItem to="/">Liked Models</DropdownItem>
+            </DropdownMenu>
+        </div>
+    );
+}
+
+export function WithIconsUncontrolled() {
     return (
         <div>
             <DropdownMenu
                 css={`
                     margin: auto;
                 `}
+            >
+                <DropdownItem onClick={action('deleted folder')}>
+                    <TrashCanIcon />
+                    <span>Delete Folder</span>
+                </DropdownItem>
+                <DropdownItem to="/">
+                    <UploadModelToFolderIcon />
+                    <span>Upload Model to Folder</span>
+                </DropdownItem>
+                <DropdownItem to="/">
+                    <ModelSquareIconStyled />
+                    <span>Upload Model</span>
+                </DropdownItem>
+                <DropdownItem to="/">
+                    <NewFolderIcon />
+                    <span>Add Folder</span>
+                </DropdownItem>
+            </DropdownMenu>
+        </div>
+    );
+}
+
+export function WithIconsControlledOpen() {
+    return (
+        <div>
+            <DropdownMenu
+                css={`
+                    margin: auto;
+                `}
+                isOpen={true}
             >
                 <DropdownItem onClick={action('deleted folder')}>
                     <TrashCanIcon />

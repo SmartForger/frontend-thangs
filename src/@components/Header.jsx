@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/macro';
-import { Link } from 'react-router-dom';
-import { SearchBar } from '@components/SearchBar';
+import { useParams, useHistory, Link } from 'react-router-dom';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { useCurrentUser } from '@customHooks/Users';
 import { useHasUnreadNotifications } from '@customHooks/Notifications';
-import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
-import { ReactComponent as MatchingIcon } from '@svg/matching-icon.svg';
-import { ReactComponent as Logo } from '@svg/logo.svg';
-import { ReactComponent as LogoText } from '@svg/logo-text.svg';
+import { DropdownMenu, DropdownItem } from '@components/DropdownMenu';
+import { FolderCreateModal } from '@components/FolderCreateModal';
 import { linkText } from '@style/text';
-import { Button, BrandButton } from '@components/Button';
+import { Button } from '@components/Button';
 import { mediaMdPlus } from '@style/media-queries';
 import { GREY_5, RED_2 } from '@style/colors';
+
+import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
+import { ReactComponent as Logo } from '@svg/logo.svg';
+import { ReactComponent as LogoText } from '@svg/logo-text.svg';
+import { ReactComponent as PlusButton } from '@svg/icon-blue-circle-plus.svg';
+import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass.svg';
+import { ReactComponent as UploadModelToFolderIcon } from '@svg/upload-model-to-folder-icon.svg';
+import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg';
+import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg';
+import { ReactComponent as HeartIcon } from '@svg/heart-icon-gray.svg';
+import { ReactComponent as PencilIcon } from '@svg/icon-pencil.svg';
+import { ReactComponent as UserPlusIcon } from '@svg/icon-user-plus.svg';
 
 const NOTIFICATIONS_URL = '/notifications';
 
@@ -79,12 +88,7 @@ const SignUp = () => {
     );
 };
 
-const MatchingIconStyled = styled(MatchingIcon)`
-    margin-right: 8px;
-`;
-
 const NotificationIconStyled = styled(NotificationIcon)`
-    margin-left: 32px;
     color: ${props => (props.unread ? RED_2 : GREY_5)};
 `;
 
@@ -92,25 +96,38 @@ const NotificationsButton = () => {
     const { hasUnreadNotifications } = useHasUnreadNotifications();
 
     return (
-        <Link to={NOTIFICATIONS_URL}>
+        <Link
+            to={NOTIFICATIONS_URL}
+            css={`
+                height: 50px;
+                padding: 0 8px;
+            `}
+        >
             <NotificationIconStyled unread={hasUnreadNotifications ? 1 : 0} />
         </Link>
     );
 };
 
-const UploadButton = styled(Button)`
-    width: 100%;
-
-    ${mediaMdPlus} {
-        margin-left: 32px;
-        width: 124px;
-    }
-`;
-
+const DropdownIcon = styled(PlusButton)``;
+const SearchIcon = styled(MagnifyingGlass)``;
+const ProfilePictureStyled = styled(ProfilePicture)``;
+function Search() {
+    return (
+        <Link
+            to="/search"
+            css={`
+                height: 50px;
+                padding: 0 8px;
+            `}
+        >
+            <SearchIcon />
+        </Link>
+    );
+}
 function UserPicture({ user }) {
     return (
-        <Link to="/home/">
-            <ProfilePicture
+        <Link to="/profile/">
+            <ProfilePictureStyled
                 name={user.fullName}
                 src={user.profile.avatarUrl}
                 size="50px"
@@ -119,11 +136,91 @@ function UserPicture({ user }) {
     );
 }
 
-function Upload({ css }) {
+const ButtonsRow = styled(Row)`
+    > a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 8px;
+        :last-child {
+            margin-right: 0px;
+        }
+    }
+`;
+
+const DropdownMenuStyled = styled(DropdownMenu)`
+    height: 50px;
+    margin: auto;
+    > button {
+        height: 50px;
+    }
+`;
+
+const DropdownIconStyled = styled(DropdownIcon)`
+    width: 50px;
+    height: 50px;
+`;
+
+function AddModelDropdownMenu() {
+    const { folderId } = useParams();
+    const history = useHistory();
+    const [createFolderIsOpen, setCreateFolderIsOpen] = useState(false);
     return (
-        <LinkStyled to={`/upload`} css={css}>
-            <UploadButton>Upload Model</UploadButton>
-        </LinkStyled>
+        <>
+            <DropdownMenuStyled
+                css={`
+                    margin: 0 8px;
+                    width: 50px;
+                    line-height: 0;
+                    > div {
+                        right: 0px;
+                    }
+                `}
+                buttonIcon={DropdownIconStyled}
+            >
+                {folderId && (
+                    <DropdownItem to={`/folder/${folderId}/upload`}>
+                        <UploadModelToFolderIcon /> Upload model to folder
+                    </DropdownItem>
+                )}
+                <DropdownItem to="/upload">
+                    <ModelSquareIcon /> Upload model
+                </DropdownItem>
+                <DropdownItem
+                    to="/"
+                    onClick={() => setCreateFolderIsOpen(true)}
+                >
+                    <NewFolderIcon />
+                    Add Folder
+                </DropdownItem>
+            </DropdownMenuStyled>
+            <FolderCreateModal
+                isOpen={createFolderIsOpen}
+                onCancel={() => setCreateFolderIsOpen(false)}
+                afterCreate={folder => {
+                    history.push(`/folder/${folder.id}`);
+                }}
+            />
+        </>
+    );
+}
+
+function ProfileDropdownMenu() {
+    let { folderId } = useParams();
+    return (
+        <DropdownMenuStyled>
+            {folderId !== undefined && (
+                <DropdownItem to="/">
+                    <UserPlusIcon /> Invite users
+                </DropdownItem>
+            )}
+            <DropdownItem to="/profile/edit">
+                <PencilIcon /> Edit Profile
+            </DropdownItem>
+            <DropdownItem to="/profile/likes">
+                <HeartIcon /> Liked Models
+            </DropdownItem>
+        </DropdownMenuStyled>
     );
 }
 
@@ -136,11 +233,13 @@ const UserNav = () => {
 
     if (user) {
         return (
-            <Row>
-                <UserPicture user={user} />
+            <ButtonsRow>
+                <Search />
                 <NotificationsButton />
-                <Upload />
-            </Row>
+                <AddModelDropdownMenu />
+                <UserPicture user={user} />
+                <ProfileDropdownMenu />
+            </ButtonsRow>
         );
     }
 
@@ -151,32 +250,6 @@ const UserNav = () => {
         </Row>
     );
 };
-
-const Flex = styled.div`
-    display: flex;
-`;
-
-const LinkStyled = styled(Link)`
-    ${allowCssProp};
-`;
-
-function Matching({ css }) {
-    return (
-        <LinkStyled to={'/matching'} css={css}>
-            <BrandButton
-                css={`
-                    width: 100%;
-                    ${mediaMdPlus} {
-                        padding: 6px 24px 6px 32px;
-                    }
-                `}
-            >
-                <MatchingIconStyled />
-                Search by Model
-            </BrandButton>
-        </LinkStyled>
-    );
-}
 
 function DesktopHeader({ variant }) {
     return (
@@ -193,12 +266,6 @@ function DesktopHeader({ variant }) {
                     </div>
                     {variant !== 'logo-only' && <UserNav />}
                 </TopRow>
-                {variant !== 'logo-only' && (
-                    <Flex>
-                        <Matching />
-                        <SearchBar />
-                    </Flex>
-                )}
             </DesktopBoundary>
         </DesktopOnly>
     );
@@ -220,47 +287,20 @@ const DesktopOnly = styled.span`
 `;
 
 const MobileBoundary = styled.div`
-    margin: 16px auto;
+    margin: 44px 0px auto;
     padding: 0 12px;
 `;
 
 function MobileHeader({ variant }) {
-    const { loading, user } = useCurrentUser();
     return (
         <MobileOnly>
             <MobileBoundary>
                 <TopRow>
                     <Link to="/">
                         <LogoStyled />
-                        <LogoText />
                     </Link>
-                    {variant !== 'logo-only' && !loading && user && (
-                        <UserPicture user={user} />
-                    )}
+                    {variant !== 'logo-only' && <UserNav />}
                 </TopRow>
-                {variant !== 'logo-only' && (
-                    <>
-                        <Row
-                            css={`
-                                margin-bottom: 16px;
-                            `}
-                        >
-                            <Matching
-                                css={`
-                                    flex-basis: 50%;
-                                    margin-right: 24px;
-                                    min-width: 180px;
-                                `}
-                            />
-                            <Upload
-                                css={`
-                                    flex-basis: 50%;
-                                `}
-                            />
-                        </Row>
-                        <SearchBar />
-                    </>
-                )}
             </MobileBoundary>
         </MobileOnly>
     );

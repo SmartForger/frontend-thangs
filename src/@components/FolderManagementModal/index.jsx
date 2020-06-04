@@ -73,7 +73,7 @@ const TrashCanIconStyled = styled(TrashCanIcon)`
     color: ${GREY_12};
 `;
 
-function UserList({ users, folderId }) {
+function UserList({ users = [], folderId }) {
     const currentUserId = authenticationService.getCurrentUserId();
 
     return (

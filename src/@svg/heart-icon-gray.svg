@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="16px" viewBox="0 0 18 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>11BD9F21-DDF0-47BB-80C5-3024D77B45F9@1.00x</title>
+    <g id="Beta-UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="User-Dropdown" transform="translate(-34.000000, -102.000000)" fill="#7B7B82">
+            <g id="icon/gray-heart" transform="translate(34.000000, 102.000000)">
+                <g id="icon/White-heart">
+                    <path d="M5,2 C3.346,2 2,3.346 2,5 C2,8.363 6.643,12.207 9,13.806 C11.357,12.207 16,8.363 16,5 C16,3.346 14.654,2 13,2 C11.311,2 10,3.612 10,5 C10,5.552 9.552,6 9,6 C8.448,6 8,5.552 8,5 C8,3.612 6.689,2 5,2 M9,16 C8.815,16 8.632,15.949 8.47,15.848 C8.124,15.632 0,10.491 0,5 C0,2.243 2.243,0 5,0 C6.594,0 8.07,0.837 9,2.08 C9.93,0.837 11.406,0 13,0 C15.757,0 18,2.243 18,5 C18,10.491 9.876,15.632 9.53,15.848 C9.368,15.949 9.185,16 9,16" id="Fill-1"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

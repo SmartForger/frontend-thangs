@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { TextButton } from '../Button';
@@ -15,7 +15,7 @@ const Menu = styled.div`
     box-sizing: border-box;
     position: absolute;
     right: 12px;
-    top: 40px;
+    margin-top: 8px;
     z-index: 2;
 `;
 
@@ -47,9 +47,16 @@ export function DropdownItem({ children, to = '#', onClick }) {
     );
 }
 
-export function DropdownMenu({ children, className, noIcons }) {
-    const [isOpen, setIsOpen] = useState();
-    const toggleOpen = () => setIsOpen(!isOpen);
+export function DropdownMenu({
+    children,
+    className,
+    noIcons,
+    buttonIcon: ButtonIcon = DotStackIcon,
+    isOpen: isOpenExternal = undefined,
+}) {
+    const [isOpenInternal, toggleOpen] = useDropdownMenuState(isOpenExternal);
+    const isOpen =
+        isOpenExternal === undefined ? isOpenInternal : isOpenExternal;
 
     return (
         <Container className={className}>
@@ -60,9 +67,26 @@ export function DropdownMenu({ children, className, noIcons }) {
                     align-items: center;
                 `}
             >
-                <DotStackIcon />
+                <ButtonIcon />
             </TextButton>
             {isOpen && <Menu noIcons={noIcons}>{children}</Menu>}
         </Container>
     );
+}
+
+function useDropdownMenuState(initialIsOpen = false) {
+    const [isOpen, setIsOpen] = useState(initialIsOpen);
+    const toggleOpen = e => setIsOpen(!isOpen);
+    const closeMenu = () => setIsOpen(false);
+    useEffect(() => {
+        if (isOpen) {
+            document.addEventListener('click', closeMenu);
+        }
+        return () => {
+            if (isOpen) {
+                document.removeEventListener('click', closeMenu);
+            }
+        };
+    }, [isOpen]);
+    return [isOpen, toggleOpen];
 }

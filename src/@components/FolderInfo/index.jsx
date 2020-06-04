@@ -33,8 +33,8 @@ const Name = styled.div`
 
 export function FolderInfo({
     name,
-    members,
-    models,
+    members = [],
+    models = [],
     boldName,
     hideModels,
     className,

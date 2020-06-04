@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components/macro';
 import { Header as HeaderComponent } from './Header';
 
 import { USER_QUERY } from '../@services/graphql-service/users';
@@ -19,6 +20,7 @@ const MOCK_USER = {
     inviteCode: null,
     likedModels: [],
     models: [],
+    folders: [],
     isBeingFollowedByRequester: false,
 };
 
@@ -34,6 +36,10 @@ const requestMockHandlers = {
     mutations: [],
 };
 
+const UndoPageWrapper = styled.div`
+    margin: -16px;
+`;
+
 export default {
     title: 'Header',
     component: Header,
@@ -41,29 +47,53 @@ export default {
 };
 
 export function Header() {
-    return <HeaderComponent />;
+    return (
+        <UndoPageWrapper>
+            <HeaderComponent />
+        </UndoPageWrapper>
+    );
 }
 
 export function HeaderLogoOnly() {
-    return <HeaderComponent variant="logo-only" />;
+    return (
+        <UndoPageWrapper>
+            <HeaderComponent variant="logo-only" />
+        </UndoPageWrapper>
+    );
 }
 
 export function HeaderInverted() {
-    return <HeaderComponent inverted={true} />;
+    return (
+        <UndoPageWrapper>
+            <HeaderComponent inverted={true} />
+        </UndoPageWrapper>
+    );
 }
 
 export function HeaderLogoOnlyInverted() {
-    return <HeaderComponent variant="logo-only" inverted={true} />;
+    return (
+        <UndoPageWrapper>
+            <HeaderComponent variant="logo-only" inverted={true} />
+        </UndoPageWrapper>
+    );
 }
 
 export function HeaderAuthenticated() {
     useMockCurrentUser(MOCK_USER);
-    return <HeaderComponent />;
+    return (
+        <UndoPageWrapper>
+            <HeaderComponent />
+        </UndoPageWrapper>
+    );
 }
 
 export function HeaderAuthenticatedInverted() {
     useMockCurrentUser(MOCK_USER);
-    return <HeaderComponent inverted={true} />;
+    return (
+        <UndoPageWrapper>
+            <HeaderComponent inverted={true} />
+        </UndoPageWrapper>
+    );
 }
 
 // TODO: This is a pretty messy hack to simulate authentication. And it still

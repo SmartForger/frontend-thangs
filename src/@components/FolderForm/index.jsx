@@ -149,10 +149,12 @@ export function CreateFolderForm({
         e.preventDefault();
         try {
             const variables = { name: data.name, members: data.members };
-            await createFolder({
+            const mutation = await createFolder({
                 variables,
             });
-            afterCreate(data);
+            const folder = mutation.data.createFolder.folder;
+            console.log(folder);
+            afterCreate(folder);
         } catch (error) {
             onErrorReceived({
                 server: error,
