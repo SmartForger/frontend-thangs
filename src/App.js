@@ -135,7 +135,7 @@ const App = () => {
                                 component={routeRequiresAuth(Newspost)}
                             />
                             <Route
-                                path="/search/:searchQuery"
+                                path={['/search/:searchQuery', '/search']}
                                 component={routeRequiresAuth(SearchResults)}
                             />
                             <Route

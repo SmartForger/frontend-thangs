@@ -7,17 +7,15 @@ import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg';
 import { landingPageText, landingPageSubtext } from '@style/text';
 import { mediaMdPlus } from '@style/media-queries';
 
-const allowCssProp = props => (props.css ? props.css : '');
-
 const Padding = css`
-    padding: ${props =>
-            props.variant === 'small-vertical-spacing' ? '110px' : '195px'}
-        16px 32px;
+    padding-top: ${114 + 8}px;
+    padding-right: 16px;
+    padding-bottom: 32px;
+    padding-left: 16px;
 
     ${mediaMdPlus} {
-        padding: ${props =>
-                props.variant === 'small-vertical-spacing' ? '110px' : '195px'}
-            100px 32px;
+        padding-right: 100px;
+        padding-left: 100px;
     }
 `;
 
@@ -25,8 +23,6 @@ const NewLayout = styled.div`
     ${Padding};
     margin: auto;
     max-width: ${props => props.theme.maxWidth};
-
-    ${allowCssProp};
 `;
 
 export const WithNewThemeLayout = (Component, options = {}) => props => {

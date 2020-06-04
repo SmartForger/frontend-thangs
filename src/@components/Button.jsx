@@ -15,8 +15,7 @@ import {
     YELLOW_1,
     YELLOW_3,
 } from '@style/colors';
-
-const allowCssProp = props => (props.css ? props.css : '');
+import { mediaMdPlus } from '../@style/media-queries';
 
 const BtnStyle = css`
     border: none;
@@ -32,8 +31,6 @@ const BtnStyle = css`
     &:disabled {
         cursor: not-allowed;
     }
-
-    ${allowCssProp};
 `;
 
 export const SecondaryButton = styled.button`
@@ -92,8 +89,6 @@ export const TextButton = styled.button`
     &:disabled {
         cursor: not-allowed;
     }
-
-    ${allowCssProp};
 `;
 
 export const BrandButton = styled.button`
@@ -101,12 +96,15 @@ export const BrandButton = styled.button`
     ${matchingButtonText};
     ${props => props.theme.shadow};
     background-color: ${YELLOW_1};
-    padding: 6px 12px;
+    padding: 6px 16px;
+    min-width: 182px;
+
+    ${mediaMdPlus} {
+        padding: 6px 24px;
+    }
 
     &:hover {
         ${matchingButtonHoverText};
         background-color: ${YELLOW_3};
     }
-
-    ${allowCssProp};
 `;

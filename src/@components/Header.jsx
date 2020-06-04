@@ -206,7 +206,7 @@ function AddModelDropdownMenu() {
 }
 
 function ProfileDropdownMenu() {
-    let { folderId } = useParams();
+    const { folderId } = useParams();
     return (
         <DropdownMenuStyled>
             {folderId !== undefined && (

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import { useHistory, useParams } from 'react-router-dom';
+import styled from 'styled-components/macro';
+import { useHistory } from 'react-router-dom';
 import { ReactComponent as SearchIcon } from '@svg/search-icon.svg';
 import { inputPlaceholderText } from '@style/text';
 import { mediaMdPlus } from '@style/media-queries';
@@ -20,10 +20,6 @@ const SearchForm = styled.form`
     border-radius: 8px;
     position: relative;
     display: flex;
-
-    ${mediaMdPlus} {
-        margin-left: 12px;
-    }
 `;
 
 const SearchStyle = styled.input`
@@ -55,9 +51,7 @@ const SearchIconStyled = styled(SearchIcon)`
     }
 `;
 
-export function SearchBar(props) {
-    const params = useParams();
-    const initialSearchQuery = params.searchQuery;
+export function SearchBar({ className, initialSearchQuery }) {
     const { searchQuery, setSearchQuery, executeSearch } = useSearch(
         initialSearchQuery
     );
@@ -73,7 +67,7 @@ export function SearchBar(props) {
     };
 
     return (
-        <SearchForm onSubmit={handleSubmit}>
+        <SearchForm onSubmit={handleSubmit} className={className}>
             <SearchIconStyled />
             <SearchStyle
                 placeholder="Search models by name, description, owner, etc..."
