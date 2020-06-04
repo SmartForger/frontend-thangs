@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components/macro';
 import { useHistory } from 'react-router-dom';
 import { useDeleteFolder } from '../../@customHooks/Folders';
 import { DropdownMenu, DropdownItem } from '../DropdownMenu';
 import { FolderManagementModal } from '../FolderManagementModal';
+import { FlashContext } from '../Flash';
 import { TextButton } from '../Button';
 import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg';
 import { ReactComponent as TrashCanIcon } from '../../@svg/trash-can-icon.svg';
@@ -39,11 +40,12 @@ const ErrorIconStyled = styled(ErrorIcon)`
 function DeleteMenu({ folderId }) {
     const [deleteFolder, { loading, error }] = useDeleteFolder(folderId);
     const history = useHistory();
+    const [, { navigateWithFlash }] = useContext(FlashContext);
 
     const handleDelete = async e => {
         e.preventDefault();
         await deleteFolder();
-        history.push('/profile');
+        navigateWithFlash('/home', 'Folder deleted');
     };
 
     return (
@@ -75,7 +77,12 @@ const ManagementButton = styled(TextButton)`
 
 function ManageUsers({ folder }) {
     const [isOpen, setIsOpen] = useState();
-    const afterInvite = () => setIsOpen(false);
+    const [, { setFlash }] = useContext(FlashContext);
+
+    const afterInvite = () => {
+        setFlash('Users invited successfully.');
+        setIsOpen(false);
+    };
     const handleCancel = () => setIsOpen(false);
     const handleClick = () => setIsOpen(true);
 

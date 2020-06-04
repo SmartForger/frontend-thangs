@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import * as R from 'ramda';
 
 import { WithNewThemeLayout } from '@style';
+import { WithFlash } from '@components/Flash';
 import { useCurrentUser } from '@customHooks/Users';
 import { Spinner } from '@components/Spinner';
 import { Message404 } from '../404';
@@ -13,46 +14,27 @@ export * from './EditProfile';
 export * from './RedirectProfile';
 export * from './Likes';
 
-const Frame = styled.div`
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    margin-top: 16px;
-`;
-
 const TextHeader = styled.div`
+    ${subheaderText}
     display: flex;
     align-items: center;
     margin-right: 56px;
+    margin-bottom: 24px;
     cursor: pointer;
-    ${subheaderText}
 `;
 
-function ObjectCount({ user }) {
+function Header({ onClick, user }) {
     const models = R.pathOr([], ['models'])(user);
     const folders = R.pathOr([], ['folders'])(user);
 
     const modelAmount = models.length;
     const folderAmount = folders.length;
     return (
-        <span>
-            Models {modelAmount} Folders {folderAmount}
-        </span>
-    );
-}
-
-function Models({ onClick, user }) {
-    return (
         <TextHeader onClick={onClick}>
-            <ObjectCount user={user} />
+            Models {modelAmount} Folders {folderAmount}
         </TextHeader>
     );
 }
-const ContentContainer = styled.div`
-    margin-top: 24px;
-    width: 100%;
-    display: flex;
-`;
 
 const getModels = R.pathOr([], ['models']);
 const getFolders = R.pathOr([], ['folders']);
@@ -76,19 +58,14 @@ function ModelsContent({ user }) {
     );
 }
 
-const PageContainer = styled.div`
-    margin-top: 24px;
-    width: 100%;
-`;
-
 function PageContent({ user }) {
     return (
-        <PageContainer>
-            <Models user={user} />
-            <ContentContainer>
+        <>
+            <Header user={user} />
+            <WithFlash>
                 <ModelsContent user={user} />
-            </ContentContainer>
-        </PageContainer>
+            </WithFlash>
+        </>
     );
 }
 
@@ -116,11 +93,7 @@ function Page() {
         );
     }
 
-    return (
-        <Frame>
-            <PageContent user={user} />
-        </Frame>
-    );
+    return <PageContent user={user} />;
 }
 
 export const Home = WithNewThemeLayout(Page);

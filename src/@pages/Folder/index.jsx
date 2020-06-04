@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { useFolder } from '../../@customHooks/Folders';
 import { useCurrentUser } from '../../@customHooks/Users';
 
+import { WithFlash } from '../../@components/Flash';
 import { Spinner } from '../../@components/Spinner';
 import { CardCollection } from '../../@components/CardCollection';
 import { Breadcrumbs } from '../../@components/Breadcrumbs';
@@ -22,10 +23,12 @@ function Folder({ folder, modelCount }) {
                 modelsCount={6}
                 folder={folder}
             ></BreadcrumbsStyled>
-            <CardCollection
-                models={folder.models}
-                noResultsText="Upload models to this folder and collaborate with other users privately."
-            />
+            <WithFlash>
+                <CardCollection
+                    models={folder.models}
+                    noResultsText="Upload models to this folder and collaborate with other users privately."
+                />
+            </WithFlash>
         </div>
     );
 }

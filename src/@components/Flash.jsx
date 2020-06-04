@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { flashToastText } from '@style/text';
 
@@ -7,18 +8,39 @@ export const Flash = styled.div`
     background-color: ${props => props.theme.flashColor};
     border-radius: 8px;
     padding: 16px 24px;
-    margin-bottom: 48px;
+    margin-bottom: 24px;
 `;
 
-const NOOP = () => null;
-
-export const FlashContext = React.createContext([null, NOOP]);
+export const FlashContext = React.createContext([null, {}]);
 
 export const FlashContextProvider = props => {
-    const [state, setState] = useState();
+    const history = useHistory();
+    const [flash, setFlash] = useState();
+    const navigateWithFlash = (to, msg) => {
+        history.push(to);
+        setTimeout(() => setFlash(msg), 0);
+    };
+
     return (
-        <FlashContext.Provider value={[state, setState]}>
+        <FlashContext.Provider value={[flash, { setFlash, navigateWithFlash }]}>
             {props.children}
         </FlashContext.Provider>
     );
 };
+
+export function WithFlash({ children }) {
+    const [flash, { setFlash }] = useContext(FlashContext);
+
+    useEffect(() => {
+        return function cleanup() {
+            setFlash();
+        };
+    }, [setFlash]);
+
+    return (
+        <>
+            {flash && <Flash>{flash}</Flash>}
+            {children}
+        </>
+    );
+}

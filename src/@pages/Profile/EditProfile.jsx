@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import { WithNewThemeLayout } from '@style/Layout';
@@ -7,7 +7,7 @@ import { ProfilePicture } from '@components/ProfilePicture';
 import { DarkButton } from '@components/Button';
 import { Spinner } from '@components/Spinner';
 import { ChangeablePicture } from '@components/ChangeablePicture';
-import { FlashContext } from '@components/Flash';
+import { Flash } from '@components/Flash';
 import { EditProfileForm } from '@components/EditProfileForm';
 import * as GraphqlService from '@services/graphql-service';
 import { subheaderText } from '@style/text';
@@ -81,15 +81,14 @@ function InlineProfile({ user }) {
 }
 
 function WarningOnEmptyProfile({ user }) {
-    const [, setFlash] = useContext(FlashContext);
-    useEffect(() => {
-        if (!user.profile.description) {
-            setFlash(
-                'Add information about yourself below to let others know your specialties, interests, etc.'
-            );
-        }
-    }, [setFlash, user]);
-
+    if (!user.profile.description) {
+        return (
+            <Flash>
+                Add information about yourself below to let others know your
+                specialties, interests, etc.
+            </Flash>
+        );
+    }
     return null;
 }
 

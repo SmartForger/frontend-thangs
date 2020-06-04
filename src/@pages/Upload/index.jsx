@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
@@ -6,6 +6,7 @@ import { useForm, ErrorMessage } from 'react-hook-form';
 import { WithNewThemeLayout } from '@style/Layout';
 import { Uploader } from '@components/Uploader';
 import { Button, DarkButton } from '@components/Button';
+import { FlashContext } from '@components/Flash';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 import { Spinner } from '@components/Spinner';
@@ -118,6 +119,7 @@ const Page = () => {
     const [file, setFile] = useState();
     const [category, setCategory] = useState();
     const currentUserId = authenticationService.getCurrentUserId();
+    const [, { navigateWithFlash }] = useContext(FlashContext);
 
     const [
         uploadModel,
@@ -146,7 +148,8 @@ const Page = () => {
                 ...optionalVariables,
             },
         });
-        history.push('/profile');
+
+        navigateWithFlash('/home', 'Model added successfully.');
     };
 
     const handleCancel = e => {
@@ -248,7 +251,10 @@ const Page = () => {
                                 onChange={({ value }) => setCategory(value)}
                                 components={{
                                     IndicatorSeparator: () => null,
-                                    DropdownIndicator,
+                                    DropdownIndicator: ({ cx, ...props }) => {
+                                        // cx causes React to throw an error, so we remove it
+                                        return <DropdownIndicator {...props} />;
+                                    },
                                 }}
                                 styles={{
                                     control: base => {
