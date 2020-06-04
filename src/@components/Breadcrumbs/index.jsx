@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components/macro';
-import { useHistory } from 'react-router-dom';
 import { useDeleteFolder } from '../../@customHooks/Folders';
 import { DropdownMenu, DropdownItem } from '../DropdownMenu';
 import { FolderManagementModal } from '../FolderManagementModal';
@@ -39,7 +38,6 @@ const ErrorIconStyled = styled(ErrorIcon)`
 
 function DeleteMenu({ folderId }) {
     const [deleteFolder, { loading, error }] = useDeleteFolder(folderId);
-    const history = useHistory();
     const [, { navigateWithFlash }] = useContext(FlashContext);
 
     const handleDelete = async e => {
