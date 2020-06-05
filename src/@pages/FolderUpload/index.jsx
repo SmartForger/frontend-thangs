@@ -334,6 +334,6 @@ const Page = () => {
     return <Upload folder={folder} />;
 };
 
-const FolderUpload = WithNewThemeLayout(Page, { logoOnly: true });
+const FolderUpload = WithNewThemeLayout(Page);
 
 export { FolderUpload };

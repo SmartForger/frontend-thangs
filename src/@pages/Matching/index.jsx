@@ -9,23 +9,19 @@ import { authenticationService } from '@services';
 import { CardCollection } from '@components/CardCollection';
 import { UploadProgress } from '@components/UploadProgress';
 
-import { pageTitleText, matchingSubheader } from '@style/text';
+import { subheaderText, matchingSubheader } from '@style/text';
 
 const PROCESSING = 'PROCESSING';
 const ERROR = 'ERROR';
 
 const Header = styled.h1`
-    ${pageTitleText};
+    ${subheaderText};
     margin-bottom: 16px;
 `;
 
 const Subheader = styled.h4`
     ${matchingSubheader};
     margin-bottom: 24px;
-`;
-
-const Frame = styled.div`
-    margin-top: 48px;
 `;
 
 const graphqlService = GraphqlService.getInstance();
@@ -92,7 +88,7 @@ function Page() {
     const onCancel = () => history.push('/');
 
     return (
-        <Frame>
+        <div>
             <Header>Search by Model</Header>
             <Subheader>
                 Upload your model to see other models with similar geometry.
@@ -112,10 +108,10 @@ function Page() {
                     <CancelButton onClick={onCancel}>Cancel</CancelButton>
                 </>
             )}
-        </Frame>
+        </div>
     );
 }
 
-const Matching = WithNewThemeLayout(Page, { logoOnly: true });
+const Matching = WithNewThemeLayout(Page);
 
 export { Matching };

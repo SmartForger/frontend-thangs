@@ -72,12 +72,9 @@ export const resultsHeaderText = css`
 export const modelTitleText = css`
     font-size: 18px;
 `;
-export const pageTitleText = css`
+export const darkPageTitleText = css`
     font-size: 48px;
     font-family: ${LEXEND_DECA};
-`;
-export const darkPageTitleText = css`
-    ${pageTitleText};
     color: ${WHITE_1};
 `;
 export const linkText = css`

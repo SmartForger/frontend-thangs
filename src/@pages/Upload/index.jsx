@@ -12,7 +12,7 @@ import { authenticationService } from '@services';
 import { Spinner } from '@components/Spinner';
 import { UploadFrame } from '@components/UploadFrame';
 import { ProgressText } from '@components/ProgressText';
-import { pageTitleText, formErrorText, infoMessageText } from '@style/text';
+import { subheaderText, formErrorText, infoMessageText } from '@style/text';
 
 const Row = styled.div`
     display: flex;
@@ -60,7 +60,7 @@ const CancelButton = styled(DarkButton)`
 `;
 
 const Header = styled.h1`
-    ${pageTitleText};
+    ${subheaderText};
     margin-bottom: 24px;
 `;
 
@@ -324,6 +324,6 @@ const Page = () => {
     );
 };
 
-const Upload = WithNewThemeLayout(Page, { logoOnly: true });
+const Upload = WithNewThemeLayout(Page);
 
 export { Upload };
