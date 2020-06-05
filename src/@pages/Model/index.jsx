@@ -211,13 +211,7 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                 </BackButton>
             </HeaderStyled>
             <Row>
-                <Column
-                    css={`
-                        ${mediaLgPlus} {
-                            width: 65%;
-                        }
-                    `}
-                >
+                <Column>
                     <Row>
                         {showBackupViewer ? (
                             <BackupViewerStyled model={model} />
@@ -235,7 +229,13 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                         <CommentsForModel model={model} />
                     </OnlyMobileRow>
                 </Column>
-                <OnlyDesktopColumn>
+                <OnlyDesktopColumn
+                    css={`
+                        ${mediaLgPlus} {
+                            max-width: 35%;
+                        }
+                    `}
+                >
                     <Row>
                         <Details currentUser={currentUser} model={model} />
                     </Row>
