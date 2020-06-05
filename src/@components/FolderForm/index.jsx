@@ -153,7 +153,6 @@ export function CreateFolderForm({
                 variables,
             });
             const folder = mutation.data.createFolder.folder;
-            console.log(folder);
             afterCreate(folder);
         } catch (error) {
             onErrorReceived({
@@ -171,10 +170,11 @@ export function CreateFolderForm({
         <Form onSubmit={handleSubmit(handleSave)}>
             <Label htmlFor="name">Folder Name</Label>
             <FullWidthInput name="name" ref={register({ required: true })} />
-            <Label htmlFor="members">{membersLabel}</Label>
+            <Label htmlFor="members">Add Users</Label>
             <FullWidthInput
                 name="members"
                 ref={register({ required: true })}
+                placeholder="example@example.com"
                 css={`
                     margin-bottom: 24px;
                 `}

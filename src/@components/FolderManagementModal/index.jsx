@@ -152,7 +152,6 @@ export function FolderManagementModal({
                     onErrorReceived={setErrors}
                     afterInvite={afterInvite}
                     onCancel={onCancel}
-                    membersLabel="Add Members"
                 />
             </Row>
             <Row

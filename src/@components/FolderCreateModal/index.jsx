@@ -53,7 +53,6 @@ export function FolderCreateModal({ isOpen, onCancel, afterCreate }) {
                     onErrorReceived={setErrors}
                     afterCreate={afterCreate}
                     onCancel={onCancel}
-                    membersLabel="Share Folder"
                     includeNameField
                 />
             </Row>
