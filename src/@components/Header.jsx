@@ -10,6 +10,7 @@ import { linkText } from '@style/text';
 import { Button } from '@components/Button';
 import { mediaMdPlus } from '@style/media-queries';
 import { GREY_5, RED_2 } from '@style/colors';
+import { authenticationService } from '@services';
 
 import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
 import { ReactComponent as Logo } from '@svg/logo.svg';
@@ -21,6 +22,7 @@ import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg';
 import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon-gray.svg';
 import { ReactComponent as PencilIcon } from '@svg/icon-pencil.svg';
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg';
 
 const NOTIFICATIONS_URL = '/notifications';
 
@@ -110,6 +112,7 @@ const NotificationsButton = () => {
 const DropdownIcon = styled(PlusButton)``;
 const SearchIcon = styled(MagnifyingGlass)``;
 const ProfilePictureStyled = styled(ProfilePicture)``;
+
 function Search() {
     return (
         <Link
@@ -123,9 +126,10 @@ function Search() {
         </Link>
     );
 }
+
 function UserPicture({ user }) {
     return (
-        <Link to="/profile/">
+        <Link to="/home/">
             <ProfilePictureStyled
                 name={user.fullName}
                 src={user.profile.avatarUrl}
@@ -205,6 +209,8 @@ function AddModelDropdownMenu() {
 }
 
 function ProfileDropdownMenu() {
+    const history = useHistory();
+
     return (
         <DropdownMenuStyled>
             <DropdownItem to="/profile/edit">
@@ -212,6 +218,15 @@ function ProfileDropdownMenu() {
             </DropdownItem>
             <DropdownItem to="/profile/likes">
                 <HeartIcon /> Liked Models
+            </DropdownItem>
+            <DropdownItem
+                onClick={() => {
+                    authenticationService.logout();
+                    history.push('/login');
+                }}
+            >
+                <ExitIcon />
+                Sign Out
             </DropdownItem>
         </DropdownMenuStyled>
     );

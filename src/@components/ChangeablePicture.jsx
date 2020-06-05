@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components/macro';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import Modal from 'react-modal';
@@ -73,7 +73,7 @@ const CancelButton = styled(DarkButton)`
     padding: 8px 36px;
 `;
 
-export function ChangeablePicture({ user, button, css }) {
+export function ChangeablePicture({ user, button, className }) {
     const [cropSrc, setCropSrc] = useState(null);
     const [crop, setCrop] = useState();
     const [croppedImg, setCroppedImg] = useState(null);
@@ -169,7 +169,7 @@ export function ChangeablePicture({ user, button, css }) {
     };
 
     return (
-        <Form css={css} ref={formRef}>
+        <Form className={className} ref={formRef}>
             <label htmlFor="avatar">
                 <Button
                     onClick={e => {

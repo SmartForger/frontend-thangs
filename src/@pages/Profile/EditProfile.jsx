@@ -1,5 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
+import { Link } from 'react-router-dom';
 
 import { WithNewThemeLayout } from '@style/Layout';
 import { useCurrentUser } from '@customHooks/Users';
@@ -10,13 +11,8 @@ import { ChangeablePicture } from '@components/ChangeablePicture';
 import { Flash } from '@components/Flash';
 import { EditProfileForm } from '@components/EditProfileForm';
 import * as GraphqlService from '@services/graphql-service';
-import { subheaderText } from '@style/text';
 
 const graphqlService = GraphqlService.getInstance();
-
-const Name = styled.div`
-    ${subheaderText};
-`;
 
 const Row = styled.div`
     display: flex;
@@ -47,35 +43,29 @@ function PictureForm({ user, className }) {
                 name={user.fullName}
                 src={user.profile.avatarUrl}
             />
-            <ChangeablePicture
-                user={user}
-                css={`
-                    margin-right: 8px;
-                `}
-            />
+            <div>
+                <Row>
+                    <ChangeablePicture
+                        user={user}
+                        css={`
+                            margin-right: 8px;
+                        `}
+                    />
 
-            {currentAvatar && (
-                <DeleteButton onClick={onDelete} disabled={loading}>
-                    {deleteText}
-                </DeleteButton>
-            )}
-        </Row>
-    );
-}
-
-const PictureFormStyled = styled(PictureForm)`
-    margin-top: 64px;
-`;
-
-function InlineProfile({ user }) {
-    return (
-        <Row>
-            <ProfilePictureStyled
-                name={user.fullName}
-                src={user.profile.avatarUrl}
-                size="50px"
-            />
-            <Name>{user.fullName}</Name>
+                    {currentAvatar && (
+                        <DeleteButton onClick={onDelete} disabled={loading}>
+                            {deleteText}
+                        </DeleteButton>
+                    )}
+                </Row>
+                <Row
+                    css={`
+                        margin-top: 16px;
+                    `}
+                >
+                    <Link to={`/profile/${user.id}`}>View Profile</Link>
+                </Row>
+            </div>
         </Row>
     );
 }
@@ -111,8 +101,7 @@ function Page() {
     return (
         <div>
             <WarningOnEmptyProfile user={user} />
-            <InlineProfile user={user} />
-            <PictureFormStyled
+            <PictureForm
                 user={user}
                 css={`
                     margin-bottom: 64px;

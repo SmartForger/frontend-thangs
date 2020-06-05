@@ -11,7 +11,6 @@ export * from './HideOnRoutes.jsx';
 export * from './Tag.jsx';
 export * from './Viewer.jsx';
 export * from './ColorPicker';
-export * from './ProfileSidebar';
 export * from './ChangeablePicture';
 export * from './Markdown';
 export * from './CommentsForModel';

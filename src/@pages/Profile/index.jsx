@@ -1,26 +1,24 @@
 import React, { useState } from 'react';
-import { useParams, useHistory, Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { useParams, Link } from 'react-router-dom';
+import styled from 'styled-components/macro';
 import * as R from 'ramda';
 
 import { WithNewThemeLayout } from '@style';
 import * as GraphqlService from '@services/graphql-service';
-import { authenticationService } from '@services';
 import { useCurrentUser } from '@customHooks/Users';
 import { Spinner } from '@components/Spinner';
-import { AnchorButton } from '@components/AnchorButton';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { Markdown } from '@components/Markdown';
 import { Message404 } from '../404';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
 import { ReactComponent as AboutIcon } from '@svg/about-icon.svg';
 import { ReactComponent as ModelIcon } from '@svg/model-icon.svg';
-import { ReactComponent as PencilIcon } from '@svg/pencil-icon.svg';
 import { CardCollection } from '@components/CardCollection';
-import { SecondaryButton } from '@components/Button';
 import { ToggleFollowButton } from '@components/ToggleFollowButton';
 import {
     subheaderText,
+    boldText,
+    linkText,
     tabNavigationText,
     activeTabNavigationText,
     profileAboutText,
@@ -33,21 +31,9 @@ export * from './Home';
 
 const graphqlService = GraphqlService.getInstance();
 
-const Anchor = styled(AnchorButton)`
-    margin-top: 16px;
-    padding: 4px;
-`;
-
-const Frame = styled.div`
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    margin-top: 16px;
-`;
-
 const Name = styled.div`
     ${subheaderText};
-    margin-top: 16px;
+    margin-top: 10px;
 `;
 
 const TabTitleGroup = styled.div`
@@ -222,17 +208,14 @@ function Tabs({ user }) {
     );
 }
 
-const EditButton = styled(SecondaryButton)`
-    padding: 8px 16px;
-    max-width: 100%;
-    svg {
-        margin-right: 8px;
-    }
+const EditProfileLink = styled(Link)`
+    // We need to reset styles on this component because it is rendered within larger text
+    ${boldText};
+    ${linkText};
 `;
 
 function ProfileButton({ viewedUser, className }) {
     const { user } = useCurrentUser();
-    const history = useHistory();
 
     if (!user || user.id !== viewedUser.id) {
         return (
@@ -241,28 +224,20 @@ function ProfileButton({ viewedUser, className }) {
     }
 
     return (
-        <>
-            <Link to={'/profile/edit'} className={className}>
-                <EditButton>
-                    <PencilIcon />
-                    Edit Profile
-                </EditButton>
-            </Link>
-
-            <Anchor
-                onClick={() => {
-                    authenticationService.logout();
-                    history.push('/login');
-                }}
-            >
-                Sign Out
-            </Anchor>
-        </>
+        <EditProfileLink to="/profile/edit" className={className}>
+            Edit Profile
+        </EditProfileLink>
     );
 }
-const ProfileButtonStyled = styled(ProfileButton)`
-    margin-top: 16px;
+
+const ProfilePictureStyled = styled(ProfilePicture)`
+    margin-right: 24px;
 `;
+
+const Row = styled.div`
+    display: flex;
+`;
+
 function Page() {
     const { id } = useParams();
     const { loading, error, user } = graphqlService.useUserById(id);
@@ -288,16 +263,25 @@ function Page() {
     }
 
     return (
-        <Frame>
-            <ProfilePicture
-                size="104px"
-                name={user.fullName}
-                src={user.profile.avatarUrl}
-            />
-            <Name>{user.fullName}</Name>
-            <ProfileButtonStyled viewedUser={user} />
+        <div>
+            <Row>
+                <ProfilePictureStyled
+                    size="80px"
+                    src={user.profile.avatarUrl}
+                />
+                <div>
+                    <Name>{user.fullName}</Name>
+                    <ProfileButton
+                        viewedUser={user}
+                        css={`
+                            margin-top: 16px;
+                            display: block;
+                        `}
+                    />
+                </div>
+            </Row>
             <Tabs user={user} />
-        </Frame>
+        </div>
     );
 }
 
