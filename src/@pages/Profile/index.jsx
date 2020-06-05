@@ -268,6 +268,7 @@ function Page() {
                 <ProfilePictureStyled
                     size="80px"
                     src={user.profile.avatarUrl}
+                    name={user.fullName}
                 />
                 <div>
                     <Name>{user.fullName}</Name>
