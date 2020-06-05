@@ -214,7 +214,6 @@ export function InviteUsersForm({
     onErrorReceived,
     afterInvite,
     onCancel,
-    membersLabel,
 }) {
     const validationResolver = data => {
         const members = data.members ? parseEmails(data.members) : [];
@@ -268,10 +267,11 @@ export function InviteUsersForm({
 
     return (
         <Form onSubmit={handleSubmit(handleSave)}>
-            <Label htmlFor="members">{membersLabel}</Label>
+            <Label htmlFor="members">Add Users</Label>
             <FullWidthInput
                 name="members"
                 ref={register({ required: true })}
+                placeholder="example@example.com"
                 css={`
                     margin-bottom: 24px;
                 `}
