@@ -34,9 +34,9 @@ function Folder({ folder, modelCount }) {
 }
 
 function Page() {
-    const { id } = useParams();
+    const { folderId } = useParams();
 
-    const { loading, error, folder } = useFolder(id);
+    const { loading, error, folder } = useFolder(folderId);
     const { loading: userLoading, error: userError, user } = useCurrentUser();
 
     if (loading || userLoading) {
