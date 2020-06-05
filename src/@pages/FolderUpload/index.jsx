@@ -321,8 +321,9 @@ function Upload({ folder }) {
     );
 }
 const Page = () => {
-    const { id } = useParams();
-    const { loading, error, folder } = useFolder(id);
+    console.log('FolderUpload');
+    const { folderId } = useParams();
+    const { loading, error, folder } = useFolder(folderId);
 
     if (loading) {
         return <Spinner />;

@@ -68,7 +68,11 @@ const App = () => {
                                 component={routeRequiresAuth(Landing)}
                             />
                             <Route
-                                path="/folder/:id"
+                                path="/folder/:folderId/upload"
+                                component={routeRequiresAuth(FolderUpload)}
+                            />
+                            <Route
+                                path="/folder/:folderId"
                                 exact
                                 component={routeRequiresAuth(FolderPage)}
                             />
@@ -125,10 +129,6 @@ const App = () => {
                             <Route
                                 path="/preview/model/:id"
                                 component={routeRequiresAuth(ModelPreview)}
-                            />
-                            <Route
-                                path="/folder/:id/upload"
-                                component={routeRequiresAuth(FolderUpload)}
                             />
                             <Route
                                 path="/newspost/:id"
