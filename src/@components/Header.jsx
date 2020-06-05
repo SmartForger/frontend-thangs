@@ -21,7 +21,6 @@ import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg';
 import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg';
 import { ReactComponent as HeartIcon } from '@svg/heart-icon-gray.svg';
 import { ReactComponent as PencilIcon } from '@svg/icon-pencil.svg';
-import { ReactComponent as UserPlusIcon } from '@svg/icon-user-plus.svg';
 
 const NOTIFICATIONS_URL = '/notifications';
 
@@ -206,14 +205,8 @@ function AddModelDropdownMenu() {
 }
 
 function ProfileDropdownMenu() {
-    const { folderId } = useParams();
     return (
         <DropdownMenuStyled>
-            {folderId !== undefined && (
-                <DropdownItem to="/">
-                    <UserPlusIcon /> Invite users
-                </DropdownItem>
-            )}
             <DropdownItem to="/profile/edit">
                 <PencilIcon /> Edit Profile
             </DropdownItem>
