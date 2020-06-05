@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import { useForm, ErrorMessage } from 'react-hook-form';
@@ -18,11 +18,7 @@ const Row = styled.div`
     display: flex;
 `;
 
-const allowCssProp = props => (props.css ? props.css : '');
-
-const Column = styled.div`
-    ${allowCssProp};
-`;
+const Column = styled.div``;
 
 const Field = styled.div`
     display: flex;
@@ -37,8 +33,6 @@ const FullWidthInput = styled.input`
     padding: 8px 16px;
     margin-bottom: 8px;
     border-radius: 8px;
-
-    ${allowCssProp};
 `;
 
 const Label = styled.label`

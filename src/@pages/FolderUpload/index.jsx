@@ -141,7 +141,7 @@ function Upload({ folder }) {
             },
         });
 
-        navigateWithFlash('/home', 'Model added successfully.');
+        navigateWithFlash(`/folder/${folder.id}`, 'Model added successfully.');
     };
 
     const handleCancel = e => {

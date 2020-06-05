@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components/macro';
+import { Link } from 'react-router-dom';
 import { useDeleteFolder } from '../../@customHooks/Folders';
 import { DropdownMenu, DropdownItem } from '../DropdownMenu';
 import { FolderManagementModal } from '../FolderManagementModal';
@@ -99,31 +100,37 @@ function ManageUsers({ folder }) {
     );
 }
 
+const LinkStyled = styled(Link)``;
+
 export function Breadcrumbs({ modelsCount, folder, className }) {
     return (
         <Row className={className}>
-            <Row
+            <LinkStyled
+                to="/home"
                 css={`
                     ${breadcrumbTextLight};
-                    ::after {
+                `}
+            >
+                <Row>
+                    <div>All Models</div>{' '}
+                    <div
+                        css={`
+                            margin-left: 4px;
+                        `}
+                    >
+                        {modelsCount}
+                    </div>
+                </Row>
+            </LinkStyled>
+            <Row
+                css={`
+                    ${smallHeaderText};
+
+                    ::before {
                         content: '>';
                         margin-left: 16px;
                         margin-right: 24px;
                     }
-                `}
-            >
-                <div>All Models</div>{' '}
-                <div
-                    css={`
-                        margin-left: 4px;
-                    `}
-                >
-                    {modelsCount}
-                </div>
-            </Row>
-            <Row
-                css={`
-                    ${smallHeaderText};
                 `}
             >
                 <FolderIconStyled />

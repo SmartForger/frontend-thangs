@@ -28,10 +28,20 @@ export const FlashContextProvider = props => {
     );
 };
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export function WithFlash({ children }) {
     const [flash, { setFlash }] = useContext(FlashContext);
 
     useEffect(() => {
+        async function clearFlash() {
+            await sleep(5000);
+            setFlash();
+        }
+        clearFlash();
+
         return function cleanup() {
             setFlash();
         };
