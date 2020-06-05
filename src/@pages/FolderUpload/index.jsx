@@ -321,7 +321,6 @@ function Upload({ folder }) {
     );
 }
 const Page = () => {
-    console.log('FolderUpload');
     const { folderId } = useParams();
     const { loading, error, folder } = useFolder(folderId);
 
