@@ -205,6 +205,11 @@ export const regularText = css`
     font-size: 14px;
     color: ${BLACK_1};
 `;
+export const boldText = css`
+    font-size: 14px;
+    font-weight: 500;
+    color: ${BLACK_1};
+`;
 export const lightText = css`
     font-size: 14px;
     color: ${GREY_4};

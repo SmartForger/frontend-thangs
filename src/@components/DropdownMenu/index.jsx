@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { TextButton } from '../Button';
 import { WHITE_1, GREY_14 } from '../../@style/colors';
-import { regularText } from '../../@style/text';
+import { boldText } from '../../@style/text';
 import { ReactComponent as DotStackIcon } from '../../@svg/dot-stack-icon.svg';
 
 const Menu = styled.div`
@@ -20,10 +20,11 @@ const Menu = styled.div`
 `;
 
 const Item = styled(Link)`
-    ${regularText};
+    ${boldText};
     line-height: 32px;
     display: inline-flex;
     align-items: center;
+    cursor: pointer;
 
     svg {
         width: 26px;
@@ -40,7 +41,7 @@ const Container = styled.div`
 export function DropdownItem({ children, to = '#', onClick }) {
     return (
         <div>
-            <Item to={to} onClick={onClick}>
+            <Item to={to} onClick={onClick} as={onClick && 'div'}>
                 {children}
             </Item>
         </div>
