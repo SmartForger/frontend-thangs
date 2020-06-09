@@ -1,6 +1,6 @@
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { USER_QUERY } from './users';
+import { USER_QUERY, parseUser } from './users';
 import { parseModel } from './models';
 
 export const FOLDER_QUERY = gql`
@@ -41,7 +41,11 @@ export function parseFolder(folder) {
         return undefined;
     }
 
-    return { ...folder, models: folder.models.map(parseModel) };
+    return {
+        ...folder,
+        models: folder.models.map(parseModel),
+        members: folder.members.map(parseUser),
+    };
 }
 
 export const useFolderById = id => {
