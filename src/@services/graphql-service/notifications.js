@@ -23,7 +23,6 @@ const ERROR = 'ERROR';
 const VERB_TO_NOTIFICATION_TYPE = {
     liked: USER_LIKED_MODEL,
     downloaded: USER_DOWNLOADED_MODEL,
-    'changed status': MODEL_CHANGED_STATUS,
     commented: USER_COMMENTED_ON_MODEL,
     uploaded: USER_UPLOADED_MODEL,
 };
@@ -31,7 +30,6 @@ const VERB_TO_NOTIFICATION_TYPE = {
 export const isUserLikedModel = R.equals(USER_LIKED_MODEL);
 export const isUserCommentedOnModel = R.equals(USER_COMMENTED_ON_MODEL);
 export const isUserDownloadedModel = R.equals(USER_DOWNLOADED_MODEL);
-export const isModelChangedStatus = R.equals(MODEL_CHANGED_STATUS);
 export const isModelFailedProcessing = R.equals(MODEL_FAILED_PROCESSING);
 export const isModelCompletedProcessing = R.equals(MODEL_COMPLETED_PROCESSING);
 export const isUserUploadedModel = R.equals(USER_UPLOADED_MODEL);
@@ -40,13 +38,14 @@ export const isUserStartedFollowingUser = R.equals(USER_STARTED_FOLLOWING_USER);
 export const modelHasCompletedStatus = R.propEq('uploadStatus', COMPLETED);
 export const modelHasFailedStatus = R.propEq('uploadStatus', ERROR);
 
-function getNotificationType(verb, actor, target) {
-    const type = VERB_TO_NOTIFICATION_TYPE[verb];
-    if (!type) {
-        return NOT_RECOGNIZED;
-    }
+const STARTED_FOLLOWING = 'started following';
+const CHANGED_STATUS = 'changed status';
 
-    if (verb === 'started following') {
+const isStartedFollowing = R.equals(STARTED_FOLLOWING);
+const isModelChangedStatus = R.equals(CHANGED_STATUS);
+
+function getNotificationType(verb, actor, target) {
+    if (isStartedFollowing(verb)) {
         if (isModel(target)) {
             return USER_STARTED_FOLLOWING_MODEL;
         }
@@ -55,15 +54,15 @@ function getNotificationType(verb, actor, target) {
         }
     }
 
-    if (isModelChangedStatus(type) && modelHasCompletedStatus(actor)) {
+    if (isModelChangedStatus(verb) && modelHasCompletedStatus(actor)) {
         return MODEL_COMPLETED_PROCESSING;
     }
 
-    if (isModelChangedStatus(type) && modelHasFailedStatus(actor)) {
+    if (isModelChangedStatus(verb) && modelHasFailedStatus(actor)) {
         return MODEL_FAILED_PROCESSING;
     }
 
-    return type;
+    return VERB_TO_NOTIFICATION_TYPE[verb] || NOT_RECOGNIZED;
 }
 
 const isModel = R.propEq('__typename', 'ModelType');
