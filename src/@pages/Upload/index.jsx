@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
@@ -6,7 +6,7 @@ import { useForm, ErrorMessage } from 'react-hook-form';
 import { WithNewThemeLayout } from '@style/Layout';
 import { Uploader } from '@components/Uploader';
 import { Button, DarkButton } from '@components/Button';
-import { FlashContext } from '@components/Flash';
+import { useFlashNotification } from '@components/Flash';
 import * as GraphqlService from '@services/graphql-service';
 import { authenticationService } from '@services';
 import { Spinner } from '@components/Spinner';
@@ -113,7 +113,7 @@ const Page = () => {
     const [file, setFile] = useState();
     const [category, setCategory] = useState();
     const currentUserId = authenticationService.getCurrentUserId();
-    const [, { navigateWithFlash }] = useContext(FlashContext);
+    const { navigateWithFlash } = useFlashNotification();
 
     const [
         uploadModel,

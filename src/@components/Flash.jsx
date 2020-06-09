@@ -11,7 +11,7 @@ export const Flash = styled.div`
     margin-bottom: 24px;
 `;
 
-export const FlashContext = React.createContext([null, {}]);
+const FlashContext = React.createContext([null, {}]);
 
 export const FlashContextProvider = props => {
     const history = useHistory();
@@ -53,4 +53,9 @@ export function WithFlash({ children }) {
             {children}
         </>
     );
+}
+
+export function useFlashNotification() {
+    const [, { setFlash, navigateWithFlash }] = useContext(FlashContext);
+    return { setFlash, navigateWithFlash };
 }

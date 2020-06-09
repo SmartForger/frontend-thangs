@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { useHistory, useParams } from 'react-router-dom';
 import Select from 'react-select';
@@ -8,7 +8,7 @@ import { Message404 } from '../404';
 import { useFolder } from '../../@customHooks/Folders';
 import { Uploader } from '@components/Uploader';
 import { Button, DarkButton } from '@components/Button';
-import { FlashContext } from '../../@components/Flash';
+import { useFlashNotification } from '../../@components/Flash';
 import { Breadcrumbs } from '../../@components/Breadcrumbs';
 import { useAddToFolder } from '../../@customHooks/Folders';
 import { Spinner } from '@components/Spinner';
@@ -115,7 +115,7 @@ function Upload({ folder }) {
         addToFolder,
         { loading: isUploading, error: uploadError },
     ] = useAddToFolder(folder.id);
-    const [, { navigateWithFlash }] = useContext(FlashContext);
+    const { navigateWithFlash } = useFlashNotification();
 
     const { register, handleSubmit, errors } = useForm();
 
