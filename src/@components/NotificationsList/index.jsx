@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import * as R from 'ramda';
 
 import { useNotifications } from '@customHooks/Notifications';
@@ -12,11 +12,11 @@ const List = styled.ol`
     max-width: 688px;
 
     .notification + .notification {
-        margin-top: 16px;
+        margin-top: 48px;
     }
 `;
 
-export function NotificationsList() {
+export function NotificationsList({ className }) {
     const { loading, error, notifications } = useNotifications();
 
     if (loading) {
@@ -33,7 +33,7 @@ export function NotificationsList() {
     }
 
     return (
-        <List>
+        <List className={className}>
             {notifications.map((notification, i) => (
                 <Notification
                     key={i}

@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { headerText } from '@style/text';
 import { WithNewThemeLayout } from '@style/Layout';
 import { NotificationsList } from '@components/NotificationsList';
@@ -47,7 +47,11 @@ function Page() {
                     'Clear Notifications'
                 )}
             </ButtonStyled>
-            <NotificationsList />
+            <NotificationsList
+                css={`
+                    margin-top: 48px;
+                `}
+            />
         </div>
     );
 }
