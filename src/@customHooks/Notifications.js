@@ -18,23 +18,23 @@ export function useNotifications() {
     return { loading, error, notifications };
 }
 
-export function useHasUnreadNotifications() {
+export function useUnreadNotificationCount() {
     const id = authenticationService.getCurrentUserId();
     if (!id) {
         return {
             loading: false,
             error: undefined,
-            hasUnreadNotifications: false,
+            unreadNotifications: undefined,
         };
     }
 
     const {
         loading,
         error,
-        hasUnreadNotifications,
-    } = graphqlService.useUserHasUnreadNotifications(id);
+        unreadNotificationCount,
+    } = graphqlService.useUserUnreadNotificationCount(id);
 
-    return { loading, error, hasUnreadNotifications };
+    return { loading, error, unreadNotificationCount };
 }
 
 export function useUpdateLastCheckedNotifications() {

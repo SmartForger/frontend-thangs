@@ -3,13 +3,13 @@ import styled from 'styled-components/macro';
 import { useParams, useHistory, Link } from 'react-router-dom';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { useCurrentUser } from '@customHooks/Users';
-import { useHasUnreadNotifications } from '@customHooks/Notifications';
+import { useUnreadNotificationCount } from '@customHooks/Notifications';
 import { DropdownMenu, DropdownItem } from '@components/DropdownMenu';
 import { FolderCreateModal } from '@components/FolderCreateModal';
 import { linkText } from '@style/text';
 import { Button } from '@components/Button';
 import { mediaMdPlus } from '@style/media-queries';
-import { GREY_5, RED_2 } from '@style/colors';
+import { GREY_5, RED_3, WHITE_1 } from '@style/colors';
 import { authenticationService } from '@services';
 
 import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
@@ -90,11 +90,27 @@ const SignUp = () => {
 };
 
 const NotificationIconStyled = styled(NotificationIcon)`
-    color: ${props => (props.unread ? RED_2 : GREY_5)};
+    color: ${GREY_5};
+`;
+
+const UnreadBadge = styled.div`
+    background: ${RED_3};
+    border-radius: 100%;
+    color: ${WHITE_1};
+    width: 16px;
+    height: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    font-weight: bold;
+    position: absolute;
+    top: 6px;
+    right: 4px;
 `;
 
 const NotificationsButton = () => {
-    const { hasUnreadNotifications } = useHasUnreadNotifications();
+    const { unreadNotificationCount } = useUnreadNotificationCount();
 
     return (
         <Link
@@ -102,9 +118,13 @@ const NotificationsButton = () => {
             css={`
                 height: 50px;
                 padding: 0 8px;
+                position: relative;
             `}
         >
-            <NotificationIconStyled unread={hasUnreadNotifications ? 1 : 0} />
+            <NotificationIconStyled />
+            {unreadNotificationCount > 0 && (
+                <UnreadBadge>{unreadNotificationCount}</UnreadBadge>
+            )}
         </Link>
     );
 };

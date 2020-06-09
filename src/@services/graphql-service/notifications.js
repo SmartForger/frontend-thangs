@@ -193,20 +193,20 @@ const UNREAD_NOTIFICATIONS = gql`
     query user($id: ID) {
         user(id: $id) {
             id
-            hasUnreadNotifications
+            unreadNotificationCount
         }
     }
 `;
 
-export function useUserHasUnreadNotifications(id) {
+export function useUserUnreadNotificationCount(id) {
     const { loading, error, data } = useQuery(UNREAD_NOTIFICATIONS, {
         variables: { id },
         pollInterval: FIVE_MINUTES,
     });
 
-    const hasUnreadNotifications =
-        data && data.user && data.user.hasUnreadNotifications;
-    return { loading, error, hasUnreadNotifications };
+    const unreadNotificationCount =
+        data && data.user && data.user.unreadNotificationCount;
+    return { loading, error, unreadNotificationCount };
 }
 
 export function useUpdateLastCheckedNotificationsForUser(id) {
