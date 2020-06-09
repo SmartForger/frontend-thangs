@@ -181,6 +181,7 @@ function getAndParseHandledNotifications(data) {
 export function useNotificationsByUserId(id) {
     const { loading, error, data } = useQuery(NOTIFICATIONS, {
         variables: { id, lastCheckedTime: null },
+        fetchPolicy: 'no-cache',
         pollInterval: FIVE_MINUTES,
     });
 
