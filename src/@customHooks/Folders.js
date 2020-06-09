@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { authenticationService } from '../@services';
 import * as GraphqlService from '../@services/graphql-service';
 import { uploadToSignedUrl } from '../@services/storageService';
@@ -37,41 +38,51 @@ export function useFolder(folderId) {
 }
 
 export function useAddToFolder(folderId) {
+    const [loading, setLoading] = useState();
     const [
         createUploadUrl,
-        { loading: loadingCreateUploadUrl, error: errorCreateUploadUrl },
+        { error: errorCreateUploadUrl },
     ] = graphqlService.useCreateUploadUrl();
 
     const [
         addToFolder,
-        { loading: loadingAddToFolder, error: errorAddToFolder, folder },
+        { error: errorAddToFolder, folder },
     ] = graphqlService.useAddToFolderMutation(folderId);
 
     const upload = async (file, { variables }) => {
+        setLoading(true);
         const urlResult = await createUploadUrl({
             variables: { filename: file.name },
         });
 
-        const {
-            data: {
-                createUploadUrl: { originalFilename, newFilename, uploadUrl },
-            },
-        } = urlResult;
+        try {
+            const {
+                data: {
+                    createUploadUrl: {
+                        originalFilename,
+                        newFilename,
+                        uploadUrl,
+                    },
+                },
+            } = urlResult;
 
-        await uploadToSignedUrl(uploadUrl, file);
-        await addToFolder({
-            variables: {
-                ...variables,
-                filename: newFilename,
-                originalFilename,
-            },
-        });
+            await uploadToSignedUrl(uploadUrl, file);
+            await addToFolder({
+                variables: {
+                    ...variables,
+                    filename: newFilename,
+                    originalFilename,
+                },
+            });
+        } finally {
+            setLoading(false);
+        }
     };
 
     return [
         upload,
         {
-            loading: loadingCreateUploadUrl || loadingAddToFolder,
+            loading,
             error: errorCreateUploadUrl || errorAddToFolder,
             folder,
         },

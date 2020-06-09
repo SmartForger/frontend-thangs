@@ -309,10 +309,14 @@ function Upload({ folder }) {
                         `}
                         onClick={handleCancel}
                         type="button"
+                        disabled={isUploading}
                     >
                         Cancel
                     </CancelButton>
-                    <SaveButton type="submit" disabled={!file}>
+                    <SaveButton
+                        type="submit"
+                        disabled={!file || isUploading || uploadError}
+                    >
                         Save Model
                     </SaveButton>
                 </ButtonGroup>
