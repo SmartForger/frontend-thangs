@@ -1,10 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
 import { useDeleteFolder } from '../../@customHooks/Folders';
 import { DropdownMenu, DropdownItem } from '../DropdownMenu';
 import { FolderManagementModal } from '../FolderManagementModal';
-import { FlashContext } from '../Flash';
+import { useFlashNotification } from '../Flash';
 import { TextButton } from '../Button';
 import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg';
 import { ReactComponent as TrashCanIcon } from '../../@svg/trash-can-icon.svg';
@@ -39,7 +39,7 @@ const ErrorIconStyled = styled(ErrorIcon)`
 
 function DeleteMenu({ folderId }) {
     const [deleteFolder, { loading, error }] = useDeleteFolder(folderId);
-    const [, { navigateWithFlash }] = useContext(FlashContext);
+    const { navigateWithFlash } = useFlashNotification();
 
     const handleDelete = async e => {
         e.preventDefault();
@@ -76,10 +76,12 @@ const ManagementButton = styled(TextButton)`
 
 function ManageUsers({ folder }) {
     const [isOpen, setIsOpen] = useState();
-    const [, { setFlash }] = useContext(FlashContext);
+    const { setFlash } = useFlashNotification();
 
     const afterInvite = () => {
-        setFlash('Users invited successfully.');
+        setFlash(
+            'If the email addresses belong to registered Thangs users, they will have access to your folder'
+        );
         setIsOpen(false);
     };
     const handleCancel = () => setIsOpen(false);

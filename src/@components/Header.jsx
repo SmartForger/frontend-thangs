@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
+import { useFlashNotification } from '@components/Flash';
 import { useParams, useHistory, Link } from 'react-router-dom';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { useCurrentUser } from '@customHooks/Users';
@@ -186,8 +187,8 @@ const DropdownIconStyled = styled(DropdownIcon)`
 
 function AddModelDropdownMenu() {
     const { folderId } = useParams();
-    const history = useHistory();
     const [createFolderIsOpen, setCreateFolderIsOpen] = useState(false);
+    const { navigateWithFlash } = useFlashNotification();
     return (
         <>
             <DropdownMenuStyled
@@ -221,7 +222,11 @@ function AddModelDropdownMenu() {
                 isOpen={createFolderIsOpen}
                 onCancel={() => setCreateFolderIsOpen(false)}
                 afterCreate={folder => {
-                    history.push(`/folder/${folder.id}`);
+                    setCreateFolderIsOpen(false);
+                    navigateWithFlash(
+                        `/folder/${folder.id}`,
+                        'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
+                    );
                 }}
             />
         </>
