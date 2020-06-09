@@ -7,8 +7,10 @@ import { ReactComponent as GraphUploadingIcon } from '@svg/graph-uploading-icon.
 import { ReactComponent as RulerUploadingIcon } from '@svg/ruler-uploading-icon.svg';
 import { ReactComponent as ProtractorUploadingIcon } from '@svg/protractor-uploading-icon.svg';
 import { ProgressText } from '@components/ProgressText';
+import { infoMessageText } from '@style/text';
 
 const Dots = styled(ProgressText)`
+    ${infoMessageText};
     margin-bottom: 160px;
     width: 256px;
 `;
