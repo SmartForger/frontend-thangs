@@ -14,7 +14,6 @@ import {
     isUserUploadedModel,
     isUserStartedFollowingUser,
 } from '@services/graphql-service/notifications';
-import Logo from '@svg/logo.svg';
 import { BLACK_2 } from '@style/colors';
 
 const DATE_FORMAT = 'h:mmaaaa M/dd/yy';
@@ -92,10 +91,14 @@ const LogoContainer = styled.div`
     }
 `;
 
+const Image = styled.img`
+    max-width: 24px;
+`;
+
 function ThangsPicture() {
     return (
         <LogoContainer>
-            <img src={Logo} alt="Thangs logo" />
+            <Image src="/thangs-logo.png" alt="Thangs logo" />
         </LogoContainer>
     );
 }
