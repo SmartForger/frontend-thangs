@@ -90,7 +90,7 @@ function UserList({ users = [], folderId, creator }) {
                     >
                         <UserInline user={user} displayEmail>
                             {user.id !== currentUserId &&
-                                creator.id === currentUserId && (
+                                creator.id !== user.id && (
                                     <RevokeAccessButton
                                         targetUserId={user.id}
                                         folderId={folderId}
