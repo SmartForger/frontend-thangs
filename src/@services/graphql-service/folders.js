@@ -9,6 +9,9 @@ export const FOLDER_QUERY = gql`
             id
             size
             name
+            creator {
+                id
+            }
             models {
                 id
                 name
