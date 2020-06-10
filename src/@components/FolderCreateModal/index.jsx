@@ -40,13 +40,14 @@ export function FolderCreateModal({ isOpen, onCancel, afterCreate }) {
             <DisplayErrors
                 errors={errors}
                 css={`
-                    margin-bottom: 16px;
+                    margin-top: 16px;
                 `}
                 serverErrorMsg="Unable to create folder. Please try again later."
             />
             <Row
+                hasErrors={errors}
                 css={`
-                    margin-top: 48px;
+                    margin-top: ${props => (props.hasErrors ? '16px' : '70px')};
                 `}
             >
                 <CreateFolderForm

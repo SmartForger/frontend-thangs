@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
+import * as R from 'ramda';
 import { UserInline } from '../UserInline';
 import { Modal } from '../Modal';
 import { authenticationService } from '../../@services';
@@ -138,13 +139,14 @@ export function FolderManagementModal({
             <DisplayErrors
                 errors={errors}
                 css={`
-                    margin-bottom: 16px;
+                    margin-top: 16px;
                 `}
                 serverErrorMsg="Unable to invite users. Please try again later."
             />
             <Row
+                hasErrors={errors && !R.isEmpty(errors)}
                 css={`
-                    margin-top: 48px;
+                    margin-top: ${props => (props.hasErrors ? '16px' : '70px')};
                 `}
             >
                 <InviteUsersForm

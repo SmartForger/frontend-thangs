@@ -61,6 +61,10 @@ const isEmptyMembers = ([key, info]) => {
     return key === 'members' && info.type === 'array.min';
 };
 
+const isEmptyName = ([key, info]) => {
+    return key === 'name' && info.type === 'string.empty';
+};
+
 const isInvalidEmail = ([key, info]) => {
     return key === 'members' && info.type === 'string.email';
 };
@@ -92,6 +96,12 @@ export function DisplayErrors({ errors, className, serverErrorMsg }) {
             return (
                 <ErrorTextStyle className={className} key={i}>
                     Please check that you have provided valid emails
+                </ErrorTextStyle>
+            );
+        } else if (isEmptyName(error)) {
+            return (
+                <ErrorTextStyle className={className} key={i}>
+                    Please provide a name for your folder
                 </ErrorTextStyle>
             );
         } else if (isServerError(error)) {
