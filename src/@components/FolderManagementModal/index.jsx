@@ -73,7 +73,7 @@ const TrashCanIconStyled = styled(TrashCanIcon)`
     color: ${GREY_12};
 `;
 
-function UserList({ users = [], folderId }) {
+function UserList({ users = [], folderId, creator }) {
     const currentUserId = authenticationService.getCurrentUserId();
 
     return (
@@ -89,14 +89,15 @@ function UserList({ users = [], folderId }) {
                         `}
                     >
                         <UserInline user={user} displayEmail>
-                            {user.id !== currentUserId && (
-                                <RevokeAccessButton
-                                    targetUserId={user.id}
-                                    folderId={folderId}
-                                >
-                                    <TrashCanIconStyled />
-                                </RevokeAccessButton>
-                            )}
+                            {user.id !== currentUserId &&
+                                creator.id === currentUserId && (
+                                    <RevokeAccessButton
+                                        targetUserId={user.id}
+                                        folderId={folderId}
+                                    >
+                                        <TrashCanIconStyled />
+                                    </RevokeAccessButton>
+                                )}
                         </UserInline>
                     </Item>
                 );
@@ -113,7 +114,7 @@ export function FolderManagementModal({
     className,
 }) {
     const [errors, setErrors] = useState();
-
+    console.log(folder);
     return (
         <Modal
             isOpen={isOpen}
@@ -159,7 +160,11 @@ export function FolderManagementModal({
                     margin-top: 48px;
                 `}
             >
-                <UserList users={folder.members} folderId={folder.id} />
+                <UserList
+                    creator={folder.creator}
+                    users={folder.members}
+                    folderId={folder.id}
+                />
             </Row>
         </Modal>
     );
