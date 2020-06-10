@@ -15,7 +15,7 @@ import { BLUE_2 } from '../../@style/colors';
 import { smallHeaderText, breadcrumbTextLight } from '../../@style/text';
 
 const FolderIconStyled = styled(FolderIcon)`
-    fill: ${BLUE_2};
+    color: ${BLUE_2};
     margin-right: 16px;
 `;
 

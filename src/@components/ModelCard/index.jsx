@@ -38,7 +38,7 @@ const ChatIconStyled = styled(ChatIcon)``;
 
 const ModelThumbnailStyled = styled(ModelThumbnail)`
     padding-bottom: 0;
-    min-height: 195px;
+    min-height: 196px;
     margin: auto;
     max-width: calc(100% - 118px);
     width: 100%;

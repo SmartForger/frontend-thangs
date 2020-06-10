@@ -22,7 +22,7 @@ const Subtext = styled.div`
 `;
 
 const FolderIconStyled = styled(FolderIcon)`
-    fill: ${BLUE_2};
+    color: ${BLUE_2};
     margin-right: 16px;
     margin-top: 4px;
 `;

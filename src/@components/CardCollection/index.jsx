@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { ModelCard } from '../ModelCard';
 import { FolderCard } from '../FolderCard';
 import { NoResults } from '../NoResults';
@@ -34,7 +34,7 @@ export function CardCollection({
     }
 
     return (
-        <ModelsStyled singleRow={models.length < maxPerRow}>
+        <ModelsStyled singleRow={models.length + folders.length < maxPerRow}>
             {models.map((model, index) => (
                 <ModelCard
                     key={`model-${model.id}:${index}`}
