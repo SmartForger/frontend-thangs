@@ -114,7 +114,6 @@ export function FolderManagementModal({
     className,
 }) {
     const [errors, setErrors] = useState();
-    console.log(folder);
     return (
         <Modal
             isOpen={isOpen}
