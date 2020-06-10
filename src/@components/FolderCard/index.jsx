@@ -9,12 +9,10 @@ import { GREY_13 } from '../../@style/colors';
 const Grid = styled.div`
     display: grid;
     height: 100%;
-    max-height: 270px;
     grid-template-areas:
         'info info'
         'model-one model-two';
-    grid-template-rows: 50% 50%;
-    grid-template-columns: 50% 50%;
+    grid-template-rows: repeat(2, minmax(50%, 140px));
     grid-gap: 4px;
 `;
 
@@ -32,20 +30,14 @@ function Placeholder() {
 
 function PossiblyEmptyModelCard({ model, className }) {
     return model ? (
-        <CardStyled
-            className={className}
-            css={`
-                height: calc(100% - 4px);
-                width: calc(100% - 4px);
-            `}
-        >
+        <CardStyled className={className}>
             <ModelThumbnail
                 {...model}
                 css={`
                     margin: auto;
                     img {
-                        min-height: 196px;
-                        max-width: inherit;
+                        max-width: 100%;
+                        max-height: 100%;
                     }
                 `}
             />
@@ -63,7 +55,6 @@ function CardContents({ className, folder }) {
                 css={`
                     grid-area: info;
                     border-radius: 8px 8px 0 0;
-                    width: calc(100% - 4px);
                 `}
             >
                 <FolderInfo
