@@ -44,10 +44,13 @@ export function parseFolder(folder) {
         return undefined;
     }
 
+    const models = folder.models ? folder.models.map(parseModel) : [];
+    const members = folder.members ? folder.members.map(parseUser) : [];
+
     return {
         ...folder,
-        models: folder.models.map(parseModel),
-        members: folder.members.map(parseUser),
+        models,
+        members,
     };
 }
 

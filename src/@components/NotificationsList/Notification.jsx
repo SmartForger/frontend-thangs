@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
 import * as DateFns from 'date-fns';
 import { ProfilePicture } from '@components/ProfilePicture';
@@ -13,6 +13,7 @@ import {
     isUserCommentedOnModel,
     isUserUploadedModel,
     isUserStartedFollowingUser,
+    isUserGrantedUserAccessToFolder,
 } from '@services/graphql-service/notifications';
 import { BLACK_2 } from '@style/colors';
 
@@ -20,8 +21,17 @@ const DATE_FORMAT = 'h:mmaaaa M/dd/yy';
 
 const Item = styled.li`
     display: flex;
-    justify-content: space-between;
 `;
+
+function Body({ left, content, right, className }) {
+    return (
+        <Item className={className}>
+            <Left>{left}</Left>
+            <Content>{content}</Content>
+            <Right>{right}</Right>
+        </Item>
+    );
+}
 
 function ActorPicture({ id, name, img }) {
     return (
@@ -31,9 +41,18 @@ function ActorPicture({ id, name, img }) {
     );
 }
 
+const Left = styled.div`
+    min-width: 48px;
+`;
+
+const Right = styled.div`
+    min-width: 188px;
+`;
+
 const Content = styled.div`
     margin: 16px 0 0 16px;
-    flex-grow: 1;
+    max-width: calc(100% - 188px - 48px);
+    min-width: calc(100% - 188px - 48px);
 
     span + span {
         margin-left: 8px;
@@ -79,7 +98,8 @@ const Thumbnail = styled(ModelThumbnail)`
 
 const LogoContainer = styled.div`
     height: 48px;
-    width: 48px;
+    min-width: 48px;
+    max-width: 48px;
     border-radius: 100%;
     background-color: ${BLACK_2};
     display: flex;
@@ -107,47 +127,62 @@ const Text = styled.div`
     margin-top: 16px;
 `;
 
+const TruncateOverflow = styled.div`
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+`;
+
 function ModelCompletedProcessing({ className, time, actor }) {
     return (
-        <Item className={className}>
-            <ThangsPicture />
-            <Content>
-                <ActorName>Thangs</ActorName>
-                <Time>{time}</Time>
-                <Text>We have finished processing your model.</Text>
-            </Content>
-            <Link to={`/model/${actor.id}`}>
-                <TargetPicture>
-                    <Thumbnail
-                        thumbnailUrl={actor.thumbnailUrl}
-                        name={actor.name}
-                    />
-                </TargetPicture>
-            </Link>
-        </Item>
+        <Body
+            className={className}
+            left={<ThangsPicture />}
+            content={
+                <div>
+                    <ActorName>Thangs</ActorName>
+                    <Time>{time}</Time>
+                    <Text>We have finished processing your model.</Text>
+                </div>
+            }
+            right={
+                <Link to={`/model/${actor.id}`}>
+                    <TargetPicture>
+                        <Thumbnail
+                            thumbnailUrl={actor.thumbnailUrl}
+                            name={actor.name}
+                        />
+                    </TargetPicture>
+                </Link>
+            }
+        />
     );
 }
 
 function ModelFailedProcessing({ className, time, actor }) {
     return (
-        <Item className={className}>
-            <ThangsPicture />
-            <Content>
-                <ActorName>Thangs</ActorName>
-                <Time>{time}</Time>
-                <Text>
-                    We were unable to process your model. Please try again.
-                </Text>
-            </Content>
-            <Link to={`/model/${actor.id}`}>
-                <TargetPicture>
-                    <Thumbnail
-                        thumbnailUrl={actor.thumbnailUrl}
-                        name={actor.name}
-                    />
-                </TargetPicture>
-            </Link>
-        </Item>
+        <Body
+            className={className}
+            left={<ThangsPicture />}
+            content={
+                <div>
+                    <ActorName>Thangs</ActorName>
+                    <Time>{time}</Time>
+                    <Text>
+                        We were unable to process your model. Please try again.
+                    </Text>
+                </div>
+            }
+            right={
+                <Link to={`/model/${actor.id}`}>
+                    <TargetPicture>
+                        <Thumbnail
+                            thumbnailUrl={actor.thumbnailUrl}
+                            name={actor.name}
+                        />
+                    </TargetPicture>
+                </Link>
+            }
+        />
     );
 }
 
@@ -160,32 +195,41 @@ function UserCommentedOnModel({
     verb,
 }) {
     return (
-        <Item className={className}>
-            <ActorPicture
-                name={actor.fullName}
-                id={actor.id}
-                img={actor.profile.avatarUrl}
-            />
-            <Content>
-                <ActorName>{actor.fullName}</ActorName>
-
+        <Body
+            className={className}
+            left={
+                <ActorPicture
+                    name={actor.fullName}
+                    id={actor.id}
+                    img={actor.profile.avatarUrl}
+                />
+            }
+            content={
                 <div>
-                    <Verb>{verb}</Verb>
-                    <span>on</span>
-                    <TargetName>{target.name}</TargetName>
+                    <ActorName>{actor.fullName}</ActorName>
+
+                    <TruncateOverflow>
+                        <Verb>{verb}</Verb>
+                        <span>on</span>
+                        <TargetName>{target.name}</TargetName>
+                    </TruncateOverflow>
                     <Time>{time}</Time>
+                    <Text>
+                        <TruncateOverflow>{actionObject.body}</TruncateOverflow>
+                    </Text>
                 </div>
-                <Text>{actionObject.body}</Text>
-            </Content>
-            <Link to={`/model/${target.id}`}>
-                <TargetPicture>
-                    <Thumbnail
-                        thumbnailUrl={target.thumbnailUrl}
-                        name={target.name}
-                    />
-                </TargetPicture>
-            </Link>
-        </Item>
+            }
+            right={
+                <Link to={`/model/${target.id}`}>
+                    <TargetPicture>
+                        <Thumbnail
+                            thumbnailUrl={target.thumbnailUrl}
+                            name={target.name}
+                        />
+                    </TargetPicture>
+                </Link>
+            }
+        />
     );
 }
 
@@ -198,30 +242,37 @@ function UserUploadedModel({
     actionObject,
 }) {
     return (
-        <Item className={className}>
-            <ActorPicture
-                name={actor.fullName}
-                id={actor.id}
-                img={actor.profile.avatarUrl}
-            />
-            <Content>
-                <ActorName>{actor.fullName}</ActorName>
-
+        <Body
+            className={className}
+            left={
+                <ActorPicture
+                    name={actor.fullName}
+                    id={actor.id}
+                    img={actor.profile.avatarUrl}
+                />
+            }
+            content={
                 <div>
-                    <Verb>{verb}</Verb>
-                    <TargetName>{actionObject.name}</TargetName>
+                    <ActorName>{actor.fullName}</ActorName>
+
+                    <div>
+                        <Verb>{verb}</Verb>
+                        <TargetName>{actionObject.name}</TargetName>
+                    </div>
                     <Time>{time}</Time>
                 </div>
-            </Content>
-            <Link to={`/model/${actionObject.id}`}>
-                <TargetPicture>
-                    <Thumbnail
-                        thumbnailUrl={actionObject.thumbnailUrl}
-                        name={actionObject.name}
-                    />
-                </TargetPicture>
-            </Link>
-        </Item>
+            }
+            right={
+                <Link to={`/model/${actionObject.id}`}>
+                    <TargetPicture>
+                        <Thumbnail
+                            thumbnailUrl={actionObject.thumbnailUrl}
+                            name={actionObject.name}
+                        />
+                    </TargetPicture>
+                </Link>
+            }
+        />
     );
 }
 
@@ -234,30 +285,37 @@ function UserLikedModel({
     actionObject,
 }) {
     return (
-        <Item className={className}>
-            <ActorPicture
-                name={actor.fullName}
-                id={actor.id}
-                img={actor.profile.avatarUrl}
-            />
-            <Content>
-                <ActorName>{actor.fullName}</ActorName>
-
+        <Body
+            className={className}
+            left={
+                <ActorPicture
+                    name={actor.fullName}
+                    id={actor.id}
+                    img={actor.profile.avatarUrl}
+                />
+            }
+            content={
                 <div>
-                    <Verb>{verb}</Verb>
-                    <TargetName>{target.name}</TargetName>
+                    <ActorName>{actor.fullName}</ActorName>
+
+                    <div>
+                        <Verb>{verb}</Verb>
+                        <TargetName>{target.name}</TargetName>
+                    </div>
                     <Time>{time}</Time>
                 </div>
-            </Content>
-            <Link to={`/model/${target.id}`}>
-                <TargetPicture>
-                    <Thumbnail
-                        thumbnailUrl={target.thumbnailUrl}
-                        name={target.name}
-                    />
-                </TargetPicture>
-            </Link>
-        </Item>
+            }
+            right={
+                <Link to={`/model/${target.id}`}>
+                    <TargetPicture>
+                        <Thumbnail
+                            thumbnailUrl={target.thumbnailUrl}
+                            name={target.name}
+                        />
+                    </TargetPicture>
+                </Link>
+            }
+        />
     );
 }
 
@@ -270,22 +328,65 @@ function UserStartedFollowingUser({
     actionObject,
 }) {
     return (
-        <Item className={className}>
-            <ActorPicture
-                name={actor.fullName}
-                id={actor.id}
-                img={actor.profile.avatarUrl}
-            />
-            <Content>
-                <ActorName>{actor.fullName}</ActorName>
-
+        <Body
+            className={className}
+            left={
+                <ActorPicture
+                    name={actor.fullName}
+                    id={actor.id}
+                    img={actor.profile.avatarUrl}
+                />
+            }
+            content={
                 <div>
-                    <Verb>{verb}</Verb>
-                    <TargetName>you</TargetName>
+                    <ActorName>{actor.fullName}</ActorName>
+
+                    <div>
+                        <Verb>{verb}</Verb>
+                        <TargetName>you</TargetName>
+                    </div>
                     <Time>{time}</Time>
                 </div>
-            </Content>
-        </Item>
+            }
+        />
+    );
+}
+
+function UserGrantedUserAccessToFolder({
+    className,
+    time,
+    actor,
+    verb,
+    target,
+    actionObject,
+}) {
+    return (
+        <Body
+            className={className}
+            left={
+                <ActorPicture
+                    name={actor.fullName}
+                    id={actor.id}
+                    img={actor.profile.avatarUrl}
+                />
+            }
+            content={
+                <div>
+                    <ActorName>{actor.fullName}</ActorName>
+
+                    <TruncateOverflow>
+                        <Verb>Granted you access</Verb>
+                        <TargetName>
+                            to a folder{' '}
+                            <Link to={`/folder/${target.id}`}>
+                                {target.name}
+                            </Link>
+                        </TargetName>
+                    </TruncateOverflow>
+                    <Time>{time}</Time>
+                </div>
+            }
+        />
     );
 }
 
@@ -309,9 +410,7 @@ export function Notification({
                 verb={verb}
             />
         );
-    }
-
-    if (isModelCompletedProcessing(notificationType)) {
+    } else if (isModelCompletedProcessing(notificationType)) {
         return (
             <ModelCompletedProcessing
                 className={className}
@@ -320,9 +419,7 @@ export function Notification({
                 verb={verb}
             />
         );
-    }
-
-    if (isUserCommentedOnModel(notificationType)) {
+    } else if (isUserCommentedOnModel(notificationType)) {
         return (
             <UserCommentedOnModel
                 className={className}
@@ -333,9 +430,7 @@ export function Notification({
                 verb={verb}
             />
         );
-    }
-
-    if (isUserUploadedModel(notificationType)) {
+    } else if (isUserUploadedModel(notificationType)) {
         return (
             <UserUploadedModel
                 className={className}
@@ -346,9 +441,7 @@ export function Notification({
                 verb={verb}
             />
         );
-    }
-
-    if (isUserStartedFollowingUser(notificationType)) {
+    } else if (isUserStartedFollowingUser(notificationType)) {
         return (
             <UserStartedFollowingUser
                 className={className}
@@ -359,15 +452,26 @@ export function Notification({
                 verb={verb}
             />
         );
+    } else if (isUserGrantedUserAccessToFolder(notificationType)) {
+        return (
+            <UserGrantedUserAccessToFolder
+                className={className}
+                time={time}
+                actor={actor}
+                target={target}
+                actionObject={actionObject}
+                verb={verb}
+            />
+        );
+    } else {
+        return (
+            <UserLikedModel
+                className={className}
+                time={time}
+                actor={actor}
+                target={target}
+                verb={verb}
+            />
+        );
     }
-
-    return (
-        <UserLikedModel
-            className={className}
-            time={time}
-            actor={actor}
-            target={target}
-            verb={verb}
-        />
-    );
 }

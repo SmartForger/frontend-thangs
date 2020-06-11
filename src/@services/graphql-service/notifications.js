@@ -3,6 +3,7 @@ import * as R from 'ramda';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { parseModel } from './models';
 import { parseUser } from './users';
+import { parseFolder } from './folders';
 
 const FIVE_MINUTES = 5 * 60 * 1000;
 
@@ -16,6 +17,8 @@ export const USER_COMMENTED_ON_MODEL = 'USER_COMMENTED_ON_MODEL';
 export const USER_UPLOADED_MODEL = 'USER_UPLOADED_MODEL';
 export const USER_STARTED_FOLLOWING_USER = 'USER_STARTED_FOLLOWING_USER';
 export const USER_STARTED_FOLLOWING_MODEL = 'USER_STARTED_FOLLOWING_MODEL';
+export const USER_GRANTED_USER_ACCESS_TO_FOLDER =
+    'USER_GRANTED_USER_ACCESS_TO_FOLDER';
 
 const COMPLETED = 'COMPLETED';
 const ERROR = 'ERROR';
@@ -34,15 +37,20 @@ export const isModelFailedProcessing = R.equals(MODEL_FAILED_PROCESSING);
 export const isModelCompletedProcessing = R.equals(MODEL_COMPLETED_PROCESSING);
 export const isUserUploadedModel = R.equals(USER_UPLOADED_MODEL);
 export const isUserStartedFollowingUser = R.equals(USER_STARTED_FOLLOWING_USER);
+export const isUserGrantedUserAccessToFolder = R.equals(
+    USER_GRANTED_USER_ACCESS_TO_FOLDER
+);
 
 export const modelHasCompletedStatus = R.propEq('uploadStatus', COMPLETED);
 export const modelHasFailedStatus = R.propEq('uploadStatus', ERROR);
 
 const STARTED_FOLLOWING = 'started following';
 const CHANGED_STATUS = 'changed status';
+const GRANTED_ACCESS = 'granted access';
 
 const isStartedFollowing = R.equals(STARTED_FOLLOWING);
 const isModelChangedStatus = R.equals(CHANGED_STATUS);
+const isGrantedAccess = R.equals(GRANTED_ACCESS);
 
 function getNotificationType(verb, actor, target) {
     if (isStartedFollowing(verb)) {
@@ -62,12 +70,17 @@ function getNotificationType(verb, actor, target) {
         return MODEL_FAILED_PROCESSING;
     }
 
+    if (isGrantedAccess(verb)) {
+        return USER_GRANTED_USER_ACCESS_TO_FOLDER;
+    }
+
     return VERB_TO_NOTIFICATION_TYPE[verb] || NOT_RECOGNIZED;
 }
 
 const isModel = R.propEq('__typename', 'ModelType');
 const isModelComment = R.propEq('__typename', 'ModelCommentType');
 const isUser = R.propEq('__typename', 'UserType');
+const isFolder = R.propEq('__typename', 'FolderType');
 
 function parseGeneric(item) {
     if (!item) {
@@ -78,6 +91,8 @@ function parseGeneric(item) {
         return parseModel(item);
     } else if (isModelComment(item)) {
         return item;
+    } else if (isFolder(item)) {
+        return parseFolder(item);
     }
     return null;
 }
@@ -134,8 +149,18 @@ const NOTIFICATIONS = gql`
                         uploadStatus
                         uploadedFile
                     }
+                    ... on FolderType {
+                        id
+                        name
+                        members {
+                            id
+                        }
+                    }
                 }
                 actionObject {
+                    ... on UserType {
+                        fullName
+                    }
                     ... on ModelType {
                         id
                         name
@@ -161,6 +186,7 @@ function isHandledNotificationType({ notificationType }) {
         isUserCommentedOnModel,
         isUserUploadedModel,
         isUserStartedFollowingUser,
+        isUserGrantedUserAccessToFolder,
     ])(notificationType);
 }
 
@@ -184,6 +210,7 @@ export function useNotificationsByUserId(id) {
         pollInterval: FIVE_MINUTES,
     });
 
+    console.log('data', data);
     const notifications = getAndParseHandledNotifications(data);
     return { loading, error, notifications };
 }
