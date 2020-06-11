@@ -112,7 +112,6 @@ const TabContent = styled.div`
 
 const MarkdownStyled = styled(Markdown)`
     max-width: 600px;
-    margin: auto;
     ${profileAboutText};
 `;
 
