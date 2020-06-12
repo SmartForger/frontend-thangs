@@ -18,7 +18,7 @@ yarn install
 3. Create a file named `.env.development` in the root folder and make sure it contains the necessary details for your dev environment:
 
 ```ini
-REACT_APP_API_KEY=(Url pointing to the instance of "thangs-social-service" you are currently working with, eg: http://localhost:8000/api/)
+REACT_APP_API_KEY=https://staging-thangs-backend-dot-gcp-and-physna.uc.r.appspot.com/api/
 REACT_APP_WEBSITE_NAME=(The Document Title you wish to display)
 REACT_APP_IMG_PATH=(Url for the thumbnailer you are currently using **not currently relevant)
 NODE_PATH="src/"
@@ -91,30 +91,6 @@ yarn format
     ...
 }
 ```
-
-## Deploying to Production
-
-1. Ensure you have the [Gcloud SDK](https://cloud.google.com/sdk/install) installed
-
-2. Initialize your [Gcloud](https://cloud.google.com/sdk/gcloud/reference/init)
-
-3. Create a new [Gcloud Configuration](https://cloud.google.com/sdk/gcloud/reference/init) following the prompts to target the correct project
-
-4. Build the project by running:
-```bash
-yarn build
-```
-
-5. Run the following in the route directory to deploy:
-```bash
-gcloud app deploy
-```
-
-6. Once the app has finished deploying you can run the following to view the app in production:
-```bash
-gcloud app browse
-```
-
 ## HOOPS Communicator and Web Viewer
 
 https://docs.techsoft3d.com/communicator/latest/build/overview/getting-started.html
