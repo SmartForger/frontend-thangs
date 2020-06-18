@@ -35,6 +35,8 @@ import {
     routeRequiresAuth,
 } from '@components/RouteComponent';
 import { FlashContextProvider } from './@components/Flash';
+import {Provider} from "react-redux";
+import store from "./store";
 
 const originalFetch = window.fetch;
 const client = graphqlClient(originalFetch, history);
@@ -57,6 +59,7 @@ const App = () => {
     initializeAnalytics(history);
 
     return (
+      <Provider store={store}>
         <AppFrame>
             <ApolloProvider client={client}>
                 <ErrorBoundary>
@@ -156,6 +159,7 @@ const App = () => {
                 </ErrorBoundary>
             </ApolloProvider>
         </AppFrame>
+      </Provider>
     );
 };
 
