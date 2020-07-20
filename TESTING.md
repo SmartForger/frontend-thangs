@@ -198,3 +198,27 @@ Model liked
 
 - Using a different account, like one of your uploaded models.
 - While logged in as the owner of the liked model, Expect to see notification about the liked model.
+
+## Folders
+
+For testing notifications, you will need to have access to the platform with two
+users, which we'll refer to as `User One` and `User Two`.
+
+### Creating a folder
+- As `User One`, click on `Add Folder` from the top bar menu
+- Give the folder a name and provide the email for `User Two` to invite them
+- As `User Two`, you should now be able to navigate to the url of that folder
+- As `User Two`, click on your notification bell in the top bar
+- You should see a notification that you have been added to a folder
+
+### Sharing models in a folder
+- As `User One`, go to the folder page
+- Click on `Upload Model to Folder` from the top bar menu
+- Upload a model
+- As `User Two`, you should now be able to navigate to the url of that model
+
+### Revoking access to a folder
+- As `User One`, go to the folder page
+- Click on the icon on the far right of the breadcrumbs
+- Click the trash can on the right of `User Two`
+- As `User Two`, you should no longer be able to navigate to the url of that model
