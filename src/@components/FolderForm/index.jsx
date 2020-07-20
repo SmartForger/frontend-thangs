@@ -1,13 +1,17 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import React, {useState} from 'react';
+import {Controller, useForm} from 'react-hook-form';
 import styled from 'styled-components/macro';
 import Joi from '@hapi/joi';
 import * as R from 'ramda';
-import { Button, DarkButton } from '../Button';
+import {Button, DarkButton} from '../Button';
 import { Spinner } from '../Spinner';
-import { useCreateFolder, useInviteToFolder } from '../../@customHooks/Folders';
+import {useCreateFolder, useInviteToFolder} from '../../@customHooks/Folders';
 import { formErrorText } from '../../@style/text';
 import { WHITE_4 } from '../../@style/colors';
+import teamLogo from "../../@svg/multi-users.svg";
+import saveTeamLogo from "../../@svg/save-team.svg";
+import saveTeamSuccess from "../../@svg/save-team-success.svg";
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const SpinnerStyled = styled(Spinner)`
     width: 18px;
@@ -27,6 +31,27 @@ const Form = styled.form`
     flex-direction: column;
 `;
 
+const PseudoForm = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+`;
+
+const SaveTeamLabel = styled.label`
+    color: #1B8CF8;
+    cursor: pointer;
+    margin-top: 26px;
+`;
+
+const SaveTeamSuccessLabel = styled.label`
+    color: #585858;
+    margin-top: 26px;
+`;
+
+const SaveLogo = styled.img`
+    margin: 26px 7px 0 auto
+`;
+
 const Label = styled.label`
     margin-bottom: 8px;
 `;
@@ -40,12 +65,38 @@ const FullWidthInput = styled.input`
     background: ${WHITE_4};
 `;
 
+let initSchema = Joi.object({
+    name: Joi.string().required(),
+    members: Joi.array()
+        .items(Joi.string().email({ tlds: { allow: false } }))
+        .min(1)
+        .required(),
+    team: Joi.string().allow('')
+});
+
+const autocompleteSchema = Joi.object({
+    name: Joi.string().required(),
+    members: Joi.array()
+    .items(Joi.string())
+    .required(),
+    team: Joi.string().allow('')
+});
+
 const schemaWithName = Joi.object({
     name: Joi.string().required(),
     members: Joi.array()
         .items(Joi.string().email({ tlds: { allow: false } }))
         .min(1)
         .required(),
+    team: Joi.string().allow(''),
+});
+
+const schemaWithTeamMembers = Joi.object({
+    members: Joi.array()
+        .items(Joi.string().email({ tlds: { allow: false } }))
+        .min(1)
+        .required(),
+    team: Joi.string().required()
 });
 
 const schemaWithoutName = Joi.object({
@@ -59,6 +110,10 @@ const parseEmails = R.pipe(R.split(/, */), R.filter(R.identity));
 
 const isEmptyMembers = ([key, info]) => {
     return key === 'members' && info.type === 'array.min';
+};
+
+const isEmptyTeamName = ([key, info]) => {
+    return key === 'team' && info.type === 'string.empty';
 };
 
 const isEmptyName = ([key, info]) => {
@@ -104,6 +159,12 @@ export function DisplayErrors({ errors, className, serverErrorMsg }) {
                     Please provide a name for your folder
                 </ErrorTextStyle>
             );
+        } else if (isEmptyTeamName(error)) {
+            return (
+                <ErrorTextStyle className={className} key={i}>
+                    Please provide a Team Name for your folder
+                </ErrorTextStyle>
+            );
         } else if (isServerError(error)) {
             return (
                 <ErrorTextStyle className={className} key={i}>
@@ -122,16 +183,24 @@ export function CreateFolderForm({
     onCancel,
     membersLabel,
 }) {
+    const [saveTeamActive, setSaveTeamActive] = useState(false);
+    const [saveSuccess, setSaveSuccess] = useState(false);
+
+    let saveLogo = saveSuccess ? saveTeamSuccess : (saveTeamActive ? saveTeamLogo : teamLogo);
+    let errors;
+    let teams = ['Team1', 'Team2', 'Team3', 'Team4', 'Team5', 'Team6', 'Team7', 'Team8', 'Team9'];
+
     const validationResolver = data => {
         const members = data.members ? parseEmails(data.members) : [];
         const input = {
             name: data.name,
-            members,
+            team: data.team,
+            members
         };
 
-        const { error, value: values } = schemaWithName.validate(input);
+        const { error, value: values } = initSchema.validate(input);
 
-        const errors = error
+        errors = error
             ? error.details.reduce((previous, currentError) => {
                   return {
                       ...previous,
@@ -148,17 +217,24 @@ export function CreateFolderForm({
         };
     };
 
-    const { register, handleSubmit } = useForm({
+    const { register, handleSubmit, getValues, triggerValidation, control, setValue} = useForm({
         validationResolver,
         reValidateMode: 'onSubmit',
     });
+
+    const isExistingTeam = () => {return teams.indexOf(getValues('members')) > -1};
 
     const [createFolder, { loading }] = useCreateFolder();
 
     const handleSave = async (data, e) => {
         e.preventDefault();
+        console.log(data);
         try {
-            const variables = { name: data.name, members: data.members };
+            const variables = {
+                name: data.name,
+                members: isExistingTeam() ? getValues("members") : data.members,
+                team: data.team ? data.team : null
+            };
             const mutation = await createFolder({
                 variables,
             });
@@ -176,19 +252,79 @@ export function CreateFolderForm({
         onCancel();
     };
 
+    const addInputGroupField = () => {
+        return(
+            <>
+              <Label htmlFor="team">Team Name</Label>
+              <FullWidthInput name="team" ref={register()} />
+            </>
+            )
+    }
+
+    const addSaveGroupFields = () => {
+        return(
+            <>
+            {saveTeamActive ? addInputGroupField() : null}
+            <Row>
+                <SaveLogo src={saveLogo} />
+                {saveTeamActive && !saveSuccess ? <SaveTeamLabel onClick={() => saveGroup()}>Save Team</SaveTeamLabel> : null}
+                {!saveTeamActive && !saveSuccess ? <SaveTeamLabel onClick={() => saveGroupActivate()}>Save Users As Team</SaveTeamLabel> : null}
+                {saveTeamActive && saveSuccess ? <SaveTeamSuccessLabel>Team Saved</SaveTeamSuccessLabel> : null}
+            </Row>
+            </>
+        )
+    }
+
+    const saveGroupActivate = () => {
+        setSaveTeamActive(true);
+    }
+
+    const saveGroup = ()  => {
+        initSchema = schemaWithTeamMembers;
+        const res = triggerValidation();
+        if(!(errors.members || errors.team)){
+            console.log(getValues("members"));
+            console.log(getValues("team"));
+            setSaveSuccess(true);
+        }
+        initSchema = schemaWithName;
+    }
+
+    const onAutocompleteChange = (event) => {
+        setValue("members", event.target?.value ? event.target.value : event[1]);
+        if(isExistingTeam()) {
+            initSchema = autocompleteSchema;
+        } else {
+            initSchema = schemaWithName;
+            }
+        const res = triggerValidation();
+        };
+
     return (
         <Form onSubmit={handleSubmit(handleSave)}>
             <Label htmlFor="name">Folder Name</Label>
             <FullWidthInput name="name" ref={register({ required: true })} />
-            <Label htmlFor="members">Add Users</Label>
-            <FullWidthInput
-                name="members"
-                ref={register({ required: true })}
-                placeholder="example@example.com"
-                css={`
-                    margin-bottom: 24px;
-                `}
-            />
+            <Label htmlFor="members">Add users or enter an existing team name</Label>
+            <Controller
+                name="membersauto" control={control}
+                onInputChange={(event) => onAutocompleteChange(event)}
+                onChange={(event) => onAutocompleteChange(event)}
+                as={
+                    <Autocomplete
+                        freeSolo
+                        ListboxProps={{ style: { borderRadius: "3px", background: '#ececec', overflow: 'auto' } }}
+                        options={teams}
+                        defaultValue=""
+                        getOptionLabel={team => team}
+                        renderInput={(teams) =>
+                            <Controller as={
+                                <PseudoForm ref={teams.InputProps.ref}>
+                                  <FullWidthInput {...teams.inputProps} />
+                                </PseudoForm>
+                            }
+                        name="members"
+                        control={control}/>}/>}/>
+            {addSaveGroupFields()}
             <Row
                 css={`
                     justify-content: flex-end;
