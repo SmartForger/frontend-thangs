@@ -1,85 +1,89 @@
-import React from 'react';
-import styled from 'styled-components/macro';
-import { FolderCard } from './';
-import { withApolloProvider } from '../../../.storybook/withApolloProvider';
-import ThumbnailFixture from '../../../.storybook/fixtures/model-thumbnail.png';
-import UserImgFixture from '../../../.storybook/fixtures/user-img.png';
+import React from 'react'
+import { FolderCard } from './'
+import { withApolloProvider } from '../../../.storybook/withApolloProvider'
+import ThumbnailFixture from '../../../.storybook/fixtures/model-thumbnail.png'
+import UserImgFixture from '../../../.storybook/fixtures/user-img.png'
+import { createUseStyles } from '@style'
+
+const useStyles = createUseStyles(_theme => {
+  return {
+    Container: {
+      width: '21.5rem',
+      height: '16.75rem',
+    },
+  }
+})
 
 export default {
-    title: 'FolderCard',
-    component: FolderCard,
-    decorators: [withApolloProvider()],
-};
-
-const ContainerSize = styled.div`
-    width: 344px;
-    height: 270px;
-`;
+  title: 'FolderCard',
+  component: FolderCard,
+  decorators: [withApolloProvider()],
+}
 
 const userFixture = {
-    id: '9998',
-    username: null,
-    email: null,
-    firstName: null,
-    lastName: null,
-    fullName: 'Thangs Physna',
-    profile: {
-        avatarUrl: UserImgFixture,
-    },
-    inviteCode: null,
-    likedModels: [],
-    models: [],
-    isBeingFollowedByRequester: false,
-};
+  id: '9998',
+  username: null,
+  email: null,
+  firstName: null,
+  lastName: null,
+  fullName: 'Thangs Physna',
+  profile: {
+    avatarUrl: UserImgFixture,
+  },
+  inviteCode: null,
+  likedModels: [],
+  models: [],
+  isBeingFollowedByRequester: false,
+}
 
 const modelFixture = {
-    id: '9999',
-    uploadStatus: 'COMPLETED',
-    name: 'Awesome model',
-    likesCount: 100,
-    commentsCount: 523,
-    owner: userFixture,
-    thumbnailUrl: ThumbnailFixture,
-};
+  id: '9999',
+  uploadStatus: 'COMPLETED',
+  name: 'Awesome model',
+  likesCount: 100,
+  commentsCount: 523,
+  owner: userFixture,
+  thumbnailUrl: ThumbnailFixture,
+}
 
 export function WithManyModels() {
-    const folderFixture = {
-        id: 1,
-        name: 'test-folder',
-        members: [userFixture, userFixture],
-        models: [modelFixture, modelFixture, modelFixture],
-    };
-    return (
-        <ContainerSize>
-            <FolderCard folder={folderFixture}></FolderCard>
-        </ContainerSize>
-    );
+  const folderFixture = {
+    id: 1,
+    name: 'test-folder',
+    members: [userFixture, userFixture],
+    models: [modelFixture, modelFixture, modelFixture],
+  }
+  return (
+    <div className={c.Container}>
+      <FolderCard folder={folderFixture}></FolderCard>
+    </div>
+  )
 }
 
 export function WithSingleModel() {
-    const folderFixture = {
-        id: 1,
-        name: 'test-folder',
-        members: [userFixture, userFixture],
-        models: [modelFixture],
-    };
-    return (
-        <ContainerSize>
-            <FolderCard folder={folderFixture}></FolderCard>
-        </ContainerSize>
-    );
+  const folderFixture = {
+    id: 1,
+    name: 'test-folder',
+    members: [userFixture, userFixture],
+    models: [modelFixture],
+  }
+  return (
+    <div className={c.Container}>
+      <FolderCard folder={folderFixture}></FolderCard>
+    </div>
+  )
 }
 
 export function WithNoModels() {
-    const folderFixture = {
-        id: 1,
-        name: 'test-folder',
-        members: [userFixture, userFixture],
-        models: [],
-    };
-    return (
-        <ContainerSize>
-            <FolderCard folder={folderFixture}></FolderCard>
-        </ContainerSize>
-    );
+  const folderFixture = {
+    id: 1,
+    name: 'test-folder',
+    members: [userFixture, userFixture],
+    models: [],
+  }
+  return (
+    <div className={c.Container}>
+      <FolderCard folder={folderFixture}></FolderCard>
+    </div>
+  )
 }

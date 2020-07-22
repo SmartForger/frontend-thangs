@@ -1,11 +1,19 @@
-import styled from 'styled-components';
+import { createUseStyles } from '@style'
 
-export const Card = styled.div`
-    display: flex;
-    flex-direction: column;
+const useStyles = createUseStyles(theme => {
+  return {
+    Card: {
+      display: 'flex',
+      flexDirection: 'column',
+      background: theme.color.cardBackground,
+      boxShadow: '0px 5px 10px 0px rgba(0, 0, 0, 0.15)',
+      borderRadius: '.5rem',
+      height: '100%',
+    },
+  }
+})
 
-    background: ${props => props.theme.cardBackground};
-    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
-    border-radius: 8px;
-    height: 100%;
-`;
+export const Card = props => {
+  const c = useStyles(props)
+  return <div className={c.Card}></div>
+}

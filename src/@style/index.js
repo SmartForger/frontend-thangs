@@ -1,3 +1,3 @@
-export * from './ThangsNormal.theme';
-export * from './Thangs.GlobalStyle';
-export * from './Layout';
+export { ThemeProvider, createUseStyles, defaultTheme, useTheme } from './theming'
+export { createTheme } from './theme'
+export { createColorShades, createColorScale } from '@utilities'

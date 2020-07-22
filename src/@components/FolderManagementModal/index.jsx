@@ -1,172 +1,175 @@
-import React, { useState } from 'react';
-import styled from 'styled-components/macro';
-import * as R from 'ramda';
-import { UserInline } from '../UserInline';
-import { Modal } from '../Modal';
-import { authenticationService } from '../../@services';
-import { TextButton } from '../Button';
-import { mediaMdPlus } from '../../@style/media-queries';
-import { InviteUsersForm, DisplayErrors } from '../FolderForm';
-import { FolderInfo } from '../FolderInfo';
-import { Spinner } from '../Spinner';
-import { ReactComponent as TrashCanIcon } from '../../@svg/trash-can-icon.svg';
-import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg';
-import { useRevokeAccess } from '../../@customHooks/Folders';
-import { GREY_12 } from '../../@style/colors';
+import React, { useState } from 'react'
+import * as R from 'ramda'
+import classnames from 'classnames'
+import { UserInline } from '../UserInline'
+import { Modal } from '../Modal'
+import { authenticationService } from '../../@services'
+import { TextButton } from '../Button'
+import { InviteUsersForm, DisplayErrors } from '../FolderForm'
+import { FolderInfo } from '../FolderInfo'
+import { Spinner } from '../Spinner'
+import { ReactComponent as TrashCanIcon } from '../../@svg/trash-can-icon.svg'
+import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg'
+import { useRevokeAccess } from '../../@customHooks/Folders'
+import { createUseStyles } from '@style'
 
-const SpinnerStyled = styled(Spinner)`
-    width: 18px;
-    height: 18px;
-    & .path {
-        stroke: currentColor;
-    }
-`;
-
-const ErrorIconStyled = styled(ErrorIcon)`
-    width: 18px;
-    height: 18px;
-`;
-
-const Row = styled.div`
-    display: flex;
-`;
-
-const List = styled.ul`
-    width: 100%;
-`;
-
-const Item = styled.li`
-    display: block;
-`;
+const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+  return {
+    FolderManagementModal: {},
+    FolderManagementModal_Spinner: {
+      width: '1rem',
+      height: '1rem',
+      '& .path': {
+        stroke: 'currentColor',
+      },
+    },
+    FolderManagementModal_Icon: {
+      width: '1rem',
+      height: '1rem',
+    },
+    FolderManagementModal_Row: {
+      display: 'flex',
+    },
+    FolderManagementModel_TopRow: {
+      marginTop: ({ hasErrors }) => (hasErrors ? '16px' : '70px'),
+    },
+    FolderManagementModel_BottomRow: {
+      marginTop: '3rem',
+    },
+    FolderManagementModal_List: {
+      width: '100%',
+    },
+    FolderManagementModal_Item: {
+      display: 'block',
+      marginTop: '1rem',
+    },
+    FolderManagementModal_Item__isFirst: {
+      marginTop: 0,
+    },
+    FolderManagementModal_TrashCanIcon: {
+      color: theme.colors.GREY_12,
+    },
+  }
+})
 
 function RevokeAccessButton({ folderId, targetUserId, children }) {
-    const [revokeAccess, { loading, error }] = useRevokeAccess(
-        folderId,
-        targetUserId
-    );
-    const handleRevoke = async e => {
-        e.preventDefault();
-        try {
-            await revokeAccess({
-                variables: {
-                    userId: targetUserId,
-                },
-            });
-        } catch (e) {
-            console.error('e', e);
-        }
-    };
+  const [revokeAccess, { loading, error }] = useRevokeAccess(folderId, targetUserId)
+  const handleRevoke = async e => {
+    e.preventDefault()
+    try {
+      await revokeAccess({
+        variables: {
+          userId: targetUserId,
+        },
+      })
+    } catch (e) {
+      console.error('e', e)
+    }
+  }
 
-    return (
-        <TextButton onClick={handleRevoke}>
-            {loading ? (
-                <SpinnerStyled />
-            ) : error ? (
-                <ErrorIconStyled />
-            ) : (
-                children
-            )}
-        </TextButton>
-    );
+  return (
+    <TextButton onClick={handleRevoke}>
+      {loading ? (
+        <Spinner className={c.FolderManagementModal_Spinner} />
+      ) : error ? (
+        <ErrorIcon className={c.FolderManagementModal_Icon} />
+      ) : (
+        children
+      )}
+    </TextButton>
+  )
 }
 
-const TrashCanIconStyled = styled(TrashCanIcon)`
-    color: ${GREY_12};
-`;
-
 function UserList({ users = [], folderId, creator }) {
-    const currentUserId = authenticationService.getCurrentUserId();
+  const currentUserId = authenticationService.getCurrentUserId()
 
-    return (
-        <List>
-            {users.map((user, idx) => {
-                return (
-                    <Item
-                        key={idx}
-                        isFirst={idx === 0}
-                        css={`
-                            margin-top: ${props =>
-                                props.isFirst ? '0' : '16px'};
-                        `}
-                    >
-                        <UserInline user={user} displayEmail>
-                            {user.id !== currentUserId &&
-                                creator.id !== user.id && (
-                                    <RevokeAccessButton
-                                        targetUserId={user.id}
-                                        folderId={folderId}
-                                    >
-                                        <TrashCanIconStyled />
-                                    </RevokeAccessButton>
-                                )}
-                        </UserInline>
-                    </Item>
-                );
+  return (
+    <ul className={c.FolderManagementModal_List}>
+      {users.map((user, idx) => {
+        const isFirst = idx === 0
+        return (
+          <li
+            className={classnames(c.FolderManagementModal_Item, {
+              [c.FolderManagementModal_Item__isFirst]: isFirst,
             })}
-        </List>
-    );
+            key={idx}
+          >
+            <UserInline user={user} displayEmail>
+              {user.id !== currentUserId && creator.id !== user.id && (
+                <RevokeAccessButton targetUserId={user.id} folderId={folderId}>
+                  <TrashCanIcon className={c.FolderManagementModal_TrashCanIcon} />
+                </RevokeAccessButton>
+              )}
+            </UserInline>
+          </li>
+        )
+      })}
+    </ul>
+  )
 }
 
 export function FolderManagementModal({
-    isOpen,
-    folder,
-    afterInvite,
-    onCancel,
-    className,
+  isOpen,
+  folder,
+  afterInvite,
+  onCancel,
+  className,
 }) {
-    const [errors, setErrors] = useState();
-    return (
-        <Modal
-            isOpen={isOpen}
-            className={className}
-            css={`
-                width: 100%;
-                ${mediaMdPlus} {
-                    max-width: 500px;
-                }
-            `}
-        >
-            <FolderInfo
-                name={folder.name}
-                members={folder.members}
-                models={folder.models}
-                boldName
-                hideModels
-                css={`
-                    padding: 0;
-                `}
-            />
-            <DisplayErrors
-                errors={errors}
-                css={`
-                    margin-top: 16px;
-                `}
-                serverErrorMsg="Unable to invite users. Please try again later."
-            />
-            <Row
-                hasErrors={errors && !R.isEmpty(errors)}
-                css={`
-                    margin-top: ${props => (props.hasErrors ? '16px' : '70px')};
-                `}
-            >
-                <InviteUsersForm
-                    folderId={folder.id}
-                    onErrorReceived={setErrors}
-                    afterInvite={afterInvite}
-                    onCancel={onCancel}
-                />
-            </Row>
-            <Row
-                css={`
-                    margin-top: 48px;
-                `}
-            >
-                <UserList
-                    creator={folder.creator}
-                    users={folder.members}
-                    folderId={folder.id}
-                />
-            </Row>
-        </Modal>
-    );
+  const [errors, setErrors] = useState()
+  const hasErrors = errors && !R.isEmpty(errors)
+  const c = useStyles({ hasErrors })
+  return (
+    <Modal
+      isOpen={isOpen}
+      className={className}
+      css={`
+        width: 100%;
+        ${mediaMdPlus} {
+          max-width: 500px;
+        }
+      `}
+    >
+      <FolderInfo
+        name={folder.name}
+        members={folder.members}
+        models={folder.models}
+        boldName
+        hideModels
+        css={`
+          padding: 0;
+        `}
+      />
+      <DisplayErrors
+        errors={errors}
+        css={`
+          margin-top: 16px;
+        `}
+        serverErrorMsg='Unable to invite users. Please try again later.'
+      />
+      <div
+        className={classnames(
+          c.FolderManagementModal_Row,
+          c.FolderManagementModal_TopRow
+        )}
+      >
+        <InviteUsersForm
+          folderId={folder.id}
+          onErrorReceived={setErrors}
+          afterInvite={afterInvite}
+          onCancel={onCancel}
+        />
+      </div>
+      <div
+        className={classnames(
+          c.FolderManagementModal_Row,
+          c.FolderManagementModal_BottomRow
+        )}
+      >
+        <UserList creator={folder.creator} users={folder.members} folderId={folder.id} />
+      </div>
+    </Modal>
+  )
 }

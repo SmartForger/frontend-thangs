@@ -1,93 +1,101 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components/macro';
-import { TextButton } from '../Button';
-import { WHITE_1, GREY_14 } from '../../@style/colors';
-import { boldText } from '../../@style/text';
-import { ReactComponent as DotStackIcon } from '../../@svg/dot-stack-icon.svg';
+import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { TextButton } from '../Button'
+import { boldText } from '../../@style/text'
+import { ReactComponent as DotStackIcon } from '../../@svg/dot-stack-icon.svg'
+import { createUseStyles } from '@style'
 
-const Menu = styled.div`
-    background: ${WHITE_1};
-    border-radius: 0px 0px 8px 8px;
-    box-shadow: 0px 5px 10px 0px rgba(35, 37, 48, 0.25);
-    width: 260px;
-    padding: ${props => (props.noIcons ? '24px 48px' : '24px')};
-    box-sizing: border-box;
-    position: absolute;
-    right: 12px;
-    margin-top: 8px;
-    z-index: 2;
-`;
+const useStyles = createUseStyles(theme => {
+  return {
+    DropdownMenu: {
+      background: theme.colors.WHITE_1,
+      borderRadius: '0 0 .5rem .5rem',
+      boxShadow: '0px 5px 10px 0px rgba(35, 37, 48, 0.25)',
+      width: '16.25rem',
+      padding: ({ noIcons }) => (noIcons ? '24px 48px' : '24px'),
+      boxSizing: 'border-box',
+      position: 'absolute',
+      right: '.75rem',
+      marginTop: '.5rem',
+      zIndex: 2,
+    },
+    DropdownMenu_Item: {
+      ...boldText,
+      lineHeight: '2rem',
+      display: 'inline-flex',
+      alignItems: 'center',
+      cursor: 'pointer',
 
-const Item = styled(Link)`
-    ${boldText};
-    line-height: 32px;
-    display: inline-flex;
-    align-items: center;
-    cursor: pointer;
-
-    svg {
-        width: 26px;
-        margin-right: 8px;
-        color: ${GREY_14};
-    }
-`;
-
-const Container = styled.div`
-    position: relative;
-    width: fit-content;
-`;
+      '& svg': {
+        width: '1.5rem',
+        marginRight: '.5rem',
+        color: theme.colors.GREY_14,
+      },
+    },
+    DropdownMenu_Container: {
+      position: 'relative',
+      width: 'fit-content',
+    },
+    DropdownMenu_Button: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+  }
+})
 
 export function DropdownItem({ children, to = '#', onClick }) {
-    return (
-        <div>
-            <Item to={to} onClick={onClick} as={onClick && 'div'}>
-                {children}
-            </Item>
-        </div>
-    );
+  const c = useStyles()
+  return (
+    <div>
+      <Link
+        className={c.DropdownMenu_Item}
+        to={to}
+        onClick={onClick}
+        as={onClick && 'div'}
+      >
+        {children}
+      </Link>
+    </div>
+  )
 }
 
 export function DropdownMenu({
-    children,
-    className,
-    noIcons,
-    buttonIcon: ButtonIcon = DotStackIcon,
-    isOpen: isOpenExternal = undefined,
+  children,
+  className,
+  noIcons,
+  buttonIcon: ButtonIcon = DotStackIcon,
+  isOpen: isOpenExternal = undefined,
 }) {
-    const [isOpenInternal, toggleOpen] = useDropdownMenuState(isOpenExternal);
-    const isOpen =
-        isOpenExternal === undefined ? isOpenInternal : isOpenExternal;
-
-    return (
-        <Container className={className}>
-            <TextButton
-                onClick={toggleOpen}
-                css={`
-                    display: flex;
-                    align-items: center;
-                `}
-            >
-                <ButtonIcon />
-            </TextButton>
-            {isOpen && <Menu noIcons={noIcons}>{children}</Menu>}
-        </Container>
-    );
+  const [isOpenInternal, toggleOpen] = useDropdownMenuState(isOpenExternal)
+  const isOpen = isOpenExternal === undefined ? isOpenInternal : isOpenExternal
+  const c = useStyles({ isOpen, noIcons })
+  return (
+    <div className={classnames(className, c.DropdownMenu_Container)}>
+      <TextButton className={c.DropdownMenu_Button} onClick={toggleOpen}>
+        <ButtonIcon />
+      </TextButton>
+      {isOpen && (
+        <div className={c.DropdownMenu} noIcons={noIcons}>
+          {children}
+        </div>
+      )}
+    </div>
+  )
 }
 
 function useDropdownMenuState(initialIsOpen = false) {
-    const [isOpen, setIsOpen] = useState(initialIsOpen);
-    const toggleOpen = e => setIsOpen(!isOpen);
-    const closeMenu = () => setIsOpen(false);
-    useEffect(() => {
-        if (isOpen) {
-            document.addEventListener('click', closeMenu);
-        }
-        return () => {
-            if (isOpen) {
-                document.removeEventListener('click', closeMenu);
-            }
-        };
-    }, [isOpen]);
-    return [isOpen, toggleOpen];
+  const [isOpen, setIsOpen] = useState(initialIsOpen)
+  const toggleOpen = e => setIsOpen(!isOpen)
+  const closeMenu = () => setIsOpen(false)
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('click', closeMenu)
+    }
+    return () => {
+      if (isOpen) {
+        document.removeEventListener('click', closeMenu)
+      }
+    }
+  }, [isOpen])
+  return [isOpen, toggleOpen]
 }

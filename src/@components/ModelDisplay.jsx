@@ -1,45 +1,51 @@
-import React from 'react';
-import styled from 'styled-components';
-import { animated } from 'react-spring';
-import { Link } from 'react-router-dom';
+import React from 'react'
+import { animated } from 'react-spring'
+import { Link } from 'react-router-dom'
+import { createUseStyles } from '@style'
 
-const ModelDisplayStyled = styled(animated.div)`
-    width: 185px;
-    height: 135px;
-    background: ${props => props.imgURL || props.theme.white};
-    margin: 10px;
-    border-radius: 2%;
-    text-align: center;
-    box-shadow: inset 0 0 0 3px black;
-`;
+const useStyles = createUseStyles(theme => {
+  return {
+    ModelDisplay: {
+      width: '11.5rem',
+      height: '8.5rem',
+      background: ({ imgURL }) => imgURL || theme.color.white,
+      margin: '.5rem',
+      borderRadius: '2%',
+      textAlign: 'center',
+      boxShadow: 'inset 0 0 0 3px black',
+    },
+    ModelDisplay_LinkBox: {
+      textDecoration: 'none',
+      transition: 'all 0.2s',
 
-const LinkBox = styled(animated(Link))`
-    text-decoration: none;
-    transition: all 0.2s;
-
-    &:hover {
-        transform: scale(0.9);
-    }
-`;
-
-const ModelName = styled.div`
-    text-align: center;
-`;
+      '&:hover': {
+        transform: 'scale(0.9)',
+      },
+    },
+    ModelDisplay_ModelName: {
+      textAlign: 'center',
+    },
+  }
+})
 
 const ModelDisplay = ({
-    model,
-    style, // This prop is used to attach react-spring animations
+  imgURL,
+  model,
+  style, // This prop is used to attach react-spring animations
 }) => {
-    return (
-        <LinkBox
-            to={`/model/${model.id}`}
-            style={style}
-            data-cy="profile-model-link"
-        >
-            <ModelDisplayStyled />
-            <ModelName>{model.name}</ModelName>
-        </LinkBox>
-    );
-};
+  const c = useStyles({ imgURL })
+  const LinkBox = animated(Link)
+  return (
+    <LinkBox
+      className={c.ModelDisplay_LinkBox}
+      to={`/model/${model.id}`}
+      style={style}
+      data-cy='profile-model-link'
+    >
+      <animated.div className={c.ModelDisplay} />
+      <div className={c.ModelDisplay_ModelName}>{model.name}</div>
+    </LinkBox>
+  )
+}
 
-export { ModelDisplay };
+export { ModelDisplay }

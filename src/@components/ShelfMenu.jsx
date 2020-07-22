@@ -1,49 +1,57 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from 'react'
+import { createUseStyles } from '@style'
 
-const ButtonStyle = styled.div`
-  background: ${props => props.theme.grey};
-  width: 50px;
-  height: 100%;
-  position: relative;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-around;
-  align-items: center;
+const useStyles = createUseStyles(theme => {
+  return {
+    Shelf: {
+      position: absolute,
+      background: theme.color.grey,
+      width: '17vw',
+      right: '5vw',
+      borderBottom: `2px solid ${theme.color.darkgrey}`,
+      transform: ({ open }) => (open ? 'translateY(-1vh)' : 'translateY(-90vh)'),
+      transition: '0.5s all',
+      zIndex: 9,
+    },
+    ShelfButton: {
+      background: theme.color.grey,
+      width: '3rem',
+      height: '100%',
+      position: 'relative',
+      display: 'flex',
+      flexFlow: 'row nowrap',
+      justifyContent: 'space-around',
+      alignItems: 'center',
 
-  & > div {
-    width: 1rem;
-    height: 1rem;
-    background: ${props => props.theme.darkgrey};
-    border-radius: 50%;
-    transition: all 0.3s linear;
-
-`;
-
-const ShelfStyle = styled.div`
-    position: absolute;
-    background: ${props => props.theme.grey};
-    width: 17vw;
-    right: 5vw;
-    border-bottom: 2px solid ${props => props.theme.darkgrey};
-    transform: ${props =>
-        props.open ? 'translateY(-1vh)' : 'translateY(-90vh)'};
-    transition: 0.5s all;
-    z-index: 9;
-`;
+      '& > div': {
+        width: '1rem',
+        height: '1rem',
+        background: theme.color.darkgrey,
+        borderRadius: '50%',
+        transition: 'all 0.3s linear',
+      },
+    },
+  }
+})
 
 const Shelf = ({ open, children }) => {
-    return <ShelfStyle open={open}>{children}</ShelfStyle>;
-};
+  const c = useStyles({ open })
+  return (
+    <div className={c.Shelf} open={open}>
+      {children}
+    </div>
+  )
+}
 
 const ShelfButton = ({ open, setOpen }) => {
-    return (
-        <ButtonStyle open={open} onClick={() => setOpen(!open)}>
-            <div />
-            <div />
-            <div />
-        </ButtonStyle>
-    );
-};
+  const c = useStyles({ open })
+  return (
+    <div className={c.ShelfButton} open={open} onClick={() => setOpen(!open)}>
+      <div />
+      <div />
+      <div />
+    </div>
+  )
+}
 
-export { Shelf, ShelfButton };
+export { Shelf, ShelfButton }

@@ -1,79 +1,81 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Button } from '@components/Button';
-import { Spinner } from '@components/Spinner';
-import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg';
-import * as GraphqlService from '@services/graphql-service';
+import React from 'react'
+import { Button } from '@components/Button'
+import { Spinner } from '@components/Spinner'
+import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
+import * as GraphqlService from '@services/graphql-service'
+import { createUseStyles } from '@style'
 
-const graphqlService = GraphqlService.getInstance();
+const graphqlService = GraphqlService.getInstance()
 
-const SpinnerStyled = styled(Spinner)`
-    width: 18px;
-    height: 18px;
-    & .path {
-        stroke: currentColor;
-    }
-`;
+const useStyles = createUseStyles(_theme => {
+  return {
+    Spinner: {
+      width: '1rem',
+      height: '1rem',
+      '& .path': {
+        stroke: 'currentColor',
+      },
+    },
+    ErrorIcon: {
+      width: '1rem',
+      height: '1rem',
+    },
+    Button: {
+      marginTop: '1rem',
+      width: '6.25rem',
+    },
+  }
+})
 
-const SmallErrorIconStyled = styled(ErrorIcon)`
-    width: 18px;
-    height: 18px;
-`;
-
-const ButtonStyled = styled(Button)`
-    margin-top: 16px;
-    width: 100px;
-`;
-
-function FollowButton({ user, viewedUser }) {
-    const [
-        followUser,
-        { loading, error },
-    ] = graphqlService.useFollowUserMutation(viewedUser);
-    const handleClick = e => {
-        e.preventDefault();
-        followUser();
-    };
-    return (
-        <ButtonStyled disabled={loading || error} onClick={handleClick}>
-            {loading ? (
-                <SpinnerStyled />
-            ) : error ? (
-                <SmallErrorIconStyled />
-            ) : (
-                'Follow'
-            )}
-        </ButtonStyled>
-    );
+const FollowButton = ({ user, viewedUser }) => {
+  const [followUser, { loading, error }] = graphqlService.useFollowUserMutation(
+    viewedUser
+  )
+  const c = useStyles()
+  const handleClick = e => {
+    e.preventDefault()
+    followUser()
+  }
+  return (
+    <Button className={c.Button} disabled={loading || error} onClick={handleClick}>
+      {loading ? (
+        <Spinner className={c.Spinner} />
+      ) : error ? (
+        <ErrorIcon className={c.ErrorIcon} />
+      ) : (
+        'Follow'
+      )}
+    </Button>
+  )
 }
 
-function UnfollowButton({ user, viewedUser }) {
-    const [
-        unfollowUser,
-        { loading, error },
-    ] = graphqlService.useUnfollowUserMutation(viewedUser);
-    const handleClick = e => {
-        e.preventDefault();
-        unfollowUser();
-    };
-    return (
-        <ButtonStyled disabled={loading || error} onClick={handleClick}>
-            {loading ? (
-                <SpinnerStyled />
-            ) : error ? (
-                <SmallErrorIconStyled />
-            ) : (
-                'Unfollow'
-            )}
-        </ButtonStyled>
-    );
+const UnfollowButton = ({ user, viewedUser }) => {
+  const [unfollowUser, { loading, error }] = graphqlService.useUnfollowUserMutation(
+    viewedUser
+  )
+  const c = useStyles()
+  const handleClick = e => {
+    e.preventDefault()
+    unfollowUser()
+  }
+  return (
+    <Button className={c.Button} disabled={loading || error} onClick={handleClick}>
+      {loading ? (
+        <Spinner className={c.Spinner} />
+      ) : error ? (
+        <ErrorIcon className={c.ErrorIcon} />
+      ) : (
+        'Unfollow'
+      )}
+    </Button>
+  )
 }
 
-export function ToggleFollowButton({ viewedUser }) {
-    const isFollowing = viewedUser.isBeingFollowedByRequester;
-    return isFollowing ? (
-        <UnfollowButton viewedUser={viewedUser} />
-    ) : (
-        <FollowButton viewedUser={viewedUser} />
-    );
+export const ToggleFollowButton = ({ viewedUser }) => {
+  const isFollowing = viewedUser.isBeingFollowedByRequester
+  return isFollowing ? (
+    <UnfollowButton viewedUser={viewedUser} />
+  ) : (
+    <FollowButton viewedUser={viewedUser} />
+  )
 }

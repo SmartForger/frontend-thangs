@@ -1,37 +1,44 @@
-import React from 'react';
-import ReactMarkdown from 'react-markdown';
-import styled from 'styled-components';
+import React from 'react'
+import ReactMarkdown from 'react-markdown'
+import { createUseStyles } from '@style'
+
+const useStyles = createUseStyles(_theme => {
+  return {
+    Markdown: {
+      '& p': {
+        margin: '0',
+
+        '& ~ p': {
+          marginTop: '.5rem',
+        },
+      },
+    },
+  }
+})
 
 const allowedTypes = [
-    'link',
-    'blockquote',
-    'thematicBreak',
-    'strong',
-    'emphasis',
-    'paragraph',
-    'break',
-    'text',
-];
+  'link',
+  'blockquote',
+  'thematicBreak',
+  'strong',
+  'emphasis',
+  'paragraph',
+  'break',
+  'text',
+]
 
-const MarkdownStyled = styled(ReactMarkdown)`
-    p {
-        margin: 0;
-
-        ~ p {
-            margin-top: 8px;
-        }
-    }
-`;
+const MarkdownStyled = styled(ReactMarkdown)``
 
 const Markdown = ({ children, className }) => {
-    return (
-        <MarkdownStyled
-            source={children}
-            allowedTypes={allowedTypes}
-            unwrapDisallowed
-            className={className}
-        />
-    );
-};
+  const c = useStyles()
+  return (
+    <ReactMarkdown
+      source={children}
+      allowedTypes={allowedTypes}
+      unwrapDisallowed
+      className={classNames(className, c.Markdown)}
+    />
+  )
+}
 
-export { Markdown };
+export { Markdown }

@@ -1,11 +1,20 @@
-import styled from 'styled-components';
-import { zeroStateText } from '@style/text';
+import { zeroStateText } from '@style/text'
+import { createUseStyles } from '@style'
 
-export const NoResults = styled.div`
-    ${zeroStateText};
-    background-color: ${props => props.theme.zeroStateBackground};
-    padding: 16px;
-    border-radius: 8px;
-    width: 100%;
-    box-sizing: border-box;
-`;
+const useStyles = createUseStyles(theme => {
+  return {
+    NoResults: {
+      ...zeroStateText,
+      backgroundColor: theme.color.zeroStateBackground,
+      padding: '1rem',
+      borderRadius: '.5rem',
+      width: '100%',
+      boxSizing: 'border-box',
+    },
+  }
+})
+
+export const NoResults = _props => {
+  const c = useStyles()
+  return <div className={c.NoResults}></div>
+}

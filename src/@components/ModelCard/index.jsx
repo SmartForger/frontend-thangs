@@ -1,117 +1,107 @@
-import React, { useState } from 'react';
-import { UserInline } from '../UserInline';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components/macro';
-import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg';
-import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
-import { thumbnailActivityCountText, regularText } from '@style/text';
-import { ModelThumbnail } from '@components/ModelThumbnail';
-import { Card } from '@components/Card';
-import { BLUE_2 } from '../../@style/colors';
+import React, { useState } from 'react'
+import { UserInline } from '../UserInline'
+import { Link } from 'react-router-dom'
+import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg'
+import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
+import { thumbnailActivityCountText, regularText } from '@style/text'
+import { ModelThumbnail } from '@components/ModelThumbnail'
+import { Card } from '@components/Card'
+import { createUseStyles } from '@style'
 
-const Content = styled.div`
-    padding: 8px 16px;
-`;
-
-const Row = styled.div`
-    display: flex;
-    justify-content: space-between;
-`;
-
-const ActivityIndicators = styled.div`
-    display: flex;
-    flex-direction: row;
-    > span:not(:last-child) {
-        margin-right: 16px;
-    }
-`;
-
-const ActivityCount = styled.span`
-    ${thumbnailActivityCountText};
-    display: flex;
-    align-items: center;
-    letter-spacing: 0px;
-`;
-
-const HeartIconStyled = styled(HeartIcon)``;
-const ChatIconStyled = styled(ChatIcon)``;
-
-const ModelThumbnailStyled = styled(ModelThumbnail)`
-    padding-bottom: 0;
-    min-height: 196px;
-    margin: auto;
-    max-width: calc(100% - 118px);
-    width: 100%;
-    border-radius: 8px 8px 0px 0px;
-`;
-
-const Name = styled.div`
-    ${regularText};
-`;
+const useStyles = createUseStyles(_theme => {
+  return {
+    ModelCard: {},
+    ModelCard_Thumbnail: {
+      paddingBottom: 0,
+      minHeight: '12.25rem',
+      margin: auto,
+      maxWidth: 'calc(100% - 118px)',
+      width: '100%',
+      borderRadius: '.5rem .5rem 0 0',
+    },
+    ModelCard_Content: {
+      padding: '.5rem 1rem',
+    },
+    ModelCard_Name: {
+      ...regularText,
+    },
+    ModelCard_Row: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      marginTop: '.5rem',
+    },
+    ModelCard_ActivityIndicators: {
+      display: 'flex',
+      flexDirection: 'row',
+      '& > span:not(:last-child': {
+        marginRight: '1rem',
+      },
+    },
+    ModelCard_ActivityCount: {
+      ...thumbnailActivityCountText,
+      display: 'flex',
+      alignItems: 'center',
+      letterSpacing: 0,
+    },
+    ModelCard_Icon: {
+      fill: theme.colors.BLUE_2,
+    },
+  }
+})
 
 function CardContents({ className, model, showOwner, hovered }) {
-    return (
-        <Card className={className}>
-            <ModelThumbnailStyled
-                name={model.name}
-                thumbnailUrl={model.thumbnailUrl}
-                showOwner={showOwner}
-            ></ModelThumbnailStyled>
-            <Content>
-                <Name>{model.name}</Name>
-                <Row
-                    css={`
-                        margin-top: 8px;
-                    `}
-                >
-                    {showOwner && <UserInline user={model.owner} />}
-                    <ActivityIndicators>
-                        <ActivityCount>
-                            <ChatIconStyled
-                                css={`
-                                    fill: ${BLUE_2};
-                                `}
-                            />
-                            &nbsp;{model.commentsCount}
-                        </ActivityCount>
-                        <ActivityCount>
-                            <HeartIconStyled
-                                css={`
-                                    fill: ${BLUE_2};
-                                `}
-                            />
-                            &nbsp;{model.likesCount}
-                        </ActivityCount>
-                    </ActivityIndicators>
-                </Row>
-            </Content>
-        </Card>
-    );
+  const c = useStyles()
+  return (
+    <Card className={className}>
+      <ModelThumbnail
+        className={c.ModelCard_Thumbnail}
+        name={model.name}
+        thumbnailUrl={model.thumbnailUrl}
+        showOwner={showOwner}
+      ></ModelThumbnail>
+      <div className={c.ModelCard_Content}>
+        <div className={c.ModelCard_Name}>{model.name}</div>
+        <div className={c.ModelCard_Row}>
+          {showOwner && <UserInline user={model.owner} />}
+          <div className={c.ModelCard_ActivityIndicators}>
+            <span className={c.ModelCard_ActivityCount}>
+              <ChatIcon className={c.ModelCard_Icon} />
+              &nbsp;{model.commentsCount}
+            </span>
+            <span className={c.ModelCard_ActivityCount}>
+              <HeartIcon className={c.ModelCard_Icon} />
+              &nbsp;{model.likesCount}
+            </span>
+          </div>
+        </div>
+      </div>
+    </Card>
+  )
 }
 
 function ModelCard({ className, model, withOwner }) {
-    const showOwner = withOwner && model.owner;
-    const [hovered, setHovered] = useState(false);
+  const showOwner = withOwner && model.owner
+  const [hovered, setHovered] = useState(false)
 
-    const handleMouseEnter = () => setHovered(true);
-    const handleMouseLeave = () => setHovered(false);
+  const handleMouseEnter = () => setHovered(true)
+  const handleMouseLeave = () => setHovered(false)
 
-    return (
-        <Link
-            to={`/model/${model.id}`}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onFocus={handleMouseEnter}
-            onBlur={handleMouseLeave}
-        >
-            <CardContents
-                className={className}
-                model={model}
-                showOwner={showOwner}
-                hovered={hovered}
-            />
-        </Link>
-    );
+  return (
+    <Link
+      to={`/model/${model.id}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onFocus={handleMouseEnter}
+      onBlur={handleMouseLeave}
+    >
+      <CardContents
+        className={className}
+        model={model}
+        showOwner={showOwner}
+        hovered={hovered}
+      />
+    </Link>
+  )
 }
 
-export { ModelCard };
+export { ModelCard }

@@ -1,79 +1,87 @@
-import React, { useState } from 'react';
-import styled from 'styled-components/macro';
-import { useHistory } from 'react-router-dom';
-import { ReactComponent as SearchIcon } from '@svg/search-icon.svg';
-import { inputPlaceholderText } from '@style/text';
-import { mediaMdPlus } from '@style/media-queries';
+import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { ReactComponent as SearchIcon } from '@svg/search-icon.svg'
+import { inputPlaceholderText } from '@style/text'
+import { createUseStyles } from '@style'
+
+const useStyles = createUseStyles(_theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+  return {
+    SearchBar: {},
+    SearchBar_form: {
+      flexGrow: 1,
+      backgroundColor: theme.color.searchBackground,
+      borderRadius: '.5rem',
+      position: 'relative',
+      display: 'flex',
+    },
+    SearchBar_SearchIcon: {
+      position: 'absolute',
+      top: '50%',
+      left: '1rem',
+      transform: 'translateY(-50%)',
+      height: '1rem',
+      width: '1rem',
+
+      [md]: {
+        height: '1.5rem',
+        width: '1.5rem',
+      },
+    },
+    SearchBar_input: {
+      border: 'none',
+      padding: '.5rem .5rem .5rem 2.5rem',
+      background: 'none',
+      width: '100%',
+
+      '&::placeholder': {
+        ...inputPlaceholderText,
+      },
+
+      [md]: {
+        paddingLeft: '3.5rem',
+      },
+    },
+  }
+})
 
 function useSearch(initialSearchQuery = '') {
-    const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
-    const history = useHistory();
-    const executeSearch = () => {
-        history.push(`/search/${searchQuery}`);
-    };
-    return { searchQuery, setSearchQuery, executeSearch };
+  const [searchQuery, setSearchQuery] = useState(initialSearchQuery)
+  const history = useHistory()
+  const executeSearch = () => {
+    history.push(`/search/${searchQuery}`)
+  }
+  return { searchQuery, setSearchQuery, executeSearch }
 }
 
-const SearchForm = styled.form`
-    flex-grow: 1;
-    background-color: ${props => props.theme.searchBackground};
-    border-radius: 8px;
-    position: relative;
-    display: flex;
-`;
-
-const SearchStyle = styled.input`
-    border: none;
-    padding: 8px 8px 8px 40px;
-    background: none;
-    width: 100%;
-
-    ::placeholder {
-        ${inputPlaceholderText};
-    }
-
-    ${mediaMdPlus} {
-        padding-left: 56px;
-    }
-`;
-
-const SearchIconStyled = styled(SearchIcon)`
-    position: absolute;
-    top: 50%;
-    left: 16px;
-    transform: translateY(-50%);
-    height: 18px;
-    width: 18px;
-
-    ${mediaMdPlus} {
-        height: 24px;
-        width: 24px;
-    }
-`;
-
 export function SearchBar({ className, initialSearchQuery }) {
-    const { searchQuery, setSearchQuery, executeSearch } = useSearch(
-        initialSearchQuery
-    );
+  const c = useStyles()
+  const { searchQuery, setSearchQuery, executeSearch } = useSearch(initialSearchQuery)
 
-    const handleChange = e => {
-        e.persist();
-        setSearchQuery(e.target.value);
-    };
+  const handleChange = e => {
+    e.persist()
+    setSearchQuery(e.target.value)
+  }
 
-    const handleSubmit = e => {
-        e.preventDefault();
-        executeSearch();
-    };
+  const handleSubmit = e => {
+    e.preventDefault()
+    executeSearch()
+  }
 
-    return (
-        <SearchForm onSubmit={handleSubmit} className={className}>
-            <SearchIconStyled />
-            <SearchStyle
-                placeholder="Search models by name, description, owner, etc..."
-                value={searchQuery}
-                onChange={handleChange}
-            />
-        </SearchForm>
-    );
+  return (
+    <SearchForm
+      onSubmit={handleSubmit}
+      className={classnames(className, c.SearchBar_form)}
+    >
+      <SearchIcon className={c.SearchBar_SearchIcon} />
+      <input
+        className={c.SearchBar_input}
+        placeholder='Search models by name, description, owner, etc...'
+        value={searchQuery}
+        onChange={handleChange}
+      />
+    </SearchForm>
+  )
 }

@@ -1,14 +1,23 @@
-import styled from 'styled-components/macro';
-import { WHITE_1, WHITE_5 } from '../@style/colors';
+import { createUseStyles } from '@style'
 
-export const UploadFrame = styled.div`
-    height: 560px;
-    background-color: ${props => (props.dragactive ? WHITE_5 : WHITE_1)};
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    position: relative;
-    cursor: ${props => (props.currentFile ? 'auto' : 'pointer')};
-`;
+const useStyles = createUseStyles(theme => {
+  return {
+    UploadFrame: {
+      height: '35rem',
+      backgroundColor: ({ dragactive }) =>
+        dragactive ? theme.color.white[5] : theme.color.white[1],
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '1.5rem',
+      position: 'relative',
+      cursor: ({ currentFile }) => (currentFile ? 'auto' : 'pointer'),
+    },
+  }
+})
+
+export const UploadFrame = props => {
+  const c = useStyles(props)
+  return <div className={c.UploadFrame}></div>
+}
