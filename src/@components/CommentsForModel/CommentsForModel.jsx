@@ -8,6 +8,7 @@ import { Spinner } from '@components/Spinner';
 import { ProfilePicture } from '@components/ProfilePicture';
 import { NewModelCommentForm } from './NewModelCommentForm';
 import { subheaderText, commentPostedText, commentUsername } from '@style/text';
+import { VersionPicture } from '@components/VersionPicture';
 
 const graphqlService = GraphqlService.getInstance();
 
@@ -39,8 +40,6 @@ const TimeAgo = styled.div`
 `;
 
 const Body = styled.div`
-    margin-bottom: 4px;
-    margin-top: 16px;
 `;
 
 const FlexGrow = styled.div`
@@ -77,6 +76,28 @@ const Comment = ({ comment }) => {
     );
 };
 
+
+const VersionEntry = ( ) => {
+    const time = formatDistance(new Date(), new Date());
+    const  body = 'TEMPLATE: Version of Template Model uploaded'
+    return (
+        <CommentStyled>
+            <VersionPicture
+                    size="48px"
+                    color="blue"
+                />
+            <FlexGrow>
+                <Box>
+                    <Body>
+                        <Markdown>{body}</Markdown>
+                        <TimeAgo>Tem Plate / {time}</TimeAgo>
+                    </Body>
+                </Box>
+            </FlexGrow>
+        </CommentStyled>
+    );
+};
+
 const Header = styled.h2`
     ${subheaderText};
 `;
@@ -106,9 +127,13 @@ const CommentsForModel = ({ model, className }) => {
                 {comments.length} {commentsHeaderText}
             </Header>
             <Comments>
+           
+                <VersionEntry />
+
                 {comments.map((comment, i) => (
                     <Comment key={i} comment={comment} />
                 ))}
+                
             </Comments>
             <NewModelCommentForm modelId={model.id} />
         </div>

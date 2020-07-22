@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useDropzone } from 'react-dropzone';
 import { ReactComponent as UploadIcon } from '../../@svg/upload-icon.svg';
+import { ReactComponent as VersionIcon } from '../../@svg/version.svg';
 import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg';
 import { ReactComponent as ModelPyramid } from '../../@svg/model-pyramid.svg';
 import { ReactComponent as ExitIcon } from '../../@svg/icon-X.svg';
@@ -14,11 +15,20 @@ import {
 } from '../../@style/text';
 import { GREY_3, WHITE_3 } from '../../@style/colors';
 
+export const UPLOAD_MODES = {
+    MODEL: 'MODEL',
+    VERSION: 'VERSION',
+}
+
 const ErrorIconStyled = styled(ErrorIcon)`
     color: ${GREY_3};
 `;
 
 const UploadIconStyled = styled(UploadIcon)`
+    margin-bottom: 32px;
+`;
+
+const VersionIconStyled = styled(VersionIcon)`
     margin-bottom: 32px;
 `;
 
@@ -96,7 +106,12 @@ const InfoMessage = styled(SmallInfoMessage)`
     ${infoMessageText};
 `;
 
-export function Uploader({ file, setFile, showError = true }) {
+export function Uploader({ 
+    file, 
+    setFile, 
+    showError = true, 
+    mode = UPLOAD_MODES.MODEL 
+}) {
     const [errorState, setErrorState] = React.useState();
     const onDrop = React.useCallback(
         (acceptedFiles, rejectedFiles, event) => {
@@ -197,7 +212,12 @@ export function Uploader({ file, setFile, showError = true }) {
                     </FlexColumn>
                 ) : (
                     <FlexColumn>
-                        <UploadIconStyled />
+                        {mode === UPLOAD_MODES.MODEL && (
+                            <UploadIconStyled />
+                        )}
+                         {mode === UPLOAD_MODES.VERSION && (
+                            <VersionIconStyled />
+                        )}
                         <InfoMessage>
                             Drag & Drop model
                             <br />
