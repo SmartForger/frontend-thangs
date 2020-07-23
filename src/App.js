@@ -37,7 +37,9 @@ import {
 import { FlashContextProvider } from './@components/Flash';
 import {Provider} from "react-redux";
 import store from "./store";
-
+import {createStoreon} from "storeon";
+import {StoreContext} from "storeon/react";
+import teamsStore from '@store/teams/store';
 const originalFetch = window.fetch;
 const client = graphqlClient(originalFetch, history);
 
@@ -62,6 +64,7 @@ const App = () => {
       <Provider store={store}>
         <AppFrame>
             <ApolloProvider client={client}>
+              <StoreContext.Provider value={createStoreon([teamsStore])}>
                 <ErrorBoundary>
                     <FlashContextProvider>
                         <Switch>
@@ -157,6 +160,7 @@ const App = () => {
                         </Switch>
                     </FlashContextProvider>
                 </ErrorBoundary>
+              </StoreContext.Provider>
             </ApolloProvider>
         </AppFrame>
       </Provider>

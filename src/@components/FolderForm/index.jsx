@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import styled from 'styled-components/macro';
 import Joi from '@hapi/joi';
@@ -12,6 +12,7 @@ import teamLogo from "../../@svg/multi-users.svg";
 import saveTeamLogo from "../../@svg/save-team.svg";
 import saveTeamSuccess from "../../@svg/save-team-success.svg";
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import {useStoreon} from "storeon/react";
 
 const SpinnerStyled = styled(Spinner)`
     width: 18px;
@@ -183,12 +184,25 @@ export function CreateFolderForm({
     onCancel,
     membersLabel,
 }) {
-    const [saveTeamActive, setSaveTeamActive] = useState(false);
-    const [saveSuccess, setSaveSuccess] = useState(false);
+    const { dispatch, teams } = useStoreon('teams')
 
-    let saveLogo = saveSuccess ? saveTeamSuccess : (saveTeamActive ? saveTeamLogo : teamLogo);
+    const [saveTeamActive, setSaveTeamActive] = useState(false);
+
+    let saveLogo = teams.isSaved ? saveTeamSuccess : (saveTeamActive ? saveTeamLogo : teamLogo);
     let errors;
-    let teams = ['Team1', 'Team2', 'Team3', 'Team4', 'Team5', 'Team6', 'Team7', 'Team8', 'Team9'];
+    let teamNames = [];
+
+
+    if(teams.data){
+        teams.data.forEach((team) => {
+            teamNames.push(team.name);
+        });
+        console.log(teamNames);
+    }
+
+    console.log(teams.data);
+
+    // let teams = ['Team1', 'Team2', 'Team3', 'Team4', 'Team5', 'Team6', 'Team7', 'Team8', 'Team9'];
 
     const validationResolver = data => {
         const members = data.members ? parseEmails(data.members) : [];
@@ -222,7 +236,7 @@ export function CreateFolderForm({
         reValidateMode: 'onSubmit',
     });
 
-    const isExistingTeam = () => {return teams.indexOf(getValues('members')) > -1};
+    const isExistingTeam = () => {return teamNames.indexOf(getValues('members')) > -1};
 
     const [createFolder, { loading }] = useCreateFolder();
 
@@ -267,9 +281,9 @@ export function CreateFolderForm({
             {saveTeamActive ? addInputGroupField() : null}
             <Row>
                 <SaveLogo src={saveLogo} />
-                {saveTeamActive && !saveSuccess ? <SaveTeamLabel onClick={() => saveGroup()}>Save Team</SaveTeamLabel> : null}
-                {!saveTeamActive && !saveSuccess ? <SaveTeamLabel onClick={() => saveGroupActivate()}>Save Users As Team</SaveTeamLabel> : null}
-                {saveTeamActive && saveSuccess ? <SaveTeamSuccessLabel>Team Saved</SaveTeamSuccessLabel> : null}
+                {saveTeamActive && !teams.isSaved ? <SaveTeamLabel onClick={() => saveGroup()}>Save Team</SaveTeamLabel> : null}
+                {!saveTeamActive && !teams.isSaved ? <SaveTeamLabel onClick={() => saveGroupActivate()}>Save Users As Team</SaveTeamLabel> : null}
+                {saveTeamActive && teams.isSaved ? <SaveTeamSuccessLabel>Team Saved</SaveTeamSuccessLabel> : null}
             </Row>
             </>
         )
@@ -283,9 +297,8 @@ export function CreateFolderForm({
         initSchema = schemaWithTeamMembers;
         const res = triggerValidation();
         if(!(errors.members || errors.team)){
-            console.log(getValues("members"));
-            console.log(getValues("team"));
-            setSaveSuccess(true);
+            const data = {team: getValues("team"), members: getValues("members") ? parseEmails(getValues("members")) : []};
+            dispatch('add-team', data);
         }
         initSchema = schemaWithName;
     }
@@ -306,14 +319,14 @@ export function CreateFolderForm({
             <FullWidthInput name="name" ref={register({ required: true })} />
             <Label htmlFor="members">Add users or enter an existing team name</Label>
             <Controller
-                name="membersauto" control={control}
+                name="members-autocomplete" control={control}
                 onInputChange={(event) => onAutocompleteChange(event)}
                 onChange={(event) => onAutocompleteChange(event)}
                 as={
                     <Autocomplete
                         freeSolo
                         ListboxProps={{ style: { borderRadius: "3px", background: '#ececec', overflow: 'auto' } }}
-                        options={teams}
+                        options={teamNames}
                         defaultValue=""
                         getOptionLabel={team => team}
                         renderInput={(teams) =>
