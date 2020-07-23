@@ -114,6 +114,27 @@ const Page = () => {
                     'Sorry, we encounteed an unexpected error.  Please try again.'
             );
         } else {
+            await restLogin();
+            history.push('/');
+        }
+    }
+
+    async function restLogin() {
+        setWaiting(true);
+        setLoginErrorMessage(null);
+
+        const res = await authenticationService.restLogin({
+            password: inputs.password,
+        });
+
+        setWaiting(false);
+
+        if (res.status !== 200) {
+            setLoginErrorMessage(
+                res.data.detail ||
+                    'Sorry, we encounteed an unexpected error.  Please try again.'
+            );
+        } else {
             history.push('/');
         }
     }
