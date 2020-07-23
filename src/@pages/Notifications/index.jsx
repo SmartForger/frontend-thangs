@@ -6,7 +6,6 @@ import { NotificationsList } from '@components/NotificationsList';
 import { Button } from '@components/Button';
 import { Spinner } from '@components/Spinner';
 import { useUpdateLastCheckedNotifications } from '@customHooks/Notifications';
-import {connect} from "react-redux";
 
 const Header = styled.h1`
     ${headerText};
@@ -25,7 +24,7 @@ const ButtonStyled = styled(Button)`
     margin: 16px 0;
 `;
 
-function Page(props) {
+function Page() {
     const [
         updateLastChecked,
         { loading, error },
@@ -39,7 +38,6 @@ function Page(props) {
     return (
         <div>
             <Header>Notifications</Header>
-            {props.notificationInfo.data}
             <ButtonStyled disabled={loading} onClick={handleClick}>
                 {loading ? (
                     <SpinnerStyled />
@@ -58,11 +56,5 @@ function Page(props) {
     );
 }
 
-const mapStateToProps = state => {
-    return {
-        notificationInfo: state
-    };
-};
-
-export const Notifications = connect(mapStateToProps)(WithNewThemeLayout(Page));
+export const Notifications = WithNewThemeLayout(Page);
 
