@@ -13,6 +13,8 @@ import { ReactComponent as TrashCanIcon } from '../../@svg/trash-can-icon.svg';
 import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg';
 import { useRevokeAccess } from '../../@customHooks/Folders';
 import { GREY_12 } from '../../@style/colors';
+import { smallHeaderText } from '@style/text';
+import useFetchOnce from "../../@services/store-service/hooks/useFetchOnce";
 
 const SpinnerStyled = styled(Spinner)`
     width: 18px;
@@ -37,6 +39,10 @@ const List = styled.ul`
 
 const Item = styled.li`
     display: block;
+`;
+
+const TeamName = styled.div`
+    ${smallHeaderText};
 `;
 
 function RevokeAccessButton({ folderId, targetUserId, children }) {
@@ -107,6 +113,55 @@ function UserList({ users = [], folderId, creator }) {
     );
 }
 
+function Team({ id }) {
+    const {  teams } = useFetchOnce('teams')
+    console.log('TEAMS', teams);
+
+    const team = (teams.data && teams.data[id]) || {}
+    console.log('Team', team);
+
+    return teams.isLoaded
+        ? (
+            <>
+                <Row
+                    css={`
+                        margin-top: 24px;
+                    `}
+                >
+                    <TeamName>
+                        {team.name}
+                    </TeamName>
+                </Row>
+
+                <Row>
+                    <List>
+                        { team.members.map(member => {
+                            return (
+                                <Item
+                                    key={member.id}
+                                    css={`
+                                        margin-top: ${props =>
+                                        props.isFirst ? '0' : '16px'};
+                                    `}
+                                >
+                                    <UserInline user={member} displayEmail>
+                                        <RevokeAccessButton
+                                            targetUserId={member.id}
+                                        >
+                                            <TrashCanIconStyled />
+                                        </RevokeAccessButton>
+                                    </UserInline>
+                                </Item>
+                            );
+                        })
+                        }
+                    </List>
+                </Row>
+            </>
+        )
+        : <SpinnerStyled />
+}
+
 export function FolderManagementModal({
     isOpen,
     folder,
@@ -167,6 +222,7 @@ export function FolderManagementModal({
                     folderId={folder.id}
                 />
             </Row>
+            {/*<Team id={folder.teamId}/>*/}
         </Modal>
     );
 }
