@@ -28,7 +28,6 @@ const useStyles = createUseStyles(theme => {
   const {
     mediaQueries: { md },
   } = theme
-  console.log('what I got', theme)
   return {
     Header: {},
     Header__fixed: {
