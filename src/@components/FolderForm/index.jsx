@@ -192,17 +192,15 @@ export function CreateFolderForm({
     let errors;
     let teamNames = [];
 
+    useEffect(() => {
+        dispatch('fetch-teams');
+    }, []);
 
     if(teams.data){
         teams.data.forEach((team) => {
             teamNames.push(team.name);
         });
-        console.log(teamNames);
     }
-
-    console.log(teams.data);
-
-    // let teams = ['Team1', 'Team2', 'Team3', 'Team4', 'Team5', 'Team6', 'Team7', 'Team8', 'Team9'];
 
     const validationResolver = data => {
         const members = data.members ? parseEmails(data.members) : [];
