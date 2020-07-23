@@ -1,6 +1,111 @@
 {
+  "env": {
+    "browser": true,
+    "es6": true
+  },
   "extends": [
-    "react-app",
-    "plugin:cypress/recommended"
-  ]
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "globals": {
+    "Promise": true,
+    "module": true,
+    "process": true,
+    "__dirname": true,
+    "Buffer": true
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react",
+    "react-hooks"
+  ],
+  "settings": {
+    "react": {
+      "createClass": "createReactClass",
+      "pragma": "React",
+      "version": "16.0"
+    },
+    "propWrapperFunctions": [
+      "forbidExtraProps"
+    ]
+  },
+  "rules": {
+    "strict": 0,
+    "react/prop-types": 0,
+    "arrow-body-style": 0,
+    "arrow-parens": 0,
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".js", ".jsx"
+        ]
+      }
+    ],
+    "import/no-unresolved": 0,
+    "no-console": [
+      "error",
+      {
+        "allow": [
+          "info",
+          "warn",
+          "error",
+          "debug"
+        ]
+      }
+    ],
+    "react/jsx-uses-react": "error",
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "never"
+    ],
+    "no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "ignoreRestSiblings": false,
+        "varsIgnorePattern": "^_",
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "no-multiple-empty-lines": [
+      "error",
+      {
+        "max": 3
+      }
+    ],
+    "react-hooks/rules-of-hooks": 2,
+    "react-hooks/exhaustive-deps": 1,
+    "space-before-function-paren": [
+      "error",
+      {
+        "anonymous": "never",
+        "named": "never",
+        "asyncArrow": "always"
+      }
+    ]
+  }
 }
