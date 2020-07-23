@@ -24,7 +24,7 @@ const _useStyles = createUseStyles(theme => {
       },
     },
     Layout_Hero: {
-      background: theme.color.invertedHeaderBackground,
+      background: theme.colors.invertedHeaderBackground,
       height: '47.25rem',
       position: 'relative',
       display: 'flex',

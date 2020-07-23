@@ -3,7 +3,7 @@ import React from 'react'
 import * as GraphqlService from '@services/graphql-service'
 import { WithNewInvertedHeaderLayout } from '@style/Layout'
 import { Spinner } from '@components/Spinner'
-import { CardCollection } from '@components/CardCollection'
+import CardCollection from '@components/CardCollection'
 
 const graphqlService = GraphqlService.getInstance()
 
@@ -16,8 +16,8 @@ function Page() {
 
   if (error) {
     return (
-      <div data-cy="fetch-results-error">
-                Error! We were not able to load results. Please try again later.
+      <div data-cy='fetch-results-error'>
+        Error! We were not able to load results. Please try again later.
       </div>
     )
   }
@@ -25,7 +25,7 @@ function Page() {
   return (
     <CardCollection
       models={models}
-      noResultsText="We have no models to display right now. Please try again later."
+      noResultsText='We have no models to display right now. Please try again later.'
     />
   )
 }

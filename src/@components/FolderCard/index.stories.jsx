@@ -1,5 +1,5 @@
 import React from 'react'
-import { FolderCard } from './'
+import FolderCard from './'
 import { withApolloProvider } from '../../../.storybook/withApolloProvider'
 import ThumbnailFixture from '../../../.storybook/fixtures/model-thumbnail.png'
 import UserImgFixture from '../../../.storybook/fixtures/user-img.png'
@@ -46,7 +46,7 @@ const modelFixture = {
   thumbnailUrl: ThumbnailFixture,
 }
 
-export function WithManyModels() {
+export const WithManyModels = () => {
   const c = useStyles()
   const folderFixture = {
     id: 1,
@@ -61,7 +61,7 @@ export function WithManyModels() {
   )
 }
 
-export function WithSingleModel() {
+export const WithSingleModel = () => {
   const c = useStyles()
   const folderFixture = {
     id: 1,
@@ -76,7 +76,7 @@ export function WithSingleModel() {
   )
 }
 
-export function WithNoModels() {
+export const WithNoModels = () => {
   const c = useStyles()
   const folderFixture = {
     id: 1,

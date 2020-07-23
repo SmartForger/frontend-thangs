@@ -44,7 +44,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export function DropdownItem({ children, to = '#', onClick }) {
+export const DropdownItem = ({ children, to = '#', onClick }) => {
   const c = useStyles()
   return (
     <div>
@@ -60,13 +60,13 @@ export function DropdownItem({ children, to = '#', onClick }) {
   )
 }
 
-export function DropdownMenu({
+export const DropdownMenu = ({
   children,
   className,
   noIcons,
   buttonIcon: ButtonIcon = DotStackIcon,
   isOpen: isOpenExternal = undefined,
-}) {
+}) => {
   const [isOpenInternal, toggleOpen] = useDropdownMenuState(isOpenExternal)
   const isOpen = isOpenExternal === undefined ? isOpenInternal : isOpenExternal
   const c = useStyles({ isOpen, noIcons })
@@ -84,7 +84,7 @@ export function DropdownMenu({
   )
 }
 
-function useDropdownMenuState(initialIsOpen = false) {
+const useDropdownMenuState = (initialIsOpen = false) => {
   const [isOpen, setIsOpen] = useState(initialIsOpen)
   const toggleOpen = _e => setIsOpen(!isOpen)
   const closeMenu = () => setIsOpen(false)

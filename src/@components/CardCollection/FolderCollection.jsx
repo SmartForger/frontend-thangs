@@ -1,6 +1,6 @@
 import React from 'react'
 import { NoResults } from '../NoResults'
-import { FolderCard } from '../FolderCard'
+import FolderCard from '../FolderCard'
 import { ShowMoreButton } from '../ShowMore'
 import { Grid } from './Grid'
 import { createUseStyles } from '@style'
@@ -17,13 +17,13 @@ const useStyles = createUseStyles(_theme => {
 
 const NOOP = () => null
 
-export function FolderCollection({
+const FolderCollection = ({
   folders = [],
   maxPerRow = 4,
   noResultsText,
   fetchMore = NOOP,
   hasMore,
-}) {
+}) => {
   const c = useStyles()
   if (!folders || folders.length < 1) {
     return <NoResults>{noResultsText}</NoResults>
@@ -48,3 +48,5 @@ export function FolderCollection({
     </>
   )
 }
+
+export default FolderCollection

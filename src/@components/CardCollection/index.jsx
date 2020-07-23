@@ -1,6 +1,6 @@
 import React from 'react'
-import { ModelCard } from '../ModelCard'
-import { FolderCard } from '../FolderCard'
+import ModelCard from '../ModelCard'
+import FolderCard from '../FolderCard'
 import { NoResults } from '../NoResults'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -28,12 +28,7 @@ const nothingToDisplay = ({ models, folders }) => {
   return true
 }
 
-export function CardCollection({
-  models = [],
-  maxPerRow = 4,
-  noResultsText,
-  folders = [],
-}) {
+const CardCollection = ({ models = [], maxPerRow = 4, noResultsText, folders = [] }) => {
   const c = useStyles()
   if (nothingToDisplay({ models, folders })) {
     return <NoResults>{noResultsText}</NoResults>
@@ -55,3 +50,5 @@ export function CardCollection({
     </div>
   )
 }
+
+export default CardCollection

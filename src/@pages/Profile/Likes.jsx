@@ -5,7 +5,7 @@ import { WithNewThemeLayout } from '@style'
 import { useCurrentUser } from '@customHooks/Users'
 import { Spinner } from '@components/Spinner'
 import { Message404 } from '../404'
-import { CardCollection } from '@components/CardCollection'
+import CardCollection from '@components/CardCollection'
 import { subheaderText } from '@style/text'
 import { createUseStyles } from '@style'
 
@@ -21,7 +21,7 @@ const useStyles = createUseStyles(_theme => {
 
 const getLikedModels = R.pathOr([], ['likedModels'])
 
-function LikesCount({ user }) {
+const LikesCount = ({ user }) => {
   const c = useStyles()
   const likes = getLikedModels(user)
   const amount = likes.length
@@ -29,7 +29,7 @@ function LikesCount({ user }) {
   return <div className={c.Likes_LikedModelsHeader}>Liked Models {amount}</div>
 }
 
-function LikesContent({ user }) {
+const LikesContent = ({ user }) => {
   const models = getLikedModels(user)
   return (
     <CardCollection models={models} noResultsText='You have not liked any models yet.' />
@@ -65,6 +65,4 @@ const Page = () => {
   )
 }
 
-const Likes = WithNewThemeLayout(Page)
-
-export { Likes }
+export const Likes = WithNewThemeLayout(Page)

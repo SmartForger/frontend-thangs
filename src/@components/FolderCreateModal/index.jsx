@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Modal } from '../Modal'
+import Modal from '../Modal'
 import { CreateFolderForm, DisplayErrors } from '../FolderForm'
 import { ReactComponent as NewFolderIcon } from '../../@svg/folder-plus-icon.svg'
 import { headerText, lightText } from '../../@style/text'
@@ -32,7 +32,7 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-export function FolderCreateModal({ isOpen, onCancel, afterCreate }) {
+const FolderCreateModal = ({ isOpen, onCancel, afterCreate }) => {
   const c = useStyles()
   const [errors, setErrors] = useState()
   return (
@@ -62,3 +62,5 @@ export function FolderCreateModal({ isOpen, onCancel, afterCreate }) {
     </Modal>
   )
 }
+
+export default FolderCreateModal

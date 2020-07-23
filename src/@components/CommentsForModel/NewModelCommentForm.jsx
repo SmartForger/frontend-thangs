@@ -41,7 +41,7 @@ const useStyles = createUseStyles(theme => {
 
 const graphqlService = GraphqlService.getInstance()
 
-export function NewModelCommentForm({ modelId }) {
+const NewModelCommentForm = ({ modelId }) => {
   const c = useStyles()
   const userId = authenticationService.getCurrentUserId()
   const { user } = graphqlService.useUserById(userId)
@@ -79,3 +79,5 @@ export function NewModelCommentForm({ modelId }) {
     </div>
   )
 }
+
+export default NewModelCommentForm

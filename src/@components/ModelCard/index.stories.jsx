@@ -1,5 +1,5 @@
 import React from 'react'
-import { ModelCard } from './'
+import ModelCard from './'
 import { withApolloProvider } from '../../../.storybook/withApolloProvider'
 import ThumbnailFixture from '../../../.storybook/fixtures/model-thumbnail.png'
 import UserImgFixture from '../../../.storybook/fixtures/user-img.png'
@@ -36,7 +36,7 @@ const modelFixture = {
   thumbnailUrl: ThumbnailFixture,
 }
 
-export function WithOwner() {
+export const WithOwner = () => {
   const c = useStyles()
   return (
     <div className={c.Container}>
@@ -45,7 +45,7 @@ export function WithOwner() {
   )
 }
 
-export function WithoutOwner() {
+export const WithoutOwner = () => {
   const c = useStyles()
   return (
     <div className={c.Container}>

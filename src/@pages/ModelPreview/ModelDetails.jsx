@@ -30,7 +30,7 @@ const useStyles = createUseStyles(_theme => {
 const title = R.replace(/(^|\s)\S/g, R.toUpper)
 const titleCase = R.pipe(R.toLower, title)
 
-export function ModelDetails({ model, className }) {
+export const ModelDetails = ({ model, className }) => {
   const c = useStyles()
   const category = model.category && titleCase(model.category)
   return (
@@ -45,7 +45,7 @@ export function ModelDetails({ model, className }) {
   )
 }
 
-function AttrRow({ name, value }) {
+const AttrRow = ({ name, value }) => {
   const c = useStyles()
   if (!value || !name) {
     return null

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ModelCollection } from './ModelCollection'
+import ModelCollection from './ModelCollection'
 import ThumbnailFixture from '../../../.storybook/fixtures/model-thumbnail.png'
 import UserImgFixture from '../../../.storybook/fixtures/user-img.png'
 
@@ -26,11 +26,7 @@ export default {
 }
 
 export function SingleRowModels() {
-  return (
-    <ModelCollection
-      models={[modelFixture, modelFixture]}
-    ></ModelCollection>
-  )
+  return <ModelCollection models={[modelFixture, modelFixture]}></ModelCollection>
 }
 
 export function MultipleRowsModels() {
@@ -54,7 +50,7 @@ export function NoResults() {
   return (
     <ModelCollection
       models={[]}
-      noResultsText="No geometric similar matches found. Try uploading another model."
+      noResultsText='No geometric similar matches found. Try uploading another model.'
     ></ModelCollection>
   )
 }

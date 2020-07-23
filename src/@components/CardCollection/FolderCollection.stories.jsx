@@ -1,5 +1,5 @@
 import React from 'react'
-import { FolderCollection } from './FolderCollection'
+import FolderCollection from './FolderCollection'
 import ThumbnailFixture from '../../../.storybook/fixtures/model-thumbnail.png'
 import UserImgFixture from '../../../.storybook/fixtures/user-img.png'
 
@@ -43,11 +43,7 @@ export function NoResults() {
 }
 
 export function SingleRowFolders() {
-  return (
-    <FolderCollection
-      folders={[folderFixture, folderFixture]}
-    ></FolderCollection>
-  )
+  return <FolderCollection folders={[folderFixture, folderFixture]}></FolderCollection>
 }
 
 export function MultipleRowFolders() {

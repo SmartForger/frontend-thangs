@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDeleteFolder } from '../../@customHooks/Folders'
 import { DropdownMenu, DropdownItem } from '../DropdownMenu'
-import { FolderManagementModal } from '../FolderManagementModal'
+import FolderManagementModal from '../FolderManagementModal'
 import { useFlashNotification } from '../Flash'
 import { Button } from '../Button'
 import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg'
@@ -18,7 +18,7 @@ const useStyles = createUseStyles(theme => {
   return {
     Breadcrumbs: {},
     Breadcrumbs_FolderIcon: {
-      color: theme.color.BLUE_2,
+      color: theme.colors.BLUE_2,
       marginRight: '1rem',
     },
     Breadcrumbs_Spinner: {
@@ -62,7 +62,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-function DeleteMenu({ folderId }) {
+const DeleteMenu = ({ folderId }) => {
   const c = useStyles()
   const [deleteFolder, { loading, error }] = useDeleteFolder(folderId)
   const { navigateWithFlash } = useFlashNotification()
@@ -90,7 +90,7 @@ function DeleteMenu({ folderId }) {
   )
 }
 
-function ManageUsers({ folder }) {
+const ManageUsers = ({ folder }) => {
   const c = useStyles()
   const [isOpen, setIsOpen] = useState()
   const { setFlash } = useFlashNotification()
@@ -119,7 +119,7 @@ function ManageUsers({ folder }) {
   )
 }
 
-export function Breadcrumbs({ modelsCount, folder, className }) {
+const Breadcrumbs = ({ modelsCount, folder, className }) => {
   const c = useStyles()
   return (
     <div className={classnames(className, c.Breadcrumbs_Row)}>
@@ -138,3 +138,5 @@ export function Breadcrumbs({ modelsCount, folder, className }) {
     </div>
   )
 }
+
+export default Breadcrumbs

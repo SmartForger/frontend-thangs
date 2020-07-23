@@ -2,7 +2,7 @@ import React from 'react'
 
 import { headerText } from '@style/text'
 import { NoResults } from '@components/NoResults'
-import { CardCollection } from '@components/CardCollection'
+import CardCollection from '@components/CardCollection'
 import { Spinner } from '@components/Spinner'
 import { ProgressText } from '@components/ProgressText'
 import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg'

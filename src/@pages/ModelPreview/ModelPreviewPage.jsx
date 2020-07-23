@@ -6,7 +6,7 @@ import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
 import { Button } from '@components/Button'
 import { ModelDetails } from './ModelDetails'
 import { LikeModelButton } from '@components/LikeModelButton'
-import { ModelViewer } from '@components/HoopsModelViewer'
+import ModelViewer from '@components/HoopsModelViewer'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 

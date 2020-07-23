@@ -49,7 +49,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-function CardContents({ className, model, showOwner, _hovered }) {
+const CardContents = ({ className, model, showOwner, _hovered }) => {
   const c = useStyles()
   return (
     <Card className={className}>
@@ -79,7 +79,7 @@ function CardContents({ className, model, showOwner, _hovered }) {
   )
 }
 
-function ModelCard({ className, model, withOwner }) {
+const ModelCard = ({ className, model, withOwner }) => {
   const showOwner = withOwner && model.owner
   const [hovered, setHovered] = useState(false)
 
@@ -104,4 +104,4 @@ function ModelCard({ className, model, withOwner }) {
   )
 }
 
-export { ModelCard }
+export default ModelCard

@@ -81,7 +81,7 @@ const isServerError = ([key, _info]) => {
   return key === 'server'
 }
 
-export function DisplayErrors({ errors, className, serverErrorMsg }) {
+export const DisplayErrors = ({ errors, className, serverErrorMsg }) => {
   const c = useStyles()
   const messages = R.toPairs(errors)
 
@@ -116,12 +116,12 @@ export function DisplayErrors({ errors, className, serverErrorMsg }) {
   })
 }
 
-export function CreateFolderForm({
+export const CreateFolderForm = ({
   onErrorReceived,
   afterCreate,
   onCancel,
   _membersLabel,
-}) {
+}) => {
   const c = useStyles()
   const validationResolver = data => {
     const members = data.members ? parseEmails(data.members) : []
@@ -233,7 +233,7 @@ export function CreateFolderForm({
   )
 }
 
-export function InviteUsersForm({ folderId, onErrorReceived, afterInvite, onCancel }) {
+export const InviteUsersForm = ({ folderId, onErrorReceived, afterInvite, onCancel }) => {
   const c = useStyles()
   const validationResolver = data => {
     const members = data.members ? parseEmails(data.members) : []

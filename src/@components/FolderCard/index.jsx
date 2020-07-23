@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { ModelThumbnail } from '../ModelThumbnail'
-import { FolderInfo } from '../FolderInfo'
+import FolderInfo from '../FolderInfo'
 import { Card } from '../Card'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -19,7 +19,7 @@ const useStyles = createUseStyles(theme => {
       gridGap: '.25rem',
     },
     FolderCard_Placeholder: {
-      backgroundColor: theme.color.GREY_13,
+      backgroundColor: theme.colors.GREY_13,
     },
     FolderCard_ModelThumbnail: {
       margin: 'auto',
@@ -41,12 +41,12 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-function Placeholder() {
+const Placeholder = () => {
   const c = useStyles()
   return <Card className={c.FolderCard_Placeholder} />
 }
 
-function PossiblyEmptyModelCard({ model, className }) {
+const PossiblyEmptyModelCard = ({ model, className }) => {
   const c = useStyles()
   return model ? (
     <Card className={className}>
@@ -57,7 +57,7 @@ function PossiblyEmptyModelCard({ model, className }) {
   )
 }
 
-function CardContents({ className, folder }) {
+const CardContents = ({ className, folder }) => {
   const c = useStyles()
   const [model1, model2] = folder.models
   return (
@@ -71,7 +71,7 @@ function CardContents({ className, folder }) {
   )
 }
 
-function FolderCard({ folder }) {
+const FolderCard = ({ folder }) => {
   return (
     <Link to={`/folder/${folder.id}`}>
       <CardContents folder={folder} />
@@ -79,4 +79,4 @@ function FolderCard({ folder }) {
   )
 }
 
-export { FolderCard }
+export default FolderCard

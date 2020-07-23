@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import * as R from 'ramda'
 import classnames from 'classnames'
 import { UserInline } from '../UserInline'
-import { Modal } from '../Modal'
+import Modal from '../Modal'
 import { authenticationService } from '../../@services'
 import { Button } from '../Button'
 import { InviteUsersForm, DisplayErrors } from '../FolderForm'
-import { FolderInfo } from '../FolderInfo'
+import FolderInfo from '../FolderInfo'
 import { Spinner } from '../Spinner'
 import { ReactComponent as TrashCanIcon } from '../../@svg/trash-can-icon.svg'
 import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg'
@@ -60,7 +60,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-function RevokeAccessButton({ folderId, targetUserId, children }) {
+const RevokeAccessButton = ({ folderId, targetUserId, children }) => {
   const c = useStyles()
   const [revokeAccess, { loading, error }] = useRevokeAccess(folderId, targetUserId)
   const handleRevoke = async e => {
@@ -89,7 +89,7 @@ function RevokeAccessButton({ folderId, targetUserId, children }) {
   )
 }
 
-function UserList({ users = [], folderId, creator }) {
+const UserList = ({ users = [], folderId, creator }) => {
   const c = useStyles()
   const currentUserId = authenticationService.getCurrentUserId()
 
@@ -118,13 +118,7 @@ function UserList({ users = [], folderId, creator }) {
   )
 }
 
-export function FolderManagementModal({
-  isOpen,
-  folder,
-  afterInvite,
-  onCancel,
-  className,
-}) {
+const FolderManagementModal = ({ isOpen, folder, afterInvite, onCancel, className }) => {
   const [errors, setErrors] = useState()
   const hasErrors = errors && !R.isEmpty(errors)
   const c = useStyles({ hasErrors })
@@ -171,3 +165,5 @@ export function FolderManagementModal({
     </Modal>
   )
 }
+
+export default FolderManagementModal

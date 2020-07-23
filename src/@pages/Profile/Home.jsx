@@ -6,7 +6,7 @@ import { WithFlash } from '@components/Flash'
 import { useCurrentUser } from '@customHooks/Users'
 import { Spinner } from '@components/Spinner'
 import { Message404 } from '../404'
-import { CardCollection } from '@components/CardCollection'
+import CardCollection from '@components/CardCollection'
 import { subheaderText } from '@style/text'
 import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg'
 import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg'
@@ -41,7 +41,7 @@ export * from './EditProfile'
 export * from './RedirectProfile'
 export * from './Likes'
 
-function ModelsTitle({ user, selected, onClick }) {
+const ModelsTitle = ({ user, selected, onClick }) => {
   const c = useStyles()
   const models = R.pathOr([], ['models'])(user)
   const modelAmount = models.length
@@ -53,7 +53,7 @@ function ModelsTitle({ user, selected, onClick }) {
   )
 }
 
-function FoldersTitle({ user, selected, onClick, className }) {
+const FoldersTitle = ({ user, selected, onClick, className }) => {
   const c = useStyles()
   const folders = R.pathOr([], ['folders'])(user)
   const folderAmount = folders.length
@@ -68,7 +68,7 @@ function FoldersTitle({ user, selected, onClick, className }) {
 const getModels = R.pathOr([], ['models'])
 const getFolders = R.pathOr([], ['folders'])
 
-function PageContent({ user }) {
+const PageContent = ({ user }) => {
   const c = useStyles()
   const [selected, setSelected] = useState('models')
 
@@ -118,7 +118,7 @@ function PageContent({ user }) {
   )
 }
 
-function Page() {
+const Page = () => {
   const { user, error, loading } = useCurrentUser()
 
   if (loading) {

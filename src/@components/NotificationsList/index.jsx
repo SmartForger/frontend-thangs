@@ -21,7 +21,7 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-export function NotificationsList({ className }) {
+const NotificationsList = ({ className }) => {
   const c = useStyles()
   const { loading, error, notifications } = useNotifications()
 
@@ -55,3 +55,5 @@ export function NotificationsList({ className }) {
     </ol>
   )
 }
+
+export default NotificationsList

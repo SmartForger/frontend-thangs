@@ -31,7 +31,7 @@ const CATEGORIES = [
   { value: 'hobbyist', label: 'Hobbyist' },
 ]
 
-export function CategorySelect({ setCategory }) {
+const CategorySelect = ({ setCategory }) => {
   const c = useStyles()
   return (
     <Select
@@ -96,3 +96,5 @@ export function CategorySelect({ setCategory }) {
     />
   )
 }
+
+export default CategorySelect

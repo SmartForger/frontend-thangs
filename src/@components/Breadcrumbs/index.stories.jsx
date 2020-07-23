@@ -1,6 +1,6 @@
 import React from 'react'
 import { withApolloProvider } from '../../../.storybook/withApolloProvider'
-import { Breadcrumbs } from './'
+import Breadcrumbs from './'
 
 export default {
   title: 'Breadcrumbs',
@@ -8,7 +8,7 @@ export default {
   decorators: [withApolloProvider()],
 }
 
-export function FolderBreadcrumbs() {
+export const FolderBreadcrumbs = () => {
   const folderFixture = {
     name: '4 Cylinder Engine Project',
     id: 9,

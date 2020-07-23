@@ -8,7 +8,7 @@ import { Button, DarkButton } from '../Button'
 import { ProgressText } from '../ProgressText'
 import { Uploader } from '../Uploader'
 import { UploadFrame } from '../UploadFrame'
-import { CategorySelect } from './CategorySelect'
+import CategorySelect from './CategorySelect'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -59,7 +59,7 @@ const useStyles = createUseStyles(theme => {
     ModelUploadForm_Spinner: {
       marginTop: '14rem',
       '& .path': {
-        stroke: theme.color.uploaderText,
+        stroke: theme.colors.uploaderText,
       },
     },
     ModelUploadForm_Dots: {
@@ -70,12 +70,12 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-function ShowError({ message }) {
+const ShowError = ({ message }) => {
   const c = useStyles()
   return <span className={c.ModelUploadForm_Error}>{message}</span>
 }
 
-export function ModelUploadForm({ onSubmit, isUploading, error, onCancel }) {
+const ModelUploadForm = ({ onSubmit, isUploading, error, onCancel }) => {
   const c = useStyles()
   const { register, handleSubmit, errors } = useForm()
   const [file, setFile] = useState()
@@ -193,3 +193,5 @@ export function ModelUploadForm({ onSubmit, isUploading, error, onCancel }) {
     </form>
   )
 }
+
+export default ModelUploadForm

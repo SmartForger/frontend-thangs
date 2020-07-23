@@ -1,5 +1,5 @@
 import React from 'react'
-import { FolderCreateModal } from './'
+import FolderCreateModal from './'
 import { action } from '@storybook/addon-actions'
 import { authenticationService } from '@services'
 import { withApolloProvider } from '../../../.storybook/withApolloProvider'
@@ -11,7 +11,7 @@ export default {
   component: FolderCreateModal,
 }
 
-export function Successful() {
+export const Successful = () => {
   authenticationService.getCurrentUserId = () => '1111'
   return (
     <FolderCreateModal
@@ -37,7 +37,7 @@ Successful.story = {
   ],
 }
 
-export function Error() {
+export const Error = () => {
   authenticationService.getCurrentUserId = () => '1111'
   return (
     <FolderCreateModal

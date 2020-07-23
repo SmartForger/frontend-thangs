@@ -8,7 +8,7 @@ import { useFolder } from '../../@customHooks/Folders'
 import { Uploader } from '@components/Uploader'
 import { Button } from '@components/Button'
 import { useFlashNotification } from '../../@components/Flash'
-import { Breadcrumbs } from '../../@components/Breadcrumbs'
+import Breadcrumbs from '../../@components/Breadcrumbs'
 import { useAddToFolder } from '../../@customHooks/Folders'
 import { Spinner } from '@components/Spinner'
 import { UploadFrame } from '@components/UploadFrame'
@@ -74,7 +74,7 @@ const useStyles = createUseStyles(theme => {
     FolderUpload_Spinner: {
       marginTop: '14rem',
       '& .path': {
-        stroke: theme.color.uploaderText,
+        stroke: theme.colors.uploaderText,
       },
     },
     FolderUpload_Dots: {

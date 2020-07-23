@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Spinner } from '@components/Spinner'
 import { HowTo } from '@components/HowTo'
 import { useLocalStorage } from '@customHooks/Storage'
-import { Toolbar } from './Toolbar'
+import Toolbar from './Toolbar'
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg'
 import { viewerLoadingText } from '@style/text'
 
@@ -40,7 +40,7 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-function HoopsModelViewer({ className, model }) {
+const HoopsModelViewer = ({ className, model }) => {
   const c = useStyles()
   const [meshColor, setMeshColor] = useState()
   const [wireColor, setWireColor] = useState()
@@ -85,19 +85,6 @@ function HoopsModelViewer({ className, model }) {
   )
 }
 
-export function ModelViewer({ className, model }) {
-  const c = useStyles()
-  const [seenHowTo, setSeenHowTo] = useLocalStorage('seenHowTo', false)
-
-  return seenHowTo ? (
-    <HoopsModelViewer className={className} model={model} />
-  ) : (
-    <div className={classnames(className, c.HoopsModelViewer_WebViewContainer)}>
-      <HowTo setSeenHowTo={setSeenHowTo} />
-    </div>
-  )
-}
-
 const StatusIndicator = ({ status }) => {
   const c = useStyles()
   if (status.isReady) {
@@ -123,3 +110,18 @@ const StatusIndicator = ({ status }) => {
     </div>
   )
 }
+
+const ModelViewer = ({ className, model }) => {
+  const c = useStyles()
+  const [seenHowTo, setSeenHowTo] = useLocalStorage('seenHowTo', false)
+
+  return seenHowTo ? (
+    <HoopsModelViewer className={className} model={model} />
+  ) : (
+    <div className={classnames(className, c.HoopsModelViewer_WebViewContainer)}>
+      <HowTo setSeenHowTo={setSeenHowTo} />
+    </div>
+  )
+}
+
+export default ModelViewer

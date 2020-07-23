@@ -24,7 +24,7 @@ export default {
   component: DropdownMenu,
 }
 
-export function WithOnlyTextUncontrolled() {
+export const WithOnlyTextUncontrolled = () => {
   const c = useStyles()
   return (
     <div>
@@ -37,7 +37,7 @@ export function WithOnlyTextUncontrolled() {
   )
 }
 
-export function WithOnlyTextControlledOpen() {
+export const WithOnlyTextControlledOpen = () => {
   const c = useStyles()
   return (
     <div>
@@ -50,7 +50,7 @@ export function WithOnlyTextControlledOpen() {
   )
 }
 
-export function WithIconsUncontrolled() {
+export const WithIconsUncontrolled = () => {
   const c = useStyles()
   return (
     <div>
@@ -76,7 +76,7 @@ export function WithIconsUncontrolled() {
   )
 }
 
-export function WithIconsControlledOpen() {
+export const WithIconsControlledOpen = () => {
   const c = useStyles()
   return (
     <div>

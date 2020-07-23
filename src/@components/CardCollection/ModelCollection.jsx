@@ -1,6 +1,6 @@
 import React from 'react'
 import { NoResults } from '../NoResults'
-import { ModelCard } from '../ModelCard'
+import ModelCard from '../ModelCard'
 import { ShowMoreButton } from '../ShowMore'
 import { Grid } from './Grid'
 import { createUseStyles } from '@style'
@@ -17,13 +17,13 @@ const useStyles = createUseStyles(_theme => {
 
 const NOOP = () => null
 
-export function ModelCollection({
+const ModelCollection = ({
   models = [],
   maxPerRow = 4,
   noResultsText,
   fetchMore = NOOP,
   hasMore,
-}) {
+}) => {
   const c = useStyles()
   if (!models || models.length < 1) {
     return <NoResults>{noResultsText}</NoResults>
@@ -43,3 +43,5 @@ export function ModelCollection({
     </>
   )
 }
+
+export default ModelCollection

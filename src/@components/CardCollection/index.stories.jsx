@@ -1,5 +1,5 @@
 import React from 'react'
-import { CardCollection } from './'
+import CardCollection from './'
 import { withApolloProvider } from '../../../.storybook/withApolloProvider'
 import ThumbnailFixture from '../../../.storybook/fixtures/model-thumbnail.png'
 import UserImgFixture from '../../../.storybook/fixtures/user-img.png'
@@ -34,13 +34,11 @@ export default {
   decorators: [withApolloProvider()],
 }
 
-export function SingleRowModels() {
-  return (
-    <CardCollection models={[modelFixture, modelFixture]}></CardCollection>
-  )
+export const SingleRowModels = () => {
+  return <CardCollection models={[modelFixture, modelFixture]}></CardCollection>
 }
 
-export function MultipleRowsModels() {
+export const MultipleRowsModels = () => {
   return (
     <CardCollection
       models={[
@@ -57,24 +55,20 @@ export function MultipleRowsModels() {
   )
 }
 
-export function NoResults() {
+export const NoResults = () => {
   return (
     <CardCollection
       models={[]}
-      noResultsText="No geometric similar matches found. Try uploading another model."
+      noResultsText='No geometric similar matches found. Try uploading another model.'
     ></CardCollection>
   )
 }
 
-export function SingleRowFolders() {
-  return (
-    <CardCollection
-      folders={[folderFixture, folderFixture]}
-    ></CardCollection>
-  )
+export const SingleRowFolders = () => {
+  return <CardCollection folders={[folderFixture, folderFixture]}></CardCollection>
 }
 
-export function MultipleRowFolders() {
+export const MultipleRowFolders = () => {
   return (
     <CardCollection
       folders={[
@@ -89,16 +83,10 @@ export function MultipleRowFolders() {
   )
 }
 
-export function MultipleRowModelsAndFolders() {
+export const MultipleRowModelsAndFolders = () => {
   return (
     <CardCollection
-      models={[
-        modelFixture,
-        modelFixture,
-        modelFixture,
-        modelFixture,
-        modelFixture,
-      ]}
+      models={[modelFixture, modelFixture, modelFixture, modelFixture, modelFixture]}
       folders={[
         folderFixture,
         folderFixture,

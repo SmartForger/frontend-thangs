@@ -5,7 +5,7 @@ import { ProfilePicture } from '@components/ProfilePicture'
 import { useCurrentUser } from '@customHooks/Users'
 import { useUnreadNotificationCount } from '@customHooks/Notifications'
 import { DropdownMenu, DropdownItem } from '@components/DropdownMenu'
-import { FolderCreateModal } from '@components/FolderCreateModal'
+import FolderCreateModal from '@components/FolderCreateModal'
 import { linkText } from '@style/text'
 import { Button } from '@components/Button'
 import { authenticationService } from '@services'
@@ -28,6 +28,7 @@ const useStyles = createUseStyles(theme => {
   const {
     mediaQueries: { md },
   } = theme
+  console.log('what I got', theme)
   return {
     Header: {},
     Header__fixed: {

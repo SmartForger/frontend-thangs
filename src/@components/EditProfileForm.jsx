@@ -35,14 +35,14 @@ const useStyles = createUseStyles(theme => {
       marginBottom: '.5rem',
       borderRadius: '.5rem',
       minWidth: 0,
-      backgroundColor: theme.color.textInputBackground,
+      backgroundColor: theme.colors.textInputBackground,
     },
     EditProfileForm_textarea: {
       resize: 'vertical',
       border: 0,
       padding: '.5rem 1rem',
       borderRadius: '.5rem',
-      backgroundColor: theme.color.textInputBackground,
+      backgroundColor: theme.colors.textInputBackground,
     },
   }
 })

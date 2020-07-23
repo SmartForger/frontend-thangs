@@ -31,14 +31,14 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export function FolderInfo({
+const FolderInfo = ({
   name,
   members = [],
   models = [],
   boldName,
   hideModels,
   className,
-}) {
+}) => {
   const c = useStyles()
   return (
     <div className={classnames(className, c.FolderIcon)}>
@@ -68,3 +68,5 @@ export function FolderInfo({
     </div>
   )
 }
+
+export default FolderInfo

@@ -12,7 +12,7 @@ import { Message404 } from '../404'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as AboutIcon } from '@svg/about-icon.svg'
 import { ReactComponent as ModelIcon } from '@svg/model-icon.svg'
-import { CardCollection } from '@components/CardCollection'
+import CardCollection from '@components/CardCollection'
 import { ToggleFollowButton } from '@components/ToggleFollowButton'
 import {
   subheaderText,
@@ -91,7 +91,7 @@ export * from './Home'
 
 const graphqlService = GraphqlService.getInstance()
 
-function ModelCount({ user }) {
+const ModelCount = ({ user }) => {
   const models = R.pathOr([], ['models'])(user)
   const { user: currentUser, loading } = useCurrentUser()
   if (loading || !currentUser) {
@@ -102,7 +102,7 @@ function ModelCount({ user }) {
   return <span>Models {amount}</span>
 }
 
-function Models({ selected, onClick, user }) {
+const Models = ({ selected, onClick, user }) => {
   const c = useStyles()
   return (
     <div className={c.Profile_TabTitle} selected={selected} onClick={onClick}>
@@ -114,7 +114,7 @@ function Models({ selected, onClick, user }) {
   )
 }
 
-function Likes({ selected, onClick, user }) {
+const Likes = ({ selected, onClick, user }) => {
   const c = useStyles()
   const likes = getLikedModels(user)
   const amount = likes.length
@@ -129,7 +129,7 @@ function Likes({ selected, onClick, user }) {
   )
 }
 
-function About({ selected, onClick, _user }) {
+const About = ({ selected, onClick, _user }) => {
   const c = useStyles()
   return (
     <div className={c.Profile_TabTitle} selected={selected} onClick={onClick}>
@@ -145,7 +145,7 @@ const getDescription = R.pathOr(null, ['profile', 'description'])
 const getModels = R.pathOr([], ['models'])
 const getLikedModels = R.pathOr([], ['likedModels'])
 
-function AboutContent({ selected, user }) {
+const AboutContent = ({ selected, user }) => {
   const c = useStyles()
   if (!selected) {
     return null
@@ -154,7 +154,7 @@ function AboutContent({ selected, user }) {
   return <Markdown className={c.Profile_Markdown}>{description}</Markdown>
 }
 
-function ModelsContent({ selected, user }) {
+const ModelsContent = ({ selected, user }) => {
   const models = getModels(user)
   const { user: currentUser, loading } = useCurrentUser()
 
@@ -180,7 +180,7 @@ function ModelsContent({ selected, user }) {
   )
 }
 
-function LikesContent({ selected, user }) {
+const LikesContent = ({ selected, user }) => {
   if (!selected) {
     return null
   }
@@ -193,7 +193,7 @@ function LikesContent({ selected, user }) {
   )
 }
 
-function Tabs({ user }) {
+const Tabs = ({ user }) => {
   const [selected, setSelected] = useState('models')
 
   const selectModel = () => setSelected('models')
@@ -217,7 +217,7 @@ function Tabs({ user }) {
   )
 }
 
-function ProfileButton({ viewedUser, className }) {
+const ProfileButton = ({ viewedUser, className }) => {
   const c = useStyles()
   const { user } = useCurrentUser()
 
@@ -232,7 +232,7 @@ function ProfileButton({ viewedUser, className }) {
   )
 }
 
-function Page() {
+const Page = () => {
   const { id } = useParams()
   const { loading, error, user } = graphqlService.useUserById(id)
   const c = useStyles()

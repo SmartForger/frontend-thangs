@@ -43,9 +43,9 @@ const useStyles = createUseStyles(theme => {
     },
     Button__secondary: {
       ...secondaryButtonText,
-      backgroundColor: theme.color.purple[300],
+      backgroundColor: theme.colors.purple[300],
       '&:hover': {
-        backgroundColor: theme.color.purple[500],
+        backgroundColor: theme.colors.purple[500],
       },
     },
     Button__back: {
@@ -57,9 +57,9 @@ const useStyles = createUseStyles(theme => {
     },
     Button__dark: {
       ...darkButtonText,
-      backgroundColor: theme.color.purple[500],
+      backgroundColor: theme.colors.purple[500],
       '&:hover': {
-        backgroundColor: theme.color.purple[800],
+        backgroundColor: theme.colors.purple[800],
       },
     },
     Button__text: {
@@ -84,7 +84,7 @@ const useStyles = createUseStyles(theme => {
 
       '&:hover': {
         ...matchingButtonHoverText,
-        backgroundColor: theme.color.gold[800],
+        backgroundColor: theme.colors.gold[800],
       },
     },
   }

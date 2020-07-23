@@ -12,7 +12,7 @@ export const useGlobalStyles = createUseStyles(theme => {
         background: theme.colors.backgroundColor,
         fontFamily: theme.colors.buttonFont,
         fontSize: '.875rem',
-        color: theme.colors.mainFontColor,
+        color: theme.colors.mainFontColor || theme.colors.grey[700],
       },
 
       a: {

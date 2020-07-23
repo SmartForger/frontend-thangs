@@ -1,5 +1,5 @@
 import React from 'react'
-import { NewModelCommentForm } from './NewModelCommentForm'
+import NewModelCommentForm from './NewModelCommentForm'
 import { authenticationService } from '@services'
 import { USER_QUERY } from '../../@services/graphql-service/users'
 import {
@@ -59,7 +59,7 @@ const requestMockHandlers = {
 export function Story() {
   authenticationService.getCurrentUser = () => ({ id: '1111' })
 
-  return <NewModelCommentForm modelId="9999" />
+  return <NewModelCommentForm modelId='9999' />
 }
 
 export default {

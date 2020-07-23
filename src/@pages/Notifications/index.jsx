@@ -1,7 +1,7 @@
 import React from 'react'
 import { headerText } from '@style/text'
 import { WithNewThemeLayout } from '@style/Layout'
-import { NotificationsList } from '@components/NotificationsList'
+import NotificationsList from '@components/NotificationsList'
 import { Button } from '@components/Button'
 import { Spinner } from '@components/Spinner'
 import { useUpdateLastCheckedNotifications } from '@customHooks/Notifications'

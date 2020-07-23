@@ -28,7 +28,7 @@ const useStyles = createUseStyles(theme => {
         '&:before': {
           content: ' ',
           display: 'block',
-          backgroundColor: theme.color.cardBackground,
+          backgroundColor: theme.colors.cardBackground,
           backgroundImage: `url(${ErrorImg})`,
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center 37%',

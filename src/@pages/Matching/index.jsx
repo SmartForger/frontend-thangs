@@ -5,7 +5,7 @@ import { Button } from '@components/Button'
 import { Uploader } from '@components/Uploader'
 import * as GraphqlService from '@services/graphql-service'
 import { authenticationService } from '@services'
-import { CardCollection } from '@components/CardCollection'
+import CardCollection from '@components/CardCollection'
 import { UploadProgress } from '@components/UploadProgress'
 
 import { subheaderText, matchingSubheader } from '@style/text'

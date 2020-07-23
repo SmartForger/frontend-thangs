@@ -66,13 +66,13 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export function Toolbar({
+const Toolbar = ({
   onResetView,
   onDrawModeChange,
   onColorChange,
   meshColor,
   wireColor,
-}) {
+}) => {
   const c = useStyles()
   const makeDrawModeHandler = modeName => () => {
     onDrawModeChange(modeName)
@@ -130,3 +130,5 @@ export function Toolbar({
     </div>
   )
 }
+
+export default Toolbar

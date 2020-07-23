@@ -2,7 +2,7 @@ import React from 'react'
 import * as R from 'ramda'
 import { action } from '@storybook/addon-actions'
 import { withApolloProvider } from '../../../.storybook/withApolloProvider'
-import { FolderManagementModal } from './'
+import FolderManagementModal from './'
 import { USER_QUERY } from '../../@services/graphql-service/users'
 import {
   FOLDER_QUERY,
@@ -93,7 +93,7 @@ export default {
   component: FolderManagementModal,
 }
 
-export function WithOtherUsers() {
+export const WithOtherUsers = () => {
   return (
     <FolderManagementModal
       folder={folderFixture}
@@ -108,7 +108,7 @@ WithOtherUsers.story = {
   decorators: [withApolloProvider(provider)],
 }
 
-export function WithServerError() {
+export const WithServerError = () => {
   return (
     <FolderManagementModal
       folder={folderFixture}

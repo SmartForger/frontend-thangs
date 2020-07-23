@@ -7,7 +7,7 @@ const useStyles = createUseStyles(theme => {
     Tag: {
       width: 'fit-content',
       background: theme.colors.grey[500],
-      color: theme.color.secondary,
+      color: theme.colors.secondary,
       margin: '2px',
       padding: '4px',
       userSelect: 'none',
@@ -16,8 +16,8 @@ const useStyles = createUseStyles(theme => {
       transition: '0.2s all',
 
       '&:hover': {
-        background: theme.color.secondary,
-        color: theme.color.secondary,
+        background: theme.colors.secondary,
+        color: theme.colors.secondary,
         transform: 'scale(1.05)',
       },
     },

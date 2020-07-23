@@ -105,7 +105,7 @@ const CATEGORIES = [
   { value: 'hobbyist', label: 'Hobbyist' },
 ]
 
-function ShowError({ message }) {
+const ShowError = ({ message }) => {
   const c = useStyles()
   return <span className={c.Upload_Error}>{message}</span>
 }
@@ -325,6 +325,4 @@ const Page = () => {
   )
 }
 
-const Upload = WithNewThemeLayout(Page)
-
-export { Upload }
+export const Upload = WithNewThemeLayout(Page)

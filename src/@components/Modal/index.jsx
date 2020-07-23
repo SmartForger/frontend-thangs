@@ -21,7 +21,9 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const Modal = props => {
+const Modal = props => {
   const c = useStyles(props)
   return <ReactModal className={c.Modal}></ReactModal>
 }
+
+export default Modal

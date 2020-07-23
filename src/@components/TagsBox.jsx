@@ -9,7 +9,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexFlow: 'row wrap',
       alignContent: 'flex-start',
-      background: theme.color.white[500],
+      background: theme.colors.white[500],
       padding: '.5rem',
       borderRadius: '.25rem',
     },

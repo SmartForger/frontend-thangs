@@ -40,7 +40,7 @@ const useStyles = createUseStyles(_theme => {
 
 const graphqlService = GraphqlService.getInstance()
 
-function PictureForm({ user, className }) {
+const PictureForm = ({ user, className }) => {
   const c = useStyles()
   const [deleteProfileAvatar, { loading }] = graphqlService.useDeleteUserAvatarMutation(
     user
@@ -80,7 +80,7 @@ function PictureForm({ user, className }) {
   )
 }
 
-function WarningOnEmptyProfile({ user }) {
+const WarningOnEmptyProfile = ({ user }) => {
   if (!user.profile.description) {
     return (
       <Flash>
@@ -92,7 +92,7 @@ function WarningOnEmptyProfile({ user }) {
   return null
 }
 
-function Page() {
+const Page = () => {
   const c = useStyles()
   const { loading, error, user } = useCurrentUser()
 
@@ -117,6 +117,4 @@ function Page() {
   )
 }
 
-const EditProfile = WithNewThemeLayout(Page)
-
-export { EditProfile }
+export const EditProfile = WithNewThemeLayout(Page)

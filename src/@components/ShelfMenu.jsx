@@ -5,16 +5,16 @@ const useStyles = createUseStyles(theme => {
   return {
     Shelf: {
       position: 'absolute',
-      background: theme.color.grey,
+      background: theme.colors.grey,
       width: '17vw',
       right: '5vw',
-      borderBottom: `2px solid ${theme.color.darkgrey}`,
+      borderBottom: `2px solid ${theme.colors.darkgrey}`,
       transform: ({ open }) => (open ? 'translateY(-1vh)' : 'translateY(-90vh)'),
       transition: '0.5s all',
       zIndex: 9,
     },
     ShelfButton: {
-      background: theme.color.grey,
+      background: theme.colors.grey,
       width: '3rem',
       height: '100%',
       position: 'relative',
@@ -26,7 +26,7 @@ const useStyles = createUseStyles(theme => {
       '& > div': {
         width: '1rem',
         height: '1rem',
-        background: theme.color.darkgrey,
+        background: theme.colors.darkgrey,
         borderRadius: '50%',
         transition: 'all 0.3s linear',
       },
