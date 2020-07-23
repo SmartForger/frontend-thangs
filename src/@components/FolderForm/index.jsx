@@ -2,10 +2,11 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import Joi from '@hapi/joi'
 import * as R from 'ramda'
-import { Button, DarkButton } from '../Button'
+import { Button } from '../Button'
 import { Spinner } from '../Spinner'
 import { useCreateFolder, useInviteToFolder } from '../../@customHooks/Folders'
 import { formErrorText } from '../../@style/text'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -34,7 +35,7 @@ const useStyles = createUseStyles(theme => {
       marginBottom: '.5rem',
       borderRadius: '.5rem',
       minWidth: 0,
-      background: theme.colors.WHITE_4,
+      background: theme.colors.white[900],
     },
     FolderForm_ErrorText: {
       ...formErrorText,
@@ -76,11 +77,9 @@ const isInvalidEmail = ([key, info]) => {
   return key === 'members' && info.type === 'string.email'
 }
 
-const isServerError = ([key, info]) => {
+const isServerError = ([key, _info]) => {
   return key === 'server'
 }
-
-const ErrorTextStyle = styled.h4``
 
 export function DisplayErrors({ errors, className, serverErrorMsg }) {
   const c = useStyles()
@@ -121,7 +120,7 @@ export function CreateFolderForm({
   onErrorReceived,
   afterCreate,
   onCancel,
-  membersLabel,
+  _membersLabel,
 }) {
   const c = useStyles()
   const validationResolver = data => {
@@ -134,13 +133,15 @@ export function CreateFolderForm({
     const { error, value: values } = schemaWithName.validate(input)
 
     const errors = error
-      ? error.details.reduce((previous, currentError) => {
+      ? /* eslint-disable indent */
+        error.details.reduce((previous, currentError) => {
           return {
             ...previous,
             [currentError.path[0]]: currentError,
           }
         }, {})
       : {}
+    /* eslint-enable indent */
 
     onErrorReceived(R.equals(errors, {}) ? undefined : errors)
 
@@ -207,7 +208,8 @@ export function CreateFolderForm({
           margin-top: 48px;
         `}
       >
-        <DarkButton
+        <Button
+          dark
           onClick={handleCancel}
           css={`
             margin-right: 16px;
@@ -216,7 +218,7 @@ export function CreateFolderForm({
           type='button'
         >
           Cancel
-        </DarkButton>
+        </Button>
         <Button
           type='submit'
           css={`
@@ -240,13 +242,15 @@ export function InviteUsersForm({ folderId, onErrorReceived, afterInvite, onCanc
     const { error, value: values } = schemaWithoutName.validate(input)
 
     const errors = error
-      ? error.details.reduce((previous, currentError) => {
+      ? /* eslint-disable indent */
+        error.details.reduce((previous, currentError) => {
           return {
             ...previous,
             [currentError.path[0]]: currentError,
           }
         }, {})
       : {}
+    /* eslint-enable indent */
 
     onErrorReceived(R.equals(errors, {}) ? undefined : errors)
 
@@ -304,7 +308,8 @@ export function InviteUsersForm({ folderId, onErrorReceived, afterInvite, onCanc
           margin-top: 48px;
         `}
       >
-        <DarkButton
+        <Button
+          dark
           onClick={handleCancel}
           css={`
             margin-right: 16px;
@@ -313,7 +318,7 @@ export function InviteUsersForm({ folderId, onErrorReceived, afterInvite, onCanc
           type='button'
         >
           Cancel
-        </DarkButton>
+        </Button>
         <Button
           type='submit'
           css={`

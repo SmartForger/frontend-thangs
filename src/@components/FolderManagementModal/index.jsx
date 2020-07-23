@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import { UserInline } from '../UserInline'
 import { Modal } from '../Modal'
 import { authenticationService } from '../../@services'
-import { TextButton } from '../Button'
+import { Button } from '../Button'
 import { InviteUsersForm, DisplayErrors } from '../FolderForm'
 import { FolderInfo } from '../FolderInfo'
 import { Spinner } from '../Spinner'
@@ -18,7 +18,12 @@ const useStyles = createUseStyles(theme => {
     mediaQueries: { md },
   } = theme
   return {
-    FolderManagementModal: {},
+    FolderManagementModal: {
+      width: '100%',
+      [md]: {
+        maxWidth: '31.25rem',
+      },
+    },
     FolderManagementModal_Spinner: {
       width: '1rem',
       height: '1rem',
@@ -50,12 +55,13 @@ const useStyles = createUseStyles(theme => {
       marginTop: 0,
     },
     FolderManagementModal_TrashCanIcon: {
-      color: theme.colors.GREY_12,
+      color: theme.colors.grey[500],
     },
   }
 })
 
 function RevokeAccessButton({ folderId, targetUserId, children }) {
+  const c = useStyles()
   const [revokeAccess, { loading, error }] = useRevokeAccess(folderId, targetUserId)
   const handleRevoke = async e => {
     e.preventDefault()
@@ -71,7 +77,7 @@ function RevokeAccessButton({ folderId, targetUserId, children }) {
   }
 
   return (
-    <TextButton onClick={handleRevoke}>
+    <Button text onClick={handleRevoke}>
       {loading ? (
         <Spinner className={c.FolderManagementModal_Spinner} />
       ) : error ? (
@@ -79,11 +85,12 @@ function RevokeAccessButton({ folderId, targetUserId, children }) {
       ) : (
         children
       )}
-    </TextButton>
+    </Button>
   )
 }
 
 function UserList({ users = [], folderId, creator }) {
+  const c = useStyles()
   const currentUserId = authenticationService.getCurrentUserId()
 
   return (
@@ -122,16 +129,7 @@ export function FolderManagementModal({
   const hasErrors = errors && !R.isEmpty(errors)
   const c = useStyles({ hasErrors })
   return (
-    <Modal
-      isOpen={isOpen}
-      className={className}
-      css={`
-        width: 100%;
-        ${mediaMdPlus} {
-          max-width: 500px;
-        }
-      `}
-    >
+    <Modal isOpen={isOpen} className={classnames(className, c.FolderManagementModal)}>
       <FolderInfo
         name={folder.name}
         members={folder.members}

@@ -1,11 +1,22 @@
-import styled from 'styled-components/macro';
+import React from 'react'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
-export const Grid = styled.div`
-    display: grid;
-    grid-template-columns: repeat(
-        ${props => (props.singleRow ? 'auto-fill' : 'auto-fit')},
-        ${props => (props.singleRow ? '344px' : 'minmax(344px, 1fr)')}
-    );
-    gap: 16px;
-    width: 100%;
-`;
+const useStyles = createUseStyles(_theme => {
+  return {
+    Grid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit minmax(21.5rem, 1fr))',
+      gap: '1rem',
+      width: '100%',
+    },
+    Grid__singleRow: {
+      gridTemplateColumns: 'repeat(auto-fill 21.5rem)',
+    },
+  }
+})
+
+export const Grid = ({ singleRow }) => {
+  const c = useStyles()
+  return <div className={classnames(c.Grid, { [c.Grid__singleRow]: singleRow })}></div>
+}

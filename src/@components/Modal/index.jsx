@@ -1,3 +1,4 @@
+import React from 'react'
 import ReactModal from 'react-modal'
 import { createUseStyles } from '@style'
 
@@ -5,10 +6,10 @@ ReactModal.setAppElement('#root')
 
 const useStyles = createUseStyles(theme => {
   return {
-    ReactModal: {
+    Modal: {
       position: 'fixed',
       padding: '2.5rem 4rem 4rem',
-      background: theme.colors.WHITE_1,
+      background: theme.colors.white[400],
       overflow: 'auto',
       borderRadius: '.5rem',
       outline: 'none',
@@ -20,7 +21,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const ReactModal = props => {
+export const Modal = props => {
   const c = useStyles(props)
-  return <div className={c.ReactModal}></div>
+  return <ReactModal className={c.Modal}></ReactModal>
 }

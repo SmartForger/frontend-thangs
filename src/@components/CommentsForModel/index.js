@@ -1,1 +1,1 @@
-export { CommentsForModel } from './CommentsForModel';
+export { CommentsForModel } from './CommentsForModel'

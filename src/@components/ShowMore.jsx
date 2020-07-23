@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { TextButton } from './Button'
+import { Button } from './Button'
 import { Spinner } from './Spinner'
 import { linkText } from '../@style/text'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(_theme => {
@@ -25,8 +26,10 @@ export function ShowMore({ more, className }) {
   return shouldShowMore ? (
     more
   ) : (
-    <div className={c.ShowMoreButton}>
-      <TextButton onClick={() => setShouldShowMore(true)}>Show More</TextButton>
+    <div className={classnames(className, c.ShowMoreButton)}>
+      <Button text onClick={() => setShouldShowMore(true)}>
+        Show More
+      </Button>
     </div>
   )
 }
@@ -35,6 +38,8 @@ export function ShowMore({ more, className }) {
 export function ShowMoreButton({ fetchMore }) {
   const [loading, setLoading] = useState()
   const [hadError, setHadError] = useState()
+  const c = useStyles()
+
   const handleClick = async e => {
     e.preventDefault()
     setLoading(true)
@@ -46,7 +51,7 @@ export function ShowMoreButton({ fetchMore }) {
     }
   }
   return (
-    <TextButton className={c.ShowMoreButton} onClick={handleClick}>
+    <Button text className={c.ShowMoreButton} onClick={handleClick}>
       {hadError ? (
         'Server Error'
       ) : loading ? (
@@ -54,6 +59,6 @@ export function ShowMoreButton({ fetchMore }) {
       ) : (
         'Show More'
       )}
-    </TextButton>
+    </Button>
   )
 }

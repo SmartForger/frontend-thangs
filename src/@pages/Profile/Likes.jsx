@@ -1,68 +1,70 @@
-import React from 'react';
-import styled from 'styled-components';
-import * as R from 'ramda';
+import React from 'react'
+import * as R from 'ramda'
 
-import { WithNewThemeLayout } from '@style';
-import { useCurrentUser } from '@customHooks/Users';
-import { Spinner } from '@components/Spinner';
-import { Message404 } from '../404';
-import { CardCollection } from '@components/CardCollection';
-import { subheaderText } from '@style/text';
+import { WithNewThemeLayout } from '@style'
+import { useCurrentUser } from '@customHooks/Users'
+import { Spinner } from '@components/Spinner'
+import { Message404 } from '../404'
+import { CardCollection } from '@components/CardCollection'
+import { subheaderText } from '@style/text'
+import { createUseStyles } from '@style'
 
-const getLikedModels = R.pathOr([], ['likedModels']);
+const useStyles = createUseStyles(_theme => {
+  return {
+    Likes: {},
+    Likes_LikedModelsHeader: {
+      ...subheaderText,
+      marginBottom: '2rem',
+    },
+  }
+})
 
-const LikedModelsHeader = styled.div`
-    ${subheaderText};
-    margin-bottom: 34px;
-`;
+const getLikedModels = R.pathOr([], ['likedModels'])
 
 function LikesCount({ user }) {
-    const likes = getLikedModels(user);
-    const amount = likes.length;
+  const c = useStyles()
+  const likes = getLikedModels(user)
+  const amount = likes.length
 
-    return <LikedModelsHeader>Liked Models {amount}</LikedModelsHeader>;
+  return <div className={c.Likes_LikedModelsHeader}>Liked Models {amount}</div>
 }
 
 function LikesContent({ user }) {
-    const models = getLikedModels(user);
-    return (
-        <CardCollection
-            models={models}
-            noResultsText="You have not liked any models yet."
-        />
-    );
+  const models = getLikedModels(user)
+  return (
+    <CardCollection models={models} noResultsText='You have not liked any models yet.' />
+  )
 }
 
 const Page = () => {
-    const { user, loading, error } = useCurrentUser();
-    if (loading) {
-        return <Spinner />;
-    }
+  const { user, loading, error } = useCurrentUser()
+  if (loading) {
+    return <Spinner />
+  }
 
-    if (error) {
-        return (
-            <div data-cy="fetch-profile-error">
-                Error! We were not able to load this profile. Please try again
-                later.
-            </div>
-        );
-    }
-
-    if (!user) {
-        return (
-            <div data-cy="fetch-profile-error">
-                <Message404 />
-            </div>
-        );
-    }
+  if (error) {
     return (
-        <>
-            <LikesCount user={user} />
-            <LikesContent user={user} />
-        </>
-    );
-};
+      <div data-cy='fetch-profile-error'>
+        Error! We were not able to load this profile. Please try again later.
+      </div>
+    )
+  }
 
-const Likes = WithNewThemeLayout(Page);
+  if (!user) {
+    return (
+      <div data-cy='fetch-profile-error'>
+        <Message404 />
+      </div>
+    )
+  }
+  return (
+    <>
+      <LikesCount user={user} />
+      <LikesContent user={user} />
+    </>
+  )
+}
 
-export { Likes };
+const Likes = WithNewThemeLayout(Page)
+
+export { Likes }

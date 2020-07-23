@@ -15,6 +15,11 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
+export const Flash = _props => {
+  const c = useStyles()
+  return <div className={c.Flash} />
+}
+
 const FlashContext = React.createContext([null, {}])
 
 export const FlashContextProvider = props => {

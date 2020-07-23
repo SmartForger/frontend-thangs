@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { ReactComponent as SearchIcon } from '@svg/search-icon.svg'
 import { inputPlaceholderText } from '@style/text'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   const {
     mediaQueries: { md },
   } = theme
@@ -71,10 +72,7 @@ export function SearchBar({ className, initialSearchQuery }) {
   }
 
   return (
-    <SearchForm
-      onSubmit={handleSubmit}
-      className={classnames(className, c.SearchBar_form)}
-    >
+    <form onSubmit={handleSubmit} className={classnames(className, c.SearchBar_form)}>
       <SearchIcon className={c.SearchBar_SearchIcon} />
       <input
         className={c.SearchBar_input}
@@ -82,6 +80,6 @@ export function SearchBar({ className, initialSearchQuery }) {
         value={searchQuery}
         onChange={handleChange}
       />
-    </SearchForm>
+    </form>
   )
 }

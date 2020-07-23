@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(_theme => {
@@ -27,8 +28,6 @@ const allowedTypes = [
   'text',
 ]
 
-const MarkdownStyled = styled(ReactMarkdown)``
-
 const Markdown = ({ children, className }) => {
   const c = useStyles()
   return (
@@ -36,7 +35,7 @@ const Markdown = ({ children, className }) => {
       source={children}
       allowedTypes={allowedTypes}
       unwrapDisallowed
-      className={classNames(className, c.Markdown)}
+      className={classnames(className, c.Markdown)}
     />
   )
 }

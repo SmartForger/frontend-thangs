@@ -47,6 +47,7 @@ const modelFixture = {
 }
 
 export function WithManyModels() {
+  const c = useStyles()
   const folderFixture = {
     id: 1,
     name: 'test-folder',
@@ -61,6 +62,7 @@ export function WithManyModels() {
 }
 
 export function WithSingleModel() {
+  const c = useStyles()
   const folderFixture = {
     id: 1,
     name: 'test-folder',
@@ -75,6 +77,7 @@ export function WithSingleModel() {
 }
 
 export function WithNoModels() {
+  const c = useStyles()
   const folderFixture = {
     id: 1,
     name: 'test-folder',

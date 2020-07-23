@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { TextButton } from '../Button'
+import { Button } from '../Button'
 import { boldText } from '../../@style/text'
 import { ReactComponent as DotStackIcon } from '../../@svg/dot-stack-icon.svg'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   return {
     DropdownMenu: {
-      background: theme.colors.WHITE_1,
+      background: theme.colors.white[400],
       borderRadius: '0 0 .5rem .5rem',
       boxShadow: '0px 5px 10px 0px rgba(35, 37, 48, 0.25)',
       width: '16.25rem',
@@ -29,7 +30,7 @@ const useStyles = createUseStyles(theme => {
       '& svg': {
         width: '1.5rem',
         marginRight: '.5rem',
-        color: theme.colors.GREY_14,
+        color: theme.colors.grey[500],
       },
     },
     DropdownMenu_Container: {
@@ -71,9 +72,9 @@ export function DropdownMenu({
   const c = useStyles({ isOpen, noIcons })
   return (
     <div className={classnames(className, c.DropdownMenu_Container)}>
-      <TextButton className={c.DropdownMenu_Button} onClick={toggleOpen}>
+      <Button text className={c.DropdownMenu_Button} onClick={toggleOpen}>
         <ButtonIcon />
-      </TextButton>
+      </Button>
       {isOpen && (
         <div className={c.DropdownMenu} noIcons={noIcons}>
           {children}
@@ -85,7 +86,7 @@ export function DropdownMenu({
 
 function useDropdownMenuState(initialIsOpen = false) {
   const [isOpen, setIsOpen] = useState(initialIsOpen)
-  const toggleOpen = e => setIsOpen(!isOpen)
+  const toggleOpen = _e => setIsOpen(!isOpen)
   const closeMenu = () => setIsOpen(false)
   useEffect(() => {
     if (isOpen) {

@@ -27,7 +27,7 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const FollowButton = ({ user, viewedUser }) => {
+const FollowButton = ({ _user, viewedUser }) => {
   const [followUser, { loading, error }] = graphqlService.useFollowUserMutation(
     viewedUser
   )
@@ -49,7 +49,7 @@ const FollowButton = ({ user, viewedUser }) => {
   )
 }
 
-const UnfollowButton = ({ user, viewedUser }) => {
+const UnfollowButton = ({ _user, viewedUser }) => {
   const [unfollowUser, { loading, error }] = graphqlService.useUnfollowUserMutation(
     viewedUser
   )

@@ -1,8 +1,8 @@
-import { gql } from 'apollo-boost';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import { createAppUrl } from './utils';
-import { parseModel } from './models';
-import { parseFolder } from './folders';
+import { gql } from 'apollo-boost'
+import { useQuery, useMutation } from '@apollo/react-hooks'
+import { createAppUrl } from './utils'
+import { parseModel } from './models'
+import { parseFolder } from './folders'
 
 export const USER_QUERY = gql`
     query getUser($id: ID) {
@@ -64,7 +64,7 @@ export const USER_QUERY = gql`
             isBeingFollowedByRequester
         }
     }
-`;
+`
 
 const UPDATE_USER_MUTATION = gql`
     mutation updateUser($updateInput: UpdateUserInput!) {
@@ -80,7 +80,7 @@ const UPDATE_USER_MUTATION = gql`
             }
         }
     }
-`;
+`
 
 const UPLOAD_USER_PROFILE_AVATAR_MUTATION = gql`
     mutation uploadUserProfileAvatar($userId: ID, $file: Upload!) {
@@ -93,74 +93,74 @@ const UPLOAD_USER_PROFILE_AVATAR_MUTATION = gql`
             }
         }
     }
-`;
+`
 
 const parseUser = user => {
-    const avatarUrl =
+  const avatarUrl =
         user.profile && user.profile.avatarUrl
-            ? createAppUrl(user.profile.avatarUrl)
-            : '';
-    const folders = user.folders ? user.folders.map(parseFolder) : [];
-    const models = user.models ? user.models.map(parseModel) : [];
-    const likedModels = user.likedModels
-        ? user.likedModels.map(parseModel)
-        : [];
-    return {
-        ...user,
-        models,
-        folders,
-        likedModels,
-        profile: {
-            ...user.profile,
-            avatarUrl,
-        },
-    };
-};
+          ? createAppUrl(user.profile.avatarUrl)
+          : ''
+  const folders = user.folders ? user.folders.map(parseFolder) : []
+  const models = user.models ? user.models.map(parseModel) : []
+  const likedModels = user.likedModels
+    ? user.likedModels.map(parseModel)
+    : []
+  return {
+    ...user,
+    models,
+    folders,
+    likedModels,
+    profile: {
+      ...user.profile,
+      avatarUrl,
+    },
+  }
+}
 
 const parseUserPayload = data => {
-    if (!data || !data.user) {
-        return null;
-    }
+  if (!data || !data.user) {
+    return null
+  }
 
-    return parseUser(data.user);
-};
+  return parseUser(data.user)
+}
 
 const useUserById = id => {
-    const { loading, error, data, startPolling, stopPolling } = useQuery(
-        USER_QUERY,
-        {
-            variables: { id },
-        }
-    );
-    const user = parseUserPayload(data);
+  const { loading, error, data, startPolling, stopPolling } = useQuery(
+    USER_QUERY,
+    {
+      variables: { id },
+    }
+  )
+  const user = parseUserPayload(data)
 
-    return { loading, error, user, startPolling, stopPolling };
-};
+  return { loading, error, user, startPolling, stopPolling }
+}
 
 const useUpdateUser = () => {
-    return useMutation(UPDATE_USER_MUTATION);
-};
+  return useMutation(UPDATE_USER_MUTATION)
+}
 
 const useUploadUserAvatarMutation = (user, croppedImg) => {
-    return useMutation(UPLOAD_USER_PROFILE_AVATAR_MUTATION, {
+  return useMutation(UPLOAD_USER_PROFILE_AVATAR_MUTATION, {
+    variables: {
+      file: croppedImg,
+      userId: user.id,
+    },
+    refetchQueries: [
+      {
+        query: USER_QUERY,
         variables: {
-            file: croppedImg,
-            userId: user.id,
+          id: user.id,
         },
-        refetchQueries: [
-            {
-                query: USER_QUERY,
-                variables: {
-                    id: user.id,
-                },
-            },
-        ],
-    });
-};
+      },
+    ],
+  })
+}
 
 export const useDeleteUserAvatarMutation = user => {
-    return useMutation(
-        gql`
+  return useMutation(
+    gql`
             mutation deleteUserProfileAvatar($userId: ID) {
                 deleteUserProfileAvatar(userId: $userId) {
                     user {
@@ -169,70 +169,70 @@ export const useDeleteUserAvatarMutation = user => {
                 }
             }
         `,
+    {
+      variables: {
+        userId: user.id,
+      },
+      refetchQueries: [
         {
-            variables: {
-                userId: user.id,
-            },
-            refetchQueries: [
-                {
-                    query: USER_QUERY,
-                    variables: {
-                        id: user.id,
-                    },
-                },
-            ],
-        }
-    );
-};
+          query: USER_QUERY,
+          variables: {
+            id: user.id,
+          },
+        },
+      ],
+    }
+  )
+}
 
 export const useFollowUserMutation = user => {
-    return useMutation(
-        gql`
+  return useMutation(
+    gql`
             mutation followUser($id: ID!) {
                 followUser(id: $id) {
                     ok
                 }
             }
         `,
+    {
+      variables: {
+        id: user.id,
+      },
+      refetchQueries: [
         {
-            variables: {
-                id: user.id,
-            },
-            refetchQueries: [
-                {
-                    query: USER_QUERY,
-                    variables: {
-                        id: user.id,
-                    },
-                },
-            ],
-        }
-    );
-};
+          query: USER_QUERY,
+          variables: {
+            id: user.id,
+          },
+        },
+      ],
+    }
+  )
+}
 
 export const useUnfollowUserMutation = user => {
-    return useMutation(
-        gql`
+  return useMutation(
+    gql`
             mutation unfollowUser($id: ID!) {
                 unfollowUser(id: $id) {
                     ok
                 }
             }
         `,
+    {
+      variables: {
+        id: user.id,
+      },
+      refetchQueries: [
         {
-            variables: {
-                id: user.id,
-            },
-            refetchQueries: [
-                {
-                    query: USER_QUERY,
-                    variables: {
-                        id: user.id,
-                    },
-                },
-            ],
-        }
-    );
-};
+          query: USER_QUERY,
+          variables: {
+            id: user.id,
+          },
+        },
+      ],
+    }
+  )
+}
 
-export { useUserById, useUpdateUser, useUploadUserAvatarMutation, parseUser };
+export { useUserById, useUpdateUser, useUploadUserAvatarMutation, parseUser }

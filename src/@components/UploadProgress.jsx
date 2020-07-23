@@ -30,14 +30,13 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const c = useStyles()
 const CHECK = 'check'
 const LENS = 'lens'
 const GRAPH = 'graph'
 const RULER = 'ruler'
 const PROTRACTOR = 'protractor'
 
-const Icons = () => {
+const Icons = ({ className }) => {
   const [icon, setIcon] = useState(CHECK)
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -57,7 +56,7 @@ const Icons = () => {
   }, [icon, setIcon])
 
   return (
-    <div className={c.IconContainer}>
+    <div className={className}>
       {icon === CHECK ? (
         <CheckUploadingIcon />
       ) : icon === LENS ? (
@@ -74,9 +73,10 @@ const Icons = () => {
 }
 
 export const UploadProgress = () => {
+  const c = useStyles()
   return (
     <UploadFrame className={c.UploadFrame}>
-      <Icons />
+      <Icons className={c.IconContainer} />
       <ProgressText text='Searching matches' className={c.Dots} />
     </UploadFrame>
   )

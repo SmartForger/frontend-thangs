@@ -3,7 +3,7 @@ import * as R from 'ramda'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
 import * as GraphqlService from '@services/graphql-service'
-import { SecondaryButton, DarkButton } from '@components/Button'
+import { Button } from '@components/Button'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(_theme => {
@@ -33,12 +33,12 @@ export function LikeModelButton({ currentUser, model }) {
   const [likeModel] = graphqlService.useLikeModelMutation(currentUser.id, model.id)
   const [unlikeModel] = graphqlService.useUnlikeModelMutation(currentUser.id, model.id)
   return hasLikedModel(model, currentUser) ? (
-    <DarkButton className={c.LikeModelButton} onClick={unlikeModel}>
+    <Button dark className={c.LikeModelButton} onClick={unlikeModel}>
       <HeartFilledIcon /> Liked!
-    </DarkButton>
+    </Button>
   ) : (
-    <SecondaryButton className={c.LikeModelButton} onClick={likeModel}>
+    <Button secondary className={c.LikeModelButton} onClick={likeModel}>
       <HeartIcon /> Like
-    </SecondaryButton>
+    </Button>
   )
 }

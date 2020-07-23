@@ -1,343 +1,352 @@
-import React, { useState } from 'react';
-import styled from 'styled-components/macro';
-import { useHistory, useParams } from 'react-router-dom';
-import Select from 'react-select';
-import { useForm, ErrorMessage } from 'react-hook-form';
-import { WithNewThemeLayout } from '@style/Layout';
-import { Message404 } from '../404';
-import { useFolder } from '../../@customHooks/Folders';
-import { Uploader } from '@components/Uploader';
-import { Button, DarkButton } from '@components/Button';
-import { useFlashNotification } from '../../@components/Flash';
-import { Breadcrumbs } from '../../@components/Breadcrumbs';
-import { useAddToFolder } from '../../@customHooks/Folders';
-import { Spinner } from '@components/Spinner';
-import { UploadFrame } from '@components/UploadFrame';
-import { ProgressText } from '@components/ProgressText';
-import { formErrorText, infoMessageText } from '@style/text';
+import React, { useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
+import Select from 'react-select'
+import { useForm, ErrorMessage } from 'react-hook-form'
+import { WithNewThemeLayout } from '@style/Layout'
+import { Message404 } from '../404'
+import { useFolder } from '../../@customHooks/Folders'
+import { Uploader } from '@components/Uploader'
+import { Button } from '@components/Button'
+import { useFlashNotification } from '../../@components/Flash'
+import { Breadcrumbs } from '../../@components/Breadcrumbs'
+import { useAddToFolder } from '../../@customHooks/Folders'
+import { Spinner } from '@components/Spinner'
+import { UploadFrame } from '@components/UploadFrame'
+import { ProgressText } from '@components/ProgressText'
+import { formErrorText, infoMessageText } from '@style/text'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
-const Row = styled.div`
-    display: flex;
-`;
+const useStyles = createUseStyles(theme => {
+  return {
+    FolderUpload: {},
+    FolderUpload_Row: {
+      display: 'flex',
+    },
+    FolderUpload_Column: {
+      flexGrow: 1,
+      marginRight: '2rem',
+    },
+    FolderUpload_Column__isLast: {
+      minWidth: '21rem',
+    },
+    FolderUpload_Field: {
+      display: 'flex',
+      flexDirection: 'column',
+      marginBottom: '.25rem',
+    },
+    FolderUpload_FullWidthInput: {
+      display: 'block',
+      flexGrow: 1,
+      border: 0,
+      padding: '.5rem 1rem',
+      marginBottom: '.5rem',
+      borderRadius: '.5rem',
+    },
+    FolderUpload_Label: {
+      marginBottom: '.5rem',
+    },
+    FolderUpload_ButtonGroup: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      marginTop: '2rem',
+    },
+    FolderUpload_Button: {
+      padding: '.5rem 2.25rem',
+    },
+    FolderUpload_CancelButton: {
+      marginRight: '.5rem',
+    },
+    FolderUpload_Error: {
+      ...formErrorText,
+      margin: '.5rem 0',
+    },
+    FolderUpload_DropdownIndicator: {
+      width: 0,
+      height: 0,
+      marginRight: '1rem',
+      borderLeft: '6px solid transparent',
+      borderRight: '6px solid transparent',
 
-const Column = styled.div``;
+      /* We unfortunately need to hardcode this value because of how react-select works */
+      borderTop: '8px solid #f5f5f5',
+    },
+    FolderUpload_Spinner: {
+      marginTop: '14rem',
+      '& .path': {
+        stroke: theme.color.uploaderText,
+      },
+    },
+    FolderUpload_Dots: {
+      ...infoMessageText,
+      width: '8.75rem',
+      marginBottom: '14rem',
+    },
+    FolderUpload_Breadcrumbs: {
+      marginBottom: '3rem',
+    },
+  }
+})
 
-const Field = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 8px;
-`;
-
-const FullWidthInput = styled.input`
-    display: block;
-    flex-grow: 1;
-    border: 0;
-    padding: 8px 16px;
-    margin-bottom: 8px;
-    border-radius: 8px;
-`;
-
-const Label = styled.label`
-    margin-bottom: 8px;
-`;
-
-const ButtonGroup = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 32px;
-`;
-
-const SaveButton = styled(Button)`
-    padding: 8px 36px;
-`;
-
-const CancelButton = styled(DarkButton)`
-    padding: 8px 36px;
-`;
-
-const ErrorStyled = styled.span`
-    ${formErrorText};
-    margin: 8px 0;
-`;
-
-const sanitizeFileName = name => name.replace(/ /g, '_');
+const sanitizeFileName = name => name.replace(/ /g, '_')
 
 const CATEGORIES = [
-    { value: 'automotive', label: 'Automotive' },
-    { value: 'aerospace', label: 'Aerospace' },
-    { value: 'healthcare', label: 'Healthcare' },
-    { value: 'industrial', label: 'Industrial' },
-    { value: 'home', label: 'Home' },
-    { value: 'safety', label: 'Safety' },
-    { value: 'characters', label: 'Characters' },
-    { value: 'architecture', label: 'Architecture' },
-    { value: 'technology', label: 'Technology' },
-    { value: 'hobbyist', label: 'Hobbyist' },
-];
-
-const DropdownIndicator = styled.div`
-    width: 0;
-    height: 0;
-    margin-right: 16px;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-
-    /* We unfortunately need to hardcode this value because of how react-select works */
-    border-top: 8px solid #f5f5f5;
-`;
+  { value: 'automotive', label: 'Automotive' },
+  { value: 'aerospace', label: 'Aerospace' },
+  { value: 'healthcare', label: 'Healthcare' },
+  { value: 'industrial', label: 'Industrial' },
+  { value: 'home', label: 'Home' },
+  { value: 'safety', label: 'Safety' },
+  { value: 'characters', label: 'Characters' },
+  { value: 'architecture', label: 'Architecture' },
+  { value: 'technology', label: 'Technology' },
+  { value: 'hobbyist', label: 'Hobbyist' },
+]
 
 function ShowError({ message }) {
-    return <ErrorStyled>{message}</ErrorStyled>;
+  const c = useStyles()
+  return <span clasName={c.FolderUpload_Error}>{message}</span>
 }
-
-const DarkBackgroundSpinner = styled(Spinner)`
-    margin-top: 224px;
-    & .path {
-        stroke: ${props => props.theme.uploaderText};
-    }
-`;
-
-const DotsStyled = styled(ProgressText)`
-    ${infoMessageText};
-    width: 139px;
-    margin-bottom: 224px;
-`;
-
-const BreadcrumbsStyled = styled(Breadcrumbs)`
-    margin-bottom: 48px;
-`;
 
 function Upload({ folder }) {
-    const history = useHistory();
-    const [file, setFile] = useState();
-    const [category, setCategory] = useState();
-    const [
-        addToFolder,
-        { loading: isUploading, error: uploadError },
-    ] = useAddToFolder(folder.id);
-    const { navigateWithFlash } = useFlashNotification();
+  const c = useStyles()
+  const history = useHistory()
+  const [file, setFile] = useState()
+  const [category, setCategory] = useState()
+  const [addToFolder, { loading: isUploading, error: uploadError }] = useAddToFolder(
+    folder.id
+  )
+  const { navigateWithFlash } = useFlashNotification()
 
-    const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit, errors } = useForm()
 
-    const onSubmit = async data => {
-        const requiredVariables = {
-            folderId: folder.id,
-            name: sanitizeFileName(data.name),
-            size: file.size,
-            description: data.description,
-        };
+  const onSubmit = async data => {
+    const requiredVariables = {
+      folderId: folder.id,
+      name: sanitizeFileName(data.name),
+      size: file.size,
+      description: data.description,
+    }
 
-        const optionalVariables = {
-            weight: data.weight,
-            height: data.height,
-            material: data.material,
-            category,
-        };
+    const optionalVariables = {
+      weight: data.weight,
+      height: data.height,
+      material: data.material,
+      category,
+    }
 
-        await addToFolder(file, {
-            variables: {
-                ...requiredVariables,
-                ...optionalVariables,
-            },
-        });
+    await addToFolder(file, {
+      variables: {
+        ...requiredVariables,
+        ...optionalVariables,
+      },
+    })
 
-        navigateWithFlash(`/folder/${folder.id}`, 'Model added successfully.');
-    };
+    navigateWithFlash(`/folder/${folder.id}`, 'Model added successfully.')
+  }
 
-    const handleCancel = e => {
-        e.preventDefault();
-        history.goBack();
-    };
+  const handleCancel = e => {
+    e.preventDefault()
+    history.goBack()
+  }
 
-    const modelsCount = folder.models ? folder.models.length : 0;
+  const modelsCount = folder.models ? folder.models.length : 0
 
-    return (
-        <div>
-            <BreadcrumbsStyled
-                modelsCount={modelsCount}
-                folder={folder}
-            ></BreadcrumbsStyled>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <Row>
-                    <Column
-                        css={`
-                            flex-grow: 1;
-                            margin-right: 32px;
-                        `}
-                    >
-                        {isUploading ? (
-                            <UploadFrame>
-                                <DarkBackgroundSpinner />
-                                <DotsStyled text="Uploading" />
-                            </UploadFrame>
-                        ) : (
-                            <Uploader
-                                showError={!!uploadError}
-                                file={file}
-                                setFile={setFile}
-                            />
-                        )}
-                    </Column>
-                    <Column
-                        css={`
-                            min-width: 336px;
-                        `}
-                    >
-                        <Field>
-                            <ErrorMessage
-                                errors={errors}
-                                name="name"
-                                message="Please enter a name for your model"
-                            >
-                                {ShowError}
-                            </ErrorMessage>
-                            <Label htmlFor="name">Title *</Label>
-                            <FullWidthInput
-                                name="name"
-                                defaultValue={file && file.name}
-                                placeholder="Model Name"
-                                ref={register({ required: true })}
-                            />
-                        </Field>
-                        <Field>
-                            <Label htmlFor="material">Material</Label>
-                            <FullWidthInput
-                                name="material"
-                                placeholder="Material"
-                                ref={register}
-                            />
-                        </Field>
-                        <Field>
-                            <Label htmlFor="weight">Weight</Label>
-                            <FullWidthInput
-                                name="weight"
-                                placeholder="Weight"
-                                ref={register}
-                            />
-                        </Field>
-                        <Field>
-                            <Label htmlFor="height">Height</Label>
-                            <FullWidthInput
-                                name="height"
-                                placeholder="Height"
-                                ref={register}
-                            />
-                        </Field>
-                        <Field>
-                            <ErrorMessage
-                                errors={errors}
-                                name="description"
-                                message="Please enter a description for your model"
-                            >
-                                {ShowError}
-                            </ErrorMessage>
-                            <Label htmlFor="description">Description *</Label>
-                            <FullWidthInput
-                                name="description"
-                                placeholder="Description"
-                                ref={register({ required: true })}
-                            />
-                        </Field>
-                        <Field>
-                            <Label htmlFor="category">Category</Label>
-                            <Select
-                                name="category"
-                                placeholder="Select Category"
-                                isClearable
-                                options={CATEGORIES}
-                                onChange={({ value }) => setCategory(value)}
-                                components={{
-                                    IndicatorSeparator: () => null,
-                                    DropdownIndicator: ({ cx, ...props }) => {
-                                        // cx causes React to throw an error, so we remove it
-                                        return <DropdownIndicator {...props} />;
-                                    },
-                                }}
-                                styles={{
-                                    control: base => {
-                                        return {
-                                            ...base,
-                                            minHeight: 'auto',
-                                            borderRadius: '8px',
-                                            backgroundColor: '#616168',
-                                            border: 'none',
-                                        };
-                                    },
-                                    singleValue: base => {
-                                        return {
-                                            ...base,
-                                            margin: 0,
-                                            color: '#f5f5f5',
-                                        };
-                                    },
-                                    placeholder: base => {
-                                        return {
-                                            ...base,
-                                            margin: 0,
-                                            color: '#f5f5f5',
-                                        };
-                                    },
-                                    clearIndicator: base => {
-                                        return {
-                                            ...base,
-                                            color: '#f5f5f5',
-                                            padding: '7px',
-                                        };
-                                    },
-                                    input: base => {
-                                        return {
-                                            ...base,
-                                            margin: 0,
-                                            padding: 0,
-                                        };
-                                    },
-                                    valueContainer: base => {
-                                        return {
-                                            ...base,
-                                            padding: '8px 16px',
-                                        };
-                                    },
-                                }}
-                            />
-                        </Field>
-                    </Column>
-                </Row>
-                <ButtonGroup>
-                    <CancelButton
-                        css={`
-                            margin-right: 8px;
-                        `}
-                        onClick={handleCancel}
-                        type="button"
-                        disabled={isUploading}
-                    >
-                        Cancel
-                    </CancelButton>
-                    <SaveButton
-                        type="submit"
-                        disabled={!file || isUploading || uploadError}
-                    >
-                        Save Model
-                    </SaveButton>
-                </ButtonGroup>
-            </form>
+  return (
+    <div>
+      <Breadcrumbs
+        className={c.FolderUpload_Breadcrumbs}
+        modelsCount={modelsCount}
+        folder={folder}
+      ></Breadcrumbs>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className={c.FolderUpload_Row}>
+          <div className={c.FolderUpload_Column}>
+            {isUploading ? (
+              <UploadFrame>
+                <Spinner className={c.FolderUpload_Spinner} />
+                <ProgressText className={c.FolderUpload_Dots} text='Uploading' />
+              </UploadFrame>
+            ) : (
+              <Uploader showError={!!uploadError} file={file} setFile={setFile} />
+            )}
+          </div>
+          <div
+            className={classnames(c.FolderUpload_Column, c.FolderUpload_Column__isLast)}
+          >
+            <div className={c.FolderUpload_Field}>
+              <ErrorMessage
+                errors={errors}
+                name='name'
+                message='Please enter a name for your model'
+              >
+                {ShowError}
+              </ErrorMessage>
+              <label className={c.FolderUpload_Label} htmlFor='name'>
+                Title *
+              </label>
+              <input
+                className={c.FolderUpload_FullWidthInput}
+                name='name'
+                defaultValue={file && file.name}
+                placeholder='Model Name'
+                ref={register({ required: true })}
+              />
+            </div>
+            <div className={c.FolderUpload_Field}>
+              <label className={c.FolderUpload_Label} htmlFor='material'>
+                Material
+              </label>
+              <input
+                className={c.FolderUpload_FullWidthInput}
+                name='material'
+                placeholder='Material'
+                ref={register}
+              />
+            </div>
+            <div className={c.FolderUpload_Field}>
+              <label className={c.FolderUpload_Label} htmlFor='weight'>
+                Weight
+              </label>
+              <input
+                className={c.FolderUpload_FullWidthInput}
+                name='weight'
+                placeholder='Weight'
+                ref={register}
+              />
+            </div>
+            <div className={c.FolderUpload_Field}>
+              <label className={c.FolderUpload_Label} htmlFor='height'>
+                Height
+              </label>
+              <input
+                className={c.FolderUpload_FullWidthInput}
+                name='height'
+                placeholder='Height'
+                ref={register}
+              />
+            </div>
+            <div className={c.FolderUpload_Field}>
+              <ErrorMessage
+                errors={errors}
+                name='description'
+                message='Please enter a description for your model'
+              >
+                {ShowError}
+              </ErrorMessage>
+              <label className={c.FolderUpload_Label} htmlFor='description'>
+                Description *
+              </label>
+              <input
+                className={c.FolderUpload_FullWidthInput}
+                name='description'
+                placeholder='Description'
+                ref={register({ required: true })}
+              />
+            </div>
+            <div className={c.FolderUpload_Field}>
+              <label className={c.FolderUpload_Label} htmlFor='category'>
+                Category
+              </label>
+              <Select
+                name='category'
+                placeholder='Select Category'
+                isClearable
+                options={CATEGORIES}
+                onChange={({ value }) => setCategory(value)}
+                components={{
+                  IndicatorSeparator: () => null,
+                  // eslint-disable-next-line react/display-name
+                  DropdownIndicator: ({ cx: _cx, ...props }) => {
+                    // cx causes React to throw an error, so we remove it
+                    return <div className={c.FolderUpload_DropdownIndicator} {...props} />
+                  },
+                }}
+                styles={{
+                  control: base => {
+                    return {
+                      ...base,
+                      minHeight: 'auto',
+                      borderRadius: '8px',
+                      backgroundColor: '#616168',
+                      border: 'none',
+                    }
+                  },
+                  singleValue: base => {
+                    return {
+                      ...base,
+                      margin: 0,
+                      color: '#f5f5f5',
+                    }
+                  },
+                  placeholder: base => {
+                    return {
+                      ...base,
+                      margin: 0,
+                      color: '#f5f5f5',
+                    }
+                  },
+                  clearIndicator: base => {
+                    return {
+                      ...base,
+                      color: '#f5f5f5',
+                      padding: '7px',
+                    }
+                  },
+                  input: base => {
+                    return {
+                      ...base,
+                      margin: 0,
+                      padding: 0,
+                    }
+                  },
+                  valueContainer: base => {
+                    return {
+                      ...base,
+                      padding: '8px 16px',
+                    }
+                  },
+                }}
+              />
+            </div>
+          </div>
         </div>
-    );
+        <div className={c.FolderUpload_ButtonGroup}>
+          <Button
+            dark
+            className={classnames(c.FolderUpload_Button, c.FolderUpload_CancelButton)}
+            onClick={handleCancel}
+            type='button'
+            disabled={isUploading}
+          >
+            Cancel
+          </Button>
+          <Button
+            className={c.FolderUpload_Button}
+            type='submit'
+            disabled={!file || isUploading || uploadError}
+          >
+            Save Model
+          </Button>
+        </div>
+      </form>
+    </div>
+  )
 }
 const Page = () => {
-    const { folderId } = useParams();
-    const { loading, error, folder } = useFolder(folderId);
+  const { folderId } = useParams()
+  const { loading, error, folder } = useFolder(folderId)
 
-    if (loading) {
-        return <Spinner />;
-    } else if (!folder) {
-        return <Message404 />;
-    } else if (error) {
-        return <div>Error loading folder</div>;
-    }
-    return <Upload folder={folder} />;
-};
+  if (loading) {
+    return <Spinner />
+  } else if (!folder) {
+    return <Message404 />
+  } else if (error) {
+    return <div>Error loading folder</div>
+  }
+  return <Upload folder={folder} />
+}
 
-const FolderUpload = WithNewThemeLayout(Page);
+const FolderUpload = WithNewThemeLayout(Page)
 
-export { FolderUpload };
+export { FolderUpload }

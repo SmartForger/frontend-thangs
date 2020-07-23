@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import styled from 'styled-components/macro'
 import { useHistory } from 'react-router-dom'
 import Select from 'react-select'
 import { useForm, ErrorMessage } from 'react-hook-form'
 import { WithNewThemeLayout } from '@style/Layout'
 import { Uploader } from '@components/Uploader'
-import { Button, DarkButton } from '@components/Button'
+import { Button } from '@components/Button'
 import { useFlashNotification } from '@components/Flash'
 import * as GraphqlService from '@services/graphql-service'
 import { authenticationService } from '@services'
@@ -13,55 +12,81 @@ import { Spinner } from '@components/Spinner'
 import { UploadFrame } from '@components/UploadFrame'
 import { ProgressText } from '@components/ProgressText'
 import { subheaderText, formErrorText, infoMessageText } from '@style/text'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
-const Row = styled.div`
-  display: flex;
-`
+const useStyles = createUseStyles(theme => {
+  return {
+    Upload: {},
+    Upload_Row: {
+      display: 'flex',
+    },
+    Upload_Column: {},
+    Upload_Column__frame: {
+      flexGrow: 1,
+      marginRight: '2rem',
+    },
+    Upload_Column__form: {
+      minWidth: '21rem',
+    },
+    Upload_Field: {
+      display: 'flex',
+      flexDirection: 'column',
+      marginBottom: '.5rem',
+    },
+    Upload_FullWidthInput: {
+      display: 'block',
+      flexGrow: 1,
+      border: 0,
+      padding: '.5rem 1rem',
+      marginBottom: '.5rem',
+      borderRadius: '.5rem',
+    },
+    Upload_Label: {
+      marginBottom: '.5rem',
+    },
+    Upload_ButtonGroup: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      marginTop: '2rem',
+    },
+    Upload_Button: {
+      padding: '.5rem 2.25rem',
+    },
+    Upload_Button__CancelButton: {
+      marginRight: '.5rem',
+    },
+    Upload_Header: {
+      ...subheaderText,
+      marginBottom: '1.5rem',
+    },
+    Upload_Error: {
+      ...formErrorText,
+      margin: '.5rem 0',
+    },
+    Upload_DropdownIndicator: {
+      width: 0,
+      height: 0,
+      marginRight: '1rem',
+      borderLeft: '6px solid transparent',
+      borderRight: '6px solid transparent',
 
-const Column = styled.div``
-
-const Field = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 8px;
-`
-
-const FullWidthInput = styled.input`
-  display: block;
-  flex-grow: 1;
-  border: 0;
-  padding: 8px 16px;
-  margin-bottom: 8px;
-  border-radius: 8px;
-`
-
-const Label = styled.label`
-  margin-bottom: 8px;
-`
-
-const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 32px;
-`
-
-const SaveButton = styled(Button)`
-  padding: 8px 36px;
-`
-
-const CancelButton = styled(DarkButton)`
-  padding: 8px 36px;
-`
-
-const Header = styled.h1`
-  ${subheaderText};
-  margin-bottom: 24px;
-`
-
-const ErrorStyled = styled.span`
-  ${formErrorText};
-  margin: 8px 0;
-`
+      /* We unfortunately need to hardcode this value because of how react-select works */
+      borderTop: '8px solid #f5f5f5',
+    },
+    Upload_Spinner: {
+      marginTop: '14rem',
+      '& .path': {
+        stroke: theme.colors.uploaderText,
+      },
+    },
+    Upload_Dots: {
+      ...infoMessageText,
+      width: '8.75rem',
+      marginBottom: '14rem',
+    },
+  }
+})
 
 const graphqlService = GraphqlService.getInstance()
 
@@ -80,33 +105,10 @@ const CATEGORIES = [
   { value: 'hobbyist', label: 'Hobbyist' },
 ]
 
-const DropdownIndicator = styled.div`
-  width: 0;
-  height: 0;
-  margin-right: 16px;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-
-  /* We unfortunately need to hardcode this value because of how react-select works */
-  border-top: 8px solid #f5f5f5;
-`
-
 function ShowError({ message }) {
-  return <ErrorStyled>{message}</ErrorStyled>
+  const c = useStyles()
+  return <span className={c.Upload_Error}>{message}</span>
 }
-
-const DarkBackgroundSpinner = styled(Spinner)`
-  margin-top: 224px;
-  & .path {
-    stroke: ${props => props.theme.uploaderText};
-  }
-`
-
-const DotsStyled = styled(ProgressText)`
-  ${infoMessageText};
-  width: 139px;
-  margin-bottom: 224px;
-`
 
 const Page = () => {
   const history = useHistory()
@@ -114,6 +116,7 @@ const Page = () => {
   const [category, setCategory] = useState()
   const currentUserId = authenticationService.getCurrentUserId()
   const { navigateWithFlash } = useFlashNotification()
+  const c = useStyles()
 
   const [
     uploadModel,
@@ -153,30 +156,21 @@ const Page = () => {
 
   return (
     <div>
-      <Header>Upload Model</Header>
+      <h1 className={c.Upload_Header}>Upload Model</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Row>
-          <Column
-            css={`
-              flex-grow: 1;
-              margin-right: 32px;
-            `}
-          >
+        <div className={c.Upload_Row}>
+          <div className={c.Upload_Column__frame}>
             {isUploading ? (
               <UploadFrame>
-                <DarkBackgroundSpinner />
-                <DotsStyled text='Uploading' />
+                <Spinner className={c.Upload_Spinner} />
+                <ProgressText className={c.Upload_Dots} text='Uploading' />
               </UploadFrame>
             ) : (
               <Uploader showError={!!uploadError} file={file} setFile={setFile} />
             )}
-          </Column>
-          <Column
-            css={`
-              min-width: 336px;
-            `}
-          >
-            <Field>
+          </div>
+          <div className={c.Upload_Column__form}>
+            <div className={c.Upload_Field}>
               <ErrorMessage
                 errors={errors}
                 name='name'
@@ -184,27 +178,51 @@ const Page = () => {
               >
                 {ShowError}
               </ErrorMessage>
-              <Label htmlFor='name'>Title *</Label>
-              <FullWidthInput
+              <label className={c.Upload_Label} htmlFor='name'>
+                Title *
+              </label>
+              <input
+                className={c.Upload_FullWidthInput}
                 name='name'
                 defaultValue={file && file.name}
                 placeholder='Model Name'
                 ref={register({ required: true })}
               />
-            </Field>
-            <Field>
-              <Label htmlFor='material'>Material</Label>
-              <FullWidthInput name='material' placeholder='Material' ref={register} />
-            </Field>
-            <Field>
-              <Label htmlFor='weight'>Weight</Label>
-              <FullWidthInput name='weight' placeholder='Weight' ref={register} />
-            </Field>
-            <Field>
-              <Label htmlFor='height'>Height</Label>
-              <FullWidthInput name='height' placeholder='Height' ref={register} />
-            </Field>
-            <Field>
+            </div>
+            <div className={c.Upload_Field}>
+              <label className={c.Upload_Label} htmlFor='material'>
+                Material
+              </label>
+              <input
+                className={c.Upload_FullWidthInput}
+                name='material'
+                placeholder='Material'
+                ref={register}
+              />
+            </div>
+            <div className={c.Upload_Field}>
+              <label className={c.Upload_Label} htmlFor='weight'>
+                Weight
+              </label>
+              <input
+                className={c.Upload_FullWidthInput}
+                name='weight'
+                placeholder='Weight'
+                ref={register}
+              />
+            </div>
+            <div className={c.Upload_Field}>
+              <label className={c.Upload_Label} htmlFor='height'>
+                Height
+              </label>
+              <input
+                className={c.Upload_FullWidthInput}
+                name='height'
+                placeholder='Height'
+                ref={register}
+              />
+            </div>
+            <div className={c.Upload_Field}>
               <ErrorMessage
                 errors={errors}
                 name='description'
@@ -212,15 +230,20 @@ const Page = () => {
               >
                 {ShowError}
               </ErrorMessage>
-              <Label htmlFor='description'>Description *</Label>
-              <FullWidthInput
+              <label className={c.Upload_Label} htmlFor='description'>
+                Description *
+              </label>
+              <input
+                className={c.Upload_FullWidthInput}
                 name='description'
                 placeholder='Description'
                 ref={register({ required: true })}
               />
-            </Field>
-            <Field>
-              <Label htmlFor='category'>Category</Label>
+            </div>
+            <div className={c.Upload_Field}>
+              <label className={c.Upload_Label} htmlFor='category'>
+                Category
+              </label>
               <Select
                 name='category'
                 placeholder='Select Category'
@@ -229,9 +252,10 @@ const Page = () => {
                 onChange={({ value }) => setCategory(value)}
                 components={{
                   IndicatorSeparator: () => null,
-                  DropdownIndicator: ({ cx, ...props }) => {
+                  // eslint-disable-next-line react/display-name
+                  DropdownIndicator: ({ cx: _cx, ...props }) => {
                     // cx causes React to throw an error, so we remove it
-                    return <DropdownIndicator {...props} />
+                    return <div className={c.Upload_DropdownIndicator} {...props} />
                   },
                 }}
                 styles={{
@@ -280,23 +304,22 @@ const Page = () => {
                   },
                 }}
               />
-            </Field>
-          </Column>
-        </Row>
-        <ButtonGroup>
-          <CancelButton
-            css={`
-              margin-right: 8px;
-            `}
+            </div>
+          </div>
+        </div>
+        <div className={c.Upload_ButtonGroup}>
+          <Button
+            dark
+            className={classnames(c.Upload_Button, c.Upload_Button__CancelButton)}
             onClick={handleCancel}
             type='button'
           >
             Cancel
-          </CancelButton>
-          <SaveButton type='submit' disabled={!file}>
+          </Button>
+          <Button className={c.Upload_Button} type='submit' disabled={!file}>
             Save Model
-          </SaveButton>
-        </ButtonGroup>
+          </Button>
+        </div>
       </form>
     </div>
   )

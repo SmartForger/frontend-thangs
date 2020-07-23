@@ -1,21 +1,21 @@
-const hasEndSlash = /\/$/;
+const hasEndSlash = /\/$/
 
 const createAppUrl = path => {
-    if (!path) {
-        return null;
-    }
-    return new URL(path, process.env.REACT_APP_API_KEY).toString();
-};
+  if (!path) {
+    return null
+  }
+  return new URL(path, process.env.REACT_APP_API_KEY).toString()
+}
 
 const withEndSlash = path => {
-    if (hasEndSlash.test(path)) {
-        return path;
-    }
-    return `${path}/`;
-};
+  if (hasEndSlash.test(path)) {
+    return path
+  }
+  return `${path}/`
+}
 
 const getGraphQLUrl = () => {
-    return withEndSlash(createAppUrl('/graphql'));
-};
+  return withEndSlash(createAppUrl('/graphql'))
+}
 
-export { createAppUrl, getGraphQLUrl };
+export { createAppUrl, getGraphQLUrl }

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { withApolloProvider } from '../../../.storybook/withApolloProvider'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(_theme => {
   return {
     Button: {
       marginTop: '2rem',

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(_theme => {
   return {
     ProgressText: {
-      textAlign: left,
+      textAlign: 'left',
     },
   }
 })
@@ -25,9 +26,9 @@ export function ProgressText({ text, className }) {
   }, [dots, setDots])
 
   return (
-    <Text className={classNames(className, c.ProgressText)}>
+    <div className={classnames(className, c.ProgressText)}>
       {text}
       {dots}
-    </Text>
+    </div>
   )
 }

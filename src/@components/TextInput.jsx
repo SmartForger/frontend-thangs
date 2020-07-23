@@ -27,7 +27,7 @@ export const TextInput = props => {
   const c = useStyles(props)
 
   const handleValidation = () => {
-    if (props.hasOwnProperty('validator')) {
+    if (Object.prototype.hasOwnProperty.call(props, 'validator')) {
       setValid(props.validator())
     }
   }

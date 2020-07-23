@@ -1,1 +1,1 @@
-export const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST;
+export const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST

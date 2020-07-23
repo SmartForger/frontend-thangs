@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 
 import { Spinner } from '@components/Spinner'
 import { HowTo } from '@components/HowTo'
@@ -9,6 +8,7 @@ import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg'
 import { viewerLoadingText } from '@style/text'
 
 import { useHoopsViewer } from '@customHooks'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(_theme => {

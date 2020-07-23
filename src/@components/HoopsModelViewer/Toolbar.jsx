@@ -1,7 +1,7 @@
 import React from 'react'
 import { AnchorButton } from '@components/AnchorButton'
 import { ColorPicker } from '@components/ColorPicker'
-import { TextButton } from '@components/Button'
+import { Button } from '@components/Button'
 
 import { ReactComponent as WireMode } from '@svg/view-mode-wire.svg'
 import { ReactComponent as ShadedMode } from '@svg/view-mode-shaded.svg'
@@ -18,9 +18,9 @@ const useStyles = createUseStyles(theme => {
   return {
     Toolbar: {
       position: 'relative',
-      backgroundColor: theme.colors.WHITE_1,
+      backgroundColor: theme.colors.white[400],
       boxShadow: 'none',
-      borderTop: `1px solid ${theme.colors.GREY_1}`,
+      borderTop: `1px solid ${theme.colors.purple[200]}`,
       padding: '1.5rem',
       display: 'flex',
       justifyContent: 'space-between',
@@ -86,37 +86,40 @@ export function Toolbar({
     <div className={c.Toolbar}>
       <div className={c.Toolbar_ToolGroup}>
         <div className={c.Toolbar_ToolGroupTitle}>Model View</div>
-        <TextButton
+        <Button
+          text
           className={c.Toolbar_IconButton}
           onClick={makeDrawModeHandler('shaded')}
         >
           <ShadedMode />
-        </TextButton>
-        <TextButton
+        </Button>
+        <Button
+          text
           className={c.Toolbar_IconButton}
           onClick={makeDrawModeHandler('wire')}
         >
           <WireMode />
-        </TextButton>
-        <TextButton
+        </Button>
+        <Button
+          text
           className={c.Toolbar_IconButton}
           onClick={makeDrawModeHandler('xray')}
         >
           <XRayMode />
-        </TextButton>
+        </Button>
       </div>
       <div className={c.Toolbar_ToolGroup}>
         <div className={c.Toolbar_ToolGroupTitle}>Change Color</div>
-        <TextButton className={c.Toolbar_IconButton}>
+        <Button text className={c.Toolbar_IconButton}>
           <ColorPicker color={wireColor} onChange={makeColorHandler('wire')}>
             <EdgesColor />
           </ColorPicker>
-        </TextButton>
-        <TextButton className={c.Toolbar_IconButton}>
+        </Button>
+        <Button text className={c.Toolbar_IconButton}>
           <ColorPicker color={meshColor} onChange={makeColorHandler('mesh')}>
             <ShadeColor />
           </ColorPicker>
-        </TextButton>
+        </Button>
       </div>
       <AnchorButton className={c.Toolbar_MobileAnchorButton} onClick={onResetView}>
         Reset

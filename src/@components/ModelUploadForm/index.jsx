@@ -9,6 +9,7 @@ import { ProgressText } from '../ProgressText'
 import { Uploader } from '../Uploader'
 import { UploadFrame } from '../UploadFrame'
 import { CategorySelect } from './CategorySelect'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -70,6 +71,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 function ShowError({ message }) {
+  const c = useStyles()
   return <span className={c.ModelUploadForm_Error}>{message}</span>
 }
 

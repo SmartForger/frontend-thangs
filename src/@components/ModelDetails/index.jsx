@@ -1,6 +1,7 @@
 import React from 'react'
 import * as R from 'ramda'
 import { modelDetailsLabelText } from '@style/text'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(_theme => {

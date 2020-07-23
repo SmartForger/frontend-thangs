@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components/macro'
+import React from 'react'
 import {
   primaryButtonText,
   secondaryButtonText,
@@ -6,6 +6,7 @@ import {
   matchingButtonText,
   matchingButtonHoverText,
 } from '@style/text'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -23,20 +24,17 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       borderRadius: '.5rem',
       padding: '.5rem .75rem',
-      backgroundColor: theme.colors.BLUE_2,
+      backgroundColor: theme.colors.blue[500],
       ...primaryButtonText,
       ...theme.shadow,
 
-      '&:disabled': {
-        cursor: 'not-allowed',
-      },
-
       '&:hover': {
-        backgroundColor: theme.colors.BLUE_4,
+        backgroundColor: theme.colors.blue[700],
       },
 
       '&:disabled': {
         ...secondaryButtonText,
+        cursor: 'not-allowed',
         opacity: '0.8',
         '&:hover': {
           opacity: 1,
@@ -45,9 +43,9 @@ const useStyles = createUseStyles(theme => {
     },
     Button__secondary: {
       ...secondaryButtonText,
-      backgroundColor: theme.color.GREY_3,
+      backgroundColor: theme.color.purple[300],
       '&:hover': {
-        backgroundColor: theme.color.GREY_7,
+        backgroundColor: theme.color.purple[500],
       },
     },
     Button__back: {
@@ -59,16 +57,16 @@ const useStyles = createUseStyles(theme => {
     },
     Button__dark: {
       ...darkButtonText,
-      backgroundColor: theme.color.GREY_7,
+      backgroundColor: theme.color.purple[500],
       '&:hover': {
-        backgroundColor: theme.color.BLACK_4,
+        backgroundColor: theme.color.purple[800],
       },
     },
     Button__text: {
-      border: none,
-      background: none,
+      border: 'none',
+      background: 'none',
       padding: 0,
-      cursor: pointer,
+      cursor: 'pointer',
       '&:disabled': {
         cursor: 'not-allowed',
       },
@@ -76,7 +74,7 @@ const useStyles = createUseStyles(theme => {
     Button__brand: {
       ...matchingButtonText,
       ...theme.shadow,
-      backgroundColor: theme.colors.YELLOW_1,
+      backgroundColor: theme.colors.gold[500],
       padding: '.5rem 1rem',
       minWidth: '11.25rem',
 
@@ -86,7 +84,7 @@ const useStyles = createUseStyles(theme => {
 
       '&:hover': {
         ...matchingButtonHoverText,
-        backgroundColor: theme.color.YELLOW_3,
+        backgroundColor: theme.color.gold[800],
       },
     },
   }

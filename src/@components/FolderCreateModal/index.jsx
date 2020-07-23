@@ -3,9 +3,10 @@ import { Modal } from '../Modal'
 import { CreateFolderForm, DisplayErrors } from '../FolderForm'
 import { ReactComponent as NewFolderIcon } from '../../@svg/folder-plus-icon.svg'
 import { headerText, lightText } from '../../@style/text'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(_theme => {
   return {
     FolderCreateModal: {},
     FolderCreateModal_Header: {
@@ -32,6 +33,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 export function FolderCreateModal({ isOpen, onCancel, afterCreate }) {
+  const c = useStyles()
   const [errors, setErrors] = useState()
   return (
     <Modal isOpen={isOpen}>

@@ -1,3 +1,4 @@
+import React from 'react'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -5,7 +6,7 @@ const useStyles = createUseStyles(theme => {
     UploadFrame: {
       height: '35rem',
       backgroundColor: ({ dragactive }) =>
-        dragactive ? theme.color.white[5] : theme.color.white[1],
+        dragactive ? theme.color.white[800] : theme.color.white[400],
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',

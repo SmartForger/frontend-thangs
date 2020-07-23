@@ -1,7 +1,7 @@
-import { gql } from 'apollo-boost';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import { USER_QUERY, parseUser } from './users';
-import { parseModel } from './models';
+import { gql } from 'apollo-boost'
+import { useQuery, useMutation } from '@apollo/react-hooks'
+import { USER_QUERY, parseUser } from './users'
+import { parseModel } from './models'
 
 export const FOLDER_QUERY = gql`
     query folderQuery($id: ID) {
@@ -37,30 +37,30 @@ export const FOLDER_QUERY = gql`
             }
         }
     }
-`;
+`
 
 export function parseFolder(folder) {
-    if (!folder) {
-        return undefined;
-    }
+  if (!folder) {
+    return undefined
+  }
 
-    const models = folder.models ? folder.models.map(parseModel) : [];
-    const members = folder.members ? folder.members.map(parseUser) : [];
+  const models = folder.models ? folder.models.map(parseModel) : []
+  const members = folder.members ? folder.members.map(parseUser) : []
 
-    return {
-        ...folder,
-        models,
-        members,
-    };
+  return {
+    ...folder,
+    models,
+    members,
+  }
 }
 
 export const useFolderById = id => {
-    const { loading, error, data } = useQuery(FOLDER_QUERY, {
-        variables: { id },
-    });
-    const folder = data && parseFolder(data.folder);
-    return { loading, error, folder };
-};
+  const { loading, error, data } = useQuery(FOLDER_QUERY, {
+    variables: { id },
+  })
+  const folder = data && parseFolder(data.folder)
+  return { loading, error, folder }
+}
 
 export const CREATE_FOLDER_MUTATION = gql`
     mutation createFolder($name: String!, $members: [String]) {
@@ -71,18 +71,18 @@ export const CREATE_FOLDER_MUTATION = gql`
             }
         }
     }
-`;
+`
 
 export const useCreateFolderMutation = id => {
-    return useMutation(CREATE_FOLDER_MUTATION, {
-        refetchQueries: [
-            {
-                query: USER_QUERY,
-                variables: { id },
-            },
-        ],
-    });
-};
+  return useMutation(CREATE_FOLDER_MUTATION, {
+    refetchQueries: [
+      {
+        query: USER_QUERY,
+        variables: { id },
+      },
+    ],
+  })
+}
 
 export const INVITE_TO_FOLDER_MUTATION = gql`
     mutation inviteToFolder($folderId: ID, $emails: [String]) {
@@ -95,19 +95,19 @@ export const INVITE_TO_FOLDER_MUTATION = gql`
             }
         }
     }
-`;
+`
 
 export const useInviteToFolderMutation = folderId => {
-    return useMutation(INVITE_TO_FOLDER_MUTATION, {
-        variables: { folderId },
-        refetchQueries: [
-            {
-                query: FOLDER_QUERY,
-                variables: { id: folderId },
-            },
-        ],
-    });
-};
+  return useMutation(INVITE_TO_FOLDER_MUTATION, {
+    variables: { folderId },
+    refetchQueries: [
+      {
+        query: FOLDER_QUERY,
+        variables: { id: folderId },
+      },
+    ],
+  })
+}
 
 export const REVOKE_ACCESS_MUTATION = gql`
     mutation revokeAccess($folderId: ID, $userId: ID) {
@@ -120,19 +120,19 @@ export const REVOKE_ACCESS_MUTATION = gql`
             }
         }
     }
-`;
+`
 
 export const useRevokeAccessMutation = (folderId, userId) => {
-    return useMutation(REVOKE_ACCESS_MUTATION, {
-        variables: { folderId, userId },
-        refetchQueries: [
-            {
-                query: FOLDER_QUERY,
-                variables: { id: folderId },
-            },
-        ],
-    });
-};
+  return useMutation(REVOKE_ACCESS_MUTATION, {
+    variables: { folderId, userId },
+    refetchQueries: [
+      {
+        query: FOLDER_QUERY,
+        variables: { id: folderId },
+      },
+    ],
+  })
+}
 
 const ADD_TO_FOLDER_MUTATION = gql`
     mutation addToFolder(
@@ -178,28 +178,28 @@ const ADD_TO_FOLDER_MUTATION = gql`
             }
         }
     }
-`;
+`
 
 export function useAddToFolderMutation(folderId) {
-    const [addToFolder, { loading, error, data }] = useMutation(
-        ADD_TO_FOLDER_MUTATION,
-        {
-            variables: {
-                folderId,
-            },
-            refetchQueries: [
-                { query: FOLDER_QUERY, variables: { id: folderId } },
-            ],
-        }
-    );
+  const [addToFolder, { loading, error, data }] = useMutation(
+    ADD_TO_FOLDER_MUTATION,
+    {
+      variables: {
+        folderId,
+      },
+      refetchQueries: [
+        { query: FOLDER_QUERY, variables: { id: folderId } },
+      ],
+    }
+  )
 
-    const folder =
+  const folder =
         data &&
         data.addToFolder &&
         data.addToFolder.folder &&
-        parseFolder(data.addToFolder.folder);
+        parseFolder(data.addToFolder.folder)
 
-    return [addToFolder, { loading, error, folder }];
+  return [addToFolder, { loading, error, folder }]
 }
 
 const DELETE_FOLDER_MUTATION = gql`
@@ -208,17 +208,17 @@ const DELETE_FOLDER_MUTATION = gql`
             ok
         }
     }
-`;
+`
 
 export function useDeleteFolderMutation(folderId, userId) {
-    return useMutation(DELETE_FOLDER_MUTATION, {
-        variables: { folderId },
+  return useMutation(DELETE_FOLDER_MUTATION, {
+    variables: { folderId },
 
-        refetchQueries: [
-            {
-                query: USER_QUERY,
-                variables: { id: userId },
-            },
-        ],
-    });
+    refetchQueries: [
+      {
+        query: USER_QUERY,
+        variables: { id: userId },
+      },
+    ],
+  })
 }

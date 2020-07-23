@@ -1,44 +1,45 @@
-import React from 'react';
-import styled from 'styled-components/macro';
-import { NoResults } from '../NoResults';
-import { ModelCard } from '../ModelCard';
-import { ShowMoreButton } from '../ShowMore';
-import { Grid } from './Grid';
+import React from 'react'
+import { NoResults } from '../NoResults'
+import { ModelCard } from '../ModelCard'
+import { ShowMoreButton } from '../ShowMore'
+import { Grid } from './Grid'
+import { createUseStyles } from '@style'
 
-const NOOP = () => null;
+const useStyles = createUseStyles(_theme => {
+  return {
+    ModelCollection: {},
+    ModelCollection_ShowMoreContainer: {
+      marginTop: '2rem',
+      textAlign: 'center',
+    },
+  }
+})
 
-const ShowMoreContainer = styled.div`
-    margin-top: 32px;
-    text-align: center;
-`;
+const NOOP = () => null
 
 export function ModelCollection({
-    models = [],
-    maxPerRow = 4,
-    noResultsText,
-    fetchMore = NOOP,
-    hasMore,
+  models = [],
+  maxPerRow = 4,
+  noResultsText,
+  fetchMore = NOOP,
+  hasMore,
 }) {
-    if (!models || models.length < 1) {
-        return <NoResults>{noResultsText}</NoResults>;
-    }
-
-    return (
-        <>
-            <Grid singleRow={models.length < maxPerRow}>
-                {models.map((model, index) => (
-                    <ModelCard
-                        key={`model-${model.id}:${index}`}
-                        model={model}
-                        withOwner={true}
-                    />
-                ))}
-            </Grid>
-            {hasMore && (
-                <ShowMoreContainer>
-                    <ShowMoreButton fetchMore={fetchMore} />
-                </ShowMoreContainer>
-            )}
-        </>
-    );
+  const c = useStyles()
+  if (!models || models.length < 1) {
+    return <NoResults>{noResultsText}</NoResults>
+  }
+  return (
+    <>
+      <Grid singleRow={models.length < maxPerRow}>
+        {models.map((model, index) => (
+          <ModelCard key={`model-${model.id}:${index}`} model={model} withOwner={true} />
+        ))}
+      </Grid>
+      {hasMore && (
+        <div className={c.ModelCollection_ShowMoreContainer}>
+          <ShowMoreButton fetchMore={fetchMore} />
+        </div>
+      )}
+    </>
+  )
 }

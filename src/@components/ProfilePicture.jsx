@@ -1,6 +1,7 @@
 import React from 'react'
 import Avatar from 'react-avatar'
 import { avatarDefaultText } from '@style/text'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(_theme => {
@@ -20,7 +21,7 @@ export function ProfilePicture({
   className,
   name,
   src,
-  user,
+  _user,
   size = DEFAULT_AVATAR_SIZE,
   color = DEFAULT_AVATAR_COLOR,
 }) {
@@ -32,7 +33,7 @@ export function ProfilePicture({
       color={color}
       size={size}
       round={true}
-      className={classNames(className, c.ProfilePicture)}
+      className={classnames(className, c.ProfilePicture)}
       maxInitials={2}
     />
   )

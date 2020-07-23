@@ -48,7 +48,7 @@ const useStyles = createUseStyles(theme => {
 })
 const graphqlService = GraphqlService.getInstance()
 
-export function EditProfileForm({ user }) {
+export const EditProfileForm = ({ user }) => {
   const { register, handleSubmit, errors } = useForm()
   const [updateUser] = graphqlService.useUpdateUser()
   const [currentState, setCurrentState] = useState('ready')
@@ -151,3 +151,5 @@ export function EditProfileForm({ user }) {
     </form>
   )
 }
+
+export default EditProfileForm

@@ -74,11 +74,11 @@ function ModelViewerDisplay({ model, className }) {
     setMode(targetMode)
   }
 
-  const changeMeshColor = (color, event) => {
+  const changeMeshColor = (color, _event) => {
     setMeshColor(color)
   }
 
-  const changeWireColor = (color, event) => {
+  const changeWireColor = (color, _event) => {
     setWireColor(color)
   }
 
@@ -121,7 +121,7 @@ function ModelViewerDisplay({ model, className }) {
           </div>
         </div>
         <div className={c.ModelViewer_ButtonGroup}>
-          <ControlText>CHANGE COLOR</ControlText>
+          <div className={c.ModelViewer_ControlText}>CHANGE COLOR</div>
           <ColorPicker color={meshColor} onChange={changeMeshColor}>
             <ColorIcon1 />
           </ColorPicker>
@@ -129,7 +129,7 @@ function ModelViewerDisplay({ model, className }) {
             <ColorIcon2 />
           </ColorPicker>
         </div>
-        <Placeholder />
+        <div className={c.ModelViewer_Placeholder} />
       </div>
     </div>
   )

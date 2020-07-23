@@ -1,15 +1,16 @@
+import React from 'react'
 import { linkText } from '@style/text'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(_theme => {
   return {
     AnchorButton: {
       ...linkText,
       margin: 0,
       padding: 0,
-      border: none,
-      background: none,
-      cursor: pointer,
+      border: 'none',
+      background: 'none',
+      cursor: 'pointer',
     },
   }
 })

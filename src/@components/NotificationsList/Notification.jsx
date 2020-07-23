@@ -14,6 +14,7 @@ import {
   isUserStartedFollowingUser,
   isUserGrantedUserAccessToFolder,
 } from '@services/graphql-service/notifications'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -68,7 +69,7 @@ const useStyles = createUseStyles(theme => {
       minWidth: '3rem',
       maxWidth: '3rem',
       borderRadius: '100%',
-      backgroundColor: theme.colors.BLACK_2,
+      backgroundColor: theme.colors.purple[900],
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -223,7 +224,7 @@ function UserCommentedOnModel({ className, time, actor, target, actionObject, ve
   )
 }
 
-function UserUploadedModel({ className, time, actor, verb, target, actionObject }) {
+function UserUploadedModel({ className, time, actor, verb, _target, actionObject }) {
   const c = useStyles()
   return (
     <Body
@@ -257,7 +258,7 @@ function UserUploadedModel({ className, time, actor, verb, target, actionObject 
   )
 }
 
-function UserLikedModel({ className, time, actor, verb, target, actionObject }) {
+function UserLikedModel({ className, time, actor, verb, target, _actionObject }) {
   const c = useStyles()
   return (
     <Body
@@ -296,8 +297,8 @@ function UserStartedFollowingUser({
   time,
   actor,
   verb,
-  target,
-  actionObject,
+  _target,
+  _actionObject,
 }) {
   const c = useStyles()
   return (
@@ -325,9 +326,9 @@ function UserGrantedUserAccessToFolder({
   className,
   time,
   actor,
-  verb,
+  _verb,
   target,
-  actionObject,
+  _actionObject,
 }) {
   const c = useStyles()
   return (

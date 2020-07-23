@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ModelThumbnail } from '../ModelThumbnail'
 import { FolderInfo } from '../FolderInfo'
 import { Card } from '../Card'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -70,7 +71,7 @@ function CardContents({ className, folder }) {
   )
 }
 
-function FolderCard({ className, folder }) {
+function FolderCard({ folder }) {
   return (
     <Link to={`/folder/${folder.id}`}>
       <CardContents folder={folder} />

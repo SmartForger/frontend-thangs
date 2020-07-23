@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react'
-import { createGlobalStyle } from 'styled-components/macro'
 import ReactCrop from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 import Modal from 'react-modal'
@@ -7,11 +6,12 @@ import md5 from 'md5'
 
 import { logger } from '../logging'
 
-import { Button, DarkButton } from '@components'
+import { Button } from '@components'
 import * as GraphqlService from '@services/graphql-service'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(_theme => {
   return {
     ChangeablePicture: {},
     ChangeablePicture_HiddenInput: {
@@ -61,25 +61,35 @@ Modal.setAppElement('#root')
 
 const graphqlService = GraphqlService.getInstance()
 
-const ModalOverlayStyles = createGlobalStyle`
-    .img-cropper-modal-overlay {
-        position: fixed;
-        top: 0px;
-        left: 0px;
-        right: 0px;
-        bottom: 0px;
-        background-color: rgba(0, 0, 0, 0.75);
-        z-index: 2;
-    }
-    .ReactCrop__image {
-        max-height: 80vh;
-        max-width: 80vw;
-    }
-`
+const useModalOverlayStyles = createUseStyles(_theme => {
+  return {
+    '@global': {
+      '.img-cropper-modal-overlay': {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        zIndex: 2,
+      },
+      '.ReactCrop__image': {
+        maxHeight: '80vh',
+        maxWidth: '80vw',
+      },
+    },
+  }
+})
+
+const ModalOverlayStyles = () => {
+  useModalOverlayStyles()
+
+  return null
+}
 
 const initialCrop = { unit: '%', width: 30, aspect: 1 / 1 }
 
-export function ChangeablePicture({ user, button, className }) {
+export function ChangeablePicture({ user, _button, className }) {
   const [cropSrc, setCropSrc] = useState(null)
   const [crop, setCrop] = useState()
   const [croppedImg, setCroppedImg] = useState(null)
@@ -155,7 +165,7 @@ export function ChangeablePicture({ user, button, className }) {
       crop.height
     )
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       canvas.toBlob(blob => {
         if (!blob) {
           logger.error('Canvas is empty')
@@ -213,9 +223,9 @@ export function ChangeablePicture({ user, button, className }) {
           <Button onClick={submitCrop} className={c.ChangeablePicture_SaveButton}>
             Save
           </Button>
-          <DarkButton className={c.ChangeablePicture_CancelButton} onClick={cancel}>
+          <Button dark className={c.ChangeablePicture_CancelButton} onClick={cancel}>
             Cancel
-          </DarkButton>
+          </Button>
         </div>
       </Modal>
     </form>

@@ -1,274 +1,261 @@
-import React from 'react';
-import styled from 'styled-components/macro';
-import { useHistory, Link, useParams } from 'react-router-dom';
+import React from 'react'
+import { useHistory, Link, useParams } from 'react-router-dom'
 
-import { ProfilePicture } from '@components/ProfilePicture';
-import { LikeModelButton } from '@components/LikeModelButton';
-import { CommentsForModel } from '@components/CommentsForModel';
-import { ModelViewer } from '@components/HoopsModelViewer';
-import { ModelViewer as BackupViewer } from '@components/ModelViewer';
-import { TextButton, BackButton } from '@components/Button';
-import { Spinner } from '@components/Spinner';
-import { ProgressText } from '@components/ProgressText';
-import { RelatedModels } from '@components/RelatedModels';
+import { ProfilePicture } from '@components/ProfilePicture'
+import { LikeModelButton } from '@components/LikeModelButton'
+import { CommentsForModel } from '@components/CommentsForModel'
+import { ModelViewer } from '@components/HoopsModelViewer'
+import { ModelViewer as BackupViewer } from '@components/ModelViewer'
+import { Button } from '@components/Button'
+import { Spinner } from '@components/Spinner'
+import { ProgressText } from '@components/ProgressText'
+import { RelatedModels } from '@components/RelatedModels'
 
-import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
+import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
 
-import { useLocalStorage } from '@customHooks/Storage';
-import { useDownloadModel } from '@customHooks/Models';
-import * as GraphqlService from '@services/graphql-service';
-import { WithNewThemeLayout } from '@style/Layout';
-import { linkText, modelTitleText } from '@style/text';
-import {
-    mediaSmPlus,
-    mediaMdPlus,
-    mediaLgPlus,
-    mediaXlPlus,
-} from '@style/media-queries';
+import { useLocalStorage } from '@customHooks/Storage'
+import { useDownloadModel } from '@customHooks/Models'
+import * as GraphqlService from '@services/graphql-service'
+import { WithNewThemeLayout } from '@style/Layout'
+import { linkText, modelTitleText } from '@style/text'
 
-import { ModelDetails } from '../ModelPreview/ModelDetails';
-import { Message404 } from '../404';
+import { ModelDetails } from '../ModelPreview/ModelDetails'
+import { Message404 } from '../404'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
-const graphqlService = GraphqlService.getInstance();
+const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { sm, md, lg, xl },
+  } = theme
+  return {
+    Model: {},
+    Model_Header: {
+      display: 'flex',
+      alignItems: 'center',
+      margin: '.5rem 0 1rem',
+    },
+    Model_Row: {
+      display: 'flex',
+      flexDirection: 'row',
+      marginBottom: '1.5rem',
+      '&:last-of-type': {
+        marginBottom: 0,
+      },
+      [lg]: {
+        marginBottom: '3rem',
+      },
+      '& > div': {
+        flexGrow: 1,
+      },
+    },
+    Model_Column: {
+      display: 'flex',
+      flexDirection: 'column',
 
-const HeaderStyled = styled.div`
-    display: flex;
-    align-items: center;
-    margin: 8px 0 16px;
-`;
+      [lg]: {
+        marginRight: '3rem',
+        '&:last-of-type': {
+          marginRight: 0,
+        },
+      },
+    },
+    Model_Row__mobile: {
+      [lg]: {
+        display: 'none',
+      },
+    },
+    Model_Column__desktop: {
+      display: 'none',
+      [lg]: {
+        display: 'block',
+        maxWidth: '35%',
+      },
+    },
+    Model_ModelViewer: {
+      display: 'flex',
+      overflow: 'hidden',
+      flexDirection: 'column',
+      height: '23.5rem',
+      margin: '0 -1rem',
+      width: 'calc(100% + 2rem)',
 
-const Row = styled.div`
-    display: flex;
-    flex-direction: row;
+      [sm]: {
+        height: '28.75rem',
+      },
 
-    margin-bottom: 24px;
-    :last-of-type {
-        margin-bottom: 0;
-    }
-    ${mediaLgPlus} {
-        margin-bottom: 48px;
-    }
+      [md]: {
+        height: '37.5rem',
+        margin: 0,
+        width: '100%',
+      },
 
-    > div {
-        flex-grow: 1;
-    }
-`;
+      [lg]: {
+        height: '38.5rem',
+        width: 'auto',
+      },
 
-const Column = styled.div`
-    display: flex;
-    flex-direction: Column;
+      [xl]: {
+        height: '38.5rem',
+      },
+    },
+    Model_BackupViewer: {
+      height: '38.5rem',
+    },
+    Model_TitleContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      margin: '.5rem 0',
+    },
+    Model_TitleContent: {
+      flexDirection: 'column',
+    },
+    Model_OwnerProfilePicture: {
+      marginRight: '1rem',
+    },
+    Model_TitleText: {
+      ...modelTitleText,
+      marginBottom: '.5rem',
+    },
+    Model_ProfileLink: {
+      ...linkText,
+      display: 'block',
+      textDecoration: 'none',
+    },
+    Model_Description: {
+      margin: '2rem 0',
+    },
+    Model_DownloadButton: {
+      ...linkText,
+      width: '7.75rem',
+      textAlign: 'left',
+      marginBottom: '1.5rem',
+    },
+  }
+})
 
-    ${mediaLgPlus} {
-        margin-right: 48px;
-        :last-of-type {
-            margin-right: 0;
-        }
-    }
-`;
-
-const OnlyMobileRow = styled(Row)`
-    ${mediaLgPlus} {
-        display: none;
-    }
-`;
-
-const OnlyDesktopColumn = styled(Column)`
-    display: none;
-    ${mediaLgPlus} {
-        display: block;
-    }
-`;
-
-const ModelViewerStyled = styled(ModelViewer)`
-    display: flex;
-    overflow: hidden;
-
-    flex-direction: column;
-    height: 375px;
-    margin: 0 -16px;
-    width: calc(100% + 32px);
-
-    ${mediaSmPlus} {
-        height: 460px;
-    }
-
-    ${mediaMdPlus} {
-        height: 600px;
-        margin: 0;
-        width: 100%;
-    }
-
-    ${mediaLgPlus} {
-        height: 616px;
-        width: auto;
-    }
-
-    ${mediaXlPlus} {
-        height: 616px;
-    }
-`;
-
-const BackupViewerStyled = styled(BackupViewer)`
-    height: 616px;
-`;
-
-const ModelTitleContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin: 8px 0;
-`;
-
-const ModelTitleContent = styled.div`
-    flex-direction: column;
-`;
-
-const ModelOwnerProfilePicture = styled(ProfilePicture)`
-    margin-right: 16px;
-`;
-
-const ModelTitleText = styled.div`
-    ${modelTitleText};
-    margin-bottom: 8px;
-`;
-
-const ProfileLink = styled(Link)`
-    ${linkText};
-    display: block;
-    text-decoration: none;
-`;
-
-const Description = styled.div`
-    margin: 32px 0;
-`;
+const graphqlService = GraphqlService.getInstance()
 
 function ModelTitle({ model, className }) {
-    return (
-        <ModelTitleContainer className={className}>
-            {model.owner && (
-                <ProfileLink to={`/profile/${model.owner.id}`}>
-                    <ModelOwnerProfilePicture
-                        size="48px"
-                        name={model.owner.fullName}
-                        src={model.owner.profile.avatarUrl}
-                    />
-                </ProfileLink>
-            )}
-            <ModelTitleContent>
-                <ModelTitleText>{model.name}</ModelTitleText>
-                {model.owner && (
-                    <ProfileLink to={`/profile/${model.owner.id}`}>
-                        {model.owner.fullName}
-                    </ProfileLink>
-                )}
-            </ModelTitleContent>
-        </ModelTitleContainer>
-    );
+  const c = useStyles()
+  return (
+    <div className={classnames(className, c.Model_TitleContainer)}>
+      {model.owner && (
+        <Link className={c.ProfileLink} to={`/profile/${model.owner.id}`}>
+          <ProfilePicture
+            className={c.Model_OwnerProfilePicture}
+            size='48px'
+            name={model.owner.fullName}
+            src={model.owner.profile.avatarUrl}
+          />
+        </Link>
+      )}
+      <div className={c.Model_TitleContent}>
+        <div className={c.Model_TitleText}>{model.name}</div>
+        {model.owner && (
+          <Link className={c.ProfileLink} to={`/profile/${model.owner.id}`}>
+            {model.owner.fullName}
+          </Link>
+        )}
+      </div>
+    </div>
+  )
 }
 
-const DownloadTextButton = styled(TextButton)`
-    ${linkText};
-    width: 122px;
-    text-align: left;
-    margin-bottom: 24px;
-`;
-
 function DownloadLink({ model }) {
-    const [isDownloading, hadError, downloadModel] = useDownloadModel(model);
-    return (
-        <DownloadTextButton onClick={downloadModel}>
-            {isDownloading ? (
-                <ProgressText text="Downloading" />
-            ) : hadError ? (
-                'Server Error'
-            ) : (
-                'Download Model'
-            )}
-        </DownloadTextButton>
-    );
+  const c = useStyles()
+  const [isDownloading, hadError, downloadModel] = useDownloadModel(model)
+  return (
+    <Button text className={c.Model_DownloadButton} onClick={downloadModel}>
+      {isDownloading ? (
+        <ProgressText text='Downloading' />
+      ) : hadError ? (
+        'Server Error'
+      ) : (
+        'Download Model'
+      )}
+    </Button>
+  )
 }
 
 function Details({ currentUser, model, className }) {
-    return (
-        <div className={className}>
-            <LikeModelButton currentUser={currentUser} model={model} />
-            <ModelTitle model={model} />
-            <Description>{model.description}</Description>
-            <DownloadLink model={model} />
-            <ModelDetails model={model} />
-        </div>
-    );
+  const c = useStyles()
+  return (
+    <div className={className}>
+      <LikeModelButton currentUser={currentUser} model={model} />
+      <ModelTitle model={model} />
+      <div className={c.Model_Description}>{model.description}</div>
+      <DownloadLink model={model} />
+      <ModelDetails model={model} />
+    </div>
+  )
 }
 
 const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
-    const history = useHistory();
+  const c = useStyles()
+  const history = useHistory()
 
-    return (
-        <>
-            <HeaderStyled>
-                <BackButton onClick={() => history.goBack()}>
-                    <BackArrow />
-                </BackButton>
-            </HeaderStyled>
-            <Row>
-                <Column>
-                    <Row>
-                        {showBackupViewer ? (
-                            <BackupViewerStyled model={model} />
-                        ) : (
-                            <ModelViewerStyled model={model} />
-                        )}
-                    </Row>
-                    <OnlyMobileRow>
-                        <Details currentUser={currentUser} model={model} />
-                    </OnlyMobileRow>
-                    <Row>
-                        <RelatedModels modelId={model.id} />
-                    </Row>
-                    <OnlyMobileRow>
-                        <CommentsForModel model={model} />
-                    </OnlyMobileRow>
-                </Column>
-                <OnlyDesktopColumn
-                    css={`
-                        ${mediaLgPlus} {
-                            max-width: 35%;
-                        }
-                    `}
-                >
-                    <Row>
-                        <Details currentUser={currentUser} model={model} />
-                    </Row>
-                    <Row>
-                        <CommentsForModel model={model} />
-                    </Row>
-                </OnlyDesktopColumn>
-            </Row>
-        </>
-    );
-};
-
-function Page() {
-    const { id } = useParams();
-    const [showBackupViewer] = useLocalStorage('showBackupViewer', false);
-
-    const { loading, error, model } = graphqlService.useModelById(id);
-    const [currentUser] = useLocalStorage('currentUser', null);
-
-    if (loading) {
-        return <Spinner />;
-    } else if (!model) {
-        return <Message404 />;
-    } else if (error) {
-        return <div>Error loading Model</div>;
-    }
-    return (
-        <ModelDetailPage
-            model={model}
-            currentUser={currentUser}
-            showBackupViewer={showBackupViewer}
-        />
-    );
+  return (
+    <>
+      <div className={c.Model_Header}>
+        <Button back onClick={() => history.goBack()}>
+          <BackArrow />
+        </Button>
+      </div>
+      <div className={c.Model_Row}>
+        <div className={c.Model_Column}>
+          <div className={c.Model_Row}>
+            {showBackupViewer ? (
+              <BackupViewer className={c.Model_BackupViewer} model={model} />
+            ) : (
+              <ModelViewer className={c.Model_ModelViewer} model={model} />
+            )}
+          </div>
+          <div className={c.Model_Row__mobile}>
+            <Details currentUser={currentUser} model={model} />
+          </div>
+          <div className={c.Model_Row}>
+            <RelatedModels modelId={model.id} />
+          </div>
+          <div className={c.Model_Row__mobile}>
+            <CommentsForModel model={model} />
+          </div>
+        </div>
+        <div className={c.Model_Column__desktop}>
+          <div className={c.Model_Row}>
+            <Details currentUser={currentUser} model={model} />
+          </div>
+          <div className={c.Model_Row}>
+            <CommentsForModel model={model} />
+          </div>
+        </div>
+      </div>
+    </>
+  )
 }
 
-export const ModelDetail = WithNewThemeLayout(Page);
+function Page() {
+  const { id } = useParams()
+  const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
+
+  const { loading, error, model } = graphqlService.useModelById(id)
+  const [currentUser] = useLocalStorage('currentUser', null)
+
+  if (loading) {
+    return <Spinner />
+  } else if (!model) {
+    return <Message404 />
+  } else if (error) {
+    return <div>Error loading Model</div>
+  }
+  return (
+    <ModelDetailPage
+      model={model}
+      currentUser={currentUser}
+      showBackupViewer={showBackupViewer}
+    />
+  )
+}
+
+export const ModelDetail = WithNewThemeLayout(Page)

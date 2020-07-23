@@ -8,13 +8,13 @@ import { ModelThumbnail } from '@components/ModelThumbnail'
 import { Card } from '@components/Card'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     ModelCard: {},
     ModelCard_Thumbnail: {
       paddingBottom: 0,
       minHeight: '12.25rem',
-      margin: auto,
+      margin: 'auto',
       maxWidth: 'calc(100% - 118px)',
       width: '100%',
       borderRadius: '.5rem .5rem 0 0',
@@ -44,12 +44,12 @@ const useStyles = createUseStyles(_theme => {
       letterSpacing: 0,
     },
     ModelCard_Icon: {
-      fill: theme.colors.BLUE_2,
+      fill: theme.colors.blue[500],
     },
   }
 })
 
-function CardContents({ className, model, showOwner, hovered }) {
+function CardContents({ className, model, showOwner, _hovered }) {
   const c = useStyles()
   return (
     <Card className={className}>

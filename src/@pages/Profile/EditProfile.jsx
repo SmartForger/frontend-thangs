@@ -1,117 +1,122 @@
-import React from 'react';
-import styled from 'styled-components/macro';
-import { Link } from 'react-router-dom';
+import React from 'react'
+import { Link } from 'react-router-dom'
 
-import { WithNewThemeLayout } from '@style/Layout';
-import { useCurrentUser } from '@customHooks/Users';
-import { ProfilePicture } from '@components/ProfilePicture';
-import { DarkButton } from '@components/Button';
-import { Spinner } from '@components/Spinner';
-import { ChangeablePicture } from '@components/ChangeablePicture';
-import { Flash } from '@components/Flash';
-import { EditProfileForm } from '@components/EditProfileForm';
-import * as GraphqlService from '@services/graphql-service';
+import { WithNewThemeLayout } from '@style/Layout'
+import { useCurrentUser } from '@customHooks/Users'
+import { ProfilePicture } from '@components/ProfilePicture'
+import { Button } from '@components/Button'
+import { Spinner } from '@components/Spinner'
+import { ChangeablePicture } from '@components/ChangeablePicture'
+import { Flash } from '@components/Flash'
+import { EditProfileForm } from '@components/EditProfileForm'
+import * as GraphqlService from '@services/graphql-service'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
-const graphqlService = GraphqlService.getInstance();
+const useStyles = createUseStyles(_theme => {
+  return {
+    EditProfile: {},
+    EditProfile_Row: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    EditProfile_Row__avatar: {
+      marginRight: '.25rem',
+    },
+    EditProfile_Row__profile: {
+      marginTop: '1rem',
+    },
+    EditProfile_ProfilePicture: {
+      marginRight: '1.5rem',
+    },
+    EditProfile_Button: {
+      padding: '.5rem 1.5rem',
+    },
+    EditProfile_PictureForm: {
+      marginBottom: '4rem',
+    },
+  }
+})
 
-const Row = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const ProfilePictureStyled = styled(ProfilePicture)`
-    margin-right: 24px;
-`;
-
-const DeleteButton = styled(DarkButton)`
-    padding: 8px 24px;
-`;
+const graphqlService = GraphqlService.getInstance()
 
 function PictureForm({ user, className }) {
-    const [
-        deleteProfileAvatar,
-        { loading },
-    ] = graphqlService.useDeleteUserAvatarMutation(user);
-    const onDelete = () => deleteProfileAvatar();
-    const deleteText = loading ? 'Deleting...' : 'Delete';
+  const c = useStyles()
+  const [deleteProfileAvatar, { loading }] = graphqlService.useDeleteUserAvatarMutation(
+    user
+  )
+  const onDelete = () => deleteProfileAvatar()
+  const deleteText = loading ? 'Deleting...' : 'Delete'
 
-    const currentAvatar = user && user.profile && user.profile.avatarUrl;
-    return (
-        <Row className={className}>
-            <ProfilePictureStyled
-                size="80px"
-                name={user.fullName}
-                src={user.profile.avatarUrl}
-            />
-            <div>
-                <Row>
-                    <ChangeablePicture
-                        user={user}
-                        css={`
-                            margin-right: 8px;
-                        `}
-                    />
+  const currentAvatar = user && user.profile && user.profile.avatarUrl
+  return (
+    <div className={classnames(className, c.EditProfile_Row)}>
+      <ProfilePicture
+        className={c.EditProfile_ProfilePicture}
+        size='80px'
+        name={user.fullName}
+        src={user.profile.avatarUrl}
+      />
+      <div>
+        <div className={classnames(c.EditProfile_Row, c.EditProfile_Row__avatar)}>
+          <ChangeablePicture user={user} />
 
-                    {currentAvatar && (
-                        <DeleteButton onClick={onDelete} disabled={loading}>
-                            {deleteText}
-                        </DeleteButton>
-                    )}
-                </Row>
-                <Row
-                    css={`
-                        margin-top: 16px;
-                    `}
-                >
-                    <Link to={`/profile/${user.id}`}>View Profile</Link>
-                </Row>
-            </div>
-        </Row>
-    );
+          {currentAvatar && (
+            <Button
+              dark
+              className={c.EditProfile_Button}
+              onClick={onDelete}
+              disabled={loading}
+            >
+              {deleteText}
+            </Button>
+          )}
+        </div>
+        <div className={classnames(c.EditProfile_Row, c.EditProfile_Row__profile)}>
+          <Link to={`/profile/${user.id}`}>View Profile</Link>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 function WarningOnEmptyProfile({ user }) {
-    if (!user.profile.description) {
-        return (
-            <Flash>
-                Add information about yourself below to let others know your
-                specialties, interests, etc.
-            </Flash>
-        );
-    }
-    return null;
+  if (!user.profile.description) {
+    return (
+      <Flash>
+        Add information about yourself below to let others know your specialties,
+        interests, etc.
+      </Flash>
+    )
+  }
+  return null
 }
 
 function Page() {
-    const { loading, error, user } = useCurrentUser();
+  const c = useStyles()
+  const { loading, error, user } = useCurrentUser()
 
-    if (loading) {
-        return <Spinner />;
-    }
+  if (loading) {
+    return <Spinner />
+  }
 
-    if (error || !user) {
-        return (
-            <div data-cy="fetch-results-error">
-                Error! We were not able to load your profile. Please try again
-                later.
-            </div>
-        );
-    }
-
+  if (error || !user) {
     return (
-        <div>
-            <WarningOnEmptyProfile user={user} />
-            <PictureForm
-                user={user}
-                css={`
-                    margin-bottom: 64px;
-                `}
-            />
-            <EditProfileForm user={user} />
-        </div>
-    );
+      <div data-cy='fetch-results-error'>
+        Error! We were not able to load your profile. Please try again later.
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <WarningOnEmptyProfile user={user} />
+      <PictureForm className={c.EditProfile_PictureForm} user={user} />
+      <EditProfileForm user={user} />
+    </div>
+  )
 }
 
-const EditProfile = WithNewThemeLayout(Page);
+const EditProfile = WithNewThemeLayout(Page)
 
-export { EditProfile };
+export { EditProfile }

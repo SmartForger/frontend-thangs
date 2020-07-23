@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useFlashNotification } from '@components/Flash'
 import { useParams, useHistory, Link } from 'react-router-dom'
-import classnames from 'classnames'
 import { ProfilePicture } from '@components/ProfilePicture'
 import { useCurrentUser } from '@customHooks/Users'
 import { useUnreadNotificationCount } from '@customHooks/Notifications'
@@ -10,6 +9,7 @@ import { FolderCreateModal } from '@components/FolderCreateModal'
 import { linkText } from '@style/text'
 import { Button } from '@components/Button'
 import { authenticationService } from '@services'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg'
@@ -34,7 +34,7 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
       position: 'fixed',
       background: ({ inverted }) =>
-        inverted ? theme.color.invertedHeaderBackground : theme.color.backgroundColor,
+        inverted ? theme.colors.invertedHeaderBackground : theme.colors.backgroundColor,
       top: 0,
       zIndex: 2,
     },
@@ -88,7 +88,7 @@ const useStyles = createUseStyles(theme => {
       width: '5rem',
     },
     Header_NotificationIcon: {
-      color: theme.colors.GREY_5,
+      color: theme.colors.purple[400],
     },
     Header_NotificationLink: {
       height: '3rem',
@@ -96,9 +96,9 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
     },
     Header_UnreadBadge: {
-      background: theme.colors.RED_3,
+      background: theme.colors.attention,
       borderRadius: '100%',
-      color: theme.colors.WHITE_1,
+      color: theme.colors.white[400],
       width: '1rem',
       height: '1rem',
       display: 'flex',
@@ -119,6 +119,14 @@ const useStyles = createUseStyles(theme => {
       margin: 'auto',
       '& > button': {
         height: '3rem',
+      },
+    },
+    Header_AddModelDropdown: {
+      margin: '0 .5rem',
+      width: '3rem',
+      lineHeight: 0,
+      '> div': {
+        right: 0,
       },
     },
     Header_ButtonsRow: {
@@ -189,15 +197,7 @@ function AddModelDropdownMenu() {
   return (
     <>
       <DropdownMenu
-        className={c.Header_DropdownMenu}
-        css={`
-          margin: 0 8px;
-          width: 50px;
-          line-height: 0;
-          > div {
-            right: 0px;
-          }
-        `}
+        className={classnames(c.Header_DropdownMenu, c.Header_AddModelDropdown)}
         buttonIcon={<PlusButton className={c.Header_DropdownIcon} />}
       >
         {folderId && (
@@ -229,10 +229,11 @@ function AddModelDropdownMenu() {
 }
 
 function ProfileDropdownMenu() {
+  const c = useStyles()
   const history = useHistory()
 
   return (
-    <DropdownMenuStyled>
+    <DropdownMenu className={c.Header_DropdownMenu}>
       <DropdownItem to='/profile/edit'>
         <PencilIcon /> Edit Profile
       </DropdownItem>
@@ -248,7 +249,7 @@ function ProfileDropdownMenu() {
         <ExitIcon />
         Sign Out
       </DropdownItem>
-    </DropdownMenuStyled>
+    </DropdownMenu>
   )
 }
 
@@ -262,13 +263,13 @@ const UserNav = () => {
 
   if (user) {
     return (
-      <Row className={c.Header_ButtonsRow}>
+      <div className={c.Header_ButtonsRow}>
         <Search />
         <NotificationsButton />
         <AddModelDropdownMenu />
         <UserPicture user={user} />
         <ProfileDropdownMenu />
-      </Row>
+      </div>
     )
   }
 

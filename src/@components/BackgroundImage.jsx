@@ -10,7 +10,7 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       display: 'flex',
       justifyContent: 'space-between',
-      background: theme.color.primary,
+      background: theme.color.backgroundColor,
       zIndex: -2,
       height: '100%',
       overflow: 'hidden',

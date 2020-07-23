@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import ErrorImg from '@svg/image-error-icon.svg'
 import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg'
 import { thumbnailErrorText } from '@style/text'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {

@@ -1,145 +1,140 @@
-import React, { useState } from 'react';
-import styled from 'styled-components/macro';
-import { Link } from 'react-router-dom';
-import { useDeleteFolder } from '../../@customHooks/Folders';
-import { DropdownMenu, DropdownItem } from '../DropdownMenu';
-import { FolderManagementModal } from '../FolderManagementModal';
-import { useFlashNotification } from '../Flash';
-import { TextButton } from '../Button';
-import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg';
-import { ReactComponent as TrashCanIcon } from '../../@svg/trash-can-icon.svg';
-import { ReactComponent as FolderManagementIcon } from '../../@svg/folder-management-icon.svg';
-import { Spinner } from '../Spinner';
-import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg';
-import { BLUE_2 } from '../../@style/colors';
-import { smallHeaderText, breadcrumbTextLight } from '../../@style/text';
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useDeleteFolder } from '../../@customHooks/Folders'
+import { DropdownMenu, DropdownItem } from '../DropdownMenu'
+import { FolderManagementModal } from '../FolderManagementModal'
+import { useFlashNotification } from '../Flash'
+import { Button } from '../Button'
+import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg'
+import { ReactComponent as TrashCanIcon } from '../../@svg/trash-can-icon.svg'
+import { ReactComponent as FolderManagementIcon } from '../../@svg/folder-management-icon.svg'
+import { Spinner } from '../Spinner'
+import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg'
+import { smallHeaderText, breadcrumbTextLight } from '../../@style/text'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
-const FolderIconStyled = styled(FolderIcon)`
-    color: ${BLUE_2};
-    margin-right: 16px;
-`;
+const useStyles = createUseStyles(theme => {
+  return {
+    Breadcrumbs: {},
+    Breadcrumbs_FolderIcon: {
+      color: theme.color.BLUE_2,
+      marginRight: '1rem',
+    },
+    Breadcrumbs_Spinner: {
+      width: '1rem',
+      height: '1rem',
+      '& .path': {
+        stroke: 'currentColor',
+      },
+    },
+    Breadcrumbs_Row: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    Breadcrumbs_RowContent: {
+      ...smallHeaderText,
 
-const SpinnerStyled = styled(Spinner)`
-    width: 18px;
-    height: 18px;
-    & .path {
-        stroke: currentColor;
-    }
-`;
-
-const Row = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const ErrorIconStyled = styled(ErrorIcon)`
-    width: 18px;
-    height: 18px;
-`;
+      '&:before': {
+        content: '>',
+        marginLeft: '1rem',
+        marginRight: '1.5rem',
+      },
+    },
+    Breadcrumbs_ErrorIcon: {
+      width: '1rem',
+      height: '1rem',
+    },
+    Breadcrumbs_DropdownMenu: {
+      marginLeft: '1rem',
+    },
+    Breadcrumbs_ManagementButton: {
+      marginLeft: '1.5rem',
+      display: 'flex',
+      alignItems: 'center',
+    },
+    Breadcrumbs_Link: {
+      ...breadcrumbTextLight,
+    },
+    Breadcrumbs_ModelCount: {
+      marginLeft: '.25rem',
+    },
+  }
+})
 
 function DeleteMenu({ folderId }) {
-    const [deleteFolder, { loading, error }] = useDeleteFolder(folderId);
-    const { navigateWithFlash } = useFlashNotification();
+  const c = useStyles()
+  const [deleteFolder, { loading, error }] = useDeleteFolder(folderId)
+  const { navigateWithFlash } = useFlashNotification()
 
-    const handleDelete = async e => {
-        e.preventDefault();
-        await deleteFolder();
-        navigateWithFlash('/home', 'Folder deleted');
-    };
+  const handleDelete = async e => {
+    e.preventDefault()
+    await deleteFolder()
+    navigateWithFlash('/home', 'Folder deleted')
+  }
 
-    return (
-        <DropdownMenu
-            css={`
-                margin-left: 16px;
-            `}
-        >
-            <DropdownItem to="#" onClick={handleDelete}>
-                {loading ? (
-                    <SpinnerStyled />
-                ) : error ? (
-                    <ErrorIconStyled />
-                ) : (
-                    <TrashCanIcon />
-                )}
+  return (
+    <DropdownMenu className={c.Breadcrumbs_DropdownMenu}>
+      <DropdownItem to='#' onClick={handleDelete}>
+        {loading ? (
+          <Spinner className={c.Breadcrumbs_Spinner} />
+        ) : error ? (
+          <ErrorIcon className={c.Breadcrumbs_ErrorIcon} />
+        ) : (
+          <TrashCanIcon />
+        )}
 
-                <span>Delete Folder</span>
-            </DropdownItem>
-        </DropdownMenu>
-    );
+        <span>Delete Folder</span>
+      </DropdownItem>
+    </DropdownMenu>
+  )
 }
-
-const ManagementButton = styled(TextButton)`
-    margin-left: 24px;
-    display: flex;
-    align-items: center;
-`;
 
 function ManageUsers({ folder }) {
-    const [isOpen, setIsOpen] = useState();
-    const { setFlash } = useFlashNotification();
+  const c = useStyles()
+  const [isOpen, setIsOpen] = useState()
+  const { setFlash } = useFlashNotification()
 
-    const afterInvite = () => {
-        setFlash(
-            'If the email addresses belong to registered Thangs users, they will have access to your folder'
-        );
-        setIsOpen(false);
-    };
-    const handleCancel = () => setIsOpen(false);
-    const handleClick = () => setIsOpen(true);
+  const afterInvite = () => {
+    setFlash(
+      'If the email addresses belong to registered Thangs users, they will have access to your folder'
+    )
+    setIsOpen(false)
+  }
+  const handleCancel = () => setIsOpen(false)
+  const handleClick = () => setIsOpen(true)
 
-    return (
-        <>
-            <ManagementButton onClick={handleClick}>
-                <FolderManagementIcon />
-            </ManagementButton>
-            <FolderManagementModal
-                folder={folder}
-                onCancel={handleCancel}
-                afterInvite={afterInvite}
-                isOpen={isOpen}
-            />
-        </>
-    );
+  return (
+    <>
+      <Button text className={c.Breadcrumbs_ManagementButton} onClick={handleClick}>
+        <FolderManagementIcon />
+      </Button>
+      <FolderManagementModal
+        folder={folder}
+        onCancel={handleCancel}
+        afterInvite={afterInvite}
+        isOpen={isOpen}
+      />
+    </>
+  )
 }
 
-const LinkStyled = styled(Link)``;
-
 export function Breadcrumbs({ modelsCount, folder, className }) {
-    return (
-        <Row className={className}>
-            <LinkStyled
-                to="/home"
-                css={`
-                    ${breadcrumbTextLight};
-                `}
-            >
-                <Row>
-                    <div>All Models</div>{' '}
-                    <div
-                        css={`
-                            margin-left: 4px;
-                        `}
-                    >
-                        {modelsCount}
-                    </div>
-                </Row>
-            </LinkStyled>
-            <Row
-                css={`
-                    ${smallHeaderText};
-
-                    ::before {
-                        content: '>';
-                        margin-left: 16px;
-                        margin-right: 24px;
-                    }
-                `}
-            >
-                <FolderIconStyled />
-                <div>{folder.name}</div>
-                <DeleteMenu folderId={folder.id} />
-                <ManageUsers folder={folder} />
-            </Row>
-        </Row>
-    );
+  const c = useStyles()
+  return (
+    <div className={classnames(className, c.Breadcrumbs_Row)}>
+      <Link className={c.Breadcrumbs_Link} to='/home'>
+        <div className={c.Breadcrumbs_Row}>
+          <div>All Models</div>{' '}
+          <div className={c.Breadcrumbs_ModelCount}>{modelsCount}</div>
+        </div>
+      </Link>
+      <div className={classnames(c.Breadcrumbs_Row, c.Breadcrumbs_RowContent)}>
+        <FolderIcon className={c.Breadcrumbs_FolderIcon} />
+        <div>{folder.name}</div>
+        <DeleteMenu folderId={folder.id} />
+        <ManageUsers folder={folder} />
+      </div>
+    </div>
+  )
 }

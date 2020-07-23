@@ -5,7 +5,7 @@ import { USER_QUERY } from '../@services/graphql-service/users'
 import { withApolloProvider } from '../../.storybook/withApolloProvider'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(_theme => {
   return {
     UndoPageWrapper: {
       margin: '-1rem',

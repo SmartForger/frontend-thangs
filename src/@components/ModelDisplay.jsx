@@ -8,7 +8,7 @@ const useStyles = createUseStyles(theme => {
     ModelDisplay: {
       width: '11.5rem',
       height: '8.5rem',
-      background: ({ imgURL }) => imgURL || theme.color.white,
+      background: ({ imgURL }) => imgURL || theme.color.white[400],
       margin: '.5rem',
       borderRadius: '2%',
       textAlign: 'center',

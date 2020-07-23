@@ -12,9 +12,10 @@ import { isError, isProcessing } from '@utilities'
 import { logger } from '../../logging'
 
 import * as GraphqlService from '@services/graphql-service'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(_theme => {
   return {
     RelatedModels: {},
     RelatedModels_NoResults: {

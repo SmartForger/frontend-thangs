@@ -5,9 +5,9 @@ import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg'
 import { ReactComponent as ModelPyramid } from '../../@svg/model-pyramid.svg'
 import { ReactComponent as ExitIcon } from '../../@svg/icon-X.svg'
 import { UploadFrame } from '../UploadFrame'
-import { TextButton } from '../Button'
+import { Button } from '../Button'
 import { infoMessageText, smallInfoMessageText, linkText } from '../../@style/text'
-import { GREY_3, WHITE_3 } from '../../@style/colors'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -21,14 +21,14 @@ const useStyles = createUseStyles(theme => {
       right: '2rem',
       top: '2rem',
       '& svg': {
-        fill: theme.colors.WHITE_3,
-        stroke: theme.colors.WHITE_3,
+        fill: theme.colors.white[900],
+        stroke: theme.colors.white[900],
         height: '3rem',
         width: '3rem',
       },
     },
     Uploader_ErrorIcon: {
-      color: theme.colors.GREY_3,
+      color: theme.colors.purple[300],
     },
     Uploader_FlexColumn: {
       display: 'flex',
@@ -95,7 +95,7 @@ export function Uploader({ file, setFile, showError = true }) {
   const c = useStyles()
   const [errorState, setErrorState] = React.useState()
   const onDrop = React.useCallback(
-    (acceptedFiles, rejectedFiles, event) => {
+    (acceptedFiles, rejectedFiles, _event) => {
       const file = acceptedFiles[0]
       if (rejectedFiles[0]) {
         setErrorState('FILE_EXT')
@@ -142,9 +142,9 @@ export function Uploader({ file, setFile, showError = true }) {
       <UploadFrame dragactive={isDragActive} currentFile={file}>
         {showError ? (
           <div className={c.Uploader_FlexColumn}>
-            <TextButton className={c.Uploader_IconButton} onClick={cancelUpload}>
+            <Button text className={c.Uploader_IconButton} onClick={cancelUpload}>
               <ErrorIcon className={c.Uploader_ErrorIcon} />
-            </TextButton>
+            </Button>
 
             <div className={c.Uploader_InfoMessage}>
               Sorry, an unexpected error occurred. Please wait a moment and try to save
@@ -153,9 +153,9 @@ export function Uploader({ file, setFile, showError = true }) {
           </div>
         ) : file ? (
           <div className={c.Uploader_FlexColumn}>
-            <TextButton className={c.Uploader_IconButton} onClick={cancelUpload}>
+            <Button text className={c.Uploader_IconButton} onClick={cancelUpload}>
               <ExitIcon />
-            </TextButton>
+            </Button>
             <ModelPyramid />
             <div className={c.Uploader_InfoMessage}>
               <strong>File:</strong> {file.name}
@@ -174,9 +174,9 @@ export function Uploader({ file, setFile, showError = true }) {
           </div>
         ) : errorState === 'TOO_BIG' ? (
           <div className={c.Uploader_FlexColumn}>
-            <TextButton className={c.Uploader_IconButton} onClick={cancelUpload}>
+            <Button text className={c.Uploader_IconButton} onClick={cancelUpload}>
               <ExitIcon />
-            </TextButton>
+            </Button>
             <ErrorIcon className={c.Uploader_ErrorIcon} />
             <div className={c.Uploader_InfoMessage}>
               File over {FILE_SIZE_LIMITS.hard.pretty}. Try uploading a different file.
@@ -184,9 +184,9 @@ export function Uploader({ file, setFile, showError = true }) {
           </div>
         ) : errorState === 'FILE_EXT' ? (
           <div className={c.Uploader_FlexColumn}>
-            <TextButton className={c.Uploader_IconButton} onClick={cancelUpload}>
+            <Button text className={c.Uploader_IconButton} onClick={cancelUpload}>
               <ExitIcon />
-            </TextButton>
+            </Button>
             <ErrorIcon className={c.Uploader_ErrorIcon} />
             <div className={c.Uploader_InfoMessage}>
               File extension not supported. Supported file extensions include{' '}
@@ -200,9 +200,9 @@ export function Uploader({ file, setFile, showError = true }) {
               Drag & Drop model
               <br />
               or{' '}
-              <TextButton onClick={handleBrowseClick}>
+              <Button onClick={handleBrowseClick}>
                 <span className={c.Uploader_LinkColor}>browse</span>
-              </TextButton>{' '}
+              </Button>{' '}
               to choose file
             </div>
           </div>

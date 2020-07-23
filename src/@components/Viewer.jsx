@@ -67,7 +67,7 @@ function HoverCube({ position }) {
     [setActive]
   )
 
-  useFrame(({ gl, scene, camera }) => {
+  useFrame(({ _gl, _scene, _camera }) => {
     mesh.current.rotation.y += 0.02
     setTime(time + 0.03)
     if (mesh.current) {

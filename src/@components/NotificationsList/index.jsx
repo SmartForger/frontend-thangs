@@ -6,9 +6,10 @@ import { Spinner } from '@components/Spinner'
 import { NoResults } from '@components/NoResults'
 import { logger } from '../../logging'
 import { Notification } from './Notification'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(_theme => {
   return {
     NotificationsList: {
       maxWidth: '43rem',

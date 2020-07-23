@@ -2,6 +2,7 @@ import React from 'react'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
+  console.log('theem', theme)
   return {
     '@keyframes rotate': {
       100: { transform: 'rotate(360deg)' },
@@ -29,7 +30,7 @@ const useStyles = createUseStyles(theme => {
       display: 'block',
 
       '& .path': {
-        stroke: ({ secondary }) => theme.color.secondary || theme.color.mainFontColor,
+        stroke: theme.color.mainFontColor,
         strokeLinecap: 'round',
         animation: 'dash 1.5s ease-in-out infinite',
       },

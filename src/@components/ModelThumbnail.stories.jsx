@@ -2,7 +2,7 @@ import React from 'react'
 import { ModelThumbnail } from './ModelThumbnail'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(_theme => {
   return {
     ModelThumbnail_container: {
       background: 'white',

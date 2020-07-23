@@ -4,7 +4,7 @@ import { createUseStyles } from '@style'
 const useStyles = createUseStyles(theme => {
   return {
     Shelf: {
-      position: absolute,
+      position: 'absolute',
       background: theme.color.grey,
       width: '17vw',
       right: '5vw',

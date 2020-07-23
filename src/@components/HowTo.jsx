@@ -1,6 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
-import { TextButton } from '@components/Button'
+import { Button } from '@components/Button'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as ColorIcon1 } from '@svg/icon-color-1.svg'
 import { ReactComponent as ColorIcon2 } from '@svg/icon-color-2.svg'
@@ -8,7 +7,6 @@ import { ReactComponent as ShadedIcon } from '@svg/icon-shaded.svg'
 import { ReactComponent as CompositeIcon } from '@svg/icon-composite.svg'
 import { ReactComponent as WireframeIcon } from '@svg/icon-wireframe.svg'
 import { howToTitle } from '@style/text'
-import { BLACK_5 } from '@style/colors'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -35,7 +33,7 @@ const useStyles = createUseStyles(theme => {
         marginLeft: '1.5rem',
       },
     },
-    HowTo_IconContainer: {
+    HowTo_IconSpacing: {
       marginLeft: '3rem',
     },
     HowTo_ExitIcon: {
@@ -44,8 +42,8 @@ const useStyles = createUseStyles(theme => {
       top: '2rem',
 
       '& svg': {
-        fill: theme.color.Black5,
-        stroke: theme.color.Black5,
+        fill: theme.color.BLACK_5,
+        stroke: theme.color.BLACK_5,
       },
     },
     HowTo_Text: {
@@ -97,11 +95,11 @@ export function HowTo({ setSeenHowTo }) {
   const handleClick = () => setSeenHowTo(true)
   return (
     <div className={c.HowTo} onClick={handleClick}>
-      <TextButton>
+      <Button text>
         <div className={c.HowTo_ExitIcon}>
           <ExitIcon />
         </div>
-      </TextButton>
+      </Button>
       <div className={c.HowTo_Container}>
         <Title className={c.HowTo_Title} />
         <Text className={c.HowTo_Text} />

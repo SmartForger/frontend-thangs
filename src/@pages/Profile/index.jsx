@@ -1,288 +1,278 @@
-import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import styled from 'styled-components/macro';
-import * as R from 'ramda';
+import React, { useState } from 'react'
+import { useParams, Link } from 'react-router-dom'
+import * as R from 'ramda'
 
-import { WithNewThemeLayout } from '@style';
-import * as GraphqlService from '@services/graphql-service';
-import { useCurrentUser } from '@customHooks/Users';
-import { Spinner } from '@components/Spinner';
-import { ProfilePicture } from '@components/ProfilePicture';
-import { Markdown } from '@components/Markdown';
-import { Message404 } from '../404';
-import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
-import { ReactComponent as AboutIcon } from '@svg/about-icon.svg';
-import { ReactComponent as ModelIcon } from '@svg/model-icon.svg';
-import { CardCollection } from '@components/CardCollection';
-import { ToggleFollowButton } from '@components/ToggleFollowButton';
+import { WithNewThemeLayout } from '@style'
+import * as GraphqlService from '@services/graphql-service'
+import { useCurrentUser } from '@customHooks/Users'
+import { Spinner } from '@components/Spinner'
+import { ProfilePicture } from '@components/ProfilePicture'
+import { Markdown } from '@components/Markdown'
+import { Message404 } from '../404'
+import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
+import { ReactComponent as AboutIcon } from '@svg/about-icon.svg'
+import { ReactComponent as ModelIcon } from '@svg/model-icon.svg'
+import { CardCollection } from '@components/CardCollection'
+import { ToggleFollowButton } from '@components/ToggleFollowButton'
 import {
-    subheaderText,
-    boldText,
-    linkText,
-    tabNavigationText,
-    activeTabNavigationText,
-    profileAboutText,
-} from '@style/text';
+  subheaderText,
+  boldText,
+  linkText,
+  tabNavigationText,
+  activeTabNavigationText,
+  profileAboutText,
+} from '@style/text'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
-export * from './EditProfile';
-export * from './RedirectProfile';
-export * from './Likes';
-export * from './Home';
+const useStyles = createUseStyles(_theme => {
+  return {
+    Profile: {},
+    Profile_Name: {
+      ...subheaderText,
+      marginTop: '.5rem',
+    },
+    Profile_TabTitleGroup: {
+      display: 'flex',
+      alignSelf: 'start',
+    },
+    Profile_TabTitle: {
+      ...tabNavigationText,
+      display: 'flex',
+      alignItems: 'center',
+      marginRight: '3.5rem',
+      cursor: 'pointer',
+    },
+    Profile_TabTitle__active: {
+      ...activeTabNavigationText,
+    },
+    Profile_Icon: {
+      display: 'flex',
+      height: '1.5rem',
+      width: '1.5rem',
+      alignItems: 'center',
+      marginRight: '.5rem',
+    },
+    Profile_TabContent: {
+      marginTop: '1.5rem',
+      width: '100%',
+      display: 'flex',
+    },
+    Profile_Markdown: {
+      maxWidth: '37.5rem',
+      ...profileAboutText,
+    },
+    Profile_TabGroupContainer: {
+      marginTop: '4.5rem',
+      width: '100%',
+    },
+    Profile_ProfilePicture: {
+      marginRight: '1.5rem',
+    },
+    Profile_Row: {
+      display: 'flex',
+    },
+    Profile_EditProfileLink: {
+      // We need to reset styles on this component because it is rendered within larger text
+      ...boldText,
+      ...linkText,
+    },
+    Profile_ProfileButton: {
+      marginTop: '1rem',
+      display: 'block',
+    },
+  }
+})
 
-const graphqlService = GraphqlService.getInstance();
+export * from './EditProfile'
+export * from './RedirectProfile'
+export * from './Likes'
+export * from './Home'
 
-const Name = styled.div`
-    ${subheaderText};
-    margin-top: 10px;
-`;
-
-const TabTitleGroup = styled.div`
-    display: flex;
-    align-self: start;
-`;
-
-const TabTitle = styled.div`
-    ${props => (props.selected ? activeTabNavigationText : tabNavigationText)};
-    display: flex;
-    align-items: center;
-    margin-right: 56px;
-    cursor: pointer;
-`;
-
-const Icon = styled.div`
-    display: flex;
-    height: 24px;
-    width: 24px;
-    align-items: center;
-    margin-right: 8px;
-`;
+const graphqlService = GraphqlService.getInstance()
 
 function ModelCount({ user }) {
-    const models = R.pathOr([], ['models'])(user);
-    const { user: currentUser, loading } = useCurrentUser();
-    if (loading || !currentUser) {
-        return <Spinner />;
-    }
+  const models = R.pathOr([], ['models'])(user)
+  const { user: currentUser, loading } = useCurrentUser()
+  if (loading || !currentUser) {
+    return <Spinner />
+  }
 
-    const amount = models.length;
-    return <span>Models {amount}</span>;
+  const amount = models.length
+  return <span>Models {amount}</span>
 }
 
 function Models({ selected, onClick, user }) {
-    return (
-        <TabTitle selected={selected} onClick={onClick}>
-            <Icon>
-                <ModelIcon />
-            </Icon>
-            <ModelCount user={user} />
-        </TabTitle>
-    );
+  const c = useStyles()
+  return (
+    <div className={c.Profile_TabTitle} selected={selected} onClick={onClick}>
+      <div className={c.Profile_Icon}>
+        <ModelIcon />
+      </div>
+      <ModelCount user={user} />
+    </div>
+  )
 }
 
 function Likes({ selected, onClick, user }) {
-    const likes = getLikedModels(user);
-    const amount = likes.length;
+  const c = useStyles()
+  const likes = getLikedModels(user)
+  const amount = likes.length
 
-    return (
-        <TabTitle selected={selected} onClick={onClick}>
-            <Icon>
-                <HeartIcon />
-            </Icon>
-            <span>Likes {amount}</span>
-        </TabTitle>
-    );
+  return (
+    <div className={c.Profile_TabTitle} selected={selected} onClick={onClick}>
+      <div className={c.Profile_Icon}>
+        <HeartIcon />
+      </div>
+      <span>Likes {amount}</span>
+    </div>
+  )
 }
 
-function About({ selected, onClick, user }) {
-    return (
-        <TabTitle selected={selected} onClick={onClick}>
-            <Icon>
-                <AboutIcon />
-            </Icon>
-            <span>About</span>
-        </TabTitle>
-    );
+function About({ selected, onClick, _user }) {
+  const c = useStyles()
+  return (
+    <div className={c.Profile_TabTitle} selected={selected} onClick={onClick}>
+      <div className={c.Profile_Icon}>
+        <AboutIcon />
+      </div>
+      <span>About</span>
+    </div>
+  )
 }
 
-const TabContent = styled.div`
-    margin-top: 24px;
-    width: 100%;
-    display: flex;
-`;
-
-const MarkdownStyled = styled(Markdown)`
-    max-width: 600px;
-    ${profileAboutText};
-`;
-
-const getDescription = R.pathOr(null, ['profile', 'description']);
-const getModels = R.pathOr([], ['models']);
-const getLikedModels = R.pathOr([], ['likedModels']);
+const getDescription = R.pathOr(null, ['profile', 'description'])
+const getModels = R.pathOr([], ['models'])
+const getLikedModels = R.pathOr([], ['likedModels'])
 
 function AboutContent({ selected, user }) {
-    if (!selected) {
-        return null;
-    }
-
-    const description = getDescription(user);
-    return <MarkdownStyled>{description}</MarkdownStyled>;
+  const c = useStyles()
+  if (!selected) {
+    return null
+  }
+  const description = getDescription(user)
+  return <Markdown className={c.Profile_Markdown}>{description}</Markdown>
 }
 
 function ModelsContent({ selected, user }) {
-    const models = getModels(user);
-    const { user: currentUser, loading } = useCurrentUser();
+  const models = getModels(user)
+  const { user: currentUser, loading } = useCurrentUser()
 
-    if (!selected) {
-        return null;
-    }
+  if (!selected) {
+    return null
+  }
 
-    if (loading || !currentUser) {
-        return <Spinner />;
-    }
+  if (loading || !currentUser) {
+    return <Spinner />
+  }
 
-    const sortedModels = models.sort((modelA, modelB) => {
-        if (modelA.created === modelB.created) return 0;
-        if (modelA.created > modelB.created) return -1;
-        else return 1;
-    });
+  const sortedModels = models.sort((modelA, modelB) => {
+    if (modelA.created === modelB.created) return 0
+    if (modelA.created > modelB.created) return -1
+    else return 1
+  })
 
-    return (
-        <CardCollection
-            models={sortedModels}
-            noResultsText="This user has not uploaded any models yet."
-        />
-    );
+  return (
+    <CardCollection
+      models={sortedModels}
+      noResultsText='This user has not uploaded any models yet.'
+    />
+  )
 }
 
 function LikesContent({ selected, user }) {
-    if (!selected) {
-        return null;
-    }
-    const models = getLikedModels(user);
-    return (
-        <CardCollection
-            models={models}
-            noResultsText="This user has not liked any models yet."
-        />
-    );
+  if (!selected) {
+    return null
+  }
+  const models = getLikedModels(user)
+  return (
+    <CardCollection
+      models={models}
+      noResultsText='This user has not liked any models yet.'
+    />
+  )
 }
-
-const TabGroupContainer = styled.div`
-    margin-top: 72px;
-    width: 100%;
-`;
 
 function Tabs({ user }) {
-    const [selected, setSelected] = useState('models');
+  const [selected, setSelected] = useState('models')
 
-    const selectModel = () => setSelected('models');
-    const selectLikes = () => setSelected('likes');
-    const selectAbout = () => setSelected('about');
+  const selectModel = () => setSelected('models')
+  const selectLikes = () => setSelected('likes')
+  const selectAbout = () => setSelected('about')
+  const c = useStyles()
 
-    return (
-        <TabGroupContainer>
-            <TabTitleGroup>
-                <Models
-                    selected={selected === 'models'}
-                    onClick={selectModel}
-                    user={user}
-                />
-                <Likes
-                    selected={selected === 'likes'}
-                    onClick={selectLikes}
-                    user={user}
-                />
-                <About
-                    selected={selected === 'about'}
-                    onClick={selectAbout}
-                    user={user}
-                />
-            </TabTitleGroup>
-            <TabContent>
-                <ModelsContent selected={selected === 'models'} user={user} />
-                <LikesContent selected={selected === 'likes'} user={user} />
-                <AboutContent selected={selected === 'about'} user={user} />
-            </TabContent>
-        </TabGroupContainer>
-    );
+  return (
+    <div className={c.Profile_TabGroupContainer}>
+      <div className={c.TabTitleGroup}>
+        <Models selected={selected === 'models'} onClick={selectModel} user={user} />
+        <Likes selected={selected === 'likes'} onClick={selectLikes} user={user} />
+        <About selected={selected === 'about'} onClick={selectAbout} user={user} />
+      </div>
+      <div className={c.Profile_TabContent}>
+        <ModelsContent selected={selected === 'models'} user={user} />
+        <LikesContent selected={selected === 'likes'} user={user} />
+        <AboutContent selected={selected === 'about'} user={user} />
+      </div>
+    </div>
+  )
 }
-
-const EditProfileLink = styled(Link)`
-    // We need to reset styles on this component because it is rendered within larger text
-    ${boldText};
-    ${linkText};
-`;
 
 function ProfileButton({ viewedUser, className }) {
-    const { user } = useCurrentUser();
+  const c = useStyles()
+  const { user } = useCurrentUser()
 
-    if (!user || user.id !== viewedUser.id) {
-        return (
-            <ToggleFollowButton viewedUser={viewedUser} className={className} />
-        );
-    }
+  if (!user || user.id !== viewedUser.id) {
+    return <ToggleFollowButton viewedUser={viewedUser} className={className} />
+  }
 
-    return (
-        <EditProfileLink to="/profile/edit" className={className}>
-            Edit Profile
-        </EditProfileLink>
-    );
+  return (
+    <Link className={classnames(className, c.Profile_EditProfileLink)} to='/profile/edit'>
+      Edit Profile
+    </Link>
+  )
 }
-
-const ProfilePictureStyled = styled(ProfilePicture)`
-    margin-right: 24px;
-`;
-
-const Row = styled.div`
-    display: flex;
-`;
 
 function Page() {
-    const { id } = useParams();
-    const { loading, error, user } = graphqlService.useUserById(id);
-    if (loading) {
-        return <Spinner />;
-    }
+  const { id } = useParams()
+  const { loading, error, user } = graphqlService.useUserById(id)
+  const c = useStyles()
+  if (loading) {
+    return <Spinner />
+  }
 
-    if (error) {
-        return (
-            <div data-cy="fetch-profile-error">
-                Error! We were not able to load this profile. Please try again
-                later.
-            </div>
-        );
-    }
-
-    if (!user) {
-        return (
-            <div data-cy="fetch-profile-error">
-                <Message404 />
-            </div>
-        );
-    }
-
+  if (error) {
     return (
+      <div data-cy='fetch-profile-error'>
+        Error! We were not able to load this profile. Please try again later.
+      </div>
+    )
+  }
+
+  if (!user) {
+    return (
+      <div data-cy='fetch-profile-error'>
+        <Message404 />
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <div className={c.Profile_Row}>
+        <ProfilePicture
+          className={c.Profile_ProfilePicture}
+          size='80px'
+          src={user.profile.avatarUrl}
+          name={user.fullName}
+        />
         <div>
-            <Row>
-                <ProfilePictureStyled
-                    size="80px"
-                    src={user.profile.avatarUrl}
-                    name={user.fullName}
-                />
-                <div>
-                    <Name>{user.fullName}</Name>
-                    <ProfileButton
-                        viewedUser={user}
-                        css={`
-                            margin-top: 16px;
-                            display: block;
-                        `}
-                    />
-                </div>
-            </Row>
-            <Tabs user={user} />
+          <div className={c.Profile_Name}>{user.fullName}</div>
+          <ProfileButton className={c.Profile_ProfileButton} viewedUser={user} />
         </div>
-    );
+      </div>
+      <Tabs user={user} />
+    </div>
+  )
 }
 
-export const Profile = WithNewThemeLayout(Page);
+export const Profile = WithNewThemeLayout(Page)

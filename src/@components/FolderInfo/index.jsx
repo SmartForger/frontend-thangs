@@ -21,7 +21,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     FolderInfo_Icon: {
-      color: theme.colors.BLUE_2,
+      color: theme.colors.blue[500],
       marginRight: '1rem',
       marginTop: '.25rem',
     },
