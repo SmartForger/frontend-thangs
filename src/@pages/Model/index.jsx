@@ -16,7 +16,7 @@ import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
 import { useLocalStorage } from '@customHooks/Storage'
 import { useDownloadModel } from '@customHooks/Models'
 import * as GraphqlService from '@services/graphql-service'
-import { NewThemeLayout } from '@component/Layout'
+import { NewThemeLayout } from '@components/Layout'
 import { linkText, modelTitleText } from '@style/text'
 
 import { ModelDetails } from '../ModelPreview/ModelDetails'

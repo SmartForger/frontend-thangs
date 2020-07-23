@@ -31,7 +31,7 @@ const useStyles = createUseStyles(theme => {
       left: '1rem',
       transform: 'translateX(-50%)',
       borderRadius: '.25rem',
-      ...theme.shadow,
+      ...theme.variables.shadow,
 
       '&:after': {
         content: '',
@@ -63,7 +63,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const BlockPicker = ({ currentColor, onChange, visible }) => {
-  const c = useStyles({ visible })
+  const c = useStyles({ visible, color: currentColor })
   return (
     <div className={c.ColorPicker_BlockPicker} visible={visible}>
       {COLORS.map((color, idx) => {

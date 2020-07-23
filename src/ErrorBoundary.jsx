@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { NewThemeLayout } from '@component/Layout'
+import { NewThemeLayout } from '@components/Layout'
 import { logger } from './logging'
 
 function ErrorMessage() {

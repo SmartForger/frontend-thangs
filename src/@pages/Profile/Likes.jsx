@@ -1,7 +1,7 @@
 import React from 'react'
 import * as R from 'ramda'
 
-import { NewThemeLayout } from '@style'
+import { NewThemeLayout } from '@components/Layout'
 import { useCurrentUser } from '@customHooks/Users'
 import { Spinner } from '@components/Spinner'
 import { Message404 } from '../404'

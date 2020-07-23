@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { NewThemeLayout } from '@component/Layout'
+import { NewThemeLayout } from '@components/Layout'
 import { WithFlash } from '@components/Flash'
 import { useCurrentUser, useModelsOwnedBy, useFoldersOwnedBy } from '@customHooks/Users'
 import { Spinner } from '@components/Spinner'
@@ -66,7 +66,7 @@ function FoldersTitle({ count, selected, className }) {
 }
 
 function FoldersContent({ user }) {
-  const c = useStyles()
+  const c = useStyles({})
   const { folders, loading, fetchMore, pageInfo } = useFoldersOwnedBy(user.id)
 
   if (loading) {
@@ -119,7 +119,7 @@ function ModelsContent({ user }) {
 }
 
 function ModelsPage() {
-  const c = useStyles()
+  const c = useStyles({})
   const { user, error, loading } = useCurrentUser()
 
   if (loading) {

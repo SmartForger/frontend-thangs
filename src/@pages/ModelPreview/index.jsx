@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useLocalStorage } from '@customHooks/Storage'
 import * as GraphqlService from '@services/graphql-service'
 import { ModelPreviewPage } from './ModelPreviewPage'
-import { NewThemeLayout } from '@style'
+import { NewThemeLayout } from '@components/Layout'
 import { Spinner } from '@components/Spinner'
 import { Message404 } from '../404'
 

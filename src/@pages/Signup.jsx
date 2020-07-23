@@ -4,7 +4,7 @@ import * as EmailValidator from 'email-validator'
 
 import * as swearjar from '@utilities'
 import { Button, Spinner, TextInput } from '@components'
-import { NewSignupThemeLayout } from '@style'
+import { NewSignupThemeLayout } from '@components/Layout'
 import { useForm } from '@customHooks'
 import { authenticationService } from '@services'
 import { ReactComponent as UserRegistrationIcon } from '@svg/user-registration.svg'

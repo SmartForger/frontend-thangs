@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import * as R from 'ramda'
 
-import { NewThemeLayout } from '@style'
+import { NewThemeLayout } from '@components/Layout'
 import { WithFlash } from '@components/Flash'
 import { useCurrentUser } from '@customHooks/Users'
 import { Spinner } from '@components/Spinner'
@@ -42,7 +42,7 @@ export * from './RedirectProfile'
 export * from './Likes'
 
 const ModelsTitle = ({ user, selected, onClick }) => {
-  const c = useStyles()
+  const c = useStyles({ selected })
   const models = R.pathOr([], ['models'])(user)
   const modelAmount = models.length
   return (
@@ -54,7 +54,7 @@ const ModelsTitle = ({ user, selected, onClick }) => {
 }
 
 const FoldersTitle = ({ user, selected, onClick, className }) => {
-  const c = useStyles()
+  const c = useStyles({ selected })
   const folders = R.pathOr([], ['folders'])(user)
   const folderAmount = folders.length
   return (
@@ -69,7 +69,7 @@ const getModels = R.pathOr([], ['models'])
 const getFolders = R.pathOr([], ['folders'])
 
 const PageContent = ({ user }) => {
-  const c = useStyles()
+  const c = useStyles({})
   const [selected, setSelected] = useState('models')
 
   const selectModels = () => setSelected('models')

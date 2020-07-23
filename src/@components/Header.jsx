@@ -28,6 +28,7 @@ const useStyles = createUseStyles(theme => {
   const {
     mediaQueries: { md },
   } = theme
+
   return {
     Header: {},
     Header__fixed: {
@@ -43,7 +44,7 @@ const useStyles = createUseStyles(theme => {
     Header_DesktopBoundary: {
       position: 'relative',
       margin: '48px auto 16px',
-      maxWidth: theme.maxWidth,
+      maxWidth: theme.variables.maxWidth,
       flexGrow: 1,
 
       [md]: {
@@ -152,7 +153,7 @@ const useStyles = createUseStyles(theme => {
 const NOTIFICATIONS_URL = '/notifications'
 
 const SignUp = () => {
-  const c = useStyles()
+  const c = useStyles({})
   return (
     <Link to='/signup'>
       <Button className={c.Header_SignUpButton}>Sign up</Button>
@@ -161,7 +162,7 @@ const SignUp = () => {
 }
 
 const NotificationsButton = () => {
-  const c = useStyles()
+  const c = useStyles({})
   const { unreadNotificationCount } = useUnreadNotificationCount()
 
   return (
@@ -175,7 +176,7 @@ const NotificationsButton = () => {
 }
 
 function Search() {
-  const c = useStyles()
+  const c = useStyles({})
   return (
     <Link to='/search' className={c.Header_SearchLink}>
       <MagnifyingGlass />
@@ -195,7 +196,7 @@ function AddModelDropdownMenu() {
   const { folderId } = useParams()
   const [createFolderIsOpen, setCreateFolderIsOpen] = useState(false)
   const { navigateWithFlash } = useFlashNotification()
-  const c = useStyles()
+  const c = useStyles({})
   return (
     <>
       <DropdownMenu
@@ -231,7 +232,7 @@ function AddModelDropdownMenu() {
 }
 
 function ProfileDropdownMenu() {
-  const c = useStyles()
+  const c = useStyles({})
   const history = useHistory()
 
   return (
@@ -256,7 +257,7 @@ function ProfileDropdownMenu() {
 }
 
 const UserNav = () => {
-  const c = useStyles()
+  const c = useStyles({})
   const { loading, user } = useCurrentUser()
 
   if (loading) {
@@ -286,7 +287,7 @@ const UserNav = () => {
 }
 
 function DesktopHeader({ variant }) {
-  const c = useStyles()
+  const c = useStyles({})
   return (
     <span className={c.Header_DesktopOnly}>
       <div className={c.Header_DesktopBoundary}>
@@ -307,7 +308,7 @@ function DesktopHeader({ variant }) {
 }
 
 function MobileHeader({ variant }) {
-  const c = useStyles()
+  const c = useStyles({})
   return (
     <span className={c.Header_MobileOnly}>
       <div className={c.Header_MobileBoundary}>
@@ -323,7 +324,7 @@ function MobileHeader({ variant }) {
 }
 
 const Header = ({ inverted, variant }) => {
-  const c = useStyles()
+  const c = useStyles({ inverted })
   return (
     <>
       <div className={c.Header__fixed} inverted={inverted}>

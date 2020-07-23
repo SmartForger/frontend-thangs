@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { NewThemeLayout } from '@component/Layout'
+import { NewThemeLayout } from '@components/Layout'
 import { useCurrentUser } from '@customHooks/Users'
 import { ProfilePicture } from '@components/ProfilePicture'
 import { Button } from '@components/Button'

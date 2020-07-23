@@ -1,7 +1,7 @@
 import React from 'react'
 
 import * as GraphqlService from '@services/graphql-service'
-import { NewInvertedHeaderLayout } from '@component/Layout'
+import { NewInvertedHeaderLayout } from '@components/Layout'
 import { Spinner } from '@components/Spinner'
 import CardCollection from '@components/CardCollection'
 

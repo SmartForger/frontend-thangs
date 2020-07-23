@@ -8,10 +8,11 @@ const useStyles = createUseStyles(theme => {
   const {
     mediaQueries: { md },
   } = theme
+
   return {
     Layout: {
       margin: 'auto',
-      maxWidth: theme.maxWidth,
+      maxWidth: theme.variables.maxWidth,
       paddingTop: '7.5rem',
       paddingRight: '1rem',
       paddingBottom: '2rem',
@@ -31,7 +32,7 @@ const useStyles = createUseStyles(theme => {
       padding: 0,
     },
     Layout_PromotionalText: {
-      fontFamily: theme.fonts.headerFont,
+      fontFamily: theme.variables.fonts.headerFont,
 
       '*': {
         ...landingPageText,
@@ -42,7 +43,7 @@ const useStyles = createUseStyles(theme => {
       [md]: {
         margin: 'auto 6.25rem',
       },
-      maxWidth: theme.maxWidth,
+      maxWidth: theme.variables.maxWidth,
       width: '100%',
     },
     Layout_PromotionalSecondaryText: {

@@ -26,7 +26,7 @@ const useStyles = createUseStyles(theme => {
       padding: '.5rem .75rem',
       backgroundColor: theme.colors.blue[500],
       ...primaryButtonText,
-      ...theme.shadow,
+      ...theme.variables.shadow,
 
       '&:hover': {
         backgroundColor: theme.colors.blue[700],
@@ -73,7 +73,7 @@ const useStyles = createUseStyles(theme => {
     },
     Button__brand: {
       ...matchingButtonText,
-      ...theme.shadow,
+      ...theme.variables.shadow,
       backgroundColor: theme.colors.gold[500],
       padding: '.5rem 1rem',
       minWidth: '11.25rem',

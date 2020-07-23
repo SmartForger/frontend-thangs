@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { NewThemeLayout } from '@component/Layout'
+import { NewThemeLayout } from '@components/Layout'
 import { Button } from '@components/Button'
 import { Uploader } from '@components/Uploader'
 import * as GraphqlService from '@services/graphql-service'

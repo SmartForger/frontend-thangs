@@ -1,6 +1,6 @@
 import React from 'react'
 import { headerText } from '@style/text'
-import { NewThemeLayout } from '@component/Layout'
+import { NewThemeLayout } from '@components/Layout'
 import NotificationsList from '@components/NotificationsList'
 import { Button } from '@components/Button'
 import { Spinner } from '@components/Spinner'

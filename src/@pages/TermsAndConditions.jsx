@@ -1,5 +1,5 @@
 import React from 'react'
-import { NewThemeLayout } from '@style'
+import { NewThemeLayout } from '@components/Layout'
 
 const Page = () => {
   return (

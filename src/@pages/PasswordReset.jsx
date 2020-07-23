@@ -4,7 +4,7 @@ import * as EmailValidator from 'email-validator'
 import { authenticationService } from '@services'
 import { useForm } from '@customHooks'
 import { TextInput, Spinner, Button } from '@components'
-import { NewSignupThemeLayout } from '@style'
+import { NewSignupThemeLayout } from '@components/Layout'
 import { darkPageTitleText, formSuccessText, formErrorText } from '@style/text'
 import { createUseStyles } from '@style'
 

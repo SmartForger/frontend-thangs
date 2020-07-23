@@ -25,7 +25,7 @@ const useStyles = createUseStyles(theme => {
 
 export const TextInput = props => {
   const [valid, setValid] = useState(true)
-  const c = useStyles(props)
+  const c = useStyles({ invalid: !valid })
 
   const handleValidation = () => {
     if (Object.prototype.hasOwnProperty.call(props, 'validator')) {

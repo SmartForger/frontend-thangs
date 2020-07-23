@@ -45,7 +45,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 export const DropdownItem = ({ children, to = '#', onClick }) => {
-  const c = useStyles()
+  const c = useStyles({})
   return (
     <div>
       <Link

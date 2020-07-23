@@ -61,7 +61,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const RevokeAccessButton = ({ folderId, targetUserId, children }) => {
-  const c = useStyles()
+  const c = useStyles({})
   const [revokeAccess, { loading, error }] = useRevokeAccess(folderId, targetUserId)
   const handleRevoke = async e => {
     e.preventDefault()
@@ -90,7 +90,7 @@ const RevokeAccessButton = ({ folderId, targetUserId, children }) => {
 }
 
 const UserList = ({ users = [], folderId, creator }) => {
-  const c = useStyles()
+  const c = useStyles({})
   const currentUserId = authenticationService.getCurrentUserId()
 
   return (

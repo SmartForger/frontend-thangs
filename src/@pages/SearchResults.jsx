@@ -1,5 +1,5 @@
 import React from 'react'
-import { NewThemeLayout } from '@style'
+import { NewThemeLayout } from '@components/Layout'
 import { useParams, Link } from 'react-router-dom'
 import * as GraphqlService from '@services/graphql-service'
 import { Spinner } from '@components/Spinner'

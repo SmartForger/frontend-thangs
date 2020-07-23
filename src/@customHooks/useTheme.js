@@ -1,8 +1,8 @@
 import { NewTheme, NewDarkTheme } from '@style/themes'
 
-const useTheme = path => {
-  console.log(path)
-  switch (path) {
+export const useTheme = location => {
+  const { pathname } = location
+  switch (pathname) {
     case '/login':
     case '/password_reset':
     case '/signup':
@@ -11,5 +11,3 @@ const useTheme = path => {
       return NewTheme
   }
 }
-
-export default useTheme
