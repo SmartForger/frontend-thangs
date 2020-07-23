@@ -35,8 +35,6 @@ import {
     routeRequiresAuth,
 } from '@components/RouteComponent';
 import { FlashContextProvider } from './@components/Flash';
-import {Provider} from "react-redux";
-import store from "./store";
 import {createStoreon} from "storeon";
 import {StoreContext} from "storeon/react";
 import teamsStore from '@store/teams/store';
@@ -61,7 +59,6 @@ const App = () => {
     initializeAnalytics(history);
 
     return (
-      <Provider store={store}>
         <AppFrame>
             <ApolloProvider client={client}>
               <StoreContext.Provider value={createStoreon([teamsStore])}>
@@ -163,7 +160,6 @@ const App = () => {
               </StoreContext.Provider>
             </ApolloProvider>
         </AppFrame>
-      </Provider>
     );
 };
 
