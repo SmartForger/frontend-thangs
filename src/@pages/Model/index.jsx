@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import { useHistory, Link, useParams } from 'react-router-dom';
 
-import { ProfilePicture } from '@components/ProfilePicture';
 import { LikeModelButton } from '@components/LikeModelButton';
 import { CommentsForModel } from '@components/CommentsForModel';
 import { ModelViewer } from '@components/HoopsModelViewer';
@@ -11,21 +10,23 @@ import { TextButton, BackButton } from '@components/Button';
 import { Spinner } from '@components/Spinner';
 import { ProgressText } from '@components/ProgressText';
 import { RelatedModels } from '@components/RelatedModels';
+import { ModelTitle } from '@components/ModelTitle';
 
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
+import { ReactComponent as VersionIcon } from '@svg/version-icon.svg';
 
 import { useLocalStorage } from '@customHooks/Storage';
 import { useDownloadModel } from '@customHooks/Models';
 import * as GraphqlService from '@services/graphql-service';
 import { WithNewThemeLayout } from '@style/Layout';
-import { linkText, modelTitleText } from '@style/text';
+import { linkText, subheaderText, activeTabNavigationText } from '@style/text';
 import {
     mediaSmPlus,
     mediaMdPlus,
     mediaLgPlus,
     mediaXlPlus,
 } from '@style/media-queries';
-
+import { BLUE_2 } from '@style/colors';
 import { ModelDetails } from '../ModelPreview/ModelDetails';
 import { Message404 } from '../404';
 
@@ -112,59 +113,9 @@ const BackupViewerStyled = styled(BackupViewer)`
     height: 616px;
 `;
 
-const ModelTitleContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin: 8px 0;
-`;
-
-const ModelTitleContent = styled.div`
-    flex-direction: column;
-`;
-
-const ModelOwnerProfilePicture = styled(ProfilePicture)`
-    margin-right: 16px;
-`;
-
-const ModelTitleText = styled.div`
-    ${modelTitleText};
-    margin-bottom: 8px;
-`;
-
-const ProfileLink = styled(Link)`
-    ${linkText};
-    display: block;
-    text-decoration: none;
-`;
-
 const Description = styled.div`
     margin: 32px 0;
 `;
-
-function ModelTitle({ model, className }) {
-    return (
-        <ModelTitleContainer className={className}>
-            {model.owner && (
-                <ProfileLink to={`/profile/${model.owner.id}`}>
-                    <ModelOwnerProfilePicture
-                        size="48px"
-                        name={model.owner.fullName}
-                        src={model.owner.profile.avatarUrl}
-                    />
-                </ProfileLink>
-            )}
-            <ModelTitleContent>
-                <ModelTitleText>{model.name}</ModelTitleText>
-                {model.owner && (
-                    <ProfileLink to={`/profile/${model.owner.id}`}>
-                        {model.owner.fullName}
-                    </ProfileLink>
-                )}
-            </ModelTitleContent>
-        </ModelTitleContainer>
-    );
-}
 
 const DownloadTextButton = styled(TextButton)`
     ${linkText};
@@ -188,9 +139,77 @@ function DownloadLink({ model }) {
     );
 }
 
+const Header = styled.h2`
+    ${subheaderText};
+`;
+
+const LinkTextButton = styled(TextButton)`
+    ${linkText};
+`;
+
+const IconedButton = styled.div`
+    ${activeTabNavigationText};
+    display: flex;
+    align-items: center;
+    margin-right: 56px;
+    cursor: pointer;
+    *:not(:first-child) {
+        margin-left: 12px;
+    }
+`;
+
+const VersionIconStyled = styled(VersionIcon)``;
+
+const VersionUpload = ({ modelId }) => (
+    <div>
+        <Header>
+            Versions
+        </Header>
+        <Link to={`/model/${modelId}/upload`}>
+            <IconedButton 
+                css={`
+                        margin-top: 24px
+                `}>
+                <VersionIconStyled
+                    css={`
+                        fill: ${BLUE_2} !important;
+                        width: 20px;
+                        height: 20px;
+                    `}
+                />
+                <LinkTextButton >
+                    Upload new version
+                </LinkTextButton>
+            </IconedButton>
+        </Link>
+    </div>
+)
+
+
+const Revised = () => (
+    <IconedButton css={`
+        margin-bottom: 24px;
+    `}>
+        <VersionIconStyled
+            css={`
+                fill: ${BLUE_2} !important;
+                width: 20px;
+                height: 20px;
+            `}
+        />
+        <div>
+            Revised from
+        </div>
+        <LinkTextButton >
+            Geofry Thomas
+        </LinkTextButton>
+    </IconedButton>
+)
+
 function Details({ currentUser, model, className }) {
     return (
         <div className={className}>
+            <Revised />
             <LikeModelButton currentUser={currentUser} model={model} />
             <ModelTitle model={model} />
             <Description>{model.description}</Description>
@@ -238,6 +257,9 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
                 >
                     <Row>
                         <Details currentUser={currentUser} model={model} />
+                    </Row>
+                    <Row>
+                        <VersionUpload modelId={model.id}/>
                     </Row>
                     <Row>
                         <CommentsForModel model={model} />

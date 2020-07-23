@@ -24,6 +24,7 @@ import {
     Home,
 } from '@pages';
 import { Upload } from '@pages/Upload';
+import { UploadVersion } from '@pages/UploadVersion';
 import { Matching } from '@pages/Matching';
 import { FolderPage } from '@pages/Folder';
 import { ModelPreview } from '@pages/ModelPreview';
@@ -126,6 +127,7 @@ const App = () => {
                                 component={routeRequiresAuth(RedirectProfile)}
                             />
                             <Route
+                                exact
                                 path="/model/:id"
                                 component={routeRequiresAuth(ModelDetail)}
                             />
@@ -148,6 +150,10 @@ const App = () => {
                             <Route
                                 path="/upload"
                                 component={routeRequiresAuth(Upload)}
+                            />
+                            <Route
+                                path="/model/:id/upload"
+                                component={routeRequiresAuth(UploadVersion)}
                             />
                             <Route
                                 path="/notifications"
