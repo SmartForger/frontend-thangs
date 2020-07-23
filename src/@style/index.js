@@ -2,3 +2,4 @@ export { ThemeProvider, createUseStyles, defaultTheme, useTheme } from './themin
 export { default as createTheme } from './createTheme'
 export { createColorShades } from './utils'
 export { NewTheme, NewDarkTheme } from './themes'
+export { GlobalStyles } from './globals'

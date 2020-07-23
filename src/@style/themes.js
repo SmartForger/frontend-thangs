@@ -6,7 +6,7 @@ import { colors } from './colors.js'
  */
 const fontMedium = '"Montserrat", sans-serif'
 const fontMain = '"Montserrat", sans-serif'
-const shadow = 'box-shadow: 0px 5px 10px 0px rgba(35, 37, 48, 0.25)'
+const boxShadow = '0px 5px 10px 0px rgba(35, 37, 48, 0.25)'
 const headerFont = 'Lexend Deca'
 
 const maxWidth = '1440px'
@@ -84,7 +84,7 @@ export const NewTheme = {
       mainFont: fontMain,
     },
     maxWidth,
-    shadow,
+    boxShadow,
   },
 }
 

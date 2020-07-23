@@ -29,7 +29,7 @@ const useStyles = createUseStyles(theme => {
 
       '&:focus': {
         outline: 'none',
-        ...theme.variables.shadow,
+        boxShadow: theme.variables.boxShadow,
       },
     },
     NewModalCommentForm_PostCommentButton: {

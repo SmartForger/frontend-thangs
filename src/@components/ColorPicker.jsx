@@ -31,7 +31,7 @@ const useStyles = createUseStyles(theme => {
       left: '1rem',
       transform: 'translateX(-50%)',
       borderRadius: '.25rem',
-      ...theme.variables.shadow,
+      boxShadow: theme.variables.boxShadow,
 
       '&:after': {
         content: '',

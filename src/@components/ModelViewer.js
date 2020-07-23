@@ -21,7 +21,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'column',
       borderRadius: '.5rem',
-      ...theme.variables.shadow,
+      boxShadow: theme.variables.boxShadow,
 
       '& > div': {
         pointerEvents: 'all',

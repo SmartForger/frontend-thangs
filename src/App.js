@@ -32,8 +32,8 @@ import { FolderUpload } from '@pages/FolderUpload'
 import { ErrorBoundary } from './ErrorBoundary'
 import { routeRequiresAnon, routeRequiresAuth } from '@components/RouteComponent'
 import { FlashContextProvider } from './@components/Flash'
-import { ThemeProvider } from '@style'
-import { useTheme } from '@customHooks/useTheme'
+import { ThemeProvider, GlobalStyles } from '@style'
+import { usePageTheming } from '@customHooks/usePageTheming'
 
 const originalFetch = window.fetch
 const client = graphqlClient(originalFetch, history)
@@ -59,12 +59,13 @@ export function AppFrame() {
 const App = () => {
   const location = useLocation()
   initializeAnalytics(history)
-  const theme = useTheme(location)
+  const theme = usePageTheming(location)
   return (
     <ApolloProvider client={client}>
       <ErrorBoundary>
         <FlashContextProvider>
           <ThemeProvider theme={theme}>
+            <GlobalStyles />
             <Switch>
               <Route exact path='/' component={routeRequiresAuth(Landing)} />
               <Route

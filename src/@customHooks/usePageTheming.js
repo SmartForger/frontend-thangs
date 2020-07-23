@@ -1,6 +1,6 @@
 import { NewTheme, NewDarkTheme } from '@style/themes'
 
-export const useTheme = location => {
+export const usePageTheming = location => {
   const { pathname } = location
   switch (pathname) {
     case '/login':

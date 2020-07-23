@@ -1,6 +1,6 @@
 import { createUseStyles } from '@style'
 
-export const useGlobalStyles = createUseStyles(theme => {
+const globals = theme => {
   return {
     '@global': {
       body: {
@@ -42,4 +42,12 @@ export const useGlobalStyles = createUseStyles(theme => {
       },
     },
   }
-})
+}
+
+const useGlobalStyles = createUseStyles(globals)
+
+export const GlobalStyles = () => {
+  useGlobalStyles()
+
+  return null
+}

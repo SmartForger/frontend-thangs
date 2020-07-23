@@ -266,7 +266,7 @@ const UserNav = () => {
 
   if (user) {
     return (
-      <div className={c.Header_ButtonsRow}>
+      <div className={classnames(c.Header_Row, c.Header_ButtonsRow)}>
         <Search />
         <NotificationsButton />
         <AddModelDropdownMenu />
