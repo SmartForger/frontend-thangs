@@ -33,9 +33,9 @@ const useStyles = createUseStyles(theme => {
     ModelViewer_ControlBar: {
       width: '100%',
       height: '5rem',
-      backgroundColor: theme.colors.cardBackground,
+      backgroundColor: theme.variables.colors.cardBackground,
       borderRadius: '0 0 .5rem .5rem',
-      borderTop: `1px ${theme.colors.viewerControlBorderColor} solid`,
+      borderTop: `1px ${theme.variables.colors.viewerControlBorderColor} solid`,
       display: 'flex',
       padding: '1.5rem',
       boxSizing: 'border-box',
@@ -46,7 +46,7 @@ const useStyles = createUseStyles(theme => {
       marginRight: '1rem',
       fontWeight: 500,
       fontSize: '75rem',
-      color: theme.colors.viewerControlText,
+      color: theme.variables.colors.viewerControlText,
     },
     ModelViewer_ButtonGroup: {
       display: 'flex',

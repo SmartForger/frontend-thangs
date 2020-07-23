@@ -1,7 +1,7 @@
 import React from 'react'
 
 import * as GraphqlService from '@services/graphql-service'
-import { WithNewInvertedHeaderLayout } from '@style/Layout'
+import { NewInvertedHeaderLayout } from '@component/Layout'
 import { Spinner } from '@components/Spinner'
 import CardCollection from '@components/CardCollection'
 
@@ -30,4 +30,10 @@ function Page() {
   )
 }
 
-export const Landing = WithNewInvertedHeaderLayout(Page)
+export const Landing = () => {
+  return (
+    <NewInvertedHeaderLayout>
+      <Page />
+    </NewInvertedHeaderLayout>
+  )
+}

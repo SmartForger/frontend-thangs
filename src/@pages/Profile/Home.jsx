@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import * as R from 'ramda'
 
-import { WithNewThemeLayout } from '@style'
+import { NewThemeLayout } from '@style'
 import { WithFlash } from '@components/Flash'
 import { useCurrentUser } from '@customHooks/Users'
 import { Spinner } from '@components/Spinner'
@@ -144,4 +144,10 @@ const Page = () => {
   return <PageContent user={user} />
 }
 
-export const Home = WithNewThemeLayout(Page)
+export const Home = () => {
+  return (
+    <NewThemeLayout>
+      <Page />
+    </NewThemeLayout>
+  )
+}

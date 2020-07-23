@@ -1,5 +1,5 @@
 import React from 'react'
-import { WithNewThemeLayout } from '@style'
+import { NewThemeLayout } from '@style'
 
 const Page = () => {
   return (
@@ -452,4 +452,10 @@ const Page = () => {
   )
 }
 
-export const TermsAndConditions = WithNewThemeLayout(Page, { logoOnly: true })
+export const TermsAndConditions = () => {
+  return (
+    <NewThemeLayout options={{ logoOnly: true }}>
+      <Page />
+    </NewThemeLayout>
+  )
+}

@@ -1,4 +1,4 @@
 export { ThemeProvider, createUseStyles, defaultTheme, useTheme } from './theming'
-export { createTheme } from './theme'
+export createTheme from './createTheme'
 export { createColorShades } from './utils'
-export * from './Layout'
+export { NewTheme, NewDarkTheme } from './themes'

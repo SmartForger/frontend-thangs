@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { WithNewThemeLayout } from '@style/Layout'
-
+import { NewThemeLayout } from '@component/Layout'
 import { logger } from './logging'
 
 function ErrorMessage() {
@@ -11,8 +10,6 @@ function ErrorMessage() {
     </div>
   )
 }
-
-const ErrorUI = WithNewThemeLayout(ErrorMessage, { logoOnly: true })
 
 export class ErrorBoundary extends Component {
   constructor(props) {
@@ -31,7 +28,11 @@ export class ErrorBoundary extends Component {
 
   render() {
     if (this.state.hasError) {
-      return <ErrorUI />
+      return (
+        <NewThemeLayout options={{ logoOnly: true }}>
+          <ErrorMessage />
+        </NewThemeLayout>
+      )
     }
 
     return this.props.children

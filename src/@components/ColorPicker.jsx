@@ -21,7 +21,7 @@ const useStyles = createUseStyles(theme => {
     },
     ColorPicker_BlockPicker: {
       display: ({ visible }) => (visible ? 'grid' : 'none'),
-      backgroundColor: theme.colors.cardBackground,
+      backgroundColor: theme.variables.colors.cardBackground,
       position: 'absolute',
       gridTemplateColumns: 'repeat(4, 1fr)',
       gridTemplateRows: 'repeat(2, 1fr)',
@@ -41,7 +41,7 @@ const useStyles = createUseStyles(theme => {
         transform: 'translateX(-50%)',
         width: 0,
         height: 0,
-        borderTop: `solid 8px ${theme.colors.cardBackground}`,
+        borderTop: `solid 8px ${theme.variables.colors.cardBackground}`,
         borderLeft: 'solid 6px transparent',
         borderRight: 'solid 6px transparent',
         zIndex: 1,
@@ -56,7 +56,7 @@ const useStyles = createUseStyles(theme => {
       boxSizing: 'border-box',
     },
     ColorPicker__isSelected: {
-      border: `1px solid ${theme.colors.cardBackground}`,
+      border: `1px solid ${theme.variables.colors.cardBackground}`,
       boxShadow: '0px 0px 6px 0px rgba(0, 0, 0, 0.5)',
     },
   }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { WithNewThemeLayout } from '@style/Layout'
+import { NewThemeLayout } from '@component/Layout'
 import { Button } from '@components/Button'
 import { Uploader } from '@components/Uploader'
 import * as GraphqlService from '@services/graphql-service'
@@ -23,7 +23,7 @@ const useStyles = createUseStyles(theme => {
       marginBottom: '1.5rem',
     },
     Matching_Button: {
-      backgroundColor: theme.colors.deleteButton,
+      backgroundColor: theme.variables.colors.deleteButton,
       marginTop: '1.5rem',
       float: 'right',
     },
@@ -111,6 +111,12 @@ function Page() {
   )
 }
 
-const Matching = WithNewThemeLayout(Page)
+const Matching = () => {
+  return (
+    <NewThemeLayout>
+      <Page />
+    </NewThemeLayout>
+  )
+}
 
 export { Matching }

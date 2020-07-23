@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import Select from 'react-select'
 import { useForm, ErrorMessage } from 'react-hook-form'
-import { WithNewThemeLayout } from '@style/Layout'
+import { NewThemeLayout } from '@component/Layout'
 import { Uploader } from '@components/Uploader'
 import { Button } from '@components/Button'
 import { useFlashNotification } from '@components/Flash'
@@ -77,7 +77,7 @@ const useStyles = createUseStyles(theme => {
     Upload_Spinner: {
       marginTop: '14rem',
       '& .path': {
-        stroke: theme.colors.uploaderText,
+        stroke: theme.variables.colors.uploaderText,
       },
     },
     Upload_Dots: {
@@ -325,4 +325,10 @@ const Page = () => {
   )
 }
 
-export const Upload = WithNewThemeLayout(Page)
+export const Upload = () => {
+  return (
+    <NewThemeLayout>
+      <Page />
+    </NewThemeLayout>
+  )
+}

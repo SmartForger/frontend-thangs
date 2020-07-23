@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { WithNewThemeLayout } from '@style/Layout'
+import { NewThemeLayout } from '@component/Layout'
 import { useCurrentUser } from '@customHooks/Users'
 import { ProfilePicture } from '@components/ProfilePicture'
 import { Button } from '@components/Button'
@@ -117,4 +117,10 @@ const Page = () => {
   )
 }
 
-export const EditProfile = WithNewThemeLayout(Page)
+export const EditProfile = () => {
+  return (
+    <NewThemeLayout>
+      <Page />
+    </NewThemeLayout>
+  )
+}

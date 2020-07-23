@@ -13,10 +13,11 @@ const useStyles = createUseStyles(theme => {
       boxSizing: 'border-box',
       lineHeight: '18px',
       fontWeight: '500',
-      backgroundColor: theme.colors.textInputBackground,
-      color: ({ invalid }) => (invalid ? theme.colors.error : theme.colors.textInput),
+      backgroundColor: theme.variables.colors.textInputBackground,
+      color: ({ invalid }) =>
+        invalid ? theme.colors.error : theme.variables.colors.textInput,
       '&::placeholder': {
-        color: theme.colors.textInputPlaceholderColor,
+        color: theme.variables.colors.textInputPlaceholderColor,
       },
     },
   }

@@ -40,7 +40,7 @@ const useStyles = createUseStyles(theme => {
     FolderForm_ErrorText: {
       ...formErrorText,
       marginTop: '1.5rem',
-      backgroundColor: theme.colors.errorTextBackground,
+      backgroundColor: theme.variables.colors.errorTextBackground,
       fontWeight: 500,
       padding: '.5rem 1rem',
       borderRadius: '.5rem',

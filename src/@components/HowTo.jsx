@@ -42,13 +42,13 @@ const useStyles = createUseStyles(theme => {
       top: '2rem',
 
       '& svg': {
-        fill: theme.colors.BLACK_5,
-        stroke: theme.colors.BLACK_5,
+        fill: theme.variables.colors.BLACK_5,
+        stroke: theme.variables.colors.BLACK_5,
       },
     },
     HowTo_Text: {
       maxWidth: '29.5rem',
-      color: theme.colors.viewerText,
+      color: theme.variables.colors.viewerText,
       marginBottom: '4.5rem',
     },
     HowTo_Title: {

@@ -4,7 +4,7 @@ import * as EmailValidator from 'email-validator'
 import { authenticationService } from '@services'
 import { useForm } from '@customHooks'
 import { TextInput, Spinner, Button } from '@components'
-import { WithNewSignupThemeLayout } from '@style'
+import { NewSignupThemeLayout } from '@style'
 import { darkPageTitleText, formSuccessText, formErrorText } from '@style/text'
 import { createUseStyles } from '@style'
 
@@ -29,7 +29,7 @@ const useStyles = createUseStyles(theme => {
     PasswordReset_ErrorText: {
       ...formErrorText,
       marginTop: '1.5rem',
-      backgroundColor: theme.colors.errorTextBackground,
+      backgroundColor: theme.variables.colors.errorTextBackground,
       padding: '.5rem 1rem',
       borderRadius: '.5rem',
     },
@@ -252,5 +252,18 @@ const ConfirmResetPage = () => {
   )
 }
 
-export const PasswordReset = WithNewSignupThemeLayout(ResetPage)
-export const ConfirmPasswordReset = WithNewSignupThemeLayout(ConfirmResetPage)
+export const PasswordReset = () => {
+  return (
+    <NewSignupThemeLayout>
+      <ResetPage />
+    </NewSignupThemeLayout>
+  )
+}
+
+export const ConfirmPasswordReset = () => {
+  return (
+    <NewSignupThemeLayout>
+      <ConfirmResetPage />
+    </NewSignupThemeLayout>
+  )
+}

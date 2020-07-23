@@ -13,7 +13,7 @@ const useStyles = createUseStyles(theme => {
     SearchBar: {},
     SearchBar_form: {
       flexGrow: 1,
-      backgroundColor: theme.colors.searchBackground,
+      backgroundColor: theme.variables.colors.searchBackground,
       borderRadius: '.5rem',
       position: 'relative',
       display: 'flex',

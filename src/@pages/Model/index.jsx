@@ -16,7 +16,7 @@ import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
 import { useLocalStorage } from '@customHooks/Storage'
 import { useDownloadModel } from '@customHooks/Models'
 import * as GraphqlService from '@services/graphql-service'
-import { WithNewThemeLayout } from '@style/Layout'
+import { NewThemeLayout } from '@component/Layout'
 import { linkText, modelTitleText } from '@style/text'
 
 import { ModelDetails } from '../ModelPreview/ModelDetails'
@@ -258,4 +258,10 @@ function Page() {
   )
 }
 
-export const ModelDetail = WithNewThemeLayout(Page)
+export const ModelDetail = () => {
+  return (
+    <NewThemeLayout>
+      <Page />
+    </NewThemeLayout>
+  )
+}

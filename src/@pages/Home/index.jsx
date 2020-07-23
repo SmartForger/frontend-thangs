@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { WithNewThemeLayout } from '@style/Layout'
+import { NewThemeLayout } from '@component/Layout'
 import { WithFlash } from '@components/Flash'
 import { useCurrentUser, useModelsOwnedBy, useFoldersOwnedBy } from '@customHooks/Users'
 import { Spinner } from '@components/Spinner'
@@ -185,5 +185,18 @@ function FoldersPage() {
   return <FoldersContent user={user} />
 }
 
-export const Folders = WithNewThemeLayout(FoldersPage)
-export const Models = WithNewThemeLayout(ModelsPage)
+export const Folders = () => {
+  return (
+    <NewThemeLayout>
+      <FoldersPage />
+    </NewThemeLayout>
+  )
+}
+
+export const Models = () => {
+  return (
+    <NewThemeLayout>
+      <ModelsPage />
+    </NewThemeLayout>
+  )
+}

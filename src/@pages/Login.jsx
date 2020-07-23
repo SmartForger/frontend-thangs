@@ -4,7 +4,7 @@ import * as EmailValidator from 'email-validator'
 import { authenticationService } from '@services'
 import { useForm } from '@customHooks'
 import { TextInput, Spinner, Button } from '@components'
-import { WithNewSignupThemeLayout } from '@style'
+import { NewSignupThemeLayout } from '@style'
 import { ReactComponent as LoginIcon } from '@svg/user-login.svg'
 import { darkPageTitleText, formErrorText, darkFormText } from '@style/text'
 import { createUseStyles } from '@style'
@@ -26,7 +26,7 @@ const useStyles = createUseStyles(theme => {
     Login_ErrorText: {
       ...formErrorText,
       marginTop: '1.5rem',
-      backgroundColor: theme.colors.errorTextBackground,
+      backgroundColor: theme.variables.colors.errorTextBackground,
       fontWeight: 500,
       padding: '.5rem 1rem',
       borderRadius: '.5rem',
@@ -122,63 +122,65 @@ const Page = () => {
   }
 
   return (
-    <div className={c.Login_Body}>
-      <LoginIcon />
-      <h1 className={c.Login_PageHeader}>
-        Sign In {waiting && <Spinner className={c.Login_Spinner} size='30' />}
-      </h1>
-      {!!loginErrorMessage && (
-        <h4 className={c.Login_ErrorText} data-cy='login-error'>
-          {loginErrorMessage}
-        </h4>
-      )}
-      <form onSubmit={handleSubmit} data-cy='login-form'>
-        <div className={c.Login_Fields}>
-          <div className={c.Login_FormControl}>
-            <label className={c.Login_Label}>
-              E-Mail
-              <TextInput
-                className={c.Login_TextInput}
-                type='text'
-                name='email'
-                incorrect={needsCorrected('email')}
-                onChange={handleChange}
-                validator={validateEmail}
-                value={inputs.email}
-                data-cy='login-email'
-                required
-              />
-            </label>
+    <NewSignupThemeLayout>
+      <div className={c.Login_Body}>
+        <LoginIcon />
+        <h1 className={c.Login_PageHeader}>
+          Sign In {waiting && <Spinner className={c.Login_Spinner} size='30' />}
+        </h1>
+        {!!loginErrorMessage && (
+          <h4 className={c.Login_ErrorText} data-cy='login-error'>
+            {loginErrorMessage}
+          </h4>
+        )}
+        <form onSubmit={handleSubmit} data-cy='login-form'>
+          <div className={c.Login_Fields}>
+            <div className={c.Login_FormControl}>
+              <label className={c.Login_Label}>
+                E-Mail
+                <TextInput
+                  className={c.Login_TextInput}
+                  type='text'
+                  name='email'
+                  incorrect={needsCorrected('email')}
+                  onChange={handleChange}
+                  validator={validateEmail}
+                  value={inputs.email}
+                  data-cy='login-email'
+                  required
+                />
+              </label>
+            </div>
+            <div className={c.Login_FormControl}>
+              <label className={c.Login_Label}>
+                Password
+                <TextInput
+                  className={c.Login_TextInput}
+                  type='password'
+                  name='password'
+                  onChange={handleChange}
+                  value={inputs.password}
+                  data-cy='login-password'
+                  required
+                />
+              </label>
+            </div>
           </div>
-          <div className={c.Login_FormControl}>
-            <label className={c.Login_Label}>
-              Password
-              <TextInput
-                className={c.Login_TextInput}
-                type='password'
-                name='password'
-                onChange={handleChange}
-                value={inputs.password}
-                data-cy='login-password'
-                required
-              />
-            </label>
-          </div>
+          <Button
+            className={c.Login_Button}
+            type='submit'
+            disabled={waiting || invalidForm()}
+          >
+            Sign In
+          </Button>
+        </form>
+        <div className={c.Login_ForgotText}>
+          Forgot password? <Link to='/password_reset'>Click here</Link> to reset your
+          password.
         </div>
-        <Button
-          className={c.Login_Button}
-          type='submit'
-          disabled={waiting || invalidForm()}
-        >
-          Sign In
-        </Button>
-      </form>
-      <div className={c.Login_ForgotText}>
-        Forgot password? <Link to='/password_reset'>Click here</Link> to reset your
-        password.
       </div>
-    </div>
+    </NewSignupThemeLayout>
   )
 }
 
-export const Login = WithNewSignupThemeLayout(Page)
+export const Login = Page

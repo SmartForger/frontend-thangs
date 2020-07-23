@@ -1,5 +1,5 @@
 import React from 'react'
-import { WithNewThemeLayout } from '@style'
+import { NewThemeLayout } from '@style'
 import { useParams, Link } from 'react-router-dom'
 import * as GraphqlService from '@services/graphql-service'
 import { Spinner } from '@components/Spinner'
@@ -108,4 +108,10 @@ const Page = () => {
   )
 }
 
-export const SearchResults = WithNewThemeLayout(Page)
+export const SearchResults = () => {
+  return (
+    <NewThemeLayout>
+      <Page />
+    </NewThemeLayout>
+  )
+}

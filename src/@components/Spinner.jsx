@@ -30,7 +30,7 @@ const useStyles = createUseStyles(theme => {
       display: 'block',
 
       '& .path': {
-        stroke: theme.colors.mainFontColor || theme.colors.grey[700],
+        stroke: theme.variables.colors.mainFontColor || theme.colors.grey[700],
         strokeLinecap: 'round',
         animation: 'dash 1.5s ease-in-out infinite',
       },

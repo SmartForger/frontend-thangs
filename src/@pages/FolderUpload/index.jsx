@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import Select from 'react-select'
 import { useForm, ErrorMessage } from 'react-hook-form'
-import { WithNewThemeLayout } from '@style/Layout'
+import { NewThemeLayout } from '@component/Layout'
 import { Message404 } from '../404'
 import { useFolder } from '../../@customHooks/Folders'
 import { Uploader } from '@components/Uploader'
@@ -74,7 +74,7 @@ const useStyles = createUseStyles(theme => {
     FolderUpload_Spinner: {
       marginTop: '14rem',
       '& .path': {
-        stroke: theme.colors.uploaderText,
+        stroke: theme.variables.colors.uploaderText,
       },
     },
     FolderUpload_Dots: {
@@ -347,6 +347,12 @@ const Page = () => {
   return <Upload folder={folder} />
 }
 
-const FolderUpload = WithNewThemeLayout(Page)
+const FolderUpload = () => {
+  return (
+    <NewThemeLayout>
+      <Page />
+    </NewThemeLayout>
+  )
+}
 
 export { FolderUpload }

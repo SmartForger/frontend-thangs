@@ -3,7 +3,7 @@ import { useParams, Redirect } from 'react-router-dom'
 import { format } from 'date-fns'
 
 import * as GraphqlService from '@services/graphql-service'
-import { WithNewThemeLayout } from '@style'
+import { NewThemeLayout } from '@style'
 import { Spinner } from '@components/Spinner'
 import { Markdown } from '@components/Markdown'
 import { createUseStyles } from '@style'
@@ -60,4 +60,10 @@ const Page = () => {
   return <NewspostPage newspost={newspost} />
 }
 
-export const Newspost = WithNewThemeLayout(Page)
+export const Newspost = () => {
+  return (
+    <NewThemeLayout>
+      <Page />
+    </NewThemeLayout>
+  )
+}

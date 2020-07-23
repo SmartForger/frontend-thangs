@@ -4,7 +4,7 @@ import * as EmailValidator from 'email-validator'
 
 import * as swearjar from '@utilities'
 import { Button, Spinner, TextInput } from '@components'
-import { WithNewSignupThemeLayout } from '@style'
+import { NewSignupThemeLayout } from '@style'
 import { useForm } from '@customHooks'
 import { authenticationService } from '@services'
 import { ReactComponent as UserRegistrationIcon } from '@svg/user-registration.svg'
@@ -32,7 +32,7 @@ const useStyles = createUseStyles(theme => {
     Signup_ErrorText: {
       ...formErrorText,
       marginTop: '1.5rem',
-      backgroundColor: theme.colors.errorTextBackground,
+      backgroundColor: theme.variables.colors.errorTextBackground,
       padding: '.5rem 1rem',
       borderRadius: '.5rem',
     },
@@ -294,4 +294,10 @@ const Page = () => {
   )
 }
 
-export const Signup = WithNewSignupThemeLayout(Page)
+export const Signup = () => {
+  return (
+    <NewSignupThemeLayout>
+      <Page />
+    </NewSignupThemeLayout>
+  )
+}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { headerText } from '@style/text'
-import { WithNewThemeLayout } from '@style/Layout'
+import { NewThemeLayout } from '@component/Layout'
 import NotificationsList from '@components/NotificationsList'
 import { Button } from '@components/Button'
 import { Spinner } from '@components/Spinner'
@@ -57,4 +57,10 @@ function Page() {
   )
 }
 
-export const Notifications = WithNewThemeLayout(Page)
+export const Notifications = () => {
+  return (
+    <NewThemeLayout>
+      <Page />
+    </NewThemeLayout>
+  )
+}

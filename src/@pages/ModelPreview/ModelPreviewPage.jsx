@@ -41,7 +41,7 @@ const useStyles = createUseStyles(theme => {
         lineHeight: 18,
       },
       '& > table td:first-child': {
-        color: theme.colors.modelDetailLabel,
+        color: theme.variables.colors.modelDetailLabel,
         fontSize: '.75rem',
         fontWeight: 600,
         lineHeight: '1.5rem',
@@ -49,8 +49,8 @@ const useStyles = createUseStyles(theme => {
       },
     },
     ModelPreviewPage_PrimaryButton: {
-      background: theme.colors.modelPrimaryButtonBackground,
-      color: theme.colors.modelPrimaryButtonText,
+      background: theme.variables.colors.modelPrimaryButtonBackground,
+      color: theme.variables.colors.modelPrimaryButtonText,
       marginBottom: '1.5rem',
       alignItems: 'center',
       justifyContent: 'center',
@@ -75,12 +75,12 @@ const useStyles = createUseStyles(theme => {
     },
     ModelPreviewPage_ModelTitleText: {
       display: 'block',
-      color: theme.colors.modelTitleText,
+      color: theme.variables.colors.modelTitleText,
       fontSize: '1.5rem',
     },
     ModelPreviewPage_ModelOwnerLink: {
       display: 'block',
-      color: theme.colors.modelOwnerLink,
+      color: theme.variables.colors.modelOwnerLink,
       fontSize: '1rem',
       fontWeight: 500,
       textDecoration: 'none',

@@ -7,7 +7,7 @@ const useStyles = createUseStyles(theme => {
   return {
     Flash: {
       ...flashToastText,
-      backgroundColor: theme.colors.flashColor,
+      backgroundColor: theme.variables.colors.flashColor,
       borderRadius: '.5rem',
       padding: '1rem 1.5rem',
       marginBottom: '1.5rem',

@@ -6,7 +6,7 @@ const useStyles = createUseStyles(theme => {
   return {
     NoResults: {
       ...zeroStateText,
-      backgroundColor: theme.colors.zeroStateBackground,
+      backgroundColor: theme.variables.colors.zeroStateBackground,
       padding: '1rem',
       borderRadius: '.5rem',
       width: '100%',

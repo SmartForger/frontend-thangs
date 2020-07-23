@@ -9,16 +9,16 @@ export const useGlobalStyles = createUseStyles(theme => {
         padding: 0,
         margin: 0,
         overflowX: 'hidden',
-        background: theme.colors.backgroundColor,
-        fontFamily: theme.colors.buttonFont,
+        background: theme.variables.colors.backgroundColor,
+        fontFamily: theme.variables.colors.buttonFont,
         fontSize: '.875rem',
-        color: theme.colors.mainFontColor || theme.colors.grey[700],
+        color: theme.variables.colors.mainFontColor || theme.colors.grey[700],
       },
 
       a: {
         textDecoration: 'none',
         fontWeight: 500,
-        color: theme.colors.linkText,
+        color: theme.variables.colors.linkText,
       },
 
       'h1, h2, h3, h4, h5, h6': {

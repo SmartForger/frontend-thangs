@@ -1,6 +1,6 @@
 import React from 'react'
 import { createTheming, createUseStyles as jssCreateUseStyles } from 'react-jss'
-import { createTheme } from './theme'
+import createTheme from './createTheme'
 
 export const defaultTheme = createTheme()
 const ThemeContext = React.createContext(defaultTheme)

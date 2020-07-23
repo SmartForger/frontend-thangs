@@ -34,7 +34,9 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
       position: 'fixed',
       background: ({ inverted }) =>
-        inverted ? theme.colors.invertedHeaderBackground : theme.colors.backgroundColor,
+        inverted
+          ? theme.variables.colors.invertedHeaderBackground
+          : theme.variables.colors.backgroundColor,
       top: 0,
       zIndex: 2,
     },

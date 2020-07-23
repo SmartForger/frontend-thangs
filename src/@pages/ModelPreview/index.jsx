@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useLocalStorage } from '@customHooks/Storage'
 import * as GraphqlService from '@services/graphql-service'
 import { ModelPreviewPage } from './ModelPreviewPage'
-import { WithNewThemeLayout } from '@style'
+import { NewThemeLayout } from '@style'
 import { Spinner } from '@components/Spinner'
 import { Message404 } from '../404'
 
@@ -24,6 +24,12 @@ function Page() {
   return <ModelPreviewPage model={model} currentUser={currentUser} />
 }
 
-const ModelPreview = WithNewThemeLayout(Page)
+const ModelPreview = () => {
+  return (
+    <NewThemeLayout>
+      <Page />
+    </NewThemeLayout>
+  )
+}
 
 export { ModelPreview }

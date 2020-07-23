@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import * as R from 'ramda'
 
-import { WithNewThemeLayout } from '@style'
+import { NewThemeLayout } from '@style'
 import * as GraphqlService from '@services/graphql-service'
 import { useCurrentUser } from '@customHooks/Users'
 import { Spinner } from '@components/Spinner'
@@ -275,4 +275,10 @@ const Page = () => {
   )
 }
 
-export const Profile = WithNewThemeLayout(Page)
+export const Profile = () => {
+  return (
+    <NewThemeLayout>
+      <Page />
+    </NewThemeLayout>
+  )
+}

@@ -1,9 +1,12 @@
 import { colors } from './colors.js'
 import * as textMixins from './text.js'
 
-export const createTheme = (data = {}) => {
+const createTheme = (data = {}) => {
   const base = {
-    colors: { ...colors, ...data.colors },
+    colors,
+    variables: {
+      colors: data.colors,
+    },
     mixins: {
       text: textMixins,
     },
@@ -29,3 +32,5 @@ export const createTheme = (data = {}) => {
     { ...data }
   )
 }
+
+export default createTheme

@@ -18,7 +18,7 @@ const useStyles = createUseStyles(theme => {
   return {
     Breadcrumbs: {},
     Breadcrumbs_FolderIcon: {
-      color: theme.colors.BLUE_2,
+      color: theme.colors.blue[500],
       marginRight: '1rem',
     },
     Breadcrumbs_Spinner: {

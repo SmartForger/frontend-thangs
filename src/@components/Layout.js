@@ -1,11 +1,10 @@
 import React from 'react'
-import { NewTheme, NewDarkTheme } from '@style/ThangsNormal.theme.js'
 import { Header } from '@components/Header'
 import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg'
 import { landingPageText, landingPageSubtext } from '@style/text'
-import { createUseStyles, ThemeProvider } from '@style'
+import { createUseStyles } from '@style'
 
-const _useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(theme => {
   const {
     mediaQueries: { md },
   } = theme
@@ -24,7 +23,7 @@ const _useStyles = createUseStyles(theme => {
       },
     },
     Layout_Hero: {
-      background: theme.colors.invertedHeaderBackground,
+      background: theme.variables.colors.invertedHeaderBackground,
       height: '47.25rem',
       position: 'relative',
       display: 'flex',
@@ -59,26 +58,26 @@ const _useStyles = createUseStyles(theme => {
   }
 })
 
-export const WithNewThemeLayout = (Component, options = {}) => props => {
-  const c = {} //useStyles()
+export const NewThemeLayout = ({ children, options = {} }) => {
+  const c = useStyles()
   const { logoOnly } = options
   const headerVariant = logoOnly && 'logo-only'
   const layoutVariant = logoOnly && 'small-vertical-spacing'
 
   return (
-    <ThemeProvider theme={NewTheme}>
+    <React.Fragment>
       <Header variant={headerVariant} />
       <div className={c.Layout} variant={layoutVariant}>
-        <Component {...props} />
+        {children}
       </div>
-    </ThemeProvider>
+    </React.Fragment>
   )
 }
 
-export const WithNewInvertedHeaderLayout = Component => props => {
-  const c = {} //useStyles()
+export const NewInvertedHeaderLayout = ({ children }) => {
+  const c = useStyles()
   return (
-    <ThemeProvider theme={NewTheme}>
+    <React.Fragment>
       <Header inverted />
       <div>
         <BackgroundSvg />
@@ -94,20 +93,20 @@ export const WithNewInvertedHeaderLayout = Component => props => {
         </div>
       </div>
       <div className={c.Layout} variant='small-vertical-spacing'>
-        <Component {...props} />
+        {children}
       </div>
-    </ThemeProvider>
+    </React.Fragment>
   )
 }
 
-export const WithNewSignupThemeLayout = Component => props => {
-  const c = {} //useStyles()
+export const NewSignupThemeLayout = ({ children }) => {
+  const c = useStyles()
   return (
-    <ThemeProvider theme={NewDarkTheme}>
+    <React.Fragment>
       <Header variant='logo-only' />
       <div className={c.Layout} variant='small-vertical-spacing'>
-        <Component {...props} />
+        {children}
       </div>
-    </ThemeProvider>
+    </React.Fragment>
   )
 }

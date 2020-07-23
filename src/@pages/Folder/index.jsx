@@ -8,7 +8,7 @@ import { WithFlash } from '../../@components/Flash'
 import { Spinner } from '../../@components/Spinner'
 import CardCollection from '../../@components/CardCollection'
 import Breadcrumbs from '../../@components/Breadcrumbs'
-import { WithNewThemeLayout } from '../../@style/Layout'
+import { NewThemeLayout } from '../../@component/Layout'
 import { Message404 } from '../404'
 import { createUseStyles } from '@style'
 
@@ -58,4 +58,10 @@ function Page() {
   return <Folder folder={folder} modelCount={modelCount} />
 }
 
-export const FolderPage = WithNewThemeLayout(Page)
+export const FolderPage = () => {
+  return (
+    <NewThemeLayout>
+      <Page />
+    </NewThemeLayout>
+  )
+}

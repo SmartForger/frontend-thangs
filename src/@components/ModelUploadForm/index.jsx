@@ -59,7 +59,7 @@ const useStyles = createUseStyles(theme => {
     ModelUploadForm_Spinner: {
       marginTop: '14rem',
       '& .path': {
-        stroke: theme.colors.uploaderText,
+        stroke: theme.variables.colors.uploaderText,
       },
     },
     ModelUploadForm_Dots: {
