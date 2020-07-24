@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { ReactComponent as SearchIcon } from '@svg/search-icon.svg'
-import { inputPlaceholderText } from '@style/text'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -33,12 +32,13 @@ const useStyles = createUseStyles(theme => {
     },
     SearchBar_input: {
       border: 'none',
-      padding: '.5rem .5rem .5rem 2.5rem',
+      padding: '.5625rem .5rem .5625rem 2.5rem',
       background: 'none',
       width: '100%',
+      lineHeight: '1.125rem',
 
       '&::placeholder': {
-        ...inputPlaceholderText,
+        ...theme.mixins.text.inputPlaceholderText,
       },
 
       [md]: {

@@ -4,6 +4,7 @@ import * as R from 'ramda'
 import { Button } from '@components/Button'
 import * as GraphqlService from '@services/graphql-service'
 import { logger } from '../logging'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -37,9 +38,13 @@ const useStyles = createUseStyles(theme => {
       minWidth: 0,
       backgroundColor: theme.variables.colors.textInputBackground,
     },
+    EditProfileForm_textareaContainer: {
+      marginTop: '3rem',
+    },
     EditProfileForm_textarea: {
       resize: 'vertical',
       border: 0,
+      marginBottom: '2rem',
       padding: '.5rem 1rem',
       borderRadius: '.5rem',
       backgroundColor: theme.variables.colors.textInputBackground,
@@ -109,11 +114,11 @@ export const EditProfileForm = ({ user }) => {
         />
       </div>
       <div
-        className={c.EditProfileForm_Field}
+        className={classnames(
+          c.EditProfileForm_Field,
+          c.EditProfileForm_textareaContainer
+        )}
         htmlFor='description'
-        css={`
-          margin-top: 48px;
-        `}
       >
         <label className={c.EditProfileForm_label}>About</label>
         <textarea
@@ -123,9 +128,6 @@ export const EditProfileForm = ({ user }) => {
           ref={register({ required: true })}
           placeholder='Add a bio...'
           rows={5}
-          css={`
-            margin-bottom: 32px;
-          `}
         />
       </div>
 

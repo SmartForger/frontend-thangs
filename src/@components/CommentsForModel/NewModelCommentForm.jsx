@@ -2,7 +2,6 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { authenticationService } from '@services'
 import * as GraphqlService from '@services/graphql-service'
-import { formCalloutText } from '@style/text'
 import { Button } from '@components/Button'
 import { createUseStyles } from '@style'
 
@@ -12,7 +11,7 @@ const useStyles = createUseStyles(theme => {
       marginTop: '2.5rem',
     },
     NewModalCommentForm_Header: {
-      ...formCalloutText,
+      ...theme.mixins.text.formCalloutText,
       marginBottom: '1rem',
     },
     NewModalCommentForm_PostCommentTextArea: {

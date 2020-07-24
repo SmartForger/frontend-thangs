@@ -8,7 +8,6 @@ import { Spinner } from '@components/Spinner'
 import { Message404 } from '../404'
 import ModelCollection from '@components/CardCollection/ModelCollection'
 import FolderCollection from '@components/CardCollection/FolderCollection'
-import { subheaderText } from '@style/text'
 import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg'
 import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg'
 import classnames from 'classnames'
@@ -30,12 +29,12 @@ const useStyles = createUseStyles(theme => {
       color: ({ selected }) => (selected ? theme.colors.blue[500] : 'inherit'),
     },
     Home_Title: {
-      ...subheaderText,
+      ...theme.mixins.text.subheaderText,
       display: 'flex',
       alignItems: 'center',
       color: 'inherit',
     },
-    Home_FolderTitle: {
+    Home_FoldersTitle: {
       marginLeft: '1rem',
     },
   }

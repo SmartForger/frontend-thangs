@@ -17,7 +17,6 @@ import { useLocalStorage } from '@customHooks/Storage'
 import { useDownloadModel } from '@customHooks/Models'
 import * as GraphqlService from '@services/graphql-service'
 import { NewThemeLayout } from '@components/Layout'
-import { linkText, modelTitleText } from '@style/text'
 
 import { ModelDetails } from '../ModelPreview/ModelDetails'
 import { Message404 } from '../404'
@@ -115,11 +114,11 @@ const useStyles = createUseStyles(theme => {
       marginRight: '1rem',
     },
     Model_TitleText: {
-      ...modelTitleText,
+      ...theme.mixins.text.modelTitleText,
       marginBottom: '.5rem',
     },
     Model_ProfileLink: {
-      ...linkText,
+      ...theme.mixins.text.linkText,
       display: 'block',
       textDecoration: 'none',
     },
@@ -127,7 +126,7 @@ const useStyles = createUseStyles(theme => {
       margin: '2rem 0',
     },
     Model_DownloadButton: {
-      ...linkText,
+      ...theme.mixins.text.linkText,
       width: '7.75rem',
       textAlign: 'left',
       marginBottom: '1.5rem',

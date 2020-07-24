@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { headerText } from '@style/text'
 import { NoResults } from '@components/NoResults'
 import CardCollection from '@components/CardCollection'
 import { Spinner } from '@components/Spinner'
@@ -15,7 +14,7 @@ import * as GraphqlService from '@services/graphql-service'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     RelatedModels: {},
     RelatedModels_NoResults: {
@@ -30,7 +29,7 @@ const useStyles = createUseStyles(_theme => {
       height: '1.5rem',
     },
     RelatedModels_Header: {
-      ...headerText,
+      ...theme.mixins.text.headerText,
       marginBottom: '1.5rem',
     },
     RelatedModels_Related: {

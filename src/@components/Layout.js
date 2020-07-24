@@ -1,7 +1,6 @@
 import React from 'react'
 import { Header } from '@components/Header'
 import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg'
-import { landingPageText, landingPageSubtext } from '@style/text'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -31,13 +30,6 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'center',
       padding: 0,
     },
-    Layout_PromotionalText: {
-      fontFamily: theme.variables.fonts.headerFont,
-
-      '*': {
-        ...landingPageText,
-      },
-    },
     Layout_TextContainer: {
       margin: 'auto 1rem',
       [md]: {
@@ -46,8 +38,14 @@ const useStyles = createUseStyles(theme => {
       maxWidth: theme.variables.maxWidth,
       width: '100%',
     },
+    Layout_PromotionalText: {
+      fontFamily: theme.variables.fonts.headerFont,
+    },
+    Layout_PromotionalPrimaryText: {
+      ...theme.mixins.text.landingPageText,
+    },
     Layout_PromotionalSecondaryText: {
-      ...landingPageSubtext,
+      ...theme.mixins.text.landingPageSubtext,
       maxWidth: '34.5rem',
       marginTop: '1.5rem',
     },
@@ -80,15 +78,15 @@ export const NewInvertedHeaderLayout = ({ children }) => {
   return (
     <React.Fragment>
       <Header inverted />
-      <div>
-        <BackgroundSvg />
+      <div className={c.Layout_Hero}>
+        <BackgroundSvg className={c.Layout_Background} />
         <div className={c.Layout_TextContainer}>
           <div className={c.Layout_PromotionalText}>
-            <span>
-              <u>Build</u> Thangs.
+            <span className={c.Layout_PromotionalPrimaryText}>
+              <u className={c.Layout_PromotionalPrimaryText}>Build</u> Thangs.
             </span>
           </div>
-          <div className={c.PromotionalSecondaryText}>
+          <div className={c.Layout_PromotionalSecondaryText}>
             3D model community for designers, engineers and enthusiasts
           </div>
         </div>

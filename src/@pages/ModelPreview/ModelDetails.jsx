@@ -1,10 +1,9 @@
 import React from 'react'
 import * as R from 'ramda'
-import { modelDetailsLabelText } from '@style/text'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     ModelDetails: {},
     ModelDetails_Table: {
@@ -17,7 +16,7 @@ const useStyles = createUseStyles(_theme => {
       verticalAlign: 'middle',
     },
     ModelDetails_Cell__first: {
-      ...modelDetailsLabelText,
+      ...theme.mixins.text.modelDetailsLabelText,
       height: '1.5rem',
       textTransform: 'uppercase',
     },

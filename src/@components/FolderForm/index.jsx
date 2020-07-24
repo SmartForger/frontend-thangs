@@ -5,7 +5,6 @@ import * as R from 'ramda'
 import { Button } from '../Button'
 import { Spinner } from '../Spinner'
 import { useCreateFolder, useInviteToFolder } from '../../@customHooks/Folders'
-import { formErrorText } from '../../@style/text'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -38,7 +37,7 @@ const useStyles = createUseStyles(theme => {
       background: theme.colors.white[900],
     },
     FolderForm_ErrorText: {
-      ...formErrorText,
+      ...theme.mixins.text.formErrorText,
       marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
       fontWeight: 500,

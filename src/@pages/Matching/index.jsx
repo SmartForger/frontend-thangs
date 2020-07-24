@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { NewThemeLayout } from '@components/Layout'
 import { Button } from '@components/Button'
@@ -7,19 +7,17 @@ import * as GraphqlService from '@services/graphql-service'
 import { authenticationService } from '@services'
 import CardCollection from '@components/CardCollection'
 import { UploadProgress } from '@components/UploadProgress'
-
-import { subheaderText, matchingSubheader } from '@style/text'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   return {
     Matching: {},
     Matching_Header: {
-      ...subheaderText,
+      ...theme.mixins.text.subheaderText,
       marginBottom: '1rem',
     },
     Matching_Subheader: {
-      ...matchingSubheader,
+      ...theme.mixins.text.matchingSubheader,
       marginBottom: '1.5rem',
     },
     Matching_Button: {
@@ -85,7 +83,7 @@ function Page() {
     setCurrentModel(model)
   }
 
-  const onCancel = () => history.push('/')
+  const onCancel = useCallback(() => history.push('/'), [history])
 
   return (
     <div>
@@ -102,7 +100,13 @@ function Page() {
           <form>
             <Uploader showError={!!uploadError} setFile={handleFile} />
           </form>
-          <Button className={c.Matching_Button} onClick={onCancel}>
+          <Button
+            className={c.Matching_Button}
+            onClick={() => {
+              console.log('HERE')
+              onCancel()
+            }}
+          >
             Cancel
           </Button>
         </>

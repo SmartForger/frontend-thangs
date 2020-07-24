@@ -8,7 +8,6 @@ import { ReactComponent as ShadedMode } from '@svg/view-mode-shaded.svg'
 import { ReactComponent as XRayMode } from '@svg/view-mode-xray.svg'
 import { ReactComponent as EdgesColor } from '@svg/view-color-edges.svg'
 import { ReactComponent as ShadeColor } from '@svg/view-color-shade.svg'
-import { viewerToolbarText } from '@style/text'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -36,7 +35,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Toolbar_ToolGroupTitle: {
-      ...viewerToolbarText,
+      ...theme.mixins.text.viewerToolbarText,
       display: 'none',
       textTransform: 'uppercase',
       margin: 0,

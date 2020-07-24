@@ -11,7 +11,6 @@ import { authenticationService } from '@services'
 import { Spinner } from '@components/Spinner'
 import { UploadFrame } from '@components/UploadFrame'
 import { ProgressText } from '@components/ProgressText'
-import { subheaderText, formErrorText, infoMessageText } from '@style/text'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -57,11 +56,11 @@ const useStyles = createUseStyles(theme => {
       marginRight: '.5rem',
     },
     Upload_Header: {
-      ...subheaderText,
+      ...theme.mixins.text.subheaderText,
       marginBottom: '1.5rem',
     },
     Upload_Error: {
-      ...formErrorText,
+      ...theme.mixins.text.formErrorText,
       margin: '.5rem 0',
     },
     Upload_DropdownIndicator: {
@@ -81,7 +80,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Upload_Dots: {
-      ...infoMessageText,
+      ...theme.mixins.text.infoMessageText,
       width: '8.75rem',
       marginBottom: '14rem',
     },

@@ -5,7 +5,6 @@ import { authenticationService } from '@services'
 import { useForm } from '@customHooks'
 import { TextInput, Spinner, Button } from '@components'
 import { NewSignupThemeLayout } from '@components/Layout'
-import { darkPageTitleText, formSuccessText, formErrorText } from '@style/text'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -16,7 +15,7 @@ const useStyles = createUseStyles(theme => {
       marginTop: '6.5rem',
     },
     PasswordReset_PageHeader: {
-      ...darkPageTitleText,
+      ...theme.mixins.text.darkPageTitleText,
       marginTop: '.25rem',
     },
     PasswordReset_Spinner: {
@@ -27,14 +26,14 @@ const useStyles = createUseStyles(theme => {
       marginTop: '.5rem',
     },
     PasswordReset_ErrorText: {
-      ...formErrorText,
+      ...theme.mixins.text.formErrorText,
       marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
       padding: '.5rem 1rem',
       borderRadius: '.5rem',
     },
     PasswordReset_SuccessText: {
-      ...formSuccessText,
+      ...theme.mixins.text.formSuccessText,
       backgroundColor: 'lightgreen',
       padding: '.25rem',
       borderRadius: '.25rem',

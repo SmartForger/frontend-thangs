@@ -13,7 +13,6 @@ import { useAddToFolder } from '../../@customHooks/Folders'
 import { Spinner } from '@components/Spinner'
 import { UploadFrame } from '@components/UploadFrame'
 import { ProgressText } from '@components/ProgressText'
-import { formErrorText, infoMessageText } from '@style/text'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -58,7 +57,7 @@ const useStyles = createUseStyles(theme => {
       marginRight: '.5rem',
     },
     FolderUpload_Error: {
-      ...formErrorText,
+      ...theme.mixins.text.formErrorText,
       margin: '.5rem 0',
     },
     FolderUpload_DropdownIndicator: {
@@ -78,7 +77,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     FolderUpload_Dots: {
-      ...infoMessageText,
+      ...theme.mixins.text.infoMessageText,
       width: '8.75rem',
       marginBottom: '14rem',
     },

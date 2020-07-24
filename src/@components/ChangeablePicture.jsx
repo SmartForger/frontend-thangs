@@ -37,6 +37,7 @@ const useStyles = createUseStyles(_theme => {
     },
     ChangeablePicture_Form: {
       position: 'relative',
+      marginRight: '.5rem',
     },
     ChangeablePicture_ButtonContainer: {
       display: 'flex',
@@ -177,10 +178,10 @@ export function ChangeablePicture({ user, _button, className }) {
     }, 'image/jpeg')
   }
 
-  const onButtonClick = e => {
-    buttonRef.current.focus()
-    e.persist()
-  }
+  // const onButtonClick = e => {
+  //   buttonRef.current.focus()
+  //   e.persist()
+  // }
 
   return (
     <form className={classnames(className, c.ChangeablePicture_Form)} ref={formRef}>
@@ -201,7 +202,6 @@ export function ChangeablePicture({ user, _button, className }) {
         name='Change Image'
         id='avatar'
         onChange={onSelectFile}
-        onClick={onButtonClick}
         accept='image/x-png,image/jpeg'
         ref={imageEl}
       />

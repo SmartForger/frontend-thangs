@@ -6,7 +6,6 @@ import { ReactComponent as ColorIcon2 } from '@svg/icon-color-2.svg'
 import { ReactComponent as ShadedIcon } from '@svg/icon-shaded.svg'
 import { ReactComponent as CompositeIcon } from '@svg/icon-composite.svg'
 import { ReactComponent as WireframeIcon } from '@svg/icon-wireframe.svg'
-import { howToTitle } from '@style/text'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -52,7 +51,7 @@ const useStyles = createUseStyles(theme => {
       marginBottom: '4.5rem',
     },
     HowTo_Title: {
-      ...howToTitle,
+      ...theme.mixins.text.howToTitle,
       marginBottom: '1.5rem',
     },
   }

@@ -6,7 +6,6 @@ import { useCurrentUser } from '@customHooks/Users'
 import { useUnreadNotificationCount } from '@customHooks/Notifications'
 import { DropdownMenu, DropdownItem } from '@components/DropdownMenu'
 import FolderCreateModal from '@components/FolderCreateModal'
-import { linkText } from '@style/text'
 import { Button } from '@components/Button'
 import { authenticationService } from '@services'
 import classnames from 'classnames'
@@ -84,7 +83,7 @@ const useStyles = createUseStyles(theme => {
       height: '3rem',
     },
     Header_SignInLink: {
-      ...linkText,
+      ...theme.mixins.text.linkText,
       marginRight: '2rem',
     },
     Header_SignUpButton: {
@@ -187,7 +186,7 @@ function Search() {
 function UserPicture({ user }) {
   return (
     <Link to='/home/'>
-      <ProfilePicture name={user.fullName} src={user.profile.avatarUrl} size='50px' />
+      <ProfilePicture name={user.fullName} src={user.profile.avatarUrl} size='3rem' />
     </Link>
   )
 }
@@ -201,7 +200,7 @@ function AddModelDropdownMenu() {
     <>
       <DropdownMenu
         className={classnames(c.Header_DropdownMenu, c.Header_AddModelDropdown)}
-        buttonIcon={<PlusButton className={c.Header_DropdownIcon} />}
+        buttonIcon={PlusButton}
       >
         {folderId && (
           <DropdownItem to={`/folder/${folderId}/upload`}>

@@ -6,14 +6,13 @@ import { useCurrentUser } from '@customHooks/Users'
 import { Spinner } from '@components/Spinner'
 import { Message404 } from '../404'
 import CardCollection from '@components/CardCollection'
-import { subheaderText } from '@style/text'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     Likes: {},
     Likes_LikedModelsHeader: {
-      ...subheaderText,
+      ...theme.mixins.text.subheaderText,
       marginBottom: '2rem',
     },
   }

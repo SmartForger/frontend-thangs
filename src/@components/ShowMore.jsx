@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
 import { Button } from './Button'
 import { Spinner } from './Spinner'
-import { linkText } from '../@style/text'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     ShowMoreButton: {
-      ...linkText,
+      ...theme.mixins.text.linkText,
       width: '7rem',
       padding: '.25rem .75rem',
     },

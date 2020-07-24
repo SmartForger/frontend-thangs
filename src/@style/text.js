@@ -16,21 +16,21 @@ export const flashToastText = {
 
 export const tabNavigationText = {
   color: colors.purple[400],
-  fontSize: 16,
-  svg: {
+  fontSize: '1rem',
+  '& svg': {
     fill: colors.purple[400],
   },
 }
 
 export const activeTabNavigationText = {
-  fontSize: 16,
-  svg: {
+  fontSize: '1rem',
+  '& svg': {
     fill: colors.grey[700],
   },
 }
 
 export const profileAboutText = {
-  fontSize: 16,
+  fontSize: '1rem',
   color: BLACK_5,
 }
 
@@ -40,7 +40,7 @@ export const cardNumbersText = {
 }
 
 export const formCalloutText = {
-  fontSize: 18,
+  fontSize: '1.125rem',
   fontFamily: LEXEND_DECA,
 }
 
@@ -50,22 +50,22 @@ export const usernameText = {
 }
 
 export const subheaderText = {
-  fontSize: 24,
+  fontSize: '1.5rem',
   fontFamily: LEXEND_DECA,
 }
 
 export const resultsHeaderText = {
-  fontSize: 24,
+  fontSize: '1.5rem',
   fontFamily: LEXEND_DECA,
   color: BLACK_5,
 }
 
 export const modelTitleText = {
-  fontSize: 18,
+  fontSize: '1.125rem',
 }
 
 export const darkPageTitleText = {
-  fontSize: 48,
+  fontSize: '3rem',
   fontFamily: LEXEND_DECA,
   color: colors.white[400],
 }
@@ -77,7 +77,7 @@ export const linkText = {
 }
 
 export const headerText = {
-  fontSize: 32,
+  fontSize: '2rem',
   fontFamily: LEXEND_DECA,
 }
 
@@ -94,7 +94,7 @@ export const secondaryButtonText = {
   color: colors.white[400],
   fontWeight: 500,
 
-  '> svg': {
+  '& > svg': {
     fill: colors.white[400],
   },
 }
@@ -105,20 +105,20 @@ export const darkButtonText = {
 }
 
 export const smallInfoMessageText = {
-  lineHeight: 18,
+  lineHeight: '1.125rem',
   fontStyle: 'italic',
   color: colors.purple[400],
 }
 
 export const infoMessageText = {
-  fontSize: 24,
+  fontSize: '1.5rem',
   fontStyle: 'normal',
-  lineHeight: 28,
+  lineHeight: '1.75rem',
   color: colors.purple[300],
 }
 
 export const modelDetailsLabelText = {
-  fontSize: 12,
+  fontSize: '.75rem',
   fontWeight: 600,
   color: colors.purple[400],
 }
@@ -130,29 +130,29 @@ export const inputPlaceholderText = {
 export const landingPageText = {
   color: colors.white[400],
   textDecorationColor: colors.gold[500],
-  fontSize: 72,
+  fontSize: '4.5rem',
 }
 
 export const landingPageSubtext = {
   color: colors.purple[300],
-  fontSize: 32,
+  fontSize: '2rem',
   fontWeight: 300,
 }
 
 export const matchingSubheader = {
-  fontSize: 18,
+  fontSize: '1.125rem',
   color: colors.purple[400],
 }
 
 export const viewerToolbarText = {
   color: colors.grey[300],
-  fontSize: 12,
+  fontSize: '.75rem',
   fontWeight: 500,
 }
 
 export const viewerLoadingText = {
   fontWeight: 500,
-  fontSize: 16,
+  fontSize: '1rem',
 }
 
 export const formSuccessText = {
@@ -165,10 +165,10 @@ export const formErrorText = {
 }
 
 export const matchingButtonText = {
-  color: colors.gold[800],
+  color: colors.gold[900],
   fontWeight: 500,
-  svg: {
-    fill: colors.gold[800],
+  '& svg': {
+    fill: colors.gold[900],
   },
 }
 
@@ -176,7 +176,7 @@ export const matchingButtonHoverText = {
   color: colors.gold[500],
   fontWeight: 500,
 
-  svg: {
+  '& svg': {
     fill: colors.gold[500],
   },
 }
@@ -208,44 +208,44 @@ export const commentPostedText = {
 }
 
 export const commentUsername = {
-  fontSize: 16,
+  fontSize: '1rem',
   fontWeight: 500,
 }
 
 export const howToTitle = {
-  fontSize: 24,
+  fontSize: '1.5rem',
   fontFamily: LEXEND_DECA,
   color: colors.grey[700],
 }
 
 export const regularText = {
-  fontSize: 14,
+  fontSize: '.875rem',
   color: colors.grey[700],
 }
 
 export const boldText = {
-  fontSize: 14,
+  fontSize: '.875rem',
   fontWeight: 500,
   color: colors.grey[700],
 }
 
 export const lightText = {
-  fontSize: 14,
+  fontSize: '.875rem',
   color: colors.grey[300],
 }
 
 export const cardSubtext = {
-  fontSize: 12,
+  fontSize: '.75rem',
   color: colors.grey[500],
 }
 
 export const breadcrumbTextLight = {
-  fontSize: 20,
+  fontSize: '1.25rem',
   fontFamily: LEXEND_DECA,
   color: colors.grey[500],
 }
 
 export const smallHeaderText = {
-  fontSize: 20,
+  fontSize: '1.25rem',
   fontFamily: LEXEND_DECA,
 }

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '../Button'
-import { boldText } from '../../@style/text'
 import { ReactComponent as DotStackIcon } from '../../@svg/dot-stack-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -13,7 +12,7 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '0 0 .5rem .5rem',
       boxShadow: '0px 5px 10px 0px rgba(35, 37, 48, 0.25)',
       width: '16.25rem',
-      padding: ({ noIcons }) => (noIcons ? '24px 48px' : '24px'),
+      padding: ({ noIcons }) => (noIcons ? '1.5rem 3rem' : '1.5rem'),
       boxSizing: 'border-box',
       position: 'absolute',
       right: '.75rem',
@@ -21,7 +20,7 @@ const useStyles = createUseStyles(theme => {
       zIndex: 2,
     },
     DropdownMenu_Item: {
-      ...boldText,
+      ...theme.mixins.text.boldText,
       lineHeight: '2rem',
       display: 'inline-flex',
       alignItems: 'center',

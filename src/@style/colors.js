@@ -60,7 +60,7 @@ export const colors = {
     600: '#dfa500',
     700: '#cb9602',
     800: '#b18002',
-    900: '#805E00',
+    900: '#8b6400',
   },
   attention: '#ff0000',
   error: '#ca2d2c',

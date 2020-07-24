@@ -1,12 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { flashToastText } from '@style/text'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   return {
     Flash: {
-      ...flashToastText,
+      ...theme.mixins.text.flashToastText,
       backgroundColor: theme.variables.colors.flashColor,
       borderRadius: '.5rem',
       padding: '1rem 1.5rem',
@@ -15,9 +14,9 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const Flash = _props => {
+export const Flash = ({ children, _props }) => {
   const c = useStyles()
-  return <div className={c.Flash} />
+  return <div className={c.Flash}>{children}</div>
 }
 
 const FlashContext = React.createContext([null, {}])

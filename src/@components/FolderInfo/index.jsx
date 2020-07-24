@@ -1,20 +1,19 @@
 import React from 'react'
 import classnames from 'classnames'
 import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg'
-import { smallHeaderText, regularText, cardSubtext } from '../../@style/text'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   return {
     FolderInfo: {
-      ...regularText,
+      ...theme.mixins.text.regularText,
       padding: '1rem',
     },
     FolderInfo_Row: {
       display: 'flex',
     },
     FolderInfo_Subtext: {
-      ...cardSubtext,
+      ...theme.mixins.text.cardSubtext,
       display: 'flex',
       '& > div + div': {
         marginLeft: '.25rem',
@@ -26,7 +25,7 @@ const useStyles = createUseStyles(theme => {
       marginTop: '.25rem',
     },
     FolderInfo_Name__Bold: {
-      ...smallHeaderText,
+      ...theme.mixins.text.smallHeaderText,
     },
   }
 })

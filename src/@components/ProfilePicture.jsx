@@ -1,14 +1,13 @@
 import React from 'react'
 import Avatar from 'react-avatar'
-import { avatarDefaultText } from '@style/text'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     ProfilePicture: {
       '& span': {
-        ...avatarDefaultText,
+        ...theme.mixins.text.avatarDefaultText,
       },
     },
   }

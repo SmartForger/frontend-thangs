@@ -3,7 +3,6 @@ import { UserInline } from '../UserInline'
 import { Link } from 'react-router-dom'
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
-import { thumbnailActivityCountText, regularText } from '@style/text'
 import { ModelThumbnail } from '@components/ModelThumbnail'
 import { Card } from '@components/Card'
 import { createUseStyles } from '@style'
@@ -15,7 +14,7 @@ const useStyles = createUseStyles(theme => {
       paddingBottom: 0,
       minHeight: '12.25rem',
       margin: 'auto',
-      maxWidth: 'calc(100% - 118px)',
+      maxWidth: 'calc(100% - 7.375rem)',
       width: '100%',
       borderRadius: '.5rem .5rem 0 0',
     },
@@ -23,7 +22,7 @@ const useStyles = createUseStyles(theme => {
       padding: '.5rem 1rem',
     },
     ModelCard_Name: {
-      ...regularText,
+      ...theme.mixins.text.regularText,
     },
     ModelCard_Row: {
       display: 'flex',
@@ -33,12 +32,13 @@ const useStyles = createUseStyles(theme => {
     ModelCard_ActivityIndicators: {
       display: 'flex',
       flexDirection: 'row',
-      '& > span:not(:last-child': {
+
+      '& > span:not(:last-child)': {
         marginRight: '1rem',
       },
     },
     ModelCard_ActivityCount: {
-      ...thumbnailActivityCountText,
+      ...theme.mixins.text.thumbnailActivityCountText,
       display: 'flex',
       alignItems: 'center',
       letterSpacing: 0,
@@ -57,7 +57,6 @@ const CardContents = ({ className, model, showOwner, _hovered }) => {
         className={c.ModelCard_Thumbnail}
         name={model.name}
         thumbnailUrl={model.thumbnailUrl}
-        showOwner={showOwner}
       ></ModelThumbnail>
       <div className={c.ModelCard_Content}>
         <div className={c.ModelCard_Name}>{model.name}</div>

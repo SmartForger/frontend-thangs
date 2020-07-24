@@ -21,7 +21,7 @@ export const UserInline = ({
   user,
   className,
   displayEmail,
-  size = '24px',
+  size = '1.5rem',
   children,
 }) => {
   const c = useStyles()

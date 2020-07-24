@@ -14,22 +14,14 @@ import { ReactComponent as AboutIcon } from '@svg/about-icon.svg'
 import { ReactComponent as ModelIcon } from '@svg/model-icon.svg'
 import CardCollection from '@components/CardCollection'
 import { ToggleFollowButton } from '@components/ToggleFollowButton'
-import {
-  subheaderText,
-  boldText,
-  linkText,
-  tabNavigationText,
-  activeTabNavigationText,
-  profileAboutText,
-} from '@style/text'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     Profile: {},
     Profile_Name: {
-      ...subheaderText,
+      ...theme.mixins.text.subheaderText,
       marginTop: '.5rem',
     },
     Profile_TabTitleGroup: {
@@ -37,14 +29,14 @@ const useStyles = createUseStyles(_theme => {
       alignSelf: 'start',
     },
     Profile_TabTitle: {
-      ...tabNavigationText,
+      ...theme.mixins.text.tabNavigationText,
       display: 'flex',
       alignItems: 'center',
       marginRight: '3.5rem',
       cursor: 'pointer',
     },
     Profile_TabTitle__active: {
-      ...activeTabNavigationText,
+      ...theme.mixins.text.activeTabNavigationText,
     },
     Profile_Icon: {
       display: 'flex',
@@ -60,7 +52,7 @@ const useStyles = createUseStyles(_theme => {
     },
     Profile_Markdown: {
       maxWidth: '37.5rem',
-      ...profileAboutText,
+      ...theme.mixins.text.profileAboutText,
     },
     Profile_TabGroupContainer: {
       marginTop: '4.5rem',
@@ -74,8 +66,8 @@ const useStyles = createUseStyles(_theme => {
     },
     Profile_EditProfileLink: {
       // We need to reset styles on this component because it is rendered within larger text
-      ...boldText,
-      ...linkText,
+      ...theme.mixins.text.boldText,
+      ...theme.mixins.text.linkText,
     },
     Profile_ProfileButton: {
       marginTop: '1rem',
@@ -203,7 +195,7 @@ const Tabs = ({ user }) => {
 
   return (
     <div className={c.Profile_TabGroupContainer}>
-      <div className={c.TabTitleGroup}>
+      <div className={c.Profile_TabTitleGroup}>
         <Models selected={selected === 'models'} onClick={selectModel} user={user} />
         <Likes selected={selected === 'likes'} onClick={selectLikes} user={user} />
         <About selected={selected === 'about'} onClick={selectAbout} user={user} />

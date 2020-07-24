@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { useForm, ErrorMessage } from 'react-hook-form'
 
-import { formErrorText, infoMessageText } from '../../@style/text'
-
 import { Spinner } from '../Spinner'
 import { Button, DarkButton } from '../Button'
 import { ProgressText } from '../ProgressText'
@@ -27,7 +25,7 @@ const useStyles = createUseStyles(theme => {
       marginRight: '.5rem',
     },
     ModelUploadForm_Error: {
-      ...formErrorText,
+      ...theme.mixins.text.formErrorText,
       margin: '.5rem 0',
     },
     ModelUploadForm_Row: {
@@ -63,7 +61,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     ModelUploadForm_Dots: {
-      ...infoMessageText,
+      ...theme.mixins.text.infoMessageText,
       width: '8.5rem',
       marginBottom: '14rem',
     },

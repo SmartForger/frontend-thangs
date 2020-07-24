@@ -1,11 +1,10 @@
 import React from 'react'
-import { linkText } from '@style/text'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     AnchorButton: {
-      ...linkText,
+      ...theme.mixins.text.linkText,
       margin: 0,
       padding: 0,
       border: 'none',

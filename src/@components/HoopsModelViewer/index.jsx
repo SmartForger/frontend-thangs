@@ -5,13 +5,12 @@ import { HowTo } from '@components/HowTo'
 import { useLocalStorage } from '@customHooks/Storage'
 import Toolbar from './Toolbar'
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg'
-import { viewerLoadingText } from '@style/text'
 
 import { useHoopsViewer } from '@customHooks'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     HoopsModelViewer: {},
     HoopsModelViewer_WebViewContainer: {
@@ -34,7 +33,7 @@ const useStyles = createUseStyles(_theme => {
       transform: 'translate(-50%, -50%)',
     },
     HoopsModelViewer_PlaceholderText: {
-      ...viewerLoadingText,
+      ...theme.mixins.text.viewerLoadingText,
       marginTop: '1.5rem',
     },
   }

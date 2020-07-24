@@ -10,7 +10,6 @@ import { ReactComponent as TrashCanIcon } from '../../@svg/trash-can-icon.svg'
 import { ReactComponent as FolderManagementIcon } from '../../@svg/folder-management-icon.svg'
 import { Spinner } from '../Spinner'
 import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg'
-import { smallHeaderText, breadcrumbTextLight } from '../../@style/text'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -33,7 +32,7 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
     },
     Breadcrumbs_RowContent: {
-      ...smallHeaderText,
+      ...theme.mixins.text.smallHeaderText,
 
       '&:before': {
         content: '>',
@@ -54,7 +53,7 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
     },
     Breadcrumbs_Link: {
-      ...breadcrumbTextLight,
+      ...theme.mixins.text.breadcrumbTextLight,
     },
     Breadcrumbs_ModelCount: {
       marginLeft: '.25rem',

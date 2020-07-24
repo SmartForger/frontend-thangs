@@ -1,5 +1,4 @@
 import React from 'react'
-import { headerText } from '@style/text'
 import { NewThemeLayout } from '@components/Layout'
 import NotificationsList from '@components/NotificationsList'
 import { Button } from '@components/Button'
@@ -7,11 +6,11 @@ import { Spinner } from '@components/Spinner'
 import { useUpdateLastCheckedNotifications } from '@customHooks/Notifications'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     Notifications: {},
     Notifications_Header: {
-      ...headerText,
+      ...theme.mixins.text.headerText,
     },
     Notifications_Spinner: {
       width: '1rem',

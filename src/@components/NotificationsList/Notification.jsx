@@ -4,8 +4,6 @@ import * as DateFns from 'date-fns'
 import { ProfilePicture } from '@components/ProfilePicture'
 import { ModelThumbnail } from '@components/ModelThumbnail'
 import { Card } from '@components/Card'
-import { commentUsername } from '@style/text'
-import { commentPostedText } from '@style/text'
 import {
   isModelCompletedProcessing,
   isModelFailedProcessing,
@@ -39,19 +37,19 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Notification_ActorName: {
-      ...commentUsername,
+      ...theme.mixins.text.commentUsername,
       marginBottom: '.5rem',
     },
     Notification_Time: {
-      ...commentPostedText,
+      ...theme.mixins.text.commentPostedText,
     },
     Notification_Verb: {
-      ...commentPostedText,
+      ...theme.mixins.text.commentPostedText,
       textTransform: 'capitalize',
       fontWeight: 600,
     },
     Notification_TargetName: {
-      ...commentPostedText,
+      ...theme.mixins.text.commentPostedText,
     },
     Notification_TargetPicture: {
       width: '11.75rem',

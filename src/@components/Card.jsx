@@ -14,7 +14,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const Card = props => {
+export const Card = ({ children, props }) => {
   const c = useStyles(props)
-  return <div className={c.Card}></div>
+  return <div className={c.Card}>{children}</div>
 }

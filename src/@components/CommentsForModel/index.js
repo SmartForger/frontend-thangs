@@ -6,7 +6,6 @@ import { Markdown } from '@components'
 import { Spinner } from '@components/Spinner'
 import { ProfilePicture } from '@components/ProfilePicture'
 import NewModelCommentForm from './NewModelCommentForm'
-import { subheaderText, commentPostedText, commentUsername } from '@style/text'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -20,28 +19,21 @@ const useStyles = createUseStyles(theme => {
       margin: 0,
       padding: 0,
     },
-    CommentsForModel_Box: {
-      backgroundColor: theme.colors.grey[500],
-    },
     CommentsForModel_ProfilePicture: {
       marginRight: '1rem',
     },
     CommentsForModel_TimeAgo: {
-      ...commentPostedText,
-    },
-    CommentsForModel_Body: {
-      marginBottom: '.25rem',
-      marginTop: '1rem',
+      ...theme.mixins.text.commentPostedText,
     },
     CommentsForModel_FlexGrow: {
       flexGrow: 1,
     },
     CommentsForModel_Name: {
-      ...commentUsername,
+      ...theme.mixins.text.commentUsername,
       marginBottom: '1rem',
     },
     CommentsForModel_Header: {
-      ...subheaderText,
+      ...theme.mixins.text.subheaderText,
     },
   }
 })
@@ -63,8 +55,8 @@ const Comment = ({ comment }) => {
         />
       </Link>
       <div className={c.CommentsForModel_FlexGrow}>
-        <div className={c.CommentsForModel_Box}>
-          <div className={c.CommentsForModel_Body}>
+        <div>
+          <div>
             <div className={c.CommentsForModel_Name}>{owner.fullName}</div>
             <div className={c.CommentsForModel_TimeAgo}>Posted {time} ago</div>
             <Markdown>{body}</Markdown>

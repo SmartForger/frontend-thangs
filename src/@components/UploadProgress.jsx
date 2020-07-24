@@ -6,10 +6,9 @@ import { ReactComponent as LensUploadingIcon } from '@svg/lens-uploading-icon.sv
 import { ReactComponent as GraphUploadingIcon } from '@svg/graph-uploading-icon.svg'
 import { ReactComponent as RulerUploadingIcon } from '@svg/ruler-uploading-icon.svg'
 import { ReactComponent as ProtractorUploadingIcon } from '@svg/protractor-uploading-icon.svg'
-import { infoMessageText } from '@style/text'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     IconContainer: {
       height: '10.5rem',
@@ -18,7 +17,7 @@ const useStyles = createUseStyles(_theme => {
       textAlign: 'center',
     },
     Dots: {
-      ...infoMessageText, //TODO - Move to theme
+      ...theme.mixins.text.infoMessageText,
       marginBottom: '10rem',
       width: '16rem',
     },

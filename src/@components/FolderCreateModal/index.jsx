@@ -2,19 +2,18 @@ import React, { useState } from 'react'
 import Modal from '../Modal'
 import { CreateFolderForm, DisplayErrors } from '../FolderForm'
 import { ReactComponent as NewFolderIcon } from '../../@svg/folder-plus-icon.svg'
-import { headerText, lightText } from '../../@style/text'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     FolderCreateModal: {},
     FolderCreateModal_Header: {
-      ...headerText,
+      ...theme.mixins.text.headerText,
       marginBottom: '1rem',
     },
     FolderCreateModal_Text: {
-      ...lightText,
+      ...theme.mixins.text.lightText,
     },
     FolderCreateModal_Row: {
       display: 'flex',

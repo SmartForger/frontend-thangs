@@ -7,7 +7,6 @@ import CardCollection from '@components/CardCollection'
 import { Button } from '../@components/Button'
 import { SearchBar } from '@components/SearchBar'
 import { NoResults } from '../@components/NoResults'
-import { subheaderText } from '@style/text'
 import { ReactComponent as MatchingIcon } from '../@svg/matching-icon.svg'
 import { createUseStyles } from '@style'
 
@@ -23,7 +22,7 @@ const useStyles = createUseStyles(theme => {
       marginRight: '.5rem',
     },
     SearchResults_Header: {
-      ...subheaderText,
+      ...theme.mixins.text.subheaderText,
       marginBottom: '1.5rem',
     },
     SearchResults_Flexbox: {

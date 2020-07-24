@@ -8,7 +8,6 @@ import { NewSignupThemeLayout } from '@components/Layout'
 import { useForm } from '@customHooks'
 import { authenticationService } from '@services'
 import { ReactComponent as UserRegistrationIcon } from '@svg/user-registration.svg'
-import { darkPageTitleText, formErrorText } from '@style/text'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -22,7 +21,7 @@ const useStyles = createUseStyles(theme => {
       display: 'inline-block',
     },
     Signup_PageHeader: {
-      ...darkPageTitleText,
+      ...theme.mixins.text.darkPageTitleText,
       marginTop: '.5rem',
     },
     Signup_Field: {
@@ -30,7 +29,7 @@ const useStyles = createUseStyles(theme => {
       flexFlow: 'column nowrap',
     },
     Signup_ErrorText: {
-      ...formErrorText,
+      ...theme.mixins.text.formErrorText,
       marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
       padding: '.5rem 1rem',

@@ -1,9 +1,5 @@
 import { colors } from './colors.js'
 
-/*
- * These will be the fonts we actually want to use, but we need to get them from
- * our designer before we can use them.
- */
 const fontMedium = '"Montserrat", sans-serif'
 const fontMain = '"Montserrat", sans-serif'
 const boxShadow = '0px 5px 10px 0px rgba(35, 37, 48, 0.25)'

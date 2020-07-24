@@ -1,11 +1,4 @@
 import React from 'react'
-import {
-  primaryButtonText,
-  secondaryButtonText,
-  darkButtonText,
-  matchingButtonText,
-  matchingButtonHoverText,
-} from '@style/text'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -16,6 +9,17 @@ const useStyles = createUseStyles(theme => {
   return {
     Button: {
       border: 'none',
+      background: 'none',
+      padding: 0,
+      outline: 'none',
+      cursor: 'pointer',
+      lineHeight: '1.125rem',
+      '&:disabled': {
+        cursor: 'not-allowed',
+      },
+    },
+    Button__notText: {
+      border: 'none',
       textAlign: 'center',
       userSelect: 'none',
       cursor: 'pointer',
@@ -23,17 +27,16 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: '.5rem',
-      padding: '.5rem .75rem',
+      padding: '.5625rem .75rem',
       backgroundColor: theme.colors.blue[500],
-      ...primaryButtonText,
-      boxShadow: theme.variables.boxShadow,
+      ...theme.mixins.text.primaryButtonText,
 
       '&:hover': {
         backgroundColor: theme.colors.blue[700],
       },
 
       '&:disabled': {
-        ...secondaryButtonText,
+        ...theme.mixins.text.secondaryButtonText,
         cursor: 'not-allowed',
         opacity: '0.8',
         '&:hover': {
@@ -42,7 +45,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Button__secondary: {
-      ...secondaryButtonText,
+      ...theme.mixins.text.secondaryButtonText,
       backgroundColor: theme.colors.purple[300],
       '&:hover': {
         backgroundColor: theme.colors.purple[500],
@@ -56,51 +59,55 @@ const useStyles = createUseStyles(theme => {
       marginRight: '1rem',
     },
     Button__dark: {
-      ...darkButtonText,
+      ...theme.mixins.text.darkButtonText,
       backgroundColor: theme.colors.purple[500],
       '&:hover': {
         backgroundColor: theme.colors.purple[800],
       },
     },
-    Button__text: {
-      border: 'none',
-      background: 'none',
-      padding: 0,
-      cursor: 'pointer',
-      '&:disabled': {
-        cursor: 'not-allowed',
-      },
-    },
     Button__brand: {
-      ...matchingButtonText,
+      ...theme.mixins.text.matchingButtonText,
+      borderRadius: '.5rem',
       boxShadow: theme.variables.boxShadow,
       backgroundColor: theme.colors.gold[500],
-      padding: '.5rem 1rem',
+      padding: '.375rem 1rem',
       minWidth: '11.25rem',
 
       [md]: {
-        padding: '.5rem 1.5rem',
+        padding: '.375rem 1.5rem',
       },
 
       '&:hover': {
-        ...matchingButtonHoverText,
+        ...theme.mixins.text.matchingButtonHoverText,
         backgroundColor: theme.colors.gold[800],
       },
     },
   }
 })
 
-export const Button = ({ secondary, back, dark, text, brand }) => {
+export const Button = ({
+  children,
+  secondary,
+  back,
+  dark,
+  text,
+  brand,
+  className,
+  ...props
+}) => {
   const c = useStyles()
   return (
     <button
-      className={classnames(c.Button, {
+      className={classnames(className, c.Button, {
         [c.Button__secondary]: secondary || back,
         [c.Button__back]: back,
         [c.Button__dark]: dark,
-        [c.Button__text]: text,
+        [c.Button__notText]: !text,
         [c.Button__brand]: brand,
       })}
-    ></button>
+      {...props}
+    >
+      {children}
+    </button>
   )
 }

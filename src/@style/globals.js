@@ -10,7 +10,7 @@ const globals = theme => {
         margin: 0,
         overflowX: 'hidden',
         background: theme.variables.colors.backgroundColor,
-        fontFamily: theme.variables.colors.buttonFont,
+        fontFamily: theme.variables.fonts.mainFont,
         fontSize: '.875rem',
         color: theme.variables.colors.mainFontColor || theme.colors.grey[700],
       },

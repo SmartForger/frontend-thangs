@@ -6,14 +6,13 @@ import { useForm } from '@customHooks'
 import { TextInput, Spinner, Button } from '@components'
 import { NewSignupThemeLayout } from '@components/Layout'
 import { ReactComponent as LoginIcon } from '@svg/user-login.svg'
-import { darkPageTitleText, formErrorText, darkFormText } from '@style/text'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   return {
     Login: {},
     Login_PageHeader: {
-      ...darkPageTitleText,
+      ...theme.mixins.text.darkPageTitleText,
       marginTop: '.5rem',
     },
     Login_Spinner: {
@@ -24,7 +23,7 @@ const useStyles = createUseStyles(theme => {
       marginTop: '.5rem',
     },
     Login_ErrorText: {
-      ...formErrorText,
+      ...theme.mixins.text.formErrorText,
       marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
       fontWeight: 500,
@@ -53,11 +52,11 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
     },
     Login_ForgotText: {
-      ...darkFormText,
+      ...theme.mixins.text.darkFormText,
       marginTop: '1.5rem',
     },
     Login_Label: {
-      ...darkFormText,
+      ...theme.mixins.text.darkFormText,
     },
   }
 })

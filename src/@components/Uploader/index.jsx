@@ -6,7 +6,6 @@ import { ReactComponent as ModelPyramid } from '../../@svg/model-pyramid.svg'
 import { ReactComponent as ExitIcon } from '../../@svg/icon-X.svg'
 import { UploadFrame } from '../UploadFrame'
 import { Button } from '../Button'
-import { infoMessageText, smallInfoMessageText, linkText } from '../../@style/text'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -37,16 +36,16 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
     },
     Uploader_LinkColor: {
-      ...linkText,
+      ...theme.mixins.text.linkText,
     },
     Uploader_InfoMessage: {
-      ...infoMessageText,
+      ...theme.mixins.text.infoMessageText,
       marginTop: '2rem',
       textAlign: 'center',
       maxWidth: '25rem',
     },
     Uploader_SmallInfoMessage: {
-      ...smallInfoMessageText,
+      ...theme.mixins.text.smallInfoMessageText,
     },
   }
 })
@@ -200,7 +199,7 @@ export function Uploader({ file, setFile, showError = true }) {
               Drag & Drop model
               <br />
               or{' '}
-              <Button onClick={handleBrowseClick}>
+              <Button text onClick={handleBrowseClick}>
                 <span className={c.Uploader_LinkColor}>browse</span>
               </Button>{' '}
               to choose file

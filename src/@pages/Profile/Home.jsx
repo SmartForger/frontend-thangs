@@ -7,7 +7,6 @@ import { useCurrentUser } from '@customHooks/Users'
 import { Spinner } from '@components/Spinner'
 import { Message404 } from '../404'
 import CardCollection from '@components/CardCollection'
-import { subheaderText } from '@style/text'
 import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg'
 import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg'
 import classnames from 'classnames'
@@ -17,7 +16,7 @@ const useStyles = createUseStyles(theme => {
   return {
     Home: {},
     Home_TextHeader: {
-      ...subheaderText,
+      ...theme.mixins.text.subheaderText,
       display: 'flex',
       alignItems: 'center',
       marginRight: '3.5rem',
@@ -33,6 +32,9 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       alignItems: 'center',
       cursor: 'pointer',
+    },
+    Home_FoldersTitle: {
+      marginLeft: '1rem',
     },
   }
 })
@@ -93,12 +95,10 @@ const PageContent = ({ user }) => {
           user={user}
         />
         <FoldersTitle
+          className={c.Home_FoldersTitle}
           selected={selected === 'folders'}
           onClick={selectFolders}
           user={user}
-          css={`
-            margin-left: 16px;
-          `}
         />
       </div>
       <WithFlash>
