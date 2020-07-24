@@ -1,7 +1,6 @@
 import React from 'react'
 import { useHistory, Link, useParams } from 'react-router-dom'
 
-import { ProfilePicture } from '@components/ProfilePicture'
 import { LikeModelButton } from '@components/LikeModelButton'
 import CommentsForModel from '@components/CommentsForModel'
 import ModelViewer from '@components/HoopsModelViewer'
@@ -10,8 +9,10 @@ import { Button } from '@components/Button'
 import { Spinner } from '@components/Spinner'
 import { ProgressText } from '@components/ProgressText'
 import { RelatedModels } from '@components/RelatedModels'
+import { ModelTitle } from '@components/ModelTitle'
 
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
+import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
 
 import { useLocalStorage } from '@customHooks/Storage'
 import { useDownloadModel } from '@customHooks/Models'
@@ -20,8 +21,9 @@ import { NewThemeLayout } from '@components/Layout'
 
 import { ModelDetails } from '../ModelPreview/ModelDetails'
 import { Message404 } from '../404'
-import classnames from 'classnames'
 import { createUseStyles } from '@style'
+
+const graphqlService = GraphqlService.getInstance()
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -131,36 +133,30 @@ const useStyles = createUseStyles(theme => {
       textAlign: 'left',
       marginBottom: '1.5rem',
     },
+    Model_VersionHeader: {
+      ...theme.variables.text.subheaderText,
+    },
+    Model_VersionLinkText: {
+      ...theme.variables.text.linkText,
+    },
+    Model_VersionButton: {
+      ...theme.variables.text.activeTabNavigationText,
+      display: 'flex',
+      alignItems: 'center',
+      marginRight: '3.5rem',
+      marginTop: '1.5rem',
+      cursor: 'pointer',
+      '*:not(:first-child)': {
+        marginLeft: '.75rem',
+      },
+    },
+    Model_VersionIcon: {
+      fill: theme.color.blue[500],
+      width: '1.25rem',
+      height: '1.25rem',
+    },
   }
 })
-
-const graphqlService = GraphqlService.getInstance()
-
-function ModelTitle({ model, className }) {
-  const c = useStyles()
-  return (
-    <div className={classnames(className, c.Model_TitleContainer)}>
-      {model.owner && (
-        <Link className={c.ProfileLink} to={`/profile/${model.owner.id}`}>
-          <ProfilePicture
-            className={c.Model_OwnerProfilePicture}
-            size='48px'
-            name={model.owner.fullName}
-            src={model.owner.profile.avatarUrl}
-          />
-        </Link>
-      )}
-      <div className={c.Model_TitleContent}>
-        <div className={c.Model_TitleText}>{model.name}</div>
-        {model.owner && (
-          <Link className={c.ProfileLink} to={`/profile/${model.owner.id}`}>
-            {model.owner.fullName}
-          </Link>
-        )}
-      </div>
-    </div>
-  )
-}
 
 function DownloadLink({ model }) {
   const c = useStyles()
@@ -178,10 +174,41 @@ function DownloadLink({ model }) {
   )
 }
 
+const VersionUpload = ({ modelId }) => {
+  const c = useStyles()
+  return (
+    <div>
+      <h2 className={c.Model_VersionHeader}>Versions</h2>
+      <Link to={`/model/${modelId}/upload`}>
+        <div className={c.Model_VersionButton}>
+          <VersionIcon className={c.Model_VersionIcon} />
+          <Button text className={c.Model_VersionLinkText}>
+            Upload new version
+          </Button>
+        </div>
+      </Link>
+    </div>
+  )
+}
+
+const Revised = () => {
+  const c = useStyles()
+  return (
+    <div className={c.Model_VersionButton}>
+      <VersionIcon className={c.Model_VersionIcon} />
+      <div>Revised from</div>
+      <Button text className={c.Model_VersionLinkText}>
+        Geofry Thomas
+      </Button>
+    </div>
+  )
+}
+
 function Details({ currentUser, model, className }) {
   const c = useStyles()
   return (
     <div className={className}>
+      <Revised />
       <LikeModelButton currentUser={currentUser} model={model} />
       <ModelTitle model={model} />
       <div className={c.Model_Description}>{model.description}</div>
@@ -224,6 +251,9 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
         <div className={c.Model_Column__desktop}>
           <div className={c.Model_Row}>
             <Details currentUser={currentUser} model={model} />
+          </div>
+          <div className={c.Model_Row}>
+            <VersionUpload modelId={model.id} />
           </div>
           <div className={c.Model_Row}>
             <CommentsForModel model={model} />

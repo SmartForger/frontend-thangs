@@ -15,6 +15,16 @@ export function useCreateFolder() {
   return [createFolder, { loading, error }]
 }
 
+export function useAddGroupToFolder() {
+  const userId = authenticationService.getCurrentUserId()
+  const [
+    addGroupToFolder,
+    { loading, error },
+  ] = graphqlService.useCreateFolderMutation(userId)
+
+  return [addGroupToFolder, { loading, error }]
+}
+
 export function useInviteToFolder(folderId) {
   const [
     inviteToFolder,

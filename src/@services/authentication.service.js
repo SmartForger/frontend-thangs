@@ -86,6 +86,34 @@ const login = async ({ email, password }) => {
   }
 }
 
+const restLogin = async ({ password }) => {
+  const username = currentUser.username
+  const requestOptions = {
+    url: ('https://staging-api-platform-dot-thangs.uc.r.appspot.com/auth'),
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    data: JSON.stringify({ userName: username, password }),
+  }
+
+  try {
+    const response = await axios(requestOptions)
+    const { token } = response.data
+    localStorage.setItem('restAccessToken', token.TOKEN)
+
+    return response
+  } catch (err) {
+    if (err.response) {
+      return err.response
+    }
+    return {
+      status: 500,
+      data: {
+        detail: 'Internal Server Error, please try again',
+      },
+    }
+  }
+}
+
 const signup = async ({
   email,
   password,
@@ -137,6 +165,11 @@ function getBaseUrl() {
   return withEndSlash(url)
 }
 
+function getRestBaseUrl() {
+  let url = process.env.REACT_APP_REST_API_KEY
+  return withEndSlash(url)
+}
+
 function isGraphQLUrl(url) {
   const graphqlUrl = getGraphQLUrl()
   return url.includes(graphqlUrl)
@@ -144,6 +177,12 @@ function isGraphQLUrl(url) {
 
 function getApiUrl(path) {
   const baseUrl = getBaseUrl()
+  const apiPath = withEndSlash(path)
+  return new URL(apiPath, baseUrl)
+}
+
+export function getRestApiUrl(path) {
+  const baseUrl = getRestBaseUrl()
   const apiPath = withEndSlash(path)
   return new URL(apiPath, baseUrl)
 }
@@ -213,6 +252,7 @@ const setPasswordForReset = async ({
 
 const authenticationService = {
   login,
+  restLogin,
   logout,
   signup,
   getGraphQLUrl,

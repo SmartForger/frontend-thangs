@@ -77,6 +77,7 @@ const Page = () => {
       setLoginErrorMessage('')
     }
   }
+
   const validateEmail = () => {
     if (!EmailValidator.validate(inputs.email)) {
       setInvalidFields(['email'])
@@ -99,6 +100,26 @@ const Page = () => {
 
     const res = await authenticationService.login({
       email: inputs.email,
+      password: inputs.password,
+    })
+
+    setWaiting(false)
+
+    if (res.status !== 200) {
+      setLoginErrorMessage(
+        res.data.detail || 'Sorry, we encounteed an unexpected error.  Please try again.'
+      )
+    } else {
+      await restLogin()
+      history.push('/')
+    }
+  }
+
+  async function restLogin() {
+    setWaiting(true)
+    setLoginErrorMessage(null)
+
+    const res = await authenticationService.restLogin({
       password: inputs.password,
     })
 

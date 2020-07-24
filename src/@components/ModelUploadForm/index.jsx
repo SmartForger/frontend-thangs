@@ -62,7 +62,7 @@ const useStyles = createUseStyles(theme => {
     },
     ModelUploadForm_Dots: {
       ...theme.mixins.text.infoMessageText,
-      width: '8.5rem',
+      width: '8.75rem',
       marginBottom: '14rem',
     },
   }
