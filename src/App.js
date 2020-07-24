@@ -32,7 +32,8 @@ import { FolderUpload } from '@pages/FolderUpload'
 import { ErrorBoundary } from './ErrorBoundary'
 import { routeRequiresAnon, routeRequiresAuth } from '@components/RouteComponent'
 import { FlashContextProvider } from './@components/Flash'
-import { ThemeProvider, GlobalStyles } from '@style'
+import { ThemeProvider } from '@style'
+import { GlobalStyles } from '@style/globals'
 import { usePageTheming } from '@customHooks/usePageTheming'
 
 const originalFetch = window.fetch

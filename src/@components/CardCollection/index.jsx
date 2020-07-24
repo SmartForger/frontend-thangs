@@ -39,7 +39,6 @@ const CardCollection = ({ models = [], maxPerRow = 4, noResultsText, folders = [
       className={classnames(c.CardCollection, {
         [c.CardCollection__singleRow]: singleRow,
       })}
-      singleRow={singleRow}
     >
       {models.map((model, index) => (
         <ModelCard key={`model-${model.id}:${index}`} model={model} withOwner={true} />

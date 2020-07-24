@@ -25,13 +25,25 @@ const useStyles = createUseStyles(theme => {
     FolderForm_Row: {
       display: 'flex',
     },
+    FolderForm_ButtonRow: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      marginTop: '3rem',
+    },
+    FolderForm_CancelButton: {
+      marginRight: '1rem',
+      minWidth: '7.25rem',
+    },
+    FolderForm_SaveButton: {
+      minWidth: '6.75rem',
+    },
     FolderForm_Label: {
       marginBottom: '.5rem',
     },
     FolderForm_FullWidthInput: {
       border: 0,
       padding: '.5rem 1rem',
-      marginBottom: '.5rem',
+      marginBottom: '1.5rem',
       borderRadius: '.5rem',
       minWidth: 0,
       background: theme.colors.white[900],
@@ -41,7 +53,7 @@ const useStyles = createUseStyles(theme => {
       marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
       fontWeight: 500,
-      padding: '.5rem 1rem',
+      padding: '.625rem 1rem',
       borderRadius: '.5rem',
     },
   }
@@ -196,35 +208,17 @@ export const CreateFolderForm = ({
         name='members'
         ref={register({ required: true })}
         placeholder='example@example.com'
-        css={`
-          margin-bottom: 24px;
-        `}
       />
-      <div
-        className={c.FolderForm_Row}
-        css={`
-          justify-content: flex-end;
-          margin-top: 48px;
-        `}
-      >
+      <div className={classnames(c.FolderForm_Row, c.FolderForm_ButtonRow)}>
         <Button
           dark
+          className={c.FolderForm_CancelButton}
           onClick={handleCancel}
-          css={`
-            margin-right: 16px;
-            min-width: 116px;
-          `}
           type='button'
         >
           Cancel
         </Button>
-        <Button
-          type='submit'
-          css={`
-            min-width: 106px;
-          `}
-          disabled={loading}
-        >
+        <Button className={c.FolderForm_SaveButton} type='submit' disabled={loading}>
           {loading ? <Spinner className={c.FolderForm_Spinner} /> : 'Save'}
         </Button>
       </div>
@@ -296,34 +290,17 @@ export const InviteUsersForm = ({ folderId, onErrorReceived, afterInvite, onCanc
         name='members'
         ref={register({ required: true })}
         placeholder='example@example.com'
-        css={`
-          margin-bottom: 24px;
-        `}
       />
-      <div
-        className={c.FolderForm_Row}
-        css={`
-          justify-content: flex-end;
-          margin-top: 48px;
-        `}
-      >
+      <div className={classnames(c.FolderForm_Row, c.FolderForm_ButtonRow)}>
         <Button
+          className={c.FolderForm_CancelButton}
           dark
           onClick={handleCancel}
-          css={`
-            margin-right: 16px;
-            min-width: 116px;
-          `}
           type='button'
         >
           Cancel
         </Button>
-        <Button
-          type='submit'
-          css={`
-            min-width: 106px;
-          `}
-        >
+        <Button className={c.FolderForm_SaveButton} type='submit'>
           {loading ? <Spinner className={c.FolderForm_Spinner} /> : 'Invite'}
         </Button>
       </div>

@@ -103,7 +103,6 @@ function Page() {
           <Button
             className={c.Matching_Button}
             onClick={() => {
-              console.log('HERE')
               onCancel()
             }}
           >

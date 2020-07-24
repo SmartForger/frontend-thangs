@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactModal from 'react-modal'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 ReactModal.setAppElement('#root')
@@ -21,9 +22,13 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const Modal = props => {
+const Modal = ({ children, className, ...props }) => {
   const c = useStyles(props)
-  return <ReactModal className={c.Modal}></ReactModal>
+  return (
+    <ReactModal className={classnames(className, c.Modal)} {...props}>
+      {children}
+    </ReactModal>
+  )
 }
 
 export default Modal

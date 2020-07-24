@@ -8,7 +8,9 @@ import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   return {
-    Notifications: {},
+    Notifications: {
+      marginTop: '3rem',
+    },
     Notifications_Header: {
       ...theme.mixins.text.headerText,
     },
@@ -47,11 +49,7 @@ function Page() {
           'Clear Notifications'
         )}
       </Button>
-      <NotificationsList
-        css={`
-          margin-top: 48px;
-        `}
-      />
+      <NotificationsList className={c.Notifications} />
     </div>
   )
 }

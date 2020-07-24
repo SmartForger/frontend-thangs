@@ -38,10 +38,10 @@ const useStyles = createUseStyles(theme => {
     FolderManagementModal_Row: {
       display: 'flex',
     },
-    FolderManagementModel_TopRow: {
-      marginTop: ({ hasErrors }) => (hasErrors ? '16px' : '70px'),
+    FolderManagementModal_AddUsersForm: {
+      marginTop: ({ hasErrors }) => (hasErrors ? '1rem' : '4.375rem'),
     },
-    FolderManagementModel_BottomRow: {
+    FolderManagementModal_BottomRow: {
       marginTop: '3rem',
     },
     FolderManagementModal_List: {
@@ -56,6 +56,12 @@ const useStyles = createUseStyles(theme => {
     },
     FolderManagementModal_TrashCanIcon: {
       color: theme.colors.grey[500],
+    },
+    FolderManagementModal_FolderInfo: {
+      padding: 0,
+    },
+    FolderManagementModal_DisplayErrors: {
+      marginTop: '1rem',
     },
   }
 })
@@ -125,26 +131,22 @@ const FolderManagementModal = ({ isOpen, folder, afterInvite, onCancel, classNam
   return (
     <Modal isOpen={isOpen} className={classnames(className, c.FolderManagementModal)}>
       <FolderInfo
+        className={c.FolderManagementModal_FolderInfo}
         name={folder.name}
         members={folder.members}
         models={folder.models}
         boldName
         hideModels
-        css={`
-          padding: 0;
-        `}
       />
       <DisplayErrors
+        className={c.FolderManagementModal_DisplayErrors}
         errors={errors}
-        css={`
-          margin-top: 16px;
-        `}
         serverErrorMsg='Unable to invite users. Please try again later.'
       />
       <div
         className={classnames(
           c.FolderManagementModal_Row,
-          c.FolderManagementModal_TopRow
+          c.FolderManagementModal_AddUsersForm
         )}
       >
         <InviteUsersForm

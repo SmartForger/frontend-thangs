@@ -31,11 +31,11 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       alignItems: 'center',
     },
-    Breadcrumbs_RowContent: {
+    Breadcrumbs_Arrow: {
       ...theme.mixins.text.smallHeaderText,
 
       '&:before': {
-        content: '>',
+        content: '">"',
         marginLeft: '1rem',
         marginRight: '1.5rem',
       },
@@ -128,7 +128,7 @@ const Breadcrumbs = ({ modelsCount, folder, className }) => {
           <div className={c.Breadcrumbs_ModelCount}>{modelsCount}</div>
         </div>
       </Link>
-      <div className={classnames(c.Breadcrumbs_Row, c.Breadcrumbs_RowContent)}>
+      <div className={classnames(c.Breadcrumbs_Row, c.Breadcrumbs_Arrow)}>
         <FolderIcon className={c.Breadcrumbs_FolderIcon} />
         <div>{folder.name}</div>
         <DeleteMenu folderId={folder.id} />

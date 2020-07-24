@@ -1,4 +1,5 @@
 import React from 'react'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -14,7 +15,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const Card = ({ children, props }) => {
+export const Card = ({ children, className, ...props }) => {
   const c = useStyles(props)
-  return <div className={c.Card}>{children}</div>
+  return <div className={classnames(className, c.Card)}>{children}</div>
 }

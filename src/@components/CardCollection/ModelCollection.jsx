@@ -2,7 +2,7 @@ import React from 'react'
 import { NoResults } from '../NoResults'
 import ModelCard from '../ModelCard'
 import { ShowMoreButton } from '../ShowMore'
-import { Grid } from './Grid'
+import Grid from './Grid'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(_theme => {

@@ -47,14 +47,15 @@ export const DropdownItem = ({ children, to = '#', onClick }) => {
   const c = useStyles({})
   return (
     <div>
-      <Link
-        className={c.DropdownMenu_Item}
-        to={to}
-        onClick={onClick}
-        as={onClick && 'div'}
-      >
-        {children}
-      </Link>
+      {onClick ? (
+        <div className={c.DropdownMenu_Item} onClick={onClick}>
+          {children}
+        </div>
+      ) : (
+        <Link className={c.DropdownMenu_Item} to={to} onClick={onClick}>
+          {children}
+        </Link>
+      )}
     </div>
   )
 }
@@ -74,11 +75,7 @@ export const DropdownMenu = ({
       <Button text className={c.DropdownMenu_Button} onClick={toggleOpen}>
         <ButtonIcon />
       </Button>
-      {isOpen && (
-        <div className={c.DropdownMenu} noIcons={noIcons}>
-          {children}
-        </div>
-      )}
+      {isOpen && <div className={c.DropdownMenu}>{children}</div>}
     </div>
   )
 }

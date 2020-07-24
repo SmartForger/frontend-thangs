@@ -81,7 +81,6 @@ const CardContents = ({ className, model, showOwner, _hovered }) => {
 const ModelCard = ({ className, model, withOwner }) => {
   const showOwner = withOwner && model.owner
   const [hovered, setHovered] = useState(false)
-
   const handleMouseEnter = () => setHovered(true)
   const handleMouseLeave = () => setHovered(false)
 

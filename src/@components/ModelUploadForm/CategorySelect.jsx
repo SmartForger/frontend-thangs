@@ -43,9 +43,9 @@ const CategorySelect = ({ setCategory }) => {
       components={{
         IndicatorSeparator: () => null,
         // eslint-disable-next-line react/display-name
-        DropdownIndicator: ({ cx: _cx, ...props }) => {
+        DropdownIndicator: () => {
           // cx causes React to throw an error, so we remove it
-          return <div className={c.CategorySelect_DropdownIndicator} {...props} />
+          return <div className={c.CategorySelect_DropdownIndicator} />
         },
       }}
       styles={{

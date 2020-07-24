@@ -16,9 +16,13 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const Grid = ({ singleRow }) => {
+const Grid = ({ children, singleRow }) => {
   const c = useStyles()
-  return <div className={classnames(c.Grid, { [c.Grid__singleRow]: singleRow })}></div>
+  return (
+    <div className={classnames(c.Grid, { [c.Grid__singleRow]: singleRow })}>
+      {children}
+    </div>
+  )
 }
 
 export default Grid

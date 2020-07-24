@@ -5,7 +5,7 @@ import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   return {
-    FolderInfo: {
+    FolderIcon: {
       ...theme.mixins.text.regularText,
       padding: '1rem',
     },

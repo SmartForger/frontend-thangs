@@ -64,19 +64,19 @@ export const NewThemeLayout = ({ children, options = {} }) => {
   const layoutVariant = logoOnly && 'small-vertical-spacing'
 
   return (
-    <React.Fragment>
+    <>
       <Header variant={headerVariant} />
       <div className={c.Layout} variant={layoutVariant}>
         {children}
       </div>
-    </React.Fragment>
+    </>
   )
 }
 
 export const NewInvertedHeaderLayout = ({ children }) => {
   const c = useStyles()
   return (
-    <React.Fragment>
+    <>
       <Header inverted />
       <div className={c.Layout_Hero}>
         <BackgroundSvg className={c.Layout_Background} />
@@ -94,18 +94,18 @@ export const NewInvertedHeaderLayout = ({ children }) => {
       <div className={c.Layout} variant='small-vertical-spacing'>
         {children}
       </div>
-    </React.Fragment>
+    </>
   )
 }
 
 export const NewSignupThemeLayout = ({ children }) => {
   const c = useStyles()
   return (
-    <React.Fragment>
+    <>
       <Header variant='logo-only' />
       <div className={c.Layout} variant='small-vertical-spacing'>
         {children}
       </div>
-    </React.Fragment>
+    </>
   )
 }

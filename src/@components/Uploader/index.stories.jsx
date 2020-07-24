@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { withApolloProvider } from '../../../.storybook/withApolloProvider'
 import { createUseStyles } from '@style'
+import { Uploader } from './'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -9,7 +10,6 @@ const useStyles = createUseStyles(_theme => {
     },
   }
 })
-import { Uploader } from './'
 
 export function UploaderStory() {
   const c = useStyles()

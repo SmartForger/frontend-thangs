@@ -43,24 +43,41 @@ const useStyles = createUseStyles(theme => {
 function ModelsTitle({ count, selected }) {
   const c = useStyles({ selected })
   return (
-    <Link className={c.Home_Title} to={!selected && '/models'} as={selected && 'div'}>
-      <ModelSquareIcon className={c.Home_Icon} selected={selected} />
-      Models {count}
-    </Link>
+    <>
+      {selected ? (
+        <div className={c.Home_Title}>
+          <ModelSquareIcon className={c.Home_Icon} selected={selected} />
+          Models {count}
+        </div>
+      ) : (
+        <Link className={c.Home_Title} to={!selected && '/models'}>
+          <ModelSquareIcon className={c.Home_Icon} selected={selected} />
+          Models {count}
+        </Link>
+      )}
+    </>
   )
 }
 
 function FoldersTitle({ count, selected, className }) {
   const c = useStyles({ selected })
   return (
-    <Link
-      className={classnames(className, c.Home_Title)}
-      to={!selected && '/folders'}
-      as={selected && 'div'}
-    >
-      <FolderIcon className={c.Home_Icon} selected={selected} />
-      Folders {count}
-    </Link>
+    <>
+      {selected ? (
+        <div className={classnames(className, c.Home_Title)}>
+          <FolderIcon className={c.Home_Icon} selected={selected} />
+          Folders {count}
+        </div>
+      ) : (
+        <Link
+          className={classnames(className, c.Home_Title)}
+          to={!selected && '/folders'}
+        >
+          <FolderIcon className={c.Home_Icon} selected={selected} />
+          Folders {count}
+        </Link>
+      )}
+    </>
   )
 }
 

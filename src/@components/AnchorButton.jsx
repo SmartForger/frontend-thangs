@@ -1,4 +1,5 @@
 import React from 'react'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -14,7 +15,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const AnchorButton = props => {
+export const AnchorButton = ({ children, className, ...props }) => {
   const c = useStyles(props)
-  return <button className={c.AnchorButton}></button>
+  return <button className={classnames(className, c.AnchorButton)}>{children}</button>
 }

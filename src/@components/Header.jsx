@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useFlashNotification } from '@components/Flash'
 import { useParams, useHistory, Link } from 'react-router-dom'
 import { ProfilePicture } from '@components/ProfilePicture'
@@ -174,7 +174,7 @@ const NotificationsButton = () => {
   )
 }
 
-function Search() {
+const Search = () => {
   const c = useStyles({})
   return (
     <Link to='/search' className={c.Header_SearchLink}>
@@ -183,7 +183,7 @@ function Search() {
   )
 }
 
-function UserPicture({ user }) {
+const UserPicture = ({ user }) => {
   return (
     <Link to='/home/'>
       <ProfilePicture name={user.fullName} src={user.profile.avatarUrl} size='3rem' />
@@ -191,11 +191,16 @@ function UserPicture({ user }) {
   )
 }
 
-function AddModelDropdownMenu() {
+const AddModelDropdownMenu = () => {
+  const c = useStyles({})
   const { folderId } = useParams()
   const [createFolderIsOpen, setCreateFolderIsOpen] = useState(false)
   const { navigateWithFlash } = useFlashNotification()
-  const c = useStyles({})
+  const setFolderOpen = useCallback(() => {
+    setCreateFolderIsOpen(true)
+  }, [])
+  const setFolderClose = useCallback(() => setCreateFolderIsOpen(false), [])
+
   return (
     <>
       <DropdownMenu
@@ -210,16 +215,16 @@ function AddModelDropdownMenu() {
         <DropdownItem to='/upload'>
           <ModelSquareIcon /> Upload model
         </DropdownItem>
-        <DropdownItem to='/' onClick={() => setCreateFolderIsOpen(true)}>
+        <DropdownItem to='/' onClick={setFolderOpen}>
           <NewFolderIcon />
           Add Folder
         </DropdownItem>
       </DropdownMenu>
       <FolderCreateModal
         isOpen={createFolderIsOpen}
-        onCancel={() => setCreateFolderIsOpen(false)}
+        onCancel={setFolderClose}
         afterCreate={folder => {
-          setCreateFolderIsOpen(false)
+          setFolderClose()
           navigateWithFlash(
             `/folder/${folder.id}`,
             'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
@@ -230,7 +235,7 @@ function AddModelDropdownMenu() {
   )
 }
 
-function ProfileDropdownMenu() {
+const ProfileDropdownMenu = () => {
   const c = useStyles({})
   const history = useHistory()
 
@@ -285,7 +290,7 @@ const UserNav = () => {
   )
 }
 
-function DesktopHeader({ variant }) {
+const DesktopHeader = ({ variant }) => {
   const c = useStyles({})
   return (
     <span className={c.Header_DesktopOnly}>
@@ -306,7 +311,7 @@ function DesktopHeader({ variant }) {
   )
 }
 
-function MobileHeader({ variant }) {
+const MobileHeader = ({ variant }) => {
   const c = useStyles({})
   return (
     <span className={c.Header_MobileOnly}>
@@ -326,7 +331,7 @@ const Header = ({ inverted, variant }) => {
   const c = useStyles({ inverted })
   return (
     <>
-      <div className={c.Header__fixed} inverted={inverted}>
+      <div className={c.Header__fixed}>
         <MobileHeader variant={variant} />
         <DesktopHeader variant={variant} />
       </div>

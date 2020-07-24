@@ -19,8 +19,8 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'flex-end',
     },
     EditProfileForm_Button: {
-      padding: '.5rem 2.25rem',
       maxWidth: '100%',
+      width: '10.5rem',
     },
     EditProfileForm_Field: {
       display: 'flex',
@@ -136,18 +136,14 @@ export const EditProfileForm = ({ user }) => {
           className={c.EditProfileForm_Button}
           type='submit'
           disabled={!R.empty(errors)}
-          css={`
-            width: 168px;
-            padding: 8px 30px;
-          `}
         >
           {currentState === 'waiting'
             ? 'Saving...'
             : currentState === 'saved'
-            ? 'Saved!'
-            : currentState === 'error'
-            ? 'Error'
-            : 'Save Changes'}
+              ? 'Saved!'
+              : currentState === 'error'
+                ? 'Error'
+                : 'Save Changes'}
         </Button>
       </div>
     </form>
