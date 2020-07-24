@@ -9,6 +9,11 @@ import { Button } from '../Button'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
+export const UPLOAD_MODES = {
+  MODEL: 'MODEL',
+  VERSION: 'VERSION',
+}
+
 const useStyles = createUseStyles(theme => {
   return {
     Uploader: {},
