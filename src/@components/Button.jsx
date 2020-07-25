@@ -1,110 +1,113 @@
-import styled, { css } from 'styled-components/macro';
-import {
-    primaryButtonText,
-    secondaryButtonText,
-    darkButtonText,
-    matchingButtonText,
-    matchingButtonHoverText,
-} from '@style/text';
-import {
-    BLUE_2,
-    BLUE_4,
-    BLACK_4,
-    GREY_3,
-    GREY_7,
-    YELLOW_1,
-    YELLOW_3,
-} from '@style/colors';
-import { mediaMdPlus } from '../@style/media-queries';
+import React from 'react'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
-const BtnStyle = css`
-    border: none;
-    text-align: center;
-    user-select: none;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
-    padding: 8px 12px;
+const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+  return {
+    Button: {
+      border: 'none',
+      background: 'none',
+      padding: 0,
+      outline: 'none',
+      cursor: 'pointer',
+      lineHeight: '1.125rem',
+      '&:disabled': {
+        cursor: 'not-allowed',
+      },
+    },
+    Button__notText: {
+      border: 'none',
+      textAlign: 'center',
+      userSelect: 'none',
+      cursor: 'pointer',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: '.5rem',
+      padding: '.5625rem .75rem',
+      backgroundColor: theme.colors.blue[500],
+      ...theme.mixins.text.primaryButtonText,
 
-    &:disabled {
-        cursor: not-allowed;
-    }
-`;
+      '&:hover': {
+        backgroundColor: theme.colors.blue[700],
+      },
 
-export const SecondaryButton = styled.button`
-    ${BtnStyle};
-    ${secondaryButtonText};
-    background-color: ${GREY_3};
-    &:hover {
-        background-color: ${GREY_7};
-    }
-`;
+      '&:disabled': {
+        ...theme.mixins.text.secondaryButtonText,
+        cursor: 'not-allowed',
+        opacity: '0.8',
+        '&:hover': {
+          opacity: 1,
+        },
+      },
+    },
+    Button__secondary: {
+      ...theme.mixins.text.secondaryButtonText,
+      backgroundColor: theme.colors.purple[300],
+      '&:hover': {
+        backgroundColor: theme.colors.purple[500],
+      },
+    },
+    Button__back: {
+      width: '3rem',
+      height: '3rem',
+      borderRadius: '3rem',
+      padding: 0,
+      marginRight: '1rem',
+    },
+    Button__dark: {
+      ...theme.mixins.text.darkButtonText,
+      backgroundColor: theme.colors.purple[500],
+      '&:hover': {
+        backgroundColor: theme.colors.purple[800],
+      },
+    },
+    Button__brand: {
+      ...theme.mixins.text.matchingButtonText,
+      borderRadius: '.5rem',
+      boxShadow: theme.variables.boxShadow,
+      backgroundColor: theme.colors.gold[500],
+      padding: '.375rem 1rem',
+      minWidth: '11.25rem',
 
-export const BackButton = styled(SecondaryButton)`
-    width: 48px;
-    height: 48px;
-    border-radius: 48px;
-    padding: 0;
-    margin-right: 16px;
-`;
+      [md]: {
+        padding: '.375rem 1.5rem',
+      },
 
-export const DarkButton = styled.button`
-    ${BtnStyle};
-    ${darkButtonText};
-    ${props => props.theme.shadow};
-    background-color: ${GREY_7};
+      '&:hover': {
+        ...theme.mixins.text.matchingButtonHoverText,
+        backgroundColor: theme.colors.gold[800],
+      },
+    },
+  }
+})
 
-    &:hover {
-        background-color: ${BLACK_4};
-    }
-`;
-
-export const Button = styled.button`
-    ${BtnStyle};
-    ${primaryButtonText};
-    background-color: ${BLUE_2};
-    ${props => props.theme.shadow};
-
-    &:hover {
-        background-color: ${BLUE_4};
-    }
-
-    &:disabled {
-        ${secondaryButtonText};
-        opacity: 0.8;
-        &:hover {
-            opacity: 1;
-        }
-    }
-`;
-
-export const TextButton = styled.button`
-    border: none;
-    background: none;
-    padding: 0;
-    cursor: pointer;
-
-    &:disabled {
-        cursor: not-allowed;
-    }
-`;
-
-export const BrandButton = styled.button`
-    ${BtnStyle};
-    ${matchingButtonText};
-    ${props => props.theme.shadow};
-    background-color: ${YELLOW_1};
-    padding: 6px 16px;
-    min-width: 182px;
-
-    ${mediaMdPlus} {
-        padding: 6px 24px;
-    }
-
-    &:hover {
-        ${matchingButtonHoverText};
-        background-color: ${YELLOW_3};
-    }
-`;
+export const Button = ({
+  children,
+  secondary,
+  back,
+  dark,
+  text,
+  brand,
+  className,
+  ...props
+}) => {
+  const c = useStyles()
+  return (
+    <button
+      className={classnames(className, c.Button, {
+        [c.Button__secondary]: secondary || back,
+        [c.Button__back]: back,
+        [c.Button__dark]: dark,
+        [c.Button__notText]: !text,
+        [c.Button__brand]: brand,
+      })}
+      {...props}
+    >
+      {children}
+    </button>
+  )
+}

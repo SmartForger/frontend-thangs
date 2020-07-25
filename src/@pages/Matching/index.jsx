@@ -1,117 +1,125 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
-import { WithNewThemeLayout } from '@style/Layout';
-import { Button } from '@components/Button';
-import { Uploader } from '@components/Uploader';
-import * as GraphqlService from '@services/graphql-service';
-import { authenticationService } from '@services';
-import { CardCollection } from '@components/CardCollection';
-import { UploadProgress } from '@components/UploadProgress';
+import React, { useState, useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
+import { NewThemeLayout } from '@components/Layout'
+import { Button } from '@components/Button'
+import { Uploader } from '@components/Uploader'
+import * as GraphqlService from '@services/graphql-service'
+import { authenticationService } from '@services'
+import CardCollection from '@components/CardCollection'
+import { UploadProgress } from '@components/UploadProgress'
+import { createUseStyles } from '@style'
 
-import { subheaderText, matchingSubheader } from '@style/text';
+const useStyles = createUseStyles(theme => {
+  return {
+    Matching: {},
+    Matching_Header: {
+      ...theme.mixins.text.subheaderText,
+      marginBottom: '1rem',
+    },
+    Matching_Subheader: {
+      ...theme.mixins.text.matchingSubheader,
+      marginBottom: '1.5rem',
+    },
+    Matching_Button: {
+      backgroundColor: theme.variables.colors.deleteButton,
+      marginTop: '1.5rem',
+      float: 'right',
+    },
+  }
+})
 
-const PROCESSING = 'PROCESSING';
-const ERROR = 'ERROR';
+const PROCESSING = 'PROCESSING'
+const ERROR = 'ERROR'
 
-const Header = styled.h1`
-    ${subheaderText};
-    margin-bottom: 16px;
-`;
-
-const Subheader = styled.h4`
-    ${matchingSubheader};
-    margin-bottom: 24px;
-`;
-
-const graphqlService = GraphqlService.getInstance();
-
-const CancelButton = styled(Button)`
-    background-color: ${props => props.theme.deleteButton};
-    margin-top: 24px;
-    float: right;
-`;
+const graphqlService = GraphqlService.getInstance()
 
 function Results({ modelId }) {
-    const {
-        loading,
-        error,
-        model,
-        startPolling,
-        stopPolling,
-    } = graphqlService.useUploadedModelByIdWithRelated(modelId);
+  const {
+    loading,
+    error,
+    model,
+    startPolling,
+    stopPolling,
+  } = graphqlService.useUploadedModelByIdWithRelated(modelId)
 
-    if (loading || (model && model.uploadStatus === PROCESSING)) {
-        startPolling(1000);
-        return <UploadProgress />;
-    }
+  if (loading || (model && model.uploadStatus === PROCESSING)) {
+    startPolling(1000)
+    return <UploadProgress />
+  }
 
-    stopPolling();
+  stopPolling()
 
-    if (error || !model || model.uploadStatus === ERROR) {
-        return (
-            <div>
-                There was an error analyzing your model. Please try again later.
-            </div>
-        );
-    }
+  if (error || !model || model.uploadStatus === ERROR) {
+    return <div>There was an error analyzing your model. Please try again later.</div>
+  }
 
-    return (
-        <CardCollection
-            models={model.relatedModels}
-            noResultsText="No geometric similar matches found. Try uploading another model."
-        />
-    );
+  return (
+    <CardCollection
+      models={model.relatedModels}
+      noResultsText='No geometric similar matches found. Try uploading another model.'
+    />
+  )
 }
 
 function Page() {
-    const [currentModel, setCurrentModel] = useState();
-    const history = useHistory();
-    const currentUser = authenticationService.getCurrentUser();
-    const [
-        uploadModel,
-        { loading: isUploading, error: uploadError },
-    ] = graphqlService.useUploadModelMutation(currentUser.id);
+  const [currentModel, setCurrentModel] = useState()
+  const history = useHistory()
+  const c = useStyles()
+  const currentUser = authenticationService.getCurrentUser()
+  const [
+    uploadModel,
+    { loading: isUploading, error: uploadError },
+  ] = graphqlService.useUploadModelMutation(currentUser.id)
 
-    async function handleFile(file) {
-        const model = await uploadModel(file, {
-            variables: {
-                name: file.name,
-                size: file.size,
-                userEmail: currentUser.email,
-                searchUpload: true,
-            },
-        });
-        setCurrentModel(model);
-    }
+  async function handleFile(file) {
+    const model = await uploadModel(file, {
+      variables: {
+        name: file.name,
+        size: file.size,
+        userEmail: currentUser.email,
+        searchUpload: true,
+      },
+    })
+    setCurrentModel(model)
+  }
 
-    const onCancel = () => history.push('/');
+  const onCancel = useCallback(() => history.push('/'), [history])
 
-    return (
-        <div>
-            <Header>Search by Model</Header>
-            <Subheader>
-                Upload your model to see other models with similar geometry.
-            </Subheader>
-            {isUploading ? (
-                <UploadProgress />
-            ) : currentModel ? (
-                <Results modelId={currentModel.id} />
-            ) : (
-                <>
-                    <form>
-                        <Uploader
-                            showError={!!uploadError}
-                            setFile={handleFile}
-                        />
-                    </form>
-                    <CancelButton onClick={onCancel}>Cancel</CancelButton>
-                </>
-            )}
-        </div>
-    );
+  return (
+    <div>
+      <h1 className={c.Matching_Header}>Search by Model</h1>
+      <h4 className={c.Matching_Subheader}>
+        Upload your model to see other models with similar geometry.
+      </h4>
+      {isUploading ? (
+        <UploadProgress />
+      ) : currentModel ? (
+        <Results modelId={currentModel.id} />
+      ) : (
+        <>
+          <form>
+            <Uploader showError={!!uploadError} setFile={handleFile} />
+          </form>
+          <Button
+            className={c.Matching_Button}
+            onClick={() => {
+              onCancel()
+            }}
+          >
+            Cancel
+          </Button>
+        </>
+      )}
+    </div>
+  )
 }
 
-const Matching = WithNewThemeLayout(Page);
+const Matching = () => {
+  return (
+    <NewThemeLayout>
+      <Page />
+    </NewThemeLayout>
+  )
+}
 
-export { Matching };
+export { Matching }

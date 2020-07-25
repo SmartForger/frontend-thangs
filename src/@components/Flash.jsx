@@ -1,61 +1,70 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import styled from 'styled-components';
-import { flashToastText } from '@style/text';
+import React, { useState, useContext, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
+import { createUseStyles } from '@style'
 
-export const Flash = styled.div`
-    ${flashToastText};
-    background-color: ${props => props.theme.flashColor};
-    border-radius: 8px;
-    padding: 16px 24px;
-    margin-bottom: 24px;
-`;
+const useStyles = createUseStyles(theme => {
+  return {
+    Flash: {
+      ...theme.mixins.text.flashToastText,
+      backgroundColor: theme.variables.colors.flashColor,
+      borderRadius: '.5rem',
+      padding: '1rem 1.5rem',
+      marginBottom: '1.5rem',
+    },
+  }
+})
 
-const FlashContext = React.createContext([null, {}]);
+export const Flash = ({ children, _props }) => {
+  const c = useStyles()
+  return <div className={c.Flash}>{children}</div>
+}
+
+const FlashContext = React.createContext([null, {}])
 
 export const FlashContextProvider = props => {
-    const history = useHistory();
-    const [flash, setFlash] = useState();
-    const navigateWithFlash = (to, msg) => {
-        history.push(to);
-        setTimeout(() => setFlash(msg), 0);
-    };
+  const history = useHistory()
+  const [flash, setFlash] = useState()
+  const navigateWithFlash = (to, msg) => {
+    history.push(to)
+    setTimeout(() => setFlash(msg), 0)
+  }
 
-    return (
-        <FlashContext.Provider value={[flash, { setFlash, navigateWithFlash }]}>
-            {props.children}
-        </FlashContext.Provider>
-    );
-};
+  return (
+    <FlashContext.Provider value={[flash, { setFlash, navigateWithFlash }]}>
+      {props.children}
+    </FlashContext.Provider>
+  )
+}
 
 function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 export function WithFlash({ children }) {
-    const [flash, { setFlash }] = useContext(FlashContext);
+  const [flash, { setFlash }] = useContext(FlashContext)
+  const c = useStyles()
 
-    useEffect(() => {
-        async function clearFlash() {
-            await sleep(5000);
-            setFlash();
-        }
-        clearFlash();
+  useEffect(() => {
+    async function clearFlash() {
+      await sleep(5000)
+      setFlash()
+    }
+    clearFlash()
 
-        return function cleanup() {
-            setFlash();
-        };
-    }, [setFlash]);
+    return function cleanup() {
+      setFlash()
+    }
+  }, [setFlash])
 
-    return (
-        <>
-            {flash && <Flash>{flash}</Flash>}
-            {children}
-        </>
-    );
+  return (
+    <>
+      {flash && <div className={c.Flash}>{flash}</div>}
+      {children}
+    </>
+  )
 }
 
 export function useFlashNotification() {
-    const [, { setFlash, navigateWithFlash }] = useContext(FlashContext);
-    return { setFlash, navigateWithFlash };
+  const [, { setFlash, navigateWithFlash }] = useContext(FlashContext)
+  return { setFlash, navigateWithFlash }
 }

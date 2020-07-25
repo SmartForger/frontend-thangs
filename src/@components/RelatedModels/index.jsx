@@ -1,91 +1,89 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from 'react'
 
-import { headerText } from '@style/text';
-import { NoResults } from '@components/NoResults';
-import { CardCollection } from '@components/CardCollection';
-import { Spinner } from '@components/Spinner';
-import { ProgressText } from '@components/ProgressText';
-import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg';
-import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg';
-import { isError, isProcessing } from '@utilities';
+import { NoResults } from '@components/NoResults'
+import CardCollection from '@components/CardCollection'
+import { Spinner } from '@components/Spinner'
+import { ProgressText } from '@components/ProgressText'
+import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg'
+import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
+import { isError, isProcessing } from '@utilities'
 
-import { logger } from '../../logging';
+import { logger } from '../../logging'
 
-import * as GraphqlService from '@services/graphql-service';
+import * as GraphqlService from '@services/graphql-service'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
-const graphqlService = GraphqlService.getInstance();
+const useStyles = createUseStyles(theme => {
+  return {
+    RelatedModels: {},
+    RelatedModels_NoResults: {
+      display: 'flex',
+      alignItems: 'center',
+      '& > svg': {
+        marginRight: '.5rem',
+      },
+    },
+    RelatedModels_Icon: {
+      width: '1.5rem',
+      height: '1.5rem',
+    },
+    RelatedModels_Header: {
+      ...theme.mixins.text.headerText,
+      marginBottom: '1.5rem',
+    },
+    RelatedModels_Related: {
+      gridArea: 'related',
+    },
+  }
+})
 
-const NoResultsStyled = styled(NoResults)`
-    display: flex;
-    align-items: center;
-    > svg {
-        margin-right: 8px;
-    }
-`;
-
-const SmallLoadingIconStyled = styled(LoadingIcon)`
-    width: 24px;
-    height: 24px;
-`;
-
-const SmallErrorIconStyled = styled(ErrorIcon)`
-    width: 24px;
-    height: 24px;
-`;
-
-const Header = styled.div`
-    ${headerText};
-    margin-bottom: 24px;
-`;
-
-const Related = styled.div`
-    grid-area: related;
-`;
+const graphqlService = GraphqlService.getInstance()
 
 export function RelatedModels({ modelId, className }) {
-    const {
-        loading,
-        error,
-        model,
-        startPolling,
-        stopPolling,
-    } = graphqlService.useModelByIdWithRelated(modelId);
+  const c = useStyles()
+  const {
+    loading,
+    error,
+    model,
+    startPolling,
+    stopPolling,
+  } = graphqlService.useModelByIdWithRelated(modelId)
 
-    if (loading) {
-        return <Spinner />;
-    } else if (error) {
-        logger.error('error', error);
-        return <Spinner />;
-    }
+  if (loading) {
+    return <Spinner />
+  } else if (error) {
+    logger.error('error', error)
+    return <Spinner />
+  }
 
-    if (isProcessing(model)) {
-        startPolling(1000);
-    } else {
-        stopPolling();
-    }
+  if (isProcessing(model)) {
+    startPolling(1000)
+  } else {
+    stopPolling()
+  }
 
-    return (
-        <Related className={className}>
-            <Header>Geometrically Similar</Header>
+  return (
+    <div className={classnames(className, c.RelatedModels_Related)}>
+      <div className={c.RelatedModels_Header}>Geometrically Similar</div>
 
-            {isProcessing(model) ? (
-                <NoResultsStyled>
-                    <SmallLoadingIconStyled />
-                    <ProgressText text="Processing for matches" />
-                </NoResultsStyled>
-            ) : isError(model) ? (
-                <NoResultsStyled>
-                    <SmallErrorIconStyled />
-                    An error occurred while processing for matches.
-                </NoResultsStyled>
-            ) : (
-                <CardCollection
-                    models={model && model.relatedModels}
-                    maxPerRow={3}
-                    noResultsText="There were no geometrically similar matches found."
-                />
-            )}
-        </Related>
-    );
+      {isProcessing(model) ? (
+        <NoResults className={c.RelatedModels_NoResults}>
+          <LoadingIcon className={c.RelatedModels_Icon} />
+          <ProgressText text='Processing for matches' />
+        </NoResults>
+      ) : isError(model) ? (
+        <NoResults className={c.RelatedModels_NoResults}>
+          <ErrorIcon className={c.RelatedModels_Icon} />
+          An error occurred while processing for matches.
+        </NoResults>
+      ) : (
+        <CardCollection
+          models={model && model.relatedModels}
+          maxPerRow={3}
+          noResultsText='There were no geometrically similar matches found.'
+        />
+      )}
+    </div>
+  )
 }

@@ -1,296 +1,296 @@
-import React from 'react';
-import styled from 'styled-components/macro';
-import { useHistory, Link, useParams } from 'react-router-dom';
+import React from 'react'
+import { useHistory, Link, useParams } from 'react-router-dom'
 
-import { LikeModelButton } from '@components/LikeModelButton';
-import { CommentsForModel } from '@components/CommentsForModel';
-import { ModelViewer } from '@components/HoopsModelViewer';
-import { ModelViewer as BackupViewer } from '@components/ModelViewer';
-import { TextButton, BackButton } from '@components/Button';
-import { Spinner } from '@components/Spinner';
-import { ProgressText } from '@components/ProgressText';
-import { RelatedModels } from '@components/RelatedModels';
-import { ModelTitle } from '@components/ModelTitle';
+import { LikeModelButton } from '@components/LikeModelButton'
+import CommentsForModel from '@components/CommentsForModel'
+import ModelViewer from '@components/HoopsModelViewer'
+import { ModelViewer as BackupViewer } from '@components/ModelViewer'
+import { Button } from '@components/Button'
+import { Spinner } from '@components/Spinner'
+import { ProgressText } from '@components/ProgressText'
+import { RelatedModels } from '@components/RelatedModels'
+import { ModelTitle } from '@components/ModelTitle'
 
-import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg';
-import { ReactComponent as VersionIcon } from '@svg/version-icon.svg';
+import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
+import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
 
-import { useLocalStorage } from '@customHooks/Storage';
-import { useDownloadModel } from '@customHooks/Models';
-import * as GraphqlService from '@services/graphql-service';
-import { WithNewThemeLayout } from '@style/Layout';
-import { linkText, subheaderText, activeTabNavigationText } from '@style/text';
-import {
-    mediaSmPlus,
-    mediaMdPlus,
-    mediaLgPlus,
-    mediaXlPlus,
-} from '@style/media-queries';
-import { BLUE_2 } from '@style/colors';
-import { ModelDetails } from '../ModelPreview/ModelDetails';
-import { Message404 } from '../404';
+import { useLocalStorage } from '@customHooks/Storage'
+import { useDownloadModel } from '@customHooks/Models'
+import * as GraphqlService from '@services/graphql-service'
+import { NewThemeLayout } from '@components/Layout'
 
-const graphqlService = GraphqlService.getInstance();
+import { ModelDetails } from '../ModelPreview/ModelDetails'
+import { Message404 } from '../404'
+import { createUseStyles } from '@style'
 
-const HeaderStyled = styled.div`
-    display: flex;
-    align-items: center;
-    margin: 8px 0 16px;
-`;
+const graphqlService = GraphqlService.getInstance()
 
-const Row = styled.div`
-    display: flex;
-    flex-direction: row;
+const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { sm, md, lg, xl },
+  } = theme
+  return {
+    Model: {},
+    Model_Header: {
+      display: 'flex',
+      alignItems: 'center',
+      margin: '.5rem 0 1rem',
+    },
+    Model_Row: {
+      display: 'flex',
+      flexDirection: 'row',
+      marginBottom: '1.5rem',
+      '&:last-of-type': {
+        marginBottom: 0,
+      },
+      [lg]: {
+        marginBottom: '3rem',
+      },
+      '& > div': {
+        flexGrow: 1,
+      },
+    },
+    Model_Column: {
+      display: 'flex',
+      flexDirection: 'column',
 
-    margin-bottom: 24px;
-    :last-of-type {
-        margin-bottom: 0;
-    }
-    ${mediaLgPlus} {
-        margin-bottom: 48px;
-    }
+      [lg]: {
+        marginRight: '3rem',
+        '&:last-of-type': {
+          marginRight: 0,
+        },
+      },
+    },
+    Model_Row__mobile: {
+      [lg]: {
+        display: 'none',
+      },
+    },
+    Model_Column__desktop: {
+      display: 'none',
+      [lg]: {
+        display: 'block',
+        maxWidth: '35%',
+      },
+    },
+    Model_ModelViewer: {
+      display: 'flex',
+      overflow: 'hidden',
+      flexDirection: 'column',
+      height: '23.5rem',
+      margin: '0 -1rem',
+      width: 'calc(100% + 2rem)',
 
-    > div {
-        flex-grow: 1;
-    }
-`;
+      [sm]: {
+        height: '28.75rem',
+      },
 
-const Column = styled.div`
-    display: flex;
-    flex-direction: Column;
+      [md]: {
+        height: '37.5rem',
+        margin: 0,
+        width: '100%',
+      },
 
-    ${mediaLgPlus} {
-        margin-right: 48px;
-        :last-of-type {
-            margin-right: 0;
-        }
-    }
-`;
+      [lg]: {
+        height: '38.5rem',
+        width: 'auto',
+      },
 
-const OnlyMobileRow = styled(Row)`
-    ${mediaLgPlus} {
-        display: none;
-    }
-`;
-
-const OnlyDesktopColumn = styled(Column)`
-    display: none;
-    ${mediaLgPlus} {
-        display: block;
-    }
-`;
-
-const ModelViewerStyled = styled(ModelViewer)`
-    display: flex;
-    overflow: hidden;
-
-    flex-direction: column;
-    height: 375px;
-    margin: 0 -16px;
-    width: calc(100% + 32px);
-
-    ${mediaSmPlus} {
-        height: 460px;
-    }
-
-    ${mediaMdPlus} {
-        height: 600px;
-        margin: 0;
-        width: 100%;
-    }
-
-    ${mediaLgPlus} {
-        height: 616px;
-        width: auto;
-    }
-
-    ${mediaXlPlus} {
-        height: 616px;
-    }
-`;
-
-const BackupViewerStyled = styled(BackupViewer)`
-    height: 616px;
-`;
-
-const Description = styled.div`
-    margin: 32px 0;
-`;
-
-const DownloadTextButton = styled(TextButton)`
-    ${linkText};
-    width: 122px;
-    text-align: left;
-    margin-bottom: 24px;
-`;
+      [xl]: {
+        height: '38.5rem',
+      },
+    },
+    Model_BackupViewer: {
+      height: '38.5rem',
+    },
+    Model_TitleContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      margin: '.5rem 0',
+    },
+    Model_TitleContent: {
+      flexDirection: 'column',
+    },
+    Model_OwnerProfilePicture: {
+      marginRight: '1rem',
+    },
+    Model_TitleText: {
+      ...theme.mixins.text.modelTitleText,
+      marginBottom: '.5rem',
+    },
+    Model_ProfileLink: {
+      ...theme.mixins.text.linkText,
+      display: 'block',
+      textDecoration: 'none',
+    },
+    Model_Description: {
+      margin: '2rem 0',
+    },
+    Model_DownloadButton: {
+      ...theme.mixins.text.linkText,
+      width: '7.75rem',
+      textAlign: 'left',
+      marginBottom: '1.5rem',
+    },
+    Model_VersionHeader: {
+      ...theme.mixins.text.subheaderText,
+    },
+    Model_VersionLinkText: {
+      ...theme.mixins.text.linkText,
+    },
+    Model_VersionButton: {
+      ...theme.mixins.text.activeTabNavigationText,
+      display: 'flex',
+      alignItems: 'center',
+      marginRight: '3.5rem',
+      marginTop: '1.5rem',
+      cursor: 'pointer',
+      '*:not(:first-child)': {
+        marginLeft: '.75rem',
+      },
+    },
+    Model_VersionIcon: {
+      fill: theme.colors.blue[500],
+      width: '1.25rem',
+      height: '1.25rem',
+    },
+  }
+})
 
 function DownloadLink({ model }) {
-    const [isDownloading, hadError, downloadModel] = useDownloadModel(model);
-    return (
-        <DownloadTextButton onClick={downloadModel}>
-            {isDownloading ? (
-                <ProgressText text="Downloading" />
-            ) : hadError ? (
-                'Server Error'
-            ) : (
-                'Download Model'
-            )}
-        </DownloadTextButton>
-    );
+  const c = useStyles()
+  const [isDownloading, hadError, downloadModel] = useDownloadModel(model)
+  return (
+    <Button text className={c.Model_DownloadButton} onClick={downloadModel}>
+      {isDownloading ? (
+        <ProgressText text='Downloading' />
+      ) : hadError ? (
+        'Server Error'
+      ) : (
+        'Download Model'
+      )}
+    </Button>
+  )
 }
 
-const Header = styled.h2`
-    ${subheaderText};
-`;
-
-const LinkTextButton = styled(TextButton)`
-    ${linkText};
-`;
-
-const IconedButton = styled.div`
-    ${activeTabNavigationText};
-    display: flex;
-    align-items: center;
-    margin-right: 56px;
-    cursor: pointer;
-    *:not(:first-child) {
-        margin-left: 12px;
-    }
-`;
-
-const VersionIconStyled = styled(VersionIcon)``;
-
-const VersionUpload = ({ modelId }) => (
+const VersionUpload = ({ modelId }) => {
+  const c = useStyles()
+  return (
     <div>
-        <Header>
-            Versions
-        </Header>
-        <Link to={`/model/${modelId}/upload`}>
-            <IconedButton 
-                css={`
-                        margin-top: 24px
-                `}>
-                <VersionIconStyled
-                    css={`
-                        fill: ${BLUE_2} !important;
-                        width: 20px;
-                        height: 20px;
-                    `}
-                />
-                <LinkTextButton >
-                    Upload new version
-                </LinkTextButton>
-            </IconedButton>
-        </Link>
-    </div>
-)
-
-
-const Revised = () => (
-    <IconedButton css={`
-        margin-bottom: 24px;
-    `}>
-        <VersionIconStyled
-            css={`
-                fill: ${BLUE_2} !important;
-                width: 20px;
-                height: 20px;
-            `}
-        />
-        <div>
-            Revised from
+      <h2 className={c.Model_VersionHeader}>Versions</h2>
+      <Link to={`/model/${modelId}/upload`}>
+        <div className={c.Model_VersionButton}>
+          <VersionIcon className={c.Model_VersionIcon} />
+          <Button text className={c.Model_VersionLinkText}>
+            Upload new version
+          </Button>
         </div>
-        <LinkTextButton >
-            Geofry Thomas
-        </LinkTextButton>
-    </IconedButton>
-)
+      </Link>
+    </div>
+  )
+}
+
+const Revised = () => {
+  const c = useStyles()
+  return (
+    <div className={c.Model_VersionButton}>
+      <VersionIcon className={c.Model_VersionIcon} />
+      <div>Revised from</div>
+      <Button text className={c.Model_VersionLinkText}>
+        Geofry Thomas
+      </Button>
+    </div>
+  )
+}
 
 function Details({ currentUser, model, className }) {
-    return (
-        <div className={className}>
-            <Revised />
-            <LikeModelButton currentUser={currentUser} model={model} />
-            <ModelTitle model={model} />
-            <Description>{model.description}</Description>
-            <DownloadLink model={model} />
-            <ModelDetails model={model} />
-        </div>
-    );
+  const c = useStyles()
+  return (
+    <div className={className}>
+      <Revised />
+      <LikeModelButton currentUser={currentUser} model={model} />
+      <ModelTitle model={model} />
+      <div className={c.Model_Description}>{model.description}</div>
+      <DownloadLink model={model} />
+      <ModelDetails model={model} />
+    </div>
+  )
 }
 
 const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
-    const history = useHistory();
+  const c = useStyles()
+  const history = useHistory()
 
-    return (
-        <>
-            <HeaderStyled>
-                <BackButton onClick={() => history.goBack()}>
-                    <BackArrow />
-                </BackButton>
-            </HeaderStyled>
-            <Row>
-                <Column>
-                    <Row>
-                        {showBackupViewer ? (
-                            <BackupViewerStyled model={model} />
-                        ) : (
-                            <ModelViewerStyled model={model} />
-                        )}
-                    </Row>
-                    <OnlyMobileRow>
-                        <Details currentUser={currentUser} model={model} />
-                    </OnlyMobileRow>
-                    <Row>
-                        <RelatedModels modelId={model.id} />
-                    </Row>
-                    <OnlyMobileRow>
-                        <CommentsForModel model={model} />
-                    </OnlyMobileRow>
-                </Column>
-                <OnlyDesktopColumn
-                    css={`
-                        ${mediaLgPlus} {
-                            max-width: 35%;
-                        }
-                    `}
-                >
-                    <Row>
-                        <Details currentUser={currentUser} model={model} />
-                    </Row>
-                    <Row>
-                        <VersionUpload modelId={model.id}/>
-                    </Row>
-                    <Row>
-                        <CommentsForModel model={model} />
-                    </Row>
-                </OnlyDesktopColumn>
-            </Row>
-        </>
-    );
-};
-
-function Page() {
-    const { id } = useParams();
-    const [showBackupViewer] = useLocalStorage('showBackupViewer', false);
-
-    const { loading, error, model } = graphqlService.useModelById(id);
-    const [currentUser] = useLocalStorage('currentUser', null);
-
-    if (loading) {
-        return <Spinner />;
-    } else if (!model) {
-        return <Message404 />;
-    } else if (error) {
-        return <div>Error loading Model</div>;
-    }
-    return (
-        <ModelDetailPage
-            model={model}
-            currentUser={currentUser}
-            showBackupViewer={showBackupViewer}
-        />
-    );
+  return (
+    <>
+      <div className={c.Model_Header}>
+        <Button back onClick={() => history.goBack()}>
+          <BackArrow />
+        </Button>
+      </div>
+      <div className={c.Model_Row}>
+        <div className={c.Model_Column}>
+          <div className={c.Model_Row}>
+            {showBackupViewer ? (
+              <BackupViewer className={c.Model_BackupViewer} model={model} />
+            ) : (
+              <ModelViewer className={c.Model_ModelViewer} model={model} />
+            )}
+          </div>
+          <div className={c.Model_Row__mobile}>
+            <Details currentUser={currentUser} model={model} />
+          </div>
+          <div className={c.Model_Row}>
+            <RelatedModels modelId={model.id} />
+          </div>
+          <div className={c.Model_Row__mobile}>
+            <CommentsForModel model={model} />
+          </div>
+        </div>
+        <div className={c.Model_Column__desktop}>
+          <div className={c.Model_Row}>
+            <Details currentUser={currentUser} model={model} />
+          </div>
+          <div className={c.Model_Row}>
+            <VersionUpload modelId={model.id} />
+          </div>
+          <div className={c.Model_Row}>
+            <CommentsForModel model={model} />
+          </div>
+        </div>
+      </div>
+    </>
+  )
 }
 
-export const ModelDetail = WithNewThemeLayout(Page);
+function Page() {
+  const { id } = useParams()
+  const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
+
+  const { loading, error, model } = graphqlService.useModelById(id)
+  const [currentUser] = useLocalStorage('currentUser', null)
+
+  if (loading) {
+    return <Spinner />
+  } else if (!model) {
+    return <Message404 />
+  } else if (error) {
+    return <div>Error loading Model</div>
+  }
+  return (
+    <ModelDetailPage
+      model={model}
+      currentUser={currentUser}
+      showBackupViewer={showBackupViewer}
+    />
+  )
+}
+
+export const ModelDetail = () => {
+  return (
+    <NewThemeLayout>
+      <Page />
+    </NewThemeLayout>
+  )
+}

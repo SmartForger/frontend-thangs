@@ -1,18 +1,34 @@
-import ReactModal from 'react-modal';
-import styled from 'styled-components/macro';
-import { WHITE_1 } from '../../@style/colors';
+import React from 'react'
+import ReactModal from 'react-modal'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
-ReactModal.setAppElement('#root');
+ReactModal.setAppElement('#root')
 
-export const Modal = styled(ReactModal)`
-    position: fixed;
-    padding: 40px 64px 64px;
-    background: ${WHITE_1};
-    overflow: auto;
-    border-radius: 8px;
-    outline: none;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    ${props => props.theme.shadow};
-`;
+const useStyles = createUseStyles(theme => {
+  return {
+    Modal: {
+      position: 'fixed',
+      padding: '2.5rem 4rem 4rem',
+      background: theme.colors.white[400],
+      overflow: 'auto',
+      borderRadius: '.5rem',
+      outline: 'none',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      boxShadow: theme.variables.boxShadow,
+    },
+  }
+})
+
+const Modal = ({ children, className, ...props }) => {
+  const c = useStyles(props)
+  return (
+    <ReactModal className={classnames(className, c.Modal)} {...props}>
+      {children}
+    </ReactModal>
+  )
+}
+
+export default Modal

@@ -1,60 +1,63 @@
-import React from 'react';
-import styled from 'styled-components/macro';
-import { headerText } from '@style/text';
-import { WithNewThemeLayout } from '@style/Layout';
-import { NotificationsList } from '@components/NotificationsList';
-import { Button } from '@components/Button';
-import { Spinner } from '@components/Spinner';
-import { useUpdateLastCheckedNotifications } from '@customHooks/Notifications';
+import React from 'react'
+import { NewThemeLayout } from '@components/Layout'
+import NotificationsList from '@components/NotificationsList'
+import { Button } from '@components/Button'
+import { Spinner } from '@components/Spinner'
+import { useUpdateLastCheckedNotifications } from '@customHooks/Notifications'
+import { createUseStyles } from '@style'
 
-const Header = styled.h1`
-    ${headerText};
-`;
-
-const SpinnerStyled = styled(Spinner)`
-    height: 24px;
-    width: 24px;
-    & .path {
-        stroke: currentColor;
-    }
-`;
-
-const ButtonStyled = styled(Button)`
-    min-width: 160px;
-    margin: 16px 0;
-`;
+const useStyles = createUseStyles(theme => {
+  return {
+    Notifications: {
+      marginTop: '3rem',
+    },
+    Notifications_Header: {
+      ...theme.mixins.text.headerText,
+    },
+    Notifications_Spinner: {
+      width: '1rem',
+      height: '1rem',
+      '& .path': {
+        stroke: 'currentColor',
+      },
+    },
+    Notification_Button: {
+      minWidth: '10rem',
+      margin: '1rem 0',
+    },
+  }
+})
 
 function Page() {
-    const [
-        updateLastChecked,
-        { loading, error },
-    ] = useUpdateLastCheckedNotifications();
+  const c = useStyles()
+  const [updateLastChecked, { loading, error }] = useUpdateLastCheckedNotifications()
 
-    const handleClick = e => {
-        e.preventDefault();
-        return updateLastChecked();
-    };
+  const handleClick = e => {
+    e.preventDefault()
+    return updateLastChecked()
+  }
 
-    return (
-        <div>
-            <Header>Notifications</Header>
-            <ButtonStyled disabled={loading} onClick={handleClick}>
-                {loading ? (
-                    <SpinnerStyled />
-                ) : error ? (
-                    'Error'
-                ) : (
-                    'Clear Notifications'
-                )}
-            </ButtonStyled>
-            <NotificationsList
-                css={`
-                    margin-top: 48px;
-                `}
-            />
-        </div>
-    );
+  return (
+    <div>
+      <h1 className={c.Notifications_Header}>Notifications</h1>
+      <Button className={c.Notification_Button} disabled={loading} onClick={handleClick}>
+        {loading ? (
+          <Spinner className={c.Notifications_Spinner} />
+        ) : error ? (
+          'Error'
+        ) : (
+          'Clear Notifications'
+        )}
+      </Button>
+      <NotificationsList className={c.Notifications} />
+    </div>
+  )
 }
 
-export const Notifications = WithNewThemeLayout(Page);
-
+export const Notifications = () => {
+  return (
+    <NewThemeLayout>
+      <Page />
+    </NewThemeLayout>
+  )
+}

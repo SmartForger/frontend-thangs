@@ -1,353 +1,342 @@
-import React, { useState } from 'react';
-import styled from 'styled-components/macro';
-import { useFlashNotification } from '@components/Flash';
-import { useParams, useHistory, Link } from 'react-router-dom';
-import { ProfilePicture } from '@components/ProfilePicture';
-import { useCurrentUser } from '@customHooks/Users';
-import { useUnreadNotificationCount } from '@customHooks/Notifications';
-import { DropdownMenu, DropdownItem } from '@components/DropdownMenu';
-import { FolderCreateModal } from '@components/FolderCreateModal';
-import { linkText } from '@style/text';
-import { Button } from '@components/Button';
-import { mediaMdPlus } from '@style/media-queries';
-import { GREY_5, RED_3, WHITE_1 } from '@style/colors';
-import { authenticationService } from '@services';
+import React, { useState, useCallback } from 'react'
+import { useFlashNotification } from '@components/Flash'
+import { useParams, useHistory, Link } from 'react-router-dom'
+import { ProfilePicture } from '@components/ProfilePicture'
+import { useCurrentUser } from '@customHooks/Users'
+import { useUnreadNotificationCount } from '@customHooks/Notifications'
+import { DropdownMenu, DropdownItem } from '@components/DropdownMenu'
+import FolderCreateModal from '@components/FolderCreateModal'
+import { Button } from '@components/Button'
+import { authenticationService } from '@services'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
-import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg';
-import { ReactComponent as Logo } from '@svg/logo.svg';
-import { ReactComponent as LogoText } from '@svg/logo-text.svg';
-import { ReactComponent as PlusButton } from '@svg/icon-blue-circle-plus.svg';
-import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass.svg';
-import { ReactComponent as UploadModelToFolderIcon } from '@svg/upload-model-to-folder-icon.svg';
-import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg';
-import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg';
-import { ReactComponent as HeartIcon } from '@svg/heart-icon-gray.svg';
-import { ReactComponent as PencilIcon } from '@svg/icon-pencil.svg';
-import { ReactComponent as ExitIcon } from '@svg/icon-X.svg';
+import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg'
+import { ReactComponent as Logo } from '@svg/logo.svg'
+import { ReactComponent as LogoText } from '@svg/logo-text.svg'
+import { ReactComponent as PlusButton } from '@svg/icon-blue-circle-plus.svg'
+import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass.svg'
+import { ReactComponent as UploadModelToFolderIcon } from '@svg/upload-model-to-folder-icon.svg'
+import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg'
+import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg'
+import { ReactComponent as HeartIcon } from '@svg/heart-icon-gray.svg'
+import { ReactComponent as PencilIcon } from '@svg/icon-pencil.svg'
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 
-const NOTIFICATIONS_URL = '/notifications';
+const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
 
-const LogoStyled = styled(Logo)`
-    margin-right: 12px;
-`;
+  return {
+    Header: {},
+    Header__fixed: {
+      width: '100%',
+      position: 'fixed',
+      background: ({ inverted }) =>
+        inverted
+          ? theme.variables.colors.invertedHeaderBackground
+          : theme.variables.colors.backgroundColor,
+      top: 0,
+      zIndex: 2,
+    },
+    Header_DesktopBoundary: {
+      position: 'relative',
+      margin: '48px auto 16px',
+      maxWidth: theme.variables.maxWidth,
+      flexGrow: 1,
 
-const FixedHeader = styled.div`
-    width: 100%;
-    position: fixed;
-    background: ${props =>
-        props.inverted
-            ? props.theme.invertedHeaderBackground
-            : props.theme.backgroundColor};
-    top: 0;
-    z-index: 2;
-`;
+      [md]: {
+        margin: '3rem 6.25rem 1rem',
+      },
+    },
+    Header_DesktopOnly: {
+      display: 'none',
 
-const DesktopBoundary = styled.div`
-    position: relative;
-    margin: 48px auto 16px;
-    max-width: ${props => props.theme.maxWidth};
-    flex-grow: 1;
+      [md]: {
+        display: 'flex',
+        justifyContent: 'center',
+      },
+    },
+    Header_MobileOnly: {
+      [md]: {
+        display: 'none',
+      },
+    },
+    Header_MobileBoundary: {
+      margin: '2.75rem 0 auto',
+      padding: '0 .75px',
+    },
+    Header_Logo: {
+      marginRight: '.75rem',
+    },
+    Header_Row: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
 
-    ${mediaMdPlus} {
-        margin: 48px 100px 16px;
-    }
-`;
+      '&:not(:last-of-type)': {
+        marginBottom: '1.5rem',
+      },
+    },
+    Header_TopRow: {
+      height: '3rem',
+    },
+    Header_SignInLink: {
+      ...theme.mixins.text.linkText,
+      marginRight: '2rem',
+    },
+    Header_SignUpButton: {
+      width: '5rem',
+    },
+    Header_NotificationIcon: {
+      color: theme.colors.purple[400],
+    },
+    Header_NotificationLink: {
+      height: '3rem',
+      padding: '0 .5rem',
+      position: 'relative',
+    },
+    Header_UnreadBadge: {
+      background: theme.colors.attention,
+      borderRadius: '100%',
+      color: theme.colors.white[400],
+      width: '1rem',
+      height: '1rem',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontSize: '10px',
+      fontWeight: 'bold',
+      position: 'absolute',
+      top: '6px',
+      right: '4px',
+    },
+    Header_DropdownIcon: {
+      width: '3rem',
+      height: '3rem',
+    },
+    Header_DropdownMenu: {
+      height: '3rem',
+      margin: 'auto',
+      '& > button': {
+        height: '3rem',
+      },
+    },
+    Header_AddModelDropdown: {
+      margin: '0 .5rem',
+      width: '3rem',
+      lineHeight: 0,
+      '> div': {
+        right: 0,
+      },
+    },
+    Header_ButtonsRow: {
+      '& > a': {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: '0 .5rem',
+        '&:last-child': {
+          marginRight: 0,
+        },
+      },
+    },
+    Header_SearchLink: {
+      height: '3rem',
+      padding: '0 .5rem',
+    },
+  }
+})
 
-const allowCssProp = props => (props.css ? props.css : '');
-
-const Row = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    :not(:last-of-type) {
-        margin-bottom: 24px;
-    }
-
-    ${allowCssProp};
-`;
-
-const TopRow = styled(Row)`
-    height: 50px;
-`;
-
-const SignIn = styled(Link)`
-    ${linkText};
-    margin-right: 30px;
-`;
+const NOTIFICATIONS_URL = '/notifications'
 
 const SignUp = () => {
-    return (
-        <Link to="/signup">
-            <Button
-                css={`
-                    width: 81px;
-                `}
-            >
-                Sign up
-            </Button>
-        </Link>
-    );
-};
-
-const NotificationIconStyled = styled(NotificationIcon)`
-    color: ${GREY_5};
-`;
-
-const UnreadBadge = styled.div`
-    background: ${RED_3};
-    border-radius: 100%;
-    color: ${WHITE_1};
-    width: 16px;
-    height: 16px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 10px;
-    font-weight: bold;
-    position: absolute;
-    top: 6px;
-    right: 4px;
-`;
+  const c = useStyles({})
+  return (
+    <Link to='/signup'>
+      <Button className={c.Header_SignUpButton}>Sign up</Button>
+    </Link>
+  )
+}
 
 const NotificationsButton = () => {
-    const { unreadNotificationCount } = useUnreadNotificationCount();
+  const c = useStyles({})
+  const { unreadNotificationCount } = useUnreadNotificationCount()
 
-    return (
-        <Link
-            to={NOTIFICATIONS_URL}
-            css={`
-                height: 50px;
-                padding: 0 8px;
-                position: relative;
-            `}
-        >
-            <NotificationIconStyled />
-            {unreadNotificationCount > 0 && (
-                <UnreadBadge>{unreadNotificationCount}</UnreadBadge>
-            )}
-        </Link>
-    );
-};
-
-const DropdownIcon = styled(PlusButton)``;
-const SearchIcon = styled(MagnifyingGlass)``;
-const ProfilePictureStyled = styled(ProfilePicture)``;
-
-function Search() {
-    return (
-        <Link
-            to="/search"
-            css={`
-                height: 50px;
-                padding: 0 8px;
-            `}
-        >
-            <SearchIcon />
-        </Link>
-    );
+  return (
+    <Link to={NOTIFICATIONS_URL} className={c.Header_NotificationLink}>
+      <NotificationIcon className={c.Header_NotificationIcon} />
+      {unreadNotificationCount > 0 && (
+        <div className={c.Header_UnreadBadge}>{unreadNotificationCount}</div>
+      )}
+    </Link>
+  )
 }
 
-function UserPicture({ user }) {
-    return (
-        <Link to="/home/">
-            <ProfilePictureStyled
-                name={user.fullName}
-                src={user.profile.avatarUrl}
-                size="50px"
-            />
-        </Link>
-    );
+const Search = () => {
+  const c = useStyles({})
+  return (
+    <Link to='/search' className={c.Header_SearchLink}>
+      <MagnifyingGlass />
+    </Link>
+  )
 }
 
-const ButtonsRow = styled(Row)`
-    > a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 8px;
-        :last-child {
-            margin-right: 0px;
-        }
-    }
-`;
-
-const DropdownMenuStyled = styled(DropdownMenu)`
-    height: 50px;
-    margin: auto;
-    > button {
-        height: 50px;
-    }
-`;
-
-const DropdownIconStyled = styled(DropdownIcon)`
-    width: 50px;
-    height: 50px;
-`;
-
-function AddModelDropdownMenu() {
-    const { folderId } = useParams();
-    const [createFolderIsOpen, setCreateFolderIsOpen] = useState(false);
-    const { navigateWithFlash } = useFlashNotification();
-    return (
-        <>
-            <DropdownMenuStyled
-                css={`
-                    margin: 0 8px;
-                    width: 50px;
-                    line-height: 0;
-                    > div {
-                        right: 0px;
-                    }
-                `}
-                buttonIcon={DropdownIconStyled}
-            >
-                {folderId && (
-                    <DropdownItem to={`/folder/${folderId}/upload`}>
-                        <UploadModelToFolderIcon /> Upload model to folder
-                    </DropdownItem>
-                )}
-                <DropdownItem to="/upload">
-                    <ModelSquareIcon /> Upload model
-                </DropdownItem>
-                <DropdownItem
-                    to="/"
-                    onClick={() => setCreateFolderIsOpen(true)}
-                >
-                    <NewFolderIcon />
-                    Add Folder
-                </DropdownItem>
-            </DropdownMenuStyled>
-            <FolderCreateModal
-                isOpen={createFolderIsOpen}
-                onCancel={() => setCreateFolderIsOpen(false)}
-                afterCreate={folder => {
-                    setCreateFolderIsOpen(false);
-                    navigateWithFlash(
-                        `/folder/${folder.id}`,
-                        'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
-                    );
-                }}
-            />
-        </>
-    );
+const UserPicture = ({ user }) => {
+  return (
+    <Link to='/home/'>
+      <ProfilePicture name={user.fullName} src={user.profile.avatarUrl} size='3rem' />
+    </Link>
+  )
 }
 
-function ProfileDropdownMenu() {
-    const history = useHistory();
+const AddModelDropdownMenu = () => {
+  const c = useStyles({})
+  const { folderId } = useParams()
+  const [createFolderIsOpen, setCreateFolderIsOpen] = useState(false)
+  const { navigateWithFlash } = useFlashNotification()
+  const setFolderOpen = useCallback(() => {
+    setCreateFolderIsOpen(true)
+  }, [])
+  const setFolderClose = useCallback(() => setCreateFolderIsOpen(false), [])
 
-    return (
-        <DropdownMenuStyled>
-            <DropdownItem to="/profile/edit">
-                <PencilIcon /> Edit Profile
-            </DropdownItem>
-            <DropdownItem to="/profile/likes">
-                <HeartIcon /> Liked Models
-            </DropdownItem>
-            <DropdownItem
-                onClick={() => {
-                    authenticationService.logout();
-                    history.push('/login');
-                }}
-            >
-                <ExitIcon />
-                Sign Out
-            </DropdownItem>
-        </DropdownMenuStyled>
-    );
+  return (
+    <>
+      <DropdownMenu
+        className={classnames(c.Header_DropdownMenu, c.Header_AddModelDropdown)}
+        buttonIcon={PlusButton}
+      >
+        {folderId && (
+          <DropdownItem to={`/folder/${folderId}/upload`}>
+            <UploadModelToFolderIcon /> Upload model to folder
+          </DropdownItem>
+        )}
+        <DropdownItem to='/upload'>
+          <ModelSquareIcon /> Upload model
+        </DropdownItem>
+        <DropdownItem to='/' onClick={setFolderOpen}>
+          <NewFolderIcon />
+          Add Folder
+        </DropdownItem>
+      </DropdownMenu>
+      <FolderCreateModal
+        isOpen={createFolderIsOpen}
+        onCancel={setFolderClose}
+        afterCreate={folder => {
+          setFolderClose()
+          navigateWithFlash(
+            `/folder/${folder.id}`,
+            'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
+          )
+        }}
+      />
+    </>
+  )
+}
+
+const ProfileDropdownMenu = () => {
+  const c = useStyles({})
+  const history = useHistory()
+
+  return (
+    <DropdownMenu className={c.Header_DropdownMenu}>
+      <DropdownItem to='/profile/edit'>
+        <PencilIcon /> Edit Profile
+      </DropdownItem>
+      <DropdownItem to='/profile/likes'>
+        <HeartIcon /> Liked Models
+      </DropdownItem>
+      <DropdownItem
+        onClick={() => {
+          authenticationService.logout()
+          history.push('/login')
+        }}
+      >
+        <ExitIcon />
+        Sign Out
+      </DropdownItem>
+    </DropdownMenu>
+  )
 }
 
 const UserNav = () => {
-    const { loading, user } = useCurrentUser();
+  const c = useStyles({})
+  const { loading, user } = useCurrentUser()
 
-    if (loading) {
-        return <Row></Row>;
-    }
+  if (loading) {
+    return <div className={c.Header_Row}></div>
+  }
 
-    if (user) {
-        return (
-            <ButtonsRow>
-                <Search />
-                <NotificationsButton />
-                <AddModelDropdownMenu />
-                <UserPicture user={user} />
-                <ProfileDropdownMenu />
-            </ButtonsRow>
-        );
-    }
-
+  if (user) {
     return (
-        <Row>
-            <SignIn to="/login">Sign in</SignIn>
-            <SignUp />
-        </Row>
-    );
-};
+      <div className={classnames(c.Header_Row, c.Header_ButtonsRow)}>
+        <Search />
+        <NotificationsButton />
+        <AddModelDropdownMenu />
+        <UserPicture user={user} />
+        <ProfileDropdownMenu />
+      </div>
+    )
+  }
 
-function DesktopHeader({ variant }) {
-    return (
-        <DesktopOnly>
-            <DesktopBoundary>
-                <TopRow>
-                    <div>
-                        <Row>
-                            <Link to="/">
-                                <LogoStyled />
-                                <LogoText />
-                            </Link>
-                        </Row>
-                    </div>
-                    {variant !== 'logo-only' && <UserNav />}
-                </TopRow>
-            </DesktopBoundary>
-        </DesktopOnly>
-    );
+  return (
+    <div className={c.Header_Row}>
+      <Link className={c.Header_SignInLink} to='/login'>
+        Sign in
+      </Link>
+      <SignUp />
+    </div>
+  )
 }
 
-const MobileOnly = styled.span`
-    ${mediaMdPlus} {
-        display: none;
-    }
-`;
+const DesktopHeader = ({ variant }) => {
+  const c = useStyles({})
+  return (
+    <span className={c.Header_DesktopOnly}>
+      <div className={c.Header_DesktopBoundary}>
+        <div className={classnames(c.Header_Row, c.Header_TopRow)}>
+          <div>
+            <div className={c.Header_Row}>
+              <Link to='/'>
+                <Logo className={c.Header_Logo} />
+                <LogoText />
+              </Link>
+            </div>
+          </div>
+          {variant !== 'logo-only' && <UserNav />}
+        </div>
+      </div>
+    </span>
+  )
+}
 
-const DesktopOnly = styled.span`
-    display: none;
-
-    ${mediaMdPlus} {
-        display: flex;
-        justify-content: center;
-    }
-`;
-
-const MobileBoundary = styled.div`
-    margin: 44px 0px auto;
-    padding: 0 12px;
-`;
-
-function MobileHeader({ variant }) {
-    return (
-        <MobileOnly>
-            <MobileBoundary>
-                <TopRow>
-                    <Link to="/">
-                        <LogoStyled />
-                    </Link>
-                    {variant !== 'logo-only' && <UserNav />}
-                </TopRow>
-            </MobileBoundary>
-        </MobileOnly>
-    );
+const MobileHeader = ({ variant }) => {
+  const c = useStyles({})
+  return (
+    <span className={c.Header_MobileOnly}>
+      <div className={c.Header_MobileBoundary}>
+        <div className={classnames(c.Header_Row, c.Header_TopRow)}>
+          <Link to='/'>
+            <Logo className={c.Header_Logo} />
+          </Link>
+          {variant !== 'logo-only' && <UserNav />}
+        </div>
+      </div>
+    </span>
+  )
 }
 
 const Header = ({ inverted, variant }) => {
-    return (
-        <>
-            <FixedHeader inverted={inverted}>
-                <MobileHeader variant={variant} />
-                <DesktopHeader variant={variant} />
-            </FixedHeader>
-        </>
-    );
-};
+  const c = useStyles({ inverted })
+  return (
+    <>
+      <div className={c.Header__fixed}>
+        <MobileHeader variant={variant} />
+        <DesktopHeader variant={variant} />
+      </div>
+    </>
+  )
+}
 
-export { Header };
+export { Header }

@@ -1,28 +1,34 @@
-import React from 'react';
-import styled from 'styled-components';
-import rightStripes from '@images/Thangs_Stripes_Right.png';
-import lefttStripes from '@images/Thangs_Stripes_Left.png';
+import React from 'react'
+import rightStripes from '@images/Thangs_Stripes_Right.png'
+import lefttStripes from '@images/Thangs_Stripes_Left.png'
+import { createUseStyles } from '@style'
 
-const ChildStyle = styled.img`
-    margin: 0 3vh;
-`;
+const useStyles = createUseStyles(theme => {
+  return {
+    BackgroundImage: {
+      width: '100vw',
+      position: 'absolute',
+      display: 'flex',
+      justifyContent: 'space-between',
+      background: theme.variables.colors.backgroundColor,
+      zIndex: -2,
+      height: '100%',
+      overflow: 'hidden',
+    },
+    BackgroundImage_Child: {
+      margin: '0 3vh',
+    },
+  }
+})
 
-const StyledBackground = styled.div`
-    width: 100vw;
-    position: absolute;
-    display: flex;
-    justify-content: space-between;
-    background: ${props => props.theme.primary};
-    z-index: -2;
-    height: 100%;
-    overflow: hidden;
-`;
+const BackgroundImage = () => {
+  const c = useStyles()
+  return (
+    <div className={c.BackgroundImage}>
+      <div className={c.BackgroundImage_child} src={lefttStripes} />
+      <div className={c.BackgroundImage_child} src={rightStripes} />
+    </div>
+  )
+}
 
-const BackgroundImage = () => (
-    <StyledBackground>
-        <ChildStyle src={lefttStripes} />
-        <ChildStyle src={rightStripes} />
-    </StyledBackground>
-);
-
-export { BackgroundImage };
+export { BackgroundImage }

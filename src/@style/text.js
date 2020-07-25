@@ -1,227 +1,249 @@
-import { css } from 'styled-components';
-import {
-    GREY_1,
-    GREY_3,
-    GREY_4,
-    GREY_5,
-    GREY_6,
-    GREY_10,
-    GREY_11,
-    GREY_12,
-    BLUE_2,
-    BLACK_1,
-    BLACK_5,
-    BROWN,
-    RED_4,
-    WHITE_1,
-    WHITE_2,
-    WHITE_3,
-    OFF_WHITE,
-    YELLOW_1,
-} from './colors';
+import { colors } from './colors.js'
 
-export const MONTSERRAT = "'Montserrat', sans-serif";
+// const _MONTSERRAT = '"Montserrat", sans-serif'
+const LEXEND_DECA = 'Lexend Deca'
 
-const LEXEND_DECA = 'Lexend Deca';
+export const modelCardHoverText = {
+  fontWeight: 500,
+  color: colors.white[400],
+}
 
-export const modelCardHoverText = css`
-    font-weight: 500;
-    color: ${WHITE_1};
-`;
-export const flashToastText = css`
-    color: ${WHITE_3};
-`;
-export const tabNavigationText = css`
-    color: ${GREY_5};
-    font-size: 16px;
-    svg {
-        fill: ${GREY_5};
-    }
-`;
-export const activeTabNavigationText = css`
-    font-size: 16px;
-    svg {
-        fill: ${BLACK_1};
-    }
-`;
-export const profileAboutText = css`
-    font-size: 16px;
-    color: ${BLACK_5};
-`;
-export const cardNumbersText = css`
-    color: ${GREY_11};
-    font-weight: 500;
-`;
-export const formCalloutText = css`
-    font-size: 18px;
-    font-family: ${LEXEND_DECA};
-`;
-export const usernameText = css`
-    font-weight: 500;
-    color: ${BLACK_1};
-`;
-export const subheaderText = css`
-    font-size: 24px;
-    font-family: ${LEXEND_DECA};
-`;
-export const resultsHeaderText = css`
-    font-size: 24px;
-    font-family: ${LEXEND_DECA};
-    color: ${BLACK_5};
-`;
-export const modelTitleText = css`
-    font-size: 18px;
-`;
-export const darkPageTitleText = css`
-    font-size: 48px;
-    font-family: ${LEXEND_DECA};
-    color: ${WHITE_1};
-`;
-export const linkText = css`
-    font-weight: 500;
-    text-decoration: none;
-    color: ${BLUE_2};
-`;
-export const headerText = css`
-    font-size: 32px;
-    font-family: ${LEXEND_DECA};
-`;
-export const logoText = css`
-    color: ${GREY_12};
-`;
-export const primaryButtonText = css`
-    color: ${WHITE_2};
-    font-weight: 500;
-`;
-export const secondaryButtonText = css`
-    color: ${WHITE_1};
-    font-weight: 500;
+export const flashToastText = {
+  color: colors.white[900],
+}
 
-    > svg {
-        fill: ${WHITE_1};
-    }
-`;
-export const darkButtonText = css`
-    color: ${OFF_WHITE};
-    font-weight: 500;
-`;
-export const smallInfoMessageText = css`
-    line-height: 18px;
-    font-style: italic;
-    color: ${GREY_5};
-`;
-export const infoMessageText = css`
-    font-size: 24px;
-    font-style: normal;
-    line-height: 28px;
-    color: ${GREY_3};
-`;
-export const modelDetailsLabelText = css`
-    font-size: 12px;
-    font-weight: 600;
-    color: ${GREY_5};
-`;
-export const inputPlaceholderText = css`
-    color: ${GREY_5};
-`;
-export const landingPageText = css`
-    color: ${WHITE_1};
-    text-decoration-color: ${YELLOW_1};
-    font-size: 72px;
-`;
-export const landingPageSubtext = css`
-    color: ${GREY_3};
-    font-size: 32px;
-    font-weight: 300;
-`;
-export const matchingSubheader = css`
-    font-size: 18px;
-    color: ${GREY_5};
-`;
-export const viewerToolbarText = css`
-    color: ${GREY_4}
-    font-size: 12px;
-    font-weight: 500;
-`;
-export const viewerLoadingText = css`
-    font-weight: 500;
-    font-size: 16px;
-`;
-export const formSuccessText = css`
-    color: green;
-`;
-export const formErrorText = css`
-    color: ${RED_4};
-    font-weight: 500;
-`;
-export const matchingButtonText = css`
-    color: ${BROWN};
-    font-weight: 500;
-    svg {
-        fill: ${BROWN};
-    }
-`;
-export const matchingButtonHoverText = css`
-    color: ${YELLOW_1};
-    font-weight: 500;
+export const tabNavigationText = {
+  color: colors.purple[400],
+  fontSize: '1rem',
+  '& svg': {
+    fill: colors.purple[400],
+  },
+}
 
-    svg {
-        fill: ${YELLOW_1};
-    }
-`;
-export const thumbnailErrorText = css`
-    color: ${GREY_1};
-    font-weight: 500;
-`;
-export const thumbnailActivityCountText = css`
-    color: ${GREY_11};
-    font-weight: 500;
-`;
-export const zeroStateText = css`
-    color: ${GREY_6};
-`;
-export const darkFormText = css`
-    color: ${GREY_4};
-`;
-export const avatarDefaultText = css`
-    color: ${GREY_10};
-`;
-export const commentPostedText = css`
-    font-style: italic;
-`;
-export const commentUsername = css`
-    font-size: 16px;
-    font-weight: 500;
-`;
-export const howToTitle = css`
-    font-size: 24px;
-    font-family: ${LEXEND_DECA};
-    color: ${BLACK_1};
-`;
-export const regularText = css`
-    font-size: 14px;
-    color: ${BLACK_1};
-`;
-export const boldText = css`
-    font-size: 14px;
-    font-weight: 500;
-    color: ${BLACK_1};
-`;
-export const lightText = css`
-    font-size: 14px;
-    color: ${GREY_4};
-`;
-export const cardSubtext = css`
-    font-size: 12px;
-    color: ${GREY_6};
-`;
-export const breadcrumbTextLight = css`
-    font-size: 20px;
-    font-family: ${LEXEND_DECA};
-    color: ${GREY_6};
-`;
+export const activeTabNavigationText = {
+  fontSize: '1rem',
+  '& svg': {
+    fill: colors.grey[700],
+  },
+}
 
-export const smallHeaderText = css`
-    font-size: 20px;
-    font-family: ${LEXEND_DECA};
-`;
+export const profileAboutText = {
+  fontSize: '1rem',
+  color: colors.grey[700],
+}
+
+export const cardNumbersText = {
+  color: colors.grey[300],
+  fontWeight: 500,
+}
+
+export const formCalloutText = {
+  fontSize: '1.125rem',
+  fontFamily: LEXEND_DECA,
+}
+
+export const usernameText = {
+  fontWeight: 500,
+  color: colors.grey[700],
+}
+
+export const subheaderText = {
+  fontSize: '1.5rem',
+  fontFamily: LEXEND_DECA,
+}
+
+export const resultsHeaderText = {
+  fontSize: '1.5rem',
+  fontFamily: LEXEND_DECA,
+  color: colors.grey[700],
+}
+
+export const modelTitleText = {
+  fontSize: '1.125rem',
+}
+
+export const darkPageTitleText = {
+  fontSize: '3rem',
+  fontFamily: LEXEND_DECA,
+  color: colors.white[400],
+}
+
+export const linkText = {
+  fontWeight: 500,
+  textDecoration: 'none',
+  color: colors.blue[500],
+}
+
+export const headerText = {
+  fontSize: '2rem',
+  fontFamily: LEXEND_DECA,
+}
+
+export const logoText = {
+  color: colors.logo,
+}
+
+export const primaryButtonText = {
+  color: colors.white[900],
+  fontWeight: 500,
+}
+
+export const secondaryButtonText = {
+  color: colors.white[400],
+  fontWeight: 500,
+
+  '& > svg': {
+    fill: colors.white[400],
+  },
+}
+
+export const darkButtonText = {
+  color: colors.white[800],
+  fontWeight: 500,
+}
+
+export const smallInfoMessageText = {
+  lineHeight: '1.125rem',
+  fontStyle: 'italic',
+  color: colors.purple[400],
+}
+
+export const infoMessageText = {
+  fontSize: '1.5rem',
+  fontStyle: 'normal',
+  lineHeight: '1.75rem',
+  color: colors.purple[300],
+}
+
+export const modelDetailsLabelText = {
+  fontSize: '.75rem',
+  fontWeight: 600,
+  color: colors.purple[400],
+}
+
+export const inputPlaceholderText = {
+  color: colors.purple[400],
+}
+
+export const landingPageText = {
+  color: colors.white[400],
+  textDecorationColor: colors.gold[500],
+  fontSize: '4.5rem',
+}
+
+export const landingPageSubtext = {
+  color: colors.purple[300],
+  fontSize: '2rem',
+  fontWeight: 300,
+}
+
+export const matchingSubheader = {
+  fontSize: '1.125rem',
+  color: colors.purple[400],
+}
+
+export const viewerToolbarText = {
+  color: colors.grey[300],
+  fontSize: '.75rem',
+  fontWeight: 500,
+}
+
+export const viewerLoadingText = {
+  fontWeight: 500,
+  fontSize: '1rem',
+}
+
+export const formSuccessText = {
+  color: colors.success,
+}
+
+export const formErrorText = {
+  color: colors.error,
+  fontWeight: 500,
+}
+
+export const matchingButtonText = {
+  color: colors.gold[900],
+  fontWeight: 500,
+  '& svg': {
+    fill: colors.gold[900],
+  },
+}
+
+export const matchingButtonHoverText = {
+  color: colors.gold[500],
+  fontWeight: 500,
+
+  '& svg': {
+    fill: colors.gold[500],
+  },
+}
+
+export const thumbnailErrorText = {
+  color: colors.purple[200],
+  fontWeight: 500,
+}
+
+export const thumbnailActivityCountText = {
+  color: colors.grey[300],
+  fontWeight: 500,
+}
+
+export const zeroStateText = {
+  color: colors.grey[500],
+}
+
+export const darkFormText = {
+  color: colors.grey[300],
+}
+
+export const avatarDefaultText = {
+  color: colors.purple[300],
+}
+
+export const commentPostedText = {
+  fontStyle: 'italic',
+}
+
+export const commentUsername = {
+  fontSize: '1rem',
+  fontWeight: 500,
+}
+
+export const howToTitle = {
+  fontSize: '1.5rem',
+  fontFamily: LEXEND_DECA,
+  color: colors.grey[700],
+}
+
+export const regularText = {
+  fontSize: '.875rem',
+  color: colors.grey[700],
+}
+
+export const boldText = {
+  fontSize: '.875rem',
+  fontWeight: 500,
+  color: colors.grey[700],
+}
+
+export const lightText = {
+  fontSize: '.875rem',
+  color: colors.grey[300],
+}
+
+export const cardSubtext = {
+  fontSize: '.75rem',
+  color: colors.grey[500],
+}
+
+export const breadcrumbTextLight = {
+  fontSize: '1.25rem',
+  fontFamily: LEXEND_DECA,
+  color: colors.grey[500],
+}
+
+export const smallHeaderText = {
+  fontSize: '1.25rem',
+  fontFamily: LEXEND_DECA,
+}

@@ -1,57 +1,63 @@
-import React from 'react';
-import styled from 'styled-components';
-import * as R from 'ramda';
-import { modelDetailsLabelText } from '@style/text';
+import React from 'react'
+import * as R from 'ramda'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
-const title = R.replace(/(^|\s)\S/g, R.toUpper);
-const titleCase = R.pipe(R.toLower, title);
+const useStyles = createUseStyles(theme => {
+  return {
+    ModelDetails: {},
+    ModelDetails_Table: {
+      borderSpacing: '.5rem 0',
+      margin: '0 -.5rem',
+    },
+    ModelDetails_Cell: {
+      padding: 0,
+      lineHeight: '1rem',
+      verticalAlign: 'middle',
+    },
+    ModelDetails_Cell__first: {
+      ...theme.mixins.text.modelDetailsLabelText,
+      height: '1.5rem',
+      textTransform: 'uppercase',
+    },
+    ModelDetails_Cell__second: {
+      paddingBottom: 1,
+    },
+  }
+})
 
-const Table = styled.table`
-    border-spacing: 8px 0;
-    margin: 0 -8px;
-`;
+const title = R.replace(/(^|\s)\S/g, R.toUpper)
+const titleCase = R.pipe(R.toLower, title)
 
-const Cell = styled.td`
-    padding: 0;
-    line-height: 18px;
-    vertical-align: middle;
-`;
-
-const FirstCell = styled(Cell)`
-    ${modelDetailsLabelText};
-    height: 24px;
-    text-transform: uppercase;
-`;
-
-const SecondCell = styled(Cell)`
-    padding-bottom: 1px;
-`;
-
-const Row = styled.tr``;
-
-export function ModelDetails({ model, className }) {
-    const category = model.category && titleCase(model.category);
-    return (
-        <Table className={className}>
-            <tbody>
-                <AttrRow name="Material" value={model.material} />
-                <AttrRow name="Weight" value={model.weight} />
-                <AttrRow name="Height" value={model.height} />
-                <AttrRow name="Category" value={category} />
-            </tbody>
-        </Table>
-    );
+export const ModelDetails = ({ model, className }) => {
+  const c = useStyles()
+  const category = model.category && titleCase(model.category)
+  return (
+    <table className={classnames(className, c.ModelDetails_Table)}>
+      <tbody>
+        <AttrRow name='Material' value={model.material} />
+        <AttrRow name='Weight' value={model.weight} />
+        <AttrRow name='Height' value={model.height} />
+        <AttrRow name='Category' value={category} />
+      </tbody>
+    </table>
+  )
 }
 
-function AttrRow({ name, value }) {
-    if (!value || !name) {
-        return null;
-    }
+const AttrRow = ({ name, value }) => {
+  const c = useStyles()
+  if (!value || !name) {
+    return null
+  }
 
-    return (
-        <Row>
-            <FirstCell>{name}</FirstCell>
-            <SecondCell>{value}</SecondCell>
-        </Row>
-    );
+  return (
+    <tr>
+      <td className={classnames(c.ModelDetails_Cell, c.ModelDetails_Cell__first)}>
+        {name}
+      </td>
+      <td className={classnames(c.ModelDetails_Cell, c.ModelDetails_Cell__second)}>
+        {value}
+      </td>
+    </tr>
+  )
 }

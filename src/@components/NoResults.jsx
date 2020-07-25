@@ -1,11 +1,21 @@
-import styled from 'styled-components';
-import { zeroStateText } from '@style/text';
+import React from 'react'
+import { createUseStyles } from '@style'
 
-export const NoResults = styled.div`
-    ${zeroStateText};
-    background-color: ${props => props.theme.zeroStateBackground};
-    padding: 16px;
-    border-radius: 8px;
-    width: 100%;
-    box-sizing: border-box;
-`;
+const useStyles = createUseStyles(theme => {
+  return {
+    NoResults: {
+      ...theme.mixins.text.zeroStateText,
+      backgroundColor: theme.variables.colors.zeroStateBackground,
+      padding: '1rem',
+      borderRadius: '.5rem',
+      width: '100%',
+      boxSizing: 'border-box',
+      lineHeight: '1.125rem',
+    },
+  }
+})
+
+export const NoResults = ({ children }) => {
+  const c = useStyles()
+  return <div className={c.NoResults}>{children}</div>
+}

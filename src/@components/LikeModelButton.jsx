@@ -1,56 +1,44 @@
-import React from 'react';
-import * as R from 'ramda';
-import styled, { css } from 'styled-components';
-import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg';
-import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg';
-import * as GraphqlService from '@services/graphql-service';
-import { SecondaryButton, DarkButton } from '@components/Button';
+import React from 'react'
+import * as R from 'ramda'
+import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
+import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
+import * as GraphqlService from '@services/graphql-service'
+import { Button } from '@components/Button'
+import { createUseStyles } from '@style'
 
-const graphqlService = GraphqlService.getInstance();
+const useStyles = createUseStyles(_theme => {
+  return {
+    LikeModelButton: {
+      marginBottom: '1.5rem',
+      maxWidth: '7.75rem',
+      padding: '.5rem 1.5rem',
 
-const ButtonStyles = css`
-    margin-bottom: 24px;
-    max-width: 124px;
-    padding: 6px 24px;
+      '& > svg': {
+        marginRight: '.5rem',
+      },
+    },
+  }
+})
 
-    > svg {
-        margin-right: 8px;
-    }
-`;
+const graphqlService = GraphqlService.getInstance()
 
-const LikeButton = styled(SecondaryButton)`
-    ${ButtonStyles}
-`;
-
-const LikedButton = styled(DarkButton)`
-    ${ButtonStyles};
-`;
-
-const userIdsWhoHaveLiked = R.pipe(
-    R.prop('likes'),
-    R.map(R.path(['owner', 'id']))
-);
+const userIdsWhoHaveLiked = R.pipe(R.prop('likes'), R.map(R.path(['owner', 'id'])))
 
 export const hasLikedModel = (model, user) => {
-    return R.includes(user.id, userIdsWhoHaveLiked(model));
-};
+  return R.includes(user.id, userIdsWhoHaveLiked(model))
+}
 
 export function LikeModelButton({ currentUser, model }) {
-    const [likeModel] = graphqlService.useLikeModelMutation(
-        currentUser.id,
-        model.id
-    );
-    const [unlikeModel] = graphqlService.useUnlikeModelMutation(
-        currentUser.id,
-        model.id
-    );
-    return hasLikedModel(model, currentUser) ? (
-        <LikedButton onClick={unlikeModel}>
-            <HeartFilledIcon /> Liked!
-        </LikedButton>
-    ) : (
-        <LikeButton onClick={likeModel}>
-            <HeartIcon /> Like
-        </LikeButton>
-    );
+  const c = useStyles()
+  const [likeModel] = graphqlService.useLikeModelMutation(currentUser.id, model.id)
+  const [unlikeModel] = graphqlService.useUnlikeModelMutation(currentUser.id, model.id)
+  return hasLikedModel(model, currentUser) ? (
+    <Button dark className={c.LikeModelButton} onClick={unlikeModel}>
+      <HeartFilledIcon /> Liked!
+    </Button>
+  ) : (
+    <Button secondary className={c.LikeModelButton} onClick={likeModel}>
+      <HeartIcon /> Like
+    </Button>
+  )
 }

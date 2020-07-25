@@ -1,11 +1,21 @@
-import styled from 'styled-components';
+import React from 'react'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
-export const Card = styled.div`
-    display: flex;
-    flex-direction: column;
+const useStyles = createUseStyles(theme => {
+  return {
+    Card: {
+      display: 'flex',
+      flexDirection: 'column',
+      background: theme.variables.colors.cardBackground,
+      boxShadow: '0px 5px 10px 0px rgba(0, 0, 0, 0.15)',
+      borderRadius: '.5rem',
+      height: '100%',
+    },
+  }
+})
 
-    background: ${props => props.theme.cardBackground};
-    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
-    border-radius: 8px;
-    height: 100%;
-`;
+export const Card = ({ children, className, ...props }) => {
+  const c = useStyles(props)
+  return <div className={classnames(className, c.Card)}>{children}</div>
+}

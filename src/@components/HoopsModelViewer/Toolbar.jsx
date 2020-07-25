@@ -1,128 +1,133 @@
-import React from 'react';
-import styled from 'styled-components';
-import { AnchorButton } from '@components/AnchorButton';
-import { ColorPicker } from '@components/ColorPicker';
-import { TextButton } from '@components/Button';
+import React from 'react'
+import { AnchorButton } from '@components/AnchorButton'
+import { ColorPicker } from '@components/ColorPicker'
+import { Button } from '@components/Button'
 
-import { ReactComponent as WireMode } from '@svg/view-mode-wire.svg';
-import { ReactComponent as ShadedMode } from '@svg/view-mode-shaded.svg';
-import { ReactComponent as XRayMode } from '@svg/view-mode-xray.svg';
-import { ReactComponent as EdgesColor } from '@svg/view-color-edges.svg';
-import { ReactComponent as ShadeColor } from '@svg/view-color-shade.svg';
-import { viewerToolbarText } from '@style/text';
-import { WHITE_1, GREY_1 } from '@style/colors';
-import { mediaMdPlus } from '@style/media-queries';
+import { ReactComponent as WireMode } from '@svg/view-mode-wire.svg'
+import { ReactComponent as ShadedMode } from '@svg/view-mode-shaded.svg'
+import { ReactComponent as XRayMode } from '@svg/view-mode-xray.svg'
+import { ReactComponent as EdgesColor } from '@svg/view-color-edges.svg'
+import { ReactComponent as ShadeColor } from '@svg/view-color-shade.svg'
+import { createUseStyles } from '@style'
 
-const IconButton = styled(TextButton)`
-    height: 36px;
-    ${mediaMdPlus} {
-        margin-left: 16px;
-    }
-`;
+const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+  return {
+    Toolbar: {
+      position: 'relative',
+      backgroundColor: theme.colors.white[400],
+      boxShadow: 'none',
+      borderTop: `1px solid ${theme.colors.purple[200]}`,
+      padding: '1.5rem',
+      display: 'flex',
+      justifyContent: 'space-between',
+    },
+    Toolbar_ToolGroup: {
+      display: 'flex',
+      alignItems: 'center',
+      margin: 0,
+      padding: 0,
 
-const ToolbarContainer = styled.div`
-    position: relative;
-    background-color: ${WHITE_1};
-    box-shadow: none;
-    border-top: 1px solid ${GREY_1};
-    padding: 24px;
+      '& > button + button': {
+        marginLeft: '.75rem',
+      },
+    },
+    Toolbar_ToolGroupTitle: {
+      ...theme.mixins.text.viewerToolbarText,
+      display: 'none',
+      textTransform: 'uppercase',
+      margin: 0,
+      padding: 0,
 
-    display: flex;
-    justify-content: space-between;
-`;
+      [md]: {
+        display: 'block',
+      },
+    },
+    Toolbar_IconButton: {
+      height: '2.25rem',
+      [md]: {
+        marginLeft: '1rem',
+      },
+    },
+    Toolbar_MobileAnchorButton: {
+      [md]: {
+        display: 'none',
+      },
+    },
+    Toolbar_DesktopAnchorButton: {
+      display: 'none',
+      [md]: {
+        display: 'block',
+      },
+    },
+  }
+})
 
-const ToolGroup = styled.div`
-    display: flex;
-    align-items: center;
-    margin: 0;
-    padding: 0;
+const Toolbar = ({
+  onResetView,
+  onDrawModeChange,
+  onColorChange,
+  meshColor,
+  wireColor,
+}) => {
+  const c = useStyles()
+  const makeDrawModeHandler = modeName => () => {
+    onDrawModeChange(modeName)
+  }
 
-    > button + button {
-        margin-left: 12px;
-    }
-`;
+  const makeColorHandler = modeName => color => {
+    onColorChange(modeName, color)
+  }
 
-const ToolGroupTitle = styled.div`
-    ${viewerToolbarText};
-    display: none;
-    text-transform: uppercase;
-    margin: 0;
-    padding: 0;
-
-    ${mediaMdPlus} {
-        display: block;
-    }
-`;
-
-export function Toolbar({
-    onResetView,
-    onDrawModeChange,
-    onColorChange,
-    meshColor,
-    wireColor,
-}) {
-    const makeDrawModeHandler = modeName => () => {
-        onDrawModeChange(modeName);
-    };
-
-    const makeColorHandler = modeName => color => {
-        onColorChange(modeName, color);
-    };
-
-    return (
-        <ToolbarContainer>
-            <ToolGroup>
-                <ToolGroupTitle>Model View</ToolGroupTitle>
-                <IconButton onClick={makeDrawModeHandler('shaded')}>
-                    <ShadedMode />
-                </IconButton>
-                <IconButton onClick={makeDrawModeHandler('wire')}>
-                    <WireMode />
-                </IconButton>
-                <IconButton onClick={makeDrawModeHandler('xray')}>
-                    <XRayMode />
-                </IconButton>
-            </ToolGroup>
-            <ToolGroup>
-                <ToolGroupTitle>Change Color</ToolGroupTitle>
-                <IconButton>
-                    <ColorPicker
-                        color={wireColor}
-                        onChange={makeColorHandler('wire')}
-                    >
-                        <EdgesColor />
-                    </ColorPicker>
-                </IconButton>
-                <IconButton>
-                    <ColorPicker
-                        color={meshColor}
-                        onChange={makeColorHandler('mesh')}
-                    >
-                        <ShadeColor />
-                    </ColorPicker>
-                </IconButton>
-            </ToolGroup>
-            <AnchorButton
-                onClick={onResetView}
-                css={`
-                    ${mediaMdPlus} {
-                        display: none;
-                    }
-                `}
-            >
-                Reset
-            </AnchorButton>
-            <AnchorButton
-                onClick={onResetView}
-                css={`
-                    display: none;
-                    ${mediaMdPlus} {
-                        display: block;
-                    }
-                `}
-            >
-                Reset Image
-            </AnchorButton>
-        </ToolbarContainer>
-    );
+  return (
+    <div className={c.Toolbar}>
+      <div className={c.Toolbar_ToolGroup}>
+        <div className={c.Toolbar_ToolGroupTitle}>Model View</div>
+        <Button
+          text
+          className={c.Toolbar_IconButton}
+          onClick={makeDrawModeHandler('shaded')}
+        >
+          <ShadedMode />
+        </Button>
+        <Button
+          text
+          className={c.Toolbar_IconButton}
+          onClick={makeDrawModeHandler('wire')}
+        >
+          <WireMode />
+        </Button>
+        <Button
+          text
+          className={c.Toolbar_IconButton}
+          onClick={makeDrawModeHandler('xray')}
+        >
+          <XRayMode />
+        </Button>
+      </div>
+      <div className={c.Toolbar_ToolGroup}>
+        <div className={c.Toolbar_ToolGroupTitle}>Change Color</div>
+        <Button text className={c.Toolbar_IconButton}>
+          <ColorPicker color={wireColor} onChange={makeColorHandler('wire')}>
+            <EdgesColor />
+          </ColorPicker>
+        </Button>
+        <Button text className={c.Toolbar_IconButton}>
+          <ColorPicker color={meshColor} onChange={makeColorHandler('mesh')}>
+            <ShadeColor />
+          </ColorPicker>
+        </Button>
+      </div>
+      <AnchorButton className={c.Toolbar_MobileAnchorButton} onClick={onResetView}>
+        Reset
+      </AnchorButton>
+      <AnchorButton className={c.Toolbar_DesktopAnchorButton} onClick={onResetView}>
+        Reset Image
+      </AnchorButton>
+    </div>
+  )
 }
+
+export default Toolbar

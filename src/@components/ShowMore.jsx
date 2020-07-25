@@ -1,55 +1,63 @@
-import React, { useState } from 'react';
-import styled from 'styled-components/macro';
-import { TextButton } from './Button';
-import { Spinner } from './Spinner';
-import { linkText } from '../@style/text';
+import React, { useState } from 'react'
+import { Button } from './Button'
+import { Spinner } from './Spinner'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
-const MoreButton = styled(TextButton)`
-    ${linkText};
-    width: 114px;
-    padding: 8px 12px;
-`;
+const useStyles = createUseStyles(theme => {
+  return {
+    ShowMoreButton: {
+      ...theme.mixins.text.linkText,
+      width: '7rem',
+      padding: '.25rem .75rem',
+    },
+    ShowMoreButton_Spinner: {
+      width: '1rem',
+      height: '1rem',
+    },
+  }
+})
 
-const SpinnerStyled = styled(Spinner)`
-    width: 18px;
-    height: 18px;
-`;
-
+// Used for Client-Side Controlled Pagination - Sync
 export function ShowMore({ more, className }) {
-    const [shouldShowMore, setShouldShowMore] = useState();
-    return shouldShowMore ? (
-        more
-    ) : (
-        <div className={className}>
-            <MoreButton onClick={() => setShouldShowMore(true)}>
-                Show More
-            </MoreButton>
-        </div>
-    );
+  const [shouldShowMore, setShouldShowMore] = useState()
+  const c = useStyles()
+  return shouldShowMore ? (
+    more
+  ) : (
+    <div className={classnames(className, c.ShowMoreButton)}>
+      <Button text onClick={() => setShouldShowMore(true)}>
+        Show More
+      </Button>
+    </div>
+  )
 }
 
+// Used for Server-Side Controlled Pagination - Async
 export function ShowMoreButton({ fetchMore }) {
-    const [loading, setLoading] = useState();
-    const [hadError, setHadError] = useState();
-    const handleClick = async e => {
-        e.preventDefault();
-        setLoading(true);
-        try {
-            await fetchMore();
-            setLoading(false);
-        } catch (error) {
-            setHadError(true);
-        }
-    };
-    return (
-        <MoreButton onClick={handleClick}>
-            {hadError ? (
-                'Server Error'
-            ) : loading ? (
-                <SpinnerStyled />
-            ) : (
-                'Show More'
-            )}
-        </MoreButton>
-    );
+  const [loading, setLoading] = useState()
+  const [hadError, setHadError] = useState()
+  const c = useStyles()
+
+  const handleClick = async e => {
+    e.preventDefault()
+    setLoading(true)
+    try {
+      await fetchMore()
+      setLoading(false)
+    } catch (error) {
+      setHadError(true)
+    }
+  }
+  return (
+    <Button text className={c.ShowMoreButton} onClick={handleClick}>
+      {hadError ? (
+        'Server Error'
+      ) : loading ? (
+        <Spinner className={c.ShowMoreButton_Spinner} />
+      ) : (
+        'Show More'
+      )}
+    </Button>
+  )
 }

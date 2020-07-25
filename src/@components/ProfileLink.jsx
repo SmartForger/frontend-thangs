@@ -1,18 +1,22 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import { linkText } from '@style/text';
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { createUseStyles } from '@style'
 
-const ProfileLinkStyled = styled(Link)`
-    ${linkText};
-    display: block;
-    text-decoration: none;
-`;
+const useStyles = createUseStyles(theme => {
+  return {
+    ProfileLink: {
+      ...theme.mixins.text.linkText,
+      display: 'block',
+      textDecoration: 'none',
+    },
+  }
+})
 
 export function ProfileLink({ children, ...props }) {
-    return (
-        <ProfileLinkStyled {...props}>
-            {children}
-        </ProfileLinkStyled>
-    );
+  const c = useStyles()
+  return (
+    <Link className={c.ProfileLink} {...props}>
+      {children}
+    </Link>
+  )
 }

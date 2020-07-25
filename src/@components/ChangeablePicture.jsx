@@ -1,224 +1,233 @@
-import React, { useState, useRef } from 'react';
-import styled, { createGlobalStyle } from 'styled-components/macro';
-import ReactCrop from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css';
-import Modal from 'react-modal';
-import md5 from 'md5';
+import React, { useState, useRef } from 'react'
+import ReactCrop from 'react-image-crop'
+import 'react-image-crop/dist/ReactCrop.css'
+import Modal from 'react-modal'
+import md5 from 'md5'
 
-import { logger } from '../logging';
+import { logger } from '../logging'
 
-import { Button, DarkButton } from '@components';
-import * as GraphqlService from '@services/graphql-service';
+import { Button } from '@components'
+import * as GraphqlService from '@services/graphql-service'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
-Modal.setAppElement('#root');
+const useStyles = createUseStyles(_theme => {
+  return {
+    ChangeablePicture: {},
+    ChangeablePicture_HiddenInput: {
+      position: 'absolute',
+      left: '0',
+      top: '0',
+      opacity: '0',
+      height: '100%',
+      width: '100%',
+      cursor: 'pointer',
+    },
+    ChangeablePicture_Modal: {
+      position: 'fixed',
+      background: 'rgb(255, 255, 255)',
+      border: '1px solid rgb(204, 204, 204)',
+      overflow: 'auto',
+      borderRadius: '4px',
+      outline: 'none',
+      padding: '1.25rem',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+    },
+    ChangeablePicture_Form: {
+      position: 'relative',
+      marginRight: '.5rem',
+    },
+    ChangeablePicture_ButtonContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      marginTop: '.5rem',
+    },
+    ChangeablePicture_CancelButton: {
+      padding: '.5rem 2.25rem',
+    },
+    ChangeablePicture_SaveButton: {
+      marginRight: '.5rem',
+      padding: '.5rem 2.25rem',
+    },
+    ChangeablePicture_UploadButton: {
+      width: '12.25rem',
+      maxWidth: '100%',
+    },
+  }
+})
 
-const graphqlService = GraphqlService.getInstance();
+Modal.setAppElement('#root')
 
-const HiddenInput = styled.input`
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0;
-    height: 100%;
-    width: 100%;
-    cursor: pointer;
-`;
+const graphqlService = GraphqlService.getInstance()
 
-const ModalStyled = styled(Modal)`
-    position: fixed;
-    border: 1px solid rgb(204, 204, 204);
-    background: rgb(255, 255, 255);
-    overflow: auto;
-    border-radius: 4px;
-    outline: none;
-    padding: 20px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-`;
+const useModalOverlayStyles = createUseStyles(_theme => {
+  return {
+    '@global': {
+      '.img-cropper-modal-overlay': {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        zIndex: 2,
+      },
+      '.ReactCrop__image': {
+        maxHeight: '80vh',
+        maxWidth: '80vw',
+      },
+    },
+  }
+})
 
-const ModalOverlayStyles = createGlobalStyle`
-    .img-cropper-modal-overlay {
-        position: fixed;
-        top: 0px;
-        left: 0px;
-        right: 0px;
-        bottom: 0px;
-        background-color: rgba(0, 0, 0, 0.75);
-        z-index: 2;
+const ModalOverlayStyles = () => {
+  useModalOverlayStyles()
+
+  return null
+}
+
+const initialCrop = { unit: '%', width: 30, aspect: 1 / 1 }
+
+export function ChangeablePicture({ user, _button, className }) {
+  const [cropSrc, setCropSrc] = useState(null)
+  const [crop, setCrop] = useState()
+  const [croppedImg, setCroppedImg] = useState(null)
+  const [img, setImg] = useState(null)
+  const [isCropping, setIsCropping] = useState(false)
+  const imageEl = useRef(null)
+  const formRef = useRef(null)
+  const buttonRef = useRef(null)
+  const [uploadAvatar] = graphqlService.useUploadUserAvatarMutation(user, croppedImg)
+  const c = useStyles()
+
+  const submitCrop = () => {
+    uploadAvatar()
+    setIsCropping(false)
+  }
+
+  const cancel = () => {
+    formRef.current.reset()
+    setIsCropping(false)
+  }
+
+  function onSelectFile(e) {
+    if (e.target.files && e.target.files.length > 0) {
+      const reader = new FileReader()
+      reader.addEventListener('load', () => {
+        setCropSrc(reader.result)
+        setIsCropping(true)
+      })
+      reader.readAsDataURL(e.target.files[0])
     }
-    .ReactCrop__image {
-        max-height: 80vh;
-        max-width: 80vw;
+  }
+
+  const onImageLoaded = img => {
+    setCrop(initialCrop)
+    setImg(img)
+    return false
+  }
+
+  const onCropComplete = async crop => {
+    await makeClientCrop(crop)
+  }
+
+  const onCropChange = crop => setCrop(crop)
+
+  async function makeClientCrop(crop) {
+    if (img && crop.width && crop.height) {
+      const croppedImg = await getCroppedImage(
+        img,
+        crop,
+        md5(imageEl.current.files[0].name)
+      )
+      setCroppedImg(croppedImg)
     }
-`;
+  }
 
-const ButtonContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    margin-top: 8px;
-`;
+  const getCroppedImage = (image, crop, fileName) => {
+    const canvas = document.createElement('canvas')
+    const scaleX = image.naturalWidth / image.width
+    const scaleY = image.naturalHeight / image.height
+    canvas.width = crop.width
+    canvas.height = crop.height
+    const ctx = canvas.getContext('2d')
 
-const initialCrop = { unit: '%', width: 30, aspect: 1 / 1 };
+    ctx.drawImage(
+      image,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
+      0,
+      0,
+      crop.width,
+      crop.height
+    )
 
-const allowCssProp = props => (props.css ? props.css : '');
-
-const Form = styled.form`
-    position: relative;
-
-    ${allowCssProp};
-`;
-
-const CancelButton = styled(DarkButton)`
-    padding: 8px 36px;
-`;
-
-export function ChangeablePicture({ user, button, className }) {
-    const [cropSrc, setCropSrc] = useState(null);
-    const [crop, setCrop] = useState();
-    const [croppedImg, setCroppedImg] = useState(null);
-    const [img, setImg] = useState(null);
-    const [isCropping, setIsCropping] = useState(false);
-    const imageEl = useRef(null);
-    const formRef = useRef(null);
-    const buttonRef = useRef(null);
-    const [uploadAvatar] = graphqlService.useUploadUserAvatarMutation(
-        user,
-        croppedImg
-    );
-
-    const submitCrop = () => {
-        uploadAvatar();
-        setIsCropping(false);
-    };
-
-    const cancel = () => {
-        formRef.current.reset();
-        setIsCropping(false);
-    };
-
-    function onSelectFile(e) {
-        if (e.target.files && e.target.files.length > 0) {
-            const reader = new FileReader();
-            reader.addEventListener('load', () => {
-                setCropSrc(reader.result);
-                setIsCropping(true);
-            });
-            reader.readAsDataURL(e.target.files[0]);
+    return new Promise((resolve, _reject) => {
+      canvas.toBlob(blob => {
+        if (!blob) {
+          logger.error('Canvas is empty')
+          return
         }
-    }
+        blob.name = fileName
+        resolve(blob)
+      })
+    }, 'image/jpeg')
+  }
 
-    const onImageLoaded = img => {
-        setCrop(initialCrop);
-        setImg(img);
-        return false;
-    };
+  // const onButtonClick = e => {
+  //   buttonRef.current.focus()
+  //   e.persist()
+  // }
 
-    const onCropComplete = async crop => {
-        await makeClientCrop(crop);
-    };
-
-    const onCropChange = crop => setCrop(crop);
-
-    async function makeClientCrop(crop) {
-        if (img && crop.width && crop.height) {
-            const croppedImg = await getCroppedImage(
-                img,
-                crop,
-                md5(imageEl.current.files[0].name)
-            );
-            setCroppedImg(croppedImg);
-        }
-    }
-
-    const getCroppedImage = (image, crop, fileName) => {
-        const canvas = document.createElement('canvas');
-        const scaleX = image.naturalWidth / image.width;
-        const scaleY = image.naturalHeight / image.height;
-        canvas.width = crop.width;
-        canvas.height = crop.height;
-        const ctx = canvas.getContext('2d');
-
-        ctx.drawImage(
-            image,
-            crop.x * scaleX,
-            crop.y * scaleY,
-            crop.width * scaleX,
-            crop.height * scaleY,
-            0,
-            0,
-            crop.width,
-            crop.height
-        );
-
-        return new Promise((resolve, reject) => {
-            canvas.toBlob(blob => {
-                if (!blob) {
-                    logger.error('Canvas is empty');
-                    return;
-                }
-                blob.name = fileName;
-                resolve(blob);
-            });
-        }, 'image/jpeg');
-    };
-
-    const onButtonClick = e => {
-        buttonRef.current.focus();
-        e.persist();
-    };
-
-    return (
-        <Form className={className} ref={formRef}>
-            <label htmlFor="avatar">
-                <Button
-                    onClick={e => {
-                        e.preventDefault();
-                    }}
-                    ref={buttonRef}
-                    css={`
-                        width: 197px;
-                        max-width: 100%;
-                    `}
-                >
-                    Upload New Photo
-                </Button>
-            </label>
-            <HiddenInput
-                type="file"
-                name="Change Image"
-                id="avatar"
-                onChange={onSelectFile}
-                onClick={onButtonClick}
-                accept="image/x-png,image/jpeg"
-                ref={imageEl}
-            />
-            <ModalOverlayStyles />
-            <ModalStyled
-                isOpen={isCropping}
-                overlayClassName="img-cropper-modal-overlay"
-            >
-                <ReactCrop
-                    src={cropSrc}
-                    crop={crop}
-                    onImageLoaded={onImageLoaded}
-                    onComplete={onCropComplete}
-                    onChange={onCropChange}
-                    circularCrop={true}
-                />
-                <ButtonContainer>
-                    <Button
-                        onClick={submitCrop}
-                        css={`
-                            margin-right: 8px;
-                            padding: 8px 36px;
-                        `}
-                    >
-                        Save
-                    </Button>
-                    <CancelButton onClick={cancel}>Cancel</CancelButton>
-                </ButtonContainer>
-            </ModalStyled>
-        </Form>
-    );
+  return (
+    <form className={classnames(className, c.ChangeablePicture_Form)} ref={formRef}>
+      <label htmlFor='avatar'>
+        <Button
+          className={c.ChangeablePicture_UploadButton}
+          onClick={e => {
+            e.preventDefault()
+          }}
+          ref={buttonRef}
+        >
+          Upload New Photo
+        </Button>
+      </label>
+      <input
+        className={c.ChangeablePicture_HiddenInput}
+        type='file'
+        name='Change Image'
+        id='avatar'
+        onChange={onSelectFile}
+        accept='image/x-png,image/jpeg'
+        ref={imageEl}
+      />
+      <ModalOverlayStyles />
+      <Modal
+        className={c.ChangeablePicture_Modal}
+        isOpen={isCropping}
+        overlayClassName='img-cropper-modal-overlay'
+      >
+        <ReactCrop
+          src={cropSrc}
+          crop={crop}
+          onImageLoaded={onImageLoaded}
+          onComplete={onCropComplete}
+          onChange={onCropChange}
+          circularCrop={true}
+        />
+        <div className={c.ChangeablePicture_ButtonContainer}>
+          <Button onClick={submitCrop} className={c.ChangeablePicture_SaveButton}>
+            Save
+          </Button>
+          <Button dark className={c.ChangeablePicture_CancelButton} onClick={cancel}>
+            Cancel
+          </Button>
+        </div>
+      </Modal>
+    </form>
+  )
 }

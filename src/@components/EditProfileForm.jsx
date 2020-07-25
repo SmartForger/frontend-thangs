@@ -1,157 +1,153 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
-import * as R from 'ramda';
-import { Button as _Button } from '@components/Button';
-import * as GraphqlService from '@services/graphql-service';
-import { logger } from '../logging';
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import * as R from 'ramda'
+import { Button } from '@components/Button'
+import * as GraphqlService from '@services/graphql-service'
+import { logger } from '../logging'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
-const graphqlService = GraphqlService.getInstance();
+const useStyles = createUseStyles(theme => {
+  return {
+    EditProfileForm: {
+      display: 'flex',
+      flexDirection: 'column',
+      maxWidth: '32.5rem',
+    },
+    EditProfileForm_ButtonContainer: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+    },
+    EditProfileForm_Button: {
+      maxWidth: '100%',
+      width: '10.5rem',
+    },
+    EditProfileForm_Field: {
+      display: 'flex',
+      flexDirection: 'column',
+      marginTop: '1rem',
+    },
+    EditProfileForm_label: {
+      margin: '.5rem 0',
+    },
+    EditProfileForm_input: {
+      border: 0,
+      padding: '.5rem 1rem',
+      marginBottom: '.5rem',
+      borderRadius: '.5rem',
+      minWidth: 0,
+      backgroundColor: theme.variables.colors.textInputBackground,
+    },
+    EditProfileForm_textareaContainer: {
+      marginTop: '3rem',
+    },
+    EditProfileForm_textarea: {
+      resize: 'vertical',
+      border: 0,
+      marginBottom: '2rem',
+      padding: '.5rem 1rem',
+      borderRadius: '.5rem',
+      backgroundColor: theme.variables.colors.textInputBackground,
+    },
+  }
+})
+const graphqlService = GraphqlService.getInstance()
 
-const allowCssProp = props => (props.css ? props.css : '');
+export const EditProfileForm = ({ user }) => {
+  const { register, handleSubmit, errors } = useForm()
+  const [updateUser] = graphqlService.useUpdateUser()
+  const [currentState, setCurrentState] = useState('ready')
+  const c = useStyles()
 
-const Button = styled(_Button)`
-    padding: 8px 36px;
-    max-width: 100%;
+  async function formSubmit(data, e) {
+    e.preventDefault()
 
-    ${allowCssProp};
-`;
-
-const FormStyled = styled.form`
-    display: flex;
-    flex-direction: column;
-    max-width: 520px;
-`;
-
-const Field = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin-top: 16px;
-
-    ${allowCssProp};
-`;
-
-const FullWidthInput = styled.input`
-    border: 0;
-    padding: 8px 16px;
-    margin-bottom: 8px;
-    border-radius: 8px;
-    min-width: 0;
-    background-color: ${props => props.theme.textInputBackground};
-
-    ${allowCssProp};
-`;
-
-const TextArea = styled.textarea`
-    resize: vertical;
-    border: 0;
-    padding: 8px 16px;
-    border-radius: 8px;
-    background-color: ${props => props.theme.textInputBackground};
-
-    ${allowCssProp};
-`;
-
-const SaveButtonContainer = styled.div`
-    display: flex;
-    justify-content: flex-end;
-`;
-
-const Label = styled.label`
-    margin: 8px 0;
-`;
-
-export function EditProfileForm({ user }) {
-    const { register, handleSubmit, errors } = useForm();
-    const [updateUser] = graphqlService.useUpdateUser();
-    const [currentState, setCurrentState] = useState('ready');
-
-    async function formSubmit(data, e) {
-        e.preventDefault();
-
-        const updateInput = {
-            id: user.id,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            profile: {
-                description: data.description,
-            },
-        };
-
-        try {
-            setCurrentState('waiting');
-            await updateUser({
-                variables: { updateInput },
-            });
-        } catch (error) {
-            setCurrentState('error');
-            logger.error('Error when trying to update the user', error);
-        }
-        setCurrentState('saved');
+    const updateInput = {
+      id: user.id,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      profile: {
+        description: data.description,
+      },
     }
 
-    const handleChange = () => setCurrentState('ready');
+    try {
+      setCurrentState('waiting')
+      await updateUser({
+        variables: { updateInput },
+      })
+    } catch (error) {
+      setCurrentState('error')
+      logger.error('Error when trying to update the user', error)
+    }
+    setCurrentState('saved')
+  }
 
-    return (
-        <FormStyled
-            onSubmit={(data, e) => handleSubmit(formSubmit)(data, e)}
-            onChange={handleChange}
+  const handleChange = () => setCurrentState('ready')
+
+  return (
+    <form
+      className={c.EditProfileForm}
+      onSubmit={(data, e) => handleSubmit(formSubmit)(data, e)}
+      onChange={handleChange}
+    >
+      <div className={c.EditProfileForm_Field}>
+        <label className={c.EditProfileForm_label} htmlFor='firstName'>
+          First Name
+        </label>
+        <input
+          className={c.EditProfileForm_input}
+          name='firstName'
+          defaultValue={user.firstName}
+          ref={register({ required: true })}
+          placeholder='Enter first name...'
+        />
+      </div>
+      <div className={c.EditProfileForm_Field} htmlFor='lastName'>
+        <label className={c.EditProfileForm_label}>Last Name</label>
+        <input
+          className={c.EditProfileForm_input}
+          name='lastName'
+          defaultValue={user.lastName}
+          ref={register({ required: true })}
+          placeholder='Enter last name...'
+        />
+      </div>
+      <div
+        className={classnames(
+          c.EditProfileForm_Field,
+          c.EditProfileForm_textareaContainer
+        )}
+        htmlFor='description'
+      >
+        <label className={c.EditProfileForm_label}>About</label>
+        <textarea
+          className={c.EditProfileForm_textarea}
+          name='description'
+          defaultValue={user.profile.description}
+          ref={register({ required: true })}
+          placeholder='Add a bio...'
+          rows={5}
+        />
+      </div>
+
+      <div className={c.EditProfileForm_ButtonContainer}>
+        <Button
+          className={c.EditProfileForm_Button}
+          type='submit'
+          disabled={!R.empty(errors)}
         >
-            <Field>
-                <Label htmlFor="firstName">First Name</Label>
-                <FullWidthInput
-                    name="firstName"
-                    defaultValue={user.firstName}
-                    ref={register({ required: true })}
-                    placeholder="Enter first name..."
-                />
-            </Field>
-            <Field htmlFor="lastName">
-                <Label>Last Name</Label>
-                <FullWidthInput
-                    name="lastName"
-                    defaultValue={user.lastName}
-                    ref={register({ required: true })}
-                    placeholder="Enter last name..."
-                />
-            </Field>
-            <Field
-                htmlFor="description"
-                css={`
-                    margin-top: 48px;
-                `}
-            >
-                <Label>About</Label>
-                <TextArea
-                    name="description"
-                    defaultValue={user.profile.description}
-                    ref={register({ required: true })}
-                    placeholder="Add a bio..."
-                    rows={5}
-                    css={`
-                        margin-bottom: 32px;
-                    `}
-                />
-            </Field>
-
-            <SaveButtonContainer>
-                <Button
-                    type="submit"
-                    disabled={!R.empty(errors)}
-                    css={`
-                        width: 168px;
-                        padding: 8px 30px;
-                    `}
-                >
-                    {currentState === 'waiting'
-                        ? 'Saving...'
-                        : currentState === 'saved'
-                            ? 'Saved!'
-                            : currentState === 'error'
-                                ? 'Error'
-                                : 'Save Changes'}
-                </Button>
-            </SaveButtonContainer>
-        </FormStyled>
-    );
+          {currentState === 'waiting'
+            ? 'Saving...'
+            : currentState === 'saved'
+              ? 'Saved!'
+              : currentState === 'error'
+                ? 'Error'
+                : 'Save Changes'}
+        </Button>
+      </div>
+    </form>
+  )
 }
+
+export default EditProfileForm

@@ -1,163 +1,153 @@
-import React, { useState } from 'react';
-import styled, { css } from 'styled-components/macro';
-import * as R from 'ramda';
+import React, { useState } from 'react'
+import * as R from 'ramda'
 
-import { WithNewThemeLayout } from '@style';
-import { WithFlash } from '@components/Flash';
-import { useCurrentUser } from '@customHooks/Users';
-import { Spinner } from '@components/Spinner';
-import { Message404 } from '../404';
-import { CardCollection } from '@components/CardCollection';
-import { subheaderText } from '@style/text';
-import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg';
-import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg';
-import { BLUE_2 } from '../../@style/colors';
+import { NewThemeLayout } from '@components/Layout'
+import { WithFlash } from '@components/Flash'
+import { useCurrentUser } from '@customHooks/Users'
+import { Spinner } from '@components/Spinner'
+import { Message404 } from '../404'
+import CardCollection from '@components/CardCollection'
+import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg'
+import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
-export * from './EditProfile';
-export * from './RedirectProfile';
-export * from './Likes';
+const useStyles = createUseStyles(theme => {
+  return {
+    Home: {},
+    Home_TextHeader: {
+      ...theme.mixins.text.subheaderText,
+      display: 'flex',
+      alignItems: 'center',
+      marginRight: '3.5rem',
+      marginBottom: '1.5rem',
+    },
+    Home_Icon: {
+      marginRight: '.5rem',
+      width: '1.5rem',
+      height: '1.5rem',
+      color: ({ selected }) => (selected ? theme.colors.blue[500] : 'inherit'),
+    },
+    Home_Row: {
+      display: 'flex',
+      alignItems: 'center',
+      cursor: 'pointer',
+    },
+    Home_FoldersTitle: {
+      marginLeft: '1rem',
+    },
+  }
+})
 
-const TextHeader = styled.div`
-    ${subheaderText}
-    display: flex;
-    align-items: center;
-    margin-right: 56px;
-    margin-bottom: 24px;
-`;
+export * from './EditProfile'
+export * from './RedirectProfile'
+export * from './Likes'
 
-const BlueIfSelected = css`
-    ${props => props.selected && `color: ${BLUE_2};`}
-`;
+const ModelsTitle = ({ user, selected, onClick }) => {
+  const c = useStyles({ selected })
+  const models = R.pathOr([], ['models'])(user)
+  const modelAmount = models.length
+  return (
+    <div className={c.Home_Row} onClick={onClick}>
+      <ModelSquareIcon className={c.Home_Icon} selected={selected} />
+      Models {modelAmount}
+    </div>
+  )
+}
 
-const ModelIconStyled = styled(ModelSquareIcon)`
-    margin-right: 8px;
-    width: 22px;
-    height: 22px;
-    ${BlueIfSelected};
-`;
+const FoldersTitle = ({ user, selected, onClick, className }) => {
+  const c = useStyles({ selected })
+  const folders = R.pathOr([], ['folders'])(user)
+  const folderAmount = folders.length
+  return (
+    <div className={classnames(className, c.Home_Row)} onClick={onClick}>
+      <FolderIcon className={c.Home_Icon} selected={selected} />
+      Folders {folderAmount}
+    </div>
+  )
+}
 
-const FolderIconStyled = styled(FolderIcon)`
-    margin-right: 8px;
-    width: 22px;
-    height: 22px;
-    ${BlueIfSelected};
-`;
+const getModels = R.pathOr([], ['models'])
+const getFolders = R.pathOr([], ['folders'])
 
-const Row = styled.div`
-    display: flex;
-    align-items: center;
-`;
+const PageContent = ({ user }) => {
+  const c = useStyles({})
+  const [selected, setSelected] = useState('models')
 
-function ModelsTitle({ user, selected, onClick }) {
-    const models = R.pathOr([], ['models'])(user);
-    const modelAmount = models.length;
+  const selectModels = () => setSelected('models')
+  const selectFolders = () => setSelected('folders')
+
+  const models = getModels(user)
+  const folders = getFolders(user)
+
+  const sortedModels = models.sort((modelA, modelB) => {
+    if (modelA.created === modelB.created) return 0
+    if (modelA.created > modelB.created) return -1
+    else return 1
+  })
+
+  return (
+    <div>
+      <div className={c.Home_TextHeader}>
+        <ModelsTitle
+          selected={selected === 'models'}
+          onClick={selectModels}
+          user={user}
+        />
+        <FoldersTitle
+          className={c.Home_FoldersTitle}
+          selected={selected === 'folders'}
+          onClick={selectFolders}
+          user={user}
+        />
+      </div>
+      <WithFlash>
+        {selected === 'models' ? (
+          <CardCollection
+            models={sortedModels}
+            noResultsText='This user has not uploaded any models yet.'
+          />
+        ) : (
+          <CardCollection
+            folders={folders}
+            noResultsText='This user has not uploaded any folders yet.'
+          />
+        )}
+      </WithFlash>
+    </div>
+  )
+}
+
+const Page = () => {
+  const { user, error, loading } = useCurrentUser()
+
+  if (loading) {
+    return <Spinner />
+  }
+
+  if (error) {
     return (
-        <Row
-            onClick={onClick}
-            css={`
-                cursor: pointer;
-            `}
-        >
-            <ModelIconStyled selected={selected} />
-            Models {modelAmount}
-        </Row>
-    );
-}
+      <div data-cy='fetch-profile-error'>
+        Error! We were not able to load this profile. Please try again later.
+      </div>
+    )
+  }
 
-function FoldersTitle({ user, selected, onClick, className }) {
-    const folders = R.pathOr([], ['folders'])(user);
-    const folderAmount = folders.length;
+  if (!user) {
     return (
-        <Row
-            onClick={onClick}
-            className={className}
-            css={`
-                cursor: pointer;
-            `}
-        >
-            <FolderIconStyled selected={selected} />
-            Folders {folderAmount}
-        </Row>
-    );
+      <div data-cy='fetch-profile-error'>
+        <Message404 />
+      </div>
+    )
+  }
+
+  return <PageContent user={user} />
 }
 
-const getModels = R.pathOr([], ['models']);
-const getFolders = R.pathOr([], ['folders']);
-
-function PageContent({ user }) {
-    const [selected, setSelected] = useState('models');
-
-    const selectModels = () => setSelected('models');
-    const selectFolders = () => setSelected('folders');
-
-    const models = getModels(user);
-    const folders = getFolders(user);
-
-    const sortedModels = models.sort((modelA, modelB) => {
-        if (modelA.created === modelB.created) return 0;
-        if (modelA.created > modelB.created) return -1;
-        else return 1;
-    });
-
-    return (
-        <div>
-            <TextHeader>
-                <ModelsTitle
-                    selected={selected === 'models'}
-                    onClick={selectModels}
-                    user={user}
-                />
-                <FoldersTitle
-                    selected={selected === 'folders'}
-                    onClick={selectFolders}
-                    user={user}
-                    css={`
-                        margin-left: 16px;
-                    `}
-                />
-            </TextHeader>
-            <WithFlash>
-                {selected === 'models' ? (
-                    <CardCollection
-                        models={sortedModels}
-                        noResultsText="This user has not uploaded any models yet."
-                    />
-                ) : (
-                    <CardCollection
-                        folders={folders}
-                        noResultsText="This user has not uploaded any folders yet."
-                    />
-                )}
-            </WithFlash>
-        </div>
-    );
+export const Home = () => {
+  return (
+    <NewThemeLayout>
+      <Page />
+    </NewThemeLayout>
+  )
 }
-
-function Page() {
-    const { user, error, loading } = useCurrentUser();
-
-    if (loading) {
-        return <Spinner />;
-    }
-
-    if (error) {
-        return (
-            <div data-cy="fetch-profile-error">
-                Error! We were not able to load this profile. Please try again
-                later.
-            </div>
-        );
-    }
-
-    if (!user) {
-        return (
-            <div data-cy="fetch-profile-error">
-                <Message404 />
-            </div>
-        );
-    }
-
-    return <PageContent user={user} />;
-}
-
-export const Home = WithNewThemeLayout(Page);

@@ -1,29 +1,30 @@
-import React from 'react';
-import styled from 'styled-components';
-import { ReactComponent as VersionIcon } from '@svg/version-icon.svg';
-import { BLUE_2 } from '@style/colors';
-import { WHITE_2 } from '@style/colors';
+import React from 'react'
+import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
+import { createUseStyles } from '@style'
 
-const VersionIconStyled = styled(VersionIcon)`
-    display: block;
-    margin: auto;
-    fill: ${WHITE_2} !important;
-   
-`;
-
-const IconContainer = styled.div`
-    display: flex;
-    background-color: ${BLUE_2};
-    width: 48px;
-    height: 48px;
-    border-radius: 100%;
-    margin-right: 16px;
-`;
+const useStyles = createUseStyles(theme => {
+  return {
+    VersionPicture: {
+      display: 'flex',
+      backgroundColor: theme.colors.blue[500],
+      width: 48,
+      height: 48,
+      borderRadius: '100%',
+      marginRight: 16,
+    },
+    VersionPicture_Icon: {
+      display: 'block',
+      margin: 'auto',
+      fill: `${theme.colors.white[900]} !important`,
+    },
+  }
+})
 
 export function VersionPicture() {
-    return (
-        <IconContainer>
-            <VersionIconStyled />
-        </IconContainer>
-    );
+  const c = useStyles()
+  return (
+    <div className={c.VersionPicture_Icon}>
+      <VersionIcon className={c.VersionPicture_Icon} />
+    </div>
+  )
 }

@@ -1,103 +1,107 @@
-import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
-
-const StyledColorDisplay = styled.div`
-    cursor: pointer;
-    position: relative;
-`;
+import React, { useState } from 'react'
+import classnames from 'classnames'
+import { createUseStyles } from '@style'
 
 const COLORS = [
-    '#dbdbdf',
-    '#88888b',
-    '#464655',
-    '#1cb2f5',
-    '#014d7c',
-    '#ffbc00',
-    '#b18002',
-    '#c7eeff',
-];
+  '#dbdbdf',
+  '#88888b',
+  '#464655',
+  '#1cb2f5',
+  '#014d7c',
+  '#ffbc00',
+  '#b18002',
+  '#c7eeff',
+]
 
-const BlockPickerStyled = styled.div`
-    display: ${props => (props.visible ? 'grid' : 'none')};
-    background-color: ${props => props.theme.cardBackground};
-    position: absolute;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 12px;
-    padding: 24px;
-    bottom: calc(100% + 24px);
-    left: 18px;
-    transform: translateX(-50%);
-    border-radius: 4px;
+const useStyles = createUseStyles(theme => {
+  return {
+    ColorPicker: {
+      cursor: 'pointer',
+      position: 'relative',
+    },
+    ColorPicker_BlockPicker: {
+      display: ({ visible }) => (visible ? 'grid' : 'none'),
+      backgroundColor: theme.variables.colors.cardBackground,
+      position: 'absolute',
+      gridTemplateColumns: 'repeat(4, 1fr)',
+      gridTemplateRows: 'repeat(2, 1fr)',
+      gap: '.75rem',
+      padding: '1.5rem',
+      bottom: 'calc(100% + 1.5rem)',
+      left: '1rem',
+      transform: 'translateX(-50%)',
+      borderRadius: '.25rem',
+      boxShadow: theme.variables.boxShadow,
 
-    ${props => props.theme.shadow};
+      '&:after': {
+        content: '',
+        position: 'absolute',
+        top: 'calc(100% - 1px)',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: 0,
+        height: 0,
+        borderTop: `solid 8px ${theme.variables.colors.cardBackground}`,
+        borderLeft: 'solid 6px transparent',
+        borderRight: 'solid 6px transparent',
+        zIndex: 1,
+      },
+    },
+    ColorPicker_Color: {
+      cursor: 'pointer',
+      height: '1.5rem',
+      width: '1.5rem',
+      borderRadius: '100%',
+      backgroundColor: ({ color }) => color,
+      boxSizing: 'border-box',
+    },
+    ColorPicker__isSelected: {
+      border: `1px solid ${theme.variables.colors.cardBackground}`,
+      boxShadow: '0px 0px 6px 0px rgba(0, 0, 0, 0.5)',
+    },
+  }
+})
 
-    :after {
-        content: '';
-        position: absolute;
-        top: calc(100% - 1px);
-        left: 50%;
-        transform: translateX(-50%);
-        width: 0;
-        height: 0;
-        border-top: solid 8px ${props => props.theme.cardBackground};
-        border-left: solid 6px transparent;
-        border-right: solid 6px transparent;
-        z-index: 1;
-    }
-`;
-
-const Color = styled.div`
-    cursor: pointer;
-    height: 24px;
-    width: 24px;
-    border-radius: 100%;
-    background-color: ${props => props.color};
-    box-sizing: border-box;
-
-    ${props =>
-        props.isSelected &&
-        css`
-            border: 1px solid ${props => props.theme.cardBackground};
-            box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.5);
-        `};
-`;
-
-function BlockPicker({ currentColor, onChange, visible }) {
-    return (
-        <BlockPickerStyled visible={visible}>
-            {COLORS.map((color, idx) => (
-                <Color
-                    color={color}
-                    onClick={() => onChange(color)}
-                    isSelected={color === currentColor}
-                    key={idx}
-                />
-            ))}
-        </BlockPickerStyled>
-    );
+const BlockPicker = ({ currentColor, onChange, visible }) => {
+  const c = useStyles({ visible, color: currentColor })
+  return (
+    <div className={c.ColorPicker_BlockPicker} visible={visible}>
+      {COLORS.map((color, idx) => {
+        const isSelected = color === currentColor
+        return (
+          <div
+            className={classnames(c.ColorPicker_Color, {
+              [c.ColorPicker__isSelected]: isSelected,
+            })}
+            color={color}
+            onClick={() => onChange(color)}
+            key={idx}
+          />
+        )
+      })}
+    </div>
+  )
 }
 
-export function ColorPicker({ color = '#FFFFFF', onChange, children }) {
-    const [visible, setVisible] = useState();
+export const ColorPicker = ({ color = '#FFFFFF', onChange, children }) => {
+  const [visible, setVisible] = useState()
+  const c = useStyles({ visible, color })
 
-    const toggleVisible = () => {
-        setVisible(!visible);
-    };
+  const toggleVisible = () => {
+    setVisible(!visible)
+  }
 
-    const handleChange = (...args) => {
-        onChange(...args);
-        toggleVisible();
-    };
+  const handleChange = (...args) => {
+    onChange(...args)
+    toggleVisible()
+  }
 
-    return (
-        <StyledColorDisplay color={color} onClick={toggleVisible}>
-            <BlockPicker
-                currentColor={color}
-                onChange={handleChange}
-                visible={visible}
-            />
-            {children}
-        </StyledColorDisplay>
-    );
+  return (
+    <div className={c.ColorPicker} color={color} onClick={toggleVisible}>
+      <BlockPicker currentColor={color} onChange={handleChange} visible={visible} />
+      {children}
+    </div>
+  )
 }
+
+export default ColorPicker

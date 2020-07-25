@@ -1,46 +1,47 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react'
+import { createUseStyles } from '@style'
 
-const TextInputStyled = styled.input`
-    padding: 8px 12px;
-    margin: 0;
-    display: inline-block;
-    border: 2px solid
-        ${props => (props.invalid ? props.theme.errorTextColor : 'transparent')};
-    border-radius: 8px;
-    box-sizing: border-box;
-    line-height: 18px;
-    font-weight: 500;
-    background-color: ${props => props.theme.textInputBackground};
-    color: ${props =>
-        props.invalid
-            ? props.theme.errorTextColor
-            : props.theme.textInputColor};
+const useStyles = createUseStyles(theme => {
+  return {
+    TextInput: {
+      padding: '.5rem .75rem',
+      margin: 0,
+      display: 'inline-block',
+      border: '2px solid',
+      borderColor: ({ invalid }) => (invalid ? theme.colors.error : 'transparent'),
+      borderRadius: '.5rem',
+      boxSizing: 'border-box',
+      lineHeight: '18px',
+      fontWeight: '500',
+      backgroundColor: theme.variables.colors.textInputBackground,
+      color: ({ invalid }) =>
+        invalid ? theme.colors.error : theme.variables.colors.textInput,
+      '&::placeholder': {
+        color: theme.variables.colors.textInputPlaceholderColor,
+      },
+    },
+  }
+})
 
-    ::placeholder {
-        color: ${props => props.theme.textInputPlaceholderColor};
+export const TextInput = props => {
+  const [valid, setValid] = useState(true)
+  const c = useStyles({ invalid: !valid })
+
+  const handleValidation = () => {
+    if (Object.prototype.hasOwnProperty.call(props, 'validator')) {
+      setValid(props.validator())
     }
-`;
+  }
 
-const TextInput = props => {
-    const [valid, setValid] = useState(true);
-
-    const handleValidation = () => {
-        if (props.hasOwnProperty('validator')) {
-            setValid(props.validator());
-        }
-    };
-
-    return (
-        <TextInputStyled
-            {...props}
-            onBlur={handleValidation}
-            invalid={!valid}
-        />
-    );
-};
-
-export { TextInput };
+  return (
+    <input
+      {...props}
+      className={c.TextInput}
+      onBlur={handleValidation}
+      invalid={!valid}
+    />
+  )
+}
 
 /*
 

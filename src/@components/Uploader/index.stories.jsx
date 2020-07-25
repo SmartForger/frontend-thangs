@@ -1,29 +1,36 @@
-import React, { useState } from 'react';
-import styled from 'styled-components/macro';
-import { withApolloProvider } from '../../../.storybook/withApolloProvider';
+import React, { useState } from 'react'
+import { withApolloProvider } from '../../../.storybook/withApolloProvider'
+import { createUseStyles } from '@style'
+import { Uploader } from './'
 
-import { Uploader } from './';
-
-export default {
-    title: 'Uploader',
-    component: Uploader,
-    decorators: [withApolloProvider()],
-};
-
-const Button = styled.button`
-    margin-top: 32px;
-`;
+const useStyles = createUseStyles(_theme => {
+  return {
+    Button: {
+      marginTop: '2rem',
+    },
+  }
+})
 
 export function UploaderStory() {
-    const [file, setFile] = useState();
-    const [uploadError, setUploadError] = useState();
+  const c = useStyles()
+  const [file, setFile] = useState()
+  const [uploadError, setUploadError] = useState()
 
-    return (
-        <div>
-            <Uploader showError={!!uploadError} file={file} setFile={setFile} />
-            <Button onClick={() => setUploadError({ message: 'upload error' })}>
-                Simulate Upload Error
-            </Button>
-        </div>
-    );
+  return (
+    <div>
+      <Uploader showError={!!uploadError} file={file} setFile={setFile} />
+      <button
+        className={c.Button}
+        onClick={() => setUploadError({ message: 'upload error' })}
+      >
+        Simulate Upload Error
+      </button>
+    </div>
+  )
+}
+
+export default {
+  title: 'Uploader',
+  component: Uploader,
+  decorators: [withApolloProvider()],
 }
