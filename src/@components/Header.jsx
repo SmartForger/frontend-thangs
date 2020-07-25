@@ -29,20 +29,16 @@ const useStyles = createUseStyles(theme => {
   } = theme
 
   return {
-    Header: {},
-    Header__fixed: {
+    Header: {
       width: '100%',
-      position: 'fixed',
-      background: ({ inverted }) =>
-        inverted
-          ? theme.variables.colors.invertedHeaderBackground
-          : theme.variables.colors.backgroundColor,
+      position: 'absolute',
+      background: 'none',
       top: 0,
       zIndex: 2,
     },
     Header_DesktopBoundary: {
       position: 'relative',
-      margin: '48px auto 16px',
+      margin: '3rem auto 1rem',
       maxWidth: theme.variables.maxWidth,
       flexGrow: 1,
 
@@ -331,7 +327,7 @@ const Header = ({ inverted, variant }) => {
   const c = useStyles({ inverted })
   return (
     <>
-      <div className={c.Header__fixed}>
+      <div className={c.Header}>
         <MobileHeader variant={variant} />
         <DesktopHeader variant={variant} />
       </div>

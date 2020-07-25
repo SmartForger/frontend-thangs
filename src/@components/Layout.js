@@ -54,6 +54,7 @@ const useStyles = createUseStyles(theme => {
       bottom: 0,
       right: 0,
     },
+    Layout_Spacer: { height: '6.25rem' },
   }
 })
 
@@ -66,6 +67,7 @@ export const NewThemeLayout = ({ children, options = {} }) => {
   return (
     <>
       <Header variant={headerVariant} />
+      <div className={c.Layout_Spacer}></div>
       <div className={c.Layout} variant={layoutVariant}>
         {children}
       </div>
@@ -103,6 +105,7 @@ export const NewSignupThemeLayout = ({ children }) => {
   return (
     <>
       <Header variant='logo-only' />
+      <div className={c.Layout_Spacer}></div>
       <div className={c.Layout} variant='small-vertical-spacing'>
         {children}
       </div>
