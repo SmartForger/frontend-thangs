@@ -12,7 +12,7 @@ const useStyles = createUseStyles(theme => {
     Layout: {
       margin: 'auto',
       maxWidth: theme.variables.maxWidth,
-      paddingTop: '7.5rem',
+      paddingTop: '2.5rem',
       paddingRight: '1rem',
       paddingBottom: '2rem',
       paddingLeft: '1rem',
@@ -24,7 +24,7 @@ const useStyles = createUseStyles(theme => {
     },
     Layout_Hero: {
       background: theme.variables.colors.invertedHeaderBackground,
-      height: '47.25rem',
+      height: '36rem',
       position: 'relative',
       display: 'flex',
       justifyContent: 'center',

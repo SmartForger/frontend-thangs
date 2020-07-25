@@ -27,12 +27,12 @@ const useStyles = createUseStyles(theme => {
       height: ({ size }) => size,
       margin: 'auto',
       display: 'block',
+    },
 
-      '& .path': {
-        stroke: theme.variables.colors.mainFontColor || theme.colors.grey[700],
-        strokeLinecap: 'round',
-        animation: 'dash 1.5s ease-in-out infinite',
-      },
+    Spinner_path: {
+      stroke: theme.variables.colors.mainFontColor || theme.colors.grey[700],
+      strokeLinecap: 'round',
+      animation: 'dash 1.5s ease-in-out infinite',
     },
   }
 })
@@ -46,7 +46,14 @@ const Spinner = ({ size = '3rem', ...otherProps }) => {
       viewBox='0 0 50 50'
       data-cy='loading-spinner'
     >
-      <circle className='path' cx='25' cy='25' r='20' fill='none' strokeWidth='4' />
+      <circle
+        className={c.Spinner_path}
+        cx='25'
+        cy='25'
+        r='20'
+        fill='none'
+        strokeWidth='4'
+      />
     </svg>
   )
 }
