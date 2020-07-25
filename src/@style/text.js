@@ -128,13 +128,14 @@ export const inputPlaceholderText = {
 export const landingPageText = {
   color: colors.white[400],
   textDecorationColor: colors.gold[500],
-  fontSize: '4.5rem',
+  fontSize: '4rem',
 }
 
 export const landingPageSubtext = {
   color: colors.purple[300],
-  fontSize: '2rem',
+  fontSize: '1rem',
   fontWeight: 300,
+  lineHeight: '1.5rem',
 }
 
 export const matchingSubheader = {
