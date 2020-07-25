@@ -52,15 +52,15 @@ const useStyles = createUseStyles(theme => {
       marginRight: '.5rem',
     },
     UploadVersion_Header: {
-      ...theme.variables.text.subheaderText,
+      ...theme.mixins.text.subheaderText,
       marginBottom: '1.5rem',
     },
     UploadVersion_Error: {
-      ...theme.variables.text.formErrorText,
+      ...theme.mixins.text.formErrorText,
       margin: '.5rem 0',
     },
     UploadVersion_Dots: {
-      ...theme.variables.text.infoMessageText,
+      ...theme.mixins.text.infoMessageText,
       width: '8.75rem',
       marginBottom: '14rem',
     },

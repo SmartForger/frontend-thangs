@@ -15,30 +15,30 @@ export const colors = {
     500: mains.WHITE,
     600: '#fafafa',
     700: '#f8f8f8',
-    800: '#f5f5f5',
+    800: '#f5f5f5', //formerly OFF_WHITE, GREY_13
     900: '#e8e8ec',
   },
   grey: {
     100: '#d9d9d9',
     200: '#b7b7b7',
-    300: '#989898',
+    300: '#989898', //formerly GREY_11
     400: '#898989',
-    500: mains.GREY,
+    500: mains.GREY, //formerly GREY_6
     600: '#6B6B6B',
-    700: '#515151',
+    700: '#515151', //formerly BLACK_1, BLACK_4
     800: '#3d3d3d',
-    900: '#231f20',
+    900: '#231f20', //formerly BLACK_3
   },
   purple: {
     100: '#f1f1f3',
-    200: '#dbdbdf',
-    300: '#b9b9be',
-    400: '#88888b',
-    500: mains.PURPLE,
+    200: '#dbdbdf', //formerly GREY_2
+    300: '#b9b9be', //formerly GREY_3
+    400: '#88888b', //formerly GREY_5
+    500: mains.PURPLE, //formerly GREY_7
     600: '#55555B',
     700: '#49494E',
-    800: '#464655',
-    900: '#232530',
+    800: '#464655', //formerly BLACK_4
+    900: '#232530', //formerly BLACK_2
   },
   blue: {
     100: '#a0cffc',
@@ -66,5 +66,5 @@ export const colors = {
   error: '#ca2d2c',
   errorBackground: '#edd0d0',
   success: '#00ff00',
-  logo: '#7b7b82',
+  logo: '#7b7b82', //formerly GREY_12
 }

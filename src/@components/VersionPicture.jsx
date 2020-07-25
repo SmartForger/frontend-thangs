@@ -15,7 +15,7 @@ const useStyles = createUseStyles(theme => {
     VersionPicture_Icon: {
       display: 'block',
       margin: 'auto',
-      fill: `${theme.color.white[900]} !important`,
+      fill: `${theme.colors.white[900]} !important`,
     },
   }
 })

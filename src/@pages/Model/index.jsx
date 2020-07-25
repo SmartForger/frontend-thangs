@@ -134,13 +134,13 @@ const useStyles = createUseStyles(theme => {
       marginBottom: '1.5rem',
     },
     Model_VersionHeader: {
-      ...theme.variables.text.subheaderText,
+      ...theme.mixins.text.subheaderText,
     },
     Model_VersionLinkText: {
-      ...theme.variables.text.linkText,
+      ...theme.mixins.text.linkText,
     },
     Model_VersionButton: {
-      ...theme.variables.text.activeTabNavigationText,
+      ...theme.mixins.text.activeTabNavigationText,
       display: 'flex',
       alignItems: 'center',
       marginRight: '3.5rem',
@@ -151,7 +151,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Model_VersionIcon: {
-      fill: theme.color.blue[500],
+      fill: theme.colors.blue[500],
       width: '1.25rem',
       height: '1.25rem',
     },

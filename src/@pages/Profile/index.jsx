@@ -97,7 +97,12 @@ const ModelCount = ({ user }) => {
 const Models = ({ selected, onClick, user }) => {
   const c = useStyles()
   return (
-    <div className={c.Profile_TabTitle} selected={selected} onClick={onClick}>
+    <div
+      className={classnames(c.Profile_TabTitle, {
+        [c.Profile_TabTitle__active]: selected,
+      })}
+      onClick={onClick}
+    >
       <div className={c.Profile_Icon}>
         <ModelIcon />
       </div>
@@ -112,7 +117,12 @@ const Likes = ({ selected, onClick, user }) => {
   const amount = likes.length
 
   return (
-    <div className={c.Profile_TabTitle} selected={selected} onClick={onClick}>
+    <div
+      className={classnames(c.Profile_TabTitle, {
+        [c.Profile_TabTitle__active]: selected,
+      })}
+      onClick={onClick}
+    >
       <div className={c.Profile_Icon}>
         <HeartIcon />
       </div>
@@ -124,7 +134,12 @@ const Likes = ({ selected, onClick, user }) => {
 const About = ({ selected, onClick, _user }) => {
   const c = useStyles()
   return (
-    <div className={c.Profile_TabTitle} selected={selected} onClick={onClick}>
+    <div
+      className={classnames(c.Profile_TabTitle, {
+        [c.Profile_TabTitle__active]: selected,
+      })}
+      onClick={onClick}
+    >
       <div className={c.Profile_Icon}>
         <AboutIcon />
       </div>

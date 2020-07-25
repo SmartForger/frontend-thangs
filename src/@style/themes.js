@@ -6,11 +6,9 @@ const boxShadow = '0px 5px 10px 0px rgba(35, 37, 48, 0.25)'
 const headerFont = 'Lexend Deca'
 
 const maxWidth = '1440px'
-const BLACK_5 = '#4a4a4a'
 export const NewTheme = {
   variables: {
     colors: {
-      BLACK_5: '#4a4a4a',
       activityCount: colors.purple[300],
       avatarInitialsColor: colors.purple[300],
       avatarTextColor: colors.purple[200],
@@ -47,8 +45,8 @@ export const NewTheme = {
       primaryButton: colors.blue[500],
       primaryButtonText: colors.white[900],
       primaryButtonDisabledColor: colors.purple[300],
-      profileContentColor: BLACK_5,
-      profileNameColor: BLACK_5,
+      profileContentColor: colors.grey[700],
+      profileNameColor: colors.grey[700],
       promotionalSecondaryTextColor: colors.purple[300],
       promotionalTextColor: colors.white[400],
       searchBackground: colors.white[400],

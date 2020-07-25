@@ -1,6 +1,4 @@
 import { colors } from './colors.js'
-const BLACK_5 = '#4a4a4a'
-const GREY_11 = '#9b9b9b'
 
 // const _MONTSERRAT = '"Montserrat", sans-serif'
 const LEXEND_DECA = 'Lexend Deca'
@@ -31,11 +29,11 @@ export const activeTabNavigationText = {
 
 export const profileAboutText = {
   fontSize: '1rem',
-  color: BLACK_5,
+  color: colors.grey[700],
 }
 
 export const cardNumbersText = {
-  color: GREY_11,
+  color: colors.grey[300],
   fontWeight: 500,
 }
 
@@ -57,7 +55,7 @@ export const subheaderText = {
 export const resultsHeaderText = {
   fontSize: '1.5rem',
   fontFamily: LEXEND_DECA,
-  color: BLACK_5,
+  color: colors.grey[700],
 }
 
 export const modelTitleText = {
@@ -187,7 +185,7 @@ export const thumbnailErrorText = {
 }
 
 export const thumbnailActivityCountText = {
-  color: GREY_11,
+  color: colors.grey[300],
   fontWeight: 500,
 }
 
