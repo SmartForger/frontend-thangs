@@ -1,6 +1,7 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { Header } from '@components/Header'
+import { Footer } from '@components/Footer'
 import { Button } from '@components/Button'
 import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg'
 import { ReactComponent as MatchingIcon } from '../@svg/matching-icon.svg'
@@ -77,6 +78,7 @@ export const NewThemeLayout = ({ children, options = {} }) => {
       <div className={c.Layout} variant={layoutVariant}>
         {children}
       </div>
+      <Footer />
     </>
   )
 }
@@ -116,6 +118,7 @@ export const NewInvertedHeaderLayout = ({ children }) => {
       <div className={c.Layout} variant='small-vertical-spacing'>
         {children}
       </div>
+      <Footer />
     </>
   )
 }
@@ -129,6 +132,7 @@ export const NewSignupThemeLayout = ({ children }) => {
       <div className={c.Layout} variant='small-vertical-spacing'>
         {children}
       </div>
+      <Footer />
     </>
   )
 }

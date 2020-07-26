@@ -248,3 +248,10 @@ export const smallHeaderText = {
   fontSize: '1.25rem',
   fontFamily: LEXEND_DECA,
 }
+
+export const footerText = {
+  fontSize: '.75rem',
+  fontWeight: 'normal',
+  color: colors.purple[400],
+  lineHeight: '1rem',
+}
