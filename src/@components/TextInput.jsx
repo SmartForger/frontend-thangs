@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -23,7 +24,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const TextInput = props => {
+export const TextInput = ({ className, ...props }) => {
   const [valid, setValid] = useState(true)
   const c = useStyles({ invalid: !valid })
 
@@ -36,7 +37,7 @@ export const TextInput = props => {
   return (
     <input
       {...props}
-      className={c.TextInput}
+      className={classnames(className, c.TextInput)}
       onBlur={handleValidation}
       invalid={!valid}
     />

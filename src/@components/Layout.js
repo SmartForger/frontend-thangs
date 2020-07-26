@@ -50,6 +50,7 @@ const useStyles = createUseStyles(theme => {
     Layout_PromotionalSecondaryText: {
       ...theme.mixins.text.landingPageSubtext,
       maxWidth: '42rem',
+      minWidth: '27.125rem',
       marginTop: '1.5rem',
     },
     Layout_Background: {

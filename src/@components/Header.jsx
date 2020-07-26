@@ -61,7 +61,7 @@ const useStyles = createUseStyles(theme => {
     },
     Header_MobileBoundary: {
       margin: '2.75rem 0 auto',
-      padding: '0 .75px',
+      padding: '0 .75rem',
     },
     Header_Logo: {
       marginRight: '.75rem',
@@ -90,8 +90,10 @@ const useStyles = createUseStyles(theme => {
     },
     Header_NotificationLink: {
       height: '3rem',
-      padding: '0 .5rem',
       position: 'relative',
+    },
+    Header_SearchLink: {
+      height: '3rem',
     },
     Header_UnreadBadge: {
       background: theme.colors.attention,
@@ -102,11 +104,11 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      fontSize: '10px',
+      fontSize: '.625rem',
       fontWeight: 'bold',
       position: 'absolute',
-      top: '6px',
-      right: '4px',
+      top: '.375rem',
+      right: '-.25rem',
     },
     Header_DropdownIcon: {
       width: '3rem',
@@ -120,7 +122,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Header_AddModelDropdown: {
-      margin: '0 .5rem',
+      margin: '0 1rem',
       width: '3rem',
       lineHeight: 0,
       '> div': {
@@ -132,15 +134,11 @@ const useStyles = createUseStyles(theme => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        margin: '0 .5rem',
+        margin: '0 1rem',
         '&:last-child': {
           marginRight: 0,
         },
       },
-    },
-    Header_SearchLink: {
-      height: '3rem',
-      padding: '0 .5rem',
     },
   }
 })
@@ -246,7 +244,7 @@ const ProfileDropdownMenu = () => {
       <DropdownItem
         onClick={() => {
           authenticationService.logout()
-          history.push('/login')
+          history.push('/')
         }}
       >
         <ExitIcon />
@@ -277,7 +275,8 @@ const UserNav = () => {
   }
 
   return (
-    <div className={c.Header_Row}>
+    <div className={classnames(c.Header_Row, c.Header_ButtonsRow)}>
+      <Search />
       <Link className={c.Header_SignInLink} to='/login'>
         Sign in
       </Link>
