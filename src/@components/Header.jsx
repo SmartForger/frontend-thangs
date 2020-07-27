@@ -145,8 +145,7 @@ const useStyles = createUseStyles(theme => {
 
 const NOTIFICATIONS_URL = '/notifications'
 
-const SignUp = () => {
-  const c = useStyles({})
+const SignUp = ({ c }) => {
   return (
     <Link to='/signup'>
       <Button className={c.Header_SignUpButton}>Sign up</Button>
@@ -154,8 +153,7 @@ const SignUp = () => {
   )
 }
 
-const NotificationsButton = () => {
-  const c = useStyles({})
+const NotificationsButton = ({ c }) => {
   const { unreadNotificationCount } = useUnreadNotificationCount()
 
   return (
@@ -168,8 +166,7 @@ const NotificationsButton = () => {
   )
 }
 
-const Search = () => {
-  const c = useStyles({})
+const Search = ({ c }) => {
   return (
     <Link to='/search' className={c.Header_SearchLink}>
       <MagnifyingGlass />
@@ -185,8 +182,7 @@ const UserPicture = ({ user }) => {
   )
 }
 
-const AddModelDropdownMenu = () => {
-  const c = useStyles({})
+const AddModelDropdownMenu = ({ c }) => {
   const { folderId } = useParams()
   const [createFolderIsOpen, setCreateFolderIsOpen] = useState(false)
   const { navigateWithFlash } = useFlashNotification()
@@ -229,8 +225,7 @@ const AddModelDropdownMenu = () => {
   )
 }
 
-const ProfileDropdownMenu = () => {
-  const c = useStyles({})
+const ProfileDropdownMenu = ({ c }) => {
   const history = useHistory()
 
   return (
@@ -254,8 +249,7 @@ const ProfileDropdownMenu = () => {
   )
 }
 
-const UserNav = () => {
-  const c = useStyles({})
+const UserNav = ({ c }) => {
   const { loading, user } = useCurrentUser()
 
   if (loading) {
@@ -265,28 +259,27 @@ const UserNav = () => {
   if (user) {
     return (
       <div className={classnames(c.Header_Row, c.Header_ButtonsRow)}>
-        <Search />
-        <NotificationsButton />
-        <AddModelDropdownMenu />
+        <Search c={c} />
+        <NotificationsButton c={c} />
+        <AddModelDropdownMenu c={c} />
         <UserPicture user={user} />
-        <ProfileDropdownMenu />
+        <ProfileDropdownMenu c={c} />
       </div>
     )
   }
 
   return (
     <div className={classnames(c.Header_Row, c.Header_ButtonsRow)}>
-      <Search />
+      <Search c={c} />
       <Link className={c.Header_SignInLink} to='/login'>
         Sign in
       </Link>
-      <SignUp />
+      <SignUp c={c} />
     </div>
   )
 }
 
-const DesktopHeader = ({ variant }) => {
-  const c = useStyles({})
+const DesktopHeader = ({ variant, c }) => {
   return (
     <span className={c.Header_DesktopOnly}>
       <div className={c.Header_DesktopBoundary}>
@@ -299,15 +292,14 @@ const DesktopHeader = ({ variant }) => {
               </Link>
             </div>
           </div>
-          {variant !== 'logo-only' && <UserNav />}
+          {variant !== 'logo-only' && <UserNav c={c} />}
         </div>
       </div>
     </span>
   )
 }
 
-const MobileHeader = ({ variant }) => {
-  const c = useStyles({})
+const MobileHeader = ({ variant, c }) => {
   return (
     <span className={c.Header_MobileOnly}>
       <div className={c.Header_MobileBoundary}>
@@ -315,7 +307,7 @@ const MobileHeader = ({ variant }) => {
           <Link to='/'>
             <Logo className={c.Header_Logo} />
           </Link>
-          {variant !== 'logo-only' && <UserNav />}
+          {variant !== 'logo-only' && <UserNav c={c} />}
         </div>
       </div>
     </span>
@@ -327,8 +319,8 @@ const Header = ({ inverted, variant }) => {
   return (
     <>
       <div className={c.Header}>
-        <MobileHeader variant={variant} />
-        <DesktopHeader variant={variant} />
+        <MobileHeader variant={variant} c={c} />
+        <DesktopHeader variant={variant} c={c} />
       </div>
     </>
   )
