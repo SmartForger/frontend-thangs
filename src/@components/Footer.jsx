@@ -78,6 +78,10 @@ const useStyles = createUseStyles(theme => {
         marginBottom: '1.5rem',
       },
     },
+    Footer_TopRow: {
+      paddingTop: '3.5rem',
+      borderTop: `1px solid ${theme.colors.purple[300]}`,
+    },
     Footer_Summary: {
       ...theme.mixins.text.footerText,
       maxWidth: '19.5rem',
@@ -106,7 +110,7 @@ const Footer = ({ inverted }) => {
   return (
     <>
       <div className={c.Footer}>
-        <div className={c.Footer_Row}>
+        <div className={classnames(c.Footer_Row, c.Footer_TopRow)}>
           <Link to='/'>
             <Logo className={c.Footer_Logo} />
             <LogoText />
