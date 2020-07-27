@@ -2,12 +2,7 @@ import { NewTheme, NewDarkTheme } from '@style/themes'
 
 export const usePageTheming = location => {
   const { pathname } = location
-  switch (pathname) {
-    case '/login':
-    case '/password_reset':
-    case '/signup':
-      return NewDarkTheme
-    default:
-      return NewTheme
-  }
+  const darkThemePages = ['/login', '/password_reset', '/signup']
+  if (darkThemePages.some(darkPage => pathname.includes(darkPage))) return NewDarkTheme
+  return NewTheme
 }

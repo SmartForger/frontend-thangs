@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -23,22 +24,21 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const TextInput = props => {
+export const TextInput = ({ className, validator, ...props }) => {
   const [valid, setValid] = useState(true)
   const c = useStyles({ invalid: !valid })
 
   const handleValidation = () => {
-    if (Object.prototype.hasOwnProperty.call(props, 'validator')) {
-      setValid(props.validator())
+    if (validator && typeof validator === 'function') {
+      setValid(validator())
     }
   }
 
   return (
     <input
       {...props}
-      className={c.TextInput}
+      className={classnames(className, c.TextInput)}
       onBlur={handleValidation}
-      invalid={!valid}
     />
   )
 }

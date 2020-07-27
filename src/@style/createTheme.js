@@ -37,12 +37,11 @@ const createTheme = (data = {}) => {
 
   fontLoader({
     url:
-      'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap',
+      'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap',
     family: '"Montserrat", sans-serif',
   })
   fontLoader({
-    url:
-      'https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300;400;500;600;700&display=swap',
+    url: 'https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap',
     family: 'Lexend Deca',
   })
 

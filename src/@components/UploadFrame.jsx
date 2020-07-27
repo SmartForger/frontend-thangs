@@ -1,4 +1,5 @@
 import React from 'react'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -18,7 +19,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const UploadFrame = ({ children, ...props }) => {
+export const UploadFrame = ({ children, className, ...props }) => {
   const c = useStyles(props)
-  return <div className={c.UploadFrame}>{children}</div>
+  return <div className={classnames(className, c.UploadFrame)}>{children}</div>
 }

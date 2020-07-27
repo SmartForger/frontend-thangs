@@ -69,7 +69,7 @@ function Page() {
   const [
     uploadModel,
     { loading: isUploading, error: uploadError },
-  ] = graphqlService.useUploadModelMutation(currentUser.id)
+  ] = graphqlService.useUploadModelMutation(currentUser ? currentUser.id : undefined)
 
   async function handleFile(file) {
     const model = await uploadModel(file, {

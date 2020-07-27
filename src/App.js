@@ -31,13 +31,10 @@ import { ModelPreview } from '@pages/ModelPreview'
 import { Notifications } from '@pages/Notifications'
 import { FolderUpload } from '@pages/FolderUpload'
 import { ErrorBoundary } from './ErrorBoundary'
-import {
-  routeRequiresAnon,
-  routeRequiresAuth,
-} from '@components/RouteComponent'
+import { routeRequiresAnon, routeRequiresAuth } from '@components/RouteComponent'
 import { FlashContextProvider } from './@components/Flash'
-import {createStoreon} from 'storeon'
-import {StoreContext} from 'storeon/react'
+import { createStoreon } from 'storeon'
+import { StoreContext } from 'storeon/react'
 import teamsStore from '@store/teams/store'
 import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
@@ -76,7 +73,7 @@ const App = () => {
             <ThemeProvider theme={theme}>
               <GlobalStyles />
               <Switch>
-                <Route exact path='/' component={routeRequiresAuth(Landing)} />
+                <Route exact path='/' component={Landing} />
                 <Route
                   path='/folder/:folderId/upload'
                   component={routeRequiresAuth(FolderUpload)}
@@ -87,13 +84,13 @@ const App = () => {
                   component={routeRequiresAuth(FolderPage)}
                 />
                 <Route path='/login' component={routeRequiresAnon(Login)} />
-                <Route path='/terms_and_conditions' exact component={TermsAndConditions} />
-                <Route path='/home' component={routeRequiresAuth(Home)} />
                 <Route
-                  path='/signup/:registrationCode'
-                  component={routeRequiresAnon(Signup)}
+                  path='/terms_and_conditions'
                   exact
+                  component={TermsAndConditions}
                 />
+                <Route path='/home' component={routeRequiresAuth(Home)} />
+                <Route path='/signup' component={routeRequiresAnon(Signup)} exact />
                 <Route exact path='/password_reset' component={PasswordReset} />
                 <Route
                   path='/password_reset_confirm/:userId/:token'
@@ -119,12 +116,18 @@ const App = () => {
                 <Route path='/newspost/:id' component={routeRequiresAuth(Newspost)} />
                 <Route
                   path={['/search/:searchQuery', '/search']}
-                  component={routeRequiresAuth(SearchResults)}
+                  component={SearchResults}
                 />
-                <Route path='/matching' component={routeRequiresAuth(Matching)} />
+                <Route path='/matching' component={Matching} />
                 <Route path='/upload' component={routeRequiresAuth(Upload)} />
-                <Route path="/model/:id/upload" component={routeRequiresAuth(UploadVersion)} />
-                <Route path='/notifications' component={routeRequiresAuth(Notifications)} />
+                <Route
+                  path='/model/:id/upload'
+                  component={routeRequiresAuth(UploadVersion)}
+                />
+                <Route
+                  path='/notifications'
+                  component={routeRequiresAuth(Notifications)}
+                />
                 <Route path='*' component={Page404} status={404} />
               </Switch>
             </ThemeProvider>

@@ -49,7 +49,7 @@ function Matching() {
     <Link to={'/matching'}>
       <Button brand className={c.SearchResults_BrandButton}>
         <MatchingIcon className={c.SearchResults_MatchingIcon} />
-        <span>Search by Model</span>
+        <span>Search by Model Upload</span>
       </Button>
     </Link>
   )

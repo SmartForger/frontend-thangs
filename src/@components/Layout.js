@@ -1,6 +1,10 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import { Header } from '@components/Header'
+import { Footer } from '@components/Footer'
+import { Button } from '@components/Button'
 import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg'
+import { ReactComponent as MatchingIcon } from '../@svg/matching-icon.svg'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -46,7 +50,8 @@ const useStyles = createUseStyles(theme => {
     },
     Layout_PromotionalSecondaryText: {
       ...theme.mixins.text.landingPageSubtext,
-      maxWidth: '34.5rem',
+      maxWidth: '42rem',
+      minWidth: '27.125rem',
       marginTop: '1.5rem',
     },
     Layout_Background: {
@@ -54,6 +59,9 @@ const useStyles = createUseStyles(theme => {
       bottom: 0,
       right: 0,
     },
+    Layout_SearchByModelUploadButton: { marginTop: '1.5rem' },
+    Layout_SearchByModelUploadButton_MatchingIcon: { marginRight: '.5rem' },
+    Layout_Spacer: { height: '6.25rem' },
   }
 })
 
@@ -66,15 +74,18 @@ export const NewThemeLayout = ({ children, options = {} }) => {
   return (
     <>
       <Header variant={headerVariant} />
+      <div className={c.Layout_Spacer}></div>
       <div className={c.Layout} variant={layoutVariant}>
         {children}
       </div>
+      <Footer />
     </>
   )
 }
 
 export const NewInvertedHeaderLayout = ({ children }) => {
   const c = useStyles()
+  const history = useHistory()
   return (
     <>
       <Header inverted />
@@ -83,17 +94,31 @@ export const NewInvertedHeaderLayout = ({ children }) => {
         <div className={c.Layout_TextContainer}>
           <div className={c.Layout_PromotionalText}>
             <span className={c.Layout_PromotionalPrimaryText}>
-              <u className={c.Layout_PromotionalPrimaryText}>Build</u> Thangs.
+              <u className={c.Layout_PromotionalPrimaryText}>Search.</u> Collaborate.
+              Share.
             </span>
           </div>
           <div className={c.Layout_PromotionalSecondaryText}>
-            3D model community for designers, engineers and enthusiasts
+            Search for models in Thangs or upload your model and our powerful technology
+            will find all geometrically similar models. Connect with the Thangs community
+            to collaborate and share 3D models.
+          </div>
+          <div className={c.Layout_SearchByModelUploadButton}>
+            <Button
+              brand
+              className={c.Layout_SearchByModelUploadButton_BrandButton}
+              onClick={() => history.push('/matching')}
+            >
+              <MatchingIcon className={c.Layout_SearchByModelUploadButton_MatchingIcon} />
+              <span>Search by Model Upload</span>
+            </Button>
           </div>
         </div>
       </div>
       <div className={c.Layout} variant='small-vertical-spacing'>
         {children}
       </div>
+      <Footer />
     </>
   )
 }
@@ -102,7 +127,8 @@ export const NewSignupThemeLayout = ({ children }) => {
   const c = useStyles()
   return (
     <>
-      <Header variant='logo-only' />
+      <Header />
+      <div className={c.Layout_Spacer}></div>
       <div className={c.Layout} variant='small-vertical-spacing'>
         {children}
       </div>
