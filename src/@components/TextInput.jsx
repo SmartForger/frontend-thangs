@@ -24,13 +24,13 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const TextInput = ({ className, ...props }) => {
+export const TextInput = ({ className, validator, ...props }) => {
   const [valid, setValid] = useState(true)
   const c = useStyles({ invalid: !valid })
 
   const handleValidation = () => {
-    if (Object.prototype.hasOwnProperty.call(props, 'validator')) {
-      setValid(props.validator())
+    if (validator) {
+      setValid(validator())
     }
   }
 
@@ -39,7 +39,6 @@ export const TextInput = ({ className, ...props }) => {
       {...props}
       className={classnames(className, c.TextInput)}
       onBlur={handleValidation}
-      invalid={!valid}
     />
   )
 }

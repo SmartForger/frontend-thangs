@@ -127,12 +127,11 @@ export const NewSignupThemeLayout = ({ children }) => {
   const c = useStyles()
   return (
     <>
-      <Header variant='logo-only' />
+      <Header />
       <div className={c.Layout_Spacer}></div>
       <div className={c.Layout} variant='small-vertical-spacing'>
         {children}
       </div>
-      <Footer />
     </>
   )
 }
