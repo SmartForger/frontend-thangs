@@ -127,18 +127,27 @@ const Footer = ({ inverted }) => {
         </div>
         <div className={c.Footer_Column}>
           <div className={c.Footer_SocialLinkContainer}>
-            <Link to='https://www.facebook.com/physna/' className={c.Footer_SocialLink}>
+            <a
+              target='_blank'
+              href='https://www.facebook.com/physna/'
+              className={c.Footer_SocialLink}
+            >
               <FacebookIcon />
-            </Link>
-            <Link to='https://twitter.com/Physna3D' className={c.Footer_SocialLink}>
+            </a>
+            <a
+              target='_blank'
+              href='https://twitter.com/Physna3D'
+              className={c.Footer_SocialLink}
+            >
               <TwitterIcon />
-            </Link>
-            <Link
-              to='https://www.instagram.com/physna3d/'
+            </a>
+            <a
+              target='_blank'
+              href='https://www.instagram.com/physna3d/'
               className={c.Footer_SocialLink}
             >
               <InstagramIcon />
-            </Link>
+            </a>
           </div>
           <div className={c.Footer_Copyright}>
             ©Copyright 2020 Thangs All rights reserved.
