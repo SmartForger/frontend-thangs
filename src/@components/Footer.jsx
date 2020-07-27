@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 import { ReactComponent as Logo } from '@svg/logo.svg'
@@ -27,6 +26,13 @@ const useStyles = createUseStyles(theme => {
         paddingRight: '6.25rem',
         paddingLeft: '6.25rem',
       },
+    },
+    Footer_Container: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'flex-end',
+      paddingTop: '3rem',
+      borderTop: `1px solid ${theme.colors.grey[300]}`,
     },
     Footer_DesktopBoundary: {
       position: 'relative',
@@ -61,23 +67,14 @@ const useStyles = createUseStyles(theme => {
         fill: theme.colors.logo,
       },
     },
-    Footer_Row: {
+    Footer_Column: {
       display: 'flex',
-      justifyContent: 'flex-start',
-      alignItems: 'baseline',
-
-      '&:not(:last-of-type)': {
-        marginBottom: '1.5rem',
-      },
-    },
-    Footer_TopRow: {
-      paddingTop: '3.5rem',
-      borderTop: `1px solid ${theme.colors.purple[300]}`,
+      flexDirection: 'column',
     },
     Footer_Summary: {
       ...theme.mixins.text.footerText,
       maxWidth: '19.5rem',
-      marginRight: '6rem',
+      marginTop: '1.5rem',
     },
     Footer_SiteLinkContainer: {
       display: 'none', //'flex' TEMP OFF
@@ -88,10 +85,12 @@ const useStyles = createUseStyles(theme => {
       lineHeight: '1.5rem',
     },
     Footer_SocialLinkContainer: {
-      display: 'none', //'flex' TEMP OFF
+      display: 'flex',
+      justifyContent: 'flex-end',
+      marginBottom: '1.5rem',
     },
     Footer_SocialLink: {
-      marginRight: '1.5rem',
+      marginLeft: '1.5rem',
     },
     Footer_Copyright: {
       ...theme.mixins.text.footerText,
@@ -102,15 +101,13 @@ const useStyles = createUseStyles(theme => {
 const Footer = ({ inverted }) => {
   const c = useStyles({ inverted })
   return (
-    <>
-      <div className={c.Footer}>
-        <div className={classnames(c.Footer_Row, c.Footer_TopRow)}>
+    <div className={c.Footer}>
+      <div className={c.Footer_Container}>
+        <div className={c.Footer_Column}>
           <Link to='/'>
             <Logo className={c.Footer_Logo} />
             <LogoText />
           </Link>
-        </div>
-        <div className={c.Footer_Row}>
           <div className={c.Footer_Summary}>
             Thangs is the world&apos;s largest 3D model community for 3D enthusiasts and
             engineers. Find 3D models, share and collaborate with Thangs users around the
@@ -128,26 +125,27 @@ const Footer = ({ inverted }) => {
             </Link>
           </div>
         </div>
-        <div className={c.Footer_Row}>
+        <div className={c.Footer_Column}>
           <div className={c.Footer_SocialLinkContainer}>
-            <Link to='www.facebook.com' className={c.Footer_SocialLink}>
+            <Link to='https://www.facebook.com/physna/' className={c.Footer_SocialLink}>
               <FacebookIcon />
             </Link>
-            <Link to='www.twitter.com' className={c.Footer_SocialLink}>
+            <Link to='https://twitter.com/Physna3D' className={c.Footer_SocialLink}>
               <TwitterIcon />
             </Link>
-            <Link to='www.instagram.com' className={c.Footer_SocialLink}>
+            <Link
+              to='https://www.instagram.com/physna3d/'
+              className={c.Footer_SocialLink}
+            >
               <InstagramIcon />
             </Link>
           </div>
-        </div>
-        <div className={c.Footer_Row}>
           <div className={c.Footer_Copyright}>
             ©Copyright 2020 Thangs All rights reserved.
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
