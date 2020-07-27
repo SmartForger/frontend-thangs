@@ -29,7 +29,7 @@ export const TextInput = ({ className, validator, ...props }) => {
   const c = useStyles({ invalid: !valid })
 
   const handleValidation = () => {
-    if (validator) {
+    if (validator && typeof validator === 'function') {
       setValid(validator())
     }
   }

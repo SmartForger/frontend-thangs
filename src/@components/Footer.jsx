@@ -79,16 +79,18 @@ const useStyles = createUseStyles(theme => {
       maxWidth: '19.5rem',
       marginRight: '6rem',
     },
-    Footer_LinkContainer: {
-      display: 'flex',
+    Footer_SiteLinkContainer: {
+      display: 'none', //'flex' TEMP OFF
       flexDirection: 'column',
     },
-    Footer_Link: {
+    Footer_SiteLink: {
       color: theme.colors.purple[400],
       lineHeight: '1.5rem',
     },
+    Footer_SocialLinkContainer: {
+      display: 'none', //'flex' TEMP OFF
+    },
     Footer_SocialLink: {
-      display: 'inline-block',
       marginRight: '1.5rem',
     },
     Footer_Copyright: {
@@ -114,20 +116,20 @@ const Footer = ({ inverted }) => {
             engineers. Find 3D models, share and collaborate with Thangs users around the
             world.
           </div>
-          <div className={c.Footer_LinkContainer}>
-            <Link className={c.Footer_Link} to='/about'>
+          <div className={c.Footer_SiteLinkContainer}>
+            <Link className={c.Footer_SiteLink} to='/about'>
               About
             </Link>
-            <Link className={c.Footer_Link} to='/help'>
+            <Link className={c.Footer_SiteLink} to='/help'>
               Help
             </Link>
-            <Link className={c.Footer_Link} to='/careers'>
+            <Link className={c.Footer_SiteLink} to='/careers'>
               Careers
             </Link>
           </div>
         </div>
         <div className={c.Footer_Row}>
-          <div className={c.Footer_SocialBar}>
+          <div className={c.Footer_SocialLinkContainer}>
             <Link to='www.facebook.com' className={c.Footer_SocialLink}>
               <FacebookIcon />
             </Link>
