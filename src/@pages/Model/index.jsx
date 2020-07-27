@@ -146,14 +146,31 @@ const useStyles = createUseStyles(theme => {
       marginRight: '3.5rem',
       marginTop: '1.5rem',
       cursor: 'pointer',
-      '*:not(:first-child)': {
+
+      '& *:not(:first-child)': {
         marginLeft: '.75rem',
+      },
+
+      '& path, & polygon': {
+        fill: theme.colors.blue[500],
       },
     },
     Model_VersionIcon: {
-      fill: theme.colors.blue[500],
       width: '1.25rem',
       height: '1.25rem',
+    },
+    Model_RevisedLabel: {
+      display: 'flex',
+      marginBottom: '1.5rem',
+      alignItems: 'center',
+
+      '& *:not(:first-child)': {
+        marginLeft: '.25rem',
+      },
+
+      '& path, & polygon': {
+        fill: theme.colors.grey[700],
+      },
     },
   }
 })
@@ -194,7 +211,7 @@ const VersionUpload = ({ modelId }) => {
 const Revised = () => {
   const c = useStyles()
   return (
-    <div className={c.Model_VersionButton}>
+    <div className={c.Model_RevisedLabel}>
       <VersionIcon className={c.Model_VersionIcon} />
       <div>Revised from</div>
       <Button text className={c.Model_VersionLinkText}>

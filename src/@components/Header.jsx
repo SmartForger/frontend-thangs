@@ -147,7 +147,7 @@ const NOTIFICATIONS_URL = '/notifications'
 
 const SignUp = ({ c }) => {
   return (
-    <Link to='/signup'>
+    <Link to='/signup/alpha'>
       <Button className={c.Header_SignUpButton}>Sign up</Button>
     </Link>
   )

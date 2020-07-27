@@ -11,7 +11,10 @@ import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   return {
-    Matching: {},
+    Matching: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
     Matching_Header: {
       ...theme.mixins.text.subheaderText,
       marginBottom: '1rem',
@@ -23,7 +26,7 @@ const useStyles = createUseStyles(theme => {
     Matching_Button: {
       backgroundColor: theme.variables.colors.deleteButton,
       marginTop: '1.5rem',
-      float: 'right',
+      alignSelf: 'flex-end',
     },
   }
 })
@@ -86,7 +89,7 @@ function Page() {
   const onCancel = useCallback(() => history.push('/'), [history])
 
   return (
-    <div>
+    <div className={c.Matching}>
       <h1 className={c.Matching_Header}>Search by Model</h1>
       <h4 className={c.Matching_Subheader}>
         Upload your model to see other models with similar geometry.

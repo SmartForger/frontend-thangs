@@ -90,7 +90,11 @@ const App = () => {
                   component={TermsAndConditions}
                 />
                 <Route path='/home' component={routeRequiresAuth(Home)} />
-                <Route path='/signup' component={routeRequiresAnon(Signup)} exact />
+                <Route
+                  path='/signup/:registrationCode'
+                  component={routeRequiresAnon(Signup)}
+                  exact
+                />
                 <Route exact path='/password_reset' component={PasswordReset} />
                 <Route
                   path='/password_reset_confirm/:userId/:token'

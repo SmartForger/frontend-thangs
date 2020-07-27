@@ -19,6 +19,7 @@ const useStyles = createUseStyles(theme => {
     },
     Signup_Spinner: {
       display: 'inline-block',
+      width: '2rem',
     },
     Signup_PageHeader: {
       ...theme.mixins.text.darkPageTitleText,

@@ -17,6 +17,7 @@ const useStyles = createUseStyles(theme => {
     },
     Login_Spinner: {
       display: 'inline-block',
+      width: '2rem',
     },
     Login_TextInput: {
       width: '100%',

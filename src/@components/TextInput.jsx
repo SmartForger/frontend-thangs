@@ -6,7 +6,6 @@ const useStyles = createUseStyles(theme => {
   return {
     TextInput: {
       padding: '.5rem .75rem',
-      margin: 0,
       display: 'inline-block',
       border: '2px solid',
       borderColor: ({ invalid }) => (invalid ? theme.colors.error : 'transparent'),
@@ -24,9 +23,9 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const TextInput = ({ className, validator, ...props }) => {
+export const TextInput = ({ className, validator, error, ...props }) => {
   const [valid, setValid] = useState(true)
-  const c = useStyles({ invalid: !valid })
+  const c = useStyles({ invalid: !valid || error })
 
   const handleValidation = () => {
     if (validator && typeof validator === 'function') {
@@ -37,7 +36,7 @@ export const TextInput = ({ className, validator, ...props }) => {
   return (
     <input
       {...props}
-      className={classnames(className, c.TextInput)}
+      className={classnames(c.TextInput, className)}
       onBlur={handleValidation}
     />
   )

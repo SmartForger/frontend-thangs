@@ -103,6 +103,7 @@ export const darkButtonText = {
 }
 
 export const smallInfoMessageText = {
+  fontSize: '.875rem',
   lineHeight: '1.125rem',
   fontStyle: 'italic',
   color: colors.purple[400],
@@ -119,6 +120,20 @@ export const modelDetailsLabelText = {
   fontSize: '.75rem',
   fontWeight: 600,
   color: colors.purple[400],
+}
+
+export const inputLabelText = {
+  fontSize: '.75rem',
+  fontWeight: 'normal',
+  lineHeight: '1.125rem',
+  color: colors.grey[700],
+}
+
+export const inputText = {
+  fontSize: '.875rem',
+  fontWeight: 'normal',
+  lineHeight: '1.125rem',
+  color: colors.grey[500],
 }
 
 export const inputPlaceholderText = {
