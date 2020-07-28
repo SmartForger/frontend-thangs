@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import Select from 'react-select'
 import { useForm, ErrorMessage } from 'react-hook-form'
@@ -166,6 +166,15 @@ const Page = () => {
     history.goBack()
   }
 
+  const handleSelectChange = useCallback(
+    e => {
+      if (e && e.value) {
+        setCategory(e.value)
+      }
+    },
+    [setCategory]
+  )
+
   if (modelLoading) {
     return <Spinner />
   } else if (!model) {
@@ -275,7 +284,7 @@ const Page = () => {
                 placeholder='Select Category'
                 isClearable
                 options={CATEGORIES}
-                onChange={({ value }) => setCategory(value)}
+                onChange={handleSelectChange}
                 components={{
                   IndicatorSeparator: () => null,
                   // eslint-disable-next-line react/display-name

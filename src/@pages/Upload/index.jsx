@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import Select from 'react-select'
 import { useForm, ErrorMessage } from 'react-hook-form'
@@ -153,6 +153,15 @@ const Page = () => {
     history.goBack()
   }
 
+  const handleSelectChange = useCallback(
+    e => {
+      if (e && e.value) {
+        setCategory(e.value)
+      }
+    },
+    [setCategory]
+  )
+
   return (
     <div>
       <h1 className={c.Upload_Header}>Upload Model</h1>
@@ -248,7 +257,7 @@ const Page = () => {
                 placeholder='Select Category'
                 isClearable
                 options={CATEGORIES}
-                onChange={({ value }) => setCategory(value)}
+                onChange={handleSelectChange}
                 components={{
                   IndicatorSeparator: () => null,
                   // eslint-disable-next-line react/display-name

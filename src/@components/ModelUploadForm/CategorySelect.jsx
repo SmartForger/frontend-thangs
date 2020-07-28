@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import Select from 'react-select'
 import { createUseStyles } from '@style'
 
@@ -33,13 +33,23 @@ const CATEGORIES = [
 
 const CategorySelect = ({ setCategory }) => {
   const c = useStyles()
+
+  const handleSelectChange = useCallback(
+    e => {
+      if (e && e.value) {
+        setCategory(e.value)
+      }
+    },
+    [setCategory]
+  )
+
   return (
     <Select
       name='category'
       placeholder='Select Category'
       isClearable
       options={CATEGORIES}
-      onChange={({ value }) => setCategory(value)}
+      onChange={handleSelectChange(setCategory)}
       components={{
         IndicatorSeparator: () => null,
         // eslint-disable-next-line react/display-name
