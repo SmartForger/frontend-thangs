@@ -36,6 +36,7 @@ import { FlashContextProvider } from './@components/Flash'
 import { createStoreon } from 'storeon'
 import { StoreContext } from 'storeon/react'
 import teamsStore from '@store/teams/store'
+import folderStore from '@store/folders/store'
 import uploadModelStore from '@pages/UploadVersion/store'
 import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
@@ -68,7 +69,9 @@ const App = () => {
   const theme = usePageTheming(location)
   return (
     <ApolloProvider client={client}>
-      <StoreContext.Provider value={createStoreon([teamsStore, uploadModelStore])}>
+      <StoreContext.Provider
+        value={createStoreon([teamsStore, folderStore, uploadModelStore])}
+      >
         <ErrorBoundary>
           <FlashContextProvider>
             <ThemeProvider theme={theme}>
