@@ -106,6 +106,7 @@ const schemaWithName = Joi.object({
     .items(Joi.string().email({ tlds: { allow: false } }))
     .min(1)
     .required(),
+  team: Joi.string().allow(''),
 })
 
 const schemaWithTeamMembers = Joi.object({
@@ -211,6 +212,8 @@ export function CreateFolderForm({
 
     const { error, value: values } = initSchema.validate(input)
 
+    console.log(error);
+
     errors = error
       ? error.details.reduce((previous, currentError) => {
         return {
@@ -252,6 +255,8 @@ export function CreateFolderForm({
         members: data.members,
         team: data.team ? data.team : null,
       }
+
+      console.log(variables);
 
       // dispatch('create-folder', variables);
       const res = await api({
