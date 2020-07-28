@@ -52,7 +52,6 @@ const useStyles = createUseStyles(theme => {
       height: '1.5rem',
       width: '1.5rem',
       borderRadius: '100%',
-      backgroundColor: ({ color }) => color,
       boxSizing: 'border-box',
     },
     ColorPicker__isSelected: {
@@ -73,7 +72,7 @@ const BlockPicker = ({ currentColor, onChange, visible }) => {
             className={classnames(c.ColorPicker_Color, {
               [c.ColorPicker__isSelected]: isSelected,
             })}
-            color={color}
+            style={{ backgroundColor: color }}
             onClick={() => onChange(color)}
             key={idx}
           />
@@ -97,7 +96,7 @@ export const ColorPicker = ({ color = '#FFFFFF', onChange, children }) => {
   }
 
   return (
-    <div className={c.ColorPicker} color={color} onClick={toggleVisible}>
+    <div className={c.ColorPicker} onClick={toggleVisible}>
       <BlockPicker currentColor={color} onChange={handleChange} visible={visible} />
       {children}
     </div>

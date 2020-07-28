@@ -52,11 +52,13 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Toolbar_MobileAnchorButton: {
+      outline: 'none',
       [md]: {
         display: 'none',
       },
     },
     Toolbar_DesktopAnchorButton: {
+      outline: 'none',
       display: 'none',
       [md]: {
         display: 'block',
@@ -79,6 +81,9 @@ const Toolbar = ({
 
   const makeColorHandler = modeName => color => {
     onColorChange(modeName, color)
+  }
+  const handleResetView = () => {
+    onResetView()
   }
 
   return (
@@ -120,10 +125,10 @@ const Toolbar = ({
           </ColorPicker>
         </Button>
       </div>
-      <AnchorButton className={c.Toolbar_MobileAnchorButton} onClick={onResetView}>
+      <AnchorButton className={c.Toolbar_MobileAnchorButton} onClick={handleResetView}>
         Reset
       </AnchorButton>
-      <AnchorButton className={c.Toolbar_DesktopAnchorButton} onClick={onResetView}>
+      <AnchorButton className={c.Toolbar_DesktopAnchorButton} onClick={handleResetView}>
         Reset Image
       </AnchorButton>
     </div>

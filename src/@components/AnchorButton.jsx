@@ -15,7 +15,11 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const AnchorButton = ({ children, className, ...props }) => {
+export const AnchorButton = ({ children, className, onClick, ...props }) => {
   const c = useStyles(props)
-  return <button className={classnames(className, c.AnchorButton)}>{children}</button>
+  return (
+    <button className={classnames(className, c.AnchorButton)} onClick={onClick}>
+      {children}
+    </button>
+  )
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 
 import { Spinner } from '@components/Spinner'
 import { HowTo } from '@components/HowTo'
@@ -46,24 +46,30 @@ const HoopsModelViewer = ({ className, model }) => {
 
   const { containerRef, hoops } = useHoopsViewer(model.uploadedFile)
 
-  const handleResetView = () => {
+  const handleResetView = useCallback(() => {
     const [newWireColor, newMeshColor] = hoops.resetImage()
     setWireColor(newWireColor)
     setMeshColor(newMeshColor)
-  }
+  }, [hoops])
 
-  const handleDrawModeChange = modeName => {
-    hoops.changeDrawMode(modeName)
-  }
+  const handleDrawModeChange = useCallback(
+    modeName => {
+      hoops.changeDrawMode(modeName)
+    },
+    [hoops]
+  )
 
-  const handleColorChange = (modeName, colorStr) => {
-    hoops.changeColor(modeName, colorStr)
-    if (modeName === 'wire') {
-      setWireColor(colorStr)
-    } else if (modeName === 'mesh') {
-      setMeshColor(colorStr)
-    }
-  }
+  const handleColorChange = useCallback(
+    (modeName, colorStr) => {
+      hoops.changeColor(modeName, colorStr)
+      if (modeName === 'wire') {
+        setWireColor(colorStr)
+      } else if (modeName === 'mesh') {
+        setMeshColor(colorStr)
+      }
+    },
+    [hoops]
+  )
 
   return (
     <div className={className}>
