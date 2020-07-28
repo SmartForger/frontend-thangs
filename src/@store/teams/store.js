@@ -70,8 +70,8 @@ export default store => {
     store.dispatch('saving-team')
     const res = await postTeams(data)
     if (res.status === 201) {
-      store.dispatch('team-saved')
-      setTimeout(() => store.dispatch('fetch-teams'), 1000)
+      store.dispatch('fetch-teams')
+      setTimeout(() => store.dispatch('team-saved'), 1000)
     } else {
       store.dispatch('team-saved-error')
     }
