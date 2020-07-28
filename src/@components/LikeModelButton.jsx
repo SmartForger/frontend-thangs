@@ -9,6 +9,7 @@ import { createUseStyles } from '@style'
 const useStyles = createUseStyles(_theme => {
   return {
     LikeModelButton: {
+      marginTop: '2rem',
       marginBottom: '1.5rem',
       maxWidth: '7.75rem',
       padding: '.5rem 1.5rem',

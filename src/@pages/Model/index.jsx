@@ -134,13 +134,12 @@ const useStyles = createUseStyles(theme => {
       marginBottom: '1.5rem',
     },
     Model_VersionHeader: {
-      ...theme.mixins.text.subheaderText,
+      ...theme.mixins.text.formCalloutText,
     },
     Model_VersionLinkText: {
       ...theme.mixins.text.linkText,
     },
     Model_VersionButton: {
-      ...theme.mixins.text.activeTabNavigationText,
       display: 'flex',
       alignItems: 'center',
       marginRight: '3.5rem',
@@ -226,8 +225,8 @@ function Details({ currentUser, model, className }) {
   return (
     <div className={className}>
       <Revised />
-      <LikeModelButton currentUser={currentUser} model={model} />
       <ModelTitle model={model} />
+      <LikeModelButton currentUser={currentUser} model={model} />
       <div className={c.Model_Description}>{model.description}</div>
       <DownloadLink model={model} />
       <ModelDetails model={model} />

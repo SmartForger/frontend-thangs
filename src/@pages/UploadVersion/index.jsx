@@ -18,24 +18,24 @@ import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
   return {
-    Upload: {},
-    Upload_Row: {
+    UploadVersion: {},
+    UploadVersion_Row: {
       display: 'flex',
     },
-    Upload_Column: {},
-    Upload_Column__frame: {
+    UploadVersion_Column: {},
+    UploadVersion_Column__frame: {
       flexGrow: 1,
       marginRight: '2rem',
     },
-    Upload_Column__form: {
+    UploadVersion_Column__form: {
       minWidth: '21rem',
     },
-    Upload_Field: {
+    UploadVersion_Field: {
       display: 'flex',
       flexDirection: 'column',
       marginBottom: '.5rem',
     },
-    Upload_FullWidthInput: {
+    UploadVersion_FullWidthInput: {
       display: 'block',
       flexGrow: 1,
       border: 0,
@@ -43,29 +43,29 @@ const useStyles = createUseStyles(theme => {
       marginBottom: '.5rem',
       borderRadius: '.5rem',
     },
-    Upload_Label: {
+    UploadVersion_Label: {
       marginBottom: '.5rem',
     },
-    Upload_ButtonGroup: {
+    UploadVersion_ButtonGroup: {
       display: 'flex',
       justifyContent: 'flex-end',
       marginTop: '2rem',
     },
-    Upload_Button: {
+    UploadVersion_Button: {
       padding: '.5rem 2.25rem',
     },
-    Upload_Button__CancelButton: {
+    UploadVersion_Button__CancelButton: {
       marginRight: '.5rem',
     },
-    Upload_Header: {
+    UploadVersion_Header: {
       ...theme.mixins.text.subheaderText,
       marginBottom: '1.5rem',
     },
-    Upload_Error: {
+    UploadVersion_Error: {
       ...theme.mixins.text.formErrorText,
       margin: '.5rem 0',
     },
-    Upload_DropdownIndicator: {
+    UploadVersion_DropdownIndicator: {
       width: 0,
       height: 0,
       marginRight: '1rem',
@@ -75,13 +75,13 @@ const useStyles = createUseStyles(theme => {
       /* We unfortunately need to hardcode this value because of how react-select works */
       borderTop: '8px solid #f5f5f5',
     },
-    Upload_Spinner: {
+    UploadVersion_Spinner: {
       marginTop: '14rem',
       '& .path': {
         stroke: theme.variables.colors.uploaderText,
       },
     },
-    Upload_Dots: {
+    UploadVersion_Dots: {
       ...theme.mixins.text.infoMessageText,
       width: '8.75rem',
       marginBottom: '14rem',
@@ -111,7 +111,7 @@ const CATEGORIES = [
 
 const ShowError = ({ message }) => {
   const c = useStyles()
-  return <span className={c.Upload_Error}>{message}</span>
+  return <span className={c.UploadVersion_Error}>{message}</span>
 }
 
 const Page = () => {
@@ -135,7 +135,7 @@ const Page = () => {
       navigateWithFlash('/home', 'Model added successfully.')
       dispatch('reset-upload-model')
     }
-  }, [uploadModel])
+  }, [dispatch, navigateWithFlash, uploadModel])
 
   const onSubmit = async data => {
     const requiredVariables = {
@@ -176,14 +176,14 @@ const Page = () => {
 
   return (
     <div>
-      <h1 className={c.Upload_Header}>Upload Model</h1>
+      <h1 className={c.UploadVersion_Header}>Upload Model</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className={c.Upload_Row}>
-          <div className={c.Upload_Column__frame}>
+        <div className={c.UploadVersion_Row}>
+          <div className={c.UploadVersion_Column__frame}>
             {uploadModel.isLoading ? (
               <UploadFrame>
-                <Spinner className={c.Upload_Spinner} />
-                <ProgressText className={c.Upload_Dots} text='Uploading' />
+                <Spinner className={c.UploadVersion_Spinner} />
+                <ProgressText className={c.UploadVersion_Dots} text='Uploading' />
               </UploadFrame>
             ) : (
               <Uploader
@@ -194,9 +194,9 @@ const Page = () => {
               />
             )}
           </div>
-          <div className={c.Upload_Column__form}>
+          <div className={c.UploadVersion_Column__form}>
             {model && <ModelTitle className={c.UploadVersion_ModelTitle} model={model} />}
-            <div className={c.Upload_Field}>
+            <div className={c.UploadVersion_Field}>
               <ErrorMessage
                 errors={errors}
                 name='name'
@@ -204,51 +204,51 @@ const Page = () => {
               >
                 {ShowError}
               </ErrorMessage>
-              <label className={c.Upload_Label} htmlFor='name'>
+              <label className={c.UploadVersion_Label} htmlFor='name'>
                 Title *
               </label>
               <input
-                className={c.Upload_FullWidthInput}
+                className={c.UploadVersion_FullWidthInput}
                 name='name'
                 defaultValue={file && file.name}
                 placeholder='Model Name'
                 ref={register({ required: true })}
               />
             </div>
-            <div className={c.Upload_Field}>
-              <label className={c.Upload_Label} htmlFor='material'>
+            <div className={c.UploadVersion_Field}>
+              <label className={c.UploadVersion_Label} htmlFor='material'>
                 Material
               </label>
               <input
-                className={c.Upload_FullWidthInput}
+                className={c.UploadVersion_FullWidthInput}
                 name='material'
                 placeholder='Material'
                 ref={register}
               />
             </div>
-            <div className={c.Upload_Field}>
-              <label className={c.Upload_Label} htmlFor='weight'>
+            <div className={c.UploadVersion_Field}>
+              <label className={c.UploadVersion_Label} htmlFor='weight'>
                 Weight
               </label>
               <input
-                className={c.Upload_FullWidthInput}
+                className={c.UploadVersion_FullWidthInput}
                 name='weight'
                 placeholder='Weight'
                 ref={register}
               />
             </div>
-            <div className={c.Upload_Field}>
-              <label className={c.Upload_Label} htmlFor='height'>
+            <div className={c.UploadVersion_Field}>
+              <label className={c.UploadVersion_Label} htmlFor='height'>
                 Height
               </label>
               <input
-                className={c.Upload_FullWidthInput}
+                className={c.UploadVersion_FullWidthInput}
                 name='height'
                 placeholder='Height'
                 ref={register}
               />
             </div>
-            <div className={c.Upload_Field}>
+            <div className={c.UploadVersion_Field}>
               <ErrorMessage
                 errors={errors}
                 name='description'
@@ -256,18 +256,18 @@ const Page = () => {
               >
                 {ShowError}
               </ErrorMessage>
-              <label className={c.Upload_Label} htmlFor='description'>
+              <label className={c.UploadVersion_Label} htmlFor='description'>
                 Description *
               </label>
               <input
-                className={c.Upload_FullWidthInput}
+                className={c.UploadVersion_FullWidthInput}
                 name='description'
                 placeholder='Description'
                 ref={register({ required: true })}
               />
             </div>
-            <div className={c.Upload_Field}>
-              <label className={c.Upload_Label} htmlFor='category'>
+            <div className={c.UploadVersion_Field}>
+              <label className={c.UploadVersion_Label} htmlFor='category'>
                 Category
               </label>
               <Select
@@ -281,7 +281,7 @@ const Page = () => {
                   // eslint-disable-next-line react/display-name
                   DropdownIndicator: () => {
                     // cx causes React to throw an error, so we remove it
-                    return <div className={c.Upload_DropdownIndicator} />
+                    return <div className={c.UploadVersion_DropdownIndicator} />
                   },
                 }}
                 styles={{
@@ -333,16 +333,19 @@ const Page = () => {
             </div>
           </div>
         </div>
-        <div className={c.Upload_ButtonGroup}>
+        <div className={c.UploadVersion_ButtonGroup}>
           <Button
             dark
-            className={classnames(c.Upload_Button, c.Upload_Button__CancelButton)}
+            className={classnames(
+              c.UploadVersion_Button,
+              c.UploadVersion_Button__CancelButton
+            )}
             onClick={handleCancel}
             type='button'
           >
             Cancel
           </Button>
-          <Button className={c.Upload_Button} type='submit' disabled={!file}>
+          <Button className={c.UploadVersion_Button} type='submit' disabled={!file}>
             Save Model
           </Button>
         </div>

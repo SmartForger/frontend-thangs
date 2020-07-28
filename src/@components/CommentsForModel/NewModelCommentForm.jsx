@@ -8,7 +8,7 @@ import { createUseStyles } from '@style'
 const useStyles = createUseStyles(theme => {
   return {
     NewModalCommentForm: {
-      marginTop: '2.5rem',
+      display: 'flex',
     },
     NewModalCommentForm_Header: {
       ...theme.mixins.text.formCalloutText,
@@ -16,7 +16,7 @@ const useStyles = createUseStyles(theme => {
     },
     NewModalCommentForm_PostCommentTextArea: {
       width: '100%',
-      marginBottom: '1.5rem',
+      marginRight: '.75rem',
       resize: 'none',
       minHeight: '2.5rem',
       border: 'none',
@@ -31,10 +31,7 @@ const useStyles = createUseStyles(theme => {
         boxShadow: theme.variables.boxShadow,
       },
     },
-    NewModalCommentForm_PostCommentButton: {
-      marginBottom: '1.5rem',
-      float: 'right',
-    },
+    NewModalCommentForm_PostCommentButton: {},
   }
 })
 
@@ -63,16 +60,19 @@ const NewModelCommentForm = ({ modelId }) => {
   }
 
   return (
-    <div className={c.NewModalCommentForm}>
+    <div>
       <div className={c.NewModalCommentForm_Header}>Add Comment</div>
-      <form onSubmit={(data, e) => handleSubmit(formSubmit)(data, e)}>
+      <form
+        className={c.NewModalCommentForm}
+        onSubmit={(data, e) => handleSubmit(formSubmit)(data, e)}
+      >
         <textarea
           className={c.NewModalCommentForm_PostCommentTextArea}
           name='body'
           ref={register({ required: true })}
         />
         <Button className={c.NewModalCommentForm_PostCommentButton} type='submit'>
-          Post Comment
+          Comment
         </Button>
       </form>
     </div>

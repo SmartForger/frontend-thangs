@@ -83,13 +83,8 @@ const CommentsForModel = ({ model, className }) => {
     )
   }
 
-  const commentsHeaderText =
-    comments.length > 1 || comments.length === 0 ? 'Comments' : 'Comment'
   return (
     <div className={className}>
-      <h2 className={c.CommentsForModel_Header}>
-        {comments.length} {commentsHeaderText}
-      </h2>
       <ul className={c.CommentsForModel_List}>
         {comments.map((comment, i) => (
           <Comment key={i} comment={comment} />
