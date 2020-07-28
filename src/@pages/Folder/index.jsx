@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import * as R from 'ramda'
 import { useParams } from 'react-router-dom'
-import { useFolder } from '@customHooks/Folders'
 import { useCurrentUser } from '@customHooks/Users'
 
 import { WithFlash } from '@components/Flash'
@@ -11,6 +10,7 @@ import Breadcrumbs from '@components/Breadcrumbs'
 import { NewThemeLayout } from '@components/Layout'
 import { Message404 } from '../404'
 import { createUseStyles } from '@style'
+import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -21,13 +21,13 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-function Folder({ folder, _modelCount }) {
+function Folder({ folder, modelCount }) {
   const c = useStyles()
   return (
     <div>
       <Breadcrumbs
         className={c.Folder_Breadcrumbs}
-        modelsCount={6}
+        modelsCount={modelCount}
         folder={folder}
       ></Breadcrumbs>
       <WithFlash>
@@ -42,20 +42,24 @@ function Folder({ folder, _modelCount }) {
 
 function Page() {
   const { folderId } = useParams()
+  const { dispatch, folders } = useStoreon('folders')
 
-  const { loading, error, folder } = useFolder(folderId)
+  useEffect(() => {
+    dispatch('fetch-folder', folderId)
+  }, [])
+
   const { loading: userLoading, error: userError, user } = useCurrentUser()
 
-  if (loading || userLoading) {
+  if (userLoading || folders.isLoading) {
     return <Spinner />
-  } else if (!folder || !user) {
+  } else if (!folders.currentFolder || !user) {
     return <Message404 />
-  } else if (error | userError) {
+  } else if (userError || folders.loadError) {
     return <div>Error loading folder</div>
   }
 
-  const modelCount = R.length(user.models)
-  return <Folder folder={folder} modelCount={modelCount} />
+  const modelCount = R.length(folders.currentFolder.models)
+  return <Folder folder={folders.currentFolder} modelCount={modelCount} />
 }
 
 export const FolderPage = () => {
