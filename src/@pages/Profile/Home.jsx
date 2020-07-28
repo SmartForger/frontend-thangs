@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as R from 'ramda'
 
 import { NewThemeLayout } from '@components/Layout'
@@ -11,6 +11,7 @@ import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg'
 import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -55,10 +56,10 @@ const ModelsTitle = ({ user, selected, onClick }) => {
   )
 }
 
-const FoldersTitle = ({ user, selected, onClick, className }) => {
+const FoldersTitle = ({ _user, selected, onClick, className }) => {
   const c = useStyles({ selected })
-  const folders = R.pathOr([], ['folders'])(user)
-  const folderAmount = folders.length
+  const { folders } = useStoreon('folders')
+  const folderAmount = folders?.data?.length
   return (
     <div className={classnames(className, c.Home_Row)} onClick={onClick}>
       <FolderIcon className={c.Home_Icon} selected={selected} />
@@ -68,17 +69,19 @@ const FoldersTitle = ({ user, selected, onClick, className }) => {
 }
 
 const getModels = R.pathOr([], ['models'])
-const getFolders = R.pathOr([], ['folders'])
 
 const PageContent = ({ user }) => {
   const c = useStyles({})
+  const { dispatch, folders } = useStoreon('folders')
+  useEffect(() => {
+    dispatch('fetch-folders')
+  }, [])
   const [selected, setSelected] = useState('models')
 
   const selectModels = () => setSelected('models')
   const selectFolders = () => setSelected('folders')
 
   const models = getModels(user)
-  const folders = getFolders(user)
 
   const sortedModels = models.sort((modelA, modelB) => {
     if (modelA.created === modelB.created) return 0
@@ -109,7 +112,7 @@ const PageContent = ({ user }) => {
           />
         ) : (
           <CardCollection
-            folders={folders}
+            folders={folders?.data}
             noResultsText='This user has not uploaded any folders yet.'
           />
         )}
