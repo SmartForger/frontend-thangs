@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as R from 'ramda'
 import classnames from 'classnames'
 import { UserInline } from '../UserInline'
@@ -12,6 +12,7 @@ import { ReactComponent as TrashCanIcon } from '../../@svg/trash-can-icon.svg'
 import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg'
 import { useRevokeAccess } from '../../@customHooks/Folders'
 import { createUseStyles } from '@style'
+import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -62,6 +63,9 @@ const useStyles = createUseStyles(theme => {
     },
     FolderManagementModal_DisplayErrors: {
       marginTop: '1rem',
+    },
+    FolderManagementModal_TeamName: {
+      ...theme.mixins.text.smallHeaderText,
     },
   }
 })
@@ -124,6 +128,61 @@ const UserList = ({ users = [], folderId, creator }) => {
   )
 }
 
+const Team = ({ id }) => {
+  const c = useStyles({})
+  const { dispatch, teams } = useStoreon('teams')
+
+  useEffect(() => {
+    dispatch('fetch-team', id)
+  }, [])
+
+  return teams.isLoaded ? (
+    <>
+      <div
+        className={c.FolderManagementModal_Row}
+        css={`
+          margin-top: 24px;
+        `}
+      >
+        <div className={c.FolderManagementModal_TeamName} key={teams.currentTeam?.name}>
+          {teams.currentTeam?.name}
+        </div>
+      </div>
+
+      <div className={c.FolderManagementModal_Row}>
+        <ul className={c.FolderManagementModal_List} key={teams.currentTeam?.members}>
+          {teams.currentTeam?.members.map(member => {
+            return (
+              <div key={member}>
+                <li className={c.FolderManagementModal_Item} key={member}>
+                  {member}
+                </li>
+              </div>
+              /*<Item
+                                    key={member.id}
+                                    css={`
+                                        margin-top: ${props =>
+                                        props.isFirst ? '0' : '16px'};
+                                    `}
+                                >
+                                    <UserInline user={member} displayEmail>
+                                        <RevokeAccessButton
+                                            targetUserId={member.id}
+                                        >
+                                            <TrashCanIconStyled />
+                                        </RevokeAccessButton>
+                                    </UserInline>
+                                </Item>*/
+            )
+          })}
+        </ul>
+      </div>
+    </>
+  ) : (
+    <Spinner className={c.FolderManagementModal_Spinner} />
+  )
+}
+
 const FolderManagementModal = ({ isOpen, folder, afterInvite, onCancel, className }) => {
   const [errors, setErrors] = useState()
   const hasErrors = errors && !R.isEmpty(errors)
@@ -162,7 +221,22 @@ const FolderManagementModal = ({ isOpen, folder, afterInvite, onCancel, classNam
           c.FolderManagementModal_BottomRow
         )}
       >
-        <UserList creator={folder.creator} users={folder.members} folderId={folder.id} />
+        {folder.team_id ? (
+          <Team key={folder.team_id} id={folder.team_id} />
+        ) : (
+          <div
+            className={c.FolderManagementModal_Row}
+            css={`
+              margin-top: 48px;
+            `}
+          >
+            <UserList
+              creator={folder.creator}
+              users={folder.members}
+              folderId={folder.id}
+            />
+          </div>
+        )}
       </div>
     </Modal>
   )
