@@ -34,7 +34,6 @@ const useStyles = createUseStyles(theme => {
     },
     PasswordReset_SuccessText: {
       ...theme.mixins.text.formSuccessText,
-      backgroundColor: 'lightgreen',
       padding: '.25rem',
       borderRadius: '.25rem',
       marginTop: '.25rem',
