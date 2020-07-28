@@ -1,10 +1,9 @@
 import axios from 'axios'
-
-const url = 'https://staging-api-platform-dot-thangs.uc.r.appspot.com/'
+import { getRestApiUrl } from '../authentication.service'
 
 export default ({ method = 'GET', endpoint, body }) =>
   axios({
-    url: `${url}${endpoint}`,
+    url: getRestApiUrl(endpoint),
     method,
     headers: {
       'Content-Type': 'application/json',

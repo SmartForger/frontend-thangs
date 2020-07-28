@@ -134,7 +134,7 @@ const Team = ({ id }) => {
 
   useEffect(() => {
     dispatch('fetch-team', id)
-  }, [])
+  }, [dispatch, id])
 
   return teams.isLoaded ? (
     <>

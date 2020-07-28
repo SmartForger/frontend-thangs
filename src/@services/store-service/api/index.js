@@ -8,9 +8,9 @@ export function getTeams() {
 }
 
 export function getTeam(id) {
-    return axios.get(getRestApiUrl(`teams/${id}`), { 'headers': { 'Authorization': `Bearer ${localStorage.getItem('restAccessToken')}` } }).then((res) => {
-        return res.data;
-    });
+  return axios.get(getRestApiUrl(`teams/${id}`), { 'headers': { 'Authorization': `Bearer ${localStorage.getItem('restAccessToken')}` } }).then((res) => {
+    return res.data
+  })
 }
 
 export default function postTeams(data) {

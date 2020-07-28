@@ -1,12 +1,19 @@
-import React from 'react'
-import { useForm } from 'react-hook-form'
+import React, { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import Joi from '@hapi/joi'
 import * as R from 'ramda'
 import { Button } from '../Button'
 import { Spinner } from '../Spinner'
-import { useCreateFolder, useInviteToFolder } from '../../@customHooks/Folders'
+import { useInviteToFolder } from '../../@customHooks/Folders'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import teamLogo from '../../@svg/multi-users.svg'
+import saveTeamLogo from '../../@svg/save-team.svg'
+import saveTeamSuccess from '../../@svg/save-team-success.svg'
+import Autocomplete from '@material-ui/lab/Autocomplete'
+import { useStoreon } from 'storeon/react'
+import api from '../../@services/api'
+import useFetchOnce from '../../@services/store-service/hooks/useFetchOnce'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -56,7 +63,41 @@ const useStyles = createUseStyles(theme => {
       padding: '.625rem 1rem',
       borderRadius: '.5rem',
     },
+    FolderForm_SaveLogo: {
+      margin: '26px 7px 0 auto',
+    },
+    FolderForm_SaveTeamLabel: {
+      color: theme.colors.blue[500],
+      cursor: 'pointer',
+      marginTop: '1.625rem',
+    },
+    FolderForm_SaveTeamSuccessLabel: {
+      color: theme.colors.grey[700],
+      marginTop: '1.625rem',
+    },
+    FolderForm_PseudoForm: {
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+    },
   }
+})
+
+let initSchema = Joi.object({
+  name: Joi.string().required(),
+  members: Joi.array()
+    .items(Joi.string().email({ tlds: { allow: false } }))
+    .min(1)
+    .required(),
+  team: Joi.string().allow(''),
+})
+
+const autocompleteSchema = Joi.object({
+  name: Joi.string().required(),
+  members: Joi.array()
+    .items(Joi.string())
+    .required(),
+  team: Joi.string().allow(''),
 })
 
 const schemaWithName = Joi.object({
@@ -65,6 +106,14 @@ const schemaWithName = Joi.object({
     .items(Joi.string().email({ tlds: { allow: false } }))
     .min(1)
     .required(),
+})
+
+const schemaWithTeamMembers = Joi.object({
+  members: Joi.array()
+    .items(Joi.string().email({ tlds: { allow: false } }))
+    .min(1)
+    .required(),
+  team: Joi.string().required(),
 })
 
 const schemaWithoutName = Joi.object({
@@ -121,38 +170,55 @@ export const DisplayErrors = ({ errors, className, serverErrorMsg }) => {
           {serverErrorMsg}
         </h4>
       )
+    } else {
+      return null
     }
-
-    return null
   })
 }
 
-export const CreateFolderForm = ({
+export function CreateFolderForm({
   onErrorReceived,
   afterCreate,
   onCancel,
   _membersLabel,
-}) => {
+}) {
+  const { dispatch, _folders } = useStoreon('folders')
+  const { teams } = useFetchOnce('teams')
   const c = useStyles()
+  const [saveTeamActive, setSaveTeamActive] = useState(false)
+
+  let saveLogo = teams.isSaved
+    ? saveTeamSuccess
+    : saveTeamActive
+      ? saveTeamLogo
+      : teamLogo
+  let errors
+  let teamNames = []
+
+  if (teams.data) {
+    teams.data.forEach(team => {
+      teamNames.push(team.name)
+    })
+  }
+
   const validationResolver = data => {
     const members = data.members ? parseEmails(data.members) : []
     const input = {
       name: data.name,
+      team: data.team,
       members,
     }
 
-    const { error, value: values } = schemaWithName.validate(input)
+    const { error, value: values } = initSchema.validate(input)
 
-    const errors = error
-      ? /* eslint-disable indent */
-        error.details.reduce((previous, currentError) => {
-          return {
-            ...previous,
-            [currentError.path[0]]: currentError,
-          }
-        }, {})
+    errors = error
+      ? error.details.reduce((previous, currentError) => {
+        return {
+          ...previous,
+          [currentError.path[0]]: currentError,
+        }
+      }, {})
       : {}
-    /* eslint-enable indent */
 
     onErrorReceived(R.equals(errors, {}) ? undefined : errors)
 
@@ -162,21 +228,38 @@ export const CreateFolderForm = ({
     }
   }
 
-  const { register, handleSubmit } = useForm({
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    triggerValidation,
+    control,
+    setValue,
+  } = useForm({
     validationResolver,
     reValidateMode: 'onSubmit',
   })
 
-  const [createFolder, { loading }] = useCreateFolder()
+  const isExistingTeam = () => {
+    return teamNames.indexOf(getValues('members')) > -1
+  }
 
   const handleSave = async (data, e) => {
     e.preventDefault()
     try {
-      const variables = { name: data.name, members: data.members }
-      const mutation = await createFolder({
-        variables,
+      const variables = {
+        name: data.name,
+        members: data.members,
+        team: data.team ? data.team : null,
+      }
+
+      // dispatch('create-folder', variables);
+      const res = await api({
+        method: 'POST',
+        endpoint: 'folders',
+        body: variables,
       })
-      const folder = mutation.data.createFolder.folder
+      const folder = res.data
       afterCreate(folder)
     } catch (error) {
       onErrorReceived({
@@ -190,6 +273,71 @@ export const CreateFolderForm = ({
     onCancel()
   }
 
+  const addInputGroupField = () => {
+    return (
+      <>
+        <label className={c.FolderForm_Label} htmlFor='team'>
+          Team Name
+        </label>
+        <input className={c.FolderForm_FullWidthInput} name='team' ref={register()} />
+      </>
+    )
+  }
+
+  const addSaveGroupFields = () => {
+    return (
+      <>
+        {saveTeamActive ? addInputGroupField() : null}
+        <div className={c.FolderForm_Row}>
+          <img className={c.FolderForm_SaveLogo} src={saveLogo} />
+          {saveTeamActive && !teams.isSaved ? (
+            <label className={c.FolderForm_SaveTeamLabel} onClick={() => saveGroup()}>
+              Save Team
+            </label>
+          ) : null}
+          {!saveTeamActive && !teams.isSaved ? (
+            <label
+              className={c.FolderForm_SaveTeamLabel}
+              onClick={() => saveGroupActivate()}
+            >
+              Save Users As Team
+            </label>
+          ) : null}
+          {saveTeamActive && teams.isSaved ? (
+            <label className={c.SaveTeamSuccessLabel}>Team Saved</label>
+          ) : null}
+        </div>
+      </>
+    )
+  }
+
+  const saveGroupActivate = () => {
+    setSaveTeamActive(true)
+  }
+
+  const saveGroup = () => {
+    initSchema = schemaWithTeamMembers
+    const _res = triggerValidation()
+    if (!(errors.members || errors.team)) {
+      const data = {
+        team: getValues('team'),
+        members: getValues('members') ? parseEmails(getValues('members')) : [],
+      }
+      dispatch('add-team', data)
+    }
+    initSchema = schemaWithName
+  }
+
+  const onAutocompleteChange = event => {
+    setValue('members', event.target?.value ? event.target.value : event[1])
+    if (isExistingTeam()) {
+      initSchema = autocompleteSchema
+    } else {
+      initSchema = schemaWithName
+    }
+    const _res = triggerValidation()
+  }
+
   return (
     <form className={c.FolderForm} onSubmit={handleSubmit(handleSave)}>
       <label className={c.FolderForm_Label} htmlFor='name'>
@@ -201,14 +349,40 @@ export const CreateFolderForm = ({
         ref={register({ required: true })}
       />
       <label className={c.FolderForm_Label} htmlFor='members'>
-        Add Users
+        Add users or enter an existing team name
       </label>
-      <input
-        className={c.FolderForm_FullWidthInput}
-        name='members'
-        ref={register({ required: true })}
-        placeholder='example@example.com'
+      <Controller
+        name='members-autocomplete'
+        control={control}
+        onInputChange={event => onAutocompleteChange(event)}
+        onChange={event => onAutocompleteChange(event)}
+        as={
+          <Autocomplete
+            freeSolo
+            ListboxProps={{
+              style: { borderRadius: '3px', background: '#ececec', overflow: 'auto' },
+            }}
+            options={teamNames}
+            defaultValue=''
+            getOptionLabel={team => team}
+            renderInput={teams => (
+              <Controller
+                as={
+                  <form className={c.FolderForm_PseudoForm} ref={teams.InputProps.ref}>
+                    <input
+                      className={c.FolderForm_FullWidthInput}
+                      {...teams.inputProps}
+                    />
+                  </form>
+                }
+                name='members'
+                control={control}
+              />
+            )}
+          />
+        }
       />
+      {addSaveGroupFields()}
       <div className={classnames(c.FolderForm_Row, c.FolderForm_ButtonRow)}>
         <Button
           dark
@@ -218,8 +392,12 @@ export const CreateFolderForm = ({
         >
           Cancel
         </Button>
-        <Button className={c.FolderForm_SaveButton} type='submit' disabled={loading}>
-          {loading ? <Spinner className={c.FolderForm_Spinner} /> : 'Save'}
+        <Button
+          className={c.FolderForm_SaveButton}
+          type='submit'
+          disabled={teams.isLoading}
+        >
+          {teams.isLoading ? <Spinner className={c.FolderForm_Spinner} /> : 'Save'}
         </Button>
       </div>
     </form>
@@ -279,7 +457,6 @@ export const InviteUsersForm = ({ folderId, onErrorReceived, afterInvite, onCanc
     e.preventDefault()
     onCancel()
   }
-
   return (
     <form className={c.FolderForm} onSubmit={handleSubmit(handleSave)}>
       <label className={c.FolderForm_Label} htmlFor='members'>

@@ -46,7 +46,7 @@ function Page() {
 
   useEffect(() => {
     dispatch('fetch-folder', folderId)
-  }, [])
+  }, [dispatch, folderId])
 
   const { loading: userLoading, error: userError, user } = useCurrentUser()
 

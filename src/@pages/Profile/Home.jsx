@@ -75,7 +75,7 @@ const PageContent = ({ user }) => {
   const { dispatch, folders } = useStoreon('folders')
   useEffect(() => {
     dispatch('fetch-folders')
-  }, [])
+  }, [dispatch])
   const [selected, setSelected] = useState('models')
 
   const selectModels = () => setSelected('models')
