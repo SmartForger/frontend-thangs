@@ -216,7 +216,7 @@ const AddModelDropdownMenu = ({ c }) => {
         afterCreate={folder => {
           setFolderClose()
           navigateWithFlash(
-            `/folder/${folder.id}`,
+            `/folder/${folder.folderId}`,
             'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
           )
         }}
