@@ -57,9 +57,9 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-function Text() {
+function Text({ className }) {
   return (
-    <div>
+    <div className={className}>
       Model can be viewed as Wireframe, Shaded or Composite and changed via the icons in
       the viewer. Wireframe color and shading color can be changed using the paint icons
       in the viewer. Model can be zoomed in and out and rotated 360 degrees.
@@ -67,8 +67,8 @@ function Text() {
   )
 }
 
-function Title() {
-  return <h4>How to Use:</h4>
+function Title({ className }) {
+  return <h4 className={className}>How to Use:</h4>
 }
 
 function Icons() {
