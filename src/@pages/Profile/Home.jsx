@@ -72,10 +72,7 @@ const getModels = R.pathOr([], ['models'])
 
 const PageContent = ({ user }) => {
   const c = useStyles({})
-  const { dispatch, folders } = useStoreon('folders')
-  useEffect(() => {
-    dispatch('fetch-folders')
-  }, [dispatch])
+  const { folders } = useStoreon('folders')
   const [selected, setSelected] = useState('models')
 
   const selectModels = () => setSelected('models')
@@ -123,8 +120,12 @@ const PageContent = ({ user }) => {
 
 const Page = () => {
   const { user, error, loading } = useCurrentUser()
+  const {dispatch, folders} = useStoreon('folders');
+  useEffect(() => {
+    dispatch('fetch-folders');
+  }, [])
 
-  if (loading) {
+  if (loading || folders.isLoading) {
     return <Spinner />
   }
 

@@ -10,9 +10,8 @@ const graphqlService = GraphqlService.getInstance()
 
 function Page() {
   const { error, loading, models } = graphqlService.useModelsByLikes()
-  const { folders } = useFetchOnce('folders')
 
-  if (loading || folders?.isLoading) {
+  if (loading) {
     return <Spinner />
   }
 

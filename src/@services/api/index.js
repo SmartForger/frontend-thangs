@@ -7,7 +7,7 @@ export default ({ method = 'GET', endpoint, body }) =>
     method,
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('accessTokenRest')}`,
+      Authorization: `Bearer ${localStorage.getItem('restAccessToken')}`,
     },
     ...(method === 'POST' ? { data: JSON.stringify(body) } : {}),
   }).catch(e => Promise.resolve({ data: {}, error: e }))
