@@ -39,7 +39,7 @@ const FolderCreateModal = ({ isOpen, onCancel, afterCreate }) => {
       <NewFolderIcon className={c.FolderCreateModal_NewFolderIcon} />
       <h2 className={c.FolderCreateModal_Header}>Add Folder</h2>
       <div className={c.FolderCreateModal_Text}>
-        Create a team and share models with other teamates privately for collaboration.
+        Create a team and share models with other teammates privately for collaboration.
       </div>
       <DisplayErrors
         errors={errors}
