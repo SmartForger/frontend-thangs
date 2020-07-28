@@ -29,10 +29,16 @@ const useStyles = createUseStyles(theme => {
     },
     Footer_Container: {
       display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
       justifyContent: 'space-between',
-      alignItems: 'flex-end',
       paddingTop: '3rem',
       borderTop: `1px solid ${theme.colors.grey[300]}`,
+
+      [md]: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+      },
     },
     Footer_DesktopBoundary: {
       position: 'relative',
@@ -68,8 +74,12 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Footer_Column: {
+      alignItems: 'center',
       display: 'flex',
       flexDirection: 'column',
+      [md]: {
+        alignItems: 'flex-start',
+      },
     },
     Footer_Summary: {
       ...theme.mixins.text.footerText,
@@ -88,9 +98,17 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       justifyContent: 'flex-end',
       marginBottom: '1.5rem',
+      marginTop: '1rem',
+      [md]: {
+        alignSelf: 'flex-end',
+        marginTop: 0,
+      },
     },
     Footer_SocialLink: {
-      marginLeft: '1.5rem',
+      margin: '0 1.5rem',
+      [md]: {
+        margin: '0 0 0 1.5rem',
+      },
     },
     Footer_Copyright: {
       ...theme.mixins.text.footerText,
