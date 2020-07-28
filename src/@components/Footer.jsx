@@ -129,6 +129,7 @@ const Footer = ({ inverted }) => {
           <div className={c.Footer_SocialLinkContainer}>
             <a
               target='_blank'
+              rel='noopener noreferrer'
               href='https://www.facebook.com/physna/'
               className={c.Footer_SocialLink}
             >
@@ -136,6 +137,7 @@ const Footer = ({ inverted }) => {
             </a>
             <a
               target='_blank'
+              rel='noopener noreferrer'
               href='https://twitter.com/Physna3D'
               className={c.Footer_SocialLink}
             >
@@ -143,6 +145,7 @@ const Footer = ({ inverted }) => {
             </a>
             <a
               target='_blank'
+              rel='noopener noreferrer'
               href='https://www.instagram.com/physna3d/'
               className={c.Footer_SocialLink}
             >
