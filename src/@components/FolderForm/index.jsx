@@ -212,8 +212,6 @@ export function CreateFolderForm({
 
     const { error, value: values } = initSchema.validate(input)
 
-    console.log(error);
-
     errors = error
       ? error.details.reduce((previous, currentError) => {
         return {
@@ -255,8 +253,6 @@ export function CreateFolderForm({
         members: data.members,
         team: data.team ? data.team : null,
       }
-
-      console.log(variables);
 
       // dispatch('create-folder', variables);
       const res = await api({
