@@ -147,8 +147,7 @@ const signup = async ({
 const logout = () => {
   clearCurrentUser()
 
-  localStorage.removeItem('accessToken')
-  localStorage.removeItem('refreshToken')
+  localStorage.clear()
 }
 
 const hasEndSlash = /\/$/
