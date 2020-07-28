@@ -89,7 +89,7 @@ const login = async ({ email, password }) => {
 const restLogin = async ({ password }) => {
   const username = currentUser.username
   const requestOptions = {
-    url: ('https://staging-api-platform-dot-thangs.uc.r.appspot.com/auth'),
+    url: 'https://staging-api-platform-dot-thangs.uc.r.appspot.com/auth',
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     data: JSON.stringify({ userName: username, password }),
@@ -235,12 +235,7 @@ const resetPasswordForEmail = async email => {
   return axios.post(url, { email })
 }
 
-const setPasswordForReset = async ({
-  token,
-  userId,
-  password,
-  confirmPassword,
-}) => {
+const setPasswordForReset = async ({ token, userId, password, confirmPassword }) => {
   const url = getApiUrl('password_reset_confirm/')
   return axios.post(url, {
     token,

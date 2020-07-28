@@ -120,10 +120,10 @@ const PageContent = ({ user }) => {
 
 const Page = () => {
   const { user, error, loading } = useCurrentUser()
-  const {dispatch, folders} = useStoreon('folders');
+  const { dispatch, folders } = useStoreon('folders')
   useEffect(() => {
-    dispatch('fetch-folders');
-  }, [])
+    dispatch('fetch-folders')
+  }, [dispatch])
 
   if (loading || folders.isLoading) {
     return <Spinner />
