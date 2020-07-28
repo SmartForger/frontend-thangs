@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDropzone } from 'react-dropzone'
 import { ReactComponent as UploadIcon } from '../../@svg/upload-icon.svg'
+import { ReactComponent as VersionIcon } from '../../@svg/version.svg'
 import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg'
 import { ReactComponent as ModelPyramid } from '../../@svg/model-pyramid.svg'
 import { ReactComponent as ExitIcon } from '../../@svg/icon-X.svg'
@@ -95,7 +96,7 @@ const FILE_SIZE_LIMITS = {
   },
 }
 
-export function Uploader({ file, setFile, showError = true }) {
+export function Uploader({ file, setFile, showError = true, mode = UPLOAD_MODES.MODEL }) {
   const c = useStyles()
   const [errorState, setErrorState] = React.useState()
   const onDrop = React.useCallback(
@@ -199,7 +200,8 @@ export function Uploader({ file, setFile, showError = true }) {
           </div>
         ) : (
           <div className={c.Uploader_FlexColumn}>
-            <UploadIcon className={c.Uploader_Icon} />
+            {mode === UPLOAD_MODES.MODEL && <UploadIcon className={c.Uploader_Icon} />}
+            {mode === UPLOAD_MODES.VERSION && <VersionIcon className={c.Uploader_Icon} />}
             <div className={c.Uploader_InfoMessage}>
               Drag & Drop model
               <br />
