@@ -260,7 +260,7 @@ export const breadcrumbTextLight = {
 }
 
 export const smallHeaderText = {
-  fontSize: '1.25rem',
+  fontSize: '1.125rem',
   fontFamily: LEXEND_DECA,
 }
 

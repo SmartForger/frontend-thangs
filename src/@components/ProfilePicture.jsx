@@ -2,6 +2,7 @@ import React from 'react'
 import Avatar from 'react-avatar'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import { ReactComponent as UserIcon } from '@svg/icon-user.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -25,7 +26,7 @@ export function ProfilePicture({
   color = DEFAULT_AVATAR_COLOR,
 }) {
   const c = useStyles()
-  return (
+  return src ? (
     <Avatar
       name={name}
       src={src}
@@ -35,5 +36,7 @@ export function ProfilePicture({
       className={classnames(className, c.ProfilePicture)}
       maxInitials={2}
     />
+  ) : (
+    <UserIcon />
   )
 }

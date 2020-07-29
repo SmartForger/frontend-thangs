@@ -44,6 +44,7 @@ const useStyles = createUseStyles(theme => {
     },
     FolderManagementModal_BottomRow: {
       marginTop: '3rem',
+      width: '100%',
     },
     FolderManagementModal_List: {
       width: '100%',
@@ -64,8 +65,18 @@ const useStyles = createUseStyles(theme => {
     FolderManagementModal_DisplayErrors: {
       marginTop: '1rem',
     },
+    FolderManagementModal_TeamContainer: {
+      flexDirection: 'column',
+    },
+    FolderManagementModal_TeamNameContainer: {
+      marginBottom: '1rem',
+    },
     FolderManagementModal_TeamName: {
       ...theme.mixins.text.smallHeaderText,
+    },
+    FolderManagementModal_UserInline: {
+      display: 'flex',
+      justifyContent: 'space-between',
     },
   }
 })
@@ -107,6 +118,14 @@ const UserList = ({ users = [], folderId, creator }) => {
     <ul className={c.FolderManagementModal_List}>
       {users.map((user, idx) => {
         const isFirst = idx === 0
+        const groupUser = user
+        const groupUserId = groupUser.id
+        const isOwner =
+          groupUserId.toString() !== currentUserId.toString() &&
+          creator.toString() !== groupUserId.toString()
+
+        if (!groupUser.fullName)
+          groupUser.fullName = `${groupUser.first_name} ${groupUser.last_name}`
         return (
           <li
             className={classnames(c.FolderManagementModal_Item, {
@@ -114,9 +133,13 @@ const UserList = ({ users = [], folderId, creator }) => {
             })}
             key={idx}
           >
-            <UserInline user={user} displayEmail>
-              {user.id !== currentUserId && creator.id !== user.id && (
-                <RevokeAccessButton targetUserId={user.id} folderId={folderId}>
+            <UserInline
+              className={c.FolderManagementModal_UserInline}
+              user={groupUser}
+              displayEmail
+            >
+              {isOwner && (
+                <RevokeAccessButton targetUserId={groupUser.id} folderId={folderId}>
                   <TrashCanIcon className={c.FolderManagementModal_TrashCanIcon} />
                 </RevokeAccessButton>
               )}
@@ -128,7 +151,7 @@ const UserList = ({ users = [], folderId, creator }) => {
   )
 }
 
-const Team = ({ id }) => {
+const Team = ({ id, creator, folderId }) => {
   const c = useStyles({})
   const { dispatch, teams } = useStoreon('teams')
 
@@ -138,12 +161,7 @@ const Team = ({ id }) => {
 
   return teams.isLoaded ? (
     <>
-      <div
-        className={c.FolderManagementModal_Row}
-        css={`
-          margin-top: 24px;
-        `}
-      >
+      <div className={c.FolderManagementModal_TeamNameContainer}>
         <div className={c.FolderManagementModal_TeamName} key={teams.currentTeam?.name}>
           {teams.currentTeam?.name}
         </div>
@@ -151,30 +169,11 @@ const Team = ({ id }) => {
 
       <div className={c.FolderManagementModal_Row}>
         <ul className={c.FolderManagementModal_List} key={teams.currentTeam?.members}>
-          {teams.currentTeam?.members.map(member => {
-            return (
-              <div key={member}>
-                <li className={c.FolderManagementModal_Item} key={member}>
-                  {member}
-                </li>
-              </div>
-              /*<Item
-                                    key={member.id}
-                                    css={`
-                                        margin-top: ${props =>
-                                        props.isFirst ? '0' : '16px'};
-                                    `}
-                                >
-                                    <UserInline user={member} displayEmail>
-                                        <RevokeAccessButton
-                                            targetUserId={member.id}
-                                        >
-                                            <TrashCanIconStyled />
-                                        </RevokeAccessButton>
-                                    </UserInline>
-                                </Item>*/
-            )
-          })}
+          <UserList
+            creator={creator}
+            users={teams.currentTeam?.members}
+            folderId={folderId}
+          />
         </ul>
       </div>
     </>
@@ -218,24 +217,23 @@ const FolderManagementModal = ({ isOpen, folder, afterInvite, onCancel, classNam
       <div
         className={classnames(
           c.FolderManagementModal_Row,
-          c.FolderManagementModal_BottomRow
+          c.FolderManagementModal_BottomRow,
+          c.FolderManagementModal_TeamContainer
         )}
       >
         {folder.team_id ? (
-          <Team key={folder.team_id} id={folder.team_id} />
+          <Team
+            key={folder.team_id}
+            id={folder.team_id}
+            creator={folder.creator}
+            folderId={folder.id}
+          />
         ) : (
-          <div
-            className={c.FolderManagementModal_Row}
-            css={`
-              margin-top: 48px;
-            `}
-          >
-            <UserList
-              creator={folder.creator}
-              users={folder.members}
-              folderId={folder.id}
-            />
-          </div>
+          <UserList
+            creator={folder.creator}
+            users={folder.members}
+            folderId={folder.id}
+          />
         )}
       </div>
     </Modal>

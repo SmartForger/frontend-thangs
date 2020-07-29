@@ -3,17 +3,22 @@ import { ProfilePicture } from './ProfilePicture'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
-    UserContainer: {
+    UserInline: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
     },
-    Info: {
+    UserInline_Info: {
       marginLeft: '1rem',
       flexGrow: 1,
     },
+    UserInline_SmallName: {
+      ...theme.mixins.text.linkText,
+      fontSize: '.75rem',
+    },
+    UserInline_Email: {},
   }
 })
 
@@ -25,14 +30,21 @@ export const UserInline = ({
   children,
 }) => {
   const c = useStyles()
-  const classNames = classnames(className, c.UserContainer)
   return (
-    <div className={classNames}>
-      <ProfilePicture size={size} name={user.fullName} src={user.profile.avatarUrl} />
-      <span className={c.Info}>
-        <div>{user.fullName}</div>
-        {displayEmail && <div>{user.email}</div>}
-      </span>
+    <div className={className}>
+      <div className={c.UserInline}>
+        <ProfilePicture size={size} name={user.fullName} src={user.profile?.avatarUrl} />
+        <span className={c.UserInline_Info}>
+          <div
+            className={classnames({
+              [c.UserInline_SmallName]: displayEmail,
+            })}
+          >
+            {user.fullName}
+          </div>
+          {displayEmail && <div className={c.UserInline_Email}>{user.email}</div>}
+        </span>
+      </div>
       {children}
     </div>
   )

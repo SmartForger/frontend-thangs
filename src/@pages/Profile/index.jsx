@@ -269,7 +269,7 @@ const Page = () => {
         <ProfilePicture
           className={c.Profile_ProfilePicture}
           size='80px'
-          src={user.profile.avatarUrl}
+          src={user.profile?.avatarUrl}
           name={user.fullName}
         />
         <div>

@@ -5,106 +5,102 @@ import { parseModel } from './models'
 import { parseFolder } from './folders'
 
 export const USER_QUERY = gql`
-    query getUser($id: ID) {
-        user(id: $id) {
-            id
-            username
-            email
-            firstName
-            lastName
-            fullName
-            profile {
-                description
-                avatarUrl
-            }
-            models {
-                id
-                name
-                created
-                likesCount
-                commentsCount
-                attachment {
-                    id
-                    imgSrc
-                }
-                uploadStatus
-                uploadedFile
-            }
-            folders {
-                id
-                name
-                models {
-                    id
-                    name
-                    uploadedFile
-                }
-                size
-                members {
-                    id
-                    username
-                }
-            }
-            inviteCode
-            likedModels {
-                id
-                name
-                likesCount
-                commentsCount
-                uploadStatus
-                owner {
-                    id
-                    fullName
-                }
-                attachment {
-                    id
-                    imgSrc
-                }
-                uploadedFile
-            }
-            isBeingFollowedByRequester
+  query getUser($id: ID) {
+    user(id: $id) {
+      id
+      username
+      email
+      firstName
+      lastName
+      fullName
+      profile {
+        description
+        avatarUrl
+      }
+      models {
+        id
+        name
+        created
+        likesCount
+        commentsCount
+        attachment {
+          id
+          imgSrc
         }
+        uploadStatus
+        uploadedFile
+      }
+      folders {
+        id
+        name
+        models {
+          id
+          name
+          uploadedFile
+        }
+        size
+        members {
+          id
+          username
+        }
+      }
+      inviteCode
+      likedModels {
+        id
+        name
+        likesCount
+        commentsCount
+        uploadStatus
+        owner {
+          id
+          fullName
+        }
+        attachment {
+          id
+          imgSrc
+        }
+        uploadedFile
+      }
+      isBeingFollowedByRequester
     }
+  }
 `
 
 const UPDATE_USER_MUTATION = gql`
-    mutation updateUser($updateInput: UpdateUserInput!) {
-        updateUser(input: $updateInput) {
-            user {
-                id
-                firstName
-                lastName
-                fullName
-                profile {
-                    description
-                }
-            }
+  mutation updateUser($updateInput: UpdateUserInput!) {
+    updateUser(input: $updateInput) {
+      user {
+        id
+        firstName
+        lastName
+        fullName
+        profile {
+          description
         }
+      }
     }
+  }
 `
 
 const UPLOAD_USER_PROFILE_AVATAR_MUTATION = gql`
-    mutation uploadUserProfileAvatar($userId: ID, $file: Upload!) {
-        uploadUserProfileAvatar(userId: $userId, file: $file) {
-            user {
-                id
-                profile {
-                    avatarUrl
-                }
-            }
+  mutation uploadUserProfileAvatar($userId: ID, $file: Upload!) {
+    uploadUserProfileAvatar(userId: $userId, file: $file) {
+      user {
+        id
+        profile {
+          avatarUrl
         }
+      }
     }
+  }
 `
 
 const parseUser = user => {
   const avatarUrl =
-        user.profile && user.profile.avatarUrl
-          ? createAppUrl(user.profile.avatarUrl)
-          : ''
+    user.profile && user.profile?.avatarUrl ? createAppUrl(user.profile?.avatarUrl) : ''
   const folders = user.folders ? user.folders.map(parseFolder) : []
   const models = user.models ? user.models.map(parseModel) : []
-  const likedModels = user.likedModels
-    ? user.likedModels.map(parseModel)
-    : []
+  const likedModels = user.likedModels ? user.likedModels.map(parseModel) : []
   return {
     ...user,
     models,
@@ -126,12 +122,9 @@ const parseUserPayload = data => {
 }
 
 const useUserById = id => {
-  const { loading, error, data, startPolling, stopPolling } = useQuery(
-    USER_QUERY,
-    {
-      variables: { id },
-    }
-  )
+  const { loading, error, data, startPolling, stopPolling } = useQuery(USER_QUERY, {
+    variables: { id },
+  })
   const user = parseUserPayload(data)
 
   return { loading, error, user, startPolling, stopPolling }
@@ -161,14 +154,14 @@ const useUploadUserAvatarMutation = (user, croppedImg) => {
 export const useDeleteUserAvatarMutation = user => {
   return useMutation(
     gql`
-            mutation deleteUserProfileAvatar($userId: ID) {
-                deleteUserProfileAvatar(userId: $userId) {
-                    user {
-                        id
-                    }
-                }
-            }
-        `,
+      mutation deleteUserProfileAvatar($userId: ID) {
+        deleteUserProfileAvatar(userId: $userId) {
+          user {
+            id
+          }
+        }
+      }
+    `,
     {
       variables: {
         userId: user.id,
@@ -188,12 +181,12 @@ export const useDeleteUserAvatarMutation = user => {
 export const useFollowUserMutation = user => {
   return useMutation(
     gql`
-            mutation followUser($id: ID!) {
-                followUser(id: $id) {
-                    ok
-                }
-            }
-        `,
+      mutation followUser($id: ID!) {
+        followUser(id: $id) {
+          ok
+        }
+      }
+    `,
     {
       variables: {
         id: user.id,
@@ -213,12 +206,12 @@ export const useFollowUserMutation = user => {
 export const useUnfollowUserMutation = user => {
   return useMutation(
     gql`
-            mutation unfollowUser($id: ID!) {
-                unfollowUser(id: $id) {
-                    ok
-                }
-            }
-        `,
+      mutation unfollowUser($id: ID!) {
+        unfollowUser(id: $id) {
+          ok
+        }
+      }
+    `,
     {
       variables: {
         id: user.id,

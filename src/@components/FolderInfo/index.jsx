@@ -15,6 +15,9 @@ const useStyles = createUseStyles(theme => {
     FolderInfo_Subtext: {
       ...theme.mixins.text.cardSubtext,
       display: 'flex',
+      marginTop: '.25rem',
+      fontSize: '.875rem',
+
       '& > div + div': {
         marginLeft: '.25rem',
       },
@@ -44,10 +47,7 @@ const FolderInfo = ({
       <div className={c.FolderInfo_Row}>
         <FolderIcon className={c.FolderInfo_Icon} />
         <div>
-          <div
-            className={classnames({ [c.FolderInfo_Name__Bold]: boldName })}
-            bold={boldName}
-          >
+          <div className={classnames({ [c.FolderInfo_Name__Bold]: boldName })}>
             {name}
           </div>
           <div className={c.FolderInfo_Subtext}>
@@ -58,7 +58,7 @@ const FolderInfo = ({
               </div>
             )}
             <div>
-              {members.length} Team Member
+              {members.length} Member
               {members.length !== 1 && 's'}
             </div>
           </div>

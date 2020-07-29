@@ -177,7 +177,7 @@ const Search = ({ c }) => {
 const UserPicture = ({ user }) => {
   return (
     <Link to='/home/'>
-      <ProfilePicture name={user.fullName} src={user.profile.avatarUrl} size='3rem' />
+      <ProfilePicture name={user.fullName} src={user.profile?.avatarUrl} size='3rem' />
     </Link>
   )
 }

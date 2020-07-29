@@ -9,7 +9,7 @@ const useStyles = createUseStyles(theme => {
   return {
     Modal: {
       position: 'fixed',
-      padding: '2.5rem 4rem 4rem',
+      padding: '2.25rem 2rem 2rem',
       background: theme.colors.white[400],
       overflow: 'auto',
       borderRadius: '.5rem',

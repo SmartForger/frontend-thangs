@@ -48,14 +48,14 @@ const PictureForm = ({ user, className }) => {
   const onDelete = () => deleteProfileAvatar()
   const deleteText = loading ? 'Deleting...' : 'Delete'
 
-  const currentAvatar = user && user.profile && user.profile.avatarUrl
+  const currentAvatar = user && user.profile && user.profile?.avatarUrl
   return (
     <div className={classnames(className, c.EditProfile_Row)}>
       <ProfilePicture
         className={c.EditProfile_ProfilePicture}
         size='80px'
         name={user.fullName}
-        src={user.profile.avatarUrl}
+        src={user.profile?.avatarUrl}
       />
       <div>
         <div className={classnames(c.EditProfile_Row, c.EditProfile_Row__avatar)}>
@@ -81,7 +81,7 @@ const PictureForm = ({ user, className }) => {
 }
 
 const WarningOnEmptyProfile = ({ user }) => {
-  if (!user.profile.description) {
+  if (!user.profile?.description) {
     return (
       <Flash>
         Add information about yourself below to let others know your specialties,

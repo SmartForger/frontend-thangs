@@ -124,7 +124,7 @@ export const EditProfileForm = ({ user }) => {
         <textarea
           className={c.EditProfileForm_textarea}
           name='description'
-          defaultValue={user.profile.description}
+          defaultValue={user.profile?.description}
           ref={register({ required: true })}
           placeholder='Add a bio...'
           rows={5}
@@ -140,10 +140,10 @@ export const EditProfileForm = ({ user }) => {
           {currentState === 'waiting'
             ? 'Saving...'
             : currentState === 'saved'
-              ? 'Saved!'
-              : currentState === 'error'
-                ? 'Error'
-                : 'Save Changes'}
+            ? 'Saved!'
+            : currentState === 'error'
+            ? 'Error'
+            : 'Save Changes'}
         </Button>
       </div>
     </form>
