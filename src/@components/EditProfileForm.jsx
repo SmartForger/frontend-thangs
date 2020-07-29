@@ -140,10 +140,10 @@ export const EditProfileForm = ({ user }) => {
           {currentState === 'waiting'
             ? 'Saving...'
             : currentState === 'saved'
-            ? 'Saved!'
-            : currentState === 'error'
-            ? 'Error'
-            : 'Save Changes'}
+              ? 'Saved!'
+              : currentState === 'error'
+                ? 'Error'
+                : 'Save Changes'}
         </Button>
       </div>
     </form>

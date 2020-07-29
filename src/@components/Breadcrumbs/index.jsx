@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useDeleteFolder } from '../../@customHooks/Folders'
 import { DropdownMenu, DropdownItem } from '../DropdownMenu'
 import FolderManagementModal from '../FolderManagementModal'
 import { useFlashNotification } from '../Flash'
@@ -12,7 +11,7 @@ import { Spinner } from '../Spinner'
 import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import {useStoreon} from "storeon/react";
+import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -69,7 +68,12 @@ const DeleteMenu = ({ folderId }) => {
 
   const handleDelete = async e => {
     e.preventDefault()
-    dispatch('delete-folder', {folderId: folderId, onFinish: () => {navigateWithFlash('/home', 'Folder deleted')}})
+    dispatch('delete-folder', {
+      folderId: folderId,
+      onFinish: () => {
+        navigateWithFlash('/home', 'Folder deleted')
+      },
+    })
   }
 
   return (

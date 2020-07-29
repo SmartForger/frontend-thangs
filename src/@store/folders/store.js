@@ -120,7 +120,7 @@ export default store => {
     },
   }))
 
-  store.on('create-folder', (state, {data, onFinish}) => {
+  store.on('create-folder', (state, { data, onFinish }) => {
     store.dispatch('folder-saving')
     api({
       method: 'POST',
@@ -130,7 +130,7 @@ export default store => {
       .then(res => {
         if (res.status === 201) {
           store.dispatch('saved-folder-data', res.data)
-          onFinish(res.data);
+          onFinish(res.data)
           store.dispatch('folder-saved')
           store.dispatch('fetch-folders')
         }
@@ -140,18 +140,18 @@ export default store => {
       })
   })
 
-  store.on('delete-folder', async (_state, {folderId, onFinish}) => {
+  store.on('delete-folder', async (_state, { folderId, onFinish }) => {
     store.dispatch('folders-loading')
     await api({
       method: 'DELETE',
       endpoint: `folders/${folderId}`,
     })
-        .then(res => {
-          store.dispatch('folders-loaded')
-          onFinish()
-        })
-        .catch(_error => {
-          store.dispatch('folders-action-error')
-        })
+      .then(_res => {
+        store.dispatch('folders-loaded')
+        onFinish()
+      })
+      .catch(_error => {
+        store.dispatch('folders-action-error')
+      })
   })
 }

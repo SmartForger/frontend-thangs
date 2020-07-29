@@ -12,7 +12,6 @@ import saveTeamLogo from '../../@svg/save-team.svg'
 import saveTeamSuccess from '../../@svg/save-team-success.svg'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { useStoreon } from 'storeon/react'
-import api from '../../@services/api'
 import useFetchOnce from '../../@services/store-service/hooks/useFetchOnce'
 
 const useStyles = createUseStyles(theme => {
@@ -208,8 +207,8 @@ export function CreateFolderForm({
   let saveLogo = teams.isSaved
     ? saveTeamSuccess
     : saveTeamActive
-    ? saveTeamLogo
-    : teamLogo
+      ? saveTeamLogo
+      : teamLogo
   let errors
   let teamNames = []
 
@@ -231,11 +230,11 @@ export function CreateFolderForm({
 
     errors = error
       ? error.details.reduce((previous, currentError) => {
-          return {
-            ...previous,
-            [currentError.path[0]]: currentError,
-          }
-        }, {})
+        return {
+          ...previous,
+          [currentError.path[0]]: currentError,
+        }
+      }, {})
       : {}
 
     onErrorReceived(R.equals(errors, {}) ? undefined : errors)
@@ -270,7 +269,12 @@ export function CreateFolderForm({
         members: data.members,
         team: data.team ? data.team : null,
       }
-      dispatch('create-folder', {data: variables, onFinish: (folder) => {afterCreate(folder)}})
+      dispatch('create-folder', {
+        data: variables,
+        onFinish: folder => {
+          afterCreate(folder)
+        },
+      })
     } catch (error) {
       onErrorReceived({
         server: error,
