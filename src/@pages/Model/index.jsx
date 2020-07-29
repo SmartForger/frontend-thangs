@@ -1,7 +1,7 @@
 import React from 'react'
 import { useHistory, Link, useParams } from 'react-router-dom'
-import * as R from 'ramda'
-import { LikeModelButton } from '@components/LikeModelButton'
+// import * as R from 'ramda'
+// import { LikeModelButton } from '@components/LikeModelButton'
 import CommentsForModel from '@components/CommentsForModel'
 import ModelViewer from '@components/HoopsModelViewer'
 import { ModelViewer as BackupViewer } from '@components/ModelViewer'
@@ -208,7 +208,7 @@ const VersionUpload = ({ modelId }) => {
   )
 }
 
-function Details({ currentUser, model, className }) {
+function Details({ _currentUser, model, className }) {
   const c = useStyles()
   return (
     <div className={className}>
