@@ -32,6 +32,9 @@ const useStyles = createUseStyles(theme => {
     FolderForm_Row: {
       display: 'flex',
     },
+    FolderForm_TeamRow: {
+      alignItems: 'flex-end',
+    },
     FolderForm_ButtonRow: {
       display: 'flex',
       justifyContent: 'flex-end',
@@ -47,6 +50,9 @@ const useStyles = createUseStyles(theme => {
     FolderForm_Label: {
       marginBottom: '.5rem',
     },
+    FolderForm_TeamLabel: {
+      marginTop: '1.5rem',
+    },
     FolderForm_FullWidthInput: {
       border: 0,
       padding: '.5rem 1rem',
@@ -54,6 +60,9 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.5rem',
       minWidth: 0,
       background: theme.colors.white[900],
+    },
+    FolderForm_ControllerInput: {
+      width: '100%',
     },
     FolderForm_ErrorText: {
       ...theme.mixins.text.formErrorText,
@@ -79,6 +88,14 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
+
+      '& input': {
+        border: 0,
+        padding: '.5rem 1rem',
+        borderRadius: '.5rem',
+        minWidth: 0,
+        background: theme.colors.white[900],
+      },
     },
   }
 })
@@ -191,8 +208,8 @@ export function CreateFolderForm({
   let saveLogo = teams.isSaved
     ? saveTeamSuccess
     : saveTeamActive
-      ? saveTeamLogo
-      : teamLogo
+    ? saveTeamLogo
+    : teamLogo
   let errors
   let teamNames = []
 
@@ -214,11 +231,11 @@ export function CreateFolderForm({
 
     errors = error
       ? error.details.reduce((previous, currentError) => {
-        return {
-          ...previous,
-          [currentError.path[0]]: currentError,
-        }
-      }, {})
+          return {
+            ...previous,
+            [currentError.path[0]]: currentError,
+          }
+        }, {})
       : {}
 
     onErrorReceived(R.equals(errors, {}) ? undefined : errors)
@@ -277,7 +294,10 @@ export function CreateFolderForm({
   const addInputGroupField = () => {
     return (
       <>
-        <label className={c.FolderForm_Label} htmlFor='team'>
+        <label
+          className={classnames(c.FolderForm_Label, c.FolderForm_TeamLabel)}
+          htmlFor='team'
+        >
           Team Name
         </label>
         <input className={c.FolderForm_FullWidthInput} name='team' ref={register()} />
@@ -289,7 +309,7 @@ export function CreateFolderForm({
     return (
       <>
         {saveTeamActive ? addInputGroupField() : null}
-        <div className={c.FolderForm_Row}>
+        <div className={classnames(c.FolderForm_Row, c.FolderForm_TeamRow)}>
           <img className={c.FolderForm_SaveLogo} src={saveLogo} />
           {saveTeamActive && !teams.isSaved ? (
             <label className={c.FolderForm_SaveTeamLabel} onClick={() => saveGroup()}>
@@ -336,7 +356,7 @@ export function CreateFolderForm({
     } else {
       initSchema = schemaWithName
     }
-    const _res = triggerValidation()
+    // triggerValidation()
   }
 
   return (
@@ -353,27 +373,21 @@ export function CreateFolderForm({
         Add users or enter an existing team name
       </label>
       <Controller
-        name='members-autocomplete'
-        control={control}
-        onInputChange={event => onAutocompleteChange(event)}
-        onChange={event => onAutocompleteChange(event)}
         as={
           <Autocomplete
+            className={c.FolderForm_Row}
+            options={teamNames}
+            getOptionLabel={team => team}
             freeSolo
             ListboxProps={{
               style: { borderRadius: '3px', background: '#ececec', overflow: 'auto' },
             }}
-            options={teamNames}
             defaultValue=''
-            getOptionLabel={team => team}
             renderInput={teams => (
               <Controller
                 as={
                   <form className={c.FolderForm_PseudoForm} ref={teams.InputProps.ref}>
-                    <input
-                      className={c.FolderForm_FullWidthInput}
-                      {...teams.inputProps}
-                    />
+                    <input {...teams.inputProps} />
                   </form>
                 }
                 name='members'
@@ -382,6 +396,10 @@ export function CreateFolderForm({
             )}
           />
         }
+        name='members-autocomplete'
+        control={control}
+        onInputChange={event => onAutocompleteChange(event)}
+        onChange={event => onAutocompleteChange(event)}
       />
       {addSaveGroupFields()}
       <div className={classnames(c.FolderForm_Row, c.FolderForm_ButtonRow)}>
