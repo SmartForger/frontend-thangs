@@ -12,6 +12,7 @@ import { Spinner } from '../Spinner'
 import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import {useStoreon} from "storeon/react";
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -62,22 +63,21 @@ const useStyles = createUseStyles(theme => {
 })
 
 const DeleteMenu = ({ folderId }) => {
+  const { dispatch, folders } = useStoreon('folders')
   const c = useStyles()
-  const [deleteFolder, { loading, error }] = useDeleteFolder(folderId)
   const { navigateWithFlash } = useFlashNotification()
 
   const handleDelete = async e => {
     e.preventDefault()
-    await deleteFolder()
-    navigateWithFlash('/home', 'Folder deleted')
+    dispatch('delete-folder', {folderId: folderId, onFinish: () => {navigateWithFlash('/home', 'Folder deleted')}})
   }
 
   return (
     <DropdownMenu className={c.Breadcrumbs_DropdownMenu}>
       <DropdownItem to='#' onClick={handleDelete}>
-        {loading ? (
+        {folders.isLoading ? (
           <Spinner className={c.Breadcrumbs_Spinner} />
-        ) : error ? (
+        ) : folders.loadError ? (
           <ErrorIcon className={c.Breadcrumbs_ErrorIcon} />
         ) : (
           <TrashCanIcon />

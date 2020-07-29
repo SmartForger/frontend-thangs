@@ -50,7 +50,7 @@ export default store => {
     },
   }))
 
-  store.on('folders-error', (state, _event) => ({
+  store.on('folders-action-error', (state, _event) => ({
     folders: {
       ...state.folders,
       loadError: true,
@@ -68,7 +68,7 @@ export default store => {
         store.dispatch('update-folders', res.data)
       })
       .catch(_error => {
-        store.dispatch('folders-error')
+        store.dispatch('folders-action-error')
       })
   })
 
@@ -84,7 +84,7 @@ export default store => {
         store.dispatch('update-folder', folder)
       })
       .catch(_error => {
-        store.dispatch('folders-error')
+        store.dispatch('folders-action-error')
       })
   })
 
@@ -120,7 +120,7 @@ export default store => {
     },
   }))
 
-  store.on('create-folder', (state, data) => {
+  store.on('create-folder', (state, {data, onFinish}) => {
     store.dispatch('folder-saving')
     api({
       method: 'POST',
@@ -129,13 +129,29 @@ export default store => {
     })
       .then(res => {
         if (res.status === 201) {
-          store.dispatch('folder-saved')
           store.dispatch('saved-folder-data', res.data)
+          onFinish(res.data);
+          store.dispatch('folder-saved')
           store.dispatch('fetch-folders')
         }
       })
       .catch(_error => {
         store.dispatch('folder-saved-error')
       })
+  })
+
+  store.on('delete-folder', async (_state, {folderId, onFinish}) => {
+    store.dispatch('folders-loading')
+    await api({
+      method: 'DELETE',
+      endpoint: `folders/${folderId}`,
+    })
+        .then(res => {
+          store.dispatch('folders-loaded')
+          onFinish()
+        })
+        .catch(_error => {
+          store.dispatch('folders-action-error')
+        })
   })
 }

@@ -270,15 +270,7 @@ export function CreateFolderForm({
         members: data.members,
         team: data.team ? data.team : null,
       }
-
-      // dispatch('create-folder', variables);
-      const res = await api({
-        method: 'POST',
-        endpoint: 'folders',
-        body: variables,
-      })
-      const folder = res.data
-      afterCreate(folder)
+      dispatch('create-folder', {data: variables, onFinish: (folder) => {afterCreate(folder)}})
     } catch (error) {
       onErrorReceived({
         server: error,
