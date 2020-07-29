@@ -356,7 +356,7 @@ export function CreateFolderForm({
     } else {
       initSchema = schemaWithName
     }
-    triggerValidation()
+    // triggerValidation()
   }
 
   return (
