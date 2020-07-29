@@ -20,11 +20,13 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export function VersionPicture() {
+const VersionPicture = () => {
   const c = useStyles()
   return (
-    <div className={c.VersionPicture_Icon}>
+    <div className={c.VersionPicture}>
       <VersionIcon className={c.VersionPicture_Icon} />
     </div>
   )
 }
+
+export default VersionPicture 
