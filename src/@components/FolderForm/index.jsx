@@ -200,7 +200,7 @@ export function CreateFolderForm({
   onCancel,
   _membersLabel,
 }) {
-  const { dispatch, _folders } = useStoreon('folders')
+  const { dispatch } = useStoreon('folders')
   const { teams } = useFetchOnce('teams')
   const c = useStyles()
   const [saveTeamActive, setSaveTeamActive] = useState(false)
@@ -310,7 +310,7 @@ export function CreateFolderForm({
       <>
         {saveTeamActive ? addInputGroupField() : null}
         <div className={classnames(c.FolderForm_Row, c.FolderForm_TeamRow)}>
-          <img className={c.FolderForm_SaveLogo} src={saveLogo} />
+          <img alt={'Remove User'} className={c.FolderForm_SaveLogo} src={saveLogo} />
           {saveTeamActive && !teams.isSaved ? (
             <label className={c.FolderForm_SaveTeamLabel} onClick={() => saveGroup()}>
               Save Team

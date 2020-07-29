@@ -74,7 +74,7 @@ export default store => {
 
   store.on('fetch-folder', async (state, folderId) => {
     store.dispatch('folders-loading')
-    const _res = await api({
+    await api({
       method: 'GET',
       endpoint: `folders/${folderId}`,
     })
