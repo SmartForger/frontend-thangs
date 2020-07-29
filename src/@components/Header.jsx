@@ -6,6 +6,7 @@ import { useCurrentUser } from '@customHooks/Users'
 import { useUnreadNotificationCount } from '@customHooks/Notifications'
 import { DropdownMenu, DropdownItem } from '@components/DropdownMenu'
 import FolderCreateModal from '@components/FolderCreateModal'
+import TeamCreateModal from '@components/TeamCreateModal'
 import { Button } from '@components/Button'
 import { authenticationService } from '@services'
 import classnames from 'classnames'
@@ -185,11 +186,16 @@ const UserPicture = ({ user }) => {
 const AddModelDropdownMenu = ({ c }) => {
   const { folderId } = useParams()
   const [createFolderIsOpen, setCreateFolderIsOpen] = useState(false)
+  const [createTeamIsOpen, setCreateTeamIsOpen] = useState(false)
   const { navigateWithFlash } = useFlashNotification()
   const setFolderOpen = useCallback(() => {
     setCreateFolderIsOpen(true)
   }, [])
+  const setTeamOpen = useCallback(() => {
+    setCreateTeamIsOpen(true)
+  }, [])
   const setFolderClose = useCallback(() => setCreateFolderIsOpen(false), [])
+  const setTeamClose = useCallback(() => setCreateTeamIsOpen(false), [])
 
   return (
     <>
@@ -213,12 +219,24 @@ const AddModelDropdownMenu = ({ c }) => {
       <FolderCreateModal
         isOpen={createFolderIsOpen}
         onCancel={setFolderClose}
+        onTeamModalOpen={() => {
+          setFolderClose()
+          setTeamOpen()
+        }}
         afterCreate={folder => {
           setFolderClose()
           navigateWithFlash(
             `/folder/${folder.folderId}`,
             'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
           )
+        }}
+      />
+      <TeamCreateModal
+        isOpen={createTeamIsOpen}
+        onCancel={setTeamClose}
+        afterCreate={() => {
+          setTeamClose()
+          setFolderOpen()
         }}
       />
     </>

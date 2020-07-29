@@ -197,6 +197,7 @@ export function CreateFolderForm({
   onErrorReceived,
   afterCreate,
   onCancel,
+  onTeamModelOpen,
   _membersLabel,
 }) {
   const { dispatch } = useStoreon('folders')
@@ -315,9 +316,9 @@ export function CreateFolderForm({
           {!saveTeamActive && !teams.isSaved ? (
             <label
               className={c.FolderForm_SaveTeamLabel}
-              onClick={() => saveGroupActivate()}
+              onClick={() => onTeamModelOpen()}
             >
-              Save Users As Team
+              Create Team
             </label>
           ) : null}
           {saveTeamActive && teams.isSaved ? (

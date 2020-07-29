@@ -3,14 +3,14 @@ import * as R from 'ramda'
 import classnames from 'classnames'
 import { UserInline } from '../UserInline'
 import Modal from '../Modal'
-import { authenticationService } from '../../@services'
+import { authenticationService } from '@services'
 import { Button } from '../Button'
 import { InviteUsersForm, DisplayErrors } from '../FolderForm'
 import FolderInfo from '../FolderInfo'
 import { Spinner } from '../Spinner'
-import { ReactComponent as TrashCanIcon } from '../../@svg/trash-can-icon.svg'
-import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg'
-import { useRevokeAccess } from '../../@customHooks/Folders'
+import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
+import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
+import { useRevokeAccess } from '@customHooks/Folders'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 
@@ -136,6 +136,7 @@ const UserList = ({ users = [], folderId, creator }) => {
             <UserInline
               className={c.FolderManagementModal_UserInline}
               user={groupUser}
+              size={'3rem'}
               displayEmail
             >
               {isOwner && (
@@ -166,7 +167,6 @@ const Team = ({ id, creator, folderId }) => {
           {teams.currentTeam?.name}
         </div>
       </div>
-
       <div className={c.FolderManagementModal_Row}>
         <ul className={c.FolderManagementModal_List} key={teams.currentTeam?.members}>
           <UserList

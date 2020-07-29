@@ -11,6 +11,13 @@ const useStyles = createUseStyles(theme => {
         ...theme.mixins.text.avatarDefaultText,
       },
     },
+    ProfilePicture_alt: {
+      width: '3rem',
+      height: '3rem',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
   }
 })
 
@@ -37,6 +44,6 @@ export function ProfilePicture({
       maxInitials={2}
     />
   ) : (
-    <UserIcon />
+    <UserIcon className={classnames(className, c.ProfilePicture_alt)} />
   )
 }
