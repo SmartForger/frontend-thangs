@@ -338,7 +338,7 @@ export function CreateFolderForm({
 
   const saveGroup = () => {
     initSchema = schemaWithTeamMembers
-    const _res = triggerValidation()
+    triggerValidation()
     if (!(errors.members || errors.team)) {
       const data = {
         team: getValues('team'),
@@ -356,7 +356,7 @@ export function CreateFolderForm({
     } else {
       initSchema = schemaWithName
     }
-    // triggerValidation()
+    triggerValidation()
   }
 
   return (
@@ -386,9 +386,9 @@ export function CreateFolderForm({
             renderInput={teams => (
               <Controller
                 as={
-                  <form className={c.FolderForm_PseudoForm} ref={teams.InputProps.ref}>
+                  <div className={c.FolderForm_PseudoForm} ref={teams.InputProps.ref}>
                     <input {...teams.inputProps} />
-                  </form>
+                  </div>
                 }
                 name='members'
                 control={control}
