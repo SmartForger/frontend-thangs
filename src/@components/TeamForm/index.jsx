@@ -110,25 +110,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-let initSchema = Joi.object({
-  name: Joi.string().required(),
-  members: Joi.array()
-    .items(Joi.string().email({ tlds: { allow: false } }))
-    .min(1)
-    .required(),
-  team: Joi.string().allow(''),
-})
-
-const schemaWithName = Joi.object({
-  name: Joi.string().required(),
-  members: Joi.array()
-    .items(Joi.string().email({ tlds: { allow: false } }))
-    .min(1)
-    .required(),
-  team: Joi.string().allow(''),
-})
-
-const schemaWithTeamMembers = Joi.object({
+const initSchema = Joi.object({
   members: Joi.array()
     .items(Joi.string().email({ tlds: { allow: false } }))
     .min(1)
@@ -138,15 +120,15 @@ const schemaWithTeamMembers = Joi.object({
 
 const parseEmails = R.pipe(
   R.split(/, */),
-  R.filter(user => user.email)
+  R.filter(R.identity)
 )
 
 const isEmptyMembers = ([key, info]) => {
   return key === 'members' && info.type === 'array.min'
 }
 
-const isEmptyName = ([key, info]) => {
-  return key === 'name' && info.type === 'string.empty'
+const isEmptyTeamName = ([key, info]) => {
+  return key === 'team' && info.type === 'string.empty'
 }
 
 const isInvalidEmail = ([key, info]) => {
@@ -162,22 +144,22 @@ export const DisplayErrors = ({ errors, className, serverErrorMsg }) => {
   const messages = R.toPairs(errors)
 
   return messages.map((error, i) => {
-    if (isEmptyMembers(error)) {
+    if (isEmptyTeamName(error)) {
       return (
         <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
-          Please invite at least one other member
+            Please provide a team name for your folder
         </h4>
       )
-    } else if (isInvalidEmail(error)) {
+    }  else if (isInvalidEmail(error)) {
       return (
         <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
           Please check that you have provided valid emails
         </h4>
       )
-    } else if (isEmptyName(error)) {
+    } else if (isEmptyMembers(error)) {
       return (
         <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
-          Please provide a name for your folder
+            Please invite at least one other member
         </h4>
       )
     } else if (isServerError(error)) {
@@ -199,7 +181,7 @@ const UserList = ({ users = [] }) => {
   return (
     <ul className={c.TeamForm_List}>
       {users.map((user, idx) => {
-        const isFirst = idx === 0
+        const _isFirst = idx === 0
         const groupUser = typeof user === 'string' ? { email: user } : user
         const groupUserId = groupUser.id
         const isOwner =
@@ -244,7 +226,7 @@ export function CreateTeamForm({
   const validationResolver = data => {
     const members = data.members ? parseEmails(data.members) : []
     const input = {
-      name: data.name,
+      team: data.team,
       members,
     }
 
@@ -252,11 +234,11 @@ export function CreateTeamForm({
 
     errors = error
       ? error.details.reduce((previous, currentError) => {
-          return {
-            ...previous,
-            [currentError.path[0]]: currentError,
-          }
-        }, {})
+        return {
+          ...previous,
+          [currentError.path[0]]: currentError,
+        }
+      }, {})
       : {}
 
     onErrorReceived(R.equals(errors, {}) ? undefined : errors)
@@ -267,7 +249,7 @@ export function CreateTeamForm({
     }
   }
 
-  const { register, getValues, triggerValidation, reset } = useForm({
+  const { handleSubmit, register, getValues, reset } = useForm({
     validationResolver,
     reValidateMode: 'onSubmit',
   })
@@ -287,22 +269,20 @@ export function CreateTeamForm({
     [getValues, group, reset]
   )
 
-  const handleSave = () => {
-    console.log('in handleSave')
-    initSchema = schemaWithTeamMembers
-    console.log('in handleSave')
-    const _res = triggerValidation()
-    console.log('errors in handleSave', errors)
-    if (!(errors.members || errors.team)) {
-      const data = {
-        team: getValues('team'),
-        members: parseEmails(group),
+  const handleSave = async (data, e) => {
+    e.preventDefault()
+    try {
+      const variables = {
+        team: data.team,
+        members: data.members,
       }
-      console.log('handleSave', data)
-      dispatch('add-team', data)
+      dispatch('add-team', variables)
+      afterCreate()
+    } catch (error) {
+      onErrorReceived({
+        server: error,
+      })
     }
-    initSchema = schemaWithName
-    afterCreate()
   }
 
   const handleCancel = e => {
@@ -311,7 +291,7 @@ export function CreateTeamForm({
   }
 
   return (
-    <form className={c.TeamForm}>
+    <form onSubmit={handleSubmit(handleSave)} className={c.TeamForm}>
       <label className={c.TeamForm_Label} htmlFor='team'>
         Team Name
       </label>
@@ -346,7 +326,7 @@ export function CreateTeamForm({
         >
           Cancel
         </Button>
-        <Button type='button' className={c.TeamForm_SaveButton} onClick={handleSave}>
+        <Button type='submit' className={c.TeamForm_SaveButton}>
           Save
         </Button>
       </div>
