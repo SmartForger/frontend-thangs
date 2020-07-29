@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory, Link, useParams } from 'react-router-dom'
-
+import * as R from 'ramda'
 import { LikeModelButton } from '@components/LikeModelButton'
 import CommentsForModel from '@components/CommentsForModel'
 import ModelViewer from '@components/HoopsModelViewer'
@@ -16,14 +16,15 @@ import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
 
 import { useLocalStorage } from '@customHooks/Storage'
 import { useDownloadModel } from '@customHooks/Models'
-import * as GraphqlService from '@services/graphql-service'
 import { NewThemeLayout } from '@components/Layout'
 
 import { ModelDetails } from '../ModelPreview/ModelDetails'
 import { Message404 } from '../404'
 import { createUseStyles } from '@style'
+import useCollectionFetchOnce from '@services/store-service/hooks/useCollectionFetchOnce'
+import Revised from '@components/Revised'
 
-const graphqlService = GraphqlService.getInstance()
+const snakeToCamel = str => str.replace(/([-_]\w)/g, g => g[1].toUpperCase())
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -207,26 +208,14 @@ const VersionUpload = ({ modelId }) => {
   )
 }
 
-const Revised = () => {
-  const c = useStyles()
-  return (
-    <div className={c.Model_RevisedLabel}>
-      <VersionIcon className={c.Model_VersionIcon} />
-      <div>Revised from</div>
-      <Button text className={c.Model_VersionLinkText}>
-        Geofry Thomas
-      </Button>
-    </div>
-  )
-}
-
 function Details({ currentUser, model, className }) {
   const c = useStyles()
   return (
     <div className={className}>
-      <Revised />
+      {model.previousVersionModelId && <Revised modelId={model.previousVersionModelId} />}
+
       <ModelTitle model={model} />
-      <LikeModelButton currentUser={currentUser} model={model} />
+      {/* <LikeModelButton currentUser={currentUser} model={model} /> */}
       <div className={c.Model_Description}>{model.description}</div>
       <DownloadLink model={model} />
       <ModelDetails model={model} />
@@ -234,9 +223,35 @@ function Details({ currentUser, model, className }) {
   )
 }
 
-const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
+const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   const c = useStyles()
   const history = useHistory()
+  const {
+    atom: { data: modelData, isLoading, isLoaded, isError },
+  } = useCollectionFetchOnce(id, 'model')
+
+  // TMP convert model props names from snake_case to camelCase
+  // waiting for BE changes (29.07.2020)
+  const model = Object.keys(modelData).reduce((acc, item) => {
+    const key = snakeToCamel(item)
+    const value = modelData[item]
+
+    return { [key]: value, ...acc }
+  }, {})
+
+  // TMP convert model props names from snake_case to camelCase
+  // waiting for BE changes (29.07.2020)
+  if (model.uploadedFile && model.uploadedFile.indexOf('/') > -1) {
+    model.uploadedFile = model.uploadedFile.split('/')[2]
+  }
+
+  if (isLoading || !isLoaded) {
+    return <Spinner />
+  } else if (!model) {
+    return <Message404 />
+  } else if (isError) {
+    return <div>Error loading Model</div>
+  }
 
   return (
     <>
@@ -283,20 +298,11 @@ const ModelDetailPage = ({ model, currentUser, showBackupViewer }) => {
 function Page() {
   const { id } = useParams()
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
-
-  const { loading, error, model } = graphqlService.useModelById(id)
   const [currentUser] = useLocalStorage('currentUser', null)
 
-  if (loading) {
-    return <Spinner />
-  } else if (!model) {
-    return <Message404 />
-  } else if (error) {
-    return <div>Error loading Model</div>
-  }
   return (
     <ModelDetailPage
-      model={model}
+      id={id}
       currentUser={currentUser}
       showBackupViewer={showBackupViewer}
     />

@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom'
 import { ProfilePicture } from '@components/ProfilePicture'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import * as GraphqlService from '@services/graphql-service'
+import { Spinner } from './Spinner'
+
+const graphqlService = GraphqlService.getInstance()
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -33,23 +37,30 @@ const useStyles = createUseStyles(theme => {
 
 export const ModelTitle = ({ model, className }) => {
   const c = useStyles()
+  let { loading, error, user } = graphqlService.useUserById(model.ownerId)
+
+  if (loading) {
+    return <Spinner />
+  } else if (error || !user) {
+    return <div>Error loading user</div>
+  }
   return (
     <div className={classnames(className, c.ModelTitle_Container)}>
-      {model.owner && (
-        <Link className={c.ModelTitle_ProfileLink} to={`/profile/${model.owner.id}`}>
+      {user && (
+        <Link className={c.ModelTitle_ProfileLink} to={`/profile/${model.owner_id}`}>
           <ProfilePicture
             className={c.ModelTitle_OwnerProfilePicture}
             size='48px'
-            name={model.owner.fullName}
-            src={model.owner.profile.avatarUrl}
+            name={user.fullName}
+            src={user.profile.avatarUrl}
           />
         </Link>
       )}
       <div className={c.ModelTitle_Content}>
         <div className={c.ModelTitle_Text}>{model.name}</div>
-        {model.owner && (
-          <Link className={c.ModelTitle_ProfileLink} to={`/profile/${model.owner.id}`}>
-            {model.owner.fullName}
+        {user && (
+          <Link className={c.ModelTitle_ProfileLink} to={`/profile/${model.owner_id}`}>
+            {user.fullName}
           </Link>
         )}
       </div>

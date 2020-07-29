@@ -37,6 +37,7 @@ import { createStoreon } from 'storeon'
 import { StoreContext } from 'storeon/react'
 import teamsStore from '@store/teams/store'
 import folderStore from '@store/folders/store'
+import modelsStore from '@store/Models/store'
 import uploadModelStore from '@pages/UploadVersion/store'
 import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
@@ -70,7 +71,7 @@ const App = () => {
   return (
     <ApolloProvider client={client}>
       <StoreContext.Provider
-        value={createStoreon([teamsStore, folderStore, uploadModelStore])}
+        value={createStoreon([teamsStore, folderStore, uploadModelStore, modelsStore])}
       >
         <ErrorBoundary>
           <FlashContextProvider>
