@@ -19,6 +19,9 @@ const useStyles = createUseStyles(theme => {
       listStyleType: 'none',
       margin: 0,
       padding: 0,
+      '& > *': {
+        marginBottom: '2rem'
+      }
     },
     CommentsForModel_ProfilePicture: {
       marginRight: '1rem',
@@ -37,7 +40,7 @@ const useStyles = createUseStyles(theme => {
       ...theme.mixins.text.subheaderText,
     },
     CommentsForModel_CommentBody: {
-      margin: '1rem 3rem 2rem',
+      margin: '0.5rem 3rem 0',
     },
     CommentsForModel_VersionComment: {
       display: 'flex',
