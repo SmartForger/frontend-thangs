@@ -15,7 +15,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-      margin: '.5rem 0',
+      margin: '.5rem 0 2rem',
     },
     ModelTitle_Content: {
       flexDirection: 'column',
@@ -47,7 +47,7 @@ export const ModelTitle = ({ model, className }) => {
   return (
     <div className={classnames(className, c.ModelTitle_Container)}>
       {user && (
-        <Link className={c.ModelTitle_ProfileLink} to={`/profile/${model.owner_id}`}>
+        <Link className={c.ModelTitle_ProfileLink} to={`/profile/${model.ownerId}`}>
           <ProfilePicture
             className={c.ModelTitle_OwnerProfilePicture}
             size='48px'
@@ -59,7 +59,7 @@ export const ModelTitle = ({ model, className }) => {
       <div className={c.ModelTitle_Content}>
         <div className={c.ModelTitle_Text}>{model.name}</div>
         {user && (
-          <Link className={c.ModelTitle_ProfileLink} to={`/profile/${model.owner_id}`}>
+          <Link className={c.ModelTitle_ProfileLink} to={`/profile/${model.ownerId}`}>
             {user.fullName}
           </Link>
         )}

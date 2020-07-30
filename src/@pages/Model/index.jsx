@@ -38,12 +38,9 @@ const useStyles = createUseStyles(theme => {
     Model_Row: {
       display: 'flex',
       flexDirection: 'row',
-      marginBottom: '1.5rem',
-      '&:last-of-type': {
-        marginBottom: 0,
-      },
-      [lg]: {
-        marginBottom: '3rem',
+      marginTop: '1.5rem',
+      '&:first-of-type': {
+        marginTop: 0,
       },
       '& > div': {
         flexGrow: 1,
@@ -124,16 +121,17 @@ const useStyles = createUseStyles(theme => {
       textDecoration: 'none',
     },
     Model_Description: {
-      margin: '2rem 0',
+      marginBottom: '1rem',
     },
     Model_DownloadButton: {
       ...theme.mixins.text.linkText,
       width: '7.75rem',
       textAlign: 'left',
-      marginBottom: '1.5rem',
+      marginBottom: '1rem',
     },
     Model_VersionHeader: {
       ...theme.mixins.text.formCalloutText,
+      marginBottom: '1.5rem',
     },
     Model_VersionLinkText: {
       ...theme.mixins.text.linkText,
@@ -142,7 +140,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       alignItems: 'center',
       marginRight: '3.5rem',
-      marginTop: '1.5rem',
+      marginBottom: '1rem',
       cursor: 'pointer',
 
       '& *:not(:first-child)': {

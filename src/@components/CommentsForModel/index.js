@@ -1,37 +1,19 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { formatDistance } from 'date-fns'
+import { formatDistanceStrict } from 'date-fns'
 import * as GraphqlService from '@services/graphql-service'
 import { Markdown } from '@components'
 import { Spinner } from '@components/Spinner'
-import { ProfilePicture } from '@components/ProfilePicture'
+import { UserInline } from '@components/UserInline'
 import NewModelCommentForm from './NewModelCommentForm'
+import { ReactComponent as VersionIcon } from '@svg/icon_version.svg'
 import { createUseStyles } from '@style'
-import VersionPicture from '@components/VersionPicture'
-
-const getParsedBody = str => {
-  try {
-    const strQuotesReplaces = str.replace(/'/g, '"')
-    return JSON.parse(strQuotesReplaces)
-  } catch (e) {
-    return str
-  }
-}
-
-const renderTypedComment = ({ comment, key }) => {
-  const parsedBody = getParsedBody(comment.body)
-  if (typeof parsedBody === 'object') {
-    return <VersionComment key={key} comment={{ ...comment, body: parsedBody }} />
-  } else {
-    return <Comment key={key} comment={comment} />
-  }
-}
 
 const useStyles = createUseStyles(theme => {
   return {
     CommentsForModel: {
       display: 'flex',
-      marginTop: '2.5rem',
+      flexDirection: 'column',
     },
     CommentsForModel_List: {
       listStyleType: 'none',
@@ -54,35 +36,64 @@ const useStyles = createUseStyles(theme => {
     CommentsForModel_Header: {
       ...theme.mixins.text.subheaderText,
     },
+    CommentsForModel_CommentBody: {
+      margin: '1rem 3rem 2rem',
+    },
+    CommentsForModel_VersionComment: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    CommentsForModel_VersionCommentInfo: {
+      marginLeft: '1rem',
+    },
+    CommentsForModel_VersionCommentOwner: {
+      ...theme.mixins.text.linkText,
+      fontSize: '.75rem',
+    },
+    CommentsForModel_VersionCommentDate: {
+      ...theme.mixins.text.footerText,
+      fontSize: '.75rem',
+    },
   }
 })
 
 const graphqlService = GraphqlService.getInstance()
 
+const getParsedBody = str => {
+  try {
+    const strQuotesReplaces = str.replace(/'/g, '"')
+    return JSON.parse(strQuotesReplaces)
+  } catch (e) {
+    return str
+  }
+}
+
+const renderTypedComment = ({ comment, key }) => {
+  const parsedBody = getParsedBody(comment.body)
+  if (typeof parsedBody === 'object') {
+    return <VersionComment key={key} comment={{ ...comment, body: parsedBody }} />
+  } else {
+    return <Comment key={key} comment={comment} />
+  }
+}
+
 const Comment = ({ comment }) => {
   const c = useStyles()
   const { owner, body, created } = comment
-  const time = formatDistance(new Date(created), new Date())
+  const time = formatDistanceStrict(new Date(created), new Date())
 
   return (
     <li className={c.CommentsForModel}>
       <Link to={`/profile/${owner.id}`}>
-        <ProfilePicture
-          className={c.CommentsForModel_ProfilePicture}
-          size='48px'
-          name={owner.fullName}
-          src={owner.profile.avatarUrl}
+        <UserInline
+          className={c.CommentsForModel_UserInline}
+          user={owner}
+          size={'3rem'}
+          suffix={`${time} ago`}
         />
       </Link>
-      <div className={c.CommentsForModel_FlexGrow}>
-        <div>
-          <div>
-            <div className={c.CommentsForModel_Name}>{owner.fullName}</div>
-            <div className={c.CommentsForModel_TimeAgo}>Posted {time} ago</div>
-            <Markdown>{body}</Markdown>
-          </div>
-        </div>
-      </div>
+      <Markdown className={c.CommentsForModel_CommentBody}>{body}</Markdown>
     </li>
   )
 }
@@ -94,7 +105,7 @@ const VersionComment = ({ comment }) => {
     body: { nextVersionId, name = '' },
     created,
   } = comment
-  const time = formatDistance(new Date(created), new Date())
+  const time = formatDistanceStrict(new Date(created), new Date())
 
   if (!nextVersionId) {
     return <></>
@@ -102,16 +113,19 @@ const VersionComment = ({ comment }) => {
 
   return (
     <li className={c.CommentsForModel}>
-      <Link to={`/model/${nextVersionId}`}>
-        <VersionPicture />
-      </Link>
-      <div className={c.CommentsForModel_FlexGrow}>
-        <div>
+      <div className={c.CommentsForModel_VersionComment}>
+        <VersionIcon />
+        <div className={c.CommentsForModel_VersionCommentInfo}>
           <div>
-            <Markdown>{`${name} uploaded`}</Markdown>
-            <div className={c.CommentsForModel_TimeAgo}>
-              {owner.fullName} / {time}
-            </div>
+            {`Version of ${name} `}
+            <Link to={`/model/${nextVersionId}`}>#{nextVersionId}</Link>
+            {' uploaded'}
+          </div>
+          <div className={c.CommentsForModel_VersionCommentOwner}>
+            {owner.fullName}
+            <span
+              className={c.CommentsForModel_VersionCommentDate}
+            >{` ${time} ago`}</span>
           </div>
         </div>
       </div>
@@ -137,10 +151,10 @@ const CommentsForModel = ({ model, className }) => {
 
   return (
     <div className={className}>
+      <NewModelCommentForm modelId={model.id} />
       <ul className={c.CommentsForModel_List}>
         {comments.map((comment, i) => renderTypedComment({ comment, key: i }))}
       </ul>
-      <NewModelCommentForm modelId={model.id} />
     </div>
   )
 }

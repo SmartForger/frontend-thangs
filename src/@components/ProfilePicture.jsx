@@ -26,7 +26,7 @@ export function ProfilePicture({
   color = DEFAULT_AVATAR_COLOR,
 }) {
   const c = useStyles()
-  return src ? (
+  return src || name ? (
     <Avatar
       name={name}
       src={src}

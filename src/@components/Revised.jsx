@@ -21,7 +21,7 @@ const useStyles = createUseStyles(theme => {
     },
     Revised_Label: {
       display: 'flex',
-      marginBottom: '1.5rem',
+      marginBottom: '2rem',
       alignItems: 'center',
 
       '& *:not(:first-child)': {
@@ -40,7 +40,7 @@ const Revised = ({ modelId }) => {
   const { atom: model } = useCollectionFetchOnce(modelId, 'model')
 
   const { loading: userLoading, user } = graphqlService.useUserById(
-    R.path([ 'data', 'owner_id'], model)
+    R.path(['data', 'ownerId'], model)
   )
 
   if (userLoading || model.isLoading) {

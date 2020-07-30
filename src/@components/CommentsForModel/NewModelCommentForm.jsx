@@ -9,6 +9,7 @@ const useStyles = createUseStyles(theme => {
   return {
     NewModalCommentForm: {
       display: 'flex',
+      marginBottom: '2.5rem',
     },
     NewModalCommentForm_Header: {
       ...theme.mixins.text.formCalloutText,

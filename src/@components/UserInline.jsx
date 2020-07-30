@@ -18,7 +18,10 @@ const useStyles = createUseStyles(theme => {
       ...theme.mixins.text.linkText,
       fontSize: '.75rem',
     },
-    UserInline_Email: {},
+    UserInline_Suffix: {
+      ...theme.mixins.text.footerText,
+      fontSize: '.75rem',
+    },
   }
 })
 
@@ -28,6 +31,7 @@ export const UserInline = ({
   displayEmail,
   size = '1.5rem',
   children,
+  suffix,
 }) => {
   const c = useStyles()
   return (
@@ -42,6 +46,7 @@ export const UserInline = ({
           >
             {user.fullName}
           </div>
+          {suffix && <span className={c.UserInline_Suffix}>{suffix}</span>}
           {displayEmail && <div className={c.UserInline_Email}>{user.email}</div>}
         </span>
       </div>
