@@ -64,6 +64,8 @@ export function AppFrame() {
   )
 }
 
+const store = createStoreon([teamsStore, folderStore, uploadModelStore, modelsStore])
+
 const App = () => {
   const location = useLocation()
   initializeAnalytics(history)
@@ -71,7 +73,7 @@ const App = () => {
   return (
     <ApolloProvider client={client}>
       <StoreContext.Provider
-        value={createStoreon([teamsStore, folderStore, uploadModelStore, modelsStore])}
+        value={store}
       >
         <ErrorBoundary>
           <FlashContextProvider>
