@@ -6,13 +6,13 @@ import { NewThemeLayout } from '@components/Layout'
 import { Uploader, UPLOAD_MODES } from '@components/Uploader'
 import { Button } from '@components/Button'
 import { useFlashNotification } from '@components/Flash'
-import * as GraphqlService from '@services/graphql-service'
 import { Spinner } from '@components/Spinner'
 import { UploadFrame } from '@components/UploadFrame'
 import { ProgressText } from '@components/ProgressText'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { ModelTitle } from '@components/ModelTitle'
+import useCollectionFetchOnce from '@services/store-service/hooks/useCollectionFetchOnce'
 import { Message404 } from '../404'
 import { useStoreon } from 'storeon/react'
 
@@ -92,8 +92,6 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const graphqlService = GraphqlService.getInstance()
-
 const sanitizeFileName = name => name.replace(/ /g, '_')
 
 const CATEGORIES = [
@@ -122,9 +120,9 @@ const Page = () => {
   const { navigateWithFlash } = useFlashNotification()
   const c = useStyles()
 
-  const { loading: modelLoading, error: modelError, model } = graphqlService.useModelById(
-    parentModelId
-  )
+  const {
+    atom: { data: model, isLoading: modelLoading, isError: modelError },
+  } = useCollectionFetchOnce(parentModelId, 'model')
 
   const { uploadModel, dispatch } = useStoreon('uploadModel')
 
@@ -185,7 +183,7 @@ const Page = () => {
 
   return (
     <div>
-      <h1 className={c.UploadVersion_Header}>Upload Model</h1>
+      <h1 className={c.UploadVersion_Header}>Upload New Version</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={c.UploadVersion_Row}>
           <div className={c.UploadVersion_Column__frame}>
