@@ -2,6 +2,7 @@ import React from 'react'
 import ModelCard from '../ModelCard'
 import FolderCard from '../FolderCard'
 import { NoResults } from '../NoResults'
+import Skeleton from '@material-ui/lab/Skeleton'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -16,6 +17,13 @@ const useStyles = createUseStyles(_theme => {
     CardCollection__singleRow: {
       gridTemplateColumns: 'repeat(auto-fill, 21.5rem)',
     },
+    ModelCard_Skeleton: {
+      paddingBottom: 0,
+      minHeight: '16.375rem',
+      margin: 'auto',
+      width: '100%',
+      borderRadius: '.5rem',
+    },
   }
 })
 
@@ -28,12 +36,35 @@ const nothingToDisplay = ({ models, folders }) => {
   return true
 }
 
-const CardCollection = ({ models = [], maxPerRow = 4, noResultsText, folders = [] }) => {
+const CardCollection = ({
+  models = [],
+  maxPerRow = 4,
+  noResultsText,
+  folders = [],
+  loading = false,
+}) => {
   const c = useStyles()
+
+  if (loading) {
+    return (
+      <div className={c.CardCollection}>
+        {[...Array(12).keys()].map((model, index) => (
+          <Skeleton
+            variant='rect'
+            className={c.ModelCard_Skeleton}
+            key={`skeletonCard:${index}`}
+          />
+        ))}
+      </div>
+    )
+  }
+
   if (nothingToDisplay({ models, folders })) {
     return <NoResults>{noResultsText}</NoResults>
   }
+
   const singleRow = models.length + folders.length < maxPerRow
+
   return (
     <div
       className={classnames(c.CardCollection, {
