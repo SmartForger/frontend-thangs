@@ -18,6 +18,9 @@ const useStyles = createUseStyles(theme => {
       left: '50%',
       transform: 'translate(-50%, -50%)',
       boxShadow: theme.variables.boxShadow,
+      width: '40vw',
+      minWidth: '19rem',
+      maxWidth: '38.75rem',
     },
   }
 })

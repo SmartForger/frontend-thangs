@@ -69,7 +69,7 @@ export const WithIconsUncontrolled = () => {
         </DropdownItem>
         <DropdownItem to='/'>
           <NewFolderIcon />
-          <span>Add Folder</span>
+          <span>Create Folder</span>
         </DropdownItem>
       </DropdownMenu>
     </div>
@@ -95,7 +95,7 @@ export const WithIconsControlledOpen = () => {
         </DropdownItem>
         <DropdownItem to='/'>
           <NewFolderIcon />
-          <span>Add Folder</span>
+          <span>Create Folder</span>
         </DropdownItem>
       </DropdownMenu>
     </div>

@@ -187,6 +187,7 @@ const AddModelDropdownMenu = ({ c }) => {
   const { folderId } = useParams()
   const [createFolderIsOpen, setCreateFolderIsOpen] = useState(false)
   const [createTeamIsOpen, setCreateTeamIsOpen] = useState(false)
+  const [newTeam, setNewTeam] = useState(null)
   const { navigateWithFlash } = useFlashNotification()
   const setFolderOpen = useCallback(() => {
     setCreateFolderIsOpen(true)
@@ -213,32 +214,41 @@ const AddModelDropdownMenu = ({ c }) => {
         </DropdownItem>
         <DropdownItem to='/' onClick={setFolderOpen}>
           <NewFolderIcon />
-          Add Folder
+          Create Folder
         </DropdownItem>
       </DropdownMenu>
-      <FolderCreateModal
-        isOpen={createFolderIsOpen}
-        onCancel={setFolderClose}
-        onTeamModalOpen={() => {
-          setFolderClose()
-          setTeamOpen()
-        }}
-        afterCreate={folder => {
-          setFolderClose()
-          navigateWithFlash(
-            `/folder/${folder.folderId}`,
-            'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
-          )
-        }}
-      />
-      <TeamCreateModal
-        isOpen={createTeamIsOpen}
-        onCancel={setTeamClose}
-        afterCreate={() => {
-          setTeamClose()
-          setFolderOpen()
-        }}
-      />
+      {createFolderIsOpen && (
+        <FolderCreateModal
+          isOpen={createFolderIsOpen}
+          onCancel={setFolderClose}
+          onTeamModalOpen={() => {
+            setFolderClose()
+            setTeamOpen()
+          }}
+          afterCreate={folder => {
+            setFolderClose()
+            navigateWithFlash(
+              `/folder/${folder.folderId}`,
+              'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
+            )
+          }}
+          newTeamName={newTeam}
+        />
+      )}
+      {createTeamIsOpen && (
+        <TeamCreateModal
+          isOpen={createTeamIsOpen}
+          onCancel={() => {
+            setTeamClose()
+            setFolderOpen()
+          }}
+          afterCreate={newTeamName => {
+            setTeamClose()
+            setNewTeam(newTeamName)
+            setFolderOpen()
+          }}
+        />
+      )}
     </>
   )
 }

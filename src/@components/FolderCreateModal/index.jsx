@@ -1,9 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import Modal from '../Modal'
-import { UserInline } from '../UserInline'
 import { CreateFolderForm, DisplayErrors } from '../FolderForm'
 import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg'
-import { useCurrentUser } from '@customHooks/Users'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -36,9 +34,14 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const FolderCreateModal = ({ isOpen, onCancel, afterCreate, onTeamModalOpen }) => {
+const FolderCreateModal = ({
+  isOpen,
+  onCancel,
+  afterCreate,
+  onTeamModalOpen,
+  newTeamName,
+}) => {
   const c = useStyles()
-  const { user } = useCurrentUser()
   const [errors, setErrors] = useState()
   const handleOnCancel = useCallback(() => {
     setErrors(null)
@@ -50,9 +53,9 @@ const FolderCreateModal = ({ isOpen, onCancel, afterCreate, onTeamModalOpen }) =
   return (
     <Modal isOpen={isOpen}>
       <NewFolderIcon className={c.FolderCreateModal_NewFolderIcon} />
-      <h2 className={c.FolderCreateModal_Header}>Add Folder</h2>
+      <h2 className={c.FolderCreateModal_Header}>Create Folder</h2>
       <div className={c.FolderCreateModal_Text}>
-        Create a team and share models with other teammates privately for collaboration.
+        Create a folder to share models and collaborate with your teammates privately.
       </div>
       <DisplayErrors
         errors={errors}
@@ -69,15 +72,10 @@ const FolderCreateModal = ({ isOpen, onCancel, afterCreate, onTeamModalOpen }) =
           afterCreate={afterCreate}
           onCancel={handleOnCancel}
           onTeamModelOpen={handleOnTeamModelOpen}
+          defaultTeam={newTeamName}
           includeNameField
         />
       </div>
-      <UserInline
-        className={c.FolderCreateModal_UserInline}
-        user={user}
-        size={'3rem'}
-        displayEmail
-      />
     </Modal>
   )
 }

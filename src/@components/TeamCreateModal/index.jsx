@@ -44,16 +44,19 @@ const TeamCreateModal = ({ isOpen, onCancel, afterCreate, onTeamModalOpen }) => 
   const handleOnTeamModelOpen = useCallback(() => {
     onTeamModalOpen()
   }, [onTeamModalOpen])
-  const handleAfterCreate = useCallback(() => {
-    setErrors(null)
-    afterCreate()
-  }, [afterCreate])
+  const handleAfterCreate = useCallback(
+    newTeamName => {
+      setErrors(null)
+      afterCreate(newTeamName)
+    },
+    [afterCreate]
+  )
   return (
     <Modal isOpen={isOpen}>
       <NewFolderIcon className={c.TeamCreateModal_NewFolderIcon} />
-      <h2 className={c.TeamCreateModal_Header}>Add Team</h2>
+      <h2 className={c.TeamCreateModal_Header}>Create Team</h2>
       <div className={c.TeamCreateModal_Text}>
-        Create a team and share models with other teammates privately for collaboration.
+        Create a team for your new shared folder.
       </div>
       <DisplayErrors
         errors={errors}

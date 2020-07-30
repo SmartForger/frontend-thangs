@@ -15,16 +15,8 @@ import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
-  const {
-    mediaQueries: { md },
-  } = theme
   return {
-    FolderManagementModal: {
-      width: '100%',
-      [md]: {
-        maxWidth: '31.25rem',
-      },
-    },
+    FolderManagementModal: {},
     FolderManagementModal_Spinner: {
       width: '1rem',
       height: '1rem',

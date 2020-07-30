@@ -2,17 +2,12 @@ import React from 'react'
 
 import * as GraphqlService from '@services/graphql-service'
 import { NewInvertedHeaderLayout } from '@components/Layout'
-import { Spinner } from '@components/Spinner'
 import CardCollection from '@components/CardCollection'
 
 const graphqlService = GraphqlService.getInstance()
 
 function Page() {
   const { error, loading, models } = graphqlService.useModelsByLikes()
-
-  if (loading) {
-    return <Spinner />
-  }
 
   if (error) {
     return (
@@ -26,6 +21,7 @@ function Page() {
     <CardCollection
       models={models}
       noResultsText='We have no models to display right now. Please try again later.'
+      loading={loading}
     />
   )
 }

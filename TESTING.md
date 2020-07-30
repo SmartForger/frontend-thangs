@@ -205,7 +205,7 @@ For testing notifications, you will need to have access to the platform with two
 users, which we'll refer to as `User One` and `User Two`.
 
 ### Creating a folder
-- As `User One`, click on `Add Folder` from the top bar menu
+- As `User One`, click on `Create Folder` from the top bar menu
 - Give the folder a name and provide the email for `User Two` to invite them
 - As `User Two`, you should now be able to navigate to the url of that folder
 - As `User Two`, click on your notification bell in the top bar

@@ -40,6 +40,10 @@ const globals = theme => {
       '.ReactModal__Overlay': {
         zIndex: 2,
       },
+
+      '.ReactModal__Body--open': {
+        overflow: 'hidden',
+      },
     },
   }
 }
