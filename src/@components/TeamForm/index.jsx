@@ -10,6 +10,7 @@ import classnames from 'classnames'
 import { useCurrentUser } from '@customHooks/Users'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
+import useFetchOnce from '@services/store-service/hooks/useFetchOnce'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -96,9 +97,7 @@ const useStyles = createUseStyles(theme => {
     },
     TeamForm_MemberRow: {
       display: 'flex',
-    },
-    TeamForm_Autocomplete: {
-      width: '100%',
+      marginBottom: '1.5rem',
     },
     TeamForm_MemberInput: {
       marginBottom: 0,
@@ -118,10 +117,7 @@ const initSchema = Joi.object({
   team: Joi.string().required(),
 })
 
-const parseEmails = R.pipe(
-  R.split(/, */),
-  R.filter(R.identity)
-)
+const parseEmails = R.pipe(R.split(/, */), R.filter(R.identity))
 
 const isEmptyMembers = ([key, info]) => {
   return key === 'members' && info.type === 'array.min'
@@ -147,10 +143,10 @@ export const DisplayErrors = ({ errors, className, serverErrorMsg }) => {
     if (isEmptyTeamName(error)) {
       return (
         <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
-            Please provide a team name for your folder
+          Please provide a team name for your folder
         </h4>
       )
-    }  else if (isInvalidEmail(error)) {
+    } else if (isInvalidEmail(error)) {
       return (
         <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
           Please check that you have provided valid emails
@@ -159,7 +155,7 @@ export const DisplayErrors = ({ errors, className, serverErrorMsg }) => {
     } else if (isEmptyMembers(error)) {
       return (
         <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
-            Please invite at least one other member
+          Please invite at least one other member
         </h4>
       )
     } else if (isServerError(error)) {
@@ -173,15 +169,14 @@ export const DisplayErrors = ({ errors, className, serverErrorMsg }) => {
     }
   })
 }
-
-const UserList = ({ users = [] }) => {
+const noop = () => null
+const UserList = ({ users = [], removeUser = noop }) => {
   const c = useStyles({})
   const currentUserId = authenticationService.getCurrentUserId()
 
   return (
-    <ul className={c.TeamForm_List}>
+    <ul>
       {users.map((user, idx) => {
-        const _isFirst = idx === 0
         const groupUser = typeof user === 'string' ? { email: user } : user
         const groupUserId = groupUser.id
         const isOwner =
@@ -191,16 +186,11 @@ const UserList = ({ users = [] }) => {
           groupUser.fullName = `${groupUser.first_name} ${groupUser.last_name}`
 
         return (
-          <li className={classnames(c.TeamForm_Item)} key={idx}>
-            <UserInline
-              className={c.TeamForm_UserInline}
-              user={groupUser}
-              size={'3rem'}
-              displayEmail
-            >
+          <li className={c.TeamForm_Item} key={idx}>
+            <UserInline user={groupUser} size={'3rem'} displayEmail>
               {isOwner && (
-                <Button text onClick={console.log('Remove User')}>
-                  <TrashCanIcon className={c.TeamForm_TrashCanIcon} />
+                <Button text onClick={() => removeUser(groupUser)}>
+                  <TrashCanIcon />
                 </Button>
               )}
             </UserInline>
@@ -217,14 +207,17 @@ export function CreateTeamForm({
   onCancel,
   _membersLabel,
 }) {
-  const { dispatch, _folders } = useStoreon('folders')
-  const { user } = useCurrentUser()
-  const [group, setGroup] = useState([user])
+  const { dispatch } = useStoreon('folders')
+  const { user: currentUser } = useCurrentUser()
+  const [group, setGroup] = useState([])
+  const { teams = {} } = useFetchOnce('teams')
+  const { data: teamsData = [] } = teams
+  const teamNames = teamsData.map(team => team.name)
   const c = useStyles()
   let errors
 
   const validationResolver = data => {
-    const members = data.members ? parseEmails(data.members) : []
+    const members = group
     const input = {
       team: data.team,
       members,
@@ -254,36 +247,47 @@ export function CreateTeamForm({
     reValidateMode: 'onSubmit',
   })
 
-  const addGroup = useCallback(
+  const handleAdd = useCallback(
     e => {
       e.preventDefault()
-      debugger
       if (
         getValues('members') &&
-        !group.some(user => R.equals(user, getValues('members')))
+        !group.some(userToAdd => R.equals(userToAdd, getValues('members'))) &&
+        !group.some(userToAdd => {
+          return R.equals(userToAdd, currentUser.email)
+        })
       ) {
-        setGroup([...group, getValues('members')])
+        setGroup([...group, ...parseEmails(getValues('members'))])
       }
-      reset()
+      reset({ ...getValues(), members: '' })
     },
-    [getValues, group, reset]
+    [getValues, group, reset, currentUser]
   )
 
-  const handleSave = async (data, e) => {
+  const handleSave = async ({ team, members }, e) => {
     e.preventDefault()
     try {
       const variables = {
-        team: data.team,
-        members: data.members,
+        team,
+        members,
       }
       dispatch('add-team', variables)
-      afterCreate()
+      afterCreate(team)
     } catch (error) {
       onErrorReceived({
         server: error,
       })
     }
   }
+
+  const handleRemove = useCallback(
+    userToRemove => {
+      let newGroup = group
+      newGroup = newGroup.filter(user => user.email !== userToRemove.email)
+      setGroup(newGroup)
+    },
+    [group]
+  )
 
   const handleCancel = e => {
     e.preventDefault()
@@ -301,7 +305,7 @@ export function CreateTeamForm({
         ref={register({ required: true })}
       />
       <label className={c.TeamForm_Label} htmlFor='members'>
-        Add Users by Email or Username
+        Add users by email
       </label>
       <div className={c.TeamForm_MemberRow}>
         <input
@@ -312,11 +316,12 @@ export function CreateTeamForm({
         <Button
           type='button'
           className={classnames(c.TeamForm_SaveButton, c.TeamForm_AddButton)}
-          onClick={addGroup}
+          onClick={handleAdd}
         >
           Add
         </Button>
       </div>
+      <UserList users={[currentUser, ...group]} removeUser={handleRemove} />
       <div className={classnames(c.TeamForm_Row, c.TeamForm_ButtonRow)}>
         <Button
           dark
@@ -324,13 +329,12 @@ export function CreateTeamForm({
           onClick={handleCancel}
           type='button'
         >
-          Cancel
+          Back
         </Button>
         <Button type='submit' className={c.TeamForm_SaveButton}>
-          Save
+          Save & Create Folder
         </Button>
       </div>
-      <UserList users={group} />
     </form>
   )
 }
