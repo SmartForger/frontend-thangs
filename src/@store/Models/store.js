@@ -37,6 +37,6 @@ export default store => {
   store.on('fetch-model', async (state, { id }) => {
     store.dispatch('loading-model', { id })
     const { data } = await api({ method: 'GET', endpoint: `models/${id}` })
-    store.dispatch('loaded-model', { id, data: data.model })
+    store.dispatch('loaded-model', { id, data })
   })
 }

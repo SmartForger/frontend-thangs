@@ -24,8 +24,6 @@ import { createUseStyles } from '@style'
 import useCollectionFetchOnce from '@services/store-service/hooks/useCollectionFetchOnce'
 import Revised from '@components/Revised'
 
-const snakeToCamel = str => str.replace(/([-_]\w)/g, g => g[1].toUpperCase())
-
 const useStyles = createUseStyles(theme => {
   const {
     mediaQueries: { sm, md, lg, xl },
@@ -230,24 +228,9 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
     atom: { data: modelData, isLoading, isLoaded, isError },
   } = useCollectionFetchOnce(id, 'model')
 
-  // TMP convert model props names from snake_case to camelCase
-  // waiting for BE changes (29.07.2020)
-  const model = Object.keys(modelData).reduce((acc, item) => {
-    const key = snakeToCamel(item)
-    const value = modelData[item]
-
-    return { [key]: value, ...acc }
-  }, {})
-
-  // TMP convert model props names from snake_case to camelCase
-  // waiting for BE changes (29.07.2020)
-  if (model.uploadedFile && model.uploadedFile.indexOf('/') > -1) {
-    model.uploadedFile = model.uploadedFile.split('/')[2]
-  }
-
   if (isLoading || !isLoaded) {
     return <Spinner />
-  } else if (!model) {
+  } else if (!modelData) {
     return <Message404 />
   } else if (isError) {
     return <div>Error loading Model</div>
@@ -264,30 +247,30 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
         <div className={c.Model_Column}>
           <div className={c.Model_Row}>
             {showBackupViewer ? (
-              <BackupViewer className={c.Model_BackupViewer} model={model} />
+              <BackupViewer className={c.Model_BackupViewer} model={modelData} />
             ) : (
-              <ModelViewer className={c.Model_ModelViewer} model={model} />
+              <ModelViewer className={c.Model_ModelViewer} model={modelData} />
             )}
           </div>
           <div className={c.Model_Row__mobile}>
-            <Details currentUser={currentUser} model={model} />
+            <Details currentUser={currentUser} model={modelData} />
           </div>
           <div className={c.Model_Row}>
-            <RelatedModels modelId={model.id} />
+            <RelatedModels modelId={modelData.id} />
           </div>
           <div className={c.Model_Row__mobile}>
-            <CommentsForModel model={model} />
+            <CommentsForModel model={modelData} />
           </div>
         </div>
         <div className={c.Model_Column__desktop}>
           <div className={c.Model_Row}>
-            <Details currentUser={currentUser} model={model} />
+            <Details currentUser={currentUser} model={modelData} />
           </div>
           <div className={c.Model_Row}>
-            <VersionUpload modelId={model.id} />
+            <VersionUpload modelId={modelData.id} />
           </div>
           <div className={c.Model_Row}>
-            <CommentsForModel model={model} />
+            <CommentsForModel model={modelData} />
           </div>
         </div>
       </div>
