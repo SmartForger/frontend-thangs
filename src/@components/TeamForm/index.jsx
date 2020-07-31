@@ -220,7 +220,7 @@ export function CreateTeamForm({
 
   useEffect(() => {
     if (saveError) onErrorReceived({ server: 'Error' })
-  }, [saveError])
+  }, [saveError, onErrorReceived])
 
   const initSchema = Joi.object({
     members: Joi.array()

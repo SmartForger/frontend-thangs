@@ -224,7 +224,7 @@ export function CreateFolderForm({
     }
   }
 
-  const { register, handleSubmit, getValues, control, setValue, reset } = useForm({
+  const { register, handleSubmit, control } = useForm({
     validationResolver,
     reValidateMode: 'onSubmit',
   })

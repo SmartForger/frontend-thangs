@@ -7,7 +7,7 @@ import { useUnreadNotificationCount } from '@customHooks/Notifications'
 import { DropdownMenu, DropdownItem } from '@components/DropdownMenu'
 import FolderCreateModal from '@components/FolderCreateModal'
 import TeamCreateModal from '@components/TeamCreateModal'
-import { Button } from '@components/Button'
+// import { Button } from '@components/Button'
 import { authenticationService } from '@services'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -146,13 +146,13 @@ const useStyles = createUseStyles(theme => {
 
 const NOTIFICATIONS_URL = '/notifications'
 
-const SignUp = ({ c }) => {
-  return (
-    <Link to='/signup/alpha'>
-      <Button className={c.Header_SignUpButton}>Sign up</Button>
-    </Link>
-  )
-}
+// const SignUp = ({ c }) => {
+//   return (
+//     <Link to='/signup/alpha'>
+//       <Button className={c.Header_SignUpButton}>Sign up</Button>
+//     </Link>
+//   )
+// }
 
 const NotificationsButton = ({ c }) => {
   const { unreadNotificationCount } = useUnreadNotificationCount()
