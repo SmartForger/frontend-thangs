@@ -1,5 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import React, { useCallback, useMemo } from 'react'
 import Joi from '@hapi/joi'
 import * as R from 'ramda'
 import { Button } from '@components/Button'
@@ -8,6 +7,7 @@ import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { authenticationService } from '@services'
 import classnames from 'classnames'
 import { useCurrentUser } from '@customHooks/Users'
+import { useSimpleForm } from '@customHooks'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import useFetchOnce from '@services/store-service/hooks/useFetchOnce'
@@ -112,19 +112,27 @@ const useStyles = createUseStyles(theme => {
 const parseEmails = R.pipe(R.split(/, */), R.filter(R.identity))
 
 const isEmptyMembers = ([key, info]) => {
-  return key === 'members' && info.type === 'array.min'
+  return key === 'teamMembers' && info.type === 'array.min'
+}
+
+const isEmptyTeam = ([key, info]) => {
+  return key === 'emails' && info.type === 'array.min'
 }
 
 const isEmptyTeamName = ([key, info]) => {
-  return key === 'team' && info.type === 'string.empty'
+  return key === 'teamName' && info.type === 'string.empty'
 }
 
 const isInvalidEmail = ([key, info]) => {
-  return key === 'members' && info.type === 'string.email'
+  return key === 'emails' && info.type === 'string.email'
 }
 
 const isDuplicateTeamName = ([key, info]) => {
-  return key === 'team' && info.type === 'any.invalid'
+  return key === 'teamName' && info.type === 'any.invalid'
+}
+
+const isExistingMember = ([key, info]) => {
+  return key === 'teamMembers' && info.type === 'exists'
 }
 
 const isServerError = ([key, _info]) => {
@@ -148,7 +156,7 @@ export const DisplayErrors = ({ errors, className, serverErrorMsg }) => {
           Please check that you have provided valid emails
         </h4>
       )
-    } else if (isEmptyMembers(error)) {
+    } else if (isEmptyMembers(error) || isEmptyTeam(error)) {
       return (
         <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
           Please invite at least one other member
@@ -158,6 +166,12 @@ export const DisplayErrors = ({ errors, className, serverErrorMsg }) => {
       return (
         <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
           Team name already exists. Please try another
+        </h4>
+      )
+    } else if (isExistingMember) {
+      return (
+        <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
+          Team member already added. Please try another email
         </h4>
       )
     } else if (isServerError(error)) {
@@ -171,6 +185,7 @@ export const DisplayErrors = ({ errors, className, serverErrorMsg }) => {
     }
   })
 }
+
 const noop = () => null
 const UserList = ({ users = [], removeUser = noop }) => {
   const c = useStyles({})
@@ -179,19 +194,18 @@ const UserList = ({ users = [], removeUser = noop }) => {
   return (
     <ul>
       {users.map((user, idx) => {
-        const groupUser = typeof user === 'string' ? { email: user } : user
-        const groupUserId = groupUser.id
-        const isOwner =
-          groupUser.id && groupUserId.toString() !== currentUserId.toString()
+        const teamUser = typeof user === 'string' ? { email: user } : user
+        const teamUserId = teamUser.id
+        const isOwner = teamUser.id && teamUserId.toString() !== currentUserId.toString()
 
-        if (groupUser.id && !groupUser.fullName)
-          groupUser.fullName = `${groupUser.first_name} ${groupUser.last_name}`
+        if (teamUser.id && !teamUser.fullName)
+          teamUser.fullName = `${teamUser.first_name} ${teamUser.last_name}`
 
         return (
           <li className={c.TeamForm_Item} key={idx}>
-            <UserInline user={groupUser} size={'3rem'} displayEmail>
+            <UserInline user={teamUser} size={'3rem'} displayEmail>
               {isOwner && (
-                <Button text onClick={() => removeUser(groupUser)}>
+                <Button text onClick={() => removeUser(teamUser)}>
                   <TrashCanIcon />
                 </Button>
               )}
@@ -209,12 +223,10 @@ export function CreateTeamForm({
   onCancel,
   _membersLabel,
 }) {
-  const { dispatch, saveError } = useStoreon('folders')
+  const { dispatch } = useStoreon('folders')
   const { user: currentUser } = useCurrentUser()
-  const [group, setGroup] = useState([])
   const { teams = {} } = useFetchOnce('teams')
   const c = useStyles()
-  let errors
   let teamNames = []
   if (teams?.data) {
     teams.data.forEach(team => {
@@ -222,124 +234,157 @@ export function CreateTeamForm({
     })
   }
 
-  useEffect(() => {
-    if (saveError) onErrorReceived({ server: 'Error' })
-  }, [saveError, onErrorReceived])
-
   const initSchema = Joi.object({
-    members: Joi.array()
+    teamMembers: Joi.array()
+      .min(1)
+      .required(),
+    teamName: Joi.string()
+      .required()
+      .invalid(...teamNames),
+    emails: Joi.any(),
+  })
+
+  const emailsSchema = Joi.object({
+    emails: Joi.array()
       .items(Joi.string().email({ tlds: { allow: false } }))
       .min(1)
       .required(),
-    team: Joi.string()
-      .required()
-      .invalid(...teamNames),
   })
 
-  const validationResolver = data => {
-    const members = group
-    const input = {
-      team: data.team,
-      members,
-    }
-
-    const { error, value: values } = initSchema.validate(input)
-
-    errors = error
-      ? error.details.reduce((previous, currentError) => {
-          return {
-            ...previous,
-            [currentError.path[0]]: currentError,
-          }
-        }, {})
-      : {}
-
-    onErrorReceived(R.equals(errors, {}) ? undefined : errors)
-
-    return {
-      values: error ? {} : values,
-      errors,
-    }
+  const initialState = {
+    teamName: '',
+    emails: '',
+    teamMembers: [],
   }
 
-  const { handleSubmit, register, getValues, reset } = useForm({
-    validationResolver,
-    reValidateMode: 'onSubmit',
+  const { onFormSubmit, onInputChange, inputState, clearAllInputs } = useSimpleForm({
+    initialValidationSchema: initSchema,
+    initialState,
   })
+
+  const handleOnInputChange = useCallback(
+    (key, value) => {
+      onInputChange(key, value)
+    },
+    [onInputChange]
+  )
 
   const handleAdd = useCallback(
     e => {
       e.preventDefault()
+      const emails = inputState['emails']
+      const emailsArray = [...parseEmails(emails)]
+      const { error } = emailsSchema.validate({
+        emails: emailsArray,
+      })
+      const errors = error
+        ? /* eslint-disable indent */
+          error.details.reduce((previous, currentError) => {
+            return {
+              ...previous,
+              [currentError.path[0]]: currentError,
+            }
+          }, {})
+        : {}
+      /* eslint-enable indent */
+      if (error) return onErrorReceived(errors)
       if (
-        getValues('members') &&
-        !group.some(userToAdd => R.equals(userToAdd, getValues('members'))) &&
-        !group.some(userToAdd => {
-          return R.equals(userToAdd, currentUser.email)
+        !emailsArray.some(emailToInvite =>
+          inputState['teamMembers'].includes(emailToInvite)
+        ) &&
+        !emailsArray.some(emailToInvite => {
+          return R.equals(emailToInvite, currentUser.email)
         })
       ) {
-        setGroup([...group, ...parseEmails(getValues('members'))])
+        onInputChange('teamMembers', [...inputState['teamMembers'], ...emailsArray])
+        onInputChange('emails', '')
+      } else {
+        onInputChange('emails', '')
+        return onErrorReceived({
+          team: {
+            path: ['teamMembers'],
+            type: 'exists',
+          },
+        })
       }
-      reset({ ...getValues(), members: '' })
     },
-    [getValues, group, reset, currentUser]
+    [inputState, emailsSchema, onErrorReceived, currentUser, onInputChange]
   )
 
-  const handleSave = async ({ team, members }, e) => {
-    e.preventDefault()
-    const variables = {
-      team,
-      members,
-    }
-    dispatch('add-team', {
-      data: variables,
-      onFinish: () => {
-        afterCreate(team)
-      },
-      onError: error => {
-        onErrorReceived({
-          server: error,
-        })
-      },
-    })
-  }
+  const handleSave = useCallback(
+    (_state, isValid, errors) => {
+      if (!isValid) {
+        return onErrorReceived(errors)
+      }
+      const variables = {
+        teamName: inputState['teamName'],
+        teamMembers: inputState['teamMembers'],
+      }
+      dispatch('add-team', {
+        data: variables,
+        onFinish: () => {
+          afterCreate(inputState['teamName'])
+        },
+        onError: error => {
+          onErrorReceived({
+            server: error,
+          })
+        },
+      })
+    },
+    [inputState, afterCreate, dispatch, onErrorReceived]
+  )
 
   const handleRemove = useCallback(
     userToRemove => {
-      let newGroup = group
-      newGroup = newGroup.filter(user => user.email !== userToRemove.email)
-      setGroup(newGroup)
+      let newTeam = inputState['teamMembers']
+      newTeam = newTeam.filter(user => user.email !== userToRemove.email)
+      onInputChange('teamMembers', newTeam)
     },
-    [group]
+    [inputState, onInputChange]
   )
 
-  const handleCancel = e => {
-    e.preventDefault()
-    onCancel()
-  }
+  const handleCancel = useCallback(
+    e => {
+      e.preventDefault()
+      clearAllInputs()
+      onCancel()
+    },
+    [clearAllInputs, onCancel]
+  )
 
+  const team = useMemo(() => {
+    return inputState['teamMembers'] ? inputState['teamMembers'] : []
+  }, [inputState])
+
+  console.log(inputState)
   return (
-    <form onSubmit={handleSubmit(handleSave)} className={c.TeamForm}>
-      <label className={c.TeamForm_Label} htmlFor='team'>
+    <form onSubmit={onFormSubmit(handleSave)} className={c.TeamForm}>
+      <label className={c.TeamForm_Label} htmlFor='teamMembers'>
         Team Name
       </label>
       <input
         className={c.TeamForm_FullWidthInput}
-        name='team'
-        ref={register({ required: true })}
-        onChange={() => {
+        name='teamName'
+        type='text'
+        value={inputState['teamName'] && inputState['teamName'].value}
+        onChange={e => {
+          handleOnInputChange('teamName', e.target.value)
           onErrorReceived(null)
         }}
       />
-      <label className={c.TeamForm_Label} htmlFor='members'>
+      <label className={c.TeamForm_Label} htmlFor='emails'>
         Add users by email
       </label>
       <div className={c.TeamForm_MemberRow}>
         <input
           className={classnames(c.TeamForm_FullWidthInput, c.TeamForm_MemberInput)}
           placeholder={'member1@example.com, member2@example.com'}
-          name='members'
-          ref={register({ required: true })}
-          onChange={() => {
+          name='emails'
+          type='text'
+          value={inputState['emails'] && inputState['emails'].value}
+          onChange={e => {
+            handleOnInputChange('emails', e.target.value)
             onErrorReceived(null)
           }}
         />
@@ -351,7 +396,7 @@ export function CreateTeamForm({
           Add
         </Button>
       </div>
-      <UserList users={[currentUser, ...group]} removeUser={handleRemove} />
+      <UserList users={[currentUser, ...team]} removeUser={handleRemove} />
       <div className={classnames(c.TeamForm_Row, c.TeamForm_ButtonRow)}>
         <Button
           dark

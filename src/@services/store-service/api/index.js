@@ -26,8 +26,8 @@ export default function postTeams(data) {
     .post(
       getRestApiUrl('teams'),
       {
-        name: data.team,
-        members: data.members,
+        name: data.teamName,
+        members: data.teamMembers,
       },
       { headers: { Authorization: `Bearer ${localStorage.getItem('restAccessToken')}` } }
     )
