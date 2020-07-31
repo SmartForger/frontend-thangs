@@ -1,5 +1,5 @@
-import api from '../../@services/api'
-import { parseFolder } from '../../@services/graphql-service/folders'
+import api from '@services/api'
+import { parseFolder } from '@services/graphql-service/folders'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -120,7 +120,7 @@ export default store => {
     },
   }))
 
-  store.on('create-folder', (state, { data, onFinish }) => {
+  store.on('create-folder', (state, { data, onFinish, onError }) => {
     store.dispatch('folder-saving')
     api({
       method: 'POST',
@@ -135,8 +135,9 @@ export default store => {
           store.dispatch('fetch-folders')
         }
       })
-      .catch(_error => {
+      .catch(error => {
         store.dispatch('folder-saved-error')
+        onError(error)
       })
   })
 

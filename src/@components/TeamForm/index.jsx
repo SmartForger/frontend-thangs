@@ -1,9 +1,9 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import Joi from '@hapi/joi'
 import * as R from 'ramda'
-import { Button } from '../Button'
-import { UserInline } from '../UserInline'
+import { Button } from '@components/Button'
+import { UserInline } from '@components/UserInline'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { authenticationService } from '@services'
 import classnames from 'classnames'
@@ -109,14 +109,6 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const initSchema = Joi.object({
-  members: Joi.array()
-    .items(Joi.string().email({ tlds: { allow: false } }))
-    .min(1)
-    .required(),
-  team: Joi.string().required(),
-})
-
 const parseEmails = R.pipe(R.split(/, */), R.filter(R.identity))
 
 const isEmptyMembers = ([key, info]) => {
@@ -129,6 +121,10 @@ const isEmptyTeamName = ([key, info]) => {
 
 const isInvalidEmail = ([key, info]) => {
   return key === 'members' && info.type === 'string.email'
+}
+
+const isDuplicateTeamName = ([key, info]) => {
+  return key === 'team' && info.type === 'any.invalid'
 }
 
 const isServerError = ([key, _info]) => {
@@ -156,6 +152,12 @@ export const DisplayErrors = ({ errors, className, serverErrorMsg }) => {
       return (
         <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
           Please invite at least one other member
+        </h4>
+      )
+    } else if (isDuplicateTeamName(error)) {
+      return (
+        <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
+          Team name already exists. Please try another
         </h4>
       )
     } else if (isServerError(error)) {
@@ -207,7 +209,7 @@ export function CreateTeamForm({
   onCancel,
   _membersLabel,
 }) {
-  const { dispatch } = useStoreon('folders')
+  const { dispatch, saveError } = useStoreon('folders')
   const { user: currentUser } = useCurrentUser()
   const [group, setGroup] = useState([])
   const { teams = {} } = useFetchOnce('teams')
@@ -215,6 +217,20 @@ export function CreateTeamForm({
   const teamNames = teamsData.map(team => team.name)
   const c = useStyles()
   let errors
+
+  useEffect(() => {
+    if (saveError) onErrorReceived({ server: 'Error' })
+  }, [saveError])
+
+  const initSchema = Joi.object({
+    members: Joi.array()
+      .items(Joi.string().email({ tlds: { allow: false } }))
+      .min(1)
+      .required(),
+    team: Joi.string()
+      .required()
+      .invalid(...teamNames),
+  })
 
   const validationResolver = data => {
     const members = group
@@ -227,11 +243,11 @@ export function CreateTeamForm({
 
     errors = error
       ? error.details.reduce((previous, currentError) => {
-        return {
-          ...previous,
-          [currentError.path[0]]: currentError,
-        }
-      }, {})
+          return {
+            ...previous,
+            [currentError.path[0]]: currentError,
+          }
+        }, {})
       : {}
 
     onErrorReceived(R.equals(errors, {}) ? undefined : errors)
@@ -266,18 +282,21 @@ export function CreateTeamForm({
 
   const handleSave = async ({ team, members }, e) => {
     e.preventDefault()
-    try {
-      const variables = {
-        team,
-        members,
-      }
-      dispatch('add-team', variables)
-      afterCreate(team)
-    } catch (error) {
-      onErrorReceived({
-        server: error,
-      })
+    const variables = {
+      team,
+      members,
     }
+    dispatch('add-team', {
+      data: variables,
+      onFinish: () => {
+        afterCreate(team)
+      },
+      onError: error => {
+        onErrorReceived({
+          server: error,
+        })
+      },
+    })
   }
 
   const handleRemove = useCallback(
@@ -303,6 +322,9 @@ export function CreateTeamForm({
         className={c.TeamForm_FullWidthInput}
         name='team'
         ref={register({ required: true })}
+        onChange={() => {
+          onErrorReceived(null)
+        }}
       />
       <label className={c.TeamForm_Label} htmlFor='members'>
         Add users by email
@@ -312,6 +334,9 @@ export function CreateTeamForm({
           className={classnames(c.TeamForm_FullWidthInput, c.TeamForm_MemberInput)}
           name='members'
           ref={register({ required: true })}
+          onChange={() => {
+            onErrorReceived(null)
+          }}
         />
         <Button
           type='button'

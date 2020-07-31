@@ -229,25 +229,23 @@ export function CreateFolderForm({
     reValidateMode: 'onSubmit',
   })
 
-
   const handleSave = async ({ name, members }, e) => {
     e.preventDefault()
-    try {
-      const variables = {
-        name,
-        members,
-      }
-      dispatch('create-folder', {
-        data: variables,
-        onFinish: folder => {
-          afterCreate(folder)
-        },
-      })
-    } catch (error) {
-      onErrorReceived({
-        server: error,
-      })
+    const variables = {
+      name,
+      members,
     }
+    dispatch('create-folder', {
+      data: variables,
+      onFinish: folder => {
+        afterCreate(folder)
+      },
+      onError: error => {
+        onErrorReceived({
+          server: error,
+        })
+      },
+    })
   }
 
   const handleCancel = e => {

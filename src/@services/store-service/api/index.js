@@ -22,14 +22,14 @@ export function getTeam(id) {
 }
 
 export default function postTeams(data) {
-  console.log('PostData for Teams', data)
-  const response = axios.post(
-    getRestApiUrl('teams'),
-    {
-      name: data.team,
-      members: data.members,
-    },
-    { headers: { Authorization: `Bearer ${localStorage.getItem('restAccessToken')}` } }
-  )
-  return response
+  return axios
+    .post(
+      getRestApiUrl('teams'),
+      {
+        name: data.team,
+        members: data.members,
+      },
+      { headers: { Authorization: `Bearer ${localStorage.getItem('restAccessToken')}` } }
+    )
+    .catch(e => Promise.reject({ data: {}, error: e }))
 }
