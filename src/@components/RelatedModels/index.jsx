@@ -7,10 +7,9 @@ import { ProgressText } from '@components/ProgressText'
 import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { isError, isProcessing } from '@utilities'
-
+import useCollectionFetchOnce from '@services/store-service/hooks/useCollectionFetchOnce'
 import { logger } from '../../logging'
 
-import * as GraphqlService from '@services/graphql-service'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -38,17 +37,11 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const graphqlService = GraphqlService.getInstance()
-
 export function RelatedModels({ modelId, className }) {
   const c = useStyles()
   const {
-    loading,
-    error,
-    model,
-    startPolling,
-    stopPolling,
-  } = graphqlService.useModelByIdWithRelated(modelId)
+    atom: { data: model, isLoading: loading, isError: error },
+  } = useCollectionFetchOnce(modelId, 'model')
 
   if (loading) {
     return <Spinner />
@@ -56,13 +49,7 @@ export function RelatedModels({ modelId, className }) {
     logger.error('error', error)
     return <Spinner />
   }
-
-  if (isProcessing(model)) {
-    startPolling(1000)
-  } else {
-    stopPolling()
-  }
-
+  
   return (
     <div className={classnames(className, c.RelatedModels_Related)}>
       <div className={c.RelatedModels_Header}>Geometrically Similar</div>

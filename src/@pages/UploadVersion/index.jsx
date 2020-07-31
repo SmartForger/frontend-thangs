@@ -135,21 +135,25 @@ const Page = () => {
     }
   }, [dispatch, navigateWithFlash, uploadModel])
 
+  useEffect(() => () => dispatch('reset-upload-model'), [dispatch])
+
   const onSubmit = async data => {
+    const { weight, material, height, name, description } = data
+
     const requiredVariables = {
-      name: sanitizeFileName(data.name),
+      name: sanitizeFileName(name),
       size: file.size,
-      description: data.description,
-      previousVersionModelId: parentModelId,
+      description,
     }
 
     const optionalVariables = {
-      weight: data.weight,
-      height: data.height,
-      material: data.material,
-      category,
+      ...(weight.length > 0 && { weight }),
+      ...(height.length > 0 && { height }),
+      ...(material.length > 0 && { material }),
+      ...(category && { category }),
+      ...(parentModelId.length > 0 && { previousVersionModelId: parentModelId }),
     }
-
+    
     dispatch('upload-model', {
       file,
       data: {

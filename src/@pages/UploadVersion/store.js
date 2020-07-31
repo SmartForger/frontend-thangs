@@ -48,7 +48,7 @@ export default store => {
       method: 'POST',
       endpoint: 'models',
       body: {
-        uploadedFileName: uploadedData.newFileName || '',
+        filename: uploadedData.newFileName || '',
         originalFileName: file.name,
         units: 'mm',
         searchUpload: false,

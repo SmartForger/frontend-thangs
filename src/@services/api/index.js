@@ -1,11 +1,10 @@
 import axios from 'axios'
-import { getRestApiUrl } from '../authentication.service'
 
 export default ({ method = 'GET', endpoint, body }) => {
   const token = localStorage.getItem('restAccessToken')
 
   return axios({
-    url: getRestApiUrl(endpoint),
+    url: `${process.env.REACT_APP_REST_API_KEY}${endpoint}`,
     method,
     headers: {
       'Content-Type': 'application/json',
