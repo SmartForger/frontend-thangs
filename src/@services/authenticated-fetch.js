@@ -38,6 +38,7 @@ const tryWithRefresh = async (originalFetch, history, url, options) => {
   } catch (e) {
     logger.error('Error refreshing token', e)
     authenticationService.logout()
+    history.push('/login')
     return null
   }
 }
