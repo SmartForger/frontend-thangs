@@ -189,10 +189,14 @@ export function CreateFolderForm({
 }) {
   const { dispatch } = useStoreon('folders')
   const { teams = {} } = useFetchOnce('teams')
-  const { data: teamsData = [] } = teams
-  const teamNames = teamsData.map(team => team.name)
   const c = useStyles()
   let errors
+  let teamNames = []
+  if (teams?.data) {
+    teams.data.forEach(team => {
+      teamNames.push(team.name)
+    })
+  }
 
   const validationResolver = ({ members, name }) => {
     const input = {

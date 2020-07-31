@@ -213,10 +213,14 @@ export function CreateTeamForm({
   const { user: currentUser } = useCurrentUser()
   const [group, setGroup] = useState([])
   const { teams = {} } = useFetchOnce('teams')
-  const { data: teamsData = [] } = teams
-  const teamNames = teamsData.map(team => team.name)
   const c = useStyles()
   let errors
+  let teamNames = []
+  if (teams?.data) {
+    teams.data.forEach(team => {
+      teamNames.push(team.name)
+    })
+  }
 
   useEffect(() => {
     if (saveError) onErrorReceived({ server: 'Error' })
