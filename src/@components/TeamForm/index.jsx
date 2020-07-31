@@ -357,7 +357,6 @@ export function CreateTeamForm({
     return inputState['teamMembers'] ? inputState['teamMembers'] : []
   }, [inputState])
 
-  console.log(inputState)
   return (
     <form onSubmit={onFormSubmit(handleSave)} className={c.TeamForm}>
       <label className={c.TeamForm_Label} htmlFor='teamMembers'>
