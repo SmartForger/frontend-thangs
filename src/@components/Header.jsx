@@ -297,13 +297,14 @@ const UserNav = ({ c }) => {
   }
 
   return (
-    <div className={classnames(c.Header_Row, c.Header_ButtonsRow)}>
-      <Search c={c} />
-      <Link className={c.Header_SignInLink} to='/login'>
-        Sign in
-      </Link>
-      <SignUp c={c} />
-    </div>
+    // <div className={classnames(c.Header_Row, c.Header_ButtonsRow)}>
+    //   <Search c={c} />
+    //   <Link className={c.Header_SignInLink} to='/login'>
+    //     Sign in
+    //   </Link>
+    //   <SignUp c={c} />
+    // </div>
+    null
   )
 }
 

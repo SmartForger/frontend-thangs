@@ -80,7 +80,7 @@ const App = () => {
             <ThemeProvider theme={theme}>
               <GlobalStyles />
               <Switch>
-                <Route exact path='/' component={Landing} />
+                <Route exact path='/' component={routeRequiresAuth(Landing)} />
                 <Route
                   path='/folder/:folderId/upload'
                   component={routeRequiresAuth(FolderUpload)}
@@ -131,9 +131,9 @@ const App = () => {
                 <Route path='/newspost/:id' component={routeRequiresAuth(Newspost)} />
                 <Route
                   path={['/search/:searchQuery', '/search']}
-                  component={SearchResults}
+                  component={routeRequiresAuth(SearchResults)}
                 />
-                <Route path='/matching' component={Matching} />
+                <Route path='/matching' component={routeRequiresAuth(Matching)} />
                 <Route path='/upload' component={routeRequiresAuth(Upload)} />
                 <Route
                   path='/model/:id/upload'
