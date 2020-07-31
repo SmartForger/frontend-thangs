@@ -332,6 +332,7 @@ export function CreateTeamForm({
       <div className={c.TeamForm_MemberRow}>
         <input
           className={classnames(c.TeamForm_FullWidthInput, c.TeamForm_MemberInput)}
+          placeholder={'member1@example.com, member2@example.com'}
           name='members'
           ref={register({ required: true })}
           onChange={() => {

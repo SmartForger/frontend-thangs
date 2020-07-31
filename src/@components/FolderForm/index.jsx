@@ -209,11 +209,11 @@ export function CreateFolderForm({
 
     errors = error
       ? error.details.reduce((previous, currentError) => {
-          return {
-            ...previous,
-            [currentError.path[0]]: currentError,
-          }
-        }, {})
+        return {
+          ...previous,
+          [currentError.path[0]]: currentError,
+        }
+      }, {})
       : {}
 
     onErrorReceived(R.equals(errors, {}) ? undefined : errors)
