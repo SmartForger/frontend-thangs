@@ -37,7 +37,11 @@ export const UserInline = ({
   return (
     <div className={className}>
       <div className={c.UserInline}>
-        <ProfilePicture size={size} name={user.fullName} src={user.profile?.avatarUrl} />
+        <ProfilePicture
+          size={size}
+          name={user.fullName}
+          src={user && user.profile && user.profile.avatarUrl}
+        />
         <span className={c.UserInline_Info}>
           <div
             className={classnames({

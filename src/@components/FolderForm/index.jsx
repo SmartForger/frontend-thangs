@@ -192,7 +192,7 @@ export function CreateFolderForm({
   const c = useStyles()
   let errors
   let teamNames = []
-  if (teams?.data) {
+  if (teams && teams.data) {
     teams.data.forEach(team => {
       teamNames.push(team.name)
     })

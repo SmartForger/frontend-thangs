@@ -228,7 +228,7 @@ export function CreateTeamForm({
   const { teams = {} } = useFetchOnce('teams')
   const c = useStyles()
   let teamNames = []
-  if (teams?.data) {
+  if (teams && teams.data) {
     teams.data.forEach(team => {
       teamNames.push(team.name)
     })

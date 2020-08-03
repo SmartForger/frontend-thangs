@@ -124,7 +124,7 @@ export const EditProfileForm = ({ user }) => {
         <textarea
           className={c.EditProfileForm_textarea}
           name='description'
-          defaultValue={user.profile?.description}
+          defaultValue={user && user.profile && user.profile.description}
           ref={register({ required: true })}
           placeholder='Add a bio...'
           rows={5}

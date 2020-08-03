@@ -59,7 +59,7 @@ const ModelsTitle = ({ user, selected, onClick }) => {
 const FoldersTitle = ({ _user, selected, onClick, className }) => {
   const c = useStyles({ selected })
   const { folders } = useStoreon('folders')
-  const folderAmount = folders?.data?.length
+  const folderAmount = folders && folders.data && folders.data.length
   return (
     <div className={classnames(className, c.Home_Row)} onClick={onClick}>
       <FolderIcon className={c.Home_Icon} selected={selected} />
@@ -109,7 +109,7 @@ const PageContent = ({ user }) => {
           />
         ) : (
           <CardCollection
-            folders={folders?.data}
+            folders={folders && folders.data}
             noResultsText='This user has not uploaded any folders yet.'
           />
         )}

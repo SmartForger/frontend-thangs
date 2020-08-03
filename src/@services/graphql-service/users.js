@@ -97,7 +97,9 @@ const UPLOAD_USER_PROFILE_AVATAR_MUTATION = gql`
 
 const parseUser = user => {
   const avatarUrl =
-    user.profile && user.profile?.avatarUrl ? createAppUrl(user.profile?.avatarUrl) : ''
+    user && user.profile && user.profile.avatarUrl
+      ? createAppUrl(user.profile.avatarUrl)
+      : ''
   const folders = user.folders ? user.folders.map(parseFolder) : []
   const models = user.models ? user.models.map(parseModel) : []
   const likedModels = user.likedModels ? user.likedModels.map(parseModel) : []

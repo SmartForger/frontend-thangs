@@ -107,7 +107,7 @@ const ResetPage = () => {
       setIsSuccess(true)
     } catch (e) {
       setErrorMessage(
-        e?.response?.data ? (
+        e && e.response && e.response.data ? (
           <ServerErrors errors={e.response.data} />
         ) : (
           'Unknown error. Try again.'
@@ -185,7 +185,7 @@ const ConfirmResetPage = () => {
       history.push('/')
     } catch (e) {
       setErrorMessage(
-        e?.response?.data ? (
+        e && e.response && e.response.data ? (
           <ServerErrors errors={e.response.data} />
         ) : (
           'Unknown error. Try again.'

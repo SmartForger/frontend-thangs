@@ -155,15 +155,21 @@ const Team = ({ id, creator, folderId }) => {
   return teams.isLoaded ? (
     <>
       <div className={c.FolderManagementModal_TeamNameContainer}>
-        <div className={c.FolderManagementModal_TeamName} key={teams.currentTeam?.name}>
-          {teams.currentTeam?.name}
+        <div
+          className={c.FolderManagementModal_TeamName}
+          key={teams && teams.currentTeam && teams.currentTeam.name}
+        >
+          {teams && teams.currentTeam && teams.currentTeam.name}
         </div>
       </div>
       <div className={c.FolderManagementModal_Row}>
-        <ul className={c.FolderManagementModal_List} key={teams.currentTeam?.members}>
+        <ul
+          className={c.FolderManagementModal_List}
+          key={teams && teams.currentTeam && teams.currentTeam.members}
+        >
           <UserList
             creator={creator}
-            users={teams.currentTeam?.members}
+            users={teams && teams.currentTeam && teams.currentTeam.members}
             folderId={folderId}
           />
         </ul>
