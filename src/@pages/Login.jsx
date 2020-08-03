@@ -90,10 +90,10 @@ const Page = () => {
     }
   }
 
-  const needsCorrected = field => {
-    if (invalidFields.indexOf(field) !== -1) return true
-    return false
-  }
+  // const needsCorrected = field => {
+  //   if (invalidFields.indexOf(field) !== -1) return true
+  //   return false
+  // }
 
   async function login() {
     setWaiting(true)
