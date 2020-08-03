@@ -228,7 +228,7 @@ export function CreateFolderForm({
     }
   }
 
-  const { register, handleSubmit, control } = useForm({
+  const { handleSubmit, control } = useForm({
     validationResolver,
     reValidateMode: 'onSubmit',
   })
@@ -275,10 +275,11 @@ export function CreateFolderForm({
       <label className={c.FolderForm_Label} htmlFor='name'>
         Folder Name
       </label>
-      <input
-        className={c.FolderForm_FullWidthInput}
+      <Controller
         name='name'
-        ref={register({ required: true })}
+        control={control}
+        defaultValue=''
+        as={<input className={c.FolderForm_FullWidthInput} name='name' />}
       />
       <label className={c.FolderForm_Label} htmlFor='members'>
         Add users by email or enter an existing team name
