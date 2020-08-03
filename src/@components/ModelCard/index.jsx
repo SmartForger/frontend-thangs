@@ -5,6 +5,7 @@ import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ModelThumbnail } from '@components/ModelThumbnail'
 import { Card } from '@components/Card'
+import { THUMBNAILS_HOST } from '@utilities/constants'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -56,7 +57,7 @@ const CardContents = ({ className, model, showOwner, _hovered }) => {
       <ModelThumbnail
         className={c.ModelCard_Thumbnail}
         name={model.name}
-        thumbnailUrl={model.thumbnailUrl}
+        thumbnailUrl={model.thumbnailUrl || `${THUMBNAILS_HOST}/${model.uploadedFile}`}
       ></ModelThumbnail>
       <div className={c.ModelCard_Content}>
         <div className={c.ModelCard_Name}>{model.name}</div>
