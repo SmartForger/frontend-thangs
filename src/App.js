@@ -38,6 +38,7 @@ import { StoreContext } from 'storeon/react'
 import teamsStore from '@store/teams/store'
 import folderStore from '@store/folders/store'
 import modelsStore from '@store/models/store'
+import landingModelsStore from '@store/landingModels/store'
 import uploadModelStore from '@pages/UploadVersion/store'
 import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
@@ -64,7 +65,13 @@ export function AppFrame() {
   )
 }
 
-const store = createStoreon([teamsStore, folderStore, uploadModelStore, modelsStore])
+const store = createStoreon([
+  teamsStore,
+  folderStore,
+  uploadModelStore,
+  modelsStore,
+  landingModelsStore,
+])
 
 const App = () => {
   const location = useLocation()
@@ -72,15 +79,13 @@ const App = () => {
   const theme = usePageTheming(location)
   return (
     <ApolloProvider client={client}>
-      <StoreContext.Provider
-        value={store}
-      >
+      <StoreContext.Provider value={store}>
         <ErrorBoundary>
           <FlashContextProvider>
             <ThemeProvider theme={theme}>
               <GlobalStyles />
               <Switch>
-                <Route exact path='/' component={routeRequiresAuth(Landing)} />
+                <Route exact path='/' component={Landing} />
                 <Route
                   path='/folder/:folderId/upload'
                   component={routeRequiresAuth(FolderUpload)}

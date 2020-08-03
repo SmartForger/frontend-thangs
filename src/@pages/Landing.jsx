@@ -1,15 +1,17 @@
-import React from 'react'
-
-import * as GraphqlService from '@services/graphql-service'
+import React, { useEffect } from 'react'
 import { NewInvertedHeaderLayout } from '@components/Layout'
 import CardCollection from '@components/CardCollection'
-
-const graphqlService = GraphqlService.getInstance()
+import { useStoreon } from 'storeon/react'
 
 function Page() {
-  const { error, loading, models } = graphqlService.useModelsByLikes()
+  const { dispatch, landingModels } = useStoreon('landingModels')
 
-  if (error) {
+  useEffect(() => {
+    dispatch('landing-models/fetch-models')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  if (landingModels.isError) {
     return (
       <div data-cy='fetch-results-error'>
         Error! We were not able to load results. Please try again later.
@@ -19,9 +21,9 @@ function Page() {
 
   return (
     <CardCollection
-      models={models}
+      models={landingModels.data}
       noResultsText='We have no models to display right now. Please try again later.'
-      loading={loading}
+      loading={landingModels.isLoading}
     />
   )
 }
