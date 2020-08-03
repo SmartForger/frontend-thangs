@@ -23,10 +23,6 @@ export const USER_QUERY = gql`
         created
         likesCount
         commentsCount
-        attachment {
-          id
-          imgSrc
-        }
         uploadStatus
         uploadedFile
       }
