@@ -142,7 +142,6 @@ const ResetPage = () => {
                 disabled={waiting}
                 type='text'
                 name='email'
-                incorrect={needsCorrected('email')}
                 onChange={handleChange}
                 validator={validateEmail}
                 value={inputs.email}

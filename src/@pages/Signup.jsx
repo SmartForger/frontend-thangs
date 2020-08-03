@@ -208,7 +208,6 @@ const Page = () => {
                 id='username-input'
                 type='text'
                 name='username'
-                incorrect={needsCorrected('username')}
                 onChange={handleChange}
                 validator={validateUsername}
                 value={inputs.username || ''}
@@ -225,7 +224,6 @@ const Page = () => {
                 id='email-input'
                 type='text'
                 name='email'
-                incorrect={needsCorrected('email')}
                 onChange={handleChange}
                 validator={validateEmail}
                 value={inputs.email || ''}

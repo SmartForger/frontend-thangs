@@ -163,7 +163,6 @@ const Page = () => {
                   className={c.Login_TextInput}
                   type='text'
                   name='email'
-                  incorrect={needsCorrected('email')}
                   onChange={handleChange}
                   validator={validateEmail}
                   value={inputs.email}
