@@ -130,10 +130,10 @@ const Page = () => {
 
   useEffect(() => {
     if (uploadModel.isLoaded && !uploadModel.isError) {
-      navigateWithFlash('/home', 'Model added successfully.')
+      navigateWithFlash(`/model/${parentModelId}`, 'Model added successfully.')
       dispatch('reset-upload-model')
     }
-  }, [dispatch, navigateWithFlash, uploadModel])
+  }, [dispatch, navigateWithFlash, parentModelId, uploadModel])
 
   useEffect(() => () => dispatch('reset-upload-model'), [dispatch])
 
