@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react'
+import { useEffect, useContext, useCallback } from 'react'
 import { StoreContext, useStoreon } from 'storeon/react'
 
 export default function(atomRawName, collectionName) {
@@ -6,7 +6,7 @@ export default function(atomRawName, collectionName) {
 
   const { dispatch, ...atoms } = useStoreon(atomName)
   const store = useContext(StoreContext)
-  const getStored = name => store.get()[name]
+  const getStored = useCallback(name => store.get()[name], [store])
 
   if (!getStored(atomName)) {
     dispatch(`init-${collectionName}`, { id: atomRawName })
@@ -18,7 +18,7 @@ export default function(atomRawName, collectionName) {
     if (!getStored(atomName).isLoading) {
       dispatch(`fetch-${collectionName}`, { id: atomRawName })
     }
-  }, [])
+  }, [atomName, atomRawName, collectionName, dispatch, getStored])
 
   return { dispatch, atom }
 }
