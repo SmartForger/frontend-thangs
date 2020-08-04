@@ -18,7 +18,8 @@ export default function(atomRawName, collectionName) {
     if (!getStored(atomName).isLoading) {
       dispatch(`fetch-${collectionName}`, { id: atomRawName })
     }
-  }, [atomName, atomRawName, collectionName, dispatch, getStored])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return { dispatch, atom }
 }
