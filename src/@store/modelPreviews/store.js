@@ -9,19 +9,19 @@ const getInitAtom = () => ({
 
 export default store => {
   store.on('@init', () => ({
-    landingModels: getInitAtom(),
+    modelPreviews: getInitAtom(),
   }))
 
-  store.on('loading-models', state => ({
-    landingModels: {
+  store.on('loading-model-previews', state => ({
+    modelPreviews: {
       ...state.models,
       isLoading: true,
       isLoaded: false,
     },
   }))
 
-  store.on('loaded-models', (state, { data }) => ({
-    landingModels: {
+  store.on('loaded-model-previews', (state, { data }) => ({
+    modelPreviews: {
       ...state.models,
       isLoading: false,
       isLoaded: true,
@@ -29,9 +29,9 @@ export default store => {
     },
   }))
 
-  store.on('landing-models/fetch-models', async () => {
-    store.dispatch('loading-models')
+  store.on('fetch-model-previews', async () => {
+    store.dispatch('loading-model-previews')
     const { data } = await api({ method: 'GET', endpoint: 'models/landing' })
-    store.dispatch('loaded-models', { data })
+    store.dispatch('loaded-model-previews', { data })
   })
 }

@@ -38,7 +38,7 @@ import { StoreContext } from 'storeon/react'
 import teamsStore from '@store/teams/store'
 import folderStore from '@store/folders/store'
 import modelsStore from '@store/models/store'
-import landingModelsStore from '@store/landingModels/store'
+import modelPreviewsStore from '@store/modelPreviews/store'
 import commentsStore from '@store/comments/store'
 import userStore from '@store/user/store'
 import uploadModelStore from '@pages/UploadVersion/store'
@@ -70,8 +70,8 @@ export function AppFrame() {
 const store = createStoreon([
   commentsStore,
   folderStore,
+  modelPreviewsStore,
   modelsStore,
-  landingModelsStore,
   teamsStore,
   uploadModelStore,
   userStore,
