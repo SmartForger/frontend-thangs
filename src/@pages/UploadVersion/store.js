@@ -71,7 +71,7 @@ export default store => {
           //TEMP - This is to merge the user models cached by graphQL and new models uploaded as new versions - BE
           data: {
             id: uploadedData.modelId,
-            name: file.name,
+            name: data.name,
             likesCount: 0,
             commentsCount: 0,
             uploadStatus: 'PROCESSING',
