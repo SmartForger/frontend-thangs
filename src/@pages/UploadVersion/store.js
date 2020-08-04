@@ -5,6 +5,7 @@ const getInitAtom = () => ({
   isLoaded: false,
   isLoading: false,
   isError: false,
+  data: {},
 })
 
 export default store => {
@@ -22,9 +23,10 @@ export default store => {
       isError: false,
     },
   }))
-  store.on('loaded-upload-model', ({ uploadModel }) => ({
+  store.on('loaded-upload-model', ({ uploadModel }, { data }) => ({
     uploadModel: {
       ...uploadModel,
+      data,
       isLoading: false,
       isLoaded: true,
     },
@@ -41,18 +43,18 @@ export default store => {
     store.dispatch('loading-upload-model')
 
     try {
-      const { data: uploadedData } = await api({
+      const { data: uploadedUrlData } = await api({
         method: 'GET',
         endpoint: `models/upload-url?fileName=${file.name}`,
       })
 
-      await uploadToSignedUrl(uploadedData.signedUrl, file)
+      await uploadToSignedUrl(uploadedUrlData.signedUrl, file)
 
-      const { error } = await api({
+      const { data: uploadedData, error } = await api({
         method: 'POST',
         endpoint: 'models',
         body: {
-          filename: uploadedData.newFileName || '',
+          filename: uploadedUrlData.newFileName || '',
           originalFileName: file.name,
           units: 'mm',
           searchUpload: false,
@@ -64,7 +66,7 @@ export default store => {
       if (error) {
         store.dispatch('failure-upload-model')
       } else {
-        store.dispatch('loaded-upload-model')
+        store.dispatch('loaded-upload-model', { data: uploadedData })
       }
     } catch (e) {
       store.dispatch('failure-upload-model')

@@ -1,20 +1,20 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import Select from 'react-select'
 import { useForm, ErrorMessage } from 'react-hook-form'
 import { NewThemeLayout } from '@components/Layout'
 import { Message404 } from '../404'
-import { useFolder } from '../../@customHooks/Folders'
 import { Uploader } from '@components/Uploader'
 import { Button } from '@components/Button'
 import { useFlashNotification } from '../../@components/Flash'
 import Breadcrumbs from '../../@components/Breadcrumbs'
-import { useAddToFolder } from '../../@customHooks/Folders'
+import api from '@services/api'
 import { Spinner } from '@components/Spinner'
 import { UploadFrame } from '@components/UploadFrame'
 import { ProgressText } from '@components/ProgressText'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -112,36 +112,44 @@ function Upload({ folder }) {
   const history = useHistory()
   const [file, setFile] = useState()
   const [category, setCategory] = useState()
-  const [addToFolder, { loading: isUploading, error: uploadError }] = useAddToFolder(
-    folder.id
-  )
   const { navigateWithFlash } = useFlashNotification()
+  const { uploadModel, dispatch } = useStoreon('uploadModel')
 
   const { register, handleSubmit, errors } = useForm()
 
+  useEffect(() => {
+    if (uploadModel.isLoaded && !uploadModel.isError) {
+      navigateWithFlash(`/folder/${folder.id}`, 'Model added successfully.')
+      dispatch('reset-upload-model')
+    }
+  }, [dispatch, navigateWithFlash, uploadModel, folder])
+
+  useEffect(() => () => dispatch('reset-upload-model'), [dispatch])
+
   const onSubmit = async data => {
+    const { weight, material, height, name, description } = data
+
     const requiredVariables = {
-      folderId: folder.id,
-      name: sanitizeFileName(data.name),
+      name: sanitizeFileName(name),
       size: file.size,
-      description: data.description,
+      description,
     }
 
     const optionalVariables = {
-      weight: data.weight,
-      height: data.height,
-      material: data.material,
-      category,
+      ...(weight.length > 0 && { weight }),
+      ...(height.length > 0 && { height }),
+      ...(material.length > 0 && { material }),
+      ...(category && { category }),
+      folderId: folder.id,
     }
 
-    await addToFolder(file, {
-      variables: {
+    dispatch('upload-model', {
+      file,
+      data: {
         ...requiredVariables,
         ...optionalVariables,
       },
     })
-
-    navigateWithFlash(`/folder/${folder.id}`, 'Model added successfully.')
   }
 
   const handleCancel = e => {
@@ -169,13 +177,13 @@ function Upload({ folder }) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={c.FolderUpload_Row}>
           <div className={c.FolderUpload_Column}>
-            {isUploading ? (
+            {uploadModel.isLoading ? (
               <UploadFrame>
                 <Spinner className={c.FolderUpload_Spinner} />
                 <ProgressText className={c.FolderUpload_Dots} text='Uploading' />
               </UploadFrame>
             ) : (
-              <Uploader showError={!!uploadError} file={file} setFile={setFile} />
+              <Uploader showError={uploadModel.isError} file={file} setFile={setFile} />
             )}
           </div>
           <div
@@ -324,14 +332,14 @@ function Upload({ folder }) {
             className={classnames(c.FolderUpload_Button, c.FolderUpload_CancelButton)}
             onClick={handleCancel}
             type='button'
-            disabled={isUploading}
+            disabled={uploadModel.isLoading}
           >
             Cancel
           </Button>
           <Button
             className={c.FolderUpload_Button}
             type='submit'
-            disabled={!file || isUploading || uploadError}
+            disabled={!file || uploadModel.isLoading || uploadModel.isError}
           >
             Save Model
           </Button>
@@ -342,7 +350,16 @@ function Upload({ folder }) {
 }
 const Page = () => {
   const { folderId } = useParams()
-  const { loading, error, folder } = useFolder(folderId)
+  const {
+    dispatch,
+    folders: { isLoading: loading, loadError: error, currentFolder },
+  } = useStoreon('folders')
+
+  useEffect(() => {
+    dispatch('fetch-folder', folderId)
+  }, [dispatch, folderId])
+
+  const folder = currentFolder
 
   if (loading) {
     return <Spinner />
