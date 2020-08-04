@@ -1,4 +1,5 @@
 import api from '@services/api'
+import { uploadToSignedUrl } from '@services/storageService'
 
 const getInitAtom = () => ({
   isLoaded: false,
@@ -39,28 +40,34 @@ export default store => {
   store.on('upload-model', async (state, { file, data }) => {
     store.dispatch('loading-upload-model')
 
-    const { data: uploadedData } = await api({
-      method: 'GET',
-      endpoint: `models/upload-url?fileName=${file.name}`,
-    })
+    try {
+      const { data: uploadedData } = await api({
+        method: 'GET',
+        endpoint: `models/upload-url?fileName=${file.name}`,
+      })
 
-    const { error } = await api({
-      method: 'POST',
-      endpoint: 'models',
-      body: {
-        filename: uploadedData.newFileName || '',
-        originalFileName: file.name,
-        units: 'mm',
-        searchUpload: false,
-        isPrivate: false,
-        ...data,
-      },
-    })
+      await uploadToSignedUrl(uploadedData.signedUrl, file)
 
-    if (error) {
+      const { error } = await api({
+        method: 'POST',
+        endpoint: 'models',
+        body: {
+          filename: uploadedData.newFileName || '',
+          originalFileName: file.name,
+          units: 'mm',
+          searchUpload: false,
+          isPrivate: false,
+          ...data,
+        },
+      })
+
+      if (error) {
+        store.dispatch('failure-upload-model')
+      } else {
+        store.dispatch('loaded-upload-model')
+      }
+    } catch (e) {
       store.dispatch('failure-upload-model')
-    } else {
-      store.dispatch('loaded-upload-model')
     }
   })
 }
