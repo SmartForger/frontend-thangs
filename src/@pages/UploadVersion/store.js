@@ -67,6 +67,17 @@ export default store => {
         store.dispatch('failure-upload-model')
       } else {
         store.dispatch('loaded-upload-model', { data: uploadedData })
+        store.dispatch('update-user-models', {
+          //TEMP - This is to merge the user models cached by graphQL and new models uploaded as new versions - BE
+          data: {
+            id: uploadedData.modelId,
+            name: file.name,
+            likesCount: 0,
+            commentsCount: 0,
+            uploadStatus: 'PROCESSING',
+            uploadedFile: uploadedUrlData.newFileName,
+          },
+        })
       }
     } catch (e) {
       store.dispatch('failure-upload-model')

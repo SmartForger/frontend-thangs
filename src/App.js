@@ -40,6 +40,7 @@ import folderStore from '@store/folders/store'
 import modelsStore from '@store/models/store'
 import landingModelsStore from '@store/landingModels/store'
 import commentsStore from '@store/comments/store'
+import userStore from '@store/user/store'
 import uploadModelStore from '@pages/UploadVersion/store'
 import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
@@ -67,12 +68,13 @@ export function AppFrame() {
 }
 
 const store = createStoreon([
-  teamsStore,
+  commentsStore,
   folderStore,
-  uploadModelStore,
   modelsStore,
   landingModelsStore,
-  commentsStore,
+  teamsStore,
+  uploadModelStore,
+  userStore,
 ])
 
 const App = () => {

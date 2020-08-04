@@ -4,14 +4,14 @@ import CardCollection from '@components/CardCollection'
 import { useStoreon } from 'storeon/react'
 
 function Page() {
-  const { dispatch, landingModels } = useStoreon('landingModels')
+  const { dispatch, modelPreviews } = useStoreon('modelPreviews')
 
   useEffect(() => {
-    dispatch('landing-models/fetch-models')
+    dispatch('fetch-model-previews')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (landingModels.isError) {
+  if (modelPreviews.isError) {
     return (
       <div data-cy='fetch-results-error'>
         Error! We were not able to load results. Please try again later.
@@ -21,9 +21,9 @@ function Page() {
 
   return (
     <CardCollection
-      models={landingModels.data}
+      models={modelPreviews.data}
       noResultsText='We have no models to display right now. Please try again later.'
-      loading={landingModels.isLoading}
+      loading={modelPreviews.isLoading}
     />
   )
 }
