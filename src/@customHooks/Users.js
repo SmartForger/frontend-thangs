@@ -6,7 +6,7 @@ const graphqlService = GraphqlService.getInstance()
 
 export function useCurrentUser() {
   const id = authenticationService.getCurrentUserId()
-  const { dispatch: _d, user: userStore } = useStoreon('user')
+  const { user: userStore } = useStoreon('user')
   if (!id) {
     return { loading: false, error: undefined, user: undefined }
   }
