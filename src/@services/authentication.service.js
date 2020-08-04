@@ -88,8 +88,9 @@ const login = async ({ email, password }) => {
 
 const restLogin = async ({ password }) => {
   const username = currentUser.username
+  const authUrl = process.env.REACT_APP_REST_API_KEY
   const requestOptions = {
-    url: 'https://staging-api-platform-dot-thangs.uc.r.appspot.com/auth',
+    url: authUrl,
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     data: JSON.stringify({ userName: username, password }),
