@@ -21,7 +21,7 @@ workflows:
 jobs:
   deploy-staging:
     docker:
-      - image: google/cloud-sdk
+      - image: google/cloud-sdk:303.0.0
     parameters:
       NoPromote:
         default: "" # "--no-promote"
