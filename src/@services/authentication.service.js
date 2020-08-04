@@ -88,7 +88,7 @@ const login = async ({ email, password }) => {
 
 const restLogin = async ({ password }) => {
   const username = currentUser.username
-  const authUrl = `${process.env.REACT_APP_REST_API_KEY}/auth`
+  const authUrl = `${process.env.REACT_APP_REST_API_KEY}auth`
   const requestOptions = {
     url: authUrl,
     method: 'POST',
