@@ -5,12 +5,6 @@ export function useModelCommentsPaged(modelId) {
   return response
 }
 
-export function useAllModelCommentsCount(modelId, _previousCursor) {
-  const response = commentService.useAllModelCommentsCount(modelId)
-  const { error, loading, count } = response
-  return { error, loading, count }
-}
-
 export function useCreateModelCommentMutation(modelId) {
   return commentService.useCreateModelCommentMutation(modelId)
 }

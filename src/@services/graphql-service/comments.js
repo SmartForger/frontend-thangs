@@ -1,6 +1,5 @@
 import { gql } from 'apollo-boost'
-import { useQuery, useMutation } from '@apollo/react-hooks'
-import { parseUser } from './users'
+import { useMutation } from '@apollo/react-hooks'
 
 export const ALL_MODEL_COMMENTS_QUERY = gql`
     query allModelComments($modelId: ID) {
@@ -21,27 +20,6 @@ export const ALL_MODEL_COMMENTS_QUERY = gql`
     }
 `
 
-const parseCommentPayload = data => {
-  if (!data || !data.allModelComments) {
-    return []
-  }
-
-  return data.allModelComments.map(comment => {
-    return {
-      ...comment,
-      owner: parseUser(comment.owner),
-    }
-  })
-}
-
-const useAllModelComments = modelId => {
-  const { loading, error, data } = useQuery(ALL_MODEL_COMMENTS_QUERY, {
-    variables: { modelId },
-  })
-  const comments = parseCommentPayload(data)
-  return { loading, error, comments }
-}
-
 export const CREATE_MODEL_COMMENT_MUTATION = gql`
     mutation createModelComment($input: CreateModelCommentInput!) {
         createModelComment(input: $input) {
@@ -60,15 +38,8 @@ export const CREATE_MODEL_COMMENT_MUTATION = gql`
     }
 `
 
-const useCreateModelCommentMutation = ({ modelId }) => {
-  return useMutation(CREATE_MODEL_COMMENT_MUTATION, {
-    refetchQueries: [
-      {
-        query: ALL_MODEL_COMMENTS_QUERY,
-        variables: { modelId },
-      },
-    ],
-  })
+const useCreateModelCommentMutation = () => {
+  return useMutation(CREATE_MODEL_COMMENT_MUTATION)
 }
 
-export { useAllModelComments, useCreateModelCommentMutation }
+export { useCreateModelCommentMutation }

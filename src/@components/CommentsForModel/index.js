@@ -1,13 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { formatDistanceStrict } from 'date-fns'
-import * as GraphqlService from '@services/graphql-service'
 import { Markdown } from '@components'
 import { Spinner } from '@components/Spinner'
 import { UserInline } from '@components/UserInline'
 import NewModelCommentForm from './NewModelCommentForm'
 import { ReactComponent as VersionIcon } from '@svg/icon_version.svg'
 import { createUseStyles } from '@style'
+import useFetchPerMount from '@services/store-service/hooks/useFetchPerMount'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -20,8 +20,8 @@ const useStyles = createUseStyles(theme => {
       margin: 0,
       padding: 0,
       '& > *': {
-        marginBottom: '2rem'
-      }
+        marginBottom: '2rem',
+      },
     },
     CommentsForModel_ProfilePicture: {
       marginRight: '1rem',
@@ -60,8 +60,6 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
-
-const graphqlService = GraphqlService.getInstance()
 
 const getParsedBody = str => {
   try {
@@ -138,13 +136,15 @@ const VersionComment = ({ comment }) => {
 
 const CommentsForModel = ({ model, className }) => {
   const c = useStyles()
-  const { loading, error, comments } = graphqlService.useAllModelComments(model.id)
+  const {
+    atom: { isLoading: loading, isLoaded: loaded, isError: error, data: comments },
+  } = useFetchPerMount(model.id, 'model-comments')
 
   if (error) {
     return <div className={className}>Error loading comments</div>
   }
 
-  if (loading) {
+  if (loading || !loaded) {
     return (
       <div className={className}>
         <Spinner />

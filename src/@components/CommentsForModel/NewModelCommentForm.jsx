@@ -4,6 +4,7 @@ import { authenticationService } from '@services'
 import * as GraphqlService from '@services/graphql-service'
 import { Button } from '@components/Button'
 import { createUseStyles } from '@style'
+import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -42,6 +43,7 @@ const NewModelCommentForm = ({ modelId }) => {
   const c = useStyles()
   const userId = authenticationService.getCurrentUserId()
   const { user } = graphqlService.useUserById(userId)
+  const { dispatch } = useStoreon()
 
   const { register, handleSubmit, reset } = useForm()
   const [createModelComment] = graphqlService.useCreateModelCommentMutation({
@@ -51,8 +53,10 @@ const NewModelCommentForm = ({ modelId }) => {
   async function formSubmit(data, e) {
     e.preventDefault()
     await createModelComment({
-      variables: { input: { ownerId: userId, modelId, body: data.body } },
+      variables: { input: { ownerId: userId, modelId: `${modelId}`, body: data.body } },
     })
+
+    dispatch('fetch-model-comments', { id: modelId })
     reset()
   }
 
