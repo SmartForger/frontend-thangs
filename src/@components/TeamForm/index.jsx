@@ -406,7 +406,7 @@ export function CreateTeamForm({
           Back
         </Button>
         <Button type='submit' className={c.TeamForm_SaveButton}>
-          Save & Create Folder
+          Save & Continue
         </Button>
       </div>
     </form>
