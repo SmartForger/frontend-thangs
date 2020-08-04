@@ -9,13 +9,13 @@ workflows:
           filters:
             branches:
               only:
-                - development-1
+                - development
       - deploy-production:
           context: gcp-and-physna
           filters:
             branches:
               only:
-                - master
+                - development
 
 jobs:
   deploy-staging:
