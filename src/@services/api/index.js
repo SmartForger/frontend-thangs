@@ -10,6 +10,6 @@ export default ({ method = 'GET', endpoint, body }) => {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
-    ...(method === 'POST' ? { data: JSON.stringify(body) } : {}),
+    ...(body && { data: JSON.stringify(body) }),
   }).catch(e => Promise.resolve({ data: {}, error: e }))
 }
