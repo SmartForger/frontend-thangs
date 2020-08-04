@@ -9,7 +9,7 @@ workflows:
           filters:
             branches:
               only:
-                - development
+                - development-1
       - deploy-production:
           context: gcp-and-physna
           filters:
