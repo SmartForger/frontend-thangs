@@ -169,7 +169,7 @@ const Team = ({ id, creator, folderId }) => {
         >
           <UserList
             creator={creator}
-            users={teams && teams.currentTeam && teams.currentTeam.members}
+            users={(teams && teams.currentTeam && teams.currentTeam.members) ? teams.currentTeam.members : []}
             folderId={folderId}
           />
         </ul>
