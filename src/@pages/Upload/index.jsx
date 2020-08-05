@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import Select from 'react-select'
 import { useForm, ErrorMessage } from 'react-hook-form'
@@ -6,13 +6,12 @@ import { NewThemeLayout } from '@components/Layout'
 import { Uploader } from '@components/Uploader'
 import { Button } from '@components/Button'
 import { useFlashNotification } from '@components/Flash'
-import * as GraphqlService from '@services/graphql-service'
-import { authenticationService } from '@services'
 import { Spinner } from '@components/Spinner'
 import { UploadFrame } from '@components/UploadFrame'
 import { ProgressText } from '@components/ProgressText'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -87,8 +86,6 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const graphqlService = GraphqlService.getInstance()
-
 const sanitizeFileName = name => name.replace(/ /g, '_')
 
 const CATEGORIES = [
@@ -113,39 +110,45 @@ const Page = () => {
   const history = useHistory()
   const [file, setFile] = useState()
   const [category, setCategory] = useState()
-  const currentUserId = authenticationService.getCurrentUserId()
   const { navigateWithFlash } = useFlashNotification()
   const c = useStyles()
 
-  const [
-    uploadModel,
-    { loading: isUploading, error: uploadError },
-  ] = graphqlService.useUploadModelMutation(currentUserId)
+  const { uploadModel, dispatch } = useStoreon('uploadModel')
 
   const { register, handleSubmit, errors } = useForm()
 
+  useEffect(() => {
+    if (uploadModel.isLoaded && !uploadModel.isError) {
+      navigateWithFlash('/home', 'Model added successfully.')
+      dispatch('reset-upload-model')
+    }
+  }, [uploadModel])
+
+  useEffect(() => () => dispatch('reset-upload-model'), [])
+
   const onSubmit = async data => {
+    const { weight, material, height, name, description } = data
+
     const requiredVariables = {
-      name: sanitizeFileName(data.name),
+      name: sanitizeFileName(name),
       size: file.size,
-      description: data.description,
+      description,
     }
 
     const optionalVariables = {
-      weight: data.weight,
-      height: data.height,
-      material: data.material,
-      category,
+      ...(weight.length > 0 && { weight }),
+      ...(height.length > 0 && { height }),
+      ...(material.length > 0 && { material }),
+      ...(category && { category }),
     }
 
-    await uploadModel(file, {
-      variables: {
+    dispatch('upload-model', {
+      file,
+      data: {
         ...requiredVariables,
         ...optionalVariables,
       },
     })
-
-    navigateWithFlash('/home', 'Model added successfully.')
   }
 
   const handleCancel = e => {
@@ -168,13 +171,13 @@ const Page = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={c.Upload_Row}>
           <div className={c.Upload_Column__frame}>
-            {isUploading ? (
+            {uploadModel.isLoading ? (
               <UploadFrame>
                 <Spinner className={c.Upload_Spinner} />
                 <ProgressText className={c.Upload_Dots} text='Uploading' />
               </UploadFrame>
             ) : (
-              <Uploader showError={!!uploadError} file={file} setFile={setFile} />
+              <Uploader showError={uploadModel.isError} file={file} setFile={setFile} />
             )}
           </div>
           <div className={c.Upload_Column__form}>
