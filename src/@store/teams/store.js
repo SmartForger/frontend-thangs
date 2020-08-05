@@ -1,4 +1,4 @@
-import postTeams, { getTeam, getTeams } from '@services/store-service/api'
+import api from '@services/api'
 
 const getInitAtom = () => ({
   isLoaded: false,
@@ -34,12 +34,18 @@ export default store => {
   }))
 
   store.on('fetch-teams', async _state => {
-    const teams = await getTeams()
+    const { data: teams } = await api({
+      method: 'GET',
+      endpoint: 'teams',
+    })
     store.dispatch('update-teams', teams)
   })
 
   store.on('fetch-team', async (state, id) => {
-    const team = await getTeam(id)
+    const { data: team } = await api({
+      method: 'GET',
+      endpoint: `teams/${id}`,
+    })
     store.dispatch('update-team', team)
   })
 
@@ -69,10 +75,16 @@ export default store => {
   store.on('add-team', async (state, { data, onFinish, onError }) => {
     store.dispatch('saving-team')
     try {
-      await postTeams(data)
+      const { teamName, teamMembers } = data
+      await api({
+        method: 'POST',
+        endpoint: 'teams',
+        body: {
+          name: teamName,
+          members: teamMembers,
+        },
+      })
       store.dispatch('fetch-teams')
-      const teams = await getTeams()
-      store.dispatch('update-teams', teams)
       store.dispatch('team-saved')
       onFinish()
     } catch (error) {
