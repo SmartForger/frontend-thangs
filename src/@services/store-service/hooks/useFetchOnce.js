@@ -1,15 +1,14 @@
-import { useEffect } from 'react'
-import { useStoreon } from 'storeon/react'
+import useCommonStoreon from './useCommonStoreon'
 
-export default function(atomName) {
-  const { dispatch, ...store } = useStoreon(atomName)
+export default function(atomRawName, collectionName) {
+  const { dispatch, atom, getStoredAtom, operationParams } = useCommonStoreon(
+    atomRawName,
+    collectionName
+  )
 
-  useEffect(() => {
-    const atom = store[atomName]
-    if (atom && !atom.isLoaded) {
-      dispatch(`fetch-${atomName}`)
-    }
-  }, [atomName, dispatch, store])
+  if (!getStoredAtom().isLoaded && !getStoredAtom().isLoading) {
+    dispatch(...operationParams('fetch'))
+  }
 
-  return { dispatch, ...store }
+  return { dispatch, atom }
 }

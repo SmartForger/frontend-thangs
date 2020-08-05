@@ -7,7 +7,7 @@ import { ProgressText } from '@components/ProgressText'
 import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { isError, isProcessing } from '@utilities'
-import useCollectionFetchOnce from '@services/store-service/hooks/useCollectionFetchOnce'
+import useFetchOnce from '@services/store-service/hooks/useFetchOnce'
 import { logger } from '../../logging'
 
 import classnames from 'classnames'
@@ -41,7 +41,7 @@ export function RelatedModels({ modelId, className }) {
   const c = useStyles()
   const {
     atom: { data: model, isLoading: loading, isError: error },
-  } = useCollectionFetchOnce(modelId, 'model')
+  } = useFetchOnce(modelId, 'model')
 
   if (loading) {
     return <Spinner />
@@ -49,7 +49,7 @@ export function RelatedModels({ modelId, className }) {
     logger.error('error', error)
     return <Spinner />
   }
-  
+
   return (
     <div className={classnames(className, c.RelatedModels_Related)}>
       <div className={c.RelatedModels_Header}>Geometrically Similar</div>

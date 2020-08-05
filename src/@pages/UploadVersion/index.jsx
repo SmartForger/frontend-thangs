@@ -12,7 +12,7 @@ import { ProgressText } from '@components/ProgressText'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { ModelTitle } from '@components/ModelTitle'
-import useCollectionFetchOnce from '@services/store-service/hooks/useCollectionFetchOnce'
+import useFetchOnce from '@services/store-service/hooks/useFetchOnce'
 import { Message404 } from '../404'
 import { useStoreon } from 'storeon/react'
 
@@ -122,7 +122,7 @@ const Page = () => {
 
   const {
     atom: { data: model, isLoading: modelLoading, isError: modelError },
-  } = useCollectionFetchOnce(parentModelId, 'model')
+  } = useFetchOnce(parentModelId, 'model')
 
   const { uploadModel, dispatch } = useStoreon('uploadModel')
 
@@ -153,7 +153,7 @@ const Page = () => {
       ...(category && { category }),
       ...(parentModelId.length > 0 && { previousVersionModelId: parentModelId }),
     }
-    
+
     dispatch('upload-model', {
       file,
       data: {

@@ -1,22 +1,15 @@
-import { useEffect, useContext, useCallback } from 'react'
-import { StoreContext, useStoreon } from 'storeon/react'
+import { useEffect } from 'react'
+import useCommonStoreon from './useCommonStoreon'
 
 export default function(atomRawName, collectionName) {
-  const atomName = collectionName ? `${collectionName}-${atomRawName}` : atomRawName
-
-  const { dispatch, ...atoms } = useStoreon(atomName)
-  const store = useContext(StoreContext)
-  const getStored = useCallback(name => store.get()[name], [store])
-
-  if (!getStored(atomName)) {
-    dispatch(`init-${collectionName}`, { id: atomRawName })
-  }
-
-  const atom = atoms[atomName] ? atoms[atomName] : getStored(atomName)
+  const { dispatch, atom, getStoredAtom, operationParams } = useCommonStoreon(
+    atomRawName,
+    collectionName
+  )
 
   useEffect(() => {
-    if (!getStored(atomName).isLoading) {
-      dispatch(`fetch-${collectionName}`, { id: atomRawName })
+    if (!getStoredAtom().isLoading) {
+      dispatch(...operationParams('fetch'))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

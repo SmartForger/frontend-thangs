@@ -4,7 +4,7 @@ import * as R from 'ramda'
 import { createUseStyles } from '@style'
 import * as GraphqlService from '@services/graphql-service'
 import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
-import useCollectionFetchOnce from '@services/store-service/hooks/useCollectionFetchOnce'
+import useFetchOnce from '@services/store-service/hooks/useFetchOnce'
 import { Spinner } from './Spinner'
 
 const graphqlService = GraphqlService.getInstance()
@@ -37,7 +37,7 @@ const useStyles = createUseStyles(theme => {
 
 const Revised = ({ modelId }) => {
   const c = useStyles()
-  const { atom: model } = useCollectionFetchOnce(modelId, 'model')
+  const { atom: model } = useFetchOnce(modelId, 'model')
 
   const { loading: userLoading, user } = graphqlService.useUserById(
     R.path(['data', 'ownerId'], model)

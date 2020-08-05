@@ -21,7 +21,7 @@ import { NewThemeLayout } from '@components/Layout'
 import { ModelDetails } from '../ModelPreview/ModelDetails'
 import { Message404 } from '../404'
 import { createUseStyles } from '@style'
-import useCollectionFetchOnce from '@services/store-service/hooks/useCollectionFetchOnce'
+import useFetchOnce from '@services/store-service/hooks/useFetchOnce'
 import Revised from '@components/Revised'
 
 const useStyles = createUseStyles(theme => {
@@ -224,7 +224,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   const history = useHistory()
   const {
     atom: { data: modelData, isLoading, isLoaded, isError },
-  } = useCollectionFetchOnce(id, 'model')
+  } = useFetchOnce(id, 'model')
 
   if (isLoading || !isLoaded) {
     return <Spinner />

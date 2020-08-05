@@ -10,7 +10,7 @@ import { useCurrentUser } from '@customHooks/Users'
 import { useSimpleForm } from '@customHooks'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
-import useFetchOnce from '@services/store-service/hooks/useFetchOnce'
+import useFetchPerMount from '@services/store-service/hooks/useFetchPerMount'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -225,7 +225,7 @@ export function CreateTeamForm({
 }) {
   const { dispatch } = useStoreon('folders')
   const { user: currentUser } = useCurrentUser()
-  const { teams = {} } = useFetchOnce('teams')
+  const { atom: teams } = useFetchPerMount('teams')
   const c = useStyles()
   let teamNames = []
   if (teams && teams.data) {

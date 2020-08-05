@@ -10,7 +10,7 @@ import { createUseStyles } from '@style'
 import teamLogo from '@svg/multi-users.svg'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { useStoreon } from 'storeon/react'
-import useFetchOnce from '@services/store-service/hooks/useFetchOnce'
+import useFetchPerMount from '@services/store-service/hooks/useFetchPerMount'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -188,15 +188,11 @@ export function CreateFolderForm({
   _membersLabel,
 }) {
   const { dispatch } = useStoreon('folders')
-  const { teams = {} } = useFetchOnce('teams')
+  const { atom: teams } = useFetchPerMount('teams')
   const c = useStyles()
   let errors
-  let teamNames = []
-  if (teams && teams.data) {
-    teams.data.forEach(team => {
-      teamNames.push(team.name)
-    })
-  }
+
+  const teamNames = (teams.data && Object.values(teams.data).map(team => team.name)) || []
 
   const validationResolver = ({ members, name }) => {
     const input = {
