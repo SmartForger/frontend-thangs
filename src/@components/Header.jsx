@@ -183,7 +183,7 @@ const AddModelDropdownMenu = ({ c }) => {
   const { folderId } = useParams()
   const [createFolderIsOpen, setCreateFolderIsOpen] = useState(false)
   const [createTeamIsOpen, setCreateTeamIsOpen] = useState(false)
-  const [newTeam, setNewTeam] = useState(null)
+  const [newFolderData, setNewFolderData] = useState({})
   const { navigateWithFlash } = useFlashNotification()
   const setFolderOpen = useCallback(() => {
     setCreateFolderIsOpen(true)
@@ -217,7 +217,8 @@ const AddModelDropdownMenu = ({ c }) => {
         <FolderCreateModal
           isOpen={createFolderIsOpen}
           onCancel={setFolderClose}
-          onTeamModalOpen={() => {
+          onTeamModalOpen={newFolderData => {
+            setNewFolderData(newFolderData)
             setFolderClose()
             setTeamOpen()
           }}
@@ -228,7 +229,6 @@ const AddModelDropdownMenu = ({ c }) => {
               'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
             )
           }}
-          newTeamName={newTeam}
         />
       )}
       {createTeamIsOpen && (
@@ -238,11 +238,14 @@ const AddModelDropdownMenu = ({ c }) => {
             setTeamClose()
             setFolderOpen()
           }}
-          afterCreate={newTeamName => {
+          afterCreate={folder => {
             setTeamClose()
-            setNewTeam(newTeamName)
-            setFolderOpen()
+            navigateWithFlash(
+              `/folder/${folder.folderId}`,
+              'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
+            )
           }}
+          newFolderData={newFolderData}
         />
       )}
     </>

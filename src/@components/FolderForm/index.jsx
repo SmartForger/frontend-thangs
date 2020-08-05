@@ -91,6 +91,9 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
+//TODO - Abstract Joi Objects to constants i.e. constants/inputs/validation
+//TODO - or Input Components for specific-field reuse - BE
+//Question - Does Joi have chaining ability?
 let initSchema = Joi.object({
   name: Joi.string().required(),
   members: Joi.array()
@@ -122,6 +125,10 @@ const schemaWithoutName = Joi.object({
     .items(Joi.string().email({ tlds: { allow: false } }))
     .min(1)
     .required(),
+})
+
+const schemaJustName = Joi.object({
+  name: Joi.string().required(),
 })
 
 const parseEmails = R.pipe(R.split(/, */), R.filter(R.identity))
@@ -179,18 +186,31 @@ export const DisplayErrors = ({ errors, className, serverErrorMsg }) => {
 
 const noop = () => null
 
+const buildErrors = error => {
+  /* eslint-disable indent */
+  const errors = error
+    ? error.details.reduce((previous, currentError) => {
+        return {
+          ...previous,
+          [currentError.path[0]]: currentError,
+        }
+      }, {})
+    : {}
+  /* eslint-enable indent */
+
+  return R.equals(errors, {}) ? undefined : errors
+}
+
 export function CreateFolderForm({
   onErrorReceived = noop,
   afterCreate = noop,
   onCancel = noop,
   onTeamModelOpen = noop,
-  defaultTeam = '',
   _membersLabel,
 }) {
   const { dispatch } = useStoreon('folders')
   const { atom: teams } = useFetchPerMount('teams')
   const c = useStyles()
-  let errors
 
   const teamNames = (teams.data && Object.values(teams.data).map(team => team.name)) || []
 
@@ -206,25 +226,16 @@ export function CreateFolderForm({
     }
 
     const { error, value: values } = initSchema.validate(input)
-
-    errors = error
-      ? error.details.reduce((previous, currentError) => {
-        return {
-          ...previous,
-          [currentError.path[0]]: currentError,
-        }
-      }, {})
-      : {}
-
-    onErrorReceived(R.equals(errors, {}) ? undefined : errors)
+    const errors = buildErrors(error)
+    if (errors) onErrorReceived(errors)
 
     return {
       values: error ? {} : values,
-      errors,
+      errors: errors || {},
     }
   }
 
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, getValues } = useForm({
     validationResolver,
     reValidateMode: 'onSubmit',
   })
@@ -253,12 +264,22 @@ export function CreateFolderForm({
     onCancel()
   }
 
+  const handleOnCreateTeam = () => {
+    const { error } = schemaJustName.validate({ name: getValues('name') })
+    const errors = buildErrors(error)
+    if (errors) return onErrorReceived(errors)
+    onTeamModelOpen({ folderName: getValues('name'), members: getValues('members') })
+  }
+
   const addSaveGroupFields = () => {
     return (
       <>
         <div className={classnames(c.FolderForm_Row, c.FolderForm_TeamRow)}>
           <img alt={'Create Team'} className={c.FolderForm_SaveLogo} src={teamLogo} />
-          <label className={c.FolderForm_SaveTeamLabel} onClick={() => onTeamModelOpen()}>
+          <label
+            className={c.FolderForm_SaveTeamLabel}
+            onClick={() => handleOnCreateTeam()}
+          >
             Create Team
           </label>
         </div>
@@ -285,7 +306,6 @@ export function CreateFolderForm({
         control={control}
         onChange={([_e, data]) => data}
         onInputChange={(_e, data) => data}
-        defaultValue={defaultTeam}
         as={
           <Autocomplete
             id='members'

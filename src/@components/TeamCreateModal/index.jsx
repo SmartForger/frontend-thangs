@@ -34,7 +34,13 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const TeamCreateModal = ({ isOpen, onCancel, afterCreate, onTeamModalOpen }) => {
+const TeamCreateModal = ({
+  isOpen,
+  onCancel,
+  afterCreate,
+  onTeamModalOpen,
+  newFolderData,
+}) => {
   const c = useStyles()
   const [errors, setErrors] = useState()
   const handleOnCancel = useCallback(() => {
@@ -73,6 +79,7 @@ const TeamCreateModal = ({ isOpen, onCancel, afterCreate, onTeamModalOpen }) => 
           afterCreate={handleAfterCreate}
           onCancel={handleOnCancel}
           onTeamModelOpen={handleOnTeamModelOpen}
+          newFolderData={newFolderData}
           includeNameField
         />
       </div>

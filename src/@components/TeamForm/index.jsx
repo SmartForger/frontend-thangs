@@ -106,6 +106,14 @@ const useStyles = createUseStyles(theme => {
     TeamForm_Item: {
       marginBottom: '1rem',
     },
+    TeamForm_FolderNameLabel: {
+      marginBottom: '1.5rem',
+    },
+    TeamForm_FolderName: {
+      display: 'block',
+      padding: '.5rem 1rem',
+      ...theme.mixins.text.lightText,
+    },
   }
 })
 
@@ -221,11 +229,13 @@ export function CreateTeamForm({
   onErrorReceived,
   afterCreate,
   onCancel,
+  newFolderData = {},
   _membersLabel,
 }) {
   const { dispatch } = useStoreon('folders')
   const { user: currentUser } = useCurrentUser()
   const { atom: teams } = useFetchPerMount('teams')
+  const { folderName, members = '' } = newFolderData
   const c = useStyles()
   let teamNames = []
   if (teams && teams.data) {
@@ -253,7 +263,7 @@ export function CreateTeamForm({
 
   const initialState = {
     teamName: '',
-    emails: '',
+    emails: members,
     teamMembers: [],
   }
 
@@ -316,14 +326,28 @@ export function CreateTeamForm({
       if (!isValid) {
         return onErrorReceived(errors)
       }
-      const variables = {
+      const addTeamVariables = {
         teamName: inputState['teamName'],
         teamMembers: inputState['teamMembers'],
       }
+      const createFolderVariables = {
+        name: folderName,
+        members: [inputState['teamName']],
+      }
       dispatch('add-team', {
-        data: variables,
+        data: addTeamVariables,
         onFinish: () => {
-          afterCreate(inputState['teamName'])
+          dispatch('create-folder', {
+            data: createFolderVariables,
+            onFinish: folder => {
+              afterCreate(folder)
+            },
+            onError: error => {
+              onErrorReceived({
+                server: error,
+              })
+            },
+          })
         },
         onError: error => {
           onErrorReceived({
@@ -332,7 +356,7 @@ export function CreateTeamForm({
         },
       })
     },
-    [inputState, afterCreate, dispatch, onErrorReceived]
+    [inputState, folderName, dispatch, onErrorReceived, afterCreate]
   )
 
   const handleRemove = useCallback(
@@ -359,6 +383,10 @@ export function CreateTeamForm({
 
   return (
     <form onSubmit={onFormSubmit(handleSave)} className={c.TeamForm}>
+      <div className={c.TeamForm_FolderNameLabel}>
+        Folder Name
+        <div className={c.TeamForm_FolderName}>{folderName}</div>
+      </div>
       <label className={c.TeamForm_Label} htmlFor='teamMembers'>
         Team Name
       </label>
@@ -366,7 +394,7 @@ export function CreateTeamForm({
         className={c.TeamForm_FullWidthInput}
         name='teamName'
         type='text'
-        value={inputState['teamName'] && inputState['teamName'].value}
+        value={inputState['teamName']}
         onChange={e => {
           handleOnInputChange('teamName', e.target.value)
           onErrorReceived(null)
@@ -381,7 +409,7 @@ export function CreateTeamForm({
           placeholder={'member1@example.com, member2@example.com'}
           name='emails'
           type='text'
-          value={inputState['emails'] && inputState['emails'].value}
+          value={inputState['emails']}
           onChange={e => {
             handleOnInputChange('emails', e.target.value)
             onErrorReceived(null)
@@ -406,7 +434,7 @@ export function CreateTeamForm({
           Back
         </Button>
         <Button type='submit' className={c.TeamForm_SaveButton}>
-          Save & Continue
+          Save & Create Folder
         </Button>
       </div>
     </form>

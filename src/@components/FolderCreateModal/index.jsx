@@ -34,22 +34,19 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const FolderCreateModal = ({
-  isOpen,
-  onCancel,
-  afterCreate,
-  onTeamModalOpen,
-  newTeamName,
-}) => {
+const FolderCreateModal = ({ isOpen, onCancel, afterCreate, onTeamModalOpen }) => {
   const c = useStyles()
   const [errors, setErrors] = useState()
   const handleOnCancel = useCallback(() => {
     setErrors(null)
     onCancel()
   }, [onCancel])
-  const handleOnTeamModelOpen = useCallback(() => {
-    onTeamModalOpen()
-  }, [onTeamModalOpen])
+  const handleOnTeamModelOpen = useCallback(
+    folderData => {
+      onTeamModalOpen(folderData)
+    },
+    [onTeamModalOpen]
+  )
   return (
     <Modal isOpen={isOpen}>
       <NewFolderIcon className={c.FolderCreateModal_NewFolderIcon} />
@@ -72,7 +69,6 @@ const FolderCreateModal = ({
           afterCreate={afterCreate}
           onCancel={handleOnCancel}
           onTeamModelOpen={handleOnTeamModelOpen}
-          defaultTeam={newTeamName}
           includeNameField
         />
       </div>
