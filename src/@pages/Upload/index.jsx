@@ -122,8 +122,9 @@ const Page = () => {
       navigateWithFlash('/home', 'Model added successfully.')
       dispatch('reset-upload-model')
     }
-  }, [uploadModel])
+  }, [dispatch, navigateWithFlash, uploadModel])
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => () => dispatch('reset-upload-model'), [])
 
   const onSubmit = async data => {
