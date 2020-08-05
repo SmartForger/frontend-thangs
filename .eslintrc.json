@@ -8,6 +8,7 @@
     "plugin:react/recommended"
   ],
   "globals": {
+    "require": true,
     "Promise": true,
     "module": true,
     "process": true,
