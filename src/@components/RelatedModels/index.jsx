@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { headerText } from '@style/text'
 import { NoResults } from '@components/NoResults'
 import CardCollection from '@components/CardCollection'
 import { Spinner } from '@components/Spinner'
@@ -7,13 +8,14 @@ import { ProgressText } from '@components/ProgressText'
 import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { isError, isProcessing } from '@utilities'
-import useFetchOnce from '@services/store-service/hooks/useFetchOnce'
+
 import { logger } from '../../logging'
 
+import * as GraphqlService from '@services/graphql-service'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(_theme => {
   return {
     RelatedModels: {},
     RelatedModels_NoResults: {
@@ -28,7 +30,7 @@ const useStyles = createUseStyles(theme => {
       height: '1.5rem',
     },
     RelatedModels_Header: {
-      ...theme.mixins.text.headerText,
+      ...headerText,
       marginBottom: '1.5rem',
     },
     RelatedModels_Related: {
@@ -37,17 +39,29 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
+const graphqlService = GraphqlService.getInstance()
+
 export function RelatedModels({ modelId, className }) {
   const c = useStyles()
   const {
-    atom: { data: model, isLoading: loading, isError: error },
-  } = useFetchOnce(modelId, 'model')
+    loading,
+    error,
+    model,
+    startPolling,
+    stopPolling,
+  } = graphqlService.useModelByIdWithRelated(modelId)
 
   if (loading) {
     return <Spinner />
   } else if (error) {
     logger.error('error', error)
     return <Spinner />
+  }
+
+  if (isProcessing(model)) {
+    startPolling(1000)
+  } else {
+    stopPolling()
   }
 
   return (
