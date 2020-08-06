@@ -2,7 +2,7 @@ import useCommonStoreon from './useCommonStoreon'
 import useFetchOnce from './useFetchOnce'
 import useFetchPerMount from './useFetchPerMount'
 
-const useModels = () => {
+const useServices = () => {
   return {
     useCommonStoreon,
     useFetchOnce,
@@ -10,4 +10,4 @@ const useModels = () => {
   }
 }
 
-export default useModels
+export default useServices
