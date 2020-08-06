@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import useCommonStoreon from './useCommonStoreon'
 
-export default function(atomRawName, collectionName) {
+export default (atomRawName, collectionName) => {
   const { dispatch, atom, getStoredAtom, operationParams } = useCommonStoreon(
     atomRawName,
     collectionName

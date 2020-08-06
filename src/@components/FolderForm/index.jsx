@@ -10,7 +10,7 @@ import { createUseStyles } from '@style'
 import teamLogo from '@svg/multi-users.svg'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { useStoreon } from 'storeon/react'
-import useFetchPerMount from '@services/store-service/hooks/useFetchPerMount'
+import { useServices } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -208,6 +208,7 @@ export function CreateFolderForm({
   onTeamModelOpen = noop,
 }) {
   const { dispatch } = useStoreon('folders')
+  const { useFetchPerMount } = useServices()
   const { atom: teams } = useFetchPerMount('teams')
   const c = useStyles()
 

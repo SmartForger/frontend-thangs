@@ -9,7 +9,7 @@ import classnames from 'classnames'
 import { useCurrentUser, useForm } from '@hooks'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
-import useFetchPerMount from '@services/store-service/hooks/useFetchPerMount'
+import { useServices } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -232,6 +232,7 @@ export function CreateTeamForm({
 }) {
   const { dispatch } = useStoreon('folders')
   const { user: currentUser } = useCurrentUser()
+  const { useFetchPerMount } = useServices()
   const { atom: teams } = useFetchPerMount('teams')
   const { folderName, members = '' } = newFolderData
   const c = useStyles()

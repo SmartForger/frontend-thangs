@@ -1,7 +1,7 @@
 import React from 'react'
 import * as R from 'ramda'
 import ModelCard from '../ModelCard'
-import useFetchOnce from '@services/store-service/hooks/useFetchOnce'
+import { useServices } from '@hooks'
 
 // TMP Delte after move to RestAPI
 const parseStoreToGQL = data => ({
@@ -10,6 +10,7 @@ const parseStoreToGQL = data => ({
 })
 
 const WithStoreModel = ({ id }) => {
+  const { useFetchOnce } = useServices()
   const { atom: model } = useFetchOnce(id, 'model')
 
   return (

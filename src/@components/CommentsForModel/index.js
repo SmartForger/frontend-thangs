@@ -7,7 +7,7 @@ import { UserInline } from '@components/UserInline'
 import NewModelCommentForm from './NewModelCommentForm'
 import { ReactComponent as VersionIcon } from '@svg/icon_version.svg'
 import { createUseStyles } from '@style'
-import useFetchPerMount from '@services/store-service/hooks/useFetchPerMount'
+import { useServices } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -136,6 +136,7 @@ const VersionComment = ({ comment }) => {
 
 const CommentsForModel = ({ model, className }) => {
   const c = useStyles()
+  const { useFetchPerMount } = useServices()
   const {
     atom: { isLoading: loading, isLoaded: loaded, isError: error, data: comments },
   } = useFetchPerMount(model.id, 'model-comments')

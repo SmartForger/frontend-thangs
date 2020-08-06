@@ -20,7 +20,7 @@ import { NewThemeLayout } from '@components/Layout'
 import { ModelDetails } from '../ModelPreview/ModelDetails'
 import { Message404 } from '../404'
 import { createUseStyles } from '@style'
-import useFetchOnce from '@services/store-service/hooks/useFetchOnce'
+import { useServices } from '@hooks'
 import Revised from '@components/Revised'
 
 const useStyles = createUseStyles(theme => {
@@ -222,6 +222,7 @@ function Details({ currentUser, model, className }) {
 const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   const c = useStyles()
   const history = useHistory()
+  const { useFetchOnce } = useServices()
   const {
     atom: { data: modelData, isLoading, isLoaded, isError },
   } = useFetchOnce(id, 'model')

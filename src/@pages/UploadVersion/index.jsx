@@ -12,7 +12,7 @@ import { ProgressText } from '@components/ProgressText'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { ModelTitle } from '@components/ModelTitle'
-import useFetchOnce from '@services/store-service/hooks/useFetchOnce'
+import { useServices } from '@hooks'
 import { Message404 } from '../404'
 import { useStoreon } from 'storeon/react'
 
@@ -119,7 +119,7 @@ const Page = () => {
   const [category, setCategory] = useState()
   const { navigateWithFlash } = useFlashNotification()
   const c = useStyles()
-
+  const { useFetchOnce } = useServices()
   const {
     atom: { data: model, isLoading: modelLoading, isError: modelError },
   } = useFetchOnce(parentModelId, 'model')
