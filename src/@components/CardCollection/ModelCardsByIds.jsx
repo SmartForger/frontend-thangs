@@ -1,11 +1,12 @@
 import React from 'react'
+import * as R from 'ramda'
 import ModelCard from '../ModelCard'
 import useFetchOnce from '@services/store-service/hooks/useFetchOnce'
 
 const WithStoreModel = ({ id }) => {
   const { atom: model } = useFetchOnce(id, 'model')
 
-  return <ModelCard model={model.data} withOwner={true} />
+  return !R.isEmpty(model.data) && <ModelCard model={model.data} withOwner={true} />
 }
 
 const ModelCardsByIds = ({ modelsIds = [] }) =>
