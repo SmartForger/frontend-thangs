@@ -58,7 +58,7 @@ function Page() {
     return <div>Error loading folder</div>
   }
 
-  const modelCount = R.length(folders.currentFolder.models)
+  const modelCount = R.length(folders.currentFolder.models) || ''
   return <Folder folder={folders.currentFolder} modelCount={modelCount} />
 }
 
