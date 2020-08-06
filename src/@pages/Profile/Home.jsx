@@ -7,6 +7,8 @@ import { useCurrentUser } from '@customHooks/Users'
 import { Spinner } from '@components/Spinner'
 import { Message404 } from '../404'
 import CardCollection from '@components/CardCollection'
+import ModelCards from '@components/CardCollection/ModelCards'
+import FolderCards from '@components/CardCollection/FolderCards'
 import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg'
 import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg'
 import classnames from 'classnames'
@@ -103,15 +105,13 @@ const PageContent = ({ user }) => {
       </div>
       <WithFlash>
         {selected === 'models' ? (
-          <CardCollection
-            models={sortedModels}
-            noResultsText='This user has not uploaded any models yet.'
-          />
+          <CardCollection noResultsText='This user has not uploaded any models yet.'>
+            <ModelCards models={sortedModels} />
+          </CardCollection>
         ) : (
-          <CardCollection
-            folders={folders && folders.data}
-            noResultsText='This user has not uploaded any folders yet.'
-          />
+          <CardCollection noResultsText='This user has not uploaded any folders yet.'>
+            <FolderCards folders={folders && folders.data} />
+          </CardCollection>
         )}
       </WithFlash>
     </div>

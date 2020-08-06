@@ -79,7 +79,7 @@ export default store => {
       endpoint: `folders/${folderId}`,
     })
       .then(res => {
-        const folder = parseFolder(res.data)
+        const folder = res.data
         store.dispatch('folders-loaded')
         store.dispatch('update-folder', folder)
       })

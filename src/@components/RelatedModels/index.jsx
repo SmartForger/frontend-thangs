@@ -3,6 +3,7 @@ import React from 'react'
 import { headerText } from '@style/text'
 import { NoResults } from '@components/NoResults'
 import CardCollection from '@components/CardCollection'
+import ModelCards from '@components/CardCollection/ModelCards'
 import { Spinner } from '@components/Spinner'
 import { ProgressText } from '@components/ProgressText'
 import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg'
@@ -80,10 +81,11 @@ export function RelatedModels({ modelId, className }) {
         </NoResults>
       ) : (
         <CardCollection
-          models={model && model.relatedModels}
           maxPerRow={3}
           noResultsText='There were no geometrically similar matches found.'
-        />
+        >
+          <ModelCards models={model && model.relatedModels} />
+        </CardCollection>
       )}
     </div>
   )

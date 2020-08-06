@@ -6,6 +6,7 @@ import { useCurrentUser } from '@customHooks/Users'
 import { Spinner } from '@components/Spinner'
 import { Message404 } from '../404'
 import CardCollection from '@components/CardCollection'
+import ModelCards from '@components/CardCollection/ModelCards'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -31,7 +32,9 @@ const LikesCount = ({ user }) => {
 const LikesContent = ({ user }) => {
   const models = getLikedModels(user)
   return (
-    <CardCollection models={models} noResultsText='You have not liked any models yet.' />
+    <CardCollection models={models} noResultsText='You have not liked any models yet.' >
+      <ModelCards models={models}/>
+    </CardCollection>
   )
 }
 

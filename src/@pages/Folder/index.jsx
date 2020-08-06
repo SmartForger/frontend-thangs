@@ -11,6 +11,7 @@ import { NewThemeLayout } from '@components/Layout'
 import { Message404 } from '../404'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
+import ModelCardsByIds from '@components/CardCollection/ModelCardsByIds'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -31,10 +32,9 @@ function Folder({ folder, modelCount }) {
         folder={folder}
       ></Breadcrumbs>
       <WithFlash>
-        <CardCollection
-          models={folder.models}
-          noResultsText='Upload models to this folder and collaborate with other users privately.'
-        />
+        <CardCollection noResultsText='Upload models to this folder and collaborate with other users privately.'>
+          <ModelCardsByIds modelsIds={folder.models} />
+        </CardCollection>
       </WithFlash>
     </div>
   )

@@ -6,6 +6,7 @@ import { Uploader } from '@components/Uploader'
 import * as GraphqlService from '@services/graphql-service'
 import { authenticationService } from '@services'
 import CardCollection from '@components/CardCollection'
+import ModelCards from '@components/CardCollection/ModelCards'
 import { UploadProgress } from '@components/UploadProgress'
 import { createUseStyles } from '@style'
 
@@ -57,10 +58,9 @@ function Results({ modelId }) {
   }
 
   return (
-    <CardCollection
-      models={model.relatedModels}
-      noResultsText='No geometric similar matches found. Try uploading another model.'
-    />
+    <CardCollection noResultsText='No geometric similar matches found. Try uploading another model.'>
+      <ModelCards models={model.relatedModels} />
+    </CardCollection>
   )
 }
 

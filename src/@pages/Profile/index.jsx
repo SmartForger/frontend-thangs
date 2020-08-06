@@ -13,6 +13,7 @@ import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as AboutIcon } from '@svg/about-icon.svg'
 import { ReactComponent as ModelIcon } from '@svg/model-icon.svg'
 import CardCollection from '@components/CardCollection'
+import ModelCards from '@components/CardCollection/ModelCards'
 import { ToggleFollowButton } from '@components/ToggleFollowButton'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -180,10 +181,9 @@ const ModelsContent = ({ selected, user }) => {
   })
 
   return (
-    <CardCollection
-      models={sortedModels}
-      noResultsText='This user has not uploaded any models yet.'
-    />
+    <CardCollection noResultsText='This user has not uploaded any models yet.'>
+      <ModelCards models={sortedModels} />
+    </CardCollection>
   )
 }
 
@@ -193,10 +193,9 @@ const LikesContent = ({ selected, user }) => {
   }
   const models = getLikedModels(user)
   return (
-    <CardCollection
-      models={models}
-      noResultsText='This user has not liked any models yet.'
-    />
+    <CardCollection noResultsText='This user has not liked any models yet.'>
+      <ModelCards models={models} />
+    </CardCollection>
   )
 }
 

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { NewInvertedHeaderLayout } from '@components/Layout'
 import CardCollection from '@components/CardCollection'
+import ModelCards from '@components/CardCollection/ModelCards'
 import { useStoreon } from 'storeon/react'
 
 function Page() {
@@ -18,13 +19,14 @@ function Page() {
       </div>
     )
   }
-
+  
   return (
     <CardCollection
-      models={modelPreviews.data}
       noResultsText='We have no models to display right now. Please try again later.'
       loading={modelPreviews.isLoading}
-    />
+    >
+      <ModelCards models={modelPreviews.data} />
+    </CardCollection>
   )
 }
 

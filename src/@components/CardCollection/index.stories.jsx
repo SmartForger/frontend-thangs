@@ -1,5 +1,7 @@
 import React from 'react'
 import CardCollection from './'
+import ModelCards from './ModelCards'
+import FolderCards from './FolderCards'
 import { withApolloProvider } from '../../../.storybook/withApolloProvider'
 import ThumbnailFixture from '../../../.storybook/fixtures/model-thumbnail.png'
 import UserImgFixture from '../../../.storybook/fixtures/user-img.png'
@@ -35,65 +37,81 @@ export default {
 }
 
 export const SingleRowModels = () => {
-  return <CardCollection models={[modelFixture, modelFixture]}></CardCollection>
+  return (
+    <CardCollection>
+      <ModelCards models={[modelFixture, modelFixture]} />
+    </CardCollection>
+  )
 }
 
 export const MultipleRowsModels = () => {
   return (
-    <CardCollection
-      models={[
-        modelFixture,
-        modelFixture,
-        modelFixture,
-        modelFixture,
-        modelFixture,
-        modelFixture,
-        modelFixture,
-        modelFixture,
-      ]}
-    ></CardCollection>
+    <CardCollection>
+      <ModelCards
+        models={[
+          modelFixture,
+          modelFixture,
+          modelFixture,
+          modelFixture,
+          modelFixture,
+          modelFixture,
+          modelFixture,
+          modelFixture,
+        ]}
+      />
+    </CardCollection>
   )
 }
 
 export const NoResults = () => {
   return (
-    <CardCollection
-      models={[]}
-      noResultsText='No geometric similar matches found. Try uploading another model.'
-    ></CardCollection>
+    <CardCollection noResultsText='No geometric similar matches found. Try uploading another model.'>
+      {' '}
+      <ModelCards models={[]} />
+    </CardCollection>
   )
 }
 
 export const SingleRowFolders = () => {
-  return <CardCollection folders={[folderFixture, folderFixture]}></CardCollection>
+  return (
+    <CardCollection>
+      <FolderCards folders={[folderFixture, folderFixture]} />
+    </CardCollection>
+  )
 }
 
 export const MultipleRowFolders = () => {
   return (
-    <CardCollection
-      folders={[
-        folderFixture,
-        folderFixture,
-        folderFixture,
-        folderFixture,
-        folderFixture,
-        folderFixture,
-      ]}
-    ></CardCollection>
+    <CardCollection>
+      <FolderCards
+        folders={[
+          folderFixture,
+          folderFixture,
+          folderFixture,
+          folderFixture,
+          folderFixture,
+          folderFixture,
+        ]}
+      />
+    </CardCollection>
   )
 }
 
 export const MultipleRowModelsAndFolders = () => {
   return (
-    <CardCollection
-      models={[modelFixture, modelFixture, modelFixture, modelFixture, modelFixture]}
-      folders={[
-        folderFixture,
-        folderFixture,
-        folderFixture,
-        folderFixture,
-        folderFixture,
-      ]}
-    ></CardCollection>
+    <CardCollection>
+      <ModelCards
+        models={[modelFixture, modelFixture, modelFixture, modelFixture, modelFixture]}
+      />
+      <FolderCards
+        folders={[
+          folderFixture,
+          folderFixture,
+          folderFixture,
+          folderFixture,
+          folderFixture,
+        ]}
+      />
+    </CardCollection>
   )
 }

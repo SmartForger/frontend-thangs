@@ -4,6 +4,7 @@ import { useParams, Link } from 'react-router-dom'
 import * as GraphqlService from '@services/graphql-service'
 import { Spinner } from '@components/Spinner'
 import CardCollection from '@components/CardCollection'
+import ModelCards from '@components/CardCollection/ModelCards'
 import { Button } from '../@components/Button'
 import { SearchBar } from '@components/SearchBar'
 import { NoResults } from '../@components/NoResults'
@@ -75,10 +76,9 @@ const SearchResult = ({ searchQuery }) => {
   return (
     <SearchResults className={c.SearchResults}>
       <div className={c.SearchResults_Header}>Results for {searchQuery}</div>
-      <CardCollection
-        models={models}
-        noResultsText='No results found. Try searching another keyword or search by model above.'
-      />
+      <CardCollection noResultsText='No results found. Try searching another keyword or search by model above.'>
+        <ModelCards models={models} />
+      </CardCollection>
     </SearchResults>
   )
 }
