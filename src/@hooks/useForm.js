@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef } from 'react'
 
-const useSimpleForm = (opts = {}) => {
+const useForm = (opts = {}) => {
   const { initialValidationSchema, initialState } = opts
   const [inputState, setInputState] = useState(initialState || {})
   const validationSchema = useRef(initialValidationSchema)
@@ -38,6 +38,7 @@ const useSimpleForm = (opts = {}) => {
       const hasErrors = !!error
       return { isValid: !hasErrors, errors }
     }
+    return { isValid: true, errors: {} }
   }, [inputState, validationSchema])
 
   const onFormSubmit = callbackFn => event => {
@@ -58,4 +59,4 @@ const useSimpleForm = (opts = {}) => {
   }
 }
 
-export default useSimpleForm
+export default useForm

@@ -2,11 +2,10 @@ import React, { useState, useCallback } from 'react'
 
 import { Spinner } from '@components/Spinner'
 import { HowTo } from '@components/HowTo'
-import { useLocalStorage } from '@customHooks/Storage'
+import { useLocalStorage, useHoopsViewer } from '@hooks'
 import Toolbar from './Toolbar'
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg'
 
-import { useHoopsViewer } from '@customHooks'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 

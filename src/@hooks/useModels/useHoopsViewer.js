@@ -1,51 +1,11 @@
 /* global Communicator */
-import { useState, useCallback, useEffect, useReducer, useRef } from 'react'
-import { STLLoader } from 'three/examples/jsm/loaders/STLLoader'
-import * as GraphqlService from '@services/graphql-service'
-
+import { useCallback, useEffect, useReducer, useRef } from 'react'
 import { colorHexStringToRGBArray, ensureScriptIsLoaded } from '@utilities'
 import axios from 'axios'
-
 import { logger } from '../logging'
 
-const graphqlService = GraphqlService.getInstance()
-
-export const useStl = url => {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(url, {
-          headers: {
-            Origin: window.location.origin,
-            'Content-Type': 'application/octet-stream',
-          },
-        })
-        const blob = await response.blob()
-        const data = await blob.arrayBuffer()
-
-        const loader = new STLLoader()
-        const geometry = loader.parse(data)
-        setData(geometry)
-        setLoading(false)
-      } catch (e) {
-        logger.error('Could not load model data', e)
-
-        setError(e)
-      }
-    }
-    fetchData()
-  }, [url])
-
-  return [data, loading, error]
-}
-
 const MODEL_PREP_TIMEOUT = 15000
-const MODEL_PREP_ENDPOINT_URI =
-    process.env.REACT_APP_HOOPS_MODEL_PREP_ENDPOINT_URI
+const MODEL_PREP_ENDPOINT_URI = process.env.REACT_APP_HOOPS_MODEL_PREP_ENDPOINT_URI
 const HOOPS_WS_ENDPOINT_URI = process.env.REACT_APP_HOOPS_WS_ENDPOINT_URI
 
 const debug = (...args) => {
@@ -91,10 +51,7 @@ class HoopsStatus {
   }
 
   get isPending() {
-    return (
-      this.state === STATES.UnpreparedModel ||
-            this.state === STATES.PreparedModel
-    )
+    return this.state === STATES.UnpreparedModel || this.state === STATES.PreparedModel
   }
 
   get isUnpreparedModel() {
@@ -130,7 +87,7 @@ const hoopsStatusReducer = (currentStatus, transition) => {
   }
 }
 
-export const useHoopsViewer = modelFilename => {
+const useHoopsViewer = modelFilename => {
   const containerRef = useRef()
   const hoopsViewerRef = useRef()
   const [hoopsStatus, doTransition] = useReducer(
@@ -157,12 +114,9 @@ export const useHoopsViewer = modelFilename => {
     ensureScriptIsLoaded('vendors/hoops/hoops_web_viewer.js')
       .then(async () => {
         debug('  * 1: Preparing Model')
-        const resp = await axios.get(
-          `${MODEL_PREP_ENDPOINT_URI}/${modelFilename}`,
-          {
-            cancelToken: prepCancelSource.token,
-          }
-        )
+        const resp = await axios.get(`${MODEL_PREP_ENDPOINT_URI}/${modelFilename}`, {
+          cancelToken: prepCancelSource.token,
+        })
 
         if (!resp.data.ok) {
           throw new Error('Model preparation failed.')
@@ -188,9 +142,7 @@ export const useHoopsViewer = modelFilename => {
       debug('  * 1: Cleanup. Cancel any pending model prep request.')
       isActiveEffect = false
       clearTimeout(timeoutId)
-      prepCancelSource.cancel(
-        'Model preparation canceled by user. (Effect cleanup)'
-      )
+      prepCancelSource.cancel('Model preparation canceled by user. (Effect cleanup)')
     }
   }, [hoopsStatus, modelFilename])
 
@@ -263,19 +215,13 @@ export const useHoopsViewer = modelFilename => {
     ensureCurrentHoopsViewer()
     switch (modeName) {
       case 'shaded':
-        hoopsViewerRef.current.view.setDrawMode(
-          Communicator.DrawMode.WireframeOnShaded
-        )
+        hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.WireframeOnShaded)
         break
       case 'wire':
-        hoopsViewerRef.current.view.setDrawMode(
-          Communicator.DrawMode.Wireframe
-        )
+        hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.Wireframe)
         break
       case 'xray':
-        hoopsViewerRef.current.view.setDrawMode(
-          Communicator.DrawMode.XRay
-        )
+        hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.XRay)
         break
       default:
         logger.error('Unsupported draw mode!', modeName)
@@ -288,9 +234,7 @@ export const useHoopsViewer = modelFilename => {
       throw new Error(`Unsupported HOOPS color change mode: ${modeName}`)
     }
 
-    const hColor = new Communicator.Color(
-      ...colorHexStringToRGBArray(colorStr)
-    )
+    const hColor = new Communicator.Color(...colorHexStringToRGBArray(colorStr))
     const model = hoopsViewerRef.current.model
 
     const gatherLeafNodeIds = nodes => {
@@ -303,9 +247,7 @@ export const useHoopsViewer = modelFilename => {
       })
     }
 
-    const nodeIds = gatherLeafNodeIds(
-      model.getNodeChildren(model.getAbsoluteRootNode())
-    )
+    const nodeIds = gatherLeafNodeIds(model.getNodeChildren(model.getAbsoluteRootNode()))
 
     try {
       if (modeName === 'wire') {
@@ -341,26 +283,4 @@ export const useHoopsViewer = modelFilename => {
   }
 }
 
-export function useDownloadModel(model) {
-  const [isDownloading, setIsDownloading] = useState()
-  const [hadError, setHadError] = useState()
-  const [getDownloadUrl] = graphqlService.useCreateDownloadUrlMutation(
-    model.id
-  )
-
-  const downloadModel = async event => {
-    event.preventDefault()
-    setIsDownloading(true)
-    try {
-      const url = await getDownloadUrl()
-      window.open(url)
-    } catch (error) {
-      logger.log('Error getting model download url', error)
-      setHadError(true)
-    }
-
-    setIsDownloading(false)
-  }
-
-  return [isDownloading, hadError, downloadModel]
-}
+export default useHoopsViewer

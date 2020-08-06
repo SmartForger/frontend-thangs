@@ -1,6 +1,6 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { useLocalStorage } from '@customHooks/Storage'
+import { useLocalStorage } from '@hooks'
 import * as GraphqlService from '@services/graphql-service'
 import { ModelPreviewPage } from './ModelPreviewPage'
 import { NewThemeLayout } from '@components/Layout'

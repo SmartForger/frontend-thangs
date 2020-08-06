@@ -1,7 +1,7 @@
 import React from 'react'
 import * as R from 'ramda'
 
-import { useNotifications } from '@customHooks/Notifications'
+import { useNotifications } from '@hooks'
 import { Spinner } from '@components/Spinner'
 import { NoResults } from '@components/NoResults'
 import { logger } from '../../logging'

@@ -3,7 +3,7 @@ import { Canvas, useFrame, useThree, extend } from 'react-three-fiber'
 import { createUseStyles } from '@style'
 
 import * as THREE from 'three'
-import { useStl } from '@customHooks'
+import { useStl } from '@hooks'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 const useStyles = createUseStyles(_theme => {

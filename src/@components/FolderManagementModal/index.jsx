@@ -10,7 +10,7 @@ import FolderInfo from '../FolderInfo'
 import { Spinner } from '../Spinner'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
-import { useRevokeAccess } from '@customHooks/Folders'
+import { useRevokeAccess } from '@hooks'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 
@@ -169,7 +169,11 @@ const Team = ({ id, creator, folderId }) => {
         >
           <UserList
             creator={creator}
-            users={(teams && teams.currentTeam && teams.currentTeam.members) ? teams.currentTeam.members : []}
+            users={
+              teams && teams.currentTeam && teams.currentTeam.members
+                ? teams.currentTeam.members
+                : []
+            }
             folderId={folderId}
           />
         </ul>

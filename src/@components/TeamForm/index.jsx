@@ -6,8 +6,7 @@ import { UserInline } from '@components/UserInline'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { authenticationService } from '@services'
 import classnames from 'classnames'
-import { useCurrentUser } from '@customHooks/Users'
-import { useSimpleForm } from '@customHooks'
+import { useCurrentUser, useForm } from '@hooks'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import useFetchPerMount from '@services/store-service/hooks/useFetchPerMount'
@@ -267,7 +266,7 @@ export function CreateTeamForm({
     teamMembers: [],
   }
 
-  const { onFormSubmit, onInputChange, inputState, clearAllInputs } = useSimpleForm({
+  const { onFormSubmit, onInputChange, inputState, clearAllInputs } = useForm({
     initialValidationSchema: initSchema,
     initialState,
   })

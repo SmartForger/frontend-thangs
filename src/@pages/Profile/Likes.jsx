@@ -2,7 +2,7 @@ import React from 'react'
 import * as R from 'ramda'
 
 import { NewThemeLayout } from '@components/Layout'
-import { useCurrentUser } from '@customHooks/Users'
+import { useCurrentUser } from '@hooks'
 import { Spinner } from '@components/Spinner'
 import { Message404 } from '../404'
 import CardCollection from '@components/CardCollection'
@@ -32,8 +32,8 @@ const LikesCount = ({ user }) => {
 const LikesContent = ({ user }) => {
   const models = getLikedModels(user)
   return (
-    <CardCollection models={models} noResultsText='You have not liked any models yet.' >
-      <ModelCards models={models}/>
+    <CardCollection models={models} noResultsText='You have not liked any models yet.'>
+      <ModelCards models={models} />
     </CardCollection>
   )
 }

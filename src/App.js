@@ -44,7 +44,7 @@ import userStore from '@store/user/store'
 import uploadModelStore from '@store/uploadModel/store'
 import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
-import { usePageTheming } from '@customHooks/usePageTheming'
+import { usePageTheming } from '@hooks'
 
 const originalFetch = window.fetch
 const client = graphqlClient(originalFetch, history)

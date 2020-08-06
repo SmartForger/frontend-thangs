@@ -4,7 +4,7 @@ import * as R from 'ramda'
 
 import { NewThemeLayout } from '@components/Layout'
 import * as GraphqlService from '@services/graphql-service'
-import { useCurrentUser } from '@customHooks/Users'
+import { useCurrentUser } from '@hooks'
 import { Spinner } from '@components/Spinner'
 import { ProfilePicture } from '@components/ProfilePicture'
 import { Markdown } from '@components/Markdown'

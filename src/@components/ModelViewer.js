@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { Viewer } from '@components/Viewer'
 import { ColorPicker } from '@components/ColorPicker'
-import { useLocalStorage } from '@customHooks/Storage'
+import { useLocalStorage } from '@hooks'
 import { HowTo } from '@components/HowTo'
 import { ReactComponent as ColorIcon1 } from '@svg/icon-color-1.svg'
 import { ReactComponent as ColorIcon2 } from '@svg/icon-color-2.svg'

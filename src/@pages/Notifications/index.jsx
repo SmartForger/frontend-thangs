@@ -3,7 +3,7 @@ import { NewThemeLayout } from '@components/Layout'
 import NotificationsList from '@components/NotificationsList'
 import { Button } from '@components/Button'
 import { Spinner } from '@components/Spinner'
-import { useUpdateLastCheckedNotifications } from '@customHooks/Notifications'
+import { useUpdateLastCheckedNotifications } from '@hooks'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {

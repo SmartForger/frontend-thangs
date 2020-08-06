@@ -23,8 +23,7 @@ const useLocalStorage = (key, initialValue) => {
   const setValue = value => {
     try {
       // Allow value to be a function so it is consistent with useState
-      const valueToStore =
-                value instanceof Function ? value(storedValue) : value
+      const valueToStore = value instanceof Function ? value(storedValue) : value
       // Save our state
       setStoredValue(valueToStore)
       // Save to local storage
@@ -42,4 +41,4 @@ const useLocalStorage = (key, initialValue) => {
   return [storedValue, setValue, removeValue]
 }
 
-export { useLocalStorage }
+export default useLocalStorage

@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { NewThemeLayout } from '@components/Layout'
-import { useCurrentUser } from '@customHooks/Users'
+import { useCurrentUser } from '@hooks'
 import { ProfilePicture } from '@components/ProfilePicture'
 import { Button } from '@components/Button'
 import { Spinner } from '@components/Spinner'

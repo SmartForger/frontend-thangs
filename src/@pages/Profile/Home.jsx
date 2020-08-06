@@ -3,7 +3,7 @@ import * as R from 'ramda'
 
 import { NewThemeLayout } from '@components/Layout'
 import { WithFlash } from '@components/Flash'
-import { useCurrentUser } from '@customHooks/Users'
+import { useCurrentUser } from '@hooks'
 import { Spinner } from '@components/Spinner'
 import { Message404 } from '../404'
 import CardCollection from '@components/CardCollection'

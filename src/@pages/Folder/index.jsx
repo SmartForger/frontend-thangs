@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import * as R from 'ramda'
 import { useParams } from 'react-router-dom'
-import { useCurrentUser } from '@customHooks/Users'
+import { useCurrentUser } from '@hooks'
 
 import { WithFlash } from '@components/Flash'
 import { Spinner } from '@components/Spinner'
