@@ -1,5 +1,4 @@
 import api from '@services/api'
-import { parseFolder } from '@services/graphql-service/folders'
 
 const getInitAtom = () => ({
   isLoading: false,
