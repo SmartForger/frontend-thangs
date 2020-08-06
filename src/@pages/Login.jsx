@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import { useHistory, Link } from 'react-router-dom'
+import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
 import { authenticationService } from '@services'
-import { useForm } from '@customHooks'
+import { useForm } from '@hooks'
 import { TextInput, Spinner, Button } from '@components'
 import { NewSignupThemeLayout } from '@components/Layout'
 import { ReactComponent as LoginIcon } from '@svg/user-login.svg'
@@ -62,25 +63,49 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
+const loginSchema = Joi.object({
+  email: Joi.string().email({ tlds: { allow: false } }),
+  password: Joi.string().required(),
+})
+
 const Page = () => {
   const [waiting, setWaiting] = useState(false)
   const [loginErrorMessage, setLoginErrorMessage] = useState(null)
-  const { inputs, handleChange, handleSubmit } = useForm(login)
   const [invalidFields, setInvalidFields] = useState([])
   const history = useHistory()
   const c = useStyles()
 
-  const setFieldToValid = fieldName => {
-    if (invalidFields.indexOf(fieldName) !== -1) {
-      const temp = [...invalidFields]
-      temp.splice(invalidFields.indexOf(fieldName), 1)
-      setInvalidFields(temp)
-      setLoginErrorMessage('')
-    }
+  const initialState = {
+    email: '',
+    password: '',
   }
 
-  const validateEmail = () => {
-    if (!EmailValidator.validate(inputs.email)) {
+  const { onFormSubmit, onInputChange, inputState } = useForm({
+    initialValidationSchema: loginSchema,
+    initialState,
+  })
+
+  const handleOnInputChange = useCallback(
+    (key, value) => {
+      onInputChange(key, value)
+    },
+    [onInputChange]
+  )
+
+  const setFieldToValid = useCallback(
+    fieldName => {
+      if (invalidFields.indexOf(fieldName) !== -1) {
+        const temp = [...invalidFields]
+        temp.splice(invalidFields.indexOf(fieldName), 1)
+        setInvalidFields(temp)
+        setLoginErrorMessage('')
+      }
+    },
+    [invalidFields]
+  )
+
+  const validateEmail = useCallback(() => {
+    if (!EmailValidator.validate(inputState.email)) {
       setInvalidFields(['email'])
       setLoginErrorMessage('Please enter a valid e-mail address')
       return false
@@ -88,40 +113,14 @@ const Page = () => {
       setFieldToValid('email')
       return true
     }
-  }
+  }, [inputState, setFieldToValid])
 
-  // const needsCorrected = field => {
-  //   if (invalidFields.indexOf(field) !== -1) return true
-  //   return false
-  // }
-
-  async function login() {
-    setWaiting(true)
-    setLoginErrorMessage(null)
-
-    const res = await authenticationService.login({
-      email: inputs.email,
-      password: inputs.password,
-    })
-
-    setWaiting(false)
-
-    if (res.status !== 200) {
-      setLoginErrorMessage(
-        res.data.detail || 'Sorry, we encounteed an unexpected error.  Please try again.'
-      )
-    } else {
-      await restLogin()
-      history.push('/')
-    }
-  }
-
-  async function restLogin() {
+  const handleLoginREST = useCallback(async () => {
     setWaiting(true)
     setLoginErrorMessage(null)
 
     const res = await authenticationService.restLogin({
-      password: inputs.password,
+      password: inputState.password,
     })
 
     setWaiting(false)
@@ -133,14 +132,39 @@ const Page = () => {
     } else {
       history.push('/')
     }
-  }
+  }, [history, inputState])
 
-  const invalidForm = () => {
-    if (inputs.password && inputs.email && EmailValidator.validate(inputs.email)) {
+  const handleLogin = useCallback(async () => {
+    setWaiting(true)
+    setLoginErrorMessage(null)
+
+    const res = await authenticationService.login({
+      email: inputState.email,
+      password: inputState.password,
+    })
+
+    setWaiting(false)
+
+    if (res.status !== 200) {
+      setLoginErrorMessage(
+        res.data.detail || 'Sorry, we encounteed an unexpected error.  Please try again.'
+      )
+    } else {
+      await handleLoginREST()
+      history.push('/')
+    }
+  }, [handleLoginREST, history, inputState])
+
+  const invalidForm = useMemo(() => {
+    if (
+      inputState.password &&
+      inputState.email &&
+      EmailValidator.validate(inputState.email)
+    ) {
       return false
     }
     return true
-  }
+  }, [inputState])
 
   return (
     <NewSignupThemeLayout>
@@ -154,7 +178,7 @@ const Page = () => {
             {loginErrorMessage}
           </h4>
         )}
-        <form onSubmit={handleSubmit} data-cy='login-form'>
+        <form onSubmit={onFormSubmit(handleLogin)} data-cy='login-form'>
           <div className={c.Login_Fields}>
             <div className={c.Login_FormControl}>
               <label className={c.Login_Label}>
@@ -163,9 +187,11 @@ const Page = () => {
                   className={c.Login_TextInput}
                   type='text'
                   name='email'
-                  onChange={handleChange}
+                  onChange={e => {
+                    handleOnInputChange('email', e.target.value)
+                  }}
                   validator={validateEmail}
-                  value={inputs.email}
+                  value={inputState && inputState.email}
                   data-cy='login-email'
                   required
                 />
@@ -178,8 +204,10 @@ const Page = () => {
                   className={c.Login_TextInput}
                   type='password'
                   name='password'
-                  onChange={handleChange}
-                  value={inputs.password}
+                  onChange={e => {
+                    handleOnInputChange('password', e.target.value)
+                  }}
+                  value={inputState && inputState.password}
                   data-cy='login-password'
                   required
                 />
@@ -189,7 +217,7 @@ const Page = () => {
           <Button
             className={c.Login_Button}
             type='submit'
-            disabled={waiting || invalidForm()}
+            disabled={waiting || invalidForm}
           >
             Sign In
           </Button>

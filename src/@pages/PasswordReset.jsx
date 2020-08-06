@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
+import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
 import { authenticationService } from '@services'
-import { useForm } from '@customHooks'
+import { useForm } from '@hooks'
 import { TextInput, Spinner, Button } from '@components'
 import { NewSignupThemeLayout } from '@components/Layout'
 import { createUseStyles } from '@style'
@@ -58,6 +59,15 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
+const resetSchema = Joi.object({
+  email: Joi.string().required(),
+})
+
+const changePasswordSchema = Joi.object({
+  password: Joi.string().required(),
+  confirmPassword: Joi.string().required(),
+})
+
 const ServerErrors = ({ errors }) => (
   <ul>
     {Object.entries(errors).flatMap(([errKey, msgList]) =>
@@ -65,24 +75,44 @@ const ServerErrors = ({ errors }) => (
     )}
   </ul>
 )
+
 const ResetPage = () => {
   const [waiting, setWaiting] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
-  const { inputs, handleChange, handleSubmit } = useForm(resetPassword)
   const [invalidFields, setInvalidFields] = useState([])
   const [isSuccess, setIsSuccess] = useState(false)
   const c = useStyles()
 
-  const setFieldToValid = fieldName => {
-    if (invalidFields.indexOf(fieldName) !== -1) {
-      const temp = [...invalidFields]
-      temp.splice(invalidFields.indexOf(fieldName), 1)
-      setInvalidFields(temp)
-      setErrorMessage('')
-    }
+  const initialState = {
+    email: '',
   }
-  const validateEmail = () => {
-    if (!EmailValidator.validate(inputs.email)) {
+
+  const { onFormSubmit, onInputChange, inputState } = useForm({
+    initialValidationSchema: resetSchema,
+    initialState,
+  })
+
+  const handleOnInputChange = useCallback(
+    (key, value) => {
+      onInputChange(key, value)
+    },
+    [onInputChange]
+  )
+
+  const setFieldToValid = useCallback(
+    fieldName => {
+      if (invalidFields.indexOf(fieldName) !== -1) {
+        const temp = [...invalidFields]
+        temp.splice(invalidFields.indexOf(fieldName), 1)
+        setInvalidFields(temp)
+        setErrorMessage('')
+      }
+    },
+    [invalidFields]
+  )
+
+  const validateEmail = useCallback(() => {
+    if (!EmailValidator.validate(inputState.email)) {
       setInvalidFields(['email'])
       setErrorMessage('Please enter a valid e-mail address')
       return false
@@ -90,20 +120,15 @@ const ResetPage = () => {
       setFieldToValid('email')
       return true
     }
-  }
+  }, [inputState, setFieldToValid])
 
-  // const needsCorrected = field => {
-  //   if (invalidFields.indexOf(field) !== -1) return true
-  //   return false
-  // }
-
-  async function resetPassword() {
+  const handleResetPassword = useCallback(async () => {
     setWaiting(true)
     setErrorMessage(null)
     setIsSuccess(false)
 
     try {
-      await authenticationService.resetPasswordForEmail(inputs.email)
+      await authenticationService.resetPasswordForEmail(inputState.email)
       setIsSuccess(true)
     } catch (e) {
       setErrorMessage(
@@ -116,7 +141,7 @@ const ResetPage = () => {
     } finally {
       setWaiting(false)
     }
-  }
+  }, [inputState])
 
   return (
     <div className={c.PasswordReset}>
@@ -132,7 +157,7 @@ const ResetPage = () => {
       {!!isSuccess && (
         <h4 className={c.PasswordReset_SuccessText}>Email with reset link sent!</h4>
       )}
-      <form onSubmit={handleSubmit} data-cy='reset-form'>
+      <form onSubmit={onFormSubmit(handleResetPassword)} data-cy='reset-form'>
         <div className={c.PasswordReset_Fields}>
           <div className={c.PasswordReset_FormControl}>
             <label>
@@ -142,9 +167,11 @@ const ResetPage = () => {
                 disabled={waiting}
                 type='text'
                 name='email'
-                onChange={handleChange}
+                onChange={e => {
+                  handleOnInputChange('email', e.target.value)
+                }}
                 validator={validateEmail}
-                value={inputs.email}
+                value={inputState && inputState.email}
                 required
               />
             </label>
@@ -153,7 +180,7 @@ const ResetPage = () => {
         <Button
           className={c.PasswordReset_Button}
           type='submit'
-          disabled={!(inputs.email && EmailValidator.validate(inputs.email))}
+          disabled={!(inputState.email && EmailValidator.validate(inputState.email))}
         >
           {isSuccess ? 'Re-send Email' : 'Email Reset Link'}
         </Button>
@@ -165,18 +192,34 @@ const ResetPage = () => {
 const ConfirmResetPage = () => {
   const [waiting, setWaiting] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
-  const { inputs, handleChange, handleSubmit } = useForm(resetPassword)
   const history = useHistory()
   const { userId, token } = useParams()
   const c = useStyles()
 
-  async function resetPassword() {
+  const initialState = {
+    password: '',
+    confirmPassword: '',
+  }
+
+  const { onFormSubmit, onInputChange, inputState } = useForm({
+    initialValidationSchema: changePasswordSchema,
+    initialState,
+  })
+
+  const handleOnInputChange = useCallback(
+    (key, value) => {
+      onInputChange(key, value)
+    },
+    [onInputChange]
+  )
+
+  const handleChangePassword = useCallback(async () => {
     setWaiting(true)
     setErrorMessage(null)
 
     try {
       await authenticationService.setPasswordForReset({
-        ...inputs,
+        ...inputState,
         token,
         userId,
       })
@@ -193,7 +236,7 @@ const ConfirmResetPage = () => {
     } finally {
       setWaiting(false)
     }
-  }
+  }, [history, inputState, token, userId])
 
   return (
     <div className={c.PasswordReset}>
@@ -206,7 +249,7 @@ const ConfirmResetPage = () => {
           {errorMessage}
         </h4>
       )}
-      <form onSubmit={handleSubmit} data-cy='confirm-reset-form'>
+      <form onSubmit={onFormSubmit(handleChangePassword)} data-cy='confirm-reset-form'>
         <div className={c.PasswordReset_Fields}>
           <div className={c.PasswordReset_FormControl}>
             <label>
@@ -216,8 +259,10 @@ const ConfirmResetPage = () => {
                 disabled={waiting}
                 type='password'
                 name='password'
-                onChange={handleChange}
-                value={inputs.password || ''}
+                onChange={e => {
+                  handleOnInputChange('password', e.target.value)
+                }}
+                value={(inputState && inputState.password) || ''}
                 required
               />
             </label>
@@ -230,8 +275,10 @@ const ConfirmResetPage = () => {
                 disabled={waiting}
                 type='password'
                 name='confirmPassword'
-                onChange={handleChange}
-                value={inputs.confirmPassword || ''}
+                onChange={e => {
+                  handleOnInputChange('confirmPassword', e.target.value)
+                }}
+                value={(inputState && inputState.confirmPassword) || ''}
                 required
               />
             </label>
@@ -240,7 +287,7 @@ const ConfirmResetPage = () => {
         <Button
           className={c.PasswordReset_Button}
           type='submit'
-          disabled={!(inputs.password && inputs.confirmPassword)}
+          disabled={!(inputState.password && inputState.confirmPassword)}
         >
           Submit
         </Button>

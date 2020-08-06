@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
+import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
-
 import * as swearjar from '@utilities'
 import { Button, Spinner, TextInput } from '@components'
 import { NewSignupThemeLayout } from '@components/Layout'
-import { useForm } from '@customHooks'
+import { useForm } from '@hooks'
 import { authenticationService } from '@services'
 import { ReactComponent as UserRegistrationIcon } from '@svg/user-registration.svg'
 import { createUseStyles } from '@style'
@@ -56,28 +56,56 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
+const signUpSchema = Joi.object({
+  email: Joi.string().email({ tlds: { allow: false } }),
+  password: Joi.string().required(),
+  registration_code: Joi.string().required(),
+  first_name: Joi.string().required(),
+  last_name: Joi.string().required(),
+  username: Joi.string().required(),
+})
+
 const Page = () => {
-  const [waiting, setWaiting] = React.useState(false)
-  const [signupErrorMessage, setSignupErrorMessage] = React.useState(null)
-  const [invalidFields, setInvalidFields] = React.useState([])
-  const { inputs, handleChange, handleSubmit } = useForm(signup)
-  const [acceptedTerms, setAcceptedTerms] = React.useState(false)
+  const [waiting, setWaiting] = useState(false)
+  const [signupErrorMessage, setSignupErrorMessage] = useState(null)
+  const [invalidFields, setInvalidFields] = useState([])
   const c = useStyles()
+
+  const initialState = {
+    email: '',
+    password: '',
+    first_name: '',
+    last_name: '',
+    username: '',
+    acceptedTerms: false,
+  }
+
+  const { onFormSubmit, onInputChange, inputState } = useForm({
+    initialValidationSchema: signUpSchema,
+    initialState,
+  })
+
+  const handleOnInputChange = useCallback(
+    (key, value) => {
+      onInputChange(key, value)
+    },
+    [onInputChange]
+  )
 
   const history = useHistory()
   const { registrationCode } = useParams()
 
-  async function signup() {
+  const handleSignUp = useCallback(async () => {
     setWaiting(true)
     setSignupErrorMessage(null)
 
     const response = await authenticationService.signup({
-      email: inputs.email,
-      password: inputs.password,
+      email: inputState.email,
+      password: inputState.password,
       registration_code: registrationCode,
-      first_name: inputs.firstName,
-      last_name: inputs.lastName,
-      username: inputs.username,
+      first_name: inputState.firstName,
+      last_name: inputState.lastName,
+      username: inputState.username,
     })
 
     setWaiting(false)
@@ -87,47 +115,45 @@ const Page = () => {
       setSignupErrorMessage(response.data[fields[0]])
     } else {
       await authenticationService.login({
-        email: inputs.email,
-        password: inputs.password,
+        email: inputState.email,
+        password: inputState.password,
       })
       history.push('/')
     }
-  }
+  }, [history, inputState, registrationCode])
 
-  const setFieldToValid = fieldName => {
-    if (invalidFields.indexOf(fieldName) !== -1) {
-      const temp = [...invalidFields]
-      temp.splice(invalidFields.indexOf(fieldName), 1)
-      setInvalidFields(temp)
-      setSignupErrorMessage('')
-    }
-  }
+  const setFieldToValid = useCallback(
+    fieldName => {
+      if (invalidFields.indexOf(fieldName) !== -1) {
+        const temp = [...invalidFields]
+        temp.splice(invalidFields.indexOf(fieldName), 1)
+        setInvalidFields(temp)
+        setSignupErrorMessage('')
+      }
+    },
+    [invalidFields]
+  )
 
-  // const needsCorrected = field => {
-  //   if (invalidFields.indexOf(field) !== -1) return true
-  //   return false
-  // }
-
-  const invalidForm = () => {
+  const invalidForm = useMemo(() => {
     if (!registrationCode) {
       return false
     }
     if (
-      acceptedTerms &&
-      inputs.firstName &&
-      inputs.lastName &&
-      inputs.username &&
-      inputs.email &&
-      inputs.password &&
-      inputs.password === inputs.confirmPass
+      inputState.acceptedTerms &&
+      inputState.firstName &&
+      inputState.lastName &&
+      inputState.username &&
+      inputState.email &&
+      inputState.password &&
+      inputState.password === inputState.confirmPass
     ) {
       return false
     }
     return true
-  }
+  }, [inputState, registrationCode])
 
-  const validateUsername = () => {
-    if (swearjar.profane(inputs.username)) {
+  const validateUsername = useCallback(() => {
+    if (swearjar.profane(inputState.username)) {
       setInvalidFields(['username'])
       setSignupErrorMessage('Sorry, we detected profanity in your username!')
       return false
@@ -135,10 +161,10 @@ const Page = () => {
       setFieldToValid('username')
       return true
     }
-  }
+  }, [inputState, setFieldToValid])
 
-  const validateEmail = () => {
-    if (!EmailValidator.validate(inputs.email)) {
+  const validateEmail = useCallback(() => {
+    if (!EmailValidator.validate(inputState.email)) {
       setInvalidFields(['email'])
       setSignupErrorMessage('Please enter a valid e-mail address')
       return false
@@ -146,10 +172,10 @@ const Page = () => {
       setFieldToValid('email')
       return true
     }
-  }
+  }, [inputState, setFieldToValid])
 
-  const validatePasswords = () => {
-    if (inputs.confirmPass !== inputs.password) {
+  const validatePasswords = useCallback(() => {
+    if (inputState.confirmPass !== inputState.password) {
       setInvalidFields(['password'])
       setSignupErrorMessage('Please ensure that both passwords match')
       return false
@@ -157,11 +183,11 @@ const Page = () => {
       setFieldToValid('password')
       return true
     }
-  }
+  }, [inputState, setFieldToValid])
 
   return (
     <div className={c.Signup}>
-      <form onSubmit={handleSubmit} data-cy='signup-form'>
+      <form onSubmit={onFormSubmit(handleSignUp)} data-cy='signup-form'>
         <UserRegistrationIcon />
         <h1 className={c.Signup_PageHeader}>
           Register {waiting && <Spinner className={c.Signup_Spinner} size='30' />}
@@ -180,8 +206,8 @@ const Page = () => {
                 id='first-name-input'
                 type='text'
                 name='firstName'
-                onChange={handleChange}
-                value={inputs.firstName || ''}
+                onChange={e => handleOnInputChange('firstName', e.target.value)}
+                value={(inputState && inputState.firstName) || ''}
                 data-cy='signup-first-name'
               />
             </label>
@@ -194,8 +220,8 @@ const Page = () => {
                 id='last-name-input'
                 type='text'
                 name='lastName'
-                onChange={handleChange}
-                value={inputs.lastName || ''}
+                onChange={e => handleOnInputChange('lastName', e.target.value)}
+                value={(inputState && inputState.lastName) || ''}
                 data-cy='signup-last-name'
               />
             </label>
@@ -208,9 +234,9 @@ const Page = () => {
                 id='username-input'
                 type='text'
                 name='username'
-                onChange={handleChange}
+                onChange={e => handleOnInputChange('username', e.target.value)}
                 validator={validateUsername}
-                value={inputs.username || ''}
+                value={(inputState && inputState.username) || ''}
                 data-cy='signup-username'
                 required
               />
@@ -224,9 +250,9 @@ const Page = () => {
                 id='email-input'
                 type='text'
                 name='email'
-                onChange={handleChange}
+                onChange={e => handleOnInputChange('email', e.target.value)}
                 validator={validateEmail}
-                value={inputs.email || ''}
+                value={(inputState && inputState.email) || ''}
                 data-cy='signup-email'
                 required
               />
@@ -240,8 +266,8 @@ const Page = () => {
                 id='password-input'
                 type='password'
                 name='password'
-                onChange={handleChange}
-                value={inputs.password || ''}
+                onChange={e => handleOnInputChange('password', e.target.value)}
+                value={(inputState && inputState.password) || ''}
                 data-cy='signup-password'
                 required
               />
@@ -255,8 +281,8 @@ const Page = () => {
                 id='confirm-password-input'
                 type='password'
                 name='confirmPass'
-                onChange={handleChange}
-                value={inputs.confirmPass || ''}
+                onChange={e => handleOnInputChange('confirmPass', e.target.value)}
+                value={(inputState && inputState.confirmPass) || ''}
                 validator={validatePasswords}
                 data-cy='signup-confirm-password'
                 required
@@ -276,13 +302,15 @@ const Page = () => {
           <input
             type='checkbox'
             value='Accepted Terms and Conditions'
-            checked={acceptedTerms}
-            onChange={() => setAcceptedTerms(!acceptedTerms)}
+            checked={inputState.acceptedTerms}
+            onChange={e => {
+              handleOnInputChange('acceptedTerms', e.target.checked)
+            }}
           />
           <Button
             className={c.Signup_Button}
             type='submit'
-            disabled={waiting || invalidForm()}
+            disabled={waiting || invalidForm}
           >
             Submit
           </Button>
