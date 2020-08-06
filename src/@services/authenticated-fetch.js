@@ -23,10 +23,7 @@ const tryWithRefresh = async (originalFetch, history, url, options) => {
   try {
     await authenticationService.refreshAccessToken()
     const accessToken = localStorage.getItem('accessToken')
-    const response = await originalFetch(
-      url,
-      withAuthHeader(options, accessToken)
-    )
+    const response = await originalFetch(url, withAuthHeader(options, accessToken))
 
     if (isErrorResponse(response)) {
       const error = new Error()
@@ -50,12 +47,9 @@ const createAuthenticatedFetch = (originalFetch, history) => {
     }
 
     const accessToken = localStorage.getItem('accessToken')
-    const response = await originalFetch(
-      url,
-      withAuthHeader(options, accessToken)
-    )
+    const response = await originalFetch(url, withAuthHeader(options, accessToken))
 
-    if (response.status === 401) {
+    if (accessToken && response.status === 401) {
       return tryWithRefresh(originalFetch, history, url, options)
     }
     return response
