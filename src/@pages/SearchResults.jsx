@@ -11,6 +11,8 @@ import { NoResults } from '../@components/NoResults'
 import { ReactComponent as MatchingIcon } from '../@svg/matching-icon.svg'
 import { createUseStyles } from '@style'
 
+const graphqlService = GraphqlService.getInstance()
+
 const useStyles = createUseStyles(theme => {
   const {
     mediaQueries: { md },
@@ -44,7 +46,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-function Matching() {
+const Matching = () => {
   const c = useStyles()
   return (
     <Link to={'/matching'}>
@@ -58,14 +60,13 @@ function Matching() {
 
 const SearchResult = ({ searchQuery }) => {
   const c = useStyles()
-  const graphqlService = GraphqlService.getInstance()
   const { loading, error, models } = graphqlService.useSearchModels(searchQuery)
 
   if (loading) {
     return <Spinner />
   }
 
-  if (error) {
+  if (!models && error) {
     return (
       <div data-cy='fetch-results-error'>
         Error! We were not able to load results. Please try again later.
@@ -74,12 +75,12 @@ const SearchResult = ({ searchQuery }) => {
   }
 
   return (
-    <SearchResults className={c.SearchResults}>
+    <div className={c.SearchResults}>
       <div className={c.SearchResults_Header}>Results for {searchQuery}</div>
       <CardCollection noResultsText='No results found. Try searching another keyword or search by model above.'>
         <ModelCards models={models} />
       </CardCollection>
-    </SearchResults>
+    </div>
   )
 }
 

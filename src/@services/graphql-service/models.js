@@ -9,146 +9,146 @@ import { THUMBNAILS_HOST } from '@utilities/constants'
 import { USER_QUERY, parseUser } from './users'
 
 const MODEL_FRAGMENT = gql`
-    fragment Model on ModelType {
+  fragment Model on ModelType {
+    id
+    name
+    likes {
+      isLiked
+      owner {
         id
-        name
-        likes {
-            isLiked
-            owner {
-                id
-                firstName
-                lastName
-                fullName
-            }
-        }
-        owner {
-            id
-            firstName
-            lastName
-            fullName
-            profile {
-                avatarUrl
-            }
-        }
-        attachment {
-            id
-            attachmentId
-        }
-        likesCount
-        commentsCount
-        uploadStatus
-        description
-        category
-        weight
-        height
-        material
-        uploadedFile
+        firstName
+        lastName
+        fullName
+      }
     }
+    owner {
+      id
+      firstName
+      lastName
+      fullName
+      profile {
+        avatarUrl
+      }
+    }
+    attachment {
+      id
+      attachmentId
+    }
+    likesCount
+    commentsCount
+    uploadStatus
+    description
+    category
+    weight
+    height
+    material
+    uploadedFile
+  }
 `
 
 export const MODEL_WITH_RELATED_QUERY = gql`
-    query getModel($id: ID) {
-        model(id: $id) {
-            ...Model
-            relatedModels {
-                ...Model
-            }
-        }
+  query getModel($id: ID) {
+    model(id: $id) {
+      ...Model
+      relatedModels {
+        ...Model
+      }
     }
+  }
 
-    ${MODEL_FRAGMENT}
+  ${MODEL_FRAGMENT}
 `
 
 const UPLOADED_MODEL_WITH_RELATED_QUERY = gql`
-    query getModel($id: ID) {
-        model(id: $id) {
-            id
-            uploadStatus
-            relatedModels {
-                ...Model
-            }
-        }
+  query getModel($id: ID) {
+    model(id: $id) {
+      id
+      uploadStatus
+      relatedModels {
+        ...Model
+      }
     }
+  }
 
-    ${MODEL_FRAGMENT}
+  ${MODEL_FRAGMENT}
 `
 
 const MODEL_QUERY = gql`
-    query getModel($id: ID) {
-        model(id: $id) {
-            ...Model
-        }
+  query getModel($id: ID) {
+    model(id: $id) {
+      ...Model
     }
+  }
 
-    ${MODEL_FRAGMENT}
+  ${MODEL_FRAGMENT}
 `
 
 const LIKE_MODEL_MUTATION = gql`
-    mutation likeModel($userId: ID, $modelId: ID) {
-        likeModel(userId: $userId, modelId: $modelId) {
-            user {
-                id
-                firstName
-                lastName
-                fullName
-                profile {
-                    description
-                    avatarUrl
-                }
-            }
-            model {
-                ...Model
-            }
-            like {
-                id
-            }
+  mutation likeModel($userId: ID, $modelId: ID) {
+    likeModel(userId: $userId, modelId: $modelId) {
+      user {
+        id
+        firstName
+        lastName
+        fullName
+        profile {
+          description
+          avatarUrl
         }
+      }
+      model {
+        ...Model
+      }
+      like {
+        id
+      }
     }
+  }
 
-    ${MODEL_FRAGMENT}
+  ${MODEL_FRAGMENT}
 `
 
 const UNLIKE_MODEL_MUTATION = gql`
-    mutation unlikeModel($userId: ID, $modelId: ID) {
-        unlikeModel(userId: $userId, modelId: $modelId) {
-            user {
-                id
-                firstName
-                lastName
-                fullName
-                profile {
-                    description
-                    avatarUrl
-                }
-            }
-            model {
-                ...Model
-            }
-            like {
-                id
-            }
+  mutation unlikeModel($userId: ID, $modelId: ID) {
+    unlikeModel(userId: $userId, modelId: $modelId) {
+      user {
+        id
+        firstName
+        lastName
+        fullName
+        profile {
+          description
+          avatarUrl
         }
+      }
+      model {
+        ...Model
+      }
+      like {
+        id
+      }
     }
+  }
 
-    ${MODEL_FRAGMENT}
+  ${MODEL_FRAGMENT}
 `
 
 const MODELS_BY_DATE_QUERY = gql`
-    query modelsByDate {
-        modelsByDate {
-            ...Model
-        }
+  query modelsByDate {
+    modelsByDate {
+      ...Model
     }
-    ${MODEL_FRAGMENT}
+  }
+  ${MODEL_FRAGMENT}
 `
 
 const MODELS_BY_LIKES_QUERY = gql`
-    query modelsByLikes {
-        modelsByLikes {
-            ...Model
-        }
+  query modelsByLikes {
+    modelsByLikes {
+      ...Model
     }
-    ${MODEL_FRAGMENT}
+  }
+  ${MODEL_FRAGMENT}
 `
 
 const getModel = R.pathOr(null, ['model'])
@@ -161,9 +161,7 @@ function parseThumbnailUrl(filename) {
 }
 
 export function parseModel(model) {
-  const relatedModels = model.relatedModels
-    ? model.relatedModels.map(parseModel)
-    : null
+  const relatedModels = model.relatedModels ? model.relatedModels.map(parseModel) : null
   const owner = model.owner && parseUser(model.owner)
   const thumbnailUrl = parseThumbnailUrl(model.uploadedFile)
 
@@ -269,64 +267,64 @@ const useUnlikeModelMutation = (userId, modelId) => {
 }
 
 const CREATE_UPLOAD_URL_MUTATION = gql`
-    mutation createUploadUrl($filename: String!) {
-        createUploadUrl(filename: $filename) {
-            uploadUrl
-            newFilename
-            originalFilename
-        }
+  mutation createUploadUrl($filename: String!) {
+    createUploadUrl(filename: $filename) {
+      uploadUrl
+      newFilename
+      originalFilename
     }
+  }
 `
 
 const CREATE_DOWNLOAD_URL_MUTATION = gql`
-    mutation createDownloadUrl($modelId: ID!) {
-        createDownloadUrl(modelId: $modelId) {
-            downloadUrl
-        }
+  mutation createDownloadUrl($modelId: ID!) {
+    createDownloadUrl(modelId: $modelId) {
+      downloadUrl
     }
+  }
 `
 
 const UPLOAD_MODEL_MUTATION = gql`
-    mutation uploadModel(
-        $filename: String!
-        $originalFilename: String!
-        $name: String!
-        $size: Int!
-        $description: String
-        $weight: String
-        $height: String
-        $material: String
-        $category: String
-        $searchUpload: Boolean = false
+  mutation uploadModel(
+    $filename: String!
+    $originalFilename: String!
+    $name: String!
+    $size: Int!
+    $description: String
+    $weight: String
+    $height: String
+    $material: String
+    $category: String
+    $searchUpload: Boolean = false
+  ) {
+    uploadModel(
+      filename: $filename
+      originalFilename: $originalFilename
+      units: "mm"
+      name: $name
+      size: $size
+      description: $description
+      category: $category
+      weight: $weight
+      height: $height
+      material: $material
+      searchUpload: $searchUpload
     ) {
-        uploadModel(
-            filename: $filename
-            originalFilename: $originalFilename
-            units: "mm"
-            name: $name
-            size: $size
-            description: $description
-            category: $category
-            weight: $weight
-            height: $height
-            material: $material
-            searchUpload: $searchUpload
-        ) {
-            model {
-                id
-                name
-                created
-                likesCount
-                commentsCount
-                attachment {
-                    id
-                    imgSrc
-                }
-                uploadStatus
-                uploadedFile
-            }
+      model {
+        id
+        name
+        created
+        likesCount
+        commentsCount
+        attachment {
+          id
+          imgSrc
         }
+        uploadStatus
+        uploadedFile
+      }
     }
+  }
 `
 
 const parseModelPayload = data => {
@@ -356,12 +354,12 @@ const useModelsByLikes = () => {
 }
 
 const SEARCH_MODELS_QUERY = gql`
-    query searchModels($query: String!) {
-        searchModels(query: $query) {
-            ...Model
-        }
+  query searchModels($query: String!) {
+    searchModels(query: $query) {
+      ...Model
     }
-    ${MODEL_FRAGMENT}
+  }
+  ${MODEL_FRAGMENT}
 `
 
 const useCreateDownloadUrlMutation = modelId => {
@@ -407,11 +405,7 @@ const useUploadModelMutation = userId => {
     try {
       const {
         data: {
-          createUploadUrl: {
-            originalFilename,
-            newFilename,
-            uploadUrl,
-          },
+          createUploadUrl: { originalFilename, newFilename, uploadUrl },
         },
       } = await createUploadUrl({
         variables: {
@@ -430,8 +424,8 @@ const useUploadModelMutation = userId => {
       })
       return (
         response.data &&
-                response.data.uploadModel &&
-                parseModel(response.data.uploadModel.model)
+        response.data.uploadModel &&
+        parseModel(response.data.uploadModel.model)
       )
     } catch (e) {
       setUploadError(e)
@@ -458,6 +452,7 @@ const parseSeachModelsPayload = data => {
 const useSearchModels = searchQuery => {
   const { error, loading, data } = useQuery(SEARCH_MODELS_QUERY, {
     variables: { query: searchQuery },
+    errorPolicy: 'ignore',
   })
 
   const models = parseSeachModelsPayload(data)
@@ -466,23 +461,20 @@ const useSearchModels = searchQuery => {
 }
 
 const DELETE_MODEL_MUTATION = gql`
-    mutation deleteModel($modelId: ID!) {
-        deleteModel(modelId: $modelId) {
-            ok
-        }
+  mutation deleteModel($modelId: ID!) {
+    deleteModel(modelId: $modelId) {
+      ok
     }
+  }
 `
 
 const useDeleteModelMutation = (modelId, userId) => {
-  const [deleteModel, { loading, data, error }] = useMutation(
-    DELETE_MODEL_MUTATION,
-    {
-      variables: {
-        modelId,
-      },
-      refetchQueries: [{ query: USER_QUERY, variables: { id: userId } }],
-    }
-  )
+  const [deleteModel, { loading, data, error }] = useMutation(DELETE_MODEL_MUTATION, {
+    variables: {
+      modelId,
+    },
+    refetchQueries: [{ query: USER_QUERY, variables: { id: userId } }],
+  })
 
   const ok = data && data.deleteModel && data.deleteModel.ok
   return [deleteModel, { loading, ok, error }]
