@@ -1,11 +1,11 @@
 import React from 'react'
 import NewModelCommentForm from './NewModelCommentForm'
 import { authenticationService } from '@services'
-import { USER_QUERY } from '../../@services/graphql-service/users'
+import { USER_QUERY } from '@services/graphql-service/users'
 import {
   ALL_MODEL_COMMENTS_QUERY,
   CREATE_MODEL_COMMENT_MUTATION,
-} from '../../@services/graphql-service/comments'
+} from '@services/graphql-service/comments'
 
 import { withApolloProvider } from '../../../.storybook/withApolloProvider'
 

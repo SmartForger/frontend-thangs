@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader'
-import { logger } from '../logging'
+import { logger } from '@utilities/logging'
 
 const useStl = url => {
   const [data, setData] = useState(null)

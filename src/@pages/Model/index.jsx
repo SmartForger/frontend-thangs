@@ -14,7 +14,7 @@ import { ModelTitle } from '@components/ModelTitle'
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
 import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
 
-import { useLocalStorage, useDownloadModel } from '@hooks'
+import { useLocalStorage, useModels } from '@hooks'
 import { NewThemeLayout } from '@components/Layout'
 
 import { ModelDetails } from '../ModelPreview/ModelDetails'
@@ -172,6 +172,7 @@ const useStyles = createUseStyles(theme => {
 
 function DownloadLink({ model }) {
   const c = useStyles()
+  const { useDownloadModel } = useModels()
   const [isDownloading, hadError, downloadModel] = useDownloadModel(model)
   return (
     <Button text className={c.Model_DownloadButton} onClick={downloadModel}>

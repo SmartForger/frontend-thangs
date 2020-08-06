@@ -3,7 +3,7 @@ import { Canvas, useFrame, useThree, extend } from 'react-three-fiber'
 import { createUseStyles } from '@style'
 
 import * as THREE from 'three'
-import { useStl } from '@hooks'
+import { useModels } from '@hooks'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 const useStyles = createUseStyles(_theme => {
@@ -112,6 +112,7 @@ function Controls() {
 }
 
 const Asset = ({ url, mode, meshColor, wireFrameColor }) => {
+  const { useStl } = useModels()
   const [stl, loading, error] = useStl(url)
   const scene = new THREE.Scene()
 

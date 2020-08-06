@@ -229,7 +229,6 @@ export function CreateTeamForm({
   afterCreate,
   onCancel,
   newFolderData = {},
-  _membersLabel,
 }) {
   const { dispatch } = useStoreon('folders')
   const { user: currentUser } = useCurrentUser()

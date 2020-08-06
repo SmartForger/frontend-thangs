@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react'
 import { useFlashNotification } from '@components/Flash'
 import { useParams, useHistory, Link } from 'react-router-dom'
 import { ProfilePicture } from '@components/ProfilePicture'
-import { useCurrentUser, useUnreadNotificationCount } from '@hooks'
+import { useCurrentUser, useNotifications } from '@hooks'
 import { DropdownMenu, DropdownItem } from '@components/DropdownMenu'
 import FolderCreateModal from '@components/FolderCreateModal'
 import TeamCreateModal from '@components/TeamCreateModal'
@@ -146,6 +146,7 @@ const useStyles = createUseStyles(theme => {
 const NOTIFICATIONS_URL = '/notifications'
 
 const NotificationsButton = ({ c }) => {
+  const { useUnreadNotificationCount } = useNotifications()
   const { unreadNotificationCount } = useUnreadNotificationCount()
 
   return (

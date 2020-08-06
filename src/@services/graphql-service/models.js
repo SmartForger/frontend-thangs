@@ -3,7 +3,7 @@ import { gql } from 'apollo-boost'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { uploadToSignedUrl } from '@services/storageService'
 import * as R from 'ramda'
-import { logger } from '../../logging'
+import { logger } from '@utilities/logging'
 import { THUMBNAILS_HOST } from '@utilities/constants'
 
 import { USER_QUERY, parseUser } from './users'

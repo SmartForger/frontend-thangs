@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import * as R from 'ramda'
 import { Button } from '@components/Button'
 import * as GraphqlService from '@services/graphql-service'
-import { logger } from '../logging'
+import { logger } from '@utilities/logging'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -140,10 +140,10 @@ export const EditProfileForm = ({ user }) => {
           {currentState === 'waiting'
             ? 'Saving...'
             : currentState === 'saved'
-              ? 'Saved!'
-              : currentState === 'error'
-                ? 'Error'
-                : 'Save Changes'}
+            ? 'Saved!'
+            : currentState === 'error'
+            ? 'Error'
+            : 'Save Changes'}
         </Button>
       </div>
     </form>

@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useReducer, useRef } from 'react'
 import { colorHexStringToRGBArray, ensureScriptIsLoaded } from '@utilities'
 import axios from 'axios'
-import { logger } from '../logging'
+import { logger } from '@utilities/logging'
 
 const MODEL_PREP_TIMEOUT = 15000
 const MODEL_PREP_ENDPOINT_URI = process.env.REACT_APP_HOOPS_MODEL_PREP_ENDPOINT_URI

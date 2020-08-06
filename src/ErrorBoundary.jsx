@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { NewThemeLayout } from '@components/Layout'
-import { logger } from './logging'
+import { logger } from '@utilities/logging'
 
 function ErrorMessage() {
   return (

@@ -14,7 +14,7 @@ import * as newsposts from './newsposts'
 import * as notifications from './notifications'
 import { getGraphQLUrl } from './utils'
 
-import { logger } from '../../logging'
+import { logger } from '@utilities/logging'
 
 import introspectionQueryResultData from './fragmentTypes.json'
 
@@ -34,8 +34,7 @@ export const graphqlClient = (originalFetch, history) =>
               `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
             )
           )
-        if (networkError)
-          logger.log(`[Network error]: ${networkError}`)
+        if (networkError) logger.log(`[Network error]: ${networkError}`)
       }),
       createUploadLink({
         uri: getGraphQLUrl(),

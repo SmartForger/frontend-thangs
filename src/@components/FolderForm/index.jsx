@@ -4,7 +4,7 @@ import Joi from '@hapi/joi'
 import * as R from 'ramda'
 import { Button } from '../Button'
 import { Spinner } from '../Spinner'
-import { useInviteToFolder } from '@hooks'
+import { useFolders } from '@hooks'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import teamLogo from '@svg/multi-users.svg'
@@ -348,6 +348,7 @@ export function CreateFolderForm({
 
 export const InviteUsersForm = ({ folderId, onErrorReceived, afterInvite, onCancel }) => {
   const c = useStyles()
+  const { useInviteToFolder } = useFolders()
   const validationResolver = ({ members }) => {
     const input = { members: members ? parseEmails(members) : [] }
 

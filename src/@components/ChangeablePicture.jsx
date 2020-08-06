@@ -4,7 +4,7 @@ import 'react-image-crop/dist/ReactCrop.css'
 import Modal from 'react-modal'
 import md5 from 'md5'
 
-import { logger } from '../logging'
+import { logger } from '@utilities/logging'
 
 import { Button } from '@components'
 import * as GraphqlService from '@services/graphql-service'

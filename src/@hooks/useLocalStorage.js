@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { logger } from '../logging'
+import { logger } from '@utilities/logging'
 
 //crc: a hook to store data in local storage
 const useLocalStorage = (key, initialValue) => {

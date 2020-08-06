@@ -1,7 +1,7 @@
 import * as R from 'ramda'
 import { authenticationService } from '@services'
 
-import { logger } from '../logging'
+import { logger } from '@utilities/logging'
 
 function withAuthHeader(options, accessToken) {
   return {

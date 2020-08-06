@@ -10,7 +10,7 @@ import FolderInfo from '../FolderInfo'
 import { Spinner } from '../Spinner'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
-import { useRevokeAccess } from '@hooks'
+import { useFolders } from '@hooks'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 
@@ -75,6 +75,7 @@ const useStyles = createUseStyles(theme => {
 
 const RevokeAccessButton = ({ folderId, targetUserId, children }) => {
   const c = useStyles({})
+  const { useRevokeAccess } = useFolders()
   const [revokeAccess, { loading, error }] = useRevokeAccess(folderId, targetUserId)
   const handleRevoke = async e => {
     e.preventDefault()

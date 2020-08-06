@@ -1,4 +1,4 @@
-import { logger } from '../logging'
+import { logger } from '@utilities/logging'
 
 const apiKey = process.env.REACT_APP_PENDO_API_KEY
 if (apiKey === undefined) {
@@ -9,7 +9,7 @@ const shouldTrack = () => apiKey !== undefined
 
 const initialize = history => {
   if (shouldTrack()) {
-    (function(p, e, n, d, o) {
+    ;(function(p, e, n, d, o) {
       var v, w, x, y, z
       o = p[d] = p[d] || {}
       o._q = []
@@ -17,12 +17,12 @@ const initialize = history => {
       for (w = 0, x = v.length; w < x; ++w)
         (function(m) {
           o[m] =
-                        o[m] ||
-                        function() {
-                          o._q[m === v[0] ? 'unshift' : 'push'](
-                            [m].concat([].slice.call(arguments, 0))
-                          )
-                        }
+            o[m] ||
+            function() {
+              o._q[m === v[0] ? 'unshift' : 'push'](
+                [m].concat([].slice.call(arguments, 0))
+              )
+            }
         })(v[w])
       y = e.createElement(n)
       y.async = !0
@@ -50,19 +50,19 @@ const identify = user => {
 
   const userDetails = user
     ? {
-      visitor: {
-        id: user.id,
-        name: user.username,
-        email: user.email,
-      },
-      // Accounts are a separate concept in Pendo's system, which group many
-      // users. Currently we don't have a concept for this, so we can just
-      // reuse user details.
-      account: {
-        id: user.id,
-        name: user.username,
-      },
-    }
+        visitor: {
+          id: user.id,
+          name: user.username,
+          email: user.email,
+        },
+        // Accounts are a separate concept in Pendo's system, which group many
+        // users. Currently we don't have a concept for this, so we can just
+        // reuse user details.
+        account: {
+          id: user.id,
+          name: user.username,
+        },
+      }
     : {}
   window.pendo.identify(userDetails)
 }

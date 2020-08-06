@@ -4,7 +4,7 @@ import * as R from 'ramda'
 import { useNotifications } from '@hooks'
 import { Spinner } from '@components/Spinner'
 import { NoResults } from '@components/NoResults'
-import { logger } from '../../logging'
+import { logger } from '@utilities/logging'
 import { Notification } from './Notification'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -23,7 +23,8 @@ const useStyles = createUseStyles(_theme => {
 
 const NotificationsList = ({ className }) => {
   const c = useStyles()
-  const { loading, error, notifications } = useNotifications()
+  const { useNotificationsByUserId } = useNotifications()
+  const { loading, error, notifications } = useNotificationsByUserId()
 
   if (loading) {
     return <Spinner />

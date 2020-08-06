@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react'
 
 import { Spinner } from '@components/Spinner'
 import { HowTo } from '@components/HowTo'
-import { useLocalStorage, useHoopsViewer } from '@hooks'
+import { useLocalStorage, useModels } from '@hooks'
 import Toolbar from './Toolbar'
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg'
 
@@ -42,7 +42,7 @@ const HoopsModelViewer = ({ className, model }) => {
   const c = useStyles()
   const [meshColor, setMeshColor] = useState()
   const [wireColor, setWireColor] = useState()
-
+  const { useHoopsViewer } = useModels()
   const { containerRef, hoops } = useHoopsViewer(model.uploadedFile)
 
   const handleResetView = useCallback(() => {

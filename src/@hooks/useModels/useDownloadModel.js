@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import * as GraphqlService from '@services/graphql-service'
-import { logger } from '../logging'
+import { logger } from '@utilities/logging'
 
 const graphqlService = GraphqlService.getInstance()
 

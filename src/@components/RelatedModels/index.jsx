@@ -10,7 +10,7 @@ import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { isError, isProcessing } from '@utilities'
 
-import { logger } from '../../logging'
+import { logger } from '@utilities/logging'
 
 import * as GraphqlService from '@services/graphql-service'
 import classnames from 'classnames'
