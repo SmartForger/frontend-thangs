@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import Joi from '@hapi/joi'
 import * as R from 'ramda'
@@ -206,34 +206,39 @@ export function CreateFolderForm({
   afterCreate = noop,
   onCancel = noop,
   onTeamModelOpen = noop,
-  _membersLabel,
 }) {
   const { dispatch } = useStoreon('folders')
   const { atom: teams } = useFetchPerMount('teams')
   const c = useStyles()
 
-  const teamNames = (teams.data && Object.values(teams.data).map(team => team.name)) || []
+  const teamNames = useMemo(
+    () => (teams.data && Object.values(teams.data).map(team => team.name)) || [],
+    [teams]
+  )
 
-  const validationResolver = ({ members, name }) => {
-    const input = {
-      name: name,
-      members: members ? parseEmails(members) : [],
-    }
-    if (teamNames.indexOf(members) > -1) {
-      initSchema = autocompleteSchema
-    } else {
-      initSchema = schemaWithName
-    }
+  const validationResolver = useCallback(
+    ({ members, name }) => {
+      const input = {
+        name: name || '',
+        members: members ? parseEmails(members) : [],
+      }
+      if (teamNames.indexOf(members) > -1) {
+        initSchema = autocompleteSchema
+      } else {
+        initSchema = schemaWithName
+      }
 
-    const { error, value: values } = initSchema.validate(input)
-    const errors = buildErrors(error)
-    if (errors) onErrorReceived(errors)
+      const { error, value: values } = initSchema.validate(input)
+      const errors = buildErrors(error)
+      if (errors) onErrorReceived(errors)
 
-    return {
-      values: error ? {} : values,
-      errors: errors || {},
-    }
-  }
+      return {
+        values: error ? {} : values,
+        errors: errors || {},
+      }
+    },
+    [onErrorReceived, teamNames]
+  )
 
   const { handleSubmit, control, getValues } = useForm({
     validationResolver,
@@ -264,12 +269,12 @@ export function CreateFolderForm({
     onCancel()
   }
 
-  const handleOnCreateTeam = () => {
-    const { error } = schemaJustName.validate({ name: getValues('name') })
+  const handleOnCreateTeam = useCallback(() => {
+    const { error } = schemaJustName.validate({ name: getValues('name') || '' })
     const errors = buildErrors(error)
     if (errors) return onErrorReceived(errors)
     onTeamModelOpen({ folderName: getValues('name'), members: getValues('members') })
-  }
+  }, [getValues, onErrorReceived, onTeamModelOpen])
 
   const addSaveGroupFields = () => {
     return (
