@@ -295,7 +295,6 @@ export function CreateFolderForm({
       <Controller
         name='name'
         control={control}
-        defaultValue=''
         as={<input className={c.FolderForm_FullWidthInput} name='name' />}
       />
       <label className={c.FolderForm_Label} htmlFor='members'>
