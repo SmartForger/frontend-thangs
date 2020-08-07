@@ -452,7 +452,6 @@ const parseSeachModelsPayload = data => {
 const useSearchModels = searchQuery => {
   const { error, loading, data } = useQuery(SEARCH_MODELS_QUERY, {
     variables: { query: searchQuery },
-    errorPolicy: 'ignore',
   })
 
   const models = parseSeachModelsPayload(data)
