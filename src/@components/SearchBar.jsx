@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React, { useCallback, useState } from 'react'
-=======
-import React, { useCallback, useState, useMemo } from 'react'
->>>>>>> 1ea4785... Update components with hooks and export defaults
 import { useHistory } from 'react-router-dom'
 import { ReactComponent as SearchIcon } from '@svg/search-icon.svg'
 import classnames from 'classnames'
@@ -55,9 +51,9 @@ const useStyles = createUseStyles(theme => {
 const useSearch = (initialSearchQuery = '') => {
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery)
   const history = useHistory()
-  const executeSearch = useMemo(() => {
+  const executeSearch = () => {
     history.push(`/search/${searchQuery}`)
-  }, [history, searchQuery])
+  }
   return { searchQuery, setSearchQuery, executeSearch }
 }
 
