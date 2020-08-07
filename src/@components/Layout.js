@@ -32,6 +32,14 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'center',
       padding: 0,
     },
+    Layout_HeaderBackground: {
+      background: theme.variables.colors.invertedHeaderBackground,
+      height: '5rem',
+      position: 'relative',
+      display: 'flex',
+      justifyContent: 'center',
+      padding: 0,
+    },
     Layout_TextContainer: {
       margin: 'auto 1rem',
       [md]: {
@@ -54,7 +62,7 @@ const useStyles = createUseStyles(theme => {
     },
     Layout_Background: {
       position: 'absolute',
-      bottom: 0,
+      top: 0,
       right: 0,
     },
     Layout_SearchByModelUploadButton: { marginTop: '1.5rem' },
@@ -72,7 +80,9 @@ export const NewThemeLayout = ({ children, options = {} }) => {
   return (
     <>
       <Header variant={headerVariant} />
-      <div className={c.Layout_Spacer}></div>
+      <div className={c.Layout_HeaderBackground}>
+        <BackgroundSvg className={c.Layout_Background} />
+      </div>
       <div className={c.Layout} variant={layoutVariant}>
         {children}
       </div>
@@ -103,7 +113,6 @@ export const NewInvertedHeaderLayout = ({ children }) => {
           </div>
           <div className={c.Layout_SearchByModelUploadButton}>
             <Button
-              brand
               className={c.Layout_SearchByModelUploadButton_BrandButton}
               onClick={() => history.push('/matching')}
             >
@@ -126,7 +135,9 @@ export const NewSignupThemeLayout = ({ children }) => {
   return (
     <>
       <Header />
-      <div className={c.Layout_Spacer}></div>
+      <div className={c.Layout_HeaderBackground}>
+        <BackgroundSvg className={c.Layout_Background} />
+      </div>
       <div className={c.Layout} variant='small-vertical-spacing'>
         {children}
       </div>

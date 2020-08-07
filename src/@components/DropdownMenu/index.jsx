@@ -78,6 +78,7 @@ const DropdownItem = ({ children, to = '#', onClick }) => {
 }
 
 const DropdownMenu = ({
+  TargetComponent,
   children,
   className,
   noIcons,
@@ -87,11 +88,16 @@ const DropdownMenu = ({
   const [isOpenInternal, toggleOpen] = useDropdownMenuState(isOpenExternal)
   const isOpen = isOpenExternal === undefined ? isOpenInternal : isOpenExternal
   const c = useStyles({ isOpen, noIcons })
+  debugger
   return (
     <div className={classnames(className, c.DropdownMenu_Container)}>
-      <Button text className={c.DropdownMenu_Button} onClick={toggleOpen}>
-        <ButtonIcon />
-      </Button>
+      {TargetComponent ? (
+        <TargetComponent onClick={toggleOpen} />
+      ) : (
+        <Button text className={c.DropdownMenu_Button} onClick={toggleOpen}>
+          <ButtonIcon />
+        </Button>
+      )}
       {isOpen && <div className={c.DropdownMenu}>{children}</div>}
     </div>
   )

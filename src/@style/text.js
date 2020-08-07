@@ -84,8 +84,10 @@ export const logoText = {
 }
 
 export const primaryButtonText = {
-  color: colors.white[900],
-  fontWeight: 500,
+  color: colors.purple[900],
+  fontSize: '1rem',
+  lineHeight: '1rem',
+  fontWeight: 'bold',
 }
 
 export const secondaryButtonText = {

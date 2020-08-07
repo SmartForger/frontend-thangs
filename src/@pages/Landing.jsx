@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
-import { CardCollection, NewInvertedHeaderLayout } from '@components'
+import { CardCollection, NewInvertedHeaderLayout, NewThemeLayout } from '@components'
+import { useCurrentUser } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { useStoreon } from 'storeon/react'
 
@@ -30,6 +31,16 @@ function Page() {
 }
 
 export const Landing = () => {
+  const { user } = useCurrentUser()
+
+  if (user) {
+    return (
+      <NewThemeLayout>
+        <Page />
+      </NewThemeLayout>
+    )
+  }
+
   return (
     <NewInvertedHeaderLayout>
       <Page />

@@ -8,6 +8,8 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     Button: {
+      display: 'flex',
+      textAlign: 'center',
       border: 'none',
       background: 'none',
       padding: 0,
@@ -28,11 +30,11 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       borderRadius: '.5rem',
       padding: '.5625rem .75rem',
-      backgroundColor: theme.colors.blue[500],
+      backgroundColor: theme.colors.gold[500],
       ...theme.mixins.text.primaryButtonText,
 
       '&:hover': {
-        backgroundColor: theme.colors.blue[700],
+        backgroundColor: theme.colors.gold[700],
       },
 
       '&:disabled': {
@@ -62,39 +64,13 @@ const useStyles = createUseStyles(theme => {
       ...theme.mixins.text.darkButtonText,
       backgroundColor: theme.colors.purple[500],
       '&:hover': {
-        backgroundColor: theme.colors.purple[800],
-      },
-    },
-    Button__brand: {
-      ...theme.mixins.text.matchingButtonText,
-      borderRadius: '.5rem',
-      boxShadow: theme.variables.boxShadow,
-      backgroundColor: theme.colors.gold[500],
-      padding: '.375rem 1rem',
-      minWidth: '11.25rem',
-
-      [md]: {
-        padding: '.375rem 1.5rem',
-      },
-
-      '&:hover': {
-        ...theme.mixins.text.matchingButtonHoverText,
-        backgroundColor: theme.colors.gold[800],
+        backgroundColor: theme.colors.purple[700],
       },
     },
   }
 })
 
-const Button = ({
-  children,
-  secondary,
-  back,
-  dark,
-  text,
-  brand,
-  className,
-  ...props
-}) => {
+const Button = ({ children, secondary, back, dark, text, className, ...props }) => {
   const c = useStyles()
   return (
     <button
@@ -103,7 +79,6 @@ const Button = ({
         [c.Button__back]: back,
         [c.Button__dark]: dark,
         [c.Button__notText]: !text,
-        [c.Button__brand]: brand,
       })}
       {...props}
     >

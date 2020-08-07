@@ -36,8 +36,8 @@ export const colors = {
     400: '#88888b', //formerly GREY_5
     500: mains.PURPLE, //formerly GREY_7
     600: '#55555B',
-    700: '#49494E',
-    800: '#464655', //formerly BLACK_4
+    700: '#464655', //formerly BLACK_4
+    800: '#31313C',
     900: '#232530', //formerly BLACK_2
   },
   blue: {

@@ -1,14 +1,15 @@
 import React, { useState, useCallback } from 'react'
+import { useParams, useHistory, Link } from 'react-router-dom'
 import {
   Button,
-  DropdownItem,
-  DropdownMenu,
-  CreateFolderModal,
   ProfilePicture,
-  CreateTeamModal,
+  TextInput,
   useFlashNotification,
+  DropdownMenu,
+  DropdownItem,
+  CreateFolderModal,
+  CreateTeamModal,
 } from '@components'
-import { useParams, useHistory, Link } from 'react-router-dom'
 import { useCurrentUser, useNotifications } from '@hooks'
 import { authenticationService } from '@services'
 import classnames from 'classnames'
@@ -18,13 +19,15 @@ import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg'
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as LogoText } from '@svg/logo-text.svg'
 import { ReactComponent as PlusButton } from '@svg/icon-blue-circle-plus.svg'
-import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass.svg'
+import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
 import { ReactComponent as UploadModelToFolderIcon } from '@svg/upload-model-to-folder-icon.svg'
 import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg'
 import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon-gray.svg'
 import { ReactComponent as PencilIcon } from '@svg/icon-pencil.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
+import { ReactComponent as MatchingIcon } from '@svg/matching-icon-header.svg'
+import { ReactComponent as ClearIcon } from '@svg/icon-input-clear.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -38,15 +41,15 @@ const useStyles = createUseStyles(theme => {
       background: 'none',
       top: 0,
       zIndex: 2,
+      borderTop: `.125rem solid ${theme.colors.gold[500]}`,
     },
     Header_DesktopBoundary: {
       position: 'relative',
-      margin: '3rem auto 1rem',
       maxWidth: theme.variables.maxWidth,
       flexGrow: 1,
 
       [md]: {
-        margin: '3rem 6.25rem 1rem',
+        margin: '0.875rem 6.25rem 1rem',
       },
     },
     Header_DesktopOnly: {
@@ -65,6 +68,9 @@ const useStyles = createUseStyles(theme => {
     Header_MobileBoundary: {
       margin: '2.75rem 0 auto',
       padding: '0 .75rem',
+    },
+    Header_LogoWrapper: {
+      marginRight: '2.25rem',
     },
     Header_Logo: {
       marginRight: '.75rem',
@@ -85,8 +91,8 @@ const useStyles = createUseStyles(theme => {
       ...theme.mixins.text.linkText,
       marginRight: '2rem',
     },
-    Header_SignUpButton: {
-      width: '5rem',
+    Header_Button: {
+      marginLeft: '1rem',
     },
     Header_NotificationIcon: {
       color: theme.colors.purple[400],
@@ -99,19 +105,19 @@ const useStyles = createUseStyles(theme => {
       height: '3rem',
     },
     Header_UnreadBadge: {
-      background: theme.colors.attention,
+      background: theme.colors.gold[500],
       borderRadius: '100%',
-      color: theme.colors.white[400],
-      width: '1rem',
-      height: '1rem',
+      color: theme.colors.purple[900],
+      width: '.875rem',
+      height: '.875rem',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      fontSize: '.625rem',
+      fontSize: '.5625rem',
       fontWeight: 'bold',
       position: 'absolute',
-      top: '.375rem',
-      right: '-.25rem',
+      top: '.2rem',
+      right: '.65rem',
     },
     Header_DropdownIcon: {
       width: '3rem',
@@ -137,11 +143,75 @@ const useStyles = createUseStyles(theme => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        margin: '0 1rem',
         '&:last-child': {
           marginRight: 0,
         },
       },
+    },
+    Header_TextButton: {
+      marginRight: '1.5rem',
+      fontSize: '1rem',
+      lineHeight: '1rem',
+      fontWeight: 'bold',
+      color: theme.colors.white[400],
+
+      '& span': {
+        marginLeft: '.5rem',
+      },
+    },
+    Header_SearchFormWrapper: {
+      alignItems: 'center',
+      display: 'flex',
+      position: 'relative',
+
+      '& input': {
+        paddingLeft: '2rem',
+
+        outline: 'none',
+        fontSize: '1rem',
+        lineHeight: '1rem',
+        '&::placeholder': {
+          color: theme.colors.white[400],
+        },
+        '&:focus, &:active': {
+          background: theme.colors.purple[800],
+          color: theme.colors.white[400],
+          '&::placeholder': {
+            color: 'transparent',
+          },
+        },
+        '&:-webkit-autofill': {
+          '-webkit-box-shadow': `0 0 0px 1000px ${theme.colors.purple[800]} inset`,
+          '-webkit-text-fill-color': theme.colors.white[400],
+          border: 'none',
+        },
+      },
+    },
+    Header_SearchFormWrapper_active: {},
+    Header_SearchFormIcon: {
+      position: 'absolute',
+      left: '.75rem',
+    },
+    Header_SearchFormInput: {
+      backgroundColor: 'transparent',
+    },
+    Header_SearchFormInput_active: {
+      background: theme.colors.purple[800],
+      color: theme.colors.white[400],
+      '&::placeholder': {
+        color: 'transparent',
+      },
+    },
+    Header_SearchClearIcon: {
+      display: 'none',
+      position: 'absolute',
+      right: '.75rem',
+    },
+    Header_SearchClearIcon_active: {
+      display: 'block',
+    },
+    Header_UserPicture: {
+      marginLeft: '1rem',
     },
   }
 })
@@ -150,8 +220,8 @@ const NOTIFICATIONS_URL = '/notifications'
 
 const NotificationsButton = ({ c }) => {
   const { useUnreadNotificationCount } = useNotifications()
-  const { unreadNotificationCount } = useUnreadNotificationCount()
-
+  // const { unreadNotificationCount } = useUnreadNotificationCount()
+  const unreadNotificationCount = 4
   return (
     <Link to={NOTIFICATIONS_URL} className={c.Header_NotificationLink}>
       <NotificationIcon className={c.Header_NotificationIcon} />
@@ -162,21 +232,13 @@ const NotificationsButton = ({ c }) => {
   )
 }
 
-const Search = ({ c }) => {
+const UserPicture = ({ user, className }) => {
   return (
-    <Link to='/search' className={c.Header_SearchLink}>
-      <MagnifyingGlass />
-    </Link>
-  )
-}
-
-const UserPicture = ({ user }) => {
-  return (
-    <Link to='/home/'>
+    <Link className={className} to='/home/'>
       <ProfilePicture
         name={user.fullName}
         src={user && user.profile && user.profile.avatarUrl}
-        size='3rem'
+        size='2.125rem'
       />
     </Link>
   )
@@ -190,16 +252,12 @@ const AddModelDropdownMenu = ({ c }) => {
   const { navigateWithFlash } = useFlashNotification()
   const setFolderOpen = useCallback(() => {
     setCreateFolderIsOpen(true)
-  }, [setCreateFolderIsOpen])
+  }, [])
   const setTeamOpen = useCallback(() => {
     setCreateTeamIsOpen(true)
-  }, [setCreateTeamIsOpen])
-  const setFolderClose = useCallback(() => setCreateFolderIsOpen(false), [
-    setCreateFolderIsOpen,
-  ])
-  const setTeamClose = useCallback(() => setCreateTeamIsOpen(false), [
-    setCreateTeamIsOpen,
-  ])
+  }, [])
+  const setFolderClose = useCallback(() => setCreateFolderIsOpen(false), [])
+  const setTeamClose = useCallback(() => setCreateTeamIsOpen(false), [])
 
   return (
     <>
@@ -293,39 +351,80 @@ const UserNav = ({ c }) => {
   if (user) {
     return (
       <div className={classnames(c.Header_Row, c.Header_ButtonsRow)}>
-        <Search c={c} />
         <NotificationsButton c={c} />
-        <AddModelDropdownMenu c={c} />
-        <UserPicture user={user} />
+        <UserPicture className={c.Header_UserPicture} user={user} />
         <ProfileDropdownMenu c={c} />
+        <Button className={c.Header_Button}>Upload</Button>
       </div>
     )
   }
 
   return (
     <div className={classnames(c.Header_Row, c.Header_ButtonsRow)}>
-      {/* <Search c={c} /> */}
-      <Link className={c.Header_SignInLink} to='/login'>
-        Sign in
-      </Link>
-      <Link to='/signup/alpha'>
-        <Button className={c.Header_SignUpButton}>Sign up</Button>
+      <Link to='/login'>
+        <Button className={c.Header_Button}>Sign in</Button>
       </Link>
     </div>
   )
 }
 
-const DesktopHeader = ({ variant, c }) => {
+const DesktopHeader = ({ variant, c, searchTerm, setSearchTerm }) => {
+  const handleSearchSubmit = e => {
+    e.preventDefault()
+    console.log('Search...')
+  }
+
+  const handleSearchClear = () => {
+    setSearchTerm(undefined)
+  }
+
   return (
     <span className={c.Header_DesktopOnly}>
       <div className={c.Header_DesktopBoundary}>
         <div className={classnames(c.Header_Row, c.Header_TopRow)}>
           <div>
             <div className={c.Header_Row}>
-              <Link to='/'>
+              <Link className={c.Header_LogoWrapper} to='/'>
                 <Logo className={c.Header_Logo} />
                 <LogoText />
               </Link>
+              <Button
+                text
+                className={c.Header_TextButton}
+                onClick={() => console.log('show upload overlay')}
+              >
+                <MatchingIcon />
+                <span>Model upload search</span>
+              </Button>
+              <form onSubmit={handleSearchSubmit}>
+                <div
+                  className={classnames(c.Header_SearchFormWrapper, {
+                    [c.Header_SearchFormWrapper_active]: searchTerm,
+                  })}
+                >
+                  <MagnifyingGlass
+                    className={c.Header_SearchFormIcon}
+                    onClick={handleSearchSubmit}
+                  />
+                  <TextInput
+                    name='search'
+                    placeholder='Search'
+                    className={classnames(c.Header_SearchFormInput, {
+                      [c.Header_SearchFormInput_active]: searchTerm,
+                    })}
+                    onChange={e => {
+                      setSearchTerm(e.target.value)
+                    }}
+                    value={searchTerm || ''}
+                  />
+                  <ClearIcon
+                    className={classnames(c.Header_SearchClearIcon, {
+                      [c.Header_SearchClearIcon_active]: searchTerm,
+                    })}
+                    onClick={handleSearchClear}
+                  />
+                </div>
+              </form>
             </div>
           </div>
           {variant !== 'logo-only' && <UserNav c={c} />}
@@ -352,11 +451,22 @@ const MobileHeader = ({ variant, c }) => {
 
 const Header = ({ inverted, variant }) => {
   const c = useStyles({ inverted })
+  const [searchTerm, setSearchTerm] = useState(undefined)
   return (
     <>
       <div className={c.Header}>
-        <MobileHeader variant={variant} c={c} />
-        <DesktopHeader variant={variant} c={c} />
+        <MobileHeader
+          variant={variant}
+          c={c}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        />
+        <DesktopHeader
+          variant={variant}
+          c={c}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        />
       </div>
     </>
   )
