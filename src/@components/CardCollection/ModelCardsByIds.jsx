@@ -3,10 +3,20 @@ import * as R from 'ramda'
 import ModelCard from '../ModelCard'
 import useFetchOnce from '@services/store-service/hooks/useFetchOnce'
 
+// TMP Delte after move to RestAPI
+const parseStoreToGQL = data => ({
+  ...data,
+  likesCount: data.likes,
+})
+
 const WithStoreModel = ({ id }) => {
   const { atom: model } = useFetchOnce(id, 'model')
 
-  return !R.isEmpty(model.data) && <ModelCard model={model.data} withOwner={true} />
+  return (
+    !R.isEmpty(model.data) && (
+      <ModelCard model={parseStoreToGQL(model.data)} withOwner={true} />
+    )
+  )
 }
 
 const ModelCardsByIds = ({ modelsIds = [] }) =>
