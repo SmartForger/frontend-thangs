@@ -1,11 +1,9 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import ReactCrop from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 import Modal from 'react-modal'
 import md5 from 'md5'
-
 import { logger } from '@utilities/logging'
-
 import { Button } from '@components'
 import * as GraphqlService from '@services/graphql-service'
 import classnames from 'classnames'
@@ -90,7 +88,7 @@ const ModalOverlayStyles = () => {
 
 const initialCrop = { unit: '%', width: 30, aspect: 1 / 1 }
 
-export function ChangeablePicture({ user, _button, className }) {
+const ChangeablePicture = ({ user, className }) => {
   const [cropSrc, setCropSrc] = useState(null)
   const [crop, setCrop] = useState()
   const [croppedImg, setCroppedImg] = useState(null)
@@ -102,17 +100,17 @@ export function ChangeablePicture({ user, _button, className }) {
   const [uploadAvatar] = graphqlService.useUploadUserAvatarMutation(user, croppedImg)
   const c = useStyles()
 
-  const submitCrop = () => {
+  const submitCrop = useCallback(() => {
     uploadAvatar()
     setIsCropping(false)
-  }
+  }, [uploadAvatar])
 
-  const cancel = () => {
+  const cancel = useCallback(() => {
     formRef.current.reset()
     setIsCropping(false)
-  }
+  }, [])
 
-  function onSelectFile(e) {
+  const onSelectFile = useCallback(e => {
     if (e.target.files && e.target.files.length > 0) {
       const reader = new FileReader()
       reader.addEventListener('load', () => {
@@ -121,32 +119,38 @@ export function ChangeablePicture({ user, _button, className }) {
       })
       reader.readAsDataURL(e.target.files[0])
     }
-  }
+  }, [])
 
-  const onImageLoaded = img => {
+  const onImageLoaded = useCallback(img => {
     setCrop(initialCrop)
     setImg(img)
     return false
-  }
+  }, [])
 
-  const onCropComplete = async crop => {
-    await makeClientCrop(crop)
-  }
+  const onCropComplete = useCallback(
+    async crop => {
+      await makeClientCrop(crop)
+    },
+    [makeClientCrop]
+  )
 
-  const onCropChange = crop => setCrop(crop)
+  const onCropChange = useCallback(crop => setCrop(crop), [])
 
-  async function makeClientCrop(crop) {
-    if (img && crop.width && crop.height) {
-      const croppedImg = await getCroppedImage(
-        img,
-        crop,
-        md5(imageEl.current.files[0].name)
-      )
-      setCroppedImg(croppedImg)
-    }
-  }
+  const makeClientCrop = useCallback(
+    async crop => {
+      if (img && crop.width && crop.height) {
+        const croppedImg = await getCroppedImage(
+          img,
+          crop,
+          md5(imageEl.current.files[0].name)
+        )
+        setCroppedImg(croppedImg)
+      }
+    },
+    [getCroppedImage, img]
+  )
 
-  const getCroppedImage = (image, crop, fileName) => {
+  const getCroppedImage = useCallback((image, crop, fileName) => {
     const canvas = document.createElement('canvas')
     const scaleX = image.naturalWidth / image.width
     const scaleY = image.naturalHeight / image.height
@@ -176,12 +180,7 @@ export function ChangeablePicture({ user, _button, className }) {
         resolve(blob)
       })
     }, 'image/jpeg')
-  }
-
-  // const onButtonClick = e => {
-  //   buttonRef.current.focus()
-  //   e.persist()
-  // }
+  }, [])
 
   return (
     <form className={classnames(className, c.ChangeablePicture_Form)} ref={formRef}>
@@ -231,3 +230,5 @@ export function ChangeablePicture({ user, _button, className }) {
     </form>
   )
 }
+
+export default ChangeablePicture

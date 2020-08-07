@@ -1,7 +1,7 @@
 import React from 'react'
 import { NoResults } from '../NoResults'
 import FolderCard from '../FolderCard'
-import { ShowMoreButton } from '../ShowMore'
+import { ShowMoreButton } from '../ShowMoreButton'
 import Grid from './Grid'
 import { createUseStyles } from '@style'
 

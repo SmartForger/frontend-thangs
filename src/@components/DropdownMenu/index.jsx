@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Button } from '../Button'
-import { ReactComponent as DotStackIcon } from '../../@svg/dot-stack-icon.svg'
+import { Button } from '@components'
+import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -43,7 +43,24 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const DropdownItem = ({ children, to = '#', onClick }) => {
+const useDropdownMenuState = (initialIsOpen = false) => {
+  const [isOpen, setIsOpen] = useState(initialIsOpen)
+  const toggleOpen = _e => setIsOpen(!isOpen)
+  const closeMenu = () => setIsOpen(false)
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('click', closeMenu)
+    }
+    return () => {
+      if (isOpen) {
+        document.removeEventListener('click', closeMenu)
+      }
+    }
+  }, [isOpen])
+  return [isOpen, toggleOpen]
+}
+
+const DropdownItem = ({ children, to = '#', onClick }) => {
   const c = useStyles({})
   return (
     <div>
@@ -60,7 +77,7 @@ export const DropdownItem = ({ children, to = '#', onClick }) => {
   )
 }
 
-export const DropdownMenu = ({
+const DropdownMenu = ({
   children,
   className,
   noIcons,
@@ -80,19 +97,4 @@ export const DropdownMenu = ({
   )
 }
 
-const useDropdownMenuState = (initialIsOpen = false) => {
-  const [isOpen, setIsOpen] = useState(initialIsOpen)
-  const toggleOpen = _e => setIsOpen(!isOpen)
-  const closeMenu = () => setIsOpen(false)
-  useEffect(() => {
-    if (isOpen) {
-      document.addEventListener('click', closeMenu)
-    }
-    return () => {
-      if (isOpen) {
-        document.removeEventListener('click', closeMenu)
-      }
-    }
-  }, [isOpen])
-  return [isOpen, toggleOpen]
-}
+export { DropdownItem, DropdownMenu }

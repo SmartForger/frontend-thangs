@@ -1,6 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
-import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg'
+import { ReactComponent as FolderIcon } from '@svg/folder-icon.svg'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {

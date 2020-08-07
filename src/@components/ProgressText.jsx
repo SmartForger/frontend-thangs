@@ -10,7 +10,7 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-export function ProgressText({ text, className }) {
+const ProgressText = ({ text, className }) => {
   const c = useStyles()
   const [dots, setDots] = useState('.')
 
@@ -32,3 +32,5 @@ export function ProgressText({ text, className }) {
     </div>
   )
 }
+
+export default ProgressText

@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
-import { Button } from './Button'
-import { Spinner } from './Spinner'
+import React, { useCallback, useState } from 'react'
+import { Button, Spinner } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -19,7 +18,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 // Used for Client-Side Controlled Pagination - Sync
-export function ShowMore({ more, className }) {
+const ShowMoreSync = ({ more, className }) => {
   const [shouldShowMore, setShouldShowMore] = useState()
   const c = useStyles()
   return shouldShowMore ? (
@@ -34,23 +33,31 @@ export function ShowMore({ more, className }) {
 }
 
 // Used for Server-Side Controlled Pagination - Async
-export function ShowMoreButton({ fetchMore }) {
+const ShowMoreAsync = ({ fetchMore, className }) => {
   const [loading, setLoading] = useState()
   const [hadError, setHadError] = useState()
   const c = useStyles()
 
-  const handleClick = async e => {
-    e.preventDefault()
-    setLoading(true)
-    try {
-      await fetchMore()
-      setLoading(false)
-    } catch (error) {
-      setHadError(true)
-    }
-  }
+  const handleClick = useCallback(
+    async e => {
+      e.preventDefault()
+      setLoading(true)
+      try {
+        await fetchMore()
+        setLoading(false)
+      } catch (error) {
+        setHadError(true)
+      }
+    },
+    [fetchMore]
+  )
+
   return (
-    <Button text className={c.ShowMoreButton} onClick={handleClick}>
+    <Button
+      text
+      className={classnames(className, c.ShowMoreButton)}
+      onClick={handleClick}
+    >
       {hadError ? (
         'Server Error'
       ) : loading ? (
@@ -61,3 +68,10 @@ export function ShowMoreButton({ fetchMore }) {
     </Button>
   )
 }
+
+const ShowMoreButton = props => {
+  const { fetchMore } = props
+  return fetchMore ? <ShowMoreAsync {...props} /> : <ShowMoreSync {...props} />
+}
+
+export default ShowMoreButton

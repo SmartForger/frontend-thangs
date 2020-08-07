@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from 'react'
+import React, { useRef, useState, useCallback, useMemo } from 'react'
 import { Canvas, useFrame, useThree, extend } from 'react-three-fiber'
 import { createUseStyles } from '@style'
 
@@ -43,13 +43,13 @@ const Viewer = ({
   )
 }
 
-function HoverCube({ position }) {
+const HoverCube = ({ position }) => {
   const mesh = useRef()
   const [, setIsHovered] = useState(false)
   const [isActive, setActive] = useState(false)
   const [time, setTime] = useState(0)
 
-  const color = isActive ? 0xf95b3c : 0xf7bb3d
+  const color = useMemo(() => (isActive ? 0xf95b3c : 0xf7bb3d), [isActive])
 
   const onHover = useCallback(
     (e, value) => {
@@ -91,7 +91,7 @@ function HoverCube({ position }) {
 }
 
 extend({ OrbitControls })
-function Controls() {
+const Controls = () => {
   const controlsRef = useRef()
   const { camera, gl } = useThree()
 
@@ -171,4 +171,4 @@ const Asset = ({ url, mode, meshColor, wireFrameColor }) => {
   return <HoverCube />
 }
 
-export { Viewer }
+export default Viewer

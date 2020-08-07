@@ -19,7 +19,9 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const UploadFrame = ({ children, className, ...props }) => {
+const UploadFrame = ({ children, className, ...props }) => {
   const c = useStyles(props)
   return <div className={classnames(className, c.UploadFrame)}>{children}</div>
 }
+
+export default UploadFrame

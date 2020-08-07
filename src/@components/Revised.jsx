@@ -5,7 +5,7 @@ import { createUseStyles } from '@style'
 import * as GraphqlService from '@services/graphql-service'
 import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
 import { useServices } from '@hooks'
-import { Spinner } from './Spinner'
+import { Spinner } from '@components'
 
 const graphqlService = GraphqlService.getInstance()
 

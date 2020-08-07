@@ -24,14 +24,13 @@ const useStyles = createUseStyles(theme => {
 const DEFAULT_AVATAR_SIZE = '15.5rem'
 const DEFAULT_AVATAR_COLOR = '#616168'
 
-export function ProfilePicture({
+const ProfilePicture = ({
   className,
   name,
   src,
-  _user,
   size = DEFAULT_AVATAR_SIZE,
   color = DEFAULT_AVATAR_COLOR,
-}) {
+}) => {
   const c = useStyles()
   return src || name ? (
     <Avatar
@@ -47,3 +46,5 @@ export function ProfilePicture({
     <UserIcon className={classnames(className, c.ProfilePicture_alt)} />
   )
 }
+
+export default ProfilePicture

@@ -1,9 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import * as DateFns from 'date-fns'
-import { ProfilePicture } from '@components/ProfilePicture'
-import { ModelThumbnail } from '@components/ModelThumbnail'
-import { Card } from '@components/Card'
+import { ProfilePicture, ModelThumbnail, Card } from '@components'
 import {
   isModelCompletedProcessing,
   isModelFailedProcessing,
@@ -91,7 +89,7 @@ const useStyles = createUseStyles(theme => {
 
 const DATE_FORMAT = 'h:mmaaaa M/dd/yy'
 
-function Body({ left, content, right, className }) {
+const Body = ({ left, content, right, className }) => {
   const c = useStyles()
   return (
     <li className={classnames(className, c.Notification_Item)}>
@@ -102,7 +100,7 @@ function Body({ left, content, right, className }) {
   )
 }
 
-function ActorPicture({ id, name, img }) {
+const ActorPicture = ({ id, name, img }) => {
   return (
     <Link to={`/profile/${id}`}>
       <ProfilePicture size='48px' name={name} src={img} />
@@ -110,12 +108,12 @@ function ActorPicture({ id, name, img }) {
   )
 }
 
-function formatDate(time) {
+const formatDate = time => {
   const formatted = DateFns.format(new Date(time), DATE_FORMAT)
   return formatted.replace('a.m.', 'am').replace('p.m.', 'pm')
 }
 
-function ThangsPicture() {
+const ThangsPicture = () => {
   const c = useStyles()
   return (
     <div className={c.Notification_LogoContainer}>
@@ -124,7 +122,7 @@ function ThangsPicture() {
   )
 }
 
-function ModelCompletedProcessing({ className, time, actor }) {
+const ModelCompletedProcessing = ({ className, time, actor }) => {
   const c = useStyles()
   return (
     <Body
@@ -154,7 +152,7 @@ function ModelCompletedProcessing({ className, time, actor }) {
   )
 }
 
-function ModelFailedProcessing({ className, time, actor }) {
+const ModelFailedProcessing = ({ className, time, actor }) => {
   const c = useStyles()
   return (
     <Body
@@ -184,7 +182,7 @@ function ModelFailedProcessing({ className, time, actor }) {
   )
 }
 
-function UserCommentedOnModel({ className, time, actor, target, actionObject, verb }) {
+const UserCommentedOnModel = ({ className, time, actor, target, actionObject, verb }) => {
   const c = useStyles()
   return (
     <Body
@@ -195,7 +193,6 @@ function UserCommentedOnModel({ className, time, actor, target, actionObject, ve
       content={
         <div>
           <div className={c.Notification_ActorName}>{actor.fullName}</div>
-
           <div className={c.Notification_TruncateOverflow}>
             <span className={c.Notification_Verb}>{verb}</span>
             <span>on</span>
@@ -222,7 +219,7 @@ function UserCommentedOnModel({ className, time, actor, target, actionObject, ve
   )
 }
 
-function UserUploadedModel({ className, time, actor, verb, _target, actionObject }) {
+const UserUploadedModel = ({ className, time, actor, verb, actionObject }) => {
   const c = useStyles()
   return (
     <Body
@@ -233,7 +230,6 @@ function UserUploadedModel({ className, time, actor, verb, _target, actionObject
       content={
         <div>
           <div className={c.Notification_ActorName}>{actor.fullName}</div>
-
           <div>
             <span className={c.Notification_Verb}>{verb}</span>
             <span className={c.Notification_TargetName}>{actionObject.name}</span>
@@ -256,7 +252,7 @@ function UserUploadedModel({ className, time, actor, verb, _target, actionObject
   )
 }
 
-function UserLikedModel({ className, time, actor, verb, target, _actionObject }) {
+const UserLikedModel = ({ className, time, actor, verb, target }) => {
   const c = useStyles()
   return (
     <Body
@@ -267,7 +263,6 @@ function UserLikedModel({ className, time, actor, verb, target, _actionObject })
       content={
         <div>
           <div className={c.Notification_ActorName}>{actor.fullName}</div>
-
           <div>
             <span className={c.Notification_Verb}>{verb}</span>
             <span className={c.Notification_TargetName}>{target.name}</span>
@@ -290,14 +285,7 @@ function UserLikedModel({ className, time, actor, verb, target, _actionObject })
   )
 }
 
-function UserStartedFollowingUser({
-  className,
-  time,
-  actor,
-  verb,
-  _target,
-  _actionObject,
-}) {
+const UserStartedFollowingUser = ({ className, time, actor, verb }) => {
   const c = useStyles()
   return (
     <Body
@@ -320,14 +308,7 @@ function UserStartedFollowingUser({
   )
 }
 
-function UserGrantedUserAccessToFolder({
-  className,
-  time,
-  actor,
-  _verb,
-  target,
-  _actionObject,
-}) {
+const UserGrantedUserAccessToFolder = ({ className, time, actor, target }) => {
   const c = useStyles()
   return (
     <Body
@@ -352,7 +333,7 @@ function UserGrantedUserAccessToFolder({
   )
 }
 
-export function Notification({
+const Notification = ({
   timestamp,
   actor,
   verb,
@@ -360,7 +341,7 @@ export function Notification({
   notificationType,
   actionObject,
   className,
-}) {
+}) => {
   const time = formatDate(timestamp)
 
   if (isModelFailedProcessing(notificationType)) {
@@ -437,3 +418,5 @@ export function Notification({
     )
   }
 }
+
+export default Notification

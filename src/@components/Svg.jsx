@@ -712,4 +712,4 @@ const SVG = ({
   return <HTT width={width} height={height} viewBox={viewBox} />
 }
 
-export { SVG }
+export default SVG

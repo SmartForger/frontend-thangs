@@ -85,7 +85,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const Button = ({
+const Button = ({
   children,
   secondary,
   back,
@@ -111,3 +111,5 @@ export const Button = ({
     </button>
   )
 }
+
+export default Button

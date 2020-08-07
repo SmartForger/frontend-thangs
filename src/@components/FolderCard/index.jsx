@@ -1,8 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { ModelThumbnail } from '../ModelThumbnail'
-import FolderInfo from '../FolderInfo'
-import { Card } from '../Card'
+import { Card, ModelThumbnail, FolderInfo } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 

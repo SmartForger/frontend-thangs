@@ -1,5 +1,5 @@
-import React from 'react'
-import { Button } from '@components/Button'
+import React, { useCallback } from 'react'
+import { Button } from '@components'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as ColorIcon1 } from '@svg/icon-color-1.svg'
 import { ReactComponent as ColorIcon2 } from '@svg/icon-color-2.svg'
@@ -57,7 +57,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-function Text({ className }) {
+const Text = ({ className }) => {
   return (
     <div className={className}>
       Model can be viewed as Wireframe, Shaded or Composite and changed via the icons in
@@ -67,11 +67,11 @@ function Text({ className }) {
   )
 }
 
-function Title({ className }) {
+const Title = ({ className }) => {
   return <h4 className={className}>How to Use:</h4>
 }
 
-function Icons() {
+const Icons = () => {
   const c = useStyles()
   return (
     <div className={c.HowTo_IconContainer}>
@@ -89,9 +89,9 @@ function Icons() {
   )
 }
 
-export function HowTo({ setSeenHowTo }) {
+const HowTo = ({ setSeenHowTo }) => {
   const c = useStyles()
-  const handleClick = () => setSeenHowTo(true)
+  const handleClick = useCallback(() => setSeenHowTo(true), [setSeenHowTo])
   return (
     <div className={c.HowTo} onClick={handleClick}>
       <Button text>
@@ -107,3 +107,5 @@ export function HowTo({ setSeenHowTo }) {
     </div>
   )
 }
+
+export default HowTo

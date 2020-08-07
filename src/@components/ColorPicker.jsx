@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -82,18 +82,21 @@ const BlockPicker = ({ currentColor, onChange, visible }) => {
   )
 }
 
-export const ColorPicker = ({ color = '#FFFFFF', onChange, children }) => {
+const ColorPicker = ({ color = '#FFFFFF', onChange, children }) => {
   const [visible, setVisible] = useState()
   const c = useStyles({ visible, color })
 
-  const toggleVisible = () => {
+  const toggleVisible = useCallback(() => {
     setVisible(!visible)
-  }
+  }, [visible])
 
-  const handleChange = (...args) => {
-    onChange(...args)
-    toggleVisible()
-  }
+  const handleChange = useCallback(
+    (...args) => {
+      onChange(...args)
+      toggleVisible()
+    },
+    [onChange, toggleVisible]
+  )
 
   return (
     <div className={c.ColorPicker} onClick={toggleVisible}>

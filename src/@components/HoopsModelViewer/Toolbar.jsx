@@ -1,8 +1,5 @@
-import React from 'react'
-import { AnchorButton } from '@components/AnchorButton'
-import { ColorPicker } from '@components/ColorPicker'
-import { Button } from '@components/Button'
-
+import React, { useCallback } from 'react'
+import { AnchorButton, Button, ColorPicker } from '@components'
 import { ReactComponent as WireMode } from '@svg/view-mode-wire.svg'
 import { ReactComponent as ShadedMode } from '@svg/view-mode-shaded.svg'
 import { ReactComponent as XRayMode } from '@svg/view-mode-xray.svg'
@@ -75,16 +72,23 @@ const Toolbar = ({
   wireColor,
 }) => {
   const c = useStyles()
-  const makeDrawModeHandler = modeName => () => {
-    onDrawModeChange(modeName)
-  }
+  const makeDrawModeHandler = useCallback(
+    modeName => () => {
+      onDrawModeChange(modeName)
+    },
+    [onDrawModeChange]
+  )
 
-  const makeColorHandler = modeName => color => {
-    onColorChange(modeName, color)
-  }
-  const handleResetView = () => {
+  const makeColorHandler = useCallback(
+    modeName => color => {
+      onColorChange(modeName, color)
+    },
+    [onColorChange]
+  )
+
+  const handleResetView = useCallback(() => {
     onResetView()
-  }
+  }, [onResetView])
 
   return (
     <div className={c.Toolbar}>

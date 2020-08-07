@@ -179,4 +179,4 @@ const Footer = ({ inverted }) => {
   )
 }
 
-export { Footer }
+export default Footer

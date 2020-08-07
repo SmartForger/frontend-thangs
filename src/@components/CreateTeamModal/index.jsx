@@ -7,34 +7,34 @@ import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   return {
-    TeamCreateModal: {},
-    TeamCreateModal_Header: {
+    CreateTeamModal: {},
+    CreateTeamModal_Header: {
       ...theme.mixins.text.headerText,
       marginBottom: '1rem',
     },
-    TeamCreateModal_Text: {
+    CreateTeamModal_Text: {
       ...theme.mixins.text.lightText,
     },
-    TeamCreateModal_Row: {
+    CreateTeamModal_Row: {
       display: 'flex',
       marginTop: '4.25rem',
     },
-    TeamCreateModal_Row__hasError: {
+    CreateTeamModal_Row__hasError: {
       marginTop: '1rem',
     },
-    TeamCreateModal_NewFolderIcon: {
+    CreateTeamModal_NewFolderIcon: {
       marginBottom: '1rem',
     },
-    TeamCreateModal_DisplayErrors: {
+    CreateTeamModal_DisplayErrors: {
       marginBottom: '1rem',
     },
-    TeamCreateModal_UserInline: {
+    CreateTeamModal_UserInline: {
       marginTop: '3rem',
     },
   }
 })
 
-const TeamCreateModal = ({
+const CreateTeamModal = ({
   isOpen,
   onCancel,
   afterCreate,
@@ -59,19 +59,19 @@ const TeamCreateModal = ({
   )
   return (
     <Modal isOpen={isOpen}>
-      <NewFolderIcon className={c.TeamCreateModal_NewFolderIcon} />
-      <h2 className={c.TeamCreateModal_Header}>Create Team</h2>
-      <div className={c.TeamCreateModal_Text}>
+      <NewFolderIcon className={c.CreateTeamModal_NewFolderIcon} />
+      <h2 className={c.CreateTeamModal_Header}>Create Team</h2>
+      <div className={c.CreateTeamModal_Text}>
         Create a team for your new shared folder.
       </div>
       <DisplayErrors
         errors={errors}
-        className={c.TeamCreateModal_DisplayErrors}
+        className={c.CreateTeamModal_DisplayErrors}
         serverErrorMsg='Unable to create team. Please try again later.'
       />
       <div
-        className={classnames(c.TeamCreateModal_Row, {
-          [c.TeamCreateModal_Row__hasError]: errors,
+        className={classnames(c.CreateTeamModal_Row, {
+          [c.CreateTeamModal_Row__hasError]: errors,
         })}
       >
         <CreateTeamForm
@@ -87,4 +87,4 @@ const TeamCreateModal = ({
   )
 }
 
-export default TeamCreateModal
+export default CreateTeamModal

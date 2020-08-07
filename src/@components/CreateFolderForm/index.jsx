@@ -2,8 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import Joi from '@hapi/joi'
 import * as R from 'ramda'
-import { Button } from '../Button'
-import { Spinner } from '../Spinner'
+import { Button, Spinner } from '@components'
 import { useFolders } from '@hooks'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -149,7 +148,7 @@ const isServerError = ([key, _info]) => {
   return key === 'server'
 }
 
-export const DisplayErrors = ({ errors, className, serverErrorMsg }) => {
+const DisplayFolderFormErrors = ({ errors, className, serverErrorMsg }) => {
   const c = useStyles()
   const messages = R.toPairs(errors)
 
@@ -201,12 +200,12 @@ const buildErrors = error => {
   return R.equals(errors, {}) ? undefined : errors
 }
 
-export function CreateFolderForm({
+const CreateFolderForm = ({
   onErrorReceived = noop,
   afterCreate = noop,
   onCancel = noop,
   onTeamModelOpen = noop,
-}) {
+}) => {
   const { dispatch } = useStoreon('folders')
   const { useFetchPerMount } = useServices()
   const { atom: teams } = useFetchPerMount('teams')
@@ -347,7 +346,7 @@ export function CreateFolderForm({
   )
 }
 
-export const InviteUsersForm = ({ folderId, onErrorReceived, afterInvite, onCancel }) => {
+const InviteUsersForm = ({ folderId, onErrorReceived, afterInvite, onCancel }) => {
   const c = useStyles()
   const { useInviteToFolder } = useFolders()
   const validationResolver = ({ members }) => {
@@ -427,3 +426,5 @@ export const InviteUsersForm = ({ folderId, onErrorReceived, afterInvite, onCanc
     </form>
   )
 }
+
+export { CreateFolderForm, InviteUsersForm, DisplayFolderFormErrors }

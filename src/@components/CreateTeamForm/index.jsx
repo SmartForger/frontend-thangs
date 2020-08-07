@@ -1,8 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import Joi from '@hapi/joi'
 import * as R from 'ramda'
-import { Button } from '@components/Button'
-import { UserInline } from '@components/UserInline'
+import { Button, UserInline } from '@components'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { authenticationService } from '@services'
 import classnames from 'classnames'
@@ -146,7 +145,7 @@ const isServerError = ([key, _info]) => {
   return key === 'server'
 }
 
-export const DisplayErrors = ({ errors, className, serverErrorMsg }) => {
+const DisplayTeamFormErrors = ({ errors, className, serverErrorMsg }) => {
   const c = useStyles()
   const messages = R.toPairs(errors)
 
@@ -224,12 +223,12 @@ const UserList = ({ users = [], removeUser = noop }) => {
   )
 }
 
-export function CreateTeamForm({
+const CreateTeamForm = ({
   onErrorReceived,
   afterCreate,
   onCancel,
   newFolderData = {},
-}) {
+}) => {
   const { dispatch } = useStoreon('folders')
   const { user: currentUser } = useCurrentUser()
   const { useFetchPerMount } = useServices()
@@ -439,3 +438,5 @@ export function CreateTeamForm({
     </form>
   )
 }
+
+export default { CreateTeamForm, DisplayTeamFormErrors }

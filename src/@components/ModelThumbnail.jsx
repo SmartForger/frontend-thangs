@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import ErrorImg from '@svg/image-error-icon.svg'
 import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg'
 import classnames from 'classnames'
@@ -61,10 +61,10 @@ const LOADING = 'LOADING'
 const COMPLETE = 'COMPLETE'
 const ERROR = 'ERROR'
 
-export function ModelThumbnail({ name, thumbnailUrl: src, className }) {
+const ModelThumbnail = ({ name, thumbnailUrl: src, className }) => {
   const [loadingState, setLoadingState] = useState(LOADING)
-  const onLoad = () => setLoadingState(COMPLETE)
-  const onError = () => setLoadingState(ERROR)
+  const onLoad = useCallback(() => setLoadingState(COMPLETE), [setLoadingState])
+  const onError = useCallback(() => setLoadingState(ERROR), [setLoadingState])
   const c = useStyles()
   return (
     <div className={classnames(className, c.ModelThumbnail)}>
@@ -81,3 +81,5 @@ export function ModelThumbnail({ name, thumbnailUrl: src, className }) {
     </div>
   )
 }
+
+export default ModelThumbnail

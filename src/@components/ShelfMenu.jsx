@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -46,7 +46,11 @@ const Shelf = ({ open, children }) => {
 const ShelfButton = ({ open, setOpen }) => {
   const c = useStyles({ open })
   return (
-    <div className={c.ShelfButton} open={open} onClick={() => setOpen(!open)}>
+    <div
+      className={c.ShelfButton}
+      open={open}
+      onClick={useCallback(() => setOpen(!open), [open, setOpen])}
+    >
       <div />
       <div />
       <div />

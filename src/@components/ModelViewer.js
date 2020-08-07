@@ -1,9 +1,6 @@
-import React, { useState } from 'react'
-
-import { Viewer } from '@components/Viewer'
-import { ColorPicker } from '@components/ColorPicker'
+import React, { useCallback, useState } from 'react'
+import { ColorPicker, HowTo, Viewer } from '@components'
 import { useLocalStorage } from '@hooks'
-import { HowTo } from '@components/HowTo'
 import { ReactComponent as ColorIcon1 } from '@svg/icon-color-1.svg'
 import { ReactComponent as ColorIcon2 } from '@svg/icon-color-2.svg'
 import { ReactComponent as ShadedIcon } from '@svg/icon-shaded.svg'
@@ -64,23 +61,32 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-function ModelViewerDisplay({ model, className }) {
+const ModelViewerDisplay = ({ model, className }) => {
   const [mode, setMode] = useState('composite')
   const [meshColor, setMeshColor] = useState('#ffbc00')
   const [wireColor, setWireColor] = useState('#014d7c')
   const c = useStyles()
 
-  const changeMode = targetMode => {
-    setMode(targetMode)
-  }
+  const changeMode = useCallback(
+    targetMode => {
+      setMode(targetMode)
+    },
+    [setMode]
+  )
 
-  const changeMeshColor = (color, _event) => {
-    setMeshColor(color)
-  }
+  const changeMeshColor = useCallback(
+    (color, _event) => {
+      setMeshColor(color)
+    },
+    [setMeshColor]
+  )
 
-  const changeWireColor = (color, _event) => {
-    setWireColor(color)
-  }
+  const changeWireColor = useCallback(
+    (color, _event) => {
+      setWireColor(color)
+    },
+    [setWireColor]
+  )
 
   return (
     <div className={className}>
@@ -135,7 +141,7 @@ function ModelViewerDisplay({ model, className }) {
   )
 }
 
-function ModelViewer({ model, className }) {
+const ModelViewer = ({ model, className }) => {
   const [seenHowTo, setSeenHowTo] = useLocalStorage('seenHowTo', false)
 
   return seenHowTo ? (
@@ -147,4 +153,4 @@ function ModelViewer({ model, className }) {
   )
 }
 
-export { ModelViewer }
+export default ModelViewer

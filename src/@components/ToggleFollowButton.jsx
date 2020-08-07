@@ -1,6 +1,5 @@
-import React from 'react'
-import { Button } from '@components/Button'
-import { Spinner } from '@components/Spinner'
+import React, { useCallback } from 'react'
+import { Button, Spinner } from '@components'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import * as GraphqlService from '@services/graphql-service'
 import { createUseStyles } from '@style'
@@ -32,10 +31,14 @@ const FollowButton = ({ _user, viewedUser }) => {
     viewedUser
   )
   const c = useStyles()
-  const handleClick = e => {
-    e.preventDefault()
-    followUser()
-  }
+  const handleClick = useCallback(
+    e => {
+      e.preventDefault()
+      followUser()
+    },
+    [followUser]
+  )
+
   return (
     <Button className={c.Button} disabled={loading || error} onClick={handleClick}>
       {loading ? (
@@ -54,10 +57,14 @@ const UnfollowButton = ({ _user, viewedUser }) => {
     viewedUser
   )
   const c = useStyles()
-  const handleClick = e => {
-    e.preventDefault()
-    unfollowUser()
-  }
+  const handleClick = useCallback(
+    e => {
+      e.preventDefault()
+      unfollowUser()
+    },
+    [unfollowUser]
+  )
+
   return (
     <Button className={c.Button} disabled={loading || error} onClick={handleClick}>
       {loading ? (
@@ -71,7 +78,7 @@ const UnfollowButton = ({ _user, viewedUser }) => {
   )
 }
 
-export const ToggleFollowButton = ({ viewedUser }) => {
+const ToggleFollowButton = ({ viewedUser }) => {
   const isFollowing = viewedUser.isBeingFollowedByRequester
   return isFollowing ? (
     <UnfollowButton viewedUser={viewedUser} />
@@ -79,3 +86,5 @@ export const ToggleFollowButton = ({ viewedUser }) => {
     <FollowButton viewedUser={viewedUser} />
   )
 }
+
+export default ToggleFollowButton

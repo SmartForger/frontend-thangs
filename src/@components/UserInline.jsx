@@ -1,5 +1,5 @@
 import React from 'react'
-import { ProfilePicture } from './ProfilePicture'
+import { ProfilePicture } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -25,7 +25,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const UserInline = ({
+const UserInline = ({
   user,
   className,
   displayEmail,
@@ -58,3 +58,5 @@ export const UserInline = ({
     </div>
   )
 }
+
+export default UserInline

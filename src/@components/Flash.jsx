@@ -14,14 +14,14 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const Flash = ({ children, _props }) => {
+const Flash = ({ children, _props }) => {
   const c = useStyles()
   return <div className={c.Flash}>{children}</div>
 }
 
 const FlashContext = React.createContext([null, {}])
 
-export const FlashContextProvider = props => {
+const FlashContextProvider = props => {
   const history = useHistory()
   const [flash, setFlash] = useState()
   const navigateWithFlash = (to, msg) => {
@@ -40,7 +40,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-export function WithFlash({ children }) {
+const WithFlash = ({ children }) => {
   const [flash, { setFlash }] = useContext(FlashContext)
   const c = useStyles()
 
@@ -64,7 +64,9 @@ export function WithFlash({ children }) {
   )
 }
 
-export function useFlashNotification() {
+const useFlashNotification = () => {
   const [, { setFlash, navigateWithFlash }] = useContext(FlashContext)
   return { setFlash, navigateWithFlash }
 }
+
+export { Flash, FlashContextProvider, WithFlash, useFlashNotification }

@@ -1,11 +1,6 @@
 import React, { useState } from 'react'
 import { useForm, ErrorMessage } from 'react-hook-form'
-
-import { Spinner } from '../Spinner'
-import { Button, DarkButton } from '../Button'
-import { ProgressText } from '../ProgressText'
-import { Uploader } from '../Uploader'
-import { UploadFrame } from '../UploadFrame'
+import { Spinner, Button, ProgressText, Uploader, UploadFrame } from '@components'
 import CategorySelect from './CategorySelect'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -172,14 +167,15 @@ const ModelUploadForm = ({ onSubmit, isUploading, error, onCancel }) => {
         </div>
       </div>
       <div className={c.ModelUploadForm_ButtonGroup}>
-        <DarkButton
+        <Button
+          dark
           className={classnames(c.ModelUploadForm_Button, c.ModelUploadForm_CancelButton)}
           onClick={onCancel}
           type='button'
           disabled={isUploading}
         >
           Cancel
-        </DarkButton>
+        </Button>
         <Button
           className={c.ModelUploadForm_Button}
           type='submit'

@@ -1,12 +1,15 @@
 import React, { useState, useCallback } from 'react'
-import { useFlashNotification } from '@components/Flash'
+import {
+  Button,
+  DropdownItem,
+  DropdownMenu,
+  FolderCreateModal,
+  ProfilePicture,
+  TeamCreateModal,
+  useFlashNotification,
+} from '@components'
 import { useParams, useHistory, Link } from 'react-router-dom'
-import { ProfilePicture } from '@components/ProfilePicture'
 import { useCurrentUser, useNotifications } from '@hooks'
-import { DropdownMenu, DropdownItem } from '@components/DropdownMenu'
-import FolderCreateModal from '@components/FolderCreateModal'
-import TeamCreateModal from '@components/TeamCreateModal'
-import { Button } from '@components/Button'
 import { authenticationService } from '@services'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -187,12 +190,16 @@ const AddModelDropdownMenu = ({ c }) => {
   const { navigateWithFlash } = useFlashNotification()
   const setFolderOpen = useCallback(() => {
     setCreateFolderIsOpen(true)
-  }, [])
+  }, [setCreateFolderIsOpen])
   const setTeamOpen = useCallback(() => {
     setCreateTeamIsOpen(true)
-  }, [])
-  const setFolderClose = useCallback(() => setCreateFolderIsOpen(false), [])
-  const setTeamClose = useCallback(() => setCreateTeamIsOpen(false), [])
+  }, [setCreateTeamIsOpen])
+  const setFolderClose = useCallback(() => setCreateFolderIsOpen(false), [
+    setCreateFolderIsOpen,
+  ])
+  const setTeamClose = useCallback(() => setCreateTeamIsOpen(false), [
+    setCreateTeamIsOpen,
+  ])
 
   return (
     <>
@@ -355,4 +362,4 @@ const Header = ({ inverted, variant }) => {
   )
 }
 
-export { Header }
+export default Header

@@ -69,4 +69,4 @@ const Likes = ({ model, user }) => {
   )
 }
 
-export { Likes }
+export default Likes

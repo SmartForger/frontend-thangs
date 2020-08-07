@@ -12,7 +12,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export function ProfileLink({ children, ...props }) {
+const ProfileLink = ({ children, ...props }) => {
   const c = useStyles()
   return (
     <Link className={c.ProfileLink} {...props}>
@@ -20,3 +20,5 @@ export function ProfileLink({ children, ...props }) {
     </Link>
   )
 }
+
+export default ProfileLink

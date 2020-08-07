@@ -29,4 +29,4 @@ const Tag = ({ children }) => {
   return <animated.div className={c.Tag}>{children}</animated.div>
 }
 
-export { Tag }
+export default Tag

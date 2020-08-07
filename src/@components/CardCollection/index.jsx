@@ -1,5 +1,5 @@
 import React from 'react'
-import { NoResults } from '../NoResults'
+import { NoResults } from '@components'
 import Skeleton from '@material-ui/lab/Skeleton'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -25,12 +25,7 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const CardCollection = ({
-  maxPerRow = 4,
-  noResultsText,
-  loading = false,
-  children,
-}) => {
+const CardCollection = ({ maxPerRow = 4, noResultsText, loading = false, children }) => {
   const c = useStyles()
 
   if (loading) {
@@ -46,7 +41,7 @@ const CardCollection = ({
       </div>
     )
   }
-  
+
   if (children) {
     return (
       <div

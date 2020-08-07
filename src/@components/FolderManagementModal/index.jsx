@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import * as R from 'ramda'
 import classnames from 'classnames'
-import { UserInline } from '../UserInline'
-import Modal from '../Modal'
+import {
+  Button,
+  FolderInfo,
+  InviteUsersForm,
+  DisplayFolderFormErrors,
+  Modal,
+  Spinner,
+  UserInline,
+} from '@components'
 import { authenticationService } from '@services'
-import { Button } from '../Button'
-import { InviteUsersForm, DisplayErrors } from '../FolderForm'
-import FolderInfo from '../FolderInfo'
-import { Spinner } from '../Spinner'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { useFolders } from '@hooks'
@@ -77,18 +80,21 @@ const RevokeAccessButton = ({ folderId, targetUserId, children }) => {
   const c = useStyles({})
   const { useRevokeAccess } = useFolders()
   const [revokeAccess, { loading, error }] = useRevokeAccess(folderId, targetUserId)
-  const handleRevoke = async e => {
-    e.preventDefault()
-    try {
-      await revokeAccess({
-        variables: {
-          userId: targetUserId,
-        },
-      })
-    } catch (e) {
-      console.error('e', e)
-    }
-  }
+  const handleRevoke = useCallback(
+    async e => {
+      e.preventDefault()
+      try {
+        await revokeAccess({
+          variables: {
+            userId: targetUserId,
+          },
+        })
+      } catch (e) {
+        console.error('e', e)
+      }
+    },
+    [revokeAccess, targetUserId]
+  )
 
   return (
     <Button text onClick={handleRevoke}>
@@ -199,7 +205,7 @@ const FolderManagementModal = ({ isOpen, folder, afterInvite, onCancel, classNam
         boldName
         hideModels
       />
-      <DisplayErrors
+      <DisplayFolderFormErrors
         className={c.FolderManagementModal_DisplayErrors}
         errors={errors}
         serverErrorMsg='Unable to invite users. Please try again later.'

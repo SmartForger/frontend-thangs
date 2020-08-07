@@ -1,13 +1,16 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { DropdownMenu, DropdownItem } from '../DropdownMenu'
-import FolderManagementModal from '../FolderManagementModal'
-import { useFlashNotification } from '../Flash'
-import { Button } from '../Button'
+import {
+  Button,
+  DropdownItem,
+  DropdownMenu,
+  FolderManagementModal,
+  Spinner,
+  useFlashNotification,
+} from '@components'
 import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg'
 import { ReactComponent as TrashCanIcon } from '../../@svg/trash-can-icon.svg'
 import { ReactComponent as FolderManagementIcon } from '../../@svg/folder-management-icon.svg'
-import { Spinner } from '../Spinner'
 import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -66,15 +69,18 @@ const DeleteMenu = ({ folderId }) => {
   const c = useStyles()
   const { navigateWithFlash } = useFlashNotification()
 
-  const handleDelete = async e => {
-    e.preventDefault()
-    dispatch('delete-folder', {
-      folderId: folderId,
-      onFinish: () => {
-        navigateWithFlash('/home', 'Folder deleted')
-      },
-    })
-  }
+  const handleDelete = useCallback(
+    async e => {
+      e.preventDefault()
+      dispatch('delete-folder', {
+        folderId: folderId,
+        onFinish: () => {
+          navigateWithFlash('/home', 'Folder deleted')
+        },
+      })
+    },
+    [dispatch, folderId, navigateWithFlash]
+  )
 
   return (
     <DropdownMenu className={c.Breadcrumbs_DropdownMenu}>
@@ -98,14 +104,14 @@ const ManageUsers = ({ folder }) => {
   const [isOpen, setIsOpen] = useState()
   const { setFlash } = useFlashNotification()
 
-  const afterInvite = () => {
+  const afterInvite = useCallback(() => {
     setFlash(
       'If the email addresses belong to registered Thangs users, they will have access to your folder'
     )
     setIsOpen(false)
-  }
-  const handleCancel = () => setIsOpen(false)
-  const handleClick = () => setIsOpen(true)
+  }, [setFlash])
+  const handleCancel = useCallback(() => setIsOpen(false), [])
+  const handleClick = useCallback(() => setIsOpen(true), [])
 
   return (
     <>

@@ -48,4 +48,4 @@ const ModelDisplay = ({
   )
 }
 
-export { ModelDisplay }
+export default ModelDisplay

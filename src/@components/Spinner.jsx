@@ -56,4 +56,4 @@ const Spinner = ({ size = '3rem', ...otherProps }) => {
   )
 }
 
-export { Spinner }
+export default Spinner

@@ -31,4 +31,4 @@ const BackgroundImage = () => {
   )
 }
 
-export { BackgroundImage }
+export default BackgroundImage

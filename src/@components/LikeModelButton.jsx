@@ -25,11 +25,11 @@ const graphqlService = GraphqlService.getInstance()
 
 const userIdsWhoHaveLiked = R.pipe(R.prop('likes'), R.map(R.path(['owner', 'id'])))
 
-export const hasLikedModel = (model, user) => {
+const hasLikedModel = (model, user) => {
   return R.includes(user.id, userIdsWhoHaveLiked(model))
 }
 
-export function LikeModelButton({ currentUser, model }) {
+const LikeModelButton = ({ currentUser, model }) => {
   const c = useStyles()
   const [likeModel] = graphqlService.useLikeModelMutation(currentUser.id, model.id)
   const [unlikeModel] = graphqlService.useUnlikeModelMutation(currentUser.id, model.id)
@@ -43,3 +43,5 @@ export function LikeModelButton({ currentUser, model }) {
     </Button>
   )
 }
+
+export default LikeModelButton

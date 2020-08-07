@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState, useMemo } from 'react'
 import { useHistory } from 'react-router-dom'
 import { ReactComponent as SearchIcon } from '@svg/search-icon.svg'
 import classnames from 'classnames'
@@ -48,28 +48,34 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-function useSearch(initialSearchQuery = '') {
+const useSearch = (initialSearchQuery = '') => {
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery)
   const history = useHistory()
-  const executeSearch = () => {
+  const executeSearch = useMemo(() => {
     history.push(`/search/${searchQuery}`)
-  }
+  }, [history, searchQuery])
   return { searchQuery, setSearchQuery, executeSearch }
 }
 
-export function SearchBar({ className, initialSearchQuery }) {
+const SearchBar = ({ className, initialSearchQuery }) => {
   const c = useStyles()
   const { searchQuery, setSearchQuery, executeSearch } = useSearch(initialSearchQuery)
 
-  const handleChange = e => {
-    e.persist()
-    setSearchQuery(e.target.value)
-  }
+  const handleChange = useCallback(
+    e => {
+      e.persist()
+      setSearchQuery(e.target.value)
+    },
+    [setSearchQuery]
+  )
 
-  const handleSubmit = e => {
-    e.preventDefault()
-    executeSearch()
-  }
+  const handleSubmit = useCallback(
+    e => {
+      e.preventDefault()
+      executeSearch()
+    },
+    [executeSearch]
+  )
 
   return (
     <form onSubmit={handleSubmit} className={classnames(className, c.SearchBar_form)}>
@@ -83,3 +89,5 @@ export function SearchBar({ className, initialSearchQuery }) {
     </form>
   )
 }
+
+export default SearchBar

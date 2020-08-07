@@ -1,22 +1,14 @@
 import React from 'react'
-
-import { headerText } from '@style/text'
-import { NoResults } from '@components/NoResults'
-import CardCollection from '@components/CardCollection'
-import ModelCards from '@components/CardCollection/ModelCards'
-import { Spinner } from '@components/Spinner'
-import { ProgressText } from '@components/ProgressText'
+import { NoResults, CardCollection, ModelCards, Spinner, ProgressText } from '@components'
 import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { isError, isProcessing } from '@utilities'
-
 import { logger } from '@utilities/logging'
-
 import * as GraphqlService from '@services/graphql-service'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     RelatedModels: {},
     RelatedModels_NoResults: {
@@ -31,7 +23,7 @@ const useStyles = createUseStyles(_theme => {
       height: '1.5rem',
     },
     RelatedModels_Header: {
-      ...headerText,
+      ...theme.mixins.text.headerText,
       marginBottom: '1.5rem',
     },
     RelatedModels_Related: {
@@ -42,7 +34,7 @@ const useStyles = createUseStyles(_theme => {
 
 const graphqlService = GraphqlService.getInstance()
 
-export function RelatedModels({ modelId, className }) {
+const RelatedModels = ({ modelId, className }) => {
   const c = useStyles()
   const {
     loading,
@@ -90,3 +82,5 @@ export function RelatedModels({ modelId, className }) {
     </div>
   )
 }
+
+export default RelatedModels

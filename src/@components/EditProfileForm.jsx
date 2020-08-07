@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as R from 'ramda'
-import { Button } from '@components/Button'
+import { Button } from '@components'
 import * as GraphqlService from '@services/graphql-service'
 import { logger } from '@utilities/logging'
 import classnames from 'classnames'
@@ -53,37 +53,53 @@ const useStyles = createUseStyles(theme => {
 })
 const graphqlService = GraphqlService.getInstance()
 
-export const EditProfileForm = ({ user }) => {
+const EditProfileForm = ({ user }) => {
   const { register, handleSubmit, errors } = useForm()
   const [updateUser] = graphqlService.useUpdateUser()
   const [currentState, setCurrentState] = useState('ready')
   const c = useStyles()
 
-  async function formSubmit(data, e) {
-    e.preventDefault()
+  const formSubmit = useCallback(
+    async (data, e) => {
+      e.preventDefault()
 
-    const updateInput = {
-      id: user.id,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      profile: {
-        description: data.description,
-      },
+      const updateInput = {
+        id: user.id,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        profile: {
+          description: data.description,
+        },
+      }
+
+      try {
+        setCurrentState('waiting')
+        await updateUser({
+          variables: { updateInput },
+        })
+      } catch (error) {
+        setCurrentState('error')
+        logger.error('Error when trying to update the user', error)
+      }
+      setCurrentState('saved')
+    },
+    [updateUser, user]
+  )
+
+  const handleChange = useCallback(() => setCurrentState('ready'), [setCurrentState])
+
+  const buttonText = useMemo(() => {
+    switch (currentState) {
+      case 'waiting':
+        return 'Saving...'
+      case 'saved':
+        return 'Saved!'
+      case 'error':
+        return 'Error'
+      default:
+        return 'Save Changes'
     }
-
-    try {
-      setCurrentState('waiting')
-      await updateUser({
-        variables: { updateInput },
-      })
-    } catch (error) {
-      setCurrentState('error')
-      logger.error('Error when trying to update the user', error)
-    }
-    setCurrentState('saved')
-  }
-
-  const handleChange = () => setCurrentState('ready')
+  }, [currentState])
 
   return (
     <form
@@ -137,13 +153,7 @@ export const EditProfileForm = ({ user }) => {
           type='submit'
           disabled={!R.empty(errors)}
         >
-          {currentState === 'waiting'
-            ? 'Saving...'
-            : currentState === 'saved'
-              ? 'Saved!'
-              : currentState === 'error'
-                ? 'Error'
-                : 'Save Changes'}
+          {buttonText}
         </Button>
       </div>
     </form>

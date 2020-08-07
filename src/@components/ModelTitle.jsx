@@ -1,10 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { ProfilePicture } from '@components/ProfilePicture'
+import { ProfilePicture, Spinner } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import * as GraphqlService from '@services/graphql-service'
-import { Spinner } from './Spinner'
 
 const graphqlService = GraphqlService.getInstance()
 
@@ -35,7 +34,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const ModelTitle = ({ model, className }) => {
+const ModelTitle = ({ model, className }) => {
   const c = useStyles()
   let { loading, error, user } = graphqlService.useUserById(model.ownerId)
 
@@ -67,3 +66,5 @@ export const ModelTitle = ({ model, className }) => {
     </div>
   )
 }
+
+export default ModelTitle

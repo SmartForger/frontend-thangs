@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -23,15 +23,15 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const TextInput = ({ className, validator, error, ...props }) => {
+const TextInput = ({ className, validator, error, ...props }) => {
   const [valid, setValid] = useState(true)
   const c = useStyles({ invalid: !valid || error })
 
-  const handleValidation = () => {
+  const handleValidation = useCallback(() => {
     if (validator && typeof validator === 'function') {
       setValid(validator())
     }
-  }
+  }, [validator])
 
   return (
     <input
@@ -42,30 +42,4 @@ export const TextInput = ({ className, validator, error, ...props }) => {
   )
 }
 
-/*
-
-const validator = (fieldName,invalidFieldsArray) => {
-
-}
-
-const isFieldInvalid = fieldName => {
-    return invalidFields.indexOf(fieldName) !== -1;
-};
-
-const validator = () => {
-    if value == blah
-        setFieldToValid('registration_code');
-    };
-
-
-
-    func() -> void {
-        onBlur check if the field is legit
-
-        setState(true / false)
-    }
-
-    func() -> bool {
-        determine if the field is legit
-    }
-*/
+export default TextInput

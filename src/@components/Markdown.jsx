@@ -40,4 +40,4 @@ const Markdown = ({ children, className }) => {
   )
 }
 
-export { Markdown }
+export default Markdown

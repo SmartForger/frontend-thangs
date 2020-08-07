@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import Modal from '../Modal'
-import { CreateFolderForm, DisplayErrors } from '../FolderForm'
+import { Modal, CreateFolderForm, DisplayFolderFormErrors } from '@components'
 import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -54,7 +53,7 @@ const FolderCreateModal = ({ isOpen, onCancel, afterCreate, onTeamModalOpen }) =
       <div className={c.FolderCreateModal_Text}>
         Create a folder to share models and collaborate with your teammates privately.
       </div>
-      <DisplayErrors
+      <DisplayFolderFormErrors
         errors={errors}
         className={c.FolderCreateModal_DisplayErrors}
         serverErrorMsg='Unable to create folder. Please try again later.'

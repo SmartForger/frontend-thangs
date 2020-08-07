@@ -1,12 +1,11 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { ReactComponent as UploadIcon } from '../../@svg/upload-icon.svg'
-import { ReactComponent as VersionIcon } from '../../@svg/version.svg'
-import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg'
-import { ReactComponent as ModelPyramid } from '../../@svg/model-pyramid.svg'
-import { ReactComponent as ExitIcon } from '../../@svg/icon-X.svg'
-import { UploadFrame } from '../UploadFrame'
-import { Button } from '../Button'
+import { ReactComponent as UploadIcon } from '@svg/upload-icon.svg'
+import { ReactComponent as VersionIcon } from '@svg/version.svg'
+import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
+import { ReactComponent as ModelPyramid } from '@svg/model-pyramid.svg'
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
+import { Button, UploadFrame } from '@components/UploadFrame'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -96,10 +95,10 @@ const FILE_SIZE_LIMITS = {
   },
 }
 
-export function Uploader({ file, setFile, showError = true, mode = UPLOAD_MODES.MODEL }) {
+const Uploader = ({ file, setFile, showError = true, mode = UPLOAD_MODES.MODEL }) => {
   const c = useStyles()
-  const [errorState, setErrorState] = React.useState()
-  const onDrop = React.useCallback(
+  const [errorState, setErrorState] = useState()
+  const onDrop = useCallback(
     (acceptedFiles, rejectedFiles, _event) => {
       const file = acceptedFiles[0]
       if (rejectedFiles[0]) {
@@ -119,27 +118,34 @@ export function Uploader({ file, setFile, showError = true, mode = UPLOAD_MODES.
     [setFile]
   )
 
-  const preventClickingWhileFull = e => {
-    if (file) {
+  const preventClickingWhileFull = useCallback(
+    e => {
+      if (file) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+    },
+    [file]
+  )
+
+  const cancelUpload = useCallback(
+    e => {
       e.preventDefault()
       e.stopPropagation()
-    }
-  }
+      setErrorState(null)
+      setFile(null)
+    },
+    [setFile]
+  )
 
-  const cancelUpload = e => {
-    e.preventDefault()
-    e.stopPropagation()
-    setErrorState(null)
-    setFile(null)
-  }
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: MODEL_FILE_EXTS,
   })
 
-  const handleBrowseClick = e => {
+  const handleBrowseClick = useCallback(e => {
     e.preventDefault()
-  }
+  }, [])
 
   return (
     <div {...getRootProps({ onClick: preventClickingWhileFull })}>
@@ -221,3 +227,5 @@ export function Uploader({ file, setFile, showError = true, mode = UPLOAD_MODES.
     </div>
   )
 }
+
+export default Uploader

@@ -10,4 +10,4 @@ const HideOnRoutes = ({ routes, children }) => {
   return <div>{children}</div>
 }
 
-export { HideOnRoutes }
+export default HideOnRoutes

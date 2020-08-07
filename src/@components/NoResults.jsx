@@ -15,7 +15,9 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const NoResults = ({ children }) => {
+const NoResults = ({ children }) => {
   const c = useStyles()
   return <div className={c.NoResults}>{children}</div>
 }
+
+export default NoResults

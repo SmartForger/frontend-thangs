@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { ProgressText } from '@components/ProgressText'
-import { UploadFrame } from '@components/UploadFrame'
+import { ProgressText, UploadFrame } from '@components'
 import { ReactComponent as CheckUploadingIcon } from '@svg/check-uploading-icon.svg'
 import { ReactComponent as LensUploadingIcon } from '@svg/lens-uploading-icon.svg'
 import { ReactComponent as GraphUploadingIcon } from '@svg/graph-uploading-icon.svg'
@@ -71,7 +70,7 @@ const Icons = ({ className }) => {
   )
 }
 
-export const UploadProgress = () => {
+const UploadProgress = () => {
   const c = useStyles()
   return (
     <UploadFrame className={c.UploadFrame}>
@@ -80,3 +79,5 @@ export const UploadProgress = () => {
     </UploadFrame>
   )
 }
+
+export default UploadProgress

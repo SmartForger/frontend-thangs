@@ -16,7 +16,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const TagsBox = ({ items }) => {
+const TagsBox = ({ items }) => {
   const c = useStyles()
   const config = { mass: 4, tension: 2000, friction: 95 }
   const [trail] = useTrail(items.length, () => ({
@@ -27,10 +27,11 @@ export const TagsBox = ({ items }) => {
 
   return (
     <div className={c.TagsBox}>
-      {/* <button onClick={Bounce}>Bounce</button> */}
       {trail.map((tag, index) => (
         <Tag key={index}>{items[index].name}</Tag>
       ))}
     </div>
   )
 }
+
+export default TagsBox
