@@ -4,7 +4,7 @@ import * as R from 'ramda'
 import { useNotifications } from '@hooks'
 import { Spinner, NoResults } from '@components'
 import { logger } from '@utilities/logging'
-import { Notification } from './Notification'
+import Notification from './Notification'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 

@@ -1,11 +1,8 @@
 import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { format } from 'date-fns'
-
 import * as GraphqlService from '@services/graphql-service'
-import { NewThemeLayout } from '@components/Layout'
-import { Spinner } from '@components/Spinner'
-import { Markdown } from '@components/Markdown'
+import { NewThemeLayout, Spinner, Markdown } from '@components'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(_theme => {

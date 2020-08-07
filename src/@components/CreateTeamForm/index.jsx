@@ -12,40 +12,40 @@ import { useServices } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
-    TeamForm: {
+    CreateTeamForm: {
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
     },
-    TeamForm_Spinner: {
+    CreateTeamForm_Spinner: {
       width: '1rem',
       height: '1rem',
       '& .path': {
         stroke: 'currentColor',
       },
     },
-    TeamForm_Row: {
+    CreateTeamForm_Row: {
       display: 'flex',
     },
-    TeamForm_TeamRow: {
+    CreateTeamForm_TeamRow: {
       alignItems: 'flex-end',
     },
-    TeamForm_ButtonRow: {
+    CreateTeamForm_ButtonRow: {
       display: 'flex',
       justifyContent: 'flex-end',
       marginTop: '3rem',
     },
-    TeamForm_CancelButton: {
+    CreateTeamForm_CancelButton: {
       marginRight: '1rem',
       minWidth: '7.25rem',
     },
-    TeamForm_SaveButton: {
+    CreateTeamForm_SaveButton: {
       minWidth: '6.75rem',
     },
-    TeamForm_Label: {
+    CreateTeamForm_Label: {
       marginBottom: '.5rem',
     },
-    TeamForm_FullWidthInput: {
+    CreateTeamForm_FullWidthInput: {
       border: 0,
       padding: '.5rem 1rem',
       marginBottom: '1.5rem',
@@ -53,10 +53,10 @@ const useStyles = createUseStyles(theme => {
       minWidth: 0,
       background: theme.colors.white[900],
     },
-    TeamForm_ControllerInput: {
+    CreateTeamForm_ControllerInput: {
       width: '100%',
     },
-    TeamForm_ErrorText: {
+    CreateTeamForm_ErrorText: {
       ...theme.mixins.text.formErrorText,
       marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
@@ -64,19 +64,19 @@ const useStyles = createUseStyles(theme => {
       padding: '.625rem 1rem',
       borderRadius: '.5rem',
     },
-    TeamForm_SaveLogo: {
+    CreateTeamForm_SaveLogo: {
       margin: '26px 7px 0 auto',
     },
-    TeamForm_SaveTeamLabel: {
+    CreateTeamForm_SaveTeamLabel: {
       color: theme.colors.blue[500],
       cursor: 'pointer',
       marginTop: '1.625rem',
     },
-    TeamForm_SaveTeamSuccessLabel: {
+    CreateTeamForm_SaveTeamSuccessLabel: {
       color: theme.colors.grey[700],
       marginTop: '1.625rem',
     },
-    TeamForm_PseudoForm: {
+    CreateTeamForm_PseudoForm: {
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
@@ -89,25 +89,25 @@ const useStyles = createUseStyles(theme => {
         background: theme.colors.white[900],
       },
     },
-    TeamForm_AddButton: {
+    CreateTeamForm_AddButton: {
       minWidth: 0,
       marginLeft: '1rem',
     },
-    TeamForm_MemberRow: {
+    CreateTeamForm_MemberRow: {
       display: 'flex',
       marginBottom: '1.5rem',
     },
-    TeamForm_MemberInput: {
+    CreateTeamForm_MemberInput: {
       marginBottom: 0,
       width: '100%',
     },
-    TeamForm_Item: {
+    CreateTeamForm_Item: {
       marginBottom: '1rem',
     },
-    TeamForm_FolderNameLabel: {
+    CreateTeamForm_FolderNameLabel: {
       marginBottom: '1.5rem',
     },
-    TeamForm_FolderName: {
+    CreateTeamForm_FolderName: {
       display: 'block',
       padding: '.5rem 1rem',
       ...theme.mixins.text.lightText,
@@ -152,37 +152,37 @@ const DisplayTeamFormErrors = ({ errors, className, serverErrorMsg }) => {
   return messages.map((error, i) => {
     if (isEmptyTeamName(error)) {
       return (
-        <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
+        <h4 className={classnames(className, c.CreateTeamForm_ErrorText)} key={i}>
           Please provide a team name for your folder
         </h4>
       )
     } else if (isInvalidEmail(error)) {
       return (
-        <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
+        <h4 className={classnames(className, c.CreateTeamForm_ErrorText)} key={i}>
           Please check that you have provided valid emails
         </h4>
       )
     } else if (isEmptyMembers(error) || isEmptyTeam(error)) {
       return (
-        <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
+        <h4 className={classnames(className, c.CreateTeamForm_ErrorText)} key={i}>
           Please invite at least one other member
         </h4>
       )
     } else if (isDuplicateTeamName(error)) {
       return (
-        <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
+        <h4 className={classnames(className, c.CreateTeamForm_ErrorText)} key={i}>
           Team name already exists. Please try another
         </h4>
       )
     } else if (isExistingMember) {
       return (
-        <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
+        <h4 className={classnames(className, c.CreateTeamForm_ErrorText)} key={i}>
           Team member already added. Please try another email
         </h4>
       )
     } else if (isServerError(error)) {
       return (
-        <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
+        <h4 className={classnames(className, c.CreateTeamForm_ErrorText)} key={i}>
           {serverErrorMsg}
         </h4>
       )
@@ -208,7 +208,7 @@ const UserList = ({ users = [], removeUser = noop }) => {
           teamUser.fullName = `${teamUser.first_name} ${teamUser.last_name}`
 
         return (
-          <li className={c.TeamForm_Item} key={idx}>
+          <li className={c.CreateTeamForm_Item} key={idx}>
             <UserInline user={teamUser} size={'3rem'} displayEmail>
               {isOwner && (
                 <Button text onClick={() => removeUser(teamUser)}>
@@ -380,10 +380,10 @@ const CreateTeamForm = ({
   }, [inputState])
 
   return (
-    <form onSubmit={onFormSubmit(handleSave)} className={c.TeamForm}>
-      <div className={c.TeamForm_FolderNameLabel}>
+    <form onSubmit={onFormSubmit(handleSave)} className={c.CreateTeamForm}>
+      <div className={c.CreateTeamForm_FolderNameLabel}>
         Folder Name
-        <div className={c.TeamForm_FolderName}>{folderName}</div>
+        <div className={c.CreateTeamForm_FolderName}>{folderName}</div>
       </div>
       <label className={c.TeamForm_Label} htmlFor='teamMembers'>
         Team Name
@@ -439,4 +439,4 @@ const CreateTeamForm = ({
   )
 }
 
-export default { CreateTeamForm, DisplayTeamFormErrors }
+export { CreateTeamForm, DisplayTeamFormErrors }

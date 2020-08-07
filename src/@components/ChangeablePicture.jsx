@@ -127,28 +127,7 @@ const ChangeablePicture = ({ user, className }) => {
     return false
   }, [])
 
-  const onCropComplete = useCallback(
-    async crop => {
-      await makeClientCrop(crop)
-    },
-    [makeClientCrop]
-  )
-
   const onCropChange = useCallback(crop => setCrop(crop), [])
-
-  const makeClientCrop = useCallback(
-    async crop => {
-      if (img && crop.width && crop.height) {
-        const croppedImg = await getCroppedImage(
-          img,
-          crop,
-          md5(imageEl.current.files[0].name)
-        )
-        setCroppedImg(croppedImg)
-      }
-    },
-    [getCroppedImage, img]
-  )
 
   const getCroppedImage = useCallback((image, crop, fileName) => {
     const canvas = document.createElement('canvas')
@@ -181,6 +160,27 @@ const ChangeablePicture = ({ user, className }) => {
       })
     }, 'image/jpeg')
   }, [])
+
+  const makeClientCrop = useCallback(
+    async crop => {
+      if (img && crop.width && crop.height) {
+        const croppedImg = await getCroppedImage(
+          img,
+          crop,
+          md5(imageEl.current.files[0].name)
+        )
+        setCroppedImg(croppedImg)
+      }
+    },
+    [getCroppedImage, img]
+  )
+
+  const onCropComplete = useCallback(
+    async crop => {
+      await makeClientCrop(crop)
+    },
+    [makeClientCrop]
+  )
 
   return (
     <form className={classnames(className, c.ChangeablePicture_Form)} ref={formRef}>

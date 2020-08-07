@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import Modal from '../Modal'
-import { CreateTeamForm, DisplayErrors } from '../TeamForm'
+import { CreateTeamForm, DisplayTeamFormErrors, Modal } from '@components'
 import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -64,7 +63,7 @@ const CreateTeamModal = ({
       <div className={c.CreateTeamModal_Text}>
         Create a team for your new shared folder.
       </div>
-      <DisplayErrors
+      <DisplayTeamFormErrors
         errors={errors}
         className={c.CreateTeamModal_DisplayErrors}
         serverErrorMsg='Unable to create team. Please try again later.'

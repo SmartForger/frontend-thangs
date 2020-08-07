@@ -2,12 +2,13 @@ import React, { useEffect } from 'react'
 import * as R from 'ramda'
 import { useParams } from 'react-router-dom'
 import { useCurrentUser } from '@hooks'
-
-import { WithFlash } from '@components/Flash'
-import { Spinner } from '@components/Spinner'
-import CardCollection from '@components/CardCollection'
-import Breadcrumbs from '@components/Breadcrumbs'
-import { NewThemeLayout } from '@components/Layout'
+import {
+  Breadcrumbs,
+  CardCollection,
+  NewThemeLayout,
+  Spinner,
+  WithFlash,
+} from '@components'
 import { Message404 } from '../404'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'

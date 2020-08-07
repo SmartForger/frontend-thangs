@@ -1,14 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { NewThemeLayout } from '@components/Layout'
 import { useCurrentUser } from '@hooks'
-import { ProfilePicture } from '@components/ProfilePicture'
-import { Button } from '@components/Button'
-import { Spinner } from '@components/Spinner'
-import { ChangeablePicture } from '@components/ChangeablePicture'
-import { Flash } from '@components/Flash'
-import { EditProfileForm } from '@components/EditProfileForm'
+import {
+  Button,
+  ChangeablePicture,
+  EditProfileForm,
+  Flash,
+  NewThemeLayout,
+  ProfilePicture,
+  Spinner,
+} from '@components'
 import * as GraphqlService from '@services/graphql-service'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'

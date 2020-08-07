@@ -5,7 +5,7 @@ import { ReactComponent as VersionIcon } from '@svg/version.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { ReactComponent as ModelPyramid } from '@svg/model-pyramid.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import { Button, UploadFrame } from '@components/UploadFrame'
+import { Button, UploadFrame } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 

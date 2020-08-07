@@ -1,12 +1,8 @@
 import React from 'react'
-
 import { useHistory, Link } from 'react-router-dom'
-import { ProfilePicture } from '@components/ProfilePicture'
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
-import { Button } from '@components/Button'
+import { Button, ProfilePicture, LikeModelButton, HoopsModelViewer } from '@components/'
 import { ModelDetails } from './ModelDetails'
-import { LikeModelButton } from '@components/LikeModelButton'
-import ModelViewer from '@components/HoopsModelViewer'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -128,7 +124,7 @@ const ModelPreviewPage = ({ model, currentUser }) => {
       </div>
       <div className={c.ModelPreviewPage_ModelContainer}>
         <div className={c.ModelPreviewPage_ModelViewerContainer}>
-          <ModelViewer model={model} />
+          <HoopsModelViewer model={model} />
         </div>
         <div className={c.ModelPreviewPage_Sidebar}>
           <ModelTitle model={model} />

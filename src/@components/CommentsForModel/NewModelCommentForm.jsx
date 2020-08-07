@@ -2,7 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { authenticationService } from '@services'
 import * as GraphqlService from '@services/graphql-service'
-import { Button } from '@components/Button'
+import { Button } from '@components'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 

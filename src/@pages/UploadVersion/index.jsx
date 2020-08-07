@@ -2,16 +2,19 @@ import React, { useCallback, useState, useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import Select from 'react-select'
 import { useForm, ErrorMessage } from 'react-hook-form'
-import { NewThemeLayout } from '@components/Layout'
-import { Uploader, UPLOAD_MODES } from '@components/Uploader'
-import { Button } from '@components/Button'
-import { useFlashNotification } from '@components/Flash'
-import { Spinner } from '@components/Spinner'
-import { UploadFrame } from '@components/UploadFrame'
-import { ProgressText } from '@components/ProgressText'
+import {
+  Button,
+  ModelTitle,
+  NewThemeLayout,
+  ProgressText,
+  Spinner,
+  UploadFrame,
+  Uploader,
+  useFlashNotification,
+} from '@components'
+import { UPLOAD_MODES } from '@components/Uploader'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import { ModelTitle } from '@components/ModelTitle'
 import { useServices } from '@hooks'
 import { Message404 } from '../404'
 import { useStoreon } from 'storeon/react'

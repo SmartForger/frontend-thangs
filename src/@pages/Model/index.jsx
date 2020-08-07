@@ -1,27 +1,26 @@
 import React from 'react'
 import { useHistory, Link, useParams } from 'react-router-dom'
 // import * as R from 'ramda'
-import { LikeModelButton } from '@components/LikeModelButton'
-import CommentsForModel from '@components/CommentsForModel'
-import ModelViewer from '@components/HoopsModelViewer'
-import { ModelViewer as BackupViewer } from '@components/ModelViewer'
-import { Button } from '@components/Button'
-import { Spinner } from '@components/Spinner'
-import { ProgressText } from '@components/ProgressText'
-import { RelatedModels } from '@components/RelatedModels'
-import { ModelTitle } from '@components/ModelTitle'
-
+import {
+  Button,
+  CommentsForModel,
+  HoopsModelViewer,
+  LikeModelButton,
+  ModelTitle,
+  ModelViewer as BackupViewer,
+  NewThemeLayout,
+  ProgressText,
+  RelatedModels,
+  Revised,
+  Spinner,
+} from '@components'
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
 import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
-
 import { useLocalStorage, useModels } from '@hooks'
-import { NewThemeLayout } from '@components/Layout'
-
 import { ModelDetails } from '../ModelPreview/ModelDetails'
 import { Message404 } from '../404'
 import { createUseStyles } from '@style'
 import { useServices } from '@hooks'
-import Revised from '@components/Revised'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -248,7 +247,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
             {showBackupViewer ? (
               <BackupViewer className={c.Model_BackupViewer} model={modelData} />
             ) : (
-              <ModelViewer className={c.Model_ModelViewer} model={modelData} />
+              <HoopsModelViewer className={c.Model_ModelViewer} model={modelData} />
             )}
           </div>
           <div className={c.Model_Row__mobile}>

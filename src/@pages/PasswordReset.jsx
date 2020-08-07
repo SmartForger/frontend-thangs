@@ -4,8 +4,7 @@ import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
 import { authenticationService } from '@services'
 import { useForm } from '@hooks'
-import { TextInput, Spinner, Button } from '@components'
-import { NewSignupThemeLayout } from '@components/Layout'
+import { TextInput, Spinner, Button, NewSignupThemeLayout } from '@components'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {

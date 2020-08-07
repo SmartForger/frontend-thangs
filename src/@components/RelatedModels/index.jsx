@@ -1,5 +1,6 @@
 import React from 'react'
-import { NoResults, CardCollection, ModelCards, Spinner, ProgressText } from '@components'
+import { NoResults, CardCollection, Spinner, ProgressText } from '@components'
+import ModelCards from '@components/CardCollection/ModelCards'
 import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { isError, isProcessing } from '@utilities'

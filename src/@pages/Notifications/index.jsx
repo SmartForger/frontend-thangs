@@ -1,8 +1,5 @@
 import React from 'react'
-import { NewThemeLayout } from '@components/Layout'
-import NotificationsList from '@components/NotificationsList'
-import { Button } from '@components/Button'
-import { Spinner } from '@components/Spinner'
+import { Button, NewThemeLayout, NotificationList, Spinner } from '@components'
 import { useNotifications } from '@hooks'
 import { createUseStyles } from '@style'
 
@@ -50,7 +47,7 @@ function Page() {
           'Clear Notifications'
         )}
       </Button>
-      <NotificationsList className={c.Notifications} />
+      <NotificationList className={c.Notifications} />
     </div>
   )
 }

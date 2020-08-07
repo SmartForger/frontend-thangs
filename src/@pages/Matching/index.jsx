@@ -1,13 +1,15 @@
 import React, { useState, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
-import { NewThemeLayout } from '@components/Layout'
-import { Button } from '@components/Button'
-import { Uploader } from '@components/Uploader'
+import {
+  Button,
+  NewThemeLayout,
+  Uploader,
+  CardCollection,
+  UploadProgress,
+} from '@components'
 import * as GraphqlService from '@services/graphql-service'
 import { authenticationService } from '@services'
-import CardCollection from '@components/CardCollection'
 import ModelCards from '@components/CardCollection/ModelCards'
-import { UploadProgress } from '@components/UploadProgress'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {

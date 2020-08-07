@@ -2,13 +2,15 @@ import React, { useCallback, useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import Select from 'react-select'
 import { useForm, ErrorMessage } from 'react-hook-form'
-import { NewThemeLayout } from '@components/Layout'
-import { Uploader } from '@components/Uploader'
-import { Button } from '@components/Button'
-import { useFlashNotification } from '@components/Flash'
-import { Spinner } from '@components/Spinner'
-import { UploadFrame } from '@components/UploadFrame'
-import { ProgressText } from '@components/ProgressText'
+import {
+  Button,
+  NewThemeLayout,
+  ProgressText,
+  Spinner,
+  UploadFrame,
+  Uploader,
+  useFlashNotification,
+} from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
@@ -152,10 +154,13 @@ const Page = () => {
     })
   }
 
-  const handleCancel = e => {
-    e.preventDefault()
-    history.goBack()
-  }
+  const handleCancel = useCallback(
+    e => {
+      e.preventDefault()
+      history.goBack()
+    },
+    [history]
+  )
 
   const handleSelectChange = useCallback(
     e => {

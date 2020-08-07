@@ -1,20 +1,21 @@
 import React, { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import * as R from 'ramda'
-
-import { NewThemeLayout } from '@components/Layout'
+import {
+  CardCollection,
+  Markdown,
+  NewThemeLayout,
+  ProfilePicture,
+  Spinner,
+  ToggleFollowButton,
+} from '@components'
+import ModelCards from '@components/CardCollection/ModelCards'
 import * as GraphqlService from '@services/graphql-service'
 import { useCurrentUser } from '@hooks'
-import { Spinner } from '@components/Spinner'
-import { ProfilePicture } from '@components/ProfilePicture'
-import { Markdown } from '@components/Markdown'
 import { Message404 } from '../404'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as AboutIcon } from '@svg/about-icon.svg'
 import { ReactComponent as ModelIcon } from '@svg/model-icon.svg'
-import CardCollection from '@components/CardCollection'
-import ModelCards from '@components/CardCollection/ModelCards'
-import { ToggleFollowButton } from '@components/ToggleFollowButton'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 

@@ -1,11 +1,8 @@
 import React from 'react'
 import * as R from 'ramda'
-
-import { NewThemeLayout } from '@components/Layout'
 import { useCurrentUser } from '@hooks'
-import { Spinner } from '@components/Spinner'
+import { Spinner, CardCollection, NewThemeLayout } from '@components'
 import { Message404 } from '../404'
-import CardCollection from '@components/CardCollection'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { createUseStyles } from '@style'
 

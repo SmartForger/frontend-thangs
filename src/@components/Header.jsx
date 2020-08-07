@@ -3,9 +3,9 @@ import {
   Button,
   DropdownItem,
   DropdownMenu,
-  FolderCreateModal,
+  CreateFolderModal,
   ProfilePicture,
-  TeamCreateModal,
+  CreateTeamModal,
   useFlashNotification,
 } from '@components'
 import { useParams, useHistory, Link } from 'react-router-dom'
@@ -221,7 +221,7 @@ const AddModelDropdownMenu = ({ c }) => {
         </DropdownItem>
       </DropdownMenu>
       {createFolderIsOpen && (
-        <FolderCreateModal
+        <CreateFolderModal
           isOpen={createFolderIsOpen}
           onCancel={setFolderClose}
           onTeamModalOpen={newFolderData => {
@@ -239,7 +239,7 @@ const AddModelDropdownMenu = ({ c }) => {
         />
       )}
       {createTeamIsOpen && (
-        <TeamCreateModal
+        <CreateTeamModal
           isOpen={createTeamIsOpen}
           onCancel={() => {
             setTeamClose()

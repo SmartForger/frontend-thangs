@@ -3,7 +3,7 @@ import * as R from 'ramda'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
 import * as GraphqlService from '@services/graphql-service'
-import { Button } from '@components/Button'
+import { Button } from '@components'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(_theme => {
