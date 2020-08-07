@@ -11,7 +11,7 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
       height: '100%',
       overflow: 'hidden',
-      padding: '.5rem',
+      padding: '1rem .5rem',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',

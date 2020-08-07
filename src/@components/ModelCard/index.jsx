@@ -4,6 +4,7 @@ import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { Card, ModelThumbnail, UserInline } from '@components'
 import { THUMBNAILS_HOST } from '@utilities/constants'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -42,42 +43,56 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       letterSpacing: 0,
     },
-    ModelCard_Icon: {
-      fill: theme.colors.blue[500],
+    ModelCard_LikedIcon: {
+      fill: theme.colors.gold[500],
+      stroke: theme.colors.gold[500],
+      '& path': {
+        fill: theme.colors.gold[500],
+      },
     },
   }
 })
 
-const CardContents = ({ className, model, showOwner }) => {
-  const c = useStyles()
+const ModelDetails = ({ c, model, showOwner }) => {
   return (
-    <Card className={className}>
-      <ModelThumbnail
-        className={c.ModelCard_Thumbnail}
-        name={model.name}
-        thumbnailUrl={model.thumbnailUrl || `${THUMBNAILS_HOST}/${model.uploadedFile}`}
-      ></ModelThumbnail>
-      <div className={c.ModelCard_Content}>
-        <div className={c.ModelCard_Name}>{model.name}</div>
-        <div className={c.ModelCard_Row}>
-          {showOwner && <UserInline user={model.owner} />}
-          <div className={c.ModelCard_ActivityIndicators}>
-            <span className={c.ModelCard_ActivityCount}>
-              <ChatIcon className={c.ModelCard_Icon} />
-              &nbsp;{model.commentsCount}
-            </span>
-            <span className={c.ModelCard_ActivityCount}>
-              <HeartIcon className={c.ModelCard_Icon} />
-              &nbsp;{model.likesCount}
-            </span>
-          </div>
+    <div className={c.ModelCard_Content}>
+      <div className={c.ModelCard_Name}>{model.name}</div>
+      <div className={c.ModelCard_Row}>
+        {showOwner && <UserInline user={model.owner} />}
+        <div className={c.ModelCard_ActivityIndicators}>
+          <span className={c.ModelCard_ActivityCount}>
+            <ChatIcon className={c.ModelCard_Icon} />
+            &nbsp;{model.commentsCount}
+          </span>
+          <span className={c.ModelCard_ActivityCount}>
+            <HeartIcon
+              className={classnames(c.ModelCard_Icon, { [c.ModelCard_LikedIcon]: true })}
+            />
+            &nbsp;{model.likesCount}
+          </span>
         </div>
       </div>
-    </Card>
+    </div>
+  )
+}
+
+const CardContents = ({ className, c, model, showOwner }) => {
+  return (
+    <>
+      <Card className={className}>
+        <ModelThumbnail
+          className={c.ModelCard_Thumbnail}
+          name={model.name}
+          thumbnailUrl={model.thumbnailUrl || `${THUMBNAILS_HOST}/${model.uploadedFile}`}
+        ></ModelThumbnail>
+      </Card>
+      <ModelDetails c={c} model={model} showOwner={showOwner} />
+    </>
   )
 }
 
 const ModelCard = ({ className, model, withOwner }) => {
+  const c = useStyles()
   const showOwner = withOwner && model.owner
   const [hovered, setHovered] = useState(false)
   const handleMouseEnter = useCallback(() => setHovered(true), [])
@@ -96,6 +111,7 @@ const ModelCard = ({ className, model, withOwner }) => {
         model={model}
         showOwner={showOwner}
         hovered={hovered}
+        c={c}
       />
     </Link>
   )

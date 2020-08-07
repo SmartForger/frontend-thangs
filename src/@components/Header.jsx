@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { useParams, useHistory, Link } from 'react-router-dom'
 import {
   Button,
@@ -66,14 +66,11 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Header_MobileBoundary: {
-      margin: '2.75rem 0 auto',
+      margin: '1rem 0 auto',
       padding: '0 .75rem',
     },
     Header_LogoWrapper: {
       marginRight: '2.25rem',
-    },
-    Header_Logo: {
-      marginRight: '.75rem',
     },
     Header_Row: {
       display: 'flex',
@@ -220,8 +217,8 @@ const NOTIFICATIONS_URL = '/notifications'
 
 const NotificationsButton = ({ c }) => {
   const { useUnreadNotificationCount } = useNotifications()
-  // const { unreadNotificationCount } = useUnreadNotificationCount()
-  const unreadNotificationCount = 4
+  const { unreadNotificationCount } = useUnreadNotificationCount()
+
   return (
     <Link to={NOTIFICATIONS_URL} className={c.Header_NotificationLink}>
       <NotificationIcon className={c.Header_NotificationIcon} />
@@ -368,7 +365,10 @@ const UserNav = ({ c }) => {
   )
 }
 
-const DesktopHeader = ({ variant, c, searchTerm, setSearchTerm }) => {
+const Header = ({ inverted, variant }) => {
+  const c = useStyles({ inverted })
+  const [searchTerm, setSearchTerm] = useState(undefined)
+
   const handleSearchSubmit = e => {
     e.preventDefault()
     console.log('Search...')
@@ -379,94 +379,70 @@ const DesktopHeader = ({ variant, c, searchTerm, setSearchTerm }) => {
   }
 
   return (
-    <span className={c.Header_DesktopOnly}>
-      <div className={c.Header_DesktopBoundary}>
-        <div className={classnames(c.Header_Row, c.Header_TopRow)}>
-          <div>
-            <div className={c.Header_Row}>
-              <Link className={c.Header_LogoWrapper} to='/'>
-                <Logo className={c.Header_Logo} />
-                <LogoText />
-              </Link>
-              <Button
-                text
-                className={c.Header_TextButton}
-                onClick={() => console.log('show upload overlay')}
-              >
-                <MatchingIcon />
-                <span>Model upload search</span>
-              </Button>
-              <form onSubmit={handleSearchSubmit}>
-                <div
-                  className={classnames(c.Header_SearchFormWrapper, {
-                    [c.Header_SearchFormWrapper_active]: searchTerm,
-                  })}
-                >
-                  <MagnifyingGlass
-                    className={c.Header_SearchFormIcon}
-                    onClick={handleSearchSubmit}
-                  />
-                  <TextInput
-                    name='search'
-                    placeholder='Search'
-                    className={classnames(c.Header_SearchFormInput, {
-                      [c.Header_SearchFormInput_active]: searchTerm,
-                    })}
-                    onChange={e => {
-                      setSearchTerm(e.target.value)
-                    }}
-                    value={searchTerm || ''}
-                  />
-                  <ClearIcon
-                    className={classnames(c.Header_SearchClearIcon, {
-                      [c.Header_SearchClearIcon_active]: searchTerm,
-                    })}
-                    onClick={handleSearchClear}
-                  />
-                </div>
-              </form>
-            </div>
-          </div>
-          {variant !== 'logo-only' && <UserNav c={c} />}
-        </div>
-      </div>
-    </span>
-  )
-}
-
-const MobileHeader = ({ variant, c }) => {
-  return (
-    <span className={c.Header_MobileOnly}>
-      <div className={c.Header_MobileBoundary}>
-        <div className={classnames(c.Header_Row, c.Header_TopRow)}>
-          <Link to='/'>
-            <Logo className={c.Header_Logo} />
-          </Link>
-          {variant !== 'logo-only' && <UserNav c={c} />}
-        </div>
-      </div>
-    </span>
-  )
-}
-
-const Header = ({ inverted, variant }) => {
-  const c = useStyles({ inverted })
-  const [searchTerm, setSearchTerm] = useState(undefined)
-  return (
     <>
       <div className={c.Header}>
-        <MobileHeader
-          variant={variant}
-          c={c}
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-        />
-        <DesktopHeader
-          variant={variant}
-          c={c}
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-        />
+        <span className={c.Header_MobileOnly}>
+          <div className={c.Header_MobileBoundary}>
+            <div className={classnames(c.Header_Row, c.Header_TopRow)}>
+              <Link to='/'>
+                <Logo className={c.Header_Logo} />
+              </Link>
+              {variant !== 'logo-only' && <UserNav c={c} />}
+            </div>
+          </div>
+        </span>
+        <span className={c.Header_DesktopOnly}>
+          <div className={c.Header_DesktopBoundary}>
+            <div className={classnames(c.Header_Row, c.Header_TopRow)}>
+              <div>
+                <div className={c.Header_Row}>
+                  <Link className={c.Header_LogoWrapper} to='/'>
+                    <Logo className={c.Header_Logo} />
+                    <LogoText />
+                  </Link>
+                  <Button
+                    text
+                    className={c.Header_TextButton}
+                    onClick={() => console.log('show upload overlay')}
+                  >
+                    <MatchingIcon />
+                    <span>Model upload search</span>
+                  </Button>
+                  <form onSubmit={handleSearchSubmit}>
+                    <div
+                      className={classnames(c.Header_SearchFormWrapper, {
+                        [c.Header_SearchFormWrapper_active]: searchTerm,
+                      })}
+                    >
+                      <MagnifyingGlass
+                        className={c.Header_SearchFormIcon}
+                        onClick={handleSearchSubmit}
+                      />
+                      <TextInput
+                        name='search'
+                        placeholder='Search'
+                        className={classnames(c.Header_SearchFormInput, {
+                          [c.Header_SearchFormInput_active]: searchTerm,
+                        })}
+                        onChange={e => {
+                          setSearchTerm(e.target.value)
+                        }}
+                        value={searchTerm || ''}
+                      />
+                      <ClearIcon
+                        className={classnames(c.Header_SearchClearIcon, {
+                          [c.Header_SearchClearIcon_active]: searchTerm,
+                        })}
+                        onClick={handleSearchClear}
+                      />
+                    </div>
+                  </form>
+                </div>
+              </div>
+              {variant !== 'logo-only' && <UserNav c={c} />}
+            </div>
+          </div>
+        </span>
       </div>
     </>
   )

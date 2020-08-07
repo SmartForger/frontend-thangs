@@ -11,8 +11,11 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
     },
     UserInline_Info: {
-      marginLeft: '1rem',
+      marginLeft: '.5rem',
       flexGrow: 1,
+      fontSize: '1rem',
+      fontWeight: '600',
+      color: theme.colors.black[500],
     },
     UserInline_SmallName: {
       ...theme.mixins.text.linkText,
@@ -29,7 +32,7 @@ const UserInline = ({
   user,
   className,
   displayEmail,
-  size = '1.5rem',
+  size = '1.75rem',
   children,
   suffix,
 }) => {

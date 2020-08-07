@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button, Header, Footer } from '@components'
+import { Button, Header } from '@components'
 import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg'
 import { ReactComponent as MatchingIcon } from '../@svg/matching-icon.svg'
 import { createUseStyles } from '@style'
@@ -39,6 +39,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       justifyContent: 'center',
       padding: 0,
+      overflow: 'hidden',
     },
     Layout_TextContainer: {
       margin: 'auto 1rem',
@@ -86,7 +87,6 @@ export const NewThemeLayout = ({ children, options = {} }) => {
       <div className={c.Layout} variant={layoutVariant}>
         {children}
       </div>
-      <Footer />
     </>
   )
 }
@@ -125,7 +125,6 @@ export const NewInvertedHeaderLayout = ({ children }) => {
       <div className={c.Layout} variant='small-vertical-spacing'>
         {children}
       </div>
-      <Footer />
     </>
   )
 }
