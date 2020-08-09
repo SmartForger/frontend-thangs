@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import * as R from 'ramda'
 
 import { useNotifications } from '@hooks'
@@ -22,8 +22,17 @@ const useStyles = createUseStyles(_theme => {
 
 const NotificationsList = ({ className }) => {
   const c = useStyles()
-  const { useNotificationsByUserId } = useNotifications()
+  const {
+    useNotificationsByUserId,
+    useUpdateLastCheckedNotifications,
+  } = useNotifications()
   const { loading, error, notifications } = useNotificationsByUserId()
+  const [updateLastChecked] = useUpdateLastCheckedNotifications()
+
+  useEffect(() => {
+    updateLastChecked()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (loading) {
     return <Spinner />
