@@ -1,15 +1,21 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import * as DateFns from 'date-fns'
+import { formatDistanceStrict } from 'date-fns'
 import { ProfilePicture, ModelThumbnail, Card } from '@components'
 import {
   isModelCompletedProcessing,
   isModelFailedProcessing,
   isUserCommentedOnModel,
+  isUserLikedModel,
   isUserUploadedModel,
   isUserStartedFollowingUser,
   isUserGrantedUserAccessToFolder,
 } from '@services/graphql-service/notifications'
+
+import { ReactComponent as HeartIcon } from '@svg/notification-heart.svg'
+import { ReactComponent as CommentIcon } from '@svg/notification-comment.svg'
+import { ReactComponent as PlusIcon } from '@svg/notification-plus.svg'
+
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -18,21 +24,6 @@ const useStyles = createUseStyles(theme => {
     Notification: {},
     Notification_Item: {
       display: 'flex',
-    },
-    Notification_Left: {
-      minWidth: '3rem',
-    },
-    Notification_Right: {
-      minWidth: '11.75rem',
-    },
-    Notification_Content: {
-      margin: '1rem 0 0 1rem',
-      maxWidth: 'calc(100% - 11.75rem - 3rem)',
-      minWidth: 'calc(100% - 11.75rem - 3rem)',
-
-      '& span + span': {
-        marginLeft: '.5rem',
-      },
     },
     Notification_ActorName: {
       ...theme.mixins.text.commentUsername,
@@ -84,252 +75,60 @@ const useStyles = createUseStyles(theme => {
       overflowX: 'hidden',
       textOverflow: 'ellipsis',
     },
+    NotificationSnippet: {
+      display: 'flex',
+      flexDirection: 'row',
+      marginBottom: '1.5rem',
+      alignItems: 'flex-start',
+      padding: '.5rem',
+      borderRadius: '.5rem',
+      width: '15rem',
+
+      '&:hover': {
+        backgroundColor: theme.colors.white[700],
+        borderRadiu: '.5rem',
+      },
+    },
+    NotificationSnippet_content: {
+      display: 'flex',
+      flexDirection: 'column',
+      marginLeft: '.5rem',
+    },
+    NotificationSnippet_text: {
+      fontWeight: '600',
+      lineHeight: '125%',
+    },
+    NotificationSnippet_verb: {
+      fontWeight: 'normal',
+    },
+    NotificationSnippet_time: {
+      fontSize: '12px',
+      fontWeight: '600',
+      marginTop: '.25rem',
+      color: theme.colors.grey[300],
+    },
+    Notification_HeartIcon: {
+      fill: theme.colors.gold[500],
+      stroke: theme.colors.gold[500],
+    },
   }
 })
-
-const DATE_FORMAT = 'h:mmaaaa M/dd/yy'
-
-const Body = ({ left, content, right, className }) => {
-  const c = useStyles()
+const noop = () => null
+const NotificationSnippet = ({ c, Icon = noop, actor, verb, time, target }) => {
   return (
-    <li className={classnames(className, c.Notification_Item)}>
-      <div className={c.Notification_Left}>{left}</div>
-      <div className={c.Notification_Content}>{content}</div>
-      <div className={c.Notification_Right}>{right}</div>
-    </li>
-  )
-}
-
-const ActorPicture = ({ id, name, img }) => {
-  return (
-    <Link to={`/profile/${id}`}>
-      <ProfilePicture size='48px' name={name} src={img} />
-    </Link>
-  )
-}
-
-const formatDate = time => {
-  const formatted = DateFns.format(new Date(time), DATE_FORMAT)
-  return formatted.replace('a.m.', 'am').replace('p.m.', 'pm')
-}
-
-const ThangsPicture = () => {
-  const c = useStyles()
-  return (
-    <div className={c.Notification_LogoContainer}>
-      <img className={c.Notification_Image} src='/thangs-logo.png' alt='Thangs logo' />
+    <div className={c.NotificationSnippet}>
+      <div>
+        <Icon />
+      </div>
+      <div className={c.NotificationSnippet_content}>
+        <div className={c.NotificationSnippet_text}>
+          {`${actor.fullName} `}
+          <span className={c.NotificationSnippet_verb}>{verb}</span>
+          {` ${target.name}`}
+        </div>
+        <div className={c.NotificationSnippet_time}>{time}</div>
+      </div>
     </div>
-  )
-}
-
-const ModelCompletedProcessing = ({ className, time, actor }) => {
-  const c = useStyles()
-  return (
-    <Body
-      className={className}
-      left={<ThangsPicture />}
-      content={
-        <div>
-          <div className={c.Notification_ActorName}>Thangs</div>
-          <span className={c.Notification_Time}>{time}</span>
-          <div className={c.Notification_Text}>
-            We have finished processing your model.
-          </div>
-        </div>
-      }
-      right={
-        <Link to={`/model/${actor.id}`}>
-          <Card className={c.Notification_TargetPicture}>
-            <ModelThumbnail
-              className={c.Notification_Thumbnail}
-              thumbnailUrl={actor.thumbnailUrl}
-              name={actor.name}
-            />
-          </Card>
-        </Link>
-      }
-    />
-  )
-}
-
-const ModelFailedProcessing = ({ className, time, actor }) => {
-  const c = useStyles()
-  return (
-    <Body
-      className={className}
-      left={<ThangsPicture />}
-      content={
-        <div>
-          <div className={c.Notification_ActorName}>Thangs</div>
-          <span className={c.Notification_Time}>{time}</span>
-          <div className={c.Notification_Text}>
-            We were unable to process your model. Please try again.
-          </div>
-        </div>
-      }
-      right={
-        <Link to={`/model/${actor.id}`}>
-          <Card className={c.Notification_TargetPicture}>
-            <ModelThumbnail
-              className={c.Notification_Thumbnail}
-              thumbnailUrl={actor.thumbnailUrl}
-              name={actor.name}
-            />
-          </Card>
-        </Link>
-      }
-    />
-  )
-}
-
-const UserCommentedOnModel = ({ className, time, actor, target, actionObject, verb }) => {
-  const c = useStyles()
-  return (
-    <Body
-      className={className}
-      left={
-        <ActorPicture name={actor.fullName} id={actor.id} img={actor.profile.avatarUrl} />
-      }
-      content={
-        <div>
-          <div className={c.Notification_ActorName}>{actor.fullName}</div>
-          <div className={c.Notification_TruncateOverflow}>
-            <span className={c.Notification_Verb}>{verb}</span>
-            <span>on</span>
-            <span className={c.Notification_TargetName}>{target.name}</span>
-          </div>
-          <span className={c.Notification_Time}>{time}</span>
-          <div className={c.Notification_Text}>
-            <div className={c.Notification_TruncateOverflow}>{actionObject.body}</div>
-          </div>
-        </div>
-      }
-      right={
-        <Link to={`/model/${target.id}`}>
-          <Card className={c.Notification_TargetPicture}>
-            <ModelThumbnail
-              className={c.Notification_Thumbnail}
-              thumbnailUrl={target.thumbnailUrl}
-              name={target.name}
-            />
-          </Card>
-        </Link>
-      }
-    />
-  )
-}
-
-const UserUploadedModel = ({ className, time, actor, verb, actionObject }) => {
-  const c = useStyles()
-  return (
-    <Body
-      className={className}
-      left={
-        <ActorPicture name={actor.fullName} id={actor.id} img={actor.profile.avatarUrl} />
-      }
-      content={
-        <div>
-          <div className={c.Notification_ActorName}>{actor.fullName}</div>
-          <div>
-            <span className={c.Notification_Verb}>{verb}</span>
-            <span className={c.Notification_TargetName}>{actionObject.name}</span>
-          </div>
-          <span className={c.Notification_Time}>{time}</span>
-        </div>
-      }
-      right={
-        <Link to={`/model/${actionObject.id}`}>
-          <Card className={c.Notification_TargetPicture}>
-            <ModelThumbnail
-              className={c.Notification_Thumbnail}
-              thumbnailUrl={actionObject.thumbnailUrl}
-              name={actionObject.name}
-            />
-          </Card>
-        </Link>
-      }
-    />
-  )
-}
-
-const UserLikedModel = ({ className, time, actor, verb, target }) => {
-  const c = useStyles()
-  return (
-    <Body
-      className={className}
-      left={
-        <ActorPicture name={actor.fullName} id={actor.id} img={actor.profile.avatarUrl} />
-      }
-      content={
-        <div>
-          <div className={c.Notification_ActorName}>{actor.fullName}</div>
-          <div>
-            <span className={c.Notification_Verb}>{verb}</span>
-            <span className={c.Notification_TargetName}>{target.name}</span>
-          </div>
-          <span className={c.Notification_Time}>{time}</span>
-        </div>
-      }
-      right={
-        <Link to={`/model/${target.id}`}>
-          <Card className={c.Notification_TargetPicture}>
-            <ModelThumbnail
-              className={c.Notification_Thumbnail}
-              thumbnailUrl={target.thumbnailUrl}
-              name={target.name}
-            />
-          </Card>
-        </Link>
-      }
-    />
-  )
-}
-
-const UserStartedFollowingUser = ({ className, time, actor, verb }) => {
-  const c = useStyles()
-  return (
-    <Body
-      className={className}
-      left={
-        <ActorPicture name={actor.fullName} id={actor.id} img={actor.profile.avatarUrl} />
-      }
-      content={
-        <div>
-          <div className={c.Notification_ActorName}>{actor.fullName}</div>
-
-          <div>
-            <span className={c.Notification_Verb}>{verb}</span>
-            <span className={c.Notification_TargetName}>you</span>
-          </div>
-          <span className={c.Notification_Time}>{time}</span>
-        </div>
-      }
-    />
-  )
-}
-
-const UserGrantedUserAccessToFolder = ({ className, time, actor, target }) => {
-  const c = useStyles()
-  return (
-    <Body
-      className={className}
-      left={
-        <ActorPicture name={actor.fullName} id={actor.id} img={actor.profile.avatarUrl} />
-      }
-      content={
-        <div>
-          <div className={c.Notification_ActorName}>{actor.fullName}</div>
-
-          <div className={c.Notification_TruncateOverflow}>
-            <span className={c.Notification_Verb}>Granted you access</span>
-            <span className={c.Notification_TargetName}>
-              to a folder <Link to={`/folder/${target.id}`}>{target.name}</Link>
-            </span>
-          </div>
-          <span className={c.Notification_Time}>{time}</span>
-        </div>
-      }
-    />
   )
 }
 
@@ -342,81 +141,36 @@ const Notification = ({
   actionObject,
   className,
 }) => {
-  const time = formatDate(timestamp)
+  const c = useStyles()
+  const time = formatDistanceStrict(new Date(timestamp), new Date())
+  const displayTime = `${time} ago`
+  let text = ''
+  let IconComponent = noop
 
   if (isModelFailedProcessing(notificationType)) {
-    return (
-      <ModelFailedProcessing
-        className={className}
-        time={time}
-        actor={actor}
-        verb={verb}
-      />
-    )
+    text = 'We were unable to process your model. Please try again.'
   } else if (isModelCompletedProcessing(notificationType)) {
-    return (
-      <ModelCompletedProcessing
-        className={className}
-        time={time}
-        actor={actor}
-        verb={verb}
-      />
-    )
+    text = 'We have finished processing your model.'
   } else if (isUserCommentedOnModel(notificationType)) {
-    return (
-      <UserCommentedOnModel
-        className={className}
-        time={time}
-        actor={actor}
-        target={target}
-        actionObject={actionObject}
-        verb={verb}
-      />
-    )
-  } else if (isUserUploadedModel(notificationType)) {
-    return (
-      <UserUploadedModel
-        className={className}
-        time={time}
-        actor={actor}
-        target={target}
-        actionObject={actionObject}
-        verb={verb}
-      />
-    )
+    text = actionObject && actionObject.body
+    IconComponent = CommentIcon
+  } else if (isUserLikedModel(notificationType)) {
+    IconComponent = HeartIcon
   } else if (isUserStartedFollowingUser(notificationType)) {
-    return (
-      <UserStartedFollowingUser
-        className={className}
-        time={time}
-        actor={actor}
-        target={target}
-        actionObject={actionObject}
-        verb={verb}
-      />
-    )
-  } else if (isUserGrantedUserAccessToFolder(notificationType)) {
-    return (
-      <UserGrantedUserAccessToFolder
-        className={className}
-        time={time}
-        actor={actor}
-        target={target}
-        actionObject={actionObject}
-        verb={verb}
-      />
-    )
-  } else {
-    return (
-      <UserLikedModel
-        className={className}
-        time={time}
-        actor={actor}
-        target={target}
-        verb={verb}
-      />
-    )
+    IconComponent = PlusIcon
   }
+  return (
+    <NotificationSnippet
+      c={c}
+      className={className}
+      time={displayTime}
+      actor={actor}
+      target={target}
+      verb={verb}
+      text={text}
+      Icon={IconComponent}
+    />
+  )
 }
 
 export default Notification

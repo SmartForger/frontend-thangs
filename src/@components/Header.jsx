@@ -38,7 +38,6 @@ const useStyles = createUseStyles(theme => {
   return {
     Header: {
       padding: 0,
-      overflow: 'hidden',
       position: 'relative',
       justifyContent: 'center',
       borderTop: `.125rem solid ${theme.colors.gold[500]}`,
@@ -98,12 +97,15 @@ const useStyles = createUseStyles(theme => {
         },
       },
     },
+    Header_NotificationIconWrapper: {
+      position: 'relative',
+    },
     Header_NotificationIcon: {
       color: theme.colors.purple[400],
-    },
-    Header_NotificationLink: {
-      height: '3rem',
-      position: 'relative',
+      '& path': {
+        stroke: ({ notificationsIsOpen }) =>
+          notificationsIsOpen ? theme.colors.gold[500] : theme.colors.purple[500],
+      },
     },
     Header_UnreadBadge: {
       background: theme.colors.gold[500],
@@ -117,8 +119,8 @@ const useStyles = createUseStyles(theme => {
       fontSize: '.5625rem',
       fontWeight: 'bold',
       position: 'absolute',
-      top: '.2rem',
-      right: '.65rem',
+      top: '-.5rem',
+      right: '.7rem',
     },
     Header_DropdownMenu: {
       height: '3rem',
@@ -207,19 +209,16 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const NOTIFICATIONS_URL = '/notifications'
-
-const NotificationsButton = ({ c }) => {
+const NotificationsButton = ({ c, handleNotificationsClick }) => {
   const { useUnreadNotificationCount } = useNotifications()
   const { unreadNotificationCount } = useUnreadNotificationCount()
-
   return (
-    <Link to={NOTIFICATIONS_URL} className={c.Header_NotificationLink}>
+    <div className={c.Header_NotificationIconWrapper} onClick={handleNotificationsClick}>
       <NotificationIcon className={c.Header_NotificationIcon} />
       {unreadNotificationCount > 0 && (
         <div className={c.Header_UnreadBadge}>{unreadNotificationCount}</div>
       )}
-    </Link>
+    </div>
   )
 }
 
@@ -229,7 +228,7 @@ const UserPicture = ({ user, className }) => {
       <ProfilePicture
         name={user.fullName}
         src={user && user.profile && user.profile.avatarUrl}
-        size='2.125rem'
+        size='2.375rem'
       />
     </Link>
   )
@@ -332,7 +331,7 @@ const ProfileDropdownMenu = ({ c }) => {
   )
 }
 
-const UserNav = ({ c }) => {
+const UserNav = ({ c, handleNotificationsClick, handleModelOpen }) => {
   const { loading, user } = useCurrentUser()
 
   if (loading) {
@@ -342,9 +341,10 @@ const UserNav = ({ c }) => {
   if (user) {
     return (
       <div className={classnames(c.Header_Row, c.Header_ButtonsRow)}>
-        <NotificationsButton c={c} />
+        <NotificationsButton c={c} handleNotificationsClick={handleNotificationsClick} />
         <UserPicture className={c.Header_UserPicture} user={user} />
         <ProfileDropdownMenu c={c} />
+        <AddModelDropdownMenu c={c} />
         <Button className={c.Header_Button}>Upload</Button>
       </div>
     )
@@ -358,9 +358,15 @@ const UserNav = ({ c }) => {
     </div>
   )
 }
-
-const Header = ({ inverted, variant }) => {
-  const c = useStyles({ inverted })
+const noop = () => null
+const Header = ({
+  inverted,
+  variant,
+  handleNotificationsClick = noop,
+  handleModelOpen = noop,
+  notificationsIsOpen,
+}) => {
+  const c = useStyles({ inverted, notificationsIsOpen })
   const [searchTerm, setSearchTerm] = useState(undefined)
 
   const handleSearchSubmit = e => {
@@ -382,7 +388,13 @@ const Header = ({ inverted, variant }) => {
               <Link to='/'>
                 <Logo className={c.Header_Logo} />
               </Link>
-              {variant !== 'logo-only' && <UserNav c={c} />}
+              {variant !== 'logo-only' && (
+                <UserNav
+                  c={c}
+                  handleNotificationsClick={handleNotificationsClick}
+                  handleModelOpen={handleModelOpen}
+                />
+              )}
             </div>
           </div>
         </span>
@@ -430,7 +442,9 @@ const Header = ({ inverted, variant }) => {
                   </form>
                 </div>
               </div>
-              {variant !== 'logo-only' && <UserNav c={c} />}
+              {variant !== 'logo-only' && (
+                <UserNav c={c} handleNotificationsClick={handleNotificationsClick} />
+              )}
             </div>
           </div>
         </span>

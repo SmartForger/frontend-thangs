@@ -5,7 +5,7 @@ const useStyles = createUseStyles(theme => {
   return {
     NoResults: {
       ...theme.mixins.text.zeroStateText,
-      backgroundColor: theme.variables.colors.zeroStateBackground,
+      backgroundColor: theme.colors.white[700],
       padding: '1rem',
       borderRadius: '.5rem',
       width: '100%',

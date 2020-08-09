@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Layout, NotificationList, Spinner } from '@components'
+import { Button, Layout, NotificationsList, Spinner } from '@components'
 import { useNotifications } from '@hooks'
 import { createUseStyles } from '@style'
 
@@ -47,7 +47,7 @@ function Page() {
           'Clear Notifications'
         )}
       </Button>
-      <NotificationList className={c.Notifications} />
+      <NotificationsList className={c.Notifications} />
     </div>
   )
 }

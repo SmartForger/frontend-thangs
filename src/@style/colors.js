@@ -21,7 +21,7 @@ export const colors = {
   grey: {
     100: '#d9d9d9',
     200: '#b7b7b7',
-    300: '#989898', //formerly GREY_11
+    300: '#999999', //formerly GREY_11
     400: '#898989',
     500: mains.GREY, //formerly GREY_6
     600: '#6B6B6B',
