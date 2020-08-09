@@ -1,12 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
-import {
-  Button,
-  NewThemeLayout,
-  Uploader,
-  CardCollection,
-  UploadProgress,
-} from '@components'
+import { Button, Layout, Uploader, CardCollection, UploadProgress } from '@components'
 import * as GraphqlService from '@services/graphql-service'
 import { authenticationService } from '@services'
 import ModelCards from '@components/CardCollection/ModelCards'
@@ -121,9 +115,9 @@ function Page() {
 
 const Matching = () => {
   return (
-    <NewThemeLayout>
+    <Layout>
       <Page />
-    </NewThemeLayout>
+    </Layout>
   )
 }
 

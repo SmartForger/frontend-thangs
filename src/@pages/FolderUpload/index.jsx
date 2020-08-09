@@ -5,7 +5,7 @@ import { useForm, ErrorMessage } from 'react-hook-form'
 import {
   Breadcrumbs,
   Button,
-  NewThemeLayout,
+  Layout,
   ProgressText,
   Spinner,
   UploadFrame,
@@ -374,9 +374,9 @@ const Page = () => {
 
 const FolderUpload = () => {
   return (
-    <NewThemeLayout>
+    <Layout>
       <Page />
-    </NewThemeLayout>
+    </Layout>
   )
 }
 

@@ -7,7 +7,7 @@ import {
   ChangeablePicture,
   EditProfileForm,
   Flash,
-  NewThemeLayout,
+  Layout,
   ProfilePicture,
   Spinner,
 } from '@components'
@@ -122,8 +122,8 @@ const Page = () => {
 
 export const EditProfile = () => {
   return (
-    <NewThemeLayout>
+    <Layout>
       <Page />
-    </NewThemeLayout>
+    </Layout>
   )
 }

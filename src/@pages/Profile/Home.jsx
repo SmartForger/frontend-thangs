@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import * as R from 'ramda'
-import { NewThemeLayout, WithFlash, Spinner, CardCollection } from '@components'
+import { Layout, WithFlash, Spinner, CardCollection } from '@components'
 import ModelCards from '@components/CardCollection/ModelCards'
 import FolderCards from '@components/CardCollection/FolderCards'
 import { useCurrentUser } from '@hooks'
@@ -146,8 +146,8 @@ const Page = () => {
 
 export const Home = () => {
   return (
-    <NewThemeLayout>
+    <Layout>
       <Page />
-    </NewThemeLayout>
+    </Layout>
   )
 }

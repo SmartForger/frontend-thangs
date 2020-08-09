@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
 import * as swearjar from '@utilities'
-import { Button, Spinner, TextInput, NewSignupThemeLayout } from '@components'
+import { Button, Spinner, TextInput, Layout } from '@components'
 import { useForm } from '@hooks'
 import { authenticationService } from '@services'
 import { ReactComponent as UserRegistrationIcon } from '@svg/user-registration.svg'
@@ -321,8 +321,8 @@ const Page = () => {
 
 export const Signup = () => {
   return (
-    <NewSignupThemeLayout>
+    <Layout>
       <Page />
-    </NewSignupThemeLayout>
+    </Layout>
   )
 }

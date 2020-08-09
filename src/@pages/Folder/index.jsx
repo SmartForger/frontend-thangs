@@ -2,13 +2,7 @@ import React, { useEffect } from 'react'
 import * as R from 'ramda'
 import { useParams } from 'react-router-dom'
 import { useCurrentUser } from '@hooks'
-import {
-  Breadcrumbs,
-  CardCollection,
-  NewThemeLayout,
-  Spinner,
-  WithFlash,
-} from '@components'
+import { Breadcrumbs, CardCollection, Layout, Spinner, WithFlash } from '@components'
 import { Message404 } from '../404'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
@@ -65,8 +59,8 @@ function Page() {
 
 export const FolderPage = () => {
   return (
-    <NewThemeLayout>
+    <Layout>
       <Page />
-    </NewThemeLayout>
+    </Layout>
   )
 }

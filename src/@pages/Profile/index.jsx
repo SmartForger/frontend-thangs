@@ -4,7 +4,7 @@ import * as R from 'ramda'
 import {
   CardCollection,
   Markdown,
-  NewThemeLayout,
+  Layout,
   ProfilePicture,
   Spinner,
   ToggleFollowButton,
@@ -284,8 +284,8 @@ const Page = () => {
 
 export const Profile = () => {
   return (
-    <NewThemeLayout>
+    <Layout>
       <Page />
-    </NewThemeLayout>
+    </Layout>
   )
 }

@@ -4,7 +4,7 @@ import Select from 'react-select'
 import { useForm, ErrorMessage } from 'react-hook-form'
 import {
   Button,
-  NewThemeLayout,
+  Layout,
   ProgressText,
   Spinner,
   UploadFrame,
@@ -344,8 +344,8 @@ const Page = () => {
 
 export const Upload = () => {
   return (
-    <NewThemeLayout>
+    <Layout>
       <Page />
-    </NewThemeLayout>
+    </Layout>
   )
 }

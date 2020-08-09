@@ -8,10 +8,10 @@ import {
   Spinner,
   useFlashNotification,
 } from '@components'
-import { ReactComponent as FolderIcon } from '../../@svg/folder-icon.svg'
-import { ReactComponent as TrashCanIcon } from '../../@svg/trash-can-icon.svg'
-import { ReactComponent as FolderManagementIcon } from '../../@svg/folder-management-icon.svg'
-import { ReactComponent as ErrorIcon } from '../../@svg/error-triangle.svg'
+import { ReactComponent as FolderIcon } from '@svg/folder-icon.svg'
+import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
+import { ReactComponent as FolderManagementIcon } from '@svg/folder-management-icon.svg'
+import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'

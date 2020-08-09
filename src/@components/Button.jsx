@@ -3,9 +3,6 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
-  const {
-    mediaQueries: { md },
-  } = theme
   return {
     Button: {
       display: 'flex',
@@ -19,6 +16,7 @@ const useStyles = createUseStyles(theme => {
       '&:disabled': {
         cursor: 'not-allowed',
       },
+      whiteSpace: 'nowrap',
     },
     Button__notText: {
       border: 'none',
@@ -29,7 +27,7 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: '.5rem',
-      padding: '.5625rem .75rem',
+      padding: '.75rem 1.5rem',
       backgroundColor: theme.colors.gold[500],
       ...theme.mixins.text.primaryButtonText,
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { format } from 'date-fns'
 import * as GraphqlService from '@services/graphql-service'
-import { NewThemeLayout, Spinner, Markdown } from '@components'
+import { Layout, Spinner, Markdown } from '@components'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(_theme => {
@@ -59,8 +59,8 @@ const Page = () => {
 
 export const Newspost = () => {
   return (
-    <NewThemeLayout>
+    <Layout>
       <Page />
-    </NewThemeLayout>
+    </Layout>
   )
 }

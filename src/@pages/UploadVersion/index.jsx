@@ -5,7 +5,7 @@ import { useForm, ErrorMessage } from 'react-hook-form'
 import {
   Button,
   ModelTitle,
-  NewThemeLayout,
+  Layout,
   ProgressText,
   Spinner,
   UploadFrame,
@@ -370,8 +370,8 @@ const Page = () => {
 
 export const UploadVersion = () => {
   return (
-    <NewThemeLayout>
+    <Layout>
       <Page />
-    </NewThemeLayout>
+    </Layout>
   )
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { NewThemeLayout } from '@components/Layout'
+import { Layout } from '@components'
 import { logger } from '@utilities/logging'
 
 function ErrorMessage() {
@@ -29,9 +29,9 @@ export class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <NewThemeLayout options={{ logoOnly: true }}>
+        <Layout options={{ logoOnly: true }}>
           <ErrorMessage />
-        </NewThemeLayout>
+        </Layout>
       )
     }
 

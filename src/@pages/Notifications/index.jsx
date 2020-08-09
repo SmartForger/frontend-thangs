@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, NewThemeLayout, NotificationList, Spinner } from '@components'
+import { Button, Layout, NotificationList, Spinner } from '@components'
 import { useNotifications } from '@hooks'
 import { createUseStyles } from '@style'
 
@@ -54,8 +54,8 @@ function Page() {
 
 export const Notifications = () => {
   return (
-    <NewThemeLayout>
+    <Layout>
       <Page />
-    </NewThemeLayout>
+    </Layout>
   )
 }

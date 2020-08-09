@@ -1,10 +1,16 @@
 import React from 'react'
-import { NewThemeLayout } from '@components/Layout'
 import { useParams, Link } from 'react-router-dom'
 import * as GraphqlService from '@services/graphql-service'
-import { Spinner, CardCollection, Button, SearchBar, NoResults } from '@components'
+import {
+  Spinner,
+  CardCollection,
+  Button,
+  SearchBar,
+  NoResults,
+  Layout,
+} from '@components'
 import ModelCards from '@components/CardCollection/ModelCards'
-import { ReactComponent as MatchingIcon } from '../@svg/matching-icon.svg'
+import { ReactComponent as MatchingIcon } from '@svg/matching-icon.svg'
 import { createUseStyles } from '@style'
 
 const graphqlService = GraphqlService.getInstance()
@@ -106,8 +112,8 @@ const Page = () => {
 
 export const SearchResults = () => {
   return (
-    <NewThemeLayout>
+    <Layout>
       <Page />
-    </NewThemeLayout>
+    </Layout>
   )
 }

@@ -4,7 +4,7 @@ import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
 import { authenticationService } from '@services'
 import { useForm } from '@hooks'
-import { TextInput, Spinner, Button, NewSignupThemeLayout } from '@components'
+import { TextInput, Spinner, Button, Layout } from '@components'
 import { ReactComponent as LoginIcon } from '@svg/user-login.svg'
 import { createUseStyles } from '@style'
 
@@ -46,7 +46,6 @@ const useStyles = createUseStyles(theme => {
       margin: 0,
       marginTop: '6rem',
       float: 'right',
-      width: '6.5rem',
     },
     Login_FormControl: {
       marginTop: '2rem',
@@ -166,7 +165,7 @@ const Page = () => {
   }, [inputState])
 
   return (
-    <NewSignupThemeLayout>
+    <Layout>
       <div className={c.Login_Body}>
         <LoginIcon />
         <h1 className={c.Login_PageHeader}>
@@ -226,7 +225,7 @@ const Page = () => {
           password.
         </div>
       </div>
-    </NewSignupThemeLayout>
+    </Layout>
   )
 }
 

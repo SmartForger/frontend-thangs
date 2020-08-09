@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useParams, useHistory, Link } from 'react-router-dom'
 import {
   Button,
@@ -15,6 +15,7 @@ import { authenticationService } from '@services'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
+import { ReactComponent as BackgroundSvg } from '@svg/header-background.svg'
 import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg'
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as LogoText } from '@svg/logo-text.svg'
@@ -36,12 +37,12 @@ const useStyles = createUseStyles(theme => {
 
   return {
     Header: {
-      width: '100%',
-      position: 'absolute',
-      background: 'none',
-      top: 0,
-      zIndex: 2,
+      padding: 0,
+      overflow: 'hidden',
+      position: 'relative',
+      justifyContent: 'center',
       borderTop: `.125rem solid ${theme.colors.gold[500]}`,
+      background: theme.colors.purple[900],
     },
     Header_DesktopBoundary: {
       position: 'relative',
@@ -49,7 +50,7 @@ const useStyles = createUseStyles(theme => {
       flexGrow: 1,
 
       [md]: {
-        margin: '0.875rem 6.25rem 1rem',
+        margin: '1.5rem 2rem',
       },
     },
     Header_DesktopOnly: {
@@ -209,6 +210,20 @@ const useStyles = createUseStyles(theme => {
     },
     Header_UserPicture: {
       marginLeft: '1rem',
+    },
+    Header_BackgroundWrapper: {
+      background: theme.variables.colors.invertedHeaderBackground,
+      height: '6rem',
+      position: 'relative',
+      display: 'flex',
+      justifyContent: 'center',
+      padding: 0,
+      overflow: 'hidden',
+    },
+    Header_Background: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
     },
   }
 })
@@ -381,6 +396,7 @@ const Header = ({ inverted, variant }) => {
   return (
     <>
       <div className={c.Header}>
+        <BackgroundSvg className={c.Header_Background} />
         <span className={c.Header_MobileOnly}>
           <div className={c.Header_MobileBoundary}>
             <div className={classnames(c.Header_Row, c.Header_TopRow)}>

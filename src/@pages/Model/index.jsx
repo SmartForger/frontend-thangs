@@ -8,7 +8,7 @@ import {
   LikeModelButton,
   ModelTitle,
   ModelViewer as BackupViewer,
-  NewThemeLayout,
+  Layout,
   ProgressText,
   RelatedModels,
   Revised,
@@ -292,8 +292,8 @@ function Page() {
 
 export const ModelDetail = () => {
   return (
-    <NewThemeLayout>
+    <Layout>
       <Page />
-    </NewThemeLayout>
+    </Layout>
   )
 }

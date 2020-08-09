@@ -4,7 +4,7 @@ import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
 import { authenticationService } from '@services'
 import { useForm } from '@hooks'
-import { TextInput, Spinner, Button, NewSignupThemeLayout } from '@components'
+import { TextInput, Spinner, Button, Layout } from '@components'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -297,16 +297,16 @@ const ConfirmResetPage = () => {
 
 export const PasswordReset = () => {
   return (
-    <NewSignupThemeLayout>
+    <Layout>
       <ResetPage />
-    </NewSignupThemeLayout>
+    </Layout>
   )
 }
 
 export const ConfirmPasswordReset = () => {
   return (
-    <NewSignupThemeLayout>
+    <Layout>
       <ConfirmResetPage />
-    </NewSignupThemeLayout>
+    </Layout>
   )
 }

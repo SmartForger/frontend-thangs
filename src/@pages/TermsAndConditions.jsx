@@ -1,5 +1,5 @@
 import React from 'react'
-import { NewThemeLayout } from '@components'
+import { Layout } from '@components'
 
 const Page = () => {
   return (
@@ -454,8 +454,8 @@ const Page = () => {
 
 export const TermsAndConditions = () => {
   return (
-    <NewThemeLayout options={{ logoOnly: true }}>
+    <Layout options={{ logoOnly: true }}>
       <Page />
-    </NewThemeLayout>
+    </Layout>
   )
 }

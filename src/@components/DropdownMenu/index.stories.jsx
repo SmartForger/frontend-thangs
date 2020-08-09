@@ -1,10 +1,10 @@
 import React from 'react'
 import { action } from '@storybook/addon-actions'
 import { DropdownMenu, DropdownItem } from './'
-import { ReactComponent as UploadModelToFolderIcon } from '../../@svg/upload-model-to-folder-icon.svg'
-import { ReactComponent as NewFolderIcon } from '../../@svg/folder-plus-icon.svg'
-import { ReactComponent as TrashCanIcon } from '../../@svg/trash-can-icon.svg'
-import { ReactComponent as ModelSquareIcon } from '../../@svg/model-square-icon.svg'
+import { ReactComponent as UploadModelToFolderIcon } from '@svg/upload-model-to-folder-icon.svg'
+import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg'
+import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
+import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(_theme => {

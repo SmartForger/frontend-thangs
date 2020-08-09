@@ -1,7 +1,7 @@
 import React from 'react'
 import * as R from 'ramda'
 import { useCurrentUser } from '@hooks'
-import { Spinner, CardCollection, NewThemeLayout } from '@components'
+import { Spinner, CardCollection, Layout } from '@components'
 import { Message404 } from '../404'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { createUseStyles } from '@style'
@@ -66,8 +66,8 @@ const Page = () => {
 
 export const Likes = () => {
   return (
-    <NewThemeLayout>
+    <Layout>
       <Page />
-    </NewThemeLayout>
+    </Layout>
   )
 }
