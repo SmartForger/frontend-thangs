@@ -29,6 +29,7 @@ import { ReactComponent as PencilIcon } from '@svg/icon-pencil.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as MatchingIcon } from '@svg/matching-icon-header.svg'
 import { ReactComponent as ClearIcon } from '@svg/icon-input-clear.svg'
+import { ReactComponent as Caret } from '@svg/header-caret.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -205,6 +206,12 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       top: 0,
       right: 0,
+    },
+    Header_Caret: {
+      display: ({ notificationsIsOpen }) => (notificationsIsOpen ? 'block' : 'none'),
+      position: 'absolute',
+      bottom: '-1.5rem',
+      right: '17.75rem',
     },
   }
 })
@@ -446,6 +453,7 @@ const Header = ({
                 <UserNav c={c} handleNotificationsClick={handleNotificationsClick} />
               )}
             </div>
+            <Caret className={c.Header_Caret} />
           </div>
         </span>
       </div>
