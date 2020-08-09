@@ -88,7 +88,6 @@ const DropdownMenu = ({
   const [isOpenInternal, toggleOpen] = useDropdownMenuState(isOpenExternal)
   const isOpen = isOpenExternal === undefined ? isOpenInternal : isOpenExternal
   const c = useStyles({ isOpen, noIcons })
-  debugger
   return (
     <div className={classnames(className, c.DropdownMenu_Container)}>
       {TargetComponent ? (
