@@ -54,9 +54,11 @@ const useStyles = createUseStyles(theme => {
 })
 
 const ModelDetails = ({ c, model, showOwner }) => {
+  let modelName = model.name
+  if (modelName.length > 40) modelName = modelName.slice(0, 40) + '...'
   return (
     <div className={c.ModelCard_Content}>
-      <div className={c.ModelCard_Name}>{model.name}</div>
+      <div className={c.ModelCard_Name}>{modelName}</div>
       <div className={c.ModelCard_Row}>
         {showOwner && <UserInline user={model.owner} />}
         <div className={c.ModelCard_ActivityIndicators}>
