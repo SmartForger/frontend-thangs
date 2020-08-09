@@ -9,10 +9,6 @@ import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
-  const {
-    mediaQueries: { md },
-  } = theme
-
   return {
     Landing: {},
     Landing_Hero: {
@@ -22,15 +18,6 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
       justifyContent: 'center',
       background: theme.colors.purple[900],
-    },
-    Landing_HeaderBackground: {
-      background: theme.variables.colors.invertedHeaderBackground,
-      height: '5rem',
-      position: 'relative',
-      display: 'flex',
-      justifyContent: 'center',
-      padding: 0,
-      overflow: 'hidden',
     },
     Landing_TextContainer: {
       maxWidth: theme.variables.maxWidth,
@@ -51,16 +38,6 @@ const useStyles = createUseStyles(theme => {
     },
     Landing_SearchByModelUploadButton: { marginTop: '1.5rem' },
     Landing_SearchByModelUploadButton_MatchingIcon: { marginRight: '.5rem' },
-    Landing_Spacer: { height: '6.25rem' },
-    Landing_BackgroundWrapper: {
-      background: theme.variables.colors.invertedHeaderBackground,
-      height: '6rem',
-      position: 'relative',
-      display: 'flex',
-      justifyContent: 'center',
-      padding: 0,
-      overflow: 'hidden',
-    },
     Landing_Background: {
       position: 'absolute',
       top: '-6rem',
@@ -116,10 +93,7 @@ const LandingHero = () => {
             to collaborate and share 3D models.
           </div>
           <div className={c.Landing_SearchByModelUploadButton}>
-            <Button
-              className={c.Landing_SearchByModelUploadButton_BrandButton}
-              onClick={() => history.push('/matching')}
-            >
+            <Button onClick={() => history.push('/matching')}>
               <MatchingIcon
                 className={c.Landing_SearchByModelUploadButton_MatchingIcon}
               />

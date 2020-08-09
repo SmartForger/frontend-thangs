@@ -85,12 +85,18 @@ const useStyles = createUseStyles(theme => {
     Header_TopRow: {
       height: '3rem',
     },
-    Header_SignInLink: {
-      ...theme.mixins.text.linkText,
-      marginRight: '2rem',
-    },
     Header_Button: {
       marginLeft: '1rem',
+    },
+    Header_ButtonsRow: {
+      '& > a': {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        '&:last-child': {
+          marginRight: 0,
+        },
+      },
     },
     Header_NotificationIcon: {
       color: theme.colors.purple[400],
@@ -98,9 +104,6 @@ const useStyles = createUseStyles(theme => {
     Header_NotificationLink: {
       height: '3rem',
       position: 'relative',
-    },
-    Header_SearchLink: {
-      height: '3rem',
     },
     Header_UnreadBadge: {
       background: theme.colors.gold[500],
@@ -117,10 +120,6 @@ const useStyles = createUseStyles(theme => {
       top: '.2rem',
       right: '.65rem',
     },
-    Header_DropdownIcon: {
-      width: '3rem',
-      height: '3rem',
-    },
     Header_DropdownMenu: {
       height: '3rem',
       margin: 'auto',
@@ -134,16 +133,6 @@ const useStyles = createUseStyles(theme => {
       lineHeight: 0,
       '> div': {
         right: 0,
-      },
-    },
-    Header_ButtonsRow: {
-      '& > a': {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        '&:last-child': {
-          marginRight: 0,
-        },
       },
     },
     Header_TextButton: {
@@ -185,7 +174,6 @@ const useStyles = createUseStyles(theme => {
         },
       },
     },
-    Header_SearchFormWrapper_active: {},
     Header_SearchFormIcon: {
       position: 'absolute',
       left: '.75rem',
@@ -210,15 +198,6 @@ const useStyles = createUseStyles(theme => {
     },
     Header_UserPicture: {
       marginLeft: '1rem',
-    },
-    Header_BackgroundWrapper: {
-      background: theme.variables.colors.invertedHeaderBackground,
-      height: '6rem',
-      position: 'relative',
-      display: 'flex',
-      justifyContent: 'center',
-      padding: 0,
-      overflow: 'hidden',
     },
     Header_Background: {
       position: 'absolute',
@@ -425,11 +404,7 @@ const Header = ({ inverted, variant }) => {
                     <span>Model upload search</span>
                   </Button>
                   <form onSubmit={handleSearchSubmit}>
-                    <div
-                      className={classnames(c.Header_SearchFormWrapper, {
-                        [c.Header_SearchFormWrapper_active]: searchTerm,
-                      })}
-                    >
+                    <div className={classnames(c.Header_SearchFormWrapper)}>
                       <MagnifyingGlass
                         className={c.Header_SearchFormIcon}
                         onClick={handleSearchSubmit}
