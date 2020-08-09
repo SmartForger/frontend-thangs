@@ -20,17 +20,13 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const NotificationsList = ({ className }) => {
+const NotificationsList = ({ className, notifications, loading, error }) => {
   const c = useStyles()
-  const {
-    useNotificationsByUserId,
-    useUpdateLastCheckedNotifications,
-  } = useNotifications()
-  const { loading, error, notifications } = useNotificationsByUserId()
+  const { useUpdateLastCheckedNotifications } = useNotifications()
   const [updateLastChecked] = useUpdateLastCheckedNotifications()
 
   useEffect(() => {
-    updateLastChecked()
+    // updateLastChecked()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
