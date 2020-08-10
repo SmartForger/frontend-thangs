@@ -1,8 +1,8 @@
-import React from 'react'
-import { useForm } from 'react-hook-form'
+import React, { useCallback } from 'react'
+import { useForm } from '@hooks'
 import { authenticationService } from '@services'
 import * as GraphqlService from '@services/graphql-service'
-import { Button } from '@components'
+import { Button, TextInput } from '@components'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 
@@ -30,7 +30,6 @@ const useStyles = createUseStyles(theme => {
 
       '&:focus': {
         outline: 'none',
-        boxShadow: theme.variables.boxShadow,
       },
     },
     NewModalCommentForm_PostCommentButton: {},
@@ -45,20 +44,40 @@ const NewModelCommentForm = ({ modelId }) => {
   const { user } = graphqlService.useUserById(userId)
   const { dispatch } = useStoreon()
 
-  const { register, handleSubmit, reset } = useForm()
+  const initialState = {
+    body: '',
+  }
+
+  const { onFormSubmit, onInputChange, inputState, clearAllInputs } = useForm({
+    initialState,
+  })
+
   const [createModelComment] = graphqlService.useCreateModelCommentMutation({
     modelId,
   })
 
-  async function formSubmit(data, e) {
-    e.preventDefault()
-    await createModelComment({
-      variables: { input: { ownerId: userId, modelId: `${modelId}`, body: data.body } },
-    })
+  const formSubmit = useCallback(
+    async (inputState, isValid, _errors) => {
+      if (isValid) {
+        await createModelComment({
+          variables: {
+            input: { ownerId: userId, modelId: `${modelId}`, body: inputState.body },
+          },
+        })
 
-    dispatch('fetch-model-comments', { id: modelId })
-    reset()
-  }
+        dispatch('fetch-model-comments', { id: modelId })
+        clearAllInputs()
+      }
+    },
+    [clearAllInputs, createModelComment, dispatch, modelId, userId]
+  )
+
+  const handleOnInputChange = useCallback(
+    (key, value) => {
+      onInputChange(key, value)
+    },
+    [onInputChange]
+  )
 
   if (!user) {
     return null
@@ -67,14 +86,15 @@ const NewModelCommentForm = ({ modelId }) => {
   return (
     <div>
       <div className={c.NewModalCommentForm_Header}>Add Comment</div>
-      <form
-        className={c.NewModalCommentForm}
-        onSubmit={(data, e) => handleSubmit(formSubmit)(data, e)}
-      >
-        <textarea
+      <form className={c.NewModalCommentForm} onSubmit={onFormSubmit(formSubmit)}>
+        <TextInput
           className={c.NewModalCommentForm_PostCommentTextArea}
           name='body'
-          ref={register({ required: true })}
+          value={inputState && inputState.body}
+          onChange={e => {
+            handleOnInputChange('body', e.target.value)
+          }}
+          required
         />
         <Button className={c.NewModalCommentForm_PostCommentButton} type='submit'>
           Comment
