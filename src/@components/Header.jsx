@@ -236,78 +236,78 @@ const NotificationsButton = ({ c, handleNotificationsClick }) => {
   )
 }
 
-const _AddModelDropdownMenu = ({ c }) => {
-  const { folderId } = useParams()
-  const [createFolderIsOpen, setCreateFolderIsOpen] = useState(false)
-  const [createTeamIsOpen, setCreateTeamIsOpen] = useState(false)
-  const [newFolderData, setNewFolderData] = useState({})
-  const { navigateWithFlash } = useFlashNotification()
-  const setFolderOpen = useCallback(() => {
-    setCreateFolderIsOpen(true)
-  }, [])
-  const setTeamOpen = useCallback(() => {
-    setCreateTeamIsOpen(true)
-  }, [])
-  const setFolderClose = useCallback(() => setCreateFolderIsOpen(false), [])
-  const setTeamClose = useCallback(() => setCreateTeamIsOpen(false), [])
+// const _AddModelDropdownMenu = ({ c }) => {
+//   const { folderId } = useParams()
+//   const [createFolderIsOpen, setCreateFolderIsOpen] = useState(false)
+//   const [createTeamIsOpen, setCreateTeamIsOpen] = useState(false)
+//   const [newFolderData, setNewFolderData] = useState({})
+//   const { navigateWithFlash } = useFlashNotification()
+//   const setFolderOpen = useCallback(() => {
+//     setCreateFolderIsOpen(true)
+//   }, [])
+//   const setTeamOpen = useCallback(() => {
+//     setCreateTeamIsOpen(true)
+//   }, [])
+//   const setFolderClose = useCallback(() => setCreateFolderIsOpen(false), [])
+//   const setTeamClose = useCallback(() => setCreateTeamIsOpen(false), [])
 
-  return (
-    <>
-      <DropdownMenu
-        className={classnames(c.Header_DropdownMenu, c.Header_AddModelDropdown)}
-        buttonIcon={PlusButton}
-      >
-        {folderId && (
-          <DropdownItem to={`/folder/${folderId}/upload`}>
-            <UploadModelToFolderIcon /> Upload model to folder
-          </DropdownItem>
-        )}
-        <DropdownItem to='/upload'>
-          <ModelSquareIcon /> Upload model
-        </DropdownItem>
-        <DropdownItem to='/' onClick={setFolderOpen}>
-          <NewFolderIcon />
-          Create Folder
-        </DropdownItem>
-      </DropdownMenu>
-      {createFolderIsOpen && (
-        <CreateFolderModal
-          isOpen={createFolderIsOpen}
-          onCancel={setFolderClose}
-          onTeamModalOpen={newFolderData => {
-            setNewFolderData(newFolderData)
-            setFolderClose()
-            setTeamOpen()
-          }}
-          afterCreate={folder => {
-            setFolderClose()
-            navigateWithFlash(
-              `/folder/${folder.folderId}`,
-              'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
-            )
-          }}
-        />
-      )}
-      {createTeamIsOpen && (
-        <CreateTeamModal
-          isOpen={createTeamIsOpen}
-          onCancel={() => {
-            setTeamClose()
-            setFolderOpen()
-          }}
-          afterCreate={folder => {
-            setTeamClose()
-            navigateWithFlash(
-              `/folder/${folder.folderId}`,
-              'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
-            )
-          }}
-          newFolderData={newFolderData}
-        />
-      )}
-    </>
-  )
-}
+//   return (
+//     <>
+//       <DropdownMenu
+//         className={classnames(c.Header_DropdownMenu, c.Header_AddModelDropdown)}
+//         buttonIcon={PlusButton}
+//       >
+//         {folderId && (
+//           <DropdownItem to={`/folder/${folderId}/upload`}>
+//             <UploadModelToFolderIcon /> Upload model to folder
+//           </DropdownItem>
+//         )}
+//         <DropdownItem to='/upload'>
+//           <ModelSquareIcon /> Upload model
+//         </DropdownItem>
+//         <DropdownItem to='/' onClick={setFolderOpen}>
+//           <NewFolderIcon />
+//           Create Folder
+//         </DropdownItem>
+//       </DropdownMenu>
+//       {createFolderIsOpen && (
+//         <CreateFolderModal
+//           isOpen={createFolderIsOpen}
+//           onCancel={setFolderClose}
+//           onTeamModalOpen={newFolderData => {
+//             setNewFolderData(newFolderData)
+//             setFolderClose()
+//             setTeamOpen()
+//           }}
+//           afterCreate={folder => {
+//             setFolderClose()
+//             navigateWithFlash(
+//               `/folder/${folder.folderId}`,
+//               'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
+//             )
+//           }}
+//         />
+//       )}
+//       {createTeamIsOpen && (
+//         <CreateTeamModal
+//           isOpen={createTeamIsOpen}
+//           onCancel={() => {
+//             setTeamClose()
+//             setFolderOpen()
+//           }}
+//           afterCreate={folder => {
+//             setTeamClose()
+//             navigateWithFlash(
+//               `/folder/${folder.folderId}`,
+//               'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
+//             )
+//           }}
+//           newFolderData={newFolderData}
+//         />
+//       )}
+//     </>
+//   )
+// }
 
 const ProfileDropdownMenu = ({ c, user, TargetComponent }) => {
   const history = useHistory()

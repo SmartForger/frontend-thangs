@@ -120,7 +120,7 @@ const NotificationSnippet = ({
   target,
   linkTarget,
 }) => {
-  const actorName = actor && actor.name
+  const actorName = actor && actor.fullName
   const targetName = target && target.name
   return (
     <Link className={c.NotificationSnippet} to={linkTarget}>
