@@ -106,9 +106,9 @@ export const darkButtonText = {
 
 export const smallInfoMessageText = {
   fontSize: '.875rem',
-  lineHeight: '1.125rem',
+  lineHeight: '125%',
   fontStyle: 'italic',
-  color: colors.purple[400],
+  color: colors.purple[900],
 }
 
 export const infoMessageText = {
@@ -271,4 +271,11 @@ export const footerText = {
   fontWeight: 'normal',
   color: colors.purple[400],
   lineHeight: '1rem',
+}
+
+export const uploadFrameText = {
+  fontSize: '2.25rem',
+  fontFamily: LEXEND_DECA,
+  fontWeight: 'normal',
+  lineHeight: '2.875rem',
 }

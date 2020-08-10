@@ -1,40 +1,37 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-
 import {
-  Breadcrumbs,
-  Layout,
   ProgressText,
   Spinner,
   UploadFrame,
-  UploadForm,
   Uploader,
   useFlashNotification,
+  UploadForm,
 } from '@components'
-import { Message404 } from '../404'
-import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
   return {
-    FolderUpload: {},
-    FolderUpload_Row: {
+    Upload: {},
+    Upload_Row: {
       display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: '2.5rem',
     },
-    FolderUpload_Column: {
-      flexGrow: 1,
+    Upload_Column: {},
+    Upload_Column__frame: {
       marginRight: '2rem',
     },
-    FolderUpload_Column__isLast: {
+    Upload_Column__form: {
       minWidth: '21rem',
     },
-    FolderUpload_Field: {
+    Upload_Field: {
       display: 'flex',
       flexDirection: 'column',
-      marginBottom: '.25rem',
+      marginBottom: '.5rem',
     },
-    FolderUpload_FullWidthInput: {
+    Upload_FullWidthInput: {
       display: 'block',
       flexGrow: 1,
       border: 0,
@@ -42,25 +39,29 @@ const useStyles = createUseStyles(theme => {
       marginBottom: '.5rem',
       borderRadius: '.5rem',
     },
-    FolderUpload_Label: {
+    Upload_Label: {
       marginBottom: '.5rem',
     },
-    FolderUpload_ButtonGroup: {
+    Upload_ButtonGroup: {
       display: 'flex',
       justifyContent: 'flex-end',
       marginTop: '2rem',
     },
-    FolderUpload_Button: {
+    Upload_Button: {
       padding: '.5rem 2.25rem',
     },
-    FolderUpload_CancelButton: {
+    Upload_Button__CancelButton: {
       marginRight: '.5rem',
     },
-    FolderUpload_Error: {
+    Upload_Header: {
+      ...theme.mixins.text.subheaderText,
+      marginBottom: '1.5rem',
+    },
+    Upload_Error: {
       ...theme.mixins.text.formErrorText,
       margin: '.5rem 0',
     },
-    FolderUpload_DropdownIndicator: {
+    Upload_DropdownIndicator: {
       width: 0,
       height: 0,
       marginRight: '1rem',
@@ -70,43 +71,43 @@ const useStyles = createUseStyles(theme => {
       /* We unfortunately need to hardcode this value because of how react-select works */
       borderTop: '8px solid #f5f5f5',
     },
-    FolderUpload_Spinner: {
+    Upload_Spinner: {
       marginTop: '14rem',
       '& .path': {
         stroke: theme.variables.colors.uploaderText,
       },
     },
-    FolderUpload_Dots: {
+    Upload_Dots: {
       ...theme.mixins.text.infoMessageText,
       width: '8.75rem',
       marginBottom: '14rem',
-    },
-    FolderUpload_Breadcrumbs: {
-      marginBottom: '3rem',
     },
   }
 })
 
 const sanitizeFileName = name => name.replace(/ /g, '_')
 
-function Upload({ folder }) {
-  const c = useStyles()
+const Upload = () => {
   const [file, setFile] = useState()
   const { navigateWithFlash } = useFlashNotification()
+  const c = useStyles()
+
   const { uploadModel, dispatch } = useStoreon('uploadModel')
 
   useEffect(() => {
     if (uploadModel.isLoaded && !uploadModel.isError) {
-      navigateWithFlash(`/folder/${folder.id}`, 'Model added successfully.')
+      navigateWithFlash('/home', 'Model added successfully.')
       dispatch('reset-upload-model')
     }
-  }, [dispatch, navigateWithFlash, uploadModel, folder])
+  }, [dispatch, navigateWithFlash, uploadModel])
 
-  useEffect(() => () => dispatch('reset-upload-model'), [dispatch])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => () => dispatch('reset-upload-model'), [])
 
   const onSubmit = useCallback(
     async data => {
-      const { weight, material, height, name, category, description } = data
+      console.log('data', data)
+      const { weight, material, height, name, description, category } = data
 
       const requiredVariables = {
         name: sanitizeFileName(name),
@@ -119,7 +120,6 @@ function Upload({ folder }) {
         ...(height.length > 0 && { height }),
         ...(material.length > 0 && { material }),
         ...(category && { category }),
-        folderId: folder.id,
       }
 
       dispatch('upload-model', {
@@ -130,69 +130,28 @@ function Upload({ folder }) {
         },
       })
     },
-    [dispatch, file, folder]
+    [dispatch, file]
   )
-
-  const modelsCount = folder.models ? folder.models.length : 0
 
   return (
     <div>
-      <Breadcrumbs
-        className={c.FolderUpload_Breadcrumbs}
-        modelsCount={modelsCount}
-        folder={folder}
-      ></Breadcrumbs>
-      <div className={c.FolderUpload_Row}>
-        <div className={c.FolderUpload_Column}>
+      <div className={c.Upload_Row}>
+        <div className={c.Upload_Column__frame}>
           {uploadModel.isLoading ? (
             <UploadFrame>
-              <Spinner className={c.FolderUpload_Spinner} />
-              <ProgressText className={c.FolderUpload_Dots} text='Uploading' />
+              <Spinner className={c.Upload_Spinner} />
+              <ProgressText className={c.Upload_Dots} text='Uploading' />
             </UploadFrame>
           ) : (
             <Uploader showError={uploadModel.isError} file={file} setFile={setFile} />
           )}
         </div>
-        <div className={classnames(c.FolderUpload_Column, c.FolderUpload_Column__isLast)}>
-          <UploadForm
-            onSubmit={onSubmit}
-            disableSubmit={!file || uploadModel.isLoading || uploadModel.isError}
-            file={file}
-          />
+        <div className={c.Upload_Column__form}>
+          <UploadForm onSubmit={onSubmit} disableSubmit={!file} />
         </div>
       </div>
     </div>
   )
 }
-const Page = () => {
-  const { folderId } = useParams()
-  const {
-    dispatch,
-    folders: { isLoading: loading, loadError: error, currentFolder },
-  } = useStoreon('folders')
 
-  useEffect(() => {
-    dispatch('fetch-folder', folderId)
-  }, [dispatch, folderId])
-
-  const folder = currentFolder
-
-  if (loading) {
-    return <Spinner />
-  } else if (!folder) {
-    return <Message404 />
-  } else if (error) {
-    return <div>Error loading folder</div>
-  }
-  return <Upload folder={folder} />
-}
-
-const FolderUpload = () => {
-  return (
-    <Layout>
-      <Page />
-    </Layout>
-  )
-}
-
-export { FolderUpload }
+export default Upload

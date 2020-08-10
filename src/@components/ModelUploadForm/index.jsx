@@ -1,7 +1,12 @@
 import React, { useState } from 'react'
-import { useForm, ErrorMessage } from 'react-hook-form'
-import { Spinner, Button, ProgressText, Uploader, UploadFrame } from '@components'
-import CategorySelect from './CategorySelect'
+import {
+  Spinner,
+  Button,
+  ProgressText,
+  Uploader,
+  UploadFrame,
+  UploadForm,
+} from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -63,19 +68,12 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const ShowError = ({ message }) => {
-  const c = useStyles()
-  return <span className={c.ModelUploadForm_Error}>{message}</span>
-}
-
 const ModelUploadForm = ({ onSubmit, isUploading, error, onCancel }) => {
   const c = useStyles()
-  const { register, handleSubmit, errors } = useForm()
   const [file, setFile] = useState()
-  const [category, setCategory] = useState()
 
   return (
-    <form onSubmit={handleSubmit(onSubmit({ file, category }))}>
+    <>
       <div className={c.ModelUploadForm_Row}>
         <div className={c.ModelUploadForm_ColumnLeft}>
           {isUploading ? (
@@ -88,103 +86,14 @@ const ModelUploadForm = ({ onSubmit, isUploading, error, onCancel }) => {
           )}
         </div>
         <div className={c.ModelUploadForm_ColumnRight}>
-          <div className={c.ModelUploadForm_Field}>
-            <ErrorMessage
-              errors={errors}
-              name='name'
-              message='Please enter a name for your model'
-            >
-              {ShowError}
-            </ErrorMessage>
-            <label className={c.ModelUploadForm_Label} htmlFor='name'>
-              Title *
-            </label>
-            <input
-              className={c.ModelUploadForm_FullWidthInput}
-              name='name'
-              defaultValue={file && file.name}
-              placeholder='Model Name'
-              ref={register({ required: true })}
-            />
-          </div>
-          <div className={c.ModelUploadForm_Field}>
-            <label className={c.ModelUploadForm_Label} htmlFor='material'>
-              Material
-            </label>
-            <input
-              className={c.ModelUploadForm_FullWidthInput}
-              name='material'
-              placeholder='Material'
-              ref={register}
-            />
-          </div>
-          <div className={c.ModelUploadForm_Field}>
-            <label className={c.ModelUploadForm_Label} htmlFor='weight'>
-              Weight
-            </label>
-            <input
-              className={c.ModelUploadForm_FullWidthInput}
-              name='weight'
-              placeholder='Weight'
-              ref={register}
-            />
-          </div>
-          <div className={c.ModelUploadForm_Field}>
-            <label className={c.ModelUploadForm_Label} htmlFor='height'>
-              Height
-            </label>
-            <input
-              className={c.ModelUploadForm_FullWidthInput}
-              name='height'
-              placeholder='Height'
-              ref={register}
-            />
-          </div>
-          <div className={c.ModelUploadForm_Field}>
-            <ErrorMessage
-              errors={errors}
-              name='description'
-              message='Please enter a description for your model'
-            >
-              {ShowError}
-            </ErrorMessage>
-            <label className={c.ModelUploadForm_Label} htmlFor='description'>
-              Description *
-            </label>
-            <input
-              className={c.ModelUploadForm_FullWidthInput}
-              name='description'
-              placeholder='Description'
-              ref={register({ required: true })}
-            />
-          </div>
-          <div className={c.ModelUploadForm_Field}>
-            <label className={c.ModelUploadForm_Label} htmlFor='category'>
-              Category
-            </label>
-            <CategorySelect setCategory={setCategory} />
-          </div>
+          <UploadForm
+            onSubmit={onSubmit}
+            disableSubmit={!file || isUploading || error}
+            file={file}
+          />
         </div>
       </div>
-      <div className={c.ModelUploadForm_ButtonGroup}>
-        <Button
-          dark
-          className={classnames(c.ModelUploadForm_Button, c.ModelUploadForm_CancelButton)}
-          onClick={onCancel}
-          type='button'
-          disabled={isUploading}
-        >
-          Cancel
-        </Button>
-        <Button
-          className={c.ModelUploadForm_Button}
-          type='submit'
-          disabled={!file || isUploading || error}
-        >
-          Save Model
-        </Button>
-      </div>
-    </form>
+    </>
   )
 }
 

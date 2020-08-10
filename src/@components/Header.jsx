@@ -338,7 +338,7 @@ const ProfileDropdownMenu = ({ c }) => {
   )
 }
 
-const UserNav = ({ c, handleNotificationsClick, handleModelOpen }) => {
+const UserNav = ({ c, handleNotificationsClick, handleModalOpen }) => {
   const { loading, user } = useCurrentUser()
 
   if (loading) {
@@ -352,7 +352,9 @@ const UserNav = ({ c, handleNotificationsClick, handleModelOpen }) => {
         <UserPicture className={c.Header_UserPicture} user={user} />
         <ProfileDropdownMenu c={c} />
         <AddModelDropdownMenu c={c} />
-        <Button className={c.Header_Button}>Upload</Button>
+        <Button className={c.Header_Button} onClick={() => handleModalOpen('upload')}>
+          Upload
+        </Button>
       </div>
     )
   }
@@ -370,7 +372,7 @@ const Header = ({
   inverted,
   variant,
   handleNotificationsClick = noop,
-  handleModelOpen = noop,
+  handleModalOpen = noop,
   notificationsIsOpen,
 }) => {
   const c = useStyles({ inverted, notificationsIsOpen })
@@ -399,7 +401,7 @@ const Header = ({
                 <UserNav
                   c={c}
                   handleNotificationsClick={handleNotificationsClick}
-                  handleModelOpen={handleModelOpen}
+                  handleModalOpen={handleModalOpen}
                 />
               )}
             </div>
@@ -450,7 +452,11 @@ const Header = ({
                 </div>
               </div>
               {variant !== 'logo-only' && (
-                <UserNav c={c} handleNotificationsClick={handleNotificationsClick} />
+                <UserNav
+                  c={c}
+                  handleNotificationsClick={handleNotificationsClick}
+                  handleModalOpen={handleModalOpen}
+                />
               )}
             </div>
             <Caret className={c.Header_Caret} />

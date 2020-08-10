@@ -5,18 +5,24 @@ import { createUseStyles } from '@style'
 const useStyles = createUseStyles(theme => {
   return {
     TextInput: {
+      borderColor: ({ invalid }) =>
+        invalid ? theme.colors.error : theme.colors.grey[100],
+      borderWidth: ({ invalid }) => (invalid ? '2px' : '1p'),
+      color: ({ invalid }) =>
+        invalid ? theme.colors.error : theme.variables.colors.textInput,
       padding: '.5rem .75rem',
       display: 'inline-block',
-      border: '2px solid',
-      borderColor: ({ invalid }) => (invalid ? theme.colors.error : 'transparent'),
+      borderStyle: 'solid',
       borderRadius: '.5rem',
       boxSizing: 'border-box',
       lineHeight: '18px',
       fontWeight: '500',
-      color: ({ invalid }) =>
-        invalid ? theme.colors.error : theme.variables.colors.textInput,
+      outline: 'none',
       '&::placeholder': {
         color: theme.variables.colors.textInputPlaceholderColor,
+      },
+      '&:focus, &:active': {
+        borderColor: theme.colors.gold[500],
       },
     },
   }

@@ -1,9 +1,8 @@
 import React, { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { ReactComponent as UploadIcon } from '@svg/upload-icon.svg'
+import { ReactComponent as UploadIcon } from '@svg/icon-uploader.svg'
 import { ReactComponent as VersionIcon } from '@svg/version.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
-import { ReactComponent as ModelPyramid } from '@svg/model-pyramid.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { Button, UploadFrame } from '@components'
 import classnames from 'classnames'
@@ -17,19 +16,11 @@ export const UPLOAD_MODES = {
 const useStyles = createUseStyles(theme => {
   return {
     Uploader: {},
-    Uploader_Icon: {
-      marginBottom: '2rem',
-    },
+    Uploader_Icon: {},
     Uploader_IconButton: {
       position: 'absolute',
       right: '2rem',
       top: '2rem',
-      '& svg': {
-        fill: theme.colors.white[900],
-        stroke: theme.colors.white[900],
-        height: '3rem',
-        width: '3rem',
-      },
     },
     Uploader_ErrorIcon: {
       color: theme.colors.purple[300],
@@ -44,13 +35,25 @@ const useStyles = createUseStyles(theme => {
       ...theme.mixins.text.linkText,
     },
     Uploader_InfoMessage: {
-      ...theme.mixins.text.infoMessageText,
-      marginTop: '2rem',
+      ...theme.mixins.text.uploadFrameText,
+      color: theme.colors.purple[900],
+      marginTop: '1.75rem',
       textAlign: 'center',
-      maxWidth: '25rem',
     },
     Uploader_SmallInfoMessage: {
       ...theme.mixins.text.smallInfoMessageText,
+      marginTop: '2rem',
+      maxWidth: '21.25rem',
+    },
+    Uploader_FileName: {
+      ...theme.mixins.text.subheaderText,
+      color: theme.colors.purple[900],
+      marginTop: '1.75rem',
+      textAlign: 'center',
+      fontSize: '1.4rem',
+      maxWidth: '38rem',
+      whiteSpace: 'pre-wrap',
+      wordBreak: 'break-word',
     },
   }
 })
@@ -167,8 +170,8 @@ const Uploader = ({ file, setFile, showError = true, mode = UPLOAD_MODES.MODEL }
             <Button text className={c.Uploader_IconButton} onClick={cancelUpload}>
               <ExitIcon />
             </Button>
-            <ModelPyramid />
-            <div className={c.Uploader_InfoMessage}>
+            <UploadIcon />
+            <div className={c.Uploader_FileName}>
               <strong>File:</strong> {file.name}
             </div>
             {errorState === 'SIZE_WARNING' && (
@@ -209,10 +212,10 @@ const Uploader = ({ file, setFile, showError = true, mode = UPLOAD_MODES.MODEL }
             {mode === UPLOAD_MODES.MODEL && <UploadIcon className={c.Uploader_Icon} />}
             {mode === UPLOAD_MODES.VERSION && <VersionIcon className={c.Uploader_Icon} />}
             <div className={c.Uploader_InfoMessage}>
-              Drag & Drop model
+              Drag & Drop a model
               <br />
               or{' '}
-              <Button text onClick={handleBrowseClick}>
+              <Button text inline onClick={handleBrowseClick}>
                 <span className={c.Uploader_LinkColor}>browse</span>
               </Button>{' '}
               to choose file

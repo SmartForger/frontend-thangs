@@ -5,15 +5,17 @@ import { createUseStyles } from '@style'
 const useStyles = createUseStyles(theme => {
   return {
     UploadFrame: {
+      width: '38.75rem',
       height: '35rem',
-      backgroundColor: ({ dragactive }) =>
-        dragactive ? theme.colors.white[800] : theme.colors.white[400],
+      backgroundColor: 'none',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       padding: '1.5rem',
       position: 'relative',
+      border: `1.5px dashed ${theme.colors.grey[100]}`,
+      borderRadius: '1rem',
       cursor: ({ currentFile }) => (currentFile ? 'auto' : 'pointer'),
     },
   }

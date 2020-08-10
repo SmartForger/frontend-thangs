@@ -1,6 +1,10 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Header, Modal, NotificationsList } from '@components'
+<<<<<<< HEAD
+import { Upload } from '@modals'
+=======
 import { useNotifications } from '@hooks'
+>>>>>>> bd5312b04608a3fbbd1343f94ac290ab34da7593
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -31,6 +35,8 @@ const useStyles = createUseStyles(theme => {
         opacity: 0,
       },
     },
+<<<<<<< HEAD
+=======
     NotificationsList: {
       maxWidth: '43rem',
       animation: '1000ms linear 0s $slideIn',
@@ -40,6 +46,7 @@ const useStyles = createUseStyles(theme => {
         marginTop: '4rem',
       },
     },
+>>>>>>> bd5312b04608a3fbbd1343f94ac290ab34da7593
     Layout: {
       display: 'flex',
       flexDirection: 'row',
@@ -54,6 +61,22 @@ const useStyles = createUseStyles(theme => {
         paddingRight: ({ notificationsIsOpen }) =>
           notificationsIsOpen ? '1.25rem' : '4rem',
         paddingLeft: '4rem',
+      },
+    },
+    Layout_blur: {
+      filter: 'blur(4px)',
+      OFilter: 'blur(4px)',
+      MsFilter: 'blur(4px)',
+      MozFilter: 'blur(4px)',
+      WebkitFilter: 'blur(4px)',
+    },
+    NotificationsList: {
+      maxWidth: '43rem',
+      animation: '1000ms linear 0s $slideIn',
+      width: '100%',
+
+      '& .notification + .notification': {
+        marginTop: '4rem',
       },
     },
     NotificationsList_Wrapper: {
@@ -77,8 +100,14 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
+const modalTemplates = {
+  upload: Upload,
+}
 const noop = () => null
 const Layout = ({ children, Hero = noop }) => {
+<<<<<<< HEAD
+  const [modalOpen, setModalOpen] = useState(null) //'createFolder', 'createTeam', 'signIn', 'signUp', 'forgotPassword', 'upload', 'searchByUpload'
+=======
   const [modelOpen, setModelOpen] = useState(null) //'createFolder', 'createTeam', 'signIn', 'signUp', 'forgotPassword', 'upload', 'searchByUpload'
   const { useNotificationsByUserId } = useNotifications()
   const {
@@ -86,6 +115,7 @@ const Layout = ({ children, Hero = noop }) => {
     error: notificationsError,
     notifications,
   } = useNotificationsByUserId()
+>>>>>>> bd5312b04608a3fbbd1343f94ac290ab34da7593
   const [notificationsIsOpen, setNotificationsOpen] = useState(false)
   const [notificationsClosing, setNotificationsClosing] = useState(false)
   const c = useStyles({ notificationsIsOpen })
@@ -102,18 +132,50 @@ const Layout = ({ children, Hero = noop }) => {
     }
   }, [notificationsIsOpen])
 
-  const handleModelOpen = useCallback(modalName => {
-    setModelOpen(modalName)
+  const handleModalOpen = useCallback(modalName => {
+    setModalOpen(modalName)
   }, [])
 
+  const handleModalClose = useCallback(() => {
+    console.log('handleModalClose')
+    setModalOpen(null)
+  }, [])
+
+  const ModalView = useMemo(() => modalOpen && modalTemplates[modalOpen], [modalOpen])
   return (
     <>
       <Header
-        setModelOpen={setModelOpen}
         handleNotificationsClick={handleNotificationsClick}
-        handleModelOpen={handleModelOpen}
+        handleModalOpen={handleModalOpen}
+        modalOpen={modalOpen}
         notificationsIsOpen={notificationsIsOpen}
+        setModalOpen={setModalOpen}
       />
+<<<<<<< HEAD
+      {ModalView && (
+        <Modal isOpen={!!modalOpen} handleModalClose={handleModalClose}>
+          <ModalView />
+        </Modal>
+      )}
+      <div className={classnames({ [c.Layout_blur]: modalOpen })}>
+        {Hero && <Hero />}
+        <div className={c.Layout}>
+          {children}
+          {notificationsIsOpen && (
+            <div
+              className={classnames(c.NotificationsList_Wrapper, {
+                [c.NotificationsList_Wrapper__deactive]: notificationsClosing,
+              })}
+            >
+              <ExitIcon
+                className={c.NotificationsList_CloseIcon}
+                onClick={handleNotificationsClick}
+              />
+              <NotificationsList />
+            </div>
+          )}
+        </div>
+=======
       {modelOpen && <Modal template={modelOpen} />}
       {Hero && <Hero />}
       <div className={c.Layout}>
@@ -135,6 +197,7 @@ const Layout = ({ children, Hero = noop }) => {
             />
           </div>
         )}
+>>>>>>> bd5312b04608a3fbbd1343f94ac290ab34da7593
       </div>
     </>
   )

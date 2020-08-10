@@ -81,14 +81,18 @@ const ModelDetails = ({ c, model, showOwner }) => {
 const CardContents = ({ className, c, model, showOwner }) => {
   return (
     <>
-      <Card className={className}>
-        <ModelThumbnail
-          className={c.ModelCard_Thumbnail}
-          name={model.name}
-          thumbnailUrl={model.thumbnailUrl || `${THUMBNAILS_HOST}/${model.uploadedFile}`}
-        ></ModelThumbnail>
-      </Card>
-      <ModelDetails c={c} model={model} showOwner={showOwner} />
+      <div>
+        <Card className={className}>
+          <ModelThumbnail
+            className={c.ModelCard_Thumbnail}
+            name={model.name}
+            thumbnailUrl={
+              model.thumbnailUrl || `${THUMBNAILS_HOST}/${model.uploadedFile}`
+            }
+          ></ModelThumbnail>
+        </Card>
+        <ModelDetails c={c} model={model} showOwner={showOwner} />
+      </div>
     </>
   )
 }

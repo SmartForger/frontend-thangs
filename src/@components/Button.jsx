@@ -65,10 +65,22 @@ const useStyles = createUseStyles(theme => {
         backgroundColor: theme.colors.purple[700],
       },
     },
+    Button__inline: {
+      display: 'inline',
+    },
   }
 })
 
-const Button = ({ children, secondary, back, dark, text, className, ...props }) => {
+const Button = ({
+  children,
+  secondary,
+  back,
+  dark,
+  inline,
+  text,
+  className,
+  ...props
+}) => {
   const c = useStyles()
   return (
     <button
@@ -76,6 +88,7 @@ const Button = ({ children, secondary, back, dark, text, className, ...props }) 
         [c.Button__secondary]: secondary || back,
         [c.Button__back]: back,
         [c.Button__dark]: dark,
+        [c.Button__inline]: inline,
         [c.Button__notText]: !text,
       })}
       {...props}
