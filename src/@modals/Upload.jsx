@@ -19,63 +19,11 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       marginTop: '2.5rem',
     },
-    Upload_Column: {},
     Upload_Column__frame: {
       marginRight: '2rem',
     },
     Upload_Column__form: {
       minWidth: '21rem',
-    },
-    Upload_Field: {
-      display: 'flex',
-      flexDirection: 'column',
-      marginBottom: '.5rem',
-    },
-    Upload_FullWidthInput: {
-      display: 'block',
-      flexGrow: 1,
-      border: 0,
-      padding: '.5rem 1rem',
-      marginBottom: '.5rem',
-      borderRadius: '.5rem',
-    },
-    Upload_Label: {
-      marginBottom: '.5rem',
-    },
-    Upload_ButtonGroup: {
-      display: 'flex',
-      justifyContent: 'flex-end',
-      marginTop: '2rem',
-    },
-    Upload_Button: {
-      padding: '.5rem 2.25rem',
-    },
-    Upload_Button__CancelButton: {
-      marginRight: '.5rem',
-    },
-    Upload_Header: {
-      ...theme.mixins.text.subheaderText,
-      marginBottom: '1.5rem',
-    },
-    Upload_Error: {
-      ...theme.mixins.text.formErrorText,
-      margin: '.5rem 0',
-    },
-    Upload_DropdownIndicator: {
-      width: 0,
-      height: 0,
-      marginRight: '1rem',
-      borderLeft: '6px solid transparent',
-      borderRight: '6px solid transparent',
-
-      /* We unfortunately need to hardcode this value because of how react-select works */
-      borderTop: '8px solid #f5f5f5',
-    },
-    Upload_Spinner: {
-      marginTop: '14rem',
-      '& .path': {
-        stroke: theme.variables.colors.uploaderText,
-      },
     },
     Upload_Dots: {
       ...theme.mixins.text.infoMessageText,
@@ -106,7 +54,6 @@ const Upload = () => {
 
   const onSubmit = useCallback(
     async data => {
-      console.log('data', data)
       const { weight, material, height, name, description, category } = data
 
       const requiredVariables = {

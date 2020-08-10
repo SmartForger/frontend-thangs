@@ -127,8 +127,26 @@ const UploadForm = ({ onSubmit, disableSubmit, file }) => {
     [onInputChange]
   )
 
+  const handleOnFormSubmit = useCallback(
+    e => {
+      e.preventDefault()
+      onFormSubmit(
+        onSubmit({
+          file,
+          category: inputState.category,
+          weight: inputState.weight,
+          material: inputState.material,
+          height: inputState.height,
+          name: inputState.name,
+          description: inputState.description,
+        })
+      )
+    },
+    [file, inputState, onFormSubmit, onSubmit]
+  )
+
   return (
-    <form onSubmit={onFormSubmit(onSubmit({ file, category: inputState.category }))}>
+    <form onSubmit={handleOnFormSubmit}>
       <div className={c.UploadForm_Field}>
         <label className={c.UploadForm_Label} htmlFor='name'>
           Title

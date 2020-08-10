@@ -25,7 +25,7 @@ import { ReactComponent as UploadModelToFolderIcon } from '@svg/upload-model-to-
 import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg'
 import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon-gray.svg'
-import { ReactComponent as PencilIcon } from '@svg/icon-pencil.svg'
+import { ReactComponent as UserIcon } from '@svg/icon_user.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as MatchingIcon } from '@svg/matching-icon-header.svg'
 import { ReactComponent as ClearIcon } from '@svg/icon-input-clear.svg'
@@ -126,6 +126,7 @@ const useStyles = createUseStyles(theme => {
     Header_DropdownMenu: {
       height: '3rem',
       margin: 'auto',
+      marginLeft: '1rem',
       '& > button': {
         height: '3rem',
       },
@@ -229,18 +230,6 @@ const NotificationsButton = ({ c, handleNotificationsClick }) => {
   )
 }
 
-const UserPicture = ({ user, className }) => {
-  return (
-    <Link className={className} to='/home/'>
-      <ProfilePicture
-        name={user.fullName}
-        src={user && user.profile && user.profile.avatarUrl}
-        size='2.375rem'
-      />
-    </Link>
-  )
-}
-
 const AddModelDropdownMenu = ({ c }) => {
   const { folderId } = useParams()
   const [createFolderIsOpen, setCreateFolderIsOpen] = useState(false)
@@ -314,13 +303,17 @@ const AddModelDropdownMenu = ({ c }) => {
   )
 }
 
-const ProfileDropdownMenu = ({ c }) => {
+const ProfileDropdownMenu = ({ c, user, TargetComponent }) => {
   const history = useHistory()
 
   return (
-    <DropdownMenu className={c.Header_DropdownMenu}>
-      <DropdownItem to='/profile/edit'>
-        <PencilIcon /> Edit Profile
+    <DropdownMenu
+      className={c.Header_DropdownMenu}
+      TargetComponent={TargetComponent}
+      user={user}
+    >
+      <DropdownItem to='/home'>
+        <UserIcon /> View Profile
       </DropdownItem>
       <DropdownItem to='/profile/likes'>
         <HeartIcon /> Liked Models
@@ -338,6 +331,23 @@ const ProfileDropdownMenu = ({ c }) => {
   )
 }
 
+const ProfileDropdown = ({ user, onClick = noop }) => {
+  return (
+    <div
+      onClick={() => {
+        console.log('clicked')
+        onClick()
+      }}
+    >
+      <ProfilePicture
+        name={user.fullName}
+        src={user && user.profile && user.profile.avatarUrl}
+        size='2.375rem'
+      />
+    </div>
+  )
+}
+
 const UserNav = ({ c, handleNotificationsClick, handleModalOpen }) => {
   const { loading, user } = useCurrentUser()
 
@@ -349,9 +359,7 @@ const UserNav = ({ c, handleNotificationsClick, handleModalOpen }) => {
     return (
       <div className={classnames(c.Header_Row, c.Header_ButtonsRow)}>
         <NotificationsButton c={c} handleNotificationsClick={handleNotificationsClick} />
-        <UserPicture className={c.Header_UserPicture} user={user} />
-        <ProfileDropdownMenu c={c} />
-        <AddModelDropdownMenu c={c} />
+        <ProfileDropdownMenu c={c} user={user} TargetComponent={ProfileDropdown} />
         <Button className={c.Header_Button} onClick={() => handleModalOpen('upload')}>
           Upload
         </Button>
@@ -419,7 +427,7 @@ const Header = ({
                   <Button
                     text
                     className={c.Header_TextButton}
-                    onClick={() => console.log('show upload overlay')}
+                    onClick={() => handleModalOpen('searchByUpload')}
                   >
                     <MatchingIcon />
                     <span>Model upload search</span>

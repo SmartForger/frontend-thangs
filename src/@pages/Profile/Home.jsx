@@ -13,7 +13,9 @@ import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
   return {
-    Home: {},
+    Home: {
+      width: '100%',
+    },
     Home_TextHeader: {
       ...theme.mixins.text.subheaderText,
       display: 'flex',
@@ -85,7 +87,7 @@ const PageContent = ({ user }) => {
   })
 
   return (
-    <div>
+    <div className={c.Home}>
       <div className={c.Home_TextHeader}>
         <ModelsTitle
           selected={selected === 'models'}

@@ -20,24 +20,14 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const NotificationsList = ({ className, notifications, loading, error }) => {
+const NotificationsList = ({ className }) => {
   const c = useStyles()
-<<<<<<< HEAD
   const {
     useNotificationsByUserId,
     // useUpdateLastCheckedNotifications,
   } = useNotifications()
   const { loading, error, notifications } = useNotificationsByUserId()
   // const [updateLastChecked] = useUpdateLastCheckedNotifications()
-=======
-  const { useUpdateLastCheckedNotifications } = useNotifications()
-  const [updateLastChecked] = useUpdateLastCheckedNotifications()
-
-  useEffect(() => {
-    // updateLastChecked()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
->>>>>>> bd5312b04608a3fbbd1343f94ac290ab34da7593
 
   if (loading) {
     return <Spinner />

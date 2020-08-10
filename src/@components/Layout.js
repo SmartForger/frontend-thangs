@@ -1,10 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { Header, Modal, NotificationsList } from '@components'
-<<<<<<< HEAD
-import { Upload } from '@modals'
-=======
-import { useNotifications } from '@hooks'
->>>>>>> bd5312b04608a3fbbd1343f94ac290ab34da7593
+import { Upload, SearchByUpload } from '@modals'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -35,18 +31,6 @@ const useStyles = createUseStyles(theme => {
         opacity: 0,
       },
     },
-<<<<<<< HEAD
-=======
-    NotificationsList: {
-      maxWidth: '43rem',
-      animation: '1000ms linear 0s $slideIn',
-      width: '100%',
-
-      '& .notification + .notification': {
-        marginTop: '4rem',
-      },
-    },
->>>>>>> bd5312b04608a3fbbd1343f94ac290ab34da7593
     Layout: {
       display: 'flex',
       flexDirection: 'row',
@@ -102,20 +86,11 @@ const useStyles = createUseStyles(theme => {
 })
 const modalTemplates = {
   upload: Upload,
+  searchByUpload: SearchByUpload,
 }
 const noop = () => null
 const Layout = ({ children, Hero = noop }) => {
-<<<<<<< HEAD
   const [modalOpen, setModalOpen] = useState(null) //'createFolder', 'createTeam', 'signIn', 'signUp', 'forgotPassword', 'upload', 'searchByUpload'
-=======
-  const [modelOpen, setModelOpen] = useState(null) //'createFolder', 'createTeam', 'signIn', 'signUp', 'forgotPassword', 'upload', 'searchByUpload'
-  const { useNotificationsByUserId } = useNotifications()
-  const {
-    loading: notificationsLoading,
-    error: notificationsError,
-    notifications,
-  } = useNotificationsByUserId()
->>>>>>> bd5312b04608a3fbbd1343f94ac290ab34da7593
   const [notificationsIsOpen, setNotificationsOpen] = useState(false)
   const [notificationsClosing, setNotificationsClosing] = useState(false)
   const c = useStyles({ notificationsIsOpen })
@@ -137,7 +112,6 @@ const Layout = ({ children, Hero = noop }) => {
   }, [])
 
   const handleModalClose = useCallback(() => {
-    console.log('handleModalClose')
     setModalOpen(null)
   }, [])
 
@@ -151,7 +125,6 @@ const Layout = ({ children, Hero = noop }) => {
         notificationsIsOpen={notificationsIsOpen}
         setModalOpen={setModalOpen}
       />
-<<<<<<< HEAD
       {ModalView && (
         <Modal isOpen={!!modalOpen} handleModalClose={handleModalClose}>
           <ModalView />
@@ -175,29 +148,6 @@ const Layout = ({ children, Hero = noop }) => {
             </div>
           )}
         </div>
-=======
-      {modelOpen && <Modal template={modelOpen} />}
-      {Hero && <Hero />}
-      <div className={c.Layout}>
-        {children}
-        {notificationsIsOpen && (
-          <div
-            className={classnames(c.NotificationsList_Wrapper, {
-              [c.NotificationsList_Wrapper__deactive]: notificationsClosing,
-            })}
-          >
-            <ExitIcon
-              className={c.NotificationsList_CloseIcon}
-              onClick={handleNotificationsClick}
-            />
-            <NotificationsList
-              notifications={notifications}
-              loading={notificationsLoading}
-              error={notificationsError}
-            />
-          </div>
-        )}
->>>>>>> bd5312b04608a3fbbd1343f94ac290ab34da7593
       </div>
     </>
   )

@@ -68,7 +68,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const ModelUploadForm = ({ onSubmit, isUploading, error, onCancel }) => {
+const ModelUploadForm = ({ onSubmit, isUploading, error }) => {
   const c = useStyles()
   const [file, setFile] = useState()
 

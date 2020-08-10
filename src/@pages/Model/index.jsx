@@ -27,7 +27,9 @@ const useStyles = createUseStyles(theme => {
     mediaQueries: { sm, md, lg, xl },
   } = theme
   return {
-    Model: {},
+    Model: {
+      width: '100%',
+    },
     Model_Header: {
       display: 'flex',
       alignItems: 'center',
@@ -236,39 +238,41 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
 
   return (
     <>
-      <div className={c.Model_Header}>
-        <Button back onClick={() => history.goBack()}>
-          <BackArrow />
-        </Button>
-      </div>
-      <div className={c.Model_Row}>
-        <div className={c.Model_Column}>
-          <div className={c.Model_Row}>
-            {showBackupViewer ? (
-              <BackupViewer className={c.Model_BackupViewer} model={modelData} />
-            ) : (
-              <HoopsModelViewer className={c.Model_ModelViewer} model={modelData} />
-            )}
-          </div>
-          <div className={c.Model_Row__mobile}>
-            <Details currentUser={currentUser} model={modelData} />
-          </div>
-          <div className={c.Model_Row}>
-            <RelatedModels modelId={modelData.id} />
-          </div>
-          <div className={c.Model_Row__mobile}>
-            <CommentsForModel model={modelData} />
-          </div>
+      <div className={c.Model}>
+        <div className={c.Model_Header}>
+          <Button back onClick={() => history.goBack()}>
+            <BackArrow />
+          </Button>
         </div>
-        <div className={c.Model_Column__desktop}>
-          <div className={c.Model_Row}>
-            <Details currentUser={currentUser} model={modelData} />
+        <div className={c.Model_Row}>
+          <div className={c.Model_Column}>
+            <div className={c.Model_Row}>
+              {showBackupViewer ? (
+                <BackupViewer className={c.Model_BackupViewer} model={modelData} />
+              ) : (
+                <HoopsModelViewer className={c.Model_ModelViewer} model={modelData} />
+              )}
+            </div>
+            <div className={c.Model_Row__mobile}>
+              <Details currentUser={currentUser} model={modelData} />
+            </div>
+            <div className={c.Model_Row}>
+              <RelatedModels modelId={modelData.id} />
+            </div>
+            <div className={c.Model_Row__mobile}>
+              <CommentsForModel model={modelData} />
+            </div>
           </div>
-          <div className={c.Model_Row}>
-            <VersionUpload modelId={modelData.id} />
-          </div>
-          <div className={c.Model_Row}>
-            <CommentsForModel model={modelData} />
+          <div className={c.Model_Column__desktop}>
+            <div className={c.Model_Row}>
+              <Details currentUser={currentUser} model={modelData} />
+            </div>
+            <div className={c.Model_Row}>
+              <VersionUpload modelId={modelData.id} />
+            </div>
+            <div className={c.Model_Row}>
+              <CommentsForModel model={modelData} />
+            </div>
           </div>
         </div>
       </div>
