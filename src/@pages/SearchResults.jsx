@@ -71,6 +71,7 @@ const Page = () => {
       dispatch('get-search-results', {
         searchTerm: searchQuery,
         onError: error => {
+          // eslint-disable-next-line no-console
           console.log('e:', error)
         },
       })
