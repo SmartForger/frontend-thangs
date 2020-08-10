@@ -73,29 +73,34 @@ const useStyles = createUseStyles(theme => {
       lineHeight: '.75rem',
       padding: '.625rem 1rem',
     },
+    Button__icon: {
+      padding: '.75rem',
+    },
   }
 })
 
 const Button = ({
-  children,
-  secondary,
   back,
-  dark,
-  inline,
-  text,
-  small,
+  children,
   className,
+  dark,
+  icon,
+  inline,
+  secondary,
+  small,
+  text,
   ...props
 }) => {
   const c = useStyles()
   return (
     <button
       className={classnames(className, c.Button, {
-        [c.Button__secondary]: secondary || back,
         [c.Button__back]: back,
         [c.Button__dark]: dark,
+        [c.Button__icon]: icon,
         [c.Button__inline]: inline,
         [c.Button__notText]: !text,
+        [c.Button__secondary]: secondary || back,
         [c.Button__small]: small,
       })}
       {...props}

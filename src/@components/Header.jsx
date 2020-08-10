@@ -177,6 +177,10 @@ const useStyles = createUseStyles(theme => {
         },
       },
     },
+    Header_SearchForm: {
+      display: 'flex',
+      flexDirection: 'row',
+    },
     Header_SearchFormIcon: {
       position: 'absolute',
       left: '.75rem',
@@ -198,6 +202,9 @@ const useStyles = createUseStyles(theme => {
     },
     Header_SearchClearIcon_active: {
       display: 'block',
+    },
+    Header_SearchButton: {
+      marginLeft: '.5rem',
     },
     Header_UserPicture: {
       marginLeft: '1rem',
@@ -442,12 +449,9 @@ const Header = ({
                     <MatchingIcon />
                     <span>Model upload search</span>
                   </Button>
-                  <form onSubmit={handleSearchSubmit}>
+                  <form className={c.Header_SearchForm} onSubmit={handleSearchSubmit}>
                     <div className={classnames(c.Header_SearchFormWrapper)}>
-                      <MagnifyingGlass
-                        className={c.Header_SearchFormIcon}
-                        onClick={handleSearchSubmit}
-                      />
+                      <MagnifyingGlass className={c.Header_SearchFormIcon} />
                       <TextInput
                         name='search'
                         placeholder='Search'
@@ -465,6 +469,11 @@ const Header = ({
                         })}
                         onClick={handleSearchClear}
                       />
+                    </div>
+                    <div className={c.Header_SearchButton}>
+                      <Button icon onClick={handleSearchSubmit}>
+                        <MagnifyingGlass />
+                      </Button>
                     </div>
                   </form>
                 </div>
