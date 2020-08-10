@@ -120,6 +120,8 @@ const NotificationSnippet = ({
   target,
   linkTarget,
 }) => {
+  const actorName = actor && actor.name
+  const targetName = target && target.name
   return (
     <Link className={c.NotificationSnippet} to={linkTarget}>
       <div>
@@ -127,9 +129,9 @@ const NotificationSnippet = ({
       </div>
       <div className={c.NotificationSnippet_content}>
         <div className={c.NotificationSnippet_text}>
-          {`${actor.fullName} `}
+          {`${actorName} `}
           <span className={c.NotificationSnippet_verb}>{verb}</span>
-          {` ${target.name}`}
+          {` ${targetName}`}
         </div>
         <div className={c.NotificationSnippet_time}>{time}</div>
       </div>
@@ -159,10 +161,10 @@ const Notification = ({
   } else if (isUserCommentedOnModel(notificationType)) {
     text = actionObject && actionObject.body
     IconComponent = CommentIcon
-    linkTarget = `/model/${target.id}`
+    linkTarget = target && target.id ? `/model/${target.id}` : '/'
   } else if (isUserLikedModel(notificationType)) {
     IconComponent = HeartIcon
-    linkTarget = `/model/${target.id}`
+    linkTarget = target && target.id ? `/model/${target.id}` : '/'
   } else if (isUserStartedFollowingUser(notificationType)) {
     IconComponent = PlusIcon
   } else if (isUserUploadedModel(notificationType)) {
