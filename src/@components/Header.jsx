@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react'
-import { useParams, useHistory, Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { useHistory, Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
@@ -7,11 +7,8 @@ import {
   Button,
   ProfilePicture,
   TextInput,
-  useFlashNotification,
   DropdownMenu,
   DropdownItem,
-  CreateFolderModal,
-  CreateTeamModal,
 } from '@components'
 import { useCurrentUser, useNotifications } from '@hooks'
 import { authenticationService } from '@services'
@@ -21,11 +18,7 @@ import { ReactComponent as BackgroundSvg } from '@svg/header-background.svg'
 import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg'
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as LogoText } from '@svg/logo-text.svg'
-import { ReactComponent as PlusButton } from '@svg/icon-blue-circle-plus.svg'
 import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
-import { ReactComponent as UploadModelToFolderIcon } from '@svg/upload-model-to-folder-icon.svg'
-import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg'
-import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon-gray.svg'
 import { ReactComponent as UserIcon } from '@svg/icon_user.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
