@@ -46,7 +46,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-function Page() {
+const Page = ({ user = {} }) => {
   const { dispatch, modelPreviews } = useStoreon('modelPreviews')
 
   useEffect(() => {
@@ -67,7 +67,7 @@ function Page() {
       noResultsText='We have no models to display right now. Please try again later.'
       loading={modelPreviews.isLoading}
     >
-      <ModelCards models={modelPreviews.data} />
+      <ModelCards models={modelPreviews.data} user={user} />
     </CardCollection>
   )
 }
@@ -109,17 +109,9 @@ const LandingHero = () => {
 export const Landing = () => {
   const { user } = useCurrentUser()
 
-  if (!user) {
-    return (
-      <Layout Hero={LandingHero}>
-        <Page />
-      </Layout>
-    )
-  }
-
   return (
-    <Layout>
-      <Page />
+    <Layout Hero={!user ? LandingHero : undefined}>
+      <Page user={user} />
     </Layout>
   )
 }

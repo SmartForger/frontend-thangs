@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { formatDistanceStrict } from 'date-fns'
-import { ProfilePicture, ModelThumbnail, Card } from '@components'
 import {
   isModelCompletedProcessing,
   isModelFailedProcessing,
@@ -11,12 +10,9 @@ import {
   isUserStartedFollowingUser,
   isUserGrantedUserAccessToFolder,
 } from '@services/graphql-service/notifications'
-
 import { ReactComponent as HeartIcon } from '@svg/notification-heart.svg'
 import { ReactComponent as CommentIcon } from '@svg/notification-comment.svg'
 import { ReactComponent as PlusIcon } from '@svg/notification-plus.svg'
-
-import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -93,6 +89,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'column',
       marginLeft: '.5rem',
+      color: theme.colors.grey[600],
     },
     NotificationSnippet_text: {
       fontWeight: '600',
@@ -114,9 +111,17 @@ const useStyles = createUseStyles(theme => {
   }
 })
 const noop = () => null
-const NotificationSnippet = ({ c, Icon = noop, actor, verb, time, target }) => {
+const NotificationSnippet = ({
+  c,
+  Icon = noop,
+  actor,
+  verb,
+  time,
+  target,
+  linkTarget,
+}) => {
   return (
-    <div className={c.NotificationSnippet}>
+    <Link className={c.NotificationSnippet} to={linkTarget}>
       <div>
         <Icon />
       </div>
@@ -128,7 +133,7 @@ const NotificationSnippet = ({ c, Icon = noop, actor, verb, time, target }) => {
         </div>
         <div className={c.NotificationSnippet_time}>{time}</div>
       </div>
-    </div>
+    </Link>
   )
 }
 
@@ -146,7 +151,7 @@ const Notification = ({
   const displayTime = `${time} ago`
   let text = ''
   let IconComponent = noop
-
+  let linkTarget = '/'
   if (isModelFailedProcessing(notificationType)) {
     text = 'We were unable to process your model. Please try again.'
   } else if (isModelCompletedProcessing(notificationType)) {
@@ -154,9 +159,15 @@ const Notification = ({
   } else if (isUserCommentedOnModel(notificationType)) {
     text = actionObject && actionObject.body
     IconComponent = CommentIcon
+    linkTarget = `/model/${target.id}`
   } else if (isUserLikedModel(notificationType)) {
     IconComponent = HeartIcon
+    linkTarget = `/model/${target.id}`
   } else if (isUserStartedFollowingUser(notificationType)) {
+    IconComponent = PlusIcon
+  } else if (isUserUploadedModel(notificationType)) {
+    IconComponent = PlusIcon
+  } else if (isUserGrantedUserAccessToFolder(notificationType)) {
     IconComponent = PlusIcon
   }
   return (
@@ -168,6 +179,7 @@ const Notification = ({
       target={target}
       verb={verb}
       text={text}
+      linkTarget={linkTarget}
       Icon={IconComponent}
     />
   )

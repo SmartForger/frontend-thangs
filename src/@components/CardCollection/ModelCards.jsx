@@ -1,5 +1,5 @@
 import React from 'react'
-import ModelCard from '../ModelCard'
+import ModelCard from '@components/ModelCard'
 
 const ModelCards = ({ models = [], user, likes }) =>
   Array.isArray(models) &&

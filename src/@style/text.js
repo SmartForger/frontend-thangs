@@ -279,3 +279,10 @@ export const uploadFrameText = {
   fontWeight: 'normal',
   lineHeight: '2.875rem',
 }
+
+export const searchResultsHeader = {
+  fontSize: '1rem',
+  fontFamily: LEXEND_DECA,
+  fontWeight: 'normal',
+  lineHeight: '2.875rem',
+}

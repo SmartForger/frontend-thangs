@@ -1,13 +1,5 @@
 import React, { useState } from 'react'
-import {
-  Spinner,
-  Button,
-  ProgressText,
-  Uploader,
-  UploadFrame,
-  UploadForm,
-} from '@components'
-import classnames from 'classnames'
+import { Spinner, ProgressText, Uploader, UploadFrame, UploadForm } from '@components'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {

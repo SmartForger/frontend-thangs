@@ -31,9 +31,6 @@ const useStyles = createUseStyles(_theme => {
     EditProfile_ProfilePicture: {
       marginRight: '1.5rem',
     },
-    EditProfile_Button: {
-      padding: '.5rem 1.5rem',
-    },
     EditProfile_PictureForm: {
       marginBottom: '4rem',
     },
@@ -64,12 +61,7 @@ const PictureForm = ({ user, className }) => {
           <ChangeablePicture user={user} />
 
           {currentAvatar && (
-            <Button
-              dark
-              className={c.EditProfile_Button}
-              onClick={onDelete}
-              disabled={loading}
-            >
+            <Button dark onClick={onDelete} disabled={loading}>
               {deleteText}
             </Button>
           )}

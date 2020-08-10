@@ -1,19 +1,10 @@
-import React from 'react'
-import { useParams, Link } from 'react-router-dom'
-import * as GraphqlService from '@services/graphql-service'
-import {
-  Spinner,
-  CardCollection,
-  Button,
-  SearchBar,
-  NoResults,
-  Layout,
-} from '@components'
+import React, { useEffect } from 'react'
+import * as R from 'ramda'
+import { useParams } from 'react-router-dom'
+import { useStoreon } from 'storeon/react'
+import { CardCollection, NoResults, Layout } from '@components'
 import ModelCards from '@components/CardCollection/ModelCards'
-import { ReactComponent as MatchingIcon } from '@svg/matching-icon.svg'
 import { createUseStyles } from '@style'
-
-const graphqlService = GraphqlService.getInstance()
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -23,16 +14,23 @@ const useStyles = createUseStyles(theme => {
     SearchResults: {
       marginTop: '2rem',
     },
+    SearchResults_Page: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: '100%',
+    },
     SearchResults_MatchingIcon: {
       marginRight: '.5rem',
     },
     SearchResults_Header: {
-      ...theme.mixins.text.subheaderText,
-      marginBottom: '1.5rem',
-    },
-    SearchResults_Flexbox: {
+      // ...theme.mixins.text.subheaderText,
+      // marginBottom: '1.5rem',
       display: 'flex',
-      marginBottom: '3rem',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    SearchResults_HeaderText: {
+      ...theme.mixins.text.searchResultsHeader,
     },
     SearchResults_BrandButton: {
       width: '100%',
@@ -48,38 +46,15 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const Matching = () => {
+const SearchResult = ({ models, isLoading }) => {
   const c = useStyles()
-  return (
-    <Link to={'/matching'}>
-      <Button className={c.SearchResults_BrandButton}>
-        <MatchingIcon className={c.SearchResults_MatchingIcon} />
-        <span>Search by Model Upload</span>
-      </Button>
-    </Link>
-  )
-}
-
-const SearchResult = ({ searchQuery }) => {
-  const c = useStyles()
-  const { loading, error, models } = graphqlService.useSearchModels(searchQuery)
-
-  if (loading) {
-    return <Spinner />
-  }
-
-  if (!models && error) {
-    return (
-      <div data-cy='fetch-results-error'>
-        Error! We were not able to load results. Please try again later.
-      </div>
-    )
-  }
 
   return (
     <div className={c.SearchResults}>
-      <div className={c.SearchResults_Header}>Results for {searchQuery}</div>
-      <CardCollection noResultsText='No results found. Try searching another keyword or search by model above.'>
+      <CardCollection
+        loading={isLoading}
+        noResultsText='No results found. Try searching another keyword or search by model above.'
+      >
         <ModelCards models={models} />
       </CardCollection>
     </div>
@@ -89,24 +64,43 @@ const SearchResult = ({ searchQuery }) => {
 const Page = () => {
   const c = useStyles()
   const { searchQuery } = useParams()
+  const { dispatch, searchResults } = useStoreon('searchResults')
+
+  useEffect(() => {
+    if (R.empty(searchResults.data)) {
+      dispatch('get-search-results', {
+        searchTerm: searchQuery,
+        onError: error => {
+          console.log('e:', error)
+        },
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
-    <>
-      <div className={c.SearchResults_Flexbox}>
-        <Matching />
-        <SearchBar
-          className={c.SearchResults_SearchBar}
-          initialSearchQuery={searchQuery}
-        />
+    <div className={c.SearchResults_Page}>
+      <div className={c.SearchResults_Header}>
+        <div className={c.SearchResults_HeaderText}>Search Results for {searchQuery}</div>
+        {/* <div>
+          <Button dark small>
+            Clear Search
+          </Button>
+        </div> */}
       </div>
       {searchQuery ? (
-        <SearchResult searchQuery={searchQuery} />
+        <SearchResult
+          searchQuery={searchQuery}
+          isLoading={searchResults.isLoading}
+          models={searchResults.data}
+        />
       ) : (
         <NoResults>
           Begin typing to search models by name, description, owner, etc. Use search by
           model to find geometrically similar matches to the model you upload.
         </NoResults>
       )}
-    </>
+    </div>
   )
 }
 

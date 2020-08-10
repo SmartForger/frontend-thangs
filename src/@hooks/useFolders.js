@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { authenticationService } from '../@services'
-import * as GraphqlService from '../@services/graphql-service'
-import { uploadToSignedUrl } from '../@services/storageService'
+import { authenticationService, storageService } from '@services'
+import * as GraphqlService from '@services/graphql-service'
 
 const graphqlService = GraphqlService.getInstance()
 
@@ -70,7 +69,7 @@ const useFolders = () => {
           },
         } = urlResult
 
-        await uploadToSignedUrl(uploadUrl, file)
+        await storageService.uploadToSignedUrl(uploadUrl, file)
         await addToFolder({
           variables: {
             ...variables,

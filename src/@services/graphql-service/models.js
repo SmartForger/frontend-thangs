@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { gql } from 'apollo-boost'
 import { useQuery, useMutation } from '@apollo/react-hooks'
-import { uploadToSignedUrl } from '@services/storageService'
+import { storageService } from '@services'
 import * as R from 'ramda'
 import { logger } from '@utilities/logging'
 import { THUMBNAILS_HOST } from '@utilities/constants'
@@ -413,7 +413,7 @@ const useUploadModelMutation = userId => {
         },
       })
 
-      await uploadToSignedUrl(uploadUrl, file)
+      await storageService.uploadToSignedUrl(uploadUrl, file)
 
       const response = await uploadModel({
         variables: {

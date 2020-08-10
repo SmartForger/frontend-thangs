@@ -1,5 +1,5 @@
 import api from '@services/api'
-import { uploadToSignedUrl } from '@services/storageService'
+import { storageService } from '@services'
 
 const getInitAtom = () => ({
   isLoaded: false,
@@ -48,7 +48,7 @@ export default store => {
         endpoint: `models/upload-url?fileName=${file.name}`,
       })
 
-      await uploadToSignedUrl(uploadedUrlData.signedUrl, file)
+      await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file)
 
       const { data: uploadedData, error } = await api({
         method: 'POST',

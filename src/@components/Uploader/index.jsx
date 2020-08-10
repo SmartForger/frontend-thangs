@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { ReactComponent as UploadIcon } from '@svg/icon-uploader.svg'
+import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 import { ReactComponent as VersionIcon } from '@svg/version.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'

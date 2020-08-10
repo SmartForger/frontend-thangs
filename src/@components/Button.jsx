@@ -68,6 +68,11 @@ const useStyles = createUseStyles(theme => {
     Button__inline: {
       display: 'inline',
     },
+    Button__small: {
+      fontSize: '.75rem',
+      lineHeight: '.75rem',
+      padding: '.625rem 1rem',
+    },
   }
 })
 
@@ -78,6 +83,7 @@ const Button = ({
   dark,
   inline,
   text,
+  small,
   className,
   ...props
 }) => {
@@ -90,6 +96,7 @@ const Button = ({
         [c.Button__dark]: dark,
         [c.Button__inline]: inline,
         [c.Button__notText]: !text,
+        [c.Button__small]: small,
       })}
       {...props}
     >

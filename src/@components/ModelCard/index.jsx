@@ -117,24 +117,27 @@ const ModelCard = ({ className, model, withOwner, user, likes }) => {
   const handleMouseEnter = useCallback(() => setHovered(true), [])
   const handleMouseLeave = useCallback(() => setHovered(false), [])
   const isLiked = user ? hasLikedModel(model, user) : likes
-  return (
-    <Link
-      to={`/model/${model.id}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onFocus={handleMouseEnter}
-      onBlur={handleMouseLeave}
-    >
-      <CardContents
-        className={className}
-        model={model}
-        showOwner={showOwner}
-        hovered={hovered}
-        c={c}
-        isLiked={isLiked}
-      />
-    </Link>
-  )
+  if (!model.resultSource || (model.resultSource && model.resultSource === 'thangs')) {
+    return (
+      <Link
+        to={`/model/${model.id}`}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onFocus={handleMouseEnter}
+        onBlur={handleMouseLeave}
+      >
+        <CardContents
+          className={className}
+          model={model}
+          showOwner={showOwner}
+          hovered={hovered}
+          c={c}
+          isLiked={isLiked}
+        />
+      </Link>
+    )
+  }
+  return <div style={{ wordBreak: 'break-word' }}>{JSON.stringify(model)}</div>
 }
 
 export default ModelCard

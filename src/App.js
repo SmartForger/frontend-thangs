@@ -1,6 +1,7 @@
 import React from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { Route, Router, Switch, useLocation } from 'react-router-dom'
+import { storeonDevtools } from 'storeon/devtools'
 
 import * as pendo from '@vendors/pendo'
 import * as fullStory from '@vendors/full-story'
@@ -42,6 +43,7 @@ import modelPreviewsStore from '@store/modelPreviews/store'
 import commentsStore from '@store/comments/store'
 import userStore from '@store/user/store'
 import uploadModelStore from '@store/uploadModel/store'
+import searchStore from '@store/search/store'
 import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
 import { usePageTheming } from '@hooks'
@@ -67,15 +69,31 @@ export function AppFrame() {
   )
 }
 
-const store = createStoreon([
-  commentsStore,
-  folderStore,
-  modelPreviewsStore,
-  modelsStore,
-  teamsStore,
-  uploadModelStore,
-  userStore,
-])
+/* eslint-disable indent */
+const store =
+  process.env.NODE_ENV === 'development'
+    ? createStoreon([
+        commentsStore,
+        folderStore,
+        modelPreviewsStore,
+        modelsStore,
+        searchStore,
+        teamsStore,
+        uploadModelStore,
+        userStore,
+        storeonDevtools,
+      ])
+    : createStoreon([
+        commentsStore,
+        folderStore,
+        modelPreviewsStore,
+        modelsStore,
+        searchStore,
+        teamsStore,
+        uploadModelStore,
+        userStore,
+      ])
+/* eslint-enable indent */
 
 const App = () => {
   const location = useLocation()

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-async function uploadToSignedUrl(uploadUrl, file) {
+const uploadToSignedUrl = async (uploadUrl, file) => {
   return await axios
     .put(uploadUrl, file, {
       headers: {
@@ -10,4 +10,8 @@ async function uploadToSignedUrl(uploadUrl, file) {
     .catch(e => Promise.reject({ data: {}, error: e }))
 }
 
-export { uploadToSignedUrl }
+const storageService = {
+  uploadToSignedUrl,
+}
+
+export default storageService

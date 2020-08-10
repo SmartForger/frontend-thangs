@@ -1,5 +1,8 @@
 import React, { useState, useCallback } from 'react'
 import { useParams, useHistory, Link } from 'react-router-dom'
+import { useStoreon } from 'storeon/react'
+import classnames from 'classnames'
+
 import {
   Button,
   ProfilePicture,
@@ -12,7 +15,6 @@ import {
 } from '@components'
 import { useCurrentUser, useNotifications } from '@hooks'
 import { authenticationService } from '@services'
-import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 import { ReactComponent as BackgroundSvg } from '@svg/header-background.svg'
@@ -124,12 +126,9 @@ const useStyles = createUseStyles(theme => {
       right: '.7rem',
     },
     Header_DropdownMenu: {
-      height: '3rem',
       margin: 'auto',
       marginLeft: '1rem',
-      '& > button': {
-        height: '3rem',
-      },
+      zIndex: 5,
     },
     Header_AddModelDropdown: {
       margin: '0 1rem',
@@ -212,7 +211,7 @@ const useStyles = createUseStyles(theme => {
       display: ({ notificationsIsOpen }) => (notificationsIsOpen ? 'block' : 'none'),
       position: 'absolute',
       bottom: '-1.5rem',
-      right: '17.75rem',
+      right: '11rem',
     },
   }
 })
@@ -230,7 +229,7 @@ const NotificationsButton = ({ c, handleNotificationsClick }) => {
   )
 }
 
-const AddModelDropdownMenu = ({ c }) => {
+const _AddModelDropdownMenu = ({ c }) => {
   const { folderId } = useParams()
   const [createFolderIsOpen, setCreateFolderIsOpen] = useState(false)
   const [createTeamIsOpen, setCreateTeamIsOpen] = useState(false)
@@ -335,7 +334,6 @@ const ProfileDropdown = ({ user, onClick = noop }) => {
   return (
     <div
       onClick={() => {
-        console.log('clicked')
         onClick()
       }}
     >
@@ -383,12 +381,23 @@ const Header = ({
   handleModalOpen = noop,
   notificationsIsOpen,
 }) => {
+  const { dispatch } = useStoreon()
+  const history = useHistory()
   const c = useStyles({ inverted, notificationsIsOpen })
   const [searchTerm, setSearchTerm] = useState(undefined)
 
   const handleSearchSubmit = e => {
     e.preventDefault()
-    console.log('Search...')
+    dispatch('get-search-results', {
+      searchTerm: searchTerm,
+      onFinish: _results => {
+        history.push(`/search/${searchTerm}`)
+        handleModalOpen(null)
+      },
+      onError: error => {
+        console.log('e:', error)
+      },
+    })
   }
 
   const handleSearchClear = () => {

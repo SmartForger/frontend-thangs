@@ -264,4 +264,4 @@ const authenticationService = {
   },
 }
 
-export { authenticationService }
+export default authenticationService
