@@ -30,7 +30,7 @@ const LikesContent = ({ user }) => {
   const models = getLikedModels(user)
   return (
     <CardCollection models={models} noResultsText='You have not liked any models yet.'>
-      <ModelCards models={models} />
+      <ModelCards models={models} likes={true} />
     </CardCollection>
   )
 }

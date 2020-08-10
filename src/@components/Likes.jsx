@@ -29,11 +29,11 @@ const LikesCount = ({ likes }) => {
 const userIdsWhoHaveLiked = R.pipe(
   R.prop('likes'),
   R.filter(R.propEq('isLiked', true)),
-  R.map(R.path(['owner', 'id']))
+  R.map(R.path(['ownerId']))
 )
 
 const hasLikedModel = (model, user) => {
-  return R.includes(user.id, userIdsWhoHaveLiked(model))
+  return R.includes(parseInt(user.id), userIdsWhoHaveLiked(model))
 }
 
 const LikeButton = ({ model, user }) => {

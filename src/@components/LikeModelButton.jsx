@@ -23,10 +23,14 @@ const useStyles = createUseStyles(_theme => {
 
 const graphqlService = GraphqlService.getInstance()
 
-const userIdsWhoHaveLiked = R.pipe(R.prop('likes'), R.map(R.path(['owner', 'id'])))
+const userIdsWhoHaveLiked = R.pipe(
+  R.prop('likes'),
+  R.filter(R.propEq('isLiked', true)),
+  R.map(R.path(['ownerId']))
+)
 
 const hasLikedModel = (model, user) => {
-  return R.includes(user.id, userIdsWhoHaveLiked(model))
+  return R.includes(parseInt(user.id), userIdsWhoHaveLiked(model))
 }
 
 const LikeModelButton = ({ currentUser, model }) => {

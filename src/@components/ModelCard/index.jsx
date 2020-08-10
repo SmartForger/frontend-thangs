@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import * as R from 'ramda'
 import { Link } from 'react-router-dom'
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
@@ -53,7 +54,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const ModelDetails = ({ c, model, showOwner }) => {
+const ModelDetails = ({ c, model, showOwner, isLiked = false }) => {
   let modelName = model.name
   if (modelName.length > 40) modelName = modelName.slice(0, 40) + '...'
   return (
@@ -68,7 +69,9 @@ const ModelDetails = ({ c, model, showOwner }) => {
           </span>
           <span className={c.ModelCard_ActivityCount}>
             <HeartIcon
-              className={classnames(c.ModelCard_Icon, { [c.ModelCard_LikedIcon]: true })}
+              className={classnames(c.ModelCard_Icon, {
+                [c.ModelCard_LikedIcon]: isLiked,
+              })}
             />
             &nbsp;{model.likesCount}
           </span>
@@ -78,7 +81,7 @@ const ModelDetails = ({ c, model, showOwner }) => {
   )
 }
 
-const CardContents = ({ className, c, model, showOwner }) => {
+const CardContents = ({ className, c, model, showOwner, isLiked }) => {
   return (
     <>
       <div>
@@ -91,19 +94,29 @@ const CardContents = ({ className, c, model, showOwner }) => {
             }
           ></ModelThumbnail>
         </Card>
-        <ModelDetails c={c} model={model} showOwner={showOwner} />
+        <ModelDetails c={c} model={model} showOwner={showOwner} isLiked={isLiked} />
       </div>
     </>
   )
 }
 
-const ModelCard = ({ className, model, withOwner }) => {
+const userIdsWhoHaveLiked = R.pipe(
+  R.prop('likes'),
+  R.filter(R.propEq('isLiked', true)),
+  R.map(R.path(['ownerId']))
+)
+
+const hasLikedModel = (model, user) => {
+  return R.includes(parseInt(user.id), userIdsWhoHaveLiked(model))
+}
+
+const ModelCard = ({ className, model, withOwner, user, likes }) => {
   const c = useStyles()
   const showOwner = withOwner && model.owner
   const [hovered, setHovered] = useState(false)
   const handleMouseEnter = useCallback(() => setHovered(true), [])
   const handleMouseLeave = useCallback(() => setHovered(false), [])
-
+  const isLiked = user ? hasLikedModel(model, user) : likes
   return (
     <Link
       to={`/model/${model.id}`}
@@ -118,6 +131,7 @@ const ModelCard = ({ className, model, withOwner }) => {
         showOwner={showOwner}
         hovered={hovered}
         c={c}
+        isLiked={isLiked}
       />
     </Link>
   )
