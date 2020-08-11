@@ -154,4 +154,42 @@ export default store => {
         store.dispatch('folders-action-error')
       })
   })
+
+  store.on('invite-to-folder', (state, { data, folderId, onFinish }) => {
+    store.dispatch('folder-saving')
+    api({
+      method: 'PUT',
+      endpoint: `folders/${folderId}`,
+      body: data,
+    })
+      .then(res => {
+        if (res.status === 200 || res.status === 204) {
+          store.dispatch('saved-folder-data', res.data)
+          onFinish(data)
+          store.dispatch('folder-saved')
+          store.dispatch('fetch-folder', folderId)
+        }
+      })
+      .catch(_error => {
+        store.dispatch('folder-saved-error')
+      })
+  })
+
+  store.on('revoke-folder-access', (state, { folderId, userId }) => {
+    store.dispatch('folder-saving')
+    api({
+      method: 'PUT',
+      endpoint: `folders/${folderId}/members/${userId}`,
+    })
+      .then(res => {
+        if (res.status === 200 || res.status === 204) {
+          store.dispatch('saved-folder-data', res.data)
+          store.dispatch('folder-saved')
+          store.dispatch('fetch-folder', folderId)
+        }
+      })
+      .catch(_error => {
+        store.dispatch('folder-saved-error')
+      })
+  })
 }

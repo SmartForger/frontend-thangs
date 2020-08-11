@@ -3,7 +3,6 @@ import { Controller, useForm } from 'react-hook-form'
 import Joi from '@hapi/joi'
 import * as R from 'ramda'
 import { Button, Spinner } from '@components'
-import { useFolders } from '@hooks'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import teamLogo from '@svg/multi-users.svg'
@@ -347,8 +346,8 @@ const CreateFolderForm = ({
 }
 
 const InviteUsersForm = ({ folderId, onErrorReceived, afterInvite, onCancel }) => {
+  const { dispatch, folders } = useStoreon('folders')
   const c = useStyles()
-  const { useInviteToFolder } = useFolders()
   const validationResolver = ({ members }) => {
     const input = { members: members ? parseEmails(members) : [] }
 
@@ -378,16 +377,11 @@ const InviteUsersForm = ({ folderId, onErrorReceived, afterInvite, onCancel }) =
     reValidateMode: 'onSubmit',
   })
 
-  const [inviteToFolder, { loading }] = useInviteToFolder(folderId)
-
   const handleSave = async (data, e) => {
     e.preventDefault()
     try {
       const variables = { emails: data.members }
-      await inviteToFolder({
-        variables,
-      })
-      afterInvite(data)
+      dispatch('invite-to-folder', {data: variables, folderId: folderId, onFinish: () => afterInvite(data)})
     } catch (error) {
       onErrorReceived({
         server: error,
@@ -420,7 +414,7 @@ const InviteUsersForm = ({ folderId, onErrorReceived, afterInvite, onCancel }) =
           Cancel
         </Button>
         <Button className={c.FolderForm_SaveButton} type='submit'>
-          {loading ? <Spinner className={c.FolderForm_Spinner} /> : 'Invite'}
+          {(folders && folders.isLoading) ? <Spinner className={c.FolderForm_Spinner} /> : 'Invite'}
         </Button>
       </div>
     </form>

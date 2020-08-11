@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as R from 'ramda'
 import classnames from 'classnames'
 import {
@@ -13,7 +13,6 @@ import {
 import { authenticationService } from '@services'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
-import { useFolders } from '@hooks'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 
@@ -78,29 +77,21 @@ const useStyles = createUseStyles(theme => {
 
 const RevokeAccessButton = ({ folderId, targetUserId, children }) => {
   const c = useStyles({})
-  const { useRevokeAccess } = useFolders()
-  const [revokeAccess, { loading, error }] = useRevokeAccess(folderId, targetUserId)
-  const handleRevoke = useCallback(
-    async e => {
-      e.preventDefault()
-      try {
-        await revokeAccess({
-          variables: {
-            userId: targetUserId,
-          },
-        })
-      } catch (e) {
-        console.error('e', e)
-      }
-    },
-    [revokeAccess, targetUserId]
-  )
+  const { dispatch, folders } = useStoreon('folders')
+  const handleRevoke = async e => {
+    e.preventDefault()
+    try {
+      dispatch('revoke-folder-access', {folderId: folderId, userId: targetUserId})
+    } catch (e) {
+      console.error('e', e)
+    }
+  }
 
   return (
     <Button text onClick={handleRevoke}>
-      {loading ? (
+      {folders.isLoading ? (
         <Spinner className={c.FolderManagementModal_Spinner} />
-      ) : error ? (
+      ) : folders.loadError ? (
         <ErrorIcon className={c.FolderManagementModal_Icon} />
       ) : (
         children
