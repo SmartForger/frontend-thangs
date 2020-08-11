@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { Card, ModelThumbnail, UserInline } from '@components'
-import { THUMBNAILS_HOST } from '@utilities/constants'
+import { THUMBNAILS_HOST, TIW_THUMBNAILS_HOST } from '@utilities/constants'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
