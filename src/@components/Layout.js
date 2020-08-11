@@ -56,7 +56,6 @@ const useStyles = createUseStyles(theme => {
     },
     NotificationsList: {
       maxWidth: '43rem',
-      animation: '1000ms linear 0s $slideIn',
       width: '100%',
 
       '& .notification + .notification': {
