@@ -9,10 +9,10 @@ const useStyles = createUseStyles(theme => {
   return {
     DropdownMenu: {
       background: theme.colors.white[400],
-      borderRadius: '0 0 .5rem .5rem',
+      borderRadius: '.5rem',
       boxShadow: '0px 5px 10px 0px rgba(35, 37, 48, 0.25)',
       width: '16.25rem',
-      padding: ({ noIcons }) => (noIcons ? '1.5rem 3rem' : '1.5rem'),
+      padding: ({ noIcons }) => (noIcons ? '1.5rem 3rem' : '1rem'),
       boxSizing: 'border-box',
       position: 'absolute',
       right: '.75rem',
@@ -30,6 +30,13 @@ const useStyles = createUseStyles(theme => {
         width: '1.5rem',
         marginRight: '.5rem',
         color: theme.colors.grey[500],
+      },
+    },
+    DropdownMenu_ItemWrapper: {
+      borderRadius: '.5rem',
+      padding: '0 .75rem',
+      '&:hover': {
+        backgroundColor: theme.colors.white[700],
       },
     },
     DropdownMenu_Container: {
@@ -63,7 +70,7 @@ const useDropdownMenuState = (initialIsOpen = false) => {
 const DropdownItem = ({ children, to = '#', onClick }) => {
   const c = useStyles({})
   return (
-    <div>
+    <div className={c.DropdownMenu_ItemWrapper}>
       {onClick ? (
         <div className={c.DropdownMenu_Item} onClick={onClick}>
           {children}
