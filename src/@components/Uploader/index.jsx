@@ -60,10 +60,7 @@ const useStyles = createUseStyles(theme => {
 
 const MODEL_FILE_EXTS = [
   '.3dxml', // THREE_D_XML
-  '.asab', // ACIS_Assembly_Binary
-  '.asat', // ACIS_Assembly
   '.CATPart', // CATIAV5
-  '.CATProduct', // CATIAV5_Assembly
   '.dwg',
   '.dxf',
   '.iges',
@@ -75,7 +72,6 @@ const MODEL_FILE_EXTS = [
   '.prt', // NX, ProE_Creo
   '.sab', // ACIS_Binary
   '.sat', // ACIS
-  '.sldasm', // SolidWorks_Assembly
   '.sldprt', // SolidWorks
   '.step',
   '.stl',
