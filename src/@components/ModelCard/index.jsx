@@ -93,6 +93,10 @@ const CardContents = ({ className, c, model, showOwner, isLiked }) => {
             thumbnailUrl={
               model.thumbnailUrl || `${THUMBNAILS_HOST}/${model.uploadedFile}`
             }
+          //Here is what would entail to call the Waldo thumbnail Url
+          //tiwThumbnailUrl={
+          //  model.thumbnailUrl || `${TIW_THUMBNAILS_HOST}/${model.uploadedFile}/${relatedModel.uploadedFile}`
+          //}
           ></ModelThumbnail>
         </Card>
         <ModelDetails c={c} model={model} showOwner={showOwner} isLiked={isLiked} />
