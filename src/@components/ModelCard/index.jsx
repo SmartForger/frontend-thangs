@@ -21,6 +21,8 @@ const useStyles = createUseStyles(theme => {
     },
     ModelCard_Content: {
       padding: '.5rem 0',
+      display: 'flex',
+      justifyContent: 'space-between',
     },
     ModelCard_Name: {
       ...theme.mixins.text.regularText,
@@ -54,10 +56,13 @@ const useStyles = createUseStyles(theme => {
 })
 
 const ModelDetails = ({ c, model, showOwner, isLiked = false }) => {
+  let modelName = model.name
+  if (modelName.length > 40) modelName = modelName.slice(0, 40) + '...'
   return (
     <div className={c.ModelCard_Content}>
+      {!showOwner && <div className={c.ModelCard_Name}>{modelName}</div>}
+      {showOwner && <UserInline user={model.owner} />}
       <div className={c.ModelCard_Row}>
-        {showOwner && <UserInline user={model.owner} />}
         <div className={c.ModelCard_ActivityIndicators}>
           <span className={c.ModelCard_ActivityCount}>
             <ChatIcon className={c.ModelCard_Icon} />
