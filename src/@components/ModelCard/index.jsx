@@ -20,7 +20,7 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.5rem .5rem 0 0',
     },
     ModelCard_Content: {
-      padding: '.5rem 1rem',
+      padding: '.5rem 0',
     },
     ModelCard_Name: {
       ...theme.mixins.text.regularText,
@@ -28,7 +28,6 @@ const useStyles = createUseStyles(theme => {
     ModelCard_Row: {
       display: 'flex',
       justifyContent: 'space-between',
-      marginTop: '.5rem',
     },
     ModelCard_ActivityIndicators: {
       display: 'flex',
@@ -55,11 +54,8 @@ const useStyles = createUseStyles(theme => {
 })
 
 const ModelDetails = ({ c, model, showOwner, isLiked = false }) => {
-  let modelName = model.name
-  if (modelName.length > 40) modelName = modelName.slice(0, 40) + '...'
   return (
     <div className={c.ModelCard_Content}>
-      <div className={c.ModelCard_Name}>{modelName}</div>
       <div className={c.ModelCard_Row}>
         {showOwner && <UserInline user={model.owner} />}
         <div className={c.ModelCard_ActivityIndicators}>
@@ -84,7 +80,7 @@ const ModelDetails = ({ c, model, showOwner, isLiked = false }) => {
 const CardContents = ({ className, c, model, showOwner, isLiked }) => {
   return (
     <>
-      <div>
+      <div title={model && model.name}>
         <Card className={className}>
           <ModelThumbnail
             className={c.ModelCard_Thumbnail}
