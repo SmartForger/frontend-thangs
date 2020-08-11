@@ -125,7 +125,7 @@ const ModelCard = ({ className, model, withOwner, user, likes }) => {
   if (!model.resultSource || (model.resultSource && model.resultSource === 'thangs')) {
     return (
       <Link
-        to={`/model/${model.id}`}
+        to={{pathname: `/model/${model.id}`, state: { prevPath: window.location.href }}}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onFocus={handleMouseEnter}

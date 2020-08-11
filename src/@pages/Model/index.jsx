@@ -223,6 +223,7 @@ function Details({ currentUser, model, className }) {
 const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   const c = useStyles()
   const history = useHistory()
+  const isFromThePortal = () => (history.location && history.location.state && history.location.state.prevPath)
   const { useFetchOnce } = useServices()
   const {
     atom: { data: modelData, isLoading, isLoaded, isError },
@@ -240,9 +241,13 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
     <>
       <div className={c.Model}>
         <div className={c.Model_Header}>
-          <Button back onClick={() => history.goBack()}>
-            <BackArrow />
-          </Button>
+          {isFromThePortal() ?
+            <Button back onClick={() => history.goBack()}>
+              <BackArrow />
+            </Button>
+            :
+            null
+          }
         </div>
         <div className={c.Model_Row}>
           <div className={c.Model_Column}>
