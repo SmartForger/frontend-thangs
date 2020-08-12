@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import * as R from 'ramda'
-import { Layout, WithFlash, Spinner, CardCollection } from '@components'
+import {
+  Layout,
+  WithFlash,
+  Spinner,
+  CardCollection,
+  ProfilePicture,
+  ToggleFollowButton,
+} from '@components'
 import ModelCards from '@components/CardCollection/ModelCards'
 import FolderCards from '@components/CardCollection/FolderCards'
 import { useCurrentUser } from '@hooks'
@@ -37,6 +45,25 @@ const useStyles = createUseStyles(theme => {
     Home_FoldersTitle: {
       marginLeft: '1rem',
     },
+    Profile_Row: {
+      display: 'flex',
+      alignItems: 'center',
+      marginBottom: '3rem',
+    },
+    Profile_ProfilePicture: {
+      marginRight: '.5rem',
+    },
+    Profile_Name: {
+      ...theme.mixins.text.subheaderText,
+    },
+    Profile_ProfileButton: {
+      marginTop: '.25rem',
+      display: 'block',
+    },
+    Profile_EditProfileLink: {
+      ...theme.mixins.text.boldText,
+      ...theme.mixins.text.linkText,
+    },
   }
 })
 
@@ -68,6 +95,20 @@ const FoldersTitle = ({ _user, selected, onClick, className }) => {
   )
 }
 
+const ProfileButton = ({ viewedUser, className, c }) => {
+  const { user } = useCurrentUser()
+
+  if (!user || user.id !== viewedUser.id) {
+    return <ToggleFollowButton viewedUser={viewedUser} className={className} />
+  }
+
+  return (
+    <Link className={classnames(className, c.Profile_EditProfileLink)} to='/profile/edit'>
+      Edit Profile
+    </Link>
+  )
+}
+
 const getModels = R.pathOr([], ['models'])
 
 const PageContent = ({ user }) => {
@@ -88,6 +129,18 @@ const PageContent = ({ user }) => {
 
   return (
     <div className={c.Home}>
+      <div className={c.Profile_Row}>
+        <ProfilePicture
+          className={c.Profile_ProfilePicture}
+          size='2.5rem'
+          src={user && user.profile && user.profile.avatarUrl}
+          name={user.fullName}
+        />
+        <div>
+          <div className={c.Profile_Name}>{user.fullName}</div>
+          <ProfileButton className={c.Profile_ProfileButton} viewedUser={user} c={c} />
+        </div>
+      </div>
       <div className={c.Home_TextHeader}>
         <ModelsTitle
           selected={selected === 'models'}

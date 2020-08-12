@@ -67,7 +67,7 @@ const PictureForm = ({ user, className }) => {
           )}
         </div>
         <div className={classnames(c.EditProfile_Row, c.EditProfile_Row__profile)}>
-          <Link to={`/profile/${user.id}`}>View Profile</Link>
+          <Link to={'/home'}>View Profile</Link>
         </div>
       </div>
     </div>

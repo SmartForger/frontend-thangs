@@ -25,6 +25,7 @@ const useStyles = createUseStyles(theme => {
       display: 'inline-flex',
       alignItems: 'center',
       cursor: 'pointer',
+      width: '100%',
 
       '& svg': {
         width: '1.5rem',
