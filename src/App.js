@@ -34,19 +34,11 @@ import { FolderUpload } from '@pages/FolderUpload'
 import { ErrorBoundary } from './ErrorBoundary'
 import { routeRequiresAnon, routeRequiresAuth } from '@components/RouteComponent'
 import { FlashContextProvider } from './@components/Flash'
-import { createStoreon } from 'storeon'
 import { StoreContext } from 'storeon/react'
-import teamsStore from '@store/teams/store'
-import folderStore from '@store/folders/store'
-import modelsStore from '@store/models/store'
-import modelPreviewsStore from '@store/modelPreviews/store'
-import commentsStore from '@store/comments/store'
-import userStore from '@store/user/store'
-import uploadModelStore from '@store/uploadModel/store'
-import searchStore from '@store/search/store'
 import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
 import { usePageTheming } from '@hooks'
+import store from 'store'
 
 const originalFetch = window.fetch
 const client = graphqlClient(originalFetch, history)
@@ -68,32 +60,6 @@ export function AppFrame() {
     </Router>
   )
 }
-
-/* eslint-disable indent */
-const store =
-  process.env.NODE_ENV === 'development'
-    ? createStoreon([
-        commentsStore,
-        folderStore,
-        modelPreviewsStore,
-        modelsStore,
-        searchStore,
-        teamsStore,
-        uploadModelStore,
-        userStore,
-        storeonDevtools,
-      ])
-    : createStoreon([
-        commentsStore,
-        folderStore,
-        modelPreviewsStore,
-        modelsStore,
-        searchStore,
-        teamsStore,
-        uploadModelStore,
-        userStore,
-      ])
-/* eslint-enable indent */
 
 const App = () => {
   const location = useLocation()
