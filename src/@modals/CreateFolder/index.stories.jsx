@@ -3,8 +3,8 @@ import FolderCreateModal from './'
 import { action } from '@storybook/addon-actions'
 import { authenticationService } from '@services'
 import { withApolloProvider } from '../../../.storybook/withApolloProvider'
-import { CREATE_FOLDER_MUTATION } from '../../../src/@services/graphql-service/folders'
-import { USER_QUERY } from '../../../src/@services/graphql-service/users'
+import { CREATE_FOLDER_MUTATION } from '@services/graphql-service/folders'
+import { USER_QUERY } from '@services/graphql-service/users'
 
 export default {
   title: 'FolderCreateModal',

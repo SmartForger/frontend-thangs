@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="20px" viewBox="0 0 18 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/upload</title>
+    <g id="Teams/Groups" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="New-Collection-Copy-2" transform="translate(-455.000000, -412.000000)" fill="#515151">
+            <g id="icon/save">
+                <g transform="translate(453.000000, 411.000000)">
+                    <g id="Group-4" fill="none" transform="translate(2.000000, 1.000000)">
+                        <polygon id="Fill-1" fill="#515151" points="8.0001 0.0002 8.0001 8.5862 5.7071 6.2932 4.2931 7.7072 9.0001 12.4142 13.7071 7.7072 12.2931 6.2932 10.0001 8.5862 10.0001 0.0002"></polygon>
+                        <path d="M2,16 L16,16 L15.997,18 L2,18 L2,16 Z M0,16 L0,18 C0,19.103 0.897,20 2,20 L16,20 C17.103,20 18,19.103 18,18 L18,16 C18,14.897 17.103,14 16,14 L2,14 C0.897,14 0,14.897 0,16 L0,16 Z" id="Fill-2" fill="#515151"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

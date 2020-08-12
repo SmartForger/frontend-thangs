@@ -6,7 +6,6 @@ import {
   FolderInfo,
   InviteUsersForm,
   DisplayFolderFormErrors,
-  Modal,
   Spinner,
   UserInline,
 } from '@components'
@@ -18,59 +17,63 @@ import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
   return {
-    FolderManagementModal: {},
-    FolderManagementModal_Spinner: {
+    FolderManagement: {
+      width: '40vw',
+      margin: '3rem auto',
+    },
+    FolderManagement_Spinner: {
       width: '1rem',
       height: '1rem',
       '& .path': {
         stroke: 'currentColor',
       },
     },
-    FolderManagementModal_Icon: {
+    FolderManagement_Icon: {
       width: '1rem',
       height: '1rem',
     },
-    FolderManagementModal_Row: {
+    FolderManagement_Row: {
       display: 'flex',
     },
-    FolderManagementModal_AddUsersForm: {
+    FolderManagement_AddUsersForm: {
       marginTop: ({ hasErrors }) => (hasErrors ? '1rem' : '4.375rem'),
     },
-    FolderManagementModal_BottomRow: {
+    FolderManagement_BottomRow: {
       marginTop: '3rem',
       width: '100%',
     },
-    FolderManagementModal_List: {
+    FolderManagement_List: {
       width: '100%',
     },
-    FolderManagementModal_Item: {
+    FolderManagement_Item: {
       display: 'block',
       marginTop: '1rem',
     },
-    FolderManagementModal_Item__isFirst: {
+    FolderManagement_Item__isFirst: {
       marginTop: 0,
     },
-    FolderManagementModal_TrashCanIcon: {
+    FolderManagement_TrashCanIcon: {
       color: theme.colors.grey[500],
     },
-    FolderManagementModal_FolderInfo: {
+    FolderManagement_FolderInfo: {
       padding: 0,
     },
-    FolderManagementModal_DisplayErrors: {
+    FolderManagement_DisplayErrors: {
       marginTop: '1rem',
     },
-    FolderManagementModal_TeamContainer: {
+    FolderManagement_TeamContainer: {
       flexDirection: 'column',
     },
-    FolderManagementModal_TeamNameContainer: {
+    FolderManagement_TeamNameContainer: {
       marginBottom: '1rem',
     },
-    FolderManagementModal_TeamName: {
+    FolderManagement_TeamName: {
       ...theme.mixins.text.smallHeaderText,
     },
-    FolderManagementModal_UserInline: {
+    FolderManagement_UserInline: {
       display: 'flex',
       justifyContent: 'space-between',
+      alignItems: 'center',
     },
   }
 })
@@ -81,7 +84,7 @@ const RevokeAccessButton = ({ folderId, targetUserId, children }) => {
   const handleRevoke = async e => {
     e.preventDefault()
     try {
-      dispatch('revoke-folder-access', {folderId: folderId, userId: targetUserId})
+      dispatch('revoke-folder-access', { folderId: folderId, userId: targetUserId })
     } catch (e) {
       console.error('e', e)
     }
@@ -90,9 +93,9 @@ const RevokeAccessButton = ({ folderId, targetUserId, children }) => {
   return (
     <Button text onClick={handleRevoke}>
       {folders.isLoading ? (
-        <Spinner className={c.FolderManagementModal_Spinner} />
+        <Spinner className={c.FolderManagement_Spinner} />
       ) : folders.loadError ? (
-        <ErrorIcon className={c.FolderManagementModal_Icon} />
+        <ErrorIcon className={c.FolderManagement_Icon} />
       ) : (
         children
       )}
@@ -105,7 +108,7 @@ const UserList = ({ users = [], folderId, creator }) => {
   const currentUserId = authenticationService.getCurrentUserId()
 
   return (
-    <ul className={c.FolderManagementModal_List}>
+    <ul className={c.FolderManagement_List}>
       {users.map((user, idx) => {
         const isFirst = idx === 0
         const groupUser = user
@@ -118,20 +121,20 @@ const UserList = ({ users = [], folderId, creator }) => {
           groupUser.fullName = `${groupUser.first_name} ${groupUser.last_name}`
         return (
           <li
-            className={classnames(c.FolderManagementModal_Item, {
-              [c.FolderManagementModal_Item__isFirst]: isFirst,
+            className={classnames(c.FolderManagement_Item, {
+              [c.FolderManagement_Item__isFirst]: isFirst,
             })}
             key={idx}
           >
             <UserInline
-              className={c.FolderManagementModal_UserInline}
+              className={c.FolderManagement_UserInline}
               user={groupUser}
               size={'3rem'}
               displayEmail
             >
               {isOwner && (
                 <RevokeAccessButton targetUserId={groupUser.id} folderId={folderId}>
-                  <TrashCanIcon className={c.FolderManagementModal_TrashCanIcon} />
+                  <TrashCanIcon className={c.FolderManagement_TrashCanIcon} />
                 </RevokeAccessButton>
               )}
             </UserInline>
@@ -152,17 +155,17 @@ const Team = ({ id, creator, folderId }) => {
 
   return teams.isLoaded ? (
     <>
-      <div className={c.FolderManagementModal_TeamNameContainer}>
+      <div className={c.FolderManagement_TeamNameContainer}>
         <div
-          className={c.FolderManagementModal_TeamName}
+          className={c.FolderManagement_TeamName}
           key={teams && teams.currentTeam && teams.currentTeam.name}
         >
           {teams && teams.currentTeam && teams.currentTeam.name}
         </div>
       </div>
-      <div className={c.FolderManagementModal_Row}>
+      <div className={c.FolderManagement_Row}>
         <ul
-          className={c.FolderManagementModal_List}
+          className={c.FolderManagement_List}
           key={teams && teams.currentTeam && teams.currentTeam.members}
         >
           <UserList
@@ -178,18 +181,18 @@ const Team = ({ id, creator, folderId }) => {
       </div>
     </>
   ) : (
-    <Spinner className={c.FolderManagementModal_Spinner} />
+    <Spinner className={c.FolderManagement_Spinner} />
   )
 }
 
-const FolderManagementModal = ({ isOpen, folder, afterInvite, onCancel, className }) => {
+const FolderManagement = ({ folder, afterInvite, className }) => {
   const [errors, setErrors] = useState()
   const hasErrors = errors && !R.isEmpty(errors)
   const c = useStyles({ hasErrors })
   return (
-    <Modal isOpen={isOpen} className={classnames(className, c.FolderManagementModal)}>
+    <div className={classnames(className, c.FolderManagement)}>
       <FolderInfo
-        className={c.FolderManagementModal_FolderInfo}
+        className={c.FolderManagement_FolderInfo}
         name={folder.name}
         members={folder.members}
         models={folder.models}
@@ -197,28 +200,24 @@ const FolderManagementModal = ({ isOpen, folder, afterInvite, onCancel, classNam
         hideModels
       />
       <DisplayFolderFormErrors
-        className={c.FolderManagementModal_DisplayErrors}
+        className={c.FolderManagement_DisplayErrors}
         errors={errors}
         serverErrorMsg='Unable to invite users. Please try again later.'
       />
       <div
-        className={classnames(
-          c.FolderManagementModal_Row,
-          c.FolderManagementModal_AddUsersForm
-        )}
+        className={classnames(c.FolderManagement_Row, c.FolderManagement_AddUsersForm)}
       >
         <InviteUsersForm
           folderId={folder.id}
           onErrorReceived={setErrors}
           afterInvite={afterInvite}
-          onCancel={onCancel}
         />
       </div>
       <div
         className={classnames(
-          c.FolderManagementModal_Row,
-          c.FolderManagementModal_BottomRow,
-          c.FolderManagementModal_TeamContainer
+          c.FolderManagement_Row,
+          c.FolderManagement_BottomRow,
+          c.FolderManagement_TeamContainer
         )}
       >
         {folder.team_id ? (
@@ -236,8 +235,8 @@ const FolderManagementModal = ({ isOpen, folder, afterInvite, onCancel, classNam
           />
         )}
       </div>
-    </Modal>
+    </div>
   )
 }
 
-export default FolderManagementModal
+export default FolderManagement

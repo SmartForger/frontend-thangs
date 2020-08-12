@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import Joi from '@hapi/joi'
 import * as R from 'ramda'
-import { Button, Spinner } from '@components'
+import { Button, Spinner, TextInput } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import teamLogo from '@svg/multi-users.svg'
@@ -34,10 +34,6 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       justifyContent: 'flex-end',
       marginTop: '3rem',
-    },
-    FolderForm_CancelButton: {
-      marginRight: '1rem',
-      minWidth: '7.25rem',
     },
     FolderForm_SaveButton: {
       minWidth: '6.75rem',
@@ -75,11 +71,15 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
 
       '& input': {
-        border: 0,
+        border: `1px solid ${theme.colors.grey[100]}`,
         padding: '.5rem 1rem',
         borderRadius: '.5rem',
         minWidth: 0,
         background: theme.colors.white[900],
+        color: theme.variables.colors.textInput,
+        '&:focus, &:active': {
+          borderColor: theme.colors.gold[500],
+        },
       },
     },
     FolderForm_MemberInput: {
@@ -116,13 +116,6 @@ const schemaWithName = Joi.object({
     .min(1)
     .required(),
   team: Joi.string().allow(''),
-})
-
-const schemaWithoutName = Joi.object({
-  members: Joi.array()
-    .items(Joi.string().email({ tlds: { allow: false } }))
-    .min(1)
-    .required(),
 })
 
 const schemaJustName = Joi.object({
@@ -202,8 +195,7 @@ const buildErrors = error => {
 const CreateFolderForm = ({
   onErrorReceived = noop,
   afterCreate = noop,
-  onCancel = noop,
-  onTeamModelOpen = noop,
+  onTeamModalOpen = noop,
 }) => {
   const { dispatch } = useStoreon('folders')
   const { useFetchPerMount } = useServices()
@@ -244,36 +236,36 @@ const CreateFolderForm = ({
     reValidateMode: 'onSubmit',
   })
 
-  const handleSave = async ({ name, members }, e) => {
-    e.preventDefault()
-    const variables = {
-      name,
-      members,
-    }
-    dispatch('create-folder', {
-      data: variables,
-      onFinish: folder => {
-        afterCreate(folder)
-      },
-      onError: error => {
-        onErrorReceived({
-          server: error,
-        })
-      },
-    })
-  }
-
-  const handleCancel = e => {
-    e.preventDefault()
-    onCancel()
-  }
+  const handleSave = useCallback(
+    ({ name, members }, isValid, errors) => {
+      if (!isValid) {
+        return onErrorReceived(errors)
+      }
+      const variables = {
+        name,
+        members,
+      }
+      dispatch('create-folder', {
+        data: variables,
+        onFinish: folder => {
+          afterCreate(folder)
+        },
+        onError: error => {
+          onErrorReceived({
+            server: error,
+          })
+        },
+      })
+    },
+    [afterCreate, dispatch, onErrorReceived]
+  )
 
   const handleOnCreateTeam = useCallback(() => {
     const { error } = schemaJustName.validate({ name: getValues('name') || '' })
     const errors = buildErrors(error)
     if (errors) return onErrorReceived(errors)
-    onTeamModelOpen({ folderName: getValues('name'), members: getValues('members') })
-  }, [getValues, onErrorReceived, onTeamModelOpen])
+    onTeamModalOpen({ folderName: getValues('name'), members: getValues('members') })
+  }, [getValues, onErrorReceived, onTeamModalOpen])
 
   const addSaveGroupFields = () => {
     return (
@@ -299,7 +291,7 @@ const CreateFolderForm = ({
       <Controller
         name='name'
         control={control}
-        as={<input className={c.FolderForm_FullWidthInput} name='name' />}
+        as={<TextInput className={c.FolderForm_FullWidthInput} name='name' />}
       />
       <label className={c.FolderForm_Label} htmlFor='members'>
         Add users by email or enter an existing team name
@@ -326,14 +318,6 @@ const CreateFolderForm = ({
       {addSaveGroupFields()}
       <div className={classnames(c.FolderForm_Row, c.FolderForm_ButtonRow)}>
         <Button
-          dark
-          className={c.FolderForm_CancelButton}
-          onClick={handleCancel}
-          type='button'
-        >
-          Cancel
-        </Button>
-        <Button
           className={c.FolderForm_SaveButton}
           type='submit'
           disabled={teams.isLoading}
@@ -345,80 +329,4 @@ const CreateFolderForm = ({
   )
 }
 
-const InviteUsersForm = ({ folderId, onErrorReceived, afterInvite, onCancel }) => {
-  const { dispatch, folders } = useStoreon('folders')
-  const c = useStyles()
-  const validationResolver = ({ members }) => {
-    const input = { members: members ? parseEmails(members) : [] }
-
-    const { error, value: values } = schemaWithoutName.validate(input)
-
-    const errors = error
-      ? /* eslint-disable indent */
-        error.details.reduce((previous, currentError) => {
-          return {
-            ...previous,
-            [currentError.path[0]]: currentError,
-          }
-        }, {})
-      : {}
-    /* eslint-enable indent */
-
-    onErrorReceived(R.equals(errors, {}) ? undefined : errors)
-
-    return {
-      values: error ? {} : values,
-      errors,
-    }
-  }
-
-  const { register, handleSubmit } = useForm({
-    validationResolver,
-    reValidateMode: 'onSubmit',
-  })
-
-  const handleSave = async (data, e) => {
-    e.preventDefault()
-    try {
-      const variables = { emails: data.members }
-      dispatch('invite-to-folder', {data: variables, folderId: folderId, onFinish: () => afterInvite(data)})
-    } catch (error) {
-      onErrorReceived({
-        server: error,
-      })
-    }
-  }
-
-  const handleCancel = e => {
-    e.preventDefault()
-    onCancel()
-  }
-  return (
-    <form className={c.FolderForm} onSubmit={handleSubmit(handleSave)}>
-      <label className={c.FolderForm_Label} htmlFor='members'>
-        Add users by email
-      </label>
-      <input
-        className={c.FolderForm_FullWidthInput}
-        name='members'
-        ref={register({ required: true })}
-        placeholder='example@example.com'
-      />
-      <div className={classnames(c.FolderForm_Row, c.FolderForm_ButtonRow)}>
-        <Button
-          className={c.FolderForm_CancelButton}
-          dark
-          onClick={handleCancel}
-          type='button'
-        >
-          Cancel
-        </Button>
-        <Button className={c.FolderForm_SaveButton} type='submit'>
-          {(folders && folders.isLoading) ? <Spinner className={c.FolderForm_Spinner} /> : 'Invite'}
-        </Button>
-      </div>
-    </form>
-  )
-}
-
-export { CreateFolderForm, InviteUsersForm, DisplayFolderFormErrors }
+export { CreateFolderForm, DisplayFolderFormErrors }

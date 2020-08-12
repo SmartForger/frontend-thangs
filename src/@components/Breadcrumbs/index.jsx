@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import { useStoreon } from 'storeon/react'
 import {
   Button,
   DropdownItem,
   DropdownMenu,
-  FolderManagementModal,
   Spinner,
   useFlashNotification,
 } from '@components'
@@ -14,7 +14,6 @@ import { ReactComponent as FolderManagementIcon } from '@svg/folder-management-i
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -64,8 +63,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const DeleteMenu = ({ folderId }) => {
-  const { dispatch, folders } = useStoreon('folders')
+const DeleteMenu = ({ dispatch, folderId, folders }) => {
   const c = useStyles()
   const { navigateWithFlash } = useFlashNotification()
 
@@ -99,36 +97,37 @@ const DeleteMenu = ({ folderId }) => {
   )
 }
 
-const ManageUsers = ({ folder }) => {
+const ManageUsers = ({ dispatch, folder }) => {
   const c = useStyles()
-  const [isOpen, setIsOpen] = useState()
   const { setFlash } = useFlashNotification()
 
   const afterInvite = useCallback(() => {
     setFlash(
       'If the email addresses belong to registered Thangs users, they will have access to your folder'
     )
-    setIsOpen(false)
-  }, [setFlash])
-  const handleCancel = useCallback(() => setIsOpen(false), [])
-  const handleClick = useCallback(() => setIsOpen(true), [])
+    dispatch('close-modal')
+  }, [dispatch, setFlash])
 
   return (
     <>
-      <Button text className={c.Breadcrumbs_ManagementButton} onClick={handleClick}>
+      <Button
+        text
+        className={c.Breadcrumbs_ManagementButton}
+        onClick={() =>
+          dispatch('open-modal', {
+            modalName: 'folderManagement',
+            modalData: { afterInvite, folder },
+          })
+        }
+      >
         <FolderManagementIcon />
       </Button>
-      <FolderManagementModal
-        folder={folder}
-        onCancel={handleCancel}
-        afterInvite={afterInvite}
-        isOpen={isOpen}
-      />
     </>
   )
 }
 
 const Breadcrumbs = ({ modelsCount, folder, className }) => {
+  const { dispatch, folders } = useStoreon('folders')
   const c = useStyles()
   return (
     <div className={classnames(className, c.Breadcrumbs_Row)}>
@@ -141,8 +140,8 @@ const Breadcrumbs = ({ modelsCount, folder, className }) => {
       <div className={classnames(c.Breadcrumbs_Row, c.Breadcrumbs_Arrow)}>
         <FolderIcon className={c.Breadcrumbs_FolderIcon} />
         <div>{folder.name}</div>
-        <DeleteMenu folderId={folder.id} />
-        <ManageUsers folder={folder} />
+        <DeleteMenu folderId={folder.id} dispatch={dispatch} folders={folders} />
+        <ManageUsers folder={folder} dispatch={dispatch} />
       </div>
     </div>
   )

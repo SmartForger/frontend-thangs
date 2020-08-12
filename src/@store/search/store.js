@@ -63,7 +63,7 @@ export default store => {
   )
   store.on(
     'get-search-results-by-model',
-    async (state, { file, data, onFinish, onError }) => {
+    async (state, { file, data, onUploaded = noop, onFinish = noop, onError = noop }) => {
       store.dispatch('loading-search-results')
 
       try {
@@ -73,7 +73,7 @@ export default store => {
         })
 
         await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file)
-
+        onUploaded(uploadedUrlData)
         const { data: uploadedData, error } = await api({
           method: 'POST',
           endpoint: 'models/search-by-model',

@@ -23,8 +23,6 @@ const useStyles = createUseStyles(theme => {
       marginRight: '.5rem',
     },
     SearchResults_Header: {
-      // ...theme.mixins.text.subheaderText,
-      // marginBottom: '1.5rem',
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',

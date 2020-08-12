@@ -36,7 +36,6 @@ const useStyles = createUseStyles(theme => {
       },
 
       '&:disabled': {
-        ...theme.mixins.text.secondaryButtonText,
         cursor: 'not-allowed',
         opacity: '0.8',
         '&:hover': {

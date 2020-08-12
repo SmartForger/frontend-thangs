@@ -1,2 +1,7 @@
-export { default as Upload } from './Upload'
+export { default as CreateFolder } from './CreateFolder'
+export { default as CreateTeam } from './CreateTeam'
+export { default as SignIn } from './SignIn'
 export { default as SearchByUpload } from './SearchByUpload'
+export { default as Upload } from './Upload'
+export { default as FolderManagement } from './FolderManagement'
+export { default as PasswordReset } from './PasswordReset'

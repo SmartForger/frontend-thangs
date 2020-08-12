@@ -1,9 +1,19 @@
 import React, { useCallback, useMemo, useState } from 'react'
+import { useStoreon } from 'storeon/react'
 import { Header, Modal, NotificationsList } from '@components'
-import { Upload, SearchByUpload } from '@modals'
+import {
+  Upload,
+  SearchByUpload,
+  CreateFolder,
+  CreateTeam,
+  PasswordReset,
+  SignIn,
+  FolderManagement,
+} from '@modals'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import { modelCardHoverText } from '@style/text'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -81,15 +91,23 @@ const useStyles = createUseStyles(theme => {
       top: '-1rem',
       right: '.75rem',
     },
+    Modal__hidden: {
+      display: 'none',
+    },
   }
 })
 const modalTemplates = {
   upload: Upload,
   searchByUpload: SearchByUpload,
+  createFolder: CreateFolder,
+  createTeam: CreateTeam,
+  signIn: SignIn,
+  passwordReset: PasswordReset,
+  folderManagement: FolderManagement,
 }
-const noop = () => null
-const Layout = ({ children, Hero = noop }) => {
-  const [modalOpen, setModalOpen] = useState(null) //'createFolder', 'createTeam', 'signIn', 'signUp', 'forgotPassword', 'upload', 'searchByUpload'
+
+const Layout = ({ children, Hero, variant }) => {
+  const { modal } = useStoreon('modal')
   const [notificationsIsOpen, setNotificationsOpen] = useState(false)
   const [notificationsClosing, setNotificationsClosing] = useState(false)
   const c = useStyles({ notificationsIsOpen })
@@ -106,30 +124,27 @@ const Layout = ({ children, Hero = noop }) => {
     }
   }, [notificationsIsOpen])
 
-  const handleModalOpen = useCallback(modalName => {
-    setModalOpen(modalName)
-  }, [])
+  const ModalView = useMemo(
+    () => modal && modal.isOpen && modalTemplates[modal.currentModal],
+    [modal]
+  )
 
-  const handleModalClose = useCallback(() => {
-    setModalOpen(null)
-  }, [])
-
-  const ModalView = useMemo(() => modalOpen && modalTemplates[modalOpen], [modalOpen])
   return (
     <>
       <Header
         handleNotificationsClick={handleNotificationsClick}
-        handleModalOpen={handleModalOpen}
-        modalOpen={modalOpen}
         notificationsIsOpen={notificationsIsOpen}
-        setModalOpen={setModalOpen}
+        variant={variant}
       />
       {ModalView && (
-        <Modal isOpen={!!modalOpen} handleModalClose={handleModalClose}>
-          <ModalView handleModalClose={handleModalClose} />
+        <Modal
+          className={classnames({ [c.Modal__hidden]: modal.isHidden })}
+          isOpen={modal.isOpen}
+        >
+          <ModalView {...modal.modalData} />
         </Modal>
       )}
-      <div className={classnames({ [c.Layout_blur]: modalOpen })}>
+      <div className={classnames({ [c.Layout_blur]: modal.isOpen && !modal.isHidden })}>
         {Hero && <Hero />}
         <div className={c.Layout}>
           {children}

@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactModal from 'react-modal'
+import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 import { Button } from '@components'
 import { createUseStyles } from '@style'
@@ -22,10 +23,14 @@ const useStyles = createUseStyles(_theme => {
       top: '2rem',
       cursor: 'pointer',
     },
+    Modal_Content: {
+      marginTop: '2.5rem',
+    },
   }
 })
-const noop = () => null
-const Modal = ({ children, className, handleModalClose = noop, ...props }) => {
+
+const Modal = ({ children, className, ...props }) => {
+  const { dispatch } = useStoreon()
   const c = useStyles(props)
   return (
     <ReactModal
@@ -42,10 +47,14 @@ const Modal = ({ children, className, handleModalClose = noop, ...props }) => {
       }}
       {...props}
     >
-      <Button text className={c.Modal_CloseButton} onClick={handleModalClose}>
+      <Button
+        text
+        className={c.Modal_CloseButton}
+        onClick={() => dispatch('close-modal')}
+      >
         <ExitIcon />
       </Button>
-      {children}
+      <div className={c.Modal_Content}>{children}</div>
     </ReactModal>
   )
 }

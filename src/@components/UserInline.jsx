@@ -37,8 +37,8 @@ const UserInline = ({
   suffix,
 }) => {
   const c = useStyles()
-  let userName = user.fullName
-  if (userName.length > 20) userName = userName.slice(0, 20) + '...'
+  let userName = user && user.fullName
+  if (userName && userName.length > 20) userName = userName.slice(0, 20) + '...'
   return (
     <div className={className}>
       <div className={c.UserInline}>

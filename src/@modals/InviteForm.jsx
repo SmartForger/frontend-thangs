@@ -1,52 +1,50 @@
 import React, { useCallback, useState } from 'react'
-import { CreateTeamForm, DisplayTeamFormErrors, Modal } from '@components'
+import { useStoreon } from 'storeon/react'
+import { InviteFormForm, DisplayTeamFormErrors } from '@components'
 import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   return {
-    CreateTeamModal: {},
-    CreateTeamModal_Header: {
+    InviteForm: {
+      width: '40vw',
+      margin: '0 auto',
+    },
+    InviteForm_Header: {
       ...theme.mixins.text.headerText,
       marginBottom: '1rem',
     },
-    CreateTeamModal_Text: {
+    InviteForm_Text: {
       ...theme.mixins.text.lightText,
     },
-    CreateTeamModal_Row: {
+    InviteForm_Row: {
       display: 'flex',
       marginTop: '4.25rem',
     },
-    CreateTeamModal_Row__hasError: {
+    InviteForm_Row__hasError: {
       marginTop: '1rem',
     },
-    CreateTeamModal_NewFolderIcon: {
+    InviteForm_NewFolderIcon: {
       marginBottom: '1rem',
     },
-    CreateTeamModal_DisplayErrors: {
+    InviteForm_DisplayErrors: {
       marginBottom: '1rem',
     },
-    CreateTeamModal_UserInline: {
+    InviteForm_UserInline: {
       marginTop: '3rem',
     },
   }
 })
 
-const CreateTeamModal = ({
-  isOpen,
-  onCancel,
-  afterCreate,
-  onTeamModalOpen,
-  newFolderData,
-}) => {
+const InviteForm = ({ afterCreate, onTeamModalOpen, ...props }) => {
+  const { dispatch } = useStoreon()
   const c = useStyles()
   const [errors, setErrors] = useState()
   const handleOnCancel = useCallback(() => {
-    setErrors(null)
-    onCancel()
-  }, [onCancel])
-  const handleOnTeamModelOpen = useCallback(() => {
+    dispatch('open-modal', { modalName: 'createFolder' })
+  }, [dispatch])
+  const handleOnTeamModalOpen = useCallback(() => {
     onTeamModalOpen()
   }, [onTeamModalOpen])
   const handleAfterCreate = useCallback(
@@ -57,33 +55,31 @@ const CreateTeamModal = ({
     [afterCreate]
   )
   return (
-    <Modal isOpen={isOpen}>
-      <NewFolderIcon className={c.CreateTeamModal_NewFolderIcon} />
-      <h2 className={c.CreateTeamModal_Header}>Create Team</h2>
-      <div className={c.CreateTeamModal_Text}>
-        Create a team for your new shared folder.
-      </div>
+    <div className={c.InviteForm}>
+      <NewFolderIcon className={c.InviteForm_NewFolderIcon} />
+      <h2 className={c.InviteForm_Header}>Create Team</h2>
+      <div className={c.InviteForm_Text}>Create a team for your new shared folder.</div>
       <DisplayTeamFormErrors
         errors={errors}
-        className={c.CreateTeamModal_DisplayErrors}
+        className={c.InviteForm_DisplayErrors}
         serverErrorMsg='Unable to create team. Please try again later.'
       />
       <div
-        className={classnames(c.CreateTeamModal_Row, {
-          [c.CreateTeamModal_Row__hasError]: errors,
+        className={classnames(c.InviteForm_Row, {
+          [c.InviteForm_Row__hasError]: errors,
         })}
       >
-        <CreateTeamForm
+        <InviteFormForm
           onErrorReceived={setErrors}
           afterCreate={handleAfterCreate}
           onCancel={handleOnCancel}
-          onTeamModelOpen={handleOnTeamModelOpen}
-          newFolderData={newFolderData}
+          onTeamModalOpen={handleOnTeamModalOpen}
+          newFolderData={props}
           includeNameField
         />
       </div>
-    </Modal>
+    </div>
   )
 }
 
-export default CreateTeamModal
+export default InviteForm

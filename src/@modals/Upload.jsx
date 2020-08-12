@@ -17,7 +17,6 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop: '2.5rem',
     },
     Upload_Column__frame: {
       marginRight: '2rem',
@@ -81,21 +80,19 @@ const Upload = () => {
   )
 
   return (
-    <div>
-      <div className={c.Upload_Row}>
-        <div className={c.Upload_Column__frame}>
-          {uploadModel.isLoading ? (
-            <UploadFrame>
-              <Spinner className={c.Upload_Spinner} />
-              <ProgressText className={c.Upload_Dots} text='Uploading' />
-            </UploadFrame>
-          ) : (
-            <Uploader showError={uploadModel.isError} file={file} setFile={setFile} />
-          )}
-        </div>
-        <div className={c.Upload_Column__form}>
-          <UploadForm onSubmit={onSubmit} disableSubmit={!file} />
-        </div>
+    <div className={c.Upload_Row}>
+      <div className={c.Upload_Column__frame}>
+        {uploadModel.isLoading ? (
+          <UploadFrame>
+            <Spinner className={c.Upload_Spinner} />
+            <ProgressText className={c.Upload_Dots} text='Uploading' />
+          </UploadFrame>
+        ) : (
+          <Uploader showError={uploadModel.isError} file={file} setFile={setFile} />
+        )}
+      </div>
+      <div className={c.Upload_Column__form}>
+        <UploadForm onSubmit={onSubmit} disableSubmit={!file} />
       </div>
     </div>
   )

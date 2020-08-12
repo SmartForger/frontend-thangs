@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useHistory, Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
@@ -9,22 +9,23 @@ import {
   TextInput,
   DropdownMenu,
   DropdownItem,
+  useFlashNotification,
 } from '@components'
 import { useCurrentUser, useNotifications } from '@hooks'
 import { authenticationService } from '@services'
 import { createUseStyles } from '@style'
 
 import { ReactComponent as BackgroundSvg } from '@svg/header-background.svg'
-import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg'
+import { ReactComponent as Caret } from '@svg/header-caret.svg'
+import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
+import { ReactComponent as HeartIcon } from '@svg/heart-icon-gray.svg'
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as LogoText } from '@svg/logo-text.svg'
 import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
-import { ReactComponent as HeartIcon } from '@svg/heart-icon-gray.svg'
+import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg'
+import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg'
 import { ReactComponent as UserIcon } from '@svg/icon_user.svg'
-import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import { ReactComponent as MatchingIcon } from '@svg/matching-icon-header.svg'
-import { ReactComponent as ClearIcon } from '@svg/icon-input-clear.svg'
-import { ReactComponent as Caret } from '@svg/header-caret.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -145,19 +146,27 @@ const useStyles = createUseStyles(theme => {
         marginLeft: '.5rem',
       },
     },
+    Header_SignUpButton: {
+      marginRight: '.5rem',
+      color: theme.colors.gold[500],
+    },
     Header_SearchFormWrapper: {
       alignItems: 'center',
       display: 'flex',
       position: 'relative',
 
       '& input': {
-        paddingLeft: '2rem',
-
+        background: theme.colors.purple[800],
+        border: 'none',
         outline: 'none',
         fontSize: '1rem',
-        lineHeight: '1rem',
+        padding: '.5rem .75rem .5rem 2.25rem',
+        lineHeight: '1.5rem',
+        width: '20rem',
+
         '&::placeholder': {
-          color: theme.colors.white[400],
+          color: theme.colors.grey[500],
+          fontWeight: 600,
         },
         '&:focus, &:active': {
           background: theme.colors.purple[800],
@@ -180,24 +189,27 @@ const useStyles = createUseStyles(theme => {
     Header_SearchFormIcon: {
       position: 'absolute',
       left: '.75rem',
-    },
-    Header_SearchFormInput: {
-      backgroundColor: 'transparent',
+      '& path, & polygon': {
+        fill: theme.colors.grey[500],
+      },
     },
     Header_SearchFormInput_active: {
-      background: theme.colors.purple[800],
       color: theme.colors.white[400],
       '&::placeholder': {
         color: 'transparent',
       },
     },
-    Header_SearchClearIcon: {
-      display: 'none',
+    Header_SearchIcon: {
       position: 'absolute',
       right: '.75rem',
     },
-    Header_SearchClearIcon_active: {
-      display: 'block',
+    Header_UploadIcon: {
+      position: 'absolute',
+      right: '2.75rem',
+
+      '& path, & polygon': {
+        fill: theme.colors.gold[500],
+      },
     },
     Header_SearchButton: {
       marginLeft: '.5rem',
@@ -235,81 +247,19 @@ const NotificationsButton = ({ c, handleNotificationsClick }) => {
   )
 }
 
-// const _AddModelDropdownMenu = ({ c }) => {
-//   const { folderId } = useParams()
-//   const [createFolderIsOpen, setCreateFolderIsOpen] = useState(false)
-//   const [createTeamIsOpen, setCreateTeamIsOpen] = useState(false)
-//   const [newFolderData, setNewFolderData] = useState({})
-//   const { navigateWithFlash } = useFlashNotification()
-//   const setFolderOpen = useCallback(() => {
-//     setCreateFolderIsOpen(true)
-//   }, [])
-//   const setTeamOpen = useCallback(() => {
-//     setCreateTeamIsOpen(true)
-//   }, [])
-//   const setFolderClose = useCallback(() => setCreateFolderIsOpen(false), [])
-//   const setTeamClose = useCallback(() => setCreateTeamIsOpen(false), [])
-
-//   return (
-//     <>
-//       <DropdownMenu
-//         className={classnames(c.Header_DropdownMenu, c.Header_AddModelDropdown)}
-//         buttonIcon={PlusButton}
-//       >
-//         {folderId && (
-//           <DropdownItem to={`/folder/${folderId}/upload`}>
-//             <UploadModelToFolderIcon /> Upload model to folder
-//           </DropdownItem>
-//         )}
-//         <DropdownItem to='/upload'>
-//           <ModelSquareIcon /> Upload model
-//         </DropdownItem>
-//         <DropdownItem to='/' onClick={setFolderOpen}>
-//           <NewFolderIcon />
-//           Create Folder
-//         </DropdownItem>
-//       </DropdownMenu>
-//       {createFolderIsOpen && (
-//         <CreateFolderModal
-//           isOpen={createFolderIsOpen}
-//           onCancel={setFolderClose}
-//           onTeamModalOpen={newFolderData => {
-//             setNewFolderData(newFolderData)
-//             setFolderClose()
-//             setTeamOpen()
-//           }}
-//           afterCreate={folder => {
-//             setFolderClose()
-//             navigateWithFlash(
-//               `/folder/${folder.folderId}`,
-//               'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
-//             )
-//           }}
-//         />
-//       )}
-//       {createTeamIsOpen && (
-//         <CreateTeamModal
-//           isOpen={createTeamIsOpen}
-//           onCancel={() => {
-//             setTeamClose()
-//             setFolderOpen()
-//           }}
-//           afterCreate={folder => {
-//             setTeamClose()
-//             navigateWithFlash(
-//               `/folder/${folder.folderId}`,
-//               'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
-//             )
-//           }}
-//           newFolderData={newFolderData}
-//         />
-//       )}
-//     </>
-//   )
-// }
-
-const ProfileDropdownMenu = ({ c, user, TargetComponent }) => {
+const ProfileDropdownMenu = ({ c, dispatch, user, TargetComponent }) => {
   const history = useHistory()
+  const { navigateWithFlash } = useFlashNotification()
+  const handleAfterCreate = useCallback(
+    folder => {
+      dispatch('close-modal')
+      navigateWithFlash(
+        `/folder/${folder.folderId}`,
+        'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
+      )
+    },
+    [dispatch, navigateWithFlash]
+  )
 
   return (
     <DropdownMenu
@@ -325,6 +275,19 @@ const ProfileDropdownMenu = ({ c, user, TargetComponent }) => {
       </DropdownItem>
       <DropdownItem
         onClick={() => {
+          dispatch('open-modal', {
+            modalName: 'createFolder',
+            modalData: {
+              afterCreate: handleAfterCreate,
+            },
+          })
+        }}
+      >
+        <NewFolderIcon /> Add Folder
+      </DropdownItem>
+      <DropdownItem
+        onClick={() => {
+          dispatch('close-modal')
           authenticationService.logout()
           history.push('/')
         }}
@@ -355,7 +318,7 @@ const ProfileDropdown = ({ user, onClick = noop }) => {
   )
 }
 
-const UserNav = ({ c, handleNotificationsClick, handleModalOpen }) => {
+const UserNav = ({ c, handleNotificationsClick, dispatch }) => {
   const { loading, user } = useCurrentUser()
 
   if (loading) {
@@ -366,8 +329,16 @@ const UserNav = ({ c, handleNotificationsClick, handleModalOpen }) => {
     return (
       <div className={classnames(c.Header_Row, c.Header_ButtonsRow)}>
         <NotificationsButton c={c} handleNotificationsClick={handleNotificationsClick} />
-        <ProfileDropdownMenu c={c} user={user} TargetComponent={ProfileDropdown} />
-        <Button className={c.Header_Button} onClick={() => handleModalOpen('upload')}>
+        <ProfileDropdownMenu
+          c={c}
+          user={user}
+          TargetComponent={ProfileDropdown}
+          dispatch={dispatch}
+        />
+        <Button
+          className={c.Header_Button}
+          onClick={() => dispatch('open-modal', { modalName: 'upload' })}
+        >
           Upload
         </Button>
       </div>
@@ -376,9 +347,22 @@ const UserNav = ({ c, handleNotificationsClick, handleModalOpen }) => {
 
   return (
     <div className={classnames(c.Header_Row, c.Header_ButtonsRow)}>
-      <Link to='/login'>
-        <Button className={c.Header_Button}>Sign in</Button>
+      <Link to={'/signup/alpha'}>
+        <Button text className={classnames(c.Header_TextButton, c.Header_SignUpButton)}>
+          Sign up
+        </Button>
       </Link>
+      <Button
+        className={c.Header_Button}
+        onClick={() =>
+          dispatch('open-modal', {
+            modalName: 'signIn',
+            modalData: { afterSignIn: () => dispatch('close-modal') },
+          })
+        }
+      >
+        Sign in
+      </Button>
     </div>
   )
 }
@@ -387,7 +371,6 @@ const Header = ({
   inverted,
   variant,
   handleNotificationsClick = noop,
-  handleModalOpen = noop,
   notificationsIsOpen,
 }) => {
   const { dispatch } = useStoreon()
@@ -397,21 +380,19 @@ const Header = ({
 
   const handleSearchSubmit = e => {
     e.preventDefault()
-    dispatch('get-search-results-by-text', {
-      searchTerm: searchTerm,
-      onFinish: _results => {
-        history.push(`/search/${searchTerm}`)
-        handleModalOpen(null)
-      },
-      onError: error => {
-        // eslint-disable-next-line no-console
-        console.log('e:', error)
-      },
-    })
-  }
-
-  const handleSearchClear = () => {
-    setSearchTerm(undefined)
+    if (searchTerm) {
+      dispatch('get-search-results-by-text', {
+        searchTerm: searchTerm,
+        onFinish: _results => {
+          history.push(`/search/${searchTerm}`)
+          dispatch('close-modal')
+        },
+        onError: error => {
+          // eslint-disable-next-line no-console
+          console.log('e:', error)
+        },
+      })
+    }
   }
 
   return (
@@ -428,7 +409,7 @@ const Header = ({
                 <UserNav
                   c={c}
                   handleNotificationsClick={handleNotificationsClick}
-                  handleModalOpen={handleModalOpen}
+                  dispatch={dispatch}
                 />
               )}
             </div>
@@ -443,48 +424,43 @@ const Header = ({
                     <Logo className={c.Header_Logo} />
                     <LogoText />
                   </Link>
-                  <Button
-                    text
-                    className={c.Header_TextButton}
-                    onClick={() => handleModalOpen('searchByUpload')}
-                  >
-                    <MatchingIcon />
-                    <span>Model upload search</span>
-                  </Button>
-                  <form className={c.Header_SearchForm} onSubmit={handleSearchSubmit}>
-                    <div className={classnames(c.Header_SearchFormWrapper)}>
-                      <MagnifyingGlass className={c.Header_SearchFormIcon} />
-                      <TextInput
-                        name='search'
-                        placeholder='Search'
-                        className={classnames(c.Header_SearchFormInput, {
-                          [c.Header_SearchFormInput_active]: searchTerm,
-                        })}
-                        onChange={e => {
-                          setSearchTerm(e.target.value)
-                        }}
-                        value={searchTerm || ''}
-                      />
-                      <ClearIcon
-                        className={classnames(c.Header_SearchClearIcon, {
-                          [c.Header_SearchClearIcon_active]: searchTerm,
-                        })}
-                        onClick={handleSearchClear}
-                      />
-                    </div>
-                    <div className={c.Header_SearchButton}>
-                      <Button icon onClick={handleSearchSubmit}>
-                        <MagnifyingGlass />
-                      </Button>
-                    </div>
-                  </form>
+                  {variant !== 'logo-only' && (
+                    <>
+                      <form className={c.Header_SearchForm} onSubmit={handleSearchSubmit}>
+                        <div className={classnames(c.Header_SearchFormWrapper)}>
+                          <MagnifyingGlass className={c.Header_SearchFormIcon} />
+                          <TextInput
+                            name='search'
+                            placeholder='Search'
+                            className={classnames(c.Header_SearchFormInput, {
+                              [c.Header_SearchFormInput_active]: searchTerm,
+                            })}
+                            onChange={e => {
+                              setSearchTerm(e.target.value)
+                            }}
+                            value={searchTerm || ''}
+                          />
+                          <UploadIcon
+                            className={classnames(c.Header_UploadIcon)}
+                            onClick={() =>
+                              dispatch('open-modal', { modalName: 'searchByUpload' })
+                            }
+                          />
+                          <MagnifyingGlass
+                            className={classnames(c.Header_SearchIcon)}
+                            onClick={handleSearchSubmit}
+                          />
+                        </div>
+                      </form>
+                    </>
+                  )}
                 </div>
               </div>
               {variant !== 'logo-only' && (
                 <UserNav
                   c={c}
                   handleNotificationsClick={handleNotificationsClick}
-                  handleModalOpen={handleModalOpen}
+                  dispatch={dispatch}
                 />
               )}
             </div>

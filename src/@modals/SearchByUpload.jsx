@@ -1,9 +1,8 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import { Uploader, UploadProgress } from '@components' //CardCollection,
-// import * as GraphqlService from '@services/graphql-service'
-// import ModelCards from '@components/CardCollection/ModelCards'
+import { Uploader, UploadProgress } from '@components'
+import * as GraphqlService from '@services/graphql-service'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(_theme => {
@@ -13,36 +12,35 @@ const useStyles = createUseStyles(_theme => {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      marginTop: '2.5rem',
     },
   }
 })
 
-// const PROCESSING = 'PROCESSING'
-// const ERROR = 'ERROR'
-
-// const graphqlService = GraphqlService.getInstance()
+const graphqlService = GraphqlService.getInstance()
 
 const sanitizeFileName = name => name.replace(/ /g, '_')
 
-const SearchByUpload = ({ handleModalClose }) => {
+const PollingComponent = ({ modelId, dispatch }) => {
+  const {
+    loading,
+    error,
+    model,
+    startPolling,
+    stopPolling,
+  } = graphqlService.useUploadedModelByIdWithRelated(modelId)
+  if (!loading && !error && model) {
+    stopPolling()
+    debugger
+    dispatch('update-search-results', model)
+  }
+  startPolling(1000)
+}
+
+const SearchByUpload = () => {
+  const [model, setModel] = useState(null)
   const c = useStyles()
   const history = useHistory()
   const { dispatch, searchResults } = useStoreon('searchResults')
-  // const {
-  //   loading,
-  //   error,
-  //   model,
-  //   startPolling,
-  //   stopPolling,
-  // } = graphqlService.useUploadedModelByIdWithRelated(modelId)
-
-  // if (loading || (model && model.uploadStatus === PROCESSING)) {
-  //   startPolling(1000)
-  //   return <UploadProgress />
-  // }
-
-  // stopPolling()
 
   // if (error || !model || model.uploadStatus === ERROR) {
   //   return <div>There was an error analyzing your model. Please try again later.</div>
@@ -59,9 +57,12 @@ const SearchByUpload = ({ handleModalClose }) => {
         data: {
           ...requiredVariables,
         },
+        onUploaded: model => {
+          setModel(model)
+        },
         onFinish: _results => {
           history.push(`/search/${file.name}`)
-          handleModalClose()
+          dispatch('hide-modal')
         },
         onError: error => {
           // eslint-disable-next-line no-console
@@ -69,9 +70,9 @@ const SearchByUpload = ({ handleModalClose }) => {
         },
       })
     },
-    [dispatch, handleModalClose, history]
+    [dispatch, history]
   )
-
+  console.log(model)
   return (
     <div>
       <div className={c.SearchByUpload_Row}>
@@ -82,6 +83,7 @@ const SearchByUpload = ({ handleModalClose }) => {
             <form>
               <Uploader showError={!!searchResults.isError} setFile={handleFile} />
             </form>
+            {model && <PollingComponent dispatch={dispatch} modelId={model.id} />}
           </>
         )}
       </div>

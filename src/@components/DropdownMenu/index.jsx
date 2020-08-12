@@ -77,7 +77,7 @@ const DropdownItem = ({ children, to = '#', onClick }) => {
           {children}
         </div>
       ) : (
-        <Link className={c.DropdownMenu_Item} to={to} onClick={onClick}>
+        <Link className={c.DropdownMenu_Item} to={to}>
           {children}
         </Link>
       )}

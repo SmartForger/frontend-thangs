@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
 import { CardCollection, Layout, Button } from '@components'
 import { useCurrentUser } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
@@ -46,9 +45,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const Page = ({ user = {} }) => {
-  const { dispatch, modelPreviews } = useStoreon('modelPreviews')
-
+const Page = ({ user = {}, dispatch, modelPreviews }) => {
   useEffect(() => {
     dispatch('fetch-model-previews')
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,7 +70,7 @@ const Page = ({ user = {} }) => {
 }
 
 const LandingHero = () => {
-  const history = useHistory()
+  const { dispatch } = useStoreon()
   const c = useStyles()
 
   return (
@@ -93,7 +90,9 @@ const LandingHero = () => {
             to collaborate and share 3D models.
           </div>
           <div className={c.Landing_SearchByModelUploadButton}>
-            <Button onClick={() => history.push('/matching')}>
+            <Button
+              onClick={() => dispatch('open-modal', { modalName: 'searchByUpload' })}
+            >
               <MatchingIcon
                 className={c.Landing_SearchByModelUploadButton_MatchingIcon}
               />
@@ -106,12 +105,15 @@ const LandingHero = () => {
   )
 }
 
-export const Landing = () => {
+const Landing = () => {
   const { user } = useCurrentUser()
+  const { dispatch, modelPreviews } = useStoreon('modelPreviews')
 
   return (
     <Layout Hero={!user ? LandingHero : undefined}>
-      <Page user={user} />
+      <Page user={user} dispatch={dispatch} modelPreviews={modelPreviews} />
     </Layout>
   )
 }
+
+export default Landing

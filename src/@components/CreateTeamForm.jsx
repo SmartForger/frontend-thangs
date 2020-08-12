@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import Joi from '@hapi/joi'
 import * as R from 'ramda'
-import { Button, UserInline } from '@components'
+import { Button, TextInput, UserInline } from '@components'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { authenticationService } from '@services'
 import classnames from 'classnames'
@@ -12,40 +12,44 @@ import { useServices } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
-    CreateTeamForm: {
+    TeamForm: {
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
     },
-    CreateTeamForm_Spinner: {
+    TeamForm_Spinner: {
       width: '1rem',
       height: '1rem',
       '& .path': {
         stroke: 'currentColor',
       },
     },
-    CreateTeamForm_Row: {
+    TeamForm_Row: {
       display: 'flex',
     },
-    CreateTeamForm_TeamRow: {
+    TeamForm_TeamRow: {
       alignItems: 'flex-end',
     },
-    CreateTeamForm_ButtonRow: {
+    TeamForm_ButtonRow: {
       display: 'flex',
       justifyContent: 'flex-end',
       marginTop: '3rem',
     },
-    CreateTeamForm_CancelButton: {
+    TeamForm_CancelButton: {
       marginRight: '1rem',
       minWidth: '7.25rem',
     },
-    CreateTeamForm_SaveButton: {
+    TeamForm_SaveButton: {
       minWidth: '6.75rem',
     },
-    CreateTeamForm_Label: {
+    TeamForm_InputWrapper: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    TeamForm_Label: {
       marginBottom: '.5rem',
     },
-    CreateTeamForm_FullWidthInput: {
+    TeamForm_FullWidthInput: {
       border: 0,
       padding: '.5rem 1rem',
       marginBottom: '1.5rem',
@@ -53,10 +57,10 @@ const useStyles = createUseStyles(theme => {
       minWidth: 0,
       background: theme.colors.white[900],
     },
-    CreateTeamForm_ControllerInput: {
+    TeamForm_ControllerInput: {
       width: '100%',
     },
-    CreateTeamForm_ErrorText: {
+    TeamForm_ErrorText: {
       ...theme.mixins.text.formErrorText,
       marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
@@ -64,19 +68,19 @@ const useStyles = createUseStyles(theme => {
       padding: '.625rem 1rem',
       borderRadius: '.5rem',
     },
-    CreateTeamForm_SaveLogo: {
+    TeamForm_SaveLogo: {
       margin: '26px 7px 0 auto',
     },
-    CreateTeamForm_SaveTeamLabel: {
+    TeamForm_SaveTeamLabel: {
       color: theme.colors.blue[500],
       cursor: 'pointer',
       marginTop: '1.625rem',
     },
-    CreateTeamForm_SaveTeamSuccessLabel: {
+    TeamForm_SaveTeamSuccessLabel: {
       color: theme.colors.grey[700],
       marginTop: '1.625rem',
     },
-    CreateTeamForm_PseudoForm: {
+    TeamForm_PseudoForm: {
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
@@ -89,25 +93,25 @@ const useStyles = createUseStyles(theme => {
         background: theme.colors.white[900],
       },
     },
-    CreateTeamForm_AddButton: {
+    TeamForm_AddButton: {
       minWidth: 0,
       marginLeft: '1rem',
     },
-    CreateTeamForm_MemberRow: {
+    TeamForm_MemberRow: {
       display: 'flex',
       marginBottom: '1.5rem',
     },
-    CreateTeamForm_MemberInput: {
+    TeamForm_MemberInput: {
       marginBottom: 0,
       width: '100%',
     },
-    CreateTeamForm_Item: {
+    TeamForm_Item: {
       marginBottom: '1rem',
     },
-    CreateTeamForm_FolderNameLabel: {
+    TeamForm_FolderNameLabel: {
       marginBottom: '1.5rem',
     },
-    CreateTeamForm_FolderName: {
+    TeamForm_FolderName: {
       display: 'block',
       padding: '.5rem 1rem',
       ...theme.mixins.text.lightText,
@@ -152,37 +156,37 @@ const DisplayTeamFormErrors = ({ errors, className, serverErrorMsg }) => {
   return messages.map((error, i) => {
     if (isEmptyTeamName(error)) {
       return (
-        <h4 className={classnames(className, c.CreateTeamForm_ErrorText)} key={i}>
+        <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
           Please provide a team name for your folder
         </h4>
       )
     } else if (isInvalidEmail(error)) {
       return (
-        <h4 className={classnames(className, c.CreateTeamForm_ErrorText)} key={i}>
+        <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
           Please check that you have provided valid emails
         </h4>
       )
     } else if (isEmptyMembers(error) || isEmptyTeam(error)) {
       return (
-        <h4 className={classnames(className, c.CreateTeamForm_ErrorText)} key={i}>
+        <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
           Please invite at least one other member
         </h4>
       )
     } else if (isDuplicateTeamName(error)) {
       return (
-        <h4 className={classnames(className, c.CreateTeamForm_ErrorText)} key={i}>
+        <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
           Team name already exists. Please try another
         </h4>
       )
     } else if (isExistingMember) {
       return (
-        <h4 className={classnames(className, c.CreateTeamForm_ErrorText)} key={i}>
+        <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
           Team member already added. Please try another email
         </h4>
       )
     } else if (isServerError(error)) {
       return (
-        <h4 className={classnames(className, c.CreateTeamForm_ErrorText)} key={i}>
+        <h4 className={classnames(className, c.TeamForm_ErrorText)} key={i}>
           {serverErrorMsg}
         </h4>
       )
@@ -208,7 +212,7 @@ const UserList = ({ users = [], removeUser = noop }) => {
           teamUser.fullName = `${teamUser.first_name} ${teamUser.last_name}`
 
         return (
-          <li className={c.CreateTeamForm_Item} key={idx}>
+          <li className={c.TeamForm_Item} key={idx}>
             <UserInline user={teamUser} size={'3rem'} displayEmail>
               {isOwner && (
                 <Button text onClick={() => removeUser(teamUser)}>
@@ -380,46 +384,50 @@ const CreateTeamForm = ({
   }, [inputState])
 
   return (
-    <form onSubmit={onFormSubmit(handleSave)} className={c.CreateTeamForm}>
-      <div className={c.CreateTeamForm_FolderNameLabel}>
+    <form onSubmit={onFormSubmit(handleSave)} className={c.TeamForm}>
+      <div className={c.TeamForm_FolderNameLabel}>
         Folder Name
-        <div className={c.CreateTeamForm_FolderName}>{folderName}</div>
+        <div className={c.TeamForm_FolderName}>{folderName}</div>
       </div>
-      <label className={c.TeamForm_Label} htmlFor='teamMembers'>
-        Team Name
-      </label>
-      <input
-        className={c.TeamForm_FullWidthInput}
-        name='teamName'
-        type='text'
-        value={inputState['teamName']}
-        onChange={e => {
-          handleOnInputChange('teamName', e.target.value)
-          onErrorReceived(null)
-        }}
-      />
-      <label className={c.TeamForm_Label} htmlFor='emails'>
-        Add users by email
-      </label>
-      <div className={c.TeamForm_MemberRow}>
-        <input
-          className={classnames(c.TeamForm_FullWidthInput, c.TeamForm_MemberInput)}
-          placeholder={'member1@example.com, member2@example.com'}
-          name='emails'
+      <div className={c.TeamForm_InputWrapper}>
+        <label className={c.TeamForm_Label} htmlFor='teamMembers'>
+          Team Name
+        </label>
+        <TextInput
+          className={c.TeamForm_FullWidthInput}
+          name='teamName'
           type='text'
-          value={inputState['emails']}
+          value={inputState && inputState['teamName']}
           onChange={e => {
-            handleOnInputChange('emails', e.target.value)
+            handleOnInputChange('teamName', e.target.value)
             onErrorReceived(null)
           }}
         />
-        <Button
-          type='button'
-          className={classnames(c.TeamForm_SaveButton, c.TeamForm_AddButton)}
-          onClick={handleAdd}
-        >
-          Add
-        </Button>
+      </div>
+      <div className={c.TeamForm_InputWrapper}>
+        <label className={c.TeamForm_Label} htmlFor='emails'>
+          Add users by email
+        </label>
+        <div className={c.TeamForm_MemberRow}>
+          <TextInput
+            className={classnames(c.TeamForm_FullWidthInput, c.TeamForm_MemberInput)}
+            placeholder={'member1@example.com, member2@example.com'}
+            name='emails'
+            type='text'
+            value={inputState && inputState['emails']}
+            onChange={e => {
+              handleOnInputChange('emails', e.target.value)
+              onErrorReceived(null)
+            }}
+          />
+          <Button
+            type='button'
+            className={classnames(c.TeamForm_SaveButton, c.TeamForm_AddButton)}
+            onClick={handleAdd}
+          >
+            Add
+          </Button>
+        </div>
       </div>
       <UserList users={[currentUser, ...team]} removeUser={handleRemove} />
       <div className={classnames(c.TeamForm_Row, c.TeamForm_ButtonRow)}>

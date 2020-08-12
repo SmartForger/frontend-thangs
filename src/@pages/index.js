@@ -1,4 +1,4 @@
-export * from './Landing'
+export { default as Landing } from './Landing'
 export * from './Login'
 export * from './Signup'
 export * from './Profile'
