@@ -8,7 +8,9 @@ import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   return {
-    Likes: {},
+    Likes: {
+      width: '100%',
+    },
     Likes_LikedModelsHeader: {
       ...theme.mixins.text.subheaderText,
       marginBottom: '2rem',
@@ -18,8 +20,7 @@ const useStyles = createUseStyles(theme => {
 
 const getLikedModels = R.pathOr([], ['likedModels'])
 
-const LikesCount = ({ user }) => {
-  const c = useStyles()
+const LikesCount = ({ user, c }) => {
   const likes = getLikedModels(user)
   const amount = likes.length
 
@@ -37,6 +38,7 @@ const LikesContent = ({ user }) => {
 
 const Page = () => {
   const { user, loading, error } = useCurrentUser()
+  const c = useStyles()
   if (loading) {
     return <Spinner />
   }
@@ -57,10 +59,10 @@ const Page = () => {
     )
   }
   return (
-    <>
-      <LikesCount user={user} />
+    <div className={c.Likes}>
+      <LikesCount user={user} c={c} />
       <LikesContent user={user} />
-    </>
+    </div>
   )
 }
 
