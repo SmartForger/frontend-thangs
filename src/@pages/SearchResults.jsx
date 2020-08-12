@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react'
 import { useLocation, useParams, Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { CardCollection, NoResults, Layout, Button } from '@components'
+import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 import ModelCards from '@components/CardCollection/ModelCards'
 import * as GraphqlService from '@services/graphql-service'
 import { createUseStyles } from '@style'
@@ -46,33 +47,47 @@ const useStyles = createUseStyles(theme => {
         height: '100%',
       },
     },
+    SearchResults_Results: {
+      marginTop: '2rem',
+    },
+    SearchResults_ResultsHeader: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    SearchResults_ResultsHeaderText: {
+      ...theme.mixins.text.searchResultsHeader,
+      marginLeft: '.5rem',
+    },
   }
 })
 
-const SearchResult = ({ models, isLoading, isError }) => {
-  const c = useStyles()
-
-  if (isError) {
-    return (
-      <NoResults>
-        Error! We were not able to load results. Please try again later.
-      </NoResults>
-    )
-  }
-
+const SearchResult = ({ models, modelId, isLoading, isError, c }) => {
   return (
-    <div className={c.SearchResults}>
-      <CardCollection
-        loading={isLoading}
-        noResultsText='No results found. Try searching another keyword or search by model above.'
-      >
-        <ModelCards models={models} showSocial={false} />
-      </CardCollection>
+    <div className={c.SearchResults_Results}>
+      {modelId && (
+        <div className={c.SearchResults_ResultsHeader}>
+          <span className={c.SearchResults_ResultsHeaderText}>
+            Similar geometry found elsewhere
+          </span>
+        </div>
+      )}
+      {isError ? (
+        <NoResults>
+          Error! We were not able to load results. Please try again later.
+        </NoResults>
+      ) : (
+        <CardCollection
+          loading={isLoading}
+          noResultsText='No results found. Try searching another keyword or search by model above.'
+        >
+          <ModelCards models={models} showSocial={false} />
+        </CardCollection>
+      )}
     </div>
   )
 }
 
-const ThangsSearchResult = ({ modelId }) => {
+const ThangsSearchResult = ({ modelId, c }) => {
   const {
     loading,
     error,
@@ -83,19 +98,31 @@ const ThangsSearchResult = ({ modelId }) => {
 
   if (loading || (model && model.uploadStatus === PROCESSING)) {
     startPolling(1000)
-    return <div>Loading Thangs matches</div>
   }
 
   stopPolling()
 
-  if (error || !model || model.uploadStatus === ERROR) {
-    return <div>There was an error analyzing your model. Please try again later.</div>
-  }
-
   return (
-    <CardCollection noResultsText='No geometric similar matches found. Try uploading another model.'>
-      <ModelCards models={model.relatedModels} showSocial={false} />
-    </CardCollection>
+    <div className={c.SearchResults_Results}>
+      <div className={c.SearchResults_ResultsHeader}>
+        <UploadIcon />
+        <span className={c.SearchResults_ResultsHeaderText}>
+          Similar geometry on Thangs
+        </span>
+      </div>
+      {error || !model || model.uploadStatus === ERROR ? (
+        <NoResults>
+          Error! We were not able to load results. Please try again later.
+        </NoResults>
+      ) : (
+        <CardCollection
+          loading={loading}
+          noResultsText='No results found. Try searching another keyword or search by model above.'
+        >
+          <ModelCards models={model} showSocial={false} />
+        </CardCollection>
+      )}
+    </div>
   )
 }
 
@@ -142,12 +169,15 @@ const Page = () => {
           </Link>
         </div>
       </div>
+      {modelId && <ThangsSearchResult modelId={modelId} c={c} />}
       {searchQuery ? (
         <SearchResult
           searchQuery={searchQuery}
           isLoading={searchResults.isLoading}
           isError={searchResults.isError}
           models={savedSearchResults}
+          modelId={modelId}
+          c={c}
         />
       ) : (
         <NoResults>
@@ -155,7 +185,6 @@ const Page = () => {
           model to find geometrically similar matches to the model you upload.
         </NoResults>
       )}
-      {modelId && <ThangsSearchResult modelId={modelId} />}
     </div>
   )
 }
