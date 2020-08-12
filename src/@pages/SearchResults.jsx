@@ -142,6 +142,7 @@ const Page = () => {
     null
   )
   useEffect(() => {
+    dispatch('reset-search-results')
     if (!modelId) {
       dispatch('get-search-results-by-text', {
         searchTerm: searchQuery,
@@ -149,7 +150,7 @@ const Page = () => {
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [searchQuery])
 
   useEffect(() => {
     if (searchResults.data && Object.keys(searchResults.data).length) {
