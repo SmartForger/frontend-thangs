@@ -65,6 +65,14 @@ const useStyles = createUseStyles(theme => {
         backgroundColor: theme.colors.purple[700],
       },
     },
+    Button__light: {
+      color: theme.colors.purple[900],
+      fontWeight: 600,
+      backgroundColor: theme.colors.grey[100],
+      '&:hover': {
+        backgroundColor: theme.colors.grey[300],
+      },
+    },
     Button__inline: {
       display: 'inline',
     },
@@ -84,6 +92,7 @@ const Button = ({
   children,
   className,
   dark,
+  light,
   icon,
   inline,
   secondary,
@@ -97,6 +106,7 @@ const Button = ({
       className={classnames(className, c.Button, {
         [c.Button__back]: back,
         [c.Button__dark]: dark,
+        [c.Button__light]: light,
         [c.Button__icon]: icon,
         [c.Button__inline]: inline,
         [c.Button__notText]: !text,

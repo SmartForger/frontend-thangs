@@ -57,7 +57,7 @@ const useStyles = createUseStyles(theme => {
 
 const ModelDetails = ({ c, model, showOwner, isLiked = false }) => {
   let modelName = model.name
-  if (modelName.length > 40) modelName = modelName.slice(0, 40) + '...'
+  if (modelName && modelName.length > 40) modelName = modelName.slice(0, 40) + '...'
   return (
     <div className={c.ModelCard_Content}>
       {!showOwner && <div className={c.ModelCard_Name}>{modelName}</div>}
@@ -82,7 +82,24 @@ const ModelDetails = ({ c, model, showOwner, isLiked = false }) => {
   )
 }
 
+const getThumbnailUrl = (model = {}) => {
+  if (model.thumbnailUrl) return model.thumbnailUrl
+  if (model.uploadedFile) return model.uploadedFile
+  if (model.fileName) return model.fileName.replace('uploads/models/', '')
+  if (model.modelFileName) return model.modelFileName.replace('uploads/models/', '')
+}
+
+const getTIWThumbnailUrl = (model = {}) => {
+  if (model.searchModel) return model.searchModel.replace('uploads/models/', '')
+}
+
 const CardContents = ({ className, c, model, showOwner, isLiked }) => {
+  const thumbnailUrl = `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}`
+
+  const tiwThumbnailUrl = model.searchModel
+    ? `${TIW_THUMBNAILS_HOST}/${getThumbnailUrl(model)}/${getTIWThumbnailUrl(model)}`
+    : undefined
+
   return (
     <>
       <div title={model && model.name}>
@@ -90,13 +107,9 @@ const CardContents = ({ className, c, model, showOwner, isLiked }) => {
           <ModelThumbnail
             className={c.ModelCard_Thumbnail}
             name={model.name}
-            thumbnailUrl={
-              model.thumbnailUrl || `${THUMBNAILS_HOST}/${model.uploadedFile}`
-            }
-          //Here is what would entail to call the Waldo thumbnail Url
-          //tiwThumbnailUrl={
-          //  model.thumbnailUrl || `${TIW_THUMBNAILS_HOST}/${model.uploadedFile}/${relatedModel.uploadedFile}`
-          //}
+            thumbnailUrl={thumbnailUrl}
+            //Here is what would entail to call the Waldo thumbnail Url
+            tiwThumbnailUrl={tiwThumbnailUrl}
           ></ModelThumbnail>
         </Card>
         <ModelDetails c={c} model={model} showOwner={showOwner} isLiked={isLiked} />
@@ -122,27 +135,24 @@ const ModelCard = ({ className, model, withOwner, user, likes }) => {
   const handleMouseEnter = useCallback(() => setHovered(true), [])
   const handleMouseLeave = useCallback(() => setHovered(false), [])
   const isLiked = user ? hasLikedModel(model, user) : likes
-  if (!model.resultSource || (model.resultSource && model.resultSource === 'thangs')) {
-    return (
-      <Link
-        to={{pathname: `/model/${model.id}`, state: { prevPath: window.location.href }}}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onFocus={handleMouseEnter}
-        onBlur={handleMouseLeave}
-      >
-        <CardContents
-          className={className}
-          model={model}
-          showOwner={showOwner}
-          hovered={hovered}
-          c={c}
-          isLiked={isLiked}
-        />
-      </Link>
-    )
-  }
-  return <div style={{ wordBreak: 'break-word' }}>{JSON.stringify(model)}</div>
+  return (
+    <Link
+      to={{ pathname: `/model/${model.id}`, state: { prevPath: window.location.href } }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onFocus={handleMouseEnter}
+      onBlur={handleMouseLeave}
+    >
+      <CardContents
+        className={className}
+        model={model}
+        showOwner={showOwner}
+        hovered={hovered}
+        c={c}
+        isLiked={isLiked}
+      />
+    </Link>
+  )
 }
 
 export default ModelCard

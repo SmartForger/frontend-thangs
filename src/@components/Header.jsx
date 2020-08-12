@@ -388,7 +388,7 @@ const Header = ({
 
   const handleSearchSubmit = e => {
     e.preventDefault()
-    dispatch('get-search-results', {
+    dispatch('get-search-results-by-text', {
       searchTerm: searchTerm,
       onFinish: _results => {
         history.push(`/search/${searchTerm}`)

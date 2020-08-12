@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
-import * as R from 'ramda'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import { CardCollection, NoResults, Layout } from '@components'
+import { CardCollection, NoResults, Layout, Button } from '@components'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { createUseStyles } from '@style'
+import { useLocalStorage } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -64,36 +64,35 @@ const SearchResult = ({ models, isLoading }) => {
 const Page = () => {
   const c = useStyles()
   const { searchQuery } = useParams()
-  const { dispatch, searchResults } = useStoreon('searchResults')
+  const { searchResults } = useStoreon('searchResults')
+  const [savedSearchResults, setSavedSearchResults] = useLocalStorage(
+    'savedSearchResults',
+    null
+  )
 
   useEffect(() => {
-    if (R.empty(searchResults.data)) {
-      dispatch('get-search-results', {
-        searchTerm: searchQuery,
-        onError: error => {
-          // eslint-disable-next-line no-console
-          console.log('e:', error)
-        },
-      })
+    if (searchResults.data && Object.keys(searchResults.data).length) {
+      setSavedSearchResults(searchResults.data)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [searchResults, setSavedSearchResults])
 
   return (
     <div className={c.SearchResults_Page}>
       <div className={c.SearchResults_Header}>
         <div className={c.SearchResults_HeaderText}>Search Results for {searchQuery}</div>
-        {/* <div>
-          <Button dark small>
-            Clear Search
-          </Button>
-        </div> */}
+        <div>
+          <Link to='/'>
+            <Button light small>
+              Clear Search
+            </Button>
+          </Link>
+        </div>
       </div>
       {searchQuery ? (
         <SearchResult
           searchQuery={searchQuery}
           isLoading={searchResults.isLoading}
-          models={searchResults.data}
+          models={savedSearchResults}
         />
       ) : (
         <NoResults>

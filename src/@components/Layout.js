@@ -126,7 +126,7 @@ const Layout = ({ children, Hero = noop }) => {
       />
       {ModalView && (
         <Modal isOpen={!!modalOpen} handleModalClose={handleModalClose}>
-          <ModalView />
+          <ModalView handleModalClose={handleModalClose} />
         </Modal>
       )}
       <div className={classnames({ [c.Layout_blur]: modalOpen })}>
