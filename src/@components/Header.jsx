@@ -83,6 +83,9 @@ const useStyles = createUseStyles(theme => {
     Header_Button: {
       marginLeft: '1rem',
     },
+    Header_ClickableButton: {
+      cursor: 'pointer',
+    },
     Header_ButtonsRow: {
       '& > a': {
         display: 'flex',
@@ -220,7 +223,10 @@ const NotificationsButton = ({ c, handleNotificationsClick }) => {
   const { useUnreadNotificationCount } = useNotifications()
   const { unreadNotificationCount } = useUnreadNotificationCount()
   return (
-    <div className={c.Header_NotificationIconWrapper} onClick={handleNotificationsClick}>
+    <div
+      className={classnames(c.Header_NotificationIconWrapper, c.Header_ClickableButton)}
+      onClick={handleNotificationsClick}
+    >
       <NotificationIcon className={c.Header_NotificationIcon} />
       {unreadNotificationCount > 0 && (
         <div className={c.Header_UnreadBadge}>{unreadNotificationCount}</div>
@@ -331,8 +337,11 @@ const ProfileDropdownMenu = ({ c, user, TargetComponent }) => {
 }
 
 const ProfileDropdown = ({ user, onClick = noop }) => {
+  const c = useStyles({ inverted: false, notificationsIsOpen: false })
+
   return (
     <div
+      className={c.Header_ClickableButton}
       onClick={() => {
         onClick()
       }}
