@@ -148,7 +148,6 @@ const DisplayInviteFormErrors = ({ errors, className, serverErrorMsg }) => {
 }
 
 const InviteUsersForm = ({ folderId, onErrorReceived, afterInvite }) => {
-  console.log('afterInvite', afterInvite)
   const { dispatch, folders } = useStoreon('folders')
   const c = useStyles()
 
@@ -175,18 +174,17 @@ const InviteUsersForm = ({ folderId, onErrorReceived, afterInvite }) => {
       if (!isValid) {
         return onErrorReceived(errors)
       }
-      try {
-        const variables = { emails: members }
-        dispatch('invite-to-folder', {
-          data: variables,
-          folderId: folderId,
-          onFinish: () => afterInvite(members),
-        })
-      } catch (error) {
-        onErrorReceived({
-          server: error,
-        })
-      }
+      const variables = { emails: members }
+      dispatch('invite-to-folder', {
+        data: variables,
+        folderId: folderId,
+        onFinish: () => afterInvite(members),
+        onError: error => {
+          onErrorReceived({
+            server: error,
+          })
+        },
+      })
     },
     [afterInvite, dispatch, folderId, onErrorReceived]
   )

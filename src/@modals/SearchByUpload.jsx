@@ -30,7 +30,6 @@ const PollingComponent = ({ modelId, dispatch }) => {
   } = graphqlService.useUploadedModelByIdWithRelated(modelId)
   if (!loading && !error && model) {
     stopPolling()
-    debugger
     dispatch('update-search-results', model)
   }
   startPolling(1000)
@@ -72,7 +71,6 @@ const SearchByUpload = () => {
     },
     [dispatch, history]
   )
-  console.log(model)
   return (
     <div>
       <div className={c.SearchByUpload_Row}>

@@ -155,43 +155,39 @@ export default store => {
       })
   })
 
-  store.on('invite-to-folder', (state, { data, folderId, onFinish }) => {
+  store.on('invite-to-folder', async (state, { data, folderId, onFinish, onError }) => {
     store.dispatch('folder-saving')
-    api({
+    const { error } = await api({
       method: 'PUT',
       endpoint: `folders/${folderId}`,
-      body: data,
+      body: data
     })
-      .then(res => {
-        if (res.status === 200 || res.status === 204) {
-          onFinish(data)
-          store.dispatch('folder-saved')
-          store.dispatch('fetch-folder', folderId)
-        }
-      })
-      .catch(_error => {
-        store.dispatch('folder-saved-error')
-      })
+    if (error) {
+      store.dispatch('folder-saved-error')
+      onError(error)
+    } else {
+      onFinish(data)
+      store.dispatch('folder-saved')
+      store.dispatch('fetch-folder', folderId)
+    }
   })
 
-  store.on('revoke-folder-access', (state, { folderId, userId }) => {
+  store.on('revoke-folder-access', async (state, { folderId, userId, onError }) => {
     store.dispatch('folder-saving')
-    api({
+    const { error } = await api({
       method: 'PUT',
       endpoint: `folders/${folderId}/members/${userId}`,
     })
-      .then(res => {
-        if (res.status === 200 || res.status === 204) {
-          store.dispatch('folder-saved')
-          if(state && state.folders && state.folders.currentFolder && state.folders.currentFolder.team_id){
-            store.dispatch('fetch-team', state.folders.currentFolder.team_id)
-          } else {
-            store.dispatch('fetch-folder', folderId)
-          }
-        }
-      })
-      .catch(_error => {
-        store.dispatch('folder-saved-error')
-      })
+    if (error) {
+      store.dispatch('folder-saved-error')
+      onError(error)
+    } else {
+      store.dispatch('folder-saved')
+      if(state && state.folders && state.folders.currentFolder && state.folders.currentFolder.team_id){
+        store.dispatch('fetch-team', state.folders.currentFolder.team_id)
+      } else {
+        store.dispatch('fetch-folder', folderId)
+      }
+    }
   })
 }
