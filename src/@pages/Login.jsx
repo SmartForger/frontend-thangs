@@ -5,7 +5,6 @@ import * as EmailValidator from 'email-validator'
 import { authenticationService } from '@services'
 import { useForm } from '@hooks'
 import { TextInput, Spinner, Button, Layout } from '@components'
-import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg'
 import { ReactComponent as LoginIcon } from '@svg/user-login.svg'
 import { createUseStyles } from '@style'
 

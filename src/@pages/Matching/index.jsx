@@ -43,7 +43,6 @@ function Results({ modelId }) {
   } = graphqlService.useUploadedModelByIdWithRelated(modelId)
 
   if (loading || !model || (model && model.uploadStatus === PROCESSING)) {
-    console.log('startPolling')
     startPolling(1000)
     return <UploadProgress />
   }
@@ -84,7 +83,6 @@ function Page() {
   }
 
   const onCancel = useCallback(() => history.push('/'), [history])
-  console.log('currentModel.id', currentModel)
   return (
     <div className={c.Matching}>
       <h1 className={c.Matching_Header}>Search by Model</h1>

@@ -43,10 +43,6 @@ const SearchByUpload = () => {
           dispatch('close-modal')
           history.push(`/search/${file ? file.name : ''}?modelId=${modelId}`)
         },
-        onError: error => {
-          // eslint-disable-next-line no-console
-          console.log('e:', error)
-        },
       })
     },
     [dispatch, history]

@@ -1,7 +1,6 @@
 import React from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { Route, Router, Switch, useLocation } from 'react-router-dom'
-import { storeonDevtools } from 'storeon/devtools'
 
 import * as pendo from '@vendors/pendo'
 import * as fullStory from '@vendors/full-story'
@@ -33,23 +32,8 @@ import { Notifications } from '@pages/Notifications'
 import { FolderUpload } from '@pages/FolderUpload'
 import { ErrorBoundary } from './ErrorBoundary'
 import { routeRequiresAnon, routeRequiresAuth } from '@components/RouteComponent'
-<<<<<<< HEAD
-import { FlashContextProvider } from './@components/Flash'
-import { StoreContext } from 'storeon/react'
-=======
 import { FlashContextProvider } from '@components/Flash'
-import { createStoreon } from 'storeon'
 import { StoreContext } from 'storeon/react'
-import teamsStore from '@store/teams/store'
-import folderStore from '@store/folders/store'
-import modalStore from '@store/modal/store'
-import modelsStore from '@store/models/store'
-import modelPreviewsStore from '@store/modelPreviews/store'
-import commentsStore from '@store/comments/store'
-import userStore from '@store/user/store'
-import uploadModelStore from '@store/uploadModel/store'
-import searchStore from '@store/search/store'
->>>>>>> 30f1cc7... Update modals and search header styles
 import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
 import { usePageTheming } from '@hooks'
@@ -76,37 +60,6 @@ export function AppFrame() {
   )
 }
 
-<<<<<<< HEAD
-=======
-/* eslint-disable indent */
-const store =
-  process.env.NODE_ENV === 'development'
-    ? createStoreon([
-        commentsStore,
-        folderStore,
-        modalStore,
-        modelPreviewsStore,
-        modelsStore,
-        searchStore,
-        teamsStore,
-        uploadModelStore,
-        userStore,
-        storeonDevtools,
-      ])
-    : createStoreon([
-        commentsStore,
-        folderStore,
-        modalStore,
-        modelPreviewsStore,
-        modelsStore,
-        searchStore,
-        teamsStore,
-        uploadModelStore,
-        userStore,
-      ])
-/* eslint-enable indent */
-
->>>>>>> 30f1cc7... Update modals and search header styles
 const App = () => {
   const location = useLocation()
   initializeAnalytics(history)

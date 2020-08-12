@@ -101,7 +101,7 @@ const ExternalModelDetails = ({ c, model }) => {
     <div className={c.ModelCard_Content}>
       <div className={c.ModelCard_DetailsInline}>
         <GlobeIcon width={'28px'} height={'28px'} />
-        <span className={c.ModelCard_ExternalName}>Replace/this/with/url</span>
+        <span className={c.ModelCard_ExternalName}>{model.filename}</span>
       </div>
     </div>
   )
@@ -126,8 +126,8 @@ const CardContents = ({ className, c, model, showOwner, showSocial, isLiked }) =
   const tiwThumbnailUrl = model.tiwFullThumbnailUrl
     ? model.tiwFullThumbnailUrl
     : model.searchModel
-    ? `${TIW_THUMBNAILS_HOST}/${getThumbnailUrl(model)}/${getTIWThumbnailUrl(model)}`
-    : undefined
+      ? `${TIW_THUMBNAILS_HOST}/${getThumbnailUrl(model)}/${getTIWThumbnailUrl(model)}`
+      : undefined
 
   return (
     <>

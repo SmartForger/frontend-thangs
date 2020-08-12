@@ -13,7 +13,6 @@ import {
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import { modelCardHoverText } from '@style/text'
 
 const useStyles = createUseStyles(theme => {
   const {
