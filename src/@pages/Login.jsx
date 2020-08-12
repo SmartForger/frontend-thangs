@@ -5,6 +5,7 @@ import * as EmailValidator from 'email-validator'
 import { authenticationService } from '@services'
 import { useForm } from '@hooks'
 import { TextInput, Spinner, Button, Layout } from '@components'
+import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg'
 import { ReactComponent as LoginIcon } from '@svg/user-login.svg'
 import { createUseStyles } from '@style'
 
@@ -57,6 +58,11 @@ const useStyles = createUseStyles(theme => {
     },
     Login_Label: {
       ...theme.mixins.text.darkFormText,
+    },
+    Login_Background: {
+      position: 'absolute',
+      top: '2px',
+      right: 0,
     },
   }
 })

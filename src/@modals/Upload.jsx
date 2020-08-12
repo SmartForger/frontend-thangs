@@ -52,7 +52,7 @@ const Upload = () => {
   useEffect(() => () => dispatch('reset-upload-model'), [])
 
   const onSubmit = useCallback(
-    async data => {
+    data => {
       const { weight, material, height, name, description, category } = data
 
       const requiredVariables = {

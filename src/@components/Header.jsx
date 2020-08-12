@@ -17,7 +17,7 @@ import { createUseStyles } from '@style'
 
 import { ReactComponent as BackgroundSvg } from '@svg/header-background.svg'
 import { ReactComponent as Caret } from '@svg/header-caret.svg'
-import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
+import { ReactComponent as UploadIcon } from '@svg/icon-upload-3.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon-gray.svg'
 import { ReactComponent as Logo } from '@svg/logo.svg'
@@ -154,6 +154,9 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       display: 'flex',
       position: 'relative',
+      width: '20rem',
+      background: theme.colors.purple[800],
+      borderRadius: '.5rem',
 
       '& input': {
         background: theme.colors.purple[800],
@@ -162,9 +165,9 @@ const useStyles = createUseStyles(theme => {
         fontSize: '1rem',
         padding: '.5rem .75rem .5rem 2.25rem',
         lineHeight: '1.5rem',
-        width: '20rem',
 
         '&::placeholder': {
+          fontSize: '.875rem',
           color: theme.colors.grey[500],
           fontWeight: 600,
         },
@@ -202,10 +205,12 @@ const useStyles = createUseStyles(theme => {
     Header_SearchIcon: {
       position: 'absolute',
       right: '.75rem',
+      cursor: 'pointer',
     },
     Header_UploadIcon: {
       position: 'absolute',
       right: '2.75rem',
+      cursor: 'pointer',
 
       '& path, & polygon': {
         fill: theme.colors.gold[500],
@@ -381,17 +386,8 @@ const Header = ({
   const handleSearchSubmit = e => {
     e.preventDefault()
     if (searchTerm) {
-      dispatch('get-search-results-by-text', {
-        searchTerm: searchTerm,
-        onFinish: _results => {
-          history.push(`/search/${searchTerm}`)
-          dispatch('close-modal')
-        },
-        onError: error => {
-          // eslint-disable-next-line no-console
-          console.log('e:', error)
-        },
-      })
+      history.push(`/search/${searchTerm}`)
+      dispatch('close-modal')
     }
   }
 
@@ -431,7 +427,7 @@ const Header = ({
                           <MagnifyingGlass className={c.Header_SearchFormIcon} />
                           <TextInput
                             name='search'
-                            placeholder='Search'
+                            placeholder='Search By Text or Upload'
                             className={classnames(c.Header_SearchFormInput, {
                               [c.Header_SearchFormInput_active]: searchTerm,
                             })}
@@ -441,12 +437,14 @@ const Header = ({
                             value={searchTerm || ''}
                           />
                           <UploadIcon
+                            title={'Search By Model Upload'}
                             className={classnames(c.Header_UploadIcon)}
                             onClick={() =>
                               dispatch('open-modal', { modalName: 'searchByUpload' })
                             }
                           />
                           <MagnifyingGlass
+                            title={'Search By Text'}
                             className={classnames(c.Header_SearchIcon)}
                             onClick={handleSearchSubmit}
                           />

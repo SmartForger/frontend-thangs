@@ -42,6 +42,9 @@ export default store => {
       data,
     },
   }))
+  store.on('reset-search-results', () => ({
+    searchResults: getInitAtom(),
+  }))
   store.on(
     'get-search-results-by-text',
     async (state, { searchTerm, onFinish = noop, onError = noop }) => {
@@ -57,6 +60,7 @@ export default store => {
           }
         })
         .catch(error => {
+          store.dispatch('error-search-results', { data: error })
           onError(error)
         })
     }
@@ -88,17 +92,27 @@ export default store => {
         })
 
         const newMatches = uploadedData.matches.map(match => {
-          return { ...match, searchModel: uploadedData.searchByModelFileName }
+          return {
+            ...match,
+            searchModel: uploadedData.searchByModelFileName,
+            resultSource: 'phyndexer',
+          }
         })
+
+        const newResult = {
+          matches: newMatches,
+          modelId: uploadedData.newModelId,
+        }
 
         if (error) {
           store.dispatch('error-search-results', { data: error })
         } else {
-          store.dispatch('loaded-search-results', { data: newMatches })
-          onFinish()
+          store.dispatch('loaded-search-results', { data: newResult.matches })
+          onFinish(newResult)
         }
-      } catch (e) {
-        onError(e)
+      } catch (error) {
+        store.dispatch('error-search-results', { data: error })
+        onError(error)
       }
     }
   )

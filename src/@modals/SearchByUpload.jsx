@@ -1,8 +1,7 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { Uploader, UploadProgress } from '@components'
-import * as GraphqlService from '@services/graphql-service'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(_theme => {
@@ -16,36 +15,20 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const graphqlService = GraphqlService.getInstance()
-
 const sanitizeFileName = name => name.replace(/ /g, '_')
 
-const PollingComponent = ({ modelId, dispatch }) => {
-  const {
-    loading,
-    error,
-    model,
-    startPolling,
-    stopPolling,
-  } = graphqlService.useUploadedModelByIdWithRelated(modelId)
-  if (!loading && !error && model) {
-    stopPolling()
-    dispatch('update-search-results', model)
-  }
-  startPolling(1000)
-}
-
 const SearchByUpload = () => {
-  const [model, setModel] = useState(null)
   const c = useStyles()
   const history = useHistory()
   const { dispatch, searchResults } = useStoreon('searchResults')
 
-  // if (error || !model || model.uploadStatus === ERROR) {
-  //   return <div>There was an error analyzing your model. Please try again later.</div>
-  // }
+  useEffect(() => {
+    dispatch('reset-search-results')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const handleFile = useCallback(
-    async file => {
+    file => {
       const requiredVariables = {
         name: sanitizeFileName(file.name),
         size: file.size,
@@ -56,12 +39,9 @@ const SearchByUpload = () => {
         data: {
           ...requiredVariables,
         },
-        onUploaded: model => {
-          setModel(model)
-        },
-        onFinish: _results => {
-          history.push(`/search/${file.name}`)
-          dispatch('hide-modal')
+        onFinish: ({ modelId }) => {
+          dispatch('close-modal')
+          history.push(`/search/${file ? file.name : ''}?modelId=${modelId}`)
         },
         onError: error => {
           // eslint-disable-next-line no-console
@@ -81,7 +61,6 @@ const SearchByUpload = () => {
             <form>
               <Uploader showError={!!searchResults.isError} setFile={handleFile} />
             </form>
-            {model && <PollingComponent dispatch={dispatch} modelId={model.id} />}
           </>
         )}
       </div>

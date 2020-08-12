@@ -16,12 +16,6 @@ export default store => {
       modalData: modalData,
     },
   }))
-  store.on('hide-modal', state => ({
-    modal: {
-      ...state.modal,
-      isHidden: true,
-    },
-  }))
   store.on('close-modal', () => ({
     modal: {
       isOpen: false,

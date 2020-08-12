@@ -3,7 +3,7 @@ import { CardCollection, Layout, Button } from '@components'
 import { useCurrentUser } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg'
-import { ReactComponent as MatchingIcon } from '@svg/matching-icon.svg'
+import { ReactComponent as UploadIcon } from '@svg/icon-upload-3.svg'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
 
@@ -36,7 +36,7 @@ const useStyles = createUseStyles(theme => {
       marginTop: '1.5rem',
     },
     Landing_SearchByModelUploadButton: { marginTop: '1.5rem' },
-    Landing_SearchByModelUploadButton_MatchingIcon: { marginRight: '.5rem' },
+    Landing_SearchByModelUploadButton_UploadIcon: { marginRight: '.5rem' },
     Landing_Background: {
       position: 'absolute',
       top: '-6rem',
@@ -93,9 +93,7 @@ const LandingHero = () => {
             <Button
               onClick={() => dispatch('open-modal', { modalName: 'searchByUpload' })}
             >
-              <MatchingIcon
-                className={c.Landing_SearchByModelUploadButton_MatchingIcon}
-              />
+              <UploadIcon className={c.Landing_SearchByModelUploadButton_UploadIcon} />
               <span>Search by Model Upload</span>
             </Button>
           </div>

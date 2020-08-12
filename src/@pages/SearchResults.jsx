@@ -1,10 +1,15 @@
-import React, { useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import React, { useEffect, useMemo } from 'react'
+import { useLocation, useParams, Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { CardCollection, NoResults, Layout, Button } from '@components'
 import ModelCards from '@components/CardCollection/ModelCards'
+import * as GraphqlService from '@services/graphql-service'
 import { createUseStyles } from '@style'
 import { useLocalStorage } from '@hooks'
+
+const PROCESSING = 'PROCESSING'
+const ERROR = 'ERROR'
+const graphqlService = GraphqlService.getInstance()
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -44,8 +49,16 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const SearchResult = ({ models, isLoading }) => {
+const SearchResult = ({ models, isLoading, isError }) => {
   const c = useStyles()
+
+  if (isError) {
+    return (
+      <NoResults>
+        Error! We were not able to load results. Please try again later.
+      </NoResults>
+    )
+  }
 
   return (
     <div className={c.SearchResults}>
@@ -53,20 +66,63 @@ const SearchResult = ({ models, isLoading }) => {
         loading={isLoading}
         noResultsText='No results found. Try searching another keyword or search by model above.'
       >
-        <ModelCards models={models} />
+        <ModelCards models={models} showSocial={false} />
       </CardCollection>
     </div>
   )
 }
 
+const ThangsSearchResult = ({ modelId }) => {
+  const {
+    loading,
+    error,
+    model,
+    startPolling,
+    stopPolling,
+  } = graphqlService.useUploadedModelByIdWithRelated(modelId)
+
+  if (loading || (model && model.uploadStatus === PROCESSING)) {
+    startPolling(1000)
+    return <div>Loading Thangs matches</div>
+  }
+
+  stopPolling()
+
+  if (error || !model || model.uploadStatus === ERROR) {
+    return <div>There was an error analyzing your model. Please try again later.</div>
+  }
+
+  return (
+    <CardCollection noResultsText='No geometric similar matches found. Try uploading another model.'>
+      <ModelCards models={model.relatedModels} showSocial={false} />
+    </CardCollection>
+  )
+}
+
+const useQuery = location => {
+  return new URLSearchParams(location.search)
+}
+
 const Page = () => {
   const c = useStyles()
   const { searchQuery } = useParams()
-  const { searchResults } = useStoreon('searchResults')
+  const location = useLocation()
+  const query = useQuery(location)
+  const modelId = useMemo(() => query.get('modelId'), [query])
+  const { dispatch, searchResults } = useStoreon('searchResults')
   const [savedSearchResults, setSavedSearchResults] = useLocalStorage(
     'savedSearchResults',
     null
   )
+  useEffect(() => {
+    if (!modelId) {
+      dispatch('get-search-results-by-text', {
+        searchTerm: searchQuery,
+        onFinish: _results => {},
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (searchResults.data && Object.keys(searchResults.data).length) {
@@ -90,6 +146,7 @@ const Page = () => {
         <SearchResult
           searchQuery={searchQuery}
           isLoading={searchResults.isLoading}
+          isError={searchResults.isError}
           models={savedSearchResults}
         />
       ) : (
@@ -98,6 +155,7 @@ const Page = () => {
           model to find geometrically similar matches to the model you upload.
         </NoResults>
       )}
+      {modelId && <ThangsSearchResult modelId={modelId} />}
     </div>
   )
 }
