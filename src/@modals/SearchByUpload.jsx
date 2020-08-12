@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import { Uploader, CardCollection, UploadProgress } from '@components'
-import * as GraphqlService from '@services/graphql-service'
-import ModelCards from '@components/CardCollection/ModelCards'
+import { Uploader, UploadProgress } from '@components' //CardCollection,
+// import * as GraphqlService from '@services/graphql-service'
+// import ModelCards from '@components/CardCollection/ModelCards'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(_theme => {
@@ -18,10 +18,10 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const PROCESSING = 'PROCESSING'
-const ERROR = 'ERROR'
+// const PROCESSING = 'PROCESSING'
+// const ERROR = 'ERROR'
 
-const graphqlService = GraphqlService.getInstance()
+// const graphqlService = GraphqlService.getInstance()
 
 const sanitizeFileName = name => name.replace(/ /g, '_')
 

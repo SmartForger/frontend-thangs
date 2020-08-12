@@ -101,8 +101,8 @@ const CardContents = ({ className, c, model, showOwner, isLiked }) => {
   const tiwThumbnailUrl = model.tiwFullThumbnailUrl
     ? model.tiwFullThumbnailUrl
     : model.searchModel
-    ? `${TIW_THUMBNAILS_HOST}/${getThumbnailUrl(model)}/${getTIWThumbnailUrl(model)}`
-    : undefined
+      ? `${TIW_THUMBNAILS_HOST}/${getThumbnailUrl(model)}/${getTIWThumbnailUrl(model)}`
+      : undefined
 
   return (
     <>
