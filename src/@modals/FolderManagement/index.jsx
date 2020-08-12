@@ -188,6 +188,7 @@ const Team = ({ id, creator, folderId }) => {
 const FolderManagement = ({ folder, afterInvite, className }) => {
   const [errors, setErrors] = useState()
   const hasErrors = errors && !R.isEmpty(errors)
+  const { folders } = useStoreon('folders')
   const c = useStyles({ hasErrors })
   return (
     <div className={classnames(className, c.FolderManagement)}>
@@ -229,9 +230,9 @@ const FolderManagement = ({ folder, afterInvite, className }) => {
           />
         ) : (
           <UserList
-            creator={folder.creator}
-            users={folder.members}
-            folderId={folder.id}
+            creator={folders.currentFolder.creator}
+            users={folders.currentFolder.members}
+            folderId={folders.currentFolder.id}
           />
         )}
       </div>

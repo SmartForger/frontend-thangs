@@ -164,7 +164,6 @@ export default store => {
     })
       .then(res => {
         if (res.status === 200 || res.status === 204) {
-          store.dispatch('saved-folder-data', res.data)
           onFinish(data)
           store.dispatch('folder-saved')
           store.dispatch('fetch-folder', folderId)
@@ -183,7 +182,6 @@ export default store => {
     })
       .then(res => {
         if (res.status === 200 || res.status === 204) {
-          store.dispatch('saved-folder-data', res.data)
           store.dispatch('folder-saved')
           store.dispatch('fetch-folder', folderId)
         }
