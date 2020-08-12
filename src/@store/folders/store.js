@@ -183,7 +183,11 @@ export default store => {
       .then(res => {
         if (res.status === 200 || res.status === 204) {
           store.dispatch('folder-saved')
-          store.dispatch('fetch-folder', folderId)
+          if(state && state.folders && state.folders.currentFolder && state.folders.currentFolder.team_id){
+            store.dispatch('fetch-team', state.folders.currentFolder.team_id)
+          } else {
+            store.dispatch('fetch-folder', folderId)
+          }
         }
       })
       .catch(_error => {
