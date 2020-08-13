@@ -98,14 +98,16 @@ const SearchResult = ({
       ) : (
         <CardCollection
           loading={isLoading}
-          noResultsText='No results found. Try searching another keyword or search by model above.'
+          noResultsText='No results found. Try searching another keyword or model above.'
         >
-          <ModelCards
-            models={models}
-            showSocial={false}
-            showWaldo={!!modelId}
-            searchModelFileName={searchModelFileName}
-          />
+          {models ? (
+            <ModelCards
+              models={models}
+              showSocial={false}
+              showWaldo={!!modelId}
+              searchModelFileName={searchModelFileName}
+            />
+          ) : null}
         </CardCollection>
       )}
     </div>
@@ -144,14 +146,16 @@ const ThangsSearchResult = ({ modelId, c, searchModelFileName }) => {
       ) : (
         <CardCollection
           loading={loading}
-          noResultsText='No results found. Try searching another keyword or search by model above.'
+          noResultsText='No results found. Try searching another keyword or model above.'
         >
-          <ModelCards
-            models={model && model.relatedModels}
-            showSocial={false}
-            showWaldo={!!modelId}
-            searchModelFileName={searchModelFileName}
-          />
+          {model && model.relatedModels ? (
+            <ModelCards
+              models={model && model.relatedModels}
+              showSocial={false}
+              showWaldo={!!modelId}
+              searchModelFileName={searchModelFileName}
+            />
+          ) : null}
         </CardCollection>
       )}
     </div>
