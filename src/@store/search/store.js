@@ -95,6 +95,9 @@ export default store => {
           ...data,
         },
       })
+      if (error) {
+        return store.dispatch('error-search-results', { data: error })
+      }
 
       const newMatches = uploadedData.matches.map(match => {
         return {
@@ -103,7 +106,7 @@ export default store => {
           resultSource: 'phyndexer',
         }
       })
-      debugger
+
       const newResult = {
         matches: newMatches,
         modelId: uploadedData.newModelId,
@@ -112,12 +115,8 @@ export default store => {
           uploadedData.searchByModelFileName.replace('uploads/models/', ''),
       }
 
-      if (error) {
-        store.dispatch('error-search-results', { data: error })
-      } else {
-        store.dispatch('loaded-search-results', { data: newResult })
-        onFinish(newResult)
-      }
+      store.dispatch('loaded-search-results', { data: newResult })
+      onFinish(newResult)
     }
   )
 }
