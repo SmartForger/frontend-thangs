@@ -206,6 +206,9 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       right: '.75rem',
       cursor: 'pointer',
+      '& path, & polygon': {
+        fill: theme.colors.gold[500],
+      },
     },
     Header_UploadIcon: {
       position: 'absolute',
@@ -215,9 +218,6 @@ const useStyles = createUseStyles(theme => {
       '& path, & polygon': {
         fill: theme.colors.gold[500],
       },
-    },
-    Header_SearchButton: {
-      marginLeft: '.5rem',
     },
     Header_UserPicture: {
       marginLeft: '1rem',
