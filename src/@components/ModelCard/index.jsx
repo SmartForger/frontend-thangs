@@ -3,7 +3,7 @@ import * as R from 'ramda'
 import { Link } from 'react-router-dom'
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
-import { ReactComponent as GlobeIcon } from '@svg/icon-globe.svg'
+import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
 import { Card, ModelThumbnail, UserInline } from '@components'
 import { THUMBNAILS_HOST, TIW_THUMBNAILS_HOST } from '@utilities/constants'
 import classnames from 'classnames'
@@ -109,7 +109,7 @@ const ExternalModelDetails = ({ c, model }) => {
   return (
     <div className={c.ModelCard_Content}>
       <div className={c.ModelCard_DetailsInline}>
-        <GlobeIcon width={'28px'} height={'28px'} />
+        <ExternalLinkIcon />
         <span className={c.ModelCard_ExternalName}>
           {model.attributionUrl || model.fileName}
         </span>
