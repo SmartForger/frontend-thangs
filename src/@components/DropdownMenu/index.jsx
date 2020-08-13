@@ -11,7 +11,7 @@ const useStyles = createUseStyles(theme => {
       background: theme.colors.white[400],
       borderRadius: '.5rem',
       boxShadow: '0px 5px 10px 0px rgba(35, 37, 48, 0.25)',
-      width: '16.25rem',
+      width: '12rem',
       padding: ({ noIcons }) => (noIcons ? '1.5rem 3rem' : '1rem'),
       boxSizing: 'border-box',
       position: 'absolute',
@@ -35,7 +35,7 @@ const useStyles = createUseStyles(theme => {
     },
     DropdownMenu_ItemWrapper: {
       borderRadius: '.5rem',
-      padding: '0 .75rem',
+      padding: '0',
       '&:hover': {
         backgroundColor: theme.colors.white[700],
       },

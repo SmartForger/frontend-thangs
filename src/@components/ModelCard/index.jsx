@@ -64,8 +64,6 @@ const useStyles = createUseStyles(theme => {
       letterSpacing: 0,
     },
     ModelCard_LikedIcon: {
-      fill: theme.colors.gold[500],
-      stroke: theme.colors.gold[500],
       '& path': {
         fill: theme.colors.gold[500],
       },

@@ -18,14 +18,14 @@ import { createUseStyles } from '@style'
 import { ReactComponent as BackgroundSvg } from '@svg/header-background.svg'
 import { ReactComponent as Caret } from '@svg/header-caret.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload-3.svg'
-import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import { ReactComponent as HeartIcon } from '@svg/heart-icon-gray.svg'
+import { ReactComponent as ExitIcon } from '@svg/dropdown-signout.svg'
+import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as LogoText } from '@svg/logo-text.svg'
 import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
-import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg'
+import { ReactComponent as NewFolderIcon } from '@svg/dropdown-folder.svg'
 import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg'
-import { ReactComponent as UserIcon } from '@svg/icon_user.svg'
+import { ReactComponent as UserIcon } from '@svg/dropdown-profile.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -126,6 +126,11 @@ const useStyles = createUseStyles(theme => {
       margin: 'auto',
       marginLeft: '1rem',
       zIndex: 5,
+    },
+    Header_DropdownMenuDivider: {
+      margin: '.25rem 0',
+      border: 'none',
+      borderTop: `1px solid ${theme.colors.grey[100]}`,
     },
     Header_AddModelDropdown: {
       margin: '0 1rem',
@@ -272,9 +277,6 @@ const ProfileDropdownMenu = ({ c, dispatch, user, TargetComponent }) => {
       TargetComponent={TargetComponent}
       user={user}
     >
-      <DropdownItem to='/home'>
-        <UserIcon /> View Profile
-      </DropdownItem>
       <DropdownItem to='/profile/likes'>
         <HeartIcon /> Liked Models
       </DropdownItem>
@@ -289,6 +291,10 @@ const ProfileDropdownMenu = ({ c, dispatch, user, TargetComponent }) => {
         }}
       >
         <NewFolderIcon /> Add Folder
+      </DropdownItem>
+      <hr className={c.Header_DropdownMenuDivider} />
+      <DropdownItem to='/home'>
+        <UserIcon /> View Profile
       </DropdownItem>
       <DropdownItem
         onClick={() => {

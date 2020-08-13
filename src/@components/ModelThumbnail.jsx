@@ -29,7 +29,7 @@ const useStyles = createUseStyles(theme => {
         display: 'block',
         position: 'absolute',
         height: '100%',
-        width: '5rem',
+        width: '2rem',
       },
 
       '& img': {
