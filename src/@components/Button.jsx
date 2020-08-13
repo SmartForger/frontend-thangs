@@ -17,6 +17,9 @@ const useStyles = createUseStyles(theme => {
         cursor: 'not-allowed',
       },
       whiteSpace: 'nowrap',
+      '& > svg': {
+        marginRight: '.5rem',
+      },
     },
     Button__notText: {
       border: 'none',
