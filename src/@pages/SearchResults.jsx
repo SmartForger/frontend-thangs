@@ -5,13 +5,8 @@ import { useStoreon } from 'storeon/react'
 import { CardCollection, NoResults, Layout, Button } from '@components'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 import ModelCards from '@components/CardCollection/ModelCards'
-import * as GraphqlService from '@services/graphql-service'
 import { createUseStyles } from '@style'
 import { useLocalStorage } from '@hooks'
-
-const PROCESSING = 'PROCESSING'
-const ERROR = 'ERROR'
-const graphqlService = GraphqlService.getInstance()
 
 const useStyles = createUseStyles(theme => {
   const {
