@@ -166,7 +166,9 @@ function parseTiwThumbnailUrl(modelFilename, relatedModelFileName) {
 
 export function parseModel(model) {
   const relatedModels = model.relatedModels
-    ? model.relatedModels.map(m => parseRelatedModel(model, m))
+    ? model.relatedModels.map(m => {
+        return parseRelatedModel(m, model)
+      })
     : null
   const owner = model.owner && parseUser(model.owner)
   const fullThumbnailUrl = parseThumbnailUrl(model.uploadedFile)
@@ -179,13 +181,13 @@ export function parseModel(model) {
   }
 }
 
-export function parseRelatedModel(model, relatedModel) {
+export function parseRelatedModel(model, originalModel) {
   const relatedModels = null
   const owner = model.owner && parseUser(model.owner)
   const fullThumbnailUrl = parseThumbnailUrl(model.uploadedFile)
   const tiwFullThumbnailUrl = parseTiwThumbnailUrl(
     model.uploadedFile,
-    relatedModel.uploadedFile
+    originalModel.uploadedFile
   )
 
   return {
@@ -353,7 +355,6 @@ const UPLOAD_MODEL_MUTATION = gql`
 
 const parseModelPayload = data => {
   const model = getModel(data)
-
   if (!model) {
     return null
   }

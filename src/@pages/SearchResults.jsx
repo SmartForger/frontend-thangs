@@ -74,7 +74,14 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const SearchResult = ({ models, modelId, isLoading, isError, c }) => {
+const SearchResult = ({
+  models,
+  modelId,
+  isLoading,
+  isError,
+  c,
+  searchModelFileName,
+}) => {
   return (
     <div className={c.SearchResults_Results}>
       {modelId && (
@@ -93,14 +100,19 @@ const SearchResult = ({ models, modelId, isLoading, isError, c }) => {
           loading={isLoading}
           noResultsText='No results found. Try searching another keyword or search by model above.'
         >
-          <ModelCards models={models} showSocial={false} showWaldo={!!modelId} />
+          <ModelCards
+            models={models}
+            showSocial={false}
+            showWaldo={!!modelId}
+            searchModelFileName={searchModelFileName}
+          />
         </CardCollection>
       )}
     </div>
   )
 }
 
-const ThangsSearchResult = ({ modelId, c }) => {
+const ThangsSearchResult = ({ modelId, c, searchModelFileName }) => {
   const {
     loading,
     error,
@@ -137,6 +149,7 @@ const ThangsSearchResult = ({ modelId, c }) => {
             models={model.relatedModels}
             showSocial={false}
             showWaldo={!!modelId}
+            searchModelFileName={searchModelFileName}
           />
         </CardCollection>
       )}
@@ -163,13 +176,19 @@ const Page = () => {
     'savedSearchQuery',
     null
   )
+  const [savedOriginalModelName, setSavedOriginalModelName] = useLocalStorage(
+    'savedOriginalModelName',
+    null
+  )
   useEffect(() => {
-    if (savedSearchQuery !== searchQuery) {
+    if (savedSearchQuery !== searchQuery || !savedSearchResults) {
       dispatch('reset-search-results')
+      setSavedSearchResults(null)
+      setSavedSearchQuery(null)
+      setSavedOriginalModelName(null)
       if (!modelId) {
         dispatch('get-search-results-by-text', {
           searchTerm: searchQuery,
-          onFinish: _results => {},
         })
       }
     }
@@ -177,11 +196,25 @@ const Page = () => {
   }, [searchQuery])
 
   useEffect(() => {
-    if (searchResults.data && Object.keys(searchResults.data).length) {
-      setSavedSearchResults(searchResults.data)
+    if (
+      searchResults.data &&
+      searchResults.data.matches &&
+      Object.keys(searchResults.data.matches).length
+    ) {
+      setSavedSearchResults(searchResults.data.matches)
       setSavedSearchQuery(searchQuery)
+      setSavedOriginalModelName(
+        searchResults.data.searchModel ? searchResults.data.searchModel : null
+      )
     }
-  }, [searchQuery, searchResults, setSavedSearchQuery, setSavedSearchResults])
+  }, [
+    modelId,
+    searchQuery,
+    searchResults,
+    setSavedOriginalModelName,
+    setSavedSearchQuery,
+    setSavedSearchResults,
+  ])
 
   return (
     <div className={c.SearchResults_Page}>
@@ -195,7 +228,15 @@ const Page = () => {
           </Link>
         </div>
       </div>
-      {modelId && <ThangsSearchResult modelId={modelId} c={c} />}
+      {modelId && (
+        <ThangsSearchResult
+          modelId={modelId}
+          c={c}
+          searchModelFileName={
+            searchResults && searchResults.data && searchResults.data.searchModel
+          }
+        />
+      )}
       {searchQuery ? (
         <SearchResult
           searchQuery={searchQuery}
@@ -203,6 +244,7 @@ const Page = () => {
           isError={searchResults.isError}
           models={savedSearchResults}
           modelId={modelId}
+          searchModelFileName={savedOriginalModelName}
           c={c}
         />
       ) : (

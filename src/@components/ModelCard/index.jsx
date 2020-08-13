@@ -125,7 +125,8 @@ const getThumbnailUrl = (model = {}) => {
   if (model.modelFileName) return model.modelFileName.replace('uploads/models/', '')
 }
 
-const getWaldoThumbnailUrl = (model = {}) => {
+const getWaldoThumbnailUrl = (model = {}, searchModelFileName) => {
+  if (searchModelFileName) return searchModelFileName
   if (model.searchModel) return model.searchModel.replace('uploads/models/', '')
 }
 
@@ -154,16 +155,18 @@ const CardContents = ({
   handleMouseEnter,
   handleMouseLeave,
   modelAttributionUrl,
+  searchModelFileName,
 }) => {
   const thumbnailUrl = model.fullThumbnailUrl
     ? model.fullThumbnailUrl
     : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}`
 
-  const waldoThumbnailUrl = model.tiwFullThumbnailUrl
-    ? model.tiwFullThumbnailUrl
-    : model.searchModel
-      ? `${TIW_THUMBNAILS_HOST}/${getThumbnailUrl(model)}/${getWaldoThumbnailUrl(model)}`
-      : undefined
+  const waldoThumbnailUrl = searchModelFileName
+    ? `${TIW_THUMBNAILS_HOST}/${getThumbnailUrl(model)}/${getWaldoThumbnailUrl(
+        model,
+        searchModelFileName
+      )}`
+    : undefined
 
   return (
     <>
@@ -235,6 +238,7 @@ const ModelCard = ({
   likes,
   showSocial = true,
   showWaldo,
+  searchModelFileName,
 }) => {
   const c = useStyles()
   const showOwner = withOwner && model.owner
@@ -266,6 +270,7 @@ const ModelCard = ({
         c={c}
         isLiked={isLiked}
         modelAttributionUrl={modelAttributionUrl}
+        searchModelFileName={searchModelFileName}
       />
     </Anchor>
   )

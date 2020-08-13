@@ -55,7 +55,7 @@ export default store => {
       })
         .then(res => {
           if (res.status === 200) {
-            store.dispatch('loaded-search-results', res)
+            store.dispatch('loaded-search-results', { data: { matches: res.data } })
             onFinish(res)
           }
         })
@@ -70,49 +70,53 @@ export default store => {
     async (state, { file, data, onUploaded = noop, onFinish = noop, onError = noop }) => {
       store.dispatch('loading-search-results')
 
-      try {
-        const { data: uploadedUrlData } = await api({
-          method: 'GET',
-          endpoint: `models/upload-url?fileName=${file.name}`,
-        })
+      const { data: uploadedUrlData, error: uploadError } = await api({
+        method: 'GET',
+        endpoint: `models/upload-url?fileName=${file.name}`,
+      })
+      if (uploadError)
+        return store.dispatch('error-search-results', { data: uploadError })
+      const { error: signUrlError } = await storageService.uploadToSignedUrl(
+        uploadedUrlData.signedUrl,
+        file
+      )
+      if (signUrlError)
+        return store.dispatch('error-search-results', { data: signUrlError })
+      onUploaded(uploadedUrlData)
+      const { data: uploadedData, error } = await api({
+        method: 'POST',
+        endpoint: 'models/search-by-model',
+        body: {
+          filename: uploadedUrlData.newFileName || '',
+          originalFileName: file.name,
+          units: 'mm',
+          searchUpload: false,
+          isPrivate: false,
+          ...data,
+        },
+      })
 
-        await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file)
-        onUploaded(uploadedUrlData)
-        const { data: uploadedData, error } = await api({
-          method: 'POST',
-          endpoint: 'models/search-by-model',
-          body: {
-            filename: uploadedUrlData.newFileName || '',
-            originalFileName: file.name,
-            units: 'mm',
-            searchUpload: false,
-            isPrivate: false,
-            ...data,
-          },
-        })
-
-        const newMatches = uploadedData.matches.map(match => {
-          return {
-            ...match,
-            searchModel: uploadedData.searchByModelFileName,
-            resultSource: 'phyndexer',
-          }
-        })
-
-        const newResult = {
-          matches: newMatches,
-          modelId: uploadedData.newModelId,
+      const newMatches = uploadedData.matches.map(match => {
+        return {
+          ...match,
+          searchModel: uploadedData.searchByModelFileName,
+          resultSource: 'phyndexer',
         }
+      })
+      debugger
+      const newResult = {
+        matches: newMatches,
+        modelId: uploadedData.newModelId,
+        searchModel:
+          uploadedData.searchByModelFileName &&
+          uploadedData.searchByModelFileName.replace('uploads/models/', ''),
+      }
 
-        if (error) {
-          store.dispatch('error-search-results', { data: error })
-        } else {
-          store.dispatch('loaded-search-results', { data: newResult.matches })
-          onFinish(newResult)
-        }
-      } catch (error) {
+      if (error) {
         store.dispatch('error-search-results', { data: error })
-        onError(error)
+      } else {
+        store.dispatch('loaded-search-results', { data: newResult })
+        onFinish(newResult)
       }
     }
   )
