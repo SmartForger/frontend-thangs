@@ -104,11 +104,11 @@ const LandingHero = () => {
 }
 
 const Landing = () => {
-  const { user } = useCurrentUser()
+  const { loading, user } = useCurrentUser()
   const { dispatch, modelPreviews } = useStoreon('modelPreviews')
 
   return (
-    <Layout Hero={!user ? LandingHero : undefined}>
+    <Layout Hero={!loading && !user && LandingHero}>
       <Page user={user} dispatch={dispatch} modelPreviews={modelPreviews} />
     </Layout>
   )
