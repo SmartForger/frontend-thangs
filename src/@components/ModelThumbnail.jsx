@@ -111,7 +111,7 @@ const ModelThumbnail = ({
           [className]: !isSwapped,
           [c.ModelThumbnail]: !isSwapped,
         })}
-        onClick={onSwap}
+        onClick={loadingState === COMPLETE && !lookingForWaldo ? onSwap : undefined}
       >
         {src && (
           <img
@@ -131,7 +131,7 @@ const ModelThumbnail = ({
             [className]: isSwapped,
             [c.ModelThumbnail]: isSwapped,
           })}
-          onClick={onSwap}
+          onClick={loadingState === COMPLETE && !lookingForWaldo ? onSwap : undefined}
         >
           <img
             src={waldoSrc}
