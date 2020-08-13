@@ -4,7 +4,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import { storageService } from '@services'
 import * as R from 'ramda'
 import { logger } from '@utilities/logging'
-import { THUMBNAILS_HOST, TIW_THUMBNAILS_HOST } from '@utilities/constants'
+import { THUMBNAILS_HOST } from '@utilities/constants'
 
 import { USER_QUERY, parseUser } from './users'
 
@@ -160,15 +160,11 @@ function parseThumbnailUrl(filename) {
   return `${THUMBNAILS_HOST}/${filename}`
 }
 
-function parseTiwThumbnailUrl(modelFilename, relatedModelFileName) {
-  return `${TIW_THUMBNAILS_HOST}/${modelFilename}/${relatedModelFileName}`
-}
-
 export function parseModel(model) {
   const relatedModels = model.relatedModels
     ? model.relatedModels.map(m => {
-        return parseRelatedModel(m)
-      })
+      return parseRelatedModel(m)
+    })
     : null
   const owner = model.owner && parseUser(model.owner)
   const fullThumbnailUrl = parseThumbnailUrl(model.uploadedFile)

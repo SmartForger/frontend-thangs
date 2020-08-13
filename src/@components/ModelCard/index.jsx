@@ -164,12 +164,10 @@ const CardContents = ({
 
   const waldoThumbnailUrl = searchModelFileName
     ? `${TIW_THUMBNAILS_HOST}/${getThumbnailUrl(model)}/${getWaldoThumbnailUrl(
-        model,
-        searchModelFileName
-      )}`
+      model,
+      searchModelFileName
+    )}`
     : undefined
-  if (model.resultSource !== 'phyndexer')
-    console.log('searchModelFileName', searchModelFileName)
   return (
     <>
       <div title={modelAttributionUrl || model.name || model.fileName}>

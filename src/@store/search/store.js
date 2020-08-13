@@ -74,14 +74,18 @@ export default store => {
         method: 'GET',
         endpoint: `models/upload-url?fileName=${file.name}`,
       })
-      if (uploadError)
-        return store.dispatch('error-search-results', { data: uploadError })
+      if (uploadError) {
+        store.dispatch('error-search-results', { data: uploadError })
+        return onError(uploadError)
+      }
       const { error: signUrlError } = await storageService.uploadToSignedUrl(
         uploadedUrlData.signedUrl,
         file
       )
-      if (signUrlError)
-        return store.dispatch('error-search-results', { data: signUrlError })
+      if (signUrlError) {
+        store.dispatch('error-search-results', { data: signUrlError })
+        return onError(signUrlError)
+      }
       onUploaded(uploadedUrlData)
       const { data: uploadedData, error } = await api({
         method: 'POST',
@@ -96,7 +100,8 @@ export default store => {
         },
       })
       if (error) {
-        return store.dispatch('error-search-results', { data: error })
+        store.dispatch('error-search-results', { data: error })
+        return onError(error)
       }
 
       const newMatches = uploadedData.matches.map(match => {
