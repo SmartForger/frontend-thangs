@@ -39,7 +39,7 @@ const Upload = () => {
   const { navigateWithFlash } = useFlashNotification()
   const c = useStyles()
 
-  const { uploadModel, dispatch } = useStoreon('uploadModel')
+  const { uploadModel, folders, dispatch } = useStoreon('uploadModel', 'folders')
 
   useEffect(() => {
     if (uploadModel.isLoaded && !uploadModel.isError) {
@@ -48,12 +48,16 @@ const Upload = () => {
     }
   }, [dispatch, navigateWithFlash, uploadModel])
 
+  useEffect(() => {
+    dispatch('fetch-folders')
+  }, [dispatch])
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => () => dispatch('reset-upload-model'), [])
 
   const onSubmit = useCallback(
     data => {
-      const { weight, material, height, name, description, category } = data
+      const { weight, material, height, name, description, category, folder } = data
 
       const requiredVariables = {
         name: sanitizeFileName(name),
@@ -66,6 +70,7 @@ const Upload = () => {
         ...(height.length > 0 && { height }),
         ...(material.length > 0 && { material }),
         ...(category && { category }),
+        folderId: folder ? folder.id : undefined,
       }
 
       dispatch('upload-model', {
@@ -91,9 +96,15 @@ const Upload = () => {
           <Uploader showError={uploadModel.isError} file={file} setFile={setFile} />
         )}
       </div>
-      <div className={c.Upload_Column__form}>
-        <UploadForm onSubmit={onSubmit} disableSubmit={!file} />
-      </div>
+      {folders.loading ? (
+        <div className={c.Upload_Column__form}>
+          <Spinner className={c.Upload_Spinner} />
+        </div>
+      ) : (
+        <div className={c.Upload_Column__form}>
+          <UploadForm onSubmit={onSubmit} disableSubmit={!file} folders={folders.data} />
+        </div>
+      )}
     </div>
   )
 }

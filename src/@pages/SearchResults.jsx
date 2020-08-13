@@ -53,6 +53,7 @@ const useStyles = createUseStyles(theme => {
     SearchResults_ResultsHeader: {
       display: 'flex',
       alignItems: 'center',
+      marginBottom: '1rem',
     },
     SearchResults_ResultsHeaderText: {
       ...theme.mixins.text.searchResultsHeader,
@@ -80,7 +81,7 @@ const SearchResult = ({ models, modelId, isLoading, isError, c }) => {
           loading={isLoading}
           noResultsText='No results found. Try searching another keyword or search by model above.'
         >
-          <ModelCards models={models} showSocial={false} />
+          <ModelCards models={models} showSocial={false} showWaldo={!!modelId} />
         </CardCollection>
       )}
     </div>
@@ -98,6 +99,17 @@ const ThangsSearchResult = ({ modelId, c }) => {
 
   if (loading || (model && model.uploadStatus === PROCESSING)) {
     startPolling(1000)
+    return (
+      <div className={c.SearchResults_Results}>
+        <div className={c.SearchResults_ResultsHeader}>
+          <UploadIcon />
+          <span className={c.SearchResults_ResultsHeaderText}>
+            Similar geometry on Thangs
+          </span>
+        </div>
+        <NoResults>Loading your results...</NoResults>
+      </div>
+    )
   }
 
   stopPolling()
@@ -119,7 +131,11 @@ const ThangsSearchResult = ({ modelId, c }) => {
           loading={loading}
           noResultsText='No results found. Try searching another keyword or search by model above.'
         >
-          <ModelCards models={model} showSocial={false} />
+          <ModelCards
+            models={model.relatedModels}
+            showSocial={false}
+            showWaldo={!!modelId}
+          />
         </CardCollection>
       )}
     </div>

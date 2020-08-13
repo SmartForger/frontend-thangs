@@ -1,7 +1,7 @@
 import React from 'react'
 import ModelCard from '@components/ModelCard'
 
-const ModelCards = ({ models = [], user, likes, showSocial }) =>
+const ModelCards = ({ models = [], user, likes, showSocial, showWaldo }) =>
   Array.isArray(models) &&
   models.map((model, index) => (
     <ModelCard
@@ -9,6 +9,7 @@ const ModelCards = ({ models = [], user, likes, showSocial }) =>
       model={model}
       withOwner={true}
       showSocial={showSocial}
+      showWaldo={showWaldo}
       user={user}
       likes={likes}
     />

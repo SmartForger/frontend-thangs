@@ -11,7 +11,9 @@ import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   return {
-    ModelCard: {},
+    ModelCard: {
+      position: 'relative',
+    },
     ModelCard_Thumbnail: {
       paddingBottom: 0,
       minHeight: '12.25rem',
@@ -64,6 +66,9 @@ const useStyles = createUseStyles(theme => {
         fill: theme.colors.gold[500],
       },
     },
+    ModelCard_Link: {
+      zIndex: 1,
+    },
   }
 })
 
@@ -114,34 +119,68 @@ const getThumbnailUrl = (model = {}) => {
   if (model.modelFileName) return model.modelFileName.replace('uploads/models/', '')
 }
 
-const getTIWThumbnailUrl = (model = {}) => {
+const getWaldoThumbnailUrl = (model = {}) => {
   if (model.searchModel) return model.searchModel.replace('uploads/models/', '')
 }
 
-const CardContents = ({ className, c, model, showOwner, showSocial, isLiked }) => {
+const CardContents = ({
+  className,
+  c,
+  model,
+  showOwner,
+  showSocial,
+  showWaldo,
+  isLiked,
+  modelPath,
+  handleMouseEnter,
+  handleMouseLeave,
+}) => {
   const thumbnailUrl = model.fullThumbnailUrl
     ? model.fullThumbnailUrl
     : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}`
 
-  const tiwThumbnailUrl = model.tiwFullThumbnailUrl
+  const waldoThumbnailUrl = model.tiwFullThumbnailUrl
     ? model.tiwFullThumbnailUrl
     : model.searchModel
-      ? `${TIW_THUMBNAILS_HOST}/${getThumbnailUrl(model)}/${getTIWThumbnailUrl(model)}`
+      ? `${TIW_THUMBNAILS_HOST}/${getThumbnailUrl(model)}/${getWaldoThumbnailUrl(model)}`
       : undefined
 
   return (
     <>
       <div title={model && model.name}>
-        <Card className={className}>
+        <Card className={classnames(className, c.ModelCard)}>
           <ModelThumbnail
             className={c.ModelCard_Thumbnail}
             name={model.name}
+            model={model}
             thumbnailUrl={thumbnailUrl}
-            //Here is what would entail to call the Waldo thumbnail Url
-            tiwThumbnailUrl={tiwThumbnailUrl}
+            waldoThumbnailUrl={showWaldo ? waldoThumbnailUrl : undefined}
           ></ModelThumbnail>
         </Card>
-        {model.resultSource === 'phyndexer' ? (
+        {showWaldo ? (
+          <div>
+            <Link
+              to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              onFocus={handleMouseEnter}
+              onBlur={handleMouseLeave}
+              className={c.ModelCard_Link}
+            >
+              {model.resultSource === 'phyndexer' ? (
+                <ExternalModelDetails c={c} model={model} />
+              ) : (
+                <ThangsModelDetails
+                  c={c}
+                  model={model}
+                  showOwner={showOwner}
+                  showSocial={showSocial}
+                  isLiked={isLiked}
+                />
+              )}
+            </Link>
+          </div>
+        ) : model.resultSource === 'phyndexer' ? (
           <ExternalModelDetails c={c} model={model} />
         ) : (
           <ThangsModelDetails
@@ -167,7 +206,15 @@ const hasLikedModel = (model, user) => {
   return R.includes(parseInt(user.id), userIdsWhoHaveLiked(model))
 }
 
-const ModelCard = ({ className, model, withOwner, user, likes, showSocial = true }) => {
+const ModelCard = ({
+  className,
+  model,
+  withOwner,
+  user,
+  likes,
+  showSocial = true,
+  showWaldo,
+}) => {
   const c = useStyles()
   const showOwner = withOwner && model.owner
   const [hovered, setHovered] = useState(false)
@@ -175,24 +222,40 @@ const ModelCard = ({ className, model, withOwner, user, likes, showSocial = true
   const handleMouseLeave = useCallback(() => setHovered(false), [])
   const isLiked = user ? hasLikedModel(model, user) : likes
   const modelPath = model && model.id ? `/model/${model.id}` : '/'
-  return (
+  return !showWaldo ? (
     <Link
       to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onFocus={handleMouseEnter}
       onBlur={handleMouseLeave}
+      className={c.ModelCard_Link}
     >
       <CardContents
         className={className}
         model={model}
         showOwner={showOwner}
         showSocial={showSocial}
+        showWaldo={showWaldo}
         hovered={hovered}
         c={c}
         isLiked={isLiked}
       />
     </Link>
+  ) : (
+    <CardContents
+      className={className}
+      model={model}
+      showOwner={showOwner}
+      showSocial={showSocial}
+      showWaldo={showWaldo}
+      hovered={hovered}
+      c={c}
+      isLiked={isLiked}
+      modelPath={modelPath}
+      handleMouseEnter={handleMouseEnter}
+      handleMouseLeave={handleMouseLeave}
+    />
   )
 }
 

@@ -1,6 +1,7 @@
 import api from '@services/api'
 import { storageService } from '@services'
 
+const noop = () => null
 const getInitAtom = () => ({
   isLoaded: false,
   isLoading: false,
@@ -39,7 +40,7 @@ export default store => {
       isError: true,
     },
   }))
-  store.on('upload-model', async (state, { file, data }) => {
+  store.on('upload-model', async (state, { file, data, onFinish = noop }) => {
     store.dispatch('loading-upload-model')
 
     try {
@@ -67,6 +68,7 @@ export default store => {
         store.dispatch('failure-upload-model')
       } else {
         store.dispatch('loaded-upload-model', { data: uploadedData })
+        onFinish()
         store.dispatch('update-user-models', {
           //TEMP - This is to merge the user models cached by graphQL and new models uploaded as new versions - BE
           data: {
