@@ -27,14 +27,13 @@ const cache = new InMemoryCache({ fragmentMatcher })
 export const graphqlClient = (originalFetch, history) =>
   new ApolloClient({
     link: ApolloLink.from([
-      onError(({ graphQLErrors, networkError }) => {
+      onError(({ graphQLErrors }) => {
         if (graphQLErrors)
           graphQLErrors.forEach(({ message, locations, path }) =>
             logger.log(
               `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
             )
           )
-        if (networkError) logger.log(`[Network error]: ${networkError}`)
       }),
       createUploadLink({
         uri: getGraphQLUrl(),

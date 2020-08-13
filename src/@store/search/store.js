@@ -1,6 +1,27 @@
 import api from '@services/api'
 import { storageService } from '@services'
 
+const poll = async ({ fn, validate, fail, interval, maxAttempts }) => {
+  let attempts = 0
+
+  const executePoll = async (resolve, reject) => {
+    const result = await fn()
+    attempts++
+
+    if (validate(result)) {
+      return resolve(result)
+    } else if (fail(result)) {
+      return reject(new Error('Polling failed'))
+    } else if (maxAttempts && attempts === maxAttempts) {
+      return reject(new Error('Exceeded max attempts'))
+    } else {
+      setTimeout(executePoll, interval, resolve, reject)
+    }
+  }
+
+  return new Promise(executePoll)
+}
+
 const noop = () => null
 const getInitAtom = () => ({
   isLoaded: false,
@@ -16,30 +37,53 @@ export default store => {
 
   store.on('update-search-results', (state, { data }) => ({
     searchResults: {
-      ...state.results,
+      ...state.searchResults,
       data,
     },
   }))
   store.on('loading-search-results', state => ({
     searchResults: {
-      ...state.results,
+      ...state.searchResults,
       isLoading: true,
       isLoaded: false,
     },
   }))
   store.on('loaded-search-results', (state, { data }) => ({
     searchResults: {
+      ...state.searchResults,
       isLoading: false,
       isLoaded: true,
       data,
     },
   }))
+  store.on('polling-related-models', state => ({
+    searchResults: {
+      ...state.searchResults,
+      isPolling: true,
+    },
+  }))
+  store.on('loaded-related-results', (state, { data }) => ({
+    searchResults: {
+      ...state.searchResults,
+      isPolling: false,
+      isPollingError: false,
+      matchingResults: data,
+    },
+  }))
   store.on('error-search-results', (state, { data }) => ({
     searchResults: {
+      ...state.searchResults,
       isLoading: false,
       isLoaded: false,
       isError: true,
       data,
+    },
+  }))
+  store.on('error-polling-results', state => ({
+    searchResults: {
+      ...state.searchResults,
+      isPolling: false,
+      isPollingError: true,
     },
   }))
   store.on('reset-search-results', () => ({
@@ -122,6 +166,43 @@ export default store => {
 
       store.dispatch('loaded-search-results', { data: newResult })
       onFinish(newResult)
+    }
+  )
+  store.on(
+    'get-related-models',
+    async (state, { modelId, onFinish = noop, onError = noop }) => {
+      store.dispatch('polling-related-models')
+      const getStatus = async () => {
+        return await api({
+          method: 'GET',
+          endpoint: `models/status/${modelId}`,
+        })
+      }
+
+      const { error: statusError } = await poll({
+        fn: getStatus,
+        validate: ({ data }) => data === 'completed',
+        fail: ({ data }) => data === 'error',
+        interval: 1000,
+        maxAttempts: 1000,
+      })
+      if (statusError) {
+        store.dispatch('error-polling-results', { data: statusError })
+        return onError(statusError)
+      }
+
+      const { data, error } = await api({
+        method: 'GET',
+        endpoint: `models/related/${modelId}`,
+      })
+
+      if (error) {
+        store.dispatch('error-polling-results', { data: error })
+        return onError(error)
+      } else {
+        store.dispatch('loaded-related-results', { data })
+        onFinish(data)
+      }
     }
   )
 }

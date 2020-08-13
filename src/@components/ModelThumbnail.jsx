@@ -139,7 +139,7 @@ const ModelThumbnail = ({
             onError={i => (i.target.style.display = 'none')}
             alt={name}
           />
-          {lookingForWaldo && <LoadingIcon className={c.Spinner} />}
+          {/* {lookingForWaldo && <LoadingIcon className={c.Spinner} />} */}
         </div>
       )}
     </>

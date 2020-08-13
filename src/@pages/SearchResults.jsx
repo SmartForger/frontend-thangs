@@ -114,21 +114,7 @@ const SearchResult = ({
   )
 }
 
-const ThangsSearchResult = ({ modelId, c, searchModelFileName }) => {
-  const {
-    loading,
-    error,
-    model,
-    startPolling,
-    stopPolling,
-  } = graphqlService.useUploadedModelByIdWithRelated(modelId)
-  const isLoading = loading || (model && model.uploadStatus === PROCESSING)
-  if (isLoading) {
-    startPolling(1000)
-  } else {
-    stopPolling()
-  }
-
+const ThangsSearchResult = ({ models, isError, isLoading, c, searchModelFileName }) => {
   return (
     <div className={c.SearchResults_Results}>
       <div className={c.SearchResults_ResultsHeader}>
@@ -138,21 +124,24 @@ const ThangsSearchResult = ({ modelId, c, searchModelFileName }) => {
         </span>
       </div>
       {isLoading ? (
-        <NoResults>Loading your results...</NoResults>
-      ) : error || !model || model.uploadStatus === ERROR ? (
+        <NoResults>
+          We are still searching the Thangs database, in the meantime - check out our
+          public database search results below
+        </NoResults>
+      ) : isError ? (
         <NoResults>
           Error! We were not able to load results. Please try again later.
         </NoResults>
       ) : (
         <CardCollection
-          loading={loading}
+          loading={isLoading}
           noResultsText='No results found. Try searching another keyword or model above.'
         >
-          {model && model.relatedModels ? (
+          {models ? (
             <ModelCards
-              models={model && model.relatedModels}
+              models={models}
               showSocial={false}
-              showWaldo={!!modelId}
+              showWaldo={true}
               searchModelFileName={searchModelFileName}
             />
           ) : null}
@@ -197,6 +186,7 @@ const Page = () => {
         })
       }
     }
+    if (modelId) dispatch('get-related-models', { modelId: modelId })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery])
 
@@ -235,7 +225,9 @@ const Page = () => {
       </div>
       {modelId && (
         <ThangsSearchResult
-          modelId={modelId}
+          models={searchResults && searchResults.matchingResults}
+          isLoading={searchResults.isPolling}
+          isError={searchResults.isPollingError}
           c={c}
           searchModelFileName={savedOriginalModelName}
         />
