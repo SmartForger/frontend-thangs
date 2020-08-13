@@ -159,13 +159,19 @@ const Page = () => {
     'savedSearchResults',
     null
   )
+  const [savedSearchQuery, setSavedSearchQuery] = useLocalStorage(
+    'savedSearchQuery',
+    null
+  )
   useEffect(() => {
-    dispatch('reset-search-results')
-    if (!modelId) {
-      dispatch('get-search-results-by-text', {
-        searchTerm: searchQuery,
-        onFinish: _results => {},
-      })
+    if (savedSearchQuery !== searchQuery) {
+      dispatch('reset-search-results')
+      if (!modelId) {
+        dispatch('get-search-results-by-text', {
+          searchTerm: searchQuery,
+          onFinish: _results => {},
+        })
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery])
@@ -173,8 +179,9 @@ const Page = () => {
   useEffect(() => {
     if (searchResults.data && Object.keys(searchResults.data).length) {
       setSavedSearchResults(searchResults.data)
+      setSavedSearchQuery(searchQuery)
     }
-  }, [searchResults, setSavedSearchResults])
+  }, [searchQuery, searchResults, setSavedSearchQuery, setSavedSearchResults])
 
   return (
     <div className={c.SearchResults_Page}>
