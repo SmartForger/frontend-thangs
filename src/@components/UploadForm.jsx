@@ -150,7 +150,10 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
           height: inputState.height,
           name: inputState.name,
           description: inputState.description,
-          folder: inputState.folder === '' ? undefined : inputState.folder,
+          folder:
+            inputState.folder === '' || inputState.folder === 'public'
+              ? undefined
+              : inputState.folder,
         })
       )
     },

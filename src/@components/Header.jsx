@@ -416,10 +416,12 @@ const Header = ({
             <div className={classnames(c.Header_Row, c.Header_TopRow)}>
               <div>
                 <div className={c.Header_Row}>
-                  <Link className={c.Header_LogoWrapper} to='/'>
-                    <Logo className={c.Header_Logo} />
-                    <LogoText />
-                  </Link>
+                  <div onClick={useCallback(() => dispatch('close-modal'), [dispatch])}>
+                    <Link className={c.Header_LogoWrapper} to='/'>
+                      <Logo className={c.Header_Logo} />
+                      <LogoText />
+                    </Link>
+                  </div>
                   {variant !== 'logo-only' && (
                     <>
                       <form className={c.Header_SearchForm} onSubmit={handleSearchSubmit}>
