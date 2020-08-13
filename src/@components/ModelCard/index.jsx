@@ -108,7 +108,10 @@ const ExternalModelDetails = ({ c, model }) => {
     <div className={c.ModelCard_Content}>
       <div className={c.ModelCard_DetailsInline}>
         <ExternalLinkIcon />
-        <span className={c.ModelCard_ExternalName}>
+        <span
+          className={c.ModelCard_ExternalName}
+          title={model.attributionUrl || model.fileName}
+        >
           {model.attributionUrl || model.fileName}
         </span>
       </div>
@@ -165,10 +168,11 @@ const CardContents = ({
         searchModelFileName
       )}`
     : undefined
-
+  if (model.resultSource !== 'phyndexer')
+    console.log('searchModelFileName', searchModelFileName)
   return (
     <>
-      <div title={model && model.name}>
+      <div title={modelAttributionUrl || model.name || model.fileName}>
         <Card className={classnames(className, c.ModelCard)}>
           <ModelThumbnail
             className={c.ModelCard_Thumbnail}

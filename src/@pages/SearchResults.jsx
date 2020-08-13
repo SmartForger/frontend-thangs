@@ -135,8 +135,9 @@ const ThangsSearchResult = ({ modelId, c, searchModelFileName }) => {
           Similar geometry on Thangs
         </span>
       </div>
-      {isLoading && <NoResults>Loading your results...</NoResults>}
-      {error || !model || model.uploadStatus === ERROR ? (
+      {isLoading ? (
+        <NoResults>Loading your results...</NoResults>
+      ) : error || !model || model.uploadStatus === ERROR ? (
         <NoResults>
           Error! We were not able to load results. Please try again later.
         </NoResults>
@@ -146,7 +147,7 @@ const ThangsSearchResult = ({ modelId, c, searchModelFileName }) => {
           noResultsText='No results found. Try searching another keyword or search by model above.'
         >
           <ModelCards
-            models={model.relatedModels}
+            models={model && model.relatedModels}
             showSocial={false}
             showWaldo={!!modelId}
             searchModelFileName={searchModelFileName}
@@ -232,9 +233,7 @@ const Page = () => {
         <ThangsSearchResult
           modelId={modelId}
           c={c}
-          searchModelFileName={
-            searchResults && searchResults.data && searchResults.data.searchModel
-          }
+          searchModelFileName={savedOriginalModelName}
         />
       )}
       {searchQuery ? (
