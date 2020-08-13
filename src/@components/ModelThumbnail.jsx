@@ -137,6 +137,7 @@ const ModelThumbnail = ({
             src={waldoSrc}
             onLoad={onFoundWaldo}
             onError={i => (i.target.style.display = 'none')}
+            alt={name}
           />
           {lookingForWaldo && <LoadingIcon className={c.Spinner} />}
         </div>

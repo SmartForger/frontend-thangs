@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 import { useLocation, useParams, Link } from 'react-router-dom'
+import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
 import { CardCollection, NoResults, Layout, Button } from '@components'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
@@ -17,6 +18,14 @@ const useStyles = createUseStyles(theme => {
     mediaQueries: { md },
   } = theme
   return {
+    '@keyframes spin': {
+      '0%': {
+        transform: 'rotate(0deg)',
+      },
+      '100%': {
+        transform: 'rotate(360deg)',
+      },
+    },
     SearchResults: {
       marginTop: '2rem',
     },
@@ -59,6 +68,9 @@ const useStyles = createUseStyles(theme => {
       ...theme.mixins.text.searchResultsHeader,
       marginLeft: '.5rem',
     },
+    Spinner: {
+      animation: '$spin 1.2s linear infinite',
+    },
   }
 })
 
@@ -96,32 +108,22 @@ const ThangsSearchResult = ({ modelId, c }) => {
     startPolling,
     stopPolling,
   } = graphqlService.useUploadedModelByIdWithRelated(modelId)
-
-  if (loading || (model && model.uploadStatus === PROCESSING)) {
+  const isLoading = loading || (model && model.uploadStatus === PROCESSING)
+  if (isLoading) {
     startPolling(1000)
-    return (
-      <div className={c.SearchResults_Results}>
-        <div className={c.SearchResults_ResultsHeader}>
-          <UploadIcon />
-          <span className={c.SearchResults_ResultsHeaderText}>
-            Similar geometry on Thangs
-          </span>
-        </div>
-        <NoResults>Loading your results...</NoResults>
-      </div>
-    )
+  } else {
+    stopPolling()
   }
-
-  stopPolling()
 
   return (
     <div className={c.SearchResults_Results}>
       <div className={c.SearchResults_ResultsHeader}>
-        <UploadIcon />
+        <UploadIcon className={classnames({ [c.Spinner]: isLoading })} />
         <span className={c.SearchResults_ResultsHeaderText}>
           Similar geometry on Thangs
         </span>
       </div>
+      {isLoading && <NoResults>Loading your results...</NoResults>}
       {error || !model || model.uploadStatus === ERROR ? (
         <NoResults>
           Error! We were not able to load results. Please try again later.

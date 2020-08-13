@@ -42,13 +42,6 @@ const Upload = () => {
   const { uploadModel, folders, dispatch } = useStoreon('uploadModel', 'folders')
 
   useEffect(() => {
-    if (uploadModel.isLoaded && !uploadModel.isError) {
-      navigateWithFlash('/home', 'Model added successfully.')
-      dispatch('reset-upload-model')
-    }
-  }, [dispatch, navigateWithFlash, uploadModel])
-
-  useEffect(() => {
     dispatch('fetch-folders')
   }, [dispatch])
 
@@ -70,7 +63,7 @@ const Upload = () => {
         ...(height.length > 0 && { height }),
         ...(material.length > 0 && { material }),
         ...(category && { category }),
-        folderId: folder ? folder.id : undefined,
+        folderId: folder ? folder : undefined,
       }
 
       dispatch('upload-model', {
@@ -79,9 +72,14 @@ const Upload = () => {
           ...requiredVariables,
           ...optionalVariables,
         },
+        onFinish: () => {
+          dispatch('close-modal')
+          navigateWithFlash('/home', 'Model added successfully.')
+          dispatch('reset-upload-model')
+        },
       })
     },
-    [dispatch, file]
+    [dispatch, file, navigateWithFlash]
   )
 
   return (
