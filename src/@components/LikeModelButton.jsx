@@ -23,26 +23,29 @@ const useStyles = createUseStyles(_theme => {
 
 const graphqlService = GraphqlService.getInstance()
 
-const userIdsWhoHaveLiked = R.pipe(
-  R.prop('likes'),
-  R.filter(R.propEq('isLiked', true)),
-  R.map(R.path(['ownerId']))
-)
+const userIdsWhoHaveLiked = R.pipe(R.prop('likes'), R.map(R.path(['owner', 'id'])))
 
 const hasLikedModel = (model, user) => {
-  return R.includes(parseInt(user.id), userIdsWhoHaveLiked(model))
+  return R.includes(`${user.id}`, userIdsWhoHaveLiked(model))
 }
 
-const LikeModelButton = ({ currentUser, model }) => {
+const LikeModelButton = ({ currentUser, modelId }) => {
   const c = useStyles()
-  const [likeModel] = graphqlService.useLikeModelMutation(currentUser.id, model.id)
-  const [unlikeModel] = graphqlService.useUnlikeModelMutation(currentUser.id, model.id)
+
+  const { loading, error, model } = graphqlService.useModelById(modelId)
+  const [likeModel] = graphqlService.useLikeModelMutation(currentUser.id, modelId)
+  const [unlikeModel] = graphqlService.useUnlikeModelMutation(currentUser.id, modelId)
+
+  if (loading || error) {
+    return <div>Loading...</div>
+  }
+
   return hasLikedModel(model, currentUser) ? (
-    <Button dark className={c.LikeModelButton} onClick={unlikeModel}>
+    <Button dark className={c.LikeModelButton} disabled={loading} onClick={unlikeModel}>
       <HeartFilledIcon /> Liked!
     </Button>
   ) : (
-    <Button secondary className={c.LikeModelButton} onClick={likeModel}>
+    <Button secondary className={c.LikeModelButton} disabled={loading} onClick={likeModel}>
       <HeartIcon /> Like
     </Button>
   )

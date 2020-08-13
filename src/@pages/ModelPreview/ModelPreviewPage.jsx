@@ -128,7 +128,7 @@ const ModelPreviewPage = ({ model, currentUser }) => {
         </div>
         <div className={c.ModelPreviewPage_Sidebar}>
           <ModelTitle model={model} />
-          <LikeModelButton currentUser={currentUser} model={model} />
+          {model.id && <LikeModelButton currentUser={currentUser} modelId={model.id} />}
           <ModelDetails model={model} />
           <Link className={c.ModelPreviewPage_PrimaryButton} to={`/model/${model.id}`}>
             View details

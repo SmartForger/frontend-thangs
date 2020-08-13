@@ -212,7 +212,9 @@ function Details({ currentUser, model, className }) {
       {model.previousVersionModelId && <Revised modelId={model.previousVersionModelId} />}
 
       <ModelTitle model={model} />
-      <LikeModelButton currentUser={currentUser} model={model} />
+      {model.id && (
+        <LikeModelButton currentUser={currentUser} modelId={model.id} model={model} />
+      )}
       <div className={c.Model_Description}>{model.description}</div>
       <DownloadLink model={model} />
       <ModelDetails model={model} />
@@ -223,7 +225,8 @@ function Details({ currentUser, model, className }) {
 const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   const c = useStyles()
   const history = useHistory()
-  const isFromThePortal = () => (history.location && history.location.state && history.location.state.prevPath)
+  const isFromThePortal = () =>
+    history.location && history.location.state && history.location.state.prevPath
   const { useFetchOnce } = useServices()
   const {
     atom: { data: modelData, isLoading, isLoaded, isError },
@@ -241,13 +244,11 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
     <>
       <div className={c.Model}>
         <div className={c.Model_Header}>
-          {isFromThePortal() ?
+          {isFromThePortal() ? (
             <Button back onClick={() => history.goBack()}>
               <BackArrow />
             </Button>
-            :
-            null
-          }
+          ) : null}
         </div>
         <div className={c.Model_Row}>
           <div className={c.Model_Column}>
