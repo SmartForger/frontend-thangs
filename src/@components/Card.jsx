@@ -10,7 +10,7 @@ const useStyles = createUseStyles(theme => {
       background: theme.variables.colors.cardBackground,
       border: `1px solid ${theme.colors.white[700]}`,
       borderRadius: '.5rem',
-      height: '100%',
+      height: '14.75rem',
     },
   }
 })

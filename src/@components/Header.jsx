@@ -231,6 +231,11 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       top: 0,
       right: 0,
+      display: 'none',
+
+      [md]: {
+        display: 'block',
+      },
     },
     Header_Caret: {
       display: ({ notificationsIsOpen }) => (notificationsIsOpen ? 'block' : 'none'),
