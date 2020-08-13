@@ -37,7 +37,7 @@ const ModelTitle = ({ model, className }) => {
   return (
     <div className={classnames(className, c.ModelTitle_Container)}>
       {user && (
-        <Link className={c.ModelTitle_ProfileLink} to={`/profile/${user.Id}`}>
+        <Link className={c.ModelTitle_ProfileLink} to={`/profile/${user.id}`}>
           <ProfilePicture
             className={c.ModelTitle_OwnerProfilePicture}
             size='48px'
@@ -49,7 +49,7 @@ const ModelTitle = ({ model, className }) => {
       <div className={c.ModelTitle_Content}>
         <div className={c.ModelTitle_Text}>{model.name}</div>
         {user && (
-          <Link className={c.ModelTitle_ProfileLink} to={`/profile/${user.Id}`}>
+          <Link className={c.ModelTitle_ProfileLink} to={`/profile/${user.id}`}>
             {user.fullName}
           </Link>
         )}
