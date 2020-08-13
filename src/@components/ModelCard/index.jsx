@@ -40,6 +40,10 @@ const useStyles = createUseStyles(theme => {
       fontSize: '1rem',
       fontWeight: '600',
       color: theme.colors.black[500],
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      width: '20rem',
     },
     ModelCard_Row: {
       display: 'flex',
@@ -106,7 +110,9 @@ const ExternalModelDetails = ({ c, model }) => {
     <div className={c.ModelCard_Content}>
       <div className={c.ModelCard_DetailsInline}>
         <GlobeIcon width={'28px'} height={'28px'} />
-        <span className={c.ModelCard_ExternalName}>{model.filename}</span>
+        <span className={c.ModelCard_ExternalName}>
+          {model.attributionUrl || model.fileName}
+        </span>
       </div>
     </div>
   )
@@ -123,6 +129,19 @@ const getWaldoThumbnailUrl = (model = {}) => {
   if (model.searchModel) return model.searchModel.replace('uploads/models/', '')
 }
 
+const Anchor = ({ children, attributionUrl, to, noLink, ...props }) => {
+  if (noLink) return children
+  return attributionUrl ? (
+    <a href={attributionUrl} target='_blank' rel='noopener noreferrer' {...props}>
+      {children}
+    </a>
+  ) : (
+    <Link to={to} {...props}>
+      {children}
+    </Link>
+  )
+}
+
 const CardContents = ({
   className,
   c,
@@ -134,6 +153,7 @@ const CardContents = ({
   modelPath,
   handleMouseEnter,
   handleMouseLeave,
+  modelAttributionUrl,
 }) => {
   const thumbnailUrl = model.fullThumbnailUrl
     ? model.fullThumbnailUrl
@@ -159,8 +179,9 @@ const CardContents = ({
         </Card>
         {showWaldo ? (
           <div>
-            <Link
+            <Anchor
               to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
+              attributionUrl={modelAttributionUrl}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
               onFocus={handleMouseEnter}
@@ -178,7 +199,7 @@ const CardContents = ({
                   isLiked={isLiked}
                 />
               )}
-            </Link>
+            </Anchor>
           </div>
         ) : model.resultSource === 'phyndexer' ? (
           <ExternalModelDetails c={c} model={model} />
@@ -221,15 +242,19 @@ const ModelCard = ({
   const handleMouseEnter = useCallback(() => setHovered(true), [])
   const handleMouseLeave = useCallback(() => setHovered(false), [])
   const isLiked = user ? hasLikedModel(model, user) : likes
-  const modelPath = model && model.id ? `/model/${model.id}` : '/'
-  return !showWaldo ? (
-    <Link
+  const modelAttributionUrl =
+    model && model.attributionUrl && encodeURI(model.attributionUrl)
+  const modelPath = model.id ? `/model/${model.id}` : '/'
+  return (
+    <Anchor
       to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
+      attributionUrl={modelAttributionUrl}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onFocus={handleMouseEnter}
       onBlur={handleMouseLeave}
       className={c.ModelCard_Link}
+      noLink={showWaldo}
     >
       <CardContents
         className={className}
@@ -240,22 +265,9 @@ const ModelCard = ({
         hovered={hovered}
         c={c}
         isLiked={isLiked}
+        modelAttributionUrl={modelAttributionUrl}
       />
-    </Link>
-  ) : (
-    <CardContents
-      className={className}
-      model={model}
-      showOwner={showOwner}
-      showSocial={showSocial}
-      showWaldo={showWaldo}
-      hovered={hovered}
-      c={c}
-      isLiked={isLiked}
-      modelPath={modelPath}
-      handleMouseEnter={handleMouseEnter}
-      handleMouseLeave={handleMouseLeave}
-    />
+    </Anchor>
   )
 }
 
