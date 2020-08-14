@@ -162,17 +162,6 @@ const SignIn = ({ afterSignIn }) => {
     }
   }, [handleLoginREST, history, inputState])
 
-  const invalidForm = useMemo(() => {
-    if (
-      inputState.password &&
-      inputState.email &&
-      EmailValidator.validate(inputState.email)
-    ) {
-      return false
-    }
-    return true
-  }, [inputState])
-
   return (
     <div className={c.Login_Body}>
       <LoginIcon className={c.Login_Icon} />
@@ -220,11 +209,7 @@ const SignIn = ({ afterSignIn }) => {
             </label>
           </div>
         </div>
-        <Button
-          className={c.Login_Button}
-          type='submit'
-          disabled={waiting || invalidForm}
-        >
+        <Button className={c.Login_Button} type='submit'>
           Sign In
         </Button>
       </form>
