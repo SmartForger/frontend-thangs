@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { authenticationService } from '@services'
 
 export default ({ method = 'GET', endpoint, body }) => {
   const token = localStorage.getItem('restAccessToken')
@@ -11,5 +12,11 @@ export default ({ method = 'GET', endpoint, body }) => {
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     ...(body && { data: JSON.stringify(body) }),
-  }).catch(e => Promise.resolve({ data: {}, error: e }))
+  }).catch(error => {
+    if (error.response.status === 403) {
+      authenticationService.logout()
+      window.location.href = '/login?sessionExpired=true'
+    }
+    return error
+  })
 }
