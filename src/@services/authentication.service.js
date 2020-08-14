@@ -3,7 +3,6 @@ import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 import { getGraphQLUrl } from './graphql-service'
 import * as pendo from '@vendors/pendo'
-import * as fullStory from '@vendors/full-story'
 
 function getCurrentUserFromLocalStorage() {
   const currentUserStr = localStorage.getItem('currentUser')
@@ -70,7 +69,6 @@ const login = async ({ email, password }) => {
     setCurrentUser(user)
 
     pendo.identify(user)
-    fullStory.identify(user)
 
     return response
   } catch (err) {

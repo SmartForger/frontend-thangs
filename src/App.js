@@ -3,7 +3,6 @@ import { ApolloProvider } from '@apollo/react-hooks'
 import { Route, Router, Switch, useLocation } from 'react-router-dom'
 
 import * as pendo from '@vendors/pendo'
-import * as fullStory from '@vendors/full-story'
 import { authenticationService, graphqlClient } from '@services'
 import { history } from './history'
 import {
@@ -47,9 +46,6 @@ const initializeAnalytics = history => {
 
   pendo.initialize(history)
   pendo.identify(user)
-
-  fullStory.initialize()
-  fullStory.identify(user)
 }
 
 export function AppFrame() {
