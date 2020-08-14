@@ -164,9 +164,9 @@ const CardContents = ({
 
   const waldoThumbnailUrl = searchModelFileName
     ? `${TIW_THUMBNAILS_HOST}/${getThumbnailUrl(model)}/${getWaldoThumbnailUrl(
-      model,
-      searchModelFileName
-    )}`
+        model,
+        searchModelFileName
+      )}`
     : undefined
   return (
     <>
@@ -189,7 +189,7 @@ const CardContents = ({
             onFocus={handleMouseEnter}
             onBlur={handleMouseLeave}
             className={c.ModelCard_Link}
-            noLink={!showWaldo}
+            noLink={!showWaldo || !modelPath}
           >
             {model.resultSource === 'phyndexer' ? (
               <ExternalModelDetails c={c} model={model} />
@@ -237,7 +237,7 @@ const ModelCard = ({
   const isLiked = user ? hasLikedModel(model, user) : likes
   const modelAttributionUrl =
     model && model.attributionUrl && encodeURI(model.attributionUrl)
-  const modelPath = model.id ? `/model/${model.id}` : '/'
+  const modelPath = model.id ? `/model/${model.id}` : modelAttributionUrl
   return (
     <Anchor
       to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
@@ -247,7 +247,7 @@ const ModelCard = ({
       onFocus={handleMouseEnter}
       onBlur={handleMouseLeave}
       className={c.ModelCard_Link}
-      noLink={showWaldo}
+      noLink={showWaldo || !modelPath}
     >
       <CardContents
         className={className}
