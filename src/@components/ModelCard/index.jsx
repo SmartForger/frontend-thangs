@@ -138,7 +138,7 @@ const Anchor = ({ children, attributionUrl, to, noLink, ...props }) => {
       {children}
     </a>
   ) : (
-    <Link to={to} {...props}>
+    <Link to={to.pathname} {...props}>
       {children}
     </Link>
   )
@@ -164,9 +164,9 @@ const CardContents = ({
 
   const waldoThumbnailUrl = searchModelFileName
     ? `${TIW_THUMBNAILS_HOST}/${getThumbnailUrl(model)}/${getWaldoThumbnailUrl(
-      model,
-      searchModelFileName
-    )}`
+        model,
+        searchModelFileName
+      )}`
     : undefined
   return (
     <>
@@ -180,41 +180,30 @@ const CardContents = ({
             waldoThumbnailUrl={showWaldo ? waldoThumbnailUrl : undefined}
           ></ModelThumbnail>
         </Card>
-        {showWaldo ? (
-          <div>
-            <Anchor
-              to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
-              attributionUrl={modelAttributionUrl}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-              onFocus={handleMouseEnter}
-              onBlur={handleMouseLeave}
-              className={c.ModelCard_Link}
-            >
-              {model.resultSource === 'phyndexer' ? (
-                <ExternalModelDetails c={c} model={model} />
-              ) : (
-                <ThangsModelDetails
-                  c={c}
-                  model={model}
-                  showOwner={showOwner}
-                  showSocial={showSocial}
-                  isLiked={isLiked}
-                />
-              )}
-            </Anchor>
-          </div>
-        ) : model.resultSource === 'phyndexer' ? (
-          <ExternalModelDetails c={c} model={model} />
-        ) : (
-          <ThangsModelDetails
-            c={c}
-            model={model}
-            showOwner={showOwner}
-            showSocial={showSocial}
-            isLiked={isLiked}
-          />
-        )}
+        <div>
+          <Anchor
+            to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
+            attributionUrl={modelAttributionUrl}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onFocus={handleMouseEnter}
+            onBlur={handleMouseLeave}
+            className={c.ModelCard_Link}
+            noLink={!showWaldo}
+          >
+            {model.resultSource === 'phyndexer' ? (
+              <ExternalModelDetails c={c} model={model} />
+            ) : (
+              <ThangsModelDetails
+                c={c}
+                model={model}
+                showOwner={showOwner}
+                showSocial={showSocial}
+                isLiked={isLiked}
+              />
+            )}
+          </Anchor>
+        </div>
       </div>
     </>
   )
@@ -271,6 +260,7 @@ const ModelCard = ({
         isLiked={isLiked}
         modelAttributionUrl={modelAttributionUrl}
         searchModelFileName={searchModelFileName}
+        modelPath={modelPath}
       />
     </Anchor>
   )
