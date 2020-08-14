@@ -164,9 +164,9 @@ const CardContents = ({
 
   const waldoThumbnailUrl = searchModelFileName
     ? `${TIW_THUMBNAILS_HOST}/${getThumbnailUrl(model)}/${getWaldoThumbnailUrl(
-        model,
-        searchModelFileName
-      )}`
+      model,
+      searchModelFileName
+    )}`
     : undefined
   return (
     <>
