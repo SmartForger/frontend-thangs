@@ -308,7 +308,7 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
           }}
         />
       </div>
-      {folders && folders.length && (
+      {folders && folders.length ? (
         <div className={classnames(c.UploadForm_Field, c.UploadForm_FolderField)}>
           <label className={c.UploadForm_Label} htmlFor='folder'>
             Folder
@@ -375,7 +375,7 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
             }}
           />
         </div>
-      )}
+      ) : null}
       <div className={c.UploadForm_ButtonGroup}>
         <Button className={c.UploadForm_Button} type='submit' disabled={disableSubmit}>
           Save Model
