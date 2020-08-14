@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
+import { ReactComponent as ViewOnlyIcon } from '@svg/view-only-icon.svg'
 import { Card, ModelThumbnail, UserInline } from '@components'
 import { THUMBNAILS_HOST, TIW_THUMBNAILS_HOST } from '@utilities/constants'
 import classnames from 'classnames'
@@ -103,11 +104,11 @@ const ThangsModelDetails = ({ c, model, showOwner, showSocial, isLiked = false }
   )
 }
 
-const ExternalModelDetails = ({ c, model }) => {
+const ExternalModelDetails = ({ c, model, isLink }) => {
   return (
     <div className={c.ModelCard_Content}>
       <div className={c.ModelCard_DetailsInline}>
-        <ExternalLinkIcon />
+        {isLink ? <ExternalLinkIcon /> : <ViewOnlyIcon title={'View Only'} />}
         <span
           className={c.ModelCard_ExternalName}
           title={model.attributionUrl || model.fileName}
@@ -192,7 +193,7 @@ const CardContents = ({
             noLink={!showWaldo || !modelPath}
           >
             {model.resultSource === 'phyndexer' ? (
-              <ExternalModelDetails c={c} model={model} />
+              <ExternalModelDetails c={c} model={model} isLink={!!modelAttributionUrl} />
             ) : (
               <ThangsModelDetails
                 c={c}
