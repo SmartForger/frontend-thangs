@@ -160,7 +160,7 @@ export default store => {
     const { error } = await api({
       method: 'PUT',
       endpoint: `folders/${folderId}`,
-      body: data
+      body: data,
     })
     if (error) {
       store.dispatch('folder-saved-error')
@@ -183,7 +183,12 @@ export default store => {
       onError(error)
     } else {
       store.dispatch('folder-saved')
-      if(state && state.folders && state.folders.currentFolder && state.folders.currentFolder.team_id){
+      if (
+        state &&
+        state.folders &&
+        state.folders.currentFolder &&
+        state.folders.currentFolder.team_id
+      ) {
         store.dispatch('fetch-team', state.folders.currentFolder.team_id)
       } else {
         store.dispatch('fetch-folder', folderId)
