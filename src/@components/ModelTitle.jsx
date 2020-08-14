@@ -22,6 +22,8 @@ const useStyles = createUseStyles(theme => {
     ModelTitle_Text: {
       ...theme.mixins.text.modelTitleText,
       marginBottom: '.5rem',
+      whiteSpace: 'pre-wrap',
+      wordBreak: 'break-word',
     },
     ModelTitle_ProfileLink: {
       ...theme.mixins.text.linkText,
