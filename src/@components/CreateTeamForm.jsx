@@ -397,6 +397,7 @@ const CreateTeamForm = ({
           className={c.TeamForm_FullWidthInput}
           name='teamName'
           type='text'
+          maxLength='100'
           value={inputState && inputState['teamName']}
           onChange={e => {
             handleOnInputChange('teamName', e.target.value)

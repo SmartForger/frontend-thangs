@@ -291,7 +291,13 @@ const CreateFolderForm = ({
       <Controller
         name='name'
         control={control}
-        as={<TextInput className={c.FolderForm_FullWidthInput} name='name' />}
+        as={
+          <TextInput
+            className={c.FolderForm_FullWidthInput}
+            maxLength='100'
+            name='name'
+          />
+        }
       />
       <label className={c.FolderForm_Label} htmlFor='members'>
         Add users by email or enter an existing team name

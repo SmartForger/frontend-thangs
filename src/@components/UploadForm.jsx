@@ -171,6 +171,7 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
           className={c.UploadForm_FullWidthInput}
           type='text'
           name='name'
+          maxLength='100'
           onChange={e => {
             handleOnInputChange('name', e.target.value)
           }}
@@ -187,6 +188,7 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
           className={c.UploadForm_FullWidthInput}
           type='text'
           name='description'
+          maxLength='250'
           onChange={e => {
             handleOnInputChange('description', e.target.value)
           }}
@@ -202,6 +204,7 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
           className={c.UploadForm_FullWidthInput}
           type='text'
           name='material'
+          maxLength='50'
           onChange={e => {
             handleOnInputChange('material', e.target.value)
           }}
@@ -216,6 +219,7 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
           className={c.UploadForm_FullWidthInput}
           type='text'
           name='weight'
+          maxLength='50'
           onChange={e => {
             handleOnInputChange('weight', e.target.value)
           }}
@@ -230,6 +234,7 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
           className={c.UploadForm_FullWidthInput}
           type='text'
           name='height'
+          maxLength='50'
           onChange={e => {
             handleOnInputChange('height', e.target.value)
           }}

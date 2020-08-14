@@ -211,6 +211,7 @@ const Page = () => {
                 id='first-name-input'
                 type='text'
                 name='firstName'
+                maxLength='30'
                 onChange={e => handleOnInputChange('firstName', e.target.value)}
                 value={(inputState && inputState.firstName) || ''}
                 data-cy='signup-first-name'
@@ -225,6 +226,7 @@ const Page = () => {
                 id='last-name-input'
                 type='text'
                 name='lastName'
+                maxLength='150'
                 onChange={e => handleOnInputChange('lastName', e.target.value)}
                 value={(inputState && inputState.lastName) || ''}
                 data-cy='signup-last-name'
@@ -239,6 +241,7 @@ const Page = () => {
                 id='username-input'
                 type='text'
                 name='username'
+                maxLength='100'
                 onChange={e => handleOnInputChange('username', e.target.value)}
                 validator={validateUsername}
                 value={(inputState && inputState.username) || ''}
@@ -255,6 +258,7 @@ const Page = () => {
                 id='email-input'
                 type='text'
                 name='email'
+                maxLength='150'
                 onChange={e => handleOnInputChange('email', e.target.value)}
                 validator={validateEmail}
                 value={(inputState && inputState.email) || ''}
