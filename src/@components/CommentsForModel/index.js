@@ -87,7 +87,7 @@ const Comment = ({ comment }) => {
       <Link to={`/profile/${owner.id}`}>
         <UserInline
           className={c.CommentsForModel_UserInline}
-          user={owner}
+          user={{ profile: owner }}
           size={'3rem'}
           suffix={`${time} ago`}
         />
