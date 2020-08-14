@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useStoreon } from 'storeon/react'
 import { Button } from '@components'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import classnames from 'classnames'
@@ -67,17 +68,36 @@ const useDropdownMenuState = (initialIsOpen = false) => {
   }, [isOpen])
   return [isOpen, toggleOpen]
 }
-
 const DropdownItem = ({ children, to = '#', onClick }) => {
   const c = useStyles({})
+  const { dispatch } = useStoreon()
+  const handleOnClick = useCallback(
+    e => {
+      typeof onClick === 'function' && onClick(e)
+    },
+    [onClick]
+  )
   return (
     <div className={c.DropdownMenu_ItemWrapper}>
       {onClick ? (
-        <div className={c.DropdownMenu_Item} onClick={onClick}>
+        <div
+          className={c.DropdownMenu_Item}
+          onClick={e => {
+            dispatch('close-modal')
+            handleOnClick(e)
+          }}
+        >
           {children}
         </div>
       ) : (
-        <Link className={c.DropdownMenu_Item} to={to}>
+        <Link
+          className={c.DropdownMenu_Item}
+          to={to}
+          onClick={e => {
+            dispatch('close-modal')
+            handleOnClick(e)
+          }}
+        >
           {children}
         </Link>
       )}

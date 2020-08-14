@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useStoreon } from 'storeon/react'
 import { Header, Modal, NotificationsList } from '@components'
 import {
@@ -111,7 +111,7 @@ const Layout = ({ children, Hero, variant }) => {
   const [notificationsClosing, setNotificationsClosing] = useState(false)
   const c = useStyles({ notificationsIsOpen })
 
-  const handleNotificationsClick = useCallback(() => {
+  const onNotificationsClick = useCallback(() => {
     if (notificationsIsOpen) {
       setNotificationsClosing(true)
       setTimeout(() => {
@@ -128,10 +128,16 @@ const Layout = ({ children, Hero, variant }) => {
     [modal]
   )
 
+  useEffect(() => {
+    if (modal.isOpen) {
+      setNotificationsOpen(false)
+    }
+  }, [modal])
+
   return (
     <>
       <Header
-        handleNotificationsClick={handleNotificationsClick}
+        onNotificationsClick={onNotificationsClick}
         notificationsIsOpen={notificationsIsOpen}
         variant={variant}
       />
@@ -155,7 +161,7 @@ const Layout = ({ children, Hero, variant }) => {
             >
               <ExitIcon
                 className={c.NotificationsList_CloseIcon}
-                onClick={handleNotificationsClick}
+                onClick={onNotificationsClick}
               />
               <NotificationsList />
             </div>

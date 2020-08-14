@@ -386,7 +386,7 @@ const noop = () => null
 const Header = ({
   inverted,
   variant,
-  handleNotificationsClick = noop,
+  onNotificationsClick = noop,
   notificationsIsOpen,
 }) => {
   const { dispatch } = useStoreon()
@@ -400,6 +400,11 @@ const Header = ({
       history.push(`/search/${searchTerm}`)
       dispatch('close-modal')
     }
+  }
+
+  const handleNotificationsClick = () => {
+    dispatch('close-modal')
+    onNotificationsClick()
   }
 
   return (
