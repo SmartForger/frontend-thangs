@@ -54,12 +54,13 @@ const useStyles = createUseStyles(theme => {
         },
 
         '&:after': {
-          content: '"Image Error"',
+          content: '"Image Unavailable"',
           position: 'absolute',
           display: 'block',
           top: '72.5%',
           left: '50%',
           transform: 'translateX(-50%)',
+          textAlign: 'center',
         },
       },
     },
