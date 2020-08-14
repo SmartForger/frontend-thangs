@@ -5,6 +5,7 @@ import * as EmailValidator from 'email-validator'
 import { authenticationService } from '@services'
 import { useForm } from '@hooks'
 import { TextInput, Spinner, Button, Layout } from '@components'
+import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
 import { ReactComponent as LoginIcon } from '@svg/user-login.svg'
 import { createUseStyles } from '@style'
 
@@ -62,6 +63,14 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       top: '2px',
       right: 0,
+    },
+    Login_Wrapper: {
+      margin: '0 auto',
+    },
+    Login_BackButton: {
+      position: 'absolute',
+      right: '10rem',
+      top: '10rem',
     },
   }
 })
@@ -171,63 +180,68 @@ const Page = () => {
 
   return (
     <Layout>
-      <div className={c.Login_Body}>
-        <LoginIcon />
-        <h1 className={c.Login_PageHeader}>
-          Sign In {waiting && <Spinner className={c.Login_Spinner} size='30' />}
-        </h1>
-        {!!loginErrorMessage && (
-          <h4 className={c.Login_ErrorText} data-cy='login-error'>
-            {loginErrorMessage}
-          </h4>
-        )}
-        <form onSubmit={onFormSubmit(handleLogin)} data-cy='login-form'>
-          <div className={c.Login_Fields}>
-            <div className={c.Login_FormControl}>
-              <label className={c.Login_Label}>
-                E-Mail
-                <TextInput
-                  className={c.Login_TextInput}
-                  type='text'
-                  name='email'
-                  onChange={e => {
-                    handleOnInputChange('email', e.target.value)
-                  }}
-                  validator={validateEmail}
-                  value={inputState && inputState.email}
-                  data-cy='login-email'
-                  required
-                />
-              </label>
+      <div className={c.Login_Wrapper}>
+        <Button back className={c.Login_BackButton} onClick={() => history.goBack()}>
+          <BackArrow />
+        </Button>
+        <div className={c.Login_Body}>
+          <LoginIcon />
+          <h1 className={c.Login_PageHeader}>
+            Sign In {waiting && <Spinner className={c.Login_Spinner} size='30' />}
+          </h1>
+          {!!loginErrorMessage && (
+            <h4 className={c.Login_ErrorText} data-cy='login-error'>
+              {loginErrorMessage}
+            </h4>
+          )}
+          <form onSubmit={onFormSubmit(handleLogin)} data-cy='login-form'>
+            <div className={c.Login_Fields}>
+              <div className={c.Login_FormControl}>
+                <label className={c.Login_Label}>
+                  E-Mail
+                  <TextInput
+                    className={c.Login_TextInput}
+                    type='text'
+                    name='email'
+                    onChange={e => {
+                      handleOnInputChange('email', e.target.value)
+                    }}
+                    validator={validateEmail}
+                    value={inputState && inputState.email}
+                    data-cy='login-email'
+                    required
+                  />
+                </label>
+              </div>
+              <div className={c.Login_FormControl}>
+                <label className={c.Login_Label}>
+                  Password
+                  <TextInput
+                    className={c.Login_TextInput}
+                    type='password'
+                    name='password'
+                    onChange={e => {
+                      handleOnInputChange('password', e.target.value)
+                    }}
+                    value={inputState && inputState.password}
+                    data-cy='login-password'
+                    required
+                  />
+                </label>
+              </div>
             </div>
-            <div className={c.Login_FormControl}>
-              <label className={c.Login_Label}>
-                Password
-                <TextInput
-                  className={c.Login_TextInput}
-                  type='password'
-                  name='password'
-                  onChange={e => {
-                    handleOnInputChange('password', e.target.value)
-                  }}
-                  value={inputState && inputState.password}
-                  data-cy='login-password'
-                  required
-                />
-              </label>
-            </div>
+            <Button
+              className={c.Login_Button}
+              type='submit'
+              disabled={waiting || invalidForm}
+            >
+              Sign In
+            </Button>
+          </form>
+          <div className={c.Login_ForgotText}>
+            Forgot password? <Link to='/password_reset'>Click here</Link> to reset your
+            password.
           </div>
-          <Button
-            className={c.Login_Button}
-            type='submit'
-            disabled={waiting || invalidForm}
-          >
-            Sign In
-          </Button>
-        </form>
-        <div className={c.Login_ForgotText}>
-          Forgot password? <Link to='/password_reset'>Click here</Link> to reset your
-          password.
         </div>
       </div>
     </Layout>
