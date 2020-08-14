@@ -247,8 +247,11 @@ const useStyles = createUseStyles(theme => {
 })
 
 const NotificationsButton = ({ c, handleNotificationsClick }) => {
+  const { notifications } = useStoreon('notifications')
   const { useUnreadNotificationCount } = useNotifications()
   const { unreadNotificationCount } = useUnreadNotificationCount()
+  const filteredNotificationsCount = notifications && notifications.filteredNotificationsCount ?
+    notifications.filteredNotificationsCount : null
   return (
     <div
       className={classnames(c.Header_NotificationIconWrapper, c.Header_ClickableButton)}
@@ -256,7 +259,7 @@ const NotificationsButton = ({ c, handleNotificationsClick }) => {
     >
       <NotificationIcon className={c.Header_NotificationIcon} />
       {unreadNotificationCount > 0 && (
-        <div className={c.Header_UnreadBadge}>{unreadNotificationCount}</div>
+        <div className={c.Header_UnreadBadge}>{filteredNotificationsCount ? filteredNotificationsCount : unreadNotificationCount}</div>
       )}
     </div>
   )

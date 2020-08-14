@@ -9,6 +9,8 @@ import commentsStore from '@store/comments/store'
 import userStore from '@store/user/store'
 import uploadModelStore from '@store/uploadModel/store'
 import searchStore from '@store/search/store'
+import notificationsStore from '@store/notifications/store'
+
 
 const storeParts = [
   commentsStore,
@@ -20,6 +22,7 @@ const storeParts = [
   uploadModelStore,
   userStore,
   searchStore,
+  notificationsStore
 ]
 
 const store = createStoreon([

@@ -6,10 +6,12 @@ import {
   isModelFailedProcessing,
   isUserCommentedOnModel,
   isUserLikedModel,
-  isUserUploadedModel,
+  isUserDownloadedModel,
   isUserStartedFollowingUser,
   isUserGrantedUserAccessToFolder,
 } from '@services/graphql-service/notifications'
+import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
+import { ReactComponent as GrantAccessIcon } from '@svg/notification-grant-access.svg'
 import { ReactComponent as HeartIcon } from '@svg/notification-heart.svg'
 import { ReactComponent as CommentIcon } from '@svg/notification-comment.svg'
 import { ReactComponent as PlusIcon } from '@svg/notification-plus.svg'
@@ -122,20 +124,24 @@ const NotificationSnippet = ({
 }) => {
   const actorName = actor && actor.fullName
   const targetName = target && target.name
+  const isActorAndTargetExists = actor && actor.fullName && target && target.name
   return (
-    <Link className={c.NotificationSnippet} to={linkTarget}>
-      <div>
-        <Icon />
-      </div>
-      <div className={c.NotificationSnippet_content}>
-        <div className={c.NotificationSnippet_text}>
-          {`${actorName} `}
-          <span className={c.NotificationSnippet_verb}>{verb}</span>
-          {` ${targetName}`}
+    isActorAndTargetExists ?
+      <Link className={c.NotificationSnippet} to={linkTarget}>
+        <div>
+          <Icon />
         </div>
-        <div className={c.NotificationSnippet_time}>{time}</div>
-      </div>
-    </Link>
+        <div className={c.NotificationSnippet_content}>
+          <div className={c.NotificationSnippet_text}>
+            { `${actorName} ` }
+            <span className={c.NotificationSnippet_verb}>{verb}</span>
+            {` ${targetName}`}
+          </div>
+          <div className={c.NotificationSnippet_time}>{time}</div>
+        </div>
+      </Link>
+      :
+      null
   )
 }
 
@@ -167,10 +173,10 @@ const Notification = ({
     linkTarget = target && target.id ? `/model/${target.id}` : '/'
   } else if (isUserStartedFollowingUser(notificationType)) {
     IconComponent = PlusIcon
-  } else if (isUserUploadedModel(notificationType)) {
-    IconComponent = PlusIcon
+  } else if (isUserDownloadedModel(notificationType)) {
+    IconComponent = DownloadIcon
   } else if (isUserGrantedUserAccessToFolder(notificationType)) {
-    IconComponent = PlusIcon
+    IconComponent = GrantAccessIcon
   }
   return (
     <NotificationSnippet
