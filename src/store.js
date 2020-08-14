@@ -11,7 +11,6 @@ import uploadModelStore from '@store/uploadModel/store'
 import searchStore from '@store/search/store'
 import notificationsStore from '@store/notifications/store'
 
-
 const storeParts = [
   commentsStore,
   folderStore,
