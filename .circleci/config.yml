@@ -136,7 +136,10 @@ jobs:
           # TODO: This needs to be pulled into a separate job & workflow so that
           #       we can run staging steps in the deploy-staging workflow and
           #       production steps in the deploy-production workflow.
-          command: yarn build
+          command: |
+            yarn build
+            VERSION=`git rev-parse --short HEAD`
+            sed -i -- "s/%VERSION%/$VERSION/g" build/index.html
       - run:
           name: "Deploy build"
           command: |
