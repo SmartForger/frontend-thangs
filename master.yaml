@@ -11,6 +11,11 @@ handlers:
   - url: /static/(.*)
     static_files: build/static/\1
     upload: build/static/(.*)
+    expiration: 1m
+  - url: /static/js/(.*)\.js
+    static_files: build/static/js/\1
+    upload: build/static/js/(.*)
+    expiration: 1m
   - url: /vendors/(.*)
     static_files: build/vendors/\1
     upload: build/vendors/(.*)

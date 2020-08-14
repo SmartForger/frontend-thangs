@@ -14,6 +14,10 @@ handlers:
   - url: /storybook/(.*)
     static_files: storybook/\1
     upload: storybook/(.*)
+  - url: /static/js/(.*)\.js
+    static_files: build/static/js/\1
+    upload: build/static/js/(.*)
+    expiration: 1m
   - url: /static/(.*)
     static_files: build/static/\1
     upload: build/static/(.*)
