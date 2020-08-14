@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useMemo } from 'react'
-import { useHistory, Link } from 'react-router-dom'
+import { useLocation, useHistory, Link } from 'react-router-dom'
 import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
 import { authenticationService } from '@services'
 import { useForm } from '@hooks'
-import { TextInput, Spinner, Button, Layout } from '@components'
+import { TextInput, Spinner, Button, Layout, Flash } from '@components'
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
 import { ReactComponent as LoginIcon } from '@svg/user-login.svg'
 import { createUseStyles } from '@style'
@@ -80,12 +80,21 @@ const loginSchema = Joi.object({
   password: Joi.string().required(),
 })
 
+const useQuery = location => {
+  return new URLSearchParams(location.search)
+}
+
 const Page = () => {
   const [waiting, setWaiting] = useState(false)
   const [loginErrorMessage, setLoginErrorMessage] = useState(null)
   const [invalidFields, setInvalidFields] = useState([])
   const history = useHistory()
+  const location = useLocation()
+  const query = useQuery(location)
+  const sessionExpired = useMemo(() => query.get('sessionExpired'), [query])
   const c = useStyles()
+  const isFromThePortal = () =>
+    history.location && history.location.state && history.location.state.prevPath
 
   const initialState = {
     email: '',
@@ -167,24 +176,18 @@ const Page = () => {
     }
   }, [handleLoginREST, history, inputState])
 
-  const invalidForm = useMemo(() => {
-    if (
-      inputState.password &&
-      inputState.email &&
-      EmailValidator.validate(inputState.email)
-    ) {
-      return false
-    }
-    return true
-  }, [inputState])
-
   return (
     <Layout>
       <div className={c.Login_Wrapper}>
-        <Button back className={c.Login_BackButton} onClick={() => history.goBack()}>
-          <BackArrow />
-        </Button>
+        {isFromThePortal() ? (
+          <Button back className={c.Login_BackButton} onClick={() => history.goBack()}>
+            <BackArrow />
+          </Button>
+        ) : null}
         <div className={c.Login_Body}>
+          {sessionExpired && (
+            <Flash>Session Expired. Please sign back in to continue.</Flash>
+          )}
           <LoginIcon />
           <h1 className={c.Login_PageHeader}>
             Sign In {waiting && <Spinner className={c.Login_Spinner} size='30' />}
@@ -230,11 +233,7 @@ const Page = () => {
                 </label>
               </div>
             </div>
-            <Button
-              className={c.Login_Button}
-              type='submit'
-              disabled={waiting || invalidForm}
-            >
+            <Button className={c.Login_Button} type='submit'>
               Sign In
             </Button>
           </form>
