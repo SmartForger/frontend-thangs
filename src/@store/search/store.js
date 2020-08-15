@@ -147,14 +147,15 @@ export default store => {
         store.dispatch('error-search-results', { data: error })
         return onError(error)
       }
-
-      const newMatches = uploadedData.matches.map(match => {
-        return {
-          ...match,
-          searchModel: uploadedData.searchByModelFileName,
-          resultSource: 'phyndexer',
-        }
-      })
+      const newMatches = uploadedData.matches
+        ? uploadedData.matches.map(match => {
+            return {
+              ...match,
+              searchModel: uploadedData.searchByModelFileName,
+              resultSource: 'phyndexer',
+            }
+          })
+        : []
 
       const newResult = {
         matches: newMatches,
@@ -171,6 +172,7 @@ export default store => {
   store.on(
     'get-related-models',
     async (state, { modelId, onFinish = noop, onError = noop }) => {
+      if (!modelId) return
       store.dispatch('polling-related-models')
       const getStatus = async () => {
         return await api({

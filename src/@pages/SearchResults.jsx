@@ -181,7 +181,8 @@ const Page = () => {
         })
       }
     }
-    if (modelId) dispatch('get-related-models', { modelId: modelId })
+    if (modelId && modelId !== 'undefined')
+      dispatch('get-related-models', { modelId: modelId })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery])
 
