@@ -119,7 +119,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const parseEmails = R.pipe(R.split(/, */), R.filter(R.identity))
+const parseEmails = R.pipe(R.split(/[ ,] */), R.filter(R.identity))
 const trimEmails = emails => emails.map(email => email.trim())
 
 const isEmptyMembers = ([key, info]) => {

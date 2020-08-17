@@ -122,7 +122,7 @@ const schemaJustName = Joi.object({
   name: Joi.string().required(),
 })
 
-const parseEmails = R.pipe(R.split(/, */), R.filter(R.identity))
+const parseEmails = R.pipe(R.split(/[ ,] */), R.filter(R.identity))
 const trimEmails = emails => emails.map(email => email.trim())
 
 const isEmptyMembers = ([key, info]) => {
@@ -317,7 +317,10 @@ const CreateFolderForm = ({
             options={teamNames}
             renderInput={params => (
               <div className={c.FolderForm_PseudoForm} ref={params.InputProps.ref}>
-                <input {...params.inputProps} />
+                <input
+                  {...params.inputProps}
+                  placeholder={'member1@example.com, member2@example.com'}
+                />
               </div>
             )}
           />
