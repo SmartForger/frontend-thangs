@@ -147,16 +147,17 @@ export default store => {
         store.dispatch('error-search-results', { data: error })
         return onError(error)
       }
+      /* Before
       const newMatches = uploadedData.matches
         ? uploadedData.matches.map(match => {
-            return {
-              ...match,
-              searchModel: uploadedData.searchByModelFileName,
-              resultSource: 'phyndexer',
-            }
-          })
+          return {
+            ...match,
+            searchModel: uploadedData.searchByModelFileName,
+            resultSource: 'phyndexer',
+          }
+        })
         : []
-
+      
       const newResult = {
         matches: newMatches,
         modelId: uploadedData.newModelId,
@@ -164,8 +165,19 @@ export default store => {
           uploadedData.searchByModelFileName &&
           uploadedData.searchByModelFileName.replace('uploads/models/', ''),
       }
-
       store.dispatch('loaded-search-results', { data: newResult })
+      onFinish(newResult)
+      Before */
+
+      const newResult = {
+        matches: uploadedData.matches,
+        modelId: uploadedData.newModelId,
+        phyndexerId: uploadedData.newPhyndexerId,
+        searchModel:
+          uploadedData.searchByModelFileName &&
+          uploadedData.searchByModelFileName.replace('uploads/models/', ''),
+      }
+      store.dispatch('get-related-models', { data: newResult })
       onFinish(newResult)
     }
   )
