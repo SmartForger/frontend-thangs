@@ -275,7 +275,6 @@ export default store => {
 
       if (statusError) {
         store.dispatch('error-search-results-for-phyndexer', { data: statusError })
-        return onError(statusError)
       }
 
       const { data, error } = await api({
