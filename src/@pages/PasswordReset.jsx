@@ -49,7 +49,6 @@ const useStyles = createUseStyles(theme => {
       margin: 0,
       marginTop: '2rem',
       float: 'right',
-      maxWidth: '9.75rem',
     },
     PasswordReset_FormControl: {
       marginTop: '2rem',

@@ -366,7 +366,7 @@ const UserNav = ({ c, handleNotificationsClick, dispatch }) => {
 
   return (
     <div className={classnames(c.Header_Row, c.Header_ButtonsRow)}>
-      <Link to={'/signup/alpha'}>
+      <Link to={'/signup/alpha'} onClick={() => dispatch('close-modal')}>
         <Button text className={classnames(c.Header_TextButton, c.Header_SignUpButton)}>
           Sign up
         </Button>
@@ -475,13 +475,11 @@ const Header = ({
                   )}
                 </div>
               </div>
-              {variant !== 'logo-only' && (
-                <UserNav
-                  c={c}
-                  handleNotificationsClick={handleNotificationsClick}
-                  dispatch={dispatch}
-                />
-              )}
+              <UserNav
+                c={c}
+                handleNotificationsClick={handleNotificationsClick}
+                dispatch={dispatch}
+              />
             </div>
             <Caret className={c.Header_Caret} />
           </div>
