@@ -6,7 +6,7 @@ const useStyles = createUseStyles(_theme => {
   return {
     Grid: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit minmax(21.5rem, 1fr))',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(21.5rem, 1fr))',
       gap: '1rem',
       width: '100%',
     },
