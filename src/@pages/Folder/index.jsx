@@ -10,7 +10,9 @@ import ModelCardsByIds from '@components/CardCollection/ModelCardsByIds'
 
 const useStyles = createUseStyles(_theme => {
   return {
-    Folder: {},
+    Folder: {
+      width: '100%'
+    },
     Folder_Breadcrumbs: {
       marginBottom: '2.5rem',
     },
@@ -20,7 +22,7 @@ const useStyles = createUseStyles(_theme => {
 function Folder({ folder, modelCount }) {
   const c = useStyles()
   return (
-    <div>
+    <div className={c.Folder}>
       <Breadcrumbs
         className={c.Folder_Breadcrumbs}
         modelsCount={modelCount}
