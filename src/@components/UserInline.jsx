@@ -37,14 +37,14 @@ const UserInline = ({
   suffix,
 }) => {
   const c = useStyles()
-  let userName = user && user.fullName
+  let userName = (user && user.fullName) || user.profile.fullName
   if (userName && userName.length > 20) userName = userName.slice(0, 20) + '...'
   return (
     <div className={className}>
       <div className={c.UserInline}>
         <ProfilePicture
           size={size}
-          name={user.fullName}
+          name={user.fullName || user.profile.fullName}
           src={user && user.profile && user.profile.avatarUrl}
         />
         <span className={c.UserInline_Info}>
