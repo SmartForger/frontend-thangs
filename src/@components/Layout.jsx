@@ -9,6 +9,7 @@ import {
   PasswordReset,
   SignIn,
   FolderManagement,
+  ReportModel,
 } from '@modals'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import classnames from 'classnames'
@@ -89,6 +90,7 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       top: '-1rem',
       right: '.75rem',
+      cursor: 'pointer',
     },
     Modal__hidden: {
       display: 'none',
@@ -103,6 +105,7 @@ const modalTemplates = {
   signIn: SignIn,
   passwordReset: PasswordReset,
   folderManagement: FolderManagement,
+  reportModel: ReportModel,
 }
 
 const Layout = ({ children, Hero, variant }) => {
