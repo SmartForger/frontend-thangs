@@ -58,13 +58,18 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Header_MobileOnly: {
+      display: 'flex',
+      justifyContent: 'center',
+      flexDirection: 'column',
+
       [md]: {
         display: 'none',
       },
     },
     Header_MobileBoundary: {
-      margin: '1rem 0 auto',
-      padding: '0 .75rem',
+      margin: '1.5rem 2rem',
+      padding: 0,
+      width: 'auto',
     },
     Header_LogoWrapper: {
       marginRight: '2.25rem',
@@ -83,6 +88,7 @@ const useStyles = createUseStyles(theme => {
     },
     Header_Button: {
       marginLeft: '1rem',
+      cursor: 'pointer',
     },
     Header_ClickableButton: {
       cursor: 'pointer',
@@ -99,6 +105,7 @@ const useStyles = createUseStyles(theme => {
     },
     Header_NotificationIconWrapper: {
       position: 'relative',
+      marginLeft: '1rem',
     },
     Header_NotificationIcon: {
       color: theme.colors.purple[400],
@@ -159,9 +166,14 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       display: 'flex',
       position: 'relative',
-      width: '20rem',
+      width: '100%',
+      margin: '0 1rem 1rem',
       background: theme.colors.purple[800],
       borderRadius: '.5rem',
+
+      [md]: {
+        width: '20rem',
+      },
 
       '& input': {
         background: theme.colors.purple[800],
@@ -194,11 +206,10 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
     },
-    Header_SearchFormIcon: {
-      position: 'absolute',
-      left: '.75rem',
-      '& path, & polygon': {
-        fill: theme.colors.grey[500],
+    Header_SearchFormInput: {
+      width: '100%',
+      [md]: {
+        width: 'auto',
       },
     },
     Header_SearchFormInput_active: {
@@ -208,12 +219,21 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Header_SearchIcon: {
-      position: 'absolute',
-      right: '.75rem',
-      cursor: 'pointer',
       '& path, & polygon': {
         fill: theme.colors.gold[500],
       },
+    },
+    Header_DesktopSearchFormIcon: {
+      position: 'absolute',
+      left: '.75rem',
+      '& path, & polygon': {
+        fill: theme.colors.white[400],
+      },
+    },
+    Header_DesktopSearchActionIcon: {
+      position: 'absolute',
+      right: '.75rem',
+      cursor: 'pointer',
     },
     Header_UploadIcon: {
       position: 'absolute',
@@ -246,12 +266,16 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
+const noop = () => null
+
 const NotificationsButton = ({ c, handleNotificationsClick }) => {
   const { notifications } = useStoreon('notifications')
   const { useUnreadNotificationCount } = useNotifications()
   const { unreadNotificationCount } = useUnreadNotificationCount()
-  const filteredNotificationsCount = notifications && notifications.filteredNotificationsCount ?
-    notifications.filteredNotificationsCount : null
+  const filteredNotificationsCount =
+    notifications && notifications.filteredNotificationsCount
+      ? notifications.filteredNotificationsCount
+      : null
   return (
     <div
       className={classnames(c.Header_NotificationIconWrapper, c.Header_ClickableButton)}
@@ -259,7 +283,11 @@ const NotificationsButton = ({ c, handleNotificationsClick }) => {
     >
       <NotificationIcon className={c.Header_NotificationIcon} />
       {unreadNotificationCount > 0 && (
-        <div className={c.Header_UnreadBadge}>{filteredNotificationsCount ? filteredNotificationsCount : unreadNotificationCount}</div>
+        <div className={c.Header_UnreadBadge}>
+          {filteredNotificationsCount
+            ? filteredNotificationsCount
+            : unreadNotificationCount}
+        </div>
       )}
     </div>
   )
@@ -337,7 +365,7 @@ const ProfileDropdown = ({ user, onClick = noop }) => {
   )
 }
 
-const UserNav = ({ c, handleNotificationsClick, dispatch }) => {
+const UserNav = ({ c, handleNotificationsClick, dispatch, handleSearchShow = noop }) => {
   const { loading, user } = useCurrentUser()
 
   if (loading) {
@@ -355,11 +383,20 @@ const UserNav = ({ c, handleNotificationsClick, dispatch }) => {
           dispatch={dispatch}
         />
         <Button
-          className={c.Header_Button}
+          className={classnames(c.Header_Button, c.Header_DesktopOnly)}
           onClick={() => dispatch('open-modal', { modalName: 'upload' })}
         >
           Upload
         </Button>
+        <MagnifyingGlass
+          title={'Search By Text'}
+          className={classnames(
+            c.Header_SearchIcon,
+            c.Header_Button,
+            c.Header_MobileOnly
+          )}
+          onClick={handleSearchShow}
+        />
       </div>
     )
   }
@@ -385,7 +422,7 @@ const UserNav = ({ c, handleNotificationsClick, dispatch }) => {
     </div>
   )
 }
-const noop = () => null
+
 const Header = ({
   inverted,
   variant,
@@ -396,7 +433,7 @@ const Header = ({
   const history = useHistory()
   const c = useStyles({ inverted, notificationsIsOpen })
   const [searchTerm, setSearchTerm] = useState(undefined)
-
+  const [showMobileSearch, setShowMobileSearch] = useState(false)
   const handleSearchSubmit = e => {
     e.preventDefault()
     if (searchTerm) {
@@ -408,6 +445,10 @@ const Header = ({
   const handleNotificationsClick = () => {
     dispatch('close-modal')
     onNotificationsClick()
+  }
+
+  const handleSearchClicked = () => {
+    setShowMobileSearch(!showMobileSearch)
   }
 
   return (
@@ -425,10 +466,37 @@ const Header = ({
                   c={c}
                   handleNotificationsClick={handleNotificationsClick}
                   dispatch={dispatch}
+                  handleSearchShow={handleSearchClicked}
                 />
               )}
             </div>
           </div>
+          {showMobileSearch && (
+            <div>
+              <form className={c.Header_SearchForm} onSubmit={handleSearchSubmit}>
+                <div className={classnames(c.Header_SearchFormWrapper)}>
+                  <MagnifyingGlass
+                    className={classnames(
+                      c.Header_SearchIcon,
+                      c.Header_DesktopSearchFormIcon
+                    )}
+                    onClick={handleSearchSubmit}
+                  />
+                  <TextInput
+                    name='search'
+                    placeholder='Search By Text or Upload'
+                    className={classnames(c.Header_SearchFormInput, {
+                      [c.Header_SearchFormInput_active]: searchTerm,
+                    })}
+                    onChange={e => {
+                      setSearchTerm(e.target.value)
+                    }}
+                    value={searchTerm || ''}
+                  />
+                </div>
+              </form>
+            </div>
+          )}
         </span>
         <span className={c.Header_DesktopOnly}>
           <div className={c.Header_DesktopBoundary}>
@@ -442,36 +510,42 @@ const Header = ({
                     </Link>
                   </div>
                   {variant !== 'logo-only' && (
-                    <>
-                      <form className={c.Header_SearchForm} onSubmit={handleSearchSubmit}>
-                        <div className={classnames(c.Header_SearchFormWrapper)}>
-                          <MagnifyingGlass className={c.Header_SearchFormIcon} />
-                          <TextInput
-                            name='search'
-                            placeholder='Search By Text or Upload'
-                            className={classnames(c.Header_SearchFormInput, {
-                              [c.Header_SearchFormInput_active]: searchTerm,
-                            })}
-                            onChange={e => {
-                              setSearchTerm(e.target.value)
-                            }}
-                            value={searchTerm || ''}
-                          />
-                          <UploadIcon
-                            title={'Search By Model Upload'}
-                            className={classnames(c.Header_UploadIcon)}
-                            onClick={() =>
-                              dispatch('open-modal', { modalName: 'searchByUpload' })
-                            }
-                          />
-                          <MagnifyingGlass
-                            title={'Search By Text'}
-                            className={classnames(c.Header_SearchIcon)}
-                            onClick={handleSearchSubmit}
-                          />
-                        </div>
-                      </form>
-                    </>
+                    <form className={c.Header_SearchForm} onSubmit={handleSearchSubmit}>
+                      <div className={classnames(c.Header_SearchFormWrapper)}>
+                        <MagnifyingGlass
+                          className={classnames(
+                            c.Header_SearchIcon,
+                            c.Header_DesktopSearchFormIcon
+                          )}
+                        />
+                        <TextInput
+                          name='search'
+                          placeholder='Search By Text or Upload'
+                          className={classnames(c.Header_SearchFormInput, {
+                            [c.Header_SearchFormInput_active]: searchTerm,
+                          })}
+                          onChange={e => {
+                            setSearchTerm(e.target.value)
+                          }}
+                          value={searchTerm || ''}
+                        />
+                        <UploadIcon
+                          title={'Search By Model Upload'}
+                          className={classnames(c.Header_UploadIcon)}
+                          onClick={() =>
+                            dispatch('open-modal', { modalName: 'searchByUpload' })
+                          }
+                        />
+                        <MagnifyingGlass
+                          title={'Search By Text'}
+                          className={classnames(
+                            c.Header_SearchIcon,
+                            c.Header_DesktopSearchActionIcon
+                          )}
+                          onClick={handleSearchSubmit}
+                        />
+                      </div>
+                    </form>
                   )}
                 </div>
               </div>
