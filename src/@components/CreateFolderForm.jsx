@@ -123,6 +123,7 @@ const schemaJustName = Joi.object({
 })
 
 const parseEmails = R.pipe(R.split(/, */), R.filter(R.identity))
+const trimEmails = emails => emails.map(email => email.trim())
 
 const isEmptyMembers = ([key, info]) => {
   return key === 'members' && info.type === 'array.min'
@@ -212,7 +213,7 @@ const CreateFolderForm = ({
       const formattedMembers = members && members.trim()
       const input = {
         name: name || '',
-        members: formattedMembers ? parseEmails(formattedMembers) : [],
+        members: formattedMembers ? trimEmails(parseEmails(formattedMembers)) : [],
       }
       if (teamNames.indexOf(members) > -1) {
         initSchema = autocompleteSchema

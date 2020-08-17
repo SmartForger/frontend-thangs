@@ -120,6 +120,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const parseEmails = R.pipe(R.split(/, */), R.filter(R.identity))
+const trimEmails = emails => emails.map(email => email.trim())
 
 const isEmptyMembers = ([key, info]) => {
   return key === 'teamMembers' && info.type === 'array.min'
@@ -284,8 +285,8 @@ const CreateTeamForm = ({
   const handleAdd = useCallback(
     e => {
       e.preventDefault()
-      const emails = inputState['emails']
-      const emailsArray = [...parseEmails(emails)]
+      const emails = inputState['emails'].trim()
+      const emailsArray = trimEmails([...parseEmails(emails)])
       const { error } = emailsSchema.validate({
         emails: emailsArray,
       })
