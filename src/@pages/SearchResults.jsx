@@ -109,7 +109,21 @@ const SearchResult = ({
   )
 }
 
-const ThangsSearchResult = ({ models, isError, isLoading, c, searchModelFileName }) => {
+const ThangsSearchResult = ({
+  models,
+  isError,
+  isLoading,
+  isOtherModelsLoaded,
+  c,
+  searchModelFileName,
+}) => {
+  const searchingText = useMemo(() => {
+    return isOtherModelsLoaded
+      ? `We are still searching the Thangs database, in the meantime - check out our
+    public database search results below`
+      : 'We are searching the Thangs database...'
+  }, [isOtherModelsLoaded])
+
   return (
     <div className={c.SearchResults_Results}>
       <div className={c.SearchResults_ResultsHeader}>
@@ -119,10 +133,7 @@ const ThangsSearchResult = ({ models, isError, isLoading, c, searchModelFileName
         </span>
       </div>
       {isLoading ? (
-        <NoResults>
-          We are still searching the Thangs database, in the meantime - check out our
-          public database search results below
-        </NoResults>
+        <NoResults>{searchingText}</NoResults>
       ) : isError ? (
         <NoResults>
           Error! We were not able to load results. Please try again later.
