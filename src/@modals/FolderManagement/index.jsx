@@ -221,20 +221,20 @@ const FolderManagement = ({ folder, afterInvite, className }) => {
           c.FolderManagement_TeamContainer
         )}
       >
-        {folder.team_id ? (
+        {/* {folder.team_id ? (
           <Team
             key={folder.team_id}
             id={folder.team_id}
             creator={folder.creator}
             folderId={folder.id}
           />
-        ) : (
-          <UserList
-            creator={folders.currentFolder.creator}
-            users={folders.currentFolder.members}
-            folderId={folders.currentFolder.id}
-          />
-        )}
+        ) : ( */}
+        <UserList
+          creator={folders.currentFolder.creator}
+          users={folders.currentFolder.members}
+          folderId={folders.currentFolder.id}
+        />
+        {/* )} */}
       </div>
     </div>
   )

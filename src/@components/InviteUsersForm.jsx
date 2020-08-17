@@ -94,7 +94,8 @@ const schemaWithoutName = Joi.object({
   emails: Joi.any(),
 })
 
-const parseEmails = R.pipe(R.split(/, */), R.filter(R.identity))
+const parseEmails = R.pipe(R.split(/[ ,] */), R.filter(R.identity))
+const trimEmails = emails => emails.map(email => email.trim())
 
 const isEmptyMembers = ([key, info]) => {
   return key === 'members' && info.type === 'array.min'
@@ -163,7 +164,7 @@ const InviteUsersForm = ({ folderId, onErrorReceived, afterInvite }) => {
 
   const handleOnInputChange = useCallback(
     (key, value) => {
-      if (key === 'emails') onInputChange('members', [...parseEmails(value)])
+      if (key === 'emails') onInputChange('members', trimEmails([...parseEmails(value)]))
       onInputChange(key, value)
     },
     [onInputChange]
