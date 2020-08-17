@@ -1,20 +1,11 @@
-import React, { Children } from 'react'
+import React from 'react'
 import { NoResults } from '@components'
 import Skeleton from '@material-ui/lab/Skeleton'
-import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import Grid from './Grid'
 
 const useStyles = createUseStyles(_theme => {
   return {
-    CardCollection: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(21.5rem, 1fr))',
-      gap: '1rem',
-      width: '100%',
-    },
-    CardCollection__singleRow: {
-      gridTemplateColumns: 'repeat(auto-fill, 21.5rem)',
-    },
     ModelCard_Skeleton: {
       paddingBottom: 0,
       minHeight: '16.375rem',
@@ -30,7 +21,7 @@ const CardCollection = ({ maxPerRow = 4, noResultsText, loading = false, childre
 
   if (loading) {
     return (
-      <div className={c.CardCollection}>
+      <Grid singleRow={false}>
         {[...Array(12).keys()].map(index => (
           <Skeleton
             variant='rect'
@@ -38,20 +29,12 @@ const CardCollection = ({ maxPerRow = 4, noResultsText, loading = false, childre
             key={`skeletonCard:${index}`}
           />
         ))}
-      </div>
+      </Grid>
     )
   }
 
   if (children) {
-    return (
-      <div
-        className={classnames(c.CardCollection, {
-          [c.CardCollection__singleRow]: Children.count(children) < maxPerRow,
-        })}
-      >
-        {children}
-      </div>
-    )
+    return <Grid singleRow={children.length < maxPerRow}>{children}</Grid>
   } else {
     return <NoResults>{noResultsText}</NoResults>
   }
