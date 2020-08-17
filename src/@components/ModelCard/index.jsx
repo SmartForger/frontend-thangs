@@ -200,9 +200,6 @@ const CardContents = ({
   showSocial,
   showWaldo,
   isLiked,
-  modelPath,
-  handleMouseEnter,
-  handleMouseLeave,
   modelAttributionUrl,
   searchModelFileName,
   showReportModel,
@@ -234,7 +231,7 @@ const CardContents = ({
           ></ModelThumbnail>
         </Card>
         <div>
-            {model.resultSource === 'phyndexer' ? (
+          {model.resultSource === 'phyndexer' ? (
             <ExternalModelDetails
               c={c}
               model={model}
