@@ -21,7 +21,7 @@ const SearchByUpload = () => {
   const c = useStyles()
   const history = useHistory()
   const { dispatch, searchResults } = useStoreon('searchResults')
-
+  const { phyndexer } = searchResults
   useEffect(() => {
     dispatch('reset-search-results')
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -50,12 +50,12 @@ const SearchByUpload = () => {
   return (
     <div>
       <div className={c.SearchByUpload_Row}>
-        {searchResults.isLoading ? (
+        {phyndexer.isLoading ? (
           <UploadProgress />
         ) : (
           <>
             <form>
-              <Uploader showError={!!searchResults.isError} setFile={handleFile} />
+              <Uploader showError={!!phyndexer.isError} setFile={handleFile} />
             </form>
           </>
         )}

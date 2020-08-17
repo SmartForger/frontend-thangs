@@ -157,6 +157,7 @@ const Page = () => {
   const query = useQuery(location)
   const modelId = useMemo(() => query.get('modelId'), [query])
   const { dispatch, searchResults } = useStoreon('searchResults')
+  const { text, phyndexer, thangs } = searchResults
   const [savedSearchResults, setSavedSearchResults] = useLocalStorage(
     'savedSearchResults',
     null
@@ -187,24 +188,38 @@ const Page = () => {
   }, [searchQuery])
 
   useEffect(() => {
-    if (
-      searchResults.data &&
-      searchResults.data.matches &&
-      Object.keys(searchResults.data.matches).length
-    ) {
-      setSavedSearchResults(searchResults.data.matches)
-      setSavedSearchQuery(searchQuery)
-      setSavedOriginalModelName(
-        searchResults.data.searchModel ? searchResults.data.searchModel : null
-      )
+    if (!modelId) {
+      if (
+        text &&
+        text.data &&
+        text.data.matches &&
+        Object.keys(text.data.matches).length
+      ) {
+        setSavedSearchResults(text.data.matches)
+        setSavedSearchQuery(searchQuery)
+        setSavedOriginalModelName(null)
+      }
+    } else {
+      if (
+        phyndexer &&
+        phyndexer.data &&
+        phyndexer.data.matches &&
+        Object.keys(phyndexer.data.matches).length
+      ) {
+        setSavedSearchResults(phyndexer.data.matches)
+        setSavedSearchQuery(searchQuery)
+        setSavedOriginalModelName(phyndexer.data.searchByModelFileName)
+      }
     }
   }, [
     modelId,
+    phyndexer,
     searchQuery,
     searchResults,
     setSavedOriginalModelName,
     setSavedSearchQuery,
     setSavedSearchResults,
+    text,
   ])
 
   return (
@@ -221,18 +236,19 @@ const Page = () => {
       </div>
       {modelId && (
         <ThangsSearchResult
-          models={searchResults && searchResults.matchingResults}
-          isLoading={searchResults.isPolling}
-          isError={searchResults.isPollingError}
+          models={thangs && thangs.data}
+          isLoading={thangs && thangs.isLoading}
+          isError={thangs && thangs.isError}
           c={c}
           searchModelFileName={savedOriginalModelName}
+          isOtherModelsLoaded={savedSearchResults && savedSearchResults.length > 0}
         />
       )}
       {searchQuery ? (
         <SearchResult
           searchQuery={searchQuery}
-          isLoading={searchResults.isLoading}
-          isError={searchResults.isError}
+          isLoading={modelId ? phyndexer.isLoading : text.isLoading}
+          isError={modelId ? phyndexer.isError : text.isError}
           models={savedSearchResults}
           modelId={modelId}
           searchModelFileName={savedOriginalModelName}
