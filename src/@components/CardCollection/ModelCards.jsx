@@ -7,7 +7,9 @@ const ModelCards = ({
   likes,
   showSocial,
   showWaldo,
+  showReportModel,
   searchModelFileName,
+  handleReportModel,
 }) =>
   Array.isArray(models) &&
   models.map((model, index) => (
@@ -18,6 +20,8 @@ const ModelCards = ({
       searchModelFileName={searchModelFileName}
       showSocial={showSocial}
       showWaldo={showWaldo}
+      showReportModel={showReportModel}
+      handleReportModel={handleReportModel}
       user={user}
       likes={likes}
     />

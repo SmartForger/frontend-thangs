@@ -5,7 +5,8 @@ import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
 import { ReactComponent as ViewOnlyIcon } from '@svg/view-only-icon.svg'
-import { Card, ModelThumbnail, UserInline } from '@components'
+import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
+import { Button, Card, ModelThumbnail, UserInline } from '@components'
 import { THUMBNAILS_HOST, TIW_THUMBNAILS_HOST } from '@utilities/constants'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -34,6 +35,7 @@ const useStyles = createUseStyles(theme => {
     ModelCard_DetailsInline: {
       display: 'flex',
       alignItems: 'center',
+      width: '100%',
     },
     ModelCard_ExternalName: {
       marginLeft: '.5rem',
@@ -72,10 +74,25 @@ const useStyles = createUseStyles(theme => {
     ModelCard_Link: {
       zIndex: 1,
     },
+    ModelCard_ReportModelButton: {
+      '& > svg': {
+        margin: '0 !important',
+      },
+    },
   }
 })
 
-const ThangsModelDetails = ({ c, model, showOwner, showSocial, isLiked = false }) => {
+const noop = () => null
+
+const ThangsModelDetails = ({
+  c,
+  model,
+  showOwner,
+  showSocial,
+  isLiked = false,
+  showReportModel,
+  handleReportModel = noop,
+}) => {
   let modelName = model.name
   if (modelName && modelName.length > 40) modelName = modelName.slice(0, 40) + '...'
   return (
@@ -100,11 +117,26 @@ const ThangsModelDetails = ({ c, model, showOwner, showSocial, isLiked = false }
           </div>
         </div>
       )}
+      {showReportModel && (
+        <Button
+          icon
+          className={c.ModelCard_ReportModelButton}
+          onClick={() => handleReportModel({ model })}
+        >
+          <FlagIcon />
+        </Button>
+      )}
     </div>
   )
 }
 
-const ExternalModelDetails = ({ c, model, isLink }) => {
+const ExternalModelDetails = ({
+  c,
+  model,
+  isLink,
+  showReportModel,
+  handleReportModel = noop,
+}) => {
   return (
     <div className={c.ModelCard_Content}>
       <div className={c.ModelCard_DetailsInline}>
@@ -115,6 +147,15 @@ const ExternalModelDetails = ({ c, model, isLink }) => {
         >
           {model.attributionUrl || model.fileName}
         </span>
+        {showReportModel && (
+          <Button
+            icon
+            className={c.ModelCard_ReportModelButton}
+            onClick={() => handleReportModel({ model })}
+          >
+            <FlagIcon />
+          </Button>
+        )}
       </div>
     </div>
   )
@@ -164,18 +205,20 @@ const CardContents = ({
   handleMouseLeave,
   modelAttributionUrl,
   searchModelFileName,
+  showReportModel,
+  handleReportModel,
 }) => {
   const thumbnailUrl = model.fullThumbnailUrl
     ? model.fullThumbnailUrl
     : model.thumbnailUrl
-      ? model.thumbnailUrl
-      : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}`
+    ? model.thumbnailUrl
+    : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}`
 
   const waldoThumbnailUrl = searchModelFileName
     ? `${TIW_THUMBNAILS_HOST}/${getThumbnailFileName(model)}/${getWaldoThumbnailUrl(
-      model,
-      searchModelFileName
-    )}`
+        model,
+        searchModelFileName
+      )}`
     : undefined
 
   return (
@@ -191,28 +234,25 @@ const CardContents = ({
           ></ModelThumbnail>
         </Card>
         <div>
-          <Anchor
-            to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
-            attributionUrl={modelAttributionUrl}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onFocus={handleMouseEnter}
-            onBlur={handleMouseLeave}
-            className={c.ModelCard_Link}
-            noLink={!showWaldo || !modelPath}
-          >
             {model.resultSource === 'phyndexer' ? (
-              <ExternalModelDetails c={c} model={model} isLink={!!modelAttributionUrl} />
-            ) : (
-              <ThangsModelDetails
-                c={c}
-                model={model}
-                showOwner={showOwner}
-                showSocial={showSocial}
-                isLiked={isLiked}
-              />
-            )}
-          </Anchor>
+            <ExternalModelDetails
+              c={c}
+              model={model}
+              isLink={!!modelAttributionUrl}
+              showReportModel={showReportModel}
+              handleReportModel={handleReportModel}
+            />
+          ) : (
+            <ThangsModelDetails
+              c={c}
+              model={model}
+              showOwner={showOwner}
+              showSocial={showSocial}
+              isLiked={isLiked}
+              showReportModel={showReportModel}
+              handleReportModel={handleReportModel}
+            />
+          )}
         </div>
       </div>
     </>
@@ -237,7 +277,9 @@ const ModelCard = ({
   likes,
   showSocial = true,
   showWaldo,
+  showReportModel,
   searchModelFileName,
+  handleReportModel,
 }) => {
   const c = useStyles()
   const showOwner = withOwner && model.owner
@@ -257,7 +299,7 @@ const ModelCard = ({
       onFocus={handleMouseEnter}
       onBlur={handleMouseLeave}
       className={c.ModelCard_Link}
-      noLink={showWaldo || !modelPath}
+      noLink={!modelPath || showReportModel}
     >
       <CardContents
         className={className}
@@ -271,6 +313,8 @@ const ModelCard = ({
         modelAttributionUrl={modelAttributionUrl}
         searchModelFileName={searchModelFileName}
         modelPath={modelPath}
+        showReportModel={showReportModel}
+        handleReportModel={handleReportModel}
       />
     </Anchor>
   )

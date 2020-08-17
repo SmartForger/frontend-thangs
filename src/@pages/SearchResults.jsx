@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocation, useParams, Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
 import { CardCollection, NoResults, Layout, Button } from '@components'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
+import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { createUseStyles } from '@style'
 import { useLocalStorage } from '@hooks'
@@ -66,6 +67,11 @@ const useStyles = createUseStyles(theme => {
     Spinner: {
       animation: '$spin 1.2s linear infinite',
     },
+    SearchResults_ReportModelButton: {
+      width: '12rem',
+      marginTop: '4rem',
+      alignSelf: 'flex-end',
+    },
   }
 })
 
@@ -76,6 +82,8 @@ const SearchResult = ({
   isError,
   c,
   searchModelFileName,
+  showReportModel,
+  handleReportModel,
 }) => {
   return (
     <div className={c.SearchResults_Results}>
@@ -101,6 +109,9 @@ const SearchResult = ({
               showSocial={false}
               showWaldo={false} //Change back to !!modelId when we want waldo thumbnails back
               searchModelFileName={searchModelFileName}
+              showReportModel={showReportModel}
+              handleReportModel={handleReportModel}
+              isExternalModel={!!modelId}
             />
           ) : null}
         </CardCollection>
@@ -116,6 +127,8 @@ const ThangsSearchResult = ({
   isOtherModelsLoaded,
   c,
   searchModelFileName,
+  showReportModel,
+  handleReportModel,
 }) => {
   const searchingText = useMemo(() => {
     return isOtherModelsLoaded
@@ -149,6 +162,8 @@ const ThangsSearchResult = ({
               showSocial={false}
               showWaldo={false} //Change back to TRUE when we want waldo thumbnails back
               searchModelFileName={searchModelFileName}
+              showReportModel={showReportModel}
+              handleReportModel={handleReportModel}
             />
           ) : null}
         </CardCollection>
@@ -181,6 +196,7 @@ const Page = () => {
     'savedOriginalModelName',
     null
   )
+  const [showReportModelButtons, setShowReportModelButtons] = useState(false)
   useEffect(() => {
     if (savedSearchQuery !== searchQuery || !savedSearchResults) {
       dispatch('reset-search-results')
@@ -233,6 +249,22 @@ const Page = () => {
     text,
   ])
 
+  const handleReportModel = useCallback(
+    ({ model }) => {
+      dispatch('open-modal', {
+        modalName: 'reportModel',
+        modalData: {
+          model: model,
+          afterSend: () => {
+            setShowReportModelButtons(false)
+            dispatch('close-modal')
+          },
+        },
+      })
+    },
+    [dispatch]
+  )
+
   return (
     <div className={c.SearchResults_Page}>
       <div className={c.SearchResults_Header}>
@@ -253,6 +285,8 @@ const Page = () => {
           c={c}
           searchModelFileName={savedOriginalModelName}
           isOtherModelsLoaded={savedSearchResults && savedSearchResults.length > 0}
+          showReportModel={showReportModelButtons}
+          handleReportModel={handleReportModel}
         />
       )}
       {searchQuery ? (
@@ -263,6 +297,8 @@ const Page = () => {
           models={savedSearchResults}
           modelId={modelId}
           searchModelFileName={savedOriginalModelName}
+          showReportModel={showReportModelButtons}
+          handleReportModel={handleReportModel}
           c={c}
         />
       ) : (
@@ -270,6 +306,15 @@ const Page = () => {
           Begin typing to search models by name, description, owner, etc. Use search by
           model to find geometrically similar matches to the model you upload.
         </NoResults>
+      )}
+      {savedSearchResults && (
+        <Button
+          className={c.SearchResults_ReportModelButton}
+          onClick={() => setShowReportModelButtons(true)}
+        >
+          <FlagIcon />
+          Report a Model
+        </Button>
       )}
     </div>
   )
