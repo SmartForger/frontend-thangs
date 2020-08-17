@@ -99,7 +99,7 @@ const SearchResult = ({
             <ModelCards
               models={models}
               showSocial={false}
-              showWaldo={!!modelId}
+              showWaldo={false} //Change back to !!modelId when we want waldo thumbnails back
               searchModelFileName={searchModelFileName}
             />
           ) : null}
@@ -147,7 +147,7 @@ const ThangsSearchResult = ({
             <ModelCards
               models={models}
               showSocial={false}
-              showWaldo={true}
+              showWaldo={false} //Change back to TRUE when we want waldo thumbnails back
               searchModelFileName={searchModelFileName}
             />
           ) : null}
