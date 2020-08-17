@@ -170,7 +170,7 @@ const ReportModel = ({ model, afterSend }) => {
         </div>
         <div className={c.ReportModel_ButtonRow}>
           <Button className={c.ReportModel_Button} type='submit'>
-            Sign In
+            Submit
           </Button>
         </div>
       </form>
