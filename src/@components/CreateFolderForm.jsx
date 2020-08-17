@@ -209,9 +209,10 @@ const CreateFolderForm = ({
 
   const validationResolver = useCallback(
     ({ members, name }) => {
+      const formattedMembers = members && members.trim()
       const input = {
         name: name || '',
-        members: members ? parseEmails(members) : [],
+        members: formattedMembers ? parseEmails(formattedMembers) : [],
       }
       if (teamNames.indexOf(members) > -1) {
         initSchema = autocompleteSchema

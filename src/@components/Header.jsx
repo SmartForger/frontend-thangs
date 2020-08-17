@@ -327,7 +327,7 @@ const ProfileDropdownMenu = ({ c, dispatch, user, TargetComponent }) => {
           })
         }}
       >
-        <NewFolderIcon /> Add Folder
+        <NewFolderIcon /> Create Folder
       </DropdownItem>
       <hr className={c.Header_DropdownMenuDivider} />
       <DropdownItem to='/home'>
