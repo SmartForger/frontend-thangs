@@ -15,7 +15,7 @@ export default ({ method = 'GET', endpoint, body, cancelToken, timeout = 300000 
     },
     ...(body && { data: JSON.stringify(body) }),
   }).catch(error => {
-    if (error.response.status === 403) {
+    if (error && error.response && error.response.status === 403) {
       authenticationService.logout()
       window.location.href = '/login?sessionExpired=true'
     }
