@@ -173,6 +173,7 @@ const useStyles = createUseStyles(theme => {
 
       [md]: {
         width: '20rem',
+        margin: 0,
       },
 
       '& input': {
