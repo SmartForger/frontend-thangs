@@ -10,7 +10,7 @@ const getPhynStatus = intervalRequest(
       timeout: 60000,
     })
     if (data === 'error' || error) {
-      reject(data || error)
+      resolve({ error: error || 'error' })
     }
     if (data === 'completed') resolve(data)
   },
@@ -51,6 +51,7 @@ const getInitAtom = () => ({
     isLoaded: false,
     isLoading: false,
     isError: false,
+    isPollingError: false,
     data: {},
   },
   text: {
@@ -164,6 +165,15 @@ export default store => {
       },
     },
   }))
+  store.on('error-search-results-for-phyndexer-polling', state => ({
+    searchResults: {
+      ...state.searchResults,
+      phyndexer: {
+        ...state.searchResults.phyndexer,
+        isPollingError: true,
+      },
+    },
+  }))
   store.on('reset-search-results', () => ({
     searchResults: getInitAtom(),
   }))
@@ -272,9 +282,10 @@ export default store => {
       store.dispatch('loading-search-results-for-phyndexer')
 
       const { error: statusError } = await getPhynStatus({ newPhyndexerId })
-
       if (statusError) {
-        store.dispatch('error-search-results-for-phyndexer', { data: statusError })
+        store.dispatch('error-search-results-for-phyndexer-polling', {
+          data: statusError,
+        })
       }
 
       const { data, error } = await api({
