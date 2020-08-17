@@ -127,8 +127,14 @@ const getThumbnailUrl = (model = {}) => {
   if (model.modelFileName) return model.modelFileName.replace('uploads/models/', '')
 }
 
+const getThumbnailFileName = (model = {}) => {
+  if (model.uploadedFile) return model.uploadedFile
+  if (model.fileName) return model.fileName.replace('uploads/models/', '')
+  if (model.modelFileName) return model.modelFileName.replace('uploads/models/', '')
+}
+
 const getWaldoThumbnailUrl = (model = {}, searchModelFileName) => {
-  if (searchModelFileName) return searchModelFileName
+  if (searchModelFileName) return searchModelFileName.replace('uploads/models/', '')
   if (model.searchModel) return model.searchModel.replace('uploads/models/', '')
 }
 
@@ -166,11 +172,12 @@ const CardContents = ({
       : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}`
 
   const waldoThumbnailUrl = searchModelFileName
-    ? `${TIW_THUMBNAILS_HOST}/${getThumbnailUrl(model)}/${getWaldoThumbnailUrl(
+    ? `${TIW_THUMBNAILS_HOST}/${getThumbnailFileName(model)}/${getWaldoThumbnailUrl(
       model,
       searchModelFileName
     )}`
     : undefined
+
   return (
     <>
       <div title={modelAttributionUrl || model.name || model.fileName}>
