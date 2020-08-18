@@ -3,6 +3,13 @@ import ReactDOM from 'react-dom'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { logger } from '@utilities/logging'
+import TagManager from 'react-gtm-module'
+
+const tagManagerArgs = {
+  gtmId: process.env.REACT_APP_GOOGLE_TAG_MANAGER_ID,
+}
+
+TagManager.initialize(tagManagerArgs)
 
 ReactDOM.render(<App />, document.getElementById('root'))
 
