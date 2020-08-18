@@ -14,11 +14,11 @@ export default ({ method = 'GET', endpoint, body, cancelToken, timeout = 300000 
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     ...(body && { data: JSON.stringify(body) }),
-  }).catch(error => {
-    if (error && error.response && error.response.status === 403) {
+  }).catch(e => {
+    if (e && e.response && e.response.status === 403) {
       authenticationService.logout()
       window.location.href = '/login?sessionExpired=true'
     }
-    return error
+    return Promise.resolve({ data: {}, error: e })
   })
 }
