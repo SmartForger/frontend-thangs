@@ -8,15 +8,23 @@ import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+
   return {
     Landing: {},
     Landing_Hero: {
       display: 'flex',
-      padding: '5rem 6rem',
+      padding: '1.5rem 2rem',
       overflow: 'hidden',
       position: 'relative',
       justifyContent: 'center',
       background: theme.colors.purple[900],
+
+      [md]: {
+        padding: '5rem 6rem',
+      },
     },
     Landing_TextContainer: {
       maxWidth: theme.variables.maxWidth,
@@ -28,14 +36,27 @@ const useStyles = createUseStyles(theme => {
     },
     Landing_PromotionalPrimaryText: {
       ...theme.mixins.text.landingPageText,
+      fontSize: '2rem',
+
+      [md]: {
+        fontSize: '4rem',
+      },
     },
     Landing_PromotionalSecondaryText: {
       ...theme.mixins.text.landingPageSubtext,
       maxWidth: '42rem',
-      minWidth: '27.125rem',
+      minWidth: 0,
       marginTop: '1.5rem',
+
+      [md]: {
+        minWidth: '27.125rem',
+      },
     },
-    Landing_SearchByModelUploadButton: { marginTop: '1.5rem' },
+    Landing_SearchByModelUploadButton: {
+      display: 'none',
+      marginTop: '1.5rem',
+      [md]: { display: 'block' },
+    },
     Landing_SearchByModelUploadButton_UploadIcon: { marginRight: '.5rem' },
     Landing_Background: {
       position: 'absolute',
