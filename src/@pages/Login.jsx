@@ -33,7 +33,6 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.5rem',
     },
     Login_Body: {
-      width: '31.25rem',
       margin: 'auto',
       marginTop: '6.5rem',
     },
@@ -66,6 +65,8 @@ const useStyles = createUseStyles(theme => {
     },
     Login_Wrapper: {
       margin: '0 auto',
+      maxWidth: '32rem',
+      width: '90%',
     },
     Login_BackButton: {
       position: 'absolute',
