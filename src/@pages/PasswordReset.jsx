@@ -10,7 +10,6 @@ import { createUseStyles } from '@style'
 const useStyles = createUseStyles(theme => {
   return {
     PasswordReset: {
-      width: '31.25rem',
       margin: 'auto',
       marginTop: '6.5rem',
     },

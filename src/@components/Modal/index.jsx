@@ -24,7 +24,9 @@ const useStyles = createUseStyles(_theme => {
       cursor: 'pointer',
     },
     Modal_Content: {
-      marginTop: '5rem',
+      width: '90%',
+      margin: '0 auto',
+      maxWidth: '32rem',
     },
   }
 })

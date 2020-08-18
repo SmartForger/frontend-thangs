@@ -10,10 +10,15 @@ import { ReactComponent as UserRegistrationIcon } from '@svg/user-registration.s
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+
   return {
     Signup: {
-      width: '31.25rem',
-      margin: 'auto',
+      margin: '0 auto',
+      width: '90%',
+      maxWidth: '32rem',
     },
     Signup_Spinner: {
       display: 'inline-block',
@@ -45,11 +50,25 @@ const useStyles = createUseStyles(theme => {
     Signup_ButtonContainer: {
       marginTop: '2rem',
       display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+      flexDirection: 'column',
+      alignItems: 'flex-end',
+
+      [md]: {
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexDirection: 'row',
+      },
     },
     Signup_Button: {
       margin: 0,
+    },
+    Signup_TermsCheckbox: {
+      display: 'flex',
+      alignItems: 'center',
+
+      '& p': {
+        marginRight: '1rem',
+      },
     },
   }
 })
@@ -293,22 +312,24 @@ const Page = () => {
           </div>
         </div>
         <div className={c.Signup_ButtonContainer}>
-          <p>
-            By checking the box, you agree <br />
-            to the{' '}
-            <a href='/terms_and_conditions' target='_blank'>
-              terms and conditions
-            </a>{' '}
-            of this site.*
-          </p>
-          <input
-            type='checkbox'
-            value='Accepted Terms and Conditions'
-            checked={inputState.acceptedTerms}
-            onChange={e => {
-              handleOnInputChange('acceptedTerms', e.target.checked)
-            }}
-          />
+          <div className={c.Signup_TermsCheckbox}>
+            <p>
+              By checking the box, you agree <br />
+              to the{' '}
+              <a href='/terms_and_conditions' target='_blank'>
+                terms and conditions
+              </a>{' '}
+              of this site.*
+            </p>
+            <input
+              type='checkbox'
+              value='Accepted Terms and Conditions'
+              checked={inputState.acceptedTerms}
+              onChange={e => {
+                handleOnInputChange('acceptedTerms', e.target.checked)
+              }}
+            />
+          </div>
           <Button
             className={c.Signup_Button}
             type='submit'
@@ -324,7 +345,7 @@ const Page = () => {
 
 export const Signup = () => {
   return (
-    <Layout variant={'logo-only'}>
+    <Layout>
       <Page />
     </Layout>
   )

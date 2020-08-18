@@ -8,8 +8,8 @@ import { createUseStyles } from '@style'
 const useStyles = createUseStyles(theme => {
   return {
     CreateTeam: {
-      width: '40vw',
-      margin: '0 auto',
+      width: '100%',
+      margin: '4rem auto',
     },
     CreateTeam_Header: {
       ...theme.mixins.text.uploadFrameText,

@@ -39,7 +39,6 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.5rem',
     },
     Login_Body: {
-      width: '31.25rem',
       margin: 'auto',
       marginTop: '6.5rem',
     },

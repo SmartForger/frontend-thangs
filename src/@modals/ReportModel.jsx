@@ -20,7 +20,6 @@ const useStyles = createUseStyles(theme => {
       marginTop: '.5rem',
     },
     ReportModel_Body: {
-      width: '31.25rem',
       margin: 'auto',
       marginTop: '6.5rem',
     },

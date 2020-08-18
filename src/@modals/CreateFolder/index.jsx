@@ -8,8 +8,8 @@ import { createUseStyles } from '@style'
 const useStyles = createUseStyles(theme => {
   return {
     CreateFolder: {
-      width: '40vw',
-      margin: '0 auto',
+      width: '100%',
+      margin: '4rem auto',
     },
     CreateFolder_Header: {
       ...theme.mixins.text.uploadFrameText,
