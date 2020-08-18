@@ -6,7 +6,6 @@ import * as swearjar from '@utilities'
 import { Button, Spinner, TextInput, Layout } from '@components'
 import { useForm } from '@hooks'
 import { authenticationService } from '@services'
-import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg'
 import { ReactComponent as UserRegistrationIcon } from '@svg/user-registration.svg'
 import { createUseStyles } from '@style'
 
@@ -51,11 +50,6 @@ const useStyles = createUseStyles(theme => {
     },
     Signup_Button: {
       margin: 0,
-    },
-    Signup_Background: {
-      position: 'absolute',
-      top: '2px',
-      right: 0,
     },
   }
 })
@@ -191,7 +185,6 @@ const Page = () => {
 
   return (
     <div className={c.Signup}>
-      <BackgroundSvg className={c.Signup_Background} />
       <form onSubmit={onFormSubmit(handleSignUp)} data-cy='signup-form'>
         <UserRegistrationIcon />
         <h1 className={c.Signup_PageHeader}>
