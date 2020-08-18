@@ -34,7 +34,6 @@ const useStyles = createUseStyles(theme => {
       boxShadow: `inset 0 0 0 12px ${theme.colors.gold[500]}`,
       borderRadius: '50% 50% 50% 0',
       animation: '$loading 2s infinite',
-      marginBottom: '2rem',
 
       '&:after': {
         content: '"',
