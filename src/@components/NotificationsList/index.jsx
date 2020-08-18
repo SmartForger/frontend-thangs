@@ -50,7 +50,7 @@ const NotificationsList = ({className}) => {
 
   if (loading) {
     return <Spinner />
-  } else if (error) {
+  } else if (error && R.isEmpty(notifications)) {
     logger.error('error', error)
     return (
       <NoResults>
