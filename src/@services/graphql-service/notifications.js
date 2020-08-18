@@ -204,6 +204,7 @@ function getAndParseHandledNotifications(data) {
 
 export function useNotificationsByUserId(id) {
   const { loading, error, data } = useQuery(NOTIFICATIONS, {
+    errorPolicy: 'all',
     variables: { id, lastCheckedTime: null },
     fetchPolicy: 'network-only',
     pollInterval: FIVE_MINUTES,
