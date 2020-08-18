@@ -204,7 +204,7 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
             className={c.UploadForm_Select}
             name='folder'
             placeholder='Select folder'
-            options={[{ value: 'public', label: 'My Models' }, ...usersFolders]}
+            options={[{ value: 'public', label: 'Public' }, ...usersFolders]}
             onChange={e => {
               if (e) handleOnInputChange('folder', e.value)
             }}
