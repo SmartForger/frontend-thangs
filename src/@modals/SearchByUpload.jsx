@@ -6,11 +6,11 @@ import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(_theme => {
   return {
-    SearchByUpload: {},
-    SearchByUpload_Row: {
+    SearchByUpload: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
+      marginTop: '4rem',
     },
   }
 })
@@ -49,7 +49,7 @@ const SearchByUpload = () => {
   )
   return (
     <div>
-      <div className={c.SearchByUpload_Row}>
+      <div className={c.SearchByUpload}>
         {phyndexer.isLoading ? (
           <UploadProgress />
         ) : (

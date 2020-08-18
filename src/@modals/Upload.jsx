@@ -12,11 +12,11 @@ import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
   return {
-    Upload: {},
-    Upload_Row: {
+    Upload: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
+      marginTop: '4rem',
     },
     Upload_Column__frame: {
       marginRight: '2rem',
@@ -83,7 +83,7 @@ const Upload = () => {
   )
 
   return (
-    <div className={c.Upload_Row}>
+    <div className={c.Upload}>
       <div className={c.Upload_Column__frame}>
         {uploadModel.isLoading ? (
           <UploadFrame>
