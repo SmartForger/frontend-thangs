@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { Route, Router, Switch, useLocation } from 'react-router-dom'
 
 import * as pendo from '@vendors/pendo'
+import ReactGA from 'react-ga'
+
 import { authenticationService, graphqlClient } from '@services'
 import { history } from './history'
 import {
@@ -44,6 +46,7 @@ const client = graphqlClient(originalFetch, history)
 const initializeAnalytics = history => {
   const user = authenticationService.getCurrentUser()
 
+  ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID)
   pendo.initialize(history)
   pendo.identify(user)
 }
@@ -60,6 +63,10 @@ const App = () => {
   const location = useLocation()
   initializeAnalytics(history)
   const theme = usePageTheming(location)
+
+  useEffect(() => {
+    ReactGA.pageview(location.pathname + location.search)
+  }, [location])
   return (
     <ApolloProvider client={client}>
       <StoreContext.Provider value={store}>
