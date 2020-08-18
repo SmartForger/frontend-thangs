@@ -1,6 +1,6 @@
 {
   "name": "thangs-react",
-  "version": "1.2.15",
+  "version": "1.2.16",
   "private": true,
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",
