@@ -259,6 +259,9 @@ const Page = () => {
             setShowReportModelButtons(false)
             dispatch('close-modal')
           },
+          onModalClose: () => {
+            setShowReportModelButtons(false)
+          },
         },
       })
     },
@@ -310,7 +313,7 @@ const Page = () => {
       {savedSearchResults && (
         <Button
           className={c.SearchResults_ReportModelButton}
-          onClick={() => setShowReportModelButtons(true)}
+          onClick={() => setShowReportModelButtons(!showReportModelButtons)}
         >
           <FlagIcon />
           Report a Model

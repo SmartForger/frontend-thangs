@@ -148,6 +148,7 @@ const Layout = ({ children, Hero, variant }) => {
         <Modal
           className={classnames({ [c.Modal__hidden]: modal.isHidden })}
           isOpen={modal.isOpen}
+          {...modal.modalData}
         >
           <ModalView {...modal.modalData} />
         </Modal>

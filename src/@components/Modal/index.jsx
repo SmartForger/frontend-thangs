@@ -28,8 +28,8 @@ const useStyles = createUseStyles(_theme => {
     },
   }
 })
-
-const Modal = ({ children, className, ...props }) => {
+const noop = () => null
+const Modal = ({ children, className, onModalClose = noop, ...props }) => {
   const { dispatch } = useStoreon()
   const c = useStyles(props)
   return (
@@ -50,7 +50,10 @@ const Modal = ({ children, className, ...props }) => {
       <Button
         text
         className={c.Modal_CloseButton}
-        onClick={() => dispatch('close-modal')}
+        onClick={() => {
+          onModalClose()
+          dispatch('close-modal')
+        }}
       >
         <ExitIcon />
       </Button>
