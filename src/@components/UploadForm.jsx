@@ -1,7 +1,9 @@
 import React, { useCallback, useMemo } from 'react'
 import Select from 'react-select'
 import { Button, TextInput } from '@components'
+import { ReactComponent as FolderIcon } from '@svg/folder-icon.svg'
 import { useForm } from '@hooks'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -90,6 +92,13 @@ const useStyles = createUseStyles(theme => {
       border: '1px solid #ddd',
       borderRadius: '.5rem',
       marginBottom: '.5rem',
+    },
+    UploadForm_FolderLabel: {
+      justifyContent: 'flex-start',
+
+      '& > svg': {
+        marginRight: '.5rem',
+      },
     },
   }
 })
@@ -197,7 +206,11 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
       </div>
       {folders && folders.length ? (
         <div className={c.UploadForm_Field}>
-          <label className={c.UploadForm_Label} htmlFor='folder'>
+          <label
+            className={classnames(c.UploadForm_Label, c.UploadForm_FolderLabel)}
+            htmlFor='folder'
+          >
+            <FolderIcon width={'1rem'} />
             Add To Folder
           </label>
           <Select
