@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
 import Select from 'react-select'
-import classnames from 'classnames'
 import { Button, TextInput } from '@components'
 import { useForm } from '@hooks'
 import { createUseStyles } from '@style'
@@ -25,9 +24,6 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'column',
       marginBottom: '.5rem',
-    },
-    UploadForm_FolderField: {
-      marginTop: '1rem',
     },
     UploadForm_FullWidthInput: {
       display: 'block',
@@ -77,9 +73,7 @@ const useStyles = createUseStyles(theme => {
       marginRight: '1rem',
       borderLeft: '6px solid transparent',
       borderRight: '6px solid transparent',
-
-      /* We unfortunately need to hardcode this value because of how react-select works */
-      borderTop: '8px solid #f5f5f5',
+      borderTop: `8px solid ${theme.colors.purple[900]}`,
     },
     UploadForm_Spinner: {
       marginTop: '14rem',
@@ -91,6 +85,11 @@ const useStyles = createUseStyles(theme => {
       ...theme.mixins.text.infoMessageText,
       width: '8.75rem',
       marginBottom: '14rem',
+    },
+    UploadForm_Select: {
+      border: '1px solid #ddd',
+      borderRadius: '.5rem',
+      marginBottom: '.5rem',
     },
   }
 })
@@ -196,6 +195,75 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
           required
         />
       </div>
+      {folders && folders.length ? (
+        <div className={c.UploadForm_Field}>
+          <label className={c.UploadForm_Label} htmlFor='folder'>
+            Add To Folder
+          </label>
+          <Select
+            className={c.UploadForm_Select}
+            name='folder'
+            placeholder='Select folder'
+            options={[{ value: 'public', label: 'My Models' }, ...usersFolders]}
+            onChange={e => {
+              if (e) handleOnInputChange('folder', e.value)
+            }}
+            components={{
+              IndicatorSeparator: () => null,
+              // eslint-disable-next-line react/display-name
+              DropdownIndicator: () => {
+                // cx causes React to throw an error, so we remove it
+                return <div className={c.UploadForm_DropdownIndicator} />
+              },
+            }}
+            styles={{
+              control: base => {
+                return {
+                  ...base,
+                  minHeight: 'auto',
+                  borderRadius: '8px',
+                  backgroundColor: '#ffffff',
+                  border: 'none',
+                }
+              },
+              singleValue: base => {
+                return {
+                  ...base,
+                  margin: 0,
+                  color: '#999999',
+                }
+              },
+              placeholder: base => {
+                return {
+                  ...base,
+                  margin: 0,
+                  color: '#999999',
+                }
+              },
+              clearIndicator: base => {
+                return {
+                  ...base,
+                  color: '#999999',
+                  padding: '7px',
+                }
+              },
+              input: base => {
+                return {
+                  ...base,
+                  margin: 0,
+                  padding: 0,
+                }
+              },
+              valueContainer: base => {
+                return {
+                  ...base,
+                  padding: '8px 16px',
+                }
+              },
+            }}
+          />
+        </div>
+      ) : null}
       <div className={c.UploadForm_Field}>
         <label className={c.UploadForm_Label} htmlFor='material'>
           Material
@@ -246,8 +314,9 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
           Category
         </label>
         <Select
+          className={c.UploadForm_Select}
           name='category'
-          placeholder='Select Category'
+          placeholder='Select category'
           isClearable
           options={CATEGORIES}
           onChange={e => {
@@ -267,7 +336,7 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
                 ...base,
                 minHeight: 'auto',
                 borderRadius: '8px',
-                backgroundColor: '#616168',
+                backgroundColor: '#ffffff',
                 border: 'none',
               }
             },
@@ -275,20 +344,20 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
               return {
                 ...base,
                 margin: 0,
-                color: '#f5f5f5',
+                color: '#999999',
               }
             },
             placeholder: base => {
               return {
                 ...base,
                 margin: 0,
-                color: '#f5f5f5',
+                color: '#999999',
               }
             },
             clearIndicator: base => {
               return {
                 ...base,
-                color: '#f5f5f5',
+                color: '#999999',
                 padding: '7px',
               }
             },
@@ -308,74 +377,6 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
           }}
         />
       </div>
-      {folders && folders.length ? (
-        <div className={classnames(c.UploadForm_Field, c.UploadForm_FolderField)}>
-          <label className={c.UploadForm_Label} htmlFor='folder'>
-            Folder
-          </label>
-          <Select
-            name='folder'
-            placeholder='Select Folder'
-            options={[{ value: 'public', label: 'Public' }, ...usersFolders]}
-            onChange={e => {
-              if (e) handleOnInputChange('folder', e.value)
-            }}
-            components={{
-              IndicatorSeparator: () => null,
-              // eslint-disable-next-line react/display-name
-              DropdownIndicator: () => {
-                // cx causes React to throw an error, so we remove it
-                return <div className={c.UploadForm_DropdownIndicator} />
-              },
-            }}
-            styles={{
-              control: base => {
-                return {
-                  ...base,
-                  minHeight: 'auto',
-                  borderRadius: '8px',
-                  backgroundColor: '#616168',
-                  border: 'none',
-                }
-              },
-              singleValue: base => {
-                return {
-                  ...base,
-                  margin: 0,
-                  color: '#f5f5f5',
-                }
-              },
-              placeholder: base => {
-                return {
-                  ...base,
-                  margin: 0,
-                  color: '#f5f5f5',
-                }
-              },
-              clearIndicator: base => {
-                return {
-                  ...base,
-                  color: '#f5f5f5',
-                  padding: '7px',
-                }
-              },
-              input: base => {
-                return {
-                  ...base,
-                  margin: 0,
-                  padding: 0,
-                }
-              },
-              valueContainer: base => {
-                return {
-                  ...base,
-                  padding: '8px 16px',
-                }
-              },
-            }}
-          />
-        </div>
-      ) : null}
       <div className={c.UploadForm_ButtonGroup}>
         <Button className={c.UploadForm_Button} type='submit' disabled={disableSubmit}>
           Save Model
