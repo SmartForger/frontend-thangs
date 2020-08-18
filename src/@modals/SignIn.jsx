@@ -198,6 +198,7 @@ const SignIn = ({ afterSignIn }) => {
                 className={c.Login_TextInput}
                 type='password'
                 name='password'
+                autocomplete='current-password'
                 onChange={e => {
                   handleOnInputChange('password', e.target.value)
                 }}

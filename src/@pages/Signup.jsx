@@ -285,6 +285,7 @@ const Page = () => {
               <TextInput
                 className={c.Signup_TextInput}
                 id='password-input'
+                autocomplete='new-password'
                 type='password'
                 name='password'
                 onChange={e => handleOnInputChange('password', e.target.value)}
@@ -300,6 +301,7 @@ const Page = () => {
               <TextInput
                 className={c.Signup_TextInput}
                 id='confirm-password-input'
+                autocomplete='new-password'
                 type='password'
                 name='confirmPass'
                 onChange={e => handleOnInputChange('confirmPass', e.target.value)}

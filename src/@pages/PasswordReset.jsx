@@ -256,6 +256,7 @@ const ConfirmResetPage = () => {
                 disabled={waiting}
                 type='password'
                 name='password'
+                autocomplete='new-password'
                 onChange={e => {
                   handleOnInputChange('password', e.target.value)
                 }}
@@ -272,6 +273,7 @@ const ConfirmResetPage = () => {
                 disabled={waiting}
                 type='password'
                 name='confirmPassword'
+                autocomplete='new-password'
                 onChange={e => {
                   handleOnInputChange('confirmPassword', e.target.value)
                 }}
