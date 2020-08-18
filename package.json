@@ -68,8 +68,7 @@
     "update-fragments": "env-cmd -f .env.development node scripts/update-fragments.js",
     "storybook": "start-storybook -p 9009 -s public",
     "build:storybook": "build-storybook -c .storybook -s public -o storybook",
-    "lint": "eslint --ext .js,.jsx src",
-    "postbuild": "rimraf build/**/*.map"
+    "lint": "eslint --ext .js,.jsx src"
   },
   "browserslist": {
     "production": [
