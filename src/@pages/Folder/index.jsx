@@ -30,7 +30,7 @@ function Folder({ folder, modelCount }) {
       ></Breadcrumbs>
       <WithFlash>
         <CardCollection noResultsText='Upload models to this folder and collaborate with other users privately.'>
-          <ModelCardsByIds modelsIds={folder.models} />
+          <ModelCardsByIds items={folder.models} />
         </CardCollection>
       </WithFlash>
     </div>

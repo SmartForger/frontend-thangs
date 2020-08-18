@@ -55,7 +55,7 @@ function Results({ modelId }) {
 
   return (
     <CardCollection noResultsText='No geometric similar matches found. Try uploading another model.'>
-      <ModelCards models={model.relatedModels} />
+      <ModelCards items={model.relatedModels} />
     </CardCollection>
   )
 }

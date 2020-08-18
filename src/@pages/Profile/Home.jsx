@@ -157,11 +157,11 @@ const PageContent = ({ user }) => {
       <WithFlash>
         {selected === 'models' ? (
           <CardCollection noResultsText='This user has not uploaded any models yet.'>
-            <ModelCards models={sortedModels} />
+            <ModelCards items={sortedModels} />
           </CardCollection>
         ) : (
           <CardCollection noResultsText='This user has not uploaded any folders yet.'>
-            <FolderCards folders={folders && folders.data} />
+            <FolderCards items={folders && folders.data} />
           </CardCollection>
         )}
       </WithFlash>

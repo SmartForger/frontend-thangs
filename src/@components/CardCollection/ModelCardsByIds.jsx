@@ -20,9 +20,9 @@ const WithStoreModel = ({ id }) => {
   )
 }
 
-const ModelCardsByIds = ({ modelsIds = [] }) =>
-  Array.isArray(modelsIds) &&
-  modelsIds.map(modelId => {
+const ModelCardsByIds = ({ items = [] }) =>
+  Array.isArray(items) &&
+  items.map(modelId => {
     return <WithStoreModel key={modelId} id={modelId} />
   })
 

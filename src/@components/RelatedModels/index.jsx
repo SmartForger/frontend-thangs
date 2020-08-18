@@ -77,7 +77,7 @@ const RelatedModels = ({ modelId, className }) => {
           maxPerRow={3}
           noResultsText='There were no geometrically similar matches found.'
         >
-          <ModelCards models={model && model.relatedModels} />
+          <ModelCards items={model && model.relatedModels} />
         </CardCollection>
       )}
     </div>

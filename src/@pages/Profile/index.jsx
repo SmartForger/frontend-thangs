@@ -183,7 +183,7 @@ const ModelsContent = ({ selected, user }) => {
 
   return (
     <CardCollection noResultsText='This user has not uploaded any models yet.'>
-      <ModelCards models={sortedModels} />
+      <ModelCards items={sortedModels} />
     </CardCollection>
   )
 }
@@ -195,7 +195,7 @@ const LikesContent = ({ selected, user }) => {
   const models = getLikedModels(user)
   return (
     <CardCollection noResultsText='This user has not liked any models yet.'>
-      <ModelCards models={models} />
+      <ModelCards items={models} />
     </CardCollection>
   )
 }

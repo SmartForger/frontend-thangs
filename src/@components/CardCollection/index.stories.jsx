@@ -39,7 +39,7 @@ export default {
 export const SingleRowModels = () => {
   return (
     <CardCollection>
-      <ModelCards models={[modelFixture, modelFixture]} />
+      <ModelCards items={[modelFixture, modelFixture]} />
     </CardCollection>
   )
 }
@@ -48,7 +48,7 @@ export const MultipleRowsModels = () => {
   return (
     <CardCollection>
       <ModelCards
-        models={[
+        items={[
           modelFixture,
           modelFixture,
           modelFixture,
@@ -66,8 +66,7 @@ export const MultipleRowsModels = () => {
 export const NoResults = () => {
   return (
     <CardCollection noResultsText='No geometric similar matches found. Try uploading another model.'>
-      {' '}
-      <ModelCards models={[]} />
+      <ModelCards items={[]} />
     </CardCollection>
   )
 }
@@ -75,7 +74,7 @@ export const NoResults = () => {
 export const SingleRowFolders = () => {
   return (
     <CardCollection>
-      <FolderCards folders={[folderFixture, folderFixture]} />
+      <FolderCards items={[folderFixture, folderFixture]} />
     </CardCollection>
   )
 }
@@ -84,7 +83,7 @@ export const MultipleRowFolders = () => {
   return (
     <CardCollection>
       <FolderCards
-        folders={[
+        items={[
           folderFixture,
           folderFixture,
           folderFixture,
@@ -101,7 +100,7 @@ export const MultipleRowModelsAndFolders = () => {
   return (
     <CardCollection>
       <ModelCards
-        models={[modelFixture, modelFixture, modelFixture, modelFixture, modelFixture]}
+        items={[modelFixture, modelFixture, modelFixture, modelFixture, modelFixture]}
       />
       <FolderCards
         folders={[

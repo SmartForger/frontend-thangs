@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Children } from 'react'
 import { NoResults } from '@components'
 import Skeleton from '@material-ui/lab/Skeleton'
 import classnames from 'classnames'
@@ -43,10 +43,16 @@ const CardCollection = ({ maxPerRow = 4, noResultsText, loading = false, childre
   }
 
   if (children) {
+    const allItemsCount = Array.isArray(children)
+      ? children.reduce(
+        (acc, child) => 
+          (child.props.items && acc + child.props.items.length) || 0, 0)
+      : (children.props.items && children.props.items.length) || 0
+
     return (
       <div
         className={classnames(c.CardCollection, {
-          [c.CardCollection__singleRow]: children.length < maxPerRow,
+          [c.CardCollection__singleRow]: allItemsCount < maxPerRow,
         })}
       >
         {children}
