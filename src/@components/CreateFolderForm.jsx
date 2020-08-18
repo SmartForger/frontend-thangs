@@ -288,7 +288,7 @@ const CreateFolderForm = ({
   return (
     <form className={c.FolderForm} onSubmit={handleSubmit(handleSave)}>
       <label className={c.FolderForm_Label} htmlFor='name'>
-        Folder Name
+        Folder Name - <i>Select this folder name when uploading models</i>
       </label>
       <Controller
         name='name'

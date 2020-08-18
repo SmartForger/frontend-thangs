@@ -387,7 +387,7 @@ const CreateTeamForm = ({
   return (
     <form onSubmit={onFormSubmit(handleSave)} className={c.TeamForm}>
       <div className={c.TeamForm_FolderNameLabel}>
-        Folder Name
+        Folder Name - <i>Select this folder name when uploading models</i>
         <div className={c.TeamForm_FolderName}>{folderName}</div>
       </div>
       <div className={c.TeamForm_InputWrapper}>
