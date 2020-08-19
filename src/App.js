@@ -4,6 +4,7 @@ import { Route, Router, Switch, useLocation } from 'react-router-dom'
 
 import * as pendo from '@vendors/pendo'
 import ReactGA from 'react-ga'
+import ReactPixel from 'react-facebook-pixel'
 
 import { authenticationService, graphqlClient } from '@services'
 import { history } from './history'
@@ -47,6 +48,7 @@ const initializeAnalytics = history => {
   const user = authenticationService.getCurrentUser()
 
   ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID)
+  ReactPixel.init(process.env.REACT_APP_FACEBOOK_PIXEL_ID)
   pendo.initialize(history)
   pendo.identify(user)
 }
@@ -66,6 +68,7 @@ const App = () => {
 
   useEffect(() => {
     ReactGA.pageview(location.pathname + location.search)
+    ReactPixel.pageView()
   }, [location])
   return (
     <ApolloProvider client={client}>
