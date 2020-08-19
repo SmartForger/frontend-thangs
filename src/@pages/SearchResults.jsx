@@ -103,7 +103,7 @@ const SearchResult = ({
           loading={isLoading}
           noResultsText='No results found. Try searching another keyword or model above.'
         >
-          {models ? (
+          {models && models.length > 0 ? (
             <ModelCards
               items={models}
               showSocial={false}
@@ -156,7 +156,7 @@ const ThangsSearchResult = ({
           loading={isLoading}
           noResultsText='No results found. Try searching another keyword or model above.'
         >
-          {models ? (
+          {models && models.length > 0 ? (
             <ModelCards
               items={models}
               showSocial={false}
@@ -216,12 +216,7 @@ const Page = () => {
 
   useEffect(() => {
     if (!modelId) {
-      if (
-        text &&
-        text.data &&
-        text.data.matches &&
-        Object.keys(text.data.matches).length
-      ) {
+      if (text && text.data && text.data.matches) {
         setSavedSearchResults(text.data.matches)
         setSavedSearchQuery(searchQuery)
         setSavedOriginalModelName(null)
@@ -310,7 +305,7 @@ const Page = () => {
           model to find geometrically similar matches to the model you upload.
         </NoResults>
       )}
-      {savedSearchResults && (
+      {savedSearchResults && savedSearchResults.length > 0 && (
         <Button
           className={c.SearchResults_ReportModelButton}
           onClick={() => setShowReportModelButtons(!showReportModelButtons)}

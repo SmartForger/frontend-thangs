@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { logger } from '@utilities/logging'
 
@@ -20,23 +20,26 @@ const useLocalStorage = (key, initialValue) => {
   })
 
   // Return a wrapped version of useStates setter function that persist the new value to local storage
-  const setValue = value => {
-    try {
-      // Allow value to be a function so it is consistent with useState
-      const valueToStore = value instanceof Function ? value(storedValue) : value
-      // Save our state
-      setStoredValue(valueToStore)
-      // Save to local storage
-      window.localStorage.setItem(key, JSON.stringify(valueToStore))
-    } catch (error) {
-      // A more advanced implementation would handle the error case
-      logger.log(error)
-    }
-  }
+  const setValue = useCallback(
+    value => {
+      try {
+        // Allow value to be a function so it is consistent with useState
+        const valueToStore = value instanceof Function ? value(storedValue) : value
+        // Save our state
+        setStoredValue(valueToStore)
+        // Save to local storage
+        window.localStorage.setItem(key, JSON.stringify(valueToStore))
+      } catch (error) {
+        // A more advanced implementation would handle the error case
+        logger.log(error)
+      }
+    },
+    [key, storedValue]
+  )
 
-  const removeValue = () => {
+  const removeValue = useCallback(() => {
     window.localStorage.removeItem(key)
-  }
+  }, [key])
 
   return [storedValue, setValue, removeValue]
 }
