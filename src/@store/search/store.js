@@ -1,5 +1,6 @@
 import api from '@services/api'
 import { storageService, intervalRequest } from '@services'
+import apiForChain from '@services/api/apiForChain'
 
 const getPhynStatus = intervalRequest(
   ({ newPhyndexerId }) => async (resolve, reject, cancelToken) => {
@@ -181,22 +182,20 @@ export default store => {
     'get-search-results-by-text',
     async (state, { searchTerm, onFinish = noop, onError = noop }) => {
       store.dispatch('loading-search-results-for-text')
-      api({
+      const { data, error } = api({
         method: 'GET',
         endpoint: `models/search-by-text?searchTerm=${searchTerm}`,
       })
-        .then(res => {
-          if (res.status === 200) {
-            store.dispatch('loaded-search-results-for-text', {
-              data: { matches: res.data },
-            })
-            onFinish(res)
-          }
+
+      if (error) {
+        store.dispatch('error-search-results-for-text', { data: error })
+        onError(error)
+      } else {
+        store.dispatch('loaded-search-results-for-text', {
+          data: { matches: data },
         })
-        .catch(error => {
-          store.dispatch('error-search-results-for-text', { data: error })
-          onError(error)
-        })
+        onFinish(error)
+      }
     }
   )
   store.on(
@@ -204,75 +203,66 @@ export default store => {
     async (state, { file, data, onFinish = noop, onError = noop }) => {
       store.dispatch('loading-search-results-for-phyndexer')
 
-      const { data: uploadedUrlData, error: uploadError } = await api({
+      let uploadedUrlData
+
+      apiForChain({
         method: 'GET',
         endpoint: `models/upload-url?fileName=${file.name}`,
       })
-      if (uploadError) {
-        store.dispatch('error-search-results-for-phyndexer', { data: uploadError })
-        return onError(uploadError)
-      }
-      const { error: signUrlError } = await storageService.uploadToSignedUrl(
-        uploadedUrlData.signedUrl,
-        file
-      )
-      if (signUrlError) {
-        store.dispatch('error-search-results-for-phyndexer', { data: signUrlError })
-        return onError(signUrlError)
-      }
+        .then(({ data }) => {
+          uploadedUrlData = data
+          return storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file)
+        })
+        .then(() =>
+          apiForChain({
+            method: 'POST',
+            endpoint: 'models/search-by-model',
+            body: {
+              filename: uploadedUrlData.newFileName || '',
+              originalFileName: file.name,
+              units: 'mm',
+              searchUpload: false,
+              isPrivate: false,
+              ...data,
+            },
+          })
+        )
+        .then(({ data: uploadedData }) => {
+          const { newPhyndexerId, newModelId } = uploadedData
 
-      const { data: uploadedData, error } = await api({
-        method: 'POST',
-        endpoint: 'models/search-by-model',
-        body: {
-          filename: uploadedUrlData.newFileName || '',
-          originalFileName: file.name,
-          units: 'mm',
-          searchUpload: false,
-          isPrivate: false,
-          ...data,
-        },
-      })
-
-      if (error) {
-        store.dispatch('error-search-results-for-phyndexer', { data: error })
-        return onError(error)
-      }
-
-      const { newPhyndexerId, newModelId } = uploadedData
-
-      store.dispatch('get-related-models-via-phyndexer', {
-        newPhyndexerId,
-        newModelId,
-        onFinish,
-      })
+          store.dispatch('get-related-models-via-phyndexer', {
+            newPhyndexerId,
+            newModelId,
+            onFinish,
+          })
+        })
+        .catch(error => {
+          store.dispatch('error-search-results-for-phyndexer', { data: error })
+          return onError(error)
+        })
     }
   )
   store.on(
     'get-related-models-via-thangs',
-    async (state, { modelId, onFinish = noop, onError = noop }) => {
+    (_state, { modelId, onFinish = noop, onError = noop }) => {
       if (!modelId) return
       store.dispatch('loading-search-results-for-thangs')
 
-      const { error: statusError } = await getThangsStatus({ modelId })
-
-      if (statusError) {
-        store.dispatch('error-search-results-for-thangs', { data: statusError })
-        return onError(statusError)
-      }
-
-      const { data, error } = await api({
-        method: 'GET',
-        endpoint: `models/related/${modelId}`,
-      })
-
-      if (error) {
-        store.dispatch('error-search-results-for-thangs', { data: error })
-        return onError(error)
-      } else {
-        store.dispatch('loaded-search-results-for-thangs', { data })
-        onFinish(data)
-      }
+      getThangsStatus({ modelId })
+        .then(() =>
+          apiForChain({
+            method: 'GET',
+            endpoint: `models/related/${modelId}`,
+          })
+        )
+        .then(({ data }) => {
+          store.dispatch('loaded-search-results-for-thangs', { data })
+          onFinish(data)
+        })
+        .catch(error => {
+          store.dispatch('error-search-results-for-thangs', { data: error })
+          return onError(error)
+        })
     }
   )
   store.on(
