@@ -294,7 +294,14 @@ const NotificationsButton = ({ c, handleNotificationsClick }) => {
   )
 }
 
-const ProfileDropdownMenu = ({ c, dispatch, user, TargetComponent }) => {
+const ProfileDropdownMenu = ({
+  c,
+  dispatch,
+  user,
+  TargetComponent,
+  handleNotificationsClick,
+  notificationsIsOpen,
+}) => {
   const history = useHistory()
   const { navigateWithFlash } = useFlashNotification()
   const handleAfterCreate = useCallback(
@@ -335,9 +342,12 @@ const ProfileDropdownMenu = ({ c, dispatch, user, TargetComponent }) => {
       </DropdownItem>
       <DropdownItem
         onClick={() => {
+          if (notificationsIsOpen) handleNotificationsClick()
           dispatch('close-modal')
-          authenticationService.logout()
-          history.push('/')
+          setTimeout(() => {
+            authenticationService.logout()
+            history.push('/')
+          }, 250)
         }}
       >
         <ExitIcon />
@@ -366,7 +376,13 @@ const ProfileDropdown = ({ user, onClick = noop }) => {
   )
 }
 
-const UserNav = ({ c, handleNotificationsClick, dispatch, handleSearchShow = noop }) => {
+const UserNav = ({
+  c,
+  handleNotificationsClick,
+  notificationsIsOpen,
+  dispatch,
+  handleSearchShow = noop,
+}) => {
   const { loading, user } = useCurrentUser()
 
   if (loading) {
@@ -382,6 +398,8 @@ const UserNav = ({ c, handleNotificationsClick, dispatch, handleSearchShow = noo
           user={user}
           TargetComponent={ProfileDropdown}
           dispatch={dispatch}
+          handleNotificationsClick={handleNotificationsClick}
+          notificationsIsOpen={notificationsIsOpen}
         />
         <Button
           className={classnames(c.Header_Button, c.Header_DesktopOnly)}
@@ -466,6 +484,7 @@ const Header = ({
                 <UserNav
                   c={c}
                   handleNotificationsClick={handleNotificationsClick}
+                  notificationsIsOpen={notificationsIsOpen}
                   dispatch={dispatch}
                   handleSearchShow={handleSearchClicked}
                 />
@@ -553,6 +572,7 @@ const Header = ({
               <UserNav
                 c={c}
                 handleNotificationsClick={handleNotificationsClick}
+                notificationsIsOpen={notificationsIsOpen}
                 dispatch={dispatch}
               />
             </div>
