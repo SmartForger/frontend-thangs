@@ -1,59 +1,45 @@
 import api from '@services/api'
-
-const getInitAtom = () => ({
-  isLoaded: false,
-  isLoading: false,
-  isError: false,
-  data: {},
-})
+import { STATUSES, getStatusState } from '@services/store-service/constants'
 
 const COLLECTION_PREFIX = 'model-comments'
 
 export default store => {
   store.on('@init', () => ({}))
 
-  store.on(`init-${COLLECTION_PREFIX}`, (_, { id }) => {
-    return {
-      [`${COLLECTION_PREFIX}-${id}`]: getInitAtom(),
-    }
-  })
-  store.on(`update-${COLLECTION_PREFIX}`, (state, { id, data }) => ({
+  store.on(`init-${COLLECTION_PREFIX}`, (_, { id }) => ({
     [`${COLLECTION_PREFIX}-${id}`]: {
-      ...state[`${COLLECTION_PREFIX}-${id}`],
-      data,
+      ...getStatusState(STATUSES.INIT),
+      data: {},
     },
   }))
-  store.on(`loading-${COLLECTION_PREFIX}`, (state, { id }) => ({
-    [`${COLLECTION_PREFIX}-${id}`]: {
-      ...state[`${COLLECTION_PREFIX}-${id}`],
-      isLoading: true,
-      isLoaded: false,
-    },
-  }))
-  store.on(`failure-${COLLECTION_PREFIX}`, (state, { id }) => ({
-    [`${COLLECTION_PREFIX}-${id}`]: {
-      ...state[`${COLLECTION_PREFIX}-${id}`],
-      isLoading: false,
-      isLoaded: true,
-      isError: true,
-    },
-  }))
-  store.on(`loaded-${COLLECTION_PREFIX}`, (state, { id, data }) => ({
-    [`${COLLECTION_PREFIX}-${id}`]: {
-      ...state[`${COLLECTION_PREFIX}-${id}`],
-      isLoading: false,
-      isLoaded: true,
+  store.on('change-status', (state, { atom, status = STATUSES.INIT, data }) => ({
+    [atom]: {
+      ...state[atom],
+      ...getStatusState(status),
       data,
     },
   }))
   store.on(`fetch-${COLLECTION_PREFIX}`, async (_, { id }) => {
-    store.dispatch(`loading-${COLLECTION_PREFIX}`, { id })
-    const { data, error } = await api({ method: 'GET', endpoint: `models/${id}/comments` })
+    store.dispatch('change-status', {
+      status: STATUSES.LOADING,
+      atom: `${COLLECTION_PREFIX}-${id}`,
+    })
+    const { data, error } = await api({
+      method: 'GET',
+      endpoint: `models/${id}/comments`,
+    })
 
     if (error) {
-      store.dispatch(`failure-${COLLECTION_PREFIX}`, { id })
+      store.dispatch('change-status', {
+        status: STATUSES.FAILURE,
+        atom: `${COLLECTION_PREFIX}-${id}`,
+      })
     } else {
-      store.dispatch(`loaded-${COLLECTION_PREFIX}`, { id, data })
+      store.dispatch('change-status', {
+        status: STATUSES.LOADED,
+        atom: `${COLLECTION_PREFIX}-${id}`,
+        data,
+      })
     }
   })
 }
