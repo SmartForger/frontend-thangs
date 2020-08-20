@@ -141,7 +141,7 @@ const UserList = ({ users = [], folderId, creator }) => {
               className={c.FolderManagement_UserInline}
               user={groupUser}
               size={'3rem'}
-              isPending
+              isPending={isPending}
               displayEmail
             >
               {isOwner ||
