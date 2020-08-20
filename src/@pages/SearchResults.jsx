@@ -277,7 +277,7 @@ const Page = () => {
       </div>
       {modelId && (
         <ThangsSearchResult
-          models={thangs && thangs.data && thangs.data.models}
+          models={thangs && thangs.data && thangs.data.matches}
           isLoading={thangs && thangs.isLoading}
           isError={thangs && thangs.isError}
           c={c}
