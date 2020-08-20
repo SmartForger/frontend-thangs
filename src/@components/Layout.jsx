@@ -108,7 +108,7 @@ const modalTemplates = {
   reportModel: ReportModel,
 }
 
-const Layout = ({ children, Hero, variant }) => {
+const Layout = ({ children, Hero, variant, showUploadBarText }) => {
   const { modal } = useStoreon('modal')
   const [notificationsIsOpen, setNotificationsOpen] = useState(false)
   const [notificationsClosing, setNotificationsClosing] = useState(false)
@@ -143,6 +143,7 @@ const Layout = ({ children, Hero, variant }) => {
         onNotificationsClick={onNotificationsClick}
         notificationsIsOpen={notificationsIsOpen}
         variant={variant}
+        showUploadBarText={showUploadBarText}
       />
       {ModalView && (
         <Modal

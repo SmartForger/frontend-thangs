@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CardCollection, Layout, Button } from '@components'
 import { useCurrentUser } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
@@ -127,9 +127,15 @@ const LandingHero = () => {
 const Landing = () => {
   const { loading, user } = useCurrentUser()
   const { dispatch, modelPreviews } = useStoreon('modelPreviews')
-
+  const [showUploadBarText, setShowUploadBarText] = useState(false)
+  useEffect(() => {
+    setShowUploadBarText(true)
+    setTimeout(() => {
+      setShowUploadBarText(false)
+    }, 5000)
+  }, [])
   return (
-    <Layout Hero={!loading && !user && LandingHero}>
+    <Layout Hero={!loading && !user && LandingHero} showUploadBarText={showUploadBarText}>
       <Page user={user} dispatch={dispatch} modelPreviews={modelPreviews} />
     </Layout>
   )

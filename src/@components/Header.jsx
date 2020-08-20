@@ -29,7 +29,7 @@ import { ReactComponent as UserIcon } from '@svg/dropdown-profile.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md },
+    mediaQueries: { md, lg },
   } = theme
 
   return {
@@ -74,6 +74,9 @@ const useStyles = createUseStyles(theme => {
     Header_LogoWrapper: {
       marginRight: '2.25rem',
     },
+    Header_RowWrapper: {
+      width: '100%',
+    },
     Header_Row: {
       display: 'flex',
       justifyContent: 'space-between',
@@ -81,6 +84,10 @@ const useStyles = createUseStyles(theme => {
 
       '&:not(:last-of-type)': {
         marginBottom: '1.5rem',
+      },
+
+      [md]: {
+        justifyContent: 'flex-start',
       },
     },
     Header_TopRow: {
@@ -172,7 +179,6 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.5rem',
 
       [md]: {
-        width: '20rem',
         margin: 0,
       },
 
@@ -206,6 +212,14 @@ const useStyles = createUseStyles(theme => {
     Header_SearchForm: {
       display: 'flex',
       flexDirection: 'row',
+      width: '100%',
+      justifyContent: 'flex-start',
+      minWidth: '18.5rem',
+      maxWidth: '32rem',
+
+      [md]: {
+        width: '60%',
+      },
     },
     Header_SearchFormInput: {
       width: '100%',
@@ -236,7 +250,15 @@ const useStyles = createUseStyles(theme => {
       right: '.75rem',
       cursor: 'pointer',
     },
-    Header_UploadIcon: {
+    Header_UploadBar: {
+      width: 18,
+      display: 'flex',
+      alignItems: 'center',
+      flexDirection: 'row',
+      color: theme.colors.gold[500],
+      overflow: 'hidden',
+      transition: 'width 1.4s',
+      whiteSpace: 'nowrap',
       position: 'absolute',
       right: '2.75rem',
       cursor: 'pointer',
@@ -244,6 +266,20 @@ const useStyles = createUseStyles(theme => {
       '& path, & polygon': {
         fill: theme.colors.gold[500],
       },
+
+      '&:hover': {
+        [lg]: {
+          width: '9.5rem',
+        },
+      },
+    },
+    Header_UploadBar__expand: {
+      [lg]: {
+        width: '9.5rem',
+      },
+    },
+    Header_UploadIcon: {
+      marginRight: '.5rem',
     },
     Header_UserPicture: {
       marginLeft: '1rem',
@@ -447,6 +483,7 @@ const Header = ({
   variant,
   onNotificationsClick = noop,
   notificationsIsOpen,
+  showUploadBarText = true,
 }) => {
   const { dispatch } = useStoreon()
   const history = useHistory()
@@ -518,7 +555,7 @@ const Header = ({
         <span className={c.Header_DesktopOnly}>
           <div className={c.Header_DesktopBoundary}>
             <div className={classnames(c.Header_Row, c.Header_TopRow)}>
-              <div>
+              <div className={c.Header_RowWrapper}>
                 <div className={c.Header_Row}>
                   <div onClick={useCallback(() => dispatch('close-modal'), [dispatch])}>
                     <Link className={c.Header_LogoWrapper} to='/'>
@@ -546,13 +583,21 @@ const Header = ({
                           }}
                           value={searchTerm || ''}
                         />
-                        <UploadIcon
-                          title={'Search By Model Upload'}
-                          className={classnames(c.Header_UploadIcon)}
-                          onClick={() =>
-                            dispatch('open-modal', { modalName: 'searchByUpload' })
-                          }
-                        />
+                        <div
+                          className={classnames(c.Header_UploadBar, {
+                            [c.Header_UploadBar__expand]: showUploadBarText,
+                          })}
+                        >
+                          <div className={classnames(c.Header_UploadIcon)}>
+                            <UploadIcon
+                              title={'Search By Model Upload'}
+                              onClick={() =>
+                                dispatch('open-modal', { modalName: 'searchByUpload' })
+                              }
+                            />
+                          </div>
+                          <span>Upload for Search</span>
+                        </div>
                         <MagnifyingGlass
                           title={'Search By Text'}
                           className={classnames(
