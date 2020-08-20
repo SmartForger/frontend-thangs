@@ -244,7 +244,16 @@ export function useUploadedModelByIdWithRelated(id) {
 const useLikeModelMutation = (userId, modelId) => {
   return useMutation(LIKE_MODEL_MUTATION, {
     variables: { userId, modelId },
-    refetchQueries: [{ query: MODEL_QUERY, variables: { id: modelId } }],
+    refetchQueries: [
+      {
+        query: MODEL_QUERY,
+        variables: { id: modelId }
+      },
+      {
+        query: USER_QUERY,
+        variables: { id: userId },
+      }
+    ],
     update: (
       store,
       {
@@ -265,7 +274,16 @@ const useLikeModelMutation = (userId, modelId) => {
 const useUnlikeModelMutation = (userId, modelId) => {
   return useMutation(UNLIKE_MODEL_MUTATION, {
     variables: { userId, modelId },
-    refetchQueries: [{ query: MODEL_QUERY, variables: { id: modelId } }],
+    refetchQueries: [
+      {
+        query: MODEL_QUERY,
+        variables: { id: modelId }
+      },
+      {
+        query: USER_QUERY,
+        variables: { id: userId },
+      }
+    ],
     update: (
       store,
       {
