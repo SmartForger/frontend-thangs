@@ -15,7 +15,7 @@ const getPhynStatus = intervalRequest(
     if (data === 'completed') resolve(data)
   },
   {
-    interval: 1000,
+    interval: 4000,
     timeout: 10 * 60 * 1000,
   }
 )
@@ -34,7 +34,7 @@ const getThangsStatus = intervalRequest(
     if (data === 'completed') resolve(data)
   },
   {
-    interval: 3000,
+    interval: 4000,
     timeout: 10 * 60 * 1000,
   }
 )
