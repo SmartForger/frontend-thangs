@@ -19,8 +19,8 @@ const useStyles = createUseStyles(_theme => {
     },
     Modal_CloseButton: {
       position: 'absolute',
-      right: '4rem',
-      top: '2rem',
+      right: '3rem',
+      top: '3rem',
       cursor: 'pointer',
     },
     Modal_Content: {
