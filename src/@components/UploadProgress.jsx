@@ -19,8 +19,7 @@ const useStyles = createUseStyles(theme => {
       ...theme.mixins.text.uploadFrameText,
       color: theme.colors.purple[900],
       marginTop: '1.75rem',
-      textAlign: 'center',
-      width: '16rem',
+      width: '12rem',
     },
     UploadFrame: {
       display: 'flex',
