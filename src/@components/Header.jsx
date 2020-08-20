@@ -452,7 +452,7 @@ const Header = ({
   const history = useHistory()
   const c = useStyles({ inverted, notificationsIsOpen })
   const [searchTerm, setSearchTerm] = useState(undefined)
-  const [showMobileSearch, setShowMobileSearch] = useState(false)
+  const [showMobileSearch, setShowMobileSearch] = useState(variant !== 'logo-only')
   const handleSearchSubmit = e => {
     e.preventDefault()
     if (searchTerm) {
