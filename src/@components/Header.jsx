@@ -224,7 +224,7 @@ const useStyles = createUseStyles(theme => {
         fill: theme.colors.gold[500],
       },
     },
-    Header_DesktopSearchFormIcon: {
+    Header_SearchFormIcon: {
       position: 'absolute',
       left: '.75rem',
       '& path, & polygon': {
@@ -496,10 +496,7 @@ const Header = ({
               <form className={c.Header_SearchForm} onSubmit={handleSearchSubmit}>
                 <div className={classnames(c.Header_SearchFormWrapper)}>
                   <MagnifyingGlass
-                    className={classnames(
-                      c.Header_SearchIcon,
-                      c.Header_DesktopSearchFormIcon
-                    )}
+                    className={classnames(c.Header_SearchIcon, c.Header_SearchFormIcon)}
                     onClick={handleSearchSubmit}
                   />
                   <TextInput
@@ -535,7 +532,7 @@ const Header = ({
                         <MagnifyingGlass
                           className={classnames(
                             c.Header_SearchIcon,
-                            c.Header_DesktopSearchFormIcon
+                            c.Header_SearchFormIcon
                           )}
                         />
                         <TextInput
