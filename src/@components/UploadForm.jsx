@@ -55,9 +55,6 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'flex-end',
       marginTop: '2rem',
     },
-    UploadForm_Button: {
-      padding: '.5rem 2.25rem',
-    },
     UploadForm_Button__CancelButton: {
       marginRight: '.5rem',
     },
