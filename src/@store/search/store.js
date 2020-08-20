@@ -256,7 +256,7 @@ export default store => {
           })
         )
         .then(({ data }) => {
-          store.dispatch('loaded-search-results-for-thangs', { data })
+          store.dispatch('loaded-search-results-for-thangs', { data: { matches: data } })
           onFinish(data)
         })
         .catch(error => {
