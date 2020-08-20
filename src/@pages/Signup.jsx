@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory, useParams, useLocation } from 'react-router-dom'
 import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
 import * as swearjar from '@utilities'
@@ -82,14 +82,22 @@ const signUpSchema = Joi.object({
   username: Joi.string().required(),
 })
 
+const useQuery = location => {
+  return new URLSearchParams(location.search)
+}
+
 const Page = () => {
+  const location = useLocation()
+  const query = useQuery(location)
+  const redirectUrl = useMemo(() => query.get('redirectUrl'), [query])
+  const inviteEmail = useMemo(() => query.get('email'), [query])
   const [waiting, setWaiting] = useState(false)
   const [signupErrorMessage, setSignupErrorMessage] = useState(null)
   const [invalidFields, setInvalidFields] = useState([])
   const c = useStyles()
 
   const initialState = {
-    email: '',
+    email: inviteEmail || '',
     password: '',
     first_name: '',
     last_name: '',
@@ -135,9 +143,10 @@ const Page = () => {
         email: inputState.email,
         password: inputState.password,
       })
+      if (redirectUrl) return history.push(redirectUrl)
       history.push('/welcome')
     }
-  }, [history, inputState, registrationCode])
+  }, [history, inputState, redirectUrl, registrationCode])
 
   const setFieldToValid = useCallback(
     fieldName => {
