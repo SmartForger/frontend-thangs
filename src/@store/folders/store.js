@@ -71,11 +71,11 @@ export default store => {
       })
   })
 
-  store.on('fetch-folder', async (state, folderId) => {
+  store.on('fetch-folder', async (state, { folderId, inviteCode }) => {
     store.dispatch('folders-loading')
     await api({
       method: 'GET',
-      endpoint: `folders/${folderId}`,
+      endpoint: `folders/${folderId}${inviteCode ? `?inviteCode=${inviteCode}` : ''}`,
     })
       .then(res => {
         const folder = res.data

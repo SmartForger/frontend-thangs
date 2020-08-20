@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import * as R from 'ramda'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import { useCurrentUser } from '@hooks'
 import { Breadcrumbs, CardCollection, Layout, Spinner, WithFlash } from '@components'
 import { Message404 } from '../404'
@@ -11,7 +11,7 @@ import ModelCardsByIds from '@components/CardCollection/ModelCardsByIds'
 const useStyles = createUseStyles(_theme => {
   return {
     Folder: {
-      width: '100%'
+      width: '100%',
     },
     Folder_Breadcrumbs: {
       marginBottom: '2.5rem',
@@ -37,13 +37,20 @@ function Folder({ folder, modelCount }) {
   )
 }
 
-function Page() {
+const useQuery = location => {
+  return new URLSearchParams(location.search)
+}
+
+const Page = () => {
+  const location = useLocation()
+  const query = useQuery(location)
+  const inviteCode = useMemo(() => query.get('inviteCode'), [query])
   const { folderId } = useParams()
   const { dispatch, folders } = useStoreon('folders')
 
   useEffect(() => {
-    dispatch('fetch-folder', folderId)
-  }, [dispatch, folderId])
+    dispatch('fetch-folder', { folderId, inviteCode })
+  }, [dispatch, folderId, inviteCode])
 
   const { loading: userLoading, error: userError, user } = useCurrentUser()
 
