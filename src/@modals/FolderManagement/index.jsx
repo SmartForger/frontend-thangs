@@ -75,6 +75,17 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'space-between',
       alignItems: 'center',
     },
+    FolderManagement_PendingFlag: {
+      textTransform: 'uppercase',
+      backgroundColor: theme.colors.grey[100],
+      borderRadius: '.25rem',
+      color: 'white',
+      letterSpacing: '.16em',
+      fontWeight: 'bold',
+      fontSize: '11px',
+      lineHeight: '16px',
+      padding: '1px 2px 2px 3px',
+    },
   }
 })
 
@@ -116,7 +127,7 @@ const UserList = ({ users = [], folderId, creator }) => {
         const isOwner =
           groupUserId.toString() !== currentUserId.toString() &&
           creator.toString() !== groupUserId.toString()
-
+        const isPending = user && user.isPending
         if (!groupUser.fullName)
           groupUser.fullName = `${groupUser.first_name} ${groupUser.last_name}`
         return (
@@ -130,12 +141,22 @@ const UserList = ({ users = [], folderId, creator }) => {
               className={c.FolderManagement_UserInline}
               user={groupUser}
               size={'3rem'}
+              isPending
               displayEmail
             >
-              {isOwner && (
-                <RevokeAccessButton targetUserId={groupUser.id} folderId={folderId}>
-                  <TrashCanIcon className={c.FolderManagement_TrashCanIcon} />
-                </RevokeAccessButton>
+              {isOwner ||
+                (isPending && (
+                  <RevokeAccessButton targetUserId={groupUser.id} folderId={folderId}>
+                    <TrashCanIcon className={c.FolderManagement_TrashCanIcon} />
+                  </RevokeAccessButton>
+                ))}
+              {isPending && (
+                <span
+                  className={c.FolderManagement_PendingFlag}
+                  title={'Email invite has been sent'}
+                >
+                  Pending Invite
+                </span>
               )}
             </UserInline>
           </li>

@@ -15,11 +15,13 @@ const useStyles = createUseStyles(theme => {
       flexGrow: 1,
       fontSize: '1rem',
       fontWeight: '600',
-      color: theme.colors.black[500],
+      color: ({ isPending }) =>
+        isPending ? theme.colors.grey[200] : theme.colors.black[500],
     },
     UserInline_SmallName: {
       ...theme.mixins.text.linkText,
       fontSize: '.75rem',
+      textTransform: 'capitalize',
     },
     UserInline_Suffix: {
       ...theme.mixins.text.footerText,
@@ -35,8 +37,9 @@ const UserInline = ({
   size = '1.75rem',
   children,
   suffix,
+  isPending,
 }) => {
-  const c = useStyles()
+  const c = useStyles({ isPending })
   let userName =
     (user && user.fullName) || (user && user.profile && user.profile.fullName)
   if (userName && userName.length > 20) userName = userName.slice(0, 20) + '...'
