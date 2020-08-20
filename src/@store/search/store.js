@@ -270,7 +270,7 @@ export default store => {
         store.dispatch('error-search-results-for-thangs', { data: error })
         return onError(error)
       } else {
-        store.dispatch('loaded-search-results-for-thangs', { data: { matches: data } })
+        store.dispatch('loaded-search-results-for-thangs', { data })
         onFinish(data)
       }
     }
