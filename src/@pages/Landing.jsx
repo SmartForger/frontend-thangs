@@ -124,7 +124,49 @@ const LandingHero = () => {
   )
 }
 
-const Landing = () => {
+const NewSignUpLandingHero = () => {
+  const { dispatch } = useStoreon()
+  const c = useStyles()
+
+  return (
+    <>
+      <div className={c.Landing_Hero}>
+        <BackgroundSvg className={c.Landing_Background} />
+        <div className={c.Landing_TextContainer}>
+          <div className={c.Landing_PromotionalText}>
+            <span className={c.Landing_PromotionalPrimaryText}>
+              <u className={c.Landing_PromotionalPrimaryText}>Welcome to Thangs!</u>
+            </span>
+          </div>
+          <div className={c.Landing_PromotionalSecondaryText}>
+            Search for models in Thangs or upload your model and our powerful technology
+            will find all geometrically similar models. Connect with the Thangs community
+            to collaborate and share 3D models.
+          </div>
+          <div className={c.Landing_SearchByModelUploadButton}>
+            <Button
+              onClick={() => dispatch('open-modal', { modalName: 'searchByUpload' })}
+            >
+              <UploadIcon className={c.Landing_SearchByModelUploadButton_UploadIcon} />
+              <span>Search by Model Upload</span>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+const getHero = ({ loading, user, newSignUp }) => {
+  if (!loading && !user) {
+    return LandingHero
+  } else if (newSignUp) {
+    return NewSignUpLandingHero
+  }
+  return null
+}
+
+const Landing = ({ newSignUp }) => {
   const { loading, user } = useCurrentUser()
   const { dispatch, modelPreviews } = useStoreon('modelPreviews')
   const [showUploadBarText, setShowUploadBarText] = useState(false)
@@ -134,8 +176,10 @@ const Landing = () => {
       setShowUploadBarText(false)
     }, 5000)
   }, [])
+
+  const HeroComponent = getHero({ loading, user, newSignUp })
   return (
-    <Layout Hero={!loading && !user && LandingHero} showUploadBarText={showUploadBarText}>
+    <Layout Hero={HeroComponent} showUploadBarText={showUploadBarText}>
       <Page user={user} dispatch={dispatch} modelPreviews={modelPreviews} />
     </Layout>
   )

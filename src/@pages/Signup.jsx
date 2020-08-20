@@ -135,7 +135,7 @@ const Page = () => {
         email: inputState.email,
         password: inputState.password,
       })
-      history.push('/')
+      history.push('/welcome')
     }
   }, [history, inputState, registrationCode])
 

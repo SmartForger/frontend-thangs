@@ -80,6 +80,10 @@ const App = () => {
               <Switch>
                 <Route exact path='/' component={Landing} />
                 <Route
+                  path='/welcome'
+                  render={props => <Landing {...props} newSignUp={true} />}
+                />
+                <Route
                   path='/folder/:folderId/upload'
                   component={routeRequiresAuth(FolderUpload)}
                 />
