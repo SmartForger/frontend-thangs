@@ -587,14 +587,13 @@ const Header = ({
                           className={classnames(c.Header_UploadBar, {
                             [c.Header_UploadBar__expand]: showUploadBarText,
                           })}
+                          onClick={() =>
+                            dispatch('open-modal', { modalName: 'searchByUpload' })
+                          }
+                          title={'Search By Model Upload'}
                         >
                           <div className={classnames(c.Header_UploadIcon)}>
-                            <UploadIcon
-                              title={'Search By Model Upload'}
-                              onClick={() =>
-                                dispatch('open-modal', { modalName: 'searchByUpload' })
-                              }
-                            />
+                            <UploadIcon />
                           </div>
                           <span>Upload for Search</span>
                         </div>
