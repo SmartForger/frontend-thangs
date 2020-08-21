@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import ErrorImg from '@svg/image-error-icon.svg'
-import { ReactComponent as LoadingIcon } from '@svg/icon-loader.svg'
+import { Loader } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -77,8 +77,8 @@ const useStyles = createUseStyles(theme => {
         boxShadow: '-1px 2px 4px -1px rgba(0,0,0,0.79)',
       },
     },
-    Spinner: {
-      animation: '$spin 1.2s linear infinite',
+    ModelThumbnail_Loader: {
+      position: 'absolute',
     },
   }
 })
@@ -123,7 +123,7 @@ const ModelThumbnail = ({
             title={model.fileName}
           />
         )}
-        {loadingState === LOADING && <LoadingIcon className={c.Spinner} />}
+        {loadingState === LOADING && <Loader className={c.ModelThumbnail_Loader} />}
       </div>
       {waldoSrc && (
         <div
@@ -140,7 +140,7 @@ const ModelThumbnail = ({
             onError={i => (i.target.style.display = 'none')}
             alt={name}
           />
-          {/* {lookingForWaldo && <LoadingIcon className={c.Spinner} />} */}
+          {/* {lookingForWaldo && <Loader />} */}
         </div>
       )}
     </>

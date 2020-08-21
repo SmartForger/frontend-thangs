@@ -74,12 +74,6 @@ const useStyles = createUseStyles(theme => {
       borderRight: '6px solid transparent',
       borderTop: `8px solid ${theme.colors.purple[900]}`,
     },
-    UploadForm_Spinner: {
-      marginTop: '14rem',
-      '& .path': {
-        stroke: theme.variables.colors.uploaderText,
-      },
-    },
     UploadForm_Dots: {
       ...theme.mixins.text.infoMessageText,
       width: '8.75rem',
