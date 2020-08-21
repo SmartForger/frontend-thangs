@@ -9,21 +9,22 @@ import ReactPixel from 'react-facebook-pixel'
 import { authenticationService, graphqlClient } from '@services'
 import { history } from './history'
 import {
-  Landing,
-  Login,
-  Signup,
-  PasswordReset,
   ConfirmPasswordReset,
-  SearchResults,
-  Page404,
-  Profile,
-  Likes,
   EditProfile,
-  RedirectProfile,
-  Newspost,
-  ModelDetail,
-  TermsAndConditions,
   Home,
+  Landing,
+  Likes,
+  Login,
+  ModelDetail,
+  Newspost,
+  Page404,
+  PasswordReset,
+  PrivacyPolicy,
+  Profile,
+  RedirectProfile,
+  SearchResults,
+  Signup,
+  TermsAndConditions,
 } from '@pages'
 import { Upload } from '@pages/Upload'
 import { UploadVersion } from '@pages/UploadVersion'
@@ -98,6 +99,7 @@ const App = () => {
                   exact
                   component={TermsAndConditions}
                 />
+                <Route path='/privacy_policy' exact component={PrivacyPolicy} />
                 <Route path='/home' component={routeRequiresAuth(Home)} />
                 <Route
                   path='/signup/:registrationCode'

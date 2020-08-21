@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useStoreon } from 'storeon/react'
-import { Header, Modal, NotificationsList } from '@components'
+import { Header, Modal, NotificationsList, Footer } from '@components'
 import {
   Upload,
   SearchByUpload,
@@ -173,6 +173,7 @@ const Layout = ({ children, Hero, variant, showUploadBarText }) => {
           )}
         </div>
       </div>
+      <Footer />
     </>
   )
 }
