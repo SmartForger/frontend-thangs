@@ -1,8 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import {
-  ProgressText,
-  Spinner,
-  UploadFrame,
+  Loader,
+  UploadProgress,
   Uploader,
   useFlashNotification,
   UploadForm,
@@ -86,17 +85,14 @@ const Upload = () => {
     <div className={c.Upload}>
       <div className={c.Upload_Column__frame}>
         {uploadModel.isLoading ? (
-          <UploadFrame>
-            <Spinner className={c.Upload_Spinner} />
-            <ProgressText className={c.Upload_Dots} text='Uploading' />
-          </UploadFrame>
+          <UploadProgress />
         ) : (
           <Uploader showError={uploadModel.isError} file={file} setFile={setFile} />
         )}
       </div>
       {folders.loading ? (
         <div className={c.Upload_Column__form}>
-          <Spinner className={c.Upload_Spinner} />
+          <Loader />
         </div>
       ) : (
         <div className={c.Upload_Column__form}>
