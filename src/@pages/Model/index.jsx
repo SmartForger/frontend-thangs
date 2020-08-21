@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory, Link, useParams } from 'react-router-dom'
-// import * as R from 'ramda'
+import * as R from 'ramda'
 import {
   Button,
   CommentsForModel,
@@ -12,7 +12,7 @@ import {
   ProgressText,
   RelatedModels,
   Revised,
-  Spinner,
+  Spinner, useFlashNotification,
 } from '@components'
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
 import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
@@ -225,6 +225,7 @@ function Details({ currentUser, model, className }) {
 const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   const c = useStyles()
   const history = useHistory()
+  const { navigateWithFlash } = useFlashNotification()
   const isFromThePortal = () =>
     history.location && history.location.state && history.location.state.prevPath
   const { useFetchOnce } = useServices()
@@ -234,6 +235,11 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
 
   if (isLoading || !isLoaded) {
     return <Spinner />
+  } else if(R.isEmpty(modelData)) {
+    navigateWithFlash(
+      '/home',
+      'The model entered does not exist'
+    )
   } else if (!modelData) {
     return <Message404 />
   } else if (isError) {
