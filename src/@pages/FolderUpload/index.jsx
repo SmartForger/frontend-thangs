@@ -172,7 +172,7 @@ const Page = () => {
   } = useStoreon('folders')
 
   useEffect(() => {
-    dispatch('fetch-folder', folderId)
+    dispatch('fetch-folder', { folderId })
   }, [dispatch, folderId])
 
   const folder = currentFolder

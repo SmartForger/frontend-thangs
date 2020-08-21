@@ -18,7 +18,7 @@ import { useStoreon } from 'storeon/react'
 const useStyles = createUseStyles(theme => {
   return {
     FolderManagement: {
-      width: '40vw',
+      width: '100%',
       margin: '3rem auto',
     },
     FolderManagement_Spinner: {
@@ -39,7 +39,7 @@ const useStyles = createUseStyles(theme => {
       marginTop: ({ hasErrors }) => (hasErrors ? '1rem' : '4.375rem'),
     },
     FolderManagement_BottomRow: {
-      marginTop: '3rem',
+      marginTop: '2rem',
       width: '100%',
     },
     FolderManagement_List: {
@@ -117,48 +117,37 @@ const RevokeAccessButton = ({ folderId, targetUserId, children }) => {
 const UserList = ({ users = [], folderId, creator }) => {
   const c = useStyles({})
   const currentUserId = authenticationService.getCurrentUserId()
-
+  const isCurrentUserOwner = creator === currentUserId
   return (
     <ul className={c.FolderManagement_List}>
       {users.map((user, idx) => {
-        const isFirst = idx === 0
-        const groupUser = user
-        const groupUserId = groupUser.id || ''
-        const isOwner =
-          `${groupUserId}` !== `${currentUserId}` && `${creator}` !== `${groupUserId}`
+        const isOwner = user && user.isOwner
         const isPending = user && user.isPending
-        if (!groupUser.fullName)
-          groupUser.fullName =
-            (groupUser.first_name &&
-              groupUser.last_name &&
-              `${groupUser.first_name} ${groupUser.last_name}`) ||
-            ''
         return (
-          <li
-            className={classnames(c.FolderManagement_Item, {
-              [c.FolderManagement_Item__isFirst]: isFirst,
-            })}
-            key={idx}
-          >
+          <li className={c.FolderManagement_Item} key={idx}>
             <UserInline
               className={c.FolderManagement_UserInline}
-              user={groupUser}
+              user={user}
               size={'3rem'}
               isPending={isPending}
               displayEmail
             >
-              {isOwner ||
-                (isPending && (
-                  <RevokeAccessButton targetUserId={groupUser.id} folderId={folderId}>
-                    <TrashCanIcon className={c.FolderManagement_TrashCanIcon} />
-                  </RevokeAccessButton>
-                ))}
+              {isCurrentUserOwner && !isOwner && !isPending && (
+                <RevokeAccessButton targetUserId={user && user.id} folderId={folderId}>
+                  <TrashCanIcon className={c.FolderManagement_TrashCanIcon} />
+                </RevokeAccessButton>
+              )}
               {isPending && (
                 <span
                   className={c.FolderManagement_PendingFlag}
                   title={'Email invite has been sent'}
                 >
                   Pending Invite
+                </span>
+              )}
+              {isOwner && (
+                <span className={c.FolderManagement_PendingFlag} title={'Folder Admin'}>
+                  Owner/Admin
                 </span>
               )}
             </UserInline>

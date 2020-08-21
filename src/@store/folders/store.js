@@ -168,7 +168,7 @@ export default store => {
     } else {
       onFinish(data)
       store.dispatch('folder-saved')
-      store.dispatch('fetch-folder', folderId)
+      store.dispatch('fetch-folder', { folderId })
     }
   })
 
@@ -191,7 +191,7 @@ export default store => {
       ) {
         store.dispatch('fetch-team', state.folders.currentFolder.team_id)
       } else {
-        store.dispatch('fetch-folder', folderId)
+        store.dispatch('fetch-folder', { folderId })
       }
     }
   })
