@@ -224,7 +224,7 @@ const useStyles = createUseStyles(theme => {
     Header_SearchFormInput: {
       width: '100%',
       [md]: {
-        width: 'auto',
+        width: '80%',
       },
     },
     Header_SearchFormInput_active: {
