@@ -123,13 +123,16 @@ const UserList = ({ users = [], folderId, creator }) => {
       {users.map((user, idx) => {
         const isFirst = idx === 0
         const groupUser = user
-        const groupUserId = groupUser.id
+        const groupUserId = groupUser.id || ''
         const isOwner =
-          groupUserId.toString() !== currentUserId.toString() &&
-          creator.toString() !== groupUserId.toString()
+          `${groupUserId}` !== `${currentUserId}` && `${creator}` !== `${groupUserId}`
         const isPending = user && user.isPending
         if (!groupUser.fullName)
-          groupUser.fullName = `${groupUser.first_name} ${groupUser.last_name}`
+          groupUser.fullName =
+            (groupUser.first_name &&
+              groupUser.last_name &&
+              `${groupUser.first_name} ${groupUser.last_name}`) ||
+            ''
         return (
           <li
             className={classnames(c.FolderManagement_Item, {
