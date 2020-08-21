@@ -170,11 +170,14 @@ const Landing = ({ newSignUp }) => {
   const { loading, user } = useCurrentUser()
   const { dispatch, modelPreviews } = useStoreon('modelPreviews')
   const [showUploadBarText, setShowUploadBarText] = useState(false)
+
   useEffect(() => {
-    setShowUploadBarText(true)
     setTimeout(() => {
-      setShowUploadBarText(false)
-    }, 5000)
+      setShowUploadBarText(true)
+      setTimeout(() => {
+        setShowUploadBarText(false)
+      }, 4000)
+    }, 500)
   }, [])
 
   const HeroComponent = getHero({ loading, user, newSignUp })
