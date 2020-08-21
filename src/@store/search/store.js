@@ -94,29 +94,28 @@ export default store => {
   store.on(
     'get-search-results-by-text',
     async (_state, { searchTerm, onFinish = noop, onError = noop }) => {
-      store.dispatch('change-search-results-status', { 
+      store.dispatch('change-search-results-status', {
         atom: ATOMS.TEXT,
         status: STATUSES.LOADING,
       })
-      
-    
+
       const { data, error } = await api({
         method: 'GET',
         endpoint: `models/search-by-text?searchTerm=${searchTerm}`,
       })
 
       if (error) {
-        store.dispatch('change-search-results-status', { 
+        store.dispatch('change-search-results-status', {
           atom: ATOMS.TEXT,
           status: STATUSES.FAILURE,
           data: error,
         })
         onError(error)
       } else {
-        store.dispatch('change-search-results-status', { 
+        store.dispatch('change-search-results-status', {
           atom: ATOMS.TEXT,
           status: STATUSES.LOADED,
-          data: { matches: data }
+          data: { matches: data },
         })
 
         onFinish(error)
@@ -126,7 +125,7 @@ export default store => {
   store.on(
     'get-search-results-by-model',
     (_state, { file, data, onFinish = noop, onError = noop }) => {
-      store.dispatch('change-search-results-status', { 
+      store.dispatch('change-search-results-status', {
         atom: ATOMS.PHYNDEXER,
         status: STATUSES.LOADING,
       })
@@ -165,7 +164,7 @@ export default store => {
           })
         })
         .catch(error => {
-          store.dispatch('change-search-results-status', { 
+          store.dispatch('change-search-results-status', {
             atom: ATOMS.PHYNDEXER,
             status: STATUSES.FAILURE,
             data: error,
@@ -178,7 +177,7 @@ export default store => {
     'get-related-models-via-thangs',
     (_state, { modelId, onFinish = noop, onError = noop }) => {
       if (!modelId) return
-      store.dispatch('change-search-results-status', { 
+      store.dispatch('change-search-results-status', {
         atom: ATOMS.THANGS,
         status: STATUSES.LOADING,
       })
@@ -191,19 +190,19 @@ export default store => {
           })
         )
         .then(({ data }) => {
-          store.dispatch('change-search-results-status', { 
+          store.dispatch('change-search-results-status', {
             atom: ATOMS.THANGS,
             status: STATUSES.LOADED,
-            data: { matches: data },
+            data: data,
           })
 
           onFinish(data)
         })
         .catch(error => {
-          store.dispatch('change-search-results-status', { 
+          store.dispatch('change-search-results-status', {
             atom: ATOMS.THANGS,
             status: STATUSES.FAILURE,
-            data: error
+            data: error,
           })
           return onError(error)
         })
@@ -213,7 +212,7 @@ export default store => {
     'get-related-models-via-phyndexer',
     async (_state, { newPhyndexerId, newModelId, onFinish = noop, onError = noop }) => {
       if (!newPhyndexerId) return
-      store.dispatch('change-search-results-status', { 
+      store.dispatch('change-search-results-status', {
         atom: ATOMS.PHYNDEXER,
         status: STATUSES.LOADING,
       })
@@ -231,7 +230,7 @@ export default store => {
       })
 
       if (error) {
-        store.dispatch('change-search-results-status', { 
+        store.dispatch('change-search-results-status', {
           atom: ATOMS.PHYNDEXER,
           status: STATUSES.FAILURE,
           data: error,
@@ -239,7 +238,7 @@ export default store => {
         onFinish({ modelId: newModelId })
         return onError(error)
       } else {
-        store.dispatch('change-search-results-status', { 
+        store.dispatch('change-search-results-status', {
           atom: ATOMS.PHYNDEXER,
           status: STATUSES.LOADED,
           data,
