@@ -38,7 +38,11 @@ const Upload = () => {
   const { navigateWithFlash } = useFlashNotification()
   const c = useStyles()
 
-  const { uploadModel, folders, dispatch } = useStoreon('uploadModel', 'folders')
+  const { uploadModel, folders, modal, dispatch } = useStoreon(
+    'uploadModel',
+    'folders',
+    'modal'
+  )
 
   useEffect(() => {
     dispatch('fetch-folders')
@@ -96,7 +100,12 @@ const Upload = () => {
         </div>
       ) : (
         <div className={c.Upload_Column__form}>
-          <UploadForm onSubmit={onSubmit} disableSubmit={!file} folders={folders.data} />
+          <UploadForm
+            onSubmit={onSubmit}
+            disableSubmit={!file}
+            folders={folders.data}
+            selectedFolderId={modal && modal.modalData && modal.modalData.folderId}
+          />
         </div>
       )}
     </div>

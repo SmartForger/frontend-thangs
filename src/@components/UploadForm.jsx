@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useEffect } from 'react'
 import Select from 'react-select'
 import { Button, TextInput } from '@components'
 import { ReactComponent as FolderIcon } from '@svg/folder-icon.svg'
@@ -94,8 +94,21 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
+const UploadForm = ({ onSubmit, disableSubmit, file, folders, selectedFolderId }) => {
   const c = useStyles()
+
+  const usersFolders = useMemo(() => {
+    return folders && folders.length
+      ? folders.map(folder => ({ value: folder.id, label: folder.name }))
+      : []
+  }, [folders])
+
+  const selectedFolder = useMemo(() => {
+    if (!selectedFolderId) return undefined
+    const selectedFolderObj = folders.find(folder => folder.id === selectedFolderId)
+    const selectedFolder = { value: selectedFolderId, label: selectedFolderObj.name }
+    return selectedFolder
+  }, [folders, selectedFolderId])
 
   const initialState = {
     name: '',
@@ -111,6 +124,13 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
     initialState,
   })
 
+  useEffect(() => {
+    if (selectedFolderId) {
+      handleOnInputChange('folder', selectedFolderId)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const CATEGORIES = [
     { value: 'automotive', label: 'Automotive' },
     { value: 'aerospace', label: 'Aerospace' },
@@ -123,12 +143,6 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
     { value: 'technology', label: 'Technology' },
     { value: 'hobbyist', label: 'Hobbyist' },
   ]
-
-  const usersFolders = useMemo(() => {
-    return folders && folders.length
-      ? folders.map(folder => ({ value: folder.id, label: folder.name }))
-      : []
-  }, [folders])
 
   const handleOnInputChange = useCallback(
     (key, value) => {
@@ -208,6 +222,7 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders }) => {
             className={c.UploadForm_Select}
             name='folder'
             placeholder='Select folder'
+            defaultValue={selectedFolder}
             options={[{ value: 'public', label: 'Public' }, ...usersFolders]}
             onChange={e => {
               if (e) handleOnInputChange('folder', e.value)
