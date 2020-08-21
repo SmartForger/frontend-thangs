@@ -9,15 +9,19 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'row',
       textAlign: 'center',
       justifyContent: 'space-between',
-      margin: '2rem 3rem 0',
-      padding: '2rem 1rem',
+      position: 'absolute',
+      bottom: 0,
+      width: '100%',
+      height: '3.75rem',
 
       '& > p': {
         margin: 0,
+        paddingLeft: '3rem',
       },
 
       '& > a': {
         color: theme.colors.black[500],
+        paddingRight: '3rem',
       },
     },
   }

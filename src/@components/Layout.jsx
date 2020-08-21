@@ -41,6 +41,10 @@ const useStyles = createUseStyles(theme => {
         opacity: 0,
       },
     },
+    Container: {
+      position: 'relative',
+      minHeight: '100vh',
+    },
     Layout: {
       display: 'flex',
       flexDirection: 'row',
@@ -63,6 +67,9 @@ const useStyles = createUseStyles(theme => {
       MsFilter: 'blur(4px)',
       MozFilter: 'blur(4px)',
       WebkitFilter: 'blur(4px)',
+    },
+    Layout_Content: {
+      paddingBottom: '7rem',
     },
     NotificationsList: {
       maxWidth: '43rem',
@@ -138,7 +145,7 @@ const Layout = ({ children, Hero, variant, showUploadBarText }) => {
   }, [modal])
 
   return (
-    <>
+    <div className={c.Container}>
       <Header
         onNotificationsClick={onNotificationsClick}
         notificationsIsOpen={notificationsIsOpen}
@@ -154,7 +161,11 @@ const Layout = ({ children, Hero, variant, showUploadBarText }) => {
           <ModalView {...modal.modalData} />
         </Modal>
       )}
-      <div className={classnames({ [c.Layout_blur]: modal.isOpen && !modal.isHidden })}>
+      <div
+        className={classnames(c.Layout_Content, {
+          [c.Layout_blur]: modal.isOpen && !modal.isHidden,
+        })}
+      >
         {Hero && <Hero />}
         <div className={c.Layout}>
           {children}
@@ -174,7 +185,7 @@ const Layout = ({ children, Hero, variant, showUploadBarText }) => {
         </div>
       </div>
       <Footer />
-    </>
+    </div>
   )
 }
 

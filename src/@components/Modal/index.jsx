@@ -25,7 +25,7 @@ const useStyles = createUseStyles(_theme => {
     },
     Modal_Content: {
       width: '90%',
-      margin: '0 auto',
+      margin: '6rem auto 0',
       maxWidth: '32rem',
     },
   }

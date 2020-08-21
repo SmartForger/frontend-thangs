@@ -483,7 +483,7 @@ const Header = ({
   variant,
   onNotificationsClick = noop,
   notificationsIsOpen,
-  showUploadBarText = true,
+  showUploadBarText = false,
 }) => {
   const { dispatch } = useStoreon()
   const history = useHistory()
