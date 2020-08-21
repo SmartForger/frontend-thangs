@@ -12,7 +12,8 @@ import {
   ProgressText,
   RelatedModels,
   Revised,
-  Spinner, useFlashNotification,
+  Spinner,
+  useFlashNotification,
 } from '@components'
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
 import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
@@ -235,11 +236,8 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
 
   if (isLoading || !isLoaded) {
     return <Spinner />
-  } else if(R.isEmpty(modelData)) {
-    navigateWithFlash(
-      '/home',
-      'The model entered does not exist'
-    )
+  } else if (R.isEmpty(modelData)) {
+    navigateWithFlash('/home', 'The model entered does not exist')
   } else if (!modelData) {
     return <Message404 />
   } else if (isError) {

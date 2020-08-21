@@ -2,7 +2,14 @@ import React, { useEffect, useMemo } from 'react'
 import * as R from 'ramda'
 import { useParams, useLocation } from 'react-router-dom'
 import { useCurrentUser } from '@hooks'
-import {Breadcrumbs, CardCollection, Layout, Spinner, useFlashNotification, WithFlash} from '@components'
+import {
+  Breadcrumbs,
+  CardCollection,
+  Layout,
+  Spinner,
+  useFlashNotification,
+  WithFlash,
+} from '@components'
 import { Message404 } from '../404'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
@@ -57,11 +64,8 @@ const Page = () => {
 
   if (userLoading || folders.isLoading) {
     return <Spinner />
-  } else if(R.isEmpty(folders.currentFolder)) {
-    navigateWithFlash(
-      '/home',
-      'The folder entered does not exist'
-    )
+  } else if (R.isEmpty(folders.currentFolder)) {
+    navigateWithFlash('/home', 'The folder entered does not exist')
   } else if (!folders.currentFolder || !user) {
     return <Message404 />
   } else if (userError || folders.loadError) {
