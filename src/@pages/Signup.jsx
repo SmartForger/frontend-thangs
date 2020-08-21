@@ -120,6 +120,23 @@ const Page = () => {
   const history = useHistory()
   const { registrationCode } = useParams()
 
+  const handleLoginREST = useCallback(async () => {
+    setWaiting(true)
+    setSignupErrorMessage(null)
+
+    const res = await authenticationService.restLogin({
+      password: inputState.password,
+    })
+
+    setWaiting(false)
+
+    if (res.status !== 200) {
+      setSignupErrorMessage(
+        res.data.detail || 'Sorry, we encounteed an unexpected error.  Please try again.'
+      )
+    }
+  }, [inputState])
+
   const handleSignUp = useCallback(async () => {
     setWaiting(true)
     setSignupErrorMessage(null)
@@ -143,10 +160,11 @@ const Page = () => {
         email: inputState.email,
         password: inputState.password,
       })
+      await handleLoginREST()
       if (redirectUrl) return history.push(redirectUrl)
       history.push('/welcome')
     }
-  }, [history, inputState, redirectUrl, registrationCode])
+  }, [handleLoginREST, history, inputState, redirectUrl, registrationCode])
 
   const setFieldToValid = useCallback(
     fieldName => {
