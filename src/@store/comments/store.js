@@ -1,5 +1,5 @@
 import api from '@services/api'
-import { STATUSES, getStatusState } from '@services/store-service/constants'
+import { STATUSES, getStatusState } from '@store/constants'
 
 const COLLECTION_PREFIX = 'model-comments'
 
