@@ -29,7 +29,6 @@ import { Upload } from '@pages/Upload'
 import { UploadVersion } from '@pages/UploadVersion'
 import { Matching } from '@pages/Matching'
 import { FolderPage } from '@pages/Folder'
-import { ModelPreview } from '@pages/ModelPreview'
 import { Notifications } from '@pages/Notifications'
 import { FolderUpload } from '@pages/FolderUpload'
 import { ErrorBoundary } from './ErrorBoundary'
@@ -126,10 +125,6 @@ const App = () => {
                   path='/model/:id'
                   exact
                   component={routeRequiresAuth(ModelDetail)}
-                />
-                <Route
-                  path='/preview/model/:id'
-                  component={routeRequiresAuth(ModelPreview)}
                 />
                 <Route
                   path={['/search/:searchQuery', '/search']}
