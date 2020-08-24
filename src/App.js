@@ -16,7 +16,6 @@ import {
   Likes,
   Login,
   ModelDetail,
-  Newspost,
   Page404,
   PasswordReset,
   PrivacyPolicy,
@@ -132,7 +131,6 @@ const App = () => {
                   path='/preview/model/:id'
                   component={routeRequiresAuth(ModelPreview)}
                 />
-                <Route path='/newspost/:id' component={routeRequiresAuth(Newspost)} />
                 <Route
                   path={['/search/:searchQuery', '/search']}
                   component={SearchResults}
