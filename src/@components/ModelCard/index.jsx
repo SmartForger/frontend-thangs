@@ -95,6 +95,9 @@ const ThangsModelDetails = ({
 }) => {
   let modelName = model.name
   if (modelName && modelName.length > 40) modelName = modelName.slice(0, 40) + '...'
+  let modelLikeCount = model && model.likesCount
+  if (modelLikeCount && Array.isArray(modelLikeCount))
+    modelLikeCount = modelLikeCount.length
   return (
     <div className={c.ModelCard_Content}>
       {!showOwner && <div className={c.ModelCard_Name}>{modelName}</div>}
@@ -112,7 +115,7 @@ const ThangsModelDetails = ({
                   [c.ModelCard_LikedIcon]: isLiked,
                 })}
               />
-              &nbsp;{model.likesCount}
+              &nbsp;{modelLikeCount}
             </span>
           </div>
         </div>
@@ -279,7 +282,7 @@ const ModelCard = ({
   handleReportModel,
 }) => {
   const c = useStyles()
-  const showOwner = withOwner && model.owner
+  const showOwner = withOwner && !!model.owner
   const [hovered, setHovered] = useState(false)
   const handleMouseEnter = useCallback(() => setHovered(true), [])
   const handleMouseLeave = useCallback(() => setHovered(false), [])
