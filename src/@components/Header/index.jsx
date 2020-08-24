@@ -3,29 +3,18 @@ import { useHistory, Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
-import {
-  Button,
-  ProfilePicture,
-  TextInput,
-  DropdownMenu,
-  DropdownItem,
-  useFlashNotification,
-} from '@components'
-import { useCurrentUser, useNotifications } from '@hooks'
-import { authenticationService } from '@services'
+import { TextInput } from '@components'
+import { useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
 
 import { ReactComponent as BackgroundSvg } from '@svg/header-background.svg'
 import { ReactComponent as Caret } from '@svg/header-caret.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload-3.svg'
-import { ReactComponent as ExitIcon } from '@svg/dropdown-signout.svg'
-import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as LogoText } from '@svg/logo-text.svg'
 import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
-import { ReactComponent as NewFolderIcon } from '@svg/dropdown-folder.svg'
-import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg'
-import { ReactComponent as UserIcon } from '@svg/dropdown-profile.svg'
+
+import UserNav from './UserNav'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -92,82 +81,6 @@ const useStyles = createUseStyles(theme => {
     },
     Header_TopRow: {
       height: '3rem',
-    },
-    Header_Button: {
-      marginLeft: '1rem',
-      cursor: 'pointer',
-    },
-    Header_ClickableButton: {
-      cursor: 'pointer',
-    },
-    Header_ButtonsRow: {
-      '& > a': {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        '&:last-child': {
-          marginRight: 0,
-        },
-      },
-    },
-    Header_NotificationIconWrapper: {
-      position: 'relative',
-      marginLeft: '1rem',
-    },
-    Header_NotificationIcon: {
-      color: theme.colors.purple[400],
-      '& path': {
-        stroke: ({ notificationsIsOpen }) =>
-          notificationsIsOpen ? theme.colors.gold[500] : theme.colors.purple[500],
-      },
-    },
-    Header_UnreadBadge: {
-      background: theme.colors.gold[500],
-      borderRadius: '100%',
-      color: theme.colors.purple[900],
-      width: '.875rem',
-      height: '.875rem',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      fontSize: '.5625rem',
-      fontWeight: 'bold',
-      position: 'absolute',
-      top: '-.5rem',
-      right: '.7rem',
-    },
-    Header_DropdownMenu: {
-      margin: 'auto',
-      marginLeft: '1rem',
-      zIndex: 5,
-    },
-    Header_DropdownMenuDivider: {
-      margin: '.25rem 0',
-      border: 'none',
-      borderTop: `1px solid ${theme.colors.grey[100]}`,
-    },
-    Header_AddModelDropdown: {
-      margin: '0 1rem',
-      width: '3rem',
-      lineHeight: 0,
-      '> div': {
-        right: 0,
-      },
-    },
-    Header_TextButton: {
-      marginRight: '1.5rem',
-      fontSize: '1rem',
-      lineHeight: '1rem',
-      fontWeight: 'bold',
-      color: theme.colors.white[400],
-
-      '& span': {
-        marginLeft: '.5rem',
-      },
-    },
-    Header_SignUpButton: {
-      marginRight: '.5rem',
-      color: theme.colors.gold[500],
     },
     Header_SearchFormWrapper: {
       alignItems: 'center',
@@ -281,9 +194,6 @@ const useStyles = createUseStyles(theme => {
     Header_UploadIcon: {
       marginRight: '.5rem',
     },
-    Header_UserPicture: {
-      marginLeft: '1rem',
-    },
     Header_Background: {
       position: 'absolute',
       top: 0,
@@ -305,179 +215,6 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const NotificationsButton = ({ c, handleNotificationsClick }) => {
-  const { notifications } = useStoreon('notifications')
-  const { useUnreadNotificationCount } = useNotifications()
-  const { unreadNotificationCount } = useUnreadNotificationCount()
-  const filteredNotificationsCount =
-    notifications && notifications.filteredNotificationsCount
-      ? notifications.filteredNotificationsCount
-      : null
-  return (
-    <div
-      className={classnames(c.Header_NotificationIconWrapper, c.Header_ClickableButton)}
-      onClick={handleNotificationsClick}
-    >
-      <NotificationIcon className={c.Header_NotificationIcon} />
-      {unreadNotificationCount > 0 && (
-        <div className={c.Header_UnreadBadge}>
-          {filteredNotificationsCount
-            ? filteredNotificationsCount
-            : unreadNotificationCount}
-        </div>
-      )}
-    </div>
-  )
-}
-
-const ProfileDropdownMenu = ({
-  c,
-  dispatch,
-  user,
-  TargetComponent,
-  handleNotificationsClick,
-  notificationsIsOpen,
-}) => {
-  const history = useHistory()
-  const { navigateWithFlash } = useFlashNotification()
-  const handleAfterCreate = useCallback(
-    folder => {
-      dispatch('close-modal')
-      navigateWithFlash(
-        `/folder/${folder.folderId}`,
-        'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
-      )
-    },
-    [dispatch, navigateWithFlash]
-  )
-
-  return (
-    <DropdownMenu
-      className={c.Header_DropdownMenu}
-      TargetComponent={TargetComponent}
-      user={user}
-    >
-      <DropdownItem to='/profile/likes'>
-        <HeartIcon /> Liked Models
-      </DropdownItem>
-      <DropdownItem
-        onClick={() => {
-          dispatch('open-modal', {
-            modalName: 'createFolder',
-            modalData: {
-              afterCreate: handleAfterCreate,
-            },
-          })
-        }}
-      >
-        <NewFolderIcon /> Create Folder
-      </DropdownItem>
-      <hr className={c.Header_DropdownMenuDivider} />
-      <DropdownItem to='/home'>
-        <UserIcon /> View Profile
-      </DropdownItem>
-      <DropdownItem
-        onClick={() => {
-          if (notificationsIsOpen) handleNotificationsClick()
-          dispatch('close-modal')
-          setTimeout(() => {
-            authenticationService.logout()
-            history.push('/')
-          }, 250)
-        }}
-      >
-        <ExitIcon />
-        Sign Out
-      </DropdownItem>
-    </DropdownMenu>
-  )
-}
-
-const ProfileDropdown = ({ user, onClick = noop }) => {
-  const c = useStyles({ inverted: false, notificationsIsOpen: false })
-
-  return (
-    <div
-      className={c.Header_ClickableButton}
-      onClick={() => {
-        onClick()
-      }}
-    >
-      <ProfilePicture
-        name={user.fullName}
-        src={user && user.profile && user.profile.avatarUrl}
-        size='2.375rem'
-      />
-    </div>
-  )
-}
-
-const UserNav = ({
-  c,
-  handleNotificationsClick,
-  notificationsIsOpen,
-  dispatch,
-  handleSearchShow = noop,
-}) => {
-  const { loading, user } = useCurrentUser()
-
-  if (loading) {
-    return <div className={c.Header_Row}></div>
-  }
-
-  if (user) {
-    return (
-      <div className={classnames(c.Header_Row, c.Header_ButtonsRow)}>
-        <NotificationsButton c={c} handleNotificationsClick={handleNotificationsClick} />
-        <ProfileDropdownMenu
-          c={c}
-          user={user}
-          TargetComponent={ProfileDropdown}
-          dispatch={dispatch}
-          handleNotificationsClick={handleNotificationsClick}
-          notificationsIsOpen={notificationsIsOpen}
-        />
-        <Button
-          className={classnames(c.Header_Button, c.Header_DesktopOnly)}
-          onClick={() => dispatch('open-modal', { modalName: 'upload' })}
-        >
-          Upload
-        </Button>
-        <MagnifyingGlass
-          title={'Search By Text'}
-          className={classnames(
-            c.Header_SearchIcon,
-            c.Header_Button,
-            c.Header_MobileOnly
-          )}
-          onClick={handleSearchShow}
-        />
-      </div>
-    )
-  }
-
-  return (
-    <div className={classnames(c.Header_Row, c.Header_ButtonsRow)}>
-      <Link to={'/signup/alpha'} onClick={() => dispatch('close-modal')}>
-        <Button text className={classnames(c.Header_TextButton, c.Header_SignUpButton)}>
-          Sign up
-        </Button>
-      </Link>
-      <Button
-        className={c.Header_Button}
-        onClick={() =>
-          dispatch('open-modal', {
-            modalName: 'signIn',
-            modalData: { afterSignIn: () => dispatch('close-modal') },
-          })
-        }
-      >
-        Sign in
-      </Button>
-    </div>
-  )
-}
-
 const Header = ({
   inverted,
   variant,
@@ -490,6 +227,7 @@ const Header = ({
   const c = useStyles({ inverted, notificationsIsOpen })
   const [searchTerm, setSearchTerm] = useState(undefined)
   const [showMobileSearch, setShowMobileSearch] = useState(variant !== 'logo-only')
+  const t = useTranslations({})
   const handleSearchSubmit = e => {
     e.preventDefault()
     if (searchTerm) {
@@ -538,7 +276,7 @@ const Header = ({
                   />
                   <TextInput
                     name='search'
-                    placeholder='Search By Text or Upload'
+                    placeholder={t('header.searchPlaceholderText')}
                     className={classnames(c.Header_SearchFormInput, {
                       [c.Header_SearchFormInput_active]: searchTerm,
                     })}
@@ -571,10 +309,11 @@ const Header = ({
                             c.Header_SearchIcon,
                             c.Header_SearchFormIcon
                           )}
+                          onClick={handleSearchSubmit}
                         />
                         <TextInput
                           name='search'
-                          placeholder='Search By Text or Upload'
+                          placeholder={t('header.searchPlaceholderText')}
                           className={classnames(c.Header_SearchFormInput, {
                             [c.Header_SearchFormInput_active]: searchTerm,
                           })}
@@ -590,15 +329,15 @@ const Header = ({
                           onClick={() =>
                             dispatch('open-modal', { modalName: 'searchByUpload' })
                           }
-                          title={'Search By Model Upload'}
+                          title={t('header.searchUploadText')}
                         >
                           <div className={classnames(c.Header_UploadIcon)}>
                             <UploadIcon />
                           </div>
-                          <span>Upload for Search</span>
+                          <span>{t('header.searchUploadText')}</span>
                         </div>
                         <MagnifyingGlass
-                          title={'Search By Text'}
+                          title={t('header.searchTextTitle')}
                           className={classnames(
                             c.Header_SearchIcon,
                             c.Header_DesktopSearchActionIcon
