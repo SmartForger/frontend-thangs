@@ -32,7 +32,6 @@ const useStyles = createUseStyles(theme => {
         outline: 'none',
       },
     },
-    NewModalCommentForm_PostCommentButton: {},
   }
 })
 
@@ -96,9 +95,7 @@ const NewModelCommentForm = ({ modelId }) => {
           }}
           required
         />
-        <Button className={c.NewModalCommentForm_PostCommentButton} type='submit'>
-          Comment
-        </Button>
+        <Button type='submit'>Comment</Button>
       </form>
     </div>
   )
