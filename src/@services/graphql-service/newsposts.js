@@ -1,39 +1,6 @@
 import { gql } from 'apollo-boost'
 import { useQuery } from '@apollo/react-hooks'
 
-const ALL_NEWSPOSTS_QUERY = gql`
-    query allNewsposts {
-        allNewsposts {
-            id
-            title
-            content
-            owner {
-                id
-                firstName
-                lastName
-                profile {
-                    avatarUrl
-                }
-            }
-            created
-        }
-    }
-`
-
-const parseAllNewspostsPayload = data => {
-  if (!data || !data.allNewsposts) {
-    return []
-  }
-
-  return data.allNewsposts
-}
-
-const useAllNewsposts = () => {
-  const { loading, error, data } = useQuery(ALL_NEWSPOSTS_QUERY)
-  const newsposts = parseAllNewspostsPayload(data)
-  return { loading, error, newsposts }
-}
-
 const NEWSPOST_QUERY = gql`
     query newspost($id: ID) {
         newspost(id: $id) {
@@ -69,4 +36,4 @@ const useNewspostById = id => {
   return { loading, error, newspost }
 }
 
-export { useAllNewsposts, useNewspostById }
+export { useNewspostById }

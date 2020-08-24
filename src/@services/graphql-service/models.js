@@ -133,28 +133,7 @@ const UNLIKE_MODEL_MUTATION = gql`
   ${MODEL_FRAGMENT}
 `
 
-const MODELS_BY_DATE_QUERY = gql`
-  query modelsByDate {
-    modelsByDate {
-      ...Model
-    }
-  }
-  ${MODEL_FRAGMENT}
-`
-
-const MODELS_BY_LIKES_QUERY = gql`
-  query modelsByLikes {
-    modelsByLikes {
-      ...Model
-    }
-  }
-  ${MODEL_FRAGMENT}
-`
-
 const getModel = R.pathOr(null, ['model'])
-const getModelsByDate = R.pathOr(null, ['modelsByDate'])
-const getModelsByLikes = R.pathOr(null, ['modelsByLikes'])
-const getSearchModels = R.pathOr(null, ['searchModels'])
 
 function parseThumbnailUrl(filename) {
   return `${THUMBNAILS_HOST}/${filename}`
@@ -188,24 +167,6 @@ export function parseRelatedModel(model) {
     fullThumbnailUrl,
     relatedModels,
   }
-}
-
-const parseModelsByDatePayload = data => {
-  const models = getModelsByDate(data)
-  if (!models) {
-    return null
-  }
-
-  return models.map(parseModel)
-}
-
-const parseModelsByLikePayload = data => {
-  const models = getModelsByLikes(data)
-  if (!models) {
-    return null
-  }
-
-  return models.map(parseModel)
 }
 
 const useModelById = id => {
@@ -371,31 +332,6 @@ const parseModelPayload = data => {
   return parseModel(model)
 }
 
-const useModelsByDate = () => {
-  const { error, loading, data } = useQuery(MODELS_BY_DATE_QUERY)
-
-  const models = parseModelsByDatePayload(data)
-
-  return { loading, error, models }
-}
-
-const useModelsByLikes = () => {
-  const { error, loading, data } = useQuery(MODELS_BY_LIKES_QUERY)
-
-  const models = parseModelsByLikePayload(data)
-
-  return { loading, error, models }
-}
-
-const SEARCH_MODELS_QUERY = gql`
-  query searchModels($query: String!) {
-    searchModels(query: $query) {
-      ...Model
-    }
-  }
-  ${MODEL_FRAGMENT}
-`
-
 const useCreateDownloadUrlMutation = modelId => {
   const [createDownloadUrl] = useMutation(CREATE_DOWNLOAD_URL_MUTATION, {
     variables: { modelId: modelId },
@@ -473,54 +409,10 @@ const useUploadModelMutation = userId => {
   return [uploadModelAndParseResults, { loading, error: uploadError }]
 }
 
-const parseSeachModelsPayload = data => {
-  const models = getSearchModels(data)
-
-  if (!models) {
-    return null
-  }
-
-  return models.map(parseModel)
-}
-
-const useSearchModels = searchQuery => {
-  const { error, loading, data } = useQuery(SEARCH_MODELS_QUERY, {
-    variables: { query: searchQuery },
-  })
-
-  const models = parseSeachModelsPayload(data)
-
-  return { loading, error, models }
-}
-
-const DELETE_MODEL_MUTATION = gql`
-  mutation deleteModel($modelId: ID!) {
-    deleteModel(modelId: $modelId) {
-      ok
-    }
-  }
-`
-
-const useDeleteModelMutation = (modelId, userId) => {
-  const [deleteModel, { loading, data, error }] = useMutation(DELETE_MODEL_MUTATION, {
-    variables: {
-      modelId,
-    },
-    refetchQueries: [{ query: USER_QUERY, variables: { id: userId } }],
-  })
-
-  const ok = data && data.deleteModel && data.deleteModel.ok
-  return [deleteModel, { loading, ok, error }]
-}
-
 export {
   useModelById,
   useLikeModelMutation,
   useUnlikeModelMutation,
   useUploadModelMutation,
   useCreateDownloadUrlMutation,
-  useModelsByDate,
-  useModelsByLikes,
-  useSearchModels,
-  useDeleteModelMutation,
 }

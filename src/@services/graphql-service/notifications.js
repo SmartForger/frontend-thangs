@@ -3,7 +3,6 @@ import * as R from 'ramda'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { parseModel } from './models'
 import { parseUser } from './users'
-import { parseFolder } from './folders'
 
 const FIVE_MINUTES = 5 * 60 * 1000
 
@@ -79,7 +78,6 @@ function getNotificationType(verb, actor, target) {
 const isModel = R.propEq('__typename', 'ModelType')
 const isModelComment = R.propEq('__typename', 'ModelCommentType')
 const isUser = R.propEq('__typename', 'UserType')
-const isFolder = R.propEq('__typename', 'FolderType')
 
 function parseGeneric(item) {
   if (!item) {
@@ -90,8 +88,6 @@ function parseGeneric(item) {
     return parseModel(item)
   } else if (isModelComment(item)) {
     return item
-  } else if (isFolder(item)) {
-    return parseFolder(item)
   }
   return null
 }

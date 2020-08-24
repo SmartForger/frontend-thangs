@@ -9,7 +9,6 @@ import { createAuthenticatedFetch } from '@services/authenticated-fetch'
 import * as users from './users'
 import * as models from './models'
 import * as comments from './comments'
-import * as folders from './folders'
 import * as newsposts from './newsposts'
 import * as notifications from './notifications'
 import { getGraphQLUrl } from './utils'
@@ -54,7 +53,6 @@ const getInstance = () => {
     ...users,
     ...models,
     ...comments,
-    ...folders,
     ...newsposts,
     ...notifications,
   }

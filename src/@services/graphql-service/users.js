@@ -2,7 +2,6 @@ import { gql } from 'apollo-boost'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { createAppUrl } from './utils'
 import { parseModel } from './models'
-import { parseFolder } from './folders'
 
 export const USER_QUERY = gql`
   query getUser($id: ID) {
@@ -96,13 +95,11 @@ const parseUser = user => {
     user && user.profile && user.profile.avatarUrl
       ? createAppUrl(user.profile.avatarUrl)
       : ''
-  const folders = user.folders ? user.folders.map(parseFolder) : []
   const models = user.models ? user.models.map(parseModel) : []
   const likedModels = user.likedModels ? user.likedModels.map(parseModel) : []
   return {
     ...user,
     models,
-    folders,
     likedModels,
     profile: {
       ...user.profile,
