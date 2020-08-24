@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { formatDistanceStrict } from 'date-fns'
-import { ReactComponent as VersionIcon } from '@svg/icon_version.svg'
+import { ReactComponent as VersionIcon } from '@svg/icon-version.svg'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
