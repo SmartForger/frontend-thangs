@@ -129,7 +129,6 @@ const App = () => {
                   path={['/search/:searchQuery', '/search']}
                   component={SearchResults}
                 />
-                <Route path='/matching' component={Matching} />
                 <Route path='/upload' component={routeRequiresAuth(Upload)} />
                 <Route
                   path='/model/:id/upload'
