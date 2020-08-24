@@ -70,7 +70,13 @@ const useStyles = createUseStyles(theme => {
     SearchResults_ReportModelButton: {
       width: '12rem',
       marginTop: '4rem',
-      alignSelf: 'flex-end',
+      alignSelf: 'flex-start',
+      color: theme.colors.purple[400],
+
+      '& > svg': {
+        fill: theme.colors.purple[400],
+        width: '.75rem',
+      },
     },
   }
 })
@@ -307,6 +313,7 @@ const Page = () => {
       )}
       {savedSearchResults && savedSearchResults.length > 0 && (
         <Button
+          text
           className={c.SearchResults_ReportModelButton}
           onClick={() => setShowReportModelButtons(!showReportModelButtons)}
         >

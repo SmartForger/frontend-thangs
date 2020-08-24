@@ -16,12 +16,12 @@ const useStyles = createUseStyles(theme => {
 
       '& > p': {
         margin: 0,
-        paddingLeft: '3rem',
+        paddingLeft: '4rem',
       },
 
       '& > a': {
         color: theme.colors.black[500],
-        paddingRight: '3rem',
+        paddingRight: '4rem',
       },
     },
   }
