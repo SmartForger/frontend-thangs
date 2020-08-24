@@ -28,7 +28,6 @@ import {
 import { Upload } from '@pages/Upload'
 import { UploadVersion } from '@pages/UploadVersion'
 import { FolderPage } from '@pages/Folder'
-import { Notifications } from '@pages/Notifications'
 import { FolderUpload } from '@pages/FolderUpload'
 import { ErrorBoundary } from './ErrorBoundary'
 import { routeRequiresAnon, routeRequiresAuth } from '@components/RouteComponent'
@@ -133,10 +132,6 @@ const App = () => {
                 <Route
                   path='/model/:id/upload'
                   component={routeRequiresAuth(UploadVersion)}
-                />
-                <Route
-                  path='/notifications'
-                  component={routeRequiresAuth(Notifications)}
                 />
                 <Route path='*' component={Page404} status={404} />
               </Switch>
