@@ -2,6 +2,7 @@ import api from '@services/api'
 import { storageService, intervalRequest } from '@services'
 import apiForChain from '@services/api/apiForChain'
 import { getStatusState, STATUSES } from '@store/constants'
+import * as types from '@constants/storeEventTypes'
 
 const ATOMS = {
   THANGS: 'thangs',
@@ -65,7 +66,7 @@ const getInitAtom = () => ({
 })
 
 export default store => {
-  store.on('@init', () => ({
+  store.on(types.STORE_INIT, () => ({
     searchResults: getInitAtom(),
   }))
 

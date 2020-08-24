@@ -1,3 +1,5 @@
+import * as types from '@constants/storeEventTypes'
+
 const getInitAtom = () => ({
   isLoaded: false,
   isLoading: false,
@@ -7,11 +9,11 @@ const getInitAtom = () => ({
 })
 
 export default store => {
-  store.on('@init', () => ({
+  store.on(types.STORE_INIT, () => ({
     user: getInitAtom(),
   }))
 
-  store.on('update-user-models', (state, { data }) => ({
+  store.on(types.UPDATE_USER_MODELS, (state, { data }) => ({
     user: {
       ...state.user,
       models: [...state.user.models, data],

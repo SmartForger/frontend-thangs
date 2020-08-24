@@ -1,3 +1,5 @@
+import * as types from '@constants/storeEventTypes'
+
 const getInitAtom = () => ({
   isLoaded: false,
   isLoading: false,
@@ -6,14 +8,14 @@ const getInitAtom = () => ({
 })
 
 export default store => {
-  store.on('@init', () => ({
+  store.on(types.STORE_INIT, () => ({
     notifications: getInitAtom(),
   }))
 
   store.on('setFilteredNotificationsCount', (state, event) => ({
     notifications: {
       ...state.notifications,
-      filteredNotificationsCount: event
+      filteredNotificationsCount: event,
     },
   }))
 }

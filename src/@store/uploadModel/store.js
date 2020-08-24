@@ -1,5 +1,6 @@
 import api from '@services/api'
 import { storageService } from '@services'
+import * as types from '@constants/storeEventTypes'
 
 const noop = () => null
 const getInitAtom = () => ({
@@ -10,7 +11,7 @@ const getInitAtom = () => ({
 })
 
 export default store => {
-  store.on('@init', () => ({
+  store.on(types.STORE_INIT, () => ({
     uploadModel: getInitAtom(),
   }))
   store.on('reset-upload-model', () => ({

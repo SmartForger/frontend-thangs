@@ -1,4 +1,5 @@
 import api from '@services/api'
+import * as types from '@constants/storeEventTypes'
 
 const getInitAtom = () => ({
   isLoaded: false,
@@ -10,7 +11,7 @@ const getInitAtom = () => ({
 })
 
 export default store => {
-  store.on('@init', () => ({
+  store.on(types.STORE_INIT, () => ({
     teams: getInitAtom(),
   }))
 

@@ -1,3 +1,5 @@
+import * as types from '@constants/storeEventTypes'
+
 const getInitAtom = () => ({
   isOpen: false,
   isHidden: false,
@@ -6,7 +8,7 @@ const getInitAtom = () => ({
 })
 
 export default store => {
-  store.on('@init', () => ({
+  store.on(types.STORE_INIT, () => ({
     modal: getInitAtom(),
   }))
   store.on('open-modal', (state, { modalName, modalData }) => ({

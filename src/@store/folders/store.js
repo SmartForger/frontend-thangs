@@ -1,4 +1,5 @@
 import api from '@services/api'
+import * as types from '@constants/storeEventTypes'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -13,7 +14,7 @@ const getInitAtom = () => ({
 })
 
 export default store => {
-  store.on('@init', () => ({
+  store.on(types.STORE_INIT, () => ({
     folders: getInitAtom(),
   }))
 

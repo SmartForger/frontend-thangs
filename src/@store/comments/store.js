@@ -1,10 +1,11 @@
 import api from '@services/api'
 import { STATUSES, getStatusState } from '@store/constants'
+import * as types from '@constants/storeEventTypes'
 
 const COLLECTION_PREFIX = 'model-comments'
 
 export default store => {
-  store.on('@init', () => ({}))
+  store.on(types.STORE_INIT, () => ({}))
 
   store.on(`init-${COLLECTION_PREFIX}`, (_, { id }) => ({
     [`${COLLECTION_PREFIX}-${id}`]: {
