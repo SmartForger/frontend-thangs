@@ -27,7 +27,6 @@ import {
 } from '@pages'
 import { Upload } from '@pages/Upload'
 import { UploadVersion } from '@pages/UploadVersion'
-import { Matching } from '@pages/Matching'
 import { FolderPage } from '@pages/Folder'
 import { Notifications } from '@pages/Notifications'
 import { FolderUpload } from '@pages/FolderUpload'
