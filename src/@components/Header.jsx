@@ -493,7 +493,7 @@ const Header = ({
   const handleSearchSubmit = e => {
     e.preventDefault()
     if (searchTerm) {
-      history.push(`/search/${searchTerm}`)
+      history.push(`/search/${encodeURIComponent(searchTerm)}`)
       dispatch('close-modal')
     }
   }

@@ -272,7 +272,9 @@ const Page = () => {
   return (
     <div className={c.SearchResults_Page}>
       <div className={c.SearchResults_Header}>
-        <div className={c.SearchResults_HeaderText}>Search Results for {searchQuery}</div>
+        <div className={c.SearchResults_HeaderText}>
+          Search Results for {decodeURIComponent(searchQuery)}
+        </div>
         <div>
           <Link to='/'>
             <Button light small>
