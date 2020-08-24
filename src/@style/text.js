@@ -3,11 +3,6 @@ import { colors } from './colors.js'
 // const _MONTSERRAT = '"Montserrat", sans-serif'
 const LEXEND_DECA = 'Lexend Deca'
 
-export const modelCardHoverText = {
-  fontWeight: 500,
-  color: colors.white[400],
-}
-
 export const flashToastText = {
   color: colors.white[900],
 }
@@ -32,30 +27,14 @@ export const profileAboutText = {
   color: colors.grey[700],
 }
 
-export const cardNumbersText = {
-  color: colors.grey[300],
-  fontWeight: 500,
-}
-
 export const formCalloutText = {
   fontSize: '1.125rem',
   fontFamily: LEXEND_DECA,
 }
 
-export const usernameText = {
-  fontWeight: 500,
-  color: colors.grey[700],
-}
-
 export const subheaderText = {
   fontSize: '1.5rem',
   fontFamily: LEXEND_DECA,
-}
-
-export const resultsHeaderText = {
-  fontSize: '1.5rem',
-  fontFamily: LEXEND_DECA,
-  color: colors.grey[700],
 }
 
 export const modelTitleText = {
@@ -77,10 +56,6 @@ export const linkText = {
 export const headerText = {
   fontSize: '2rem',
   fontFamily: LEXEND_DECA,
-}
-
-export const logoText = {
-  color: colors.logo,
 }
 
 export const primaryButtonText = {
@@ -124,24 +99,6 @@ export const modelDetailsLabelText = {
   color: colors.purple[400],
 }
 
-export const inputLabelText = {
-  fontSize: '.75rem',
-  fontWeight: 'normal',
-  lineHeight: '1.125rem',
-  color: colors.grey[700],
-}
-
-export const inputText = {
-  fontSize: '.875rem',
-  fontWeight: 'normal',
-  lineHeight: '1.125rem',
-  color: colors.grey[500],
-}
-
-export const inputPlaceholderText = {
-  color: colors.purple[400],
-}
-
 export const landingPageText = {
   color: colors.white[400],
   textDecorationColor: colors.gold[500],
@@ -153,11 +110,6 @@ export const landingPageSubtext = {
   fontSize: '1rem',
   fontWeight: 300,
   lineHeight: '1.5rem',
-}
-
-export const matchingSubheader = {
-  fontSize: '1.125rem',
-  color: colors.purple[400],
 }
 
 export const viewerToolbarText = {
@@ -178,23 +130,6 @@ export const formSuccessText = {
 export const formErrorText = {
   color: colors.error,
   fontWeight: 500,
-}
-
-export const matchingButtonText = {
-  color: colors.gold[900],
-  fontWeight: 500,
-  '& svg': {
-    fill: colors.gold[900],
-  },
-}
-
-export const matchingButtonHoverText = {
-  color: colors.gold[500],
-  fontWeight: 500,
-
-  '& svg': {
-    fill: colors.gold[500],
-  },
 }
 
 export const thumbnailErrorText = {
