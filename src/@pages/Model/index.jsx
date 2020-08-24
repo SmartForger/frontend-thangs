@@ -6,6 +6,7 @@ import {
   CommentsForModel,
   HoopsModelViewer,
   LikeModelButton,
+  ModelDetails,
   ModelTitle,
   ModelViewer as BackupViewer,
   Layout,
@@ -18,7 +19,6 @@ import {
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
 import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
 import { useLocalStorage, useModels } from '@hooks'
-import { ModelDetails } from '../ModelPreview/ModelDetails'
 import { Message404 } from '../404'
 import { createUseStyles } from '@style'
 import { useServices } from '@hooks'
