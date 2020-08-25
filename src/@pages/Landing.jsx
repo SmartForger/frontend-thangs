@@ -178,6 +178,7 @@ const Landing = ({ newSignUp }) => {
         setShowUploadBarText(false)
       }, 4000)
     }, 500)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const HeroComponent = getHero({ loading, user, newSignUp })
