@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { Route, Router, Switch, useLocation } from 'react-router-dom'
 
@@ -41,13 +41,20 @@ import store from 'store'
 const originalFetch = window.fetch
 const client = graphqlClient(originalFetch, history)
 
-const initializeAnalytics = history => {
+const useQuery = location => {
+  return new URLSearchParams(location.search)
+}
+
+const initializeAnalytics = ({ userIdentified, inviteCode }) => {
   const user = authenticationService.getCurrentUser()
 
   ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID)
   ReactPixel.init(process.env.REACT_APP_FACEBOOK_PIXEL_ID)
-  pendo.initialize(history)
-  pendo.identify(user)
+  pendo.initialize()
+  if (user && !userIdentified.current) {
+    pendo.identify(user, { inviteCode })
+    userIdentified.current = true
+  }
 }
 
 export function AppFrame() {
@@ -60,7 +67,10 @@ export function AppFrame() {
 
 const App = () => {
   const location = useLocation()
-  initializeAnalytics(history)
+  const query = useQuery(location)
+  const inviteCode = useMemo(() => query.get('inviteCode'), [query])
+  const userIdentified = useRef(false)
+  initializeAnalytics({ userIdentified, inviteCode })
   const theme = usePageTheming(location)
 
   useEffect(() => {

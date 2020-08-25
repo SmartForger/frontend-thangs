@@ -1,5 +1,6 @@
 import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
+import * as pendo from '@vendors/pendo'
 
 const getInitAtom = () => ({
   isLoaded: false,
@@ -87,6 +88,7 @@ export default store => {
       })
       store.dispatch('fetch-teams')
       store.dispatch('team-saved')
+      pendo.track('Team Created')
       onFinish()
     } catch (error) {
       store.dispatch('team-save-error')

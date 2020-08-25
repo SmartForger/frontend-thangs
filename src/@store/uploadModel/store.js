@@ -1,6 +1,7 @@
 import api from '@services/api'
 import { storageService } from '@services'
 import * as types from '@constants/storeEventTypes'
+import * as pendo from '@vendors/pendo'
 
 const noop = () => null
 const getInitAtom = () => ({
@@ -70,6 +71,7 @@ export default store => {
       } else {
         store.dispatch('loaded-upload-model', { data: uploadedData })
         onFinish()
+        pendo.track('Model Uploaded')
         store.dispatch(types.UPDATE_USER_MODELS, {
           //TEMP - This is to merge the user models cached by graphQL and new models uploaded as new versions - BE
           data: {

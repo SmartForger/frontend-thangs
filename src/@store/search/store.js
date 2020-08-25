@@ -3,6 +3,7 @@ import { storageService, intervalRequest } from '@services'
 import apiForChain from '@services/api/apiForChain'
 import { getStatusState, STATUSES } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
+import * as pendo from '@vendors/pendo'
 
 const ATOMS = {
   THANGS: 'thangs',
@@ -118,6 +119,10 @@ export default store => {
           status: STATUSES.LOADED,
           data: { matches: data },
         })
+        pendo.track('Text Search', {
+          searchTerm,
+          numOfMatches: (data && data.length) || 0,
+        })
 
         onFinish(error)
       }
@@ -163,6 +168,11 @@ export default store => {
             newModelId,
             onFinish,
           })
+
+          pendo.track('Model Search Started', {
+            phyndexerId: newPhyndexerId,
+            modelId: newModelId,
+          })
         })
         .catch(error => {
           store.dispatch('change-search-results-status', {
@@ -196,7 +206,10 @@ export default store => {
             status: STATUSES.LOADED,
             data: data,
           })
-
+          pendo.track('Thangs Model Search Results', {
+            modelId,
+            numOfMatches: (data && data.matches && data.matches.length) || 0,
+          })
           onFinish(data)
         })
         .catch(error => {
@@ -243,6 +256,10 @@ export default store => {
           atom: ATOMS.PHYNDEXER,
           status: STATUSES.LOADED,
           data,
+        })
+        pendo.track('Phyndexer Model Search Results', {
+          phyndexerId: newPhyndexerId,
+          numOfMatches: (data && data.matches && data.matches.length) || 0,
         })
         onFinish({ modelId: newModelId })
       }
