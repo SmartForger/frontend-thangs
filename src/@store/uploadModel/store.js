@@ -70,7 +70,7 @@ export default store => {
       } else {
         store.dispatch('loaded-upload-model', { data: uploadedData })
         onFinish()
-        store.dispatch('update-user-models', {
+        store.dispatch(types.UPDATE_USER_MODELS, {
           //TEMP - This is to merge the user models cached by graphQL and new models uploaded as new versions - BE
           data: {
             id: uploadedData.modelId,

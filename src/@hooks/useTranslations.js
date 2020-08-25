@@ -10,7 +10,7 @@ export const getTranslatorFn = translations => (...args) => {
 }
 
 const useTranslations = ({ language = 'en' }) => {
-  const { data } = translations.en
+  const { data } = translations[language]
   return useMemo(() => getTranslatorFn(data), [data])
 }
 
