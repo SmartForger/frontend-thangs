@@ -52,7 +52,7 @@ export const ProfileDropdownMenu = ({
       dispatch('close-modal')
       navigateWithFlash(
         `/folder/${folder.folderId}`,
-        'Folder created successfully. If the provided email addresses belong to registered Thangs users, they will have access to your folder.'
+        'Folder created successfully. If the provided unregistered email addresses, they will receive an email with instructions for accessing your folder.'
       )
     },
     [dispatch, navigateWithFlash]

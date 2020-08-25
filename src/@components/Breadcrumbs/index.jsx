@@ -103,7 +103,7 @@ const ManageUsers = ({ dispatch, folder }) => {
 
   const afterInvite = useCallback(() => {
     setFlash(
-      'If the email addresses belong to registered Thangs users, they will have access to your folder'
+      'If the email addresses are unregistered in Thangs, they will receive an email with instructions for accessing your folder.'
     )
     dispatch('close-modal')
   }, [dispatch, setFlash])
