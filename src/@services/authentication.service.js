@@ -2,7 +2,6 @@ import * as R from 'ramda'
 import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 import { getGraphQLUrl } from './graphql-service'
-import * as pendo from '@vendors/pendo'
 
 function getCurrentUserFromLocalStorage() {
   const currentUserStr = localStorage.getItem('currentUser')
@@ -67,8 +66,6 @@ const login = async ({ email, password }) => {
       refreshToken: refresh,
     }
     setCurrentUser(user)
-
-    pendo.identify(user)
 
     return response
   } catch (err) {
