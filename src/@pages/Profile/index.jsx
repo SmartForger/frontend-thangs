@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import * as R from 'ramda'
 import {
   CardCollection,
@@ -7,7 +7,7 @@ import {
   Layout,
   ProfilePicture,
   Spinner,
-  ToggleFollowButton,
+  ProfileButton,
 } from '@components'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { Message404 } from '../404'
@@ -18,7 +18,6 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import useFetchOnce from '@hooks/useServices/useFetchOnce'
 import useFetchPerMount from '@hooks/useServices/useFetchPerMount'
-import useCurrentUserAlt from '@hooks/useCurrentUserAlt'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -208,25 +207,6 @@ const Tabs = ({ userId }) => {
   )
 }
 
-const ProfileButton = ({ userId, className }) => {
-  const c = useStyles()
-  const isCurrentUser = useCurrentUserAlt(userId)
-
-  if (isCurrentUser) {
-    return (
-      <Link
-        className={classnames(className, c.Profile_EditProfileLink)}
-        to='/profile/edit'
-      >
-        Edit Profile
-      </Link>
-    )
-  } else {
-    // return <ToggleFollowButton viewedUser={{}} className={className} />
-    return <div />
-  }
-}
-
 const Page = () => {
   const { id } = useParams()
   const c = useStyles()
@@ -266,7 +246,7 @@ const Page = () => {
         />
         <div>
           <div className={c.Profile_Name}>{user.fullName}</div>
-          <ProfileButton userId={id} user={user} className={c.Profile_ProfileButton} />
+          <ProfileButton userId={id} className={c.Profile_ProfileButton} />
         </div>
       </div>
       <Tabs userId={id} />
