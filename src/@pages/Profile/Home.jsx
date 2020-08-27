@@ -16,7 +16,7 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import useFetchPerMount from '@hooks/useServices/useFetchPerMount'
-import { useCurrentUserId, useCurrentUserStoreOn } from '@hooks'
+import { useCurrentUserId, useCurrentUser } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -151,7 +151,7 @@ const PageContent = ({ user }) => {
 const Page = () => {
   const {
     atom: { isLoading, isError, data: user },
-  } = useCurrentUserStoreOn()
+  } = useCurrentUser()
 
   const { dispatch, folders } = useStoreon('folders')
   useEffect(() => {

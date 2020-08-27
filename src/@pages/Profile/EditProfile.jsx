@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { useCurrentUserStoreOn } from '@hooks'
+import { useCurrentUser } from '@hooks'
 import {
   Button,
   ChangeablePicture,
@@ -89,7 +89,9 @@ const WarningOnEmptyProfile = ({ user }) => {
 
 const Page = () => {
   const c = useStyles()
-  const { atom: { data: user, isLoading, isError  } } = useCurrentUserStoreOn()
+  const {
+    atom: { data: user, isLoading, isError },
+  } = useCurrentUser()
 
   if (isLoading) {
     return <Spinner />

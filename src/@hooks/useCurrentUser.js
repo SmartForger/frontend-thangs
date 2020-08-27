@@ -2,7 +2,7 @@ import * as R from 'ramda'
 import { authenticationService } from '@services'
 import useFetchOnce from './useServices/useFetchOnce'
 
-const useCurrentUserStoreOn = () => {
+const useCurrentUser = () => {
   const id = authenticationService.getCurrentUserId()
   const props = useFetchOnce(id, 'user')
 
@@ -16,4 +16,4 @@ const useCurrentUserStoreOn = () => {
   }
 }
 
-export default useCurrentUserStoreOn
+export default useCurrentUser
