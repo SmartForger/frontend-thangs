@@ -119,10 +119,15 @@ export default store => {
           status: STATUSES.LOADED,
           data: { matches: data },
         })
-        pendo.track('Text Search', {
-          searchTerm,
-          numOfMatches: (data && data.length) || 0,
-        })
+        pendo.track(
+          `Text Search - ${
+            data && data.length && data.length > 0 ? 'Results' : 'No Results'
+          }`,
+          {
+            searchTerm,
+            numOfMatches: (data && data.length) || 0,
+          }
+        )
 
         onFinish(error)
       }
@@ -206,10 +211,17 @@ export default store => {
             status: STATUSES.LOADED,
             data: data,
           })
-          pendo.track('Thangs Model Search Results', {
-            modelId,
-            numOfMatches: (data && data.matches && data.matches.length) || 0,
-          })
+          pendo.track(
+            `Thangs Model Search - ${
+              data && data.matches && data.matches.length && data.matches.length > 0
+                ? 'Results'
+                : 'No Results'
+            }`,
+            {
+              modelId,
+              numOfMatches: (data && data.matches && data.matches.length) || 0,
+            }
+          )
           onFinish(data)
         })
         .catch(error => {
@@ -257,10 +269,17 @@ export default store => {
           status: STATUSES.LOADED,
           data,
         })
-        pendo.track('Phyndexer Model Search Results', {
-          phyndexerId: newPhyndexerId,
-          numOfMatches: (data && data.matches && data.matches.length) || 0,
-        })
+        pendo.track(
+          `Phyndexer Model Search - ${
+            data && data.matches && data.matches.length && data.matches.length > 0
+              ? 'Results'
+              : 'No Results'
+          }`,
+          {
+            phyndexerId: newPhyndexerId,
+            numOfMatches: (data && data.matches && data.matches.length) || 0,
+          }
+        )
         onFinish({ modelId: newModelId })
       }
     }
