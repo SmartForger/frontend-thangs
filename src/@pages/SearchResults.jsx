@@ -69,7 +69,7 @@ const useStyles = createUseStyles(theme => {
     },
     SearchResults_ReportModelButton: {
       width: '12rem',
-      marginTop: '4rem',
+      marginTop: '2rem',
       alignSelf: 'flex-start',
       color: theme.colors.purple[400],
 
