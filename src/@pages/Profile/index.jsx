@@ -21,7 +21,9 @@ import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   return {
-    Profile: {},
+    Profile: {
+      width: '100%',
+    },
     Profile_Name: {
       ...theme.mixins.text.subheaderText,
       marginTop: '.5rem',
@@ -264,7 +266,7 @@ const Page = () => {
   }
 
   return (
-    <div>
+    <div className={c.Profile}>
       <div className={c.Profile_Row}>
         <ProfilePicture
           className={c.Profile_ProfilePicture}
