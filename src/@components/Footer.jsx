@@ -20,7 +20,7 @@ const useStyles = createUseStyles(theme => {
       },
 
       '& > a': {
-        color: theme.colors.black[500],
+        color: theme.variables.colors.mainFontColor,
         paddingRight: '4rem',
       },
     },
