@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { CardCollection, Layout, Button } from '@components'
-import { useCurrentUser } from '@hooks'
+import { useCurrentUserStoreOn } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
@@ -174,7 +174,7 @@ const getHero = ({ loading, user, newSignUp }) => {
 }
 
 const Landing = ({ newSignUp }) => {
-  const { loading, user } = useCurrentUser()
+  const { atom: { data: user, isLoading: loading } } = useCurrentUserStoreOn()
   const { dispatch, modelPreviews } = useStoreon('modelPreviews')
   const [showUploadBarText, setShowUploadBarText] = useState(false)
 
