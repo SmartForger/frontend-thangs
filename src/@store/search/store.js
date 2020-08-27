@@ -105,6 +105,9 @@ export default store => {
         method: 'GET',
         endpoint: `models/search-by-text?searchTerm=${searchTerm}`,
       })
+      pendo.track('Text Search Started', {
+        searchTerm,
+      })
 
       if (error) {
         store.dispatch('change-search-results-status', {
