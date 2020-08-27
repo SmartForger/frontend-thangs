@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 
 import { Button } from '@components'
-import { useCurrentUser, useTranslations } from '@hooks'
+import { useCurrentUserStoreOn, useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
 
 import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
@@ -92,11 +92,11 @@ const UserNav = ({
   dispatch,
   handleSearchShow = noop,
 }) => {
-  const { loading, user } = useCurrentUser()
+  const { atom: { isLoading, data: user } } = useCurrentUserStoreOn()
   const c = useStyles()
   const t = useTranslations({})
 
-  if (loading) {
+  if (isLoading) {
     return <div className={c.UserNav_Row}></div>
   }
 
