@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 import * as R from 'ramda'
 import { useParams, useLocation } from 'react-router-dom'
-import { useCurrentUser } from '@hooks'
 import {
   Breadcrumbs,
   CardCollection,
@@ -60,15 +59,13 @@ const Page = () => {
     dispatch('fetch-folder', { folderId, inviteCode })
   }, [dispatch, folderId, inviteCode])
 
-  const { loading: userLoading, error: userError, user } = useCurrentUser()
-
-  if (userLoading || folders.isLoading) {
+  if (folders.isLoading) {
     return <Spinner />
   } else if (R.isEmpty(folders.currentFolder)) {
     navigateWithFlash('/home', 'The folder entered does not exist')
-  } else if (!folders.currentFolder || !user) {
+  } else if (!folders.currentFolder) {
     return <Message404 />
-  } else if (userError || folders.loadError) {
+  } else if (folders.loadError) {
     return <div>Error loading folder</div>
   }
 
