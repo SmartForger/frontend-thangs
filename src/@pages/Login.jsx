@@ -178,7 +178,7 @@ const Page = () => {
   }, [handleLoginREST, history, inputState])
 
   return (
-    <Layout>
+    <Layout showSearch={false}>
       <div className={c.Login_Wrapper}>
         {isFromThePortal() ? (
           <Button back className={c.Login_BackButton} onClick={() => history.goBack()}>

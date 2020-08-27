@@ -297,7 +297,7 @@ const ConfirmResetPage = () => {
 
 export const PasswordReset = () => {
   return (
-    <Layout>
+    <Layout showSearch={false}>
       <ResetPage />
     </Layout>
   )
@@ -305,7 +305,7 @@ export const PasswordReset = () => {
 
 export const ConfirmPasswordReset = () => {
   return (
-    <Layout>
+    <Layout showSearch={false}>
       <ConfirmResetPage />
     </Layout>
   )

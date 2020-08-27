@@ -135,7 +135,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const SearchBar = ({ showUploadBarText = false }) => {
+const SearchBar = ({ showUploadBarText = false, isMobile }) => {
   const { dispatch } = useStoreon()
   const history = useHistory()
   const c = useStyles({})
@@ -167,26 +167,30 @@ const SearchBar = ({ showUploadBarText = false }) => {
           }}
           value={searchTerm || ''}
         />
-        <div
-          className={classnames(c.SearchBar_UploadBar, {
-            [c.SearchBar_UploadBar__expand]: showUploadBarText,
-          })}
-          onClick={() => dispatch('open-modal', { modalName: 'searchByUpload' })}
-          title={t('header.searchUploadText')}
-        >
-          <div className={classnames(c.SearchBar_UploadIcon)}>
-            <UploadIcon />
-          </div>
-          <span>{t('header.searchUploadText')}</span>
-        </div>
-        <MagnifyingGlass
-          title={t('header.searchTextTitle')}
-          className={classnames(
-            c.SearchBar_SearchIcon,
-            c.SearchBar_DesktopSearchActionIcon
-          )}
-          onClick={handleSearchSubmit}
-        />
+        {!isMobile && (
+          <>
+            <div
+              className={classnames(c.SearchBar_UploadBar, {
+                [c.SearchBar_UploadBar__expand]: showUploadBarText,
+              })}
+              onClick={() => dispatch('open-modal', { modalName: 'searchByUpload' })}
+              title={t('header.searchUploadText')}
+            >
+              <div className={classnames(c.SearchBar_UploadIcon)}>
+                <UploadIcon />
+              </div>
+              <span>{t('header.searchUploadText')}</span>
+            </div>
+            <MagnifyingGlass
+              title={t('header.searchTextTitle')}
+              className={classnames(
+                c.SearchBar_SearchIcon,
+                c.SearchBar_DesktopSearchActionIcon
+              )}
+              onClick={handleSearchSubmit}
+            />
+          </>
+        )}
       </div>
     </form>
   )

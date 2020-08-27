@@ -1,20 +1,17 @@
 import React, { useCallback, useState } from 'react'
-import { useHistory, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
-import { TextInput } from '@components'
-import { useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
 
 import { ReactComponent as BackgroundSvg } from '@svg/header-background.svg'
 import { ReactComponent as Caret } from '@svg/header-caret.svg'
-import { ReactComponent as UploadIcon } from '@svg/icon-upload-3.svg'
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as LogoText } from '@svg/logo-text.svg'
-import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
 
 import UserNav from './UserNav'
+import SearchBar from './SearchBar'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -192,6 +189,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Header_UploadIcon: {
+      display: 'flex',
       marginRight: '.5rem',
     },
     Header_Background: {
@@ -217,24 +215,14 @@ const noop = () => null
 
 const Header = ({
   inverted,
-  variant,
   onNotificationsClick = noop,
   notificationsIsOpen,
-  showUploadBarText = false,
+  showUploadBarText,
+  showSearch = true,
 }) => {
   const { dispatch } = useStoreon()
-  const history = useHistory()
   const c = useStyles({ inverted, notificationsIsOpen })
-  const [searchTerm, setSearchTerm] = useState(undefined)
-  const [showMobileSearch, setShowMobileSearch] = useState(variant !== 'logo-only')
-  const t = useTranslations({})
-  const handleSearchSubmit = e => {
-    e.preventDefault()
-    if (searchTerm) {
-      history.push(`/search/${encodeURIComponent(searchTerm)}`)
-      dispatch('close-modal')
-    }
-  }
+  const [showMobileSearch, setShowMobileSearch] = useState(showSearch)
 
   const handleNotificationsClick = () => {
     dispatch('close-modal')
@@ -255,38 +243,18 @@ const Header = ({
               <Link to='/'>
                 <Logo className={c.Header_Logo} />
               </Link>
-              {variant !== 'logo-only' && (
-                <UserNav
-                  c={c}
-                  handleNotificationsClick={handleNotificationsClick}
-                  notificationsIsOpen={notificationsIsOpen}
-                  dispatch={dispatch}
-                  handleSearchShow={handleSearchClicked}
-                />
-              )}
+              <UserNav
+                c={c}
+                handleNotificationsClick={handleNotificationsClick}
+                notificationsIsOpen={notificationsIsOpen}
+                dispatch={dispatch}
+                handleSearchShow={handleSearchClicked}
+              />
             </div>
           </div>
-          {showMobileSearch && (
+          {showMobileSearch && showSearch && (
             <div>
-              <form className={c.Header_SearchForm} onSubmit={handleSearchSubmit}>
-                <div className={classnames(c.Header_SearchFormWrapper)}>
-                  <MagnifyingGlass
-                    className={classnames(c.Header_SearchIcon, c.Header_SearchFormIcon)}
-                    onClick={handleSearchSubmit}
-                  />
-                  <TextInput
-                    name='search'
-                    placeholder={t('header.searchPlaceholderText')}
-                    className={classnames(c.Header_SearchFormInput, {
-                      [c.Header_SearchFormInput_active]: searchTerm,
-                    })}
-                    onChange={e => {
-                      setSearchTerm(e.target.value)
-                    }}
-                    value={searchTerm || ''}
-                  />
-                </div>
-              </form>
+              <SearchBar isMobile />
             </div>
           )}
         </span>
@@ -301,52 +269,7 @@ const Header = ({
                       <LogoText />
                     </Link>
                   </div>
-                  {variant !== 'logo-only' && (
-                    <form className={c.Header_SearchForm} onSubmit={handleSearchSubmit}>
-                      <div className={classnames(c.Header_SearchFormWrapper)}>
-                        <MagnifyingGlass
-                          className={classnames(
-                            c.Header_SearchIcon,
-                            c.Header_SearchFormIcon
-                          )}
-                          onClick={handleSearchSubmit}
-                        />
-                        <TextInput
-                          name='search'
-                          placeholder={t('header.searchPlaceholderText')}
-                          className={classnames(c.Header_SearchFormInput, {
-                            [c.Header_SearchFormInput_active]: searchTerm,
-                          })}
-                          onChange={e => {
-                            setSearchTerm(e.target.value)
-                          }}
-                          value={searchTerm || ''}
-                        />
-                        <div
-                          className={classnames(c.Header_UploadBar, {
-                            [c.Header_UploadBar__expand]: showUploadBarText,
-                          })}
-                          onClick={() =>
-                            dispatch('open-modal', { modalName: 'searchByUpload' })
-                          }
-                          title={t('header.searchUploadText')}
-                        >
-                          <div className={classnames(c.Header_UploadIcon)}>
-                            <UploadIcon />
-                          </div>
-                          <span>{t('header.searchUploadText')}</span>
-                        </div>
-                        <MagnifyingGlass
-                          title={t('header.searchTextTitle')}
-                          className={classnames(
-                            c.Header_SearchIcon,
-                            c.Header_DesktopSearchActionIcon
-                          )}
-                          onClick={handleSearchSubmit}
-                        />
-                      </div>
-                    </form>
-                  )}
+                  {showSearch && <SearchBar showUploadBarText={showUploadBarText} />}
                 </div>
               </div>
               <UserNav

@@ -374,7 +374,7 @@ const Page = () => {
 
 export const Signup = () => {
   return (
-    <Layout>
+    <Layout showSearch={false}>
       <Page />
     </Layout>
   )
