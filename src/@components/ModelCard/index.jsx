@@ -71,7 +71,10 @@ const useStyles = createUseStyles(theme => {
         fill: theme.colors.gold[500],
       },
     },
-    ModelCard_Link: {
+    ModelCard_ExternalLink: {
+      zIndex: 1,
+    },
+    ModelCard_ThangsLink: {
       zIndex: 1,
     },
     ModelCard_ReportModelButton: {
@@ -298,7 +301,10 @@ const ModelCard = ({
       onMouseLeave={handleMouseLeave}
       onFocus={handleMouseEnter}
       onBlur={handleMouseLeave}
-      className={c.ModelCard_Link}
+      className={classnames({
+        [c.ModelCard_ExternalLink]: model.resultSource === 'phyndexer',
+        [c.ModelCard_ThangsLink]: model.resultSource !== 'phyndexer',
+      })}
       noLink={!modelPath || showReportModel}
     >
       <CardContents
