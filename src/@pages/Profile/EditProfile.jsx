@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { useCurrentUser } from '@hooks'
+import { useCurrentUserStoreOn } from '@hooks'
 import {
   Button,
   ChangeablePicture,
@@ -89,13 +89,13 @@ const WarningOnEmptyProfile = ({ user }) => {
 
 const Page = () => {
   const c = useStyles()
-  const { loading, error, user } = useCurrentUser()
+  const { atom: { data: user, isLoading, isError  } } = useCurrentUserStoreOn()
 
-  if (loading) {
+  if (isLoading) {
     return <Spinner />
   }
 
-  if (error || !user) {
+  if (isError || !user) {
     return (
       <div data-cy='fetch-results-error'>
         Error! We were not able to load your profile. Please try again later.

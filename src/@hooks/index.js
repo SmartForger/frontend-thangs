@@ -1,5 +1,4 @@
 export { default as useComments } from '@hooks/useComments'
-export { default as useCurrentUser } from '@hooks/useCurrentUser'
 export { default as useForm } from '@hooks/useForm'
 export { default as useLocalStorage } from '@hooks/useLocalStorage'
 export { default as useModels } from '@hooks/useModels'
