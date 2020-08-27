@@ -58,13 +58,13 @@ Alternative paths:
 
 - Invalid inputs.
 
-## Geometrically Similar Models
+## Geometrically Related Models
 
 Primary path:
 
 1. Upload a model, expect to be redirected to profile page.
 2. Click on card for new model to visit details page.
-3. Under the "Geometrically Similar Models" heading, expect to see "Processing model" message.
+3. Under the "Geometrically Related Models" heading, expect to see "Processing model" message.
 4. Expect that after some time (< 15 minutes) this should update and now either display model cards for related results or empty text.
 
 Alternative paths:

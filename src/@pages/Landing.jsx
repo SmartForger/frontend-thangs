@@ -114,7 +114,7 @@ const LandingHero = () => {
           </div>
           <div className={c.Landing_PromotionalSecondaryText}>
             Search for models in Thangs or upload your model and our powerful technology
-            will find all geometrically similar models. Connect with the Thangs community
+            will find all geometrically related models. Connect with the Thangs community
             to collaborate and share 3D models.
           </div>
           <div className={c.Landing_SearchByModelUploadButton}>
@@ -147,7 +147,7 @@ const NewSignUpLandingHero = () => {
           </div>
           <div className={c.Landing_PromotionalSecondaryText}>
             Search for models in Thangs or upload your model and our powerful technology
-            will find all geometrically similar models. Connect with the Thangs community
+            will find all geometrically related models. Connect with the Thangs community
             to collaborate and share 3D models.
           </div>
           <div className={c.Landing_SearchByModelUploadButton}>

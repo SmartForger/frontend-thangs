@@ -310,7 +310,7 @@ const Page = () => {
       ) : (
         <NoResults>
           Begin typing to search models by name, description, owner, etc. Use search by
-          model to find geometrically similar matches to the model you upload.
+          model to find geometrically related matches to the model you upload.
         </NoResults>
       )}
       {savedSearchResults && savedSearchResults.length > 0 && (

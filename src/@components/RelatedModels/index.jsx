@@ -29,6 +29,7 @@ const useStyles = createUseStyles(theme => {
     },
     RelatedModels_Related: {
       gridArea: 'related',
+      marginBottom: '2rem',
     },
   }
 })
@@ -60,7 +61,7 @@ const RelatedModels = ({ modelId, className }) => {
 
   return (
     <div className={classnames(className, c.RelatedModels_Related)}>
-      <div className={c.RelatedModels_Header}>Geometrically Similar</div>
+      <div className={c.RelatedModels_Header}>Geometrically Related</div>
 
       {isProcessing(model) ? (
         <NoResults className={c.RelatedModels_NoResults}>
@@ -75,9 +76,11 @@ const RelatedModels = ({ modelId, className }) => {
       ) : (
         <CardCollection
           maxPerRow={3}
-          noResultsText='There were no geometrically similar matches found.'
+          noResultsText='There were no geometrically related matches found.'
         >
-          <ModelCards items={model && model.relatedModels} />
+          {model && model.relatedModels && model.relatedModels.length > 0 ? (
+            <ModelCards items={model && model.relatedModels} />
+          ) : null}
         </CardCollection>
       )}
     </div>
