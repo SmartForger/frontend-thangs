@@ -45,12 +45,15 @@ const useQuery = location => {
   return new URLSearchParams(location.search)
 }
 
-const initializeAnalytics = ({ userIdentified, inviteCode }) => {
+const initializeAnalytics = ({ userIdentified, pendoInitialized, inviteCode }) => {
   const user = authenticationService.getCurrentUser()
 
   ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID)
   ReactPixel.init(process.env.REACT_APP_FACEBOOK_PIXEL_ID)
-  pendo.initialize()
+  if (!pendoInitialized.current) {
+    pendo.initialize()
+    pendoInitialized.current = true
+  }
   if (user && !userIdentified.current) {
     pendo.identify(user, { inviteCode })
     userIdentified.current = true
@@ -70,7 +73,8 @@ const App = () => {
   const query = useQuery(location)
   const inviteCode = useMemo(() => query.get('inviteCode'), [query])
   const userIdentified = useRef(false)
-  initializeAnalytics({ userIdentified, inviteCode })
+  const pendoInitialized = useRef(false)
+  initializeAnalytics({ userIdentified, pendoInitialized, inviteCode })
   const theme = usePageTheming(location)
 
   useEffect(() => {
