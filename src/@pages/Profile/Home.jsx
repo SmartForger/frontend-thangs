@@ -15,9 +15,8 @@ import { ReactComponent as FolderIcon } from '@svg/folder-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
-import useCurrentUserStoreOn from '@hooks/useCurrentUserStoreOn'
-import useCurrentUserId from '@hooks/useCurrentUserId'
 import useFetchPerMount from '@hooks/useServices/useFetchPerMount'
+import { useCurrentUserId, useCurrentUserStoreOn } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {

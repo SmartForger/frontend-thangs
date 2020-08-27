@@ -1,10 +1,9 @@
 import React from 'react'
-import {useServices} from '@hooks'
+import {useServices, useCurrentUserId} from '@hooks'
 import { Spinner, CardCollection, Layout } from '@components'
 import { Message404 } from '../404'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { createUseStyles } from '@style'
-import useCurrentUserId from '../../@hooks/useCurrentUserId'
 
 const useStyles = createUseStyles(theme => {
   return {

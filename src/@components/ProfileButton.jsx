@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import useCurrentUserAlt from '@hooks/useCurrentUserAlt'
+import { useCurrentUserId } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -16,7 +16,7 @@ const useStyles = createUseStyles(theme => {
 
 const ProfileButton = ({ userId, className }) => {
   const c = useStyles()
-  const isCurrentUser = useCurrentUserAlt(userId)
+  const isCurrentUser = useCurrentUserId() === userId
 
   if (isCurrentUser) {
     return (
