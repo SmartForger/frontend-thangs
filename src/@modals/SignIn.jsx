@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
@@ -48,10 +48,26 @@ const useStyles = createUseStyles(theme => {
       flexFlow: 'column nowrap',
       alignItems: 'center',
     },
-    Login_Button: {
-      margin: 0,
-      marginTop: '6rem',
-      float: 'right',
+    Login_Button: {},
+    Login_ButtonWrapper: {
+      marginLeft: '1rem',
+      marginBottom: '1.5rem',
+    },
+    Login_ButtonRow: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      marginTop: '2rem',
+      justifyContent: 'flex-end',
+    },
+    Login_NoAccount: {
+      display: 'flex',
+      alignItems: 'center',
+      marginBottom: '1.5rem',
+    },
+    Login_NoAccountButton: {
+      padding: '.5rem',
+      color: theme.colors.gold[500],
+      fontWeight: 'bold',
     },
     Login_FormControl: {
       marginTop: '2rem',
@@ -60,6 +76,8 @@ const useStyles = createUseStyles(theme => {
     Login_ForgotText: {
       marginTop: '1.5rem',
       display: 'flex',
+      whiteSpace: 'nowrap',
+      flexWrap: 'wrap',
     },
     Login_ForgotButton: {
       ...theme.mixins.text.linkText,
@@ -209,21 +227,33 @@ const SignIn = ({ afterSignIn }) => {
             </label>
           </div>
         </div>
-        <Button className={c.Login_Button} type='submit'>
-          Sign In
-        </Button>
+        <div className={c.Login_ForgotText}>
+          Forgot password?
+          <Button
+            className={c.Login_ForgotButton}
+            text
+            onClick={() => dispatch('open-modal', { modalName: 'passwordReset' })}
+          >
+            Click here
+          </Button>
+          to reset your password.
+        </div>
+        <div className={c.Login_ButtonRow}>
+          <div className={c.Login_NoAccount}>
+            <span>Don&apos;t have an account?</span>
+            <Link to={'/signup/alpha'} onClick={() => dispatch('close-modal')}>
+              <Button className={c.Login_NoAccountButton} text>
+                Sign Up
+              </Button>
+            </Link>
+          </div>
+          <div className={c.Login_ButtonWrapper}>
+            <Button className={c.Login_Button} type='submit'>
+              Sign In
+            </Button>
+          </div>
+        </div>
       </form>
-      <div className={c.Login_ForgotText}>
-        Forgot password?
-        <Button
-          className={c.Login_ForgotButton}
-          text
-          onClick={() => dispatch('open-modal', { modalName: 'passwordReset' })}
-        >
-          Click here
-        </Button>
-        to reset your password.
-      </div>
     </div>
   )
 }
