@@ -222,7 +222,8 @@ const ProfileButton = ({ userId, className }) => {
       </Link>
     )
   } else {
-    return <ToggleFollowButton viewedUser={{}} className={className} />
+    // return <ToggleFollowButton viewedUser={{}} className={className} />
+    return <div />
   }
 }
 
@@ -265,8 +266,7 @@ const Page = () => {
         />
         <div>
           <div className={c.Profile_Name}>{user.fullName}</div>
-          {/* Waiting for RestAPI follow / unfollow requests */}
-          {/* <ProfileButton userId={id} user={user} className={c.Profile_ProfileButton} /> */}
+          <ProfileButton userId={id} user={user} className={c.Profile_ProfileButton} />
         </div>
       </div>
       <Tabs userId={id} />
