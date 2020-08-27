@@ -10,7 +10,6 @@ import {
   ToggleFollowButton,
 } from '@components'
 import ModelCards from '@components/CardCollection/ModelCards'
-import { useCurrentUser } from '@hooks'
 import { Message404 } from '../404'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as AboutIcon } from '@svg/about-icon.svg'
@@ -19,6 +18,7 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import useFetchOnce from '@hooks/useServices/useFetchOnce'
 import useFetchPerMount from '@hooks/useServices/useFetchPerMount'
+import useCurrentUserAlt from '@hooks/useCurrentUserAlt'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -99,12 +99,7 @@ const TabTitle = ({ title, Icon, selected, onClick, amount }) => {
       <div className={c.Profile_Icon}>
         <Icon />
       </div>
-      <span>
-        {amount
-          ? [title, amount].join(' ')
-          : title
-        }
-      </span>
+      <span>{amount ? [title, amount].join(' ') : title}</span>
     </div>
   )
 }
@@ -213,19 +208,22 @@ const Tabs = ({ userId }) => {
   )
 }
 
-const ProfileButton = ({ viewedUser, className }) => {
+const ProfileButton = ({ userId, className }) => {
   const c = useStyles()
-  const { user } = useCurrentUser()
+  const isCurrentUser = useCurrentUserAlt(userId)
 
-  if (!user || user.id !== viewedUser.id) {
-    return <ToggleFollowButton viewedUser={viewedUser} className={className} />
+  if (isCurrentUser) {
+    return (
+      <Link
+        className={classnames(className, c.Profile_EditProfileLink)}
+        to='/profile/edit'
+      >
+        Edit Profile
+      </Link>
+    )
+  } else {
+    return <ToggleFollowButton viewedUser={{}} className={className} />
   }
-
-  return (
-    <Link className={classnames(className, c.Profile_EditProfileLink)} to='/profile/edit'>
-      Edit Profile
-    </Link>
-  )
 }
 
 const Page = () => {
@@ -267,7 +265,8 @@ const Page = () => {
         />
         <div>
           <div className={c.Profile_Name}>{user.fullName}</div>
-          <ProfileButton className={c.Profile_ProfileButton} viewedUser={user} />
+          {/* Waiting for RestAPI follow / unfollow requests */}
+          {/* <ProfileButton userId={id} user={user} className={c.Profile_ProfileButton} /> */}
         </div>
       </div>
       <Tabs userId={id} />
