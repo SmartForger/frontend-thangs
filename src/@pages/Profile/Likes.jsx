@@ -18,9 +18,12 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const LikesCount = ({ likedModels, c }) => {
-  const amount = likedModels && likedModels.data && likedModels.data.length
-  return <div className={c.Likes_LikedModelsHeader}>Liked Models {amount}</div>
+const LikesCount = ({likedModels, c}) => {
+  const amount = likedModels && likedModels.length
+  if (amount) {
+    return <div className={c.Likes_LikedModelsHeader}>Liked Models {amount}</div>
+  }
+  return null
 }
 
 const LikesContent = ({ likedModels }) => {
