@@ -7,7 +7,7 @@ import { TextInput } from '@components'
 import { useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
 
-import { ReactComponent as UploadIcon } from '@svg/icon-upload-3.svg'
+import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
 
 const useStyles = createUseStyles(theme => {
@@ -82,6 +82,8 @@ const useStyles = createUseStyles(theme => {
       },
     },
     SearchBar_SearchIcon: {
+      cursor: 'pointer',
+
       '& path, & polygon': {
         fill: theme.colors.gold[500],
       },
@@ -127,6 +129,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     SearchBar_UploadIcon: {
+      display: 'flex',
       marginRight: '.5rem',
     },
   }

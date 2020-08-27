@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { Card, FolderInfo } from '@components'
-import { ReactComponent as UploadIcon } from '@svg/icon-upload-3.svg'
+import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
