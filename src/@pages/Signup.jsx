@@ -198,24 +198,6 @@ const Page = () => {
     [invalidFields]
   )
 
-  const invalidForm = useMemo(() => {
-    if (!registrationCode) {
-      return false
-    }
-    if (
-      inputState.acceptedTerms &&
-      inputState.firstName &&
-      inputState.lastName &&
-      inputState.username &&
-      inputState.email &&
-      inputState.password &&
-      inputState.password === inputState.confirmPass
-    ) {
-      return false
-    }
-    return true
-  }, [inputState, registrationCode])
-
   const validateUsername = useCallback(() => {
     if (swearjar.profane(inputState.username)) {
       setInvalidFields(['username'])
@@ -376,6 +358,7 @@ const Page = () => {
             onChange={e => {
               handleOnInputChange('acceptedTerms', e.target.checked)
             }}
+            required
           />
         </div>
         <div className={c.Signup_ButtonRow}>
