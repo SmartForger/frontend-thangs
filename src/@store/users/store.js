@@ -1,3 +1,4 @@
+import * as R from 'ramda'
 import api from '@services/api'
 import { STATUSES, getStatusState } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
@@ -21,6 +22,8 @@ export default store => {
     },
   }))
   store.on(`fetch-${COLLECTION_PREFIX}`, async (_, { id }) => {
+    if (R.isNil(id)) return
+
     store.dispatch('change-status', {
       status: STATUSES.LOADING,
       atom: `${COLLECTION_PREFIX}-${id}`,
