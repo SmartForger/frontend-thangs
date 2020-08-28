@@ -16,7 +16,8 @@ export default (atomRawName, collectionName) => {
   const store = useContext(StoreContext)
   const getStoredAtom = useCallback(() => store.get()[atomName], [store, atomName])
 
-  const operationParams = getOperationParams.bind(null, atomRawName, collectionName)
+  const operationParams = operation =>
+    getOperationParams(atomRawName, collectionName, operation)
 
   if (!getStoredAtom()) {
     dispatch(...operationParams('init'))
