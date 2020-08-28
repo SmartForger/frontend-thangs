@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React from 'react'
 import * as R from 'ramda'
 import { Link } from 'react-router-dom'
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg'

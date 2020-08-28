@@ -1,5 +1,5 @@
 import { gql } from 'apollo-boost'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/react-hooks'
 import { createAppUrl } from './utils'
 import { parseModel } from './models'
 
@@ -106,14 +106,6 @@ const parseUser = user => {
       avatarUrl,
     },
   }
-}
-
-const parseUserPayload = data => {
-  if (!data || !data.user) {
-    return null
-  }
-
-  return parseUser(data.user)
 }
 
 const useUpdateUser = () => {
