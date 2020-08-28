@@ -1,12 +1,10 @@
 import React from 'react'
-import { NoResults, CardCollection, Spinner, ProgressText } from '@components'
+import { CardCollection, Spinner } from '@components'
 import ModelCards from '@components/CardCollection/ModelCards'
-import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg'
-import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
-import { isError, isProcessing } from '@utilities'
 import { logger } from '@utilities/logging'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import useFetchPerMount from '@hooks/useServices/useFetchPerMount'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -35,15 +33,15 @@ const useStyles = createUseStyles(theme => {
 
 const RelatedModels = ({ modelId, className }) => {
   const c = useStyles()
-  let loading = false //TEMP
-  let error = false //TEMP
-  let model = []
-  console.log('This needs changed to REST!', 'GET models/related/', modelId)
 
-  if (loading) {
+  const {
+    atom: { isLoading, isError, data },
+  } = useFetchPerMount(modelId, 'related-models')
+
+  if (isLoading) {
     return <Spinner />
-  } else if (error) {
-    logger.error('error', error)
+  } else if (isError) {
+    logger.error('error', isError)
     return <Spinner />
   }
 
@@ -51,26 +49,14 @@ const RelatedModels = ({ modelId, className }) => {
     <div className={classnames(className, c.RelatedModels_Related)}>
       <div className={c.RelatedModels_Header}>Geometrically Related</div>
 
-      {isProcessing(model) ? (
-        <NoResults className={c.RelatedModels_NoResults}>
-          <LoadingIcon className={c.RelatedModels_Icon} />
-          <ProgressText text='Processing for matches' />
-        </NoResults>
-      ) : isError(model) ? (
-        <NoResults className={c.RelatedModels_NoResults}>
-          <ErrorIcon className={c.RelatedModels_Icon} />
-          An error occurred while processing for matches.
-        </NoResults>
-      ) : (
-        <CardCollection
-          maxPerRow={3}
-          noResultsText='There were no geometrically related matches found.'
-        >
-          {model && model.relatedModels && model.relatedModels.length > 0 ? (
-            <ModelCards items={model && model.relatedModels} />
-          ) : null}
-        </CardCollection>
-      )}
+      <CardCollection
+        maxPerRow={3}
+        noResultsText='There were no geometrically related matches found.'
+      >
+        {data && data.matches && data.matches.length > 0 ? (
+          <ModelCards items={data.matches} />
+        ) : null}
+      </CardCollection>
     </div>
   )
 }
