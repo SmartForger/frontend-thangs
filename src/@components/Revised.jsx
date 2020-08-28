@@ -2,12 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import * as R from 'ramda'
 import { createUseStyles } from '@style'
-import * as GraphqlService from '@services/graphql-service'
 import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
 import { useServices } from '@hooks'
 import { Spinner } from '@components'
-
-const graphqlService = GraphqlService.getInstance()
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -40,19 +37,18 @@ const Revised = ({ modelId }) => {
   const { useFetchOnce } = useServices()
   const { atom: model } = useFetchOnce(modelId, 'model')
 
-  const { loading: userLoading, user } = graphqlService.useUserById(
-    R.path(['data', 'ownerId'], model)
-  )
-
-  if (userLoading || model.isLoading) {
+  if (model.isLoading) {
     return <Spinner />
   }
+
+  const { fullName, firstName, lastName } = R.path(['data', 'owner'], model) || {}
+  const resultName = fullName ? fullName : [firstName, lastName].join(' ')
 
   return (
     <div className={c.Revised_Label}>
       <VersionIcon className={c.Revised_VersionIcon} />
       <div>Revised from</div>
-      <Link to={`/model/${modelId}`}>{(user && user.fullName) || 'unknown'}</Link>
+      <Link to={`/model/${modelId}`}>{resultName || 'unknown'}</Link>
     </div>
   )
 }

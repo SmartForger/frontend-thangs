@@ -210,8 +210,8 @@ function Details({ currentUser, model, className }) {
   const c = useStyles()
   return (
     <div className={className}>
-      {model.previousVersionModelId && <Revised modelId={model.previousVersionModelId} />}
-
+      {model.previousVersionModelId && <Revised modelId={507} />}
+      <Revised modelId={507} />
       <ModelTitle model={model} />
       {model.id && (
         <LikeModelButton currentUser={currentUser} modelId={model.id} model={model} />

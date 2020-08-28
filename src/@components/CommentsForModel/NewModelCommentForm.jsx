@@ -40,7 +40,7 @@ const graphqlService = GraphqlService.getInstance()
 const NewModelCommentForm = ({ modelId }) => {
   const c = useStyles()
   const userId = authenticationService.getCurrentUserId()
-  const { user } = graphqlService.useUserById(userId)
+
   const { dispatch } = useStoreon()
 
   const initialState = {
@@ -77,10 +77,6 @@ const NewModelCommentForm = ({ modelId }) => {
     },
     [onInputChange]
   )
-
-  if (!user) {
-    return null
-  }
 
   return (
     <div>

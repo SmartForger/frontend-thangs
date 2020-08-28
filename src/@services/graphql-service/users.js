@@ -116,15 +116,6 @@ const parseUserPayload = data => {
   return parseUser(data.user)
 }
 
-const useUserById = id => {
-  const { loading, error, data, startPolling, stopPolling } = useQuery(USER_QUERY, {
-    variables: { id },
-  })
-  const user = parseUserPayload(data)
-
-  return { loading, error, user, startPolling, stopPolling }
-}
-
 const useUpdateUser = () => {
   return useMutation(UPDATE_USER_MUTATION)
 }
@@ -223,4 +214,4 @@ export const useUnfollowUserMutation = user => {
   )
 }
 
-export { useUserById, useUpdateUser, useUploadUserAvatarMutation, parseUser }
+export { useUpdateUser, useUploadUserAvatarMutation, parseUser }
