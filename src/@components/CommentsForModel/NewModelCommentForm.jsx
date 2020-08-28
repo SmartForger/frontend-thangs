@@ -1,7 +1,5 @@
 import React, { useCallback } from 'react'
 import { useForm } from '@hooks'
-import { authenticationService } from '@services'
-import * as GraphqlService from '@services/graphql-service'
 import { Button, TextInput } from '@components'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
@@ -35,11 +33,8 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const graphqlService = GraphqlService.getInstance()
-
 const NewModelCommentForm = ({ modelId }) => {
   const c = useStyles()
-  const userId = authenticationService.getCurrentUserId()
 
   const { dispatch } = useStoreon()
 
@@ -51,24 +46,16 @@ const NewModelCommentForm = ({ modelId }) => {
     initialState,
   })
 
-  const [createModelComment] = graphqlService.useCreateModelCommentMutation({
-    modelId,
-  })
-
   const formSubmit = useCallback(
     async (inputState, isValid, _errors) => {
       if (isValid) {
-        await createModelComment({
-          variables: {
-            input: { ownerId: userId, modelId: `${modelId}`, body: inputState.body },
-          },
-        })
 
-        dispatch('fetch-model-comments', { id: modelId })
-        clearAllInputs()
+        dispatch('new-model-comments', { id: modelId, body: inputState.body, onFinish: () => {
+          clearAllInputs()
+        } })
       }
     },
-    [clearAllInputs, createModelComment, dispatch, modelId, userId]
+    [clearAllInputs, dispatch, modelId]
   )
 
   const handleOnInputChange = useCallback(

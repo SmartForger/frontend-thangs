@@ -8,7 +8,6 @@ import { createAuthenticatedFetch } from '@services/authenticated-fetch'
 
 import * as users from './users'
 import * as models from './models'
-import * as comments from './comments'
 import * as notifications from './notifications'
 import { getGraphQLUrl } from './utils'
 
@@ -51,7 +50,6 @@ const getInstance = () => {
   return {
     ...users,
     ...models,
-    ...comments,
     ...notifications,
   }
 }

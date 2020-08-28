@@ -4,8 +4,12 @@ import * as types from '@constants/storeEventTypes'
 
 const COLLECTION_PREFIX = 'model-comments'
 
+const noop = () => null
+
 export default store => {
-  store.on(types.STORE_INIT, () => ({}))
+  store.on(types.STORE_INIT, () => ({
+    [`new-${COLLECTION_PREFIX}`]: getStatusState(STATUSES.INIT),
+  }))
 
   store.on(`init-${COLLECTION_PREFIX}`, (_, { id }) => ({
     [`${COLLECTION_PREFIX}-${id}`]: {
@@ -43,4 +47,38 @@ export default store => {
       })
     }
   })
+  store.on(
+    `new-${COLLECTION_PREFIX}`,
+    async (_, { id, body, onFinish = noop, onError = noop }) => {
+      store.dispatch('change-status', {
+        status: STATUSES.LOADING,
+        atom: `new-${COLLECTION_PREFIX}`,
+      })
+
+      const { data, error } = await api({
+        method: 'POST',
+        endpoint: `models/${id}/comments`,
+        body: {
+          body,
+        },
+      })
+
+      if (error) {
+        store.dispatch('change-status', {
+          status: STATUSES.FAILURE,
+          atom: `new-${COLLECTION_PREFIX}`,
+        })
+        onError()
+      } else {
+        store.dispatch('change-status', {
+          status: STATUSES.LOADED,
+          atom: `new-${COLLECTION_PREFIX}`,
+          data,
+        })
+
+        onFinish()
+        store.dispatch(`fetch-${COLLECTION_PREFIX}`, { id })
+      }
+    }
+  )
 }
