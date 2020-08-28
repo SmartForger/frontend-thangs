@@ -98,7 +98,7 @@ const ThangsModelDetails = ({
 }) => {
   let modelName = model.name
   if (modelName && modelName.length > 40) modelName = modelName.slice(0, 40) + '...'
-  let modelLikeCount = model && model.likesCount
+  let modelLikeCount = model && model.likes && model.likes.length
   if (modelLikeCount && Array.isArray(modelLikeCount))
     modelLikeCount = modelLikeCount.length
   return (
@@ -262,14 +262,8 @@ const CardContents = ({
   )
 }
 
-const userIdsWhoHaveLiked = R.pipe(
-  R.prop('likes'),
-  R.filter(R.propEq('isLiked', true)),
-  R.map(R.path(['ownerId']))
-)
-
 const hasLikedModel = (model, user) => {
-  return R.includes(parseInt(user.id), userIdsWhoHaveLiked(model))
+  return R.includes(parseInt(user.id), model.likes)
 }
 
 const ModelCard = ({
