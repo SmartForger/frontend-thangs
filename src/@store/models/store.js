@@ -14,12 +14,33 @@ export default store => {
   store.on('init-model', (_, { id }) => ({
     [`model-${id}`]: getInitAtom(),
   }))
+
   store.on('update-model', (state, { id, data }) => ({
     [`model-${id}`]: {
       ...state[`model-${id}`],
-      data,
+      data
     },
   }))
+
+  store.on('update-model-likes', (state, {modelId, currentUserId}) => {
+    let likes = state[`model-${modelId}`].data.likes
+    const index = likes.indexOf(currentUserId)
+    if (likes.includes(currentUserId)) {
+      likes.splice(index, 1)
+    } else {
+      likes.push(currentUserId)
+    }
+    return {
+      [`model-${modelId}`]: {
+        ...state[`model-${modelId}`],
+        data: {
+          ...state[`model-${modelId}`].data,
+          likes: likes,
+        }
+      },
+    }
+  })
+
   store.on('loading-model', (state, { id }) => ({
     [`model-${id}`]: {
       ...state[`model-${id}`],
