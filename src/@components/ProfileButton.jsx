@@ -27,9 +27,8 @@ const ProfileButton = ({ userId, className }) => {
       </Link>
     )
   } else {
-    if (currentUserId) return <ToggleFollowButton viewedUser={{}} className={className} />
+    return <ToggleFollowButton userId={userId} />
   }
-  return null
 }
 
 export default ProfileButton
