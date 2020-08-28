@@ -179,7 +179,7 @@ export default store => {
 
           pendo.track('Model Search Started', {
             phyndexerId: newPhyndexerId,
-            modelId: newModelId,
+            modelId: newModelId.toString(),
           })
         })
         .catch(error => {
@@ -214,6 +214,7 @@ export default store => {
             status: STATUSES.LOADED,
             data: data,
           })
+
           pendo.track(
             `Thangs Model Search - ${
               data && data.matches && data.matches.length && data.matches.length > 0
@@ -272,6 +273,7 @@ export default store => {
           status: STATUSES.LOADED,
           data,
         })
+
         pendo.track(
           `Phyndexer Model Search - ${
             data && data.matches && data.matches.length && data.matches.length > 0
