@@ -286,9 +286,6 @@ const ModelCard = ({
 }) => {
   const c = useStyles()
   const showOwner = withOwner && !!model.owner
-  const [hovered, setHovered] = useState(false)
-  const handleMouseEnter = useCallback(() => setHovered(true), [])
-  const handleMouseLeave = useCallback(() => setHovered(false), [])
   const isLiked = user ? hasLikedModel(model, user) : likes
   const modelAttributionUrl =
     model && model.attributionUrl && encodeURI(model.attributionUrl)
@@ -297,10 +294,6 @@ const ModelCard = ({
     <Anchor
       to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
       attributionUrl={modelAttributionUrl}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onFocus={handleMouseEnter}
-      onBlur={handleMouseLeave}
       className={classnames({
         [c.ModelCard_ExternalLink]: model.resultSource === 'phyndexer',
         [c.ModelCard_ThangsLink]: model.resultSource !== 'phyndexer',
@@ -313,7 +306,6 @@ const ModelCard = ({
         showOwner={showOwner}
         showSocial={showSocial}
         showWaldo={showWaldo}
-        hovered={hovered}
         c={c}
         isLiked={isLiked}
         modelAttributionUrl={modelAttributionUrl}

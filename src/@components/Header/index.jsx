@@ -217,21 +217,21 @@ const Header = ({
   inverted,
   onNotificationsClick = noop,
   notificationsIsOpen,
-  showUploadBarText,
+  showSearchTextFlash,
   showSearch = true,
 }) => {
   const { dispatch } = useStoreon()
   const c = useStyles({ inverted, notificationsIsOpen })
   const [showMobileSearch, setShowMobileSearch] = useState(showSearch)
 
-  const handleNotificationsClick = () => {
+  const handleNotificationsClick = useCallback(() => {
     dispatch('close-modal')
     onNotificationsClick()
-  }
+  }, [dispatch, onNotificationsClick])
 
-  const handleSearchClicked = () => {
+  const handleSearchClicked = useCallback(() => {
     setShowMobileSearch(!showMobileSearch)
-  }
+  }, [showMobileSearch])
 
   return (
     <>
@@ -269,7 +269,7 @@ const Header = ({
                       <LogoText />
                     </Link>
                   </div>
-                  {showSearch && <SearchBar showUploadBarText={showUploadBarText} />}
+                  {showSearch && <SearchBar showSearchTextFlash={showSearchTextFlash} />}
                 </div>
               </div>
               <UserNav

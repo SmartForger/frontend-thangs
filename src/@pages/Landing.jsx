@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { CardCollection, Layout, Button } from '@components'
 import { useCurrentUser } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
@@ -178,21 +178,9 @@ const Landing = ({ newSignUp }) => {
     atom: { data: user, isLoading: loading },
   } = useCurrentUser()
   const { dispatch, modelPreviews } = useStoreon('modelPreviews')
-  const [showUploadBarText, setShowUploadBarText] = useState(false)
-
-  useEffect(() => {
-    setTimeout(() => {
-      setShowUploadBarText(true)
-      setTimeout(() => {
-        setShowUploadBarText(false)
-      }, 4000)
-    }, 500)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   const HeroComponent = getHero({ loading, user, newSignUp })
   return (
-    <Layout Hero={HeroComponent} showUploadBarText={showUploadBarText}>
+    <Layout Hero={HeroComponent} showSearchTextFlash={true}>
       <Page user={user} dispatch={dispatch} modelPreviews={modelPreviews} />
     </Layout>
   )

@@ -115,7 +115,7 @@ const modalTemplates = {
   reportModel: ReportModel,
 }
 
-const Layout = ({ children, Hero, showSearch, showUploadBarText }) => {
+const Layout = ({ children, Hero, showSearch, showSearchTextFlash }) => {
   const { modal } = useStoreon('modal')
   const [notificationsIsOpen, setNotificationsOpen] = useState(false)
   const [notificationsClosing, setNotificationsClosing] = useState(false)
@@ -149,7 +149,7 @@ const Layout = ({ children, Hero, showSearch, showUploadBarText }) => {
       <Header
         onNotificationsClick={onNotificationsClick}
         notificationsIsOpen={notificationsIsOpen}
-        showUploadBarText={showUploadBarText}
+        showSearchTextFlash={showSearchTextFlash}
         showSearch={showSearch}
       />
       {ModalView && (

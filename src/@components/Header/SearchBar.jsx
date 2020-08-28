@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
@@ -135,12 +135,14 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const SearchBar = ({ showUploadBarText = false, isMobile }) => {
+const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
   const { dispatch } = useStoreon()
   const history = useHistory()
   const c = useStyles({})
   const t = useTranslations({})
   const [searchTerm, setSearchTerm] = useState(undefined)
+  const [showUploadText, setShowUploadText] = useState(false)
+
   const handleSearchSubmit = e => {
     e.preventDefault()
     if (searchTerm) {
@@ -148,6 +150,18 @@ const SearchBar = ({ showUploadBarText = false, isMobile }) => {
       dispatch('close-modal')
     }
   }
+
+  useEffect(() => {
+    if (showSearchTextFlash) {
+      setTimeout(() => {
+        setShowUploadText(true)
+        setTimeout(() => {
+          setShowUploadText(false)
+        }, 4000)
+      }, 500)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <form className={c.SearchBar_Form} onSubmit={handleSearchSubmit}>
@@ -171,7 +185,7 @@ const SearchBar = ({ showUploadBarText = false, isMobile }) => {
           <>
             <div
               className={classnames(c.SearchBar_UploadBar, {
-                [c.SearchBar_UploadBar__expand]: showUploadBarText,
+                [c.SearchBar_UploadBar__expand]: showUploadText,
               })}
               onClick={() => dispatch('open-modal', { modalName: 'searchByUpload' })}
               title={t('header.searchUploadText')}
