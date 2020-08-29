@@ -1,9 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
+import * as R from 'ramda'
 
 import { Button } from '@components'
-import { useCurrentUser, useTranslations } from '@hooks'
+import { useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
 
 import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
@@ -91,10 +92,10 @@ const UserNav = ({
   notificationsIsOpen,
   dispatch,
   handleSearchShow = noop,
+  isLoading,
+  user,
+  showUser,
 }) => {
-  const {
-    atom: { isLoading, data: user },
-  } = useCurrentUser()
   const c = useStyles()
   const t = useTranslations({})
 
@@ -102,7 +103,7 @@ const UserNav = ({
     return <div className={c.UserNav_Row}></div>
   }
 
-  if (user) {
+  if (showUser && user && !R.isNil(user) && !R.isEmpty(user)) {
     return (
       <div className={classnames(c.UserNav_Row, c.UserNav_ButtonsRow)}>
         <NotificationsButton handleNotificationsClick={handleNotificationsClick} />

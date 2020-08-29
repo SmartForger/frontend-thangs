@@ -1,8 +1,7 @@
 import React from 'react'
-import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
-import { useNotifications } from '@hooks'
+import { useServices } from '@hooks'
 import { createUseStyles } from '@style'
 import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg'
 
@@ -43,13 +42,9 @@ const useStyles = createUseStyles(theme => {
 
 const NotificationsButton = ({ handleNotificationsClick }) => {
   const c = useStyles({})
-  const { notifications } = useStoreon('notifications')
-  const { useUnreadNotificationCount } = useNotifications()
-  const { unreadNotificationCount } = useUnreadNotificationCount()
-  const filteredNotificationsCount =
-    notifications && notifications.filteredNotificationsCount
-      ? notifications.filteredNotificationsCount
-      : null
+  const { useFetchPerMount } = useServices()
+  const { atom: notifications } = useFetchPerMount('notifications')
+  const { data: notificationData } = notifications
   return (
     <div
       className={classnames(
@@ -59,11 +54,9 @@ const NotificationsButton = ({ handleNotificationsClick }) => {
       onClick={handleNotificationsClick}
     >
       <NotificationIcon className={c.NotificationsButton_NotificationIcon} />
-      {unreadNotificationCount > 0 && (
+      {notificationData && notificationData.unreadCount > 0 && (
         <div className={c.NotificationsButton_UnreadBadge}>
-          {filteredNotificationsCount
-            ? filteredNotificationsCount
-            : unreadNotificationCount}
+          {notificationData.unreadCount}
         </div>
       )}
     </div>

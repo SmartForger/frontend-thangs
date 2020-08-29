@@ -1,20 +1,14 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import { useStoreon } from 'storeon/react'
 import { formatDistanceStrict } from 'date-fns'
-import {
-  isModelCompletedProcessing,
-  isModelFailedProcessing,
-  isUserCommentedOnModel,
-  isUserLikedModel,
-  isUserDownloadedModel,
-  isUserStartedFollowingUser,
-  isUserGrantedUserAccessToFolder,
-} from '@services/graphql-service/notifications'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as GrantAccessIcon } from '@svg/notification-grant-access.svg'
 import { ReactComponent as HeartIcon } from '@svg/notification-heart.svg'
 import { ReactComponent as CommentIcon } from '@svg/notification-comment.svg'
 import { ReactComponent as PlusIcon } from '@svg/notification-plus.svg'
+import { ReactComponent as UploadIcon } from '@svg/notification-uploaded.svg'
+import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -73,10 +67,15 @@ const useStyles = createUseStyles(theme => {
       overflowX: 'hidden',
       textOverflow: 'ellipsis',
     },
+    NotificationSnippet_Wrapper: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: '1rem',
+    },
     NotificationSnippet: {
       display: 'flex',
       flexDirection: 'row',
-      marginBottom: '1.5rem',
       alignItems: 'flex-start',
       padding: '.5rem',
       borderRadius: '.5rem',
@@ -110,85 +109,123 @@ const useStyles = createUseStyles(theme => {
       fill: theme.colors.gold[500],
       stroke: theme.colors.gold[500],
     },
+    NotificationSnippet_TrashIcon: {
+      padding: '.5rem',
+      cursor: 'pointer',
+      '&:hover': {
+        backgroundColor: theme.colors.white[700],
+        borderRadiu: '.5rem',
+      },
+    },
   }
 })
 const noop = () => null
+
 const NotificationSnippet = ({
   c,
   Icon = noop,
+  id,
   actor,
+  count,
   verb,
   time,
   target,
   linkTarget,
+  handleNotificationDelete,
 }) => {
   const actorName = actor && actor.fullName
   const targetName = target && target.name
-  const isActorAndTargetExists = actor && actor.fullName && target && target.name
   return (
-    isActorAndTargetExists ?
+    <div className={c.NotificationSnippet_Wrapper}>
       <Link className={c.NotificationSnippet} to={linkTarget}>
         <div>
           <Icon />
         </div>
         <div className={c.NotificationSnippet_content}>
           <div className={c.NotificationSnippet_text}>
-            { `${actorName} ` }
+            {`${actorName} `}
+            {count > 1 ? `and ${count - 1} others ` : ''}
             <span className={c.NotificationSnippet_verb}>{verb}</span>
             {` ${targetName}`}
           </div>
           <div className={c.NotificationSnippet_time}>{time}</div>
         </div>
       </Link>
-      :
-      null
+      <TrashCanIcon
+        className={c.NotificationSnippet_TrashIcon}
+        onClick={() => handleNotificationDelete(id)}
+      />
+    </div>
   )
 }
 
-const Notification = ({
-  timestamp,
-  actor,
-  verb,
-  target,
-  notificationType,
-  actionObject,
-  className,
-}) => {
+const Notification = ({ id, actor, className, count, target, updated, verb }) => {
   const c = useStyles()
-  const time = formatDistanceStrict(new Date(timestamp), new Date())
+  const { dispatch } = useStoreon()
+  const time = formatDistanceStrict(new Date(updated), new Date())
   const displayTime = `${time} ago`
   let text = ''
   let IconComponent = noop
   let linkTarget = '/'
-  if (isModelFailedProcessing(notificationType)) {
-    text = 'We were unable to process your model. Please try again.'
-  } else if (isModelCompletedProcessing(notificationType)) {
-    text = 'We have finished processing your model.'
-  } else if (isUserCommentedOnModel(notificationType)) {
-    text = actionObject && actionObject.body
-    IconComponent = CommentIcon
-    linkTarget = target && target.id ? `/model/${target.id}` : '/'
-  } else if (isUserLikedModel(notificationType)) {
-    IconComponent = HeartIcon
-    linkTarget = target && target.id ? `/model/${target.id}` : '/'
-  } else if (isUserStartedFollowingUser(notificationType)) {
-    IconComponent = PlusIcon
-  } else if (isUserDownloadedModel(notificationType)) {
-    IconComponent = DownloadIcon
-  } else if (isUserGrantedUserAccessToFolder(notificationType)) {
-    IconComponent = GrantAccessIcon
+
+  const handleNotificationDelete = useCallback(
+    id => {
+      dispatch('clear-notification', { id })
+    },
+    [dispatch]
+  )
+
+  switch (verb) {
+    case 'commented':
+      IconComponent = CommentIcon
+      linkTarget = target && target.id ? `/model/${target.id}` : '/'
+      break
+    case 'downloaded':
+      IconComponent = DownloadIcon
+      linkTarget = target && target.id ? `/model/${target.id}` : '/'
+      break
+    case 'followed':
+      IconComponent = PlusIcon
+      linkTarget = target && target.id ? `/user/${target.id}` : '/'
+      break
+    case 'invited':
+      IconComponent = GrantAccessIcon
+      linkTarget = target && target.id ? `/folder/${target.id}` : '/'
+      break
+    case 'liked':
+      IconComponent = HeartIcon
+      linkTarget = target && target.id ? `/model/${target.id}` : '/'
+      break
+    case 'uploaded':
+      IconComponent = UploadIcon
+      linkTarget = target && target.id ? `/model/${target.id}` : '/'
+      break
+    case 'uploaded-new-version':
+      IconComponent = UploadIcon
+      linkTarget = target && target.id ? `/model/${target.id}` : '/'
+      break
+    case 'uploaded-to-folder':
+      IconComponent = UploadIcon
+      linkTarget = target && target.id ? `/folder/${target.id}` : '/'
+      break
+    default:
+      break
   }
+
   return (
     <NotificationSnippet
       c={c}
       className={className}
+      count={count}
       time={displayTime}
+      id={id}
       actor={actor}
       target={target}
       verb={verb}
       text={text}
       linkTarget={linkTarget}
       Icon={IconComponent}
+      handleNotificationDelete={handleNotificationDelete}
     />
   )
 }

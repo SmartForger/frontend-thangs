@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
+import { useCurrentUser } from '@hooks'
 import { createUseStyles } from '@style'
 
 import { ReactComponent as BackgroundSvg } from '@svg/header-background.svg'
@@ -219,15 +220,20 @@ const Header = ({
   notificationsIsOpen,
   showSearchTextFlash,
   showSearch = true,
+  showUser = true,
 }) => {
   const { dispatch } = useStoreon()
   const c = useStyles({ inverted, notificationsIsOpen })
   const [showMobileSearch, setShowMobileSearch] = useState(showSearch)
 
+  const {
+    atom: { isLoading, data: user },
+  } = useCurrentUser()
   const handleNotificationsClick = useCallback(() => {
     dispatch('close-modal')
+    if (!notificationsIsOpen) dispatch('read-notifications')
     onNotificationsClick()
-  }, [dispatch, onNotificationsClick])
+  }, [dispatch, notificationsIsOpen, onNotificationsClick])
 
   const handleSearchClicked = useCallback(() => {
     setShowMobileSearch(!showMobileSearch)
@@ -249,6 +255,9 @@ const Header = ({
                 notificationsIsOpen={notificationsIsOpen}
                 dispatch={dispatch}
                 handleSearchShow={handleSearchClicked}
+                isLoading={isLoading}
+                user={user}
+                showUser={showUser}
               />
             </div>
           </div>
@@ -277,6 +286,9 @@ const Header = ({
                 handleNotificationsClick={handleNotificationsClick}
                 notificationsIsOpen={notificationsIsOpen}
                 dispatch={dispatch}
+                isLoading={isLoading}
+                user={user}
+                showUser={showUser}
               />
             </div>
             <Caret className={c.Header_Caret} />
