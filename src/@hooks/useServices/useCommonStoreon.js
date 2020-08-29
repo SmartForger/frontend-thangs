@@ -16,14 +16,14 @@ export default (atomRawName, collectionName) => {
   const store = useContext(StoreContext)
   const getStoredAtom = useCallback(() => store.get()[atomName], [store, atomName])
 
-  const operationParams = operation =>
+  const getEventParams = operation =>
     getOperationParams(atomRawName, collectionName, operation)
 
   if (!getStoredAtom()) {
-    dispatch(...operationParams('init'))
+    dispatch(...getEventParams('init'))
   }
 
   const atom = atoms[atomName] ? atoms[atomName] : getStoredAtom()
 
-  return { dispatch, atom, getStoredAtom, operationParams }
+  return { dispatch, atom, getStoredAtom, getEventParams }
 }
