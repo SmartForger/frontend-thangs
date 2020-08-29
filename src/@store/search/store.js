@@ -179,7 +179,7 @@ export default store => {
 
           pendo.track('Model Search Started', {
             phyndexerId: newPhyndexerId,
-            modelId: newModelId.toString(),
+            modelId: `${newModelId}`,
           })
         })
         .catch(error => {
