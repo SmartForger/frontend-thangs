@@ -1,5 +1,4 @@
 import React from 'react'
-import * as R from 'ramda'
 import { Link } from 'react-router-dom'
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
@@ -10,6 +9,7 @@ import { Button, Card, ModelThumbnail, UserInline } from '@components'
 import { THUMBNAILS_HOST, TIW_THUMBNAILS_HOST } from '@utilities/constants'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import useCurrentUserId from '../../@hooks/useCurrentUserId'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -262,16 +262,10 @@ const CardContents = ({
   )
 }
 
-const hasLikedModel = (model, user) => {
-  return R.includes(parseInt(user.id), model.likes)
-}
-
 const ModelCard = ({
   className,
   model,
   withOwner,
-  user,
-  likes,
   showSocial = true,
   showWaldo,
   showReportModel,
@@ -279,8 +273,9 @@ const ModelCard = ({
   handleReportModel,
 }) => {
   const c = useStyles()
+  const currentUserId = parseInt(useCurrentUserId())
   const showOwner = withOwner && !!model.owner
-  const isLiked = user ? hasLikedModel(model, user) : likes
+  const isLiked = model && model.likes && model.likes.includes(currentUserId)
   const modelAttributionUrl =
     model && model.attributionUrl && encodeURI(model.attributionUrl)
   const modelPath = model.id ? `/model/${model.id}` : modelAttributionUrl

@@ -28,7 +28,7 @@ const LikesCount = ({likedModels, c}) => {
 const LikesContent = ({ likedModels }) => {
   return (
     <CardCollection noResultsText='You have not liked any models yet.'>
-      <ModelCards items={likedModels} likes={true} />
+      <ModelCards items={likedModels} />
     </CardCollection>
   )
 }
