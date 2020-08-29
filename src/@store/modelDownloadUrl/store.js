@@ -15,7 +15,7 @@ export default store => {
 
   store.on('loading-model-download-url', state => ({
     modelDownloadUrl: {
-      ...state.models,
+      ...state.modelDownloadUrl,
       isLoading: true,
       isLoaded: false,
     },
@@ -23,21 +23,31 @@ export default store => {
 
   store.on('loaded-model-download-url', (state, { data }) => ({
     modelDownloadUrl: {
-      ...state.models,
+      ...state.modelDownloadUrl,
       isLoading: false,
       isLoaded: true,
       data,
     },
   }))
 
-  store.on('fetch-model-download-url', async (_, { modelId, onFinish, onError }) => {
+  store.on('failed-model-download-url', (state, { data }) => ({
+    modelDownloadUrl: {
+      ...state.modelDownloadUrl,
+      isLoading: false,
+      isLoaded: true,
+      isError: true,
+      data,
+    },
+  }))
+
+  store.on('fetch-model-download-url', async (_, { modelId, onFinish }) => {
     store.dispatch('loading-model-download-url')
     const {data, error} = await api({method: 'GET', endpoint: `models/${modelId}/download-url`})
     if (error) {
-      return onError(error)
+      store.dispatch('failed-model-download-url')
     } else {
       store.dispatch('loaded-model-download-url', {data})
-      onFinish()
+      onFinish(data && data.signedUrl)
     }
   })
 }

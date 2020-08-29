@@ -18,10 +18,11 @@ import {
 } from '@components'
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
 import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
-import { useLocalStorage, useModels } from '@hooks'
+import { useLocalStorage } from '@hooks'
 import { Message404 } from '../404'
 import { createUseStyles } from '@style'
 import { useServices } from '@hooks'
+import {useStoreon} from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -174,13 +175,18 @@ const useStyles = createUseStyles(theme => {
 
 function DownloadLink({ model }) {
   const c = useStyles()
-  const { useDownloadModel } = useModels()
-  const [isDownloading, hadError, downloadModel] = useDownloadModel(model)
+  const {dispatch, modelDownloadUrl} = useStoreon('modelDownloadUrl')
+  const downloadModel = () => dispatch('fetch-model-download-url', {
+    modelId: model.id,
+    onFinish: (downloadUrl) => {
+      window.open(downloadUrl)
+    }
+  })
   return (
     <Button text className={c.Model_DownloadButton} onClick={downloadModel}>
-      {isDownloading ? (
+      {modelDownloadUrl.isLoading ? (
         <ProgressText text='Downloading' />
-      ) : hadError ? (
+      ) : modelDownloadUrl.isError ? (
         'Server Error'
       ) : (
         'Download Model'
