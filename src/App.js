@@ -1,12 +1,11 @@
 import React, { useEffect, useMemo, useRef } from 'react'
-import { ApolloProvider } from '@apollo/react-hooks'
 import { Route, Router, Switch, useLocation } from 'react-router-dom'
 
 import * as pendo from '@vendors/pendo'
 import ReactGA from 'react-ga'
 import ReactPixel from 'react-facebook-pixel'
 
-import { authenticationService, graphqlClient } from '@services'
+import { authenticationService } from '@services'
 import { history } from './history'
 import {
   ConfirmPasswordReset,
@@ -37,9 +36,6 @@ import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
 import { usePageTheming } from '@hooks'
 import store from 'store'
-
-const originalFetch = window.fetch
-const client = graphqlClient(originalFetch, history)
 
 const useQuery = location => {
   return new URLSearchParams(location.search)
@@ -82,78 +78,68 @@ const App = () => {
     ReactPixel.pageView()
   }, [location])
   return (
-    <ApolloProvider client={client}>
-      <StoreContext.Provider value={store}>
-        <ErrorBoundary>
-          <FlashContextProvider>
-            <ThemeProvider theme={theme}>
-              <GlobalStyles />
-              <Switch>
-                <Route exact path='/' component={Landing} />
-                <Route
-                  path='/welcome'
-                  render={props => <Landing {...props} newSignUp={true} />}
-                />
-                <Route
-                  path='/folder/:folderId/upload'
-                  component={routeRequiresAuth(FolderUpload)}
-                />
-                <Route
-                  path='/folder/:folderId'
-                  exact
-                  component={routeRequiresAuth(FolderPage)}
-                />
-                <Route path='/login' component={routeRequiresAnon(Login)} />
-                <Route
-                  path='/terms_and_conditions'
-                  exact
-                  component={TermsAndConditions}
-                />
-                <Route path='/privacy_policy' exact component={PrivacyPolicy} />
-                <Route path='/home' component={routeRequiresAuth(Home)} />
-                <Route
-                  path='/signup/:registrationCode'
-                  component={routeRequiresAnon(Signup)}
-                  exact
-                />
-                <Route exact path='/password_reset' component={PasswordReset} />
-                <Route
-                  path='/password_reset_confirm/:userId/:token'
-                  component={ConfirmPasswordReset}
-                />
-                <Route
-                  exact
-                  path='/profile/edit'
-                  component={routeRequiresAuth(EditProfile)}
-                />
-                <Route path='/profile/likes' component={routeRequiresAuth(Likes)} />
-                <Route exact path='/profile/:id' component={routeRequiresAuth(Profile)} />
-                <Route
-                  exact
-                  path='/profile/'
-                  component={routeRequiresAuth(RedirectProfile)}
-                />
-                <Route
-                  path='/model/:id'
-                  exact
-                  component={routeRequiresAuth(ModelDetail)}
-                />
-                <Route
-                  path={['/search/:searchQuery', '/search']}
-                  component={SearchResults}
-                />
-                <Route path='/upload' component={routeRequiresAuth(Upload)} />
-                <Route
-                  path='/model/:id/upload'
-                  component={routeRequiresAuth(UploadVersion)}
-                />
-                <Route path='*' component={Page404} status={404} />
-              </Switch>
-            </ThemeProvider>
-          </FlashContextProvider>
-        </ErrorBoundary>
-      </StoreContext.Provider>
-    </ApolloProvider>
+    <StoreContext.Provider value={store}>
+      <ErrorBoundary>
+        <FlashContextProvider>
+          <ThemeProvider theme={theme}>
+            <GlobalStyles />
+            <Switch>
+              <Route exact path='/' component={Landing} />
+              <Route
+                path='/welcome'
+                render={props => <Landing {...props} newSignUp={true} />}
+              />
+              <Route
+                path='/folder/:folderId/upload'
+                component={routeRequiresAuth(FolderUpload)}
+              />
+              <Route
+                path='/folder/:folderId'
+                exact
+                component={routeRequiresAuth(FolderPage)}
+              />
+              <Route path='/login' component={routeRequiresAnon(Login)} />
+              <Route path='/terms_and_conditions' exact component={TermsAndConditions} />
+              <Route path='/privacy_policy' exact component={PrivacyPolicy} />
+              <Route path='/home' component={routeRequiresAuth(Home)} />
+              <Route
+                path='/signup/:registrationCode'
+                component={routeRequiresAnon(Signup)}
+                exact
+              />
+              <Route exact path='/password_reset' component={PasswordReset} />
+              <Route
+                path='/password_reset_confirm/:userId/:token'
+                component={ConfirmPasswordReset}
+              />
+              <Route
+                exact
+                path='/profile/edit'
+                component={routeRequiresAuth(EditProfile)}
+              />
+              <Route path='/profile/likes' component={routeRequiresAuth(Likes)} />
+              <Route exact path='/profile/:id' component={Profile} />
+              <Route
+                exact
+                path='/profile/'
+                component={routeRequiresAuth(RedirectProfile)}
+              />
+              <Route path='/model/:id' exact component={routeRequiresAuth(ModelDetail)} />
+              <Route
+                path={['/search/:searchQuery', '/search']}
+                component={SearchResults}
+              />
+              <Route path='/upload' component={routeRequiresAuth(Upload)} />
+              <Route
+                path='/model/:id/upload'
+                component={routeRequiresAuth(UploadVersion)}
+              />
+              <Route path='*' component={Page404} status={404} />
+            </Switch>
+          </ThemeProvider>
+        </FlashContextProvider>
+      </ErrorBoundary>
+    </StoreContext.Provider>
   )
 }
 
