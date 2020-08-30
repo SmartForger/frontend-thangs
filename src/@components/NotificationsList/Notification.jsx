@@ -133,8 +133,10 @@ const NotificationSnippet = ({
   linkTarget,
   handleNotificationDelete,
 }) => {
-  const actorName = actor && actor.fullName
+  const actorName = actor && actor.userName
   const targetName = target && target.name
+  const countText =
+    count > 1 ? `and ${count - 1} ${count === 2 ? 'other' : 'others'} ` : ''
   return (
     <div className={c.NotificationSnippet_Wrapper}>
       <Link className={c.NotificationSnippet} to={linkTarget}>
@@ -144,7 +146,7 @@ const NotificationSnippet = ({
         <div className={c.NotificationSnippet_content}>
           <div className={c.NotificationSnippet_text}>
             {`${actorName} `}
-            {count > 1 ? `and ${count - 1} others ` : ''}
+            {countText}
             <span className={c.NotificationSnippet_verb}>{verb}</span>
             {` ${targetName}`}
           </div>
@@ -159,10 +161,10 @@ const NotificationSnippet = ({
   )
 }
 
-const Notification = ({ id, actor, className, count, target, updated, verb }) => {
+const Notification = ({ id, actor, className, count, target, timestamp, verb }) => {
   const c = useStyles()
   const { dispatch } = useStoreon()
-  const time = formatDistanceStrict(new Date(updated), new Date())
+  const time = formatDistanceStrict(new Date(timestamp), new Date())
   const displayTime = `${time} ago`
   let text = ''
   let IconComponent = noop
