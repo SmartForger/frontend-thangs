@@ -2,28 +2,29 @@ import api from '@services/api'
 import { STATUSES, getStatusState } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
 
-const COLLECTION_PREFIX = 'user-own-models'
-
 export default store => {
   store.on(types.STORE_INIT, () => ({}))
 
-  store.on(`init-${COLLECTION_PREFIX}`, (_, { id }) => ({
-    [`${COLLECTION_PREFIX}-${id}`]: {
+  store.on('init-user-own-models', (_, { id }) => ({
+    [`user-own-models-${id}`]: {
       ...getStatusState(STATUSES.INIT),
       data: {},
     },
   }))
-  store.on('change-status', (state, { atom, status = STATUSES.INIT, data }) => ({
-    [atom]: {
-      ...state[atom],
-      ...getStatusState(status),
-      data,
-    },
-  }))
-  store.on(`fetch-${COLLECTION_PREFIX}`, async (_, { id }) => {
-    store.dispatch('change-status', {
+  store.on(
+    'change-user-own-models-status',
+    (state, { atom, status = STATUSES.INIT, data }) => ({
+      [atom]: {
+        ...state[atom],
+        ...getStatusState(status),
+        data,
+      },
+    })
+  )
+  store.on('fetch-user-own-models', async (_, { id }) => {
+    store.dispatch('change-user-own-models-status', {
       status: STATUSES.LOADING,
-      atom: `${COLLECTION_PREFIX}-${id}`,
+      atom: `user-own-models-${id}`,
     })
     const { data, error } = await api({
       method: 'GET',
@@ -31,14 +32,14 @@ export default store => {
     })
 
     if (error) {
-      store.dispatch('change-status', {
+      store.dispatch('change-user-own-models-status', {
         status: STATUSES.FAILURE,
-        atom: `${COLLECTION_PREFIX}-${id}`,
+        atom: `user-own-models-${id}`,
       })
     } else {
-      store.dispatch('change-status', {
+      store.dispatch('change-user-own-models-status', {
         status: STATUSES.LOADED,
-        atom: `${COLLECTION_PREFIX}-${id}`,
+        atom: `user-own-models-${id}`,
         data,
       })
     }
