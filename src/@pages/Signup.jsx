@@ -140,51 +140,31 @@ const Page = () => {
   const history = useHistory()
   const { registrationCode } = useParams()
 
-  const handleLoginREST = useCallback(async () => {
-    setWaiting(true)
-    setSignupErrorMessage(null)
-
-    const res = await authenticationService.restLogin({
-      password: inputState.password,
-    })
-
-    setWaiting(false)
-
-    if (res.status !== 200) {
-      setSignupErrorMessage(
-        res.data.detail || 'Sorry, we encounteed an unexpected error.  Please try again.'
-      )
-    }
-  }, [inputState])
-
   const handleSignUp = useCallback(async () => {
     setWaiting(true)
     setSignupErrorMessage(null)
 
-    const response = await authenticationService.signup({
+    const { error } = await authenticationService.signup({
       email: inputState.email,
       password: inputState.password,
-      registration_code: registrationCode,
-      first_name: inputState.firstName,
-      last_name: inputState.lastName,
+      registrationCode: registrationCode,
+      firstName: inputState.firstName,
+      lastName: inputState.lastName,
       username: inputState.username,
     })
 
     setWaiting(false)
-    if (response.status !== 201) {
-      const fields = Object.keys(response.data)
-      setInvalidFields(fields)
-      setSignupErrorMessage(response.data[fields[0]])
+    if (error) {
+      setSignupErrorMessage(error)
     } else {
       await authenticationService.login({
         email: inputState.email,
         password: inputState.password,
       })
-      await handleLoginREST()
       if (redirectUrl) return history.push(redirectUrl)
       history.push('/welcome')
     }
-  }, [handleLoginREST, history, inputState, redirectUrl, registrationCode])
+  }, [history, inputState, redirectUrl, registrationCode])
 
   const setFieldToValid = useCallback(
     fieldName => {

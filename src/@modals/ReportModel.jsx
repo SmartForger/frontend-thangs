@@ -139,7 +139,7 @@ const ReportModel = ({ model, afterSend }) => {
       <form onSubmit={onFormSubmit(handleSubmit)}>
         <div className={c.ReportModel_FormControl}>
           <label className={c.ReportModel_Label}>
-            E-Mail
+            Email
             <TextInput
               className={c.ReportModel_TextInput}
               type='text'

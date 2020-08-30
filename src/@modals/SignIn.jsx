@@ -139,25 +139,6 @@ const SignIn = ({ afterSignIn }) => {
     }
   }, [inputState, setFieldToValid])
 
-  const handleLoginREST = useCallback(async () => {
-    setWaiting(true)
-    setLoginErrorMessage(null)
-
-    const res = await authenticationService.restLogin({
-      password: inputState.password,
-    })
-
-    setWaiting(false)
-
-    if (res.status !== 200) {
-      setLoginErrorMessage(
-        res.data.detail || 'Sorry, we encounteed an unexpected error.  Please try again.'
-      )
-    } else {
-      afterSignIn()
-    }
-  }, [afterSignIn, inputState])
-
   const handleLogin = useCallback(async () => {
     setWaiting(true)
     setLoginErrorMessage(null)
@@ -174,10 +155,10 @@ const SignIn = ({ afterSignIn }) => {
         res.data.detail || 'Sorry, we encounteed an unexpected error.  Please try again.'
       )
     } else {
-      await handleLoginREST()
+      afterSignIn()
       history.push('/')
     }
-  }, [handleLoginREST, history, inputState])
+  }, [afterSignIn, history, inputState])
 
   return (
     <div className={c.Login_Body}>
@@ -194,7 +175,7 @@ const SignIn = ({ afterSignIn }) => {
         <div className={c.Login_Fields}>
           <div className={c.Login_FormControl}>
             <label className={c.Login_Label}>
-              E-Mail
+              Email/Username
               <TextInput
                 className={c.Login_TextInput}
                 type='text'
