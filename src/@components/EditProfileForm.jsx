@@ -1,11 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import React, { useCallback } from 'react'
 import * as R from 'ramda'
-import { Button } from '@components'
-import * as GraphqlService from '@services/graphql-service'
-import { logger } from '@utilities/logging'
+import { Button, Spinner } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import { useForm } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -51,61 +49,45 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
-const graphqlService = GraphqlService.getInstance()
-
-const EditProfileForm = ({ user }) => {
-  const { register, handleSubmit, errors } = useForm()
-  const [updateUser] = graphqlService.useUpdateUser()
-  const [currentState, setCurrentState] = useState('ready')
+const noop = () => null
+const EditProfileForm = ({ user, isLoading, handleUpdateProfile = noop }) => {
   const c = useStyles()
 
-  const formSubmit = useCallback(
+  const initialState = {
+    firstName: user.firstName,
+    emails: '',
+  }
+
+  const { onFormSubmit, onInputChange, inputState } = useForm({
+    initialState,
+  })
+
+  const handleOnInputChange = useCallback(
+    (key, value) => {
+      onInputChange(key, value)
+    },
+    [onInputChange]
+  )
+
+  const handleSubmit = useCallback(
     async (data, e) => {
       e.preventDefault()
-
-      const updateInput = {
+      handleUpdateProfile({
         id: user.id,
         firstName: data.firstName,
         lastName: data.lastName,
         profile: {
           description: data.description,
         },
-      }
-
-      try {
-        setCurrentState('waiting')
-        await updateUser({
-          variables: { updateInput },
-        })
-      } catch (error) {
-        setCurrentState('error')
-        logger.error('Error when trying to update the user', error)
-      }
-      setCurrentState('saved')
+      })
     },
-    [updateUser, user]
+    [handleUpdateProfile, user]
   )
-
-  const handleChange = useCallback(() => setCurrentState('ready'), [setCurrentState])
-
-  const buttonText = useMemo(() => {
-    switch (currentState) {
-      case 'waiting':
-        return 'Saving...'
-      case 'saved':
-        return 'Saved!'
-      case 'error':
-        return 'Error'
-      default:
-        return 'Save Changes'
-    }
-  }, [currentState])
 
   return (
     <form
       className={c.EditProfileForm}
-      onSubmit={(data, e) => handleSubmit(formSubmit)(data, e)}
-      onChange={handleChange}
+      onSubmit={(data, e) => onFormSubmit(handleSubmit)(data, e)}
     >
       <div className={c.EditProfileForm_Field}>
         <label className={c.EditProfileForm_label} htmlFor='firstName'>
@@ -114,9 +96,12 @@ const EditProfileForm = ({ user }) => {
         <input
           className={c.EditProfileForm_input}
           name='firstName'
-          defaultValue={user.firstName}
-          ref={register({ required: true })}
+          value={inputState.firstName}
           placeholder='Enter first name...'
+          onChange={e => {
+            handleOnInputChange('firstName', e.target.value)
+          }}
+          required
         />
       </div>
       <div className={c.EditProfileForm_Field} htmlFor='lastName'>
@@ -124,9 +109,12 @@ const EditProfileForm = ({ user }) => {
         <input
           className={c.EditProfileForm_input}
           name='lastName'
-          defaultValue={user.lastName}
-          ref={register({ required: true })}
+          value={inputState.lastName}
           placeholder='Enter last name...'
+          onChange={e => {
+            handleOnInputChange('lastName', e.target.value)
+          }}
+          required
         />
       </div>
       <div
@@ -140,20 +128,18 @@ const EditProfileForm = ({ user }) => {
         <textarea
           className={c.EditProfileForm_textarea}
           name='description'
-          defaultValue={user && user.profile && user.profile.description}
-          ref={register({ required: true })}
+          value={inputState.description}
           placeholder='Add a bio...'
+          onChange={e => {
+            handleOnInputChange('description', e.target.value)
+          }}
           rows={5}
         />
       </div>
 
       <div className={c.EditProfileForm_ButtonContainer}>
-        <Button
-          className={c.EditProfileForm_Button}
-          type='submit'
-          disabled={!R.empty(errors)}
-        >
-          {buttonText}
+        <Button className={c.EditProfileForm_Button} type='submit'>
+          {isLoading ? <Spinner /> : 'Save Changes'}
         </Button>
       </div>
     </form>

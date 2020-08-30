@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 
 import { useCurrentUser } from '@hooks'
@@ -11,7 +11,7 @@ import {
   ProfilePicture,
   Spinner,
 } from '@components'
-import * as GraphqlService from '@services/graphql-service'
+
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -36,16 +36,10 @@ const useStyles = createUseStyles(_theme => {
     },
   }
 })
-
-const graphqlService = GraphqlService.getInstance()
-
-const PictureForm = ({ user, className }) => {
+const noop = () => null
+const PictureForm = ({ user, className, isLoading, handleDeleteAvatar = noop }) => {
   const c = useStyles()
-  const [deleteProfileAvatar, { loading }] = graphqlService.useDeleteUserAvatarMutation(
-    user
-  )
-  const onDelete = () => deleteProfileAvatar()
-  const deleteText = loading ? 'Deleting...' : 'Delete'
+  const deleteText = 'Delete' //loading ? 'Deleting...' : 'Delete'
 
   const currentAvatar = user && user.profile && user.profile.avatarUrl
   return (
@@ -61,7 +55,7 @@ const PictureForm = ({ user, className }) => {
           <ChangeablePicture user={user} />
 
           {currentAvatar && (
-            <Button dark onClick={onDelete} disabled={loading}>
+            <Button dark onClick={handleDeleteAvatar} disabled={isLoading}>
               {deleteText}
             </Button>
           )}
@@ -90,8 +84,17 @@ const WarningOnEmptyProfile = ({ user }) => {
 const Page = () => {
   const c = useStyles()
   const {
+    dispatch,
     atom: { data: user, isLoading, isError },
   } = useCurrentUser()
+
+  const handleUpdateProfile = useCallback(() => {
+    console.log('This needs changed to REST!', 'updateUser()')
+  }, [])
+
+  const handleDeleteAvatar = useCallback(() => {
+    console.log('This needs changed to REST!', 'deleteAvatar()')
+  }, [])
 
   if (isLoading) {
     return <Spinner />
@@ -108,8 +111,13 @@ const Page = () => {
   return (
     <div>
       <WarningOnEmptyProfile user={user} />
-      <PictureForm className={c.EditProfile_PictureForm} user={user} />
-      <EditProfileForm user={user} />
+      <PictureForm
+        className={c.EditProfile_PictureForm}
+        handleDeleteAvatar={handleDeleteAvatar}
+        user={user}
+        isLoading={isLoading}
+      />
+      <EditProfileForm user={user} handleUpdateProfile={handleUpdateProfile} />
     </div>
   )
 }

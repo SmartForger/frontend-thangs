@@ -1,10 +1,8 @@
 import React, { useCallback } from 'react'
-import { Button, Spinner } from '@components'
-import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
-import * as GraphqlService from '@services/graphql-service'
+import { Button } from '@components'
+// import { Button, Spinner } from '@components'
+// import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { createUseStyles } from '@style'
-
-const graphqlService = GraphqlService.getInstance()
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -27,53 +25,47 @@ const useStyles = createUseStyles(_theme => {
 })
 
 const FollowButton = ({ _user, viewedUser }) => {
-  const [followUser, { loading, error }] = graphqlService.useFollowUserMutation(
-    viewedUser
-  )
   const c = useStyles()
   const handleClick = useCallback(
     e => {
       e.preventDefault()
-      followUser()
+      console.log('This needs changed to REST!', 'followUser()', viewedUser)
     },
-    [followUser]
+    [viewedUser]
   )
 
   return (
-    <Button className={c.Button} disabled={loading || error} onClick={handleClick}>
-      {loading ? (
+    <Button className={c.Button} onClick={handleClick}>
+      {/* {loading ? (
         <Spinner className={c.Spinner} />
       ) : error ? (
         <ErrorIcon className={c.ErrorIcon} />
-      ) : (
-        'Follow'
-      )}
+      ) : ( */}
+      Follow
+      {/* )} */}
     </Button>
   )
 }
 
 const UnfollowButton = ({ _user, viewedUser }) => {
-  const [unfollowUser, { loading, error }] = graphqlService.useUnfollowUserMutation(
-    viewedUser
-  )
   const c = useStyles()
   const handleClick = useCallback(
     e => {
       e.preventDefault()
-      unfollowUser()
+      console.log('This needs changed to REST!', 'followUser()', viewedUser)
     },
-    [unfollowUser]
+    [viewedUser]
   )
 
   return (
-    <Button className={c.Button} disabled={loading || error} onClick={handleClick}>
-      {loading ? (
+    <Button className={c.Button} onClick={handleClick}>
+      {/* {loading ? (
         <Spinner className={c.Spinner} />
       ) : error ? (
         <ErrorIcon className={c.ErrorIcon} />
-      ) : (
-        'Unfollow'
-      )}
+      ) : ( */}
+      Unfollow
+      {/* )} */}
     </Button>
   )
 }
