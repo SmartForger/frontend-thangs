@@ -71,7 +71,11 @@ export default store => {
       } else {
         store.dispatch(types.LOADED_UPLOAD_MODEL, { data: uploadedData })
         onFinish()
-        pendo.track('Model Uploaded')
+        if (data && data.previousVersionModelId) {
+          pendo.track('New Version Uploaded')
+        } else {
+          pendo.track('New Model Uploaded')
+        }
       }
     } catch (e) {
       store.dispatch(types.FAILURE_UPLOAD_MODEL)

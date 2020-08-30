@@ -17,6 +17,7 @@ const useStyles = createUseStyles(theme => {
       '& > p': {
         margin: 0,
         paddingLeft: '4rem',
+        fontWeight: 500,
       },
 
       '& > a': {
