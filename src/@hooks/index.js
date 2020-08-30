@@ -1,7 +1,6 @@
 export { default as useForm } from '@hooks/useForm'
 export { default as useLocalStorage } from '@hooks/useLocalStorage'
 export { default as useModels } from '@hooks/useModels'
-export { default as useNotifications } from '@hooks/useNotifications'
 export { default as usePageTheming } from '@hooks/usePageTheming'
 export { default as useServices } from '@hooks/useServices'
 export { default as useTranslations } from '@hooks/useTranslations'
