@@ -97,9 +97,9 @@ const ChangeablePicture = ({ user, className }) => {
   const c = useStyles()
 
   const submitCrop = useCallback(() => {
-    console.log('This needs changed to REST!', croppedImg)
+    console.log('This needs changed to REST!', croppedImg, user)
     setIsCropping(false)
-  }, [croppedImg])
+  }, [croppedImg, user])
 
   const cancel = useCallback(() => {
     formRef.current.reset()

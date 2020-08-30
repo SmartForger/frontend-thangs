@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import * as R from 'ramda'
 import { Button, Spinner } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'

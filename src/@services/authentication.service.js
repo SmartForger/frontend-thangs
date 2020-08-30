@@ -98,10 +98,7 @@ const signup = async ({
   }
 
   try {
-    debugger
-    const res = await axios(requestOptions)
-    debugger
-    return res
+    return await axios(requestOptions)
   } catch (err) {
     return (
       (err && err.response && err.response.data) ||

@@ -89,12 +89,12 @@ const Page = () => {
   } = useCurrentUser()
 
   const handleUpdateProfile = useCallback(() => {
-    console.log('This needs changed to REST!', 'updateUser()')
-  }, [])
+    console.log('This needs changed to REST!', 'updateUser()', dispatch)
+  }, [dispatch])
 
   const handleDeleteAvatar = useCallback(() => {
-    console.log('This needs changed to REST!', 'deleteAvatar()')
-  }, [])
+    console.log('This needs changed to REST!', 'deleteAvatar()', dispatch)
+  }, [dispatch])
 
   if (isLoading) {
     return <Spinner />
