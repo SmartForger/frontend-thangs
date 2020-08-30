@@ -5,14 +5,14 @@ import * as types from '@constants/storeEventTypes'
 export default store => {
   store.on(types.STORE_INIT, () => ({}))
 
-  store.on('init-user-own-models', (_, { id }) => ({
+  store.on(types.INIT_USER_OWN_MODELS, (_, { id }) => ({
     [`user-own-models-${id}`]: {
       ...getStatusState(STATUSES.INIT),
       data: {},
     },
   }))
   store.on(
-    'change-user-own-models-status',
+    types.CHANGE_USER_OWNED_MODELS_STATUS,
     (state, { atom, status = STATUSES.INIT, data }) => ({
       [atom]: {
         ...state[atom],
@@ -21,8 +21,8 @@ export default store => {
       },
     })
   )
-  store.on('fetch-user-own-models', async (_, { id }) => {
-    store.dispatch('change-user-own-models-status', {
+  store.on(types.FETCH_USER_OWN_MODELS, async (_, { id }) => {
+    store.dispatch(types.CHANGE_USER_OWNED_MODELS_STATUS, {
       status: STATUSES.LOADING,
       atom: `user-own-models-${id}`,
     })
@@ -32,12 +32,12 @@ export default store => {
     })
 
     if (error) {
-      store.dispatch('change-user-own-models-status', {
+      store.dispatch(types.CHANGE_USER_OWNED_MODELS_STATUS, {
         status: STATUSES.FAILURE,
         atom: `user-own-models-${id}`,
       })
     } else {
-      store.dispatch('change-user-own-models-status', {
+      store.dispatch(types.CHANGE_USER_OWNED_MODELS_STATUS, {
         status: STATUSES.LOADED,
         atom: `user-own-models-${id}`,
         data,

@@ -6,6 +6,7 @@ import * as R from 'ramda'
 import { Button } from '@components'
 import { useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
+import * as types from '@constants/storeEventTypes'
 
 import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
 
@@ -116,7 +117,7 @@ const UserNav = ({
         />
         <Button
           className={classnames(c.UserNav_Button, c.UserNav_DesktopOnly)}
-          onClick={() => dispatch('open-modal', { modalName: 'upload' })}
+          onClick={() => dispatch(types.OPEN_OVERLAY, { modalName: 'upload' })}
         >
           {t('header.uploadButtonText')}
         </Button>
@@ -135,7 +136,7 @@ const UserNav = ({
 
   return (
     <div className={classnames(c.UserNav_Row, c.UserNav_ButtonsRow)}>
-      <Link to={'/signup/alpha'} onClick={() => dispatch('close-modal')}>
+      <Link to={'/signup/alpha'} onClick={() => dispatch(types.CLOSE_OVERLAY)}>
         <Button text className={classnames(c.UserNav_TextButton, c.UserNav_SignUpButton)}>
           Sign up
         </Button>
@@ -143,9 +144,9 @@ const UserNav = ({
       <Button
         className={c.UserNav_Button}
         onClick={() =>
-          dispatch('open-modal', {
+          dispatch(types.OPEN_OVERLAY, {
             modalName: 'signIn',
-            modalData: { afterSignIn: () => dispatch('close-modal') },
+            modalData: { afterSignIn: () => dispatch(types.CLOSE_OVERLAY) },
           })
         }
       >

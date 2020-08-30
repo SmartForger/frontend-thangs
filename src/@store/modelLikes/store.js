@@ -1,15 +1,16 @@
 import api from '@services/api'
 import { STATUSES, getStatusState } from '@store/constants'
+import * as types from '@constants/storeEventTypes'
 
 export default store => {
-  store.on('init', _ => ({
+  store.on(types.STORE_INIT, _ => ({
     'like-model': {
       ...getStatusState(STATUSES.INIT),
       data: {},
     },
   }))
   store.on(
-    'change-like-model-status',
+    types.CHANGE_LIKE_MODEL_STATUS,
     (state, { atom, status = STATUSES.INIT, data }) => ({
       [atom]: {
         ...state[atom],
@@ -18,8 +19,8 @@ export default store => {
       },
     })
   )
-  store.on('post-like-model', async (_, { modelId, currentUserId }) => {
-    store.dispatch('change-like-model-status', {
+  store.on(types.POST_LIKE_MODEL, async (_, { modelId, currentUserId }) => {
+    store.dispatch(types.CHANGE_LIKE_MODEL_STATUS, {
       status: STATUSES.LOADING,
       atom: 'like-model',
     })
@@ -29,25 +30,25 @@ export default store => {
     })
 
     if (error) {
-      store.dispatch('change-like-model-status', {
+      store.dispatch(types.CHANGE_LIKE_MODEL_STATUS, {
         status: STATUSES.FAILURE,
         atom: `like-model-${modelId}`,
       })
     } else {
-      store.dispatch('change-like-model-status', {
+      store.dispatch(types.CHANGE_LIKE_MODEL_STATUS, {
         status: STATUSES.LOADED,
         atom: 'like-model',
         data,
       })
-      store.dispatch('update-model-likes', {
+      store.dispatch(types.UPDATE_MODEL_LIKES, {
         modelId: modelId,
         currentUserId: currentUserId,
       })
     }
   })
 
-  store.on('delete-like-model', async (_, { modelId, currentUserId }) => {
-    store.dispatch('change-like-model-status', {
+  store.on(types.DELETE_LIKE_MODEL, async (_, { modelId, currentUserId }) => {
+    store.dispatch(types.CHANGE_LIKE_MODEL_STATUS, {
       status: STATUSES.LOADING,
       atom: 'like-model',
     })
@@ -57,17 +58,17 @@ export default store => {
     })
 
     if (error) {
-      store.dispatch('change-like-model-status', {
+      store.dispatch(types.CHANGE_LIKE_MODEL_STATUS, {
         status: STATUSES.FAILURE,
         atom: 'like-model',
       })
     } else {
-      store.dispatch('change-like-model-status', {
+      store.dispatch(types.CHANGE_LIKE_MODEL_STATUS, {
         status: STATUSES.LOADED,
         atom: 'like-model',
         data,
       })
-      store.dispatch('update-model-likes', {
+      store.dispatch(types.UPDATE_MODEL_LIKES, {
         modelId: modelId,
         currentUserId: currentUserId,
       })

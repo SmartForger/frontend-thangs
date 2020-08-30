@@ -5,6 +5,7 @@ import { Card, FolderInfo } from '@components'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -34,7 +35,7 @@ const CardContents = ({ className, folder }) => {
         className={c.FolderCard_UploadIcon}
         onClick={e => {
           e.preventDefault()
-          dispatch('open-modal', {
+          dispatch(types.OPEN_OVERLAY, {
             modalName: 'upload',
             modalData: { folderId: folder.id },
           })

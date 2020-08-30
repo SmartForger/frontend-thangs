@@ -13,7 +13,7 @@ export default store => {
     modelDownloadUrl: getInitAtom(),
   }))
 
-  store.on('loading-model-download-url', state => ({
+  store.on(types.LOADING_MODEL_DOWNLOAD_URL, state => ({
     modelDownloadUrl: {
       ...state.modelDownloadUrl,
       isLoading: true,
@@ -21,7 +21,7 @@ export default store => {
     },
   }))
 
-  store.on('loaded-model-download-url', (state, { data }) => ({
+  store.on(types.LOADED_MODEL_DOWNLOAD_URL, (state, { data }) => ({
     modelDownloadUrl: {
       ...state.modelDownloadUrl,
       isLoading: false,
@@ -30,7 +30,7 @@ export default store => {
     },
   }))
 
-  store.on('failed-model-download-url', (state, { data }) => ({
+  store.on(types.FAILED_MODEL_DOWNLOAD_URL, (state, { data }) => ({
     modelDownloadUrl: {
       ...state.modelDownloadUrl,
       isLoading: false,
@@ -40,13 +40,16 @@ export default store => {
     },
   }))
 
-  store.on('fetch-model-download-url', async (_, { modelId, onFinish }) => {
-    store.dispatch('loading-model-download-url')
-    const {data, error} = await api({method: 'GET', endpoint: `models/${modelId}/download-url`})
+  store.on(types.FETCH_MODEL_DOWNLOAD_URL, async (_, { modelId, onFinish }) => {
+    store.dispatch(types.LOADING_MODEL_DOWNLOAD_URL)
+    const { data, error } = await api({
+      method: 'GET',
+      endpoint: `models/${modelId}/download-url`,
+    })
     if (error) {
-      store.dispatch('failed-model-download-url')
+      store.dispatch(types.FAILED_MODEL_DOWNLOAD_URL)
     } else {
-      store.dispatch('loaded-model-download-url', {data})
+      store.dispatch(types.LOADED_MODEL_DOWNLOAD_URL, { data })
       onFinish(data && data.signedUrl)
     }
   })

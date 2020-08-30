@@ -8,6 +8,7 @@ import { useForm } from '@hooks'
 import { TextInput, Spinner, Button } from '@components'
 import { ReactComponent as LoginIcon } from '@svg/user-login.svg'
 import { createUseStyles } from '@style'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -213,7 +214,7 @@ const SignIn = ({ afterSignIn }) => {
           <Button
             className={c.Login_ForgotButton}
             text
-            onClick={() => dispatch('open-modal', { modalName: 'passwordReset' })}
+            onClick={() => dispatch(types.OPEN_OVERLAY, { modalName: 'passwordReset' })}
           >
             Click here
           </Button>
@@ -222,7 +223,7 @@ const SignIn = ({ afterSignIn }) => {
         <div className={c.Login_ButtonRow}>
           <div className={c.Login_NoAccount}>
             <span>Don&apos;t have an account?</span>
-            <Link to={'/signup/alpha'} onClick={() => dispatch('close-modal')}>
+            <Link to={'/signup/alpha'} onClick={() => dispatch(types.CLOSE_OVERLAY)}>
               <Button className={c.Login_NoAccountButton} text>
                 Sign Up
               </Button>

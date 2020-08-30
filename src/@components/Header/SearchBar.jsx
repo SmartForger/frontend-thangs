@@ -6,6 +6,7 @@ import classnames from 'classnames'
 import { TextInput } from '@components'
 import { useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
+import * as types from '@constants/storeEventTypes'
 
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
@@ -147,7 +148,7 @@ const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
     e.preventDefault()
     if (searchTerm) {
       history.push(`/search/${encodeURIComponent(searchTerm)}`)
-      dispatch('close-modal')
+      dispatch(types.CLOSE_OVERLAY)
     }
   }
 
@@ -187,7 +188,9 @@ const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
               className={classnames(c.SearchBar_UploadBar, {
                 [c.SearchBar_UploadBar__expand]: showUploadText,
               })}
-              onClick={() => dispatch('open-modal', { modalName: 'searchByUpload' })}
+              onClick={() =>
+                dispatch(types.OPEN_OVERLAY, { modalName: 'searchByUpload' })
+              }
               title={t('header.searchUploadText')}
             >
               <div className={classnames(c.SearchBar_UploadIcon)}>

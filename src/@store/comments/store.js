@@ -9,21 +9,24 @@ export default store => {
     'new-model-comments': getStatusState(STATUSES.INIT),
   }))
 
-  store.on('init-model-comments', (_, { id }) => ({
+  store.on(types.INIT_MODEL_COMMENTS, (_, { id }) => ({
     [`model-comments-${id}`]: {
       ...getStatusState(STATUSES.INIT),
       data: {},
     },
   }))
-  store.on('change-comment-status', (state, { atom, status = STATUSES.INIT, data }) => ({
-    [atom]: {
-      ...state[atom],
-      ...getStatusState(status),
-      data,
-    },
-  }))
-  store.on('fetch-model-comments', async (_, { id }) => {
-    store.dispatch('change-comment-status', {
+  store.on(
+    types.CHANGE_MODEL_COMMENTS,
+    (state, { atom, status = STATUSES.INIT, data }) => ({
+      [atom]: {
+        ...state[atom],
+        ...getStatusState(status),
+        data,
+      },
+    })
+  )
+  store.on(types.FETCH_MODEL_COMMENTS, async (_, { id }) => {
+    store.dispatch(types.CHANGE_MODEL_COMMENTS, {
       status: STATUSES.LOADING,
       atom: `model-comments-${id}`,
     })
@@ -33,12 +36,12 @@ export default store => {
     })
 
     if (error) {
-      store.dispatch('change-comment-status', {
+      store.dispatch(types.CHANGE_MODEL_COMMENTS, {
         status: STATUSES.FAILURE,
         atom: `model-comments-${id}`,
       })
     } else {
-      store.dispatch('change-comment-status', {
+      store.dispatch(types.CHANGE_MODEL_COMMENTS, {
         status: STATUSES.LOADED,
         atom: `model-comments-${id}`,
         data,
@@ -46,9 +49,9 @@ export default store => {
     }
   })
   store.on(
-    'new-model-comments',
+    types.NEW_MODEL_COMMENTS,
     async (_, { id, body, onFinish = noop, onError = noop }) => {
-      store.dispatch('change-comment-status', {
+      store.dispatch(types.CHANGE_MODEL_COMMENTS, {
         status: STATUSES.LOADING,
         atom: 'new-model-comments',
       })
@@ -62,20 +65,20 @@ export default store => {
       })
 
       if (error) {
-        store.dispatch('change-comment-status', {
+        store.dispatch(types.CHANGE_MODEL_COMMENTS, {
           status: STATUSES.FAILURE,
           atom: 'new-model-comments',
         })
         onError()
       } else {
-        store.dispatch('change-comment-status', {
+        store.dispatch(types.CHANGE_MODEL_COMMENTS, {
           status: STATUSES.LOADED,
           atom: 'new-model-comments',
           data,
         })
 
         onFinish()
-        store.dispatch('fetch-model-comments', { id })
+        store.dispatch(types.FETCH_MODEL_COMMENTS, { id })
       }
     }
   )

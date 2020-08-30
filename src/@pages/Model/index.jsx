@@ -22,7 +22,8 @@ import { useLocalStorage } from '@hooks'
 import { Message404 } from '../404'
 import { createUseStyles } from '@style'
 import { useServices } from '@hooks'
-import {useStoreon} from 'storeon/react'
+import { useStoreon } from 'storeon/react'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -175,13 +176,14 @@ const useStyles = createUseStyles(theme => {
 
 function DownloadLink({ model }) {
   const c = useStyles()
-  const {dispatch, modelDownloadUrl} = useStoreon('modelDownloadUrl')
-  const downloadModel = () => dispatch('fetch-model-download-url', {
-    modelId: model.id,
-    onFinish: (downloadUrl) => {
-      window.open(downloadUrl)
-    }
-  })
+  const { dispatch, modelDownloadUrl } = useStoreon('modelDownloadUrl')
+  const downloadModel = () =>
+    dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
+      modelId: model.id,
+      onFinish: downloadUrl => {
+        window.open(downloadUrl)
+      },
+    })
   return (
     <Button text className={c.Model_DownloadButton} onClick={downloadModel}>
       {modelDownloadUrl.isLoading ? (

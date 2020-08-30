@@ -8,6 +8,7 @@ import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { createUseStyles } from '@style'
 import { useLocalStorage } from '@hooks'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -205,18 +206,18 @@ const Page = () => {
   const [showReportModelButtons, setShowReportModelButtons] = useState(false)
   useEffect(() => {
     if (savedSearchQuery !== searchQuery || !savedSearchResults) {
-      dispatch('reset-search-results')
+      dispatch(types.RESET_SEARCH_RESULTS)
       setSavedSearchResults(null)
       setSavedSearchQuery(null)
       setSavedOriginalModelName(null)
       if (!modelId) {
-        dispatch('get-search-results-by-text', {
+        dispatch(types.GET_TEXT_SEARCH_RESULTS, {
           searchTerm: searchQuery,
         })
       }
     }
     if (modelId && modelId !== 'undefined')
-      dispatch('get-related-models-via-thangs', { modelId: modelId })
+      dispatch(types.GET_RELATED_MODELS_VIA_THANGS, { modelId: modelId })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery])
 
@@ -252,13 +253,13 @@ const Page = () => {
 
   const handleReportModel = useCallback(
     ({ model }) => {
-      dispatch('open-modal', {
+      dispatch(types.OPEN_OVERLAY, {
         modalName: 'reportModel',
         modalData: {
           model: model,
           afterSend: () => {
             setShowReportModelButtons(false)
-            dispatch('close-modal')
+            dispatch(types.CLOSE_OVERLAY)
           },
           onModalClose: () => {
             setShowReportModelButtons(false)

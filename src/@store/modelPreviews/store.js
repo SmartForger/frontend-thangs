@@ -13,7 +13,7 @@ export default store => {
     modelPreviews: getInitAtom(),
   }))
 
-  store.on('loading-model-previews', state => ({
+  store.on(types.LOADING_MODEL_PREVIEW, state => ({
     modelPreviews: {
       ...state.models,
       isLoading: true,
@@ -21,7 +21,7 @@ export default store => {
     },
   }))
 
-  store.on('loaded-model-previews', (state, { data }) => ({
+  store.on(types.LOADED_MODEL_PREVIEW, (state, { data }) => ({
     modelPreviews: {
       ...state.models,
       isLoading: false,
@@ -30,9 +30,9 @@ export default store => {
     },
   }))
 
-  store.on('fetch-model-previews', async () => {
-    store.dispatch('loading-model-previews')
+  store.on(types.FETCH_MODEL_PREVIEW, async () => {
+    store.dispatch(types.LOADING_MODEL_PREVIEW)
     const { data } = await api({ method: 'GET', endpoint: 'models/landing' })
-    store.dispatch('loaded-model-previews', { data })
+    store.dispatch(types.LOADED_MODEL_PREVIEW, { data })
   })
 }

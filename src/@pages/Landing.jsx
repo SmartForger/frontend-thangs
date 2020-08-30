@@ -6,6 +6,7 @@ import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -75,7 +76,7 @@ const useStyles = createUseStyles(theme => {
 
 const Page = ({ user = {}, dispatch, modelPreviews }) => {
   useEffect(() => {
-    dispatch('fetch-model-previews')
+    dispatch(types.FETCH_MODEL_PREVIEW)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -119,7 +120,9 @@ const LandingHero = () => {
           </div>
           <div className={c.Landing_SearchByModelUploadButton}>
             <Button
-              onClick={() => dispatch('open-modal', { modalName: 'searchByUpload' })}
+              onClick={() =>
+                dispatch(types.OPEN_OVERLAY, { modalName: 'searchByUpload' })
+              }
             >
               <UploadIcon className={c.Landing_SearchByModelUploadButton_UploadIcon} />
               <span>Search by Model Upload</span>
@@ -152,7 +155,9 @@ const NewSignUpLandingHero = () => {
           </div>
           <div className={c.Landing_SearchByModelUploadButton}>
             <Button
-              onClick={() => dispatch('open-modal', { modalName: 'searchByUpload' })}
+              onClick={() =>
+                dispatch(types.OPEN_OVERLAY, { modalName: 'searchByUpload' })
+              }
             >
               <UploadIcon className={c.Landing_SearchByModelUploadButton_UploadIcon} />
               <span>Search by Model Upload</span>

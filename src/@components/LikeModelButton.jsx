@@ -3,7 +3,8 @@ import * as R from 'ramda'
 import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
 import { Button } from '@components'
 import { createUseStyles } from '@style'
-import useServices from '../@hooks/useServices'
+import useServices from '@hooks/useServices'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -25,11 +26,14 @@ const LikeModelButton = ({ currentUser, modelId }) => {
   const currentUserId = parseInt(currentUser.id)
   const { useFetchOnce } = useServices()
   const {
-    atom: { data: modelData, isLoading, isError }, dispatch
+    atom: { data: modelData, isLoading, isError },
+    dispatch,
   } = useFetchOnce(modelId, 'model')
 
-  const likeModel = () => dispatch('post-like-model', {modelId: modelId, currentUserId: currentUserId})
-  const unlikeModel = () => dispatch('delete-like-model', {modelId: modelId, currentUserId: currentUserId})
+  const likeModel = () =>
+    dispatch(types.POST_LIKE_MODEL, { modelId: modelId, currentUserId: currentUserId })
+  const unlikeModel = () =>
+    dispatch(types.DELETE_LIKE_MODEL, { modelId: modelId, currentUserId: currentUserId })
 
   if (isLoading || isError) {
     return <div>Loading...</div>
@@ -40,7 +44,12 @@ const LikeModelButton = ({ currentUser, modelId }) => {
       <HeartFilledIcon /> Liked!
     </Button>
   ) : (
-    <Button className={c.LikeModelButton} secondary disabled={isLoading} onClick={likeModel}>
+    <Button
+      className={c.LikeModelButton}
+      secondary
+      disabled={isLoading}
+      onClick={likeModel}
+    >
       <HeartFilledIcon /> Like
     </Button>
   )

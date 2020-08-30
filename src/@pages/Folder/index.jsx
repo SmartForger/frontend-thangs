@@ -13,6 +13,7 @@ import { Message404 } from '../404'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import ModelCardsByIds from '@components/CardCollection/ModelCardsByIds'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -56,7 +57,7 @@ const Page = () => {
   const { navigateWithFlash } = useFlashNotification()
 
   useEffect(() => {
-    dispatch('fetch-folder', { folderId, inviteCode })
+    dispatch(types.FETCH_FOLDER, { folderId, inviteCode })
   }, [dispatch, folderId, inviteCode])
 
   if (folders.isLoading) {
@@ -65,7 +66,7 @@ const Page = () => {
     navigateWithFlash('/home', 'The folder entered does not exist')
   } else if (!folders.currentFolder) {
     return <Message404 />
-  } else if (folders.loadError) {
+  } else if (folders.isError) {
     return <div>Error loading folder</div>
   }
 

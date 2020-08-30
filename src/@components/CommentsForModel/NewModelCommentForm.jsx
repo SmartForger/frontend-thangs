@@ -3,6 +3,7 @@ import { useForm } from '@hooks'
 import { Button, TextInput } from '@components'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -49,10 +50,13 @@ const NewModelCommentForm = ({ modelId }) => {
   const formSubmit = useCallback(
     async (inputState, isValid, _errors) => {
       if (isValid) {
-
-        dispatch('new-model-comments', { id: modelId, body: inputState.body, onFinish: () => {
-          clearAllInputs()
-        } })
+        dispatch(types.NEW_MODEL_COMMENTS, {
+          id: modelId,
+          body: inputState.body,
+          onFinish: () => {
+            clearAllInputs()
+          },
+        })
       }
     },
     [clearAllInputs, dispatch, modelId]

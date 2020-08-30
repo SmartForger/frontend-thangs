@@ -15,10 +15,10 @@ export default store => {
   store.on(types.STORE_INIT, () => ({
     uploadModel: getInitAtom(),
   }))
-  store.on('reset-upload-model', () => ({
+  store.on(types.RESET_UPLOAD_MODEL, () => ({
     uploadModel: getInitAtom(),
   }))
-  store.on('loading-upload-model', ({ uploadModel }) => ({
+  store.on(types.LOADING_UPLOAD_MODEL, ({ uploadModel }) => ({
     uploadModel: {
       ...uploadModel,
       isLoading: true,
@@ -26,7 +26,7 @@ export default store => {
       isError: false,
     },
   }))
-  store.on('loaded-upload-model', ({ uploadModel }, { data }) => ({
+  store.on(types.LOADED_UPLOAD_MODEL, ({ uploadModel }, { data }) => ({
     uploadModel: {
       ...uploadModel,
       data,
@@ -34,7 +34,7 @@ export default store => {
       isLoaded: true,
     },
   }))
-  store.on('failure-upload-model', ({ uploadModel }) => ({
+  store.on(types.FAILURE_UPLOAD_MODEL, ({ uploadModel }) => ({
     uploadModel: {
       ...uploadModel,
       isLoading: false,
@@ -42,8 +42,8 @@ export default store => {
       isError: true,
     },
   }))
-  store.on('upload-model', async (state, { file, data, onFinish = noop }) => {
-    store.dispatch('loading-upload-model')
+  store.on(types.UPLOAD_MODEL, async (state, { file, data, onFinish = noop }) => {
+    store.dispatch(types.LOADING_UPLOAD_MODEL)
 
     try {
       const { data: uploadedUrlData } = await api({
@@ -67,14 +67,14 @@ export default store => {
       })
 
       if (error) {
-        store.dispatch('failure-upload-model')
+        store.dispatch(types.FAILURE_UPLOAD_MODEL)
       } else {
-        store.dispatch('loaded-upload-model', { data: uploadedData })
+        store.dispatch(types.LOADED_UPLOAD_MODEL, { data: uploadedData })
         onFinish()
         pendo.track('Model Uploaded')
       }
     } catch (e) {
-      store.dispatch('failure-upload-model')
+      store.dispatch(types.FAILURE_UPLOAD_MODEL)
     }
   })
 }

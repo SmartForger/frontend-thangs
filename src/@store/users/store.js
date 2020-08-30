@@ -6,23 +6,23 @@ import * as types from '@constants/storeEventTypes'
 export default store => {
   store.on(types.STORE_INIT, () => ({}))
 
-  store.on('init-user', (_, { id }) => ({
+  store.on(types.INIT_USER, (_, { id }) => ({
     [`user-${id}`]: {
       ...getStatusState(STATUSES.INIT),
       data: {},
     },
   }))
-  store.on('change-user-status', (state, { atom, status = STATUSES.INIT, data }) => ({
+  store.on(types.CHANGE_USER_STATUS, (state, { atom, status = STATUSES.INIT, data }) => ({
     [atom]: {
       ...state[atom],
       ...getStatusState(status),
       data,
     },
   }))
-  store.on('fetch-user', async (_, { id }) => {
+  store.on(types.FETCH_USER, async (_, { id }) => {
     if (R.isNil(id)) return
 
-    store.dispatch('change-user-status', {
+    store.dispatch(types.CHANGE_USER_STATUS, {
       status: STATUSES.LOADING,
       atom: `user-${id}`,
     })
@@ -32,12 +32,12 @@ export default store => {
     })
 
     if (error) {
-      store.dispatch('change-user-status', {
+      store.dispatch(types.CHANGE_USER_STATUS, {
         status: STATUSES.FAILURE,
         atom: `user-${id}`,
       })
     } else {
-      store.dispatch('change-user-status', {
+      store.dispatch(types.CHANGE_USER_STATUS, {
         status: STATUSES.LOADED,
         atom: `user-${id}`,
         data,
@@ -45,7 +45,7 @@ export default store => {
     }
   })
 
-  store.on('update-user', async (_, { id }) => {
+  store.on(types.UPDATE_USER, async (_, { id }) => {
     console.log('This will point to a new update user endpoint', id)
     // logger.error('Error when trying to update the user', error) //use if
   })

@@ -10,6 +10,7 @@ import { ReactComponent as PlusIcon } from '@svg/notification-plus.svg'
 import { ReactComponent as UploadIcon } from '@svg/notification-uploaded.svg'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { createUseStyles } from '@style'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -172,7 +173,7 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
 
   const handleNotificationDelete = useCallback(
     id => {
-      dispatch('clear-notification', { id })
+      dispatch(types.CLEAR_NOTIFICATION, { id })
     },
     [dispatch]
   )

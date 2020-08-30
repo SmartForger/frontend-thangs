@@ -5,6 +5,7 @@ import { Button } from '@components'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -83,7 +84,7 @@ const DropdownItem = ({ children, to = '#', onClick }) => {
         <div
           className={c.DropdownMenu_Item}
           onClick={e => {
-            dispatch('close-modal')
+            dispatch(types.CLOSE_OVERLAY)
             handleOnClick(e)
           }}
         >
@@ -94,7 +95,7 @@ const DropdownItem = ({ children, to = '#', onClick }) => {
           className={c.DropdownMenu_Item}
           to={to}
           onClick={e => {
-            dispatch('close-modal')
+            dispatch(types.CLOSE_OVERLAY)
             handleOnClick(e)
           }}
         >

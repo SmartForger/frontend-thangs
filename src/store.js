@@ -2,7 +2,7 @@ import { storeonDevtools } from 'storeon/devtools'
 import { createStoreon } from 'storeon'
 import teamsStore from '@store/teams/store'
 import folderStore from '@store/folders/store'
-import modalStore from '@store/modal/store'
+import overlayStore from '@store/overlay/store'
 import modelsStore from '@store/models/store'
 import modelPreviewsStore from '@store/modelPreviews/store'
 import commentsStore from '@store/comments/store'
@@ -19,7 +19,7 @@ import modelDownloadUrl from '@store/modelDownloadUrl/store'
 const storeParts = [
   commentsStore,
   folderStore,
-  modalStore,
+  overlayStore,
   modelPreviewsStore,
   modelsStore,
   teamsStore,

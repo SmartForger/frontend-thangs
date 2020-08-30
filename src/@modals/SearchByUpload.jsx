@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { Uploader, UploadProgress } from '@components'
 import { createUseStyles } from '@style'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -23,7 +24,7 @@ const SearchByUpload = () => {
   const { dispatch, searchResults } = useStoreon('searchResults')
   const { phyndexer } = searchResults
   useEffect(() => {
-    dispatch('reset-search-results')
+    dispatch(types.RESET_SEARCH_RESULTS)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -34,13 +35,13 @@ const SearchByUpload = () => {
         size: file.size,
       }
 
-      dispatch('get-search-results-by-model', {
+      dispatch(types.GET_MODEL_SEARCH_RESULTS, {
         file,
         data: {
           ...requiredVariables,
         },
         onFinish: ({ modelId }) => {
-          dispatch('close-modal')
+          dispatch(types.CLOSE_OVERLAY)
           history.push(`/search/${file ? file.name : ''}?modelId=${modelId}`)
         },
       })

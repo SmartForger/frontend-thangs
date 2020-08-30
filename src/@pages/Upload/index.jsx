@@ -10,6 +10,7 @@ import {
 } from '@components'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -96,12 +97,12 @@ const Page = () => {
   useEffect(() => {
     if (uploadModel.isLoaded && !uploadModel.isError) {
       navigateWithFlash('/home', 'Model added successfully.')
-      dispatch('reset-upload-model')
+      dispatch(types.RESET_UPLOAD_MODEL)
     }
   }, [dispatch, navigateWithFlash, uploadModel])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => () => dispatch('reset-upload-model'), [])
+  useEffect(() => () => dispatch(types.RESET_UPLOAD_MODEL), [])
 
   const onSubmit = useCallback(
     async data => {
@@ -120,7 +121,7 @@ const Page = () => {
         ...(category && { category }),
       }
 
-      dispatch('upload-model', {
+      dispatch(types.UPLOAD_MODEL, {
         file,
         data: {
           ...requiredVariables,

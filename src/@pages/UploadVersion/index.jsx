@@ -15,6 +15,7 @@ import { createUseStyles } from '@style'
 import { useServices } from '@hooks'
 import { Message404 } from '../404'
 import { useStoreon } from 'storeon/react'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -109,11 +110,11 @@ const Page = () => {
   useEffect(() => {
     if (uploadModel.isLoaded && !uploadModel.isError) {
       navigateWithFlash(`/model/${parentModelId}`, 'Model added successfully.')
-      dispatch('reset-upload-model')
+      dispatch(types.RESET_UPLOAD_MODEL)
     }
   }, [dispatch, navigateWithFlash, parentModelId, uploadModel])
 
-  useEffect(() => () => dispatch('reset-upload-model'), [dispatch])
+  useEffect(() => () => dispatch(types.RESET_UPLOAD_MODEL), [dispatch])
 
   const onSubmit = useCallback(
     async data => {
@@ -133,7 +134,7 @@ const Page = () => {
         ...(parentModelId.length > 0 && { previousVersionModelId: parentModelId }),
       }
 
-      dispatch('upload-model', {
+      dispatch(types.UPLOAD_MODEL, {
         file,
         data: {
           ...requiredVariables,

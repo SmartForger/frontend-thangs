@@ -11,14 +11,14 @@ export default store => {
   store.on(types.STORE_INIT, () => ({
     modal: getInitAtom(),
   }))
-  store.on('open-modal', (state, { modalName, modalData }) => ({
+  store.on(types.OPEN_OVERLAY, (state, { modalName, modalData }) => ({
     modal: {
       isOpen: true,
       currentModal: modalName,
       modalData: modalData,
     },
   }))
-  store.on('close-modal', () => ({
+  store.on(types.CLOSE_OVERLAY, () => ({
     modal: {
       isOpen: false,
       currentModal: null,

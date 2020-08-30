@@ -9,6 +9,7 @@ import { useForm, useCurrentUser } from '@hooks'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import { useServices } from '@hooks'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -339,10 +340,10 @@ const CreateTeamForm = ({
         name: folderName,
         members: [inputState['teamName']],
       }
-      dispatch('add-team', {
+      dispatch(types.ADD_TEAM, {
         data: addTeamVariables,
         onFinish: () => {
-          dispatch('create-folder', {
+          dispatch(types.CREATE_FOLDER, {
             data: createFolderVariables,
             onFinish: folder => {
               afterCreate(folder)

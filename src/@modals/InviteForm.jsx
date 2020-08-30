@@ -42,7 +42,7 @@ const InviteForm = ({ afterCreate, onTeamModalOpen, ...props }) => {
   const c = useStyles()
   const [errors, setErrors] = useState()
   const handleOnCancel = useCallback(() => {
-    dispatch('open-modal', { modalName: 'createFolder' })
+    dispatch(types.OPEN_OVERLAY, { modalName: 'createFolder' })
   }, [dispatch])
   const handleOnTeamModalOpen = useCallback(() => {
     onTeamModalOpen()

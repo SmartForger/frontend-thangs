@@ -17,6 +17,7 @@ import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import useFetchPerMount from '@hooks/useServices/useFetchPerMount'
 import { useCurrentUserId, useCurrentUser } from '@hooks'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -155,7 +156,7 @@ const Page = () => {
 
   const { dispatch, folders } = useStoreon('folders')
   useEffect(() => {
-    dispatch('fetch-folders')
+    dispatch(types.FETCH_FOLDERS)
   }, [dispatch])
 
   if (isLoading || folders.isLoading) {

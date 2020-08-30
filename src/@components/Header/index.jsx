@@ -5,6 +5,7 @@ import classnames from 'classnames'
 
 import { useCurrentUser } from '@hooks'
 import { createUseStyles } from '@style'
+import * as types from '@constants/storeEventTypes'
 
 import { ReactComponent as BackgroundSvg } from '@svg/header-background.svg'
 import { ReactComponent as Caret } from '@svg/header-caret.svg'
@@ -230,8 +231,8 @@ const Header = ({
     atom: { isLoading, data: user },
   } = useCurrentUser()
   const handleNotificationsClick = useCallback(() => {
-    dispatch('close-modal')
-    if (!notificationsIsOpen) dispatch('read-notifications')
+    dispatch(types.CLOSE_OVERLAY)
+    if (!notificationsIsOpen) dispatch(types.READ_NOTIFICATIONS)
     onNotificationsClick()
   }, [dispatch, notificationsIsOpen, onNotificationsClick])
 
@@ -272,7 +273,9 @@ const Header = ({
             <div className={classnames(c.Header_Row, c.Header_TopRow)}>
               <div className={c.Header_RowWrapper}>
                 <div className={c.Header_Row}>
-                  <div onClick={useCallback(() => dispatch('close-modal'), [dispatch])}>
+                  <div
+                    onClick={useCallback(() => dispatch(types.CLOSE_OVERLAY), [dispatch])}
+                  >
                     <Link className={c.Header_LogoWrapper} to='/'>
                       <Logo className={c.Header_Logo} />
                       <LogoText />

@@ -5,6 +5,7 @@ import classnames from 'classnames'
 import { Button } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
+import * as types from '@constants/storeEventTypes'
 
 ReactModal.setAppElement('#root')
 
@@ -54,7 +55,7 @@ const Modal = ({ children, className, onModalClose = noop, ...props }) => {
         className={c.Modal_CloseButton}
         onClick={() => {
           onModalClose()
-          dispatch('close-modal')
+          dispatch(types.CLOSE_OVERLAY)
         }}
       >
         <ExitIcon />

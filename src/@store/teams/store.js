@@ -16,7 +16,7 @@ export default store => {
     teams: getInitAtom(),
   }))
 
-  store.on('update-teams', (state, event) => ({
+  store.on(types.UPDATE_TEAMS, (state, event) => ({
     teams: {
       ...state.teams,
       isLoaded: true,
@@ -26,7 +26,7 @@ export default store => {
     },
   }))
 
-  store.on('update-team', (state, event) => ({
+  store.on(types.UPDATE_TEAM, (state, event) => ({
     teams: {
       ...state.teams,
       isLoaded: true,
@@ -35,23 +35,23 @@ export default store => {
     },
   }))
 
-  store.on('fetch-teams', async _state => {
+  store.on(types.FETCH_TEAMS, async _state => {
     const { data: teams } = await api({
       method: 'GET',
       endpoint: 'teams',
     })
-    store.dispatch('update-teams', teams)
+    store.dispatch(types.UPDATE_TEAMS, teams)
   })
 
-  store.on('fetch-team', async (state, id) => {
+  store.on(types.FETCH_TEAM, async (state, id) => {
     const { data: team } = await api({
       method: 'GET',
       endpoint: `teams/${id}`,
     })
-    store.dispatch('update-team', team)
+    store.dispatch(types.UPDATE_TEAM, team)
   })
 
-  store.on('saving-team', state => ({
+  store.on(types.SAVING_TEAM, state => ({
     teams: {
       ...state.teams,
       isSaving: true,
@@ -59,7 +59,7 @@ export default store => {
     },
   }))
 
-  store.on('team-saved', state => ({
+  store.on(types.SAVED_TEAM, state => ({
     teams: {
       ...state.teams,
       isSaving: false,
@@ -67,15 +67,15 @@ export default store => {
     },
   }))
 
-  store.on('team-save-error', state => ({
+  store.on(types.ERROR_SAVING_TEAM, state => ({
     teams: {
       ...state.teams,
       saveError: true,
     },
   }))
 
-  store.on('add-team', async (state, { data, onFinish, onError }) => {
-    store.dispatch('saving-team')
+  store.on(types.ADD_TEAM, async (state, { data, onFinish, onError }) => {
+    store.dispatch(types.SAVING_TEAM)
     try {
       const { teamName, teamMembers } = data
       await api({
@@ -86,12 +86,12 @@ export default store => {
           members: teamMembers,
         },
       })
-      store.dispatch('fetch-teams')
-      store.dispatch('team-saved')
+      store.dispatch(types.FETCH_TEAMS)
+      store.dispatch(types.SAVED_TEAM)
       pendo.track('Team Created')
       onFinish()
     } catch (error) {
-      store.dispatch('team-save-error')
+      store.dispatch(types.ERROR_SAVING_TEAM)
       onError(error)
     }
   })

@@ -9,6 +9,7 @@ import teamLogo from '@svg/multi-users.svg'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { useStoreon } from 'storeon/react'
 import { useServices } from '@hooks'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -247,7 +248,7 @@ const CreateFolderForm = ({
         name,
         members,
       }
-      dispatch('create-folder', {
+      dispatch(types.CREATE_FOLDER, {
         data: variables,
         onFinish: folder => {
           afterCreate(folder)

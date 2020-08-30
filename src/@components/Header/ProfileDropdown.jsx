@@ -10,6 +10,7 @@ import {
 import { useTranslations } from '@hooks'
 import { authenticationService } from '@services'
 import { createUseStyles } from '@style'
+import * as types from '@constants/storeEventTypes'
 
 import { ReactComponent as ExitIcon } from '@svg/dropdown-signout.svg'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
@@ -49,7 +50,7 @@ export const ProfileDropdownMenu = ({
   const { navigateWithFlash } = useFlashNotification()
   const handleAfterCreate = useCallback(
     folder => {
-      dispatch('close-modal')
+      dispatch(types.CLOSE_OVERLAY)
       navigateWithFlash(
         `/folder/${folder.folderId}`,
         'Folder created successfully. If the provided unregistered email addresses, they will receive an email with instructions for accessing your folder.'
@@ -69,7 +70,7 @@ export const ProfileDropdownMenu = ({
       </DropdownItem>
       <DropdownItem
         onClick={() => {
-          dispatch('open-modal', {
+          dispatch(types.OPEN_OVERLAY, {
             modalName: 'createFolder',
             modalData: {
               afterCreate: handleAfterCreate,
@@ -86,7 +87,7 @@ export const ProfileDropdownMenu = ({
       <DropdownItem
         onClick={() => {
           if (notificationsIsOpen) handleNotificationsClick()
-          dispatch('close-modal')
+          dispatch(types.CLOSE_OVERLAY)
           setTimeout(() => {
             authenticationService.logout()
             history.push('/')

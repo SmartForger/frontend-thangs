@@ -6,6 +6,7 @@ import { Button, Spinner, TextInput } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -176,7 +177,7 @@ const InviteUsersForm = ({ folderId, onErrorReceived, afterInvite }) => {
         return onErrorReceived(errors)
       }
       const variables = { emails: members }
-      dispatch('invite-to-folder', {
+      dispatch(types.INVITE_TO_FOLDER, {
         data: variables,
         folderId: folderId,
         onFinish: () => afterInvite(members),
