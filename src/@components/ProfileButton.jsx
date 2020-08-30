@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useCurrentUserId } from '@hooks'
+import { ToggleFollowButton } from '@components'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -16,7 +17,8 @@ const useStyles = createUseStyles(theme => {
 
 const ProfileButton = ({ userId, className }) => {
   const c = useStyles()
-  const isCurrentUser = useCurrentUserId() === userId
+  const currentUserId = useCurrentUserId()
+  const isCurrentUser = currentUserId === userId
 
   if (isCurrentUser) {
     return (
@@ -25,9 +27,9 @@ const ProfileButton = ({ userId, className }) => {
       </Link>
     )
   } else {
-    // return <ToggleFollowButton viewedUser={{}} className={className} />
-    return <div />
+    if (currentUserId) return <ToggleFollowButton viewedUser={{}} className={className} />
   }
+  return null
 }
 
 export default ProfileButton
