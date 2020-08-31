@@ -2,8 +2,8 @@ import * as R from 'ramda'
 import api from '@services/api'
 import { STATUSES, getStatusState } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
+import { logger } from '@utilities/logging'
 
-const COLLECTION_PREFIX = 'user'
 const noop = () => null
 
 export default store => {
@@ -19,10 +19,10 @@ export default store => {
     [atom]: {
       ...state[atom],
       ...getStatusState(status),
-      data,
+      data: { ...state[atom].data, ...data },
     },
   }))
-  store.on(types.FETCH_USER, async (_, { id }) => {
+  store.on(types.FETCH_USER, async (_, { id, onFinish = noop }) => {
     if (R.isNil(id)) return
 
     store.dispatch(types.CHANGE_USER_STATUS, {
@@ -45,6 +45,7 @@ export default store => {
         atom: `user-${id}`,
         data,
       })
+      onFinish()
     }
   })
   store.on(types.UPDATE_USER_AVATAR, (state, { userId, data }) => {
@@ -55,82 +56,99 @@ export default store => {
           ...state[`user-${userId}`].data,
           profile: {
             ...state[`user-${userId}`].data.profile,
-            avatarUrl: data
-          }
-        }
+            avatarUrl: data,
+          },
+        },
       },
     }
   })
-  store.on(
-    `follow-${COLLECTION_PREFIX}`,
-    async (_, { id, onFinish = noop, onError = noop }) => {
-      store.dispatch('change-status', {
-        status: STATUSES.LOADING,
-        atom: `follow-${COLLECTION_PREFIX}`,
+  store.on(types.UPDATE_USER, async (_, { id, user: updatedUser, onFinish = noop }) => {
+    if (R.isNil(id)) return
+
+    store.dispatch(types.CHANGE_USER_STATUS, {
+      status: STATUSES.LOADING,
+      atom: `user-${id}`,
+    })
+    const { error } = await api({
+      method: 'PUT',
+      endpoint: `users/${id}`,
+      body: updatedUser,
+    })
+
+    if (error) {
+      store.dispatch(types.CHANGE_USER_STATUS, {
+        status: STATUSES.FAILURE,
+        atom: `user-${id}`,
       })
-
-      const { data, error } = await api({
-        method: 'POST',
-        endpoint: `users/${id}/follow`,
-      })
-
-      if (error) {
-        store.dispatch('change-status', {
-          status: STATUSES.FAILURE,
-          atom: `follow-${COLLECTION_PREFIX}`,
-        })
-        onError()
-      } else {
-        store.dispatch('change-status', {
-          status: STATUSES.LOADED,
-          atom: `follow-${COLLECTION_PREFIX}`,
-          data,
-        })
-
-        onFinish()
-        store.dispatch(`local-follow-${COLLECTION_PREFIX}`, { id, isFollowed: true })
-      }
+      logger.error('Error when trying to update the user', error)
+    } else {
+      store.dispatch(types.FETCH_USER, { id, onFinish })
     }
-  )
-  store.on(
-    `unfollow-${COLLECTION_PREFIX}`,
-    async (_, { id, onFinish = noop, onError = noop }) => {
+  })
+  store.on('follow-user', async (_, { id, onFinish = noop, onError = noop }) => {
+    store.dispatch('change-status', {
+      status: STATUSES.LOADING,
+      atom: 'follow-user',
+    })
+
+    const { data, error } = await api({
+      method: 'POST',
+      endpoint: `users/${id}/follow`,
+    })
+
+    if (error) {
       store.dispatch('change-status', {
-        status: STATUSES.LOADING,
-        atom: `unfollow-${COLLECTION_PREFIX}`,
+        status: STATUSES.FAILURE,
+        atom: 'follow-user',
+      })
+      onError()
+    } else {
+      store.dispatch('change-status', {
+        status: STATUSES.LOADED,
+        atom: 'follow-user',
+        data,
       })
 
-      const { data, error } = await api({
-        method: 'DELETE',
-        endpoint: `users/${id}/unfollow`,
-      })
-
-      if (error) {
-        store.dispatch('change-status', {
-          status: STATUSES.FAILURE,
-          atom: `unfollow-${COLLECTION_PREFIX}`,
-        })
-        onError()
-      } else {
-        store.dispatch('change-status', {
-          status: STATUSES.LOADED,
-          atom: `unfollow-${COLLECTION_PREFIX}`,
-          data,
-        })
-
-        onFinish()
-        store.dispatch(`local-follow-${COLLECTION_PREFIX}`, { id, isFollowed: false })
-      }
+      onFinish()
+      store.dispatch('local-follow-user', { id, isFollowed: true })
     }
-  )
+  })
+  store.on('unfollow-user', async (_, { id, onFinish = noop, onError = noop }) => {
+    store.dispatch('change-status', {
+      status: STATUSES.LOADING,
+      atom: 'unfollow-user',
+    })
 
-  store.on(`local-follow-${COLLECTION_PREFIX}`, (state, { id, isFollowed = false }) => ({
-    [`${COLLECTION_PREFIX}-${id}`]: {
-      ...state[`${COLLECTION_PREFIX}-${id}`],
+    const { data, error } = await api({
+      method: 'DELETE',
+      endpoint: `users/${id}/unfollow`,
+    })
+
+    if (error) {
+      store.dispatch('change-status', {
+        status: STATUSES.FAILURE,
+        atom: 'unfollow-user',
+      })
+      onError()
+    } else {
+      store.dispatch('change-status', {
+        status: STATUSES.LOADED,
+        atom: 'unfollow-user',
+        data,
+      })
+
+      onFinish()
+      store.dispatch('local-follow-user', { id, isFollowed: false })
+    }
+  })
+
+  store.on('local-follow-user', (state, { id, isFollowed = false }) => ({
+    [`user-${id}`]: {
+      ...state[`user-${id}`],
       data: {
-        ...state[`${COLLECTION_PREFIX}-${id}`].data,
+        ...state[`user-${id}`].data,
         isBeingFollowedByRequester: isFollowed,
-      }
+      },
     },
   }))
 }
