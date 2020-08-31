@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { withApolloProvider } from '../../../.storybook/withApolloProvider'
 import { createUseStyles } from '@style'
 import { Uploader } from './'
 
@@ -32,5 +31,4 @@ export function UploaderStory() {
 export default {
   title: 'Uploader',
   component: Uploader,
-  decorators: [withApolloProvider()],
 }
