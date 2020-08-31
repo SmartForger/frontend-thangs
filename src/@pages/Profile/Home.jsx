@@ -108,7 +108,7 @@ const PageContent = ({ user }) => {
       <div className={c.Profile_Row}>
         <ProfilePicture
           className={c.Profile_ProfilePicture}
-          size='2.5rem'
+          size='5rem'
           src={user && user.profile && user.profile.avatarUrl}
           name={user.fullName}
         />

@@ -46,7 +46,7 @@ const PictureForm = ({ user, className, isLoading, handleDeleteAvatar = noop }) 
     <div className={classnames(className, c.EditProfile_Row)}>
       <ProfilePicture
         className={c.EditProfile_ProfilePicture}
-        size='80px'
+        size='5rem'
         name={user.fullName}
         src={currentAvatar}
       />
