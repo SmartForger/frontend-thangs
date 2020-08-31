@@ -47,10 +47,19 @@ export default store => {
       })
     }
   })
-
-  store.on(types.UPDATE_USER, async (_, { id }) => {
-    console.log('This will point to a new update user endpoint', id)
-    // logger.error('Error when trying to update the user', error) //use if
+  store.on(types.UPDATE_USER_AVATAR, (state, { userId, data }) => {
+    return {
+      [`user-${userId}`]: {
+        ...state[`user-${userId}`],
+        data: {
+          ...state[`user-${userId}`].data,
+          profile: {
+            ...state[`user-${userId}`].data.profile,
+            avatarUrl: data
+          }
+        }
+      },
+    }
   })
   store.on(
     `follow-${COLLECTION_PREFIX}`,

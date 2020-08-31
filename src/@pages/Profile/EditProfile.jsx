@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, {useCallback} from 'react'
 import { Link } from 'react-router-dom'
 
 import { useCurrentUser } from '@hooks'
@@ -11,9 +11,10 @@ import {
   ProfilePicture,
   Spinner,
 } from '@components'
-
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import {useStoreon} from 'storeon/react'
+import * as types from '../../@constants/storeEventTypes'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -36,10 +37,12 @@ const useStyles = createUseStyles(_theme => {
     },
   }
 })
-const noop = () => null
-const PictureForm = ({ user, className, isLoading, handleDeleteAvatar = noop }) => {
+
+const PictureForm = ({ user, className }) => {
   const c = useStyles()
-  const deleteText = 'Delete' //loading ? 'Deleting...' : 'Delete'
+  const { dispatch, userUploadAvatar } = useStoreon('userUploadAvatar')
+  const onDelete = () => dispatch(types.DELETE_USER_AVATAR, {userId: user.id})
+  const deleteText = (userUploadAvatar && userUploadAvatar?.isLoading) ? 'Deleting...' : 'Delete'
 
   const currentAvatar = user && user.profile && user.profile.avatarUrl
   return (
@@ -55,7 +58,7 @@ const PictureForm = ({ user, className, isLoading, handleDeleteAvatar = noop }) 
           <ChangeablePicture user={user} />
 
           {currentAvatar && (
-            <Button dark onClick={handleDeleteAvatar} disabled={isLoading}>
+            <Button dark onClick={onDelete} disabled={userUploadAvatar && userUploadAvatar.isLoading}>
               {deleteText}
             </Button>
           )}
@@ -92,10 +95,6 @@ const Page = () => {
     console.log('This needs changed to REST!', 'updateUser()', dispatch)
   }, [dispatch])
 
-  const handleDeleteAvatar = useCallback(() => {
-    console.log('This needs changed to REST!', 'deleteAvatar()', dispatch)
-  }, [dispatch])
-
   if (isLoading) {
     return <Spinner />
   }
@@ -113,7 +112,6 @@ const Page = () => {
       <WarningOnEmptyProfile user={user} />
       <PictureForm
         className={c.EditProfile_PictureForm}
-        handleDeleteAvatar={handleDeleteAvatar}
         user={user}
         isLoading={isLoading}
       />

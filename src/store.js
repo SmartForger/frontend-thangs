@@ -15,6 +15,7 @@ import notificationsStore from '@store/notifications/store'
 import modelLikesStore from '@store/modelLikes/store'
 import modelDownloadUrl from '@store/modelDownloadUrl/store'
 import relatedModelsStore from '@store/relatedModels/store'
+import userAvatarStore from '@store/userAvatar/store'
 
 const storeParts = [
   commentsStore,
@@ -31,6 +32,7 @@ const storeParts = [
   notificationsStore,
   modelLikesStore,
   modelDownloadUrl,
+  userAvatarStore,
   relatedModelsStore,
 ]
 

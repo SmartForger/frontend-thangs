@@ -7,6 +7,8 @@ import { logger } from '@utilities/logging'
 import { Button } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import {useStoreon} from 'storeon/react'
+import * as types from '../@constants/storeEventTypes'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -94,12 +96,13 @@ const ChangeablePicture = ({ user, className }) => {
   const imageEl = useRef(null)
   const formRef = useRef(null)
   const buttonRef = useRef(null)
+  const { dispatch } = useStoreon('userUploadAvatar')
   const c = useStyles()
 
   const submitCrop = useCallback(() => {
-    console.log('This needs changed to REST!', croppedImg, user)
+    dispatch(types.UPLOAD_USER_AVATAR, {userId: user.id, file: croppedImg})
     setIsCropping(false)
-  }, [croppedImg, user])
+  }, [croppedImg, dispatch, user.id])
 
   const cancel = useCallback(() => {
     formRef.current.reset()

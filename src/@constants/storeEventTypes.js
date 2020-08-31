@@ -75,6 +75,7 @@ export const FAILURE_UPLOAD_MODEL = 'failure-upload-model'
 /* Users Store Events */
 export const INIT_USER = 'init-user'
 export const CHANGE_USER_STATUS = 'change-user-status'
+export const UPDATE_USER_AVATAR = 'update-user-avatar'
 export const FETCH_USER = 'fetch-user'
 export const UPDATE_USER = 'update-user'
 /* User Liked Models Store Events */
@@ -85,3 +86,10 @@ export const FETCH_USER_LIKED_MODELS = 'fetch-user-liked-models'
 export const INIT_USER_OWN_MODELS = 'init-user-own-models'
 export const CHANGE_USER_OWNED_MODELS_STATUS = 'change-user-owned-models-status'
 export const FETCH_USER_OWN_MODELS = 'fetch-user-own-models'
+/* User Avatar Store Events */
+export const INIT_USER_AVATAR = 'init-user-avatar'
+export const LOADING_USER_AVATAR = 'loading-user-avatar'
+export const LOADED_USER_AVATAR = 'loaded-user-avatar'
+export const FAILED_USER_AVATAR = 'failed-user-avatar'
+export const UPLOAD_USER_AVATAR = 'upload-user-avatar'
+export const DELETE_USER_AVATAR = 'delete-user-avatar'
