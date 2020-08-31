@@ -31,9 +31,9 @@ const LikeModelButton = ({ currentUser, modelId }) => {
   } = useFetchOnce(modelId, 'model')
 
   const likeModel = () =>
-    dispatch(types.POST_LIKE_MODEL, { modelId: modelId, currentUserId: currentUserId })
+    dispatch(types.LIKE_MODEL, { modelId: modelId, currentUserId: currentUserId })
   const unlikeModel = () =>
-    dispatch(types.DELETE_LIKE_MODEL, { modelId: modelId, currentUserId: currentUserId })
+    dispatch(types.UNLIKE_MODEL, { modelId: modelId, currentUserId: currentUserId })
 
   if (isLoading || isError) {
     return <div>Loading...</div>
