@@ -197,7 +197,7 @@ const buildErrors = error => {
 const CreateFolderForm = ({
   onErrorReceived = noop,
   afterCreate = noop,
-  onTeamModalOpen = noop,
+  onTeamOverlayOpen = noop,
 }) => {
   const { dispatch } = useStoreon('folders')
   const { useFetchPerMount } = useServices()
@@ -267,8 +267,8 @@ const CreateFolderForm = ({
     const { error } = schemaJustName.validate({ name: getValues('name') || '' })
     const errors = buildErrors(error)
     if (errors) return onErrorReceived(errors)
-    onTeamModalOpen({ folderName: getValues('name'), members: getValues('members') })
-  }, [getValues, onErrorReceived, onTeamModalOpen])
+    onTeamOverlayOpen({ folderName: getValues('name'), members: getValues('members') })
+  }, [getValues, onErrorReceived, onTeamOverlayOpen])
 
   const addSaveGroupFields = () => {
     return (

@@ -189,7 +189,7 @@ const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
                 [c.SearchBar_UploadBar__expand]: showUploadText,
               })}
               onClick={() =>
-                dispatch(types.OPEN_OVERLAY, { modalName: 'searchByUpload' })
+                dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload' })
               }
               title={t('header.searchUploadText')}
             >

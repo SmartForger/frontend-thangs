@@ -71,8 +71,8 @@ export const ProfileDropdownMenu = ({
       <DropdownItem
         onClick={() => {
           dispatch(types.OPEN_OVERLAY, {
-            modalName: 'createFolder',
-            modalData: {
+            overlayName: 'createFolder',
+            overlayData: {
               afterCreate: handleAfterCreate,
             },
           })

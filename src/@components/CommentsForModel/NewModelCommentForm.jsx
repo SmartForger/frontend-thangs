@@ -7,15 +7,15 @@ import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
-    NewModalCommentForm: {
+    NewModelCommentForm: {
       display: 'flex',
       marginBottom: '2.5rem',
     },
-    NewModalCommentForm_Header: {
+    NewModelCommentForm_Header: {
       ...theme.mixins.text.formCalloutText,
       marginBottom: '1rem',
     },
-    NewModalCommentForm_PostCommentTextArea: {
+    NewModelCommentForm_PostCommentTextArea: {
       width: '100%',
       marginRight: '.75rem',
       resize: 'none',
@@ -71,10 +71,10 @@ const NewModelCommentForm = ({ modelId }) => {
 
   return (
     <div>
-      <div className={c.NewModalCommentForm_Header}>Add Comment</div>
-      <form className={c.NewModalCommentForm} onSubmit={onFormSubmit(formSubmit)}>
+      <div className={c.NewModelCommentForm_Header}>Add Comment</div>
+      <form className={c.NewModelCommentForm} onSubmit={onFormSubmit(formSubmit)}>
         <TextInput
-          className={c.NewModalCommentForm_PostCommentTextArea}
+          className={c.NewModelCommentForm_PostCommentTextArea}
           name='body'
           value={inputState && inputState.body}
           onChange={e => {

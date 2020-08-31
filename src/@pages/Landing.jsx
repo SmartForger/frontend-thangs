@@ -121,7 +121,7 @@ const LandingHero = () => {
           <div className={c.Landing_SearchByModelUploadButton}>
             <Button
               onClick={() =>
-                dispatch(types.OPEN_OVERLAY, { modalName: 'searchByUpload' })
+                dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload' })
               }
             >
               <UploadIcon className={c.Landing_SearchByModelUploadButton_UploadIcon} />
@@ -156,7 +156,7 @@ const NewSignUpLandingHero = () => {
           <div className={c.Landing_SearchByModelUploadButton}>
             <Button
               onClick={() =>
-                dispatch(types.OPEN_OVERLAY, { modalName: 'searchByUpload' })
+                dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload' })
               }
             >
               <UploadIcon className={c.Landing_SearchByModelUploadButton_UploadIcon} />

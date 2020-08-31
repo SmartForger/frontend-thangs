@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useStoreon } from 'storeon/react'
-import { Header, Modal, NotificationsList, Footer } from '@components'
+import { Header, Overlay, NotificationsList, Footer } from '@components'
 import {
   Upload,
   SearchByUpload,
@@ -99,12 +99,12 @@ const useStyles = createUseStyles(theme => {
       right: '.75rem',
       cursor: 'pointer',
     },
-    Modal__hidden: {
+    Overlay__hidden: {
       display: 'none',
     },
   }
 })
-const modalTemplates = {
+const overlayTemplates = {
   upload: Upload,
   searchByUpload: SearchByUpload,
   createFolder: CreateFolder,
@@ -116,7 +116,7 @@ const modalTemplates = {
 }
 
 const Layout = ({ children, Hero, showSearch, showSearchTextFlash, showUser }) => {
-  const { modal } = useStoreon('modal')
+  const { overlay } = useStoreon('overlay')
   const [notificationsIsOpen, setNotificationsOpen] = useState(false)
   const [notificationsClosing, setNotificationsClosing] = useState(false)
   const c = useStyles({ notificationsIsOpen })
@@ -133,16 +133,16 @@ const Layout = ({ children, Hero, showSearch, showSearchTextFlash, showUser }) =
     }
   }, [notificationsIsOpen])
 
-  const ModalView = useMemo(
-    () => modal && modal.isOpen && modalTemplates[modal.currentModal],
-    [modal]
+  const OverlayView = useMemo(
+    () => overlay && overlay.isOpen && overlayTemplates[overlay.currentOverlay],
+    [overlay]
   )
 
   useEffect(() => {
-    if (modal.isOpen) {
+    if (overlay.isOpen) {
       setNotificationsOpen(false)
     }
-  }, [modal])
+  }, [overlay])
 
   return (
     <div className={c.Container}>
@@ -153,18 +153,18 @@ const Layout = ({ children, Hero, showSearch, showSearchTextFlash, showUser }) =
         showSearch={showSearch}
         showUser={showUser}
       />
-      {ModalView && (
-        <Modal
-          className={classnames({ [c.Modal__hidden]: modal.isHidden })}
-          isOpen={modal.isOpen}
-          {...modal.modalData}
+      {OverlayView && (
+        <Overlay
+          className={classnames({ [c.Overlay__hidden]: overlay.isHidden })}
+          isOpen={overlay.isOpen}
+          {...overlay.overlayData}
         >
-          <ModalView {...modal.modalData} />
-        </Modal>
+          <OverlayView {...overlay.overlayData} />
+        </Overlay>
       )}
       <div
         className={classnames(c.Layout_Content, {
-          [c.Layout_blur]: modal.isOpen && !modal.isHidden,
+          [c.Layout_blur]: overlay.isOpen && !overlay.isHidden,
         })}
       >
         {Hero && <Hero />}

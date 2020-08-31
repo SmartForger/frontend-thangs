@@ -230,7 +230,7 @@ const SignIn = ({ afterSignIn }) => {
         <Button
           className={c.Login_ForgotButton}
           text
-          onClick={() => dispatch(types.OPEN_OVERLAY, { modalName: 'passwordReset' })}
+          onClick={() => dispatch(types.OPEN_OVERLAY, { overlayName: 'passwordReset' })}
         >
           Click here
         </Button>

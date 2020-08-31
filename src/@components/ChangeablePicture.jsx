@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react'
 import ReactCrop from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
-import Modal from 'react-modal'
+import ReactModal from 'react-modal'
 import md5 from 'md5'
 import { logger } from '@utilities/logging'
 import { Button } from '@components'
@@ -55,7 +55,7 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-Modal.setAppElement('#root')
+ReactModal.setAppElement('#root')
 
 const useModalOverlayStyles = createUseStyles(_theme => {
   return {
@@ -201,7 +201,7 @@ const ChangeablePicture = ({ user, className }) => {
         ref={imageEl}
       />
       <ModalOverlayStyles />
-      <Modal
+      <ReactModal
         className={c.ChangeablePicture_Modal}
         isOpen={isCropping}
         overlayClassName='img-cropper-modal-overlay'
@@ -222,7 +222,7 @@ const ChangeablePicture = ({ user, className }) => {
             Cancel
           </Button>
         </div>
-      </Modal>
+      </ReactModal>
     </form>
   )
 }

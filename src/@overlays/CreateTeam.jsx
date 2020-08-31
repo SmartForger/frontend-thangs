@@ -40,16 +40,16 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const CreateTeam = ({ afterCreate, onTeamModalOpen, ...props }) => {
+const CreateTeam = ({ afterCreate, onTeamOverlayOpen, ...props }) => {
   const { dispatch } = useStoreon()
   const c = useStyles()
   const [errors, setErrors] = useState()
   const handleOnCancel = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, { modalName: 'createFolder' })
+    dispatch(types.OPEN_OVERLAY, { overlayName: 'createFolder' })
   }, [dispatch])
-  const handleOnTeamModalOpen = useCallback(() => {
-    onTeamModalOpen()
-  }, [onTeamModalOpen])
+  const handleonTeamOverlayOpen = useCallback(() => {
+    onTeamOverlayOpen()
+  }, [onTeamOverlayOpen])
   const handleAfterCreate = useCallback(
     newTeamName => {
       setErrors(null)
@@ -76,7 +76,7 @@ const CreateTeam = ({ afterCreate, onTeamModalOpen, ...props }) => {
           onErrorReceived={setErrors}
           afterCreate={handleAfterCreate}
           onCancel={handleOnCancel}
-          onTeamModalOpen={handleOnTeamModalOpen}
+          onTeamOverlayOpen={handleonTeamOverlayOpen}
           newFolderData={props}
           includeNameField
         />

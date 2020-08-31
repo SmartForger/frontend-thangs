@@ -117,7 +117,7 @@ const UserNav = ({
         />
         <Button
           className={classnames(c.UserNav_Button, c.UserNav_DesktopOnly)}
-          onClick={() => dispatch(types.OPEN_OVERLAY, { modalName: 'upload' })}
+          onClick={() => dispatch(types.OPEN_OVERLAY, { overlayName: 'upload' })}
         >
           {t('header.uploadButtonText')}
         </Button>
@@ -145,8 +145,8 @@ const UserNav = ({
         className={c.UserNav_Button}
         onClick={() =>
           dispatch(types.OPEN_OVERLAY, {
-            modalName: 'signIn',
-            modalData: { afterSignIn: () => dispatch(types.CLOSE_OVERLAY) },
+            overlayName: 'signIn',
+            overlayData: { afterSignIn: () => dispatch(types.CLOSE_OVERLAY) },
           })
         }
       >

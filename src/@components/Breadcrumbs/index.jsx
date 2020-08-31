@@ -116,8 +116,8 @@ const ManageUsers = ({ dispatch, folder }) => {
         className={c.Breadcrumbs_ManagementButton}
         onClick={() =>
           dispatch(types.OPEN_OVERLAY, {
-            modalName: 'folderManagement',
-            modalData: { afterInvite, folder },
+            overlayName: 'folderManagement',
+            overlayData: { afterInvite, folder },
           })
         }
       >
