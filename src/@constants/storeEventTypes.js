@@ -12,8 +12,8 @@ export const CHANGE_MODEL_COMMENTS = 'change-comment-status'
 export const NEW_MODEL_COMMENTS = 'new-model-comments'
 export const FETCH_MODEL_COMMENTS = 'fetch-model-comments'
 /* Model Likes Store Events */
-export const POST_LIKE_MODEL = 'post-like-model'
-export const DELETE_LIKE_MODEL = 'delete-like-model'
+export const LIKE_MODEL = 'like-model'
+export const UNLIKE_MODEL = 'unlike-model'
 export const CHANGE_LIKE_MODEL_STATUS = 'change-like-model-status'
 /* Model Previews Store Events */
 export const FETCH_MODEL_PREVIEW = 'fetch-model-previews'
