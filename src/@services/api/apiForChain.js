@@ -2,10 +2,9 @@ import axios from 'axios'
 import { authenticationService } from '@services'
 
 export default ({ method = 'GET', endpoint, body, cancelToken, timeout = 300000 }) => {
-  const token = localStorage.getItem('restAccessToken')
-
+  const token = localStorage.getItem('accessToken')
   return axios({
-    url: `${process.env.REACT_APP_REST_API_KEY}${endpoint}`,
+    url: `${process.env.REACT_APP_API_KEY}${endpoint}`,
     method,
     cancelToken,
     timeout,

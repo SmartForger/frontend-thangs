@@ -14,6 +14,7 @@ import { ReactComponent as FolderManagementIcon } from '@svg/folder-management-i
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -70,7 +71,7 @@ const DeleteMenu = ({ dispatch, folderId, folders }) => {
   const handleDelete = useCallback(
     async e => {
       e.preventDefault()
-      dispatch('delete-folder', {
+      dispatch(types.DELETE_FOLDER, {
         folderId: folderId,
         onFinish: () => {
           navigateWithFlash('/home', 'Folder deleted')
@@ -85,7 +86,7 @@ const DeleteMenu = ({ dispatch, folderId, folders }) => {
       <DropdownItem to='#' onClick={handleDelete}>
         {folders.isLoading ? (
           <Spinner className={c.Breadcrumbs_Spinner} />
-        ) : folders.loadError ? (
+        ) : folders.isError ? (
           <ErrorIcon className={c.Breadcrumbs_ErrorIcon} />
         ) : (
           <TrashCanIcon />
@@ -103,9 +104,9 @@ const ManageUsers = ({ dispatch, folder }) => {
 
   const afterInvite = useCallback(() => {
     setFlash(
-      'If the email addresses belong to registered Thangs users, they will have access to your folder'
+      'If the email addresses are unregistered in Thangs, they will receive an email with instructions for accessing your folder.'
     )
-    dispatch('close-modal')
+    dispatch(types.CLOSE_OVERLAY)
   }, [dispatch, setFlash])
 
   return (
@@ -114,7 +115,7 @@ const ManageUsers = ({ dispatch, folder }) => {
         text
         className={c.Breadcrumbs_ManagementButton}
         onClick={() =>
-          dispatch('open-modal', {
+          dispatch(types.OPEN_OVERLAY, {
             modalName: 'folderManagement',
             modalData: { afterInvite, folder },
           })

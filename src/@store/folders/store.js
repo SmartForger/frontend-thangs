@@ -1,9 +1,11 @@
 import api from '@services/api'
+import * as types from '@constants/storeEventTypes'
+import * as pendo from '@vendors/pendo'
 
 const getInitAtom = () => ({
   isLoading: false,
   isLoaded: false,
-  loadError: false,
+  isError: false,
   isSaving: false,
   isSaved: false,
   saveError: false,
@@ -13,18 +15,18 @@ const getInitAtom = () => ({
 })
 
 export default store => {
-  store.on('@init', () => ({
+  store.on(types.STORE_INIT, () => ({
     folders: getInitAtom(),
   }))
 
-  store.on('update-folders', (state, event) => ({
+  store.on(types.UPDATE_FOLDERS, (state, event) => ({
     folders: {
       ...state.folders,
       data: event,
     },
   }))
 
-  store.on('update-folder', (state, event) => ({
+  store.on(types.UPDATE_FOLDER, (state, event) => ({
     folders: {
       ...state.folders,
       isLoaded: true,
@@ -33,7 +35,7 @@ export default store => {
     },
   }))
 
-  store.on('folders-loading', (state, _event) => ({
+  store.on(types.LOADING_FOLDER, (state, _event) => ({
     folders: {
       ...state.folders,
       isLoading: true,
@@ -41,7 +43,7 @@ export default store => {
     },
   }))
 
-  store.on('folders-loaded', (state, _event) => ({
+  store.on(types.LOADED_FOLDER, (state, _event) => ({
     folders: {
       ...state.folders,
       isLoading: false,
@@ -49,45 +51,45 @@ export default store => {
     },
   }))
 
-  store.on('folders-action-error', (state, _event) => ({
+  store.on(types.ERROR_FOLDER, (state, _event) => ({
     folders: {
       ...state.folders,
-      loadError: true,
+      isError: true,
     },
   }))
 
-  store.on('fetch-folders', async _state => {
-    store.dispatch('folders-loading')
+  store.on(types.FETCH_FOLDERS, async _state => {
+    store.dispatch(types.LOADING_FOLDER)
     await api({
       method: 'GET',
       endpoint: 'folders',
     })
       .then(res => {
-        store.dispatch('folders-loaded')
-        store.dispatch('update-folders', res.data)
+        store.dispatch(types.LOADED_FOLDER)
+        store.dispatch(types.UPDATE_FOLDERS, res.data)
       })
       .catch(_error => {
-        store.dispatch('folders-action-error')
+        store.dispatch(types.ERROR_FOLDER)
       })
   })
 
-  store.on('fetch-folder', async (state, { folderId, inviteCode }) => {
-    store.dispatch('folders-loading')
+  store.on(types.FETCH_FOLDER, async (state, { folderId, inviteCode }) => {
+    store.dispatch(types.LOADING_FOLDER)
     await api({
       method: 'GET',
       endpoint: `folders/${folderId}${inviteCode ? `?inviteCode=${inviteCode}` : ''}`,
     })
       .then(res => {
         const folder = res.data
-        store.dispatch('folders-loaded')
-        store.dispatch('update-folder', folder)
+        store.dispatch(types.LOADED_FOLDER)
+        store.dispatch(types.UPDATE_FOLDER, folder)
       })
       .catch(_error => {
-        store.dispatch('folders-action-error')
+        store.dispatch(types.ERROR_FOLDER)
       })
   })
 
-  store.on('folder-saving', state => ({
+  store.on(types.SAVING_FOLDER, state => ({
     folders: {
       ...state.folders,
       isSaving: true,
@@ -95,7 +97,7 @@ export default store => {
     },
   }))
 
-  store.on('folder-saved', state => ({
+  store.on(types.SAVED_FOLDER, state => ({
     folders: {
       ...state.folders,
       isSaving: false,
@@ -103,7 +105,7 @@ export default store => {
     },
   }))
 
-  store.on('folder-save-error', state => ({
+  store.on(types.ERROR_SAVING_FOLDER, state => ({
     folders: {
       ...state.folders,
       saveError: true,
@@ -112,15 +114,15 @@ export default store => {
     },
   }))
 
-  store.on('saved-folder-data', (state, folder) => ({
+  store.on(types.SAVED_FOLDER_DATA, (state, folder) => ({
     folders: {
       ...state.folders,
       createdFolder: folder,
     },
   }))
 
-  store.on('create-folder', (state, { data, onFinish, onError }) => {
-    store.dispatch('folder-saving')
+  store.on(types.CREATE_FOLDER, (state, { data, onFinish, onError }) => {
+    store.dispatch(types.SAVING_FOLDER)
     api({
       method: 'POST',
       endpoint: 'folders',
@@ -128,70 +130,77 @@ export default store => {
     })
       .then(res => {
         if (res.status === 201) {
-          store.dispatch('saved-folder-data', res.data)
+          store.dispatch(types.SAVED_FOLDER_DATA, res.data)
+          pendo.track('Folder Created')
           onFinish(res.data)
-          store.dispatch('folder-saved')
-          store.dispatch('fetch-folders')
+          store.dispatch(types.SAVED_FOLDER)
+          store.dispatch(types.FETCH_FOLDERS)
         }
       })
       .catch(error => {
-        store.dispatch('folder-saved-error')
+        store.dispatch(types.ERROR_SAVING_FOLDER)
         onError(error)
       })
   })
 
-  store.on('delete-folder', async (_state, { folderId, onFinish }) => {
-    store.dispatch('folders-loading')
+  store.on(types.DELETE_FOLDER, async (_state, { folderId, onFinish }) => {
+    store.dispatch(types.LOADING_FOLDER)
     await api({
       method: 'DELETE',
       endpoint: `folders/${folderId}`,
     })
       .then(_res => {
-        store.dispatch('folders-loaded')
+        store.dispatch(types.LOADED_FOLDER)
+        pendo.track('Folder Deleted')
         onFinish()
       })
       .catch(_error => {
-        store.dispatch('folders-action-error')
+        store.dispatch(types.ERROR_FOLDER)
       })
   })
 
-  store.on('invite-to-folder', async (state, { data, folderId, onFinish, onError }) => {
-    store.dispatch('folder-saving')
-    const { error } = await api({
-      method: 'PUT',
-      endpoint: `folders/${folderId}`,
-      body: data,
-    })
-    if (error) {
-      store.dispatch('folder-saved-error')
-      onError(error)
-    } else {
-      onFinish(data)
-      store.dispatch('folder-saved')
-      store.dispatch('fetch-folder', { folderId })
+  store.on(
+    types.INVITE_TO_FOLDER,
+    async (state, { data, folderId, onFinish, onError }) => {
+      store.dispatch(types.SAVING_FOLDER)
+      const { error } = await api({
+        method: 'PUT',
+        endpoint: `folders/${folderId}`,
+        body: data,
+      })
+      if (error) {
+        store.dispatch(types.ERROR_SAVING_FOLDER)
+        onError(error)
+      } else {
+        pendo.track('Folder Invite Sent')
+        onFinish(data)
+        store.dispatch(types.SAVED_FOLDER)
+        store.dispatch(types.FETCH_FOLDER, { folderId })
+      }
     }
-  })
+  )
 
-  store.on('revoke-folder-access', async (state, { folderId, userId, onError }) => {
-    store.dispatch('folder-saving')
+  store.on(types.REVOKE_FOLDER_ACCESS, async (state, { folderId, userId, onError }) => {
+    store.dispatch(types.SAVING_FOLDER)
     const { error } = await api({
       method: 'PUT',
       endpoint: `folders/${folderId}/members/${userId}`,
     })
     if (error) {
-      store.dispatch('folder-saved-error')
+      store.dispatch(types.ERROR_SAVING_FOLDER)
       onError(error)
     } else {
-      store.dispatch('folder-saved')
+      store.dispatch(types.SAVED_FOLDER)
+      pendo.track('Folder Access Revoked')
       if (
         state &&
         state.folders &&
         state.folders.currentFolder &&
         state.folders.currentFolder.team_id
       ) {
-        store.dispatch('fetch-team', state.folders.currentFolder.team_id)
+        store.dispatch(types.FETCH_TEAM, state.folders.currentFolder.team_id)
       } else {
-        store.dispatch('fetch-folder', { folderId })
+        store.dispatch(types.FETCH_FOLDER, { folderId })
       }
     }
   })

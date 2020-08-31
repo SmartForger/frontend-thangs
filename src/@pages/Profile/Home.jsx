@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import * as R from 'ramda'
 import {
   Layout,
   WithFlash,
   Spinner,
   CardCollection,
   ProfilePicture,
-  ToggleFollowButton,
+  ProfileButton,
 } from '@components'
 import ModelCards from '@components/CardCollection/ModelCards'
 import FolderCards from '@components/CardCollection/FolderCards'
-import { useCurrentUser } from '@hooks'
 import { Message404 } from '../404'
 import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg'
 import { ReactComponent as FolderIcon } from '@svg/folder-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
+import useFetchPerMount from '@hooks/useServices/useFetchPerMount'
+import { useCurrentUserId, useCurrentUser } from '@hooks'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -71,61 +71,37 @@ export * from './EditProfile'
 export * from './RedirectProfile'
 export * from './Likes'
 
-const ModelsTitle = ({ user, selected, onClick }) => {
+const CollectionTitle = ({ selected, onClick, className, title, Icon, amount }) => {
   const c = useStyles({ selected })
-  const models = R.pathOr([], ['models'])(user)
-  const modelAmount = models.length
-  return (
-    <div className={c.Home_Row} onClick={onClick}>
-      <ModelSquareIcon className={c.Home_Icon} selected={selected} />
-      Models {modelAmount}
-    </div>
-  )
-}
-
-const FoldersTitle = ({ _user, selected, onClick, className }) => {
-  const c = useStyles({ selected })
-  const { folders } = useStoreon('folders')
-  const folderAmount = folders && folders.data && folders.data.length
   return (
     <div className={classnames(className, c.Home_Row)} onClick={onClick}>
-      <FolderIcon className={c.Home_Icon} selected={selected} />
-      Folders {folderAmount}
+      <Icon className={c.Home_Icon} selected={selected} />
+      {amount ? [title, amount].join(' ') : title}
     </div>
   )
 }
-
-const ProfileButton = ({ viewedUser, className, c }) => {
-  const { user } = useCurrentUser()
-
-  if (!user || user.id !== viewedUser.id) {
-    return <ToggleFollowButton viewedUser={viewedUser} className={className} />
-  }
-
-  return (
-    <Link className={classnames(className, c.Profile_EditProfileLink)} to='/profile/edit'>
-      Edit Profile
-    </Link>
-  )
-}
-
-const getModels = R.pathOr([], ['models'])
 
 const PageContent = ({ user }) => {
   const c = useStyles({})
+  const currentUserId = useCurrentUserId()
+
   const { folders } = useStoreon('folders')
+
+  const {
+    atom: { data: models },
+  } = useFetchPerMount(currentUserId, 'user-own-models')
   const [selected, setSelected] = useState('models')
 
   const selectModels = () => setSelected('models')
   const selectFolders = () => setSelected('folders')
 
-  const models = getModels(user)
-
-  const sortedModels = models.sort((modelA, modelB) => {
-    if (modelA.created === modelB.created) return 0
-    if (modelA.created > modelB.created) return -1
-    else return 1
-  })
+  const sortedModels = ((Array.isArray(models) && models) || []).sort(
+    (modelA, modelB) => {
+      if (modelA.created === modelB.created) return 0
+      if (modelA.created > modelB.created) return -1
+      else return 1
+    }
+  )
 
   return (
     <div className={c.Home}>
@@ -138,20 +114,24 @@ const PageContent = ({ user }) => {
         />
         <div>
           <div className={c.Profile_Name}>{user.fullName}</div>
-          <ProfileButton className={c.Profile_ProfileButton} viewedUser={user} c={c} />
+          <ProfileButton className={c.Profile_ProfileButton} userId={currentUserId} />
         </div>
       </div>
       <div className={c.Home_TextHeader}>
-        <ModelsTitle
+        <CollectionTitle
           selected={selected === 'models'}
           onClick={selectModels}
-          user={user}
+          title={'Models'}
+          amount={((Array.isArray(models) && models) || []).length}
+          Icon={ModelSquareIcon}
         />
-        <FoldersTitle
-          className={c.Home_FoldersTitle}
+        <CollectionTitle
           selected={selected === 'folders'}
+          className={c.Home_FoldersTitle}
           onClick={selectFolders}
-          user={user}
+          title={'Folders'}
+          amount={((Array.isArray(folders.data) && folders.data) || []).length}
+          Icon={FolderIcon}
         />
       </div>
       <WithFlash>
@@ -170,17 +150,20 @@ const PageContent = ({ user }) => {
 }
 
 const Page = () => {
-  const { user, error, loading } = useCurrentUser()
+  const {
+    atom: { isLoading, isError, data: user },
+  } = useCurrentUser()
+
   const { dispatch, folders } = useStoreon('folders')
   useEffect(() => {
-    dispatch('fetch-folders')
+    dispatch(types.FETCH_FOLDERS)
   }, [dispatch])
 
-  if (loading || folders.isLoading) {
+  if (isLoading || folders.isLoading) {
     return <Spinner />
   }
 
-  if (error) {
+  if (isError) {
     return (
       <div data-cy='fetch-profile-error'>
         Error! We were not able to load this profile. Please try again later.

@@ -5,7 +5,6 @@ import Modal from 'react-modal'
 import md5 from 'md5'
 import { logger } from '@utilities/logging'
 import { Button } from '@components'
-import * as GraphqlService from '@services/graphql-service'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -58,8 +57,6 @@ const useStyles = createUseStyles(_theme => {
 
 Modal.setAppElement('#root')
 
-const graphqlService = GraphqlService.getInstance()
-
 const useModalOverlayStyles = createUseStyles(_theme => {
   return {
     '@global': {
@@ -97,13 +94,12 @@ const ChangeablePicture = ({ user, className }) => {
   const imageEl = useRef(null)
   const formRef = useRef(null)
   const buttonRef = useRef(null)
-  const [uploadAvatar] = graphqlService.useUploadUserAvatarMutation(user, croppedImg)
   const c = useStyles()
 
   const submitCrop = useCallback(() => {
-    uploadAvatar()
+    console.log('This needs changed to REST!', croppedImg, user)
     setIsCropping(false)
-  }, [uploadAvatar])
+  }, [croppedImg, user])
 
   const cancel = useCallback(() => {
     formRef.current.reset()

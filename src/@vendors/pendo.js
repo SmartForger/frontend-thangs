@@ -7,7 +7,7 @@ if (apiKey === undefined) {
 
 const shouldTrack = () => apiKey !== undefined
 
-const initialize = history => {
+const initialize = () => {
   if (shouldTrack()) {
     (function(p, e, n, d, o) {
       var v, w, x, y, z
@@ -31,19 +31,11 @@ const initialize = history => {
       z.parentNode.insertBefore(y, z)
     })(window, document, 'script', 'pendo')
 
-    window.pendo.initialize({
-      events: {
-        ready() {
-          trackPageview(history.location)
-        },
-      },
-    })
-
-    history.listen(trackPageview)
+    window.pendo.initialize()
   }
 }
 
-const identify = user => {
+const identify = (user, options = {}) => {
   if (!shouldTrack()) {
     return
   }
@@ -54,6 +46,7 @@ const identify = user => {
         id: user.id,
         name: user.username,
         email: user.email,
+        inviteCode: options.inviteCode || undefined,
       },
       // Accounts are a separate concept in Pendo's system, which group many
       // users. Currently we don't have a concept for this, so we can just
@@ -61,6 +54,7 @@ const identify = user => {
       account: {
         id: user.id,
         name: user.username,
+        inviteCode: options.inviteCode || undefined,
       },
     }
     : {}
@@ -79,12 +73,6 @@ const track = (type, data) => {
       track(type, data)
     }, 500)
   }
-}
-
-const trackPageview = location => {
-  const pageName = location.pathname
-  const query = location.search
-  track('Viewed page', { pageName, query })
 }
 
 export { initialize, identify, track }

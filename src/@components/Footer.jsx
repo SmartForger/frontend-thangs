@@ -17,10 +17,11 @@ const useStyles = createUseStyles(theme => {
       '& > p': {
         margin: 0,
         paddingLeft: '4rem',
+        fontWeight: 500,
       },
 
       '& > a': {
-        color: theme.colors.black[500],
+        color: theme.variables.colors.mainFontColor,
         paddingRight: '4rem',
       },
     },

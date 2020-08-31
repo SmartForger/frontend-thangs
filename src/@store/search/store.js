@@ -2,6 +2,8 @@ import api from '@services/api'
 import { storageService, intervalRequest } from '@services'
 import apiForChain from '@services/api/apiForChain'
 import { getStatusState, STATUSES } from '@store/constants'
+import * as types from '@constants/storeEventTypes'
+import * as pendo from '@vendors/pendo'
 
 const ATOMS = {
   THANGS: 'thangs',
@@ -65,11 +67,11 @@ const getInitAtom = () => ({
 })
 
 export default store => {
-  store.on('@init', () => ({
+  store.on(types.STORE_INIT, () => ({
     searchResults: getInitAtom(),
   }))
 
-  store.on('change-search-results-status', (state, { atom, status, data }) => ({
+  store.on(types.CHANGE_SEARCH_RESULTS_STATUS, (state, { atom, status, data }) => ({
     searchResults: {
       ...state.searchResults,
       [atom]: {
@@ -79,7 +81,7 @@ export default store => {
     },
   }))
 
-  store.on('error-search-results-for-phyndexer-polling', state => ({
+  store.on(types.ERROR_POLLING_PHYNDEXER, state => ({
     searchResults: {
       ...state.searchResults,
       phyndexer: {
@@ -88,13 +90,13 @@ export default store => {
       },
     },
   }))
-  store.on('reset-search-results', () => ({
+  store.on(types.RESET_SEARCH_RESULTS, () => ({
     searchResults: getInitAtom(),
   }))
   store.on(
-    'get-search-results-by-text',
+    types.GET_TEXT_SEARCH_RESULTS,
     async (_state, { searchTerm, onFinish = noop, onError = noop }) => {
-      store.dispatch('change-search-results-status', {
+      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.TEXT,
         status: STATUSES.LOADING,
       })
@@ -103,29 +105,41 @@ export default store => {
         method: 'GET',
         endpoint: `models/search-by-text?searchTerm=${searchTerm}`,
       })
+      pendo.track('Text Search Started', {
+        searchTerm,
+      })
 
       if (error) {
-        store.dispatch('change-search-results-status', {
+        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
           atom: ATOMS.TEXT,
           status: STATUSES.FAILURE,
           data: error,
         })
         onError(error)
       } else {
-        store.dispatch('change-search-results-status', {
+        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
           atom: ATOMS.TEXT,
           status: STATUSES.LOADED,
           data: { matches: data },
         })
+        pendo.track(
+          `Text Search - ${
+            data && data.length && data.length > 0 ? 'Results' : 'No Results'
+          }`,
+          {
+            searchTerm,
+            numOfMatches: (data && data.length) || 0,
+          }
+        )
 
         onFinish(error)
       }
     }
   )
   store.on(
-    'get-search-results-by-model',
+    types.GET_MODEL_SEARCH_RESULTS,
     (_state, { file, data, onFinish = noop, onError = noop }) => {
-      store.dispatch('change-search-results-status', {
+      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.PHYNDEXER,
         status: STATUSES.LOADING,
       })
@@ -157,14 +171,19 @@ export default store => {
         .then(({ data: uploadedData }) => {
           const { newPhyndexerId, newModelId } = uploadedData
 
-          store.dispatch('get-related-models-via-phyndexer', {
+          store.dispatch(types.GET_RELATED_MODELS_VIA_PHYNDEXER, {
             newPhyndexerId,
             newModelId,
             onFinish,
           })
+
+          pendo.track('Model Search Started', {
+            phyndexerId: newPhyndexerId,
+            modelId: `${newModelId}`,
+          })
         })
         .catch(error => {
-          store.dispatch('change-search-results-status', {
+          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
             atom: ATOMS.PHYNDEXER,
             status: STATUSES.FAILURE,
             data: error,
@@ -174,10 +193,10 @@ export default store => {
     }
   )
   store.on(
-    'get-related-models-via-thangs',
+    types.GET_RELATED_MODELS_VIA_THANGS,
     (_state, { modelId, onFinish = noop, onError = noop }) => {
       if (!modelId) return
-      store.dispatch('change-search-results-status', {
+      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.THANGS,
         status: STATUSES.LOADING,
       })
@@ -190,16 +209,27 @@ export default store => {
           })
         )
         .then(({ data }) => {
-          store.dispatch('change-search-results-status', {
+          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
             atom: ATOMS.THANGS,
             status: STATUSES.LOADED,
             data: data,
           })
 
+          pendo.track(
+            `Thangs Model Search - ${
+              data && data.matches && data.matches.length && data.matches.length > 0
+                ? 'Results'
+                : 'No Results'
+            }`,
+            {
+              modelId,
+              numOfMatches: (data && data.matches && data.matches.length) || 0,
+            }
+          )
           onFinish(data)
         })
         .catch(error => {
-          store.dispatch('change-search-results-status', {
+          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
             atom: ATOMS.THANGS,
             status: STATUSES.FAILURE,
             data: error,
@@ -209,17 +239,17 @@ export default store => {
     }
   )
   store.on(
-    'get-related-models-via-phyndexer',
+    types.GET_RELATED_MODELS_VIA_PHYNDEXER,
     async (_state, { newPhyndexerId, newModelId, onFinish = noop, onError = noop }) => {
       if (!newPhyndexerId) return
-      store.dispatch('change-search-results-status', {
+      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.PHYNDEXER,
         status: STATUSES.LOADING,
       })
 
       const { error: statusError } = await getPhynStatus({ newPhyndexerId })
       if (statusError) {
-        store.dispatch('error-search-results-for-phyndexer-polling', {
+        store.dispatch(types.ERROR_POLLING_PHYNDEXER, {
           data: statusError,
         })
       }
@@ -230,7 +260,7 @@ export default store => {
       })
 
       if (error) {
-        store.dispatch('change-search-results-status', {
+        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
           atom: ATOMS.PHYNDEXER,
           status: STATUSES.FAILURE,
           data: error,
@@ -238,11 +268,23 @@ export default store => {
         onFinish({ modelId: newModelId })
         return onError(error)
       } else {
-        store.dispatch('change-search-results-status', {
+        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
           atom: ATOMS.PHYNDEXER,
           status: STATUSES.LOADED,
           data,
         })
+
+        pendo.track(
+          `Phyndexer Model Search - ${
+            data && data.matches && data.matches.length && data.matches.length > 0
+              ? 'Results'
+              : 'No Results'
+          }`,
+          {
+            phyndexerId: newPhyndexerId,
+            numOfMatches: (data && data.matches && data.matches.length) || 0,
+          }
+        )
         onFinish({ modelId: newModelId })
       }
     }

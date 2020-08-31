@@ -1,10 +1,9 @@
 import React, { useCallback } from 'react'
 import { useForm } from '@hooks'
-import { authenticationService } from '@services'
-import * as GraphqlService from '@services/graphql-service'
 import { Button, TextInput } from '@components'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -32,16 +31,12 @@ const useStyles = createUseStyles(theme => {
         outline: 'none',
       },
     },
-    NewModalCommentForm_PostCommentButton: {},
   }
 })
 
-const graphqlService = GraphqlService.getInstance()
-
 const NewModelCommentForm = ({ modelId }) => {
   const c = useStyles()
-  const userId = authenticationService.getCurrentUserId()
-  const { user } = graphqlService.useUserById(userId)
+
   const { dispatch } = useStoreon()
 
   const initialState = {
@@ -52,24 +47,19 @@ const NewModelCommentForm = ({ modelId }) => {
     initialState,
   })
 
-  const [createModelComment] = graphqlService.useCreateModelCommentMutation({
-    modelId,
-  })
-
   const formSubmit = useCallback(
     async (inputState, isValid, _errors) => {
       if (isValid) {
-        await createModelComment({
-          variables: {
-            input: { ownerId: userId, modelId: `${modelId}`, body: inputState.body },
+        dispatch(types.NEW_MODEL_COMMENTS, {
+          id: modelId,
+          body: inputState.body,
+          onFinish: () => {
+            clearAllInputs()
           },
         })
-
-        dispatch('fetch-model-comments', { id: modelId })
-        clearAllInputs()
       }
     },
-    [clearAllInputs, createModelComment, dispatch, modelId, userId]
+    [clearAllInputs, dispatch, modelId]
   )
 
   const handleOnInputChange = useCallback(
@@ -78,10 +68,6 @@ const NewModelCommentForm = ({ modelId }) => {
     },
     [onInputChange]
   )
-
-  if (!user) {
-    return null
-  }
 
   return (
     <div>
@@ -96,9 +82,7 @@ const NewModelCommentForm = ({ modelId }) => {
           }}
           required
         />
-        <Button className={c.NewModalCommentForm_PostCommentButton} type='submit'>
-          Comment
-        </Button>
+        <Button type='submit'>Comment</Button>
       </form>
     </div>
   )

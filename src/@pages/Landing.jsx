@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { CardCollection, Layout, Button } from '@components'
 import { useCurrentUser } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg'
-import { ReactComponent as UploadIcon } from '@svg/icon-upload-3.svg'
+import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -57,7 +58,14 @@ const useStyles = createUseStyles(theme => {
       marginTop: '1.5rem',
       [md]: { display: 'block' },
     },
-    Landing_SearchByModelUploadButton_UploadIcon: { marginRight: '.5rem' },
+    Landing_SearchByModelUploadButton_UploadIcon: {
+      marginRight: '.5rem',
+
+      '& path': {
+        fill: theme.colors.purple[900],
+        stroke: theme.colors.purple[900],
+      },
+    },
     Landing_Background: {
       position: 'absolute',
       top: '-6rem',
@@ -68,7 +76,7 @@ const useStyles = createUseStyles(theme => {
 
 const Page = ({ user = {}, dispatch, modelPreviews }) => {
   useEffect(() => {
-    dispatch('fetch-model-previews')
+    dispatch(types.FETCH_MODEL_PREVIEW)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -107,12 +115,14 @@ const LandingHero = () => {
           </div>
           <div className={c.Landing_PromotionalSecondaryText}>
             Search for models in Thangs or upload your model and our powerful technology
-            will find all geometrically similar models. Connect with the Thangs community
+            will find all geometrically related models. Connect with the Thangs community
             to collaborate and share 3D models.
           </div>
           <div className={c.Landing_SearchByModelUploadButton}>
             <Button
-              onClick={() => dispatch('open-modal', { modalName: 'searchByUpload' })}
+              onClick={() =>
+                dispatch(types.OPEN_OVERLAY, { modalName: 'searchByUpload' })
+              }
             >
               <UploadIcon className={c.Landing_SearchByModelUploadButton_UploadIcon} />
               <span>Search by Model Upload</span>
@@ -140,12 +150,14 @@ const NewSignUpLandingHero = () => {
           </div>
           <div className={c.Landing_PromotionalSecondaryText}>
             Search for models in Thangs or upload your model and our powerful technology
-            will find all geometrically similar models. Connect with the Thangs community
+            will find all geometrically related models. Connect with the Thangs community
             to collaborate and share 3D models.
           </div>
           <div className={c.Landing_SearchByModelUploadButton}>
             <Button
-              onClick={() => dispatch('open-modal', { modalName: 'searchByUpload' })}
+              onClick={() =>
+                dispatch(types.OPEN_OVERLAY, { modalName: 'searchByUpload' })
+              }
             >
               <UploadIcon className={c.Landing_SearchByModelUploadButton_UploadIcon} />
               <span>Search by Model Upload</span>
@@ -167,22 +179,13 @@ const getHero = ({ loading, user, newSignUp }) => {
 }
 
 const Landing = ({ newSignUp }) => {
-  const { loading, user } = useCurrentUser()
+  const {
+    atom: { data: user, isLoading: loading },
+  } = useCurrentUser()
   const { dispatch, modelPreviews } = useStoreon('modelPreviews')
-  const [showUploadBarText, setShowUploadBarText] = useState(false)
-
-  useEffect(() => {
-    setTimeout(() => {
-      setShowUploadBarText(true)
-      setTimeout(() => {
-        setShowUploadBarText(false)
-      }, 4000)
-    }, 500)
-  }, [])
-
   const HeroComponent = getHero({ loading, user, newSignUp })
   return (
-    <Layout Hero={HeroComponent} showUploadBarText={showUploadBarText}>
+    <Layout Hero={HeroComponent} showSearchTextFlash={true}>
       <Page user={user} dispatch={dispatch} modelPreviews={modelPreviews} />
     </Layout>
   )

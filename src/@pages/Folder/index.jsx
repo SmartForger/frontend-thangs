@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 import * as R from 'ramda'
 import { useParams, useLocation } from 'react-router-dom'
-import { useCurrentUser } from '@hooks'
 import {
   Breadcrumbs,
   CardCollection,
@@ -14,6 +13,7 @@ import { Message404 } from '../404'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import ModelCardsByIds from '@components/CardCollection/ModelCardsByIds'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -57,18 +57,16 @@ const Page = () => {
   const { navigateWithFlash } = useFlashNotification()
 
   useEffect(() => {
-    dispatch('fetch-folder', { folderId, inviteCode })
+    dispatch(types.FETCH_FOLDER, { folderId, inviteCode })
   }, [dispatch, folderId, inviteCode])
 
-  const { loading: userLoading, error: userError, user } = useCurrentUser()
-
-  if (userLoading || folders.isLoading) {
+  if (folders.isLoading) {
     return <Spinner />
   } else if (R.isEmpty(folders.currentFolder)) {
     navigateWithFlash('/home', 'The folder entered does not exist')
-  } else if (!folders.currentFolder || !user) {
+  } else if (!folders.currentFolder) {
     return <Message404 />
-  } else if (userError || folders.loadError) {
+  } else if (folders.isError) {
     return <div>Error loading folder</div>
   }
 

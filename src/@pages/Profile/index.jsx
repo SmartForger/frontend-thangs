@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import * as R from 'ramda'
 import {
   CardCollection,
@@ -7,21 +7,23 @@ import {
   Layout,
   ProfilePicture,
   Spinner,
-  ToggleFollowButton,
+  ProfileButton,
 } from '@components'
 import ModelCards from '@components/CardCollection/ModelCards'
-import * as GraphqlService from '@services/graphql-service'
-import { useCurrentUser } from '@hooks'
 import { Message404 } from '../404'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as AboutIcon } from '@svg/about-icon.svg'
 import { ReactComponent as ModelIcon } from '@svg/model-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import useFetchOnce from '@hooks/useServices/useFetchOnce'
+import useFetchPerMount from '@hooks/useServices/useFetchPerMount'
 
 const useStyles = createUseStyles(theme => {
   return {
-    Profile: {},
+    Profile: {
+      width: '100%',
+    },
     Profile_Name: {
       ...theme.mixins.text.subheaderText,
       marginTop: '.5rem',
@@ -83,40 +85,8 @@ export * from './RedirectProfile'
 export * from './Likes'
 export * from './Home'
 
-const graphqlService = GraphqlService.getInstance()
-
-const ModelCount = ({ user }) => {
-  const models = R.pathOr([], ['models'])(user)
-  const { user: currentUser, loading } = useCurrentUser()
-  if (loading || !currentUser) {
-    return <Spinner />
-  }
-
-  const amount = models.length
-  return <span>Models {amount}</span>
-}
-
-const Models = ({ selected, onClick, user }) => {
+const TabTitle = ({ title, Icon, selected, onClick, amount }) => {
   const c = useStyles()
-  return (
-    <div
-      className={classnames(c.Profile_TabTitle, {
-        [c.Profile_TabTitle__active]: selected,
-      })}
-      onClick={onClick}
-    >
-      <div className={c.Profile_Icon}>
-        <ModelIcon />
-      </div>
-      <ModelCount user={user} />
-    </div>
-  )
-}
-
-const Likes = ({ selected, onClick, user }) => {
-  const c = useStyles()
-  const likes = getLikedModels(user)
-  const amount = likes.length
 
   return (
     <div
@@ -126,60 +96,47 @@ const Likes = ({ selected, onClick, user }) => {
       onClick={onClick}
     >
       <div className={c.Profile_Icon}>
-        <HeartIcon />
+        <Icon />
       </div>
-      <span>Likes {amount}</span>
+      <span>{amount ? [title, amount].join(' ') : title}</span>
     </div>
   )
 }
 
-const About = ({ selected, onClick, _user }) => {
-  const c = useStyles()
-  return (
-    <div
-      className={classnames(c.Profile_TabTitle, {
-        [c.Profile_TabTitle__active]: selected,
-      })}
-      onClick={onClick}
-    >
-      <div className={c.Profile_Icon}>
-        <AboutIcon />
-      </div>
-      <span>About</span>
-    </div>
-  )
-}
+const getDescription = R.pathOr('Empty', ['profile', 'description'])
 
-const getDescription = R.pathOr(null, ['profile', 'description'])
-const getModels = R.pathOr([], ['models'])
-const getLikedModels = R.pathOr([], ['likedModels'])
-
-const AboutContent = ({ selected, user }) => {
+const AboutContent = ({ selected, userId }) => {
   const c = useStyles()
+  const {
+    atom: { data: user },
+  } = useFetchOnce(userId, 'user')
+
   if (!selected) {
     return null
   }
+
   const description = getDescription(user)
   return <Markdown className={c.Profile_Markdown}>{description}</Markdown>
 }
 
-const ModelsContent = ({ selected, user }) => {
-  const models = getModels(user)
-  const { user: currentUser, loading } = useCurrentUser()
+const ModelsContent = ({ selected, modelsAtom }) => {
+  const { data: models, isLoading } = modelsAtom
 
   if (!selected) {
     return null
   }
 
-  if (loading || !currentUser) {
+  if (isLoading || !models) {
     return <Spinner />
   }
 
-  const sortedModels = models.sort((modelA, modelB) => {
-    if (modelA.created === modelB.created) return 0
-    if (modelA.created > modelB.created) return -1
-    else return 1
-  })
+  const sortedModels = ((Array.isArray(models) && models) || []).sort(
+    (modelA, modelB) => {
+      if (modelA.created === modelB.created) return 0
+      if (modelA.created > modelB.created) return -1
+      else return 1
+    }
+  )
 
   return (
     <CardCollection noResultsText='This user has not uploaded any models yet.'>
@@ -188,11 +145,17 @@ const ModelsContent = ({ selected, user }) => {
   )
 }
 
-const LikesContent = ({ selected, user }) => {
+const LikesContent = ({ selected, modelsAtom }) => {
+  const { data: models, isLoading } = modelsAtom
+
   if (!selected) {
     return null
   }
-  const models = getLikedModels(user)
+
+  if (isLoading || !models) {
+    return <Spinner />
+  }
+
   return (
     <CardCollection noResultsText='This user has not liked any models yet.'>
       <ModelCards items={models} />
@@ -200,7 +163,7 @@ const LikesContent = ({ selected, user }) => {
   )
 }
 
-const Tabs = ({ user }) => {
+const Tabs = ({ userId }) => {
   const [selected, setSelected] = useState('models')
 
   const selectModel = () => setSelected('models')
@@ -208,46 +171,55 @@ const Tabs = ({ user }) => {
   const selectAbout = () => setSelected('about')
   const c = useStyles()
 
+  const { atom: ownUserModelsAtom } = useFetchPerMount(userId, 'user-own-models')
+  const { atom: likedUserModelsAtom } = useFetchPerMount(userId, 'user-liked-models')
+
   return (
     <div className={c.Profile_TabGroupContainer}>
       <div className={c.Profile_TabTitleGroup}>
-        <Models selected={selected === 'models'} onClick={selectModel} user={user} />
-        <Likes selected={selected === 'likes'} onClick={selectLikes} user={user} />
-        <About selected={selected === 'about'} onClick={selectAbout} user={user} />
+        <TabTitle
+          title={'Models'}
+          Icon={ModelIcon}
+          selected={selected === 'models'}
+          onClick={selectModel}
+          amount={R.length(ownUserModelsAtom.data)}
+        />
+        <TabTitle
+          title={'likes'}
+          Icon={HeartIcon}
+          selected={selected === 'likes'}
+          onClick={selectLikes}
+          amount={R.length(likedUserModelsAtom.data)}
+        />
+        <TabTitle
+          title={'About'}
+          Icon={AboutIcon}
+          selected={selected === 'about'}
+          onClick={selectAbout}
+        />
       </div>
       <div className={c.Profile_TabContent}>
-        <ModelsContent selected={selected === 'models'} user={user} />
-        <LikesContent selected={selected === 'likes'} user={user} />
-        <AboutContent selected={selected === 'about'} user={user} />
+        <ModelsContent selected={selected === 'models'} modelsAtom={ownUserModelsAtom} />
+        <LikesContent selected={selected === 'likes'} modelsAtom={likedUserModelsAtom} />
+        <AboutContent selected={selected === 'about'} userId={userId} />
       </div>
     </div>
   )
 }
 
-const ProfileButton = ({ viewedUser, className }) => {
-  const c = useStyles()
-  const { user } = useCurrentUser()
-
-  if (!user || user.id !== viewedUser.id) {
-    return <ToggleFollowButton viewedUser={viewedUser} className={className} />
-  }
-
-  return (
-    <Link className={classnames(className, c.Profile_EditProfileLink)} to='/profile/edit'>
-      Edit Profile
-    </Link>
-  )
-}
-
 const Page = () => {
   const { id } = useParams()
-  const { loading, error, user } = graphqlService.useUserById(id)
   const c = useStyles()
-  if (loading) {
+
+  const {
+    atom: { isLoading, isError, data: user },
+  } = useFetchPerMount(id, 'user')
+
+  if (isLoading) {
     return <Spinner />
   }
 
-  if (error) {
+  if (isError) {
     return (
       <div data-cy='fetch-profile-error'>
         Error! We were not able to load this profile. Please try again later.
@@ -264,7 +236,7 @@ const Page = () => {
   }
 
   return (
-    <div>
+    <div className={c.Profile}>
       <div className={c.Profile_Row}>
         <ProfilePicture
           className={c.Profile_ProfilePicture}
@@ -274,10 +246,10 @@ const Page = () => {
         />
         <div>
           <div className={c.Profile_Name}>{user.fullName}</div>
-          <ProfileButton className={c.Profile_ProfileButton} viewedUser={user} />
+          <ProfileButton userId={id} className={c.Profile_ProfileButton} />
         </div>
       </div>
-      <Tabs user={user} />
+      <Tabs userId={id} />
     </div>
   )
 }

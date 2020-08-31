@@ -1,9 +1,10 @@
 import React from 'react'
 import * as R from 'ramda'
 import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
-import * as GraphqlService from '@services/graphql-service'
 import { Button } from '@components'
 import { createUseStyles } from '@style'
+import useServices from '@hooks/useServices'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -16,31 +17,39 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const graphqlService = GraphqlService.getInstance()
-
-const userIdsWhoHaveLiked = R.pipe(R.prop('likes'), R.map(R.path(['owner', 'id'])))
-
-const hasLikedModel = (model, user) => {
-  return R.includes(`${user.id}`, userIdsWhoHaveLiked(model))
+const hasLikedModel = (modelData, currentUserId) => {
+  return R.includes(currentUserId, modelData.likes)
 }
 
 const LikeModelButton = ({ currentUser, modelId }) => {
   const c = useStyles()
+  const currentUserId = parseInt(currentUser.id)
+  const { useFetchOnce } = useServices()
+  const {
+    atom: { data: modelData, isLoading, isError },
+    dispatch,
+  } = useFetchOnce(modelId, 'model')
 
-  const { loading, error, model } = graphqlService.useModelById(modelId)
-  const [likeModel] = graphqlService.useLikeModelMutation(currentUser.id, modelId)
-  const [unlikeModel] = graphqlService.useUnlikeModelMutation(currentUser.id, modelId)
+  const likeModel = () =>
+    dispatch(types.POST_LIKE_MODEL, { modelId: modelId, currentUserId: currentUserId })
+  const unlikeModel = () =>
+    dispatch(types.DELETE_LIKE_MODEL, { modelId: modelId, currentUserId: currentUserId })
 
-  if (loading || error) {
+  if (isLoading || isError) {
     return <div>Loading...</div>
   }
 
-  return hasLikedModel(model, currentUser) ? (
-    <Button className={c.LikeModelButton} disabled={loading} onClick={unlikeModel}>
+  return hasLikedModel(modelData, currentUserId) ? (
+    <Button className={c.LikeModelButton} disabled={isLoading} onClick={unlikeModel}>
       <HeartFilledIcon /> Liked!
     </Button>
   ) : (
-    <Button className={c.LikeModelButton} secondary disabled={loading} onClick={likeModel}>
+    <Button
+      className={c.LikeModelButton}
+      secondary
+      disabled={isLoading}
+      onClick={likeModel}
+    >
       <HeartFilledIcon /> Like
     </Button>
   )

@@ -14,6 +14,7 @@ import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -95,7 +96,7 @@ const RevokeAccessButton = ({ folderId, targetUserId, children }) => {
   const handleRevoke = async e => {
     e.preventDefault()
     try {
-      dispatch('revoke-folder-access', { folderId: folderId, userId: targetUserId })
+      dispatch(types.REVOKE_FOLDER_ACCESS, { folderId: folderId, userId: targetUserId })
     } catch (e) {
       console.error('e', e)
     }
@@ -105,7 +106,7 @@ const RevokeAccessButton = ({ folderId, targetUserId, children }) => {
     <Button text onClick={handleRevoke}>
       {folders.isLoading ? (
         <Spinner className={c.FolderManagement_Spinner} />
-      ) : folders.loadError ? (
+      ) : folders.isError ? (
         <ErrorIcon className={c.FolderManagement_Icon} />
       ) : (
         children
@@ -157,46 +158,6 @@ const UserList = ({ users = [], folderId, creator }) => {
     </ul>
   )
 }
-
-// const Team = ({ id, creator, folderId }) => {
-//   const c = useStyles({})
-//   const { dispatch, teams } = useStoreon('teams')
-
-//   useEffect(() => {
-//     dispatch('fetch-team', id)
-//   }, [dispatch, id])
-
-//   return teams.isLoaded ? (
-//     <>
-//       <div className={c.FolderManagement_TeamNameContainer}>
-//         <div
-//           className={c.FolderManagement_TeamName}
-//           key={teams && teams.currentTeam && teams.currentTeam.name}
-//         >
-//           {teams && teams.currentTeam && teams.currentTeam.name}
-//         </div>
-//       </div>
-//       <div className={c.FolderManagement_Row}>
-//         <ul
-//           className={c.FolderManagement_List}
-//           key={teams && teams.currentTeam && teams.currentTeam.members}
-//         >
-//           <UserList
-//             creator={creator}
-//             users={
-//               teams && teams.currentTeam && teams.currentTeam.members
-//                 ? teams.currentTeam.members
-//                 : []
-//             }
-//             folderId={folderId}
-//           />
-//         </ul>
-//       </div>
-//     </>
-//   ) : (
-//     <Spinner className={c.FolderManagement_Spinner} />
-//   )
-// }
 
 const FolderManagement = ({ folder, afterInvite, className }) => {
   const [errors, setErrors] = useState()

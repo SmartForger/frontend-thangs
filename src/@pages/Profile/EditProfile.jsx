@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 
 import { useCurrentUser } from '@hooks'
@@ -11,7 +11,7 @@ import {
   ProfilePicture,
   Spinner,
 } from '@components'
-import * as GraphqlService from '@services/graphql-service'
+
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -36,16 +36,10 @@ const useStyles = createUseStyles(_theme => {
     },
   }
 })
-
-const graphqlService = GraphqlService.getInstance()
-
-const PictureForm = ({ user, className }) => {
+const noop = () => null
+const PictureForm = ({ user, className, isLoading, handleDeleteAvatar = noop }) => {
   const c = useStyles()
-  const [deleteProfileAvatar, { loading }] = graphqlService.useDeleteUserAvatarMutation(
-    user
-  )
-  const onDelete = () => deleteProfileAvatar()
-  const deleteText = loading ? 'Deleting...' : 'Delete'
+  const deleteText = 'Delete' //loading ? 'Deleting...' : 'Delete'
 
   const currentAvatar = user && user.profile && user.profile.avatarUrl
   return (
@@ -61,7 +55,7 @@ const PictureForm = ({ user, className }) => {
           <ChangeablePicture user={user} />
 
           {currentAvatar && (
-            <Button dark onClick={onDelete} disabled={loading}>
+            <Button dark onClick={handleDeleteAvatar} disabled={isLoading}>
               {deleteText}
             </Button>
           )}
@@ -89,13 +83,24 @@ const WarningOnEmptyProfile = ({ user }) => {
 
 const Page = () => {
   const c = useStyles()
-  const { loading, error, user } = useCurrentUser()
+  const {
+    dispatch,
+    atom: { data: user, isLoading, isError },
+  } = useCurrentUser()
 
-  if (loading) {
+  const handleUpdateProfile = useCallback(() => {
+    console.log('This needs changed to REST!', 'updateUser()', dispatch)
+  }, [dispatch])
+
+  const handleDeleteAvatar = useCallback(() => {
+    console.log('This needs changed to REST!', 'deleteAvatar()', dispatch)
+  }, [dispatch])
+
+  if (isLoading) {
     return <Spinner />
   }
 
-  if (error || !user) {
+  if (isError || !user) {
     return (
       <div data-cy='fetch-results-error'>
         Error! We were not able to load your profile. Please try again later.
@@ -106,8 +111,13 @@ const Page = () => {
   return (
     <div>
       <WarningOnEmptyProfile user={user} />
-      <PictureForm className={c.EditProfile_PictureForm} user={user} />
-      <EditProfileForm user={user} />
+      <PictureForm
+        className={c.EditProfile_PictureForm}
+        handleDeleteAvatar={handleDeleteAvatar}
+        user={user}
+        isLoading={isLoading}
+      />
+      <EditProfileForm user={user} handleUpdateProfile={handleUpdateProfile} />
     </div>
   )
 }

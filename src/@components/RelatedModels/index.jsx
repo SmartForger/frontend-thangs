@@ -5,7 +5,6 @@ import { ReactComponent as LoadingIcon } from '@svg/image-loading-icon.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { isError, isProcessing } from '@utilities'
 import { logger } from '@utilities/logging'
-import * as GraphqlService from '@services/graphql-service'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -29,21 +28,17 @@ const useStyles = createUseStyles(theme => {
     },
     RelatedModels_Related: {
       gridArea: 'related',
+      marginBottom: '2rem',
     },
   }
 })
 
-const graphqlService = GraphqlService.getInstance()
-
 const RelatedModels = ({ modelId, className }) => {
   const c = useStyles()
-  const {
-    loading,
-    error,
-    model,
-    startPolling,
-    stopPolling,
-  } = graphqlService.useModelByIdWithRelated(modelId)
+  let loading = false //TEMP
+  let error = false //TEMP
+  let model = []
+  console.log('This needs changed to REST!', 'GET models/related/', modelId)
 
   if (loading) {
     return <Spinner />
@@ -52,15 +47,9 @@ const RelatedModels = ({ modelId, className }) => {
     return <Spinner />
   }
 
-  if (isProcessing(model)) {
-    startPolling(1000)
-  } else {
-    stopPolling()
-  }
-
   return (
     <div className={classnames(className, c.RelatedModels_Related)}>
-      <div className={c.RelatedModels_Header}>Geometrically Similar</div>
+      <div className={c.RelatedModels_Header}>Geometrically Related</div>
 
       {isProcessing(model) ? (
         <NoResults className={c.RelatedModels_NoResults}>
@@ -75,9 +64,11 @@ const RelatedModels = ({ modelId, className }) => {
       ) : (
         <CardCollection
           maxPerRow={3}
-          noResultsText='There were no geometrically similar matches found.'
+          noResultsText='There were no geometrically related matches found.'
         >
-          <ModelCards items={model && model.relatedModels} />
+          {model && model.relatedModels && model.relatedModels.length > 0 ? (
+            <ModelCards items={model && model.relatedModels} />
+          ) : null}
         </CardCollection>
       )}
     </div>

@@ -15,6 +15,7 @@ import { Message404 } from '../404'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -98,11 +99,11 @@ function Upload({ folder }) {
   useEffect(() => {
     if (uploadModel.isLoaded && !uploadModel.isError) {
       navigateWithFlash(`/folder/${folder.id}`, 'Model added successfully.')
-      dispatch('reset-upload-model')
+      dispatch(types.RESET_UPLOAD_MODEL)
     }
   }, [dispatch, navigateWithFlash, uploadModel, folder])
 
-  useEffect(() => () => dispatch('reset-upload-model'), [dispatch])
+  useEffect(() => () => dispatch(types.RESET_UPLOAD_MODEL), [dispatch])
 
   const onSubmit = useCallback(
     async data => {
@@ -122,7 +123,7 @@ function Upload({ folder }) {
         folderId: folder.id,
       }
 
-      dispatch('upload-model', {
+      dispatch(types.UPLOAD_MODEL, {
         file,
         data: {
           ...requiredVariables,
@@ -168,11 +169,11 @@ const Page = () => {
   const { folderId } = useParams()
   const {
     dispatch,
-    folders: { isLoading: loading, loadError: error, currentFolder },
+    folders: { isLoading: loading, isError: error, currentFolder },
   } = useStoreon('folders')
 
   useEffect(() => {
-    dispatch('fetch-folder', { folderId })
+    dispatch(types.FETCH_FOLDER, { folderId })
   }, [dispatch, folderId])
 
   const folder = currentFolder

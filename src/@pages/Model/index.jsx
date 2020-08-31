@@ -6,6 +6,7 @@ import {
   CommentsForModel,
   HoopsModelViewer,
   LikeModelButton,
+  ModelDetails,
   ModelTitle,
   ModelViewer as BackupViewer,
   Layout,
@@ -17,11 +18,12 @@ import {
 } from '@components'
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
 import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
-import { useLocalStorage, useModels } from '@hooks'
-import { ModelDetails } from '../ModelPreview/ModelDetails'
+import { useLocalStorage } from '@hooks'
 import { Message404 } from '../404'
 import { createUseStyles } from '@style'
 import { useServices } from '@hooks'
+import { useStoreon } from 'storeon/react'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -174,13 +176,19 @@ const useStyles = createUseStyles(theme => {
 
 function DownloadLink({ model }) {
   const c = useStyles()
-  const { useDownloadModel } = useModels()
-  const [isDownloading, hadError, downloadModel] = useDownloadModel(model)
+  const { dispatch, modelDownloadUrl } = useStoreon('modelDownloadUrl')
+  const downloadModel = () =>
+    dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
+      modelId: model.id,
+      onFinish: downloadUrl => {
+        window.open(downloadUrl)
+      },
+    })
   return (
     <Button text className={c.Model_DownloadButton} onClick={downloadModel}>
-      {isDownloading ? (
+      {modelDownloadUrl.isLoading ? (
         <ProgressText text='Downloading' />
-      ) : hadError ? (
+      ) : modelDownloadUrl.isError ? (
         'Server Error'
       ) : (
         'Download Model'
@@ -211,7 +219,6 @@ function Details({ currentUser, model, className }) {
   return (
     <div className={className}>
       {model.previousVersionModelId && <Revised modelId={model.previousVersionModelId} />}
-
       <ModelTitle model={model} />
       {model.id && (
         <LikeModelButton currentUser={currentUser} modelId={model.id} model={model} />

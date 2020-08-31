@@ -4,6 +4,7 @@ import { InviteFormForm, DisplayTeamFormErrors } from '@components'
 import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -42,7 +43,7 @@ const InviteForm = ({ afterCreate, onTeamModalOpen, ...props }) => {
   const c = useStyles()
   const [errors, setErrors] = useState()
   const handleOnCancel = useCallback(() => {
-    dispatch('open-modal', { modalName: 'createFolder' })
+    dispatch(types.OPEN_OVERLAY, { modalName: 'createFolder' })
   }, [dispatch])
   const handleOnTeamModalOpen = useCallback(() => {
     onTeamModalOpen()

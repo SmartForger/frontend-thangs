@@ -1,18 +1,19 @@
-import * as GraphqlService from '@services/graphql-service'
+import * as R from 'ramda'
 import { authenticationService } from '@services'
-import { useStoreon } from 'storeon/react'
-
-const graphqlService = GraphqlService.getInstance()
+import useFetchOnce from './useServices/useFetchOnce'
 
 const useCurrentUser = () => {
   const id = authenticationService.getCurrentUserId()
-  const { user: userStore } = useStoreon('user')
-  const { loading, error, user } = graphqlService.useUserById(id)
-  if (!id) {
-    return { loading: false, error: undefined, user: undefined }
+  const props = useFetchOnce(id, 'user')
+
+  if (R.isNil(id)) {
+    return {
+      dispatch: props.dispatch,
+      atom: { isLoading: false, isError: true, isLoaded: true },
+    }
+  } else {
+    return props
   }
-  if (user) user.models = [...userStore.models, ...user.models] //TEMP - This is to merge the user models cached by graphQL and new models uploaded as new versions - BE
-  return { loading, error, user }
 }
 
 export default useCurrentUser

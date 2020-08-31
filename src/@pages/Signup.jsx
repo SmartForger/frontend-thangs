@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { useHistory, useParams, useLocation } from 'react-router-dom'
+import { Link, useHistory, useParams, useLocation } from 'react-router-dom'
 import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
 import * as swearjar from '@utilities'
@@ -62,6 +62,26 @@ const useStyles = createUseStyles(theme => {
     Signup_Button: {
       margin: 0,
     },
+    Signup_ButtonRow: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      marginTop: '2rem',
+      justifyContent: 'flex-end',
+    },
+    Signup_ButtonWrapper: {
+      marginLeft: '1rem',
+      marginBottom: '1.5rem',
+    },
+    Signup_HasAccount: {
+      display: 'flex',
+      alignItems: 'center',
+      marginBottom: '1.5rem',
+    },
+    Signup_HasAccountButton: {
+      padding: '.5rem',
+      color: theme.colors.gold[500],
+      fontWeight: 'bold',
+    },
     Signup_TermsCheckbox: {
       display: 'flex',
       alignItems: 'center',
@@ -120,51 +140,31 @@ const Page = () => {
   const history = useHistory()
   const { registrationCode } = useParams()
 
-  const handleLoginREST = useCallback(async () => {
-    setWaiting(true)
-    setSignupErrorMessage(null)
-
-    const res = await authenticationService.restLogin({
-      password: inputState.password,
-    })
-
-    setWaiting(false)
-
-    if (res.status !== 200) {
-      setSignupErrorMessage(
-        res.data.detail || 'Sorry, we encounteed an unexpected error.  Please try again.'
-      )
-    }
-  }, [inputState])
-
   const handleSignUp = useCallback(async () => {
     setWaiting(true)
     setSignupErrorMessage(null)
 
-    const response = await authenticationService.signup({
+    const { error } = await authenticationService.signup({
       email: inputState.email,
       password: inputState.password,
-      registration_code: registrationCode,
-      first_name: inputState.firstName,
-      last_name: inputState.lastName,
+      registrationCode: registrationCode,
+      firstName: inputState.firstName,
+      lastName: inputState.lastName,
       username: inputState.username,
     })
 
     setWaiting(false)
-    if (response.status !== 201) {
-      const fields = Object.keys(response.data)
-      setInvalidFields(fields)
-      setSignupErrorMessage(response.data[fields[0]])
+    if (error) {
+      setSignupErrorMessage(error)
     } else {
       await authenticationService.login({
         email: inputState.email,
         password: inputState.password,
       })
-      await handleLoginREST()
       if (redirectUrl) return history.push(redirectUrl)
       history.push('/welcome')
     }
-  }, [handleLoginREST, history, inputState, redirectUrl, registrationCode])
+  }, [history, inputState, redirectUrl, registrationCode])
 
   const setFieldToValid = useCallback(
     fieldName => {
@@ -177,24 +177,6 @@ const Page = () => {
     },
     [invalidFields]
   )
-
-  const invalidForm = useMemo(() => {
-    if (!registrationCode) {
-      return false
-    }
-    if (
-      inputState.acceptedTerms &&
-      inputState.firstName &&
-      inputState.lastName &&
-      inputState.username &&
-      inputState.email &&
-      inputState.password &&
-      inputState.password === inputState.confirmPass
-    ) {
-      return false
-    }
-    return true
-  }, [inputState, registrationCode])
 
   const validateUsername = useCallback(() => {
     if (swearjar.profane(inputState.username)) {
@@ -340,32 +322,39 @@ const Page = () => {
             </label>
           </div>
         </div>
-        <div className={c.Signup_ButtonContainer}>
-          <div className={c.Signup_TermsCheckbox}>
-            <p>
-              By checking the box, you agree <br />
-              to the{' '}
-              <a href='/terms_and_conditions' target='_blank'>
-                terms and conditions
-              </a>{' '}
-              of this site.*
-            </p>
-            <input
-              type='checkbox'
-              value='Accepted Terms and Conditions'
-              checked={inputState.acceptedTerms}
-              onChange={e => {
-                handleOnInputChange('acceptedTerms', e.target.checked)
-              }}
-            />
+        <div className={c.Signup_TermsCheckbox}>
+          <p>
+            By checking the box, you agree <br />
+            to the{' '}
+            <a href='/terms_and_conditions' target='_blank'>
+              terms and conditions
+            </a>{' '}
+            of this site.*
+          </p>
+          <input
+            type='checkbox'
+            value='Accepted Terms and Conditions'
+            checked={inputState.acceptedTerms}
+            onChange={e => {
+              handleOnInputChange('acceptedTerms', e.target.checked)
+            }}
+            required
+          />
+        </div>
+        <div className={c.Signup_ButtonRow}>
+          <div className={c.Signup_HasAccount}>
+            <span>Already have an account?</span>
+            <Link to={'/login'}>
+              <Button className={c.Signup_HasAccountButton} text>
+                Sign In
+              </Button>
+            </Link>
           </div>
-          <Button
-            className={c.Signup_Button}
-            type='submit'
-            disabled={waiting || invalidForm}
-          >
-            Submit
-          </Button>
+          <div className={c.Signup_ButtonWrapper}>
+            <Button className={c.Signup_Button} type='submit'>
+              Submit
+            </Button>
+          </div>
         </div>
       </form>
     </div>
@@ -374,7 +363,7 @@ const Page = () => {
 
 export const Signup = () => {
   return (
-    <Layout>
+    <Layout showSearch={false}>
       <Page />
     </Layout>
   )

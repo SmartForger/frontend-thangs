@@ -5,10 +5,11 @@ import { Button, TextInput, UserInline } from '@components'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { authenticationService } from '@services'
 import classnames from 'classnames'
-import { useCurrentUser, useForm } from '@hooks'
+import { useForm, useCurrentUser } from '@hooks'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import { useServices } from '@hooks'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -235,7 +236,9 @@ const CreateTeamForm = ({
   newFolderData = {},
 }) => {
   const { dispatch } = useStoreon('folders')
-  const { user: currentUser } = useCurrentUser()
+  const {
+    atom: { data: currentUser },
+  } = useCurrentUser()
   const { useFetchPerMount } = useServices()
   const { atom: teams } = useFetchPerMount('teams')
   const { folderName, members = '' } = newFolderData
@@ -337,10 +340,10 @@ const CreateTeamForm = ({
         name: folderName,
         members: [inputState['teamName']],
       }
-      dispatch('add-team', {
+      dispatch(types.ADD_TEAM, {
         data: addTeamVariables,
         onFinish: () => {
-          dispatch('create-folder', {
+          dispatch(types.CREATE_FOLDER, {
             data: createFolderVariables,
             onFinish: folder => {
               afterCreate(folder)

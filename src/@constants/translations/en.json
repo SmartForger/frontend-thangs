@@ -1,0 +1,16 @@
+{
+    "header": {
+        "searchPlaceholderText": "Search By Text or Upload",
+        "searchTextTitle": "Search By Text",
+        "searchUploadText": "Upload for Search",
+        "signUpButtonText": "Sign up",
+        "signInButtonText": "Sign in",
+        "uploadButtonText": "Upload",
+        "dropdownMenu": {
+            "likedModels": "Liked Models",
+            "createFolder": "Create Folder",
+            "viewProfile": "View Profile",
+            "signOut": "Sign Out"
+        }
+    }
+}

@@ -4,6 +4,7 @@ import { CreateFolderForm, DisplayFolderFormErrors } from '@components'
 import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -45,7 +46,7 @@ const CreateFolder = ({ afterCreate }) => {
   const [errors, setErrors] = useState()
   const handleOnTeamModalOpen = useCallback(
     folderData => {
-      dispatch('open-modal', {
+      dispatch(types.OPEN_OVERLAY, {
         modalName: 'createTeam',
         modalData: { afterCreate, ...folderData },
       })

@@ -1,6 +1,5 @@
 import React from 'react'
-import * as R from 'ramda'
-import { useCurrentUser } from '@hooks'
+import {useServices, useCurrentUserId} from '@hooks'
 import { Spinner, CardCollection, Layout } from '@components'
 import { Message404 } from '../404'
 import ModelCards from '@components/CardCollection/ModelCards'
@@ -18,32 +17,32 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const getLikedModels = R.pathOr([], ['likedModels'])
-
-const LikesCount = ({ user, c }) => {
-  const likes = getLikedModels(user)
-  const amount = likes.length
-
-  return <div className={c.Likes_LikedModelsHeader}>Liked Models {amount}</div>
+const LikesCount = ({likedModels, c}) => {
+  const amount = likedModels && likedModels.length
+  if (amount) {
+    return <div className={c.Likes_LikedModelsHeader}>Liked Models {amount}</div>
+  }
+  return null
 }
 
-const LikesContent = ({ user }) => {
-  const models = getLikedModels(user)
+const LikesContent = ({ likedModels }) => {
   return (
     <CardCollection noResultsText='You have not liked any models yet.'>
-      <ModelCards items={models} likes={true} />
+      <ModelCards items={likedModels} />
     </CardCollection>
   )
 }
 
 const Page = () => {
-  const { user, loading, error } = useCurrentUser()
+  const { useFetchPerMount } = useServices()
+  const { atom: likedUserModelsAtom } = useFetchPerMount(useCurrentUserId(), 'user-liked-models')
+
   const c = useStyles()
-  if (loading) {
+  if (likedUserModelsAtom.isLoading) {
     return <Spinner />
   }
 
-  if (error) {
+  if (likedUserModelsAtom.isError) {
     return (
       <div data-cy='fetch-profile-error'>
         Error! We were not able to load this profile. Please try again later.
@@ -51,7 +50,7 @@ const Page = () => {
     )
   }
 
-  if (!user) {
+  if (!likedUserModelsAtom.data) {
     return (
       <div data-cy='fetch-profile-error'>
         <Message404 />
@@ -60,8 +59,8 @@ const Page = () => {
   }
   return (
     <div className={c.Likes}>
-      <LikesCount user={user} c={c} />
-      <LikesContent user={user} />
+      <LikesCount likedModels={likedUserModelsAtom.data} c={c} />
+      <LikesContent likedModels={likedUserModelsAtom.data} />
     </div>
   )
 }

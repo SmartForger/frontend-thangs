@@ -8,6 +8,7 @@ import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { createUseStyles } from '@style'
 import { useLocalStorage } from '@hooks'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -69,7 +70,7 @@ const useStyles = createUseStyles(theme => {
     },
     SearchResults_ReportModelButton: {
       width: '12rem',
-      marginTop: '4rem',
+      marginTop: '2rem',
       alignSelf: 'flex-start',
       color: theme.colors.purple[400],
 
@@ -205,18 +206,18 @@ const Page = () => {
   const [showReportModelButtons, setShowReportModelButtons] = useState(false)
   useEffect(() => {
     if (savedSearchQuery !== searchQuery || !savedSearchResults) {
-      dispatch('reset-search-results')
+      dispatch(types.RESET_SEARCH_RESULTS)
       setSavedSearchResults(null)
       setSavedSearchQuery(null)
       setSavedOriginalModelName(null)
       if (!modelId) {
-        dispatch('get-search-results-by-text', {
+        dispatch(types.GET_TEXT_SEARCH_RESULTS, {
           searchTerm: searchQuery,
         })
       }
     }
     if (modelId && modelId !== 'undefined')
-      dispatch('get-related-models-via-thangs', { modelId: modelId })
+      dispatch(types.GET_RELATED_MODELS_VIA_THANGS, { modelId: modelId })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery])
 
@@ -252,13 +253,13 @@ const Page = () => {
 
   const handleReportModel = useCallback(
     ({ model }) => {
-      dispatch('open-modal', {
+      dispatch(types.OPEN_OVERLAY, {
         modalName: 'reportModel',
         modalData: {
           model: model,
           afterSend: () => {
             setShowReportModelButtons(false)
-            dispatch('close-modal')
+            dispatch(types.CLOSE_OVERLAY)
           },
           onModalClose: () => {
             setShowReportModelButtons(false)
@@ -272,7 +273,9 @@ const Page = () => {
   return (
     <div className={c.SearchResults_Page}>
       <div className={c.SearchResults_Header}>
-        <div className={c.SearchResults_HeaderText}>Search Results for {searchQuery}</div>
+        <div className={c.SearchResults_HeaderText}>
+          Search Results for {decodeURIComponent(searchQuery)}
+        </div>
         <div>
           <Link to='/'>
             <Button light small>
@@ -308,7 +311,7 @@ const Page = () => {
       ) : (
         <NoResults>
           Begin typing to search models by name, description, owner, etc. Use search by
-          model to find geometrically similar matches to the model you upload.
+          model to find geometrically related matches to the model you upload.
         </NoResults>
       )}
       {savedSearchResults && savedSearchResults.length > 0 && (

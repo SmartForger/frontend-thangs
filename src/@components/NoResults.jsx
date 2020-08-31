@@ -1,5 +1,6 @@
 import React from 'react'
 import { createUseStyles } from '@style'
+import classnames from 'classnames'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -15,9 +16,9 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const NoResults = ({ children }) => {
+const NoResults = ({ children, className }) => {
   const c = useStyles()
-  return <div className={c.NoResults}>{children}</div>
+  return <div className={classnames(className, c.NoResults)}>{children}</div>
 }
 
 export default NoResults

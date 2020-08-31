@@ -8,6 +8,7 @@ import {
 } from '@components'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -45,11 +46,11 @@ const Upload = () => {
   )
 
   useEffect(() => {
-    dispatch('fetch-folders')
+    dispatch(types.FETCH_FOLDERS)
   }, [dispatch])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => () => dispatch('reset-upload-model'), [])
+  useEffect(() => () => dispatch(types.RESET_UPLOAD_MODEL), [])
 
   const onSubmit = useCallback(
     data => {
@@ -69,16 +70,16 @@ const Upload = () => {
         folderId: folder ? folder : undefined,
       }
 
-      dispatch('upload-model', {
+      dispatch(types.UPLOAD_MODEL, {
         file,
         data: {
           ...requiredVariables,
           ...optionalVariables,
         },
         onFinish: () => {
-          dispatch('close-modal')
+          dispatch(types.CLOSE_OVERLAY)
           navigateWithFlash('/home', 'Model added successfully.')
-          dispatch('reset-upload-model')
+          dispatch(types.RESET_UPLOAD_MODEL)
         },
       })
     },

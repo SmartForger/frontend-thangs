@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom'
 import { formatDistanceStrict } from 'date-fns'
 import { Markdown, Spinner, UserInline } from '@components'
 import NewModelCommentForm from './NewModelCommentForm'
-import { ReactComponent as VersionIcon } from '@svg/icon_version.svg'
+import VersionComment from './VersionComment'
 import { createUseStyles } from '@style'
 import { useServices } from '@hooks'
 
-const useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(_theme => {
   return {
     CommentsForModel: {
       display: 'flex',
@@ -21,40 +21,8 @@ const useStyles = createUseStyles(theme => {
         marginBottom: '2rem',
       },
     },
-    CommentsForModel_ProfilePicture: {
-      marginRight: '1rem',
-    },
-    CommentsForModel_TimeAgo: {
-      ...theme.mixins.text.commentPostedText,
-    },
-    CommentsForModel_FlexGrow: {
-      flexGrow: 1,
-    },
-    CommentsForModel_Name: {
-      ...theme.mixins.text.commentUsername,
-      marginBottom: '1rem',
-    },
-    CommentsForModel_Header: {
-      ...theme.mixins.text.subheaderText,
-    },
     CommentsForModel_CommentBody: {
       margin: '0.5rem 3rem 0',
-    },
-    CommentsForModel_VersionComment: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    CommentsForModel_VersionCommentInfo: {
-      marginLeft: '1rem',
-    },
-    CommentsForModel_VersionCommentOwner: {
-      ...theme.mixins.text.linkText,
-      fontSize: '.75rem',
-    },
-    CommentsForModel_VersionCommentDate: {
-      ...theme.mixins.text.footerText,
-      fontSize: '.75rem',
     },
   }
 })
@@ -93,41 +61,6 @@ const Comment = ({ comment }) => {
         />
       </Link>
       <Markdown className={c.CommentsForModel_CommentBody}>{body}</Markdown>
-    </li>
-  )
-}
-
-const VersionComment = ({ comment }) => {
-  const c = useStyles()
-  const {
-    owner,
-    body: { nextVersionId, name = '' },
-    created,
-  } = comment
-  const time = formatDistanceStrict(new Date(created), new Date())
-
-  if (!nextVersionId) {
-    return <></>
-  }
-
-  return (
-    <li className={c.CommentsForModel}>
-      <div className={c.CommentsForModel_VersionComment}>
-        <VersionIcon />
-        <div className={c.CommentsForModel_VersionCommentInfo}>
-          <div>
-            {`Version of ${name} `}
-            <Link to={`/model/${nextVersionId}`}>#{nextVersionId}</Link>
-            {' uploaded'}
-          </div>
-          <div className={c.CommentsForModel_VersionCommentOwner}>
-            {owner.fullName}
-            <span
-              className={c.CommentsForModel_VersionCommentDate}
-            >{` ${time} ago`}</span>
-          </div>
-        </div>
-      </div>
     </li>
   )
 }

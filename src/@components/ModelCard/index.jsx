@@ -1,5 +1,4 @@
-import React, { useCallback, useState } from 'react'
-import * as R from 'ramda'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
@@ -10,6 +9,7 @@ import { Button, Card, ModelThumbnail, UserInline } from '@components'
 import { THUMBNAILS_HOST, TIW_THUMBNAILS_HOST } from '@utilities/constants'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import useCurrentUserId from '../../@hooks/useCurrentUserId'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -71,7 +71,10 @@ const useStyles = createUseStyles(theme => {
         fill: theme.colors.gold[500],
       },
     },
-    ModelCard_Link: {
+    ModelCard_ExternalLink: {
+      zIndex: 1,
+    },
+    ModelCard_ThangsLink: {
       zIndex: 1,
     },
     ModelCard_ReportModelButton: {
@@ -95,7 +98,7 @@ const ThangsModelDetails = ({
 }) => {
   let modelName = model.name
   if (modelName && modelName.length > 40) modelName = modelName.slice(0, 40) + '...'
-  let modelLikeCount = model && model.likesCount
+  let modelLikeCount = model && model.likes && model.likes.length
   if (modelLikeCount && Array.isArray(modelLikeCount))
     modelLikeCount = modelLikeCount.length
   return (
@@ -259,22 +262,10 @@ const CardContents = ({
   )
 }
 
-const userIdsWhoHaveLiked = R.pipe(
-  R.prop('likes'),
-  R.filter(R.propEq('isLiked', true)),
-  R.map(R.path(['ownerId']))
-)
-
-const hasLikedModel = (model, user) => {
-  return R.includes(parseInt(user.id), userIdsWhoHaveLiked(model))
-}
-
 const ModelCard = ({
   className,
   model,
   withOwner,
-  user,
-  likes,
   showSocial = true,
   showWaldo,
   showReportModel,
@@ -282,11 +273,9 @@ const ModelCard = ({
   handleReportModel,
 }) => {
   const c = useStyles()
+  const currentUserId = parseInt(useCurrentUserId())
   const showOwner = withOwner && !!model.owner
-  const [hovered, setHovered] = useState(false)
-  const handleMouseEnter = useCallback(() => setHovered(true), [])
-  const handleMouseLeave = useCallback(() => setHovered(false), [])
-  const isLiked = user ? hasLikedModel(model, user) : likes
+  const isLiked = model && model.likes && model.likes.includes(currentUserId)
   const modelAttributionUrl =
     model && model.attributionUrl && encodeURI(model.attributionUrl)
   const modelPath = model.id ? `/model/${model.id}` : modelAttributionUrl
@@ -294,11 +283,10 @@ const ModelCard = ({
     <Anchor
       to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
       attributionUrl={modelAttributionUrl}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onFocus={handleMouseEnter}
-      onBlur={handleMouseLeave}
-      className={c.ModelCard_Link}
+      className={classnames({
+        [c.ModelCard_ExternalLink]: model.resultSource === 'phyndexer',
+        [c.ModelCard_ThangsLink]: model.resultSource !== 'phyndexer',
+      })}
       noLink={!modelPath || showReportModel}
     >
       <CardContents
@@ -307,7 +295,6 @@ const ModelCard = ({
         showOwner={showOwner}
         showSocial={showSocial}
         showWaldo={showWaldo}
-        hovered={hovered}
         c={c}
         isLiked={isLiked}
         modelAttributionUrl={modelAttributionUrl}

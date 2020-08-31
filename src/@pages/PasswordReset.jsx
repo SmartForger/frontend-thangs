@@ -158,7 +158,7 @@ const ResetPage = () => {
         <div className={c.PasswordReset_Fields}>
           <div className={c.PasswordReset_FormControl}>
             <label>
-              E-Mail
+              Email
               <TextInput
                 className={c.PasswordReset_TextInput}
                 disabled={waiting}
@@ -297,7 +297,7 @@ const ConfirmResetPage = () => {
 
 export const PasswordReset = () => {
   return (
-    <Layout>
+    <Layout showSearch={false}>
       <ResetPage />
     </Layout>
   )
@@ -305,7 +305,7 @@ export const PasswordReset = () => {
 
 export const ConfirmPasswordReset = () => {
   return (
-    <Layout>
+    <Layout showSearch={false}>
       <ConfirmResetPage />
     </Layout>
   )

@@ -42,10 +42,26 @@ const useStyles = createUseStyles(theme => {
       flexFlow: 'column nowrap',
       alignItems: 'center',
     },
-    Login_Button: {
-      margin: 0,
-      marginTop: '6rem',
-      float: 'right',
+    Login_Button: {},
+    Login_ButtonWrapper: {
+      marginLeft: '1rem',
+      marginBottom: '1.5rem',
+    },
+    Login_ButtonRow: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      marginTop: '2rem',
+      justifyContent: 'flex-end',
+    },
+    Login_NoAccount: {
+      display: 'flex',
+      alignItems: 'center',
+      marginBottom: '1.5rem',
+    },
+    Login_NoAccountButton: {
+      padding: '.5rem',
+      color: theme.colors.gold[500],
+      fontWeight: 'bold',
     },
     Login_FormControl: {
       marginTop: '2rem',
@@ -137,48 +153,27 @@ const Page = () => {
     }
   }, [inputState, setFieldToValid])
 
-  const handleLoginREST = useCallback(async () => {
+  const handleLogin = useCallback(async () => {
     setWaiting(true)
     setLoginErrorMessage(null)
 
-    const res = await authenticationService.restLogin({
+    const { data, error } = await authenticationService.login({
+      email: inputState.email,
       password: inputState.password,
     })
 
     setWaiting(false)
-
-    if (res.status !== 200) {
+    if (error) {
       setLoginErrorMessage(
-        res.data.detail || 'Sorry, we encounteed an unexpected error.  Please try again.'
+        data.detail || 'Sorry, we encounteed an unexpected error.  Please try again.'
       )
     } else {
       history.push('/')
     }
   }, [history, inputState])
 
-  const handleLogin = useCallback(async () => {
-    setWaiting(true)
-    setLoginErrorMessage(null)
-
-    const res = await authenticationService.login({
-      email: inputState.email,
-      password: inputState.password,
-    })
-
-    setWaiting(false)
-
-    if (res.status !== 200) {
-      setLoginErrorMessage(
-        res.data.detail || 'Sorry, we encounteed an unexpected error.  Please try again.'
-      )
-    } else {
-      await handleLoginREST()
-      history.push('/')
-    }
-  }, [handleLoginREST, history, inputState])
-
   return (
-    <Layout>
+    <Layout showSearch={false} showUser={false}>
       <div className={c.Login_Wrapper}>
         {isFromThePortal() ? (
           <Button back className={c.Login_BackButton} onClick={() => history.goBack()}>
@@ -202,7 +197,7 @@ const Page = () => {
             <div className={c.Login_Fields}>
               <div className={c.Login_FormControl}>
                 <label className={c.Login_Label}>
-                  E-Mail
+                  Email/Username
                   <TextInput
                     className={c.Login_TextInput}
                     type='text'
@@ -235,14 +230,26 @@ const Page = () => {
                 </label>
               </div>
             </div>
-            <Button className={c.Login_Button} type='submit'>
-              Sign In
-            </Button>
+            <div className={c.Login_ForgotText}>
+              Forgot password? <Link to='/password_reset'>Click here</Link> to reset your
+              password.
+            </div>
+            <div className={c.Login_ButtonRow}>
+              <div className={c.Login_NoAccount}>
+                <span>Don&apos;t have an account?</span>
+                <Link to={'/signup/alpha'}>
+                  <Button className={c.Login_NoAccountButton} text>
+                    Sign Up
+                  </Button>
+                </Link>
+              </div>
+              <div className={c.Login_ButtonWrapper}>
+                <Button className={c.Login_Button} type='submit'>
+                  Sign In
+                </Button>
+              </div>
+            </div>
           </form>
-          <div className={c.Login_ForgotText}>
-            Forgot password? <Link to='/password_reset'>Click here</Link> to reset your
-            password.
-          </div>
         </div>
       </div>
     </Layout>
