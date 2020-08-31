@@ -45,7 +45,6 @@ const useStyles = createUseStyles(theme => {
     Login_Button: {},
     Login_ButtonWrapper: {
       marginLeft: '1rem',
-      marginBottom: '1.5rem',
     },
     Login_ButtonRow: {
       display: 'flex',
@@ -230,19 +229,7 @@ const Page = () => {
                 </label>
               </div>
             </div>
-            <div className={c.Login_ForgotText}>
-              Forgot password? <Link to='/password_reset'>Click here</Link> to reset your
-              password.
-            </div>
             <div className={c.Login_ButtonRow}>
-              <div className={c.Login_NoAccount}>
-                <span>Don&apos;t have an account?</span>
-                <Link to={'/signup/alpha'}>
-                  <Button className={c.Login_NoAccountButton} text>
-                    Sign Up
-                  </Button>
-                </Link>
-              </div>
               <div className={c.Login_ButtonWrapper}>
                 <Button className={c.Login_Button} type='submit'>
                   Sign In
@@ -250,6 +237,18 @@ const Page = () => {
               </div>
             </div>
           </form>
+          <div className={c.Login_NoAccount}>
+            <span>Don&apos;t have an account?</span>
+            <Link to={'/signup/alpha'}>
+              <Button className={c.Login_NoAccountButton} text>
+                Sign Up
+              </Button>
+            </Link>
+          </div>
+          <div className={c.Login_ForgotText}>
+            Forgot password? <Link to='/password_reset'>Click here</Link> to reset your
+            password.
+          </div>
         </div>
       </div>
     </Layout>

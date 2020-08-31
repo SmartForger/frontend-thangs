@@ -209,26 +209,7 @@ const SignIn = ({ afterSignIn }) => {
             </label>
           </div>
         </div>
-        <div className={c.Login_ForgotText}>
-          Forgot password?
-          <Button
-            className={c.Login_ForgotButton}
-            text
-            onClick={() => dispatch(types.OPEN_OVERLAY, { modalName: 'passwordReset' })}
-          >
-            Click here
-          </Button>
-          to reset your password.
-        </div>
         <div className={c.Login_ButtonRow}>
-          <div className={c.Login_NoAccount}>
-            <span>Don&apos;t have an account?</span>
-            <Link to={'/signup/alpha'} onClick={() => dispatch(types.CLOSE_OVERLAY)}>
-              <Button className={c.Login_NoAccountButton} text>
-                Sign Up
-              </Button>
-            </Link>
-          </div>
           <div className={c.Login_ButtonWrapper}>
             <Button className={c.Login_Button} type='submit'>
               Sign In
@@ -236,6 +217,25 @@ const SignIn = ({ afterSignIn }) => {
           </div>
         </div>
       </form>
+      <div className={c.Login_NoAccount}>
+        <span>Don&apos;t have an account?</span>
+        <Link to={'/signup/alpha'} onClick={() => dispatch(types.CLOSE_OVERLAY)}>
+          <Button className={c.Login_NoAccountButton} text>
+            Sign Up
+          </Button>
+        </Link>
+      </div>
+      <div className={c.Login_ForgotText}>
+        Forgot password?
+        <Button
+          className={c.Login_ForgotButton}
+          text
+          onClick={() => dispatch(types.OPEN_OVERLAY, { modalName: 'passwordReset' })}
+        >
+          Click here
+        </Button>
+        to reset your password.
+      </div>
     </div>
   )
 }

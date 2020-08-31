@@ -70,7 +70,6 @@ const useStyles = createUseStyles(theme => {
     },
     Signup_ButtonWrapper: {
       marginLeft: '1rem',
-      marginBottom: '1.5rem',
     },
     Signup_HasAccount: {
       display: 'flex',
@@ -342,14 +341,6 @@ const Page = () => {
           />
         </div>
         <div className={c.Signup_ButtonRow}>
-          <div className={c.Signup_HasAccount}>
-            <span>Already have an account?</span>
-            <Link to={'/login'}>
-              <Button className={c.Signup_HasAccountButton} text>
-                Sign In
-              </Button>
-            </Link>
-          </div>
           <div className={c.Signup_ButtonWrapper}>
             <Button className={c.Signup_Button} type='submit'>
               Submit
@@ -357,6 +348,14 @@ const Page = () => {
           </div>
         </div>
       </form>
+      <div className={c.Signup_HasAccount}>
+        <span>Already have an account?</span>
+        <Link to={'/login'}>
+          <Button className={c.Signup_HasAccountButton} text>
+            Sign In
+          </Button>
+        </Link>
+      </div>
     </div>
   )
 }
