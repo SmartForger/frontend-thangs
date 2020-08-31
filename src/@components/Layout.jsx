@@ -10,7 +10,7 @@ import {
   SignIn,
   FolderManagement,
   ReportModel,
-} from '@modals'
+} from '@overlays'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
