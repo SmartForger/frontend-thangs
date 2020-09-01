@@ -78,6 +78,8 @@ export const CHANGE_USER_STATUS = 'change-user-status'
 export const UPDATE_USER_AVATAR = 'update-user-avatar'
 export const FETCH_USER = 'fetch-user'
 export const UPDATE_USER = 'update-user'
+export const FETCH_CURRENT_USER = 'fetch-currentUser'
+export const RESET_CURRENT_USER = 'reset-currentUser'
 /* User Liked Models Store Events */
 export const INIT_USER_LIKED_MODELS = 'init-user-liked-models'
 export const CHANGE_USER_LIKED_MODELS_STATUS = 'change-user-liked-models-status'

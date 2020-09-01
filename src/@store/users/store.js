@@ -7,14 +7,23 @@ import { logger } from '@utilities/logging'
 const noop = () => null
 
 export default store => {
-  store.on(types.STORE_INIT, () => ({}))
-
-  store.on(types.INIT_USER, (_, { id }) => ({
-    [`user-${id}`]: {
+  store.on(types.STORE_INIT, () => ({
+    currentUser: {
       ...getStatusState(STATUSES.INIT),
       data: {},
     },
   }))
+
+  store.on(types.INIT_USER, (_, { id }) => {
+    if (R.isNil(id)) return
+
+    return {
+      [`user-${id}`]: {
+        ...getStatusState(STATUSES.INIT),
+        data: {},
+      },
+    }
+  })
   store.on(types.CHANGE_USER_STATUS, (state, { atom, status = STATUSES.INIT, data }) => ({
     [atom]: {
       ...state[atom],
@@ -151,4 +160,35 @@ export default store => {
       },
     },
   }))
+  store.on(types.FETCH_CURRENT_USER, async (_, { id }) => {
+    store.dispatch(types.CHANGE_USER_STATUS, {
+      status: STATUSES.LOADING,
+      atom: 'currentUser',
+    })
+    const { data, error } = await api({
+      method: 'GET',
+      endpoint: `users/${id}`,
+    })
+
+    if (error) {
+      store.dispatch(types.CHANGE_USER_STATUS, {
+        status: STATUSES.FAILURE,
+        atom: 'currentUser',
+      })
+    } else {
+      store.dispatch(types.CHANGE_USER_STATUS, {
+        status: STATUSES.LOADED,
+        atom: 'currentUser',
+        data,
+      })
+    }
+  })
+
+  store.on(types.RESET_CURRENT_USER, () => {
+    store.dispatch(types.CHANGE_USER_STATUS, {
+      status: STATUSES.INIT,
+      atom: 'currentUser',
+      data: {},
+    })
+  })
 }
