@@ -2,7 +2,6 @@ import React from 'react'
 import CardCollection from './'
 import ModelCards from './ModelCards'
 import FolderCards from './FolderCards'
-import { withApolloProvider } from '../../../.storybook/withApolloProvider'
 import ThumbnailFixture from '../../../.storybook/fixtures/model-thumbnail.png'
 import UserImgFixture from '../../../.storybook/fixtures/user-img.png'
 
@@ -33,7 +32,6 @@ const folderFixture = {
 export default {
   title: 'CardCollection',
   component: CardCollection,
-  decorators: [withApolloProvider()],
 }
 
 export const SingleRowModels = () => {
