@@ -28,7 +28,7 @@ export default store => {
     [atom]: {
       ...state[atom],
       ...getStatusState(status),
-      data: { ...state[atom].data, ...data },
+      data,
     },
   }))
   store.on(types.FETCH_USER, async (_, { id, onFinish = noop }) => {
@@ -91,7 +91,7 @@ export default store => {
       })
       logger.error('Error when trying to update the user', error)
     } else {
-      store.dispatch(types.FETCH_USER, { id, onFinish })
+      store.dispatch(types.FETCH_CURRENT_USER, { id, onFinish })
     }
   })
   store.on('follow-user', async (_, { id, onFinish = noop, onError = noop }) => {
@@ -160,7 +160,7 @@ export default store => {
       },
     },
   }))
-  store.on(types.FETCH_CURRENT_USER, async (_, { id }) => {
+  store.on(types.FETCH_CURRENT_USER, async (_, { id, onFinish = noop }) => {
     store.dispatch(types.CHANGE_USER_STATUS, {
       status: STATUSES.LOADING,
       atom: 'currentUser',
@@ -174,6 +174,7 @@ export default store => {
       store.dispatch(types.CHANGE_USER_STATUS, {
         status: STATUSES.FAILURE,
         atom: 'currentUser',
+        data: {},
       })
     } else {
       store.dispatch(types.CHANGE_USER_STATUS, {
@@ -181,6 +182,7 @@ export default store => {
         atom: 'currentUser',
         data,
       })
+      onFinish()
     }
   })
 

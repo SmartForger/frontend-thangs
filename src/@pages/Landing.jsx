@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import * as R from 'ramda'
 import { CardCollection, Layout, Button } from '@components'
 import { useCurrentUser } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
@@ -170,7 +171,7 @@ const NewSignUpLandingHero = () => {
 }
 
 const getHero = ({ loading, user, newSignUp }) => {
-  if (!loading && !user) {
+  if (!loading && R.isEmpty(user)) {
     return LandingHero
   } else if (newSignUp) {
     return NewSignUpLandingHero

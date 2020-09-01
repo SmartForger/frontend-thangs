@@ -112,7 +112,11 @@ const Page = () => {
     [dispatch, navigateWithFlash]
   )
 
-  if (isError || !user) {
+  if (isLoading) {
+    return <Spinner />
+  }
+
+  if (isError) {
     return (
       <div data-cy='fetch-results-error'>
         Error! We were not able to load your profile. Please try again later.
@@ -122,23 +126,18 @@ const Page = () => {
 
   return (
     <div>
-      {R.isEmpty(user) ? (
-        <Spinner />
-      ) : (
-        <>
-          <WarningOnEmptyProfile user={user} />
-          <PictureForm
-            className={c.EditProfile_PictureForm}
-            user={user}
-            isLoading={isLoading}
-          />
-          <EditProfileForm
-            user={user}
-            handleUpdateProfile={handleUpdateProfile}
-            isLoading={isLoading}
-          />
-        </>
-      )}
+      <>
+        <WarningOnEmptyProfile user={user} />
+        <PictureForm
+          className={c.EditProfile_PictureForm}
+          user={user}
+        />
+        <EditProfileForm
+          user={user}
+          handleUpdateProfile={handleUpdateProfile}
+          isLoading={isLoading}
+        />
+      </>
     </div>
   )
 }
