@@ -328,10 +328,12 @@ const Page = () => {
   )
 }
 
-export const SearchResults = () => {
+const SearchResults = () => {
   return (
     <Layout>
       <Page />
     </Layout>
   )
 }
+
+export default SearchResults

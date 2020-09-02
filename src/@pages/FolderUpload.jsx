@@ -11,7 +11,7 @@ import {
   Uploader,
   useFlashNotification,
 } from '@components'
-import { Message404 } from '../404'
+import { Message404 } from './404'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
@@ -196,4 +196,4 @@ const FolderUpload = () => {
   )
 }
 
-export { FolderUpload }
+export default FolderUpload

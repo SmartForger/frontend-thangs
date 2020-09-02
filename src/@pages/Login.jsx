@@ -100,7 +100,7 @@ const useQuery = location => {
   return new URLSearchParams(location.search)
 }
 
-const Page = () => {
+const Login = () => {
   const [waiting, setWaiting] = useState(false)
   const [loginErrorMessage, setLoginErrorMessage] = useState(null)
   const [invalidFields, setInvalidFields] = useState([])
@@ -255,4 +255,4 @@ const Page = () => {
   )
 }
 
-export const Login = Page
+export default Login

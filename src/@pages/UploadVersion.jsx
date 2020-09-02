@@ -13,7 +13,7 @@ import {
 import { UPLOAD_MODES } from '@components/Uploader'
 import { createUseStyles } from '@style'
 import { useServices } from '@hooks'
-import { Message404 } from '../404'
+import { Message404 } from './404'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 
@@ -181,10 +181,12 @@ const Page = () => {
   )
 }
 
-export const UploadVersion = () => {
+const UploadVersion = () => {
   return (
     <Layout>
       <Page />
     </Layout>
   )
 }
+
+export default UploadVersion

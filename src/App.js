@@ -23,11 +23,11 @@ import {
   SearchResults,
   Signup,
   TermsAndConditions,
+  FolderPage,
+  FolderUpload,
+  Upload,
+  UploadVersion,
 } from '@pages'
-import { Upload } from '@pages/Upload'
-import { UploadVersion } from '@pages/UploadVersion'
-import { FolderPage } from '@pages/Folder'
-import { FolderUpload } from '@pages/FolderUpload'
 import { ErrorBoundary } from './ErrorBoundary'
 import { routeRequiresAnon, routeRequiresAuth } from '@components/RouteComponent'
 import { FlashContextProvider } from '@components/Flash'

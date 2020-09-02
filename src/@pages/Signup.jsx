@@ -360,10 +360,12 @@ const Page = () => {
   )
 }
 
-export const Signup = () => {
+const Signup = () => {
   return (
     <Layout showSearch={false}>
       <Page />
     </Layout>
   )
 }
+
+export default Signup
