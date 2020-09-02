@@ -1,18 +1,48 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import * as R from 'ramda'
 import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
 import { Button } from '@components'
 import { createUseStyles } from '@style'
 import useServices from '@hooks/useServices'
 import * as types from '@constants/storeEventTypes'
+import classnames from 'classnames'
 
 const useStyles = createUseStyles(_theme => {
   return {
+    '@-webkit-keyframes spinner': {
+      from: { '-webkit-transform': 'rotateY(0deg)' },
+      to: { '-webkit-transform': 'rotateY(-180deg)' },
+    },
+    '@keyframes spinner': {
+      from: {
+        '-moz-transform': 'rotateY(0deg)',
+        '-ms-transform': 'rotateY(0deg)',
+        transform: 'rotateY(0deg)',
+      },
+      to: {
+        '-moz-transform': 'rotateY(-180deg)',
+        '-ms-transform': 'rotateY(-180deg)',
+        transform: 'rotateY(-180deg)',
+      },
+    },
     LikeModelButton: {
-      marginTop: '2rem',
-      marginBottom: '1.5rem',
-      maxWidth: '7.75rem',
-      padding: '.5rem 1.5rem',
+      padding: '.5rem 1.25rem',
+    },
+    LikeModelIcon__liked: {
+      animation: '$spinner 250ms linear 0s 1',
+
+      '-webkit-transform-style': 'preserve-3d',
+      '-moz-transform-style': 'preserve-3d',
+      '-ms-transform-style': 'preserve-3d',
+      'transform-style': 'preserve-3d',
+    },
+    LikeModelIcon__unliked: {
+      animation: '$spinner 250ms linear 0s 1 reverse',
+
+      '-webkit-transform-style': 'preserve-3d',
+      '-moz-transform-style': 'preserve-3d',
+      '-ms-transform-style': 'preserve-3d',
+      'transform-style': 'preserve-3d',
     },
   }
 })
@@ -29,28 +59,41 @@ const LikeModelButton = ({ currentUser, modelId }) => {
     atom: { data: modelData, isLoading, isError },
     dispatch,
   } = useFetchOnce(modelId, 'model')
+  const [status, setStatus] = useState(undefined)
 
-  const likeModel = () =>
-    dispatch(types.LIKE_MODEL, { modelId: modelId, currentUserId: currentUserId })
-  const unlikeModel = () =>
-    dispatch(types.UNLIKE_MODEL, { modelId: modelId, currentUserId: currentUserId })
+  const handleLikeClicked = useCallback(() => {
+    const likeModel = () =>
+      dispatch(types.LIKE_MODEL, { modelId: modelId, currentUserId: currentUserId })
 
-  if (isLoading || isError) {
-    return <div>Loading...</div>
-  }
+    const unlikeModel = () =>
+      dispatch(types.UNLIKE_MODEL, { modelId: modelId, currentUserId: currentUserId })
 
-  return hasLikedModel(modelData, currentUserId) ? (
-    <Button className={c.LikeModelButton} disabled={isLoading} onClick={unlikeModel}>
-      <HeartFilledIcon /> Liked!
-    </Button>
-  ) : (
+    if (hasLikedModel(modelData, currentUserId)) {
+      unlikeModel()
+      setStatus('liked')
+    } else {
+      likeModel()
+      setStatus('unliked')
+    }
+
+    setTimeout(() => {
+      setStatus(undefined)
+    }, 250)
+  }, [currentUserId, dispatch, modelData, modelId])
+  return (
     <Button
-      className={c.LikeModelButton}
-      secondary
-      disabled={isLoading}
-      onClick={likeModel}
+      className={classnames(c.LikeModelButton)}
+      secondary={!hasLikedModel(modelData, currentUserId)}
+      disabled={isLoading || isError}
+      onClick={handleLikeClicked}
+      icon
     >
-      <HeartFilledIcon /> Like
+      <HeartFilledIcon
+        className={classnames({
+          [c.LikeModelIcon__liked]: status === 'liked',
+          [c.LikeModelIcon__unliked]: status === 'unliked',
+        })}
+      />
     </Button>
   )
 }

@@ -83,7 +83,7 @@ const useStyles = createUseStyles(theme => {
       width: '15rem',
 
       '&:hover': {
-        backgroundColor: theme.colors.white[700],
+        backgroundColor: theme.colors.white[800],
         borderRadiu: '.5rem',
       },
     },
@@ -114,7 +114,7 @@ const useStyles = createUseStyles(theme => {
       padding: '.5rem',
       cursor: 'pointer',
       '&:hover': {
-        backgroundColor: theme.colors.white[700],
+        backgroundColor: theme.colors.white[800],
         borderRadiu: '.5rem',
       },
     },

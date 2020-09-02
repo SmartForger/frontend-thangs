@@ -8,14 +8,14 @@ const maxWidth = '1440px'
 export const NewTheme = {
   variables: {
     colors: {
-      backgroundColor: colors.white[900],
+      backgroundColor: colors.white[600],
       cardBackground: colors.white[400],
       errorTextColor: colors.error,
       errorTextBackground: colors.errorBackground,
       flashColor: colors.purple[400],
       linkText: colors.blue[500],
       mainFontColor: colors.grey[700],
-      textInputBackground: colors.white[800],
+      textInputBackground: colors.white[700],
       textInputColor: colors.grey[700],
       textInputPlaceholderColor: colors.grey[300],
       uploaderText: colors.purple[300],
@@ -41,7 +41,7 @@ export const NewDarkTheme = {
       backgroundColor: colors.purple[900],
       linkText: colors.blue[300],
       mainFontColor: colors.grey[300],
-      textInputBackground: colors.white[900],
+      textInputBackground: colors.white[600],
     },
   },
 }

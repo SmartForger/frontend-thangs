@@ -18,8 +18,8 @@ const useStyles = createUseStyles(theme => {
     },
     Revised_Label: {
       display: 'flex',
-      marginBottom: '2rem',
       alignItems: 'center',
+      whiteSpace: 'nowrap',
 
       '& *:not(:first-child)': {
         marginLeft: '.25rem',
@@ -41,14 +41,11 @@ const Revised = ({ modelId }) => {
     return <Spinner />
   }
 
-  const { fullName, firstName, lastName } = R.path(['data', 'owner'], model) || {}
-  const resultName = fullName ? fullName : [firstName, lastName].join(' ')
-
   return (
     <div className={c.Revised_Label}>
       <VersionIcon className={c.Revised_VersionIcon} />
       <div>Revised from</div>
-      <Link to={`/model/${modelId}`}>{resultName || 'unknown'}</Link>
+      <Link to={`/model/${modelId}`}>{`#${modelId}` || 'unknown'}</Link>
     </div>
   )
 }

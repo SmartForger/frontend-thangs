@@ -56,7 +56,7 @@ const useStyles = createUseStyles(theme => {
       marginBottom: '1.5rem',
       borderRadius: '.5rem',
       minWidth: 0,
-      background: theme.colors.white[900],
+      background: theme.colors.white[600],
     },
     TeamForm_ControllerInput: {
       width: '100%',
@@ -91,7 +91,7 @@ const useStyles = createUseStyles(theme => {
         padding: '.5rem 1rem',
         borderRadius: '.5rem',
         minWidth: 0,
-        background: theme.colors.white[900],
+        background: theme.colors.white[600],
       },
     },
     TeamForm_AddButton: {

@@ -18,9 +18,9 @@ const useStyles = createUseStyles(_theme => {
       width: '1rem',
       height: '1rem',
     },
-    Button: {
-      marginTop: '1rem',
-      width: '6.25rem',
+    ToggleFollowButton: {
+      paddingTop: '.75rem',
+      paddingBottom: '.75rem',
     },
   }
 })
@@ -35,17 +35,26 @@ const ToggleFollowButton = ({ userId }) => {
   const c = useStyles()
   const isFollowing = user && user.isBeingFollowedByRequester
 
-  const handleClick = useCallback(e => {
-    e.preventDefault()
-    if (isFollowing) {
-      dispatch('unfollow-user', { id: userId })
-    } else {
-      dispatch('follow-user', { id: userId })
-    }
-  }, [dispatch, userId, isFollowing])
+  const handleClick = useCallback(
+    e => {
+      e.preventDefault()
+      if (isFollowing) {
+        dispatch('unfollow-user', { id: userId })
+      } else {
+        dispatch('follow-user', { id: userId })
+      }
+    },
+    [dispatch, userId, isFollowing]
+  )
 
   return (
-    <Button className={c.Button} disabled={isLoading || isError} onClick={handleClick}>
+    <Button
+      className={c.ToggleFollowButton}
+      disabled={isLoading || isError}
+      onClick={handleClick}
+      secondary={!isFollowing}
+      darkText
+    >
       {isLoading ? (
         <Spinner className={c.Spinner} />
       ) : isError ? (

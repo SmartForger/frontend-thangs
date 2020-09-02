@@ -39,7 +39,7 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.5rem',
       padding: '0',
       '&:hover': {
-        backgroundColor: theme.colors.white[700],
+        backgroundColor: theme.colors.white[800],
       },
     },
     DropdownMenu_Container: {

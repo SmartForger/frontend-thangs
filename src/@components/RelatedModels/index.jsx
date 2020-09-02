@@ -5,6 +5,7 @@ import { logger } from '@utilities/logging'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import useFetchPerMount from '@hooks/useServices/useFetchPerMount'
+import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -21,8 +22,14 @@ const useStyles = createUseStyles(theme => {
       height: '1.5rem',
     },
     RelatedModels_Header: {
-      ...theme.mixins.text.headerText,
+      ...theme.mixins.text.formCalloutText,
       marginBottom: '1.5rem',
+      display: 'flex',
+      alignItems: 'center',
+
+      '& > svg': {
+        marginRight: '.5rem',
+      },
     },
     RelatedModels_Related: {
       gridArea: 'related',
@@ -47,11 +54,14 @@ const RelatedModels = ({ modelId, className }) => {
 
   return (
     <div className={classnames(className, c.RelatedModels_Related)}>
-      <div className={c.RelatedModels_Header}>Geometrically Related</div>
+      <div className={c.RelatedModels_Header}>
+        <UploadIcon width={'1rem'} height={'1rem'} />
+        Geometrically Related
+      </div>
 
       <CardCollection
         maxPerRow={3}
-        noResultsText='There were no geometrically related matches found.'
+        noResultsText='No geometrically related matches found yet...'
       >
         {data && data.matches && data.matches.length > 0 ? (
           <ModelCards items={data.matches} />
