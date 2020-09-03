@@ -59,10 +59,7 @@ const RelatedModels = ({ modelId, className }) => {
         Geometrically Related
       </div>
 
-      <CardCollection
-        maxPerRow={3}
-        noResultsText='No geometrically related matches found yet...'
-      >
+      <CardCollection maxPerRow={3} noResultsText='No geometrically related matches yet.'>
         {data && data.matches && data.matches.length > 0 ? (
           <ModelCards items={data.matches} />
         ) : null}

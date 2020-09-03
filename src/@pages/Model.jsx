@@ -37,6 +37,8 @@ const useStyles = createUseStyles(theme => {
   return {
     Model: {
       width: '100%',
+      maxWidth: '76.5rem',
+      margin: '0 auto',
     },
     Model_Header: {
       display: 'flex',
@@ -62,10 +64,15 @@ const useStyles = createUseStyles(theme => {
         },
       },
     },
-    Model_MainColumn: {
-      width: '100%',
+    Model_LeftColumn: {
+      flexBasis: '2rem',
+      flexGrow: 2,
       maxWidth: '60rem',
       marginRight: '4rem',
+    },
+    Model_RightColumn: {
+      flexBasis: '1rem',
+      flexGrow: 1,
     },
     Model_Row__mobile: {
       [lg]: {
@@ -335,7 +342,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
           )}
         </div>
         <div className={c.Model_Row}>
-          <div className={c.Model_MainColumn}>
+          <div className={c.Model_LeftColumn}>
             <div>
               <div className={c.Model_ModelDescription}>{modelData.description}</div>
               <div className={c.Model_ModelDetails}>
@@ -343,17 +350,17 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
               </div>
               <hr className={c.Model_Rule} />
             </div>
+            <RelatedModels modelId={modelData.id} />
+            <hr className={c.Model_Rule} />
             <CommentsForModel model={modelData} />
           </div>
-          <div className={c.Model_Column}>
+          <div className={classnames(c.Model_Column, c.Model_RightColumn)}>
             <div>
               <DownloadLink model={modelData} />
               <ModelStats model={modelData} />
             </div>
             <hr className={c.Model_Rule} />
             <VersionUpload modelId={modelData.id} />
-            <hr className={c.Model_Rule} />
-            <RelatedModels modelId={modelData.id} />
           </div>
         </div>
       </div>
