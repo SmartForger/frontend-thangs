@@ -134,15 +134,14 @@ export function getApiUrl(path) {
 }
 
 const resetPasswordForEmail = async email => {
-  const url = getApiUrl('password_reset/')
+  const url = getApiUrl('auth/password-reset/')
   return axios.post(url, { email })
 }
 
-const setPasswordForReset = async ({ token, userId, password, confirmPassword }) => {
-  const url = getApiUrl('password_reset_confirm/')
+const setPasswordForReset = async ({ token, password, confirmPassword }) => {
+  const url = getApiUrl('auth/password-reset-confirm/')
   return axios.post(url, {
     token,
-    uidb64: userId,
     password,
     confirmPassword,
   })

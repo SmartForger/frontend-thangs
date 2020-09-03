@@ -109,7 +109,7 @@ const App = () => {
               />
               <Route exact path='/password_reset' component={PasswordReset} />
               <Route
-                path='/password_reset_confirm/:userId/:token'
+                path='/password_reset_confirm/:token'
                 component={ConfirmPasswordReset}
               />
               <Route

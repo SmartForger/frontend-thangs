@@ -132,8 +132,8 @@ const ResetPage = () => {
         e && e.response && e.response.data ? (
           <ServerErrors errors={e.response.data} />
         ) : (
-          'Unknown error. Try again.'
-        )
+            'Unknown error. Try again.'
+          )
       )
     } finally {
       setWaiting(false)
@@ -190,7 +190,7 @@ const ConfirmResetPage = () => {
   const [waiting, setWaiting] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
   const history = useHistory()
-  const { userId, token } = useParams()
+  const { token } = useParams()
   const c = useStyles()
 
   const initialState = {
@@ -218,7 +218,6 @@ const ConfirmResetPage = () => {
       await authenticationService.setPasswordForReset({
         ...inputState,
         token,
-        userId,
       })
 
       history.push('/')
@@ -227,13 +226,13 @@ const ConfirmResetPage = () => {
         e && e.response && e.response.data ? (
           <ServerErrors errors={e.response.data} />
         ) : (
-          'Unknown error. Try again.'
-        )
+            'Unknown error. Try again.'
+          )
       )
     } finally {
       setWaiting(false)
     }
-  }, [history, inputState, token, userId])
+  }, [history, inputState, token])
 
   return (
     <div className={c.PasswordReset}>
