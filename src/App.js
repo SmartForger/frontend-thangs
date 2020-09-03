@@ -85,6 +85,7 @@ const App = () => {
             <GlobalStyles />
             <Switch>
               <Route exact path='/' component={Landing} />
+              <Route path='/explore/:id' component={Landing} />
               <Route
                 path='/welcome'
                 render={props => <Landing {...props} newSignUp={true} />}

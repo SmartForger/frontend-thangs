@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import * as R from 'ramda'
+import { useParams } from 'react-router-dom'
 import { CardCollection, Layout, Button } from '@components'
 import { useCurrentUser } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
@@ -8,6 +9,7 @@ import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
+import * as pendo from '@vendors/pendo'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -180,6 +182,8 @@ const getHero = ({ loading, user, newSignUp }) => {
 }
 
 const Landing = ({ newSignUp }) => {
+  const { id } = useParams()
+  if (id) pendo.track('User referral', { referralChannel: id })
   const {
     atom: { data: user, isLoading: loading },
   } = useCurrentUser()
