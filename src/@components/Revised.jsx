@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import * as R from 'ramda'
 import { createUseStyles } from '@style'
 import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
 import { useServices } from '@hooks'

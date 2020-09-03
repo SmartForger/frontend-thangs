@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import * as R from 'ramda'
 import { useCurrentUser } from '@hooks'
 import {
   Button,
@@ -128,10 +127,7 @@ const Page = () => {
     <div>
       <>
         <WarningOnEmptyProfile user={user} />
-        <PictureForm
-          className={c.EditProfile_PictureForm}
-          user={user}
-        />
+        <PictureForm className={c.EditProfile_PictureForm} user={user} />
         <EditProfileForm
           user={user}
           handleUpdateProfile={handleUpdateProfile}
