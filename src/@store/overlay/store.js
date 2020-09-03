@@ -3,26 +3,26 @@ import * as types from '@constants/storeEventTypes'
 const getInitAtom = () => ({
   isOpen: false,
   isHidden: false,
-  currentModal: null,
-  modalData: null,
+  currentOverlay: null,
+  overlayData: null,
 })
 
 export default store => {
   store.on(types.STORE_INIT, () => ({
-    modal: getInitAtom(),
+    overlay: getInitAtom(),
   }))
-  store.on(types.OPEN_OVERLAY, (state, { modalName, modalData }) => ({
-    modal: {
+  store.on(types.OPEN_OVERLAY, (state, { overlayName, overlayData }) => ({
+    overlay: {
       isOpen: true,
-      currentModal: modalName,
-      modalData: modalData,
+      currentOverlay: overlayName,
+      overlayData: overlayData,
     },
   }))
   store.on(types.CLOSE_OVERLAY, () => ({
-    modal: {
+    overlay: {
       isOpen: false,
-      currentModal: null,
-      modalData: null,
+      currentOverlay: null,
+      overlayData: null,
     },
   }))
 }

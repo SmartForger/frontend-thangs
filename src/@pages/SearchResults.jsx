@@ -254,14 +254,14 @@ const Page = () => {
   const handleReportModel = useCallback(
     ({ model }) => {
       dispatch(types.OPEN_OVERLAY, {
-        modalName: 'reportModel',
-        modalData: {
+        overlayName: 'reportModel',
+        overlayData: {
           model: model,
           afterSend: () => {
             setShowReportModelButtons(false)
             dispatch(types.CLOSE_OVERLAY)
           },
-          onModalClose: () => {
+          onOverlayClose: () => {
             setShowReportModelButtons(false)
           },
         },
@@ -328,10 +328,12 @@ const Page = () => {
   )
 }
 
-export const SearchResults = () => {
+const SearchResults = () => {
   return (
     <Layout>
       <Page />
     </Layout>
   )
 }
+
+export default SearchResults

@@ -44,14 +44,15 @@ const AttrRow = ({ name, value }) => {
 
 const ModelDetails = ({ model, className }) => {
   const c = useStyles()
-  const category = model.category && titleCase(model.category)
+  const { category, material, weight, height } = model
+  if (!category && !material && !weight && !height) return null
   return (
     <table className={classnames(className, c.ModelDetails)}>
       <tbody>
         <AttrRow name='Material' value={model.material} />
         <AttrRow name='Weight' value={model.weight} />
         <AttrRow name='Height' value={model.height} />
-        <AttrRow name='Category' value={category} />
+        <AttrRow name='Category' value={category && titleCase(category)} />
       </tbody>
     </table>
   )

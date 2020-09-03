@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
-
 import { useCurrentUser } from '@hooks'
 import {
   Button,
@@ -10,10 +9,12 @@ import {
   Layout,
   ProfilePicture,
   Spinner,
+  useFlashNotification,
 } from '@components'
-
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import { useStoreon } from 'storeon/react'
+import * as types from '../../@constants/storeEventTypes'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -36,17 +37,20 @@ const useStyles = createUseStyles(_theme => {
     },
   }
 })
-const noop = () => null
-const PictureForm = ({ user, className, isLoading, handleDeleteAvatar = noop }) => {
+
+const PictureForm = ({ user, className }) => {
   const c = useStyles()
-  const deleteText = 'Delete' //loading ? 'Deleting...' : 'Delete'
+  const { dispatch, userUploadAvatar } = useStoreon('userUploadAvatar')
+  const onDelete = () => dispatch(types.DELETE_USER_AVATAR, { userId: user.id })
+  const deleteText =
+    userUploadAvatar && userUploadAvatar?.isLoading ? 'Deleting...' : 'Delete'
 
   const currentAvatar = user && user.profile && user.profile.avatarUrl
   return (
     <div className={classnames(className, c.EditProfile_Row)}>
       <ProfilePicture
         className={c.EditProfile_ProfilePicture}
-        size='80px'
+        size='5rem'
         name={user.fullName}
         src={currentAvatar}
       />
@@ -55,7 +59,11 @@ const PictureForm = ({ user, className, isLoading, handleDeleteAvatar = noop }) 
           <ChangeablePicture user={user} />
 
           {currentAvatar && (
-            <Button dark onClick={handleDeleteAvatar} disabled={isLoading}>
+            <Button
+              dark
+              onClick={onDelete}
+              disabled={userUploadAvatar && userUploadAvatar.isLoading}
+            >
               {deleteText}
             </Button>
           )}
@@ -87,20 +95,27 @@ const Page = () => {
     dispatch,
     atom: { data: user, isLoading, isError },
   } = useCurrentUser()
+  const { navigateWithFlash } = useFlashNotification()
 
-  const handleUpdateProfile = useCallback(() => {
-    console.log('This needs changed to REST!', 'updateUser()', dispatch)
-  }, [dispatch])
-
-  const handleDeleteAvatar = useCallback(() => {
-    console.log('This needs changed to REST!', 'deleteAvatar()', dispatch)
-  }, [dispatch])
+  const handleUpdateProfile = useCallback(
+    user => {
+      const { id, ...updatedUser } = user
+      dispatch(types.UPDATE_USER, {
+        id,
+        user: updatedUser,
+        onFinish: () => {
+          navigateWithFlash('/home', 'Your profile has been updated.')
+        },
+      })
+    },
+    [dispatch, navigateWithFlash]
+  )
 
   if (isLoading) {
     return <Spinner />
   }
 
-  if (isError || !user) {
+  if (isError) {
     return (
       <div data-cy='fetch-results-error'>
         Error! We were not able to load your profile. Please try again later.
@@ -110,14 +125,15 @@ const Page = () => {
 
   return (
     <div>
-      <WarningOnEmptyProfile user={user} />
-      <PictureForm
-        className={c.EditProfile_PictureForm}
-        handleDeleteAvatar={handleDeleteAvatar}
-        user={user}
-        isLoading={isLoading}
-      />
-      <EditProfileForm user={user} handleUpdateProfile={handleUpdateProfile} />
+      <>
+        <WarningOnEmptyProfile user={user} />
+        <PictureForm className={c.EditProfile_PictureForm} user={user} />
+        <EditProfileForm
+          user={user}
+          handleUpdateProfile={handleUpdateProfile}
+          isLoading={isLoading}
+        />
+      </>
     </div>
   )
 }

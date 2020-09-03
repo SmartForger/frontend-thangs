@@ -8,7 +8,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'column',
       background: theme.variables.colors.cardBackground,
-      border: `1px solid ${theme.colors.white[700]}`,
+      border: `1px solid ${theme.colors.white[800]}`,
       borderRadius: '.5rem',
       height: '14.75rem',
     },

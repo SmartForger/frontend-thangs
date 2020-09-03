@@ -23,10 +23,6 @@ const useStyles = createUseStyles(theme => {
       fontSize: '.75rem',
       textTransform: 'capitalize',
     },
-    UserInline_Suffix: {
-      ...theme.mixins.text.footerText,
-      fontSize: '.75rem',
-    },
   }
 })
 
@@ -36,7 +32,6 @@ const UserInline = ({
   displayEmail,
   size = '1.75rem',
   children,
-  suffix,
   isPending,
 }) => {
   const c = useStyles({ isPending })
@@ -59,7 +54,6 @@ const UserInline = ({
           >
             {userName}
           </div>
-          {suffix && <span className={c.UserInline_Suffix}>{suffix}</span>}
           {displayEmail && <div className={c.UserInline_Email}>{user.email}</div>}
         </span>
       </div>

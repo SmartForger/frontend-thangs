@@ -153,10 +153,12 @@ const Page = () => {
   )
 }
 
-export const Upload = () => {
+const Upload = () => {
   return (
     <Layout>
       <Page />
     </Layout>
   )
 }
+
+export default Upload

@@ -11,7 +11,6 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-      margin: '.5rem 0 2rem',
     },
     ModelTitle_Content: {
       flexDirection: 'column',
@@ -21,14 +20,20 @@ const useStyles = createUseStyles(theme => {
     },
     ModelTitle_Text: {
       ...theme.mixins.text.modelTitleText,
-      marginBottom: '.5rem',
+      marginBottom: '.25rem',
       whiteSpace: 'pre-wrap',
       wordBreak: 'break-word',
+    },
+    ModelTitle_ProfileAuthor: {
+      display: 'flex',
     },
     ModelTitle_ProfileLink: {
       ...theme.mixins.text.linkText,
       display: 'block',
       textDecoration: 'none',
+      marginLeft: '.25rem',
+      color: theme.colors.gold[500],
+      fontWeight: 600,
     },
   }
 })
@@ -42,7 +47,7 @@ const ModelTitle = ({ model, className }) => {
         <Link className={c.ModelTitle_ProfileLink} to={`/profile/${user.id}`}>
           <ProfilePicture
             className={c.ModelTitle_OwnerProfilePicture}
-            size='48px'
+            size='2.5rem'
             name={user.fullName}
             src={user.profile.avatarUrl}
           />
@@ -51,9 +56,12 @@ const ModelTitle = ({ model, className }) => {
       <div className={c.ModelTitle_Content}>
         <div className={c.ModelTitle_Text}>{model.name}</div>
         {user && (
-          <Link className={c.ModelTitle_ProfileLink} to={`/profile/${user.id}`}>
-            {user.fullName}
-          </Link>
+          <span className={c.ModelTitle_ProfileAuthor}>
+            by
+            <Link className={c.ModelTitle_ProfileLink} to={`/profile/${user.id}`}>
+              {user.fullName}
+            </Link>
+          </span>
         )}
       </div>
     </div>

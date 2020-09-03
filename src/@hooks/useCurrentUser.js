@@ -1,19 +1,25 @@
+import { useContext, useCallback } from 'react'
 import * as R from 'ramda'
-import { authenticationService } from '@services'
-import useFetchOnce from './useServices/useFetchOnce'
+import { StoreContext, useStoreon } from 'storeon/react'
+import * as storeEventTypes from '@constants/storeEventTypes'
+import useCurrentUserId from './useCurrentUserId'
 
 const useCurrentUser = () => {
-  const id = authenticationService.getCurrentUserId()
-  const props = useFetchOnce(id, 'user')
+  const currentId = useCurrentUserId()
 
-  if (R.isNil(id)) {
-    return {
-      dispatch: props.dispatch,
-      atom: { isLoading: false, isError: true, isLoaded: true },
-    }
-  } else {
-    return props
+  const { currentUser, dispatch } = useStoreon('currentUser')
+  const store = useContext(StoreContext)
+  const getCurrentUser = useCallback(() => store.get()['currentUser'], [store])
+
+  if (currentId && !getCurrentUser().isLoading && !getCurrentUser().isLoaded) {
+    dispatch(storeEventTypes.FETCH_CURRENT_USER, { id: currentId })
   }
+
+  if (!currentId && !R.isEmpty(getCurrentUser().data)) {
+    dispatch(storeEventTypes.RESET_CURRENT_USER)
+  }
+
+  return { atom: currentUser, dispatch }
 }
 
 export default useCurrentUser

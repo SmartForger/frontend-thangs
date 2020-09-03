@@ -49,12 +49,13 @@ const useStyles = createUseStyles(theme => {
   }
 })
 const noop = () => null
-const EditProfileForm = ({ user, isLoading, handleUpdateProfile = noop }) => {
+const EditProfileForm = ({ user = {}, isLoading, handleUpdateProfile = noop }) => {
   const c = useStyles()
 
   const initialState = {
     firstName: user.firstName,
-    emails: '',
+    lastName: user.lastName,
+    description: user.profile && user.profile.description,
   }
 
   const { onFormSubmit, onInputChange, inputState } = useForm({
@@ -69,14 +70,13 @@ const EditProfileForm = ({ user, isLoading, handleUpdateProfile = noop }) => {
   )
 
   const handleSubmit = useCallback(
-    async (data, e) => {
-      e.preventDefault()
+    async data => {
       handleUpdateProfile({
         id: user.id,
         firstName: data.firstName,
         lastName: data.lastName,
         profile: {
-          description: data.description,
+          description: data.description || '',
         },
       })
     },
@@ -84,10 +84,7 @@ const EditProfileForm = ({ user, isLoading, handleUpdateProfile = noop }) => {
   )
 
   return (
-    <form
-      className={c.EditProfileForm}
-      onSubmit={(data, e) => onFormSubmit(handleSubmit)(data, e)}
-    >
+    <form className={c.EditProfileForm} onSubmit={onFormSubmit(handleSubmit)}>
       <div className={c.EditProfileForm_Field}>
         <label className={c.EditProfileForm_label} htmlFor='firstName'>
           First Name
@@ -95,7 +92,7 @@ const EditProfileForm = ({ user, isLoading, handleUpdateProfile = noop }) => {
         <input
           className={c.EditProfileForm_input}
           name='firstName'
-          value={inputState.firstName}
+          value={inputState && inputState.firstName}
           placeholder='Enter first name...'
           onChange={e => {
             handleOnInputChange('firstName', e.target.value)
@@ -108,7 +105,7 @@ const EditProfileForm = ({ user, isLoading, handleUpdateProfile = noop }) => {
         <input
           className={c.EditProfileForm_input}
           name='lastName'
-          value={inputState.lastName}
+          value={inputState && inputState.lastName}
           placeholder='Enter last name...'
           onChange={e => {
             handleOnInputChange('lastName', e.target.value)
@@ -127,7 +124,7 @@ const EditProfileForm = ({ user, isLoading, handleUpdateProfile = noop }) => {
         <textarea
           className={c.EditProfileForm_textarea}
           name='description'
-          value={inputState.description}
+          value={inputState && inputState.description}
           placeholder='Add a bio...'
           onChange={e => {
             handleOnInputChange('description', e.target.value)
@@ -138,7 +135,13 @@ const EditProfileForm = ({ user, isLoading, handleUpdateProfile = noop }) => {
 
       <div className={c.EditProfileForm_ButtonContainer}>
         <Button className={c.EditProfileForm_Button} type='submit'>
-          {isLoading ? <Spinner /> : 'Save Changes'}
+          {isLoading ? (
+            <div>
+              <Spinner size={'1rem'} />
+            </div>
+          ) : (
+            'Save Changes'
+          )}
         </Button>
       </div>
     </form>

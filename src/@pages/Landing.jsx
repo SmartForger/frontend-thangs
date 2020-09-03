@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import * as R from 'ramda'
 import { CardCollection, Layout, Button } from '@components'
 import { useCurrentUser } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
@@ -121,7 +122,7 @@ const LandingHero = () => {
           <div className={c.Landing_SearchByModelUploadButton}>
             <Button
               onClick={() =>
-                dispatch(types.OPEN_OVERLAY, { modalName: 'searchByUpload' })
+                dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload' })
               }
             >
               <UploadIcon className={c.Landing_SearchByModelUploadButton_UploadIcon} />
@@ -156,7 +157,7 @@ const NewSignUpLandingHero = () => {
           <div className={c.Landing_SearchByModelUploadButton}>
             <Button
               onClick={() =>
-                dispatch(types.OPEN_OVERLAY, { modalName: 'searchByUpload' })
+                dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload' })
               }
             >
               <UploadIcon className={c.Landing_SearchByModelUploadButton_UploadIcon} />
@@ -170,7 +171,7 @@ const NewSignUpLandingHero = () => {
 }
 
 const getHero = ({ loading, user, newSignUp }) => {
-  if (!loading && !user) {
+  if (!loading && R.isEmpty(user)) {
     return LandingHero
   } else if (newSignUp) {
     return NewSignUpLandingHero

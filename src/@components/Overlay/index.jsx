@@ -11,20 +11,20 @@ ReactModal.setAppElement('#root')
 
 const useStyles = createUseStyles(_theme => {
   return {
-    Modal: {
+    Overlay: {
       position: 'relative',
       overflow: 'auto',
       outline: 'none',
       width: '100%',
       height: '100%',
     },
-    Modal_CloseButton: {
+    Overlay_CloseButton: {
       position: 'absolute',
       right: '3rem',
       top: '3rem',
       cursor: 'pointer',
     },
-    Modal_Content: {
+    Overlay_Content: {
       width: '90%',
       margin: '6rem auto 0',
       maxWidth: '32rem',
@@ -32,12 +32,12 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 const noop = () => null
-const Modal = ({ children, className, onModalClose = noop, ...props }) => {
+const Overlay = ({ children, className, onOverlayClose = noop, ...props }) => {
   const { dispatch } = useStoreon()
   const c = useStyles(props)
   return (
     <ReactModal
-      className={classnames(className, c.Modal)}
+      className={classnames(className, c.Overlay)}
       style={{
         overlay: {
           position: 'fixed',
@@ -52,17 +52,17 @@ const Modal = ({ children, className, onModalClose = noop, ...props }) => {
     >
       <Button
         text
-        className={c.Modal_CloseButton}
+        className={c.Overlay_CloseButton}
         onClick={() => {
-          onModalClose()
+          onOverlayClose()
           dispatch(types.CLOSE_OVERLAY)
         }}
       >
         <ExitIcon />
       </Button>
-      <div className={c.Modal_Content}>{children}</div>
+      <div className={c.Overlay_Content}>{children}</div>
     </ReactModal>
   )
 }
 
-export default Modal
+export default Overlay

@@ -6,10 +6,17 @@ import NewModelCommentForm from './NewModelCommentForm'
 import VersionComment from './VersionComment'
 import { createUseStyles } from '@style'
 import { useServices } from '@hooks'
+import classnames from 'classnames'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     CommentsForModel: {
+      ...theme.mixins.text.formCalloutText,
+      marginTop: '0.5rem',
+      fontSize: '1rem',
+      lineHeight: '1.5rem',
+    },
+    CommentsForModel_Comment: {
       display: 'flex',
       flexDirection: 'column',
     },
@@ -22,7 +29,14 @@ const useStyles = createUseStyles(_theme => {
       },
     },
     CommentsForModel_CommentBody: {
-      margin: '0.5rem 3rem 0',
+      margin: '0.25rem 2.375rem 0',
+    },
+    CommentsForModel_timestamp: {
+      ...theme.mixins.text.footerText,
+      fontSize: '.75rem',
+      margin: '1rem 2.375rem 0',
+      fontWeight: 600,
+      lineHeight: '.75rem',
     },
   }
 })
@@ -51,16 +65,16 @@ const Comment = ({ comment }) => {
   const time = formatDistanceStrict(new Date(created), new Date())
 
   return (
-    <li className={c.CommentsForModel}>
+    <li className={c.CommentsForModel_Comment}>
       <Link to={`/profile/${owner.id}`}>
         <UserInline
           className={c.CommentsForModel_UserInline}
           user={{ profile: owner }}
-          size={'3rem'}
-          suffix={`${time} ago`}
+          size={'1.875rem'}
         />
       </Link>
       <Markdown className={c.CommentsForModel_CommentBody}>{body}</Markdown>
+      <span className={c.CommentsForModel_timestamp}>{`${time} ago`}</span>
     </li>
   )
 }
@@ -85,7 +99,9 @@ const CommentsForModel = ({ model, className }) => {
   }
 
   return (
-    <div className={className}>
+    <div className={classnames(className, c.CommentsForModel)}>
+      {comments && comments.length}{' '}
+      {comments && comments.length && comments.length === 1 ? 'comment' : 'comments'}
       <NewModelCommentForm modelId={model.id} />
       <ul className={c.CommentsForModel_List}>
         {comments.map((comment, i) => renderTypedComment({ comment, key: i }))}

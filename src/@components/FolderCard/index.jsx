@@ -36,8 +36,8 @@ const CardContents = ({ className, folder }) => {
         onClick={e => {
           e.preventDefault()
           dispatch(types.OPEN_OVERLAY, {
-            modalName: 'upload',
-            modalData: { folderId: folder.id },
+            overlayName: 'upload',
+            overlayData: { folderId: folder.id },
           })
         }}
       >

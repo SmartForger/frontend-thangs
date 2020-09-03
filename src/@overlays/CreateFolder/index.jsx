@@ -44,11 +44,11 @@ const CreateFolder = ({ afterCreate }) => {
   const { dispatch } = useStoreon()
   const c = useStyles()
   const [errors, setErrors] = useState()
-  const handleOnTeamModalOpen = useCallback(
+  const handleonTeamOverlayOpen = useCallback(
     folderData => {
       dispatch(types.OPEN_OVERLAY, {
-        modalName: 'createTeam',
-        modalData: { afterCreate, ...folderData },
+        overlayName: 'createTeam',
+        overlayData: { afterCreate, ...folderData },
       })
     },
     [afterCreate, dispatch]
@@ -73,7 +73,7 @@ const CreateFolder = ({ afterCreate }) => {
         <CreateFolderForm
           onErrorReceived={setErrors}
           afterCreate={afterCreate}
-          onTeamModalOpen={handleOnTeamModalOpen}
+          onTeamOverlayOpen={handleonTeamOverlayOpen}
           includeNameField
         />
       </div>

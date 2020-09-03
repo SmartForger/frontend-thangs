@@ -76,7 +76,7 @@ export default store => {
       ...state.searchResults,
       [atom]: {
         ...getStatusState(status),
-        data: status === STATUSES.LOADING ? {} : data,
+        data,
       },
     },
   }))
@@ -245,6 +245,7 @@ export default store => {
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.PHYNDEXER,
         status: STATUSES.LOADING,
+        data: { newModelId },
       })
 
       const { error: statusError } = await getPhynStatus({ newPhyndexerId })

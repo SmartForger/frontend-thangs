@@ -9,7 +9,7 @@ import {
   useFlashNotification,
   WithFlash,
 } from '@components'
-import { Message404 } from '../404'
+import { Message404 } from './404'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import ModelCardsByIds from '@components/CardCollection/ModelCardsByIds'
@@ -26,7 +26,7 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-function Folder({ folder, modelCount }) {
+const Folder = ({ folder, modelCount }) => {
   const c = useStyles()
   return (
     <div className={c.Folder}>
@@ -74,10 +74,12 @@ const Page = () => {
   return <Folder folder={folders.currentFolder} modelCount={modelCount} />
 }
 
-export const FolderPage = () => {
+const FolderPage = () => {
   return (
     <Layout>
       <Page />
     </Layout>
   )
 }
+
+export default FolderPage

@@ -452,10 +452,12 @@ const Page = () => {
   )
 }
 
-export const TermsAndConditions = () => {
+const TermsAndConditions = () => {
   return (
     <Layout options={{ logoOnly: true }}>
       <Page />
     </Layout>
   )
 }
+
+export default TermsAndConditions

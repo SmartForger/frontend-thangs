@@ -48,9 +48,9 @@ const useStyles = createUseStyles(theme => {
     },
     Button__secondary: {
       ...theme.mixins.text.secondaryButtonText,
-      backgroundColor: theme.colors.purple[300],
+      backgroundColor: theme.colors.white[900],
       '&:hover': {
-        backgroundColor: theme.colors.purple[500],
+        backgroundColor: theme.colors.grey[100],
       },
     },
     Button__back: {
@@ -85,6 +85,9 @@ const useStyles = createUseStyles(theme => {
     },
     Button__icon: {
       padding: '.75rem',
+      '& > svg': {
+        margin: 0,
+      },
     },
   }
 })

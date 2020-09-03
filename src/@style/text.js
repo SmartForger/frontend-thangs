@@ -4,7 +4,7 @@ import { colors } from './colors.js'
 const LEXEND_DECA = 'Lexend Deca'
 
 export const flashToastText = {
-  color: colors.white[900],
+  color: colors.white[600],
 }
 
 export const tabNavigationText = {
@@ -28,8 +28,9 @@ export const profileAboutText = {
 }
 
 export const formCalloutText = {
-  fontSize: '1.125rem',
-  fontFamily: LEXEND_DECA,
+  fontSize: '1rem',
+  fontWeight: 600,
+  lineHeight: '1.5rem',
 }
 
 export const subheaderText = {
@@ -39,6 +40,9 @@ export const subheaderText = {
 
 export const modelTitleText = {
   fontSize: '1.125rem',
+  fontWeight: 600,
+  color: colors.purple[900],
+  lineHeight: '1.125rem',
 }
 
 export const darkPageTitleText = {
@@ -66,16 +70,16 @@ export const primaryButtonText = {
 }
 
 export const secondaryButtonText = {
-  color: colors.white[400],
+  color: colors.purple[900],
   fontWeight: 500,
 
-  '& > svg': {
-    fill: colors.white[400],
+  '& > svg, & g': {
+    fill: colors.purple[900],
   },
 }
 
 export const darkButtonText = {
-  color: colors.white[800],
+  color: colors.white[700],
   fontWeight: 500,
 }
 

@@ -5,25 +5,30 @@ import {
   Button,
   CommentsForModel,
   HoopsModelViewer,
+  Layout,
   LikeModelButton,
   ModelDetails,
   ModelTitle,
   ModelViewer as BackupViewer,
-  Layout,
   ProgressText,
   RelatedModels,
   Revised,
   Spinner,
+  ToggleFollowButton,
   useFlashNotification,
 } from '@components'
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
 import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
+import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
+import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
+import { ReactComponent as DateIcon } from '@svg/date-icon.svg'
 import { useLocalStorage } from '@hooks'
-import { Message404 } from '../404'
+import { Message404 } from './404'
 import { createUseStyles } from '@style'
 import { useServices } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
+import classnames from 'classnames'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -32,6 +37,8 @@ const useStyles = createUseStyles(theme => {
   return {
     Model: {
       width: '100%',
+      maxWidth: '76.5rem',
+      margin: '0 auto',
     },
     Model_Header: {
       display: 'flex',
@@ -41,35 +48,41 @@ const useStyles = createUseStyles(theme => {
     Model_Row: {
       display: 'flex',
       flexDirection: 'row',
-      marginTop: '1.5rem',
+      marginTop: '2rem',
       '&:first-of-type': {
-        marginTop: 0,
-      },
-      '& > div': {
-        flexGrow: 1,
+        marginTop: '1.5rem',
       },
     },
     Model_Column: {
       display: 'flex',
       flexDirection: 'column',
 
-      [lg]: {
-        marginRight: '3rem',
+      [md]: {
+        marginRight: '2rem',
         '&:last-of-type': {
           marginRight: 0,
         },
       },
     },
-    Model_Row__mobile: {
-      [lg]: {
+    Model_LeftColumn: {
+      flexBasis: '2rem',
+      flexGrow: 2,
+      maxWidth: '60rem',
+      marginRight: '4rem',
+    },
+    Model_RightColumn: {
+      flexBasis: '1rem',
+      flexGrow: 1,
+    },
+    Model__mobileOnly: {
+      [md]: {
         display: 'none',
       },
     },
-    Model_Column__desktop: {
+    Model__desktopOnly: {
       display: 'none',
-      [lg]: {
+      [md]: {
         display: 'block',
-        maxWidth: '35%',
       },
     },
     Model_ModelViewer: {
@@ -77,8 +90,8 @@ const useStyles = createUseStyles(theme => {
       overflow: 'hidden',
       flexDirection: 'column',
       height: '23.5rem',
-      margin: '0 -1rem',
-      width: 'calc(100% + 2rem)',
+      margin: '0 auto',
+      width: '100%',
 
       [sm]: {
         height: '28.75rem',
@@ -86,17 +99,33 @@ const useStyles = createUseStyles(theme => {
 
       [md]: {
         height: '37.5rem',
-        margin: 0,
-        width: '100%',
       },
 
       [lg]: {
         height: '38.5rem',
-        width: 'auto',
       },
 
       [xl]: {
         height: '38.5rem',
+      },
+    },
+    Model_ModelDescription: {
+      fontSize: '1rem',
+      lineHeight: '1.5rem',
+    },
+    Model_ModelDetails: {
+      marginTop: '2rem',
+    },
+    Model_Detail: {
+      justifyContent: 'space-between',
+      flexWrap: 'wrap',
+    },
+    Model_SocialButtons: {
+      display: 'flex',
+      alignItems: 'center',
+
+      '& > div': {
+        marginLeft: '1rem',
       },
     },
     Model_BackupViewer: {
@@ -114,23 +143,37 @@ const useStyles = createUseStyles(theme => {
     Model_OwnerProfilePicture: {
       marginRight: '1rem',
     },
-    Model_TitleText: {
-      ...theme.mixins.text.modelTitleText,
-      marginBottom: '.5rem',
-    },
     Model_ProfileLink: {
       ...theme.mixins.text.linkText,
       display: 'block',
       textDecoration: 'none',
     },
-    Model_Description: {
-      marginBottom: '1rem',
-    },
     Model_DownloadButton: {
-      ...theme.mixins.text.linkText,
-      width: '7.75rem',
-      textAlign: 'left',
-      marginBottom: '1rem',
+      width: '100%',
+    },
+    Model_ModelStats: {
+      display: 'flex',
+      flexDirection: 'column',
+      marginTop: '1.5rem',
+
+      '& > span': {
+        display: 'flex',
+        alignItems: 'center',
+        fontWeight: 500,
+        marginBottom: '.5rem',
+        '&:last-of-type': {
+          marginBottom: 0,
+        },
+      },
+
+      '& svg': {
+        marginRight: '.5rem',
+      },
+
+      '& svg, & path': {
+        fill: theme.colors.gold[500],
+        stroke: theme.colors.gold[500],
+      },
     },
     Model_VersionHeader: {
       ...theme.mixins.text.formCalloutText,
@@ -171,10 +214,15 @@ const useStyles = createUseStyles(theme => {
         fill: theme.colors.grey[700],
       },
     },
+    Model_Rule: {
+      margin: '2rem 0',
+      border: 'none',
+      borderTop: `1px solid ${theme.colors.white[900]}`,
+    },
   }
 })
 
-function DownloadLink({ model }) {
+const DownloadLink = ({ model }) => {
   const c = useStyles()
   const { dispatch, modelDownloadUrl } = useStoreon('modelDownloadUrl')
   const downloadModel = () =>
@@ -185,7 +233,7 @@ function DownloadLink({ model }) {
       },
     })
   return (
-    <Button text className={c.Model_DownloadButton} onClick={downloadModel}>
+    <Button className={c.Model_DownloadButton} onClick={downloadModel}>
       {modelDownloadUrl.isLoading ? (
         <ProgressText text='Downloading' />
       ) : modelDownloadUrl.isError ? (
@@ -194,6 +242,26 @@ function DownloadLink({ model }) {
         'Download Model'
       )}
     </Button>
+  )
+}
+
+const ModelStats = ({ model: _m }) => {
+  const c = useStyles()
+  return (
+    <div className={c.Model_ModelStats}>
+      <span>
+        <HeartIcon width={12} height={12} />
+        143 Likes
+      </span>
+      <span>
+        <DownloadIcon width={12} height={12} />
+        4321 Downloads
+      </span>
+      <span>
+        <DateIcon width={12} height={12} />
+        April 29, 2020
+      </span>
+    </div>
   )
 }
 
@@ -214,18 +282,36 @@ const VersionUpload = ({ modelId }) => {
   )
 }
 
-function Details({ currentUser, model, className }) {
+const Details = ({ currentUser, model }) => {
   const c = useStyles()
   return (
-    <div className={className}>
-      {model.previousVersionModelId && <Revised modelId={model.previousVersionModelId} />}
+    <div className={classnames(c.Model_Row, c.Model_Detail)}>
       <ModelTitle model={model} />
+      {model.previousVersionModelId && <Revised modelId={model.previousVersionModelId} />}
       {model.id && (
-        <LikeModelButton currentUser={currentUser} modelId={model.id} model={model} />
+        <div className={c.Model_SocialButtons}>
+          <div>
+            <ToggleFollowButton userId={currentUser.id} />
+          </div>
+          <div>
+            <LikeModelButton currentUser={currentUser} modelId={model.id} model={model} />
+          </div>
+        </div>
       )}
-      <div className={c.Model_Description}>{model.description}</div>
-      <DownloadLink model={model} />
-      <ModelDetails model={model} />
+    </div>
+  )
+}
+
+const StatsAndActions = ({ c, className, modelData }) => {
+  return (
+    <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
+      <div>
+        <DownloadLink model={modelData} />
+        <ModelStats model={modelData} />
+      </div>
+      <hr className={c.Model_Rule} />
+      <VersionUpload modelId={modelData.id} />
+      <hr className={c.Model_Rule} />
     </div>
   )
 }
@@ -252,52 +338,49 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   }
 
   return (
-    <>
-      <div className={c.Model}>
+    <div className={c.Model}>
+      {isFromThePortal() ? (
         <div className={c.Model_Header}>
-          {isFromThePortal() ? (
-            <Button back onClick={() => history.goBack()}>
-              <BackArrow />
-            </Button>
-          ) : null}
+          <Button back onClick={() => history.goBack()}>
+            <BackArrow />
+          </Button>
+        </div>
+      ) : null}
+      <div className={c.Model_Column}>
+        <Details currentUser={currentUser} model={modelData} />
+        <div className={c.Model_Row}>
+          {showBackupViewer ? (
+            <BackupViewer className={c.Model_BackupViewer} model={modelData} />
+          ) : (
+            <HoopsModelViewer className={c.Model_ModelViewer} model={modelData} />
+          )}
         </div>
         <div className={c.Model_Row}>
-          <div className={c.Model_Column}>
-            <div className={c.Model_Row}>
-              {showBackupViewer ? (
-                <BackupViewer className={c.Model_BackupViewer} model={modelData} />
-              ) : (
-                <HoopsModelViewer className={c.Model_ModelViewer} model={modelData} />
-              )}
+          <div className={c.Model_LeftColumn}>
+            <div>
+              <div className={c.Model_ModelDescription}>{modelData.description}</div>
+              <div className={c.Model_ModelDetails}>
+                <ModelDetails model={modelData} />
+              </div>
+              <hr className={c.Model_Rule} />
             </div>
-            <div className={c.Model_Row__mobile}>
-              <Details currentUser={currentUser} model={modelData} />
-            </div>
-            <div className={c.Model_Row}>
-              <RelatedModels modelId={modelData.id} />
-            </div>
-            <div className={c.Model_Row__mobile}>
-              <CommentsForModel model={modelData} />
-            </div>
+            <StatsAndActions
+              className={c.Model__mobileOnly}
+              c={c}
+              modelData={modelData}
+            />
+            <RelatedModels modelId={modelData.id} />
+            <hr className={c.Model_Rule} />
+            <CommentsForModel model={modelData} />
           </div>
-          <div className={c.Model_Column__desktop}>
-            <div className={c.Model_Row}>
-              <Details currentUser={currentUser} model={modelData} />
-            </div>
-            <div className={c.Model_Row}>
-              <VersionUpload modelId={modelData.id} />
-            </div>
-            <div className={c.Model_Row}>
-              <CommentsForModel model={modelData} />
-            </div>
-          </div>
+          <StatsAndActions className={c.Model__desktopOnly} c={c} modelData={modelData} />
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
-function Page() {
+const Page = () => {
   const { id } = useParams()
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [currentUser] = useLocalStorage('currentUser', null)
@@ -311,10 +394,12 @@ function Page() {
   )
 }
 
-export const ModelDetail = () => {
+const ModelDetail = () => {
   return (
     <Layout>
       <Page />
     </Layout>
   )
 }
+
+export default ModelDetail

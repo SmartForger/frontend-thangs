@@ -45,7 +45,7 @@ const useStyles = createUseStyles(theme => {
       marginBottom: '1.5rem',
       borderRadius: '.5rem',
       minWidth: 0,
-      background: theme.colors.white[900],
+      background: theme.colors.white[600],
     },
     InviteForm_ErrorText: {
       ...theme.mixins.text.formErrorText,
@@ -73,7 +73,7 @@ const useStyles = createUseStyles(theme => {
         padding: '.5rem 1rem',
         borderRadius: '.5rem',
         minWidth: 0,
-        background: theme.colors.white[900],
+        background: theme.colors.white[600],
         color: theme.variables.colors.textInput,
         '&:focus, &:active': {
           borderColor: theme.colors.gold[500],

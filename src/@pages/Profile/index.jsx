@@ -240,7 +240,7 @@ const Page = () => {
       <div className={c.Profile_Row}>
         <ProfilePicture
           className={c.Profile_ProfilePicture}
-          size='80px'
+          size='5rem'
           src={user && user.profile && user.profile.avatarUrl}
           name={user.fullName}
         />

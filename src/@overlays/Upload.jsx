@@ -39,10 +39,10 @@ const Upload = () => {
   const { navigateWithFlash } = useFlashNotification()
   const c = useStyles()
 
-  const { uploadModel, folders, modal, dispatch } = useStoreon(
+  const { uploadModel, folders, overlay, dispatch } = useStoreon(
     'uploadModel',
     'folders',
-    'modal'
+    'overlay'
   )
 
   useEffect(() => {
@@ -105,7 +105,9 @@ const Upload = () => {
             onSubmit={onSubmit}
             disableSubmit={!file}
             folders={folders.data}
-            selectedFolderId={modal && modal.modalData && modal.modalData.folderId}
+            selectedFolderId={
+              overlay && overlay.overlayData && overlay.overlayData.folderId
+            }
           />
         </div>
       )}

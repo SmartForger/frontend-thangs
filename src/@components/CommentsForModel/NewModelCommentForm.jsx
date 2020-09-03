@@ -7,17 +7,19 @@ import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
-    NewModalCommentForm: {
+    NewModelCommentForm: {
       display: 'flex',
-      marginBottom: '2.5rem',
+      margin: '2rem 0',
+      flexDirection: 'column',
+      alignItems: 'flex-end',
     },
-    NewModalCommentForm_Header: {
+    NewModelCommentForm_Header: {
       ...theme.mixins.text.formCalloutText,
       marginBottom: '1rem',
     },
-    NewModalCommentForm_PostCommentTextArea: {
+    NewModelCommentForm_PostCommentTextArea: {
       width: '100%',
-      marginRight: '.75rem',
+      marginBottom: '.75rem',
       resize: 'none',
       minHeight: '2.5rem',
       border: 'none',
@@ -70,21 +72,19 @@ const NewModelCommentForm = ({ modelId }) => {
   )
 
   return (
-    <div>
-      <div className={c.NewModalCommentForm_Header}>Add Comment</div>
-      <form className={c.NewModalCommentForm} onSubmit={onFormSubmit(formSubmit)}>
-        <TextInput
-          className={c.NewModalCommentForm_PostCommentTextArea}
-          name='body'
-          value={inputState && inputState.body}
-          onChange={e => {
-            handleOnInputChange('body', e.target.value)
-          }}
-          required
-        />
-        <Button type='submit'>Comment</Button>
-      </form>
-    </div>
+    <form className={c.NewModelCommentForm} onSubmit={onFormSubmit(formSubmit)}>
+      <TextInput
+        className={c.NewModelCommentForm_PostCommentTextArea}
+        name='body'
+        value={inputState && inputState.body}
+        onChange={e => {
+          handleOnInputChange('body', e.target.value)
+        }}
+        placeholder={'Add a public comment'}
+        required
+      />
+      <Button type='submit'>Comment</Button>
+    </form>
   )
 }
 

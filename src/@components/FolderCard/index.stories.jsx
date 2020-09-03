@@ -1,6 +1,5 @@
 import React from 'react'
 import FolderCard from './'
-import { withApolloProvider } from '../../../.storybook/withApolloProvider'
 import ThumbnailFixture from '../../../.storybook/fixtures/model-thumbnail.png'
 import UserImgFixture from '../../../.storybook/fixtures/user-img.png'
 import { createUseStyles } from '@style'
@@ -17,7 +16,6 @@ const useStyles = createUseStyles(_theme => {
 export default {
   title: 'FolderCard',
   component: FolderCard,
-  decorators: [withApolloProvider()],
 }
 
 const userFixture = {

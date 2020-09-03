@@ -1,12 +1,14 @@
 import React, { useState, useRef, useCallback } from 'react'
 import ReactCrop from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
-import Modal from 'react-modal'
+import ReactModal from 'react-modal'
 import md5 from 'md5'
 import { logger } from '@utilities/logging'
 import { Button } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import {useStoreon} from 'storeon/react'
+import * as types from '../@constants/storeEventTypes'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -55,7 +57,7 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-Modal.setAppElement('#root')
+ReactModal.setAppElement('#root')
 
 const useModalOverlayStyles = createUseStyles(_theme => {
   return {
@@ -94,12 +96,13 @@ const ChangeablePicture = ({ user, className }) => {
   const imageEl = useRef(null)
   const formRef = useRef(null)
   const buttonRef = useRef(null)
+  const { dispatch } = useStoreon('userUploadAvatar')
   const c = useStyles()
 
   const submitCrop = useCallback(() => {
-    console.log('This needs changed to REST!', croppedImg, user)
+    dispatch(types.UPLOAD_USER_AVATAR, {userId: user.id, file: croppedImg})
     setIsCropping(false)
-  }, [croppedImg, user])
+  }, [croppedImg, dispatch, user.id])
 
   const cancel = useCallback(() => {
     formRef.current.reset()
@@ -201,7 +204,7 @@ const ChangeablePicture = ({ user, className }) => {
         ref={imageEl}
       />
       <ModalOverlayStyles />
-      <Modal
+      <ReactModal
         className={c.ChangeablePicture_Modal}
         isOpen={isCropping}
         overlayClassName='img-cropper-modal-overlay'
@@ -222,7 +225,7 @@ const ChangeablePicture = ({ user, className }) => {
             Cancel
           </Button>
         </div>
-      </Modal>
+      </ReactModal>
     </form>
   )
 }

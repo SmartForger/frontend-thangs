@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react'
-import { Button } from '@components'
-// import { Button, Spinner } from '@components'
-// import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
+import { Button, Spinner } from '@components'
+import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { createUseStyles } from '@style'
+import useFetchPerMount from '@hooks/useServices/useFetchPerMount'
+import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -17,65 +18,53 @@ const useStyles = createUseStyles(_theme => {
       width: '1rem',
       height: '1rem',
     },
-    Button: {
-      marginTop: '1rem',
-      width: '6.25rem',
+    ToggleFollowButton: {
+      paddingTop: '.75rem',
+      paddingBottom: '.75rem',
     },
   }
 })
 
-const FollowButton = ({ _user, viewedUser }) => {
+const ToggleFollowButton = ({ userId }) => {
+  const {
+    atom: { isLoading, isError, data: user },
+  } = useFetchPerMount(userId, 'user')
+
+  const { dispatch } = useStoreon()
+
   const c = useStyles()
+  const isFollowing = user && user.isBeingFollowedByRequester
+
   const handleClick = useCallback(
     e => {
       e.preventDefault()
-      console.log('This needs changed to REST!', 'followUser()', viewedUser)
+      if (isFollowing) {
+        dispatch('unfollow-user', { id: userId })
+      } else {
+        dispatch('follow-user', { id: userId })
+      }
     },
-    [viewedUser]
+    [dispatch, userId, isFollowing]
   )
 
   return (
-    <Button className={c.Button} onClick={handleClick}>
-      {/* {loading ? (
+    <Button
+      className={c.ToggleFollowButton}
+      disabled={isLoading || isError}
+      onClick={handleClick}
+      secondary={!isFollowing}
+      darkText
+    >
+      {isLoading ? (
         <Spinner className={c.Spinner} />
-      ) : error ? (
+      ) : isError ? (
         <ErrorIcon className={c.ErrorIcon} />
-      ) : ( */}
-      Follow
-      {/* )} */}
+      ) : isFollowing ? (
+        'Unfollow'
+      ) : (
+        'Follow'
+      )}
     </Button>
-  )
-}
-
-const UnfollowButton = ({ _user, viewedUser }) => {
-  const c = useStyles()
-  const handleClick = useCallback(
-    e => {
-      e.preventDefault()
-      console.log('This needs changed to REST!', 'followUser()', viewedUser)
-    },
-    [viewedUser]
-  )
-
-  return (
-    <Button className={c.Button} onClick={handleClick}>
-      {/* {loading ? (
-        <Spinner className={c.Spinner} />
-      ) : error ? (
-        <ErrorIcon className={c.ErrorIcon} />
-      ) : ( */}
-      Unfollow
-      {/* )} */}
-    </Button>
-  )
-}
-
-const ToggleFollowButton = ({ viewedUser }) => {
-  const isFollowing = viewedUser.isBeingFollowedByRequester
-  return isFollowing ? (
-    <UnfollowButton viewedUser={viewedUser} />
-  ) : (
-    <FollowButton viewedUser={viewedUser} />
   )
 }
 
