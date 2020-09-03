@@ -74,16 +74,15 @@ const useStyles = createUseStyles(theme => {
       flexBasis: '1rem',
       flexGrow: 1,
     },
-    Model_Row__mobile: {
-      [lg]: {
+    Model__mobileOnly: {
+      [md]: {
         display: 'none',
       },
     },
-    Model_Column__desktop: {
+    Model__desktopOnly: {
       display: 'none',
-      [lg]: {
+      [md]: {
         display: 'block',
-        maxWidth: '35%',
       },
     },
     Model_ModelViewer: {
@@ -119,6 +118,7 @@ const useStyles = createUseStyles(theme => {
     },
     Model_Detail: {
       justifyContent: 'space-between',
+      flexWrap: 'wrap',
     },
     Model_SocialButtons: {
       display: 'flex',
@@ -302,6 +302,20 @@ const Details = ({ currentUser, model }) => {
   )
 }
 
+const StatsAndActions = ({ c, className, modelData }) => {
+  return (
+    <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
+      <div>
+        <DownloadLink model={modelData} />
+        <ModelStats model={modelData} />
+      </div>
+      <hr className={c.Model_Rule} />
+      <VersionUpload modelId={modelData.id} />
+      <hr className={c.Model_Rule} />
+    </div>
+  )
+}
+
 const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   const c = useStyles()
   const history = useHistory()
@@ -350,18 +364,16 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
               </div>
               <hr className={c.Model_Rule} />
             </div>
+            <StatsAndActions
+              className={c.Model__mobileOnly}
+              c={c}
+              modelData={modelData}
+            />
             <RelatedModels modelId={modelData.id} />
             <hr className={c.Model_Rule} />
             <CommentsForModel model={modelData} />
           </div>
-          <div className={classnames(c.Model_Column, c.Model_RightColumn)}>
-            <div>
-              <DownloadLink model={modelData} />
-              <ModelStats model={modelData} />
-            </div>
-            <hr className={c.Model_Rule} />
-            <VersionUpload modelId={modelData.id} />
-          </div>
+          <StatsAndActions className={c.Model__desktopOnly} c={c} modelData={modelData} />
         </div>
       </div>
     </div>
