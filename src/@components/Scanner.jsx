@@ -64,27 +64,6 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'center',
     },
 
-    Scanner_paper_scan: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: 150,
-      height: 190,
-      background: theme.colors.white[100],
-      border: `1px solid ${theme.colors.grey[100]}`,
-      borderRadius: 4,
-      boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.1)',
-      textAlign: 'center',
-      fontSize: 18,
-      fontWeight: 'bold',
-      '& p': {
-        margin: 0,
-        color: theme.colors.grey[300],
-        fontSize: 14,
-        fontWeight: 'normal',
-      },
-    },
-
     Scanner_detail: {
       textAlign: 'center',
     },
@@ -123,24 +102,14 @@ const Scanner = ({ children }) => {
         >
           <SvgCorner />
         </div>
-        
-         <div className={c.Scanner_content}>
+
+        <div className={c.Scanner_content}>
           {children}
-           {/*
-          <div className={c.Scanner_paper_scan}>
-            <div>
-              <div>7,162</div>
-              <p>facets scanned</p>
-            </div>
-          </div>*/}
-        </div> 
-
-
+        </div>
 
         <div className={c.Scanner_line}></div>
       </div>
-
-      <div className={c.Scanner_detail}>Scanning 123,634,234 facets...</div>
+      <div className={c.Scanner_detail}>Scanning geometry...</div>
     </div>
   )
 }

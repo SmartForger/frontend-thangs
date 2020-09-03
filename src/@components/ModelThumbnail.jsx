@@ -87,13 +87,40 @@ const LOADING = 'LOADING'
 const COMPLETE = 'COMPLETE'
 const ERROR = 'ERROR'
 
-const ModelThumbnail = ({
-  className,
-  model,
-  name,
-  thumbnailUrl: src,
-  waldoThumbnailUrl: waldoSrc = undefined,
-}) => {
+const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST
+const TIW_THUMBNAILS_HOST = process.env.REACT_APP_TIW_THUMBNAILS_HOST
+
+const getThumbnailFileName = (model = {}) => {
+  if (model.uploadedFile) return model.uploadedFile
+  if (model.fileName) return model.fileName.replace('uploads/models/', '')
+  if (model.modelFileName) return model.modelFileName.replace('uploads/models/', '')
+}
+
+const getWaldoThumbnailUrl = (model = {}, searchModelFileName) => {
+  if (searchModelFileName) return searchModelFileName.replace('uploads/models/', '')
+  if (model.searchModel) return model.searchModel.replace('uploads/models/', '')
+}
+
+const thumbnailUrl = model =>
+  model.fullThumbnailUrl
+    ? model.fullThumbnailUrl
+    : model.thumbnailUrl
+      ? model.thumbnailUrl
+      : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}`
+
+const getThumbnailUrl = (model = {}) => {
+  if (model.thumbnailUrl) return model.thumbnailUrl
+  if (model.uploadedFile) return model.uploadedFile
+  if (model.fileName) return model.fileName.replace('uploads/models/', '')
+  if (model.modelFileName) return model.modelFileName.replace('uploads/models/', '')
+}
+
+const waldoThumbnailUrl = (model, searchModelFileName) =>
+  searchModelFileName
+    ? `${TIW_THUMBNAILS_HOST}/${getThumbnailFileName(model)}/${getWaldoThumbnailUrl(model, searchModelFileName)}`
+    : undefined
+
+const ModelThumbnail = ({ className, model, name, searchModelFileName, showWaldo }) => {
   const [loadingState, setLoadingState] = useState(LOADING)
   const [lookingForWaldo, setLookingForWaldo] = useState(true)
   const [isSwapped, setIsSwapped] = useState(false)
@@ -104,6 +131,10 @@ const ModelThumbnail = ({
   const onSwap = useCallback(() => {
     setIsSwapped(!isSwapped)
   }, [isSwapped])
+
+  const src = thumbnailUrl(model)
+  const waldoSrc = showWaldo ? waldoThumbnailUrl(model, searchModelFileName) : undefined
+
   return (
     <>
       <div

@@ -6,7 +6,6 @@ import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
 import { ReactComponent as ViewOnlyIcon } from '@svg/view-only-icon.svg'
 import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import { Button, Card, ModelThumbnail, UserInline } from '@components'
-import { THUMBNAILS_HOST, TIW_THUMBNAILS_HOST } from '@utilities/constants'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import useCurrentUserId from '../../@hooks/useCurrentUserId'
@@ -167,24 +166,6 @@ const ExternalModelDetails = ({
   )
 }
 
-const getThumbnailUrl = (model = {}) => {
-  if (model.thumbnailUrl) return model.thumbnailUrl
-  if (model.uploadedFile) return model.uploadedFile
-  if (model.fileName) return model.fileName.replace('uploads/models/', '')
-  if (model.modelFileName) return model.modelFileName.replace('uploads/models/', '')
-}
-
-const getThumbnailFileName = (model = {}) => {
-  if (model.uploadedFile) return model.uploadedFile
-  if (model.fileName) return model.fileName.replace('uploads/models/', '')
-  if (model.modelFileName) return model.modelFileName.replace('uploads/models/', '')
-}
-
-const getWaldoThumbnailUrl = (model = {}, searchModelFileName) => {
-  if (searchModelFileName) return searchModelFileName.replace('uploads/models/', '')
-  if (model.searchModel) return model.searchModel.replace('uploads/models/', '')
-}
-
 const Anchor = ({ children, attributionUrl, to, noLink, ...props }) => {
   if (noLink) return children
   return attributionUrl ? (
@@ -211,18 +192,6 @@ const CardContents = ({
   showReportModel,
   handleReportModel,
 }) => {
-  const thumbnailUrl = model.fullThumbnailUrl
-    ? model.fullThumbnailUrl
-    : model.thumbnailUrl
-      ? model.thumbnailUrl
-      : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}`
-
-  const waldoThumbnailUrl = searchModelFileName
-    ? `${TIW_THUMBNAILS_HOST}/${getThumbnailFileName(model)}/${getWaldoThumbnailUrl(
-      model,
-      searchModelFileName
-    )}`
-    : undefined
 
   return (
     <>
@@ -232,9 +201,9 @@ const CardContents = ({
             className={c.ModelCard_Thumbnail}
             name={model.name}
             model={model}
-            thumbnailUrl={thumbnailUrl}
-            waldoThumbnailUrl={showWaldo ? waldoThumbnailUrl : undefined}
-          ></ModelThumbnail>
+            searchModelFileName={searchModelFileName}
+            showWaldo={showWaldo}
+          />
         </Card>
         <div>
           {model.resultSource === 'phyndexer' ? (
