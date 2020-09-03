@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
-import { ReactComponent as ViewOnlyIcon } from '@svg/view-only-icon.svg'
 import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import { Button, Card, ModelThumbnail, UserInline } from '@components'
 import classnames from 'classnames'
@@ -138,14 +137,13 @@ const ThangsModelDetails = ({
 const ExternalModelDetails = ({
   c,
   model,
-  isLink,
   showReportModel,
   handleReportModel = noop,
 }) => {
   return (
     <div className={c.ModelCard_Content}>
       <div className={c.ModelCard_DetailsInline}>
-        {isLink ? <ExternalLinkIcon /> : <ViewOnlyIcon title={'View Only'} />}
+        <ExternalLinkIcon />
         <span
           className={c.ModelCard_ExternalName}
           title={model.attributionUrl || model.fileName}
@@ -192,7 +190,7 @@ const CardContents = ({
   showReportModel,
   handleReportModel,
 }) => {
-
+  if (model.resultSource === 'phyndexer' && !modelAttributionUrl) return null
   return (
     <>
       <div title={modelAttributionUrl || model.name || model.fileName}>
@@ -210,7 +208,6 @@ const CardContents = ({
             <ExternalModelDetails
               c={c}
               model={model}
-              isLink={!!modelAttributionUrl}
               showReportModel={showReportModel}
               handleReportModel={handleReportModel}
             />
