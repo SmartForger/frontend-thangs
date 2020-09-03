@@ -1,6 +1,7 @@
 import React from 'react'
 import { useHistory, Link, useParams } from 'react-router-dom'
 import * as R from 'ramda'
+import { format } from 'date-fns'
 import {
   Button,
   CommentsForModel,
@@ -245,21 +246,21 @@ const DownloadLink = ({ model }) => {
   )
 }
 
-const ModelStats = ({ model: _m }) => {
+const ModelStats = ({ model = {} }) => {
   const c = useStyles()
   return (
     <div className={c.Model_ModelStats}>
       <span>
         <HeartIcon width={12} height={12} />
-        143 Likes
+        {model.likesCount} likes
       </span>
       <span>
         <DownloadIcon width={12} height={12} />
-        4321 Downloads
+        {model.downloadCount} Downloads
       </span>
       <span>
         <DateIcon width={12} height={12} />
-        April 29, 2020
+        {model.uploadDate && format(new Date(model.uploadDate), 'MMMM d, Y')}
       </span>
     </div>
   )
