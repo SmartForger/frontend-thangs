@@ -1,10 +1,10 @@
 import React from 'react'
-import { ModelCard } from '@components'
+import { ModelSearchResult } from '@components'
 
-const ModelCards = ({ items = [], ...props }) =>
+const ModelSearchResults = ({ items = [], ...props }) =>
   Array.isArray(items) &&
   items.map((model, index) => (
-    <ModelCard
+    <ModelSearchResult
       key={`model-${model.id}:${index}`}
       model={model}
       withOwner={true}
@@ -12,4 +12,4 @@ const ModelCards = ({ items = [], ...props }) =>
     />
   ))
 
-export default ModelCards
+export default ModelSearchResults

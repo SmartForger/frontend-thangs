@@ -21,24 +21,24 @@ export const colors = {
   grey: {
     100: '#dddddd',
     200: '#b7b7b7',
-    300: '#999999', //formerly GREY_11
+    300: '#999999',
     400: '#898989',
-    500: mains.GREY, //formerly GREY_6
+    500: mains.GREY,
     600: '#6B6B6B',
-    700: '#515151', //formerly BLACK_1, BLACK_4
+    700: '#515151',
     800: '#3d3d3d',
-    900: '#231f20', //formerly BLACK_3
+    900: '#231f20',
   },
   purple: {
     100: '#f1f1f3',
-    200: '#dbdbdf', //formerly GREY_2
-    300: '#b9b9be', //formerly GREY_3
-    400: '#88888b', //formerly GREY_5
-    500: mains.PURPLE, //formerly GREY_7
+    200: '#dbdbdf',
+    300: '#b9b9be',
+    400: '#88888b',
+    500: mains.PURPLE,
     600: '#55555B',
-    700: '#464655', //formerly BLACK_4
+    700: '#464655',
     800: '#31313C',
-    900: '#232530', //formerly BLACK_2
+    900: '#232530',
   },
   blue: {
     100: '#a0cffc',

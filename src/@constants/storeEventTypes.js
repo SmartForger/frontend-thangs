@@ -64,6 +64,7 @@ export const GET_MODEL_SEARCH_RESULTS = 'get-model-search-results'
 export const GET_TEXT_SEARCH_RESULTS = 'get-text-search-results'
 export const GET_RELATED_MODELS_VIA_THANGS = 'get-related-models-via-thangs'
 export const GET_RELATED_MODELS_VIA_PHYNDEXER = 'get-related-models-via-phyndexer'
+export const GET_RELATED_MODELS = 'get-related-models'
 export const CHANGE_SEARCH_RESULTS_STATUS = 'change-search-results-status'
 export const ERROR_POLLING_PHYNDEXER = 'error-polling-phyndexer'
 /* Upload Model Store Events */

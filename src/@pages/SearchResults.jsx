@@ -2,10 +2,10 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocation, useParams, Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
-import { CardCollection, NoResults, Layout, Button } from '@components'
+import { SearchUploader, NoResults, Layout, Button } from '@components'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
-import ModelCards from '@components/CardCollection/ModelCards'
+import ModelSearchResults from '@components/CardCollection/ModelSearchResults'
 import { createUseStyles } from '@style'
 import { useLocalStorage } from '@hooks'
 import * as types from '@constants/storeEventTypes'
@@ -23,13 +23,9 @@ const useStyles = createUseStyles(theme => {
         transform: 'rotate(360deg)',
       },
     },
-    SearchResults: {
-      marginTop: '2rem',
-    },
     SearchResults_Page: {
       display: 'flex',
-      flexDirection: 'column',
-      width: '100%',
+      flexDirection: 'row',
     },
     SearchResults_MatchingIcon: {
       marginRight: '.5rem',
@@ -38,9 +34,25 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
+      color: theme.colors.purple[900],
+      marginBottom: '1.5rem',
+    },
+    SearchResults_HeaderTextWrapper: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-start',
     },
     SearchResults_HeaderText: {
       ...theme.mixins.text.searchResultsHeader,
+      fontSize: '1rem',
+      lineHeight: '1.5rem',
+      color: theme.colors.purple[900],
+    },
+    SearchResult_ResultCountText: {
+      ...theme.mixins.text.searchResultsHeader,
+      fontSize: '.875rem',
+      lineHeight: '1rem',
+      color: theme.colors.grey[300],
     },
     SearchResults_BrandButton: {
       width: '100%',
@@ -54,7 +66,8 @@ const useStyles = createUseStyles(theme => {
       },
     },
     SearchResults_Results: {
-      marginTop: '2rem',
+      display: 'flex',
+      flexDirection: 'column',
     },
     SearchResults_ResultsHeader: {
       display: 'flex',
@@ -85,12 +98,12 @@ const useStyles = createUseStyles(theme => {
 const SearchResult = ({
   models,
   modelId,
-  isLoading,
   isError,
   c,
   searchModelFileName,
   showReportModel,
   handleReportModel,
+  handleFindSimilar,
 }) => {
   return (
     <div className={c.SearchResults_Results}>
@@ -106,22 +119,19 @@ const SearchResult = ({
           Error! We were not able to load results. Please try again later.
         </NoResults>
       ) : (
-        <CardCollection
-          loading={isLoading}
-          noResultsText='No results found. Try searching another keyword or model above.'
-        >
+        <>
           {models && models.length > 0 ? (
-            <ModelCards
+            <ModelSearchResults
               items={models}
               showSocial={false}
               showWaldo={false} //Change back to !!modelId when we want waldo thumbnails back
               searchModelFileName={searchModelFileName}
               showReportModel={showReportModel}
               handleReportModel={handleReportModel}
-              isExternalModel={!!modelId}
+              handleFindSimilar={handleFindSimilar}
             />
           ) : null}
-        </CardCollection>
+        </>
       )}
     </div>
   )
@@ -129,6 +139,7 @@ const SearchResult = ({
 
 const ThangsSearchResult = ({
   models,
+  modelId,
   isError,
   isLoading,
   isOtherModelsLoaded,
@@ -136,6 +147,7 @@ const ThangsSearchResult = ({
   searchModelFileName,
   showReportModel,
   handleReportModel,
+  handleFindSimilar,
 }) => {
   const searchingText = useMemo(() => {
     return isOtherModelsLoaded
@@ -146,12 +158,14 @@ const ThangsSearchResult = ({
 
   return (
     <div className={c.SearchResults_Results}>
-      <div className={c.SearchResults_ResultsHeader}>
-        <UploadIcon className={classnames({ [c.Spinner]: isLoading })} />
-        <span className={c.SearchResults_ResultsHeaderText}>
-          Similar geometry on Thangs
-        </span>
-      </div>
+      {modelId && (
+        <div className={c.SearchResults_ResultsHeader}>
+          <UploadIcon className={classnames({ [c.Spinner]: isLoading })} />
+          <span className={c.SearchResults_ResultsHeaderText}>
+            Similar geometry on Thangs
+          </span>
+        </div>
+      )}
       {isLoading ? (
         <NoResults>{searchingText}</NoResults>
       ) : isError ? (
@@ -159,21 +173,19 @@ const ThangsSearchResult = ({
           Error! We were not able to load results. Please try again later.
         </NoResults>
       ) : (
-        <CardCollection
-          loading={isLoading}
-          noResultsText='No results found. Try searching another keyword or model above.'
-        >
+        <>
           {models && models.length > 0 ? (
-            <ModelCards
+            <ModelSearchResults
               items={models}
               showSocial={false}
-              showWaldo={false} //Change back to TRUE when we want waldo thumbnails back
+              showWaldo={false} //Change back to !!modelId when we want waldo thumbnails back
               searchModelFileName={searchModelFileName}
               showReportModel={showReportModel}
               handleReportModel={handleReportModel}
+              handleFindSimilar={handleFindSimilar}
             />
           ) : null}
-        </CardCollection>
+        </>
       )}
     </div>
   )
@@ -190,66 +202,18 @@ const Page = () => {
   const query = useQuery(location)
   const modelId = useMemo(() => query.get('modelId'), [query])
   const { dispatch, searchResults } = useStoreon('searchResults')
-  const { text, phyndexer, thangs } = searchResults
-  const [savedSearchResults, setSavedSearchResults] = useLocalStorage(
-    'savedSearchResults',
-    null
-  )
-  const [savedSearchQuery, setSavedSearchQuery] = useLocalStorage(
-    'savedSearchQuery',
-    null
-  )
-  const [savedOriginalModelName, setSavedOriginalModelName] = useLocalStorage(
-    'savedOriginalModelName',
-    null
-  )
+  const { phyndexer, thangs } = searchResults
   const [showReportModelButtons, setShowReportModelButtons] = useState(false)
   useEffect(() => {
-    if (savedSearchQuery !== searchQuery || !savedSearchResults) {
-      dispatch(types.RESET_SEARCH_RESULTS)
-      setSavedSearchResults(null)
-      setSavedSearchQuery(null)
-      setSavedOriginalModelName(null)
-      if (!modelId) {
-        dispatch(types.GET_TEXT_SEARCH_RESULTS, {
-          searchTerm: searchQuery,
-        })
-      }
+    if (!modelId) {
+      dispatch(types.GET_TEXT_SEARCH_RESULTS, {
+        searchTerm: searchQuery,
+      })
     }
     if (modelId && modelId !== 'undefined')
-      dispatch(types.GET_RELATED_MODELS_VIA_THANGS, { modelId: modelId })
+      dispatch(types.GET_RELATED_MODELS, { modelId: modelId })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery])
-
-  useEffect(() => {
-    if (!modelId) {
-      if (text && text.data && text.data.matches) {
-        setSavedSearchResults(text.data.matches)
-        setSavedSearchQuery(searchQuery)
-        setSavedOriginalModelName(null)
-      }
-    } else {
-      if (
-        phyndexer &&
-        phyndexer.data &&
-        phyndexer.data.matches &&
-        Object.keys(phyndexer.data.matches).length
-      ) {
-        setSavedSearchResults(phyndexer.data.matches)
-        setSavedSearchQuery(searchQuery)
-        setSavedOriginalModelName(phyndexer.data.searchByModelFileName)
-      }
-    }
-  }, [
-    modelId,
-    phyndexer,
-    searchQuery,
-    searchResults,
-    setSavedOriginalModelName,
-    setSavedSearchQuery,
-    setSavedSearchResults,
-    text,
-  ])
 
   const handleReportModel = useCallback(
     ({ model }) => {
@@ -270,60 +234,87 @@ const Page = () => {
     [dispatch]
   )
 
+  const handleFindSimilar = useCallback(
+    ({ model }) => {
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'searchByUpload',
+        overlayData: {
+          model: model,
+        },
+      })
+    },
+    [dispatch]
+  )
+
+  const thangsModels = (thangs && thangs.data && thangs.data.matches) || []
+  const phyndexerModels = (phyndexer && phyndexer.data && phyndexer.data.matches) || []
+  const resultCount = phyndexerModels.length + thangsModels.length
+
   return (
     <div className={c.SearchResults_Page}>
-      <div className={c.SearchResults_Header}>
-        <div className={c.SearchResults_HeaderText}>
-          Search Results for {decodeURIComponent(searchQuery)}
+      <div className={c.SearchResults_MainContent}>
+        <div className={c.SearchResults_Header}>
+          <div className={c.SearchResults_HeaderTextWrapper}>
+            <div className={c.SearchResults_HeaderText}>
+              Search Results for {decodeURIComponent(searchQuery)}
+            </div>
+            {resultCount && resultCount > 0 ? (
+              <div className={c.SearchResult_ResultCountText}>
+                About {resultCount} results
+              </div>
+            ) : null}
+          </div>
+          <div>
+            <Link to='/'>
+              <Button light small>
+                Clear Search
+              </Button>
+            </Link>
+          </div>
         </div>
-        <div>
-          <Link to='/'>
-            <Button light small>
-              Clear Search
-            </Button>
-          </Link>
-        </div>
+        {searchQuery ? (
+          <>
+            <ThangsSearchResult
+              isLoading={thangs.isLoading}
+              isError={thangs.isError}
+              models={thangsModels}
+              modelId={modelId}
+              searchModelFileName={undefined}
+              isOtherModelsLoaded={phyndexer.isLoaded}
+              showReportModel={showReportModelButtons}
+              handleReportModel={handleReportModel}
+              handleFindSimilar={handleFindSimilar}
+              c={c}
+            />
+            <SearchResult
+              isLoading={phyndexer.isLoading}
+              isError={phyndexer.isError}
+              models={phyndexerModels}
+              modelId={modelId}
+              searchModelFileName={undefined}
+              showReportModel={showReportModelButtons}
+              handleReportModel={handleReportModel}
+              handleFindSimilar={handleFindSimilar}
+              c={c}
+            />
+          </>
+        ) : (
+          <NoResults>
+            Begin typing to search models by name, description, owner, etc. Use search by
+            model to find geometrically related matches to the model you upload.
+          </NoResults>
+        )}
+        {resultCount && resultCount > 0 ? (
+          <Button
+            text
+            className={c.SearchResults_ReportModelButton}
+            onClick={() => setShowReportModelButtons(!showReportModelButtons)}
+          >
+            <FlagIcon />
+            Report a Model
+          </Button>
+        ) : null}
       </div>
-      {modelId && (
-        <ThangsSearchResult
-          models={thangs && thangs.data && thangs.data.matches}
-          isLoading={thangs && thangs.isLoading}
-          isError={thangs && thangs.isError}
-          c={c}
-          searchModelFileName={savedOriginalModelName}
-          isOtherModelsLoaded={savedSearchResults && savedSearchResults.length > 0}
-          showReportModel={showReportModelButtons}
-          handleReportModel={handleReportModel}
-        />
-      )}
-      {searchQuery ? (
-        <SearchResult
-          searchQuery={searchQuery}
-          isLoading={modelId ? phyndexer.isLoading : text.isLoading}
-          isError={modelId ? phyndexer.isError : text.isError}
-          models={savedSearchResults}
-          modelId={modelId}
-          searchModelFileName={savedOriginalModelName}
-          showReportModel={showReportModelButtons}
-          handleReportModel={handleReportModel}
-          c={c}
-        />
-      ) : (
-        <NoResults>
-          Begin typing to search models by name, description, owner, etc. Use search by
-          model to find geometrically related matches to the model you upload.
-        </NoResults>
-      )}
-      {savedSearchResults && savedSearchResults.length > 0 && (
-        <Button
-          text
-          className={c.SearchResults_ReportModelButton}
-          onClick={() => setShowReportModelButtons(!showReportModelButtons)}
-        >
-          <FlagIcon />
-          Report a Model
-        </Button>
-      )}
     </div>
   )
 }

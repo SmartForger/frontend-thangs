@@ -8,7 +8,6 @@ import * as pendo from '@vendors/pendo'
 const ATOMS = {
   THANGS: 'thangs',
   PHYNDEXER: 'phyndexer',
-  TEXT: 'text',
 }
 
 const getPhynStatus = intervalRequest(
@@ -60,10 +59,6 @@ const getInitAtom = () => ({
     isPollingError: false,
     data: {},
   },
-  [ATOMS.TEXT]: {
-    ...getStatusState(STATUSES.INIT),
-    data: {},
-  },
 })
 
 export default store => {
@@ -97,7 +92,11 @@ export default store => {
     types.GET_TEXT_SEARCH_RESULTS,
     async (_state, { searchTerm, onFinish = noop, onError = noop }) => {
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-        atom: ATOMS.TEXT,
+        atom: ATOMS.THANGS,
+        status: STATUSES.LOADING,
+      })
+      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+        atom: ATOMS.PHYNDEXER,
         status: STATUSES.LOADING,
       })
 
@@ -111,26 +110,34 @@ export default store => {
 
       if (error) {
         store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-          atom: ATOMS.TEXT,
+          atom: ATOMS.THANGS,
+          status: STATUSES.FAILURE,
+          data: error,
+        })
+        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+          atom: ATOMS.PHYNDEXER,
           status: STATUSES.FAILURE,
           data: error,
         })
         onError(error)
       } else {
-        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-          atom: ATOMS.TEXT,
-          status: STATUSES.LOADED,
-          data: { matches: data },
+        let numOfMatches = 0
+        if (data && Array.isArray(data)) {
+          data.forEach(result => {
+            const { collection, ...searchData } = result
+            numOfMatches += searchData && searchData.matches && searchData.matches.length
+            store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+              atom: collection,
+              status: STATUSES.LOADED,
+              data: { ...searchData },
+            })
+          })
+        }
+
+        pendo.track(`Text Search - ${numOfMatches > 0 ? 'Results' : 'No Results'}`, {
+          searchTerm,
+          numOfMatches,
         })
-        pendo.track(
-          `Text Search - ${
-            data && data.length && data.length > 0 ? 'Results' : 'No Results'
-          }`,
-          {
-            searchTerm,
-            numOfMatches: (data && data.length) || 0,
-          }
-        )
 
         onFinish(error)
       }
@@ -287,6 +294,67 @@ export default store => {
           }
         )
         onFinish({ modelId: newModelId })
+      }
+    }
+  )
+  store.on(
+    types.GET_RELATED_MODELS,
+    async (_state, { modelId, onFinish = noop, onError = noop }) => {
+      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+        atom: ATOMS.THANGS,
+        status: STATUSES.LOADING,
+      })
+      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+        atom: ATOMS.PHYNDEXER,
+        status: STATUSES.LOADING,
+      })
+
+      const { data, error } = await api({
+        method: 'GET',
+        endpoint: `models/match/${modelId}`,
+      })
+
+      pendo.track('More Similar Search Started', {
+        modelId,
+      })
+
+      if (error) {
+        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+          atom: ATOMS.THANGS,
+          status: STATUSES.FAILURE,
+          data: error,
+        })
+        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+          atom: ATOMS.PHYNDEXER,
+          status: STATUSES.FAILURE,
+          data: error,
+        })
+        onError(error)
+      } else {
+        let numOfMatches = 0
+        if (data && Array.isArray(data)) {
+          data.forEach(result => {
+            const { collection, ...searchData } = result
+            numOfMatches += searchData && searchData.matches && searchData.matches.length
+            if (result === 'completed') {
+              store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+                atom: collection,
+                status: STATUSES.LOADED,
+                data: { ...searchData },
+              })
+            }
+          })
+        }
+
+        pendo.track(
+          `More Similar Search - ${numOfMatches > 0 ? 'Results' : 'No Results'}`,
+          {
+            modelId,
+            numOfMatches,
+          }
+        )
+
+        onFinish()
       }
     }
   )

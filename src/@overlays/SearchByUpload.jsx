@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import * as R from 'ramda'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
@@ -60,12 +60,26 @@ const sanitizeFileName = name => name.replace(/ /g, '_')
 const SearchByUpload = () => {
   const c = useStyles()
   const history = useHistory()
-  const { dispatch, searchResults } = useStoreon('searchResults')
+  const { dispatch, searchResults, overlay } = useStoreon('searchResults', 'overlay')
   const { phyndexer } = searchResults
-  const newModelId = R.path(['data', 'newModelId'], phyndexer)
+  const [newModelId, setNewModelId] = useState(R.path(['data', 'newModelId'], phyndexer))
 
   useEffect(() => {
     dispatch(types.RESET_SEARCH_RESULTS)
+    const model = overlay && overlay.overlayData && overlay.overlayData.model
+    if (model) {
+      const modelId = model.id || model.modelId
+      setNewModelId(modelId)
+      dispatch(types.GET_RELATED_MODELS, {
+        modelId,
+        onFinish: () => {
+          dispatch(types.CLOSE_OVERLAY)
+          history.push(
+            `/search/${model.uploadedFile || model.modelFileName}?modelId=${modelId}`
+          )
+        },
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

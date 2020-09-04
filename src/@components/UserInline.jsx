@@ -23,6 +23,12 @@ const useStyles = createUseStyles(theme => {
       fontSize: '.75rem',
       textTransform: 'capitalize',
     },
+    UserInline_SearchResult: {
+      color: theme.colors.grey[300],
+      fontSize: '1rem',
+      lineHeight: '1rem',
+      fontWeight: 600,
+    },
   }
 })
 
@@ -33,6 +39,7 @@ const UserInline = ({
   size = '1.75rem',
   children,
   isPending,
+  isSearchResult,
 }) => {
   const c = useStyles({ isPending })
   let userName =
@@ -50,6 +57,7 @@ const UserInline = ({
           <div
             className={classnames({
               [c.UserInline_SmallName]: displayEmail,
+              [c.UserInline_SearchResult]: isSearchResult,
             })}
           >
             {userName}
