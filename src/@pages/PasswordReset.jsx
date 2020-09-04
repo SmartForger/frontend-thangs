@@ -132,8 +132,8 @@ const ResetPage = () => {
         e && e.response && e.response.data ? (
           <ServerErrors errors={e.response.data} />
         ) : (
-            'Unknown error. Try again.'
-          )
+          'Unknown error. Try again.'
+        )
       )
     } finally {
       setWaiting(false)
@@ -226,8 +226,8 @@ const ConfirmResetPage = () => {
         e && e.response && e.response.data ? (
           <ServerErrors errors={e.response.data} />
         ) : (
-            'Unknown error. Try again.'
-          )
+          'Unknown error. Try again.'
+        )
       )
     } finally {
       setWaiting(false)

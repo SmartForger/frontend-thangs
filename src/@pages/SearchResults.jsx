@@ -2,12 +2,11 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocation, useParams, Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
-import { SearchUploader, NoResults, Layout, Button } from '@components'
+import { NoResults, Layout, Button } from '@components'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import ModelSearchResults from '@components/CardCollection/ModelSearchResults'
 import { createUseStyles } from '@style'
-import { useLocalStorage } from '@hooks'
 import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
