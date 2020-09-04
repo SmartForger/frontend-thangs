@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react'
+import * as R from 'ramda'
 import {
   Loader,
   UploadProgress,
@@ -32,15 +33,21 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
+const UPLOAD_MODES = {
+  MODEL: 'MODEL',
+  VERSION: 'VERSION',
+}
+
 const sanitizeFileName = name => name.replace(/ /g, '_')
 
-const Upload = () => {
+const Upload = ({ prevModelId }) => {
   const [file, setFile] = useState()
   const { navigateWithFlash } = useFlashNotification()
   const c = useStyles()
+  const uploadMode = R.isNil(prevModelId) ? UPLOAD_MODES.MODEL : UPLOAD_MODES.VERSION
 
-  const { uploadModel, folders, overlay, dispatch } = useStoreon(
-    'uploadModel',
+  const { uploadModelPhase1, folders, overlay, dispatch } = useStoreon(
+    'uploadModelPhase1',
     'folders',
     'overlay'
   )
@@ -52,7 +59,20 @@ const Upload = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => () => dispatch(types.RESET_UPLOAD_MODEL), [])
 
-  const onSubmit = useCallback(
+  const handleFileUpload = useCallback(
+    file => {
+      if (R.isNil(file)) {
+        dispatch(types.RESET_UPLOAD_MODEL)
+      } else {
+        dispatch(types.UPLOAD_MODEL_PHASE1, { file })
+      }
+
+      setFile(file)
+    },
+    [dispatch]
+  )
+
+  const handleSubmit = useCallback(
     data => {
       const { weight, material, height, name, description, category, folder } = data
 
@@ -67,11 +87,11 @@ const Upload = () => {
         ...(height.length > 0 && { height }),
         ...(material.length > 0 && { material }),
         ...(category && { category }),
+        ...(!R.isNil(prevModelId) && { previousVersionModelId: prevModelId }),
         folderId: folder ? folder : undefined,
       }
 
-      dispatch(types.UPLOAD_MODEL, {
-        file,
+      dispatch(types.UPLOAD_MODEL_PHASE2, {
         data: {
           ...requiredVariables,
           ...optionalVariables,
@@ -83,16 +103,22 @@ const Upload = () => {
         },
       })
     },
-    [dispatch, file, navigateWithFlash]
+    [dispatch, file, navigateWithFlash, prevModelId]
   )
 
   return (
     <div className={c.Upload}>
       <div className={c.Upload_Column__frame}>
-        {uploadModel.isLoading ? (
+        
+        {uploadModelPhase1.isLoading ? (
           <UploadProgress />
         ) : (
-          <Uploader showError={uploadModel.isError} file={file} setFile={setFile} />
+          <Uploader
+            showError={uploadModelPhase1.isError}
+            file={file}
+            setFile={handleFileUpload}
+            mode={uploadMode}
+          />
         )}
       </div>
       {folders.loading ? (
@@ -102,7 +128,7 @@ const Upload = () => {
       ) : (
         <div className={c.Upload_Column__form}>
           <UploadForm
-            onSubmit={onSubmit}
+            onSubmit={handleSubmit}
             disableSubmit={!file}
             folders={folders.data}
             selectedFolderId={

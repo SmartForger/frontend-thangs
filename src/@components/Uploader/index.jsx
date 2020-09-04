@@ -1,17 +1,11 @@
 import React, { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
-import { ReactComponent as VersionIcon } from '@svg/version.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { Button, UploadFrame } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-
-export const UPLOAD_MODES = {
-  MODEL: 'MODEL',
-  VERSION: 'VERSION',
-}
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -94,7 +88,7 @@ const FILE_SIZE_LIMITS = {
   },
 }
 
-const Uploader = ({ file, setFile, showError = true, mode = UPLOAD_MODES.MODEL }) => {
+const Uploader = ({ file, setFile, showError = true }) => {
   const c = useStyles()
   const [errorState, setErrorState] = useState()
   const onDrop = useCallback(
@@ -205,8 +199,7 @@ const Uploader = ({ file, setFile, showError = true, mode = UPLOAD_MODES.MODEL }
           </div>
         ) : (
           <div className={c.Uploader_FlexColumn}>
-            {mode === UPLOAD_MODES.MODEL && <UploadIcon className={c.Uploader_Icon} />}
-            {mode === UPLOAD_MODES.VERSION && <VersionIcon className={c.Uploader_Icon} />}
+            <UploadIcon className={c.Uploader_Icon} />
             <div className={c.Uploader_InfoMessage}>
               Drag & Drop a model
               <br />

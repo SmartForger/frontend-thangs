@@ -1,49 +1,37 @@
+import * as R from 'ramda'
 import api from '@services/api'
 import { storageService } from '@services'
+import { STATUSES, getStatusState } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
 import * as pendo from '@vendors/pendo'
 
 const noop = () => null
-const getInitAtom = () => ({
-  isLoaded: false,
-  isLoading: false,
-  isError: false,
-  data: {},
-})
 
 export default store => {
   store.on(types.STORE_INIT, () => ({
-    uploadModel: getInitAtom(),
+    uploadModelPhase1: { ...getStatusState(STATUSES.INIT), data: {} },
+    uploadModelPhase2: { ...getStatusState(STATUSES.INIT), data: {} },
   }))
   store.on(types.RESET_UPLOAD_MODEL, () => ({
-    uploadModel: getInitAtom(),
+    uploadModelPhase1: { ...getStatusState(STATUSES.INIT), data: {} },
+    uploadModelPhase2: { ...getStatusState(STATUSES.INIT), data: {} },
   }))
-  store.on(types.LOADING_UPLOAD_MODEL, ({ uploadModel }) => ({
-    uploadModel: {
-      ...uploadModel,
-      isLoading: true,
-      isLoaded: false,
-      isError: false,
-    },
-  }))
-  store.on(types.LOADED_UPLOAD_MODEL, ({ uploadModel }, { data }) => ({
-    uploadModel: {
-      ...uploadModel,
-      data,
-      isLoading: false,
-      isLoaded: true,
-    },
-  }))
-  store.on(types.FAILURE_UPLOAD_MODEL, ({ uploadModel }) => ({
-    uploadModel: {
-      ...uploadModel,
-      isLoading: false,
-      isLoaded: true,
-      isError: true,
-    },
-  }))
-  store.on(types.UPLOAD_MODEL, async (state, { file, data, onFinish = noop }) => {
-    store.dispatch(types.LOADING_UPLOAD_MODEL)
+
+  store.on(
+    types.CHANGE_UPLOAD_MODEL_STATUS,
+    (state, { atom, status = STATUSES.INIT, data }) => ({
+      [atom]: {
+        ...state[atom],
+        ...getStatusState(status),
+        data,
+      },
+    })
+  )
+  store.on(types.UPLOAD_MODEL_PHASE1, async (_, { file, onFinish = noop }) => {
+    store.dispatch(types.CHANGE_UPLOAD_MODEL_STATUS, {
+      status: STATUSES.LOADING,
+      atom: 'uploadModelPhase1',
+    })
 
     try {
       const { data: uploadedUrlData } = await api({
@@ -53,12 +41,42 @@ export default store => {
 
       await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file)
 
+      store.dispatch(types.CHANGE_UPLOAD_MODEL_STATUS, {
+        status: STATUSES.LOADED,
+        atom: 'uploadModelPhase1',
+        data: { file, uploadedUrlData },
+      })
+
+      onFinish()
+    } catch (e) {
+      store.dispatch(types.CHANGE_UPLOAD_MODEL_STATUS, {
+        status: STATUSES.FAILURE,
+        atom: 'uploadModelPhase1',
+      })
+    }
+  })
+  store.on(types.UPLOAD_MODEL_PHASE2, async (state, { data, onFinish = noop }) => {
+    store.dispatch(types.CHANGE_UPLOAD_MODEL_STATUS, {
+      status: STATUSES.LOADING,
+      atom: 'uploadModelPhase2',
+    })
+
+    try {
+      const filename = R.path([
+        'uploadModelPhase1', 
+        'data', 
+        'uploadedUrlData', 
+        'newFileName'
+      ], state) || ''
+      const originalFileName =
+        R.path(['uploadModelPhase1', 'data', 'file', 'name'], state) || ''
+
       const { data: uploadedData, error } = await api({
         method: 'POST',
         endpoint: 'models',
         body: {
-          filename: uploadedUrlData.newFileName || '',
-          originalFileName: file.name,
+          filename,
+          originalFileName,
           units: 'mm',
           searchUpload: false,
           isPrivate: false,
@@ -67,9 +85,16 @@ export default store => {
       })
 
       if (error) {
-        store.dispatch(types.FAILURE_UPLOAD_MODEL)
+        store.dispatch(types.CHANGE_UPLOAD_MODEL_STATUS, {
+          status: STATUSES.FAILURE,
+          atom: 'uploadModelPhase2',
+        })
       } else {
-        store.dispatch(types.LOADED_UPLOAD_MODEL, { data: uploadedData })
+        store.dispatch(types.CHANGE_UPLOAD_MODEL_STATUS, {
+          status: STATUSES.LOADED,
+          atom: 'uploadModelPhase2',
+          data: uploadedData,
+        })
         onFinish()
         if (data && data.previousVersionModelId) {
           pendo.track('New Version Uploaded')
@@ -78,7 +103,10 @@ export default store => {
         }
       }
     } catch (e) {
-      store.dispatch(types.FAILURE_UPLOAD_MODEL)
+      store.dispatch(types.CHANGE_UPLOAD_MODEL_STATUS, {
+        status: STATUSES.FAILURE,
+        atom: 'uploadModelPhase2',
+      })
     }
   })
 }

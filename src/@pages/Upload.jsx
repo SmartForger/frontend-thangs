@@ -92,14 +92,14 @@ const Page = () => {
   const { navigateWithFlash } = useFlashNotification()
   const c = useStyles()
 
-  const { uploadModel, dispatch } = useStoreon('uploadModel')
+  const { uploadModelPhase1, dispatch } = useStoreon('uploadModelPhase1')
 
   useEffect(() => {
-    if (uploadModel.isLoaded && !uploadModel.isError) {
+    if (uploadModelPhase1.isLoaded && !uploadModelPhase1.isError) {
       navigateWithFlash('/home', 'Model added successfully.')
       dispatch(types.RESET_UPLOAD_MODEL)
     }
-  }, [dispatch, navigateWithFlash, uploadModel])
+  }, [dispatch, navigateWithFlash, uploadModelPhase1])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => () => dispatch(types.RESET_UPLOAD_MODEL), [])
@@ -121,7 +121,7 @@ const Page = () => {
         ...(category && { category }),
       }
 
-      dispatch(types.UPLOAD_MODEL, {
+      dispatch(types.UPLOAD_MODEL_PHASE1, {
         file,
         data: {
           ...requiredVariables,
@@ -136,13 +136,13 @@ const Page = () => {
     <div>
       <div className={c.Upload_Row}>
         <div className={c.Upload_Column__frame}>
-          {uploadModel.isLoading ? (
+          {uploadModelPhase1.isLoading ? (
             <UploadFrame>
               <Spinner className={c.Upload_Spinner} />
               <ProgressText className={c.Upload_Dots} text='Uploading' />
             </UploadFrame>
           ) : (
-            <Uploader showError={uploadModel.isError} file={file} setFile={setFile} />
+            <Uploader showError={uploadModelPhase1.isError} file={file} setFile={setFile} />
           )}
         </div>
         <div className={c.Upload_Column__form}>

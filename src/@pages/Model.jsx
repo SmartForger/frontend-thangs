@@ -1,5 +1,5 @@
 import React from 'react'
-import { useHistory, Link, useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import * as R from 'ramda'
 import { format } from 'date-fns'
 import {
@@ -268,17 +268,24 @@ const ModelStats = ({ model = {} }) => {
 
 const VersionUpload = ({ modelId }) => {
   const c = useStyles()
+  const { dispatch } = useStoreon()
   return (
     <div>
       <h2 className={c.Model_VersionHeader}>Versions</h2>
-      <Link to={`/model/${modelId}/upload`}>
-        <div className={c.Model_VersionButton}>
-          <VersionIcon className={c.Model_VersionIcon} />
-          <Button text className={c.Model_VersionLinkText}>
-            Upload new version
-          </Button>
-        </div>
-      </Link>
+      <div
+        className={c.Model_VersionButton}
+        onClick={() =>
+          dispatch(types.OPEN_OVERLAY, {
+            overlayName: 'upload',
+            overlayData: { prevModelId: modelId },
+          })
+        }
+      >
+        <VersionIcon className={c.Model_VersionIcon} />
+        <Button text className={c.Model_VersionLinkText}>
+          Upload new version
+        </Button>
+      </div>
     </div>
   )
 }

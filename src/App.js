@@ -24,9 +24,7 @@ import {
   Signup,
   TermsAndConditions,
   FolderPage,
-  FolderUpload,
   Upload,
-  UploadVersion,
 } from '@pages'
 import { ErrorBoundary } from './ErrorBoundary'
 import { routeRequiresAnon, routeRequiresAuth } from '@components/RouteComponent'
@@ -91,10 +89,6 @@ const App = () => {
                 render={props => <Landing {...props} newSignUp={true} />}
               />
               <Route
-                path='/folder/:folderId/upload'
-                component={routeRequiresAuth(FolderUpload)}
-              />
-              <Route
                 path='/folder/:folderId'
                 exact
                 component={routeRequiresAuth(FolderPage)}
@@ -131,10 +125,6 @@ const App = () => {
                 component={SearchResults}
               />
               <Route path='/upload' component={routeRequiresAuth(Upload)} />
-              <Route
-                path='/model/:id/upload'
-                component={routeRequiresAuth(UploadVersion)}
-              />
               <Route path='*' component={Page404} status={404} />
             </Switch>
           </ThemeProvider>
