@@ -299,7 +299,7 @@ const Details = ({ currentUser, model }) => {
       {model.id && (
         <div className={c.Model_SocialButtons}>
           <div>
-            <ToggleFollowButton userId={currentUser.id} />
+            <ToggleFollowButton userId={model && model.owner && model.owner.id} />
           </div>
           <div>
             <LikeModelButton currentUser={currentUser} modelId={model.id} model={model} />
