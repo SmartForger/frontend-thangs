@@ -124,7 +124,7 @@ const SearchResult = ({
         </div>
       )}
       {isLoading ? (
-        <NoResults>Searching our 1,000,000+ models...</NoResults>
+        <NoResults>Searching 1,000,000+ models...</NoResults>
       ) : isError ? (
         <NoResults>
           Error! We were not able to load results. Please try again later.
