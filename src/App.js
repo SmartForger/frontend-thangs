@@ -125,6 +125,7 @@ const App = () => {
                 component={SearchResults}
               />
               <Route path='/upload' component={routeRequiresAuth(Upload)} />
+              <Route path='/:userName' component={Profile} />
               <Route path='*' component={Page404} status={404} />
             </Switch>
           </ThemeProvider>

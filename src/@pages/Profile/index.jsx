@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import * as R from 'ramda'
 import {
@@ -18,6 +18,7 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import useFetchOnce from '@hooks/useServices/useFetchOnce'
 import useFetchPerMount from '@hooks/useServices/useFetchPerMount'
+import { useUserName } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -208,18 +209,21 @@ const Tabs = ({ userId }) => {
 }
 
 const Page = () => {
-  const { id } = useParams()
+  const { id, userName } = useParams()
   const c = useStyles()
-
+  const [userId, loading, error] = useUserName(userName)
+  const profileId = useMemo(() => userId || id, [userId, id])
+  console.log(profileId)
+  debugger
   const {
     atom: { isLoading, isError, data: user },
-  } = useFetchPerMount(id, 'user')
-
-  if (isLoading) {
+  } = useFetchPerMount(profileId, 'user')
+  console.log('user', user)
+  if (isLoading || loading) {
     return <Spinner />
   }
 
-  if (isError) {
+  if (isError || error) {
     return (
       <div data-cy='fetch-profile-error'>
         Error! We were not able to load this profile. Please try again later.
@@ -246,10 +250,10 @@ const Page = () => {
         />
         <div>
           <div className={c.Profile_Name}>{user.fullName}</div>
-          <ProfileButton userId={id} className={c.Profile_ProfileButton} />
+          <ProfileButton userId={profileId} className={c.Profile_ProfileButton} />
         </div>
       </div>
-      <Tabs userId={id} />
+      <Tabs userId={profileId} />
     </div>
   )
 }
