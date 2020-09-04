@@ -291,7 +291,6 @@ const ResultContents = ({
   showSocial,
   showWaldo,
 }) => {
-  if (model.resultSource === 'phyndexer' && !modelAttributionUrl) return null
   return (
     <div className={c.ModelSearchResult_ResultContents}>
       <Anchor

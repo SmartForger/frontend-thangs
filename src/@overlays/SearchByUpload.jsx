@@ -72,8 +72,8 @@ const SearchByUpload = () => {
       setNewModelId(modelId)
       dispatch(types.GET_RELATED_MODELS, {
         modelId,
-        onFinish: () => {
-          dispatch(types.CLOSE_OVERLAY)
+        onSomeResult: () => {
+          dispatch('close-overlay')
           history.push(
             `/search/${model.uploadedFile || model.modelFileName}?modelId=${modelId}`
           )
@@ -96,7 +96,7 @@ const SearchByUpload = () => {
           ...requiredVariables,
         },
         onFinish: ({ modelId }) => {
-          dispatch(types.CLOSE_OVERLAY)
+          dispatch('close-overlay')
           history.push(`/search/${file ? file.name : ''}?modelId=${modelId}`)
         },
       })

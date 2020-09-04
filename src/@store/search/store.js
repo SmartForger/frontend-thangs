@@ -10,37 +10,42 @@ const ATOMS = {
   PHYNDEXER: 'phyndexer',
 }
 
-const getPhynStatus = intervalRequest(
-  ({ newPhyndexerId }) => async (resolve, reject, cancelToken) => {
+const pollMatches = intervalRequest(
+  ({ modelId, store, onSomeResult }) => async (resolve, reject, cancelToken) => {
     const { data, error } = await api({
       method: 'GET',
-      endpoint: `models/phyn-status/${newPhyndexerId}`,
-      cancelToken,
-      timeout: 60000,
-    })
-    if (data === 'error' || error) {
-      resolve({ error: error || 'error' })
-    }
-    if (data === 'completed') resolve(data)
-  },
-  {
-    interval: 5000,
-    timeout: 10 * 60 * 1000,
-  }
-)
-
-const getThangsStatus = intervalRequest(
-  ({ modelId }) => async (resolve, reject, cancelToken) => {
-    const { data, error } = await api({
-      method: 'GET',
-      endpoint: `models/status/${modelId}`,
+      endpoint: `models/match/${modelId}`,
       cancelToken,
       timeout: 60000,
     })
     if (data === 'error' || error) {
       reject(data || error)
     }
-    if (data === 'completed') resolve(data)
+    let allResolved = true
+    let matchCount = 0
+    if (data && Array.isArray(data)) {
+      data.forEach(result => {
+        const { collection, status, ...searchData } = result
+        if (status === 'completed') {
+          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+            atom: collection,
+            status: STATUSES.LOADED,
+            data: { ...searchData },
+          })
+          matchCount += searchData && searchData.matches && searchData.matches.length
+        } else if (status === 'error') {
+          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+            atom: collection,
+            status: STATUSES.FAILURE,
+            data: { ...searchData },
+          })
+        } else {
+          allResolved = false
+        }
+      })
+    }
+    if (matchCount > 0 || allResolved) onSomeResult({ modelId })
+    if (allResolved) resolve({ data: { ...data, matchCount } })
   },
   {
     interval: 5000,
@@ -177,11 +182,9 @@ export default store => {
         )
         .then(({ data: uploadedData }) => {
           const { newPhyndexerId, newModelId } = uploadedData
-
-          store.dispatch(types.GET_RELATED_MODELS_VIA_PHYNDEXER, {
-            newPhyndexerId,
-            newModelId,
-            onFinish,
+          store.dispatch(types.GET_RELATED_MODELS, {
+            modelId: newModelId,
+            onSomeResult: ({ modelId }) => onFinish({ modelId }),
           })
 
           pendo.track('Model Search Started', {
@@ -199,107 +202,10 @@ export default store => {
         })
     }
   )
-  store.on(
-    types.GET_RELATED_MODELS_VIA_THANGS,
-    (_state, { modelId, onFinish = noop, onError = noop }) => {
-      if (!modelId) return
-      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-        atom: ATOMS.THANGS,
-        status: STATUSES.LOADING,
-      })
 
-      getThangsStatus({ modelId })
-        .then(() =>
-          apiForChain({
-            method: 'GET',
-            endpoint: `models/related/${modelId}`,
-          })
-        )
-        .then(({ data }) => {
-          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-            atom: ATOMS.THANGS,
-            status: STATUSES.LOADED,
-            data: data,
-          })
-
-          pendo.track(
-            `Thangs Model Search - ${
-              data && data.matches && data.matches.length && data.matches.length > 0
-                ? 'Results'
-                : 'No Results'
-            }`,
-            {
-              modelId,
-              numOfMatches: (data && data.matches && data.matches.length) || 0,
-            }
-          )
-          onFinish(data)
-        })
-        .catch(error => {
-          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-            atom: ATOMS.THANGS,
-            status: STATUSES.FAILURE,
-            data: error,
-          })
-          return onError(error)
-        })
-    }
-  )
-  store.on(
-    types.GET_RELATED_MODELS_VIA_PHYNDEXER,
-    async (_state, { newPhyndexerId, newModelId, onFinish = noop, onError = noop }) => {
-      if (!newPhyndexerId) return
-      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-        atom: ATOMS.PHYNDEXER,
-        status: STATUSES.LOADING,
-        data: { newModelId },
-      })
-
-      const { error: statusError } = await getPhynStatus({ newPhyndexerId })
-      if (statusError) {
-        store.dispatch(types.ERROR_POLLING_PHYNDEXER, {
-          data: statusError,
-        })
-      }
-
-      const { data, error } = await api({
-        method: 'GET',
-        endpoint: `models/phyn-related/${newPhyndexerId}`,
-      })
-
-      if (error) {
-        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-          atom: ATOMS.PHYNDEXER,
-          status: STATUSES.FAILURE,
-          data: error,
-        })
-        onFinish({ modelId: newModelId })
-        return onError(error)
-      } else {
-        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-          atom: ATOMS.PHYNDEXER,
-          status: STATUSES.LOADED,
-          data,
-        })
-
-        pendo.track(
-          `Phyndexer Model Search - ${
-            data && data.matches && data.matches.length && data.matches.length > 0
-              ? 'Results'
-              : 'No Results'
-          }`,
-          {
-            phyndexerId: newPhyndexerId,
-            numOfMatches: (data && data.matches && data.matches.length) || 0,
-          }
-        )
-        onFinish({ modelId: newModelId })
-      }
-    }
-  )
   store.on(
     types.GET_RELATED_MODELS,
-    async (_state, { modelId, onFinish = noop, onError = noop }) => {
+    async (_state, { modelId, onSomeResult = noop, onError = noop }) => {
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.THANGS,
         status: STATUSES.LOADING,
@@ -307,16 +213,13 @@ export default store => {
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.PHYNDEXER,
         status: STATUSES.LOADING,
-      })
-
-      const { data, error } = await api({
-        method: 'GET',
-        endpoint: `models/match/${modelId}`,
       })
 
       pendo.track('More Similar Search Started', {
         modelId,
       })
+
+      const { data, error } = await pollMatches({ modelId, store, onSomeResult })
 
       if (error) {
         store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
@@ -330,32 +233,34 @@ export default store => {
           data: error,
         })
         onError(error)
-      } else {
-        let numOfMatches = 0
-        if (data && Array.isArray(data)) {
-          data.forEach(result => {
-            const { collection, ...searchData } = result
-            numOfMatches += searchData && searchData.matches && searchData.matches.length
-            if (result === 'completed') {
-              store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-                atom: collection,
-                status: STATUSES.LOADED,
-                data: { ...searchData },
-              })
-            }
-          })
-        }
-
-        pendo.track(
-          `More Similar Search - ${numOfMatches > 0 ? 'Results' : 'No Results'}`,
-          {
-            modelId,
-            numOfMatches,
-          }
-        )
-
-        onFinish()
       }
+
+      if (data && Array.isArray(data)) {
+        data.forEach(result => {
+          const { collection, status, ...searchData } = result
+          if (status === 'completed') {
+            store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+              atom: collection,
+              status: STATUSES.LOADED,
+              data: { ...searchData },
+            })
+          } else if (status === 'error') {
+            store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+              atom: collection,
+              status: STATUSES.FAILURE,
+              data: { ...searchData },
+            })
+          }
+        })
+      }
+
+      pendo.track(
+        `More Similar Search - ${data.matchCount > 0 ? 'Results' : 'No Results'}`,
+        {
+          modelId,
+          numOfMatches: data.matchCount,
+        }
+      )
     }
   )
 }

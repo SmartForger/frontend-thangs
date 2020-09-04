@@ -25,6 +25,10 @@ const useStyles = createUseStyles(theme => {
     SearchResults_Page: {
       display: 'flex',
       flexDirection: 'row',
+      width: '100%',
+    },
+    SearchResults_MainContent: {
+      width: '100%',
     },
     SearchResults_MatchingIcon: {
       marginRight: '.5rem',
@@ -67,11 +71,13 @@ const useStyles = createUseStyles(theme => {
     SearchResults_Results: {
       display: 'flex',
       flexDirection: 'column',
+      margin: '1rem 0',
     },
     SearchResults_ResultsHeader: {
       display: 'flex',
       alignItems: 'center',
-      marginBottom: '1rem',
+      marginBottom: '1.5rem',
+      marginTop: '.5rem',
     },
     SearchResults_ResultsHeaderText: {
       ...theme.mixins.text.searchResultsHeader,
@@ -98,12 +104,16 @@ const SearchResult = ({
   models,
   modelId,
   isError,
+  isLoading = true,
   c,
   searchModelFileName,
   showReportModel,
   handleReportModel,
   handleFindSimilar,
 }) => {
+  const filteredModels = models.filter(
+    model => model.resultSource !== 'phyndexer' || model.attributionUrl
+  )
   return (
     <div className={c.SearchResults_Results}>
       {modelId && (
@@ -113,15 +123,17 @@ const SearchResult = ({
           </span>
         </div>
       )}
-      {isError ? (
+      {isLoading ? (
+        <NoResults>Searching our 1,000,000+ models...</NoResults>
+      ) : isError ? (
         <NoResults>
           Error! We were not able to load results. Please try again later.
         </NoResults>
       ) : (
         <>
-          {models && models.length > 0 ? (
+          {filteredModels && filteredModels.length > 0 ? (
             <ModelSearchResults
-              items={models}
+              items={filteredModels}
               showSocial={false}
               showWaldo={false} //Change back to !!modelId when we want waldo thumbnails back
               searchModelFileName={searchModelFileName}
@@ -129,7 +141,13 @@ const SearchResult = ({
               handleReportModel={handleReportModel}
               handleFindSimilar={handleFindSimilar}
             />
-          ) : null}
+          ) : (
+            <>
+              {modelId ? (
+                <NoResults>No results found. Try another search or model.</NoResults>
+              ) : null}
+            </>
+          )}
         </>
       )}
     </div>
@@ -140,7 +158,7 @@ const ThangsSearchResult = ({
   models,
   modelId,
   isError,
-  isLoading,
+  isLoading = true,
   isOtherModelsLoaded,
   c,
   searchModelFileName,
@@ -154,7 +172,6 @@ const ThangsSearchResult = ({
     public database search results below`
       : 'We are searching the Thangs database...'
   }, [isOtherModelsLoaded])
-
   return (
     <div className={c.SearchResults_Results}>
       {modelId && (
@@ -166,11 +183,15 @@ const ThangsSearchResult = ({
         </div>
       )}
       {isLoading ? (
-        <NoResults>{searchingText}</NoResults>
+        <>{modelId && <NoResults>{searchingText}</NoResults>}</>
       ) : isError ? (
-        <NoResults>
-          Error! We were not able to load results. Please try again later.
-        </NoResults>
+        <>
+          {modelId && (
+            <NoResults>
+              Error! We were not able to load results. Please try again later.
+            </NoResults>
+          )}
+        </>
       ) : (
         <>
           {models && models.length > 0 ? (
@@ -183,7 +204,13 @@ const ThangsSearchResult = ({
               handleReportModel={handleReportModel}
               handleFindSimilar={handleFindSimilar}
             />
-          ) : null}
+          ) : (
+            <>
+              {modelId ? (
+                <NoResults>No results found. Try another search or model.</NoResults>
+              ) : null}
+            </>
+          )}
         </>
       )}
     </div>
@@ -209,10 +236,13 @@ const Page = () => {
         searchTerm: searchQuery,
       })
     }
-    if (modelId && modelId !== 'undefined')
-      dispatch(types.GET_RELATED_MODELS, { modelId: modelId })
+    if (modelId && modelId !== undefined) {
+      dispatch(types.GET_RELATED_MODELS, {
+        modelId: modelId,
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery])
+  }, [searchQuery, modelId])
 
   const handleReportModel = useCallback(
     ({ model }) => {
