@@ -24,6 +24,7 @@ const routeRequiresAuth = (Component, redirectDest = '/login') => {
   const AuthRouteComponent = (...props) => {
     const isAuthed = authenticationService.getCurrentUserId() !== undefined
     const currentPath = history.location.pathname
+    localStorage.setItem('routeBeforeSignIn', currentPath)
     const shouldRedirect = !isAuthed && currentPath !== redirectDest
     DEBUG &&
       console.debug(

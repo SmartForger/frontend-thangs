@@ -140,6 +140,8 @@ const Page = () => {
   const { registrationCode } = useParams()
 
   const handleSignUp = useCallback(async () => {
+    let requestedPage = localStorage.getItem('routeBeforeSignIn')
+    localStorage.removeItem('routeBeforeSignIn')
     setWaiting(true)
     setSignupErrorMessage(null)
 
@@ -161,7 +163,8 @@ const Page = () => {
         password: inputState.password,
       })
       if (redirectUrl) return history.push(redirectUrl)
-      history.push('/welcome')
+      requestedPage ? history.push(requestedPage) : history.push('/welcome')
+      requestedPage = null
     }
   }, [history, inputState, redirectUrl, registrationCode])
 

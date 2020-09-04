@@ -153,6 +153,8 @@ const Login = () => {
   }, [inputState, setFieldToValid])
 
   const handleLogin = useCallback(async () => {
+    let requestedPage = localStorage.getItem('routeBeforeSignIn')
+    localStorage.removeItem('routeBeforeSignIn')
     setWaiting(true)
     setLoginErrorMessage(null)
 
@@ -167,7 +169,8 @@ const Login = () => {
         data.detail || 'Sorry, we encounteed an unexpected error.  Please try again.'
       )
     } else {
-      history.push('/')
+      requestedPage ? history.push(requestedPage) : history.push('/')
+      requestedPage = null
     }
   }, [history, inputState])
 

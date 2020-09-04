@@ -7,7 +7,6 @@ import {
   CreateFolder,
   CreateTeam,
   PasswordReset,
-  SignIn,
   FolderManagement,
   ReportModel,
 } from '@overlays'
@@ -109,7 +108,6 @@ const overlayTemplates = {
   searchByUpload: SearchByUpload,
   createFolder: CreateFolder,
   createTeam: CreateTeam,
-  signIn: SignIn,
   passwordReset: PasswordReset,
   folderManagement: FolderManagement,
   reportModel: ReportModel,

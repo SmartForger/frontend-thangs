@@ -141,17 +141,9 @@ const UserNav = ({
           Sign up
         </Button>
       </Link>
-      <Button
-        className={c.UserNav_Button}
-        onClick={() =>
-          dispatch(types.OPEN_OVERLAY, {
-            overlayName: 'signIn',
-            overlayData: { afterSignIn: () => dispatch(types.CLOSE_OVERLAY) },
-          })
-        }
-      >
-        Sign in
-      </Button>
+      <Link to={'/login'} onClick={() => dispatch(types.CLOSE_OVERLAY)}>
+        <Button className={c.UserNav_Button}>Sign in</Button>
+      </Link>
     </div>
   )
 }
