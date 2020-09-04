@@ -57,20 +57,6 @@ export default store => {
       onFinish()
     }
   })
-  store.on(types.UPDATE_USER_AVATAR, (state, { userId, data }) => {
-    return {
-      [`user-${userId}`]: {
-        ...state[`user-${userId}`],
-        data: {
-          ...state[`user-${userId}`].data,
-          profile: {
-            ...state[`user-${userId}`].data.profile,
-            avatarUrl: data,
-          },
-        },
-      },
-    }
-  })
   store.on(types.UPDATE_USER, async (_, { id, user: updatedUser, onFinish = noop }) => {
     if (R.isNil(id)) return
 

@@ -7,7 +7,7 @@ import { logger } from '@utilities/logging'
 import { Button } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import {useStoreon} from 'storeon/react'
+import { useStoreon } from 'storeon/react'
 import * as types from '../@constants/storeEventTypes'
 
 const useStyles = createUseStyles(_theme => {
@@ -95,12 +95,11 @@ const ChangeablePicture = ({ user, className }) => {
   const [isCropping, setIsCropping] = useState(false)
   const imageEl = useRef(null)
   const formRef = useRef(null)
-  const buttonRef = useRef(null)
   const { dispatch } = useStoreon('userUploadAvatar')
   const c = useStyles()
 
   const submitCrop = useCallback(() => {
-    dispatch(types.UPLOAD_USER_AVATAR, {userId: user.id, file: croppedImg})
+    dispatch(types.UPLOAD_USER_AVATAR, { userId: user.id, file: croppedImg })
     setIsCropping(false)
   }, [croppedImg, dispatch, user.id])
 
@@ -189,7 +188,6 @@ const ChangeablePicture = ({ user, className }) => {
           onClick={e => {
             e.preventDefault()
           }}
-          ref={buttonRef}
         >
           Upload New Photo
         </Button>

@@ -75,7 +75,6 @@ export const FAILURE_UPLOAD_MODEL = 'failure-upload-model'
 /* Users Store Events */
 export const INIT_USER = 'init-user'
 export const CHANGE_USER_STATUS = 'change-user-status'
-export const UPDATE_USER_AVATAR = 'update-user-avatar'
 export const FETCH_USER = 'fetch-user'
 export const UPDATE_USER = 'update-user'
 export const FETCH_CURRENT_USER = 'fetch-currentUser'
