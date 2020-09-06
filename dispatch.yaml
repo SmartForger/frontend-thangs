@@ -3,6 +3,8 @@ dispatch:
   - url: "thangs.com/*"
     # TODO: Update to thangs-frontend
     service: thangs-react
+  - url: "www.thangs.com/*"
+    service: thangs-react
   - url: "app.thangs.com/*"
     # TODO: Update to thangs-frontend
     service: thangs-react
@@ -12,6 +14,8 @@ dispatch:
 
   # Staging routes
   - url: "staging.thangs.com/*"
+    service: staging-thangs-frontend
+  - url: "www.staging.thangs.com/*"
     service: staging-thangs-frontend
   - url: "staging-backend.thangs.com/*"
     service: staging-thangs-backend
