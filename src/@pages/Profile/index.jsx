@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import * as R from 'ramda'
 import {
@@ -18,7 +18,6 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import useFetchOnce from '@hooks/useServices/useFetchOnce'
 import useFetchPerMount from '@hooks/useServices/useFetchPerMount'
-import { useUserName } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -85,6 +84,8 @@ export * from './EditProfile'
 export * from './RedirectProfile'
 export * from './Likes'
 export * from './Home'
+
+const ONLY_DIGITS_REGEX = /^\d+$/
 
 const TabTitle = ({ title, Icon, selected, onClick, amount }) => {
   const c = useStyles()
@@ -209,21 +210,34 @@ const Tabs = ({ userId }) => {
 }
 
 const Page = () => {
-  const { id, userName } = useParams()
-  const c = useStyles()
-  const [userId, loading, error] = useUserName(userName)
-  const profileId = useMemo(() => userId || id, [userId, id])
-  console.log(profileId)
-  debugger
+  const { id } = useParams()
+  const isId = ONLY_DIGITS_REGEX.test(id)
+
+  if (id && isId) {
+    return <PageById userId={id} />
+  }
+
+  if (id && !isId) {
+    return <PageByUserName userName={id} />
+  }
+
+  return (
+    <div data-cy='fetch-profile-error'>
+      <Message404 />
+    </div>
+  )
+}
+
+const PageByUserName = ({ userName }) => {
   const {
-    atom: { isLoading, isError, data: user },
-  } = useFetchPerMount(profileId, 'user')
-  console.log('user', user)
-  if (isLoading || loading) {
+    atom: { isLoaded, isError, data: userId },
+  } = useFetchOnce(userName, 'user-id')
+
+  if (!isLoaded) {
     return <Spinner />
   }
 
-  if (isError || error) {
+  if (isError) {
     return (
       <div data-cy='fetch-profile-error'>
         Error! We were not able to load this profile. Please try again later.
@@ -231,7 +245,7 @@ const Page = () => {
     )
   }
 
-  if (!user) {
+  if (!userId) {
     return (
       <div data-cy='fetch-profile-error'>
         <Message404 />
@@ -239,21 +253,55 @@ const Page = () => {
     )
   }
 
+  return <PageById userId={userId} />
+}
+
+const PageById = ({ userId }) => {
+  const {
+    atom: { isLoaded, isError, data: user },
+  } = useFetchOnce(userId, 'user')
+
+  if (!isLoaded) {
+    return <Spinner />
+  }
+
+  if (isError) {
+    return (
+      <div data-cy='fetch-profile-error'>
+        Error! We were not able to load this profile. Please try again later.
+      </div>
+    )
+  }
+
+  if (R.isNil(user) || R.isEmpty(user)) {
+    return (
+      <div data-cy='fetch-profile-error'>
+        <Message404 />
+      </div>
+    )
+  }
+
+  return <UseredPage user={user} />
+}
+
+const UseredPage = ({ user = {} }) => {
+  const c = useStyles()
+
   return (
     <div className={c.Profile}>
       <div className={c.Profile_Row}>
         <ProfilePicture
           className={c.Profile_ProfilePicture}
           size='5rem'
-          src={user && user.profile && user.profile.avatarUrl}
+          src={user.profile && user.profile.avatarUrl}
           name={user.fullName}
         />
         <div>
           <div className={c.Profile_Name}>{user.fullName}</div>
-          <ProfileButton userId={profileId} className={c.Profile_ProfileButton} />
+          <ProfileButton userId={user.id} className={c.Profile_ProfileButton} />
         </div>
       </div>
-      <Tabs userId={profileId} />
+      <Tabs userId={user.id} />
     </div>
   )
 }

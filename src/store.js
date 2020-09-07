@@ -16,6 +16,7 @@ import modelLikesStore from '@store/modelLikes/store'
 import modelDownloadUrl from '@store/modelDownloadUrl/store'
 import relatedModelsStore from '@store/relatedModels/store'
 import userAvatarStore from '@store/userAvatar/store'
+import usersIdsStore from '@store/usersIds/store'
 
 const storeParts = [
   commentsStore,
@@ -34,6 +35,7 @@ const storeParts = [
   modelDownloadUrl,
   userAvatarStore,
   relatedModelsStore,
+  usersIdsStore,
 ]
 
 const store = createStoreon([

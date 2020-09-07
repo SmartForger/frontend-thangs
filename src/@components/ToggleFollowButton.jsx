@@ -2,8 +2,8 @@ import React, { useCallback } from 'react'
 import { Button, Spinner } from '@components'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { createUseStyles } from '@style'
-import useFetchPerMount from '@hooks/useServices/useFetchPerMount'
 import { useStoreon } from 'storeon/react'
+import useFetchOnce from '@hooks/useServices/useFetchOnce'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -28,7 +28,7 @@ const useStyles = createUseStyles(_theme => {
 const ToggleFollowButton = ({ userId }) => {
   const {
     atom: { isLoading, isError, data: user },
-  } = useFetchPerMount(userId, 'user')
+  } = useFetchOnce(userId, 'user')
 
   const { dispatch } = useStoreon()
 

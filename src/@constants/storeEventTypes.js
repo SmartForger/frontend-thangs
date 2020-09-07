@@ -94,3 +94,7 @@ export const LOADED_USER_AVATAR = 'loaded-user-avatar'
 export const FAILED_USER_AVATAR = 'failed-user-avatar'
 export const UPLOAD_USER_AVATAR = 'upload-user-avatar'
 export const DELETE_USER_AVATAR = 'delete-user-avatar'
+/* Users Ids by Name */
+export const INIT_USER_ID = 'init-user-id'
+export const FETCH_USER_ID = 'fetch-user-id'
+export const CHANGE_USER_ID_STATUS = 'change-user-id-status'
