@@ -85,8 +85,6 @@ export * from './RedirectProfile'
 export * from './Likes'
 export * from './Home'
 
-const ONLY_DIGITS_REGEX = /^\d+$/
-
 const TabTitle = ({ title, Icon, selected, onClick, amount }) => {
   const c = useStyles()
 
@@ -210,15 +208,14 @@ const Tabs = ({ userId }) => {
 }
 
 const Page = () => {
-  const { id } = useParams()
-  const isId = ONLY_DIGITS_REGEX.test(id)
+  const { id, userName } = useParams()
 
-  if (id && isId) {
-    return <PageById userId={id} />
+  if (userName) {
+    return <PageByUserName userName={userName} />
   }
 
-  if (id && !isId) {
-    return <PageByUserName userName={id} />
+  if (id) {
+    return <PageById userId={id} />
   }
 
   return (
