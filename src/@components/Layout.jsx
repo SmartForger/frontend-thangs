@@ -14,7 +14,6 @@ import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import Banner from './Header/Banner'
-import { history } from '../history'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -117,7 +116,8 @@ const overlayTemplates = {
 
 const Layout = ({
   children,
-  injestedModels,
+  bannerText,
+  isLanding,
   Hero,
   showSearch,
   showSearchTextFlash,
@@ -127,7 +127,6 @@ const Layout = ({
   const [notificationsIsOpen, setNotificationsOpen] = useState(false)
   const [notificationsClosing, setNotificationsClosing] = useState(false)
   const c = useStyles({ notificationsIsOpen })
-  const currentPath = history.location.pathname
 
   const onNotificationsClick = useCallback(() => {
     if (notificationsIsOpen) {
@@ -154,9 +153,7 @@ const Layout = ({
 
   return (
     <div className={c.Container}>
-      {currentPath === '/' && injestedModels && (
-        <Banner>{injestedModels} models injested</Banner>
-      )}
+      {isLanding && bannerText && <Banner>{bannerText}</Banner>}
       <Header
         onNotificationsClick={onNotificationsClick}
         notificationsIsOpen={notificationsIsOpen}

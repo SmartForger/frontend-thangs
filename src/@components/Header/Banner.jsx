@@ -1,15 +1,15 @@
 import React from 'react'
-import { createUseStyles } from 'react-jss'
+import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(() => {
+const useStyles = createUseStyles(theme => {
   return {
     Banner: {},
     Banner_TopRow: {
       height: '2.5rem',
-      background: '#FFBC00',
+      background: theme.colors.gold[500],
     },
     Banner_TopRowText: {
-      fontFamily: 'Proxima Nova',
+      fontFamily: theme.variables.fonts.mainFont,
       fontStyle: 'normal',
       fontWeight: '600',
       fontSize: '.875rem',
