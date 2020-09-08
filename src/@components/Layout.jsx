@@ -117,7 +117,6 @@ const overlayTemplates = {
 const Layout = ({
   children,
   bannerText,
-  isLanding,
   Hero,
   showSearch,
   showSearchTextFlash,
@@ -153,7 +152,7 @@ const Layout = ({
 
   return (
     <div className={c.Container}>
-      {isLanding && bannerText && <Banner>{bannerText}</Banner>}
+      {bannerText && <Banner>{bannerText}</Banner>}
       <Header
         onNotificationsClick={onNotificationsClick}
         notificationsIsOpen={notificationsIsOpen}

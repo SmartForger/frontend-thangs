@@ -196,7 +196,6 @@ const Landing = ({ newSignUp }) => {
   const HeroComponent = getHero({ loading, user, newSignUp })
   return (
     <Layout
-      isLanding={true}
       bannerText={
         modelsStats && modelsStats.data && modelsStats.data.modelsIngested
           ? `${modelsStats.data.modelsIngested} models ingested`

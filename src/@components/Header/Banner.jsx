@@ -9,7 +9,6 @@ const useStyles = createUseStyles(theme => {
       background: theme.colors.gold[500],
     },
     Banner_TopRowText: {
-      fontFamily: theme.variables.fonts.mainFont,
       fontStyle: 'normal',
       fontWeight: '600',
       fontSize: '.875rem',
