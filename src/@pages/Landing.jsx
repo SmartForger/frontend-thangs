@@ -182,15 +182,24 @@ const getHero = ({ loading, user, newSignUp }) => {
 }
 
 const Landing = ({ newSignUp }) => {
+  const { dispatch, modelPreviews } = useStoreon('modelPreviews')
+  const { modelsStats } = useStoreon('modelsStats')
+  useEffect(() => {
+    dispatch(types.FETCH_MODELS_STATS)
+  }, [dispatch])
   const { id } = useParams()
   if (id) pendo.track('User referral', { referralChannel: id })
   const {
     atom: { data: user, isLoading: loading },
   } = useCurrentUser()
-  const { dispatch, modelPreviews } = useStoreon('modelPreviews')
+
   const HeroComponent = getHero({ loading, user, newSignUp })
   return (
-    <Layout Hero={HeroComponent} showSearchTextFlash={true}>
+    <Layout
+      injestedModels={modelsStats && modelsStats.data && modelsStats.data.modelsIngested}
+      Hero={HeroComponent}
+      showSearchTextFlash={true}
+    >
       <Page user={user} dispatch={dispatch} modelPreviews={modelPreviews} />
     </Layout>
   )

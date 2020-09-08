@@ -13,6 +13,8 @@ import {
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import Banner from './Header/Banner'
+import { history } from '../history'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -113,11 +115,19 @@ const overlayTemplates = {
   reportModel: ReportModel,
 }
 
-const Layout = ({ children, Hero, showSearch, showSearchTextFlash, showUser }) => {
+const Layout = ({
+  children,
+  injestedModels,
+  Hero,
+  showSearch,
+  showSearchTextFlash,
+  showUser,
+}) => {
   const { overlay } = useStoreon('overlay')
   const [notificationsIsOpen, setNotificationsOpen] = useState(false)
   const [notificationsClosing, setNotificationsClosing] = useState(false)
   const c = useStyles({ notificationsIsOpen })
+  const currentPath = history.location.pathname
 
   const onNotificationsClick = useCallback(() => {
     if (notificationsIsOpen) {
@@ -144,6 +154,9 @@ const Layout = ({ children, Hero, showSearch, showSearchTextFlash, showUser }) =
 
   return (
     <div className={c.Container}>
+      {currentPath === '/' && injestedModels && (
+        <Banner>{injestedModels} models injested</Banner>
+      )}
       <Header
         onNotificationsClick={onNotificationsClick}
         notificationsIsOpen={notificationsIsOpen}
