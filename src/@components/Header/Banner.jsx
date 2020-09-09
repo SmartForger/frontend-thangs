@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -6,6 +6,8 @@ const useStyles = createUseStyles(theme => {
     Banner: {},
     Banner_TopRow: {
       background: theme.colors.gold[500],
+      height: ({ isOpen }) => (isOpen ? '2rem' : 0),
+      transition: 'height 0.15s',
     },
     Banner_TopRowText: {
       fontWeight: 600,
@@ -18,7 +20,14 @@ const useStyles = createUseStyles(theme => {
 })
 
 const Banner = props => {
-  const c = useStyles()
+  const [isOpen, setIsOpen] = useState(false)
+  const c = useStyles({ isOpen })
+  useEffect(() => {
+    setTimeout(() => {
+      setIsOpen(true)
+    }, 500)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className={c.Banner_TopRow}>
