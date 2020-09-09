@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import * as R from 'ramda'
 import {
   Layout,
   WithFlash,
@@ -6,6 +7,7 @@ import {
   CardCollection,
   ProfilePicture,
   ProfileButton,
+  Button,
 } from '@components'
 import ModelCards from '@components/CardCollection/ModelCards'
 import FolderCards from '@components/CardCollection/FolderCards'
@@ -64,6 +66,15 @@ const useStyles = createUseStyles(theme => {
       ...theme.mixins.text.boldText,
       ...theme.mixins.text.linkText,
     },
+
+    Profile_NoContentMessage: {
+      ...theme.mixins.text.smallHeaderText,
+      marginTop: '1.75rem',
+    },
+
+    Profile_NoContentMessage__link: {
+      ...theme.mixins.text.linkText,
+    },
   }
 })
 
@@ -78,6 +89,69 @@ const CollectionTitle = ({ selected, onClick, className, title, Icon, amount }) 
       <Icon className={c.Home_Icon} selected={selected} />
       {amount ? [title, amount].join(' ') : title}
     </div>
+  )
+}
+
+const ModelsContent = ({ models }) => {
+  const c = useStyles({})
+  const { dispatch } = useStoreon()
+  if (R.isEmpty(models)) {
+    return (
+      <div className={c.Profile_NoContentMessage}>
+        <Button
+          text
+          inline
+          onClick={e => {
+            e.preventDefault()
+            dispatch(types.OPEN_OVERLAY, {
+              overlayName: 'upload',
+            })
+          }}
+        >
+          <span className={c.Profile_NoContentMessage__link}>Upload</span>
+        </Button>{' '}your first model to start building your portfolio.
+        ?
+      </div>
+    )
+  }
+
+  return (
+    <CardCollection noResultsText='This user has not uploaded any models yet.'>
+      <ModelCards items={models} />
+    </CardCollection>
+  )
+}
+
+const FoldersContent = ({ folders: foldersAtom }) => {
+  const c = useStyles({})
+  const { dispatch } = useStoreon()
+
+  const folders = R.path(['data'], foldersAtom) || []
+
+  if (R.isEmpty(folders)) {
+    return (
+      <div className={c.Profile_NoContentMessage}>
+        <Button
+          text
+          inline
+          onClick={e => {
+            e.preventDefault()
+            dispatch(types.OPEN_OVERLAY, {
+              overlayName: 'createFolder',
+            })
+          }}
+        >
+          <span className={c.Profile_NoContentMessage__link}>Create</span>
+        </Button>{' '}
+        a private shared folder, invite team members, and start collaborating on projects.
+      </div>
+    )
+  }
+
+  return (
+    <CardCollection noResultsText='This user has not uploaded any folders yet.'>
+      <FolderCards items={folders} />
+    </CardCollection>
   )
 }
 
@@ -136,13 +210,9 @@ const PageContent = ({ user }) => {
       </div>
       <WithFlash>
         {selected === 'models' ? (
-          <CardCollection noResultsText='This user has not uploaded any models yet.'>
-            <ModelCards items={sortedModels} />
-          </CardCollection>
+          <ModelsContent models={sortedModels} />
         ) : (
-          <CardCollection noResultsText='This user has not uploaded any folders yet.'>
-            <FolderCards items={folders && folders.data} />
-          </CardCollection>
+          <FoldersContent folders={folders} />
         )}
       </WithFlash>
     </div>
