@@ -253,7 +253,11 @@ const Landing = ({ newSignUp }) => {
 
   return (
     <Layout
-      bannerText={modelsIngested ? `${modelsIngested} models ingested` : null}
+      bannerText={
+        modelsIngested
+          ? `${modelsIngested} models indexed and ready to be searched`
+          : null
+      }
       Hero={HeroComponent}
       showSearchTextFlash={true}
     >
