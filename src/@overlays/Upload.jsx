@@ -74,7 +74,7 @@ const Upload = ({ prevModelId }) => {
 
   const handleSubmit = useCallback(
     data => {
-      const { weight, material, height, name, description, category, folder } = data
+      const { weight, material, height, name, description, category, folder: folderId } = data
 
       const requiredVariables = {
         name: sanitizeFileName(name),
@@ -88,7 +88,7 @@ const Upload = ({ prevModelId }) => {
         ...(material.length > 0 && { material }),
         ...(category && { category }),
         ...(!R.isNil(prevModelId) && { previousVersionModelId: prevModelId }),
-        folderId: folder ? folder : undefined,
+        folderId,
       }
 
       dispatch(types.UPLOAD_MODEL_PHASE2, {
@@ -98,7 +98,7 @@ const Upload = ({ prevModelId }) => {
         },
         onFinish: () => {
           dispatch(types.CLOSE_OVERLAY)
-          navigateWithFlash('/home', 'Model added successfully.')
+          navigateWithFlash(folderId ? `/folder/${folderId}` : '/home', 'Model added successfully.')
           dispatch(types.RESET_UPLOAD_MODEL)
         },
       })
