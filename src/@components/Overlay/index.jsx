@@ -32,7 +32,7 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 const noop = () => null
-const Overlay = ({ children, className, onOverlayClose = noop, ...props }) => {
+const Overlay = ({ children, className, isBanner, onOverlayClose = noop, ...props }) => {
   const { dispatch } = useStoreon()
   const c = useStyles(props)
   return (
@@ -41,7 +41,7 @@ const Overlay = ({ children, className, onOverlayClose = noop, ...props }) => {
       style={{
         overlay: {
           position: 'fixed',
-          top: '6.125rem',
+          top: isBanner ? '8.125rem' : '6.125rem',
           left: 0,
           right: 0,
           bottom: 0,

@@ -170,6 +170,7 @@ const Layout = ({
         <Overlay
           className={classnames({ [c.Overlay__hidden]: overlay.isHidden })}
           isOpen={overlay.isOpen}
+          isBanner={!!bannerText}
           {...overlay.overlayData}
         >
           <OverlayView {...overlay.overlayData} />
