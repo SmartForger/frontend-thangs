@@ -52,6 +52,11 @@ const ScannerThumbnail = ({ model }) => {
 }
 
 const sanitizeFileName = name => name.replace(/ /g, '_')
+const getFileName = filename => {
+  if (!filename) return null
+  const filenameArray = filename.split('/')
+  return filenameArray[filenameArray.length - 1]
+}
 
 const SearchByUpload = () => {
   const c = useStyles()
@@ -68,17 +73,18 @@ const SearchByUpload = () => {
     dispatch(types.RESET_SEARCH_RESULTS)
     if (model) {
       const modelId = model.id || model.modelId
+      const searchTerm =
+        model.uploadedFile ||
+        model.modelFileName ||
+        getFileName(model.fileName) ||
+        'model'
       setNewModelId(modelId)
       if (modelId) {
         dispatch(types.GET_RELATED_MODELS, {
           modelId,
           onFinish: () => {
             dispatch('close-overlay')
-            history.push(
-              `/search/${model.uploadedFile ||
-                model.modelFileName ||
-                ''}?modelId=${modelId}&related=true`
-            )
+            history.push(`/search/${searchTerm}?modelId=${modelId}&related=true`)
           },
         })
       }
