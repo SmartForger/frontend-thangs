@@ -34,11 +34,11 @@ const ScannerPaper = ({ facetsAmount }) => {
       <div>
         {facetsAmount ? (
           <>
-            <div>7,162</div>
+            <div>{facetsAmount}</div>
             <p>facets scanned</p>
           </>
         ) : (
-          <div>Facets</div>
+          <div></div>
         )}
       </div>
     </div>

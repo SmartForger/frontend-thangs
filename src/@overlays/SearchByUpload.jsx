@@ -63,17 +63,25 @@ const SearchByUpload = () => {
     () => overlay && overlay.overlayData && overlay.overlayData.model,
     [overlay]
   )
+
   useEffect(() => {
     dispatch(types.RESET_SEARCH_RESULTS)
     if (model) {
       const modelId = model.id || model.modelId
       setNewModelId(modelId)
-      dispatch(types.GET_RELATED_MODELS, {
-        modelId,
-        onSomeResult: () => {
-          dispatch('close-overlay')
-        },
-      })
+      if (modelId) {
+        dispatch(types.GET_RELATED_MODELS, {
+          modelId,
+          onFinish: () => {
+            dispatch('close-overlay')
+            history.push(
+              `/search/${model.uploadedFile ||
+                model.modelFileName ||
+                ''}?modelId=${modelId}&related=true`
+            )
+          },
+        })
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -90,9 +98,12 @@ const SearchByUpload = () => {
         data: {
           ...requiredVariables,
         },
-        onFinish: ({ modelId }) => {
+        onNewModelId: ({ newModelId }) => setNewModelId(newModelId),
+        onFinish: ({ modelId, phyndexerId }) => {
           dispatch('close-overlay')
-          history.push(`/search/${file ? file.name : ''}?modelId=${modelId}`)
+          history.push(
+            `/search/${file ? file.name : ''}?modelId=${modelId}&phynId=${phyndexerId}`
+          )
         },
       })
     },
@@ -102,7 +113,7 @@ const SearchByUpload = () => {
   return (
     <div>
       <div className={c.SearchByUpload}>
-        {phyndexer.isLoading ? (
+        {phyndexer.isLoading || model ? (
           R.isNil(newModelId) ? (
             <UploadProgress />
           ) : (

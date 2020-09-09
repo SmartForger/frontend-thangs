@@ -144,6 +144,11 @@ const SearchResult = ({
           ) : null}
         </>
       )}
+      {modelId && !isLoading && !isError && filteredModels.length === 0 ? (
+        <NoResults>
+          No results found. Try another search term or upload a different model.
+        </NoResults>
+      ) : null}
     </div>
   )
 }
@@ -201,6 +206,11 @@ const ThangsSearchResult = ({
           ) : null}
         </>
       )}
+      {modelId && !isLoading && !isError && models.length === 0 ? (
+        <NoResults>
+          No results found. Try another search term or upload a different model.
+        </NoResults>
+      ) : null}
     </div>
   )
 }
@@ -215,6 +225,8 @@ const Page = () => {
   const location = useLocation()
   const query = useQuery(location)
   const modelId = useMemo(() => query.get('modelId'), [query])
+  const phynId = useMemo(() => query.get('phynId'), [query])
+  const related = useMemo(() => query.get('related'), [query])
   const { dispatch, searchResults } = useStoreon('searchResults')
   const { phyndexer, thangs } = searchResults
   const [showReportModelButtons, setShowReportModelButtons] = useState(false)
@@ -224,9 +236,18 @@ const Page = () => {
         searchTerm: searchQuery,
       })
     }
-    if (modelId && modelId !== undefined) {
-      dispatch(types.GET_RELATED_MODELS, {
+    if (!related && modelId && phynId) {
+      dispatch(types.GET_RELATED_MODELS_VIA_THANGS, {
         modelId: modelId,
+      })
+      dispatch(types.GET_RELATED_MODELS_VIA_PHYNDEXER, {
+        newModelId: modelId,
+        newPhyndexerId: phynId,
+      })
+    }
+    if (related && modelId) {
+      dispatch(types.GET_RELATED_MODELS, {
+        modelId,
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -333,7 +354,7 @@ const Page = () => {
             Report a Model
           </Button>
         ) : null}
-        {!isLoading && !isError && (!resultCount || resultCount === 0) ? (
+        {!modelId && !isLoading && !isError && (!resultCount || resultCount === 0) ? (
           <NoResults>
             No results found. Try another search term or upload a different model.
           </NoResults>

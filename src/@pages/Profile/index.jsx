@@ -18,6 +18,7 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import useFetchOnce from '@hooks/useServices/useFetchOnce'
 import useFetchPerMount from '@hooks/useServices/useFetchPerMount'
+import * as pendo from '@vendors/pendo'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -229,7 +230,7 @@ const PageByUserName = ({ userName }) => {
   const {
     atom: { isLoaded, isError, data: userId },
   } = useFetchOnce(userName, 'user-id')
-
+  pendo.track('Portfolio', { userName })
   if (!isLoaded) {
     return <Spinner />
   }
