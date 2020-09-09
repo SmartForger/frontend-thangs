@@ -28,7 +28,7 @@ jobs:
         type: string
         description: "add --no-promote to deploy without routing traffic to new version"
       Version:
-        default: ""
+        default: "--version \"${CIRCLE_SHA1:0:8}\""
         type: string
         description: "add --version someVersionName if you want to assign a version"
       Stack:
@@ -78,9 +78,6 @@ jobs:
           name: "Build Storybook"
           command: yarn build:storybook
       - run:
-          name: "Create short git hash"
-          command: echo 'export SHORT_GIT_HASH=${CIRCLE_SHA1:0:7}' >> $BASH_ENV
-      - run:
           name: "Deploy build"
           command: |
             # Store service account
@@ -89,7 +86,7 @@ jobs:
             gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
             gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
-            gcloud app deploy --quiet <<parameters.Stack>>.yaml <<parameters.NoPromote>> --version ${SHORT_GIT_HASH}
+            gcloud app deploy --quiet <<parameters.Stack>>.yaml <<parameters.NoPromote>> <<parameters.Version>>
 
   deploy-production:
     docker:
@@ -100,7 +97,7 @@ jobs:
         type: string
         description: "add --no-promote to deploy without routing traffic to new version"
       Version:
-        default: ""
+        default: "--version \"${CIRCLE_SHA1:0:8}\""
         type: string
         description: "add --version someVersionName if you want to assign a version"
       Stack:
