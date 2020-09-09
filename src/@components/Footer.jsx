@@ -12,7 +12,7 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       bottom: 0,
       width: '100%',
-      height: '3.75rem',
+      height: '2.75rem',
 
       '& > p': {
         margin: 0,

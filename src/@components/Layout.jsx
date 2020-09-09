@@ -101,7 +101,7 @@ const useStyles = createUseStyles(theme => {
     },
     Layout_FeedbackTooltip: {
       position: 'fixed',
-      bottom: '2rem',
+      bottom: '3rem',
       right: '2rem',
       zIndex: 1,
     },
