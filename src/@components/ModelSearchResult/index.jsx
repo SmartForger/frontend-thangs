@@ -4,7 +4,6 @@ import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
 import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
-import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
 import { Button, Card, ModelThumbnail, UserInline } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -75,7 +74,7 @@ const useStyles = createUseStyles(theme => {
       fontSize: '1rem',
       lineHeight: '1.5rem',
       fontWeight: 500,
-      marginTop: '.5rem',
+      marginTop: '.25rem',
       color: theme.colors.grey[700],
     },
     ModelSearchResult_DetailsInline: {
@@ -138,11 +137,13 @@ const useStyles = createUseStyles(theme => {
         margin: '0 !important',
       },
     },
-    ModelSearchResult_FindSimilarLink: {
-      color: theme.colors.gold[500],
-      marginTop: '.5rem',
+    ModelSearchResult_FindRelatedLink: {
+      marginTop: '1rem',
       fontSize: '1rem',
+      fontWeight: 500,
       lineHeight: '1rem',
+      cursor: 'pointer',
+      textDecoration: 'underline',
     },
   }
 })
@@ -156,7 +157,7 @@ const ThangsModelDetails = ({
   isLiked = false,
   showReportModel,
   handleReportModel = noop,
-  handleFindSimilar = noop,
+  handleFindRelated = noop,
 }) => {
   let modelName = model.name
   if (modelName && modelName.length > 40) modelName = modelName.slice(0, 40) + '...'
@@ -188,13 +189,12 @@ const ThangsModelDetails = ({
         <div className={c.ModelSearchResult_Name}>{modelName}</div>
         <div className={c.ModelSearchResult_Description}>{model.description}</div>
       </Anchor>
-      <Button
-        text
-        className={c.ModelSearchResult_FindSimilarLink}
-        onClick={() => handleFindSimilar({ model })}
+      <div
+        className={c.ModelSearchResult_FindRelatedLink}
+        onClick={() => handleFindRelated({ model })}
       >
-        <MagnifyingGlass /> Find Similar Models
-      </Button>
+        View related models
+      </div>
       {showReportModel && (
         <Button
           icon
@@ -215,7 +215,7 @@ const ExternalModelDetails = ({
   modelPath,
   showReportModel,
   handleReportModel = noop,
-  handleFindSimilar = noop,
+  handleFindRelated = noop,
 }) => {
   const { modelTitle, modelDescription, modelFileName } = model
   let formattedModelDescription = modelDescription
@@ -243,13 +243,12 @@ const ExternalModelDetails = ({
         <div className={c.ModelSearchResult_Name}>{modelTitle || modelFileName}</div>
         <div className={c.ModelSearchResult_Description}>{formattedModelDescription}</div>
       </Anchor>
-      <Button
-        text
-        className={c.ModelSearchResult_FindSimilarLink}
-        onClick={() => handleFindSimilar({ model })}
+      <div
+        className={c.ModelSearchResult_FindRelatedLink}
+        onClick={() => handleFindRelated({ model })}
       >
-        <MagnifyingGlass /> Find Similar Models
-      </Button>
+        View related models
+      </div>
       {showReportModel && (
         <Button
           icon
@@ -283,7 +282,7 @@ const ResultContents = ({
   modelAttributionUrl,
   modelPath,
   handleReportModel = noop,
-  handleFindSimilar = noop,
+  handleFindRelated = noop,
   isLiked,
   searchModelFileName,
   showOwner,
@@ -316,7 +315,7 @@ const ResultContents = ({
             modelPath={modelPath}
             showReportModel={showReportModel}
             handleReportModel={handleReportModel}
-            handleFindSimilar={handleFindSimilar}
+            handleFindRelated={handleFindRelated}
           />
         ) : (
           <ThangsModelDetails
@@ -328,7 +327,7 @@ const ResultContents = ({
             isLiked={isLiked}
             showReportModel={showReportModel}
             handleReportModel={handleReportModel}
-            handleFindSimilar={handleFindSimilar}
+            handleFindRelated={handleFindRelated}
           />
         )}
       </div>
@@ -345,7 +344,7 @@ const ModelSearchResult = ({
   showReportModel,
   searchModelFileName,
   handleReportModel = noop,
-  handleFindSimilar = noop,
+  handleFindRelated = noop,
 }) => {
   const c = useStyles()
   const currentUserId = parseInt(useCurrentUserId())
@@ -374,7 +373,7 @@ const ModelSearchResult = ({
         modelPath={modelPath}
         showReportModel={showReportModel}
         handleReportModel={handleReportModel}
-        handleFindSimilar={handleFindSimilar}
+        handleFindRelated={handleFindRelated}
       />
     </div>
   )
