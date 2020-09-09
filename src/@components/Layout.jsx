@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useStoreon } from 'storeon/react'
-import { Header, Overlay, NotificationsList, Footer } from '@components'
+import { Header, Overlay, NotificationsList, Footer, FeedbackTooltip } from '@components'
 import {
   Upload,
   SearchByUpload,
@@ -99,6 +99,12 @@ const useStyles = createUseStyles(theme => {
       right: '.75rem',
       cursor: 'pointer',
     },
+    Layout_FeedbackTooltip: {
+      position: 'fixed',
+      bottom: '2rem',
+      right: '2rem',
+      zIndex: 1,
+    },
     Overlay__hidden: {
       display: 'none',
     },
@@ -190,6 +196,7 @@ const Layout = ({
               <NotificationsList />
             </div>
           )}
+          <FeedbackTooltip className={c.Layout_FeedbackTooltip} />
         </div>
       </div>
       <Footer />
