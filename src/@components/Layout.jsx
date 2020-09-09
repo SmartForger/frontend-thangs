@@ -50,7 +50,7 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'row',
       margin: 'auto',
       maxWidth: theme.variables.maxWidth,
-      paddingTop: '2.5rem',
+      paddingTop: '2rem',
       paddingRight: '1rem',
       paddingBottom: '2rem',
       paddingLeft: '1rem',

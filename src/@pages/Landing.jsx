@@ -224,6 +224,10 @@ const getHero = ({ loading, user, newSignUp }) => {
   return null
 }
 
+const numberWithCommas = x => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
 const Landing = ({ newSignUp }) => {
   const { dispatch, modelPreviews } = useStoreon('modelPreviews')
   const { modelsStats } = useStoreon('modelsStats')
@@ -235,15 +239,16 @@ const Landing = ({ newSignUp }) => {
   const {
     atom: { data: user, isLoading: loading },
   } = useCurrentUser()
-
   const HeroComponent = getHero({ loading, user, newSignUp })
+  const modelsIngested =
+    modelsStats &&
+    modelsStats.data &&
+    modelsStats.data.modelsIngested &&
+    numberWithCommas(modelsStats.data.modelsIngested)
+
   return (
     <Layout
-      bannerText={
-        modelsStats && modelsStats.data && modelsStats.data.modelsIngested
-          ? `${modelsStats.data.modelsIngested} models ingested`
-          : null
-      }
+      bannerText={modelsIngested ? `${modelsIngested} models ingested` : null}
       Hero={HeroComponent}
       showSearchTextFlash={true}
     >

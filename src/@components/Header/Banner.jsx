@@ -5,20 +5,14 @@ const useStyles = createUseStyles(theme => {
   return {
     Banner: {},
     Banner_TopRow: {
-      height: '2.5rem',
       background: theme.colors.gold[500],
     },
     Banner_TopRowText: {
-      fontStyle: 'normal',
-      fontWeight: '600',
-      fontSize: '.875rem',
-      lineHeight: '2.625rem',
-      alignItems: 'center',
+      fontWeight: 600,
+      lineHeight: '1.5rem',
       textAlign: 'center',
-      color: '#333333',
-      flex: 'none',
-      alignSelf: 'center',
-      margin: 'auto',
+      color: theme.colors.black[500],
+      padding: '.25rem 0',
     },
   }
 })
