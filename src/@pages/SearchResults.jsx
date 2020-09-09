@@ -109,7 +109,7 @@ const SearchResult = ({
   searchModelFileName,
   showReportModel,
   handleReportModel,
-  handleFindSimilar,
+  handleFindRelated,
 }) => {
   const filteredModels = models.filter(
     model => model.resultSource !== 'phyndexer' || model.attributionUrl
@@ -139,15 +139,9 @@ const SearchResult = ({
               searchModelFileName={searchModelFileName}
               showReportModel={showReportModel}
               handleReportModel={handleReportModel}
-              handleFindSimilar={handleFindSimilar}
+              handleFindRelated={handleFindRelated}
             />
-          ) : (
-            <>
-              {modelId ? (
-                <NoResults>No results found. Try another search or model.</NoResults>
-              ) : null}
-            </>
-          )}
+          ) : null}
         </>
       )}
     </div>
@@ -164,7 +158,7 @@ const ThangsSearchResult = ({
   searchModelFileName,
   showReportModel,
   handleReportModel,
-  handleFindSimilar,
+  handleFindRelated,
 }) => {
   const searchingText = useMemo(() => {
     return isOtherModelsLoaded
@@ -202,15 +196,9 @@ const ThangsSearchResult = ({
               searchModelFileName={searchModelFileName}
               showReportModel={showReportModel}
               handleReportModel={handleReportModel}
-              handleFindSimilar={handleFindSimilar}
+              handleFindRelated={handleFindRelated}
             />
-          ) : (
-            <>
-              {modelId ? (
-                <NoResults>No results found. Try another search or model.</NoResults>
-              ) : null}
-            </>
-          )}
+          ) : null}
         </>
       )}
     </div>
@@ -263,7 +251,7 @@ const Page = () => {
     [dispatch]
   )
 
-  const handleFindSimilar = useCallback(
+  const handleFindRelated = useCallback(
     ({ model }) => {
       dispatch(types.OPEN_OVERLAY, {
         overlayName: 'searchByUpload',
@@ -278,6 +266,8 @@ const Page = () => {
   const thangsModels = (thangs && thangs.data && thangs.data.matches) || []
   const phyndexerModels = (phyndexer && phyndexer.data && phyndexer.data.matches) || []
   const resultCount = phyndexerModels.length + thangsModels.length
+  const isLoading = thangs.isLoading || phyndexer.isLoading
+  const isError = thangs.isError || phyndexer.isError
 
   return (
     <div className={c.SearchResults_Page}>
@@ -312,7 +302,7 @@ const Page = () => {
               isOtherModelsLoaded={phyndexer.isLoaded}
               showReportModel={showReportModelButtons}
               handleReportModel={handleReportModel}
-              handleFindSimilar={handleFindSimilar}
+              handleFindRelated={handleFindRelated}
               c={c}
             />
             <SearchResult
@@ -323,7 +313,7 @@ const Page = () => {
               searchModelFileName={undefined}
               showReportModel={showReportModelButtons}
               handleReportModel={handleReportModel}
-              handleFindSimilar={handleFindSimilar}
+              handleFindRelated={handleFindRelated}
               c={c}
             />
           </>
@@ -342,6 +332,11 @@ const Page = () => {
             <FlagIcon />
             Report a Model
           </Button>
+        ) : null}
+        {!isLoading && !isError && (!resultCount || resultCount === 0) ? (
+          <NoResults>
+            No results found. Try another search term or upload a different model.
+          </NoResults>
         ) : null}
       </div>
     </div>

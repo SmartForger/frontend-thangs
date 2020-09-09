@@ -49,7 +49,7 @@ const pollMatches = intervalRequest(
   },
   {
     interval: 5000,
-    timeout: 10 * 60 * 1000,
+    timeout: 4 * 60 * 1000,
   }
 )
 
@@ -235,30 +235,13 @@ export default store => {
         onError(error)
       }
 
-      if (data && Array.isArray(data)) {
-        data.forEach(result => {
-          const { collection, status, ...searchData } = result
-          if (status === 'completed') {
-            store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-              atom: collection,
-              status: STATUSES.LOADED,
-              data: { ...searchData },
-            })
-          } else if (status === 'error') {
-            store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-              atom: collection,
-              status: STATUSES.FAILURE,
-              data: { ...searchData },
-            })
-          }
-        })
-      }
-
       pendo.track(
-        `More Similar Search - ${data.matchCount > 0 ? 'Results' : 'No Results'}`,
+        `More Similar Search - ${
+          error || data.matchCount === 0 ? 'No Results' : 'Results'
+        }`,
         {
           modelId,
-          numOfMatches: data.matchCount,
+          numOfMatches: (data && data.matchCount) || 0,
         }
       )
     }

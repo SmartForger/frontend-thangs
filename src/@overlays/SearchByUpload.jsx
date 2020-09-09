@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import * as R from 'ramda'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
@@ -6,7 +6,6 @@ import { Uploader, UploadProgress, ModelThumbnail } from '@components'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 import Scanner from '@components/Scanner'
-import useFetchOnce from '@hooks/useServices/useFetchOnce'
 import ScannerPaper from '@components/ScannerPaper'
 
 const useStyles = createUseStyles(_theme => {
@@ -29,11 +28,8 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const ScannerThumbnail = ({ modelId }) => {
+const ScannerThumbnail = ({ model }) => {
   const c = useStyles()
-  const {
-    atom: { data: model },
-  } = useFetchOnce(modelId, 'model')
 
   if (!model || R.isEmpty(model)) {
     return (
@@ -63,10 +59,12 @@ const SearchByUpload = () => {
   const { dispatch, searchResults, overlay } = useStoreon('searchResults', 'overlay')
   const { phyndexer } = searchResults
   const [newModelId, setNewModelId] = useState(R.path(['data', 'newModelId'], phyndexer))
-
+  const model = useMemo(
+    () => overlay && overlay.overlayData && overlay.overlayData.model,
+    [overlay]
+  )
   useEffect(() => {
     dispatch(types.RESET_SEARCH_RESULTS)
-    const model = overlay && overlay.overlayData && overlay.overlayData.model
     if (model) {
       const modelId = model.id || model.modelId
       setNewModelId(modelId)
@@ -74,9 +72,6 @@ const SearchByUpload = () => {
         modelId,
         onSomeResult: () => {
           dispatch('close-overlay')
-          history.push(
-            `/search/${model.uploadedFile || model.modelFileName}?modelId=${modelId}`
-          )
         },
       })
     }
@@ -103,6 +98,7 @@ const SearchByUpload = () => {
     },
     [dispatch, history]
   )
+
   return (
     <div>
       <div className={c.SearchByUpload}>
@@ -110,7 +106,7 @@ const SearchByUpload = () => {
           R.isNil(newModelId) ? (
             <UploadProgress />
           ) : (
-            <ScannerThumbnail modelId={newModelId} />
+            <ScannerThumbnail model={model} />
           )
         ) : (
           <form>
