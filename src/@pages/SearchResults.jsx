@@ -116,13 +116,11 @@ const SearchResult = ({
   )
   return (
     <div className={c.SearchResults_Results}>
-      {modelId && (
-        <div className={c.SearchResults_ResultsHeader}>
-          <span className={c.SearchResults_ResultsHeaderText}>
-            Similar geometry found elsewhere
-          </span>
-        </div>
-      )}
+      <div className={c.SearchResults_ResultsHeader}>
+        <span className={c.SearchResults_ResultsHeaderText}>
+          {modelId ? 'Similar geometry found elsewhere' : 'Models found elsewhere'}
+        </span>
+      </div>
       {isLoading ? (
         <NoResults>Searching 1,000,000+ models...</NoResults>
       ) : isError ? (
@@ -144,7 +142,7 @@ const SearchResult = ({
           ) : null}
         </>
       )}
-      {modelId && !isLoading && !isError && filteredModels.length === 0 ? (
+      {!isLoading && !isError && filteredModels.length === 0 ? (
         <NoResults>
           No results found. Try another search term or upload a different model.
         </NoResults>
@@ -173,14 +171,12 @@ const ThangsSearchResult = ({
   }, [isOtherModelsLoaded])
   return (
     <div className={c.SearchResults_Results}>
-      {modelId && (
-        <div className={c.SearchResults_ResultsHeader}>
-          <UploadIcon className={classnames({ [c.Spinner]: isLoading })} />
-          <span className={c.SearchResults_ResultsHeaderText}>
-            Similar geometry on Thangs
-          </span>
-        </div>
-      )}
+      <div className={c.SearchResults_ResultsHeader}>
+        <UploadIcon className={classnames({ [c.Spinner]: isLoading })} />
+        <span className={c.SearchResults_ResultsHeaderText}>
+          {modelId ? 'Similar geometry on Thangs' : 'Models on Thangs'}
+        </span>
+      </div>
       {isLoading ? (
         <>{modelId && <NoResults>{searchingText}</NoResults>}</>
       ) : isError ? (
@@ -206,7 +202,7 @@ const ThangsSearchResult = ({
           ) : null}
         </>
       )}
-      {modelId && !isLoading && !isError && models.length === 0 ? (
+      {!isLoading && !isError && models.length === 0 ? (
         <NoResults>
           No results found. Try another search term or upload a different model.
         </NoResults>
@@ -287,8 +283,6 @@ const Page = () => {
   const thangsModels = (thangs && thangs.data && thangs.data.matches) || []
   const phyndexerModels = (phyndexer && phyndexer.data && phyndexer.data.matches) || []
   const resultCount = phyndexerModels.length + thangsModels.length
-  const isLoading = thangs.isLoading || phyndexer.isLoading
-  const isError = thangs.isError || phyndexer.isError
 
   return (
     <div className={c.SearchResults_Page}>
@@ -353,11 +347,6 @@ const Page = () => {
             <FlagIcon />
             Report a Model
           </Button>
-        ) : null}
-        {!modelId && !isLoading && !isError && (!resultCount || resultCount === 0) ? (
-          <NoResults>
-            No results found. Try another search term or upload a different model.
-          </NoResults>
         ) : null}
       </div>
     </div>
