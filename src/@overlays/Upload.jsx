@@ -74,7 +74,15 @@ const Upload = ({ prevModelId }) => {
 
   const handleSubmit = useCallback(
     data => {
-      const { weight, material, height, name, description, category, folder: folderId } = data
+      const {
+        weight,
+        material,
+        height,
+        name,
+        description,
+        category,
+        folder: folderId,
+      } = data
 
       const requiredVariables = {
         name: sanitizeFileName(name),
@@ -98,7 +106,10 @@ const Upload = ({ prevModelId }) => {
         },
         onFinish: () => {
           dispatch(types.CLOSE_OVERLAY)
-          navigateWithFlash(folderId ? `/folder/${folderId}` : '/home', 'Model added successfully.')
+          navigateWithFlash(
+            folderId ? `/folder/${folderId}` : '/home',
+            'Model added successfully.'
+          )
           dispatch(types.RESET_UPLOAD_MODEL)
         },
       })
@@ -109,7 +120,6 @@ const Upload = ({ prevModelId }) => {
   return (
     <div className={c.Upload}>
       <div className={c.Upload_Column__frame}>
-        
         {uploadModelPhase1.isLoading ? (
           <UploadProgress />
         ) : (
@@ -129,7 +139,8 @@ const Upload = ({ prevModelId }) => {
         <div className={c.Upload_Column__form}>
           <UploadForm
             onSubmit={handleSubmit}
-            disableSubmit={!file}
+            disableSubmit={!file || uploadModelPhase1.isLoading}
+            isLoading={uploadModelPhase1.isLoading}
             folders={folders.data}
             selectedFolderId={
               overlay && overlay.overlayData && overlay.overlayData.folderId

@@ -94,7 +94,14 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const UploadForm = ({ onSubmit, disableSubmit, file, folders, selectedFolderId }) => {
+const UploadForm = ({
+  onSubmit,
+  disableSubmit,
+  file,
+  folders,
+  isLoading,
+  selectedFolderId,
+}) => {
   const c = useStyles()
 
   const usersFolders = useMemo(() => {
@@ -398,7 +405,7 @@ const UploadForm = ({ onSubmit, disableSubmit, file, folders, selectedFolderId }
       </div>
       <div className={c.UploadForm_ButtonGroup}>
         <Button className={c.UploadForm_Button} type='submit' disabled={disableSubmit}>
-          Save Model
+          {isLoading ? 'Processing...' : 'Save Model'}
         </Button>
       </div>
     </form>
