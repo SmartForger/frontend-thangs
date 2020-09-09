@@ -4,6 +4,7 @@ import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import useFetchOnce from '@hooks/useServices/useFetchOnce'
+import * as pendo from '@vendors/pendo'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -40,8 +41,10 @@ const ToggleFollowButton = ({ userId }) => {
       e.preventDefault()
       if (isFollowing) {
         dispatch('unfollow-user', { id: userId })
+        pendo.track('Unfollow User', userId)
       } else {
         dispatch('follow-user', { id: userId })
+        pendo.track('Follow User', userId)
       }
     },
     [dispatch, userId, isFollowing]

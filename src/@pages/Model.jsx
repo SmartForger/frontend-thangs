@@ -30,6 +30,7 @@ import { useServices } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import classnames from 'classnames'
+import * as pendo from '@vendors/pendo'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -231,6 +232,7 @@ const DownloadLink = ({ model }) => {
       modelId: model.id,
       onFinish: downloadUrl => {
         window.open(downloadUrl)
+        pendo.track('Download Model', { modelId: model.id })
       },
     })
   return (

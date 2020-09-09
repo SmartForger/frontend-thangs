@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import * as R from 'ramda'
 import { useParams } from 'react-router-dom'
 import { CardCollection, Layout, Button } from '@components'
@@ -102,6 +102,11 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
     dispatch(types.FETCH_MODEL_PREVIEW, { sortBy: selected })
   }, [dispatch, selected])
 
+  const sortBy = useCallback(type => {
+    setSelected(type)
+    pendo.track('Sorted Models', { sortBy: type })
+  }, [])
+
   if (modelPreviews.isError) {
     return (
       <div data-cy='fetch-results-error'>
@@ -115,19 +120,19 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
       <div className={c.Landing_TabNavigationWrapper}>
         <div className={c.Landing_TabNavigation}>
           <div>
-            <Button tertiary={selected !== 'likes'} onClick={() => setSelected('likes')}>
+            <Button tertiary={selected !== 'likes'} onClick={() => sortBy('likes')}>
               Popular
             </Button>
           </div>
           <div>
-            <Button tertiary={selected !== 'date'} onClick={() => setSelected('date')}>
+            <Button tertiary={selected !== 'date'} onClick={() => sortBy('date')}>
               New
             </Button>
           </div>
           <div>
             <Button
               tertiary={selected !== 'downloaded'}
-              onClick={() => setSelected('downloaded')}
+              onClick={() => sortBy('downloaded')}
             >
               Downloads
             </Button>
