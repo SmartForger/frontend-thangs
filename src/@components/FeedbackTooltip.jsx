@@ -1,6 +1,6 @@
 import React from 'react'
 import { createUseStyles } from '@style'
-import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg'
+import { ReactComponent as FeedbackIcon } from '@svg/icon-feedback.svg'
 import classnames from 'classnames'
 import ReactTooltip from 'react-tooltip'
 
@@ -19,20 +19,24 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       top: '0.75rem',
       left: '0.75rem',
-      '& path': {
-        stroke: theme.colors.black[500],
-      },
     },
     FeedbackTooltip_Message: {
-      backgroundColor: `${theme.colors.white[500]} !important`,
+      backgroundColor: `${theme.colors.white[100]} !important`,
+      opacity: '1 !important',
       color: `${theme.colors.black[500]} !important`,
       boxShadow: '0px 5px 10px 0px rgba(35, 37, 48, 0.25)',
       borderRadius: '0.5rem',
       ...theme.mixins.text.viewerLoadingText,
       padding: '1rem 1rem',
-      '&:after': {
-        borderLeftColor: `${theme.colors.white[500]} !important`,
-        bordeTopColor: `${theme.colors.white[500]} !important`,
+      '&.place-top': {
+        '&:after': {
+          borderTopColor: `${theme.colors.white[500]} !important`,
+        },
+      },
+      '&.place-left': {
+        '&:after': {
+          borderLeftColor: `${theme.colors.white[500]} !important`,
+        },
       },
     },
   }
@@ -44,20 +48,19 @@ const FeedbackTooltip = ({ className }) => {
     <>
       <a
         href={FEEDBACK_FORM_URL}
-        target='_blank' 
+        target='_blank'
         rel='noopener noreferrer'
         className={classnames(className, c.FeedbackTooltip)}
         data-for='custom-class'
         data-tip='Help us improve! Give us your feedback.'
       >
-        <ChatIcon className={c.FeedbackTooltip_Icon} />
+        <FeedbackIcon className={c.FeedbackTooltip_Icon} />
       </a>
       <ReactTooltip
         id='custom-class'
         className={c.FeedbackTooltip_Message}
         place={'top'}
         effect='solid'
-        delayHide={3000}
       />
     </>
   )
