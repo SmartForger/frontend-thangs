@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as R from 'ramda'
 import { useParams } from 'react-router-dom'
 import { CardCollection, Layout, Button } from '@components'
@@ -74,14 +74,33 @@ const useStyles = createUseStyles(theme => {
       top: '-6rem',
       right: 0,
     },
+    Landing_Column: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: '100%',
+    },
+    Landing_TabNavigationWrapper: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      marginBottom: '1rem',
+    },
+    Landing_TabNavigation: {
+      display: 'flex',
+      marginBottom: '1rem',
+      justifyContent: 'flex-end',
+      padding: '.25rem',
+      backgroundColor: theme.colors.white[400],
+      borderRadius: '.5rem',
+    },
   }
 })
 
 const Page = ({ user = {}, dispatch, modelPreviews }) => {
+  const c = useStyles({})
+  const [selected, setSelected] = useState('likes')
   useEffect(() => {
-    dispatch(types.FETCH_MODEL_PREVIEW)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    dispatch(types.FETCH_MODEL_PREVIEW, { sortBy: selected })
+  }, [dispatch, selected])
 
   if (modelPreviews.isError) {
     return (
@@ -92,12 +111,36 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
   }
 
   return (
-    <CardCollection
-      noResultsText='We have no models to display right now. Please try again later.'
-      loading={modelPreviews.isLoading}
-    >
-      <ModelCards items={modelPreviews.data} user={user} />
-    </CardCollection>
+    <div className={c.Landing_Column}>
+      <div className={c.Landing_TabNavigationWrapper}>
+        <div className={c.Landing_TabNavigation}>
+          <div>
+            <Button tertiary={selected !== 'likes'} onClick={() => setSelected('likes')}>
+              Popular
+            </Button>
+          </div>
+          <div>
+            <Button tertiary={selected !== 'date'} onClick={() => setSelected('date')}>
+              New
+            </Button>
+          </div>
+          <div>
+            <Button
+              tertiary={selected !== 'downloaded'}
+              onClick={() => setSelected('downloaded')}
+            >
+              Downloads
+            </Button>
+          </div>
+        </div>
+      </div>
+      <CardCollection
+        noResultsText='We have no models to display right now. Please try again later.'
+        loading={modelPreviews.isLoading}
+      >
+        <ModelCards items={modelPreviews.data} user={user} />
+      </CardCollection>
+    </div>
   )
 }
 
@@ -188,7 +231,7 @@ const Landing = ({ newSignUp }) => {
     dispatch(types.FETCH_MODELS_STATS)
   }, [dispatch])
   const { id } = useParams()
-  if (id) pendo.track('User referral', { referralChannel: id })
+  if (id) pendo.track('Explore', { referralChannel: id })
   const {
     atom: { data: user, isLoading: loading },
   } = useCurrentUser()

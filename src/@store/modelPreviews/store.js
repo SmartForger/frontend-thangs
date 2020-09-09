@@ -29,10 +29,12 @@ export default store => {
       data,
     },
   }))
-
-  store.on(types.FETCH_MODEL_PREVIEW, async () => {
+  store.on(types.FETCH_MODEL_PREVIEW, async (_state, { sortBy = 'likes' }) => {
     store.dispatch(types.LOADING_MODEL_PREVIEW)
-    const { data } = await api({ method: 'GET', endpoint: 'models/landing' })
+    const { data } = await api({
+      method: 'GET',
+      endpoint: `models/landing?sortBy=${sortBy}`,
+    })
     store.dispatch(types.LOADED_MODEL_PREVIEW, { data })
   })
 }

@@ -30,7 +30,7 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: '.5rem',
-      padding: '.75rem 1.5rem',
+      padding: '.75rem 1rem',
       backgroundColor: theme.colors.gold[500],
       ...theme.mixins.text.primaryButtonText,
 
@@ -51,6 +51,13 @@ const useStyles = createUseStyles(theme => {
       backgroundColor: theme.colors.white[900],
       '&:hover': {
         backgroundColor: theme.colors.grey[100],
+      },
+    },
+    Button__tertiary: {
+      padding: '.75rem 1rem',
+      backgroundColor: 'transparent',
+      '&:hover': {
+        backgroundColor: 'transparent',
       },
     },
     Button__back: {
@@ -101,6 +108,7 @@ const Button = ({
   icon,
   inline,
   secondary,
+  tertiary,
   small,
   text,
   ...props
@@ -116,6 +124,7 @@ const Button = ({
         [c.Button__inline]: inline,
         [c.Button__notText]: !text,
         [c.Button__secondary]: secondary || back,
+        [c.Button__tertiary]: tertiary,
         [c.Button__small]: small,
       })}
       {...props}
