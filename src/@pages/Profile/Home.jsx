@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import * as R from 'ramda'
 import {
   Layout,
@@ -20,6 +20,7 @@ import { useStoreon } from 'storeon/react'
 import useFetchPerMount from '@hooks/useServices/useFetchPerMount'
 import { useCurrentUserId, useCurrentUser } from '@hooks'
 import * as types from '@constants/storeEventTypes'
+import { useFlashNotification } from '@components/Flash'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -124,10 +125,20 @@ const ModelsContent = ({ models }) => {
 const FoldersContent = ({ folders: foldersAtom }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
-
+  const { navigateWithFlash } = useFlashNotification()
   const folders = R.path(['data'], foldersAtom) || []
-
-  if (R.isEmpty(folders)) {
+  const handleAfterCreate = useCallback(
+    folder => {
+      dispatch(types.CLOSE_OVERLAY)
+      navigateWithFlash(
+        `/folder/${folder.folderId}`,
+        'Folder created successfully. If the provided unregistered email addresses, they will receive an email with instructions for accessing your folder.'
+      )
+    },
+    [dispatch, navigateWithFlash]
+  )
+  
+  if (R.isEmpty([])) {
     return (
       <div className={c.Profile_NoContentMessage}>
         <Button
@@ -137,6 +148,9 @@ const FoldersContent = ({ folders: foldersAtom }) => {
             e.preventDefault()
             dispatch(types.OPEN_OVERLAY, {
               overlayName: 'createFolder',
+              overlayData: {
+                afterCreate: handleAfterCreate,
+              },
             })
           }}
         >
