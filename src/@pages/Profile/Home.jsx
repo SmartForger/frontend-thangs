@@ -138,7 +138,7 @@ const FoldersContent = ({ folders: foldersAtom }) => {
     [dispatch, navigateWithFlash]
   )
   
-  if (R.isEmpty([])) {
+  if (R.isEmpty(folders)) {
     return (
       <div className={c.Profile_NoContentMessage}>
         <Button
