@@ -110,7 +110,6 @@ const ModelsContent = ({ models }) => {
         >
           <span className={c.Profile_NoContentMessage__link}>Upload</span>
         </Button>{' '}your first model to start building your portfolio.
-        ?
       </div>
     )
   }
@@ -212,8 +211,8 @@ const PageContent = ({ user }) => {
         {selected === 'models' ? (
           <ModelsContent models={sortedModels} />
         ) : (
-          <FoldersContent folders={folders} />
-        )}
+            <FoldersContent folders={folders} />
+          )}
       </WithFlash>
     </div>
   )
