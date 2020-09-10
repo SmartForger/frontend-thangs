@@ -51,9 +51,10 @@ const hasLikedModel = (modelData, currentUserId) => {
   return R.includes(currentUserId, modelData.likes)
 }
 
-const LikeModelButton = ({ currentUser, modelId }) => {
+const LikeModelButton = ({ currentUser, modelId, userId }) => {
   const c = useStyles()
   const currentUserId = parseInt(currentUser.id)
+  const isModelOfCurrentUser = (currentUser && currentUser.id) === userId
   const { useFetchOnce } = useServices()
   const {
     atom: { data: modelData, isLoading, isError },
@@ -81,20 +82,22 @@ const LikeModelButton = ({ currentUser, modelId }) => {
     }, 250)
   }, [currentUserId, dispatch, modelData, modelId])
   return (
-    <Button
-      className={classnames(c.LikeModelButton)}
-      secondary={!hasLikedModel(modelData, currentUserId)}
-      disabled={isLoading || isError}
-      onClick={handleLikeClicked}
-      icon
-    >
-      <HeartFilledIcon
-        className={classnames({
-          [c.LikeModelIcon__liked]: status === 'liked',
-          [c.LikeModelIcon__unliked]: status === 'unliked',
-        })}
-      />
-    </Button>
+    !isModelOfCurrentUser && (
+      <Button
+        className={classnames(c.LikeModelButton)}
+        secondary={!hasLikedModel(modelData, currentUserId)}
+        disabled={isLoading || isError}
+        onClick={handleLikeClicked}
+        icon
+      >
+        <HeartFilledIcon
+          className={classnames({
+            [c.LikeModelIcon__liked]: status === 'liked',
+            [c.LikeModelIcon__unliked]: status === 'unliked',
+          })}
+        />
+      </Button>
+    )
   )
 }
 

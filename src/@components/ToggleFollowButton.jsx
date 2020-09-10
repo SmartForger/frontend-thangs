@@ -26,12 +26,13 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const ToggleFollowButton = ({ userId }) => {
+const ToggleFollowButton = ({ currentUser, userId }) => {
   const {
     atom: { isLoading, isError, data: user },
   } = useFetchOnce(userId, 'user')
 
   const { dispatch } = useStoreon()
+  const isModelOfCurrentUser = (currentUser && currentUser.id) === userId
 
   const c = useStyles()
   const isFollowing = user && user.isBeingFollowedByRequester
@@ -51,23 +52,25 @@ const ToggleFollowButton = ({ userId }) => {
   )
 
   return (
-    <Button
-      className={c.ToggleFollowButton}
-      disabled={isLoading || isError}
-      onClick={handleClick}
-      secondary={!isFollowing}
-      darkText
-    >
-      {isLoading ? (
-        <Spinner className={c.Spinner} />
-      ) : isError ? (
-        <ErrorIcon className={c.ErrorIcon} />
-      ) : isFollowing ? (
-        'Unfollow'
-      ) : (
-        'Follow'
-      )}
-    </Button>
+    !isModelOfCurrentUser && (
+      <Button
+        className={c.ToggleFollowButton}
+        disabled={isLoading || isError}
+        onClick={handleClick}
+        secondary={!isFollowing}
+        darkText
+      >
+        {isLoading ? (
+          <Spinner className={c.Spinner} />
+        ) : isError ? (
+          <ErrorIcon className={c.ErrorIcon} />
+        ) : isFollowing ? (
+          'Unfollow'
+        ) : (
+          'Follow'
+        )}
+      </Button>
+    )
   )
 }
 
