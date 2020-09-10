@@ -110,7 +110,8 @@ const ModelsContent = ({ models }) => {
           }}
         >
           <span className={c.Profile_NoContentMessage__link}>Upload</span>
-        </Button>{' '}your first model to start building your portfolio.
+        </Button>{' '}
+        your first model to start building your portfolio.
       </div>
     )
   }
@@ -137,7 +138,7 @@ const FoldersContent = ({ folders: foldersAtom }) => {
     },
     [dispatch, navigateWithFlash]
   )
-  
+
   if (R.isEmpty(folders)) {
     return (
       <div className={c.Profile_NoContentMessage}>
@@ -200,7 +201,7 @@ const PageContent = ({ user }) => {
           name={user.fullName}
         />
         <div>
-          <div className={c.Profile_Name}>{user.fullName}</div>
+          <h1 className={c.Profile_Name}>{user.fullName}</h1>
           <ProfileButton className={c.Profile_ProfileButton} userId={currentUserId} />
         </div>
       </div>
@@ -225,8 +226,8 @@ const PageContent = ({ user }) => {
         {selected === 'models' ? (
           <ModelsContent models={sortedModels} />
         ) : (
-            <FoldersContent folders={folders} />
-          )}
+          <FoldersContent folders={folders} />
+        )}
       </WithFlash>
     </div>
   )

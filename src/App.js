@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react'
 import { Route, Router, Switch, useLocation } from 'react-router-dom'
-
+import { Helmet } from 'react-helmet'
 import * as pendo from '@vendors/pendo'
 import ReactGA from 'react-ga'
 import ReactPixel from 'react-facebook-pixel'
@@ -32,7 +32,7 @@ import { FlashContextProvider } from '@components/Flash'
 import { StoreContext } from 'storeon/react'
 import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
-import { usePageTheming } from '@hooks'
+import { usePageMeta, usePageTheming } from '@hooks'
 import store from 'store'
 
 const useQuery = location => {
@@ -70,7 +70,7 @@ const App = () => {
   const pendoInitialized = useRef(false)
   initializeAnalytics({ userIdentified, pendoInitialized, inviteCode })
   const theme = usePageTheming(location)
-
+  const { title, description } = usePageMeta(location)
   useEffect(() => {
     ReactGA.pageview(location.pathname + location.search)
     ReactPixel.pageView()
@@ -81,8 +81,12 @@ const App = () => {
         <FlashContextProvider>
           <ThemeProvider theme={theme}>
             <GlobalStyles />
+            <Helmet>
+              <title>{title}</title>
+              <meta name='description' content={description} />
+            </Helmet>
             <Switch>
-              <Route exact path='/' component={Landing} />
+              <Route exact path='/' render={props => <Landing {...props} />} />
               <Route path='/explore/:id' component={Landing} />
               <Route
                 path='/welcome'
@@ -126,6 +130,7 @@ const App = () => {
               />
               <Route path='/upload' component={routeRequiresAuth(Upload)} />
               <Route path='/:userName' component={Profile} />
+              <Route path='/404' component={Page404} status={404} />
               <Route path='*' component={Page404} status={404} />
             </Switch>
           </ThemeProvider>

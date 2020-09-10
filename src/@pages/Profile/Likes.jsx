@@ -1,5 +1,5 @@
 import React from 'react'
-import {useServices, useCurrentUserId} from '@hooks'
+import { useServices, useCurrentUserId } from '@hooks'
 import { Spinner, CardCollection, Layout } from '@components'
 import { Message404 } from '../404'
 import ModelCards from '@components/CardCollection/ModelCards'
@@ -17,10 +17,10 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const LikesCount = ({likedModels, c}) => {
+const LikesCount = ({ likedModels, c }) => {
   const amount = likedModels && likedModels.length
   if (amount) {
-    return <div className={c.Likes_LikedModelsHeader}>Liked Models {amount}</div>
+    return <h1 className={c.Likes_LikedModelsHeader}>Liked Models {amount}</h1>
   }
   return null
 }
@@ -35,7 +35,10 @@ const LikesContent = ({ likedModels }) => {
 
 const Page = () => {
   const { useFetchPerMount } = useServices()
-  const { atom: likedUserModelsAtom } = useFetchPerMount(useCurrentUserId(), 'user-liked-models')
+  const { atom: likedUserModelsAtom } = useFetchPerMount(
+    useCurrentUserId(),
+    'user-liked-models'
+  )
 
   const c = useStyles()
   if (likedUserModelsAtom.isLoading) {

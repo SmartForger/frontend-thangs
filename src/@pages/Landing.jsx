@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import * as R from 'ramda'
 import { useParams } from 'react-router-dom'
 import { CardCollection, Layout, Button } from '@components'
-import { useCurrentUser } from '@hooks'
+import { useCurrentUser, useTranslations } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
@@ -159,10 +159,10 @@ const LandingHero = () => {
         <BackgroundSvg className={c.Landing_Background} />
         <div className={c.Landing_TextContainer}>
           <div className={c.Landing_PromotionalText}>
-            <span className={c.Landing_PromotionalPrimaryText}>
+            <h1 className={c.Landing_PromotionalPrimaryText}>
               <u className={c.Landing_PromotionalPrimaryText}>Search.</u> Collaborate.
               Share.
-            </span>
+            </h1>
           </div>
           <div className={c.Landing_PromotionalSecondaryText}>
             Search for models in Thangs or upload your model and our powerful technology
@@ -245,6 +245,7 @@ const Landing = ({ newSignUp }) => {
     atom: { data: user, isLoading: loading },
   } = useCurrentUser()
   const HeroComponent = getHero({ loading, user, newSignUp })
+  const t = useTranslations({})
   const modelsIngested =
     modelsStats &&
     modelsStats.data &&
@@ -254,9 +255,7 @@ const Landing = ({ newSignUp }) => {
   return (
     <Layout
       bannerText={
-        modelsIngested
-          ? `${modelsIngested} models indexed and ready to be searched`
-          : null
+        modelsIngested ? `${modelsIngested} ${t('header.modelsIndexed')}` : null
       }
       Hero={HeroComponent}
       showSearchTextFlash={true}

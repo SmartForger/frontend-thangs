@@ -54,7 +54,7 @@ const ModelTitle = ({ model, className }) => {
         </Link>
       )}
       <div className={c.ModelTitle_Content}>
-        <div className={c.ModelTitle_Text}>{model.name}</div>
+        <h1 className={c.ModelTitle_Text}>{model.name}</h1>
         {user && (
           <span className={c.ModelTitle_ProfileAuthor}>
             by

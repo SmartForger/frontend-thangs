@@ -1,5 +1,6 @@
 import React from 'react'
 import { useHistory, useParams } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 import * as R from 'ramda'
 import { format } from 'date-fns'
 import {
@@ -26,7 +27,7 @@ import { ReactComponent as DateIcon } from '@svg/date-icon.svg'
 import { useLocalStorage } from '@hooks'
 import { Message404 } from './404'
 import { createUseStyles } from '@style'
-import { useServices } from '@hooks'
+import { usePageMeta, useServices } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import classnames from 'classnames'
@@ -336,6 +337,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   const {
     atom: { data: modelData, isLoading, isLoaded, isError },
   } = useFetchOnce(id, 'model')
+  const { title, description } = usePageMeta('model')
 
   if (isLoading || !isLoaded) {
     return <Spinner />
@@ -348,45 +350,61 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   }
 
   return (
-    <div className={c.Model}>
-      {isFromThePortal() ? (
-        <div className={c.Model_Header}>
-          <Button back onClick={() => history.goBack()}>
-            <BackArrow />
-          </Button>
-        </div>
-      ) : null}
-      <div className={c.Model_Column}>
-        <Details currentUser={currentUser} model={modelData} />
-        <div className={c.Model_Row}>
-          {showBackupViewer ? (
-            <BackupViewer className={c.Model_BackupViewer} model={modelData} />
-          ) : (
-            <HoopsModelViewer className={c.Model_ModelViewer} model={modelData} />
-          )}
-        </div>
-        <div className={c.Model_Row}>
-          <div className={c.Model_LeftColumn}>
-            <div>
-              <div className={c.Model_ModelDescription}>{modelData.description}</div>
-              <div className={c.Model_ModelDetails}>
-                <ModelDetails model={modelData} />
+    <>
+      <Helmet>
+        <title>
+          {modelData.name}
+          {title}
+        </title>
+        <meta
+          name='description'
+          content={`${description}${modelData.description.slice(0, 129)}`}
+        />
+      </Helmet>
+      <div className={c.Model}>
+        {isFromThePortal() ? (
+          <div className={c.Model_Header}>
+            <Button back onClick={() => history.goBack()}>
+              <BackArrow />
+            </Button>
+          </div>
+        ) : null}
+        <div className={c.Model_Column}>
+          <Details currentUser={currentUser} model={modelData} />
+          <div className={c.Model_Row}>
+            {showBackupViewer ? (
+              <BackupViewer className={c.Model_BackupViewer} model={modelData} />
+            ) : (
+              <HoopsModelViewer className={c.Model_ModelViewer} model={modelData} />
+            )}
+          </div>
+          <div className={c.Model_Row}>
+            <div className={c.Model_LeftColumn}>
+              <div>
+                <div className={c.Model_ModelDescription}>{modelData.description}</div>
+                <div className={c.Model_ModelDetails}>
+                  <ModelDetails model={modelData} />
+                </div>
+                <hr className={c.Model_Rule} />
               </div>
+              <StatsAndActions
+                className={c.Model__mobileOnly}
+                c={c}
+                modelData={modelData}
+              />
+              <RelatedModels modelId={modelData.id} />
               <hr className={c.Model_Rule} />
+              <CommentsForModel model={modelData} />
             </div>
             <StatsAndActions
-              className={c.Model__mobileOnly}
+              className={c.Model__desktopOnly}
               c={c}
               modelData={modelData}
             />
-            <RelatedModels modelId={modelData.id} />
-            <hr className={c.Model_Rule} />
-            <CommentsForModel model={modelData} />
           </div>
-          <StatsAndActions className={c.Model__desktopOnly} c={c} modelData={modelData} />
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
@@ -394,7 +412,6 @@ const Page = () => {
   const { id } = useParams()
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [currentUser] = useLocalStorage('currentUser', null)
-
   return (
     <ModelDetailPage
       id={id}

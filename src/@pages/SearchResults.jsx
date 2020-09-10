@@ -289,9 +289,9 @@ const Page = () => {
       <div className={c.SearchResults_MainContent}>
         <div className={c.SearchResults_Header}>
           <div className={c.SearchResults_HeaderTextWrapper}>
-            <div className={c.SearchResults_HeaderText}>
+            <h1 className={c.SearchResults_HeaderText}>
               Search Results for {decodeURIComponent(searchQuery)}
-            </div>
+            </h1>
             {resultCount && resultCount > 0 ? (
               <div className={c.SearchResult_ResultCountText}>
                 About {resultCount} results

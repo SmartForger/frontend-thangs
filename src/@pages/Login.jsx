@@ -158,7 +158,7 @@ const Login = () => {
     setWaiting(true)
     setLoginErrorMessage(null)
 
-    const { data, error } = await authenticationService.login({
+    const { error } = await authenticationService.login({
       email: inputState.email,
       password: inputState.password,
     })
@@ -166,7 +166,7 @@ const Login = () => {
     setWaiting(false)
     if (error) {
       setLoginErrorMessage(
-        data.detail || 'Sorry, we encounteed an unexpected error.  Please try again.'
+        error.data || 'Sorry, we encounteed an unexpected error. Please try again.'
       )
     } else {
       requestedPage ? history.push(requestedPage) : history.push('/')

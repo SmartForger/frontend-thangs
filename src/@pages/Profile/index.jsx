@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 import * as R from 'ramda'
 import {
   CardCollection,
@@ -16,6 +17,7 @@ import { ReactComponent as AboutIcon } from '@svg/about-icon.svg'
 import { ReactComponent as ModelIcon } from '@svg/model-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import { usePageMeta } from '@hooks'
 import useFetchOnce from '@hooks/useServices/useFetchOnce'
 import useFetchPerMount from '@hooks/useServices/useFetchPerMount'
 import * as pendo from '@vendors/pendo'
@@ -27,7 +29,7 @@ const useStyles = createUseStyles(theme => {
     },
     Profile_Name: {
       ...theme.mixins.text.subheaderText,
-      marginTop: '.5rem',
+      margin: '.5rem 0',
     },
     Profile_TabTitleGroup: {
       display: 'flex',
@@ -230,6 +232,7 @@ const PageByUserName = ({ userName }) => {
   const {
     atom: { isLoaded, isError, data: userId },
   } = useFetchOnce(userName, 'user-id')
+  const { title, description } = usePageMeta('profile')
   pendo.track('Portfolio', { userName })
   if (!isLoaded) {
     return <Spinner />
@@ -251,7 +254,18 @@ const PageByUserName = ({ userName }) => {
     )
   }
 
-  return <PageById userId={userId} />
+  return (
+    <>
+      <Helmet>
+        <title>
+          {userName}
+          {title}
+        </title>
+        <meta name='description' content={description} />
+      </Helmet>
+      <PageById userId={userId} />
+    </>
+  )
 }
 
 const PageById = ({ userId }) => {
@@ -295,7 +309,7 @@ const UseredPage = ({ user = {} }) => {
           name={user.fullName}
         />
         <div>
-          <div className={c.Profile_Name}>{user.fullName}</div>
+          <h1 className={c.Profile_Name}>{user.fullName}</h1>
           <ProfileButton userId={user.id} className={c.Profile_ProfileButton} />
         </div>
       </div>

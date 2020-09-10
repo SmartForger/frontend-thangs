@@ -158,7 +158,6 @@ const Layout = ({
 
   return (
     <div className={c.Container}>
-      {bannerText && <Banner>{bannerText}</Banner>}
       <Header
         onNotificationsClick={onNotificationsClick}
         notificationsIsOpen={notificationsIsOpen}
@@ -182,6 +181,7 @@ const Layout = ({
         })}
       >
         {Hero && <Hero />}
+        {bannerText && <Banner>{bannerText}</Banner>}
         <div className={c.Layout}>
           {children}
           {notificationsIsOpen && (

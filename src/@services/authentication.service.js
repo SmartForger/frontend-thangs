@@ -64,7 +64,7 @@ const login = async ({ email, password }) => {
     return response
   } catch (err) {
     if (err.response) {
-      return err.response
+      return { error: err.response }
     }
     return {
       status: 500,
