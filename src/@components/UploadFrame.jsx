@@ -3,9 +3,11 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { xs, sm },
+  } = theme
   return {
     UploadFrame: {
-      width: '38.75rem',
       height: '35rem',
       backgroundColor: 'none',
       display: 'flex',
@@ -17,6 +19,13 @@ const useStyles = createUseStyles(theme => {
       border: `1.5px dashed ${theme.colors.grey[100]}`,
       borderRadius: '1rem',
       cursor: ({ currentFile }) => (currentFile ? 'auto' : 'pointer'),
+
+      [xs]: {
+        width: 'auto',
+      },
+      [sm]: {
+        width: '38.75rem',
+      },
     },
   }
 })
