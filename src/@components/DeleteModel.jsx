@@ -7,7 +7,6 @@ import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import * as eventTypes from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
-
   const isconSelectedState = {
     color: theme.colors.black[500],
   }
@@ -56,10 +55,13 @@ const DeleteModel = ({ modelId, className }) => {
 
   const [isOpened, setIsOpened] = useState(false)
 
-  const handleConfirm = useCallback(e => {
-    e.preventDefault()
-    dispatch(eventTypes.DELETE_OWN_MODEL, { id: modelId })
-  }, [dispatch, modelId])
+  const handleConfirm = useCallback(
+    e => {
+      e.preventDefault()
+      dispatch(eventTypes.DELETE_OWN_MODEL, { id: modelId })
+    },
+    [dispatch, modelId]
+  )
 
   const handleCancel = useCallback(e => {
     e.preventDefault()
@@ -82,7 +84,10 @@ const DeleteModel = ({ modelId, className }) => {
   return (
     <div className={classnames(className, c.DeleteModel)}>
       <TrashCanIcon
-        className={classnames(c.DeleteModel_TrashIcon, (isOpened && c.DeleteModel_TrashIcon__selected))}
+        className={classnames(
+          c.DeleteModel_TrashIcon,
+          isOpened && c.DeleteModel_TrashIcon__selected
+        )}
         onClick={() => {
           setIsOpened(true)
         }}
@@ -91,8 +96,12 @@ const DeleteModel = ({ modelId, className }) => {
         <div className={c.FeedbackTooltip_Message} ref={ccc}>
           <div>Are you sure you want to delete?</div>
           <div className={c.FeedbackTooltip_Link}>
-            <a onClick={handleCancel}>Cancel</a>
-            <a onClick={handleConfirm}>Confirm</a>
+            <a href='/#' onClick={handleCancel}>
+              Cancel
+            </a>
+            <a href='/#' onClick={handleConfirm}>
+              Confirm
+            </a>
           </div>
         </div>
       )}
