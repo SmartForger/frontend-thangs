@@ -87,6 +87,7 @@ export const FETCH_USER_LIKED_MODELS = 'fetch-user-liked-models'
 export const INIT_USER_OWN_MODELS = 'init-user-own-models'
 export const CHANGE_USER_OWNED_MODELS_STATUS = 'change-user-owned-models-status'
 export const FETCH_USER_OWN_MODELS = 'fetch-user-own-models'
+export const DELETE_OWN_MODEL = 'delete-own-model'
 /* User Avatar Store Events */
 export const INIT_USER_AVATAR = 'init-user-avatar'
 export const LOADING_USER_AVATAR = 'loading-user-avatar'
