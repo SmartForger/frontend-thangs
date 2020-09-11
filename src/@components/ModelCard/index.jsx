@@ -1,11 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import * as R from 'ramda'
+import classnames from 'classnames'
 import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
 import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
-import { Button, Card, ModelThumbnail, UserInline } from '@components'
-import classnames from 'classnames'
+import { Button, Card, ModelThumbnail, UserInline, DeleteModel } from '@components'
 import { createUseStyles } from '@style'
 import useCurrentUserId from '../../@hooks/useCurrentUserId'
 
@@ -79,6 +80,11 @@ const useStyles = createUseStyles(theme => {
       '& > svg': {
         margin: '0 !important',
       },
+    },
+    ModelCard_DeleteModel: {
+      position: 'absolute',
+      right: '1rem',
+      top: '1rem',
     },
   }
 })
@@ -245,31 +251,37 @@ const ModelCard = ({
   const modelAttributionUrl =
     model && model.attributionUrl && encodeURI(model.attributionUrl)
   const modelPath = model.id ? `/model/${model.id}` : modelAttributionUrl
+  const isCurrentUserOwner = `${currentUserId}` === `${R.path(['owner', 'id'], model)}`
   return (
-    <Anchor
-      to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
-      attributionUrl={modelAttributionUrl}
-      className={classnames({
-        [c.ModelCard_ExternalLink]: model.resultSource === 'phyndexer',
-        [c.ModelCard_ThangsLink]: model.resultSource !== 'phyndexer',
-      })}
-      noLink={!modelPath || showReportModel}
-    >
-      <CardContents
-        className={className}
-        model={model}
-        showOwner={showOwner}
-        showSocial={showSocial}
-        showWaldo={showWaldo}
-        c={c}
-        isLiked={isLiked}
-        modelAttributionUrl={modelAttributionUrl}
-        searchModelFileName={searchModelFileName}
-        modelPath={modelPath}
-        showReportModel={showReportModel}
-        handleReportModel={handleReportModel}
-      />
-    </Anchor>
+    <div className={c.ModelCard}>
+      <Anchor
+        to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
+        attributionUrl={modelAttributionUrl}
+        className={classnames({
+          [c.ModelCard_ExternalLink]: model.resultSource === 'phyndexer',
+          [c.ModelCard_ThangsLink]: model.resultSource !== 'phyndexer',
+        })}
+        noLink={!modelPath || showReportModel}
+      >
+        <CardContents
+          className={className}
+          model={model}
+          showOwner={showOwner}
+          showSocial={showSocial}
+          showWaldo={showWaldo}
+          c={c}
+          isLiked={isLiked}
+          modelAttributionUrl={modelAttributionUrl}
+          searchModelFileName={searchModelFileName}
+          modelPath={modelPath}
+          showReportModel={showReportModel}
+          handleReportModel={handleReportModel}
+        />
+      </Anchor>
+      {isCurrentUserOwner && (
+        <DeleteModel className={c.ModelCard_DeleteModel} modelId={model.id} />
+      )}
+    </div>
   )
 }
 
