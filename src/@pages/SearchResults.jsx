@@ -8,6 +8,7 @@ import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import ModelSearchResults from '@components/CardCollection/ModelSearchResults'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
+import Snackbar from '../@components/Snackbar'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -308,6 +309,7 @@ const Page = () => {
         </div>
         {searchQuery ? (
           <>
+            {!modelId && (phyndexer.isLoaded || thangs.isLoaded) && <Snackbar></Snackbar>}
             <ThangsSearchResult
               isLoading={thangs.isLoading}
               isError={thangs.isError}

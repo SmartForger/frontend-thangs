@@ -78,6 +78,12 @@ export const linkText = {
   color: colors.blue[500],
 }
 
+export const snackbarLinkText = {
+  fontWeight: 500,
+  textDecoration: 'underline',
+  color: colors.gold[500],
+}
+
 export const headerText = {
   fontSize: '2rem',
   fontFamily: LEXEND_DECA,
