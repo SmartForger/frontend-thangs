@@ -8,12 +8,12 @@ const useStyles = createUseStyles(_theme => {
   return {
     CardCollection: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(21.5rem, 1fr))',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(20.5rem, 1fr))',
       gap: '1rem',
       width: '100%',
     },
     CardCollection__singleRow: {
-      gridTemplateColumns: 'repeat(auto-fill, 21.5rem)',
+      gridTemplateColumns: 'repeat(auto-fill, 20.5rem)',
     },
     ModelCard_Skeleton: {
       paddingBottom: 0,
