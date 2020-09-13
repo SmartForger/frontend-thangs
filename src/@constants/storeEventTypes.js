@@ -1,11 +1,10 @@
 export const STORE_INIT = '@init'
 /* Model Store Events */
 export const INIT_MODEL = 'init-model'
-export const UPDATE_MODEL = 'update-model'
-export const LOADING_MODEL = 'loading-model'
-export const LOADED_MODEL = 'loaded-model'
 export const UPDATE_MODEL_LIKES = 'update-model-likes'
 export const FETCH_MODEL = 'fetch-model'
+export const DELETE_MODEL = 'delete-model'
+export const CHANGE_MODEL_STATUS = 'change-model-status'
 /* Model Comments Store Events */
 export const INIT_MODEL_COMMENTS = 'init-model-comments'
 export const CHANGE_MODEL_COMMENTS = 'change-comment-status'
@@ -87,7 +86,6 @@ export const FETCH_USER_LIKED_MODELS = 'fetch-user-liked-models'
 export const INIT_USER_OWN_MODELS = 'init-user-own-models'
 export const CHANGE_USER_OWNED_MODELS_STATUS = 'change-user-owned-models-status'
 export const FETCH_USER_OWN_MODELS = 'fetch-user-own-models'
-export const DELETE_OWN_MODEL = 'delete-own-model'
 /* User Avatar Store Events */
 export const INIT_USER_AVATAR = 'init-user-avatar'
 export const LOADING_USER_AVATAR = 'loading-user-avatar'

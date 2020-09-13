@@ -1,13 +1,9 @@
 import api from '@services/api'
 import { STATUSES, getStatusState } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
-import { authenticationService } from '@services'
+
 
 export default store => {
-  store.on(types.STORE_INIT, () => ({
-    deleteModel: getStatusState(STATUSES.INIT),
-  }))
-
   store.on(types.INIT_USER_OWN_MODELS, (_, { id }) => ({
     [`user-own-models-${id}`]: {
       ...getStatusState(STATUSES.INIT),
@@ -47,32 +43,5 @@ export default store => {
       })
     }
   })
-  store.on(types.DELETE_OWN_MODEL, async (_, { id }) => {
-    store.dispatch(types.CHANGE_USER_OWNED_MODELS_STATUS, {
-      status: STATUSES.LOADING,
-      atom: 'deleteModel',
-    })
-    const { data, error } = await api({
-      method: 'DELETE',
-      endpoint: `models/${id}`,
-    })
-
-    if (error) {
-      store.dispatch(types.CHANGE_USER_OWNED_MODELS_STATUS, {
-        status: STATUSES.FAILURE,
-        atom: 'deleteModel',
-      })
-    } else {
-      store.dispatch(types.CHANGE_USER_OWNED_MODELS_STATUS, {
-        status: STATUSES.LOADED,
-        atom: 'deleteModel',
-        data,
-      })
-
-      store.dispatch(
-        types.FETCH_USER_OWN_MODELS, 
-        { id: authenticationService.getCurrentUserId() }
-      )
-    }
-  })
+  
 }
