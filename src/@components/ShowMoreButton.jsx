@@ -6,7 +6,7 @@ import { createUseStyles } from '@style'
 const useStyles = createUseStyles(theme => {
   return {
     ShowMoreButton: {
-      ...theme.mixins.text.linkText,
+      ...theme.text.linkText,
       width: '7rem',
       padding: '.25rem .75rem',
     },

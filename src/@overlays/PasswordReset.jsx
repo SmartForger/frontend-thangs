@@ -13,7 +13,7 @@ const useStyles = createUseStyles(theme => {
       marginTop: '6.5rem',
     },
     PasswordReset_PageHeader: {
-      ...theme.mixins.text.uploadFrameText,
+      ...theme.text.uploadFrameText,
       color: theme.colors.purple[900],
       marginTop: '.25rem',
     },
@@ -26,7 +26,7 @@ const useStyles = createUseStyles(theme => {
       marginTop: '.5rem',
     },
     PasswordReset_ErrorText: {
-      ...theme.mixins.text.formErrorText,
+      ...theme.text.formErrorText,
       marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
       padding: '.5rem 1rem',

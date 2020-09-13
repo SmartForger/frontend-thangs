@@ -19,19 +19,19 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
     },
     Notification_ActorName: {
-      ...theme.mixins.text.commentUsername,
+      ...theme.text.commentUsername,
       marginBottom: '.5rem',
     },
     Notification_Time: {
-      ...theme.mixins.text.commentPostedText,
+      ...theme.text.commentPostedText,
     },
     Notification_Verb: {
-      ...theme.mixins.text.commentPostedText,
+      ...theme.text.commentPostedText,
       textTransform: 'capitalize',
       fontWeight: 600,
     },
     Notification_TargetName: {
-      ...theme.mixins.text.commentPostedText,
+      ...theme.text.commentPostedText,
     },
     Notification_TargetPicture: {
       width: '11.75rem',

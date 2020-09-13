@@ -22,7 +22,7 @@ const useStyles = createUseStyles(theme => {
       zIndex: 2,
     },
     DropdownMenu_Item: {
-      ...theme.mixins.text.boldText,
+      ...theme.text.boldText,
       lineHeight: '2rem',
       display: 'inline-flex',
       alignItems: 'center',

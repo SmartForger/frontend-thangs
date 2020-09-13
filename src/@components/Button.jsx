@@ -32,7 +32,7 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.5rem',
       padding: '.75rem 1rem',
       backgroundColor: theme.colors.gold[500],
-      ...theme.mixins.text.primaryButtonText,
+      ...theme.text.primaryButtonText,
 
       '&:hover': {
         backgroundColor: theme.colors.gold[700],
@@ -47,7 +47,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Button__secondary: {
-      ...theme.mixins.text.secondaryButtonText,
+      ...theme.text.secondaryButtonText,
       backgroundColor: theme.colors.white[900],
       '&:hover': {
         backgroundColor: theme.colors.grey[100],
@@ -68,7 +68,7 @@ const useStyles = createUseStyles(theme => {
       marginRight: '1rem',
     },
     Button__dark: {
-      ...theme.mixins.text.darkButtonText,
+      ...theme.text.darkButtonText,
       backgroundColor: theme.colors.purple[500],
       '&:hover': {
         backgroundColor: theme.colors.purple[700],

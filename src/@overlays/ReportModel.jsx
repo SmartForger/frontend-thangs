@@ -15,7 +15,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     ReportModel_PageHeader: {
-      ...theme.mixins.text.uploadFrameText,
+      ...theme.text.uploadFrameText,
       color: theme.colors.purple[900],
       marginTop: '.5rem',
     },

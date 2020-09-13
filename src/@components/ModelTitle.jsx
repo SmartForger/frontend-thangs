@@ -19,7 +19,7 @@ const useStyles = createUseStyles(theme => {
       marginRight: '1rem',
     },
     ModelTitle_Text: {
-      ...theme.mixins.text.modelTitleText,
+      ...theme.text.modelTitleText,
       marginBottom: '.25rem',
       whiteSpace: 'pre-wrap',
       wordBreak: 'break-word',
@@ -28,7 +28,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
     },
     ModelTitle_ProfileLink: {
-      ...theme.mixins.text.linkText,
+      ...theme.text.linkText,
       display: 'block',
       textDecoration: 'none',
       marginLeft: '.25rem',

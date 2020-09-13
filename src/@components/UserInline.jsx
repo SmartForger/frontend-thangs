@@ -19,7 +19,7 @@ const useStyles = createUseStyles(theme => {
         isPending ? theme.colors.grey[200] : theme.colors.black[500],
     },
     UserInline_SmallName: {
-      ...theme.mixins.text.linkText,
+      ...theme.text.linkText,
       fontSize: '.75rem',
       textTransform: 'capitalize',
     },

@@ -28,7 +28,7 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
     },
     Profile_Name: {
-      ...theme.mixins.text.subheaderText,
+      ...theme.text.subheaderText,
       margin: '.5rem 0',
     },
     Profile_TabTitleGroup: {
@@ -36,14 +36,14 @@ const useStyles = createUseStyles(theme => {
       alignSelf: 'start',
     },
     Profile_TabTitle: {
-      ...theme.mixins.text.tabNavigationText,
+      ...theme.text.tabNavigationText,
       display: 'flex',
       alignItems: 'center',
       marginRight: '3.5rem',
       cursor: 'pointer',
     },
     Profile_TabTitle__active: {
-      ...theme.mixins.text.activeTabNavigationText,
+      ...theme.text.activeTabNavigationText,
     },
     Profile_Icon: {
       display: 'flex',
@@ -59,7 +59,7 @@ const useStyles = createUseStyles(theme => {
     },
     Profile_Markdown: {
       maxWidth: '37.5rem',
-      ...theme.mixins.text.profileAboutText,
+      ...theme.text.profileAboutText,
     },
     Profile_TabGroupContainer: {
       marginTop: '4.5rem',
@@ -73,8 +73,8 @@ const useStyles = createUseStyles(theme => {
     },
     Profile_EditProfileLink: {
       // We need to reset styles on this component because it is rendered within larger text
-      ...theme.mixins.text.boldText,
-      ...theme.mixins.text.linkText,
+      ...theme.text.boldText,
+      ...theme.text.linkText,
     },
     Profile_ProfileButton: {
       marginTop: '1rem',

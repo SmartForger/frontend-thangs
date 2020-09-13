@@ -29,7 +29,7 @@ const useStyles = createUseStyles(theme => {
       transform: 'translate(-50%, -50%)',
     },
     HoopsModelViewer_PlaceholderText: {
-      ...theme.mixins.text.viewerLoadingText,
+      ...theme.text.viewerLoadingText,
       marginTop: '1.5rem',
     },
   }

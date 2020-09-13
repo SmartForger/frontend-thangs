@@ -13,7 +13,7 @@ const useStyles = createUseStyles(theme => {
   return {
     Login: {},
     Login_PageHeader: {
-      ...theme.mixins.text.darkPageTitleText,
+      ...theme.text.darkPageTitleText,
       marginTop: '.5rem',
     },
     Login_Spinner: {
@@ -25,7 +25,7 @@ const useStyles = createUseStyles(theme => {
       marginTop: '.5rem',
     },
     Login_ErrorText: {
-      ...theme.mixins.text.formErrorText,
+      ...theme.text.formErrorText,
       marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
       fontWeight: 500,
@@ -67,11 +67,11 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
     },
     Login_ForgotText: {
-      ...theme.mixins.text.darkFormText,
+      ...theme.text.darkFormText,
       marginTop: '1.5rem',
     },
     Login_Label: {
-      ...theme.mixins.text.darkFormText,
+      ...theme.text.darkFormText,
     },
     Login_Background: {
       position: 'absolute',

@@ -14,7 +14,7 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'flex-end',
     },
     NewModelCommentForm_Header: {
-      ...theme.mixins.text.formCalloutText,
+      ...theme.text.formCalloutText,
       marginBottom: '1rem',
     },
     NewModelCommentForm_PostCommentTextArea: {

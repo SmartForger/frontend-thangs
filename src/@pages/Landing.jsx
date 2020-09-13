@@ -39,7 +39,7 @@ const useStyles = createUseStyles(theme => {
       fontFamily: theme.variables.fonts.headerFont,
     },
     Landing_PromotionalPrimaryText: {
-      ...theme.mixins.text.landingPageText,
+      ...theme.text.landingPageText,
       fontSize: '2rem',
 
       [md]: {
@@ -47,7 +47,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Landing_PromotionalSecondaryText: {
-      ...theme.mixins.text.landingPageSubtext,
+      ...theme.text.landingPageSubtext,
       maxWidth: '42rem',
       minWidth: 0,
       marginTop: '1.5rem',

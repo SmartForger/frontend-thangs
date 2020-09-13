@@ -15,7 +15,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     ModelThumbnail: {
-      ...theme.mixins.text.thumbnailErrorText,
+      ...theme.text.thumbnailErrorText,
       position: 'relative',
       height: '100%',
       overflow: 'hidden',

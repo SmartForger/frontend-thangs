@@ -59,11 +59,11 @@ const useStyles = createUseStyles(theme => {
       marginRight: '.5rem',
     },
     UploadForm_Header: {
-      ...theme.mixins.text.subheaderText,
+      ...theme.text.subheaderText,
       marginBottom: '1.5rem',
     },
     UploadForm_Error: {
-      ...theme.mixins.text.formErrorText,
+      ...theme.text.formErrorText,
       margin: '.5rem 0',
     },
     UploadForm_DropdownIndicator: {
@@ -75,7 +75,7 @@ const useStyles = createUseStyles(theme => {
       borderTop: `8px solid ${theme.colors.purple[900]}`,
     },
     UploadForm_Dots: {
-      ...theme.mixins.text.infoMessageText,
+      ...theme.text.infoMessageText,
       width: '8.75rem',
       marginBottom: '14rem',
     },

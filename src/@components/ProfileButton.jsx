@@ -8,7 +8,7 @@ import { ToggleFollowButton } from '@components'
 const useStyles = createUseStyles(theme => {
   return {
     ProfileButton: {
-      ...theme.mixins.text.linkText,
+      ...theme.text.linkText,
       display: 'block',
       textDecoration: 'none',
     },

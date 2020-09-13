@@ -6,14 +6,14 @@ import { createUseStyles } from '@style'
 const useStyles = createUseStyles(theme => {
   return {
     FolderIcon: {
-      ...theme.mixins.text.regularText,
+      ...theme.text.regularText,
       padding: '1rem',
     },
     FolderInfo_Row: {
       display: 'flex',
     },
     FolderInfo_Subtext: {
-      ...theme.mixins.text.cardSubtext,
+      ...theme.text.cardSubtext,
       display: 'flex',
       marginTop: '.25rem',
       fontSize: '.875rem',
@@ -28,7 +28,7 @@ const useStyles = createUseStyles(theme => {
       marginTop: '.25rem',
     },
     FolderInfo_Name__Bold: {
-      ...theme.mixins.text.smallHeaderText,
+      ...theme.text.smallHeaderText,
     },
   }
 })

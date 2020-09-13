@@ -62,7 +62,7 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
     },
     TeamForm_ErrorText: {
-      ...theme.mixins.text.formErrorText,
+      ...theme.text.formErrorText,
       marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
       fontWeight: 500,
@@ -115,7 +115,7 @@ const useStyles = createUseStyles(theme => {
     TeamForm_FolderName: {
       display: 'block',
       padding: '.5rem 1rem',
-      ...theme.mixins.text.lightText,
+      ...theme.text.lightText,
     },
   }
 })

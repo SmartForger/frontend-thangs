@@ -11,7 +11,7 @@ const useStyles = createUseStyles(theme => {
       textAlign: 'center',
     },
     Dots: {
-      ...theme.mixins.text.uploadFrameText,
+      ...theme.text.uploadFrameText,
       color: theme.colors.purple[900],
       marginTop: '1.75rem',
       width: '12rem',

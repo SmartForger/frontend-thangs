@@ -147,7 +147,7 @@ const useStyles = createUseStyles(theme => {
       marginRight: '1rem',
     },
     Model_ProfileLink: {
-      ...theme.mixins.text.linkText,
+      ...theme.text.linkText,
       display: 'block',
       textDecoration: 'none',
     },
@@ -179,11 +179,11 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Model_VersionHeader: {
-      ...theme.mixins.text.formCalloutText,
+      ...theme.text.formCalloutText,
       marginBottom: '1.5rem',
     },
     Model_VersionLinkText: {
-      ...theme.mixins.text.linkText,
+      ...theme.text.linkText,
     },
     Model_VersionButton: {
       display: 'flex',

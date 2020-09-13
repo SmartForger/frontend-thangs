@@ -46,13 +46,13 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'flex-start',
     },
     SearchResults_HeaderText: {
-      ...theme.mixins.text.searchResultsHeader,
+      ...theme.text.searchResultsHeader,
       fontSize: '1rem',
       lineHeight: '1.5rem',
       color: theme.colors.purple[900],
     },
     SearchResult_ResultCountText: {
-      ...theme.mixins.text.searchResultsHeader,
+      ...theme.text.searchResultsHeader,
       fontSize: '.875rem',
       lineHeight: '1rem',
       color: theme.colors.grey[300],
@@ -80,7 +80,7 @@ const useStyles = createUseStyles(theme => {
       marginTop: '.5rem',
     },
     SearchResults_ResultsHeaderText: {
-      ...theme.mixins.text.searchResultsHeader,
+      ...theme.text.searchResultsHeader,
       marginLeft: '.5rem',
     },
     Spinner: {

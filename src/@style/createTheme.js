@@ -4,9 +4,7 @@ import * as textMixins from './text.js'
 const createTheme = (data = {}) => {
   const base = {
     colors,
-    mixins: {
-      text: textMixins,
-    },
+    text: textMixins,
     mediaQueries: {
       xs: '@media (min-width: 320px)',
       sm: '@media (min-width: 480px)',

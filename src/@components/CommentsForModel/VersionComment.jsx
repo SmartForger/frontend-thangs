@@ -17,7 +17,7 @@ const useStyles = createUseStyles(theme => {
     },
     VersionComment_Info: {},
     VersionComment_Owner: {
-      ...theme.mixins.text.linkText,
+      ...theme.text.linkText,
       fontSize: '.75rem',
     },
     VersionComment_Date: {

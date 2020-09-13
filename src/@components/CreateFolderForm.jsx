@@ -51,7 +51,7 @@ const useStyles = createUseStyles(theme => {
       background: theme.colors.white[600],
     },
     FolderForm_ErrorText: {
-      ...theme.mixins.text.formErrorText,
+      ...theme.text.formErrorText,
       marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
       fontWeight: 500,

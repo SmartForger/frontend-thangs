@@ -9,7 +9,7 @@ const useStyles = createUseStyles(theme => {
   return {
     Revised: {},
     Revised_VersionLinkText: {
-      ...theme.mixins.text.linkText,
+      ...theme.text.linkText,
     },
     Revised_VersionIcon: {
       width: '1.25rem',

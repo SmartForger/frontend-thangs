@@ -26,7 +26,7 @@ const useStyles = createUseStyles(theme => {
       color: `${theme.colors.black[500]} !important`,
       boxShadow: '0px 5px 10px 0px rgba(35, 37, 48, 0.25)',
       borderRadius: '0.5rem',
-      ...theme.mixins.text.viewerLoadingText,
+      ...theme.text.viewerLoadingText,
       padding: '1rem 1rem',
       '&.place-top': {
         '&:after': {

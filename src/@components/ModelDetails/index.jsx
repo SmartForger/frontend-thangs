@@ -15,7 +15,7 @@ const useStyles = createUseStyles(theme => {
       verticalAlign: 'middle',
     },
     ModelDetails_FirstCell: {
-      ...theme.mixins.text.modelDetailsLabelText,
+      ...theme.text.modelDetailsLabelText,
       height: '1.5rem',
       textTransform: 'uppercase',
     },

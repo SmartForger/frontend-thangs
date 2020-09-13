@@ -13,11 +13,11 @@ const useStyles = createUseStyles(theme => {
       margin: '0 auto',
     },
     InviteForm_Header: {
-      ...theme.mixins.text.headerText,
+      ...theme.text.headerText,
       marginBottom: '1rem',
     },
     InviteForm_Text: {
-      ...theme.mixins.text.lightText,
+      ...theme.text.lightText,
     },
     InviteForm_Row: {
       display: 'flex',

@@ -112,7 +112,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     ModelSearchResult_ActivityCount: {
-      ...theme.mixins.text.thumbnailActivityCountText,
+      ...theme.text.thumbnailActivityCountText,
       display: 'flex',
       alignItems: 'center',
       letterSpacing: 0,

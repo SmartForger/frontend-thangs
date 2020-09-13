@@ -8,7 +8,7 @@ const useStyles = createUseStyles(theme => {
   return {
     ProfilePicture: {
       '& span': {
-        ...theme.mixins.text.avatarDefaultText,
+        ...theme.text.avatarDefaultText,
       },
     },
     ProfilePicture_alt: {

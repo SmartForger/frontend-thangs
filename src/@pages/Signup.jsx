@@ -25,7 +25,7 @@ const useStyles = createUseStyles(theme => {
       width: '2rem',
     },
     Signup_PageHeader: {
-      ...theme.mixins.text.darkPageTitleText,
+      ...theme.text.darkPageTitleText,
       marginTop: '.5rem',
     },
     Signup_Field: {
@@ -33,7 +33,7 @@ const useStyles = createUseStyles(theme => {
       flexFlow: 'column nowrap',
     },
     Signup_ErrorText: {
-      ...theme.mixins.text.formErrorText,
+      ...theme.text.formErrorText,
       marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
       padding: '.5rem 1rem',

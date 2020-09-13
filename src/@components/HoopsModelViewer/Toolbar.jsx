@@ -32,7 +32,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Toolbar_ToolGroupTitle: {
-      ...theme.mixins.text.viewerToolbarText,
+      ...theme.text.viewerToolbarText,
       display: 'none',
       textTransform: 'uppercase',
       margin: 0,

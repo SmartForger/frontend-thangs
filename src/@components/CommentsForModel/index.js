@@ -11,7 +11,7 @@ import classnames from 'classnames'
 const useStyles = createUseStyles(theme => {
   return {
     CommentsForModel: {
-      ...theme.mixins.text.formCalloutText,
+      ...theme.text.formCalloutText,
       marginTop: '0.5rem',
       fontSize: '1rem',
       lineHeight: '1.5rem',
@@ -32,7 +32,7 @@ const useStyles = createUseStyles(theme => {
       margin: '0.25rem 2.375rem 0',
     },
     CommentsForModel_timestamp: {
-      ...theme.mixins.text.footerText,
+      ...theme.text.footerText,
       fontSize: '.75rem',
       margin: '1rem 2.375rem 0',
       fontWeight: 600,

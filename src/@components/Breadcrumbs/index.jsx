@@ -35,7 +35,7 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
     },
     Breadcrumbs_Arrow: {
-      ...theme.mixins.text.smallHeaderText,
+      ...theme.text.smallHeaderText,
 
       '&:before': {
         content: '">"',
@@ -56,7 +56,7 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
     },
     Breadcrumbs_Link: {
-      ...theme.mixins.text.breadcrumbTextLight,
+      ...theme.text.breadcrumbTextLight,
     },
     Breadcrumbs_ModelCount: {
       marginLeft: '.25rem',

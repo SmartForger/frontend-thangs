@@ -51,7 +51,7 @@ const useStyles = createUseStyles(theme => {
       marginBottom: '4.5rem',
     },
     HowTo_Title: {
-      ...theme.mixins.text.howToTitle,
+      ...theme.text.howToTitle,
       marginBottom: '1.5rem',
     },
   }

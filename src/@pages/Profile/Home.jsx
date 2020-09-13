@@ -28,7 +28,7 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
     },
     Home_TextHeader: {
-      ...theme.mixins.text.subheaderText,
+      ...theme.text.subheaderText,
       display: 'flex',
       alignItems: 'center',
       marginRight: '3.5rem',
@@ -57,24 +57,24 @@ const useStyles = createUseStyles(theme => {
       marginRight: '.5rem',
     },
     Profile_Name: {
-      ...theme.mixins.text.subheaderText,
+      ...theme.text.subheaderText,
     },
     Profile_ProfileButton: {
       marginTop: '.25rem',
       display: 'block',
     },
     Profile_EditProfileLink: {
-      ...theme.mixins.text.boldText,
-      ...theme.mixins.text.linkText,
+      ...theme.text.boldText,
+      ...theme.text.linkText,
     },
 
     Profile_NoContentMessage: {
-      ...theme.mixins.text.smallHeaderText,
+      ...theme.text.smallHeaderText,
       marginTop: '1.75rem',
     },
 
     Profile_NoContentMessage__link: {
-      ...theme.mixins.text.linkText,
+      ...theme.text.linkText,
     },
   }
 })

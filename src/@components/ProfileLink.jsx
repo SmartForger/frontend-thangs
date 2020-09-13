@@ -5,7 +5,7 @@ import { createUseStyles } from '@style'
 const useStyles = createUseStyles(theme => {
   return {
     ProfileLink: {
-      ...theme.mixins.text.linkText,
+      ...theme.text.linkText,
       display: 'block',
       textDecoration: 'none',
     },

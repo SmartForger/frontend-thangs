@@ -26,21 +26,21 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
     },
     Uploader_LinkColor: {
-      ...theme.mixins.text.linkText,
+      ...theme.text.linkText,
     },
     Uploader_InfoMessage: {
-      ...theme.mixins.text.uploadFrameText,
+      ...theme.text.uploadFrameText,
       color: theme.colors.purple[900],
       marginTop: '1.75rem',
       textAlign: 'center',
     },
     Uploader_SmallInfoMessage: {
-      ...theme.mixins.text.smallInfoMessageText,
+      ...theme.text.smallInfoMessageText,
       marginTop: '2rem',
       maxWidth: '21.25rem',
     },
     Uploader_FileName: {
-      ...theme.mixins.text.subheaderText,
+      ...theme.text.subheaderText,
       color: theme.colors.purple[900],
       marginTop: '1.75rem',
       textAlign: 'center',

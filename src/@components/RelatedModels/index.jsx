@@ -22,7 +22,7 @@ const useStyles = createUseStyles(theme => {
       height: '1.5rem',
     },
     RelatedModels_Header: {
-      ...theme.mixins.text.formCalloutText,
+      ...theme.text.formCalloutText,
       marginBottom: '1.5rem',
       display: 'flex',
       alignItems: 'center',

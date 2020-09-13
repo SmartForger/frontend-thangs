@@ -54,11 +54,11 @@ const useStyles = createUseStyles(theme => {
       marginRight: '.5rem',
     },
     Upload_Header: {
-      ...theme.mixins.text.subheaderText,
+      ...theme.text.subheaderText,
       marginBottom: '1.5rem',
     },
     Upload_Error: {
-      ...theme.mixins.text.formErrorText,
+      ...theme.text.formErrorText,
       margin: '.5rem 0',
     },
     Upload_DropdownIndicator: {
@@ -78,7 +78,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Upload_Dots: {
-      ...theme.mixins.text.infoMessageText,
+      ...theme.text.infoMessageText,
       width: '8.75rem',
       marginBottom: '14rem',
     },

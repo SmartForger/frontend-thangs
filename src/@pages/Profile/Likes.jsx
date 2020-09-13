@@ -11,7 +11,7 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
     },
     Likes_LikedModelsHeader: {
-      ...theme.mixins.text.subheaderText,
+      ...theme.text.subheaderText,
       marginBottom: '2rem',
     },
   }

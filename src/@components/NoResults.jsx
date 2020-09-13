@@ -5,7 +5,7 @@ import classnames from 'classnames'
 const useStyles = createUseStyles(theme => {
   return {
     NoResults: {
-      ...theme.mixins.text.zeroStateText,
+      ...theme.text.zeroStateText,
       backgroundColor: theme.colors.white[800],
       padding: '1rem',
       borderRadius: '.5rem',

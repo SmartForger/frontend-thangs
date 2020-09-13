@@ -29,7 +29,7 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'space-between',
     },
     ModelCard_Name: {
-      ...theme.mixins.text.regularText,
+      ...theme.text.regularText,
     },
     ModelCard_DetailsInline: {
       display: 'flex',
@@ -60,7 +60,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     ModelCard_ActivityCount: {
-      ...theme.mixins.text.thumbnailActivityCountText,
+      ...theme.text.thumbnailActivityCountText,
       display: 'flex',
       alignItems: 'center',
       letterSpacing: 0,

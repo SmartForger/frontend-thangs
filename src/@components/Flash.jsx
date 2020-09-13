@@ -5,7 +5,7 @@ import { createUseStyles } from '@style'
 const useStyles = createUseStyles(theme => {
   return {
     Flash: {
-      ...theme.mixins.text.flashToastText,
+      ...theme.text.flashToastText,
       backgroundColor: theme.variables.colors.flashColor,
       borderRadius: '.5rem',
       padding: '1rem 1.5rem',

@@ -5,7 +5,7 @@ import { createUseStyles } from '@style'
 const useStyles = createUseStyles(theme => {
   return {
     AnchorButton: {
-      ...theme.mixins.text.linkText,
+      ...theme.text.linkText,
       margin: 0,
       padding: 0,
       border: 'none',

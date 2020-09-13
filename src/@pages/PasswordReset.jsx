@@ -14,7 +14,7 @@ const useStyles = createUseStyles(theme => {
       marginTop: '6.5rem',
     },
     PasswordReset_PageHeader: {
-      ...theme.mixins.text.darkPageTitleText,
+      ...theme.text.darkPageTitleText,
       marginTop: '.25rem',
     },
     PasswordReset_Spinner: {
@@ -25,14 +25,14 @@ const useStyles = createUseStyles(theme => {
       marginTop: '.5rem',
     },
     PasswordReset_ErrorText: {
-      ...theme.mixins.text.formErrorText,
+      ...theme.text.formErrorText,
       marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
       padding: '.5rem 1rem',
       borderRadius: '.5rem',
     },
     PasswordReset_SuccessText: {
-      ...theme.mixins.text.formSuccessText,
+      ...theme.text.formSuccessText,
       padding: '.25rem',
       borderRadius: '.25rem',
       marginTop: '.25rem',

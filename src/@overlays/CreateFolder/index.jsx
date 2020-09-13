@@ -13,12 +13,12 @@ const useStyles = createUseStyles(theme => {
       margin: '4rem auto',
     },
     CreateFolder_Header: {
-      ...theme.mixins.text.uploadFrameText,
+      ...theme.text.uploadFrameText,
       color: theme.colors.purple[900],
       marginBottom: '1rem',
     },
     CreateFolder_Text: {
-      ...theme.mixins.text.lightText,
+      ...theme.text.lightText,
     },
     CreateFolder_Row: {
       display: 'flex',

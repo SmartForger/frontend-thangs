@@ -26,7 +26,7 @@ const useStyles = createUseStyles(theme => {
       minWidth: '21rem',
     },
     Upload_Dots: {
-      ...theme.mixins.text.infoMessageText,
+      ...theme.text.infoMessageText,
       width: '8.75rem',
       marginBottom: '14rem',
     },

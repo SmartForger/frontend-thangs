@@ -69,7 +69,7 @@ const useStyles = createUseStyles(theme => {
       marginBottom: '1rem',
     },
     FolderManagement_TeamName: {
-      ...theme.mixins.text.smallHeaderText,
+      ...theme.text.smallHeaderText,
     },
     FolderManagement_UserInline: {
       display: 'flex',
