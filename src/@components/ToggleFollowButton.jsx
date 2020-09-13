@@ -4,7 +4,6 @@ import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import useFetchOnce from '@hooks/useServices/useFetchOnce'
-import * as types from '@constants/storeEventTypes'
 import * as pendo from '@vendors/pendo'
 
 const useStyles = createUseStyles(_theme => {
