@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactModal from 'react-modal'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
@@ -25,9 +25,17 @@ const useStyles = createUseStyles(_theme => {
       cursor: 'pointer',
     },
     Overlay_Content: {
+      position: 'relative',
       width: '90%',
       margin: '6rem auto 0',
       maxWidth: ({ windowed }) => (windowed ? '49.75rem' : '32rem'),
+      transition: 'all 450ms',
+      opacity: ({ animateIn }) => (animateIn ? 0 : 1),
+      top: ({ animateIn }) => (animateIn ? '30px' : 0),
+    },
+    Overlay_Content__visible: {
+      opacity: '1 !important',
+      top: '0 !important',
     },
   }
 })
@@ -37,13 +45,18 @@ const Overlay = ({
   className,
   onOverlayClose = noop,
   windowed = false,
+  animateIn = false,
   ...props
 }) => {
+  const [isVisible, setIsVisible] = useState(false)
   const { dispatch } = useStoreon()
-  const c = useStyles({ windowed })
+  const c = useStyles({ windowed, animateIn })
   useEffect(() => {
     document.body.scrollTop = 0
     document.documentElement.scrollTop = 0
+    setTimeout(() => {
+      setIsVisible(true)
+    }, 0)
   }, [])
 
   return (
@@ -71,7 +84,13 @@ const Overlay = ({
       >
         {!windowed && <ExitIcon />}
       </Button>
-      <div className={c.Overlay_Content}>{children}</div>
+      <div
+        className={classnames(c.Overlay_Content, {
+          [c.Overlay_Content__visible]: isVisible,
+        })}
+      >
+        {children}
+      </div>
     </ReactModal>
   )
 }

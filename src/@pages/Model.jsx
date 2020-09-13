@@ -243,6 +243,7 @@ const DownloadLink = ({ model, isAuthedUser }) => {
       dispatch(types.OPEN_OVERLAY, {
         overlayName: 'signUp',
         overlayData: {
+          animateIn: true,
           windowed: true,
           titleMessage: 'Join to download.',
         },
@@ -299,6 +300,7 @@ const VersionUpload = ({ modelId, isAuthedUser }) => {
       dispatch(types.OPEN_OVERLAY, {
         overlayName: 'signUp',
         overlayData: {
+          animateIn: true,
           windowed: true,
           titleMessage: 'Join to upload your version.',
         },
@@ -374,6 +376,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
     dispatch(types.OPEN_OVERLAY, {
       overlayName: 'signUp',
       overlayData: {
+        animateIn: true,
         windowed: true,
       },
     })

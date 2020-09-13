@@ -77,6 +77,7 @@ const UnauthFollowButton = ({ c, dispatch }) => {
       dispatch(types.OPEN_OVERLAY, {
         overlayName: 'signUp',
         overlayData: {
+          animateIn: true,
           windowed: true,
           titleMessage: 'Join to Like, Follow, Share.',
         },
