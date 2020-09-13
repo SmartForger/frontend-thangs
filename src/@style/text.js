@@ -1,7 +1,28 @@
 import { colors } from './colors.js'
 
-// const _MONTSERRAT = '"Montserrat", sans-serif'
-const LEXEND_DECA = 'Lexend Deca'
+export const MONTSERRAT = '"Montserrat", sans-serif'
+export const LEXEND_DECA = 'Lexend Deca'
+
+export const titleBase = {
+  fontFamily: MONTSERRAT,
+  fontStyle: 'normal',
+  fontWeight: 600,
+  letterSpacing: '-0.015em',
+}
+
+export const metadataBase = {
+  fontFamily: MONTSERRAT,
+  fontStyle: 'normal',
+  fontWeight: 600,
+  letterSpacing: '-0.02em',
+}
+
+export const bodyBase = {
+  fontFamily: MONTSERRAT,
+  fontStyle: 'normal',
+  fontWeight: 500,
+  letterSpacing: '-0.02em',
+}
 
 export const flashToastText = {
   color: colors.white[600],
