@@ -79,12 +79,11 @@ const Comment = ({ comment }) => {
   )
 }
 
-const CommentsForModel = ({ model, className }) => {
-  const c = useStyles()
+const AuthCommentsForModel = ({ c, className, modelId }) => {
   const { useFetchPerMount } = useServices()
   const {
     atom: { isLoading: loading, isLoaded: loaded, isError: error, data: comments },
-  } = useFetchPerMount(model.id, 'model-comments')
+  } = useFetchPerMount(modelId, 'model-comments')
 
   if (error) {
     return <div className={className}>Error loading comments</div>
@@ -102,12 +101,35 @@ const CommentsForModel = ({ model, className }) => {
     <div className={classnames(className, c.CommentsForModel)}>
       {comments && comments.length}{' '}
       {comments && comments.length && comments.length === 1 ? 'comment' : 'comments'}
-      <NewModelCommentForm modelId={model.id} />
+      <NewModelCommentForm modelId={modelId} />
       <ul className={c.CommentsForModel_List}>
         {comments.map((comment, i) => renderTypedComment({ comment, key: i }))}
       </ul>
     </div>
   )
+}
+
+const UnauthCommentsForModel = ({ className, c }) => {
+  return (
+    <div className={classnames(className, c.CommentsForModel)}>
+      <NewModelCommentForm />
+    </div>
+  )
+}
+
+const CommentsForModel = ({ className, currentUser, modelId }) => {
+  const c = useStyles()
+  if (currentUser) {
+    return (
+      <AuthCommentsForModel
+        className={className}
+        c={c}
+        currentUser={currentUser}
+        modelId={modelId}
+      />
+    )
+  }
+  return <UnauthCommentsForModel className={className} c={c} />
 }
 
 export default CommentsForModel

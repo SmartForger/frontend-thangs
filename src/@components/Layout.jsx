@@ -9,6 +9,7 @@ import {
   PasswordReset,
   FolderManagement,
   ReportModel,
+  Signup,
 } from '@overlays'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import classnames from 'classnames'
@@ -118,6 +119,7 @@ const overlayTemplates = {
   passwordReset: PasswordReset,
   folderManagement: FolderManagement,
   reportModel: ReportModel,
+  signUp: Signup,
 }
 
 const Layout = ({
@@ -169,7 +171,6 @@ const Layout = ({
         <Overlay
           className={classnames({ [c.Overlay__hidden]: overlay.isHidden })}
           isOpen={overlay.isOpen}
-          isBanner={!!bannerText}
           {...overlay.overlayData}
         >
           <OverlayView {...overlay.overlayData} />

@@ -142,7 +142,11 @@ const Page = () => {
               <ProgressText className={c.Upload_Dots} text='Uploading' />
             </UploadFrame>
           ) : (
-            <Uploader showError={uploadModelPhase1.isError} file={file} setFile={setFile} />
+            <Uploader
+              showError={uploadModelPhase1.isError}
+              file={file}
+              setFile={setFile}
+            />
           )}
         </div>
         <div className={c.Upload_Column__form}>

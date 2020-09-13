@@ -36,9 +36,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const NewModelCommentForm = ({ modelId }) => {
-  const c = useStyles()
-
+const CommentForm = ({ c, modelId }) => {
   const { dispatch } = useStoreon()
 
   const initialState = {
@@ -86,6 +84,38 @@ const NewModelCommentForm = ({ modelId }) => {
       <Button type='submit'>Comment</Button>
     </form>
   )
+}
+
+const NewModelCommentForm = ({ modelId }) => {
+  const c = useStyles()
+  const { dispatch } = useStoreon()
+
+  const handleClick = useCallback(
+    e => {
+      e.preventDefault()
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'signUp',
+        overlayData: {
+          windowed: true,
+          titleMessage: 'Join to Like, Follow, Share.',
+        },
+      })
+    },
+    [dispatch]
+  )
+
+  if (!modelId) {
+    return (
+      <div className={c.NewModelCommentForm}>
+        <TextInput
+          className={c.NewModelCommentForm_PostCommentTextArea}
+          placeholder={'Add a public comment'}
+        />
+        <Button onClick={handleClick}>Comment</Button>
+      </div>
+    )
+  }
+  return <CommentForm modelId={modelId} c={c} />
 }
 
 export default NewModelCommentForm

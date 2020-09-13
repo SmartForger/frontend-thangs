@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import * as R from 'ramda'
+import { useStoreon } from 'storeon/react'
 import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
 import { Button } from '@components'
 import { createUseStyles } from '@style'
@@ -9,10 +10,6 @@ import classnames from 'classnames'
 
 const useStyles = createUseStyles(_theme => {
   return {
-    '@-webkit-keyframes spinner': {
-      from: { '-webkit-transform': 'rotateY(0deg)' },
-      to: { '-webkit-transform': 'rotateY(-180deg)' },
-    },
     '@keyframes spinner': {
       from: {
         '-moz-transform': 'rotateY(0deg)',
@@ -51,8 +48,7 @@ const hasLikedModel = (modelData, currentUserId) => {
   return R.includes(currentUserId, modelData.likes)
 }
 
-const LikeModelButton = ({ currentUser, modelId, userId }) => {
-  const c = useStyles()
+const AuthLikeModelButton = ({ c, currentUser, modelId, userId }) => {
   const currentUserId = parseInt(currentUser.id)
   const isModelOfCurrentUser = (currentUser && currentUser.id) === userId
   const { useFetchOnce } = useServices()
@@ -99,6 +95,47 @@ const LikeModelButton = ({ currentUser, modelId, userId }) => {
       </Button>
     )
   )
+}
+
+const UnauthLikeModelButton = ({ c, dispatch }) => {
+  const handleClick = useCallback(
+    () =>
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'signUp',
+        overlayData: {
+          windowed: true,
+          titleMessage: 'Join to Like, Follow, Share.',
+        },
+      }),
+    [dispatch]
+  )
+
+  return (
+    <Button
+      className={classnames(c.LikeModelButton)}
+      onClick={handleClick}
+      secondary
+      icon
+    >
+      <HeartFilledIcon className={c.LikeModelIcon__unliked} />
+    </Button>
+  )
+}
+
+const LikeModelButton = ({ currentUser, modelId, profileUserId }) => {
+  const { dispatch } = useStoreon()
+  const c = useStyles()
+  if (currentUser) {
+    return (
+      <AuthLikeModelButton
+        c={c}
+        currentUser={currentUser}
+        modelId={modelId}
+        profileUserId={profileUserId}
+      />
+    )
+  }
+  return <UnauthLikeModelButton c={c} dispatch={dispatch} />
 }
 
 export default LikeModelButton

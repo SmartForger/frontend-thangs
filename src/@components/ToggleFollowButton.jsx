@@ -4,6 +4,7 @@ import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import useFetchOnce from '@hooks/useServices/useFetchOnce'
+import * as types from '@constants/storeEventTypes'
 import * as pendo from '@vendors/pendo'
 
 const useStyles = createUseStyles(_theme => {
@@ -26,29 +27,25 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const ToggleFollowButton = ({ currentUser, userId }) => {
+const AuthFollowButton = ({ c, currentUser, profileUserId, dispatch }) => {
   const {
     atom: { isLoading, isError, data: user },
-  } = useFetchOnce(userId, 'user')
-
-  const { dispatch } = useStoreon()
-  const isModelOfCurrentUser = (currentUser && currentUser.id) === userId
-
-  const c = useStyles()
+  } = useFetchOnce(profileUserId, 'user')
+  const isModelOfCurrentUser = (currentUser && currentUser.id) === profileUserId
   const isFollowing = user && user.isBeingFollowedByRequester
 
   const handleClick = useCallback(
     e => {
       e.preventDefault()
       if (isFollowing) {
-        dispatch('unfollow-user', { id: userId })
-        pendo.track('Unfollow User', userId)
+        dispatch('unfollow-user', { id: profileUserId })
+        pendo.track('Unfollow User', profileUserId)
       } else {
-        dispatch('follow-user', { id: userId })
-        pendo.track('Follow User', userId)
+        dispatch('follow-user', { id: profileUserId })
+        pendo.track('Follow User', profileUserId)
       }
     },
-    [dispatch, userId, isFollowing]
+    [dispatch, profileUserId, isFollowing]
   )
 
   return (
@@ -72,6 +69,42 @@ const ToggleFollowButton = ({ currentUser, userId }) => {
       </Button>
     )
   )
+}
+
+const UnauthFollowButton = ({ c, dispatch }) => {
+  const handleClick = useCallback(
+    () =>
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'signUp',
+        overlayData: {
+          windowed: true,
+          titleMessage: 'Join to Like, Follow, Share.',
+        },
+      }),
+    [dispatch]
+  )
+
+  return (
+    <Button className={c.ToggleFollowButton} onClick={handleClick} secondary>
+      Follow
+    </Button>
+  )
+}
+
+const ToggleFollowButton = ({ profileUserId, currentUser }) => {
+  const { dispatch } = useStoreon()
+  const c = useStyles()
+  if (currentUser) {
+    return (
+      <AuthFollowButton
+        c={c}
+        currentUser={currentUser}
+        dispatch={dispatch}
+        profileUserId={profileUserId}
+      />
+    )
+  }
+  return <UnauthFollowButton c={c} dispatch={dispatch} />
 }
 
 export default ToggleFollowButton

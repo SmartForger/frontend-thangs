@@ -117,7 +117,10 @@ const getThumbnailUrl = (model = {}) => {
 
 const waldoThumbnailUrl = (model, searchModelFileName) =>
   searchModelFileName
-    ? `${TIW_THUMBNAILS_HOST}/${getThumbnailFileName(model)}/${getWaldoThumbnailUrl(model, searchModelFileName)}`
+    ? `${TIW_THUMBNAILS_HOST}/${getThumbnailFileName(model)}/${getWaldoThumbnailUrl(
+      model,
+      searchModelFileName
+    )}`
     : undefined
 
 const ModelThumbnail = ({ className, model, name, searchModelFileName, showWaldo }) => {

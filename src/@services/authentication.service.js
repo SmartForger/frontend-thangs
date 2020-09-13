@@ -78,7 +78,7 @@ const login = async ({ email, password }) => {
 const signup = async ({
   email,
   password,
-  registrationCode,
+  registrationCode = 'alpha',
   firstName,
   lastName,
   username,
@@ -96,14 +96,18 @@ const signup = async ({
       username,
     }),
   }
-
   try {
     return await axios(requestOptions)
   } catch (err) {
-    return (
-      (err && err.response && err.response.data) ||
-      'Error Processing your new account. Please try again later.'
-    )
+    if (err.response) {
+      return { error: err.response.data }
+    }
+    return {
+      status: 500,
+      data: {
+        detail: 'Internal Server Error, please try again',
+      },
+    }
   }
 }
 

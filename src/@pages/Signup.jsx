@@ -156,7 +156,7 @@ const Page = () => {
 
     setWaiting(false)
     if (error) {
-      setSignupErrorMessage(error)
+      setSignupErrorMessage(error.message)
     } else {
       await authenticationService.login({
         email: inputState.email,

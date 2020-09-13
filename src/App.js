@@ -123,7 +123,7 @@ const App = () => {
                 path='/profile/'
                 component={routeRequiresAuth(RedirectProfile)}
               />
-              <Route path='/model/:id' exact component={routeRequiresAuth(ModelDetail)} />
+              <Route path='/model/:id' exact component={ModelDetail} />
               <Route
                 path={['/search/:searchQuery', '/search']}
                 component={SearchResults}

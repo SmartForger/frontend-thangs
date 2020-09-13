@@ -27,7 +27,7 @@ const ProfileButton = ({ userId, className }) => {
       </Link>
     )
   } else {
-    return <ToggleFollowButton userId={userId} />
+    return <ToggleFollowButton profileUserId={userId} currentUser={currentUserId} />
   }
 }
 

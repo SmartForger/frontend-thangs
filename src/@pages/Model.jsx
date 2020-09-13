@@ -1,5 +1,5 @@
-import React from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import React, { useCallback, useEffect, useRef } from 'react'
+import { useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import * as R from 'ramda'
 import { format } from 'date-fns'
@@ -19,7 +19,6 @@ import {
   ToggleFollowButton,
   useFlashNotification,
 } from '@components'
-import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
 import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
@@ -225,19 +224,36 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const DownloadLink = ({ model }) => {
+const DownloadLink = ({ model, isAuthedUser }) => {
   const c = useStyles()
   const { dispatch, modelDownloadUrl } = useStoreon('modelDownloadUrl')
-  const downloadModel = () =>
-    dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
-      modelId: model.id,
-      onFinish: downloadUrl => {
-        window.open(downloadUrl)
-        pendo.track('Download Model', { modelId: model.id })
-      },
-    })
+  const downloadModel = useCallback(
+    () =>
+      dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
+        modelId: model.id,
+        onFinish: downloadUrl => {
+          window.open(downloadUrl)
+          pendo.track('Download Model', { modelId: model.id })
+        },
+      }),
+    [dispatch, model.id]
+  )
+  const showSignUpOverlay = useCallback(
+    () =>
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'signUp',
+        overlayData: {
+          windowed: true,
+          titleMessage: 'Join to download.',
+        },
+      }),
+    [dispatch]
+  )
   return (
-    <Button className={c.Model_DownloadButton} onClick={downloadModel}>
+    <Button
+      className={c.Model_DownloadButton}
+      onClick={isAuthedUser ? downloadModel : showSignUpOverlay}
+    >
       {modelDownloadUrl.isLoading ? (
         <ProgressText text='Downloading' />
       ) : modelDownloadUrl.isError ? (
@@ -269,21 +285,30 @@ const ModelStats = ({ model = {} }) => {
   )
 }
 
-const VersionUpload = ({ modelId }) => {
+const VersionUpload = ({ modelId, isAuthedUser }) => {
   const c = useStyles()
   const { dispatch } = useStoreon()
+
+  const handleClick = useCallback(() => {
+    if (isAuthedUser) {
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'upload',
+        overlayData: { prevModelId: modelId },
+      })
+    } else {
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'signUp',
+        overlayData: {
+          windowed: true,
+          titleMessage: 'Join to upload your version.',
+        },
+      })
+    }
+  }, [dispatch, isAuthedUser, modelId])
   return (
     <div>
       <h2 className={c.Model_VersionHeader}>Versions</h2>
-      <div
-        className={c.Model_VersionButton}
-        onClick={() =>
-          dispatch(types.OPEN_OVERLAY, {
-            overlayName: 'upload',
-            overlayData: { prevModelId: modelId },
-          })
-        }
-      >
+      <div className={c.Model_VersionButton} onClick={handleClick}>
         <VersionIcon className={c.Model_VersionIcon} />
         <Button text className={c.Model_VersionLinkText}>
           Upload new version
@@ -304,15 +329,14 @@ const Details = ({ currentUser, model }) => {
           <div>
             <ToggleFollowButton
               currentUser={currentUser}
-              userId={model && model.owner && model.owner.id}
+              profileUserId={model && model.owner && model.owner.id}
             />
           </div>
           <div>
             <LikeModelButton
               currentUser={currentUser}
               modelId={model.id}
-              model={model}
-              userId={model && model.owner && model.owner.id}
+              profileUserId={model && model.owner && model.owner.id}
             />
           </div>
         </div>
@@ -321,15 +345,15 @@ const Details = ({ currentUser, model }) => {
   )
 }
 
-const StatsAndActions = ({ c, className, modelData }) => {
+const StatsAndActions = ({ c, className, modelData, isAuthedUser }) => {
   return (
     <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
       <div>
-        <DownloadLink model={modelData} />
+        <DownloadLink model={modelData} isAuthedUser={isAuthedUser} />
         <ModelStats model={modelData} />
       </div>
       <hr className={c.Model_Rule} />
-      <VersionUpload modelId={modelData.id} />
+      <VersionUpload modelId={modelData.id} isAuthedUser={isAuthedUser} />
       <hr className={c.Model_Rule} />
     </div>
   )
@@ -337,15 +361,34 @@ const StatsAndActions = ({ c, className, modelData }) => {
 
 const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   const c = useStyles()
-  const history = useHistory()
   const { navigateWithFlash } = useFlashNotification()
-  const isFromThePortal = () =>
-    history.location && history.location.state && history.location.state.prevPath
   const { useFetchOnce } = useServices()
+  const timerRef = useRef(null)
   const {
     atom: { data: modelData, isLoading, isLoaded, isError },
   } = useFetchOnce(id, 'model')
   const { title, description } = usePageMeta('model')
+  const { dispatch, overlay } = useStoreon('overlay')
+  const { isOpen } = overlay
+  const openSignupOverlay = useCallback(() => {
+    dispatch(types.OPEN_OVERLAY, {
+      overlayName: 'signUp',
+      overlayData: {
+        windowed: true,
+      },
+    })
+  }, [dispatch])
+
+  useEffect(() => {
+    if (!currentUser && !isOpen) {
+      timerRef.current = setTimeout(() => {
+        openSignupOverlay()
+      }, 10000)
+
+      return () => clearTimeout(timerRef.current)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen])
 
   if (isLoading || !isLoaded) {
     return <Spinner />
@@ -370,13 +413,6 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
         />
       </Helmet>
       <div className={c.Model}>
-        {isFromThePortal() ? (
-          <div className={c.Model_Header}>
-            <Button back onClick={() => history.goBack()}>
-              <BackArrow />
-            </Button>
-          </div>
-        ) : null}
         <div className={c.Model_Column}>
           <Details currentUser={currentUser} model={modelData} />
           <div className={c.Model_Row}>
@@ -399,10 +435,11 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
                 className={c.Model__mobileOnly}
                 c={c}
                 modelData={modelData}
+                isAuthedUser={!!currentUser}
               />
               <RelatedModels modelId={modelData.id} />
               <hr className={c.Model_Rule} />
-              <CommentsForModel model={modelData} />
+              <CommentsForModel modelId={modelData.id} currentUser={currentUser} />
             </div>
             <StatsAndActions
               className={c.Model__desktopOnly}
