@@ -41,6 +41,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
+const noop = () => null
 const getParsedBody = str => {
   try {
     const strQuotesReplaces = str.replace(/'/g, '"')
@@ -109,15 +110,20 @@ const AuthCommentsForModel = ({ c, className, modelId }) => {
   )
 }
 
-const UnauthCommentsForModel = ({ className, c }) => {
+const UnauthCommentsForModel = ({ className, c, openSignupOverlay }) => {
   return (
     <div className={classnames(className, c.CommentsForModel)}>
-      <NewModelCommentForm />
+      <NewModelCommentForm openSignupOverlay={openSignupOverlay} />
     </div>
   )
 }
 
-const CommentsForModel = ({ className, currentUser, modelId }) => {
+const CommentsForModel = ({
+  className,
+  currentUser,
+  modelId,
+  openSignupOverlay = noop,
+}) => {
   const c = useStyles()
   if (currentUser) {
     return (
@@ -129,7 +135,13 @@ const CommentsForModel = ({ className, currentUser, modelId }) => {
       />
     )
   }
-  return <UnauthCommentsForModel className={className} c={c} />
+  return (
+    <UnauthCommentsForModel
+      className={className}
+      c={c}
+      openSignupOverlay={openSignupOverlay}
+    />
+  )
 }
 
 export default CommentsForModel

@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react'
 import * as R from 'ramda'
-import { useStoreon } from 'storeon/react'
 import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
 import { Button } from '@components'
 import { createUseStyles } from '@style'
@@ -96,19 +95,11 @@ const AuthLikeModelButton = ({ c, currentUser, modelId, userId }) => {
     )
   )
 }
-
-const UnauthLikeModelButton = ({ c, dispatch }) => {
+const noop = () => null
+const UnauthLikeModelButton = ({ c, openSignupOverlay = noop }) => {
   const handleClick = useCallback(
-    () =>
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'signUp',
-        overlayData: {
-          animateIn: true,
-          windowed: true,
-          titleMessage: 'Join to Like, Follow, Share.',
-        },
-      }),
-    [dispatch]
+    () => openSignupOverlay('Join to Like, Follow, Share.'),
+    [openSignupOverlay]
   )
 
   return (
@@ -123,8 +114,12 @@ const UnauthLikeModelButton = ({ c, dispatch }) => {
   )
 }
 
-const LikeModelButton = ({ currentUser, modelId, profileUserId }) => {
-  const { dispatch } = useStoreon()
+const LikeModelButton = ({
+  currentUser,
+  modelId,
+  profileUserId,
+  openSignupOverlay = noop,
+}) => {
   const c = useStyles()
   if (currentUser) {
     return (
@@ -136,7 +131,7 @@ const LikeModelButton = ({ currentUser, modelId, profileUserId }) => {
       />
     )
   }
-  return <UnauthLikeModelButton c={c} dispatch={dispatch} />
+  return <UnauthLikeModelButton c={c} openSignupOverlay={openSignupOverlay} />
 }
 
 export default LikeModelButton

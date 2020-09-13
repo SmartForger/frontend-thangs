@@ -131,7 +131,7 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       top: '2rem',
       right: '2rem',
-      zIndex: 1,
+      zIndex: 4,
 
       '& path': {
         fill: theme.colors.white[400],
@@ -309,7 +309,7 @@ const SignUpForm = ({ c }) => {
         password: inputState.password,
       })
       if (loginError) return setSignupErrorMessage(error)
-      return window.location.reload(true)
+      return window.location.reload()
     }
   }, [inputState, validateEmail, validatePasswords, validateUsername])
 

@@ -70,7 +70,10 @@ const useStyles = createUseStyles(theme => {
       flexBasis: '2rem',
       flexGrow: 2,
       maxWidth: '60rem',
-      marginRight: '4rem',
+
+      [md]: {
+        marginRight: '4rem',
+      },
     },
     Model_RightColumn: {
       flexBasis: '1rem',
@@ -223,8 +226,8 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
-
-const DownloadLink = ({ model, isAuthedUser }) => {
+const noop = () => null
+const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
   const c = useStyles()
   const { dispatch, modelDownloadUrl } = useStoreon('modelDownloadUrl')
   const downloadModel = useCallback(
@@ -238,23 +241,17 @@ const DownloadLink = ({ model, isAuthedUser }) => {
       }),
     [dispatch, model.id]
   )
-  const showSignUpOverlay = useCallback(
-    () =>
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'signUp',
-        overlayData: {
-          animateIn: true,
-          windowed: true,
-          titleMessage: 'Join to download.',
-        },
-      }),
-    [dispatch]
-  )
+
+  const handleClick = useCallback(() => {
+    if (isAuthedUser) {
+      downloadModel()
+    } else {
+      openSignupOverlay('Join to download.')
+    }
+  }, [downloadModel, isAuthedUser, openSignupOverlay])
+
   return (
-    <Button
-      className={c.Model_DownloadButton}
-      onClick={isAuthedUser ? downloadModel : showSignUpOverlay}
-    >
+    <Button className={c.Model_DownloadButton} onClick={handleClick}>
       {modelDownloadUrl.isLoading ? (
         <ProgressText text='Downloading' />
       ) : modelDownloadUrl.isError ? (
@@ -286,7 +283,7 @@ const ModelStats = ({ model = {} }) => {
   )
 }
 
-const VersionUpload = ({ modelId, isAuthedUser }) => {
+const VersionUpload = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
   const c = useStyles()
   const { dispatch } = useStoreon()
 
@@ -297,16 +294,10 @@ const VersionUpload = ({ modelId, isAuthedUser }) => {
         overlayData: { prevModelId: modelId },
       })
     } else {
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'signUp',
-        overlayData: {
-          animateIn: true,
-          windowed: true,
-          titleMessage: 'Join to upload your version.',
-        },
-      })
+      openSignupOverlay('Join to Like, Follow, Share.')
     }
-  }, [dispatch, isAuthedUser, modelId])
+  }, [isAuthedUser, dispatch, modelId, openSignupOverlay])
+
   return (
     <div>
       <h2 className={c.Model_VersionHeader}>Versions</h2>
@@ -320,7 +311,7 @@ const VersionUpload = ({ modelId, isAuthedUser }) => {
   )
 }
 
-const Details = ({ currentUser, model }) => {
+const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
   const c = useStyles()
   return (
     <div className={classnames(c.Model_Row, c.Model_Detail)}>
@@ -332,6 +323,7 @@ const Details = ({ currentUser, model }) => {
             <ToggleFollowButton
               currentUser={currentUser}
               profileUserId={model && model.owner && model.owner.id}
+              openSignupOverlay={openSignupOverlay}
             />
           </div>
           <div>
@@ -339,6 +331,7 @@ const Details = ({ currentUser, model }) => {
               currentUser={currentUser}
               modelId={model.id}
               profileUserId={model && model.owner && model.owner.id}
+              openSignupOverlay={openSignupOverlay}
             />
           </div>
         </div>
@@ -347,15 +340,29 @@ const Details = ({ currentUser, model }) => {
   )
 }
 
-const StatsAndActions = ({ c, className, modelData, isAuthedUser }) => {
+const StatsAndActions = ({
+  c,
+  className,
+  modelData,
+  isAuthedUser,
+  openSignupOverlay = noop,
+}) => {
   return (
     <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
       <div>
-        <DownloadLink model={modelData} isAuthedUser={isAuthedUser} />
+        <DownloadLink
+          model={modelData}
+          isAuthedUser={isAuthedUser}
+          openSignupOverlay={openSignupOverlay}
+        />
         <ModelStats model={modelData} />
       </div>
       <hr className={c.Model_Rule} />
-      <VersionUpload modelId={modelData.id} isAuthedUser={isAuthedUser} />
+      <VersionUpload
+        modelId={modelData.id}
+        isAuthedUser={isAuthedUser}
+        openSignupOverlay={openSignupOverlay}
+      />
       <hr className={c.Model_Rule} />
     </div>
   )
@@ -366,24 +373,30 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   const { navigateWithFlash } = useFlashNotification()
   const { useFetchOnce } = useServices()
   const timerRef = useRef(null)
+  const signUpShown = useRef(false)
   const {
     atom: { data: modelData, isLoading, isLoaded, isError },
   } = useFetchOnce(id, 'model')
   const { title, description } = usePageMeta('model')
   const { dispatch, overlay } = useStoreon('overlay')
   const { isOpen } = overlay
-  const openSignupOverlay = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'signUp',
-      overlayData: {
-        animateIn: true,
-        windowed: true,
-      },
-    })
-  }, [dispatch])
+  const openSignupOverlay = useCallback(
+    titleMessage => {
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'signUp',
+        overlayData: {
+          animateIn: true,
+          windowed: true,
+          titleMessage,
+        },
+      })
+      signUpShown.current = true
+    },
+    [dispatch]
+  )
 
   useEffect(() => {
-    if (!currentUser && !isOpen) {
+    if (!currentUser && !isOpen && !signUpShown.current) {
       timerRef.current = setTimeout(() => {
         openSignupOverlay()
       }, 20000)
@@ -391,7 +404,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
       return () => clearTimeout(timerRef.current)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen])
+  }, [])
 
   if (isLoading || !isLoaded) {
     return <Spinner />
@@ -417,7 +430,11 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
       </Helmet>
       <div className={c.Model}>
         <div className={c.Model_Column}>
-          <Details currentUser={currentUser} model={modelData} />
+          <Details
+            currentUser={currentUser}
+            model={modelData}
+            openSignupOverlay={openSignupOverlay}
+          />
           <div className={c.Model_Row}>
             {showBackupViewer ? (
               <BackupViewer className={c.Model_BackupViewer} model={modelData} />
@@ -439,15 +456,21 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
                 c={c}
                 modelData={modelData}
                 isAuthedUser={!!currentUser}
+                openSignupOverlay={openSignupOverlay}
               />
               <RelatedModels modelId={modelData.id} />
               <hr className={c.Model_Rule} />
-              <CommentsForModel modelId={modelData.id} currentUser={currentUser} />
+              <CommentsForModel
+                modelId={modelData.id}
+                currentUser={currentUser}
+                openSignupOverlay={openSignupOverlay}
+              />
             </div>
             <StatsAndActions
               className={c.Model__desktopOnly}
               c={c}
               modelData={modelData}
+              openSignupOverlay={openSignupOverlay}
             />
           </div>
         </div>

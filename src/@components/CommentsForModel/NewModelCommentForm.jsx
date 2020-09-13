@@ -85,24 +85,16 @@ const CommentForm = ({ c, modelId }) => {
     </form>
   )
 }
-
-const NewModelCommentForm = ({ modelId }) => {
+const noop = () => null
+const NewModelCommentForm = ({ modelId, openSignupOverlay = noop }) => {
   const c = useStyles()
-  const { dispatch } = useStoreon()
 
   const handleClick = useCallback(
     e => {
       e.preventDefault()
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'signUp',
-        overlayData: {
-          animateIn: true,
-          windowed: true,
-          titleMessage: 'Join to Like, Follow, Share.',
-        },
-      })
+      openSignupOverlay('Join and start collaborating.')
     },
-    [dispatch]
+    [openSignupOverlay]
   )
 
   if (!modelId) {

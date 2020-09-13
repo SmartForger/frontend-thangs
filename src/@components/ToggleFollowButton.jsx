@@ -70,19 +70,11 @@ const AuthFollowButton = ({ c, currentUser, profileUserId, dispatch }) => {
     )
   )
 }
-
-const UnauthFollowButton = ({ c, dispatch }) => {
+const noop = () => null
+const UnauthFollowButton = ({ c, openSignupOverlay = noop }) => {
   const handleClick = useCallback(
-    () =>
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'signUp',
-        overlayData: {
-          animateIn: true,
-          windowed: true,
-          titleMessage: 'Join to Like, Follow, Share.',
-        },
-      }),
-    [dispatch]
+    () => openSignupOverlay('Join to Like, Follow, Share.'),
+    [openSignupOverlay]
   )
 
   return (
@@ -92,7 +84,7 @@ const UnauthFollowButton = ({ c, dispatch }) => {
   )
 }
 
-const ToggleFollowButton = ({ profileUserId, currentUser }) => {
+const ToggleFollowButton = ({ profileUserId, currentUser, openSignupOverlay = noop }) => {
   const { dispatch } = useStoreon()
   const c = useStyles()
   if (currentUser) {
@@ -105,7 +97,7 @@ const ToggleFollowButton = ({ profileUserId, currentUser }) => {
       />
     )
   }
-  return <UnauthFollowButton c={c} dispatch={dispatch} />
+  return <UnauthFollowButton c={c} openSignupOverlay={openSignupOverlay} />
 }
 
 export default ToggleFollowButton
