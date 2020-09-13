@@ -386,7 +386,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
     if (!currentUser && !isOpen) {
       timerRef.current = setTimeout(() => {
         openSignupOverlay()
-      }, 10000)
+      }, 20000)
 
       return () => clearTimeout(timerRef.current)
     }
