@@ -64,10 +64,10 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
       justifyContent: 'flex-start',
       minWidth: '18.5rem',
-      maxWidth: '32rem',
 
       [md]: {
         width: '60%',
+        maxWidth: '32rem',
       },
     },
     SearchBar_FormInput: {

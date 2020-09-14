@@ -123,14 +123,24 @@ const useStyles = createUseStyles(theme => {
     },
     Model_Detail: {
       justifyContent: 'space-between',
-      flexWrap: 'wrap',
+      flexDirection: 'column',
+
+      [md]: {
+        flexDirection: 'row',
+      },
     },
     Model_SocialButtons: {
       display: 'flex',
       alignItems: 'center',
+      justifyContent: 'flex-end',
+      marginTop: '1rem',
 
       '& > div': {
         marginLeft: '1rem',
+      },
+
+      [md]: {
+        marginTop: 0,
       },
     },
     Model_BackupViewer: {
