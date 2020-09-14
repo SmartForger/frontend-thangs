@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { Link, useHistory, useParams, useLocation } from 'react-router-dom'
 import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
-import * as swearjar from '@utilities'
 import { Button, Spinner, TextInput, Layout } from '@components'
 import { useForm } from '@hooks'
 import { authenticationService } from '@services'
@@ -180,17 +179,6 @@ const Page = () => {
     [invalidFields]
   )
 
-  const validateUsername = useCallback(() => {
-    if (swearjar.profane(inputState.username)) {
-      setInvalidFields(['username'])
-      setSignupErrorMessage('Sorry, we detected profanity in your username!')
-      return false
-    } else {
-      setFieldToValid('username')
-      return true
-    }
-  }, [inputState, setFieldToValid])
-
   const validateEmail = useCallback(() => {
     if (!EmailValidator.validate(inputState.email)) {
       setInvalidFields(['email'])
@@ -266,7 +254,6 @@ const Page = () => {
                 name='username'
                 maxLength='100'
                 onChange={e => handleOnInputChange('username', e.target.value)}
-                validator={validateUsername}
                 value={(inputState && inputState.username) || ''}
                 data-cy='signup-username'
                 required

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
-import * as swearjar from '@utilities'
 import {
   Button,
   MultiLineBodyText,
@@ -252,17 +251,6 @@ const SignUpForm = ({ c, closeOverlay }) => {
     [invalidFields]
   )
 
-  const validateUsername = useCallback(() => {
-    if (swearjar.profane(inputState.username)) {
-      setInvalidFields(['username'])
-      setSignupErrorMessage('Sorry, we detected profanity in your username!')
-      return false
-    } else {
-      setFieldToValid('username')
-      return true
-    }
-  }, [inputState, setFieldToValid])
-
   const validateEmail = useCallback(() => {
     if (!EmailValidator.validate(inputState.email)) {
       setInvalidFields(['email'])
@@ -288,7 +276,6 @@ const SignUpForm = ({ c, closeOverlay }) => {
   const handleSignUp = useCallback(async () => {
     setWaiting(true)
     setSignupErrorMessage(null)
-    if (!validateUsername()) return setWaiting(false)
     if (!validateEmail()) return setWaiting(false)
     if (!validatePasswords()) return setWaiting(false)
 
@@ -311,7 +298,7 @@ const SignUpForm = ({ c, closeOverlay }) => {
       if (loginError) return setSignupErrorMessage(error)
       return window.location.reload()
     }
-  }, [inputState, validateEmail, validatePasswords, validateUsername])
+  }, [inputState, validateEmail, validatePasswords])
 
   return (
     <div className={classnames(c.Signup_Row, c.Signup_SignUpForm)}>
@@ -358,7 +345,6 @@ const SignUpForm = ({ c, closeOverlay }) => {
               autoComplete='username'
               value={inputState && inputState.username}
               onChange={handleOnInputChange}
-              validator={validateUsername}
               required
             />
             <Spacer size='1rem' />
