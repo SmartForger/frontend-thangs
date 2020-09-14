@@ -215,7 +215,7 @@ const SignUpPromo = ({ c, titleMessage }) => {
   )
 }
 
-const SignUpForm = ({ c }) => {
+const SignUpForm = ({ c, closeOverlay }) => {
   const [waiting, setWaiting] = useState(false)
   const [signupErrorMessage, setSignupErrorMessage] = useState(null)
   const [invalidFields, setInvalidFields] = useState([])
@@ -431,7 +431,7 @@ const SignUpForm = ({ c }) => {
         <Spacer size='.5rem' />
         <div className={c.Signup_HasAccount}>
           <span>Already have an account?</span>
-          <Link to={'/login'}>
+          <Link to={'/login'} onClick={closeOverlay}>
             <Button className={c.Signup_HasAccountButton} text>
               Sign In
             </Button>
@@ -455,7 +455,7 @@ const Signup = ({ titleMessage }) => {
         <ExitIcon />
       </Button>
       <SignUpPromo c={c} titleMessage={titleMessage} />
-      <SignUpForm c={c} />
+      <SignUpForm c={c} closeOverlay={closeOverlay} />
       <Spacer className={c.Signup_MobileSpacer} size='4rem' />
     </div>
   )
