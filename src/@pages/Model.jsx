@@ -471,6 +471,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
               c={c}
               modelData={modelData}
               openSignupOverlay={openSignupOverlay}
+              isAuthedUser={!!currentUser}
             />
           </div>
         </div>
