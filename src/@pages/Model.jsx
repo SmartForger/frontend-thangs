@@ -235,7 +235,7 @@ const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
       dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
         modelId: model.id,
         onFinish: downloadUrl => {
-          window.open(downloadUrl)
+          window.location.assign(downloadUrl)
           pendo.track('Download Model', { modelId: model.id })
         },
       }),
