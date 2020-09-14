@@ -93,10 +93,31 @@ const CollectionTitle = ({ selected, onClick, className, title, Icon, amount }) 
   )
 }
 
-const ModelsContent = ({ models }) => {
+const ModelsContent = ({ models: modelsAtom }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
-  if (R.isEmpty(models)) {
+
+  if (!modelsAtom.isLoaded) {
+    return <Spinner />
+  }
+
+  if (modelsAtom.isError) {
+    return (
+      <div data-cy='fetch-profile-error'>
+        Error! We were not able to load this profile. Please try again later.
+      </div>
+    )
+  }
+
+  const sortedModels = ((Array.isArray(modelsAtom.data) && (modelsAtom.data) || []).sort(
+    (modelA, modelB) => {
+      if (modelA.created === modelB.created) return 0
+      if (modelA.created > modelB.created) return -1
+      else return 1
+    }
+  ))
+  
+  if (R.isEmpty(sortedModels)) {
     return (
       <div className={c.Profile_NoContentMessage}>
         <Button
@@ -118,7 +139,7 @@ const ModelsContent = ({ models }) => {
 
   return (
     <CardCollection noResultsText='This user has not uploaded any models yet.'>
-      <ModelCards items={models} />
+      <ModelCards items={sortedModels} />
     </CardCollection>
   )
 }
@@ -138,6 +159,18 @@ const FoldersContent = ({ folders: foldersAtom }) => {
     },
     [dispatch, navigateWithFlash]
   )
+
+  if (!foldersAtom.isLoaded) {
+    return <Spinner />
+  }
+
+  if (foldersAtom.isError) {
+    return (
+      <div data-cy='fetch-profile-error'>
+        Error! We were not able to load this profile. Please try again later.
+      </div>
+    )
+  }
 
   if (R.isEmpty(folders)) {
     return (
@@ -175,21 +208,13 @@ const PageContent = ({ user }) => {
 
   const { folders } = useStoreon('folders')
 
-  const {
-    atom: { data: models },
-  } = useFetchPerMount(currentUserId, 'user-own-models')
+  const { atom: modelsAtom } = useFetchPerMount(currentUserId, 'user-own-models')
   const [selected, setSelected] = useState('models')
 
   const selectModels = () => setSelected('models')
   const selectFolders = () => setSelected('folders')
 
-  const sortedModels = ((Array.isArray(models) && models) || []).sort(
-    (modelA, modelB) => {
-      if (modelA.created === modelB.created) return 0
-      if (modelA.created > modelB.created) return -1
-      else return 1
-    }
-  )
+
 
   return (
     <div className={c.Home}>
@@ -210,7 +235,7 @@ const PageContent = ({ user }) => {
           selected={selected === 'models'}
           onClick={selectModels}
           title={'Models'}
-          amount={((Array.isArray(models) && models) || []).length}
+          amount={((Array.isArray(modelsAtom.data) && modelsAtom.data) || []).length}
           Icon={ModelSquareIcon}
         />
         <CollectionTitle
@@ -224,7 +249,7 @@ const PageContent = ({ user }) => {
       </div>
       <WithFlash>
         {selected === 'models' ? (
-          <ModelsContent models={sortedModels} />
+          <ModelsContent models={modelsAtom} />
         ) : (
           <FoldersContent folders={folders} />
         )}

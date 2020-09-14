@@ -54,7 +54,6 @@ const AuthFollowButton = ({ c, currentUser, profileUserId, dispatch }) => {
         disabled={isLoading || isError}
         onClick={handleClick}
         secondary={!isFollowing}
-        darkText
       >
         {isLoading ? (
           <Spinner className={c.Spinner} />
