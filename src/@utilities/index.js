@@ -2,7 +2,6 @@ import * as R from 'ramda'
 
 export * from './PhysnaServer'
 export * from './ensureScriptIsLoaded'
-export * from './swearjar.js'
 
 /**
  * Receives Color Hex String: #FFFFFF
