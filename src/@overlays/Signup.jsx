@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
@@ -431,10 +431,13 @@ const SignUpForm = ({ c, closeOverlay }) => {
 
 const Signup = ({ titleMessage }) => {
   const c = useStyles()
+  const history = useHistory()
   const { dispatch } = useStoreon()
   const closeOverlay = useCallback(() => {
     dispatch('close-overlay')
-  }, [dispatch])
+    const currentPath = history.location.pathname
+    localStorage.setItem('routeBeforeSignIn', currentPath)
+  }, [dispatch, history])
   return (
     <div className={c.Signup}>
       <Button text className={c.Signup_ExitButton} onClick={closeOverlay}>
