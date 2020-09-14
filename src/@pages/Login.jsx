@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { useLocation, useHistory, Link } from 'react-router-dom'
 import Joi from '@hapi/joi'
-import * as EmailValidator from 'email-validator'
 import { authenticationService } from '@services'
 import { useForm } from '@hooks'
 import { TextInput, Spinner, Button, Layout, Flash } from '@components'
@@ -103,7 +102,6 @@ const useQuery = location => {
 const Login = () => {
   const [waiting, setWaiting] = useState(false)
   const [loginErrorMessage, setLoginErrorMessage] = useState(null)
-  const [invalidFields, setInvalidFields] = useState([])
   const history = useHistory()
   const location = useLocation()
   const query = useQuery(location)
@@ -128,29 +126,6 @@ const Login = () => {
     },
     [onInputChange]
   )
-
-  const setFieldToValid = useCallback(
-    fieldName => {
-      if (invalidFields.indexOf(fieldName) !== -1) {
-        const temp = [...invalidFields]
-        temp.splice(invalidFields.indexOf(fieldName), 1)
-        setInvalidFields(temp)
-        setLoginErrorMessage('')
-      }
-    },
-    [invalidFields]
-  )
-
-  const validateEmail = useCallback(() => {
-    if (!EmailValidator.validate(inputState.email)) {
-      setInvalidFields(['email'])
-      setLoginErrorMessage('Please enter a valid e-mail address')
-      return false
-    } else {
-      setFieldToValid('email')
-      return true
-    }
-  }, [inputState, setFieldToValid])
 
   const handleLogin = useCallback(async () => {
     let requestedPage = localStorage.getItem('routeBeforeSignIn')
@@ -207,7 +182,6 @@ const Login = () => {
                     onChange={e => {
                       handleOnInputChange('email', e.target.value)
                     }}
-                    validator={validateEmail}
                     value={inputState && inputState.email}
                     data-cy='login-email'
                     required
