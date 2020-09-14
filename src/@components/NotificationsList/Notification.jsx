@@ -81,6 +81,7 @@ const useStyles = createUseStyles(theme => {
       padding: '.5rem',
       borderRadius: '.5rem',
       width: '15rem',
+      overflowWrap: 'anywhere',
 
       '&:hover': {
         backgroundColor: theme.colors.white[800],
