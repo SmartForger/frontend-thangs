@@ -109,14 +109,14 @@ const ModelsContent = ({ models: modelsAtom }) => {
     )
   }
 
-  const sortedModels = ((Array.isArray(modelsAtom.data) && (modelsAtom.data) || []).sort(
+  const sortedModels = ((Array.isArray(modelsAtom.data) && modelsAtom.data) || []).sort(
     (modelA, modelB) => {
       if (modelA.created === modelB.created) return 0
       if (modelA.created > modelB.created) return -1
       else return 1
     }
-  ))
-  
+  )
+
   if (R.isEmpty(sortedModels)) {
     return (
       <div className={c.Profile_NoContentMessage}>
@@ -213,8 +213,6 @@ const PageContent = ({ user }) => {
 
   const selectModels = () => setSelected('models')
   const selectFolders = () => setSelected('folders')
-
-
 
   return (
     <div className={c.Home}>
