@@ -14,7 +14,8 @@ const useStyles = createUseStyles(theme => {
     Snackbar: {
       display: 'flex',
       flexDirection: 'row',
-      bottom: '1.5rem',
+      bottom: ({ isOpen }) => (isOpen ? '1.5rem' : '-5rem'),
+      left: 'calc(50vw - 45.75%)',
       background: theme.colors.purple[900],
       boxShadow: '0px 2px 12px rgba(0, 0, 0, 0.2)',
       borderRadius: '.5rem',
@@ -23,8 +24,8 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       zIndex: '2',
       position: 'fixed',
-      height: ({ isOpen }) => (isOpen ? '4.5rem' : 0),
-      transition: 'height 0.45s',
+      height: '4.5rem',
+      transition: 'left 0.45s, bottom 0.45s',
     },
     Snackbar__mobileOnly: {
       [md]: {
@@ -58,8 +59,37 @@ const Snackbar = () => {
     }, 500)
   }, [])
 
+  const onTouchStart = event => {
+    const { pageX } = event.touches[0]
+    const starLeftPosition = (window.screen.width * 4.25) / 100
+    const leftTouchPosition = pageX - starLeftPosition
+    const snackbar = document.getElementById('snackbar')
+    const onTouchMove = event => {
+      const newLeftPosition = event.touches[0].pageX
+      if (newLeftPosition < starLeftPosition) {
+        snackbar.style.left = -leftTouchPosition + 'px'
+      }
+    }
+    const onTouchEnd = () => {
+      const currentLeftPosition = snackbar.style.left
+      if (starLeftPosition - parseFloat(currentLeftPosition) >= 100) {
+        snackbar.style.left = '-100vw'
+      } else {
+        snackbar.style.left = starLeftPosition + 'px'
+      }
+      document.removeEventListener('touchmove', onTouchMove)
+      document.addEventListener('touchend', onTouchEnd)
+    }
+    document.addEventListener('touchmove', onTouchMove)
+    document.addEventListener('touchend', onTouchEnd)
+  }
+
   return (
-    <div className={classnames(c.Snackbar, c.Snackbar__mobileOnly)}>
+    <div
+      id='snackbar'
+      onTouchStart={onTouchStart}
+      className={classnames(c.Snackbar, c.Snackbar__mobileOnly)}
+    >
       <div className={c.Snackbar_Text}>
         <Button
           text
