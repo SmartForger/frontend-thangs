@@ -162,8 +162,8 @@ const SignUpPromo = ({ c, titleMessage }) => {
           <TitleSecondary light>{titleMessage || 'Where Thangs happen.'}</TitleSecondary>
           <Spacer size='2rem' />
           <MultiLineBodyText light className={c.Signup_SignUpPromoText}>
-            Join for free and experience one of the fastest growing modelling communities
-            with collaboration, geometric searches, thousands of free models and much
+            Join for free and experience one of the fastest growing modeling communities
+            with collaboration, geometric searches, over 1 million free models and much
             more.
           </MultiLineBodyText>
           <Spacer size='2rem' />
@@ -189,13 +189,13 @@ const SignUpPromo = ({ c, titleMessage }) => {
             <div className={c.Signup_Row}>
               <CheckIcon />
               <Spacer size='.5rem' />
-              <MultiLineBodyText light>Collaborate on projects</MultiLineBodyText>
+              <MultiLineBodyText light>Geometrical searches</MultiLineBodyText>
             </div>
             <Spacer size='.5rem' />
             <div className={c.Signup_Row}>
               <CheckIcon />
               <Spacer size='.5rem' />
-              <MultiLineBodyText light>Geometrical searches</MultiLineBodyText>
+              <MultiLineBodyText light>Collaborate on projects</MultiLineBodyText>
             </div>
             <Spacer size='.5rem' />
             <div className={c.Signup_Row}>
