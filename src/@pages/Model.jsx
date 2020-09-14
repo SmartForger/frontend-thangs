@@ -406,6 +406,8 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   )
 
   useEffect(() => {
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
     if (!currentUser && !isOpen && !signUpShown.current) {
       timerRef.current = setTimeout(() => {
         openSignupOverlay()
