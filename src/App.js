@@ -27,7 +27,11 @@ import {
   Upload,
 } from '@pages'
 import { ErrorBoundary } from './ErrorBoundary'
-import { routeRequiresAnon, routeRequiresAuth } from '@components/RouteComponent'
+import {
+  routeRequiresAnon,
+  routeRequiresAuth,
+  routeRequiresKick,
+} from '@components/RouteComponent'
 import { FlashContextProvider } from '@components/Flash'
 import { StoreContext } from 'storeon/react'
 import { ThemeProvider } from '@style'
@@ -123,7 +127,7 @@ const App = () => {
                 path='/profile/'
                 component={routeRequiresAuth(RedirectProfile)}
               />
-              <Route path='/model/:id' exact component={ModelDetail} />
+              <Route path='/model/:id' exact component={routeRequiresKick(ModelDetail)} />
               <Route
                 path={['/search/:searchQuery', '/search']}
                 component={SearchResults}

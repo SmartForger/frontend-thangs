@@ -36,4 +36,12 @@ const routeRequiresAuth = (Component, redirectDest = '/login') => {
   return AuthRouteComponent
 }
 
-export { routeRequiresAnon, routeRequiresAuth }
+const routeRequiresKick = Component => {
+  const RouteComponent = (...props) => {
+    return <Component {...props} />
+  }
+
+  return RouteComponent
+}
+
+export { routeRequiresAnon, routeRequiresAuth, routeRequiresKick }
