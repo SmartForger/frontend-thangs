@@ -11,8 +11,7 @@ const useStyles = createUseStyles(theme => {
     mediaQueries: { md },
   } = theme
   return {
-    Snackbar: {},
-    Snackbar_Container_mobileOnly: {
+    Snackbar: {
       display: 'flex',
       flexDirection: 'row',
       bottom: '1.5rem',
@@ -26,7 +25,8 @@ const useStyles = createUseStyles(theme => {
       position: 'fixed',
       height: ({ isOpen }) => (isOpen ? '4.5rem' : 0),
       transition: 'height 0.45s',
-
+    },
+    Snackbar__mobileOnly: {
       [md]: {
         display: 'none',
       },
@@ -59,28 +59,26 @@ const Snackbar = () => {
   }, [])
 
   return (
-    <>
-      <div className={c.Snackbar_Container_mobileOnly}>
-        <div className={c.Snackbar_Text}>
-          <Button
-            text
-            inline
-            onClick={e => {
-              e.preventDefault()
-              dispatch(types.OPEN_OVERLAY, {
-                overlayName: 'searchByUpload',
-              })
-            }}
-          >
-            <span className={c.Snackbar_Link}>Upload</span>
-          </Button>{' '}
-          your model to find ones with related geometry.
-        </div>
-        <div className={classnames(c.Snackbar_UploadIcon)}>
-          <SnackbarUploadIcon />
-        </div>
+    <div className={classnames(c.Snackbar, c.Snackbar__mobileOnly)}>
+      <div className={c.Snackbar_Text}>
+        <Button
+          text
+          inline
+          onClick={e => {
+            e.preventDefault()
+            dispatch(types.OPEN_OVERLAY, {
+              overlayName: 'searchByUpload',
+            })
+          }}
+        >
+          <span className={c.Snackbar_Link}>Upload</span>
+        </Button>{' '}
+        your model to find ones with related geometry.
       </div>
-    </>
+      <div className={classnames(c.Snackbar_UploadIcon)}>
+        <SnackbarUploadIcon />
+      </div>
+    </div>
   )
 }
 
