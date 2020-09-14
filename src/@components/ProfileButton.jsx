@@ -6,6 +6,7 @@ import { createUseStyles } from '@style'
 import { useCurrentUserId } from '@hooks'
 import { ToggleFollowButton } from '@components'
 import * as types from '@constants/storeEventTypes'
+import * as pendo from '@vendors/pendo'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -32,6 +33,7 @@ const ProfileButton = ({ userId, className }) => {
           titleMessage,
         },
       })
+      pendo.track('SignUp Prompt Overlay', { source: 'Timed' })
     },
     [dispatch]
   )

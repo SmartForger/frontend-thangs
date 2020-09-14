@@ -70,10 +70,10 @@ const AuthFollowButton = ({ c, currentUser, profileUserId, dispatch }) => {
 }
 const noop = () => null
 const UnauthFollowButton = ({ c, openSignupOverlay = noop }) => {
-  const handleClick = useCallback(
-    () => openSignupOverlay('Join to Like, Follow, Share.'),
-    [openSignupOverlay]
-  )
+  const handleClick = useCallback(() => {
+    openSignupOverlay('Join to Like, Follow, Share.')
+    pendo.track('SignUp Prompt Overlay', { source: 'Follow' })
+  }, [openSignupOverlay])
 
   return (
     <Button className={c.ToggleFollowButton} onClick={handleClick} secondary>

@@ -4,6 +4,7 @@ import { Button, TextInput } from '@components'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
+import * as pendo from '@vendors/pendo'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -93,6 +94,7 @@ const NewModelCommentForm = ({ modelId, openSignupOverlay = noop }) => {
     e => {
       e.preventDefault()
       openSignupOverlay('Join and start collaborating.')
+      pendo.track('SignUp Prompt Overlay', { source: 'Comment' })
     },
     [openSignupOverlay]
   )

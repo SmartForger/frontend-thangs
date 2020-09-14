@@ -257,6 +257,7 @@ const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
       downloadModel()
     } else {
       openSignupOverlay('Join to download.')
+      pendo.track('SignUp Prompt Overlay', { source: 'Download' })
     }
   }, [downloadModel, isAuthedUser, openSignupOverlay])
 
@@ -305,6 +306,7 @@ const VersionUpload = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
       })
     } else {
       openSignupOverlay('Join to Like, Follow, Share.')
+      pendo.track('SignUp Prompt Overlay', { source: 'Version Upload' })
     }
   }, [isAuthedUser, dispatch, modelId, openSignupOverlay])
 
