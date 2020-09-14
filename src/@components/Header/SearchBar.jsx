@@ -153,13 +153,19 @@ const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
   }
 
   useEffect(() => {
+    let timeout1, timeout2
     if (showSearchTextFlash) {
-      setTimeout(() => {
+      timeout1 = setTimeout(() => {
         setShowUploadText(true)
-        setTimeout(() => {
+        timeout2 = setTimeout(() => {
           setShowUploadText(false)
         }, 4000)
       }, 500)
+    }
+
+    return () => {
+      clearTimeout(timeout2)
+      clearTimeout(timeout1)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
