@@ -197,7 +197,6 @@ const ThangsModelDetails = ({
       </div>
       {showReportModel && (
         <Button
-          icon
           className={c.ModelSearchResult_ReportModelButton}
           onClick={() => handleReportModel({ model })}
         >
@@ -251,7 +250,6 @@ const ExternalModelDetails = ({
       </div>
       {showReportModel && (
         <Button
-          icon
           className={c.ModelSearchResult_ReportModelButton}
           onClick={() => handleReportModel({ model })}
         >

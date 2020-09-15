@@ -96,7 +96,7 @@ const useStyles = createUseStyles(theme => {
         fill: theme.colors.white[400],
       },
     },
-    SearchBar_DesktopSearchActionIcon: {
+    SearchBar_SearchActionIcon: {
       position: 'absolute',
       right: '.75rem',
       cursor: 'pointer',
@@ -206,10 +206,7 @@ const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
             </div>
             <MagnifyingGlass
               title={t('header.searchTextTitle')}
-              className={classnames(
-                c.SearchBar_SearchIcon,
-                c.SearchBar_DesktopSearchActionIcon
-              )}
+              className={classnames(c.SearchBar_SearchIcon, c.SearchBar_SearchActionIcon)}
               onClick={handleSearchSubmit}
             />
           </>

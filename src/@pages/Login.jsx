@@ -153,7 +153,7 @@ const Login = () => {
     <Layout showSearch={false} showUser={false}>
       <div className={c.Login_Wrapper}>
         {isFromThePortal() ? (
-          <Button back className={c.Login_BackButton} onClick={() => history.goBack()}>
+          <Button className={c.Login_BackButton} onClick={() => history.goBack()}>
             <BackArrow />
           </Button>
         ) : null}

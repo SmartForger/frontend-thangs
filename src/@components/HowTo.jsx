@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import { Button } from '@components'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as ColorIcon1 } from '@svg/icon-color-1.svg'
 import { ReactComponent as ColorIcon2 } from '@svg/icon-color-2.svg'
@@ -39,6 +38,7 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       right: '2rem',
       top: '2rem',
+      cursor: 'pointer',
 
       '& svg': {
         fill: theme.variables.colors.BLACK_5,
@@ -94,11 +94,9 @@ const HowTo = ({ setSeenHowTo }) => {
   const handleClick = useCallback(() => setSeenHowTo(true), [setSeenHowTo])
   return (
     <div className={c.HowTo} onClick={handleClick}>
-      <Button text>
-        <div className={c.HowTo_ExitIcon}>
-          <ExitIcon />
-        </div>
-      </Button>
+      <div className={c.HowTo_ExitIcon}>
+        <ExitIcon />
+      </div>
       <div className={c.HowTo_Container}>
         <Title className={c.HowTo_Title} />
         <Text className={c.HowTo_Text} />

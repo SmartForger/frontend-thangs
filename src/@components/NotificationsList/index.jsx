@@ -12,6 +12,7 @@ const useStyles = createUseStyles(_theme => {
   return {
     NotificationsList: {
       maxWidth: '43rem',
+      minHeight: '20rem',
 
       '& .notification + .notification': {
         marginTop: '4rem',

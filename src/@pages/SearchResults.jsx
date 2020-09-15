@@ -2,13 +2,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocation, useParams, Link } from 'react-router-dom'
 import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
-import { NoResults, Layout, Button } from '@components'
+import { NoResults, Layout, Button, Spacer } from '@components'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import ModelSearchResults from '@components/CardCollection/ModelSearchResults'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
-import Snackbar from '../@components/Snackbar'
+import Snackbar from '@components/Snackbar'
+import { useFileUpload } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -281,6 +282,11 @@ const Page = () => {
     [dispatch]
   )
 
+  const { UploadZone } = useFileUpload({
+    setFile,
+    file,
+  })
+
   const thangsModels = (thangs && thangs.data && thangs.data.matches) || []
   const phyndexerModels = (phyndexer && phyndexer.data && phyndexer.data.matches) || []
   const resultCount = phyndexerModels.length + thangsModels.length
@@ -301,15 +307,17 @@ const Page = () => {
           </div>
           <div>
             <Link to='/'>
-              <Button light small>
-                Clear Search
-              </Button>
+              <Button secondary>Clear Search</Button>
             </Link>
           </div>
         </div>
         {searchQuery ? (
           <>
-            {!modelId && (phyndexer.isLoaded || thangs.isLoaded) && <Snackbar></Snackbar>}
+            {!modelId && (phyndexer.isLoaded || thangs.isLoaded) && (
+              <UploadZone>
+                <Snackbar />
+              </UploadZone>
+            )}
             <ThangsSearchResult
               isLoading={thangs.isLoading}
               isError={thangs.isError}
@@ -342,11 +350,12 @@ const Page = () => {
         )}
         {resultCount && resultCount > 0 ? (
           <Button
-            text
+            tertiary
             className={c.SearchResults_ReportModelButton}
             onClick={() => setShowReportModelButtons(!showReportModelButtons)}
           >
             <FlagIcon />
+            <Spacer size='.5rem' />
             Report a Model
           </Button>
         ) : null}

@@ -10,7 +10,7 @@ addDecorator(storyFn => {
     <AppFrame>
       <ThemeProvider theme={NewTheme}>
         <GlobalStyles />
-        <StoryFrame style={{ padding: '1rem' }}>{storyFn()}</StoryFrame>
+        <div style={{ padding: '1rem' }}>{storyFn()}</div>
       </ThemeProvider>
     </AppFrame>
   )

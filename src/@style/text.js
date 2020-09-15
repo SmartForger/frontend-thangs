@@ -24,6 +24,13 @@ export const bodyBase = {
   letterSpacing: '-0.02em',
 }
 
+export const labelBase = {
+  fontFamily: MONTSERRAT,
+  fontStyle: 'normal',
+  fontWeight: 500,
+  letterSpacing: '-0.02em',
+}
+
 export const flashToastText = {
   color: colors.white[600],
 }

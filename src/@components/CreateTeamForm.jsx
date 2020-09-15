@@ -251,9 +251,7 @@ const CreateTeamForm = ({
   }
 
   const initSchema = Joi.object({
-    teamMembers: Joi.array()
-      .min(1)
-      .required(),
+    teamMembers: Joi.array().min(1).required(),
     teamName: Joi.string()
       .required()
       .invalid(...teamNames),
@@ -437,7 +435,7 @@ const CreateTeamForm = ({
       <UserList users={[currentUser, ...team]} removeUser={handleRemove} />
       <div className={classnames(c.TeamForm_Row, c.TeamForm_ButtonRow)}>
         <Button
-          dark
+          secondary
           className={c.TeamForm_CancelButton}
           onClick={handleCancel}
           type='button'

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import ReactModal from 'react-modal'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
-import { Button } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import * as types from '@constants/storeEventTypes'
@@ -74,8 +73,7 @@ const Overlay = ({
       }}
       {...props}
     >
-      <Button
-        text
+      <div
         className={c.Overlay_CloseButton}
         onClick={() => {
           onOverlayClose()
@@ -83,7 +81,7 @@ const Overlay = ({
         }}
       >
         {!windowed && <ExitIcon />}
-      </Button>
+      </div>
       <div
         className={classnames(c.Overlay_Content, {
           [c.Overlay_Content__visible]: isVisible,

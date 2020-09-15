@@ -1,14 +1,15 @@
 import React, { useCallback, useState } from 'react'
 import * as R from 'ramda'
 import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
-import { Button } from '@components'
+import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
+import { Button, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import useServices from '@hooks/useServices'
 import * as types from '@constants/storeEventTypes'
 import classnames from 'classnames'
 import * as pendo from '@vendors/pendo'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     '@keyframes spinner': {
       from: {
@@ -22,8 +23,11 @@ const useStyles = createUseStyles(_theme => {
         transform: 'rotateY(-180deg)',
       },
     },
-    LikeModelButton: {
-      padding: '.5rem 1.25rem',
+    LikeModelButton: {},
+    LikeModelIcon: {
+      '& path': {
+        fill: theme.colors.black[500],
+      },
     },
     LikeModelIcon__liked: {
       animation: '$spinner 250ms linear 0s 1',
@@ -56,8 +60,8 @@ const AuthLikeModelButton = ({ c, currentUser, modelId, userId }) => {
     atom: { data: modelData, isLoading, isError },
     dispatch,
   } = useFetchOnce(modelId, 'model')
-  const [status, setStatus] = useState(undefined)
-
+  const [liked, setLiked] = useState(hasLikedModel(modelData, currentUserId))
+  const [hasChanged, setHasChanged] = useState(false)
   const handleLikeClicked = useCallback(() => {
     const likeModel = () =>
       dispatch(types.LIKE_MODEL, { modelId: modelId, currentUserId: currentUserId })
@@ -65,33 +69,41 @@ const AuthLikeModelButton = ({ c, currentUser, modelId, userId }) => {
     const unlikeModel = () =>
       dispatch(types.UNLIKE_MODEL, { modelId: modelId, currentUserId: currentUserId })
 
-    if (hasLikedModel(modelData, currentUserId)) {
+    if (liked) {
       unlikeModel()
-      setStatus('liked')
+      setLiked(false)
+      setHasChanged(true)
     } else {
       likeModel()
-      setStatus('unliked')
+      setLiked(true)
+      setHasChanged(true)
     }
-
-    setTimeout(() => {
-      setStatus(undefined)
-    }, 250)
-  }, [currentUserId, dispatch, modelData, modelId])
+  }, [currentUserId, dispatch, liked, modelId])
   return (
     !isModelOfCurrentUser && (
       <Button
         className={classnames(c.LikeModelButton)}
-        secondary={!hasLikedModel(modelData, currentUserId)}
+        secondary
         disabled={isLoading || isError}
         onClick={handleLikeClicked}
-        icon
       >
-        <HeartFilledIcon
-          className={classnames({
-            [c.LikeModelIcon__liked]: status === 'liked',
-            [c.LikeModelIcon__unliked]: status === 'unliked',
-          })}
-        />
+        <div>
+          {liked ? (
+            <HeartFilledIcon
+              className={classnames(c.LikeModelIcon, {
+                [c.LikeModelIcon__liked]: hasChanged,
+              })}
+            />
+          ) : (
+            <HeartIcon
+              className={classnames(c.LikeModelIcon, {
+                [c.LikeModelIcon__unliked]: hasChanged,
+              })}
+            />
+          )}
+        </div>
+        <Spacer size='.5rem' />
+        {liked ? 'Liked' : 'Like'}
       </Button>
     )
   )
@@ -104,13 +116,10 @@ const UnauthLikeModelButton = ({ c, openSignupOverlay = noop }) => {
   }, [openSignupOverlay])
 
   return (
-    <Button
-      className={classnames(c.LikeModelButton)}
-      onClick={handleClick}
-      secondary
-      icon
-    >
-      <HeartFilledIcon className={c.LikeModelIcon__unliked} />
+    <Button className={classnames(c.LikeModelButton)} onClick={handleClick} secondary>
+      <HeartFilledIcon className={c.LikeModelIcon} />
+      <Spacer size='.5rem' />
+      Like
     </Button>
   )
 }

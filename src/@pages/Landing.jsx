@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import * as R from 'ramda'
 import { useParams } from 'react-router-dom'
-import { CardCollection, Layout, Button } from '@components'
+import { CardCollection, Layout, Button, Tabs } from '@components'
 import { useCurrentUser, useTranslations } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg'
@@ -79,22 +79,6 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       width: '100%',
     },
-    Landing_TabNavigationWrapper: {
-      display: 'flex',
-      justifyContent: 'center',
-      [md]: {
-        justifyContent: 'flex-end',
-      },
-      marginBottom: '1rem',
-    },
-    Landing_TabNavigation: {
-      display: 'flex',
-      marginBottom: '1rem',
-      justifyContent: 'flex-end',
-      padding: '.25rem',
-      backgroundColor: theme.colors.white[400],
-      borderRadius: '.5rem',
-    },
   }
 })
 
@@ -110,6 +94,32 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
     pendo.track('Sorted Models', { sortBy: type })
   }, [])
 
+  const sortOptions = useMemo(() => {
+    const likes = 'likes'
+    const data = 'data'
+    const downloaded = 'downloaded'
+    return [
+      {
+        label: 'Popular',
+        value: likes,
+        selected: selected === likes,
+        onClick: () => sortBy(likes),
+      },
+      {
+        label: 'New',
+        value: data,
+        selected: selected === data,
+        onClick: () => sortBy(data),
+      },
+      {
+        label: 'Downloads',
+        value: downloaded,
+        selected: selected === downloaded,
+        onClick: () => sortBy(downloaded),
+      },
+    ]
+  }, [selected, sortBy])
+
   if (modelPreviews.isError) {
     return (
       <div data-cy='fetch-results-error'>
@@ -120,28 +130,7 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
 
   return (
     <div className={c.Landing_Column}>
-      <div className={c.Landing_TabNavigationWrapper}>
-        <div className={c.Landing_TabNavigation}>
-          <div>
-            <Button tertiary={selected !== 'likes'} onClick={() => sortBy('likes')}>
-              Popular
-            </Button>
-          </div>
-          <div>
-            <Button tertiary={selected !== 'date'} onClick={() => sortBy('date')}>
-              New
-            </Button>
-          </div>
-          <div>
-            <Button
-              tertiary={selected !== 'downloaded'}
-              onClick={() => sortBy('downloaded')}
-            >
-              Downloads
-            </Button>
-          </div>
-        </div>
-      </div>
+      <Tabs options={sortOptions} />
       <CardCollection
         noResultsText='We have no models to display right now. Please try again later.'
         loading={modelPreviews.isLoading}
@@ -152,7 +141,7 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
   )
 }
 
-const LandingHero = () => {
+const LandingHero = ({ newSignUp }) => {
   const { dispatch } = useStoreon()
   const c = useStyles()
 
@@ -162,10 +151,16 @@ const LandingHero = () => {
         <BackgroundSvg className={c.Landing_Background} />
         <div className={c.Landing_TextContainer}>
           <div className={c.Landing_PromotionalText}>
-            <h1 className={c.Landing_PromotionalPrimaryText}>
-              <u className={c.Landing_PromotionalPrimaryText}>Search.</u> Collaborate.
-              Share.
-            </h1>
+            {newSignUp ? (
+              <h1 className={c.Landing_PromotionalPrimaryText}>
+                <u className={c.Landing_PromotionalPrimaryText}>Welcome to Thangs!</u>
+              </h1>
+            ) : (
+              <h1 className={c.Landing_PromotionalPrimaryText}>
+                <u className={c.Landing_PromotionalPrimaryText}>Search.</u> Collaborate.
+                Share.
+              </h1>
+            )}
           </div>
           <div className={c.Landing_PromotionalSecondaryText}>
             Search for models in Thangs or upload your model and our powerful technology
@@ -188,46 +183,15 @@ const LandingHero = () => {
   )
 }
 
-const NewSignUpLandingHero = () => {
-  const { dispatch } = useStoreon()
-  const c = useStyles()
-
-  return (
-    <>
-      <div className={c.Landing_Hero}>
-        <BackgroundSvg className={c.Landing_Background} />
-        <div className={c.Landing_TextContainer}>
-          <div className={c.Landing_PromotionalText}>
-            <span className={c.Landing_PromotionalPrimaryText}>
-              <u className={c.Landing_PromotionalPrimaryText}>Welcome to Thangs!</u>
-            </span>
-          </div>
-          <div className={c.Landing_PromotionalSecondaryText}>
-            Search for models in Thangs or upload your model and our powerful technology
-            will find all geometrically related models. Connect with the Thangs community
-            to collaborate and share 3D models.
-          </div>
-          <div className={c.Landing_SearchByModelUploadButton}>
-            <Button
-              onClick={() =>
-                dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload' })
-              }
-            >
-              <UploadIcon className={c.Landing_SearchByModelUploadButton_UploadIcon} />
-              <span>Search by Model Upload</span>
-            </Button>
-          </div>
-        </div>
-      </div>
-    </>
-  )
+const WelcomeHero = () => {
+  return <LandingHero newSignUp />
 }
 
 const getHero = ({ loading, user, newSignUp }) => {
   if (!loading && R.isEmpty(user)) {
     return LandingHero
   } else if (newSignUp) {
-    return NewSignUpLandingHero
+    return WelcomeHero
   }
   return null
 }

@@ -15,14 +15,15 @@ import {
   ProgressText,
   RelatedModels,
   Revised,
+  Spacer,
   Spinner,
   ToggleFollowButton,
   useFlashNotification,
 } from '@components'
-import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as DateIcon } from '@svg/date-icon.svg'
+import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { useLocalStorage } from '@hooks'
 import { Message404 } from './404'
 import { createUseStyles } from '@style'
@@ -163,7 +164,7 @@ const useStyles = createUseStyles(theme => {
       display: 'block',
       textDecoration: 'none',
     },
-    Model_DownloadButton: {
+    Model_SidebarButton: {
       width: '100%',
     },
     Model_ModelStats: {
@@ -194,22 +195,10 @@ const useStyles = createUseStyles(theme => {
       ...theme.text.formCalloutText,
       marginBottom: '1.5rem',
     },
-    Model_VersionLinkText: {
-      ...theme.text.linkText,
-    },
     Model_VersionButton: {
-      display: 'flex',
-      alignItems: 'center',
-      marginRight: '3.5rem',
-      marginBottom: '1rem',
-      cursor: 'pointer',
-
-      '& *:not(:first-child)': {
-        marginLeft: '.75rem',
-      },
-
       '& path, & polygon': {
-        fill: theme.colors.blue[500],
+        fill: theme.colors.black[500],
+        stroke: theme.colors.black[500],
       },
     },
     Model_VersionIcon: {
@@ -262,7 +251,7 @@ const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
   }, [downloadModel, isAuthedUser, openSignupOverlay])
 
   return (
-    <Button className={c.Model_DownloadButton} onClick={handleClick}>
+    <Button className={c.Model_SidebarButton} onClick={handleClick}>
       {modelDownloadUrl.isLoading ? (
         <ProgressText text='Downloading' />
       ) : modelDownloadUrl.isError ? (
@@ -294,7 +283,7 @@ const ModelStats = ({ model = {} }) => {
   )
 }
 
-const VersionUpload = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
+const VersionLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
   const c = useStyles()
   const { dispatch } = useStoreon()
 
@@ -311,15 +300,13 @@ const VersionUpload = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
   }, [isAuthedUser, dispatch, modelId, openSignupOverlay])
 
   return (
-    <div>
-      <h2 className={c.Model_VersionHeader}>Versions</h2>
-      <div className={c.Model_VersionButton} onClick={handleClick}>
-        <VersionIcon className={c.Model_VersionIcon} />
-        <Button text className={c.Model_VersionLinkText}>
-          Upload new version
-        </Button>
+    <Button secondary className={c.Model_SidebarButton} onClick={handleClick}>
+      <div>
+        <UploadIcon className={c.Model_VersionButton} />
       </div>
-    </div>
+      <Spacer size='.5rem' />
+      Upload new version
+    </Button>
   )
 }
 
@@ -367,14 +354,15 @@ const StatsAndActions = ({
           isAuthedUser={isAuthedUser}
           openSignupOverlay={openSignupOverlay}
         />
+        <Spacer size='1rem' />
+        <VersionLink
+          modelId={modelData.id}
+          isAuthedUser={isAuthedUser}
+          openSignupOverlay={openSignupOverlay}
+        />
+        <hr className={c.Model_Rule} />
         <ModelStats model={modelData} />
       </div>
-      <hr className={c.Model_Rule} />
-      <VersionUpload
-        modelId={modelData.id}
-        isAuthedUser={isAuthedUser}
-        openSignupOverlay={openSignupOverlay}
-      />
       <hr className={c.Model_Rule} />
     </div>
   )
@@ -413,6 +401,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
     if (!currentUser && !isOpen && !signUpShown.current) {
       timerRef.current = setTimeout(() => {
         openSignupOverlay()
+        pendo.track('SignUp Prompt Overlay - Timer')
       }, 20000)
 
       return () => clearTimeout(timerRef.current)

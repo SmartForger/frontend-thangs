@@ -65,7 +65,12 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       letterSpacing: 0,
     },
-    ModelCard_LikedIcon: {
+    ModelCard_Icon: {
+      '& path': {
+        fill: theme.colors.grey[300],
+      },
+    },
+    ModelCard_Icon__liked: {
       '& path': {
         fill: theme.colors.gold[500],
       },
@@ -113,13 +118,13 @@ const ThangsModelDetails = ({
         <div className={c.ModelCard_Row}>
           <div className={c.ModelCard_ActivityIndicators}>
             <span className={c.ModelCard_ActivityCount}>
-              <ChatIcon className={c.ModelCard_Icon} />
+              <ChatIcon />
               &nbsp;{model.commentsCount}
             </span>
             <span className={c.ModelCard_ActivityCount}>
               <HeartIcon
                 className={classnames(c.ModelCard_Icon, {
-                  [c.ModelCard_LikedIcon]: isLiked,
+                  [c.ModelCard_Icon__liked]: isLiked,
                 })}
               />
               &nbsp;{modelLikeCount}
@@ -129,7 +134,6 @@ const ThangsModelDetails = ({
       )}
       {showReportModel && (
         <Button
-          icon
           className={c.ModelCard_ReportModelButton}
           onClick={() => handleReportModel({ model })}
         >
@@ -158,7 +162,6 @@ const ExternalModelDetails = ({
         </span>
         {showReportModel && (
           <Button
-            icon
             className={c.ModelCard_ReportModelButton}
             onClick={() => handleReportModel({ model })}
           >

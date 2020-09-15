@@ -86,6 +86,7 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
       paddingTop: '1.5rem',
       paddingLeft: '1.25rem',
+      minHeight: '10rem',
       [md]: {
         width: '15rem',
       },

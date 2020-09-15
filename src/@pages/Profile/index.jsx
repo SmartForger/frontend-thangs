@@ -188,7 +188,7 @@ const Tabs = ({ userId }) => {
           amount={R.length(ownUserModelsAtom.data)}
         />
         <TabTitle
-          title={'likes'}
+          title={'Likes'}
           Icon={HeartIcon}
           selected={selected === 'likes'}
           onClick={selectLikes}

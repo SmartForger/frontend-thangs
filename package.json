@@ -80,12 +80,12 @@
     ]
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^5.3.18",
-    "@storybook/addon-links": "^5.3.18",
-    "@storybook/addons": "^5.3.18",
+    "@storybook/addon-actions": "^6.0.21",
+    "@storybook/addon-links": "^6.0.21",
+    "@storybook/addons": "^6.0.21",
     "@storybook/preset-create-react-app": "^3.0.0",
-    "@storybook/react": "^5.3.18",
-    "prettier": "^1.19.1",
+    "@storybook/react": "^6.0.21",
+    "prettier": "^2.1.1",
     "start-server-and-test": "^1.10.8"
   }
 }

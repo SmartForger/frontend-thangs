@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from 'react'
-import { useDropzone } from 'react-dropzone'
+import React from 'react'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { Button, UploadFrame } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import { useFileUpload } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -52,97 +52,20 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const MODEL_FILE_EXTS = [
-  '.3dxml', // THREE_D_XML
-  '.CATPart', // CATIAV5
-  '.dwg',
-  '.dxf',
-  '.iges',
-  '.igs',
-  '.ipt', // Inventor
-  '.jt',
-  '.model', // CATIAV4
-  '.par', // SolidEdge
-  '.prt', // NX, ProE_Creo
-  '.sab', // ACIS_Binary
-  '.sat', // ACIS
-  '.sldprt', // SolidWorks
-  '.step',
-  '.stl',
-  '.stp',
-  '.vda',
-  '.x_b', // ParaSolid_Binary
-  '.x_t', // ParaSolid
-  '.xcgm',
-  '.xml', // XMLEBOM
-]
-
-const FILE_SIZE_LIMITS = {
-  hard: {
-    size: 250_000_000,
-    pretty: '250MB',
-  },
-  soft: {
-    size: 50_000_000,
-    pretty: '50MB',
-  },
-}
-
-const Uploader = ({ file, setFile, showError = true }) => {
+const Uploader = ({ showError = true }) => {
   const c = useStyles()
-  const [errorState, setErrorState] = useState()
-  const onDrop = useCallback(
-    (acceptedFiles, rejectedFiles, _event) => {
-      const file = acceptedFiles[0]
-      if (rejectedFiles[0]) {
-        setErrorState('FILE_EXT')
-        setFile(null)
-      } else if (file.size >= FILE_SIZE_LIMITS.hard.size) {
-        setErrorState('TOO_BIG')
-        setFile(null)
-      } else if (file.size >= FILE_SIZE_LIMITS.soft.size) {
-        setErrorState('SIZE_WARNING')
-        setFile(file)
-      } else {
-        setErrorState(null)
-        setFile(file)
-      }
-    },
-    [setFile]
-  )
-
-  const preventClickingWhileFull = useCallback(
-    e => {
-      if (file) {
-        e.preventDefault()
-        e.stopPropagation()
-      }
-    },
-    [file]
-  )
-
-  const cancelUpload = useCallback(
-    e => {
-      e.preventDefault()
-      e.stopPropagation()
-      setErrorState(null)
-      setFile(null)
-    },
-    [setFile]
-  )
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: MODEL_FILE_EXTS,
-  })
-
-  const handleBrowseClick = useCallback(e => {
-    e.preventDefault()
-  }, [])
+  const {
+    errorState,
+    file,
+    cancelUpload,
+    isDragActive,
+    UploadZone,
+    FILE_SIZE_LIMITS,
+    MODEL_FILE_EXTS,
+  } = useFileUpload()
 
   return (
-    <div {...getRootProps({ onClick: preventClickingWhileFull })}>
-      <input {...getInputProps({ multiple: false })} />
+    <UploadZone>
       <UploadFrame dragactive={isDragActive} currentFile={file}>
         {showError ? (
           <div className={c.Uploader_FlexColumn}>
@@ -203,11 +126,7 @@ const Uploader = ({ file, setFile, showError = true }) => {
             <div className={c.Uploader_InfoMessage}>
               Drag & Drop a model
               <br />
-              or{' '}
-              <Button text inline onClick={handleBrowseClick}>
-                <span className={c.Uploader_LinkColor}>browse</span>
-              </Button>{' '}
-              to choose file
+              or <span className={c.Uploader_LinkColor}>browse</span> to choose file
             </div>
           </div>
         )}
@@ -216,7 +135,7 @@ const Uploader = ({ file, setFile, showError = true }) => {
           {FILE_SIZE_LIMITS.soft.pretty} may take longer to upload and process.
         </div>
       </UploadFrame>
-    </div>
+    </UploadZone>
   )
 }
 

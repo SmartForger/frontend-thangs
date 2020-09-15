@@ -13,7 +13,6 @@ const useStyles = createUseStyles(theme => {
     },
     NotificationsButton_NotificationIconWrapper: {
       position: 'relative',
-      marginLeft: '1rem',
     },
     NotificationsButton_NotificationIcon: {
       color: theme.colors.purple[400],

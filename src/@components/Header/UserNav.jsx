@@ -3,12 +3,10 @@ import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import * as R from 'ramda'
 
-import { Button } from '@components'
+import { Button, Spacer } from '@components'
 import { useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
-
-import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
 
 import { ProfileDropdown, ProfileDropdownMenu } from './ProfileDropdown'
 import NotificationsButton from './NotificationsButton'
@@ -50,10 +48,6 @@ const useStyles = createUseStyles(theme => {
         justifyContent: 'flex-start',
       },
     },
-    UserNav_Button: {
-      marginLeft: '1rem',
-      cursor: 'pointer',
-    },
     UserNav_ButtonsRow: {
       '& > a': {
         display: 'flex',
@@ -63,21 +57,6 @@ const useStyles = createUseStyles(theme => {
           marginRight: 0,
         },
       },
-    },
-    UserNav_TextButton: {
-      marginRight: '1.5rem',
-      fontSize: '1rem',
-      lineHeight: '1rem',
-      fontWeight: 'bold',
-      color: theme.colors.white[400],
-
-      '& span': {
-        marginLeft: '.5rem',
-      },
-    },
-    UserNav_SignUpButton: {
-      marginRight: '.5rem',
-      color: theme.colors.gold[500],
     },
     UserNav_SearchIcon: {
       '& path, & polygon': {
@@ -108,6 +87,7 @@ const UserNav = ({
     return (
       <div className={classnames(c.UserNav_Row, c.UserNav_ButtonsRow)}>
         <NotificationsButton handleNotificationsClick={handleNotificationsClick} />
+        <Spacer size='1rem' />
         <ProfileDropdownMenu
           user={user}
           TargetComponent={ProfileDropdown}
@@ -115,35 +95,32 @@ const UserNav = ({
           handleNotificationsClick={handleNotificationsClick}
           notificationsIsOpen={notificationsIsOpen}
         />
+        <Spacer size='1rem' />
         <Button
-          className={classnames(c.UserNav_Button, c.UserNav_DesktopOnly)}
+          className={classnames(c.UserNav_Button)}
           onClick={() => dispatch(types.OPEN_OVERLAY, { overlayName: 'upload' })}
         >
           {t('header.uploadButtonText')}
         </Button>
-        <MagnifyingGlass
-          title={'Search By Text'}
-          className={classnames(
-            c.UserNav_SearchIcon,
-            c.UserNav_Button,
-            c.UserNav_MobileOnly
-          )}
-          onClick={handleSearchShow}
-        />
+        <Spacer size='1rem' className={c.UserNav_DesktopOnly} />
       </div>
     )
   }
 
   return (
     <div className={classnames(c.UserNav_Row, c.UserNav_ButtonsRow)}>
-      <Link to={'/signup/alpha'} onClick={() => dispatch(types.CLOSE_OVERLAY)}>
-        <Button text className={classnames(c.UserNav_TextButton, c.UserNav_SignUpButton)}>
-          Sign up
+      <Link to='/signup/alpha' onClick={() => dispatch(types.CLOSE_OVERLAY)}>
+        <Button
+          tertiary
+          className={classnames(c.UserNav_TextButton, c.UserNav_SignUpButton)}
+        >
+          {t('header.signUpButtonText')}
         </Button>
       </Link>
-      <Link to={'/login'} onClick={() => dispatch(types.CLOSE_OVERLAY)}>
-        <Button className={c.UserNav_Button}>Sign in</Button>
+      <Link to='/login' onClick={() => dispatch(types.CLOSE_OVERLAY)}>
+        <Button className={c.UserNav_Button}>{t('header.signInButtonText')}</Button>
       </Link>
+      <Spacer size='1rem' className={c.UserNav_DesktopOnly} />
     </div>
   )
 }

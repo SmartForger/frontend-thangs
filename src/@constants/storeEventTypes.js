@@ -66,6 +66,12 @@ export const GET_RELATED_MODELS_VIA_PHYNDEXER = 'get-related-models-via-phyndexe
 export const GET_RELATED_MODELS = 'get-related-models'
 export const CHANGE_SEARCH_RESULTS_STATUS = 'change-search-results-status'
 export const ERROR_POLLING_PHYNDEXER = 'error-polling-phyndexer'
+/* Search Subscription Events */
+export const SAVE_SUBSCRIPTION = 'save-subscription'
+export const GET_SUBSCRIPTIONS = 'get-subscriptions'
+export const READ_SUBSCRIPTION = 'read-subscription'
+export const SILENCE_SUBSCRIPTION = 'silence-subscription'
+export const DELETE_SUBSCRIPTION = 'delete-subscription'
 /* Upload Model Store Events */
 export const UPLOAD_MODEL_PHASE1 = 'upload-model-phase1'
 export const UPLOAD_MODEL_PHASE2 = 'upload-model-phase2'

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { AnchorButton, Button, ColorPicker } from '@components'
+import { AnchorButton, ColorPicker } from '@components'
 import { ReactComponent as WireMode } from '@svg/view-mode-wire.svg'
 import { ReactComponent as ShadedMode } from '@svg/view-mode-shaded.svg'
 import { ReactComponent as XRayMode } from '@svg/view-mode-xray.svg'
@@ -94,40 +94,28 @@ const Toolbar = ({
     <div className={c.Toolbar}>
       <div className={c.Toolbar_ToolGroup}>
         <div className={c.Toolbar_ToolGroupTitle}>Model View</div>
-        <Button
-          text
-          className={c.Toolbar_IconButton}
-          onClick={makeDrawModeHandler('shaded')}
-        >
+        <div className={c.Toolbar_IconButton} onClick={makeDrawModeHandler('shaded')}>
           <ShadedMode />
-        </Button>
-        <Button
-          text
-          className={c.Toolbar_IconButton}
-          onClick={makeDrawModeHandler('wire')}
-        >
+        </div>
+        <div className={c.Toolbar_IconButton} onClick={makeDrawModeHandler('wire')}>
           <WireMode />
-        </Button>
-        <Button
-          text
-          className={c.Toolbar_IconButton}
-          onClick={makeDrawModeHandler('xray')}
-        >
+        </div>
+        <div className={c.Toolbar_IconButton} onClick={makeDrawModeHandler('xray')}>
           <XRayMode />
-        </Button>
+        </div>
       </div>
       <div className={c.Toolbar_ToolGroup}>
         <div className={c.Toolbar_ToolGroupTitle}>Change Color</div>
-        <Button text className={c.Toolbar_IconButton}>
+        <div className={c.Toolbar_IconButton}>
           <ColorPicker color={wireColor} onChange={makeColorHandler('wire')}>
             <EdgesColor />
           </ColorPicker>
-        </Button>
-        <Button text className={c.Toolbar_IconButton}>
+        </div>
+        <div className={c.Toolbar_IconButton}>
           <ColorPicker color={meshColor} onChange={makeColorHandler('mesh')}>
             <ShadeColor />
           </ColorPicker>
-        </Button>
+        </div>
       </div>
       <AnchorButton className={c.Toolbar_MobileAnchorButton} onClick={handleResetView}>
         Reset

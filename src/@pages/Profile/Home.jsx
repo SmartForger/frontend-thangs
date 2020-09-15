@@ -7,7 +7,6 @@ import {
   CardCollection,
   ProfilePicture,
   ProfileButton,
-  Button,
 } from '@components'
 import ModelCards from '@components/CardCollection/ModelCards'
 import FolderCards from '@components/CardCollection/FolderCards'
@@ -120,9 +119,8 @@ const ModelsContent = ({ models: modelsAtom }) => {
   if (R.isEmpty(sortedModels)) {
     return (
       <div className={c.Profile_NoContentMessage}>
-        <Button
-          text
-          inline
+        <a
+          href='/#'
           onClick={e => {
             e.preventDefault()
             dispatch(types.OPEN_OVERLAY, {
@@ -131,7 +129,7 @@ const ModelsContent = ({ models: modelsAtom }) => {
           }}
         >
           <span className={c.Profile_NoContentMessage__link}>Upload</span>
-        </Button>{' '}
+        </a>{' '}
         your first model to start building your portfolio.
       </div>
     )
@@ -175,9 +173,8 @@ const FoldersContent = ({ folders: foldersAtom }) => {
   if (R.isEmpty(folders)) {
     return (
       <div className={c.Profile_NoContentMessage}>
-        <Button
-          text
-          inline
+        <a
+          href='/#'
           onClick={e => {
             e.preventDefault()
             dispatch(types.OPEN_OVERLAY, {
@@ -189,7 +186,7 @@ const FoldersContent = ({ folders: foldersAtom }) => {
           }}
         >
           <span className={c.Profile_NoContentMessage__link}>Create</span>
-        </Button>{' '}
+        </a>{' '}
         a private shared folder, invite team members, and start collaborating on projects.
       </div>
     )

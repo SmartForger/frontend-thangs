@@ -24,8 +24,6 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
     },
     ProfileDropdown_DropdownMenu: {
-      margin: 'auto',
-      marginLeft: '1rem',
       zIndex: 5,
     },
     ProfileDropdown_DropdownMenuDivider: {

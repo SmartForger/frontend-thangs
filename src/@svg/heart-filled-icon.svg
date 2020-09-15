@@ -1,8 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="icon/Filled-heart" fill="#FFFFFF">
-            <path d="M12,20 C11.815,20 11.632,19.949 11.47,19.848 C11.124,19.632 3,14.491 3,9 C3,6.243 5.243,4 8,4 C9.594,4 11.07,4.837 12,6.08 C12.93,4.837 14.406,4 16,4 C18.757,4 21,6.243 21,9 C21,14.491 12.876,19.632 12.53,19.848 C12.368,19.949 12.185,20 12,20" id="Path"></path>
-        </g>
-    </g>
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M8 15.5C7.8334 15.5 7.67016 15.4539 7.52889 15.367C7.22133 15.178 0 10.6796 0 5.875C0 3.46263 1.99378 1.5 4.44444 1.5C5.86133 1.5 7.17333 2.23237 8 3.32C8.82667 2.23237 10.1387 1.5 11.5556 1.5C14.0062 1.5 16 3.46263 16 5.875C16 10.6796 8.77867 15.178 8.47111 15.367C8.32984 15.4539 8.1666 15.5 8 15.5Z" fill="black"/>
 </svg>
