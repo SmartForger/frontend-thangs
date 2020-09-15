@@ -81,7 +81,10 @@ const useStyles = createUseStyles(theme => {
     },
     Landing_TabNavigationWrapper: {
       display: 'flex',
-      justifyContent: 'flex-end',
+      justifyContent: 'center',
+      [md]: {
+        justifyContent: 'flex-end',
+      },
       marginBottom: '1rem',
     },
     Landing_TabNavigation: {

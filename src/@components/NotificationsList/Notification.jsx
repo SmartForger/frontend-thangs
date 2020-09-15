@@ -80,7 +80,7 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'flex-start',
       padding: '.5rem',
       borderRadius: '.5rem',
-      width: '15rem',
+      width: '100%',
       overflowWrap: 'anywhere',
 
       '&:hover': {

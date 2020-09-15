@@ -48,7 +48,7 @@ const useStyles = createUseStyles(theme => {
     },
     Layout: {
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column-reverse',
       margin: 'auto',
       maxWidth: theme.variables.maxWidth,
       paddingTop: '2rem',
@@ -60,6 +60,7 @@ const useStyles = createUseStyles(theme => {
         paddingRight: ({ notificationsIsOpen }) =>
           notificationsIsOpen ? '1.25rem' : '4rem',
         paddingLeft: '4rem',
+        flexDirection: 'row',
       },
     },
     Layout_blur: {
@@ -85,7 +86,9 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
       paddingTop: '1.5rem',
       paddingLeft: '1.25rem',
-      width: '15rem',
+      [md]: {
+        width: '15rem',
+      },
     },
     NotificationsList_Wrapper__deactive: {
       animation: '100ms linear 0s $notificationsSlideOut',
