@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import { ReactComponent as SnackbarUploadIcon } from '@svg/snackbar-upload.svg'
 import classnames from 'classnames'
 import * as types from '../@constants/storeEventTypes'
 import Button from './Button'
+
+const INIT_LEFT = 16
+const SWIPE_START_LEFT = 80
+const LEFT_TRANSITION = 'left 0.45s'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -15,17 +19,14 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       bottom: ({ isOpen }) => (isOpen ? '1.5rem' : '-5rem'),
-      left: 'calc(50vw - 45.75%)',
       background: theme.colors.purple[900],
       boxShadow: '0px 2px 12px rgba(0, 0, 0, 0.2)',
       borderRadius: '.5rem',
-      width: '91.5%',
-      justifyContent: 'center',
-      alignItems: 'center',
       zIndex: '2',
-      position: 'fixed',
+      position: 'absolute',
+      width: '91.5%',
       height: '4.5rem',
-      transition: 'left 0.45s, bottom 0.45s',
+      transition: 'bottom 0.45s',
     },
     Snackbar__mobileOnly: {
       [md]: {
@@ -52,6 +53,8 @@ const Snackbar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const c = useStyles({ isOpen })
   const { dispatch } = useStoreon()
+  const snackbarRef = useRef(null)
+  const snackBarMoveData = useRef({ xStart: undefined })
 
   useEffect(() => {
     setTimeout(() => {
@@ -60,34 +63,39 @@ const Snackbar = () => {
   }, [])
 
   const onTouchStart = event => {
-    const { pageX } = event.touches[0]
-    const starLeftPosition = (window.screen.width * 4.25) / 100
-    const leftTouchPosition = pageX - starLeftPosition
-    const snackbar = document.getElementById('snackbar')
-    const onTouchMove = event => {
-      const newLeftPosition = event.touches[0].pageX
-      if (newLeftPosition < starLeftPosition) {
-        snackbar.style.left = -leftTouchPosition + 'px'
-      }
+    const { pageX: touchX } = event.touches[0]
+    snackBarMoveData.current = {
+      xStart: touchX,
     }
-    const onTouchEnd = () => {
-      const currentLeftPosition = snackbar.style.left
-      if (starLeftPosition - parseFloat(currentLeftPosition) >= 100) {
-        snackbar.style.left = '-100vw'
-      } else {
-        snackbar.style.left = starLeftPosition + 'px'
-      }
-      document.removeEventListener('touchmove', onTouchMove)
-      document.addEventListener('touchend', onTouchEnd)
+  }
+
+  const onTouchMove = event => {
+    const { pageX: touchX } = event.touches[0]
+    const { xStart } = snackBarMoveData.current
+    const nextLeft = touchX - xStart
+
+    // Left swipe only:
+    if (nextLeft < INIT_LEFT) {
+      snackbarRef.current.style.left = `${nextLeft}px`
     }
-    document.addEventListener('touchmove', onTouchMove)
-    document.addEventListener('touchend', onTouchEnd)
+  }
+
+  const onTouchEnd = () => {
+    if (parseFloat(snackbarRef.current.style.left) < -SWIPE_START_LEFT){
+      snackbarRef.current.style.transition = LEFT_TRANSITION 
+      snackbarRef.current.style.left = '-100vw'
+    } else {
+      snackbarRef.current.style.left = `${INIT_LEFT}px` 
+    }
+    snackBarMoveData.current = {}
   }
 
   return (
     <div
-      id='snackbar'
+      ref={snackbarRef}
       onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
       className={classnames(c.Snackbar, c.Snackbar__mobileOnly)}
     >
       <div className={c.Snackbar_Text}>
