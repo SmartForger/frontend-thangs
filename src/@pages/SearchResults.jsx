@@ -1,14 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useLocation, useParams, Link } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
-import { NoResults, Layout, Button, Spacer } from '@components'
+import {
+  NoResults,
+  Layout,
+  Button,
+  Spacer,
+  SaveSearchButton,
+  Snackbar,
+} from '@components'
+import { useLocalStorage } from '@hooks'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import ModelSearchResults from '@components/CardCollection/ModelSearchResults'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
-import Snackbar from '@components/Snackbar'
+import * as pendo from '@vendors/pendo'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -218,6 +226,7 @@ const useQuery = location => {
 
 const Page = () => {
   const c = useStyles()
+  const [currentUser] = useLocalStorage('currentUser', null)
   const { searchQuery } = useParams()
   const location = useLocation()
   const query = useQuery(location)
@@ -281,6 +290,18 @@ const Page = () => {
     [dispatch]
   )
 
+  const openSignupOverlay = useCallback(() => {
+    dispatch(types.OPEN_OVERLAY, {
+      overlayName: 'signUp',
+      overlayData: {
+        animateIn: true,
+        windowed: true,
+        titleMessage: 'Join to subscribe to new search results alerts.',
+      },
+    })
+    pendo.track('SignUp Prompt Overlay', { source: 'Save Search' })
+  }, [dispatch])
+
   const thangsModels = (thangs && thangs.data && thangs.data.matches) || []
   const phyndexerModels = (phyndexer && phyndexer.data && phyndexer.data.matches) || []
   const resultCount = phyndexerModels.length + thangsModels.length
@@ -288,23 +309,26 @@ const Page = () => {
   return (
     <div className={c.SearchResults_Page}>
       <div className={c.SearchResults_MainContent}>
-        <div className={c.SearchResults_Header}>
-          <div className={c.SearchResults_HeaderTextWrapper}>
-            <h1 className={c.SearchResults_HeaderText}>
-              Search Results for {decodeURIComponent(searchQuery)}
-            </h1>
-            {resultCount && resultCount > 0 ? (
-              <div className={c.SearchResult_ResultCountText}>
-                About {resultCount} results
-              </div>
-            ) : null}
+        {searchQuery && (
+          <div className={c.SearchResults_Header}>
+            <div className={c.SearchResults_HeaderTextWrapper}>
+              <h1 className={c.SearchResults_HeaderText}>
+                Search Results for {decodeURIComponent(searchQuery)}
+              </h1>
+              {resultCount && resultCount > 0 ? (
+                <div className={c.SearchResult_ResultCountText}>
+                  About {resultCount} results
+                </div>
+              ) : null}
+            </div>
+            <SaveSearchButton
+              currentUser={currentUser}
+              searchTerm={searchQuery}
+              modelId={modelId}
+              openSignupOverlay={openSignupOverlay}
+            />
           </div>
-          <div>
-            <Link to='/'>
-              <Button secondary>Clear Search</Button>
-            </Link>
-          </div>
-        </div>
+        )}
         {searchQuery ? (
           <>
             {!modelId && (phyndexer.isLoaded || thangs.isLoaded) && <Snackbar />}

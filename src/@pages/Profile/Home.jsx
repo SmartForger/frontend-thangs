@@ -3,6 +3,7 @@ import * as R from 'ramda'
 import {
   Layout,
   WithFlash,
+  Spacer,
   Spinner,
   CardCollection,
   ProfilePicture,
@@ -10,9 +11,11 @@ import {
 } from '@components'
 import ModelCards from '@components/CardCollection/ModelCards'
 import FolderCards from '@components/CardCollection/FolderCards'
+import SearchCards from '@components/CardCollection/SearchCards'
 import { Message404 } from '../404'
 import { ReactComponent as ModelSquareIcon } from '@svg/model-square-icon.svg'
 import { ReactComponent as FolderIcon } from '@svg/folder-icon.svg'
+import { ReactComponent as SavedSearchIcon } from '@svg/saved-search-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
@@ -38,14 +41,15 @@ const useStyles = createUseStyles(theme => {
       width: '1.5rem',
       height: '1.5rem',
       color: ({ selected }) => (selected ? theme.colors.blue[500] : 'inherit'),
+      '& path': {
+        fill: ({ selected }) =>
+          selected ? theme.colors.blue[500] : theme.colors.grey[700],
+      },
     },
     Home_Row: {
       display: 'flex',
       alignItems: 'center',
       cursor: 'pointer',
-    },
-    Home_FoldersTitle: {
-      marginLeft: '1rem',
     },
     Profile_Row: {
       display: 'flex',
@@ -136,7 +140,7 @@ const ModelsContent = ({ models: modelsAtom }) => {
   }
 
   return (
-    <CardCollection noResultsText='This user has not uploaded any models yet.'>
+    <CardCollection noResultsText='You have not uploaded any models yet.'>
       <ModelCards items={sortedModels} />
     </CardCollection>
   )
@@ -193,23 +197,69 @@ const FoldersContent = ({ folders: foldersAtom }) => {
   }
 
   return (
-    <CardCollection noResultsText='This user has not uploaded any folders yet.'>
+    <CardCollection noResultsText='You have not uploaded any folders yet.'>
       <FolderCards items={folders} />
     </CardCollection>
   )
 }
 
-const PageContent = ({ user }) => {
+const SavedSearchesContent = ({ subscriptions = {} }) => {
+  const c = useStyles({})
+
+  if (!subscriptions.isLoaded) {
+    return <Spinner />
+  }
+
+  if (subscriptions.isError) {
+    return (
+      <div data-cy='fetch-profile-error'>
+        Error! We were not able to load this profile. Please try again later.
+      </div>
+    )
+  }
+
+  if (R.isEmpty(subscriptions.data)) {
+    return (
+      <div className={c.Profile_NoContentMessage}>
+        Get notifications when more results are added by saving your
+        <a href='/search'>
+          <span className={c.Profile_NoContentMessage__link}>search.</span>
+        </a>{' '}
+        Find it on the search results page.
+      </div>
+    )
+  }
+
+  return (
+    <CardCollection noResultsText='You have not saved and searches yet.'>
+      <SearchCards items={subscriptions} />
+    </CardCollection>
+  )
+}
+
+const PageContent = ({ user, folders, searchSubscriptions }) => {
   const c = useStyles({})
   const currentUserId = useCurrentUserId()
-
-  const { folders } = useStoreon('folders')
 
   const { atom: modelsAtom } = useFetchPerMount(currentUserId, 'user-own-models')
   const [selected, setSelected] = useState('models')
 
-  const selectModels = () => setSelected('models')
-  const selectFolders = () => setSelected('folders')
+  const selectModels = useCallback(() => setSelected('models'), [])
+  const selectFolders = useCallback(() => setSelected('folders'), [])
+  const selectSearches = useCallback(() => setSelected('savedSearches'), [])
+
+  const TabContent = useCallback(() => {
+    switch (selected) {
+      case 'models':
+        return <ModelsContent models={modelsAtom} />
+      case 'folders':
+        return <FoldersContent folders={folders} />
+      case 'savedSearches':
+        return <SavedSearchesContent searchSubscriptions={searchSubscriptions} />
+      default:
+        return null
+    }
+  }, [folders, modelsAtom, searchSubscriptions, selected])
 
   return (
     <div className={c.Home}>
@@ -233,21 +283,28 @@ const PageContent = ({ user }) => {
           amount={((Array.isArray(modelsAtom.data) && modelsAtom.data) || []).length}
           Icon={ModelSquareIcon}
         />
+        <Spacer size={'1.5rem'} />
         <CollectionTitle
           selected={selected === 'folders'}
-          className={c.Home_FoldersTitle}
           onClick={selectFolders}
           title={'Folders'}
           amount={((Array.isArray(folders.data) && folders.data) || []).length}
           Icon={FolderIcon}
         />
+        <Spacer size={'1.5rem'} />
+        <CollectionTitle
+          selected={selected === 'savedSearches'}
+          onClick={selectSearches}
+          title={'Saved Searches'}
+          amount={
+            ((Array.isArray(searchSubscriptions.data) && searchSubscriptions.data) || [])
+              .length
+          }
+          Icon={SavedSearchIcon}
+        />
       </div>
       <WithFlash>
-        {selected === 'models' ? (
-          <ModelsContent models={modelsAtom} />
-        ) : (
-          <FoldersContent folders={folders} />
-        )}
+        <TabContent />
       </WithFlash>
     </div>
   )
@@ -258,12 +315,16 @@ const Page = () => {
     atom: { isLoading, isError, data: user },
   } = useCurrentUser()
 
-  const { dispatch, folders } = useStoreon('folders')
+  const { dispatch, folders, searchSubscriptions } = useStoreon(
+    'folders',
+    'searchSubscriptions'
+  )
   useEffect(() => {
     dispatch(types.FETCH_FOLDERS)
+    // dispatch(types.FETCH_SUBSCRIPTIONS)
   }, [dispatch])
 
-  if (isLoading || folders.isLoading) {
+  if (isLoading || folders.isLoading || searchSubscriptions.isLoaded) {
     return <Spinner />
   }
 
@@ -283,7 +344,13 @@ const Page = () => {
     )
   }
 
-  return <PageContent user={user} />
+  return (
+    <PageContent
+      user={user}
+      folders={folders}
+      searchSubscriptions={searchSubscriptions}
+    />
+  )
 }
 
 export const Home = () => {
