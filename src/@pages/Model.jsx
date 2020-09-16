@@ -6,6 +6,7 @@ import { format } from 'date-fns'
 import {
   Button,
   CommentsForModel,
+  Divider,
   HoopsModelViewer,
   Layout,
   LikeModelButton,
@@ -27,10 +28,10 @@ import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { useLocalStorage } from '@hooks'
 import { Message404 } from './404'
 import { createUseStyles } from '@style'
+import classnames from 'classnames'
 import { usePageMeta, useServices } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
-import classnames from 'classnames'
 import * as pendo from '@vendors/pendo'
 
 const useStyles = createUseStyles(theme => {
@@ -360,10 +361,10 @@ const StatsAndActions = ({
           isAuthedUser={isAuthedUser}
           openSignupOverlay={openSignupOverlay}
         />
-        <hr className={c.Model_Rule} />
+        <Divider />
         <ModelStats model={modelData} />
       </div>
-      <hr className={c.Model_Rule} />
+      <Divider />
     </div>
   )
 }
@@ -452,7 +453,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
                 <div className={c.Model_ModelDetails}>
                   <ModelDetails model={modelData} />
                 </div>
-                <hr className={c.Model_Rule} />
+                <Divider />
               </div>
               <StatsAndActions
                 className={c.Model__mobileOnly}
@@ -462,7 +463,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
                 openSignupOverlay={openSignupOverlay}
               />
               <RelatedModels modelId={modelData.id} />
-              <hr className={c.Model_Rule} />
+              <Divider />
               <CommentsForModel
                 modelId={modelData.id}
                 currentUser={currentUser}

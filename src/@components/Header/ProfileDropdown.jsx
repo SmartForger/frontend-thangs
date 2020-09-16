@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
-
 import {
   ProfilePicture,
+  Divider,
   DropdownMenu,
   DropdownItem,
   useFlashNotification,
@@ -78,7 +78,7 @@ export const ProfileDropdownMenu = ({
       >
         <NewFolderIcon /> {t('header.dropdownMenu.createFolder')}
       </DropdownItem>
-      <hr className={c.ProfileDropdown_DropdownMenuDivider} />
+      <Divider spacing='.25rem' />
       <DropdownItem to='/home'>
         <UserIcon /> {t('header.dropdownMenu.viewProfile')}
       </DropdownItem>
