@@ -11,8 +11,9 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       margin: 0,
       padding: 0,
-      backgroundColor: theme.color.gold[500],
-      color: theme.color.black[500],
+      backgroundColor: theme.colors.gold[500],
+      color: theme.colors.black[500],
+      borderRadius: '1rem',
     },
     Pill_TextWrapper: {
       display: 'flex',

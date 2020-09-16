@@ -12,6 +12,7 @@ const useStyles = createUseStyles(theme => {
       padding: 0,
       fontSize: ({ small }) => (small ? '.875rem' : '1rem'),
       lineHeight: ({ small }) => (small ? '.875rem' : '1rem'),
+      whiteSpace: 'nowrap',
     },
   }
 })

@@ -4,6 +4,7 @@ import { useStoreon } from 'storeon/react'
 import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { Button, Spacer } from '@components'
+import ReactTooltip from 'react-tooltip'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
@@ -45,20 +46,50 @@ const useStyles = createUseStyles(theme => {
       '-ms-transform-style': 'preserve-3d',
       'transform-style': 'preserve-3d',
     },
+    SaveSearchButton_Tooltip: {
+      opacity: '1 !important',
+      borderRadius: '.5rem',
+      filter: 'drop-shadow(0px 2px 12px rgba(0, 0, 0, 0.2))',
+    },
   }
 })
 
-const hasSavedSearch = (subscriptionData, currentUserId) => {
-  return R.includes(currentUserId, subscriptionData)
+const hasSavedSearch = (subscriptionData, searchTerm, modelId) => {
+  if (!subscriptionData) return false
+  if (modelId) {
+    return R.find(R.propEq('modelId', modelId))(subscriptionData)
+  }
+  return R.find(R.propEq('searchTerm', searchTerm))(subscriptionData)
 }
 
-const AuthSaveSearchButton = ({ c, modelId, searchTerm }) => {
-  const { dispatch, searchSubscriptions = {} } = useStoreon('searchSubscriptions')
-  const [saved, setSaved] = useState(hasSavedSearch(false))
+const getSubscriptionId = (subscriptionData, searchTerm, modelId) => {
+  if (!subscriptionData) return false
+  debugger
+  if (modelId) {
+    return R.find('id', R.find(R.propEq('modelId', modelId))(subscriptionData))
+  }
+  console.log(R.prop('id', R.find(R.propEq('searchTerm', searchTerm))(subscriptionData)))
+  return R.prop('id', R.find(R.propEq('searchTerm', searchTerm))(subscriptionData))
+}
+
+const AuthSaveSearchButton = ({
+  c,
+  modelId,
+  searchTerm,
+  searchSubscriptions,
+  dispatch,
+}) => {
+  console.log(searchSubscriptions)
+  const [saved, setSaved] = useState(
+    !!hasSavedSearch(searchSubscriptions.data, searchTerm, modelId)
+  )
   const [hasChanged, setHasChanged] = useState(false)
-  const handleLikeClicked = useCallback(() => {
+  const handleSavedClicked = useCallback(() => {
     const SaveSearch = () => dispatch(types.SAVE_SUBSCRIPTION, { modelId, searchTerm })
-    const unSaveSearch = () => dispatch(types.DELETE_SUBSCRIPTION, { id: modelId })
+    const unSaveSearch = () =>
+      dispatch(types.DELETE_SUBSCRIPTION, {
+        id: getSubscriptionId(searchSubscriptions.data, searchTerm, modelId),
+      })
 
     if (saved) {
       unSaveSearch()
@@ -69,37 +100,45 @@ const AuthSaveSearchButton = ({ c, modelId, searchTerm }) => {
       setSaved(true)
       setHasChanged(true)
     }
-  }, [saved, dispatch, modelId, searchTerm])
+  }, [saved, dispatch, modelId, searchTerm, searchSubscriptions])
 
   useEffect(() => {
-    dispatch(types.FETCH_SUBSCRIPTIONS)
-  }, [dispatch])
-
+    debugger
+    setSaved(!!hasSavedSearch(searchSubscriptions.data, searchTerm, modelId))
+  }, [modelId, searchSubscriptions, searchTerm])
+  console.log('saved', saved)
   return (
-    <Button
-      className={classnames(c.SaveSearchButton)}
-      secondary
-      disabled={searchSubscriptions.isLoading || searchSubscriptions.isError}
-      onClick={handleLikeClicked}
-    >
-      <div>
-        {saved ? (
-          <HeartFilledIcon
-            className={classnames(c.SaveSearchIcon, {
-              [c.SaveSearchIcon__saved]: hasChanged,
-            })}
-          />
-        ) : (
-          <HeartIcon
-            className={classnames(c.SaveSearchIcon, {
-              [c.SaveSearchIcon__unsaved]: hasChanged,
-            })}
-          />
-        )}
-      </div>
-      <Spacer size='.5rem' />
-      {saved ? 'Saved' : 'Save Search'}
-    </Button>
+    <>
+      <Button
+        className={classnames(c.SaveSearchButton)}
+        secondary
+        disabled={searchSubscriptions.isLoading || searchSubscriptions.isError}
+        onClick={handleSavedClicked}
+        data-for='save-search'
+        data-tip='Save to your profile'
+        data-type='light'
+        data-class={c.SaveSearchButton_Tooltip}
+      >
+        <div>
+          {saved ? (
+            <HeartFilledIcon
+              className={classnames(c.SaveSearchIcon, {
+                [c.SaveSearchIcon__saved]: hasChanged,
+              })}
+            />
+          ) : (
+            <HeartIcon
+              className={classnames(c.SaveSearchIcon, {
+                [c.SaveSearchIcon__unsaved]: hasChanged,
+              })}
+            />
+          )}
+        </div>
+        <Spacer size='.5rem' />
+        {saved ? 'Saved' : 'Save Search'}
+      </Button>
+      {!saved && <ReactTooltip id='save-search' effect='solid' />}
+    </>
   )
 }
 const noop = () => null
@@ -110,11 +149,25 @@ const UnauthSaveSearchButton = ({ c, openSignupOverlay = noop }) => {
   }, [openSignupOverlay])
 
   return (
-    <Button className={classnames(c.SaveSearchButton)} onClick={handleClick} secondary>
-      <HeartFilledIcon className={c.SaveSearchIcon} />
-      <Spacer size='.5rem' />
-      Save Search
-    </Button>
+    <>
+      <Button
+        className={classnames(c.SaveSearchButton)}
+        onClick={handleClick}
+        secondary
+        data-for='save-search'
+        data-tip='Help us improve! Give us your feedback.'
+      >
+        <HeartFilledIcon className={c.SaveSearchIcon} />
+        <Spacer size='.5rem' />
+        Save Search
+      </Button>
+      <ReactTooltip
+        id='save-search'
+        className={c.SaveSearchButton_Tooltip}
+        place={'top'}
+        effect='solid'
+      />
+    </>
   )
 }
 
@@ -123,10 +176,20 @@ const SaveSearchButton = ({
   searchTerm,
   modelId,
   openSignupOverlay = noop,
+  dispatch = noop,
+  searchSubscriptions,
 }) => {
   const c = useStyles()
   if (currentUser) {
-    return <AuthSaveSearchButton c={c} modelId={modelId} searchTerm={searchTerm} />
+    return (
+      <AuthSaveSearchButton
+        c={c}
+        modelId={modelId}
+        searchTerm={searchTerm}
+        searchSubscriptions={searchSubscriptions}
+        dispatch={dispatch}
+      />
+    )
   }
   return <UnauthSaveSearchButton c={c} openSignupOverlay={openSignupOverlay} />
 }

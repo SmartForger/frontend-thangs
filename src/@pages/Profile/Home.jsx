@@ -8,6 +8,7 @@ import {
   CardCollection,
   ProfilePicture,
   ProfileButton,
+  SingleLineBodyText,
 } from '@components'
 import ModelCards from '@components/CardCollection/ModelCards'
 import FolderCards from '@components/CardCollection/FolderCards'
@@ -36,20 +37,11 @@ const useStyles = createUseStyles(theme => {
       marginRight: '3.5rem',
       marginBottom: '1.5rem',
     },
-    Home_Icon: {
-      marginRight: '.5rem',
-      width: '1.5rem',
-      height: '1.5rem',
-      color: ({ selected }) => (selected ? theme.colors.blue[500] : 'inherit'),
-      '& path': {
-        fill: ({ selected }) =>
-          selected ? theme.colors.blue[500] : theme.colors.grey[700],
-      },
-    },
     Home_Row: {
       display: 'flex',
       alignItems: 'center',
       cursor: 'pointer',
+      textDecoration: ({ selected }) => (selected ? 'underline' : 'none'),
     },
     Profile_Row: {
       display: 'flex',
@@ -86,12 +78,13 @@ export * from './EditProfile'
 export * from './RedirectProfile'
 export * from './Likes'
 
-const CollectionTitle = ({ selected, onClick, className, title, Icon, amount }) => {
+const CollectionTitle = ({ selected, onClick, className, title, amount }) => {
   const c = useStyles({ selected })
   return (
     <div className={classnames(className, c.Home_Row)} onClick={onClick}>
-      <Icon className={c.Home_Icon} selected={selected} />
-      {amount ? [title, amount].join(' ') : title}
+      <SingleLineBodyText>
+        {amount ? [title, amount].join(' ') : title}
+      </SingleLineBodyText>
     </div>
   )
 }
@@ -203,14 +196,14 @@ const FoldersContent = ({ folders: foldersAtom }) => {
   )
 }
 
-const SavedSearchesContent = ({ subscriptions = {} }) => {
+const SavedSearchesContent = ({ searchSubscriptions = {} }) => {
   const c = useStyles({})
-
-  if (!subscriptions.isLoaded) {
+  debugger
+  if (!searchSubscriptions.isLoaded) {
     return <Spinner />
   }
 
-  if (subscriptions.isError) {
+  if (searchSubscriptions.isError) {
     return (
       <div data-cy='fetch-profile-error'>
         Error! We were not able to load this profile. Please try again later.
@@ -218,7 +211,7 @@ const SavedSearchesContent = ({ subscriptions = {} }) => {
     )
   }
 
-  if (R.isEmpty(subscriptions.data)) {
+  if (R.isEmpty(searchSubscriptions.data)) {
     return (
       <div className={c.Profile_NoContentMessage}>
         Get notifications when more results are added by saving your
@@ -231,17 +224,23 @@ const SavedSearchesContent = ({ subscriptions = {} }) => {
   }
 
   return (
-    <CardCollection noResultsText='You have not saved and searches yet.'>
-      <SearchCards items={subscriptions} />
+    <CardCollection
+      cardWidth={'22.5rem'}
+      noResultsText='You have not saved and searches yet.'
+    >
+      <SearchCards items={searchSubscriptions.data} />
     </CardCollection>
   )
 }
 
-const PageContent = ({ user, folders, searchSubscriptions }) => {
+const PageContent = ({
+  currentUserId,
+  user,
+  modelsAtom,
+  folders,
+  searchSubscriptions,
+}) => {
   const c = useStyles({})
-  const currentUserId = useCurrentUserId()
-
-  const { atom: modelsAtom } = useFetchPerMount(currentUserId, 'user-own-models')
   const [selected, setSelected] = useState('models')
 
   const selectModels = useCallback(() => setSelected('models'), [])
@@ -295,7 +294,7 @@ const PageContent = ({ user, folders, searchSubscriptions }) => {
         <CollectionTitle
           selected={selected === 'savedSearches'}
           onClick={selectSearches}
-          title={'Saved Searches'}
+          title={'Searches'}
           amount={
             ((Array.isArray(searchSubscriptions.data) && searchSubscriptions.data) || [])
               .length
@@ -314,17 +313,18 @@ const Page = () => {
   const {
     atom: { isLoading, isError, data: user },
   } = useCurrentUser()
-
+  const currentUserId = useCurrentUserId()
+  const { atom: modelsAtom = {} } = useFetchPerMount(currentUserId, 'user-own-models')
   const { dispatch, folders, searchSubscriptions } = useStoreon(
     'folders',
     'searchSubscriptions'
   )
   useEffect(() => {
     dispatch(types.FETCH_FOLDERS)
-    // dispatch(types.FETCH_SUBSCRIPTIONS)
+    dispatch(types.FETCH_SUBSCRIPTIONS)
   }, [dispatch])
 
-  if (isLoading || folders.isLoading || searchSubscriptions.isLoaded) {
+  if (isLoading) {
     return <Spinner />
   }
 
@@ -347,7 +347,9 @@ const Page = () => {
   return (
     <PageContent
       user={user}
+      currentUserId={currentUserId}
       folders={folders}
+      modelsAtom={modelsAtom}
       searchSubscriptions={searchSubscriptions}
     />
   )

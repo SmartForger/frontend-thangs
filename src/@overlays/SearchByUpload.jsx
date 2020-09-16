@@ -94,6 +94,7 @@ const SearchByUpload = () => {
 
   const handleFile = useCallback(
     file => {
+      if (!file) return
       const requiredVariables = {
         name: sanitizeFileName(file.name),
         size: file.size,

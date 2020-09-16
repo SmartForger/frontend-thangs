@@ -233,9 +233,13 @@ const Page = () => {
   const modelId = useMemo(() => query.get('modelId'), [query])
   const phynId = useMemo(() => query.get('phynId'), [query])
   const related = useMemo(() => query.get('related'), [query])
-  const { dispatch, searchResults } = useStoreon('searchResults')
+  const { dispatch, searchResults, searchSubscriptions } = useStoreon(
+    'searchResults',
+    'searchSubscriptions'
+  )
   const { phyndexer, thangs } = searchResults
   const [showReportModelButtons, setShowReportModelButtons] = useState(false)
+
   useEffect(() => {
     if (!modelId) {
       dispatch(types.GET_TEXT_SEARCH_RESULTS, {
@@ -258,6 +262,11 @@ const Page = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, modelId])
+
+  useEffect(() => {
+    dispatch(types.FETCH_SUBSCRIPTIONS)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleReportModel = useCallback(
     ({ model }) => {
@@ -326,6 +335,8 @@ const Page = () => {
               searchTerm={searchQuery}
               modelId={modelId}
               openSignupOverlay={openSignupOverlay}
+              dispatch={dispatch}
+              searchSubscriptions={searchSubscriptions}
             />
           </div>
         )}

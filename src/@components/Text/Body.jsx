@@ -15,6 +15,7 @@ const useStyles = createUseStyles(theme => {
     SingleLine: {
       fontSize: '1rem',
       lineHeight: '.75rem',
+      whiteSpace: 'nowrap',
     },
     MultiLine: {
       fontSize: '1rem',

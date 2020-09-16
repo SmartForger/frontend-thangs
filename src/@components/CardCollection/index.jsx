@@ -8,12 +8,13 @@ const useStyles = createUseStyles(_theme => {
   return {
     CardCollection: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(20.5rem, 1fr))',
+      gridTemplateColumns: ({ cardWidth }) =>
+        `repeat(auto-fit, minmax(${cardWidth}, 1fr))`,
       gap: '1rem',
       width: '100%',
     },
     CardCollection__singleRow: {
-      gridTemplateColumns: 'repeat(auto-fill, 20.5rem)',
+      gridTemplateColumns: ({ cardWidth }) => `repeat(auto-fill, ${cardWidth})`,
     },
     ModelCard_Skeleton: {
       paddingBottom: 0,
@@ -25,8 +26,14 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const CardCollection = ({ maxPerRow = 4, noResultsText, loading = false, children }) => {
-  const c = useStyles()
+const CardCollection = ({
+  maxPerRow = 4,
+  noResultsText,
+  loading = false,
+  children,
+  cardWidth = '20.5rem',
+}) => {
+  const c = useStyles({ cardWidth })
 
   if (loading) {
     return (
@@ -45,9 +52,9 @@ const CardCollection = ({ maxPerRow = 4, noResultsText, loading = false, childre
   if (children) {
     const allItemsCount = Array.isArray(children)
       ? children.reduce(
-        (acc, child) => (child.props.items && acc + child.props.items.length) || 0,
-        0
-      )
+          (acc, child) => (child.props.items && acc + child.props.items.length) || 0,
+          0
+        )
       : (children.props.items && children.props.items.length) || 0
 
     return (

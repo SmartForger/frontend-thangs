@@ -142,9 +142,9 @@ const Uploader = ({ file, setFile, showError = true }) => {
       <UploadFrame dragactive={isDragActive} currentFile={file}>
         {showError ? (
           <div className={c.Uploader_FlexColumn}>
-            <Button className={c.Uploader_IconButton} onClick={cancelUpload}>
+            <div className={c.Uploader_IconButton} onClick={cancelUpload}>
               <ErrorIcon className={c.Uploader_ErrorIcon} />
-            </Button>
+            </div>
 
             <div className={c.Uploader_InfoMessage}>
               Sorry, an unexpected error occurred. Please wait a moment and try to save
@@ -153,9 +153,9 @@ const Uploader = ({ file, setFile, showError = true }) => {
           </div>
         ) : file ? (
           <div className={c.Uploader_FlexColumn}>
-            <Button className={c.Uploader_IconButton} onClick={cancelUpload}>
+            <div className={c.Uploader_IconButton} onClick={cancelUpload}>
               <ExitIcon />
-            </Button>
+            </div>
             <UploadIcon />
             <div className={c.Uploader_FileName}>
               <strong>File:</strong> {file.name}
@@ -174,9 +174,9 @@ const Uploader = ({ file, setFile, showError = true }) => {
           </div>
         ) : errorState === 'TOO_BIG' ? (
           <div className={c.Uploader_FlexColumn}>
-            <Button className={c.Uploader_IconButton} onClick={cancelUpload}>
+            <div className={c.Uploader_IconButton} onClick={cancelUpload}>
               <ExitIcon />
-            </Button>
+            </div>
             <ErrorIcon className={c.Uploader_ErrorIcon} />
             <div className={c.Uploader_InfoMessage}>
               File over {FILE_SIZE_LIMITS.hard.pretty}. Try uploading a different file.
@@ -184,9 +184,9 @@ const Uploader = ({ file, setFile, showError = true }) => {
           </div>
         ) : errorState === 'FILE_EXT' ? (
           <div className={c.Uploader_FlexColumn}>
-            <Button text className={c.Uploader_IconButton} onClick={cancelUpload}>
+            <div className={c.Uploader_IconButton} onClick={cancelUpload}>
               <ExitIcon />
-            </Button>
+            </div>
             <ErrorIcon className={c.Uploader_ErrorIcon} />
             <div className={c.Uploader_InfoMessage}>
               File extension not supported. Supported file extensions include{' '}

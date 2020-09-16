@@ -45,6 +45,7 @@ const useStyles = createUseStyles(theme => {
     Container: {
       position: 'relative',
       minHeight: '100vh',
+      backgroundColor: theme.colors.white[700],
     },
     Layout: {
       display: 'flex',

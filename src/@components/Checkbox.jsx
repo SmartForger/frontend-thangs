@@ -5,12 +5,60 @@ import classnames from 'classnames'
 
 const useStyles = createUseStyles(theme => {
   return {
-    Checkbox: {
-      background: theme.colors.white[400],
-      border: `1px solid ${theme.colors.grey[300]}`,
+    Container: {
       borderRadius: '.25rem',
+      display: 'block',
+      position: 'relative',
+      paddingLeft: '1rem',
+      marginBottom: '1rem',
+      cursor: 'pointer',
+      fontSize: 22,
+      WebkitUserSelect: 'none',
+      MozUserSelect: 'none',
+      MsUserSelect: 'none',
+      userSelect: 'none',
+
+      '& input': {
+        position: 'absolute',
+        opacity: 0,
+        cursor: 'pointer',
+        height: 0,
+        width: 0,
+      },
+
+      '& input:checked ~ span': {
+        backgroundColor: theme.colors.black[500],
+      },
+
+      '&:hover': {
+        '& input:checked ~ span': {
+          backgroundColor: '#2196F3',
+        },
+        '& input:checked ~ span:after': {
+          display: 'block',
+        },
+      },
+    },
+    Checkmark: {
+      alignItems: 'center',
+      backgroundColor: theme.colors.white[400],
+      border: ({ checked }) => (checked ? 'none' : `1px solid ${theme.colors.grey[300]}`),
+      borderRadius: '.25rem',
+      boxSizing: 'border-box',
+      display: 'flex',
       height: '1rem',
+      justifyContent: 'center',
+      left: 0,
+      position: 'absolute',
+      top: 0,
       width: '1rem',
+    },
+    Checkbox: {
+      position: 'absolute',
+      opacity: 0,
+      cursor: 'pointer',
+      height: 0,
+      width: 0,
     },
     Checkbox__checked: {
       background: theme.colors.black[500],
@@ -19,26 +67,14 @@ const useStyles = createUseStyles(theme => {
         display: 'block',
       },
     },
-    Checkbox_Checkmark: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      height: '1rem',
-      width: '1rem',
-
-      '&:after': {
-        content: '',
-        position: 'absolute',
-        display: 'none',
-      },
-    },
   }
 })
+
 const noop = () => null
 const Checkbox = ({ id, name, checked, onClick = noop }) => {
-  const c = useStyles({})
+  const c = useStyles({ checked })
   return (
-    <label>
+    <label className={c.Container}>
       <input
         className={classnames(c.Checkbox, { [c.Checkbox__checked]: checked })}
         type='checkbox'
@@ -47,7 +83,7 @@ const Checkbox = ({ id, name, checked, onClick = noop }) => {
         checked={checked}
         onClick={onClick}
       />
-      <Checkmark className={c.Checkbox_Checkmark} />
+      <span className={c.Checkmark}>{checked && <Checkmark />}</span>
     </label>
   )
 }
