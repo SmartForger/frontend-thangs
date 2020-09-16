@@ -26,10 +26,14 @@ const useStyles = createUseStyles(theme => {
 
 export const SingleLineBodyText = ({ children, className, light }) => {
   const c = useStyles({ light })
-  return <p className={classnames(className, c.BodyText, c.SingleLine)}>{children}</p>
+  return (
+    <span className={classnames(className, c.BodyText, c.SingleLine)}>{children}</span>
+  )
 }
 
 export const MultiLineBodyText = ({ children, className, light }) => {
   const c = useStyles({ light })
-  return <p className={classnames(className, c.BodyText, c.MultiLine)}>{children}</p>
+  return (
+    <span className={classnames(className, c.BodyText, c.MultiLine)}>{children}</span>
+  )
 }

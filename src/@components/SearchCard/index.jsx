@@ -74,18 +74,28 @@ const useStyles = createUseStyles(theme => {
 const SearchCard = ({ className, search = {} }) => {
   const c = useStyles()
   const { dispatch } = useStoreon()
-  const { modelId, newResultCount = 10, searchTerm = 'model', isActive, id } = search
+  const {
+    attachmentId,
+    id,
+    isActive,
+    newResultCount = 10,
+    phyndexerId,
+    searchTerm = 'model',
+  } = search
   const [enabled, setEnabled] = useState(isActive)
 
-  const handleToggle = useCallback(() => {
-    if (enabled) {
-      dispatch(types.DISABLE_SUBSCRIPTION, { id })
-      setEnabled(false)
-    } else {
-      dispatch(types.ENABLE_SUBSCRIPTION, { id })
-      setEnabled(true)
-    }
-  }, [dispatch, enabled, id])
+  const handleToggle = useCallback(
+    e => {
+      if (e && e.target && e.target.checked) {
+        dispatch(types.ENABLE_SUBSCRIPTION, { id })
+        setEnabled(true)
+      } else {
+        dispatch(types.DISABLE_SUBSCRIPTION, { id })
+        setEnabled(false)
+      }
+    },
+    [dispatch, id]
+  )
 
   const handleDelete = useCallback(() => {
     dispatch(types.DELETE_SUBSCRIPTION, { id })
@@ -94,6 +104,7 @@ const SearchCard = ({ className, search = {} }) => {
   const handleSearch = useCallback(() => {
     dispatch(types.READ_SUBSCRIPTION, { id })
   }, [dispatch, id])
+
   return (
     <div className={classnames(className, c.SearchCard)}>
       <Spacer size='1.5rem' />
@@ -101,11 +112,15 @@ const SearchCard = ({ className, search = {} }) => {
         <Spacer size='1.5rem' />
         <div className={c.SearchCard_TopRow}>
           <Link
-            to={`/search/${searchTerm}${modelId ? `modelId=${modelId}` : ''}`}
+            to={`/search/${searchTerm ? searchTerm : 'model'}${
+              attachmentId ? `?modelId=${attachmentId}&phynId=${phyndexerId}` : ''
+            }`}
             onClick={handleSearch}
           >
             <div className={c.SearchCard_Title}>
-              <TitleTertiary>{modelId ? `#${modelId}` : searchTerm}</TitleTertiary>
+              <TitleTertiary>
+                {attachmentId ? `#${attachmentId}` : searchTerm}
+              </TitleTertiary>
               <Spacer size='.5rem' />
               {newResultCount > 0 && (
                 <>
@@ -125,14 +140,14 @@ const SearchCard = ({ className, search = {} }) => {
         </div>
         <Spacer size='.75rem' />
         <MultiLineBodyText className={c.SearchCard_SearchType}>
-          Text Search
+          {attachmentId ? 'Model Search' : 'Text Search'}
         </MultiLineBodyText>
         <Spacer size='.75rem' />
         <Divider spacing={0} />
         <Spacer size='1rem' />
         <div className={c.SearchCard_ToggleBar}>
           <SingleLineBodyText>Get notified of new models</SingleLineBodyText>
-          <Checkbox checked={enabled} onClick={handleToggle} />
+          <Checkbox checked={enabled} onChange={handleToggle} />
         </div>
         <Spacer size='1rem' />
       </div>

@@ -71,7 +71,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-const Checkbox = ({ id, name, checked, onClick = noop }) => {
+const Checkbox = ({ id, name, checked, onChange = noop }) => {
   const c = useStyles({ checked })
   return (
     <label className={c.Container}>
@@ -81,7 +81,7 @@ const Checkbox = ({ id, name, checked, onClick = noop }) => {
         id={id}
         name={name}
         checked={checked}
-        onClick={onClick}
+        onChange={onChange}
       />
       <span className={c.Checkmark}>{checked && <Checkmark />}</span>
     </label>

@@ -19,5 +19,5 @@ const useStyles = createUseStyles(theme => {
 
 export const LabelText = ({ children, className, small }) => {
   const c = useStyles({ small })
-  return <p className={classnames(className, c.LabelText)}>{children}</p>
+  return <span className={classnames(className, c.LabelText)}>{children}</span>
 }

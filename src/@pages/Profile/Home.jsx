@@ -42,6 +42,10 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       cursor: 'pointer',
       textDecoration: ({ selected }) => (selected ? 'underline' : 'none'),
+
+      '&:hover': {
+        textDecoration: 'underline',
+      },
     },
     Profile_Row: {
       display: 'flex',
