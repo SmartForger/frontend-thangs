@@ -16,17 +16,20 @@ export default store => {
     },
   }))
 
-  store.on(types.SAVE_SUBSCRIPTION, async (_, { user = {}, searchQuery }) => {
+  store.on(types.SAVE_SUBSCRIPTION, async (_, { searchTerm, modelId }) => {
     store.dispatch(types.CHANGE_SEARCH_SUBSCRIPTION_STATUS, {
       status: STATUSES.LOADING,
     })
+    const subscriptionBody = modelId
+      ? {
+          modelId,
+        }
+      : { searchTerm }
+
     const { error } = await api({
       method: 'POST',
       endpoint: 'subscriptions',
-      body: {
-        email: user.email,
-        searchQuery,
-      },
+      body: subscriptionBody,
     })
 
     if (error) {
@@ -35,14 +38,11 @@ export default store => {
         error: error,
       })
     } else {
-      store.dispatch(types.CHANGE_SEARCH_SUBSCRIPTION_STATUS, {
-        status: STATUSES.LOADED,
-      })
-      store.dispatch(types.GET_SUBSCRIPTIONS)
+      store.dispatch(types.FETCH_SUBSCRIPTIONS)
     }
   })
 
-  store.on(types.GET_SUBSCRIPTIONS, async () => {
+  store.on(types.FETCH_SUBSCRIPTIONS, async () => {
     store.dispatch(types.CHANGE_SEARCH_SUBSCRIPTION_STATUS, {
       status: STATUSES.LOADING,
     })
@@ -60,9 +60,56 @@ export default store => {
     }
   })
 
-  store.on(types.READ_SUBSCRIPTION, () => ({}))
+  store.on(types.READ_SUBSCRIPTION, async (_, { id }) => {
+    store.dispatch(types.CHANGE_SEARCH_SUBSCRIPTION_STATUS, {
+      status: STATUSES.LOADING,
+    })
+    const { error } = await api({ method: 'GET', endpoint: `subscriptions/${id}` })
+    if (error) {
+      store.dispatch(types.CHANGE_SEARCH_SUBSCRIPTION_STATUS, {
+        status: STATUSES.FAILURE,
+        error: error,
+      })
+    } else {
+      store.dispatch(types.FETCH_SUBSCRIPTIONS)
+    }
+  })
 
-  store.on(types.SILENCE_SUBSCRIPTION, () => ({}))
+  store.on(types.ENABLE_SUBSCRIPTION, async (_, { id }) => {
+    store.dispatch(types.CHANGE_SEARCH_SUBSCRIPTION_STATUS, {
+      status: STATUSES.LOADING,
+    })
+    const { error } = await api({
+      method: 'POST',
+      endpoint: `subscriptions/${id}/enable`,
+    })
+    if (error) {
+      store.dispatch(types.CHANGE_SEARCH_SUBSCRIPTION_STATUS, {
+        status: STATUSES.FAILURE,
+        error: error,
+      })
+    } else {
+      store.dispatch(types.FETCH_SUBSCRIPTIONS)
+    }
+  })
+
+  store.on(types.DISABLE_SUBSCRIPTION, async (_, { id }) => {
+    store.dispatch(types.CHANGE_SEARCH_SUBSCRIPTION_STATUS, {
+      status: STATUSES.LOADING,
+    })
+    const { error } = await api({
+      method: 'POST',
+      endpoint: `subscriptions/${id}/disable`,
+    })
+    if (error) {
+      store.dispatch(types.CHANGE_SEARCH_SUBSCRIPTION_STATUS, {
+        status: STATUSES.FAILURE,
+        error: error,
+      })
+    } else {
+      store.dispatch(types.FETCH_SUBSCRIPTIONS)
+    }
+  })
 
   store.on(types.DELETE_SUBSCRIPTION, async (_, { id }) => {
     store.dispatch(types.CHANGE_SEARCH_SUBSCRIPTION_STATUS, {
@@ -75,18 +122,7 @@ export default store => {
         error: error,
       })
     } else {
-      const { data, error } = await api({ method: 'GET', endpoint: 'subscriptions' })
-      if (error) {
-        store.dispatch(types.CHANGE_SEARCH_SUBSCRIPTION_STATUS, {
-          status: STATUSES.FAILURE,
-          error: error,
-        })
-      } else {
-        store.dispatch(types.CHANGE_SEARCH_SUBSCRIPTION_STATUS, {
-          status: STATUSES.LOADED,
-          data,
-        })
-      }
+      store.dispatch(types.FETCH_SUBSCRIPTIONS)
     }
   })
 }

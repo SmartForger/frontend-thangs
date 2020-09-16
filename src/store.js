@@ -11,6 +11,7 @@ import userOwnModelsStore from '@store/userOwnModels/store'
 import userLikedModelsStore from '@store/userLikedModels/store'
 import uploadModelStore from '@store/uploadModel/store'
 import searchStore from '@store/search/store'
+import searchSubscriptionsStore from '@store/searchSubscriptions/store'
 import notificationsStore from '@store/notifications/store'
 import modelLikesStore from '@store/modelLikes/store'
 import modelDownloadUrl from '@store/modelDownloadUrl/store'
@@ -31,6 +32,7 @@ const storeParts = [
   userOwnModelsStore,
   userLikedModelsStore,
   searchStore,
+  searchSubscriptionsStore,
   notificationsStore,
   modelLikesStore,
   modelDownloadUrl,
