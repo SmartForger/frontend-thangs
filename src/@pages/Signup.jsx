@@ -341,7 +341,7 @@ const Page = () => {
       <div className={c.Signup_HasAccount}>
         <span>Already have an account?</span>
         <Link to={'/login'}>
-          <Button className={c.Signup_HasAccountButton} text>
+          <Button tertiary className={c.Signup_HasAccountButton}>
             Sign In
           </Button>
         </Link>

@@ -217,7 +217,7 @@ const Login = () => {
           <div className={c.Login_NoAccount}>
             <span>Don&apos;t have an account?</span>
             <Link to={'/signup/alpha'}>
-              <Button className={c.Login_NoAccountButton} text>
+              <Button tertiary className={c.Login_NoAccountButton}>
                 Sign Up
               </Button>
             </Link>

@@ -8,7 +8,7 @@ import { Button } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
-import * as types from '../@constants/storeEventTypes'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(_theme => {
   return {

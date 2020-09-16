@@ -121,7 +121,12 @@ const useStyles = createUseStyles(theme => {
         marginRight: '.25rem',
       },
     },
-    ModelSearchResult_LikedIcon: {
+    ModelSearchResult_Icon: {
+      '& path': {
+        fill: theme.colors.grey[300],
+      },
+    },
+    ModelSearchResult_Icon__liked: {
       '& path': {
         fill: theme.colors.gold[500],
       },
@@ -172,13 +177,13 @@ const ThangsModelDetails = ({
           <div className={c.ModelSearchResult_Row}>
             <div className={c.ModelSearchResult_ActivityIndicators}>
               <span className={c.ModelSearchResult_ActivityCount}>
-                <ChatIcon className={c.ModelSearchResult_Icon} />
+                <ChatIcon />
                 {model.commentsCount}
               </span>
               <span className={c.ModelSearchResult_ActivityCount}>
                 <HeartIcon
                   className={classnames(c.ModelSearchResult_Icon, {
-                    [c.ModelSearchResult_LikedIcon]: isLiked,
+                    [c.ModelSearchResult_Icon__liked]: isLiked,
                   })}
                 />
                 {modelLikeCount}

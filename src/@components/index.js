@@ -1,6 +1,7 @@
 export { default as Breadcrumbs } from './Breadcrumbs'
 export { default as CardCollection } from './CardCollection'
 export { default as CommentsForModel } from './CommentsForModel'
+export { default as Divider } from './Divider'
 export * from './DropdownMenu'
 export { default as FolderCard } from './FolderCard'
 export * from './CreateFolderForm'

@@ -216,11 +216,7 @@ const UserList = ({ users = [], removeUser = noop }) => {
         return (
           <li className={c.TeamForm_Item} key={idx}>
             <UserInline user={teamUser} size={'3rem'} displayEmail>
-              {isOwner && (
-                <Button text onClick={() => removeUser(teamUser)}>
-                  <TrashCanIcon />
-                </Button>
-              )}
+              {isOwner && <TrashCanIcon onClick={() => removeUser(teamUser)} />}
             </UserInline>
           </li>
         )
