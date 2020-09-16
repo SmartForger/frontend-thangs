@@ -66,12 +66,10 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const noop = () => null
 const UserNav = ({
   handleNotificationsClick,
   notificationsIsOpen,
   dispatch,
-  handleSearchShow = noop,
   isLoading,
   user,
   showUser,

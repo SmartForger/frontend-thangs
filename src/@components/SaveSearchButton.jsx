@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import * as R from 'ramda'
-import { useStoreon } from 'storeon/react'
 import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { Button, Spacer } from '@components'
@@ -64,11 +63,9 @@ const hasSavedSearch = (subscriptionData, searchTerm, modelId) => {
 
 const getSubscriptionId = (subscriptionData, searchTerm, modelId) => {
   if (!subscriptionData) return false
-  debugger
   if (modelId) {
     return R.find('id', R.find(R.propEq('modelId', modelId))(subscriptionData))
   }
-  console.log(R.prop('id', R.find(R.propEq('searchTerm', searchTerm))(subscriptionData)))
   return R.prop('id', R.find(R.propEq('searchTerm', searchTerm))(subscriptionData))
 }
 
@@ -79,7 +76,6 @@ const AuthSaveSearchButton = ({
   searchSubscriptions,
   dispatch,
 }) => {
-  console.log(searchSubscriptions)
   const [saved, setSaved] = useState(
     !!hasSavedSearch(searchSubscriptions.data, searchTerm, modelId)
   )
@@ -103,10 +99,9 @@ const AuthSaveSearchButton = ({
   }, [saved, dispatch, modelId, searchTerm, searchSubscriptions])
 
   useEffect(() => {
-    debugger
     setSaved(!!hasSavedSearch(searchSubscriptions.data, searchTerm, modelId))
   }, [modelId, searchSubscriptions, searchTerm])
-  console.log('saved', saved)
+
   return (
     <>
       <Button

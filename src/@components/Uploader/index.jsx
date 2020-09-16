@@ -3,7 +3,7 @@ import { useDropzone } from 'react-dropzone'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import { Button, UploadFrame } from '@components'
+import { UploadFrame } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 

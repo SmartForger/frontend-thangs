@@ -22,8 +22,8 @@ export default store => {
     })
     const subscriptionBody = modelId
       ? {
-          modelId,
-        }
+        modelId,
+      }
       : { searchTerm }
 
     const { error } = await api({

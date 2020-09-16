@@ -2,7 +2,6 @@ import React from 'react'
 import SearchCard from '../SearchCard'
 
 const SearchCards = ({ items = [] }) => {
-  debugger
   return (
     Array.isArray(items) &&
     items.map((search, index) => (

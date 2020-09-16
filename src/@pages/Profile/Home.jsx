@@ -198,7 +198,6 @@ const FoldersContent = ({ folders: foldersAtom }) => {
 
 const SavedSearchesContent = ({ searchSubscriptions = {} }) => {
   const c = useStyles({})
-  debugger
   if (!searchSubscriptions.isLoaded) {
     return <Spinner />
   }

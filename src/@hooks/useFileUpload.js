@@ -37,7 +37,7 @@ const FILE_SIZE_LIMITS = {
   },
 }
 
-const useFileUpload = ({ handleFile }) => {
+const useFileUpload = () => {
   const [file, setFile] = useState(undefined)
   const [errorState, setErrorState] = useState(undefined)
 
