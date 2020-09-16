@@ -16,6 +16,10 @@ import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { lg },
+  } = theme
+
   return {
     SearchCard: {
       position: 'relative',
@@ -24,6 +28,12 @@ const useStyles = createUseStyles(theme => {
       backgroundColor: theme.colors.white[400],
       borderRadius: '.5rem',
       '&:hover': {
+        '& div > span': {
+          [lg]: {
+            opacity: 1,
+          },
+        },
+
         '& a h3': {
           textDecoration: 'underline',
         },
@@ -45,6 +55,10 @@ const useStyles = createUseStyles(theme => {
     },
     SearchCard_RemoveButton: {
       cursor: 'pointer',
+
+      [lg]: {
+        opacity: 0,
+      },
     },
     SearchCard_SearchType: {
       color: theme.colors.grey[300],
