@@ -34,7 +34,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Snackbar_Link: {
-      ...theme.mixins.text.snackbarLinkText,
+      ...theme.text.snackbarLinkText,
     },
     Snackbar_Text: {
       margin: '.75rem 0 .75rem 1rem',
