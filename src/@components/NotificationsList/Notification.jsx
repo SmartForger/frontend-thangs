@@ -128,6 +128,7 @@ const NotificationSnippet = ({
   Icon = noop,
   id,
   actor,
+  altVerb,
   count,
   verb,
   time,
@@ -149,7 +150,7 @@ const NotificationSnippet = ({
           <div className={c.NotificationSnippet_text}>
             {`${actorName} `}
             {countText}
-            <span className={c.NotificationSnippet_verb}>{verb}</span>
+            <span className={c.NotificationSnippet_verb}>{altVerb || verb}</span>
             {` ${targetName}`}
           </div>
           <div className={c.NotificationSnippet_time}>{time}</div>
@@ -168,7 +169,7 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
   const { dispatch } = useStoreon()
   const time = formatDistanceStrict(new Date(timestamp), new Date())
   const displayTime = `${time} ago`
-  let text = ''
+  let altVerb = undefined
   let IconComponent = noop
   let linkTarget = '/'
 
@@ -204,9 +205,10 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
       IconComponent = UploadIcon
       linkTarget = target && target.id ? `/model/${target.id}` : '/'
       break
-    case 'uploaded-new-version':
+    case 'uploadedNewVersion':
       IconComponent = UploadIcon
       linkTarget = target && target.id ? `/model/${target.id}` : '/'
+      altVerb = 'uploaded new version'
       break
     case 'uploaded-to-folder':
       IconComponent = UploadIcon
@@ -226,7 +228,7 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
       actor={actor}
       target={target}
       verb={verb}
-      text={text}
+      altVerb={altVerb}
       linkTarget={linkTarget}
       Icon={IconComponent}
       handleNotificationDelete={handleNotificationDelete}

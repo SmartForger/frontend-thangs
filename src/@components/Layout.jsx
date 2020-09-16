@@ -88,7 +88,7 @@ const useStyles = createUseStyles(theme => {
       paddingLeft: '1.25rem',
       minHeight: '10rem',
       [md]: {
-        width: '15rem',
+        width: '20rem',
       },
     },
     NotificationsList_Wrapper__deactive: {
