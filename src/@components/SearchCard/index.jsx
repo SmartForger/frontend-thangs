@@ -93,9 +93,9 @@ const SearchCard = ({ className, search = {} }) => {
             <div className={c.SearchCard_Title}>
               <TitleTertiary>{modelId ? `#${modelId}` : searchTerm}</TitleTertiary>
               <Spacer size='.5rem' />
-              {newResultCount === 0 && (
+              {newResultCount > 0 && (
                 <>
-                  <Pill>100 New</Pill>
+                  <Pill>{newResultCount} New</Pill>
                   <Spacer size='.5rem' />
                 </>
               )}
