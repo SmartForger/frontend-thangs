@@ -9,7 +9,6 @@ import ModelSearchResults from '@components/CardCollection/ModelSearchResults'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 import Snackbar from '@components/Snackbar'
-import { useFileUpload } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -282,11 +281,6 @@ const Page = () => {
     [dispatch]
   )
 
-  const { UploadZone } = useFileUpload({
-    setFile,
-    file,
-  })
-
   const thangsModels = (thangs && thangs.data && thangs.data.matches) || []
   const phyndexerModels = (phyndexer && phyndexer.data && phyndexer.data.matches) || []
   const resultCount = phyndexerModels.length + thangsModels.length
@@ -313,11 +307,7 @@ const Page = () => {
         </div>
         {searchQuery ? (
           <>
-            {!modelId && (phyndexer.isLoaded || thangs.isLoaded) && (
-              <UploadZone>
-                <Snackbar />
-              </UploadZone>
-            )}
+            {!modelId && (phyndexer.isLoaded || thangs.isLoaded) && <Snackbar />}
             <ThangsSearchResult
               isLoading={thangs.isLoading}
               isError={thangs.isError}
