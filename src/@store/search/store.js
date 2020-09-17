@@ -1,3 +1,4 @@
+import * as R from 'ramda'
 import api from '@services/api'
 import { storageService, intervalRequest } from '@services'
 import apiForChain from '@services/api/apiForChain'
@@ -153,6 +154,19 @@ export default store => {
 
       let uploadedUrlData
 
+      const emptyMatchesTypes = []
+
+      const handleFinish = (type, props) => {
+        emptyMatchesTypes.push(type)
+        if (
+          (R.path(['matches', 'length'], props) || 0) > 0 ||
+          (emptyMatchesTypes.includes(ATOMS.PHYNDEXER) &&
+          emptyMatchesTypes.includes(ATOMS.THANGS))
+        ) {
+          onFinish(props)
+        }
+      }
+
       apiForChain({
         method: 'GET',
         endpoint: `models/upload-url?fileName=${file.name}`,
@@ -176,18 +190,27 @@ export default store => {
           })
         )
         .then(({ data: uploadedData }) => {
-          const { newPhyndexerId, newModelId } = uploadedData
-
+          const { newPhyndexerId: phyndexerId, newModelId: modelId } = uploadedData
+        
           store.dispatch(types.GET_RELATED_MODELS_VIA_PHYNDEXER, {
-            newPhyndexerId,
-            newModelId,
-            onFinish,
+            newPhyndexerId: phyndexerId,
+            newModelId: modelId,
+            onFinish: props => {
+              handleFinish(ATOMS.PHYNDEXER, {...props, phyndexerId, modelId })
+            },
             onNewModelId,
           })
 
+          store.dispatch(types.GET_RELATED_MODELS_VIA_THANGS, {
+            modelId,
+            onFinish: props => {
+              handleFinish(ATOMS.THANGS, {...props, phyndexerId, modelId })
+            },
+          })
+
           pendo.track('Model Search Started', {
-            phyndexerId: newPhyndexerId,
-            modelId: `${newModelId}`,
+            phyndexerId,
+            modelId: `${modelId}`,
           })
         })
         .catch(error => {
@@ -278,7 +301,7 @@ export default store => {
           status: STATUSES.FAILURE,
           data: error,
         })
-        onFinish({ modelId: newModelId })
+        onFinish({ modelId: newModelId, matches: [] })
         return onError(error)
       } else {
         store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
@@ -298,7 +321,11 @@ export default store => {
             numOfMatches: (data && data.matches && data.matches.length) || 0,
           }
         )
-        onFinish({ modelId: newModelId, phyndexerId: newPhyndexerId })
+        onFinish({
+          modelId: newModelId,
+          phyndexerId: newPhyndexerId,
+          matches: data && data.matches,
+        })
       }
     }
   )

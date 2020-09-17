@@ -246,7 +246,7 @@ const Page = () => {
         searchTerm: searchQuery,
       })
     }
-    if (!related && modelId && phynId) {
+    if (!related && modelId && phynId && !phyndexer.isLoaded && !thangs.isLoaded ) {
       dispatch(types.GET_RELATED_MODELS_VIA_THANGS, {
         modelId: modelId,
       })
