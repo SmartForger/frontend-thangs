@@ -112,7 +112,7 @@ const signup = async ({
 }
 
 const googleAuth = async ({ code }) => {
-  const authUrl = `${process.env.REACT_APP_API_KEY}googleAuth`
+  const authUrl = `${process.env.REACT_APP_API_KEY}auth/google`
   const requestOptions = {
     url: authUrl,
     method: 'POST',
