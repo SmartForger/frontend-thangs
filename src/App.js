@@ -8,6 +8,7 @@ import ReactPixel from 'react-facebook-pixel'
 import { authenticationService } from '@services'
 import { history } from './history'
 import {
+  Auth,
   ConfirmPasswordReset,
   EditProfile,
   Home,
@@ -36,12 +37,8 @@ import { FlashContextProvider } from '@components/Flash'
 import { StoreContext } from 'storeon/react'
 import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
-import { usePageMeta, usePageTheming } from '@hooks'
+import { usePageMeta, usePageTheming, useQuery } from '@hooks'
 import store from 'store'
-
-const useQuery = location => {
-  return new URLSearchParams(location.search)
-}
 
 const initializeAnalytics = ({ userIdentified, pendoInitialized, inviteCode }) => {
   const user = authenticationService.getCurrentUser()
@@ -134,6 +131,7 @@ const App = () => {
               />
               <Route path='/upload' component={routeRequiresAuth(Upload)} />
               <Route path='/:userName' component={Profile} />
+              <Route path='/authenticate/google' component={Auth} />
               <Route path='/404' component={Page404} status={404} />
               <Route path='*' component={Page404} status={404} />
             </Switch>

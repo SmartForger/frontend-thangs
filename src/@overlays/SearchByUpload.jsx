@@ -83,7 +83,7 @@ const SearchByUpload = () => {
         dispatch(types.GET_RELATED_MODELS, {
           modelId,
           onFinish: () => {
-            dispatch('close-overlay')
+            dispatch(types.CLOSE_OVERLAY)
             history.push(`/search/${searchTerm}?modelId=${modelId}&related=true`)
           },
         })
@@ -107,7 +107,7 @@ const SearchByUpload = () => {
         },
         onNewModelId: ({ newModelId }) => setNewModelId(newModelId),
         onFinish: ({ modelId, phyndexerId }) => {
-          dispatch('close-overlay')
+          dispatch(types.CLOSE_OVERLAY)
           history.push(
             `/search/${file ? file.name : ''}?modelId=${modelId}&phynId=${phyndexerId}`
           )

@@ -64,7 +64,7 @@ const hasSavedSearch = (subscriptionData, searchTerm, modelId) => {
 const getSubscriptionId = (subscriptionData, searchTerm, modelId) => {
   if (!subscriptionData) return false
   if (modelId) {
-    return R.find('id', R.find(R.propEq('attachmentId', modelId))(subscriptionData))
+    return R.find('id', R.find(R.propEq('modelId', modelId))(subscriptionData))
   }
   return R.prop('id', R.find(R.propEq('searchTerm', searchTerm))(subscriptionData))
 }

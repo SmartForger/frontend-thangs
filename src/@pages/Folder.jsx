@@ -9,6 +9,7 @@ import {
   useFlashNotification,
   WithFlash,
 } from '@components'
+import { useQuery } from '@hooks'
 import { Message404 } from './404'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
@@ -42,10 +43,6 @@ const Folder = ({ folder, modelCount }) => {
       </WithFlash>
     </div>
   )
-}
-
-const useQuery = location => {
-  return new URLSearchParams(location.search)
 }
 
 const Page = () => {

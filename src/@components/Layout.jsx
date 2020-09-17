@@ -9,6 +9,7 @@ import {
   PasswordReset,
   FolderManagement,
   ReportModel,
+  Signin,
   Signup,
 } from '@overlays'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
@@ -124,6 +125,7 @@ const overlayTemplates = {
   passwordReset: PasswordReset,
   folderManagement: FolderManagement,
   reportModel: ReportModel,
+  signIn: Signin,
   signUp: Signup,
 }
 
@@ -164,7 +166,11 @@ const Layout = ({
   }, [overlay])
 
   return (
-    <div className={c.Container}>
+    <div
+      className={classnames(c.Container, {
+        [c.Layout_blur]: overlay.isOpen && !overlay.isHidden,
+      })}
+    >
       <Header
         onNotificationsClick={onNotificationsClick}
         notificationsIsOpen={notificationsIsOpen}
@@ -181,11 +187,7 @@ const Layout = ({
           <OverlayView {...overlay.overlayData} />
         </Overlay>
       )}
-      <div
-        className={classnames(c.Layout_Content, {
-          [c.Layout_blur]: overlay.isOpen && !overlay.isHidden,
-        })}
-      >
+      <div className={c.Layout_Content}>
         {Hero && <Hero />}
         {bannerText && <Banner>{bannerText}</Banner>}
         <div className={c.Layout}>

@@ -3,7 +3,7 @@ import { Link, useHistory, useParams, useLocation } from 'react-router-dom'
 import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
 import { Button, Spinner, TextInput, Layout } from '@components'
-import { useForm } from '@hooks'
+import { useForm, useQuery } from '@hooks'
 import { authenticationService } from '@services'
 import { ReactComponent as UserRegistrationIcon } from '@svg/user-registration.svg'
 import { createUseStyles } from '@style'
@@ -99,10 +99,6 @@ const signUpSchema = Joi.object({
   last_name: Joi.string().required(),
   username: Joi.string().required(),
 })
-
-const useQuery = location => {
-  return new URLSearchParams(location.search)
-}
 
 const Page = () => {
   const location = useLocation()
@@ -342,7 +338,7 @@ const Page = () => {
         <span>Already have an account?</span>
         <Link to={'/login'}>
           <Button tertiary className={c.Signup_HasAccountButton}>
-            Sign In
+            Log In
           </Button>
         </Link>
       </div>

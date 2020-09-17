@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react'
 import { useLocation, useHistory, Link } from 'react-router-dom'
 import Joi from '@hapi/joi'
 import { authenticationService } from '@services'
-import { useForm } from '@hooks'
+import { useForm, useQuery } from '@hooks'
 import { TextInput, Spinner, Button, Layout, Flash } from '@components'
 import { ReactComponent as BackArrow } from '@svg/back-arrow-icon.svg'
 import { ReactComponent as LoginIcon } from '@svg/user-login.svg'
@@ -95,10 +95,6 @@ const loginSchema = Joi.object({
   password: Joi.string().required(),
 })
 
-const useQuery = location => {
-  return new URLSearchParams(location.search)
-}
-
 const Login = () => {
   const [waiting, setWaiting] = useState(false)
   const [loginErrorMessage, setLoginErrorMessage] = useState(null)
@@ -163,7 +159,7 @@ const Login = () => {
           )}
           <LoginIcon />
           <h1 className={c.Login_PageHeader}>
-            Sign In {waiting && <Spinner className={c.Login_Spinner} size='30' />}
+            Log In {waiting && <Spinner className={c.Login_Spinner} size='30' />}
           </h1>
           {!!loginErrorMessage && (
             <h4 className={c.Login_ErrorText} data-cy='login-error'>
@@ -209,7 +205,7 @@ const Login = () => {
             <div className={c.Login_ButtonRow}>
               <div className={c.Login_ButtonWrapper}>
                 <Button className={c.Login_Button} type='submit'>
-                  Sign In
+                  Log In
                 </Button>
               </div>
             </div>
@@ -218,7 +214,7 @@ const Login = () => {
             <span>Don&apos;t have an account?</span>
             <Link to={'/signup/alpha'}>
               <Button tertiary className={c.Login_NoAccountButton}>
-                Sign Up
+                Log Up
               </Button>
             </Link>
           </div>

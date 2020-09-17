@@ -10,7 +10,7 @@ import {
   SaveSearchButton,
   Snackbar,
 } from '@components'
-import { useLocalStorage } from '@hooks'
+import { useLocalStorage, useQuery } from '@hooks'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import ModelSearchResults from '@components/CardCollection/ModelSearchResults'
@@ -218,10 +218,6 @@ const ThangsSearchResult = ({
       ) : null}
     </div>
   )
-}
-
-const useQuery = location => {
-  return new URLSearchParams(location.search)
 }
 
 const Page = () => {

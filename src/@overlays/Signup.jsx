@@ -1,23 +1,27 @@
 import React, { useCallback, useState } from 'react'
-import { Link, useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
 import {
   Button,
+  Divider,
   MultiLineBodyText,
   Input,
+  LabelText,
   TitleSecondary,
   TitleTertiary,
+  SingleLineBodyText,
   Spacer,
 } from '@components'
-import { useForm } from '@hooks'
+import { useForm, useGoogleLogin } from '@hooks'
 import { authenticationService } from '@services'
 import { ReactComponent as BackgroundSvg } from '@svg/overlay-background.svg'
 import { ReactComponent as CheckIcon } from '@svg/icon-check.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
+import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -41,7 +45,7 @@ const useStyles = createUseStyles(theme => {
         alignItems: 'flex-start',
 
         [md]: {
-          width: '50%',
+          width: ({ showPromo }) => (showPromo ? '50%' : '100%'),
         },
       },
     },
@@ -92,11 +96,13 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       alignItems: 'center',
       marginBottom: '1.5rem',
+      justifyContent: 'center',
     },
     Signup_HasAccountButton: {
       padding: '.5rem',
-      color: theme.colors.gold[500],
+      color: theme.colors.blue[500],
       fontWeight: 'bold',
+      textDecoration: 'underline',
     },
     Signup_TermsCheckbox: {
       display: 'flex',
@@ -131,6 +137,7 @@ const useStyles = createUseStyles(theme => {
       top: '2rem',
       right: '2rem',
       zIndex: 4,
+      cursor: 'pointer',
 
       '& path': {
         fill: theme.colors.white[400],
@@ -138,6 +145,11 @@ const useStyles = createUseStyles(theme => {
           fill: theme.colors.black[500],
         },
       },
+    },
+    Signup_withGoogleButton: {
+      border: `1px solid ${theme.colors.black[500]}`,
+      backgroundColor: 'transparent',
+      width: '100%',
     },
   }
 })
@@ -214,10 +226,11 @@ const SignUpPromo = ({ c, titleMessage }) => {
   )
 }
 
-const SignUpForm = ({ c, closeOverlay }) => {
+const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo }) => {
   const [waiting, setWaiting] = useState(false)
   const [signupErrorMessage, setSignupErrorMessage] = useState(null)
   const [invalidFields, setInvalidFields] = useState([])
+  const { googleLoginUrl } = useGoogleLogin()
   const initialState = {
     email: '',
     password: '',
@@ -255,23 +268,33 @@ const SignUpForm = ({ c, closeOverlay }) => {
     if (!EmailValidator.validate(inputState.email)) {
       setInvalidFields(['email'])
       setSignupErrorMessage('Please enter a valid e-mail address')
+      dispatch(types.SET_OVERLAY_DATA, {
+        overlayData: {
+          shake: true,
+        },
+      })
       return false
     } else {
       setFieldToValid('email')
       return true
     }
-  }, [inputState, setFieldToValid])
+  }, [dispatch, inputState, setFieldToValid])
 
   const validatePasswords = useCallback(() => {
     if (inputState.confirmPass !== inputState.password) {
       setInvalidFields(['password'])
       setSignupErrorMessage('Please ensure that both passwords match')
+      dispatch(types.SET_OVERLAY_DATA, {
+        overlayData: {
+          shake: true,
+        },
+      })
       return false
     } else {
       setFieldToValid('password')
       return true
     }
-  }, [inputState, setFieldToValid])
+  }, [dispatch, inputState, setFieldToValid])
 
   const handleSignUp = useCallback(async () => {
     setWaiting(true)
@@ -289,6 +312,11 @@ const SignUpForm = ({ c, closeOverlay }) => {
 
     setWaiting(false)
     if (error) {
+      dispatch(types.SET_OVERLAY_DATA, {
+        overlayData: {
+          shake: true,
+        },
+      })
       setSignupErrorMessage(error.message)
     } else {
       const { error: loginError } = await authenticationService.login({
@@ -298,15 +326,23 @@ const SignUpForm = ({ c, closeOverlay }) => {
       if (loginError) return setSignupErrorMessage(error)
       return window.location.reload()
     }
-  }, [inputState, validateEmail, validatePasswords])
+  }, [dispatch, inputState, validateEmail, validatePasswords])
 
   return (
     <div className={classnames(c.Signup_Row, c.Signup_SignUpForm)}>
       <Spacer size='4rem' />
       <div className={c.Signup_FormWrapper}>
         <Spacer size='4rem' />
-        <TitleTertiary>Sign Up For Free</TitleTertiary>
+        <TitleTertiary>{showPromo ? 'Sign Up For Free' : 'Create Account'}</TitleTertiary>
         <Spacer size='2rem' />
+        <a href={googleLoginUrl}>
+          <Button secondary className={c.Signup_withGoogleButton}>
+            <GoogleLogo />
+            <Spacer size={'.5rem'} />
+            <LabelText>Sign up with Google</LabelText>
+          </Button>
+        </a>
+        <Divider spacing={'1.5rem'} />
         <form onSubmit={onFormSubmit(handleSignUp)} data-cy='signup-form'>
           {!!signupErrorMessage && (
             <>
@@ -317,26 +353,6 @@ const SignUpForm = ({ c, closeOverlay }) => {
             </>
           )}
           <div className={c.Signup_Form}>
-            <Input
-              id='first-name-input'
-              name='firstName'
-              label='First Name'
-              maxLength='30'
-              value={inputState && inputState.firstName}
-              onChange={handleOnInputChange}
-              required
-            />
-            <Spacer size='1rem' />
-            <Input
-              id='last-name-input'
-              name='lastName'
-              label='Last Name'
-              maxLength='150'
-              value={inputState && inputState.lastName}
-              onChange={handleOnInputChange}
-              required
-            />
-            <Spacer size='2rem' />
             <Input
               id='username-input'
               name='username'
@@ -359,7 +375,7 @@ const SignUpForm = ({ c, closeOverlay }) => {
               validator={validateEmail}
               required
             />
-            <Spacer size='2rem' />
+            <Spacer size='1rem' />
             <Input
               id='password-input'
               name='password'
@@ -411,17 +427,19 @@ const SignUpForm = ({ c, closeOverlay }) => {
           </div>
           <Spacer size='1rem' />
           <Button className={c.Signup_Button} type='submit' disabled={waiting}>
-            {waiting ? 'Processing...' : 'Sign Up'}
+            {waiting ? 'Processing...' : 'Register'}
           </Button>
         </form>
-        <Spacer size='.5rem' />
+        <Divider spacing={'1.5rem'} />
         <div className={c.Signup_HasAccount}>
-          <span>Already have an account?</span>
-          <Link to={'/login'} onClick={closeOverlay}>
-            <Button className={c.Signup_HasAccountButton} text>
-              Sign In
-            </Button>
-          </Link>
+          <SingleLineBodyText>Already a member?</SingleLineBodyText>
+          <Button
+            tertiary
+            className={c.Signup_HasAccountButton}
+            onClick={handleSignInClick}
+          >
+            Log In
+          </Button>
         </div>
       </div>
       <Spacer size='4rem' />
@@ -429,22 +447,32 @@ const SignUpForm = ({ c, closeOverlay }) => {
   )
 }
 
-const Signup = ({ titleMessage }) => {
-  const c = useStyles()
-  const history = useHistory()
+const Signup = ({ titleMessage, showPromo = true }) => {
+  const c = useStyles({ showPromo })
   const { dispatch } = useStoreon()
   const closeOverlay = useCallback(() => {
-    dispatch('close-overlay')
-    const currentPath = history.location.pathname
-    localStorage.setItem('routeBeforeSignIn', currentPath)
-  }, [dispatch, history])
+    dispatch(types.CLOSE_OVERLAY)
+  }, [dispatch])
+  const handleSignInClick = useCallback(() => {
+    dispatch(types.OPEN_OVERLAY, {
+      overlayName: 'signIn',
+      overlayData: {
+        animateIn: true,
+        windowed: true,
+        showPromo: false,
+      },
+    })
+  }, [dispatch])
   return (
     <div className={c.Signup}>
-      <Button text className={c.Signup_ExitButton} onClick={closeOverlay}>
-        <ExitIcon />
-      </Button>
-      <SignUpPromo c={c} titleMessage={titleMessage} />
-      <SignUpForm c={c} closeOverlay={closeOverlay} />
+      <ExitIcon className={c.Signup_ExitButton} onClick={closeOverlay} />
+      {showPromo && <SignUpPromo c={c} titleMessage={titleMessage} />}
+      <SignUpForm
+        c={c}
+        dispatch={dispatch}
+        handleSignInClick={handleSignInClick}
+        showPromo={showPromo}
+      />
       <Spacer className={c.Signup_MobileSpacer} size='4rem' />
     </div>
   )

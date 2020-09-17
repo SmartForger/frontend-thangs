@@ -25,4 +25,13 @@ export default store => {
       overlayData: null,
     },
   }))
+  store.on(types.SET_OVERLAY_DATA, (state, { overlayData }) => ({
+    overlay: {
+      ...state.overlay,
+      overlayData: {
+        ...state.overlay.overlayData,
+        ...overlayData,
+      },
+    },
+  }))
 }

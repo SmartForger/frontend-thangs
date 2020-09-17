@@ -51,6 +51,7 @@ export const UPDATE_TEAMS = 'update-teams'
 /* Overlay Store Events */
 export const OPEN_OVERLAY = 'open-overlay'
 export const CLOSE_OVERLAY = 'close-overlay'
+export const SET_OVERLAY_DATA = 'set-overlay-data'
 /* Notification Store Events */
 export const FETCH_NOTIFICATIONS = 'fetch-notifications'
 export const READ_NOTIFICATIONS = 'read-notifications'

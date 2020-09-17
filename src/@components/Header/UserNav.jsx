@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 import * as R from 'ramda'
 
@@ -77,6 +76,28 @@ const UserNav = ({
   const c = useStyles()
   const t = useTranslations({})
 
+  const handleSignUp = () => {
+    dispatch(types.OPEN_OVERLAY, {
+      overlayName: 'signUp',
+      overlayData: {
+        animateIn: true,
+        windowed: true,
+        showPromo: false,
+      },
+    })
+  }
+
+  const handleSignIn = () => {
+    dispatch(types.OPEN_OVERLAY, {
+      overlayName: 'signIn',
+      overlayData: {
+        animateIn: true,
+        windowed: true,
+        showPromo: false,
+      },
+    })
+  }
+
   if (isLoading) {
     return <div className={c.UserNav_Row}></div>
   }
@@ -107,17 +128,16 @@ const UserNav = ({
 
   return (
     <div className={classnames(c.UserNav_Row, c.UserNav_ButtonsRow)}>
-      <Link to='/signup/alpha' onClick={() => dispatch(types.CLOSE_OVERLAY)}>
-        <Button
-          tertiary
-          className={classnames(c.UserNav_TextButton, c.UserNav_SignUpButton)}
-        >
-          {t('header.signUpButtonText')}
-        </Button>
-      </Link>
-      <Link to='/login' onClick={() => dispatch(types.CLOSE_OVERLAY)}>
-        <Button className={c.UserNav_Button}>{t('header.signInButtonText')}</Button>
-      </Link>
+      <Button
+        tertiary
+        className={classnames(c.UserNav_TextButton, c.UserNav_SignUpButton)}
+        onClick={handleSignUp}
+      >
+        {t('header.signUpButtonText')}
+      </Button>
+      <Button className={c.UserNav_Button} onClick={handleSignIn}>
+        {t('header.signInButtonText')}
+      </Button>
       <Spacer size='1rem' className={c.UserNav_DesktopOnly} />
     </div>
   )

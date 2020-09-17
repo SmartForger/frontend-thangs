@@ -10,12 +10,28 @@ ReactModal.setAppElement('#root')
 
 const useStyles = createUseStyles(_theme => {
   return {
+    '@keyframes shake': {
+      '10%, 90%': {
+        transform: 'translate3d(-1px, 0, 0)',
+      },
+      '20%, 80%': {
+        transform: 'translate3d(2px, 0, 0)',
+      },
+      '30%, 50%, 70%': {
+        transform: 'translate3d(-4px, 0, 0)',
+      },
+      '40%, 60%': {
+        transform: 'translate3d(4px, 0, 0)',
+      },
+    },
     Overlay: {
       position: 'relative',
       overflow: 'auto',
       outline: 'none',
       width: '100%',
       height: '100%',
+      display: 'flex',
+      alignItems: 'center',
     },
     Overlay_CloseButton: {
       position: 'absolute',
@@ -26,8 +42,13 @@ const useStyles = createUseStyles(_theme => {
     Overlay_Content: {
       position: 'relative',
       width: '90%',
-      margin: '6rem auto 0',
-      maxWidth: ({ windowed }) => (windowed ? '49.75rem' : '32rem'),
+      margin: '0 auto',
+      maxWidth: ({ windowed, showPromo }) =>
+        !showPromo && windowed
+          ? '22.875rem'
+          : showPromo && windowed
+          ? '45.75rem'
+          : '32rem',
       transition: 'all 450ms',
       opacity: ({ animateIn }) => (animateIn ? 0 : 1),
       top: ({ animateIn }) => (animateIn ? '30px' : 0),
@@ -35,6 +56,12 @@ const useStyles = createUseStyles(_theme => {
     Overlay_Content__visible: {
       opacity: '1 !important',
       top: '0 !important',
+    },
+    Overlay__shake: {
+      animation: '$shake 0.82s cubic-bezier(.36,.07,.19,.97) both',
+      transform: 'translate3d(0, 0, 0)',
+      backfaceVisibility: 'hidden',
+      perspective: '1000px',
     },
   }
 })
@@ -45,11 +72,13 @@ const Overlay = ({
   onOverlayClose = noop,
   windowed = false,
   animateIn = false,
+  showPromo = true,
+  shake = false,
   ...props
 }) => {
   const [isVisible, setIsVisible] = useState(false)
   const { dispatch } = useStoreon()
-  const c = useStyles({ windowed, animateIn })
+  const c = useStyles({ windowed, animateIn, showPromo })
   useEffect(() => {
     document.body.scrollTop = 0
     document.documentElement.scrollTop = 0
@@ -60,11 +89,11 @@ const Overlay = ({
 
   return (
     <ReactModal
-      className={classnames(className, c.Overlay)}
+      className={classnames(className, c.Overlay, { [c.Overlay__shake]: shake })}
       style={{
         overlay: {
           position: 'fixed',
-          top: '6.125rem',
+          top: 0,
           left: 0,
           right: 0,
           bottom: 0,

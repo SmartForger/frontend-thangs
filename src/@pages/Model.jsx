@@ -408,7 +408,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
       return () => clearTimeout(timerRef.current)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [isOpen])
 
   if (isLoading || !isLoaded) {
     return <Spinner />

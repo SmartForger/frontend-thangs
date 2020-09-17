@@ -75,7 +75,7 @@ const SearchCard = ({ className, search = {} }) => {
   const c = useStyles()
   const { dispatch } = useStoreon()
   const {
-    attachmentId,
+    modelId,
     id,
     isActive,
     newResultCount = 10,
@@ -113,14 +113,12 @@ const SearchCard = ({ className, search = {} }) => {
         <div className={c.SearchCard_TopRow}>
           <Link
             to={`/search/${searchTerm ? searchTerm : 'model'}${
-              attachmentId ? `?modelId=${attachmentId}&phynId=${phyndexerId}` : ''
+              modelId ? `?modelId=${modelId}&phynId=${phyndexerId}` : ''
             }`}
             onClick={handleSearch}
           >
             <div className={c.SearchCard_Title}>
-              <TitleTertiary>
-                {attachmentId ? `#${attachmentId}` : searchTerm}
-              </TitleTertiary>
+              <TitleTertiary>{modelId ? `#${modelId}` : searchTerm}</TitleTertiary>
               <Spacer size='.5rem' />
               {newResultCount > 0 && (
                 <>
@@ -140,7 +138,7 @@ const SearchCard = ({ className, search = {} }) => {
         </div>
         <Spacer size='.75rem' />
         <MultiLineBodyText className={c.SearchCard_SearchType}>
-          {attachmentId ? 'Model Search' : 'Text Search'}
+          {modelId ? 'Model Search' : 'Text Search'}
         </MultiLineBodyText>
         <Spacer size='.75rem' />
         <Divider spacing={0} />
