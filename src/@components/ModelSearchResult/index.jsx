@@ -7,7 +7,7 @@ import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import { Button, Card, ModelThumbnail, UserInline } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import useCurrentUserId from '../../@hooks/useCurrentUserId'
+import { useCurrentUserId } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {

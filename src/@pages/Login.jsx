@@ -99,9 +99,7 @@ const Login = () => {
   const [waiting, setWaiting] = useState(false)
   const [loginErrorMessage, setLoginErrorMessage] = useState(null)
   const history = useHistory()
-  const location = useLocation()
-  const query = useQuery(location)
-  const sessionExpired = useMemo(() => query.get('sessionExpired'), [query])
+  const sessionExpired = useQuery('sessionExpired')
   const c = useStyles()
   const isFromThePortal = () =>
     history.location && history.location.state && history.location.state.prevPath

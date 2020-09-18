@@ -15,8 +15,8 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const AnchorButton = ({ children, className, onClick, ...props }) => {
-  const c = useStyles(props)
+const AnchorButton = ({ children, className, onClick }) => {
+  const c = useStyles({})
   return (
     <button className={classnames(className, c.AnchorButton)} onClick={onClick}>
       {children}

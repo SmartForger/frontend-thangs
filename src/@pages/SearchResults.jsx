@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
 import {
@@ -224,11 +224,9 @@ const Page = () => {
   const c = useStyles()
   const [currentUser] = useLocalStorage('currentUser', null)
   const { searchQuery } = useParams()
-  const location = useLocation()
-  const query = useQuery(location)
-  const modelId = useMemo(() => query.get('modelId'), [query])
-  const phynId = useMemo(() => query.get('phynId'), [query])
-  const related = useMemo(() => query.get('related'), [query])
+  const modelId = useQuery('modelId')
+  const phynId = useQuery('phynId')
+  const related = useQuery('related')
   const { dispatch, searchResults, searchSubscriptions } = useStoreon(
     'searchResults',
     'searchSubscriptions'

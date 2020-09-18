@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import * as R from 'ramda'
-import { useParams, useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import {
   Breadcrumbs,
   CardCollection,
@@ -46,9 +46,7 @@ const Folder = ({ folder, modelCount }) => {
 }
 
 const Page = () => {
-  const location = useLocation()
-  const query = useQuery(location)
-  const inviteCode = useMemo(() => query.get('inviteCode'), [query])
+  const inviteCode = useQuery('inviteCode')
   const { folderId } = useParams()
   const { dispatch, folders } = useStoreon('folders')
   const { navigateWithFlash } = useFlashNotification()

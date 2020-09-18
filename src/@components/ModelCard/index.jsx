@@ -8,7 +8,7 @@ import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
 import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import { Button, Card, ModelThumbnail, UserInline, DeleteModel } from '@components'
 import { createUseStyles } from '@style'
-import useCurrentUserId from '../../@hooks/useCurrentUserId'
+import { useCurrentUserId } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {

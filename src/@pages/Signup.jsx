@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useState } from 'react'
-import { Link, useHistory, useParams, useLocation } from 'react-router-dom'
+import React, { useCallback, useState } from 'react'
+import { Link, useHistory, useParams } from 'react-router-dom'
 import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
 import { Button, Spinner, TextInput, Layout } from '@components'
@@ -101,10 +101,8 @@ const signUpSchema = Joi.object({
 })
 
 const Page = () => {
-  const location = useLocation()
-  const query = useQuery(location)
-  const redirectUrl = useMemo(() => query.get('redirectUrl'), [query])
-  const inviteEmail = useMemo(() => query.get('email'), [query])
+  const redirectUrl = useQuery('redirectUrl')
+  const inviteEmail = useQuery('email')
   const [waiting, setWaiting] = useState(false)
   const [signupErrorMessage, setSignupErrorMessage] = useState(null)
   const [invalidFields, setInvalidFields] = useState([])
