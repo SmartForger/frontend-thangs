@@ -246,7 +246,7 @@ const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
     if (isAuthedUser) {
       downloadModel()
     } else {
-      openSignupOverlay('Join to download.')
+      openSignupOverlay('Join to download.', 'Download')
       pendo.track('SignUp Prompt Overlay', { source: 'Download' })
     }
   }, [downloadModel, isAuthedUser, openSignupOverlay])
@@ -295,7 +295,7 @@ const VersionLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
         overlayData: { prevModelId: modelId },
       })
     } else {
-      openSignupOverlay('Join to Like, Follow, Share.')
+      openSignupOverlay('Join to Like, Follow, Share.', 'Version Upload')
       pendo.track('SignUp Prompt Overlay', { source: 'Version Upload' })
     }
   }, [isAuthedUser, dispatch, modelId, openSignupOverlay])
@@ -382,13 +382,14 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   const { dispatch, overlay } = useStoreon('overlay')
   const { isOpen } = overlay
   const openSignupOverlay = useCallback(
-    titleMessage => {
+    (titleMessage, source) => {
       dispatch(types.OPEN_OVERLAY, {
         overlayName: 'signUp',
         overlayData: {
           animateIn: true,
           windowed: true,
           titleMessage,
+          source,
         },
       })
       signUpShown.current = true
@@ -401,7 +402,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
     document.documentElement.scrollTop = 0
     if (!currentUser && !isOpen && !signUpShown.current) {
       timerRef.current = setTimeout(() => {
-        openSignupOverlay()
+        openSignupOverlay('Where Thangs happen', 'Timer')
         pendo.track('SignUp Prompt Overlay - Timer')
       }, 20000)
 

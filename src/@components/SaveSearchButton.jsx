@@ -137,7 +137,7 @@ const AuthSaveSearchButton = ({
 const noop = () => null
 const UnauthSaveSearchButton = ({ c, openSignupOverlay = noop }) => {
   const handleClick = useCallback(() => {
-    openSignupOverlay('Join to Like, Follow, Share.')
+    openSignupOverlay('Join to Like, Follow, Share.', 'Like')
     pendo.track('SignUp Prompt Overlay', { source: 'Like' })
   }, [openSignupOverlay])
 

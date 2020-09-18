@@ -83,6 +83,7 @@ const UserNav = ({
         animateIn: true,
         windowed: true,
         showPromo: false,
+        source: 'Header',
       },
     })
   }

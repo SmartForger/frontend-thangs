@@ -93,7 +93,7 @@ const NewModelCommentForm = ({ modelId, openSignupOverlay = noop }) => {
   const handleClick = useCallback(
     e => {
       e.preventDefault()
-      openSignupOverlay('Join and start collaborating.')
+      openSignupOverlay('Join and start collaborating.', 'Comment')
       pendo.track('SignUp Prompt Overlay', { source: 'Comment' })
     },
     [openSignupOverlay]

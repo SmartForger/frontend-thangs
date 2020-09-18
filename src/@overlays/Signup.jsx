@@ -22,6 +22,7 @@ import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
+import * as pendo from '@vendors/pendo'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -226,7 +227,7 @@ const SignUpPromo = ({ c, titleMessage }) => {
   )
 }
 
-const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo }) => {
+const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
   const [waiting, setWaiting] = useState(false)
   const [signupErrorMessage, setSignupErrorMessage] = useState(null)
   const [invalidFields, setInvalidFields] = useState([])
@@ -324,9 +325,10 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo }) => {
         password: inputState.password,
       })
       if (loginError) return setSignupErrorMessage(error)
+      pendo.track('Overlay Sign Up Success', { source })
       return window.location.reload()
     }
-  }, [dispatch, inputState, validateEmail, validatePasswords])
+  }, [dispatch, inputState, source, validateEmail, validatePasswords])
 
   return (
     <div className={classnames(c.Signup_Row, c.Signup_SignUpForm)}>
@@ -447,7 +449,7 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo }) => {
   )
 }
 
-const Signup = ({ titleMessage, showPromo = true }) => {
+const Signup = ({ titleMessage, showPromo = true, source }) => {
   const c = useStyles({ showPromo })
   const { dispatch } = useStoreon()
   const closeOverlay = useCallback(() => {
@@ -472,6 +474,7 @@ const Signup = ({ titleMessage, showPromo = true }) => {
         dispatch={dispatch}
         handleSignInClick={handleSignInClick}
         showPromo={showPromo}
+        source={source}
       />
       <Spacer className={c.Signup_MobileSpacer} size='4rem' />
     </div>

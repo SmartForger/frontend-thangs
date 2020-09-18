@@ -242,7 +242,7 @@ const Page = () => {
         searchTerm: searchQuery,
       })
     }
-    if (!related && modelId && phynId && !phyndexer.isLoaded && !thangs.isLoaded ) {
+    if (!related && modelId && phynId && !phyndexer.isLoaded && !thangs.isLoaded) {
       dispatch(types.GET_RELATED_MODELS_VIA_THANGS, {
         modelId: modelId,
       })
@@ -302,6 +302,7 @@ const Page = () => {
         animateIn: true,
         windowed: true,
         titleMessage: 'Join to subscribe to new search results alerts.',
+        source: 'Save Search',
       },
     })
     pendo.track('SignUp Prompt Overlay', { source: 'Save Search' })

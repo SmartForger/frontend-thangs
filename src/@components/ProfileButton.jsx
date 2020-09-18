@@ -24,13 +24,14 @@ const ProfileButton = ({ userId, className }) => {
   const { dispatch } = useStoreon()
   const isCurrentUser = currentUserId === userId
   const openSignupOverlay = useCallback(
-    titleMessage => {
+    (titleMessage, source) => {
       dispatch(types.OPEN_OVERLAY, {
         overlayName: 'signUp',
         overlayData: {
           animateIn: true,
           windowed: true,
           titleMessage,
+          source,
         },
       })
       pendo.track('SignUp Prompt Overlay', { source: 'Timed' })

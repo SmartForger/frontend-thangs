@@ -111,7 +111,7 @@ const AuthLikeModelButton = ({ c, currentUser, modelId, userId }) => {
 const noop = () => null
 const UnauthLikeModelButton = ({ c, openSignupOverlay = noop }) => {
   const handleClick = useCallback(() => {
-    openSignupOverlay('Join to Like, Follow, Share.')
+    openSignupOverlay('Join to Like, Follow, Share.', 'Like')
     pendo.track('SignUp Prompt Overlay', { source: 'Like' })
   }, [openSignupOverlay])
 
