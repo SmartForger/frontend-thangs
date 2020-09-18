@@ -153,7 +153,8 @@ const SearchResult = ({
       )}
       {!isLoading && !isError && filteredModels.length === 0 ? (
         <NoResults>
-          No results found. Try another search term or upload a different model.
+          No results found. Save your search and we will notify you when there are
+          matches.
         </NoResults>
       ) : null}
     </div>
@@ -213,7 +214,8 @@ const ThangsSearchResult = ({
       )}
       {!isLoading && !isError && models.length === 0 ? (
         <NoResults>
-          No results found. Try another search term or upload a different model.
+          No results found. Save your search and we will notify you when there are
+          matches.
         </NoResults>
       ) : null}
     </div>
