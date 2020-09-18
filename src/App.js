@@ -88,6 +88,7 @@ const App = () => {
             </Helmet>
             <Switch>
               <Route exact path='/' render={props => <Landing {...props} />} />
+              <Route path='/authenticate/google' component={Auth} />
               <Route path='/explore/:id' component={Landing} />
               <Route
                 path='/welcome'
@@ -131,7 +132,6 @@ const App = () => {
               />
               <Route path='/upload' component={routeRequiresAuth(Upload)} />
               <Route path='/:userName' component={Profile} />
-              <Route path='/authenticate/google' component={Auth} />
               <Route path='/404' component={Page404} status={404} />
               <Route path='*' component={Page404} status={404} />
             </Switch>
