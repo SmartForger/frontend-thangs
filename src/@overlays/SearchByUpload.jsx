@@ -62,12 +62,12 @@ const SearchByUpload = () => {
   const c = useStyles()
   const history = useHistory()
   const { dispatch, searchResults, overlay } = useStoreon('searchResults', 'overlay')
-  const { phyndexer } = searchResults
-  const [newModelId, setNewModelId] = useState(R.path(['data', 'newModelId'], phyndexer))
+  const { phyndexer, thangs, uploadData } = searchResults
   const model = useMemo(
     () => overlay && overlay.overlayData && overlay.overlayData.model,
     [overlay]
   )
+  const newFileName = R.path(['data', 'newFileName'], uploadData)
 
   useEffect(() => {
     dispatch(types.RESET_SEARCH_RESULTS)
@@ -78,7 +78,6 @@ const SearchByUpload = () => {
         model.modelFileName ||
         getFileName(model.fileName) ||
         'model'
-      setNewModelId(modelId)
       if (modelId) {
         dispatch(types.GET_RELATED_MODELS, {
           modelId,
@@ -99,13 +98,11 @@ const SearchByUpload = () => {
         name: sanitizeFileName(file.name),
         size: file.size,
       }
-
       dispatch(types.GET_MODEL_SEARCH_RESULTS, {
         file,
         data: {
           ...requiredVariables,
         },
-        onNewModelId: ({ newModelId }) => setNewModelId(newModelId),
         onFinish: ({ modelId, phyndexerId }) => {
           dispatch(types.CLOSE_OVERLAY)
           history.push(
@@ -120,15 +117,22 @@ const SearchByUpload = () => {
   return (
     <div>
       <div className={c.SearchByUpload}>
-        {phyndexer.isLoading || model ? (
-          R.isNil(newModelId) ? (
-            <UploadProgress />
-          ) : (
+        {phyndexer.isLoading || thangs.isLoading || model ? (
+          !R.isNil(model) ? (
             <ScannerThumbnail model={model} />
+          ) : newFileName ? (
+            <ScannerThumbnail
+              model={{ uploadedFile: newFileName }}
+            />
+          ) : (
+            <UploadProgress />
           )
         ) : (
           <form>
-            <Uploader showError={!!phyndexer.isError} setFile={handleFile} />
+            <Uploader
+              showError={phyndexer.isError || thangs.isError}
+              setFile={handleFile}
+            />
           </form>
         )}
       </div>

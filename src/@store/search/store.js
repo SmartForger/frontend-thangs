@@ -9,6 +9,7 @@ import * as pendo from '@vendors/pendo'
 const ATOMS = {
   THANGS: 'thangs',
   PHYNDEXER: 'phyndexer',
+  UPLOAD_DATA: 'uploadData'
 }
 
 const getPhynStatus = intervalRequest(
@@ -60,6 +61,10 @@ const getInitAtom = () => ({
     isPollingError: false,
     data: {},
   },
+  [ATOMS.UPLOAD_DATA]: {
+    ...getStatusState(STATUSES.INIT),
+    data: {},
+  },
 })
 
 export default store => {
@@ -72,7 +77,7 @@ export default store => {
       ...state.searchResults,
       [atom]: {
         ...getStatusState(status),
-        data,
+        ...(data && { data }),
       },
     },
   }))
@@ -146,9 +151,17 @@ export default store => {
   )
   store.on(
     types.GET_MODEL_SEARCH_RESULTS,
-    (_state, { file, data, onFinish = noop, onNewModelId = noop, onError = noop }) => {
+    (_state, { file, data, onFinish = noop, onError = noop }) => {
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.PHYNDEXER,
+        status: STATUSES.LOADING,
+      })
+      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+        atom: ATOMS.THANGS,
+        status: STATUSES.LOADING,
+      })
+      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+        atom: ATOMS.UPLOAD_DATA,
         status: STATUSES.LOADING,
       })
 
@@ -173,6 +186,11 @@ export default store => {
       })
         .then(({ data }) => {
           uploadedUrlData = data
+          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+            atom: ATOMS.UPLOAD_DATA,
+            status: STATUSES.LOADED,
+            data,
+          })
           return storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file)
         })
         .then(() =>
@@ -198,7 +216,6 @@ export default store => {
             onFinish: props => {
               handleFinish(ATOMS.PHYNDEXER, {...props, phyndexerId, modelId })
             },
-            onNewModelId,
           })
 
           store.dispatch(types.GET_RELATED_MODELS_VIA_THANGS, {
@@ -216,6 +233,16 @@ export default store => {
         .catch(error => {
           store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
             atom: ATOMS.PHYNDEXER,
+            status: STATUSES.FAILURE,
+            data: error,
+          })
+          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+            atom: ATOMS.THANGS,
+            status: STATUSES.FAILURE,
+            data: error,
+          })
+          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+            atom: ATOMS.UPLOAD_DATA,
             status: STATUSES.FAILURE,
             data: error,
           })
@@ -273,7 +300,7 @@ export default store => {
     types.GET_RELATED_MODELS_VIA_PHYNDEXER,
     async (
       _state,
-      { newPhyndexerId, newModelId, onFinish = noop, onNewModelId = noop, onError = noop }
+      { newPhyndexerId, newModelId, onFinish = noop, onError = noop }
     ) => {
       if (!newPhyndexerId) return
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
@@ -281,7 +308,6 @@ export default store => {
         status: STATUSES.LOADING,
         data: { newModelId },
       })
-      onNewModelId({ newModelId })
 
       const { error: statusError } = await getPhynStatus({ newPhyndexerId })
       if (statusError) {
