@@ -163,13 +163,14 @@ const SignInForm = ({
   handleSignUpClick,
   handleResetPasswordClick,
   sessionExpired,
+  authFailed,
 }) => {
   const [waiting, setWaiting] = useState(false)
   const [signupErrorMessage, setSigninErrorMessage] = useState(null)
-  const showErrorMessage = useMemo(() => signupErrorMessage || sessionExpired, [
-    sessionExpired,
-    signupErrorMessage,
-  ])
+  const showErrorMessage = useMemo(
+    () => signupErrorMessage || sessionExpired || authFailed,
+    [authFailed, sessionExpired, signupErrorMessage]
+  )
   const { googleLoginUrl } = useGoogleLogin()
   const initialState = {
     email: '',
@@ -229,7 +230,9 @@ const SignInForm = ({
           {showErrorMessage && (
             <>
               <h4 className={c.Signin_ErrorText} data-cy='signup-error'>
-                {sessionExpired
+                {authFailed
+                  ? 'Something went wrong. Please try again'
+                  : sessionExpired
                   ? 'Session Expired. Please sign back in to continue'
                   : signupErrorMessage}
               </h4>
@@ -290,7 +293,7 @@ const SignInForm = ({
   )
 }
 
-const Signin = ({ sessionExpired }) => {
+const Signin = ({ sessionExpired, authFailed }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
   const closeOverlay = useCallback(() => {
@@ -325,6 +328,7 @@ const Signin = ({ sessionExpired }) => {
         handleSignUpClick={handleSignUpClick}
         handleResetPasswordClick={handleResetPasswordClick}
         sessionExpired={sessionExpired}
+        authFailed={authFailed}
       />
       <Spacer className={c.Signin_MobileSpacer} size='4rem' />
     </div>

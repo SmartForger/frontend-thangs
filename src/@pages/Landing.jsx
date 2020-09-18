@@ -212,6 +212,7 @@ const Landing = ({ newSignUp }) => {
     dispatch(types.FETCH_MODELS_STATS)
   }, [dispatch])
   const sessionExpired = useQuery('sessionExpired')
+  const authFailed = useQuery('authFailed')
   const { id } = useParams()
   const HeroComponent = getHero({ loading, user, newSignUp })
   const t = useTranslations({})
@@ -223,14 +224,15 @@ const Landing = ({ newSignUp }) => {
     numberWithCommas(modelsStats.data.modelsIngested)
 
   useEffect(() => {
-    if (sessionExpired)
+    if (sessionExpired || authFailed)
       dispatch(types.OPEN_OVERLAY, {
         overlayName: 'signIn',
         overlayData: {
           animateIn: true,
           windowed: true,
           showPromo: false,
-          sessionExpired: true,
+          sessionExpired,
+          authFailed,
         },
       })
     if (id) pendo.track('Explore', { referralChannel: id })
