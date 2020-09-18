@@ -123,7 +123,7 @@ const DropdownMenu = ({
       {TargetComponent ? (
         <TargetComponent onClick={toggleOpen} user={user} />
       ) : (
-        <Button text className={c.DropdownMenu_Button} onClick={toggleOpen}>
+        <Button tertiary className={c.DropdownMenu_Button} onClick={toggleOpen}>
           <ButtonIcon />
         </Button>
       )}

@@ -47,11 +47,8 @@ const useStyles = createUseStyles(theme => {
       width: '1rem',
       height: '1rem',
     },
-    Breadcrumbs_DropdownMenu: {
-      marginLeft: '1rem',
-    },
+    Breadcrumbs_DropdownMenu: {},
     Breadcrumbs_ManagementButton: {
-      marginLeft: '1.5rem',
       display: 'flex',
       alignItems: 'center',
     },
@@ -110,20 +107,17 @@ const ManageUsers = ({ dispatch, folder }) => {
   }, [dispatch, setFlash])
 
   return (
-    <>
-      <Button
-        text
-        className={c.Breadcrumbs_ManagementButton}
-        onClick={() =>
-          dispatch(types.OPEN_OVERLAY, {
-            overlayName: 'folderManagement',
-            overlayData: { afterInvite, folder },
-          })
-        }
-      >
-        <FolderManagementIcon />
-      </Button>
-    </>
+    <div
+      className={c.Breadcrumbs_ManagementButton}
+      onClick={() =>
+        dispatch(types.OPEN_OVERLAY, {
+          overlayName: 'folderManagement',
+          overlayData: { afterInvite, folder },
+        })
+      }
+    >
+      <FolderManagementIcon />
+    </div>
   )
 }
 
