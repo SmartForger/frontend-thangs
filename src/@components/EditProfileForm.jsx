@@ -53,9 +53,9 @@ const EditProfileForm = ({ user = {}, isLoading, handleUpdateProfile = noop }) =
   const c = useStyles()
 
   const initialState = {
-    firstName: user.firstName,
-    lastName: user.lastName,
-    description: user.profile && user.profile.description,
+    firstName: user.firstName || '',
+    lastName: user.lastName || '',
+    description: (user.profile && user.profile.description) || '',
   }
 
   const { onFormSubmit, onInputChange, inputState } = useForm({

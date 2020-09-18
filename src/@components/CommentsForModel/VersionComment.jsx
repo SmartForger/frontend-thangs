@@ -66,7 +66,7 @@ const VersionComment = ({ comment }) => {
         <div className={c.UserInline}>
           <VersionIcon width={'1.75rem'} height={'1.75rem'} />
           <span className={c.UserInline_Info}>
-            <div>{owner.fullName}</div>
+            <div>{owner.username}</div>
           </span>
         </div>
       </div>

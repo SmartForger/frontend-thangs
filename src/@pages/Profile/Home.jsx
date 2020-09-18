@@ -238,7 +238,7 @@ const SavedSearchesContent = ({ searchSubscriptions = {} }) => {
 
 const PageContent = ({
   currentUserId,
-  user,
+  user = {},
   modelsAtom,
   folders,
   searchSubscriptions,
@@ -269,11 +269,11 @@ const PageContent = ({
         <ProfilePicture
           className={c.Profile_ProfilePicture}
           size='5rem'
-          src={user && user.profile && user.profile.avatarUrl}
-          name={user.fullName}
+          src={user.profile && user.profile.avatarUrl}
+          name={user.fullName || user.username}
         />
         <div>
-          <h1 className={c.Profile_Name}>{user.fullName}</h1>
+          <h1 className={c.Profile_Name}>{user.fullName || user.username}</h1>
           <ProfileButton className={c.Profile_ProfileButton} userId={currentUserId} />
         </div>
       </div>

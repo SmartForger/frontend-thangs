@@ -24,7 +24,7 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
     },
     ProfileDropdown_DropdownMenu: {
-      zIndex: 5,
+      zIndex: 2,
     },
     ProfileDropdown_DropdownMenuDivider: {
       margin: '.25rem 0',
@@ -99,8 +99,8 @@ export const ProfileDropdownMenu = ({
   )
 }
 
-export const ProfileDropdown = ({ user, onClick = noop }) => {
-  const c = useStyles({ inverted: false, notificationsIsOpen: false })
+export const ProfileDropdown = ({ user = {}, onClick = noop }) => {
+  const c = useStyles({})
 
   return (
     <div
@@ -110,8 +110,8 @@ export const ProfileDropdown = ({ user, onClick = noop }) => {
       }}
     >
       <ProfilePicture
-        name={user.fullName}
-        src={user && user.profile && user.profile.avatarUrl}
+        name={user.fullName || user.username}
+        src={user.profile && user.profile.avatarUrl}
         size='2.375rem'
       />
     </div>

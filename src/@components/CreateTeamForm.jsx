@@ -210,9 +210,6 @@ const UserList = ({ users = [], removeUser = noop }) => {
         const teamUserId = teamUser.id
         const isOwner = teamUser.id && teamUserId.toString() !== currentUserId.toString()
 
-        if (teamUser.id && !teamUser.fullName)
-          teamUser.fullName = `${teamUser.first_name} ${teamUser.last_name}`
-
         return (
           <li className={c.TeamForm_Item} key={idx}>
             <UserInline user={teamUser} size={'3rem'} displayEmail>

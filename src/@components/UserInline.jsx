@@ -33,7 +33,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const UserInline = ({
-  user,
+  user = {},
   className,
   displayEmail,
   size = '1.75rem',
@@ -42,8 +42,7 @@ const UserInline = ({
   isSearchResult,
 }) => {
   const c = useStyles({ isPending })
-  let userName =
-    (user && user.fullName) || (user && user.profile && user.profile.fullName)
+  let userName = user.username
   if (userName && userName.length > 20) userName = userName.slice(0, 20) + '...'
   return (
     <div className={className}>
@@ -51,7 +50,7 @@ const UserInline = ({
         <ProfilePicture
           size={size}
           name={userName}
-          src={user && user.profile && user.profile.avatarUrl}
+          src={user.profile && user.profile.avatarUrl}
         />
         <span className={c.UserInline_Info}>
           <div

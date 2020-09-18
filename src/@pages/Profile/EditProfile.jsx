@@ -38,20 +38,20 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const PictureForm = ({ user, className }) => {
+const PictureForm = ({ user = {}, className }) => {
   const c = useStyles()
   const { dispatch, userUploadAvatar } = useStoreon('userUploadAvatar')
   const onDelete = () => dispatch(types.DELETE_USER_AVATAR, { userId: user.id })
   const deleteText =
     userUploadAvatar && userUploadAvatar?.isLoading ? 'Deleting...' : 'Delete'
 
-  const currentAvatar = user && user.profile && user.profile.avatarUrl
+  const currentAvatar = user.profile && user.profile.avatarUrl
   return (
     <div className={classnames(className, c.EditProfile_Row)}>
       <ProfilePicture
         className={c.EditProfile_ProfilePicture}
         size='5rem'
-        name={user.fullName}
+        name={user.fullName || user.username}
         src={currentAvatar}
       />
       <div>
@@ -76,8 +76,8 @@ const PictureForm = ({ user, className }) => {
   )
 }
 
-const WarningOnEmptyProfile = ({ user }) => {
-  const userDescription = user && user.profile && user.profile.description
+const WarningOnEmptyProfile = ({ user = {} }) => {
+  const userDescription = user.profile && user.profile.description
   if (!userDescription) {
     return (
       <Flash>

@@ -48,7 +48,7 @@ const ModelTitle = ({ model, className }) => {
           <ProfilePicture
             className={c.ModelTitle_OwnerProfilePicture}
             size='2.5rem'
-            name={user.fullName}
+            name={user.username}
             src={user.profile.avatarUrl}
           />
         </Link>
@@ -59,7 +59,7 @@ const ModelTitle = ({ model, className }) => {
           <span className={c.ModelTitle_ProfileAuthor}>
             by
             <Link className={c.ModelTitle_ProfileLink} to={`/profile/${user.id}`}>
-              {user.fullName}
+              {user.username}
             </Link>
           </span>
         )}
