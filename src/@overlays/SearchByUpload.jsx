@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import * as R from 'ramda'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
@@ -121,9 +121,7 @@ const SearchByUpload = () => {
           !R.isNil(model) ? (
             <ScannerThumbnail model={model} />
           ) : newFileName ? (
-            <ScannerThumbnail
-              model={{ uploadedFile: newFileName }}
-            />
+            <ScannerThumbnail model={{ uploadedFile: newFileName }} />
           ) : (
             <UploadProgress />
           )
