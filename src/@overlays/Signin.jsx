@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useStoreon } from 'storeon/react'
 import Joi from '@hapi/joi'
 import {
@@ -157,9 +157,19 @@ const signInSchema = Joi.object({
   password: Joi.string().required(),
 })
 
-const SignInForm = ({ c, dispatch, handleSignUpClick, handleResetPasswordClick }) => {
+const SignInForm = ({
+  c,
+  dispatch,
+  handleSignUpClick,
+  handleResetPasswordClick,
+  sessionExpired,
+}) => {
   const [waiting, setWaiting] = useState(false)
   const [signupErrorMessage, setSigninErrorMessage] = useState(null)
+  const showErrorMessage = useMemo(() => signupErrorMessage || sessionExpired, [
+    sessionExpired,
+    signupErrorMessage,
+  ])
   const { googleLoginUrl } = useGoogleLogin()
   const initialState = {
     email: '',
@@ -216,10 +226,12 @@ const SignInForm = ({ c, dispatch, handleSignUpClick, handleResetPasswordClick }
         </a>
         <Divider spacing={'1.5rem'} />
         <form onSubmit={onFormSubmit(handleSignUp)} data-cy='signup-form'>
-          {!!signupErrorMessage && (
+          {showErrorMessage && (
             <>
               <h4 className={c.Signin_ErrorText} data-cy='signup-error'>
-                {signupErrorMessage}
+                {sessionExpired
+                  ? 'Session Expired. Please sign back in to continue'
+                  : signupErrorMessage}
               </h4>
               <Spacer size='1rem' />
             </>
@@ -278,7 +290,7 @@ const SignInForm = ({ c, dispatch, handleSignUpClick, handleResetPasswordClick }
   )
 }
 
-const Signin = () => {
+const Signin = ({ sessionExpired }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
   const closeOverlay = useCallback(() => {
@@ -312,6 +324,7 @@ const Signin = () => {
         dispatch={dispatch}
         handleSignUpClick={handleSignUpClick}
         handleResetPasswordClick={handleResetPasswordClick}
+        sessionExpired={sessionExpired}
       />
       <Spacer className={c.Signin_MobileSpacer} size='4rem' />
     </div>

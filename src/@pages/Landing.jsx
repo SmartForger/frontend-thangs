@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import * as R from 'ramda'
 import { useParams } from 'react-router-dom'
 import { CardCollection, Layout, Button, Tabs } from '@components'
-import { useCurrentUser, useTranslations } from '@hooks'
+import { useCurrentUser, useQuery, useTranslations } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
@@ -201,23 +201,41 @@ const numberWithCommas = x => {
 }
 
 const Landing = ({ newSignUp }) => {
-  const { dispatch, modelPreviews } = useStoreon('modelPreviews')
-  const { modelsStats } = useStoreon('modelsStats')
-  useEffect(() => {
-    dispatch(types.FETCH_MODELS_STATS)
-  }, [dispatch])
-  const { id } = useParams()
-  if (id) pendo.track('Explore', { referralChannel: id })
+  const { dispatch, modelPreviews, modelsStats } = useStoreon(
+    'modelPreviews',
+    'modelsStats'
+  )
   const {
     atom: { data: user, isLoading: loading },
   } = useCurrentUser()
+  useEffect(() => {
+    dispatch(types.FETCH_MODELS_STATS)
+  }, [dispatch])
+  const sessionExpired = useQuery('sessionExpired')
+  const { id } = useParams()
   const HeroComponent = getHero({ loading, user, newSignUp })
   const t = useTranslations({})
+
   const modelsIngested =
     modelsStats &&
     modelsStats.data &&
     modelsStats.data.modelsIngested &&
     numberWithCommas(modelsStats.data.modelsIngested)
+
+  useEffect(() => {
+    if (sessionExpired)
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'signIn',
+        overlayData: {
+          animateIn: true,
+          windowed: true,
+          showPromo: false,
+          sessionExpired: true,
+        },
+      })
+    if (id) pendo.track('Explore', { referralChannel: id })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <Layout
