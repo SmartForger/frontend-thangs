@@ -1,13 +1,7 @@
 import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import {
-  Button,
-  DropdownItem,
-  DropdownMenu,
-  Spinner,
-  useFlashNotification,
-} from '@components'
+import { DropdownItem, DropdownMenu, Spinner, useFlashNotification } from '@components'
 import { ReactComponent as FolderIcon } from '@svg/folder-icon.svg'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { ReactComponent as FolderManagementIcon } from '@svg/folder-management-icon.svg'

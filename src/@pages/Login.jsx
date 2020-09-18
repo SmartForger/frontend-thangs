@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useMemo } from 'react'
-import { useLocation, useHistory, Link } from 'react-router-dom'
+import React, { useState, useCallback } from 'react'
+import { useHistory, Link } from 'react-router-dom'
 import Joi from '@hapi/joi'
 import { authenticationService } from '@services'
 import { useForm, useQuery } from '@hooks'
