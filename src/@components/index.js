@@ -1,3 +1,4 @@
+export { default as AppAnalytics } from './AppAnalytics'
 export { default as Breadcrumbs } from './Breadcrumbs'
 export { default as CardCollection } from './CardCollection'
 export { default as Checkbox } from './Checkbox'

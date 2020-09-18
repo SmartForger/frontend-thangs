@@ -1,11 +1,5 @@
-import React, { useEffect, useMemo, useRef } from 'react'
-import { Route, Router, Switch, useLocation } from 'react-router-dom'
-import { Helmet } from 'react-helmet'
-import * as pendo from '@vendors/pendo'
-import ReactGA from 'react-ga'
-import ReactPixel from 'react-facebook-pixel'
-
-import { authenticationService } from '@services'
+import React from 'react'
+import { Route, Router, Switch } from 'react-router-dom'
 import { history } from './history'
 import {
   Auth,
@@ -28,6 +22,7 @@ import {
   Upload,
 } from '@pages'
 import { ErrorBoundary } from './ErrorBoundary'
+import { AppAnalytics } from '@components'
 import {
   routeRequiresAnon,
   routeRequiresAuth,
@@ -37,23 +32,7 @@ import { FlashContextProvider } from '@components/Flash'
 import { StoreContext } from 'storeon/react'
 import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
-import { usePageMeta, usePageTheming, useQuery } from '@hooks'
 import store from 'store'
-
-const initializeAnalytics = ({ userIdentified, pendoInitialized, inviteCode }) => {
-  const user = authenticationService.getCurrentUser()
-
-  ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID)
-  ReactPixel.init(process.env.REACT_APP_FACEBOOK_PIXEL_ID)
-  if (!pendoInitialized.current) {
-    pendo.initialize()
-    pendoInitialized.current = true
-  }
-  if (user && !userIdentified.current) {
-    pendo.identify(user, { inviteCode })
-    userIdentified.current = true
-  }
-}
 
 export function AppFrame() {
   return (
@@ -64,28 +43,13 @@ export function AppFrame() {
 }
 
 const App = () => {
-  const location = useLocation()
-  const query = useQuery(location)
-  const inviteCode = useMemo(() => query.get('inviteCode'), [query])
-  const userIdentified = useRef(false)
-  const pendoInitialized = useRef(false)
-  initializeAnalytics({ userIdentified, pendoInitialized, inviteCode })
-  const theme = usePageTheming(location)
-  const { title, description } = usePageMeta(location)
-  useEffect(() => {
-    ReactGA.pageview(location.pathname + location.search)
-    ReactPixel.pageView()
-  }, [location])
   return (
     <StoreContext.Provider value={store}>
       <ErrorBoundary>
         <FlashContextProvider>
-          <ThemeProvider theme={theme}>
+          <ThemeProvider>
             <GlobalStyles />
-            <Helmet>
-              <title>{title}</title>
-              <meta name='description' content={description} />
-            </Helmet>
+            <AppAnalytics />
             <Switch>
               <Route exact path='/' render={props => <Landing {...props} />} />
               <Route path='/authenticate/google' component={Auth} />
