@@ -96,7 +96,7 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
 
   const sortOptions = useMemo(() => {
     const likes = 'likes'
-    const data = 'data'
+    const date = 'date'
     const downloaded = 'downloaded'
     return [
       {
@@ -107,9 +107,9 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
       },
       {
         label: 'New',
-        value: data,
-        selected: selected === data,
-        onClick: () => sortBy(data),
+        value: date,
+        selected: selected === date,
+        onClick: () => sortBy(date),
       },
       {
         label: 'Downloads',
