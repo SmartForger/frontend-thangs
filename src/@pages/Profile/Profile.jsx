@@ -434,16 +434,19 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
     dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId })
   }, [dispatch, userId])
 
-  const handleUpdateProfile = useCallback(() => {
-    const { id, ...updatedUser } = user
-    dispatch(types.UPDATE_USER, {
-      id,
-      user: updatedUser,
-      onFinish: () => {
-        navigateWithFlash(`/${user.username}`, 'Your profile has been updated.')
-      },
-    })
-  }, [dispatch, navigateWithFlash, user])
+  const handleUpdateProfile = useCallback(
+    newUserData => {
+      const { id, ...updatedUser } = newUserData
+      dispatch(types.UPDATE_USER, {
+        id,
+        user: updatedUser,
+        onFinish: () => {
+          return (window.location.href = `/${user.username}`)
+        },
+      })
+    },
+    [dispatch, navigateWithFlash, user]
+  )
 
   const handleCancel = useCallback(() => {
     setShowProfileForm(false)
