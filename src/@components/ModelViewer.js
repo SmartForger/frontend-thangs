@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react'
 import { ColorPicker, HowTo, Viewer } from '@components'
-import { useLocalStorage } from '@hooks'
 import { ReactComponent as ColorIcon1 } from '@svg/icon-color-1.svg'
 import { ReactComponent as ColorIcon2 } from '@svg/icon-color-2.svg'
 import { ReactComponent as ShadedIcon } from '@svg/icon-shaded.svg'

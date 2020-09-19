@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { HowTo, Spinner } from '@components'
-import { useLocalStorage, useModels } from '@hooks'
+import { useModels } from '@hooks'
 import Toolbar from './Toolbar'
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg'
 import classnames from 'classnames'
