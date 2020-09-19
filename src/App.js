@@ -24,6 +24,7 @@ import {
   routeRequiresAnon,
   routeRequiresAuth,
   routeRequiresKick,
+  routeRedirectToProfile,
 } from '@components/RouteComponent'
 import { FlashContextProvider } from '@components/Flash'
 import { StoreContext } from 'storeon/react'
@@ -63,7 +64,7 @@ const App = () => {
               <Route path='/login' component={routeRequiresAnon(Login)} />
               <Route path='/terms_and_conditions' exact component={TermsAndConditions} />
               <Route path='/privacy_policy' exact component={PrivacyPolicy} />
-              <Route path='/home' component={routeRequiresAuth(Profile)} />
+              <Route path='/home' component={routeRedirectToProfile()} />
               <Route
                 path='/signup/:registrationCode'
                 component={routeRequiresAnon(Signup)}
