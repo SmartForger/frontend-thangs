@@ -7,6 +7,7 @@ import { logger } from '@utilities/logging'
 import { Button } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import { ReactComponent as EditIcon } from '@svg/icon-pencil.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 
@@ -189,7 +190,7 @@ const ChangeablePicture = ({ user, className }) => {
             e.preventDefault()
           }}
         >
-          Upload New Photo
+          <EditIcon />
         </Button>
       </label>
       <input

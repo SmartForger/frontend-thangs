@@ -4,10 +4,7 @@ import { history } from './history'
 import {
   Auth,
   ConfirmPasswordReset,
-  EditProfile,
-  Home,
   Landing,
-  Likes,
   Login,
   ModelDetail,
   Page404,
@@ -66,7 +63,7 @@ const App = () => {
               <Route path='/login' component={routeRequiresAnon(Login)} />
               <Route path='/terms_and_conditions' exact component={TermsAndConditions} />
               <Route path='/privacy_policy' exact component={PrivacyPolicy} />
-              <Route path='/home' component={routeRequiresAuth(Home)} />
+              <Route path='/home' component={routeRequiresAuth(Profile)} />
               <Route
                 path='/signup/:registrationCode'
                 component={routeRequiresAnon(Signup)}
@@ -77,12 +74,6 @@ const App = () => {
                 path='/password_reset_confirm/:token'
                 component={ConfirmPasswordReset}
               />
-              <Route
-                exact
-                path='/profile/edit'
-                component={routeRequiresAuth(EditProfile)}
-              />
-              <Route path='/profile/likes' component={routeRequiresAuth(Likes)} />
               <Route exact path='/profile/:id' component={Profile} />
               <Route
                 exact

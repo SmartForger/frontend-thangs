@@ -1,7 +1,7 @@
 export { default as AppAnalytics } from './AppAnalytics'
 export { default as Breadcrumbs } from './Breadcrumbs'
-export { default as CardCollection } from './CardCollection'
 export { default as Carousel } from './Carousel'
+export * from './CardCollection'
 export { default as Checkbox } from './Checkbox'
 export { default as CommentsForModel } from './CommentsForModel'
 export { default as Divider } from './Divider'

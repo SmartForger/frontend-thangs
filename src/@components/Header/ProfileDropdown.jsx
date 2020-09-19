@@ -37,7 +37,7 @@ const useStyles = createUseStyles(theme => {
 const noop = () => null
 export const ProfileDropdownMenu = ({
   dispatch,
-  user,
+  user = {},
   TargetComponent,
   handleNotificationsClick,
   notificationsIsOpen,
@@ -63,7 +63,7 @@ export const ProfileDropdownMenu = ({
       TargetComponent={TargetComponent}
       user={user}
     >
-      <DropdownItem to='/profile/likes'>
+      <DropdownItem to={`/${user.username}?selected=likes`}>
         <HeartIcon /> {t('header.dropdownMenu.likedModels')}
       </DropdownItem>
       <DropdownItem
@@ -79,7 +79,7 @@ export const ProfileDropdownMenu = ({
         <NewFolderIcon /> {t('header.dropdownMenu.createFolder')}
       </DropdownItem>
       <Divider spacing='.25rem' />
-      <DropdownItem to='/home'>
+      <DropdownItem to={`/${user.username}`}>
         <UserIcon /> {t('header.dropdownMenu.viewProfile')}
       </DropdownItem>
       <DropdownItem

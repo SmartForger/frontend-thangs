@@ -1,25 +1,12 @@
 import React, { useCallback } from 'react'
-import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import classnames from 'classnames'
-import { createUseStyles } from '@style'
 import { useCurrentUserId } from '@hooks'
-import { ToggleFollowButton } from '@components'
+import { Button, ToggleFollowButton } from '@components'
 import * as types from '@constants/storeEventTypes'
 import * as pendo from '@vendors/pendo'
 
-const useStyles = createUseStyles(theme => {
-  return {
-    ProfileButton: {
-      ...theme.text.linkText,
-      display: 'block',
-      textDecoration: 'none',
-    },
-  }
-})
-
-const ProfileButton = ({ userId, className }) => {
-  const c = useStyles()
+const noop = () => null
+const ProfileButton = ({ userId, className, onEditClick = noop }) => {
   const currentUserId = useCurrentUserId()
   const { dispatch } = useStoreon()
   const isCurrentUser = currentUserId === userId
@@ -40,13 +27,14 @@ const ProfileButton = ({ userId, className }) => {
   )
   if (isCurrentUser) {
     return (
-      <Link className={classnames(className, c.ProfileButton)} to='/profile/edit'>
+      <Button className={className} secondary onClick={onEditClick}>
         Edit Profile
-      </Link>
+      </Button>
     )
   } else {
     return (
       <ToggleFollowButton
+        className={className}
         profileUserId={userId}
         currentUser={currentUserId}
         openSignupOverlay={openSignupOverlay}

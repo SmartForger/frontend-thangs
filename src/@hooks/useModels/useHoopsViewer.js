@@ -74,16 +74,16 @@ class HoopsStatus {
 const hoopsStatusReducer = (currentStatus, transition) => {
   debug(`> Reducer Action: ${currentStatus.state} -> ${transition}`)
   switch (transition) {
-    case TRANSITIONS.PrepareModelDone:
-      return new HoopsStatus(STATES.PreparedModel)
-    case TRANSITIONS.LoadingDone:
-      return new HoopsStatus(STATES.Ready)
-    case TRANSITIONS.Reset:
-      return new HoopsStatus(STATES.UnpreparedModel)
-    case TRANSITIONS.Error:
-      return new HoopsStatus(STATES.Errored)
-    default:
-      return currentStatus
+  case TRANSITIONS.PrepareModelDone:
+    return new HoopsStatus(STATES.PreparedModel)
+  case TRANSITIONS.LoadingDone:
+    return new HoopsStatus(STATES.Ready)
+  case TRANSITIONS.Reset:
+    return new HoopsStatus(STATES.UnpreparedModel)
+  case TRANSITIONS.Error:
+    return new HoopsStatus(STATES.Errored)
+  default:
+    return currentStatus
   }
 }
 
@@ -214,17 +214,17 @@ const useHoopsViewer = modelFilename => {
   const changeDrawMode = useCallback(modeName => {
     ensureCurrentHoopsViewer()
     switch (modeName) {
-      case 'shaded':
-        hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.WireframeOnShaded)
-        break
-      case 'wire':
-        hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.Wireframe)
-        break
-      case 'xray':
-        hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.XRay)
-        break
-      default:
-        logger.error('Unsupported draw mode!', modeName)
+    case 'shaded':
+      hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.WireframeOnShaded)
+      break
+    case 'wire':
+      hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.Wireframe)
+      break
+    case 'xray':
+      hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.XRay)
+      break
+    default:
+      logger.error('Unsupported draw mode!', modeName)
     }
   }, [])
 

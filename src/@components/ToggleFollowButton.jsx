@@ -34,7 +34,7 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const AuthFollowButton = ({ c, currentUser, profileUserId, dispatch }) => {
+const AuthFollowButton = ({ c, className, currentUser, profileUserId, dispatch }) => {
   const {
     atom: { isLoading, isError, data: user },
   } = useFetchOnce(profileUserId, 'user')
@@ -58,7 +58,7 @@ const AuthFollowButton = ({ c, currentUser, profileUserId, dispatch }) => {
   return (
     !isModelOfCurrentUser && (
       <Button
-        className={c.ToggleFollowButton}
+        className={classnames(className, c.ToggleFollowButton)}
         disabled={isLoading || isError}
         onClick={handleClick}
         secondary
@@ -79,14 +79,18 @@ const AuthFollowButton = ({ c, currentUser, profileUserId, dispatch }) => {
   )
 }
 const noop = () => null
-const UnauthFollowButton = ({ c, openSignupOverlay = noop }) => {
+const UnauthFollowButton = ({ c, className, openSignupOverlay = noop }) => {
   const handleClick = useCallback(() => {
     openSignupOverlay('Join to Like, Follow, Share.', 'Follow')
     pendo.track('SignUp Prompt Overlay', { source: 'Follow' })
   }, [openSignupOverlay])
 
   return (
-    <Button className={c.ToggleFollowButton} onClick={handleClick} secondary>
+    <Button
+      className={classnames(className, c.ToggleFollowButton)}
+      onClick={handleClick}
+      secondary
+    >
       <div>
         <PlusIcon />
       </div>
@@ -96,20 +100,32 @@ const UnauthFollowButton = ({ c, openSignupOverlay = noop }) => {
   )
 }
 
-const ToggleFollowButton = ({ profileUserId, currentUser, openSignupOverlay = noop }) => {
+const ToggleFollowButton = ({
+  className,
+  profileUserId,
+  currentUser,
+  openSignupOverlay = noop,
+}) => {
   const { dispatch } = useStoreon()
   const c = useStyles()
   if (currentUser) {
     return (
       <AuthFollowButton
         c={c}
+        className={className}
         currentUser={currentUser}
         dispatch={dispatch}
         profileUserId={profileUserId}
       />
     )
   }
-  return <UnauthFollowButton c={c} openSignupOverlay={openSignupOverlay} />
+  return (
+    <UnauthFollowButton
+      c={c}
+      className={className}
+      openSignupOverlay={openSignupOverlay}
+    />
+  )
 }
 
 export default ToggleFollowButton

@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react'
-import { Button, Spinner } from '@components'
-import classnames from 'classnames'
+import { Button, Spinner, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { useForm } from '@hooks'
 
@@ -22,7 +21,6 @@ const useStyles = createUseStyles(theme => {
     EditProfileForm_Field: {
       display: 'flex',
       flexDirection: 'column',
-      marginTop: '1rem',
     },
     EditProfileForm_label: {
       margin: '.5rem 0',
@@ -35,9 +33,6 @@ const useStyles = createUseStyles(theme => {
       minWidth: 0,
       backgroundColor: theme.colors.white[400],
     },
-    EditProfileForm_textareaContainer: {
-      marginTop: '3rem',
-    },
     EditProfileForm_textarea: {
       resize: 'vertical',
       border: 0,
@@ -49,7 +44,12 @@ const useStyles = createUseStyles(theme => {
   }
 })
 const noop = () => null
-const EditProfileForm = ({ user = {}, isLoading, handleUpdateProfile = noop }) => {
+const EditProfileForm = ({
+  user = {},
+  isLoading,
+  handleUpdateProfile = noop,
+  handleCancel = noop,
+}) => {
   const c = useStyles()
 
   const initialState = {
@@ -113,13 +113,7 @@ const EditProfileForm = ({ user = {}, isLoading, handleUpdateProfile = noop }) =
           required
         />
       </div>
-      <div
-        className={classnames(
-          c.EditProfileForm_Field,
-          c.EditProfileForm_textareaContainer
-        )}
-        htmlFor='description'
-      >
+      <div className={c.EditProfileForm_Field} htmlFor='description'>
         <label className={c.EditProfileForm_label}>About</label>
         <textarea
           className={c.EditProfileForm_textarea}
@@ -134,13 +128,17 @@ const EditProfileForm = ({ user = {}, isLoading, handleUpdateProfile = noop }) =
       </div>
 
       <div className={c.EditProfileForm_ButtonContainer}>
+        <Button secondary className={c.EditProfileForm_Button} onClick={handleCancel}>
+          Cancel
+        </Button>
+        <Spacer size={'1rem'} />
         <Button className={c.EditProfileForm_Button} type='submit'>
           {isLoading ? (
             <div>
               <Spinner size={'1rem'} />
             </div>
           ) : (
-            'Save Changes'
+            'Save'
           )}
         </Button>
       </div>

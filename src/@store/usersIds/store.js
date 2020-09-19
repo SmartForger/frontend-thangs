@@ -2,11 +2,9 @@ import api from '@services/api'
 import { STATUSES, getStatusState } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
 
-const COLLECTION_NAME = 'user-id'
-
 export default store => {
   store.on(types.INIT_USER_ID, (_, { id }) => ({
-    [`${COLLECTION_NAME}-${id}`]: {
+    [`user-id-${id}`]: {
       ...getStatusState(STATUSES.INIT),
     },
   }))
@@ -23,7 +21,7 @@ export default store => {
   store.on(types.FETCH_USER_ID, async (_, { id }) => {
     store.dispatch(types.CHANGE_USER_ID_STATUS, {
       status: STATUSES.LOADING,
-      atom: `${COLLECTION_NAME}-${id}`,
+      atom: `user-id-${id}`,
     })
     const { data, error } = await api({
       method: 'GET',
@@ -33,12 +31,12 @@ export default store => {
     if (error) {
       store.dispatch(types.CHANGE_USER_ID_STATUS, {
         status: STATUSES.FAILURE,
-        atom: `${COLLECTION_NAME}-${id}`,
+        atom: `user-id-${id}`,
       })
     } else {
       store.dispatch(types.CHANGE_USER_ID_STATUS, {
         status: STATUSES.LOADED,
-        atom: `${COLLECTION_NAME}-${id}`,
+        atom: `user-id-${id}`,
         data: data.userId,
       })
     }

@@ -1,0 +1,6 @@
+# Ignore artifacts:
+*.json
+prettier.config.js
+
+# Ignore all HTML files:
+*.html
