@@ -44,8 +44,8 @@ const routeRequiresKick = Component => {
   return RouteComponent
 }
 
-const routeRedirectToProfile = Component => {
-  const RouteComponent = (...props) => {
+const routeRedirectToProfile = () => {
+  const RouteComponent = () => {
     const currentUserId = authenticationService.getCurrentUserId()
     const isAuthed = currentUserId !== undefined
     if (!isAuthed) return <Redirect to={'/'} />
