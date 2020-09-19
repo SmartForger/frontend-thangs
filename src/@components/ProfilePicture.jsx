@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import Avatar from 'react-avatar'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -27,14 +27,20 @@ const DEFAULT_AVATAR_COLOR = '#616168'
 const ProfilePicture = ({
   className,
   name,
+  userName,
   src,
   size = DEFAULT_AVATAR_SIZE,
   color = DEFAULT_AVATAR_COLOR,
 }) => {
   const c = useStyles()
-  return src || name ? (
+  const nameToUse = useMemo(() => {
+    if (!name || name.replace(/\s/g, '') === '') return userName
+    return name
+  }, [name, userName])
+
+  return src || nameToUse ? (
     <Avatar
-      name={name}
+      name={nameToUse}
       src={src}
       color={color}
       size={size}

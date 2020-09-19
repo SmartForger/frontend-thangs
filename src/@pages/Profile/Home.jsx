@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import * as R from 'ramda'
 import {
   Layout,
@@ -250,6 +250,12 @@ const PageContent = ({
   const selectFolders = useCallback(() => setSelected('folders'), [])
   const selectSearches = useCallback(() => setSelected('savedSearches'), [])
 
+  const userName = useMemo(() => {
+    const fullName = user.fullName
+    if (!fullName || fullName.replace(/\s/g, '') === '') return user.username
+    return user.fullName
+  }, [user.fullName, user.username])
+
   const TabContent = useCallback(() => {
     switch (selected) {
       case 'models':
@@ -270,10 +276,11 @@ const PageContent = ({
           className={c.Profile_ProfilePicture}
           size='5rem'
           src={user.profile && user.profile.avatarUrl}
-          name={user.fullName || user.username}
+          name={user.fullName}
+          userName={user.username}
         />
         <div>
-          <h1 className={c.Profile_Name}>{user.fullName || user.username}</h1>
+          <h1 className={c.Profile_Name}>{userName}</h1>
           <ProfileButton className={c.Profile_ProfileButton} userId={currentUserId} />
         </div>
       </div>

@@ -306,7 +306,8 @@ const UseredPage = ({ user = {} }) => {
           className={c.Profile_ProfilePicture}
           size='5rem'
           src={user.profile && user.profile.avatarUrl}
-          name={user.fullName || user.username}
+          name={user.fullName}
+          userName={user.username}
         />
         <div>
           <h1 className={c.Profile_Name}>{user.fullName || user.username}</h1>

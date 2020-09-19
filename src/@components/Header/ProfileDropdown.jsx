@@ -110,7 +110,8 @@ export const ProfileDropdown = ({ user = {}, onClick = noop }) => {
       }}
     >
       <ProfilePicture
-        name={user.fullName || user.username}
+        name={user.fullName}
+        userName={user.username}
         src={user.profile && user.profile.avatarUrl}
         size='2.375rem'
       />

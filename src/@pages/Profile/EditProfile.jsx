@@ -51,7 +51,8 @@ const PictureForm = ({ user = {}, className }) => {
       <ProfilePicture
         className={c.EditProfile_ProfilePicture}
         size='5rem'
-        name={user.fullName || user.username}
+        name={user.fullName}
+        userName={user.username}
         src={currentAvatar}
       />
       <div>

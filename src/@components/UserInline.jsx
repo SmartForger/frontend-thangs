@@ -49,7 +49,8 @@ const UserInline = ({
       <div className={c.UserInline}>
         <ProfilePicture
           size={size}
-          name={userName}
+          name={user.fullName}
+          userName={user.username}
           src={user.profile && user.profile.avatarUrl}
         />
         <span className={c.UserInline_Info}>

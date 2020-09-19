@@ -48,7 +48,8 @@ const ModelTitle = ({ model, className }) => {
           <ProfilePicture
             className={c.ModelTitle_OwnerProfilePicture}
             size='2.5rem'
-            name={user.username}
+            name={user.fullName}
+            userName={user.username}
             src={user.profile.avatarUrl}
           />
         </Link>
