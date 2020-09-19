@@ -40,6 +40,10 @@ const useStyles = createUseStyles(theme => {
       backgroundColor: theme.colors.white[400],
       marginRight: '2.25rem',
     },
+
+    Carousel_LastCard: {
+      marginRight: 0,
+    },
   }
 })
 
@@ -50,7 +54,12 @@ const Carousel = ({ className, cards = [] }) => {
       <ul className={c.Carousel}>
         {cards.map((card, ind) => {
           return (
-            <li key={`CarouselCard_${ind}`} className={c.Carousel_Card}>
+            <li
+              key={`CarouselCard_${ind}`}
+              className={classnames(c.Carousel_Card, {
+                [c.Carousel_LastCard]: cards.length - 1 === ind,
+              })}
+            >
               <LandingCard card={card} />
             </li>
           )
