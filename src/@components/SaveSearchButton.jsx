@@ -99,6 +99,11 @@ const AuthSaveSearchButton = ({
   }, [saved, dispatch, modelId, searchTerm, searchSubscriptions])
 
   useEffect(() => {
+    dispatch(types.FETCH_SUBSCRIPTIONS)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
     setSaved(!!hasSavedSearch(searchSubscriptions.data, searchTerm, modelId))
   }, [modelId, searchSubscriptions, searchTerm])
 

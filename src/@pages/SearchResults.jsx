@@ -259,11 +259,6 @@ const Page = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, modelId])
 
-  useEffect(() => {
-    dispatch(types.FETCH_SUBSCRIPTIONS)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   const handleReportModel = useCallback(
     ({ model }) => {
       dispatch(types.OPEN_OVERLAY, {
