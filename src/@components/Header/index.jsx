@@ -268,7 +268,7 @@ const PromoCards = [
   {
     IconComponent: PromoGeoSearch,
     title: 'Geometric Search',
-    text: 'Upload your model and get geometrically similar results.',
+    text: 'Upload your model to find geometrically similar models.',
   },
   {
     IconComponent: PromoStorage,
