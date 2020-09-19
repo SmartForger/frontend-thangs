@@ -18,6 +18,8 @@ const Auth = () => {
     }
     googleAuth()
   }, [code])
+
+  return null
 }
 
 export default Auth
