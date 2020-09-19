@@ -291,7 +291,6 @@ const Header = ({
   onNotificationsClick = noop,
   notificationsIsOpen,
   showSearchTextFlash,
-  showSearch = false,
   showUser = true,
   showNewHero = false,
 }) => {

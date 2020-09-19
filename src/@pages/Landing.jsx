@@ -1,11 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import * as R from 'ramda'
 import { useParams } from 'react-router-dom'
-import { CardCollection, Layout, Button, Tabs } from '@components'
+import { CardCollection, Layout, Tabs } from '@components'
 import { useCurrentUser, useQuery, useTranslations } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
-import { ReactComponent as BackgroundSvg } from '@svg/landing-background.svg'
-import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
@@ -145,7 +142,7 @@ const numberWithCommas = x => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
-const Landing = ({ newSignUp }) => {
+const Landing = () => {
   const { dispatch, modelPreviews, modelsStats } = useStoreon(
     'modelPreviews',
     'modelsStats'
