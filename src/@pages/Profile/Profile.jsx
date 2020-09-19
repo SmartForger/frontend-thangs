@@ -234,7 +234,6 @@ const FoldersContent = ({ folders: foldersAtom = {} }) => {
 }
 
 const SavedSearchesContent = ({ searchSubscriptionsData = {} }) => {
-  debugger
   const c = useStyles({})
   const { data: searchSubscriptions, isLoaded, isError } = searchSubscriptionsData
   if (!isLoaded) {
@@ -347,10 +346,10 @@ const MyProfile = ({ models, likes }) => {
     'searchSubscriptions'
   )
   const selectedQuery = useQuery('selected')
-  const [selected, setSelected] = useState(selectedQuery || 'models')
+  const [selected, setSelected] = useState('models')
 
   useEffect(() => {
-    setSelected(selectedQuery)
+    if (selectedQuery) setSelected(selectedQuery)
   }, [selectedQuery])
 
   useEffect(() => {
@@ -434,7 +433,7 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
     dispatch(types.FETCH_USER_OWN_MODELS, { id: userId })
     dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId })
   }, [dispatch, userId])
-  debugger
+
   const handleUpdateProfile = useCallback(() => {
     const { id, ...updatedUser } = user
     dispatch(types.UPDATE_USER, {
