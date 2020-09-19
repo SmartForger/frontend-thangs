@@ -67,8 +67,7 @@
       "error",
       2,
       {
-        "flatTernaryExpressions": true,
-        "offsetTernaryExpressions": true
+        "SwitchCase": 1
       }
     ],
     "linebreak-style": [
