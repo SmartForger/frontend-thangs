@@ -9,7 +9,7 @@ import * as pendo from '@vendors/pendo'
 const ATOMS = {
   THANGS: 'thangs',
   PHYNDEXER: 'phyndexer',
-  UPLOAD_DATA: 'uploadData'
+  UPLOAD_DATA: 'uploadData',
 }
 
 const getPhynStatus = intervalRequest(
@@ -174,7 +174,7 @@ export default store => {
         if (
           (R.path(['matches', 'length'], props) || 0) > 0 ||
           (emptyMatchesTypes.includes(ATOMS.PHYNDEXER) &&
-          emptyMatchesTypes.includes(ATOMS.THANGS))
+            emptyMatchesTypes.includes(ATOMS.THANGS))
         ) {
           onFinish(props)
         }
@@ -186,15 +186,15 @@ export default store => {
       })
         .then(({ data }) => {
           uploadedUrlData = data
+          return storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file)
+        })
+        .then(() => {
           store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
             atom: ATOMS.UPLOAD_DATA,
             status: STATUSES.LOADED,
-            data,
+            data: uploadedUrlData,
           })
-          return storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file)
-        })
-        .then(() =>
-          apiForChain({
+          return apiForChain({
             method: 'POST',
             endpoint: 'models/search-by-model',
             body: {
@@ -206,22 +206,22 @@ export default store => {
               ...data,
             },
           })
-        )
+        })
         .then(({ data: uploadedData }) => {
           const { newPhyndexerId: phyndexerId, newModelId: modelId } = uploadedData
-        
+
           store.dispatch(types.GET_RELATED_MODELS_VIA_PHYNDEXER, {
             newPhyndexerId: phyndexerId,
             newModelId: modelId,
             onFinish: props => {
-              handleFinish(ATOMS.PHYNDEXER, {...props, phyndexerId, modelId })
+              handleFinish(ATOMS.PHYNDEXER, { ...props, phyndexerId, modelId })
             },
           })
 
           store.dispatch(types.GET_RELATED_MODELS_VIA_THANGS, {
             modelId,
             onFinish: props => {
-              handleFinish(ATOMS.THANGS, {...props, phyndexerId, modelId })
+              handleFinish(ATOMS.THANGS, { ...props, phyndexerId, modelId })
             },
           })
 
@@ -298,10 +298,7 @@ export default store => {
   )
   store.on(
     types.GET_RELATED_MODELS_VIA_PHYNDEXER,
-    async (
-      _state,
-      { newPhyndexerId, newModelId, onFinish = noop, onError = noop }
-    ) => {
+    async (_state, { newPhyndexerId, newModelId, onFinish = noop, onError = noop }) => {
       if (!newPhyndexerId) return
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.PHYNDEXER,
