@@ -5,6 +5,7 @@ import * as EmailValidator from 'email-validator'
 import {
   Button,
   Divider,
+  MetadataSecondary,
   MultiLineBodyText,
   Input,
   LabelText,
@@ -238,7 +239,6 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
     firstName: '',
     lastName: '',
     username: '',
-    acceptedTerms: false,
   }
 
   const { onFormSubmit, onInputChange, inputState } = useForm({
@@ -405,32 +405,22 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
             />
             <Spacer size='1rem' />
           </div>
-          <div>
-            <Spacer size='.75rem' />
-            <div className={c.Signup_TermsCheckbox}>
-              <input
-                type='checkbox'
-                value='Accepted Terms and Conditions'
-                checked={inputState.acceptedTerms}
-                onChange={e => {
-                  handleOnInputChange('acceptedTerms', e.target.checked)
-                }}
-                required
-              />
-              <Spacer size='.5rem' />
-              <p className={c.Signup_TermsText}>
-                I agree to{' '}
-                <a href='/terms_and_conditions' target='_blank'>
-                  terms and conditions
-                </a>
-              </p>
-            </div>
-            <Spacer size='.75rem' />
-          </div>
           <Spacer size='1rem' />
           <Button className={c.Signup_Button} type='submit' disabled={waiting}>
-            {waiting ? 'Processing...' : 'Register'}
+            {waiting ? 'Processing...' : 'Sign up'}
           </Button>
+          <Spacer size='.75rem' />
+          <MetadataSecondary>
+            Click “Sign up” to agree to Thangs&apos;&nbsp;
+            <a href='/terms_and_conditions' target='_blank'>
+              terms and conditions
+            </a>{' '}
+            and acknowledge that Thangs&apos;&nbsp;
+            <a href='/privacy_policy' target='_blank'>
+              Privacy Policy
+            </a>{' '}
+            applies to you.
+          </MetadataSecondary>
         </form>
         <Divider spacing={'1.5rem'} />
         <div className={c.Signup_HasAccount}>

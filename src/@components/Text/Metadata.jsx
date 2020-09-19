@@ -18,7 +18,9 @@ const useStyles = createUseStyles(theme => {
     },
     MetadataSecondary: {
       fontSize: '.75rem',
-      lineHeight: '.75rem',
+      lineHeight: '1rem',
+      display: 'inline-block',
+      textAlign: 'center',
     },
   }
 })
