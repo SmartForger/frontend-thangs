@@ -5,6 +5,7 @@ import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
 import {
   CardCollection,
+  ChangeablePicture,
   EditProfileForm,
   FolderCards,
   Layout,
@@ -72,6 +73,9 @@ const useStyles = createUseStyles(theme => {
       [md]: {
         maxWidth: '15rem',
       },
+    },
+    Profile_Avatar: {
+      position: 'relative',
     },
     Profile_Header: {
       display: 'flex',
@@ -455,12 +459,15 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
     <div className={c.Home}>
       <div className={c.Profile}>
         <div className={c.Profile_Header}>
-          <ProfilePicture
-            className={c.Profile_ProfilePicture}
-            size={'15rem'}
-            src={user.profile && user.profile.avatarUrl}
-            name={user.fullName || user.username}
-          />
+          <div className={c.Profile_Avatar}>
+            <ProfilePicture
+              className={c.Profile_ProfilePicture}
+              size={'15rem'}
+              src={user.profile && user.profile.avatarUrl}
+              name={user.fullName || user.username}
+            />
+            <ChangeablePicture user={user} />
+          </div>
           <div>
             <Spacer size={'2rem'} />
             <h1 className={c.Profile_Name}>{user.fullName}</h1>

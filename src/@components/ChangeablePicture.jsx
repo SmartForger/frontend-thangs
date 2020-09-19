@@ -4,14 +4,14 @@ import 'react-image-crop/dist/ReactCrop.css'
 import ReactModal from 'react-modal'
 import md5 from 'md5'
 import { logger } from '@utilities/logging'
-import { Button } from '@components'
+import { Button, Pill } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { ReactComponent as EditIcon } from '@svg/icon-pencil.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     ChangeablePicture: {},
     ChangeablePicture_HiddenInput: {
@@ -36,8 +36,14 @@ const useStyles = createUseStyles(_theme => {
       transform: 'translate(-50%, -50%)',
     },
     ChangeablePicture_Form: {
-      position: 'relative',
-      marginRight: '.5rem',
+      position: 'absolute',
+      width: '2rem',
+      bottom: 0,
+      right: 0,
+
+      '& g': {
+        fill: theme.colors.black[500],
+      },
     },
     ChangeablePicture_ButtonContainer: {
       display: 'flex',
@@ -50,10 +56,6 @@ const useStyles = createUseStyles(_theme => {
     ChangeablePicture_SaveButton: {
       marginRight: '.5rem',
       padding: '.5rem 2.25rem',
-    },
-    ChangeablePicture_UploadButton: {
-      width: '12.25rem',
-      maxWidth: '100%',
     },
   }
 })
@@ -184,14 +186,14 @@ const ChangeablePicture = ({ user, className }) => {
   return (
     <form className={classnames(className, c.ChangeablePicture_Form)} ref={formRef}>
       <label htmlFor='avatar'>
-        <Button
+        <Pill
           className={c.ChangeablePicture_UploadButton}
           onClick={e => {
             e.preventDefault()
           }}
         >
           <EditIcon />
-        </Button>
+        </Pill>
       </label>
       <input
         className={c.ChangeablePicture_HiddenInput}
