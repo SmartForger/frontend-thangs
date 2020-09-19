@@ -26,7 +26,7 @@ export default store => {
     })
     const { data, error } = await api({
       method: 'GET',
-      endpoint: `users/${id}/models?sortBy=date`,
+      endpoint: `users/${id}/models?sortBy=created`,
     })
 
     if (error) {
