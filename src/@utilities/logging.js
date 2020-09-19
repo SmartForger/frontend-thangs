@@ -49,12 +49,12 @@ function initialize({
 
 function getServiceName(environment) {
   switch (environment) {
-  case 'development':
-    return 'development-thangs-frontend'
-  case 'staging':
-    return 'staging-thangs-frontend'
-  case 'production':
-  default:
-    return 'thangs-frontend'
+    case 'development':
+      return 'development-thangs-frontend'
+    case 'staging':
+      return 'staging-thangs-frontend'
+    case 'production':
+    default:
+      return 'thangs-frontend'
   }
 }

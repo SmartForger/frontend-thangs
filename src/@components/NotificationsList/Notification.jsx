@@ -181,41 +181,41 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
   )
 
   switch (verb) {
-  case 'commented':
-    IconComponent = CommentIcon
-    linkTarget = target && target.id ? `/model/${target.id}` : '/'
-    break
-  case 'downloaded':
-    IconComponent = DownloadIcon
-    linkTarget = target && target.id ? `/model/${target.id}` : '/'
-    break
-  case 'followed':
-    IconComponent = PlusIcon
-    linkTarget = target && target.id ? `/user/${target.id}` : '/'
-    break
-  case 'invited':
-    IconComponent = GrantAccessIcon
-    linkTarget = target && target.id ? `/folder/${target.id}` : '/'
-    break
-  case 'liked':
-    IconComponent = HeartIcon
-    linkTarget = target && target.id ? `/model/${target.id}` : '/'
-    break
-  case 'uploaded':
-    IconComponent = UploadIcon
-    linkTarget = target && target.id ? `/model/${target.id}` : '/'
-    break
-  case 'uploadedNewVersion':
-    IconComponent = UploadIcon
-    linkTarget = target && target.id ? `/model/${target.id}` : '/'
-    altVerb = 'uploaded new version'
-    break
-  case 'uploaded-to-folder':
-    IconComponent = UploadIcon
-    linkTarget = target && target.id ? `/folder/${target.id}` : '/'
-    break
-  default:
-    break
+    case 'commented':
+      IconComponent = CommentIcon
+      linkTarget = target && target.id ? `/model/${target.id}` : '/'
+      break
+    case 'downloaded':
+      IconComponent = DownloadIcon
+      linkTarget = target && target.id ? `/model/${target.id}` : '/'
+      break
+    case 'followed':
+      IconComponent = PlusIcon
+      linkTarget = target && target.id ? `/user/${target.id}` : '/'
+      break
+    case 'invited':
+      IconComponent = GrantAccessIcon
+      linkTarget = target && target.id ? `/folder/${target.id}` : '/'
+      break
+    case 'liked':
+      IconComponent = HeartIcon
+      linkTarget = target && target.id ? `/model/${target.id}` : '/'
+      break
+    case 'uploaded':
+      IconComponent = UploadIcon
+      linkTarget = target && target.id ? `/model/${target.id}` : '/'
+      break
+    case 'uploadedNewVersion':
+      IconComponent = UploadIcon
+      linkTarget = target && target.id ? `/model/${target.id}` : '/'
+      altVerb = 'uploaded new version'
+      break
+    case 'uploaded-to-folder':
+      IconComponent = UploadIcon
+      linkTarget = target && target.id ? `/folder/${target.id}` : '/'
+      break
+    default:
+      break
   }
 
   return (

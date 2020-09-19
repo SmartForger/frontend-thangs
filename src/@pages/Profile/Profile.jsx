@@ -295,7 +295,7 @@ const CollectionTitle = ({ selected, onClick, className, title, amount }) => {
   )
 }
 
-const Portfolio = ({ userId, models, likes }) => {
+const Portfolio = ({ models, likes }) => {
   const c = useStyles({})
 
   const [selected, setSelected] = useState('models')
@@ -422,7 +422,6 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
   const [showProfileForm, setShowProfileForm] = useState(false)
-  const { navigateWithFlash } = useFlashNotification()
   const description = getDescription(user)
   const {
     [`user-own-models-${userId}`]: ownUserModelsAtom = {},
@@ -445,7 +444,7 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
         },
       })
     },
-    [dispatch, navigateWithFlash, user]
+    [dispatch, user]
   )
 
   const handleCancel = useCallback(() => {
@@ -513,7 +512,6 @@ const PageById = ({ userId, isCurrentUsersProfile }) => {
   const { isLoading, isLoaded, isError, data: user } = userData
 
   useEffect(() => {
-    console.log('FETCH_USER', userId)
     dispatch(types.FETCH_USER, { id: userId })
   }, [dispatch, userId])
 

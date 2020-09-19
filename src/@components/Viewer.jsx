@@ -129,16 +129,16 @@ const Asset = ({ url, mode, meshColor, wireFrameColor }) => {
     let currentMat
 
     switch (mode) {
-    case 'wireframe':
-      currentMat = wireframeMat
-      break
+      case 'wireframe':
+        currentMat = wireframeMat
+        break
 
-    case 'composite':
-      currentMat = compositeMat
-      break
+      case 'composite':
+        currentMat = compositeMat
+        break
 
-    default:
-      currentMat = shadedMat
+      default:
+        currentMat = shadedMat
     }
 
     const stlMesh = new THREE.Mesh(stl, currentMat)
