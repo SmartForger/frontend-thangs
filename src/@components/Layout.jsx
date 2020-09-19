@@ -136,6 +136,7 @@ const Layout = ({
   showSearch,
   showSearchTextFlash,
   showUser,
+  showNewHero,
 }) => {
   const { overlay } = useStoreon('overlay')
   const [notificationsIsOpen, setNotificationsOpen] = useState(false)
@@ -177,6 +178,7 @@ const Layout = ({
         showSearchTextFlash={showSearchTextFlash}
         showSearch={showSearch}
         showUser={showUser}
+        showNewHero={showNewHero}
       />
       {OverlayView && (
         <Overlay

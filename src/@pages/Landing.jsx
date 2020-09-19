@@ -141,61 +141,6 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
   )
 }
 
-const LandingHero = ({ newSignUp }) => {
-  const { dispatch } = useStoreon()
-  const c = useStyles()
-
-  return (
-    <>
-      <div className={c.Landing_Hero}>
-        <BackgroundSvg className={c.Landing_Background} />
-        <div className={c.Landing_TextContainer}>
-          <div className={c.Landing_PromotionalText}>
-            {newSignUp ? (
-              <h1 className={c.Landing_PromotionalPrimaryText}>
-                <u className={c.Landing_PromotionalPrimaryText}>Welcome to Thangs!</u>
-              </h1>
-            ) : (
-              <h1 className={c.Landing_PromotionalPrimaryText}>
-                <u className={c.Landing_PromotionalPrimaryText}>Search.</u> Collaborate.
-                Share.
-              </h1>
-            )}
-          </div>
-          <div className={c.Landing_PromotionalSecondaryText}>
-            Search for models in Thangs or upload your model and our powerful technology
-            will find all geometrically related models. Connect with the Thangs community
-            to collaborate and share 3D models.
-          </div>
-          <div className={c.Landing_SearchByModelUploadButton}>
-            <Button
-              onClick={() =>
-                dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload' })
-              }
-            >
-              <UploadIcon className={c.Landing_SearchByModelUploadButton_UploadIcon} />
-              <span>Search by Model Upload</span>
-            </Button>
-          </div>
-        </div>
-      </div>
-    </>
-  )
-}
-
-const WelcomeHero = () => {
-  return <LandingHero newSignUp />
-}
-
-const getHero = ({ loading, user, newSignUp }) => {
-  if (!loading && R.isEmpty(user)) {
-    return LandingHero
-  } else if (newSignUp) {
-    return WelcomeHero
-  }
-  return null
-}
-
 const numberWithCommas = x => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
@@ -206,7 +151,7 @@ const Landing = ({ newSignUp }) => {
     'modelsStats'
   )
   const {
-    atom: { data: user, isLoading: loading },
+    atom: { data: user },
   } = useCurrentUser()
   useEffect(() => {
     dispatch(types.FETCH_MODELS_STATS)
@@ -214,7 +159,6 @@ const Landing = ({ newSignUp }) => {
   const sessionExpired = useQuery('sessionExpired')
   const authFailed = useQuery('authFailed')
   const { id } = useParams()
-  const HeroComponent = getHero({ loading, user, newSignUp })
   const t = useTranslations({})
 
   const modelsIngested =
@@ -244,8 +188,7 @@ const Landing = ({ newSignUp }) => {
       bannerText={
         modelsIngested ? `${modelsIngested} ${t('header.modelsIndexed')}` : null
       }
-      Hero={HeroComponent}
-      showSearchTextFlash={true}
+      showNewHero={true}
     >
       <Page user={user} dispatch={dispatch} modelPreviews={modelPreviews} />
     </Layout>

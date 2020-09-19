@@ -12,6 +12,7 @@ const createTheme = (data = {}) => {
       lg: '@media (min-width: 1118px)',
       xl: '@media (min-width: 1235px)',
       xxl: '@media (min-width: 1440px)',
+      xxxl: '@media (min-width: 1616px)',
     },
     variables: {},
   }

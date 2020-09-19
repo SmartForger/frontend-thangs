@@ -15,7 +15,7 @@ const useStyles = createUseStyles(theme => {
       borderStyle: 'solid',
       borderRadius: '.5rem',
       boxSizing: 'border-box',
-      lineHeight: '18px',
+      lineHeight: '1rem',
       fontWeight: '500',
       outline: 'none',
       '&::placeholder': {

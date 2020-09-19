@@ -3,17 +3,23 @@ import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
+import { Carousel, Spacer, TitlePrimary, MultiLineBodyText } from '@components'
 import { useCurrentUser } from '@hooks'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 
-import { ReactComponent as BackgroundSvg } from '@svg/header-background.svg'
 import { ReactComponent as Caret } from '@svg/header-caret.svg'
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as LogoText } from '@svg/logo-text.svg'
 
+import { ReactComponent as PromoGeoSearch } from '@svg/promo-geosearch.svg'
+import { ReactComponent as PromoStorage } from '@svg/promo-storage.svg'
+import { ReactComponent as PromoCollab } from '@svg/promo-collab.svg'
+import { ReactComponent as PromoFree } from '@svg/promo-free.svg'
+
 import UserNav from './UserNav'
 import SearchBar from './SearchBar'
+import LandingSearchBar from './LandingSearchBar'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -44,6 +50,12 @@ const useStyles = createUseStyles(theme => {
         display: 'flex',
         justifyContent: 'center',
       },
+    },
+    Header_DesktopWrapper: {
+      transition: 'all 450ms',
+      opacity: 1,
+      height: ({ showNewHero, searchMinimized }) =>
+        !showNewHero || searchMinimized ? '6rem' : '37.75rem',
     },
     Header_MobileOnly: {
       display: 'flex',
@@ -115,8 +127,8 @@ const useStyles = createUseStyles(theme => {
           },
         },
         '&:-webkit-autofill': {
-          '-webkit-box-shadow': `0 0 0px 1000px ${theme.colors.purple[800]} inset`,
-          '-webkit-text-fill-color': theme.colors.white[400],
+          '-webkit-box-shadow': `0 0 0px 1000px ${theme.colors.white[400]} inset`,
+          '-webkit-text-fill-color': theme.colors.black[500],
           border: 'none',
         },
       },
@@ -210,23 +222,82 @@ const useStyles = createUseStyles(theme => {
       bottom: '-1.5rem',
       right: '11rem',
     },
+    Header_Landing: {
+      color: theme.colors.white[400],
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'spaceAround',
+      transition: 'all 400ms',
+      opacity: 1,
+    },
+    Header_LandingTitle: {
+      color: theme.colors.white[400],
+      transition: 'all 400ms',
+    },
+    Header_LandingBody: {
+      color: theme.colors.white[400],
+      textAlign: 'center',
+      transition: 'all 400ms',
+      opacity: 1,
+
+      '& span': {
+        color: theme.colors.gold[500],
+      },
+    },
+    SearchBar_Wrapper: {
+      background: 'white',
+      borderRadius: '.5rem',
+      width: '100%',
+      maxWidth: '44rem',
+      position: 'relative',
+    },
+    Header_Carousel: {
+      transition: 'all 400ms',
+      opacity: 1,
+    },
+    Fade: {
+      opacity: 0,
+    },
   }
 })
 
 const noop = () => null
 
+const PromoCards = [
+  {
+    IconComponent: PromoGeoSearch,
+    title: 'Geometric Search',
+    text: 'Upload your model and get geometrically similar results.',
+  },
+  {
+    IconComponent: PromoStorage,
+    title: 'Unlimited Storage',
+    text: 'Upload as many models as your heart desires.',
+  },
+  {
+    IconComponent: PromoCollab,
+    title: 'Collaboration',
+    text: 'Invite your friends and work together on projects.',
+  },
+  {
+    IconComponent: PromoFree,
+    title: 'And... its totally free',
+    text: 'Who doesnt love free Thangs?',
+  },
+]
+
 const Header = ({
-  inverted,
   onNotificationsClick = noop,
   notificationsIsOpen,
   showSearchTextFlash,
-  showSearch = true,
+  showSearch = false,
   showUser = true,
+  showNewHero = false,
 }) => {
   const { dispatch } = useStoreon()
-  const c = useStyles({ inverted, notificationsIsOpen })
-  const [showMobileSearch, setShowMobileSearch] = useState(showSearch)
-
+  const [searchMinimized, setMinimizeSearch] = useState(!showNewHero)
+  const c = useStyles({ notificationsIsOpen, searchMinimized, showNewHero })
   const {
     atom: { isLoading, data: user },
   } = useCurrentUser()
@@ -236,15 +307,10 @@ const Header = ({
     onNotificationsClick()
   }, [dispatch, notificationsIsOpen, onNotificationsClick])
 
-  const handleSearchClicked = useCallback(() => {
-    setShowMobileSearch(!showMobileSearch)
-  }, [showMobileSearch])
-
   return (
     <>
       <div className={c.Header}>
-        <BackgroundSvg className={c.Header_Background} />
-        <span className={c.Header_MobileOnly}>
+        <div className={c.Header_MobileOnly}>
           <div className={c.Header_MobileBoundary}>
             <div className={classnames(c.Header_Row, c.Header_TopRow)}>
               <Link to='/'>
@@ -255,20 +321,15 @@ const Header = ({
                 handleNotificationsClick={handleNotificationsClick}
                 notificationsIsOpen={notificationsIsOpen}
                 dispatch={dispatch}
-                handleSearchShow={handleSearchClicked}
                 isLoading={isLoading}
                 user={user}
                 showUser={showUser}
               />
             </div>
           </div>
-          {showMobileSearch && showSearch && (
-            <div>
-              <SearchBar isMobile />
-            </div>
-          )}
-        </span>
-        <span className={c.Header_DesktopOnly}>
+          <SearchBar />
+        </div>
+        <div className={classnames(c.Header_DesktopOnly, c.Header_DesktopWrapper)}>
           <div className={c.Header_DesktopBoundary}>
             <div className={classnames(c.Header_Row, c.Header_TopRow)}>
               <div className={c.Header_RowWrapper}>
@@ -281,7 +342,7 @@ const Header = ({
                       <LogoText />
                     </Link>
                   </div>
-                  {showSearch && <SearchBar showSearchTextFlash={showSearchTextFlash} />}
+                  {searchMinimized && <SearchBar />}
                 </div>
               </div>
               <UserNav
@@ -295,8 +356,53 @@ const Header = ({
               />
             </div>
             <Caret className={c.Header_Caret} />
+            {showNewHero && (
+              <>
+                <div
+                  className={classnames(c.Header_Landing, {
+                    [c.Fade]: searchMinimized,
+                  })}
+                >
+                  <Spacer size={'2rem'} />
+                  <TitlePrimary
+                    light
+                    className={classnames(c.Header_LandingTitle, {
+                      [c.Fade]: searchMinimized,
+                    })}
+                  >
+                    Let&apos;s find Thangs.
+                  </TitlePrimary>
+                  <Spacer size={'1rem'} />
+                  <MultiLineBodyText
+                    light
+                    className={classnames(c.Header_LandingBody, {
+                      [c.Fade]: searchMinimized,
+                    })}
+                  >
+                    Search, collaborate, and share your 3d models in one of
+                    <br />
+                    the fastest growing free communities.
+                  </MultiLineBodyText>
+                  <Spacer size={'2rem'} />
+                  <div className={c.SearchBar_Wrapper}>
+                    <LandingSearchBar
+                      showSearchTextFlash={showSearchTextFlash}
+                      searchMinimized={searchMinimized}
+                      setMinimizeSearch={setMinimizeSearch}
+                    />
+                  </div>
+                  <Spacer size={'4rem'} />
+                </div>
+                <Carousel
+                  cards={PromoCards}
+                  className={classnames(c.Header_Carousel, {
+                    [c.Fade]: searchMinimized,
+                  })}
+                />
+              </>
+            )}
           </div>
-        </span>
+        </div>
       </div>
     </>
   )
