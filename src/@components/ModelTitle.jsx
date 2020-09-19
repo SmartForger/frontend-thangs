@@ -59,7 +59,7 @@ const ModelTitle = ({ model, className }) => {
         {user && (
           <span className={c.ModelTitle_ProfileAuthor}>
             by
-            <Link className={c.ModelTitle_ProfileLink} to={`/profile/${user.id}`}>
+            <Link className={c.ModelTitle_ProfileLink} to={`/${user.username}`}>
               {user.username}
             </Link>
           </span>
