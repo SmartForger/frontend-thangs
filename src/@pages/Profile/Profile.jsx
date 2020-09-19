@@ -424,7 +424,7 @@ const MyProfile = ({ models, likes }) => {
 
 const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
   const c = useStyles({})
-  const { dispatch } = useStoreon()
+  const { dispatch, userUploadAvatar } = useStoreon('userUploadAvatar')
   const [showProfileForm, setShowProfileForm] = useState(false)
   const description = getDescription(user)
   const {
@@ -436,6 +436,10 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
     dispatch(types.FETCH_USER_OWN_MODELS, { id: userId })
     dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId })
   }, [dispatch, userId])
+
+  useEffect(() => {
+    if (userUploadAvatar && userUploadAvatar.data) window.location.reload()
+  }, [userUploadAvatar])
 
   const handleUpdateProfile = useCallback(
     newUserData => {

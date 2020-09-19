@@ -219,11 +219,11 @@ const ChangeablePicture = ({ user, className }) => {
           circularCrop={true}
         />
         <div className={c.ChangeablePicture_ButtonContainer}>
+          <Button secondary className={c.ChangeablePicture_CancelButton} onClick={cancel}>
+            Cancel
+          </Button>
           <Button onClick={submitCrop} className={c.ChangeablePicture_SaveButton}>
             Save
-          </Button>
-          <Button dark className={c.ChangeablePicture_CancelButton} onClick={cancel}>
-            Cancel
           </Button>
         </div>
       </ReactModal>
