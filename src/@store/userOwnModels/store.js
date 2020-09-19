@@ -2,7 +2,6 @@ import api from '@services/api'
 import { STATUSES, getStatusState } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
 
-
 export default store => {
   store.on(types.INIT_USER_OWN_MODELS, (_, { id }) => ({
     [`user-own-models-${id}`]: {
@@ -27,7 +26,7 @@ export default store => {
     })
     const { data, error } = await api({
       method: 'GET',
-      endpoint: `users/${id}/models`,
+      endpoint: `users/${id}/models?sortBy=date`,
     })
 
     if (error) {
@@ -43,5 +42,4 @@ export default store => {
       })
     }
   })
-  
 }
