@@ -114,7 +114,7 @@ const StatusIndicator = ({ status }) => {
 
 const ModelViewer = ({ className, model }) => {
   const c = useStyles()
-  const [seenHowTo, setSeenHowTo] = useLocalStorage('seenHowTo', false)
+  const [seenHowTo, setSeenHowTo] = useState(true) //useLocalStorage('seenHowTo', false)
 
   return seenHowTo ? (
     <HoopsModelViewer className={className} model={model} />

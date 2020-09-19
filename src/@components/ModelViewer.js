@@ -142,7 +142,7 @@ const ModelViewerDisplay = ({ model, className }) => {
 }
 
 const ModelViewer = ({ model, className }) => {
-  const [seenHowTo, setSeenHowTo] = useLocalStorage('seenHowTo', false)
+  const [seenHowTo, setSeenHowTo] = useState(true) //useLocalStorage('seenHowTo', false)
 
   return seenHowTo ? (
     <ModelViewerDisplay model={model} className={className} />
