@@ -14,7 +14,7 @@ const Auth = () => {
         return <Redirect to={'/?authFailed=true'} />
       }
       pendo.track('Third Party Signup - Success', { source: 'Google' })
-      return (window.location.href = '/welcome')
+      return (window.location.href = '/')
     }
     googleAuth()
   }, [code])
