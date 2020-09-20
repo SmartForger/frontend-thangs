@@ -240,6 +240,7 @@ const useStyles = createUseStyles(theme => {
       textAlign: 'center',
       transition: 'all 400ms',
       opacity: 1,
+      display: 'inline-block !important',
 
       '& span': {
         color: theme.colors.gold[500],
@@ -378,7 +379,9 @@ const Header = ({
                       [c.Fade]: searchMinimized,
                     })}
                   >
-                    Search, collaborate, and share your 3d models in one of
+                    <span>Search, </span>
+                    <span>collaborate, </span> and <span>share </span> your 3d models in
+                    one of
                     <br />
                     the fastest growing free communities.
                   </MultiLineBodyText>
