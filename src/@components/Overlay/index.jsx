@@ -48,6 +48,7 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
       width: '90%',
       margin: '0 auto',
+      marginTop: '2rem',
       maxWidth: ({ windowed, showPromo }) =>
         !showPromo && windowed
           ? '22.875rem'
@@ -60,6 +61,7 @@ const useStyles = createUseStyles(theme => {
 
       [md]: {
         height: 'auto',
+        marginTop: '0',
       },
     },
     Overlay_Content__visible: {

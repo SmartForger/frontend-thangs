@@ -69,6 +69,11 @@ const useStyles = createUseStyles(theme => {
     },
     Signin_SignInForm: {
       backgroundColor: theme.colors.white[300],
+      borderRadius: '0 0 .5rem .5rem',
+
+      [md]: {
+        borderRadius: 0,
+      },
     },
     Signin_FormWrapper: {
       width: '100%',
@@ -135,10 +140,7 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
 
       '& path': {
-        fill: theme.colors.white[400],
-        [md]: {
-          fill: theme.colors.black[500],
-        },
+        fill: theme.colors.black[500],
       },
     },
     Signin_withGoogleButton: {

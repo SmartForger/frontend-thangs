@@ -66,13 +66,7 @@ const useStyles = createUseStyles(theme => {
       right: '2rem',
       zIndex: 4,
       cursor: 'pointer',
-
-      '& path': {
-        fill: theme.colors.white[400],
-        [md]: {
-          fill: theme.colors.black[500],
-        },
-      },
+      fill: theme.colors.black[500],
     },
   }
 })

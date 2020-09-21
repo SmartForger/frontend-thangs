@@ -37,12 +37,10 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       overflow: 'hidden',
       position: 'relative',
-      marginTop: '2rem',
 
       [md]: {
         alignItems: 'stretch',
         flexDirection: 'row',
-        marginTop: 0,
       },
 
       '& > div': {
@@ -148,10 +146,7 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
 
       '& path': {
-        fill: theme.colors.white[400],
-        [md]: {
-          fill: theme.colors.black[500],
-        },
+        fill: theme.colors.black[500],
       },
     },
     Signup_withGoogleButton: {
