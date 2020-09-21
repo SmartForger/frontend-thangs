@@ -63,6 +63,10 @@ const DeleteModel = ({ modelId, className }) => {
     path: '/home',
   })
 
+  const userNameMatch = useRouteMatch({
+    path: '/:userName',
+  })
+
   const fetchData = {
     type: R.isNil(ownFolderMatch) ? FETCH_TYPES.OWN_MODELS : FETCH_TYPES.FOLDER,
     ...(R.path(['params', 'id'], ownFolderMatch) && {
@@ -100,7 +104,8 @@ const DeleteModel = ({ modelId, className }) => {
     }
   })
 
-  if (R.isNil(ownFolderMatch) && R.isNil(ownModelsMatch)) return null
+  if (R.isNil(ownFolderMatch) && R.isNil(ownModelsMatch) && R.isNil(userNameMatch))
+    return null
 
   return (
     <div className={classnames(className, c.DeleteModel)}>
