@@ -8,13 +8,18 @@ const Auth = () => {
   const code = useQuery('code')
   useEffect(() => {
     const googleAuth = async () => {
-      const { error } = await authenticationService.googleAuth({ code })
+      const { data, error } = await authenticationService.googleAuth({ code })
       if (error) {
         pendo.track('Third Party Signup - Failed', { source: 'Google' })
         return <Redirect to={'/?authFailed=true'} />
       }
-      pendo.track('Third Party Signup - Success', { source: 'Google' })
-      return (window.location.href = '/')
+      if (data && data.response && data.response.token && data.response.token.newUser) {
+        pendo.track('Third Party Signup - Success', { source: 'Google' })
+        return (window.location.href = '/welcome')
+      } else {
+        pendo.track('Third Party Login', { source: 'Google' })
+        return (window.location.href = '/')
+      }
     }
     googleAuth()
   }, [code])
