@@ -13,7 +13,7 @@ const Auth = () => {
         pendo.track('Third Party Signup - Failed', { source: 'Google' })
         return <Redirect to={'/?authFailed=true'} />
       }
-      if (data && data.response && data.response.token && data.response.token.newUser) {
+      if (data && data.token && data.token.newUser) {
         pendo.track('Third Party Signup - Success', { source: 'Google' })
         return (window.location.href = '/welcome')
       } else {
