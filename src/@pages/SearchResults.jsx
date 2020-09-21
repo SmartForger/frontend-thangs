@@ -251,7 +251,7 @@ const Page = () => {
         newPhyndexerId: phynId,
       })
     }
-    if (related && modelId) {
+    if (related && modelId && !phyndexer.isLoaded && !thangs.isLoaded) {
       dispatch(types.GET_RELATED_MODELS, {
         modelId,
       })
@@ -283,7 +283,7 @@ const Page = () => {
       dispatch(types.OPEN_OVERLAY, {
         overlayName: 'searchByUpload',
         overlayData: {
-          model: model,
+          model,
         },
       })
     },
