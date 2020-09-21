@@ -37,10 +37,12 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       overflow: 'hidden',
       position: 'relative',
+      marginTop: '2rem',
 
       [md]: {
         alignItems: 'stretch',
         flexDirection: 'row',
+        marginTop: 0,
       },
 
       '& > div': {
@@ -76,6 +78,10 @@ const useStyles = createUseStyles(theme => {
     },
     Signup_SignUpForm: {
       backgroundColor: theme.colors.white[300],
+      borderRadius: '0 0 .5rem .5rem',
+      [md]: {
+        borderRadius: 0,
+      },
     },
     Signup_FormWrapper: {
       width: '100%',

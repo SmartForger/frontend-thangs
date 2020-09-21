@@ -8,7 +8,11 @@ import * as types from '@constants/storeEventTypes'
 
 ReactModal.setAppElement('#root')
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+
   return {
     '@keyframes shake': {
       '10%, 90%': {
@@ -40,6 +44,7 @@ const useStyles = createUseStyles(_theme => {
       cursor: 'pointer',
     },
     Overlay_Content: {
+      height: '100vh',
       position: 'relative',
       width: '90%',
       margin: '0 auto',
@@ -52,6 +57,10 @@ const useStyles = createUseStyles(_theme => {
       transition: 'all 450ms',
       opacity: ({ animateIn }) => (animateIn ? 0 : 1),
       top: ({ animateIn }) => (animateIn ? '30px' : 0),
+
+      [md]: {
+        height: 'auto',
+      },
     },
     Overlay_Content__visible: {
       opacity: '1 !important',
