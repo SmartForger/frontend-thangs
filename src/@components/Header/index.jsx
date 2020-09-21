@@ -55,7 +55,7 @@ const useStyles = createUseStyles(theme => {
       transition: 'all 450ms',
       opacity: 1,
       height: ({ showNewHero, searchMinimized }) =>
-        !showNewHero || searchMinimized ? '6rem' : '37.75rem',
+        !showNewHero || searchMinimized ? '6rem' : '32rem',
     },
     Header_MobileOnly: {
       display: 'flex',
@@ -363,7 +363,7 @@ const Header = ({
                     [c.Fade]: searchMinimized,
                   })}
                 >
-                  <Spacer size={'2rem'} />
+                  <Spacer size={'1rem'} />
                   <TitlePrimary
                     light
                     className={classnames(c.Header_LandingTitle, {
@@ -392,7 +392,7 @@ const Header = ({
                       setMinimizeSearch={setMinimizeSearch}
                     />
                   </div>
-                  <Spacer size={'4rem'} />
+                  <Spacer size={'2.5rem'} />
                 </div>
                 <Carousel
                   cards={PromoCards}
