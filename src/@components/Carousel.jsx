@@ -122,9 +122,6 @@ const Carousel = ({ className, cards = [] }) => {
       onMouseDown={dragStart}
       onMouseUp={dragEnd}
       onMouseMove={drag}
-      onTouchStart={dragStart}
-      onTouchEnd={dragEnd}
-      onTouchMove={drag}
       className={classnames(className, c.Carousel_Wrapper)}
     >
       <ul className={classnames(c.Carousel, { [c.Carousel__dragging]: active })}>
