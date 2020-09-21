@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { LandingCard, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'

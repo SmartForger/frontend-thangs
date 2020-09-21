@@ -326,7 +326,7 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
       })
       if (loginError) return setSignupErrorMessage(error)
       pendo.track('Overlay Sign Up Success', { source })
-      return window.location.reload()
+      return (window.location.href = '/welcome')
     }
   }, [dispatch, inputState, source, validateEmail, validatePasswords])
 
