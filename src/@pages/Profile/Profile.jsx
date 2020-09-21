@@ -470,7 +470,7 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
               src={user.profile && user.profile.avatarUrl}
               name={user.fullName || user.username}
             />
-            <ChangeablePicture user={user} />
+            {isCurrentUsersProfile && <ChangeablePicture user={user} />}
           </div>
           <div>
             <Spacer size={'2rem'} />
