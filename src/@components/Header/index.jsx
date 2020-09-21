@@ -379,9 +379,8 @@ const Header = ({
                       [c.Fade]: searchMinimized,
                     })}
                   >
-                    <span>Search, </span>
-                    <span>collaborate, </span> and <span>share </span> your 3d models in
-                    one of
+                    <span>Search</span>, <span>collaborate</span>, and <span>share </span>{' '}
+                    your 3d models in one of
                     <br />
                     the fastest growing free communities.
                   </MultiLineBodyText>
