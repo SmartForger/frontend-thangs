@@ -33,6 +33,7 @@ const useStyles = createUseStyles(theme => {
 
       [xxxl]: {
         marginLeft: '0',
+        cursor: 'default',
       },
     },
     Carousel__dragging: {
