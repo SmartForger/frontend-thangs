@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
@@ -560,6 +560,7 @@ const PageByUserName = ({ userName }) => {
   const { dispatch, [`user-id-${userName}`]: userIdData = {} } = useStoreon(
     `user-id-${userName}`
   )
+  const history = useHistory()
   const { isLoaded, isError, data: userId } = userIdData
   const { title, description } = usePageMeta('profile')
   const currentUserId = useCurrentUserId()
@@ -567,12 +568,17 @@ const PageByUserName = ({ userName }) => {
     currentUserId,
     userId,
   ])
+  const isExternalReferral = useMemo(() => {
+    return history.location && history.location.state === undefined
+  }, [history.location])
 
   useEffect(() => {
     dispatch(types.FETCH_USER_ID, { id: userName })
   }, [dispatch, userName])
 
-  if (!isCurrentUsersProfile && isLoaded) pendo.track('Portfolio', { userName })
+  if (!isCurrentUsersProfile && isLoaded && isExternalReferral) {
+    pendo.track('Portfolio', { userName })
+  }
   if (!isLoaded) {
     return <Spinner />
   }

@@ -44,7 +44,13 @@ const ModelTitle = ({ model, className }) => {
   return (
     <div className={classnames(className, c.ModelTitle_Container)}>
       {user && (
-        <Link className={c.ModelTitle_ProfileLink} to={`/profile/${user.id}`}>
+        <Link
+          className={c.ModelTitle_ProfileLink}
+          to={{
+            pathname: `/${user.username}`,
+            state: { fromModel: true },
+          }}
+        >
           <ProfilePicture
             className={c.ModelTitle_OwnerProfilePicture}
             size='2.5rem'
@@ -59,7 +65,13 @@ const ModelTitle = ({ model, className }) => {
         {user && (
           <span className={c.ModelTitle_ProfileAuthor}>
             by
-            <Link className={c.ModelTitle_ProfileLink} to={`/${user.username}`}>
+            <Link
+              className={c.ModelTitle_ProfileLink}
+              to={{
+                pathname: `/${user.username}`,
+                state: { fromModel: true },
+              }}
+            >
               {user.username}
             </Link>
           </span>
