@@ -146,7 +146,8 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
 
       '& path': {
-        fill: theme.colors.black[500],
+        fill: ({ showPromo }) =>
+          showPromo ? theme.colors.white[400] : theme.colors.black[500],
       },
     },
     Signup_withGoogleButton: {
