@@ -37,28 +37,38 @@ const FILE_SIZE_LIMITS = {
   },
 }
 
-const useFileUpload = () => {
+const NOOP = () => null
+
+const useFileUpload = ({ onSetFile = NOOP }) => {
   const [file, setFile] = useState(undefined)
   const [errorState, setErrorState] = useState(undefined)
 
+  const handleSetFile = useCallback(
+    file => {
+      setFile(file)
+      onSetFile(file)
+    },
+    [setFile, onSetFile]
+  )
+
   const onDrop = useCallback(
-    (acceptedFiles, rejectedFiles, _event) => {
-      const file = acceptedFiles[0]
-      if (rejectedFiles[0]) {
+    (acceptedFiles, [rejectedFile], _event) => {
+      const [file] = acceptedFiles
+      if (rejectedFile) {
         setErrorState('FILE_EXT')
-        setFile(null)
+        handleSetFile(null)
       } else if (file.size >= FILE_SIZE_LIMITS.hard.size) {
         setErrorState('TOO_BIG')
-        setFile(null)
+        handleSetFile(null)
       } else if (file.size >= FILE_SIZE_LIMITS.soft.size) {
         setErrorState('SIZE_WARNING')
-        setFile(file)
+        handleSetFile(file)
       } else {
         setErrorState(null)
-        setFile(file)
+        handleSetFile(file)
       }
     },
-    [setFile]
+    [handleSetFile]
   )
 
   const cancelUpload = useCallback(
@@ -66,9 +76,9 @@ const useFileUpload = () => {
       e.preventDefault()
       e.stopPropagation()
       setErrorState(null)
-      setFile(null)
+      handleSetFile(null)
     },
-    [setFile]
+    [handleSetFile]
   )
 
   const preventClickingWhileFull = useCallback(
