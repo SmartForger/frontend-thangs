@@ -128,7 +128,7 @@ const SearchByUpload = () => {
         ) : (
           <form>
             <Uploader
-              showError={phyndexer.isError || thangs.isError}
+              showError={phyndexer.isError || thangs.isError ? 'Search' : false}
               setFile={handleFile}
             />
           </form>

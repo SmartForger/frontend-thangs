@@ -88,7 +88,7 @@ const FILE_SIZE_LIMITS = {
   },
 }
 
-const Uploader = ({ file, setFile, showError = true }) => {
+const Uploader = ({ file, setFile, showError = false }) => {
   const c = useStyles()
   const [errorState, setErrorState] = useState()
   const onDrop = useCallback(
@@ -147,8 +147,9 @@ const Uploader = ({ file, setFile, showError = true }) => {
             </div>
 
             <div className={c.Uploader_InfoMessage}>
-              Sorry, an unexpected error occurred. Please wait a moment and try to save
-              the model again.
+              {showError === 'Upload'
+                ? 'Sorry, an unexpected error occurred. Please wait a moment and try to save the model again.'
+                : 'Sorry, an unexpected error occurred. Please wait a moment and try to upload the model again.'}
             </div>
           </div>
         ) : file ? (

@@ -49,6 +49,7 @@ const useStyles = createUseStyles(theme => {
       width: '90%',
       margin: '0 auto',
       marginTop: '4rem',
+      paddingTop: '2rem',
       maxWidth: ({ windowed, showPromo }) =>
         !showPromo && windowed
           ? '22.875rem'

@@ -124,7 +124,7 @@ const Upload = ({ prevModelId }) => {
           <UploadProgress />
         ) : (
           <Uploader
-            showError={uploadModelPhase1.isError}
+            showError={uploadModelPhase1.isError ? 'Upload' : false}
             file={file}
             setFile={handleFileUpload}
             mode={uploadMode}
