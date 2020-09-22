@@ -130,6 +130,7 @@ const SearchByUpload = () => {
             <Uploader
               showError={phyndexer.isError || thangs.isError ? 'Search' : false}
               setFile={handleFile}
+              initialyOpened={!!R.path(['overlayData', 'initialyOpened'], overlay)}
             />
           </form>
         )}

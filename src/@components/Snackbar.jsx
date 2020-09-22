@@ -109,6 +109,7 @@ const Snackbar = () => {
             e.preventDefault()
             dispatch(types.OPEN_OVERLAY, {
               overlayName: 'searchByUpload',
+              overlayData: { initialyOpened: true }
             })
           }}
         >
