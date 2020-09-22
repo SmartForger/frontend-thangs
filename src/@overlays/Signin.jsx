@@ -14,6 +14,7 @@ import { useForm, useGoogleLogin, useFacebookLogin } from '@hooks'
 import { authenticationService } from '@services'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
+import { ReactComponent as FacebookLogo } from '@svg/facebook-logo.svg'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
@@ -231,7 +232,7 @@ const SignInForm = ({
         <Spacer size='.5rem' />
         <a href={facebookLoginUrl}>
           <Button secondary className={c.Signin_withGoogleButton}>
-            <GoogleLogo />
+            <FacebookLogo />
             <Spacer size={'.5rem'} />
             <LabelText>Log in with Facebook</LabelText>
           </Button>
@@ -244,8 +245,8 @@ const SignInForm = ({
                 {authFailed
                   ? 'Something went wrong. Please try again'
                   : sessionExpired
-                    ? 'Session Expired. Please sign back in to continue'
-                    : signupErrorMessage}
+                  ? 'Session Expired. Please sign back in to continue'
+                  : signupErrorMessage}
               </h4>
               <Spacer size='1rem' />
             </>

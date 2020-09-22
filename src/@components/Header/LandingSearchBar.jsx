@@ -25,6 +25,7 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
       margin: '0 1rem 1rem',
       height: '1rem',
+      lineHeight: '1.5rem',
 
       [md]: {
         margin: 0,
@@ -82,6 +83,7 @@ const useStyles = createUseStyles(theme => {
     SearchBar_IconWrapper: {
       display: 'flex',
       flexDirection: 'row',
+      alignItems: 'center',
     },
     SearchBar_SearchIcon: {
       cursor: 'pointer',

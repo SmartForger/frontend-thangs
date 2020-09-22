@@ -21,7 +21,7 @@ const LandingCard = ({ card = {} }) => {
   const c = useStyles({})
   return (
     <>
-      <Spacer size={'.5rem'} />
+      <Spacer size={'1.5rem'} />
       <div className={c.LandingCard}>
         <Spacer size={'1.5rem'} />
         <IconComponent />
@@ -33,7 +33,7 @@ const LandingCard = ({ card = {} }) => {
         </div>
         <Spacer size={'1.5rem'} />
       </div>
-      <Spacer size={'.5rem'} />
+      <Spacer size={'20px'} />
     </>
   )
 }

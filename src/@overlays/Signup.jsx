@@ -20,6 +20,7 @@ import { ReactComponent as BackgroundSvg } from '@svg/overlay-background.svg'
 import { ReactComponent as CheckIcon } from '@svg/icon-check.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
+import { ReactComponent as FacebookLogo } from '@svg/facebook-logo.svg'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
@@ -350,7 +351,7 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
         <Spacer size='.5rem' />
         <a href={facebookLoginUrl}>
           <Button secondary className={c.Signup_withGoogleButton}>
-            <GoogleLogo />
+            <FacebookLogo />
             <Spacer size={'.5rem'} />
             <LabelText>Sign up with Facebook</LabelText>
           </Button>

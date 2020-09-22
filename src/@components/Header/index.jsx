@@ -55,7 +55,7 @@ const useStyles = createUseStyles(theme => {
       transition: 'all 450ms',
       opacity: 1,
       height: ({ showNewHero, searchMinimized }) =>
-        !showNewHero || searchMinimized ? '6rem' : '32rem',
+        !showNewHero || searchMinimized ? '6rem' : '32.5rem',
     },
     Header_MobileOnly: {
       display: 'flex',
