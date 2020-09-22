@@ -12,8 +12,8 @@ const useStyles = createUseStyles(theme => {
       },
     },
     ProfilePicture_alt: {
-      width: '3rem',
-      height: '3rem',
+      width: '1.875rem',
+      height: '1.875rem',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
