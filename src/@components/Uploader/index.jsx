@@ -52,7 +52,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const Uploader = ({ file, setFile, showError = true }) => {
+const Uploader = ({ file, setFile, showError = true, initialyOpened }) => {
   const c = useStyles()
 
   const {
@@ -62,7 +62,7 @@ const Uploader = ({ file, setFile, showError = true }) => {
     UploadZone,
     FILE_SIZE_LIMITS,
     MODEL_FILE_EXTS,
-  } = useFileUpload({onSetFile: setFile})
+  } = useFileUpload({ onSetFile: setFile, initialyOpened })
 
   return (
     <UploadZone>

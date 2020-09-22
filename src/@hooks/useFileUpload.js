@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 const MODEL_FILE_EXTS = [
@@ -39,7 +39,7 @@ const FILE_SIZE_LIMITS = {
 
 const NOOP = () => null
 
-const useFileUpload = ({ onSetFile = NOOP }) => {
+const useFileUpload = ({ onSetFile = NOOP, initialyOpened = false }) => {
   const [file, setFile] = useState(undefined)
   const [errorState, setErrorState] = useState(undefined)
 
@@ -91,7 +91,7 @@ const useFileUpload = ({ onSetFile = NOOP }) => {
     [file]
   )
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop,
     accept: MODEL_FILE_EXTS,
   })
@@ -108,6 +108,13 @@ const useFileUpload = ({ onSetFile = NOOP }) => {
     [getInputProps, getRootProps, preventClickingWhileFull]
   )
 
+  useEffect(() => {
+    if (initialyOpened) {
+      open()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return {
     errorState,
     cancelUpload,
@@ -115,6 +122,7 @@ const useFileUpload = ({ onSetFile = NOOP }) => {
     UploadZone,
     FILE_SIZE_LIMITS,
     MODEL_FILE_EXTS,
+    file,
   }
 }
 
