@@ -1,5 +1,5 @@
-import React, { useEffect, useParams } from 'react'
-import { Redirect } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Redirect, useParams } from 'react-router-dom'
 import { useQuery } from '@hooks'
 import { authenticationService } from '@services'
 import * as pendo from '@vendors/pendo'
