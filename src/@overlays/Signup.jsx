@@ -156,6 +156,12 @@ const useStyles = createUseStyles(theme => {
       backgroundColor: 'transparent',
       width: '100%',
     },
+    Signup_withFacebookButton: {
+      border: '1px solid #3B5998',
+      backgroundColor: '#3B5998',
+      color: theme.colors.white[400],
+      width: '100%',
+    },
   }
 })
 
@@ -348,9 +354,9 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
             <LabelText>Sign up with Google</LabelText>
           </Button>
         </a>
-        <Spacer size='.5rem' />
+        <Spacer size='1rem' />
         <a href={facebookLoginUrl}>
-          <Button secondary className={c.Signup_withGoogleButton}>
+          <Button secondary className={c.Signup_withFacebookButton}>
             <FacebookLogo />
             <Spacer size={'.5rem'} />
             <LabelText>Sign up with Facebook</LabelText>

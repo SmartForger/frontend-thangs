@@ -149,6 +149,12 @@ const useStyles = createUseStyles(theme => {
       backgroundColor: 'transparent',
       width: '100%',
     },
+    Signin_withFacebookButton: {
+      border: '1px solid #3B5998',
+      backgroundColor: '#3B5998',
+      color: theme.colors.white[400],
+      width: '100%',
+    },
     Signin_ResetPasswordButton: {
       width: '100%',
     },
@@ -229,9 +235,9 @@ const SignInForm = ({
             <LabelText>Log in with Google</LabelText>
           </Button>
         </a>
-        <Spacer size='.5rem' />
+        <Spacer size='1rem' />
         <a href={facebookLoginUrl}>
-          <Button secondary className={c.Signin_withGoogleButton}>
+          <Button secondary className={c.Signin_withFacebookButton}>
             <FacebookLogo />
             <Spacer size={'.5rem'} />
             <LabelText>Log in with Facebook</LabelText>
