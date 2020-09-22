@@ -10,7 +10,7 @@ import {
   SingleLineBodyText,
   Spacer,
 } from '@components'
-import { useForm, useGoogleLogin } from '@hooks'
+import { useForm, useGoogleLogin, useFacebookLogin } from '@hooks'
 import { authenticationService } from '@services'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
@@ -174,6 +174,7 @@ const SignInForm = ({
     [authFailed, sessionExpired, signupErrorMessage]
   )
   const { googleLoginUrl } = useGoogleLogin()
+  const { facebookLoginUrl } = useFacebookLogin()
   const initialState = {
     email: '',
     password: '',
@@ -225,6 +226,14 @@ const SignInForm = ({
             <GoogleLogo />
             <Spacer size={'.5rem'} />
             <LabelText>Log in with Google</LabelText>
+          </Button>
+        </a>
+        <Spacer size='.5rem' />
+        <a href={facebookLoginUrl}>
+          <Button secondary className={c.Signin_withGoogleButton}>
+            <GoogleLogo />
+            <Spacer size={'.5rem'} />
+            <LabelText>Log in with Facebook</LabelText>
           </Button>
         </a>
         <Divider spacing={'1.5rem'} />

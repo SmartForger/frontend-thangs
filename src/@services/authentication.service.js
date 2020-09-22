@@ -111,6 +111,51 @@ const signup = async ({
   }
 }
 
+const ssoAuth = async ({ code, provider }) => {
+  if (provider === 'google') {
+    return googleAuth({ code })
+  } else if (provider === 'facebook') {
+    return facebookAuth({ code })
+  }
+  return { error: 'Provider not found' }
+}
+
+const facebookAuth = async ({ code }) => {
+  const authUrl = `${process.env.REACT_APP_API_KEY}auth/facebook`
+  const requestOptions = {
+    url: authUrl,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    data: JSON.stringify({ code }),
+  }
+
+  try {
+    const response = await axios(requestOptions)
+    const { token } = response.data
+    const { TOKEN: accessToken, expires: tokenExpiration, user } = token
+    localStorage.setItem('accessToken', accessToken)
+
+    const newUser = {
+      ...user,
+      accessToken: accessToken,
+      accessTokenExpiration: tokenExpiration,
+    }
+    setCurrentUser(newUser)
+
+    return response
+  } catch (err) {
+    if (err.response) {
+      return { error: err.response }
+    }
+    return {
+      status: 500,
+      data: {
+        detail: 'Internal Server Error, please try again',
+      },
+    }
+  }
+}
+
 const googleAuth = async ({ code }) => {
   const authUrl = `${process.env.REACT_APP_API_KEY}auth/google`
   const requestOptions = {
@@ -191,7 +236,7 @@ const authenticationService = {
   login,
   logout,
   signup,
-  googleAuth,
+  ssoAuth,
   resetPasswordForEmail,
   setPasswordForReset,
   getCurrentUser,

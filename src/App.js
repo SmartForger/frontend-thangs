@@ -50,7 +50,9 @@ const App = () => {
             <AppAnalytics />
             <Switch>
               <Route exact path='/' render={props => <Landing {...props} />} />
-              <Route path='/authenticate/google' component={Auth} />
+              <Route path='/authenticate/:provider' component={Auth} />
+              {/* <Route path='/leave/:provider' component={Deauth} />
+              <Route path='/delete/:provider' component={Deauth} /> */}
               <Route path='/explore/:id' component={Landing} />
               <Route
                 path='/welcome'

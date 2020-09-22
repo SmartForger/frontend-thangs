@@ -14,7 +14,7 @@ import {
   SingleLineBodyText,
   Spacer,
 } from '@components'
-import { useForm, useGoogleLogin } from '@hooks'
+import { useForm, useGoogleLogin, useFacebookLogin } from '@hooks'
 import { authenticationService } from '@services'
 import { ReactComponent as BackgroundSvg } from '@svg/overlay-background.svg'
 import { ReactComponent as CheckIcon } from '@svg/icon-check.svg'
@@ -235,6 +235,7 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
   const [signupErrorMessage, setSignupErrorMessage] = useState(null)
   const [invalidFields, setInvalidFields] = useState([])
   const { googleLoginUrl } = useGoogleLogin()
+  const { facebookLoginUrl } = useFacebookLogin()
   const initialState = {
     email: '',
     password: '',
@@ -344,6 +345,14 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
             <GoogleLogo />
             <Spacer size={'.5rem'} />
             <LabelText>Sign up with Google</LabelText>
+          </Button>
+        </a>
+        <Spacer size='.5rem' />
+        <a href={facebookLoginUrl}>
+          <Button secondary className={c.Signup_withGoogleButton}>
+            <GoogleLogo />
+            <Spacer size={'.5rem'} />
+            <LabelText>Sign up with Facebook</LabelText>
           </Button>
         </a>
         <Divider spacing={'1.5rem'} />
