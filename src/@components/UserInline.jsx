@@ -51,7 +51,7 @@ const UserInline = ({
           size={size}
           name={user.fullName}
           userName={user.username}
-          src={user.profile && user.profile.avatarUrl}
+          src={(user.profile && user.profile.avatarUrl) || user.avatarUrl}
         />
         <span className={c.UserInline_Info}>
           <div
