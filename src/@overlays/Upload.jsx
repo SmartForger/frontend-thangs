@@ -1,15 +1,15 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import * as R from 'ramda'
 import {
   Loader,
   UploadProgress,
-  Uploader,
   useFlashNotification,
   UploadForm,
 } from '@components'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
+import { useFileUpload } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -33,18 +33,11 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const UPLOAD_MODES = {
-  MODEL: 'MODEL',
-  VERSION: 'VERSION',
-}
-
 const sanitizeFileName = name => name.replace(/ /g, '_')
 
 const Upload = ({ prevModelId }) => {
-  const [file, setFile] = useState()
   const { navigateWithFlash } = useFlashNotification()
   const c = useStyles()
-  const uploadMode = R.isNil(prevModelId) ? UPLOAD_MODES.MODEL : UPLOAD_MODES.VERSION
 
   const { uploadModelPhase1, folders, overlay, dispatch } = useStoreon(
     'uploadModelPhase1',
@@ -66,11 +59,13 @@ const Upload = ({ prevModelId }) => {
       } else {
         dispatch(types.UPLOAD_MODEL_PHASE1, { file })
       }
-
-      setFile(file)
     },
     [dispatch]
   )
+
+  const { UploadZone, file } = useFileUpload({
+    onSetFile: handleFileUpload,
+  })
 
   const handleSubmit = useCallback(
     data => {
@@ -123,12 +118,7 @@ const Upload = ({ prevModelId }) => {
         {uploadModelPhase1.isLoading ? (
           <UploadProgress />
         ) : (
-          <Uploader
-            showError={uploadModelPhase1.isError ? 'Upload' : false}
-            file={file}
-            setFile={handleFileUpload}
-            mode={uploadMode}
-          />
+          <UploadZone showError={uploadModelPhase1.isError} />
         )}
       </div>
       {folders.loading ? (

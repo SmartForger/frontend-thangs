@@ -2,11 +2,12 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 import * as R from 'ramda'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import { Uploader, UploadProgress, ModelThumbnail } from '@components'
+import { UploadProgress, ModelThumbnail } from '@components'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 import Scanner from '@components/Scanner'
 import ScannerPaper from '@components/ScannerPaper'
+import { useFileUpload } from '@hooks'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -69,27 +70,6 @@ const SearchByUpload = () => {
   )
   const newFileName = R.path(['data', 'newFileName'], uploadData)
 
-  useEffect(() => {
-    dispatch(types.RESET_SEARCH_RESULTS)
-    if (model) {
-      const modelId = model.id || model.modelId
-      const searchTerm =
-        model.uploadedFile ||
-        model.modelFileName ||
-        getFileName(model.fileName) ||
-        'model'
-      if (modelId) {
-        dispatch(types.GET_RELATED_MODELS, {
-          modelId,
-          onFinish: () => {
-            dispatch(types.CLOSE_OVERLAY)
-            history.push(`/search/${searchTerm}?modelId=${modelId}&related=true`)
-          },
-        })
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const handleFile = useCallback(
     file => {
@@ -114,6 +94,33 @@ const SearchByUpload = () => {
     [dispatch, history]
   )
 
+  const { UploadZone } = useFileUpload({
+    initialyOpened: !!R.path(['overlayData', 'initialyOpened'], overlay),
+    onSetFile: handleFile,
+  })
+
+  useEffect(() => {
+    dispatch(types.RESET_SEARCH_RESULTS)
+    if (model) {
+      const modelId = model.id || model.modelId
+      const searchTerm =
+        model.uploadedFile ||
+        model.modelFileName ||
+        getFileName(model.fileName) ||
+        'model'
+      if (modelId) {
+        dispatch(types.GET_RELATED_MODELS, {
+          modelId,
+          onFinish: () => {
+            dispatch(types.CLOSE_OVERLAY)
+            history.push(`/search/${searchTerm}?modelId=${modelId}&related=true`)
+          },
+        })
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <div>
       <div className={c.SearchByUpload}>
@@ -127,11 +134,7 @@ const SearchByUpload = () => {
           )
         ) : (
           <form>
-            <Uploader
-              showError={phyndexer.isError || thangs.isError ? 'Search' : false}
-              setFile={handleFile}
-              initialyOpened={!!R.path(['overlayData', 'initialyOpened'], overlay)}
-            />
+            <UploadZone showError={phyndexer.isError || thangs.isError} />
           </form>
         )}
       </div>

@@ -1,16 +1,16 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import {
   Layout,
   ProgressText,
   Spinner,
   UploadFrame,
   UploadForm,
-  Uploader,
   useFlashNotification,
 } from '@components'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
+import { useFileUpload } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -88,7 +88,6 @@ const useStyles = createUseStyles(theme => {
 const sanitizeFileName = name => name.replace(/ /g, '_')
 
 const Page = () => {
-  const [file, setFile] = useState()
   const { navigateWithFlash } = useFlashNotification()
   const c = useStyles()
 
@@ -103,6 +102,8 @@ const Page = () => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => () => dispatch(types.RESET_UPLOAD_MODEL), [])
+
+  const { UploadZone, file } = useFileUpload({})
 
   const onSubmit = useCallback(
     async data => {
@@ -142,11 +143,7 @@ const Page = () => {
               <ProgressText className={c.Upload_Dots} text='Uploading' />
             </UploadFrame>
           ) : (
-            <Uploader
-              showError={uploadModelPhase1.isError ? 'Upload' : false}
-              file={file}
-              setFile={setFile}
-            />
+            <UploadZone showError={uploadModelPhase1.isError} />
           )}
         </div>
         <div className={c.Upload_Column__form}>

@@ -1,41 +1,7 @@
+import UploaderContent from '@components/UploaderContent'
+import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-
-const MODEL_FILE_EXTS = [
-  '.3dxml', // THREE_D_XML
-  '.CATPart', // CATIAV5
-  '.dwg',
-  '.dxf',
-  '.iges',
-  '.igs',
-  '.ipt', // Inventor
-  '.jt',
-  '.model', // CATIAV4
-  '.par', // SolidEdge
-  '.prt', // NX, ProE_Creo
-  '.sab', // ACIS_Binary
-  '.sat', // ACIS
-  '.sldprt', // SolidWorks
-  '.step',
-  '.stl',
-  '.stp',
-  '.vda',
-  '.x_b', // ParaSolid_Binary
-  '.x_t', // ParaSolid
-  '.xcgm',
-  '.xml', // XMLEBOM
-]
-
-const FILE_SIZE_LIMITS = {
-  hard: {
-    size: 250_000_000,
-    pretty: '250MB',
-  },
-  soft: {
-    size: 50_000_000,
-    pretty: '50MB',
-  },
-}
 
 const NOOP = () => null
 
@@ -55,13 +21,13 @@ const useFileUpload = ({ onSetFile = NOOP, initialyOpened = false }) => {
     (acceptedFiles, [rejectedFile], _event) => {
       const [file] = acceptedFiles
       if (rejectedFile) {
-        setErrorState('FILE_EXT')
+        setErrorState(ERROR_STATES.FILE_EXT)
         handleSetFile(null)
       } else if (file.size >= FILE_SIZE_LIMITS.hard.size) {
-        setErrorState('TOO_BIG')
+        setErrorState(ERROR_STATES.TOO_BIG)
         handleSetFile(null)
       } else if (file.size >= FILE_SIZE_LIMITS.soft.size) {
-        setErrorState('SIZE_WARNING')
+        setErrorState(ERROR_STATES.SIZE_WARNING)
         handleSetFile(file)
       } else {
         setErrorState(null)
@@ -91,21 +57,37 @@ const useFileUpload = ({ onSetFile = NOOP, initialyOpened = false }) => {
     [file]
   )
 
-  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
+  const { getRootProps, getInputProps, open } = useDropzone({
     onDrop,
     accept: MODEL_FILE_EXTS,
   })
 
   const UploadZone = useCallback(
-    ({ children }) => {
+    ({ children, showError }) => {
       return (
         <div {...getRootProps({ onClick: preventClickingWhileFull })}>
           <input {...getInputProps({ multiple: false })} />
-          {children}
+          {children ? (
+            children
+          ) : (
+            <UploaderContent
+              errorState={errorState}
+              file={file}
+              cancelUpload={cancelUpload}
+              showError={showError}
+            />
+          )}
         </div>
       )
     },
-    [getInputProps, getRootProps, preventClickingWhileFull]
+    [
+      getInputProps,
+      getRootProps,
+      preventClickingWhileFull,
+      errorState,
+      cancelUpload,
+      file,
+    ]
   )
 
   useEffect(() => {
@@ -116,12 +98,7 @@ const useFileUpload = ({ onSetFile = NOOP, initialyOpened = false }) => {
   }, [])
 
   return {
-    errorState,
-    cancelUpload,
-    isDragActive,
     UploadZone,
-    FILE_SIZE_LIMITS,
-    MODEL_FILE_EXTS,
     file,
   }
 }
