@@ -42,7 +42,7 @@ const UserInline = ({
   isSearchResult,
 }) => {
   const c = useStyles({ isPending })
-  let userName = user.username || (user.profile && user.profile.fullName)
+  let userName = user.username
   if (userName && userName.length > 20) userName = userName.slice(0, 20) + '...'
   return (
     <div className={className}>

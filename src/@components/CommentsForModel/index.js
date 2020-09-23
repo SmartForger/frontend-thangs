@@ -64,13 +64,12 @@ const Comment = ({ comment }) => {
   const c = useStyles()
   const { owner, body, created } = comment
   const time = formatDistanceStrict(new Date(created), new Date())
-
   return (
     <li className={c.CommentsForModel_Comment}>
       <Link to={`/profile/${owner.id}`}>
         <UserInline
           className={c.CommentsForModel_UserInline}
-          user={{ profile: owner }}
+          user={{ ...owner }}
           size={'1.875rem'}
         />
       </Link>
