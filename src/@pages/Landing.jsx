@@ -155,6 +155,7 @@ const Landing = () => {
   }, [dispatch])
   const sessionExpired = useQuery('sessionExpired')
   const authFailed = useQuery('authFailed')
+  const showSignup = useQuery('showSignup')
   const { id } = useParams()
   const t = useTranslations({})
 
@@ -176,6 +177,16 @@ const Landing = () => {
           authFailed,
         },
       })
+    if (showSignup) {
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'signUp',
+        overlayData: {
+          animateIn: true,
+          windowed: true,
+          showPromo: true,
+        },
+      })
+    }
     if (id) pendo.track('Explore', { referralChannel: id })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
