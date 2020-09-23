@@ -149,6 +149,10 @@ const useStyles = createUseStyles(theme => {
       '& path': {
         fill: ({ showPromo }) =>
           showPromo ? theme.colors.white[400] : theme.colors.black[500],
+
+        [md]: {
+          fill: `${theme.colors.black[500]} !important`,
+        },
       },
     },
     Signup_withGoogleButton: {
