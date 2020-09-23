@@ -71,6 +71,8 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
 
       [md]: {
+        position: 'sticky',
+        top: '2rem',
         maxWidth: '15rem',
       },
     },
