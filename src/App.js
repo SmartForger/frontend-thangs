@@ -16,7 +16,6 @@ import {
   Signup,
   TermsAndConditions,
   FolderPage,
-  Upload,
 } from '@pages'
 import { ErrorBoundary } from './ErrorBoundary'
 import { AppAnalytics } from '@components'
@@ -88,7 +87,6 @@ const App = () => {
                 path={['/search/:searchQuery', '/search']}
                 component={SearchResults}
               />
-              <Route path='/upload' component={routeRequiresAuth(Upload)} />
               <Route path='/:userName' component={Profile} />
               <Route path='/404' component={Page404} status={404} />
               <Route path='*' component={Page404} status={404} />
