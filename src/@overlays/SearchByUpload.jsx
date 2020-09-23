@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import * as R from 'ramda'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import { UploadProgress, ModelThumbnail } from '@components'
+import { UploadProgress, ModelThumbnail, UploaderContent } from '@components'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 import Scanner from '@components/Scanner'
@@ -64,12 +64,12 @@ const SearchByUpload = () => {
   const history = useHistory()
   const { dispatch, searchResults, overlay } = useStoreon('searchResults', 'overlay')
   const { phyndexer, thangs, uploadData } = searchResults
-  const model = useMemo(
-    () => overlay && overlay.overlayData && overlay.overlayData.model,
-    [overlay]
-  )
-  const newFileName = R.path(['data', 'newFileName'], uploadData)
+  const overlayData = (overlay && overlay.overlayData) || {}
+  const model = overlayData.model
+  const initialFile = overlayData.file
+  const isExplorerOpened = overlayData.isExplorerOpened
 
+  const newFileName = R.path(['data', 'newFileName'], uploadData)
 
   const handleFile = useCallback(
     file => {
@@ -94,9 +94,10 @@ const SearchByUpload = () => {
     [dispatch, history]
   )
 
-  const { UploadZone } = useFileUpload({
-    initialyOpened: !!R.path(['overlayData', 'initialyOpened'], overlay),
+  const { UploadZone, errorState, file, cancelUpload } = useFileUpload({
+    isExplorerOpened,
     onSetFile: handleFile,
+    file: initialFile,
   })
 
   useEffect(() => {
@@ -134,7 +135,14 @@ const SearchByUpload = () => {
           )
         ) : (
           <form>
-            <UploadZone showError={phyndexer.isError || thangs.isError} />
+            <UploadZone>
+              <UploaderContent
+                errorState={errorState}
+                file={file}
+                cancelUpload={cancelUpload}
+                showError={phyndexer.isError || thangs.isError}
+              />
+            </UploadZone>
           </form>
         )}
       </div>

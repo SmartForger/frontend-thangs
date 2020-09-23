@@ -1,12 +1,16 @@
-import UploaderContent from '@components/UploaderContent'
 import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 const NOOP = () => null
 
-const useFileUpload = ({ onSetFile = NOOP, initialyOpened = false }) => {
-  const [file, setFile] = useState(undefined)
+const useFileUpload = ({
+  onSetFile = NOOP,
+  file: initialFile,
+  isExplorerOpened = false,
+  noClick = false,
+}) => {
+  const [file, setFile] = useState(initialFile)
   const [errorState, setErrorState] = useState(undefined)
 
   const handleSetFile = useCallback(
@@ -58,40 +62,28 @@ const useFileUpload = ({ onSetFile = NOOP, initialyOpened = false }) => {
   )
 
   const { getRootProps, getInputProps, open } = useDropzone({
+    noClick,
     onDrop,
     accept: MODEL_FILE_EXTS,
   })
 
   const UploadZone = useCallback(
-    ({ children, showError }) => {
+    ({ children }) => {
       return (
         <div {...getRootProps({ onClick: preventClickingWhileFull })}>
           <input {...getInputProps({ multiple: false })} />
-          {children ? (
-            children
-          ) : (
-            <UploaderContent
-              errorState={errorState}
-              file={file}
-              cancelUpload={cancelUpload}
-              showError={showError}
-            />
-          )}
+          {children}
         </div>
       )
     },
-    [
-      getInputProps,
-      getRootProps,
-      preventClickingWhileFull,
-      errorState,
-      cancelUpload,
-      file,
-    ]
+    [getInputProps, getRootProps, preventClickingWhileFull]
   )
 
   useEffect(() => {
-    if (initialyOpened) {
+    if (initialFile) {
+      onSetFile(initialFile)
+    }
+    if (isExplorerOpened) {
       open()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -100,6 +92,8 @@ const useFileUpload = ({ onSetFile = NOOP, initialyOpened = false }) => {
   return {
     UploadZone,
     file,
+    errorState,
+    cancelUpload,
   }
 }
 

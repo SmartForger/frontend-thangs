@@ -1,11 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 import * as R from 'ramda'
-import {
-  Loader,
-  UploadProgress,
-  useFlashNotification,
-  UploadForm,
-} from '@components'
+import { Loader, UploadProgress, useFlashNotification, UploadForm, UploaderContent } from '@components'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
@@ -63,7 +58,7 @@ const Upload = ({ prevModelId }) => {
     [dispatch]
   )
 
-  const { UploadZone, file } = useFileUpload({
+  const { UploadZone, file, errorState, cancelUpload } = useFileUpload({
     onSetFile: handleFileUpload,
   })
 
@@ -118,7 +113,14 @@ const Upload = ({ prevModelId }) => {
         {uploadModelPhase1.isLoading ? (
           <UploadProgress />
         ) : (
-          <UploadZone showError={uploadModelPhase1.isError} />
+          <UploadZone>
+            <UploaderContent
+              errorState={errorState}
+              file={file}
+              cancelUpload={cancelUpload}
+              showError={uploadModelPhase1.isError}
+            />
+          </UploadZone>
         )}
       </div>
       {folders.loading ? (
