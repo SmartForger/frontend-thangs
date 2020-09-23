@@ -199,7 +199,7 @@ const SignInForm = ({
     [onInputChange]
   )
 
-  const handleSignUp = useCallback(async () => {
+  const handleSignIn = useCallback(async () => {
     setWaiting(true)
     setSigninErrorMessage(null)
 
@@ -215,7 +215,7 @@ const SignInForm = ({
           shake: true,
         },
       })
-      setSigninErrorMessage(error.message)
+      setSigninErrorMessage(error.data && error.data.message)
     } else {
       return window.location.reload()
     }
@@ -244,7 +244,7 @@ const SignInForm = ({
           </Button>
         </a>
         <Divider spacing={'1.5rem'} />
-        <form onSubmit={onFormSubmit(handleSignUp)} data-cy='signup-form'>
+        <form onSubmit={onFormSubmit(handleSignIn)} data-cy='signup-form'>
           {showErrorMessage && (
             <>
               <h4 className={c.Signin_ErrorText} data-cy='signup-error'>
