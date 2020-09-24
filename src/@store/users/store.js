@@ -57,29 +57,33 @@ export default store => {
       onFinish()
     }
   })
-  store.on(types.UPDATE_USER, async (_, { id, user: updatedUser, onFinish = noop }) => {
-    if (R.isNil(id)) return
+  store.on(
+    types.UPDATE_USER,
+    async (_, { id, user: updatedUser, onError = noop, onFinish = noop }) => {
+      if (R.isNil(id)) return
 
-    store.dispatch(types.CHANGE_USER_STATUS, {
-      status: STATUSES.LOADING,
-      atom: `user-${id}`,
-    })
-    const { error } = await api({
-      method: 'PUT',
-      endpoint: `users/${id}`,
-      body: updatedUser,
-    })
-
-    if (error) {
       store.dispatch(types.CHANGE_USER_STATUS, {
-        status: STATUSES.FAILURE,
+        status: STATUSES.LOADING,
         atom: `user-${id}`,
       })
-      logger.error('Error when trying to update the user', error)
-    } else {
-      store.dispatch(types.FETCH_CURRENT_USER, { id, onFinish })
+      const { error } = await api({
+        method: 'PUT',
+        endpoint: `users/${id}`,
+        body: updatedUser,
+      })
+
+      if (error) {
+        store.dispatch(types.CHANGE_USER_STATUS, {
+          status: STATUSES.FAILURE,
+          atom: `user-${id}`,
+        })
+        onError(error.message)
+        logger.error('Error when trying to update the user', error)
+      } else {
+        store.dispatch(types.FETCH_CURRENT_USER, { id, onFinish })
+      }
     }
-  })
+  )
 
   store.on(types.FOLLOW_USER, async (_, { id, onFinish = noop, onError = noop }) => {
     store.dispatch(types.CHANGE_USER_STATUS, {

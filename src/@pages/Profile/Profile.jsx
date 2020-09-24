@@ -428,6 +428,7 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
   const c = useStyles({})
   const { dispatch, userUploadAvatar } = useStoreon('userUploadAvatar')
   const [showProfileForm, setShowProfileForm] = useState(false)
+  const [editProfileErrorMessage, setEditProfileErrorMessage] = useState(null)
   const description = getDescription(user)
   const {
     [`user-own-models-${userId}`]: ownUserModelsAtom = {},
@@ -449,6 +450,9 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
       dispatch(types.UPDATE_USER, {
         id,
         user: updatedUser,
+        onError: error => {
+          setEditProfileErrorMessage(error)
+        },
         onFinish: () => {
           return (window.location.href = `/${user.username}`)
         },
@@ -487,6 +491,7 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
               handleUpdateProfile={handleUpdateProfile}
               handleCancel={handleCancel}
               isLoading={isLoading}
+              editProfileErrorMessage={editProfileErrorMessage}
             />
           ) : (
             <>

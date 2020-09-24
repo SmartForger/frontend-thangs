@@ -49,6 +49,7 @@ const EditProfileForm = ({
   isLoading,
   handleUpdateProfile = noop,
   handleCancel = noop,
+  editProfileErrorMessage,
 }) => {
   const c = useStyles()
 
@@ -87,6 +88,14 @@ const EditProfileForm = ({
 
   return (
     <form className={c.EditProfileForm} onSubmit={onFormSubmit(handleSubmit)}>
+      {editProfileErrorMessage && (
+        <>
+          <h4 className={c.Signin_ErrorText} data-cy='signup-error'>
+            {editProfileErrorMessage}
+          </h4>
+          <Spacer size='1rem' />
+        </>
+      )}
       <div className={c.EditProfileForm_Field}>
         <label className={c.EditProfileForm_label} htmlFor='username'>
           Username
