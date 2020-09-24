@@ -41,7 +41,7 @@ export default store => {
         atom: 'like-model',
         data,
       })
-      pendo.track('Model Liked')
+      pendo.track('Model Liked', { modelId })
       store.dispatch(types.UPDATE_MODEL_LIKES, {
         modelId: modelId,
         currentUserId: currentUserId,
@@ -70,7 +70,7 @@ export default store => {
         atom: 'like-model',
         data,
       })
-      pendo.track('Model Unliked')
+      pendo.track('Model Unliked', { modelId })
       store.dispatch(types.UPDATE_MODEL_LIKES, {
         modelId: modelId,
         currentUserId: currentUserId,

@@ -77,7 +77,7 @@ export default store => {
           atom: 'new-model-comments',
           data,
         })
-        pendo.track('New Comment')
+        pendo.track('New Comment', { modelId: id })
         onFinish()
         store.dispatch(types.FETCH_MODEL_COMMENTS, { id })
       }

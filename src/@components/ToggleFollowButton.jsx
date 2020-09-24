@@ -46,10 +46,10 @@ const AuthFollowButton = ({ c, className, currentUser, profileUserId, dispatch }
       e.preventDefault()
       if (isFollowing) {
         dispatch('unfollow-user', { id: profileUserId })
-        pendo.track('Unfollow User', profileUserId)
+        pendo.track('Unfollow User', { userId: profileUserId })
       } else {
         dispatch('follow-user', { id: profileUserId })
-        pendo.track('Follow User', profileUserId)
+        pendo.track('Follow User', { userId: profileUserId })
       }
     },
     [dispatch, profileUserId, isFollowing]
