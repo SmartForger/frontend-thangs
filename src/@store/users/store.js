@@ -25,6 +25,7 @@ export default store => {
     }
   })
   store.on(types.CHANGE_USER_STATUS, (state, { atom, status = STATUSES.INIT, data }) => ({
+    ...state,
     [atom]: {
       ...state[atom],
       ...getStatusState(status),
@@ -80,7 +81,7 @@ export default store => {
         onError(error.message)
         logger.error('Error when trying to update the user', error)
       } else {
-        store.dispatch(types.FETCH_CURRENT_USER, { id, onFinish })
+        store.dispatch(types.FETCH_USER, { id, onFinish })
       }
     }
   )

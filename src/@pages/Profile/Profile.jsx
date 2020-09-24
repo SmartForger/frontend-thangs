@@ -453,12 +453,9 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
         onError: error => {
           setEditProfileErrorMessage(error)
         },
-        onFinish: () => {
-          return (window.location.href = `/${user.username}`)
-        },
       })
     },
-    [dispatch, user]
+    [dispatch]
   )
 
   const handleCancel = useCallback(() => {
