@@ -351,7 +351,13 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
         <Spacer size='4rem' />
         <TitleTertiary>{showPromo ? 'Sign Up For Free' : 'Create Account'}</TitleTertiary>
         <Spacer size='2rem' />
-        <a href={googleLoginUrl}>
+        <a
+          href={googleLoginUrl}
+          onClick={useCallback(
+            () => pendo.track('Overlay Sign Up Click - Google', { source }),
+            [source]
+          )}
+        >
           <Button secondary className={c.Signup_withGoogleButton}>
             <GoogleLogo />
             <Spacer size={'.5rem'} />
@@ -359,7 +365,13 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
           </Button>
         </a>
         <Spacer size='1rem' />
-        <a href={facebookLoginUrl}>
+        <a
+          href={facebookLoginUrl}
+          onClick={useCallback(
+            () => pendo.track('Overlay Sign Up Click - Facebook', { source }),
+            [source]
+          )}
+        >
           <Button secondary className={c.Signup_withFacebookButton}>
             <FacebookLogo />
             <Spacer size={'.5rem'} />
