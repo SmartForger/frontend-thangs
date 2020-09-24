@@ -246,13 +246,6 @@ const useStyles = createUseStyles(theme => {
         color: theme.colors.gold[500],
       },
     },
-    SearchBar_Wrapper: {
-      background: 'white',
-      borderRadius: '.5rem',
-      width: '100%',
-      maxWidth: '44rem',
-      position: 'relative',
-    },
     Header_Carousel: {
       transition: 'all 400ms',
       opacity: 1,
@@ -392,13 +385,11 @@ const Header = ({
                     the fastest growing free communities.
                   </MultiLineBodyText>
                   <Spacer size={'2rem'} />
-                  <div className={c.SearchBar_Wrapper}>
-                    <LandingSearchBar
-                      showSearchTextFlash={showSearchTextFlash}
-                      searchMinimized={searchMinimized}
-                      setMinimizeSearch={setMinimizeSearch}
-                    />
-                  </div>
+                  <LandingSearchBar
+                    showSearchTextFlash={showSearchTextFlash}
+                    searchMinimized={searchMinimized}
+                    setMinimizeSearch={setMinimizeSearch}
+                  />
                   <Spacer size={'2.5rem'} />
                 </div>
                 <Carousel

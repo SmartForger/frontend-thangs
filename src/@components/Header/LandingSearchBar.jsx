@@ -17,7 +17,13 @@ const useStyles = createUseStyles(theme => {
   } = theme
 
   return {
-    SearchBar: {},
+    SearchBar: {
+      background: 'white',
+      borderRadius: '.5rem',
+      width: '100%',
+      maxWidth: '44rem',
+      position: 'relative',
+    },
     SearchBar_Field: {
       alignItems: 'center',
       display: 'flex',
@@ -142,7 +148,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-const SearchBar = ({ searchMinimized, setMinimizeSearch = noop }) => {
+const LandingSearchBar = ({ searchMinimized, setMinimizeSearch = noop }) => {
   const { dispatch } = useStoreon()
   const history = useHistory()
   const c = useStyles({ searchMinimized })
@@ -168,7 +174,7 @@ const SearchBar = ({ searchMinimized, setMinimizeSearch = noop }) => {
   }, [dispatch])
 
   return (
-    <div>
+    <div className={c.SearchBar}>
       <Spacer size={'1.25rem'} />
       <form className={c.SearchBar_Form} onSubmit={handleSearchSubmit}>
         <div className={classnames(c.SearchBar_Field)}>
@@ -208,4 +214,4 @@ const SearchBar = ({ searchMinimized, setMinimizeSearch = noop }) => {
   )
 }
 
-export default SearchBar
+export default LandingSearchBar
