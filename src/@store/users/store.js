@@ -80,10 +80,11 @@ export default store => {
       store.dispatch(types.FETCH_CURRENT_USER, { id, onFinish })
     }
   })
-  store.on('follow-user', async (_, { id, onFinish = noop, onError = noop }) => {
-    store.dispatch('change-status', {
+
+  store.on(types.FOLLOW_USER, async (_, { id, onFinish = noop, onError = noop }) => {
+    store.dispatch(types.CHANGE_USER_STATUS, {
       status: STATUSES.LOADING,
-      atom: 'follow-user',
+      atom: types.FOLLOW_USER,
     })
 
     const { data, error } = await api({
@@ -92,26 +93,26 @@ export default store => {
     })
 
     if (error) {
-      store.dispatch('change-status', {
+      store.dispatch(types.CHANGE_USER_STATUS, {
         status: STATUSES.FAILURE,
-        atom: 'follow-user',
+        atom: types.FOLLOW_USER,
       })
       onError()
     } else {
-      store.dispatch('change-status', {
+      store.dispatch(types.CHANGE_USER_STATUS, {
         status: STATUSES.LOADED,
-        atom: 'follow-user',
+        atom: types.FOLLOW_USER,
         data,
       })
 
       onFinish()
-      store.dispatch('local-follow-user', { id, isFollowed: true })
+      store.dispatch(types.LOCAL_FOLLOW_USER, { id, isFollowed: true })
     }
   })
-  store.on('unfollow-user', async (_, { id, onFinish = noop, onError = noop }) => {
-    store.dispatch('change-status', {
+  store.on(types.UNFOLLOW_USER, async (_, { id, onFinish = noop, onError = noop }) => {
+    store.dispatch(types.CHANGE_USER_STATUS, {
       status: STATUSES.LOADING,
-      atom: 'unfollow-user',
+      atom: types.UNFOLLOW_USER,
     })
 
     const { data, error } = await api({
@@ -120,24 +121,24 @@ export default store => {
     })
 
     if (error) {
-      store.dispatch('change-status', {
+      store.dispatch(types.CHANGE_USER_STATUS, {
         status: STATUSES.FAILURE,
-        atom: 'unfollow-user',
+        atom: types.UNFOLLOW_USER,
       })
       onError()
     } else {
-      store.dispatch('change-status', {
+      store.dispatch(types.CHANGE_USER_STATUS, {
         status: STATUSES.LOADED,
-        atom: 'unfollow-user',
+        atom: types.UNFOLLOW_USER,
         data,
       })
 
       onFinish()
-      store.dispatch('local-follow-user', { id, isFollowed: false })
+      store.dispatch(types.LOCAL_FOLLOW_USER, { id, isFollowed: false })
     }
   })
 
-  store.on('local-follow-user', (state, { id, isFollowed = false }) => ({
+  store.on(types.LOCAL_FOLLOW_USER, (state, { id, isFollowed = false }) => ({
     [`user-${id}`]: {
       ...state[`user-${id}`],
       data: {
