@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import * as R from 'ramda'
@@ -29,7 +29,7 @@ import { useLocalStorage } from '@hooks'
 import { Message404 } from './404'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
-import { usePageMeta, useServices } from '@hooks'
+import { usePageMeta } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import * as pendo from '@vendors/pendo'
@@ -372,16 +372,26 @@ const StatsAndActions = ({
 const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   const c = useStyles()
   const { navigateWithFlash } = useFlashNotification()
-  const { useFetchOnce } = useServices()
-  // const timerRef = useRef(null)
   const signUpShown = useRef(false)
   const {
-    atom: { data: modelData, isLoading, isLoaded, isError },
-  } = useFetchOnce(id, 'model')
+    dispatch,
+    [`model-${id}`]: modelAtom = {},
+    [`related-models-${id}`]: related = {},
+  } = useStoreon(`model-${id}`, `related-models-${id}`)
+
+  const { data: modelData, isLoading, isLoaded, isError } = modelAtom
+  const {
+    isLoading: isRelatedLoading,
+    isError: isRelatedError,
+    data: relatedData,
+  } = related
+
+  useEffect(() => {
+    dispatch(types.FETCH_MODEL, { id })
+    dispatch(types.FETCH_RELATED_MODELS, { id })
+  }, [dispatch, id])
+
   const { title, description } = usePageMeta('model')
-  const { dispatch } = useStoreon()
-  // const { dispatch, overlay } = useStoreon('overlay')
-  // const { isOpen } = overlay
   const openSignupOverlay = useCallback(
     (titleMessage, source) => {
       dispatch(types.OPEN_OVERLAY, {
@@ -397,20 +407,6 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
     },
     [dispatch]
   )
-
-  // useEffect(() => {
-  //   document.body.scrollTop = 0
-  //   document.documentElement.scrollTop = 0
-  //   if (!currentUser && !isOpen && !signUpShown.current) {
-  //     timerRef.current = setTimeout(() => {
-  //       openSignupOverlay('Where Thangs happen', 'Timer')
-  //       pendo.track('SignUp Prompt Overlay - Timer')
-  //     }, 20000)
-
-  //     return () => clearTimeout(timerRef.current)
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isOpen])
 
   if (isLoading || !isLoaded) {
     return <Spinner />
@@ -464,7 +460,11 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
                 isAuthedUser={!!currentUser}
                 openSignupOverlay={openSignupOverlay}
               />
-              <RelatedModels modelId={modelData.id} />
+              <RelatedModels
+                isLoading={isRelatedLoading}
+                isError={isRelatedError}
+                data={relatedData}
+              />
               <Divider />
               <CommentsForModel
                 modelId={modelData.id}

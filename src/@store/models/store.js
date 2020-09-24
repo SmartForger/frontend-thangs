@@ -35,6 +35,7 @@ export default store => {
   store.on(
     types.CHANGE_MODEL_STATUS,
     (state, { atom, status = STATUSES.INIT, data }) => ({
+      ...state,
       [atom]: {
         ...state[atom],
         ...getStatusState(status),
@@ -62,10 +63,7 @@ export default store => {
     }
   })
 
-  store.on(types.DELETE_MODEL, async (_, { 
-    modelId, 
-    fetchData,
-  }) => {
+  store.on(types.DELETE_MODEL, async (_, { modelId, fetchData }) => {
     store.dispatch(types.CHANGE_MODEL_STATUS, {
       status: STATUSES.LOADING,
       atom: 'deleteModel',
@@ -96,7 +94,6 @@ export default store => {
           id: authenticationService.getCurrentUserId(),
         })
       }
-      
     }
   })
 }

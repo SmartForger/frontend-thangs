@@ -4,7 +4,6 @@ import ModelCards from '@components/CardCollection/ModelCards'
 import { logger } from '@utilities/logging'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import useFetchPerMount from '@hooks/useServices/useFetchPerMount'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 
 const useStyles = createUseStyles(theme => {
@@ -38,12 +37,8 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const RelatedModels = ({ modelId, className }) => {
+const RelatedModels = ({ isLoading, isError, data, className }) => {
   const c = useStyles()
-
-  const {
-    atom: { isLoading, isError, data },
-  } = useFetchPerMount(modelId, 'related-models')
 
   if (isLoading) {
     return <Spinner />
