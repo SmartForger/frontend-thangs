@@ -53,6 +53,7 @@ const EditProfileForm = ({
   const c = useStyles()
 
   const initialState = {
+    username: user.username,
     firstName: user.firstName || '',
     lastName: user.lastName || '',
     description: (user.profile && user.profile.description) || '',
@@ -75,6 +76,7 @@ const EditProfileForm = ({
         id: user.id,
         firstName: data.firstName,
         lastName: data.lastName,
+        username: data.username,
         profile: {
           description: data.description || '',
         },
@@ -85,6 +87,20 @@ const EditProfileForm = ({
 
   return (
     <form className={c.EditProfileForm} onSubmit={onFormSubmit(handleSubmit)}>
+      <div className={c.EditProfileForm_Field}>
+        <label className={c.EditProfileForm_label} htmlFor='username'>
+          Username
+        </label>
+        <input
+          className={c.EditProfileForm_input}
+          name='Username'
+          value={inputState && inputState.username}
+          onChange={e => {
+            handleOnInputChange('username', e.target.value)
+          }}
+          required
+        />
+      </div>
       <div className={c.EditProfileForm_Field}>
         <label className={c.EditProfileForm_label} htmlFor='firstName'>
           First Name
