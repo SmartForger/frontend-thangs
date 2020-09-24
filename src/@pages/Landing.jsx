@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { CardCollection, Layout, Tabs } from '@components'
+import { CardCollection, Layout, Tabs, TitleSecondary } from '@components'
 import { useCurrentUser, useQuery, useTranslations } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { useStoreon } from 'storeon/react'
@@ -76,6 +76,19 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       width: '100%',
     },
+    Landing_Title: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: '1rem',
+
+      '& h2': {
+        display: 'none',
+        [md]: {
+          display: 'block',
+        },
+      },
+    },
   }
 })
 
@@ -117,6 +130,19 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
     ]
   }, [selected, sortBy])
 
+  const title = useMemo(() => {
+    switch (selected) {
+      case 'likes':
+        return 'Popular Models'
+      case 'date':
+        return 'New Models'
+      case 'downloaded':
+        return 'Most Downloaded'
+      default:
+        return 'Models'
+    }
+  }, [selected])
+
   if (modelPreviews.isError) {
     return (
       <div data-cy='fetch-results-error'>
@@ -127,7 +153,10 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
 
   return (
     <div className={c.Landing_Column}>
-      <Tabs options={sortOptions} />
+      <div className={c.Landing_Title}>
+        <TitleSecondary>{title}</TitleSecondary>
+        <Tabs options={sortOptions} />
+      </div>
       <CardCollection
         noResultsText='We have no models to display right now. Please try again later.'
         loading={modelPreviews.isLoading}

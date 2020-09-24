@@ -12,14 +12,14 @@ const useStyles = createUseStyles(theme => {
     TabsWrapper: {
       display: 'flex',
       justifyContent: 'center',
+      width: '100%',
       [md]: {
         justifyContent: 'flex-end',
+        width: 'auto',
       },
-      marginBottom: '1rem',
     },
     Tabs: {
       display: 'flex',
-      marginBottom: '1rem',
       justifyContent: 'flex-end',
       padding: '.25rem',
       backgroundColor: theme.colors.white[400],

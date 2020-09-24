@@ -70,7 +70,7 @@ const useStyles = createUseStyles(theme => {
     },
     Signin_SignInForm: {
       backgroundColor: theme.colors.white[300],
-      borderRadius: '0 0 .5rem .5rem',
+      borderRadius: '0 0 1rem 1rem',
 
       [md]: {
         borderRadius: 0,
