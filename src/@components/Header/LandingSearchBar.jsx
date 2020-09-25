@@ -5,7 +5,7 @@ import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
 import { Button, TextInput, Spacer } from '@components'
-import { useTranslations } from '@hooks'
+import { useFileUpload, useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 
@@ -260,10 +260,18 @@ const LandingSearchBar = () => {
   const { dispatch } = useStoreon()
   const uploadContainer = useRef(null)
   const searchBarContainer = useRef(null)
-
   const handleUploadClick = useCallback(() => {
     dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload' })
   }, [dispatch])
+
+  const handleSetFile = useCallback(file => {
+    dispatch(types.OPEN_OVERLAY, {
+      overlayName: 'searchByUpload',
+      overlayData: { file },
+    })
+  }, [dispatch])
+
+  const { UploadZone } = useFileUpload({ onSetFile: handleSetFile, noClick: true })
 
   const openUpload = () => {
     document.addEventListener('click', handleClickOutside, true)
@@ -277,9 +285,11 @@ const LandingSearchBar = () => {
   }
 
   const handleClickOutside = event => {
-    const isTargetSearchBar = searchBarContainer.current && searchBarContainer.current.contains(event.target)
-    const isTargetUploadInput = uploadContainer.current && uploadContainer.current.contains(event.target)
-    
+    const isTargetSearchBar =
+      searchBarContainer.current && searchBarContainer.current.contains(event.target)
+    const isTargetUploadInput =
+      uploadContainer.current && uploadContainer.current.contains(event.target)
+
     if (!isTargetSearchBar && !isTargetUploadInput) {
       closeUpload()
     }
@@ -309,32 +319,34 @@ const LandingSearchBar = () => {
       />
 
       {isUploadOpened && (
-        <div
-          className={classnames(
-            c.LandingSearchBar_Upload,
-            isDragOvered && c.LandingSearchBar_Upload__DragOvered
-          )}
-          ref={uploadContainer}
-          onDragOver={event => {
-            event.preventDefault()
-            setIsDragOvered(true)
-          }}
-          onDragLeave={event => {
-            event.preventDefault()
-            setIsDragOvered(false)
-          }}
-        >
-          <div className={classnames(c.Snackbar_UploadIcon)}>
-            <SnackbarUploadIcon />
-          </div>
+        <UploadZone>
+          <div
+            className={classnames(
+              c.LandingSearchBar_Upload,
+              isDragOvered && c.LandingSearchBar_Upload__DragOvered
+            )}
+            ref={uploadContainer}
+            onDragOver={event => {
+              event.preventDefault()
+              setIsDragOvered(true)
+            }}
+            onDragLeave={event => {
+              event.preventDefault()
+              setIsDragOvered(false)
+            }}
+          >
+            <div className={classnames(c.Snackbar_UploadIcon)}>
+              <SnackbarUploadIcon />
+            </div>
 
-          <div>
-            <span className={c.Snackbar_Link} onClick={handleUploadClick}>
-              Browse and upload
-            </span>{' '}
-            your model to find ones with related geometry.
+            <div>
+              <span className={c.Snackbar_Link} onClick={handleUploadClick}>
+                Browse and upload
+              </span>{' '}
+              your model to find ones with related geometry.
+            </div>
           </div>
-        </div>
+        </UploadZone>
       )}
     </div>
   )
