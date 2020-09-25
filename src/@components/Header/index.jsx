@@ -51,6 +51,14 @@ const useStyles = createUseStyles(theme => {
         justifyContent: 'center',
       },
     },
+    Header_DesktopOnly_Curtain: {
+      width: '100%',
+      height: '100%',
+      position: 'absolute',
+      background: 'rgba(0, 0, 0, 0.5)',
+      display: 'none',
+      zIndex: 0,
+    },
     Header_DesktopWrapper: {
       transition: 'all 450ms',
       opacity: 1,
@@ -401,6 +409,7 @@ const Header = ({
               </>
             )}
           </div>
+          <div id='HeaderDesktopOnlyCurtain' className={classnames(c.Header_DesktopOnly_Curtain)}></div>
         </div>
       </div>
     </>

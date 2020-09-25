@@ -22,6 +22,7 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
       maxWidth: '44rem',
       position: 'relative',
+      zIndex: 1,
     },
 
     LandingSearchBar_Upload: {
@@ -36,21 +37,21 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       justifyContent: 'center',
       boxShadow: '0px .5rem 1.25rem rgba(0, 0, 0, 0.16)',
-      zIndex: 1,
+      
       color: theme.colors.black[500],
       ...theme.text.viewerLoadingText,
     },
     LandingSearchBar_Upload__DragOvered: {
       background: theme.colors.blue[100],
     },
-    Snackbar_Button: {
+    LandingUpload_Button: {
       display: 'inline',
     },
-    Snackbar_Link: {
+    LandingUpload_Link: {
       ...theme.text.linkText,
       cursor: 'pointer',
     },
-    Snackbar_UploadIcon: {
+    LandingUpload_UploadIcon: {
       marginRight: '1rem',
       '& path': {
         fill: theme.colors.black[500],
@@ -290,6 +291,13 @@ const LandingSearchBar = () => {
     setIsDragOvered(false)
   }
 
+  const setCurtain = (state) => {
+    const HeaderCurtain = document.getElementById('HeaderDesktopOnlyCurtain')
+    if (HeaderCurtain) {
+      HeaderCurtain.style.display = state ? 'unset' : 'none'
+    }
+  }
+
   const handleClickOutside = event => {
     const isTargetSearchBar =
       searchBarContainer.current && searchBarContainer.current.contains(event.target)
@@ -297,11 +305,13 @@ const LandingSearchBar = () => {
       uploadContainer.current && uploadContainer.current.contains(event.target)
 
     if (!isTargetSearchBar && !isTargetUploadInput) {
+      setCurtain(false)
       closeUpload()
     }
   }
 
   const handleSearchBarFocus = event => {
+    setCurtain(true)
     if (!isUploadOpened) {
       searchBarContainer.current = event.target
       openUpload()
@@ -341,12 +351,12 @@ const LandingSearchBar = () => {
               setIsDragOvered(false)
             }}
           >
-            <div className={classnames(c.Snackbar_UploadIcon)}>
+            <div className={classnames(c.LandingUpload_UploadIcon)}>
               <SnackbarUploadIcon />
             </div>
 
             <div>
-              <span className={c.Snackbar_Link} onClick={handleUploadClick}>
+              <span className={c.LandingUpload_Link} onClick={handleUploadClick}>
                 Browse and upload
               </span>{' '}
               your model to find ones with related geometry.
