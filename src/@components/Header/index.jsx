@@ -301,11 +301,11 @@ const Header = ({
   const {
     atom: { isLoading, data: user },
   } = useCurrentUser()
-
+/*
   useEffect(() => {
     dispatch(types.FETCH_NOTIFICATIONS)
   }, [dispatch])
-
+*/
   const handleNotificationsClick = useCallback(() => {
     dispatch(types.CLOSE_OVERLAY)
     if (!notificationsIsOpen) dispatch(types.READ_NOTIFICATIONS)
