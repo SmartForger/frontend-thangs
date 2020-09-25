@@ -1,7 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
 
-import { useServices } from '@hooks'
 import { createUseStyles } from '@style'
 import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg'
 
