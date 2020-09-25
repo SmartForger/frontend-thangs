@@ -261,17 +261,23 @@ const LandingSearchBar = () => {
   const uploadContainer = useRef(null)
   const searchBarContainer = useRef(null)
   const handleUploadClick = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload' })
+    dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload', overlayData: { isExplorerOpened: true } })
   }, [dispatch])
 
-  const handleSetFile = useCallback(file => {
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'searchByUpload',
-      overlayData: { file },
-    })
-  }, [dispatch])
+  const handleSetFile = useCallback(
+    (file, errorState) => {
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'searchByUpload',
+        overlayData: { file, errorState },
+      })
+    },
+    [dispatch]
+  )
 
-  const { UploadZone } = useFileUpload({ onSetFile: handleSetFile, noClick: true })
+  const { UploadZone } = useFileUpload({
+    onSetFile: handleSetFile,
+    noClick: true,
+  })
 
   const openUpload = () => {
     document.addEventListener('click', handleClickOutside, true)

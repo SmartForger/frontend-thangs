@@ -67,6 +67,7 @@ const SearchByUpload = () => {
   const overlayData = (overlay && overlay.overlayData) || {}
   const model = overlayData.model
   const initialFile = overlayData.file
+  const initialErrorState = overlayData.errorState
   const isExplorerOpened = overlayData.isExplorerOpened
 
   const newFileName = R.path(['data', 'newFileName'], uploadData)
@@ -98,6 +99,7 @@ const SearchByUpload = () => {
     isExplorerOpened,
     onSetFile: handleFile,
     file: initialFile,
+    errorState: initialErrorState,
   })
 
   useEffect(() => {

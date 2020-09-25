@@ -7,16 +7,18 @@ const NOOP = () => null
 const useFileUpload = ({
   onSetFile = NOOP,
   file: initialFile,
+  errorState: initialErrorState,
   isExplorerOpened = false,
   noClick = false,
 }) => {
   const [file, setFile] = useState(initialFile)
-  const [errorState, setErrorState] = useState(undefined)
+  const [errorState, setErrorState] = useState(initialErrorState)
 
-  const handleSetFile = useCallback(
-    file => {
+  const handleSetFileAndState = useCallback(
+    (file, errorState) => {
       setFile(file)
-      onSetFile(file)
+      setErrorState(errorState)
+      onSetFile(file, errorState)
     },
     [setFile, onSetFile]
   )
@@ -25,20 +27,16 @@ const useFileUpload = ({
     (acceptedFiles, [rejectedFile], _event) => {
       const [file] = acceptedFiles
       if (rejectedFile) {
-        setErrorState(ERROR_STATES.FILE_EXT)
-        handleSetFile(null)
+        handleSetFileAndState(null, ERROR_STATES.FILE_EXT)
       } else if (file.size >= FILE_SIZE_LIMITS.hard.size) {
-        setErrorState(ERROR_STATES.TOO_BIG)
-        handleSetFile(null)
+        handleSetFileAndState(null, ERROR_STATES.TOO_BIG)
       } else if (file.size >= FILE_SIZE_LIMITS.soft.size) {
-        setErrorState(ERROR_STATES.SIZE_WARNING)
-        handleSetFile(file)
+        handleSetFileAndState(file, ERROR_STATES.SIZE_WARNING)
       } else {
-        setErrorState(null)
-        handleSetFile(file)
+        handleSetFileAndState(file, null)
       }
     },
-    [handleSetFile]
+    [handleSetFileAndState]
   )
 
   const cancelUpload = useCallback(
@@ -46,9 +44,9 @@ const useFileUpload = ({
       e.preventDefault()
       e.stopPropagation()
       setErrorState(null)
-      handleSetFile(null)
+      handleSetFileAndState(null, null)
     },
-    [handleSetFile]
+    [handleSetFileAndState]
   )
 
   const preventClickingWhileFull = useCallback(
