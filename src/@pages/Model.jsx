@@ -322,6 +322,7 @@ const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
           <div>
             <ToggleFollowButton
               currentUser={currentUser}
+              profileUser={model && model.owner}
               profileUserId={model && model.owner && model.owner.id}
               openSignupOverlay={openSignupOverlay}
             />

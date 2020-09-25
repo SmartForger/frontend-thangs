@@ -63,11 +63,7 @@ export const ProfileDropdownMenu = ({
       TargetComponent={TargetComponent}
       user={user}
     >
-      <DropdownItem
-        onClick={() => {
-          return (window.location.href = `/${user.username}?selected=likes`)
-        }}
-      >
+      <DropdownItem to={`/${user.username}?selected=likes`}>
         <HeartIcon /> {t('header.dropdownMenu.likedModels')}
       </DropdownItem>
       <DropdownItem
@@ -83,11 +79,7 @@ export const ProfileDropdownMenu = ({
         <NewFolderIcon /> {t('header.dropdownMenu.createFolder')}
       </DropdownItem>
       <Divider spacing='.25rem' />
-      <DropdownItem
-        onClick={() => {
-          return (window.location.href = `/${user.username}`)
-        }}
-      >
+      <DropdownItem to={`/${user.username}`}>
         <UserIcon /> {t('header.dropdownMenu.viewProfile')}
       </DropdownItem>
       <DropdownItem

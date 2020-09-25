@@ -426,7 +426,8 @@ const MyProfile = ({ models, likes }) => {
 
 const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
   const c = useStyles({})
-  const { dispatch, userUploadAvatar } = useStoreon('userUploadAvatar')
+  const history = useHistory()
+  const { dispatch } = useStoreon()
   const [showProfileForm, setShowProfileForm] = useState(false)
   const [editProfileErrorMessage, setEditProfileErrorMessage] = useState(null)
   const description = getDescription(user)
@@ -440,10 +441,6 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
     dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId })
   }, [dispatch, userId])
 
-  useEffect(() => {
-    if (userUploadAvatar && userUploadAvatar.data) window.location.reload()
-  }, [userUploadAvatar])
-
   const handleUpdateProfile = useCallback(
     newUserData => {
       const { id, ...updatedUser } = newUserData
@@ -453,9 +450,12 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
         onError: error => {
           setEditProfileErrorMessage(error)
         },
+        onFinish: () => {
+          history.push(`/${updatedUser.username}`)
+        },
       })
     },
-    [dispatch]
+    [dispatch, history]
   )
 
   const handleCancel = useCallback(() => {
@@ -498,6 +498,7 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
                 <Spacer size={'1.5rem'} />
                 <ProfileButton
                   className={c.Profile_ProfileButton}
+                  user={user}
                   userId={userId}
                   onEditClick={setShowProfileForm}
                 />

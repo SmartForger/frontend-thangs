@@ -52,7 +52,7 @@ export default store => {
     } else {
       await storageService.uploadToSignedUrl(avatarData?.signedUrl, file)
       store.dispatch(types.LOADED_USER_AVATAR, { data: avatarData?.signedUrl })
-      store.dispatch(types.FETCH_CURRENT_USER, { id: userId })
+      store.dispatch(types.FETCH_USER, { id: userId })
     }
   })
 
@@ -66,7 +66,7 @@ export default store => {
       store.dispatch(types.FAILED_USER_AVATAR)
     } else {
       store.dispatch(types.LOADED_USER_AVATAR, { data })
-      store.dispatch(types.FETCH_CURRENT_USER, { id: userId })
+      store.dispatch(types.FETCH_USER, { id: userId })
     }
   })
 }

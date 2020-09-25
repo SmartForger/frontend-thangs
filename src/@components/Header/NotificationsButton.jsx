@@ -39,11 +39,8 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const NotificationsButton = ({ handleNotificationsClick }) => {
+const NotificationsButton = ({ notifications, handleNotificationsClick }) => {
   const c = useStyles({})
-  const { useFetchPerMount } = useServices()
-  const { atom: notifications } = useFetchPerMount('notifications')
-  const { data: notificationData } = notifications
   return (
     <div
       className={classnames(
@@ -53,9 +50,9 @@ const NotificationsButton = ({ handleNotificationsClick }) => {
       onClick={handleNotificationsClick}
     >
       <NotificationIcon className={c.NotificationsButton_NotificationIcon} />
-      {notificationData && notificationData.unreadCount > 0 && (
+      {notifications && notifications.unreadCount > 0 && (
         <div className={c.NotificationsButton_UnreadBadge}>
-          {notificationData.unreadCount}
+          {notifications.unreadCount}
         </div>
       )}
     </div>

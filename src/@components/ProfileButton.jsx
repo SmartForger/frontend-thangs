@@ -6,7 +6,7 @@ import * as types from '@constants/storeEventTypes'
 import * as pendo from '@vendors/pendo'
 
 const noop = () => null
-const ProfileButton = ({ userId, className, onEditClick = noop }) => {
+const ProfileButton = ({ user, userId, className, onEditClick = noop }) => {
   const currentUserId = useCurrentUserId()
   const { dispatch } = useStoreon()
   const isCurrentUser = currentUserId === userId
@@ -35,6 +35,7 @@ const ProfileButton = ({ userId, className, onEditClick = noop }) => {
     return (
       <ToggleFollowButton
         className={className}
+        profileUser={user}
         profileUserId={userId}
         currentUser={currentUserId}
         openSignupOverlay={openSignupOverlay}

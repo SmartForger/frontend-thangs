@@ -51,6 +51,8 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
+//ToDo: Snackbar should be a more generic display component: Design is defined in Voxel.
+//The upload logic here is a specific component which should use the snackbar component - BE
 const Snackbar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const c = useStyles({ isOpen })

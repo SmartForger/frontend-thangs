@@ -67,6 +67,7 @@ const useStyles = createUseStyles(theme => {
 
 const UserNav = ({
   handleNotificationsClick,
+  notifications,
   notificationsIsOpen,
   dispatch,
   isLoading,
@@ -106,7 +107,10 @@ const UserNav = ({
   if (showUser && user && !R.isNil(user) && !R.isEmpty(user)) {
     return (
       <div className={classnames(c.UserNav_Row, c.UserNav_ButtonsRow)}>
-        <NotificationsButton handleNotificationsClick={handleNotificationsClick} />
+        <NotificationsButton
+          notifications={notifications}
+          handleNotificationsClick={handleNotificationsClick}
+        />
         <Spacer size='1rem' />
         <ProfileDropdownMenu
           user={user}

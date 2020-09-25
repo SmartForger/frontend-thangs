@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
@@ -295,12 +295,17 @@ const Header = ({
   showUser = true,
   showNewHero = false,
 }) => {
-  const { dispatch } = useStoreon()
+  const { dispatch, notifications } = useStoreon('notifications')
   const [searchMinimized, setMinimizeSearch] = useState(!showNewHero)
   const c = useStyles({ notificationsIsOpen, searchMinimized, showNewHero })
   const {
     atom: { isLoading, data: user },
   } = useCurrentUser()
+
+  useEffect(() => {
+    dispatch(types.FETCH_NOTIFICATIONS)
+  }, [dispatch])
+
   const handleNotificationsClick = useCallback(() => {
     dispatch(types.CLOSE_OVERLAY)
     if (!notificationsIsOpen) dispatch(types.READ_NOTIFICATIONS)
@@ -319,6 +324,7 @@ const Header = ({
               <UserNav
                 c={c}
                 handleNotificationsClick={handleNotificationsClick}
+                notifications={notifications}
                 notificationsIsOpen={notificationsIsOpen}
                 dispatch={dispatch}
                 isLoading={isLoading}
@@ -348,6 +354,7 @@ const Header = ({
               <UserNav
                 c={c}
                 handleNotificationsClick={handleNotificationsClick}
+                notifications={notifications}
                 notificationsIsOpen={notificationsIsOpen}
                 dispatch={dispatch}
                 isLoading={isLoading}

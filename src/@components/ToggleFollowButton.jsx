@@ -5,7 +5,6 @@ import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
-import useFetchOnce from '@hooks/useServices/useFetchOnce'
 import * as pendo from '@vendors/pendo'
 
 const useStyles = createUseStyles(_theme => {
@@ -34,10 +33,16 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const AuthFollowButton = ({ c, className, currentUser, profileUserId, dispatch }) => {
-  const {
-    atom: { isLoading, isError, data: user },
-  } = useFetchOnce(profileUserId, 'user')
+const AuthFollowButton = ({
+  c,
+  className,
+  currentUser,
+  isLoading,
+  isError,
+  profileUserId,
+  user,
+  dispatch,
+}) => {
   const isModelOfCurrentUser = (currentUser && currentUser.id) === profileUserId
   const isFollowing = user && user.isBeingFollowedByRequester
 
@@ -102,6 +107,7 @@ const UnauthFollowButton = ({ c, className, openSignupOverlay = noop }) => {
 
 const ToggleFollowButton = ({
   className,
+  profileUser,
   profileUserId,
   currentUser,
   openSignupOverlay = noop,
@@ -116,6 +122,7 @@ const ToggleFollowButton = ({
         currentUser={currentUser}
         dispatch={dispatch}
         profileUserId={profileUserId}
+        user={profileUser}
       />
     )
   }
