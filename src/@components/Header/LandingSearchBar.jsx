@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
+import * as R from 'ramda'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
@@ -8,8 +9,8 @@ import { useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 
-import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
+import { ReactComponent as SnackbarUploadIcon } from '@svg/snackbar-upload.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -17,12 +18,53 @@ const useStyles = createUseStyles(theme => {
   } = theme
 
   return {
+    LandingSearchBar: {
+      width: '100%',
+      maxWidth: '44rem',
+      position: 'relative',
+    },
+
+    LandingSearchBar_Upload: {
+      top: '3.5rem',
+      borderTop: `1px solid ${theme.colors.white[900]}`,
+      borderRadius: '0 0 .5rem .5rem',
+      position: 'absolute',
+      width: '100%',
+      height: '5.5rem',
+      background: theme.colors.white[400],
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      boxShadow: '0px .5rem 1.25rem rgba(0, 0, 0, 0.16)',
+      zIndex: 1,
+      color: theme.colors.black[500],
+      ...theme.text.viewerLoadingText,
+    },
+    LandingSearchBar_Upload__DragOvered: {
+      background: theme.colors.blue[100],
+    },
+    Snackbar_Button: {
+      display: 'inline',
+    },
+    Snackbar_Link: {
+      ...theme.text.linkText,
+      cursor: 'pointer',
+    },
+    Snackbar_UploadIcon: {
+      marginRight: '1rem',
+      '& path': {
+        fill: theme.colors.black[500],
+      },
+    },
+
     SearchBar: {
       background: 'white',
       borderRadius: '.5rem',
       width: '100%',
-      maxWidth: '44rem',
       position: 'relative',
+    },
+    SearchBar__withBottom: {
+      borderRadius: '.5rem .5rem 0 0',
     },
     SearchBar_Field: {
       alignItems: 'center',
@@ -71,11 +113,6 @@ const useStyles = createUseStyles(theme => {
       minWidth: '18.5rem',
       backgroundColor: theme.colors.white[400],
       borderRadius: '.5rem',
-
-      // [md]: {
-      //   width: '60%',
-      //   maxWidth: '32rem',
-      // },
     },
     SearchBar_FormInput: {
       width: '100%',
@@ -148,7 +185,14 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-const LandingSearchBar = ({ searchMinimized, setMinimizeSearch = noop }) => {
+
+const SearchBar = ({
+  className,
+  searchMinimized,
+  setMinimizeSearch = noop,
+  onChange,
+  ...props
+}) => {
   const { dispatch } = useStoreon()
   const history = useHistory()
   const c = useStyles({ searchMinimized })
@@ -169,12 +213,8 @@ const LandingSearchBar = ({ searchMinimized, setMinimizeSearch = noop }) => {
     [dispatch, history, searchTerm, setMinimizeSearch]
   )
 
-  const handleUploadClick = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload' })
-  }, [dispatch])
-
   return (
-    <div className={c.SearchBar}>
+    <div className={classnames(c.SearchBar, className)}>
       <Spacer size={'1.25rem'} />
       <form className={c.SearchBar_Form} onSubmit={handleSearchSubmit}>
         <div className={classnames(c.SearchBar_Field)}>
@@ -193,8 +233,10 @@ const LandingSearchBar = ({ searchMinimized, setMinimizeSearch = noop }) => {
             })}
             onChange={e => {
               setSearchTerm(e.target.value)
+              onChange && onChange(e)
             }}
             value={searchTerm || ''}
+            {...props}
           />
           <Button className={c.SearchBar_SearchButton} onClick={handleSearchSubmit}>
             <MagnifyingGlass
@@ -206,10 +248,94 @@ const LandingSearchBar = ({ searchMinimized, setMinimizeSearch = noop }) => {
           </Button>
         </div>
       </form>
-      <Button className={c.SearchBar_UploadButton} onClick={handleUploadClick}>
-        <UploadIcon />
-      </Button>
       <Spacer size={'1.25rem'} />
+    </div>
+  )
+}
+
+const LandingSearchBar = () => {
+  const c = useStyles({})
+  const [isUploadOpened, setIsUploadOpened] = useState(false)
+  const [isDragOvered, setIsDragOvered] = useState(false)
+  const { dispatch } = useStoreon()
+  const uploadContainer = useRef(null)
+  const searchBarContainer = useRef(null)
+
+  const handleUploadClick = useCallback(() => {
+    dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload' })
+  }, [dispatch])
+
+  const openUpload = () => {
+    document.addEventListener('click', handleClickOutside, true)
+    setIsUploadOpened(true)
+  }
+
+  const closeUpload = () => {
+    document.removeEventListener('click', handleClickOutside, true)
+    setIsUploadOpened(false)
+    setIsDragOvered(false)
+  }
+
+  const handleClickOutside = event => {
+    const isTargetSearchBar = searchBarContainer.current && searchBarContainer.current.contains(event.target)
+    const isTargetUploadInput = uploadContainer.current && uploadContainer.current.contains(event.target)
+    
+    if (!isTargetSearchBar && !isTargetUploadInput) {
+      closeUpload()
+    }
+  }
+
+  const handleSearchBarFocus = event => {
+    if (!isUploadOpened) {
+      searchBarContainer.current = event.target
+      openUpload()
+    }
+  }
+
+  return (
+    <div className={c.LandingSearchBar}>
+      <SearchBar
+        className={classnames(isUploadOpened && c.SearchBar__withBottom)}
+        onFocus={handleSearchBarFocus}
+        onChange={e => {
+          const value = R.path(['target', 'value'], e) || ''
+          if (value) {
+            closeUpload()
+          } else {
+            openUpload()
+          }
+        }}
+        autoComplete='off'
+      />
+
+      {isUploadOpened && (
+        <div
+          className={classnames(
+            c.LandingSearchBar_Upload,
+            isDragOvered && c.LandingSearchBar_Upload__DragOvered
+          )}
+          ref={uploadContainer}
+          onDragOver={event => {
+            event.preventDefault()
+            setIsDragOvered(true)
+          }}
+          onDragLeave={event => {
+            event.preventDefault()
+            setIsDragOvered(false)
+          }}
+        >
+          <div className={classnames(c.Snackbar_UploadIcon)}>
+            <SnackbarUploadIcon />
+          </div>
+
+          <div>
+            <span className={c.Snackbar_Link} onClick={handleUploadClick}>
+              Browse and upload
+            </span>{' '}
+            your model to find ones with related geometry.
+          </div>
+        </div>
+      )}
     </div>
   )
 }

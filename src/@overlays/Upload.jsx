@@ -118,7 +118,7 @@ const Upload = ({ prevModelId }) => {
               errorState={errorState}
               file={file}
               cancelUpload={cancelUpload}
-              showError={uploadModelPhase1.isError}
+              showError={uploadModelPhase1.isError ? 'Upload' : false}
             />
           </UploadZone>
         )}
