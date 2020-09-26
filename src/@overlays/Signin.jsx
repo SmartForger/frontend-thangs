@@ -9,6 +9,7 @@ import {
   TitleTertiary,
   SingleLineBodyText,
   Spacer,
+  MetadataSecondary,
 } from '@components'
 import { useForm, useGoogleLogin, useFacebookLogin } from '@hooks'
 import { authenticationService } from '@services'
@@ -251,8 +252,8 @@ const SignInForm = ({
                 {authFailed
                   ? 'Something went wrong. Please try again'
                   : sessionExpired
-                  ? 'Session Expired. Please sign back in to continue'
-                  : signupErrorMessage}
+                    ? 'Session Expired. Please sign back in to continue'
+                    : signupErrorMessage}
               </h4>
               <Spacer size='1rem' />
             </>
@@ -294,6 +295,18 @@ const SignInForm = ({
         >
           Reset Password
         </Button>
+        <Spacer size='1rem' />
+        <MetadataSecondary>
+          Click “Log in” to agree to Thangs&apos;&nbsp;
+          <a href='/terms_and_conditions' target='_blank'>
+            terms and conditions
+          </a>{' '}
+          and acknowledge that Thangs&apos;&nbsp;
+          <a href='/privacy_policy' target='_blank'>
+            Privacy Policy
+          </a>{' '}
+          applies to you.
+        </MetadataSecondary>
         <Divider spacing={'1.5rem'} />
         <div className={c.Signin_HasAccount}>
           <SingleLineBodyText>New to Thangs?</SingleLineBodyText>
