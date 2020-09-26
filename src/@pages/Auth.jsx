@@ -14,9 +14,12 @@ const Auth = () => {
   const { provider } = useParams()
   const googleSecurityToken = window.localStorage.getItem('googleSecurityToken')
   const facebookSecurityToken = window.localStorage.getItem('facebookSecurityToken')
+  window.localStorage.removeItem('googleSecurityToken')
+  window.localStorage.removeItem('facebookSecurityToken')
   let securityToken
   if (provider === 'google') securityToken = googleSecurityToken.toString()
   if (provider === 'facebook') securityToken = facebookSecurityToken.toString()
+
   useEffect(() => {
     const auth = async () => {
       if (returnedSecurityToken !== securityToken)
