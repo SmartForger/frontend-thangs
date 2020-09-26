@@ -9,14 +9,14 @@ workflows:
           filters:
             branches:
               only:
-                - Add-terms-to-signin
+                - development
       - deploy-production:
           Stack: master
           context: gcp-and-physna
           filters:
             branches:
               only:
-                - Add-terms-to-signin
+                - development
 
 jobs:
   deploy-staging:
