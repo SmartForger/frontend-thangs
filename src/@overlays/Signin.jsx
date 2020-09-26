@@ -181,8 +181,8 @@ const SignInForm = ({
     () => signupErrorMessage || sessionExpired || authFailed,
     [authFailed, sessionExpired, signupErrorMessage]
   )
-  const { googleLoginUrl } = useGoogleLogin()
-  const { facebookLoginUrl } = useFacebookLogin()
+  const { googleLoginUrl } = useGoogleLogin({ redirectUrl: window.location.href })
+  const { facebookLoginUrl } = useFacebookLogin({ redirectUrl: window.location.href })
   const initialState = {
     email: '',
     password: '',

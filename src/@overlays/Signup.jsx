@@ -245,8 +245,8 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
   const [waiting, setWaiting] = useState(false)
   const [signupErrorMessage, setSignupErrorMessage] = useState(null)
   const [invalidFields, setInvalidFields] = useState([])
-  const { googleLoginUrl } = useGoogleLogin()
-  const { facebookLoginUrl } = useFacebookLogin()
+  const { googleLoginUrl } = useGoogleLogin({ redirectUrl: window.location.href })
+  const { facebookLoginUrl } = useFacebookLogin({ redirectUrl: window.location.href })
   const initialState = {
     email: '',
     password: '',
