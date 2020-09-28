@@ -23,9 +23,6 @@ const useStyles = createUseStyles(theme => {
     ProfileDropdown_ClickableButton: {
       cursor: 'pointer',
     },
-    ProfileDropdown_DropdownMenu: {
-      zIndex: 2,
-    },
     ProfileDropdown_DropdownMenuDivider: {
       margin: '.25rem 0',
       border: 'none',
@@ -42,7 +39,6 @@ export const ProfileDropdownMenu = ({
   handleNotificationsClick,
   notificationsIsOpen,
 }) => {
-  const c = useStyles({})
   const t = useTranslations({})
   const history = useHistory()
   const { navigateWithFlash } = useFlashNotification()
@@ -59,7 +55,6 @@ export const ProfileDropdownMenu = ({
 
   return (
     <DropdownMenu
-      className={c.ProfileDropdown_DropdownMenu}
       TargetComponent={TargetComponent}
       user={user}
     >
