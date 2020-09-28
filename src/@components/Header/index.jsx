@@ -282,11 +282,6 @@ const PromoCards = [
     title: 'Collaboration',
     text: 'Invite your friends and work together on projects.',
   },
-  {
-    IconComponent: PromoFree,
-    title: 'And... its totally free',
-    text: 'Who doesnt love free Thangs?',
-  },
 ]
 
 const Header = ({
@@ -409,7 +404,10 @@ const Header = ({
               </>
             )}
           </div>
-          <div id='HeaderDesktopOnlyCurtain' className={classnames(c.Header_DesktopOnly_Curtain)}></div>
+          <div
+            id='HeaderDesktopOnlyCurtain'
+            className={classnames(c.Header_DesktopOnly_Curtain)}
+          ></div>
         </div>
       </div>
     </>

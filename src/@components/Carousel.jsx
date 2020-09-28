@@ -7,7 +7,7 @@ import { ReactComponent as LeftArrowIcon } from '@svg/icon-left-caret.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { xxxl },
+    mediaQueries: { xl },
   } = theme
   return {
     Carousel_Wrapper: {
@@ -21,7 +21,7 @@ const useStyles = createUseStyles(theme => {
         background: 'transparent',
       },
 
-      [xxxl]: {
+      [xl]: {
         overflowY: 'visible',
         display: 'flex',
         justifyContent: 'center',
@@ -34,7 +34,7 @@ const useStyles = createUseStyles(theme => {
       marginLeft: '2rem',
       cursor: 'grab',
 
-      [xxxl]: {
+      [xl]: {
         marginLeft: '0',
         cursor: 'default',
       },
@@ -53,7 +53,7 @@ const useStyles = createUseStyles(theme => {
       backgroundColor: theme.colors.white[400],
     },
     Carousel_LastCardSpacer: {
-      [xxxl]: {
+      [xl]: {
         display: 'none',
       },
     },
@@ -61,7 +61,7 @@ const useStyles = createUseStyles(theme => {
       width: '3rem',
       height: '3rem',
       position: 'absolute',
-      right: '2rem',
+      right: '0',
       bottom: '2.5rem',
       backgroundColor: 'white',
       borderRadius: '1.5rem',
@@ -69,12 +69,17 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       justifyContent: 'center',
       border: '1px solid black',
+      filter: 'drop-shadow(0px 2px 12px rgba(0, 0, 0, .6))',
+
+      [xl]: {
+        display: 'none',
+      },
     },
     Carousel_LeftArrow: {
       width: '3rem',
       height: '3rem',
       position: 'absolute',
-      left: '2rem',
+      left: '0',
       bottom: '2.5rem',
       backgroundColor: 'white',
       borderRadius: '1.5rem',
@@ -82,6 +87,11 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       justifyContent: 'center',
       border: '1px solid black',
+      filter: 'drop-shadow(0px 2px 12px rgba(0, 0, 0, .6))',
+
+      [xl]: {
+        display: 'none',
+      },
     },
   }
 })
@@ -89,64 +99,64 @@ const useStyles = createUseStyles(theme => {
 const Carousel = ({ className, cards = [] }) => {
   const c = useStyles({})
   const carouselRef = useRef()
-  const [active, setActive] = useState(false)
-  const [initialX, setInitialX] = useState()
-  const [xOffset, setXOffset] = useState(0)
+  // const [active, setActive] = useState(false)
+  // const [initialX, setInitialX] = useState()
+  // const [xOffset, setXOffset] = useState(0)
   const [showLeftArrow, setShowLeftArrow] = useState(false)
   const [showRightArrow, setShowRightArrow] = useState(true)
 
-  const pauseEvent = (e = {}) => {
-    if (e.stopPropagation) e.stopPropagation()
-    if (e.preventDefault) e.preventDefault()
-    e.cancelBubble = true
-    e.returnValue = false
-    return false
-  }
+  // const pauseEvent = (e = {}) => {
+  //   if (e.stopPropagation) e.stopPropagation()
+  //   if (e.preventDefault) e.preventDefault()
+  //   e.cancelBubble = true
+  //   e.returnValue = false
+  //   return false
+  // }
 
-  const dragStart = e => {
-    if (!e) {
-      e = window.event
-    }
-    if (e.target && e.target.nodeName === 'IMG') {
-      e.preventDefault()
-    } else if (e.srcElement && e.srcElement.nodeName === 'IMG') {
-      e.returnValue = false
-    }
-    setInitialX(e.clientX + carouselRef.current.scrollLeft)
-    setActive(true)
-    pauseEvent(e)
-  }
+  // const dragStart = e => {
+  //   if (!e) {
+  //     e = window.event
+  //   }
+  //   if (e.target && e.target.nodeName === 'IMG') {
+  //     e.preventDefault()
+  //   } else if (e.srcElement && e.srcElement.nodeName === 'IMG') {
+  //     e.returnValue = false
+  //   }
+  //   setInitialX(e.clientX + carouselRef.current.scrollLeft)
+  //   setActive(true)
+  //   pauseEvent(e)
+  // }
 
-  const dragEnd = e => {
-    if (!e) {
-      e = window.event
-    }
-    setActive(false)
-    let start = 1,
-      animate = () => {
-        const step = Math.sin(start)
-        if (step <= 0) {
-          window.cancelAnimationFrame(animate)
-        } else {
-          carouselRef.current.scrollLeft += xOffset * step
-          start -= 0.02
-          window.requestAnimationFrame(animate)
-        }
-      }
-    animate()
-  }
+  // const dragEnd = e => {
+  //   if (!e) {
+  //     e = window.event
+  //   }
+  //   setActive(false)
+  //   let start = 1,
+  //     animate = () => {
+  //       const step = Math.sin(start)
+  //       if (step <= 0) {
+  //         window.cancelAnimationFrame(animate)
+  //       } else {
+  //         carouselRef.current.scrollLeft += xOffset * step
+  //         start -= 0.02
+  //         window.requestAnimationFrame(animate)
+  //       }
+  //     }
+  //   animate()
+  // }
 
-  const drag = e => {
-    if (active === true) {
-      if (!e) {
-        e = window.event
-      }
-      const diffX = initialX - (e.clientX + carouselRef.current.scrollLeft)
-      carouselRef.current.scrollLeft += diffX
-      setXOffset(diffX)
-    }
-    pauseEvent(e)
-  }
+  // const drag = e => {
+  //   if (active === true) {
+  //     if (!e) {
+  //       e = window.event
+  //     }
+  //     const diffX = initialX - (e.clientX + carouselRef.current.scrollLeft)
+  //     carouselRef.current.scrollLeft += diffX
+  //     setXOffset(diffX)
+  //   }
+  //   pauseEvent(e)
+  // }
 
   const handleRightArrowClick = () => {
     const maxScrollWidth =
@@ -199,14 +209,8 @@ const Carousel = ({ className, cards = [] }) => {
 
   return (
     <>
-      <div
-        ref={carouselRef}
-        onMouseDown={dragStart}
-        onMouseUp={dragEnd}
-        onMouseMove={drag}
-        className={classnames(className, c.Carousel_Wrapper)}
-      >
-        <ul className={classnames(c.Carousel, { [c.Carousel__dragging]: active })}>
+      <div ref={carouselRef} className={classnames(className, c.Carousel_Wrapper)}>
+        <ul className={classnames(c.Carousel)}>
           {cards.map((card, ind) => {
             return (
               <li className={c.Carousel_CardWrapper} key={`CarouselCard_${ind}`}>
