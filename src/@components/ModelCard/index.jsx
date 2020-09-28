@@ -6,7 +6,7 @@ import { ReactComponent as ChatIcon } from '@svg/chat-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
 import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
-import { Button, Card, ModelThumbnail, UserInline, DeleteModel } from '@components'
+import { Button, Card, ModelThumbnail, UserInline, EditModel } from '@components'
 import { createUseStyles } from '@style'
 import { useCurrentUserId } from '@hooks'
 
@@ -86,7 +86,7 @@ const useStyles = createUseStyles(theme => {
         margin: '0 !important',
       },
     },
-    ModelCard_DeleteModel: {
+    ModelCard_EditModel: {
       position: 'absolute',
       right: '1rem',
       top: '1rem',
@@ -282,7 +282,7 @@ const ModelCard = ({
         />
       </Anchor>
       {isCurrentUserOwner && (
-        <DeleteModel className={c.ModelCard_DeleteModel} modelId={model.id} />
+        <EditModel className={c.ModelCard_EditModel} model={model} />
       )}
     </div>
   )

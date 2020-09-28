@@ -5,6 +5,7 @@ export const UPDATE_MODEL_LIKES = 'update-model-likes'
 export const FETCH_MODEL = 'fetch-model'
 export const DELETE_MODEL = 'delete-model'
 export const CHANGE_MODEL_STATUS = 'change-model-status'
+export const UPDATE_MODEL = 'update-model'
 /* Related Model Events */
 export const FETCH_RELATED_MODELS = 'fetch-related-models'
 /* Model Comments Store Events */

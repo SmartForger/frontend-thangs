@@ -15,7 +15,6 @@ import { ReactComponent as LogoText } from '@svg/logo-text.svg'
 import { ReactComponent as PromoGeoSearch } from '@svg/promo-geosearch.svg'
 import { ReactComponent as PromoStorage } from '@svg/promo-storage.svg'
 import { ReactComponent as PromoCollab } from '@svg/promo-collab.svg'
-import { ReactComponent as PromoFree } from '@svg/promo-free.svg'
 
 import UserNav from './UserNav'
 import SearchBar from './SearchBar'

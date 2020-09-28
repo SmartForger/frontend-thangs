@@ -4,7 +4,12 @@ import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   return {
-    TextInput: {
+    Textarea: {
+      width: '100%',
+      height: '100%',
+    },
+    TextTextarea: {
+      width: '100%',
       borderColor: ({ invalid }) =>
         invalid ? theme.colors.error : theme.colors.grey[100],
       borderWidth: ({ invalid }) => (invalid ? '2px' : '1px'),
@@ -18,6 +23,7 @@ const useStyles = createUseStyles(theme => {
       lineHeight: '1rem',
       fontWeight: '500',
       outline: 'none',
+      height: '100%',
       '&::placeholder': {
         color: theme.variables.colors.textInputPlaceholderColor,
       },
@@ -27,8 +33,22 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
+
 const noop = () => null
-const TextInput = ({ className, validator = noop, error, ...props }) => {
+const Textarea = ({
+  autoComplete,
+  className,
+  id,
+  label,
+  maxLength = 500,
+  name,
+  onChange = noop,
+  required = false,
+  type = 'text',
+  value = '',
+  error,
+  validator = noop,
+}) => {
   const [valid, setValid] = useState(true)
   const c = useStyles({ invalid: !valid || error })
 
@@ -39,12 +59,23 @@ const TextInput = ({ className, validator = noop, error, ...props }) => {
   }, [validator])
 
   return (
-    <input
-      {...props}
-      className={classnames(c.TextInput, className)}
-      onBlur={handleValidation}
-    />
+    <div className={classnames(className, c.Textarea)}>
+      <textarea
+        autoComplete={autoComplete}
+        className={c.TextTextarea}
+        data-cy={`cy_${id}`}
+        id={id}
+        maxLength={maxLength}
+        name={name}
+        onChange={e => onChange(name, e.target.value)}
+        placeholder={label}
+        required={required}
+        type={type}
+        value={value}
+        onBlur={handleValidation}
+      />
+    </div>
   )
 }
 
-export default TextInput
+export default Textarea

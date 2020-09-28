@@ -1,9 +1,12 @@
 import api from '@services/api'
+import * as R from 'ramda'
 import * as types from '@constants/storeEventTypes'
 import { STATUSES, getStatusState } from '@store/constants'
 import { authenticationService } from '@services'
 import { FETCH_TYPES } from './consts'
+import { logger } from '@utilities/logging'
 
+const noop = () => null
 export default store => {
   store.on(types.STORE_INIT, () => ({
     deleteModel: getStatusState(STATUSES.INIT),
@@ -43,7 +46,7 @@ export default store => {
       },
     })
   )
-  store.on(types.FETCH_MODEL, async (state, { id }) => {
+  store.on(types.FETCH_MODEL, async (state, { id, onFinish = noop }) => {
     store.dispatch(types.CHANGE_MODEL_STATUS, {
       status: STATUSES.LOADING,
       atom: `model-${id}`,
@@ -60,8 +63,37 @@ export default store => {
         atom: `model-${id}`,
         data,
       })
+      onFinish()
     }
   })
+
+  store.on(
+    types.UPDATE_MODEL,
+    async (_, { id, model: updatedModel, onError = noop, onFinish = noop }) => {
+      if (R.isNil(id)) return
+
+      store.dispatch(types.CHANGE_MODEL_STATUS, {
+        status: STATUSES.LOADING,
+        atom: `model-${id}`,
+      })
+      const { error } = await api({
+        method: 'PUT',
+        endpoint: `models/${id}`,
+        body: updatedModel,
+      })
+
+      if (error) {
+        store.dispatch(types.CHANGE_MODEL_STATUS, {
+          status: STATUSES.FAILURE,
+          atom: `model-${id}`,
+        })
+        onError(error.message)
+        logger.error('Error when trying to update the model', error)
+      } else {
+        store.dispatch(types.FETCH_MODEL, { id, onFinish })
+      }
+    }
+  )
 
   store.on(types.DELETE_MODEL, async (_, { modelId, fetchData }) => {
     store.dispatch(types.CHANGE_MODEL_STATUS, {

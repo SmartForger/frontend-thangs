@@ -1,10 +1,11 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
+import { EditModelForm, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import * as R from 'ramda'
-import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
-import * as eventTypes from '@constants/storeEventTypes'
+import { ReactComponent as EditIcon } from '@svg/icon-pencil.svg'
+import * as types from '@constants/storeEventTypes'
 import { useRouteMatch } from 'react-router-dom'
 import { FETCH_TYPES } from '@store/models/consts'
 
@@ -13,31 +14,39 @@ const useStyles = createUseStyles(theme => {
     color: theme.colors.black[500],
   }
   return {
-    DeleteModel: {},
-    DeleteModel_TrashIcon: {
+    EditModel: {},
+    EditModel_EditIcon: {
       color: theme.colors.grey[300],
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      padding: '1rem',
       '&:hover': {
         ...isconSelectedState,
       },
       cursor: 'pointer',
     },
-    DeleteModel_TrashIcon__selected: {
+    EditModel_EditIcon__selected: {
       ...isconSelectedState,
     },
-    DeleteModel_Message: {
-      backgroundColor: theme.colors.white[100],
-      boxShadow: '0px 5px 10px 0px rgba(35, 37, 48, 0.25)',
+    EditModel_Message: {
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
       borderRadius: '0.5rem',
-      ...theme.text.viewerLoadingText,
-      padding: '1rem 1rem',
-
+      boxShadow: '0px 5px 10px 0px rgba(35, 37, 48, 0.25)',
+      display: 'flex',
+      fontSize: '1rem',
+      fontWeight: 500,
+      height: '100%',
+      justifyContent: 'space-around',
+      left: 0,
       position: 'absolute',
-      bottom: '1rem',
-      right: '1rem',
-      width: '17rem',
+      top: 0,
+      width: '100%',
       zIndex: 1,
     },
-
+    EditModel_FormWrapper: {
+      backgroundColor: theme.colors.white[300],
+    },
     FeedbackTooltip_Link: {
       width: '100%',
       textAlign: 'right',
@@ -50,7 +59,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const DeleteModel = ({ modelId, className }) => {
+const EditModel = ({ model, editProfileErrorMessage }) => {
   const c = useStyles()
   const messageContainer = useRef(null)
   const { dispatch } = useStoreon()
@@ -75,15 +84,32 @@ const DeleteModel = ({ modelId, className }) => {
   }
   const [isOpened, setIsOpened] = useState(false)
 
-  const handleConfirm = useCallback(
+  const handleUpdateModel = useCallback(
+    newModelData => {
+      const { id, ...updatedModel } = newModelData
+      dispatch(types.UPDATE_MODEL, {
+        id,
+        model: updatedModel,
+        onError: error => {
+          editProfileErrorMessage(error)
+        },
+        onFinish: () => {
+          setIsOpened(false)
+        },
+      })
+    },
+    [dispatch, editProfileErrorMessage]
+  )
+
+  const handleDelete = useCallback(
     e => {
       e.preventDefault()
-      dispatch(eventTypes.DELETE_MODEL, {
-        modelId,
+      dispatch(types.DELETE_MODEL, {
+        id: model.id,
         fetchData,
       })
     },
-    [dispatch, modelId, fetchData]
+    [dispatch, model, fetchData]
   )
 
   const handleCancel = useCallback(e => {
@@ -108,31 +134,30 @@ const DeleteModel = ({ modelId, className }) => {
     return null
 
   return (
-    <div className={classnames(className, c.DeleteModel)}>
-      <TrashCanIcon
+    <>
+      <EditIcon
         className={classnames(
-          c.DeleteModel_TrashIcon,
-          isOpened && c.DeleteModel_TrashIcon__selected
+          c.EditModel_EditIcon,
+          isOpened && c.EditModel_EditIcon__selected
         )}
         onClick={() => {
           setIsOpened(true)
         }}
       />
       {isOpened && (
-        <div className={c.DeleteModel_Message} ref={messageContainer}>
-          <div>Are you sure you want to delete?</div>
-          <div className={c.FeedbackTooltip_Link}>
-            <a href='/#' onClick={handleCancel}>
-              Cancel
-            </a>
-            <a href='/#' onClick={handleConfirm}>
-              Confirm
-            </a>
-          </div>
+        <div className={c.EditModel_Message} ref={messageContainer}>
+          <Spacer size={'1rem'} />
+          <EditModelForm
+            model={model}
+            handleCancel={handleCancel}
+            handleConfirm={handleUpdateModel}
+            handleDelete={handleDelete}
+          />
+          <Spacer size={'1rem'} />
         </div>
       )}
-    </div>
+    </>
   )
 }
 
-export default DeleteModel
+export default EditModel
