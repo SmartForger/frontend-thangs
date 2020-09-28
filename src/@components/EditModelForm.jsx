@@ -51,8 +51,9 @@ const noop = () => null
 const EditModelForm = ({
   model = {},
   isLoading,
-  handleUpdateProfile = noop,
+  handleConfirm = noop,
   handleCancel = noop,
+  handleDelete = noop,
   editProfileErrorMessage,
 }) => {
   const c = useStyles()
@@ -75,13 +76,13 @@ const EditModelForm = ({
 
   const handleSubmit = useCallback(
     async data => {
-      handleUpdateProfile({
+      handleConfirm({
         id: model.id,
         name: data.name,
         description: data.description,
       })
     },
-    [handleUpdateProfile, model]
+    [handleConfirm, model]
   )
 
   return (
@@ -133,7 +134,7 @@ const EditModelForm = ({
         </Button>
       </div>
       <Spacer size='1rem' />
-      <Button tertiary className={c.EditModelForm_DeleteButton} onClick={handleCancel}>
+      <Button tertiary className={c.EditModelForm_DeleteButton} onClick={handleDelete}>
         <TrashCanIcon />
         <Spacer size={'.5rem'} />
         Delete Model

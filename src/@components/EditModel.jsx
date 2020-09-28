@@ -7,7 +7,7 @@ import * as R from 'ramda'
 import { ReactComponent as EditIcon } from '@svg/icon-pencil.svg'
 import * as types from '@constants/storeEventTypes'
 import { useRouteMatch } from 'react-router-dom'
-import { FETCH_TYPES } from '@store/models/consts'
+import { FETCH_TYPES } from '@store/userOwnModels/consts'
 
 const useStyles = createUseStyles(theme => {
   const isconSelectedState = {
@@ -104,7 +104,7 @@ const EditModel = ({ model, editProfileErrorMessage }) => {
   const handleDelete = useCallback(
     e => {
       e.preventDefault()
-      dispatch(types.DELETE_MODEL, {
+      dispatch(types.DELETE_USER_OWN_MODEL, {
         id: model.id,
         fetchData,
       })
