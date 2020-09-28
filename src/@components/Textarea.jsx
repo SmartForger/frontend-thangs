@@ -47,7 +47,7 @@ const Textarea = ({
   type = 'text',
   value = '',
   error,
-  validator = noop,
+  validator,
 }) => {
   const [valid, setValid] = useState(true)
   const c = useStyles({ invalid: !valid || error })

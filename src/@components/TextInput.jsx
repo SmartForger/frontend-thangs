@@ -27,8 +27,8 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
-const noop = () => null
-const TextInput = ({ className, validator = noop, error, ...props }) => {
+
+const TextInput = ({ className, validator, error, ...props }) => {
   const [valid, setValid] = useState(true)
   const c = useStyles({ invalid: !valid || error })
 

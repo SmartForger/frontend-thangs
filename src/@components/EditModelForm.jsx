@@ -97,6 +97,7 @@ const EditModelForm = ({
       )}
       <Input
         id='model-name-input'
+        autoComplete='off'
         name='name'
         label='Model Name'
         maxLength='150'
@@ -107,6 +108,7 @@ const EditModelForm = ({
       <Spacer size='1rem' />
       <Textarea
         id='model-description-input'
+        autoComplete='off'
         name='description'
         label='Model Description'
         maxLength='150'
