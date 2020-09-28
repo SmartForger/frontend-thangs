@@ -38,7 +38,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const NotificationsButton = ({ notifications, handleNotificationsClick }) => {
+const NotificationsButton = ({ notifications, onNotificationsClick }) => {
   const c = useStyles({})
   return (
     <div
@@ -46,7 +46,7 @@ const NotificationsButton = ({ notifications, handleNotificationsClick }) => {
         c.NotificationsButton_NotificationIconWrapper,
         c.NotificationsButton_ClickableButton
       )}
-      onClick={handleNotificationsClick}
+      onClick={onNotificationsClick}
     >
       <NotificationIcon className={c.NotificationsButton_NotificationIcon} />
       {notifications && notifications.unreadCount > 0 && (

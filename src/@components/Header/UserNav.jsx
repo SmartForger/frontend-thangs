@@ -109,7 +109,7 @@ const UserNav = ({
       <div className={classnames(c.UserNav_Row, c.UserNav_ButtonsRow)}>
         <NotificationsButton
           notifications={notifications}
-          handleNotificationsClick={handleNotificationsClick}
+          onNotificationsClick={handleNotificationsClick}
         />
         <Spacer size='1rem' />
         <ProfileDropdownMenu
