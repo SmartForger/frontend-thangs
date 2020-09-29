@@ -4,6 +4,7 @@ import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import { FETCH_TYPES } from './consts'
 
+const noop = () => null
 export default store => {
   store.on(types.INIT_USER_OWN_MODELS, (_, { id }) => ({
     [`user-own-models-${id}`]: {
@@ -14,6 +15,7 @@ export default store => {
   store.on(
     types.CHANGE_USER_OWNED_MODELS_STATUS,
     (state, { atom, status = STATUSES.INIT, data }) => ({
+      ...state,
       [atom]: {
         ...state[atom],
         ...getStatusState(status),
@@ -21,7 +23,7 @@ export default store => {
       },
     })
   )
-  store.on(types.FETCH_USER_OWN_MODELS, async (_, { id }) => {
+  store.on(types.FETCH_USER_OWN_MODELS, async (_, { id, onFinish = noop }) => {
     store.dispatch(types.CHANGE_USER_OWNED_MODELS_STATUS, {
       status: STATUSES.LOADING,
       atom: `user-own-models-${id}`,
@@ -42,10 +44,11 @@ export default store => {
         atom: `user-own-models-${id}`,
         data,
       })
+      onFinish()
     }
   })
 
-  store.on(types.DELETE_USER_OWN_MODEL, async (_, { modelId, fetchData }) => {
+  store.on(types.DELETE_USER_OWN_MODEL, async (_, { id, fetchData, onFinish = noop }) => {
     const currentUserId = authenticationService.getCurrentUserId()
     store.dispatch(types.CHANGE_USER_OWNED_MODELS_STATUS, {
       status: STATUSES.LOADING,
@@ -53,7 +56,7 @@ export default store => {
     })
     const { data, error } = await api({
       method: 'DELETE',
-      endpoint: `models/${modelId}`,
+      endpoint: `models/${id}`,
     })
 
     if (error) {
@@ -71,10 +74,12 @@ export default store => {
       if (fetchData.type === FETCH_TYPES.FOLDER) {
         store.dispatch(types.FETCH_FOLDER, {
           folderId: fetchData.folderId,
+          onFinish,
         })
       } else {
         store.dispatch(types.FETCH_USER_OWN_MODELS, {
           id: currentUserId,
+          onFinish,
         })
       }
     }

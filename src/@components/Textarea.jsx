@@ -6,10 +6,6 @@ const useStyles = createUseStyles(theme => {
   return {
     Textarea: {
       width: '100%',
-      height: '100%',
-    },
-    TextTextarea: {
-      width: '100%',
       borderColor: ({ invalid }) =>
         invalid ? theme.colors.error : theme.colors.grey[100],
       borderWidth: ({ invalid }) => (invalid ? '2px' : '1px'),
@@ -59,10 +55,10 @@ const Textarea = ({
   }, [validator])
 
   return (
-    <div className={classnames(className, c.Textarea)}>
+    <div className={classnames(className)}>
       <textarea
         autoComplete={autoComplete}
-        className={c.TextTextarea}
+        className={c.Textarea}
         data-cy={`cy_${id}`}
         id={id}
         maxLength={maxLength}

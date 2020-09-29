@@ -13,20 +13,31 @@ import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
   return {
     EditModel: {
       alignItems: 'center',
       backgroundColor: theme.colors.white[300],
       borderRadius: '1rem',
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       justifyContent: 'flex-start',
       position: 'relative',
+
+      [md]: {
+        flexDirection: 'row',
+      },
     },
     EditModel_Column: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
       width: '100%',
+
+      [md]: {
+        flexDirection: 'column',
+      },
     },
     EditModel_ExitButton: {
       top: '2rem',
@@ -78,16 +89,19 @@ const EditModel = ({ model, user, fetchData, folderId }) => {
     [dispatch, setEditModelErrorMessage, folderId, navigateWithFlash, user]
   )
 
-  const handleDelete = useCallback(
-    e => {
-      e.preventDefault()
-      dispatch(types.DELETE_USER_OWN_MODEL, {
-        id: model.id,
-        fetchData,
-      })
-    },
-    [dispatch, model, fetchData]
-  )
+  const handleDelete = useCallback(() => {
+    dispatch(types.DELETE_USER_OWN_MODEL, {
+      id: model.id,
+      fetchData,
+      onFinish: () => {
+        dispatch(types.CLOSE_OVERLAY)
+        navigateWithFlash(
+          folderId ? `/folder/${folderId}` : `/${user.username}`,
+          'Model deleted successfully.'
+        )
+      },
+    })
+  }, [dispatch, model, fetchData, navigateWithFlash, folderId, user])
 
   return (
     <div className={c.EditModel}>
@@ -104,7 +118,7 @@ const EditModel = ({ model, user, fetchData, folderId }) => {
           />
         )}
       </div>
-      <Spacer className={c.EditModel_MobileSpacer} size='4rem' />
+      <Spacer className={c.EditModel_MobileSpacer} size='4rem' mobileSize='2rem' />
       <div className={c.EditModel_Column}>
         <Spacer className={c.EditModel_MobileSpacer} size='4rem' />
         <EditModelForm

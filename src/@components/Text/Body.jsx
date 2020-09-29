@@ -6,8 +6,7 @@ const useStyles = createUseStyles(theme => {
   return {
     BodyText: {
       ...theme.text.bodyBase,
-      display: 'flex',
-      alignItems: 'center',
+      display: 'inline',
       margin: 0,
       padding: 0,
       color: ({ light }) => (light ? theme.colors.white[100] : theme.colors.black[500]),

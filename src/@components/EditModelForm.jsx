@@ -7,9 +7,7 @@ import { useForm } from '@hooks'
 const useStyles = createUseStyles(theme => {
   return {
     EditModelForm: {
-      display: 'flex',
-      flexDirection: 'column',
-      maxWidth: '95%',
+      width: '100%',
     },
     EditModelForm_ButtonContainer: {
       display: 'flex',
@@ -66,7 +64,7 @@ const CATEGORIES = [
 
 const EditModelForm = ({
   model = {},
-  handleConfirm = noop,
+  handleSubmit = noop,
   handleDelete = noop,
   editProfileErrorMessage,
 }) => {
@@ -74,6 +72,7 @@ const EditModelForm = ({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   const initialState = {
+    id: model.id,
     name: model.name || '',
     description: model.description || '',
     material: model.material || '',
@@ -93,17 +92,6 @@ const EditModelForm = ({
     [onInputChange]
   )
 
-  const handleSubmit = useCallback(
-    async data => {
-      handleConfirm({
-        id: model.id,
-        name: data.name,
-        description: data.description,
-      })
-    },
-    [handleConfirm, model]
-  )
-
   const handleDeleteModel = useCallback(() => {
     setShowDeleteConfirm(true)
   }, [])
@@ -119,7 +107,11 @@ const EditModelForm = ({
   return (
     <>
       {!showDeleteConfirm && (
-        <form onSubmit={onFormSubmit(handleSubmit)} data-cy='edit-model-form'>
+        <form
+          className={c.EditModelForm}
+          onSubmit={onFormSubmit(handleSubmit)}
+          data-cy='edit-model-form'
+        >
           {editProfileErrorMessage && (
             <>
               <h4 className={c.EditModel_ErrorText} data-cy='edit-model-error'>
@@ -128,76 +120,72 @@ const EditModelForm = ({
               <Spacer size='1rem' />
             </>
           )}
-          <div className={c.EditModel_Form}>
-            <Input
-              id='name-input'
-              name='name'
-              label='Name'
-              maxLength='150'
-              value={inputState && inputState.name}
-              onChange={handleOnInputChange}
-              required
-            />
-            <Spacer size='1rem' />
-            <Textarea
-              id='description-input'
-              name='description'
-              label='Description'
-              type='description'
-              value={inputState && inputState.description}
-              onChange={handleOnInputChange}
-              required
-            />
-            <Spacer size='1rem' />
-            <Input
-              id='material-input'
-              name='material'
-              label='Material'
-              maxLength='150'
-              type='material'
-              value={inputState && inputState.material}
-              onChange={handleOnInputChange}
-              required
-            />
-            <Spacer size='1rem' />
-            <Input
-              id='height-input'
-              name='height'
-              label='Height'
-              maxLength='150'
-              type='height'
-              value={inputState && inputState.height}
-              onChange={handleOnInputChange}
-              required
-            />
-            <Spacer size='1rem' />
-            <Input
-              id='weight-input'
-              name='weight'
-              label='Weight'
-              maxLength='150'
-              type='weight'
-              value={inputState && inputState.weight}
-              onChange={handleOnInputChange}
-              required
-            />
-            <Spacer size='1rem' />
-            <Dropdown
-              className={c.UploadForm_Select}
-              name='category'
-              placeholder='Select category'
-              isClearable
-              options={CATEGORIES}
-              onChange={e => {
-                if (e) handleOnInputChange('category', e.value)
-              }}
-            />
-          </div>
+          <Input
+            id='name-input'
+            name='name'
+            label='Name'
+            maxLength='150'
+            value={inputState && inputState.name}
+            onChange={handleOnInputChange}
+            required
+          />
+          <Spacer size='1rem' />
+          <Textarea
+            id='description-input'
+            name='description'
+            label='Description'
+            type='description'
+            value={inputState && inputState.description}
+            onChange={handleOnInputChange}
+            required
+          />
+          <Spacer size='1rem' />
+          <Input
+            id='material-input'
+            name='material'
+            label='Material'
+            maxLength='150'
+            type='material'
+            value={inputState && inputState.material}
+            onChange={handleOnInputChange}
+          />
+          <Spacer size='1rem' />
+          <Input
+            id='height-input'
+            name='height'
+            label='Height'
+            maxLength='150'
+            type='height'
+            value={inputState && inputState.height}
+            onChange={handleOnInputChange}
+          />
+          <Spacer size='1rem' />
+          <Input
+            id='weight-input'
+            name='weight'
+            label='Weight'
+            maxLength='150'
+            type='weight'
+            value={inputState && inputState.weight}
+            onChange={handleOnInputChange}
+          />
+          <Spacer size='1rem' />
+          <Dropdown
+            className={c.UploadForm_Select}
+            name='category'
+            placeholder='Select category'
+            isClearable
+            options={CATEGORIES}
+            onChange={e => {
+              if (e) handleOnInputChange('category', e.value)
+            }}
+          />
           <div className={c.EditModelForm_ButtonRow}>
             <Button
               tertiary
               className={c.EditModelForm_DeleteButton}
               onClick={handleDeleteModel}
+              type='button'
             >
               <TrashCanIcon />
               <Spacer size={'.5rem'} />
@@ -210,12 +198,13 @@ const EditModelForm = ({
       {showDeleteConfirm && (
         <div>
           <MultiLineBodyText>
-            Are you sure you want to delete this model?
+            Are you sure you want to delete <b>{model.name}</b>?
           </MultiLineBodyText>
           <div className={c.EditModelForm_ButtonRow}>
             <Button secondary onClick={handleCancelDelete}>
               Cancel
             </Button>
+            <Spacer className={c.EditModel_MobileSpacer} size='1rem' />
             <Button onClick={handleConfirmDelete}>Confirm</Button>
           </div>
         </div>

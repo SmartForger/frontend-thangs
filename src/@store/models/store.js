@@ -3,6 +3,7 @@ import * as R from 'ramda'
 import * as types from '@constants/storeEventTypes'
 import { STATUSES, getStatusState } from '@store/constants'
 import { logger } from '@utilities/logging'
+import { authenticationService } from '@services'
 
 const noop = () => null
 export default store => {
@@ -69,6 +70,7 @@ export default store => {
     types.UPDATE_MODEL,
     async (_, { id, model: updatedModel, onError = noop, onFinish = noop }) => {
       if (R.isNil(id)) return
+      const currentUserId = authenticationService.getCurrentUserId()
 
       store.dispatch(types.CHANGE_MODEL_STATUS, {
         status: STATUSES.LOADING,
@@ -88,7 +90,7 @@ export default store => {
         onError(error.message)
         logger.error('Error when trying to update the model', error)
       } else {
-        store.dispatch(types.FETCH_MODEL, { id, onFinish })
+        store.dispatch(types.FETCH_USER_OWN_MODELS, { id: currentUserId, onFinish })
       }
     }
   )

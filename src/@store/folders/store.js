@@ -13,7 +13,7 @@ const getInitAtom = () => ({
   createdFolder: null,
   data: {},
 })
-
+const noop = () => null
 export default store => {
   store.on(types.STORE_INIT, () => ({
     folders: getInitAtom(),
@@ -73,21 +73,25 @@ export default store => {
       })
   })
 
-  store.on(types.FETCH_FOLDER, async (state, { folderId, inviteCode }) => {
-    store.dispatch(types.LOADING_FOLDER)
-    await api({
-      method: 'GET',
-      endpoint: `folders/${folderId}${inviteCode ? `?inviteCode=${inviteCode}` : ''}`,
-    })
-      .then(res => {
-        const folder = res.data
-        store.dispatch(types.LOADED_FOLDER)
-        store.dispatch(types.UPDATE_FOLDER, folder)
+  store.on(
+    types.FETCH_FOLDER,
+    async (state, { folderId, inviteCode, onFinish = noop }) => {
+      store.dispatch(types.LOADING_FOLDER)
+      await api({
+        method: 'GET',
+        endpoint: `folders/${folderId}${inviteCode ? `?inviteCode=${inviteCode}` : ''}`,
       })
-      .catch(_error => {
-        store.dispatch(types.ERROR_FOLDER)
-      })
-  })
+        .then(res => {
+          const folder = res.data
+          store.dispatch(types.LOADED_FOLDER)
+          store.dispatch(types.UPDATE_FOLDER, folder)
+          onFinish()
+        })
+        .catch(_error => {
+          store.dispatch(types.ERROR_FOLDER)
+        })
+    }
+  )
 
   store.on(types.SAVING_FOLDER, state => ({
     folders: {
