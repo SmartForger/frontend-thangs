@@ -208,7 +208,6 @@ const UploadForm = ({
           className={c.UploadForm_FullWidthInput}
           type='text'
           name='description'
-          maxLength='250'
           onChange={e => {
             handleOnInputChange('description', e.target.value)
           }}

@@ -40,7 +40,7 @@ const Textarea = ({
   className,
   id,
   label,
-  maxLength = 500,
+  maxLength = 4000,
   name,
   onChange = noop,
   required = false,

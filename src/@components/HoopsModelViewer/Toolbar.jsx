@@ -19,7 +19,7 @@ const useStyles = createUseStyles(theme => {
       borderTop: `1px solid ${theme.colors.purple[200]}`,
       padding: '1.5rem',
       display: 'flex',
-      justifyContent: 'space-between',
+      justifyContent: ({ minimizeTools }) => (minimizeTools ? 'center' : 'space-between'),
     },
     Toolbar_ToolGroup: {
       display: 'flex',
@@ -70,8 +70,9 @@ const Toolbar = ({
   onColorChange,
   meshColor,
   wireColor,
+  minimizeTools = false,
 }) => {
-  const c = useStyles()
+  const c = useStyles({ minimizeTools })
   const makeDrawModeHandler = useCallback(
     modeName => () => {
       onDrawModeChange(modeName)
@@ -92,31 +93,35 @@ const Toolbar = ({
 
   return (
     <div className={c.Toolbar}>
-      <div className={c.Toolbar_ToolGroup}>
-        <div className={c.Toolbar_ToolGroupTitle}>Model View</div>
-        <div className={c.Toolbar_IconButton} onClick={makeDrawModeHandler('shaded')}>
-          <ShadedMode />
-        </div>
-        <div className={c.Toolbar_IconButton} onClick={makeDrawModeHandler('wire')}>
-          <WireMode />
-        </div>
-        <div className={c.Toolbar_IconButton} onClick={makeDrawModeHandler('xray')}>
-          <XRayMode />
-        </div>
-      </div>
-      <div className={c.Toolbar_ToolGroup}>
-        <div className={c.Toolbar_ToolGroupTitle}>Change Color</div>
-        <div className={c.Toolbar_IconButton}>
-          <ColorPicker color={wireColor} onChange={makeColorHandler('wire')}>
-            <EdgesColor />
-          </ColorPicker>
-        </div>
-        <div className={c.Toolbar_IconButton}>
-          <ColorPicker color={meshColor} onChange={makeColorHandler('mesh')}>
-            <ShadeColor />
-          </ColorPicker>
-        </div>
-      </div>
+      {!minimizeTools && (
+        <>
+          <div className={c.Toolbar_ToolGroup}>
+            <div className={c.Toolbar_ToolGroupTitle}>Model View</div>
+            <div className={c.Toolbar_IconButton} onClick={makeDrawModeHandler('shaded')}>
+              <ShadedMode />
+            </div>
+            <div className={c.Toolbar_IconButton} onClick={makeDrawModeHandler('wire')}>
+              <WireMode />
+            </div>
+            <div className={c.Toolbar_IconButton} onClick={makeDrawModeHandler('xray')}>
+              <XRayMode />
+            </div>
+          </div>
+          <div className={c.Toolbar_ToolGroup}>
+            <div className={c.Toolbar_ToolGroupTitle}>Change Color</div>
+            <div className={c.Toolbar_IconButton}>
+              <ColorPicker color={wireColor} onChange={makeColorHandler('wire')}>
+                <EdgesColor />
+              </ColorPicker>
+            </div>
+            <div className={c.Toolbar_IconButton}>
+              <ColorPicker color={meshColor} onChange={makeColorHandler('mesh')}>
+                <ShadeColor />
+              </ColorPicker>
+            </div>
+          </div>
+        </>
+      )}
       <AnchorButton className={c.Toolbar_MobileAnchorButton} onClick={handleResetView}>
         Reset
       </AnchorButton>

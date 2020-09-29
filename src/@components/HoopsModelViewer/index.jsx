@@ -13,6 +13,7 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
       width: '100%',
       flexGrow: 1,
+      cursor: 'grab',
       backgroundColor: '#ffffff',
       '& > div': {
         pointerEvents: 'all',
@@ -35,7 +36,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const HoopsModelViewer = ({ className, model }) => {
+const HoopsModelViewer = ({ className, model, minimizeTools }) => {
   const c = useStyles()
   const [meshColor, setMeshColor] = useState()
   const [wireColor, setWireColor] = useState()
@@ -80,6 +81,7 @@ const HoopsModelViewer = ({ className, model }) => {
           onColorChange={handleColorChange}
           meshColor={meshColor}
           wireColor={wireColor}
+          minimizeTools={minimizeTools}
         />
       )}
     </div>
@@ -112,12 +114,12 @@ const StatusIndicator = ({ status }) => {
   )
 }
 
-const ModelViewer = ({ className, model }) => {
+const ModelViewer = ({ className, model, minimizeTools }) => {
   const c = useStyles()
   const [seenHowTo, setSeenHowTo] = useState(true) //useLocalStorage('seenHowTo', false)
 
   return seenHowTo ? (
-    <HoopsModelViewer className={className} model={model} />
+    <HoopsModelViewer className={className} model={model} minimizeTools={minimizeTools} />
   ) : (
     <div className={classnames(className, c.HoopsModelViewer_WebViewContainer)}>
       <HowTo setSeenHowTo={setSeenHowTo} />

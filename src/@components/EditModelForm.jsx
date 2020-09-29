@@ -143,7 +143,6 @@ const EditModelForm = ({
               id='description-input'
               name='description'
               label='Description'
-              maxLength='150'
               type='description'
               value={inputState && inputState.description}
               onChange={handleOnInputChange}

@@ -35,6 +35,14 @@ const useStyles = createUseStyles(theme => {
       zIndex: 4,
       position: 'absolute',
     },
+    EditModel_Viewer: {
+      width: '100%',
+      height: '23.5rem',
+      margin: '0 auto',
+      display: 'flex',
+      overflow: 'hidden',
+      flexDirection: 'column',
+    },
   }
 })
 
@@ -87,9 +95,13 @@ const EditModel = ({ model, user, fetchData, folderId }) => {
       <Spacer className={c.EditModel_MobileSpacer} size='4rem' />
       <div className={c.EditModel_Column}>
         {showBackupViewer ? (
-          <BackupViewer className={c.Model_BackupViewer} model={model} />
+          <BackupViewer className={c.EditModel_Viewer} model={model} />
         ) : (
-          <HoopsModelViewer className={c.Model_ModelViewer} model={model} />
+          <HoopsModelViewer
+            className={c.EditModel_Viewer}
+            model={model}
+            minimizeTools={true}
+          />
         )}
       </div>
       <Spacer className={c.EditModel_MobileSpacer} size='4rem' />
