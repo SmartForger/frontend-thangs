@@ -60,8 +60,7 @@ const useStyles = createUseStyles(theme => {
       paddingLeft: '1rem',
 
       [md]: {
-        paddingRight: ({ notificationsIsOpen }) =>
-          notificationsIsOpen ? '1.25rem' : '4rem',
+        paddingRight: '4rem',
         paddingLeft: '4rem',
         flexDirection: 'row',
       },
@@ -141,32 +140,12 @@ const Layout = ({
   showNewHero,
 }) => {
   const { overlay } = useStoreon('overlay')
-  const [notificationsIsOpen, setNotificationsOpen] = useState(false)
-  const [notificationsClosing, setNotificationsClosing] = useState(false)
-  const c = useStyles({ notificationsIsOpen })
-
-  const onNotificationsClick = useCallback(() => {
-    if (notificationsIsOpen) {
-      setNotificationsClosing(true)
-      setTimeout(() => {
-        setNotificationsOpen(!notificationsIsOpen)
-        setNotificationsClosing(false)
-      }, 100)
-    } else {
-      setNotificationsOpen(!notificationsIsOpen)
-    }
-  }, [notificationsIsOpen])
+  const c = useStyles({ })
 
   const OverlayView = useMemo(
     () => overlay && overlay.isOpen && overlayTemplates[overlay.currentOverlay],
     [overlay]
   )
-
-  useEffect(() => {
-    if (overlay.isOpen) {
-      setNotificationsOpen(false)
-    }
-  }, [overlay])
 
   return (
     <div
@@ -175,8 +154,6 @@ const Layout = ({
       })}
     >
       <Header
-        onNotificationsClick={onNotificationsClick}
-        notificationsIsOpen={notificationsIsOpen}
         showSearchTextFlash={showSearchTextFlash}
         showSearch={showSearch}
         showUser={showUser}
@@ -196,19 +173,6 @@ const Layout = ({
         {bannerText && <Banner>{bannerText}</Banner>}
         <div className={c.Layout}>
           {children}
-          {notificationsIsOpen && (
-            <div
-              className={classnames(c.NotificationsList_Wrapper, {
-                [c.NotificationsList_Wrapper__deactive]: notificationsClosing,
-              })}
-            >
-              <ExitIcon
-                className={c.NotificationsList_CloseIcon}
-                onClick={onNotificationsClick}
-              />
-              <NotificationsList />
-            </div>
-          )}
           <FeedbackTooltip className={c.Layout_FeedbackTooltip} />
         </div>
       </div>

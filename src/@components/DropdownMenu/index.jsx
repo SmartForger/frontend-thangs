@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { Button } from '@components'
@@ -20,6 +20,11 @@ const useStyles = createUseStyles(theme => {
       right: '.75rem',
       marginTop: '.5rem',
       zIndex: 2,
+      overflowY: 'auto',
+      '&::-webkit-scrollbar': {
+        width: 0,
+        background: 'transparent',
+      },
     },
     DropdownMenu_Item: {
       ...theme.text.boldText,
@@ -69,23 +74,18 @@ const useDropdownMenuState = (initialIsOpen = false) => {
   }, [isOpen])
   return [isOpen, toggleOpen]
 }
-const DropdownItem = ({ children, to = '#', onClick }) => {
+const DropdownItem = ({ children, to = '#', onClick, className }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
-  const handleOnClick = useCallback(
-    e => {
-      typeof onClick === 'function' && onClick(e)
-    },
-    [onClick]
-  )
+
   return (
-    <div className={c.DropdownMenu_ItemWrapper}>
+    <div className={classnames(className, c.DropdownMenu_ItemWrapper)}>
       {onClick ? (
         <div
           className={c.DropdownMenu_Item}
           onClick={e => {
             dispatch(types.CLOSE_OVERLAY)
-            handleOnClick(e)
+            onClick && onClick(e)
           }}
         >
           {children}
@@ -96,7 +96,7 @@ const DropdownItem = ({ children, to = '#', onClick }) => {
           to={to}
           onClick={e => {
             dispatch(types.CLOSE_OVERLAY)
-            handleOnClick(e)
+            onClick && onClick(e)
           }}
         >
           {children}
@@ -119,7 +119,7 @@ const DropdownMenu = ({
   const isOpen = isOpenExternal === undefined ? isOpenInternal : isOpenExternal
   const c = useStyles({ isOpen, noIcons })
   return (
-    <div className={classnames(className, c.DropdownMenu_Container)}>
+    <div className={c.DropdownMenu_Container}>
       {TargetComponent ? (
         <TargetComponent onClick={toggleOpen} user={user} />
       ) : (
@@ -127,7 +127,9 @@ const DropdownMenu = ({
           <ButtonIcon />
         </Button>
       )}
-      {isOpen && <div className={c.DropdownMenu}>{children}</div>}
+      {isOpen && (
+        <div className={classnames(className, c.DropdownMenu)}>{children}</div>
+      )}
     </div>
   )
 }

@@ -8,7 +8,7 @@ import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 
 import { ProfileDropdown, ProfileDropdownMenu } from './ProfileDropdown'
-import NotificationsButton from './NotificationsButton'
+import Notifications from '@components/Notifications'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -66,9 +66,6 @@ const useStyles = createUseStyles(theme => {
 })
 
 const UserNav = ({
-  handleNotificationsClick,
-  notifications,
-  notificationsIsOpen,
   dispatch,
   isLoading,
   user,
@@ -107,17 +104,12 @@ const UserNav = ({
   if (showUser && user && !R.isNil(user) && !R.isEmpty(user)) {
     return (
       <div className={classnames(c.UserNav_Row, c.UserNav_ButtonsRow)}>
-        <NotificationsButton
-          notifications={notifications}
-          onNotificationsClick={handleNotificationsClick}
-        />
+        <Notifications />
         <Spacer size='1rem' />
         <ProfileDropdownMenu
           user={user}
           TargetComponent={ProfileDropdown}
           dispatch={dispatch}
-          handleNotificationsClick={handleNotificationsClick}
-          notificationsIsOpen={notificationsIsOpen}
         />
         <Spacer size='1rem' />
         <Button

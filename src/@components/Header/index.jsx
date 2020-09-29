@@ -8,7 +8,6 @@ import { useCurrentUser } from '@hooks'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 
-import { ReactComponent as Caret } from '@svg/header-caret.svg'
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as LogoText } from '@svg/logo-text.svg'
 
@@ -223,12 +222,6 @@ const useStyles = createUseStyles(theme => {
         display: 'block',
       },
     },
-    Header_Caret: {
-      display: ({ notificationsIsOpen }) => (notificationsIsOpen ? 'block' : 'none'),
-      position: 'absolute',
-      bottom: '-1.5rem',
-      right: '11rem',
-    },
     Header_Landing: {
       color: theme.colors.white[400],
       display: 'flex',
@@ -263,8 +256,6 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const noop = () => null
-
 const PromoCards = [
   {
     IconComponent: PromoGeoSearch,
@@ -284,15 +275,13 @@ const PromoCards = [
 ]
 
 const Header = ({
-  onNotificationsClick = noop,
-  notificationsIsOpen,
   showSearchTextFlash,
   showUser = true,
   showNewHero = false,
 }) => {
-  const { dispatch, notifications } = useStoreon('notifications')
+  const { dispatch } = useStoreon()
   const [searchMinimized, setMinimizeSearch] = useState(!showNewHero)
-  const c = useStyles({ notificationsIsOpen, searchMinimized, showNewHero })
+  const c = useStyles({ searchMinimized, showNewHero })
   const {
     atom: { isLoading, data: user },
   } = useCurrentUser()
@@ -300,12 +289,6 @@ const Header = ({
   useEffect(() => {
     if (user && user.id) dispatch(types.FETCH_NOTIFICATIONS)
   }, [dispatch, user])
-
-  const handleNotificationsClick = useCallback(() => {
-    dispatch(types.CLOSE_OVERLAY)
-    if (!notificationsIsOpen) dispatch(types.READ_NOTIFICATIONS)
-    onNotificationsClick()
-  }, [dispatch, notificationsIsOpen, onNotificationsClick])
 
   return (
     <>
@@ -318,9 +301,6 @@ const Header = ({
               </Link>
               <UserNav
                 c={c}
-                handleNotificationsClick={handleNotificationsClick}
-                notifications={notifications}
-                notificationsIsOpen={notificationsIsOpen}
                 dispatch={dispatch}
                 isLoading={isLoading}
                 user={user}
@@ -348,16 +328,12 @@ const Header = ({
               </div>
               <UserNav
                 c={c}
-                handleNotificationsClick={handleNotificationsClick}
-                notifications={notifications}
-                notificationsIsOpen={notificationsIsOpen}
                 dispatch={dispatch}
                 isLoading={isLoading}
                 user={user}
                 showUser={showUser}
               />
             </div>
-            <Caret className={c.Header_Caret} />
             {showNewHero && (
               <>
                 <div

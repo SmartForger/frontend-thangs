@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import classnames from 'classnames'
 
 import { createUseStyles } from '@style'
 import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg'
+import { useStoreon } from 'storeon/react'
+import * as storeEventTypes from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -16,8 +18,7 @@ const useStyles = createUseStyles(theme => {
     NotificationsButton_NotificationIcon: {
       color: theme.colors.purple[400],
       '& path': {
-        stroke: ({ notificationsIsOpen }) =>
-          notificationsIsOpen ? theme.colors.gold[500] : theme.colors.purple[500],
+        stroke: theme.colors.purple[500],
       },
     },
     NotificationsButton_UnreadBadge: {
@@ -38,15 +39,27 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const NotificationsButton = ({ notifications, onNotificationsClick }) => {
+const NotificationsButton = ({ onClick }) => {
   const c = useStyles({})
+  const { dispatch } = useStoreon()
+  const { notifications: { data: notifications } } = useStoreon('notifications')
+
+  const handleNotificationsClick = useCallback(() => {
+    if (notifications.unreadCount > 0) {
+      dispatch(storeEventTypes.READ_NOTIFICATIONS)
+    }
+  }, [dispatch, notifications])
+  
   return (
     <div
       className={classnames(
         c.NotificationsButton_NotificationIconWrapper,
         c.NotificationsButton_ClickableButton
       )}
-      onClick={onNotificationsClick}
+      onClick={() => {
+        handleNotificationsClick()
+        onClick()
+      }}
     >
       <NotificationIcon className={c.NotificationsButton_NotificationIcon} />
       {notifications && notifications.unreadCount > 0 && (

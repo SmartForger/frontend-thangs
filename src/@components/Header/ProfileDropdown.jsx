@@ -36,8 +36,6 @@ export const ProfileDropdownMenu = ({
   dispatch,
   user = {},
   TargetComponent,
-  handleNotificationsClick,
-  notificationsIsOpen,
 }) => {
   const t = useTranslations({})
   const history = useHistory()
@@ -79,7 +77,6 @@ export const ProfileDropdownMenu = ({
       </DropdownItem>
       <DropdownItem
         onClick={() => {
-          if (notificationsIsOpen) handleNotificationsClick()
           dispatch(types.CLOSE_OVERLAY)
           setTimeout(() => {
             authenticationService.logout()
