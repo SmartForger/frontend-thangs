@@ -35,7 +35,7 @@ const useStyles = createUseStyles(theme => {
       '& img': {
         margin: 'auto',
         display: 'block',
-        maxWidth: 'calc(100% - 1.5rem)',
+        maxWidth: '100%',
         zIndex: 1,
         height: 'auto',
 

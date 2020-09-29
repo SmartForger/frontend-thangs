@@ -37,7 +37,7 @@ const CardCollection = ({
   noResultsText,
   loading = false,
   children,
-  cardWidth = '20.5rem',
+  cardWidth = '14.875rem',
 }) => {
   const c = useStyles({ cardWidth })
 

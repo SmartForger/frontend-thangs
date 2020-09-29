@@ -19,7 +19,7 @@ const useStyles = createUseStyles(theme => {
       paddingBottom: 0,
       minHeight: '12.25rem',
       margin: 'auto',
-      maxWidth: 'calc(100% - 7.375rem)',
+      maxWidth: '100%',
       width: '100%',
       borderRadius: '.5rem .5rem 0 0',
     },
