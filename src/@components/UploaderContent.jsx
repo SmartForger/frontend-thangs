@@ -52,12 +52,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const UploaderContent = ({
-  errorState,
-  file,
-  cancelUpload,
-  showError
-}) => {
+const UploaderContent = ({ errorState, file, cancelUpload, showError }) => {
   const c = useStyles()
 
   return (
@@ -69,8 +64,8 @@ const UploaderContent = ({
           </div>
 
           <div className={c.Uploader_InfoMessage}>
-            Sorry, an unexpected error occurred. Please wait a moment and try to save the
-            model again.
+            Sorry, an unexpected error occurred. Please wait a moment and try to upload
+            the model again.
           </div>
         </div>
       ) : file ? (
@@ -118,8 +113,7 @@ const UploaderContent = ({
           <div className={c.Uploader_InfoMessage}>
             Drag & Drop a model
             <br />
-            or <span className={c.Uploader_LinkColor}>browse</span> to choose file to
-            choose file
+            or <span className={c.Uploader_LinkColor}>browse</span> to choose file
           </div>
         </div>
       )}

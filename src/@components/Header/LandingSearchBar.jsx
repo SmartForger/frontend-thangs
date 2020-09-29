@@ -9,6 +9,7 @@ import { useFileUpload, useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 
+import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
 import { ReactComponent as SnackbarUploadIcon } from '@svg/snackbar-upload.svg'
 
@@ -217,6 +218,10 @@ const SearchBar = ({
     [dispatch, history, searchTerm, setMinimizeSearch]
   )
 
+  const handleUploadClick = useCallback(() => {
+    dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload' })
+  }, [dispatch])
+
   return (
     <div className={classnames(c.SearchBar, className)}>
       <Spacer size={'1.25rem'} />
@@ -247,11 +252,20 @@ const SearchBar = ({
               title={t('header.searchTextTitle')}
               className={c.SearchBar_SearchIcon}
             />
+          </Button>
+          <Button className={c.SearchBar_SearchButton} onClick={handleSearchSubmit}>
+            <MagnifyingGlass
+              title={t('header.searchTextTitle')}
+              className={c.SearchBar_SearchIcon}
+            />
             <Spacer size={'.5rem'} />
             Search
           </Button>
         </div>
       </form>
+      <Button className={c.SearchBar_UploadButton} onClick={handleUploadClick}>
+        <UploadIcon />
+      </Button>
       <Spacer size={'1.25rem'} />
     </div>
   )
