@@ -37,7 +37,7 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       justifyContent: 'center',
       boxShadow: '0px .5rem 1.25rem rgba(0, 0, 0, 0.16)',
-      
+
       color: theme.colors.black[500],
       ...theme.text.viewerLoadingText,
     },
@@ -50,6 +50,9 @@ const useStyles = createUseStyles(theme => {
     LandingUpload_Link: {
       ...theme.text.linkText,
       cursor: 'pointer',
+    },
+    LandingUpload_Text: {
+      cursor: 'default',
     },
     LandingUpload_UploadIcon: {
       marginRight: '1rem',
@@ -262,7 +265,10 @@ const LandingSearchBar = () => {
   const uploadContainer = useRef(null)
   const searchBarContainer = useRef(null)
   const handleUploadClick = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload', overlayData: { isExplorerOpened: true } })
+    dispatch(types.OPEN_OVERLAY, {
+      overlayName: 'searchByUpload',
+      overlayData: { isExplorerOpened: true },
+    })
   }, [dispatch])
 
   const handleSetFile = useCallback(
@@ -291,7 +297,7 @@ const LandingSearchBar = () => {
     setIsDragOvered(false)
   }
 
-  const setCurtain = (state) => {
+  const setCurtain = state => {
     const HeaderCurtain = document.getElementById('HeaderDesktopOnlyCurtain')
     if (HeaderCurtain) {
       HeaderCurtain.style.display = state ? 'unset' : 'none'
@@ -355,7 +361,7 @@ const LandingSearchBar = () => {
               <SnackbarUploadIcon />
             </div>
 
-            <div>
+            <div className={c.LandingUpload_Text}>
               <span className={c.LandingUpload_Link} onClick={handleUploadClick}>
                 Browse and upload
               </span>{' '}

@@ -2,15 +2,16 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useStoreon } from 'storeon/react'
 import { Header, Overlay, NotificationsList, Footer, FeedbackTooltip } from '@components'
 import {
-  Upload,
-  SearchByUpload,
   CreateFolder,
   CreateTeam,
-  PasswordReset,
+  EditModel,
   FolderManagement,
+  PasswordReset,
   ReportModel,
+  SearchByUpload,
   Signin,
   Signup,
+  Upload,
 } from '@overlays'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import classnames from 'classnames'
@@ -118,15 +119,16 @@ const useStyles = createUseStyles(theme => {
   }
 })
 const overlayTemplates = {
-  upload: Upload,
-  searchByUpload: SearchByUpload,
   createFolder: CreateFolder,
   createTeam: CreateTeam,
-  passwordReset: PasswordReset,
+  editModel: EditModel,
   folderManagement: FolderManagement,
+  passwordReset: PasswordReset,
   reportModel: ReportModel,
+  searchByUpload: SearchByUpload,
   signIn: Signin,
   signUp: Signup,
+  upload: Upload,
 }
 
 const Layout = ({

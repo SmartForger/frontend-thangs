@@ -1,5 +1,6 @@
 export { default as CreateFolder } from './CreateFolder'
 export { default as CreateTeam } from './CreateTeam'
+export { default as EditModel } from './EditModel'
 export { default as FolderManagement } from './FolderManagement'
 export { default as PasswordReset } from './PasswordReset'
 export { default as ReportModel } from './ReportModel'

@@ -1,7 +1,5 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react'
-import classnames from 'classnames'
+import React, { useCallback } from 'react'
 import { useStoreon } from 'storeon/react'
-import { EditModelForm, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import * as R from 'ramda'
 import { ReactComponent as EditIcon } from '@svg/icon-pencil.svg'
@@ -59,9 +57,8 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const EditModel = ({ model, editProfileErrorMessage }) => {
+const EditModel = ({ model }) => {
   const c = useStyles()
-  const messageContainer = useRef(null)
   const { dispatch } = useStoreon()
 
   const ownFolderMatch = useRouteMatch({
@@ -82,80 +79,30 @@ const EditModel = ({ model, editProfileErrorMessage }) => {
       folderId: R.path(['params', 'id'], ownFolderMatch),
     }),
   }
-  const [isOpened, setIsOpened] = useState(false)
 
-  const handleUpdateModel = useCallback(
-    newModelData => {
-      const { id, ...updatedModel } = newModelData
-      dispatch(types.UPDATE_MODEL, {
-        id,
-        model: updatedModel,
-        onError: error => {
-          editProfileErrorMessage(error)
-        },
-        onFinish: () => {
-          setIsOpened(false)
-        },
-      })
-    },
-    [dispatch, editProfileErrorMessage]
-  )
-
-  const handleDelete = useCallback(
+  const handleClick = useCallback(
     e => {
       e.preventDefault()
-      dispatch(types.DELETE_USER_OWN_MODEL, {
-        id: model.id,
-        fetchData,
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'editModel',
+        overlayData: {
+          model,
+          fetchData,
+          user: model.owner,
+          animateIn: true,
+          windowed: true,
+        },
       })
     },
-    [dispatch, model, fetchData]
+    [dispatch, fetchData, model]
   )
-
-  const handleCancel = useCallback(e => {
-    e.preventDefault()
-    setIsOpened(false)
-  }, [])
-
-  const handleClickOutside = event => {
-    if (messageContainer.current && !messageContainer.current.contains(event.target)) {
-      setIsOpened(false)
-    }
-  }
-
-  useEffect(() => {
-    document.addEventListener('click', handleClickOutside, true)
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true)
-    }
-  })
 
   if (R.isNil(ownFolderMatch) && R.isNil(ownModelsMatch) && R.isNil(userNameMatch))
     return null
 
   return (
     <>
-      <EditIcon
-        className={classnames(
-          c.EditModel_EditIcon,
-          isOpened && c.EditModel_EditIcon__selected
-        )}
-        onClick={() => {
-          setIsOpened(true)
-        }}
-      />
-      {isOpened && (
-        <div className={c.EditModel_Message} ref={messageContainer}>
-          <Spacer size={'1rem'} />
-          <EditModelForm
-            model={model}
-            handleCancel={handleCancel}
-            handleConfirm={handleUpdateModel}
-            handleDelete={handleDelete}
-          />
-          <Spacer size={'1rem'} />
-        </div>
-      )}
+      <EditIcon className={c.EditModel_EditIcon} onClick={handleClick} />
     </>
   )
 }
