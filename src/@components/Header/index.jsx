@@ -284,8 +284,8 @@ const Header = ({ showSearchTextFlash, showUser = true, showNewHero = false }) =
       {
         IconComponent: PromoGeoSearch,
         title: 'Geometric Search',
-        linkText: 'Use',
-        text: 'your model to find geometrically related models.',
+        linkText: 'Use your model',
+        text: 'to find geometrically related models.',
         callback: () => {
           searchBarRef.current.focus()
         },

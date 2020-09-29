@@ -37,7 +37,7 @@ const TextInput = ({ className, validator, error, inputRef, ...props }) => {
       setValid(validator())
     }
   }, [validator])
-  debugger
+
   return (
     <input
       {...props}
