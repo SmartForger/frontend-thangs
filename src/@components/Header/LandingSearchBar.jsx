@@ -142,7 +142,7 @@ const useStyles = createUseStyles(theme => {
     },
     SearchBar_UploadButton: {
       position: 'absolute',
-      right: '7.5rem',
+      right: '7.25rem',
       top: '.5rem',
 
       '& path': {
@@ -196,6 +196,7 @@ const SearchBar = ({
   searchMinimized,
   setMinimizeSearch = noop,
   onChange,
+  searchBarRef,
   ...props
 }) => {
   const { dispatch } = useStoreon()
@@ -237,6 +238,7 @@ const SearchBar = ({
           <TextInput
             name='search'
             placeholder={t('header.searchPlaceholderText')}
+            inputRef={searchBarRef}
             className={classnames(c.SearchBar_FormInput, {
               [c.SearchBar_FormInput_active]: searchTerm,
             })}
@@ -263,7 +265,7 @@ const SearchBar = ({
           </Button>
         </div>
       </form>
-      <Button className={c.SearchBar_UploadButton} onClick={handleUploadClick}>
+      <Button tertiary className={c.SearchBar_UploadButton} onClick={handleUploadClick}>
         <UploadIcon />
       </Button>
       <Spacer size={'1.25rem'} />
@@ -271,7 +273,7 @@ const SearchBar = ({
   )
 }
 
-const LandingSearchBar = () => {
+const LandingSearchBar = ({ searchBarRef }) => {
   const c = useStyles({})
   const [isUploadOpened, setIsUploadOpened] = useState(false)
   const [isDragOvered, setIsDragOvered] = useState(false)
@@ -342,6 +344,7 @@ const LandingSearchBar = () => {
     <div className={c.LandingSearchBar}>
       <SearchBar
         className={classnames(isUploadOpened && c.SearchBar__withBottom)}
+        searchBarRef={searchBarRef}
         onFocus={handleSearchBarFocus}
         onChange={e => {
           const value = R.path(['target', 'value'], e) || ''
@@ -377,9 +380,9 @@ const LandingSearchBar = () => {
 
             <div className={c.LandingUpload_Text}>
               <span className={c.LandingUpload_Link} onClick={handleUploadClick}>
-                Browse and upload
+                Upload
               </span>{' '}
-              your model to find ones with related geometry.
+              or drag and drop a file (.stl) here to do a geometric search.
             </div>
           </div>
         </UploadZone>

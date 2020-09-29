@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { CardCollection, Layout, Tabs, TitleSecondary } from '@components'
-import { useCurrentUser, useQuery, useTranslations } from '@hooks'
+import { useCurrentUser, useQuery } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
@@ -167,32 +167,16 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
   )
 }
 
-const numberWithCommas = x => {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-}
-
 const Landing = () => {
-  const { dispatch, modelPreviews, modelsStats } = useStoreon(
-    'modelPreviews',
-    'modelsStats'
-  )
+  const { dispatch, modelPreviews } = useStoreon('modelPreviews')
   const {
     atom: { data: user },
   } = useCurrentUser()
-  useEffect(() => {
-    dispatch(types.FETCH_MODELS_STATS)
-  }, [dispatch])
+
   const sessionExpired = useQuery('sessionExpired')
   const authFailed = useQuery('authFailed')
   const showSignup = useQuery('showSignup')
   const { id } = useParams()
-  const t = useTranslations({})
-
-  const modelsIngested =
-    modelsStats &&
-    modelsStats.data &&
-    modelsStats.data.modelsIngested &&
-    numberWithCommas(modelsStats.data.modelsIngested)
 
   useEffect(() => {
     if (sessionExpired || authFailed)
@@ -221,12 +205,7 @@ const Landing = () => {
   }, [])
 
   return (
-    <Layout
-      bannerText={
-        modelsIngested ? `${modelsIngested} ${t('header.modelsIndexed')}` : null
-      }
-      showNewHero={true}
-    >
+    <Layout showNewHero={true}>
       <Page user={user} dispatch={dispatch} modelPreviews={modelPreviews} />
     </Layout>
   )

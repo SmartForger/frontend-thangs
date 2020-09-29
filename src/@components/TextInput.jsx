@@ -28,7 +28,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const TextInput = ({ className, validator, error, ...props }) => {
+const TextInput = ({ className, validator, error, inputRef, ...props }) => {
   const [valid, setValid] = useState(true)
   const c = useStyles({ invalid: !valid || error })
 
@@ -37,10 +37,11 @@ const TextInput = ({ className, validator, error, ...props }) => {
       setValid(validator())
     }
   }, [validator])
-
+  debugger
   return (
     <input
       {...props}
+      ref={inputRef}
       className={classnames(c.TextInput, className)}
       onBlur={handleValidation}
     />

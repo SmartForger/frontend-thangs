@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { LandingCard, Spacer } from '@components'
+import { LandingCard } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as RightArrowIcon } from '@svg/icon-right-caret.svg'
@@ -7,7 +7,7 @@ import { ReactComponent as LeftArrowIcon } from '@svg/icon-left-caret.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { xl },
+    mediaQueries: { lg },
   } = theme
   return {
     Carousel_Wrapper: {
@@ -21,7 +21,7 @@ const useStyles = createUseStyles(theme => {
         background: 'transparent',
       },
 
-      [xl]: {
+      [lg]: {
         overflowY: 'visible',
         display: 'flex',
         justifyContent: 'center',
@@ -34,8 +34,8 @@ const useStyles = createUseStyles(theme => {
       marginLeft: '2rem',
       cursor: 'grab',
 
-      [xl]: {
-        marginLeft: '0',
+      [lg]: {
+        marginLeft: '21px',
         cursor: 'default',
       },
     },
@@ -47,50 +47,50 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
     },
-    Carousel_Card: {
-      boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.16)',
-      borderRadius: '.75rem',
-      backgroundColor: theme.colors.white[400],
-    },
-    Carousel_LastCardSpacer: {
-      [xl]: {
-        display: 'none',
-      },
-    },
     Carousel_RightArrow: {
-      width: '3rem',
-      height: '3rem',
+      alignItems: 'center',
+      backdropFilter: 'blur(4px)',
+      backgroundColor: 'transparent',
+      borderRadius: '1.5rem',
+      border: '1px solid white',
+      bottom: '3.5rem',
+      display: 'flex',
+      height: '2.5rem',
+      justifyContent: 'center',
       position: 'absolute',
       right: '0',
-      bottom: '2.5rem',
-      backgroundColor: 'white',
-      borderRadius: '1.5rem',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      border: '1px solid black',
+      width: '2.5rem',
       filter: 'drop-shadow(0px 2px 12px rgba(0, 0, 0, .6))',
 
-      [xl]: {
+      [lg]: {
         display: 'none',
+      },
+
+      '& path': {
+        fill: 'white',
       },
     },
     Carousel_LeftArrow: {
-      width: '3rem',
-      height: '3rem',
-      position: 'absolute',
-      left: '0',
-      bottom: '2.5rem',
-      backgroundColor: 'white',
-      borderRadius: '1.5rem',
-      display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
-      border: '1px solid black',
+      backdropFilter: 'blur(4px)',
+      backgroundColor: 'transparent',
+      border: '1px solid white',
+      borderRadius: '1.5rem',
+      bottom: '3.5rem',
+      display: 'flex',
       filter: 'drop-shadow(0px 2px 12px rgba(0, 0, 0, .6))',
+      height: '2.5rem',
+      justifyContent: 'center',
+      left: '0',
+      position: 'absolute',
+      width: '2.5rem',
 
-      [xl]: {
+      [lg]: {
         display: 'none',
+      },
+
+      '& path': {
+        fill: 'white',
       },
     },
   }
@@ -214,15 +214,9 @@ const Carousel = ({ className, cards = [] }) => {
           {cards.map((card, ind) => {
             return (
               <li className={c.Carousel_CardWrapper} key={`CarouselCard_${ind}`}>
-                <div className={c.Carousel_Card}>
+                <div>
                   <LandingCard card={card} />
                 </div>
-                <Spacer
-                  size={'2.25rem'}
-                  className={classnames({
-                    [c.Carousel_LastCardSpacer]: cards.length - 1 === ind,
-                  })}
-                />
               </li>
             )
           })}

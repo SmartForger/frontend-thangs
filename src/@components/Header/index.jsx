@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
 import { Carousel, Spacer, TitlePrimary, MultiLineBodyText } from '@components'
 import { useCurrentUser } from '@hooks'
+
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 
@@ -241,6 +242,7 @@ const useStyles = createUseStyles(theme => {
       transition: 'all 400ms',
       opacity: 1,
       display: 'inline-block !important',
+      maxWidth: '35rem',
 
       '& span': {
         color: theme.colors.gold[500],
@@ -256,39 +258,65 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const PromoCards = [
-  {
-    IconComponent: PromoGeoSearch,
-    title: 'Geometric Search',
-    text: 'Upload your model to find geometrically similar models.',
-  },
-  {
-    IconComponent: PromoStorage,
-    title: 'Unlimited Storage',
-    text: 'Upload as many models as your heart desires.',
-  },
-  {
-    IconComponent: PromoCollab,
-    title: 'Collaboration',
-    text: 'Invite your friends and work together on projects.',
-  },
-]
+const numberWithCommas = x => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
 
-const Header = ({
-  showSearchTextFlash,
-  showUser = true,
-  showNewHero = false,
-}) => {
-  const { dispatch } = useStoreon()
+const Header = ({ showSearchTextFlash, showUser = true, showNewHero = false }) => {
+  const { dispatch, modelsStats } = useStoreon('modelsStats')
   const [searchMinimized, setMinimizeSearch] = useState(!showNewHero)
   const c = useStyles({ searchMinimized, showNewHero })
+  const searchBarRef = useRef(null)
   const {
     atom: { isLoading, data: user },
   } = useCurrentUser()
 
   useEffect(() => {
+    dispatch(types.FETCH_MODELS_STATS)
+  }, [dispatch])
+
+  useEffect(() => {
     if (user && user.id) dispatch(types.FETCH_NOTIFICATIONS)
   }, [dispatch, user])
+
+  const PromoCards = useMemo(
+    () => [
+      {
+        IconComponent: PromoGeoSearch,
+        title: 'Geometric Search',
+        linkText: 'Use',
+        text: 'your model to find geometrically related models.',
+        callback: () => {
+          searchBarRef.current.focus()
+        },
+      },
+      {
+        IconComponent: PromoStorage,
+        title: 'Unlimited Storage',
+        linkText: 'Upload',
+        text: 'as many models as your heart desires.',
+        callback: () => {
+          dispatch(types.OPEN_OVERLAY, { overlayName: 'upload' })
+        },
+      },
+      {
+        IconComponent: PromoCollab,
+        title: 'Collaboration',
+        linkText: 'Invite',
+        text: 'your friends and work together on projects.',
+        callback: () => {
+          dispatch(types.OPEN_OVERLAY, { overlayName: 'createFolder' })
+        },
+      },
+    ],
+    [dispatch]
+  )
+
+  const modelsIngested =
+    modelsStats &&
+    modelsStats.data &&
+    modelsStats.data.modelsIngested &&
+    numberWithCommas(modelsStats.data.modelsIngested)
 
   return (
     <>
@@ -357,16 +385,16 @@ const Header = ({
                       [c.Fade]: searchMinimized,
                     })}
                   >
-                    <span>Search</span>, <span>collaborate</span>, and <span>share </span>{' '}
-                    your 3d models in one of
-                    <br />
-                    the fastest growing free communities.
+                    Thangs is the fastest growing 3d community with over{' '}
+                    {modelsIngested || '1,000,000'} available models to collaborate, store
+                    and share.
                   </MultiLineBodyText>
                   <Spacer size={'2rem'} />
                   <LandingSearchBar
                     showSearchTextFlash={showSearchTextFlash}
                     searchMinimized={searchMinimized}
                     setMinimizeSearch={setMinimizeSearch}
+                    searchBarRef={searchBarRef}
                   />
                   <Spacer size={'2.5rem'} />
                 </div>
