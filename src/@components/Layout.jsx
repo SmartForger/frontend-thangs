@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
-import { Header, Overlay, NotificationsList, Footer, FeedbackTooltip } from '@components'
+import { Header, Overlay, Footer, FeedbackTooltip } from '@components'
 import {
   CreateFolder,
   CreateTeam,
@@ -13,7 +13,6 @@ import {
   Signup,
   Upload,
 } from '@overlays'
-import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import Banner from './Header/Banner'
@@ -140,7 +139,7 @@ const Layout = ({
   showNewHero,
 }) => {
   const { overlay } = useStoreon('overlay')
-  const c = useStyles({ })
+  const c = useStyles({})
 
   const OverlayView = useMemo(
     () => overlay && overlay.isOpen && overlayTemplates[overlay.currentOverlay],
