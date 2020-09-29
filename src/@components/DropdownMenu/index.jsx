@@ -21,9 +21,20 @@ const useStyles = createUseStyles(theme => {
       marginTop: '.5rem',
       zIndex: 2,
       overflowY: 'auto',
+      scrollbarWidth: 'thin',
+      scrollbarColor: '#C7C7C7 white',
+
       '&::-webkit-scrollbar': {
-        width: 0,
-        background: 'transparent',
+        width: 12,
+      },
+      '&::-webkit-scrollbar-track': {
+        background: 'white',
+        borderRadius: '.5rem',
+      },
+      '&::-webkit-scrollbar-thumb': {
+        backgroundColor: '#C7C7C7',
+        borderRadius: 20,
+        border: '3px solid white',
       },
     },
     DropdownMenu_Item: {
@@ -127,9 +138,7 @@ const DropdownMenu = ({
           <ButtonIcon />
         </Button>
       )}
-      {isOpen && (
-        <div className={classnames(className, c.DropdownMenu)}>{children}</div>
-      )}
+      {isOpen && <div className={classnames(className, c.DropdownMenu)}>{children}</div>}
     </div>
   )
 }

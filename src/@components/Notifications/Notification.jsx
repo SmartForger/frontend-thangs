@@ -126,7 +126,7 @@ const noop = () => null
 const NotificationSnippet = ({
   c,
   Icon = noop,
-  id,
+  id: _id,
   actor,
   altVerb,
   count,
@@ -134,7 +134,7 @@ const NotificationSnippet = ({
   time,
   target,
   linkTarget,
-  handleNotificationDelete,
+  handleNotificationDelete: _hND,
 }) => {
   const actorName = actor && actor.userName
   const targetName = target && target.name
@@ -156,10 +156,6 @@ const NotificationSnippet = ({
           <div className={c.NotificationSnippet_time}>{time}</div>
         </div>
       </Link>
-      <TrashCanIcon
-        className={c.NotificationSnippet_TrashIcon}
-        onClick={() => handleNotificationDelete(id)}
-      />
     </div>
   )
 }

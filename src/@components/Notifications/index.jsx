@@ -18,17 +18,9 @@ const useStyles = createUseStyles(theme => {
     Notifications: {
       width: '18.75rem',
       maxHeight: '25.5rem',
+      right: '-9rem',
 
-      [xs]: {
-        right: '-7rem',
-      },
       [sm]: {
-        right: '.75rem',
-      },
-      [md]: {
-        right: '.75rem',
-      },
-      [lg]: {
         right: '.75rem',
       },
     },
@@ -78,10 +70,7 @@ const Notifications = () => {
   const statusItem = renderStatusItem()
 
   return (
-    <DropdownMenu
-      className={c.Notifications}
-      TargetComponent={NotificationsButton}
-    >
+    <DropdownMenu className={c.Notifications} TargetComponent={NotificationsButton}>
       {statusItem
         ? statusItem
         : notificationsArray &&
