@@ -17,7 +17,11 @@ import {
 import { useForm, useGoogleLogin, useFacebookLogin } from '@hooks'
 import { authenticationService } from '@services'
 import { ReactComponent as BackgroundSvg } from '@svg/overlay-background.svg'
-import { ReactComponent as CheckIcon } from '@svg/icon-check.svg'
+import { ReactComponent as VersionControlIcon } from '@svg/icon-version-control.svg'
+import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
+import { ReactComponent as CollabIcon } from '@svg/icon-collaboration.svg'
+import { ReactComponent as StorageIcon } from '@svg/icon-storage.svg'
+import { ReactComponent as HeartIcon } from '@svg/icon-heart.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
 import { ReactComponent as FacebookLogo } from '@svg/facebook-logo.svg'
@@ -68,9 +72,6 @@ const useStyles = createUseStyles(theme => {
     },
     Signup_SignUpPromoSection: {
       zIndex: 2,
-      '& path': {
-        fill: theme.colors.white[400],
-      },
     },
     Signup_SignUpPromoText: {
       maxWidth: '16.875rem',
@@ -195,37 +196,31 @@ const SignUpPromo = ({ c, titleMessage }) => {
           <Spacer size='2rem' />
           <div className={c.Signup_Column}>
             <div className={c.Signup_Row}>
-              <CheckIcon />
+              <MagnifyingGlass />
               <Spacer size='.5rem' />
-              <MultiLineBodyText light>No fee or subscription</MultiLineBodyText>
+              <MultiLineBodyText light>Geometric Search</MultiLineBodyText>
             </div>
             <Spacer size='.5rem' />
             <div className={c.Signup_Row}>
-              <CheckIcon />
+              <StorageIcon />
               <Spacer size='.5rem' />
-              <MultiLineBodyText light>Unlimited free downloads</MultiLineBodyText>
+              <MultiLineBodyText light>Unlimited storage</MultiLineBodyText>
             </div>
             <Spacer size='.5rem' />
             <div className={c.Signup_Row}>
-              <CheckIcon />
+              <CollabIcon />
               <Spacer size='.5rem' />
-              <MultiLineBodyText light>Search over 1 million models</MultiLineBodyText>
+              <MultiLineBodyText light>Collaboration</MultiLineBodyText>
             </div>
             <Spacer size='.5rem' />
             <div className={c.Signup_Row}>
-              <CheckIcon />
+              <HeartIcon />
               <Spacer size='.5rem' />
-              <MultiLineBodyText light>Geometrical searches</MultiLineBodyText>
+              <MultiLineBodyText light>Completely Free</MultiLineBodyText>
             </div>
             <Spacer size='.5rem' />
             <div className={c.Signup_Row}>
-              <CheckIcon />
-              <Spacer size='.5rem' />
-              <MultiLineBodyText light>Collaborate on projects</MultiLineBodyText>
-            </div>
-            <Spacer size='.5rem' />
-            <div className={c.Signup_Row}>
-              <CheckIcon />
+              <VersionControlIcon />
               <Spacer size='.5rem' />
               <MultiLineBodyText light>Version Control</MultiLineBodyText>
             </div>
