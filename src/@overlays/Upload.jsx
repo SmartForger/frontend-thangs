@@ -1,6 +1,12 @@
 import React, { useCallback, useEffect } from 'react'
 import * as R from 'ramda'
-import { Loader, UploadProgress, useFlashNotification, UploadForm, UploaderContent } from '@components'
+import {
+  Loader,
+  UploadProgress,
+  useFlashNotification,
+  UploadForm,
+  UploaderContent,
+} from '@components'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
@@ -27,8 +33,6 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
-
-const sanitizeFileName = name => name.replace(/ /g, '_')
 
 const Upload = ({ prevModelId }) => {
   const { navigateWithFlash } = useFlashNotification()
@@ -75,7 +79,7 @@ const Upload = ({ prevModelId }) => {
       } = data
 
       const requiredVariables = {
-        name: sanitizeFileName(name),
+        name: name,
         size: file.size,
         description,
       }
