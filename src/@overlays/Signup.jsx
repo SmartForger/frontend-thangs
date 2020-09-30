@@ -104,7 +104,7 @@ const useStyles = createUseStyles(theme => {
     Signup_HasAccount: {
       display: 'flex',
       alignItems: 'center',
-      marginBottom: '1.5rem',
+      marginBottom: '2.5rem',
       justifyContent: 'center',
     },
     Signup_HasAccountButton: {

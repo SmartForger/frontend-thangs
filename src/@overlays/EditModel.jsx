@@ -8,6 +8,7 @@ import {
 } from '@components'
 import { useLocalStorage } from '@hooks'
 import { createUseStyles } from '@style'
+import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
@@ -36,7 +37,7 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
 
       [md]: {
-        flexDirection: 'column',
+        flexDirection: 'row',
       },
     },
     EditModel_ExitButton: {
@@ -46,9 +47,26 @@ const useStyles = createUseStyles(theme => {
       zIndex: 4,
       position: 'absolute',
     },
+    EditModel_ViewerWrapper: {
+      width: '100%',
+      height: '35.75rem',
+      margin: '0 auto',
+      display: 'flex',
+      overflow: 'hidden',
+      flexDirection: 'column',
+      borderRadius: '1rem 0 0 1rem',
+      position: 'relative',
+      borderRight: 'none',
+      borderBottom: `1px solid ${theme.colors.white[900]}`,
+
+      [md]: {
+        borderBottom: 'none',
+        borderRight: `1px solid ${theme.colors.white[900]}`,
+      },
+    },
     EditModel_Viewer: {
       width: '100%',
-      height: '23.5rem',
+      height: '100%',
       margin: '0 auto',
       display: 'flex',
       overflow: 'hidden',
@@ -97,7 +115,7 @@ const EditModel = ({ model, user, fetchData, folderId }) => {
         dispatch(types.CLOSE_OVERLAY)
         navigateWithFlash(
           folderId ? `/folder/${folderId}` : `/${user.username}`,
-          'Model deleted successfully.'
+          'Model updated successfully.'
         )
       },
     })
@@ -106,8 +124,7 @@ const EditModel = ({ model, user, fetchData, folderId }) => {
   return (
     <div className={c.EditModel}>
       <ExitIcon className={c.EditModel_ExitButton} onClick={closeOverlay} />
-      <Spacer className={c.EditModel_MobileSpacer} size='4rem' />
-      <div className={c.EditModel_Column}>
+      <div className={classnames(c.EditModel_Column, c.EditModel_ViewerWrapper)}>
         {showBackupViewer ? (
           <BackupViewer className={c.EditModel_Viewer} model={model} />
         ) : (
@@ -118,8 +135,7 @@ const EditModel = ({ model, user, fetchData, folderId }) => {
           />
         )}
       </div>
-      <Spacer className={c.EditModel_MobileSpacer} size='4rem' mobileSize='2rem' />
-      <div className={c.EditModel_Column}>
+      <div className={classnames(c.EditModel_Column, c.EditModel_EditForm)}>
         <Spacer className={c.EditModel_MobileSpacer} size='4rem' />
         <EditModelForm
           model={model}
@@ -129,7 +145,6 @@ const EditModel = ({ model, user, fetchData, folderId }) => {
         />
         <Spacer className={c.EditModel_MobileSpacer} size='4rem' />
       </div>
-      <Spacer className={c.EditModel_MobileSpacer} size='4rem' />
     </div>
   )
 }

@@ -20,6 +20,7 @@ const useStyles = createUseStyles(theme => {
       fontWeight: '500',
       outline: 'none',
       height: '100%',
+      minHeight: '6rem',
       '&::placeholder': {
         color: theme.variables.colors.textInputPlaceholderColor,
       },

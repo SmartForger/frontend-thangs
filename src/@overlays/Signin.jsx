@@ -97,7 +97,7 @@ const useStyles = createUseStyles(theme => {
     Signin_HasAccount: {
       display: 'flex',
       alignItems: 'center',
-      marginBottom: '1.5rem',
+      marginBottom: '2.5rem',
       justifyContent: 'center',
     },
     Signin_HasAccountButton: {
@@ -252,8 +252,8 @@ const SignInForm = ({
                 {authFailed
                   ? 'Something went wrong. Please try again'
                   : sessionExpired
-                    ? 'Session Expired. Please sign back in to continue'
-                    : signupErrorMessage}
+                  ? 'Session Expired. Please sign back in to continue'
+                  : signupErrorMessage}
               </h4>
               <Spacer size='1rem' />
             </>

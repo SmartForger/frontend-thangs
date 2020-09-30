@@ -63,7 +63,8 @@ const Dropdown = ({
           return {
             ...base,
             margin: 0,
-            color: '#999999',
+            color: 'black',
+            fontWeight: '500',
           }
         },
         placeholder: base => {
@@ -71,6 +72,7 @@ const Dropdown = ({
             ...base,
             margin: 0,
             color: '#999999',
+            fontWeight: '500',
           }
         },
         clearIndicator: base => {

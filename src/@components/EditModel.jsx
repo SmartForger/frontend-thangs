@@ -19,10 +19,14 @@ const useStyles = createUseStyles(theme => {
       top: 0,
       right: 0,
       padding: '1rem',
-      '&:hover': {
-        ...isconSelectedState,
-      },
+      zIndex: 1,
       cursor: 'pointer',
+
+      '&:hover': {
+        '& path': {
+          fill: theme.colors.black[500],
+        },
+      },
     },
     EditModel_EditIcon__selected: {
       ...isconSelectedState,

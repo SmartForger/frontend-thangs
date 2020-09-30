@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { AnchorButton, ColorPicker } from '@components'
+import { AnchorButton, Button, ColorPicker } from '@components'
 import { ReactComponent as WireMode } from '@svg/view-mode-wire.svg'
 import { ReactComponent as ShadedMode } from '@svg/view-mode-shaded.svg'
 import { ReactComponent as XRayMode } from '@svg/view-mode-xray.svg'
@@ -13,13 +13,18 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     Toolbar: {
-      position: 'relative',
-      backgroundColor: theme.colors.white[400],
+      position: ({ minimizeTools }) => (minimizeTools ? 'absolute' : 'relative'),
+      bottom: 0,
+      right: 0,
+      backgroundColor: ({ minimizeTools }) =>
+        minimizeTools ? 'transparent' : theme.colors.white[400],
       boxShadow: 'none',
-      borderTop: `1px solid ${theme.colors.purple[200]}`,
+      borderTop: ({ minimizeTools }) =>
+        minimizeTools ? 'none' : `1px solid ${theme.colors.purple[200]}`,
       padding: '1.5rem',
       display: 'flex',
-      justifyContent: ({ minimizeTools }) => (minimizeTools ? 'center' : 'space-between'),
+      justifyContent: ({ minimizeTools }) =>
+        minimizeTools ? 'flex-end' : 'space-between',
     },
     Toolbar_ToolGroup: {
       display: 'flex',
@@ -93,7 +98,7 @@ const Toolbar = ({
 
   return (
     <div className={c.Toolbar}>
-      {!minimizeTools && (
+      {!minimizeTools ? (
         <>
           <div className={c.Toolbar_ToolGroup}>
             <div className={c.Toolbar_ToolGroupTitle}>Model View</div>
@@ -120,14 +125,24 @@ const Toolbar = ({
               </ColorPicker>
             </div>
           </div>
+          <AnchorButton
+            className={c.Toolbar_MobileAnchorButton}
+            onClick={handleResetView}
+          >
+            Reset
+          </AnchorButton>
+          <AnchorButton
+            className={c.Toolbar_DesktopAnchorButton}
+            onClick={handleResetView}
+          >
+            Reset Image
+          </AnchorButton>
         </>
+      ) : (
+        <Button className={c.Toolbar_ResetButton} onClick={handleResetView}>
+          Reset
+        </Button>
       )}
-      <AnchorButton className={c.Toolbar_MobileAnchorButton} onClick={handleResetView}>
-        Reset
-      </AnchorButton>
-      <AnchorButton className={c.Toolbar_DesktopAnchorButton} onClick={handleResetView}>
-        Reset Image
-      </AnchorButton>
     </div>
   )
 }
