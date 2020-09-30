@@ -49,19 +49,21 @@ const useStyles = createUseStyles(theme => {
     },
     EditModel_ViewerWrapper: {
       width: '100%',
-      height: '35.75rem',
+      height: '24rem',
       margin: '0 auto',
       display: 'flex',
       overflow: 'hidden',
       flexDirection: 'column',
-      borderRadius: '1rem 0 0 1rem',
+      borderRadius: '1rem 1rem 0 0',
       position: 'relative',
       borderRight: 'none',
       borderBottom: `1px solid ${theme.colors.white[900]}`,
 
       [md]: {
+        height: '35.75rem',
         borderBottom: 'none',
         borderRight: `1px solid ${theme.colors.white[900]}`,
+        borderRadius: '1rem 0 0 1rem',
       },
     },
     EditModel_Viewer: {
