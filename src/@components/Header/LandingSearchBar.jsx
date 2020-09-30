@@ -21,26 +21,33 @@ const useStyles = createUseStyles(theme => {
 
   return {
     LandingSearchBar: {
-      width: '100%',
       maxWidth: '44rem',
+      opacity: 1,
       position: 'relative',
+      top: 0,
+      transition: 'all 450ms',
+      width: '100%',
       zIndex: 1,
     },
 
-    LandingSearchBar_Upload: {
-      top: '3.5rem',
-      borderTop: `1px solid ${theme.colors.white[900]}`,
-      borderRadius: '0 0 .5rem .5rem',
-      position: 'absolute',
-      width: '100%',
-      height: '5.5rem',
-      background: theme.colors.white[400],
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      boxShadow: '0px .5rem 1.25rem rgba(0, 0, 0, 0.16)',
+    LandingSearchBar_minimized: {
+      opacity: 0,
+      top: '-16rem',
+    },
 
+    LandingSearchBar_Upload: {
+      alignItems: 'center',
+      background: theme.colors.white[400],
+      borderRadius: '0 0 .5rem .5rem',
+      borderTop: `1px solid ${theme.colors.white[900]}`,
+      boxShadow: '0px .5rem 1.25rem rgba(0, 0, 0, 0.16)',
       color: theme.colors.black[500],
+      display: 'flex',
+      height: '5.5rem',
+      justifyContent: 'center',
+      position: 'absolute',
+      top: '3.5rem',
+      width: '100%',
       ...theme.text.viewerLoadingText,
     },
     LandingSearchBar_Upload__DragOvered: {
@@ -62,7 +69,6 @@ const useStyles = createUseStyles(theme => {
         fill: theme.colors.black[500],
       },
     },
-
     SearchBar: {
       background: 'white',
       borderRadius: '.5rem',
@@ -194,7 +200,6 @@ const noop = () => null
 
 const SearchBar = ({
   className,
-  searchMinimized,
   setMinimizeSearch = noop,
   onChange,
   searchBarRef,
@@ -202,7 +207,7 @@ const SearchBar = ({
 }) => {
   const { dispatch } = useStoreon()
   const history = useHistory()
-  const c = useStyles({ searchMinimized })
+  const c = useStyles({})
   const t = useTranslations({})
   const [searchTerm, setSearchTerm] = useState(undefined)
 
@@ -256,12 +261,6 @@ const SearchBar = ({
               title={t('header.searchTextTitle')}
               className={c.SearchBar_SearchIcon}
             />
-          </Button>
-          <Button className={c.SearchBar_SearchButton} onClick={handleSearchSubmit}>
-            <MagnifyingGlass
-              title={t('header.searchTextTitle')}
-              className={c.SearchBar_SearchIcon}
-            />
             <Spacer size={'.5rem'} />
             Search
           </Button>
@@ -275,8 +274,8 @@ const SearchBar = ({
   )
 }
 
-const LandingSearchBar = ({ searchBarRef }) => {
-  const c = useStyles({})
+const LandingSearchBar = ({ searchBarRef, searchMinimized, setMinimizeSearch }) => {
+  const c = useStyles({ searchMinimized })
   const [isUploadOpened, setIsUploadOpened] = useState(false)
   const [isDragOvered, setIsDragOvered] = useState(false)
   const { dispatch } = useStoreon()
@@ -345,10 +344,15 @@ const LandingSearchBar = ({ searchBarRef }) => {
   }
 
   return (
-    <div className={c.LandingSearchBar}>
+    <div
+      className={classnames(c.LandingSearchBar, {
+        [c.LandingSearchBar_minimized]: searchMinimized,
+      })}
+    >
       <SearchBar
         className={classnames(isUploadOpened && c.SearchBar__withBottom)}
         searchBarRef={searchBarRef}
+        setMinimizeSearch={setMinimizeSearch}
         onFocus={handleSearchBarFocus}
         onChange={e => {
           const value = R.path(['target', 'value'], e) || ''

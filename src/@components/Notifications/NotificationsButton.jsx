@@ -14,6 +14,7 @@ const useStyles = createUseStyles(theme => {
     },
     NotificationsButton_NotificationIconWrapper: {
       position: 'relative',
+      marginLeft: '1rem',
     },
     NotificationsButton_NotificationIcon: {
       color: theme.colors.purple[400],
@@ -42,14 +43,16 @@ const useStyles = createUseStyles(theme => {
 const NotificationsButton = ({ onClick }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
-  const { notifications: { data: notifications } } = useStoreon('notifications')
+  const {
+    notifications: { data: notifications },
+  } = useStoreon('notifications')
 
   const handleNotificationsClick = useCallback(() => {
     if (notifications.unreadCount > 0) {
       dispatch(storeEventTypes.READ_NOTIFICATIONS)
     }
   }, [dispatch, notifications])
-  
+
   return (
     <div
       className={classnames(

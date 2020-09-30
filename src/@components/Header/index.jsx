@@ -79,7 +79,8 @@ const useStyles = createUseStyles(theme => {
       width: 'auto',
     },
     Header_LogoWrapper: {
-      marginRight: '2.25rem',
+      display: 'flex',
+      flexWrap: 'nowrap',
     },
     Header_RowWrapper: {
       width: '100%',
@@ -394,11 +395,7 @@ const Header = ({ showSearchTextFlash, showUser = true, showNewHero = false }) =
             </div>
             {showNewHero && (
               <>
-                <div
-                  className={classnames(c.Header_Landing, {
-                    [c.Fade]: searchMinimized,
-                  })}
-                >
+                <div className={c.Header_Landing}>
                   <Spacer size={'1rem'} />
                   <TitlePrimary
                     light

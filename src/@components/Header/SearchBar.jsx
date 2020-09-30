@@ -17,7 +17,9 @@ const useStyles = createUseStyles(theme => {
   } = theme
 
   return {
-    SearchBar: {},
+    SearchBar: {
+      width: '100%',
+    },
     SearchBar_Wrapper: {
       alignItems: 'center',
       display: 'flex',
@@ -64,10 +66,11 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
       justifyContent: 'flex-start',
       minWidth: '18.5rem',
+      margin: '0 auto',
 
       [md]: {
-        width: '60%',
-        maxWidth: '32rem',
+        width: '80%',
+        maxWidth: '42rem',
       },
     },
     SearchBar_FormInput: {
@@ -171,48 +174,53 @@ const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
   }, [])
 
   return (
-    <form className={c.SearchBar_Form} onSubmit={handleSearchSubmit}>
-      <div className={classnames(c.SearchBar_Wrapper)}>
-        <MagnifyingGlass
-          className={classnames(c.SearchBar_SearchIcon, c.SearchBar_FormIcon)}
-          onClick={handleSearchSubmit}
-        />
-        <TextInput
-          name='search'
-          placeholder={t('header.searchPlaceholderText')}
-          className={classnames(c.SearchBar_FormInput, {
-            [c.SearchBar_FormInput_active]: searchTerm,
-          })}
-          onChange={e => {
-            setSearchTerm(e.target.value)
-          }}
-          value={searchTerm || ''}
-        />
-        {!isMobile && (
-          <>
-            <div
-              className={classnames(c.SearchBar_UploadBar, {
-                [c.SearchBar_UploadBar__expand]: showUploadText,
-              })}
-              onClick={() =>
-                dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload' })
-              }
-              title={t('header.searchUploadText')}
-            >
-              <div className={classnames(c.SearchBar_UploadIcon)}>
-                <UploadIcon />
+    <div className={c.SearchBar}>
+      <form className={c.SearchBar_Form} onSubmit={handleSearchSubmit}>
+        <div className={classnames(c.SearchBar_Wrapper)}>
+          <MagnifyingGlass
+            className={classnames(c.SearchBar_SearchIcon, c.SearchBar_FormIcon)}
+            onClick={handleSearchSubmit}
+          />
+          <TextInput
+            name='search'
+            placeholder={t('header.searchPlaceholderText')}
+            className={classnames(c.SearchBar_FormInput, {
+              [c.SearchBar_FormInput_active]: searchTerm,
+            })}
+            onChange={e => {
+              setSearchTerm(e.target.value)
+            }}
+            value={searchTerm || ''}
+          />
+          {!isMobile && (
+            <>
+              <div
+                className={classnames(c.SearchBar_UploadBar, {
+                  [c.SearchBar_UploadBar__expand]: showUploadText,
+                })}
+                onClick={() =>
+                  dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload' })
+                }
+                title={t('header.searchUploadText')}
+              >
+                <div className={classnames(c.SearchBar_UploadIcon)}>
+                  <UploadIcon />
+                </div>
+                <span>{t('header.searchUploadText')}</span>
               </div>
-              <span>{t('header.searchUploadText')}</span>
-            </div>
-            <MagnifyingGlass
-              title={t('header.searchTextTitle')}
-              className={classnames(c.SearchBar_SearchIcon, c.SearchBar_SearchActionIcon)}
-              onClick={handleSearchSubmit}
-            />
-          </>
-        )}
-      </div>
-    </form>
+              <MagnifyingGlass
+                title={t('header.searchTextTitle')}
+                className={classnames(
+                  c.SearchBar_SearchIcon,
+                  c.SearchBar_SearchActionIcon
+                )}
+                onClick={handleSearchSubmit}
+              />
+            </>
+          )}
+        </div>
+      </form>
+    </div>
   )
 }
 
