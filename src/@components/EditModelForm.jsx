@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
+import * as R from 'ramda'
 import {
   Button,
   Dropdown,
@@ -113,6 +114,10 @@ const EditModelForm = ({
     handleDelete()
   }, [handleDelete])
 
+  const selectedCategory = useMemo(() => {
+    return R.find(R.propEq('value', model.category), CATEGORIES)
+  }, [model])
+
   return (
     <div className={c.EditModelForm_Wrapper}>
       {!showDeleteConfirm && (
@@ -187,6 +192,7 @@ const EditModelForm = ({
               className={c.UploadForm_Select}
               name='category'
               placeholder='Select category'
+              defaultValue={selectedCategory}
               isClearable
               options={CATEGORIES}
               onChange={e => {
