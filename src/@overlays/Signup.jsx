@@ -71,6 +71,7 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
     },
     Signup_SignUpPromoSection: {
+      width: '100%',
       zIndex: 2,
     },
     Signup_SignUpPromoText: {
