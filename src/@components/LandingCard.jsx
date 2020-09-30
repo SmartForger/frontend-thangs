@@ -51,7 +51,6 @@ const LandingCard = ({ card = {} }) => {
         </div>
         <Spacer size={'1rem'} />
       </div>
-      <Spacer size={'20px'} />
     </>
   )
 }

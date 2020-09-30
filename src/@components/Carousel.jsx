@@ -45,7 +45,7 @@ const useStyles = createUseStyles(theme => {
     },
     Carousel_CardWrapper: {
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
     },
     Carousel_RightArrow: {
       alignItems: 'center',
@@ -214,9 +214,7 @@ const Carousel = ({ className, cards = [] }) => {
           {cards.map((card, ind) => {
             return (
               <li className={c.Carousel_CardWrapper} key={`CarouselCard_${ind}`}>
-                <div>
-                  <LandingCard card={card} />
-                </div>
+                <LandingCard card={card} />
               </li>
             )
           })}
