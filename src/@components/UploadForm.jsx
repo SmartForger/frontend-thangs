@@ -94,6 +94,19 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
+const CATEGORIES = [
+  { value: 'automotive', label: 'Automotive' },
+  { value: 'aerospace', label: 'Aerospace' },
+  { value: 'healthcare', label: 'Healthcare' },
+  { value: 'industrial', label: 'Industrial' },
+  { value: 'home', label: 'Home' },
+  { value: 'safety', label: 'Safety' },
+  { value: 'characters', label: 'Characters' },
+  { value: 'architecture', label: 'Architecture' },
+  { value: 'technology', label: 'Technology' },
+  { value: 'hobbyist', label: 'Hobbyist' },
+]
+
 const UploadForm = ({
   onSubmit,
   disableSubmit,
@@ -138,18 +151,6 @@ const UploadForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const CATEGORIES = [
-    { value: 'automotive', label: 'Automotive' },
-    { value: 'aerospace', label: 'Aerospace' },
-    { value: 'healthcare', label: 'Healthcare' },
-    { value: 'industrial', label: 'Industrial' },
-    { value: 'home', label: 'Home' },
-    { value: 'safety', label: 'Safety' },
-    { value: 'characters', label: 'Characters' },
-    { value: 'architecture', label: 'Architecture' },
-    { value: 'technology', label: 'Technology' },
-    { value: 'hobbyist', label: 'Hobbyist' },
-  ]
 
   const handleOnInputChange = useCallback(
     (key, value) => {
