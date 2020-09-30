@@ -369,7 +369,7 @@ export default store => {
         endpoint: `models/match/${modelId}`,
       })
 
-      pendo.track('More Similar Search Started', {
+      pendo.track('View Related Search Started', {
         modelId,
       })
 
@@ -408,7 +408,7 @@ export default store => {
         }
 
         pendo.track(
-          `More Similar Search - ${numOfMatches > 0 ? 'Results' : 'No Results'}`,
+          `View Related Search - ${numOfMatches > 0 ? 'Results' : 'No Results'}`,
           {
             modelId,
             numOfMatches,
