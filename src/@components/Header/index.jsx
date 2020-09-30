@@ -5,9 +5,9 @@ import classnames from 'classnames'
 
 import { Carousel, Spacer, TitlePrimary, MultiLineBodyText } from '@components'
 import { useCurrentUser } from '@hooks'
-
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
+import * as pendo from '@vendors/pendo'
 
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as LogoText } from '@svg/logo-text.svg'
@@ -288,6 +288,10 @@ const Header = ({ showSearchTextFlash, showUser = true, showNewHero = false }) =
         text: 'to find geometrically related models.',
         callback: () => {
           searchBarRef.current.focus()
+          pendo.track('Value Prop Clicked', {
+            source: 'Geometric Search',
+            isRegistered: !!user,
+          })
         },
       },
       {
@@ -296,7 +300,20 @@ const Header = ({ showSearchTextFlash, showUser = true, showNewHero = false }) =
         linkText: 'Upload',
         text: 'as many models as your heart desires.',
         callback: () => {
-          dispatch(types.OPEN_OVERLAY, { overlayName: 'upload' })
+          if (user && user.id) {
+            dispatch(types.OPEN_OVERLAY, { overlayName: 'upload' })
+            pendo.track('Value Prop Clicked', { source: 'Unlimited Storage' })
+          } else {
+            dispatch(types.OPEN_OVERLAY, {
+              overlayName: 'signUp',
+              overlayData: {
+                animateIn: true,
+                windowed: true,
+                source: 'Unlimited Storage',
+              },
+            })
+            pendo.track('SignUp Prompt Overlay', { source: 'Unlimited Storage' })
+          }
         },
       },
       {
@@ -305,11 +322,24 @@ const Header = ({ showSearchTextFlash, showUser = true, showNewHero = false }) =
         linkText: 'Invite',
         text: 'your friends and work together on projects.',
         callback: () => {
-          dispatch(types.OPEN_OVERLAY, { overlayName: 'createFolder' })
+          if (user && user.id) {
+            dispatch(types.OPEN_OVERLAY, { overlayName: 'createFolder' })
+            pendo.track('Value Prop Clicked', { source: 'Collaboration' })
+          } else {
+            dispatch(types.OPEN_OVERLAY, {
+              overlayName: 'signUp',
+              overlayData: {
+                animateIn: true,
+                windowed: true,
+                source: 'Collaboration',
+              },
+            })
+            pendo.track('SignUp Prompt Overlay', { source: 'Collaboration' })
+          }
         },
       },
     ],
-    [dispatch]
+    [dispatch, user]
   )
 
   const modelsIngested =
@@ -386,8 +416,8 @@ const Header = ({ showSearchTextFlash, showUser = true, showNewHero = false }) =
                     })}
                   >
                     Thangs is the fastest growing 3d community with over{' '}
-                    {modelsIngested || '1,000,000'} available models to collaborate, store
-                    and share.
+                    {modelsIngested || '1,000,000'} available models to search, store, and
+                    collaborate.
                   </MultiLineBodyText>
                   <Spacer size={'2rem'} />
                   <LandingSearchBar

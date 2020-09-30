@@ -507,7 +507,7 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
           )}
         </div>
       </div>
-      <Spacer size={'1.5rem'} />
+      <Spacer size={'3rem'} />
       <div className={c.Home_Content}>
         {isCurrentUsersProfile ? (
           <MyProfile models={ownUserModelsAtom} likes={likedUserModelsAtom} />
