@@ -151,13 +151,17 @@ const UploadForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-
   const handleOnInputChange = useCallback(
     (key, value) => {
       onInputChange(key, value)
     },
     [onInputChange]
   )
+
+  useEffect(() => {
+    const fileName = (file && file.name) || ''
+    handleOnInputChange('name', fileName)
+  }, [file, handleOnInputChange])
 
   const handleOnFormSubmit = useCallback(
     e => {
