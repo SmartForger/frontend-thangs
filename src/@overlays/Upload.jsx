@@ -10,7 +10,7 @@ import {
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
-import { useFileUpload } from '@hooks'
+import { useCurrentUser, useFileUpload } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -43,6 +43,9 @@ const Upload = ({ prevModelId }) => {
     'folders',
     'overlay'
   )
+  const {
+    atom: { data: currentUser },
+  } = useCurrentUser()
 
   useEffect(() => {
     dispatch(types.FETCH_FOLDERS)
@@ -101,14 +104,14 @@ const Upload = ({ prevModelId }) => {
         onFinish: () => {
           dispatch(types.CLOSE_OVERLAY)
           navigateWithFlash(
-            folderId ? `/folder/${folderId}` : '/home',
+            folderId ? `/folder/${folderId}` : `/${currentUser.username}`,
             'Model added successfully.'
           )
           dispatch(types.RESET_UPLOAD_MODEL)
         },
       })
     },
-    [dispatch, file, navigateWithFlash, prevModelId]
+    [currentUser, dispatch, file, navigateWithFlash, prevModelId]
   )
 
   return (
@@ -137,6 +140,7 @@ const Upload = ({ prevModelId }) => {
             onSubmit={handleSubmit}
             disableSubmit={!file || uploadModelPhase1.isLoading}
             isLoading={uploadModelPhase1.isLoading}
+            file={file}
             folders={folders.data}
             selectedFolderId={
               overlay && overlay.overlayData && overlay.overlayData.folderId
