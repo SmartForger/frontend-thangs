@@ -8,7 +8,6 @@ import { ReactComponent as HeartIcon } from '@svg/notification-heart.svg'
 import { ReactComponent as CommentIcon } from '@svg/notification-comment.svg'
 import { ReactComponent as PlusIcon } from '@svg/notification-plus.svg'
 import { ReactComponent as UploadIcon } from '@svg/notification-uploaded.svg'
-import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 

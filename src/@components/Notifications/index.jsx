@@ -11,7 +11,7 @@ import { NoResults, Spinner } from '@components'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md, xs, sm, lg },
+    mediaQueries: { sm },
   } = theme
 
   return {
