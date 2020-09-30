@@ -36,6 +36,7 @@ const Auth = () => {
         return (window.location.href = '/welcome')
       } else {
         pendo.track('Third Party Login', { source: provider.toUpperCase() })
+        if (url.includes('sessionExpired')) return (window.location.href = '/')
         return (window.location.href = url ? url : '/')
       }
     }

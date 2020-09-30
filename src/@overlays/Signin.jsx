@@ -218,6 +218,8 @@ const SignInForm = ({
       })
       setSigninErrorMessage(error.data && error.data.message)
     } else {
+      if (window.location.href.includes('sessionExpired'))
+        return (window.location.href = '/')
       return window.location.reload()
     }
   }, [dispatch, inputState])

@@ -336,6 +336,8 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
       })
       if (loginError) return setSignupErrorMessage(error)
       pendo.track('Overlay Sign Up Success', { source })
+      if (window.location.href.includes('sessionExpired'))
+        return (window.location.href = '/')
       return (window.location.href = '/welcome')
     }
   }, [dispatch, inputState, source, validateEmail, validatePasswords])
