@@ -62,7 +62,8 @@ export default store => {
         atom: `model-${id}`,
         data,
       })
-      onFinish()
+
+      store.dispatch(types.FETCH_USER, { id: data.owner.id, onFinish })
     }
   })
 

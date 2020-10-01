@@ -313,6 +313,10 @@ const VersionLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
 
 const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
   const c = useStyles()
+  const { [`user-${model.owner.id}`]: userData = {} } = useStoreon(
+    `user-${model.owner.id}`
+  )
+  const { isLoading, data: user } = userData
   return (
     <div className={classnames(c.Model_Row, c.Model_Detail)}>
       <ModelTitle model={model} />
@@ -322,8 +326,8 @@ const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
           <div>
             <ToggleFollowButton
               currentUser={currentUser}
-              profileUser={model && model.owner}
-              profileUserId={model && model.owner && model.owner.id}
+              profileUser={user}
+              profileUserId={user && user.id}
               openSignupOverlay={openSignupOverlay}
             />
           </div>
