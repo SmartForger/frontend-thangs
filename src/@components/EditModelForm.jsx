@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import * as R from 'ramda'
 import {
   Button,
+  Divider,
   Dropdown,
   Input,
   Textarea,
@@ -19,6 +20,10 @@ const useStyles = createUseStyles(theme => {
     },
     EditModelForm_Wrapper: {
       width: '100%',
+
+      '& button': {
+        width: '100%',
+      },
     },
     EditModelForm_ButtonContainer: {
       display: 'flex',
@@ -200,19 +205,15 @@ const EditModelForm = ({
               }}
             />
             <Spacer size='1rem' />
-            <div className={c.EditModelForm_ButtonRow}>
-              <Button
-                tertiary
-                className={c.EditModelForm_DeleteButton}
-                onClick={handleDeleteModel}
-                type='button'
-              >
-                Delete Model
-              </Button>
-              <Button type='submit'>Submit</Button>
-            </div>
-            <Spacer size='3rem' />
+            <Button type='submit'>Submit</Button>
+            <Spacer size='1.5rem' />
+            <Divider spacing='0' />
+            <Spacer size='.75rem' />
+            <Button tertiary onClick={handleDeleteModel} type='button'>
+              Delete Model
+            </Button>
           </form>
+          <Spacer size='2.5rem' />
         </>
       )}
       {showDeleteConfirm && (
