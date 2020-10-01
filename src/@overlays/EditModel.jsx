@@ -60,7 +60,7 @@ const useStyles = createUseStyles(theme => {
       borderBottom: `1px solid ${theme.colors.white[900]}`,
 
       [md]: {
-        height: '35.75rem',
+        height: '40rem',
         borderBottom: 'none',
         borderRight: `1px solid ${theme.colors.white[900]}`,
         borderRadius: '1rem 0 0 1rem',

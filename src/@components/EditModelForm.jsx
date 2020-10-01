@@ -205,7 +205,7 @@ const EditModelForm = ({
               }}
             />
             <Spacer size='1rem' />
-            <Button type='submit'>Submit</Button>
+            <Button type='submit'>Save Changes</Button>
             <Spacer size='1.5rem' />
             <Divider spacing='0' />
             <Spacer size='.75rem' />
