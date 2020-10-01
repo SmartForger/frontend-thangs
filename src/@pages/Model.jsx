@@ -316,7 +316,7 @@ const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
   const { [`user-${model.owner.id}`]: userData = {} } = useStoreon(
     `user-${model.owner.id}`
   )
-  const { isLoading, data: user } = userData
+  const { data: user } = userData
   return (
     <div className={classnames(c.Model_Row, c.Model_Detail)}>
       <ModelTitle model={model} />
