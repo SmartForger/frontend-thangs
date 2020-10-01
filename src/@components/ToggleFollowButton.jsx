@@ -5,6 +5,7 @@ import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
+import * as types from '@constants/storeEventTypes'
 import * as pendo from '@vendors/pendo'
 
 const useStyles = createUseStyles(_theme => {
@@ -50,10 +51,10 @@ const AuthFollowButton = ({
     e => {
       e.preventDefault()
       if (isFollowing) {
-        dispatch('unfollow-user', { id: profileUserId })
+        dispatch(types.UNFOLLOW_USER, { id: profileUserId })
         pendo.track('Unfollow User', { userId: profileUserId })
       } else {
-        dispatch('follow-user', { id: profileUserId })
+        dispatch(types.FOLLOW_USER, { id: profileUserId })
         pendo.track('Follow User', { userId: profileUserId })
       }
     },
