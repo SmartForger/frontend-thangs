@@ -233,7 +233,11 @@ const SearchBar = ({
   return (
     <div className={classnames(c.SearchBar, className)}>
       <Spacer size={'1.25rem'} />
-      <form className={c.SearchBar_Form} onSubmit={handleSearchSubmit}>
+      <form
+        className={c.SearchBar_Form}
+        onSubmit={handleSearchSubmit}
+        data-cy='landing-search-form'
+      >
         <div className={classnames(c.SearchBar_Field)}>
           <div className={c.SearchBar_IconWrapper}>
             <Spacer size={'1.25rem'} />
@@ -347,6 +351,7 @@ const LandingSearchBar = ({ searchBarRef, searchMinimized, setMinimizeSearch }) 
       })}
     >
       <SearchBar
+        data-cy='landing-search-input'
         className={classnames(isUploadOpened && c.SearchBar__withBottom)}
         searchBarRef={searchBarRef}
         setMinimizeSearch={setMinimizeSearch}
@@ -365,6 +370,7 @@ const LandingSearchBar = ({ searchBarRef, searchMinimized, setMinimizeSearch }) 
       {isUploadOpened && (
         <UploadZone>
           <div
+            data-cy='landing-search-upload-bar'
             className={classnames(
               c.LandingSearchBar_Upload,
               isDragOvered && c.LandingSearchBar_Upload__DragOvered

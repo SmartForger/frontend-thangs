@@ -106,7 +106,7 @@ const EditModel = ({ model }) => {
 
   return (
     <>
-      <EditIcon className={c.EditModel_EditIcon} onClick={handleClick} />
+      <EditIcon className={c.EditModel_EditIcon} onClick={handleClick} data-cy="edit-model-icon"/>
     </>
   )
 }

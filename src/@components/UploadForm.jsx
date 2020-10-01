@@ -186,7 +186,7 @@ const UploadForm = ({
   )
 
   return (
-    <form onSubmit={handleOnFormSubmit}>
+    <form onSubmit={handleOnFormSubmit} data-cy='upload-form'>
       <div className={c.UploadForm_Field}>
         <label className={c.UploadForm_Label} htmlFor='name'>
           Title

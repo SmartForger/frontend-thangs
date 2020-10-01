@@ -306,7 +306,7 @@ const ModelCard = ({
   const modelPath = model.id ? `/model/${model.id}` : modelAttributionUrl
   const isCurrentUserOwner = `${currentUserId}` === `${R.path(['owner', 'id'], model)}`
   return (
-    <div className={c.ModelCard}>
+    <div className={c.ModelCard} data-cy={model && model.name || 'unknown'}>
       <Anchor
         to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
         attributionUrl={modelAttributionUrl}
@@ -328,6 +328,7 @@ const ModelCard = ({
           modelPath={modelPath}
           showReportModel={showReportModel}
           handleReportModel={handleReportModel}
+          
         />
       </Anchor>
       {isCurrentUserOwner && (
