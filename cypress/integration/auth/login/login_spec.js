@@ -70,7 +70,7 @@ describe('The Login Page test cases with before condition', () => {
     fillInputWithText(DATA_CY.LOGIN_EMAIL_INPUT, USER.EMAIL)
     fillInputWithText(DATA_CY.LOGIN_PASSWORD_INPUT, USER.PASSWORD)
     submitForm(DATA_CY.LOGIN_FORM)
-    isElement(DATA_CY.LOGIN_FORM, PROPS.VISIBLE)
+    isElement(DATA_CY.LOGIN_FORM, PROPS.INVISIBLE)
     isElement(DATA_CY.USER_NAVBAR, PROPS.VISIBLE)
   })
 })
