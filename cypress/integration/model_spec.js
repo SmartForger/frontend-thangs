@@ -33,6 +33,16 @@ describe('The Model Page', () => {
     cy.get(`[data-cy="${FILE_NAME}"]`).should('be.visible')
   })
 
+  
+
+  it('Check model for name, author and description not empty', () => {
+    cy.visit('/Test')
+    cy.get(`[data-cy="${FILE_NAME}"]`).click({ force: true })
+    cy.get('[class^="ModelTitle_Text"]').should('not.be.empty')
+    cy.get('[class^="ModelTitle_ProfileAuthor"]').should('not.be.empty')
+    cy.get('[class^="Model_ModelDescription"]').should('not.be.empty')
+  })
+
   it('Delete model', () => {
     cy.visit('/Test')
     cy.get(`[data-cy="${FILE_NAME}"] [data-cy=edit-model-icon]`).click({ force: true })

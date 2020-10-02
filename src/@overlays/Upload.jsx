@@ -112,7 +112,7 @@ const Upload = ({ prevModelId }) => {
   )
 
   return (
-    <div className={c.Upload}>
+    <div className={c.Upload} data-cy="upload-overlay">
       <div className={c.Upload_Column__frame}>
         {uploadModelPhase1.isLoading ? (
           <UploadProgress />

@@ -47,7 +47,7 @@ const NotificationsButton = ({ onClick, myThangsMenu }) => {
   const c = useStyles({ myThangsMenu })
   const { dispatch } = useStoreon()
   const {
-    notifications: { data: notifications },
+    notifications: { data: notifications = {} },
   } = useStoreon('notifications')
 
   const handleNotificationsClick = useCallback(() => {
