@@ -32,7 +32,6 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'row',
       alignItems: 'center',
       marginLeft: '2rem',
-      cursor: 'grab',
 
       [lg]: {
         marginLeft: '21px',
