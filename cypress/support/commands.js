@@ -32,9 +32,9 @@
  * application code.
  */
 Cypress.Commands.add('mockOnWindow', (mock = {}) => {
-    Cypress.on('window:before:load', win => {
-        for (let [key, value] of Object.entries(mock)) {
-            win[key] = value;
-        }
-    });
-});
+  Cypress.on('window:before:load', win => {
+    for (let [key, value] of Object.entries(mock)) {
+      win[key] = value
+    }
+  })
+})
