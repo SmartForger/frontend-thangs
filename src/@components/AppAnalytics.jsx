@@ -1,21 +1,24 @@
 import React, { useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
+import { authenticationService } from '@services'
 import * as pendo from '@vendors/pendo'
 import ReactGA from 'react-ga'
 import ReactPixel from 'react-facebook-pixel'
 import { usePageMeta, useQuery } from '@hooks'
 
-const AppAnalytics = ({ user }) => {
+const AppAnalytics = () => {
   const location = useLocation()
   const inviteCode = useQuery('inviteCode')
   const userIdentified = useRef(false)
   const pendoInitialized = useRef(false)
   const { title, description } = usePageMeta('App')
+  const user = authenticationService.getCurrentUser()
 
   useEffect(() => {
     ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID)
     ReactPixel.init(process.env.REACT_APP_FACEBOOK_PIXEL_ID)
+
     if (!pendoInitialized.current) {
       pendo.initialize()
       pendoInitialized.current = true
