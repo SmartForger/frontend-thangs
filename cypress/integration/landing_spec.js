@@ -37,9 +37,7 @@ describe('The Landing Page', () => {
           encoding: 'utf-8',
         })
       })
-
-    cy.wait(20 * 1000)
-    cy.url().should('include', modelFile)
+    cy.url({timeout: 30000}).should('include', modelFile)
     cy.url().should('include', 'modelId')
     cy.url().should('include', 'phynId')
   })

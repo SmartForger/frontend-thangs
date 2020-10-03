@@ -1,4 +1,6 @@
 import 'cypress-file-upload'
+ import { login } from './common-methods'
+
 
 const MODEL_FILE = 'horn1.stl'
 const FILE_NAME = 'Test Name'
@@ -7,12 +9,7 @@ const FILE_DESCRIPTION = 'Test Description'
 
 describe('The Model Page', () => {
   beforeEach(() => {
-    cy.visit('/')
-    cy.contains('Log in').click({ force: true })
-    cy.get('[data-cy=cy_email-input]').focus().type('test@test.com')
-    cy.get('[data-cy=cy_password-input]').focus().type('test')
-    cy.get('[data-cy=signup-form]').submit()
-    cy.get('[data-cy=signup-form]').should('not.be.visible')
+    login()
   })
 
   it('Upload model', () => {
@@ -33,11 +30,9 @@ describe('The Model Page', () => {
     cy.get(`[data-cy="${FILE_NAME}"]`).should('be.visible')
   })
 
-  
-
   it('Check model for name, author and description not empty', () => {
     cy.visit('/Test')
-    cy.get(`[data-cy="${FILE_NAME}"]`).click({ force: true })
+    cy.get(`[data-cy="${FILE_NAME}"]`).first().click({ force: true })
     cy.get('[class^="ModelTitle_Text"]').should('not.be.empty')
     cy.get('[class^="ModelTitle_ProfileAuthor"]').should('not.be.empty')
     cy.get('[class^="Model_ModelDescription"]').should('not.be.empty')
@@ -45,7 +40,7 @@ describe('The Model Page', () => {
 
   it('Delete model', () => {
     cy.visit('/Test')
-    cy.get(`[data-cy="${FILE_NAME}"] [data-cy=edit-model-icon]`).click({ force: true })
+    cy.get(`[data-cy="${FILE_NAME}"] [data-cy=edit-model-icon]`).first().click({ force: true })
     cy.get('[data-cy=delete-model-button]').click({ force: true })
     cy.get('[data-cy=confirm-delete-model-button]').click({ force: true })
     cy.get(`[data-cy="${FILE_NAME}"]`).should('not.be.visible')

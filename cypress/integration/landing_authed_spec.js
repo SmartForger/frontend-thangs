@@ -1,17 +1,12 @@
 import 'cypress-file-upload'
+import { login } from './common-methods'
 
 describe('The Landing Page (authorized)', () => {
   beforeEach(() => {
-    cy.visit('/')
-    cy.contains('Log in').click({ force: true })
-    cy.get('[data-cy=cy_email-input]').focus().type('test@test.com')
-    cy.get('[data-cy=cy_password-input]').focus().type('test')
-    cy.get('[data-cy=signup-form]').submit()
-    cy.get('[data-cy=signup-form]').should('not.be.visible')
+    login()
   })
 
   it('Clicking by Notifications, Profile, Upload buttons', () => {
-    cy.visit('/')
     cy.get('[class^="NotificationsButton_NotificationIconWrapper"]').click({ force: true, multiple: true })
     cy.get('[class^="NotificationsButton"] + [class*="DropdownMenu"]').should('be.visible')
     
