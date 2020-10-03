@@ -51,9 +51,9 @@ export default store => {
       atom: `model-${id}`,
     })
     const { data, error } = await api({ method: 'GET', endpoint: `models/${id}` })
-    if (error) {
+    if (error || R.isEmpty(data)) {
       store.dispatch(types.CHANGE_MODEL_STATUS, {
-        status: STATUSES.ERROR,
+        status: STATUSES.FAILURE,
         atom: `model-${id}`,
       })
     } else {
