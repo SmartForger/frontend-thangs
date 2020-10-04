@@ -1,10 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { Spacer, TitleTertiary, MultiLineBodyText } from '@components'
 import { createUseStyles } from '@style'
 import loader from '@media/loader.gif'
 import classnames from 'classnames'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { lg },
+  } = theme
+
   return {
     LandingCard: {
       display: 'flex',
@@ -25,6 +29,7 @@ const useStyles = createUseStyles(theme => {
       backgroundColor: theme.colors.white[400],
       zIndex: 1,
       opacity: 0,
+      visibility: 'hidden',
       transition: 'all 450ms',
 
       '& video': {
@@ -33,8 +38,11 @@ const useStyles = createUseStyles(theme => {
       },
     },
     LandingCard_HoverVideo__visible: {
-      opacity: '1 !important',
-      bottom: '6rem !important',
+      [lg]: {
+        opacity: '1 !important',
+        bottom: '6rem !important',
+        visibility: 'visible',
+      },
     },
     LandingCard_Text: {
       width: '15.125rem',
@@ -89,20 +97,27 @@ const HoverVideo = ({ c, video, showVideo }) => {
   )
 }
 
-const LandingCard = ({ card = {} }) => {
+const LandingCard = ({ card = {}, handleClick }) => {
   const { IconComponent, title, linkText, text, callback = noop, hoverVideo } = card
   const c = useStyles({})
   const [showVideo, setShowVideo] = useState(false)
 
-  const handleMouseEnter = () => setShowVideo(true)
-  const handleMouseLeave = () => setShowVideo(false)
+  const onMouseEnter = useCallback(() => setShowVideo(true), [])
+  const onMouseLeave = useCallback(() => setShowVideo(false), [])
+
+  const onClick = useCallback(() => handleClick({ title, videoSrc: hoverVideo }), [
+    hoverVideo,
+    handleClick,
+    title,
+  ])
 
   return (
     <>
       <Spacer size={'1rem'} />
       <div
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        onClick={onClick}
         className={c.LandingCard}
       >
         <Spacer size={'1rem'} />
@@ -121,6 +136,7 @@ const LandingCard = ({ card = {} }) => {
         <Spacer size={'1rem'} />
         {hoverVideo && <HoverVideo c={c} video={hoverVideo} showVideo={showVideo} />}
       </div>
+      <Spacer size={'1rem'} />
     </>
   )
 }
