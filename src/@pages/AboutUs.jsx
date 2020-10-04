@@ -102,6 +102,10 @@ const useStyles = createUseStyles(theme => {
       },
       '& > div': {
         display: 'none',
+
+        [md]: {
+          display: 'block',
+        },
       },
     },
   }
