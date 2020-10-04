@@ -31,7 +31,11 @@ const initialize = () => {
       z.parentNode.insertBefore(y, z)
     })(window, document, 'script', 'pendo')
 
-    window.pendo.initialize()
+    window.pendo.initialize({
+      visitor: {
+        id: 'VISITOR-UNIQUE-ID',
+      },
+    })
   }
 }
 
@@ -69,7 +73,7 @@ const track = (type, data) => {
       return pendo.track(type, data)
     }
 
-    setTimeout(function() {
+    setTimeout(() => {
       track(type, data)
     }, 500)
   }
