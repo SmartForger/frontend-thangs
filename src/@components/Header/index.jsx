@@ -1,20 +1,15 @@
-import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
-import { Carousel, Spacer, TitlePrimary, MultiLineBodyText } from '@components'
+import { LandingCarousel, Spacer, TitlePrimary, MultiLineBodyText } from '@components'
 import { useCurrentUser } from '@hooks'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
-import * as pendo from '@vendors/pendo'
 
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as LogoText } from '@svg/logo-text.svg'
-
-import { ReactComponent as PromoGeoSearch } from '@svg/promo-geosearch.svg'
-import { ReactComponent as PromoStorage } from '@svg/promo-storage.svg'
-import { ReactComponent as PromoCollab } from '@svg/promo-collab.svg'
 
 import UserNav from './UserNav'
 import SearchBar from './SearchBar'
@@ -280,69 +275,6 @@ const Header = ({ showSearchTextFlash, showUser = true, showNewHero = false }) =
     if (user && user.id) dispatch(types.FETCH_NOTIFICATIONS)
   }, [dispatch, user])
 
-  const PromoCards = useMemo(
-    () => [
-      {
-        IconComponent: PromoGeoSearch,
-        title: 'Geometric Search',
-        linkText: 'Use your model',
-        text: 'to find geometrically related models.',
-        callback: () => {
-          searchBarRef.current.focus()
-          pendo.track('Value Prop Clicked', {
-            source: 'Geometric Search',
-            isRegistered: !!user,
-          })
-        },
-      },
-      {
-        IconComponent: PromoStorage,
-        title: 'Unlimited Storage',
-        linkText: 'Upload',
-        text: 'as many models as your heart desires.',
-        callback: () => {
-          if (user && user.id) {
-            dispatch(types.OPEN_OVERLAY, { overlayName: 'upload' })
-            pendo.track('Value Prop Clicked', { source: 'Unlimited Storage' })
-          } else {
-            dispatch(types.OPEN_OVERLAY, {
-              overlayName: 'signUp',
-              overlayData: {
-                animateIn: true,
-                windowed: true,
-                source: 'Unlimited Storage',
-              },
-            })
-            pendo.track('SignUp Prompt Overlay', { source: 'Unlimited Storage' })
-          }
-        },
-      },
-      {
-        IconComponent: PromoCollab,
-        title: 'Collaboration',
-        linkText: 'Invite',
-        text: 'your friends and work together on projects.',
-        callback: () => {
-          if (user && user.id) {
-            dispatch(types.OPEN_OVERLAY, { overlayName: 'createFolder' })
-            pendo.track('Value Prop Clicked', { source: 'Collaboration' })
-          } else {
-            dispatch(types.OPEN_OVERLAY, {
-              overlayName: 'signUp',
-              overlayData: {
-                animateIn: true,
-                windowed: true,
-                source: 'Collaboration',
-              },
-            })
-            pendo.track('SignUp Prompt Overlay', { source: 'Collaboration' })
-          }
-        },
-      },
-    ],
-    [dispatch, user]
-  )
-
   const modelsIngested =
     modelsStats &&
     modelsStats.data &&
@@ -425,11 +357,13 @@ const Header = ({ showSearchTextFlash, showUser = true, showNewHero = false }) =
                   />
                   <Spacer size={'2.5rem'} />
                 </div>
-                <Carousel
-                  cards={PromoCards}
+                <LandingCarousel
                   className={classnames(c.Header_Carousel, {
                     [c.Fade]: searchMinimized,
                   })}
+                  dispatch={dispatch}
+                  user={user}
+                  searchBarRef={searchBarRef}
                 />
               </>
             )}

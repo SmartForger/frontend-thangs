@@ -390,7 +390,7 @@ const LandingSearchBar = ({ searchBarRef, searchMinimized, setMinimizeSearch }) 
               <span className={c.LandingUpload_Link} onClick={handleUploadClick}>
                 Upload
               </span>{' '}
-              or drag and drop a file (.stl) here to do a geometric search.
+              or drag and drop a file (e.g., .stl) here to do a geometric search.
             </div>
           </div>
         </UploadZone>

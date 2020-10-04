@@ -108,6 +108,7 @@ const Upload = ({ prevModelId }) => {
             'Model added successfully.'
           )
           dispatch(types.RESET_UPLOAD_MODEL)
+          dispatch(types.FETCH_USER_OWN_MODELS, { id: currentUser.id })
         },
       })
     },
