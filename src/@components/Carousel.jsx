@@ -30,11 +30,13 @@ const useStyles = createUseStyles(theme => {
     Carousel_CardWrapper: {
       display: 'flex',
       flexDirection: 'column',
+      cursor: 'pointer',
 
       '&:hover': {
         backgroundColor: 'rgba(0,0,0,.1)',
         [lg]: {
           backgroundColor: 'transparent',
+          cursor: 'inherit',
         },
       },
     },

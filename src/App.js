@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
 import { history } from './history'
 import {
+  AboutUs,
   Auth,
   ConfirmPasswordReset,
   Landing,
@@ -65,6 +66,7 @@ const App = () => {
               <Route path='/login' component={routeRequiresAnon(Login)} />
               <Route path='/terms_and_conditions' exact component={TermsAndConditions} />
               <Route path='/privacy_policy' exact component={PrivacyPolicy} />
+              <Route path='/about-us' exact component={AboutUs} />
               <Route path='/home' component={routeRedirectToProfile()} />
               <Route
                 path='/signup/:registrationCode'

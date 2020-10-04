@@ -14,7 +14,7 @@ const useStyles = createUseStyles(theme => {
     },
     TitlePrimary: {
       fontSize: '4rem',
-      lineHeight: '4rem',
+      lineHeight: '5.25rem',
     },
     TitleSecondary: {
       fontSize: '2.25rem',

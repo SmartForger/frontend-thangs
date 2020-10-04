@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
-import { LandingCarousel, Spacer, TitlePrimary, MultiLineBodyText } from '@components'
+import { LandingHero, AboutHero } from '@components'
 import { useCurrentUser } from '@hooks'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
@@ -13,11 +13,10 @@ import { ReactComponent as LogoText } from '@svg/logo-text.svg'
 
 import UserNav from './UserNav'
 import SearchBar from './SearchBar'
-import LandingSearchBar from './LandingSearchBar'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md, lg },
+    mediaQueries: { md },
   } = theme
 
   return {
@@ -94,173 +93,17 @@ const useStyles = createUseStyles(theme => {
     Header_TopRow: {
       height: '3rem',
     },
-    Header_SearchFormWrapper: {
-      alignItems: 'center',
-      display: 'flex',
-      position: 'relative',
-      width: '100%',
-      margin: '0 1rem 1rem',
-      background: theme.colors.purple[800],
-      borderRadius: '.5rem',
-
-      [md]: {
-        margin: 0,
-      },
-
-      '& input': {
-        background: theme.colors.purple[800],
-        border: 'none',
-        outline: 'none',
-        fontSize: '1rem',
-        padding: '.5rem .75rem .5rem 2.25rem',
-        lineHeight: '1.5rem',
-
-        '&::placeholder': {
-          fontSize: '.875rem',
-          color: theme.colors.grey[500],
-          fontWeight: 600,
-        },
-        '&:focus, &:active': {
-          background: theme.colors.purple[800],
-          color: theme.colors.white[400],
-          '&::placeholder': {
-            color: 'transparent',
-          },
-        },
-        '&:-webkit-autofill': {
-          '-webkit-box-shadow': `0 0 0px 1000px ${theme.colors.white[400]} inset`,
-          '-webkit-text-fill-color': theme.colors.black[500],
-          border: 'none',
-        },
-      },
-    },
-    Header_SearchForm: {
-      display: 'flex',
-      flexDirection: 'row',
-      width: '100%',
-      justifyContent: 'flex-start',
-      minWidth: '18.5rem',
-      maxWidth: '32rem',
-
-      [md]: {
-        width: '60%',
-      },
-    },
-    Header_SearchFormInput: {
-      width: '100%',
-      [md]: {
-        width: '80%',
-      },
-    },
-    Header_SearchFormInput_active: {
-      color: theme.colors.white[400],
-      '&::placeholder': {
-        color: 'transparent',
-      },
-    },
-    Header_SearchIcon: {
-      '& path, & polygon': {
-        fill: theme.colors.gold[500],
-      },
-    },
-    Header_SearchFormIcon: {
-      position: 'absolute',
-      left: '.75rem',
-      '& path, & polygon': {
-        fill: theme.colors.white[400],
-      },
-    },
-    Header_DesktopSearchActionIcon: {
-      position: 'absolute',
-      right: '.75rem',
-      cursor: 'pointer',
-    },
-    Header_UploadBar: {
-      width: 18,
-      display: 'flex',
-      alignItems: 'center',
-      flexDirection: 'row',
-      color: theme.colors.gold[500],
-      overflow: 'hidden',
-      transition: 'width 1.4s',
-      whiteSpace: 'nowrap',
-      position: 'absolute',
-      right: '2.75rem',
-      cursor: 'pointer',
-
-      '& path, & polygon': {
-        fill: theme.colors.gold[500],
-      },
-
-      '&:hover': {
-        [lg]: {
-          width: '9.5rem',
-        },
-      },
-    },
-    Header_UploadBar__expand: {
-      [lg]: {
-        width: '9.5rem',
-      },
-    },
-    Header_UploadIcon: {
-      display: 'flex',
-      marginRight: '.5rem',
-    },
-    Header_Background: {
-      position: 'absolute',
-      top: 0,
-      right: 0,
-      display: 'none',
-
-      [md]: {
-        display: 'block',
-      },
-    },
-    Header_Landing: {
-      color: theme.colors.white[400],
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'spaceAround',
-      transition: 'all 400ms',
-      opacity: 1,
-    },
-    Header_LandingTitle: {
-      color: theme.colors.white[400],
-      transition: 'all 400ms',
-    },
-    Header_LandingBody: {
-      color: theme.colors.white[400],
-      textAlign: 'center',
-      transition: 'all 400ms',
-      opacity: 1,
-      display: 'inline-block !important',
-      maxWidth: '35rem',
-
-      '& span': {
-        color: theme.colors.gold[500],
-      },
-    },
-    Header_Carousel: {
-      transition: 'all 400ms',
-      opacity: 1,
-    },
-    Fade: {
-      opacity: 0,
-    },
   }
 })
 
-const numberWithCommas = x => {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-}
-
-const Header = ({ showSearchTextFlash, showUser = true, showNewHero = false }) => {
-  const { dispatch, modelsStats } = useStoreon('modelsStats')
-  const [searchMinimized, setMinimizeSearch] = useState(!showNewHero)
-  const c = useStyles({ searchMinimized, showNewHero })
-  const searchBarRef = useRef(null)
+const Header = ({
+  showSearchTextFlash,
+  showUser = true,
+  showNewHero = false,
+  showAboutHero = false,
+}) => {
+  const { dispatch } = useStoreon()
+  const c = useStyles({ showNewHero })
   const {
     atom: { isLoading, data: user },
   } = useCurrentUser()
@@ -272,12 +115,6 @@ const Header = ({ showSearchTextFlash, showUser = true, showNewHero = false }) =
   useEffect(() => {
     if (user && user.id) dispatch(types.FETCH_NOTIFICATIONS)
   }, [dispatch, user])
-
-  const modelsIngested =
-    modelsStats &&
-    modelsStats.data &&
-    modelsStats.data.modelsIngested &&
-    numberWithCommas(modelsStats.data.modelsIngested)
 
   return (
     <>
@@ -312,7 +149,7 @@ const Header = ({ showSearchTextFlash, showUser = true, showNewHero = false }) =
                       <LogoText />
                     </Link>
                   </div>
-                  {searchMinimized && <SearchBar />}
+                  {!showNewHero && <SearchBar />}
                 </div>
               </div>
               <UserNav
@@ -324,47 +161,9 @@ const Header = ({ showSearchTextFlash, showUser = true, showNewHero = false }) =
               />
             </div>
             {showNewHero && (
-              <>
-                <div className={c.Header_Landing}>
-                  <Spacer size={'1rem'} />
-                  <TitlePrimary
-                    light
-                    className={classnames(c.Header_LandingTitle, {
-                      [c.Fade]: searchMinimized,
-                    })}
-                  >
-                    Let&apos;s find Thangs.
-                  </TitlePrimary>
-                  <Spacer size={'1rem'} />
-                  <MultiLineBodyText
-                    light
-                    className={classnames(c.Header_LandingBody, {
-                      [c.Fade]: searchMinimized,
-                    })}
-                  >
-                    Thangs is the fastest growing 3d community with over{' '}
-                    {modelsIngested || '1,000,000'} available models to search, store, and
-                    collaborate.
-                  </MultiLineBodyText>
-                  <Spacer size={'2rem'} />
-                  <LandingSearchBar
-                    showSearchTextFlash={showSearchTextFlash}
-                    searchMinimized={searchMinimized}
-                    setMinimizeSearch={setMinimizeSearch}
-                    searchBarRef={searchBarRef}
-                  />
-                  <Spacer size={'2.5rem'} />
-                </div>
-                <LandingCarousel
-                  className={classnames(c.Header_Carousel, {
-                    [c.Fade]: searchMinimized,
-                  })}
-                  dispatch={dispatch}
-                  user={user}
-                  searchBarRef={searchBarRef}
-                />
-              </>
+              <LandingHero showSearchTextFlash={showSearchTextFlash} user={user} />
             )}
+            {showAboutHero && <AboutHero user={user} />}
           </div>
           <div
             id='HeaderDesktopOnlyCurtain'

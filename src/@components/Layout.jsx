@@ -55,7 +55,7 @@ const useStyles = createUseStyles(theme => {
       maxWidth: theme.variables.maxWidth,
       paddingTop: '2rem',
       paddingRight: '1rem',
-      paddingBottom: '2rem',
+      paddingBottom: '0',
       paddingLeft: '1rem',
 
       [md]: {
@@ -137,6 +137,7 @@ const Layout = ({
   showSearchTextFlash,
   showUser,
   showNewHero,
+  showAboutHero,
 }) => {
   const { overlay } = useStoreon('overlay')
   const c = useStyles({})
@@ -157,6 +158,7 @@ const Layout = ({
         showSearch={showSearch}
         showUser={showUser}
         showNewHero={showNewHero}
+        showAboutHero={showAboutHero}
       />
       {OverlayView && (
         <Overlay

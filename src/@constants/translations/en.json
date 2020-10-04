@@ -13,5 +13,29 @@
             "signOut": "Sign Out"
         },
         "modelsIndexed": "models indexed and ready to be searched"
+    },
+    "aboutUs": {
+        "title": "A 3D Model Community Built For You",
+        "body": "We created Thangs for one reason: our community members. With powerful search, collaboration tools, model sharing and unlimited storage, we are the fastest growing 3D community.",
+        "signUpButtonText": "Sign up",
+        "signInButtonText": "Log in",
+        "valueProps": {
+            "search": {
+                "title": "Powerful search",
+                "summary": "Search over 1 million models to find the perfect 3D model for your project. Upload your own model and do a geometric search to find similar models."
+            },
+            "storage": {
+                "title": "Unlimited Storage",
+                "summary":
+          "Upload as many models as you want to Thangs. Share your models with the entire community or choose to keep them private with free, unlimited model storage."
+        
+            },
+            "collaboration": {
+                "title": "Collaboration",
+                "summary":
+          "Invite your friends and work together on projects. Easily keep track of changes with model version controls."
+        
+            }
+        }
     }
 }
