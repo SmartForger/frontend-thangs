@@ -116,7 +116,7 @@ const LandingHero = ({ showSearchTextFlash, user }) => {
       <Spacer size={'1rem'} />
       <div className={c.Header_AboutThangs}>
         <Link to={'/about-us'}>
-          <LabelText>More About Thang</LabelText>
+          <LabelText>More About Thangs</LabelText>
         </Link>
       </div>
       <Spacer size={'.5rem'} />
