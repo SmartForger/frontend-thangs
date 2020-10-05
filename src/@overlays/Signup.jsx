@@ -5,14 +5,15 @@ import * as EmailValidator from 'email-validator'
 import {
   Button,
   Divider,
-  MetadataSecondary,
-  MultiLineBodyText,
+  FormError,
   Input,
   LabelText,
-  TitleSecondary,
-  TitleTertiary,
+  MetadataSecondary,
+  MultiLineBodyText,
   SingleLineBodyText,
   Spacer,
+  TitleSecondary,
+  TitleTertiary,
 } from '@components'
 import { useForm, useGoogleLogin, useFacebookLogin } from '@hooks'
 import { authenticationService } from '@services'
@@ -90,12 +91,6 @@ const useStyles = createUseStyles(theme => {
     Signup_Form: {
       display: 'flex',
       flexFlow: 'column nowrap',
-    },
-    Signup_ErrorText: {
-      ...theme.text.formErrorText,
-      backgroundColor: theme.variables.colors.errorTextBackground,
-      padding: '.5rem 1rem',
-      borderRadius: '.5rem',
     },
     Signup_Button: {
       margin: 0,
@@ -380,9 +375,7 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
         <form onSubmit={onFormSubmit(handleSignUp)} data-cy='signup-form'>
           {!!signupErrorMessage && (
             <>
-              <h4 className={c.Signup_ErrorText} data-cy='signup-error'>
-                {signupErrorMessage}
-              </h4>
+              <FormError>{signupErrorMessage}</FormError>
               <Spacer size='1rem' />
             </>
           )}

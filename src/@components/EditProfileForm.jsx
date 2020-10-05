@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Button, Spinner, Spacer } from '@components'
+import { Button, FormError, Spinner, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { useForm } from '@hooks'
 
@@ -90,9 +90,7 @@ const EditProfileForm = ({
     <form className={c.EditProfileForm} onSubmit={onFormSubmit(handleSubmit)}>
       {editProfileErrorMessage && (
         <>
-          <h4 className={c.Signin_ErrorText} data-cy='signup-error'>
-            {editProfileErrorMessage}
-          </h4>
+          <FormError>{editProfileErrorMessage}</FormError>
           <Spacer size='1rem' />
         </>
       )}
@@ -153,7 +151,12 @@ const EditProfileForm = ({
       </div>
 
       <div className={c.EditProfileForm_ButtonContainer}>
-        <Button secondary className={c.EditProfileForm_Button} onClick={handleCancel}>
+        <Button
+          secondary
+          className={c.EditProfileForm_Button}
+          onClick={handleCancel}
+          type='button'
+        >
           Cancel
         </Button>
         <Spacer size={'1rem'} />

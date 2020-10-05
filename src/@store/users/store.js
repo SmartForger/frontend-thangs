@@ -63,10 +63,6 @@ export default store => {
     async (_, { id, user: updatedUser, onError = noop, onFinish = noop }) => {
       if (R.isNil(id)) return
 
-      store.dispatch(types.CHANGE_USER_STATUS, {
-        status: STATUSES.LOADING,
-        atom: `user-${id}`,
-      })
       const { error } = await api({
         method: 'PUT',
         endpoint: `users/${id}`,
@@ -74,11 +70,10 @@ export default store => {
       })
 
       if (error) {
-        store.dispatch(types.CHANGE_USER_STATUS, {
-          status: STATUSES.FAILURE,
-          atom: `user-${id}`,
-        })
-        onError(error.message)
+        onError(
+          (error.response && error.response.data && error.response.data.message) ||
+            'Something has gone wrong. Please try again'
+        )
         logger.error('Error when trying to update the user', error)
       } else {
         store.dispatch(types.FETCH_CURRENT_USER, { id, onFinish })

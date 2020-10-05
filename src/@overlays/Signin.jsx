@@ -4,12 +4,13 @@ import Joi from '@hapi/joi'
 import {
   Button,
   Divider,
+  FormError,
   Input,
   LabelText,
-  TitleTertiary,
+  MetadataSecondary,
   SingleLineBodyText,
   Spacer,
-  MetadataSecondary,
+  TitleTertiary,
 } from '@components'
 import { useForm, useGoogleLogin, useFacebookLogin } from '@hooks'
 import { authenticationService } from '@services'
@@ -250,13 +251,13 @@ const SignInForm = ({
         <form onSubmit={onFormSubmit(handleSignIn)} data-cy='signup-form'>
           {showErrorMessage && (
             <>
-              <h4 className={c.Signin_ErrorText} data-cy='signup-error'>
+              <FormError>
                 {authFailed
                   ? 'Something went wrong. Please try again'
                   : sessionExpired
-                    ? 'Session Expired. Please sign back in to continue'
-                    : signupErrorMessage}
-              </h4>
+                  ? 'Session Expired. Please sign back in to continue'
+                  : signupErrorMessage}
+              </FormError>
               <Spacer size='1rem' />
             </>
           )}
