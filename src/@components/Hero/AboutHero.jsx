@@ -97,7 +97,7 @@ const AboutHero = ({ user }) => {
           </div>
         )}
       </div>
-      {R.isEmpty(user) ? <Spacer size={'4rem'} /> : <Spacer size={'.5rem'} />}
+      <Spacer size={'2.5rem'} />
     </div>
   )
 }
