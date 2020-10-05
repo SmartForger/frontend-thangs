@@ -66,7 +66,12 @@ const Comment = ({ comment }) => {
   const time = formatDistanceStrict(new Date(created), new Date())
   return (
     <li className={c.CommentsForModel_Comment}>
-      <Link to={`/${owner.username}`}>
+      <Link
+        to={{
+          pathname: `/${owner.username}`,
+          state: { fromModel: true },
+        }}
+      >
         <UserInline
           className={c.CommentsForModel_UserInline}
           user={{ ...owner }}
