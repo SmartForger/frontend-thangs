@@ -6,7 +6,7 @@ import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
-import * as pendo from '@vendors/pendo'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -52,10 +52,10 @@ const AuthFollowButton = ({
       e.preventDefault()
       if (isFollowing) {
         dispatch(types.UNFOLLOW_USER, { id: profileUserId })
-        pendo.track('Unfollow User', { userId: profileUserId })
+        track('Unfollow User', { userId: profileUserId })
       } else {
         dispatch(types.FOLLOW_USER, { id: profileUserId })
-        pendo.track('Follow User', { userId: profileUserId })
+        track('Follow User', { userId: profileUserId })
       }
     },
     [dispatch, profileUserId, isFollowing]
@@ -88,7 +88,7 @@ const noop = () => null
 const UnauthFollowButton = ({ c, className, openSignupOverlay = noop }) => {
   const handleClick = useCallback(() => {
     openSignupOverlay('Join to Like, Follow, Share.', 'Follow')
-    pendo.track('SignUp Prompt Overlay', { source: 'Follow' })
+    track('SignUp Prompt Overlay', { source: 'Follow' })
   }, [openSignupOverlay])
 
   return (

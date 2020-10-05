@@ -1,7 +1,7 @@
 import api from '@services/api'
 import { STATUSES, getStatusState } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
-import * as pendo from '@vendors/pendo'
+import { track } from '@utilities/analytics'
 
 export default store => {
   store.on(types.STORE_INIT, _ => ({
@@ -41,7 +41,7 @@ export default store => {
         atom: 'like-model',
         data,
       })
-      pendo.track('Model Liked', { modelId })
+      track('Model Liked', { modelId })
       store.dispatch(types.UPDATE_MODEL_LIKES, {
         modelId: modelId,
         currentUserId: currentUserId,
@@ -70,7 +70,7 @@ export default store => {
         atom: 'like-model',
         data,
       })
-      pendo.track('Model Unliked', { modelId })
+      track('Model Unliked', { modelId })
       store.dispatch(types.UPDATE_MODEL_LIKES, {
         modelId: modelId,
         currentUserId: currentUserId,

@@ -32,7 +32,7 @@ import classnames from 'classnames'
 import { usePageMeta } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
-import * as pendo from '@vendors/pendo'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -236,7 +236,7 @@ const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
         modelId: model.id,
         onFinish: downloadUrl => {
           window.location.assign(downloadUrl)
-          pendo.track('Download Model', { modelId: model.id })
+          track('Download Model', { modelId: model.id })
         },
       }),
     [dispatch, model.id]
@@ -247,7 +247,7 @@ const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
       downloadModel()
     } else {
       openSignupOverlay('Join to download.', 'Download')
-      pendo.track('SignUp Prompt Overlay', { source: 'Download' })
+      track('SignUp Prompt Overlay', { source: 'Download' })
     }
   }, [downloadModel, isAuthedUser, openSignupOverlay])
 
@@ -296,7 +296,7 @@ const VersionLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
       })
     } else {
       openSignupOverlay('Join to Like, Follow, Share.', 'Version Upload')
-      pendo.track('SignUp Prompt Overlay', { source: 'Version Upload' })
+      track('SignUp Prompt Overlay', { source: 'Version Upload' })
     }
   }, [isAuthedUser, dispatch, modelId, openSignupOverlay])
 

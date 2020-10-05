@@ -3,7 +3,7 @@ import api from '@services/api'
 import { storageService } from '@services'
 import { STATUSES, getStatusState } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
-import * as pendo from '@vendors/pendo'
+import { track } from '@utilities/analytics'
 
 const noop = () => null
 
@@ -62,12 +62,9 @@ export default store => {
     })
 
     try {
-      const filename = R.path([
-        'uploadModelPhase1', 
-        'data', 
-        'uploadedUrlData', 
-        'newFileName'
-      ], state) || ''
+      const filename =
+        R.path(['uploadModelPhase1', 'data', 'uploadedUrlData', 'newFileName'], state) ||
+        ''
       const originalFileName =
         R.path(['uploadModelPhase1', 'data', 'file', 'name'], state) || ''
 
@@ -97,9 +94,9 @@ export default store => {
         })
         onFinish()
         if (data && data.previousVersionModelId) {
-          pendo.track('New Version Uploaded')
+          track('New Version Uploaded')
         } else {
-          pendo.track('New Model Uploaded')
+          track('New Model Uploaded')
         }
       }
     } catch (e) {

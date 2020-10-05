@@ -8,7 +8,7 @@ import { Button, TextInput, Spacer } from '@components'
 import { useFileUpload, useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
-import * as pendo from '@vendors/pendo'
+import { track } from '@utilities/analytics'
 
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
@@ -227,7 +227,7 @@ const SearchBar = ({
 
   const handleUploadClick = useCallback(() => {
     dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload' })
-    pendo.track('Upload - Searchbar', { source: 'Searchbar - Upload Icon' })
+    track('Upload - Searchbar', { source: 'Searchbar - Upload Icon' })
   }, [dispatch])
 
   return (
@@ -286,7 +286,7 @@ const LandingSearchBar = ({ searchBarRef, searchMinimized, setMinimizeSearch }) 
       overlayName: 'searchByUpload',
       overlayData: { isExplorerOpened: true },
     })
-    pendo.track('Upload - Searchbar', { source: 'Dropdown - Upload Icon' })
+    track('Upload - Searchbar', { source: 'Dropdown - Upload Icon' })
   }, [dispatch])
 
   const handleSetFile = useCallback(
@@ -295,7 +295,7 @@ const LandingSearchBar = ({ searchBarRef, searchMinimized, setMinimizeSearch }) 
         overlayName: 'searchByUpload',
         overlayData: { file, errorState },
       })
-      pendo.track('Upload - Searchbar', { source: 'Dropdown - Drag and Drop' })
+      track('Upload - Searchbar', { source: 'Dropdown - Drag and Drop' })
     },
     [dispatch]
   )

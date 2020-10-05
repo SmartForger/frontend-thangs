@@ -16,7 +16,7 @@ import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import ModelSearchResults from '@components/CardCollection/ModelSearchResults'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
-import * as pendo from '@vendors/pendo'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -300,7 +300,7 @@ const Page = () => {
         source: 'Save Search',
       },
     })
-    pendo.track('SignUp Prompt Overlay', { source: 'Save Search' })
+    track('SignUp Prompt Overlay', { source: 'Save Search' })
   }, [dispatch])
 
   const thangsModels = (thangs && thangs.data && thangs.data.matches) || []

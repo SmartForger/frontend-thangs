@@ -29,7 +29,7 @@ import { ReactComponent as FacebookLogo } from '@svg/facebook-logo.svg'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
-import * as pendo from '@vendors/pendo'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -330,7 +330,7 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
         password: inputState.password,
       })
       if (loginError) return setSignupErrorMessage(error)
-      pendo.track('Overlay Sign Up Success', { source })
+      track('Overlay Sign Up Success', { source })
       if (window.location.href.includes('sessionExpired'))
         return (window.location.href = '/')
       return (window.location.href = '/welcome')
@@ -347,7 +347,7 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
         <a
           href={googleLoginUrl}
           onClick={useCallback(
-            () => pendo.track('Overlay Sign Up Click - Google', { source }),
+            () => track('Overlay Sign Up Click - Google', { source }),
             [source]
           )}
         >
@@ -361,7 +361,7 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
         <a
           href={facebookLoginUrl}
           onClick={useCallback(
-            () => pendo.track('Overlay Sign Up Click - Facebook', { source }),
+            () => track('Overlay Sign Up Click - Facebook', { source }),
             [source]
           )}
         >

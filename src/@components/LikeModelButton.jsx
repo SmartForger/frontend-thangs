@@ -7,7 +7,7 @@ import { createUseStyles } from '@style'
 import useServices from '@hooks/useServices'
 import * as types from '@constants/storeEventTypes'
 import classnames from 'classnames'
-import * as pendo from '@vendors/pendo'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -112,7 +112,7 @@ const noop = () => null
 const UnauthLikeModelButton = ({ c, openSignupOverlay = noop }) => {
   const handleClick = useCallback(() => {
     openSignupOverlay('Join to Like, Follow, Share.', 'Like')
-    pendo.track('SignUp Prompt Overlay', { source: 'Like' })
+    track('SignUp Prompt Overlay', { source: 'Like' })
   }, [openSignupOverlay])
 
   return (

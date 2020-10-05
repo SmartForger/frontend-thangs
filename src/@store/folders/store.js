@@ -1,6 +1,6 @@
 import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
-import * as pendo from '@vendors/pendo'
+import { track } from '@utilities/analytics'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -135,7 +135,7 @@ export default store => {
       .then(res => {
         if (res.status === 201) {
           store.dispatch(types.SAVED_FOLDER_DATA, res.data)
-          pendo.track('Folder Created')
+          track('Folder Created')
           onFinish(res.data)
           store.dispatch(types.SAVED_FOLDER)
           store.dispatch(types.FETCH_FOLDERS)
@@ -155,7 +155,7 @@ export default store => {
     })
       .then(_res => {
         store.dispatch(types.LOADED_FOLDER)
-        pendo.track('Folder Deleted')
+        track('Folder Deleted')
         onFinish()
       })
       .catch(_error => {
@@ -176,7 +176,7 @@ export default store => {
         store.dispatch(types.ERROR_SAVING_FOLDER)
         onError(error)
       } else {
-        pendo.track('Folder Invite Sent')
+        track('Folder Invite Sent')
         onFinish(data)
         store.dispatch(types.SAVED_FOLDER)
         store.dispatch(types.FETCH_FOLDER, { folderId })
@@ -195,7 +195,7 @@ export default store => {
       onError(error)
     } else {
       store.dispatch(types.SAVED_FOLDER)
-      pendo.track('Folder Access Revoked')
+      track('Folder Access Revoked')
       if (
         state &&
         state.folders &&

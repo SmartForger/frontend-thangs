@@ -1,6 +1,6 @@
 import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
-import * as pendo from '@vendors/pendo'
+import { track } from '@utilities/analytics'
 
 const getInitAtom = () => ({
   isLoaded: false,
@@ -88,7 +88,7 @@ export default store => {
       })
       store.dispatch(types.FETCH_TEAMS)
       store.dispatch(types.SAVED_TEAM)
-      pendo.track('Team Created')
+      track('Team Created')
       onFinish()
     } catch (error) {
       store.dispatch(types.ERROR_SAVING_TEAM)

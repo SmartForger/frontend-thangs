@@ -3,7 +3,7 @@ import { useStoreon } from 'storeon/react'
 import { useCurrentUserId } from '@hooks'
 import { Button, ToggleFollowButton } from '@components'
 import * as types from '@constants/storeEventTypes'
-import * as pendo from '@vendors/pendo'
+import { track } from '@utilities/analytics'
 
 const noop = () => null
 const ProfileButton = ({ user, userId, className, onEditClick = noop }) => {
@@ -21,7 +21,7 @@ const ProfileButton = ({ user, userId, className, onEditClick = noop }) => {
           source,
         },
       })
-      pendo.track('SignUp Prompt Overlay', { source: 'Timed' })
+      track('SignUp Prompt Overlay', { source: 'Timed' })
     },
     [dispatch]
   )

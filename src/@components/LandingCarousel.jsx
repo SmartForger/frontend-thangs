@@ -8,7 +8,7 @@ import { ReactComponent as PromoStorage } from '@svg/promo-storage.svg'
 import { ReactComponent as PromoCollab } from '@svg/promo-collab.svg'
 
 import * as types from '@constants/storeEventTypes'
-import * as pendo from '@vendors/pendo'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -29,7 +29,7 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, dispatch, user }) => {
           'https://storage.googleapis.com/thangs-pubic/instructionGeometricSearch.mp4',
         callback: () => {
           searchBarRef.current.focus()
-          pendo.track('Value Prop Clicked', {
+          track('Value Prop Clicked', {
             source: 'Geometric Search',
             isRegistered: !!user,
           })
@@ -44,7 +44,7 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, dispatch, user }) => {
         callback: () => {
           if (user && user.id) {
             dispatch(types.OPEN_OVERLAY, { overlayName: 'upload' })
-            pendo.track('Value Prop Clicked', { source: 'Unlimited Storage' })
+            track('Value Prop Clicked', { source: 'Unlimited Storage' })
           } else {
             dispatch(types.OPEN_OVERLAY, {
               overlayName: 'signUp',
@@ -54,7 +54,7 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, dispatch, user }) => {
                 source: 'Unlimited Storage',
               },
             })
-            pendo.track('SignUp Prompt Overlay', { source: 'Unlimited Storage' })
+            track('SignUp Prompt Overlay', { source: 'Unlimited Storage' })
           }
         },
       },
@@ -67,7 +67,7 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, dispatch, user }) => {
         callback: () => {
           if (user && user.id) {
             dispatch(types.OPEN_OVERLAY, { overlayName: 'createFolder' })
-            pendo.track('Value Prop Clicked', { source: 'Collaboration' })
+            track('Value Prop Clicked', { source: 'Collaboration' })
           } else {
             dispatch(types.OPEN_OVERLAY, {
               overlayName: 'signUp',
@@ -77,7 +77,7 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, dispatch, user }) => {
                 source: 'Collaboration',
               },
             })
-            pendo.track('SignUp Prompt Overlay', { source: 'Collaboration' })
+            track('SignUp Prompt Overlay', { source: 'Collaboration' })
           }
         },
       },

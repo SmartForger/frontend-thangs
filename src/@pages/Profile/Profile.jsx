@@ -26,7 +26,7 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useCurrentUserId, usePageMeta, useQuery } from '@hooks'
 import * as types from '@constants/storeEventTypes'
-import * as pendo from '@vendors/pendo'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -582,7 +582,7 @@ const PageByUserName = ({ userName }) => {
   }, [dispatch, userName])
 
   if (!isCurrentUsersProfile && isLoaded && isExternalReferral) {
-    pendo.track('Portfolio', { userName })
+    track('Portfolio', { userName })
   }
   if (!isLoaded) {
     return <Spinner />

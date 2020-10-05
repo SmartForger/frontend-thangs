@@ -6,7 +6,7 @@ import ModelCards from '@components/CardCollection/ModelCards'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
-import * as pendo from '@vendors/pendo'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -101,7 +101,7 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
 
   const sortBy = useCallback(type => {
     setSelected(type)
-    pendo.track('Sorted Models', { sortBy: type })
+    track('Sorted Models', { sortBy: type })
   }, [])
 
   const sortOptions = useMemo(() => {
@@ -200,7 +200,7 @@ const Landing = () => {
         },
       })
     }
-    if (id) pendo.track('Explore', { referralChannel: id })
+    if (id) track('Explore', { referralChannel: id })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

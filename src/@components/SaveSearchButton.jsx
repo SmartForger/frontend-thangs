@@ -7,7 +7,7 @@ import ReactTooltip from 'react-tooltip'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
-import * as pendo from '@vendors/pendo'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -143,7 +143,7 @@ const noop = () => null
 const UnauthSaveSearchButton = ({ c, openSignupOverlay = noop }) => {
   const handleClick = useCallback(() => {
     openSignupOverlay('Join to Like, Follow, Share.', 'Like')
-    pendo.track('SignUp Prompt Overlay', { source: 'Like' })
+    track('SignUp Prompt Overlay', { source: 'Like' })
   }, [openSignupOverlay])
 
   return (

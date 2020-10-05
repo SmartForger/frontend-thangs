@@ -4,7 +4,7 @@ import { storageService, intervalRequest } from '@services'
 import apiForChain from '@services/api/apiForChain'
 import { getStatusState, STATUSES } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
-import * as pendo from '@vendors/pendo'
+import { track } from '@utilities/analytics'
 
 const ATOMS = {
   THANGS: 'thangs',
@@ -110,7 +110,7 @@ export default store => {
         method: 'GET',
         endpoint: `models/search-by-text?searchTerm=${searchTerm}`,
       })
-      pendo.track('Text Search Started', {
+      track('Text Search Started', {
         searchTerm,
       })
 
@@ -140,7 +140,7 @@ export default store => {
           })
         }
 
-        pendo.track(`Text Search - ${numOfMatches > 0 ? 'Results' : 'No Results'}`, {
+        track(`Text Search - ${numOfMatches > 0 ? 'Results' : 'No Results'}`, {
           searchTerm,
           numOfMatches,
         })
@@ -225,7 +225,7 @@ export default store => {
             },
           })
 
-          pendo.track('Model Search Started', {
+          track('Model Search Started', {
             phyndexerId,
             modelId: `${modelId}`,
           })
@@ -273,7 +273,7 @@ export default store => {
             data: data,
           })
 
-          pendo.track(
+          track(
             `Thangs Model Search - ${
               data && data.matches && data.matches.length && data.matches.length > 0
                 ? 'Results'
@@ -333,7 +333,7 @@ export default store => {
           data,
         })
 
-        pendo.track(
+        track(
           `Phyndexer Model Search - ${
             data && data.matches && data.matches.length && data.matches.length > 0
               ? 'Results'
@@ -369,7 +369,7 @@ export default store => {
         endpoint: `models/match/${modelId}`,
       })
 
-      pendo.track('View Related Search Started', {
+      track('View Related Search Started', {
         modelId,
       })
 
@@ -407,13 +407,10 @@ export default store => {
           })
         }
 
-        pendo.track(
-          `View Related Search - ${numOfMatches > 0 ? 'Results' : 'No Results'}`,
-          {
-            modelId,
-            numOfMatches,
-          }
-        )
+        track(`View Related Search - ${numOfMatches > 0 ? 'Results' : 'No Results'}`, {
+          modelId,
+          numOfMatches,
+        })
 
         onFinish()
       }

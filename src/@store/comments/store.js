@@ -1,7 +1,7 @@
 import api from '@services/api'
 import { STATUSES, getStatusState } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
-import * as pendo from '@vendors/pendo'
+import { track } from '@utilities/analytics'
 
 const noop = () => null
 
@@ -77,7 +77,7 @@ export default store => {
           atom: 'new-model-comments',
           data,
         })
-        pendo.track('New Comment', { modelId: id })
+        track('New Comment', { modelId: id })
         onFinish()
         store.dispatch(types.FETCH_MODEL_COMMENTS, { id })
       }
