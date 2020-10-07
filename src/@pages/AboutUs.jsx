@@ -14,8 +14,8 @@ import classnames from 'classnames'
 import { ReactComponent as SearchAboutUsIcon } from '@svg/aboutUs-search.svg'
 import { ReactComponent as StorageAboutUsIcon } from '@svg/aboutUs-storage.svg'
 import { ReactComponent as CollaborationAboutUsIcon } from '@svg/aboutUs-collaboration.svg'
-import { ReactComponent as BackgroundLeft } from '@svg/aboutUs-leftSide.svg'
-import { ReactComponent as BackgroundRight } from '@svg/aboutUs-rightSide.svg'
+import { ReactComponent as BackgroundLeft } from '@svg/aboutUs-leftSide-tinkers.svg'
+import { ReactComponent as BackgroundRight } from '@svg/aboutUs-rightSide-tinkers.svg'
 import loader from '@media/loader.gif'
 
 const useStyles = createUseStyles(theme => {

@@ -9,7 +9,7 @@ import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
-import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
+import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -177,7 +177,7 @@ const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
     <div className={c.SearchBar}>
       <form className={c.SearchBar_Form} onSubmit={handleSearchSubmit}>
         <div className={classnames(c.SearchBar_Wrapper)}>
-          <MagnifyingGlass
+          <SearchIcon
             className={classnames(c.SearchBar_SearchIcon, c.SearchBar_FormIcon)}
             onClick={handleSearchSubmit}
           />
@@ -208,7 +208,7 @@ const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
                 </div>
                 <span>{t('header.searchUploadText')}</span>
               </div>
-              <MagnifyingGlass
+              <SearchIcon
                 title={t('header.searchTextTitle')}
                 className={classnames(
                   c.SearchBar_SearchIcon,

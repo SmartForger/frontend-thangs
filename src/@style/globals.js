@@ -3,6 +3,10 @@ import { createUseStyles } from '@style'
 const globals = theme => {
   return {
     '@global': {
+      'html, body, #root': {
+        height: '100%',
+      },
+
       body: {
         '-moz-osx-font-smoothing': 'grayscale',
         '-webkit-font-smoothing': 'antialiased',

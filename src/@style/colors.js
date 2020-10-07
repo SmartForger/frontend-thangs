@@ -13,7 +13,7 @@ export const colors = {
     300: '#ffffff',
     400: '#ffffff',
     500: mains.WHITE,
-    600: '#fafafa',
+    600: '#F7F7FB',
     700: '#F4F4F4',
     800: '#f2f2f2',
     900: '#e8e8e8',

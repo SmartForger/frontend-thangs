@@ -19,7 +19,7 @@ import { useForm, useGoogleLogin, useFacebookLogin } from '@hooks'
 import { authenticationService } from '@services'
 import { ReactComponent as BackgroundSvg } from '@svg/overlay-background.svg'
 import { ReactComponent as VersionControlIcon } from '@svg/icon-version-control.svg'
-import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
+import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 import { ReactComponent as CollabIcon } from '@svg/icon-collaboration.svg'
 import { ReactComponent as StorageIcon } from '@svg/icon-storage.svg'
 import { ReactComponent as HeartIcon } from '@svg/icon-heart.svg'
@@ -192,7 +192,7 @@ const SignUpPromo = ({ c, titleMessage }) => {
           <Spacer size='2rem' />
           <div className={c.Signup_Column}>
             <div className={c.Signup_Row}>
-              <MagnifyingGlass />
+              <SearchIcon />
               <Spacer size='.5rem' />
               <MultiLineBodyText light>Geometric Search</MultiLineBodyText>
             </div>

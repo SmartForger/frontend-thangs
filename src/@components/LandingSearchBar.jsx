@@ -11,7 +11,7 @@ import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'
 
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
-import { ReactComponent as MagnifyingGlass } from '@svg/magnifying-glass-header.svg'
+import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 import { ReactComponent as SnackbarUploadIcon } from '@svg/snackbar-upload.svg'
 
 const useStyles = createUseStyles(theme => {
@@ -237,10 +237,7 @@ const SearchBar = ({
         <div className={classnames(c.SearchBar_Field)}>
           <div className={c.SearchBar_IconWrapper}>
             <Spacer size={'1.25rem'} />
-            <MagnifyingGlass
-              className={c.SearchBar_SearchIcon}
-              onClick={handleSearchSubmit}
-            />
+            <SearchIcon className={c.SearchBar_SearchIcon} onClick={handleSearchSubmit} />
           </div>
           <TextInput
             name='search'
@@ -257,7 +254,7 @@ const SearchBar = ({
             {...props}
           />
           <Button className={c.SearchBar_SearchButton} onClick={handleSearchSubmit}>
-            <MagnifyingGlass
+            <SearchIcon
               title={t('header.searchTextTitle')}
               className={c.SearchBar_SearchIcon}
             />

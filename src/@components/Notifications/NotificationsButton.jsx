@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import classnames from 'classnames'
 
 import { createUseStyles } from '@style'
-import { ReactComponent as NotificationIcon } from '@svg/notification-icon.svg'
+import { ReactComponent as NotificationIcon } from '@svg/icon-notification.svg'
 import { useStoreon } from 'storeon/react'
 import * as storeEventTypes from '@constants/storeEventTypes'
 

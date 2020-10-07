@@ -8,7 +8,7 @@ const maxWidth = '1440px'
 export const NewTheme = {
   variables: {
     colors: {
-      backgroundColor: colors.white[600],
+      backgroundColor: colors.white[400],
       cardBackground: colors.white[400],
       errorTextColor: colors.error,
       errorTextBackground: colors.errorBackground,

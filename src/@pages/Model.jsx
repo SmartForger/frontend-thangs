@@ -23,7 +23,7 @@ import {
 } from '@components'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
-import { ReactComponent as DateIcon } from '@svg/date-icon.svg'
+import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { useLocalStorage } from '@hooks'
 import { Message404 } from './404'
@@ -277,7 +277,7 @@ const ModelStats = ({ model = {} }) => {
         {model.downloadCount} Downloads
       </span>
       <span>
-        <DateIcon width={12} height={12} />
+        <CalendarIcon width={12} height={12} />
         {model.uploadDate && format(new Date(model.uploadDate), 'MMMM d, Y')}
       </span>
     </div>
