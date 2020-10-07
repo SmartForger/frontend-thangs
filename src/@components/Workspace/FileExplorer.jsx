@@ -30,7 +30,7 @@ const useStyles = createUseStyles(_theme => {
       height: 'auto',
     },
     FileExplorer__open: {
-      maxHeight: '37.5rem',
+      maxHeight: '100rem',
     },
     FileExplorer_Model: {
       display: 'flex',

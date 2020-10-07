@@ -113,10 +113,6 @@ const WorkspaceNavbar = ({
     showFileExplorer,
   ])
 
-  console.log('folderNav.files', folderNav.files)
-  console.log('shouldShowFileExplorer', shouldShowFileExplorer)
-  console.log('showFileExplorer', showFileExplorer)
-
   return (
     <nav className={c.WorkspaceNavbar}>
       <Spacer size={'2rem'} />
