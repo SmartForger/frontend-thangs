@@ -29,11 +29,15 @@ const useStyles = createUseStyles(_theme => {
       overflow: 'hidden',
       height: 'auto',
     },
-    FileExplorer__open: {
-      maxHeight: '100rem',
-    },
     FileExplorer_Model: {
       display: 'flex',
+      transition: 'all 450ms ease-in-out',
+      maxHeight: 0,
+      overflow: 'hidden',
+      height: 'auto',
+    },
+    FileExplorer__open: {
+      maxHeight: '100rem',
     },
   }
 })
@@ -47,7 +51,13 @@ const Folder = ({
   subfolders: originalSubfolders,
 }) => {
   const c = useStyles({})
-  const { id: folderId, name, subfolders = originalSubfolders } = folder
+  const { id: folderId, name, subfolders = originalSubfolders, models } = folder
+  const newModels =
+    models && models.length
+      ? models.map(model => {
+          return { id: model, name: model }
+        })
+      : []
   const filteredSubfolders =
     subfolders && subfolders.length
       ? subfolders.filter(child => child.name.includes(name))
@@ -86,6 +96,7 @@ const Folder = ({
             parentKey={parentKey}
             showFiles={showFolderContents && isExpanded}
           />
+          <Models models={newModels} showModels={showFolderContents && isExpanded} />
         </div>
       )}
     </>
@@ -147,12 +158,17 @@ const Model = ({ model = {} }) => {
   return <NavLink Icon={FileIcon} label={name} isFolder={false} modelId={id} />
 }
 
-const Models = ({ models = [] }) => {
+const Models = ({ models = [], showModels }) => {
   const c = useStyles({})
   return models.map((model, index) => {
     const { id } = model
     return (
-      <div key={`model_${id}`} className={c.FileExplorer_Model}>
+      <div
+        key={`model_${id}`}
+        className={classnames(c.FileExplorer_Model, {
+          [c.FileExplorer__open]: showModels,
+        })}
+      >
         <Spacer size={'2rem'} />
         <div>
           <Model key={`model_${index}`} model={model} />
@@ -186,7 +202,7 @@ const FileExplorer = ({
   return (
     <div className={classnames(c.FileExplorer, { [c.FileExplorer__open]: showFile })}>
       <RootFolders folders={filteredFolders} folderNav={folderNav} />
-      <Models models={models} />
+      <Models models={models} showModels={showFile} />
     </div>
   )
 }
