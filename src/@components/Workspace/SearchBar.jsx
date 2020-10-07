@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { ReactComponent as SearchIcon } from '@svg/search-icon.svg'
+import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
