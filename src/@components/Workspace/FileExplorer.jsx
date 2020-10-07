@@ -45,7 +45,6 @@ const Folder = ({
   parentName,
   parentKey,
   subfolders: originalSubfolders,
-  models,
 }) => {
   const c = useStyles({})
   const { id: folderId, name, subfolders = originalSubfolders } = folder
@@ -83,12 +82,10 @@ const Folder = ({
           <Subfolders
             folders={filteredSubfolders}
             folderNav={folderNav}
-            models={models}
             parentName={name}
             parentKey={parentKey}
             showFiles={showFolderContents && isExpanded}
           />
-          <Models models={models} />
         </div>
       )}
     </>
@@ -135,18 +132,13 @@ const Subfolders = ({ folders, folderNav, parentName, parentKey, showFiles }) =>
   )
 }
 
-const RootFolders = ({ folders, folderNav, models }) => {
+const RootFolders = ({ folders, folderNav }) => {
   const filteredRootFolders = useMemo(() => {
     return folders.filter(folder => !folder.root && !folder.name.includes('//'))
   }, [folders])
 
   return (
-    <Subfolders
-      folders={filteredRootFolders}
-      folderNav={folderNav}
-      models={models}
-      showFiles={true}
-    />
+    <Subfolders folders={filteredRootFolders} folderNav={folderNav} showFiles={true} />
   )
 }
 
@@ -193,7 +185,7 @@ const FileExplorer = ({
 
   return (
     <div className={classnames(c.FileExplorer, { [c.FileExplorer__open]: showFile })}>
-      <RootFolders folders={filteredFolders} folderNav={folderNav} models={models} />
+      <RootFolders folders={filteredFolders} folderNav={folderNav} />
       <Models models={models} />
     </div>
   )
