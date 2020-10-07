@@ -1,13 +1,8 @@
-import React from 'react'
-import {
-  Spacer,
-  TitleTertiary,
-  FileCard,
-  FolderCard,
-  StatsBar,
-  FileTable,
-} from '@components'
+import React, { useEffect } from 'react'
+import { useStoreon } from 'storeon/react'
+import { Spacer, TitleTertiary, FileCard, StatsBar, FileTable } from '@components'
 import { createUseStyles } from '@style'
+import { useStarred } from '@hooks'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -20,7 +15,6 @@ const useStyles = createUseStyles(_theme => {
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
-      overflowY: 'scroll',
     },
     RecentFilesView_Starred: {
       display: 'flex',
@@ -31,6 +25,12 @@ const useStyles = createUseStyles(_theme => {
 
 const RecentFilesView = () => {
   const c = useStyles({})
+  const { dispatch, userActivity, thangs } = useStoreon('userActivity', 'thangs')
+  const { starredModels = [] } = useStarred()
+  useEffect(() => {
+    console.log('This is where I will fetch userActivity once there is an endpoint')
+  }, [])
+
   return (
     <main className={c.RecentFilesView}>
       <Spacer size='2rem' />
@@ -38,18 +38,19 @@ const RecentFilesView = () => {
         <Spacer size='2rem' />
         <TitleTertiary>Activity & Contributions</TitleTertiary>
         <Spacer size='2rem' />
-        <StatsBar />
+        <StatsBar userActivity={userActivity} />
         <Spacer size='4rem' />
         <TitleTertiary>Starred</TitleTertiary>
         <Spacer size='1.5rem' />
         <div className={c.RecentFilesView_Starred}>
-          <FileCard model={{ name: 'Pikachu.stl' }} />
-          <Spacer size='2rem' />
-          <FolderCard folder={{ name: 'Car Engine' }} />
-          <Spacer size='2rem' />
-          <FolderCard folder={{ name: 'Pokemons' }} />
-          <Spacer size='2rem' />
-          <FolderCard folder={{ name: 'Starship Enterprise' }} />
+          {starredModels.map((model, index) => {
+            return (
+              <React.Fragment key={`starred_${index}`}>
+                <FileCard model={{ name: model.name }} />
+                <Spacer size='2rem' />
+              </React.Fragment>
+            )
+          })}
         </div>
         <Spacer size='4rem' />
         <TitleTertiary>Recent</TitleTertiary>

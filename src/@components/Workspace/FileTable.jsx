@@ -22,7 +22,7 @@ const useStyles = createUseStyles(_theme => {
       flexDirection: 'row',
     },
     FileTable_FileName: {
-      width: '30%',
+      width: '40%',
     },
     FileTable_Size: {
       width: '12%',
