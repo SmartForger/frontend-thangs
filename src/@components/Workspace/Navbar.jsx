@@ -78,7 +78,7 @@ const useStyles = createUseStyles(theme => {
       '&::-webkit-scrollbar-thumb': {
         backgroundColor: '#C7C7C7',
         borderRadius: 20,
-        border: '3px solid white',
+        border: `3px solid ${theme.colors.white[600]}`,
       },
     },
   }

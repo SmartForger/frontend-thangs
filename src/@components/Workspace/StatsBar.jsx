@@ -12,7 +12,6 @@ const useStyles = createUseStyles(_theme => {
     StatsBar: {
       display: 'flex',
       flexDirection: 'row',
-      overflowY: 'scroll',
     },
     StatsBar_Stat: {
       display: 'flex',
