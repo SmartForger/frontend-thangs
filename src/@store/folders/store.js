@@ -26,12 +26,12 @@ export default store => {
     },
   }))
 
-  store.on(types.UPDATE_FOLDER, (state, event) => ({
+  store.on(types.UPDATE_FOLDER, (state, { folderId: _fold, folder }) => ({
     folders: {
       ...state.folders,
       isLoaded: true,
       isLoading: false,
-      currentFolder: event,
+      currentFolder: folder,
     },
   }))
 
@@ -84,7 +84,7 @@ export default store => {
         .then(res => {
           const folder = res.data
           store.dispatch(types.LOADED_FOLDER)
-          store.dispatch(types.UPDATE_FOLDER, folder)
+          store.dispatch(types.UPDATE_FOLDER, { folderId, folder })
           onFinish()
         })
         .catch(_error => {

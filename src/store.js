@@ -1,45 +1,49 @@
 import { storeonDevtools } from 'storeon/devtools'
 import { createStoreon } from 'storeon'
-import teamsStore from '@store/teams/store'
-import folderStore from '@store/folders/store'
-import overlayStore from '@store/overlay/store'
-import modelsStore from '@store/models/store'
-import modelPreviewsStore from '@store/modelPreviews/store'
 import commentsStore from '@store/comments/store'
-import usersStore from '@store/users/store'
-import userOwnModelsStore from '@store/userOwnModels/store'
-import userLikedModelsStore from '@store/userLikedModels/store'
-import uploadModelStore from '@store/uploadModel/store'
+import folderNavStore from '@store/folderNav/store'
+import folderStore from '@store/folders/store'
+import modelDownloadUrl from '@store/modelDownloadUrl/store'
+import modelLikesStore from '@store/modelLikes/store'
+import modelPreviewsStore from '@store/modelPreviews/store'
+import modelsStatsStore from '@store/modelsStats/store'
+import modelsStore from '@store/models/store'
+import notificationsStore from '@store/notifications/store'
+import overlayStore from '@store/overlay/store'
+import relatedModelsStore from '@store/relatedModels/store'
 import searchStore from '@store/search/store'
 import searchSubscriptionsStore from '@store/searchSubscriptions/store'
-import notificationsStore from '@store/notifications/store'
-import modelLikesStore from '@store/modelLikes/store'
-import modelDownloadUrl from '@store/modelDownloadUrl/store'
-import relatedModelsStore from '@store/relatedModels/store'
+import teamsStore from '@store/teams/store'
+import thangsStore from '@store/thangs/store'
+import uploadModelStore from '@store/uploadModel/store'
 import userAvatarStore from '@store/userAvatar/store'
+import userLikedModelsStore from '@store/userLikedModels/store'
+import userOwnModelsStore from '@store/userOwnModels/store'
 import usersIdsStore from '@store/usersIds/store'
-import modelsStatsStore from '@store/modelsStats/store'
+import usersStore from '@store/users/store'
 
 const storeParts = [
   commentsStore,
+  folderNavStore,
   folderStore,
-  overlayStore,
+  modelDownloadUrl,
+  modelLikesStore,
   modelPreviewsStore,
+  modelsStatsStore,
   modelsStore,
-  teamsStore,
-  uploadModelStore,
-  usersStore,
-  userOwnModelsStore,
-  userLikedModelsStore,
+  notificationsStore,
+  overlayStore,
+  relatedModelsStore,
   searchStore,
   searchSubscriptionsStore,
-  notificationsStore,
-  modelLikesStore,
-  modelDownloadUrl,
+  teamsStore,
+  thangsStore,
+  uploadModelStore,
   userAvatarStore,
-  relatedModelsStore,
+  userLikedModelsStore,
+  userOwnModelsStore,
   usersIdsStore,
-  modelsStatsStore,
+  usersStore,
 ]
 
 const store = createStoreon([
