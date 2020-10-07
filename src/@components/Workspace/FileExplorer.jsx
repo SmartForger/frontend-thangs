@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Spacer, NavLink, Spinner } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
-import { authenticationService } from '@services'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 
@@ -52,12 +51,6 @@ const Folder = ({
 }) => {
   const c = useStyles({})
   const { id: folderId, name, subfolders = originalSubfolders, models } = folder
-  const newModels =
-    models && models.length
-      ? models.map(model => {
-        return { id: model, name: model }
-      })
-      : []
   const filteredSubfolders =
     subfolders && subfolders.length
       ? subfolders.filter(child => child.name.includes(name))
@@ -96,7 +89,7 @@ const Folder = ({
             parentKey={parentKey}
             showFiles={showFolderContents && isExpanded}
           />
-          <Models models={newModels} showModels={showFolderContents && isExpanded} />
+          <Models models={models} showModels={showFolderContents && isExpanded} />
         </div>
       )}
     </>
@@ -178,20 +171,8 @@ const Models = ({ models = [], showModels }) => {
   })
 }
 
-const FileExplorer = ({
-  folders = [],
-  models = [],
-  folderNav,
-  showOwned = true,
-  isLoading,
-  showFile,
-}) => {
+const FileExplorer = ({ folders = [], models = [], folderNav, isLoading, showFile }) => {
   const c = useStyles({})
-  const currentUserId = authenticationService.getCurrentUserId()
-  const filteredFolders = useMemo(() => {
-    if (showOwned) return folders.filter(({ creator }) => creator === currentUserId)
-    return folders.filter(({ creator }) => creator !== currentUserId)
-  }, [currentUserId, folders, showOwned])
 
   if (isLoading) {
     return <Spinner />
@@ -201,7 +182,7 @@ const FileExplorer = ({
 
   return (
     <div className={classnames(c.FileExplorer, { [c.FileExplorer__open]: showFile })}>
-      <RootFolders folders={filteredFolders} folderNav={folderNav} />
+      <RootFolders folders={folders} folderNav={folderNav} />
       <Models models={models} showModels={showFile} />
     </div>
   )
