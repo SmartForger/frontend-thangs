@@ -40,6 +40,7 @@ const useStyles = createUseStyles(_theme => {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
+      padding: '2px 0',
     },
   }
 })

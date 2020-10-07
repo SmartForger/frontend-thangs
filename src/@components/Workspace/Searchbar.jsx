@@ -25,7 +25,7 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
       width: '100%',
       margin: '0 1rem 1rem',
-      background: theme.colors.purple[800],
+      background: theme.colors.white[600],
       borderRadius: '.5rem',
 
       [md]: {
@@ -33,27 +33,28 @@ const useStyles = createUseStyles(theme => {
       },
 
       '& input': {
-        background: theme.colors.purple[800],
+        background: theme.colors.white[600],
         border: 'none',
         outline: 'none',
         fontSize: '1rem',
-        padding: '.5rem .75rem .5rem 2.25rem',
+        padding: '.75rem .75rem .75rem 2.25rem',
         lineHeight: '1.5rem',
 
         '&::placeholder': {
-          fontSize: '.875rem',
-          color: theme.colors.grey[500],
-          fontWeight: 600,
+          fontSize: '1rem',
+          color: theme.colors.grey[300],
+          fontWeight: 500,
+          lineHeight: '1rem',
         },
         '&:focus, &:active': {
-          background: theme.colors.purple[800],
-          color: theme.colors.white[400],
+          background: theme.colors.white[600],
+          color: theme.colors.grey[300],
           '&::placeholder': {
             color: 'transparent',
           },
         },
         '&:-webkit-autofill': {
-          '-webkit-box-shadow': `0 0 0px 1000px ${theme.colors.purple[800]} inset`,
+          '-webkit-box-shadow': `0 0 0px 1000px ${theme.colors.white[600]} inset`,
           '-webkit-text-fill-color': theme.colors.white[400],
           border: 'none',
         },
@@ -65,7 +66,6 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
       justifyContent: 'flex-start',
       minWidth: '18.5rem',
-      margin: '0 auto',
 
       [md]: {
         width: '80%',
@@ -88,14 +88,14 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
 
       '& path, & polygon': {
-        fill: theme.colors.gold[500],
+        fill: theme.colors.grey[300],
       },
     },
     SearchBar_FormIcon: {
       position: 'absolute',
       left: '.75rem',
       '& path, & polygon': {
-        fill: theme.colors.white[400],
+        fill: theme.colors.grey[300],
       },
     },
     SearchBar_SearchActionIcon: {
@@ -171,11 +171,6 @@ const SearchBar = () => {
               setSearchTerm(e.target.value)
             }}
             value={searchTerm || ''}
-          />
-          <SearchIcon
-            title={t('header.searchTextTitle')}
-            className={classnames(c.SearchBar_SearchIcon, c.SearchBar_SearchActionIcon)}
-            onClick={handleSearchSubmit}
           />
         </div>
       </form>

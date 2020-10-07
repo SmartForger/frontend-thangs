@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
-import { LandingHero, AboutHero } from '@components'
+import { LandingHero, AboutHero, UserNav } from '@components'
 import { useCurrentUser } from '@hooks'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
@@ -11,7 +11,6 @@ import * as types from '@constants/storeEventTypes'
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as LogoText } from '@svg/logo-text.svg'
 
-import UserNav from './UserNav'
 import SearchBar from './SearchBar'
 
 const useStyles = createUseStyles(theme => {

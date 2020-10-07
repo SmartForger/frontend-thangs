@@ -7,7 +7,7 @@ import { useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 
-import { ProfileDropdown, ProfileDropdownMenu } from './ProfileDropdown'
+import { ProfileDropdown, ProfileDropdownMenu } from './Header/ProfileDropdown'
 import Notifications from '@components/Notifications'
 
 const useStyles = createUseStyles(theme => {
@@ -65,12 +65,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const UserNav = ({
-  dispatch,
-  isLoading,
-  user,
-  showUser,
-}) => {
+const UserNav = ({ dispatch, isLoading, user, showUser }) => {
   const c = useStyles()
   const t = useTranslations({})
 
