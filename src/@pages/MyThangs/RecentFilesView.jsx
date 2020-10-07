@@ -25,7 +25,7 @@ const useStyles = createUseStyles(_theme => {
 
 const RecentFilesView = () => {
   const c = useStyles({})
-  const { dispatch, userActivity, thangs } = useStoreon('userActivity', 'thangs')
+  const { userActivity } = useStoreon('userActivity', 'thangs')
   const { starredModels = [] } = useStarred()
   useEffect(() => {
     console.log('This is where I will fetch userActivity once there is an endpoint')
