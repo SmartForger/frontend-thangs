@@ -4,7 +4,6 @@ import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
 import { TextInput } from '@components'
-import { useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 
