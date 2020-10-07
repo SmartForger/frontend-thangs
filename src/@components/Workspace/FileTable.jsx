@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Spacer, Divider, SingleLineBodyText } from '@components'
+import { format } from 'date-fns'
+import { Contributors, Divider, SingleLineBodyText, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { MetadataSecondary } from '@components/Text/Metadata'
@@ -20,9 +21,19 @@ const useStyles = createUseStyles(_theme => {
       display: 'flex',
       alignItems: 'center',
       flexDirection: 'row',
+      cursor: 'pointer',
     },
     FileTable_FileName: {
       width: '40%',
+      maxWidth: '14rem',
+
+      '& span': {
+        overflow: 'hidden',
+        marginRight: '2rem',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        lineHeight: '1rem',
+      },
     },
     FileTable_Size: {
       width: '12%',
@@ -50,76 +61,111 @@ const Foldername = ({ name }) => {
   )
 }
 
-const FileTable = ({ _files = [] }) => {
+const FileTableHeader = () => {
   const c = useStyles({})
+  return (
+    <div className={classnames(c.FileTable_Row, c.FileTable_Header)}>
+      <div
+        className={classnames(c.FileTable_Cell, c.FileTable_FileName, c.FileTable_Header)}
+      >
+        <MetadataSecondary>Filename</MetadataSecondary>
+      </div>
+      <div className={classnames(c.FileTable_Cell, c.FileTable_Header)}>
+        <MetadataSecondary>Changed</MetadataSecondary>
+      </div>
+      <div className={classnames(c.FileTable_Cell, c.FileTable_Size, c.FileTable_Header)}>
+        <MetadataSecondary>Size</MetadataSecondary>
+      </div>
+      <div className={classnames(c.FileTable_Cell, c.FileTable_Header)}>
+        <MetadataSecondary>Contributors</MetadataSecondary>
+      </div>
+      <div className={classnames(c.FileTable_Cell, c.FileTable_Header)}>
+        <MetadataSecondary>Versioned From</MetadataSecondary>
+      </div>
+    </div>
+  )
+}
 
+const FolderRow = ({ folder }) => {
+  const c = useStyles({})
+  return (
+    <div>
+      <Spacer size={'1rem'} />
+      <div className={c.FileTable_Row}>
+        <div
+          className={classnames(c.FileTable_Cell, c.FileTable_FileName)}
+          title={folder.name}
+        >
+          <Foldername name={folder.name} />
+        </div>
+        <div className={c.FileTable_Cell}>
+          <MetadataSecondary>{}</MetadataSecondary>
+        </div>
+        <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
+          <MetadataSecondary>-</MetadataSecondary>
+        </div>
+        <div className={c.FileTable_Cell}>
+          <Contributors users={folder.members} />
+        </div>
+        <div className={c.FileTable_Cell}>
+          <Link>-</Link>
+        </div>
+      </div>
+      <Spacer size={'1rem'} />
+      <Divider spacing='0' />
+    </div>
+  )
+}
+
+const FileRow = ({ model }) => {
+  const c = useStyles({})
+  return (
+    <div>
+      <Spacer size={'1rem'} />
+      <div className={c.FileTable_Row} title={model.name}>
+        <div className={classnames(c.FileTable_Cell, c.FileTable_FileName)}>
+          <Filename name={model.name} />
+        </div>
+        <div className={c.FileTable_Cell}>
+          <MetadataSecondary>
+            {format(new Date(model.uploadDate), 'MMM d, Y')}
+          </MetadataSecondary>
+        </div>
+        <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
+          <MetadataSecondary>TBD</MetadataSecondary>
+        </div>
+        <div className={c.FileTable_Cell}>
+          <Contributors users={[model.owner]} />
+        </div>
+        <div className={c.FileTable_Cell}>
+          {model.previousVersionModelId ? (
+            <Link to={`/model/${model.previousVersionModelId}`}>
+              {model.previousVersionModelId}
+            </Link>
+          ) : (
+            '-'
+          )}
+        </div>
+      </div>
+      <Spacer size={'1rem'} />
+      <Divider spacing='0' />
+    </div>
+  )
+}
+
+const FileTable = ({ folders = [], models = [] }) => {
+  const c = useStyles({})
+  const files = [folders, models].flat().sort((a, b) => a.uploadDate - b.uploadDate)
   return (
     <div className={c.FileTable}>
-      <div className={classnames(c.FileTable_Row, c.FileTable_Header)}>
-        <div
-          className={classnames(
-            c.FileTable_Cell,
-            c.FileTable_FileName,
-            c.FileTable_Header
-          )}
-        >
-          <MetadataSecondary>Filename</MetadataSecondary>
-        </div>
-        <div className={classnames(c.FileTable_Cell, c.FileTable_Header)}>
-          <MetadataSecondary>Changed</MetadataSecondary>
-        </div>
-        <div
-          className={classnames(c.FileTable_Cell, c.FileTable_Size, c.FileTable_Header)}
-        >
-          <MetadataSecondary>Size</MetadataSecondary>
-        </div>
-        <div className={classnames(c.FileTable_Cell, c.FileTable_Header)}>
-          <MetadataSecondary>Contributors</MetadataSecondary>
-        </div>
-        <div className={classnames(c.FileTable_Cell, c.FileTable_Header)}>
-          <MetadataSecondary>Forked From</MetadataSecondary>
-        </div>
-      </div>
-      <div>
-        <Spacer size={'1rem'} />
-        <div className={c.FileTable_Row}>
-          <div className={classnames(c.FileTable_Cell, c.FileTable_FileName)}>
-            <Foldername name={'Starship Enterprise'} />
-          </div>
-          <div className={c.FileTable_Cell}>
-            <MetadataSecondary>Jun 1, 2020 • Brandon</MetadataSecondary>
-          </div>
-          <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
-            <MetadataSecondary>37mb</MetadataSecondary>
-          </div>
-          <div className={c.FileTable_Cell}>AVATARS</div>
-          <div className={c.FileTable_Cell}>
-            <Link>parent.stl</Link>
-          </div>
-        </div>
-        <Spacer size={'1rem'} />
-        <Divider spacing='0' />
-      </div>
-      <div>
-        <Spacer size={'1rem'} />
-        <div className={c.FileTable_Row}>
-          <div className={classnames(c.FileTable_Cell, c.FileTable_FileName)}>
-            <Filename name={'Pikachu.stl'} />
-          </div>
-          <div className={c.FileTable_Cell}>
-            <MetadataSecondary>Jun 1, 2020 • Damjan</MetadataSecondary>
-          </div>
-          <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
-            <MetadataSecondary>37mb</MetadataSecondary>
-          </div>
-          <div className={c.FileTable_Cell}>AVATARS</div>
-          <div className={c.FileTable_Cell}>
-            <Link>parent.stl</Link>
-          </div>
-        </div>
-        <Spacer size={'1rem'} />
-        <Divider spacing='0' />
-      </div>
+      <FileTableHeader />
+      {files.map((file, index) => {
+        return (
+          <React.Fragment key={`FileRow_${index}`}>
+            {file.subfolders ? <FolderRow folder={file} /> : <FileRow model={file} />}
+          </React.Fragment>
+        )
+      })}
     </div>
   )
 }

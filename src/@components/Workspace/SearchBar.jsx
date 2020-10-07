@@ -11,21 +11,21 @@ import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md, lg },
+    mediaQueries: { md },
   } = theme
 
   return {
     SearchBar: {
-      width: '100%',
+      width: '30rem',
     },
     SearchBar_Wrapper: {
       alignItems: 'center',
       display: 'flex',
       position: 'relative',
-      width: '100%',
       margin: '0 1rem 1rem',
       background: theme.colors.white[600],
       borderRadius: '.5rem',
+      width: '100%',
 
       [md]: {
         margin: 0,
@@ -62,21 +62,9 @@ const useStyles = createUseStyles(theme => {
     SearchBar_Form: {
       display: 'flex',
       flexDirection: 'row',
-      width: '100%',
       justifyContent: 'flex-start',
-      minWidth: '18.5rem',
-
-      [md]: {
-        width: '80%',
-        maxWidth: '42rem',
-      },
     },
-    SearchBar_FormInput: {
-      width: '100%',
-      [md]: {
-        width: '80%',
-      },
-    },
+    SearchBar_FormInput: {},
     SearchBar_FormInput_active: {
       color: theme.colors.grey[300],
       '&::placeholder': {
@@ -101,38 +89,6 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       right: '.75rem',
       cursor: 'pointer',
-    },
-    SearchBar_UploadBar: {
-      width: 18,
-      display: 'flex',
-      alignItems: 'center',
-      flexDirection: 'row',
-      color: theme.colors.gold[500],
-      overflow: 'hidden',
-      transition: 'width 1.4s',
-      whiteSpace: 'nowrap',
-      position: 'absolute',
-      right: '2.75rem',
-      cursor: 'pointer',
-
-      '& path, & polygon': {
-        fill: theme.colors.gold[500],
-      },
-
-      '&:hover': {
-        [lg]: {
-          width: '9.5rem',
-        },
-      },
-    },
-    SearchBar_UploadBar__expand: {
-      [lg]: {
-        width: '9.5rem',
-      },
-    },
-    SearchBar_UploadIcon: {
-      display: 'flex',
-      marginRight: '.5rem',
     },
   }
 })

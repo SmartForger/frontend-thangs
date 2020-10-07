@@ -10,6 +10,11 @@ const useStyles = createUseStyles(theme => {
       '& span': {
         ...theme.text.avatarDefaultText,
       },
+      boxSizing: 'border-box',
+      '& img': {
+        border: ({ bordered }) =>
+          bordered ? `1px solid ${theme.colors.white[400]}` : 'none',
+      },
     },
     ProfilePicture_alt: {
       width: '1.875rem',
@@ -31,8 +36,9 @@ const ProfilePicture = ({
   src,
   size = DEFAULT_AVATAR_SIZE,
   color = DEFAULT_AVATAR_COLOR,
+  bordered,
 }) => {
-  const c = useStyles()
+  const c = useStyles({ bordered })
   const nameToUse = useMemo(() => {
     if (!name || name.replace(/\s/g, '') === '') return userName
     return name

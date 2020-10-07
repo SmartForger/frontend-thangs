@@ -41,6 +41,7 @@ const useStyles = createUseStyles(_theme => {
       flexDirection: 'row',
       alignItems: 'center',
       padding: '2px 0',
+      cursor: 'pointer',
     },
   }
 })

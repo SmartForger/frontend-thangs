@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useStoreon } from 'storeon/react'
 import { Spacer, TitleTertiary, FileCard, StatsBar, FileTable } from '@components'
 import { createUseStyles } from '@style'
+import classnames from 'classnames'
 import { useStarred } from '@hooks'
 
 const useStyles = createUseStyles(_theme => {
@@ -9,6 +10,10 @@ const useStyles = createUseStyles(_theme => {
     RecentFilesView: {
       display: 'flex',
       flexDirection: 'row',
+
+      '& > div': {
+        flex: 'none',
+      },
     },
     RecentFilesView_Content: {
       height: '100%',
@@ -22,22 +27,23 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const RecentFilesView = () => {
+const RecentFilesView = ({ className }) => {
   const c = useStyles({})
-  const { userActivity } = useStoreon('userActivity', 'thangs')
+  const { thangs } = useStoreon('thangs')
   const { starredModels = [] } = useStarred()
+  const { data: thangsData = {} } = thangs
   useEffect(() => {
     console.log('This is where I will fetch userActivity once there is an endpoint')
   }, [])
 
   return (
-    <main className={c.RecentFilesView}>
+    <main className={classnames(className, c.RecentFilesView)}>
       <Spacer size='2rem' />
       <div className={c.RecentFilesView_Content}>
         <Spacer size='2rem' />
         <TitleTertiary>Activity & Contributions</TitleTertiary>
         <Spacer size='2rem' />
-        <StatsBar userActivity={userActivity} />
+        <StatsBar userActivity={thangsData.userActivity} />
         <Spacer size='4rem' />
         <TitleTertiary>Starred</TitleTertiary>
         <Spacer size='1.5rem' />
@@ -54,7 +60,7 @@ const RecentFilesView = () => {
         <Spacer size='4rem' />
         <TitleTertiary>Recent</TitleTertiary>
         <Spacer size='2rem' />
-        <FileTable></FileTable>
+        <FileTable folders={thangsData.folders} models={thangsData.models}></FileTable>
       </div>
       <Spacer size='2rem' />
     </main>

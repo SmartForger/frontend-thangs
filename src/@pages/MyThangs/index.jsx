@@ -21,6 +21,7 @@ const useStyles = createUseStyles(_theme => {
     },
     MyThangs_ContentWrapper: {
       flex: 'auto',
+      overflow: 'scroll',
     },
   }
 })
@@ -38,11 +39,26 @@ const MyThangs = () => {
   const [currentView, setCurrentView] = useState({ name: 'recentFiles', data: {} })
   const c = useStyles({})
   const currentUserId = authenticationService.getCurrentUserId()
-  const { dispatch, thangs, folderNav } = useStoreon('thangs', 'folderNav')
-  const { isLoading, data: thangsData = {} } = thangs
+  const { dispatch, thangs, folders, folderNav } = useStoreon(
+    'thangs',
+    'folders',
+    'folderNav'
+  )
+  const { isLoading: isLoadingThangs, data: thangsData = {} } = thangs
+  const { isLoading: isLoadingFolders, data: foldersData = {} } = folders
+  const isLoading = useMemo(() => {
+    return isLoadingThangs || isLoadingFolders
+  }, [isLoadingFolders, isLoadingThangs])
   const WorkspaceView = useMemo(() => views[currentView.name], [currentView])
+  const myFolders = useMemo(() => {
+    if (!foldersData || !foldersData.length) return []
+    return foldersData.filter(
+      ({ creator }) => creator.id.toString() === currentUserId.toString()
+    )
+  }, [currentUserId, foldersData])
 
   useEffect(() => {
+    dispatch(types.FETCH_FOLDERS)
     dispatch(types.FETCH_THANGS, { id: currentUserId })
   }, [currentUserId, dispatch])
 
@@ -58,7 +74,7 @@ const MyThangs = () => {
     <div className={c.MyThangs}>
       <WorkspaceNavbar
         folderNav={folderNav}
-        folders={thangsData.folders}
+        folders={myFolders}
         handleCurrentView={handleCurrentView}
         handleNewModel={handleNewModel}
         isLoadingThangs={isLoading}
