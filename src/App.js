@@ -6,7 +6,6 @@ import {
   Auth,
   ConfirmPasswordReset,
   Landing,
-  Login,
   ModelDetail,
   MyThangs,
   Page404,
@@ -15,14 +14,12 @@ import {
   Profile,
   RedirectProfile,
   SearchResults,
-  Signup,
   TermsAndConditions,
   FolderPage,
 } from '@pages'
 import { ErrorBoundary } from './ErrorBoundary'
 import { AppAnalytics } from '@components'
 import {
-  routeRequiresAnon,
   routeRequiresAuth,
   routeRequiresKick,
   routeRedirectToProfile,
@@ -64,16 +61,10 @@ const App = () => {
                 exact
                 component={routeRequiresAuth(FolderPage)}
               />
-              <Route path='/login' component={routeRequiresAnon(Login)} />
               <Route path='/terms_and_conditions' exact component={TermsAndConditions} />
               <Route path='/privacy_policy' exact component={PrivacyPolicy} />
               <Route path='/about-us' exact component={AboutUs} />
               <Route path='/home' component={routeRedirectToProfile()} />
-              <Route
-                path='/signup/:registrationCode'
-                component={routeRequiresAnon(Signup)}
-                exact
-              />
               <Route exact path='/password_reset' component={PasswordReset} />
               <Route
                 path='/password_reset_confirm/:token'
