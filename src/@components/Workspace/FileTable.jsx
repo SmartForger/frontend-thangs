@@ -50,7 +50,7 @@ const Foldername = ({ name }) => {
   )
 }
 
-const FileTable = ({ files = [] }) => {
+const FileTable = ({ _files = [] }) => {
   const c = useStyles({})
 
   return (

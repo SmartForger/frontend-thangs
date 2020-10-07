@@ -55,8 +55,8 @@ const Folder = ({
   const newModels =
     models && models.length
       ? models.map(model => {
-          return { id: model, name: model }
-        })
+        return { id: model, name: model }
+      })
       : []
   const filteredSubfolders =
     subfolders && subfolders.length

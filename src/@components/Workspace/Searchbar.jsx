@@ -142,7 +142,6 @@ const SearchBar = () => {
   const { dispatch } = useStoreon()
   const history = useHistory()
   const c = useStyles({})
-  const t = useTranslations({})
   const [searchTerm, setSearchTerm] = useState(undefined)
 
   const handleSearchSubmit = e => {

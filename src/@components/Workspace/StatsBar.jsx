@@ -6,7 +6,6 @@ import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
 import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
 import { ReactComponent as SharedIcon } from '@svg/icon-shared.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
-import { MetadataSecondary } from '@components/Text/Metadata'
 
 const useStyles = createUseStyles(_theme => {
   return {
