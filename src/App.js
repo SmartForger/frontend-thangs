@@ -8,6 +8,7 @@ import {
   Landing,
   Login,
   ModelDetail,
+  MyThangs,
   Page404,
   PasswordReset,
   PrivacyPolicy,
@@ -78,6 +79,7 @@ const App = () => {
                 path='/password_reset_confirm/:token'
                 component={ConfirmPasswordReset}
               />
+              <Route exact path='/thangs' component={MyThangs} />
               <Route exact path='/profile/:id' component={Profile} />
               <Route
                 exact
