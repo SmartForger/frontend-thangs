@@ -9,7 +9,6 @@ const useStyles = createUseStyles(_theme => {
     RecentFilesView: {
       display: 'flex',
       flexDirection: 'row',
-      overflowY: 'scroll',
     },
     RecentFilesView_Content: {
       height: '100%',
