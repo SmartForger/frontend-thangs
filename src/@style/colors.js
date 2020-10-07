@@ -52,7 +52,7 @@ export const colors = {
     900: '#013047',
   },
   gold: {
-    100: '#ffde80',
+    100: '#FCF8EC',
     200: '#ffd560',
     300: '#ffcd40',
     400: '#ffc420',

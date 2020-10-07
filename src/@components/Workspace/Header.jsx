@@ -1,9 +1,9 @@
 import React from 'react'
-import { Divider, Spacer } from '@components'
+import { useStoreon } from 'storeon/react'
+import { Divider, Spacer, UserNav } from '@components'
 import SearchBar from './SearchBar'
+import { useCurrentUser } from '@hooks'
 import { createUseStyles } from '@style'
-
-import { ReactComponent as NotificationIcon } from '@svg/icon-notification.svg'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -22,6 +22,10 @@ const useStyles = createUseStyles(_theme => {
 
 const WorkspaceHeader = () => {
   const c = useStyles({})
+  const { dispatch } = useStoreon()
+  const {
+    atom: { isLoading, data: user },
+  } = useCurrentUser()
 
   return (
     <header className={c.WorkspaceHeader}>
@@ -30,7 +34,12 @@ const WorkspaceHeader = () => {
         <Spacer size='2rem' />
         <SearchBar />
         <div>
-          <NotificationIcon />
+          <UserNav
+            dispatch={dispatch}
+            isLoading={isLoading}
+            user={user}
+            showUser={true}
+          />
         </div>
       </div>
       <Spacer size='2rem' />

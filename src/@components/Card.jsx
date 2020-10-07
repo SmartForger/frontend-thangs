@@ -7,17 +7,23 @@ const useStyles = createUseStyles(theme => {
     Card: {
       display: 'flex',
       flexDirection: 'column',
-      background: theme.variables.colors.cardBackground,
+      background: ({ backgroundColor }) =>
+        backgroundColor || theme.variables.colors.cardBackground,
       border: `1px solid ${theme.colors.white[800]}`,
       borderRadius: '.5rem',
-      height: '14.75rem',
+      height: ({ size }) => size || '14.75rem',
+      width: ({ size }) => size || 'auto',
     },
   }
 })
 
-const Card = ({ children, className, ...props }) => {
+const Card = ({ children, className, onClick, ...props }) => {
   const c = useStyles(props)
-  return <div className={classnames(className, c.Card)}>{children}</div>
+  return (
+    <div className={classnames(className, c.Card)} onClick={onClick}>
+      {children}
+    </div>
+  )
 }
 
 export default Card

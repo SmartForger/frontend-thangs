@@ -55,7 +55,7 @@ const useStyles = createUseStyles(theme => {
         },
         '&:-webkit-autofill': {
           '-webkit-box-shadow': `0 0 0px 1000px ${theme.colors.white[600]} inset`,
-          '-webkit-text-fill-color': theme.colors.white[400],
+          '-webkit-text-fill-color': theme.colors.grey[300],
           border: 'none',
         },
       },
@@ -79,7 +79,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     SearchBar_FormInput_active: {
-      color: theme.colors.white[400],
+      color: theme.colors.grey[300],
       '&::placeholder': {
         color: 'transparent',
       },
@@ -163,7 +163,7 @@ const SearchBar = () => {
           />
           <TextInput
             name='search'
-            placeholder={t('header.searchPlaceholderText')}
+            placeholder={'Search to find your models'}
             className={classnames(c.SearchBar_FormInput, {
               [c.SearchBar_FormInput_active]: searchTerm,
             })}
