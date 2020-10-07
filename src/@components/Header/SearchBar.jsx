@@ -42,9 +42,9 @@ const useStyles = createUseStyles(theme => {
         lineHeight: '1.5rem',
 
         '&::placeholder': {
-          fontSize: '.875rem',
+          fontSize: '1rem',
           color: theme.colors.grey[500],
-          fontWeight: 600,
+          fontWeight: 500,
         },
         '&:focus, &:active': {
           background: theme.colors.purple[800],

@@ -100,9 +100,9 @@ const useStyles = createUseStyles(theme => {
         color: theme.colors.black[500],
 
         '&::placeholder': {
-          fontSize: '.875rem',
+          fontSize: '1rem',
           color: theme.colors.grey[500],
-          fontWeight: 600,
+          fontWeight: 500,
         },
         '&:focus, &:active': {
           color: theme.variables.colors.textInput,
