@@ -33,9 +33,13 @@ const StatsBar = ({ userActivity = {} }) => {
         <SharedIcon />
         <Spacer size={'1rem'} />
         <div>
-          <TitleTertiary>{userActivity.contributions || '-'}</TitleTertiary>
+          <TitleTertiary>
+            {typeof userActivity.contributions === 'number'
+              ? userActivity.contributions
+              : '-'}
+          </TitleTertiary>
           <Spacer size='.5rem' />
-          <MetadataPrimary>Contributon</MetadataPrimary>
+          <MetadataPrimary>Contributons</MetadataPrimary>
         </div>
       </div>
       <Spacer size={'3rem'} />
@@ -43,7 +47,9 @@ const StatsBar = ({ userActivity = {} }) => {
         <ModelIcon />
         <Spacer size={'1rem'} />
         <div>
-          <TitleTertiary>{userActivity.uploads || '-'}</TitleTertiary>
+          <TitleTertiary>
+            {typeof userActivity.uploads === 'number' ? userActivity.uploads : '-'}
+          </TitleTertiary>
           <Spacer size='.5rem' />
           <MetadataPrimary>Models</MetadataPrimary>
         </div>
@@ -53,7 +59,9 @@ const StatsBar = ({ userActivity = {} }) => {
         <HeartIcon />
         <Spacer size={'1rem'} />
         <div>
-          <TitleTertiary>{userActivity.likes || '-'}</TitleTertiary>
+          <TitleTertiary>
+            {typeof userActivity.likes === 'number' ? userActivity.likes : '-'}
+          </TitleTertiary>
           <Spacer size='.5rem' />
           <MetadataPrimary>Likes</MetadataPrimary>
         </div>
@@ -63,7 +71,9 @@ const StatsBar = ({ userActivity = {} }) => {
         <PlusIcon />
         <Spacer size={'1rem'} />
         <div>
-          <TitleTertiary>{userActivity.following || '-'}</TitleTertiary>
+          <TitleTertiary>
+            {typeof userActivity.following === 'number' ? userActivity.following : '-'}
+          </TitleTertiary>
           <Spacer size='.5rem' />
           <MetadataPrimary>Following</MetadataPrimary>
         </div>
@@ -73,7 +83,9 @@ const StatsBar = ({ userActivity = {} }) => {
         <PlusIcon />
         <Spacer size={'1rem'} />
         <div>
-          <TitleTertiary>{userActivity.followers || '-'}</TitleTertiary>
+          <TitleTertiary>
+            {typeof userActivity.followers === 'number' ? userActivity.followers : '-'}
+          </TitleTertiary>
           <Spacer size='.5rem' />
           <MetadataPrimary>Followers</MetadataPrimary>
         </div>

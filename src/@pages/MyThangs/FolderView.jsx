@@ -94,7 +94,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
                   if (index === 0) return null
                   if (index === folderPath.length - 1)
                     return <span className={c.FolderView_CurrentFolder}>{path}</span>
-                  return <>{`${path} /`}&nbsp;</>
+                  return <>{`${path}`}&nbsp;&nbsp;/&nbsp;&nbsp;</>
                 })}
               </MetadataPrimary>
             </>
@@ -121,7 +121,6 @@ const FolderView = ({
   handleEditModel = noop,
 }) => {
   const c = useStyles({})
-  debugger
   const folder = findFolderById(id, folders)
 
   if (!folder || R.isEmpty(folder)) {
@@ -132,7 +131,7 @@ const FolderView = ({
     )
   }
 
-  const { name = '' } = folder
+  const { name = '', models = [] } = folder
   const rootFolder = folder.root ? findFolderById(folder.root, folders) : folder
   const { subfolders = [] } = rootFolder
   const directSubFolders = subfolders.filter(
@@ -163,7 +162,7 @@ const FolderView = ({
         <TitleTertiary>Files</TitleTertiary>
         <Spacer size='2rem' />
         <FileTable
-          models={folder.models}
+          files={models}
           handleEditModel={handleEditModel}
           handleChangeFolder={handleChangeFolder}
         ></FileTable>

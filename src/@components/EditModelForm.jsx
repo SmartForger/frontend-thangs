@@ -61,6 +61,9 @@ const useStyles = createUseStyles(theme => {
       flexWrap: 'wrap',
       justifyContent: 'flex-end',
     },
+    EditModel_ModelName: {
+      wordBreak: 'break-all',
+    },
   }
 })
 const noop = () => null
@@ -222,7 +225,8 @@ const EditModelForm = ({
           <Spacer size='2rem' />
           <div>
             <MultiLineBodyText>
-              Are you sure you want to delete <b>{model.name}</b>?
+              Are you sure you want to delete{' '}
+              <b className={c.EditModel_ModelName}>{model.name}</b>?
             </MultiLineBodyText>
             <Spacer className={c.EditModel_MobileSpacer} size='2rem' />
             <div className={c.EditModelForm_ButtonRow}>
