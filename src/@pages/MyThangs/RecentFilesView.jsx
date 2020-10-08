@@ -17,8 +17,10 @@ const useStyles = createUseStyles(_theme => {
     },
     RecentFilesView_Content: {
       height: '100%',
+      width: '100%',
       display: 'flex',
       flexDirection: 'column',
+      minWidth: '56rem',
     },
     RecentFilesView_Starred: {
       display: 'flex',

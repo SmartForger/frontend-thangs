@@ -64,7 +64,9 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'row',
       justifyContent: 'flex-start',
     },
-    SearchBar_FormInput: {},
+    SearchBar_FormInput: {
+      width: '100%',
+    },
     SearchBar_FormInput_active: {
       color: theme.colors.grey[300],
       '&::placeholder': {

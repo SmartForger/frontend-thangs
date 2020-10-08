@@ -1,7 +1,6 @@
 import React from 'react'
 import { Card, SingleLineBodyText } from '@components'
 import { createUseStyles } from '@style'
-import { ReactComponent as StarIcon } from '@svg/icon-star-filled.svg'
 import { ReactComponent as FolderCardIcon } from '@svg/folder-card.svg'
 
 const useStyles = createUseStyles(theme => {
@@ -13,6 +12,7 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       justifyContent: 'space-evenly',
       position: 'relative',
+      flex: 'none',
     },
     FolderCard_UploadIcon: {
       padding: '1.5rem',
@@ -35,6 +35,7 @@ const noop = () => null
 const FolderCard = ({ onClick = noop, folder }) => {
   const c = useStyles({})
   const { name } = folder
+  const displayName = name.split('//').reverse()[0]
   return (
     <Card
       className={c.FolderCard_CardContents}
@@ -42,9 +43,9 @@ const FolderCard = ({ onClick = noop, folder }) => {
       backgroundColor={'#F7F7FB'}
       onClick={onClick}
     >
-      <StarIcon className={c.FolderCard_Star} />
+      {/* <StarIcon className={c.FolderCard_Star} /> */}
       <FolderCardIcon />
-      <SingleLineBodyText>{name}</SingleLineBodyText>
+      <SingleLineBodyText>{displayName}</SingleLineBodyText>
     </Card>
   )
 }

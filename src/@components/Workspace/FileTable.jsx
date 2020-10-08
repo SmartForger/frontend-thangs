@@ -17,11 +17,11 @@ const useStyles = createUseStyles(_theme => {
       flexDirection: 'row',
     },
     FileTable_Cell: {
-      width: '25%',
       display: 'flex',
       alignItems: 'center',
       flexDirection: 'row',
       cursor: 'pointer',
+      width: '20%',
     },
     FileTable_FileName: {
       width: '40%',
@@ -36,7 +36,7 @@ const useStyles = createUseStyles(_theme => {
       },
     },
     FileTable_Size: {
-      width: '12%',
+      width: '10%',
     },
   }
 })
@@ -70,7 +70,7 @@ const FileTableHeader = () => {
       >
         <MetadataSecondary>Filename</MetadataSecondary>
       </div>
-      <div className={classnames(c.FileTable_Cell, c.FileTable_Header)}>
+      <div className={classnames(c.FileTable_Cell, c.FileTable_Size, c.FileTable_Header)}>
         <MetadataSecondary>Changed</MetadataSecondary>
       </div>
       <div className={classnames(c.FileTable_Cell, c.FileTable_Size, c.FileTable_Header)}>
@@ -98,7 +98,7 @@ const FolderRow = ({ folder }) => {
         >
           <Foldername name={folder.name} />
         </div>
-        <div className={c.FileTable_Cell}>
+        <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
           <MetadataSecondary>{}</MetadataSecondary>
         </div>
         <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
@@ -126,7 +126,7 @@ const FileRow = ({ model }) => {
         <div className={classnames(c.FileTable_Cell, c.FileTable_FileName)}>
           <Filename name={model.name} />
         </div>
-        <div className={c.FileTable_Cell}>
+        <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
           <MetadataSecondary>
             {format(new Date(model.uploadDate), 'MMM d, Y')}
           </MetadataSecondary>

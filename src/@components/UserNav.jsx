@@ -65,7 +65,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const UserNav = ({ dispatch, isLoading, user, showUser }) => {
+const UserNav = ({ dispatch, isLoading, user, showUser, showUpload = true }) => {
   const c = useStyles()
   const t = useTranslations({})
 
@@ -107,12 +107,14 @@ const UserNav = ({ dispatch, isLoading, user, showUser }) => {
           dispatch={dispatch}
         />
         <Spacer size='1rem' />
-        <Button
-          className={classnames(c.UserNav_Button)}
-          onClick={() => dispatch(types.OPEN_OVERLAY, { overlayName: 'upload' })}
-        >
-          {t('header.uploadButtonText')}
-        </Button>
+        {showUpload && (
+          <Button
+            className={classnames(c.UserNav_Button)}
+            onClick={() => dispatch(types.OPEN_OVERLAY, { overlayName: 'upload' })}
+          >
+            {t('header.uploadButtonText')}
+          </Button>
+        )}
         <Spacer size='1rem' className={c.UserNav_DesktopOnly} />
       </div>
     )

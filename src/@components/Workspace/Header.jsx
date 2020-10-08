@@ -51,6 +51,7 @@ const WorkspaceHeader = () => {
             isLoading={isLoading}
             user={user}
             showUser={true}
+            showUpload={false}
           />
         </div>
       </div>

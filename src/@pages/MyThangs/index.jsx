@@ -51,7 +51,7 @@ const views = {
 }
 
 const MyThangs = () => {
-  const [currentView, setCurrentView] = useState({ name: 'recentFiles', data: {} })
+  const [currentView, setCurrentView] = useState({ name: 'folder', data: { id: '200' } })
   const c = useStyles({})
   const currentUserId = authenticationService.getCurrentUserId()
   const { dispatch, thangs, folders, folderNav } = useStoreon(
@@ -97,7 +97,7 @@ const MyThangs = () => {
       />
       <div className={c.MyThangs_ContentWrapper}>
         <WorkspaceHeader />
-        <WorkspaceView {...currentView.data} />
+        <WorkspaceView {...currentView.data} folders={folders} />
       </div>
     </div>
   )
