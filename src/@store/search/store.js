@@ -65,6 +65,7 @@ const getInitAtom = () => ({
     ...getStatusState(STATUSES.INIT),
     data: {},
   },
+  polygonCount: null,
 })
 
 export default store => {
@@ -165,6 +166,13 @@ export default store => {
         status: STATUSES.LOADING,
       })
 
+      store.on(types.CHANGE_SEARCH_RESULTS_STATUS, state => ({
+        searchResults: {
+          ...state.searchResults,
+          polygonCount: null,
+        },
+      }))
+
       let uploadedUrlData
 
       const emptyMatchesTypes = []
@@ -209,6 +217,13 @@ export default store => {
         })
         .then(({ data: uploadedData }) => {
           const { newPhyndexerId: phyndexerId, newModelId: modelId } = uploadedData
+
+          store.on(types.CHANGE_SEARCH_RESULTS_STATUS, state => ({
+            searchResults: {
+              ...state.searchResults,
+              polygonCount: uploadedData.polygonCount ? uploadedData.polygonCount : null,
+            },
+          }))
 
           store.dispatch(types.GET_RELATED_MODELS_VIA_PHYNDEXER, {
             newPhyndexerId: phyndexerId,

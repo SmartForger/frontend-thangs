@@ -8,6 +8,7 @@ import * as types from '@constants/storeEventTypes'
 import Scanner from '@components/Scanner'
 import ScannerPaper from '@components/ScannerPaper'
 import { useFileUpload } from '@hooks'
+import { numberWithCommas } from '../@utilities'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -29,19 +30,19 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const ScannerThumbnail = ({ model }) => {
+const ScannerThumbnail = ({ model, polygonCount }) => {
   const c = useStyles()
 
-  if (!model || R.isEmpty(model)) {
+  if (model) {
     return (
       <Scanner>
-        <ScannerPaper />
+        <ScannerPaper polygonCount={polygonCount} />
       </Scanner>
     )
   }
 
   return (
-    <Scanner>
+    <Scanner polygonCount={polygonCount}>
       <ModelThumbnail
         className={c.SearchByUpload_Thumbnail}
         name={model && model.name}
@@ -64,6 +65,10 @@ const SearchByUpload = () => {
   const history = useHistory()
   const { dispatch, searchResults, overlay } = useStoreon('searchResults', 'overlay')
   const { phyndexer, thangs, uploadData } = searchResults
+  const polygonCount =
+    searchResults &&
+    searchResults.polygonCount &&
+    numberWithCommas(searchResults.polygonCount)
   const overlayData = (overlay && overlay.overlayData) || {}
   const model = overlayData.model
   const initialFile = overlayData.file
@@ -129,9 +134,12 @@ const SearchByUpload = () => {
       <div className={c.SearchByUpload}>
         {phyndexer.isLoading || thangs.isLoading || model ? (
           !R.isNil(model) ? (
-            <ScannerThumbnail model={model} />
+            <ScannerThumbnail polygonCount={polygonCount} model={model} />
           ) : newFileName ? (
-            <ScannerThumbnail model={{ uploadedFile: newFileName }} />
+            <ScannerThumbnail
+              polygonCount={polygonCount}
+              model={{ uploadedFile: newFileName }}
+            />
           ) : (
             <UploadProgress />
           )

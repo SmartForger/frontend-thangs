@@ -1,5 +1,6 @@
 import React from 'react'
 import { createUseStyles } from '@style'
+import { MetadataPrimary, SingleLineBodyText } from './Text'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -7,8 +8,8 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      width: 150,
-      height: 190,
+      width: 170,
+      height: 220,
       background: theme.colors.white[100],
       border: `1px solid ${theme.colors.grey[100]}`,
       borderRadius: 4,
@@ -26,20 +27,18 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const ScannerPaper = ({ facetsAmount }) => {
+const ScannerPaper = ({ polygonCount }) => {
   const c = useStyles()
 
   return (
     <div className={c.ScannerPaper}>
       <div>
-        {facetsAmount ? (
+        {polygonCount ? (
           <>
-            <div>{facetsAmount}</div>
-            <p>facets scanned</p>
+            <SingleLineBodyText>{polygonCount}</SingleLineBodyText>
+            <MetadataPrimary>polygons scanned</MetadataPrimary>
           </>
-        ) : (
-          <div></div>
-        )}
+        ) : null}
       </div>
     </div>
   )

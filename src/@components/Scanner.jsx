@@ -76,7 +76,7 @@ const SvgCorner = () => (
   </svg>
 )
 
-const Scanner = ({ children }) => {
+const Scanner = ({ children, polygonCount }) => {
   const c = useStyles()
 
   return (
@@ -103,13 +103,14 @@ const Scanner = ({ children }) => {
           <SvgCorner />
         </div>
 
-        <div className={c.Scanner_content}>
-          {children}
-        </div>
+        <div className={c.Scanner_content}>{children}</div>
 
         <div className={c.Scanner_line}></div>
       </div>
       <div className={c.Scanner_detail}>Scanning geometry...</div>
+      {polygonCount ? (
+        <div className={c.Scanner_detail}>{polygonCount} polygons scanned</div>
+      ) : null}
     </div>
   )
 }

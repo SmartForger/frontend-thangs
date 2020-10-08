@@ -11,6 +11,7 @@ import {
   LabelText,
   LandingSearchBar,
 } from '@components'
+import { numberWithCommas } from '../../@utilities'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -56,10 +57,6 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
-
-const numberWithCommas = x => {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-}
 
 const LandingHero = ({ showSearchTextFlash, user }) => {
   const { dispatch, modelsStats } = useStoreon('modelsStats')

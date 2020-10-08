@@ -13,6 +13,10 @@ export const colorHexStringToRGBArray = colorStr =>
     .match(/.{1,2}/g)
     .map(tuple => parseInt(tuple, 16))
 
+export const numberWithCommas = x => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
 export const isProcessing = R.propEq('uploadStatus', 'PROCESSING')
 export const isError = R.propEq('uploadStatus', 'ERROR')
 export const isCompleted = R.propEq('uploadStatus', 'COMPLETED')
