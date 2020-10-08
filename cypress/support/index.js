@@ -15,7 +15,7 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
-import { goTo } from '../integration/common-methods'
+import { goTo } from '../utils/common-methods'
 import { PATH } from '../integration/constants'
 // import { authenticationService } from '../../src/@services';
 
