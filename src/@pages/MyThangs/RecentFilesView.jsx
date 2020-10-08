@@ -28,8 +28,12 @@ const useStyles = createUseStyles(_theme => {
     },
   }
 })
-
-const RecentFilesView = ({ className }) => {
+const noop = () => null
+const RecentFilesView = ({
+  className,
+  setCurrentView = noop,
+  handleEditModel = noop,
+}) => {
   const c = useStyles({})
   const { thangs } = useStoreon('thangs')
   const { starredModels = [] } = useStarred()
@@ -62,7 +66,11 @@ const RecentFilesView = ({ className }) => {
         <Spacer size='4rem' />
         <TitleTertiary>Recent</TitleTertiary>
         <Spacer size='2rem' />
-        <FileTable folders={thangsData.folders} models={thangsData.models}></FileTable>
+        <FileTable
+          folders={thangsData.folders}
+          models={thangsData.models}
+          handleModelClick={handleEditModel}
+        ></FileTable>
       </div>
       <Spacer size='2rem' />
     </main>

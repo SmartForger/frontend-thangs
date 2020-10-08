@@ -91,7 +91,8 @@ const WorkspaceNavbar = ({
   models,
   isLoadingThangs,
   handleNewModel = noop,
-  setThangsView = noop,
+  handleEditModel = noop,
+  setCurrentView = noop,
 }) => {
   const c = useStyles({})
   const [showFileExplorer, setShowFileExplorer] = useState(false)
@@ -113,6 +114,34 @@ const WorkspaceNavbar = ({
     showFileExplorer,
   ])
 
+  const handleChangeFolder = useCallback(
+    folderId => () => {
+      setCurrentView('folderView', { id: folderId })
+    },
+    [setCurrentView]
+  )
+
+  const handleClickRecent = useCallback(() => {
+    setCurrentView('recentFiles')
+  }, [setCurrentView])
+
+  const handleClickShared = useCallback(() => setCurrentView('sharedFiles'), [
+    setCurrentView,
+  ])
+
+  const handleClickLiked = useCallback(() => setCurrentView('likedModels'), [
+    setCurrentView,
+  ])
+
+  const handleClickSearches = useCallback(() => setCurrentView('savedSearches'), [
+    setCurrentView,
+  ])
+
+  const handleClickEdit = useCallback(() => setCurrentView('editProfile'), [
+    setCurrentView,
+  ])
+
+  const handleSignOut = useCallback(() => authenticationService.logout(), [])
   return (
     <nav className={c.WorkspaceNavbar}>
       <Spacer size={'2rem'} />
@@ -129,7 +158,13 @@ const WorkspaceNavbar = ({
           <div>
             <TitleTertiary>Files</TitleTertiary>
             <Spacer size={'2rem'} />
-            <NavLink Icon={FileIcon} label={'Files'} isFolder={true} folderId={'files'} />
+            <NavLink
+              Icon={FileIcon}
+              label={'Files'}
+              isFolder={true}
+              folderId={'files'}
+              onClick={handleChangeFolder('files')}
+            />
             <Spacer size={'1.5rem'} />
             {shouldShowFileExplorer && (
               <FileExplorer
@@ -139,31 +174,25 @@ const WorkspaceNavbar = ({
                 showOwned={true}
                 isLoading={isLoadingThangs}
                 showFile={showFileExplorer && folderNav.files}
+                handleChangeFolder={handleChangeFolder}
+                handleModelClick={handleEditModel}
               />
             )}
             <Spacer size={'2rem'} />
-            <NavLink
-              Icon={ClockIcon}
-              label={'Recent'}
-              onClick={useCallback(() => setThangsView('recentFiles'), [setThangsView])}
-            />
+            <NavLink Icon={ClockIcon} label={'Recent'} onClick={handleClickRecent} />
             <Spacer size={'1.5rem'} />
             <NavLink
               Icon={SharedIcon}
               label={'Shared Files'}
-              onClick={useCallback(() => setThangsView('sharedFiles'), [setThangsView])}
+              onClick={handleClickShared}
             />
             <Divider />
-            <NavLink
-              Icon={HeartIcon}
-              label={'Liked Models'}
-              onClick={useCallback(() => setThangsView('likedModels'), [setThangsView])}
-            />
+            <NavLink Icon={HeartIcon} label={'Liked Models'} onClick={handleClickLiked} />
             <Spacer size={'1.5rem'} />
             <NavLink
               Icon={SearchIcon}
               label={'Saved Searches'}
-              onClick={useCallback(() => setThangsView('savedSearches'), [setThangsView])}
+              onClick={handleClickSearches}
             />
             <Spacer size={'2rem'} />
           </div>
@@ -172,14 +201,10 @@ const WorkspaceNavbar = ({
             <NavLink
               Icon={SettingsIcon}
               label={'Profile Settings'}
-              onClick={useCallback(() => setThangsView('editProfile'), [setThangsView])}
+              onClick={handleClickEdit}
             />
             <Spacer size={'1.5rem'} />
-            <NavLink
-              Icon={SignOutIcon}
-              label={'Sign Out'}
-              onClick={useCallback(() => authenticationService.logout(), [])}
-            />
+            <NavLink Icon={SignOutIcon} label={'Sign Out'} onClick={handleSignOut} />
             <Spacer size={'2rem'} />
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Spacer, NavLink, Spinner } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -41,6 +41,8 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
+const noop = () => null
+
 const Folder = ({
   folder = {},
   folderNav,
@@ -48,6 +50,8 @@ const Folder = ({
   parentName,
   parentKey,
   subfolders: originalSubfolders,
+  handleChangeFolder = noop,
+  handleModelClick = noop,
 }) => {
   const c = useStyles({})
   const { id: folderId, name, subfolders = originalSubfolders, models } = folder
@@ -78,7 +82,13 @@ const Folder = ({
 
   return (
     <>
-      <NavLink Icon={FolderIcon} label={folderName} isFolder={true} folderId={folderId} />
+      <NavLink
+        Icon={FolderIcon}
+        label={folderName}
+        isFolder={true}
+        folderId={folderId}
+        onClick={handleChangeFolder(folderId)}
+      />
       <Spacer size={'1rem'} />
       {shouldShowFolderContents && (
         <div className={c.FileExplorer_Folder}>
@@ -88,20 +98,33 @@ const Folder = ({
             parentName={name}
             parentKey={parentKey}
             showFiles={showFolderContents && isExpanded}
+            handleChangeFolder={handleChangeFolder}
           />
-          <Models models={models} showModels={showFolderContents && isExpanded} />
+          <Models
+            models={models}
+            showModels={showFolderContents && isExpanded}
+            handleModelClick={handleModelClick}
+          />
         </div>
       )}
     </>
   )
 }
 
-const Subfolders = ({ folders, folderNav, parentName, parentKey, showFiles }) => {
+const Subfolders = ({
+  folders,
+  folderNav,
+  parentName,
+  parentKey,
+  showFiles,
+  handleChangeFolder = noop,
+  handleModelClick = noop,
+}) => {
   const c = useStyles({})
   return (
     <>
       {folders.map((folder, index) => {
-        const { id: folderId, name } = folder
+        const { id: folderId, name, is_public: isPublic } = folder
         const isExpanded = folderNav[folderId]
         const newParentKey = parentKey ? `${parentKey}_${index}` : index
         const subfolders = folders.filter(folder => folder.name !== name)
@@ -127,6 +150,8 @@ const Subfolders = ({ folders, folderNav, parentName, parentKey, showFiles }) =>
                 parentKey={newParentKey}
                 isExpanded={isExpanded}
                 subfolders={subfolders}
+                handleChangeFolder={handleChangeFolder}
+                handleModelClick={handleModelClick}
               />
             </div>
           </div>
@@ -136,22 +161,45 @@ const Subfolders = ({ folders, folderNav, parentName, parentKey, showFiles }) =>
   )
 }
 
-const RootFolders = ({ folders, folderNav }) => {
+const RootFolders = ({
+  folders,
+  folderNav,
+  handleChangeFolder = noop,
+  handleModelClick = noop,
+}) => {
   const filteredRootFolders = useMemo(() => {
     return folders.filter(folder => !folder.root && !folder.name.includes('//'))
   }, [folders])
 
   return (
-    <Subfolders folders={filteredRootFolders} folderNav={folderNav} showFiles={true} />
+    <Subfolders
+      folders={filteredRootFolders}
+      folderNav={folderNav}
+      showFiles={true}
+      handleChangeFolder={handleChangeFolder}
+      handleModelClick={handleModelClick}
+    />
   )
 }
 
-const Model = ({ model = {} }) => {
+const Model = ({ model = {}, handleModelClick = noop }) => {
   const { id, name } = model
-  return <NavLink Icon={FileIcon} label={name} isFolder={false} modelId={id} />
+  const handleClick = useCallback(() => {
+    handleModelClick(model)
+  }, [handleModelClick, model])
+
+  return (
+    <NavLink
+      Icon={FileIcon}
+      label={name}
+      isFolder={false}
+      modelId={id}
+      onClick={handleClick}
+    />
+  )
 }
 
-const Models = ({ models = [], showModels }) => {
+const Models = ({ models = [], showModels, handleModelClick = noop }) => {
   const c = useStyles({})
   return models.map((model, index) => {
     const { id } = model
@@ -164,14 +212,26 @@ const Models = ({ models = [], showModels }) => {
       >
         <Spacer size={'2rem'} />
         <div>
-          <Model key={`model_${index}`} model={model} />
+          <Model
+            key={`model_${index}`}
+            model={model}
+            handleModelClick={handleModelClick}
+          />
         </div>
       </div>
     )
   })
 }
 
-const FileExplorer = ({ folders = [], models = [], folderNav, isLoading, showFile }) => {
+const FileExplorer = ({
+  folders = [],
+  models = [],
+  folderNav,
+  isLoading,
+  showFile,
+  handleChangeFolder = noop,
+  handleModelClick = noop,
+}) => {
   const c = useStyles({})
 
   if (isLoading) {
@@ -182,8 +242,13 @@ const FileExplorer = ({ folders = [], models = [], folderNav, isLoading, showFil
 
   return (
     <div className={classnames(c.FileExplorer, { [c.FileExplorer__open]: showFile })}>
-      <RootFolders folders={folders} folderNav={folderNav} />
-      <Models models={models} showModels={showFile} />
+      <RootFolders
+        folders={folders}
+        folderNav={folderNav}
+        handleChangeFolder={handleChangeFolder}
+        handleModelClick={handleModelClick}
+      />
+      <Models models={models} showModels={showFile} handleModelClick={handleModelClick} />
     </div>
   )
 }

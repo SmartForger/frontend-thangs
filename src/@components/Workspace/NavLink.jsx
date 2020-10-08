@@ -57,6 +57,11 @@ const LinkContents = ({
   isFolder,
   label,
 }) => {
+  const onLinkClick = useCallback(() => {
+    handleArrowClick()
+    handleLinkClick()
+  }, [handleArrowClick, handleLinkClick])
+
   return (
     <>
       {isFolder && (
@@ -67,7 +72,7 @@ const LinkContents = ({
           <Spacer size={'.75rem'} />
         </div>
       )}
-      <div className={c.NavLink_Link} onClick={handleLinkClick}>
+      <div className={c.NavLink_Link} onClick={onLinkClick}>
         <Icon />
         <Spacer size={'.75rem'} />
         <SingleLineBodyText>{label}</SingleLineBodyText>
@@ -79,9 +84,7 @@ const LinkContents = ({
 const NavLink = ({ Icon, className, folderId, isFolder, label, onClick = noop, to }) => {
   const c = useStyles({})
   const { dispatch, folderNav } = useStoreon('folderNav')
-  const handleClick = () => {
-    onClick()
-  }
+
   const isExpanded = useMemo(() => folderNav[folderId], [folderId, folderNav])
 
   const handleArrowClick = useCallback(() => {
@@ -98,17 +101,19 @@ const NavLink = ({ Icon, className, folderId, isFolder, label, onClick = noop, t
         Icon={Icon}
         c={c}
         handleArrowClick={handleArrowClick}
+        handleLinkClick={onClick}
         isExpanded={isExpanded}
         isFolder={isFolder}
         label={label}
       />
     </Link>
   ) : (
-    <div className={classnames(className, c.NavLink)} onClick={handleClick} title={label}>
+    <div className={classnames(className, c.NavLink)} title={label}>
       <LinkContents
         Icon={Icon}
         c={c}
         handleArrowClick={handleArrowClick}
+        handleLinkClick={onClick}
         isExpanded={isExpanded}
         isFolder={isFolder}
         label={label}

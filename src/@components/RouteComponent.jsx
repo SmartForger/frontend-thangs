@@ -20,7 +20,7 @@ const routeRequiresAnon = (Component, redirectDest = '/') => {
   return AnonymousRouteComponent
 }
 
-const routeRequiresAuth = (Component, redirectDest = '/login') => {
+const routeRequiresAuth = (Component, redirectDest = '/') => {
   const AuthRouteComponent = (...props) => {
     const isAuthed = authenticationService.getCurrentUserId() !== undefined
     const currentPath = history.location.pathname

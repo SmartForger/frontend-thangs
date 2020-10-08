@@ -194,8 +194,8 @@ const googleAuth = async ({ code }) => {
 
 const logout = () => {
   clearCurrentUser()
-
   localStorage.clear()
+  window.location.href = '/'
 }
 
 const hasEndSlash = /\/$/

@@ -6,13 +6,13 @@ import { ReactComponent as FileCardIcon } from '@svg/file-card.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
-    FileCard: {},
-    FileCard_CardContents: {
+    FileCard: {
       borderRadius: '.5rem',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'space-evenly',
       position: 'relative',
+      cursor: 'pointer',
     },
     FileCard_UploadIcon: {
       padding: '1.5rem',
@@ -37,7 +37,7 @@ const FileCard = ({ onClick = noop, model }) => {
   const { name } = model
   return (
     <Card
-      className={c.FileCard_CardContents}
+      className={c.FileCards}
       size={'14.375rem'}
       backgroundColor={'#FCF8EC'}
       onClick={onClick}

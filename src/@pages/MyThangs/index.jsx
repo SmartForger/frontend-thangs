@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useStoreon } from 'storeon/react'
 import { WorkspaceHeader, WorkspaceNavbar } from '@components'
 import { authenticationService } from '@services'
+import { useOverlay } from '@hooks'
 import EditProfileView from './EditProfileView'
 import FolderView from './FolderView'
 import RecentFilesView from './RecentFilesView'
@@ -9,6 +10,7 @@ import SharedFilesView from './SharedFilesView'
 import LikedModelsView from './LikedModelsView'
 import SavedSearchesView from './SavedSearchesView'
 import { createUseStyles } from '@style'
+import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(_theme => {
@@ -38,12 +40,19 @@ const useStyles = createUseStyles(_theme => {
         border: '3px solid white',
       },
     },
+    Layout_blur: {
+      filter: 'blur(4px)',
+      OFilter: 'blur(4px)',
+      MsFilter: 'blur(4px)',
+      MozFilter: 'blur(4px)',
+      WebkitFilter: 'blur(4px)',
+    },
   }
 })
 
 const views = {
   editProfile: EditProfileView,
-  folder: FolderView,
+  folderView: FolderView,
   likedModels: LikedModelsView,
   recentFiles: RecentFilesView,
   savedSearches: SavedSearchesView,
@@ -51,7 +60,11 @@ const views = {
 }
 
 const MyThangs = () => {
-  const [currentView, setCurrentView] = useState({ name: 'folder', data: { id: '200' } })
+  const [currentView, setCurrentView] = useState({
+    name: 'folderView',
+    data: { id: '200' },
+  })
+  const { Overlay, isOverlayOpen, isOverlayHidden } = useOverlay()
   const c = useStyles({})
   const currentUserId = authenticationService.getCurrentUserId()
   const { dispatch, thangs, folders, folderNav } = useStoreon(
@@ -82,22 +95,48 @@ const MyThangs = () => {
   }, [dispatch])
 
   const handleCurrentView = useCallback((name, data = {}) => {
-    setCurrentView({ name, data })
+    setCurrentView({ name: name, data: data })
   }, [])
 
+  const handleEditModel = useCallback(
+    model => {
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'editModel',
+        overlayData: {
+          model,
+          user: model.owner,
+          animateIn: true,
+          windowed: true,
+        },
+      })
+    },
+    [dispatch]
+  )
+
   return (
-    <div className={c.MyThangs}>
+    <div
+      className={classnames(c.MyThangs, {
+        [c.Layout_blur]: isOverlayOpen && !isOverlayHidden,
+      })}
+    >
+      {Overlay}
       <WorkspaceNavbar
         folderNav={folderNav}
         folders={myFolders}
-        handleCurrentView={handleCurrentView}
+        setCurrentView={handleCurrentView}
         handleNewModel={handleNewModel}
+        handleEditModel={handleEditModel}
         isLoadingThangs={isLoading}
         models={thangsData.models}
       />
       <div className={c.MyThangs_ContentWrapper}>
         <WorkspaceHeader />
-        <WorkspaceView {...currentView.data} folders={folders} />
+        <WorkspaceView
+          {...currentView.data}
+          setCurrentView={handleCurrentView}
+          handleEditModel={handleEditModel}
+          folders={folders}
+        />
       </div>
     </div>
   )

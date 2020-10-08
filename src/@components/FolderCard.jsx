@@ -5,14 +5,14 @@ import { ReactComponent as FolderCardIcon } from '@svg/folder-card.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
-    FolderCard: {},
-    FolderCard_CardContents: {
+    FolderCard: {
       borderRadius: '.5rem',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'space-evenly',
       position: 'relative',
       flex: 'none',
+      cursor: 'pointer',
     },
     FolderCard_UploadIcon: {
       padding: '1.5rem',
@@ -38,7 +38,7 @@ const FolderCard = ({ onClick = noop, folder }) => {
   const displayName = name.split('//').reverse()[0]
   return (
     <Card
-      className={c.FolderCard_CardContents}
+      className={c.FolderCard}
       size={'14.375rem'}
       backgroundColor={'#F7F7FB'}
       onClick={onClick}

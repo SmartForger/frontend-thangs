@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
 import { Contributors, Divider, SingleLineBodyText, Spacer } from '@components'
@@ -40,6 +40,8 @@ const useStyles = createUseStyles(_theme => {
     },
   }
 })
+
+const noop = () => null
 
 const Filename = ({ name }) => {
   return (
@@ -117,10 +119,14 @@ const FolderRow = ({ folder }) => {
   )
 }
 
-const FileRow = ({ model }) => {
+const FileRow = ({ model, handleModelClick = noop }) => {
   const c = useStyles({})
+  const handleClick = useCallback(() => {
+    handleModelClick(model)
+  }, [handleModelClick, model])
+
   return (
-    <div>
+    <div onClick={handleClick}>
       <Spacer size={'1rem'} />
       <div className={c.FileTable_Row} title={model.name}>
         <div className={classnames(c.FileTable_Cell, c.FileTable_FileName)}>
@@ -153,16 +159,24 @@ const FileRow = ({ model }) => {
   )
 }
 
-const FileTable = ({ folders = [], models = [] }) => {
+const FileTable = ({ folders = [], models = [], handleModelClick = noop }) => {
   const c = useStyles({})
   const files = [folders, models].flat().sort((a, b) => a.uploadDate - b.uploadDate)
+  const handleClick = model => {
+    debugger
+    handleModelClick(model)
+  }
   return (
     <div className={c.FileTable}>
       <FileTableHeader />
       {files.map((file, index) => {
         return (
           <React.Fragment key={`FileRow_${index}`}>
-            {file.subfolders ? <FolderRow folder={file} /> : <FileRow model={file} />}
+            {file.subfolders ? (
+              <FolderRow folder={file} />
+            ) : (
+              <FileRow model={file} handleModelClick={handleClick} />
+            )}
           </React.Fragment>
         )
       })}
