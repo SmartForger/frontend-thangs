@@ -33,7 +33,7 @@ const useStyles = createUseStyles(_theme => {
 const ScannerThumbnail = ({ model, polygonCount }) => {
   const c = useStyles()
 
-  if (model) {
+  if (!model || R.isEmpty(model)) {
     return (
       <Scanner>
         <ScannerPaper polygonCount={polygonCount} />
