@@ -69,10 +69,7 @@ const useFileUpload = ({
     ({ children }) => {
       return (
         <div {...getRootProps({ onClick: preventClickingWhileFull })}>
-          <input
-            {...getInputProps({ multiple: false })}
-            data-cy='file-upload'
-          />
+          <input {...getInputProps({ multiple: false })} name='upload' />
           {children}
         </div>
       )
