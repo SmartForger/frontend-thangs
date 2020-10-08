@@ -1,18 +1,7 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import * as R from 'ramda'
-import {
-  Button,
-  FileTable,
-  FolderCard,
-  MetadataPrimary,
-  Spacer,
-  Spinner,
-  TitleTertiary,
-} from '@components'
+import { FileTable, FolderCard, Spacer, TitleTertiary } from '@components'
 import { createUseStyles } from '@style'
-import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
-import { ReactComponent as InviteIcon } from '@svg/icon-invite.svg'
-import { ReactComponent as StarIcon } from '@svg/icon-star-filled.svg'
 import classnames from 'classnames'
 
 const useStyles = createUseStyles(theme => {
@@ -62,19 +51,34 @@ const noop = () => null
 
 const AllFilesView = ({
   className,
-  setCurrentView = noop,
+  handleChangeFolder = noop,
   handleEditModel = noop,
-  folders,
+  myFolders: folders,
   models,
 }) => {
   const c = useStyles({})
 
-  const handleChangeFolder = useCallback(
-    folderId => {
-      setCurrentView('folderView', { id: folderId })
-    },
-    [setCurrentView]
-  )
+  const sortedFolders = useMemo(() => {
+    return !R.isEmpty(folders)
+      ? folders
+          .sort((a, b) => {
+            if (a.name < b.name) return -1
+            else if (a.name > b.name) return 1
+            return 0
+          })
+          .filter(folder => !folder.name.includes('//'))
+      : []
+  }, [folders])
+
+  const sortedModels = useMemo(() => {
+    return !R.isEmpty(models)
+      ? models.sort((a, b) => {
+          if (a.name < b.name) return -1
+          else if (a.name > b.name) return 1
+          return 0
+        })
+      : []
+  }, [models])
 
   return (
     <main className={classnames(className, c.AllFilesView)}>
@@ -85,9 +89,9 @@ const AllFilesView = ({
         <Spacer size='4rem' />
         <TitleTertiary>Folders</TitleTertiary>
         <div className={c.AllFilesView_Folders}>
-          {folders.map((folder, index) => (
+          {sortedFolders.map((folder, index) => (
             <React.Fragment key={`folder=${folder.id}_${index}`}>
-              <FolderCard folder={folder} onClick={() => handleChangeFolder(folder.id)} />
+              <FolderCard folder={folder} handleClick={handleChangeFolder} />
               <Spacer size={'2rem'} />
             </React.Fragment>
           ))}
@@ -95,7 +99,11 @@ const AllFilesView = ({
         <Spacer size='4rem' />
         <TitleTertiary>Files</TitleTertiary>
         <Spacer size='2rem' />
-        <FileTable models={models} handleEditModel={handleEditModel}></FileTable>
+        <FileTable
+          files={sortedModels}
+          handleEditModel={handleEditModel}
+          handleChangeFolder={handleChangeFolder}
+        ></FileTable>
       </div>
       <Spacer size='2rem' />
     </main>

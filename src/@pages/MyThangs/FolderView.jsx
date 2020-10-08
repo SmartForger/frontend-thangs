@@ -70,8 +70,8 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
   const rootFolderName = folderPath[0]
 
   const handleClickRoot = useCallback(() => {
-    setFolder(rootFolder.id)
-  }, [rootFolder.id, setFolder])
+    if (folder.id !== rootFolder.id) setFolder(rootFolder)
+  }, [folder.id, rootFolder, setFolder])
 
   return (
     <div className={c.FolderView_Row}>
@@ -121,6 +121,7 @@ const FolderView = ({
   handleEditModel = noop,
 }) => {
   const c = useStyles({})
+  debugger
   const folder = findFolderById(id, folders)
 
   if (!folder || R.isEmpty(folder)) {
@@ -153,10 +154,7 @@ const FolderView = ({
         <div className={c.FolderView_Folders}>
           {directSubFolders.map((subfolder, index) => (
             <React.Fragment key={`folder=${subfolder.id}_${index}`}>
-              <FolderCard
-                folder={subfolder}
-                onClick={() => handleChangeFolder(subfolder.id)}
-              />
+              <FolderCard folder={subfolder} handleClick={handleChangeFolder} />
               <Spacer size={'2rem'} />
             </React.Fragment>
           ))}
@@ -164,7 +162,11 @@ const FolderView = ({
         <Spacer size='4rem' />
         <TitleTertiary>Files</TitleTertiary>
         <Spacer size='2rem' />
-        <FileTable models={folder.models} handleEditModel={handleEditModel}></FileTable>
+        <FileTable
+          models={folder.models}
+          handleEditModel={handleEditModel}
+          handleChangeFolder={handleChangeFolder}
+        ></FileTable>
       </div>
       <Spacer size='2rem' />
     </main>

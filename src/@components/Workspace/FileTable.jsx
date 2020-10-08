@@ -7,6 +7,7 @@ import classnames from 'classnames'
 import { MetadataSecondary } from '@components/Text/Metadata'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
+import { formatBytes } from '@utilities'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -22,6 +23,10 @@ const useStyles = createUseStyles(_theme => {
       flexDirection: 'row',
       cursor: 'pointer',
       width: '20%',
+
+      '& svg': {
+        flex: 'none',
+      },
     },
     FileTable_FileName: {
       width: '40%',
@@ -53,7 +58,7 @@ const Filename = ({ name }) => {
   )
 }
 
-const Foldername = ({ name }) => {
+const FolderName = ({ name }) => {
   return (
     <>
       <FolderIcon />
@@ -74,6 +79,9 @@ const FileTableHeader = () => {
       </div>
       <div className={classnames(c.FileTable_Cell, c.FileTable_Size, c.FileTable_Header)}>
         <MetadataSecondary>Changed</MetadataSecondary>
+      </div>
+      <div className={classnames(c.FileTable_Cell, c.FileTable_Size, c.FileTable_Header)}>
+        <MetadataSecondary>File Type</MetadataSecondary>
       </div>
       <div className={classnames(c.FileTable_Cell, c.FileTable_Size, c.FileTable_Header)}>
         <MetadataSecondary>Size</MetadataSecondary>
@@ -102,10 +110,13 @@ const FolderRow = ({ folder, handleFolderClick = noop }) => {
           className={classnames(c.FileTable_Cell, c.FileTable_FileName)}
           title={folder.name}
         >
-          <Foldername name={folder.name} />
+          <FolderName name={folder.name} />
         </div>
         <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
-          <MetadataSecondary>{}</MetadataSecondary>
+          <MetadataSecondary>-</MetadataSecondary>
+        </div>
+        <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
+          <MetadataSecondary>-</MetadataSecondary>
         </div>
         <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
           <MetadataSecondary>-</MetadataSecondary>
@@ -113,9 +124,7 @@ const FolderRow = ({ folder, handleFolderClick = noop }) => {
         <div className={c.FileTable_Cell}>
           <Contributors users={folder.members} />
         </div>
-        <div className={c.FileTable_Cell}>
-          <Link>-</Link>
-        </div>
+        <div className={c.FileTable_Cell}>-</div>
       </div>
       <Spacer size={'1rem'} />
       <Divider spacing='0' />
@@ -142,7 +151,10 @@ const FileRow = ({ model, handleModelClick = noop }) => {
           </MetadataSecondary>
         </div>
         <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
-          <MetadataSecondary>TBD</MetadataSecondary>
+          <MetadataSecondary>{model.fileType}</MetadataSecondary>
+        </div>
+        <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
+          <MetadataSecondary>{formatBytes(model.size)}</MetadataSecondary>
         </div>
         <div className={c.FileTable_Cell}>
           <Contributors users={[model.owner]} />
@@ -166,19 +178,6 @@ const FileRow = ({ model, handleModelClick = noop }) => {
 const FileTable = ({ files = [], handleChangeFolder = noop, handleEditModel = noop }) => {
   const c = useStyles({})
 
-  const handleFolderClick = useCallback(
-    folder => {
-      handleChangeFolder(folder)
-    },
-    [handleChangeFolder]
-  )
-
-  const handleModelClick = useCallback(
-    model => {
-      handleEditModel(model)
-    },
-    [handleEditModel]
-  )
   return (
     <div className={c.FileTable}>
       <FileTableHeader />
@@ -186,9 +185,9 @@ const FileTable = ({ files = [], handleChangeFolder = noop, handleEditModel = no
         return (
           <React.Fragment key={`FileRow_${index}`}>
             {file.subfolders ? (
-              <FolderRow folder={file} handleFolderClick={handleFolderClick} />
+              <FolderRow folder={file} handleFolderClick={handleChangeFolder} />
             ) : (
-              <FileRow model={file} handleModelClick={handleModelClick} />
+              <FileRow model={file} handleModelClick={handleEditModel} />
             )}
           </React.Fragment>
         )

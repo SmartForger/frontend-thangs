@@ -100,8 +100,8 @@ const MyThangs = () => {
   }, [])
 
   const handleChangeFolder = useCallback(
-    folderId => {
-      setCurrentView('folderView', { id: folderId })
+    folder => {
+      setCurrentView({ name: 'folderView', data: { id: folder.id } })
     },
     [setCurrentView]
   )
@@ -145,6 +145,7 @@ const MyThangs = () => {
           handleEditModel={handleEditModel}
           handleChangeFolder={handleChangeFolder}
           folders={folders.data}
+          myFolders={myFolders}
           models={thangsData.models}
         />
       </div>
