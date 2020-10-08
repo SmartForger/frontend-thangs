@@ -38,8 +38,8 @@ const RecentFilesView = ({
   const files = useMemo(() => {
     return !R.isEmpty(thangsData)
       ? [thangsData.folders, thangsData.models]
-          .flat()
-          .sort((a, b) => a.uploadDate - b.uploadDate)
+        .flat()
+        .sort((a, b) => a.uploadDate - b.uploadDate)
       : []
   }, [thangsData])
   return (

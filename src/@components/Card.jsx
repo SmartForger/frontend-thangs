@@ -12,7 +12,7 @@ const useStyles = createUseStyles(theme => {
       border: `1px solid ${theme.colors.white[800]}`,
       borderRadius: '.5rem',
       height: ({ size }) => size || '14.75rem',
-      width: ({ size }) => size || 'auto',
+      width: ({ size }) => size || undefined,
     },
   }
 })

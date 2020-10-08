@@ -37,7 +37,7 @@ const Contributors = ({ fileId, users = [] }) => {
   return (
     <div className={c.Contributors}>
       {users.map((user, index) => {
-        if (!user.profile || !user.profile.avatarUrl) return null
+        if (!user.fullName && !user.username) return null
         if (index === 2 && users.length > 3)
           return (
             <div key={`${fileId}_${user.id}_${index}`} className={c.Contributors_Avatar}>

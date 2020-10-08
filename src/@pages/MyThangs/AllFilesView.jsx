@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import * as R from 'ramda'
 import { FileTable, FolderCard, Spacer, TitleTertiary } from '@components'
 import { createUseStyles } from '@style'
@@ -61,22 +61,22 @@ const AllFilesView = ({
   const sortedFolders = useMemo(() => {
     return !R.isEmpty(folders)
       ? folders
-          .sort((a, b) => {
-            if (a.name < b.name) return -1
-            else if (a.name > b.name) return 1
-            return 0
-          })
-          .filter(folder => !folder.name.includes('//'))
+        .sort((a, b) => {
+          if (a.name < b.name) return -1
+          else if (a.name > b.name) return 1
+          return 0
+        })
+        .filter(folder => !folder.name.includes('//'))
       : []
   }, [folders])
 
   const sortedModels = useMemo(() => {
     return !R.isEmpty(models)
       ? models.sort((a, b) => {
-          if (a.name < b.name) return -1
-          else if (a.name > b.name) return 1
-          return 0
-        })
+        if (a.name < b.name) return -1
+        else if (a.name > b.name) return 1
+        return 0
+      })
       : []
   }, [models])
 

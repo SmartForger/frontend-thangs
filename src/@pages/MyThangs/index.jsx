@@ -86,6 +86,13 @@ const MyThangs = () => {
     )
   }, [currentUserId, foldersData])
 
+  const sharedFolders = useMemo(() => {
+    if (!foldersData || !foldersData.length) return []
+    return foldersData.filter(
+      ({ creator }) => creator.id.toString() !== currentUserId.toString()
+    )
+  }, [currentUserId, foldersData])
+
   useEffect(() => {
     dispatch(types.FETCH_FOLDERS)
     dispatch(types.FETCH_THANGS, { id: currentUserId })
@@ -146,7 +153,9 @@ const MyThangs = () => {
           handleChangeFolder={handleChangeFolder}
           folders={folders.data}
           myFolders={myFolders}
+          sharedFolders={sharedFolders}
           models={thangsData.models}
+          userId={currentUserId}
         />
       </div>
     </div>

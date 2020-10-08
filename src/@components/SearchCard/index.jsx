@@ -107,7 +107,6 @@ const SearchCard = ({ className, search = {} }) => {
 
   return (
     <div className={classnames(className, c.SearchCard)}>
-      <Spacer size='1.5rem' />
       <div className={c.SearchCard_Content}>
         <Spacer size='1.5rem' />
         <div className={c.SearchCard_TopRow}>
@@ -130,7 +129,6 @@ const SearchCard = ({ className, search = {} }) => {
           </Link>
           <span className={c.SearchCard_RemoveButton} onClick={handleDelete}>
             <MultiLineBodyText>
-              Remove
               <Spacer size={'.5rem'} />
               <TrashCanIcon />
             </MultiLineBodyText>

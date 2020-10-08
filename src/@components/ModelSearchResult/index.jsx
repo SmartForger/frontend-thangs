@@ -23,8 +23,8 @@ const useStyles = createUseStyles(theme => {
       marginRight: '1.5rem',
 
       [md]: {
-        width: '8.25rem',
-        height: '8.75rem !important',
+        width: '13.25rem',
+        height: '13.25rem !important',
       },
 
       '&:after': {
