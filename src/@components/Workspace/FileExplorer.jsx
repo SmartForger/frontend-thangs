@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import * as R from 'ramda'
 import { Spacer, NavLink, Spinner } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -121,10 +122,19 @@ const Subfolders = ({
   handleModelClick = noop,
 }) => {
   const c = useStyles({})
+  const files = useMemo(() => {
+    return !R.isEmpty(folders)
+      ? folders.sort((a, b) => {
+          if (a.name < b.name) return -1
+          else if (a.name > b.name) return 1
+          return 0
+        })
+      : []
+  }, [folders])
   return (
     <>
-      {folders.map((folder, index) => {
-        const { id: folderId, name, is_public: isPublic } = folder
+      {files.map((folder, index) => {
+        const { id: folderId, name } = folder
         const isExpanded = folderNav[folderId]
         const newParentKey = parentKey ? `${parentKey}_${index}` : index
         const subfolders = folders.filter(folder => folder.name !== name)
@@ -201,7 +211,16 @@ const Model = ({ model = {}, handleModelClick = noop }) => {
 
 const Models = ({ models = [], showModels, handleModelClick = noop }) => {
   const c = useStyles({})
-  return models.map((model, index) => {
+  const files = useMemo(() => {
+    return !R.isEmpty(models)
+      ? models.sort((a, b) => {
+          if (a.name < b.name) return -1
+          else if (a.name > b.name) return 1
+          return 0
+        })
+      : []
+  }, [models])
+  return files.map((model, index) => {
     const { id } = model
     return (
       <div

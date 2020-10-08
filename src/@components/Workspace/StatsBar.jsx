@@ -24,7 +24,7 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const StatsBar = () => {
+const StatsBar = ({ userActivity = {} }) => {
   const c = useStyles({})
 
   return (
@@ -33,7 +33,7 @@ const StatsBar = () => {
         <SharedIcon />
         <Spacer size={'1rem'} />
         <div>
-          <TitleTertiary>2,293</TitleTertiary>
+          <TitleTertiary>{userActivity.contributions || '-'}</TitleTertiary>
           <Spacer size='.5rem' />
           <MetadataPrimary>Contributon</MetadataPrimary>
         </div>
@@ -43,7 +43,7 @@ const StatsBar = () => {
         <ModelIcon />
         <Spacer size={'1rem'} />
         <div>
-          <TitleTertiary>231</TitleTertiary>
+          <TitleTertiary>{userActivity.uploads || '-'}</TitleTertiary>
           <Spacer size='.5rem' />
           <MetadataPrimary>Models</MetadataPrimary>
         </div>
@@ -53,7 +53,7 @@ const StatsBar = () => {
         <HeartIcon />
         <Spacer size={'1rem'} />
         <div>
-          <TitleTertiary>1,295</TitleTertiary>
+          <TitleTertiary>{userActivity.likes || '-'}</TitleTertiary>
           <Spacer size='.5rem' />
           <MetadataPrimary>Likes</MetadataPrimary>
         </div>
@@ -63,7 +63,7 @@ const StatsBar = () => {
         <PlusIcon />
         <Spacer size={'1rem'} />
         <div>
-          <TitleTertiary>239</TitleTertiary>
+          <TitleTertiary>{userActivity.following || '-'}</TitleTertiary>
           <Spacer size='.5rem' />
           <MetadataPrimary>Following</MetadataPrimary>
         </div>
@@ -73,7 +73,7 @@ const StatsBar = () => {
         <PlusIcon />
         <Spacer size={'1rem'} />
         <div>
-          <TitleTertiary>23</TitleTertiary>
+          <TitleTertiary>{userActivity.followers || '-'}</TitleTertiary>
           <Spacer size='.5rem' />
           <MetadataPrimary>Followers</MetadataPrimary>
         </div>

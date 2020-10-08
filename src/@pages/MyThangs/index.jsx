@@ -3,6 +3,7 @@ import { useStoreon } from 'storeon/react'
 import { WorkspaceHeader, WorkspaceNavbar } from '@components'
 import { authenticationService } from '@services'
 import { useOverlay } from '@hooks'
+import AllFilesView from './AllFilesView'
 import EditProfileView from './EditProfileView'
 import FolderView from './FolderView'
 import RecentFilesView from './RecentFilesView'
@@ -51,6 +52,7 @@ const useStyles = createUseStyles(_theme => {
 })
 
 const views = {
+  allFilesView: AllFilesView,
   editProfile: EditProfileView,
   folderView: FolderView,
   likedModels: LikedModelsView,
@@ -61,8 +63,7 @@ const views = {
 
 const MyThangs = () => {
   const [currentView, setCurrentView] = useState({
-    name: 'folderView',
-    data: { id: '200' },
+    name: 'recentFiles',
   })
   const { Overlay, isOverlayOpen, isOverlayHidden } = useOverlay()
   const c = useStyles({})
@@ -97,6 +98,13 @@ const MyThangs = () => {
   const handleCurrentView = useCallback((name, data = {}) => {
     setCurrentView({ name: name, data: data })
   }, [])
+
+  const handleChangeFolder = useCallback(
+    folderId => {
+      setCurrentView('folderView', { id: folderId })
+    },
+    [setCurrentView]
+  )
 
   const handleEditModel = useCallback(
     model => {
@@ -135,7 +143,9 @@ const MyThangs = () => {
           {...currentView.data}
           setCurrentView={handleCurrentView}
           handleEditModel={handleEditModel}
-          folders={folders}
+          handleChangeFolder={handleChangeFolder}
+          folders={folders.data}
+          models={thangsData.models}
         />
       </div>
     </div>

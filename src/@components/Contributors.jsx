@@ -21,9 +21,11 @@ const useStyles = createUseStyles(theme => {
         fontFamily: 'Montserrat',
         background: theme.colors.purple[900],
         borderRadius: '100%',
+        border: `1px solid ${theme.colors.white[400]}`,
 
         '& span': {
           color: theme.colors.white[400],
+          border: 'none',
         },
       },
     },

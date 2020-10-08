@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react'
+import React, { useMemo } from 'react'
+import * as R from 'ramda'
 import { useStoreon } from 'storeon/react'
 import { Spacer, TitleTertiary, FileCard, StatsBar, FileTable } from '@components'
 import { createUseStyles } from '@style'
@@ -10,10 +11,6 @@ const useStyles = createUseStyles(_theme => {
     RecentFilesView: {
       display: 'flex',
       flexDirection: 'row',
-
-      '& > div': {
-        flex: 'none',
-      },
     },
     RecentFilesView_Content: {
       height: '100%',
@@ -31,17 +28,20 @@ const useStyles = createUseStyles(_theme => {
 const noop = () => null
 const RecentFilesView = ({
   className,
-  setCurrentView = noop,
+  handleChangeFolder = noop,
   handleEditModel = noop,
 }) => {
   const c = useStyles({})
   const { thangs } = useStoreon('thangs')
   const { starredModels = [] } = useStarred()
   const { data: thangsData = {} } = thangs
-  useEffect(() => {
-    console.log('This is where I will fetch userActivity once there is an endpoint')
-  }, [])
-
+  const files = useMemo(() => {
+    return !R.isEmpty(thangsData)
+      ? [thangsData.folders, thangsData.models]
+          .flat()
+          .sort((a, b) => a.uploadDate - b.uploadDate)
+      : []
+  }, [thangsData])
   return (
     <main className={classnames(className, c.RecentFilesView)}>
       <Spacer size='2rem' />
@@ -49,7 +49,7 @@ const RecentFilesView = ({
         <Spacer size='2rem' />
         <TitleTertiary>Activity & Contributions</TitleTertiary>
         <Spacer size='2rem' />
-        <StatsBar userActivity={thangsData.userActivity} />
+        <StatsBar userActivity={thangsData.activity} />
         <Spacer size='4rem' />
         <TitleTertiary>Starred</TitleTertiary>
         <Spacer size='1.5rem' />
@@ -57,7 +57,7 @@ const RecentFilesView = ({
           {starredModels.map((model, index) => {
             return (
               <React.Fragment key={`starred_${index}`}>
-                <FileCard model={{ name: model.name }} />
+                <FileCard model={model} handleClick={handleEditModel} />
                 <Spacer size='2rem' />
               </React.Fragment>
             )
@@ -67,9 +67,9 @@ const RecentFilesView = ({
         <TitleTertiary>Recent</TitleTertiary>
         <Spacer size='2rem' />
         <FileTable
-          folders={thangsData.folders}
-          models={thangsData.models}
-          handleModelClick={handleEditModel}
+          files={files}
+          handleChangeFolder={handleChangeFolder}
+          handleEditModel={handleEditModel}
         ></FileTable>
       </div>
       <Spacer size='2rem' />

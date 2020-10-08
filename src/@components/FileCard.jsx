@@ -1,5 +1,5 @@
-import React from 'react'
-import { Card, SingleLineBodyText } from '@components'
+import React, { useCallback } from 'react'
+import { Card, SingleLineBodyText, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as StarIcon } from '@svg/icon-star-filled.svg'
 import { ReactComponent as FileCardIcon } from '@svg/file-card.svg'
@@ -32,19 +32,27 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-const FileCard = ({ onClick = noop, model }) => {
+const FileCard = ({ handleClick = noop, model }) => {
   const c = useStyles({})
   const { name } = model
+
+  const handleModelClick = useCallback(() => {
+    handleClick(model)
+  }, [handleClick, model])
+
   return (
     <Card
-      className={c.FileCards}
+      className={c.FileCard}
       size={'14.375rem'}
       backgroundColor={'#FCF8EC'}
-      onClick={onClick}
+      onClick={handleModelClick}
     >
       <StarIcon className={c.FileCard_Star} />
+      <Spacer size={'3rem'} />
       <FileCardIcon />
+      <Spacer size={'2.75rem'} />
       <SingleLineBodyText>{name}</SingleLineBodyText>
+      <Spacer size={'2.125rem'} />
     </Card>
   )
 }

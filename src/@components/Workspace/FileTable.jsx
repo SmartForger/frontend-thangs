@@ -88,10 +88,14 @@ const FileTableHeader = () => {
   )
 }
 
-const FolderRow = ({ folder }) => {
+const FolderRow = ({ folder, handleFolderClick = noop }) => {
   const c = useStyles({})
+  const handleClick = useCallback(() => {
+    handleFolderClick(folder)
+  }, [handleFolderClick, folder])
+
   return (
-    <div>
+    <div onClick={handleClick}>
       <Spacer size={'1rem'} />
       <div className={c.FileTable_Row}>
         <div
@@ -159,13 +163,22 @@ const FileRow = ({ model, handleModelClick = noop }) => {
   )
 }
 
-const FileTable = ({ folders = [], models = [], handleModelClick = noop }) => {
+const FileTable = ({ files = [], handleChangeFolder = noop, handleEditModel = noop }) => {
   const c = useStyles({})
-  const files = [folders, models].flat().sort((a, b) => a.uploadDate - b.uploadDate)
-  const handleClick = model => {
-    debugger
-    handleModelClick(model)
-  }
+
+  const handleFolderClick = useCallback(
+    folder => {
+      handleChangeFolder(folder)
+    },
+    [handleChangeFolder]
+  )
+
+  const handleModelClick = useCallback(
+    model => {
+      handleEditModel(model)
+    },
+    [handleEditModel]
+  )
   return (
     <div className={c.FileTable}>
       <FileTableHeader />
@@ -173,9 +186,9 @@ const FileTable = ({ folders = [], models = [], handleModelClick = noop }) => {
         return (
           <React.Fragment key={`FileRow_${index}`}>
             {file.subfolders ? (
-              <FolderRow folder={file} />
+              <FolderRow folder={file} handleFolderClick={handleFolderClick} />
             ) : (
-              <FileRow model={file} handleModelClick={handleClick} />
+              <FileRow model={file} handleModelClick={handleModelClick} />
             )}
           </React.Fragment>
         )

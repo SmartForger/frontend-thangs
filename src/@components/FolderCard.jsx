@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, SingleLineBodyText } from '@components'
+import { Card, SingleLineBodyText, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as FolderCardIcon } from '@svg/folder-card.svg'
 
@@ -44,8 +44,11 @@ const FolderCard = ({ onClick = noop, folder }) => {
       onClick={onClick}
     >
       {/* <StarIcon className={c.FolderCard_Star} /> */}
+      <Spacer size={'3rem'} />
       <FolderCardIcon />
+      <Spacer size={'2.75rem'} />
       <SingleLineBodyText>{displayName}</SingleLineBodyText>
+      <Spacer size={'2.125rem'} />
     </Card>
   )
 }

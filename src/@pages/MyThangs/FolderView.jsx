@@ -37,7 +37,6 @@ const useStyles = createUseStyles(theme => {
       flexWrap: 'wrap',
 
       '& > div': {
-        flex: 'none',
         marginTop: '1.5rem',
       },
     },
@@ -112,25 +111,17 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
 }
 
 const findFolderById = (id, folders) => {
-  if (id === 'files') return folders
-  return R.find(R.propEq('id', id.toString()))(folders.data) || {}
+  return R.find(R.propEq('id', id.toString()))(folders) || {}
 }
 const FolderView = ({
   className,
   id,
   folders,
-  setCurrentView = noop,
+  handleChangeFolder = noop,
   handleEditModel = noop,
 }) => {
   const c = useStyles({})
   const folder = findFolderById(id, folders)
-
-  const handleChangeFolder = useCallback(
-    folderId => {
-      setCurrentView('folderView', { id: folderId })
-    },
-    [setCurrentView]
-  )
 
   if (!folder || R.isEmpty(folder)) {
     return (
@@ -140,13 +131,13 @@ const FolderView = ({
     )
   }
 
-  const { name } = folder
+  const { name = '' } = folder
   const rootFolder = folder.root ? findFolderById(folder.root, folders) : folder
   const { subfolders = [] } = rootFolder
   const directSubFolders = subfolders.filter(
     subfolder => !subfolder.name.replace(`${name}//`, '').includes('//')
   )
-  debugger
+
   return (
     <main className={classnames(className, c.FolderView)}>
       <Spacer size='2rem' />
@@ -164,7 +155,7 @@ const FolderView = ({
             <React.Fragment key={`folder=${subfolder.id}_${index}`}>
               <FolderCard
                 folder={subfolder}
-                onClick={() => setCurrentView('folderView', { id: subfolder.id })}
+                onClick={() => handleChangeFolder(subfolder.id)}
               />
               <Spacer size={'2rem'} />
             </React.Fragment>
@@ -173,7 +164,7 @@ const FolderView = ({
         <Spacer size='4rem' />
         <TitleTertiary>Files</TitleTertiary>
         <Spacer size='2rem' />
-        <FileTable models={folder.models} handleModelClick={handleEditModel}></FileTable>
+        <FileTable models={folder.models} handleEditModel={handleEditModel}></FileTable>
       </div>
       <Spacer size='2rem' />
     </main>

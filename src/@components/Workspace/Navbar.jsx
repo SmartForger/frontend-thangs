@@ -121,6 +121,10 @@ const WorkspaceNavbar = ({
     [setCurrentView]
   )
 
+  const handleAllFiles = useCallback(() => {
+    setCurrentView('allFilesView')
+  }, [setCurrentView])
+
   const handleClickRecent = useCallback(() => {
     setCurrentView('recentFiles')
   }, [setCurrentView])
@@ -163,7 +167,7 @@ const WorkspaceNavbar = ({
               label={'Files'}
               isFolder={true}
               folderId={'files'}
-              onClick={handleChangeFolder('files')}
+              onClick={handleAllFiles}
             />
             <Spacer size={'1.5rem'} />
             {shouldShowFileExplorer && (
