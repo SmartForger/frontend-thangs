@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { AnchorButton, Button, ColorPicker } from '@components'
+import { AnchorButton, Pill, ColorPicker } from '@components'
 import { ReactComponent as WireMode } from '@svg/view-mode-wire.svg'
 import { ReactComponent as ShadedMode } from '@svg/view-mode-shaded.svg'
 import { ReactComponent as XRayMode } from '@svg/view-mode-xray.svg'
@@ -21,10 +21,11 @@ const useStyles = createUseStyles(theme => {
       boxShadow: 'none',
       borderTop: ({ minimizeTools }) =>
         minimizeTools ? 'none' : `1px solid ${theme.colors.purple[200]}`,
-      padding: '1.5rem',
+      padding: ({ minimizeTools }) => (minimizeTools ? '3.375rem 0' : '1.5rem'),
       display: 'flex',
       justifyContent: ({ minimizeTools }) =>
         minimizeTools ? 'flex-end' : 'space-between',
+      width: ({ minimizeTools }) => (minimizeTools ? '100%' : 'auto'),
     },
     Toolbar_ToolGroup: {
       display: 'flex',
@@ -65,6 +66,10 @@ const useStyles = createUseStyles(theme => {
       [md]: {
         display: 'block',
       },
+    },
+    Toolbar_ResetPill: {
+      cursor: 'pointer',
+      margin: '0 auto !important',
     },
   }
 })
@@ -139,9 +144,9 @@ const Toolbar = ({
           </AnchorButton>
         </>
       ) : (
-        <Button className={c.Toolbar_ResetButton} onClick={handleResetView}>
-          Reset
-        </Button>
+        <Pill className={c.Toolbar_ResetPill} onClick={handleResetView}>
+          Reset Position
+        </Pill>
       )}
     </div>
   )

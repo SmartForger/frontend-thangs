@@ -27,11 +27,14 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
-
-const Pill = ({ children, className, secondary }) => {
+const noop = () => null
+const Pill = ({ children, className, secondary, onClick = noop }) => {
   const c = useStyles({})
   return (
-    <div className={classnames(className, c.Pill, { [c.PillSecondary]: secondary })}>
+    <div
+      className={classnames(className, c.Pill, { [c.PillSecondary]: secondary })}
+      onClick={onClick}
+    >
       <Spacer size={'.5rem'} />
       <div className={c.Pill_TextWrapper}>
         <Spacer size={'.75rem'} />
