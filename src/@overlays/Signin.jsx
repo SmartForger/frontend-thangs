@@ -147,14 +147,14 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Signin_withGoogleButton: {
-      border: `1px solid ${theme.colors.black[500]}`,
-      backgroundColor: 'transparent',
+      border: `1px solid ${theme.colors.black[500]} !important`,
+      backgroundColor: 'transparent !important',
       width: '100%',
     },
     Signin_withFacebookButton: {
-      border: '1px solid #3B5998',
-      backgroundColor: '#3B5998',
-      color: theme.colors.white[400],
+      border: '1px solid #3B5998 !important',
+      backgroundColor: '#3B5998 !important',
+      color: `${theme.colors.white[400]} !important`,
       width: '100%',
     },
     Signin_ResetPasswordButton: {
@@ -255,8 +255,8 @@ const SignInForm = ({
                 {authFailed
                   ? 'Something went wrong. Please try again'
                   : sessionExpired
-                    ? 'Session Expired. Please sign back in to continue'
-                    : signupErrorMessage}
+                  ? 'Session Expired. Please sign back in to continue'
+                  : signupErrorMessage}
               </FormError>
               <Spacer size='1rem' />
             </>

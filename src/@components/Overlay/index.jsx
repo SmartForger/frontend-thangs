@@ -34,7 +34,7 @@ const useStyles = createUseStyles(theme => {
       outline: 'none',
       width: '100%',
       height: '100%',
-      display: 'flex',
+      display: ({ isHidden }) => (isHidden ? 'none' : 'flex'),
       alignItems: 'center',
     },
     Overlay_CloseButton: {
@@ -86,11 +86,12 @@ const Overlay = ({
   animateIn = false,
   showPromo = true,
   shake = false,
+  isHidden,
   ...props
 }) => {
   const [isVisible, setIsVisible] = useState(false)
   const { dispatch } = useStoreon()
-  const c = useStyles({ windowed, animateIn, showPromo })
+  const c = useStyles({ windowed, animateIn, showPromo, isHidden })
   useEffect(() => {
     document.body.scrollTop = 0
     document.documentElement.scrollTop = 0

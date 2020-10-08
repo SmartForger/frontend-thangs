@@ -1,20 +1,8 @@
-import React, { useMemo } from 'react'
-import { useStoreon } from 'storeon/react'
-import { Header, Overlay, Footer, FeedbackTooltip } from '@components'
-import {
-  CreateFolder,
-  CreateTeam,
-  EditModel,
-  FolderManagement,
-  PasswordReset,
-  ReportModel,
-  SearchByUpload,
-  Signin,
-  Signup,
-  Upload,
-} from '@overlays'
+import React from 'react'
+import { Header, Footer, FeedbackTooltip } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import { useOverlay } from '@hooks'
 import Banner from './Header/Banner'
 
 const useStyles = createUseStyles(theme => {
@@ -111,23 +99,8 @@ const useStyles = createUseStyles(theme => {
       right: '2rem',
       zIndex: 1,
     },
-    Overlay__hidden: {
-      display: 'none',
-    },
   }
 })
-const overlayTemplates = {
-  createFolder: CreateFolder,
-  createTeam: CreateTeam,
-  editModel: EditModel,
-  folderManagement: FolderManagement,
-  passwordReset: PasswordReset,
-  reportModel: ReportModel,
-  searchByUpload: SearchByUpload,
-  signIn: Signin,
-  signUp: Signup,
-  upload: Upload,
-}
 
 const Layout = ({
   children,
@@ -139,18 +112,13 @@ const Layout = ({
   showNewHero,
   showAboutHero,
 }) => {
-  const { overlay } = useStoreon('overlay')
   const c = useStyles({})
-
-  const OverlayView = useMemo(
-    () => overlay && overlay.isOpen && overlayTemplates[overlay.currentOverlay],
-    [overlay]
-  )
+  const { Overlay, isOverlayOpen, isOverlayHidden } = useOverlay()
 
   return (
     <div
       className={classnames(c.Container, {
-        [c.Layout_blur]: overlay.isOpen && !overlay.isHidden,
+        [c.Layout_blur]: isOverlayOpen && !isOverlayHidden,
       })}
     >
       <Header
@@ -160,15 +128,7 @@ const Layout = ({
         showNewHero={showNewHero}
         showAboutHero={showAboutHero}
       />
-      {OverlayView && (
-        <Overlay
-          className={classnames({ [c.Overlay__hidden]: overlay.isHidden })}
-          isOpen={overlay.isOpen}
-          {...overlay.overlayData}
-        >
-          <OverlayView {...overlay.overlayData} />
-        </Overlay>
-      )}
+      {Overlay}
       <div className={c.Layout_Content}>
         {Hero && <Hero />}
         {bannerText && <Banner>{bannerText}</Banner>}

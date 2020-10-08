@@ -153,15 +153,20 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Signup_withGoogleButton: {
-      border: `1px solid ${theme.colors.black[500]}`,
-      backgroundColor: 'transparent',
+      border: `1px solid ${theme.colors.black[500]} !important`,
+      backgroundColor: 'transparent !important',
       width: '100%',
     },
     Signup_withFacebookButton: {
-      border: '1px solid #3B5998',
-      backgroundColor: '#3B5998',
-      color: theme.colors.white[400],
+      border: '1px solid #3B5998 !important',
+      backgroundColor: '#3B5998 !important',
+      color: `${theme.colors.white[400]} !important`,
       width: '100%',
+    },
+    Search_Icon: {
+      '& path': {
+        fill: theme.colors.gold[500],
+      },
     },
   }
 })
@@ -192,7 +197,7 @@ const SignUpPromo = ({ c, titleMessage }) => {
           <Spacer size='2rem' />
           <div className={c.Signup_Column}>
             <div className={c.Signup_Row}>
-              <SearchIcon />
+              <SearchIcon className={c.Search_Icon} />
               <Spacer size='.5rem' />
               <MultiLineBodyText light>Geometric Search</MultiLineBodyText>
             </div>
