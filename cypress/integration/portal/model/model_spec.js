@@ -1,11 +1,23 @@
 import 'cypress-file-upload'
- import { login } from './common-methods'
-
-
-const MODEL_FILE = 'horn1.stl'
-const FILE_NAME = 'Test Name'
-const FILE_DESCRIPTION = 'Test Description'
-
+import {
+  clickOnElement,
+  clickOnElementByText,
+  clickOnTextInsideClass,
+  goTo,
+  isElement,
+  isTextInsideClass,
+  login,
+  openUpload,
+  uploadFile,
+} from '../../../utils/common-methods'
+import { CLASSES, MODEL, MODEL_TEST_TITLE, PATH, PROPS, TEXT } from '../../constants'
+import {
+  clearInput,
+  enterValidValue,
+  modelDescriptionInput,
+  modelTitleInput,
+  uploadInput,
+} from '../../../utils/inputs'
 
 describe('The Model Page', () => {
   beforeEach(() => {
@@ -13,36 +25,62 @@ describe('The Model Page', () => {
   })
 
   it('Upload model', () => {
-    cy.get('[data-cy=upload-button]').click({ force: true, multiple: true })
-    cy.fixture(MODEL_FILE, 'binary')
-      .then(Cypress.Blob.binaryStringToBlob)
-      .then(fileContent => {
-        cy.get('.ReactModalPortal [data-cy=file-upload]').attachFile({
-          fileContent,
-          filePath: MODEL_FILE,
-          encoding: 'utf-8',
-        })
-      })
-    cy.get('[data-cy=upload-form] [name=name]').focus().clear().type(FILE_NAME)
-    cy.get('[data-cy=upload-form] [name=description]').focus().type(FILE_DESCRIPTION)
-    cy.get('[data-cy=upload-form]').submit()
-    cy.visit('/Test')
-    cy.get(`[data-cy="${FILE_NAME}"]`).should('be.visible')
+    openUpload()
+    uploadFile(MODEL.FILENAME, uploadInput)
+    clearInput(CLASSES.UPLOAD_FORM, modelTitleInput)
+    enterValidValue(CLASSES.UPLOAD_FORM, modelTitleInput)
+    enterValidValue(CLASSES.UPLOAD_FORM, modelDescriptionInput)
+    clickOnTextInsideClass(CLASSES.UPLOAD_BUTTON_GROUP, 'Save Model')
+    cy.wait(5000)
+    goTo(PATH.PROFILE)
+    isElement(MODEL_TEST_TITLE, PROPS.VISIBLE)
   })
 
   it('Check model for name, author and description not empty', () => {
-    cy.visit('/Test')
-    cy.get(`[data-cy="${FILE_NAME}"]`).first().click({ force: true })
-    cy.get('[class^="ModelTitle_Text"]').should('not.be.empty')
-    cy.get('[class^="ModelTitle_ProfileAuthor"]').should('not.be.empty')
-    cy.get('[class^="Model_ModelDescription"]').should('not.be.empty')
+    goTo(PATH.PROFILE)
+    clickOnElement(MODEL_TEST_TITLE)
+    cy.wait(2000)
+    isElement(CLASSES.MODEL_PAGE_TITLE, PROPS.NOT_EMPTY)
+    isElement(CLASSES.MODEL_PAGE_AUTHOR, PROPS.NOT_EMPTY)
+    isElement(CLASSES.MODEL_PAGE_DESCRIPTION, PROPS.NOT_EMPTY)
+  })
+
+  it('Model has information: likes, downloads, date of upload', () => {
+    goTo(PATH.PROFILE)
+    clickOnElement(MODEL_TEST_TITLE)
+    cy.wait(5000)
+    isTextInsideClass(CLASSES.MODEL_PAGE_STATS, TEXT.LIKES)
+    isTextInsideClass(CLASSES.MODEL_PAGE_STATS, TEXT.DOWNLOADS)
+    isTextInsideClass(CLASSES.MODEL_PAGE_STATS, TEXT.CURRENT_YEAR)
+  })
+
+  it('Check for like/unlike button', () => {
+    goTo(PATH.EXTERNAL_MODEL)
+    cy.wait(2000)
+    isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKE, PROPS.VISIBLE)
+    clickOnElement(CLASSES.MODEL_PAGE_LIKE_BUTTON)
+    isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKED, PROPS.VISIBLE)
+    clickOnElement(CLASSES.MODEL_PAGE_LIKE_BUTTON)
+    isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKE, PROPS.VISIBLE)
+    isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKED, PROPS.INVISIBLE)
+  })
+
+  it('Check for follow/unfollow button', () => {
+    goTo(PATH.EXTERNAL_MODEL)
+    cy.wait(2000)
+    isTextInsideClass(CLASSES.MODEL_PAGE_FOLLOW_BUTTON, TEXT.FOLLOW, PROPS.VISIBLE)
+    clickOnElement(CLASSES.MODEL_PAGE_FOLLOW_BUTTON)
+    isTextInsideClass(CLASSES.MODEL_PAGE_FOLLOW_BUTTON, TEXT.UNFOLLOW, PROPS.VISIBLE)
+    clickOnElement(CLASSES.MODEL_PAGE_FOLLOW_BUTTON)
+    isTextInsideClass(CLASSES.MODEL_PAGE_FOLLOW_BUTTON, TEXT.FOLLOW, PROPS.VISIBLE)
+    isTextInsideClass(CLASSES.MODEL_PAGE_FOLLOW_BUTTON, TEXT.UNFOLLOW, PROPS.INVISIBLE)
   })
 
   it('Delete model', () => {
-    cy.visit('/Test')
-    cy.get(`[data-cy="${FILE_NAME}"] [data-cy=edit-model-icon]`).first().click({ force: true })
-    cy.get('[data-cy=delete-model-button]').click({ force: true })
-    cy.get('[data-cy=confirm-delete-model-button]').click({ force: true })
-    cy.get(`[data-cy="${FILE_NAME}"]`).should('not.be.visible')
+    goTo(PATH.PROFILE)
+    clickOnElement(CLASSES.MODEL_CARD_EDIT_BUTTON)
+    clickOnElementByText(TEXT.DELETE_MODEL)
+    clickOnElementByText(TEXT.CONFIRM)
+    isElement(MODEL_TEST_TITLE, PROPS.VISIBLE)
   })
 })

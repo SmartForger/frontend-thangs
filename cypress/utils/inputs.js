@@ -1,10 +1,12 @@
-import { SEARCH, USER } from '../integration/constants'
+import { MODEL, SEARCH, USER } from '../integration/constants'
 
 const inputSelectors = {
   loginEmailUsername: '[name=email]',
   loginPassword: '[name=password]',
   search: '[name=search]',
   upload: '[name=upload]',
+  modelTitle: '[name=name]',
+  modelDescription: '[name=description]',
 }
 
 export const loginEmailUsernameInput = {
@@ -26,6 +28,18 @@ export const searchInput = {
   invalidInput: 'test12312',
   type: 'text',
   selector: inputSelectors.search,
+}
+
+export const modelTitleInput = {
+  validInput: MODEL.TITLE,
+  type: 'text',
+  selector: inputSelectors.modelTitle,
+}
+
+export const modelDescriptionInput = {
+  validInput: MODEL.DESCRIPTION,
+  type: 'text',
+  selector: inputSelectors.modelDescription,
 }
 
 export const uploadInput = {

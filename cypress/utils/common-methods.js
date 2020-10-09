@@ -1,25 +1,28 @@
-import { CLASSES, DATA_CY, MODEL, PROPS, TEXT } from '../integration/constants'
+import { CLASSES, DATA_CY, PROPS, TEXT } from '../integration/constants'
 import {
   enterValidValue,
   findInput,
   loginEmailUsernameInput,
   loginPasswordInput,
-  uploadInput,
 } from './inputs'
 
-export function isElement(el, prop) {
+export const isElement = (el, prop) => {
   cy.get(el).should(prop)
 }
 
-export function clickOnElementByText(text) {
+export const isElementNotEmptyAndValid = (el, prop, value) => {
+  cy.get(el).should(prop).and('match', value)
+}
+
+export const clickOnElementByText = text => {
   cy.contains(text).click({ force: true })
 }
 
-export function clickOnElement(el) {
+export const clickOnElement = el => {
   cy.get(el).click({ force: true, multiple: true })
 }
 
-export function goTo(path) {
+export const goTo = path => {
   cy.visit(path, { timeout: 20000 })
 }
 
@@ -35,7 +38,7 @@ export const urlShouldIncludeAfterTimeout = (path, timeout) => {
   cy.url({ timeout: timeout }).should('include', path)
 }
 
-export function login() {
+export const login = () => {
   goTo('/')
   isElement(CLASSES.LOGIN_FORM, PROPS.INVISIBLE)
   clickOnElementByText(TEXT.LOG_IN)
@@ -47,21 +50,21 @@ export function login() {
   isElement(CLASSES.USER_NAVBAR, PROPS.VISIBLE)
 }
 
-export function openNotifications() {
+export const openNotifications = () => {
   isElement(CLASSES.NOTIFICATIONS_BUTTON, PROPS.VISIBLE) &&
     isElement(CLASSES.NOTIFICATIONS_DROPDOWN, PROPS.INVISIBLE)
   clickOnElement(CLASSES.NOTIFICATIONS_BUTTON)
   isElement(CLASSES.NOTIFICATIONS_DROPDOWN, PROPS.VISIBLE)
 }
 
-export function openProfileDropdown() {
+export const openProfileDropdown = () => {
   isElement(CLASSES.PROFILE_BUTTON, PROPS.VISIBLE) &&
     isElement(CLASSES.PROFILE_DROPDOWN, PROPS.INVISIBLE)
   clickOnElement(CLASSES.PROFILE_BUTTON)
   isElement(CLASSES.PROFILE_DROPDOWN, PROPS.VISIBLE)
 }
 
-export function openUpload() {
+export const openUpload = () => {
   isElement(DATA_CY.UPLOAD_BUTTON, PROPS.VISIBLE)
   clickOnElement(DATA_CY.UPLOAD_BUTTON)
   isElement(DATA_CY.UPLOAD_OVERLAY, PROPS.VISIBLE)
@@ -97,4 +100,8 @@ export const clickOnElementInsideClass = (className, el) => {
 
 export const clickOnTextInsideClass = (className, text) => {
   cy.get(className).contains(text).click({ force: true, multiple: true })
+}
+
+export const isTextInsideClass = (className, text, prop) => {
+  prop ? cy.get(className).contains(text).should(prop) : cy.get(className).contains(text)
 }
