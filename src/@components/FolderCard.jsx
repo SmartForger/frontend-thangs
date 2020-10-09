@@ -46,7 +46,7 @@ const FolderCard = ({ handleClick = noop, folder }) => {
   const handleFolderClick = useCallback(() => {
     handleClick(folder)
   }, [folder, handleClick])
-  debugger
+
   return (
     <>
       <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>

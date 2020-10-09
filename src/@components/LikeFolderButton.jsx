@@ -87,7 +87,6 @@ const StarButton = ({ liked, c, hasChanged }) => {
 }
 
 const LikeFolderButton = ({ className, folder = {}, minimal, onlyShowOwned }) => {
-  debugger
   const c = useStyles({})
   const { dispatch } = useStoreon()
   const currentUserId = authenticationService.getCurrentUserId()
@@ -100,7 +99,6 @@ const LikeFolderButton = ({ className, folder = {}, minimal, onlyShowOwned }) =>
   const [hasChanged, setHasChanged] = useState(false)
   const handleLikeClicked = useCallback(
     e => {
-      debugger
       e.stopPropagation()
       const likeFolder = () => dispatch(types.LIKE_FOLDER, { id })
       const unlikeFolder = () => dispatch(types.UNLIKE_FOLDER, { id })

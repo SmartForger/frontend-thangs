@@ -95,7 +95,7 @@ const WorkspaceNavbar = ({
   folders,
   models,
   isLoadingThangs,
-  handleNewModel = noop,
+  handleNewModel: _handleNoop,
   handleEditModel = noop,
   setCurrentView = noop,
 }) => {
