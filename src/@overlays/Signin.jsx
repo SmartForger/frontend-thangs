@@ -178,10 +178,10 @@ const SignInForm = ({
   authFailed,
 }) => {
   const [waiting, setWaiting] = useState(false)
-  const [signupErrorMessage, setSigninErrorMessage] = useState(null)
+  const [signinErrorMessage, setSigninErrorMessage] = useState(null)
   const showErrorMessage = useMemo(
-    () => signupErrorMessage || sessionExpired || authFailed,
-    [authFailed, sessionExpired, signupErrorMessage]
+    () => signinErrorMessage || sessionExpired || authFailed,
+    [authFailed, sessionExpired, signinErrorMessage]
   )
   const redirectUrl = useQuery('redirectUrl')
   const { googleLoginUrl } = useGoogleLogin({
@@ -255,15 +255,15 @@ const SignInForm = ({
           </Button>
         </a>
         <Divider spacing={'1.5rem'} />
-        <form onSubmit={onFormSubmit(handleSignIn)} data-cy='signup-form'>
+        <form onSubmit={onFormSubmit(handleSignIn)}>
           {showErrorMessage && (
             <>
               <FormError>
                 {authFailed
                   ? 'Something went wrong. Please try again'
                   : sessionExpired
-                    ? 'Session Expired. Please sign back in to continue'
-                    : signupErrorMessage}
+                  ? 'Session Expired. Please sign back in to continue'
+                  : signinErrorMessage}
               </FormError>
               <Spacer size='1rem' />
             </>

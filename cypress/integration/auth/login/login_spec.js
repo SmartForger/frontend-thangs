@@ -1,9 +1,9 @@
-import { BODY, CLASSES, PROPS, TEXT } from '../../constants'
+import { CLASSES, PROPS, TEXT } from '../../constants'
 import {
   clickOnElement,
   clickOnElementByText,
   isElement,
-  isTextExist,
+  isTextInsideClass,
 } from '../../../utils/common-methods'
 import {
   clearInput,
@@ -54,8 +54,7 @@ describe('The Login Page test cases with before and after conditions', () => {
     enterInvalidValue(CLASSES.LOGIN_FORM, loginEmailUsernameInput)
     enterInvalidValue(CLASSES.LOGIN_FORM, loginPasswordInput)
     clickOnElement(CLASSES.LOGIN_BUTTON)
-    isElement(CLASSES.LOGIN_ERROR, PROPS.VISIBLE)
-    isTextExist(TEXT.LOGIN_ERROR)
+    isTextInsideClass(CLASSES.LOGIN_ERROR, TEXT.LOGIN_ERROR)
     clearInput(CLASSES.LOGIN_FORM, loginEmailUsernameInput)
     clearInput(CLASSES.LOGIN_FORM, loginPasswordInput)
   })
