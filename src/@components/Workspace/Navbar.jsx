@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import {
+  AddMenu,
   Button,
   Divider,
   FileExplorer,
@@ -9,9 +10,9 @@ import {
 } from '@components'
 import { createUseStyles } from '@style'
 import { authenticationService } from '@services'
-
+import { useExternalClick } from '@hooks'
 import { ReactComponent as Logo } from '@svg/logo.svg'
-import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
+import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as ClockIcon } from '@svg/icon-clock.svg'
 import { ReactComponent as SharedIcon } from '@svg/icon-shared.svg'
@@ -40,16 +41,20 @@ const useStyles = createUseStyles(theme => {
       width: 'calc(100% - 4rem)',
       flex: 'none',
     },
-    WorkspaceNavbar_NewModelButton: {
+    WorkspaceNavbar_AddWrapper: {
+      position: 'relative',
+      zIndex: 1,
+    },
+    WorkspaceNavbar_AddButton: {
       width: '100%',
       display: 'flex',
       flexDirection: 'row',
       marginBottom: '2rem',
-
-      '& path': {
-        fill: theme.colors.black[500],
-        stroke: theme.colors.black[500],
-      },
+    },
+    WorkspaceNavbar_AddMenu: {
+      position: 'absolute',
+      width: '18.5rem',
+      top: '3.125rem',
     },
     WorkspaceNavbar_NavLink: {
       display: 'flex',
@@ -96,6 +101,8 @@ const WorkspaceNavbar = ({
 }) => {
   const c = useStyles({})
   const [showFileExplorer, setShowFileExplorer] = useState(false)
+  const [showCreateMenu, setShowCreateMenu] = useState(false)
+  const addMenuRef = useRef(null)
 
   useEffect(() => {
     if (folderNav.files) {
@@ -145,7 +152,12 @@ const WorkspaceNavbar = ({
     setCurrentView,
   ])
 
+  const handleClickCreate = useCallback(() => setShowCreateMenu(true), [])
+
   const handleSignOut = useCallback(() => authenticationService.logout(), [])
+
+  useExternalClick(addMenuRef, () => setShowCreateMenu(false))
+
   return (
     <nav className={c.WorkspaceNavbar}>
       <Spacer size={'2rem'} />
@@ -153,11 +165,18 @@ const WorkspaceNavbar = ({
         <div className={c.WorkspaceNavbar_Logo}>
           <Logo />
         </div>
-        <Button className={c.WorkspaceNavbar_NewModelButton} onClick={handleNewModel}>
-          <UploadIcon />
-          <Spacer size={'.5rem'} />
-          New Model
-        </Button>
+        <div className={c.WorkspaceNavbar_AddWrapper} ref={addMenuRef}>
+          <Button className={c.WorkspaceNavbar_AddButton} onClick={handleClickCreate}>
+            <PlusIcon />
+            <Spacer size={'.5rem'} />
+            Create
+          </Button>
+          {showCreateMenu && (
+            <div className={c.WorkspaceNavbar_AddMenu}>
+              <AddMenu />
+            </div>
+          )}
+        </div>
         <div className={c.WorkspaceNavbar_ScrollableFiles}>
           <div>
             <TitleTertiary>Files</TitleTertiary>

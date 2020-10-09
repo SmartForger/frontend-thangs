@@ -1,5 +1,6 @@
 export { default as useCurrentUser } from '@hooks/useCurrentUser'
 export { default as useCurrentUserId } from '@hooks/useCurrentUserId'
+export { default as useExternalClick } from '@hooks/useExternalClick'
 export { default as useFileUpload } from '@hooks/useFileUpload'
 export { default as useForm } from '@hooks/useForm'
 export { default as useFacebookLogin } from '@hooks/useFacebookLogin'
