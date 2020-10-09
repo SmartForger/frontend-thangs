@@ -1,17 +1,26 @@
 import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
-import { Contributors, Divider, SingleLineBodyText, Spacer } from '@components'
+import {
+  Contributors,
+  Divider,
+  SingleLineBodyText,
+  Spacer,
+  FileContextMenu,
+} from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { MetadataSecondary } from '@components/Text/Metadata'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { formatBytes } from '@utilities'
+import { ContextMenuTrigger } from 'react-contextmenu'
 
 const useStyles = createUseStyles(_theme => {
   return {
-    FileTable: {},
+    FileTable: {
+      marginLeft: '-1rem',
+    },
     FileTable_Header: {},
     FileTable_Row: {
       display: 'flex',
@@ -31,6 +40,7 @@ const useStyles = createUseStyles(_theme => {
     FileTable_FileName: {
       width: '40%',
       maxWidth: '14rem',
+      marginLeft: '1rem',
 
       '& span': {
         overflow: 'hidden',
@@ -43,12 +53,17 @@ const useStyles = createUseStyles(_theme => {
     FileTable_Size: {
       width: '10%',
     },
+    FileTable_RowWrapper: {
+      '&:hover': {
+        backgroundColor: 'rgba(0, 0, 0, 0.05)',
+      },
+    },
   }
 })
 
 const noop = () => null
 
-const Filename = ({ name }) => {
+const FileName = ({ name }) => {
   return (
     <>
       <FileIcon />
@@ -78,7 +93,7 @@ const FileTableHeader = () => {
         <MetadataSecondary>Filename</MetadataSecondary>
       </div>
       <div className={classnames(c.FileTable_Cell, c.FileTable_Size, c.FileTable_Header)}>
-        <MetadataSecondary>Changed</MetadataSecondary>
+        <MetadataSecondary>Created</MetadataSecondary>
       </div>
       <div className={classnames(c.FileTable_Cell, c.FileTable_Size, c.FileTable_Header)}>
         <MetadataSecondary>File Type</MetadataSecondary>
@@ -103,7 +118,7 @@ const FolderRow = ({ folder, handleFolderClick = noop }) => {
   }, [handleFolderClick, folder])
 
   return (
-    <div onClick={handleClick}>
+    <div className={c.FileTable_RowWrapper} onClick={handleClick}>
       <Spacer size={'1rem'} />
       <div className={c.FileTable_Row}>
         <div
@@ -139,11 +154,11 @@ const FileRow = ({ model, handleModelClick = noop }) => {
   }, [handleModelClick, model])
 
   return (
-    <div onClick={handleClick}>
+    <div className={c.FileTable_RowWrapper} onClick={handleClick}>
       <Spacer size={'1rem'} />
       <div className={c.FileTable_Row} title={model.name}>
         <div className={classnames(c.FileTable_Cell, c.FileTable_FileName)}>
-          <Filename name={model.name} />
+          <FileName name={model.name} />
         </div>
         <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
           <MetadataSecondary>
@@ -182,12 +197,23 @@ const FileTable = ({ files = [], handleChangeFolder = noop, handleEditModel = no
     <div className={c.FileTable}>
       <FileTableHeader />
       {files.map((file, index) => {
+        const { id } = file
         return (
           <React.Fragment key={`FileRow_${index}`}>
             {file.subfolders ? (
-              <FolderRow folder={file} handleFolderClick={handleChangeFolder} />
+              <>
+                <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
+                  <FolderRow folder={file} handleFolderClick={handleChangeFolder} />
+                </ContextMenuTrigger>
+                <FileContextMenu id={id} folder={file} type={'folder'} />
+              </>
             ) : (
-              <FileRow model={file} handleModelClick={handleEditModel} />
+              <>
+                <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
+                  <FileRow model={file} handleModelClick={handleEditModel} />
+                </ContextMenuTrigger>
+                <FileContextMenu id={id} model={file} type={'model'} />
+              </>
             )}
           </React.Fragment>
         )

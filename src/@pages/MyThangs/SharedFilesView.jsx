@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react'
 import * as R from 'ramda'
-import { FileTable, FolderCard, Spacer, TitleTertiary } from '@components'
+import { AddContextMenu, FileTable, FolderCard, Spacer, TitleTertiary } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
+import { ContextMenuTrigger } from 'react-contextmenu'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -60,12 +61,12 @@ const SharedFilesView = ({
   const sortedFolders = useMemo(() => {
     return !R.isEmpty(sharedFolders)
       ? sharedFolders
-        .sort((a, b) => {
-          if (a.name < b.name) return -1
-          else if (a.name > b.name) return 1
-          return 0
-        })
-        .filter(folder => !folder.name.includes('//'))
+          .sort((a, b) => {
+            if (a.name < b.name) return -1
+            else if (a.name > b.name) return 1
+            return 0
+          })
+          .filter(folder => !folder.name.includes('//'))
       : []
   }, [sharedFolders])
 
@@ -74,32 +75,37 @@ const SharedFilesView = ({
   }, [])
 
   return (
-    <main className={classnames(className, c.SharedFilesView)}>
-      <Spacer size='2rem' />
-      <div className={c.SharedFilesView_Content}>
-        <Spacer size='2rem' />
-        <TitleTertiary>Shared Files</TitleTertiary>
-        <Spacer size='4rem' />
-        <TitleTertiary>Starred</TitleTertiary>
-        <div className={c.SharedFilesView_Folders}>
-          {starredSharedFolders.map((folder, index) => (
-            <React.Fragment key={`folder=${folder.id}_${index}`}>
-              <FolderCard folder={folder} handleClick={handleChangeFolder} />
-              <Spacer size={'2rem'} />
-            </React.Fragment>
-          ))}
-        </div>
-        <Spacer size='4rem' />
-        <TitleTertiary>Files</TitleTertiary>
-        <Spacer size='2rem' />
-        <FileTable
-          files={sortedFolders}
-          handleEditModel={handleEditModel}
-          handleChangeFolder={handleChangeFolder}
-        ></FileTable>
-      </div>
-      <Spacer size='2rem' />
-    </main>
+    <>
+      <ContextMenuTrigger id='Add_Menu' holdToDisplay={1000}>
+        <main className={classnames(className, c.SharedFilesView)}>
+          <Spacer size='2rem' />
+          <div className={c.SharedFilesView_Content}>
+            <Spacer size='2rem' />
+            <TitleTertiary>Shared Files</TitleTertiary>
+            <Spacer size='4rem' />
+            <TitleTertiary>Starred</TitleTertiary>
+            <div className={c.SharedFilesView_Folders}>
+              {starredSharedFolders.map((folder, index) => (
+                <React.Fragment key={`folder=${folder.id}_${index}`}>
+                  <FolderCard folder={folder} handleClick={handleChangeFolder} />
+                  <Spacer size={'2rem'} />
+                </React.Fragment>
+              ))}
+            </div>
+            <Spacer size='4rem' />
+            <TitleTertiary>Files</TitleTertiary>
+            <Spacer size='2rem' />
+            <FileTable
+              files={sortedFolders}
+              handleEditModel={handleEditModel}
+              handleChangeFolder={handleChangeFolder}
+            ></FileTable>
+          </div>
+          <Spacer size='2rem' />
+        </main>
+      </ContextMenuTrigger>
+      <AddContextMenu />
+    </>
   )
 }
 

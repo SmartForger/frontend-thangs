@@ -1,19 +1,21 @@
 import React, { useCallback } from 'react'
 import * as R from 'ramda'
 import {
+  AddContextMenu,
   Button,
   FileTable,
   FolderCard,
+  LikeFolderButton,
   MetadataPrimary,
   Spacer,
   Spinner,
   TitleTertiary,
 } from '@components'
 import { createUseStyles } from '@style'
+import classnames from 'classnames'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as InviteIcon } from '@svg/icon-invite.svg'
-import { ReactComponent as StarIcon } from '@svg/icon-star-filled.svg'
-import classnames from 'classnames'
+import { ContextMenuTrigger } from 'react-contextmenu'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -65,13 +67,13 @@ const useStyles = createUseStyles(theme => {
 const noop = () => null
 const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
   const c = useStyles({})
-  const { name } = folder
+  const { id, name } = folder
   const folderPath = name.split('//')
   const rootFolderName = folderPath[0]
 
   const handleClickRoot = useCallback(() => {
-    if (folder.id !== rootFolder.id) setFolder(rootFolder)
-  }, [folder.id, rootFolder, setFolder])
+    if (id !== rootFolder.id) setFolder(rootFolder)
+  }, [id, rootFolder, setFolder])
 
   return (
     <div className={c.FolderView_Row}>
@@ -84,7 +86,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
               <TitleTertiary>{rootFolderName}</TitleTertiary>
             </div>
             <Spacer size={'.5rem'} />
-            <StarIcon />
+            <LikeFolderButton folder={folder} minimal onlyShowOwned />
           </div>
           {folderPath.length > 1 && (
             <>
@@ -113,6 +115,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
 const findFolderById = (id, folders) => {
   return R.find(R.propEq('id', id.toString()))(folders) || {}
 }
+
 const FolderView = ({
   className,
   id,
@@ -139,36 +142,41 @@ const FolderView = ({
   )
 
   return (
-    <main className={classnames(className, c.FolderView)}>
-      <Spacer size='2rem' />
-      <div className={c.FolderView_Content}>
-        <Spacer size='2rem' />
-        <FolderHeader
-          folder={folder}
-          rootFolder={rootFolder}
-          setFolder={handleChangeFolder}
-        />
-        <Spacer size='4rem' />
-        <TitleTertiary>Folders</TitleTertiary>
-        <div className={c.FolderView_Folders}>
-          {directSubFolders.map((subfolder, index) => (
-            <React.Fragment key={`folder=${subfolder.id}_${index}`}>
-              <FolderCard folder={subfolder} handleClick={handleChangeFolder} />
-              <Spacer size={'2rem'} />
-            </React.Fragment>
-          ))}
-        </div>
-        <Spacer size='4rem' />
-        <TitleTertiary>Files</TitleTertiary>
-        <Spacer size='2rem' />
-        <FileTable
-          files={models}
-          handleEditModel={handleEditModel}
-          handleChangeFolder={handleChangeFolder}
-        ></FileTable>
-      </div>
-      <Spacer size='2rem' />
-    </main>
+    <>
+      <ContextMenuTrigger id='Add_Menu' holdToDisplay={1000}>
+        <main className={classnames(className, c.FolderView)}>
+          <Spacer size='2rem' />
+          <div className={c.FolderView_Content}>
+            <Spacer size='2rem' />
+            <FolderHeader
+              folder={folder}
+              rootFolder={rootFolder}
+              setFolder={handleChangeFolder}
+            />
+            <Spacer size='4rem' />
+            <TitleTertiary>Folders</TitleTertiary>
+            <div className={c.FolderView_Folders}>
+              {directSubFolders.map((subfolder, index) => (
+                <React.Fragment key={`folder=${subfolder.id}_${index}`}>
+                  <FolderCard folder={subfolder} handleClick={handleChangeFolder} />
+                  <Spacer size={'2rem'} />
+                </React.Fragment>
+              ))}
+            </div>
+            <Spacer size='4rem' />
+            <TitleTertiary>Files</TitleTertiary>
+            <Spacer size='2rem' />
+            <FileTable
+              files={models}
+              handleEditModel={handleEditModel}
+              handleChangeFolder={handleChangeFolder}
+            ></FileTable>
+          </div>
+          <Spacer size='2rem' />
+        </main>
+      </ContextMenuTrigger>
+      <AddContextMenu />
+    </>
   )
 }
 

@@ -9,10 +9,9 @@ import { Button, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 import classnames from 'classnames'
-import { track } from '@utilities/analytics'
 import { authenticationService } from '@services'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     '@keyframes spinner': {
       from: {
@@ -26,9 +25,13 @@ const useStyles = createUseStyles(_theme => {
         transform: 'rotateY(-180deg)',
       },
     },
-    LikeModelButton: {},
-    LikeModelIcon: {},
-    LikeModelIcon__liked: {
+    LikeFolderButton: {},
+    LikeFolderIcon: {
+      '& path': {
+        fill: theme.colors.black[500],
+      },
+    },
+    LikeFolderIcon__liked: {
       animation: '$spinner 250ms linear 0s 1',
 
       '-webkit-transform-style': 'preserve-3d',
@@ -36,7 +39,7 @@ const useStyles = createUseStyles(_theme => {
       '-ms-transform-style': 'preserve-3d',
       'transform-style': 'preserve-3d',
     },
-    LikeModelIcon__unliked: {
+    LikeFolderIcon__unliked: {
       animation: '$spinner 250ms linear 0s 1 reverse',
 
       '-webkit-transform-style': 'preserve-3d',
@@ -47,10 +50,8 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const noop = () => null
-
-const hasLikedModel = (model, currentUserId) => {
-  return R.includes(parseInt(currentUserId), model.likes)
+const hasLikedFolder = (folderData, currentUserId) => {
+  return R.includes(parseInt(currentUserId), folderData.likes)
 }
 
 const HeartButton = ({ liked, c, hasChanged }) => {
@@ -85,44 +86,43 @@ const StarButton = ({ liked, c, hasChanged }) => {
   )
 }
 
-const AuthLikeModelButton = ({
-  c,
-  className,
-  currentUserId,
-  model = {},
-  minimal,
-  onlyShowOwned,
-}) => {
-  const { id, owner } = model
-  const isModelOfCurrentUser = useMemo(() => String(currentUserId) === String(owner.id), [
-    currentUserId,
-    owner.id,
-  ])
+const LikeFolderButton = ({ className, folder = {}, minimal, onlyShowOwned }) => {
+  debugger
+  const c = useStyles({})
   const { dispatch } = useStoreon()
-  const [liked, setLiked] = useState(hasLikedModel(model, currentUserId))
+  const currentUserId = authenticationService.getCurrentUserId()
+  const { id, creator = {} } = folder
+  const isFolderOfCurrentUser = useMemo(
+    () => String(currentUserId) === String(creator.id),
+    [currentUserId, creator.id]
+  )
+  const [liked, setLiked] = useState(hasLikedFolder(folder, currentUserId))
   const [hasChanged, setHasChanged] = useState(false)
-  const handleLikeClicked = useCallback(() => {
-    const likeModel = () =>
-      dispatch(types.LIKE_MODEL, { id, currentUserId: currentUserId })
-    const unlikeModel = () =>
-      dispatch(types.UNLIKE_MODEL, { id, currentUserId: currentUserId })
-    if (liked) {
-      unlikeModel()
-      setLiked(false)
-      setHasChanged(true)
-    } else {
-      likeModel()
-      setLiked(true)
-      setHasChanged(true)
-    }
-  }, [currentUserId, dispatch, liked, id])
+  const handleLikeClicked = useCallback(
+    e => {
+      debugger
+      e.stopPropagation()
+      const likeFolder = () => dispatch(types.LIKE_FOLDER, { id })
+      const unlikeFolder = () => dispatch(types.UNLIKE_FOLDER, { id })
+      if (liked) {
+        unlikeFolder()
+        setLiked(false)
+        setHasChanged(true)
+      } else {
+        likeFolder()
+        setLiked(true)
+        setHasChanged(true)
+      }
+    },
+    [liked, dispatch, id]
+  )
 
-  if (onlyShowOwned && !isModelOfCurrentUser) return null
+  if (onlyShowOwned && !isFolderOfCurrentUser) return null
 
   if (minimal) {
     return (
-      <div className={className}>
-        {isModelOfCurrentUser ? (
+      <div className={className} onClick={handleLikeClicked}>
+        {isFolderOfCurrentUser ? (
           <StarButton liked={liked} c={c} hasChanged={hasChanged} />
         ) : (
           <HeartButton liked={liked} c={c} hasChanged={hasChanged} />
@@ -133,64 +133,20 @@ const AuthLikeModelButton = ({
 
   return (
     <Button
-      className={classnames(className, c.LikeModelButton)}
+      className={classnames(className, c.LikeFolderButton)}
       secondary
       onClick={handleLikeClicked}
     >
-      {isModelOfCurrentUser ? (
-        <>
+      <div>
+        {isFolderOfCurrentUser ? (
           <StarButton liked={liked} c={c} hasChanged={hasChanged} />
-          <Spacer size='.5rem' />
-          {liked ? 'Starred' : 'Star'}
-        </>
-      ) : (
-        <>
+        ) : (
           <HeartButton liked={liked} c={c} hasChanged={hasChanged} />
-          <Spacer size='.5rem' />
-          {liked ? 'Liked' : 'Like'}
-        </>
-      )}
-    </Button>
-  )
-}
-
-const UnauthLikeModelButton = ({ c, openSignupOverlay = noop }) => {
-  const handleClick = useCallback(() => {
-    openSignupOverlay('Join to Like, Follow, Share.', 'Like')
-    track('SignUp Prompt Overlay', { source: 'Like' })
-  }, [openSignupOverlay])
-
-  return (
-    <Button className={classnames(c.LikeModelButton)} onClick={handleClick} secondary>
-      <HeartFilledIcon className={c.LikeModelIcon} />
+        )}
+      </div>
       <Spacer size='.5rem' />
-      Like
     </Button>
   )
 }
 
-const LikeModelButton = ({
-  className,
-  model,
-  openSignupOverlay = noop,
-  minimal,
-  onlyShowOwned,
-}) => {
-  const c = useStyles()
-  const currentUserId = authenticationService.getCurrentUserId()
-  if (currentUserId) {
-    return (
-      <AuthLikeModelButton
-        c={c}
-        className={className}
-        currentUserId={currentUserId}
-        model={model}
-        minimal={minimal}
-        onlyShowOwned={onlyShowOwned}
-      />
-    )
-  }
-  return <UnauthLikeModelButton c={c} openSignupOverlay={openSignupOverlay} />
-}
-
-export default LikeModelButton
+export default LikeFolderButton

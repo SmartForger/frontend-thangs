@@ -2,6 +2,7 @@ import { storeonDevtools } from 'storeon/devtools'
 import { createStoreon } from 'storeon'
 import commentsStore from '@store/comments/store'
 import folderNavStore from '@store/folderNav/store'
+import folderLikesStore from '@store/folderLikes/store'
 import folderStore from '@store/folders/store'
 import modelDownloadUrl from '@store/modelDownloadUrl/store'
 import modelLikesStore from '@store/modelLikes/store'
@@ -25,6 +26,7 @@ import usersStore from '@store/users/store'
 const storeParts = [
   commentsStore,
   folderNavStore,
+  folderLikesStore,
   folderStore,
   modelDownloadUrl,
   modelLikesStore,

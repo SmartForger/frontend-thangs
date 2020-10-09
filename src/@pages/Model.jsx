@@ -332,12 +332,7 @@ const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
             />
           </div>
           <div>
-            <LikeModelButton
-              currentUser={currentUser}
-              modelId={model.id}
-              profileUserId={model && model.owner && model.owner.id}
-              openSignupOverlay={openSignupOverlay}
-            />
+            <LikeModelButton model={model} openSignupOverlay={openSignupOverlay} />
           </div>
         </div>
       )}

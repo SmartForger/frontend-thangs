@@ -20,7 +20,7 @@ export default store => {
       },
     })
   )
-  store.on(types.LIKE_MODEL, async (_, { modelId, currentUserId }) => {
+  store.on(types.LIKE_MODEL, async (_, { id: modelId, currentUserId }) => {
     store.dispatch(types.CHANGE_LIKE_MODEL_STATUS, {
       status: STATUSES.LOADING,
       atom: 'like-model',
@@ -49,7 +49,7 @@ export default store => {
     }
   })
 
-  store.on(types.UNLIKE_MODEL, async (_, { modelId, currentUserId }) => {
+  store.on(types.UNLIKE_MODEL, async (_, { id: modelId, currentUserId }) => {
     store.dispatch(types.CHANGE_LIKE_MODEL_STATUS, {
       status: STATUSES.LOADING,
       atom: 'like-model',

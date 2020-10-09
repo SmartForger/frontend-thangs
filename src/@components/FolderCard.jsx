@@ -1,7 +1,14 @@
 import React, { useCallback } from 'react'
-import { Card, SingleLineBodyText, Spacer } from '@components'
+import {
+  Card,
+  FileContextMenu,
+  SingleLineBodyText,
+  Spacer,
+  LikeFolderButton,
+} from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as FolderCardIcon } from '@svg/folder-card.svg'
+import { ContextMenuTrigger } from 'react-contextmenu'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -34,25 +41,36 @@ const useStyles = createUseStyles(theme => {
 const noop = () => null
 const FolderCard = ({ handleClick = noop, folder }) => {
   const c = useStyles({})
-  const { name } = folder
+  const { id, name } = folder
   const displayName = name.split('//').reverse()[0]
   const handleFolderClick = useCallback(() => {
     handleClick(folder)
   }, [folder, handleClick])
+  debugger
   return (
-    <Card
-      className={c.FolderCard}
-      size={'14.375rem'}
-      backgroundColor={'#F7F7FB'}
-      onClick={handleFolderClick}
-    >
-      {/* <StarIcon className={c.FolderCard_Star} /> */}
-      <Spacer size={'3rem'} />
-      <FolderCardIcon />
-      <Spacer size={'2.75rem'} />
-      <SingleLineBodyText>{displayName}</SingleLineBodyText>
-      <Spacer size={'2.125rem'} />
-    </Card>
+    <>
+      <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
+        <Card
+          className={c.FolderCard}
+          size={'14.375rem'}
+          backgroundColor={'#F7F7FB'}
+          onClick={handleFolderClick}
+        >
+          <LikeFolderButton
+            className={c.FolderCard_Star}
+            folder={folder}
+            minimal
+            onlyShowOwned
+          />
+          <Spacer size={'3rem'} />
+          <FolderCardIcon />
+          <Spacer size={'2.75rem'} />
+          <SingleLineBodyText>{displayName}</SingleLineBodyText>
+          <Spacer size={'2.125rem'} />
+        </Card>
+      </ContextMenuTrigger>
+      <FileContextMenu id={id} folder={folder} type={'folder'} />
+    </>
   )
 }
 

@@ -14,7 +14,7 @@ import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     MyThangs: {
       height: '100%',
@@ -47,6 +47,26 @@ const useStyles = createUseStyles(_theme => {
       MsFilter: 'blur(4px)',
       MozFilter: 'blur(4px)',
       WebkitFilter: 'blur(4px)',
+    },
+    ContextMenu: {
+      backgroundColor: theme.colors.white[400],
+      boxShadow: '0px 8px 20px 0px rgba(0, 0, 0, 0.16)',
+      borderRadius: '.5rem',
+
+      '& div': {
+        display: 'flex',
+        flexDirection: 'row',
+      },
+    },
+    ContextMenu_Item: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      cursor: 'pointer',
+
+      '&:hover': {
+        textDecoration: 'underline',
+      },
     },
   }
 })
