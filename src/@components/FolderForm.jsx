@@ -73,7 +73,7 @@ const getParentName = fullFolderName => {
 
 const FolderForm = ({
   folder = {}, //editing a folder
-  rootFolder = {}, //creating a new subfolder
+  parentFolder = {}, //creating a new subfolder
   handleSubmit = noop,
   handleCancel = noop,
   errorMessage,
@@ -109,18 +109,19 @@ const FolderForm = ({
       let newData = data
       if (!R.isEmpty(folder)) {
         newData.name = `${getParentName(folder.name)}//${data.name}`
-      } else if (!R.isEmpty(rootFolder)) {
-        newData.name = `${rootFolder.name}//${data.name}`
+      } else if (!R.isEmpty(parentFolder)) {
+        newData.name = `${parentFolder.name}//${data.name}`
       }
-      newData.root = rootFolder.id
+      debugger
+      newData.root = parentFolder.root
       handleSubmit(newData)
     },
-    [folder, handleSubmit, rootFolder]
+    [folder, handleSubmit, parentFolder]
   )
 
   const isPrivacyDisabled = useMemo(() => {
-    return !R.isEmpty(folder) || !R.isEmpty(rootFolder)
-  }, [folder, rootFolder])
+    return !R.isEmpty(folder) || !R.isEmpty(parentFolder)
+  }, [folder, parentFolder])
 
   return (
     <div className={c.FolderForm_Wrapper}>

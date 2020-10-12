@@ -24,6 +24,7 @@ const useStyles = createUseStyles(theme => {
     FolderView: {
       display: 'flex',
       flexDirection: 'row',
+      minHeight: '88vh',
 
       '& > div': {
         flex: 'none',

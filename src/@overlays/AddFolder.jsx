@@ -114,7 +114,7 @@ const AddFolder = ({ folder }) => {
             handleSubmit={handleSubmit}
             handleCancel={closeOverlay}
             errorMessage={errorMessage}
-            rootFolder={folder}
+            parentFolder={folder}
           />
         </div>
         <Spacer className={c.AddFolder_MobileSpacer} size='2rem' />
