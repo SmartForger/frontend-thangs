@@ -127,6 +127,7 @@ const MyThangs = () => {
 
   const handleCurrentView = useCallback(
     (name, data = {}) => {
+      debugger
       setCurrentView({ name: name, data: data })
       history.push(`/myThangs/${name}`)
     },
@@ -135,7 +136,8 @@ const MyThangs = () => {
 
   const handleChangeFolder = useCallback(
     folder => {
-      setCurrentView({ name: 'folderView', data: { id: folder.id } })
+      debugger
+      setCurrentView({ name: 'folderView', data: { folderId: folder.id } })
     },
     [setCurrentView]
   )
@@ -163,11 +165,13 @@ const MyThangs = () => {
     >
       {Overlay}
       <WorkspaceNavbar
+        {...currentView.data}
         folderNav={folderNav}
         folders={myFolders}
         setCurrentView={handleCurrentView}
         handleNewModel={handleNewModel}
         handleEditModel={handleEditModel}
+        handleChangeFolder={handleChangeFolder}
         isLoadingThangs={isLoading}
         models={thangsData.models}
       />

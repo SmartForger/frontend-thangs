@@ -1,3 +1,4 @@
+export { default as AddFolder } from './AddFolder'
 export { default as CreateFolder } from './CreateFolder'
 export { default as CreateTeam } from './CreateTeam'
 export { default as DeleteFolder } from './DeleteFolder'

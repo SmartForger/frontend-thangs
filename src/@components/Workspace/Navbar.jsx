@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import * as R from 'ramda'
 import {
   AddMenu,
   Button,
@@ -90,8 +91,12 @@ const useStyles = createUseStyles(theme => {
   }
 })
 const noop = () => null
+const findFolderById = (id, folders) => {
+  return R.find(R.propEq('id', id.toString()))(folders) || {}
+}
 
 const WorkspaceNavbar = ({
+  folderId: currentFolderId,
   folderNav,
   folders,
   models,
@@ -99,12 +104,17 @@ const WorkspaceNavbar = ({
   handleNewModel: _handleNoop,
   handleEditModel = noop,
   setCurrentView = noop,
+  handleChangeFolder = noop,
 }) => {
   const c = useStyles({})
   const history = useHistory()
   const [showFileExplorer, setShowFileExplorer] = useState(false)
   const [showCreateMenu, setShowCreateMenu] = useState(false)
   const addMenuRef = useRef(null)
+
+  const folder = useMemo(() => {
+    return currentFolderId ? findFolderById(currentFolderId, folders) : {}
+  }, [currentFolderId, folders])
 
   useEffect(() => {
     if (folderNav.files) {
@@ -122,13 +132,6 @@ const WorkspaceNavbar = ({
     folderNav.files,
     showFileExplorer,
   ])
-
-  const handleChangeFolder = useCallback(
-    folderId => () => {
-      setCurrentView('folderView', { id: folderId })
-    },
-    [setCurrentView]
-  )
 
   const handleAllFiles = useCallback(() => {
     setCurrentView('allFilesView')
@@ -162,7 +165,7 @@ const WorkspaceNavbar = ({
   }, [history])
 
   useExternalClick(addMenuRef, () => setShowCreateMenu(false))
-
+  console.log('folder', folder)
   return (
     <nav className={c.WorkspaceNavbar}>
       <Spacer size={'2rem'} />
@@ -180,7 +183,7 @@ const WorkspaceNavbar = ({
           </Button>
           {showCreateMenu && (
             <div className={c.WorkspaceNavbar_AddMenu}>
-              <AddMenu />
+              <AddMenu folder={folder} />
             </div>
           )}
         </div>

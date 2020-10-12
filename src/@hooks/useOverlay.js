@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
 import {
+  AddFolder,
   CreateFolder,
   CreateTeam,
   DeleteFolder,
@@ -19,6 +20,7 @@ import {
 import { Overlay } from '@components'
 
 const overlayTemplates = {
+  addFolder: AddFolder,
   createFolder: CreateFolder,
   createTeam: CreateTeam,
   deleteFolder: DeleteFolder,

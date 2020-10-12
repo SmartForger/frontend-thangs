@@ -52,6 +52,7 @@ const WorkspaceHeader = () => {
             user={user}
             showUser={true}
             showUpload={false}
+            myThangsMenu={true}
           />
         </div>
       </div>

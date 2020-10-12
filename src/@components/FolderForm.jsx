@@ -1,43 +1,36 @@
 import React, { useCallback } from 'react'
-import {
-  Button,
-  Input,
-  MultiLineBodyText,
-  Spacer,
-  TitleTertiary,
-  Toggle,
-} from '@components'
+import { Button, Input, Spacer, Toggle } from '@components'
 import { createUseStyles } from '@style'
 import { useForm } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
-    EditFolderForm: {
+    FolderForm: {
       width: '100%',
     },
-    EditFolderForm_Wrapper: {
+    FolderForm_Wrapper: {
       width: '18.75rem',
 
       '& button': {
         width: '100%',
       },
     },
-    EditFolderForm_ButtonContainer: {
+    FolderForm_ButtonContainer: {
       display: 'flex',
       justifyContent: 'flex-end',
     },
-    EditFolderForm_Button: {
+    FolderForm_Button: {
       maxWidth: '100%',
       width: '10.5rem',
     },
-    EditFolderForm_Field: {
+    FolderForm_Field: {
       display: 'flex',
       flexDirection: 'column',
     },
-    EditFolderForm_label: {
+    FolderForm_label: {
       margin: '.5rem 0',
     },
-    EditFolderForm_input: {
+    FolderForm_input: {
       border: 0,
       padding: '.5rem 1rem',
       marginBottom: '.5rem',
@@ -45,7 +38,7 @@ const useStyles = createUseStyles(theme => {
       minWidth: 0,
       backgroundColor: theme.colors.white[400],
     },
-    EditFolderForm_textarea: {
+    FolderForm_textarea: {
       resize: 'vertical',
       border: 0,
       marginBottom: '2rem',
@@ -53,7 +46,7 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.5rem',
       backgroundColor: theme.colors.white[400],
     },
-    EditFolderForm_ButtonRow: {
+    FolderForm_ButtonRow: {
       display: 'flex',
       flexWrap: 'wrap',
       justifyContent: 'flex-end',
@@ -62,11 +55,12 @@ const useStyles = createUseStyles(theme => {
 })
 const noop = () => null
 
-const EditFolderForm = ({
+const FolderForm = ({
   folder = {},
+  rootFolder = {},
   handleSubmit = noop,
   handleCancel = noop,
-  editProfileErrorMessage,
+  errorMessage,
 }) => {
   const c = useStyles()
   const { id, name, is_public: isPublic } = folder
@@ -74,6 +68,7 @@ const EditFolderForm = ({
     id: id,
     name: name || '',
     isPublic: isPublic || false,
+    root: rootFolder.id || undefined,
   }
 
   const { onFormSubmit, onInputChange, inputState } = useForm({
@@ -95,24 +90,11 @@ const EditFolderForm = ({
   )
 
   return (
-    <div className={c.EditFolderForm_Wrapper}>
-      <Spacer size='4rem' />
-      <TitleTertiary>Edit Folder</TitleTertiary>
-      <Spacer size='1rem' />
-      <MultiLineBodyText>
-        Change the name or privacy settings of your folder.
-      </MultiLineBodyText>
-      <Spacer size='1rem' />
-      <form
-        className={c.EditFolderForm}
-        onSubmit={onFormSubmit(handleSubmit)}
-        data-cy='edit-folder-form'
-      >
-        {editProfileErrorMessage && (
+    <div className={c.FolderForm_Wrapper}>
+      <form className={c.FolderForm} onSubmit={onFormSubmit(handleSubmit)}>
+        {errorMessage && (
           <>
-            <h4 className={c.EditFolder_ErrorText} data-cy='edit-folder-error'>
-              {editProfileErrorMessage}
-            </h4>
+            <h4 className={c.EditFolder_ErrorText}>{errorMessage}</h4>
             <Spacer size='1rem' />
           </>
         )}
@@ -135,17 +117,17 @@ const EditFolderForm = ({
           hoverTooltip={'Folder privacy control coming soon'}
         />
         <Spacer size={'1rem'} />
-        <div className={c.EditFolderForm_ButtonContainer}>
+        <div className={c.FolderForm_ButtonContainer}>
           <Button
             secondary
-            className={c.EditFolderForm_Button}
+            className={c.FolderForm_Button}
             onClick={handleCancel}
             type='button'
           >
             Cancel
           </Button>
           <Spacer size={'1rem'} />
-          <Button className={c.EditFolderForm_Button} type='submit'>
+          <Button className={c.FolderForm_Button} type='submit'>
             Save
           </Button>
         </div>
@@ -155,4 +137,4 @@ const EditFolderForm = ({
   )
 }
 
-export default EditFolderForm
+export default FolderForm

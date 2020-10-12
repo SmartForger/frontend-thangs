@@ -11,7 +11,7 @@ const useStyles = createUseStyles(theme => {
     mediaQueries: { md },
   } = theme
   return {
-    EditFolder: {
+    AddFolder: {
       alignItems: 'center',
       backgroundColor: theme.colors.white[300],
       borderRadius: '1rem',
@@ -24,7 +24,7 @@ const useStyles = createUseStyles(theme => {
         flexDirection: 'row',
       },
     },
-    EditFolder_Column: {
+    AddFolder_Column: {
       display: 'flex',
       flexDirection: 'row',
       width: '100%',
@@ -33,14 +33,14 @@ const useStyles = createUseStyles(theme => {
         flexDirection: 'row',
       },
     },
-    EditFolder_ExitButton: {
+    AddFolder_ExitButton: {
       top: '2rem',
       right: '2rem',
       cursor: 'pointer',
       zIndex: 4,
       position: 'absolute',
     },
-    EditFolder_ViewerWrapper: {
+    AddFolder_ViewerWrapper: {
       width: '100%',
       height: '24rem',
       margin: '0 auto',
@@ -59,7 +59,7 @@ const useStyles = createUseStyles(theme => {
         borderRadius: '1rem 0 0 1rem',
       },
     },
-    EditFolder_Viewer: {
+    AddFolder_Viewer: {
       width: '100%',
       height: '100%',
       margin: '0 auto',
@@ -67,14 +67,15 @@ const useStyles = createUseStyles(theme => {
       overflow: 'hidden',
       flexDirection: 'column',
     },
-    EditFolder_Wrapper: {
+    AddFolder_Wrapper: {
       width: '18.75rem',
     },
   }
 })
 
-const EditFolder = ({ folder }) => {
+const AddFolder = ({ folder }) => {
   const c = useStyles()
+  debugger
   const [errorMessage, setErrorMessage] = useState(null)
   const { dispatch } = useStoreon()
 
@@ -84,10 +85,9 @@ const EditFolder = ({ folder }) => {
 
   const handleSubmit = useCallback(
     newFolderData => {
-      const { id, ...updatedFolder } = newFolderData
-      dispatch(types.EDIT_FOLDER, {
-        id,
-        folder: updatedFolder,
+      debugger
+      dispatch(types.CREATE_FOLDER, {
+        data: newFolderData,
         onError: error => {
           setErrorMessage(error)
         },
@@ -100,29 +100,29 @@ const EditFolder = ({ folder }) => {
   )
 
   return (
-    <div className={c.EditFolder}>
-      <ExitIcon className={c.EditFolder_ExitButton} onClick={closeOverlay} />
-      <div className={classnames(c.EditFolder_Column, c.EditFolder_EditForm)}>
-        <Spacer className={c.EditFolder_MobileSpacer} size='2rem' />
-        <div className={c.EditFolder_Wrapper}>
+    <div className={c.AddFolder}>
+      <ExitIcon className={c.AddFolder_ExitButton} onClick={closeOverlay} />
+      <div className={classnames(c.AddFolder_Column, c.AddFolder_EditForm)}>
+        <Spacer className={c.AddFolder_MobileSpacer} size='2rem' />
+        <div className={c.AddFolder_Wrapper}>
           <Spacer size='4rem' />
-          <TitleTertiary>Edit Folder</TitleTertiary>
+          <TitleTertiary>Create New Folder</TitleTertiary>
           <Spacer size='1rem' />
           <MultiLineBodyText>
-            Change the name or privacy settings of your folder.
+            Set the name or privacy settings of your folder.
           </MultiLineBodyText>
           <Spacer size='1rem' />
           <FolderForm
+            handleSubmit={handleSubmit}
+            handleCancel={closeOverlay}
             errorMessage={errorMessage}
             folder={folder}
-            handleCancel={closeOverlay}
-            handleSubmit={handleSubmit}
           />
         </div>
-        <Spacer className={c.EditFolder_MobileSpacer} size='2rem' />
+        <Spacer className={c.AddFolder_MobileSpacer} size='2rem' />
       </div>
     </div>
   )
 }
 
-export default EditFolder
+export default AddFolder

@@ -65,7 +65,14 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const UserNav = ({ dispatch, isLoading, user, showUser, showUpload = true }) => {
+const UserNav = ({
+  dispatch,
+  isLoading,
+  user,
+  showUser,
+  showUpload = true,
+  myThangsMenu = false,
+}) => {
   const c = useStyles()
   const t = useTranslations({})
 
@@ -105,6 +112,7 @@ const UserNav = ({ dispatch, isLoading, user, showUser, showUpload = true }) => 
           user={user}
           TargetComponent={ProfileDropdown}
           dispatch={dispatch}
+          myThangsMenu={myThangsMenu}
         />
         <Spacer size='1rem' />
         {showUpload && (

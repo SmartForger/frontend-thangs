@@ -1,10 +1,14 @@
 import React, { useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import {
+  Pill,
   ProfilePicture,
   Divider,
   DropdownMenu,
   DropdownItem,
+  MetadataSecondary,
+  MultiLineBodyText,
+  Spacer,
   useFlashNotification,
 } from '@components'
 import { useTranslations } from '@hooks'
@@ -16,10 +20,15 @@ import { ReactComponent as ExitIcon } from '@svg/dropdown-signout.svg'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as NewFolderIcon } from '@svg/dropdown-folder.svg'
 import { ReactComponent as UserIcon } from '@svg/dropdown-profile.svg'
+import { ReactComponent as PortfolioIcon } from '@svg/icon-portfolio.svg'
+import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
+import { ReactComponent as SignOutIcon } from '@svg/icon-signout.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
-    ProfileDropdown: {},
+    ProfileDropdown: {
+      width: '16.25rem',
+    },
     ProfileDropdown_ClickableButton: {
       cursor: 'pointer',
     },
@@ -27,6 +36,14 @@ const useStyles = createUseStyles(theme => {
       margin: '.25rem 0',
       border: 'none',
       borderTop: `1px solid ${theme.colors.grey[100]}`,
+    },
+    ProfileDropdown_Row: {
+      display: 'flex',
+      flexDirection: 'row',
+    },
+    ProfileDropdown_Column: {
+      display: 'flex',
+      flexDirection: 'column',
     },
   }
 })
@@ -36,7 +53,9 @@ export const ProfileDropdownMenu = ({
   dispatch,
   user = {},
   TargetComponent,
+  myThangsMenu,
 }) => {
+  const c = useStyles({})
   const t = useTranslations({})
   const history = useHistory()
   const { navigateWithFlash } = useFlashNotification()
@@ -51,11 +70,64 @@ export const ProfileDropdownMenu = ({
     [dispatch, navigateWithFlash]
   )
 
+  if (myThangsMenu) {
+    return (
+      <DropdownMenu
+        className={c.ProfileDropdown}
+        TargetComponent={TargetComponent}
+        user={user}
+      >
+        <div>
+          <div className={c.ProfileDropdown_Row}>
+            <ProfilePicture
+              size='2.5rem'
+              name={user.fullName}
+              userName={user.username}
+              src={user.profile.avatarUrl}
+            />
+            <Spacer size={'.75rem'} />
+            <div className={c.ProfileDropdown_Column}>
+              <MultiLineBodyText>{user.fullName || user.username}</MultiLineBodyText>
+              <Link to={'/myThangs/editProfile'}>
+                <MetadataSecondary>Profile Settings</MetadataSecondary>
+              </Link>
+            </div>
+          </div>
+          <Spacer size={'1rem'} />
+          <Link to={`/${user.username}`}>
+            <Pill secondary>View Portfolio</Pill>
+          </Link>
+          <Spacer size={'1rem'} />
+          <Divider spacing={0} />
+          <Spacer size={'1rem'} />
+          <DropdownItem to={`/${user.username}`}>
+            <PortfolioIcon /> Portfolio
+          </DropdownItem>
+          <DropdownItem to={`/${user.username}`}>
+            <ModelIcon /> Models
+          </DropdownItem>
+          <Spacer size={'1rem'} />
+          <Divider spacing={0} />
+          <Spacer size={'1rem'} />
+          <DropdownItem
+            onClick={() => {
+              dispatch(types.CLOSE_OVERLAY)
+              setTimeout(() => {
+                authenticationService.logout()
+                history.push('/')
+              }, 250)
+            }}
+          >
+            <SignOutIcon />
+            {t('header.dropdownMenu.signOut')}
+          </DropdownItem>
+        </div>
+      </DropdownMenu>
+    )
+  }
+
   return (
-    <DropdownMenu
-      TargetComponent={TargetComponent}
-      user={user}
-    >
+    <DropdownMenu TargetComponent={TargetComponent} user={user}>
       <DropdownItem to={`/${user.username}?selected=likes`}>
         <HeartIcon /> {t('header.dropdownMenu.likedModels')}
       </DropdownItem>

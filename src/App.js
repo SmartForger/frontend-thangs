@@ -72,10 +72,15 @@ const App = () => {
               />
               <Route
                 exact
-                path='/mythangs/:view'
+                path='/myThangs/folderView/:folderId'
                 component={routeRequiresAuth(MyThangs)}
               />
-              <Route exact path='/mythangs' component={routeRequiresAuth(MyThangs)} />
+              <Route
+                exact
+                path='/myThangs/:view'
+                component={routeRequiresAuth(MyThangs)}
+              />
+              <Route exact path='/myThangs' component={routeRequiresAuth(MyThangs)} />
               <Route exact path='/profile/:id' component={Profile} />
               <Route
                 exact

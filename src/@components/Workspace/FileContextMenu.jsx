@@ -39,7 +39,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const FileContextMenu = ({ id, model, folder, type }) => {
+const FileContextMenu = ({ id, model, folder, type, postId = '' }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
 
@@ -127,7 +127,7 @@ const FileContextMenu = ({ id, model, folder, type }) => {
   )
 
   return (
-    <ContextMenu className={c.ContextMenu} id={`File_Menu_${id}`}>
+    <ContextMenu className={c.ContextMenu} id={`File_Menu_${id}${postId}`}>
       <Spacer size={'1rem'} />
       <MenuItem className={c.ContextMenu_Item} onClick={handleEdit}>
         <div>

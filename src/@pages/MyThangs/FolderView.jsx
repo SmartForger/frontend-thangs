@@ -125,13 +125,13 @@ const findFolderById = (id, folders) => {
 
 const FolderView = ({
   className,
-  id,
+  folderId: id,
   folders,
   handleChangeFolder = noop,
   handleEditModel = noop,
 }) => {
   const c = useStyles({})
-  const folder = findFolderById(id, folders)
+  const folder = id ? findFolderById(id, folders) : {}
 
   if (!folder || R.isEmpty(folder)) {
     return (
@@ -182,7 +182,7 @@ const FolderView = ({
           <Spacer size='2rem' />
         </main>
       </ContextMenuTrigger>
-      <AddContextMenu />
+      <AddContextMenu folder={folder} rootFolder={rootFolder} />
     </>
   )
 }

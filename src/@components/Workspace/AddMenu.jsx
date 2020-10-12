@@ -39,18 +39,31 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const AddMenu = () => {
+const AddMenu = ({ folder = {} }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
-
+  debugger
   const handleAddFolder = useCallback(
-    () => dispatch(types.OPEN_OVERLAY, { overlayName: 'createFolder' }),
-    [dispatch]
+    () =>
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'addFolder',
+        overlayData: {
+          folder,
+          animateIn: true,
+          windowed: true,
+          dialogue: true,
+        },
+      }),
+    [dispatch, folder]
   )
 
   const handleUpload = useCallback(
-    () => dispatch(types.OPEN_OVERLAY, { overlayName: 'upload' }),
-    [dispatch]
+    () =>
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'upload',
+        overlayData: { folderId: folder.id },
+      }),
+    [dispatch, folder.id]
   )
 
   return (
@@ -75,7 +88,7 @@ const AddMenu = () => {
         </MenuItem>
         <Spacer size={'1.5rem'} />
       </div>
-      <Spacer size={'.5rem'} />
+      {/* <Spacer size={'.5rem'} />
       <div>
         <Spacer size={'1.5rem'} />
         <MenuItem className={c.ContextMenu_Item} onClick={handleUpload}>
@@ -84,7 +97,7 @@ const AddMenu = () => {
           <SingleLineBodyText>Upload Folder - Coming Soon...</SingleLineBodyText>
         </MenuItem>
         <Spacer size={'1.5rem'} />
-      </div>
+      </div> */}
       <Spacer size={'1rem'} />
     </div>
   )
