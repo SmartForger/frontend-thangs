@@ -2,10 +2,10 @@ import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/file
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
-const NOOP = () => null
+const noop = () => null
 
 const useFileUpload = ({
-  onSetFile = NOOP,
+  onSetFile = noop,
   file: initialFile,
   errorState: initialErrorState,
   isExplorerOpened = false,

@@ -78,7 +78,7 @@ const Upload = ({ prevModelId }) => {
 
       const requiredVariables = {
         name: name,
-        size: file.size,
+        size: file ? file.size : 0,
         description,
       }
 
@@ -104,7 +104,7 @@ const Upload = ({ prevModelId }) => {
         },
       })
     },
-    [currentUser.id, dispatch, file.size, history, prevModelId]
+    [currentUser, dispatch, file, history, prevModelId]
   )
 
   return (

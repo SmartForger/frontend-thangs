@@ -1,5 +1,5 @@
-import { useStoreon } from 'storeon/react'
 import React, { useCallback } from 'react'
+import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
 import {
   AddContextMenu,
@@ -82,7 +82,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
     dispatch(types.OPEN_OVERLAY, {
       overlayName: 'inviteUsers',
       overlayData: {
-        folder,
+        folderId: folder.id,
         animateIn: true,
         windowed: true,
         dialogue: true,

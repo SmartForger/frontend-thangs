@@ -1,4 +1,6 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
+import { useStoreon } from 'storeon/react'
+import * as R from 'ramda'
 import {
   Spacer,
   InviteUsersForm,
@@ -12,7 +14,6 @@ import { createUseStyles } from '@style'
 import { authenticationService } from '@services'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
-import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
@@ -184,11 +185,18 @@ const UserList = ({
   )
 }
 
-const InviteUsers = ({ folder = {} }) => {
+const findFolderById = (id, folders) => {
+  return R.find(R.propEq('id', id.toString()))(folders) || {}
+}
+
+const InviteUsers = ({ folderId: id }) => {
   const c = useStyles()
   const [errorMessage, setErrorMessage] = useState(null)
-  const [members, setMembers] = useState(folder.members)
-  const { dispatch } = useStoreon()
+  const { dispatch, folders } = useStoreon('folders')
+
+  const folder = useMemo(() => {
+    return findFolderById(id, folders)
+  }, [folders, id])
 
   const closeOverlay = useCallback(() => {
     dispatch(types.CLOSE_OVERLAY)
@@ -209,16 +217,14 @@ const InviteUsers = ({ folder = {} }) => {
             folderId={folder.id}
             onError={setErrorMessage}
             errorMessage={errorMessage}
-            onFinish={setMembers}
           />
           <Spacer size={'2rem'} />
           <UserList
             creator={folder.creator}
-            users={members}
+            users={folder.members}
             folderId={folder.id}
             errorMessage={errorMessage}
             setErrorMessage={setErrorMessage}
-            onFinish={setMembers}
           />
         </div>
         <Spacer className={c.InviteUsers_MobileSpacer} size='2rem' />

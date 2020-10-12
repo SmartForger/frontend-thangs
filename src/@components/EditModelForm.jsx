@@ -75,6 +75,10 @@ const useStyles = createUseStyles(theme => {
         lineHeight: '1rem',
         wordBreak: 'break-word',
       },
+
+      '& svg': {
+        flex: 'none',
+      },
     },
   }
 })
