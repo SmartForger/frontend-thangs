@@ -93,8 +93,16 @@ const FileContextMenu = ({ id, model, folder, type, postId = '' }) => {
   }, [dispatch, folder, id, model, type])
 
   const addFolder = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, { overlayName: 'createFolder' })
-  }, [dispatch])
+    dispatch(types.OPEN_OVERLAY, {
+      overlayName: 'addFolder',
+      overlayData: {
+        folder,
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
+      },
+    })
+  }, [dispatch, folder])
 
   const removeFile = useCallback(
     e => {

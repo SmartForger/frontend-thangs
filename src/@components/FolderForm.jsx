@@ -10,8 +10,6 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
     },
     FolderForm_Wrapper: {
-      width: '18.75rem',
-
       '& button': {
         width: '100%',
       },
