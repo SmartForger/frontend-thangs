@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react'
 import {
-  Spinner,
   Spacer,
   InviteUsersForm,
   TitleTertiary,
@@ -11,7 +10,6 @@ import {
 } from '@components'
 import { createUseStyles } from '@style'
 import { authenticationService } from '@services'
-import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { useStoreon } from 'storeon/react'

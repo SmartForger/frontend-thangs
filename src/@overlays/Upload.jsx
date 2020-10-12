@@ -104,7 +104,7 @@ const Upload = ({ prevModelId }) => {
         },
       })
     },
-    [currentUser, dispatch, file, prevModelId]
+    [currentUser.id, dispatch, file.size, history, prevModelId]
   )
 
   return (

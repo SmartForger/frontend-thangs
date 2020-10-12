@@ -51,7 +51,7 @@ const RecentFilesView = ({
           .sort((a, b) => new Date(a.uploadDate) - new Date(b.uploadDate))
       : []
   }, [thangsData])
-  console.log('starredModels', starredModels)
+
   return (
     <>
       <ContextMenuTrigger id='Add_Menu' holdToDisplay={1000}>

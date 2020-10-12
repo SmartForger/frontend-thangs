@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import {
   Pill,
@@ -9,7 +9,6 @@ import {
   MetadataSecondary,
   MultiLineBodyText,
   Spacer,
-  useFlashNotification,
 } from '@components'
 import { useTranslations } from '@hooks'
 import { authenticationService } from '@services'
@@ -55,17 +54,6 @@ export const ProfileDropdownMenu = ({
   const c = useStyles({})
   const t = useTranslations({})
   const history = useHistory()
-  const { navigateWithFlash } = useFlashNotification()
-  const handleAfterCreate = useCallback(
-    folder => {
-      dispatch(types.CLOSE_OVERLAY)
-      navigateWithFlash(
-        `/folder/${folder.folderId}`,
-        'Folder created successfully. If the provided unregistered email addresses, they will receive an email with instructions for accessing your folder.'
-      )
-    },
-    [dispatch, navigateWithFlash]
-  )
 
   return (
     <DropdownMenu
