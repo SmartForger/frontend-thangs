@@ -112,7 +112,6 @@ const FolderForm = ({
       } else if (!R.isEmpty(parentFolder)) {
         newData.name = `${parentFolder.name}//${data.name}`
       }
-      debugger
       newData.root = parentFolder.root
       handleSubmit(newData)
     },
