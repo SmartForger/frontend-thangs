@@ -71,7 +71,6 @@ const DeleteForm = ({
   const handleOnDelete = useCallback(
     e => {
       e.preventDefault()
-      debugger
       handleDelete(id)
     },
     [handleDelete, id]

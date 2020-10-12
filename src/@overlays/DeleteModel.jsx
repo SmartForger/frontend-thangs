@@ -81,7 +81,6 @@ const DeleteModel = ({ model, type }) => {
 
   const handleSubmit = useCallback(
     id => {
-      debugger
       dispatch(types.DELETE_MODEL, {
         id,
         onError: error => {

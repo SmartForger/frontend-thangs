@@ -98,7 +98,6 @@ const FileContextMenu = ({ id, model, folder, type }) => {
 
   const removeFile = useCallback(
     e => {
-      debugger
       e.preventDefault()
       if (type === 'model') {
         dispatch(types.OPEN_OVERLAY, {

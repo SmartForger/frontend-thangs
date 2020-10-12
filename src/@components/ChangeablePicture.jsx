@@ -7,7 +7,6 @@ import { logger } from '@utilities/logging'
 import { Button, Pill } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import { ReactComponent as EditIcon } from '@svg/icon-pencil.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 

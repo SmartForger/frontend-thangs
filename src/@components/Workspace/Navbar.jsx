@@ -159,7 +159,7 @@ const WorkspaceNavbar = ({
   const handleSignOut = useCallback(() => {
     authenticationService.logout()
     history.push('/')
-  }, [])
+  }, [history])
 
   useExternalClick(addMenuRef, () => setShowCreateMenu(false))
 
