@@ -113,7 +113,6 @@ const FolderForm = ({
         newData.name = `${rootFolder.name}//${data.name}`
       }
       newData.root = rootFolder.id
-      newData.members = []
       handleSubmit(newData)
     },
     [folder, handleSubmit, rootFolder]
