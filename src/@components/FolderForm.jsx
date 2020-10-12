@@ -79,7 +79,7 @@ const FolderForm = ({
   errorMessage,
 }) => {
   const c = useStyles()
-  const { id, name, is_public: isPublic } = folder
+  const { id, name, isPublic } = folder
   const initialState = {
     id: id,
     name: name ? getFolderName(name) : '',
