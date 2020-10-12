@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { useForm } from '@hooks'
 import Joi from '@hapi/joi'
 import * as R from 'ramda'
-import { Button, Spinner, TextInput } from '@components'
+import { Button, Spinner, TextInput, Spacer } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
@@ -31,7 +31,6 @@ const useStyles = createUseStyles(theme => {
     InviteForm_ButtonRow: {
       display: 'flex',
       justifyContent: 'flex-end',
-      marginTop: '3rem',
     },
     InviteForm_SaveButton: {
       minWidth: '6.75rem',
@@ -42,9 +41,9 @@ const useStyles = createUseStyles(theme => {
     InviteForm_FullWidthInput: {
       border: 0,
       padding: '.5rem 1rem',
-      marginBottom: '1.5rem',
       borderRadius: '.5rem',
       minWidth: 0,
+      width: '100%',
       background: theme.colors.white[600],
     },
     InviteForm_ErrorText: {
@@ -86,6 +85,8 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
+
+const noop = () => null
 
 const schemaWithoutName = Joi.object({
   members: Joi.array()
@@ -149,7 +150,12 @@ const DisplayInviteFormErrors = ({ errors, className, serverErrorMsg }) => {
   })
 }
 
-const InviteUsersForm = ({ folderId, onErrorReceived, afterInvite }) => {
+const InviteUsersForm = ({
+  folderId,
+  onError = noop,
+  afterAction = noop,
+  errorMessage,
+}) => {
   const { dispatch, folders } = useStoreon('folders')
   const c = useStyles()
 
@@ -174,39 +180,45 @@ const InviteUsersForm = ({ folderId, onErrorReceived, afterInvite }) => {
   const handleSave = useCallback(
     ({ members }, isValid, errors) => {
       if (!isValid) {
-        return onErrorReceived(errors)
+        return onError(errors)
       }
       const variables = { emails: members }
       dispatch(types.INVITE_TO_FOLDER, {
         data: variables,
         folderId: folderId,
-        onFinish: () => afterInvite(members),
+        onFinish: afterAction,
         onError: error => {
-          onErrorReceived({
+          onError({
             server: error,
           })
         },
       })
     },
-    [afterInvite, dispatch, folderId, onErrorReceived]
+    [afterAction, dispatch, folderId, onError]
   )
 
   return (
     <form className={c.InviteForm} onSubmit={onFormSubmit(handleSave)}>
-      <label className={c.InviteForm_Label} htmlFor='members'>
-        Add users by email
-      </label>
-      <TextInput
-        className={c.InviteForm_FullWidthInput}
-        name='emails'
-        value={inputState && inputState['emails']}
-        onChange={e => {
-          handleOnInputChange('emails', e.target.value)
-          onErrorReceived(null)
-        }}
-        placeholder='example@example.com'
-      />
-      <div className={classnames(c.InviteForm_Row, c.InviteForm_ButtonRow)}>
+      {errorMessage && (
+        <>
+          <h4 className={c.EditFolder_ErrorText} data-cy='edit-folder-error'>
+            {errorMessage}
+          </h4>
+          <Spacer size='1rem' />
+        </>
+      )}
+      <div className={c.InviteForm_Row}>
+        <TextInput
+          className={c.InviteForm_FullWidthInput}
+          name='emails'
+          value={inputState && inputState['emails']}
+          onChange={e => {
+            handleOnInputChange('emails', e.target.value)
+            onError(null)
+          }}
+          placeholder='Email'
+        />
+        <Spacer size={'.5rem'} />
         <Button className={c.InviteForm_SaveButton} type='submit'>
           {folders && folders.isLoading ? (
             <Spinner className={c.InviteForm_Spinner} />

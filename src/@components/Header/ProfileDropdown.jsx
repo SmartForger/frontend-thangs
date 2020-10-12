@@ -16,12 +16,9 @@ import { authenticationService } from '@services'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 
-import { ReactComponent as ExitIcon } from '@svg/dropdown-signout.svg'
-import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
-import { ReactComponent as NewFolderIcon } from '@svg/dropdown-folder.svg'
-import { ReactComponent as UserIcon } from '@svg/dropdown-profile.svg'
+import { ReactComponent as SharedIcon } from '@svg/icon-shared.svg'
 import { ReactComponent as PortfolioIcon } from '@svg/icon-portfolio.svg'
-import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
+import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as SignOutIcon } from '@svg/icon-signout.svg'
 
 const useStyles = createUseStyles(theme => {
@@ -108,8 +105,11 @@ export const ProfileDropdownMenu = ({
         <DropdownItem to={`/${user.username}`}>
           <PortfolioIcon /> Portfolio
         </DropdownItem>
-        <DropdownItem to={`/${user.username}`}>
-          <ModelIcon /> Models
+        <DropdownItem to={'/myThangs/sharedFiles'}>
+          <SharedIcon /> Shared
+        </DropdownItem>
+        <DropdownItem to={'/myThangs/likedModels'}>
+          <HeartIcon /> Liked
         </DropdownItem>
         <Spacer size={'1rem'} />
         <Divider spacing={0} />

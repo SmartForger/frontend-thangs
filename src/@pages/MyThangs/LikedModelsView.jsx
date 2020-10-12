@@ -2,7 +2,14 @@ import React, { useEffect, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
-import { CardCollection, ModelCards, Spinner, Spacer, TitleTertiary } from '@components'
+import {
+  CardCollection,
+  ModelCards,
+  FolderCards,
+  Spinner,
+  Spacer,
+  TitleTertiary,
+} from '@components'
 import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(_theme => {
@@ -35,11 +42,16 @@ const LikedModelsView = ({ className, userId }) => {
     dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId })
   }, [dispatch, userId])
 
-  const { data: models, isLoading } = likedUserModelsAtom
+  const { data = {}, isLoading } = likedUserModelsAtom
+  const { models = [], folders = [] } = data
   const filteredModels = useMemo(() => {
     if (!models || !models.length) return []
     return models.filter(({ owner }) => owner.id.toString() !== userId.toString())
   }, [userId, models])
+  const filteredFolders = useMemo(() => {
+    if (!folders || !folders.length) return []
+    return folders.filter(({ creator }) => creator.id.toString() !== userId.toString())
+  }, [userId, folders])
 
   if (isLoading) {
     return (
@@ -58,6 +70,7 @@ const LikedModelsView = ({ className, userId }) => {
         <Spacer size='2rem' />
         <CardCollection noResultsText='You have not liked any models yet.'>
           <ModelCards items={filteredModels} />
+          <FolderCards items={filteredFolders} />
         </CardCollection>
       </div>
       <Spacer size='2rem' />

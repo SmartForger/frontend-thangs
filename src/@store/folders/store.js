@@ -187,8 +187,8 @@ export default store => {
     async (state, { data, folderId, onFinish, onError }) => {
       store.dispatch(types.SAVING_FOLDER)
       const { error } = await api({
-        method: 'PUT',
-        endpoint: `folders/${folderId}`,
+        method: 'POST',
+        endpoint: `folders/${folderId}/members`,
         body: data,
       })
       if (error) {
@@ -196,35 +196,32 @@ export default store => {
         onError(error)
       } else {
         track('Folder Invite Sent')
-        onFinish(data)
         store.dispatch(types.SAVED_FOLDER)
-        store.dispatch(types.FETCH_FOLDER, { folderId })
+        store.dispatch(types.FETCH_FOLDERS)
+        store.dispatch(types.FETCH_THANGS, {})
+        onFinish()
       }
     }
   )
 
-  store.on(types.REVOKE_FOLDER_ACCESS, async (state, { folderId, userId, onError }) => {
-    store.dispatch(types.SAVING_FOLDER)
-    const { error } = await api({
-      method: 'PUT',
-      endpoint: `folders/${folderId}/members/${userId}`,
-    })
-    if (error) {
-      store.dispatch(types.ERROR_SAVING_FOLDER)
-      onError(error)
-    } else {
-      store.dispatch(types.SAVED_FOLDER)
-      track('Folder Access Revoked')
-      if (
-        state &&
-        state.folders &&
-        state.folders.currentFolder &&
-        state.folders.currentFolder.team_id
-      ) {
-        store.dispatch(types.FETCH_TEAM, state.folders.currentFolder.team_id)
+  store.on(
+    types.REVOKE_FOLDER_ACCESS,
+    async (state, { folderId, userId, onError = noop, onFinish = noop }) => {
+      store.dispatch(types.SAVING_FOLDER)
+      const { error } = await api({
+        method: 'DELETE',
+        endpoint: `folders/${folderId}/members/${userId}`,
+      })
+      if (error) {
+        store.dispatch(types.ERROR_SAVING_FOLDER)
+        onError(error)
       } else {
-        store.dispatch(types.FETCH_FOLDER, { folderId })
+        store.dispatch(types.SAVED_FOLDER)
+        track('Folder Access Revoked')
+        store.dispatch(types.FETCH_FOLDERS)
+        store.dispatch(types.FETCH_THANGS, {})
+        onFinish()
       }
     }
-  })
+  )
 }

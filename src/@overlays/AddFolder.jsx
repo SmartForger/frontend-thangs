@@ -68,7 +68,7 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
     },
     AddFolder_Wrapper: {
-      width: '18.75rem',
+      width: '339px',
     },
   }
 })

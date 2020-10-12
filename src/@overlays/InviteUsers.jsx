@@ -1,83 +1,229 @@
 import React, { useCallback, useState } from 'react'
-import { useStoreon } from 'storeon/react'
-import { InviteUsersForm, DisplayTeamFormErrors } from '@components'
-import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg'
-import classnames from 'classnames'
+import {
+  Spinner,
+  Spacer,
+  InviteUsersForm,
+  TitleTertiary,
+  MultiLineBodyText,
+  ProfilePicture,
+  MetadataSecondary,
+  SingleLineBodyText,
+} from '@components'
 import { createUseStyles } from '@style'
+import { authenticationService } from '@services'
+import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
+import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
+import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
   return {
     InviteUsers: {
-      width: '40vw',
-      margin: '0 auto',
-    },
-    InviteUsers_Header: {
-      ...theme.text.headerText,
-      marginBottom: '1rem',
-    },
-    InviteUsers_Text: {
-      ...theme.text.lightText,
+      alignItems: 'center',
+      backgroundColor: theme.colors.white[300],
+      borderRadius: '1rem',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-start',
+      position: 'relative',
+
+      [md]: {
+        flexDirection: 'row',
+      },
     },
     InviteUsers_Row: {
       display: 'flex',
-      marginTop: '4.25rem',
+      flexDirection: 'row',
     },
-    InviteUsers_Row__hasError: {
-      marginTop: '1rem',
+    InviteUsers_Column: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
     },
-    InviteUsers_NewFolderIcon: {
-      marginBottom: '1rem',
+    InviteUsers_ExitButton: {
+      top: '2rem',
+      right: '2rem',
+      cursor: 'pointer',
+      zIndex: 4,
+      position: 'absolute',
     },
-    InviteUsers_DisplayErrors: {
-      marginBottom: '1rem',
+    InviteUsers_ViewerWrapper: {
+      width: '100%',
+      height: '24rem',
+      margin: '0 auto',
+      display: 'flex',
+      overflow: 'hidden',
+      flexDirection: 'column',
+      borderRadius: '1rem 1rem 0 0',
+      position: 'relative',
+      borderRight: 'none',
+      borderBottom: `1px solid ${theme.colors.white[900]}`,
+
+      [md]: {
+        height: '40rem',
+        borderBottom: 'none',
+        borderRight: `1px solid ${theme.colors.white[900]}`,
+        borderRadius: '1rem 0 0 1rem',
+      },
     },
-    InviteUsers_UserInline: {
-      marginTop: '3rem',
+    InviteUsers_Viewer: {
+      width: '100%',
+      height: '100%',
+      margin: '0 auto',
+      display: 'flex',
+      overflow: 'hidden',
+      flexDirection: 'column',
+    },
+    InviteUsers_Wrapper: {
+      width: '339px',
+    },
+    InviteUsers_Item: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    InviteUsers_RemoveUser: {
+      cursor: 'pointer',
     },
   }
 })
 
-const InviteUsers = ({ afterCreate, onTeamOverlayOpen, ...props }) => {
+const noop = () => null
+
+const RevokeAccessButton = ({
+  folderId,
+  targetUserId,
+  children,
+  setErrorMessage = noop,
+  onFinish = noop,
+}) => {
+  const c = useStyles({})
   const { dispatch } = useStoreon()
-  const c = useStyles()
-  const [errors, setErrors] = useState()
-  const handleOnCancel = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, { overlayName: 'createFolder' })
-  }, [dispatch])
-  const handleonTeamOverlayOpen = useCallback(() => {
-    onTeamOverlayOpen()
-  }, [onTeamOverlayOpen])
-  const handleAfterCreate = useCallback(
-    newTeamName => {
-      setErrors(null)
-      afterCreate(newTeamName)
-    },
-    [afterCreate]
+  const handleRevoke = async e => {
+    e.preventDefault()
+    dispatch(types.REVOKE_FOLDER_ACCESS, {
+      folderId: folderId,
+      userId: targetUserId,
+      onError: setErrorMessage,
+      onFinish,
+    })
+  }
+
+  return (
+    <div className={c.InviteUsers_RemoveUser} onClick={handleRevoke}>
+      {children}
+    </div>
   )
+}
+
+const UserList = ({
+  users = [],
+  folderId,
+  creator,
+  setErrorMessage,
+  onFinish = noop,
+}) => {
+  const c = useStyles({})
+  const currentUserId = authenticationService.getCurrentUserId()
+  const isCurrentUserOwner = creator.id.toString() === currentUserId
+
+  return (
+    <ul className={c.InviteUsers_List}>
+      {users.map((user, idx) => {
+        const isOwner = user && user.isOwner
+        const isPending = user && user.isPending
+        return (
+          <React.Fragment key={idx}>
+            <li className={c.InviteUsers_Item}>
+              <div className={c.InviteUsers_Row}>
+                <ProfilePicture
+                  className={c.ModelTitle_OwnerProfilePicture}
+                  size='2.5rem'
+                  name={user.fullName}
+                  userName={user.username}
+                  src={user.profile && user.profile.avatarUrl}
+                />
+                <Spacer size={'1rem'} />
+                <div className={c.InviteUsers_Column}>
+                  <SingleLineBodyText>{user.username}</SingleLineBodyText>
+                  <Spacer size={'.5rem'} />
+                  <MetadataSecondary>{user.email}</MetadataSecondary>
+                </div>
+              </div>
+              {isCurrentUserOwner && !isOwner && !isPending && (
+                <RevokeAccessButton
+                  targetUserId={user && user.id}
+                  folderId={folderId}
+                  setErrorMessage={setErrorMessage}
+                  onFinish={onFinish}
+                >
+                  <TrashCanIcon className={c.FolderManagement_TrashCanIcon} />
+                </RevokeAccessButton>
+              )}
+              {isPending && (
+                <span
+                  className={c.FolderManagement_PendingFlag}
+                  title={'Email invite has been sent'}
+                >
+                  Pending
+                </span>
+              )}
+              {isOwner && (
+                <span className={c.FolderManagement_PendingFlag} title={'Folder Admin'}>
+                  Owner
+                </span>
+              )}
+            </li>
+            <Spacer size={'1rem'} />
+          </React.Fragment>
+        )
+      })}
+    </ul>
+  )
+}
+
+const InviteUsers = ({ folder = {} }) => {
+  const c = useStyles()
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [members, setMembers] = useState(folder.members)
+  const { dispatch } = useStoreon()
+
+  const closeOverlay = useCallback(() => {
+    dispatch(types.CLOSE_OVERLAY)
+  }, [dispatch])
+
   return (
     <div className={c.InviteUsers}>
-      <NewFolderIcon className={c.InviteUsers_NewFolderIcon} />
-      <h2 className={c.InviteUsers_Header}>Create Team</h2>
-      <div className={c.InviteUsers_Text}>Create a team for your new shared folder.</div>
-      <DisplayTeamFormErrors
-        errors={errors}
-        className={c.InviteUsers_DisplayErrors}
-        serverErrorMsg='Unable to create team. Please try again later.'
-      />
-      <div
-        className={classnames(c.InviteUsers_Row, {
-          [c.InviteUsers_Row__hasError]: errors,
-        })}
-      >
-        <InviteUsersForm
-          onErrorReceived={setErrors}
-          afterCreate={handleAfterCreate}
-          onCancel={handleOnCancel}
-          onTeamOverlayOpen={handleonTeamOverlayOpen}
-          newFolderData={props}
-          includeNameField
-        />
+      <ExitIcon className={c.InviteUsers_ExitButton} onClick={closeOverlay} />
+      <div className={c.InviteUsers_Row}>
+        <Spacer className={c.InviteUsers_MobileSpacer} size='2rem' />
+        <div className={c.InviteUsers_Wrapper}>
+          <Spacer size='4rem' />
+          <TitleTertiary>Add Users By Email</TitleTertiary>
+          <Spacer size='1rem' />
+          <MultiLineBodyText>Users without accounts with be emailed.</MultiLineBodyText>
+          <Spacer size='1rem' />
+          <InviteUsersForm
+            folderId={folder.id}
+            onError={setErrorMessage}
+            errorMessage={errorMessage}
+            onFinish={setMembers}
+          />
+          <Spacer size={'2rem'} />
+          <UserList
+            creator={folder.creator}
+            users={members}
+            folderId={folder.id}
+            errorMessage={errorMessage}
+            setErrorMessage={setErrorMessage}
+            onFinish={setMembers}
+          />
+        </div>
+        <Spacer className={c.InviteUsers_MobileSpacer} size='2rem' />
       </div>
     </div>
   )

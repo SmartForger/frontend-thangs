@@ -6,6 +6,7 @@ import {
   Spacer,
   TitleTertiary,
   FileCard,
+  FolderCard,
   StatsBar,
   FileTable,
 } from '@components'
@@ -41,15 +42,16 @@ const RecentFilesView = ({
 }) => {
   const c = useStyles({})
   const { thangs } = useStoreon('thangs')
-  const { starredModels = [] } = useStarred()
+  const { starredModels = [], starredFolders = [] } = useStarred()
   const { data: thangsData = {} } = thangs
   const files = useMemo(() => {
     return !R.isEmpty(thangsData)
       ? [thangsData.folders, thangsData.models]
-        .flat()
-        .sort((a, b) => new Date(a.uploadDate) - new Date(b.uploadDate))
+          .flat()
+          .sort((a, b) => new Date(a.uploadDate) - new Date(b.uploadDate))
       : []
   }, [thangsData])
+  console.log('starredModels', starredModels)
   return (
     <>
       <ContextMenuTrigger id='Add_Menu' holdToDisplay={1000}>
@@ -68,6 +70,14 @@ const RecentFilesView = ({
                 return (
                   <React.Fragment key={`starred_${index}`}>
                     <FileCard model={model} handleClick={handleEditModel} />
+                    <Spacer size='2rem' />
+                  </React.Fragment>
+                )
+              })}
+              {starredFolders.map((folder, index) => {
+                return (
+                  <React.Fragment key={`starred_${index}`}>
+                    <FolderCard folder={folder} handleClick={handleChangeFolder} />
                     <Spacer size='2rem' />
                   </React.Fragment>
                 )

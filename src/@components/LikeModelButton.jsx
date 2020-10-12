@@ -93,7 +93,7 @@ const AuthLikeModelButton = ({
   minimal,
   onlyShowOwned,
 }) => {
-  const { id, owner } = model
+  const { id, owner = {} } = model
   const isModelOfCurrentUser = useMemo(() => String(currentUserId) === String(owner.id), [
     currentUserId,
     owner.id,
