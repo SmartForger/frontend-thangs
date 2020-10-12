@@ -12,7 +12,7 @@ const useCurrentUser = () => {
   const getCurrentUser = useCallback(() => store.get()['currentUser'], [store])
 
   if (currentId && !getCurrentUser().isLoading && !getCurrentUser().isLoaded) {
-    dispatch(types.FETCH_CURRENT_USER, { id: currentId })
+    dispatch(types.FETCH_CURRENT_USER, {})
   }
 
   if (!currentId && !R.isEmpty(getCurrentUser().data)) {

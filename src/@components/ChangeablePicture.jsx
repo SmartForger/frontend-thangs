@@ -36,11 +36,7 @@ const useStyles = createUseStyles(theme => {
       transform: 'translate(-50%, -50%)',
     },
     ChangeablePicture_Form: {
-      position: 'absolute',
-      width: '2rem',
-      bottom: 0,
-      right: 0,
-
+      position: 'relative',
       '& g': {
         fill: theme.colors.black[500],
       },
@@ -90,7 +86,7 @@ const ModalOverlayStyles = () => {
 
 const initialCrop = { unit: '%', width: 30, aspect: 1 / 1 }
 
-const ChangeablePicture = ({ user, className }) => {
+const ChangeablePicture = ({ className }) => {
   const [cropSrc, setCropSrc] = useState(null)
   const [crop, setCrop] = useState()
   const [croppedImg, setCroppedImg] = useState(null)
@@ -102,9 +98,9 @@ const ChangeablePicture = ({ user, className }) => {
   const c = useStyles()
 
   const submitCrop = useCallback(() => {
-    dispatch(types.UPLOAD_USER_AVATAR, { userId: user.id, file: croppedImg })
+    dispatch(types.UPLOAD_USER_AVATAR, { file: croppedImg })
     setIsCropping(false)
-  }, [croppedImg, dispatch, user.id])
+  }, [croppedImg, dispatch])
 
   const cancel = useCallback(() => {
     formRef.current.reset()
@@ -192,7 +188,7 @@ const ChangeablePicture = ({ user, className }) => {
             e.preventDefault()
           }}
         >
-          <EditIcon />
+          Upload New Image
         </Pill>
       </label>
       <input

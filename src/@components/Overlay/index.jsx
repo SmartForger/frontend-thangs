@@ -45,8 +45,8 @@ const useStyles = createUseStyles(theme => {
     },
     Overlay_Content: {
       height: '100vh',
+      width: ({ dialogue }) => (dialogue ? undefined : '90%'),
       position: 'relative',
-      width: '90%',
       margin: '0 auto',
       marginTop: '4rem',
       paddingTop: '2rem',
@@ -54,8 +54,8 @@ const useStyles = createUseStyles(theme => {
         !showPromo && windowed
           ? '22.875rem'
           : showPromo && windowed
-            ? '45.75rem'
-            : '32rem',
+          ? '45.75rem'
+          : '32rem',
       transition: 'all 450ms',
       opacity: ({ animateIn }) => (animateIn ? 0 : 1),
       top: ({ animateIn }) => (animateIn ? '30px' : 0),
@@ -87,11 +87,12 @@ const Overlay = ({
   showPromo = true,
   shake = false,
   isHidden,
+  dialogue,
   ...props
 }) => {
   const [isVisible, setIsVisible] = useState(false)
   const { dispatch } = useStoreon()
-  const c = useStyles({ windowed, animateIn, showPromo, isHidden })
+  const c = useStyles({ windowed, animateIn, showPromo, isHidden, dialogue })
   useEffect(() => {
     document.body.scrollTop = 0
     document.documentElement.scrollTop = 0

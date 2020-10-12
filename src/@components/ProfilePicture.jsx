@@ -17,8 +17,8 @@ const useStyles = createUseStyles(theme => {
       },
     },
     ProfilePicture_alt: {
-      width: '1.875rem',
-      height: '1.875rem',
+      width: ({ size }) => size || '1.875rem',
+      height: ({ size }) => size || '1.875rem',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -38,7 +38,7 @@ const ProfilePicture = ({
   color = DEFAULT_AVATAR_COLOR,
   bordered,
 }) => {
-  const c = useStyles({ bordered })
+  const c = useStyles({ bordered, size })
   const nameToUse = useMemo(() => {
     if (!name || name.replace(/\s/g, '') === '') return userName
     return name

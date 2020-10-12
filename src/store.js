@@ -5,7 +5,6 @@ import folderNavStore from '@store/folderNav/store'
 import folderLikesStore from '@store/folderLikes/store'
 import folderStore from '@store/folders/store'
 import modelDownloadUrl from '@store/modelDownloadUrl/store'
-import modelLikesStore from '@store/modelLikes/store'
 import modelPreviewsStore from '@store/modelPreviews/store'
 import modelsStatsStore from '@store/modelsStats/store'
 import modelsStore from '@store/models/store'
@@ -29,7 +28,6 @@ const storeParts = [
   folderLikesStore,
   folderStore,
   modelDownloadUrl,
-  modelLikesStore,
   modelPreviewsStore,
   modelsStatsStore,
   modelsStore,

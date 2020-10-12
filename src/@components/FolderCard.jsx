@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import {
   Card,
   FileContextMenu,
@@ -27,8 +27,9 @@ const useStyles = createUseStyles(theme => {
     },
     FolderCard_Star: {
       position: 'absolute',
-      right: '1rem',
-      top: '1rem',
+      right: '0',
+      top: '0',
+      padding: '1rem',
 
       '& path': {
         fill: '#5A5A75',
@@ -42,6 +43,9 @@ const noop = () => null
 const FolderCard = ({ handleClick = noop, folder }) => {
   const c = useStyles({})
   const { id, name } = folder
+  const FolderId = useMemo(() => {
+    return `Folder_${id}`
+  }, [id])
   const displayName = name.split('//').reverse()[0]
   const handleFolderClick = useCallback(() => {
     handleClick(folder)
@@ -49,7 +53,7 @@ const FolderCard = ({ handleClick = noop, folder }) => {
 
   return (
     <>
-      <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
+      <ContextMenuTrigger id={`File_Menu_${FolderId}`} holdToDisplay={1000}>
         <Card
           className={c.FolderCard}
           size={'14.375rem'}
@@ -69,7 +73,7 @@ const FolderCard = ({ handleClick = noop, folder }) => {
           <Spacer size={'2.125rem'} />
         </Card>
       </ContextMenuTrigger>
-      <FileContextMenu id={id} folder={folder} type={'folder'} />
+      <FileContextMenu id={FolderId} folder={folder} type={'folder'} />
     </>
   )
 }

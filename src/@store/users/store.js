@@ -1,6 +1,7 @@
 import * as R from 'ramda'
 import api from '@services/api'
 import { STATUSES, getStatusState } from '@store/constants'
+import { authenticationService } from '@services'
 import * as types from '@constants/storeEventTypes'
 import { logger } from '@utilities/logging'
 
@@ -24,6 +25,7 @@ export default store => {
       },
     }
   })
+
   store.on(types.CHANGE_USER_STATUS, (state, { atom, status = STATUSES.INIT, data }) => ({
     ...state,
     [atom]: {
@@ -32,6 +34,7 @@ export default store => {
       data,
     },
   }))
+
   store.on(types.FETCH_USER, async (_, { id, onFinish = noop }) => {
     if (R.isNil(id)) return
 
@@ -58,6 +61,7 @@ export default store => {
       onFinish()
     }
   })
+
   store.on(
     types.UPDATE_USER,
     async (_, { id, user: updatedUser, onError = noop, onFinish = noop }) => {
@@ -76,7 +80,7 @@ export default store => {
         )
         logger.error('Error when trying to update the user', error)
       } else {
-        store.dispatch(types.FETCH_CURRENT_USER, { id, onFinish })
+        store.dispatch(types.FETCH_CURRENT_USER, { onFinish })
       }
     }
   )
@@ -109,6 +113,7 @@ export default store => {
       store.dispatch(types.LOCAL_FOLLOW_USER, { id, isFollowed: true })
     }
   })
+
   store.on(types.UNFOLLOW_USER, async (_, { id, onFinish = noop, onError = noop }) => {
     store.dispatch(types.CHANGE_USER_STATUS, {
       status: STATUSES.LOADING,
@@ -147,14 +152,16 @@ export default store => {
       },
     },
   }))
-  store.on(types.FETCH_CURRENT_USER, async (_, { id, onFinish = noop }) => {
+
+  store.on(types.FETCH_CURRENT_USER, async (_, { onFinish = noop }) => {
+    const userId = authenticationService.getCurrentUserId()
     store.dispatch(types.CHANGE_USER_STATUS, {
       status: STATUSES.LOADING,
       atom: 'currentUser',
     })
     const { data, error } = await api({
       method: 'GET',
-      endpoint: `users/${id}`,
+      endpoint: `users/${userId}`,
     })
 
     if (error) {
@@ -171,7 +178,7 @@ export default store => {
       })
       store.dispatch(types.CHANGE_USER_STATUS, {
         status: STATUSES.LOADED,
-        atom: `user-${id}`,
+        atom: `user-${userId}`,
         data,
       })
       onFinish()

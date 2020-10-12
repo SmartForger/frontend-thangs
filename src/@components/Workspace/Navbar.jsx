@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import {
   AddMenu,
   Button,
@@ -54,7 +55,7 @@ const useStyles = createUseStyles(theme => {
     WorkspaceNavbar_AddMenu: {
       position: 'absolute',
       width: '18.5rem',
-      top: '3.125rem',
+      top: '2.375rem',
     },
     WorkspaceNavbar_NavLink: {
       display: 'flex',
@@ -100,6 +101,7 @@ const WorkspaceNavbar = ({
   setCurrentView = noop,
 }) => {
   const c = useStyles({})
+  const history = useHistory()
   const [showFileExplorer, setShowFileExplorer] = useState(false)
   const [showCreateMenu, setShowCreateMenu] = useState(false)
   const addMenuRef = useRef(null)
@@ -154,7 +156,10 @@ const WorkspaceNavbar = ({
 
   const handleClickCreate = useCallback(() => setShowCreateMenu(true), [])
 
-  const handleSignOut = useCallback(() => authenticationService.logout(), [])
+  const handleSignOut = useCallback(() => {
+    authenticationService.logout()
+    history.push('/')
+  }, [])
 
   useExternalClick(addMenuRef, () => setShowCreateMenu(false))
 
@@ -163,7 +168,9 @@ const WorkspaceNavbar = ({
       <Spacer size={'2rem'} />
       <div className={c.WorkspaceNavbar_NavContainer}>
         <div className={c.WorkspaceNavbar_Logo}>
-          <Logo />
+          <Link to={'/'}>
+            <Logo />
+          </Link>
         </div>
         <div className={c.WorkspaceNavbar_AddWrapper} ref={addMenuRef}>
           <Button className={c.WorkspaceNavbar_AddButton} onClick={handleClickCreate}>
@@ -179,7 +186,7 @@ const WorkspaceNavbar = ({
         </div>
         <div className={c.WorkspaceNavbar_ScrollableFiles}>
           <div>
-            <TitleTertiary>Files</TitleTertiary>
+            <TitleTertiary>My Thangs</TitleTertiary>
             <Spacer size={'2rem'} />
             <NavLink
               Icon={FileIcon}

@@ -13,15 +13,22 @@ import classnames from 'classnames'
 import { MetadataSecondary } from '@components/Text/Metadata'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
+import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 import { formatBytes } from '@utilities'
 import { ContextMenuTrigger } from 'react-contextmenu'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     FileTable: {
       marginLeft: '-1rem',
     },
-    FileTable_Header: {},
+    FileTable_Header: {
+      '& > span': {
+        display: 'flex',
+        flexDirection: 'row',
+        color: theme.colors.black[500],
+      },
+    },
     FileTable_Row: {
       display: 'flex',
       flexDirection: 'row',
@@ -83,23 +90,40 @@ const FolderName = ({ name }) => {
   )
 }
 
-const FileTableHeader = () => {
+const SortByArrow = () => {
+  return (
+    <>
+      <Spacer size={'.25rem'} />
+      <ArrowDownIcon />
+    </>
+  )
+}
+
+const FileTableHeader = ({ sortedBy }) => {
   const c = useStyles({})
   return (
     <div className={classnames(c.FileTable_Row, c.FileTable_Header)}>
       <div
         className={classnames(c.FileTable_Cell, c.FileTable_FileName, c.FileTable_Header)}
       >
-        <MetadataSecondary>Filename</MetadataSecondary>
+        <MetadataSecondary>
+          Filename{sortedBy === 'filename' && <SortByArrow />}
+        </MetadataSecondary>
       </div>
       <div className={classnames(c.FileTable_Cell, c.FileTable_Size, c.FileTable_Header)}>
-        <MetadataSecondary>Created</MetadataSecondary>
+        <MetadataSecondary>
+          Created{sortedBy === 'created' && <SortByArrow />}
+        </MetadataSecondary>
       </div>
       <div className={classnames(c.FileTable_Cell, c.FileTable_Size, c.FileTable_Header)}>
-        <MetadataSecondary>File Type</MetadataSecondary>
+        <MetadataSecondary>
+          File Type{sortedBy === 'filetype' && <SortByArrow />}
+        </MetadataSecondary>
       </div>
       <div className={classnames(c.FileTable_Cell, c.FileTable_Size, c.FileTable_Header)}>
-        <MetadataSecondary>Size</MetadataSecondary>
+        <MetadataSecondary>
+          Size{sortedBy === 'size' && <SortByArrow />}
+        </MetadataSecondary>
       </div>
       <div className={classnames(c.FileTable_Cell, c.FileTable_Header)}>
         <MetadataSecondary>Contributors</MetadataSecondary>
@@ -190,30 +214,35 @@ const FileRow = ({ model, handleModelClick = noop }) => {
   )
 }
 
-const FileTable = ({ files = [], handleChangeFolder = noop, handleEditModel = noop }) => {
+const FileTable = ({
+  files = [],
+  handleChangeFolder = noop,
+  handleEditModel = noop,
+  sortedBy,
+}) => {
   const c = useStyles({})
 
   return (
     <div className={c.FileTable}>
-      <FileTableHeader />
+      <FileTableHeader sortedBy={sortedBy} />
       {files.map((file, index) => {
         const { id } = file
         return (
           <React.Fragment key={`FileRow_${index}`}>
             {file.subfolders ? (
-              <>
+              <div>
                 <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
                   <FolderRow folder={file} handleFolderClick={handleChangeFolder} />
                 </ContextMenuTrigger>
                 <FileContextMenu id={id} folder={file} type={'folder'} />
-              </>
+              </div>
             ) : (
-              <>
+              <div>
                 <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
                   <FileRow model={file} handleModelClick={handleEditModel} />
                 </ContextMenuTrigger>
                 <FileContextMenu id={id} model={file} type={'model'} />
-              </>
+              </div>
             )}
           </React.Fragment>
         )

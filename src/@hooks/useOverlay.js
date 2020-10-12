@@ -3,8 +3,12 @@ import { useStoreon } from 'storeon/react'
 import {
   CreateFolder,
   CreateTeam,
+  DeleteFolder,
+  DeleteModel,
+  EditFolder,
   EditModel,
   FolderManagement,
+  InviteUsers,
   PasswordReset,
   ReportModel,
   SearchByUpload,
@@ -17,8 +21,12 @@ import { Overlay } from '@components'
 const overlayTemplates = {
   createFolder: CreateFolder,
   createTeam: CreateTeam,
+  deleteFolder: DeleteFolder,
+  deleteModel: DeleteModel,
+  editFolder: EditFolder,
   editModel: EditModel,
   folderManagement: FolderManagement,
+  inviteUsers: InviteUsers,
   passwordReset: PasswordReset,
   reportModel: ReportModel,
   searchByUpload: SearchByUpload,
@@ -29,7 +37,6 @@ const overlayTemplates = {
 
 const useOverlay = () => {
   const { overlay } = useStoreon('overlay')
-
   const OverlayComponent = useMemo(() => {
     const OverlayView =
       overlay && overlay.isOpen && overlayTemplates[overlay.currentOverlay]

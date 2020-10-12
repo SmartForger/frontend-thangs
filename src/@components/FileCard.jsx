@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import {
   Card,
   FileContextMenu,
@@ -26,8 +26,9 @@ const useStyles = createUseStyles(theme => {
     },
     FileCard_Star: {
       position: 'absolute',
-      right: '1rem',
-      top: '1rem',
+      right: '0',
+      top: '0',
+      padding: '1rem',
 
       '& path': {
         fill: '#AE881E',
@@ -41,14 +42,16 @@ const noop = () => null
 const FileCard = ({ handleClick = noop, model }) => {
   const c = useStyles({})
   const { id, name } = model
-
+  const CardId = useMemo(() => {
+    return `Card_${id}`
+  }, [id])
   const handleModelClick = useCallback(() => {
     handleClick(model)
   }, [handleClick, model])
 
   return (
     <>
-      <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
+      <ContextMenuTrigger id={`File_Menu_${CardId}`} holdToDisplay={1000}>
         <Card
           className={c.FileCard}
           size={'14.375rem'}
@@ -63,7 +66,7 @@ const FileCard = ({ handleClick = noop, model }) => {
           <Spacer size={'2.125rem'} />
         </Card>
       </ContextMenuTrigger>
-      <FileContextMenu id={id} model={model} type={'model'} />
+      <FileContextMenu id={CardId} model={model} type={'model'} />
     </>
   )
 }

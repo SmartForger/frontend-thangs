@@ -40,11 +40,12 @@ export default store => {
     },
   }))
 
-  store.on(types.FETCH_MODEL_DOWNLOAD_URL, async (_, { modelId, onFinish }) => {
+  store.on(types.FETCH_MODEL_DOWNLOAD_URL, async (_, { id, onFinish }) => {
     store.dispatch(types.LOADING_MODEL_DOWNLOAD_URL)
+    debugger
     const { data, error } = await api({
       method: 'GET',
-      endpoint: `models/${modelId}/download-url`,
+      endpoint: `models/${id}/download-url`,
     })
     if (error) {
       store.dispatch(types.FAILED_MODEL_DOWNLOAD_URL)

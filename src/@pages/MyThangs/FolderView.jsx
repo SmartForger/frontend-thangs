@@ -1,3 +1,4 @@
+import { useStoreon } from 'storeon/react'
 import React, { useCallback } from 'react'
 import * as R from 'ramda'
 import {
@@ -16,6 +17,7 @@ import classnames from 'classnames'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as InviteIcon } from '@svg/icon-invite.svg'
 import { ContextMenuTrigger } from 'react-contextmenu'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -67,6 +69,7 @@ const useStyles = createUseStyles(theme => {
 const noop = () => null
 const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
   const c = useStyles({})
+  const { dispatch } = useStoreon()
   const { id, name } = folder
   const folderPath = name.split('//')
   const rootFolderName = folderPath[0]
@@ -74,6 +77,10 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
   const handleClickRoot = useCallback(() => {
     if (id !== rootFolder.id) setFolder(rootFolder)
   }, [id, rootFolder, setFolder])
+
+  const handleInviteUsers = useCallback(() => {
+    dispatch(types.OPEN_OVERLAY, { name: 'inviteUsers' })
+  }, [dispatch])
 
   return (
     <div className={c.FolderView_Row}>
@@ -103,7 +110,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
           )}
         </div>
       </div>
-      <Button>
+      <Button onClick={handleInviteUsers}>
         <InviteIcon />
         <Spacer size={'.5rem'} />
         Invite Users

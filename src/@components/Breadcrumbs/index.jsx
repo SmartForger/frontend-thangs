@@ -63,7 +63,7 @@ const DeleteMenu = ({ dispatch, folderId, folders }) => {
     async e => {
       e.preventDefault()
       dispatch(types.DELETE_FOLDER, {
-        folderId: folderId,
+        id: folderId,
         onFinish: () => {
           navigateWithFlash('/home', 'Folder deleted')
         },

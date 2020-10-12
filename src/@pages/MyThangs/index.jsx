@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { WorkspaceHeader, WorkspaceNavbar } from '@components'
 import { authenticationService } from '@services'
@@ -82,8 +83,10 @@ const views = {
 }
 
 const MyThangs = () => {
+  const { view } = useParams()
+  const history = useHistory()
   const [currentView, setCurrentView] = useState({
-    name: 'recentFiles',
+    name: view || 'recentFiles',
   })
   const { Overlay, isOverlayOpen, isOverlayHidden } = useOverlay()
   const c = useStyles({})
@@ -115,16 +118,20 @@ const MyThangs = () => {
 
   useEffect(() => {
     dispatch(types.FETCH_FOLDERS)
-    dispatch(types.FETCH_THANGS, { id: currentUserId })
+    dispatch(types.FETCH_THANGS, {})
   }, [currentUserId, dispatch])
 
   const handleNewModel = useCallback(() => {
     dispatch(types.OPEN_OVERLAY, { overlayName: 'upload' })
   }, [dispatch])
 
-  const handleCurrentView = useCallback((name, data = {}) => {
-    setCurrentView({ name: name, data: data })
-  }, [])
+  const handleCurrentView = useCallback(
+    (name, data = {}) => {
+      setCurrentView({ name: name, data: data })
+      history.push(`/myThangs/${name}`)
+    },
+    [history]
+  )
 
   const handleChangeFolder = useCallback(
     folder => {

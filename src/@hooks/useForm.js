@@ -50,12 +50,17 @@ const useForm = (opts = {}) => {
     callbackFn(inputState, isValid, errors)
   }
 
+  const resetForm = useCallback(() => {
+    setInputState(initialState)
+  }, [initialState])
+
   return {
+    clearAllInputs,
+    inputState,
     onFormSubmit,
     onInputChange,
-    inputState,
+    resetForm,
     setInputState,
-    clearAllInputs,
   }
 }
 

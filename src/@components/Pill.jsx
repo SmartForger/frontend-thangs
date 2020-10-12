@@ -14,6 +14,8 @@ const useStyles = createUseStyles(theme => {
       backgroundColor: theme.colors.gold[500],
       color: theme.colors.black[500],
       borderRadius: '1rem',
+      border: `2px solid ${theme.colors.gold[500]}`,
+      cursor: 'pointer',
     },
     Pill_TextWrapper: {
       display: 'flex',
@@ -24,6 +26,7 @@ const useStyles = createUseStyles(theme => {
     },
     PillSecondary: {
       backgroundColor: 'transparent',
+      border: `2px solid ${theme.colors.black[500]}`,
     },
   }
 })

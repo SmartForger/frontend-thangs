@@ -233,7 +233,7 @@ const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
   const downloadModel = useCallback(
     () =>
       dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
-        modelId: model.id,
+        id: model.id,
         onFinish: downloadUrl => {
           window.location.assign(downloadUrl)
           track('Download Model', { modelId: model.id })

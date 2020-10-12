@@ -13,7 +13,7 @@ export const titleBase = {
 export const metadataBase = {
   fontFamily: MONTSERRAT,
   fontStyle: 'normal',
-  fontWeight: 600,
+  fontWeight: 500,
   letterSpacing: '-0.02em',
 }
 

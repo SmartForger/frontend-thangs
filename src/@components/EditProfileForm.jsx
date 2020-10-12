@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Button, FormError, Spinner, Spacer } from '@components'
+import { Button, FormError, Input, Spinner, Spacer, Textarea } from '@components'
 import { createUseStyles } from '@style'
 import { useForm } from '@hooks'
 
@@ -12,7 +12,7 @@ const useStyles = createUseStyles(theme => {
     },
     EditProfileForm_ButtonContainer: {
       display: 'flex',
-      justifyContent: 'flex-end',
+      justifyContent: 'flex-start',
     },
     EditProfileForm_Button: {
       maxWidth: '100%',
@@ -48,8 +48,7 @@ const EditProfileForm = ({
   user = {},
   isLoading,
   handleUpdateProfile = noop,
-  handleCancel = noop,
-  editProfileErrorMessage,
+  errorMessage,
 }) => {
   const c = useStyles()
 
@@ -60,7 +59,7 @@ const EditProfileForm = ({
     description: (user.profile && user.profile.description) || '',
   }
 
-  const { onFormSubmit, onInputChange, inputState } = useForm({
+  const { onFormSubmit, onInputChange, inputState, resetForm } = useForm({
     initialState,
   })
 
@@ -86,80 +85,56 @@ const EditProfileForm = ({
     [handleUpdateProfile, user]
   )
 
+  const handleCancel = useCallback(() => {
+    resetForm()
+  }, [resetForm])
+
   return (
     <form className={c.EditProfileForm} onSubmit={onFormSubmit(handleSubmit)}>
-      {editProfileErrorMessage && (
+      {errorMessage && (
         <>
-          <FormError>{editProfileErrorMessage}</FormError>
+          <FormError>{errorMessage}</FormError>
           <Spacer size='1rem' />
         </>
       )}
-      <div className={c.EditProfileForm_Field}>
-        <label className={c.EditProfileForm_label} htmlFor='username'>
-          Username
-        </label>
-        <input
-          className={c.EditProfileForm_input}
-          name='Username'
-          value={inputState && inputState.username}
-          onChange={e => {
-            handleOnInputChange('username', e.target.value)
-          }}
-          required
-        />
-      </div>
-      <div className={c.EditProfileForm_Field}>
-        <label className={c.EditProfileForm_label} htmlFor='firstName'>
-          First Name
-        </label>
-        <input
-          className={c.EditProfileForm_input}
-          name='firstName'
-          value={inputState && inputState.firstName}
-          placeholder='Enter first name...'
-          onChange={e => {
-            handleOnInputChange('firstName', e.target.value)
-          }}
-          required
-        />
-      </div>
-      <div className={c.EditProfileForm_Field} htmlFor='lastName'>
-        <label className={c.EditProfileForm_label}>Last Name</label>
-        <input
-          className={c.EditProfileForm_input}
-          name='lastName'
-          value={inputState && inputState.lastName}
-          placeholder='Enter last name...'
-          onChange={e => {
-            handleOnInputChange('lastName', e.target.value)
-          }}
-          required
-        />
-      </div>
-      <div className={c.EditProfileForm_Field} htmlFor='description'>
-        <label className={c.EditProfileForm_label}>About</label>
-        <textarea
-          className={c.EditProfileForm_textarea}
-          name='description'
-          value={inputState && inputState.description}
-          placeholder='Add a bio...'
-          onChange={e => {
-            handleOnInputChange('description', e.target.value)
-          }}
-          rows={5}
-        />
-      </div>
-
+      <Input
+        id='firstName-input'
+        name='firstName'
+        label='First Name'
+        value={inputState && inputState.firstName}
+        onChange={handleOnInputChange}
+        required
+      />
+      <Spacer size='1rem' />
+      <Input
+        id='lastName-input'
+        name='lastName'
+        label='Last Name'
+        value={inputState && inputState.lastName}
+        onChange={handleOnInputChange}
+        required
+      />
+      <Spacer size='1rem' />
+      <Input
+        id='username-input'
+        name='username'
+        label='Username'
+        value={inputState && inputState.username}
+        onChange={handleOnInputChange}
+        required
+      />
+      <Spacer size='1rem' />
+      <Textarea
+        id='description-input'
+        name='description'
+        label='Description'
+        type='description'
+        value={inputState && inputState.description}
+        onChange={handleOnInputChange}
+        required
+      />
+      <Spacer size='1rem' />
       <div className={c.EditProfileForm_ButtonContainer}>
-        <Button
-          secondary
-          className={c.EditProfileForm_Button}
-          onClick={handleCancel}
-          type='button'
-        >
-          Cancel
-        </Button>
-        <Spacer size={'1rem'} />
         <Button className={c.EditProfileForm_Button} type='submit'>
           {isLoading ? (
             <div>
@@ -168,6 +143,15 @@ const EditProfileForm = ({
           ) : (
             'Save'
           )}
+        </Button>
+        <Spacer size={'1rem'} />
+        <Button
+          secondary
+          className={c.EditProfileForm_Button}
+          onClick={handleCancel}
+          type='button'
+        >
+          Cancel
         </Button>
       </div>
     </form>

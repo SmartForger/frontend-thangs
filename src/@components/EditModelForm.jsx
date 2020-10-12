@@ -5,6 +5,7 @@ import {
   Divider,
   Dropdown,
   Input,
+  LikeModelButton,
   Textarea,
   TitleTertiary,
   Spacer,
@@ -12,6 +13,7 @@ import {
 } from '@components'
 import { createUseStyles } from '@style'
 import { useForm } from '@hooks'
+import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -19,7 +21,7 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
     },
     EditModelForm_Wrapper: {
-      width: '100%',
+      width: '16.875rem',
 
       '& button': {
         width: '100%',
@@ -63,6 +65,16 @@ const useStyles = createUseStyles(theme => {
     },
     EditModel_ModelName: {
       wordBreak: 'break-all',
+    },
+    EditModelForm_ModelTitle: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+
+      '& h3': {
+        lineHeight: '1rem',
+        wordBreak: 'break-word',
+      },
     },
   }
 })
@@ -131,7 +143,13 @@ const EditModelForm = ({
       {!showDeleteConfirm && (
         <>
           <Spacer size='4rem' />
-          <TitleTertiary>Edit Model</TitleTertiary>
+          <div className={c.EditModelForm_ModelTitle}>
+            <FileIcon />
+            <Spacer size={'1rem'} />
+            <TitleTertiary>{model.name}</TitleTertiary>
+            <Spacer size={'.5rem'} />
+            <LikeModelButton className={c.FileCard_Star} model={model} minimal />
+          </div>
           <Spacer size='2rem' />
           <form
             className={c.EditModelForm}

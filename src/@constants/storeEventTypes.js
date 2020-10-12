@@ -5,6 +5,7 @@ export const UPDATE_MODEL_LIKES = 'update-model-likes'
 export const FETCH_MODEL = 'fetch-model'
 export const CHANGE_MODEL_STATUS = 'change-model-status'
 export const UPDATE_MODEL = 'update-model'
+export const DELETE_MODEL = 'delete-model'
 /* Related Model Events */
 export const FETCH_RELATED_MODELS = 'fetch-related-models'
 /* Model Comments Store Events */
@@ -46,6 +47,7 @@ export const FOLDER_CLOSE = 'folder_close'
 export const LIKE_FOLDER = 'like_folder'
 export const UNLIKE_FOLDER = 'unlike_folder'
 export const CHANGE_LIKE_FOLDER_STATUS = 'change_like_folder_status'
+export const EDIT_FOLDER = 'edit_folder'
 /* Team Store Events */
 export const ADD_TEAM = 'add-team'
 export const FETCH_TEAM = 'fetch-team'

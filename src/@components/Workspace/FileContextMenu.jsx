@@ -42,6 +42,7 @@ const useStyles = createUseStyles(theme => {
 const FileContextMenu = ({ id, model, folder, type }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
+
   const handleEdit = useCallback(
     e => {
       e.preventDefault()
@@ -50,7 +51,7 @@ const FileContextMenu = ({ id, model, folder, type }) => {
           overlayName: 'editModel',
           overlayData: {
             model,
-            user: model.owner,
+            type,
             animateIn: true,
             windowed: true,
           },
@@ -60,9 +61,10 @@ const FileContextMenu = ({ id, model, folder, type }) => {
           overlayName: 'editFolder',
           overlayData: {
             folder,
-            user: folder.creator,
+            type,
             animateIn: true,
             windowed: true,
+            dialogue: true,
           },
         })
       }
@@ -73,7 +75,7 @@ const FileContextMenu = ({ id, model, folder, type }) => {
   const downloadModel = useCallback(() => {
     if (type === 'model') {
       dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
-        modelId: id,
+        id,
         onFinish: downloadUrl => {
           window.location.assign(downloadUrl)
         },
@@ -84,19 +86,46 @@ const FileContextMenu = ({ id, model, folder, type }) => {
   const starFile = useCallback(() => {
     if (type === 'model') {
       const currentUserId = authenticationService.getCurrentUserId()
-      dispatch(types.LIKE_MODEL, { id, currentUserId: currentUserId })
+      dispatch(types.LIKE_MODEL, { id, currentUserId: currentUserId, owner: model.owner })
     } else if (type === 'folder') {
-      dispatch(types.LIKE_FOLDER, { id })
+      dispatch(types.LIKE_FOLDER, { id, owner: folder.owner })
     }
-  }, [dispatch, id, type])
+  }, [dispatch, folder, id, model, type])
 
   const addFolder = useCallback(() => {
-    console.log('ADD FOLDER')
-  }, [])
+    dispatch(types.OPEN_OVERLAY, { overlayName: 'createFolder' })
+  }, [dispatch])
 
-  const removeFile = useCallback(() => {
-    console.log('REMOVE FILE')
-  }, [])
+  const removeFile = useCallback(
+    e => {
+      debugger
+      e.preventDefault()
+      if (type === 'model') {
+        dispatch(types.OPEN_OVERLAY, {
+          overlayName: 'deleteModel',
+          overlayData: {
+            model,
+            type,
+            animateIn: true,
+            windowed: true,
+            dialogue: true,
+          },
+        })
+      } else if (type === 'folder') {
+        dispatch(types.OPEN_OVERLAY, {
+          overlayName: 'deleteFolder',
+          overlayData: {
+            folder,
+            type,
+            animateIn: true,
+            windowed: true,
+            dialogue: true,
+          },
+        })
+      }
+    },
+    [dispatch, folder, model, type]
+  )
 
   return (
     <ContextMenu className={c.ContextMenu} id={`File_Menu_${id}`}>

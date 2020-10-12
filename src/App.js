@@ -70,7 +70,12 @@ const App = () => {
                 path='/password_reset_confirm/:token'
                 component={ConfirmPasswordReset}
               />
-              <Route exact path='/thangs' component={routeRequiresAuth(MyThangs)} />
+              <Route
+                exact
+                path='/mythangs/:view'
+                component={routeRequiresAuth(MyThangs)}
+              />
+              <Route exact path='/mythangs' component={routeRequiresAuth(MyThangs)} />
               <Route exact path='/profile/:id' component={Profile} />
               <Route
                 exact

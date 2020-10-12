@@ -1,5 +1,6 @@
 import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
+import { authenticationService } from '@services'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -7,6 +8,8 @@ const getInitAtom = () => ({
   isError: false,
   data: {},
 })
+
+const noop = () => null
 
 export default store => {
   store.on(types.STORE_INIT, () => ({
@@ -43,18 +46,26 @@ export default store => {
     },
   }))
 
-  store.on(types.FETCH_THANGS, async (_state, { id }) => {
-    store.dispatch(types.LOADING_THANGS)
-    await api({
-      method: 'GET',
-      endpoint: `users/${id}/thangs`,
-    })
-      .then(res => {
-        store.dispatch(types.LOADED_THANGS)
-        store.dispatch(types.UPDATE_THANGS, res.data)
+  store.on(
+    types.FETCH_THANGS,
+    async (_state, { onFinish = noop, silentUpdate = false }) => {
+      const currentUserId = authenticationService.getCurrentUserId()
+      if (!currentUserId) return
+      if (!silentUpdate) {
+        store.dispatch(types.LOADING_THANGS)
+      }
+      const { data, error } = await api({
+        method: 'GET',
+        endpoint: `users/${currentUserId}/thangs`,
       })
-      .catch(_error => {
+
+      if (error) {
         store.dispatch(types.ERROR_THANGS)
-      })
-  })
+      } else {
+        store.dispatch(types.LOADED_THANGS)
+        store.dispatch(types.UPDATE_THANGS, data)
+        onFinish()
+      }
+    }
+  )
 }

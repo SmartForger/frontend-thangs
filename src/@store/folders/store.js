@@ -1,3 +1,4 @@
+import * as R from 'ramda'
 import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'
@@ -19,19 +20,37 @@ export default store => {
     folders: getInitAtom(),
   }))
 
+  store.on(
+    types.EDIT_FOLDER,
+    async (
+      _,
+      { id: folderId, folder: updatedFolder, onError = noop, onFinish = noop }
+    ) => {
+      if (R.isNil(folderId)) return
+      store.dispatch(types.LOADING_FOLDER)
+      const { error } = await api({
+        method: 'PUT',
+        endpoint: `folders/${folderId}`,
+        body: {
+          folderName: updatedFolder.name,
+        },
+      })
+
+      if (error) {
+        store.dispatch(types.ERROR_FOLDER)
+        onError()
+      } else {
+        store.dispatch(types.FETCH_FOLDERS)
+        store.dispatch(types.FETCH_THANGS, { onFinish })
+        onFinish()
+      }
+    }
+  )
+
   store.on(types.UPDATE_FOLDERS, (state, event) => ({
     folders: {
       ...state.folders,
       data: event,
-    },
-  }))
-
-  store.on(types.UPDATE_FOLDER, (state, { folderId: _fold, folder }) => ({
-    folders: {
-      ...state.folders,
-      isLoaded: true,
-      isLoading: false,
-      currentFolder: folder,
     },
   }))
 
@@ -147,7 +166,7 @@ export default store => {
       })
   })
 
-  store.on(types.DELETE_FOLDER, async (_state, { folderId, onFinish }) => {
+  store.on(types.DELETE_FOLDER, async (_state, { id: folderId, onFinish }) => {
     store.dispatch(types.LOADING_FOLDER)
     await api({
       method: 'DELETE',

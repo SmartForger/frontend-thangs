@@ -101,27 +101,30 @@ const AuthLikeModelButton = ({
   const { dispatch } = useStoreon()
   const [liked, setLiked] = useState(hasLikedModel(model, currentUserId))
   const [hasChanged, setHasChanged] = useState(false)
-  const handleLikeClicked = useCallback(() => {
-    const likeModel = () =>
-      dispatch(types.LIKE_MODEL, { id, currentUserId: currentUserId })
-    const unlikeModel = () =>
-      dispatch(types.UNLIKE_MODEL, { id, currentUserId: currentUserId })
-    if (liked) {
-      unlikeModel()
-      setLiked(false)
-      setHasChanged(true)
-    } else {
-      likeModel()
-      setLiked(true)
-      setHasChanged(true)
-    }
-  }, [currentUserId, dispatch, liked, id])
+  const handleLikeClicked = useCallback(
+    e => {
+      e.preventDefault()
+      e.stopPropagation()
+      const likeModel = () => dispatch(types.LIKE_MODEL, { id, owner })
+      const unlikeModel = () => dispatch(types.UNLIKE_MODEL, { id, owner })
+      if (liked) {
+        unlikeModel()
+        setLiked(false)
+        setHasChanged(true)
+      } else {
+        likeModel()
+        setLiked(true)
+        setHasChanged(true)
+      }
+    },
+    [liked, dispatch, id, owner]
+  )
 
   if (onlyShowOwned && !isModelOfCurrentUser) return null
 
   if (minimal) {
     return (
-      <div className={className}>
+      <div className={className} onClick={handleLikeClicked}>
         {isModelOfCurrentUser ? (
           <StarButton liked={liked} c={c} hasChanged={hasChanged} />
         ) : (

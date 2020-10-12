@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import { useStoreon } from 'storeon/react'
 import { SingleLineBodyText, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { MenuItem } from 'react-contextmenu'
 import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -39,16 +41,24 @@ const useStyles = createUseStyles(theme => {
 
 const AddMenu = () => {
   const c = useStyles({})
+  const { dispatch } = useStoreon()
+
+  const handleAddFolder = useCallback(
+    () => dispatch(types.OPEN_OVERLAY, { overlayName: 'createFolder' }),
+    [dispatch]
+  )
+
+  const handleUpload = useCallback(
+    () => dispatch(types.OPEN_OVERLAY, { overlayName: 'upload' }),
+    [dispatch]
+  )
 
   return (
     <div className={c.ContextMenu}>
       <Spacer size={'1rem'} />
       <div>
         <Spacer size={'1.5rem'} />
-        <MenuItem
-          className={c.ContextMenu_Item}
-          onClick={() => console.log('Menu Click - New Folder')}
-        >
+        <MenuItem className={c.ContextMenu_Item} onClick={handleAddFolder}>
           <PlusIcon />
           <Spacer size={'.5rem'} />
           <SingleLineBodyText>Add Folder</SingleLineBodyText>
@@ -58,10 +68,7 @@ const AddMenu = () => {
       <Spacer size={'.5rem'} />
       <div>
         <Spacer size={'1.5rem'} />
-        <MenuItem
-          className={c.ContextMenu_Item}
-          onClick={() => console.log('Menu Click - New Folder')}
-        >
+        <MenuItem className={c.ContextMenu_Item} onClick={handleUpload}>
           <UploadIcon className={c.ContextMenu_Icon} />
           <Spacer size={'.5rem'} />
           <SingleLineBodyText>Upload Model</SingleLineBodyText>
@@ -71,13 +78,10 @@ const AddMenu = () => {
       <Spacer size={'.5rem'} />
       <div>
         <Spacer size={'1.5rem'} />
-        <MenuItem
-          className={c.ContextMenu_Item}
-          onClick={() => console.log('Menu Click - New Folder')}
-        >
+        <MenuItem className={c.ContextMenu_Item} onClick={handleUpload}>
           <UploadIcon className={c.ContextMenu_Icon} />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Upload Folder</SingleLineBodyText>
+          <SingleLineBodyText>Upload Folder - Coming Soon...</SingleLineBodyText>
         </MenuItem>
         <Spacer size={'1.5rem'} />
       </div>

@@ -138,14 +138,14 @@ const EditModel = ({ model, user, fetchData, folderId }) => {
         )}
       </div>
       <div className={classnames(c.EditModel_Column, c.EditModel_EditForm)}>
-        <Spacer className={c.EditModel_MobileSpacer} size='4rem' />
+        <Spacer className={c.EditModel_MobileSpacer} size='3rem' />
         <EditModelForm
           model={model}
           handleSubmit={handleSubmit}
           handleDelete={handleDelete}
           editModelErrorMessage={editModelErrorMessage}
         />
-        <Spacer className={c.EditModel_MobileSpacer} size='4rem' />
+        <Spacer className={c.EditModel_MobileSpacer} size='3rem' />
       </div>
     </div>
   )

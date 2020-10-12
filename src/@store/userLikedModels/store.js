@@ -21,11 +21,13 @@ export default store => {
       },
     })
   )
-  store.on(types.FETCH_USER_LIKED_MODELS, async (_, { id }) => {
-    store.dispatch(types.CHANGE_USER_LIKED_MODELS_STATUS, {
-      status: STATUSES.LOADING,
-      atom: `user-liked-models-${id}`,
-    })
+  store.on(types.FETCH_USER_LIKED_MODELS, async (_, { id, silentUpdate = false }) => {
+    if (!silentUpdate) {
+      store.dispatch(types.CHANGE_USER_LIKED_MODELS_STATUS, {
+        status: STATUSES.LOADING,
+        atom: `user-liked-models-${id}`,
+      })
+    }
     const { data, error } = await api({
       method: 'GET',
       endpoint: `users/${id}/likes`,
