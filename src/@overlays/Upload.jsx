@@ -1,12 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import * as R from 'ramda'
-import {
-  Loader,
-  UploadProgress,
-  useFlashNotification,
-  UploadForm,
-  UploaderContent,
-} from '@components'
+import { Loader, UploadProgress, UploadForm, UploaderContent } from '@components'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
@@ -35,7 +30,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const Upload = ({ prevModelId }) => {
-  const { navigateWithFlash } = useFlashNotification()
+  const history = useHistory()
   const c = useStyles()
 
   const { uploadModelPhase1, folders, overlay, dispatch } = useStoreon(
@@ -103,16 +98,13 @@ const Upload = ({ prevModelId }) => {
         },
         onFinish: () => {
           dispatch(types.CLOSE_OVERLAY)
-          navigateWithFlash(
-            folderId ? `/folder/${folderId}` : `/${currentUser.username}`,
-            'Model added successfully.'
-          )
           dispatch(types.RESET_UPLOAD_MODEL)
           dispatch(types.FETCH_USER_OWN_MODELS, { id: currentUser.id })
+          history.push('/myThangs/allFilesView')
         },
       })
     },
-    [currentUser, dispatch, file, navigateWithFlash, prevModelId]
+    [currentUser, dispatch, file, prevModelId]
   )
 
   return (

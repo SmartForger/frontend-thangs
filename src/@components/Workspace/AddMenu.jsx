@@ -42,7 +42,7 @@ const useStyles = createUseStyles(theme => {
 const AddMenu = ({ folder = {} }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
-  debugger
+
   const handleAddFolder = useCallback(
     () =>
       dispatch(types.OPEN_OVERLAY, {

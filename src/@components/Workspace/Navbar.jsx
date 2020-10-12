@@ -165,7 +165,7 @@ const WorkspaceNavbar = ({
   }, [history])
 
   useExternalClick(addMenuRef, () => setShowCreateMenu(false))
-  console.log('folder', folder)
+
   return (
     <nav className={c.WorkspaceNavbar}>
       <Spacer size={'2rem'} />

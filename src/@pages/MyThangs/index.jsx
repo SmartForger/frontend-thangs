@@ -127,7 +127,6 @@ const MyThangs = () => {
 
   const handleCurrentView = useCallback(
     (name, data = {}) => {
-      debugger
       setCurrentView({ name: name, data: data })
       history.push(`/myThangs/${name}`)
     },
@@ -136,7 +135,6 @@ const MyThangs = () => {
 
   const handleChangeFolder = useCallback(
     folder => {
-      debugger
       setCurrentView({ name: 'folderView', data: { folderId: folder.id } })
     },
     [setCurrentView]

@@ -1,4 +1,5 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
+import * as R from 'ramda'
 import { Button, Input, Spacer, Toggle } from '@components'
 import { createUseStyles } from '@style'
 import { useForm } from '@hooks'
@@ -51,13 +52,28 @@ const useStyles = createUseStyles(theme => {
       flexWrap: 'wrap',
       justifyContent: 'flex-end',
     },
+    FolderForm_ErrorText: {
+      ...theme.text.formErrorText,
+      marginTop: '1.5rem',
+      backgroundColor: theme.variables.colors.errorTextBackground,
+      fontWeight: 500,
+      padding: '.625rem 1rem',
+      borderRadius: '.5rem',
+    },
   }
 })
 const noop = () => null
+const getFolderName = fullFolderName => {
+  return fullFolderName.split('//').reverse()[0]
+}
+
+const getParentName = fullFolderName => {
+  return fullFolderName.split('//').slice(0, -1).join('//')
+}
 
 const FolderForm = ({
-  folder = {},
-  rootFolder = {},
+  folder = {}, //editing a folder
+  rootFolder = {}, //creating a new subfolder
   handleSubmit = noop,
   handleCancel = noop,
   errorMessage,
@@ -66,9 +82,8 @@ const FolderForm = ({
   const { id, name, is_public: isPublic } = folder
   const initialState = {
     id: id,
-    name: name || '',
+    name: name ? getFolderName(name) : '',
     isPublic: isPublic || false,
-    root: rootFolder.id || undefined,
   }
 
   const { onFormSubmit, onInputChange, inputState } = useForm({
@@ -89,12 +104,31 @@ const FolderForm = ({
     [onInputChange]
   )
 
+  const handleFolderSubmit = useCallback(
+    data => {
+      let newData = data
+      if (!R.isEmpty(folder)) {
+        newData.name = `${getParentName(folder.name)}//${data.name}`
+      } else if (!R.isEmpty(rootFolder)) {
+        newData.name = `${rootFolder.name}//${data.name}`
+      }
+      newData.root = rootFolder.id
+      newData.members = []
+      handleSubmit(newData)
+    },
+    [folder, handleSubmit, rootFolder]
+  )
+
+  const isPrivacyDisabled = useMemo(() => {
+    return !R.isEmpty(folder) || !R.isEmpty(rootFolder)
+  }, [folder, rootFolder])
+
   return (
     <div className={c.FolderForm_Wrapper}>
-      <form className={c.FolderForm} onSubmit={onFormSubmit(handleSubmit)}>
+      <form className={c.FolderForm} onSubmit={onFormSubmit(handleFolderSubmit)}>
         {errorMessage && (
           <>
-            <h4 className={c.EditFolder_ErrorText}>{errorMessage}</h4>
+            <h4 className={c.FolderForm_ErrorText}>{errorMessage}</h4>
             <Spacer size='1rem' />
           </>
         )}
@@ -113,8 +147,10 @@ const FolderForm = ({
           label={'Private Folder'}
           checked={inputState && !inputState.isPublic}
           onChange={handleOnToggleChange}
-          disabled={true}
-          hoverTooltip={'Folder privacy control coming soon'}
+          disabled={isPrivacyDisabled}
+          hoverTooltip={
+            isPrivacyDisabled ? 'Folder privacy control coming soon' : undefined
+          }
         />
         <Spacer size={'1rem'} />
         <div className={c.FolderForm_ButtonContainer}>

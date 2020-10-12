@@ -70,95 +70,63 @@ export const ProfileDropdownMenu = ({
     [dispatch, navigateWithFlash]
   )
 
-  if (myThangsMenu) {
-    return (
-      <DropdownMenu
-        className={c.ProfileDropdown}
-        TargetComponent={TargetComponent}
-        user={user}
-      >
-        <div>
-          <div className={c.ProfileDropdown_Row}>
-            <ProfilePicture
-              size='2.5rem'
-              name={user.fullName}
-              userName={user.username}
-              src={user.profile.avatarUrl}
-            />
-            <Spacer size={'.75rem'} />
-            <div className={c.ProfileDropdown_Column}>
-              <MultiLineBodyText>{user.fullName || user.username}</MultiLineBodyText>
-              <Link to={'/myThangs/editProfile'}>
-                <MetadataSecondary>Profile Settings</MetadataSecondary>
-              </Link>
-            </div>
+  return (
+    <DropdownMenu
+      className={c.ProfileDropdown}
+      TargetComponent={TargetComponent}
+      user={user}
+    >
+      <div>
+        <div className={c.ProfileDropdown_Row}>
+          <ProfilePicture
+            size='2.5rem'
+            name={user.fullName}
+            userName={user.username}
+            src={user.profile.avatarUrl}
+          />
+          <Spacer size={'.75rem'} />
+          <div className={c.ProfileDropdown_Column}>
+            <MultiLineBodyText>{user.fullName || user.username}</MultiLineBodyText>
+            <Link to={'/myThangs/editProfile'}>
+              <MetadataSecondary>Profile Settings</MetadataSecondary>
+            </Link>
           </div>
-          <Spacer size={'1rem'} />
+        </div>
+        <Spacer size={'1rem'} />
+        {myThangsMenu ? (
           <Link to={`/${user.username}`}>
             <Pill secondary>View Portfolio</Pill>
           </Link>
-          <Spacer size={'1rem'} />
-          <Divider spacing={0} />
-          <Spacer size={'1rem'} />
-          <DropdownItem to={`/${user.username}`}>
-            <PortfolioIcon /> Portfolio
-          </DropdownItem>
-          <DropdownItem to={`/${user.username}`}>
-            <ModelIcon /> Models
-          </DropdownItem>
-          <Spacer size={'1rem'} />
-          <Divider spacing={0} />
-          <Spacer size={'1rem'} />
-          <DropdownItem
-            onClick={() => {
-              dispatch(types.CLOSE_OVERLAY)
-              setTimeout(() => {
-                authenticationService.logout()
-                history.push('/')
-              }, 250)
-            }}
-          >
-            <SignOutIcon />
-            {t('header.dropdownMenu.signOut')}
-          </DropdownItem>
-        </div>
-      </DropdownMenu>
-    )
-  }
-
-  return (
-    <DropdownMenu TargetComponent={TargetComponent} user={user}>
-      <DropdownItem to={`/${user.username}?selected=likes`}>
-        <HeartIcon /> {t('header.dropdownMenu.likedModels')}
-      </DropdownItem>
-      <DropdownItem
-        onClick={() => {
-          dispatch(types.OPEN_OVERLAY, {
-            overlayName: 'createFolder',
-            overlayData: {
-              afterCreate: handleAfterCreate,
-            },
-          })
-        }}
-      >
-        <NewFolderIcon /> {t('header.dropdownMenu.createFolder')}
-      </DropdownItem>
-      <Divider spacing='.25rem' />
-      <DropdownItem to={`/${user.username}`}>
-        <UserIcon /> {t('header.dropdownMenu.viewProfile')}
-      </DropdownItem>
-      <DropdownItem
-        onClick={() => {
-          dispatch(types.CLOSE_OVERLAY)
-          setTimeout(() => {
-            authenticationService.logout()
-            history.push('/')
-          }, 250)
-        }}
-      >
-        <ExitIcon />
-        {t('header.dropdownMenu.signOut')}
-      </DropdownItem>
+        ) : (
+          <Link to={'/myThangs'}>
+            <Pill secondary>View My Thangs</Pill>
+          </Link>
+        )}
+        <Spacer size={'1rem'} />
+        <Divider spacing={0} />
+        <Spacer size={'1rem'} />
+        <DropdownItem to={`/${user.username}`}>
+          <PortfolioIcon /> Portfolio
+        </DropdownItem>
+        <DropdownItem to={`/${user.username}`}>
+          <ModelIcon /> Models
+        </DropdownItem>
+        <Spacer size={'1rem'} />
+        <Divider spacing={0} />
+        <Spacer size={'1rem'} />
+        <DropdownItem
+          onClick={() => {
+            dispatch(types.CLOSE_OVERLAY)
+            setTimeout(() => {
+              authenticationService.logout()
+              history.push('/')
+            }, 250)
+          }}
+        >
+          <SignOutIcon />
+          {t('header.dropdownMenu.signOut')}
+        </DropdownItem>
+      </div>
     </DropdownMenu>
   )
 }

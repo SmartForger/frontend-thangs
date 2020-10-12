@@ -75,7 +75,6 @@ const useStyles = createUseStyles(theme => {
 
 const AddFolder = ({ folder }) => {
   const c = useStyles()
-  debugger
   const [errorMessage, setErrorMessage] = useState(null)
   const { dispatch } = useStoreon()
 
@@ -85,11 +84,10 @@ const AddFolder = ({ folder }) => {
 
   const handleSubmit = useCallback(
     newFolderData => {
-      debugger
       dispatch(types.CREATE_FOLDER, {
         data: newFolderData,
         onError: error => {
-          setErrorMessage(error)
+          setErrorMessage(error.message)
         },
         onFinish: () => {
           closeOverlay()
@@ -116,7 +114,7 @@ const AddFolder = ({ folder }) => {
             handleSubmit={handleSubmit}
             handleCancel={closeOverlay}
             errorMessage={errorMessage}
-            folder={folder}
+            rootFolder={folder}
           />
         </div>
         <Spacer className={c.AddFolder_MobileSpacer} size='2rem' />

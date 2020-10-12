@@ -133,10 +133,10 @@ const Subfolders = ({
   const files = useMemo(() => {
     return !R.isEmpty(folders)
       ? folders.sort((a, b) => {
-          if (a.name < b.name) return -1
-          else if (a.name > b.name) return 1
-          return 0
-        })
+        if (a.name < b.name) return -1
+        else if (a.name > b.name) return 1
+        return 0
+      })
       : []
   }, [folders])
   return (
@@ -227,10 +227,10 @@ const Models = ({ models = [], showModels, handleModelClick = noop }) => {
   const files = useMemo(() => {
     return !R.isEmpty(models)
       ? models.sort((a, b) => {
-          if (a.name < b.name) return -1
-          else if (a.name > b.name) return 1
-          return 0
-        })
+        if (a.name < b.name) return -1
+        else if (a.name > b.name) return 1
+        return 0
+      })
       : []
   }, [models])
   return files.map((model, index) => {

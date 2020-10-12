@@ -144,27 +144,27 @@ export default store => {
     },
   }))
 
-  store.on(types.CREATE_FOLDER, (state, { data, onFinish, onError }) => {
-    store.dispatch(types.SAVING_FOLDER)
-    api({
-      method: 'POST',
-      endpoint: 'folders',
-      body: data,
-    })
-      .then(res => {
-        if (res.status === 201) {
-          store.dispatch(types.SAVED_FOLDER_DATA, res.data)
-          track('Folder Created')
-          onFinish(res.data)
-          store.dispatch(types.SAVED_FOLDER)
-          store.dispatch(types.FETCH_FOLDERS)
-        }
+  store.on(
+    types.CREATE_FOLDER,
+    async (state, { data: newFolderData, onFinish, onError }) => {
+      store.dispatch(types.SAVING_FOLDER)
+      const { data, error } = await api({
+        method: 'POST',
+        endpoint: 'folders',
+        body: newFolderData,
       })
-      .catch(error => {
+      if (error) {
         store.dispatch(types.ERROR_SAVING_FOLDER)
         onError(error)
-      })
-  })
+      } else {
+        store.dispatch(types.SAVED_FOLDER_DATA, data)
+        track('Folder Created')
+        onFinish(data)
+        store.dispatch(types.SAVED_FOLDER)
+        store.dispatch(types.FETCH_FOLDERS)
+      }
+    }
+  )
 
   store.on(types.DELETE_FOLDER, async (_state, { id: folderId, onFinish }) => {
     store.dispatch(types.LOADING_FOLDER)
