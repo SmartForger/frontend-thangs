@@ -139,16 +139,20 @@ const FileContextMenu = ({ id, model, folder, type, postId = '' }) => {
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      <MenuItem className={c.ContextMenu_Item} onClick={downloadModel}>
-        <div>
-          <Spacer size={'1.5rem'} />
-          <DownloadIcon />
+      {type === 'model' && (
+        <>
+          <MenuItem className={c.ContextMenu_Item} onClick={downloadModel}>
+            <div>
+              <Spacer size={'1.5rem'} />
+              <DownloadIcon />
+              <Spacer size={'.5rem'} />
+              <SingleLineBodyText>Download</SingleLineBodyText>
+              <Spacer size={'1.5rem'} />
+            </div>
+          </MenuItem>
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Download</SingleLineBodyText>
-          <Spacer size={'1.5rem'} />
-        </div>
-      </MenuItem>
-      <Spacer size={'.5rem'} />
+        </>
+      )}
       <MenuItem className={c.ContextMenu_Item} onClick={starFile}>
         <div>
           <Spacer size={'1.5rem'} />
