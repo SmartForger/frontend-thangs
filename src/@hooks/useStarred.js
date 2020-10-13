@@ -21,10 +21,19 @@ const useStarred = () => {
     const filteredFolders = folders.filter(
       folder => folder.creator.id.toString() === userId
     )
+    const othersModels = models.filter(model => model.owner.id !== userId)
+    const othersFolders = folders.filter(folder => {
+      return (
+        folder.creator.id.toString() !== userId &&
+        folder.members.some(member => member.id.toString() === userId)
+      )
+    })
 
     return {
       starredModels: filteredModels,
       starredFolders: filteredFolders,
+      starredSharedModels: othersModels,
+      starredSharedFolders: othersFolders,
     }
   }, [likedUserModelsAtom, userId])
 

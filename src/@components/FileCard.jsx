@@ -38,7 +38,7 @@ const useStyles = createUseStyles(theme => {
     },
     FileCard_Name: {
       textOverflow: 'ellipsis',
-      maxWidth: 213,
+      maxWidth: '12.5rem',
       overflow: 'hidden',
       flex: 'none',
       lineHeight: '1rem !important',

@@ -39,14 +39,21 @@ const useStyles = createUseStyles(theme => {
       },
     },
     FolderCard_Title: {
-      display: 'flex !important',
-      alignItems: 'center',
+      textOverflow: 'ellipsis',
+      maxWidth: '12.5rem',
+      overflow: 'hidden',
+      flex: 'none',
+      lineHeight: '1rem !important',
     },
     FolderCard_IconWrapper: {
       height: '127px',
       flex: 'none',
       display: 'flex',
       alignItems: 'center',
+    },
+    FolderCard_Row: {
+      display: 'flex',
+      flexDirection: 'row',
     },
   }
 })
@@ -83,8 +90,10 @@ const FolderCard = ({ handleClick = noop, folder }) => {
             <FolderCardIcon />
           </div>
           <Spacer size={'2rem'} />
-          <SingleLineBodyText className={c.FolderCard_Title}>
-            {displayName}
+          <div className={c.FolderCard_Row}>
+            <SingleLineBodyText className={c.FolderCard_Title}>
+              {displayName}
+            </SingleLineBodyText>
             {!isPublic && (
               <>
                 <Spacer size={'.25rem'} />
@@ -97,7 +106,7 @@ const FolderCard = ({ handleClick = noop, folder }) => {
                 <SharedFolderIcon />
               </>
             )}
-          </SingleLineBodyText>
+          </div>
           <Spacer size={'2rem'} />
         </Card>
       </ContextMenuTrigger>
