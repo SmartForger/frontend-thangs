@@ -110,7 +110,11 @@ const FolderForm = ({
       } else if (!R.isEmpty(parentFolder)) {
         newData.name = `${parentFolder.name}//${data.name}`
       }
-      newData.root = parentFolder.root
+      newData.root = !R.isEmpty(parentFolder)
+        ? parentFolder.root
+          ? parentFolder.root
+          : parentFolder.id
+        : undefined
       handleSubmit(newData)
     },
     [folder, handleSubmit, parentFolder]

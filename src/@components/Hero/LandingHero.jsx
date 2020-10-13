@@ -8,7 +8,6 @@ import {
   Spacer,
   TitlePrimary,
   MultiLineBodyText,
-  LabelText,
   LandingSearchBar,
 } from '@components'
 import { numberWithCommas } from '../../@utilities'

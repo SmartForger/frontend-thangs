@@ -5,8 +5,6 @@ import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
 import {
   CardCollection,
-  ChangeablePicture,
-  EditProfileForm,
   Layout,
   Markdown,
   MetadataPrimary,
@@ -247,12 +245,10 @@ const Portfolio = ({ models, likes }) => {
   )
 }
 
-const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
+const UserPage = ({ user = {}, userId }) => {
   const c = useStyles({})
-  const history = useHistory()
   const { dispatch } = useStoreon()
   const [showProfileForm, setShowProfileForm] = useState(false)
-  const [editProfileErrorMessage, setEditProfileErrorMessage] = useState(null)
   const description = getDescription(user)
   const {
     [`user-own-models-${userId}`]: ownUserModelsAtom = {},
@@ -263,27 +259,6 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
     dispatch(types.FETCH_USER_OWN_MODELS, { id: userId })
     dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId })
   }, [dispatch, userId])
-
-  const handleUpdateProfile = useCallback(
-    newUserData => {
-      const { id, ...updatedUser } = newUserData
-      dispatch(types.UPDATE_USER, {
-        id,
-        user: updatedUser,
-        onError: error => {
-          setEditProfileErrorMessage(error)
-        },
-        onFinish: () => {
-          history.push(`/${updatedUser.username}`)
-        },
-      })
-    },
-    [dispatch, history]
-  )
-
-  const handleCancel = useCallback(() => {
-    setShowProfileForm(false)
-  }, [])
 
   return (
     <div className={c.Home}>
