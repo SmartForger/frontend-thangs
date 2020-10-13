@@ -7,10 +7,11 @@ import { useOverlay } from '@hooks'
 import AllFilesView from './AllFilesView'
 import EditProfileView from './EditProfileView'
 import FolderView from './FolderView'
-import RecentFilesView from './RecentFilesView'
-import SharedFilesView from './SharedFilesView'
 import LikedModelsView from './LikedModelsView'
+import RecentFilesView from './RecentFilesView'
 import SavedSearchesView from './SavedSearchesView'
+import SearchView from './SearchView'
+import SharedFilesView from './SharedFilesView'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
@@ -79,6 +80,7 @@ const views = {
   likedModels: LikedModelsView,
   recentFiles: RecentFilesView,
   savedSearches: SavedSearchesView,
+  searchView: SearchView,
   sharedFiles: SharedFilesView,
 }
 
@@ -174,7 +176,7 @@ const MyThangs = () => {
         models={thangsData.models}
       />
       <div className={c.MyThangs_ContentWrapper}>
-        <WorkspaceHeader />
+        <WorkspaceHeader setCurrentView={setCurrentView} />
         <WorkspaceView
           {...currentView.data}
           setCurrentView={handleCurrentView}

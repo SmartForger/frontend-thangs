@@ -30,7 +30,8 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const WorkspaceHeader = () => {
+const noop = () => null
+const WorkspaceHeader = ({ setCurrentView = noop }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
   const {
@@ -43,7 +44,7 @@ const WorkspaceHeader = () => {
       <div className={c.WorkspaceHeader_Content}>
         <div className={c.WorkspaceHeader_Row}>
           <Spacer size='2rem' />
-          <SearchBar />
+          <SearchBar setCurrentView={setCurrentView} />
         </div>
         <div>
           <UserNav

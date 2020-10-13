@@ -1,11 +1,8 @@
-import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import { useStoreon } from 'storeon/react'
+import React, { useState, useRef } from 'react'
 import classnames from 'classnames'
 
 import { TextInput } from '@components'
 import { createUseStyles } from '@style'
-import * as types from '@constants/storeEventTypes'
 
 import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 
@@ -95,17 +92,17 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const SearchBar = () => {
-  const { dispatch } = useStoreon()
-  const history = useHistory()
+const SearchBar = ({ setCurrentView }) => {
   const c = useStyles({})
   const [searchTerm, setSearchTerm] = useState(undefined)
+  const inputRef = useRef(null)
 
   const handleSearchSubmit = e => {
     e.preventDefault()
     if (searchTerm) {
-      history.push(`/search/${encodeURIComponent(searchTerm)}`)
-      dispatch(types.CLOSE_OVERLAY)
+      setCurrentView({ name: 'searchView', data: { searchTerm } })
+      setSearchTerm(undefined)
+      inputRef.current.blur()
     }
   }
 
@@ -119,6 +116,7 @@ const SearchBar = () => {
           />
           <TextInput
             name='search'
+            inputRef={inputRef}
             placeholder={'Search to find your models'}
             className={classnames(c.SearchBar_FormInput, {
               [c.SearchBar_FormInput_active]: searchTerm,

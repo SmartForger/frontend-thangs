@@ -91,6 +91,18 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
     })
   }, [dispatch, folder])
 
+  const handleEditFolder = useCallback(() => {
+    dispatch(types.OPEN_OVERLAY, {
+      overlayName: 'editFolder',
+      overlayData: {
+        folder,
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
+      },
+    })
+  }, [dispatch, folder])
+
   return (
     <div className={c.FolderView_Row}>
       <div className={c.FolderView_Row}>
@@ -119,11 +131,17 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
           )}
         </div>
       </div>
-      <Button onClick={handleInviteUsers}>
-        <InviteIcon />
-        <Spacer size={'.5rem'} />
-        Invite Members
-      </Button>
+      <div className={c.FolderView_Row}>
+        <Button secondary onClick={handleEditFolder}>
+          Edit
+        </Button>
+        <Spacer size={'1rem'} />
+        <Button onClick={handleInviteUsers}>
+          <InviteIcon />
+          <Spacer size={'.5rem'} />
+          Invite Members
+        </Button>
+      </div>
     </div>
   )
 }

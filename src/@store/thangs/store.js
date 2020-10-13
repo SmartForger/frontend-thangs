@@ -7,6 +7,7 @@ const getInitAtom = () => ({
   isLoaded: false,
   isError: false,
   data: {},
+  search: {},
 })
 
 const noop = () => null
@@ -20,6 +21,13 @@ export default store => {
     thangs: {
       ...state.thangs,
       data: event,
+    },
+  }))
+
+  store.on(types.UPDATE_SEARCH_THANGS, (state, event) => ({
+    thangs: {
+      ...state.thangs,
+      search: event,
     },
   }))
 
@@ -68,4 +76,21 @@ export default store => {
       }
     }
   )
+
+  store.on(types.SEARCH_MY_THANGS, async (_state, { searchTerm, onFinish = noop }) => {
+    if (!searchTerm) return
+    store.dispatch(types.LOADING_THANGS)
+    const { data, error } = await api({
+      method: 'GET',
+      endpoint: `users/search-my-thangs?searchTerm=${searchTerm}`,
+    })
+
+    if (error) {
+      store.dispatch(types.ERROR_THANGS)
+    } else {
+      store.dispatch(types.LOADED_THANGS)
+      store.dispatch(types.UPDATE_SEARCH_THANGS, data)
+      onFinish()
+    }
+  })
 }
