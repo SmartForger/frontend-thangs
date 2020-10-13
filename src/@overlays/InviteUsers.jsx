@@ -193,10 +193,10 @@ const InviteUsers = ({ folderId: id }) => {
   const c = useStyles()
   const [errorMessage, setErrorMessage] = useState(null)
   const { dispatch, folders } = useStoreon('folders')
-
+  const { data: folderData = {} } = folders
   const folder = useMemo(() => {
-    return findFolderById(id, folders)
-  }, [folders, id])
+    return !R.isEmpty(folderData) ? findFolderById(id, folderData) : undefined
+  }, [folderData, id])
 
   const closeOverlay = useCallback(() => {
     dispatch(types.CLOSE_OVERLAY)
@@ -206,7 +206,7 @@ const InviteUsers = ({ folderId: id }) => {
     <div className={c.InviteUsers}>
       <ExitIcon className={c.InviteUsers_ExitButton} onClick={closeOverlay} />
       <div className={c.InviteUsers_Row}>
-        <Spacer className={c.InviteUsers_MobileSpacer} size='2rem' />
+        <Spacer size='2rem' />
         <div className={c.InviteUsers_Wrapper}>
           <Spacer size='4rem' />
           <TitleTertiary>Add Users By Email</TitleTertiary>
@@ -219,15 +219,18 @@ const InviteUsers = ({ folderId: id }) => {
             errorMessage={errorMessage}
           />
           <Spacer size={'2rem'} />
-          <UserList
-            creator={folder.creator}
-            users={folder.members}
-            folderId={folder.id}
-            errorMessage={errorMessage}
-            setErrorMessage={setErrorMessage}
-          />
+          {folder && (
+            <UserList
+              creator={folder.creator}
+              users={folder.members}
+              folderId={folder.id}
+              errorMessage={errorMessage}
+              setErrorMessage={setErrorMessage}
+            />
+          )}
+          <Spacer size='2rem' />
         </div>
-        <Spacer className={c.InviteUsers_MobileSpacer} size='2rem' />
+        <Spacer className={c.InviteUsers} size='2rem' />
       </div>
     </div>
   )

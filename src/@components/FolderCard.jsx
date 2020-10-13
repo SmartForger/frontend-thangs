@@ -8,6 +8,8 @@ import {
 } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as FolderCardIcon } from '@svg/folder-card.svg'
+import { ReactComponent as PadlockIcon } from '@svg/icon-padlock.svg'
+import { ReactComponent as SharedFolderIcon } from '@svg/icon-sharedfolder.svg'
 import { ContextMenuTrigger } from 'react-contextmenu'
 
 const useStyles = createUseStyles(theme => {
@@ -36,13 +38,23 @@ const useStyles = createUseStyles(theme => {
         stroke: '#5A5A75',
       },
     },
+    FolderCard_Title: {
+      display: 'flex !important',
+      alignItems: 'center',
+    },
+    FolderCard_IconWrapper: {
+      height: '127px',
+      flex: 'none',
+      display: 'flex',
+      alignItems: 'center',
+    },
   }
 })
 
 const noop = () => null
 const FolderCard = ({ handleClick = noop, folder }) => {
   const c = useStyles({})
-  const { id, name } = folder
+  const { id, name, isPublic, members = [] } = folder
   const FolderId = useMemo(() => {
     return `Folder_${id}`
   }, [id])
@@ -67,9 +79,25 @@ const FolderCard = ({ handleClick = noop, folder }) => {
             onlyShowOwned
           />
           <Spacer size={'3rem'} />
-          <FolderCardIcon />
+          <div className={c.FolderCard_IconWrapper}>
+            <FolderCardIcon />
+          </div>
           <Spacer size={'2rem'} />
-          <SingleLineBodyText>{displayName}</SingleLineBodyText>
+          <SingleLineBodyText className={c.FolderCard_Title}>
+            {displayName}
+            {!isPublic && (
+              <>
+                <Spacer size={'.25rem'} />
+                <PadlockIcon />
+              </>
+            )}
+            {members.length > 1 && (
+              <>
+                <Spacer size={'.25rem'} />
+                <SharedFolderIcon />
+              </>
+            )}
+          </SingleLineBodyText>
           <Spacer size={'2rem'} />
         </Card>
       </ContextMenuTrigger>

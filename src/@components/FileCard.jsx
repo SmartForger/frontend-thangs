@@ -5,6 +5,7 @@ import {
   LikeModelButton,
   SingleLineBodyText,
   Spacer,
+  MetadataSecondary,
 } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as FileCardIcon } from '@svg/file-card.svg'
@@ -45,13 +46,23 @@ const useStyles = createUseStyles(theme => {
     FileCard_Icon: {
       flex: 'none',
     },
+    FileCard_IconWrapper: {
+      position: 'relative',
+    },
+    FileCard_FileType: {
+      position: 'absolute',
+      bottom: '1rem',
+      left: 0,
+      right: 0,
+      color: '#AE881E !important',
+    },
   }
 })
 
 const noop = () => null
 const FileCard = ({ handleClick = noop, model }) => {
   const c = useStyles({})
-  const { id, name } = model
+  const { id, name, fileType } = model
   const CardId = useMemo(() => {
     return `Card_${id}`
   }, [id])
@@ -71,7 +82,12 @@ const FileCard = ({ handleClick = noop, model }) => {
         >
           <LikeModelButton className={c.FileCard_Star} model={model} minimal />
           <Spacer size={'3rem'} />
-          <FileCardIcon className={c.FileCard_Icon} />
+          <div className={c.FileCard_IconWrapper}>
+            <FileCardIcon className={c.FileCard_Icon} />
+            <MetadataSecondary className={c.FileCard_FileType}>
+              {fileType}
+            </MetadataSecondary>
+          </div>
           <Spacer size={'2rem'} />
           <SingleLineBodyText className={c.FileCard_Name}>{name}</SingleLineBodyText>
           <Spacer size={'2rem'} />
