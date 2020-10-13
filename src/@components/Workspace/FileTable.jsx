@@ -277,7 +277,6 @@ const FileTable = ({
               </React.Fragment>
             )
           })}
-          )
         </>
       ) : (
         <div className={c.NoFilesMessage}>
