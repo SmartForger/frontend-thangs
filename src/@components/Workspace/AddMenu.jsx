@@ -97,9 +97,9 @@ const AddMenu = ({ folder = {}, sideBar = false }) => {
         <Spacer size={'1.5rem'} />
       </div>
       <Spacer size={'.5rem'} />
-      <div>
+      <div className={c.ContextMenu_ItemLink} onClick={handleUpload}>
         <Spacer size={'1.5rem'} />
-        <MenuItem className={c.ContextMenu_Item} onClick={handleUpload}>
+        <MenuItem className={c.ContextMenu_Item}>
           <UploadIcon className={c.ContextMenu_Icon} />
           <Spacer size={'.5rem'} />
           <SingleLineBodyText>Upload Folder</SingleLineBodyText>
