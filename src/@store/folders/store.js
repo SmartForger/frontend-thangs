@@ -1,6 +1,7 @@
 import * as R from 'ramda'
 import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
+import { authenticationService } from '@services'
 import { track } from '@utilities/analytics'
 
 const getInitAtom = () => ({
@@ -27,6 +28,7 @@ export default store => {
       { id: folderId, folder: updatedFolder, onError = noop, onFinish = noop }
     ) => {
       if (R.isNil(folderId)) return
+      const userId = authenticationService.getCurrentUserId()
       store.dispatch(types.LOADING_FOLDER)
       const { error } = await api({
         method: 'PUT',
@@ -40,9 +42,9 @@ export default store => {
         store.dispatch(types.ERROR_FOLDER)
         onError()
       } else {
+        store.dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId })
         store.dispatch(types.FETCH_FOLDERS)
         store.dispatch(types.FETCH_THANGS, { onFinish })
-        onFinish()
       }
     }
   )

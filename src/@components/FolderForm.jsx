@@ -105,7 +105,7 @@ const FolderForm = ({
   const handleFolderSubmit = useCallback(
     data => {
       let newData = data
-      if (!R.isEmpty(folder)) {
+      if (!R.isEmpty(folder) && folder.root) {
         newData.name = `${getParentName(folder.name)}//${data.name}`
       } else if (!R.isEmpty(parentFolder)) {
         newData.name = `${parentFolder.name}//${data.name}`

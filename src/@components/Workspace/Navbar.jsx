@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
+import { useStoreon } from 'storeon/react'
 import { Link, useHistory } from 'react-router-dom'
 import * as R from 'ramda'
 import {
@@ -15,13 +16,14 @@ import { authenticationService } from '@services'
 import { useExternalClick } from '@hooks'
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
-import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
+import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as ClockIcon } from '@svg/icon-clock.svg'
 import { ReactComponent as SharedIcon } from '@svg/icon-shared.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 import { ReactComponent as SettingsIcon } from '@svg/icon-settings.svg'
 import { ReactComponent as SignOutIcon } from '@svg/icon-signout.svg'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -107,6 +109,7 @@ const WorkspaceNavbar = ({
   handleChangeFolder = noop,
 }) => {
   const c = useStyles({})
+  const { dispatch } = useStoreon()
   const history = useHistory()
   const [showFileExplorer, setShowFileExplorer] = useState(false)
   const [showCreateMenu, setShowCreateMenu] = useState(false)
@@ -126,7 +129,16 @@ const WorkspaceNavbar = ({
         setShowFileExplorer(false)
       }, 450)
     }
-  }, [folderNav.files, setShowFileExplorer])
+  }, [dispatch, folderNav.files, setShowFileExplorer])
+
+  useEffect(() => {
+    const filteredRootFolders = () => {
+      return folders.filter(folder => !folder.root && !folder.name.includes('//'))
+    }
+    if (filteredRootFolders.length > 0 && filteredRootFolders.length < 11) {
+      dispatch(types.FOLDER_OPEN, { id: 'files' })
+    }
+  }, [dispatch, folders])
 
   const shouldShowFileExplorer = useMemo(() => showFileExplorer || folderNav.files, [
     folderNav.files,
@@ -192,8 +204,8 @@ const WorkspaceNavbar = ({
             <TitleTertiary>My Thangs</TitleTertiary>
             <Spacer size={'2rem'} />
             <NavLink
-              Icon={FileIcon}
-              label={'Files'}
+              Icon={FolderIcon}
+              label={'Folders'}
               isFolder={true}
               folderId={'files'}
               onClick={handleAllFiles}

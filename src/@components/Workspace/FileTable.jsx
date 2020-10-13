@@ -7,6 +7,7 @@ import {
   SingleLineBodyText,
   Spacer,
   FileContextMenu,
+  TitleTertiary,
 } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -14,6 +15,8 @@ import { MetadataSecondary } from '@components/Text/Metadata'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
+import { ReactComponent as FileCardIcon } from '@svg/file-card-blank.svg'
+import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { formatBytes } from '@utilities'
 import { ContextMenuTrigger } from 'react-contextmenu'
 
@@ -63,6 +66,31 @@ const useStyles = createUseStyles(theme => {
     FileTable_RowWrapper: {
       '&:hover': {
         backgroundColor: 'rgba(0, 0, 0, 0.05)',
+      },
+    },
+    NoFilesMessage: {
+      margin: '2rem',
+      padding: '2rem',
+      textAlign: 'center',
+      border: `1px dashed ${theme.colors.grey[100]}`,
+      borderRadius: '.5rem',
+    },
+    NoFilesMessage_Icon: {
+      position: 'relative',
+    },
+    NoFilesMessage_Text: {
+      justifyContent: 'center',
+    },
+    FileCard_UploadIcon: {
+      position: 'absolute',
+      bottom: '3rem',
+      left: 0,
+      right: 0,
+      width: '100%',
+
+      '& path': {
+        fill: '#AE881E',
+        stroke: '#AE881E',
       },
     },
   }
@@ -224,29 +252,47 @@ const FileTable = ({
 
   return (
     <div className={c.FileTable}>
-      <FileTableHeader sortedBy={sortedBy} />
-      {files.map((file, index) => {
-        const { id } = file
-        return (
-          <React.Fragment key={`FileRow_${index}`}>
-            {file.subfolders ? (
-              <div>
-                <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
-                  <FolderRow folder={file} handleFolderClick={handleChangeFolder} />
-                </ContextMenuTrigger>
-                <FileContextMenu id={id} folder={file} type={'folder'} />
-              </div>
-            ) : (
-              <div>
-                <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
-                  <FileRow model={file} handleModelClick={handleEditModel} />
-                </ContextMenuTrigger>
-                <FileContextMenu id={id} model={file} type={'model'} />
-              </div>
-            )}
-          </React.Fragment>
-        )
-      })}
+      {files.length > 0 ? (
+        <>
+          <FileTableHeader sortedBy={sortedBy} />
+          {files.map((file, index) => {
+            const { id } = file
+            return (
+              <React.Fragment key={`FileRow_${index}`}>
+                {file.subfolders ? (
+                  <div>
+                    <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
+                      <FolderRow folder={file} handleFolderClick={handleChangeFolder} />
+                    </ContextMenuTrigger>
+                    <FileContextMenu id={id} folder={file} type={'folder'} />
+                  </div>
+                ) : (
+                  <div>
+                    <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
+                      <FileRow model={file} handleModelClick={handleEditModel} />
+                    </ContextMenuTrigger>
+                    <FileContextMenu id={id} model={file} type={'model'} />
+                  </div>
+                )}
+              </React.Fragment>
+            )
+          })}
+          )
+        </>
+      ) : (
+        <div className={c.NoFilesMessage}>
+          <Spacer size={'4rem'} />
+          <div className={c.NoFilesMessage_Icon}>
+            <FileCardIcon className={c.FileCard_Icon} />
+            <UploadIcon className={c.FileCard_UploadIcon} />
+          </div>
+          <Spacer size={'1rem'} />
+          <TitleTertiary className={c.NoFilesMessage_Text}>
+            Drop files here or use the &quot;Create&quot; Button
+          </TitleTertiary>
+          <Spacer size={'4rem'} />
+        </div>
+      )}
     </div>
   )
 }
