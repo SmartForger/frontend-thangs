@@ -71,18 +71,18 @@ const RecentFilesView = ({
             <Spacer size='4rem' />
             <TitleTertiary>Starred</TitleTertiary>
             <div className={c.RecentFilesView_Starred}>
-              {starredModels.map((model, index) => {
-                return (
-                  <div className={c.RecentFilesView_Row} key={`starred_${index}`}>
-                    <FileCard model={model} handleClick={handleEditModel} />
-                    <Spacer size='2rem' />
-                  </div>
-                )
-              })}
               {starredFolders.map((folder, index) => {
                 return (
                   <div className={c.RecentFilesView_Row} key={`starred_${index}`}>
                     <FolderCard folder={folder} handleClick={handleChangeFolder} />
+                    <Spacer size='2rem' />
+                  </div>
+                )
+              })}
+              {starredModels.map((model, index) => {
+                return (
+                  <div className={c.RecentFilesView_Row} key={`starred_${index}`}>
+                    <FileCard model={model} handleClick={handleEditModel} />
                     <Spacer size='2rem' />
                   </div>
                 )
