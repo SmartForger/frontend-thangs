@@ -8,7 +8,7 @@ import * as types from '@constants/storeEventTypes'
 import Scanner from '@components/Scanner'
 import ScannerPaper from '@components/ScannerPaper'
 import { useFileUpload } from '@hooks'
-import { numberWithCommas } from '../@utilities'
+import { numberWithCommas } from '@utilities'
 
 const useStyles = createUseStyles(_theme => {
   return {

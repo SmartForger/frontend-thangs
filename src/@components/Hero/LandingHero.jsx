@@ -10,7 +10,7 @@ import {
   MultiLineBodyText,
   LandingSearchBar,
 } from '@components'
-import { numberWithCommas } from '../../@utilities'
+import { numberWithCommas } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
   return {
