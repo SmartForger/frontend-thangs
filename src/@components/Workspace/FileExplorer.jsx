@@ -3,7 +3,7 @@ import * as R from 'ramda'
 import { Spacer, NavLink, Spinner, FileContextMenu } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
-import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
+// import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ContextMenuTrigger } from 'react-contextmenu'
 
@@ -56,7 +56,7 @@ const Folder = ({
   // handleModelClick = noop,
 }) => {
   const c = useStyles({})
-  const { id, name, subfolders = originalSubfolders, models: _m } = folder
+  const { id, name, subfolders = originalSubfolders } = folder
   const filteredSubfolders =
     subfolders && subfolders.length
       ? subfolders.filter(child => child.name.includes(name))
@@ -200,60 +200,60 @@ const RootFolders = ({
   )
 }
 
-const Model = ({ model = {}, handleModelClick = noop }) => {
-  const { id, name } = model
-  const handleClick = useCallback(() => {
-    handleModelClick(model)
-  }, [handleModelClick, model])
-  const postId = '_nav'
-  return (
-    <>
-      <ContextMenuTrigger id={`File_Menu_${id}${postId}`} holdToDisplay={1000}>
-        <NavLink
-          Icon={FileIcon}
-          label={name}
-          isFolder={false}
-          modelId={id}
-          onClick={handleClick}
-        />
-      </ContextMenuTrigger>
-      <FileContextMenu id={id} model={model} type={'model'} postId={postId} />
-    </>
-  )
-}
+// const Model = ({ model = {}, handleModelClick = noop }) => {
+//   const { id, name } = model
+//   const handleClick = useCallback(() => {
+//     handleModelClick(model)
+//   }, [handleModelClick, model])
+//   const postId = '_nav'
+//   return (
+//     <>
+//       <ContextMenuTrigger id={`File_Menu_${id}${postId}`} holdToDisplay={1000}>
+//         <NavLink
+//           Icon={FileIcon}
+//           label={name}
+//           isFolder={false}
+//           modelId={id}
+//           onClick={handleClick}
+//         />
+//       </ContextMenuTrigger>
+//       <FileContextMenu id={id} model={model} type={'model'} postId={postId} />
+//     </>
+//   )
+// }
 
-const Models = ({ models = [], showModels, handleModelClick = noop }) => {
-  const c = useStyles({})
-  const files = useMemo(() => {
-    return !R.isEmpty(models)
-      ? models.sort((a, b) => {
-          if (a.name < b.name) return -1
-          else if (a.name > b.name) return 1
-          return 0
-        })
-      : []
-  }, [models])
-  return files.map((model, index) => {
-    const { id } = model
-    return (
-      <div
-        key={`model_${id}`}
-        className={classnames(c.FileExplorer_Model, {
-          [c.FileExplorer__open]: showModels,
-        })}
-      >
-        <Spacer size={'2rem'} />
-        <div>
-          <Model
-            key={`model_${index}`}
-            model={model}
-            handleModelClick={handleModelClick}
-          />
-        </div>
-      </div>
-    )
-  })
-}
+// const Models = ({ models = [], showModels, handleModelClick = noop }) => {
+//   const c = useStyles({})
+//   const files = useMemo(() => {
+//     return !R.isEmpty(models)
+//       ? models.sort((a, b) => {
+//           if (a.name < b.name) return -1
+//           else if (a.name > b.name) return 1
+//           return 0
+//         })
+//       : []
+//   }, [models])
+//   return files.map((model, index) => {
+//     const { id } = model
+//     return (
+//       <div
+//         key={`model_${id}`}
+//         className={classnames(c.FileExplorer_Model, {
+//           [c.FileExplorer__open]: showModels,
+//         })}
+//       >
+//         <Spacer size={'2rem'} />
+//         <div>
+//           <Model
+//             key={`model_${index}`}
+//             model={model}
+//             handleModelClick={handleModelClick}
+//           />
+//         </div>
+//       </div>
+//     )
+//   })
+// }
 
 const FileExplorer = ({
   folders = [],
