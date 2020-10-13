@@ -68,9 +68,9 @@ const FolderCard = ({ handleClick = noop, folder }) => {
           />
           <Spacer size={'3rem'} />
           <FolderCardIcon />
-          <Spacer size={'2.75rem'} />
+          <Spacer size={'2rem'} />
           <SingleLineBodyText>{displayName}</SingleLineBodyText>
-          <Spacer size={'2.125rem'} />
+          <Spacer size={'2rem'} />
         </Card>
       </ContextMenuTrigger>
       <FileContextMenu id={FolderId} folder={folder} type={'folder'} />

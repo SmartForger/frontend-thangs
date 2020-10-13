@@ -35,6 +35,16 @@ const useStyles = createUseStyles(theme => {
         stroke: '#AE881E',
       },
     },
+    FileCard_Name: {
+      textOverflow: 'ellipsis',
+      maxWidth: 213,
+      overflow: 'hidden',
+      flex: 'none',
+      lineHeight: '1rem !important',
+    },
+    FileCard_Icon: {
+      flex: 'none',
+    },
   }
 })
 
@@ -57,13 +67,14 @@ const FileCard = ({ handleClick = noop, model }) => {
           size={'14.375rem'}
           backgroundColor={'#FCF8EC'}
           onClick={handleModelClick}
+          title={name}
         >
           <LikeModelButton className={c.FileCard_Star} model={model} minimal />
           <Spacer size={'3rem'} />
-          <FileCardIcon />
-          <Spacer size={'2.75rem'} />
-          <SingleLineBodyText>{name}</SingleLineBodyText>
-          <Spacer size={'2.125rem'} />
+          <FileCardIcon className={c.FileCard_Icon} />
+          <Spacer size={'2rem'} />
+          <SingleLineBodyText className={c.FileCard_Name}>{name}</SingleLineBodyText>
+          <Spacer size={'2rem'} />
         </Card>
       </ContextMenuTrigger>
       <FileContextMenu id={CardId} model={model} type={'model'} />

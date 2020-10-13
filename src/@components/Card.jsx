@@ -17,10 +17,10 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const Card = ({ children, className, onClick, ...props }) => {
+const Card = ({ children, className, onClick, title, ...props }) => {
   const c = useStyles(props)
   return (
-    <div className={classnames(className, c.Card)} onClick={onClick}>
+    <div className={classnames(className, c.Card)} onClick={onClick} title={title}>
       {children}
     </div>
   )
