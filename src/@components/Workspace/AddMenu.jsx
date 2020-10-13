@@ -96,16 +96,16 @@ const AddMenu = ({ folder = {}, sideBar = false }) => {
         </MenuItem>
         <Spacer size={'1.5rem'} />
       </div>
-      {/* <Spacer size={'.5rem'} />
+      <Spacer size={'.5rem'} />
       <div>
         <Spacer size={'1.5rem'} />
         <MenuItem className={c.ContextMenu_Item} onClick={handleUpload}>
           <UploadIcon className={c.ContextMenu_Icon} />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Upload Folder - Coming Soon...</SingleLineBodyText>
+          <SingleLineBodyText>Upload Folder</SingleLineBodyText>
         </MenuItem>
         <Spacer size={'1.5rem'} />
-      </div> */}
+      </div>
       <Spacer size={'1rem'} />
     </div>
   )
