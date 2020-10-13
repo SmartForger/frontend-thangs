@@ -166,21 +166,25 @@ export default store => {
     }
   )
 
-  store.on(types.DELETE_FOLDER, async (_state, { id: folderId, onFinish }) => {
-    store.dispatch(types.LOADING_FOLDER)
-    await api({
-      method: 'DELETE',
-      endpoint: `folders/${folderId}`,
-    })
-      .then(_res => {
+  store.on(
+    types.DELETE_FOLDER,
+    async (_state, { id: folderId, onFinish = noop, onError = noop }) => {
+      store.dispatch(types.LOADING_FOLDER)
+      const { error } = await api({
+        method: 'DELETE',
+        endpoint: `folders/${folderId}`,
+      })
+      if (error) {
+        store.dispatch(types.ERROR_FOLDER)
+        onError(error)
+      } else {
         store.dispatch(types.LOADED_FOLDER)
+        store.dispatch(types.FETCH_FOLDERS)
         track('Folder Deleted')
         onFinish()
-      })
-      .catch(_error => {
-        store.dispatch(types.ERROR_FOLDER)
-      })
-  })
+      }
+    }
+  )
 
   store.on(
     types.INVITE_TO_FOLDER,
