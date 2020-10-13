@@ -1,13 +1,6 @@
 import React, { useMemo } from 'react'
 import * as R from 'ramda'
-import {
-  AddContextMenu,
-  FileTable,
-  FileCard,
-  FolderCard,
-  Spacer,
-  TitleTertiary,
-} from '@components'
+import { AddContextMenu, FileTable, FolderCard, Spacer, TitleTertiary } from '@components'
 import { useStarred } from '@hooks'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -78,7 +71,7 @@ const SharedFilesView = ({
   sharedFolders,
 }) => {
   const c = useStyles({})
-  const { starredSharedModels = [], starredSharedFolders = [] } = useStarred()
+  const { starredSharedFolders = [] } = useStarred()
   const sortedFolders = useMemo(() => {
     return !R.isEmpty(sharedFolders)
       ? sharedFolders
