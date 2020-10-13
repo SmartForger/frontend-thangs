@@ -94,7 +94,7 @@ const LandingHero = ({ showSearchTextFlash, user }) => {
         >
           Thangs is the fastest growing 3d community with over{' '}
           {modelsIngested || '1,000,000'} available models to search, store, and
-          collaborate.
+          collaborate. <Link to={'/about-us'}>Learn more</Link>
         </MultiLineBodyText>
         <Spacer size={'2rem'} />
         <LandingSearchBar
@@ -113,12 +113,6 @@ const LandingHero = ({ showSearchTextFlash, user }) => {
         user={user}
         searchBarRef={searchBarRef}
       />
-      <Spacer size={'1rem'} />
-      <div className={c.Header_AboutThangs}>
-        <Link to={'/about-us'}>
-          <LabelText>More About Thangs</LabelText>
-        </Link>
-      </div>
       <Spacer size={'.5rem'} />
     </>
   )

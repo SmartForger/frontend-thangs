@@ -8,6 +8,7 @@ import { track } from '@utilities/analytics'
 const ProfileButton = ({ user, userId, className }) => {
   const currentUserId = useCurrentUserId()
   const { dispatch } = useStoreon()
+  const isCurrentUser = currentUserId === userId
   const openSignupOverlay = useCallback(
     (titleMessage, source) => {
       dispatch(types.OPEN_OVERLAY, {
@@ -23,15 +24,19 @@ const ProfileButton = ({ user, userId, className }) => {
     },
     [dispatch]
   )
-  return (
-    <ToggleFollowButton
-      className={className}
-      profileUser={user}
-      profileUserId={userId}
-      currentUser={currentUserId}
-      openSignupOverlay={openSignupOverlay}
-    />
-  )
+  if (isCurrentUser) {
+    return null
+  } else {
+    return (
+      <ToggleFollowButton
+        className={className}
+        profileUser={user}
+        profileUserId={userId}
+        currentUser={currentUserId}
+        openSignupOverlay={openSignupOverlay}
+      />
+    )
+  }
 }
 
 export default ProfileButton
