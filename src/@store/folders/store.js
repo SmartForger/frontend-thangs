@@ -158,10 +158,10 @@ export default store => {
         onError(error)
       } else {
         store.dispatch(types.SAVED_FOLDER_DATA, data)
-        track('Folder Created')
-        onFinish(data)
         store.dispatch(types.SAVED_FOLDER)
+        track('Folder Created')
         store.dispatch(types.FETCH_FOLDERS)
+        store.dispatch(types.FETCH_THANGS, { onFinish })
       }
     }
   )
