@@ -78,7 +78,7 @@ const SearchView = ({
         <Spacer size='2rem' />
         <TitleTertiary>Search Results: {searchTerm}</TitleTertiary>
         <Spacer size='2rem' />
-        {isLoading || !results.length ? (
+        {isLoading ? (
           <Spinner />
         ) : (
           <FileTable
