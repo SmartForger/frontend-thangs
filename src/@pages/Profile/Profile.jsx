@@ -7,24 +7,20 @@ import {
   CardCollection,
   ChangeablePicture,
   EditProfileForm,
-  FolderCards,
   Layout,
   Markdown,
   MetadataPrimary,
   ModelCards,
   ProfileButton,
   ProfilePicture,
-  SearchCards,
   SingleLineBodyText,
   Spacer,
   Spinner,
-  useFlashNotification,
-  WithFlash,
 } from '@components'
 import { Message404 } from '@pages/404'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import { useCurrentUserId, usePageMeta, useQuery } from '@hooks'
+import { useCurrentUserId, usePageMeta } from '@hooks'
 import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'
 
@@ -182,100 +178,6 @@ const ModelsContent = ({ models: modelsData = {}, isCurrentUsersProfile }) => {
   )
 }
 
-const FoldersContent = ({ folders: foldersAtom = {} }) => {
-  const c = useStyles({})
-  const { data: folders, isLoaded, isError } = foldersAtom
-  const { dispatch } = useStoreon()
-  const { navigateWithFlash } = useFlashNotification()
-  const handleAfterCreate = useCallback(
-    folder => {
-      dispatch(types.CLOSE_OVERLAY)
-      navigateWithFlash(
-        `/folder/${folder.folderId}`,
-        'Folder created successfully. If the provided unregistered email addresses, they will receive an email with instructions for accessing your folder.'
-      )
-    },
-    [dispatch, navigateWithFlash]
-  )
-
-  if (!isLoaded) {
-    return <Spinner />
-  }
-
-  if (isError) {
-    return (
-      <div data-cy='fetch-profile-error'>
-        Error! We were not able to load this profile. Please try again later.
-      </div>
-    )
-  }
-
-  if (R.isEmpty(folders)) {
-    return (
-      <div className={c.Profile_NoContentMessage}>
-        <a
-          href='/#'
-          onClick={e => {
-            e.preventDefault()
-            dispatch(types.OPEN_OVERLAY, {
-              overlayName: 'createFolder',
-              overlayData: {
-                afterCreate: handleAfterCreate,
-              },
-            })
-          }}
-        >
-          <span className={c.Profile_NoContentMessage__link}>Create</span>
-        </a>{' '}
-        a private shared folder, invite team members, and start collaborating on projects.
-      </div>
-    )
-  }
-
-  return (
-    <CardCollection noResultsText='You have not uploaded any folders yet.'>
-      <FolderCards items={folders} />
-    </CardCollection>
-  )
-}
-
-const SavedSearchesContent = ({ searchSubscriptionsData = {} }) => {
-  const c = useStyles({})
-  const { data: searchSubscriptions, isLoaded, isError } = searchSubscriptionsData
-  if (!isLoaded) {
-    return <Spinner />
-  }
-
-  if (isError) {
-    return (
-      <div data-cy='fetch-profile-error'>
-        Error! We were not able to load this profile. Please try again later.
-      </div>
-    )
-  }
-
-  if (R.isEmpty(searchSubscriptions)) {
-    return (
-      <div className={c.Profile_NoContentMessage}>
-        Get notifications when more results are added by saving your
-        <a href='/search'>
-          <span className={c.Profile_NoContentMessage__link}>search.</span>
-        </a>{' '}
-        Find it on the search results page.
-      </div>
-    )
-  }
-
-  return (
-    <CardCollection
-      cardWidth={'22.5rem'}
-      noResultsText='You have not saved and searches yet.'
-    >
-      <SearchCards items={searchSubscriptions} />
-    </CardCollection>
-  )
-}
-
 const LikesContent = ({ models: modelsData = {} }) => {
   const { data: models, isLoading } = modelsData
 
@@ -345,85 +247,6 @@ const Portfolio = ({ models, likes }) => {
   )
 }
 
-const MyProfile = ({ models, likes }) => {
-  const c = useStyles({})
-  const { dispatch, folders, searchSubscriptions } = useStoreon(
-    'folders',
-    'searchSubscriptions'
-  )
-  const selectedQuery = useQuery('selected')
-  const [selected, setSelected] = useState('models')
-
-  useEffect(() => {
-    if (selectedQuery) setSelected(selectedQuery)
-  }, [selectedQuery])
-
-  useEffect(() => {
-    dispatch(types.FETCH_FOLDERS)
-    dispatch(types.FETCH_SUBSCRIPTIONS)
-  }, [dispatch])
-
-  const selectModels = useCallback(() => setSelected('models'), [])
-  const selectLikes = useCallback(() => setSelected('likes'), [])
-  const selectFolders = useCallback(() => setSelected('folders'), [])
-  const selectSearches = useCallback(() => setSelected('savedSearches'), [])
-
-  const TabContent = useCallback(() => {
-    switch (selected) {
-      case 'models':
-        return <ModelsContent models={models} isCurrentUsersProfile={true} />
-      case 'likes':
-        return <LikesContent models={likes} />
-      case 'folders':
-        return <FoldersContent folders={folders} />
-      case 'savedSearches':
-        return <SavedSearchesContent searchSubscriptionsData={searchSubscriptions} />
-      default:
-        return null
-    }
-  }, [folders, models, likes, searchSubscriptions, selected])
-
-  return (
-    <>
-      <div className={c.Home_TextHeader}>
-        <CollectionTitle
-          selected={selected === 'models'}
-          onClick={selectModels}
-          title={'Models'}
-          amount={((Array.isArray(models.data) && models.data) || []).length}
-        />
-        <Spacer size={'1.5rem'} />
-        <CollectionTitle
-          selected={selected === 'likes'}
-          onClick={selectLikes}
-          title={'Likes'}
-          amount={((Array.isArray(likes.data) && likes.data) || []).length}
-        />
-        <Spacer size={'1.5rem'} />
-        <CollectionTitle
-          selected={selected === 'folders'}
-          onClick={selectFolders}
-          title={'Folders'}
-          amount={((Array.isArray(folders.data) && folders.data) || []).length}
-        />
-        <Spacer size={'1.5rem'} />
-        <CollectionTitle
-          selected={selected === 'savedSearches'}
-          onClick={selectSearches}
-          title={'Searches'}
-          amount={
-            ((Array.isArray(searchSubscriptions.data) && searchSubscriptions.data) || [])
-              .length
-          }
-        />
-      </div>
-      <WithFlash>
-        <TabContent />
-      </WithFlash>
-    </>
-  )
-}
-
 const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
   const c = useStyles({})
   const history = useHistory()
@@ -473,7 +296,6 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
               src={user.profile && user.profile.avatarUrl}
               name={user.fullName || user.username}
             />
-            {isCurrentUsersProfile && <ChangeablePicture user={user} />}
           </div>
           <div>
             <Spacer size={'2rem'} />
@@ -482,42 +304,26 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, isLoading }) => {
           </div>
         </div>
         <div className={c.Profile_Details}>
-          {showProfileForm ? (
-            <EditProfileForm
+          <div>
+            <Spacer size={'1rem'} />
+            <Markdown className={c.Profile_Markdown}>{description}</Markdown>
+            <Spacer size={'1.5rem'} />
+            <ProfileButton
+              className={c.Profile_ProfileButton}
               user={user}
-              handleUpdateProfile={handleUpdateProfile}
-              handleCancel={handleCancel}
-              isLoading={isLoading}
-              editProfileErrorMessage={editProfileErrorMessage}
+              userId={userId}
+              onEditClick={setShowProfileForm}
             />
-          ) : (
-            <>
-              <div>
-                <Spacer size={'1rem'} />
-                <Markdown className={c.Profile_Markdown}>{description}</Markdown>
-                <Spacer size={'1.5rem'} />
-                <ProfileButton
-                  className={c.Profile_ProfileButton}
-                  user={user}
-                  userId={userId}
-                  onEditClick={setShowProfileForm}
-                />
-              </div>
-            </>
-          )}
+          </div>
         </div>
       </div>
       <Spacer size={'3rem'} />
       <div className={c.Home_Content}>
-        {isCurrentUsersProfile ? (
-          <MyProfile models={ownUserModelsAtom} likes={likedUserModelsAtom} />
-        ) : (
-          <Portfolio
-            models={ownUserModelsAtom}
-            likes={likedUserModelsAtom}
-            userId={userId}
-          />
-        )}
+        <Portfolio
+          models={ownUserModelsAtom}
+          likes={likedUserModelsAtom}
+          userId={userId}
+        />
       </div>
     </div>
   )

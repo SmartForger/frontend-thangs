@@ -17,7 +17,8 @@ import { ContextMenuTrigger } from 'react-contextmenu'
 
 const useStyles = createUseStyles(_theme => {
   return {
-    RecentFilesView: {
+    RecentFilesView: {},
+    RecentFilesView_Row: {
       display: 'flex',
       flexDirection: 'row',
     },
@@ -31,6 +32,11 @@ const useStyles = createUseStyles(_theme => {
     RecentFilesView_Starred: {
       display: 'flex',
       flexDirection: 'row',
+      flexWrap: 'wrap',
+
+      '& > div': {
+        marginTop: '1.5rem',
+      },
     },
   }
 })
@@ -47,15 +53,15 @@ const RecentFilesView = ({
   const files = useMemo(() => {
     return !R.isEmpty(thangsData)
       ? [thangsData.folders, thangsData.models]
-        .flat()
-        .sort((a, b) => new Date(a.uploadDate) - new Date(b.uploadDate))
+          .flat()
+          .sort((a, b) => new Date(a.uploadDate) - new Date(b.uploadDate))
       : []
   }, [thangsData])
 
   return (
     <>
       <ContextMenuTrigger id='Add_Menu' holdToDisplay={1000}>
-        <main className={classnames(className, c.RecentFilesView)}>
+        <main className={classnames(className, c.RecentFilesView_Row)}>
           <Spacer size='2rem' />
           <div className={c.RecentFilesView_Content}>
             <Spacer size='2rem' />
@@ -64,22 +70,21 @@ const RecentFilesView = ({
             <StatsBar userActivity={thangsData.activity} />
             <Spacer size='4rem' />
             <TitleTertiary>Starred</TitleTertiary>
-            <Spacer size='1.5rem' />
             <div className={c.RecentFilesView_Starred}>
               {starredModels.map((model, index) => {
                 return (
-                  <React.Fragment key={`starred_${index}`}>
+                  <div className={c.RecentFilesView_Row} key={`starred_${index}`}>
                     <FileCard model={model} handleClick={handleEditModel} />
                     <Spacer size='2rem' />
-                  </React.Fragment>
+                  </div>
                 )
               })}
               {starredFolders.map((folder, index) => {
                 return (
-                  <React.Fragment key={`starred_${index}`}>
+                  <div className={c.RecentFilesView_Row} key={`starred_${index}`}>
                     <FolderCard folder={folder} handleClick={handleChangeFolder} />
                     <Spacer size='2rem' />
-                  </React.Fragment>
+                  </div>
                 )
               })}
             </div>
