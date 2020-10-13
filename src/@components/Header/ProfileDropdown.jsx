@@ -54,6 +54,7 @@ export const ProfileDropdownMenu = ({
   const c = useStyles({})
   const t = useTranslations({})
   const history = useHistory()
+  const hasfullName = user && user.fullName && user.fullName.replace(' ', '')
 
   return (
     <DropdownMenu
@@ -71,7 +72,9 @@ export const ProfileDropdownMenu = ({
           />
           <Spacer size={'.75rem'} />
           <div className={c.ProfileDropdown_Column}>
-            <MultiLineBodyText>{user.fullName || user.username}</MultiLineBodyText>
+            <MultiLineBodyText>
+              {hasfullName ? user.fullName : user.username}
+            </MultiLineBodyText>
             <Link to={'/myThangs/editProfile'}>
               <MetadataSecondary>Profile Settings</MetadataSecondary>
             </Link>
