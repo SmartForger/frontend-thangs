@@ -25,10 +25,8 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'row',
       alignItems: 'center',
       cursor: 'pointer',
-
-      '&:hover': {
-        textDecoration: 'underline',
-      },
+      width: '100%',
+      outline: 'none',
     },
     ContextMenu_Icon: {
       '& path': {
@@ -36,11 +34,21 @@ const useStyles = createUseStyles(theme => {
         stroke: theme.colors.black[500],
       },
     },
+    ContextMenu_ItemLink: {
+      '&:hover': {
+        backgroundColor: ({ sideBar }) =>
+          sideBar ? 'rgba(0, 0, 0, 0.05)' : 'transparent',
+
+        '& span': {
+          textDecoration: ({ sideBar }) => (sideBar ? undefined : 'underline'),
+        },
+      },
+    },
   }
 })
 
-const AddMenu = ({ folder = {} }) => {
-  const c = useStyles({})
+const AddMenu = ({ folder = {}, sideBar = false }) => {
+  const c = useStyles({ sideBar })
   const { dispatch } = useStoreon()
 
   const handleAddFolder = useCallback(
@@ -69,9 +77,9 @@ const AddMenu = ({ folder = {} }) => {
   return (
     <div className={c.ContextMenu}>
       <Spacer size={'1rem'} />
-      <div>
+      <div className={c.ContextMenu_ItemLink} onClick={handleAddFolder}>
         <Spacer size={'1.5rem'} />
-        <MenuItem className={c.ContextMenu_Item} onClick={handleAddFolder}>
+        <MenuItem className={c.ContextMenu_Item}>
           <PlusIcon />
           <Spacer size={'.5rem'} />
           <SingleLineBodyText>Add Folder</SingleLineBodyText>
@@ -79,9 +87,9 @@ const AddMenu = ({ folder = {} }) => {
         <Spacer size={'1.5rem'} />
       </div>
       <Spacer size={'.5rem'} />
-      <div>
+      <div className={c.ContextMenu_ItemLink} onClick={handleUpload}>
         <Spacer size={'1.5rem'} />
-        <MenuItem className={c.ContextMenu_Item} onClick={handleUpload}>
+        <MenuItem className={c.ContextMenu_Item}>
           <UploadIcon className={c.ContextMenu_Icon} />
           <Spacer size={'.5rem'} />
           <SingleLineBodyText>Upload Model</SingleLineBodyText>

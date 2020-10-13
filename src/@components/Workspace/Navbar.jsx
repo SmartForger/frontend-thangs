@@ -183,7 +183,7 @@ const WorkspaceNavbar = ({
           </Button>
           {showCreateMenu && (
             <div className={c.WorkspaceNavbar_AddMenu}>
-              <AddMenu folder={folder} />
+              <AddMenu folder={folder} sideBar={true} />
             </div>
           )}
         </div>
