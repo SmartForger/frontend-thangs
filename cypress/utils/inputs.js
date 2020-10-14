@@ -7,6 +7,7 @@ const inputSelectors = {
   upload: '[name=upload]',
   modelTitle: '[name=name]',
   modelDescription: '[name=description]',
+  comment: '[name=body]',
 }
 
 export const loginEmailUsernameInput = {
@@ -40,6 +41,12 @@ export const modelDescriptionInput = {
   validInput: MODEL.DESCRIPTION,
   type: 'text',
   selector: inputSelectors.modelDescription,
+}
+
+export const commentInput = {
+  validInput: MODEL.COMMENT,
+  type: 'text',
+  selector: inputSelectors.comment,
 }
 
 export const uploadInput = {

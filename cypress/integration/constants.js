@@ -17,6 +17,7 @@ export const MODEL = {
   FILENAME: 'horn1.stl',
   TITLE: 'Test Name',
   DESCRIPTION: 'Test Description',
+  COMMENT: 'Test comment',
 }
 
 export const MODEL_TEST_TITLE = `[title="${MODEL.TITLE}"]`
@@ -55,7 +56,12 @@ export const CLASSES = {
   MODEL_PAGE_STATS: '[class^=Model_ModelStats]',
   MODEL_PAGE_LIKE_BUTTON: '[class^=LikeModelButton]',
   MODEL_PAGE_FOLLOW_BUTTON: '[class^=ToggleFollowButton]',
+  MODEL_ADD_COMMENT_FORM: '[class^=NewModelCommentForm]',
+  MODEL_COMMENT_FORM: '[class^=CommentsForModel_Comment]',
+  MODEL_NEW_UPLOADED_COMMENT: '[class^=CommentsForModel_CommentBody]',
+  MODEL_SIDEBAR_BUTTON: '[class^=Model_SidebarButton]',
   BUTTON: '[class^=Button]',
+  MY_THANGS: '[class^=MyThangs]',
 }
 
 export const DATA_CY = {
@@ -86,6 +92,9 @@ export const TEXT = {
   FOLLOW: 'Follow',
   UNFOLLOW: 'Unfollow',
   UPLOAD: 'Upload',
+  COMMENT: 'Comment',
+  UPLOAD_NEW_VERSION: 'Upload new version',
+  NEW_VERSION_UPLOADED: 'New Version Uploaded',
 }
 
 export const PROPS = {

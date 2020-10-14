@@ -1,8 +1,9 @@
 import 'cypress-file-upload'
 import {
   clickOnElement,
-  clickOnElementByText,
   clickOnTextInsideClass,
+  deleteModel,
+  editAndSaveFile,
   goTo,
   isElement,
   isTextInsideClass,
@@ -11,13 +12,7 @@ import {
   uploadFile,
 } from '../../../utils/common-methods'
 import { CLASSES, MODEL, MODEL_TEST_TITLE, PATH, PROPS, TEXT } from '../../constants'
-import {
-  clearInput,
-  enterValidValue,
-  modelDescriptionInput,
-  modelTitleInput,
-  uploadInput,
-} from '../../../utils/inputs'
+import { commentInput, enterValidValue, uploadInput } from '../../../utils/inputs'
 
 describe('The Model Page', () => {
   beforeEach(() => {
@@ -27,11 +22,8 @@ describe('The Model Page', () => {
   it('Upload model', () => {
     openUpload()
     uploadFile(MODEL.FILENAME, uploadInput)
-    clearInput(CLASSES.UPLOAD_FORM, modelTitleInput)
-    enterValidValue(CLASSES.UPLOAD_FORM, modelTitleInput)
-    enterValidValue(CLASSES.UPLOAD_FORM, modelDescriptionInput)
-    clickOnTextInsideClass(CLASSES.UPLOAD_BUTTON_GROUP, 'Save Model')
-    cy.wait(5000)
+    editAndSaveFile()
+    cy.wait(3000)
     goTo(PATH.PROFILE)
     isElement(MODEL_TEST_TITLE, PROPS.VISIBLE)
   })
@@ -45,13 +37,45 @@ describe('The Model Page', () => {
     isElement(CLASSES.MODEL_PAGE_DESCRIPTION, PROPS.NOT_EMPTY)
   })
 
+  it('Check model comments', () => {
+    goTo(PATH.PROFILE)
+    clickOnElement(MODEL_TEST_TITLE)
+    cy.wait(2000)
+    enterValidValue(CLASSES.MODEL_ADD_COMMENT_FORM, commentInput)
+    clickOnTextInsideClass(CLASSES.MODEL_ADD_COMMENT_FORM, TEXT.COMMENT)
+    isTextInsideClass(CLASSES.MODEL_COMMENT_FORM, MODEL.COMMENT, PROPS.VISIBLE)
+  })
+
+  it('Check redirect to my thangs after upload of new version', () => {
+    goTo(PATH.PROFILE)
+    clickOnElement(MODEL_TEST_TITLE)
+    cy.wait(2000)
+    clickOnTextInsideClass(CLASSES.MODEL_SIDEBAR_BUTTON, TEXT.UPLOAD_NEW_VERSION)
+    uploadFile(MODEL.FILENAME, uploadInput)
+    editAndSaveFile()
+    cy.wait(2000)
+    isElement(CLASSES.MY_THANGS, PROPS.VISIBLE)
+  })
+
+  it('Check comment on previous version model page', () => {
+    goTo(PATH.PROFILE)
+    clickOnElement(MODEL_TEST_TITLE)
+    cy.wait(2000)
+    isTextInsideClass(
+      CLASSES.MODEL_NEW_UPLOADED_COMMENT,
+      TEXT.NEW_VERSION_UPLOADED,
+      PROPS.VISIBLE
+    )
+  })
+
   it('Model has information: likes, downloads, date of upload', () => {
     goTo(PATH.PROFILE)
     clickOnElement(MODEL_TEST_TITLE)
-    cy.wait(5000)
+    cy.wait(3000)
     isTextInsideClass(CLASSES.MODEL_PAGE_STATS, TEXT.LIKES)
     isTextInsideClass(CLASSES.MODEL_PAGE_STATS, TEXT.DOWNLOADS)
     isTextInsideClass(CLASSES.MODEL_PAGE_STATS, TEXT.CURRENT_YEAR)
+    deleteModel()
   })
 
   it('Check for like/unlike button', () => {
@@ -77,10 +101,6 @@ describe('The Model Page', () => {
   })
 
   it('Delete model', () => {
-    goTo(PATH.PROFILE)
-    clickOnElement(CLASSES.MODEL_CARD_EDIT_BUTTON)
-    clickOnElementByText(TEXT.DELETE_MODEL)
-    clickOnElementByText(TEXT.CONFIRM)
-    isElement(MODEL_TEST_TITLE, PROPS.INVISIBLE)
+    deleteModel()
   })
 })

@@ -1,9 +1,19 @@
-import { CLASSES, DATA_CY, PROPS, TEXT } from '../integration/constants'
 import {
+  CLASSES,
+  DATA_CY,
+  MODEL_TEST_TITLE,
+  PATH,
+  PROPS,
+  TEXT,
+} from '../integration/constants'
+import {
+  clearInput,
   enterValidValue,
   findInput,
   loginEmailUsernameInput,
   loginPasswordInput,
+  modelDescriptionInput,
+  modelTitleInput,
 } from './inputs'
 
 export const isElement = (el, prop) => {
@@ -79,6 +89,21 @@ export const uploadFile = (filename, input) => {
         encoding: 'utf-8',
       })
     })
+}
+
+export const editAndSaveFile = () => {
+  clearInput(CLASSES.UPLOAD_FORM, modelTitleInput)
+  enterValidValue(CLASSES.UPLOAD_FORM, modelTitleInput)
+  enterValidValue(CLASSES.UPLOAD_FORM, modelDescriptionInput)
+  clickOnTextInsideClass(CLASSES.UPLOAD_BUTTON_GROUP, 'Save Model')
+}
+
+export const deleteModel = () => {
+  goTo(PATH.PROFILE)
+  clickOnElement(CLASSES.MODEL_CARD_EDIT_BUTTON)
+  clickOnElementByText(TEXT.DELETE_MODEL)
+  clickOnElementByText(TEXT.CONFIRM)
+  isElement(MODEL_TEST_TITLE, PROPS.INVISIBLE)
 }
 
 export const findElement = (className, element, index = 0) => {
