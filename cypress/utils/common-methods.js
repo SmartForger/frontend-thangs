@@ -65,8 +65,7 @@ export const openProfileDropdown = () => {
 }
 
 export const openUpload = () => {
-  isElement(DATA_CY.UPLOAD_BUTTON, PROPS.VISIBLE)
-  clickOnElement(DATA_CY.UPLOAD_BUTTON)
+  clickOnElementByText(TEXT.UPLOAD)
   isElement(DATA_CY.UPLOAD_OVERLAY, PROPS.VISIBLE)
 }
 

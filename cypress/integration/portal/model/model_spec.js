@@ -81,6 +81,6 @@ describe('The Model Page', () => {
     clickOnElement(CLASSES.MODEL_CARD_EDIT_BUTTON)
     clickOnElementByText(TEXT.DELETE_MODEL)
     clickOnElementByText(TEXT.CONFIRM)
-    isElement(MODEL_TEST_TITLE, PROPS.VISIBLE)
+    isElement(MODEL_TEST_TITLE, PROPS.INVISIBLE)
   })
 })

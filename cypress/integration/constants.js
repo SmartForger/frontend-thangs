@@ -55,6 +55,7 @@ export const CLASSES = {
   MODEL_PAGE_STATS: '[class^=Model_ModelStats]',
   MODEL_PAGE_LIKE_BUTTON: '[class^=LikeModelButton]',
   MODEL_PAGE_FOLLOW_BUTTON: '[class^=ToggleFollowButton]',
+  BUTTON: '[class^=Button]',
 }
 
 export const DATA_CY = {
@@ -84,6 +85,7 @@ export const TEXT = {
   LIKED: 'Liked',
   FOLLOW: 'Follow',
   UNFOLLOW: 'Unfollow',
+  UPLOAD: 'Upload',
 }
 
 export const PROPS = {
