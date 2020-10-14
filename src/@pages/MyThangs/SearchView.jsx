@@ -56,7 +56,7 @@ const SearchView = ({ className, handleChangeFolder = noop, handleEditModel = no
   const { searchTerm } = useParams()
   const { dispatch, thangs } = useStoreon('thangs')
   const { search: files = {}, isLoading } = thangs
-  debugger
+
   useEffect(() => {
     dispatch(types.SEARCH_MY_THANGS, {
       searchTerm,

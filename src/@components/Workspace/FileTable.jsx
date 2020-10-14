@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
 import {
@@ -7,6 +7,7 @@ import {
   SingleLineBodyText,
   Spacer,
   FileContextMenu,
+  FileMenu,
   TitleTertiary,
 } from '@components'
 import { createUseStyles } from '@style'
@@ -17,8 +18,10 @@ import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as FileCardIcon } from '@svg/file-card-blank.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
+import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import { formatBytes } from '@utilities'
 import { ContextMenuTrigger } from 'react-contextmenu'
+import { useExternalClick } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -35,6 +38,7 @@ const useStyles = createUseStyles(theme => {
     FileTable_Row: {
       display: 'flex',
       flexDirection: 'row',
+      position: 'relative',
     },
     FileTable_Cell: {
       display: 'flex',
@@ -46,6 +50,11 @@ const useStyles = createUseStyles(theme => {
       '& svg': {
         flex: 'none',
       },
+    },
+    FileTable_Action: {
+      width: 'auto',
+      justifyContent: 'flex-end',
+      flex: 1,
     },
     FileTable_FileName: {
       width: '40%',
@@ -97,6 +106,15 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       padding: '2rem',
       justifyContent: 'center',
+    },
+    MenuButton: {
+      padding: '.5rem',
+    },
+    FileRowMenu: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      zIndex: 1,
     },
   }
 })
@@ -164,15 +182,31 @@ const FileTableHeader = ({ sortedBy }) => {
       <div className={classnames(c.FileTable_Cell, c.FileTable_Header)}>
         <MetadataSecondary>Versioned From</MetadataSecondary>
       </div>
+      <div
+        className={classnames(c.FileTable_Cell, c.FileTable_Header, c.FileTable_Action)}
+      ></div>
     </div>
   )
 }
 
 const FolderRow = ({ folder, handleFolderClick = noop }) => {
   const c = useStyles({})
+  const [showFolderMenu, setShowFolderMenu] = useState(false)
+  const folderMenuRef = useRef(null)
+
+  useExternalClick(folderMenuRef, () => setShowFolderMenu(false))
+
   const handleClick = useCallback(() => {
     handleFolderClick(folder)
   }, [handleFolderClick, folder])
+
+  const handleFolderMenu = useCallback(
+    e => {
+      e.stopPropagation()
+      setShowFolderMenu(!showFolderMenu)
+    },
+    [showFolderMenu]
+  )
 
   return (
     <div className={c.FileTable_RowWrapper} onClick={handleClick}>
@@ -197,6 +231,16 @@ const FolderRow = ({ folder, handleFolderClick = noop }) => {
           <Contributors users={folder.members} />
         </div>
         <div className={c.FileTable_Cell}>-</div>
+        <div className={classnames(c.FileTable_Cell, c.FileTable_Action)}>
+          <div className={c.MenuButton} onClick={handleFolderMenu} ref={folderMenuRef}>
+            <DotStackIcon />
+            {showFolderMenu && (
+              <div className={c.FileRowMenu}>
+                <FileMenu folder={folder} type={'folder'} />
+              </div>
+            )}
+          </div>
+        </div>
       </div>
       <Spacer size={'1rem'} />
       <Divider spacing='0' />
@@ -206,9 +250,22 @@ const FolderRow = ({ folder, handleFolderClick = noop }) => {
 
 const FileRow = ({ model, handleModelClick = noop }) => {
   const c = useStyles({})
+  const [showFileMenu, setShowFileMenu] = useState(false)
+  const fileMenuRef = useRef(null)
+
+  useExternalClick(fileMenuRef, () => setShowFileMenu(false))
+
   const handleClick = useCallback(() => {
     handleModelClick(model)
   }, [handleModelClick, model])
+
+  const handleFileMenu = useCallback(
+    e => {
+      e.stopPropagation()
+      setShowFileMenu(!showFileMenu)
+    },
+    [showFileMenu]
+  )
 
   return (
     <div className={c.FileTable_RowWrapper} onClick={handleClick}>
@@ -240,6 +297,16 @@ const FileRow = ({ model, handleModelClick = noop }) => {
             '-'
           )}
         </div>
+        <div className={classnames(c.FileTable_Cell, c.FileTable_Action)}>
+          <div className={c.MenuButton} onClick={handleFileMenu} ref={fileMenuRef}>
+            <DotStackIcon />
+            {showFileMenu && (
+              <div className={c.FileRowMenu}>
+                <FileMenu model={model} type={'model'} />
+              </div>
+            )}
+          </div>
+        </div>
       </div>
       <Spacer size={'1rem'} />
       <Divider spacing='0' />
@@ -265,16 +332,16 @@ const FileTable = ({
             files.map((file, index) => {
               const { id } = file
               return (
-                <React.Fragment key={`FileRow_${index}`}>
+                <React.Fragment key={`TableRow_${index}`}>
                   {file.subfolders ? (
-                    <div>
+                    <div key={`FolderRow_${index}`}>
                       <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
                         <FolderRow folder={file} handleFolderClick={handleChangeFolder} />
                       </ContextMenuTrigger>
                       <FileContextMenu id={id} folder={file} type={'folder'} />
                     </div>
                   ) : (
-                    <div>
+                    <div key={`FileRow_${index}`}>
                       <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
                         <FileRow model={file} handleModelClick={handleEditModel} />
                       </ContextMenuTrigger>

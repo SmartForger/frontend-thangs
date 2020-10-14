@@ -74,7 +74,6 @@ const getSubfolderId = (path, rootFolder, folder) => {
   if (!rootFolder) return { id: folder.id }
   if (path === rootFolder.name) return { id: rootFolder.id }
   return rootFolder.subfolders.find(folder => {
-    debugger
     const folderName = folder.name.split('//').reverse()[0]
     return folderName === path
   })

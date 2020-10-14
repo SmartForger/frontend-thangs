@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import ReactModal from 'react-modal'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import { useExternalClick } from '@hooks'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import * as types from '@constants/storeEventTypes'
 
@@ -90,8 +91,10 @@ const Overlay = ({
   dialogue,
   ...props
 }) => {
+  const overlayRef = useRef(null)
   const [isVisible, setIsVisible] = useState(false)
   const { dispatch } = useStoreon()
+  useExternalClick(overlayRef, () => dispatch(types.CLOSE_OVERLAY))
   const c = useStyles({ windowed, animateIn, showPromo, isHidden, dialogue })
   useEffect(() => {
     document.body.scrollTop = 0
@@ -129,6 +132,7 @@ const Overlay = ({
         className={classnames(c.Overlay_Content, {
           [c.Overlay_Content__visible]: isVisible,
         })}
+        ref={overlayRef}
       >
         {children}
       </div>

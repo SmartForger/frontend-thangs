@@ -86,6 +86,7 @@ const Folder = ({
 
   const folderName = parentName ? name.replace(`${parentName}//`, '') : name
   const postId = '_nav'
+
   return (
     <>
       <ContextMenuTrigger id={`File_Menu_${id}${postId}`} holdToDisplay={1000}>

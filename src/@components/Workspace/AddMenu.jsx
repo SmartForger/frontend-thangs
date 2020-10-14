@@ -9,7 +9,7 @@ import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
-    ContextMenu: {
+    AddMenu: {
       backgroundColor: theme.colors.white[400],
       boxShadow: '0px 8px 20px 0px rgba(0, 0, 0, 0.16)',
       borderRadius: '.5rem',
@@ -20,7 +20,7 @@ const useStyles = createUseStyles(theme => {
         flexDirection: 'row',
       },
     },
-    ContextMenu_Item: {
+    AddMenu_Item: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
@@ -28,13 +28,13 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
       outline: 'none',
     },
-    ContextMenu_Icon: {
+    AddMenu_Icon: {
       '& path': {
         fill: theme.colors.black[500],
         stroke: theme.colors.black[500],
       },
     },
-    ContextMenu_ItemLink: {
+    AddMenu_ItemLink: {
       '&:hover': {
         backgroundColor: ({ sideBar }) =>
           sideBar ? 'rgba(0, 0, 0, 0.05)' : 'transparent',
@@ -75,11 +75,11 @@ const AddMenu = ({ folder = {}, sideBar = false }) => {
   )
 
   return (
-    <div className={c.ContextMenu}>
+    <div className={c.AddMenu}>
       <Spacer size={'1rem'} />
-      <div className={c.ContextMenu_ItemLink} onClick={handleAddFolder}>
+      <div className={c.AddMenu_ItemLink} onClick={handleAddFolder}>
         <Spacer size={'1.5rem'} />
-        <MenuItem className={c.ContextMenu_Item}>
+        <MenuItem className={c.AddMenu_Item}>
           <PlusIcon />
           <Spacer size={'.5rem'} />
           <SingleLineBodyText>Add Folder</SingleLineBodyText>
@@ -87,20 +87,20 @@ const AddMenu = ({ folder = {}, sideBar = false }) => {
         <Spacer size={'1.5rem'} />
       </div>
       <Spacer size={'.5rem'} />
-      <div className={c.ContextMenu_ItemLink} onClick={handleUpload}>
+      <div className={c.AddMenu_ItemLink} onClick={handleUpload}>
         <Spacer size={'1.5rem'} />
-        <MenuItem className={c.ContextMenu_Item}>
-          <UploadIcon className={c.ContextMenu_Icon} />
+        <MenuItem className={c.AddMenu_Item}>
+          <UploadIcon className={c.AddMenu_Icon} />
           <Spacer size={'.5rem'} />
           <SingleLineBodyText>Upload Model</SingleLineBodyText>
         </MenuItem>
         <Spacer size={'1.5rem'} />
       </div>
       <Spacer size={'.5rem'} />
-      <div className={c.ContextMenu_ItemLink} onClick={handleUpload}>
+      <div className={c.AddMenu_ItemLink} onClick={handleUpload}>
         <Spacer size={'1.5rem'} />
-        <MenuItem className={c.ContextMenu_Item}>
-          <UploadIcon className={c.ContextMenu_Icon} />
+        <MenuItem className={c.AddMenu_Item}>
+          <UploadIcon className={c.AddMenu_Icon} />
           <Spacer size={'.5rem'} />
           <SingleLineBodyText>Upload Folder</SingleLineBodyText>
         </MenuItem>
