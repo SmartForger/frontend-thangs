@@ -10,6 +10,7 @@ workflows:
             branches:
               only:
                 - development
+                - setup-cy-tests-and-login
       - deploy-production:
           Stack: master
           context: gcp-and-physna
@@ -75,8 +76,8 @@ jobs:
             VERSION=`git rev-parse --short HEAD`
             sed -i -- "s/%VERSION%/$VERSION/g" build/index.html
       - run:
-          name: "Build Storybook"
-          command: yarn build:storybook
+          name: "Run Cypress tests"
+          command: yarn run cypress run --headless --browser chrome
       - run:
           name: "Deploy build"
           command: |
