@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import { useParams, Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
 import {
@@ -68,11 +69,26 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
+
+const getSubfolderId = (path, rootFolder, folder) => {
+  if (!rootFolder) return { id: folder.id }
+  if (path === rootFolder.name) return { id: rootFolder.id }
+  return rootFolder.subfolders.find(folder => {
+    debugger
+    const folderName = folder.name.split('//').reverse()[0]
+    return folderName === path
+  })
+}
+
 const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
   const { id, name } = folder
   const folderPath = name.split('//')
+  const folderPathEnhanced = folderPath.map(path => {
+    const { id: pathId } = getSubfolderId(path, rootFolder, folder)
+    return { label: path, id: pathId }
+  })
   const rootFolderName = folderPath[0]
 
   const handleClickRoot = useCallback(() => {
@@ -120,11 +136,25 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
             <>
               <Spacer size={'.5rem'} />
               <MetadataPrimary>
-                {folderPath.map((path, index) => {
+                {folderPathEnhanced.map((pathObj, index) => {
                   if (index === 0) return null
-                  if (index === folderPath.length - 1)
-                    return <span className={c.FolderView_CurrentFolder}>{path}</span>
-                  return <>{`${path}`}&nbsp;&nbsp;/&nbsp;&nbsp;</>
+                  if (index === folderPathEnhanced.length - 1)
+                    return (
+                      <span
+                        key={`folderCrumb_${pathObj.label}_${index}`}
+                        className={c.FolderView_CurrentFolder}
+                      >
+                        {pathObj.label}
+                      </span>
+                    )
+                  return (
+                    <React.Fragment key={`folderCrumb_${pathObj.label}_${index}`}>
+                      <Link
+                        to={`/myThangs/folder/${pathObj.id}`}
+                      >{`${pathObj.label}`}</Link>
+                      &nbsp;&nbsp;/&nbsp;&nbsp;
+                    </React.Fragment>
+                  )
                 })}
               </MetadataPrimary>
             </>
@@ -152,12 +182,12 @@ const findFolderById = (id, folders) => {
 
 const FolderView = ({
   className,
-  folderId: id,
   folders,
   handleChangeFolder = noop,
   handleEditModel = noop,
 }) => {
   const c = useStyles({})
+  const { folderId: id } = useParams()
   const folder = id ? findFolderById(id, folders) : {}
 
   if (!folder || R.isEmpty(folder)) {

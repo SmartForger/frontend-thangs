@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from 'react'
+import { useParams } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { FileTable, Spacer, TitleTertiary, Spinner } from '@components'
 import { createUseStyles } from '@style'
@@ -50,16 +51,12 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const SearchView = ({
-  className,
-  handleChangeFolder = noop,
-  handleEditModel = noop,
-  searchTerm,
-}) => {
+const SearchView = ({ className, handleChangeFolder = noop, handleEditModel = noop }) => {
   const c = useStyles({})
+  const { searchTerm } = useParams()
   const { dispatch, thangs } = useStoreon('thangs')
   const { search: files = {}, isLoading } = thangs
-
+  debugger
   useEffect(() => {
     dispatch(types.SEARCH_MY_THANGS, {
       searchTerm,
@@ -86,6 +83,7 @@ const SearchView = ({
             handleEditModel={handleEditModel}
             handleChangeFolder={handleChangeFolder}
             sortedBy={'filename'}
+            searchCase={true}
           ></FileTable>
         )}
       </div>

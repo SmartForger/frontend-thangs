@@ -93,6 +93,11 @@ const useStyles = createUseStyles(theme => {
         stroke: '#AE881E',
       },
     },
+    NoResultsFound: {
+      display: 'flex',
+      padding: '2rem',
+      justifyContent: 'center',
+    },
   }
 })
 
@@ -247,36 +252,43 @@ const FileTable = ({
   handleChangeFolder = noop,
   handleEditModel = noop,
   sortedBy,
+  searchCase,
 }) => {
   const c = useStyles({})
 
   return (
     <div className={c.FileTable}>
-      {files.length > 0 ? (
+      {files.length > 0 || searchCase ? (
         <>
           <FileTableHeader sortedBy={sortedBy} />
-          {files.map((file, index) => {
-            const { id } = file
-            return (
-              <React.Fragment key={`FileRow_${index}`}>
-                {file.subfolders ? (
-                  <div>
-                    <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
-                      <FolderRow folder={file} handleFolderClick={handleChangeFolder} />
-                    </ContextMenuTrigger>
-                    <FileContextMenu id={id} folder={file} type={'folder'} />
-                  </div>
-                ) : (
-                  <div>
-                    <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
-                      <FileRow model={file} handleModelClick={handleEditModel} />
-                    </ContextMenuTrigger>
-                    <FileContextMenu id={id} model={file} type={'model'} />
-                  </div>
-                )}
-              </React.Fragment>
-            )
-          })}
+          {files.length > 0 ? (
+            files.map((file, index) => {
+              const { id } = file
+              return (
+                <React.Fragment key={`FileRow_${index}`}>
+                  {file.subfolders ? (
+                    <div>
+                      <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
+                        <FolderRow folder={file} handleFolderClick={handleChangeFolder} />
+                      </ContextMenuTrigger>
+                      <FileContextMenu id={id} folder={file} type={'folder'} />
+                    </div>
+                  ) : (
+                    <div>
+                      <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
+                        <FileRow model={file} handleModelClick={handleEditModel} />
+                      </ContextMenuTrigger>
+                      <FileContextMenu id={id} model={file} type={'model'} />
+                    </div>
+                  )}
+                </React.Fragment>
+              )
+            })
+          ) : (
+            <SingleLineBodyText className={c.NoResultsFound}>
+              No Results Found
+            </SingleLineBodyText>
+          )}
         </>
       ) : (
         <div className={c.NoFilesMessage}>

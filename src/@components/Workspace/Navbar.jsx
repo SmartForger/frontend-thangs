@@ -146,7 +146,7 @@ const WorkspaceNavbar = ({
   ])
 
   const handleAllFiles = useCallback(() => {
-    setCurrentView('allFilesView')
+    setCurrentView('allFiles')
   }, [setCurrentView])
 
   const handleClickRecent = useCallback(() => {

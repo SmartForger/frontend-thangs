@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import React, { useCallback, useEffect, useMemo } from 'react'
+import { Route, Switch, useHistory, withRouter } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { WorkspaceHeader, WorkspaceNavbar } from '@components'
 import { authenticationService } from '@services'
@@ -73,23 +73,8 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const views = {
-  allFilesView: AllFilesView,
-  editProfile: EditProfileView,
-  folderView: FolderView,
-  likedModels: LikedModelsView,
-  recentFiles: RecentFilesView,
-  savedSearches: SavedSearchesView,
-  searchView: SearchView,
-  sharedFiles: SharedFilesView,
-}
-
-const MyThangs = () => {
-  const { view } = useParams()
+const MyThangs = withRouter(({ match }) => {
   const history = useHistory()
-  const [currentView, setCurrentView] = useState({
-    name: view || 'recentFiles',
-  })
   const { Overlay, isOverlayOpen, isOverlayHidden } = useOverlay()
   const c = useStyles({})
   const currentUserId = authenticationService.getCurrentUserId()
@@ -103,7 +88,6 @@ const MyThangs = () => {
   const isLoading = useMemo(() => {
     return isLoadingThangs || isLoadingFolders
   }, [isLoadingFolders, isLoadingThangs])
-  const WorkspaceView = useMemo(() => views[currentView.name], [currentView])
   const myFolders = useMemo(() => {
     if (!foldersData || !foldersData.length) return []
     return foldersData.filter(
@@ -128,8 +112,7 @@ const MyThangs = () => {
   }, [dispatch])
 
   const handleCurrentView = useCallback(
-    (name, data = {}) => {
-      setCurrentView({ name: name, data: data })
+    name => {
       history.push(`/myThangs/${name}`)
     },
     [history]
@@ -137,9 +120,9 @@ const MyThangs = () => {
 
   const handleChangeFolder = useCallback(
     folder => {
-      setCurrentView({ name: 'folderView', data: { folderId: folder.id } })
+      history.push(`/myThangs/folder/${folder.id}`)
     },
-    [setCurrentView]
+    [history]
   )
 
   const handleEditModel = useCallback(
@@ -157,6 +140,17 @@ const MyThangs = () => {
     [dispatch]
   )
 
+  const viewProps = {
+    setCurrentView: handleCurrentView,
+    handleEditModel: handleEditModel,
+    handleChangeFolder: handleChangeFolder,
+    folders: folders.data,
+    myFolders: myFolders,
+    sharedFolders: sharedFolders,
+    models: thangsData.models,
+    userId: currentUserId,
+  }
+
   return (
     <div
       className={classnames(c.MyThangs, {
@@ -165,7 +159,6 @@ const MyThangs = () => {
     >
       {Overlay}
       <WorkspaceNavbar
-        {...currentView.data}
         folderNav={folderNav}
         folders={myFolders}
         setCurrentView={handleCurrentView}
@@ -176,21 +169,46 @@ const MyThangs = () => {
         models={thangsData.models}
       />
       <div className={c.MyThangs_ContentWrapper}>
-        <WorkspaceHeader setCurrentView={setCurrentView} />
-        <WorkspaceView
-          {...currentView.data}
-          setCurrentView={handleCurrentView}
-          handleEditModel={handleEditModel}
-          handleChangeFolder={handleChangeFolder}
-          folders={folders.data}
-          myFolders={myFolders}
-          sharedFolders={sharedFolders}
-          models={thangsData.models}
-          userId={currentUserId}
-        />
+        <WorkspaceHeader />
+        <Switch>
+          <Route exact path={match.path} component={RecentFilesView} {...viewProps} />
+          <Route
+            path={`${match.path}/recentFiles`}
+            render={() => <RecentFilesView {...viewProps} />}
+          />
+          <Route
+            path={`${match.path}/allFiles`}
+            render={() => <AllFilesView {...viewProps} />}
+          />
+          <Route
+            path={`${match.path}/editProfile`}
+            render={() => <EditProfileView {...viewProps} />}
+          />
+          <Route
+            path={`${match.path}/folder/:folderId`}
+            render={() => <FolderView {...viewProps} />}
+          />
+          <Route
+            path={`${match.path}/likedModels`}
+            render={() => <LikedModelsView {...viewProps} />}
+          />
+          <Route
+            path={`${match.path}/sharedFiles`}
+            render={() => <SharedFilesView {...viewProps} />}
+          />
+          <Route
+            path={`${match.path}/savedSearches`}
+            render={() => <SavedSearchesView {...viewProps} />}
+          />
+          <Route
+            path={`${match.path}/searchFiles/:searchTerm`}
+            render={() => <SearchView {...viewProps} />}
+          />
+          <Route component={() => 'Oops, Page Not Found'} />
+        </Switch>
       </div>
     </div>
   )
-}
+})
 
 export default MyThangs
