@@ -171,7 +171,11 @@ const MyThangs = withRouter(({ match }) => {
       <div className={c.MyThangs_ContentWrapper}>
         <WorkspaceHeader />
         <Switch>
-          <Route exact path={match.path} component={RecentFilesView} {...viewProps} />
+          <Route
+            exact
+            path={match.path}
+            render={() => <RecentFilesView {...viewProps} />}
+          />
           <Route
             path={`${match.path}/recentFiles`}
             render={() => <RecentFilesView {...viewProps} />}
