@@ -54,6 +54,11 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'row',
       justifyContent: 'space-between',
     },
+    FolderView_TitleAndIcons: {
+      display: 'flex',
+      alignItems: 'center',
+      flexDirection: 'row',
+    },
     FolderView_Col: {
       flexDirection: 'column',
       alignItems: 'flex-start',
@@ -125,7 +130,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
 
   return (
     <div className={c.FolderView_Row}>
-      <div className={c.FolderView_Row}>
+      <div className={c.FolderView_TitleAndIcons}>
         <FolderIcon />
         <Spacer size={'1rem'} />
         <div className={c.FolderView_Col}>
