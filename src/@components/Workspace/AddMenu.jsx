@@ -97,17 +97,7 @@ const AddMenu = ({ folder = {}, sideBar = false }) => {
         <MenuItem className={c.AddMenu_Item}>
           <UploadIcon className={c.AddMenu_Icon} />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Upload Model</SingleLineBodyText>
-        </MenuItem>
-        <Spacer size={'1.5rem'} />
-      </div>
-      <Spacer size={'.5rem'} />
-      <div className={c.AddMenu_ItemLink} onClick={handleUpload}>
-        <Spacer size={'1.5rem'} />
-        <MenuItem className={c.AddMenu_Item}>
-          <UploadIcon className={c.AddMenu_Icon} />
-          <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Upload Folder</SingleLineBodyText>
+          <SingleLineBodyText>Upload Models</SingleLineBodyText>
         </MenuItem>
         <Spacer size={'1.5rem'} />
       </div>

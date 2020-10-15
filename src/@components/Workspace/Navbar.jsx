@@ -50,14 +50,14 @@ const useStyles = createUseStyles(theme => {
       zIndex: 1,
     },
     WorkspaceNavbar_AddButton: {
-      width: '100%',
+      width: '50%',
       display: 'flex',
       flexDirection: 'row',
       marginBottom: '2rem',
     },
     WorkspaceNavbar_AddMenu: {
       position: 'absolute',
-      width: '18.5rem',
+      width: '12rem',
       top: '2.375rem',
     },
     WorkspaceNavbar_NavLink: {
@@ -191,7 +191,7 @@ const WorkspaceNavbar = ({
           <Button className={c.WorkspaceNavbar_AddButton} onClick={handleClickCreate}>
             <PlusIcon />
             <Spacer size={'.5rem'} />
-            Create
+            Add New
           </Button>
           {showCreateMenu && (
             <div className={c.WorkspaceNavbar_AddMenu}>

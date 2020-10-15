@@ -75,12 +75,12 @@ const SharedFilesView = ({
   const sortedFolders = useMemo(() => {
     return !R.isEmpty(sharedFolders)
       ? sharedFolders
-        .sort((a, b) => {
-          if (a.name < b.name) return -1
-          else if (a.name > b.name) return 1
-          return 0
-        })
-        .filter(folder => !folder.name.includes('//'))
+          .sort((a, b) => {
+            if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
+            else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
+            return 0
+          })
+          .filter(folder => !folder.name.includes('//'))
       : []
   }, [sharedFolders])
 

@@ -8,7 +8,6 @@ const useStyles = createUseStyles(theme => {
     Dropdown: {
       border: '1px solid #ddd',
       borderRadius: '.5rem',
-      marginBottom: '.5rem',
     },
     Dropdown_Indicator: {
       width: 0,
