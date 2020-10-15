@@ -68,8 +68,13 @@ const AddMenu = ({ folder = {}, sideBar = false }) => {
   const handleUpload = useCallback(
     () =>
       dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'upload',
-        overlayData: { folderId: folder.id },
+        overlayName: 'multiUpload',
+        overlayData: {
+          folderId: folder.id,
+          animateIn: true,
+          windowed: true,
+          dialogue: true,
+        },
       }),
     [dispatch, folder.id]
   )

@@ -39,3 +39,16 @@ export const ERROR_STATES = {
   TOO_BIG: 'TOO_BIG',
   SIZE_WARNING: 'SIZE_WARNING',
 }
+
+export const CATEGORIES = [
+  { value: 'automotive', label: 'Automotive' },
+  { value: 'aerospace', label: 'Aerospace' },
+  { value: 'healthcare', label: 'Healthcare' },
+  { value: 'industrial', label: 'Industrial' },
+  { value: 'home', label: 'Home' },
+  { value: 'safety', label: 'Safety' },
+  { value: 'characters', label: 'Characters' },
+  { value: 'architecture', label: 'Architecture' },
+  { value: 'technology', label: 'Technology' },
+  { value: 'hobbyist', label: 'Hobbyist' },
+]
