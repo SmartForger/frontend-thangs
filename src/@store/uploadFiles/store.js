@@ -74,7 +74,7 @@ export default store => {
     Promise.all(
       Object.keys(state.uploadFiles).map(fileId => {
         const file = state.uploadFiles[fileId]
-        store.dispatch(types.SUBMIT_FILE, { file })
+        return submitFile({ file })
       })
     ).then(() => {
       store.dispatch(types.FETCH_FOLDERS)
@@ -82,7 +82,7 @@ export default store => {
     })
   })
 
-  store.on(types.SUBMIT_FILE, async (_, { file }) => {
+  const submitFile = async ({ file }) => {
     try {
       const {
         newFileName,
@@ -111,9 +111,12 @@ export default store => {
           data: error,
           isError: true,
         })
+        return
       }
+      return
     } catch (e) {
       store.dispatch(types.CHANGE_UPLOAD_FILE, { id: file.id, data: e, isError: true })
+      return
     }
-  })
+  }
 }

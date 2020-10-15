@@ -17,10 +17,12 @@ import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
-import { ReactComponent as Dropzone } from '@svg/dropzone.svg'
+import { ReactComponent as DropzoneIcon } from '@svg/dropzone.svg'
 import { formatBytes } from '@utilities'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import { useExternalClick } from '@hooks'
+import Dropzone from 'react-dropzone'
+import { MODEL_FILE_EXTS } from '@constants/fileUpload'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -81,15 +83,6 @@ const useStyles = createUseStyles(theme => {
       padding: '2rem',
       textAlign: 'center',
       position: 'relative',
-
-      '& > div': {
-        width: '5.25rem',
-        position: 'absolute',
-        bottom: '8rem',
-        left: 0,
-        right: 0,
-        margin: 'auto',
-      },
     },
     NoFilesMessage_Icon: {
       position: 'relative',
@@ -122,6 +115,19 @@ const useStyles = createUseStyles(theme => {
       top: 0,
       right: 0,
       zIndex: 1,
+    },
+    FileTable_UploadZone: {
+      '& > div': {
+        outline: 'none',
+      },
+    },
+    FileTable_UploadButton: {
+      width: '5.25rem',
+      position: 'absolute',
+      bottom: '8rem',
+      left: 0,
+      right: 0,
+      margin: 'auto',
     },
   }
 })
@@ -328,6 +334,7 @@ const FileTable = ({
   sortedBy,
   searchCase,
   hideDropzone = false,
+  onDrop = noop,
 }) => {
   const c = useStyles({})
 
@@ -367,8 +374,17 @@ const FileTable = ({
         </>
       ) : !hideDropzone ? (
         <div className={c.NoFilesMessage}>
-          <Dropzone />
-          <Pill>Browse</Pill>
+          <Dropzone onDrop={onDrop} accept={MODEL_FILE_EXTS} maxFiles={50}>
+            {({ getRootProps, getInputProps }) => (
+              <section className={c.FileTable_UploadZone}>
+                <div {...getRootProps()}>
+                  <input {...getInputProps()} />
+                  <DropzoneIcon />
+                  <Pill className={c.FileTable_UploadButton}>Browse</Pill>
+                </div>
+              </section>
+            )}
+          </Dropzone>
         </div>
       ) : null}
     </div>

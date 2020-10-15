@@ -45,6 +45,7 @@ const RecentFilesView = ({
   className,
   handleChangeFolder = noop,
   handleEditModel = noop,
+  onDrop = noop,
 }) => {
   const c = useStyles({})
   const { thangs } = useStoreon('thangs')
@@ -96,6 +97,7 @@ const RecentFilesView = ({
               handleChangeFolder={handleChangeFolder}
               handleEditModel={handleEditModel}
               sortedBy={'created'}
+              onDrop={onDrop}
             ></FileTable>
           </div>
           <Spacer size='2rem' />

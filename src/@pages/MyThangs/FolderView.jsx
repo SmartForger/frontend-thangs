@@ -194,6 +194,7 @@ const FolderView = ({
   folders,
   handleChangeFolder = noop,
   handleEditModel = noop,
+  onDrop = noop,
 }) => {
   const c = useStyles({})
   const { folderId: id } = useParams()
@@ -213,7 +214,7 @@ const FolderView = ({
   const directSubFolders = subfolders.filter(
     subfolder => !subfolder.name.replace(`${name}//`, '').includes('//')
   )
-  debugger
+
   return (
     <>
       <ContextMenuTrigger id='Add_Menu' holdToDisplay={1000}>
@@ -252,6 +253,7 @@ const FolderView = ({
               handleEditModel={handleEditModel}
               handleChangeFolder={handleChangeFolder}
               hideDropzone={directSubFolders.length > 0}
+              onDrop={onDrop}
             ></FileTable>
           </div>
           <Spacer size='2rem' />

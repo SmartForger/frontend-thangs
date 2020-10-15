@@ -70,6 +70,11 @@ const useStyles = createUseStyles(theme => {
         textDecoration: 'underline',
       },
     },
+    MyThangs_UploadZone: {
+      '& > div': {
+        outline: 'none',
+      },
+    },
   }
 })
 
@@ -136,6 +141,21 @@ const MyThangs = withRouter(({ match }) => {
     [dispatch]
   )
 
+  const onDrop = useCallback(
+    (acceptedFiles, rejectedFile, _event) => {
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'multiUpload',
+        overlayData: {
+          initData: { acceptedFiles, rejectedFile, e: _event },
+          animateIn: true,
+          windowed: true,
+          dialogue: true,
+        },
+      })
+    },
+    [dispatch]
+  )
+
   const viewProps = {
     setCurrentView: handleCurrentView,
     handleEditModel: handleEditModel,
@@ -145,6 +165,7 @@ const MyThangs = withRouter(({ match }) => {
     sharedFolders: sharedFolders,
     models: thangsData.models,
     userId: currentUserId,
+    onDrop: onDrop,
   }
 
   return (

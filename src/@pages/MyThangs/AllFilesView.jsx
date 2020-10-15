@@ -56,28 +56,29 @@ const AllFilesView = ({
   handleEditModel = noop,
   myFolders: folders,
   models,
+  onDrop = noop,
 }) => {
   const c = useStyles({})
 
   const sortedFolders = useMemo(() => {
     return !R.isEmpty(folders)
       ? folders
-          .sort((a, b) => {
-            if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
-            else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
-            return 0
-          })
-          .filter(folder => !folder.name.includes('//'))
+        .sort((a, b) => {
+          if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
+          else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
+          return 0
+        })
+        .filter(folder => !folder.name.includes('//'))
       : []
   }, [folders])
 
   const sortedModels = useMemo(() => {
     return models && !R.isEmpty(models)
       ? models.sort((a, b) => {
-          if (a.name < b.name) return -1
-          else if (a.name > b.name) return 1
-          return 0
-        })
+        if (a.name < b.name) return -1
+        else if (a.name > b.name) return 1
+        return 0
+      })
       : []
   }, [models])
 
@@ -116,6 +117,7 @@ const AllFilesView = ({
               handleChangeFolder={handleChangeFolder}
               sortedBy={'filename'}
               hideDropzone={sortedFolders.length > 0}
+              onDrop={onDrop}
             ></FileTable>
           </div>
           <Spacer size='2rem' />

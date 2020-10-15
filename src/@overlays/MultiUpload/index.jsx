@@ -64,7 +64,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const MultiUpload = () => {
+const MultiUpload = ({ initData = null }) => {
   const { dispatch, folders, uploadFiles = {} } = useStoreon('folders', 'uploadFiles')
   const [activeView, setActiveView] = useState('upload')
   const [errorMessage, setErrorMessage] = useState(null)
@@ -107,6 +107,7 @@ const MultiUpload = () => {
   )
 
   const closeOverlay = useCallback(() => {
+    dispatch(types.RESET_UPLOAD_FILES)
     dispatch(types.CLOSE_OVERLAY)
   }, [dispatch])
 
@@ -148,13 +149,13 @@ const MultiUpload = () => {
   )
 
   useEffect(() => {
+    if (initData) onDrop(initData.acceptedFiles, initData.rejectedFile, initData.e)
+  }, [initData, onDrop])
+
+  useEffect(() => {
     const loadingFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isLoading)
     if (loadingFiles.length === 0) setErrorMessage(null)
   }, [uploadFiles])
-
-  useEffect(() => {
-    return dispatch(types.RESET_UPLOAD_FILES)
-  }, [dispatch])
 
   return (
     <div className={c.MultiUpload}>

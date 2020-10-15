@@ -136,7 +136,6 @@ const useStyles = createUseStyles(theme => {
     },
     EnterInfo_ErrorText: {
       ...theme.text.formErrorText,
-      marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
       fontWeight: 500,
       padding: '.625rem 1rem',
@@ -170,12 +169,15 @@ const EnterInfo = ({
   const c = useStyles({})
   const [isPrivacyDisabled, setIsPrivacyDisabled] = useState(false)
   const activeId = Object.keys(uploadFiles)[activeView]
-  const model = useMemo(() => uploadFiles[activeId], [activeId, uploadFiles])
+  const model = useMemo(() => uploadFiles && uploadFiles[activeId], [
+    activeId,
+    uploadFiles,
+  ])
   const { data: folderData } = folders
   const initialState = {
-    name: model.name || '',
+    name: (model && model.name) || '',
     description: '',
-    folderId: null,
+    folderId: 'files',
     material: '',
     height: '',
     weight: '',
@@ -218,41 +220,36 @@ const EnterInfo = ({
           const folder = folderData.find(folder => folder.id === e.value)
           handleOnInputChange('isPublic', folder.isPublic)
         } else {
-          handleOnInputChange('isPublic', false)
+          handleOnInputChange('isPublic', true)
         }
       }
     },
     [folderData, handleOnInputChange]
   )
 
-  const handleSkip = useCallback(
-    data => {
-      if (!inputState.name || inputState.name === '')
-        return setErrorMessage('Model name is required')
-      if (!inputState.description || inputState.description === '')
-        return setErrorMessage('Model description is required')
-      const activeId = Object.keys(uploadFiles)[activeView]
-      const filesLeft = Object.keys(uploadFiles)
-      filesLeft.slice(activeId + 1)
-      filesLeft.forEach(id => {
-        const newData = { ...data }
-        newData.name = filesLeft[id].name
-        handleUpdate({ id, data })
-      })
-      handleSkipToEnd()
-    },
-    [
-      inputState.name,
-      inputState.description,
-      setErrorMessage,
-      uploadFiles,
-      activeView,
-      handleSkipToEnd,
-      handleUpdate,
-    ]
-  )
+  const handleSkip = useCallback(() => {
+    if (!inputState.name || inputState.name === '')
+      return setErrorMessage('Model name is required')
+    if (!inputState.description || inputState.description === '')
+      return setErrorMessage('Model description is required')
+    const filesLeft = Object.keys(uploadFiles).slice(activeView)
+    filesLeft.forEach(id => {
+      const newData = { ...inputState }
+      newData.name = uploadFiles[id].name
+      handleUpdate({ id, data: inputState })
+    })
+    handleSkipToEnd()
+  }, [
+    inputState,
+    setErrorMessage,
+    uploadFiles,
+    activeView,
+    handleSkipToEnd,
+    handleUpdate,
+  ])
 
   const selectedCategory = useMemo(() => {
+    if (!model) return undefined
     return R.find(R.propEq('value', model.category), CATEGORIES)
   }, [model])
 
@@ -274,8 +271,10 @@ const EnterInfo = ({
   }, [folderData])
 
   useEffect(() => {
-    handleOnInputChange('name', model.name)
+    if (model) handleOnInputChange('name', model.name)
   }, [handleOnInputChange, model])
+
+  if (!model) return null
 
   return (
     <>
@@ -295,7 +294,7 @@ const EnterInfo = ({
       <Spacer size={'1.5rem'} />
       {errorMessage && (
         <>
-          <h4 className={c.UploadModels_ErrorText}>{errorMessage}</h4>
+          <h4 className={c.EnterInfo_ErrorText}>{errorMessage}</h4>
           <Spacer size='1rem' />
         </>
       )}
@@ -330,6 +329,7 @@ const EnterInfo = ({
               className={c.EnterInfo_Select}
               name='folder'
               placeholder={'Select folder'}
+              defaultValue={{ value: 'files', label: 'My Files' }}
               options={[{ value: 'files', label: 'My Files' }, ...usersFolders]}
               onChange={handleFolderChange}
             />

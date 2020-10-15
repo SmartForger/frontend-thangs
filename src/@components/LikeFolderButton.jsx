@@ -95,6 +95,7 @@ const LikeFolderButton = ({ className, folder = {}, minimal, onlyShowOwned }) =>
     () => String(currentUserId) === String(creator.id),
     [currentUserId, creator.id]
   )
+
   const [liked, setLiked] = useState(hasLikedFolder(folder, currentUserId))
   const [hasChanged, setHasChanged] = useState(false)
   const handleLikeClicked = useCallback(
