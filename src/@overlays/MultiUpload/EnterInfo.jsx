@@ -1,14 +1,15 @@
-import React, { useCallback, useMemo, useEffect } from 'react'
+import React, { useCallback, useMemo, useEffect, useState } from 'react'
 import * as R from 'ramda'
 import {
   Button,
-  Spacer,
-  TitleTertiary,
-  ModelThumbnail,
-  MetadataPrimary,
-  Input,
-  Textarea,
   Dropdown,
+  Input,
+  MetadataPrimary,
+  ModelThumbnail,
+  Spacer,
+  Textarea,
+  TitleTertiary,
+  Toggle,
 } from '@components'
 import { useForm } from '@hooks'
 import { createUseStyles } from '@style'
@@ -155,26 +156,31 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
+
 const noop = () => null
 const EnterInfo = ({
   activeView,
-  handleBack = noop,
+  folders,
+  // handleSkip = noop,
   handleContinue = noop,
   handleUpdate = noop,
   uploadFiles,
 }) => {
   const c = useStyles({})
+  const [isPrivacyDisabled, setIsPrivacyDisabled] = useState(false)
+  const [isPrivate, setIsPrivate] = useState(false)
   const activeId = Object.keys(uploadFiles)[activeView]
   const model = useMemo(() => uploadFiles[activeId], [activeId, uploadFiles])
-  const folders = []
+  const { data: folderData } = folders
   const initialState = {
     name: model.name || '',
     description: '',
-    folder: 'public',
+    folderId: null,
     material: '',
     height: '',
     weight: '',
     category: '',
+    isPublic: true,
   }
 
   const { onFormSubmit, onInputChange, inputState } = useForm({
@@ -188,6 +194,13 @@ const EnterInfo = ({
     [onInputChange]
   )
 
+  const handleOnToggleChange = useCallback(
+    e => {
+      onInputChange('isPublic', e && e.target && !e.target.checked)
+    },
+    [onInputChange]
+  )
+
   const handleSubmit = useCallback(
     data => {
       handleUpdate({ id: activeId, data })
@@ -196,20 +209,56 @@ const EnterInfo = ({
     [handleContinue, handleUpdate, activeId]
   )
 
+  const handleFolderChange = useCallback(
+    e => {
+      if (e) {
+        handleOnInputChange('folderId', e.value)
+        setIsPrivacyDisabled(e.value && e.value !== 'files')
+        debugger
+        if (e.value !== 'files') {
+          debugger
+          const folder = folderData.find(folder => folder.id === e.value)
+          handleOnInputChange('isPublic', folder.isPublic)
+        } else {
+          handleOnInputChange('isPublic', false)
+        }
+      }
+    },
+    [folderData, handleOnInputChange]
+  )
+
+  // const handleSkipRest = useCallback(
+  //   data => {
+  //     handleUpdate({ id: activeId, data })
+  //     handleContinue()
+  //   },
+  //   [handleContinue, handleUpdate, activeId]
+  // )
+
   const selectedCategory = useMemo(() => {
     return R.find(R.propEq('value', model.category), CATEGORIES)
   }, [model])
 
   const usersFolders = useMemo(() => {
-    return folders && folders.length
-      ? folders.map(folder => ({ value: folder.id, label: folder.name }))
+    const sortedFolders = !R.isEmpty(folderData)
+      ? folderData.sort((a, b) => {
+          if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
+          else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
+          return 0
+        })
       : []
-  }, [folders])
+
+    return sortedFolders && sortedFolders.length
+      ? sortedFolders.map(folder => ({
+          value: folder.id,
+          label: folder.name.replace('//', '/'),
+        }))
+      : []
+  }, [folderData])
 
   const selectedFolder = useMemo(() => {
     return undefined
-    // if (!inputState.folder) return undefined
-    // const selectedFolderObj = folders.find(folder => folder.id === inputState.folder)
+    // const selectedFolderObj = usersFolders.find(folder => folder.id === inputState.folder)
     // const selectedFolder = { value: inputState.folder, label: selectedFolderObj.name }
     // return selectedFolder
   }, [])
@@ -259,23 +308,15 @@ const EnterInfo = ({
           />
           <Spacer size={'1rem'} />
         </div>
-        {folders && folders.length ? (
+        {folderData && folderData.length ? (
           <div className={c.EnterInfo_Field}>
-            <label
-              className={classnames(c.EnterInfo_Label, c.EnterInfo_FolderLabel)}
-              htmlFor='folder'
-            >
-              Add To Folder
-            </label>
             <Dropdown
               className={c.EnterInfo_Select}
               name='folder'
-              placeholder='Select folder'
+              placeholder={'Select folder'}
               defaultValue={selectedFolder}
-              options={[{ value: 'public', label: 'Public' }, ...usersFolders]}
-              onChange={e => {
-                if (e) handleOnInputChange('folder', e.value)
-              }}
+              options={[{ value: 'files', label: 'My Files' }, ...usersFolders]}
+              onChange={handleFolderChange}
             />
             <Spacer size={'1rem'} />
           </div>
@@ -328,11 +369,25 @@ const EnterInfo = ({
             }}
           />
         </div>
+        <Toggle
+          id={'privacy_switch'}
+          label={'Private Model'}
+          checked={inputState && !inputState.isPublic}
+          onChange={handleOnToggleChange}
+          disabled={isPrivacyDisabled}
+          hoverTooltip={
+            isPrivacyDisabled
+              ? `The folder you have selected is ${
+                  inputState.isPublic ? 'Public' : 'Private'
+                }`
+              : undefined
+          }
+        />
         <div className={c.EnterInfo_ButtonWrapper}>
-          <Button secondary onClick={handleBack} type='button'>
-            Cancel
-          </Button>
-          <Spacer size={'1rem'} />
+          {/* <Button teritary onClick={handleSkipRest} type='button'>
+            Skip
+          </Button> 
+          <Spacer size={'1rem'} />*/}
           <Button type='submit'>Continue</Button>
         </div>
       </form>

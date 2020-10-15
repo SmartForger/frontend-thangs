@@ -67,8 +67,8 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
     },
     PadlockIcon_Header: {
-      flex: 'none'
-    }
+      flex: 'none',
+    },
   }
 })
 
@@ -121,7 +121,6 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
       },
     })
   }, [dispatch, folder])
-
 
   return (
     <div className={c.FolderView_Row}>
@@ -214,7 +213,7 @@ const FolderView = ({
   const directSubFolders = subfolders.filter(
     subfolder => !subfolder.name.replace(`${name}//`, '').includes('//')
   )
-
+  debugger
   return (
     <>
       <ContextMenuTrigger id='Add_Menu' holdToDisplay={1000}>
@@ -227,23 +226,32 @@ const FolderView = ({
               rootFolder={rootFolder}
               setFolder={handleChangeFolder}
             />
-            <Spacer size='4rem' />
-            <TitleTertiary>Folders</TitleTertiary>
-            <div className={c.FolderView_Folders}>
-              {directSubFolders.map((subfolder, index) => (
-                <React.Fragment key={`folder=${subfolder.id}_${index}`}>
-                  <FolderCard folder={subfolder} handleClick={handleChangeFolder} />
-                  <Spacer size={'2rem'} />
-                </React.Fragment>
-              ))}
-            </div>
-            <Spacer size='4rem' />
-            <TitleTertiary>Files</TitleTertiary>
-            <Spacer size='2rem' />
+            {directSubFolders.length > 0 && (
+              <>
+                <Spacer size='4rem' />
+                <TitleTertiary>Folders</TitleTertiary>
+                <div className={c.FolderView_Folders}>
+                  {directSubFolders.map((subfolder, index) => (
+                    <React.Fragment key={`folder=${subfolder.id}_${index}`}>
+                      <FolderCard folder={subfolder} handleClick={handleChangeFolder} />
+                      <Spacer size={'2rem'} />
+                    </React.Fragment>
+                  ))}
+                </div>
+              </>
+            )}
+            {models.length > 0 && (
+              <>
+                <Spacer size='4rem' />
+                <TitleTertiary>Files</TitleTertiary>
+                <Spacer size='2rem' />{' '}
+              </>
+            )}
             <FileTable
               files={models}
               handleEditModel={handleEditModel}
               handleChangeFolder={handleChangeFolder}
+              hideDropzone={directSubFolders.length > 0}
             ></FileTable>
           </div>
           <Spacer size='2rem' />

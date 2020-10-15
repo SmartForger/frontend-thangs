@@ -5,6 +5,7 @@ import EnterInfo from './EnterInfo'
 import UploadModels from './UploadModels'
 import { createUseStyles } from '@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
+import { ReactComponent as ArrowLeftIcon } from '@svg/icon-arrow-left.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { ERROR_STATES, FILE_SIZE_LIMITS } from '@constants/fileUpload'
@@ -37,6 +38,14 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       background: 'white',
     },
+    MultiUpload_BackButton: {
+      top: '1.5rem',
+      left: '1.5rem',
+      cursor: 'pointer',
+      zIndex: 4,
+      position: 'absolute',
+      background: 'white',
+    },
     MultiUpload_Row: {
       display: 'flex',
       flexDirection: 'row',
@@ -56,7 +65,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const MultiUpload = () => {
-  const { dispatch, uploadFiles = {} } = useStoreon('uploadFiles')
+  const { dispatch, folders, uploadFiles = {} } = useStoreon('folders', 'uploadFiles')
   const [activeView, setActiveView] = useState('upload')
   const [errorMessage, setErrorMessage] = useState(null)
   const c = useStyles({})
@@ -108,7 +117,6 @@ const MultiUpload = () => {
   }, [closeOverlay, dispatch])
 
   const handleContinue = useCallback(() => {
-    //If all files are uploaded
     const loadingFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isLoading)
     if (loadingFiles.length > 0)
       return setErrorMessage('Please wait until all files are processed')
@@ -139,6 +147,13 @@ const MultiUpload = () => {
     [dispatch]
   )
 
+  // const handleSkip = useCallback(
+  //   ({ id, data, index }) => {
+  //     dispatch(types.CHANGE_UPLOAD_FILE, { id, data })
+  //   },
+  //   [dispatch]
+  // )
+
   useEffect(() => {
     const loadingFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isLoading)
     if (loadingFiles.length === 0) setErrorMessage(null)
@@ -158,6 +173,9 @@ const MultiUpload = () => {
             <SingleLineBodyText className={c.MultiUpload_OverlayHeader}>
               {activeView === 'upload' ? 'Upload Files' : 'Enter Information'}
             </SingleLineBodyText>
+            {activeView !== 'upload' && (
+              <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />
+            )}
             <ExitIcon className={c.MultiUpload_ExitButton} onClick={closeOverlay} />
           </div>
           <Spacer size={'1.5rem'} />
@@ -175,7 +193,8 @@ const MultiUpload = () => {
           <EnterInfo
             activeView={activeView}
             closeOverlay={closeOverlay}
-            handleBack={handleBack}
+            folders={folders}
+            // handleSkip={handleSkip}
             handleContinue={handleContinue}
             handleUpdate={handleUpdate}
             setErrorMessage={setErrorMessage}

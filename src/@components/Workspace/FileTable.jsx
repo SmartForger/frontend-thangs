@@ -4,11 +4,11 @@ import { format } from 'date-fns'
 import {
   Contributors,
   Divider,
-  SingleLineBodyText,
-  Spacer,
   FileContextMenu,
   FileMenu,
-  TitleTertiary,
+  Pill,
+  SingleLineBodyText,
+  Spacer,
 } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -16,9 +16,8 @@ import { MetadataSecondary } from '@components/Text/Metadata'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
-import { ReactComponent as FileCardIcon } from '@svg/file-card-blank.svg'
-import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
+import { ReactComponent as Dropzone } from '@svg/dropzone.svg'
 import { formatBytes } from '@utilities'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import { useExternalClick } from '@hooks'
@@ -81,8 +80,16 @@ const useStyles = createUseStyles(theme => {
       margin: '2rem',
       padding: '2rem',
       textAlign: 'center',
-      border: `1px dashed ${theme.colors.grey[100]}`,
-      borderRadius: '.5rem',
+      position: 'relative',
+
+      '& > div': {
+        width: '5.25rem',
+        position: 'absolute',
+        bottom: '8rem',
+        left: 0,
+        right: 0,
+        margin: 'auto',
+      },
     },
     NoFilesMessage_Icon: {
       position: 'relative',
@@ -320,6 +327,7 @@ const FileTable = ({
   handleEditModel = noop,
   sortedBy,
   searchCase,
+  hideDropzone = false,
 }) => {
   const c = useStyles({})
 
@@ -357,20 +365,12 @@ const FileTable = ({
             </SingleLineBodyText>
           )}
         </>
-      ) : (
+      ) : !hideDropzone ? (
         <div className={c.NoFilesMessage}>
-          <Spacer size={'4rem'} />
-          <div className={c.NoFilesMessage_Icon}>
-            <FileCardIcon className={c.FileCard_Icon} />
-            <UploadIcon className={c.FileCard_UploadIcon} />
-          </div>
-          <Spacer size={'1rem'} />
-          <TitleTertiary className={c.NoFilesMessage_Text}>
-            Drop files here or use the &quot;Create&quot; Button
-          </TitleTertiary>
-          <Spacer size={'4rem'} />
+          <Dropzone />
+          <Pill>Browse</Pill>
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

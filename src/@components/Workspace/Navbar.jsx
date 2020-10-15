@@ -205,7 +205,7 @@ const WorkspaceNavbar = ({
             <Spacer size={'2rem'} />
             <NavLink
               Icon={FolderIcon}
-              label={'Folders'}
+              label={'All Files'}
               isFolder={true}
               folderId={'files'}
               onClick={handleAllFiles}

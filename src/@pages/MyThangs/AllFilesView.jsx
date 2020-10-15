@@ -89,24 +89,33 @@ const AllFilesView = ({
           <div className={c.AllFilesView_Content}>
             <Spacer size='2rem' />
             <TitleTertiary>All Files</TitleTertiary>
-            <Spacer size='4rem' />
-            <TitleTertiary>Folders</TitleTertiary>
-            <div className={c.AllFilesView_Folders}>
-              {sortedFolders.map((folder, index) => (
-                <React.Fragment key={`folder=${folder.id}_${index}`}>
-                  <FolderCard folder={folder} handleClick={handleChangeFolder} />
-                  <Spacer size={'2rem'} />
-                </React.Fragment>
-              ))}
-            </div>
-            <Spacer size='4rem' />
-            <TitleTertiary>Files</TitleTertiary>
-            <Spacer size='2rem' />
+            {sortedFolders.length > 0 && (
+              <>
+                <Spacer size='4rem' />
+                <TitleTertiary>Folders</TitleTertiary>
+                <div className={c.AllFilesView_Folders}>
+                  {sortedFolders.map((folder, index) => (
+                    <React.Fragment key={`folder=${folder.id}_${index}`}>
+                      <FolderCard folder={folder} handleClick={handleChangeFolder} />
+                      <Spacer size={'2rem'} />
+                    </React.Fragment>
+                  ))}
+                </div>
+              </>
+            )}
+            {sortedModels.length > 0 && (
+              <>
+                <Spacer size='4rem' />
+                <TitleTertiary>Files</TitleTertiary>
+                <Spacer size='2rem' />
+              </>
+            )}
             <FileTable
               files={sortedModels}
               handleEditModel={handleEditModel}
               handleChangeFolder={handleChangeFolder}
               sortedBy={'filename'}
+              hideDropzone={sortedFolders.length > 0}
             ></FileTable>
           </div>
           <Spacer size='2rem' />
