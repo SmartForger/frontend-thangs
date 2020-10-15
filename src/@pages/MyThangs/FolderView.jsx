@@ -17,6 +17,7 @@ import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as InviteIcon } from '@svg/icon-invite.svg'
+import { ReactComponent as PadlockIcon } from '@svg/icon-padlock.svg'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import * as types from '@constants/storeEventTypes'
 
@@ -65,6 +66,9 @@ const useStyles = createUseStyles(theme => {
     FolderView_RootLink: {
       cursor: 'pointer',
     },
+    PadlockIcon_Header: {
+      flex: 'none'
+    }
   }
 })
 
@@ -118,6 +122,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
     })
   }, [dispatch, folder])
 
+
   return (
     <div className={c.FolderView_Row}>
       <div className={c.FolderView_Row}>
@@ -129,6 +134,12 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
               <TitleTertiary>{rootFolderName}</TitleTertiary>
             </div>
             <Spacer size={'.5rem'} />
+            {!folder.isPublic && (
+              <>
+                <PadlockIcon className={c.PadlockIcon_Header} />
+                <Spacer size={'.25rem'} />
+              </>
+            )}
             <LikeFolderButton folder={folder} minimal onlyShowOwned />
           </div>
           {folderPath.length > 1 && (
