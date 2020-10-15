@@ -37,6 +37,7 @@ const ProfilePicture = ({
   size = DEFAULT_AVATAR_SIZE,
   color = DEFAULT_AVATAR_COLOR,
   bordered,
+  title = undefined
 }) => {
   const c = useStyles({ bordered, size })
   const nameToUse = useMemo(() => {
@@ -46,6 +47,7 @@ const ProfilePicture = ({
 
   return src || nameToUse ? (
     <Avatar
+      title={title}
       name={nameToUse}
       src={src}
       color={color}
@@ -55,8 +57,8 @@ const ProfilePicture = ({
       maxInitials={2}
     />
   ) : (
-    <UserIcon className={classnames(className, c.ProfilePicture_alt)} />
-  )
+      <UserIcon className={classnames(className, c.ProfilePicture_alt)} />
+    )
 }
 
 export default ProfilePicture

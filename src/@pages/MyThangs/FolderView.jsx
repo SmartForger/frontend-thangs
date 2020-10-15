@@ -12,6 +12,7 @@ import {
   Spacer,
   Spinner,
   TitleTertiary,
+  Contributors
 } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -171,6 +172,8 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
         </div>
       </div>
       <div className={c.FolderView_Row}>
+        <Contributors users={folder.members} displayLength="10" />
+        <Spacer size={'1rem'} />
         <Button secondary onClick={handleEditFolder}>
           Edit
         </Button>
