@@ -43,7 +43,14 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, dispatch, user }) => {
         hoverVideo: 'https://storage.googleapis.com/thangs-pubic/instructionStorage.mp4',
         callback: () => {
           if (user && user.id) {
-            dispatch(types.OPEN_OVERLAY, { overlayName: 'upload' })
+            dispatch(types.OPEN_OVERLAY, {
+              overlayName: 'multiUpload',
+              overlayData: {
+                animateIn: true,
+                windowed: true,
+                dialogue: true,
+              },
+            })
             track('Value Prop Clicked', { source: 'Unlimited Storage' })
           } else {
             dispatch(types.OPEN_OVERLAY, {

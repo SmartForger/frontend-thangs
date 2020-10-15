@@ -118,7 +118,16 @@ const UserNav = ({
         {showUpload && (
           <Button
             className={classnames(c.UserNav_Button)}
-            onClick={() => dispatch(types.OPEN_OVERLAY, { overlayName: 'upload' })}
+            onClick={() => {
+              dispatch(types.OPEN_OVERLAY, {
+                overlayName: 'multiUpload',
+                overlayData: {
+                  animateIn: true,
+                  windowed: true,
+                  dialogue: true,
+                },
+              })
+            }}
           >
             {t('header.uploadButtonText')}
           </Button>

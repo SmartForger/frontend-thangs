@@ -125,10 +125,8 @@ const useStyles = createUseStyles(theme => {
 
 const getDescription = R.pathOr('Empty', ['profile', 'description'])
 
-const ModelsContent = ({ models: modelsData = {}, isCurrentUsersProfile }) => {
-  const c = useStyles({})
+const ModelsContent = ({ models: modelsData = {} }) => {
   const { data: models, isLoaded, isError } = modelsData
-  const { dispatch } = useStoreon()
 
   if (!isLoaded) {
     return <Spinner />
@@ -149,25 +147,6 @@ const ModelsContent = ({ models: modelsData = {}, isCurrentUsersProfile }) => {
       else return 1
     }
   )
-
-  if (R.isEmpty(sortedModels) && isCurrentUsersProfile) {
-    return (
-      <div className={c.Profile_NoContentMessage}>
-        <a
-          href='/#'
-          onClick={e => {
-            e.preventDefault()
-            dispatch(types.OPEN_OVERLAY, {
-              overlayName: 'upload',
-            })
-          }}
-        >
-          <span className={c.Profile_NoContentMessage__link}>Upload</span>
-        </a>{' '}
-        your first model to start building your portfolio.
-      </div>
-    )
-  }
 
   return (
     <CardCollection noResultsText='You have not uploaded any models yet.'>

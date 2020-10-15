@@ -13,7 +13,6 @@ import {
 } from '@components'
 import { useForm } from '@hooks'
 import { createUseStyles } from '@style'
-import classnames from 'classnames'
 import { formatBytes } from '@utilities'
 import { CATEGORIES } from '@constants/fileUpload'
 
@@ -160,15 +159,16 @@ const useStyles = createUseStyles(theme => {
 const noop = () => null
 const EnterInfo = ({
   activeView,
+  errorMessage = '',
   folders,
-  // handleSkip = noop,
   handleContinue = noop,
   handleUpdate = noop,
+  handleSkipToEnd = noop,
+  setErrorMessage = noop,
   uploadFiles,
 }) => {
   const c = useStyles({})
   const [isPrivacyDisabled, setIsPrivacyDisabled] = useState(false)
-  const [isPrivate, setIsPrivate] = useState(false)
   const activeId = Object.keys(uploadFiles)[activeView]
   const model = useMemo(() => uploadFiles[activeId], [activeId, uploadFiles])
   const { data: folderData } = folders
@@ -214,9 +214,7 @@ const EnterInfo = ({
       if (e) {
         handleOnInputChange('folderId', e.value)
         setIsPrivacyDisabled(e.value && e.value !== 'files')
-        debugger
         if (e.value !== 'files') {
-          debugger
           const folder = folderData.find(folder => folder.id === e.value)
           handleOnInputChange('isPublic', folder.isPublic)
         } else {
@@ -227,13 +225,32 @@ const EnterInfo = ({
     [folderData, handleOnInputChange]
   )
 
-  // const handleSkipRest = useCallback(
-  //   data => {
-  //     handleUpdate({ id: activeId, data })
-  //     handleContinue()
-  //   },
-  //   [handleContinue, handleUpdate, activeId]
-  // )
+  const handleSkip = useCallback(
+    data => {
+      if (!inputState.name || inputState.name === '')
+        return setErrorMessage('Model name is required')
+      if (!inputState.description || inputState.description === '')
+        return setErrorMessage('Model description is required')
+      const activeId = Object.keys(uploadFiles)[activeView]
+      const filesLeft = Object.keys(uploadFiles)
+      filesLeft.slice(activeId + 1)
+      filesLeft.forEach(id => {
+        const newData = { ...data }
+        newData.name = filesLeft[id].name
+        handleUpdate({ id, data })
+      })
+      handleSkipToEnd()
+    },
+    [
+      inputState.name,
+      inputState.description,
+      setErrorMessage,
+      uploadFiles,
+      activeView,
+      handleSkipToEnd,
+      handleUpdate,
+    ]
+  )
 
   const selectedCategory = useMemo(() => {
     return R.find(R.propEq('value', model.category), CATEGORIES)
@@ -256,13 +273,6 @@ const EnterInfo = ({
       : []
   }, [folderData])
 
-  const selectedFolder = useMemo(() => {
-    return undefined
-    // const selectedFolderObj = usersFolders.find(folder => folder.id === inputState.folder)
-    // const selectedFolder = { value: inputState.folder, label: selectedFolderObj.name }
-    // return selectedFolder
-  }, [])
-
   useEffect(() => {
     handleOnInputChange('name', model.name)
   }, [handleOnInputChange, model])
@@ -283,6 +293,12 @@ const EnterInfo = ({
         </div>
       </div>
       <Spacer size={'1.5rem'} />
+      {errorMessage && (
+        <>
+          <h4 className={c.UploadModels_ErrorText}>{errorMessage}</h4>
+          <Spacer size='1rem' />
+        </>
+      )}
       <form onSubmit={onFormSubmit(handleSubmit)}>
         <div className={c.EnterInfo_Field}>
           <Input
@@ -314,7 +330,6 @@ const EnterInfo = ({
               className={c.EnterInfo_Select}
               name='folder'
               placeholder={'Select folder'}
-              defaultValue={selectedFolder}
               options={[{ value: 'files', label: 'My Files' }, ...usersFolders]}
               onChange={handleFolderChange}
             />
@@ -384,10 +399,10 @@ const EnterInfo = ({
           }
         />
         <div className={c.EnterInfo_ButtonWrapper}>
-          {/* <Button teritary onClick={handleSkipRest} type='button'>
+          <Button tertiary onClick={handleSkip} type='button'>
             Skip
-          </Button> 
-          <Spacer size={'1rem'} />*/}
+          </Button>
+          <Spacer size={'1rem'} />
           <Button type='submit'>Continue</Button>
         </div>
       </form>

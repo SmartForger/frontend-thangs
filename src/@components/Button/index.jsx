@@ -40,7 +40,7 @@ const useStyles = createUseStyles(theme => {
     },
     Button__tertiary: {
       backgroundColor: 'transparent',
-      color: theme.colors.gold[500],
+      color: theme.colors.black[500],
 
       '&:hover': {
         backgroundColor: 'transparent',

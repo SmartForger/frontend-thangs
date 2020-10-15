@@ -147,13 +147,6 @@ const MultiUpload = () => {
     [dispatch]
   )
 
-  // const handleSkip = useCallback(
-  //   ({ id, data, index }) => {
-  //     dispatch(types.CHANGE_UPLOAD_FILE, { id, data })
-  //   },
-  //   [dispatch]
-  // )
-
   useEffect(() => {
     const loadingFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isLoading)
     if (loadingFiles.length === 0) setErrorMessage(null)
@@ -193,9 +186,10 @@ const MultiUpload = () => {
           <EnterInfo
             activeView={activeView}
             closeOverlay={closeOverlay}
+            errorMessage={errorMessage}
             folders={folders}
-            // handleSkip={handleSkip}
             handleContinue={handleContinue}
+            handleSkipToEnd={handleSubmit}
             handleUpdate={handleUpdate}
             setErrorMessage={setErrorMessage}
             uploadFiles={uploadFiles}

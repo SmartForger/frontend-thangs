@@ -107,10 +107,6 @@ const MyThangs = withRouter(({ match }) => {
     dispatch(types.FETCH_THANGS, {})
   }, [currentUserId, dispatch])
 
-  const handleNewModel = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, { overlayName: 'upload' })
-  }, [dispatch])
-
   const handleCurrentView = useCallback(
     name => {
       history.push(`/myThangs/${name}`)
@@ -162,7 +158,6 @@ const MyThangs = withRouter(({ match }) => {
         folderNav={folderNav}
         folders={myFolders}
         setCurrentView={handleCurrentView}
-        handleNewModel={handleNewModel}
         handleEditModel={handleEditModel}
         handleChangeFolder={handleChangeFolder}
         isLoadingThangs={isLoading}
