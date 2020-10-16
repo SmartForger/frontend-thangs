@@ -345,6 +345,7 @@ const FileTable = ({
           <FileTableHeader sortedBy={sortedBy} />
           {files.length > 0 ? (
             files.map((file, index) => {
+              if (!file) return null
               const { id } = file
               return (
                 <React.Fragment key={`TableRow_${index}`}>
