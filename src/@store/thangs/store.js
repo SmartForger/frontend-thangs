@@ -48,7 +48,7 @@ export default store => {
 
   store.on(
     types.FETCH_THANGS,
-    async (_state, { onFinish = noop, silentUpdate = false }) => {
+    async (_state, { onFinish = noop, onFinishData = null, silentUpdate = false }) => {
       const currentUserId = authenticationService.getCurrentUserId()
       if (!currentUserId) return
       if (!silentUpdate) {
@@ -64,7 +64,7 @@ export default store => {
       } else {
         store.dispatch(types.LOADED_THANGS)
         store.dispatch(types.UPDATE_THANGS, data)
-        onFinish()
+        onFinish(onFinishData)
       }
     }
   )

@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Spacer, FolderForm, TitleTertiary, MultiLineBodyText } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -75,6 +76,7 @@ const useStyles = createUseStyles(theme => {
 
 const AddFolder = ({ folder }) => {
   const c = useStyles()
+  const history = useHistory()
   const [errorMessage, setErrorMessage] = useState(null)
   const { dispatch } = useStoreon()
 
@@ -89,12 +91,13 @@ const AddFolder = ({ folder }) => {
         onError: error => {
           setErrorMessage(error.message)
         },
-        onFinish: () => {
+        onFinish: id => {
           closeOverlay()
+          history.push(`/myThangs/folder/${id}`)
         },
       })
     },
-    [closeOverlay, dispatch]
+    [closeOverlay, dispatch, history]
   )
 
   return (

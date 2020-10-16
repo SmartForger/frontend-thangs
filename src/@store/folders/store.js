@@ -163,7 +163,7 @@ export default store => {
         store.dispatch(types.SAVED_FOLDER)
         track('Folder Created')
         store.dispatch(types.FETCH_FOLDERS)
-        store.dispatch(types.FETCH_THANGS, { onFinish })
+        store.dispatch(types.FETCH_THANGS, { onFinish, onFinishData: data.folderId })
       }
     }
   )
