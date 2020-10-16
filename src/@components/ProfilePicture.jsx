@@ -57,8 +57,8 @@ const ProfilePicture = ({
       maxInitials={2}
     />
   ) : (
-      <UserIcon className={classnames(className, c.ProfilePicture_alt)} />
-    )
+    <UserIcon className={classnames(className, c.ProfilePicture_alt)} />
+  )
 }
 
 export default ProfilePicture

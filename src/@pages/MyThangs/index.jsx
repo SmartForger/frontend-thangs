@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Route, Switch, useHistory, withRouter } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { WorkspaceHeader, WorkspaceNavbar } from '@components'
@@ -82,6 +82,7 @@ const MyThangs = withRouter(({ match }) => {
   const history = useHistory()
   const { Overlay, isOverlayOpen, isOverlayHidden } = useOverlay()
   const c = useStyles({})
+  const [currentFolderId, setCurrentFolderId] = useState(null)
   const currentUserId = authenticationService.getCurrentUserId()
   const { dispatch, thangs, folders, folderNav } = useStoreon(
     'thangs',
@@ -90,9 +91,11 @@ const MyThangs = withRouter(({ match }) => {
   )
   const { isLoading: isLoadingThangs, data: thangsData = {} } = thangs
   const { isLoading: isLoadingFolders, data: foldersData = {} } = folders
+
   const isLoading = useMemo(() => {
     return isLoadingThangs || isLoadingFolders
   }, [isLoadingFolders, isLoadingThangs])
+
   const myFolders = useMemo(() => {
     if (!foldersData || !foldersData.length) return []
     return foldersData.filter(
@@ -114,6 +117,7 @@ const MyThangs = withRouter(({ match }) => {
 
   const handleCurrentView = useCallback(
     name => {
+      setCurrentFolderId(null)
       history.push(`/myThangs/${name}`)
     },
     [history]
@@ -121,6 +125,7 @@ const MyThangs = withRouter(({ match }) => {
 
   const handleChangeFolder = useCallback(
     folder => {
+      setCurrentFolderId(folder.id)
       history.push(`/myThangs/folder/${folder.id}`)
     },
     [history]
@@ -158,6 +163,7 @@ const MyThangs = withRouter(({ match }) => {
 
   const viewProps = {
     setCurrentView: handleCurrentView,
+    setCurrentFolderId: setCurrentFolderId,
     handleEditModel: handleEditModel,
     handleChangeFolder: handleChangeFolder,
     folders: folders.data,
@@ -183,9 +189,10 @@ const MyThangs = withRouter(({ match }) => {
         handleChangeFolder={handleChangeFolder}
         isLoadingThangs={isLoading}
         models={thangsData.models}
+        currentFolderId={currentFolderId}
       />
       <div className={c.MyThangs_ContentWrapper}>
-        <WorkspaceHeader />
+        <WorkspaceHeader setCurrentView={handleCurrentView} />
         <Switch>
           <Route
             exact

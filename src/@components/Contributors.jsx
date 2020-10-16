@@ -34,17 +34,25 @@ const useStyles = createUseStyles(theme => {
 
 const Contributors = ({ fileId, users = [], displayLength = 2 }) => {
   const c = useStyles({})
-  let confirmedContributors = users.filter(user => user.fullName);
+  let confirmedContributors = users.filter(user => user.fullName)
   return (
     <div className={c.Contributors}>
       {users.map((user, index) => {
         if (!user.fullName && !user.username) return null
         if (index === displayLength && confirmedContributors.length > displayLength + 1) {
-          let unDisplayedUserCount = `+ ${confirmedContributors.length - displayLength}`;
-          let undisplayedUserList = confirmedContributors.slice(displayLength).map(user => user.fullName).join('\n');
+          let undisplayedUserCount = `+ ${confirmedContributors.length - displayLength}`
+          let undisplayedUserList = confirmedContributors
+            .slice(displayLength)
+            .map(user => user.fullName)
+            .join('\n')
           return (
             <div key={`${fileId}_${user.id}_${index}`} className={c.Contributors_Avatar}>
-              <ProfilePicture size='1.875rem' name={unDisplayedUserCount} title={undisplayedUserList} bordered />
+              <ProfilePicture
+                size='1.875rem'
+                name={undisplayedUserCount}
+                title={undisplayedUserList}
+                bordered
+              />
             </div>
           )
         }

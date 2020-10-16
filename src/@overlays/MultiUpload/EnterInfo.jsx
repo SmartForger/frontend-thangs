@@ -159,7 +159,8 @@ const noop = () => null
 const EnterInfo = ({
   activeView,
   errorMessage = '',
-  folders,
+  folderId,
+  folders = {},
   handleContinue = noop,
   handleUpdate = noop,
   handleSkipToEnd = noop,
@@ -253,20 +254,28 @@ const EnterInfo = ({
     return R.find(R.propEq('value', model.category), CATEGORIES)
   }, [model])
 
+  const selectedFolder = useMemo(() => {
+    if (!folderId || !folderData) return { value: 'files', label: 'My Files' }
+    const folder = folderData.find(folder => folder.id === folderId)
+    handleOnInputChange('isPublic', folder.isPublic)
+    setIsPrivacyDisabled(true)
+    return { value: folderId, label: folder.name }
+  }, [folderId, folderData, handleOnInputChange])
+
   const usersFolders = useMemo(() => {
     const sortedFolders = !R.isEmpty(folderData)
       ? folderData.sort((a, b) => {
-          if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
-          else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
-          return 0
-        })
+        if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
+        else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
+        return 0
+      })
       : []
 
     return sortedFolders && sortedFolders.length
       ? sortedFolders.map(folder => ({
-          value: folder.id,
-          label: folder.name.replace('//', '/'),
-        }))
+        value: folder.id,
+        label: folder.name.replace('//', '/'),
+      }))
       : []
   }, [folderData])
 
@@ -329,7 +338,7 @@ const EnterInfo = ({
               className={c.EnterInfo_Select}
               name='folder'
               placeholder={'Select folder'}
-              defaultValue={{ value: 'files', label: 'My Files' }}
+              defaultValue={selectedFolder}
               options={[{ value: 'files', label: 'My Files' }, ...usersFolders]}
               onChange={handleFolderChange}
             />
@@ -393,8 +402,8 @@ const EnterInfo = ({
           hoverTooltip={
             isPrivacyDisabled
               ? `The folder you have selected is ${
-                  inputState.isPublic ? 'Public' : 'Private'
-                }`
+                inputState.isPublic ? 'Public' : 'Private'
+              }`
               : undefined
           }
         />

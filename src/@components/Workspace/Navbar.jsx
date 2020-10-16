@@ -98,7 +98,7 @@ const findFolderById = (id, folders) => {
 }
 
 const WorkspaceNavbar = ({
-  folderId: currentFolderId,
+  currentFolderId,
   folderNav,
   folders,
   models,

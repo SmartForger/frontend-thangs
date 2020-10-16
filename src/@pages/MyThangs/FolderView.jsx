@@ -12,7 +12,7 @@ import {
   Spacer,
   Spinner,
   TitleTertiary,
-  Contributors
+  Contributors,
 } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -134,7 +134,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
         <FolderIcon />
         <Spacer size={'1rem'} />
         <div className={c.FolderView_Col}>
-          <div className={c.FolderView_Row}>
+          <div className={c.FolderView_TitleAndIcons}>
             <div className={c.FolderView_RootLink} onClick={handleClickRoot}>
               <TitleTertiary>{rootFolderName}</TitleTertiary>
             </div>
@@ -177,7 +177,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
         </div>
       </div>
       <div className={c.FolderView_Row}>
-        <Contributors users={folder.members} displayLength="10" />
+        <Contributors users={folder.members} displayLength='10' />
         <Spacer size={'1rem'} />
         <Button secondary onClick={handleEditFolder}>
           Edit
@@ -202,10 +202,12 @@ const FolderView = ({
   folders,
   handleChangeFolder = noop,
   handleEditModel = noop,
+  setCurrentFolderId = noop,
   onDrop = noop,
 }) => {
   const c = useStyles({})
   const { folderId: id } = useParams()
+  if (id) setCurrentFolderId(id)
   const folder = id ? findFolderById(id, folders) : {}
 
   if (!folder || R.isEmpty(folder)) {

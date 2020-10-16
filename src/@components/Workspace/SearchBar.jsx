@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react'
-import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
 
 import { TextInput } from '@components'
@@ -93,16 +92,15 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const SearchBar = () => {
+const SearchBar = ({ setCurrentView }) => {
   const c = useStyles({})
-  const history = useHistory()
   const [searchTerm, setSearchTerm] = useState(undefined)
   const inputRef = useRef(null)
 
   const handleSearchSubmit = e => {
     e.preventDefault()
     if (searchTerm) {
-      history.push(`/myThangs/searchFiles/${searchTerm}`)
+      setCurrentView(`searchFiles/${searchTerm}`)
       setSearchTerm(undefined)
       inputRef.current.blur()
     }

@@ -64,7 +64,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const MultiUpload = ({ initData = null }) => {
+const MultiUpload = ({ initData = null, folderId }) => {
   const { dispatch, folders, uploadFiles = {} } = useStoreon('folders', 'uploadFiles')
   const [activeView, setActiveView] = useState('upload')
   const [errorMessage, setErrorMessage] = useState(null)
@@ -189,6 +189,7 @@ const MultiUpload = ({ initData = null }) => {
             closeOverlay={closeOverlay}
             errorMessage={errorMessage}
             folders={folders}
+            folderId={folderId}
             handleContinue={handleContinue}
             handleSkipToEnd={handleSubmit}
             handleUpdate={handleUpdate}
