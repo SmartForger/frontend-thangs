@@ -32,7 +32,6 @@ const useStyles = createUseStyles(theme => {
       padding: '1rem',
 
       '& path': {
-        fill: '#AE881E',
         stroke: '#AE881E',
       },
     },

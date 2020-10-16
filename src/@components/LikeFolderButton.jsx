@@ -11,7 +11,7 @@ import * as types from '@constants/storeEventTypes'
 import classnames from 'classnames'
 import { authenticationService } from '@services'
 
-const useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(_theme => {
   return {
     '@keyframes spinner': {
       from: {
@@ -26,11 +26,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     LikeFolderButton: {},
-    LikeFolderIcon: {
-      '& path': {
-        fill: theme.colors.black[500],
-      },
-    },
+    LikeFolderIcon: {},
     LikeFolderIcon__liked: {
       animation: '$spinner 250ms linear 0s 1',
 
@@ -57,14 +53,14 @@ const hasLikedFolder = (folderData, currentUserId) => {
 const HeartButton = ({ liked, c, hasChanged }) => {
   return liked ? (
     <HeartFilledIcon
-      className={classnames(c.LikeModelIcon, {
-        [c.LikeModelIcon__liked]: hasChanged,
+      className={classnames(c.LikeFolderIcon, {
+        [c.LikeFolderIcon__liked]: hasChanged,
       })}
     />
   ) : (
     <HeartIcon
-      className={classnames(c.LikeModelIcon, {
-        [c.LikeModelIcon__unliked]: hasChanged,
+      className={classnames(c.LikeFolderIcon, {
+        [c.LikeFolderIcon__unliked]: hasChanged,
       })}
     />
   )
@@ -73,14 +69,14 @@ const HeartButton = ({ liked, c, hasChanged }) => {
 const StarButton = ({ liked, c, hasChanged }) => {
   return liked ? (
     <StarFilledIcon
-      className={classnames(c.LikeModelIcon, {
-        [c.LikeModelIcon__liked]: hasChanged,
+      className={classnames(c.LikeFolderIcon, {
+        [c.LikeFolderIcon__liked]: hasChanged,
       })}
     />
   ) : (
     <StarIcon
-      className={classnames(c.LikeModelIcon, {
-        [c.LikeModelIcon__unliked]: hasChanged,
+      className={classnames(c.LikeFolderIcon, {
+        [c.LikeFolderIcon__unliked]: hasChanged,
       })}
     />
   )
