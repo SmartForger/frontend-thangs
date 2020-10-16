@@ -99,7 +99,7 @@ const FileMenu = ({ model = {}, folder = {}, type }) => {
     } else if (type === 'folder') {
       dispatch(types.LIKE_FOLDER, { id: folder.id, owner: folder.owner })
     }
-  }, [dispatch, folder, model, type])
+  }, [currentUserId, dispatch, folder.id, folder.owner, model.id, model.owner, type])
 
   const addFolder = useCallback(() => {
     dispatch(types.OPEN_OVERLAY, {
