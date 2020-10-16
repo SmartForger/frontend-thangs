@@ -232,7 +232,7 @@ const WorkspaceNavbar = ({
               Icon={ClockIcon}
               label={'Recent'}
               onClick={handleClickRecent}
-              selected={path === '/myThangs/recentFiles'}
+              selected={path === '/myThangs/recentFiles' || path === '/myThangs'}
             />
             <Spacer size={'1.5rem'} />
             <NavLink
