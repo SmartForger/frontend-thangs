@@ -45,12 +45,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-export const ProfileDropdownMenu = ({
-  dispatch,
-  user = {},
-  TargetComponent,
-  myThangsMenu,
-}) => {
+export const ProfileDropdownMenu = ({ dispatch, user = {}, TargetComponent }) => {
   const c = useStyles({})
   const t = useTranslations({})
   const history = useHistory()

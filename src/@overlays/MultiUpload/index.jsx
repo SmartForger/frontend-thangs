@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import * as R from 'ramda'
-import { SingleLineBodyText, Spacer } from '@components'
+import { SingleLineBodyText, Spacer, Spinner } from '@components'
 import EnterInfo from './EnterInfo'
 import UploadModels from './UploadModels'
 import { createUseStyles } from '@style'
@@ -62,11 +62,23 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       justifyContent: 'center',
     },
+    MultiUpload_LoaderScreen: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      left: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0,0,0,0.29)',
+      zIndex: 5,
+      borderRadius: '1rem',
+      display: 'flex',
+    },
   }
 })
 
 const MultiUpload = ({ initData = null, folderId }) => {
   const { dispatch, folders, uploadFiles = {} } = useStoreon('folders', 'uploadFiles')
+  const { data: uploadFilesData = {}, isLoading } = uploadFiles
   const [activeView, setActiveView] = useState('upload')
   const [errorMessage, setErrorMessage] = useState(null)
   const c = useStyles({})
@@ -131,22 +143,22 @@ const MultiUpload = ({ initData = null, folderId }) => {
 
   const handleContinue = useCallback(
     ({ selectedFolderId }) => {
-      const loadingFiles = Object.keys(uploadFiles).filter(
-        id => uploadFiles[id].isLoading
+      const loadingFiles = Object.keys(uploadFilesData).filter(
+        id => uploadFilesData[id].isLoading
       )
       if (loadingFiles.length > 0)
         return setErrorMessage('Please wait until all files are processed')
       if (activeView === 'upload') {
         setActiveView(0)
       } else {
-        if (activeView === Object.keys(uploadFiles).length - 1) {
+        if (activeView === Object.keys(uploadFilesData).length - 1) {
           handleSubmit({ selectedFolderId })
         } else {
           setActiveView(activeView + 1)
         }
       }
     },
-    [activeView, handleSubmit, uploadFiles]
+    [activeView, handleSubmit, uploadFilesData]
   )
 
   const handleBack = useCallback(() => {
@@ -177,12 +189,19 @@ const MultiUpload = ({ initData = null, folderId }) => {
   }, [initData, onDrop])
 
   useEffect(() => {
-    const loadingFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isLoading)
+    const loadingFiles = Object.keys(uploadFilesData).filter(
+      id => uploadFilesData[id].isLoading
+    )
     if (loadingFiles.length === 0) setErrorMessage(null)
-  }, [uploadFiles])
+  }, [uploadFilesData])
 
   return (
     <div className={c.MultiUpload}>
+      {isLoading && (
+        <div className={c.MultiUpload_LoaderScreen}>
+          <Spinner />
+        </div>
+      )}
       <Spacer size={'1rem'} />
       <div className={c.MultiUpload_Content}>
         <div className={c.MultiUpload_Column}>
@@ -205,7 +224,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             handleContinue={handleContinue}
             onDrop={onDrop}
             removeFile={removeFile}
-            uploadFiles={uploadFiles}
+            uploadFiles={uploadFilesData}
           />
         ) : (
           <EnterInfo
@@ -218,7 +237,8 @@ const MultiUpload = ({ initData = null, folderId }) => {
             handleSkipToEnd={handleSubmit}
             handleUpdate={handleUpdate}
             setErrorMessage={setErrorMessage}
-            uploadFiles={uploadFiles}
+            uploadFiles={uploadFilesData}
+            isLoading={isLoading}
           />
         )}
       </div>

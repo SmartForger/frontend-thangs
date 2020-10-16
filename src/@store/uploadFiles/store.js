@@ -1,22 +1,49 @@
 import * as types from '@constants/storeEventTypes'
 import { api, storageService } from '@services'
 
+const getInitAtom = () => ({
+  isLoading: false,
+  isError: false,
+  data: {},
+})
+
 const noop = () => null
 
 export default store => {
   store.on(types.STORE_INIT, () => ({
-    uploadFiles: {},
+    uploadFiles: getInitAtom(),
   }))
 
   store.on(types.RESET_UPLOAD_FILES, () => ({
-    uploadFiles: {},
+    uploadFiles: getInitAtom(),
   }))
 
-  store.on(types.REMOVE_UPLOAD_FILES, (state, { index }) => {
-    const newUploadedFiles = { ...state.uploadFiles }
-    delete newUploadedFiles[index]
+  store.on(types.UPLOADING_FILES, state => {
     return {
-      uploadFiles: newUploadedFiles,
+      uploadFiles: {
+        ...state.uploadFiles,
+        isLoading: true,
+      },
+    }
+  })
+
+  store.on(types.UPLOADED_FILES, state => {
+    return {
+      uploadFiles: {
+        ...state.uploadFiles,
+        isLoading: true,
+      },
+    }
+  })
+
+  store.on(types.REMOVE_UPLOAD_FILES, (state, { index }) => {
+    const newUploadedFiles = { ...state.uploadFiles.data }
+    delete newUploadedFiles.data[index]
+    return {
+      uploadFiles: {
+        ...state.uploadFiles,
+        data: newUploadedFiles,
+      },
     }
   })
 
@@ -24,7 +51,10 @@ export default store => {
     return {
       uploadFiles: {
         ...state.uploadFiles,
-        [id]: { name: file.name, size: file.size, isLoading, isError },
+        data: {
+          ...state.uploadFiles.data,
+          [id]: { name: file.name, size: file.size, isLoading, isError },
+        },
       },
     }
   })
@@ -33,7 +63,10 @@ export default store => {
     return {
       uploadFiles: {
         ...state.uploadFiles,
-        [id]: { ...state.uploadFiles[id], ...data, isLoading, isError },
+        data: {
+          ...state.uploadFiles.data,
+          [id]: { ...state.uploadFiles.data[id], ...data, isLoading, isError },
+        },
       },
     }
   })
@@ -71,12 +104,14 @@ export default store => {
   })
 
   store.on(types.SUBMIT_FILES, async (state, { onFinish = noop }) => {
+    store.dispatch(types.UPLOADING_FILES)
     Promise.all(
-      Object.keys(state.uploadFiles).map(fileId => {
-        const file = state.uploadFiles[fileId]
+      Object.keys(state.uploadFiles.data).map(fileId => {
+        const file = state.uploadFiles.data[fileId]
         return submitFile({ file })
       })
     ).then(() => {
+      store.dispatch(types.UPLOADED_FILES)
       store.dispatch(types.FETCH_FOLDERS)
       store.dispatch(types.FETCH_THANGS, { onFinish })
     })

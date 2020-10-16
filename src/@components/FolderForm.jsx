@@ -81,8 +81,8 @@ const FolderForm = ({
   const isPublic = !R.isEmpty(parentFolder)
     ? parentFolder.isPublic
     : !R.isEmpty(folder)
-    ? folder.isPublic
-    : true
+      ? folder.isPublic
+      : true
   const initialState = {
     id: id,
     name: name ? getFolderName(name) : '',

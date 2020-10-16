@@ -171,6 +171,7 @@ const EnterInfo = ({
   handleSkipToEnd = noop,
   setErrorMessage = noop,
   uploadFiles,
+  isLoading,
 }) => {
   const c = useStyles({})
   const activeId = Object.keys(uploadFiles)[activeView]
@@ -406,11 +407,13 @@ const EnterInfo = ({
         )}
         <Spacer size={'1.5rem'} />
         <div className={c.EnterInfo_ButtonWrapper}>
-          <Button tertiary onClick={handleSkip} type='button'>
+          <Button tertiary onClick={handleSkip} type='button' disabled={isLoading}>
             Skip
           </Button>
           <Spacer size={'1rem'} />
-          <Button type='submit'>Continue</Button>
+          <Button type='submit' disabled={isLoading}>
+            Continue
+          </Button>
         </div>
       </form>
       <Spacer size={'1rem'} />
