@@ -374,7 +374,7 @@ const FileTable = ({
         </>
       ) : !hideDropzone ? (
         <div className={c.NoFilesMessage}>
-          <Dropzone onDrop={onDrop} accept={MODEL_FILE_EXTS} maxFiles={50}>
+          <Dropzone onDrop={onDrop} accept={MODEL_FILE_EXTS} maxFiles={25}>
             {({ getRootProps, getInputProps }) => (
               <section className={c.FileTable_UploadZone}>
                 <div {...getRootProps()}>

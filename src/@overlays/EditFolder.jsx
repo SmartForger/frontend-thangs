@@ -108,9 +108,7 @@ const EditFolder = ({ folder }) => {
           <Spacer size='4rem' />
           <TitleTertiary>Edit Folder</TitleTertiary>
           <Spacer size='1rem' />
-          <MultiLineBodyText>
-            Change the name or privacy settings of your folder.
-          </MultiLineBodyText>
+          <MultiLineBodyText>Change the name of your folder.</MultiLineBodyText>
           <Spacer size='1rem' />
           <FolderForm
             errorMessage={errorMessage}

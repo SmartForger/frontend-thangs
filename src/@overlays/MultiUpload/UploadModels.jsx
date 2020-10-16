@@ -130,6 +130,7 @@ const UploadModels = ({
   return (
     <>
       <Dropzone onDrop={onDrop} accept={MODEL_FILE_EXTS} maxFiles={50}>
+      <Dropzone onDrop={onDrop} accept={MODEL_FILE_EXTS} maxFiles={25}>
         {({ getRootProps, getInputProps }) => (
           <section className={c.UploadModels_UploadZone}>
             <div {...getRootProps()}>
