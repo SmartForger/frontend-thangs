@@ -62,6 +62,9 @@ const useStyles = createUseStyles(theme => {
         fill: theme.colors.gold[500],
       },
     },
+    UserNav_SignUpButton: {
+      color: theme.colors.gold[500],
+    },
   }
 })
 
@@ -139,11 +142,7 @@ const UserNav = ({
 
   return (
     <div className={classnames(c.UserNav_Row, c.UserNav_ButtonsRow)}>
-      <Button
-        tertiary
-        className={classnames(c.UserNav_TextButton, c.UserNav_SignUpButton)}
-        onClick={handleSignUp}
-      >
+      <Button tertiary className={c.UserNav_SignUpButton} onClick={handleSignUp}>
         {t('header.signUpButtonText')}
       </Button>
       <Button className={c.UserNav_Button} onClick={handleSignIn}>

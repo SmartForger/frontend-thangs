@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import * as R from 'ramda'
 import { Spacer, NavLink, Spinner, FileContextMenu } from '@components'
 import { createUseStyles } from '@style'
@@ -62,6 +63,8 @@ const Folder = ({
       ? subfolders.filter(child => child.name.includes(name))
       : []
   const [showFolderContents, setShowFolderContents] = useState(false)
+  const history = useHistory()
+  const currentPath = history.location.pathname
 
   useEffect(() => {
     if (isExpanded) {
@@ -96,6 +99,7 @@ const Folder = ({
           isFolder={true}
           folderId={id}
           onClick={handleNavLinkClick}
+          selected={currentPath === `/myThangs/folder/${id}`}
         />
       </ContextMenuTrigger>
       <FileContextMenu id={id} folder={folder} type={'folder'} postId={postId} />

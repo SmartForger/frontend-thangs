@@ -212,9 +212,7 @@ const WorkspaceNavbar = ({
               isFolder={true}
               folderId={'files'}
               onClick={handleAllFiles}
-              selected={
-                path === '/myThangs/allFiles' || path.includes('/myThangs/folder/')
-              }
+              selected={path === '/myThangs/allFiles'}
             />
             <Spacer size={'1.5rem'} />
             {shouldShowFileExplorer && (
