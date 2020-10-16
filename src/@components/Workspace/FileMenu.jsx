@@ -22,7 +22,7 @@ const useStyles = createUseStyles(theme => {
       '& div': {
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'flex-end',
+        alignItems: 'center',
       },
     },
     FileMenu_Item: {
@@ -33,7 +33,7 @@ const useStyles = createUseStyles(theme => {
       outline: 'none',
 
       '&:hover': {
-        textDecoration: 'underline',
+        backgroundColor: 'rgba(0, 0, 0, 0.05)',
       },
     },
   }

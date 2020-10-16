@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { useStoreon } from 'storeon/react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import * as R from 'ramda'
 import {
   AddMenu,
@@ -38,14 +38,16 @@ const useStyles = createUseStyles(theme => {
     WorkspaceNavbar_Logo: {
       marginTop: '3rem',
       marginBottom: '4rem',
+      marginLeft: '1rem',
     },
     WorkspaceNavbar_NavContainer: {
       display: 'flex',
       flexDirection: 'column',
-      width: 'calc(100% - 4rem)',
+      width: 'calc(100% - 2rem)',
       flex: 'none',
     },
     WorkspaceNavbar_AddWrapper: {
+      marginLeft: '1rem',
       position: 'relative',
       zIndex: 1,
     },
@@ -61,10 +63,7 @@ const useStyles = createUseStyles(theme => {
       top: '2.375rem',
     },
     WorkspaceNavbar_NavLink: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      cursor: 'pointer',
+      marginLeft: '1rem',
     },
     WorkspaceNavbar_ScrollableFiles: {
       display: 'flex',
@@ -72,22 +71,25 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'space-between',
       overflowX: 'hidden',
       overflowY: 'scroll',
-      scrollbarWidth: 'thin',
-      scrollbarColor: '#C7C7C7 white',
+      scrollbarColor: 'transparent',
       height: '100%',
       paddingTop: '.125rem',
+      position: 'relative',
 
       '&::-webkit-scrollbar': {
         width: '.75rem',
+        display: 'none',
       },
       '&::-webkit-scrollbar-track': {
         background: theme.colors.white[600],
         borderRadius: '.5rem',
+        display: 'none',
       },
       '&::-webkit-scrollbar-thumb': {
         backgroundColor: '#C7C7C7',
         borderRadius: 20,
         border: `3px solid ${theme.colors.white[600]}`,
+        display: 'none',
       },
     },
   }
@@ -110,6 +112,7 @@ const WorkspaceNavbar = ({
   const c = useStyles({})
   const { dispatch } = useStoreon()
   const history = useHistory()
+  const path = history.location.pathname
   const [showFileExplorer, setShowFileExplorer] = useState(false)
   const [showCreateMenu, setShowCreateMenu] = useState(false)
   const addMenuRef = useRef(null)
@@ -179,7 +182,7 @@ const WorkspaceNavbar = ({
 
   return (
     <nav className={c.WorkspaceNavbar}>
-      <Spacer size={'2rem'} />
+      <Spacer size={'1rem'} />
       <div className={c.WorkspaceNavbar_NavContainer}>
         <div className={c.WorkspaceNavbar_Logo}>
           <Link to={'/'}>
@@ -200,14 +203,18 @@ const WorkspaceNavbar = ({
         </div>
         <div className={c.WorkspaceNavbar_ScrollableFiles}>
           <div>
-            <TitleTertiary>My Thangs</TitleTertiary>
+            <TitleTertiary className={c.WorkspaceNavbar_NavLink}>My Thangs</TitleTertiary>
             <Spacer size={'2rem'} />
             <NavLink
+              className={c.WorkspaceNavbar_NavLink}
               Icon={FolderIcon}
               label={'All Files'}
               isFolder={true}
               folderId={'files'}
               onClick={handleAllFiles}
+              selected={
+                path === '/myThangs/allFiles' || path.includes('/myThangs/folder/')
+              }
             />
             <Spacer size={'1.5rem'} />
             {shouldShowFileExplorer && (
@@ -222,33 +229,60 @@ const WorkspaceNavbar = ({
                 handleModelClick={handleEditModel}
               />
             )}
-            <NavLink Icon={ClockIcon} label={'Recent'} onClick={handleClickRecent} />
-            <Spacer size={'1.5rem'} />
-            <NavLink Icon={SharedIcon} label={'Shared'} onClick={handleClickShared} />
-            <Divider />
-            <NavLink Icon={HeartIcon} label={'Liked Models'} onClick={handleClickLiked} />
+            <NavLink
+              className={c.WorkspaceNavbar_NavLink}
+              Icon={ClockIcon}
+              label={'Recent'}
+              onClick={handleClickRecent}
+              selected={path === '/myThangs/recentFiles'}
+            />
             <Spacer size={'1.5rem'} />
             <NavLink
+              className={c.WorkspaceNavbar_NavLink}
+              Icon={SharedIcon}
+              label={'Shared'}
+              onClick={handleClickShared}
+              selected={path === '/myThangs/sharedFiles'}
+            />
+            <Divider />
+            <NavLink
+              className={c.WorkspaceNavbar_NavLink}
+              Icon={HeartIcon}
+              label={'Liked Models'}
+              onClick={handleClickLiked}
+              selected={path === '/myThangs/likedModels'}
+            />
+            <Spacer size={'1.5rem'} />
+            <NavLink
+              className={c.WorkspaceNavbar_NavLink}
               Icon={SearchIcon}
               label={'Saved Searches'}
               onClick={handleClickSearches}
+              selected={path === '/myThangs/savedSearches'}
             />
             <Spacer size={'2rem'} />
           </div>
           <div>
             <Spacer size={'1.5rem'} />
             <NavLink
+              className={c.WorkspaceNavbar_NavLink}
               Icon={SettingsIcon}
               label={'Profile Settings'}
               onClick={handleClickEdit}
+              selected={path === '/myThangs/editProfile'}
             />
             <Spacer size={'1.5rem'} />
-            <NavLink Icon={SignOutIcon} label={'Sign Out'} onClick={handleSignOut} />
+            <NavLink
+              className={c.WorkspaceNavbar_NavLink}
+              Icon={SignOutIcon}
+              label={'Sign Out'}
+              onClick={handleSignOut}
+            />
             <Spacer size={'2rem'} />
           </div>
         </div>
       </div>
-      <Spacer size={'2rem'} />
+      <Spacer size={'1rem'} />
     </nav>
   )
 }

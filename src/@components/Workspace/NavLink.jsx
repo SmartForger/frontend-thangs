@@ -28,6 +28,7 @@ const useStyles = createUseStyles(_theme => {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
+      zIndex: 1,
 
       '& svg': {
         transition: 'transform 150ms ease-in-out',
@@ -42,6 +43,16 @@ const useStyles = createUseStyles(_theme => {
       alignItems: 'center',
       padding: '2px 0',
       cursor: 'pointer',
+      zIndex: 1,
+    },
+    NavLink__selected: {
+      width: '329px',
+      height: '2.5rem',
+      background: '#E2E2E7',
+      position: 'absolute',
+      zIndex: 0,
+      left: 0,
+      borderRadius: '.5rem',
     },
   }
 })
@@ -81,7 +92,16 @@ const LinkContents = ({
   )
 }
 
-const NavLink = ({ Icon, className, folderId, isFolder, label, onClick = noop, to }) => {
+const NavLink = ({
+  Icon,
+  className,
+  folderId,
+  isFolder,
+  label,
+  onClick = noop,
+  to,
+  selected = false,
+}) => {
   const c = useStyles({})
   const { dispatch, folderNav } = useStoreon('folderNav')
 
@@ -97,6 +117,7 @@ const NavLink = ({ Icon, className, folderId, isFolder, label, onClick = noop, t
 
   return to ? (
     <Link className={classnames(className, c.NavLink)} to={to} title={label}>
+      {selected && <div className={c.NavLink__selected}></div>}
       <LinkContents
         Icon={Icon}
         c={c}
@@ -109,6 +130,7 @@ const NavLink = ({ Icon, className, folderId, isFolder, label, onClick = noop, t
     </Link>
   ) : (
     <div className={classnames(className, c.NavLink)} title={label}>
+      {selected && <div className={c.NavLink__selected}></div>}
       <LinkContents
         Icon={Icon}
         c={c}

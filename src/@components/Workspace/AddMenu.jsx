@@ -36,12 +36,7 @@ const useStyles = createUseStyles(theme => {
     },
     AddMenu_ItemLink: {
       '&:hover': {
-        backgroundColor: ({ sideBar }) =>
-          sideBar ? 'rgba(0, 0, 0, 0.05)' : 'transparent',
-
-        '& span': {
-          textDecoration: ({ sideBar }) => (sideBar ? undefined : 'underline'),
-        },
+        backgroundColor: 'rgba(0, 0, 0, 0.05)',
       },
     },
   }

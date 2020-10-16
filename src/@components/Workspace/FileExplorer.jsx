@@ -134,10 +134,10 @@ const Subfolders = ({
   const files = useMemo(() => {
     return !R.isEmpty(folders)
       ? folders.sort((a, b) => {
-        if (a.name < b.name) return -1
-        else if (a.name > b.name) return 1
-        return 0
-      })
+          if (a.name < b.name) return -1
+          else if (a.name > b.name) return 1
+          return 0
+        })
       : []
   }, [folders])
   return (
@@ -282,6 +282,7 @@ const FileExplorer = ({
         handleModelClick={handleModelClick}
       />
       {/* <Models models={models} showModels={showFile} handleModelClick={handleModelClick} /> */}
+      <Spacer size={'.5rem'} />
     </div>
   )
 }
