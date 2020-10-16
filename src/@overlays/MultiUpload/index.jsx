@@ -133,6 +133,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
   }, [activeView, handleSubmit, uploadFiles])
 
   const handleBack = useCallback(() => {
+    setErrorMessage(null)
     if (activeView === 'upload') return
     if (activeView === 0) {
       setActiveView('upload')

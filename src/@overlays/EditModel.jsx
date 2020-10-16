@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import {
   Spacer,
   EditModelForm,
@@ -77,9 +78,9 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const EditModel = ({ model, user, fetchData, folderId }) => {
+const EditModel = ({ model, fetchData }) => {
   const c = useStyles()
-  const { navigateWithFlash } = useFlashNotification()
+  const history = useHistory()
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [editModelErrorMessage, setEditModelErrorMessage] = useState(null)
   const { dispatch } = useStoreon()
@@ -99,14 +100,11 @@ const EditModel = ({ model, user, fetchData, folderId }) => {
         },
         onFinish: () => {
           dispatch(types.CLOSE_OVERLAY)
-          navigateWithFlash(
-            folderId ? `/folder/${folderId}` : `/${user.username}`,
-            'Model updated successfully.'
-          )
+          history.push('/myThangs')
         },
       })
     },
-    [dispatch, setEditModelErrorMessage, folderId, navigateWithFlash, user]
+    [dispatch, history]
   )
 
   const handleDelete = useCallback(() => {
@@ -115,13 +113,10 @@ const EditModel = ({ model, user, fetchData, folderId }) => {
       fetchData,
       onFinish: () => {
         dispatch(types.CLOSE_OVERLAY)
-        navigateWithFlash(
-          folderId ? `/folder/${folderId}` : `/${user.username}`,
-          'Model updated successfully.'
-        )
+        history.push('/myThangs')
       },
     })
-  }, [dispatch, model, fetchData, navigateWithFlash, folderId, user])
+  }, [dispatch, model.id, fetchData, history])
 
   return (
     <div className={c.EditModel}>

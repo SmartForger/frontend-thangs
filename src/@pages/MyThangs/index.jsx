@@ -156,13 +156,14 @@ const MyThangs = withRouter(({ match }) => {
         overlayName: 'multiUpload',
         overlayData: {
           initData: { acceptedFiles, rejectedFile, e: _event },
+          folderId: currentFolderId,
           animateIn: true,
           windowed: true,
           dialogue: true,
         },
       })
     },
-    [dispatch]
+    [currentFolderId, dispatch]
   )
 
   const viewProps = {

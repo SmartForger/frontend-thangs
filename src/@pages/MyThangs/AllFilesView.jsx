@@ -107,7 +107,7 @@ const AllFilesView = ({
             {sortedModels.length > 0 && (
               <>
                 <Spacer size='4rem' />
-                <TitleTertiary>Files</TitleTertiary>
+                <TitleTertiary>My Public Files</TitleTertiary>
                 <Spacer size='2rem' />
               </>
             )}

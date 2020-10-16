@@ -8,9 +8,9 @@ import {
   MetadataSecondary,
   ModelThumbnail,
   Spacer,
+  SingleLineBodyText,
   Textarea,
   TitleTertiary,
-  Toggle,
 } from '@components'
 import { useForm } from '@hooks'
 import { createUseStyles } from '@style'
@@ -260,7 +260,7 @@ const EnterInfo = ({
   }, [model])
 
   const selectedFolder = useMemo(() => {
-    if (!folderId || !folderData) return { value: 'files', label: 'My Files' }
+    if (!folderId || !folderData) return { value: 'files', label: 'My Public Files' }
     const folder = folderData.find(folder => folder.id === folderId)
     handleOnInputChange('isPublic', folder.isPublic)
     setIsPrivacyDisabled(true)
@@ -344,7 +344,7 @@ const EnterInfo = ({
               name='folder'
               placeholder={'Select folder'}
               defaultValue={selectedFolder}
-              options={[{ value: 'files', label: 'My Files' }, ...usersFolders]}
+              options={[{ value: 'files', label: 'My Public Files' }, ...usersFolders]}
               onChange={handleFolderChange}
             />
             <Spacer size={'1rem'} />
@@ -398,29 +398,20 @@ const EnterInfo = ({
             }}
           />
         </div>
+        <Spacer size={'1.5rem'} />
+        <SingleLineBodyText>
+          {inputState.isPublic ? 'Public Model' : 'Private Model'}
+        </SingleLineBodyText>
         <Spacer size={'.5rem'} />
-        <Toggle
-          id={'privacy_switch'}
-          label={'Private Model'}
-          checked={inputState && !inputState.isPublic}
-          onChange={handleOnToggleChange}
-          disabled={isPrivacyDisabled}
-          hoverTooltip={
-            isPrivacyDisabled
-              ? `The folder you have selected is ${
-                inputState.isPublic ? 'Public' : 'Private'
-              }`
-              : undefined
-          }
-        />
         {inputState.isPublic ? (
           <MetadataSecondary className={c.EnterInfo_PrivacyText}>
-            This model will be shared publicly towards users on Thangs.
+            The folder you have selected is Public. This model will be shared publicly
+            towards users on Thangs.
           </MetadataSecondary>
         ) : (
           <MetadataSecondary className={c.EnterInfo_PrivacyText}>
-            This model will be private and restricted to yourself and those you to choose
-            to share it with.
+            The folder you have selected is Private. This model will be private and
+            restricted to yourself and those you to choose to share it with.
           </MetadataSecondary>
         )}
         <Spacer size={'1.5rem'} />

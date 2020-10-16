@@ -71,7 +71,7 @@ export default store => {
         data,
       })
 
-      if (fetchData.type === FETCH_TYPES.FOLDER) {
+      if (fetchData && fetchData.type === FETCH_TYPES.FOLDER) {
         store.dispatch(types.FETCH_FOLDER, {
           folderId: fetchData.folderId,
           onFinish,

@@ -93,6 +93,7 @@ export default store => {
       onError(error.message)
       logger.error('Error when trying to update the model', error)
     } else {
+      store.dispatch(types.FETCH_FOLDERS)
       store.dispatch(types.FETCH_THANGS, { onFinish })
     }
   })
