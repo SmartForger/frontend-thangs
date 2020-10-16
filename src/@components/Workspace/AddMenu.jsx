@@ -3,7 +3,7 @@ import { useStoreon } from 'storeon/react'
 import { SingleLineBodyText, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { MenuItem } from 'react-contextmenu'
-import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
+import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import * as types from '@constants/storeEventTypes'
 
@@ -85,9 +85,9 @@ const AddMenu = ({ folder = {}, sideBar = false }) => {
       <div className={c.AddMenu_ItemLink} onClick={handleAddFolder}>
         <Spacer size={'1.5rem'} />
         <MenuItem className={c.AddMenu_Item}>
-          <PlusIcon />
+          <FolderIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Add Folder</SingleLineBodyText>
+          <SingleLineBodyText>Create Folder</SingleLineBodyText>
         </MenuItem>
         <Spacer size={'1.5rem'} />
       </div>

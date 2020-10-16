@@ -222,14 +222,9 @@ const WorkspaceNavbar = ({
                 handleModelClick={handleEditModel}
               />
             )}
-            <Spacer size={'2rem'} />
             <NavLink Icon={ClockIcon} label={'Recent'} onClick={handleClickRecent} />
             <Spacer size={'1.5rem'} />
-            <NavLink
-              Icon={SharedIcon}
-              label={'Shared Files'}
-              onClick={handleClickShared}
-            />
+            <NavLink Icon={SharedIcon} label={'Shared'} onClick={handleClickShared} />
             <Divider />
             <NavLink Icon={HeartIcon} label={'Liked Models'} onClick={handleClickLiked} />
             <Spacer size={'1.5rem'} />

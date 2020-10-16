@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Route, Switch, useHistory, withRouter } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import { WorkspaceHeader, WorkspaceNavbar } from '@components'
+import { WorkspaceHeader, WorkspaceNavbar, Spinner } from '@components'
 import { authenticationService } from '@services'
 import { useOverlay } from '@hooks'
 import AllFilesView from './AllFilesView'
@@ -74,6 +74,10 @@ const useStyles = createUseStyles(theme => {
       '& > div': {
         outline: 'none',
       },
+    },
+    Spinner: {
+      position: 'relative',
+      top: '2rem',
     },
   }
 })
@@ -163,15 +167,16 @@ const MyThangs = withRouter(({ match }) => {
 
   const viewProps = {
     setCurrentView: handleCurrentView,
-    setCurrentFolderId: setCurrentFolderId,
-    handleEditModel: handleEditModel,
-    handleChangeFolder: handleChangeFolder,
+    setCurrentFolderId,
+    handleEditModel,
+    handleChangeFolder,
     folders: folders.data,
     myFolders: myFolders,
-    sharedFolders: sharedFolders,
+    sharedFolders,
     models: thangsData.models,
     userId: currentUserId,
-    onDrop: onDrop,
+    onDrop,
+    isLoading,
   }
 
   return (
@@ -193,46 +198,50 @@ const MyThangs = withRouter(({ match }) => {
       />
       <div className={c.MyThangs_ContentWrapper}>
         <WorkspaceHeader setCurrentView={handleCurrentView} />
-        <Switch>
-          <Route
-            exact
-            path={match.path}
-            render={() => <RecentFilesView {...viewProps} />}
-          />
-          <Route
-            path={`${match.path}/recentFiles`}
-            render={() => <RecentFilesView {...viewProps} />}
-          />
-          <Route
-            path={`${match.path}/allFiles`}
-            render={() => <AllFilesView {...viewProps} />}
-          />
-          <Route
-            path={`${match.path}/editProfile`}
-            render={() => <EditProfileView {...viewProps} />}
-          />
-          <Route
-            path={`${match.path}/folder/:folderId`}
-            render={() => <FolderView {...viewProps} />}
-          />
-          <Route
-            path={`${match.path}/likedModels`}
-            render={() => <LikedModelsView {...viewProps} />}
-          />
-          <Route
-            path={`${match.path}/sharedFiles`}
-            render={() => <SharedFilesView {...viewProps} />}
-          />
-          <Route
-            path={`${match.path}/savedSearches`}
-            render={() => <SavedSearchesView {...viewProps} />}
-          />
-          <Route
-            path={`${match.path}/searchFiles/:searchTerm`}
-            render={() => <SearchView {...viewProps} />}
-          />
-          <Route component={() => 'Oops, Page Not Found'} />
-        </Switch>
+        {isLoading ? (
+          <Spinner className={c.Spinner} />
+        ) : (
+          <Switch>
+            <Route
+              exact
+              path={match.path}
+              render={() => <RecentFilesView {...viewProps} />}
+            />
+            <Route
+              path={`${match.path}/recentFiles`}
+              render={() => <RecentFilesView {...viewProps} />}
+            />
+            <Route
+              path={`${match.path}/allFiles`}
+              render={() => <AllFilesView {...viewProps} />}
+            />
+            <Route
+              path={`${match.path}/editProfile`}
+              render={() => <EditProfileView {...viewProps} />}
+            />
+            <Route
+              path={`${match.path}/folder/:folderId`}
+              render={() => <FolderView {...viewProps} />}
+            />
+            <Route
+              path={`${match.path}/likedModels`}
+              render={() => <LikedModelsView {...viewProps} />}
+            />
+            <Route
+              path={`${match.path}/sharedFiles`}
+              render={() => <SharedFilesView {...viewProps} />}
+            />
+            <Route
+              path={`${match.path}/savedSearches`}
+              render={() => <SavedSearchesView {...viewProps} />}
+            />
+            <Route
+              path={`${match.path}/searchFiles/:searchTerm`}
+              render={() => <SearchView {...viewProps} />}
+            />
+            <Route component={() => 'Oops, Page Not Found'} />
+          </Switch>
+        )}
       </div>
     </div>
   )

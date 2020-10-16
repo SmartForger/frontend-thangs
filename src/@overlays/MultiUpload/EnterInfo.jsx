@@ -5,6 +5,7 @@ import {
   Dropdown,
   Input,
   MetadataPrimary,
+  MetadataSecondary,
   ModelThumbnail,
   Spacer,
   Textarea,
@@ -152,6 +153,10 @@ const useStyles = createUseStyles(theme => {
         lineHeight: '1rem',
       },
     },
+    EnterInfo_PrivacyText: {
+      width: '80%',
+      textAlign: 'left !important',
+    },
   }
 })
 
@@ -265,17 +270,17 @@ const EnterInfo = ({
   const usersFolders = useMemo(() => {
     const sortedFolders = !R.isEmpty(folderData)
       ? folderData.sort((a, b) => {
-        if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
-        else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
-        return 0
-      })
+          if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
+          else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
+          return 0
+        })
       : []
 
     return sortedFolders && sortedFolders.length
       ? sortedFolders.map(folder => ({
-        value: folder.id,
-        label: folder.name.replace('//', '/'),
-      }))
+          value: folder.id,
+          label: folder.name.replace('//', '/'),
+        }))
       : []
   }, [folderData])
 
@@ -393,6 +398,7 @@ const EnterInfo = ({
             }}
           />
         </div>
+        <Spacer size={'.5rem'} />
         <Toggle
           id={'privacy_switch'}
           label={'Private Model'}
@@ -402,11 +408,22 @@ const EnterInfo = ({
           hoverTooltip={
             isPrivacyDisabled
               ? `The folder you have selected is ${
-                inputState.isPublic ? 'Public' : 'Private'
-              }`
+                  inputState.isPublic ? 'Public' : 'Private'
+                }`
               : undefined
           }
         />
+        {inputState.isPublic ? (
+          <MetadataSecondary className={c.EnterInfo_PrivacyText}>
+            This model will be shared publicly towards users on Thangs.
+          </MetadataSecondary>
+        ) : (
+          <MetadataSecondary className={c.EnterInfo_PrivacyText}>
+            This model will be private and restricted to yourself and those you to choose
+            to share it with.
+          </MetadataSecondary>
+        )}
+        <Spacer size={'1.5rem'} />
         <div className={c.EnterInfo_ButtonWrapper}>
           <Button tertiary onClick={handleSkip} type='button'>
             Skip

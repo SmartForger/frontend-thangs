@@ -103,7 +103,7 @@ const ToggleSwitch = ({
   const c = useStyles({ checked, disabled })
   return (
     <div className={c.ToggleSwitch}>
-      <Spacer size={'1.5rem'} />
+      <Spacer size={'1rem'} />
       <div className={c.ToggleRow}>
         <SingleLineBodyText>{label}</SingleLineBodyText>
         <Toggle
@@ -123,7 +123,7 @@ const ToggleSwitch = ({
           effect='solid'
         />
       )}
-      <Spacer size={'1.5rem'} />
+      <Spacer size={'1rem'} />
     </div>
   )
 }

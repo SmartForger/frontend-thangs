@@ -1,5 +1,6 @@
 import React from 'react'
 import { createUseStyles } from '@style'
+import classnames from 'classnames'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -35,11 +36,11 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const Spinner = ({ size = '3rem', ...otherProps }) => {
+const Spinner = ({ className, size = '3rem', ...otherProps }) => {
   const c = useStyles({ size })
   return (
     <svg
-      className={c.Spinner}
+      className={classnames(className, c.Spinner)}
       {...otherProps}
       viewBox='0 0 50 50'
       data-cy='loading-spinner'
