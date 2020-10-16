@@ -264,7 +264,7 @@ const EnterInfo = ({
     const folder = folderData.find(folder => folder.id === folderId)
     handleOnInputChange('isPublic', folder.isPublic)
     setIsPrivacyDisabled(true)
-    return { value: folderId, label: folder.name }
+    return { value: folderId, label: folder.name.replace(new RegExp('//', 'g'), '/') }
   }, [folderId, folderData, handleOnInputChange])
 
   const usersFolders = useMemo(() => {
@@ -279,7 +279,7 @@ const EnterInfo = ({
     return sortedFolders && sortedFolders.length
       ? sortedFolders.map(folder => ({
           value: folder.id,
-          label: folder.name.replace('//', '/'),
+          label: folder.name.replace(new RegExp('//', 'g'), '/'),
         }))
       : []
   }, [folderData])

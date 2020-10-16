@@ -149,7 +149,7 @@ const FolderForm = ({
           checked={inputState && !inputState.isPublic}
           onChange={handleOnToggleChange}
           disabled={isPrivacyDisabled}
-          hoverTooltip={isPrivacyDisabled ? 'Editing privacy coming soon' : undefined}
+          hoverTooltip={undefined}
         />
         <Spacer size={'1rem'} />
         <div className={c.FolderForm_ButtonContainer}>
