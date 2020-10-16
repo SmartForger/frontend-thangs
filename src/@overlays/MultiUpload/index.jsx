@@ -152,6 +152,10 @@ const MultiUpload = ({ initData = null, folderId }) => {
   )
 
   useEffect(() => {
+    dispatch(types.FETCH_FOLDERS)
+  }, [dispatch])
+
+  useEffect(() => {
     if (initData) onDrop(initData.acceptedFiles, initData.rejectedFile, initData.e)
   }, [initData, onDrop])
 
