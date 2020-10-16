@@ -61,6 +61,15 @@ describe('The Signup Page test cases with before and after conditions', () => {
     clickOnElement(CLASSES.SIGNUP_BUTTON)
     isTextInsideClass(CLASSES.SIGNUP_LOGIN_ERROR, TEXT.SIGNUP_EMAIL_ERROR)
   })
+
+  it('Signup fails with wrong password confirmation', () => {
+    enterValidValue(CLASSES.SIGNUP_FORM, usernameInput)
+    enterValidValue(CLASSES.SIGNUP_FORM, emailInput)
+    enterValidValue(CLASSES.SIGNUP_FORM, passwordInput)
+    enterInvalidValue(CLASSES.SIGNUP_FORM, confirmPasswordInput)
+    clickOnElement(CLASSES.SIGNUP_BUTTON)
+    isTextInsideClass(CLASSES.SIGNUP_LOGIN_ERROR, TEXT.SIGNUP_CONFIRM_PASS_ERROR)
+  })
 })
 
 /*
