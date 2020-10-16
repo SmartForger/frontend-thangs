@@ -270,17 +270,17 @@ const EnterInfo = ({
   const usersFolders = useMemo(() => {
     const sortedFolders = !R.isEmpty(folderData)
       ? folderData.sort((a, b) => {
-          if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
-          else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
-          return 0
-        })
+        if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
+        else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
+        return 0
+      })
       : []
 
     return sortedFolders && sortedFolders.length
       ? sortedFolders.map(folder => ({
-          value: folder.id,
-          label: folder.name.replace(new RegExp('//', 'g'), '/'),
-        }))
+        value: folder.id,
+        label: folder.name.replace(new RegExp('//', 'g'), '/'),
+      }))
       : []
   }, [folderData])
 
@@ -408,8 +408,8 @@ const EnterInfo = ({
           hoverTooltip={
             isPrivacyDisabled
               ? `The folder you have selected is ${
-                  inputState.isPublic ? 'Public' : 'Private'
-                }`
+                inputState.isPublic ? 'Public' : 'Private'
+              }`
               : undefined
           }
         />
