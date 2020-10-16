@@ -204,9 +204,9 @@ const EnterInfo = ({
   const handleSubmit = useCallback(
     data => {
       handleUpdate({ id: activeId, data })
-      handleContinue()
+      handleContinue({ selectedFolderId: inputState.folderId })
     },
-    [handleContinue, handleUpdate, activeId]
+    [handleUpdate, activeId, handleContinue, inputState]
   )
 
   const handleFolderChange = useCallback(
@@ -235,7 +235,7 @@ const EnterInfo = ({
       newData.name = uploadFiles[id].name
       handleUpdate({ id, data: newData })
     })
-    handleSkipToEnd()
+    handleSkipToEnd({ selectedFolderId: inputState.folderId })
   }, [
     inputState,
     setErrorMessage,

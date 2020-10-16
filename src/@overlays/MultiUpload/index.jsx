@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import * as R from 'ramda'
 import { SingleLineBodyText, Spacer } from '@components'
 import EnterInfo from './EnterInfo'
@@ -69,6 +70,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const [activeView, setActiveView] = useState('upload')
   const [errorMessage, setErrorMessage] = useState(null)
   const c = useStyles({})
+  const history = useHistory()
 
   const handleFileUpload = useCallback(
     (file, _errorState, fileId) => {
@@ -111,26 +113,41 @@ const MultiUpload = ({ initData = null, folderId }) => {
     dispatch(types.CLOSE_OVERLAY)
   }, [dispatch])
 
-  const handleSubmit = useCallback(() => {
-    dispatch(types.SUBMIT_FILES, {
-      onFinish: closeOverlay,
-    })
-  }, [closeOverlay, dispatch])
+  const handleSubmit = useCallback(
+    ({ selectedFolderId }) => {
+      dispatch(types.SUBMIT_FILES, {
+        onFinish: () => {
+          closeOverlay()
+          history.push(
+            selectedFolderId
+              ? `/myThangs/folder/${selectedFolderId}`
+              : '/myThangs/allFiles'
+          )
+        },
+      })
+    },
+    [closeOverlay, dispatch, history]
+  )
 
-  const handleContinue = useCallback(() => {
-    const loadingFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isLoading)
-    if (loadingFiles.length > 0)
-      return setErrorMessage('Please wait until all files are processed')
-    if (activeView === 'upload') {
-      setActiveView(0)
-    } else {
-      if (activeView === Object.keys(uploadFiles).length - 1) {
-        handleSubmit()
+  const handleContinue = useCallback(
+    ({ selectedFolderId }) => {
+      const loadingFiles = Object.keys(uploadFiles).filter(
+        id => uploadFiles[id].isLoading
+      )
+      if (loadingFiles.length > 0)
+        return setErrorMessage('Please wait until all files are processed')
+      if (activeView === 'upload') {
+        setActiveView(0)
       } else {
-        setActiveView(activeView + 1)
+        if (activeView === Object.keys(uploadFiles).length - 1) {
+          handleSubmit({ selectedFolderId })
+        } else {
+          setActiveView(activeView + 1)
+        }
       }
-    }
-  }, [activeView, handleSubmit, uploadFiles])
+    },
+    [activeView, handleSubmit, uploadFiles]
+  )
 
   const handleBack = useCallback(() => {
     setErrorMessage(null)
