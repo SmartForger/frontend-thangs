@@ -117,6 +117,9 @@ const useStyles = createUseStyles(theme => {
       zIndex: 1,
     },
     FileTable_UploadZone: {
+      width: '27rem',
+      margin: '0 auto',
+
       '& > div': {
         outline: 'none',
       },
