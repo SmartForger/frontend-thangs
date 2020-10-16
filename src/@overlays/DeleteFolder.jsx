@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { DeleteForm, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -72,6 +73,7 @@ const useStyles = createUseStyles(theme => {
 
 const DeleteFolder = ({ folder, type }) => {
   const c = useStyles()
+  const history = useHistory()
   const [errorMessage, setErrorMessage] = useState(null)
   const { dispatch } = useStoreon()
 
@@ -88,10 +90,11 @@ const DeleteFolder = ({ folder, type }) => {
         },
         onFinish: () => {
           closeOverlay()
+          history.push('/myThangs/allFiles')
         },
       })
     },
-    [closeOverlay, dispatch]
+    [closeOverlay, dispatch, history]
   )
 
   return (
