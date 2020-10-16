@@ -77,11 +77,16 @@ const FolderForm = ({
   errorMessage,
 }) => {
   const c = useStyles()
-  const { id, name, isPublic } = folder
+  const { id, name } = folder
+  const isPublic = !R.isEmpty(parentFolder)
+    ? parentFolder.isPublic
+    : !R.isEmpty(folder)
+    ? folder.isPublic
+    : true
   const initialState = {
     id: id,
     name: name ? getFolderName(name) : '',
-    isPublic: isPublic || true,
+    isPublic: isPublic,
   }
 
   const { onFormSubmit, onInputChange, inputState } = useForm({
@@ -120,8 +125,10 @@ const FolderForm = ({
     [folder, handleSubmit, parentFolder]
   )
 
-  const isPrivacyDisabled = useMemo(() => {
-    return !R.isEmpty(folder) || !R.isEmpty(parentFolder)
+  const privacyDisabledTooltip = useMemo(() => {
+    if (!R.isEmpty(folder)) return 'Editing folder privacy not yet supported'
+    if (!R.isEmpty(parentFolder)) return 'Folder privacy is inherited'
+    return null
   }, [folder, parentFolder])
 
   return (
@@ -148,8 +155,8 @@ const FolderForm = ({
           label={'Private Folder'}
           checked={inputState && !inputState.isPublic}
           onChange={handleOnToggleChange}
-          disabled={isPrivacyDisabled}
-          hoverTooltip={isPrivacyDisabled ? 'Privacy setting is inherited' : undefined}
+          disabled={!!privacyDisabledTooltip}
+          hoverTooltip={privacyDisabledTooltip}
         />
         <Spacer size={'1rem'} />
         <div className={c.FolderForm_ButtonContainer}>

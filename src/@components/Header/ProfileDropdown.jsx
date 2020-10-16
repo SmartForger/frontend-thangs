@@ -81,15 +81,9 @@ export const ProfileDropdownMenu = ({
           </div>
         </div>
         <Spacer size={'1rem'} />
-        {myThangsMenu ? (
-          <Link to={`/${user.username}`}>
-            <Pill secondary>View Portfolio</Pill>
-          </Link>
-        ) : (
-          <Link to={'/myThangs'}>
-            <Pill secondary>View My Thangs</Pill>
-          </Link>
-        )}
+        <Link to={'/myThangs'}>
+          <Pill secondary>View My Thangs</Pill>
+        </Link>
         <Spacer size={'1rem'} />
         <Divider spacing={0} />
         <Spacer size={'1rem'} />
