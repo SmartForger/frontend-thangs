@@ -143,7 +143,9 @@ const MultiUpload = ({ initData = null, folderId }) => {
 
   const handleUpdate = useCallback(
     ({ id, data }) => {
-      dispatch(types.CHANGE_UPLOAD_FILE, { id, data })
+      const newData = { ...data }
+      if (newData.folderId === 'files') newData.folderId = null
+      dispatch(types.CHANGE_UPLOAD_FILE, { id, newData })
     },
     [dispatch]
   )
