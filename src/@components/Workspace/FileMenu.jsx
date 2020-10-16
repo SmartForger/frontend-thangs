@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
 import { Divider, SingleLineBodyText, Spacer } from '@components'
 import { createUseStyles } from '@style'
@@ -42,6 +42,12 @@ const useStyles = createUseStyles(theme => {
 const FileMenu = ({ model = {}, folder = {}, type }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
+  const currentUserId = authenticationService.getCurrentUserId()
+  const hasDeletePermission = useMemo(() => {
+    if (type === 'model') return currentUserId.toString() === model.owner.id.toString()
+    if (type === 'folder')
+      return currentUserId.toString() === folder.creator.id.toString()
+  }, [currentUserId, folder, model, type])
 
   const handleEdit = useCallback(
     e => {
@@ -85,7 +91,6 @@ const FileMenu = ({ model = {}, folder = {}, type }) => {
 
   const starFile = useCallback(() => {
     if (type === 'model') {
-      const currentUserId = authenticationService.getCurrentUserId()
       dispatch(types.LIKE_MODEL, {
         id: model.id,
         currentUserId: currentUserId,
@@ -185,16 +190,20 @@ const FileMenu = ({ model = {}, folder = {}, type }) => {
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      <Divider spacing={'.5rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={removeFile}>
-        <div>
-          <Spacer size={'1.5rem'} />
-          <DeleteIcon />
-          <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Remove</SingleLineBodyText>
-          <Spacer size={'1.5rem'} />
-        </div>
-      </MenuItem>
+      {hasDeletePermission && (
+        <>
+          <Divider spacing={'.5rem'} />
+          <MenuItem className={c.FileMenu_Item} onClick={removeFile}>
+            <div>
+              <Spacer size={'1.5rem'} />
+              <DeleteIcon />
+              <Spacer size={'.5rem'} />
+              <SingleLineBodyText>Remove</SingleLineBodyText>
+              <Spacer size={'1.5rem'} />
+            </div>
+          </MenuItem>
+        </>
+      )}
       <Spacer size={'1rem'} />
     </div>
   )
