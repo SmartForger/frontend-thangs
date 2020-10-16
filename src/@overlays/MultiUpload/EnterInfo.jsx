@@ -408,7 +408,7 @@ const EnterInfo = ({
         <Spacer size={'1.5rem'} />
         <div className={c.EnterInfo_ButtonWrapper}>
           <Button tertiary onClick={handleSkip} type='button' disabled={isLoading}>
-            Skip
+            Apply All
           </Button>
           <Spacer size={'1rem'} />
           <Button type='submit' disabled={isLoading}>
