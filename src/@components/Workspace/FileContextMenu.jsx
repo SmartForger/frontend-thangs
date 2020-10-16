@@ -6,7 +6,7 @@ import { createUseStyles } from '@style'
 const useStyles = createUseStyles(_theme => {
   return {
     ContextMenu: {
-      zIndex: 1,
+      zIndex: 2,
     },
   }
 })
