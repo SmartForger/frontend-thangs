@@ -39,7 +39,7 @@ const StatsBar = ({ userActivity = {} }) => {
               : '-'}
           </TitleTertiary>
           <Spacer size='.5rem' />
-          <MetadataPrimary>Contributons</MetadataPrimary>
+          <MetadataPrimary>Contributions</MetadataPrimary>
         </div>
       </div>
       <Spacer size={'3rem'} />
