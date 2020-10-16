@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import * as R from 'ramda'
 import {
   Button,
@@ -126,6 +126,10 @@ const UploadModels = ({
 }) => {
   const hasFile = Object.keys(uploadFiles).length > 0
   const c = useStyles({ hasFile })
+  const isLoadingFiles = useMemo(() => {
+    const loadingFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isLoading)
+    return loadingFiles.length > 0
+  }, [uploadFiles])
 
   return (
     <>
@@ -158,7 +162,11 @@ const UploadModels = ({
       {!R.isEmpty(uploadFiles) && (
         <>
           <Spacer size={'1.5rem'} />
-          <TitleTertiary>Files</TitleTertiary>
+          <TitleTertiary>
+            {Object.keys(uploadFiles).length > 0
+              ? `${Object.keys(uploadFiles).length} Files Uploaded`
+              : 'Files'}
+          </TitleTertiary>
           <Spacer size={'.5rem'} />
           <div className={c.UploadModels_ScrollableFiles}>
             {Object.keys(uploadFiles).map((id, index) => {
@@ -199,7 +207,9 @@ const UploadModels = ({
               Cancel
             </Button>
             <Spacer size={'1rem'} />
-            <Button onClick={handleContinue}>Continue</Button>
+            <Button onClick={handleContinue}>
+              {isLoadingFiles ? 'Processing...' : 'Continue'}
+            </Button>
           </div>
         </>
       )}
