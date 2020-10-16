@@ -34,7 +34,7 @@ export default store => {
         method: 'PUT',
         endpoint: `folders/${folderId}`,
         body: {
-          folderName: updatedFolder.name,
+          name: updatedFolder.name,
         },
       })
 
