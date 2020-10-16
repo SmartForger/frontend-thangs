@@ -31,8 +31,8 @@ const useStyles = createUseStyles(theme => {
     },
 
     LandingSearchBar_minimized: {
-      opacity: 0,
-      top: '-16rem',
+      opacity: 1,
+      top: 0,
     },
 
     LandingSearchBar_Upload: {

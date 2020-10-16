@@ -52,7 +52,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Fade: {
-      opacity: 0,
+      opacity: 1,
     },
   }
 })
