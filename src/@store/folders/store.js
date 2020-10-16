@@ -106,6 +106,7 @@ export default store => {
           const folder = res.data
           store.dispatch(types.LOADED_FOLDER)
           store.dispatch(types.UPDATE_FOLDER, { folderId, folder })
+          store.dispatch(types.FETCH_FOLDERS)
           onFinish()
         })
         .catch(_error => {
