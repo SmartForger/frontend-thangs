@@ -344,7 +344,7 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
 
   return (
     <div className={classnames(c.Signup_Row, c.Signup_SignUpForm)}>
-      <Spacer size='4rem' />
+      <Spacer size='3rem' />
       <div className={c.Signup_FormWrapper}>
         <Spacer size='4rem' />
         <TitleTertiary>{showPromo ? 'Sign Up For Free' : 'Create Account'}</TitleTertiary>
@@ -464,7 +464,7 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
           </Button>
         </div>
       </div>
-      <Spacer size='4rem' />
+      <Spacer size='3rem' />
     </div>
   )
 }
