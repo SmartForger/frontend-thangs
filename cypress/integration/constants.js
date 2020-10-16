@@ -31,9 +31,12 @@ export const BODY = 'body'
 export const CLASSES = {
   LOGIN_FORM: '[class^=Signin]',
   LOGIN_BUTTON: '[class^=Signin_Button]',
-  LOGIN_ERROR: '[class^=Signup_ErrorText]',
+  SIGNUP_BUTTON: '[class^=Signup_Button]',
+  SIGNUP_LOGIN_ERROR: '[class^=Signup_ErrorText]',
   CLOSE_LOGIN_FORM: '[class^=Signin_ExitButton]',
+  CLOSE_SIGNUP_FORM: '[class^=Signup_ExitButton]',
   SIGNUP_LINK_ON_LOGIN: '[class^=Signin_HasAccountButton]',
+  LOGIN_LINK_ON_SIGNUP: '[class^=Signup_HasAccountButton]',
   USER_NAVBAR: '[class^=ProfileDropdown_ClickableButton]',
   NOTIFICATIONS_BUTTON: '[class^=NotificationsButton_NotificationIconWrapper]',
   NOTIFICATIONS_DROPDOWN: '[class^="NotificationsButton"] + [class*="DropdownMenu"]',
@@ -62,6 +65,7 @@ export const CLASSES = {
   MODEL_SIDEBAR_BUTTON: '[class^=Model_SidebarButton]',
   BUTTON: '[class^=Button]',
   MY_THANGS: '[class^=MyThangs]',
+  SIGNUP_FORM: '[class^=Signup]',
 }
 
 export const DATA_CY = {
@@ -79,7 +83,10 @@ export const DATA_CY = {
 
 export const TEXT = {
   LOG_IN: 'Log in',
+  SIGN_UP: 'Sign up',
   LOGIN_ERROR: 'Invalid user ID or password.',
+  SIGNUP_EMAIL_ERROR: 'Please enter a valid e-mail address',
+  SIGNUP_CONFIRM_PASS_ERROR: 'Please ensure that both passwords match',
   DOWNLOADS: 'Downloads',
   POPULAR: 'Popular',
   NEW: 'New',

@@ -9,8 +9,8 @@ import {
   clearInput,
   enterInvalidValue,
   enterValidValue,
-  loginEmailUsernameInput,
-  loginPasswordInput,
+  emailInput,
+  passwordInput,
 } from '../../../utils/inputs'
 
 export function openLogin() {
@@ -51,12 +51,12 @@ describe('The Login Page test cases with before and after conditions', () => {
   })
 
   it('Login fails with incorrect credentials', () => {
-    enterInvalidValue(CLASSES.LOGIN_FORM, loginEmailUsernameInput)
-    enterInvalidValue(CLASSES.LOGIN_FORM, loginPasswordInput)
+    enterInvalidValue(CLASSES.LOGIN_FORM, emailInput)
+    enterInvalidValue(CLASSES.LOGIN_FORM, passwordInput)
     clickOnElement(CLASSES.LOGIN_BUTTON)
-    isTextInsideClass(CLASSES.LOGIN_ERROR, TEXT.LOGIN_ERROR)
-    clearInput(CLASSES.LOGIN_FORM, loginEmailUsernameInput)
-    clearInput(CLASSES.LOGIN_FORM, loginPasswordInput)
+    isTextInsideClass(CLASSES.SIGNUP_LOGIN_ERROR, TEXT.LOGIN_ERROR)
+    clearInput(CLASSES.LOGIN_FORM, emailInput)
+    clearInput(CLASSES.LOGIN_FORM, passwordInput)
   })
 })
 
@@ -70,8 +70,8 @@ describe('The Login Page test cases with before condition', () => {
   })
 
   it('Login successfully completed', () => {
-    enterValidValue(CLASSES.LOGIN_FORM, loginEmailUsernameInput)
-    enterValidValue(CLASSES.LOGIN_FORM, loginPasswordInput)
+    enterValidValue(CLASSES.LOGIN_FORM, emailInput)
+    enterValidValue(CLASSES.LOGIN_FORM, passwordInput)
     clickOnElement(CLASSES.LOGIN_BUTTON)
     isElement(CLASSES.LOGIN_FORM, PROPS.INVISIBLE)
     isElement(CLASSES.USER_NAVBAR, PROPS.VISIBLE)

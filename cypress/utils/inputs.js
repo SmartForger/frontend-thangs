@@ -1,8 +1,10 @@
 import { MODEL, SEARCH, USER } from '../integration/constants'
 
 const inputSelectors = {
-  loginEmailUsername: '[name=email]',
-  loginPassword: '[name=password]',
+  email: '[name=email]',
+  password: '[name=password]',
+  confirmPassword: '[name=confirmPass]',
+  username: '[name=username]',
   search: '[name=search]',
   upload: '[name=upload]',
   modelTitle: '[name=name]',
@@ -10,18 +12,32 @@ const inputSelectors = {
   comment: '[name=body]',
 }
 
-export const loginEmailUsernameInput = {
-  validInput: USER.EMAIL,
-  invalidInput: USER.INVALID_EMAIL,
+export const usernameInput = {
+  validInput: USER.NAME,
   type: 'text',
-  selector: inputSelectors.loginEmailUsername,
+  selector: inputSelectors.username,
 }
 
-export const loginPasswordInput = {
+export const emailInput = {
+  validInput: USER.EMAIL,
+  invalidInput: USER.INVALID_EMAIL,
+  wrongInput: USER.NAME,
+  type: 'text',
+  selector: inputSelectors.email,
+}
+
+export const passwordInput = {
   validInput: USER.PASSWORD,
   invalidInput: USER.INVALID_PASSWORD,
   type: 'password',
-  selector: inputSelectors.loginPassword,
+  selector: inputSelectors.password,
+}
+
+export const confirmPasswordInput = {
+  validInput: USER.PASSWORD,
+  invalidInput: USER.INVALID_PASSWORD,
+  type: 'password',
+  selector: inputSelectors.confirmPassword,
 }
 
 export const searchInput = {
@@ -74,6 +90,12 @@ export const enterValidValue = (el, input) => {
 
 export const enterInvalidValue = (el, input) => {
   return findInput(el, input).focus().type(input.invalidInput, {
+    force: true,
+  })
+}
+
+export const enterWrongValue = (el, input) => {
+  return findInput(el, input).focus().type(input.wrongInput, {
     force: true,
   })
 }

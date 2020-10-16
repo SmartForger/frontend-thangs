@@ -10,8 +10,8 @@ import {
   clearInput,
   enterValidValue,
   findInput,
-  loginEmailUsernameInput,
-  loginPasswordInput,
+  emailInput,
+  passwordInput,
   modelDescriptionInput,
   modelTitleInput,
 } from './inputs'
@@ -53,8 +53,8 @@ export const login = () => {
   isElement(CLASSES.LOGIN_FORM, PROPS.INVISIBLE)
   clickOnElementByText(TEXT.LOG_IN)
   isElement(CLASSES.LOGIN_FORM, PROPS.VISIBLE)
-  enterValidValue(CLASSES.LOGIN_FORM, loginEmailUsernameInput)
-  enterValidValue(CLASSES.LOGIN_FORM, loginPasswordInput)
+  enterValidValue(CLASSES.LOGIN_FORM, emailInput)
+  enterValidValue(CLASSES.LOGIN_FORM, passwordInput)
   clickOnElement(CLASSES.LOGIN_BUTTON)
   isElement(CLASSES.LOGIN_FORM, PROPS.INVISIBLE)
   isElement(CLASSES.USER_NAVBAR, PROPS.VISIBLE)
