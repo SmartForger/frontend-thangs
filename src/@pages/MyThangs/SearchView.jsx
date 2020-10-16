@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { FileTable, Spacer, TitleTertiary, Spinner } from '@components'
@@ -56,6 +56,7 @@ const SearchView = ({ className, handleChangeFolder = noop, handleEditModel = no
   const { searchTerm } = useParams()
   const { dispatch, searchThangs } = useStoreon('searchThangs')
   const { data: files = {}, isLoading } = searchThangs
+
   useEffect(() => {
     dispatch(types.SEARCH_MY_THANGS, {
       searchTerm,

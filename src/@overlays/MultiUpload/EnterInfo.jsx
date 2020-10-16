@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect, useState } from 'react'
+import React, { useCallback, useMemo, useEffect } from 'react'
 import * as R from 'ramda'
 import {
   Button,
@@ -173,7 +173,6 @@ const EnterInfo = ({
   uploadFiles,
 }) => {
   const c = useStyles({})
-  const [isPrivacyDisabled, setIsPrivacyDisabled] = useState(false)
   const activeId = Object.keys(uploadFiles)[activeView]
   const model = useMemo(() => uploadFiles && uploadFiles[activeId], [
     activeId,
@@ -202,13 +201,6 @@ const EnterInfo = ({
     [onInputChange]
   )
 
-  const handleOnToggleChange = useCallback(
-    e => {
-      onInputChange('isPublic', e && e.target && !e.target.checked)
-    },
-    [onInputChange]
-  )
-
   const handleSubmit = useCallback(
     data => {
       handleUpdate({ id: activeId, data })
@@ -221,7 +213,6 @@ const EnterInfo = ({
     e => {
       if (e) {
         handleOnInputChange('folderId', e.value)
-        setIsPrivacyDisabled(e.value && e.value !== 'files')
         if (e.value !== 'files') {
           const folder = folderData.find(folder => folder.id === e.value)
           handleOnInputChange('isPublic', folder.isPublic)
@@ -263,7 +254,6 @@ const EnterInfo = ({
     if (!folderId || !folderData) return { value: 'files', label: 'My Public Files' }
     const folder = folderData.find(folder => folder.id === folderId)
     handleOnInputChange('isPublic', folder.isPublic)
-    setIsPrivacyDisabled(true)
     return { value: folderId, label: folder.name.replace(new RegExp('//', 'g'), '/') }
   }, [folderId, folderData, handleOnInputChange])
 
