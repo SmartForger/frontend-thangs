@@ -233,7 +233,7 @@ const EnterInfo = ({
     filesLeft.forEach(id => {
       const newData = { ...inputState }
       newData.name = uploadFiles[id].name
-      handleUpdate({ id, data: inputState })
+      handleUpdate({ id, data: newData })
     })
     handleSkipToEnd()
   }, [
