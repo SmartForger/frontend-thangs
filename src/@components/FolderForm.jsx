@@ -81,7 +81,7 @@ const FolderForm = ({
   const initialState = {
     id: id,
     name: name ? getFolderName(name) : '',
-    isPublic: isPublic || false,
+    isPublic: isPublic || true,
   }
 
   const { onFormSubmit, onInputChange, inputState } = useForm({
@@ -149,7 +149,7 @@ const FolderForm = ({
           checked={inputState && !inputState.isPublic}
           onChange={handleOnToggleChange}
           disabled={isPrivacyDisabled}
-          hoverTooltip={undefined}
+          hoverTooltip={isPrivacyDisabled ? 'Privacy setting is inherited' : undefined}
         />
         <Spacer size={'1rem'} />
         <div className={c.FolderForm_ButtonContainer}>

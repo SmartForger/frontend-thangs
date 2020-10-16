@@ -183,7 +183,7 @@ const EnterInfo = ({
   const initialState = {
     name: (model && model.name) || '',
     description: '',
-    folderId: 'files',
+    folderId: folderId || 'files',
     material: '',
     height: '',
     weight: '',

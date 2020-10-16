@@ -49,7 +49,7 @@ const useStyles = createUseStyles(theme => {
     WorkspaceNavbar_AddWrapper: {
       marginLeft: '1rem',
       position: 'relative',
-      zIndex: 1,
+      zIndex: 2,
     },
     WorkspaceNavbar_AddButton: {
       width: '50%',
