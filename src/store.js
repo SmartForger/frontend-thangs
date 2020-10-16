@@ -13,6 +13,7 @@ import notificationsStore from '@store/notifications/store'
 import overlayStore from '@store/overlay/store'
 import relatedModelsStore from '@store/relatedModels/store'
 import searchStore from '@store/search/store'
+import searchMyThangsStore from '@store/searchMyThangs/store'
 import searchSubscriptionsStore from '@store/searchSubscriptions/store'
 import teamsStore from '@store/teams/store'
 import thangsStore from '@store/thangs/store'
@@ -37,6 +38,7 @@ const storeParts = [
   overlayStore,
   relatedModelsStore,
   searchStore,
+  searchMyThangsStore,
   searchSubscriptionsStore,
   teamsStore,
   thangsStore,

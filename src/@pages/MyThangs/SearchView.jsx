@@ -54,19 +54,15 @@ const noop = () => null
 const SearchView = ({ className, handleChangeFolder = noop, handleEditModel = noop }) => {
   const c = useStyles({})
   const { searchTerm } = useParams()
-  const { dispatch, thangs } = useStoreon('thangs')
-  const { search: files = {}, isLoading } = thangs
-
+  const { dispatch, searchThangs } = useStoreon('searchThangs')
+  const { data: files = {}, isLoading } = searchThangs
   useEffect(() => {
     dispatch(types.SEARCH_MY_THANGS, {
       searchTerm,
     })
   }, [dispatch, searchTerm])
 
-  const results = useMemo(
-    () => (files && files.models && files.models.length ? files.models : []),
-    [files]
-  )
+  const results = files && files.models && files.models.length ? files.models : []
 
   return (
     <main className={classnames(className, c.SearchView)}>
