@@ -164,7 +164,7 @@ const UploadModels = ({
           <Spacer size={'1.5rem'} />
           <TitleTertiary>
             {Object.keys(uploadFiles).length > 0
-              ? `${Object.keys(uploadFiles).length} Files Uploaded`
+              ? `${Object.keys(uploadFiles).length} Files`
               : 'Files'}
           </TitleTertiary>
           <Spacer size={'.5rem'} />

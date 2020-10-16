@@ -181,6 +181,11 @@ const MultiUpload = ({ initData = null, folderId }) => {
   )
 
   useEffect(() => {
+    dispatch(types.RESET_UPLOAD_FILES)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
     dispatch(types.FETCH_FOLDERS)
   }, [dispatch])
 
