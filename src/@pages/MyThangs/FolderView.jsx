@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
@@ -14,6 +14,7 @@ import {
   TitleTertiary,
   Contributors,
 } from '@components'
+import { useQuery } from '@hooks'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
@@ -207,10 +208,14 @@ const FolderView = ({
   onDrop = noop,
 }) => {
   const c = useStyles({})
+  const inviteCode = useQuery('inviteCode')
+  const { dispatch } = useStoreon()
   const { folderId: id } = useParams()
   if (id) setCurrentFolderId(id)
   const folder = id ? findFolderById(id, folders) : {}
-
+  useEffect(() => {
+    if (inviteCode) dispatch(types.FETCH_FOLDER, { folderId: id, inviteCode })
+  }, [dispatch, id, inviteCode])
   if (!folder || R.isEmpty(folder)) {
     return (
       <main className={classnames(className, c.FolderView)}>
