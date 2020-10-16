@@ -7,7 +7,7 @@ import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
 import { ReactComponent as DownloadIcon } from '@svg/icon-download.svg'
 import { ReactComponent as DeleteIcon } from '@svg/icon-delete.svg'
 import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
-import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
+import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 
@@ -151,6 +151,16 @@ const FileMenu = ({ model = {}, folder = {}, type }) => {
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
+      <MenuItem className={c.FileMenu_Item} onClick={addFolder}>
+        <div>
+          <Spacer size={'1.5rem'} />
+          <FolderIcon />
+          <Spacer size={'.5rem'} />
+          <SingleLineBodyText>Create Folder</SingleLineBodyText>
+          <Spacer size={'1.5rem'} />
+        </div>
+      </MenuItem>
+      <Spacer size={'.5rem'} />
       {type === 'model' && (
         <>
           <MenuItem className={c.FileMenu_Item} onClick={downloadModel}>
@@ -174,17 +184,8 @@ const FileMenu = ({ model = {}, folder = {}, type }) => {
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
-      <Divider spacing={'1rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={addFolder}>
-        <div>
-          <Spacer size={'1.5rem'} />
-          <PlusIcon />
-          <Spacer size={'.5rem'} />
-          <SingleLineBodyText>New Folder</SingleLineBodyText>
-          <Spacer size={'1.5rem'} />
-        </div>
-      </MenuItem>
       <Spacer size={'.5rem'} />
+      <Divider spacing={'.5rem'} />
       <MenuItem className={c.FileMenu_Item} onClick={removeFile}>
         <div>
           <Spacer size={'1.5rem'} />
