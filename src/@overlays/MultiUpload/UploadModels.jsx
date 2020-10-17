@@ -130,7 +130,7 @@ const UploadModels = ({
     const loadingFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isLoading)
     return loadingFiles.length > 0
   }, [uploadFiles])
-
+  const fileLength = uploadFiles ? Object.keys(uploadFiles).length : 0
   return (
     <>
       <Dropzone onDrop={onDrop} accept={MODEL_FILE_EXTS} maxFiles={25}>
@@ -163,9 +163,7 @@ const UploadModels = ({
         <>
           <Spacer size={'1.5rem'} />
           <TitleTertiary>
-            {Object.keys(uploadFiles).length > 0
-              ? `${Object.keys(uploadFiles).length} Files`
-              : 'Files'}
+            {fileLength > 0 ? `${fileLength} File${fileLength > 1 ? 's' : ''}` : 'Files'}
           </TitleTertiary>
           <Spacer size={'.5rem'} />
           <div className={c.UploadModels_ScrollableFiles}>

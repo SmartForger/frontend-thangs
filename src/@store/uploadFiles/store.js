@@ -38,7 +38,7 @@ export default store => {
 
   store.on(types.REMOVE_UPLOAD_FILES, (state, { index }) => {
     const newUploadedFiles = { ...state.uploadFiles.data }
-    delete newUploadedFiles.data[index]
+    delete newUploadedFiles[index]
     return {
       uploadFiles: {
         ...state.uploadFiles,
