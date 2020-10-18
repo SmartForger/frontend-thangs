@@ -12,6 +12,7 @@ import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -90,6 +91,7 @@ const EditModel = ({ model, fetchData }) => {
 
   const handleSubmit = useCallback(
     newModelData => {
+      track('Edit Model')
       const { id, ...updatedModel } = newModelData
       dispatch(types.UPDATE_MODEL, {
         id,
@@ -107,6 +109,7 @@ const EditModel = ({ model, fetchData }) => {
   )
 
   const handleDelete = useCallback(() => {
+    track('Delete Model - Edit Overlay')
     dispatch(types.DELETE_USER_OWN_MODEL, {
       id: model.id,
       fetchData,

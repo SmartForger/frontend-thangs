@@ -6,6 +6,7 @@ import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -83,6 +84,7 @@ const DeleteFolder = ({ folder, type }) => {
 
   const handleDelete = useCallback(
     id => {
+      track('Delete Folder')
       dispatch(types.DELETE_FOLDER, {
         id,
         onError: error => {

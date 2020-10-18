@@ -6,6 +6,7 @@ import { MenuItem } from 'react-contextmenu'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import * as types from '@constants/storeEventTypes'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -46,33 +47,31 @@ const AddMenu = ({ folder = {}, sideBar = false }) => {
   const c = useStyles({ sideBar })
   const { dispatch } = useStoreon()
 
-  const handleAddFolder = useCallback(
-    () =>
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'addFolder',
-        overlayData: {
-          folder,
-          animateIn: true,
-          windowed: true,
-          dialogue: true,
-        },
-      }),
-    [dispatch, folder]
-  )
+  const handleAddFolder = useCallback(() => {
+    track('Add Menu - Create Folder')
+    dispatch(types.OPEN_OVERLAY, {
+      overlayName: 'addFolder',
+      overlayData: {
+        folder,
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
+      },
+    })
+  }, [dispatch, folder])
 
-  const handleUpload = useCallback(
-    () =>
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'multiUpload',
-        overlayData: {
-          folderId: folder.id,
-          animateIn: true,
-          windowed: true,
-          dialogue: true,
-        },
-      }),
-    [dispatch, folder.id]
-  )
+  const handleUpload = useCallback(() => {
+    track('Add Menu - Upload Models')
+    dispatch(types.OPEN_OVERLAY, {
+      overlayName: 'multiUpload',
+      overlayData: {
+        folderId: folder.id,
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
+      },
+    })
+  }, [dispatch, folder.id])
 
   return (
     <div className={c.AddMenu}>

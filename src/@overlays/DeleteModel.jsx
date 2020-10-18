@@ -5,6 +5,7 @@ import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -81,6 +82,7 @@ const DeleteModel = ({ model, type }) => {
 
   const handleSubmit = useCallback(
     id => {
+      track('Delete Model - Overlay')
       dispatch(types.DELETE_MODEL, {
         id,
         onError: error => {

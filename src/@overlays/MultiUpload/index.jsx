@@ -10,6 +10,7 @@ import { ReactComponent as ArrowLeftIcon } from '@svg/icon-arrow-left.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { ERROR_STATES, FILE_SIZE_LIMITS } from '@constants/fileUpload'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -97,6 +98,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
 
   const onDrop = useCallback(
     (acceptedFiles, [rejectedFile], _event) => {
+      track('MultiUpload - OnDrop', { amount: acceptedFiles && acceptedFiles.length })
       acceptedFiles.forEach(file => {
         const fileId = Math.random().toString(36).substr(2, 9)
         if (rejectedFile) {
@@ -115,6 +117,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
 
   const removeFile = useCallback(
     index => {
+      track('MultiUpload - Remove File')
       dispatch(types.REMOVE_UPLOAD_FILES, { index })
     },
     [dispatch]
@@ -127,6 +130,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
 
   const handleSubmit = useCallback(
     ({ selectedFolderId }) => {
+      track('MultiUpload - Submit Files')
       dispatch(types.SUBMIT_FILES, {
         onFinish: () => {
           closeOverlay()
@@ -152,6 +156,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
         setActiveView(0)
       } else {
         if (activeView === Object.keys(uploadFilesData).length - 1) {
+          track('Upload - Continue')
           handleSubmit({ selectedFolderId })
         } else {
           setActiveView(activeView + 1)

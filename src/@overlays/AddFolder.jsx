@@ -6,6 +6,7 @@ import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -86,6 +87,7 @@ const AddFolder = ({ folder }) => {
 
   const handleSubmit = useCallback(
     newFolderData => {
+      track('Create Folder', { isPrivate: !newFolderData.isPublic })
       dispatch(types.CREATE_FOLDER, {
         data: newFolderData,
         onError: error => {

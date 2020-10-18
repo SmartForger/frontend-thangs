@@ -5,6 +5,7 @@ import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -84,6 +85,7 @@ const EditFolder = ({ folder }) => {
 
   const handleSubmit = useCallback(
     newFolderData => {
+      track('Edit Folder')
       const { id, ...updatedFolder } = newFolderData
       dispatch(types.EDIT_FOLDER, {
         id,

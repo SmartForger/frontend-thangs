@@ -10,6 +10,7 @@ import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -53,6 +54,7 @@ const FileMenu = ({ model = {}, folder = {}, type }) => {
     e => {
       e.preventDefault()
       if (type === 'model') {
+        track('File Menu - Edit Model')
         dispatch(types.OPEN_OVERLAY, {
           overlayName: 'editModel',
           overlayData: {
@@ -63,6 +65,7 @@ const FileMenu = ({ model = {}, folder = {}, type }) => {
           },
         })
       } else if (type === 'folder') {
+        track('File Menu - Edit Folder')
         dispatch(types.OPEN_OVERLAY, {
           overlayName: 'editFolder',
           overlayData: {
@@ -80,6 +83,7 @@ const FileMenu = ({ model = {}, folder = {}, type }) => {
 
   const downloadModel = useCallback(() => {
     if (type === 'model') {
+      track('File Menu - Download Model')
       dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
         id: model.id,
         onFinish: downloadUrl => {
@@ -91,17 +95,20 @@ const FileMenu = ({ model = {}, folder = {}, type }) => {
 
   const starFile = useCallback(() => {
     if (type === 'model') {
+      track('File Menu - Star Model')
       dispatch(types.LIKE_MODEL, {
         id: model.id,
         currentUserId: currentUserId,
         owner: model.owner,
       })
     } else if (type === 'folder') {
+      track('File Menu - Star Folder')
       dispatch(types.LIKE_FOLDER, { id: folder.id, owner: folder.owner })
     }
   }, [currentUserId, dispatch, folder.id, folder.owner, model.id, model.owner, type])
 
   const addFolder = useCallback(() => {
+    track('File Menu - Create Folder')
     dispatch(types.OPEN_OVERLAY, {
       overlayName: 'addFolder',
       overlayData: {
@@ -117,6 +124,7 @@ const FileMenu = ({ model = {}, folder = {}, type }) => {
     e => {
       e.preventDefault()
       if (type === 'model') {
+        track('File Menu - Delete Model')
         dispatch(types.OPEN_OVERLAY, {
           overlayName: 'deleteModel',
           overlayData: {
@@ -128,6 +136,7 @@ const FileMenu = ({ model = {}, folder = {}, type }) => {
           },
         })
       } else if (type === 'folder') {
+        track('File Menu - Delete Folder')
         dispatch(types.OPEN_OVERLAY, {
           overlayName: 'deleteFolder',
           overlayData: {

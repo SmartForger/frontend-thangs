@@ -5,6 +5,7 @@ import { TextInput } from '@components'
 import { createUseStyles } from '@style'
 
 import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -99,6 +100,7 @@ const SearchBar = ({ setCurrentView }) => {
 
   const handleSearchSubmit = e => {
     e.preventDefault()
+    track('Search My Thangs', { searchTerm })
     if (searchTerm) {
       setCurrentView(`searchFiles/${searchTerm}`)
       setSearchTerm(undefined)

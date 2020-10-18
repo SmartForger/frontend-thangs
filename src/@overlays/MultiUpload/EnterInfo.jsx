@@ -16,6 +16,7 @@ import { useForm } from '@hooks'
 import { createUseStyles } from '@style'
 import { formatBytes } from '@utilities'
 import { CATEGORIES } from '@constants/fileUpload'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -236,6 +237,7 @@ const EnterInfo = ({
       newData.name = uploadFiles[id].name
       handleUpdate({ id, data: newData })
     })
+    track('Upload - Apply All')
     handleSkipToEnd({ selectedFolderId: inputState.folderId })
   }, [
     inputState,
