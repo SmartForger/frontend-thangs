@@ -17,7 +17,9 @@ const useStarred = () => {
   const starred = useMemo(() => {
     const { data = {} } = likedUserModelsAtom
     const { models = [], folders = [] } = data
-    const filteredModels = models.filter(model => model.owner.id === userId)
+    const filteredModels = models.filter(
+      model => model && model.owner && model.owner.id === userId
+    )
     const filteredFolders = folders.filter(
       folder =>
         folder &&
@@ -25,7 +27,9 @@ const useStarred = () => {
         folder.creator.id &&
         folder.creator.id.toString() === userId
     )
-    const othersModels = models.filter(model => model.owner.id !== userId)
+    const othersModels = models.filter(
+      model => model && model.owner && model.owner.id !== userId
+    )
     const othersFolders = folders.filter(folder => {
       return (
         folder &&
