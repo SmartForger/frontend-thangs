@@ -91,7 +91,7 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, dispatch, user }) => {
         },
       },
     ],
-    [dispatch, searchBarRef, user]
+    [dispatch, history, searchBarRef, user]
   )
   return (
     <Carousel
