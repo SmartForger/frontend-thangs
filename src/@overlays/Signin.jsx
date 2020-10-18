@@ -12,7 +12,7 @@ import {
   Spacer,
   TitleTertiary,
 } from '@components'
-import { useForm, useGoogleLogin, useFacebookLogin } from '@hooks'
+import { useForm, useGoogleLogin, useFacebookLogin, useQuery } from '@hooks'
 import { authenticationService } from '@services'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
@@ -182,8 +182,13 @@ const SignInForm = ({
     () => signupErrorMessage || sessionExpired || authFailed,
     [authFailed, sessionExpired, signupErrorMessage]
   )
-  const { googleLoginUrl } = useGoogleLogin({ redirectUrl: window.location.href })
-  const { facebookLoginUrl } = useFacebookLogin({ redirectUrl: window.location.href })
+  const redirectUrl = useQuery('redirectUrl')
+  const { googleLoginUrl } = useGoogleLogin({
+    redirectUrl: redirectUrl || window.location.href,
+  })
+  const { facebookLoginUrl } = useFacebookLogin({
+    redirectUrl: redirectUrl || window.location.href,
+  })
   const initialState = {
     email: '',
     password: '',
@@ -219,11 +224,12 @@ const SignInForm = ({
       })
       setSigninErrorMessage(error.data && error.data.message)
     } else {
+      if (redirectUrl) return (window.location.href = redirectUrl)
       if (window.location.href.includes('sessionExpired'))
         return (window.location.href = '/')
       return window.location.reload()
     }
-  }, [dispatch, inputState])
+  }, [dispatch, inputState, redirectUrl])
 
   return (
     <div className={classnames(c.Signin_Row, c.Signin_SignInForm)}>

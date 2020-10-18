@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { Link, useHistory, useParams } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
 import {
@@ -209,13 +209,23 @@ const FolderView = ({
 }) => {
   const c = useStyles({})
   const inviteCode = useQuery('inviteCode')
+  const history = useHistory()
   const { dispatch } = useStoreon()
   const { folderId: id } = useParams()
   if (id) setCurrentFolderId(id)
   const folder = id ? findFolderById(id, folders) : {}
+
   useEffect(() => {
-    if (inviteCode) dispatch(types.FETCH_FOLDER, { folderId: id, inviteCode })
-  }, [dispatch, id, inviteCode])
+    if (inviteCode)
+      dispatch(types.FETCH_FOLDER, {
+        folderId: id,
+        inviteCode,
+        onFinish: () => {
+          history.push(`/myThangs/folder/${id}`)
+        },
+      })
+  }, [dispatch, history, id, inviteCode])
+
   if (!folder || R.isEmpty(folder)) {
     return (
       <main className={classnames(className, c.FolderView)}>

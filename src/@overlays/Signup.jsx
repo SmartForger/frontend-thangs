@@ -15,7 +15,7 @@ import {
   TitleSecondary,
   TitleTertiary,
 } from '@components'
-import { useForm, useGoogleLogin, useFacebookLogin } from '@hooks'
+import { useForm, useGoogleLogin, useFacebookLogin, useQuery } from '@hooks'
 import { authenticationService } from '@services'
 import { ReactComponent as BackgroundSvg } from '@svg/overlay-background.svg'
 import { ReactComponent as VersionControlIcon } from '@svg/icon-version-control.svg'
@@ -241,8 +241,13 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
   const [waiting, setWaiting] = useState(false)
   const [signupErrorMessage, setSignupErrorMessage] = useState(null)
   const [invalidFields, setInvalidFields] = useState([])
-  const { googleLoginUrl } = useGoogleLogin({ redirectUrl: window.location.href })
-  const { facebookLoginUrl } = useFacebookLogin({ redirectUrl: window.location.href })
+  const redirectUrl = useQuery('redirectUrl')
+  const { googleLoginUrl } = useGoogleLogin({
+    redirectUrl: redirectUrl || window.location.href,
+  })
+  const { facebookLoginUrl } = useFacebookLogin({
+    redirectUrl: redirectUrl || window.location.href,
+  })
   const initialState = {
     email: '',
     password: '',
@@ -336,11 +341,12 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
       })
       if (loginError) return setSignupErrorMessage(error)
       track('Overlay Sign Up Success', { source })
+      if (redirectUrl) return (window.location.href = redirectUrl)
       if (window.location.href.includes('sessionExpired'))
         return (window.location.href = '/')
       return (window.location.href = '/welcome')
     }
-  }, [dispatch, inputState, source, validateEmail, validatePasswords])
+  }, [dispatch, inputState, redirectUrl, source, validateEmail, validatePasswords])
 
   return (
     <div className={classnames(c.Signup_Row, c.Signup_SignUpForm)}>
