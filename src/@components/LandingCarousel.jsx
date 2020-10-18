@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { useHistory } from 'react-router-dom'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { Carousel } from '@components'
@@ -18,6 +19,7 @@ const useStyles = createUseStyles(_theme => {
 
 const LandingCarousel = ({ searchMinimized, searchBarRef, dispatch, user }) => {
   const c = useStyles({})
+  const history = useHistory()
   const PromoCards = useMemo(
     () => [
       {
@@ -73,7 +75,7 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, dispatch, user }) => {
         hoverVideo: 'https://storage.googleapis.com/thangs-pubic/instructionCollab.mp4',
         callback: () => {
           if (user && user.id) {
-            dispatch(types.OPEN_OVERLAY, { overlayName: 'createFolder' })
+            history.push('/myThangs')
             track('Value Prop Clicked', { source: 'Collaboration' })
           } else {
             dispatch(types.OPEN_OVERLAY, {
