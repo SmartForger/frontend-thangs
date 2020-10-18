@@ -1,5 +1,6 @@
 import * as types from '@constants/storeEventTypes'
 import { api, storageService } from '@services'
+import { track } from '@utilities/analytics'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -150,6 +151,7 @@ export default store => {
       }
       return
     } catch (e) {
+      track('New Model Uploaded - MultiUpload Flow')
       store.dispatch(types.CHANGE_UPLOAD_FILE, { id: file.id, data: e, isError: true })
       return
     }
