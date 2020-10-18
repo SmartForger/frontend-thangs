@@ -19,13 +19,19 @@ const useStarred = () => {
     const { models = [], folders = [] } = data
     const filteredModels = models.filter(model => model.owner.id === userId)
     const filteredFolders = folders.filter(
-      folder => folder.creator.id.toString() === userId
+      folder =>
+        folder &&
+        folder.creator &&
+        folder.creator.id &&
+        folder.creator.id.toString() === userId
     )
     const othersModels = models.filter(model => model.owner.id !== userId)
     const othersFolders = folders.filter(folder => {
       return (
         folder.creator.id.toString() !== userId &&
-        folder.members.some(member => member.id.toString() === userId)
+        folder.members.some(
+          member => member && member.id && member.id.toString() === userId
+        )
       )
     })
 
