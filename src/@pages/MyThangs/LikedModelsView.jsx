@@ -46,11 +46,16 @@ const LikedModelsView = ({ className, userId }) => {
   const { models = [], folders = [] } = data
   const filteredModels = useMemo(() => {
     if (!models || !models.length) return []
-    return models.filter(({ owner }) => owner.id.toString() !== userId.toString())
+    return models.filter(
+      ({ owner }) => owner && owner.id && owner.id.toString() !== userId.toString()
+    )
   }, [userId, models])
   const filteredFolders = useMemo(() => {
     if (!folders || !folders.length) return []
-    return folders.filter(({ creator }) => creator.id.toString() !== userId.toString())
+    return folders.filter(
+      ({ creator }) =>
+        creator && creator.id && creator.id.toString() !== userId.toString()
+    )
   }, [userId, folders])
 
   if (isLoading) {

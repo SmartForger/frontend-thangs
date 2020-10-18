@@ -103,14 +103,16 @@ const MyThangs = withRouter(({ match }) => {
   const myFolders = useMemo(() => {
     if (!foldersData || !foldersData.length) return []
     return foldersData.filter(
-      ({ creator }) => creator.id.toString() === currentUserId.toString()
+      ({ creator }) =>
+        creator && creator.id && creator.id.toString() === currentUserId.toString()
     )
   }, [currentUserId, foldersData])
 
   const sharedFolders = useMemo(() => {
     if (!foldersData || !foldersData.length) return []
     return foldersData.filter(
-      ({ creator }) => creator.id.toString() !== currentUserId.toString()
+      ({ creator }) =>
+        creator && creator.id && creator.id.toString() !== currentUserId.toString()
     )
   }, [currentUserId, foldersData])
 

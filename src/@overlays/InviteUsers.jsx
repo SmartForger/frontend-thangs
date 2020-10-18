@@ -128,7 +128,8 @@ const UserList = ({
 }) => {
   const c = useStyles({})
   const currentUserId = authenticationService.getCurrentUserId()
-  const isCurrentUserOwner = creator.id.toString() === currentUserId
+  const isCurrentUserOwner =
+    creator && creator.id && creator.id.toString() === currentUserId
 
   return (
     <ul className={c.InviteUsers_List}>

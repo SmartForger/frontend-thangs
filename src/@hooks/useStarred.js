@@ -28,6 +28,9 @@ const useStarred = () => {
     const othersModels = models.filter(model => model.owner.id !== userId)
     const othersFolders = folders.filter(folder => {
       return (
+        folder &&
+        folder.creator &&
+        folder.creator.id &&
         folder.creator.id.toString() !== userId &&
         folder.members.some(
           member => member && member.id && member.id.toString() === userId

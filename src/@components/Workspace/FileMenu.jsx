@@ -45,9 +45,20 @@ const FileMenu = ({ model = {}, folder = {}, type }) => {
   const { dispatch } = useStoreon()
   const currentUserId = authenticationService.getCurrentUserId()
   const hasDeletePermission = useMemo(() => {
-    if (type === 'model') return currentUserId.toString() === model.owner.id.toString()
+    if (type === 'model')
+      return (
+        model &&
+        model.owner &&
+        model.owner.id &&
+        model.owner.id.toString() === currentUserId.toString()
+      )
     if (type === 'folder')
-      return currentUserId.toString() === folder.creator.id.toString()
+      return (
+        folder &&
+        folder.creator &&
+        folder.creator.id &&
+        folder.creator.id.toString() === currentUserId.toString()
+      )
   }, [currentUserId, folder, model, type])
 
   const handleEdit = useCallback(
