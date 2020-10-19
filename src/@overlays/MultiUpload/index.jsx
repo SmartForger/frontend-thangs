@@ -136,8 +136,8 @@ const MultiUpload = ({ initData = null, folderId }) => {
           closeOverlay()
           history.push(
             selectedFolderId && selectedFolderId !== 'files'
-              ? `/myThangs/folder/${selectedFolderId}`
-              : '/myThangs/allFiles'
+              ? `/mythangs/folder/${selectedFolderId}`
+              : '/mythangs/all-files'
           )
         },
       })

@@ -101,7 +101,7 @@ const EditModel = ({ model, fetchData }) => {
         },
         onFinish: () => {
           dispatch(types.CLOSE_OVERLAY)
-          history.push('/myThangs')
+          history.push('/mythangs')
         },
       })
     },
@@ -115,7 +115,7 @@ const EditModel = ({ model, fetchData }) => {
       fetchData,
       onFinish: () => {
         dispatch(types.CLOSE_OVERLAY)
-        history.push('/myThangs')
+        history.push('/mythangs')
       },
     })
   }, [dispatch, model.id, fetchData, history])

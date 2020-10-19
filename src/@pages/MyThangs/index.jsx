@@ -124,7 +124,7 @@ const MyThangs = withRouter(({ match }) => {
   const handleCurrentView = useCallback(
     name => {
       setCurrentFolderId(null)
-      history.push(`/myThangs/${name}`)
+      history.push(`/mythangs/${name}`)
     },
     [history]
   )
@@ -132,7 +132,7 @@ const MyThangs = withRouter(({ match }) => {
   const handleChangeFolder = useCallback(
     folder => {
       setCurrentFolderId(folder.id)
-      history.push(`/myThangs/folder/${folder.id}`)
+      history.push(`/mythangs/folder/${folder.id}`)
     },
     [history]
   )
@@ -211,15 +211,15 @@ const MyThangs = withRouter(({ match }) => {
               render={() => <RecentFilesView {...viewProps} />}
             />
             <Route
-              path={`${match.path}/recentFiles`}
+              path={`${match.path}/recent-files`}
               render={() => <RecentFilesView {...viewProps} />}
             />
             <Route
-              path={`${match.path}/allFiles`}
+              path={`${match.path}/all-files`}
               render={() => <AllFilesView {...viewProps} />}
             />
             <Route
-              path={`${match.path}/editProfile`}
+              path={`${match.path}/edit-profile`}
               render={() => <EditProfileView {...viewProps} />}
             />
             <Route
@@ -227,15 +227,15 @@ const MyThangs = withRouter(({ match }) => {
               render={() => <FolderView {...viewProps} />}
             />
             <Route
-              path={`${match.path}/likedModels`}
+              path={`${match.path}/liked-models`}
               render={() => <LikedModelsView {...viewProps} />}
             />
             <Route
-              path={`${match.path}/sharedFiles`}
+              path={`${match.path}/shared-files`}
               render={() => <SharedFilesView {...viewProps} />}
             />
             <Route
-              path={`${match.path}/savedSearches`}
+              path={`${match.path}/saved-searches`}
               render={() => <SavedSearchesView {...viewProps} />}
             />
             <Route

@@ -95,7 +95,7 @@ const AddFolder = ({ folder }) => {
         },
         onFinish: id => {
           closeOverlay()
-          history.push(`/myThangs/folder/${id}`)
+          history.push(`/mythangs/folder/${id}`)
         },
       })
     },

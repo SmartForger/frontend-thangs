@@ -448,11 +448,11 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
           <Spacer size='.75rem' />
           <MetadataSecondary>
             Click “Sign up” to agree to Thangs&apos;&nbsp;
-            <a href='/terms_and_conditions' target='_blank'>
+            <a href='/terms-and-conditions' target='_blank'>
               terms and conditions
             </a>{' '}
             and acknowledge that Thangs&apos;&nbsp;
-            <a href='/privacy_policy' target='_blank'>
+            <a href='/privacy-policy' target='_blank'>
               Privacy Policy
             </a>{' '}
             applies to you.

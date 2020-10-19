@@ -70,13 +70,13 @@ export const ProfileDropdownMenu = ({ dispatch, user = {}, TargetComponent }) =>
             <MultiLineBodyText>
               {hasfullName ? user.fullName : user.username}
             </MultiLineBodyText>
-            <Link to={'/myThangs/editProfile'}>
+            <Link to={'/mythangs/edit-profile'}>
               <MetadataSecondary>Profile Settings</MetadataSecondary>
             </Link>
           </div>
         </div>
         <Spacer size={'1rem'} />
-        <Link to={'/myThangs'}>
+        <Link to={'/mythangs'}>
           <Pill secondary>View My Thangs</Pill>
         </Link>
         <Spacer size={'1rem'} />
@@ -85,10 +85,10 @@ export const ProfileDropdownMenu = ({ dispatch, user = {}, TargetComponent }) =>
         <DropdownItem to={`/${user.username}`}>
           <PortfolioIcon /> Portfolio
         </DropdownItem>
-        <DropdownItem to={'/myThangs/sharedFiles'}>
+        <DropdownItem to={'/mythangs/shared-files'}>
           <SharedIcon /> Shared
         </DropdownItem>
-        <DropdownItem to={'/myThangs/likedModels'}>
+        <DropdownItem to={'/mythangs/liked-models'}>
           <HeartIcon /> Liked
         </DropdownItem>
         <Spacer size={'1rem'} />

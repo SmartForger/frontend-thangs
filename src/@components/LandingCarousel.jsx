@@ -75,7 +75,7 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, dispatch, user }) => {
         hoverVideo: 'https://storage.googleapis.com/thangs-pubic/instructionCollab.mp4',
         callback: () => {
           if (user && user.id) {
-            history.push('/myThangs')
+            history.push('/mythangs')
             track('Value Prop Clicked', { source: 'Collaboration' })
           } else {
             dispatch(types.OPEN_OVERLAY, {

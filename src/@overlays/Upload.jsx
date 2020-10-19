@@ -100,7 +100,7 @@ const Upload = ({ prevModelId }) => {
           dispatch(types.CLOSE_OVERLAY)
           dispatch(types.RESET_UPLOAD_MODEL)
           dispatch(types.FETCH_USER_OWN_MODELS, { id: currentUser.id })
-          history.push('/myThangs/allFilesView')
+          history.push('/mythangs/all-files')
         },
       })
     },

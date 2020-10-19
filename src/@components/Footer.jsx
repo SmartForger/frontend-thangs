@@ -33,7 +33,7 @@ const Footer = () => {
   return (
     <div className={c.Footer}>
       <p>Thangs® 2020 by Physna Inc</p>
-      <Link to={'/privacy_policy'}>Privacy Policy</Link>
+      <Link to={'/privacy-policy'}>Privacy Policy</Link>
     </div>
   )
 }

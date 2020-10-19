@@ -167,7 +167,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
                   return (
                     <React.Fragment key={`folderCrumb_${pathObj.label}_${index}`}>
                       <Link
-                        to={`/myThangs/folder/${pathObj.id}`}
+                        to={`/mythangs/folder/${pathObj.id}`}
                       >{`${pathObj.label}`}</Link>
                       &nbsp;&nbsp;/&nbsp;&nbsp;
                     </React.Fragment>
@@ -221,7 +221,7 @@ const FolderView = ({
         folderId: id,
         inviteCode,
         onFinish: () => {
-          history.push(`/myThangs/folder/${id}`)
+          history.push(`/mythangs/folder/${id}`)
         },
       })
   }, [dispatch, history, id, inviteCode])

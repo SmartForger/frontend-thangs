@@ -61,16 +61,16 @@ const App = () => {
                 exact
                 component={routeRequiresAuth(FolderPage)}
               />
-              <Route path='/terms_and_conditions' exact component={TermsAndConditions} />
-              <Route path='/privacy_policy' exact component={PrivacyPolicy} />
+              <Route path='/terms-and-conditions' exact component={TermsAndConditions} />
+              <Route path='/privacy-policy' exact component={PrivacyPolicy} />
               <Route path='/about-us' exact component={AboutUs} />
               <Route path='/home' component={routeRedirectToProfile()} />
-              <Route exact path='/password_reset' component={PasswordReset} />
+              <Route exact path='/password-reset' component={PasswordReset} />
               <Route
-                path='/password_reset_confirm/:token'
+                path='/password-reset-confirm/:token'
                 component={ConfirmPasswordReset}
               />
-              <Route path='/myThangs' component={routeRequiresAuth(MyThangs)} />
+              <Route path='/mythangs' component={routeRequiresAuth(MyThangs)} />
               <Route exact path='/profile/:id' component={Profile} />
               <Route
                 exact

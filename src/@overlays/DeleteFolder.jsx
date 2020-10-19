@@ -92,7 +92,7 @@ const DeleteFolder = ({ folder, type }) => {
         },
         onFinish: () => {
           closeOverlay()
-          history.push('/myThangs/allFiles')
+          history.push('/mythangs/all-files')
         },
       })
     },

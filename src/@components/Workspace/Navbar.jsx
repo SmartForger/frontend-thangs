@@ -148,26 +148,26 @@ const WorkspaceNavbar = ({
   ])
 
   const handleAllFiles = useCallback(() => {
-    setCurrentView('allFiles')
+    setCurrentView('all-files')
   }, [setCurrentView])
 
   const handleClickRecent = useCallback(() => {
-    setCurrentView('recentFiles')
+    setCurrentView('recent-files')
   }, [setCurrentView])
 
-  const handleClickShared = useCallback(() => setCurrentView('sharedFiles'), [
+  const handleClickShared = useCallback(() => setCurrentView('shared-files'), [
     setCurrentView,
   ])
 
-  const handleClickLiked = useCallback(() => setCurrentView('likedModels'), [
+  const handleClickLiked = useCallback(() => setCurrentView('liked-models'), [
     setCurrentView,
   ])
 
-  const handleClickSearches = useCallback(() => setCurrentView('savedSearches'), [
+  const handleClickSearches = useCallback(() => setCurrentView('saved-searches'), [
     setCurrentView,
   ])
 
-  const handleClickEdit = useCallback(() => setCurrentView('editProfile'), [
+  const handleClickEdit = useCallback(() => setCurrentView('edit-profile'), [
     setCurrentView,
   ])
 
@@ -212,7 +212,7 @@ const WorkspaceNavbar = ({
               isFolder={true}
               folderId={'files'}
               onClick={handleAllFiles}
-              selected={path === '/myThangs/allFiles'}
+              selected={path === '/mythangs/all-files'}
             />
             <Spacer size={'1.5rem'} />
             {shouldShowFileExplorer && (
@@ -232,7 +232,7 @@ const WorkspaceNavbar = ({
               Icon={ClockIcon}
               label={'Recent'}
               onClick={handleClickRecent}
-              selected={path === '/myThangs/recentFiles' || path === '/myThangs'}
+              selected={path === '/mythangs/recent-files' || path === '/mythangs'}
             />
             <Spacer size={'1.5rem'} />
             <NavLink
@@ -240,7 +240,7 @@ const WorkspaceNavbar = ({
               Icon={SharedIcon}
               label={'Shared'}
               onClick={handleClickShared}
-              selected={path === '/myThangs/sharedFiles'}
+              selected={path === '/mythangs/shared-files'}
             />
             <Divider />
             <NavLink
@@ -248,7 +248,7 @@ const WorkspaceNavbar = ({
               Icon={HeartIcon}
               label={'Liked Models'}
               onClick={handleClickLiked}
-              selected={path === '/myThangs/likedModels'}
+              selected={path === '/mythangs/liked-models'}
             />
             <Spacer size={'1.5rem'} />
             <NavLink
@@ -256,7 +256,7 @@ const WorkspaceNavbar = ({
               Icon={SearchIcon}
               label={'Saved Searches'}
               onClick={handleClickSearches}
-              selected={path === '/myThangs/savedSearches'}
+              selected={path === '/mythangs/saved-searches'}
             />
             <Spacer size={'2rem'} />
           </div>
@@ -267,7 +267,7 @@ const WorkspaceNavbar = ({
               Icon={SettingsIcon}
               label={'Profile Settings'}
               onClick={handleClickEdit}
-              selected={path === '/myThangs/editProfile'}
+              selected={path === '/mythangs/edit-profile'}
             />
             <Spacer size={'1.5rem'} />
             <NavLink

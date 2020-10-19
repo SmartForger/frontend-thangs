@@ -99,7 +99,7 @@ const Folder = ({
           isFolder={true}
           folderId={id}
           onClick={handleNavLinkClick}
-          selected={currentPath === `/myThangs/folder/${id}`}
+          selected={currentPath === `/mythangs/folder/${id}`}
         />
       </ContextMenuTrigger>
       <FileContextMenu id={id} folder={folder} type={'folder'} postId={postId} />
