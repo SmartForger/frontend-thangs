@@ -29,6 +29,9 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       justifyContent: 'center',
     },
+    AboutHero_SignUpButton: {
+      color: theme.colors.gold[500],
+    },
     AboutHero_Link: {
       display: 'flex',
       justifyContent: 'center',
@@ -78,11 +81,7 @@ const AboutHero = ({ user }) => {
         <Spacer size={'2rem'} />
         {R.isEmpty(user) ? (
           <div className={c.AboutHero_ButtonWrapper}>
-            <Button
-              tertiary
-              className={classnames(c.UserNav_TextButton, c.UserNav_SignUpButton)}
-              onClick={handleSignUp}
-            >
+            <Button tertiary className={c.AboutHero_SignUpButton} onClick={handleSignUp}>
               {t('aboutUs.signUpButtonText')}
             </Button>
             <Button className={c.UserNav_Button} onClick={handleSignIn}>
