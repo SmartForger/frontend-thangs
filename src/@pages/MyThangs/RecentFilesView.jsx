@@ -55,7 +55,7 @@ const RecentFilesView = ({
     return !R.isEmpty(thangsData)
       ? [thangsData.folders, thangsData.models]
         .flat()
-        .sort((a, b) => new Date(a.uploadDate) - new Date(b.uploadDate))
+        .sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate))
       : []
   }, [thangsData])
 
