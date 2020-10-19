@@ -20,7 +20,7 @@ const ProfileButton = ({ user, userId, className }) => {
           source,
         },
       })
-      track('SignUp Prompt Overlay', { source: 'Timed' })
+      track('SignUp Prompt Overlay', { source: 'Follow' })
     },
     [dispatch]
   )
