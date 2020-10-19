@@ -54,7 +54,8 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '1rem',
       height: '15.5rem',
       display: 'none',
-
+      maxWidth: '20rem',
+      maxHeight: '14rem',
       '& video': {
         borderRadius: '.5rem',
       },
@@ -115,8 +116,8 @@ const Carousel = ({ className, cards = [] }) => {
                   muted
                   playsInline
                   poster={loader}
-                  width={'360px'}
-                  height={'244px'}
+                  width={'100%'}
+                  height={'100%'}
                 >
                   <source src={card.hoverVideo} type='video/mp4' />
                 </video>
