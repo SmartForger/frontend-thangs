@@ -2,6 +2,7 @@ import React from 'react'
 import { ProfilePicture } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import { truncateString } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -42,8 +43,7 @@ const UserInline = ({
   isSearchResult,
 }) => {
   const c = useStyles({ isPending })
-  let userName = user.username
-  if (userName && userName.length > 20) userName = userName.slice(0, 20) + '...'
+  let userName = truncateString(user.username, 20)
   return (
     <div className={className}>
       <div className={c.UserInline}>

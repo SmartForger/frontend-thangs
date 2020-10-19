@@ -8,6 +8,7 @@ import { Button, Card, ModelThumbnail, UserInline } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useCurrentUserId } from '@hooks'
+import { truncateString } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -164,8 +165,8 @@ const ThangsModelDetails = ({
   handleReportModel = noop,
   handleFindRelated = noop,
 }) => {
-  let modelName = model.name
-  if (modelName && modelName.length > 40) modelName = modelName.slice(0, 40) + '...'
+  let formattedModelName = truncateString(model.name, 40)
+  let formattedModelDescription = truncateString(model.description, 144)
   let modelLikeCount = model && model.likes && model.likes.length
   if (modelLikeCount && Array.isArray(modelLikeCount))
     modelLikeCount = modelLikeCount.length
@@ -191,8 +192,8 @@ const ThangsModelDetails = ({
             </div>
           </div>
         </div>
-        <div className={c.ModelSearchResult_Name}>{modelName}</div>
-        <div className={c.ModelSearchResult_Description}>{model.description}</div>
+        <div className={c.ModelSearchResult_Name}>{formattedModelName}</div>
+        <div className={c.ModelSearchResult_Description}>{formattedModelDescription}</div>
       </Anchor>
       <div
         className={c.ModelSearchResult_FindRelatedLink}
@@ -222,9 +223,7 @@ const ExternalModelDetails = ({
   handleFindRelated = noop,
 }) => {
   const { modelTitle, modelDescription, modelFileName } = model
-  let formattedModelDescription = modelDescription
-  if (modelDescription && modelDescription.length > 144)
-    formattedModelDescription = formattedModelDescription.slice(0, 144) + '...'
+  let formattedModelDescription = truncateString(modelDescription, 144)
   return (
     <div className={c.ModelSearchResult_Content}>
       <Anchor

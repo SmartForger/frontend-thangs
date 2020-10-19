@@ -17,6 +17,14 @@ export const numberWithCommas = x => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
+export const truncateString = (str, length) => {
+  if (str && str.length > length) {
+    return str.slice(0, length) + '...'
+  } else {
+    return str
+  }
+}
+
 export const isProcessing = R.propEq('uploadStatus', 'PROCESSING')
 export const isError = R.propEq('uploadStatus', 'ERROR')
 export const isCompleted = R.propEq('uploadStatus', 'COMPLETED')
