@@ -1,6 +1,12 @@
 import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Spacer, FolderForm, TitleTertiary, MultiLineBodyText } from '@components'
+import {
+  Spacer,
+  FolderForm,
+  TitleTertiary,
+  MultiLineBodyText,
+  Spinner,
+} from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
@@ -72,6 +78,17 @@ const useStyles = createUseStyles(theme => {
     AddFolder_Wrapper: {
       width: '339px',
     },
+    AddFolder_LoaderScreen: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      left: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0,0,0,0.29)',
+      zIndex: 5,
+      borderRadius: '1rem',
+      display: 'flex',
+    },
   }
 })
 
@@ -79,7 +96,8 @@ const AddFolder = ({ folder }) => {
   const c = useStyles()
   const history = useHistory()
   const [errorMessage, setErrorMessage] = useState(null)
-  const { dispatch } = useStoreon()
+  const { dispatch, folders = {} } = useStoreon('folders')
+  const { isSaving } = folders
 
   const closeOverlay = useCallback(() => {
     dispatch(types.CLOSE_OVERLAY)
@@ -104,6 +122,11 @@ const AddFolder = ({ folder }) => {
 
   return (
     <div className={c.AddFolder}>
+      {isSaving && (
+        <div className={c.AddFolder_LoaderScreen}>
+          <Spinner />
+        </div>
+      )}
       <ExitIcon className={c.AddFolder_ExitButton} onClick={closeOverlay} />
       <div className={classnames(c.AddFolder_Column, c.AddFolder_EditForm)}>
         <Spacer className={c.AddFolder_MobileSpacer} size='2rem' />

@@ -1,6 +1,7 @@
 import * as types from '@constants/storeEventTypes'
 import { api, storageService } from '@services'
 import { track } from '@utilities/analytics'
+import * as R from 'ramda'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -106,12 +107,14 @@ export default store => {
 
   store.on(types.SUBMIT_FILES, async (state, { onFinish = noop }) => {
     store.dispatch(types.UPLOADING_FILES)
+    const uploadedFiles = R.path(['uploadFiles', 'data', state]) || []
     Promise.all(
-      Object.keys(state.uploadFiles.data).map(fileId => {
-        const file = state.uploadFiles.data[fileId]
+      Object.keys(uploadedFiles).map(fileId => {
+        const file = uploadedFiles[fileId]
         return submitFile({ file })
       })
     ).then(() => {
+      track('New Models Uploaded - MultiUpload Flow', { amount: uploadedFiles.length })
       store.dispatch(types.UPLOADED_FILES)
       store.dispatch(types.FETCH_FOLDERS)
       store.dispatch(types.FETCH_THANGS, { onFinish })
@@ -151,7 +154,6 @@ export default store => {
       }
       return
     } catch (e) {
-      track('New Model Uploaded - MultiUpload Flow')
       store.dispatch(types.CHANGE_UPLOAD_FILE, { id: file.id, data: e, isError: true })
       return
     }

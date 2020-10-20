@@ -140,13 +140,6 @@ export default store => {
     },
   }))
 
-  store.on(types.SAVED_FOLDER_DATA, (state, folder) => ({
-    folders: {
-      ...state.folders,
-      createdFolder: folder,
-    },
-  }))
-
   store.on(
     types.CREATE_FOLDER,
     async (state, { data: newFolderData, onFinish, onError }) => {
@@ -160,11 +153,11 @@ export default store => {
         store.dispatch(types.ERROR_SAVING_FOLDER)
         onError(error)
       } else {
-        store.dispatch(types.SAVED_FOLDER_DATA, data)
         store.dispatch(types.SAVED_FOLDER)
+        onFinish(data.folderId)
         track('Folder Created')
         store.dispatch(types.FETCH_FOLDERS)
-        store.dispatch(types.FETCH_THANGS, { onFinish, onFinishData: data.folderId })
+        store.dispatch(types.FETCH_THANGS, {})
       }
     }
   )
