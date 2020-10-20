@@ -48,7 +48,7 @@ describe('The Landing Page', () => {
     inputFocus(CLASSES.HEADER_DESKTOP, searchInput)
     isElement(CLASSES.LANDING_SEARCH_BAR_UPLOAD, PROPS.VISIBLE)
     uploadFile(MODEL.FILENAME, uploadInput)
-    urlShouldIncludeAfterTimeout(MODEL.FILENAME, 60000)
+    urlShouldIncludeAfterTimeout(MODEL.FILENAME, 180000)
     urlShouldInclude('modelId')
     urlShouldInclude('phynId')
   })

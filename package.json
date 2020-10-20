@@ -15,8 +15,6 @@
     "babel-plugin-root-import": "^6.4.1",
     "classnames": "^2.2.6",
     "color": "^3.1.2",
-    "cypress": "^5.3.0",
-    "cypress-file-upload": "^4.1.1",
     "date-fns": "^2.11.0",
     "email-validator": "^2.0.4",
     "env-cmd": "^10.1.0",
@@ -92,6 +90,7 @@
     "@storybook/preset-create-react-app": "^3.0.0",
     "@storybook/react": "^6.0.21",
     "cypress": "5.3.0",
+    "cypress-file-upload": "^4.1.1",
     "prettier": "^2.1.1",
     "start-server-and-test": "^1.10.8"
   }
