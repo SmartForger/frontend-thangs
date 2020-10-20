@@ -1,6 +1,5 @@
 export { default as AboutUs } from './AboutUs'
 export { default as Auth } from './Auth'
-export { default as FolderPage } from './Folder'
 export { default as Landing } from './Landing'
 export { default as ModelDetail } from './Model'
 export { default as MyThangs } from './MyThangs'

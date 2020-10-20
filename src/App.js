@@ -15,7 +15,6 @@ import {
   RedirectProfile,
   SearchResults,
   TermsAndConditions,
-  FolderPage,
 } from '@pages'
 import { ErrorBoundary } from './ErrorBoundary'
 import { AppAnalytics } from '@components'
@@ -55,11 +54,6 @@ const App = () => {
               <Route
                 path='/welcome'
                 render={props => <Landing {...props} newSignUp={true} />}
-              />
-              <Route
-                path='/folder/:folderId'
-                exact
-                component={routeRequiresAuth(FolderPage)}
               />
               <Route path='/terms-and-conditions' exact component={TermsAndConditions} />
               <Route path='/privacy-policy' exact component={PrivacyPolicy} />
