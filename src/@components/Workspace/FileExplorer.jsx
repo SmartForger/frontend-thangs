@@ -67,14 +67,19 @@ const Folder = ({
   const currentPath = history.location.pathname
 
   useEffect(() => {
+    let timeout
     if (isExpanded) {
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         setShowFolderContents(true)
       }, 200)
     } else {
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         setShowFolderContents(false)
       }, 450)
+    }
+
+    return () => {
+      clearTimeout(timeout)
     }
   }, [isExpanded, setShowFolderContents])
 
