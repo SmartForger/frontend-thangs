@@ -119,6 +119,7 @@ const MyThangs = withRouter(({ match }) => {
   useEffect(() => {
     dispatch(types.FETCH_FOLDERS)
     dispatch(types.FETCH_THANGS, {})
+    dispatch(types.FETCH_NOTIFICATIONS)
   }, [currentUserId, dispatch])
 
   const handleCurrentView = useCallback(
