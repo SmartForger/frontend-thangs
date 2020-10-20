@@ -28,6 +28,7 @@ export default store => {
       { id: folderId, folder: updatedFolder, onError = noop, onFinish = noop }
     ) => {
       if (R.isNil(folderId)) return
+      store.dispatch(types.SAVING_FOLDER)
       const userId = authenticationService.getCurrentUserId()
       store.dispatch(types.LOADING_FOLDER)
       const { error } = await api({
@@ -42,9 +43,11 @@ export default store => {
         store.dispatch(types.ERROR_FOLDER)
         onError()
       } else {
+        store.dispatch(types.SAVED_FOLDER)
+        onFinish()
         store.dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId })
         store.dispatch(types.FETCH_FOLDERS)
-        store.dispatch(types.FETCH_THANGS, { onFinish })
+        store.dispatch(types.FETCH_THANGS, {})
       }
     }
   )
@@ -153,9 +156,9 @@ export default store => {
         store.dispatch(types.ERROR_SAVING_FOLDER)
         onError(error)
       } else {
-        store.dispatch(types.SAVED_FOLDER)
-        onFinish(data.folderId)
         track('Folder Created')
+        onFinish(data.folderId)
+        store.dispatch(types.SAVED_FOLDER)
         store.dispatch(types.FETCH_FOLDERS)
         store.dispatch(types.FETCH_THANGS, {})
       }
@@ -165,7 +168,7 @@ export default store => {
   store.on(
     types.DELETE_FOLDER,
     async (_state, { id: folderId, onFinish = noop, onError = noop }) => {
-      store.dispatch(types.LOADING_FOLDER)
+      store.dispatch(types.SAVING_FOLDER)
       const { error } = await api({
         method: 'DELETE',
         endpoint: `folders/${folderId}`,
@@ -174,10 +177,10 @@ export default store => {
         store.dispatch(types.ERROR_FOLDER)
         onError(error)
       } else {
-        store.dispatch(types.LOADED_FOLDER)
-        store.dispatch(types.FETCH_FOLDERS)
         track('Folder Deleted')
         onFinish()
+        store.dispatch(types.SAVED_FOLDER)
+        store.dispatch(types.FETCH_FOLDERS)
       }
     }
   )

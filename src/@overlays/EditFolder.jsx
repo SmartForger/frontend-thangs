@@ -1,5 +1,11 @@
 import React, { useCallback, useState } from 'react'
-import { Spacer, FolderForm, TitleTertiary, MultiLineBodyText } from '@components'
+import {
+  Spacer,
+  Spinner,
+  FolderForm,
+  TitleTertiary,
+  MultiLineBodyText,
+} from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
@@ -71,13 +77,25 @@ const useStyles = createUseStyles(theme => {
     EditFolder_Wrapper: {
       width: '339px',
     },
+    EditFolder_LoaderScreen: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      left: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0,0,0,0.29)',
+      zIndex: 5,
+      borderRadius: '1rem',
+      display: 'flex',
+    },
   }
 })
 
 const EditFolder = ({ folder }) => {
   const c = useStyles()
   const [errorMessage, setErrorMessage] = useState(null)
-  const { dispatch } = useStoreon()
+  const { dispatch, folders = {} } = useStoreon('folders')
+  const { isSaving } = folders
 
   const closeOverlay = useCallback(() => {
     dispatch(types.CLOSE_OVERLAY)
@@ -103,6 +121,11 @@ const EditFolder = ({ folder }) => {
 
   return (
     <div className={c.EditFolder}>
+      {isSaving && (
+        <div className={c.EditFolder_LoaderScreen}>
+          <Spinner />
+        </div>
+      )}
       <ExitIcon className={c.EditFolder_ExitButton} onClick={closeOverlay} />
       <div className={classnames(c.EditFolder_Column, c.EditFolder_EditForm)}>
         <Spacer className={c.EditFolder_MobileSpacer} size='2rem' />
