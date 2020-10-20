@@ -139,9 +139,12 @@ const NotificationSnippet = ({
   const targetName = target && target.name
   const countText =
     count > 1 ? `and ${count - 1} ${count === 2 ? 'other' : 'others'} ` : ''
+  const linkTo = linkTarget.includes('user')
+    ? linkTarget.replace('user', 'profile')
+    : linkTarget
   return (
     <div className={c.NotificationSnippet_Wrapper}>
-      <Link className={c.NotificationSnippet} to={linkTarget}>
+      <Link className={c.NotificationSnippet} to={linkTo}>
         <div>
           <Icon />
         </div>
