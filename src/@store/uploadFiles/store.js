@@ -114,7 +114,7 @@ export default store => {
         return submitFile({ file })
       })
     ).then(() => {
-      track('New Models Uploaded - MultiUpload Flow', { amount: uploadedFiles.length })
+      track('New Models Uploaded', { amount: uploadedFiles.length })
       store.dispatch(types.UPLOADED_FILES)
       store.dispatch(types.FETCH_FOLDERS)
       store.dispatch(types.FETCH_THANGS, { onFinish })
