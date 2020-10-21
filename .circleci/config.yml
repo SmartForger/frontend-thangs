@@ -83,7 +83,7 @@ jobs:
           command: yarn run dev
       - run:
           name: "Run Cypress tests"
-          command: yarn run cypress run --headless --browser chrome
+          command: yarn run cypress run chrome
       - run:
           name: "Deploy build"
           command: |
