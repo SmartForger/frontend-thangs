@@ -107,7 +107,7 @@ export default store => {
 
   store.on(types.SUBMIT_FILES, async (state, { onFinish = noop }) => {
     store.dispatch(types.UPLOADING_FILES)
-    const uploadedFiles = R.path(['uploadFiles', 'data', state]) || []
+    const uploadedFiles = R.path(['uploadFiles', 'data'], state) || []
     Promise.all(
       Object.keys(uploadedFiles).map(fileId => {
         const file = uploadedFiles[fileId]
