@@ -76,6 +76,9 @@ jobs:
             VERSION=`git rev-parse --short HEAD`
             sed -i -- "s/%VERSION%/$VERSION/g" build/index.html
       - run:
+          name: "Install xvfb"
+          command: apt-get update && apt-get install -y xvfb libsdl1.2-dev
+      - run:
           name: "Run Cypress tests"
           command: yarn run cypress run --headless --browser chrome
       - run:
