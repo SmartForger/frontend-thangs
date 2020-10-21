@@ -205,6 +205,7 @@ const FolderView = ({
   handleChangeFolder = noop,
   handleEditModel = noop,
   onDrop = noop,
+  setCurrentFolderId = noop,
 }) => {
   const c = useStyles({})
   const inviteCode = useQuery('inviteCode')
@@ -212,6 +213,11 @@ const FolderView = ({
   const { dispatch } = useStoreon()
   const { folderId: id } = useParams()
   const folder = id ? findFolderById(id, folders) : {}
+
+  useEffect(() => {
+    if (id) setCurrentFolderId(id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (inviteCode)

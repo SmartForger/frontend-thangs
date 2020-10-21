@@ -103,6 +103,7 @@ export default store => {
         status: STATUSES.SAVED,
         atom: `model-${id}`,
       })
+      store.dispatch(types.FETCH_FOLDERS, {})
       store.dispatch(types.FETCH_THANGS, {})
     }
   })
