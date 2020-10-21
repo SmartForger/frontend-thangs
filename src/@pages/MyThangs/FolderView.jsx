@@ -215,6 +215,9 @@ const FolderView = ({
   const folder = id ? findFolderById(id, folders) : {}
 
   useEffect(() => {
+    // This is for setting the current folder id
+    // to be used by the upload model selected folder dropdown
+    // when the user hard loads to a folder view page on mythangs
     if (id) setCurrentFolderId(id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
