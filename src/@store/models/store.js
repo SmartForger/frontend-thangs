@@ -78,37 +78,34 @@ export default store => {
     }
   )
 
-  store.on(
-    types.DELETE_MODEL,
-    async (_, { id, onError = noop, onFinish = noop, folderId }) => {
-      if (R.isNil(id)) return
+  store.on(types.DELETE_MODEL, async (_, { id, onError = noop, onFinish = noop }) => {
+    if (R.isNil(id)) return
+    store.dispatch(types.CHANGE_MODEL_STATUS, {
+      status: STATUSES.SAVING,
+      atom: `model-${id}`,
+    })
+
+    const { error } = await api({
+      method: 'DELETE',
+      endpoint: `models/${id}`,
+    })
+
+    if (error) {
       store.dispatch(types.CHANGE_MODEL_STATUS, {
-        status: STATUSES.SAVING,
+        status: STATUSES.FAILURE,
         atom: `model-${id}`,
       })
-
-      const { error } = await api({
-        method: 'DELETE',
-        endpoint: `models/${id}`,
+      onError(error.message)
+      logger.error('Error when trying to update the model', error)
+    } else {
+      onFinish()
+      store.dispatch(types.CHANGE_MODEL_STATUS, {
+        status: STATUSES.SAVED,
+        atom: `model-${id}`,
       })
-
-      if (error) {
-        store.dispatch(types.CHANGE_MODEL_STATUS, {
-          status: STATUSES.FAILURE,
-          atom: `model-${id}`,
-        })
-        onError(error.message)
-        logger.error('Error when trying to update the model', error)
-      } else {
-        onFinish()
-        store.dispatch(types.CHANGE_MODEL_STATUS, {
-          status: STATUSES.SAVED,
-          atom: `model-${id}`,
-        })
-        store.dispatch(types.FETCH_THANGS, { silentUpdate: true })
-      }
+      store.dispatch(types.FETCH_THANGS, {})
     }
-  )
+  })
 
   store.on(types.LIKE_MODEL, async (_, { id, owner }) => {
     const currentUserId = authenticationService.getCurrentUserId()

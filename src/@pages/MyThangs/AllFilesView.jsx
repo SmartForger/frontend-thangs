@@ -66,22 +66,18 @@ const AllFilesView = ({
   const sortedFolders = useMemo(() => {
     return !R.isEmpty(folders)
       ? folders
-        .sort((a, b) => {
-          if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
-          else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
-          return 0
-        })
-        .filter(folder => !folder.name.includes('//'))
+          .sort((a, b) => {
+            if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
+            else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
+            return 0
+          })
+          .filter(folder => !folder.name.includes('//'))
       : []
   }, [folders])
 
   const sortedModels = useMemo(() => {
     return models && !R.isEmpty(models)
-      ? models.sort((a, b) => {
-        if (a.name < b.name) return -1
-        else if (a.name > b.name) return 1
-        return 0
-      })
+      ? models.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate))
       : []
   }, [models])
 
@@ -121,7 +117,7 @@ const AllFilesView = ({
               files={sortedModels}
               handleEditModel={handleEditModel}
               handleChangeFolder={handleChangeFolder}
-              sortedBy={'filename'}
+              sortedBy={'created'}
               hideDropzone={sortedFolders.length > 0}
               onDrop={onDrop}
             ></FileTable>
