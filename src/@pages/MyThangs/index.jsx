@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Route, Switch, useHistory, withRouter } from 'react-router-dom'
+import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { WorkspaceHeader, WorkspaceNavbar, Spinner } from '@components'
 import { authenticationService } from '@services'
@@ -82,7 +82,8 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const MyThangs = withRouter(({ match }) => {
+const MyThangs = () => {
+  const { path } = useRouteMatch()
   const history = useHistory()
   const { Overlay, isOverlayOpen, isOverlayHidden } = useOverlay()
   const c = useStyles({})
@@ -206,41 +207,37 @@ const MyThangs = withRouter(({ match }) => {
           <Spinner className={c.Spinner} />
         ) : (
           <Switch>
+            <Route exact path={path} render={() => <RecentFilesView {...viewProps} />} />
             <Route
-              exact
-              path={match.path}
+              path={`${path}/recent-files`}
               render={() => <RecentFilesView {...viewProps} />}
             />
             <Route
-              path={`${match.path}/recent-files`}
-              render={() => <RecentFilesView {...viewProps} />}
-            />
-            <Route
-              path={`${match.path}/all-files`}
+              path={`${path}/all-files`}
               render={() => <AllFilesView {...viewProps} />}
             />
             <Route
-              path={`${match.path}/edit-profile`}
+              path={`${path}/edit-profile`}
               render={() => <EditProfileView {...viewProps} />}
             />
             <Route
-              path={`${match.path}/folder/:folderId`}
+              path={`${path}/folder/:folderId`}
               render={() => <FolderView {...viewProps} />}
             />
             <Route
-              path={`${match.path}/liked-models`}
+              path={`${path}/liked-models`}
               render={() => <LikedModelsView {...viewProps} />}
             />
             <Route
-              path={`${match.path}/shared-files`}
+              path={`${path}/shared-files`}
               render={() => <SharedFilesView {...viewProps} />}
             />
             <Route
-              path={`${match.path}/saved-searches`}
+              path={`${path}/saved-searches`}
               render={() => <SavedSearchesView {...viewProps} />}
             />
             <Route
-              path={`${match.path}/searchFiles/:searchTerm`}
+              path={`${path}/searchFiles/:searchTerm`}
               render={() => <SearchView {...viewProps} />}
             />
             <Route component={() => 'Oops, Page Not Found'} />
@@ -249,6 +246,6 @@ const MyThangs = withRouter(({ match }) => {
       </div>
     </div>
   )
-})
+}
 
 export default MyThangs
