@@ -10,10 +10,6 @@ workflows:
           verify-command: yarn cypress verify
           start: yarn run dev
           wait-on: 'http://localhost:3000'
-          filter:
-            branches:
-              only:
-                - setup-cy-tests-and-login
 
   deploy-gcloud:
     jobs:
