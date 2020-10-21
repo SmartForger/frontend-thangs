@@ -8,6 +8,7 @@ import { ReactComponent as HeartIcon } from '@svg/notification-heart.svg'
 import { ReactComponent as CommentIcon } from '@svg/notification-comment.svg'
 import { ReactComponent as PlusIcon } from '@svg/notification-plus.svg'
 import { ReactComponent as UploadIcon } from '@svg/notification-uploaded.svg'
+import { ReactComponent as StarIcon } from '@svg/icon-star-filled.svg'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 
@@ -139,12 +140,9 @@ const NotificationSnippet = ({
   const targetName = target && target.name
   const countText =
     count > 1 ? `and ${count - 1} ${count === 2 ? 'other' : 'others'} ` : ''
-  const linkTo = linkTarget.includes('user')
-    ? linkTarget.replace('user', 'profile')
-    : linkTarget
   return (
     <div className={c.NotificationSnippet_Wrapper}>
-      <Link className={c.NotificationSnippet} to={linkTo}>
+      <Link className={c.NotificationSnippet} to={linkTarget}>
         <div>
           <Icon />
         </div>
@@ -189,11 +187,11 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
       break
     case 'followed':
       IconComponent = PlusIcon
-      linkTarget = target && target.id ? `/user/${target.id}` : '/'
+      linkTarget = target && target.id ? `/profile/${target.id}` : '/'
       break
     case 'invited':
       IconComponent = GrantAccessIcon
-      linkTarget = target && target.id ? `/folder/${target.id}` : '/'
+      linkTarget = target && target.id ? `/mythangs/folder/${target.id}` : '/'
       break
     case 'liked':
       IconComponent = HeartIcon
@@ -210,11 +208,17 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
       break
     case 'uploaded-to-folder':
       IconComponent = UploadIcon
-      linkTarget = target && target.id ? `/folder/${target.id}` : '/'
+      linkTarget = target && target.id ? `/mythangs/folder/${target.id}` : '/'
+      break
+    case 'likedFolder':
+      IconComponent = StarIcon
+      linkTarget = target && target.id ? `/mythangs/folder/${target.id}` : '/'
       break
     default:
       break
   }
+
+  if (verb === 'invitedOther') return null
 
   return (
     <NotificationSnippet
