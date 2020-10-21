@@ -20,7 +20,7 @@ const useStyles = createUseStyles(_theme => {
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
-        width: '13.5rem',
+        width: ({ level }) => `${13.5 - level * 2}rem`,
         lineHeight: '1rem',
       },
     },
@@ -46,7 +46,7 @@ const useStyles = createUseStyles(_theme => {
       zIndex: 1,
     },
     NavLink__selected: {
-      width: '329px',
+      width: '18.5rem',
       height: '2.5rem',
       background: '#E2E2E7',
       position: 'absolute',
@@ -101,8 +101,9 @@ const NavLink = ({
   onClick = noop,
   to,
   selected = false,
+  level = 0,
 }) => {
-  const c = useStyles({})
+  const c = useStyles({ level })
   const { dispatch, folderNav } = useStoreon('folderNav')
 
   const isExpanded = useMemo(() => folderNav[folderId], [folderId, folderNav])

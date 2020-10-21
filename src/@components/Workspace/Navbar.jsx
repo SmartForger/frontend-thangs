@@ -28,7 +28,7 @@ import * as types from '@constants/storeEventTypes'
 const useStyles = createUseStyles(theme => {
   return {
     WorkspaceNavbar: {
-      width: '22.5rem',
+      width: '20.5rem',
       height: '100%',
       display: 'flex',
       flexDirection: 'row',
@@ -122,14 +122,19 @@ const WorkspaceNavbar = ({
   }, [currentFolderId, folders])
 
   useEffect(() => {
+    let timeout
     if (folderNav.files) {
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         setShowFileExplorer(true)
       }, 200)
     } else {
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         setShowFileExplorer(false)
       }, 450)
+    }
+
+    return () => {
+      clearTimeout(timeout)
     }
   }, [dispatch, folderNav.files, setShowFileExplorer])
 
