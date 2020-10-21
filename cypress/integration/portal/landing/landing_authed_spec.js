@@ -16,13 +16,14 @@ import {
   inputFocus,
   inputType,
   searchInput,
+  TEST_USER_1,
   uploadInput,
 } from '../../../utils/inputs'
 import { CLASSES, MODEL, PATH, PROPS } from '../../constants'
 
 describe('The Landing Page (authorized)', () => {
   beforeEach(() => {
-    login()
+    login(TEST_USER_1)
   })
 
   it('Open Notifications', () => {

@@ -70,6 +70,11 @@ export const uploadInput = {
   selector: inputSelectors.upload,
 }
 
+export const TEST_USER_1 = {
+  emailInput: emailInput,
+  passwordInput: passwordInput,
+}
+
 export const findInput = (el, input, index = 0) => {
   return cy.get(el).then(el => {
     return new Cypress.Promise(resolve => {

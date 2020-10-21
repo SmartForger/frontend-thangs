@@ -48,13 +48,13 @@ export const urlShouldIncludeAfterTimeout = (path, timeout) => {
   cy.url({ timeout: timeout }).should('include', path)
 }
 
-export const login = () => {
+export const login = user => {
   goTo('/')
   isElement(CLASSES.LOGIN_FORM, PROPS.INVISIBLE)
   clickOnElementByText(TEXT.LOG_IN)
   isElement(CLASSES.LOGIN_FORM, PROPS.VISIBLE)
-  enterValidValue(CLASSES.LOGIN_FORM, emailInput)
-  enterValidValue(CLASSES.LOGIN_FORM, passwordInput)
+  enterValidValue(CLASSES.LOGIN_FORM, user.emailInput)
+  enterValidValue(CLASSES.LOGIN_FORM, user.passwordInput)
   clickOnElement(CLASSES.LOGIN_BUTTON)
   isElement(CLASSES.LOGIN_FORM, PROPS.INVISIBLE)
   isElement(CLASSES.USER_NAVBAR, PROPS.VISIBLE)
