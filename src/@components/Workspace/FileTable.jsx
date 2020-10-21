@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { format } from 'date-fns'
 import {
   Contributors,
@@ -264,16 +264,17 @@ const FolderRow = ({ folder, handleFolderClick = noop }) => {
   )
 }
 
-const FileRow = ({ model, handleModelClick = noop }) => {
+const FileRow = ({ model, handleModelClick: _handle = noop }) => {
   const c = useStyles({})
+  const history = useHistory()
   const [showFileMenu, setShowFileMenu] = useState(false)
   const fileMenuRef = useRef(null)
 
   useExternalClick(fileMenuRef, () => setShowFileMenu(false))
 
   const handleClick = useCallback(() => {
-    handleModelClick(model)
-  }, [handleModelClick, model])
+    history.push(`/model/${model.id}`)
+  }, [history, model.id])
 
   const handleFileMenu = useCallback(
     e => {
