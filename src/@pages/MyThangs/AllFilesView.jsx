@@ -45,6 +45,9 @@ const useStyles = createUseStyles(theme => {
     AllFilesView_RootLink: {
       cursor: 'pointer',
     },
+    AllFilesView_FolderCard: {
+      display: 'flex',
+    },
   }
 })
 
@@ -96,10 +99,13 @@ const AllFilesView = ({
                 <TitleTertiary>Folders</TitleTertiary>
                 <div className={c.AllFilesView_Folders}>
                   {sortedFolders.map((folder, index) => (
-                    <React.Fragment key={`folder=${folder.id}_${index}`}>
+                    <div
+                      className={c.AllFilesView_FolderCard}
+                      key={`folder=${folder.id}_${index}`}
+                    >
                       <FolderCard folder={folder} handleClick={handleChangeFolder} />
                       <Spacer size={'2rem'} />
-                    </React.Fragment>
+                    </div>
                   ))}
                 </div>
               </>
