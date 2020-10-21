@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { DeleteForm, Spacer } from '@components'
+import { DeleteForm, Spacer, Spinner } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
@@ -68,14 +68,27 @@ const useStyles = createUseStyles(theme => {
       overflow: 'hidden',
       flexDirection: 'column',
     },
+    DeleteModel_LoaderScreen: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      left: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0,0,0,0.29)',
+      zIndex: 5,
+      borderRadius: '1rem',
+      display: 'flex',
+    },
   }
 })
 
-const DeleteModel = ({ model, type }) => {
+const DeleteModel = ({ model, type, folderId }) => {
   const c = useStyles()
   const [errorMessage, setErrorMessage] = useState(null)
-  const { dispatch } = useStoreon()
-
+  const { dispatch, [`model-${model.id}`]: modelAtom = {} } = useStoreon(
+    `model-${model.id}`
+  )
+  const { isSaving } = modelAtom
   const closeOverlay = useCallback(() => {
     dispatch(types.CLOSE_OVERLAY)
   }, [dispatch])
@@ -85,6 +98,7 @@ const DeleteModel = ({ model, type }) => {
       track('Delete Model - Overlay')
       dispatch(types.DELETE_MODEL, {
         id,
+        folderId,
         onError: error => {
           setErrorMessage(error)
         },
@@ -93,11 +107,16 @@ const DeleteModel = ({ model, type }) => {
         },
       })
     },
-    [closeOverlay, dispatch]
+    [closeOverlay, dispatch, folderId]
   )
 
   return (
     <div className={c.DeleteModel}>
+      {isSaving && (
+        <div className={c.DeleteModel_LoaderScreen}>
+          <Spinner />
+        </div>
+      )}
       <ExitIcon className={c.DeleteModel_ExitButton} onClick={closeOverlay} />
       <div className={classnames(c.DeleteModel_Column, c.DeleteModel_EditForm)}>
         <Spacer className={c.DeleteModel_MobileSpacer} size='2rem' />

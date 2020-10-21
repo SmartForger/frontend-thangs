@@ -6,6 +6,8 @@ export const FETCH_MODEL = 'fetch-model'
 export const CHANGE_MODEL_STATUS = 'change-model-status'
 export const UPDATE_MODEL = 'update-model'
 export const DELETE_MODEL = 'delete-model'
+export const SAVED_MODEL = 'saved-model'
+export const SAVING_MODEL = 'saving-model'
 /* Related Model Events */
 export const FETCH_RELATED_MODELS = 'fetch-related-models'
 /* Model Comments Store Events */

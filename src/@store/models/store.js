@@ -48,17 +48,12 @@ export default store => {
 
   store.on(
     types.UPDATE_MODEL,
-    async (
-      _,
-      { id, model: updatedModel, onError = noop, onFinish = noop, silentUpdate = false }
-    ) => {
+    async (_, { id, model: updatedModel, onError = noop, onFinish = noop }) => {
       if (R.isNil(id)) return
-      if (!silentUpdate) {
-        store.dispatch(types.CHANGE_MODEL_STATUS, {
-          status: STATUSES.LOADING,
-          atom: `model-${id}`,
-        })
-      }
+      store.dispatch(types.CHANGE_MODEL_STATUS, {
+        status: STATUSES.SAVING,
+        atom: `model-${id}`,
+      })
       const { error } = await api({
         method: 'PUT',
         endpoint: `models/${id}`,
@@ -73,31 +68,47 @@ export default store => {
         onError(error.message)
         logger.error('Error when trying to update the model', error)
       } else {
-        store.dispatch(types.FETCH_THANGS, { onFinish })
+        onFinish()
+        store.dispatch(types.CHANGE_MODEL_STATUS, {
+          status: STATUSES.SAVED,
+          atom: `model-${id}`,
+        })
+        store.dispatch(types.FETCH_THANGS, {})
       }
     }
   )
 
-  store.on(types.DELETE_MODEL, async (_, { id, onError = noop, onFinish = noop }) => {
-    if (R.isNil(id)) return
-    const { error } = await api({
-      method: 'DELETE',
-      endpoint: `models/${id}`,
-    })
-
-    if (error) {
+  store.on(
+    types.DELETE_MODEL,
+    async (_, { id, onError = noop, onFinish = noop, folderId }) => {
+      if (R.isNil(id)) return
       store.dispatch(types.CHANGE_MODEL_STATUS, {
-        status: STATUSES.FAILURE,
+        status: STATUSES.SAVING,
         atom: `model-${id}`,
       })
-      onError(error.message)
-      logger.error('Error when trying to update the model', error)
-    } else {
-      onFinish()
-      store.dispatch(types.FETCH_FOLDERS)
-      store.dispatch(types.FETCH_THANGS, {})
+
+      const { error } = await api({
+        method: 'DELETE',
+        endpoint: `models/${id}`,
+      })
+
+      if (error) {
+        store.dispatch(types.CHANGE_MODEL_STATUS, {
+          status: STATUSES.FAILURE,
+          atom: `model-${id}`,
+        })
+        onError(error.message)
+        logger.error('Error when trying to update the model', error)
+      } else {
+        onFinish()
+        store.dispatch(types.CHANGE_MODEL_STATUS, {
+          status: STATUSES.SAVED,
+          atom: `model-${id}`,
+        })
+        store.dispatch(types.FETCH_THANGS, { silentUpdate: true })
+      }
     }
-  })
+  )
 
   store.on(types.LIKE_MODEL, async (_, { id, owner }) => {
     const currentUserId = authenticationService.getCurrentUserId()

@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import {
   Spacer,
+  Spinner,
   EditModelForm,
   HoopsModelViewer,
   ModelViewer as BackupViewer,
@@ -75,6 +76,17 @@ const useStyles = createUseStyles(theme => {
       overflow: 'hidden',
       flexDirection: 'column',
     },
+    EditModel_LoaderScreen: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      left: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0,0,0,0.29)',
+      zIndex: 5,
+      borderRadius: '1rem',
+      display: 'flex',
+    },
   }
 })
 
@@ -83,8 +95,10 @@ const EditModel = ({ model, fetchData }) => {
   const history = useHistory()
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [editModelErrorMessage, setEditModelErrorMessage] = useState(null)
-  const { dispatch } = useStoreon()
-
+  const { dispatch, [`model-${model.id}`]: modelAtom = {} } = useStoreon(
+    `model-${model.id}`
+  )
+  const { isSaving } = modelAtom
   const closeOverlay = useCallback(() => {
     dispatch(types.CLOSE_OVERLAY)
   }, [dispatch])
@@ -122,6 +136,11 @@ const EditModel = ({ model, fetchData }) => {
 
   return (
     <div className={c.EditModel}>
+      {isSaving && (
+        <div className={c.EditModel_LoaderScreen}>
+          <Spinner />
+        </div>
+      )}
       <ExitIcon className={c.EditModel_ExitButton} onClick={closeOverlay} />
       <div className={classnames(c.EditModel_Column, c.EditModel_ViewerWrapper)}>
         {showBackupViewer ? (
