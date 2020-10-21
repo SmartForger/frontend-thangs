@@ -204,7 +204,6 @@ const FolderView = ({
   folders,
   handleChangeFolder = noop,
   handleEditModel = noop,
-  setCurrentFolderId = noop,
   onDrop = noop,
 }) => {
   const c = useStyles({})
@@ -212,7 +211,6 @@ const FolderView = ({
   const history = useHistory()
   const { dispatch } = useStoreon()
   const { folderId: id } = useParams()
-  if (id) setCurrentFolderId(id)
   const folder = id ? findFolderById(id, folders) : {}
 
   useEffect(() => {
