@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  cypress: cypress-io/cypress@1.26.0
+
 workflows:
   version: 2
   deploy-gcloud:
@@ -78,12 +81,9 @@ jobs:
       - run:
           name: "Install Cypress dependencies"
           command: apt-get update && apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
-      - run:
-          name: "Run app"
-          command: yarn run dev
-      - run:
-          name: "Run Cypress tests"
-          command: yarn run cypress run
+      - cypress/run:
+          start: yarn run start # We need our server running
+          wait-on: 'http://localhost:3000'
       - run:
           name: "Deploy build"
           command: |
