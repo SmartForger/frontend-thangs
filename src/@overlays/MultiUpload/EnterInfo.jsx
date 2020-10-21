@@ -287,6 +287,7 @@ const EnterInfo = ({
     <>
       <div className={c.EnterInfo_Row}>
         <ModelThumbnail
+          key={model.newFileName}
           className={c.EnterInfo_Thumbnail}
           name={model}
           model={{ ...model, uploadedFile: model.newFileName }}
