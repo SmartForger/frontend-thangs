@@ -69,14 +69,18 @@ const LinkContents = ({
   label,
 }) => {
   const onLinkClick = useCallback(() => {
-    handleArrowClick()
+    handleArrowClick(true)
     handleLinkClick()
   }, [handleArrowClick, handleLinkClick])
+
+  const onArrowClick = useCallback(() => {
+    handleArrowClick()
+  }, [handleArrowClick])
 
   return (
     <>
       {isFolder && (
-        <div className={c.NavLink_Arrow} onClick={handleArrowClick}>
+        <div className={c.NavLink_Arrow} onClick={onArrowClick}>
           <ArrowRightIcon
             className={classnames({ [c.NavLink_Arrow__expanded]: isExpanded })}
           />
@@ -108,13 +112,16 @@ const NavLink = ({
 
   const isExpanded = useMemo(() => folderNav[folderId], [folderId, folderNav])
 
-  const handleArrowClick = useCallback(() => {
-    if (isExpanded) {
-      dispatch(types.FOLDER_CLOSE, { id: folderId })
-    } else {
-      dispatch(types.FOLDER_OPEN, { id: folderId })
-    }
-  }, [dispatch, folderId, isExpanded])
+  const handleArrowClick = useCallback(
+    (onlyExpand = false) => {
+      if (isExpanded) {
+        if (!onlyExpand) dispatch(types.FOLDER_CLOSE, { id: folderId })
+      } else {
+        dispatch(types.FOLDER_OPEN, { id: folderId })
+      }
+    },
+    [dispatch, folderId, isExpanded]
+  )
 
   return to ? (
     <Link className={classnames(className, c.NavLink)} to={to} title={label}>
