@@ -19,7 +19,7 @@ import {
   TEST_USER_1,
   uploadInput,
 } from '../../../utils/inputs'
-import { CLASSES, MODEL, PATH, PROPS } from '../../constants'
+import { CLASSES, MODEL, PATH, PROPS } from '../../../utils/constants'
 
 describe('The Landing Page (authorized)', () => {
   beforeEach(() => {

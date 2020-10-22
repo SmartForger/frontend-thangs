@@ -16,7 +16,7 @@ import {
   searchInput,
   uploadInput,
 } from '../../../utils/inputs'
-import { CLASSES, MODEL, PATH, PROPS, TEXT } from '../../constants'
+import { CLASSES, MODEL, PATH, PROPS, TEXT } from '../../../utils/constants'
 
 describe('The Landing Page', () => {
   beforeEach(() => {

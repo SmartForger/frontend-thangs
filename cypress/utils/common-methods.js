@@ -5,7 +5,8 @@ import {
   PATH,
   PROPS,
   TEXT,
-} from '../integration/constants'
+  MODEL,
+} from './constants'
 import {
   clearInput,
   enterValidValue,
@@ -14,10 +15,16 @@ import {
   passwordInput,
   modelDescriptionInput,
   modelTitleInput,
+  emailInput2,
+  passwordInput2,
 } from './inputs'
 
 export const isElement = (el, prop) => {
   cy.get(el).should(prop)
+}
+
+export const isElementContains = (element, text) => {
+  cy.get(element).contains(text).should(PROPS.VISIBLE)
 }
 
 export const isElementNotEmptyAndValid = (el, prop, value) => {
@@ -60,6 +67,20 @@ export const login = user => {
   isElement(CLASSES.USER_NAVBAR, PROPS.VISIBLE)
 }
 
+export const loginByUser = ({ email, password }) => {
+  goTo('/')
+  isElement(CLASSES.LOGIN_FORM, PROPS.INVISIBLE)
+  clickOnElementByText(TEXT.LOG_IN)
+  isElement(CLASSES.LOGIN_FORM, PROPS.VISIBLE)
+
+  cy.get('[data-cy=cy_email-input]').focus().type(email, { force: true })
+  cy.get('[data-cy=cy_password-input]').focus().type(password, { force: true })
+  
+  clickOnElement(CLASSES.LOGIN_BUTTON)
+  isElement(CLASSES.LOGIN_FORM, PROPS.INVISIBLE)
+  isElement(CLASSES.USER_NAVBAR, PROPS.VISIBLE)
+}
+
 export const openNotifications = () => {
   isElement(CLASSES.NOTIFICATIONS_BUTTON, PROPS.VISIBLE) &&
     isElement(CLASSES.NOTIFICATIONS_DROPDOWN, PROPS.INVISIBLE)
@@ -77,6 +98,11 @@ export const openProfileDropdown = () => {
 export const openUpload = () => {
   clickOnElementByText(TEXT.UPLOAD)
   isElement(DATA_CY.UPLOAD_OVERLAY, PROPS.VISIBLE)
+}
+
+export const openMultiUpload = () => {
+  clickOnElementByText(TEXT.UPLOAD)
+  isElement(DATA_CY.MULTI_UPLOAD_OVERLAY, PROPS.VISIBLE)
 }
 
 export const uploadFile = (filename, input) => {
@@ -98,12 +124,26 @@ export const editAndSaveFile = () => {
   clickOnTextInsideClass(CLASSES.UPLOAD_BUTTON_GROUP, 'Save Model')
 }
 
+export const fillAndSubmitMultiuploadForm = () => {
+  isElement(DATA_CY.MULTIUPLOAD_FORM, PROPS.VISIBLE)
+  cy.get(`${DATA_CY.MULTIUPLOAD_FORM} [name=name]`).clear()
+  cy.get(`${DATA_CY.MULTIUPLOAD_FORM} [name=name]`).focus().type(MODEL.FILENAME)
+  cy.get(`${DATA_CY.MULTIUPLOAD_FORM} [name=description]`).clear()
+  cy.get(`${DATA_CY.MULTIUPLOAD_FORM} [name=description]`).focus().type(MODEL.DESCRIPTION)
+  clickOnTextInsideClass(CLASSES.BUTTON, 'Continue')
+}
+
 export const deleteModel = () => {
   goTo(PATH.PROFILE)
   clickOnElement(CLASSES.MODEL_CARD_EDIT_BUTTON)
   clickOnElementByText(TEXT.DELETE_MODEL)
   clickOnElementByText(TEXT.CONFIRM)
   isElement(MODEL_TEST_TITLE, PROPS.INVISIBLE)
+}
+
+export const signOut = () => {
+  openProfileDropdown()
+  clickOnElementByText(TEXT.SIGN_OUT)
 }
 
 export const findElement = (className, element, index = 0) => {

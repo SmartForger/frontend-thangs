@@ -6,11 +6,20 @@ export const USER = {
   NAME: 'Test',
 }
 
+export const USER2 = {
+  EMAIL: 'test2@test2.com',
+  INVALID_EMAIL: 'test.test@test.com',
+  PASSWORD: 'test',
+  INVALID_PASSWORD: 'badPassword',
+  NAME: 'Test2',
+}
+
 export const PATH = {
   LANDING: '/',
   SEARCH: '/search/',
   EXTERNAL_MODEL: 'model/507',
   PROFILE: `/${USER.NAME}`,
+  ALL_FILES: '/mythangs/all-files',
 }
 
 export const MODEL = {
@@ -66,6 +75,8 @@ export const CLASSES = {
   BUTTON: '[class^=Button]',
   MY_THANGS: '[class^=MyThangs]',
   SIGNUP_FORM: '[class^=Signup]',
+  DELETE_MODEL_BUTTON: '[class^=DeleteForm_Button]',
+  USER_FOLLOW_BUTTON: '[class*="ToggleFollowButton"]',
 }
 
 export const DATA_CY = {
@@ -74,16 +85,19 @@ export const DATA_CY = {
   LOGIN_PASSWORD_INPUT: '[data-cy=cy_password-input]',
   SIGNUP_LINK_ON_LOGIN: '[data-cy=signup-link-on-login]',
   SIGNUP_FORM: '[data-cy=signup-form]',
+  MULTIUPLOAD_FORM: '[data-cy=multi-upload-form]',
   USER_NAVBAR: '[data-cy=user-nav]',
   NOTIFICATIONS_BUTTON: '[data-cy=notifications-button]',
   NOTIFICATIONS_DROPDOWN: '[data-cy=notifications-dropdown]',
   UPLOAD_BUTTON: '[data-cy=upload-button]',
   UPLOAD_OVERLAY: '[data-cy=upload-overlay]',
+  MULTI_UPLOAD_OVERLAY: '[data-cy=multi-upload-overlay]',
 }
 
 export const TEXT = {
   LOG_IN: 'Log in',
   SIGN_UP: 'Sign up',
+  SIGN_OUT: 'Sign Out',
   LOGIN_ERROR: 'Invalid user ID or password.',
   SIGNUP_EMAIL_ERROR: 'Please enter a valid e-mail address',
   SIGNUP_CONFIRM_PASS_ERROR: 'Please ensure that both passwords match',
@@ -102,6 +116,8 @@ export const TEXT = {
   COMMENT: 'Comment',
   UPLOAD_NEW_VERSION: 'Upload new version',
   NEW_VERSION_UPLOADED: 'New Version Uploaded',
+  REMOVE_MODEL: 'Remove',
+  DELETE_MODEL_BUTTON: 'Delete',
 }
 
 export const PROPS = {

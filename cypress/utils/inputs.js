@@ -1,4 +1,4 @@
-import { MODEL, SEARCH, USER } from '../integration/constants'
+import { MODEL, SEARCH, USER, USER2 } from './constants'
 
 const inputSelectors = {
   email: '[name=email]',
@@ -7,6 +7,7 @@ const inputSelectors = {
   username: '[name=username]',
   search: '[name=search]',
   upload: '[name=upload]',
+  multiUpload: '[name=multi-upload]',
   modelTitle: '[name=name]',
   modelDescription: '[name=description]',
   comment: '[name=body]',
@@ -73,6 +74,11 @@ export const uploadInput = {
 export const TEST_USER_1 = {
   emailInput: emailInput,
   passwordInput: passwordInput,
+}
+
+export const multiUploadInput = {
+  type: 'file',
+  selector: inputSelectors.multiUpload,
 }
 
 export const findInput = (el, input, index = 0) => {

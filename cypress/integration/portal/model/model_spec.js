@@ -11,7 +11,7 @@ import {
   openUpload,
   uploadFile,
 } from '../../../utils/common-methods'
-import { CLASSES, MODEL, MODEL_TEST_TITLE, PATH, PROPS, TEXT } from '../../constants'
+import { CLASSES, MODEL, MODEL_TEST_TITLE, PATH, PROPS, TEXT } from '../../../utils/constants'
 import { commentInput, enterValidValue, uploadInput } from '../../../utils/inputs'
 
 describe('The Model Page', () => {

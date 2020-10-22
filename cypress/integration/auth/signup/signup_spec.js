@@ -1,4 +1,4 @@
-import { CLASSES, PROPS, TEXT } from '../../constants'
+import { CLASSES, PROPS, TEXT } from '../../../utils/constants'
 import {
   clickOnElement,
   clickOnElementByText,
@@ -6,7 +6,6 @@ import {
   isTextInsideClass,
 } from '../../../utils/common-methods'
 import {
-  clearInput,
   enterInvalidValue,
   enterValidValue,
   emailInput,

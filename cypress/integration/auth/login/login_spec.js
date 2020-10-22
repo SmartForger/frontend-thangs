@@ -1,4 +1,4 @@
-import { CLASSES, PROPS, TEXT } from '../../constants'
+import { CLASSES, PROPS, TEXT } from '../../../utils/constants'
 import {
   clickOnElement,
   clickOnElementByText,
