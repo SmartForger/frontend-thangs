@@ -187,12 +187,12 @@ const MultiUpload = ({ initData = null, folderId }) => {
 
   useEffect(() => {
     dispatch(types.RESET_UPLOAD_FILES)
+    const { data: folderData } = folders
+    if (R.isEmpty(folderData)) {
+      dispatch(types.FETCH_FOLDERS)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  useEffect(() => {
-    dispatch(types.FETCH_FOLDERS)
-  }, [dispatch])
 
   useEffect(() => {
     if (initData) onDrop(initData.acceptedFiles, initData.rejectedFile, initData.e)
