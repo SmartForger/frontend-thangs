@@ -312,7 +312,7 @@ const EnterInfo = ({
           <Spacer size='1rem' />
         </>
       )}
-      <form onSubmit={onFormSubmit(handleSubmit)}>
+      <form onSubmit={onFormSubmit(handleSubmit)} data-cy='multi-upload-form'>
         <div className={c.EnterInfo_Field}>
           <Input
             className={c.EnterInfo_FullWidthInput}

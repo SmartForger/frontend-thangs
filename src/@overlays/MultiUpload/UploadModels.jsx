@@ -174,7 +174,7 @@ const UploadModels = ({
         {({ getRootProps, getInputProps }) => (
           <section className={c.UploadModels_UploadZone}>
             <div {...getRootProps()}>
-              <input {...getInputProps()} />
+              <input {...getInputProps()} name='multi-upload' />
               <div className={c.UploadModels_UploadRow}>
                 <div className={c.UploadModels_UploadColumn}>
                   {R.isEmpty(uploadFiles) && <UploadCardIcon />}

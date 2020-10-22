@@ -250,7 +250,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
   }, [initData, onDrop])
 
   return (
-    <div className={c.MultiUpload}>
+    <div className={c.MultiUpload} data-cy='multi-upload-overlay'>
       {isLoading && (
         <div className={c.MultiUpload_LoaderScreen}>
           <Spinner />
