@@ -33,7 +33,7 @@ handlers:
     upload: build/info.html
     expiration: 1s
   - url: /(.*)
-    static_files: build/maintenance.html
-    upload: build/maintenance.html
+    static_files: build/index.html
+    upload: build/index.html
     expiration: 1s
     secure: always
