@@ -6,6 +6,7 @@ import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { useCurrentUser, useFileUpload } from '@hooks'
+import { overlayview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -46,8 +47,11 @@ const Upload = ({ prevModelId }) => {
     dispatch(types.FETCH_FOLDERS)
   }, [dispatch])
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => () => dispatch(types.RESET_UPLOAD_MODEL), [])
+  useEffect(() => {
+    dispatch(types.RESET_UPLOAD_MODEL)
+    overlayview('Upload')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleFileUpload = useCallback(
     file => {

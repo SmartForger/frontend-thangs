@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { DeleteForm, Spacer, Spinner } from '@components'
 import { createUseStyles } from '@style'
@@ -6,7 +6,7 @@ import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
-import { track } from '@utilities/analytics'
+import { overlayview, track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -110,6 +110,11 @@ const DeleteFolder = ({ folder, type }) => {
     },
     [closeOverlay, dispatch, history]
   )
+
+  useEffect(() => {
+    overlayview('DeleteFolder')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className={c.DeleteFolder}>

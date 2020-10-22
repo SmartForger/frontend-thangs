@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import * as R from 'ramda'
 import {
   Button,
@@ -16,7 +16,7 @@ import { useForm } from '@hooks'
 import { createUseStyles } from '@style'
 import { formatBytes } from '@utilities'
 import { CATEGORIES } from '@constants/fileUpload'
-import { track } from '@utilities/analytics'
+import { overlayview, track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -276,6 +276,10 @@ const EnterInfo = ({
       }))
       : []
   }, [folderData])
+
+  useEffect(() => {
+    overlayview('MultiUpload - EnterInfo')
+  }, [])
 
   useEffect(() => {
     if (model) handleOnInputChange('name', model.name)

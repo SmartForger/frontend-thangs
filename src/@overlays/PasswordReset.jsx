@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useStoreon } from 'storeon/react'
 import Joi from '@hapi/joi'
 import { Button, Input, TitleTertiary, Spacer } from '@components'
@@ -8,6 +8,7 @@ import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
+import { overlayview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -108,6 +109,11 @@ const ResetForm = ({ c }) => {
       setPasswordResetSuccessMessage('Email with reset link sent!')
     }
   }, [inputState])
+
+  useEffect(() => {
+    overlayview('PasswordReset')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className={classnames(c.PasswordReset_Row, c.PasswordReset_ResetForm)}>

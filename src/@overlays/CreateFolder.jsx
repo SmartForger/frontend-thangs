@@ -1,10 +1,11 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useStoreon } from 'storeon/react'
 import { CreateFolderForm, DisplayFolderFormErrors } from '@components'
 import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
+import { overlayview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -44,6 +45,7 @@ const CreateFolder = ({ afterCreate }) => {
   const { dispatch } = useStoreon()
   const c = useStyles()
   const [errors, setErrors] = useState()
+
   const handleonTeamOverlayOpen = useCallback(
     folderData => {
       dispatch(types.OPEN_OVERLAY, {
@@ -53,6 +55,12 @@ const CreateFolder = ({ afterCreate }) => {
     },
     [afterCreate, dispatch]
   )
+
+  useEffect(() => {
+    overlayview('CreateFolder')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <div className={c.CreateFolder}>
       <NewFolderIcon className={c.CreateFolder_NewFolderIcon} />

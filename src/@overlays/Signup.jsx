@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useStoreon } from 'storeon/react'
 import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
@@ -29,7 +29,7 @@ import { ReactComponent as FacebookLogo } from '@svg/facebook-logo.svg'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
-import { track } from '@utilities/analytics'
+import { overlayview, track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -478,9 +478,11 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
 const Signup = ({ titleMessage, showPromo = true, source }) => {
   const c = useStyles({ showPromo })
   const { dispatch } = useStoreon()
+
   const closeOverlay = useCallback(() => {
     dispatch(types.CLOSE_OVERLAY)
   }, [dispatch])
+
   const handleSignInClick = useCallback(() => {
     dispatch(types.OPEN_OVERLAY, {
       overlayName: 'signIn',
@@ -491,6 +493,11 @@ const Signup = ({ titleMessage, showPromo = true, source }) => {
       },
     })
   }, [dispatch])
+
+  useEffect(() => {
+    overlayview('Signup')
+  }, [])
+
   return (
     <div className={c.Signup}>
       <ExitIcon className={c.Signup_ExitButton} onClick={closeOverlay} />

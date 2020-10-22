@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
 import {
@@ -15,6 +15,7 @@ import { authenticationService } from '@services'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import * as types from '@constants/storeEventTypes'
+import { overlayview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -202,6 +203,11 @@ const InviteUsers = ({ folderId: id }) => {
   const closeOverlay = useCallback(() => {
     dispatch(types.CLOSE_OVERLAY)
   }, [dispatch])
+
+  useEffect(() => {
+    overlayview('InviteUsers')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className={c.InviteUsers}>

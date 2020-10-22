@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Spacer,
   Spinner,
@@ -11,7 +11,7 @@ import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
-import { track } from '@utilities/analytics'
+import { overlayview, track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -118,6 +118,11 @@ const EditFolder = ({ folder }) => {
     },
     [closeOverlay, dispatch]
   )
+
+  useEffect(() => {
+    overlayview('EditFolder')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className={c.EditFolder}>

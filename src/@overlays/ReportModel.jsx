@@ -1,10 +1,11 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import api from '@services/api'
 import * as EmailValidator from 'email-validator'
 import { useForm } from '@hooks'
 import { TextInput, Spinner, Button } from '@components'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { createUseStyles } from '@style'
+import { overlayview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -123,6 +124,11 @@ const ReportModel = ({ model, afterSend }) => {
       }, 2000)
     }
   }
+
+  useEffect(() => {
+    overlayview('ReportModel')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className={c.ReportModel_Body}>

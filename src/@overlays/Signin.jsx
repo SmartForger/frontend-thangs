@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useStoreon } from 'storeon/react'
 import Joi from '@hapi/joi'
 import {
@@ -20,6 +20,7 @@ import { ReactComponent as FacebookLogo } from '@svg/facebook-logo.svg'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
+import { overlayview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -336,9 +337,11 @@ const SignInForm = ({
 const Signin = ({ sessionExpired, authFailed }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
+
   const closeOverlay = useCallback(() => {
     dispatch(types.CLOSE_OVERLAY)
   }, [dispatch])
+
   const handleSignUpClick = useCallback(() => {
     dispatch(types.OPEN_OVERLAY, {
       overlayName: 'signUp',
@@ -349,6 +352,7 @@ const Signin = ({ sessionExpired, authFailed }) => {
       },
     })
   }, [dispatch])
+
   const handleResetPasswordClick = useCallback(() => {
     dispatch(types.OPEN_OVERLAY, {
       overlayName: 'passwordReset',
@@ -359,6 +363,11 @@ const Signin = ({ sessionExpired, authFailed }) => {
       },
     })
   }, [dispatch])
+
+  useEffect(() => {
+    overlayview('Signin')
+  }, [])
+
   return (
     <div className={c.Signin}>
       <ExitIcon className={c.Signin_ExitButton} onClick={closeOverlay} />

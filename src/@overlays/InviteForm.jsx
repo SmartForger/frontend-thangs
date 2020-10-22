@@ -1,10 +1,11 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useStoreon } from 'storeon/react'
 import { InviteFormForm, DisplayTeamFormErrors } from '@components'
 import { ReactComponent as NewFolderIcon } from '@svg/folder-plus-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
+import { overlayview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -42,12 +43,15 @@ const InviteForm = ({ afterCreate, onTeamOverlayOpen, ...props }) => {
   const { dispatch } = useStoreon()
   const c = useStyles()
   const [errors, setErrors] = useState()
+
   const handleOnCancel = useCallback(() => {
     dispatch(types.OPEN_OVERLAY, { overlayName: 'createFolder' })
   }, [dispatch])
+
   const handleonTeamOverlayOpen = useCallback(() => {
     onTeamOverlayOpen()
   }, [onTeamOverlayOpen])
+
   const handleAfterCreate = useCallback(
     newTeamName => {
       setErrors(null)
@@ -55,6 +59,12 @@ const InviteForm = ({ afterCreate, onTeamOverlayOpen, ...props }) => {
     },
     [afterCreate]
   )
+
+  useEffect(() => {
+    overlayview('InviteForm')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <div className={c.InviteForm}>
       <NewFolderIcon className={c.InviteForm_NewFolderIcon} />

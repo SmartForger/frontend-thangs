@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import * as R from 'ramda'
 import {
   Button,
@@ -18,6 +18,7 @@ import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { formatBytes } from '@utilities'
 import Dropzone from 'react-dropzone'
 import { MODEL_FILE_EXTS } from '@constants/fileUpload'
+import { overlayview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -131,6 +132,11 @@ const UploadModels = ({
     return loadingFiles.length > 0
   }, [uploadFiles])
   const fileLength = uploadFiles ? Object.keys(uploadFiles).length : 0
+
+  useEffect(() => {
+    overlayview('MultiUpload - UploadModels')
+  }, [])
+
   return (
     <>
       <Dropzone onDrop={onDrop} accept={MODEL_FILE_EXTS} maxFiles={25}>

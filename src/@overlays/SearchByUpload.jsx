@@ -9,6 +9,7 @@ import Scanner from '@components/Scanner'
 import ScannerPaper from '@components/ScannerPaper'
 import { useFileUpload } from '@hooks'
 import { numberWithCommas } from '@utilities'
+import { overlayview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -109,6 +110,7 @@ const SearchByUpload = () => {
 
   useEffect(() => {
     dispatch(types.RESET_SEARCH_RESULTS)
+    overlayview('SearchByUpload')
     if (model) {
       const modelId = model.id || model.modelId
       const searchTerm =
