@@ -15,6 +15,7 @@ import SharedFilesView from './SharedFilesView'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
+import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -96,6 +97,11 @@ const MyThangs = () => {
   )
   const { isLoading: isLoadingThangs, data: thangsData = {} } = thangs
   const { isLoading: isLoadingFolders, data: foldersData = {} } = folders
+
+  useEffect(() => {
+    pageview('MyThangs')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const isLoading = useMemo(() => {
     return isLoadingThangs || isLoadingFolders

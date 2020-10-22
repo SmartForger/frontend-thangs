@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
@@ -6,6 +6,7 @@ import { authenticationService } from '@services'
 import { useForm } from '@hooks'
 import { TextInput, Spinner, Button, Layout } from '@components'
 import { createUseStyles } from '@style'
+import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -79,6 +80,11 @@ const ResetPage = () => {
   const [invalidFields, setInvalidFields] = useState([])
   const [isSuccess, setIsSuccess] = useState(false)
   const c = useStyles()
+
+  useEffect(() => {
+    pageview('PasswordReset')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const initialState = {
     email: '',
@@ -192,6 +198,11 @@ const ConfirmResetPage = () => {
   const history = useHistory()
   const { token } = useParams()
   const c = useStyles()
+
+  useEffect(() => {
+    pageview('PasswordResetConfirm')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const initialState = {
     password: '',

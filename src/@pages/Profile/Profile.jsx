@@ -20,7 +20,7 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useCurrentUserId, usePageMeta } from '@hooks'
 import * as types from '@constants/storeEventTypes'
-import { track } from '@utilities/analytics'
+import { pageview, track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -380,6 +380,11 @@ const PageByUserName = ({ userName }) => {
 
 const Page = () => {
   const { id, userName } = useParams()
+  const identifier = id || userName
+  useEffect(() => {
+    pageview('Profile', identifier)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (userName) {
     return <PageByUserName userName={userName} />

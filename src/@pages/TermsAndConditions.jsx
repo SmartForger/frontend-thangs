@@ -1,7 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Layout } from '@components'
+import { pageview } from '@utilities/analytics'
 
 const Page = () => {
+  useEffect(() => {
+    pageview('TermsAndConditions')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <div>
       <h2>Physna, Inc. – Thangs™ Subscription Services Agreement</h2>

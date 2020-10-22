@@ -32,7 +32,7 @@ import classnames from 'classnames'
 import { usePageMeta } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
-import { track } from '@utilities/analytics'
+import { pageview, track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -490,6 +490,12 @@ const Page = () => {
   const { id } = useParams()
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [currentUser] = useLocalStorage('currentUser', null)
+
+  useEffect(() => {
+    pageview('Model', id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <ModelDetailPage
       id={id}

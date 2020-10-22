@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
 import {
   Layout,
@@ -17,6 +17,7 @@ import { ReactComponent as CollaborationAboutUsIcon } from '@svg/aboutUs-collabo
 import { ReactComponent as BackgroundLeft } from '@svg/aboutUs-leftSide-tinkers.svg'
 import { ReactComponent as BackgroundRight } from '@svg/aboutUs-rightSide-tinkers.svg'
 import loader from '@media/loader.gif'
+import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -118,6 +119,11 @@ const AboutUs = () => {
   const { modelsStats } = useStoreon('modelsStats')
   const c = useStyles({})
   const t = useTranslations({})
+
+  useEffect(() => {
+    pageview('AboutUs')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const modelsIngested =
     modelsStats &&

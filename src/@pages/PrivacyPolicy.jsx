@@ -1,7 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Layout } from '@components'
+import { pageview } from '@utilities/analytics'
 
 const Page = () => {
+  useEffect(() => {
+    pageview('PrivacyPolicy')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <div>
       <h2>Who we are</h2>

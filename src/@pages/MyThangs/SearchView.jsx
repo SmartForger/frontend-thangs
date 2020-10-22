@@ -5,6 +5,7 @@ import { FileTable, Spacer, TitleTertiary, Spinner } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
+import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -56,6 +57,11 @@ const SearchView = ({ className, handleChangeFolder = noop, handleEditModel = no
   const { searchTerm } = useParams()
   const { dispatch, searchThangs } = useStoreon('searchThangs')
   const { data: files = {}, isLoading } = searchThangs
+
+  useEffect(() => {
+    pageview('MyThangs - SearchMyThangs')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     dispatch(types.SEARCH_MY_THANGS, {

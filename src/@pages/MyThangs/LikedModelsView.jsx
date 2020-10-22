@@ -11,6 +11,7 @@ import {
   TitleTertiary,
 } from '@components'
 import * as types from '@constants/storeEventTypes'
+import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -37,6 +38,11 @@ const LikedModelsView = ({ className, userId }) => {
   const { [`user-liked-models-${userId}`]: likedUserModelsAtom = {} } = useStoreon(
     `user-liked-models-${userId}`
   )
+
+  useEffect(() => {
+    pageview('MyThangs - LikedModels')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId })

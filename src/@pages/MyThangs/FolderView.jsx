@@ -22,6 +22,7 @@ import { ReactComponent as InviteIcon } from '@svg/icon-invite.svg'
 import { ReactComponent as PadlockIcon } from '@svg/icon-padlock.svg'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import * as types from '@constants/storeEventTypes'
+import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -219,6 +220,7 @@ const FolderView = ({
     // to be used by the upload model selected folder dropdown
     // when the user hard loads to a folder view page on mythangs
     if (id) setCurrentFolderId(id)
+    pageview('MyThangs - FolderView', id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

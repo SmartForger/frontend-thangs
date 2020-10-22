@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import * as R from 'ramda'
 import { AddContextMenu, FileTable, FolderCard, Spacer, TitleTertiary } from '@components'
 import { useStarred } from '@hooks'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ContextMenuTrigger } from 'react-contextmenu'
+import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -83,6 +84,11 @@ const SharedFilesView = ({
         .filter(folder => !folder.name.includes('//'))
       : []
   }, [sharedFolders])
+
+  useEffect(() => {
+    pageview('MyThangs - SharedView')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>

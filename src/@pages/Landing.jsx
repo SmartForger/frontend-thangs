@@ -6,7 +6,7 @@ import ModelCards from '@components/CardCollection/ModelCards'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
-import { track } from '@utilities/analytics'
+import { pageview, track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -95,6 +95,12 @@ const useStyles = createUseStyles(theme => {
 const Page = ({ user = {}, dispatch, modelPreviews }) => {
   const c = useStyles({})
   const [selected, setSelected] = useState('likes')
+
+  useEffect(() => {
+    pageview('Home')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   useEffect(() => {
     dispatch(types.FETCH_MODEL_PREVIEW, { sortBy: selected })
   }, [dispatch, selected])

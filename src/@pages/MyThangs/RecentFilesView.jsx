@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import * as R from 'ramda'
 import { useStoreon } from 'storeon/react'
 import {
@@ -14,6 +14,7 @@ import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { useStarred } from '@hooks'
 import { ContextMenuTrigger } from 'react-contextmenu'
+import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -58,6 +59,11 @@ const RecentFilesView = ({
         .sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate))
       : []
   }, [thangsData])
+
+  useEffect(() => {
+    pageview('MyThangs - RecentFiles')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>

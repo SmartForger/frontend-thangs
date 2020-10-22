@@ -16,7 +16,7 @@ import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import ModelSearchResults from '@components/CardCollection/ModelSearchResults'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
-import { track } from '@utilities/analytics'
+import { pageview, track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -235,6 +235,17 @@ const Page = () => {
   )
   const { phyndexer, thangs } = searchResults
   const [showReportModelButtons, setShowReportModelButtons] = useState(false)
+
+  useEffect(() => {
+    if (related) {
+      pageview('SearchResults Related')
+    } else if (modelId) {
+      pageview('SearchResults Model')
+    } else {
+      pageview('SearchResults Text')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (!modelId) {

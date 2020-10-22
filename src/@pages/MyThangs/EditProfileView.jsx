@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
 import {
@@ -16,6 +16,7 @@ import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { useCurrentUser } from '@hooks'
 import * as types from '@constants/storeEventTypes'
+import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -38,6 +39,11 @@ const EditProfile = ({ className }) => {
   const {
     atom: { data: user = {}, isLoading },
   } = useCurrentUser()
+
+  useEffect(() => {
+    pageview('MyThangs - EditProfile')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleUpdateProfile = useCallback(
     newUserData => {

@@ -21,3 +21,8 @@ export const track = (type, data) => {
   pendo.track(type, data)
   amplitude.getInstance().logEvent(type, data)
 }
+
+export const pageview = (page, id) => {
+  amplitude.getInstance().logEvent('pageview', { page, id })
+}
+

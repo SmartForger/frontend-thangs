@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import * as R from 'ramda'
 import { AddContextMenu, FileTable, FolderCard, Spacer, TitleTertiary } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ContextMenuTrigger } from 'react-contextmenu'
+import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -62,6 +63,11 @@ const AllFilesView = ({
   onDrop = noop,
 }) => {
   const c = useStyles({})
+
+  useEffect(() => {
+    pageview('MyThangs - AllFiles')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const sortedFolders = useMemo(() => {
     return !R.isEmpty(folders)

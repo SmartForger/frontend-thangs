@@ -5,6 +5,7 @@ import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { CardCollection, SearchCards, Spinner, Spacer, TitleTertiary } from '@components'
 import * as types from '@constants/storeEventTypes'
+import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -29,6 +30,11 @@ const SavedSearches = ({ className }) => {
   const c = useStyles({})
   const { dispatch, searchSubscriptions } = useStoreon('searchSubscriptions')
   const { data: savedSearches, isLoaded, isError } = searchSubscriptions
+
+  useEffect(() => {
+    pageview('MyThangs - SavedSearches')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     dispatch(types.FETCH_SUBSCRIPTIONS)
