@@ -40,10 +40,10 @@ handlers:
   - url: .*
     static_files: build/maintenance.html
     upload: build/maintenance.html
-    expiration: 1m
+    expiration: 1s
     secure: always
   - url: /(.*)
     static_files: build/maintenance.html
     upload: build/maintenance.html
-    expiration: 1m
+    expiration: 1s
     secure: always
