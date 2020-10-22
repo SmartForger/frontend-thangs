@@ -1,6 +1,6 @@
 import { MODEL, SEARCH, USER, USER2 } from './constants'
 
-const inputSelectors = {
+export const inputSelectors = {
   email: '[name=email]',
   password: '[name=password]',
   confirmPassword: '[name=confirmPass]',

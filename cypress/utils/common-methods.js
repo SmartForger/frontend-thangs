@@ -11,24 +11,21 @@ import {
   clearInput,
   enterValidValue,
   findInput,
-  emailInput,
-  passwordInput,
   modelDescriptionInput,
   modelTitleInput,
-  emailInput2,
-  passwordInput2,
+  inputSelectors,
 } from './inputs'
 
-export const isElement = (el, prop) => {
-  cy.get(el).should(prop)
+export const isElement = (el, prop, prop2) => {
+  cy.get(el, { timeout: 5000 }).should(prop, prop2)
 }
 
 export const isElementContains = (element, text) => {
-  cy.get(element).contains(text).should(PROPS.VISIBLE)
+  cy.get(element, { timeout: 5000 }).contains(text).should(PROPS.VISIBLE)
 }
 
 export const isElementNotEmptyAndValid = (el, prop, value) => {
-  cy.get(el).should(prop).and('match', value)
+  cy.get(el, { timeout: 5000 }).should(prop).and('match', value)
 }
 
 export const clickOnElementByText = text => {
@@ -36,7 +33,7 @@ export const clickOnElementByText = text => {
 }
 
 export const clickOnElement = el => {
-  cy.get(el).click({ force: true, multiple: true })
+  cy.get(el, { timeout: 5000 }).click({ force: true, multiple: true })
 }
 
 export const goTo = path => {
@@ -72,10 +69,8 @@ export const loginByUser = ({ email, password }) => {
   isElement(CLASSES.LOGIN_FORM, PROPS.INVISIBLE)
   clickOnElementByText(TEXT.LOG_IN)
   isElement(CLASSES.LOGIN_FORM, PROPS.VISIBLE)
-
-  cy.get('[data-cy=cy_email-input]').focus().type(email, { force: true })
-  cy.get('[data-cy=cy_password-input]').focus().type(password, { force: true })
-  
+  cy.get(`[class^=Signin_Form] ${inputSelectors.email}`).focus().type(email, { force: true })
+  cy.get(`[class^=Signin_Form] ${inputSelectors.password}`).focus().type(password, { force: true })
   clickOnElement(CLASSES.LOGIN_BUTTON)
   isElement(CLASSES.LOGIN_FORM, PROPS.INVISIBLE)
   isElement(CLASSES.USER_NAVBAR, PROPS.VISIBLE)
@@ -141,11 +136,6 @@ export const deleteModel = () => {
   isElement(MODEL_TEST_TITLE, PROPS.INVISIBLE)
 }
 
-export const signOut = () => {
-  openProfileDropdown()
-  clickOnElementByText(TEXT.SIGN_OUT)
-}
-
 export const findElement = (className, element, index = 0) => {
   return cy.get(className).then(el => {
     return new Cypress.Promise(resolve => {
@@ -163,7 +153,7 @@ export const clickOnElementInsideClass = (className, el) => {
 }
 
 export const clickOnTextInsideClass = (className, text) => {
-  cy.get(className).contains(text).click({ force: true, multiple: true })
+  cy.get(className, { timeout: 5000 }).contains(text, { timeout: 10000 }).click({ force: true, multiple: true })
 }
 
 export const isTextInsideClass = (className, text, prop) => {

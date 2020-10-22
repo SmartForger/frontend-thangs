@@ -11,7 +11,7 @@ export const USER2 = {
   INVALID_EMAIL: 'test.test@test.com',
   PASSWORD: 'test',
   INVALID_PASSWORD: 'badPassword',
-  NAME: 'Test2',
+  NAME: 'test2',
 }
 
 export const PATH = {
@@ -77,6 +77,7 @@ export const CLASSES = {
   SIGNUP_FORM: '[class^=Signup]',
   DELETE_MODEL_BUTTON: '[class^=DeleteForm_Button]',
   USER_FOLLOW_BUTTON: '[class*="ToggleFollowButton"]',
+  HEADER_NOTIFICATIONS_UNREAD_BADGE: '[class^=NotificationsButton_UnreadBadge]',
 }
 
 export const DATA_CY = {
@@ -118,6 +119,7 @@ export const TEXT = {
   NEW_VERSION_UPLOADED: 'New Version Uploaded',
   REMOVE_MODEL: 'Remove',
   DELETE_MODEL_BUTTON: 'Delete',
+  DOWNLOAD_MODEL_BUTTON: 'Download Model',
 }
 
 export const PROPS = {
