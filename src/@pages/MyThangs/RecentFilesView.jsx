@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from 'react'
-import * as R from 'ramda'
 import { useStoreon } from 'storeon/react'
 import {
   AddContextMenu,

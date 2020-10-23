@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { WorkspaceHeader, WorkspaceNavbar, Spinner } from '@components'

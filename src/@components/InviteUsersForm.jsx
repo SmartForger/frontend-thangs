@@ -214,7 +214,7 @@ const InviteUsersForm = ({
         },
       })
     },
-    [afterAction, dispatch, folderId, onError]
+    [afterAction, clearAllInputs, dispatch, folderId, onError]
   )
 
   return (

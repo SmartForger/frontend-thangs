@@ -28,10 +28,9 @@ export const createNewFolders = (newFolderData, oldFolders) => {
   }
 }
 
-export const updateFolder = (folderId, newFolder, oldFolders) => {
+export const updateRootFolder = (folderId, newFolder, oldFolders) => {
   const newFolders = [...oldFolders]
   const folderIndex = R.findIndex(R.propEq('id', folderId))(newFolders)
   newFolders[folderIndex] = newFolder
-  debugger
   return newFolders
 }

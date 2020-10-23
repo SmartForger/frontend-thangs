@@ -3,7 +3,7 @@ import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import { track } from '@utilities/analytics'
-import { createNewFolders, updateFolder } from './updater'
+import { createNewFolders, updateRootFolder } from './updater'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -21,7 +21,7 @@ export default store => {
   }))
 
   store.on(types.UPDATE_FOLDER, (state, { folderId, folder, onFinish = noop }) => {
-    const newFolders = updateFolder(folderId, folder, state.folders.data)
+    const newFolders = updateRootFolder(folderId, folder, state.folders.data)
     store.dispatch(types.UPDATE_FOLDERS, newFolders)
     store.dispatch(types.SAVED_FOLDER)
     onFinish()
