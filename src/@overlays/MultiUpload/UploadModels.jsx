@@ -114,6 +114,14 @@ const useStyles = createUseStyles(theme => {
       padding: '.625rem 1rem',
       borderRadius: '.5rem',
     },
+    UploadModels_WarningText: {
+      color: '#C29C45',
+      marginTop: '1.5rem',
+      backgroundColor: '#FEFAEC',
+      fontWeight: 500,
+      padding: '.625rem 1rem',
+      borderRadius: '.5rem',
+    },
   }
 })
 const noop = () => null
@@ -124,6 +132,7 @@ const UploadModels = ({
   closeOverlay = noop,
   handleContinue = noop,
   errorMessage = null,
+  warningMessage = null,
 }) => {
   const hasFile = Object.keys(uploadFiles).length > 0
   const c = useStyles({ hasFile })
@@ -165,6 +174,12 @@ const UploadModels = ({
           <Spacer size='1rem' />
         </>
       )}
+      {warningMessage && (
+        <>
+          <h4 className={c.UploadModels_WarningText}>{warningMessage}</h4>
+          <Spacer size='1rem' />
+        </>
+      )}
       {!R.isEmpty(uploadFiles) && (
         <>
           <Spacer size={'1.5rem'} />
@@ -175,7 +190,7 @@ const UploadModels = ({
           <div className={c.UploadModels_ScrollableFiles}>
             {Object.keys(uploadFiles).map((id, index) => {
               const file = uploadFiles[id]
-              const isLoading = file.isLoading
+              const { name, size, isLoading } = file
               return (
                 <div key={`fileUpload_${index}`}>
                   <Spacer size={'.75rem'} />
@@ -185,12 +200,12 @@ const UploadModels = ({
                       <Spacer size={'.75rem'} />
                       <SingleLineBodyText
                         className={c.UploadModels_FileName}
-                        title={file.name}
+                        title={name}
                       >
-                        {file.name}
+                        {name}
                       </SingleLineBodyText>
                       <Spacer size={'.5rem'} />
-                      <MetadataSecondary>{formatBytes(file.size)}</MetadataSecondary>
+                      <MetadataSecondary>{formatBytes(size)}</MetadataSecondary>
                     </div>
                     <div>
                       <TrashCanIcon

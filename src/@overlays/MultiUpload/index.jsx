@@ -9,7 +9,7 @@ import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as ArrowLeftIcon } from '@svg/icon-arrow-left.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
-import { ERROR_STATES, FILE_SIZE_LIMITS } from '@constants/fileUpload'
+import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
@@ -85,15 +85,16 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const { data: uploadFilesData = {}, isLoading } = uploadFiles
   const [activeView, setActiveView] = useState('upload')
   const [errorMessage, setErrorMessage] = useState(null)
+  const [warningMessage, setWarningMessage] = useState(null)
   const c = useStyles({})
   const history = useHistory()
 
   const handleFileUpload = useCallback(
-    (file, _errorState, fileId) => {
+    (file, errorState, fileId) => {
       if (R.isNil(file)) {
         return
       } else {
-        dispatch(types.UPLOAD_FILE, { id: fileId, file })
+        dispatch(types.UPLOAD_FILE, { id: fileId, file, errorState })
       }
     },
     [dispatch]
@@ -105,11 +106,17 @@ const MultiUpload = ({ initData = null, folderId }) => {
       acceptedFiles.forEach(file => {
         const fileId = Math.random().toString(36).substr(2, 9)
         if (rejectedFile) {
-          handleFileUpload(null, ERROR_STATES.FILE_EXT, fileId)
+          setErrorMessage(
+            `One or more files not supported. Supported file extensions include ${MODEL_FILE_EXTS.map(
+              e => e + ' '
+            )}.`
+          )
         } else if (file.size >= FILE_SIZE_LIMITS.hard.size) {
-          handleFileUpload(null, ERROR_STATES.TOO_BIG, fileId)
+          setErrorMessage(
+            `One or more files was over ${FILE_SIZE_LIMITS.hard.pretty}. Try uploading a different file.`
+          )
         } else if (file.size >= FILE_SIZE_LIMITS.soft.size) {
-          handleFileUpload(file, ERROR_STATES.SIZE_WARNING, fileId)
+          handleFileUpload(file, { warning: ERROR_STATES.SIZE_WARNING }, fileId)
         } else {
           handleFileUpload(file, null, fileId)
         }
@@ -133,7 +140,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
 
   const handleSubmit = useCallback(
     ({ selectedFolderId }) => {
-      track('MultiUpload - Submit Files')
+      track('MultiUpload - Submit Files', { amount: Object.keys(uploadFilesData).length })
       dispatch(types.SUBMIT_FILES, {
         onFinish: () => {
           closeOverlay()
@@ -145,7 +152,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
         },
       })
     },
-    [closeOverlay, dispatch, history]
+    [closeOverlay, dispatch, history, uploadFilesData]
   )
 
   const handleContinue = useCallback(
@@ -205,7 +212,20 @@ const MultiUpload = ({ initData = null, folderId }) => {
     const loadingFiles = Object.keys(uploadFilesData).filter(
       id => uploadFilesData[id].isLoading
     )
+    const warningFiles = Object.keys(uploadFilesData).filter(
+      id => uploadFilesData[id].isWarning
+    )
     if (loadingFiles.length === 0) setErrorMessage(null)
+    if (warningFiles.length !== 0) {
+      setWarningMessage(`Notice: Files over ${FILE_SIZE_LIMITS.soft.pretty} may take a long time to
+    upload & process.`)
+    } else if (Object.keys(uploadFilesData).length > 25) {
+      setWarningMessage(
+        'Notice: Uploading more than 25 files at a time may take a long time to upload & process.'
+      )
+    } else {
+      setWarningMessage(null)
+    }
   }, [uploadFilesData])
 
   return (
@@ -234,6 +254,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
           <UploadModels
             closeOverlay={closeOverlay}
             errorMessage={errorMessage}
+            warningMessage={warningMessage}
             handleContinue={handleContinue}
             onDrop={onDrop}
             removeFile={removeFile}

@@ -49,17 +49,20 @@ export default store => {
     }
   })
 
-  store.on(types.INIT_UPLOAD_FILE, (state, { id, file, isLoading, isError }) => {
-    return {
-      uploadFiles: {
-        ...state.uploadFiles,
-        data: {
-          ...state.uploadFiles.data,
-          [id]: { name: file.name, size: file.size, isLoading, isError },
+  store.on(
+    types.INIT_UPLOAD_FILE,
+    (state, { id, file, isLoading, isError, isWarning }) => {
+      return {
+        uploadFiles: {
+          ...state.uploadFiles,
+          data: {
+            ...state.uploadFiles.data,
+            [id]: { name: file.name, size: file.size, isLoading, isError, isWarning },
+          },
         },
-      },
+      }
     }
-  })
+  )
 
   store.on(types.CHANGE_UPLOAD_FILE, (state, { id, data, isLoading, isError }) => {
     return {
@@ -73,35 +76,38 @@ export default store => {
     }
   })
 
-  store.on(types.UPLOAD_FILE, async (_, { id, file }) => {
+  store.on(types.UPLOAD_FILE, async (_, { id, file, errorState = undefined }) => {
     store.dispatch(types.INIT_UPLOAD_FILE, {
       id,
       file,
-      isLoading: true,
-      isError: false,
+      error: errorState && errorState.message,
+      isLoading: errorState && errorState.error ? false : true,
+      isError: errorState && errorState.error,
+      isWarning: errorState && errorState.warning,
     })
+    if (!errorState || !errorState.error) {
+      try {
+        const { data: uploadedUrlData } = await api({
+          method: 'GET',
+          endpoint: `models/upload-url?fileName=${file.name}`,
+        })
 
-    try {
-      const { data: uploadedUrlData } = await api({
-        method: 'GET',
-        endpoint: `models/upload-url?fileName=${file.name}`,
-      })
+        await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file)
 
-      await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file)
-
-      store.dispatch(types.CHANGE_UPLOAD_FILE, {
-        id,
-        data: uploadedUrlData,
-        isLoading: false,
-        isError: false,
-      })
-    } catch (e) {
-      store.dispatch(types.CHANGE_UPLOAD_FILE, {
-        id,
-        data: e,
-        isLoading: false,
-        isError: true,
-      })
+        store.dispatch(types.CHANGE_UPLOAD_FILE, {
+          id,
+          data: uploadedUrlData,
+          isLoading: false,
+          isError: false,
+        })
+      } catch (e) {
+        store.dispatch(types.CHANGE_UPLOAD_FILE, {
+          id,
+          data: e,
+          isLoading: false,
+          isError: true,
+        })
+      }
     }
   })
 
