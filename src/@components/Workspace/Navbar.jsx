@@ -13,15 +13,16 @@ import {
 } from '@components'
 import { createUseStyles } from '@style'
 import { authenticationService } from '@services'
-import { useExternalClick } from '@hooks'
+import { useCurrentUser, useExternalClick } from '@hooks'
 import { ReactComponent as Logo } from '@svg/logo.svg'
-import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
-import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as ClockIcon } from '@svg/icon-clock.svg'
-import { ReactComponent as SharedIcon } from '@svg/icon-shared.svg'
+import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
+import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
+import { ReactComponent as PortfolioIcon } from '@svg/icon-portfolio.svg'
 import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 import { ReactComponent as SettingsIcon } from '@svg/icon-settings.svg'
+import { ReactComponent as SharedIcon } from '@svg/icon-shared.svg'
 import { ReactComponent as SignOutIcon } from '@svg/icon-signout.svg'
 import * as types from '@constants/storeEventTypes'
 
@@ -111,6 +112,9 @@ const WorkspaceNavbar = ({
 }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
+  const {
+    atom: { data: user },
+  } = useCurrentUser()
   const history = useHistory()
   const path = history.location.pathname
   const [showFileExplorer, setShowFileExplorer] = useState(false)
@@ -177,6 +181,10 @@ const WorkspaceNavbar = ({
   ])
 
   const handleClickCreate = useCallback(() => setShowCreateMenu(true), [])
+
+  const handleClickPortfolio = useCallback(() => {
+    history.push(`/${user.username}`)
+  }, [history, user])
 
   const handleSignOut = useCallback(() => {
     authenticationService.logout()
@@ -266,6 +274,13 @@ const WorkspaceNavbar = ({
             <Spacer size={'2rem'} />
           </div>
           <div>
+            <Spacer size={'1.5rem'} />
+            <NavLink
+              className={c.WorkspaceNavbar_NavLink}
+              Icon={PortfolioIcon}
+              label={'My Portfolio'}
+              onClick={handleClickPortfolio}
+            />
             <Spacer size={'1.5rem'} />
             <NavLink
               className={c.WorkspaceNavbar_NavLink}
