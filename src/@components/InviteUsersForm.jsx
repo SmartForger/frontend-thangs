@@ -2,6 +2,7 @@ import React, { useCallback } from 'react'
 import { useForm } from '@hooks'
 import Joi from '@hapi/joi'
 import * as R from 'ramda'
+import * as EmailValidator from 'email-validator'
 import { Button, Spinner, TextInput, Spacer } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -83,6 +84,17 @@ const useStyles = createUseStyles(theme => {
       marginBottom: 0,
       width: '100%',
     },
+    InviteForm_LoaderScreen: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      left: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0,0,0,0.29)',
+      zIndex: 5,
+      borderRadius: '1rem',
+      display: 'flex',
+    },
   }
 })
 
@@ -156,7 +168,8 @@ const InviteUsersForm = ({
   afterAction = noop,
   errorMessage,
 }) => {
-  const { dispatch, folders } = useStoreon('folders')
+  const { dispatch, folders = {} } = useStoreon('folders')
+  const { isSaving } = folders
   const c = useStyles()
 
   const initialState = {
@@ -164,7 +177,7 @@ const InviteUsersForm = ({
     emails: '',
   }
 
-  const { onFormSubmit, onInputChange, inputState } = useForm({
+  const { onFormSubmit, onInputChange, inputState, clearAllInputs } = useForm({
     initialValidationSchema: schemaWithoutName,
     initialState,
   })
@@ -179,6 +192,10 @@ const InviteUsersForm = ({
 
   const handleSave = useCallback(
     ({ members }, isValid, errors) => {
+      const emailValid = members.every(member => {
+        return EmailValidator.validate(member)
+      })
+      if (!emailValid) return onError('Please enter valid e-mail addresses')
       if (!isValid) {
         return onError(errors)
       }
@@ -186,7 +203,10 @@ const InviteUsersForm = ({
       dispatch(types.INVITE_TO_FOLDER, {
         data: variables,
         folderId: folderId,
-        onFinish: afterAction,
+        onFinish: () => {
+          clearAllInputs()
+          afterAction()
+        },
         onError: error => {
           onError({
             server: error,
@@ -198,36 +218,39 @@ const InviteUsersForm = ({
   )
 
   return (
-    <form className={c.InviteForm} onSubmit={onFormSubmit(handleSave)}>
-      {errorMessage && (
-        <>
-          <h4 className={c.EditFolder_ErrorText} data-cy='edit-folder-error'>
-            {errorMessage}
-          </h4>
-          <Spacer size='1rem' />
-        </>
+    <>
+      {isSaving && (
+        <div className={c.InviteForm_LoaderScreen}>
+          <Spinner />
+        </div>
       )}
-      <div className={c.InviteForm_Row}>
-        <TextInput
-          className={c.InviteForm_FullWidthInput}
-          name='emails'
-          value={inputState && inputState['emails']}
-          onChange={e => {
-            handleOnInputChange('emails', e.target.value)
-            onError(null)
-          }}
-          placeholder='Email'
-        />
-        <Spacer size={'.5rem'} />
-        <Button className={c.InviteForm_SaveButton} type='submit'>
-          {folders && folders.isLoading ? (
-            <Spinner className={c.InviteForm_Spinner} />
-          ) : (
-            'Invite'
-          )}
-        </Button>
-      </div>
-    </form>
+      <form className={c.InviteForm} onSubmit={onFormSubmit(handleSave)}>
+        {errorMessage && (
+          <>
+            <h4 className={c.InviteForm_ErrorText} data-cy='edit-folder-error'>
+              {errorMessage}
+            </h4>
+            <Spacer size='1rem' />
+          </>
+        )}
+        <div className={c.InviteForm_Row}>
+          <TextInput
+            className={c.InviteForm_FullWidthInput}
+            name='emails'
+            value={inputState && inputState['emails']}
+            onChange={e => {
+              handleOnInputChange('emails', e.target.value)
+              onError(null)
+            }}
+            placeholder='Email'
+          />
+          <Spacer size={'.5rem'} />
+          <Button className={c.InviteForm_SaveButton} type='submit'>
+            Invite
+          </Button>
+        </div>
+      </form>
+    </>
   )
 }
 

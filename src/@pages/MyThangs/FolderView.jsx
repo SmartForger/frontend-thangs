@@ -97,6 +97,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
   const { dispatch } = useStoreon()
   const { id, name } = folder
   const folderPath = name.split('//')
+
   const folderPathEnhanced = folderPath.map(path => {
     const { id: pathId } = getSubfolderId(path, rootFolder, folder)
     return { label: path, id: pathId }
@@ -197,12 +198,20 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
 }
 
 const findFolderById = (id, folders) => {
-  return R.find(R.propEq('id', id.toString()))(folders) || {}
+  const rootFolder = R.find(R.propEq('id', id.toString()))(folders) || {}
+  if (!R.isEmpty(rootFolder)) return rootFolder
+  let subFolder = false
+  folders.some(folder => {
+    const subfolders = folder.subfolders
+    subFolder = R.find(R.propEq('id', parseInt(id)))(subfolders) || false
+    return subFolder
+  })
+  return subFolder
 }
 
 const FolderView = ({
   className,
-  folders,
+  myFolders: folders,
   handleChangeFolder = noop,
   handleEditModel = noop,
   onDrop = noop,

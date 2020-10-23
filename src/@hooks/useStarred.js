@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
+import * as R from 'ramda'
 import { authenticationService } from '@services'
 import * as types from '@constants/storeEventTypes'
 
@@ -11,8 +12,10 @@ const useStarred = () => {
   } = useStoreon(`user-liked-models-${userId}`)
 
   useEffect(() => {
-    dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId })
-  }, [dispatch, userId])
+    if (R.isEmpty(likedUserModelsAtom))
+      dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const starred = useMemo(() => {
     const { data = {} } = likedUserModelsAtom

@@ -47,18 +47,19 @@ const RecentFilesView = ({
   handleChangeFolder = noop,
   handleEditModel = noop,
   onDrop = noop,
+  myFolders: folderData,
+  models: modelData,
 }) => {
   const c = useStyles({})
-  const { thangs } = useStoreon('thangs')
+  const { activity } = useStoreon('activity')
+  const { data: activityData } = activity
   const { starredModels = [], starredFolders = [] } = useStarred()
-  const { data: thangsData = {} } = thangs
+
   const files = useMemo(() => {
-    return !R.isEmpty(thangsData)
-      ? [thangsData.folders, thangsData.models]
-        .flat()
-        .sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate))
-      : []
-  }, [thangsData])
+    return [folderData, modelData]
+      .flat()
+      .sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate))
+  }, [folderData, modelData])
 
   useEffect(() => {
     pageview('MyThangs - RecentFiles')
@@ -74,7 +75,7 @@ const RecentFilesView = ({
             <Spacer size='2rem' />
             <TitleTertiary>Activity & Contributions</TitleTertiary>
             <Spacer size='2rem' />
-            <StatsBar userActivity={thangsData.activity} />
+            <StatsBar userActivity={activityData} />
             <Spacer size='4rem' />
             <TitleTertiary>Starred</TitleTertiary>
             <div className={c.RecentFilesView_Starred}>

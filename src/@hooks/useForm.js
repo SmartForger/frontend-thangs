@@ -16,7 +16,7 @@ const useForm = (opts = {}) => {
 
   const clearAllInputs = () => {
     Object.keys(inputState).forEach(key => {
-      onInputChange(key, undefined)
+      onInputChange(key, '')
     })
   }
 

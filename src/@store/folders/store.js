@@ -3,6 +3,7 @@ import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import { track } from '@utilities/analytics'
+import { createNewFolders, updateFolder } from './updater'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -11,8 +12,6 @@ const getInitAtom = () => ({
   isSaving: false,
   isSaved: false,
   saveError: false,
-  currentFolder: null,
-  createdFolder: null,
   data: {},
 })
 const noop = () => null
@@ -21,36 +20,12 @@ export default store => {
     folders: getInitAtom(),
   }))
 
-  store.on(
-    types.EDIT_FOLDER,
-    async (
-      _,
-      { id: folderId, folder: updatedFolder, onError = noop, onFinish = noop }
-    ) => {
-      if (R.isNil(folderId)) return
-      store.dispatch(types.SAVING_FOLDER)
-      const userId = authenticationService.getCurrentUserId()
-      store.dispatch(types.LOADING_FOLDER)
-      const { error } = await api({
-        method: 'PUT',
-        endpoint: `folders/${folderId}`,
-        body: {
-          name: updatedFolder.name,
-        },
-      })
-
-      if (error) {
-        store.dispatch(types.ERROR_FOLDER)
-        onError()
-      } else {
-        store.dispatch(types.SAVED_FOLDER)
-        onFinish()
-        store.dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId })
-        store.dispatch(types.FETCH_FOLDERS)
-        store.dispatch(types.FETCH_THANGS, {})
-      }
-    }
-  )
+  store.on(types.UPDATE_FOLDER, (state, { folderId, folder, onFinish = noop }) => {
+    const newFolders = updateFolder(folderId, folder, state.folders.data)
+    store.dispatch(types.UPDATE_FOLDERS, newFolders)
+    store.dispatch(types.SAVED_FOLDER)
+    onFinish()
+  })
 
   store.on(types.UPDATE_FOLDERS, (state, event) => ({
     folders: {
@@ -82,6 +57,26 @@ export default store => {
     },
   }))
 
+  store.on(
+    types.FETCH_FOLDER,
+    async (state, { folderId, inviteCode, onFinish = noop }) => {
+      store.dispatch(types.LOADING_FOLDER)
+      await api({
+        method: 'GET',
+        endpoint: `folders/${folderId}${inviteCode ? `?inviteCode=${inviteCode}` : ''}`,
+      })
+        .then(res => {
+          const folder = res.data
+          store.dispatch(types.LOADED_FOLDER)
+          store.dispatch(types.UPDATE_FOLDER, { folderId, folder })
+          onFinish()
+        })
+        .catch(_error => {
+          store.dispatch(types.ERROR_FOLDER)
+        })
+    }
+  )
+
   store.on(types.FETCH_FOLDERS, async _state => {
     store.dispatch(types.LOADING_FOLDER)
     await api({
@@ -96,27 +91,6 @@ export default store => {
         store.dispatch(types.ERROR_FOLDER)
       })
   })
-
-  store.on(
-    types.FETCH_FOLDER,
-    async (state, { folderId, inviteCode, onFinish = noop }) => {
-      store.dispatch(types.LOADING_FOLDER)
-      await api({
-        method: 'GET',
-        endpoint: `folders/${folderId}${inviteCode ? `?inviteCode=${inviteCode}` : ''}`,
-      })
-        .then(res => {
-          const folder = res.data
-          store.dispatch(types.LOADED_FOLDER)
-          store.dispatch(types.UPDATE_FOLDER, { folderId, folder })
-          store.dispatch(types.FETCH_FOLDERS)
-          onFinish()
-        })
-        .catch(_error => {
-          store.dispatch(types.ERROR_FOLDER)
-        })
-    }
-  )
 
   store.on(types.SAVING_FOLDER, state => ({
     folders: {
@@ -157,10 +131,14 @@ export default store => {
         onError(error)
       } else {
         track('Folder Created')
+        const newFolders = createNewFolders(
+          { ...newFolderData, id: data.folderId, currentUser: state.currentUser.data },
+          state.folders.data
+        )
+        store.dispatch(types.UPDATE_FOLDERS, newFolders)
         onFinish(data.folderId)
         store.dispatch(types.SAVED_FOLDER)
-        store.dispatch(types.FETCH_FOLDERS)
-        store.dispatch(types.FETCH_THANGS, {})
+        store.dispatch(types.FETCH_THANGS, { silentUpdate: true })
       }
     }
   )
@@ -180,7 +158,37 @@ export default store => {
         track('Folder Deleted')
         onFinish()
         store.dispatch(types.SAVED_FOLDER)
-        store.dispatch(types.FETCH_FOLDERS)
+        store.dispatch(types.FETCH_THANGS, {})
+      }
+    }
+  )
+
+  store.on(
+    types.EDIT_FOLDER,
+    async (
+      _,
+      { id: folderId, folder: updatedFolder, onError = noop, onFinish = noop }
+    ) => {
+      if (R.isNil(folderId)) return
+      store.dispatch(types.SAVING_FOLDER)
+      const userId = authenticationService.getCurrentUserId()
+      store.dispatch(types.LOADING_FOLDER)
+      const { error } = await api({
+        method: 'PUT',
+        endpoint: `folders/${folderId}`,
+        body: {
+          name: updatedFolder.name,
+        },
+      })
+
+      if (error) {
+        store.dispatch(types.ERROR_FOLDER)
+        onError()
+      } else {
+        store.dispatch(types.SAVED_FOLDER)
+        onFinish()
+        store.dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId })
+        store.dispatch(types.FETCH_THANGS, {})
       }
     }
   )
@@ -199,10 +207,7 @@ export default store => {
         onError(error)
       } else {
         track('Folder Invite Sent')
-        store.dispatch(types.SAVED_FOLDER)
-        store.dispatch(types.FETCH_FOLDERS)
-        store.dispatch(types.FETCH_THANGS, {})
-        onFinish()
+        store.dispatch(types.FETCH_FOLDER, { folderId, onFinish })
       }
     }
   )
@@ -219,11 +224,8 @@ export default store => {
         store.dispatch(types.ERROR_SAVING_FOLDER)
         onError(error)
       } else {
-        store.dispatch(types.SAVED_FOLDER)
         track('Folder Access Revoked')
-        store.dispatch(types.FETCH_FOLDERS)
-        store.dispatch(types.FETCH_THANGS, {})
-        onFinish()
+        store.dispatch(types.FETCH_FOLDER, { folderId, onFinish })
       }
     }
   )

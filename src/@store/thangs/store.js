@@ -6,7 +6,6 @@ const getInitAtom = () => ({
   isLoading: false,
   isLoaded: false,
   isError: false,
-  data: {},
 })
 
 const noop = () => null
@@ -17,9 +16,21 @@ export default store => {
   }))
 
   store.on(types.UPDATE_THANGS, (state, event) => ({
-    thangs: {
-      ...state.thangs,
-      data: event,
+    activity: {
+      ...state.activity,
+      data: event.activity,
+    },
+    folders: {
+      ...state.folders,
+      data: event.folders,
+    },
+    models: {
+      ...state.models,
+      data: event.models,
+    },
+    shared: {
+      ...state.shared,
+      data: event.shared,
     },
   }))
 
@@ -62,9 +73,9 @@ export default store => {
       if (error) {
         store.dispatch(types.ERROR_THANGS)
       } else {
-        store.dispatch(types.LOADED_THANGS)
         store.dispatch(types.UPDATE_THANGS, data)
         onFinish(onFinishData)
+        store.dispatch(types.LOADED_THANGS)
       }
     }
   )

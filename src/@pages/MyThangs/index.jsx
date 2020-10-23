@@ -90,41 +90,25 @@ const MyThangs = () => {
   const c = useStyles({})
   const [currentFolderId, setCurrentFolderId] = useState(null)
   const currentUserId = authenticationService.getCurrentUserId()
-  const { dispatch, thangs, folders, folderNav } = useStoreon(
-    'thangs',
-    'folders',
-    'folderNav'
-  )
-  const { isLoading: isLoadingThangs, data: thangsData = {} } = thangs
-  const { isLoading: isLoadingFolders, data: foldersData = {} } = folders
+  const {
+    dispatch,
+    folders = {},
+    folderNav,
+    models = {},
+    shared = {},
+    thangs,
+  } = useStoreon('folders', 'models', 'thangs', 'shared', 'folderNav')
+  const { isLoading, isLoaded } = thangs
+  const { data: folderData } = folders
+  const { data: modelData } = models
+  const { data: sharedData } = shared
 
   useEffect(() => {
     pageview('MyThangs')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const isLoading = useMemo(() => {
-    return isLoadingThangs || isLoadingFolders
-  }, [isLoadingFolders, isLoadingThangs])
-
-  const myFolders = useMemo(() => {
-    if (!foldersData || !foldersData.length) return []
-    return foldersData.filter(
-      ({ creator }) =>
-        creator && creator.id && creator.id.toString() === currentUserId.toString()
-    )
-  }, [currentUserId, foldersData])
-
-  const sharedFolders = useMemo(() => {
-    if (!foldersData || !foldersData.length) return []
-    return foldersData.filter(
-      ({ creator }) =>
-        creator && creator.id && creator.id.toString() !== currentUserId.toString()
-    )
-  }, [currentUserId, foldersData])
-
   useEffect(() => {
-    dispatch(types.FETCH_FOLDERS)
     dispatch(types.FETCH_THANGS, {})
     dispatch(types.FETCH_NOTIFICATIONS)
   }, [currentUserId, dispatch])
@@ -181,10 +165,9 @@ const MyThangs = () => {
     setCurrentFolderId,
     handleEditModel,
     handleChangeFolder,
-    folders: folders.data,
-    myFolders: myFolders,
-    sharedFolders,
-    models: thangsData.models,
+    myFolders: folderData,
+    sharedFolders: sharedData,
+    models: modelData,
     userId: currentUserId,
     onDrop,
     isLoading,
@@ -198,18 +181,18 @@ const MyThangs = () => {
     >
       {Overlay}
       <WorkspaceNavbar
-        folderNav={folderNav}
-        folders={myFolders}
-        setCurrentView={handleCurrentView}
-        handleEditModel={handleEditModel}
-        handleChangeFolder={handleChangeFolder}
-        isLoadingThangs={isLoading}
-        models={thangsData.models}
         currentFolderId={currentFolderId}
+        folderNav={folderNav}
+        folders={folderData}
+        handleChangeFolder={handleChangeFolder}
+        handleEditModel={handleEditModel}
+        isLoadingThangs={isLoading}
+        models={modelData}
+        setCurrentView={handleCurrentView}
       />
       <div className={c.MyThangs_ContentWrapper}>
         <WorkspaceHeader setCurrentView={handleCurrentView} />
-        {isLoading ? (
+        {!isLoaded || isLoading ? (
           <Spinner className={c.Spinner} />
         ) : (
           <Switch>
