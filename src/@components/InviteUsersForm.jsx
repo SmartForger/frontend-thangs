@@ -49,7 +49,6 @@ const useStyles = createUseStyles(theme => {
     },
     InviteForm_ErrorText: {
       ...theme.text.formErrorText,
-      marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
       fontWeight: 500,
       padding: '.625rem 1rem',
