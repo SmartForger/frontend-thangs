@@ -20,13 +20,6 @@ export default store => {
     folders: getInitAtom(),
   }))
 
-  store.on(types.UPDATE_FOLDER, (state, { folderId, folder, onFinish = noop }) => {
-    const newFolders = updateRootFolder(folderId, folder, state.folders.data)
-    store.dispatch(types.UPDATE_FOLDERS, newFolders)
-    store.dispatch(types.SAVED_FOLDER)
-    onFinish()
-  })
-
   store.on(types.UPDATE_FOLDERS, (state, event) => ({
     folders: {
       ...state.folders,
@@ -56,26 +49,6 @@ export default store => {
       isError: true,
     },
   }))
-
-  store.on(
-    types.FETCH_FOLDER,
-    async (state, { folderId, inviteCode, onFinish = noop }) => {
-      store.dispatch(types.LOADING_FOLDER)
-      await api({
-        method: 'GET',
-        endpoint: `folders/${folderId}${inviteCode ? `?inviteCode=${inviteCode}` : ''}`,
-      })
-        .then(res => {
-          const folder = res.data
-          store.dispatch(types.LOADED_FOLDER)
-          store.dispatch(types.UPDATE_FOLDER, { folderId, folder })
-          onFinish()
-        })
-        .catch(_error => {
-          store.dispatch(types.ERROR_FOLDER)
-        })
-    }
-  )
 
   store.on(types.FETCH_FOLDERS, async _state => {
     store.dispatch(types.LOADING_FOLDER)
@@ -160,6 +133,33 @@ export default store => {
         store.dispatch(types.SAVED_FOLDER)
         store.dispatch(types.FETCH_THANGS, {})
       }
+    }
+  )
+
+  store.on(types.UPDATE_FOLDER, (state, { folder, onFinish = noop }) => {
+    const newFolders = updateFolder(folder, state.folders.data)
+    store.dispatch(types.UPDATE_FOLDERS, newFolders)
+    store.dispatch(types.SAVED_FOLDER)
+    onFinish()
+  })
+
+  store.on(
+    types.FETCH_FOLDER,
+    async (state, { folderId, inviteCode, onFinish = noop }) => {
+      store.dispatch(types.LOADING_FOLDER)
+      await api({
+        method: 'GET',
+        endpoint: `folders/${folderId}${inviteCode ? `?inviteCode=${inviteCode}` : ''}`,
+      })
+        .then(res => {
+          const folder = res.data
+          store.dispatch(types.LOADED_FOLDER)
+          store.dispatch(types.UPDATE_FOLDER, { folder })
+          onFinish()
+        })
+        .catch(_error => {
+          store.dispatch(types.ERROR_FOLDER)
+        })
     }
   )
 
