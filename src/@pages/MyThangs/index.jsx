@@ -3,7 +3,7 @@ import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { WorkspaceHeader, WorkspaceNavbar, Spinner } from '@components'
 import { authenticationService } from '@services'
-import { useOverlay } from '@hooks'
+import { useOverlay, useStarred } from '@hooks'
 import AllFilesView from './AllFilesView'
 import EditProfileView from './EditProfileView'
 import FolderView from './FolderView'
@@ -102,6 +102,7 @@ const MyThangs = () => {
   const { data: folderData } = folders
   const { data: modelData } = models
   const { data: sharedData } = shared
+  useStarred()
 
   useEffect(() => {
     pageview('MyThangs')
