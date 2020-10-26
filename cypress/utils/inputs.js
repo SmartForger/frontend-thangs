@@ -1,4 +1,4 @@
-import { MODEL, SEARCH, USER, USER2 } from './constants'
+import { MODEL, SEARCH, USER } from './constants'
 
 export const inputSelectors = {
   email: '[name=email]',

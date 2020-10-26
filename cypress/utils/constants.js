@@ -17,7 +17,8 @@ export const USER2 = {
 export const PATH = {
   LANDING: '/',
   SEARCH: '/search/',
-  EXTERNAL_MODEL: 'model/507',
+  MY_THANGS: '/mythangs',
+  EXTERNAL_MODEL: 'model/478',
   PROFILE: `/${USER.NAME}`,
   ALL_FILES: '/mythangs/all-files',
 }
@@ -77,6 +78,14 @@ export const CLASSES = {
   SIGNUP_FORM: '[class^=Signup]',
   DELETE_MODEL_BUTTON: '[class^=DeleteForm_Button]',
   USER_FOLLOW_BUTTON: '[class*="ToggleFollowButton"]',
+  MY_THANGS_NAVBAR: '[class^=WorkspaceNavbar_NavContainer]',
+  MY_THANGS_RECENT_FILES: '[class^=RecentFilesView_Content]',
+  MY_THANGS_ADD_BUTTON: '[class^=WorkspaceNavbar_AddButton]',
+  MY_THANGS_ADD_MENU: '[class^=AddMenu]',
+  MY_THANGS_SHARED_FILES: '[class^=SharedFilesView_Content]',
+  MY_THANGS_LIKED_MODELS: '[class^=LikedModels]',
+  MY_THANGS_SAVED_SEARCHES: '[class^=SavedSearches]',
+  MY_THANGS_EDIT_PROFILE: '[class^=EditProfile_Content]',
   HEADER_NOTIFICATIONS_UNREAD_BADGE: '[class^=NotificationsButton_UnreadBadge]',
 }
 
@@ -120,6 +129,12 @@ export const TEXT = {
   REMOVE_MODEL: 'Remove',
   DELETE_MODEL_BUTTON: 'Delete',
   DOWNLOAD_MODEL_BUTTON: 'Download Model',
+  VIEW_MY_THANGS: 'View My Thangs',
+  ADD_NEW: 'Add New',
+  SHARED: 'Shared',
+  LIKED_MODELS: 'Liked Models',
+  SAVED_SEARCHES: 'Saved Searches',
+  PROFILE_SETTINGS: 'Profile Settings',
 }
 
 export const PROPS = {

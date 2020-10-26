@@ -4,6 +4,7 @@ import {
   clickOnElementByText,
   isElement,
   isTextInsideClass,
+  signOut,
 } from '../../../utils/common-methods'
 import {
   clearInput,
@@ -75,5 +76,6 @@ describe('The Login Page test cases with before condition', () => {
     clickOnElement(CLASSES.LOGIN_BUTTON)
     isElement(CLASSES.LOGIN_FORM, PROPS.INVISIBLE)
     isElement(CLASSES.USER_NAVBAR, PROPS.VISIBLE)
+    signOut()
   })
 })

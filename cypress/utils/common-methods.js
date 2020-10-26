@@ -1,12 +1,4 @@
-import {
-  CLASSES,
-  DATA_CY,
-  MODEL_TEST_TITLE,
-  PATH,
-  PROPS,
-  TEXT,
-  MODEL,
-} from './constants'
+import { CLASSES, DATA_CY, MODEL_TEST_TITLE, PATH, PROPS, TEXT, MODEL } from './constants'
 import {
   clearInput,
   enterValidValue,
@@ -16,8 +8,8 @@ import {
   inputSelectors,
 } from './inputs'
 
-export const isElement = (el, prop, prop2) => {
-  cy.get(el, { timeout: 5000 }).should(prop, prop2)
+export const isElement = (el, prop) => {
+  cy.get(el, { timeout: 5000 }).should(prop)
 }
 
 export const isElementContains = (element, text) => {
@@ -33,11 +25,11 @@ export const clickOnElementByText = text => {
 }
 
 export const clickOnElement = el => {
-  cy.get(el, { timeout: 5000 }).click({ force: true, multiple: true })
+  cy.get(el, { timeout: 60000 }).click({ force: true, multiple: true })
 }
 
 export const goTo = path => {
-  cy.visit(path, { timeout: 20000 })
+  cy.visit(path, { timeout: 30000 })
 }
 
 export const isTextExist = text => {
@@ -69,8 +61,12 @@ export const loginByUser = ({ email, password }) => {
   isElement(CLASSES.LOGIN_FORM, PROPS.INVISIBLE)
   clickOnElementByText(TEXT.LOG_IN)
   isElement(CLASSES.LOGIN_FORM, PROPS.VISIBLE)
-  cy.get(`[class^=Signin_Form] ${inputSelectors.email}`).focus().type(email, { force: true })
-  cy.get(`[class^=Signin_Form] ${inputSelectors.password}`).focus().type(password, { force: true })
+  cy.get(`[class^=Signin_Form] ${inputSelectors.email}`)
+    .focus()
+    .type(email, { force: true })
+  cy.get(`[class^=Signin_Form] ${inputSelectors.password}`)
+    .focus()
+    .type(password, { force: true })
   clickOnElement(CLASSES.LOGIN_BUTTON)
   isElement(CLASSES.LOGIN_FORM, PROPS.INVISIBLE)
   isElement(CLASSES.USER_NAVBAR, PROPS.VISIBLE)
@@ -90,9 +86,11 @@ export const openProfileDropdown = () => {
   isElement(CLASSES.PROFILE_DROPDOWN, PROPS.VISIBLE)
 }
 
-export const openUpload = () => {
-  clickOnElementByText(TEXT.UPLOAD)
-  isElement(DATA_CY.UPLOAD_OVERLAY, PROPS.VISIBLE)
+export const openMyThangs = () => {
+  openProfileDropdown()
+  clickOnElementByText(TEXT.VIEW_MY_THANGS)
+  isElement(CLASSES.MY_THANGS_NAVBAR, PROPS.VISIBLE)
+  isElement(CLASSES.MY_THANGS_RECENT_FILES, PROPS.VISIBLE)
 }
 
 export const openMultiUpload = () => {
@@ -136,6 +134,12 @@ export const deleteModel = () => {
   isElement(MODEL_TEST_TITLE, PROPS.INVISIBLE)
 }
 
+export const signOut = () => {
+  openProfileDropdown()
+  clickOnElementByText(TEXT.SIGN_OUT)
+  isElement(CLASSES.PROFILE_DROPDOWN, PROPS.INVISIBLE)
+}
+
 export const findElement = (className, element, index = 0) => {
   return cy.get(className).then(el => {
     return new Cypress.Promise(resolve => {
@@ -153,9 +157,13 @@ export const clickOnElementInsideClass = (className, el) => {
 }
 
 export const clickOnTextInsideClass = (className, text) => {
-  cy.get(className, { timeout: 5000 }).contains(text, { timeout: 10000 }).click({ force: true, multiple: true })
+  cy.get(className, { timeout: 5000 })
+    .contains(text, { timeout: 10000 })
+    .click({ force: true, multiple: true })
 }
 
 export const isTextInsideClass = (className, text, prop) => {
-  prop ? cy.get(className).contains(text).should(prop) : cy.get(className).contains(text)
+  prop
+    ? cy.get(className, { timeout: 20000 }).contains(text).should(prop)
+    : cy.get(className, { timeout: 20000 }).contains(text)
 }
