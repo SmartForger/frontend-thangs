@@ -94,10 +94,10 @@ const DeleteModel = ({ model, type, folderId }) => {
   }, [dispatch])
 
   const handleSubmit = useCallback(
-    id => {
+    model => {
       track('Delete Model - Overlay')
       dispatch(types.DELETE_MODEL, {
-        id,
+        model,
         folderId,
         onError: error => {
           setErrorMessage(error)

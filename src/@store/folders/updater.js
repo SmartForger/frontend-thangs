@@ -28,9 +28,33 @@ export const createNewFolders = (newFolderData, oldFolders) => {
   }
 }
 
-export const updateRootFolder = (folderId, newFolder, oldFolders) => {
+export const updateFolder = (newFolder, oldFolders) => {
+  const { id: folderId, root } = newFolder
   const newFolders = [...oldFolders]
-  const folderIndex = R.findIndex(R.propEq('id', folderId))(newFolders)
-  newFolders[folderIndex] = newFolder
-  return newFolders
+  if (root) {
+    const parentFolderIndex = R.findIndex(R.propEq('id', root))(newFolders)
+    newFolders[parentFolderIndex].subfolders.push(newFolder)
+    return newFolders
+  } else {
+    const folderIndex = R.findIndex(R.propEq('id', folderId))(newFolders)
+    newFolders[folderIndex] = newFolder
+    return newFolders
+  }
+}
+
+export const removeFolder = (folder, oldFolders) => {
+  const { id: folderId, root } = folder
+  const newFolders = [...oldFolders]
+  if (root) {
+    const parentFolderIndex = R.findIndex(R.propEq('id', root.toString()))(newFolders)
+    const newSubfolders = newFolders[parentFolderIndex].subfolders
+    newFolders[parentFolderIndex].subfolders = R.reject(
+      folder => folder.id === folderId,
+      newSubfolders
+    )
+    return newFolders
+  } else {
+    const folders = R.reject(folder => folder.id === folderId, newFolders)
+    return folders
+  }
 }

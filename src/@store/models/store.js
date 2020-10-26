@@ -78,8 +78,9 @@ export default store => {
     }
   )
 
-  store.on(types.DELETE_MODEL, async (_, { id, onError = noop, onFinish = noop }) => {
-    if (R.isNil(id)) return
+  store.on(types.DELETE_MODEL, async (_, { model, onError = noop, onFinish = noop }) => {
+    if (R.isNil(model) || R.isEmpty(model)) return
+    const { id } = model
     store.dispatch(types.CHANGE_MODEL_STATUS, {
       status: STATUSES.SAVING,
       atom: `model-${id}`,

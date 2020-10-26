@@ -3,7 +3,7 @@ import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import { track } from '@utilities/analytics'
-import { createNewFolders, updateRootFolder } from './updater'
+import { createNewFolders, removeFolder, updateFolder } from './updater'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -118,8 +118,9 @@ export default store => {
 
   store.on(
     types.DELETE_FOLDER,
-    async (_state, { id: folderId, onFinish = noop, onError = noop }) => {
+    async (state, { folder, onFinish = noop, onError = noop }) => {
       store.dispatch(types.SAVING_FOLDER)
+      const { id: folderId } = folder
       const { error } = await api({
         method: 'DELETE',
         endpoint: `folders/${folderId}`,
@@ -129,9 +130,10 @@ export default store => {
         onError(error)
       } else {
         track('Folder Deleted')
-        onFinish()
+        const newFolders = removeFolder(folder, state.folders.data)
+        store.dispatch(types.UPDATE_FOLDERS, newFolders)
         store.dispatch(types.SAVED_FOLDER)
-        store.dispatch(types.FETCH_THANGS, {})
+        onFinish()
       }
     }
   )
@@ -185,10 +187,8 @@ export default store => {
         store.dispatch(types.ERROR_FOLDER)
         onError()
       } else {
-        store.dispatch(types.SAVED_FOLDER)
-        onFinish()
-        store.dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId })
-        store.dispatch(types.FETCH_THANGS, {})
+        store.dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId }) //Why do we need to fetch this?
+        store.dispatch(types.FETCH_FOLDER, { folderId, onFinish })
       }
     }
   )

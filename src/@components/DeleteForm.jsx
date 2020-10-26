@@ -66,14 +66,14 @@ const DeleteForm = ({
 }) => {
   const c = useStyles()
   const subject = type === 'model' ? model : folder
-  const { id, name } = subject
+  const { name } = subject
 
   const handleOnDelete = useCallback(
     e => {
       e.preventDefault()
-      handleDelete(id)
+      handleDelete(subject)
     },
-    [handleDelete, id]
+    [handleDelete, subject]
   )
 
   return (

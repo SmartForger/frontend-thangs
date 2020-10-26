@@ -95,15 +95,19 @@ const DeleteFolder = ({ folder, type }) => {
   }, [dispatch])
 
   const handleDelete = useCallback(
-    id => {
+    folder => {
       track('Delete Folder')
       dispatch(types.DELETE_FOLDER, {
-        id,
+        folder,
         onError: error => {
           setErrorMessage(error)
         },
         onFinish: () => {
           closeOverlay()
+          const { root } = folder
+          if (root) {
+            return history.push(`/mythangs/folder/${root}`)
+          }
           history.push('/mythangs/all-files')
         },
       })
