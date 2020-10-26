@@ -112,13 +112,13 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
     dispatch(types.OPEN_OVERLAY, {
       overlayName: 'inviteUsers',
       overlayData: {
-        folderId: folder.id,
+        folderId: rootFolder ? rootFolder.id : folder.id,
         animateIn: true,
         windowed: true,
         dialogue: true,
       },
     })
-  }, [dispatch, folder])
+  }, [dispatch, folder.id, rootFolder])
 
   const handleEditFolder = useCallback(() => {
     dispatch(types.OPEN_OVERLAY, {
@@ -181,7 +181,10 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
         </div>
       </div>
       <div className={c.FolderView_Row}>
-        <Contributors users={folder.members} displayLength='10' />
+        <Contributors
+          users={rootFolder ? rootFolder.members : folder.members}
+          displayLength='10'
+        />
         <Spacer size={'1rem'} />
         <Button secondary onClick={handleEditFolder}>
           Edit
