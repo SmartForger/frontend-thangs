@@ -25,7 +25,6 @@ import { MODEL_FILE_EXTS } from '@constants/fileUpload'
 const useStyles = createUseStyles(theme => {
   return {
     FileTable: {
-      marginLeft: '-1rem',
       width: '100%',
       '& table': {
         borderCollapse: 'collapse',
