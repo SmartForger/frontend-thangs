@@ -76,7 +76,7 @@ export default store => {
     }
   })
 
-  store.on(types.UPLOAD_FILE, async (_, { id, file, errorState = undefined }) => {
+  store.on(types.UPLOAD_FILE, async (_, { id, file, errorState = undefined, cancelToken }) => {
     store.dispatch(types.INIT_UPLOAD_FILE, {
       id,
       file,
@@ -90,9 +90,10 @@ export default store => {
         const { data: uploadedUrlData } = await api({
           method: 'GET',
           endpoint: `models/upload-url?fileName=${file.name}`,
+          cancelToken,
         })
 
-        await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file)
+        await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file, { cancelToken })
 
         store.dispatch(types.CHANGE_UPLOAD_FILE, {
           id,

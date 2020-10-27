@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import * as R from 'ramda'
+import axios from 'axios'
 import { SingleLineBodyText, Spacer, Spinner } from '@components'
 import EnterInfo from './EnterInfo'
 import UploadModels from './UploadModels'
@@ -91,13 +92,19 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const [warningMessage, setWarningMessage] = useState(null)
   const c = useStyles({})
   const history = useHistory()
+  const cancelTokenRef = useRef(axios.CancelToken.source())
 
   const handleFileUpload = useCallback(
     (file, errorState, fileId) => {
       if (R.isNil(file)) {
         return
       } else {
-        dispatch(types.UPLOAD_FILE, { id: fileId, file, errorState })
+        dispatch(types.UPLOAD_FILE, {
+          id: fileId,
+          file,
+          errorState,
+          cancelToken: cancelTokenRef.current.token,
+        })
       }
     },
     [dispatch]
@@ -137,6 +144,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
   )
 
   const closeOverlay = useCallback(() => {
+    cancelTokenRef.current.cancel('Upload interrupted')
     dispatch(types.RESET_UPLOAD_FILES)
     dispatch(types.CLOSE_OVERLAY)
   }, [dispatch])
