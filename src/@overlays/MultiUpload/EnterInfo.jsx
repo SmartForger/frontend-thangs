@@ -145,12 +145,19 @@ const useStyles = createUseStyles(theme => {
     },
     EnterInfo_Thumbnail: {
       flex: 'none',
+      border: `1px solid ${theme.colors.white[900]}`,
+      borderRadius: 4,
+      padding: '0px !important',
       width: '3.75rem',
       height: '3.75rem !important',
     },
     EnterInfo_ModelInfo: {
       '& h3': {
-        wordBreak: 'break-all',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        width: '18rem',
+        display: 'inline-block',
         lineHeight: '1rem',
       },
     },
@@ -292,7 +299,7 @@ const EnterInfo = ({
         />
         <Spacer size={'1rem'} />
         <div className={c.EnterInfo_ModelInfo}>
-          <TitleTertiary>{model.name}</TitleTertiary>
+          <TitleTertiary title={model.name}>{model.name}</TitleTertiary>
           <Spacer size={'.5rem'} />
           <MetadataPrimary>{formatBytes(model.size)}</MetadataPrimary>
         </div>

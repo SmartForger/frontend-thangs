@@ -32,22 +32,38 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const TitlePrimary = ({ children, className, light }) => {
+export const TitlePrimary = ({ children, className, light, title }) => {
   const c = useStyles({ light })
-  return <h1 className={classnames(className, c.Title, c.TitlePrimary)}>{children}</h1>
+  return (
+    <h1 className={classnames(className, c.Title, c.TitlePrimary)} title={title}>
+      {children}
+    </h1>
+  )
 }
 
-export const TitleSecondary = ({ children, className, light }) => {
+export const TitleSecondary = ({ children, className, light, title }) => {
   const c = useStyles({ light })
-  return <h2 className={classnames(className, c.Title, c.TitleSecondary)}>{children}</h2>
+  return (
+    <h2 className={classnames(className, c.Title, c.TitleSecondary)} title={title}>
+      {children}
+    </h2>
+  )
 }
 
-export const TitleTertiary = ({ children, className, light }) => {
+export const TitleTertiary = ({ children, className, light, title }) => {
   const c = useStyles({ light })
-  return <h3 className={classnames(className, c.Title, c.TitleTertiary)}>{children}</h3>
+  return (
+    <h3 className={classnames(className, c.Title, c.TitleTertiary)} title={title}>
+      {children}
+    </h3>
+  )
 }
 
-export const TitleQuaternary = ({ children, className, light }) => {
+export const TitleQuaternary = ({ children, className, light, title }) => {
   const c = useStyles({ light })
-  return <h4 className={classnames(className, c.Title, c.TitleQuaternary)}>{children}</h4>
+  return (
+    <h4 className={classnames(className, c.Title, c.TitleQuaternary)} title={title}>
+      {children}
+    </h4>
+  )
 }
