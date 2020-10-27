@@ -18,13 +18,10 @@ const useStyles = createUseStyles(theme => {
         fontWeight: 500,
         fontSize: '.75rem',
         lineHeight: '1rem',
-        fontFamily: 'Montserrat',
-        background: theme.colors.purple[900],
         borderRadius: '100%',
         border: `1px solid ${theme.colors.white[400]}`,
 
         '& span': {
-          color: theme.colors.white[400],
           border: 'none',
         },
       },
