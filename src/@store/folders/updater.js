@@ -19,7 +19,7 @@ export const createNewFolders = (newFolderData, oldFolders) => {
   const newFolders = [...oldFolders]
 
   if (root) {
-    const parentFolderIndex = R.findIndex(R.propEq('id', root))(oldFolders)
+    const parentFolderIndex = R.findIndex(R.propEq('id', root.toString()))(oldFolders)
     newFolders[parentFolderIndex].subfolders.push(newFolder)
     return newFolders
   } else {
@@ -28,14 +28,27 @@ export const createNewFolders = (newFolderData, oldFolders) => {
   }
 }
 
+//Updates a folder in folders array
+//If updateFolder has a root, it will replace the folder in the subfolders array of the root folder.
+//If updateFolder has no root, it will replace the folder in the folders array.
 export const updateFolder = (newFolder, oldFolders) => {
   const { id: folderId, root } = newFolder
   const newFolders = [...oldFolders]
   if (root) {
-    const parentFolderIndex = R.findIndex(R.propEq('id', root))(newFolders)
-    newFolders[parentFolderIndex].subfolders.push(newFolder)
+    newFolder.id = folderId
+    const parentFolderIndex = R.findIndex(R.propEq('id', root.toString()))(newFolders)
+    const subFolders = [...newFolders[parentFolderIndex].subfolders]
+    newFolders[parentFolderIndex].subfolders = []
+    subFolders.forEach(subfolder => {
+      if (folderId.toString() === subfolder.id.toString()) {
+        newFolders[parentFolderIndex].subfolders.push(newFolder)
+      } else {
+        newFolders[parentFolderIndex].subfolders.push(subfolder)
+      }
+    })
     return newFolders
   } else {
+    newFolders.id = folderId.toString()
     const folderIndex = R.findIndex(R.propEq('id', folderId))(newFolders)
     newFolders[folderIndex] = newFolder
     return newFolders

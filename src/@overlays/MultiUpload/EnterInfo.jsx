@@ -180,7 +180,6 @@ const EnterInfo = ({
     activeId,
     uploadFiles,
   ])
-  const { data: folderData } = folders
   const initialState = {
     name: (model && model.name) || '',
     description: '',
@@ -216,14 +215,14 @@ const EnterInfo = ({
       if (e) {
         handleOnInputChange('folderId', e.value)
         if (e.value !== 'files') {
-          const folder = folderData.find(folder => folder.id === e.value)
+          const folder = folders.find(folder => folder.id === e.value)
           handleOnInputChange('isPublic', folder.isPublic)
         } else {
           handleOnInputChange('isPublic', true)
         }
       }
     },
-    [folderData, handleOnInputChange]
+    [folders, handleOnInputChange]
   )
 
   const handleSkip = useCallback(() => {
@@ -254,28 +253,21 @@ const EnterInfo = ({
   }, [model])
 
   const selectedFolder = useMemo(() => {
-    if (!folderId || !folderData) return { value: 'files', label: 'My Public Files' }
-    const folder = folderData.find(folder => folder.id === folderId)
+    if (!folderId || !folders || !folders.length)
+      return { value: 'files', label: 'My Public Files' }
+    const folder = folders.find(folder => folder.id.toString() === folderId.toString())
     handleOnInputChange('isPublic', folder.isPublic)
     return { value: folderId, label: folder.name.replace(new RegExp('//', 'g'), '/') }
-  }, [folderId, folderData, handleOnInputChange])
+  }, [folderId, folders, handleOnInputChange])
 
   const usersFolders = useMemo(() => {
-    const sortedFolders = !R.isEmpty(folderData)
-      ? folderData.sort((a, b) => {
-        if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
-        else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
-        return 0
-      })
+    return folders && folders.length
+      ? folders.map(folder => ({
+          value: folder.id,
+          label: folder.name.replace(new RegExp('//', 'g'), '/'),
+        }))
       : []
-
-    return sortedFolders && sortedFolders.length
-      ? sortedFolders.map(folder => ({
-        value: folder.id,
-        label: folder.name.replace(new RegExp('//', 'g'), '/'),
-      }))
-      : []
-  }, [folderData])
+  }, [folders])
 
   useEffect(() => {
     overlayview('MultiUpload - EnterInfo')
@@ -335,7 +327,7 @@ const EnterInfo = ({
           />
           <Spacer size={'1rem'} />
         </div>
-        {folderData && folderData.length ? (
+        {folders && folders.length ? (
           <div className={c.EnterInfo_Field}>
             <Dropdown
               className={c.EnterInfo_Select}

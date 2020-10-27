@@ -206,7 +206,7 @@ const findFolderById = (id, folders) => {
   let subFolder = false
   folders.some(folder => {
     const subfolders = folder.subfolders
-    subFolder = R.find(R.propEq('id', parseInt(id)))(subfolders) || false
+    subFolder = R.find(R.propEq('id', id.toString()))(subfolders) || false
     return subFolder
   })
   return subFolder
