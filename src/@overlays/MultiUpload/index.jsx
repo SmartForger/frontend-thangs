@@ -264,7 +264,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
           <Spinner />
         </div>
       )}
-      <Spacer size={'1rem'} />
+      <Spacer size={'2rem'} />
       <div className={c.MultiUpload_Content}>
         <div className={c.MultiUpload_Column}>
           <Spacer size={'1.5rem'} />
@@ -305,7 +305,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
           />
         )}
       </div>
-      <Spacer size={'1rem'} />
+      <Spacer size={'2rem'} />
     </div>
   )
 }

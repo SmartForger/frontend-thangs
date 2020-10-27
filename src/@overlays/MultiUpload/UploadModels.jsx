@@ -85,13 +85,13 @@ const useStyles = createUseStyles(theme => {
         width: '.75rem',
       },
       '&::-webkit-scrollbar-track': {
-        background: theme.colors.white[600],
+        background: theme.colors.white[400],
         borderRadius: '.5rem',
       },
       '&::-webkit-scrollbar-thumb': {
         backgroundColor: '#C7C7C7',
         borderRadius: 20,
-        border: `3px solid ${theme.colors.white[600]}`,
+        border: `3px solid ${theme.colors.white[400]}`,
       },
     },
     UploadModels_RemoveBtn: {
@@ -233,7 +233,7 @@ const UploadModels = ({
           </div>
         </>
       )}
-      <Spacer size={'1rem'} />
+      <Spacer size={'2rem'} />
     </>
   )
 }
