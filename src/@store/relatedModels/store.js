@@ -27,7 +27,7 @@ export default store => {
     })
     const { data, error } = await api({
       method: 'GET',
-      endpoint: `models/related/${id}`,
+      endpoint: `models/match/${id}`,
     })
 
     if (error) {
