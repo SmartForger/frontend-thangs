@@ -2,6 +2,7 @@ import React from 'react'
 import Select from 'react-select'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -10,12 +11,10 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.5rem',
     },
     Dropdown_Indicator: {
-      width: 0,
-      height: 0,
       marginRight: '1rem',
-      borderLeft: '6px solid transparent',
-      borderRight: '6px solid transparent',
-      borderTop: `8px solid ${theme.colors.purple[900]}`,
+      '& path': {
+        fill: theme.colors.grey[300],
+      },
     },
   }
 })
@@ -45,7 +44,7 @@ const Dropdown = ({
         // eslint-disable-next-line react/display-name
         DropdownIndicator: () => {
           // cx causes React to throw an error, so we remove it
-          return <div className={c.Dropdown_Indicator} />
+          return <ArrowDownIcon className={c.Dropdown_Indicator} />
         },
       }}
       styles={{
