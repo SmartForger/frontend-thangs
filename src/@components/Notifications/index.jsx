@@ -33,7 +33,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const Notifications = () => {
+const Notifications = ({ myThangsMenu }) => {
   const c = useStyles()
   const {
     notifications: { data = {}, isLoading, isError, error },
@@ -70,7 +70,11 @@ const Notifications = () => {
   const statusItem = renderStatusItem()
 
   return (
-    <DropdownMenu className={c.Notifications} TargetComponent={NotificationsButton}>
+    <DropdownMenu
+      className={c.Notifications}
+      TargetComponent={NotificationsButton}
+      myThangsMenu={myThangsMenu}
+    >
       {statusItem
         ? statusItem
         : notificationsArray &&

@@ -109,8 +109,8 @@ const UserNav = ({
   if (showUser && user && !R.isNil(user) && !R.isEmpty(user)) {
     return (
       <div className={classnames(c.UserNav_Row, c.UserNav_ButtonsRow)}>
-        <Notifications />
-        <Spacer size='1rem' />
+        <Notifications myThangsMenu={myThangsMenu} />
+        <Spacer size='1.5rem' />
         <ProfileDropdownMenu
           user={user}
           TargetComponent={ProfileDropdown}

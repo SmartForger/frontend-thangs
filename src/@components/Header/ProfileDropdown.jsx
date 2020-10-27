@@ -19,14 +19,26 @@ import { ReactComponent as SharedIcon } from '@svg/icon-shared.svg'
 import { ReactComponent as PortfolioIcon } from '@svg/icon-portfolio.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as SignOutIcon } from '@svg/icon-signout.svg'
+import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
     ProfileDropdown: {
       width: '16.25rem',
     },
+    ProfileDropdown_Arrow: {
+      '& > path': {
+        fill: ({ myThangsMenu }) =>
+          myThangsMenu ? theme.colors.black[500] : theme.colors.gold[500],
+        stroke: ({ myThangsMenu }) =>
+          myThangsMenu ? theme.colors.black[500] : theme.colors.gold[500],
+      },
+    },
     ProfileDropdown_ClickableButton: {
       cursor: 'pointer',
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     ProfileDropdown_DropdownMenuDivider: {
       margin: '.25rem 0',
@@ -45,7 +57,12 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-export const ProfileDropdownMenu = ({ dispatch, user = {}, TargetComponent }) => {
+export const ProfileDropdownMenu = ({
+  dispatch,
+  myThangsMenu,
+  user = {},
+  TargetComponent,
+}) => {
   const c = useStyles({})
   const t = useTranslations({})
   const history = useHistory()
@@ -56,6 +73,7 @@ export const ProfileDropdownMenu = ({ dispatch, user = {}, TargetComponent }) =>
       className={c.ProfileDropdown}
       TargetComponent={TargetComponent}
       user={user}
+      myThangsMenu={myThangsMenu}
     >
       <div>
         <div className={c.ProfileDropdown_Row}>
@@ -111,22 +129,19 @@ export const ProfileDropdownMenu = ({ dispatch, user = {}, TargetComponent }) =>
   )
 }
 
-export const ProfileDropdown = ({ user = {}, onClick = noop }) => {
-  const c = useStyles({})
+export const ProfileDropdown = ({ user = {}, onClick = noop, myThangsMenu }) => {
+  const c = useStyles({ myThangsMenu })
 
   return (
-    <div
-      className={c.ProfileDropdown_ClickableButton}
-      onClick={() => {
-        onClick()
-      }}
-    >
+    <div className={c.ProfileDropdown_ClickableButton} onClick={onClick}>
       <ProfilePicture
         name={user.fullName}
         userName={user.username}
         src={user.profile && user.profile.avatarUrl}
         size='2.375rem'
       />
+      <Spacer size={'.75rem'} />
+      <ArrowDownIcon className={c.ProfileDropdown_Arrow} />
     </div>
   )
 }

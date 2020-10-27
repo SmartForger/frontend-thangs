@@ -17,31 +17,31 @@ const useStyles = createUseStyles(theme => {
       marginLeft: '1rem',
     },
     NotificationsButton_NotificationIcon: {
-      color: theme.colors.purple[400],
-      '& path': {
-        stroke: theme.colors.purple[500],
+      '& > path': {
+        fill: ({ myThangsMenu }) =>
+          myThangsMenu ? theme.colors.black[500] : theme.colors.gold[500],
       },
     },
     NotificationsButton_UnreadBadge: {
-      background: theme.colors.gold[500],
-      borderRadius: '100%',
-      color: theme.colors.purple[900],
-      width: '.875rem',
-      height: '.875rem',
-      display: 'flex',
-      justifyContent: 'center',
       alignItems: 'center',
+      background: '#30BE93',
+      border: '1px solid white',
+      borderRadius: '100%',
+      bottom: '1px',
+      display: 'flex',
       fontSize: '.5625rem',
       fontWeight: 'bold',
+      height: '.5rem',
+      justifyContent: 'center',
       position: 'absolute',
-      top: '-.5rem',
-      right: '.7rem',
+      right: '-3px',
+      width: '.5rem',
     },
   }
 })
 
-const NotificationsButton = ({ onClick }) => {
-  const c = useStyles({})
+const NotificationsButton = ({ onClick, myThangsMenu }) => {
+  const c = useStyles({ myThangsMenu })
   const { dispatch } = useStoreon()
   const {
     notifications: { data: notifications },
@@ -66,9 +66,7 @@ const NotificationsButton = ({ onClick }) => {
     >
       <NotificationIcon className={c.NotificationsButton_NotificationIcon} />
       {notifications && notifications.unreadCount > 0 && (
-        <div className={c.NotificationsButton_UnreadBadge}>
-          {notifications.unreadCount}
-        </div>
+        <div className={c.NotificationsButton_UnreadBadge}></div>
       )}
     </div>
   )

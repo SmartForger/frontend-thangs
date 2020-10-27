@@ -121,6 +121,7 @@ const DropdownMenu = ({
   TargetComponent,
   children,
   className,
+  myThangsMenu,
   noIcons,
   buttonIcon: ButtonIcon = DotStackIcon,
   isOpen: isOpenExternal = undefined,
@@ -128,11 +129,16 @@ const DropdownMenu = ({
 }) => {
   const [isOpenInternal, toggleOpen] = useDropdownMenuState(isOpenExternal)
   const isOpen = isOpenExternal === undefined ? isOpenInternal : isOpenExternal
-  const c = useStyles({ isOpen, noIcons })
+  const c = useStyles({ isOpen, noIcons, myThangsMenu })
   return (
     <div className={c.DropdownMenu_Container}>
       {TargetComponent ? (
-        <TargetComponent onClick={toggleOpen} user={user} />
+        <TargetComponent
+          className={c.DropdownMenu_TargetComponent}
+          onClick={toggleOpen}
+          user={user}
+          myThangsMenu={myThangsMenu}
+        />
       ) : (
         <Button tertiary className={c.DropdownMenu_Button} onClick={toggleOpen}>
           <ButtonIcon />
