@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import * as R from 'ramda'
 import { SingleLineBodyText, Spacer, Spinner } from '@components'
@@ -78,11 +78,14 @@ const useStyles = createUseStyles(theme => {
 })
 
 const MultiUpload = ({ initData = null, folderId }) => {
-  const { dispatch, folders = {}, uploadFiles = {} } = useStoreon(
+  const { dispatch, folders = {}, shared = {}, uploadFiles = {} } = useStoreon(
     'folders',
+    'shared',
     'uploadFiles'
   )
   const { data: uploadFilesData = {}, isLoading } = uploadFiles
+  const { data: foldersData = [] } = folders
+  const { data: sharedData = [] } = shared
   const [activeView, setActiveView] = useState('upload')
   const [errorMessage, setErrorMessage] = useState(null)
   const [warningMessage, setWarningMessage] = useState(null)
@@ -195,11 +198,38 @@ const MultiUpload = ({ initData = null, folderId }) => {
     [dispatch]
   )
 
+  const dropdownFolders = useMemo(() => {
+    debugger
+    const foldersArray = [...foldersData]
+    const sharedArray = [...sharedData]
+    const combinedArray = []
+    foldersArray.sort((a, b) => {
+      if (a.name.toLowerCase() < b.name.toLowerCase()) return -1
+      else if (a.name.toLowerCase() > b.name.toLowerCase()) return 1
+      return 0
+    })
+    sharedArray.sort((a, b) => {
+      if (a.name.toLowerCase() < b.name.toLowerCase()) return -1
+      else if (a.name.toLowerCase() > b.name.toLowerCase()) return 1
+      return 0
+    })
+    foldersArray.forEach(folder => {
+      combinedArray.push(folder)
+      folder.subfolders.forEach(subfolder => {
+        combinedArray.push(subfolder)
+      })
+    })
+    sharedArray.forEach(folder => {
+      combinedArray.push(folder)
+    })
+    return combinedArray
+  }, [foldersData, sharedData])
+
   useEffect(() => {
     dispatch(types.RESET_UPLOAD_FILES)
     const { data: folderData } = folders
     if (R.isEmpty(folderData)) {
-      dispatch(types.FETCH_FOLDERS)
+      dispatch(types.FETCH_THANGS, {})
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -265,7 +295,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             activeView={activeView}
             closeOverlay={closeOverlay}
             errorMessage={errorMessage}
-            folders={folders}
+            folders={dropdownFolders}
             folderId={folderId}
             handleContinue={handleContinue}
             handleSkipToEnd={handleSubmit}

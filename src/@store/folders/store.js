@@ -12,7 +12,7 @@ const getInitAtom = () => ({
   isSaving: false,
   isSaved: false,
   saveError: false,
-  data: {},
+  data: [],
 })
 const noop = () => null
 export default store => {
