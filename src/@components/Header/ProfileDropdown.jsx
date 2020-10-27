@@ -101,10 +101,10 @@ export const ProfileDropdownMenu = ({
         <Divider spacing={0} />
         <Spacer size={'1rem'} />
         <DropdownItem to={`/${user.username}`}>
-          <PortfolioIcon /> Portfolio
+          <PortfolioIcon /> Public Portfolio
         </DropdownItem>
         <DropdownItem to={'/mythangs/shared-files'}>
-          <SharedIcon /> Shared
+          <SharedIcon /> Shared with me
         </DropdownItem>
         <DropdownItem to={'/mythangs/liked-models'}>
           <HeartIcon /> Liked

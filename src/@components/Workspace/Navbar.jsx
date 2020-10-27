@@ -251,7 +251,7 @@ const WorkspaceNavbar = ({
             <NavLink
               className={c.WorkspaceNavbar_NavLink}
               Icon={SharedIcon}
-              label={'Shared'}
+              label={'Shared with me'}
               onClick={handleClickShared}
               selected={path === '/mythangs/shared-files'}
             />
@@ -278,7 +278,7 @@ const WorkspaceNavbar = ({
             <NavLink
               className={c.WorkspaceNavbar_NavLink}
               Icon={PortfolioIcon}
-              label={'My Portfolio'}
+              label={'My Public Portfolio'}
               onClick={handleClickPortfolio}
             />
             <Spacer size={'1.5rem'} />
