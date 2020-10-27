@@ -3,7 +3,6 @@ import { Link, useHistory } from 'react-router-dom'
 import { format } from 'date-fns'
 import {
   Contributors,
-  Divider,
   FileContextMenu,
   FileMenu,
   Pill,
@@ -11,7 +10,6 @@ import {
   Spacer,
 } from '@components'
 import { createUseStyles } from '@style'
-import classnames from 'classnames'
 import { MetadataSecondary } from '@components/Text/Metadata'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
@@ -28,6 +26,44 @@ const useStyles = createUseStyles(theme => {
   return {
     FileTable: {
       marginLeft: '-1rem',
+      width: '100%',
+      '& table': {
+        borderCollapse: 'collapse',
+        width: '100%',
+        cursor: 'pointer',
+      },
+      '& th': {
+        fontSize: '.75rem',
+        padding: '0rem .25rem 1rem',
+        textAlign: 'left',
+        textTransform: 'uppercase',
+      },
+      '& th span': {
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'row',
+        textTransform: 'capitalize',
+        color: theme.colors.black[500],
+      },
+      '& td': {
+        padding: '1rem .5rem',
+        fontSize: '.875rem',
+      },
+      '& td span': {
+        maxWidth: '15rem',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        lineHeight: '1rem',
+      },
+      '& tbody tr': {
+        padding: 0,
+        margin: 0,
+        border: 'none',
+        borderBottom: `1px solid ${theme.colors.white[900]}`,
+        '&:hover': {
+          backgroundColor: 'rgba(0, 0, 0, 0.05)',
+        },
+      },
     },
     FileTable_Header: {
       '& > span': {
@@ -40,6 +76,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       position: 'relative',
+      alignItems: 'center',
     },
     FileTable_Cell: {
       display: 'flex',
@@ -73,11 +110,6 @@ const useStyles = createUseStyles(theme => {
     FileTable_Size: {
       width: '10%',
     },
-    FileTable_RowWrapper: {
-      '&:hover': {
-        backgroundColor: 'rgba(0, 0, 0, 0.05)',
-      },
-    },
     NoFilesMessage: {
       margin: '2rem',
       padding: '2rem',
@@ -109,6 +141,7 @@ const useStyles = createUseStyles(theme => {
     },
     MenuButton: {
       padding: '0 .5rem',
+      position: 'relative',
     },
     FileRowMenu: {
       position: 'absolute',
@@ -138,22 +171,24 @@ const useStyles = createUseStyles(theme => {
 const noop = () => null
 
 const FileName = ({ name }) => {
+  const c = useStyles({})
   return (
-    <>
+    <div className={c.FileTable_Row}>
       <FileIcon />
       <Spacer size={'.5rem'} />
       <SingleLineBodyText>{name}</SingleLineBodyText>
-    </>
+    </div>
   )
 }
 
 const FolderName = ({ name }) => {
+  const c = useStyles({})
   return (
-    <>
+    <div className={c.FileTable_Row}>
       <FolderIcon />
       <Spacer size={'.5rem'} />
       <SingleLineBodyText>{name}</SingleLineBodyText>
-    </>
+    </div>
   )
 }
 
@@ -167,54 +202,47 @@ const SortByArrow = () => {
 }
 
 const FileTableHeader = ({ sortedBy }) => {
-  const c = useStyles({})
   return (
-    <div className={classnames(c.FileTable_Row, c.FileTable_Header)}>
-      <div
-        className={classnames(c.FileTable_Cell, c.FileTable_FileName, c.FileTable_Header)}
-      >
-        <MetadataSecondary>
-          Filename{sortedBy === 'filename' && <SortByArrow />}
-        </MetadataSecondary>
-      </div>
-      <div className={classnames(c.FileTable_Cell, c.FileTable_Size, c.FileTable_Header)}>
-        <MetadataSecondary>
-          Created{sortedBy === 'created' && <SortByArrow />}
-        </MetadataSecondary>
-      </div>
-      <div className={classnames(c.FileTable_Cell, c.FileTable_Size, c.FileTable_Header)}>
-        <MetadataSecondary>
-          File Type{sortedBy === 'filetype' && <SortByArrow />}
-        </MetadataSecondary>
-      </div>
-      <div className={classnames(c.FileTable_Cell, c.FileTable_Size, c.FileTable_Header)}>
-        <MetadataSecondary>
-          Size{sortedBy === 'size' && <SortByArrow />}
-        </MetadataSecondary>
-      </div>
-      <div className={classnames(c.FileTable_Cell, c.FileTable_Header)}>
-        <MetadataSecondary>Contributors</MetadataSecondary>
-      </div>
-      <div className={classnames(c.FileTable_Cell, c.FileTable_Header)}>
-        <MetadataSecondary>Versioned From</MetadataSecondary>
-      </div>
-      <div
-        className={classnames(c.FileTable_Cell, c.FileTable_Header, c.FileTable_Action)}
-      ></div>
-    </div>
+    <thead>
+      <tr>
+        <th>
+          <MetadataSecondary>
+            Filename{sortedBy === 'filename' && <SortByArrow />}
+          </MetadataSecondary>
+        </th>
+        <th>
+          <MetadataSecondary>
+            Created{sortedBy === 'created' && <SortByArrow />}
+          </MetadataSecondary>
+        </th>
+        <th>
+          <MetadataSecondary>
+            File Type{sortedBy === 'filetype' && <SortByArrow />}
+          </MetadataSecondary>
+        </th>
+        <th>
+          <MetadataSecondary>
+            Size{sortedBy === 'size' && <SortByArrow />}
+          </MetadataSecondary>
+        </th>
+        <th>
+          <MetadataSecondary>Contributors</MetadataSecondary>
+        </th>
+        <th>
+          <MetadataSecondary>Versioned From</MetadataSecondary>
+        </th>
+        <th></th>
+      </tr>
+    </thead>
   )
 }
 
-const FolderRow = ({ folder, handleFolderClick = noop }) => {
+const FolderRow = ({ folder }) => {
   const c = useStyles({})
   const [showFolderMenu, setShowFolderMenu] = useState(false)
   const folderMenuRef = useRef(null)
 
   useExternalClick(folderMenuRef, () => setShowFolderMenu(false))
-
-  const handleClick = useCallback(() => {
-    handleFolderClick(folder)
-  }, [handleFolderClick, folder])
 
   const handleFolderMenu = useCallback(
     e => {
@@ -225,56 +253,43 @@ const FolderRow = ({ folder, handleFolderClick = noop }) => {
   )
 
   return (
-    <div className={c.FileTable_RowWrapper} onClick={handleClick}>
-      <Spacer size={'1rem'} />
-      <div className={c.FileTable_Row}>
-        <div
-          className={classnames(c.FileTable_Cell, c.FileTable_FileName)}
-          title={folder.name}
-        >
-          <FolderName name={folder.name} />
+    <>
+      <td title={folder.name}>
+        <FolderName name={folder.name} />
+      </td>
+      <td>
+        <MetadataSecondary>-</MetadataSecondary>
+      </td>
+      <td>
+        <MetadataSecondary>-</MetadataSecondary>
+      </td>
+      <td>
+        <MetadataSecondary>-</MetadataSecondary>
+      </td>
+      <td>
+        <Contributors users={folder.members} />
+      </td>
+      <td>-</td>
+      <td>
+        <div className={c.MenuButton} onClick={handleFolderMenu} ref={folderMenuRef}>
+          <DotStackIcon />
+          {showFolderMenu && (
+            <div className={c.FileRowMenu}>
+              <FileMenu folder={folder} type={'folder'} />
+            </div>
+          )}
         </div>
-        <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
-          <MetadataSecondary>-</MetadataSecondary>
-        </div>
-        <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
-          <MetadataSecondary>-</MetadataSecondary>
-        </div>
-        <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
-          <MetadataSecondary>-</MetadataSecondary>
-        </div>
-        <div className={c.FileTable_Cell}>
-          <Contributors users={folder.members} />
-        </div>
-        <div className={c.FileTable_Cell}>-</div>
-        <div className={classnames(c.FileTable_Cell, c.FileTable_Action)}>
-          <div className={c.MenuButton} onClick={handleFolderMenu} ref={folderMenuRef}>
-            <DotStackIcon />
-            {showFolderMenu && (
-              <div className={c.FileRowMenu}>
-                <FileMenu folder={folder} type={'folder'} />
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-      <Spacer size={'1rem'} />
-      <Divider spacing='0' />
-    </div>
+      </td>
+    </>
   )
 }
 
 const FileRow = ({ model, handleModelClick: _handle = noop }) => {
   const c = useStyles({})
-  const history = useHistory()
   const [showFileMenu, setShowFileMenu] = useState(false)
   const fileMenuRef = useRef(null)
 
   useExternalClick(fileMenuRef, () => setShowFileMenu(false))
-
-  const handleClick = useCallback(() => {
-    history.push(`/model/${model.id}`)
-  }, [history, model.id])
 
   const handleFileMenu = useCallback(
     e => {
@@ -285,49 +300,44 @@ const FileRow = ({ model, handleModelClick: _handle = noop }) => {
   )
 
   return (
-    <div className={c.FileTable_RowWrapper} onClick={handleClick}>
-      <Spacer size={'1rem'} />
-      <div className={c.FileTable_Row} title={model.name}>
-        <div className={classnames(c.FileTable_Cell, c.FileTable_FileName)}>
-          <FileName name={model.name} />
-        </div>
-        <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
-          <MetadataSecondary>
-            {format(new Date(model.uploadDate), 'MMM d, Y')}
-          </MetadataSecondary>
-        </div>
-        <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
-          <MetadataSecondary>{model.fileType}</MetadataSecondary>
-        </div>
-        <div className={classnames(c.FileTable_Cell, c.FileTable_Size)}>
-          <MetadataSecondary>{formatBytes(model.size)}</MetadataSecondary>
-        </div>
-        <div className={c.FileTable_Cell}>
-          <Contributors users={[model.owner]} />
-        </div>
-        <div className={c.FileTable_Cell}>
-          {model.previousVersionModelId ? (
-            <Link to={`/model/${model.previousVersionModelId}`}>
-              {model.previousVersionModelId}
-            </Link>
-          ) : (
-            '-'
+    <>
+      <td>
+        <FileName name={model.name} />
+      </td>
+      <td>
+        <MetadataSecondary>
+          {format(new Date(model.uploadDate), 'MMM d, Y')}
+        </MetadataSecondary>
+      </td>
+      <td>
+        <MetadataSecondary>{model.fileType}</MetadataSecondary>
+      </td>
+      <td>
+        <MetadataSecondary>{formatBytes(model.size)}</MetadataSecondary>
+      </td>
+      <td>
+        <Contributors users={[model.owner]} />
+      </td>
+      <td>
+        {model.previousVersionModelId ? (
+          <Link to={`/model/${model.previousVersionModelId}`}>
+            {model.previousVersionModelId}
+          </Link>
+        ) : (
+          '-'
+        )}
+      </td>
+      <td>
+        <div className={c.MenuButton} onClick={handleFileMenu} ref={fileMenuRef}>
+          <DotStackIcon />
+          {showFileMenu && (
+            <div className={c.FileRowMenu}>
+              <FileMenu model={model} type={'model'} />
+            </div>
           )}
         </div>
-        <div className={classnames(c.FileTable_Cell, c.FileTable_Action)}>
-          <div className={c.MenuButton} onClick={handleFileMenu} ref={fileMenuRef}>
-            <DotStackIcon />
-            {showFileMenu && (
-              <div className={c.FileRowMenu}>
-                <FileMenu model={model} type={'model'} />
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-      <Spacer size={'1rem'} />
-      <Divider spacing='0' />
-    </div>
+      </td>
+    </>
   )
 }
 
@@ -341,41 +351,86 @@ const FileTable = ({
   onDrop = noop,
 }) => {
   const c = useStyles({})
+  const history = useHistory()
 
   return (
     <div className={c.FileTable}>
       {files.length > 0 || searchCase ? (
         <>
-          <FileTableHeader sortedBy={sortedBy} />
-          {files.length > 0 ? (
-            files.map((file, index) => {
-              if (!file) return null
-              const { id } = file
-              return (
-                <React.Fragment key={`TableRow_${index}`}>
-                  {file.subfolders ? (
-                    <div key={`FolderRow_${index}`}>
-                      <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
-                        <FolderRow folder={file} handleFolderClick={handleChangeFolder} />
-                      </ContextMenuTrigger>
-                      <FileContextMenu id={id} folder={file} type={'folder'} />
-                    </div>
-                  ) : (
-                    <div key={`FileRow_${index}`}>
-                      <ContextMenuTrigger id={`File_Menu_${id}`} holdToDisplay={1000}>
-                        <FileRow model={file} handleModelClick={handleEditModel} />
-                      </ContextMenuTrigger>
-                      <FileContextMenu id={id} model={file} type={'model'} />
-                    </div>
-                  )}
-                </React.Fragment>
-              )
-            })
-          ) : (
-            <SingleLineBodyText className={c.NoResultsFound}>
-              No Results Found
-            </SingleLineBodyText>
-          )}
+          <table>
+            <FileTableHeader sortedBy={sortedBy} />
+            <tbody>
+              {files.length > 0 ? (
+                files.map((file, index) => {
+                  if (!file) return null
+                  const { id } = file
+                  let handleClick = () => null
+                  if (file.subfolders) {
+                    handleClick = () => handleChangeFolder(file)
+                  } else {
+                    handleClick = () => {
+                      history.push(`/model/${file.id}`)
+                    }
+                  }
+                  const RowWithProps = ({ children, ...props }) => (
+                    <tr onDoubleClick={handleClick} {...props}>
+                      {children}
+                    </tr>
+                  )
+                  return (
+                    <React.Fragment key={`TableRow_${index}`}>
+                      {file.subfolders ? (
+                        <React.Fragment key={`FolderRow_${index}`}>
+                          <ContextMenuTrigger
+                            id={`File_Menu_${id}`}
+                            holdToDisplay={1000}
+                            renderTag={RowWithProps}
+                          >
+                            <FolderRow folder={file} />
+                          </ContextMenuTrigger>
+                        </React.Fragment>
+                      ) : (
+                        <React.Fragment key={`FileRow_${index}`}>
+                          <ContextMenuTrigger
+                            id={`File_Menu_${id}`}
+                            holdToDisplay={1000}
+                            renderTag={RowWithProps}
+                          >
+                            <FileRow model={file} handleModelClick={handleEditModel} />
+                          </ContextMenuTrigger>
+                        </React.Fragment>
+                      )}
+                    </React.Fragment>
+                  )
+                })
+              ) : (
+                <SingleLineBodyText className={c.NoResultsFound}>
+                  No Results Found
+                </SingleLineBodyText>
+              )}
+            </tbody>
+          </table>
+          {files.length > 0
+            ? files.map((file, index) => {
+                if (!file) return null
+                const { id, subfolders } = file
+                return subfolders ? (
+                  <FileContextMenu
+                    key={`contextMenu_${index}`}
+                    id={id}
+                    folder={file}
+                    type={'folder'}
+                  />
+                ) : (
+                  <FileContextMenu
+                    key={`contextMenu_${index}`}
+                    id={id}
+                    model={file}
+                    type={'model'}
+                  />
+                )
+              })
+            : null}
         </>
       ) : !hideDropzone ? (
         <div className={c.NoFilesMessage}>
