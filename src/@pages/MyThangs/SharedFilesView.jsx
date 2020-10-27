@@ -73,6 +73,10 @@ const SharedFilesView = ({
 }) => {
   const c = useStyles({})
   const { starredSharedFolders = [] } = useStarred()
+  const hasStarred = useMemo(() => starredSharedFolders.length > 0, [
+    starredSharedFolders.length,
+  ])
+
   const sortedFolders = useMemo(() => {
     return !R.isEmpty(sharedFolders)
       ? sharedFolders
@@ -99,17 +103,24 @@ const SharedFilesView = ({
             <Spacer size='2rem' />
             <TitleTertiary>Shared Files</TitleTertiary>
             <Spacer size='4rem' />
-            <TitleTertiary>Starred</TitleTertiary>
-            <div className={c.SharedFilesView_Starred}>
-              {starredSharedFolders.map((folder, index) => {
-                return (
-                  <div className={c.SharedFilesView_StarredRow} key={`starred_${index}`}>
-                    <FolderCard folder={folder} handleClick={handleChangeFolder} />
-                    <Spacer size='2rem' />
-                  </div>
-                )
-              })}
-            </div>
+            {hasStarred && (
+              <>
+                <TitleTertiary>Starred</TitleTertiary>
+                <div className={c.SharedFilesView_Starred}>
+                  {starredSharedFolders.map((folder, index) => {
+                    return (
+                      <div
+                        className={c.SharedFilesView_StarredRow}
+                        key={`starred_${index}`}
+                      >
+                        <FolderCard folder={folder} handleClick={handleChangeFolder} />
+                        <Spacer size='2rem' />
+                      </div>
+                    )
+                  })}
+                </div>
+              </>
+            )}
             <Spacer size='4rem' />
             <TitleTertiary>Files</TitleTertiary>
             <Spacer size='2rem' />

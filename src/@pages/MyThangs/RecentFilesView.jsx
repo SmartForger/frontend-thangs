@@ -53,7 +53,10 @@ const RecentFilesView = ({
   const { activity } = useStoreon('activity')
   const { data: activityData } = activity
   const { starredModels = [], starredFolders = [] } = useStarred()
-
+  const hasStarred = useMemo(
+    () => starredFolders.length > 0 || starredModels.length > 0,
+    [starredFolders.length, starredModels.length]
+  )
   const files = useMemo(() => {
     return [folderData, modelData]
       .flat()
@@ -75,26 +78,30 @@ const RecentFilesView = ({
             <TitleTertiary>Activity & Contributions</TitleTertiary>
             <Spacer size='2rem' />
             <StatsBar userActivity={activityData} />
-            <Spacer size='4rem' />
-            <TitleTertiary>Starred</TitleTertiary>
-            <div className={c.RecentFilesView_Starred}>
-              {starredFolders.map((folder, index) => {
-                return (
-                  <div className={c.RecentFilesView_Row} key={`starred_${index}`}>
-                    <FolderCard folder={folder} handleClick={handleChangeFolder} />
-                    <Spacer size='2rem' />
-                  </div>
-                )
-              })}
-              {starredModels.map((model, index) => {
-                return (
-                  <div className={c.RecentFilesView_Row} key={`starred_${index}`}>
-                    <FileCard model={model} handleClick={handleEditModel} />
-                    <Spacer size='2rem' />
-                  </div>
-                )
-              })}
-            </div>
+            {hasStarred && (
+              <>
+                <Spacer size='4rem' />
+                <TitleTertiary>Starred</TitleTertiary>
+                <div className={c.RecentFilesView_Starred}>
+                  {starredFolders.map((folder, index) => {
+                    return (
+                      <div className={c.RecentFilesView_Row} key={`starred_${index}`}>
+                        <FolderCard folder={folder} handleClick={handleChangeFolder} />
+                        <Spacer size='2rem' />
+                      </div>
+                    )
+                  })}
+                  {starredModels.map((model, index) => {
+                    return (
+                      <div className={c.RecentFilesView_Row} key={`starred_${index}`}>
+                        <FileCard model={model} handleClick={handleEditModel} />
+                        <Spacer size='2rem' />
+                      </div>
+                    )
+                  })}
+                </div>
+              </>
+            )}
             <Spacer size='4rem' />
             <TitleTertiary>Recent</TitleTertiary>
             <Spacer size='2rem' />
