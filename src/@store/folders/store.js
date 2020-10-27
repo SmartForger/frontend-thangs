@@ -138,13 +138,6 @@ export default store => {
     }
   )
 
-  store.on(types.UPDATE_FOLDER, (state, { folder, onFinish = noop }) => {
-    const newFolders = updateFolder(folder, state.folders.data)
-    store.dispatch(types.UPDATE_FOLDERS, newFolders)
-    store.dispatch(types.SAVED_FOLDER)
-    onFinish()
-  })
-
   store.on(
     types.FETCH_FOLDER,
     async (state, { folderId, inviteCode, onFinish = noop }) => {
@@ -156,7 +149,9 @@ export default store => {
         .then(res => {
           const folder = res.data
           store.dispatch(types.LOADED_FOLDER)
-          store.dispatch(types.UPDATE_FOLDER, { folder })
+          const newFolders = updateFolder(folder, state.folders.data)
+          store.dispatch(types.UPDATE_FOLDERS, newFolders)
+          store.dispatch(types.SAVED_FOLDER)
           onFinish()
         })
         .catch(_error => {
