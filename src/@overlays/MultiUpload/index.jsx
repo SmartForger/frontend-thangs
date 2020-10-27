@@ -199,7 +199,6 @@ const MultiUpload = ({ initData = null, folderId }) => {
   )
 
   const dropdownFolders = useMemo(() => {
-    debugger
     const foldersArray = [...foldersData]
     const sharedArray = [...sharedData]
     const combinedArray = []
