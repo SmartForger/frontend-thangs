@@ -72,8 +72,12 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
 
       '& h3': {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        width: '18rem',
+        display: 'inline-block',
         lineHeight: '1rem',
-        wordBreak: 'break-word',
       },
 
       '& svg': {
@@ -155,7 +159,7 @@ const EditModelForm = ({
           <div className={c.EditModelForm_ModelTitle}>
             <FileIcon />
             <Spacer size={'1rem'} />
-            <TitleTertiary>{model.name}</TitleTertiary>
+            <TitleTertiary title={model.name}>{model.name}</TitleTertiary>
             <Spacer size={'.5rem'} />
             <LikeModelButton className={c.FileCard_Star} model={model} minimal />
           </div>
@@ -237,10 +241,8 @@ const EditModelForm = ({
             />
             <Spacer size='1rem' />
             <Button type='submit'>Save Changes</Button>
-            <Spacer size='1.5rem' />
-            <Divider spacing='0' />
-            <Spacer size='.75rem' />
-            <Button tertiary onClick={handleDeleteModel} type='button'>
+            <Spacer size='1rem' />
+            <Button secondary onClick={handleDeleteModel} type='button'>
               Delete Model
             </Button>
           </form>
