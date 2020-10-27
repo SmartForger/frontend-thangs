@@ -41,6 +41,13 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.5rem',
       backgroundColor: theme.colors.white[400],
     },
+    EditProfileForm_Row: {
+      display: 'flex',
+      flexDirection: 'row',
+    },
+    EditProfileForm_HalfWidthInput: {
+      width: 'calc(50% - .5rem) !important',
+    },
   }
 })
 const noop = () => null
@@ -97,26 +104,29 @@ const EditProfileForm = ({
           <Spacer size='1rem' />
         </>
       )}
-      <Input
-        id='firstName-input'
-        name='firstName'
-        label='First Name'
-        value={inputState && inputState.firstName}
-        onChange={handleOnInputChange}
-        required
-      />
-      <Spacer size='1rem' />
-      <Input
-        id='lastName-input'
-        name='lastName'
-        label='Last Name'
-        value={inputState && inputState.lastName}
-        onChange={handleOnInputChange}
-        required
-      />
+      <div className={c.EditProfileForm_Row}>
+        <Input
+          id='firstName-input'
+          name='firstName'
+          label='First Name'
+          value={inputState && inputState.firstName}
+          onChange={handleOnInputChange}
+          required
+        />
+        <Spacer size='1rem' />
+        <Input
+          id='lastName-input'
+          name='lastName'
+          label='Last Name'
+          value={inputState && inputState.lastName}
+          onChange={handleOnInputChange}
+          required
+        />
+      </div>
       <Spacer size='1rem' />
       <Input
         id='username-input'
+        className={c.EditProfileForm_HalfWidthInput}
         name='username'
         label='Username'
         value={inputState && inputState.username}
@@ -141,7 +151,7 @@ const EditProfileForm = ({
               <Spinner size={'1rem'} />
             </div>
           ) : (
-            'Save'
+            'Save Changes'
           )}
         </Button>
         <Spacer size={'1rem'} />
