@@ -39,7 +39,7 @@ const useStyles = createUseStyles(theme => {
     },
     FolderCard_Title: {
       textOverflow: 'ellipsis',
-      maxWidth: '12.5rem',
+      maxWidth: '10.5rem',
       overflow: 'hidden',
       flex: 'none',
       lineHeight: '1rem !important',
