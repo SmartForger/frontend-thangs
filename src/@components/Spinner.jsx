@@ -29,9 +29,13 @@ const useStyles = createUseStyles(theme => {
       display: 'block',
     },
     Spinner_path: {
-      stroke: theme.colors.grey[700],
+      stroke: theme.colors.blue[500],
       strokeLinecap: 'round',
       animation: '$dash 1.5s ease-in-out infinite',
+    },
+    Spinner_static: {
+      stroke: theme.colors.white[900],
+      strokeLinecap: 'round',
     },
   }
 })
@@ -45,6 +49,14 @@ const Spinner = ({ className, size = '3rem', ...otherProps }) => {
       viewBox='0 0 50 50'
       data-cy='loading-spinner'
     >
+      <circle
+        className={c.Spinner_static}
+        cx='25'
+        cy='25'
+        r='20'
+        fill='none'
+        strokeWidth='4'
+      />
       <circle
         className={c.Spinner_path}
         cx='25'
