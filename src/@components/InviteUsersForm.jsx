@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { useForm } from '@hooks'
 import Joi from '@hapi/joi'
 import * as R from 'ramda'
@@ -167,6 +167,7 @@ const InviteUsersForm = ({
   afterAction = noop,
   errorMessage,
 }) => {
+  const firstInputRef = useRef(null)
   const { dispatch, folders = {} } = useStoreon('folders')
   const { isSaving } = folders
   const c = useStyles()
@@ -216,6 +217,10 @@ const InviteUsersForm = ({
     [afterAction, clearAllInputs, dispatch, folderId, onError]
   )
 
+  useEffect(() => {
+    firstInputRef.current.focus()
+  }, [])
+
   return (
     <>
       {isSaving && (
@@ -242,6 +247,7 @@ const InviteUsersForm = ({
               onError(null)
             }}
             placeholder='Email'
+            inputRef={firstInputRef}
           />
           <Spacer size={'.5rem'} />
           <Button className={c.InviteForm_SaveButton} type='submit'>

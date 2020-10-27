@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import * as R from 'ramda'
 import {
   Button,
@@ -104,6 +104,7 @@ const EditModelForm = ({
 }) => {
   const c = useStyles()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const firstInputRef = useRef(null)
 
   const initialState = {
     id: model.id,
@@ -142,6 +143,10 @@ const EditModelForm = ({
     return R.find(R.propEq('value', model.category), CATEGORIES)
   }, [model])
 
+  useEffect(() => {
+    firstInputRef.current.focus()
+  }, [])
+
   return (
     <div className={c.EditModelForm_Wrapper}>
       {!showDeleteConfirm && (
@@ -175,6 +180,7 @@ const EditModelForm = ({
               maxLength='150'
               value={inputState && inputState.name}
               onChange={handleOnInputChange}
+              inputRef={firstInputRef}
               required
             />
             <Spacer size='1rem' />

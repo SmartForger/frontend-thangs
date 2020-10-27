@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import * as R from 'ramda'
 import {
   Button,
@@ -175,6 +175,7 @@ const EnterInfo = ({
   isLoading,
 }) => {
   const c = useStyles({})
+  const firstInputRef = useRef(null)
   const activeId = Object.keys(uploadFiles)[activeView]
   const model = useMemo(() => uploadFiles && uploadFiles[activeId], [
     activeId,
@@ -263,14 +264,15 @@ const EnterInfo = ({
   const usersFolders = useMemo(() => {
     return folders && folders.length
       ? folders.map(folder => ({
-          value: folder.id,
-          label: folder.name.replace(new RegExp('//', 'g'), '/'),
-        }))
+        value: folder.id,
+        label: folder.name.replace(new RegExp('//', 'g'), '/'),
+      }))
       : []
   }, [folders])
 
   useEffect(() => {
     overlayview('MultiUpload - EnterInfo')
+    firstInputRef.current.focus()
   }, [])
 
   useEffect(() => {
@@ -312,6 +314,7 @@ const EnterInfo = ({
             onChange={handleOnInputChange}
             value={inputState && inputState.name}
             required
+            inputRef={firstInputRef}
           />
           <Spacer size={'1rem'} />
         </div>

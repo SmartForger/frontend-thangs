@@ -19,6 +19,7 @@ const Input = ({
   autoComplete,
   className,
   id,
+  inputRef,
   label,
   maxLength = 500,
   name,
@@ -35,6 +36,7 @@ const Input = ({
         className={c.TextInput}
         data-cy={`cy_${id}`}
         id={id}
+        inputRef={inputRef}
         maxLength={maxLength}
         name={name}
         onChange={e => onChange(name, e.target.value)}

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import * as R from 'ramda'
 import { Button, Input, Spacer, Toggle } from '@components'
 import { createUseStyles } from '@style'
@@ -77,6 +77,7 @@ const FolderForm = ({
   errorMessage,
 }) => {
   const c = useStyles()
+  const firstInputRef = useRef(null)
   const { id, name } = folder
   const isPublic = !R.isEmpty(parentFolder)
     ? parentFolder.isPublic
@@ -131,6 +132,10 @@ const FolderForm = ({
     return null
   }, [folder, parentFolder])
 
+  useEffect(() => {
+    firstInputRef.current.focus()
+  }, [])
+
   return (
     <div className={c.FolderForm_Wrapper}>
       <form className={c.FolderForm} onSubmit={onFormSubmit(handleFolderSubmit)}>
@@ -148,6 +153,7 @@ const FolderForm = ({
           value={inputState && inputState.name}
           onChange={handleOnInputChange}
           required
+          inputRef={firstInputRef}
         />
         <Spacer size='.5rem' />
         <Toggle
