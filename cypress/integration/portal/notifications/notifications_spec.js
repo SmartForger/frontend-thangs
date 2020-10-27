@@ -89,29 +89,25 @@ describe('User notifications', () => {
       .should('be.gt', 5)
 
     openNotifications()
-    cy.get('[class^=NotificationSnippet_text]', { timeout: 5000 })
+    cy.get('[class^=NotificationSnippet_text]', { timeout: 15000 })
       .should('contain', USER2.NAME)
       .and('contain', 'commented')
 
-    cy.get('[class^=NotificationSnippet_text]', { timeout: 5000 })
+    cy.get('[class^=NotificationSnippet_text]')
       .should('contain', USER2.NAME)
       .and('contain', 'downloaded')
 
-    cy.get('[class^=NotificationSnippet_text]', { timeout: 5000 })
+    cy.get('[class^=NotificationSnippet_text]')
       .should('contain', USER2.NAME)
       .and('contain', 'uploaded new version')
 
-    cy.get('[class^=NotificationSnippet_text]', { timeout: 5000 })
+    cy.get('[class^=NotificationSnippet_text]')
       .should('contain', USER2.NAME)
       .and('contain', 'liked')
 
-    cy.get('[class^=NotificationSnippet_text]', { timeout: 5000 })
+    cy.get('[class^=NotificationSnippet_text]')
       .should('contain', USER2.NAME)
       .and('contain', 'followed')
-
-    cy.get('[class^=NotificationSnippet_text]', { timeout: 5000 })
-      .should('contain', USER2.NAME)
-      .and('contain', 'uploaded')
   })
   
   it('Cleanup User2', () => {
