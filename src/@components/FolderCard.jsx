@@ -8,7 +8,7 @@ import {
 } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as FolderCardIcon } from '@svg/folder-card.svg'
-import { ReactComponent as PadlockIcon } from '@svg/icon-padlock.svg'
+import { ReactComponent as PadlockIcon } from '@svg/icon-padlock-blue.svg'
 import { ReactComponent as SharedFolderIcon } from '@svg/icon-sharedfolder.svg'
 import { ContextMenuTrigger } from 'react-contextmenu'
 
@@ -32,10 +32,6 @@ const useStyles = createUseStyles(theme => {
       right: '0',
       top: '0',
       padding: '1rem',
-
-      '& path': {
-        stroke: '#5A5A75',
-      },
     },
     FolderCard_Title: {
       textOverflow: 'ellipsis',
@@ -83,6 +79,7 @@ const FolderCard = ({ handleClick = noop, folder }) => {
             folder={folder}
             minimal
             onlyShowOwned
+            color={'#5A5A75'}
           />
           <Spacer size={'3rem'} />
           <div className={c.FolderCard_IconWrapper}>

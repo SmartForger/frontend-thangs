@@ -11,7 +11,7 @@ import * as types from '@constants/storeEventTypes'
 import classnames from 'classnames'
 import { authenticationService } from '@services'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     '@keyframes spinner': {
       from: {
@@ -35,6 +35,12 @@ const useStyles = createUseStyles(_theme => {
       '-ms-transform-style': 'preserve-3d',
       'transform-style': 'preserve-3d',
     },
+    LikeFolderIcon__filled: {
+      '& path': {
+        fill: ({ color }) => color || theme.colors.black[500],
+        stroke: ({ color }) => color || theme.colors.black[500],
+      },
+    },
     LikeFolderIcon__unliked: {
       animation: '$spinner 250ms linear 0s 1 reverse',
 
@@ -42,6 +48,12 @@ const useStyles = createUseStyles(_theme => {
       '-moz-transform-style': 'preserve-3d',
       '-ms-transform-style': 'preserve-3d',
       'transform-style': 'preserve-3d',
+    },
+    LikeFolderIcon__unfilled: {
+      '& path': {
+        fill: 'transparent',
+        stroke: ({ color }) => color || theme.colors.black[500],
+      },
     },
   }
 })
@@ -53,13 +65,13 @@ const hasLikedFolder = (folderData, currentUserId) => {
 const HeartButton = ({ liked, c, hasChanged }) => {
   return liked ? (
     <HeartFilledIcon
-      className={classnames(c.LikeFolderIcon, {
+      className={classnames(c.LikeFolderIcon, c.LikeFolderIcon__filled, {
         [c.LikeFolderIcon__liked]: hasChanged,
       })}
     />
   ) : (
     <HeartIcon
-      className={classnames(c.LikeFolderIcon, {
+      className={classnames(c.LikeFolderIcon, c.LikeFolderIcon__unfilled, {
         [c.LikeFolderIcon__unliked]: hasChanged,
       })}
     />
@@ -69,21 +81,21 @@ const HeartButton = ({ liked, c, hasChanged }) => {
 const StarButton = ({ liked, c, hasChanged }) => {
   return liked ? (
     <StarFilledIcon
-      className={classnames(c.LikeFolderIcon, {
+      className={classnames(c.LikeFolderIcon, c.LikeFolderIcon__filled, {
         [c.LikeFolderIcon__liked]: hasChanged,
       })}
     />
   ) : (
     <StarIcon
-      className={classnames(c.LikeFolderIcon, {
+      className={classnames(c.LikeFolderIcon, c.LikeFolderIcon__unfilled, {
         [c.LikeFolderIcon__unliked]: hasChanged,
       })}
     />
   )
 }
 
-const LikeFolderButton = ({ className, folder = {}, minimal, onlyShowOwned }) => {
-  const c = useStyles({})
+const LikeFolderButton = ({ className, color, folder = {}, minimal, onlyShowOwned }) => {
+  const c = useStyles({ color })
   const { dispatch } = useStoreon()
   const currentUserId = authenticationService.getCurrentUserId()
   const { id, creator = {} } = folder

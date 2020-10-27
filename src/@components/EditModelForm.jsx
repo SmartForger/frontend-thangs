@@ -74,9 +74,9 @@ const useStyles = createUseStyles(theme => {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
-        width: '18rem',
+        maxWidth: '18rem',
         display: 'inline-block',
-        lineHeight: '1rem',
+        lineHeight: '1.25rem',
       },
 
       '& svg': {

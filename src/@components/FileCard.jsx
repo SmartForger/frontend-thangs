@@ -30,10 +30,6 @@ const useStyles = createUseStyles(theme => {
       right: '0',
       top: '0',
       padding: '1rem',
-
-      '& path': {
-        stroke: '#AE881E',
-      },
     },
     FileCard_Name: {
       textOverflow: 'ellipsis',
@@ -79,7 +75,12 @@ const FileCard = ({ handleClick = noop, model }) => {
           onClick={handleModelClick}
           title={name}
         >
-          <LikeModelButton className={c.FileCard_Star} model={model} minimal />
+          <LikeModelButton
+            color={'#AE881E'}
+            className={c.FileCard_Star}
+            model={model}
+            minimal
+          />
           <Spacer size={'3rem'} />
           <div className={c.FileCard_IconWrapper}>
             <FileCardIcon className={c.FileCard_Icon} />
