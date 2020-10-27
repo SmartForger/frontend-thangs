@@ -37,6 +37,7 @@ const useStyles = createUseStyles(theme => {
 
       '& > div': {
         height: '100%',
+        width: '100%',
         outline: 'none',
       },
     },
