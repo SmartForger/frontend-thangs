@@ -25,7 +25,10 @@ const useStyles = createUseStyles(theme => {
     NotificationsButton_UnreadBadge: {
       alignItems: 'center',
       background: '#30BE93',
-      border: '1px solid white',
+      border: ({ myThangsMenu }) =>
+        myThangsMenu
+          ? `1px solid ${theme.colors.white[400]}`
+          : `1px solid ${theme.colors.purple[900]}`,
       borderRadius: '100%',
       bottom: '1px',
       display: 'flex',
