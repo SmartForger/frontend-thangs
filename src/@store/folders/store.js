@@ -3,7 +3,12 @@ import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import { track } from '@utilities/analytics'
-import { createNewFolders, removeFolder, updateFolder } from './updater'
+import {
+  createNewFolders,
+  removeFolder,
+  removeModelFromFolder,
+  updateFolder,
+} from './updater'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -137,6 +142,13 @@ export default store => {
       }
     }
   )
+
+  store.on(types.DELETE_MODEL_FROM_FOLDER, async (state, { model }) => {
+    store.dispatch(types.SAVING_FOLDER)
+    const newFolders = removeModelFromFolder(model, state.folders.data)
+    store.dispatch(types.UPDATE_FOLDERS, newFolders)
+    store.dispatch(types.SAVED_FOLDER)
+  })
 
   store.on(
     types.FETCH_FOLDER,

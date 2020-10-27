@@ -71,3 +71,19 @@ export const removeFolder = (folder, oldFolders) => {
     return folders
   }
 }
+
+export const removeModelFromFolder = (model, oldFolders) => {
+  const { id: modelId } = model
+  const newFolders = [...oldFolders]
+  return newFolders.map(rootFolder => {
+    const { subfolders } = rootFolder
+    const newRootFolder = { ...rootFolder }
+    newRootFolder.models = R.reject(model => model.id === modelId, rootFolder.models)
+    newRootFolder.subfolders = subfolders.map(subfolder => {
+      const newSubFolder = { ...subfolder }
+      newSubFolder.models = R.reject(model => model.id === modelId, subfolder.models)
+      return newSubFolder
+    })
+    return newRootFolder
+  })
+}

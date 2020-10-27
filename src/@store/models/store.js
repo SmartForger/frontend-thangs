@@ -5,9 +5,16 @@ import { authenticationService } from '@services'
 import { STATUSES, getStatusState } from '@store/constants'
 import { logger } from '@utilities/logging'
 import { track } from '@utilities/analytics'
+import { removeModel } from './updater'
 
 const noop = () => null
 export default store => {
+  store.on(types.UPDATE_MODELS, (state, event) => ({
+    models: {
+      ...state.models,
+      data: event,
+    },
+  }))
   store.on(
     types.CHANGE_MODEL_STATUS,
     (state, { atom, status = STATUSES.INIT, data }) => ({
@@ -78,35 +85,40 @@ export default store => {
     }
   )
 
-  store.on(types.DELETE_MODEL, async (_, { model, onError = noop, onFinish = noop }) => {
-    if (R.isNil(model) || R.isEmpty(model)) return
-    const { id } = model
-    store.dispatch(types.CHANGE_MODEL_STATUS, {
-      status: STATUSES.SAVING,
-      atom: `model-${id}`,
-    })
-
-    const { error } = await api({
-      method: 'DELETE',
-      endpoint: `models/${id}`,
-    })
-
-    if (error) {
+  store.on(
+    types.DELETE_MODEL,
+    async (state, { model, onError = noop, onFinish = noop }) => {
+      if (R.isNil(model) || R.isEmpty(model)) return
+      const { id } = model
       store.dispatch(types.CHANGE_MODEL_STATUS, {
-        status: STATUSES.FAILURE,
+        status: STATUSES.SAVING,
         atom: `model-${id}`,
       })
-      onError(error.message)
-      logger.error('Error when trying to update the model', error)
-    } else {
-      onFinish()
-      store.dispatch(types.CHANGE_MODEL_STATUS, {
-        status: STATUSES.SAVED,
-        atom: `model-${id}`,
+
+      const { error } = await api({
+        method: 'DELETE',
+        endpoint: `models/${id}`,
       })
-      store.dispatch(types.FETCH_THANGS, {})
+
+      if (error) {
+        store.dispatch(types.CHANGE_MODEL_STATUS, {
+          status: STATUSES.FAILURE,
+          atom: `model-${id}`,
+        })
+        onError(error.message)
+        logger.error('Error when trying to update the model', error)
+      } else {
+        onFinish()
+        store.dispatch(types.CHANGE_MODEL_STATUS, {
+          status: STATUSES.SAVED,
+          atom: `model-${id}`,
+        })
+        const newModels = removeModel(model, state.models.data)
+        store.dispatch(types.UPDATE_MODELS, newModels)
+        store.dispatch(types.DELETE_MODEL_FROM_FOLDER, { model })
+      }
     }
-  })
+  )
 
   store.on(types.LIKE_MODEL, async (_, { id, owner }) => {
     const currentUserId = authenticationService.getCurrentUserId()
