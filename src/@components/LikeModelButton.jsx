@@ -36,13 +36,19 @@ const useStyles = createUseStyles(theme => {
       '-ms-transform-style': 'preserve-3d',
       'transform-style': 'preserve-3d',
     },
-    LikeModelIcon__filled: {
+    LikeStarIcon__filled: {
       '& path': {
         fill: ({ color }) => color || theme.colors.black[500],
         stroke: ({ color }) => color || theme.colors.black[500],
       },
     },
-    LikeModelIcon__unliked: {
+    LikeHeartIcon__filled: {
+      '& path': {
+        fill: ({ color }) => color || theme.colors.black[500],
+        stroke: ({ color }) => color || theme.colors.black[500],
+      },
+    },
+    LikeStarIcon__unliked: {
       animation: '$spinner 250ms linear 0s 1 reverse',
 
       '-webkit-transform-style': 'preserve-3d',
@@ -50,7 +56,13 @@ const useStyles = createUseStyles(theme => {
       '-ms-transform-style': 'preserve-3d',
       'transform-style': 'preserve-3d',
     },
-    LikeModelIcon__unfilled: {
+    LikeStarIcon__unfilled: {
+      '& path': {
+        fill: ({ color }) => color || 'transparent',
+        stroke: ({ color }) => (color ? 'transparent' : theme.colors.black[500]),
+      },
+    },
+    LikeHeartIcon__unfilled: {
       '& path': {
         fill: ({ color }) => (color ? 'transparent' : theme.colors.black[500]),
         stroke: ({ color }) => color || 'transparent',
@@ -68,13 +80,13 @@ const hasLikedModel = (model, currentUserId) => {
 const HeartButton = ({ liked, c, hasChanged }) => {
   return liked ? (
     <HeartFilledIcon
-      className={classnames(c.LikeModelIcon, c.LikeModelIcon__filled, {
+      className={classnames(c.LikeModelIcon, c.LikeHeartIcon__filled, {
         [c.LikeModelIcon__liked]: hasChanged,
       })}
     />
   ) : (
     <HeartIcon
-      className={classnames(c.LikeModelIcon, c.LikeModelIcon__unfilled, {
+      className={classnames(c.LikeModelIcon, c.LikeStarIcon__unfilled, {
         [c.LikeModelIcon__unliked]: hasChanged,
       })}
     />
@@ -84,13 +96,13 @@ const HeartButton = ({ liked, c, hasChanged }) => {
 const StarButton = ({ liked, c, hasChanged }) => {
   return liked ? (
     <StarFilledIcon
-      className={classnames(c.LikeModelIcon, c.LikeModelIcon__filled, {
+      className={classnames(c.LikeModelIcon, c.LikeHeartlIcon__filled, {
         [c.LikeModelIcon__liked]: hasChanged,
       })}
     />
   ) : (
     <StarIcon
-      className={classnames(c.LikeModelIcon, c.LikeModelIcon__unfilled, {
+      className={classnames(c.LikeModelIcon, c.LikeStarIcon__unfilled, {
         [c.LikeModelIcon__unliked]: hasChanged,
       })}
     />
