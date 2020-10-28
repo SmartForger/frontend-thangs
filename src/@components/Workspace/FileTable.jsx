@@ -226,7 +226,8 @@ const FileTableHeader = ({ sortedBy, order, onSort = () => {} }) => {
             className={c.FileTable_Header__cursor}
             onClick={() => {
               onSort(COLUMNS.CREATED)
-            }}>
+            }}
+          >
             Created{sortedBy === COLUMNS.CREATED && <SortByArrow order={order} />}
           </MetadataSecondary>
         </th>
@@ -235,7 +236,8 @@ const FileTableHeader = ({ sortedBy, order, onSort = () => {} }) => {
             className={c.FileTable_Header__cursor}
             onClick={() => {
               onSort(COLUMNS.FILETYPE)
-            }}>
+            }}
+          >
             File Type{sortedBy === COLUMNS.FILETYPE && <SortByArrow order={order} />}
           </MetadataSecondary>
         </th>
@@ -244,7 +246,8 @@ const FileTableHeader = ({ sortedBy, order, onSort = () => {} }) => {
             className={c.FileTable_Header__cursor}
             onClick={() => {
               onSort(COLUMNS.SIZE)
-            }}>
+            }}
+          >
             Size{sortedBy === COLUMNS.SIZE && <SortByArrow order={order} />}
           </MetadataSecondary>
         </th>
@@ -253,8 +256,10 @@ const FileTableHeader = ({ sortedBy, order, onSort = () => {} }) => {
             className={c.FileTable_Header__cursor}
             onClick={() => {
               onSort(COLUMNS.CONTRIBUTORS)
-            }}>
-            Contributors{sortedBy === COLUMNS.CONTRIBUTORS && <SortByArrow order={order} />}
+            }}
+          >
+            Contributors
+            {sortedBy === COLUMNS.CONTRIBUTORS && <SortByArrow order={order} />}
           </MetadataSecondary>
         </th>
         <th>
@@ -335,7 +340,7 @@ const FileRow = ({ model, handleModelClick: _handle = noop }) => {
       </td>
       <td>
         <MetadataSecondary>
-          {format(new Date(model.uploadDate), 'MMM d, Y')}
+          {format(new Date(model.uploadDate), 'MMM d, Y, h:mm aaaa')}
         </MetadataSecondary>
       </td>
       <td>
@@ -398,7 +403,7 @@ const getSortedFiles = (files, sortType, order) => {
       return getCompareByOrder(a.size, b.size, order)
     }
 
-    if (sortType === COLUMNS.FILETYPE ) {
+    if (sortType === COLUMNS.FILETYPE) {
       return getCompareByOrder(
         (a.fileType || '').toUpperCase(),
         (b.fileType || '').toUpperCase(),
@@ -414,7 +419,6 @@ const getSortedFiles = (files, sortType, order) => {
   })
 }
 
-
 const FileTable = ({
   files = [],
   handleChangeFolder = noop,
@@ -429,7 +433,7 @@ const FileTable = ({
 
   const [{ sortedBy, order }, setSort] = useState({
     sortedBy: initialSortedBy || COLUMNS.FILENAME,
-    order: 'asc',
+    order: 'desc',
   })
   const handleSort = useCallback(
     sortedBy => {
@@ -452,7 +456,7 @@ const FileTable = ({
                 sortedFiles.map((file, index) => {
                   if (!file) return null
                   const { id } = file
-                  const handleClick = file.subfolders 
+                  const handleClick = file.subfolders
                     ? () => handleChangeFolder(file)
                     : () => {
                       history.push(`/model/${file.id}`)
