@@ -2,14 +2,7 @@ import React, { useEffect, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
-import {
-  CardCollection,
-  ModelCards,
-  FolderCards,
-  Spinner,
-  Spacer,
-  TitleTertiary,
-} from '@components'
+import { CardCollection, ModelCards, Spinner, Spacer, TitleTertiary } from '@components'
 import * as types from '@constants/storeEventTypes'
 import { pageview } from '@utilities/analytics'
 
@@ -49,20 +42,13 @@ const LikedModelsView = ({ className, userId }) => {
   }, [dispatch, userId])
 
   const { data = {}, isLoading } = likedUserModelsAtom
-  const { models = [], folders = [] } = data
+  const { models = [] } = data
   const filteredModels = useMemo(() => {
     if (!models || !models.length) return []
     return models.filter(
       ({ owner }) => owner && owner.id && owner.id.toString() !== userId.toString()
     )
   }, [userId, models])
-  const filteredFolders = useMemo(() => {
-    if (!folders || !folders.length) return []
-    return folders.filter(
-      ({ creator }) =>
-        creator && creator.id && creator.id.toString() !== userId.toString()
-    )
-  }, [userId, folders])
 
   if (isLoading) {
     return (
@@ -81,7 +67,6 @@ const LikedModelsView = ({ className, userId }) => {
         <Spacer size='2rem' />
         <CardCollection noResultsText='You have not liked any models yet.'>
           <ModelCards items={filteredModels} />
-          <FolderCards items={filteredFolders} />
         </CardCollection>
       </div>
       <Spacer size='2rem' />
