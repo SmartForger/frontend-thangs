@@ -133,11 +133,12 @@ const NotificationSnippet = ({
   verb,
   time,
   target,
+  targetNameAlt,
   linkTarget,
   handleNotificationDelete: _hND,
 }) => {
   const actorName = actor && actor.userName
-  const targetName = target && target.name
+  const targetName = targetNameAlt || (target && target.name)
   const countText =
     count > 1 ? `and ${count - 1} ${count === 2 ? 'other' : 'others'} ` : ''
   return (
@@ -168,6 +169,7 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
   let altVerb = undefined
   let IconComponent = noop
   let linkTarget = '/'
+  let targetNameAlt
 
   const handleNotificationDelete = useCallback(
     id => {
@@ -197,6 +199,7 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
       IconComponent = GrantAccessIcon
       linkTarget = target && target.id ? `/mythangs/folder/${target.id}` : '/'
       altVerb = 'invited you'
+      targetNameAlt = 'to a folder'
       break
     case 'liked':
       IconComponent = HeartIcon
@@ -214,6 +217,7 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
     case 'uploaded-to-folder':
       IconComponent = UploadIcon
       linkTarget = target && target.id ? `/mythangs/folder/${target.id}` : '/'
+      altVerb = 'uploaded to folder'
       break
     case 'likedFolder':
       IconComponent = StarIcon
@@ -235,6 +239,7 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
       id={id}
       actor={actor}
       target={target}
+      targetNameAlt={targetNameAlt}
       verb={verb}
       altVerb={altVerb}
       linkTarget={linkTarget}
