@@ -183,7 +183,6 @@ export default store => {
       if (R.isNil(folderId)) return
       store.dispatch(types.SAVING_FOLDER)
       const userId = authenticationService.getCurrentUserId()
-      store.dispatch(types.LOADING_FOLDER)
       const { error } = await api({
         method: 'PUT',
         endpoint: `folders/${folderId}`,
@@ -262,6 +261,7 @@ export default store => {
         atom: `user-liked-models-${id}`,
         data: newLikes,
       })
+      store.dispatch(types.SAVED_FOLDER)
     }
   })
 
@@ -288,6 +288,7 @@ export default store => {
         atom: `user-liked-models-${id}`,
         data: newLikes,
       })
+      store.dispatch(types.SAVED_FOLDER)
     }
   })
 }
