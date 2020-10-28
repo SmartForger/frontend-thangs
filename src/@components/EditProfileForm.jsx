@@ -137,7 +137,7 @@ const EditProfileForm = ({
       <Textarea
         id='description-input'
         name='description'
-        label='Description'
+        label='Biography'
         type='description'
         value={inputState && inputState.description}
         onChange={handleOnInputChange}
