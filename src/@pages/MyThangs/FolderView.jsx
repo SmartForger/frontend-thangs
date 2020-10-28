@@ -215,6 +215,7 @@ const findFolderById = (id, folders) => {
 const FolderView = ({
   className,
   myFolders: folders,
+  sharedFolders: shared,
   handleChangeFolder = noop,
   handleEditModel = noop,
   onDrop = noop,
@@ -225,7 +226,8 @@ const FolderView = ({
   const history = useHistory()
   const { dispatch } = useStoreon()
   const { folderId: id } = useParams()
-  const folder = id ? findFolderById(id, folders) : {}
+  const allFolders = [...folders, ...shared]
+  const folder = id ? findFolderById(id, allFolders) : {}
 
   useEffect(() => {
     // This is for setting the current folder id
