@@ -19,7 +19,6 @@ const useStyles = createUseStyles(theme => {
         fontSize: '.75rem',
         lineHeight: '1rem',
         borderRadius: '100%',
-        border: `1px solid ${theme.colors.white[400]}`,
 
         '& span': {
           border: 'none',
