@@ -97,14 +97,9 @@ const SharedFilesView = ({
     starredSharedFolders.length,
   ])
 
-  const sortedFolders = useMemo(() => {
+  const filteredFolders = useMemo(() => {
     return !R.isEmpty(sharedFolders)
       ? sharedFolders
-        .sort((a, b) => {
-          if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
-          else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
-          return 0
-        })
         .filter(folder => !folder.name.includes('//'))
       : []
   }, [sharedFolders])
@@ -154,7 +149,8 @@ const SharedFilesView = ({
             <TitleTertiary>Files</TitleTertiary>
             <Spacer size='2rem' />
             <FileTable
-              files={sortedFolders}
+              files={filteredFolders}
+              sortedBy="filename"
               handleEditModel={handleEditModel}
               handleChangeFolder={handleChangeFolder}
               searchCase={true}

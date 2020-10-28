@@ -77,7 +77,6 @@ const RecentFilesView = ({
   const files = useMemo(() => {
     return [folderData, modelData]
       .flat()
-      .sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate))
   }, [folderData, modelData])
 
   useEffect(() => {
@@ -131,7 +130,7 @@ const RecentFilesView = ({
               files={files}
               handleChangeFolder={handleChangeFolder}
               handleEditModel={handleEditModel}
-              sortedBy={'created'}
+              sortedBy="created"
               onDrop={onDrop}
             ></FileTable>
           </div>

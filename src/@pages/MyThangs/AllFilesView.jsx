@@ -82,12 +82,6 @@ const AllFilesView = ({
       : []
   }, [folders])
 
-  const sortedModels = useMemo(() => {
-    return models && !R.isEmpty(models)
-      ? models.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate))
-      : []
-  }, [models])
-
   return (
     <>
       <ContextMenuTrigger id='Add_Menu' holdToDisplay={1000}>
@@ -113,7 +107,7 @@ const AllFilesView = ({
                 </div>
               </>
             )}
-            {sortedModels.length > 0 && (
+            {models.length > 0 && (
               <>
                 <Spacer size='4rem' />
                 <TitleTertiary>My Public Files</TitleTertiary>
@@ -121,7 +115,7 @@ const AllFilesView = ({
               </>
             )}
             <FileTable
-              files={sortedModels}
+              files={models || []}
               handleEditModel={handleEditModel}
               handleChangeFolder={handleChangeFolder}
               sortedBy={'created'}
