@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from 'react'
+import React, { useCallback, useState, useRef, useMemo } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { format } from 'date-fns'
 import {
@@ -14,6 +14,7 @@ import { MetadataSecondary } from '@components/Text/Metadata'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
+import { ReactComponent as ArrowUpIcon } from '@svg/icon-arrow-up-sm.svg'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import { ReactComponent as DropzoneIcon } from '@svg/dropzone.svg'
 import { formatBytes } from '@utilities'
@@ -64,12 +65,8 @@ const useStyles = createUseStyles(theme => {
         },
       },
     },
-    FileTable_Header: {
-      '& > span': {
-        display: 'flex',
-        flexDirection: 'row',
-        color: theme.colors.black[500],
-      },
+    FileTable_Header__cursor: {
+      cursor: 'pointer',
     },
     FileTable_Row: {
       display: 'flex',
@@ -169,6 +166,14 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
+const COLUMNS = {
+  FILENAME: 'filename',
+  CREATED: 'created',
+  FILETYPE: 'filetype',
+  SIZE: 'size',
+  CONTRIBUTORS: 'contributors',
+}
+
 const FileName = ({ name }) => {
   const c = useStyles({})
   return (
@@ -191,41 +196,66 @@ const FolderName = ({ name }) => {
   )
 }
 
-const SortByArrow = () => {
+const SortByArrow = ({ order }) => {
   return (
     <>
       <Spacer size={'.25rem'} />
-      <ArrowDownIcon />
+      {order === 'asc' ? <ArrowDownIcon /> : <ArrowUpIcon />}
     </>
   )
 }
 
-const FileTableHeader = ({ sortedBy }) => {
+const FileTableHeader = ({ sortedBy, order, onSort = () => {} }) => {
+  const c = useStyles({})
+
   return (
     <thead>
       <tr>
         <th>
-          <MetadataSecondary>
-            Filename{sortedBy === 'filename' && <SortByArrow />}
+          <MetadataSecondary
+            className={c.FileTable_Header__cursor}
+            onClick={() => {
+              onSort(COLUMNS.FILENAME)
+            }}
+          >
+            Filename{sortedBy === COLUMNS.FILENAME && <SortByArrow order={order} />}
           </MetadataSecondary>
         </th>
         <th>
-          <MetadataSecondary>
-            Created{sortedBy === 'created' && <SortByArrow />}
+          <MetadataSecondary
+            className={c.FileTable_Header__cursor}
+            onClick={() => {
+              onSort(COLUMNS.CREATED)
+            }}>
+            Created{sortedBy === COLUMNS.CREATED && <SortByArrow order={order} />}
           </MetadataSecondary>
         </th>
         <th>
-          <MetadataSecondary>
-            File Type{sortedBy === 'filetype' && <SortByArrow />}
+          <MetadataSecondary
+            className={c.FileTable_Header__cursor}
+            onClick={() => {
+              onSort(COLUMNS.FILETYPE)
+            }}>
+            File Type{sortedBy === COLUMNS.FILETYPE && <SortByArrow order={order} />}
           </MetadataSecondary>
         </th>
         <th>
-          <MetadataSecondary>
-            Size{sortedBy === 'size' && <SortByArrow />}
+          <MetadataSecondary
+            className={c.FileTable_Header__cursor}
+            onClick={() => {
+              onSort(COLUMNS.SIZE)
+            }}>
+            Size{sortedBy === COLUMNS.SIZE && <SortByArrow order={order} />}
           </MetadataSecondary>
         </th>
         <th>
-          <MetadataSecondary>Contributors</MetadataSecondary>
+          <MetadataSecondary
+            className={c.FileTable_Header__cursor}
+            onClick={() => {
+              onSort(COLUMNS.CONTRIBUTORS)
+            }}>
+            Contributors{sortedBy === COLUMNS.CONTRIBUTORS && <SortByArrow order={order} />}
+          </MetadataSecondary>
         </th>
         <th>
           <MetadataSecondary>Versioned From</MetadataSecondary>
@@ -340,11 +370,56 @@ const FileRow = ({ model, handleModelClick: _handle = noop }) => {
   )
 }
 
+const getCompareByOrder = (a, b, order) => {
+  if (a < b) return order === 'asc' ? -1 : 1
+  if (a > b) return order === 'asc' ? 1 : -1
+  return 0
+}
+
+const getSortedFiles = (files, sortType, order) => {
+  return [...files].sort((a, b) => {
+    if (sortType === COLUMNS.FILENAME) {
+      return getCompareByOrder(
+        (a.name || '').toUpperCase(),
+        (b.name || '').toUpperCase(),
+        order
+      )
+    }
+
+    if (sortType === COLUMNS.CREATED) {
+      return getCompareByOrder(
+        new Date(a.uploadDate).getTime(),
+        new Date(b.uploadDate).getTime(),
+        order
+      )
+    }
+
+    if (sortType === COLUMNS.SIZE) {
+      return getCompareByOrder(a.size, b.size, order)
+    }
+
+    if (sortType === COLUMNS.FILETYPE ) {
+      return getCompareByOrder(
+        (a.fileType || '').toUpperCase(),
+        (b.fileType || '').toUpperCase(),
+        order
+      )
+    }
+
+    if (sortType === COLUMNS.CONTRIBUTORS) {
+      return getCompareByOrder((a.members || []).length, (b.members || []).length, order)
+    }
+
+    return 0
+  })
+}
+
+
 const FileTable = ({
   files = [],
   handleChangeFolder = noop,
   handleEditModel = noop,
-  sortedBy,
+  sortedBy: initialSortedBy,
   searchCase,
   hideDropzone = false,
   onDrop = noop,
@@ -352,25 +427,36 @@ const FileTable = ({
   const c = useStyles({})
   const history = useHistory()
 
+  const [{ sortedBy, order }, setSort] = useState({
+    sortedBy: initialSortedBy || COLUMNS.FILENAME,
+    order: 'asc',
+  })
+  const handleSort = useCallback(
+    sortedBy => {
+      setSort({ sortedBy, order: order === 'asc' ? 'desc' : 'asc' })
+    },
+    [order]
+  )
+  const sortedFiles = useMemo(() => {
+    return getSortedFiles(files, sortedBy, order)
+  }, [files, order, sortedBy])
+
   return (
     <div className={c.FileTable}>
-      {files.length > 0 || searchCase ? (
+      {sortedFiles.length > 0 || searchCase ? (
         <>
           <table>
-            <FileTableHeader sortedBy={sortedBy} />
+            <FileTableHeader sortedBy={sortedBy} onSort={handleSort} order={order} />
             <tbody>
-              {files.length > 0 ? (
-                files.map((file, index) => {
+              {sortedFiles.length > 0 ? (
+                sortedFiles.map((file, index) => {
                   if (!file) return null
                   const { id } = file
-                  let handleClick = () => null
-                  if (file.subfolders) {
-                    handleClick = () => handleChangeFolder(file)
-                  } else {
-                    handleClick = () => {
+                  const handleClick = file.subfolders 
+                    ? () => handleChangeFolder(file)
+                    : () => {
                       history.push(`/model/${file.id}`)
                     }
-                  }
                   const RowWithProps = ({ children, ...props }) => (
                     <tr onDoubleClick={handleClick} {...props}>
                       {children}
@@ -409,8 +495,8 @@ const FileTable = ({
               )}
             </tbody>
           </table>
-          {files.length > 0
-            ? files.map((file, index) => {
+          {sortedFiles.length > 0
+            ? sortedFiles.map((file, index) => {
               if (!file) return null
               const { id, subfolders } = file
               return subfolders ? (

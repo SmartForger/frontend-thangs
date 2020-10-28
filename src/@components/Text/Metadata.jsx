@@ -34,10 +34,10 @@ export const MetadataPrimary = ({ children, className }) => {
   )
 }
 
-export const MetadataSecondary = ({ children, className }) => {
+export const MetadataSecondary = ({ children, className, ...props }) => {
   const c = useStyles()
   return (
-    <span className={classnames(className, c.Metadata, c.MetadataSecondary)}>
+    <span className={classnames(className, c.Metadata, c.MetadataSecondary)} {...props}>
       {children}
     </span>
   )
