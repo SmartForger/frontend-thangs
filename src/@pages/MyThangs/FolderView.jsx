@@ -15,6 +15,7 @@ import {
   Contributors,
 } from '@components'
 import { useQuery } from '@hooks'
+import { authenticationService } from '@services'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
@@ -92,7 +93,7 @@ const getSubfolderId = (path, rootFolder, folder) => {
   })
 }
 
-const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
+const FolderHeader = ({ folder, rootFolder, setFolder = noop, isSharedFolder }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
   const { id, name } = folder
@@ -214,13 +215,14 @@ const findFolderById = (id, folders) => {
 
 const FolderView = ({
   className,
-  myFolders: folders,
-  sharedFolders: shared,
   handleChangeFolder = noop,
   handleEditModel = noop,
+  myFolders: folders,
   onDrop = noop,
   setCurrentFolderId = noop,
+  sharedFolders: shared,
 }) => {
+  const currentUserId = authenticationService.getCurrentUserId()
   const c = useStyles({})
   const inviteCode = useQuery('inviteCode')
   const history = useHistory()
@@ -228,6 +230,7 @@ const FolderView = ({
   const { folderId: id } = useParams()
   const allFolders = [...folders, ...shared]
   const folder = id ? findFolderById(id, allFolders) : {}
+  const isSharedFolder = folder.creator && folder.creator.id !== currentUserId
 
   useEffect(() => {
     // This is for setting the current folder id
@@ -275,6 +278,7 @@ const FolderView = ({
               folder={folder}
               rootFolder={rootFolder}
               setFolder={handleChangeFolder}
+              isSharedFolder={isSharedFolder}
             />
             {directSubFolders.length > 0 && (
               <>
@@ -283,7 +287,11 @@ const FolderView = ({
                 <div className={c.FolderView_Folders}>
                   {directSubFolders.map((subfolder, index) => (
                     <React.Fragment key={`folder=${subfolder.id}_${index}`}>
-                      <FolderCard folder={subfolder} handleClick={handleChangeFolder} />
+                      <FolderCard
+                        folder={subfolder}
+                        handleClick={handleChangeFolder}
+                        disableStar={isSharedFolder}
+                      />
                       <Spacer size={'2rem'} />
                     </React.Fragment>
                   ))}

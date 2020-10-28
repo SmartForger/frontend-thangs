@@ -54,7 +54,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-const FolderCard = ({ handleClick = noop, folder, isSharedFolder }) => {
+const FolderCard = ({ handleClick = noop, folder, isSharedFolder, disableStar }) => {
   const c = useStyles({})
   const { id, name, isPublic, members = [] } = folder
   const FolderId = useMemo(() => {
@@ -73,14 +73,16 @@ const FolderCard = ({ handleClick = noop, folder, isSharedFolder }) => {
           backgroundColor={'#F7F7FB'}
           onClick={handleFolderClick}
         >
-          <LikeFolderButton
-            key={`LikeBtn-${FolderId}`}
-            className={c.FolderCard_Star}
-            folder={folder}
-            minimal
-            color={'#5A5A75'}
-            shared={isSharedFolder}
-          />
+          {!disableStar && (
+            <LikeFolderButton
+              key={`LikeBtn-${FolderId}`}
+              className={c.FolderCard_Star}
+              folder={folder}
+              minimal
+              color={'#5A5A75'}
+              shared={isSharedFolder}
+            />
+          )}
           <Spacer size={'3rem'} />
           <div className={c.FolderCard_IconWrapper}>
             <FolderCardIcon />
