@@ -29,7 +29,7 @@ const useStyles = createUseStyles(theme => {
       '& table': {
         borderCollapse: 'collapse',
         width: '100%',
-        cursor: 'pointer',
+        cursor: 'default',
       },
       '& th': {
         fontSize: '.75rem',
