@@ -15,6 +15,7 @@ const useStyles = createUseStyles(theme => {
     },
     SharedFilesView_Content: {
       height: '100%',
+      width: '100%',
       display: 'flex',
       flexDirection: 'column',
       minWidth: '56rem',
