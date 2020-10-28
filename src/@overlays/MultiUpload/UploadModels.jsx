@@ -213,7 +213,7 @@ const UploadModels = ({
             {Object.keys(uploadFiles).map((id, index) => {
               const file = uploadFiles[id]
               const { name, size, isLoading } = file
-              if (!name) return
+              if (!name) return null
               return (
                 <div key={`fileUpload_${index}`}>
                   <Spacer size={'.75rem'} />
