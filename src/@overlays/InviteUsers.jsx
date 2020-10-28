@@ -16,6 +16,7 @@ import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import * as types from '@constants/storeEventTypes'
 import { overlayview } from '@utilities/analytics'
+import { logger } from '@utilities/logging'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -194,11 +195,13 @@ const findFolderById = (id, folders) => {
 const InviteUsers = ({ folderId: id }) => {
   const c = useStyles()
   const [errorMessage, setErrorMessage] = useState(null)
-  const { dispatch, folders } = useStoreon('folders')
+  const { dispatch, folders, shared } = useStoreon('folders', 'shared')
   const { data: folderData = {} } = folders
+  const { data: sharedData = {} } = shared
+  const allFolders = [...folderData, ...sharedData]
   const folder = useMemo(() => {
-    return !R.isEmpty(folderData) ? findFolderById(id, folderData) : undefined
-  }, [folderData, id])
+    return !R.isEmpty(allFolders) ? findFolderById(id, allFolders) : undefined
+  }, [allFolders, id])
 
   const closeOverlay = useCallback(() => {
     dispatch(types.CLOSE_OVERLAY)
@@ -208,6 +211,26 @@ const InviteUsers = ({ folderId: id }) => {
     overlayview('InviteUsers')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  if (!folder) {
+    logger.error(`Error loading invite overlay for ${}`)
+    return (
+      <div className={c.InviteUsers}>
+        <ExitIcon className={c.InviteUsers_ExitButton} onClick={closeOverlay} />
+        <div className={c.InviteUsers_Row}>
+          <Spacer size='2rem' />
+          <div className={c.InviteUsers_Wrapper}>
+            <Spacer size='4rem' />
+            <MultiLineBodyText>
+              There was an error in loading. Please try again
+            </MultiLineBodyText>
+            <Spacer size='2rem' />
+          </div>
+          <Spacer size='2rem' />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className={c.InviteUsers}>
