@@ -100,9 +100,35 @@ const findFolderById = (id, folders) => {
   return R.find(R.propEq('id', id.toString()))(folders) || {}
 }
 
+const AddMenuDropdown = ({ currentFolderId, folders }) => {
+  const c = useStyles()
+  const addMenuRef = useRef(null)
+  const [showCreateMenu, setShowCreateMenu] = useState(false)
+  const handleClickCreate = useCallback(() => setShowCreateMenu(true), [])
+  useExternalClick(addMenuRef, () => setShowCreateMenu(false))
+
+  const folder = useMemo(() => {
+    return currentFolderId ? findFolderById(currentFolderId, folders) : {}
+  }, [currentFolderId, folders])
+
+  return (
+    <div className={c.WorkspaceNavbar_AddWrapper} ref={addMenuRef}>
+      <Button className={c.WorkspaceNavbar_AddButton} onClick={handleClickCreate}>
+        <PlusIcon />
+        <Spacer size={'.5rem'} />
+        Add New
+      </Button>
+      {showCreateMenu && (
+        <div className={c.WorkspaceNavbar_AddMenu}>
+          <AddMenu folder={folder} sideBar={true} />
+        </div>
+      )}
+    </div>
+  )
+}
+
 const WorkspaceNavbar = ({
   currentFolderId,
-  folderNav,
   folders,
   models,
   isLoadingThangs,
@@ -110,20 +136,14 @@ const WorkspaceNavbar = ({
   setCurrentView = noop,
   handleChangeFolder = noop,
 }) => {
-  const c = useStyles({})
-  const { dispatch } = useStoreon()
+  const c = useStyles()
+  const { dispatch, folderNav } = useStoreon('folderNav')
   const {
     atom: { data: user },
   } = useCurrentUser()
   const history = useHistory()
   const path = history.location.pathname
   const [showFileExplorer, setShowFileExplorer] = useState(false)
-  const [showCreateMenu, setShowCreateMenu] = useState(false)
-  const addMenuRef = useRef(null)
-
-  const folder = useMemo(() => {
-    return currentFolderId ? findFolderById(currentFolderId, folders) : {}
-  }, [currentFolderId, folders])
 
   useEffect(() => {
     let timeout
@@ -180,8 +200,6 @@ const WorkspaceNavbar = ({
     setCurrentView,
   ])
 
-  const handleClickCreate = useCallback(() => setShowCreateMenu(true), [])
-
   const handleClickPortfolio = useCallback(() => {
     history.push(`/${user.username}`)
   }, [history, user])
@@ -190,8 +208,6 @@ const WorkspaceNavbar = ({
     authenticationService.logout()
     history.push('/')
   }, [history])
-
-  useExternalClick(addMenuRef, () => setShowCreateMenu(false))
 
   return (
     <nav className={c.WorkspaceNavbar}>
@@ -202,18 +218,7 @@ const WorkspaceNavbar = ({
             <Logo />
           </Link>
         </div>
-        <div className={c.WorkspaceNavbar_AddWrapper} ref={addMenuRef}>
-          <Button className={c.WorkspaceNavbar_AddButton} onClick={handleClickCreate}>
-            <PlusIcon />
-            <Spacer size={'.5rem'} />
-            Add New
-          </Button>
-          {showCreateMenu && (
-            <div className={c.WorkspaceNavbar_AddMenu}>
-              <AddMenu folder={folder} sideBar={true} />
-            </div>
-          )}
-        </div>
+        <AddMenuDropdown currentFolderId={currentFolderId} folders={folders} />
         <div className={c.WorkspaceNavbar_ScrollableFiles}>
           <div>
             <TitleTertiary className={c.WorkspaceNavbar_NavLink}>My Thangs</TitleTertiary>

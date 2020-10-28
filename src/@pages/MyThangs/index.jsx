@@ -25,6 +25,14 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'row',
       overflowY: 'scroll',
     },
+    MyThangs_OverlayWrapper: {
+      display: 'none',
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      top: 0,
+      left: 0,
+    },
     MyThangs_ContentWrapper: {
       flex: 'auto',
       overflow: 'scroll',
@@ -45,6 +53,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Layout_blur: {
+      display: 'block',
       filter: 'blur(4px)',
       OFilter: 'blur(4px)',
       MsFilter: 'blur(4px)',
@@ -83,21 +92,33 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
+const OverlayWrapper = () => {
+  const c = useStyles({})
+  const { Overlay, isOverlayOpen, isOverlayHidden } = useOverlay()
+
+  return (
+    <div
+      className={classnames(c.MyThangs_OverlayWrapper, {
+        [c.Layout_blur]: isOverlayOpen && !isOverlayHidden,
+      })}
+    >
+      {Overlay}
+    </div>
+  )
+}
+
 const MyThangs = () => {
   const { path } = useRouteMatch()
   const history = useHistory()
-  const { Overlay, isOverlayOpen, isOverlayHidden } = useOverlay()
   const c = useStyles({})
   const [currentFolderId, setCurrentFolderId] = useState(null)
   const currentUserId = authenticationService.getCurrentUserId()
-  const {
-    dispatch,
-    folders = {},
-    folderNav,
-    models = {},
-    shared = {},
-    thangs,
-  } = useStoreon('folders', 'models', 'thangs', 'shared', 'folderNav')
+  const { dispatch, folders = {}, models = {}, shared = {}, thangs } = useStoreon(
+    'folders',
+    'models',
+    'thangs',
+    'shared'
+  )
   const { isLoading, isLoaded } = thangs
   const { data: folderData } = folders
   const { data: modelData } = models
@@ -167,15 +188,10 @@ const MyThangs = () => {
   }
 
   return (
-    <div
-      className={classnames(c.MyThangs, {
-        [c.Layout_blur]: isOverlayOpen && !isOverlayHidden,
-      })}
-    >
-      {Overlay}
+    <div className={c.MyThangs}>
+      <OverlayWrapper />
       <WorkspaceNavbar
         currentFolderId={currentFolderId}
-        folderNav={folderNav}
         folders={folderData}
         handleChangeFolder={handleChangeFolder}
         handleEditModel={handleEditModel}

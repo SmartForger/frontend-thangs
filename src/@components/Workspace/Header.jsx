@@ -13,6 +13,7 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       position: 'fixed',
       top: 0,
+      left: '20.5rem',
       width: 'calc(100% - 20.5rem)',
       zIndex: 2,
     },
