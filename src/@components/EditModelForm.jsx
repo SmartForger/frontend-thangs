@@ -241,9 +241,6 @@ const EditModelForm = ({
             <Spacer size='1rem' />
             <Button type='submit'>Save Changes</Button>
             <Spacer size='1rem' />
-            <Button secondary onClick={handleDeleteModel} type='button'>
-              Delete Model
-            </Button>
           </form>
           <Spacer size='2.5rem' />
         </>
