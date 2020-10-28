@@ -193,6 +193,11 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
       IconComponent = GrantAccessIcon
       linkTarget = target && target.id ? `/mythangs/folder/${target.id}` : '/'
       break
+    case 'invitedYou':
+      IconComponent = GrantAccessIcon
+      linkTarget = target && target.id ? `/mythangs/folder/${target.id}` : '/'
+      altVerb = 'invited you'
+      break
     case 'liked':
       IconComponent = HeartIcon
       linkTarget = target && target.id ? `/model/${target.id}` : '/'
@@ -213,6 +218,7 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
     case 'likedFolder':
       IconComponent = StarIcon
       linkTarget = target && target.id ? `/mythangs/folder/${target.id}` : '/'
+      altVerb = 'liked folder'
       break
     default:
       break
