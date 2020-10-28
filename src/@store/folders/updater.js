@@ -55,6 +55,35 @@ export const updateFolder = (newFolder, oldFolders) => {
   }
 }
 
+const findFolderById = (id, folders) => {
+  const rootFolder = R.find(R.propEq('id', id.toString()))(folders) || {}
+  if (!R.isEmpty(rootFolder)) return rootFolder
+  let subFolder = false
+  folders.some(folder => {
+    const subfolders = folder.subfolders
+    subFolder = R.find(R.propEq('id', id.toString()))(subfolders) || false
+    return subFolder
+  })
+  return subFolder
+}
+
+export const updateLike = (folderId, state, userId, isLiked) => {
+  const allFolders = [...state.folders.data, ...state.shared.data]
+  const updatedFolder = findFolderById(folderId, allFolders)
+  const oldLikes = state[`user-liked-models-${userId}`].data
+  const newLikes = { ...oldLikes }
+
+  if (isLiked) {
+    if (!R.find(R.propEq('id', updatedFolder.id.toString()))(newLikes.folders)) {
+      updatedFolder.likes = [...updatedFolder.likes, parseInt(userId)]
+      newLikes.folders.push(updatedFolder)
+    }
+  } else {
+    newLikes.folders = newLikes.folders.filter(folder => folder.id !== updatedFolder.id)
+  }
+  return newLikes
+}
+
 export const removeFolder = (folder, oldFolders) => {
   const { id: folderId, root } = folder
   const newFolders = [...oldFolders]

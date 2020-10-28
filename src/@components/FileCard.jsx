@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import {
   Card,
   FileContextMenu,
@@ -58,9 +58,7 @@ const noop = () => null
 const FileCard = ({ handleClick = noop, model }) => {
   const c = useStyles({})
   const { id, name, fileType } = model
-  const CardId = useMemo(() => {
-    return `Card_${id}`
-  }, [id])
+  const CardId = `Card_${id}`
   const handleModelClick = useCallback(() => {
     handleClick(model)
   }, [handleClick, model])
@@ -76,6 +74,7 @@ const FileCard = ({ handleClick = noop, model }) => {
           title={name}
         >
           <LikeModelButton
+            key={`LikeBtn-${CardId}`}
             color={'#AE881E'}
             className={c.FileCard_Star}
             model={model}

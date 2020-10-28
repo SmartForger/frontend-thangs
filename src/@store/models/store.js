@@ -5,7 +5,7 @@ import { authenticationService } from '@services'
 import { STATUSES, getStatusState } from '@store/constants'
 import { logger } from '@utilities/logging'
 import { track } from '@utilities/analytics'
-import { removeModel } from './updater'
+import { removeModel, updateLike } from './updater'
 
 const noop = () => null
 export default store => {
@@ -120,11 +120,17 @@ export default store => {
     }
   )
 
-  store.on(types.LIKE_MODEL, async (_, { id, owner }) => {
+  store.on(types.LIKE_MODEL, async (state, { id, model }) => {
     const currentUserId = authenticationService.getCurrentUserId()
     store.dispatch(types.CHANGE_MODEL_STATUS, {
       status: STATUSES.LOADING,
       atom: 'like-model',
+    })
+
+    store.dispatch(types.CHANGE_USER_LIKED_MODELS_STATUS, {
+      status: STATUSES.LOADING,
+      atom: `user-liked-models-${currentUserId}`,
+      data: R.pathOr({}, [`user-liked-models-${currentUserId}`, 'data'], state),
     })
     const { data, error } = await api({
       method: 'POST',
@@ -147,21 +153,25 @@ export default store => {
         id,
         silentUpdate: true,
       })
-      if (owner.id === currentUserId) {
-        store.dispatch(types.FETCH_USER_LIKED_MODELS, {
-          id: currentUserId,
-          silentUpdate: true,
-        })
-        store.dispatch(types.FETCH_THANGS, { silentUpdate: true })
-      }
+      const newLikes = updateLike(model, state, currentUserId, true)
+      store.dispatch(types.CHANGE_USER_LIKED_MODELS_STATUS, {
+        status: STATUSES.LOADED,
+        atom: `user-liked-models-${currentUserId}`,
+        data: newLikes,
+      })
     }
   })
 
-  store.on(types.UNLIKE_MODEL, async (_, { id, owner }) => {
+  store.on(types.UNLIKE_MODEL, async (state, { id, model }) => {
     const currentUserId = authenticationService.getCurrentUserId()
     store.dispatch(types.CHANGE_MODEL_STATUS, {
       status: STATUSES.LOADING,
       atom: 'like-model',
+    })
+    store.dispatch(types.CHANGE_USER_LIKED_MODELS_STATUS, {
+      status: STATUSES.LOADING,
+      atom: `user-liked-models-${currentUserId}`,
+      data: R.pathOr({}, [`user-liked-models-${currentUserId}`, 'data'], state),
     })
     const { data, error } = await api({
       method: 'POST',
@@ -184,13 +194,12 @@ export default store => {
         id,
         silentUpdate: true,
       })
-      if (owner.id === currentUserId) {
-        store.dispatch(types.FETCH_USER_LIKED_MODELS, {
-          id: currentUserId,
-          silentUpdate: true,
-        })
-        store.dispatch(types.FETCH_THANGS, { silentUpdate: true })
-      }
+      const newLikes = updateLike(model, state, currentUserId, false)
+      store.dispatch(types.CHANGE_USER_LIKED_MODELS_STATUS, {
+        status: STATUSES.LOADED,
+        atom: `user-liked-models-${currentUserId}`,
+        data: newLikes,
+      })
     }
   })
 }

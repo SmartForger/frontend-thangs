@@ -17,6 +17,8 @@ const useStarred = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const { isLoading } = likedUserModelsAtom
+
   const starred = useMemo(() => {
     const { data = {} } = likedUserModelsAtom
     const { models = [], folders = [] } = data
@@ -46,12 +48,13 @@ const useStarred = () => {
     })
 
     return {
+      isLoading,
       starredModels: filteredModels,
       starredFolders: filteredFolders,
       starredSharedModels: othersModels,
       starredSharedFolders: othersFolders,
     }
-  }, [likedUserModelsAtom, userId])
+  }, [isLoading, likedUserModelsAtom, userId])
 
   return starred
 }

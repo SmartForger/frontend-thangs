@@ -52,8 +52,8 @@ const useStyles = createUseStyles(theme => {
     },
     LikeModelIcon__unfilled: {
       '& path': {
-        fill: 'transparent',
-        stroke: ({ color }) => color || theme.colors.black[500],
+        fill: ({ color }) => (color ? 'transparent' : theme.colors.black[500]),
+        stroke: ({ color }) => color || 'transparent',
       },
     },
   }
@@ -117,8 +117,8 @@ const AuthLikeModelButton = ({
     e => {
       e.preventDefault()
       e.stopPropagation()
-      const likeModel = () => dispatch(types.LIKE_MODEL, { id, owner })
-      const unlikeModel = () => dispatch(types.UNLIKE_MODEL, { id, owner })
+      const likeModel = () => dispatch(types.LIKE_MODEL, { id, model, owner })
+      const unlikeModel = () => dispatch(types.UNLIKE_MODEL, { id, model, owner })
       if (liked) {
         unlikeModel()
         setLiked(false)
@@ -129,7 +129,7 @@ const AuthLikeModelButton = ({
         setHasChanged(true)
       }
     },
-    [liked, dispatch, id, owner]
+    [liked, dispatch, id, model, owner]
   )
 
   if (onlyShowOwned && !isModelOfCurrentUser) return null

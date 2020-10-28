@@ -1,8 +1,5 @@
-import api from '@services/api'
 import { STATUSES, getStatusState } from '@store/constants'
-import { authenticationService } from '@services'
 import * as types from '@constants/storeEventTypes'
-import { track } from '@utilities/analytics'
 
 export default store => {
   store.on(types.STORE_INIT, _ => ({
@@ -21,65 +18,64 @@ export default store => {
       },
     })
   )
-  store.on(types.LIKE_FOLDER, async (_, { id: folderId }) => {
-    const currentUserId = authenticationService.getCurrentUserId()
-    store.dispatch(types.CHANGE_LIKE_FOLDER_STATUS, {
-      status: STATUSES.LOADING,
-      atom: 'like-folder',
-    })
-    const { data, error } = await api({
-      method: 'POST',
-      endpoint: `folders/${folderId}/like`,
-    })
+  // store.on(types.LIKE_FOLDER, async (_, { id: folderId }) => {
+  //   const currentUserId = authenticationService.getCurrentUserId()
+  //   store.dispatch(types.CHANGE_LIKE_FOLDER_STATUS, {
+  //     status: STATUSES.LOADING,
+  //     atom: 'like-folder',
+  //   })
+  //   const { data, error } = await api({
+  //     method: 'POST',
+  //     endpoint: `folders/${folderId}/like`,
+  //   })
 
-    if (error) {
-      store.dispatch(types.CHANGE_LIKE_FOLDER_STATUS, {
-        status: STATUSES.FAILURE,
-        atom: `like-folder-${folderId}`,
-      })
-    } else {
-      store.dispatch(types.CHANGE_LIKE_FOLDER_STATUS, {
-        status: STATUSES.LOADED,
-        atom: 'like-folder',
-        data,
-      })
-      track('Folder Liked', { folderId })
-      store.dispatch(types.FETCH_USER_LIKED_MODELS, {
-        id: currentUserId,
-        silentUpdate: true,
-      })
-      store.dispatch(types.FETCH_THANGS, { silentUpdate: true })
-    }
-  })
+  //   if (error) {
+  //     store.dispatch(types.CHANGE_LIKE_FOLDER_STATUS, {
+  //       status: STATUSES.FAILURE,
+  //       atom: `like-folder-${folderId}`,
+  //     })
+  //   } else {
+  //     store.dispatch(types.CHANGE_LIKE_FOLDER_STATUS, {
+  //       status: STATUSES.LOADED,
+  //       atom: 'like-folder',
+  //       data,
+  //     })
+  //     track('Folder Liked', { folderId })
+  //     store.dispatch(types.FETCH_USER_LIKED_MODELS, {
+  //       id: currentUserId,
+  //       silentUpdate: true,
+  //     })
 
-  store.on(types.UNLIKE_FOLDER, async (_, { id: folderId }) => {
-    const currentUserId = authenticationService.getCurrentUserId()
-    store.dispatch(types.CHANGE_LIKE_FOLDER_STATUS, {
-      status: STATUSES.LOADING,
-      atom: 'like-folder',
-    })
-    const { data, error } = await api({
-      method: 'POST',
-      endpoint: `folders/${folderId}/unlike`,
-    })
+  //   }
+  // })
 
-    if (error) {
-      store.dispatch(types.CHANGE_LIKE_FOLDER_STATUS, {
-        status: STATUSES.FAILURE,
-        atom: 'like-folder',
-      })
-    } else {
-      store.dispatch(types.CHANGE_LIKE_FOLDER_STATUS, {
-        status: STATUSES.LOADED,
-        atom: 'like-folder',
-        data,
-      })
-      track('Folder Unliked', { folderId })
-      store.dispatch(types.FETCH_USER_LIKED_MODELS, {
-        id: currentUserId,
-        silentUpdate: true,
-      })
-      store.dispatch(types.FETCH_THANGS, { silentUpdate: true })
-    }
-  })
+  // store.on(types.UNLIKE_FOLDER, async (_, { id: folderId }) => {
+  //   const currentUserId = authenticationService.getCurrentUserId()
+  //   store.dispatch(types.CHANGE_LIKE_FOLDER_STATUS, {
+  //     status: STATUSES.LOADING,
+  //     atom: 'like-folder',
+  //   })
+  //   const { data, error } = await api({
+  //     method: 'POST',
+  //     endpoint: `folders/${folderId}/unlike`,
+  //   })
+
+  //   if (error) {
+  //     store.dispatch(types.CHANGE_LIKE_FOLDER_STATUS, {
+  //       status: STATUSES.FAILURE,
+  //       atom: 'like-folder',
+  //     })
+  //   } else {
+  //     store.dispatch(types.CHANGE_LIKE_FOLDER_STATUS, {
+  //       status: STATUSES.LOADED,
+  //       atom: 'like-folder',
+  //       data,
+  //     })
+  //     track('Folder Unliked', { folderId })
+  //     store.dispatch(types.FETCH_USER_LIKED_MODELS, {
+  //       id: currentUserId,
+  //       silentUpdate: true,
+  //     })
+  //   }
+  // })
 }

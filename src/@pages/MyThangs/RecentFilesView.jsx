@@ -2,12 +2,13 @@ import React, { useEffect, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
 import {
   AddContextMenu,
-  Spacer,
-  TitleTertiary,
   FileCard,
-  FolderCard,
-  StatsBar,
   FileTable,
+  FolderCard,
+  Spacer,
+  Spinner,
+  StatsBar,
+  TitleTertiary,
 } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -33,10 +34,22 @@ const useStyles = createUseStyles(_theme => {
       display: 'flex',
       flexDirection: 'row',
       flexWrap: 'wrap',
+      position: 'relative',
 
       '& > div': {
         marginTop: '1.5rem',
       },
+    },
+    RecentFilesView_Loader: {
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      background: 'rgba(0,0,0,0.19)',
+      zIndex: 1,
+      top: '-.75rem',
+      left: '-1rem',
+      display: 'flex',
+      alignItems: 'center',
     },
   }
 })
@@ -52,7 +65,11 @@ const RecentFilesView = ({
   const c = useStyles({})
   const { activity } = useStoreon('activity')
   const { data: activityData } = activity
-  const { starredModels = [], starredFolders = [] } = useStarred()
+  const {
+    starredModels = [],
+    starredFolders = [],
+    isLoading: isLoadingStarred,
+  } = useStarred()
   const hasStarred = useMemo(
     () => starredFolders.length > 0 || starredModels.length > 0,
     [starredFolders.length, starredModels.length]
@@ -78,11 +95,16 @@ const RecentFilesView = ({
             <TitleTertiary>Activity & Contributions</TitleTertiary>
             <Spacer size='2rem' />
             <StatsBar userActivity={activityData} />
-            {hasStarred && (
+            {(isLoadingStarred || hasStarred) && (
               <>
                 <Spacer size='4rem' />
                 <TitleTertiary>Starred</TitleTertiary>
                 <div className={c.RecentFilesView_Starred}>
+                  {isLoadingStarred && (
+                    <div className={c.RecentFilesView_Loader}>
+                      <Spinner />
+                    </div>
+                  )}
                   {starredFolders.map((folder, index) => {
                     return (
                       <div className={c.RecentFilesView_Row} key={`starred_${index}`}>

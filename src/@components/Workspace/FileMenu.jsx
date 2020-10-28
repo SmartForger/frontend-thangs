@@ -109,6 +109,7 @@ const FileMenu = ({ model = {}, folder = {}, type }) => {
       track('File Menu - Star Model')
       dispatch(types.LIKE_MODEL, {
         id: model.id,
+        model: model,
         currentUserId: currentUserId,
         owner: model.owner,
       })
@@ -116,7 +117,7 @@ const FileMenu = ({ model = {}, folder = {}, type }) => {
       track('File Menu - Star Folder')
       dispatch(types.LIKE_FOLDER, { id: folder.id, owner: folder.owner })
     }
-  }, [currentUserId, dispatch, folder.id, folder.owner, model.id, model.owner, type])
+  }, [currentUserId, dispatch, folder.id, folder.owner, model, type])
 
   const addFolder = useCallback(() => {
     track('File Menu - Create Folder')

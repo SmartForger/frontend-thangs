@@ -1,5 +1,6 @@
 import * as R from 'ramda'
 import api from '@services/api'
+import { STATUSES } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import { track } from '@utilities/analytics'
@@ -8,6 +9,7 @@ import {
   removeFolder,
   removeModelFromFolder,
   updateFolder,
+  updateLike,
 } from './updater'
 
 const getInitAtom = () => ({
@@ -236,4 +238,56 @@ export default store => {
       }
     }
   )
+
+  store.on(types.LIKE_FOLDER, async (state, { id: folderId }) => {
+    const id = authenticationService.getCurrentUserId()
+    store.dispatch(types.SAVING_FOLDER)
+    store.dispatch(types.CHANGE_USER_LIKED_MODELS_STATUS, {
+      status: STATUSES.LOADING,
+      atom: `user-liked-models-${id}`,
+      data: R.pathOr({}, [`user-liked-models-${id}`, 'data'], state),
+    })
+    const { error } = await api({
+      method: 'POST',
+      endpoint: `folders/${folderId}/like`,
+    })
+
+    if (error) {
+      store.dispatch(types.ERROR_SAVING_FOLDER)
+    } else {
+      track('Folder Liked', { folderId })
+      const newLikes = updateLike(folderId, state, id, true)
+      store.dispatch(types.CHANGE_USER_LIKED_MODELS_STATUS, {
+        status: STATUSES.LOADED,
+        atom: `user-liked-models-${id}`,
+        data: newLikes,
+      })
+    }
+  })
+
+  store.on(types.UNLIKE_FOLDER, async (state, { id: folderId }) => {
+    const id = authenticationService.getCurrentUserId()
+    store.dispatch(types.SAVING_FOLDER)
+    store.dispatch(types.CHANGE_USER_LIKED_MODELS_STATUS, {
+      status: STATUSES.LOADING,
+      atom: `user-liked-models-${id}`,
+      data: R.pathOr({}, [`user-liked-models-${id}`, 'data'], state),
+    })
+    const { error } = await api({
+      method: 'POST',
+      endpoint: `folders/${folderId}/unlike`,
+    })
+
+    if (error) {
+      store.dispatch(types.ERROR_SAVING_FOLDER)
+    } else {
+      track('Folder Unliked', { folderId })
+      const newLikes = updateLike(folderId, state, id, false)
+      store.dispatch(types.CHANGE_USER_LIKED_MODELS_STATUS, {
+        status: STATUSES.LOADED,
+        atom: `user-liked-models-${id}`,
+        data: newLikes,
+      })
+    }
+  })
 }

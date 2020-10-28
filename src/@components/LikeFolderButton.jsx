@@ -51,7 +51,8 @@ const useStyles = createUseStyles(theme => {
     },
     LikeFolderIcon__unfilled: {
       '& path': {
-        fill: 'transparent',
+        fill: ({ color, showStar }) =>
+          color || showStar ? 'transparent' : theme.colors.black[500],
         stroke: ({ color }) => color || theme.colors.black[500],
       },
     },
@@ -94,8 +95,14 @@ const StarButton = ({ liked, c, hasChanged }) => {
   )
 }
 
-const LikeFolderButton = ({ className, color, folder = {}, minimal, onlyShowOwned }) => {
-  const c = useStyles({ color })
+const LikeFolderButton = ({
+  className,
+  color,
+  folder = {},
+  minimal,
+  onlyShowOwned,
+  shared,
+}) => {
   const { dispatch } = useStoreon()
   const currentUserId = authenticationService.getCurrentUserId()
   const { id, creator = {} } = folder
@@ -103,6 +110,10 @@ const LikeFolderButton = ({ className, color, folder = {}, minimal, onlyShowOwne
     () => String(currentUserId) === String(creator.id),
     [currentUserId, creator.id]
   )
+  const showStar = useMemo(() => {
+    return isFolderOfCurrentUser || shared
+  }, [isFolderOfCurrentUser, shared])
+  const c = useStyles({ color, showStar })
 
   const [liked, setLiked] = useState(hasLikedFolder(folder, currentUserId))
   const [hasChanged, setHasChanged] = useState(false)
@@ -129,7 +140,7 @@ const LikeFolderButton = ({ className, color, folder = {}, minimal, onlyShowOwne
   if (minimal) {
     return (
       <div className={className} onClick={handleLikeClicked}>
-        {isFolderOfCurrentUser ? (
+        {showStar ? (
           <StarButton liked={liked} c={c} hasChanged={hasChanged} />
         ) : (
           <HeartButton liked={liked} c={c} hasChanged={hasChanged} />
@@ -145,7 +156,7 @@ const LikeFolderButton = ({ className, color, folder = {}, minimal, onlyShowOwne
       onClick={handleLikeClicked}
     >
       <div>
-        {isFolderOfCurrentUser ? (
+        {showStar ? (
           <StarButton liked={liked} c={c} hasChanged={hasChanged} />
         ) : (
           <HeartButton liked={liked} c={c} hasChanged={hasChanged} />

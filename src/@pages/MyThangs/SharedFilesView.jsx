@@ -1,6 +1,13 @@
 import React, { useEffect, useMemo } from 'react'
 import * as R from 'ramda'
-import { AddContextMenu, FileTable, FolderCard, Spacer, TitleTertiary } from '@components'
+import {
+  AddContextMenu,
+  FileTable,
+  FolderCard,
+  Spacer,
+  Spinner,
+  TitleTertiary,
+} from '@components'
 import { useStarred } from '@hooks'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -56,10 +63,22 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       flexWrap: 'wrap',
+      position: 'relative',
 
       '& > div': {
         marginTop: '1.5rem',
       },
+    },
+    SharedFilesView_Loader: {
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      background: 'rgba(0,0,0,0.19)',
+      zIndex: 1,
+      top: '-.75rem',
+      left: '-1rem',
+      display: 'flex',
+      alignItems: 'center',
     },
   }
 })
@@ -73,7 +92,7 @@ const SharedFilesView = ({
   sharedFolders,
 }) => {
   const c = useStyles({})
-  const { starredSharedFolders = [] } = useStarred()
+  const { starredSharedFolders = [], isLoading: isLoadingStarred } = useStarred()
   const hasStarred = useMemo(() => starredSharedFolders.length > 0, [
     starredSharedFolders.length,
   ])
@@ -104,17 +123,26 @@ const SharedFilesView = ({
             <Spacer size='2rem' />
             <TitleTertiary>Shared Files</TitleTertiary>
             <Spacer size='4rem' />
-            {hasStarred && (
+            {(isLoadingStarred || hasStarred) && (
               <>
                 <TitleTertiary>Starred</TitleTertiary>
                 <div className={c.SharedFilesView_Starred}>
+                  {isLoadingStarred && (
+                    <div className={c.SharedFilesView_Loader}>
+                      <Spinner />
+                    </div>
+                  )}
                   {starredSharedFolders.map((folder, index) => {
                     return (
                       <div
                         className={c.SharedFilesView_StarredRow}
                         key={`starred_${index}`}
                       >
-                        <FolderCard folder={folder} handleClick={handleChangeFolder} />
+                        <FolderCard
+                          folder={folder}
+                          handleClick={handleChangeFolder}
+                          isSharedFolder={true}
+                        />
                         <Spacer size='2rem' />
                       </div>
                     )

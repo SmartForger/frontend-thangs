@@ -132,17 +132,9 @@ const MyThangs = () => {
 
   const handleEditModel = useCallback(
     model => {
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'editModel',
-        overlayData: {
-          model,
-          user: model.owner,
-          animateIn: true,
-          windowed: true,
-        },
-      })
+      history.push(`/model/${model.id}`)
     },
-    [dispatch]
+    [history]
   )
 
   const onDrop = useCallback(

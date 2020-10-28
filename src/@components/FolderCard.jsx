@@ -54,7 +54,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-const FolderCard = ({ handleClick = noop, folder }) => {
+const FolderCard = ({ handleClick = noop, folder, isSharedFolder }) => {
   const c = useStyles({})
   const { id, name, isPublic, members = [] } = folder
   const FolderId = useMemo(() => {
@@ -64,7 +64,6 @@ const FolderCard = ({ handleClick = noop, folder }) => {
   const handleFolderClick = useCallback(() => {
     handleClick(folder)
   }, [folder, handleClick])
-
   return (
     <>
       <ContextMenuTrigger id={`File_Menu_${FolderId}`} holdToDisplay={1000}>
@@ -75,11 +74,12 @@ const FolderCard = ({ handleClick = noop, folder }) => {
           onClick={handleFolderClick}
         >
           <LikeFolderButton
+            key={`LikeBtn-${FolderId}`}
             className={c.FolderCard_Star}
             folder={folder}
             minimal
-            onlyShowOwned
             color={'#5A5A75'}
+            shared={isSharedFolder}
           />
           <Spacer size={'3rem'} />
           <div className={c.FolderCard_IconWrapper}>
