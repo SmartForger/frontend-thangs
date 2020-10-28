@@ -76,47 +76,57 @@ export default store => {
     }
   })
 
-  store.on(types.UPLOAD_FILE, async (_, { id, file, errorState = undefined, cancelToken }) => {
-    store.dispatch(types.INIT_UPLOAD_FILE, {
-      id,
-      file,
-      error: errorState && errorState.message,
-      isLoading: errorState && errorState.error ? false : true,
-      isError: errorState && errorState.error,
-      isWarning: errorState && errorState.warning,
-    })
-    if (!errorState || !errorState.error) {
-      try {
-        const { data: uploadedUrlData } = await api({
-          method: 'GET',
-          endpoint: `models/upload-url?fileName=${file.name}`,
-          cancelToken,
-        })
+  store.on(
+    types.UPLOAD_FILE,
+    async (_, { id, file, errorState = undefined, cancelToken }) => {
+      store.dispatch(types.INIT_UPLOAD_FILE, {
+        id,
+        file,
+        error: errorState && errorState.message,
+        isLoading: errorState && errorState.error ? false : true,
+        isError: errorState && errorState.error,
+        isWarning: errorState && errorState.warning,
+      })
+      if (!errorState || !errorState.error) {
+        try {
+          const { data: uploadedUrlData } = await api({
+            method: 'GET',
+            endpoint: `models/upload-url?fileName=${file.name}`,
+            cancelToken,
+          })
 
-        await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file, { cancelToken })
+          await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file, {
+            cancelToken,
+          })
 
-        store.dispatch(types.CHANGE_UPLOAD_FILE, {
-          id,
-          data: uploadedUrlData,
-          isLoading: false,
-          isError: false,
-        })
-      } catch (e) {
-        store.dispatch(types.CHANGE_UPLOAD_FILE, {
-          id,
-          data: e,
-          isLoading: false,
-          isError: true,
-        })
+          store.dispatch(types.CHANGE_UPLOAD_FILE, {
+            id,
+            data: uploadedUrlData,
+            isLoading: false,
+            isError: false,
+          })
+        } catch (e) {
+          store.dispatch(types.CHANGE_UPLOAD_FILE, {
+            id,
+            data: e,
+            isLoading: false,
+            isError: true,
+          })
+        }
       }
     }
-  })
+  )
 
   store.on(types.SUBMIT_FILES, async (state, { onFinish = noop }) => {
     store.dispatch(types.UPLOADING_FILES)
     const uploadedFiles = R.path(['uploadFiles', 'data'], state) || []
+    const filteredFiles = {}
+    Object.keys(uploadedFiles).forEach(fileDataId => {
+      if (uploadedFiles[fileDataId].name)
+        filteredFiles[fileDataId] = uploadedFiles[fileDataId]
+    })
     Promise.all(
-      Object.keys(uploadedFiles).map(fileId => {
+      Object.keys(filteredFiles).map(fileId => {
         const file = uploadedFiles[fileId]
         return submitFile({ file })
       })

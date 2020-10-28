@@ -206,8 +206,9 @@ const EnterInfo = ({
   const handleOnInputChange = useCallback(
     (key, value) => {
       onInputChange(key, value)
+      setErrorMessage(null)
     },
-    [onInputChange]
+    [onInputChange, setErrorMessage]
   )
 
   const handleSubmit = useCallback(

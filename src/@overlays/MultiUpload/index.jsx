@@ -84,7 +84,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
     'shared',
     'uploadFiles'
   )
-  const { data: uploadFilesData = {}, isLoading } = uploadFiles
+  const { data: rawUploadFilesData = {}, isLoading } = uploadFiles
   const { data: foldersData = [] } = folders
   const { data: sharedData = [] } = shared
   const [activeView, setActiveView] = useState('upload')
@@ -93,7 +93,11 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const c = useStyles({})
   const history = useHistory()
   const cancelTokenRef = useRef(axios.CancelToken.source())
-
+  const uploadFilesData = {}
+  Object.keys(rawUploadFilesData).forEach(fileDataId => {
+    if (rawUploadFilesData[fileDataId].name)
+      uploadFilesData[fileDataId] = rawUploadFilesData[fileDataId]
+  })
   const handleFileUpload = useCallback(
     (file, errorState, fileId) => {
       if (R.isNil(file)) {
@@ -245,26 +249,6 @@ const MultiUpload = ({ initData = null, folderId }) => {
     if (initData) onDrop(initData.acceptedFiles, initData.rejectedFile, initData.e)
   }, [initData, onDrop])
 
-  useEffect(() => {
-    const loadingFiles = Object.keys(uploadFilesData).filter(
-      id => uploadFilesData[id].isLoading
-    )
-    const warningFiles = Object.keys(uploadFilesData).filter(
-      id => uploadFilesData[id].isWarning
-    )
-    if (loadingFiles.length === 0) setErrorMessage(null)
-    if (warningFiles.length !== 0) {
-      setWarningMessage(`Notice: Files over ${FILE_SIZE_LIMITS.soft.pretty} may take a long time to
-    upload & process.`)
-    } else if (Object.keys(uploadFilesData).length > 25) {
-      setWarningMessage(
-        'Notice: Uploading more than 25 files at a time may take a long time to upload & process.'
-      )
-    } else {
-      setWarningMessage(null)
-    }
-  }, [uploadFilesData])
-
   return (
     <div className={c.MultiUpload}>
       {isLoading && (
@@ -308,6 +292,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             handleSkipToEnd={handleSubmit}
             handleUpdate={handleUpdate}
             setErrorMessage={setErrorMessage}
+            setWarningMessage={setWarningMessage}
             uploadFiles={uploadFilesData}
             isLoading={isLoading}
           />

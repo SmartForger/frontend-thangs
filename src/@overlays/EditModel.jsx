@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import {
   Spacer,
   Spinner,
@@ -92,7 +91,6 @@ const useStyles = createUseStyles(theme => {
 
 const EditModel = ({ model, fetchData }) => {
   const c = useStyles()
-  const history = useHistory()
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [editModelErrorMessage, setEditModelErrorMessage] = useState(null)
   const { dispatch, [`model-${model.id}`]: modelAtom = {} } = useStoreon(
@@ -115,11 +113,10 @@ const EditModel = ({ model, fetchData }) => {
         },
         onFinish: () => {
           dispatch(types.CLOSE_OVERLAY)
-          history.push('/mythangs')
         },
       })
     },
-    [dispatch, history]
+    [dispatch]
   )
 
   const handleDelete = useCallback(() => {
@@ -129,10 +126,9 @@ const EditModel = ({ model, fetchData }) => {
       fetchData,
       onFinish: () => {
         dispatch(types.CLOSE_OVERLAY)
-        history.push('/mythangs')
       },
     })
-  }, [dispatch, model.id, fetchData, history])
+  }, [dispatch, model.id, fetchData])
 
   useEffect(() => {
     overlayview('EditModel')

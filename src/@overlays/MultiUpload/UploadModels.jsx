@@ -17,7 +17,7 @@ import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { formatBytes } from '@utilities'
 import Dropzone from 'react-dropzone'
-import { MODEL_FILE_EXTS } from '@constants/fileUpload'
+import { FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { overlayview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
@@ -132,6 +132,8 @@ const UploadModels = ({
   removeFile = noop,
   closeOverlay = noop,
   handleContinue = noop,
+  setErrorMessage = noop,
+  setWarningMessage = noop,
   errorMessage = null,
   warningMessage = null,
 }) => {
@@ -141,11 +143,30 @@ const UploadModels = ({
     const loadingFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isLoading)
     return loadingFiles.length > 0
   }, [uploadFiles])
-  const fileLength = uploadFiles ? Object.keys(uploadFiles).length : 0
+  const fileLength = uploadFiles
+    ? Object.keys(uploadFiles).filter(fileId => uploadFiles[fileId].name).length
+    : 0
 
   useEffect(() => {
     overlayview('MultiUpload - UploadModels')
   }, [])
+
+  useEffect(() => {
+    const loadingFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isLoading)
+    const warningFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isWarning)
+
+    if (loadingFiles.length === 0) setErrorMessage(null)
+    if (warningFiles.length !== 0) {
+      setWarningMessage(`Notice: Files over ${FILE_SIZE_LIMITS.soft.pretty} may take a long time to
+    upload & process.`)
+    } else if (Object.keys(uploadFiles).length > 25) {
+      setWarningMessage(
+        'Notice: Uploading more than 25 files at a time may take a long time to upload & process.'
+      )
+    } else {
+      setWarningMessage(null)
+    }
+  }, [setErrorMessage, setWarningMessage, uploadFiles])
 
   return (
     <>
@@ -181,7 +202,7 @@ const UploadModels = ({
           <Spacer size='1rem' />
         </>
       )}
-      {!R.isEmpty(uploadFiles) && (
+      {fileLength > 0 && (
         <>
           <Spacer size={'1.5rem'} />
           <TitleTertiary>
@@ -192,6 +213,7 @@ const UploadModels = ({
             {Object.keys(uploadFiles).map((id, index) => {
               const file = uploadFiles[id]
               const { name, size, isLoading } = file
+              if (!name) return
               return (
                 <div key={`fileUpload_${index}`}>
                   <Spacer size={'.75rem'} />
