@@ -213,7 +213,7 @@ const InviteUsers = ({ folderId: id }) => {
   }, [])
 
   if (!folder) {
-    logger.error(`Error loading invite overlay for ${}`)
+    logger.error(`Error loading invite overlay for ${id}`)
     return (
       <div className={c.InviteUsers}>
         <ExitIcon className={c.InviteUsers_ExitButton} onClick={closeOverlay} />
