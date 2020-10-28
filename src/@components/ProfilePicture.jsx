@@ -37,10 +37,11 @@ const ProfilePicture = ({
   size = DEFAULT_AVATAR_SIZE,
   color = DEFAULT_AVATAR_COLOR,
   bordered,
-  title = undefined
+  title = undefined,
 }) => {
   const c = useStyles({ bordered, size })
   const nameToUse = useMemo(() => {
+    // API is returning blank space as name. TODO: Flatten data returned by backend
     if (!name || name.replace(/\s/g, '') === '') return userName
     return name
   }, [name, userName])

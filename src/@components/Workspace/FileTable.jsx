@@ -411,24 +411,24 @@ const FileTable = ({
           </table>
           {files.length > 0
             ? files.map((file, index) => {
-                if (!file) return null
-                const { id, subfolders } = file
-                return subfolders ? (
-                  <FileContextMenu
-                    key={`contextMenu_${index}`}
-                    id={id}
-                    folder={file}
-                    type={'folder'}
-                  />
-                ) : (
-                  <FileContextMenu
-                    key={`contextMenu_${index}`}
-                    id={id}
-                    model={file}
-                    type={'model'}
-                  />
-                )
-              })
+              if (!file) return null
+              const { id, subfolders } = file
+              return subfolders ? (
+                <FileContextMenu
+                  key={`contextMenu_${index}`}
+                  id={id}
+                  folder={file}
+                  type={'folder'}
+                />
+              ) : (
+                <FileContextMenu
+                  key={`contextMenu_${index}`}
+                  id={id}
+                  model={file}
+                  type={'model'}
+                />
+              )
+            })
             : null}
         </>
       ) : !hideDropzone ? (

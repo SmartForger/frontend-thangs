@@ -385,7 +385,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
     isError: isRelatedError,
     data: relatedData = [],
   } = related
-  let phyndexerResults = 0
+
   const relatedModels = useMemo(() => {
     const relatedModelsData = {
       matches: [],
@@ -394,9 +394,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
       if (result.collection === 'thangs') {
         return relatedModelsData.matches.push(...result.matches.slice(0, 4))
       }
-      if (result.collection === 'phyndexer') {
-        phyndexerResults = result.matches.length
-      }
+
       if (result.matches.length) {
         return relatedModelsData.matches.push(
           ...result.matches.filter(match => match.attributionUrl).slice(0, 4)
@@ -404,6 +402,16 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
       }
     })
     return relatedModelsData
+  }, [relatedData])
+
+  const phyndexerResults = useMemo(() => {
+    let resultLength = 0
+    relatedData.forEach(result => {
+      if (result.collection === 'phyndexer') {
+        resultLength = result.matches.length
+      }
+    })
+    return resultLength
   }, [relatedData])
 
   useEffect(() => {
