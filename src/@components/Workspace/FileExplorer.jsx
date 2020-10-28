@@ -221,7 +221,12 @@ const FileExplorer = ({
   const c = useStyles({})
 
   if (isLoading) {
-    return <Spinner />
+    return (
+      <>
+        <Spinner />
+        <Spacer size={'2rem'} />
+      </>
+    )
   }
 
   if (!folders.length) return null
