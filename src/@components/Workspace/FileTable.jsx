@@ -462,7 +462,7 @@ const FileTable = ({
                       history.push(`/model/${file.id}`)
                     }
                   const RowWithProps = ({ children, ...props }) => (
-                    <tr onDoubleClick={handleClick} {...props}>
+                    <tr onClick={handleClick} {...props}>
                       {children}
                     </tr>
                   )
