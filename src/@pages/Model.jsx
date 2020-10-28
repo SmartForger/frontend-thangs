@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import * as R from 'ramda'
@@ -383,36 +383,8 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   const {
     isLoading: isRelatedLoading,
     isError: isRelatedError,
-    data: relatedData = [],
+    data: relatedData,
   } = related
-
-  const relatedModels = useMemo(() => {
-    const relatedModelsData = {
-      matches: [],
-    }
-    relatedData.forEach(result => {
-      if (result.collection === 'thangs') {
-        return relatedModelsData.matches.push(...result.matches.slice(0, 4))
-      }
-
-      if (result.matches.length) {
-        return relatedModelsData.matches.push(
-          ...result.matches.filter(match => match.attributionUrl).slice(0, 4)
-        )
-      }
-    })
-    return relatedModelsData
-  }, [relatedData])
-
-  const phyndexerResults = useMemo(() => {
-    let resultLength = 0
-    relatedData.forEach(result => {
-      if (result.collection === 'phyndexer') {
-        resultLength = result.matches.length
-      }
-    })
-    return resultLength
-  }, [relatedData])
 
   useEffect(() => {
     dispatch(types.FETCH_MODEL, { id })
@@ -491,8 +463,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
               <RelatedModels
                 isLoading={isRelatedLoading}
                 isError={isRelatedError}
-                data={relatedModels}
-                originalModel={phyndexerResults > 4 ? modelData : null}
+                data={relatedData}
               />
               <Divider />
               <CommentsForModel
