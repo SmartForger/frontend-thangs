@@ -93,7 +93,7 @@ const getSubfolderId = (path, rootFolder, folder) => {
   })
 }
 
-const FolderHeader = ({ folder, rootFolder, setFolder = noop, isSharedFolder }) => {
+const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
   const { id, name } = folder

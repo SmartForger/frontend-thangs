@@ -318,7 +318,7 @@ const FolderRow = ({ folder }) => {
   )
 }
 
-const FileRow = ({ model, handleModelClick: _handle = noop }) => {
+const FileRow = ({ model }) => {
   const c = useStyles({})
   const [showFileMenu, setShowFileMenu] = useState(false)
   const fileMenuRef = useRef(null)
@@ -422,7 +422,7 @@ const getSortedFiles = (files, sortType, order) => {
 const FileTable = ({
   files = [],
   handleChangeFolder = noop,
-  handleEditModel = noop,
+  handleEditModel: _h = noop,
   sortedBy: initialSortedBy,
   searchCase,
   hideDropzone = false,
@@ -456,16 +456,7 @@ const FileTable = ({
                 sortedFiles.map((file, index) => {
                   if (!file) return null
                   const { id } = file
-                  const handleClick = file.subfolders
-                    ? () => handleChangeFolder(file)
-                    : () => {
-                      history.push(`/model/${file.id}`)
-                    }
-                  const RowWithProps = ({ children, ...props }) => (
-                    <tr onClick={handleClick} {...props}>
-                      {children}
-                    </tr>
-                  )
+
                   return (
                     <React.Fragment key={`TableRow_${index}`}>
                       {file.subfolders ? (
@@ -473,7 +464,10 @@ const FileTable = ({
                           <ContextMenuTrigger
                             id={`File_Menu_${id}`}
                             holdToDisplay={1000}
-                            renderTag={RowWithProps}
+                            renderTag={'tr'}
+                            attributes={{
+                              onClick: () => handleChangeFolder(file),
+                            }}
                           >
                             <FolderRow folder={file} />
                           </ContextMenuTrigger>
@@ -483,9 +477,12 @@ const FileTable = ({
                           <ContextMenuTrigger
                             id={`File_Menu_${id}`}
                             holdToDisplay={1000}
-                            renderTag={RowWithProps}
+                            renderTag={'tr'}
+                            attributes={{
+                              onClick: () => history.push(`/model/${file.id}`),
+                            }}
                           >
-                            <FileRow model={file} handleModelClick={handleEditModel} />
+                            <FileRow model={file} />
                           </ContextMenuTrigger>
                         </React.Fragment>
                       )}
