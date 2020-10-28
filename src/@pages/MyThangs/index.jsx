@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import { WorkspaceHeader, WorkspaceNavbar, Spinner } from '@components'
+import { WorkspaceHeader, WorkspaceNavbar, Spacer, Spinner } from '@components'
 import { authenticationService } from '@services'
 import { useOverlay, useStarred } from '@hooks'
 import AllFilesView from './AllFilesView'
@@ -78,7 +78,7 @@ const useStyles = createUseStyles(theme => {
     },
     Spinner: {
       position: 'relative',
-      top: '2rem',
+      top: '9rem',
     },
   }
 })
@@ -193,6 +193,7 @@ const MyThangs = () => {
       />
       <div className={c.MyThangs_ContentWrapper}>
         <WorkspaceHeader setCurrentView={handleCurrentView} />
+        <Spacer size={'7rem'} />
         {!isLoaded || isLoading ? (
           <Spinner className={c.Spinner} />
         ) : (

@@ -11,9 +11,9 @@ const useStyles = createUseStyles(theme => {
       backgroundColor: theme.colors.white[400],
       display: 'flex',
       flexDirection: 'column',
-      position: 'sticky',
+      position: 'fixed',
       top: 0,
-      width: '100%',
+      width: 'calc(100% - 20.5rem)',
       zIndex: 2,
     },
     WorkspaceHeader_Content: {
