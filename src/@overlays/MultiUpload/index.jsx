@@ -275,7 +275,9 @@ const MultiUpload = ({ initData = null, folderId }) => {
           <UploadModels
             closeOverlay={closeOverlay}
             errorMessage={errorMessage}
+            setErrorMessage={setErrorMessage}
             warningMessage={warningMessage}
+            setWarningMessage={setWarningMessage}
             handleContinue={handleContinue}
             onDrop={onDrop}
             removeFile={removeFile}
@@ -286,13 +288,12 @@ const MultiUpload = ({ initData = null, folderId }) => {
             activeView={activeView}
             closeOverlay={closeOverlay}
             errorMessage={errorMessage}
+            setErrorMessage={setErrorMessage}
             folders={dropdownFolders}
             folderId={folderId}
             handleContinue={handleContinue}
             handleSkipToEnd={handleSubmit}
             handleUpdate={handleUpdate}
-            setErrorMessage={setErrorMessage}
-            setWarningMessage={setWarningMessage}
             uploadFiles={uploadFilesData}
             isLoading={isLoading}
           />
