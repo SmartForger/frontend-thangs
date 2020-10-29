@@ -461,10 +461,14 @@ const FileTable = ({
     order: 'desc',
   })
   const handleSort = useCallback(
-    sortedBy => {
-      setSort({ sortedBy, order: order === 'asc' ? 'desc' : 'asc' })
+    newSortedBy => {
+      const newOrder = sortedBy !== newSortedBy
+        ? 'asc'
+        : order === 'asc' ? 'desc' : 'asc'
+
+      setSort({ sortedBy: newSortedBy, order: newOrder })
     },
-    [order]
+    [sortedBy, order]
   )
   const sortedFiles = useMemo(() => {
     return getSortedFiles(files, sortedBy, order)
