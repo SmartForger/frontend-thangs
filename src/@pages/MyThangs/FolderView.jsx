@@ -100,7 +100,9 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
   const folderPath = name.split('//')
 
   const folderPathEnhanced = folderPath.map(path => {
-    const { id: pathId } = getSubfolderId(path, rootFolder, folder)
+    const subfolder = getSubfolderId(path, rootFolder, folder)
+    if (!subfolder) return null
+    const { id: pathId } = subfolder
     return { label: path, id: pathId }
   })
   const rootFolderName = folderPath[0]
