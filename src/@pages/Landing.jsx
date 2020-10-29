@@ -191,20 +191,13 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
         <Tabs options={sortOptions} />
       </div>
 
-      <button
-        onClick={() => {
-          dispatch(types.FETCH_MODEL_PREVIEW, { sortBy: selected })
-        }}
-      >
-        Gam-Gam!
-      </button>
-
       <CardCollection
         noResultsText='We have no models to display right now. Please try again later.'
         isLoading={isLoading}
       >
         <ModelCards items={modelPreviews.data} user={user} />
       </CardCollection>
+      
       <Spacer size='1rem' />
       {isLoading && <Spinner />}
     </div>

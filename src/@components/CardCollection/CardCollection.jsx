@@ -53,7 +53,7 @@ const CardCollection = ({
     return (
       <div
         className={classnames(c.CardCollection, {
-          [c.CardCollection__singleRow]: (allItemsCount < maxPerRow),
+          [c.CardCollection__singleRow]: (allItemsCount < maxPerRow) && !isLoading,
         })}
       >
         {children}
