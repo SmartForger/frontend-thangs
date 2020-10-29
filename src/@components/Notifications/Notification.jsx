@@ -193,11 +193,13 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
       break
     case 'invited':
       IconComponent = GrantAccessIcon
-      linkTarget = target && target.id ? `/mythangs/folder/${target.id}` : '/'
+      linkTarget =
+        target && target.id ? `/mythangs/folder/${target.id}` : '/mythangs/shared-files'
       break
     case 'invitedYou':
       IconComponent = GrantAccessIcon
-      linkTarget = target && target.id ? `/mythangs/folder/${target.id}` : '/'
+      linkTarget =
+        target && target.id ? `/mythangs/folder/${target.id}` : '/mythangs/shared-files'
       altVerb = 'invited you'
       targetNameAlt = 'to a folder'
       break
@@ -216,12 +218,12 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
       break
     case 'uploaded-to-folder':
       IconComponent = UploadIcon
-      linkTarget = target && target.id ? `/mythangs/folder/${target.id}` : '/'
+      linkTarget = target && target.id ? `/mythangs/folder/${target.id}` : '/mythangs'
       altVerb = 'uploaded to folder'
       break
     case 'likedFolder':
       IconComponent = StarIcon
-      linkTarget = target && target.id ? `/mythangs/folder/${target.id}` : '/'
+      linkTarget = target && target.id ? `/mythangs/folder/${target.id}` : '/mythangs'
       altVerb = 'liked folder'
       break
     default:
