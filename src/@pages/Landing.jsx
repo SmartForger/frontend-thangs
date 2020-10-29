@@ -116,21 +116,21 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
     dispatch(types.FETCH_MODEL_PREVIEW, { sortBy: selected, isInitial: true })
   }, [dispatch, selected])
 
-  const trackScrolling = () => {
-    const wrappedElement = containerRef.current
-    if (isBottom(wrappedElement) && !isLoading) {
-      dispatch(types.FETCH_MODEL_PREVIEW, { sortBy: selected })
-    }
-  }
-
   useEffect(() => {
+    const trackScrolling = () => {
+      const wrappedElement = containerRef.current
+      if (isBottom(wrappedElement) && !isLoading) {
+        dispatch(types.FETCH_MODEL_PREVIEW, { sortBy: selected })
+      }
+    }
+
     document.addEventListener('scroll', trackScrolling)
 
     return () => {
       document.removeEventListener('scroll', trackScrolling)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [dispatch, isLoading, selected])
 
   const sortBy = useCallback(type => {
     setSelected(type)
