@@ -130,10 +130,6 @@ const EditModelForm = ({
     [onInputChange]
   )
 
-  const handleDeleteModel = useCallback(() => {
-    setShowDeleteConfirm(true)
-  }, [])
-
   const handleCancelDelete = useCallback(() => {
     setShowDeleteConfirm(false)
   }, [])
