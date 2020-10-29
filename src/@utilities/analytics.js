@@ -13,7 +13,8 @@ export const initialize = () => {
 
 export const identify = ({ user, inviteCode }) => {
   pendo.identify(user, { inviteCode })
-  amplitude.getInstance().setUserId(user.id)
+  const userId = user.id.padStart(5, '0')
+  amplitude.getInstance().setUserId(userId)
   amplitude.getInstance().setUserProperties({ inviteCode })
 }
 
