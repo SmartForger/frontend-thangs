@@ -26,8 +26,6 @@ const useStyles = createUseStyles(theme => {
         transform: 'rotateY(-180deg)',
       },
     },
-    LikeModelButton: {},
-    LikeModelIcon: {},
     LikeModelIcon__liked: {
       animation: '$spinner 250ms linear 0s 1',
 
@@ -44,8 +42,8 @@ const useStyles = createUseStyles(theme => {
     },
     LikeHeartIcon__filled: {
       '& path': {
-        fill: ({ color }) => color || theme.colors.black[500],
-        stroke: ({ color }) => color || theme.colors.black[500],
+        fill: ({ color }) => color || undefined,
+        stroke: ({ color }) => color || undefined,
       },
     },
     LikeStarIcon__unliked: {
@@ -80,13 +78,13 @@ const hasLikedModel = (model, currentUserId) => {
 const HeartButton = ({ liked, c, hasChanged }) => {
   return liked ? (
     <HeartFilledIcon
-      className={classnames(c.LikeModelIcon, c.LikeHeartIcon__filled, {
+      className={classnames(c.LikeHeartIcon__filled, {
         [c.LikeModelIcon__liked]: hasChanged,
       })}
     />
   ) : (
     <HeartIcon
-      className={classnames(c.LikeModelIcon, c.LikeStarIcon__unfilled, {
+      className={classnames(c.LikeHeartIcon__unfilled, {
         [c.LikeModelIcon__unliked]: hasChanged,
       })}
     />
@@ -96,13 +94,13 @@ const HeartButton = ({ liked, c, hasChanged }) => {
 const StarButton = ({ liked, c, hasChanged }) => {
   return liked ? (
     <StarFilledIcon
-      className={classnames(c.LikeModelIcon, c.LikeHeartlIcon__filled, {
+      className={classnames(c.LikeStarIcon__filled, {
         [c.LikeModelIcon__liked]: hasChanged,
       })}
     />
   ) : (
     <StarIcon
-      className={classnames(c.LikeModelIcon, c.LikeStarIcon__unfilled, {
+      className={classnames(c.LikeStarIcon__unfilled, {
         [c.LikeModelIcon__unliked]: hasChanged,
       })}
     />
@@ -159,11 +157,7 @@ const AuthLikeModelButton = ({
   }
 
   return (
-    <Button
-      className={classnames(className, c.LikeModelButton)}
-      secondary
-      onClick={handleLikeClicked}
-    >
+    <Button className={className} secondary onClick={handleLikeClicked}>
       {isModelOfCurrentUser ? (
         <>
           <StarButton liked={liked} c={c} hasChanged={hasChanged} />
@@ -181,15 +175,15 @@ const AuthLikeModelButton = ({
   )
 }
 
-const UnauthLikeModelButton = ({ c, openSignupOverlay = noop }) => {
+const UnauthLikeModelButton = ({ openSignupOverlay = noop }) => {
   const handleClick = useCallback(() => {
     openSignupOverlay('Join to Like, Follow, Share.', 'Like')
     track('SignUp Prompt Overlay', { source: 'Like' })
   }, [openSignupOverlay])
 
   return (
-    <Button className={classnames(c.LikeModelButton)} onClick={handleClick} secondary>
-      <HeartFilledIcon className={c.LikeModelIcon} />
+    <Button onClick={handleClick} secondary>
+      <HeartFilledIcon />
       <Spacer size='.5rem' />
       Like
     </Button>
