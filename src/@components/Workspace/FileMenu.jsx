@@ -177,16 +177,20 @@ const FileMenu = ({ model = {}, folder = {}, type }) => {
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={addFolder}>
-        <div>
-          <Spacer size={'1.5rem'} />
-          <FolderIcon />
+      {type === 'folder' && (
+        <>
+          <MenuItem className={c.FileMenu_Item} onClick={addFolder}>
+            <div>
+              <Spacer size={'1.5rem'} />
+              <FolderIcon />
+              <Spacer size={'.5rem'} />
+              <SingleLineBodyText>Create Folder</SingleLineBodyText>
+              <Spacer size={'1.5rem'} />
+            </div>
+          </MenuItem>
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Create Folder</SingleLineBodyText>
-          <Spacer size={'1.5rem'} />
-        </div>
-      </MenuItem>
-      <Spacer size={'.5rem'} />
+        </>
+      )}
       {type === 'model' && (
         <>
           <MenuItem className={c.FileMenu_Item} onClick={downloadModel}>
