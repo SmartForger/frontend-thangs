@@ -239,7 +239,7 @@ const FolderView = ({
     if (id) setCurrentFolderId(id)
     pageview('MyThangs - FolderView', id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [id])
 
   useEffect(() => {
     if (inviteCode)
