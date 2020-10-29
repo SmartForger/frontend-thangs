@@ -392,41 +392,56 @@ const getCompareByOrder = (a, b, order) => {
 }
 
 const getSortedFiles = (files, sortType, order) => {
-  return [...files].sort((a, b) => {
-    if (sortType === COLUMNS.FILENAME) {
-      return getCompareByOrder(
-        (a.name || '').toUpperCase(),
-        (b.name || '').toUpperCase(),
-        order
-      )
-    }
+  return [...files]
+    .sort((a, b) => {
+      if (sortType === COLUMNS.FILENAME) {
+        return getCompareByOrder(
+          (a.name || '').toUpperCase(),
+          (b.name || '').toUpperCase(),
+          order
+        )
+      }
 
-    if (sortType === COLUMNS.CREATED) {
-      return getCompareByOrder(
-        new Date(a.uploadDate).getTime(),
-        new Date(b.uploadDate).getTime(),
-        order
-      )
-    }
+      if (sortType === COLUMNS.CREATED) {
+        return getCompareByOrder(
+          new Date(a.uploadDate).getTime(),
+          new Date(b.uploadDate).getTime(),
+          order
+        )
+      }
 
-    if (sortType === COLUMNS.SIZE) {
-      return getCompareByOrder(a.size, b.size, order)
-    }
+      if (sortType === COLUMNS.SIZE) {
+        return getCompareByOrder(a.size, b.size, order)
+      }
 
-    if (sortType === COLUMNS.FILETYPE) {
-      return getCompareByOrder(
-        (a.fileType || '').toUpperCase(),
-        (b.fileType || '').toUpperCase(),
-        order
-      )
-    }
+      if (sortType === COLUMNS.FILETYPE) {
+        return getCompareByOrder(
+          (a.fileType || '').toUpperCase(),
+          (b.fileType || '').toUpperCase(),
+          order
+        )
+      }
 
-    if (sortType === COLUMNS.CONTRIBUTORS) {
-      return getCompareByOrder((a.members || []).length, (b.members || []).length, order)
-    }
+      if (sortType === COLUMNS.CONTRIBUTORS) {
+        return getCompareByOrder(
+          (a.members || []).length,
+          (b.members || []).length,
+          order
+        )
+      }
 
-    return 0
-  })
+      return 0
+    })
+    // folders always on top
+    .sort((a, b) => {
+      if (a.fileType === undefined && b.fileType !== undefined) {
+        return -1
+      }
+      if (a.fileType !== undefined && b.fileType === undefined) {
+        return 1
+      }
+      return 0
+    })
 }
 
 const FileTable = ({
@@ -466,7 +481,6 @@ const FileTable = ({
                 sortedFiles.map((file, index) => {
                   if (!file) return null
                   const { id } = file
-
                   return (
                     <React.Fragment key={`TableRow_${index}`}>
                       {file.subfolders ? (
