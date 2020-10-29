@@ -49,6 +49,7 @@ const useStyles = createUseStyles(theme => {
     FolderCard_Row: {
       display: 'flex',
       flexDirection: 'row',
+      flex: 'none',
     },
   }
 })
