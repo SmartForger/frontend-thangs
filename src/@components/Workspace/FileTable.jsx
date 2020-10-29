@@ -138,6 +138,16 @@ const useStyles = createUseStyles(theme => {
     MenuButton: {
       padding: '0 .5rem',
       position: 'relative',
+
+      '& > svg': {
+        padding: '.25rem',
+        borderRadius: '.25rem',
+        border: '1px solid transparent',
+
+        '&:hover': {
+          border: `1px solid ${theme.colors.grey[300]}`,
+        },
+      },
     },
     FileRowMenu: {
       position: 'absolute',

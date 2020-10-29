@@ -1,12 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="3-dots" fill="#88888B">
-            <g id="Group-2" transform="translate(10.000000, 2.000000)">
-                <circle id="Oval" cx="2" cy="2" r="2"></circle>
-                <circle id="Oval" cx="2" cy="10" r="2"></circle>
-                <circle id="Oval" cx="2" cy="18" r="2"></circle>
-            </g>
-        </g>
-    </g>
+@@ -1,12 +1,5 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="2" y="7" width="2" height="2" rx="1" fill="black"/>
+<rect x="7" y="7" width="2" height="2" rx="1" fill="black"/>
+<rect x="12" y="7" width="2" height="2" rx="1" fill="black"/>
 </svg>
