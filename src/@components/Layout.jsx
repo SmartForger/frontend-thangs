@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Header, Footer, FeedbackTooltip } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useOverlay } from '@hooks'
 import Banner from './Header/Banner'
+import { ReactComponent as ArrowUpIcon } from '@svg/icon-arrow-up.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -99,8 +100,47 @@ const useStyles = createUseStyles(theme => {
       right: '2rem',
       zIndex: 1,
     },
+    BackToTop: {
+      backgroundColor: theme.colors.gold[500],
+      borderRadius: '2rem',
+      width: '2.5rem',
+      height: '2.5rem',
+      right: '2rem',
+      bottom: '6rem',
+      zIndex: 1,
+      position: 'fixed',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
   }
 })
+
+const BackToTop = () => {
+  const c = useStyles({})
+  const [showScroll, setShowScroll] = useState(false)
+
+  const checkScrollTop = () => {
+    if (!showScroll && window.pageYOffset > 800) {
+      setShowScroll(true)
+    } else if (showScroll && window.pageYOffset <= 800) {
+      setShowScroll(false)
+    }
+  }
+
+  const scrollTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  window.addEventListener('scroll', checkScrollTop)
+
+  if (!showScroll) return null
+  return (
+    <div className={c.BackToTop} onClick={scrollTop}>
+      <ArrowUpIcon />
+    </div>
+  )
+}
 
 const Layout = ({
   children,
@@ -134,6 +174,7 @@ const Layout = ({
         {bannerText && <Banner>{bannerText}</Banner>}
         <div className={c.Layout}>
           {children}
+          <BackToTop />
           <FeedbackTooltip className={c.Layout_FeedbackTooltip} />
         </div>
       </div>
