@@ -97,7 +97,15 @@ const useStyles = createUseStyles(theme => {
 })
 const noop = () => null
 const findFolderById = (id, folders) => {
-  return R.find(R.propEq('id', id.toString()))(folders) || {}
+  const rootFolder = R.find(R.propEq('id', id.toString()))(folders) || {}
+  if (!R.isEmpty(rootFolder)) return rootFolder
+  let subFolder = false
+  folders.some(folder => {
+    const subfolders = folder.subfolders
+    subFolder = R.find(R.propEq('id', id.toString()))(subfolders) || false
+    return subFolder
+  })
+  return subFolder
 }
 
 const AddMenuDropdown = ({ currentFolderId, folders }) => {
