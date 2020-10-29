@@ -13,34 +13,35 @@ export default store => {
     }
   }))
 
-  store.on(types.LOADING_MODEL_PREVIEW, state => ({
+  store.on(types.LOADING_MODEL_PREVIEW, (state, { isInitial }) => ({
     modelPreviews: {
       ...state.modelPreviews,
       ...getStatusState(STATUSES.LOADING),
+      ...(isInitial && { data: []})
     },
   }))
 
-  store.on(types.LOADED_MODEL_PREVIEW, (state, { data }) => ({
+  store.on(types.LOADED_MODEL_PREVIEW, (state, { data, isInitial }) => ({
     modelPreviews: {
       ...state.modelPreviews,
       ...getStatusState(STATUSES.LOADED),
-      data: [...state.modelPreviews.data, ...data ],
-      pageToLoad: state.modelPreviews.pageToLoad + 1
+      data: isInitial ? data : [...state.modelPreviews.data, ...data ],
+      pageToLoad: isInitial ? 1 : state.modelPreviews.pageToLoad + 1
     },
   }))
 
-  store.on(types.FETCH_MODEL_PREVIEW, async (state, { sortBy = 'likes' }) => {
-    store.dispatch(types.LOADING_MODEL_PREVIEW)
+  store.on(types.FETCH_MODEL_PREVIEW, async (state, { sortBy = 'likes', isInitial = false }) => {
+    store.dispatch(types.LOADING_MODEL_PREVIEW, { isInitial })
     const { data } = await api({
       method: 'GET',
       endpoint: 'models/landing',
       params: {
         sortBy,
         sortDir: 'desc',
-        page: state.modelPreviews.pageToLoad,
+        page: isInitial ? 0 : state.modelPreviews.pageToLoad,
         pageSize: PREVIEW_MODELS_SIZE,
       }
     })
-    store.dispatch(types.LOADED_MODEL_PREVIEW, { data })
+    store.dispatch(types.LOADED_MODEL_PREVIEW, { data, isInitial })
   })
 }

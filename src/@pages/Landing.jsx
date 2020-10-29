@@ -113,7 +113,7 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
   }, [])
 
   useEffect(() => {
-    dispatch(types.FETCH_MODEL_PREVIEW, { sortBy: selected })
+    dispatch(types.FETCH_MODEL_PREVIEW, { sortBy: selected, isInitial: true })
   }, [dispatch, selected])
 
   const trackScrolling = () => {
