@@ -1,6 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { CardCollection, Layout, Tabs, TitleSecondary } from '@components'
+import {
+  CardCollection,
+  Layout,
+  Spacer,
+  Spinner,
+  Tabs,
+  TitleSecondary,
+} from '@components'
 import { useCurrentUser, useQuery } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { useStoreon } from 'storeon/react'
@@ -92,9 +99,13 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
+const isBottom = el => el.getBoundingClientRect().bottom <= window.innerHeight
+
 const Page = ({ user = {}, dispatch, modelPreviews }) => {
   const c = useStyles({})
   const [selected, setSelected] = useState('likes')
+  const containerRef = useRef(null)
+  const isLoading = modelPreviews.isLoading
 
   useEffect(() => {
     pageview('Home')
@@ -104,6 +115,22 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
   useEffect(() => {
     dispatch(types.FETCH_MODEL_PREVIEW, { sortBy: selected })
   }, [dispatch, selected])
+
+  const trackScrolling = () => {
+    const wrappedElement = containerRef.current
+    if (isBottom(wrappedElement) && !isLoading) {
+      dispatch(types.FETCH_MODEL_PREVIEW, { sortBy: selected })
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('scroll', trackScrolling)
+
+    return () => {
+      document.removeEventListener('scroll', trackScrolling)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const sortBy = useCallback(type => {
     setSelected(type)
@@ -158,17 +185,28 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
   }
 
   return (
-    <div className={c.Landing_Column}>
+    <div className={c.Landing_Column} ref={containerRef}>
       <div className={c.Landing_Title}>
         <TitleSecondary>{title}</TitleSecondary>
         <Tabs options={sortOptions} />
       </div>
+
+      <button
+        onClick={() => {
+          dispatch(types.FETCH_MODEL_PREVIEW, { sortBy: selected })
+        }}
+      >
+        Gam-Gam!
+      </button>
+
       <CardCollection
         noResultsText='We have no models to display right now. Please try again later.'
-        loading={modelPreviews.isLoading}
+        isLoading={isLoading}
       >
         <ModelCards items={modelPreviews.data} user={user} />
       </CardCollection>
+      <Spacer size='1rem' />
+      {isLoading && <Spinner />}
     </div>
   )
 }

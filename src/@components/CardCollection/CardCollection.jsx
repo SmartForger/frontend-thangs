@@ -3,6 +3,7 @@ import { NoResults } from '@components'
 import Skeleton from '@material-ui/lab/Skeleton'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import { PREVIEW_MODELS_SIZE } from '@store/modelPreviews/store'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -35,25 +36,11 @@ const useStyles = createUseStyles(theme => {
 const CardCollection = ({
   maxPerRow = 4,
   noResultsText,
-  loading = false,
+  isLoading = false,
   children,
   cardWidth = '14.875rem',
 }) => {
   const c = useStyles({ cardWidth })
-
-  if (loading) {
-    return (
-      <div className={c.CardCollection}>
-        {[...Array(12).keys()].map((model, index) => (
-          <Skeleton
-            variant='rect'
-            className={c.ModelCard_Skeleton}
-            key={`skeletonCard:${index}`}
-          />
-        ))}
-      </div>
-    )
-  }
 
   if (children) {
     const allItemsCount = Array.isArray(children)
@@ -66,10 +53,17 @@ const CardCollection = ({
     return (
       <div
         className={classnames(c.CardCollection, {
-          [c.CardCollection__singleRow]: allItemsCount < maxPerRow,
+          [c.CardCollection__singleRow]: (allItemsCount < maxPerRow),
         })}
       >
         {children}
+        {isLoading && [...Array(PREVIEW_MODELS_SIZE).keys()].map(key => (
+          <Skeleton
+            variant='rect'
+            className={c.ModelCard_Skeleton}
+            key={`skeletonCard-${key}`}
+          />
+        ))}
       </div>
     )
   } else {
