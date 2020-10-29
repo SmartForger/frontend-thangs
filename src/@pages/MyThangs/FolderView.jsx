@@ -253,6 +253,9 @@ const FolderView = ({
         },
       })
   }, [dispatch, history, id, inviteCode])
+  if (!folder && !R.isEmpty(allFolders)) {
+    return <main className={classnames(className, c.FolderView)}>Folder not found.</main>
+  }
 
   if (!folder || R.isEmpty(folder)) {
     return (
