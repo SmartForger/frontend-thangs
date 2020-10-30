@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  cypress: cypress-io/cypress@1.26.0
+  cypress: cypress-io/cypress@1
 workflows:
   version: 2
   run-tests:
@@ -10,5 +10,6 @@ workflows:
           start: yarn dev
           wait-on: 'http://localhost:3000'
           executor: cypress/browsers-chrome76
+          store_artifacts: true
           browser: chrome
           verify-command: yarn cypress verify
