@@ -197,7 +197,7 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
       >
         <ModelCards items={modelPreviews.data} user={user} />
       </CardCollection>
-      
+
       <Spacer size='1rem' />
       {isLoading && <Spinner />}
     </div>
@@ -213,6 +213,7 @@ const Landing = () => {
   const sessionExpired = useQuery('sessionExpired')
   const authFailed = useQuery('authFailed')
   const showSignup = useQuery('showSignup')
+  const emailRedirect = useQuery('emailRedirect')
   const { id } = useParams()
 
   useEffect(() => {
@@ -238,6 +239,7 @@ const Landing = () => {
       })
     }
     if (id) track('Explore', { referralChannel: id })
+    if (emailRedirect) track('Email Redirect')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
