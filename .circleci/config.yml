@@ -9,6 +9,6 @@ workflows:
           yarn: true
           start: yarn dev
           wait-on: 'http://localhost:3000'
-          executor: cypress/base-14
+          executor: cypress/browsers-chrome76
           browser: chrome
           verify-command: yarn cypress verify
