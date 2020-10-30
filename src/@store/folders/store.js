@@ -196,7 +196,12 @@ export default store => {
         onError()
       } else {
         store.dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId }) //Why do we need to fetch this?
-        store.dispatch(types.FETCH_FOLDER, { folderId, onFinish })
+        store.dispatch(types.FETCH_THANGS, {
+          onFinish: () => {
+            store.dispatch(types.SAVED_FOLDER)
+            onFinish()
+          },
+        })
       }
     }
   )
