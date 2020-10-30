@@ -7,8 +7,8 @@ workflows:
     jobs:
       - cypress/run:
           yarn: true
-          executor: cypress/browsers-chrome78-ff70
+          start: yarn dev
+          wait-on: 'http://localhost:3000'
+          executor: cypress/base-14
           browser: chrome
           verify-command: yarn cypress verify
-          start: yarn run dev
-          wait-on: 'http://localhost:3000'
