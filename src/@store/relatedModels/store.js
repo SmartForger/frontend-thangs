@@ -14,7 +14,6 @@ export default store => {
     },
   }))
   store.on('change-status', (state, { atom, status = STATUSES.INIT, data }) => ({
-    ...state,
     [atom]: {
       ...state[atom],
       ...getStatusState(status),
@@ -40,13 +39,7 @@ export default store => {
       store.dispatch('change-status', {
         status: STATUSES.LOADED,
         atom: `${COLLECTION_PREFIX}-${id}`,
-        data:
-          data &&
-          data.length &&
-          data.reduce(
-            (obj, item) => Object.assign(obj, { [item.collection]: item.matches }),
-            {}
-          ),
+        data,
       })
     }
   })

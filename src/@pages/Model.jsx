@@ -383,23 +383,21 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   const {
     isLoading: isRelatedLoading,
     isError: isRelatedError,
-    data: relatedData = {},
+    data: relatedData = [],
   } = related
 
   const relatedModels = useMemo(() => {
     const relatedModelsData = {
       matches: [],
     }
-
-    Object.keys(relatedData).forEach(key => {
-      const matches = relatedData[key]
-      if (key === 'thangs' && matches.length) {
-        return relatedModelsData.matches.push(...matches.slice(0, 4))
+    relatedData.forEach(result => {
+      if (result.collection === 'thangs') {
+        return relatedModelsData.matches.push(...result.matches.slice(0, 4))
       }
 
-      if (matches.length) {
+      if (result.matches.length) {
         return relatedModelsData.matches.push(
-          ...matches.filter(match => match.attributionUrl).slice(0, 4)
+          ...result.matches.filter(match => match.attributionUrl).slice(0, 4)
         )
       }
     })
@@ -408,9 +406,9 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
 
   const phyndexerResults = useMemo(() => {
     let resultLength = 0
-    Object.keys(relatedData).forEach(key => {
-      if (key === 'phyndexer') {
-        resultLength = relatedData[key].length
+    relatedData.forEach(result => {
+      if (result.collection === 'phyndexer') {
+        resultLength = result.matches.length
       }
     })
     return resultLength
