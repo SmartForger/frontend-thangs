@@ -1,12 +1,10 @@
-import React, { useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
+import React from 'react'
 import { CardCollection, Spinner } from '@components'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { logger } from '@utilities/logging'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
-import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -36,30 +34,11 @@ const useStyles = createUseStyles(theme => {
       gridArea: 'related',
       marginBottom: '2rem',
     },
-    RelatedModels_FindRelatedLink: {
-      marginTop: '2rem',
-      fontSize: '1rem',
-      fontWeight: 500,
-      lineHeight: '1rem',
-      cursor: 'pointer',
-      textDecoration: 'underline',
-      width: '100%',
-      margin: '0 auto',
-      textAlign: 'center',
-    },
   }
 })
 
-const RelatedModels = ({ isLoading, isError, data, className, originalModel }) => {
+const RelatedModels = ({ isLoading, isError, data, className }) => {
   const c = useStyles()
-  const history = useHistory()
-
-  const handleMoreRelated = useCallback(() => {
-    track('View Related Click - Model Page')
-    history.push(
-      `/search/${originalModel.uploadedFile}?modelId=${originalModel.id}&related=true`
-    )
-  }, [history, originalModel])
 
   if (isLoading) {
     return <Spinner />
@@ -80,12 +59,6 @@ const RelatedModels = ({ isLoading, isError, data, className, originalModel }) =
           <ModelCards items={data.matches} />
         ) : null}
       </CardCollection>
-
-      {originalModel && (
-        <div className={c.RelatedModels_FindRelatedLink} onClick={handleMoreRelated}>
-          View more related models
-        </div>
-      )}
     </div>
   )
 }
