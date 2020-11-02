@@ -2,7 +2,7 @@ import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
 import { STATUSES, getStatusState } from '@store/constants'
 import { track } from '@utilities/analytics'
-export const PREVIEW_MODELS_SIZE = 20
+export const PREVIEW_MODELS_SIZE = 40
 
 export default store => {
   store.on(types.STORE_INIT, () => ({
