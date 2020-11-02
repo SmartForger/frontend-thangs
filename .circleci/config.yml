@@ -1,24 +1,32 @@
 version: 2.1
 orbs:
   cypress: cypress-io/cypress@1
+executors:
+  test-in-staging:
+    docker:
+      - image: 'cypress/baase:10'
+        auth:
+          username: ${DOCKER_HUB_ID}
+          password: ${DOCKER_HUB_PWD}
+    environment:
+        REACT_APP_API_KEY: 'https://staging-api-platform-dot-gcp-and-physna.uc.r.appspot.com/'
+        REACT_APP_WEBSITE_NAME: 'Thangs Staging'
+        NODE_PATH: 'src/'
+        HTTPS: 'true'
+        GENERATE_SOURCEMAP: 'false'
+        REACT_APP_HOOPS_WS_ENDPOINT_URI: 'wss://staging-thangs-hoops-server-dot-gcp-and-physna.uc.r.appspot.com'
+        REACT_APP_THUMBNAILS_HOST: 'https://staging-thangs-thumbs-dot-gcp-and-physna.uc.r.appspot.com/convert'
+        REACT_APP_GOOGLE_CLOUD_PROJECT_ID: 'gcp-and-physna'
 workflows:
   version: 2
   run-tests:
     jobs:
       - cypress/run:
+          executor: test-in-staging
+          context: physna-web
           yarn: true
           start: yarn dev
           wait-on: 'http://localhost:3000'
-          executor: cypress/browsers-chrome76
           store_artifacts: true
           browser: chrome
           verify-command: yarn cypress verify
-          environment:
-            REACT_APP_API_KEY: https://staging-api-platform-dot-gcp-and-physna.uc.r.appspot.com/
-            REACT_APP_WEBSITE_NAME: Thangs Staging
-            NODE_PATH: src/
-            HTTPS: true
-            GENERATE_SOURCEMAP: false
-            REACT_APP_HOOPS_WS_ENDPOINT_URI: wss://staging-thangs-hoops-server-dot-gcp-and-physna.uc.r.appspot.com
-            REACT_APP_THUMBNAILS_HOST: https://staging-thangs-thumbs-dot-gcp-and-physna.uc.r.appspot.com/convert
-            REACT_APP_GOOGLE_CLOUD_PROJECT_ID: gcp-and-physna
