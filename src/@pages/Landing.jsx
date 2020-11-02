@@ -125,7 +125,7 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
     }
 
     document.addEventListener('scroll', trackScrolling)
-
+    trackScrolling()
     return () => {
       document.removeEventListener('scroll', trackScrolling)
     }

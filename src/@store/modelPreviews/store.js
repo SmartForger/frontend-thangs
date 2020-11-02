@@ -2,7 +2,7 @@ import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
 import { STATUSES, getStatusState } from '@store/constants'
 import { track } from '@utilities/analytics'
-export const PREVIEW_MODELS_SIZE = 40
+export const PREVIEW_MODELS_SIZE = 25
 
 export default store => {
   store.on(types.STORE_INIT, () => ({
@@ -33,19 +33,23 @@ export default store => {
   store.on(
     types.FETCH_MODEL_PREVIEW,
     async (state, { sortBy = 'likes', isInitial = false }) => {
-      store.dispatch(types.LOADING_MODEL_PREVIEW, { isInitial })
-      if (!isInitial) track('Load More', { page: state.modelPreviews.pageToLoad, sortBy })
-      const { data } = await api({
-        method: 'GET',
-        endpoint: 'models/landing',
-        params: {
-          sortBy,
-          sortDir: 'desc',
-          page: isInitial ? 0 : state.modelPreviews.pageToLoad,
-          pageSize: PREVIEW_MODELS_SIZE,
-        },
-      })
-      store.dispatch(types.LOADED_MODEL_PREVIEW, { data, isInitial })
+      if (!state.modelPreviews.isLoading) {
+        state.modelPreviews.isLoading = true
+        store.dispatch(types.LOADING_MODEL_PREVIEW, { isInitial })
+        if (!isInitial)
+          track('Load More', { page: state.modelPreviews.pageToLoad, sortBy })
+        const { data } = await api({
+          method: 'GET',
+          endpoint: 'models/landing',
+          params: {
+            sortBy,
+            sortDir: 'desc',
+            page: isInitial ? 0 : state.modelPreviews.pageToLoad,
+            pageSize: PREVIEW_MODELS_SIZE,
+          },
+        })
+        store.dispatch(types.LOADED_MODEL_PREVIEW, { data, isInitial })
+      }
     }
   )
 }
