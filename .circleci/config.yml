@@ -4,7 +4,7 @@ orbs:
 executors:
   test-in-staging:
     docker:
-      - image: 'cypress/browsers:chrome76'
+      - image: 'cypress/browsers:chrome69'
         auth:
           username: ${DOCKER_HUB_ID}
           password: ${DOCKER_HUB_PWD}
