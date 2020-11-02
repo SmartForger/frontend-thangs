@@ -4,19 +4,12 @@ orbs:
 executors:
   test-in-staging:
     docker:
-      - image: 'cypress/browsers:chrome69'
+      - image: 'cypress/browsers:node12.4.0-chrome76'
         auth:
           username: ${DOCKER_HUB_ID}
           password: ${DOCKER_HUB_PWD}
     environment:
         REACT_APP_API_KEY: 'https://staging-api-platform-dot-gcp-and-physna.uc.r.appspot.com/'
-        REACT_APP_WEBSITE_NAME: 'Thangs Staging'
-        NODE_PATH: 'src/'
-        HTTPS: 'true'
-        GENERATE_SOURCEMAP: 'false'
-        REACT_APP_HOOPS_WS_ENDPOINT_URI: 'wss://staging-thangs-hoops-server-dot-gcp-and-physna.uc.r.appspot.com'
-        REACT_APP_THUMBNAILS_HOST: 'https://staging-thangs-thumbs-dot-gcp-and-physna.uc.r.appspot.com/convert'
-        REACT_APP_GOOGLE_CLOUD_PROJECT_ID: 'gcp-and-physna'
 workflows:
   version: 2
   run-tests:
