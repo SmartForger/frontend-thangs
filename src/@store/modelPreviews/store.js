@@ -1,7 +1,9 @@
+import * as R from 'ramda'
 import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
 import { STATUSES, getStatusState } from '@store/constants'
 import { track } from '@utilities/analytics'
+import { authenticationService } from '@services'
 export const PREVIEW_MODELS_SIZE = 25
 
 export default store => {
@@ -52,4 +54,28 @@ export default store => {
       }
     }
   )
+
+  store.on(types.CHANGE_LIKE_MODEL_PREVIEW, (state, { id }) => {
+    const currentUserId = parseInt(authenticationService.getCurrentUserId())
+
+    const data = R.path(['modelPreviews', 'data'], state) || []
+    const model = data.find(model => model.id === id) || {}
+    const likes = model.likes || []
+    const userLikeIdx = likes.indexOf(currentUserId)
+
+    if (userLikeIdx > -1) {
+      likes.splice(userLikeIdx, 1)
+      store.dispatch(types.UNLIKE_MODEL, { model })
+    } else {
+      likes.push(currentUserId)
+      store.dispatch(types.LIKE_MODEL, { model })
+    }
+
+    return {
+      modelPreviews: {
+        ...state.modelPreviews,
+        data: [...data],
+      },
+    }
+  })
 }

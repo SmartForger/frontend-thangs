@@ -115,7 +115,7 @@ const AuthLikeModelButton = ({
   minimal,
   onlyShowOwned,
 }) => {
-  const { id, owner = {} } = model
+  const { owner = {} } = model
   const isModelOfCurrentUser = useMemo(() => String(currentUserId) === String(owner.id), [
     currentUserId,
     owner.id,
@@ -127,19 +127,18 @@ const AuthLikeModelButton = ({
     e => {
       e.preventDefault()
       e.stopPropagation()
-      const likeModel = () => dispatch(types.LIKE_MODEL, { id, model, owner })
-      const unlikeModel = () => dispatch(types.UNLIKE_MODEL, { id, model, owner })
+
       if (liked) {
-        unlikeModel()
+        dispatch(types.UNLIKE_MODEL, { model })
         setLiked(false)
         setHasChanged(true)
       } else {
-        likeModel()
+        dispatch(types.LIKE_MODEL, { model })
         setLiked(true)
         setHasChanged(true)
       }
     },
-    [liked, dispatch, id, model, owner]
+    [liked, dispatch, model]
   )
 
   if (onlyShowOwned && !isModelOfCurrentUser) return null

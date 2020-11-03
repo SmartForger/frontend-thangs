@@ -24,6 +24,7 @@ export const CHANGE_LIKE_MODEL_STATUS = 'change-like-model-status'
 export const FETCH_MODEL_PREVIEW = 'fetch-model-previews'
 export const LOADING_MODEL_PREVIEW = 'loading-model-previews'
 export const LOADED_MODEL_PREVIEW = 'loaded-model-previews'
+export const CHANGE_LIKE_MODEL_PREVIEW = 'change-like-model-previews'
 /* Model Download URL Store Events */
 export const FETCH_MODEL_DOWNLOAD_URL = 'fetch-model-download-url'
 export const LOADING_MODEL_DOWNLOAD_URL = 'loading-model-download-url'

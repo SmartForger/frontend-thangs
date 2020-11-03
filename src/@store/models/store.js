@@ -120,7 +120,8 @@ export default store => {
     }
   )
 
-  store.on(types.LIKE_MODEL, async (state, { id, model }) => {
+  store.on(types.LIKE_MODEL, async (state, { model }) => {
+    const id = model.id
     const currentUserId = authenticationService.getCurrentUserId()
     store.dispatch(types.CHANGE_MODEL_STATUS, {
       status: STATUSES.LOADING,
@@ -162,7 +163,8 @@ export default store => {
     }
   })
 
-  store.on(types.UNLIKE_MODEL, async (state, { id, model }) => {
+  store.on(types.UNLIKE_MODEL, async (state, { model }) => {
+    const id = model.id
     const currentUserId = authenticationService.getCurrentUserId()
     store.dispatch(types.CHANGE_MODEL_STATUS, {
       status: STATUSES.LOADING,

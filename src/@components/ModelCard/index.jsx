@@ -6,9 +6,12 @@ import { ReactComponent as ChatIcon } from '@svg/icon-comment.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
 import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
+import * as types from '@constants/storeEventTypes'
 import { Button, Card, ModelThumbnail, UserInline, EditModel } from '@components'
 import { createUseStyles } from '@style'
 import { useCurrentUserId } from '@hooks'
+import { useStoreon } from 'storeon/react'
+import { authenticationService } from '@services'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -105,6 +108,7 @@ const ThangsModelDetails = ({
   showReportModel,
   handleReportModel = noop,
 }) => {
+  const { dispatch } = useStoreon()
   let modelName = model.name
   if (modelName && modelName.length > 40) modelName = modelName.slice(0, 40) + '...'
   let modelLikeCount = model && model.likes && model.likes.length
@@ -121,7 +125,16 @@ const ThangsModelDetails = ({
               <ChatIcon />
               &nbsp;{model.commentsCount}
             </span>
-            <span className={c.ModelCard_ActivityCount}>
+            <span
+              className={c.ModelCard_ActivityCount}
+              onClick={e => {
+                const currentUserId = authenticationService.getCurrentUserId()
+                if (!R.isNil(currentUserId)) {
+                  e.preventDefault()
+                  dispatch(types.CHANGE_LIKE_MODEL_PREVIEW, { id: model.id })
+                }
+              }}
+            >
               <HeartIcon
                 className={classnames(c.ModelCard_Icon, {
                   [c.ModelCard_Icon__liked]: isLiked,
