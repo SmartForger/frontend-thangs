@@ -16,7 +16,7 @@ import { multiUploadInput } from './inputs'
 export const multiUpload = () => {
   openMultiUpload()
   uploadFile(MODEL.FILENAME, multiUploadInput)
-  clickOnTextInsideClass(CLASSES.BUTTON, 'Continue')
+  clickOnElementByText('Continue')
   isElement(DATA_CY.MULTIUPLOAD_FORM, PROPS.VISIBLE)
   cy.get(`${DATA_CY.MULTIUPLOAD_FORM} [name=name]`).clear()
   cy.get(`${DATA_CY.MULTIUPLOAD_FORM} [name=name]`).focus().type(MODEL.TITLE)
