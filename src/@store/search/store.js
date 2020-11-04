@@ -95,23 +95,29 @@ export default store => {
   store.on(types.RESET_SEARCH_RESULTS, () => ({
     searchResults: getInitAtom(),
   }))
+
   store.on(
     types.GET_TEXT_SEARCH_RESULTS,
+    (_state, { searchTerm }) => {
+      store.dispatch(types.GET_THANGS_TEXT_SEARCH_RESULTS, { searchTerm })
+      store.dispatch(types.GET_PHYNDEXER_TEXT_SEARCH_RESULTS, { searchTerm })
+    }
+  )
+
+  store.on(
+    types.GET_THANGS_TEXT_SEARCH_RESULTS,
     async (_state, { searchTerm, onFinish = noop, onError = noop }) => {
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.THANGS,
         status: STATUSES.LOADING,
       })
-      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-        atom: ATOMS.PHYNDEXER,
-        status: STATUSES.LOADING,
-      })
 
-      const { data, error } = await api({
+      const { data = {}, error } = await api({
         method: 'GET',
-        endpoint: `models/search-by-text?searchTerm=${searchTerm}`,
+        endpoint: 'models/search-by-text',
+        params: { searchTerm },
       })
-      track('Text Search Started', {
+      track('Thangs Text Search Started', {
         searchTerm,
       })
 
@@ -121,6 +127,43 @@ export default store => {
           status: STATUSES.FAILURE,
           data: error,
         })
+        onError(error)
+      } else {
+        const matches = R.path(['matches'], data) || []
+        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+          atom: ATOMS.THANGS,
+          status: STATUSES.LOADED,
+          data: { matches },
+        })
+
+        track(`Thangs Text search - ${matches.length > 0 ? 'Results' : 'No Results'}`, {
+          searchTerm,
+          numOfMatches: matches.length,
+        })
+
+        onFinish(error)
+      }
+    }
+  )
+
+  store.on(
+    types.GET_PHYNDEXER_TEXT_SEARCH_RESULTS,
+    async (_state, { searchTerm, onFinish = noop, onError = noop }) => {
+      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+        atom: ATOMS.PHYNDEXER,
+        status: STATUSES.LOADING,
+      })
+
+      const { data = {}, error } = await api({
+        method: 'GET',
+        endpoint: 'models/search-by-phyndexer-text',
+        params: { searchTerm },
+      })
+      track('Phyndexer Text Search Started', {
+        searchTerm,
+      })
+
+      if (error) {
         store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
           atom: ATOMS.PHYNDEXER,
           status: STATUSES.FAILURE,
@@ -128,28 +171,23 @@ export default store => {
         })
         onError(error)
       } else {
-        let numOfMatches = 0
-        if (data && Array.isArray(data)) {
-          data.forEach(result => {
-            const { collection, ...searchData } = result
-            numOfMatches += searchData && searchData.matches && searchData.matches.length
-            store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-              atom: collection,
-              status: STATUSES.LOADED,
-              data: { ...searchData },
-            })
-          })
-        }
+        const matches = R.path(['matches'], data) || []
+        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+          atom: ATOMS.PHYNDEXER,
+          status: STATUSES.LOADED,
+          data: { matches },
+        })
 
-        track(`Text Search - ${numOfMatches > 0 ? 'Results' : 'No Results'}`, {
+        track(`Phyndexer Text search - ${matches.length > 0 ? 'Results' : 'No Results'}`, {
           searchTerm,
-          numOfMatches,
+          numOfMatches: matches.length,
         })
 
         onFinish(error)
       }
     }
   )
+
   store.on(
     types.GET_MODEL_SEARCH_RESULTS,
     (_state, { file, data, onFinish = noop, onError = noop }) => {

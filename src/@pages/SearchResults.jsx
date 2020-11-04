@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import classnames from 'classnames'
+import * as R from 'ramda'
 import { useStoreon } from 'storeon/react'
 import {
   NoResults,
@@ -314,8 +315,8 @@ const Page = () => {
     track('SignUp Prompt Overlay', { source: 'Save Search' })
   }, [dispatch])
 
-  const thangsModels = (thangs && thangs.data && thangs.data.matches) || []
-  const phyndexerModels = (phyndexer && phyndexer.data && phyndexer.data.matches) || []
+  const thangsModels = R.path(['data', 'matches'], thangs) || []
+  const phyndexerModels =  R.path(['data', 'matches'], phyndexer) || []
   const resultCount = phyndexerModels.length + thangsModels.length
 
   return (
