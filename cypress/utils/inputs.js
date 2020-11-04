@@ -1,4 +1,4 @@
-import { MODEL, SEARCH, USER } from './constants'
+import { FOLDER, MODEL, SEARCH, USER } from './constants'
 
 export const inputSelectors = {
   email: '[name=email]',
@@ -11,12 +11,19 @@ export const inputSelectors = {
   modelTitle: '[name=name]',
   modelDescription: '[name=description]',
   comment: '[name=body]',
+  createFolder: '[name=name]',
 }
 
 export const usernameInput = {
   validInput: USER.NAME,
   type: 'text',
   selector: inputSelectors.username,
+}
+
+export const createFolderInput = {
+  validInput: FOLDER.NAME,
+  type: 'text',
+  selector: inputSelectors.createFolder,
 }
 
 export const emailInput = {

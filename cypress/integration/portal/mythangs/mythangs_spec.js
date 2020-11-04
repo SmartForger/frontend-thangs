@@ -1,13 +1,26 @@
 import 'cypress-file-upload'
 import {
+  clickOnElement,
+  clickOnElementByText,
   clickOnTextInsideClass,
   goTo,
   isElement,
+  isTextInsideClass,
   login,
   openMyThangs,
+  rightClickOnElement,
 } from '../../../utils/common-methods'
-import { CLASSES, PATH, PROPS, TEXT } from '../../../utils/constants'
-import { TEST_USER_1 } from '../../../utils/inputs'
+import { CLASSES, FOLDER, PATH, PROPS, TEXT } from '../../../utils/constants'
+import { createFolderInput, enterValidValue, TEST_USER_1 } from '../../../utils/inputs'
+
+export const deleteSingleFile = () => {
+  goTo(PATH.MY_THANGS)
+  rightClickOnElement(CLASSES.MY_THANGS_MENU_BUTTON)
+  clickOnElementByText(TEXT.REMOVE)
+  isTextInsideClass(CLASSES.MY_THANGS_DELETE_FORM_BUTTON, TEXT.DELETE)
+  clickOnTextInsideClass(CLASSES.MY_THANGS_DELETE_FORM_BUTTON, TEXT.DELETE)
+  isElement(CLASSES.MY_THANGS_NO_FILES, PROPS.VISIBLE)
+}
 
 describe('My Thangs Page', () => {
   beforeEach(() => {
@@ -58,5 +71,31 @@ describe('My Thangs Page', () => {
     openMyThangs()
     clickOnTextInsideClass(CLASSES.MY_THANGS_NAVBAR, TEXT.SIGN_OUT)
     isElement(CLASSES.USER_NAVBAR, PROPS.INVISIBLE)
+  })
+
+  it('Create public folder', () => {
+    openMyThangs()
+    clickOnTextInsideClass(CLASSES.MY_THANGS_NAVBAR, TEXT.ADD_NEW)
+    isElement(CLASSES.MY_THANGS_ADD_MENU, PROPS.VISIBLE)
+    clickOnTextInsideClass(CLASSES.MY_THANGS_ADD_MENU, TEXT.CREATE_FOLDER)
+    isElement(CLASSES.MY_THANGS_ADD_FOLDER, PROPS.VISIBLE)
+    enterValidValue(CLASSES.MY_THANGS_INPUT, createFolderInput)
+    clickOnTextInsideClass(CLASSES.MY_THANGS_FOLDER_FORM_BUTTONS, TEXT.SAVE)
+    isTextInsideClass(CLASSES.MY_THANGS_FOLDER_VIEW_ROW, FOLDER.NAME, PROPS.VISIBLE)
+    deleteSingleFile()
+  })
+
+  it('Create private folder', () => {
+    openMyThangs()
+    clickOnTextInsideClass(CLASSES.MY_THANGS_NAVBAR, TEXT.ADD_NEW)
+    isElement(CLASSES.MY_THANGS_ADD_MENU, PROPS.VISIBLE)
+    clickOnTextInsideClass(CLASSES.MY_THANGS_ADD_MENU, TEXT.CREATE_FOLDER)
+    isElement(CLASSES.MY_THANGS_ADD_FOLDER, PROPS.VISIBLE)
+    enterValidValue(CLASSES.MY_THANGS_INPUT, createFolderInput)
+    clickOnElement(CLASSES.MY_THANGS_FOLDER_FORM_TOGGLE_BUTTON)
+    clickOnTextInsideClass(CLASSES.MY_THANGS_FOLDER_FORM_BUTTONS, TEXT.SAVE)
+    isTextInsideClass(CLASSES.MY_THANGS_FOLDER_VIEW_ROW, FOLDER.NAME, PROPS.VISIBLE)
+    isElement(CLASSES.MY_THANGS_FOLDER_PRIVATE, PROPS.VISIBLE)
+    deleteSingleFile()
   })
 })

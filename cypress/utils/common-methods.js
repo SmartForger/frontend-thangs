@@ -24,6 +24,10 @@ export const clickOnElementByText = text => {
   cy.contains(text).click({ force: true })
 }
 
+export const rightClickOnElement = el => {
+  cy.get(el, { timeout: 10000 }).rightclick()
+}
+
 export const clickOnElement = el => {
   cy.get(el, { timeout: 60000 }).click({ force: true, multiple: true })
 }

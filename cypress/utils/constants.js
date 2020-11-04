@@ -14,6 +14,10 @@ export const USER2 = {
   NAME: 'test2',
 }
 
+export const FOLDER = {
+  NAME: 'TestFolder',
+}
+
 export const PATH = {
   LANDING: '/',
   SEARCH: '/search/',
@@ -87,6 +91,15 @@ export const CLASSES = {
   MY_THANGS_SAVED_SEARCHES: '[class^=SavedSearches]',
   MY_THANGS_EDIT_PROFILE: '[class^=EditProfile_Content]',
   HEADER_NOTIFICATIONS_UNREAD_BADGE: '[class^=NotificationsButton_UnreadBadge]',
+  MY_THANGS_ADD_FOLDER: '[class^=AddFolder_Column]',
+  MY_THANGS_INPUT: '[class^=Input]',
+  MY_THANGS_FOLDER_FORM_BUTTONS: '[class^=FolderForm_ButtonContainer]',
+  MY_THANGS_FOLDER_FORM_TOGGLE_BUTTON: '[class^=Toggle_Button]',
+  MY_THANGS_FOLDER_VIEW_ROW: '[class^=FolderView_Row]',
+  MY_THANGS_FOLDER_PRIVATE: '[class^=PadlockIcon_Header]',
+  MY_THANGS_MENU_BUTTON: '[class^=MenuButton]',
+  MY_THANGS_DELETE_FORM_BUTTON: '[class^=DeleteForm_Button]',
+  MY_THANGS_NO_FILES: '[class^=NoFilesMessage]',
 }
 
 export const DATA_CY = {
@@ -126,8 +139,8 @@ export const TEXT = {
   COMMENT: 'Comment',
   UPLOAD_NEW_VERSION: 'Upload new version',
   NEW_VERSION_UPLOADED: 'New Version Uploaded',
-  REMOVE_MODEL: 'Remove',
-  DELETE_MODEL_BUTTON: 'Delete',
+  REMOVE: 'Remove',
+  DELETE: 'Delete',
   DOWNLOAD_MODEL_BUTTON: 'Download Model',
   VIEW_MY_THANGS: 'View My Thangs',
   ADD_NEW: 'Add New',
@@ -135,6 +148,9 @@ export const TEXT = {
   LIKED_MODELS: 'Liked Models',
   SAVED_SEARCHES: 'Saved Searches',
   PROFILE_SETTINGS: 'Profile Settings',
+  CREATE_FOLDER: 'Create Folder',
+  FOLDER_NAME: 'Folder Name',
+  SAVE: 'Save',
 }
 
 export const PROPS = {
