@@ -24,7 +24,7 @@ export const multiUpload = () => {
   cy.get(`${DATA_CY.MULTIUPLOAD_FORM} [name=description]`).focus().type(MODEL.DESCRIPTION)
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue')
   urlShouldIncludeAfterTimeout('mythangs/all-files', 10000)
-  isElementContains('[class *="FileTable_FileName"]', MODEL.TITLE)
+  isElementContains('[class^=FileTable_Row]', MODEL.TITLE)
 }
 
 export const deleteModel = (modelName = MODEL.TITLE) => {
