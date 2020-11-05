@@ -1,4 +1,3 @@
-import * as R from 'ramda'
 import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
 import { STATUSES, getStatusState } from '@store/constants'

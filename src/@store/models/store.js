@@ -48,7 +48,7 @@ export default store => {
           data,
         })
 
-        store.dispatch(types.FETCH_USER, { id: data.owner.id, onFinish })
+        //store.dispatch(types.FETCH_USER, { id: data.owner.id, onFinish })
       }
     }
   )
@@ -192,10 +192,12 @@ export default store => {
         data,
       })
       track('Model Unliked', { id })
+
       store.dispatch(types.FETCH_MODEL, {
         id,
         silentUpdate: true,
       })
+      
       const newLikes = updateLike(model, state, currentUserId, false)
       store.dispatch(types.CHANGE_USER_LIKED_MODELS_STATUS, {
         status: STATUSES.LOADED,
