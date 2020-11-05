@@ -67,9 +67,9 @@ describe('The Model Page', () => {
   it('Check for like/unlike button', () => {
     goTo(PATH.EXTERNAL_MODEL)
     isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKE, PROPS.VISIBLE)
-    clickOnElement(CLASSES.MODEL_PAGE_LIKE_BUTTON)
+    clickOnElementByText(TEXT.LIKE)
     isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKED, PROPS.VISIBLE)
-    clickOnElement(CLASSES.MODEL_PAGE_LIKE_BUTTON)
+    clickOnElementByText(TEXT.LIKED)
     isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKE, PROPS.VISIBLE)
     isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKED, PROPS.INVISIBLE)
   })

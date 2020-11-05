@@ -1,26 +1,16 @@
 import 'cypress-file-upload'
 import {
   clickOnElement,
-  clickOnElementByText,
   clickOnTextInsideClass,
+  deleteSingleFile,
   goTo,
   isElement,
   isTextInsideClass,
   login,
   openMyThangs,
-  rightClickOnElement,
 } from '../../../utils/common-methods'
 import { CLASSES, FOLDER, PATH, PROPS, TEXT } from '../../../utils/constants'
 import { createFolderInput, enterValidValue, TEST_USER_1 } from '../../../utils/inputs'
-
-export const deleteSingleFile = () => {
-  goTo(PATH.MY_THANGS)
-  rightClickOnElement(CLASSES.MY_THANGS_MENU_BUTTON)
-  clickOnElementByText(TEXT.REMOVE)
-  isTextInsideClass(CLASSES.MY_THANGS_DELETE_FORM_BUTTON, TEXT.DELETE)
-  clickOnTextInsideClass(CLASSES.MY_THANGS_DELETE_FORM_BUTTON, TEXT.DELETE)
-  isElement(CLASSES.MY_THANGS_NO_FILES, PROPS.VISIBLE)
-}
 
 describe('My Thangs Page', () => {
   beforeEach(() => {

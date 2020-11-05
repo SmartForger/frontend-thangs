@@ -21,7 +21,7 @@ export const isElementNotEmptyAndValid = (el, prop, value) => {
 }
 
 export const clickOnElementByText = text => {
-  cy.contains(text).click({ force: true })
+  cy.contains(text, { timeout: 7000 }).click({ force: true })
 }
 
 export const rightClickOnElement = el => {
@@ -136,6 +136,15 @@ export const deleteModel = () => {
   clickOnElementByText(TEXT.DELETE_MODEL)
   clickOnElementByText(TEXT.CONFIRM)
   isElement(MODEL_TEST_TITLE, PROPS.INVISIBLE)
+}
+
+export const deleteSingleFile = () => {
+  goTo(PATH.MY_THANGS)
+  rightClickOnElement(CLASSES.MY_THANGS_MENU_BUTTON)
+  clickOnElementByText(TEXT.REMOVE)
+  isTextInsideClass(CLASSES.MY_THANGS_DELETE_FORM_BUTTON, TEXT.DELETE)
+  clickOnTextInsideClass(CLASSES.MY_THANGS_DELETE_FORM_BUTTON, TEXT.DELETE)
+  isElement(CLASSES.MY_THANGS_NO_FILES, PROPS.VISIBLE)
 }
 
 export const signOut = () => {
