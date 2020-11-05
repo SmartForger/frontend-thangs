@@ -26,32 +26,27 @@ export default store => {
       },
     })
   )
-  store.on(
-    types.FETCH_MODEL,
-    async (state, { id, onFinish = noop, silentUpdate = false }) => {
-      if (!silentUpdate) {
-        store.dispatch(types.CHANGE_MODEL_STATUS, {
-          status: STATUSES.LOADING,
-          atom: `model-${id}`,
-        })
-      }
-      const { data, error } = await api({ method: 'GET', endpoint: `models/${id}` })
-      if (error || R.isEmpty(data)) {
-        store.dispatch(types.CHANGE_MODEL_STATUS, {
-          status: STATUSES.FAILURE,
-          atom: `model-${id}`,
-        })
-      } else {
-        store.dispatch(types.CHANGE_MODEL_STATUS, {
-          status: STATUSES.LOADED,
-          atom: `model-${id}`,
-          data,
-        })
-
-        //store.dispatch(types.FETCH_USER, { id: data.owner.id, onFinish })
-      }
+  store.on(types.FETCH_MODEL, async (_state, { id, silentUpdate = false }) => {
+    if (!silentUpdate) {
+      store.dispatch(types.CHANGE_MODEL_STATUS, {
+        status: STATUSES.LOADING,
+        atom: `model-${id}`,
+      })
     }
-  )
+    const { data, error } = await api({ method: 'GET', endpoint: `models/${id}` })
+    if (error || R.isEmpty(data)) {
+      store.dispatch(types.CHANGE_MODEL_STATUS, {
+        status: STATUSES.FAILURE,
+        atom: `model-${id}`,
+      })
+    } else {
+      store.dispatch(types.CHANGE_MODEL_STATUS, {
+        status: STATUSES.LOADED,
+        atom: `model-${id}`,
+        data,
+      })
+    }
+  })
 
   store.on(
     types.UPDATE_MODEL,
@@ -197,7 +192,7 @@ export default store => {
         id,
         silentUpdate: true,
       })
-      
+
       const newLikes = updateLike(model, state, currentUserId, false)
       store.dispatch(types.CHANGE_USER_LIKED_MODELS_STATUS, {
         status: STATUSES.LOADED,
