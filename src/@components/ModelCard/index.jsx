@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import * as R from 'ramda'
 import classnames from 'classnames'
@@ -11,7 +11,6 @@ import { Button, Card, ModelThumbnail, UserInline, EditModel } from '@components
 import { createUseStyles } from '@style'
 import { useCurrentUserId } from '@hooks'
 import { useStoreon } from 'storeon/react'
-import { authenticationService } from '@services'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -98,22 +97,39 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
+const MODEL_NAME_MAX_LENGTH = 40
 
 const ThangsModelDetails = ({
   c,
   model,
   showOwner,
   showSocial,
-  isLiked = false,
   showReportModel,
   handleReportModel = noop,
 }) => {
   const { dispatch } = useStoreon()
-  let modelName = model.name
-  if (modelName && modelName.length > 40) modelName = modelName.slice(0, 40) + '...'
-  let modelLikeCount = model && model.likes && model.likes.length
-  if (modelLikeCount && Array.isArray(modelLikeCount))
-    modelLikeCount = modelLikeCount.length
+  const currentUserId = parseInt(useCurrentUserId())
+
+  const [ stateLikes, setStateLikes ] = useState(model.likes || [])
+  const modelNameUntrunced = model.name || ''
+  const modelName = modelNameUntrunced.length > MODEL_NAME_MAX_LENGTH 
+    ? modelNameUntrunced.slice(0, MODEL_NAME_MAX_LENGTH) + '...'
+    : modelNameUntrunced
+  
+  const handleLikeButton = () => {
+    if (stateLikes.indexOf(currentUserId) > -1) {
+      setStateLikes(stateLikes.filter(value => value !== currentUserId))
+      dispatch(types.UNLIKE_MODEL, { model })
+    }else {
+      setStateLikes([...stateLikes, currentUserId])
+      dispatch(types.LIKE_MODEL, { model })
+    }
+  }
+
+  const isLiked = useMemo(() => 
+    (stateLikes.indexOf(currentUserId) > -1) ? true : false
+  , [stateLikes, currentUserId])
+
   return (
     <div className={c.ModelCard_Content}>
       {!showOwner && <div className={c.ModelCard_Name}>{modelName}</div>}
@@ -128,10 +144,9 @@ const ThangsModelDetails = ({
             <span
               className={c.ModelCard_ActivityCount}
               onClick={e => {
-                const currentUserId = authenticationService.getCurrentUserId()
-                if (!R.isNil(currentUserId)) {
+                if (!isNaN(currentUserId)) {
                   e.preventDefault()
-                  dispatch(types.CHANGE_LIKE_MODEL_PREVIEW, { id: model.id })
+                  handleLikeButton()
                 }
               }}
             >
@@ -140,7 +155,7 @@ const ThangsModelDetails = ({
                   [c.ModelCard_Icon__liked]: isLiked,
                 })}
               />
-              &nbsp;{modelLikeCount}
+              &nbsp;{stateLikes.length}
             </span>
           </div>
         </div>
@@ -206,7 +221,6 @@ const CardContents = ({
   showOwner,
   showSocial,
   showWaldo,
-  isLiked,
   modelAttributionUrl,
   searchModelFileName,
   showReportModel,
@@ -239,7 +253,6 @@ const CardContents = ({
               model={model}
               showOwner={showOwner}
               showSocial={showSocial}
-              isLiked={isLiked}
               showReportModel={showReportModel}
               handleReportModel={handleReportModel}
             />
@@ -263,7 +276,6 @@ const ModelCard = ({
   const c = useStyles()
   const currentUserId = parseInt(useCurrentUserId())
   const showOwner = withOwner && !!model.owner
-  const isLiked = model && model.likes && model.likes.includes(currentUserId)
   const modelAttributionUrl =
     model && model.attributionUrl && encodeURI(model.attributionUrl)
   const modelPath = model.id ? `/model/${model.id}` : modelAttributionUrl
@@ -286,7 +298,6 @@ const ModelCard = ({
           showSocial={showSocial}
           showWaldo={showWaldo}
           c={c}
-          isLiked={isLiked}
           modelAttributionUrl={modelAttributionUrl}
           searchModelFileName={searchModelFileName}
           modelPath={modelPath}
