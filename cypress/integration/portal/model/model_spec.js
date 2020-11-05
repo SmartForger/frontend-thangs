@@ -3,7 +3,7 @@ import {
   clickOnElement,
   clickOnElementByText,
   clickOnTextInsideClass,
-  deleteModel,
+  deleteSingleFile,
   goTo,
   isElement,
   isTextInsideClass,
@@ -85,6 +85,6 @@ describe('The Model Page', () => {
   })*/
 
   it('Delete model', () => {
-    deleteModel()
+    deleteSingleFile()
   })
 })
