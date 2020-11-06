@@ -1,6 +1,6 @@
 {
   "name": "thangs-react",
-  "version": "1.14.6",
+  "version": "1.15.0",
   "private": true,
   "dependencies": {
     "@hapi/joi": "^17.1.1",
