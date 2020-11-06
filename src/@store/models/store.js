@@ -115,7 +115,7 @@ export default store => {
     }
   )
 
-  store.on(types.LIKE_MODEL, async (state, { model }) => {
+  store.on(types.LIKE_MODEL, async (state, { model, onError = noop }) => {
     const id = model.id
     const currentUserId = authenticationService.getCurrentUserId()
     store.dispatch(types.CHANGE_MODEL_STATUS, {
@@ -138,6 +138,7 @@ export default store => {
         status: STATUSES.FAILURE,
         atom: `like-model-${id}`,
       })
+      onError()
     } else {
       store.dispatch(types.CHANGE_MODEL_STATUS, {
         status: STATUSES.LOADED,
@@ -158,7 +159,7 @@ export default store => {
     }
   })
 
-  store.on(types.UNLIKE_MODEL, async (state, { model }) => {
+  store.on(types.UNLIKE_MODEL, async (state, { model, onError = noop }) => {
     const id = model.id
     const currentUserId = authenticationService.getCurrentUserId()
     store.dispatch(types.CHANGE_MODEL_STATUS, {
@@ -180,6 +181,7 @@ export default store => {
         status: STATUSES.FAILURE,
         atom: 'like-model',
       })
+      onError()
     } else {
       store.dispatch(types.CHANGE_MODEL_STATUS, {
         status: STATUSES.LOADED,

@@ -124,11 +124,13 @@ const ThangsModelDetails = ({
 
   const handleLikeButton = () => {
     changeLikes(!isLiked)
-
+    const onError = () => {
+      changeLikes(isLiked)
+    }
     if (isLiked) {
-      dispatch(types.UNLIKE_MODEL, { model })
+      dispatch(types.UNLIKE_MODEL, { model, onError })
     } else {
-      dispatch(types.LIKE_MODEL, { model })
+      dispatch(types.LIKE_MODEL, { model, onError })
     }
   }
 
