@@ -28,7 +28,7 @@ export const multiUpload = () => {
 }
 
 export const deleteModel = (modelName = MODEL.TITLE) => {
-  goTo(PATH.ALL_FILES)
+  goTo(PATH.MY_THANGS_ALL_FILES)
   clickOnElement(`[title="${modelName}"] [class^=MenuButton]`)
   clickOnElementByText(TEXT.REMOVE)
   clickOnTextInsideClass(CLASSES.DELETE_MODEL_BUTTON, TEXT.DELETE)

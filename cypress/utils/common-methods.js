@@ -1,4 +1,12 @@
-import { CLASSES, DATA_CY, MODEL_TEST_TITLE, PATH, PROPS, TEXT, MODEL } from './constants'
+import {
+  CLASSES,
+  DATA_CY,
+  MODEL_TEST_TITLE,
+  PATH,
+  PROPS,
+  TEXT,
+  MODEL,
+} from './constants'
 import {
   clearInput,
   enterValidValue,
@@ -42,6 +50,10 @@ export const isTextExist = text => {
 
 export const urlShouldInclude = path => {
   cy.url().should('include', path)
+}
+
+export const isElementContainTwoValues = (el, value1, value2) => {
+  cy.get(el, { timeout: 15000 }).should(PROPS.CONTAIN, value1).and(PROPS.CONTAIN, value2)
 }
 
 export const urlShouldIncludeAfterTimeout = (path, timeout) => {
@@ -170,7 +182,7 @@ export const clickOnElementInsideClass = (className, el) => {
 }
 
 export const clickOnTextInsideClass = (className, text) => {
-  cy.get(className, { timeout: 5000 })
+  cy.get(className, { timeout: 10000 })
     .contains(text, { timeout: 10000 })
     .click({ force: true, multiple: true })
 }

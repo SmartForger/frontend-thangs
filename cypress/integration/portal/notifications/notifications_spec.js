@@ -9,20 +9,16 @@ import {
   loginByUser,
   urlShouldIncludeAfterTimeout,
   openNotifications,
+  clickOnElementByText,
+  deleteSingleFile,
+  isElement,
+  isElementContainTwoValues,
 } from '../../../utils/common-methods'
-import {
-  CLASSES,
-  MODEL,
-  PROPS,
-  TEXT,
-  USER,
-  USER2,
-} from '../../../utils/constants'
+import { CLASSES, MODEL, PATH, PROPS, TEXT, USER, USER2 } from '../../../utils/constants'
 import { commentInput, enterValidValue, uploadInput } from '../../../utils/inputs'
 import { multiUpload, deleteModel } from '../../../utils/uploadMethods'
 
 describe('User notifications', () => {
-
   it('User2 follows User1', () => {
     loginByUser({
       email: USER2.EMAIL,
@@ -55,7 +51,7 @@ describe('User notifications', () => {
 
     //like
     isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKE, PROPS.VISIBLE)
-    clickOnElement(CLASSES.MODEL_PAGE_LIKE_BUTTON)
+    clickOnElementByText(TEXT.LIKE)
     isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKED, PROPS.VISIBLE)
 
     //comment
@@ -67,8 +63,8 @@ describe('User notifications', () => {
     clickOnTextInsideClass(CLASSES.MODEL_SIDEBAR_BUTTON, TEXT.UPLOAD_NEW_VERSION)
     uploadFile(MODEL.FILENAME, uploadInput)
     editAndSaveFile()
-    urlShouldIncludeAfterTimeout('mythangs/all-files', 10000)
-    isElementContains('[class *="FileTable_FileName"]', MODEL.TITLE)
+    urlShouldIncludeAfterTimeout(PATH.MY_THANGS_ALL_FILES, 10000)
+    isElementContains(CLASSES.MY_THANGS_ALL_FILES_ROW, MODEL.TITLE)
 
     //download
     goTo(`/${USER.NAME}`)
@@ -82,34 +78,31 @@ describe('User notifications', () => {
       password: USER.PASSWORD,
     })
 
-    //check for at least 5 new notifications in badge
-    cy.get(CLASSES.HEADER_NOTIFICATIONS_UNREAD_BADGE)
-      .invoke('text')
-      .then(parseFloat)
-      .should('be.gt', 5)
+    isElement(CLASSES.HEADER_NOTIFICATIONS_UNREAD_BADGE, PROPS.VISIBLE)
 
     openNotifications()
-    cy.get('[class^=NotificationSnippet_text]', { timeout: 15000 })
-      .should('contain', USER2.NAME)
-      .and('contain', 'commented')
+    isElementContainTwoValues(CLASSES.NOTIFICATIONS_TEXT, USER2.NAME, TEXT.COMMENTED)
+    isElementContainTwoValues(CLASSES.NOTIFICATIONS_TEXT, USER2.NAME, TEXT.DOWNLOADED)
+    isElementContainTwoValues(
+      CLASSES.NOTIFICATIONS_TEXT,
+      USER2.NAME,
+      TEXT.UPLOADED_NEW_VERSION
+    )
+    isElementContainTwoValues(
+      CLASSES.NOTIFICATIONS_TEXT,
+      USER2.NAME,
+      TEXT.UPLOADED_NEW_VERSION
+    )
 
-    cy.get('[class^=NotificationSnippet_text]')
-      .should('contain', USER2.NAME)
-      .and('contain', 'downloaded')
+    isElementContainTwoValues(
+      CLASSES.NOTIFICATIONS_TEXT,
+      USER2.NAME,
+      TEXT.LIKED_LOWER_CASE
+    )
 
-    cy.get('[class^=NotificationSnippet_text]')
-      .should('contain', USER2.NAME)
-      .and('contain', 'uploaded new version')
-
-    cy.get('[class^=NotificationSnippet_text]')
-      .should('contain', USER2.NAME)
-      .and('contain', 'liked')
-
-    cy.get('[class^=NotificationSnippet_text]')
-      .should('contain', USER2.NAME)
-      .and('contain', 'followed')
+    isElementContainTwoValues(CLASSES.NOTIFICATIONS_TEXT, USER2.NAME, TEXT.FOLLOWED)
   })
-  
+
   it('Cleanup User2', () => {
     loginByUser({
       email: USER2.EMAIL,
@@ -119,7 +112,7 @@ describe('User notifications', () => {
     isTextInsideClass(CLASSES.USER_FOLLOW_BUTTON, TEXT.UNFOLLOW, PROPS.VISIBLE)
     clickOnElement(CLASSES.USER_FOLLOW_BUTTON)
     isTextInsideClass(CLASSES.USER_FOLLOW_BUTTON, TEXT.FOLLOW, PROPS.VISIBLE)
-    deleteModel(MODEL.TITLE)
+    deleteSingleFile()
   })
 
   it('Cleanup User1', () => {
@@ -127,7 +120,6 @@ describe('User notifications', () => {
       email: USER.EMAIL,
       password: USER.PASSWORD,
     })
-    deleteModel(MODEL.TITLE)
+    deleteSingleFile()
   })
-  
 })

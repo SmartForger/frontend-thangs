@@ -24,7 +24,7 @@ export const PATH = {
   MY_THANGS: '/mythangs',
   EXTERNAL_MODEL: 'model/478',
   PROFILE: `/${USER.NAME}`,
-  ALL_FILES: '/mythangs/all-files',
+  MY_THANGS_ALL_FILES: '/mythangs/all-files',
 }
 
 export const MODEL = {
@@ -54,6 +54,7 @@ export const CLASSES = {
   USER_NAVBAR: '[class^=ProfileDropdown_ClickableButton]',
   NOTIFICATIONS_BUTTON: '[class^=NotificationsButton_NotificationIconWrapper]',
   NOTIFICATIONS_DROPDOWN: '[class^="NotificationsButton"] + [class*="DropdownMenu"]',
+  NOTIFICATIONS_TEXT: '[class^=NotificationSnippet_text]',
   PROFILE_BUTTON: '[class^=ProfileDropdown_ClickableButton]',
   PROFILE_DROPDOWN:
     '[class^="ProfileDropdown_ClickableButton"] + [class*="DropdownMenu"]',
@@ -100,6 +101,7 @@ export const CLASSES = {
   MY_THANGS_MENU_BUTTON: '[class^=MenuButton]',
   MY_THANGS_DELETE_FORM_BUTTON: '[class^=DeleteForm_Button]',
   MY_THANGS_NO_FILES: '[class^=NoFilesMessage]',
+  MY_THANGS_ALL_FILES_ROW: '[class^=react-contextmenu-wrapper]',
 }
 
 export const DATA_CY = {
@@ -133,7 +135,9 @@ export const TEXT = {
   CURRENT_YEAR: '2020',
   LIKE: 'Like',
   LIKED: 'Liked',
+  LIKED_LOWER_CASE: 'liked',
   FOLLOW: 'Follow',
+  FOLLOWED: 'followed',
   UNFOLLOW: 'Unfollow',
   UPLOAD: 'Upload',
   COMMENT: 'Comment',
@@ -151,10 +155,14 @@ export const TEXT = {
   CREATE_FOLDER: 'Create Folder',
   FOLDER_NAME: 'Folder Name',
   SAVE: 'Save',
+  COMMENTED: 'commented',
+  DOWNLOADED: 'downloaded',
+  UPLOADED_NEW_VERSION: 'uploaded new version',
 }
 
 export const PROPS = {
   VISIBLE: 'be.visible',
   INVISIBLE: 'not.be.visible',
   NOT_EMPTY: 'not.be.empty',
+  CONTAIN: 'contain',
 }
