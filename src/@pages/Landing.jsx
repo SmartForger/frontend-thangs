@@ -141,12 +141,19 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
     const likes = 'likes'
     const date = 'date'
     const downloaded = 'downloaded'
+    const trending = 'trending'
     return [
       {
         label: 'Popular',
         value: likes,
         selected: selected === likes,
         onClick: () => sortBy(likes),
+      },
+      {
+        label: 'Trending',
+        value: trending,
+        selected: selected === trending,
+        onClick: () => sortBy(trending),
       },
       {
         label: 'New',
