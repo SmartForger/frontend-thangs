@@ -153,7 +153,9 @@ const ThangsModelDetails = ({
             state: { fromModel: true },
           }}
         >
-          <UserInline user={model.owner} maxLength={11} />
+          <div title={R.pathOr('no-user', ['owner', 'username'], model)}>
+            <UserInline user={model.owner} maxLength={11} />
+          </div>
         </Link>
       )}
 
