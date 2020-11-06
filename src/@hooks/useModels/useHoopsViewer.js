@@ -96,7 +96,7 @@ const useHoopsViewer = modelFilename => {
   )
 
   const handleResize = useCallback(() => {
-    if (hoopsViewerRef.current) {
+    if (hoopsViewerRef.current && hoopsViewerRef.current.resizeCanvas) {
       hoopsViewerRef.current.resizeCanvas()
     }
   }, [])
