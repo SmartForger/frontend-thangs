@@ -17,7 +17,7 @@ export default store => {
       [atom]: {
         ...state[atom],
         ...getStatusState(status),
-        data,
+        ...(data && { data }),
       },
     })
   )

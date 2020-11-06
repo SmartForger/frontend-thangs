@@ -109,26 +109,36 @@ const ThangsModelDetails = ({
 }) => {
   const { dispatch } = useStoreon()
   const currentUserId = parseInt(useCurrentUserId())
-
-  const [ stateLikes, setStateLikes ] = useState(model.likes || [])
   const modelNameUntrunced = model.name || ''
-  const modelName = modelNameUntrunced.length > MODEL_NAME_MAX_LENGTH 
-    ? modelNameUntrunced.slice(0, MODEL_NAME_MAX_LENGTH) + '...'
-    : modelNameUntrunced
-  
+  const modelName =
+    modelNameUntrunced.length > MODEL_NAME_MAX_LENGTH
+      ? modelNameUntrunced.slice(0, MODEL_NAME_MAX_LENGTH) + '...'
+      : modelNameUntrunced
+
+  const [stateLikes, setStateLikes] = useState(model.likes || [])
+
+  const isLiked = useMemo(() => (stateLikes.indexOf(currentUserId) > -1 ? true : false), [
+    stateLikes,
+    currentUserId,
+  ])
+
   const handleLikeButton = () => {
-    if (stateLikes.indexOf(currentUserId) > -1) {
-      setStateLikes(stateLikes.filter(value => value !== currentUserId))
+    changeLikes(!isLiked)
+
+    if (isLiked) {
       dispatch(types.UNLIKE_MODEL, { model })
-    }else {
-      setStateLikes([...stateLikes, currentUserId])
+    } else {
       dispatch(types.LIKE_MODEL, { model })
     }
   }
 
-  const isLiked = useMemo(() => 
-    (stateLikes.indexOf(currentUserId) > -1) ? true : false
-  , [stateLikes, currentUserId])
+  const changeLikes = isLiked => {
+    if (isLiked) {
+      setStateLikes(stateLikes => [...stateLikes, currentUserId])
+    } else {
+      setStateLikes(stateLikes => stateLikes.filter(value => value !== currentUserId))
+    }
+  }
 
   return (
     <div className={c.ModelCard_Content}>
