@@ -155,9 +155,7 @@ const ModelsContent = ({ models: modelsData = {} }) => {
   )
 }
 
-const LikesContent = ({ models: modelsData = {} }) => {
-  const { data: models, isLoading } = modelsData
-
+const LikesContent = ({ models, isLoading }) => {
   if (isLoading || !models) {
     return <Spinner />
   }
@@ -193,7 +191,12 @@ const Portfolio = ({ models, likes }) => {
       case 'models':
         return <ModelsContent models={models} isCurrentUsersProfile={false} />
       case 'likes':
-        return <LikesContent models={likes} />
+        return (
+          <LikesContent
+            models={R.pathOr([], ['data', 'models'], likes)}
+            isLoading={likes.isLoading}
+          />
+        )
       default:
         return null
     }
@@ -213,7 +216,7 @@ const Portfolio = ({ models, likes }) => {
           selected={selected === 'likes'}
           onClick={selectLikes}
           title={'Likes'}
-          amount={((Array.isArray(likes.data) && likes.data) || []).length}
+          amount={R.pathOr([], ['data', 'models'], likes).length}
         />
         <Spacer size={'1.5rem'} />
       </div>
