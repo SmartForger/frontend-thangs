@@ -8,6 +8,10 @@ import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+
   return {
     DropdownMenu: {
       background: theme.colors.white[400],
@@ -17,7 +21,7 @@ const useStyles = createUseStyles(theme => {
       padding: ({ noIcons }) => (noIcons ? '1.5rem 3rem' : '1rem'),
       boxSizing: 'border-box',
       position: 'absolute',
-      right: '.75rem',
+      right: '-6.5rem',
       marginTop: '.5rem',
       zIndex: 2,
       overflowY: 'auto',
@@ -35,6 +39,10 @@ const useStyles = createUseStyles(theme => {
         backgroundColor: '#C7C7C7',
         borderRadius: 20,
         border: '3px solid white',
+      },
+
+      [md]: {
+        right: '0rem',
       },
     },
     DropdownMenu_Item: {
