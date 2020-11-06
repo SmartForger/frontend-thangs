@@ -41,9 +41,10 @@ const UserInline = ({
   children,
   isPending,
   isSearchResult,
+  maxLength, 
 }) => {
   const c = useStyles({ isPending })
-  let userName = truncateString(user.username, 20)
+  let userName = truncateString(user.username, maxLength || 20)
   return (
     <div className={className}>
       <div className={c.UserInline}>

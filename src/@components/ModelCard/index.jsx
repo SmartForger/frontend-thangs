@@ -145,7 +145,18 @@ const ThangsModelDetails = ({
   return (
     <div className={c.ModelCard_Content}>
       {!showOwner && <div className={c.ModelCard_Name}>{modelName}</div>}
-      {showOwner && <UserInline user={model.owner} />}
+
+      {showOwner && (
+        <Link
+          to={{
+            pathname: `/${R.pathOr('no-user', ['owner', 'username'], model)}`,
+            state: { fromModel: true },
+          }}
+        >
+          <UserInline user={model.owner} maxLength={11} />
+        </Link>
+      )}
+
       {showSocial && (
         <div className={c.ModelCard_Row}>
           <div className={c.ModelCard_ActivityIndicators}>
