@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
+import { Helmet } from 'react-helmet'
 import {
   Layout,
   TitleSecondary,
@@ -7,7 +8,7 @@ import {
   Spacer,
   TitlePrimary,
 } from '@components'
-import { useTranslations } from '@hooks'
+import { usePageMeta, useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 
@@ -119,6 +120,7 @@ const AboutUs = () => {
   const { modelsStats } = useStoreon('modelsStats')
   const c = useStyles({})
   const t = useTranslations({})
+  const { title } = usePageMeta('aboutUs')
 
   useEffect(() => {
     pageview('AboutUs')
@@ -158,6 +160,9 @@ const AboutUs = () => {
 
   return (
     <Layout showAboutHero={true}>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       <div className={c.AboutUs}>
         <div>
           <Spacer size={'2rem'} />

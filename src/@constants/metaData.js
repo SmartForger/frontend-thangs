@@ -1,3 +1,5 @@
+export const aboutUsTitle = 'Thangs | About Us | The fastest growing 3D community'
+export const aboutUsDescription = ''
 export const thangsTitle =
   '3D model community. Search & download free 3D models. Share 3D models'
 export const thangsDescription =

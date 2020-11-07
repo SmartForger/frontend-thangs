@@ -17,6 +17,11 @@ const usePageMeta = page => {
         title: metaData.profileTitle,
         description: metaData.profileDescription,
       }
+    case 'aboutUs':
+      return {
+        title: metaData.aboutUsTitle,
+        description: metaData.aboutUsDescription,
+      }
     default:
       return {
         title: metaData.thangsTitle,
