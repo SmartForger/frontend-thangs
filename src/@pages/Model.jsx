@@ -417,12 +417,14 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   } else if (isError) {
     return <div>Error loading Model</div>
   }
-
+  const modelMetaTitle = modelData.category
+    ? `3D ${modelData.category} model`
+    : modelData.owner && modelData.owner.username
   return (
     <>
       <Helmet>
         <title>
-          {modelData.name}
+          {modelData.name} | {modelMetaTitle}
           {title}
         </title>
         <meta

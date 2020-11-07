@@ -371,7 +371,7 @@ const PageByUserName = ({ userName }) => {
     <>
       <Helmet>
         <title>
-          {userName}
+          {userName} - 3D model uploads
           {title}
         </title>
         <meta name='description' content={description} />
