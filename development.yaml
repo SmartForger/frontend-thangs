@@ -11,6 +11,9 @@ handlers:
   - url: /storybook/
     static_files: storybook/index.html
     upload: storybook/index.html
+  - url: /robots.txt
+    static_files: build/robots.txt
+    upload: build/robots.txt
   - url: /storybook/(.*)
     static_files: storybook/\1
     upload: storybook/(.*)
