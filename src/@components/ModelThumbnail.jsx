@@ -151,7 +151,7 @@ const ModelThumbnail = ({ className, model, name, searchModelFileName, showWaldo
         {src && (
           <img
             src={src}
-            alt={name}
+            alt={`${name} 3d model`}
             onLoad={onLoad}
             onError={onError}
             title={model.fileName}
@@ -172,7 +172,7 @@ const ModelThumbnail = ({ className, model, name, searchModelFileName, showWaldo
             src={waldoSrc}
             onLoad={onFoundWaldo}
             onError={i => (i.target.style.display = 'none')}
-            alt={name}
+            alt={`${name} 3d model`}
           />
           {/* {lookingForWaldo && <Loader />} */}
         </div>
