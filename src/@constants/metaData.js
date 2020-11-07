@@ -1,5 +1,6 @@
 export const aboutUsTitle = 'Thangs | About Us | The fastest growing 3D community'
-export const aboutUsDescription = ''
+export const aboutUsDescription =
+  'Thangs is the most powerful search platform for the 3D modeling community. Our unique geometric search allows users to upload 3D models and find similar.'
 export const thangsTitle =
   '3D model community. Search & download free 3D models. Share 3D models'
 export const thangsDescription =

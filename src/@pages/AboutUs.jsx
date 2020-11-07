@@ -120,7 +120,7 @@ const AboutUs = () => {
   const { modelsStats } = useStoreon('modelsStats')
   const c = useStyles({})
   const t = useTranslations({})
-  const { title } = usePageMeta('aboutUs')
+  const { title, description } = usePageMeta('aboutUs')
 
   useEffect(() => {
     pageview('AboutUs')
@@ -162,6 +162,7 @@ const AboutUs = () => {
     <Layout showAboutHero={true}>
       <Helmet>
         <title>{title}</title>
+        <meta name='description' content={description} />
       </Helmet>
       <div className={c.AboutUs}>
         <div>
