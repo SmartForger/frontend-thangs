@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import Skeleton from '@material-ui/lab/Skeleton'
 import { Button, Spacer } from '@components'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
@@ -31,6 +32,13 @@ const useStyles = createUseStyles(_theme => {
     ToggleFollowButton_icon__unfollow: {
       transform: 'rotate(45deg)',
     },
+    ToggleFollowButton_Skeleton: {
+      paddingBottom: 0,
+      margin: 'auto',
+      height: '2.5rem !important',
+      width: '6.7rem',
+      borderRadius: '.5rem',
+    },
   }
 })
 
@@ -61,8 +69,10 @@ const AuthFollowButton = ({
     [dispatch, profileUserId, isFollowing]
   )
 
-  return (
-    !isModelOfCurrentUser && (
+  return !isModelOfCurrentUser ? (
+    !profileUserId ? (
+      <Skeleton variant='rect' className={c.ToggleFollowButton_Skeleton} />
+    ) : (
       <Button
         className={classnames(className, c.ToggleFollowButton)}
         disabled={isLoading || isError}
@@ -82,7 +92,7 @@ const AuthFollowButton = ({
         {isFollowing ? 'Unfollow' : 'Follow'}
       </Button>
     )
-  )
+  ) : null
 }
 const noop = () => null
 const UnauthFollowButton = ({ c, className, openSignupOverlay = noop }) => {
