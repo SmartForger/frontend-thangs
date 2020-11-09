@@ -1,28 +1,31 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { createUseStyles } from '@style'
+import { ReactComponent as FacebookIcon } from '@svg/social-facebook.svg'
+import { ReactComponent as InstagramIcon } from '@svg/social-instagram.svg'
+import { ReactComponent as TwitterIcon } from '@svg/social-twitter.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
     Footer: {
+      padding: '1rem 4rem',
       display: 'flex',
-      flexDirection: 'row',
-      textAlign: 'center',
       justifyContent: 'space-between',
-      position: 'absolute',
-      bottom: 0,
-      width: '100%',
-      height: '2.75rem',
 
       '& > p': {
         margin: 0,
-        paddingLeft: '4rem',
         fontWeight: 500,
       },
 
       '& > a': {
         color: theme.variables.colors.mainFontColor,
-        paddingRight: '4rem',
+      },
+    },
+    Footer_Social: {
+      display: 'flex',
+
+      '& li': {
+        padding: '0 1rem',
       },
     },
   }
@@ -33,6 +36,25 @@ const Footer = () => {
   return (
     <div className={c.Footer}>
       <p>Thangs® 2020 by Physna Inc</p>
+      <div>
+        <ul className={c.Footer_Social}>
+          <li>
+            <a href='https://www.facebook.com/Thangs3D'>
+              <FacebookIcon />
+            </a>
+          </li>
+          <li>
+            <a href='https://www.instagram.com/Thangs3D'>
+              <InstagramIcon />
+            </a>
+          </li>
+          <li>
+            <a href='https://twitter.com/Thangs3D'>
+              <TwitterIcon />
+            </a>
+          </li>
+        </ul>
+      </div>
       <Link to={'/privacy-policy'}>Privacy Policy</Link>
     </div>
   )
