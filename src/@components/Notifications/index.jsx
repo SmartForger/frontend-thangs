@@ -18,10 +18,11 @@ const useStyles = createUseStyles(theme => {
     Notifications: {
       width: '18.75rem',
       maxHeight: '25.5rem',
-      right: '-9rem',
+      right: '-11.75rem',
+      marginTop: '1rem',
 
       [sm]: {
-        right: '.75rem',
+        right: '0',
       },
     },
 
