@@ -15,10 +15,13 @@ const useStyles = createUseStyles(theme => {
       '& > p': {
         margin: 0,
         fontWeight: 500,
+        width: '6.5rem',
+        whiteSpace: 'nowrap',
       },
 
       '& > a': {
         color: theme.variables.colors.mainFontColor,
+        width: '6.5rem',
       },
     },
     Footer_Social: {

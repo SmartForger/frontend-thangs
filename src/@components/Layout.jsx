@@ -46,6 +46,7 @@ const useStyles = createUseStyles(theme => {
       paddingRight: '1rem',
       paddingBottom: '0',
       paddingLeft: '1rem',
+      minHeight: '40rem',
 
       [md]: {
         paddingRight: '4rem',
