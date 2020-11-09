@@ -29,16 +29,14 @@ workflows:
           filters:
             branches:
               only:
-                - physna/development
+                - development
       - deploy-production:
           Stack: master
           context: gcp-and-physna
-          requires: 
-            - cypress/run
           filters:
             branches:
               only:
-                - physna/development
+                - development
 
 jobs:
   deploy-staging:
