@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import {
   CardCollection,
   Layout,
@@ -101,10 +101,10 @@ const useStyles = createUseStyles(theme => {
 
 const isBottom = el => el.getBoundingClientRect().bottom <= window.innerHeight
 
-const Page = ({ user = {}, dispatch, modelPreviews }) => {
+const Page = ({ user = {}, dispatch, modelPreviews, sortBy }) => {
   const c = useStyles({})
-  const [selected, setSelected] = useState('likes')
   const containerRef = useRef(null)
+  const history = useHistory()
   const isLoading = modelPreviews.isLoading
 
   useEffect(() => {
@@ -113,14 +113,14 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
   }, [])
 
   useEffect(() => {
-    dispatch(types.FETCH_MODEL_PREVIEW, { sortBy: selected, isInitial: true })
-  }, [dispatch, selected])
+    dispatch(types.FETCH_MODEL_PREVIEW, { sortBy, isInitial: true })
+  }, [dispatch, sortBy])
 
   useEffect(() => {
     const trackScrolling = () => {
       const wrappedElement = containerRef.current
       if (isBottom(wrappedElement) && !isLoading) {
-        dispatch(types.FETCH_MODEL_PREVIEW, { sortBy: selected })
+        dispatch(types.FETCH_MODEL_PREVIEW, { sortBy })
       }
     }
 
@@ -130,41 +130,45 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
       document.removeEventListener('scroll', trackScrolling)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, isLoading, selected])
+  }, [dispatch, isLoading, sortBy])
 
-  const sortBy = useCallback(type => {
-    setSelected(type)
-    track('Sorted Models', { sortBy: type })
-  }, [])
+  const handleSortBy = useCallback(
+    type => {
+      history.push(`/?sort=${type}`)
+      track('Sorted Models', { sortBy: type })
+    },
+    [history]
+  )
 
   const sortOptions = useMemo(() => {
     const likes = 'likes'
     const date = 'date'
     const downloaded = 'downloaded'
+    debugger
     return [
       {
         label: 'Popular',
         value: likes,
-        selected: selected === likes,
-        onClick: () => sortBy(likes),
+        selected: sortBy === likes,
+        onClick: () => handleSortBy(likes),
       },
       {
         label: 'New',
         value: date,
-        selected: selected === date,
-        onClick: () => sortBy(date),
+        selected: sortBy === date,
+        onClick: () => handleSortBy(date),
       },
       {
         label: 'Downloads',
         value: downloaded,
-        selected: selected === downloaded,
-        onClick: () => sortBy(downloaded),
+        selected: sortBy === downloaded,
+        onClick: () => handleSortBy(downloaded),
       },
     ]
-  }, [selected, sortBy])
+  }, [handleSortBy, sortBy])
 
   const title = useMemo(() => {
-    switch (selected) {
+    switch (sortBy) {
       case 'likes':
         return 'Popular Models'
       case 'date':
@@ -174,7 +178,7 @@ const Page = ({ user = {}, dispatch, modelPreviews }) => {
       default:
         return 'Models'
     }
-  }, [selected])
+  }, [sortBy])
 
   if (modelPreviews.isError) {
     return (
@@ -214,6 +218,7 @@ const Landing = () => {
   const authFailed = useQuery('authFailed')
   const showSignup = useQuery('showSignup')
   const emailRedirect = useQuery('emailRedirect')
+  const sortBy = useQuery('sort') || 'likes'
   const { id } = useParams()
 
   useEffect(() => {
@@ -245,7 +250,12 @@ const Landing = () => {
 
   return (
     <Layout showNewHero={true}>
-      <Page user={user} dispatch={dispatch} modelPreviews={modelPreviews} />
+      <Page
+        user={user}
+        dispatch={dispatch}
+        modelPreviews={modelPreviews}
+        sortBy={sortBy}
+      />
     </Layout>
   )
 }
