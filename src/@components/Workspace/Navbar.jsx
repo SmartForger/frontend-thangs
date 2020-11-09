@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { useStoreon } from 'storeon/react'
 import { Link, useHistory } from 'react-router-dom'
 import * as R from 'ramda'
+import { ContextMenu, ContextMenuTrigger } from 'react-contextmenu'
 import {
   AddMenu,
   Button,
@@ -65,6 +66,9 @@ const useStyles = createUseStyles(theme => {
     },
     WorkspaceNavbar_NavLink: {
       marginLeft: '1rem',
+    },
+    WorkspaceNavbar_ContextMenu: {
+      zIndex: 1,
     },
     WorkspaceNavbar_ScrollableFiles: {
       display: 'flex',
@@ -228,64 +232,69 @@ const WorkspaceNavbar = ({
         </div>
         <AddMenuDropdown currentFolderId={currentFolderId} folders={folders} />
         <div className={c.WorkspaceNavbar_ScrollableFiles}>
-          <div>
-            <TitleTertiary className={c.WorkspaceNavbar_NavLink}>My Thangs</TitleTertiary>
-            <Spacer size={'2rem'} />
-            <NavLink
-              className={c.WorkspaceNavbar_NavLink}
-              Icon={FolderIcon}
-              label={'All Files'}
-              isFolder={true}
-              folderId={'files'}
-              onClick={handleAllFiles}
-              selected={path === '/mythangs/all-files'}
-            />
-            <Spacer size={'1.5rem'} />
-            {shouldShowFileExplorer && (
-              <FileExplorer
-                folders={folders}
-                models={models}
-                folderNav={folderNav}
-                showOwned={true}
-                isLoading={isLoadingThangs}
-                showFile={showFileExplorer && folderNav.files}
-                handleChangeFolder={handleChangeFolder}
-                handleModelClick={handleEditModel}
+          <ContextMenuTrigger id='Add_Menu_Navbar' holdToDisplay={1000}>
+            <div>
+              <TitleTertiary className={c.WorkspaceNavbar_NavLink}>
+                My Thangs
+              </TitleTertiary>
+
+              <Spacer size={'2rem'} />
+              <NavLink
+                className={c.WorkspaceNavbar_NavLink}
+                Icon={FolderIcon}
+                label={'All Files'}
+                isFolder={true}
+                folderId={'files'}
+                onClick={handleAllFiles}
+                selected={path === '/mythangs/all-files'}
               />
-            )}
-            <NavLink
-              className={c.WorkspaceNavbar_NavLink}
-              Icon={ClockIcon}
-              label={'Recent'}
-              onClick={handleClickRecent}
-              selected={path === '/mythangs/recent-files' || path === '/mythangs'}
-            />
-            <Spacer size={'1.5rem'} />
-            <NavLink
-              className={c.WorkspaceNavbar_NavLink}
-              Icon={SharedIcon}
-              label={'Shared with me'}
-              onClick={handleClickShared}
-              selected={path === '/mythangs/shared-files'}
-            />
-            <Divider />
-            <NavLink
-              className={c.WorkspaceNavbar_NavLink}
-              Icon={HeartIcon}
-              label={'Liked Models'}
-              onClick={handleClickLiked}
-              selected={path === '/mythangs/liked-models'}
-            />
-            <Spacer size={'1.5rem'} />
-            <NavLink
-              className={c.WorkspaceNavbar_NavLink}
-              Icon={SearchIcon}
-              label={'Saved Searches'}
-              onClick={handleClickSearches}
-              selected={path === '/mythangs/saved-searches'}
-            />
-            <Spacer size={'2rem'} />
-          </div>
+              <Spacer size={'1.5rem'} />
+              {shouldShowFileExplorer && (
+                <FileExplorer
+                  folders={folders}
+                  models={models}
+                  folderNav={folderNav}
+                  showOwned={true}
+                  isLoading={isLoadingThangs}
+                  showFile={showFileExplorer && folderNav.files}
+                  handleChangeFolder={handleChangeFolder}
+                  handleModelClick={handleEditModel}
+                />
+              )}
+              <NavLink
+                className={c.WorkspaceNavbar_NavLink}
+                Icon={ClockIcon}
+                label={'Recent'}
+                onClick={handleClickRecent}
+                selected={path === '/mythangs/recent-files' || path === '/mythangs'}
+              />
+              <Spacer size={'1.5rem'} />
+              <NavLink
+                className={c.WorkspaceNavbar_NavLink}
+                Icon={SharedIcon}
+                label={'Shared with me'}
+                onClick={handleClickShared}
+                selected={path === '/mythangs/shared-files'}
+              />
+              <Divider />
+              <NavLink
+                className={c.WorkspaceNavbar_NavLink}
+                Icon={HeartIcon}
+                label={'Liked Models'}
+                onClick={handleClickLiked}
+                selected={path === '/mythangs/liked-models'}
+              />
+              <Spacer size={'1.5rem'} />
+              <NavLink
+                className={c.WorkspaceNavbar_NavLink}
+                Icon={SearchIcon}
+                label={'Saved Searches'}
+                onClick={handleClickSearches}
+                selected={path === '/mythangs/saved-searches'}
+              />
+              <Spacer size={'2rem'} />
+            </div>
+          </ContextMenuTrigger>
           <div>
             <Spacer size={'1.5rem'} />
             <NavLink
@@ -314,6 +323,9 @@ const WorkspaceNavbar = ({
         </div>
       </div>
       <Spacer size={'1rem'} />
+      <ContextMenu id='Add_Menu_Navbar' className={c.WorkspaceNavbar_ContextMenu}>
+        <AddMenu />
+      </ContextMenu>
     </nav>
   )
 }
