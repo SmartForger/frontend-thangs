@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 import {
   CardCollection,
   Layout,
@@ -8,7 +9,7 @@ import {
   Tabs,
   TitleSecondary,
 } from '@components'
-import { useCurrentUser, useQuery } from '@hooks'
+import { useCurrentUser, usePageMeta, useQuery } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
@@ -144,7 +145,6 @@ const Page = ({ user = {}, dispatch, modelPreviews, sortBy }) => {
     const likes = 'likes'
     const date = 'date'
     const downloaded = 'downloaded'
-    debugger
     return [
       {
         label: 'Popular',
@@ -216,9 +216,17 @@ const Landing = () => {
 
   const sessionExpired = useQuery('sessionExpired')
   const authFailed = useQuery('authFailed')
+  const showSignin = useQuery('showSignin')
   const showSignup = useQuery('showSignup')
   const emailRedirect = useQuery('emailRedirect')
-  const sortBy = useQuery('sort') || 'likes'
+  const sortBy = useQuery('sort')
+  const pageMetaKey = useMemo(() => {
+    if (sortBy) return sortBy
+    if (showSignin) return 'showSignin'
+    if (showSignup) return 'showSignup'
+    return 'home'
+  }, [showSignin, showSignup, sortBy])
+  const { title, description } = usePageMeta(pageMetaKey)
   const { id } = useParams()
 
   useEffect(() => {
@@ -242,6 +250,15 @@ const Landing = () => {
           showPromo: true,
         },
       })
+    } else if (showSignin) {
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'signIn',
+        overlayData: {
+          animateIn: true,
+          windowed: true,
+          showPromo: false,
+        },
+      })
     }
     if (id) track('Explore', { referralChannel: id })
     if (emailRedirect) track('Email Redirect')
@@ -250,11 +267,15 @@ const Landing = () => {
 
   return (
     <Layout showNewHero={true}>
+      <Helmet>
+        <title>{title}</title>
+        <meta name='description' content={description} />
+      </Helmet>
       <Page
         user={user}
         dispatch={dispatch}
         modelPreviews={modelPreviews}
-        sortBy={sortBy}
+        sortBy={sortBy || 'likes'}
       />
     </Layout>
   )
