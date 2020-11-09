@@ -299,7 +299,6 @@ const ModelCard = ({
   handleReportModel,
 }) => {
   const c = useStyles()
-  console.log(model)
   const currentUserId = parseInt(useCurrentUserId())
   const showOwner = withOwner && !!model.owner
   const modelAttributionUrl =
