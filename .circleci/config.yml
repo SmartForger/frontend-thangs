@@ -12,7 +12,8 @@ executors:
         REACT_APP_API_KEY: 'https://staging-api-platform-dot-gcp-and-physna.uc.r.appspot.com/'
 workflows:
   version: 2
-  run-tests:
+
+  deploy-gcloud:
     jobs:
       - cypress/run:
           executor: test-in-staging
@@ -23,24 +24,21 @@ workflows:
           store_artifacts: true
           browser: chrome
           verify-command: yarn cypress verify
-
-  deploy-gcloud:
-    jobs:
       - deploy-staging:
           context: gcp-and-physna
           filters:
             branches:
               only:
-                - development
+                - physna/development
       - deploy-production:
           Stack: master
           context: gcp-and-physna
           requires: 
-            - run-tests
+            - cypress/run
           filters:
             branches:
               only:
-                - development
+                - physna/development
 
 jobs:
   deploy-staging:
