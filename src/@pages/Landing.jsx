@@ -109,11 +109,6 @@ const Page = ({ user = {}, dispatch, modelPreviews, sortBy }) => {
   const isLoading = modelPreviews.isLoading
 
   useEffect(() => {
-    pageview('Home')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
     dispatch(types.FETCH_MODEL_PREVIEW, { sortBy, isInitial: true })
   }, [dispatch, sortBy])
 
@@ -208,7 +203,7 @@ const Page = ({ user = {}, dispatch, modelPreviews, sortBy }) => {
   )
 }
 
-const Landing = () => {
+const Landing = ({ newSignUp }) => {
   const { dispatch, modelPreviews } = useStoreon('modelPreviews')
   const {
     atom: { data: user },
@@ -228,6 +223,17 @@ const Landing = () => {
   }, [showSignin, showSignup, sortBy])
   const { title, description } = usePageMeta(pageMetaKey)
   const { id } = useParams()
+
+  useEffect(() => {
+    if (newSignUp) {
+      pageview('Welcome')
+    } else if (id) {
+      pageview('Explore')
+    } else {
+      pageview('Home')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (sessionExpired || authFailed)
