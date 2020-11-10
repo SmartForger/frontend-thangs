@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import { authenticationService } from '@services'
-import { initialize, identify, locationChange } from '@utilities/analytics'
+import { initialize, identify } from '@utilities/analytics'
 import ReactGA from 'react-ga'
 import ReactPixel from 'react-facebook-pixel'
 import { usePageMeta, useQuery } from '@hooks'
@@ -34,10 +34,6 @@ const AppAnalytics = () => {
     ReactGA.pageview(location.pathname + location.search)
     ReactPixel.pageView()
   }, [location])
-
-  useEffect(() => {
-    locationChange(location.pathname)
-  }, [location.pathname])
 
   return (
     <Helmet>

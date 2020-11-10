@@ -1,5 +1,5 @@
-import React from 'react'
-import { Route, Router, Switch } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Route, Router, Switch, useHistory } from 'react-router-dom'
 import { history } from './history'
 import {
   AboutUs,
@@ -28,6 +28,7 @@ import { StoreContext } from 'storeon/react'
 import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
 import store from 'store'
+import { locationChange } from '@utilities/analytics'
 
 export function AppFrame() {
   return (
@@ -38,6 +39,13 @@ export function AppFrame() {
 }
 
 const App = () => {
+  const history = useHistory()
+
+  useEffect(() => {
+    locationChange()
+    history.listen(locationChange)
+  }, [history])
+
   return (
     <StoreContext.Provider value={store}>
       <ErrorBoundary>
