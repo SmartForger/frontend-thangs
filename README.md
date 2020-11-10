@@ -38,7 +38,7 @@ SCRIPTS_SOCIAL_SERVICE_PASSWORD=user
 4. Run the following command in the terminal to start the app:
 
 ```bash
-yarn start
+yarn run dev
 ```
 
 ## Tests
@@ -66,7 +66,7 @@ yarn test:cypress
 Run manually with:
 
 ```bash
-yarn format
+yarn run lint --fix
 ```
 
 ### Editor configuration
