@@ -49,7 +49,8 @@ export default store => {
 
     // This call is needed for follow button on model page. Specifically the isBeingFollowedByRequester.
     // Could be moved to the /models call on the backend, but until then this call is needed.
-    store.dispatch(types.FETCH_USER, { id: data.owner.id })
+    if (data && data.owner && data.owner.id)
+      store.dispatch(types.FETCH_USER, { id: data.owner.id })
   })
 
   store.on(
