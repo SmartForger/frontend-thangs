@@ -27,6 +27,10 @@ export const pageview = (page, id) => {
   amplitude.getInstance().logEvent('pageview', { page, id })
 }
 
+export const locationChange = page => {
+  amplitude.getInstance().logEvent('pagechange', { page })
+}
+
 export const overlayview = overlay => {
   amplitude.getInstance().logEvent('overlayview', { overlay })
 }
