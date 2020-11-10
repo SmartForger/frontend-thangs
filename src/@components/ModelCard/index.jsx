@@ -127,10 +127,12 @@ const ThangsModelDetails = ({
     const onError = () => {
       changeLikes(isLiked)
     }
+    const onFinish = newLikes => setStateLikes(newLikes)
+
     if (isLiked) {
-      dispatch(types.UNLIKE_MODEL, { model, onError })
+      dispatch(types.UNLIKE_MODEL_CARD, { model, onFinish,  onError })
     } else {
-      dispatch(types.LIKE_MODEL, { model, onError })
+      dispatch(types.LIKE_MODEL_CARD, { model, onFinish, onError })
     }
   }
 

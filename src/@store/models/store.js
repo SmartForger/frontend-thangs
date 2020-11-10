@@ -207,4 +207,44 @@ export default store => {
       })
     }
   })
+
+  store.on(types.LIKE_MODEL_CARD, async (_state, { model, onFinish = noop, onError = noop }) => {
+    const id = model.id
+    const { error } = await api({
+      method: 'POST',
+      endpoint: `models/${id}/like`,
+    })
+
+    if (error) {
+      onError()
+    } else {
+      track('Model Liked', { id })
+
+      const { data } = await api({ method: 'GET', endpoint: `models/${id}` })
+      const newLikes = data.likes
+      if (!R.isNil(newLikes)){
+        onFinish(newLikes)
+      }
+    }
+  })
+
+  store.on(types.UNLIKE_MODEL_CARD, async (_state, { model, onFinish = noop, onError = noop }) => {
+    const id = model.id
+    const { error } = await api({
+      method: 'POST',
+      endpoint: `models/${id}/unlike`,
+    })
+
+    if (error) {
+      onError()
+    } else {
+      track('Model Unliked', { id })
+
+      const { data } = await api({ method: 'GET', endpoint: `models/${id}` })
+      const newLikes = data.likes
+      if (!R.isNil(newLikes)){
+        onFinish(newLikes)
+      }
+    }
+  })
 }

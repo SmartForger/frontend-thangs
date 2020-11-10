@@ -19,6 +19,8 @@ export const FETCH_MODEL_COMMENTS = 'fetch-model-comments'
 /* Model Likes Store Events */
 export const LIKE_MODEL = 'like-model'
 export const UNLIKE_MODEL = 'unlike-model'
+export const LIKE_MODEL_CARD = 'like-model-card'
+export const UNLIKE_MODEL_CARD = 'unlike-model-card'
 export const CHANGE_LIKE_MODEL_STATUS = 'change-like-model-status'
 /* Model Previews Store Events */
 export const FETCH_MODEL_PREVIEW = 'fetch-model-previews'
