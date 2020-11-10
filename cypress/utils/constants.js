@@ -101,7 +101,7 @@ export const CLASSES = {
   MY_THANGS_MENU_BUTTON: '[class^=MenuButton]',
   MY_THANGS_DELETE_FORM_BUTTON: '[class^=DeleteForm_Button]',
   MY_THANGS_NO_FILES: '[class^=NoFilesMessage]',
-  MY_THANGS_ALL_FILES_ROW: '[class^=react-contextmenu-wrapper]',
+  MY_THANGS_ALL_FILES_ROW: 'main',
 }
 
 export const DATA_CY = {
