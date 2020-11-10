@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 import * as R from 'ramda'
 import classnames from 'classnames'
 import { ReactComponent as ChatIcon } from '@svg/icon-comment.svg'
@@ -98,6 +99,7 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 const MODEL_NAME_MAX_LENGTH = 40
+const CANCELED_TOKEN_MESSAGE = 'canceled'
 
 const ThangsModelDetails = ({
   c,
@@ -108,6 +110,10 @@ const ThangsModelDetails = ({
   handleReportModel = noop,
 }) => {
   const { dispatch } = useStoreon()
+  const isLikedCancelTokens = useRef({
+    true: axios.CancelToken.source(),
+    false: axios.CancelToken.source(),
+  })
   const currentUserId = parseInt(useCurrentUserId())
   const modelNameUntrunced = model.name || ''
   const modelName =
@@ -124,16 +130,21 @@ const ThangsModelDetails = ({
 
   const handleLikeButton = () => {
     changeLikes(!isLiked)
-    const onError = () => {
-      changeLikes(isLiked)
+    const onError = (e = {}) => {
+      if (e.message !== CANCELED_TOKEN_MESSAGE) {
+        changeLikes(isLiked)
+      }
     }
     const onFinish = newLikes => setStateLikes(newLikes)
 
-    if (isLiked) {
-      dispatch(types.UNLIKE_MODEL_CARD, { model, onFinish,  onError })
-    } else {
-      dispatch(types.LIKE_MODEL_CARD, { model, onFinish, onError })
-    }
+    isLikedCancelTokens.current[isLiked].cancel(CANCELED_TOKEN_MESSAGE)
+    isLikedCancelTokens.current[!isLiked] = axios.CancelToken.source()
+    dispatch(isLiked ? types.UNLIKE_MODEL_CARD : types.LIKE_MODEL_CARD, {
+      model,
+      onFinish,
+      onError,
+      cancelToken: isLikedCancelTokens.current[!isLiked].token,
+    })
   }
 
   const changeLikes = isLiked => {
