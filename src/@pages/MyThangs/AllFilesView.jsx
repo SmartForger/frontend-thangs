@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo } from 'react'
 import * as R from 'ramda'
-import { AddContextMenu, FileTable, FolderCard, Spacer, TitleTertiary } from '@components'
+import { FileTable, FolderCard, Spacer, TitleTertiary } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
-import { ContextMenuTrigger } from 'react-contextmenu'
 import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
@@ -83,51 +82,46 @@ const AllFilesView = ({
   }, [folders])
 
   return (
-    <>
-      <ContextMenuTrigger id='Add_Menu' holdToDisplay={1000}>
-        <main className={classnames(className, c.AllFilesView)}>
-          <Spacer size='2rem' />
-          <div className={c.AllFilesView_Content}>
-            <Spacer size='2rem' />
-            <TitleTertiary>All Files</TitleTertiary>
-            {sortedFolders.length > 0 && (
-              <>
-                <Spacer size='4rem' />
-                <TitleTertiary>Folders</TitleTertiary>
-                <div className={c.AllFilesView_Folders}>
-                  {sortedFolders.map((folder, index) => (
-                    <div
-                      className={c.AllFilesView_FolderCard}
-                      key={`folder=${folder.id}_${index}`}
-                    >
-                      <FolderCard folder={folder} handleClick={handleChangeFolder} />
-                      <Spacer size={'2rem'} />
-                    </div>
-                  ))}
+    <main className={classnames(className, c.AllFilesView)}>
+      <Spacer size='2rem' />
+      <div className={c.AllFilesView_Content}>
+        <Spacer size='2rem' />
+        <TitleTertiary>All Files</TitleTertiary>
+        {sortedFolders.length > 0 && (
+          <>
+            <Spacer size='4rem' />
+            <TitleTertiary>Folders</TitleTertiary>
+            <div className={c.AllFilesView_Folders}>
+              {sortedFolders.map((folder, index) => (
+                <div
+                  className={c.AllFilesView_FolderCard}
+                  key={`folder=${folder.id}_${index}`}
+                >
+                  <FolderCard folder={folder} handleClick={handleChangeFolder} />
+                  <Spacer size={'2rem'} />
                 </div>
-              </>
-            )}
-            {models.length > 0 && (
-              <>
-                <Spacer size='4rem' />
-                <TitleTertiary>My Public Files</TitleTertiary>
-                <Spacer size='2rem' />
-              </>
-            )}
-            <FileTable
-              files={models || []}
-              handleEditModel={handleEditModel}
-              handleChangeFolder={handleChangeFolder}
-              sortedBy={'created'}
-              hideDropzone={sortedFolders.length > 0}
-              onDrop={onDrop}
-            ></FileTable>
-          </div>
-          <Spacer size='2rem' />
-        </main>
-      </ContextMenuTrigger>
-      <AddContextMenu />
-    </>
+              ))}
+            </div>
+          </>
+        )}
+        {models.length > 0 && (
+          <>
+            <Spacer size='4rem' />
+            <TitleTertiary>My Public Files</TitleTertiary>
+            <Spacer size='2rem' />
+          </>
+        )}
+        <FileTable
+          files={models || []}
+          handleEditModel={handleEditModel}
+          handleChangeFolder={handleChangeFolder}
+          sortedBy={'created'}
+          hideDropzone={sortedFolders.length > 0}
+          onDrop={onDrop}
+        ></FileTable>
+      </div>
+      <Spacer size='2rem' />
+    </main>
   )
 }
 

@@ -1,17 +1,9 @@
 import React, { useEffect, useMemo } from 'react'
 import * as R from 'ramda'
-import {
-  AddContextMenu,
-  FileTable,
-  FolderCard,
-  Spacer,
-  Spinner,
-  TitleTertiary,
-} from '@components'
+import { FileTable, FolderCard, Spacer, Spinner, TitleTertiary } from '@components'
 import { useStarred } from '@hooks'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
-import { ContextMenuTrigger } from 'react-contextmenu'
 import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
@@ -99,8 +91,7 @@ const SharedFilesView = ({
 
   const filteredFolders = useMemo(() => {
     return !R.isEmpty(sharedFolders)
-      ? sharedFolders
-        .filter(folder => !folder.name.includes('//'))
+      ? sharedFolders.filter(folder => !folder.name.includes('//'))
       : []
   }, [sharedFolders])
 
@@ -110,57 +101,49 @@ const SharedFilesView = ({
   }, [])
 
   return (
-    <>
-      <ContextMenuTrigger id='Add_Menu' holdToDisplay={1000}>
-        <main className={classnames(className, c.SharedFilesView)}>
-          <Spacer size='2rem' />
-          <div className={c.SharedFilesView_Content}>
-            <Spacer size='2rem' />
-            <TitleTertiary>Shared Files</TitleTertiary>
-            <Spacer size='4rem' />
-            {(isLoadingStarred || hasStarred) && (
-              <>
-                <TitleTertiary>Starred</TitleTertiary>
-                <div className={c.SharedFilesView_Starred}>
-                  {isLoadingStarred && (
-                    <div className={c.SharedFilesView_Loader}>
-                      <Spinner />
-                    </div>
-                  )}
-                  {starredSharedFolders.map((folder, index) => {
-                    return (
-                      <div
-                        className={c.SharedFilesView_StarredRow}
-                        key={`starred_${index}`}
-                      >
-                        <FolderCard
-                          folder={folder}
-                          handleClick={handleChangeFolder}
-                          isSharedFolder={true}
-                        />
-                        <Spacer size='2rem' />
-                      </div>
-                    )
-                  })}
+    <main className={classnames(className, c.SharedFilesView)}>
+      <Spacer size='2rem' />
+      <div className={c.SharedFilesView_Content}>
+        <Spacer size='2rem' />
+        <TitleTertiary>Shared Files</TitleTertiary>
+        <Spacer size='4rem' />
+        {(isLoadingStarred || hasStarred) && (
+          <>
+            <TitleTertiary>Starred</TitleTertiary>
+            <div className={c.SharedFilesView_Starred}>
+              {isLoadingStarred && (
+                <div className={c.SharedFilesView_Loader}>
+                  <Spinner />
                 </div>
-              </>
-            )}
-            <Spacer size='4rem' />
-            <TitleTertiary>Files</TitleTertiary>
-            <Spacer size='2rem' />
-            <FileTable
-              files={filteredFolders}
-              sortedBy="filename"
-              handleEditModel={handleEditModel}
-              handleChangeFolder={handleChangeFolder}
-              searchCase={true}
-            ></FileTable>
-          </div>
-          <Spacer size='2rem' />
-        </main>
-      </ContextMenuTrigger>
-      <AddContextMenu />
-    </>
+              )}
+              {starredSharedFolders.map((folder, index) => {
+                return (
+                  <div className={c.SharedFilesView_StarredRow} key={`starred_${index}`}>
+                    <FolderCard
+                      folder={folder}
+                      handleClick={handleChangeFolder}
+                      isSharedFolder={true}
+                    />
+                    <Spacer size='2rem' />
+                  </div>
+                )
+              })}
+            </div>
+          </>
+        )}
+        <Spacer size='4rem' />
+        <TitleTertiary>Files</TitleTertiary>
+        <Spacer size='2rem' />
+        <FileTable
+          files={filteredFolders}
+          sortedBy='filename'
+          handleEditModel={handleEditModel}
+          handleChangeFolder={handleChangeFolder}
+          searchCase={true}
+        ></FileTable>
+      </div>
+      <Spacer size='2rem' />
+    </main>
   )
 }
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
 import {
-  AddContextMenu,
   FileCard,
   FileTable,
   FolderCard,
@@ -13,7 +12,6 @@ import {
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { useStarred } from '@hooks'
-import { ContextMenuTrigger } from 'react-contextmenu'
 import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(_theme => {
@@ -75,8 +73,7 @@ const RecentFilesView = ({
     [starredFolders.length, starredModels.length]
   )
   const files = useMemo(() => {
-    return [folderData, modelData]
-      .flat()
+    return [folderData, modelData].flat()
   }, [folderData, modelData])
 
   useEffect(() => {
@@ -85,60 +82,55 @@ const RecentFilesView = ({
   }, [])
 
   return (
-    <>
-      <ContextMenuTrigger id='Add_Menu' holdToDisplay={1000}>
-        <main className={classnames(className, c.RecentFilesView_Row)}>
-          <Spacer size='2rem' />
-          <div className={c.RecentFilesView_Content}>
-            <Spacer size='2rem' />
-            <TitleTertiary>Activity & Contributions</TitleTertiary>
-            <Spacer size='2rem' />
-            <StatsBar userActivity={activityData} />
-            {(isLoadingStarred || hasStarred) && (
-              <>
-                <Spacer size='4rem' />
-                <TitleTertiary>Starred</TitleTertiary>
-                <div className={c.RecentFilesView_Starred}>
-                  {isLoadingStarred && (
-                    <div className={c.RecentFilesView_Loader}>
-                      <Spinner />
-                    </div>
-                  )}
-                  {starredFolders.map((folder, index) => {
-                    return (
-                      <div className={c.RecentFilesView_Row} key={`starred_${index}`}>
-                        <FolderCard folder={folder} handleClick={handleChangeFolder} />
-                        <Spacer size='2rem' />
-                      </div>
-                    )
-                  })}
-                  {starredModels.map((model, index) => {
-                    return (
-                      <div className={c.RecentFilesView_Row} key={`starred_${index}`}>
-                        <FileCard model={model} handleClick={handleEditModel} />
-                        <Spacer size='2rem' />
-                      </div>
-                    )
-                  })}
-                </div>
-              </>
-            )}
+    <main className={classnames(className, c.RecentFilesView_Row)}>
+      <Spacer size='2rem' />
+      <div className={c.RecentFilesView_Content}>
+        <Spacer size='2rem' />
+        <TitleTertiary>Activity & Contributions</TitleTertiary>
+        <Spacer size='2rem' />
+        <StatsBar userActivity={activityData} />
+        {(isLoadingStarred || hasStarred) && (
+          <>
             <Spacer size='4rem' />
-            <TitleTertiary>Recent</TitleTertiary>
-            <Spacer size='2rem' />
-            <FileTable
-              files={files}
-              handleChangeFolder={handleChangeFolder}
-              handleEditModel={handleEditModel}
-              sortedBy="created"
-              onDrop={onDrop}
-            ></FileTable>
-          </div>
-          <Spacer size='2rem' />
-        </main>
-      </ContextMenuTrigger>
-      <AddContextMenu />
-    </>
+            <TitleTertiary>Starred</TitleTertiary>
+            <div className={c.RecentFilesView_Starred}>
+              {isLoadingStarred && (
+                <div className={c.RecentFilesView_Loader}>
+                  <Spinner />
+                </div>
+              )}
+              {starredFolders.map((folder, index) => {
+                return (
+                  <div className={c.RecentFilesView_Row} key={`starred_${index}`}>
+                    <FolderCard folder={folder} handleClick={handleChangeFolder} />
+                    <Spacer size='2rem' />
+                  </div>
+                )
+              })}
+              {starredModels.map((model, index) => {
+                return (
+                  <div className={c.RecentFilesView_Row} key={`starred_${index}`}>
+                    <FileCard model={model} handleClick={handleEditModel} />
+                    <Spacer size='2rem' />
+                  </div>
+                )
+              })}
+            </div>
+          </>
+        )}
+        <Spacer size='4rem' />
+        <TitleTertiary>Recent</TitleTertiary>
+        <Spacer size='2rem' />
+        <FileTable
+          files={files}
+          handleChangeFolder={handleChangeFolder}
+          handleEditModel={handleEditModel}
+          sortedBy='created'
+          onDrop={onDrop}
+        ></FileTable>
+      </div>
+      <Spacer size='2rem' />
+    </main>
   )
 }
 

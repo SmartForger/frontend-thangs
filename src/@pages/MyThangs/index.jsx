@@ -1,7 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import { WorkspaceHeader, WorkspaceNavbar, Spacer, Spinner } from '@components'
+import {
+  WorkspaceHeader,
+  WorkspaceNavbar,
+  Spacer,
+  Spinner,
+  AddContextMenu,
+} from '@components'
 import { authenticationService } from '@services'
 import { useOverlay, useStarred } from '@hooks'
 import AllFilesView from './AllFilesView'
@@ -16,6 +22,7 @@ import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
 import { pageview } from '@utilities/analytics'
+import { ContextMenuTrigger } from 'react-contextmenu'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -88,6 +95,9 @@ const useStyles = createUseStyles(theme => {
     Spinner: {
       position: 'relative',
       top: '9rem',
+    },
+    MyThangs_ContextMenu: {
+      zIndex: 2,
     },
   }
 })
@@ -188,62 +198,86 @@ const MyThangs = () => {
   }
 
   return (
-    <div className={c.MyThangs}>
-      <OverlayWrapper />
-      <WorkspaceNavbar
-        currentFolderId={currentFolderId}
-        folders={folderData}
-        handleChangeFolder={handleChangeFolder}
-        handleEditModel={handleEditModel}
-        isLoadingThangs={isLoading}
-        models={modelData}
-        setCurrentView={handleCurrentView}
-      />
-      <div className={c.MyThangs_ContentWrapper}>
-        <WorkspaceHeader setCurrentView={handleCurrentView} />
-        <Spacer size={'7rem'} />
-        {!isLoaded || isLoading ? (
-          <Spinner className={c.Spinner} />
-        ) : (
-          <Switch>
-            <Route exact path={path} render={() => <RecentFilesView {...viewProps} />} />
-            <Route
-              path={`${path}/recent-files`}
-              render={() => <RecentFilesView {...viewProps} />}
-            />
-            <Route
-              path={`${path}/all-files`}
-              render={() => <AllFilesView {...viewProps} />}
-            />
-            <Route
-              path={`${path}/edit-profile`}
-              render={() => <EditProfileView {...viewProps} />}
-            />
-            <Route
-              path={`${path}/folder/:folderId`}
-              render={() => <FolderView {...viewProps} />}
-            />
-            <Route
-              path={`${path}/liked-models`}
-              render={() => <LikedModelsView {...viewProps} />}
-            />
-            <Route
-              path={`${path}/shared-files`}
-              render={() => <SharedFilesView {...viewProps} />}
-            />
-            <Route
-              path={`${path}/saved-searches`}
-              render={() => <SavedSearchesView {...viewProps} />}
-            />
-            <Route
-              path={`${path}/searchFiles/:searchTerm`}
-              render={() => <SearchView {...viewProps} />}
-            />
-            <Route component={() => 'Oops, Page Not Found'} />
-          </Switch>
-        )}
+    <>
+      <div className={c.MyThangs}>
+        <OverlayWrapper />
+        <ContextMenuTrigger
+          id='Add_Menu'
+          attributes={{
+            style: { height: '100%' },
+          }}
+          holdToDisplay={1000}
+        >
+          <WorkspaceNavbar
+            currentFolderId={currentFolderId}
+            folders={folderData}
+            handleChangeFolder={handleChangeFolder}
+            handleEditModel={handleEditModel}
+            isLoadingThangs={isLoading}
+            models={modelData}
+            setCurrentView={handleCurrentView}
+          />
+        </ContextMenuTrigger>
+
+        <div className={c.MyThangs_ContentWrapper}>
+          <WorkspaceHeader setCurrentView={handleCurrentView} />
+          <Spacer size={'7rem'} />
+          {!isLoaded || isLoading ? (
+            <Spinner className={c.Spinner} />
+          ) : (
+            <ContextMenuTrigger
+              id='Add_Menu'
+              attributes={{
+                style: { height: '100%' },
+              }}
+              holdToDisplay={1000}
+            >
+              <Switch>
+                <Route
+                  exact
+                  path={path}
+                  render={() => <RecentFilesView {...viewProps} />}
+                />
+                <Route
+                  path={`${path}/recent-files`}
+                  render={() => <RecentFilesView {...viewProps} />}
+                />
+                <Route
+                  path={`${path}/all-files`}
+                  render={() => <AllFilesView {...viewProps} />}
+                />
+                <Route
+                  path={`${path}/edit-profile`}
+                  render={() => <EditProfileView {...viewProps} />}
+                />
+                <Route
+                  path={`${path}/folder/:folderId`}
+                  render={() => <FolderView {...viewProps} />}
+                />
+                <Route
+                  path={`${path}/liked-models`}
+                  render={() => <LikedModelsView {...viewProps} />}
+                />
+                <Route
+                  path={`${path}/shared-files`}
+                  render={() => <SharedFilesView {...viewProps} />}
+                />
+                <Route
+                  path={`${path}/saved-searches`}
+                  render={() => <SavedSearchesView {...viewProps} />}
+                />
+                <Route
+                  path={`${path}/searchFiles/:searchTerm`}
+                  render={() => <SearchView {...viewProps} />}
+                />
+                <Route component={() => 'Oops, Page Not Found'} />
+              </Switch>
+            </ContextMenuTrigger>
+          )}
+        </div>
       </div>
-    </div>
+      <AddContextMenu className={c.MyThangs_ContextMenu} />
+    </>
   )
 }
 
