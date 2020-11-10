@@ -168,6 +168,7 @@ export default store => {
         })
         return
       }
+      track('New Model Uploaded')
       return
     } catch (e) {
       store.dispatch(types.CHANGE_UPLOAD_FILE, { id: file.id, data: e, isError: true })
