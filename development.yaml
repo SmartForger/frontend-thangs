@@ -36,10 +36,6 @@ handlers:
   - url: /(.*)\.png
     static_files: build/\1.png
     upload: build/(.*).png
-  - url: /info.html
-    static_files: build/info-staging.html
-    upload: build/info-staging.html
-    expiration: 1s
   - url: .*
     static_files: build/index.html
     upload: build/index.html
