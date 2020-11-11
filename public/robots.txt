@@ -1,9 +1,3 @@
 User-agent: *
-allow: https://thangs.com/about-us
-allow: https://thangs.com/?sort=likes
-allow: https://thangs.com/?sort=date
-allow: https://thangs.com/?sort=downloaded
-allow: https://thangs.com/?showSignin=true
-allow: https://thangs.com/?showSignup=true
-allow: https://thangs.com/model/
-allow: https://thangs.com/profile/
+
+Sitemap: https://thangs.com/sitemap.txt
