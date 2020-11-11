@@ -82,7 +82,7 @@ export const CLASSES = {
   MY_THANGS: '[class^=MyThangs]',
   SIGNUP_FORM: '[class^=Signup]',
   DELETE_MODEL_BUTTON: '[class^=DeleteForm_Button]',
-  USER_FOLLOW_BUTTON: '[class*="ToggleFollowButton"]',
+  USER_FOLLOW_BUTTON: '[class^=Profile_ProfileButton]',
   MY_THANGS_NAVBAR: '[class^=WorkspaceNavbar_NavContainer]',
   MY_THANGS_RECENT_FILES: '[class^=RecentFilesView_Content]',
   MY_THANGS_ADD_BUTTON: '[class^=WorkspaceNavbar_AddButton]',
@@ -101,7 +101,7 @@ export const CLASSES = {
   MY_THANGS_MENU_BUTTON: '[class^=MenuButton]',
   MY_THANGS_DELETE_FORM_BUTTON: '[class^=DeleteForm_Button]',
   MY_THANGS_NO_FILES: '[class^=NoFilesMessage]',
-  MY_THANGS_ALL_FILES_ROW: 'main',
+  MY_THANGS_ALL_FILES_ROW: '[class^=AllFilesView]',
 }
 
 export const DATA_CY = {

@@ -16,7 +16,7 @@ import {
 } from '../../../utils/common-methods'
 import { CLASSES, MODEL, PATH, PROPS, TEXT, USER, USER2 } from '../../../utils/constants'
 import { commentInput, enterValidValue, uploadInput } from '../../../utils/inputs'
-import { multiUpload, deleteModel } from '../../../utils/uploadMethods'
+import { multiUpload } from '../../../utils/uploadMethods'
 
 describe('User notifications', () => {
   it('User2 follows User1', () => {
@@ -28,7 +28,7 @@ describe('User notifications', () => {
 
     //follow
     isTextInsideClass(CLASSES.USER_FOLLOW_BUTTON, TEXT.FOLLOW, PROPS.VISIBLE)
-    clickOnElement(CLASSES.USER_FOLLOW_BUTTON)
+    cy.get(CLASSES.USER_FOLLOW_BUTTON, { timeout: 60000 }).click()
     isTextInsideClass(CLASSES.USER_FOLLOW_BUTTON, TEXT.UNFOLLOW, PROPS.VISIBLE)
   })
 
