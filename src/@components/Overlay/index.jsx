@@ -42,6 +42,7 @@ const useStyles = createUseStyles(theme => {
       right: '3rem',
       top: '3rem',
       cursor: 'pointer',
+      zIndex: 2,
     },
     Overlay_Content: {
       height: '100vh',
