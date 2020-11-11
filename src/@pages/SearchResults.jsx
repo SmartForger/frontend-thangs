@@ -251,7 +251,7 @@ const Page = () => {
   useEffect(() => {
     if (!modelId) {
       dispatch(types.GET_TEXT_SEARCH_RESULTS, {
-        searchTerm: searchQuery,
+        searchTerm: decodeURIComponent(searchQuery),
       })
     }
     if (!related && modelId && phynId && !phyndexer.isLoaded && !thangs.isLoaded) {
