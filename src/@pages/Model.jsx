@@ -313,10 +313,8 @@ const VersionLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
 
 const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
   const c = useStyles()
-  const { [`user-${model.owner.id}`]: userData = {} } = useStoreon(
-    `user-${model.owner.id}`
-  )
-  const { data: user } = userData
+  const { dispatch } = useStoreon()
+  const isFollowing = R.pathOr(false, ['owner', 'isFollowedByRequester'], model)
   return (
     <div className={classnames(c.Model_Row, c.Model_Detail)}>
       <ModelTitle model={model} />
@@ -326,9 +324,21 @@ const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
           <div>
             <ToggleFollowButton
               currentUser={currentUser}
-              profileUser={user}
-              profileUserId={user && user.id}
+              profileUserId={R.path(['owner', 'id'], model)}
               openSignupOverlay={openSignupOverlay}
+              isFollowing={isFollowing}
+              onActionStarted={() => {
+                dispatch(types.LOCAL_FOLLOW_MODEL_OWNER, {
+                  id: model.id,
+                  isFollowing,
+                })
+              }}
+              onActionFinished={() => {
+                dispatch(types.FETCH_MODEL, {
+                  id: model.id,
+                  silentUpdate: true,
+                })
+              }}
             />
           </div>
           <div>

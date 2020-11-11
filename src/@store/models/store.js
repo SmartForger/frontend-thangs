@@ -46,11 +46,6 @@ export default store => {
         data,
       })
     }
-
-    // This call is needed for follow button on model page. Specifically the isBeingFollowedByRequester.
-    // Could be moved to the /models call on the backend, but until then this call is needed.
-    if (data && data.owner && data.owner.id)
-      store.dispatch(types.FETCH_USER, { id: data.owner.id })
   })
 
   store.on(
@@ -262,6 +257,20 @@ export default store => {
           onFinish(newLikes)
         }
       }
+    }
+  )
+
+  store.on(
+    types.LOCAL_FOLLOW_MODEL_OWNER,
+    async (state, { id, isFollowing }) => {
+      const model = state[`model-${id}`].data
+      model.owner.isFollowedByRequester = !isFollowing
+
+      store.dispatch(types.CHANGE_MODEL_STATUS, {
+        status: STATUSES.LOADED,
+        atom: `model-${id}`,
+        data: { ...model },
+      })
     }
   )
 }

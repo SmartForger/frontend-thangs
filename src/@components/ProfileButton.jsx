@@ -27,12 +27,25 @@ const ProfileButton = ({ user, userId, className }) => {
   if (isCurrentUser) {
     return null
   } else {
+    const isFollowing = (user || {}).isBeingFollowedByRequester
+    
     return (
       <ToggleFollowButton
         className={className}
-        profileUser={user}
         profileUserId={userId}
         currentUser={currentUserId}
+        isFollowing={isFollowing}
+        onActionStarted={() => {
+          dispatch(types.LOCAL_INVERT_FOLLOW_USER, {
+            id: userId,
+          })
+        }}
+        onActionFinished={() => {
+          dispatch(types.FETCH_USER, {
+            id: userId,
+            silentUpdate: true,
+          })
+        }}
         openSignupOverlay={openSignupOverlay}
       />
     )

@@ -9,6 +9,7 @@ export const UPDATE_MODELS = 'update-models'
 export const DELETE_MODEL = 'delete-model'
 export const SAVED_MODEL = 'saved-model'
 export const SAVING_MODEL = 'saving-model'
+export const LOCAL_FOLLOW_MODEL_OWNER = 'local-follow-model-owner'
 /* Related Model Events */
 export const FETCH_RELATED_MODELS = 'fetch-related-models'
 /* Model Comments Store Events */
@@ -116,7 +117,7 @@ export const FETCH_CURRENT_USER = 'fetch-currentUser'
 export const RESET_CURRENT_USER = 'reset-currentUser'
 export const FOLLOW_USER = 'follow-user'
 export const UNFOLLOW_USER = 'unfollow-user'
-export const LOCAL_FOLLOW_USER = 'local-follow-user'
+export const LOCAL_INVERT_FOLLOW_USER = 'local-invert-follow-user'
 /* User Liked Models Store Events */
 export const INIT_USER_LIKED_MODELS = 'init-user-liked-models'
 export const CHANGE_USER_LIKED_MODELS_STATUS = 'change-user-liked-models-status'

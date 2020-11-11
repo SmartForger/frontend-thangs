@@ -49,24 +49,26 @@ const AuthFollowButton = ({
   isLoading,
   isError,
   profileUserId,
-  user,
+  onActionFinished = noop,
+  onActionStarted = noop,
+  isFollowing = false,
   dispatch,
 }) => {
   const isModelOfCurrentUser = (currentUser && currentUser.id) === profileUserId
-  const isFollowing = user && user.isBeingFollowedByRequester
-
   const handleClick = useCallback(
     e => {
       e.preventDefault()
       if (isFollowing) {
-        dispatch(types.UNFOLLOW_USER, { id: profileUserId })
+        onActionStarted()
+        dispatch(types.UNFOLLOW_USER, { id: profileUserId, onFinish: onActionFinished })
         track('Unfollow User', { userId: profileUserId })
       } else {
-        dispatch(types.FOLLOW_USER, { id: profileUserId })
+        onActionStarted()
+        dispatch(types.FOLLOW_USER, { id: profileUserId, onFinish: onActionFinished })
         track('Follow User', { userId: profileUserId })
       }
     },
-    [dispatch, profileUserId, isFollowing]
+    [dispatch, profileUserId, isFollowing, onActionFinished, onActionStarted]
   )
 
   return !isModelOfCurrentUser ? (
@@ -118,9 +120,11 @@ const UnauthFollowButton = ({ c, className, openSignupOverlay = noop }) => {
 
 const ToggleFollowButton = ({
   className,
-  profileUser,
   profileUserId,
   currentUser,
+  isFollowing,
+  onActionStarted = noop,
+  onActionFinished = noop,
   openSignupOverlay = noop,
 }) => {
   const { dispatch } = useStoreon()
@@ -129,11 +133,13 @@ const ToggleFollowButton = ({
     return (
       <AuthFollowButton
         c={c}
-        className={className}
         currentUser={currentUser}
+        className={className}
         dispatch={dispatch}
         profileUserId={profileUserId}
-        user={profileUser}
+        isFollowing={isFollowing}
+        onActionFinished={onActionFinished}
+        onActionStarted={onActionStarted}
       />
     )
   }

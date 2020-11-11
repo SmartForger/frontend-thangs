@@ -35,13 +35,16 @@ export default store => {
     },
   }))
 
-  store.on(types.FETCH_USER, async (_, { id, onFinish = noop }) => {
+  store.on(types.FETCH_USER, async (_, { id, silentUpdate = false, onFinish = noop }) => {
     if (R.isNil(id)) return
 
-    store.dispatch(types.CHANGE_USER_STATUS, {
-      status: STATUSES.LOADING,
-      atom: `user-${id}`,
-    })
+    if (!silentUpdate) {
+      store.dispatch(types.CHANGE_USER_STATUS, {
+        status: STATUSES.LOADING,
+        atom: `user-${id}`,
+      })
+    }
+
     const { data, error } = await api({
       method: 'GET',
       endpoint: `users/${id}`,
@@ -110,7 +113,6 @@ export default store => {
       })
 
       onFinish()
-      store.dispatch(types.LOCAL_FOLLOW_USER, { id, isFollowed: true })
     }
   })
 
@@ -139,19 +141,19 @@ export default store => {
       })
 
       onFinish()
-      store.dispatch(types.LOCAL_FOLLOW_USER, { id, isFollowed: false })
     }
   })
 
-  store.on(types.LOCAL_FOLLOW_USER, (state, { id, isFollowed = false }) => ({
-    [`user-${id}`]: {
-      ...state[`user-${id}`],
-      data: {
-        ...state[`user-${id}`].data,
-        isBeingFollowedByRequester: isFollowed,
-      },
-    },
-  }))
+  store.on(types.LOCAL_INVERT_FOLLOW_USER, async (state, { id }) => {
+    const user = state[`user-${id}`].data
+    user.isBeingFollowedByRequester = !user.isBeingFollowedByRequester
+
+    store.dispatch(types.CHANGE_USER_STATUS, {
+      status: STATUSES.LOADED,
+      atom: `user-${id}`,
+      data: {...user},
+    })
+  })
 
   store.on(types.FETCH_CURRENT_USER, async (_, { onFinish = noop }) => {
     const userId = authenticationService.getCurrentUserId()
