@@ -119,13 +119,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
       track('MultiUpload - OnDrop', { amount: acceptedFiles && acceptedFiles.length })
       acceptedFiles.forEach(file => {
         const fileId = Math.random().toString(36).substr(2, 9)
-        if (rejectedFile) {
-          setErrorMessage(
-            `One or more files not supported. Supported file extensions include ${MODEL_FILE_EXTS.map(
-              e => e + ' '
-            )}.`
-          )
-        } else if (file.size >= FILE_SIZE_LIMITS.hard.size) {
+        if (file.size >= FILE_SIZE_LIMITS.hard.size) {
           setErrorMessage(
             `One or more files was over ${FILE_SIZE_LIMITS.hard.pretty}. Try uploading a different file.`
           )
@@ -135,6 +129,13 @@ const MultiUpload = ({ initData = null, folderId }) => {
           handleFileUpload(file, null, fileId)
         }
       })
+      if (rejectedFile) {
+        setErrorMessage(
+          `One or more files not supported. Supported file extensions include ${MODEL_FILE_EXTS.map(
+            e => e + ' '
+          )}.`
+        )
+      }
     },
     [handleFileUpload]
   )
