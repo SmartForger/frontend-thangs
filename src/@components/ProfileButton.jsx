@@ -40,10 +40,9 @@ const ProfileButton = ({ user, userId, className }) => {
             id: userId,
           })
         }}
-        onActionFinished={() => {
-          dispatch(types.FETCH_USER, {
+        onActionFailured={() => {
+          dispatch(types.LOCAL_INVERT_FOLLOW_USER, {
             id: userId,
-            silentUpdate: true,
           })
         }}
         openSignupOverlay={openSignupOverlay}

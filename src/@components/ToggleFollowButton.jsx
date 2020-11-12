@@ -51,6 +51,7 @@ const AuthFollowButton = ({
   profileUserId,
   onActionFinished = noop,
   onActionStarted = noop,
+  onActionFailured = noop,
   isFollowing = false,
   dispatch,
 }) => {
@@ -60,15 +61,30 @@ const AuthFollowButton = ({
       e.preventDefault()
       if (isFollowing) {
         onActionStarted()
-        dispatch(types.UNFOLLOW_USER, { id: profileUserId, onFinish: onActionFinished })
+        dispatch(types.UNFOLLOW_USER, {
+          id: profileUserId,
+          onError: onActionFailured,
+          onFinish: onActionFinished,
+        })
         track('Unfollow User', { userId: profileUserId })
       } else {
         onActionStarted()
-        dispatch(types.FOLLOW_USER, { id: profileUserId, onFinish: onActionFinished })
+        dispatch(types.FOLLOW_USER, {
+          id: profileUserId,
+          onError: onActionFailured,
+          onFinish: onActionFinished,
+        })
         track('Follow User', { userId: profileUserId })
       }
     },
-    [dispatch, profileUserId, isFollowing, onActionFinished, onActionStarted]
+    [
+      dispatch,
+      profileUserId,
+      isFollowing,
+      onActionFinished,
+      onActionFailured,
+      onActionStarted,
+    ]
   )
 
   return !isModelOfCurrentUser ? (
@@ -120,12 +136,9 @@ const UnauthFollowButton = ({ c, className, openSignupOverlay = noop }) => {
 
 const ToggleFollowButton = ({
   className,
-  profileUserId,
   currentUser,
-  isFollowing,
-  onActionStarted = noop,
-  onActionFinished = noop,
   openSignupOverlay = noop,
+  ...props
 }) => {
   const { dispatch } = useStoreon()
   const c = useStyles()
@@ -136,10 +149,7 @@ const ToggleFollowButton = ({
         currentUser={currentUser}
         className={className}
         dispatch={dispatch}
-        profileUserId={profileUserId}
-        isFollowing={isFollowing}
-        onActionFinished={onActionFinished}
-        onActionStarted={onActionStarted}
+        {...props}
       />
     )
   }

@@ -333,10 +333,10 @@ const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
                   isFollowing,
                 })
               }}
-              onActionFinished={() => {
-                dispatch(types.FETCH_MODEL, {
+              onActionFailured={() => {
+                dispatch(types.LOCAL_FOLLOW_MODEL_OWNER, {
                   id: model.id,
-                  silentUpdate: true,
+                  isFollowing: !isFollowing,
                 })
               }}
             />
