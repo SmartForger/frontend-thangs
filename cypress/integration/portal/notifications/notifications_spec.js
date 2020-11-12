@@ -10,16 +10,117 @@ import {
   urlShouldIncludeAfterTimeout,
   openNotifications,
   clickOnElementByText,
-  deleteSingleFile,
   isElement,
   isElementContainTwoValues,
 } from '../../../utils/common-methods'
 import { CLASSES, MODEL, PATH, PROPS, TEXT, USER, USER2 } from '../../../utils/constants'
 import { commentInput, enterValidValue, uploadInput } from '../../../utils/inputs'
 import { multiUpload } from '../../../utils/uploadMethods'
+import api, { apiLogin } from '../../../utils/api'
 
 describe('User notifications', () => {
+  before(() => {
+
+    // BE-reset: Test2 unfollows Test if it needs
+    apiLogin({ userName: USER2.EMAIL, password: USER2.PASSWORD })
+      .then(() => {
+        return api({
+          endpoint: `users/${USER.ID}`,
+          method: 'GET',
+        })
+      })
+
+      .then(response => {
+        const user = response.body || {}
+        const isFollowed = user.isBeingFollowedByRequester
+
+        cy.log('########################### Is followed', isFollowed)
+        if (isFollowed) {
+          return api({
+            endpoint: `users/${USER.ID}/unfollow`,
+            method: 'DELETE',
+          })
+        } else {
+          return Promise.resolve('ok')
+        }
+      })
+      .then(response => {
+        cy.log(
+          '########################### Finish',
+          response === 'End' && JSON.stringify(response)
+        )
+      })
+
+    // BE-reset: Test2 delete all the models
+    apiLogin({ userName: USER2.EMAIL, password: USER2.PASSWORD })
+      .then(() => {
+        return api({
+          endpoint: `users/${USER2.ID}/thangs`,
+          method: 'GET',
+        })
+      })
+
+      .then(response => {
+        const data = response.body || {}
+        const models = data.models || []
+
+        cy.log('########################### User models', models.length)
+
+        const deleteModelRec = async modelsIds => {
+          if (modelsIds.length > 0) {
+            const modelId = modelsIds.pop()
+
+            await api({
+              endpoint: `models/${modelId}`,
+              method: 'DELETE',
+            })
+
+            cy.log('########################### Model deleted', modelId)
+
+            deleteModelRec(modelsIds)
+          }
+        }
+
+        deleteModelRec(models.map(model => model.id))
+      })
+
+    // BE-reset: Test1 delete all the models
+    apiLogin({ userName: USER.EMAIL, password: USER.PASSWORD })
+      .then(() => {
+        return api({
+          endpoint: `users/${USER.ID}/thangs`,
+          method: 'GET',
+        })
+      })
+
+      .then(response => {
+        const data = response.body || {}
+        const models = data.models || []
+
+        cy.log('########################### User models', models.length)
+
+        const deleteModelRec = async modelsIds => {
+          if (modelsIds.length > 0) {
+            const modelId = modelsIds.pop()
+
+            await api({
+              endpoint: `models/${modelId}`,
+              method: 'DELETE',
+            })
+
+            cy.log('########################### Model deleted', modelId)
+
+            deleteModelRec(modelsIds)
+          }
+        }
+
+        deleteModelRec(models.map(model => model.id))
+      })
+  })
+
   it('User2 follows User1', () => {
+    localStorage.clear()
+    
     loginByUser({
       email: USER2.EMAIL,
       password: USER2.PASSWORD,
@@ -101,25 +202,5 @@ describe('User notifications', () => {
     )
 
     isElementContainTwoValues(CLASSES.NOTIFICATIONS_TEXT, USER2.NAME, TEXT.FOLLOWED)
-  })
-
-  it('Cleanup User2', () => {
-    loginByUser({
-      email: USER2.EMAIL,
-      password: USER2.PASSWORD,
-    })
-    goTo(`/${USER.NAME}`)
-    isTextInsideClass(CLASSES.USER_FOLLOW_BUTTON, TEXT.UNFOLLOW, PROPS.VISIBLE)
-    clickOnElement(CLASSES.USER_FOLLOW_BUTTON)
-    isTextInsideClass(CLASSES.USER_FOLLOW_BUTTON, TEXT.FOLLOW, PROPS.VISIBLE)
-    deleteSingleFile()
-  })
-
-  it('Cleanup User1', () => {
-    loginByUser({
-      email: USER.EMAIL,
-      password: USER.PASSWORD,
-    })
-    deleteSingleFile()
   })
 })

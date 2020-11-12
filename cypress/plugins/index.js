@@ -18,4 +18,10 @@
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
+
+  // modify env var value
+  config.env.REACT_APP_API_KEY =
+    'https://staging-api-platform-dot-gcp-and-physna.uc.r.appspot.com/'
+
+  return config
 }

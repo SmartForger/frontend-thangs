@@ -1,4 +1,5 @@
 export const USER = {
+  ID: 232,
   EMAIL: 'test@test.com',
   INVALID_EMAIL: 'test.test@test.com',
   PASSWORD: 'test',
@@ -7,6 +8,7 @@ export const USER = {
 }
 
 export const USER2 = {
+  ID: 246,
   EMAIL: 'test2@test2.com',
   INVALID_EMAIL: 'test.test@test.com',
   PASSWORD: 'test',
