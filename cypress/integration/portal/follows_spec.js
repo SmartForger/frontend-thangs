@@ -97,7 +97,7 @@ describe('User notifications', () => {
     isTextInsideClass(CLASSES.PROFILE_FOLLOW_BUTTON, TEXT.FOLLOW, PROPS.VISIBLE)
   })
 
-  it('User2 follows and unfollows User1 from model portfolio', () => {
+  it('User2 follows and unfollows User1 from model', () => {
     loginByUser({
       email: USER2.EMAIL,
       password: USER2.PASSWORD,
