@@ -42,17 +42,29 @@ const Footer = () => {
       <div>
         <ul className={c.Footer_Social}>
           <li>
-            <a href='https://www.facebook.com/Thangs3D'>
+            <a
+              target='_blank'
+              rel='noopener noreferrer'
+              href='https://www.facebook.com/Thangs3D'
+            >
               <FacebookIcon />
             </a>
           </li>
           <li>
-            <a href='https://www.instagram.com/Thangs3D'>
+            <a
+              target='_blank'
+              rel='noopener noreferrer'
+              href='https://www.instagram.com/Thangs3D'
+            >
               <InstagramIcon />
             </a>
           </li>
           <li>
-            <a href='https://twitter.com/Thangs3D'>
+            <a
+              target='_blank'
+              rel='noopener noreferrer'
+              href='https://twitter.com/Thangs3D'
+            >
               <TwitterIcon />
             </a>
           </li>
