@@ -20,7 +20,6 @@ import api, { apiLogin } from '../../../utils/api'
 
 describe('User notifications', () => {
   before(() => {
-
     // BE-reset: Test2 unfollows Test if it needs
     apiLogin({ userName: USER2.EMAIL, password: USER2.PASSWORD })
       .then(() => {
@@ -120,7 +119,7 @@ describe('User notifications', () => {
 
   it('User2 follows User1', () => {
     localStorage.clear()
-    
+
     loginByUser({
       email: USER2.EMAIL,
       password: USER2.PASSWORD,
@@ -128,9 +127,9 @@ describe('User notifications', () => {
     goTo(`/${USER.NAME}`)
 
     //follow
-    isTextInsideClass(CLASSES.USER_FOLLOW_BUTTON, TEXT.FOLLOW, PROPS.VISIBLE)
-    cy.get(CLASSES.USER_FOLLOW_BUTTON, { timeout: 60000 }).click()
-    isTextInsideClass(CLASSES.USER_FOLLOW_BUTTON, TEXT.UNFOLLOW, PROPS.VISIBLE)
+    isTextInsideClass(CLASSES.PROFILE_FOLLOW_BUTTON, TEXT.FOLLOW, PROPS.VISIBLE)
+    cy.get(CLASSES.PROFILE_FOLLOW_BUTTON, { timeout: 60000 }).click()
+    isTextInsideClass(CLASSES.PROFILE_FOLLOW_BUTTON, TEXT.UNFOLLOW, PROPS.VISIBLE)
   })
 
   it('User1 uploads model', () => {
