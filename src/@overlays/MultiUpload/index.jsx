@@ -130,6 +130,9 @@ const MultiUpload = ({ initData = null, folderId }) => {
         }
       })
       if (rejectedFile) {
+        const filePath = rejectedFile.path.split('.')
+        const fileExt = filePath[filePath.length - 1] || ''
+        track('MultiUpload - Rejected', { fileType: fileExt })
         setErrorMessage(
           `One or more files not supported. Supported file extensions include ${MODEL_FILE_EXTS.map(
             e => e + ' '
