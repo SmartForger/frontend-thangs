@@ -25,6 +25,7 @@ import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
+import { ReactComponent as ShareIcon } from '@svg/share-icon.svg'
 import { useLocalStorage } from '@hooks'
 import { Message404 } from './404'
 import { createUseStyles } from '@style'
@@ -224,6 +225,10 @@ const useStyles = createUseStyles(theme => {
       border: 'none',
       borderTop: `1px solid ${theme.colors.white[900]}`,
     },
+    Model_DownloadAndShareContainer: {
+      display: 'inline-flex',
+      width: '100%',
+    },
   }
 })
 const noop = () => null
@@ -360,11 +365,17 @@ const StatsAndActions = ({
   return (
     <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
       <div>
-        <DownloadLink
-          model={modelData}
-          isAuthedUser={isAuthedUser}
-          openSignupOverlay={openSignupOverlay}
-        />
+        <div className={c.Model_DownloadAndShareContainer}>
+          <DownloadLink
+            model={modelData}
+            isAuthedUser={isAuthedUser}
+            openSignupOverlay={openSignupOverlay}
+          />
+          <Spacer size='.5rem' />
+          <Button>
+            <ShareIcon />
+          </Button>
+        </div>
         <Spacer size='1rem' />
         <VersionLink
           modelId={modelData.id}
