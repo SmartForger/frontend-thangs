@@ -4,6 +4,7 @@ import {
   clickOnTextInsideClass,
   goTo,
   isElement,
+  isElementContains,
   uploadFile,
   urlShouldInclude,
   urlShouldIncludeAfterTimeout,
@@ -58,5 +59,15 @@ describe('The Landing Page', () => {
     clickOnTextInsideClass(CLASSES.FILTER_TABS, TEXT.DOWNLOADS)
     clickOnTextInsideClass(CLASSES.FILTER_TABS, TEXT.POPULAR)
     clickOnTextInsideClass(CLASSES.FILTER_TABS, TEXT.NEW)
+  })
+
+  it('Landing search "#geotests" provides to results page', () => {
+    const searchBar = '[class^=Header_DesktopOnly] [name=search]'
+
+    isElement(searchBar, PROPS.VISIBLE)
+    cy.get(searchBar).focus().type('#geotests', { force: true })
+    clickOnElement(CLASSES.SEARCH_BAR_BUTTON)
+    urlShouldInclude(`${PATH.SEARCH}%23geotests`)
+    isElementContains('[class^=SearchResults_HeaderText]', 'Search Results for #geotests')
   })
 })
