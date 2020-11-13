@@ -89,6 +89,7 @@ const DeleteFolder = ({ folder, type }) => {
   const [errorMessage, setErrorMessage] = useState(null)
   const { dispatch, folders = {} } = useStoreon('folders')
   const { isSaving } = folders
+  const isNotRecentFilesPage = history.location.pathname !== '/mythangs/recent-files'
 
   const closeOverlay = useCallback(() => {
     dispatch(types.CLOSE_OVERLAY)
@@ -107,12 +108,13 @@ const DeleteFolder = ({ folder, type }) => {
           const { root } = folder
           if (root) {
             return history.push(`/mythangs/folder/${root}`)
+          } else if (isNotRecentFilesPage) {
+            return history.push('/mythangs/all-files')
           }
-          history.push('/mythangs/all-files')
         },
       })
     },
-    [closeOverlay, dispatch, history]
+    [closeOverlay, dispatch, history, isNotRecentFilesPage]
   )
 
   useEffect(() => {
