@@ -6,17 +6,30 @@ import { ReactComponent as InstagramIcon } from '@svg/social-instagram.svg'
 import { ReactComponent as TwitterIcon } from '@svg/social-twitter.svg'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+
   return {
     Footer: {
       padding: '1rem 4rem',
       display: 'flex',
       justifyContent: 'space-between',
+      flexDirection: 'column',
+      alignItems: 'center',
+
+      [md]: {
+        flexDirection: 'row',
+      },
 
       '& > p': {
         margin: 0,
         fontWeight: 500,
-        width: '6.5rem',
         whiteSpace: 'nowrap',
+
+        [md]: {
+          width: '6.5rem',
+        },
       },
 
       '& > a': {
