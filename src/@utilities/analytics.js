@@ -28,7 +28,9 @@ export const pageview = (page, id) => {
 }
 
 export const locationChange = () => {
-  amplitude.getInstance().logEvent('pagechange', { page: window.location.pathname })
+  const fullPath = window.location.pathname
+  const shortPath = fullPath.split('/')[1] || 'home'
+  amplitude.getInstance().logEvent('pagechange', { page: shortPath, fullPath })
 }
 
 export const overlayview = overlay => {
