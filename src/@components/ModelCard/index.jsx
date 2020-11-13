@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import * as R from 'ramda'
 import classnames from 'classnames'
+import { useStoreon } from 'storeon/react'
 import { ReactComponent as ChatIcon } from '@svg/icon-comment.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
@@ -11,7 +12,6 @@ import * as types from '@constants/storeEventTypes'
 import { Button, Card, ModelThumbnail, UserInline, EditModel } from '@components'
 import { createUseStyles } from '@style'
 import { useCurrentUserId } from '@hooks'
-import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
   return {

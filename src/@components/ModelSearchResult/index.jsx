@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { ReactComponent as ChatIcon } from '@svg/icon-comment.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
@@ -9,6 +9,7 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useCurrentUserId } from '@hooks'
 import { truncateString } from '@utilities'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -265,13 +266,27 @@ const ExternalModelDetails = ({
 }
 
 const Anchor = ({ children, attributionUrl, to, noLink, ...props }) => {
+  const onClick = useCallback(() => {
+    if (attributionUrl) {
+      track('External Model Link', { path: attributionUrl })
+    } else {
+      track('Thangs Model Link', { path: to.pathname })
+    }
+  }, [attributionUrl, to.pathname])
+
   if (noLink) return children
   return attributionUrl ? (
-    <a href={attributionUrl} target='_blank' rel='noopener noreferrer' {...props}>
+    <a
+      href={attributionUrl}
+      target='_blank'
+      rel='noopener noreferrer'
+      onClick={onClick}
+      {...props}
+    >
       {children}
     </a>
   ) : (
-    <Link to={to.pathname} {...props}>
+    <Link to={to.pathname} onClick={onClick} {...props}>
       {children}
     </Link>
   )
