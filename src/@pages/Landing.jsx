@@ -6,7 +6,6 @@ import {
   Layout,
   Spacer,
   Spinner,
-  Tabs,
   TitleSecondary,
   FilterDropdown,
   FilterDropdownMenu,
