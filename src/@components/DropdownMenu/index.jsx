@@ -129,6 +129,7 @@ const DropdownMenu = ({
   TargetComponent,
   children,
   className,
+  label,
   myThangsMenu,
   noIcons,
   buttonIcon: ButtonIcon = DotStackIcon,
@@ -146,6 +147,7 @@ const DropdownMenu = ({
           onClick={toggleOpen}
           user={user}
           myThangsMenu={myThangsMenu}
+          label={label}
         />
       ) : (
         <Button tertiary className={c.DropdownMenu_Button} onClick={toggleOpen}>

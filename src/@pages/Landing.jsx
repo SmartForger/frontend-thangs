@@ -8,6 +8,8 @@ import {
   Spinner,
   Tabs,
   TitleSecondary,
+  FilterDropdown,
+  FilterDropdownMenu,
 } from '@components'
 import { useCurrentUser, usePageMeta, useQuery } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
@@ -87,8 +89,12 @@ const useStyles = createUseStyles(theme => {
     Landing_Title: {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'space-between',
       marginBottom: '1rem',
+      justifyContent: 'flex-end',
+
+      [md]: {
+        justifyContent: 'space-between',
+      },
 
       '& h2': {
         display: 'none',
@@ -101,12 +107,48 @@ const useStyles = createUseStyles(theme => {
 })
 
 const isBottom = el => el.getBoundingClientRect().bottom <= window.innerHeight
+const sortTypes = {
+  likes: 'likes',
+  date: 'date',
+  downloaded: 'downloaded',
+  trending: 'trending',
+}
 
-const Page = ({ user = {}, dispatch, modelPreviews, sortBy }) => {
+const title = sortBy => {
+  switch (sortBy) {
+    case sortTypes.likes:
+      return 'Popular Models'
+    case sortTypes.trending:
+      return 'Trending Models'
+    case sortTypes.date:
+      return 'New Models'
+    case sortTypes.downloaded:
+      return 'Most Downloaded'
+    default:
+      return 'Models'
+  }
+}
+
+const label = sortBy => {
+  switch (sortBy) {
+    case sortTypes.likes:
+      return 'Popular'
+    case sortTypes.trending:
+      return 'Trending'
+    case sortTypes.date:
+      return 'New'
+    case sortTypes.downloaded:
+      return 'Downloads'
+    default:
+      return 'Models'
+  }
+}
+
+const Page = ({ user = {}, dispatch, modelPreviews = {}, sortBy }) => {
   const c = useStyles({})
   const containerRef = useRef(null)
   const history = useHistory()
-  const isLoading = modelPreviews.isLoading
+  const { isLoading } = modelPreviews
 
   useEffect(() => {
     dispatch(types.FETCH_MODEL_PREVIEW, { sortBy, isInitial: true })
@@ -137,43 +179,33 @@ const Page = ({ user = {}, dispatch, modelPreviews, sortBy }) => {
   )
 
   const sortOptions = useMemo(() => {
-    const likes = 'likes'
-    const date = 'date'
-    const downloaded = 'downloaded'
     return [
       {
         label: 'Popular',
-        value: likes,
-        selected: sortBy === likes,
-        onClick: () => handleSortBy(likes),
+        value: sortTypes.likes,
+        selected: sortBy === sortTypes.likes,
+        onClick: () => handleSortBy(sortTypes.likes),
+      },
+      {
+        label: 'Trending',
+        value: sortTypes.trending,
+        selected: sortBy === sortTypes.trending,
+        onClick: () => handleSortBy(sortTypes.trending),
       },
       {
         label: 'New',
-        value: date,
-        selected: sortBy === date,
-        onClick: () => handleSortBy(date),
+        value: sortTypes.date,
+        selected: sortBy === sortTypes.date,
+        onClick: () => handleSortBy(sortTypes.date),
       },
       {
         label: 'Downloads',
-        value: downloaded,
-        selected: sortBy === downloaded,
-        onClick: () => handleSortBy(downloaded),
+        value: sortTypes.downloaded,
+        selected: sortBy === sortTypes.downloaded,
+        onClick: () => handleSortBy(sortTypes.downloaded),
       },
     ]
   }, [handleSortBy, sortBy])
-
-  const title = useMemo(() => {
-    switch (sortBy) {
-      case 'likes':
-        return 'Popular Models'
-      case 'date':
-        return 'New Models'
-      case 'downloaded':
-        return 'Most Downloaded'
-      default:
-        return 'Models'
-    }
-  }, [sortBy])
 
   if (modelPreviews.isError) {
     return (
@@ -186,8 +218,14 @@ const Page = ({ user = {}, dispatch, modelPreviews, sortBy }) => {
   return (
     <div className={c.Landing_Column} ref={containerRef}>
       <div className={c.Landing_Title}>
-        <TitleSecondary>{title}</TitleSecondary>
-        <Tabs options={sortOptions} />
+        <TitleSecondary>{title(sortBy)}</TitleSecondary>
+        <FilterDropdownMenu
+          user={user}
+          options={sortOptions}
+          TargetComponent={FilterDropdown}
+          dispatch={dispatch}
+          label={label(sortBy)}
+        />
       </div>
 
       <CardCollection
