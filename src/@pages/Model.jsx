@@ -394,6 +394,7 @@ const StatsAndActions = ({
   )
 }
 
+const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST
 const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   const c = useStyles()
   const { navigateWithFlash } = useFlashNotification()
@@ -458,6 +459,10 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
         <meta
           property='og:description'
           content={`${modelData.description.slice(0, 129)} ${description}`}
+        />
+        <meta
+          property='og:image'
+          content={`${THUMBNAILS_HOST}/${modelData.uploadedFile}`}
         />
       </Helmet>
       <div className={c.Model}>
