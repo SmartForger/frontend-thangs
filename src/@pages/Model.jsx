@@ -16,8 +16,10 @@ import {
   ProgressText,
   RelatedModels,
   Revised,
-  Spacer,
+  ShareDropdown,
+  ShareDropdownMenu,
   Spinner,
+  Spacer,
   ToggleFollowButton,
   useFlashNotification,
 } from '@components'
@@ -25,7 +27,6 @@ import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
-import { ReactComponent as ShareIcon } from '@svg/share-icon.svg'
 import { useLocalStorage } from '@hooks'
 import { Message404 } from './404'
 import { createUseStyles } from '@style'
@@ -361,6 +362,7 @@ const StatsAndActions = ({
   modelData,
   isAuthedUser,
   openSignupOverlay = noop,
+  pageTitle,
 }) => {
   return (
     <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
@@ -372,9 +374,11 @@ const StatsAndActions = ({
             openSignupOverlay={openSignupOverlay}
           />
           <Spacer size='.5rem' />
-          <Button>
-            <ShareIcon />
-          </Button>
+          <ShareDropdownMenu
+            TargetComponent={ShareDropdown}
+            iconOnly={true}
+            title={pageTitle}
+          />
         </div>
         <Spacer size='1rem' />
         <VersionLink
@@ -441,16 +445,19 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   const modelMetaTitle = modelData.category
     ? `3D ${modelData.category} model`
     : modelData.owner && modelData.owner.username
+  const pageTitle = `${modelData.name} | ${modelMetaTitle}${title}`
   return (
     <>
       <Helmet>
-        <title>
-          {modelData.name} | {modelMetaTitle}
-          {title}
-        </title>
+        <title>{pageTitle}</title>
         <meta
           name='description'
           content={`${description}${modelData.description.slice(0, 129)}`}
+        />
+        <meta property='og:title' content={pageTitle} />
+        <meta
+          property='og:description'
+          content={`${modelData.description.slice(0, 129)} ${description}`}
         />
       </Helmet>
       <div className={c.Model}>
@@ -482,6 +489,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
                 modelData={modelData}
                 isAuthedUser={!!currentUser}
                 openSignupOverlay={openSignupOverlay}
+                pageTitle={pageTitle}
               />
               <RelatedModels
                 isLoading={isRelatedLoading}
@@ -501,6 +509,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
               modelData={modelData}
               openSignupOverlay={openSignupOverlay}
               isAuthedUser={!!currentUser}
+              pageTitle={pageTitle}
             />
           </div>
         </div>

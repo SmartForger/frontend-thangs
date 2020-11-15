@@ -132,6 +132,7 @@ const DropdownMenu = ({
   label,
   myThangsMenu,
   noIcons,
+  iconOnly,
   buttonIcon: ButtonIcon = DotStackIcon,
   isOpen: isOpenExternal = undefined,
   user,
@@ -148,6 +149,7 @@ const DropdownMenu = ({
           user={user}
           myThangsMenu={myThangsMenu}
           label={label}
+          iconOnly={iconOnly}
         />
       ) : (
         <Button tertiary className={c.DropdownMenu_Button} onClick={toggleOpen}>
