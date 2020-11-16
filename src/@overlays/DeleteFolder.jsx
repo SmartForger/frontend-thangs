@@ -108,7 +108,8 @@ const DeleteFolder = ({ folder, type }) => {
           const { root } = folder
           if (root) {
             return history.push(`/mythangs/folder/${root}`)
-          } else if (isNotRecentFilesPage) {
+          }
+          if (isNotRecentFilesPage) {
             return history.push('/mythangs/all-files')
           }
         },
