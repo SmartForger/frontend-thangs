@@ -36,7 +36,7 @@ handlers:
   - url: /(.*)\.png
     static_files: build/\1.png
     upload: build/(.*).png
-  - url: /model/*
+  - url: /model/(.*)
     static_files: build/model.html
     upload: build/model.html
     expiration: 1m
