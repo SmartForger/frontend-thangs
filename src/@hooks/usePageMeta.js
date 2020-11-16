@@ -42,6 +42,11 @@ const usePageMeta = page => {
         title: metaData.downloadedTitle,
         description: metaData.downloadedDescription,
       }
+    case 'trending':
+      return {
+        title: metaData.trendingTitle,
+        description: metaData.trendingDescription,
+      }
     case 'showSignin':
       return {
         title: metaData.showSigninTitle,

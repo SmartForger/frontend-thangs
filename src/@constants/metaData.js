@@ -26,6 +26,9 @@ export const dateDescription =
 export const downloadedTitle = 'Most Downloaded Models for 3D Printing | Thangs'
 export const downloadedDescription =
   'View the most downloaded free 3D models available to print. Join the Thangs community, start downloading and creating your own models. Search now.'
+export const trendingTitle = 'Trending 3D models free to download | Thangs'
+export const trendingDescription =
+  'Search for the top trending 3D models on Thangs. Join the Thangs community, start downloading, and try Thangs powerful geometric search for returning similar results.'
 export const showSigninTitle = 'Thangs | Sign In | Upload and share 3D models'
 export const showSigninDescription =
   'Start collaborating with 3D hobbyist and 3D engineers.  Thangs offers free private collaboration with team and public sharing. Sign in now.'
