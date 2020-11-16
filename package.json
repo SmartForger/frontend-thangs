@@ -75,7 +75,8 @@
     "cypress:run:chrome": "yarn run cypress run --browser chrome",
     "cypress:run:chromium": "yarn run cypress run --browser chromium",
     "cypress:run:chrome:headless": "yarn run cypress run --headless --browser chrome",
-    "cypress:run:chromium:headless": "yarn run cypress run ----headless browser chromium"
+    "cypress:run:chromium:headless": "yarn run cypress run ----headless browser chromium",
+    "build:workers": "webpack --config webpack.worker.js"
   },
   "browserslist": {
     "production": [
@@ -90,14 +91,18 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "7.9.0",
     "@storybook/addon-actions": "^6.0.21",
     "@storybook/addon-links": "^6.0.21",
     "@storybook/addons": "^6.0.21",
     "@storybook/preset-create-react-app": "^3.0.0",
     "@storybook/react": "^6.0.21",
+    "babel-loader": "8.0.6",
     "cypress": "5.6.0",
     "cypress-file-upload": "^4.1.1",
     "prettier": "^2.1.1",
-    "start-server-and-test": "^1.10.8"
+    "start-server-and-test": "^1.10.8",
+    "webpack": "4.41.5",
+    "webpack-cli": "^4.2.0"
   }
 }

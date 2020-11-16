@@ -1,5 +1,5 @@
 import * as types from '@constants/storeEventTypes'
-import { api, storageService } from '@services'
+import { api, storageService, uploadFile } from '@services'
 import { track } from '@utilities/analytics'
 import * as R from 'ramda'
 
@@ -78,7 +78,7 @@ export default store => {
 
   store.on(
     types.UPLOAD_FILE,
-    async (_, { id, file, errorState = undefined, cancelToken }) => {
+    async (_, { id, file, errorState = undefined /*, cancelToken*/ }) => {
       store.dispatch(types.INIT_UPLOAD_FILE, {
         id,
         file,
@@ -88,31 +88,33 @@ export default store => {
         isWarning: errorState && errorState.warning,
       })
       if (!errorState || !errorState.error) {
-        try {
-          const { data: uploadedUrlData } = await api({
-            method: 'GET',
-            endpoint: `models/upload-url?fileName=${encodeURIComponent(file.name)}`,
-            cancelToken,
-          })
+        uploadFile(id, file)
 
-          await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file, {
-            cancelToken,
-          })
+        // try {
+        //   const { data: uploadedUrlData } = await api({
+        //     method: 'GET',
+        //     endpoint: `models/upload-url?fileName=${encodeURIComponent(file.name)}`,
+        //     cancelToken,
+        //   })
 
-          store.dispatch(types.CHANGE_UPLOAD_FILE, {
-            id,
-            data: uploadedUrlData,
-            isLoading: false,
-            isError: false,
-          })
-        } catch (e) {
-          store.dispatch(types.CHANGE_UPLOAD_FILE, {
-            id,
-            data: e,
-            isLoading: false,
-            isError: true,
-          })
-        }
+        //   await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file, {
+        //     cancelToken,
+        //   })
+
+        //   store.dispatch(types.CHANGE_UPLOAD_FILE, {
+        //     id,
+        //     data: uploadedUrlData,
+        //     isLoading: false,
+        //     isError: false,
+        //   })
+        // } catch (e) {
+        //   store.dispatch(types.CHANGE_UPLOAD_FILE, {
+        //     id,
+        //     data: e,
+        //     isLoading: false,
+        //     isError: true,
+        //   })
+        // }
       }
     }
   )

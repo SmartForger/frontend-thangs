@@ -12,6 +12,7 @@ import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { track } from '@utilities/analytics'
+import { cancelUpload } from '@services'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -107,7 +108,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const [warningMessage, setWarningMessage] = useState(null)
   const c = useStyles({})
   const history = useHistory()
-  const cancelTokenRef = useRef(axios.CancelToken.source())
+  // const cancelTokenRef = useRef(axios.CancelToken.source())
   const uploadFilesData = {}
   Object.keys(rawUploadFilesData).forEach(fileDataId => {
     if (rawUploadFilesData[fileDataId].name)
@@ -122,7 +123,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
           id: fileId,
           file,
           errorState,
-          cancelToken: cancelTokenRef.current.token,
+          // cancelToken: cancelTokenRef.current.token,
         })
       }
     },
@@ -161,14 +162,15 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const removeFile = useCallback(
     index => {
       track('MultiUpload - Remove File')
-      dispatch(types.REMOVE_UPLOAD_FILES, { index })
+      // dispatch(types.REMOVE_UPLOAD_FILES, { index })
+      cancelUpload(index)
     },
     [dispatch]
   )
 
   const closeOverlay = useCallback(() => {
-    cancelTokenRef.current.cancel('Upload interrupted')
-    dispatch(types.RESET_UPLOAD_FILES)
+    // cancelTokenRef.current.cancel('Upload interrupted')
+    // dispatch(types.RESET_UPLOAD_FILES)
     dispatch(types.CLOSE_OVERLAY)
   }, [dispatch])
 
@@ -256,7 +258,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
   }, [foldersData, sharedData])
 
   useEffect(() => {
-    dispatch(types.RESET_UPLOAD_FILES)
+    // dispatch(types.RESET_UPLOAD_FILES)
     const { data: folderData } = folders
     if (R.isEmpty(folderData)) {
       dispatch(types.FETCH_THANGS, {})
