@@ -89,7 +89,9 @@ const DeleteFolder = ({ folder, type }) => {
   const [errorMessage, setErrorMessage] = useState(null)
   const { dispatch, folders = {} } = useStoreon('folders')
   const { isSaving } = folders
-  const isNotRecentFilesPage = history.location.pathname !== '/mythangs/recent-files'
+  const isNotRecentFilesPage =
+    history.location.pathname !== '/mythangs/recent-files' &&
+    history.location.pathname !== '/mythangs'
 
   const closeOverlay = useCallback(() => {
     dispatch(types.CLOSE_OVERLAY)
