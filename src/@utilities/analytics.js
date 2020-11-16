@@ -11,11 +11,11 @@ export const initialize = () => {
   pendo.initialize()
 }
 
-export const identify = ({ user, inviteCode }) => {
+export const identify = ({ user, inviteCode, experiments }) => {
   pendo.identify(user, { inviteCode })
   const userId = user.id.padStart(5, '0')
   amplitude.getInstance().setUserId(userId)
-  amplitude.getInstance().setUserProperties({ inviteCode })
+  amplitude.getInstance().setUserProperties({ inviteCode, experiments })
 }
 
 export const track = (type, data) => {
@@ -35,4 +35,8 @@ export const locationChange = () => {
 
 export const overlayview = overlay => {
   amplitude.getInstance().logEvent('overlayview', { overlay })
+}
+
+export const updateUserProperties = experiments => {
+  amplitude.getInstance().setUserProperties({ experiments })
 }

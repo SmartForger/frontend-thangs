@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
 import { history } from './history'
+import { createInstance, OptimizelyProvider } from '@optimizely/react-sdk'
 import {
   AboutUs,
   Auth,
@@ -28,6 +29,7 @@ import { StoreContext } from 'storeon/react'
 import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
 import store from 'store'
+import { authenticationService } from '@services'
 
 export function AppFrame() {
   return (
@@ -38,52 +40,79 @@ export function AppFrame() {
 }
 
 const App = () => {
+  const [isLoadingOptimizely, setIsLoadingOptimizely] = useState(true)
+  const user = authenticationService.getCurrentUser()
+
+  const optimizely = createInstance({
+    sdkKey: process.env.REACT_APP_OPTIMIZELY_API_KEY,
+  })
+
+  optimizely.onReady({ timeout: 5000 }).then(() => {
+    setIsLoadingOptimizely(false)
+  })
+
   return (
-    <StoreContext.Provider value={store}>
-      <ErrorBoundary>
-        <FlashContextProvider>
-          <ThemeProvider>
-            <GlobalStyles />
-            <AppAnalytics />
-            <Switch>
-              <Route exact path='/' render={props => <Landing {...props} />} />
-              <Route path='/authenticate/:provider' component={Auth} />
-              {/* <Route path='/leave/:provider' component={Deauth} />
+    <OptimizelyProvider optimizely={optimizely} timeout={500} user={{ id: user.id }}>
+      <StoreContext.Provider value={store}>
+        <ErrorBoundary>
+          <FlashContextProvider>
+            <ThemeProvider>
+              <GlobalStyles />
+              <AppAnalytics />
+              <Switch>
+                <Route
+                  exact
+                  path='/'
+                  render={props => (
+                    <Landing isLoadingOptimizely={isLoadingOptimizely} {...props} />
+                  )}
+                />
+                <Route path='/authenticate/:provider' component={Auth} />
+                {/* <Route path='/leave/:provider' component={Deauth} />
               <Route path='/delete/:provider' component={Deauth} /> */}
-              <Route path='/explore/:id' component={Landing} />
-              <Route
-                path='/welcome'
-                render={props => <Landing {...props} newSignUp={true} />}
-              />
-              <Route path='/terms-and-conditions' exact component={TermsAndConditions} />
-              <Route path='/privacy-policy' exact component={PrivacyPolicy} />
-              <Route path='/about-us' exact component={AboutUs} />
-              <Route path='/home' component={routeRedirectToProfile()} />
-              <Route exact path='/password-reset' component={PasswordReset} />
-              <Route
-                path='/password_reset_confirm/:token'
-                component={ConfirmPasswordReset}
-              />
-              <Route path='/mythangs' component={routeRequiresAuth(MyThangs)} />
-              <Route exact path='/profile/:id' component={Profile} />
-              <Route
-                exact
-                path='/profile/'
-                component={routeRequiresAuth(RedirectProfile)}
-              />
-              <Route path='/model/:id' exact component={routeRequiresKick(ModelDetail)} />
-              <Route
-                path={['/search/:searchQuery', '/search']}
-                component={SearchResults}
-              />
-              <Route path='/:userName' component={Profile} />
-              <Route path='/404' component={Page404} status={404} />
-              <Route path='*' component={Page404} status={404} />
-            </Switch>
-          </ThemeProvider>
-        </FlashContextProvider>
-      </ErrorBoundary>
-    </StoreContext.Provider>
+                <Route path='/explore/:id' component={Landing} />
+                <Route
+                  path='/welcome'
+                  render={props => <Landing {...props} newSignUp={true} />}
+                />
+                <Route
+                  path='/terms-and-conditions'
+                  exact
+                  component={TermsAndConditions}
+                />
+                <Route path='/privacy-policy' exact component={PrivacyPolicy} />
+                <Route path='/about-us' exact component={AboutUs} />
+                <Route path='/home' component={routeRedirectToProfile()} />
+                <Route exact path='/password-reset' component={PasswordReset} />
+                <Route
+                  path='/password_reset_confirm/:token'
+                  component={ConfirmPasswordReset}
+                />
+                <Route path='/mythangs' component={routeRequiresAuth(MyThangs)} />
+                <Route exact path='/profile/:id' component={Profile} />
+                <Route
+                  exact
+                  path='/profile/'
+                  component={routeRequiresAuth(RedirectProfile)}
+                />
+                <Route
+                  path='/model/:id'
+                  exact
+                  component={routeRequiresKick(ModelDetail)}
+                />
+                <Route
+                  path={['/search/:searchQuery', '/search']}
+                  component={SearchResults}
+                />
+                <Route path='/:userName' component={Profile} />
+                <Route path='/404' component={Page404} status={404} />
+                <Route path='*' component={Page404} status={404} />
+              </Switch>
+            </ThemeProvider>
+          </FlashContextProvider>
+        </ErrorBoundary>
+      </StoreContext.Provider>
+    </OptimizelyProvider>
   )
 }
 

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
+import { useFeature } from '@optimizely/react-sdk'
 import {
   CardCollection,
   Layout,
@@ -143,7 +144,13 @@ const label = sortBy => {
   }
 }
 
-const Page = ({ user = {}, dispatch, modelPreviews = {}, sortBy }) => {
+const Page = ({
+  user = {},
+  dispatch,
+  modelPreviews = {},
+  sortBy,
+  isLoadingOptimizely,
+}) => {
   const c = useStyles({})
   const containerRef = useRef(null)
   const history = useHistory()
@@ -216,31 +223,38 @@ const Page = ({ user = {}, dispatch, modelPreviews = {}, sortBy }) => {
 
   return (
     <div className={c.Landing_Column} ref={containerRef}>
-      <div className={c.Landing_Title}>
-        <TitleSecondary>{title(sortBy)}</TitleSecondary>
-        <FilterDropdownMenu
-          user={user}
-          options={sortOptions}
-          TargetComponent={FilterDropdown}
-          dispatch={dispatch}
-          label={label(sortBy)}
-        />
-      </div>
+      {isLoadingOptimizely && (
+        <>
+          <Spacer size={'2rem'} />
+          <Spinner />
+        </>
+      )}
+      {!isLoadingOptimizely && (
+        <>
+          <div className={c.Landing_Title}>
+            <TitleSecondary>{title(sortBy)}</TitleSecondary>
+            <FilterDropdownMenu
+              user={user}
+              options={sortOptions}
+              TargetComponent={FilterDropdown}
+              dispatch={dispatch}
+              label={label(sortBy)}
+            />
+          </div>
 
-      <CardCollection
-        noResultsText='We have no models to display right now. Please try again later.'
-        isLoading={isLoading}
-      >
-        <ModelCards items={modelPreviews.data} />
-      </CardCollection>
-
-      <Spacer size='1rem' />
-      {isLoading && <Spinner />}
+          <CardCollection
+            noResultsText='We have no models to display right now. Please try again later.'
+            isLoading={isLoading}
+          >
+            <ModelCards items={modelPreviews.data} />
+          </CardCollection>
+        </>
+      )}
     </div>
   )
 }
 
-const Landing = ({ newSignUp }) => {
+const Landing = ({ newSignUp, isLoadingOptimizely }) => {
   const { dispatch, modelPreviews } = useStoreon('modelPreviews')
   const {
     atom: { data: user },
@@ -260,7 +274,8 @@ const Landing = ({ newSignUp }) => {
   }, [showSignin, showSignup, sortBy])
   const { title, description } = usePageMeta(pageMetaKey)
   const { id } = useParams()
-
+  const [_isEnabled, variables] = useFeature('sortbydefault', { autoUpdate: true })
+  const defaultSort = (variables && variables.key) || 'likes'
   useEffect(() => {
     if (newSignUp) {
       pageview('Welcome')
@@ -318,7 +333,8 @@ const Landing = ({ newSignUp }) => {
         user={user}
         dispatch={dispatch}
         modelPreviews={modelPreviews}
-        sortBy={sortBy || 'likes'}
+        sortBy={sortBy || defaultSort}
+        isLoadingOptimizely={isLoadingOptimizely}
       />
     </Layout>
   )

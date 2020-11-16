@@ -1,8 +1,14 @@
 import React, { useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
+import { useFeature } from '@optimizely/react-sdk'
 import { authenticationService } from '@services'
-import { initialize, identify, locationChange } from '@utilities/analytics'
+import {
+  initialize,
+  identify,
+  locationChange,
+  updateUserProperties,
+} from '@utilities/analytics'
 import ReactGA from 'react-ga'
 import ReactPixel from 'react-facebook-pixel'
 import { usePageMeta, useQuery } from '@hooks'
@@ -14,21 +20,25 @@ const AppAnalytics = () => {
   const analyticsInitialized = useRef(false)
   const { title, description } = usePageMeta('App')
   const user = authenticationService.getCurrentUser()
+  const [_isEnabled, variables] = useFeature('sortbydefault', { autoUpdate: true })
 
   useEffect(() => {
     ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID)
     ReactPixel.init(process.env.REACT_APP_FACEBOOK_PIXEL_ID)
-
     if (!analyticsInitialized.current) {
       initialize()
       analyticsInitialized.current = true
     }
     if (user && !userIdentified.current) {
-      identify({ user, inviteCode })
+      identify({ user, inviteCode, experiments: { sortByVariation: variables.key } })
       userIdentified.current = true
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
+
+  useEffect(() => {
+    updateUserProperties({ sortByVariation: variables.key })
+  }, [variables.key])
 
   useEffect(() => {
     ReactGA.pageview(location.pathname + location.search)
