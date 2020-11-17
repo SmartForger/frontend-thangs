@@ -122,6 +122,7 @@ const useStyles = createUseStyles(theme => {
     Model_ModelDescription: {
       fontSize: '1rem',
       lineHeight: '1.5rem',
+      fontFamily: '"Montserrat", sans-serif',
     },
     Model_ModelDetails: {
       marginTop: '2rem',
@@ -483,7 +484,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
           <div className={c.Model_Row}>
             <div className={c.Model_LeftColumn}>
               <div>
-                <div className={c.Model_ModelDescription}>{modelData.description}</div>
+                <pre className={c.Model_ModelDescription}>{modelData.description}</pre>
                 <div className={c.Model_ModelDetails}>
                   <ModelDetails model={modelData} />
                 </div>
