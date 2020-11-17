@@ -73,10 +73,11 @@ const useStyles = createUseStyles(theme => {
     Model_LeftColumn: {
       flexBasis: '2rem',
       flexGrow: 2,
-      maxWidth: '60rem',
+      maxWidth: '100%',
 
       [md]: {
         marginRight: '4rem',
+        maxWidth: '60rem',
       },
     },
     Model_RightColumn: {
