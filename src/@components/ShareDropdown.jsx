@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Button, DropdownMenu, DropdownItem, Spacer, LabelText } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ShareIcon } from '@svg/share-icon.svg'
@@ -6,6 +6,7 @@ import { ReactComponent as ShareFacebook } from '@svg/share-facebook.svg'
 import { ReactComponent as ShareTwitter } from '@svg/share-twitter.svg'
 import { ReactComponent as ShareReddit } from '@svg/share-reddit.svg'
 import { FacebookShareButton, RedditShareButton, TwitterShareButton } from 'react-share'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -44,6 +45,25 @@ export const ShareDropdownMenu = ({ TargetComponent, iconOnly, title, urlPathnam
   const shareUrl = `${window.location.origin}/social${
     urlPathname || window.location.pathname
   }`
+
+  const onFBShare = useCallback(() => {
+    track(`Share ${urlPathname ? 'portfolio' : 'model'} - Facebook`, {
+      subject: window.location.pathname,
+    })
+  }, [urlPathname])
+
+  const onTwitterShare = useCallback(() => {
+    track(`Share ${urlPathname ? 'portfolio' : 'model'} - Twitter`, {
+      subject: window.location.pathname,
+    })
+  }, [urlPathname])
+
+  const onRedditShare = useCallback(() => {
+    track(`Share ${urlPathname ? 'portfolio' : 'model'} - Reddit`, {
+      subject: window.location.pathname,
+    })
+  }, [urlPathname])
+
   return (
     <DropdownMenu
       className={c.ShareDropdown}
@@ -51,7 +71,7 @@ export const ShareDropdownMenu = ({ TargetComponent, iconOnly, title, urlPathnam
       iconOnly={iconOnly}
     >
       <div>
-        <DropdownItem>
+        <DropdownItem onClick={onFBShare}>
           <FacebookShareButton url={shareUrl} quote={title}>
             <Spacer size={'.5rem'} />
             <div className={c.ShareDropdown_Row}>
@@ -63,7 +83,7 @@ export const ShareDropdownMenu = ({ TargetComponent, iconOnly, title, urlPathnam
             <Spacer size={'.5rem'} />
           </FacebookShareButton>
         </DropdownItem>
-        <DropdownItem>
+        <DropdownItem onClick={onTwitterShare}>
           <TwitterShareButton url={shareUrl} title={title}>
             <Spacer size={'.5rem'} />
             <div className={c.ShareDropdown_Row}>
@@ -75,7 +95,7 @@ export const ShareDropdownMenu = ({ TargetComponent, iconOnly, title, urlPathnam
             <Spacer size={'.5rem'} />
           </TwitterShareButton>
         </DropdownItem>
-        <DropdownItem>
+        <DropdownItem onClick={onRedditShare}>
           <RedditShareButton url={shareUrl} title={title}>
             <Spacer size={'.5rem'} />
             <div className={c.ShareDropdown_Row}>
