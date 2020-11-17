@@ -231,7 +231,7 @@ const Page = ({ user = {}, dispatch, modelPreviews = {}, sortBy }) => {
         noResultsText='We have no models to display right now. Please try again later.'
         isLoading={isLoading}
       >
-        <ModelCards items={modelPreviews.data} user={user} />
+        <ModelCards items={modelPreviews.data} />
       </CardCollection>
 
       <Spacer size='1rem' />

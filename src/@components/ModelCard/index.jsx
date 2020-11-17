@@ -6,10 +6,8 @@ import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
 import { ReactComponent as ChatIcon } from '@svg/icon-comment.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
-import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
-import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import * as types from '@constants/storeEventTypes'
-import { Button, Card, ModelThumbnail, UserInline, EditModel } from '@components'
+import { Card, ModelThumbnail, UserInline, EditModel } from '@components'
 import { createUseStyles } from '@style'
 import { useCurrentUserId } from '@hooks'
 import { track } from '@utilities/analytics'
@@ -98,18 +96,10 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const noop = () => null
 const MODEL_NAME_MAX_LENGTH = 40
 const CANCELED_TOKEN_MESSAGE = 'canceled'
 
-const ThangsModelDetails = ({
-  c,
-  model,
-  showOwner,
-  showSocial,
-  showReportModel,
-  handleReportModel = noop,
-}) => {
+const ThangsModelDetails = ({ c, model }) => {
   const { dispatch } = useStoreon()
   const isLikedCancelTokens = useRef({
     true: axios.CancelToken.source(),
@@ -158,55 +148,41 @@ const ThangsModelDetails = ({
 
   return (
     <div className={c.ModelCard_Content}>
-      {!showOwner && <div className={c.ModelCard_Name}>{modelName}</div>}
-
-      {showOwner && (
-        <Link
-          to={{
-            pathname: `/${R.pathOr('no-user', ['owner', 'username'], model)}`,
-            state: { fromModel: true },
-          }}
-        >
-          <div title={R.pathOr('no-user', ['owner', 'username'], model)}>
-            <UserInline user={model.owner} maxLength={20} />
-          </div>
-        </Link>
-      )}
-
-      {showSocial && (
-        <div className={c.ModelCard_Row}>
-          <div className={c.ModelCard_ActivityIndicators}>
-            <span className={c.ModelCard_ActivityCount}>
-              <ChatIcon />
-              &nbsp;{model.commentsCount}
-            </span>
-            <span
-              className={c.ModelCard_ActivityCount}
-              onClick={e => {
-                if (!isNaN(currentUserId)) {
-                  e.preventDefault()
-                  handleLikeButton()
-                }
-              }}
-            >
-              <HeartIcon
-                className={classnames(c.ModelCard_Icon, {
-                  [c.ModelCard_Icon__liked]: isLiked,
-                })}
-              />
-              &nbsp;{stateLikes.length}
-            </span>
-          </div>
+      <Link
+        to={{
+          pathname: `/${R.pathOr('no-user', ['owner', 'username'], model)}`,
+          state: { fromModel: true },
+        }}
+      >
+        <div title={R.pathOr('no-user', ['owner', 'username'], model)}>
+          <UserInline user={model.owner} maxLength={20} />
         </div>
-      )}
-      {showReportModel && (
-        <Button
-          className={c.ModelCard_ReportModelButton}
-          onClick={() => handleReportModel({ model })}
-        >
-          <FlagIcon />
-        </Button>
-      )}
+      </Link>
+
+      <div className={c.ModelCard_Row}>
+        <div className={c.ModelCard_ActivityIndicators}>
+          <span className={c.ModelCard_ActivityCount}>
+            <ChatIcon />
+            &nbsp;{model.commentsCount}
+          </span>
+          <span
+            className={c.ModelCard_ActivityCount}
+            onClick={e => {
+              if (!isNaN(currentUserId)) {
+                e.preventDefault()
+                handleLikeButton()
+              }
+            }}
+          >
+            <HeartIcon
+              className={classnames(c.ModelCard_Icon, {
+                [c.ModelCard_Icon__liked]: isLiked,
+              })}
+            />
+            &nbsp;{stateLikes.length}
+          </span>
+        </div>
+      </div>
     </div>
   )
 }
@@ -228,13 +204,7 @@ const CardContents = ({
   className,
   c,
   model,
-  showOwner,
-  showSocial,
-  showWaldo,
   modelAttributionUrl,
-  searchModelFileName,
-  showReportModel,
-  handleReportModel,
 }) => {
   if (model.resultSource === 'phyndexer' && !modelAttributionUrl) return null
   return (
@@ -245,37 +215,20 @@ const CardContents = ({
             className={c.ModelCard_Thumbnail}
             name={model.name}
             model={model}
-            searchModelFileName={searchModelFileName}
-            showWaldo={showWaldo}
           />
         </Card>
         <ThangsModelDetails
           c={c}
           model={model}
-          showOwner={showOwner}
-          showSocial={showSocial}
-          showReportModel={showReportModel}
-          handleReportModel={handleReportModel}
         />
       </div>
     </>
   )
 }
 
-const ModelCard = ({
-  className,
-  model,
-  withOwner,
-  showSocial = true,
-  showWaldo,
-  showReportModel,
-  searchModelFileName,
-  handleReportModel,
-  geoRelated,
-}) => {
+const ModelCard = ({ className, model, geoRelated }) => {
   const c = useStyles()
   const currentUserId = parseInt(useCurrentUserId())
-  const showOwner = withOwner && !!model.owner
   const modelAttributionUrl =
     model && model.attributionUrl && encodeURI(model.attributionUrl)
   const modelPath = model.id ? `/model/${model.id}` : modelAttributionUrl
@@ -294,20 +247,14 @@ const ModelCard = ({
           [c.ModelCard_ExternalLink]: model.resultSource === 'phyndexer',
           [c.ModelCard_ThangsLink]: model.resultSource !== 'phyndexer',
         })}
-        noLink={!modelPath || showReportModel}
+        noLink={!modelPath}
       >
         <CardContents
           className={className}
           model={model}
-          showOwner={showOwner}
-          showSocial={showSocial}
-          showWaldo={showWaldo}
           c={c}
           modelAttributionUrl={modelAttributionUrl}
-          searchModelFileName={searchModelFileName}
           modelPath={modelPath}
-          showReportModel={showReportModel}
-          handleReportModel={handleReportModel}
         />
       </Anchor>
       {isCurrentUserOwner && (
