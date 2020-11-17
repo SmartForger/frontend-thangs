@@ -124,6 +124,7 @@ const useStyles = createUseStyles(theme => {
       lineHeight: '1.5rem',
       fontFamily: '"Montserrat", sans-serif',
       whiteSpace: 'break-spaces',
+      overflowWrap: 'anywhere',
     },
     Model_ModelDetails: {
       marginTop: '2rem',
