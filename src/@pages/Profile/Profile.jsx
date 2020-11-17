@@ -123,9 +123,13 @@ const useStyles = createUseStyles(theme => {
       ...theme.text.smallHeaderText,
       marginTop: '1.75rem',
     },
-
     Profile_NoContentMessage__link: {
       ...theme.text.linkText,
+    },
+    Profile_Row: {
+      alignItems: 'center',
+      display: 'flex',
+      flexDirection: 'row',
     },
   }
 })
@@ -185,7 +189,7 @@ const CollectionTitle = ({ selected, onClick, className, title, amount }) => {
   )
 }
 
-const Portfolio = ({ models, likes, username, userId }) => {
+const Portfolio = ({ models, likes }) => {
   const c = useStyles({})
 
   const [selected, setSelected] = useState('models')
@@ -211,29 +215,21 @@ const Portfolio = ({ models, likes, username, userId }) => {
 
   return (
     <>
-      <div className={c.Profile_HeaderBar}>
-        <div className={c.Home_TextHeader}>
-          <CollectionTitle
-            selected={selected === 'models'}
-            onClick={selectModels}
-            title={'Models'}
-            amount={((Array.isArray(models.data) && models.data) || []).length}
-          />
-          <Spacer size={'1.5rem'} />
-          <CollectionTitle
-            selected={selected === 'likes'}
-            onClick={selectLikes}
-            title={'Likes'}
-            amount={R.pathOr([], ['data', 'models'], likes).length}
-          />
-          <Spacer size={'1.5rem'} />
-        </div>
-        <ShareDropdownMenu
-          TargetComponent={ShareDropdown}
-          iconOnly={false}
-          title={`${username} - 3D model uploads`}
-          urlPathname={`/portfolio/${userId}`}
+      <div className={c.Home_TextHeader}>
+        <CollectionTitle
+          selected={selected === 'models'}
+          onClick={selectModels}
+          title={'Models'}
+          amount={((Array.isArray(models.data) && models.data) || []).length}
         />
+        <Spacer size={'1.5rem'} />
+        <CollectionTitle
+          selected={selected === 'likes'}
+          onClick={selectLikes}
+          title={'Likes'}
+          amount={R.pathOr([], ['data', 'models'], likes).length}
+        />
+        <Spacer size={'1.5rem'} />
       </div>
       <div>
         <TabContent />
@@ -280,12 +276,21 @@ const UserPage = ({ user = {}, userId }) => {
             <Spacer size={'1rem'} />
             <Markdown className={c.Profile_Markdown}>{description}</Markdown>
             <Spacer size={'1.5rem'} />
-            <ProfileButton
-              className={c.Profile_ProfileButton}
-              user={user}
-              userId={userId}
-              onEditClick={setShowProfileForm}
-            />
+            <div className={c.Profile_Row}>
+              <ProfileButton
+                className={c.Profile_ProfileButton}
+                user={user}
+                userId={userId}
+                onEditClick={setShowProfileForm}
+              />
+              <Spacer size={'1rem'} />
+              <ShareDropdownMenu
+                TargetComponent={ShareDropdown}
+                iconOnly={true}
+                title={`${user.username} - 3D model uploads`}
+                urlPathname={`/portfolio/${userId}`}
+              />
+            </div>
           </div>
         </div>
       </div>
