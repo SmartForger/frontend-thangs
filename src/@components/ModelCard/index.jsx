@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import * as R from 'ramda'
@@ -12,6 +12,7 @@ import * as types from '@constants/storeEventTypes'
 import { Button, Card, ModelThumbnail, UserInline, EditModel } from '@components'
 import { createUseStyles } from '@style'
 import { useCurrentUserId } from '@hooks'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -310,6 +311,7 @@ const ModelCard = ({
   showReportModel,
   searchModelFileName,
   handleReportModel,
+  geoRelated,
 }) => {
   const c = useStyles()
   const currentUserId = parseInt(useCurrentUserId())
@@ -318,9 +320,14 @@ const ModelCard = ({
     model && model.attributionUrl && encodeURI(model.attributionUrl)
   const modelPath = model.id ? `/model/${model.id}` : modelAttributionUrl
   const isCurrentUserOwner = `${currentUserId}` === `${R.path(['owner', 'id'], model)}`
+  const onAnchorClick = useCallback(() => {
+    if (geoRelated) track('Geo Related Model Link', { path: modelPath })
+  }, [geoRelated, modelPath])
+
   return (
     <div className={c.ModelCard} data-cy={R.pathOr('unknown', (['name'], model))}>
       <Anchor
+        onClick={onAnchorClick}
         to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
         attributionUrl={modelAttributionUrl}
         className={classnames({

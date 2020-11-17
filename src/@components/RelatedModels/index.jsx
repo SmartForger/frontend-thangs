@@ -5,6 +5,7 @@ import { logger } from '@utilities/logging'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -37,7 +38,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const RelatedModels = ({ isLoading, isError, data, className }) => {
+const RelatedModels = ({ isLoading, isError, data = {}, className }) => {
   const c = useStyles()
 
   if (isLoading) {
@@ -46,6 +47,7 @@ const RelatedModels = ({ isLoading, isError, data, className }) => {
     logger.error('error', isError)
     return <Spinner />
   }
+  track('Related Models Shown', { matches: (data.matches && data.matches.length) || 0 })
 
   return (
     <div className={classnames(className, c.RelatedModels_Related)}>
@@ -55,8 +57,8 @@ const RelatedModels = ({ isLoading, isError, data, className }) => {
       </div>
 
       <CardCollection maxPerRow={3} noResultsText='No geometrically related matches yet.'>
-        {data && data.matches && data.matches.length > 0 ? (
-          <ModelCards items={data.matches} />
+        {data.matches && data.matches.length > 0 ? (
+          <ModelCards items={data.matches} geoRelated={true} />
         ) : null}
       </CardCollection>
     </div>
