@@ -123,6 +123,7 @@ const useStyles = createUseStyles(theme => {
       fontSize: '1rem',
       lineHeight: '1.5rem',
       fontFamily: '"Montserrat", sans-serif',
+      whiteSpace: 'break-spaces',
     },
     Model_ModelDetails: {
       marginTop: '2rem',
