@@ -41,7 +41,7 @@ const useStyles = createUseStyles(theme => {
 const noop = () => null
 export const ShareDropdownMenu = ({ TargetComponent, iconOnly, title }) => {
   const c = useStyles({})
-  const shareUrl = `${window.location.origin}/social/${window.location.pathname}`
+  const shareUrl = `${window.location.origin}/social${window.location.pathname}`
   return (
     <DropdownMenu
       className={c.ShareDropdown}
