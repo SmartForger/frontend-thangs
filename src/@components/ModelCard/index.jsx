@@ -211,35 +211,6 @@ const ThangsModelDetails = ({
   )
 }
 
-const ExternalModelDetails = ({
-  c,
-  model,
-  showReportModel,
-  handleReportModel = noop,
-}) => {
-  return (
-    <div className={c.ModelCard_Content}>
-      <div className={c.ModelCard_DetailsInline}>
-        <ExternalLinkIcon />
-        <span
-          className={c.ModelCard_ExternalName}
-          title={model.attributionUrl || model.fileName}
-        >
-          {model.attributionUrl || model.fileName}
-        </span>
-        {showReportModel && (
-          <Button
-            className={c.ModelCard_ReportModelButton}
-            onClick={() => handleReportModel({ model })}
-          >
-            <FlagIcon />
-          </Button>
-        )}
-      </div>
-    </div>
-  )
-}
-
 const Anchor = ({ children, attributionUrl, to, noLink, ...props }) => {
   if (noLink) return children
   return attributionUrl ? (
@@ -278,25 +249,14 @@ const CardContents = ({
             showWaldo={showWaldo}
           />
         </Card>
-        <div>
-          {model.resultSource === 'phyndexer' ? (
-            <ExternalModelDetails
-              c={c}
-              model={model}
-              showReportModel={showReportModel}
-              handleReportModel={handleReportModel}
-            />
-          ) : (
-            <ThangsModelDetails
-              c={c}
-              model={model}
-              showOwner={showOwner}
-              showSocial={showSocial}
-              showReportModel={showReportModel}
-              handleReportModel={handleReportModel}
-            />
-          )}
-        </div>
+        <ThangsModelDetails
+          c={c}
+          model={model}
+          showOwner={showOwner}
+          showSocial={showSocial}
+          showReportModel={showReportModel}
+          handleReportModel={handleReportModel}
+        />
       </div>
     </>
   )
