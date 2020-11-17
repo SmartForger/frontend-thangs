@@ -130,6 +130,7 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       display: 'flex',
       flexDirection: 'row',
+      justifyContent: 'flex-end',
     },
   }
 })
@@ -238,7 +239,7 @@ const Portfolio = ({ models, likes }) => {
   )
 }
 
-const UserPage = ({ user = {}, userId }) => {
+const UserPage = ({ user = {}, userId, isCurrentUsersProfile }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
   const [showProfileForm, setShowProfileForm] = useState(false)
@@ -277,16 +278,20 @@ const UserPage = ({ user = {}, userId }) => {
             <Markdown className={c.Profile_Markdown}>{description}</Markdown>
             <Spacer size={'1.5rem'} />
             <div className={c.Profile_Row}>
-              <ProfileButton
-                className={c.Profile_ProfileButton}
-                user={user}
-                userId={userId}
-                onEditClick={setShowProfileForm}
-              />
-              <Spacer size={'1rem'} />
+              {!isCurrentUsersProfile && (
+                <>
+                  <ProfileButton
+                    className={c.Profile_ProfileButton}
+                    user={user}
+                    userId={userId}
+                    onEditClick={setShowProfileForm}
+                  />
+                  <Spacer size={'1rem'} />
+                </>
+              )}
               <ShareDropdownMenu
                 TargetComponent={ShareDropdown}
-                iconOnly={true}
+                iconOnly={false}
                 title={`${user.username} - 3D model uploads`}
                 urlPathname={`/portfolio/${userId}`}
               />
