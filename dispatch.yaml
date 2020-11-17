@@ -13,6 +13,8 @@ dispatch:
     service: social-service
 
   # Staging routes
+  - url: "staging.thangs.com/social/*"
+    service: staging-api-platform
   - url: "staging.thangs.com/*"
     service: staging-thangs-frontend
   - url: "www.staging.thangs.com/*"
