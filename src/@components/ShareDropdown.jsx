@@ -39,9 +39,11 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-export const ShareDropdownMenu = ({ TargetComponent, iconOnly, title }) => {
+export const ShareDropdownMenu = ({ TargetComponent, iconOnly, title, urlPathname }) => {
   const c = useStyles({})
-  const shareUrl = `${window.location.origin}/social${window.location.pathname}`
+  const shareUrl = `${window.location.origin}/social${
+    urlPathname || window.location.pathname
+  }`
   return (
     <DropdownMenu
       className={c.ShareDropdown}
@@ -96,7 +98,12 @@ export const ShareDropdown = ({ onClick = noop, iconOnly = false }) => {
   return (
     <Button className={c.ShareDropdown_ClickableButton} onClick={onClick}>
       <ShareIcon />
-      {!iconOnly && 'Share'}
+      {!iconOnly && (
+        <>
+          <Spacer size={'.5rem'} />
+          Share
+        </>
+      )}
     </Button>
   )
 }

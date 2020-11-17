@@ -11,6 +11,8 @@ import {
   ModelCards,
   ProfileButton,
   ProfilePicture,
+  ShareDropdown,
+  ShareDropdownMenu,
   SingleLineBodyText,
   Spacer,
   Spinner,
@@ -81,6 +83,11 @@ const useStyles = createUseStyles(theme => {
       [md]: {
         flexDirection: 'column',
       },
+    },
+    Profile_HeaderBar: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'baseline',
     },
     Profile_Details: {
       marginTop: '1rem',
@@ -178,7 +185,7 @@ const CollectionTitle = ({ selected, onClick, className, title, amount }) => {
   )
 }
 
-const Portfolio = ({ models, likes }) => {
+const Portfolio = ({ models, likes, username, userId }) => {
   const c = useStyles({})
 
   const [selected, setSelected] = useState('models')
@@ -204,21 +211,29 @@ const Portfolio = ({ models, likes }) => {
 
   return (
     <>
-      <div className={c.Home_TextHeader}>
-        <CollectionTitle
-          selected={selected === 'models'}
-          onClick={selectModels}
-          title={'Models'}
-          amount={((Array.isArray(models.data) && models.data) || []).length}
+      <div className={c.Profile_HeaderBar}>
+        <div className={c.Home_TextHeader}>
+          <CollectionTitle
+            selected={selected === 'models'}
+            onClick={selectModels}
+            title={'Models'}
+            amount={((Array.isArray(models.data) && models.data) || []).length}
+          />
+          <Spacer size={'1.5rem'} />
+          <CollectionTitle
+            selected={selected === 'likes'}
+            onClick={selectLikes}
+            title={'Likes'}
+            amount={R.pathOr([], ['data', 'models'], likes).length}
+          />
+          <Spacer size={'1.5rem'} />
+        </div>
+        <ShareDropdownMenu
+          TargetComponent={ShareDropdown}
+          iconOnly={false}
+          title={`${username} - 3D model uploads`}
+          urlPathname={`/portfolio/${userId}`}
         />
-        <Spacer size={'1.5rem'} />
-        <CollectionTitle
-          selected={selected === 'likes'}
-          onClick={selectLikes}
-          title={'Likes'}
-          amount={R.pathOr([], ['data', 'models'], likes).length}
-        />
-        <Spacer size={'1.5rem'} />
       </div>
       <div>
         <TabContent />
@@ -280,6 +295,7 @@ const UserPage = ({ user = {}, userId }) => {
           models={ownUserModelsAtom}
           likes={likedUserModelsAtom}
           userId={userId}
+          username={user.username}
         />
       </div>
     </div>
