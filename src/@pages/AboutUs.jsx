@@ -209,7 +209,7 @@ const AboutUs = () => {
             <TitlePrimary>{modelsIngested || '1,000,000'} models</TitlePrimary>
             <Spacer size='1rem' />
             <MultiLineBodyText>
-              ...indexed and ready to be search. And growing fast.
+              ...indexed and ready to be searched. And growing fast.
             </MultiLineBodyText>
             <BackgroundRight className={c.AboutUs_BackgroundRight} />
             <Spacer size='6rem' />
