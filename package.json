@@ -1,6 +1,6 @@
 {
   "name": "thangs-react",
-  "version": "1.17.4",
+  "version": "1.17.5",
   "private": true,
   "dependencies": {
     "@hapi/joi": "^17.1.1",
@@ -22,7 +22,6 @@
     "history": "^4.10.1",
     "jwt-decode": "^2.2.0",
     "md5": "^2.2.1",
-    "mdi-material-ui": "^6.10.0",
     "msw": "^0.19.5",
     "query-string": "^6.13.2",
     "ramda": "^0.27.0",
