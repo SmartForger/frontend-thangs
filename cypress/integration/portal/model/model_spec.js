@@ -8,6 +8,7 @@ import {
   isElement,
   isTextInsideClass,
   login,
+  removeModelsFoldersFromMyThangs,
 } from '../../../utils/common-methods'
 import {
   CLASSES,
@@ -21,6 +22,10 @@ import { commentInput, enterValidValue, TEST_USER_1 } from '../../../utils/input
 import { multiUpload } from '../../../utils/uploadMethods'
 
 describe('The Model Page', () => {
+  before(() => {
+    removeModelsFoldersFromMyThangs()
+  })
+
   beforeEach(() => {
     login(TEST_USER_1)
   })
@@ -73,16 +78,6 @@ describe('The Model Page', () => {
     isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKE, PROPS.VISIBLE)
     isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKED, PROPS.INVISIBLE)
   })
-
-  /*it('Check for follow/unfollow button', () => {
-    goTo(PATH.EXTERNAL_MODEL)
-    isTextInsideClass(CLASSES.MODEL_PAGE_FOLLOW_BUTTON, TEXT.FOLLOW, PROPS.VISIBLE)
-    clickOnElementByText(TEXT.FOLLOW)
-    isTextInsideClass(CLASSES.MODEL_PAGE_FOLLOW_BUTTON, TEXT.UNFOLLOW, PROPS.VISIBLE)
-    clickOnElementByText(TEXT.UNFOLLOW)
-    isTextInsideClass(CLASSES.MODEL_PAGE_FOLLOW_BUTTON, TEXT.FOLLOW, PROPS.VISIBLE)
-    isTextInsideClass(CLASSES.MODEL_PAGE_FOLLOW_BUTTON, TEXT.UNFOLLOW, PROPS.INVISIBLE)
-  })*/
 
   it('Delete model', () => {
     deleteSingleFile()

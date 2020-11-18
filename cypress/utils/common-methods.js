@@ -6,6 +6,7 @@ import {
   PROPS,
   TEXT,
   MODEL,
+  USER,
 } from './constants'
 import {
   clearInput,
@@ -15,6 +16,7 @@ import {
   modelTitleInput,
   inputSelectors,
 } from './inputs'
+import api, { apiLogin } from './api'
 
 export const isElement = (el, prop) => {
   cy.get(el, { timeout: 5000 }).should(prop)
@@ -159,6 +161,33 @@ export const deleteSingleFile = () => {
   isElement(CLASSES.MY_THANGS_NO_FILES, PROPS.VISIBLE)
 }
 
+export const deleteAllFiles = async () => {
+  let elements = null
+  goTo(PATH.MY_THANGS)
+  cy.wait(7000)
+  cy.get('body', { timeout: 10000 }).then($body => {
+    if ($body.find(CLASSES.MY_THANGS_MENU_BUTTON).length > 0) {
+      cy.get(CLASSES.MY_THANGS_MENU_BUTTON).then($el => {
+        elements = Cypress.$($el).length
+        if (elements > 0) {
+          for (let i = 0; i < elements; i++) {
+            cy.get(CLASSES.MY_THANGS_MENU_BUTTON)
+              .first()
+              .rightclick()
+              .each(() => {
+                clickOnElementByText(TEXT.REMOVE)
+                isTextInsideClass(CLASSES.MY_THANGS_DELETE_FORM_BUTTON, TEXT.DELETE)
+                clickOnTextInsideClass(CLASSES.MY_THANGS_DELETE_FORM_BUTTON, TEXT.DELETE)
+                isElement(CLASSES.MY_THANGS_DELETE_FORM_BUTTON, PROPS.INVISIBLE)
+              })
+          }
+        }
+      })
+    }
+    isElement(CLASSES.MY_THANGS_NO_FILES, PROPS.VISIBLE)
+  })
+}
+
 export const signOut = () => {
   openProfileDropdown()
   clickOnElementByText(TEXT.SIGN_OUT)
@@ -191,4 +220,58 @@ export const isTextInsideClass = (className, text, prop) => {
   prop
     ? cy.get(className, { timeout: 20000 }).contains(text).should(prop)
     : cy.get(className, { timeout: 20000 }).contains(text)
+}
+
+export const removeModelsFoldersFromMyThangs = () => {
+  apiLogin({ userName: USER.EMAIL, password: USER.PASSWORD })
+    .then(() => {
+      return api({
+        endpoint: `users/${USER.ID}/thangs`,
+        method: 'GET',
+      })
+    })
+
+    .then(response => {
+      const data = response.body || {}
+      const models = data.models || []
+      const folders = data.folders || []
+
+      cy.log('########################### User models', models.length)
+
+      const deleteModelRec = async modelsIds => {
+        if (modelsIds.length > 0) {
+          const modelId = modelsIds.pop()
+
+          await api({
+            endpoint: `models/${modelId}`,
+            method: 'DELETE',
+          })
+
+          cy.log('########################### Model deleted', modelId)
+
+          deleteModelRec(modelsIds)
+        }
+      }
+
+      cy.log('########################### User folders', folders.length)
+
+      const deleteFolderRec = async foldersIds => {
+        if (foldersIds.length > 0) {
+          const folderId = foldersIds.pop()
+
+          await api({
+            endpoint: `folders/${folderId}`,
+            method: 'DELETE',
+          })
+
+          cy.log('########################### Folder deleted', folderId)
+
+          deleteFolderRec(foldersIds)
+        }
+      }
+
+      deleteModelRec(models.map(model => model.id))
+      deleteFolderRec(folders.map(folder => folder.id))
+      localStorage.removeItem('currentUser')
+    })
 }
