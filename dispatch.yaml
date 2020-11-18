@@ -1,15 +1,14 @@
 dispatch:
   # Production routes
+  - url: "thangs.com/social/*"
+    service: prod-api-platform
   - url: "thangs.com/*"
-    # TODO: Update to thangs-frontend
     service: thangs-react
   - url: "www.thangs.com/*"
     service: thangs-react
   - url: "app.thangs.com/*"
-    # TODO: Update to thangs-frontend
     service: thangs-react
   - url: "backend.thangs.com/*"
-    # TODO: Update to thangs-backend
     service: social-service
 
   # Staging routes
