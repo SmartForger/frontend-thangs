@@ -370,9 +370,11 @@ const PageByUserName = ({ userName }) => {
     dispatch(types.FETCH_USER_ID, { id: userName })
   }, [dispatch, userName])
 
-  if (!isCurrentUsersProfile && isLoaded && isExternalReferral) {
-    track('Portfolio', { userName })
-  }
+  useEffect(() => {
+    if (!isCurrentUsersProfile && isLoaded && isExternalReferral) {
+      track('Portfolio', { userName })
+    }
+  }, [isCurrentUsersProfile, isExternalReferral, isLoaded, userName])
   if (!isLoaded) {
     return <Spinner />
   }
