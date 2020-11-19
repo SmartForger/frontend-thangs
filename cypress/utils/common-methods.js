@@ -223,6 +223,9 @@ export const isTextInsideClass = (className, text, prop) => {
 }
 
 export const removeModelsFoldersFromMyThangs = () => {
+  if (localStorage.getItem('currentUser')) {
+    localStorage.removeItem('currentUser')
+  }
   apiLogin({ userName: USER.EMAIL, password: USER.PASSWORD })
     .then(() => {
       return api({

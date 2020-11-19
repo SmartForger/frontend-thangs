@@ -55,10 +55,19 @@ describe('The Landing Page', () => {
   })
 
   it('Click on filters', () => {
-    isElement(CLASSES.FILTER_TABS, PROPS.VISIBLE)
-    clickOnTextInsideClass(CLASSES.FILTER_TABS, TEXT.DOWNLOADS)
-    clickOnTextInsideClass(CLASSES.FILTER_TABS, TEXT.POPULAR)
-    clickOnTextInsideClass(CLASSES.FILTER_TABS, TEXT.NEW)
+    isElement(CLASSES.LANDING_FILTER_BUTTON, PROPS.VISIBLE)
+    clickOnElement(CLASSES.LANDING_FILTER_BUTTON)
+    clickOnTextInsideClass(CLASSES.LANDING_FILTER_DROPDOWN, TEXT.DOWNLOADS)
+    isElementContains(CLASSES.LANDING_TITLE, 'Most Downloaded')
+    clickOnElement(CLASSES.LANDING_FILTER_BUTTON)
+    clickOnTextInsideClass(CLASSES.LANDING_FILTER_DROPDOWN, TEXT.POPULAR)
+    isElementContains(CLASSES.LANDING_TITLE, 'Popular Models')
+    clickOnElement(CLASSES.LANDING_FILTER_BUTTON)
+    clickOnTextInsideClass(CLASSES.LANDING_FILTER_DROPDOWN, TEXT.NEW)
+    isElementContains(CLASSES.LANDING_TITLE, 'New Models')
+    clickOnElement(CLASSES.LANDING_FILTER_BUTTON)
+    clickOnTextInsideClass(CLASSES.LANDING_FILTER_DROPDOWN, TEXT.TRENDING)
+    isElementContains(CLASSES.LANDING_TITLE, 'Trending Models')
   })
 
   it('Landing search "#geotests" provides to results page', () => {
