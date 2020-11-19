@@ -16,19 +16,11 @@ const useStyles = createUseStyles(theme => {
       flexGrow: 1,
       fontSize: '1rem',
       fontWeight: '600',
-      color: ({ isPending }) =>
-        isPending ? theme.colors.grey[200] : theme.colors.black[500],
-    },
-    UserInline_SmallName: {
-      ...theme.text.linkText,
-      fontSize: '.75rem',
-      textTransform: 'capitalize',
+      color: theme.colors.black[500],
     },
     UserInline_SearchResult: {
       color: theme.colors.grey[300],
-      fontSize: '1rem',
       lineHeight: '1rem',
-      fontWeight: 600,
     },
   }
 })
@@ -36,37 +28,27 @@ const useStyles = createUseStyles(theme => {
 const UserInline = ({
   user = {},
   className,
-  displayEmail,
   size = '1.75rem',
-  children,
-  isPending,
   isSearchResult,
-  maxLength, 
+  maxLength,
 }) => {
-  const c = useStyles({ isPending })
+  const c = useStyles({})
   let userName = truncateString(user.username, maxLength || 20)
   return (
-    <div className={className}>
-      <div className={c.UserInline}>
-        <ProfilePicture
-          size={size}
-          name={user.fullName}
-          userName={user.username}
-          src={(user.profile && user.profile.avatarUrl) || user.avatarUrl}
-        />
-        <span className={c.UserInline_Info}>
-          <div
-            className={classnames({
-              [c.UserInline_SmallName]: displayEmail,
-              [c.UserInline_SearchResult]: isSearchResult,
-            })}
-          >
-            {userName}
-          </div>
-          {displayEmail && <div className={c.UserInline_Email}>{user.email}</div>}
-        </span>
-      </div>
-      {children}
+    <div className={classnames(className, c.UserInline)}>
+      <ProfilePicture
+        size={size}
+        name={user.fullName}
+        userName={user.username}
+        src={(user.profile && user.profile.avatarUrl) || user.avatarUrl}
+      />
+      <span
+        className={classnames(c.UserInline_Info, {
+          [c.UserInline_SearchResult]: isSearchResult,
+        })}
+      >
+        {userName}
+      </span>
     </div>
   )
 }
