@@ -77,9 +77,6 @@ const useStyles = createUseStyles(theme => {
         fill: theme.colors.gold[500],
       },
     },
-    ModelCard_ExternalLink: {
-      zIndex: 1,
-    },
     ModelCard_ThangsLink: {
       zIndex: 1,
     },
@@ -96,7 +93,6 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const MODEL_NAME_MAX_LENGTH = 40
 const CANCELED_TOKEN_MESSAGE = 'canceled'
 
 const ThangsModelDetails = ({ c, model }) => {
@@ -106,11 +102,6 @@ const ThangsModelDetails = ({ c, model }) => {
     false: axios.CancelToken.source(),
   })
   const currentUserId = parseInt(useCurrentUserId())
-  const modelNameUntrunced = model.name || ''
-  const modelName =
-    modelNameUntrunced.length > MODEL_NAME_MAX_LENGTH
-      ? modelNameUntrunced.slice(0, MODEL_NAME_MAX_LENGTH) + '...'
-      : modelNameUntrunced
 
   const [stateLikes, setStateLikes] = useState(model.likes || [])
 
@@ -146,17 +137,17 @@ const ThangsModelDetails = ({ c, model }) => {
     }
   }
 
+  const userName = R.pathOr('no-user', ['owner', 'username'], model)
   return (
     <div className={c.ModelCard_Content}>
       <Link
+        title={userName}
         to={{
-          pathname: `/${R.pathOr('no-user', ['owner', 'username'], model)}`,
+          pathname: `/${userName}`,
           state: { fromModel: true },
         }}
       >
-        <div title={R.pathOr('no-user', ['owner', 'username'], model)}>
-          <UserInline user={model.owner} maxLength={20} />
-        </div>
+        <UserInline user={model.owner} maxLength={20} />
       </Link>
 
       <div className={c.ModelCard_Row}>
@@ -200,29 +191,18 @@ const Anchor = ({ children, attributionUrl, to, noLink, ...props }) => {
   )
 }
 
-const CardContents = ({
-  className,
-  c,
-  model,
-  modelAttributionUrl,
-}) => {
-  if (model.resultSource === 'phyndexer' && !modelAttributionUrl) return null
+const CardContents = ({ className, c, model, modelAttributionUrl }) => {
   return (
-    <>
-      <div title={modelAttributionUrl || model.name || model.fileName}>
-        <Card className={classnames(className, c.ModelCard)}>
-          <ModelThumbnail
-            className={c.ModelCard_Thumbnail}
-            name={model.name}
-            model={model}
-          />
-        </Card>
-        <ThangsModelDetails
-          c={c}
+    <div title={modelAttributionUrl || model.name || model.fileName}>
+      <Card className={classnames(className, c.ModelCard)}>
+        <ModelThumbnail
+          className={c.ModelCard_Thumbnail}
+          name={model.name}
           model={model}
         />
-      </div>
-    </>
+      </Card>
+      <ThangsModelDetails c={c} model={model} />
+    </div>
   )
 }
 
@@ -243,10 +223,7 @@ const ModelCard = ({ className, model, geoRelated }) => {
         onClick={onAnchorClick}
         to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
         attributionUrl={modelAttributionUrl}
-        className={classnames({
-          [c.ModelCard_ExternalLink]: model.resultSource === 'phyndexer',
-          [c.ModelCard_ThangsLink]: model.resultSource !== 'phyndexer',
-        })}
+        className={c.ModelCard_ThangsLink}
         noLink={!modelPath}
       >
         <CardContents
