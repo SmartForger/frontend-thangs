@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { HowTo, Spinner } from '@components'
 import { useModels, usePerformanceMetrics } from '@hooks'
 import Toolbar from './Toolbar'
+import DebugToolBar from './DebugToolbar';
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -58,6 +59,13 @@ const HoopsModelViewer = ({ className, model, minimizeTools }) => {
     [hoops]
   )
 
+  const handleSetViewOrientation = useCallback(
+    orientation => {
+      hoops.changeViewOrientation(orientation)
+    },
+    [hoops]
+  )
+
   const handleColorChange = useCallback(
     (modeName, colorStr) => {
       hoops.changeColor(modeName, colorStr)
@@ -95,6 +103,7 @@ const HoopsModelViewer = ({ className, model, minimizeTools }) => {
           minimizeTools={minimizeTools}
         />
       )}
+      <DebugToolBar onHandleViewOrientation={handleSetViewOrientation} />
     </div>
   )
 }
@@ -112,15 +121,15 @@ const StatusIndicator = ({ status }) => {
           <div className={c.HoopsModelViewer_PlaceholderText}>Loading preview...</div>
         </>
       ) : (
-        status.isError && (
-          <>
-            <ErrorIcon />
-            <div className={c.HoopsModelViewer_PlaceholderText}>
-              Error Loading Preview
+          status.isError && (
+            <>
+              <ErrorIcon />
+              <div className={c.HoopsModelViewer_PlaceholderText}>
+                Error Loading Preview
             </div>
-          </>
-        )
-      )}
+            </>
+          )
+        )}
     </div>
   )
 }
@@ -132,10 +141,10 @@ const ModelViewer = ({ className, model, minimizeTools }) => {
   return seenHowTo ? (
     <HoopsModelViewer className={className} model={model} minimizeTools={minimizeTools} />
   ) : (
-    <div className={classnames(className, c.HoopsModelViewer_WebViewContainer)}>
-      <HowTo setSeenHowTo={setSeenHowTo} />
-    </div>
-  )
+      <div className={classnames(className, c.HoopsModelViewer_WebViewContainer)}>
+        <HowTo setSeenHowTo={setSeenHowTo} />
+      </div>
+    )
 }
 
 export default ModelViewer

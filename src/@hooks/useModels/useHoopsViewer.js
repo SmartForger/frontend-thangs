@@ -234,6 +234,10 @@ const useHoopsViewer = modelFilename => {
     }
   }, [])
 
+  const changeViewOrientation = useCallback(orientation => {
+    hoopsViewerRef.current.view.setViewOrientation(Communicator.ViewOrientation[orientation], 100);
+  }, [])
+
   const changeColor = useCallback((modeName, colorStr) => {
     ensureCurrentHoopsViewer()
     if (!['wire', 'mesh'].includes(modeName)) {
@@ -285,6 +289,7 @@ const useHoopsViewer = modelFilename => {
       resetImage,
       changeDrawMode,
       changeColor,
+      changeViewOrientation
     },
   }
 }
