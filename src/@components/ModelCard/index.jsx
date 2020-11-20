@@ -7,53 +7,123 @@ import { useStoreon } from 'storeon/react'
 import { ReactComponent as ChatIcon } from '@svg/icon-comment.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import * as types from '@constants/storeEventTypes'
-import { Card, ModelThumbnail, UserInline, EditModel } from '@components'
+import { ModelThumbnail, UserInline, EditModel } from '@components'
 import { createUseStyles } from '@style'
 import { useCurrentUserId } from '@hooks'
 import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { xs, sm, md, lg },
+  } = theme
+
   return {
     ModelCard: {
       position: 'relative',
+      backgroundColor: theme.variables.colors.cardBackground,
+      boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+      borderRadius: '.75rem',
+      border: `2px solid ${theme.colors.white[900]}`,
+
+      '&:hover': {
+        boxShadow: '0px 20px 80px rgba(0, 0, 0, 0.2)',
+        zIndex: 1,
+      },
+    },
+    ModelCard_UserLine: {
+      margin: '1.25rem',
     },
     ModelCard_Thumbnail: {
-      paddingBottom: 0,
-      minHeight: '12.25rem',
-      margin: 'auto',
-      maxWidth: '100%',
-      width: '100%',
-      borderRadius: '.5rem .5rem 0 0',
+      [xs]: {
+        width: '124px !important',
+        height: '146px !important',
+      },
+
+      [sm]: {
+        width: '124px !important',
+        height: '146px !important',
+      },
+
+      [md]: {
+        width: '133px !important',
+        height: '157px !important',
+      },
+
+      [lg]: {
+        width: '228px !important',
+        height: '270px !important',
+      },
+
+      margin: 'auto !important',
+      padding: '0 !important',
     },
-    ModelCard_Content: {
-      padding: '.5rem 0',
-      display: 'flex',
-      justifyContent: 'space-between',
+    ModelCard_Footer: {
+      marginLeft: '1.25rem',
+      marginBottom: '1.4rem',
+      marginRight: '1.25rem',
+
+      '& > *:last-child': {
+        marginTop: '.75rem',
+      },
+
+      [xs]: {
+        marginTop: '1rem',
+        width: '7.75rem',
+      },
+
+      [sm]: {
+        marginTop: '1rem',
+        width: '7.75rem',
+      },
+
+      [md]: {
+        marginTop: '1.5rem',
+        width: '11.31rem',
+      },
+
+      [lg]: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: '2rem',
+        marginBottom: '1.5rem',
+
+        minWidth: '13rem',
+
+        '& > *:last-child': {
+          marginTop: 0,
+        },
+      },
     },
     ModelCard_Name: {
-      ...theme.text.regularText,
-    },
-    ModelCard_DetailsInline: {
-      display: 'flex',
-      alignItems: 'center',
-      width: '100%',
-    },
-    ModelCard_ExternalName: {
-      marginLeft: '.5rem',
-      flexGrow: 1,
-      fontSize: '1rem',
-      fontWeight: '600',
-      color: theme.colors.black[500],
+      fontWeight: 500,
+      fontSize: '.875rem',
+      color: theme.colors.black[100],
+
       whiteSpace: 'nowrap',
-      overflow: 'hidden',
+      lineHeight: '1rem !important',
       textOverflow: 'ellipsis',
-      width: '20rem',
+      overflow: 'hidden',
+
+      [xs]: {
+        maxWidth: '7.75rem',
+      },
+
+      [sm]: {
+        maxWidth: '7.75rem',
+      },
+
+      [md]: {
+        maxWidth: '11.31rem',
+      },
+
+      [lg]: {
+        maxWidth: 'unset',
+      },
     },
-    ModelCard_Row: {
-      display: 'flex',
-      justifyContent: 'space-between',
-    },
-    ModelCard_ActivityIndicators: {
+
+    ModelCard_LikesAndComments: {
       display: 'flex',
       flexDirection: 'row',
 
@@ -63,26 +133,19 @@ const useStyles = createUseStyles(theme => {
     },
     ModelCard_ActivityCount: {
       ...theme.text.thumbnailActivityCountText,
+
+      '& svg, & path': {
+        fill: theme.colors.purple[900],
+      },
+
       display: 'flex',
       alignItems: 'center',
       letterSpacing: 0,
     },
-    ModelCard_Icon: {
-      '& path': {
-        fill: theme.colors.grey[300],
-      },
-    },
+
     ModelCard_Icon__liked: {
       '& path': {
         fill: theme.colors.gold[500],
-      },
-    },
-    ModelCard_ThangsLink: {
-      zIndex: 1,
-    },
-    ModelCard_ReportModelButton: {
-      '& > svg': {
-        margin: '0 !important',
       },
     },
     ModelCard_EditModel: {
@@ -95,7 +158,8 @@ const useStyles = createUseStyles(theme => {
 
 const CANCELED_TOKEN_MESSAGE = 'canceled'
 
-const ThangsModelDetails = ({ c, model }) => {
+const LikesAndComments = ({ model }) => {
+  const c = useStyles()
   const { dispatch } = useStoreon()
   const isLikedCancelTokens = useRef({
     true: axios.CancelToken.source(),
@@ -137,43 +201,28 @@ const ThangsModelDetails = ({ c, model }) => {
     }
   }
 
-  const userName = R.pathOr('no-user', ['owner', 'username'], model)
   return (
-    <div className={c.ModelCard_Content}>
-      <Link
-        title={userName}
-        to={{
-          pathname: `/${userName}`,
-          state: { fromModel: true },
+    <div className={c.ModelCard_LikesAndComments}>
+      <span className={c.ModelCard_ActivityCount}>
+        <ChatIcon />
+        &nbsp;{model.commentsCount}
+      </span>
+      <span
+        className={c.ModelCard_ActivityCount}
+        onClick={e => {
+          if (!isNaN(currentUserId)) {
+            e.preventDefault()
+            handleLikeButton()
+          }
         }}
       >
-        <UserInline user={model.owner} maxLength={20} />
-      </Link>
-
-      <div className={c.ModelCard_Row}>
-        <div className={c.ModelCard_ActivityIndicators}>
-          <span className={c.ModelCard_ActivityCount}>
-            <ChatIcon />
-            &nbsp;{model.commentsCount}
-          </span>
-          <span
-            className={c.ModelCard_ActivityCount}
-            onClick={e => {
-              if (!isNaN(currentUserId)) {
-                e.preventDefault()
-                handleLikeButton()
-              }
-            }}
-          >
-            <HeartIcon
-              className={classnames(c.ModelCard_Icon, {
-                [c.ModelCard_Icon__liked]: isLiked,
-              })}
-            />
-            &nbsp;{stateLikes.length}
-          </span>
-        </div>
-      </div>
+        <HeartIcon
+          className={classnames({
+            [c.ModelCard_Icon__liked]: isLiked,
+          })}
+        />
+        &nbsp;{stateLikes.length}
+      </span>
     </div>
   )
 }
@@ -191,17 +240,57 @@ const Anchor = ({ children, attributionUrl, to, noLink, ...props }) => {
   )
 }
 
-const CardContents = ({ className, c, model, modelAttributionUrl }) => {
+const CardContents = ({
+  className,
+  c,
+  model,
+  modelPath,
+  modelAttributionUrl,
+  isCurrentUserOwner,
+  geoRelated,
+}) => {
+  const userName = R.pathOr('no-user', ['owner', 'username'], model)
+  const onAnchorClick = useCallback(() => {
+    if (geoRelated) track('Geo Related Model Link', { path: modelPath })
+  }, [geoRelated, modelPath])
+  
   return (
-    <div title={modelAttributionUrl || model.name || model.fileName}>
-      <Card className={classnames(className, c.ModelCard)}>
+    <div
+      title={modelAttributionUrl || model.name || model.fileName}
+      className={classnames(className, c.ModelCard)}
+      data-cy={R.pathOr('unknown', (['name'], model))}
+    >
+      <Link
+        title={userName}
+        to={{
+          pathname: `/${userName}`,
+          state: { fromModel: true },
+        }}
+      >
+        <UserInline user={model.owner} maxLength={20} className={c.ModelCard_UserLine} />
+      </Link>
+
+      <Anchor
+        onClick={onAnchorClick}
+        to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
+        attributionUrl={modelAttributionUrl}
+        noLink={!modelPath}
+      >
         <ModelThumbnail
-          className={c.ModelCard_Thumbnail}
           name={model.name}
           model={model}
+          className={c.ModelCard_Thumbnail}
         />
-      </Card>
-      <ThangsModelDetails c={c} model={model} />
+
+        <div className={c.ModelCard_Footer}>
+          <div className={c.ModelCard_Name}>{model.name}</div>
+          <LikesAndComments model={model} />
+        </div>
+      </Anchor>
+
+      {isCurrentUserOwner && (
+        <EditModel className={c.ModelCard_EditModel} model={model} />
+      )}
     </div>
   )
 }
@@ -213,31 +302,17 @@ const ModelCard = ({ className, model, geoRelated }) => {
     model && model.attributionUrl && encodeURI(model.attributionUrl)
   const modelPath = model.id ? `/model/${model.id}` : modelAttributionUrl
   const isCurrentUserOwner = `${currentUserId}` === `${R.path(['owner', 'id'], model)}`
-  const onAnchorClick = useCallback(() => {
-    if (geoRelated) track('Geo Related Model Link', { path: modelPath })
-  }, [geoRelated, modelPath])
 
   return (
-    <div className={c.ModelCard} data-cy={R.pathOr('unknown', (['name'], model))}>
-      <Anchor
-        onClick={onAnchorClick}
-        to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
-        attributionUrl={modelAttributionUrl}
-        className={c.ModelCard_ThangsLink}
-        noLink={!modelPath}
-      >
-        <CardContents
-          className={className}
-          model={model}
-          c={c}
-          modelAttributionUrl={modelAttributionUrl}
-          modelPath={modelPath}
-        />
-      </Anchor>
-      {isCurrentUserOwner && (
-        <EditModel className={c.ModelCard_EditModel} model={model} />
-      )}
-    </div>
+    <CardContents
+      className={className}
+      model={model}
+      c={c}
+      modelAttributionUrl={modelAttributionUrl}
+      modelPath={modelPath}
+      isCurrentUserOwner={isCurrentUserOwner}
+      geoRelated={geoRelated}
+    />
   )
 }
 

@@ -176,7 +176,8 @@ export const thumbnailErrorText = {
 }
 
 export const thumbnailActivityCountText = {
-  color: colors.grey[300],
+  fontSize: '.75rem',
+  color: colors.purple[900],
   fontWeight: 500,
 }
 

@@ -14,13 +14,17 @@ const useStyles = createUseStyles(theme => {
     UserInline_Info: {
       marginLeft: '.5rem',
       flexGrow: 1,
-      fontSize: '1rem',
-      fontWeight: '600',
-      color: theme.colors.black[500],
+
+      lineHeight: '0.5rem',
+      fontSize: '0.75rem',
+      fontWeight: '500',
+      color: theme.colors.purple[900],
     },
     UserInline_SearchResult: {
       color: theme.colors.grey[300],
       lineHeight: '1rem',
+      fontWeight: '600',
+      fontSize: '1rem',
     },
   }
 })
