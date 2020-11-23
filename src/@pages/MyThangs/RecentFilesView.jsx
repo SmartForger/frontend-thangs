@@ -14,7 +14,11 @@ import classnames from 'classnames'
 import { useStarred } from '@hooks'
 import { pageview } from '@utilities/analytics'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+
   return {
     RecentFilesView: {},
     RecentFilesView_Row: {
@@ -26,26 +30,30 @@ const useStyles = createUseStyles(_theme => {
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
-      minWidth: '56rem',
+      [md]: {
+        minWidth: '56rem',
+      },
     },
     RecentFilesView_Starred: {
       display: 'flex',
       flexDirection: 'row',
-      flexWrap: 'wrap',
       position: 'relative',
+      overflowX: 'scroll',
+      overflowY: 'hidden',
+      whiteSpace: 'nowrap',
+
+      [md]: {
+        flexWrap: 'wrap',
+      },
 
       '& > div': {
         marginTop: '1.5rem',
       },
     },
     RecentFilesView_Loader: {
-      position: 'absolute',
       width: '100%',
-      height: '100%',
-      background: 'rgba(0,0,0,0.19)',
+      height: '5rem',
       zIndex: 1,
-      top: '-.75rem',
-      left: '-1rem',
       display: 'flex',
       alignItems: 'center',
     },

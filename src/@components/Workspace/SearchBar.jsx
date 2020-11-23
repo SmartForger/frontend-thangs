@@ -14,19 +14,23 @@ const useStyles = createUseStyles(theme => {
 
   return {
     SearchBar: {
-      width: '30rem',
+      width: '100%',
+
+      [md]: {
+        maxWidth: '30rem',
+      },
     },
     SearchBar_Wrapper: {
       alignItems: 'center',
       display: 'flex',
       position: 'relative',
-      margin: '0 1rem 1rem',
+      marginTop: '1.5rem',
       background: theme.colors.white[600],
       borderRadius: '.5rem',
       width: '100%',
 
       [md]: {
-        margin: 0,
+        margin: '0',
       },
 
       '& input': {

@@ -6,6 +6,10 @@ import classnames from 'classnames'
 import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+
   return {
     AllFilesView: {
       display: 'flex',
@@ -16,12 +20,20 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
-      minWidth: '56rem',
+      [md]: {
+        minWidth: '56rem',
+      },
     },
     AllFilesView_Folders: {
       display: 'flex',
       flexDirection: 'row',
-      flexWrap: 'wrap',
+      overflowX: 'scroll',
+      overflowY: 'hidden',
+      whiteSpace: 'nowrap',
+
+      [md]: {
+        flexWrap: 'wrap',
+      },
 
       '& > div': {
         marginTop: '1.5rem',
@@ -72,12 +84,12 @@ const AllFilesView = ({
   const sortedFolders = useMemo(() => {
     return !R.isEmpty(folders)
       ? folders
-        .sort((a, b) => {
-          if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
-          else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
-          return 0
-        })
-        .filter(folder => !folder.name.includes('//'))
+          .sort((a, b) => {
+            if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
+            else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
+            return 0
+          })
+          .filter(folder => !folder.name.includes('//'))
       : []
   }, [folders])
 

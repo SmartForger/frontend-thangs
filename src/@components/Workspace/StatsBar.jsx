@@ -12,6 +12,9 @@ const useStyles = createUseStyles(_theme => {
     StatsBar: {
       display: 'flex',
       flexDirection: 'row',
+      overflowX: 'scroll',
+      overflowY: 'hidden',
+      whiteSpace: 'nowrap',
     },
     StatsBar_Stat: {
       display: 'flex',
@@ -90,6 +93,7 @@ const StatsBar = ({ userActivity = {} }) => {
           <MetadataPrimary>Followers</MetadataPrimary>
         </div>
       </div>
+      <Spacer size={'3rem'} />
     </div>
   )
 }

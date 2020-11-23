@@ -6,7 +6,11 @@ import { CardCollection, ModelCards, Spinner, Spacer, TitleTertiary } from '@com
 import * as types from '@constants/storeEventTypes'
 import { pageview } from '@utilities/analytics'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+
   return {
     LikedModels: {
       display: 'flex',
@@ -17,7 +21,9 @@ const useStyles = createUseStyles(_theme => {
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
-      minWidth: '56rem',
+      [md]: {
+        minWidth: '56rem',
+      },
     },
     LikedModels_Spinner: {
       marginTop: '10rem',

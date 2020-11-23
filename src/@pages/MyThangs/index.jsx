@@ -25,12 +25,15 @@ import { pageview, perfTrack } from '@utilities/analytics'
 import { ContextMenuTrigger } from 'react-contextmenu'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+
   return {
     MyThangs: {
       height: '100%',
       display: 'flex',
       flexDirection: 'row',
-      overflowY: 'scroll',
     },
     MyThangs_OverlayWrapper: {
       display: 'none',
@@ -46,17 +49,37 @@ const useStyles = createUseStyles(theme => {
       scrollbarWidth: 'thin',
       scrollbarColor: '#C7C7C7 white',
 
-      '&::-webkit-scrollbar': {
-        width: 12,
+      [md]: {
+        '&::-webkit-scrollbar': {
+          width: 12,
+        },
+        '&::-webkit-scrollbar-track': {
+          background: 'white',
+          borderRadius: '.5rem',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: '#C7C7C7',
+          borderRadius: 20,
+          border: '3px solid white',
+        },
       },
-      '&::-webkit-scrollbar-track': {
-        background: 'white',
-        borderRadius: '.5rem',
+    },
+    MyThangs_DesktopOnly: {
+      display: 'none',
+
+      [md]: {
+        display: 'flex',
+        justifyContent: 'center',
+        flexDirection: 'column',
       },
-      '&::-webkit-scrollbar-thumb': {
-        backgroundColor: '#C7C7C7',
-        borderRadius: 20,
-        border: '3px solid white',
+    },
+    MyThangs_MobileOnly: {
+      display: 'flex',
+      justifyContent: 'center',
+      flexDirection: 'column',
+
+      [md]: {
+        display: 'none',
       },
     },
     Layout_blur: {
@@ -85,6 +108,13 @@ const useStyles = createUseStyles(theme => {
 
       '&:hover': {
         textDecoration: 'underline',
+      },
+    },
+    MyThangs_MainView: {
+      overflow: 'hidden',
+
+      [md]: {
+        overflow: 'visible',
       },
     },
     MyThangs_UploadZone: {
@@ -122,6 +152,7 @@ const MyThangs = () => {
   const history = useHistory()
   const c = useStyles({})
   const [currentFolderId, setCurrentFolderId] = useState(null)
+  const [isMobileNavOpen, setMobileNavOpen] = useState(false)
   const currentUserId = authenticationService.getCurrentUserId()
   const { dispatch, folders = {}, models = {}, shared = {}, thangs } = useStoreon(
     'folders',
@@ -190,7 +221,16 @@ const MyThangs = () => {
     [currentFolderId, dispatch]
   )
 
+  const openMobileNav = useCallback(() => {
+    setMobileNavOpen(true)
+  }, [])
+
+  const closeMobileNav = useCallback(() => {
+    setMobileNavOpen(false)
+  }, [])
+
   const viewProps = {
+    className: c.MyThangs_MainView,
     setCurrentView: handleCurrentView,
     setCurrentFolderId,
     handleEditModel,
@@ -222,11 +262,15 @@ const MyThangs = () => {
             isLoadingThangs={isLoading}
             models={modelData}
             setCurrentView={handleCurrentView}
+            isMobileNavOpen={isMobileNavOpen}
+            closeMobileNav={closeMobileNav}
           />
         </ContextMenuTrigger>
-
         <div className={c.MyThangs_ContentWrapper}>
-          <WorkspaceHeader setCurrentView={handleCurrentView} />
+          <WorkspaceHeader
+            setCurrentView={handleCurrentView}
+            openMobileNav={openMobileNav}
+          />
           <Spacer size={'7rem'} />
           {!isLoaded || isLoading ? (
             <Spinner className={c.Spinner} />

@@ -8,6 +8,10 @@ import * as types from '@constants/storeEventTypes'
 import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+
   return {
     SearchView: {
       display: 'flex',
@@ -17,7 +21,9 @@ const useStyles = createUseStyles(theme => {
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
-      minWidth: '56rem',
+      [md]: {
+        minWidth: '56rem',
+      },
     },
     SearchView_Folders: {
       display: 'flex',

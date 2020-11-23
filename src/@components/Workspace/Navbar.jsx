@@ -7,15 +7,20 @@ import {
   Button,
   Divider,
   FileExplorer,
+  ProfilePicture,
+  MetadataSecondary,
+  MultiLineBodyText,
   NavLink,
   Spacer,
   TitleTertiary,
 } from '@components'
 import { createUseStyles } from '@style'
+import classnames from 'classnames'
 import { authenticationService } from '@services'
 import { useCurrentUser, useExternalClick } from '@hooks'
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as ClockIcon } from '@svg/icon-clock.svg'
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
@@ -28,19 +33,30 @@ import * as types from '@constants/storeEventTypes'
 import { ContextMenuTrigger } from 'react-contextmenu'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+
   return {
     WorkspaceNavbar: {
-      width: '20.5rem',
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'row',
       backgroundColor: theme.colors.white[600],
+      display: 'none',
       flex: 'none',
+      flexDirection: 'row',
+      height: '100%',
+      position: 'absolute',
+      width: '100%',
+      zIndex: 1,
+
+      [md]: {
+        display: 'flex',
+        justifyContent: 'center',
+        position: 'relative',
+        width: '20.5rem',
+      },
     },
-    WorkspaceNavbar_Logo: {
-      marginTop: '3rem',
-      marginBottom: '4rem',
-      marginLeft: '1rem',
+    WorkspaceNavbar__visible: {
+      display: 'flex',
     },
     WorkspaceNavbar_NavContainer: {
       display: 'flex',
@@ -49,20 +65,31 @@ const useStyles = createUseStyles(theme => {
       flex: 'none',
     },
     WorkspaceNavbar_AddWrapper: {
-      marginLeft: '1rem',
       position: 'relative',
       zIndex: 2,
+
+      [md]: {
+        marginLeft: '1rem',
+      },
     },
     WorkspaceNavbar_AddButton: {
-      width: '50%',
+      width: '100%',
       display: 'flex',
       flexDirection: 'row',
       marginBottom: '2rem',
+
+      [md]: {
+        width: '50%',
+      },
     },
     WorkspaceNavbar_AddMenu: {
       position: 'absolute',
-      width: '12rem',
+      width: '100%',
       top: '2.375rem',
+
+      [md]: {
+        width: '12rem',
+      },
     },
     WorkspaceNavbar_NavLink: {
       marginLeft: '1rem',
@@ -93,6 +120,24 @@ const useStyles = createUseStyles(theme => {
         border: `3px solid ${theme.colors.white[600]}`,
         display: 'none',
       },
+    },
+    WorkspaceNavbar_MobileColumnOnly: {
+      display: 'flex',
+      flexDirection: 'column',
+      margin: '0 auto',
+
+      '& > div': {
+        margin: '0 auto',
+      },
+
+      [md]: {
+        display: 'none',
+      },
+    },
+    WorkspaceNavbar_NavHeader: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
     },
   }
 })
@@ -144,6 +189,8 @@ const WorkspaceNavbar = ({
   handleEditModel = noop,
   setCurrentView = noop,
   handleChangeFolder = noop,
+  isMobileNavOpen,
+  closeMobileNav = noop,
 }) => {
   const c = useStyles()
   const { dispatch, folderNav } = useStoreon('folderNav')
@@ -219,13 +266,36 @@ const WorkspaceNavbar = ({
   }, [history])
 
   return (
-    <nav className={c.WorkspaceNavbar}>
+    <nav
+      className={classnames(c.WorkspaceNavbar, {
+        [c.WorkspaceNavbar__visible]: isMobileNavOpen,
+      })}
+    >
       <Spacer size={'1rem'} />
       <div className={c.WorkspaceNavbar_NavContainer}>
-        <div className={c.WorkspaceNavbar_Logo}>
-          <Link to={'/'}>
-            <Logo />
-          </Link>
+        <Spacer size={'2rem'} />
+        <div className={c.WorkspaceNavbar_NavHeader}>
+          <div>
+            <Link to={'/'}>
+              <Logo />
+            </Link>
+          </div>
+          <ExitIcon onClick={closeMobileNav} />
+        </div>
+        <Spacer size={'2rem'} />
+        <div className={c.WorkspaceNavbar_MobileColumnOnly}>
+          <ProfilePicture
+            className={c.Profile_ProfilePicture}
+            size={'5rem'}
+            src={user.profile && user.profile.avatarUrl}
+            name={user.fullName || user.username}
+          />
+          <Spacer size={'.75rem'} />
+          <div>
+            <MultiLineBodyText>{user.fullName || user.username}</MultiLineBodyText>
+            <Spacer size={'.5rem'} />
+            <MetadataSecondary>{user.email}</MetadataSecondary>
+          </div>
         </div>
         <AddMenuDropdown currentFolderId={currentFolderId} folders={folders} />
         <div className={c.WorkspaceNavbar_ScrollableFiles}>

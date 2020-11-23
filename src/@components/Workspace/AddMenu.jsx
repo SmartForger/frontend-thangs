@@ -9,16 +9,25 @@ import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+
   return {
     AddMenu: {
       backgroundColor: theme.colors.white[400],
       boxShadow: '0px 8px 20px 0px rgba(0, 0, 0, 0.16)',
       borderRadius: '.5rem',
       zIndex: 2,
+      width: '100%',
 
       '& div': {
         display: 'flex',
         flexDirection: 'row',
+      },
+
+      [md]: {
+        width: 'auto',
       },
     },
     AddMenu_Item: {
@@ -28,6 +37,7 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
       width: '100%',
       outline: 'none',
+      justifyContent: 'center',
     },
     AddMenu_Icon: {
       '& path': {

@@ -7,6 +7,10 @@ import classnames from 'classnames'
 import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+
   return {
     SharedFilesView: {
       display: 'flex',
@@ -17,7 +21,9 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
-      minWidth: '56rem',
+      [md]: {
+        minWidth: '56rem',
+      },
     },
     SharedFilesView_Folders: {
       display: 'flex',
