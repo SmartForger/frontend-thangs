@@ -13,7 +13,6 @@ import {
 import {
   CLASSES,
   MODEL,
-  MODEL_TEST_TITLE,
   PATH,
   PROPS,
   TEXT,
@@ -36,7 +35,9 @@ describe('The Model Page', () => {
 
   it('Check model for name, author and description not empty', () => {
     goTo(PATH.PROFILE)
-    clickOnElement(MODEL_TEST_TITLE)
+    cy.get(`[title="${MODEL.TITLE}"] [class^=ModelCard_Thumbnail]`, {
+      timeout: 20000,
+    }).click()
     isElement(CLASSES.MODEL_PAGE_TITLE, PROPS.NOT_EMPTY)
     isElement(CLASSES.MODEL_PAGE_AUTHOR, PROPS.NOT_EMPTY)
     isElement(CLASSES.MODEL_PAGE_DESCRIPTION, PROPS.NOT_EMPTY)
@@ -44,26 +45,19 @@ describe('The Model Page', () => {
 
   it('Check model comments', () => {
     goTo(PATH.PROFILE)
-    clickOnElement(MODEL_TEST_TITLE)
-    cy.wait(2000)
+    cy.get(`[title="${MODEL.TITLE}"] [class^=ModelCard_Thumbnail]`, {
+      timeout: 20000,
+    }).click()
     enterValidValue(CLASSES.MODEL_ADD_COMMENT_FORM, commentInput)
     clickOnTextInsideClass(CLASSES.MODEL_ADD_COMMENT_FORM, TEXT.COMMENT)
     isTextInsideClass(CLASSES.MODEL_COMMENT_FORM, MODEL.COMMENT, PROPS.VISIBLE)
   })
 
-  /*it('Check comment on previous version model page', () => {
-    goTo(PATH.PROFILE)
-    clickOnElement(MODEL_TEST_TITLE)
-    isTextInsideClass(
-      CLASSES.MODEL_NEW_UPLOADED_COMMENT,
-      TEXT.NEW_VERSION_UPLOADED,
-      PROPS.VISIBLE
-    )
-  })*/
-
   it('Model has information: likes, downloads, date of upload', () => {
     goTo(PATH.PROFILE)
-    clickOnElement(MODEL_TEST_TITLE)
+    cy.get(`[title="${MODEL.TITLE}"] [class^=ModelCard_Thumbnail]`, {
+      timeout: 20000,
+    }).click()
     isTextInsideClass(CLASSES.MODEL_PAGE_STATS, TEXT.LIKES)
     isTextInsideClass(CLASSES.MODEL_PAGE_STATS, TEXT.DOWNLOADS)
     isTextInsideClass(CLASSES.MODEL_PAGE_STATS, TEXT.CURRENT_YEAR)

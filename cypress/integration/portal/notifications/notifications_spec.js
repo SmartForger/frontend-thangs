@@ -147,7 +147,9 @@ describe('User notifications', () => {
     })
     goTo(`/${USER.NAME}`)
 
-    clickOnElement(`[title="${MODEL.TITLE}"]`)
+    cy.get(`[title="${MODEL.TITLE}"] [class^=ModelCard_Thumbnail]`, {
+      timeout: 20000,
+    }).click()
 
     //like
     isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKE, PROPS.VISIBLE)
@@ -168,7 +170,9 @@ describe('User notifications', () => {
 
     //download
     goTo(`/${USER.NAME}`)
-    clickOnElement(`[title="${MODEL.TITLE}"]`)
+    cy.get(`[title="${MODEL.TITLE}"] [class^=ModelCard_Thumbnail]`, {
+      timeout: 20000,
+    }).click()
     clickOnTextInsideClass(CLASSES.MODEL_SIDEBAR_BUTTON, TEXT.DOWNLOAD_MODEL_BUTTON)
   })
 
