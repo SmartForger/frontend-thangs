@@ -113,7 +113,7 @@ const FolderForm = ({
       const newData = { ...data }
       if (!R.isEmpty(folder) && folder.root) {
         newData.name = `${getParentName(folder.name)}//${data.name}`
-      } else if (!R.isEmpty(parentFolder)) {
+      } else if (parentFolder && !R.isEmpty(parentFolder)) {
         newData.name = `${parentFolder.name}//${data.name}`
       }
       newData.root = !R.isEmpty(parentFolder)
