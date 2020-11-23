@@ -95,6 +95,7 @@ describe('User notifications', () => {
     isTextInsideClass(CLASSES.PROFILE_FOLLOW_BUTTON, TEXT.UNFOLLOW, PROPS.VISIBLE)
     cy.get(CLASSES.PROFILE_FOLLOW_BUTTON).click()
     isTextInsideClass(CLASSES.PROFILE_FOLLOW_BUTTON, TEXT.FOLLOW, PROPS.VISIBLE)
+    cy.wait(2000)
   })
 
   it('User2 follows and unfollows User1 from model', () => {
@@ -104,7 +105,9 @@ describe('User notifications', () => {
     })
     goTo(`/${USER.NAME}`)
 
-    cy.get(`[title="${MODEL.TITLE}"]`, { timeout: 10000 }).click()
+    cy.get(`[title="${MODEL.TITLE}"] [class^=ModelCard_Thumbnail]`, {
+      timeout: 20000,
+    }).click()
 
     isTextInsideClass(CLASSES.MODEL_PAGE_FOLLOW_BUTTON, TEXT.FOLLOW, PROPS.VISIBLE)
     cy.get(CLASSES.MODEL_PAGE_FOLLOW_BUTTON).first().click()
