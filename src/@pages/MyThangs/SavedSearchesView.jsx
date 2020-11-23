@@ -3,7 +3,7 @@ import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
-import { CardCollection, SearchCards, Spinner, Spacer, TitleTertiary } from '@components'
+import { CardCollectionSearch, SearchCards, Spinner, Spacer, TitleTertiary } from '@components'
 import * as types from '@constants/storeEventTypes'
 import { pageview } from '@utilities/analytics'
 
@@ -75,12 +75,12 @@ const SavedSearches = ({ className }) => {
         <Spacer size='2rem' />
         <TitleTertiary>Saved Searches</TitleTertiary>
         <Spacer size='2rem' />
-        <CardCollection
+        <CardCollectionSearch
           cardWidth={'22.5rem'}
           noResultsText='You have not saved and searches yet.'
         >
           <SearchCards items={savedSearches} />
-        </CardCollection>
+        </CardCollectionSearch>
       </div>
     </main>
   )

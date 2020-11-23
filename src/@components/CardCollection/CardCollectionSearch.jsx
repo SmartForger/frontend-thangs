@@ -7,30 +7,15 @@ import { PREVIEW_MODELS_SIZE } from '@store/modelPreviews/store'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { xs, sm, md, lg },
+    mediaQueries: { md },
   } = theme
 
   return {
     CardCollection: {
       display: 'grid',
+      gridTemplateColumns: ({ cardWidth }) =>
+        `repeat(auto-fit, minmax(${cardWidth}, 1fr))`,
       gap: '1rem',
-
-      [xs]: {
-        gridTemplateColumns: 'repeat(auto-fit, minmax(10.25rem, 1fr))',
-      },
-
-      [sm]: {
-        gridTemplateColumns: 'repeat(auto-fit, minmax(10.25rem, 1fr))',
-      },
-
-      [md]: {
-        gridTemplateColumns: 'repeat(auto-fit, minmax(13.81rem, 1fr))',
-      },
-
-      [lg]: {
-        gridTemplateColumns: 'repeat(auto-fit, minmax(21.25rem, 1fr))',
-      },
-
       width: '100%',
     },
     CardCollection__singleRow: {
@@ -40,19 +25,7 @@ const useStyles = createUseStyles(theme => {
     },
     ModelCard_Skeleton: {
       paddingBottom: 0,
-      [xs]: {
-        minHeight: '17.52rem',
-      },
-      [sm]: {
-        minHeight: '17.52rem',
-      },
-      [md]: {
-        minHeight: '19.2rem',
-      },
-      [lg]: {
-        minHeight: '26.75rem',
-      },
-
+      minHeight: '16.375rem',
       margin: 'auto',
       width: '100%',
       borderRadius: '.5rem',
@@ -60,13 +33,14 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const CardCollection = ({
+const CardCollectionSearch = ({
   maxPerRow = 4,
   noResultsText,
   isLoading = false,
   children,
+  cardWidth = '14.875rem',
 }) => {
-  const c = useStyles({})
+  const c = useStyles({ cardWidth })
 
   if (children) {
     const allItemsCount = Array.isArray(children)
@@ -97,4 +71,4 @@ const CardCollection = ({
   }
 }
 
-export default CardCollection
+export default CardCollectionSearch

@@ -1,4 +1,5 @@
 export { default as CardCollection } from './CardCollection'
+export { default as CardCollectionSearch } from './CardCollectionSearch'
 export { default as FolderCards } from './FolderCards'
 export { default as ModelCards } from './ModelCards'
 export { default as ModelSearchResults } from './ModelSearchResults'
