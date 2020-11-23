@@ -7,15 +7,34 @@ import { PREVIEW_MODELS_SIZE } from '@store/modelPreviews/store'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md },
+    mediaQueries: { xs, sm, md, lg },
   } = theme
 
   return {
     CardCollection: {
       display: 'grid',
-      gridTemplateColumns: ({ cardWidth }) =>
-        `repeat(auto-fit, minmax(${cardWidth}, 1fr))`,
       gap: '1rem',
+
+      [xs]: {
+        gridTemplateColumns: ({ cardWidth }) =>
+          `repeat(auto-fit, minmax(${cardWidth  || '10.25rem'}, 1fr))`,
+      },
+
+      [sm]: {
+        gridTemplateColumns: ({ cardWidth }) =>
+          `repeat(auto-fit, minmax(${cardWidth  || '10.25rem'}, 1fr))`,
+      },
+
+      [md]: {
+        gridTemplateColumns: ({ cardWidth }) =>
+          `repeat(auto-fit, minmax(${cardWidth  || '13.81rem'}, 1fr))`,
+      },
+
+      [lg]: {
+        gridTemplateColumns: ({ cardWidth }) =>
+          `repeat(auto-fit, minmax(${cardWidth  || '21.25rem'}, 1fr))`,
+      },
+
       width: '100%',
     },
     CardCollection__singleRow: {
@@ -38,9 +57,8 @@ const CardCollection = ({
   noResultsText,
   isLoading = false,
   children,
-  cardWidth = '14.875rem',
 }) => {
-  const c = useStyles({ cardWidth })
+  const c = useStyles({})
 
   if (children) {
     const allItemsCount = Array.isArray(children)

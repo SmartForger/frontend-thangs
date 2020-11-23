@@ -88,9 +88,7 @@ const useStyles = createUseStyles(theme => {
         justifyContent: 'space-between',
         marginTop: '2rem',
         marginBottom: '1.5rem',
-
-        minWidth: '13rem',
-
+        width: 'unset',
         '& > *:last-child': {
           marginTop: 0,
         },
@@ -283,7 +281,10 @@ const CardContents = ({
         />
 
         <div className={c.ModelCard_Footer}>
-          <div className={c.ModelCard_Name}>{model.name}</div>
+          <div className={c.ModelCard_Name}>{
+          model.name
+          //'Super_long_nameSuper_long_nameSuper_long_nameSuper_long_nameSuper_long_name'
+          }</div>
           <LikesAndComments model={model} />
         </div>
       </Anchor>
