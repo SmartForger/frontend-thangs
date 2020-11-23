@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { Route, Router, Switch, useLocation } from 'react-router-dom'
+import React from 'react'
+import { Route, Router, Switch } from 'react-router-dom'
 import { history } from './history'
 import {
   AboutUs,
@@ -28,7 +28,6 @@ import { StoreContext } from 'storeon/react'
 import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
 import store from 'store'
-import { locationChange } from '@utilities/analytics'
 
 export function AppFrame() {
   return (
@@ -38,17 +37,7 @@ export function AppFrame() {
   )
 }
 
-const usePageViews = () => {
-  let location = useLocation()
-  useEffect(() => {
-    locationChange()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname])
-}
-
 const App = () => {
-  usePageViews()
-
   return (
     <StoreContext.Provider value={store}>
       <ErrorBoundary>
