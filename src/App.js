@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Route, Router, Switch, useHistory } from 'react-router-dom'
+import { Route, Router, Switch, useLocation } from 'react-router-dom'
 import { history } from './history'
 import {
   AboutUs,
@@ -38,13 +38,16 @@ export function AppFrame() {
   )
 }
 
-const App = () => {
-  const history = useHistory()
-
+const usePageViews = () => {
+  let location = useLocation()
   useEffect(() => {
     locationChange()
-    history.listen(locationChange)
-  }, [history])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname])
+}
+
+const App = () => {
+  usePageViews()
 
   return (
     <StoreContext.Provider value={store}>
