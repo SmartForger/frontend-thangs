@@ -91,7 +91,7 @@ export default store => {
         try {
           const { data: uploadedUrlData } = await api({
             method: 'GET',
-            endpoint: `models/upload-url?fileName=${file.name}`,
+            endpoint: `models/upload-url?fileName=${encodeURIComponent(file.name)}`,
             cancelToken,
           })
 
