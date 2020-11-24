@@ -6,6 +6,7 @@ import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
 import { ReactComponent as ChatIcon } from '@svg/icon-comment.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
+import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
 import * as types from '@constants/storeEventTypes'
 import { ModelThumbnail, UserInline, EditModel } from '@components'
 import { createUseStyles } from '@style'
@@ -217,11 +218,11 @@ const LikesAndComments = ({ model }) => {
           }
         }}
       >
-        <HeartIcon
-          className={classnames({
-            [c.ModelCard_Icon__liked]: isLiked,
-          })}
-        />
+        {isLiked ? (
+          <HeartFilledIcon className={c.ModelCard_Icon__liked} />
+        ) : (
+          <HeartIcon />
+        )}
         &nbsp;{stateLikes.length}
       </span>
     </div>
@@ -284,9 +285,7 @@ const CardContents = ({
         />
 
         <div className={c.ModelCard_Footer}>
-          <div className={c.ModelCard_Name}>
-            {model.name}
-          </div>
+          <div className={c.ModelCard_Name}>{model.name}</div>
           <LikesAndComments model={model} />
         </div>
       </Anchor>
