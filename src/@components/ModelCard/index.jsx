@@ -24,8 +24,10 @@ const useStyles = createUseStyles(theme => {
       boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
       borderRadius: '.75rem',
       border: `2px solid ${theme.colors.white[900]}`,
+      transition: 'all 100ms',
 
       '&:hover': {
+        transition: 'all 300ms',
         boxShadow: '0px 20px 80px rgba(0, 0, 0, 0.2)',
         zIndex: 1,
       },
@@ -201,11 +203,12 @@ const LikesAndComments = ({ model }) => {
 
   return (
     <div className={c.ModelCard_LikesAndComments}>
-      <span className={c.ModelCard_ActivityCount}>
+      <span className={c.ModelCard_ActivityCount} title='Comments'>
         <ChatIcon />
         &nbsp;{model.commentsCount}
       </span>
       <span
+        title='Like'
         className={c.ModelCard_ActivityCount}
         onClick={e => {
           if (!isNaN(currentUserId)) {
@@ -251,7 +254,7 @@ const CardContents = ({
   const onAnchorClick = useCallback(() => {
     if (geoRelated) track('Geo Related Model Link', { path: modelPath })
   }, [geoRelated, modelPath])
-  
+
   return (
     <div
       title={modelAttributionUrl || model.name || model.fileName}
@@ -281,10 +284,9 @@ const CardContents = ({
         />
 
         <div className={c.ModelCard_Footer}>
-          <div className={c.ModelCard_Name}>{
-          model.name
-          //'Super_long_nameSuper_long_nameSuper_long_nameSuper_long_nameSuper_long_name'
-          }</div>
+          <div className={c.ModelCard_Name}>
+            {model.name}
+          </div>
           <LikesAndComments model={model} />
         </div>
       </Anchor>
