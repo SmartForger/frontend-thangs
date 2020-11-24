@@ -15,7 +15,7 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
-import { goTo, removeModelsFoldersFromMyThangs } from '../utils/common-methods'
+import { goTo } from '../utils/common-methods'
 import { PATH } from '../utils/constants'
 // import { authenticationService } from '../../src/@services';
 
@@ -23,7 +23,5 @@ before(() => {
   goTo(PATH.LANDING)
 })
 
-after(() => {
-  removeModelsFoldersFromMyThangs()
-}) // Alternatively you can use CommonJS syntax:
+// Alternatively you can use CommonJS syntax:
 // require('./commands')
