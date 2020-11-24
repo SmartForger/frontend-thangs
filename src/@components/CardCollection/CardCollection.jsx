@@ -14,24 +14,29 @@ const useStyles = createUseStyles(theme => {
     CardCollection: {
       display: 'grid',
       gap: '1rem',
+      margin: '0 auto', //FRESH
+      width: '100%', //FRESH
 
       [xs]: {
-        gridTemplateColumns: 'repeat(auto-fit, minmax(10.25rem, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, 164px)',
       },
 
       [sm]: {
-        gridTemplateColumns: 'repeat(auto-fit, minmax(10.25rem, 1fr))',
+        gap: '.5rem',
+        gridTemplateColumns: 'repeat(auto-fit, 221px)',
+      },
+
+      ['@media (min-width: 1194px)']: {
+        gridTemplateColumns: 'repeat(auto-fit, 221px)',
       },
 
       [md]: {
-        gridTemplateColumns: 'repeat(auto-fit, minmax(13.81rem, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, 221px)',
       },
 
       [lg]: {
-        gridTemplateColumns: 'repeat(auto-fit, minmax(21.25rem, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, 340px)',
       },
-
-      width: '100%',
     },
     CardCollection__singleRow: {
       [md]: {
@@ -71,25 +76,26 @@ const CardCollection = ({
   if (children) {
     const allItemsCount = Array.isArray(children)
       ? children.reduce(
-        (acc, child) => (child.props.items && acc + child.props.items.length) || 0,
-        0
-      )
+          (acc, child) => (child.props.items && acc + child.props.items.length) || 0,
+          0
+        )
       : (children.props.items && children.props.items.length) || 0
 
     return (
       <div
         className={classnames(c.CardCollection, {
-          [c.CardCollection__singleRow]: (allItemsCount < maxPerRow) && !isLoading,
+          [c.CardCollection__singleRow]: allItemsCount < maxPerRow && !isLoading,
         })}
       >
         {children}
-        {isLoading && [...Array(PREVIEW_MODELS_SIZE).keys()].map(key => (
-          <Skeleton
-            variant='rect'
-            className={c.ModelCard_Skeleton}
-            key={`skeletonCard-${key}`}
-          />
-        ))}
+        {isLoading &&
+          [...Array(PREVIEW_MODELS_SIZE).keys()].map(key => (
+            <Skeleton
+              variant='rect'
+              className={c.ModelCard_Skeleton}
+              key={`skeletonCard-${key}`}
+            />
+          ))}
       </div>
     )
   } else {

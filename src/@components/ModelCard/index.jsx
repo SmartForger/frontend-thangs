@@ -37,28 +37,25 @@ const useStyles = createUseStyles(theme => {
       margin: '1.25rem',
     },
     ModelCard_Thumbnail: {
+      margin: 'auto !important',
+      padding: '0 !important',
+      width: '100%',
+
       [xs]: {
-        width: '124px !important',
         height: '146px !important',
       },
 
       [sm]: {
-        width: '124px !important',
         height: '146px !important',
       },
 
       [md]: {
-        width: '133px !important',
         height: '157px !important',
       },
 
       [lg]: {
-        width: '228px !important',
         height: '270px !important',
       },
-
-      margin: 'auto !important',
-      padding: '0 !important',
     },
     ModelCard_Footer: {
       marginLeft: '1.25rem',
