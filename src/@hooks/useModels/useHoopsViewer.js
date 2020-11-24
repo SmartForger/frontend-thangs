@@ -238,6 +238,27 @@ const useHoopsViewer = modelFilename => {
     hoopsViewerRef.current.view.setViewOrientation(Communicator.ViewOrientation[orientation], 100);
   }, [])
 
+  const getViewerSnapshot = useCallback((fileName) => {
+    hoopsViewerRef.current.takeSnapshot()
+      .then((imgElement) => {
+        let imageHeight = containerRef.current.childNodes[0].offsetHeight;
+        let imageWidth = containerRef.current.childNodes[0].offsetWidth;
+        let timestamp = new Date().toLocaleString();
+        let myCanvasElement = document.createElement("canvas");
+        myCanvasElement.width = imageWidth;
+        myCanvasElement.height = imageHeight;
+        let context = myCanvasElement.getContext('2d');
+        context.fillStyle = "white";
+        context.fillRect(0, 0, imageWidth, imageHeight);
+        context.drawImage(imgElement, 0, 0, imageWidth, imageHeight);
+        let img = myCanvasElement.toDataURL("image/png");
+        let link = document.createElement('a');
+        link.download = `${fileName}-${timestamp}.png`;
+        link.href = img;
+        link.click();
+      });
+  }, [])
+
   const changeColor = useCallback((modeName, colorStr) => {
     ensureCurrentHoopsViewer()
     if (!['wire', 'mesh'].includes(modeName)) {
@@ -289,7 +310,8 @@ const useHoopsViewer = modelFilename => {
       resetImage,
       changeDrawMode,
       changeColor,
-      changeViewOrientation
+      changeViewOrientation,
+      getViewerSnapshot
     },
   }
 }

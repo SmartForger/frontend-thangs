@@ -66,6 +66,13 @@ const HoopsModelViewer = ({ className, model, minimizeTools }) => {
     [hoops]
   )
 
+  const handleGetViewerSnapshot = useCallback(
+    (fileName) => {
+      hoops.getViewerSnapshot(fileName);
+    },
+    [hoops]
+  )
+
   const handleColorChange = useCallback(
     (modeName, colorStr) => {
       hoops.changeColor(modeName, colorStr)
@@ -103,7 +110,11 @@ const HoopsModelViewer = ({ className, model, minimizeTools }) => {
           minimizeTools={minimizeTools}
         />
       )}
-      <DebugToolBar onHandleViewOrientation={handleSetViewOrientation} />
+      <DebugToolBar
+        modelName={model.name}
+        onChangeViewOrientation={handleSetViewOrientation}
+        onGetViewerSnapshot={handleGetViewerSnapshot}
+      />
     </div>
   )
 }
