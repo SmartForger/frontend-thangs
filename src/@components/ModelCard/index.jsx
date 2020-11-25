@@ -189,6 +189,10 @@ const useStyles = createUseStyles(theme => {
         fill: theme.colors.purple[900],
       },
 
+      '& > *': {
+        marginRight: '.25rem',
+      },
+
       display: 'flex',
       alignItems: 'center',
       letterSpacing: 0,
@@ -258,7 +262,7 @@ const LikesAndComments = ({ model }) => {
     <div className={c.ModelCard_LikesAndComments}>
       <span className={c.ModelCard_ActivityCount} title='Comments'>
         <ChatIcon />
-        &nbsp;{model.commentsCount}
+        {model.commentsCount}
       </span>
       <span
         title='Like'
@@ -275,7 +279,7 @@ const LikesAndComments = ({ model }) => {
         ) : (
           <HeartIcon />
         )}
-        &nbsp;{stateLikes.length}
+        {stateLikes.length}
       </span>
     </div>
   )
