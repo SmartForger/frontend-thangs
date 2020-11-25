@@ -37,6 +37,7 @@ const useStyles = createUseStyles(theme => {
       [lg]: {
         gridTemplateColumns: 'repeat(auto-fit, 340px)',
       },
+      justifyContent: 'center',
     },
     CardCollection__singleRow: {
       [md]: {

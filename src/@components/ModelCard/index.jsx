@@ -47,6 +47,44 @@ const useStyles = createUseStyles(theme => {
     },
     ModelCard_UserLine: {
       margin: '1.25rem',
+
+      [xs]: {
+        marginTop: '1.25rem',
+        marginBottom: '1rem',
+      },
+
+      [sm]: {
+        marginTop: '1.25rem',
+        marginBottom: '1rem',
+      },
+
+      [md]: {
+        marginTop: '1rem',
+        marginBottom: '1.5rem',
+
+        '& > div': {
+          width: '1.5rem !important',
+          height: '1.5rem !important',
+          '& > img': {
+            width: '1.5rem !important',
+            height: '1.5rem !important',
+          },
+        },
+      },
+
+      [lg]: {
+        marginTop: '1.5rem',
+        marginBottom: '2rem',
+
+        '& > div': {
+          width: '1.875rem !important',
+          height: '1.875rem !important',
+          '& > img': {
+            width: '1.875rem !important',
+            height: '1.875rem !important',
+          },
+        },
+      },
     },
     ModelCard_Thumbnail: {
       margin: 'auto !important',
@@ -71,11 +109,11 @@ const useStyles = createUseStyles(theme => {
     },
     ModelCard_Footer: {
       marginLeft: '1.25rem',
-      marginBottom: '1.4rem',
+      marginBottom: '1.25rem',
       marginRight: '1.25rem',
 
       '& > *:last-child': {
-        marginTop: '.75rem',
+        marginTop: '.375rem',
       },
 
       [xs]: {
@@ -91,6 +129,9 @@ const useStyles = createUseStyles(theme => {
       [md]: {
         marginTop: '1.5rem',
         width: '11.31rem',
+        '& > *:last-child': {
+          marginTop: '.375rem',
+        },
       },
 
       [lg]: {
