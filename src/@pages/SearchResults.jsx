@@ -316,7 +316,7 @@ const Page = () => {
   }, [dispatch])
 
   const thangsModels = R.path(['data', 'matches'], thangs) || []
-  const phyndexerModels =  R.path(['data', 'matches'], phyndexer) || []
+  const phyndexerModels = R.path(['data', 'matches'], phyndexer) || []
   const resultCount = phyndexerModels.length + thangsModels.length
 
   return (
