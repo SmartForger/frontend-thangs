@@ -26,7 +26,7 @@ const useStyles = createUseStyles(theme => {
         gridTemplateColumns: 'repeat(auto-fit, 221px)',
       },
 
-      ['@media (min-width: 1194px)']: {
+      '@media (min-width: 1194px)': {
         gridTemplateColumns: 'repeat(auto-fit, 221px)',
       },
 
