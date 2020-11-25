@@ -19,6 +19,18 @@ const useStyles = createUseStyles(theme => {
   } = theme
 
   return {
+    '@keyframes spinner': {
+      from: {
+        '-moz-transform': 'rotateY(0deg)',
+        '-ms-transform': 'rotateY(0deg)',
+        transform: 'rotateY(0deg)',
+      },
+      to: {
+        '-moz-transform': 'rotateY(-180deg)',
+        '-ms-transform': 'rotateY(-180deg)',
+        transform: 'rotateY(-180deg)',
+      },
+    },
     ModelCard: {
       position: 'relative',
       backgroundColor: theme.variables.colors.cardBackground,
@@ -140,11 +152,13 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       letterSpacing: 0,
     },
-
     ModelCard_Icon__liked: {
-      '& path': {
-        fill: theme.colors.gold[500],
-      },
+      animation: '$spinner 250ms linear 0s 1',
+
+      '-webkit-transform-style': 'preserve-3d',
+      '-moz-transform-style': 'preserve-3d',
+      '-ms-transform-style': 'preserve-3d',
+      'transform-style': 'preserve-3d',
     },
     ModelCard_EditModel: {
       position: 'absolute',
