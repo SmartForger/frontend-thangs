@@ -7,37 +7,33 @@ import { PREVIEW_MODELS_SIZE } from '@store/modelPreviews/store'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { xs, sm, md, lg },
+    mediaQueries: { xs, sm, md, lg, xxl_1454, md_972, xs_352 },
   } = theme
 
   return {
     CardCollection: {
       display: 'grid',
       gap: '1rem',
-      margin: '0 auto', //FRESH
-      width: '100%', //FRESH
+      margin: '0 auto',
+      width: '100%',
+      justifyContent: 'center',
 
-      [xs]: {
+      [xs_352]: {
+        gap: '.5rem',
         gridTemplateColumns: 'repeat(auto-fit, 164px)',
       },
 
       [sm]: {
         gap: '.5rem',
+      },
+
+      [md_972]: {
         gridTemplateColumns: 'repeat(auto-fit, 221px)',
       },
 
-      '@media (min-width: 1194px)': {
-        gridTemplateColumns: 'repeat(auto-fit, 221px)',
-      },
-
-      [md]: {
-        gridTemplateColumns: 'repeat(auto-fit, 221px)',
-      },
-
-      [lg]: {
+      [xxl_1454]: {
         gridTemplateColumns: 'repeat(auto-fit, 340px)',
       },
-      justifyContent: 'center',
     },
     CardCollection__singleRow: {
       [md]: {

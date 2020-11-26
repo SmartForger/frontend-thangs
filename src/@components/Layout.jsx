@@ -43,14 +43,14 @@ const useStyles = createUseStyles(theme => {
       margin: 'auto',
       maxWidth: theme.variables.maxWidth,
       paddingTop: '2rem',
-      paddingRight: '1rem',
       paddingBottom: '0',
-      paddingLeft: '1rem',
+      paddingRight: '.5rem',
+      paddingLeft: '.5rem',
       minHeight: '40rem',
 
       [md]: {
-        paddingRight: '4rem',
-        paddingLeft: '4rem',
+        paddingRight: '2rem',
+        paddingLeft: '2rem',
         flexDirection: 'row',
       },
     },
