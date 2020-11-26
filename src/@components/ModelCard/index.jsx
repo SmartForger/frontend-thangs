@@ -46,25 +46,22 @@ const useStyles = createUseStyles(theme => {
       },
     },
     ModelCard_UserLine: {
-      margin: '1.25rem',
+      margin: '1.125rem',
 
       [xs]: {
-        marginTop: '1.25rem',
         marginBottom: '1rem',
       },
 
       [sm]: {
-        marginTop: '1.25rem',
         marginBottom: '1rem',
       },
 
       [md]: {
-        marginTop: '1.25rem',
         marginBottom: '1.5rem',
       },
 
       [lg]: {
-        marginTop: '1.5rem',
+        marginTop: '1.375rem',
         marginBottom: '2rem',
 
         '& > div': {
@@ -100,7 +97,7 @@ const useStyles = createUseStyles(theme => {
     },
     ModelCard_Footer: {
       marginLeft: '1.25rem',
-      marginBottom: '1.25rem',
+      marginBottom: '1.125rem',
       marginRight: '1.25rem',
 
       '& > *:last-child': {
@@ -131,7 +128,7 @@ const useStyles = createUseStyles(theme => {
         alignItems: 'center',
         justifyContent: 'space-between',
         marginTop: '2rem',
-        marginBottom: '1.5rem',
+        marginBottom: '1.375rem',
         width: 'unset',
         '& > *:last-child': {
           marginTop: 0,
