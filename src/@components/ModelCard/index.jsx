@@ -59,17 +59,8 @@ const useStyles = createUseStyles(theme => {
       },
 
       [md]: {
-        marginTop: '1rem',
+        marginTop: '1.25rem',
         marginBottom: '1.5rem',
-
-        '& > div': {
-          width: '1.5rem !important',
-          height: '1.5rem !important',
-          '& > img': {
-            width: '1.5rem !important',
-            height: '1.5rem !important',
-          },
-        },
       },
 
       [lg]: {
@@ -325,7 +316,12 @@ const CardContents = ({
           state: { fromModel: true },
         }}
       >
-        <UserInline user={model.owner} maxLength={20} className={c.ModelCard_UserLine} />
+        <UserInline
+          user={model.owner}
+          size={24}
+          maxLength={20}
+          className={c.ModelCard_UserLine}
+        />
       </Link>
 
       <Anchor
