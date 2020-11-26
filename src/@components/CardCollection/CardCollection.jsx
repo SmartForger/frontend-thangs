@@ -7,7 +7,7 @@ import { PREVIEW_MODELS_SIZE } from '@store/modelPreviews/store'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { xs, sm, md, lg, xxl_1454, md_972, xs_352 },
+    mediaQueries: { xs_352, sm, md, md_972, xxl_1454 },
   } = theme
 
   return {
@@ -42,16 +42,13 @@ const useStyles = createUseStyles(theme => {
     },
     ModelCard_Skeleton: {
       paddingBottom: 0,
-      [xs]: {
+      [xs_352]: {
         minHeight: '17.52rem',
       },
-      [sm]: {
-        minHeight: '17.52rem',
-      },
-      [md]: {
+      [md_972]: {
         minHeight: '19.2rem',
       },
-      [lg]: {
+      [xxl_1454]: {
         minHeight: '26.75rem',
       },
 

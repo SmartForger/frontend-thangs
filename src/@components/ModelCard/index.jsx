@@ -15,7 +15,7 @@ import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { xs, sm, md, lg },
+    mediaQueries: { xs_352, md_972, xxl_1454 },
   } = theme
 
   return {
@@ -48,19 +48,15 @@ const useStyles = createUseStyles(theme => {
     ModelCard_UserLine: {
       margin: '1.125rem',
 
-      [xs]: {
+      [xs_352]: {
         marginBottom: '1rem',
       },
 
-      [sm]: {
-        marginBottom: '1rem',
-      },
-
-      [md]: {
+      [md_972]: {
         marginBottom: '1.5rem',
       },
 
-      [lg]: {
+      [xxl_1454]: {
         marginTop: '1.375rem',
         marginBottom: '2rem',
 
@@ -79,19 +75,15 @@ const useStyles = createUseStyles(theme => {
       padding: '0 !important',
       width: '100%',
 
-      [xs]: {
+      [xs_352]: {
         height: '146px !important',
       },
 
-      [sm]: {
-        height: '146px !important',
-      },
-
-      [md]: {
+      [md_972]: {
         height: '157px !important',
       },
 
-      [lg]: {
+      [xxl_1454]: {
         height: '270px !important',
       },
     },
@@ -104,17 +96,12 @@ const useStyles = createUseStyles(theme => {
         marginTop: '.375rem',
       },
 
-      [xs]: {
+      [xs_352]: {
         marginTop: '1rem',
         width: '7.75rem',
       },
 
-      [sm]: {
-        marginTop: '1rem',
-        width: '7.75rem',
-      },
-
-      [md]: {
+      [md_972]: {
         marginTop: '1.5rem',
         width: '11.31rem',
         '& > *:last-child': {
@@ -122,7 +109,7 @@ const useStyles = createUseStyles(theme => {
         },
       },
 
-      [lg]: {
+      [xxl_1454]: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -145,19 +132,15 @@ const useStyles = createUseStyles(theme => {
       textOverflow: 'ellipsis',
       overflow: 'hidden',
 
-      [xs]: {
+      [xs_352]: {
         maxWidth: '7.75rem',
       },
 
-      [sm]: {
-        maxWidth: '7.75rem',
-      },
-
-      [md]: {
+      [md_972]: {
         maxWidth: '11.31rem',
       },
 
-      [lg]: {
+      [xxl_1454]: {
         maxWidth: 'unset',
       },
     },
