@@ -30,6 +30,7 @@ import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
 import store from 'store'
 import { authenticationService } from '@services'
+import ScrollToTop from './@utilities/scrollToTop'
 
 export function AppFrame() {
   return (
@@ -52,13 +53,18 @@ const App = () => {
   })
 
   return (
-    <OptimizelyProvider optimizely={optimizely} timeout={500} user={{ id: ( user || {}).id }}>
+    <OptimizelyProvider
+      optimizely={optimizely}
+      timeout={500}
+      user={{ id: (user || {}).id }}
+    >
       <StoreContext.Provider value={store}>
         <ErrorBoundary>
           <FlashContextProvider>
             <ThemeProvider>
               <GlobalStyles />
               <AppAnalytics />
+              <ScrollToTop />
               <Switch>
                 <Route
                   exact
