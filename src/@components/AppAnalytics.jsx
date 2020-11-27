@@ -20,7 +20,8 @@ const AppAnalytics = () => {
   const analyticsInitialized = useRef(false)
   const { title, description } = usePageMeta('App')
   const user = authenticationService.getCurrentUser()
-  const [_isEnabled, variables] = useFeature('sortbydefault', { autoUpdate: true })
+  // eslint-disable-next-line no-unused-vars
+  const [isEnabled, variables] = useFeature('sortbydefault', { autoUpdate: true })
 
   useEffect(() => {
     ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID)

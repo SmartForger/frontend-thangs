@@ -274,7 +274,8 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
   }, [showSignin, showSignup, sortBy])
   const { title, description } = usePageMeta(pageMetaKey)
   const { id } = useParams()
-  const [_isEnabled, variables] = useFeature('sortbydefault', { autoUpdate: true })
+  // eslint-disable-next-line no-unused-vars
+  const [isEnabled, variables] = useFeature('sortbydefault', { autoUpdate: true })
   const defaultSort = (variables && variables.key) || 'likes'
   useEffect(() => {
     if (newSignUp) {
