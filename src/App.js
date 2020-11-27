@@ -52,7 +52,7 @@ const App = () => {
   })
 
   return (
-    <OptimizelyProvider optimizely={optimizely} timeout={500} user={{ id: user.id }}>
+    <OptimizelyProvider optimizely={optimizely} timeout={500} user={{ id: ( user || {}).id }}>
       <StoreContext.Provider value={store}>
         <ErrorBoundary>
           <FlashContextProvider>
