@@ -40,7 +40,7 @@ const useStyles = createUseStyles(theme => {
       transition: 'all 100ms',
 
       '&:hover': {
-        transition: 'all 300ms',
+        transition: 'all 400ms',
         boxShadow: '0px 20px 80px rgba(0, 0, 0, 0.2)',
         zIndex: 1,
       },
