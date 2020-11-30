@@ -1,5 +1,5 @@
 import * as types from '@constants/storeEventTypes'
-import { api, storageService, uploadFile } from '@services'
+import { api, uploadFile } from '@services'
 import { track } from '@utilities/analytics'
 import * as R from 'ramda'
 
@@ -7,6 +7,18 @@ const getInitAtom = () => ({
   isLoading: false,
   isError: false,
   data: {},
+  isAssembly: false,
+  assemblyData: {},
+  missingFiles: [
+    {
+      filename: 'Tail.stl',
+      skipped: false,
+    },
+    {
+      filename: 'Head.stl',
+      skipped: false,
+    },
+  ],
 })
 
 const noop = () => null
@@ -76,6 +88,40 @@ export default store => {
     }
   })
 
+  store.on(types.SET_IS_ASSEMBLY, (state, { isAssembly }) => {
+    return {
+      uploadFiles: {
+        ...state.uploadFiles,
+        isAssembly,
+      },
+    }
+  })
+
+  store.on(types.SET_MISSING_FILES, (state, { files }) => {
+    return {
+      uploadFiles: {
+        ...state.uploadFiles,
+        missingFiles: files,
+      },
+    }
+  })
+
+  store.on(types.SKIP_MISSING_FILE, (state, { filename }) => {
+    return {
+      uploadFiles: {
+        ...state.uploadFiles,
+        missingFiles: state.uploadFiles.missingFiles.map(f =>
+          f.filename === filename
+            ? {
+                ...f,
+                skipped: true,
+              }
+            : f
+        ),
+      },
+    }
+  })
+
   store.on(
     types.UPLOAD_FILE,
     async (_, { id, file, errorState = undefined /*, cancelToken*/ }) => {
@@ -89,32 +135,6 @@ export default store => {
       })
       if (!errorState || !errorState.error) {
         uploadFile(id, file)
-
-        // try {
-        //   const { data: uploadedUrlData } = await api({
-        //     method: 'GET',
-        //     endpoint: `models/upload-url?fileName=${encodeURIComponent(file.name)}`,
-        //     cancelToken,
-        //   })
-
-        //   await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file, {
-        //     cancelToken,
-        //   })
-
-        //   store.dispatch(types.CHANGE_UPLOAD_FILE, {
-        //     id,
-        //     data: uploadedUrlData,
-        //     isLoading: false,
-        //     isError: false,
-        //   })
-        // } catch (e) {
-        //   store.dispatch(types.CHANGE_UPLOAD_FILE, {
-        //     id,
-        //     data: e,
-        //     isLoading: false,
-        //     isError: true,
-        //   })
-        // }
       }
     }
   )

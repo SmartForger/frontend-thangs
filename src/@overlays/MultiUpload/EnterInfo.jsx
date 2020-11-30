@@ -1,15 +1,14 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as R from 'ramda'
 import {
   Button,
   Dropdown,
   Input,
   MetadataPrimary,
-  MetadataSecondary,
   ModelThumbnail,
   Spacer,
-  SingleLineBodyText,
   Textarea,
+  Toggle,
   TitleTertiary,
 } from '@components'
 import { useForm } from '@hooks'
@@ -19,9 +18,6 @@ import { CATEGORIES } from '@constants/fileUpload'
 import { overlayview, track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
-  const {
-    mediaQueries: { md },
-  } = theme
   return {
     EnterInfo: {
       width: '27.75rem',
@@ -36,7 +32,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-start',
-      margin: '1rem 1rem',
+      width: '100%',
     },
     EnterInfo_OverlayHeader: {
       lineHeight: '1.5rem !important',
@@ -76,19 +72,21 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'space-between',
     },
     EnterInfo_Row: {
-      height: '100%',
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-      margin: '0 1rem',
-
-      [md]: {
-        height: 'unset',
-      },
 
       '& svg': {
         flex: 'none',
       },
+    },
+    EnterInfo_FieldRow: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center'
+    },
+    EnterInfo_Field: {
+      marginBottom: '1rem',
     },
     EnterInfo_FileName: {
       textOverflow: 'ellipsis',
@@ -99,11 +97,8 @@ const useStyles = createUseStyles(theme => {
     EnterInfo_Column: {
       display: 'flex',
       flexDirection: 'column',
+      alignItems: 'center',
       justifyContent: 'center',
-
-      [md]: {
-        alignItems: 'center',
-      },
     },
     EnterInfo_UploadColumn: {
       height: '100%',
@@ -141,12 +136,8 @@ const useStyles = createUseStyles(theme => {
     },
     EnterInfo_ButtonWrapper: {
       display: 'flex',
-      flexDirection: 'column-reverse',
+      flexDirection: 'row',
       justifyContent: 'space-between',
-
-      [md]: {
-        flexDirection: 'row',
-      },
 
       '& button': {
         width: '100%',
@@ -158,7 +149,6 @@ const useStyles = createUseStyles(theme => {
       fontWeight: 500,
       padding: '.625rem 1rem',
       borderRadius: '.5rem',
-      margin: '0 1rem',
     },
     EnterInfo_Thumbnail: {
       flex: 'none',
@@ -176,11 +166,6 @@ const useStyles = createUseStyles(theme => {
         width: '18rem',
         display: 'inline-block',
         lineHeight: '1rem',
-        margin: '0 1rem',
-
-        [md]: {
-          margin: 'unset',
-        },
       },
     },
     EnterInfo_PrivacyText: {
@@ -192,10 +177,11 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 const EnterInfo = ({
-  activeView,
+  activeStep,
   errorMessage = '',
   folderId,
   folders = {},
+  isAssembly = false,
   handleContinue = noop,
   handleUpdate = noop,
   handleSkipToEnd = noop,
@@ -205,11 +191,12 @@ const EnterInfo = ({
 }) => {
   const c = useStyles({})
   const firstInputRef = useRef(null)
-  const activeId = Object.keys(uploadFiles)[activeView]
+  const activeId = Object.keys(uploadFiles)[activeStep]
   const model = useMemo(() => uploadFiles && uploadFiles[activeId], [
     activeId,
     uploadFiles,
   ])
+  const [applyRemaing, setApplyRemaining] = useState(false)
   const initialState = {
     name: (model && model.name) || '',
     description: '',
@@ -225,6 +212,11 @@ const EnterInfo = ({
     initialState,
   })
 
+  const folderPrivate = useMemo(() => {
+    const folder = folders.find(folder => folder.id === inputState.folderId)
+    return folder && !folder.isPublic
+  }, [inputState, folders])
+
   const handleOnInputChange = useCallback(
     (key, value) => {
       onInputChange(key, value)
@@ -236,9 +228,9 @@ const EnterInfo = ({
   const handleSubmit = useCallback(
     data => {
       handleUpdate({ id: activeId, data })
-      handleContinue({ selectedFolderId: inputState.folderId })
+      handleContinue({ selectedFolderId: inputState.folderId, step: activeStep + 1 })
     },
-    [handleUpdate, activeId, handleContinue, inputState]
+    [handleUpdate, activeId, handleContinue, inputState, activeStep]
   )
 
   const handleFolderChange = useCallback(
@@ -247,9 +239,9 @@ const EnterInfo = ({
         handleOnInputChange('folderId', e.value)
         if (e.value !== 'files') {
           const folder = folders.find(folder => folder.id === e.value)
-          handleOnInputChange('isPublic', folder.isPublic)
-        } else {
-          handleOnInputChange('isPublic', true)
+          if (!folder.isPublic) {
+            handleOnInputChange('isPublic', false)
+          }
         }
       }
     },
@@ -261,7 +253,7 @@ const EnterInfo = ({
       return setErrorMessage('Model name is required')
     if (!inputState.description || inputState.description === '')
       return setErrorMessage('Model description is required')
-    const filesLeft = Object.keys(uploadFiles).slice(activeView)
+    const filesLeft = Object.keys(uploadFiles).slice(activeStep)
     filesLeft.forEach(id => {
       const newData = { ...inputState }
       newData.name = uploadFiles[id].name
@@ -273,7 +265,7 @@ const EnterInfo = ({
     inputState,
     setErrorMessage,
     uploadFiles,
-    activeView,
+    activeStep,
     handleSkipToEnd,
     handleUpdate,
   ])
@@ -284,177 +276,165 @@ const EnterInfo = ({
   }, [model])
 
   const selectedFolder = useMemo(() => {
-    if (!folderId || !folders || !folders.length)
+    if (!folderId || folderId === 'files' || !folders || !folders.length)
       return { value: 'files', label: 'My Public Files' }
     const folder = folders.find(folder => folder.id.toString() === folderId.toString())
-    handleOnInputChange('isPublic', folder.isPublic)
+    if (folder && !folder.isPublic) {
+      handleOnInputChange('isPublic', false)
+    }
     return { value: folderId, label: folder.name.replace(new RegExp('//', 'g'), '/') }
   }, [folderId, folders, handleOnInputChange])
 
   const usersFolders = useMemo(() => {
     return folders && folders.length
       ? folders.map(folder => ({
-        value: folder.id,
-        label: folder.name.replace(new RegExp('//', 'g'), '/'),
-      }))
+          value: folder.id,
+          label: folder.name.replace(new RegExp('//', 'g'), '/'),
+        }))
       : []
   }, [folders])
-
-  useEffect(() => {
-    overlayview('MultiUpload - EnterInfo')
-    firstInputRef.current.focus()
-  }, [])
 
   useEffect(() => {
     if (model) handleOnInputChange('name', model.name)
   }, [handleOnInputChange, model])
 
+  useEffect(() => {
+    if (folderPrivate) {
+      handleOnInputChange('isPublic', false)
+    }
+  }, [folderPrivate, handleOnInputChange])
+
   if (!model) return null
 
   return (
     <>
-      <div className={c.EnterInfo_Column}>
-        <div className={c.EnterInfo_Row}>
-          <ModelThumbnail
-            key={model.newFileName}
-            className={c.EnterInfo_Thumbnail}
-            name={model}
-            model={{ ...model, uploadedFile: model.newFileName }}
-          />
-          <Spacer size={'1rem'} />
-          <div className={c.EnterInfo_ModelInfo}>
-            <TitleTertiary title={model.name}>{model.name}</TitleTertiary>
-            <Spacer size={'.5rem'} />
-            <MetadataPrimary>{formatBytes(model.size)}</MetadataPrimary>
-          </div>
+      <div className={c.EnterInfo_Row}>
+        <ModelThumbnail
+          key={model.newFileName}
+          className={c.EnterInfo_Thumbnail}
+          name={model}
+          model={{ ...model, uploadedFile: model.newFileName }}
+        />
+        <Spacer size={'1rem'} />
+        <div className={c.EnterInfo_ModelInfo}>
+          <TitleTertiary title={model.name}>{model.name}</TitleTertiary>
+          <Spacer size={'.5rem'} />
+          <MetadataPrimary>{formatBytes(model.size)}</MetadataPrimary>
         </div>
-        <Spacer width={'1.5rem'} height={'unset'} />
-        {errorMessage && (
-          <>
-            <h4 className={c.EnterInfo_ErrorText}>{errorMessage}</h4>
-            <Spacer size='1rem' />
-          </>
-        )}
-        <form
-          className={c.EnterInfo_Content}
-          onSubmit={onFormSubmit(handleSubmit)}
-          data-cy='multi-upload-form'
-        >
-          <div className={c.EnterInfo_Field}>
-            <Input
-              className={c.EnterInfo_FullWidthInput}
-              name='name'
-              label='Name *'
-              maxLength='100'
-              onChange={handleOnInputChange}
-              value={inputState && inputState.name}
-              required
-              inputRef={firstInputRef}
-            />
-            <Spacer size={'1rem'} />
-          </div>
-          <div className={c.EnterInfo_Field}>
-            <Textarea
-              id='description-input'
-              name='description'
-              label='Description *'
-              type='description'
-              value={inputState && inputState.description}
-              onChange={handleOnInputChange}
-              required
-            />
-            <Spacer size={'1rem'} />
-          </div>
-          {folders && folders.length ? (
-            <div className={c.EnterInfo_Field}>
-              <Dropdown
-                className={c.EnterInfo_Select}
-                name='folder'
-                placeholder={'Select folder'}
-                defaultValue={selectedFolder}
-                options={[{ value: 'files', label: 'My Public Files' }, ...usersFolders]}
-                onChange={handleFolderChange}
-              />
-              <Spacer size={'1rem'} />
-            </div>
-          ) : null}
-          <div className={c.EnterInfo_Field}>
-            <Input
-              className={c.EnterInfo_FullWidthInput}
-              name='material'
-              label='Material'
-              maxLength='50'
-              onChange={handleOnInputChange}
-              value={inputState && inputState.material}
-            />
-            <Spacer size={'1rem'} />
-          </div>
-          <div className={c.EnterInfo_FieldRow}>
-            <div className={c.EnterInfo_Field}>
-              <Input
-                className={c.EnterInfo_FullWidthInput}
-                name='weight'
-                label='Weight'
-                maxLength='50'
-                onChange={handleOnInputChange}
-                value={inputState && inputState.weight}
-              />
-              <Spacer size={'1rem'} />
-            </div>
-            <div className={c.EnterInfo_Field}>
-              <Input
-                className={c.EnterInfo_FullWidthInput}
-                name='height'
-                label='Height'
-                maxLength='50'
-                onChange={handleOnInputChange}
-                value={inputState && inputState.height}
-              />
-              <Spacer size={'1rem'} />
-            </div>
-          </div>
+      </div>
+      <Spacer size={'1.5rem'} />
+      {errorMessage && (
+        <>
+          <h4 className={c.EnterInfo_ErrorText}>{errorMessage}</h4>
+          <Spacer size='1rem' />
+        </>
+      )}
+      <form onSubmit={onFormSubmit(handleSubmit)}>
+        <div className={c.EnterInfo_Field}>
+          <Input
+            className={c.EnterInfo_FullWidthInput}
+            name='name'
+            label='Name *'
+            maxLength='100'
+            onChange={handleOnInputChange}
+            value={inputState && inputState.name}
+            required
+            inputRef={firstInputRef}
+          />
+        </div>
+        <div className={c.EnterInfo_Field}>
+          <Textarea
+            id='description-input'
+            name='description'
+            label='Description *'
+            type='description'
+            value={inputState && inputState.description}
+            onChange={handleOnInputChange}
+            required
+          />
+        </div>
+        {!isAssembly && folders && folders.length ? (
           <div className={c.EnterInfo_Field}>
             <Dropdown
               className={c.EnterInfo_Select}
-              name='category'
-              placeholder='Select category'
-              defaultValue={selectedCategory}
-              isClearable
-              options={CATEGORIES}
-              onChange={e => {
-                if (e) handleOnInputChange('category', e.value)
-              }}
+              name='folder'
+              placeholder={'Select folder'}
+              defaultValue={selectedFolder}
+              options={[{ value: 'files', label: 'My Public Files' }, ...usersFolders]}
+              onChange={handleFolderChange}
             />
           </div>
-          <Spacer size={'1.5rem'} />
-          <SingleLineBodyText>
-            {inputState.isPublic ? 'Public Model' : 'Private Model'}
-          </SingleLineBodyText>
-          <Spacer size={'.5rem'} />
-          {inputState.isPublic ? (
-            <MetadataSecondary className={c.EnterInfo_PrivacyText}>
-              The folder you have selected is Public. This model will be shared publicly
-              towards users on Thangs.
-            </MetadataSecondary>
-          ) : (
-            <MetadataSecondary className={c.EnterInfo_PrivacyText}>
-              The folder you have selected is Private. This model will be private and
-              restricted to yourself and those you to choose to share it with.
-            </MetadataSecondary>
-          )}
-          <Spacer size={'1.5rem'} />
-          <div className={c.EnterInfo_ButtonWrapper}>
-            <Button tertiary onClick={handleSkip} type='button' disabled={isLoading}>
-              Apply All
-            </Button>
-            <Spacer width={'1rem'} />
-            <Button type='submit' disabled={isLoading}>
-              Continue
-            </Button>
+        ) : null}
+        <div className={c.EnterInfo_Field}>
+          <Input
+            className={c.EnterInfo_FullWidthInput}
+            name='material'
+            label='Material'
+            maxLength='50'
+            onChange={handleOnInputChange}
+            value={inputState && inputState.material}
+          />
+        </div>
+        <div className={c.EnterInfo_FieldRow}>
+          <div className={c.EnterInfo_Field}>
+            <Input
+              className={c.EnterInfo_FullWidthInput}
+              name='weight'
+              label='Weight'
+              maxLength='50'
+              onChange={handleOnInputChange}
+              value={inputState && inputState.weight}
+            />
           </div>
-        </form>
-        <Spacer size={'2rem'} />
-      </div>
+          <Spacer size={'1rem'} />
+          <div className={c.EnterInfo_Field}>
+            <Input
+              className={c.EnterInfo_FullWidthInput}
+              name='height'
+              label='Height'
+              maxLength='50'
+              onChange={handleOnInputChange}
+              value={inputState && inputState.height}
+            />
+          </div>
+        </div>
+        <div className={c.EnterInfo_Field}>
+          <Dropdown
+            className={c.EnterInfo_Select}
+            name='category'
+            placeholder='Select category'
+            defaultValue={selectedCategory}
+            isClearable
+            options={CATEGORIES}
+            onChange={e => {
+              if (e) handleOnInputChange('category', e.value)
+            }}
+          />
+        </div>
+        <Spacer size={'.5rem'} />
+        <Toggle
+          name='applyRemaining'
+          label='Apply info to remaining models'
+          checked={applyRemaing}
+          onChange={ev => setApplyRemaining(ev.target.checked)}
+        />
+        <Toggle
+          name='isPrivate'
+          label='Make model private'
+          disabled={folderPrivate}
+          checked={!inputState.isPublic}
+          onChange={ev => {
+            handleOnInputChange('isPublic', !ev.target.checked)
+          }}
+        />
+        <Spacer size={'1rem'} />
+        <div className={c.EnterInfo_ButtonWrapper}>
+          <Button type='submit' disabled={isLoading}>
+            Continue
+          </Button>
+        </div>
+      </form>
+      <Spacer size={'2rem'} />
     </>
   )
 }

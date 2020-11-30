@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import * as R from 'ramda'
-import axios from 'axios'
 import { SingleLineBodyText, Spacer, Spinner } from '@components'
 import EnterInfo from './EnterInfo'
+// import AssemblyInfo from './AssemblyInfo'
 import UploadModels from './UploadModels'
 import { createUseStyles } from '@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
@@ -13,6 +13,7 @@ import * as types from '@constants/storeEventTypes'
 import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { track } from '@utilities/analytics'
 import { cancelUpload } from '@services'
+import AssemblyInfo from './AssemblyInfo'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -94,16 +95,31 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
+const uploadViews = {
+  upload: {
+    title: 'Upload Files',
+  },
+  assemblyInfo: {
+    title: 'New Assembly',
+  },
+  enterInfo: {
+    title: 'Enter Information',
+  },
+}
+
 const MultiUpload = ({ initData = null, folderId }) => {
   const { dispatch, folders = {}, shared = {}, uploadFiles = {} } = useStoreon(
     'folders',
     'shared',
     'uploadFiles'
   )
-  const { data: rawUploadFilesData = {}, isLoading } = uploadFiles
+  const { data: rawUploadFilesData = {}, isLoading, missingFiles } = uploadFiles
   const { data: foldersData = [] } = folders
   const { data: sharedData = [] } = shared
   const [activeView, setActiveView] = useState('upload')
+  const [activeStep, setActiveStep] = useState(0)
+  const [isAssembly, setIsAssembly] = useState(false)
+  const [assemblyFormData, setAssemblyFormData] = useState({})
   const [errorMessage, setErrorMessage] = useState(null)
   const [warningMessage, setWarningMessage] = useState(null)
   const c = useStyles({})
@@ -159,14 +175,16 @@ const MultiUpload = ({ initData = null, folderId }) => {
     [handleFileUpload]
   )
 
-  const removeFile = useCallback(
-    index => {
-      track('MultiUpload - Remove File')
-      // dispatch(types.REMOVE_UPLOAD_FILES, { index })
-      cancelUpload(index)
-    },
-    [dispatch]
-  )
+  const removeFile = index => {
+    track('MultiUpload - Remove File')
+    // dispatch(types.REMOVE_UPLOAD_FILES, { index })
+    cancelUpload(index)
+  }
+
+  const skipFile = filename => {
+    console.log('skip file', filename)
+    dispatch(types.SKIP_MISSING_FILE, { filename })
+  }
 
   const closeOverlay = useCallback(() => {
     // cancelTokenRef.current.cancel('Upload interrupted')
@@ -192,35 +210,44 @@ const MultiUpload = ({ initData = null, folderId }) => {
   )
 
   const handleContinue = useCallback(
-    ({ selectedFolderId }) => {
+    ({ selectedFolderId, data }) => {
       const loadingFiles = Object.keys(uploadFilesData).filter(
         id => uploadFilesData[id].isLoading
       )
       if (loadingFiles.length > 0)
         return setErrorMessage('Please wait until all files are processed')
+      const mfiles = missingFiles.filter(f => !f.skipped)
+      if (mfiles.length > 0) return setErrorMessage('Please handle all missing files')
+
       if (activeView === 'upload') {
-        setActiveView(0)
+        setActiveView(isAssembly ? 'assemblyInfo' : 'enterInfo')
+      } else if (activeView === 'assemblyInfo') {
+        setActiveView('enterInfo')
+        setAssemblyFormData(data)
+        setActiveStep(0)
       } else {
-        if (activeView === Object.keys(uploadFilesData).length - 1) {
+        if (activeStep !== Object.keys(uploadFilesData).length - 1) {
           track('Upload - Continue')
           handleSubmit({ selectedFolderId })
         } else {
-          setActiveView(activeView + 1)
+          setActiveStep(activeStep + 1)
         }
       }
     },
-    [activeView, handleSubmit, uploadFilesData]
+    [uploadFilesData, isAssembly, activeView, activeStep, missingFiles, handleSubmit]
   )
 
   const handleBack = useCallback(() => {
     setErrorMessage(null)
     if (activeView === 'upload') return
-    if (activeView === 0) {
+    if (activeView === 'assemblyInfo') {
       setActiveView('upload')
+    } else if (activeStep > 0) {
+      setActiveStep(activeStep - 1)
     } else {
-      setActiveView(activeView - 1)
+      setActiveView(isAssembly ? 'assemblyInfo' : 'upload')
     }
-  }, [activeView])
+  }, [activeView, activeStep, isAssembly])
 
   const handleUpdate = useCallback(
     ({ id, data }) => {
@@ -283,7 +310,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
           <Spacer size={'1.5rem'} />
           <div className={c.MultiUpload_Row}>
             <SingleLineBodyText className={c.MultiUpload_OverlayHeader}>
-              {activeView === 'upload' ? 'Upload Files' : 'Enter Information'}
+              {uploadViews[activeView].title}
             </SingleLineBodyText>
             {activeView !== 'upload' && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />
@@ -303,20 +330,33 @@ const MultiUpload = ({ initData = null, folderId }) => {
             onDrop={onDrop}
             removeFile={removeFile}
             uploadFiles={uploadFilesData}
+            isAssembly={isAssembly}
+            setIsAssembly={setIsAssembly}
+            missingFiles={missingFiles}
+            skipFile={skipFile}
+          />
+        ) : activeView === 'assemblyInfo' ? (
+          <AssemblyInfo
+            formData={assemblyFormData}
+            folders={dropdownFolders}
+            folderId={folderId}
+            setErrorMessage={setErrorMessage}
+            handleContinue={handleContinue}
           />
         ) : (
           <EnterInfo
-            activeView={activeView}
+            activeStep={activeStep}
             closeOverlay={closeOverlay}
             errorMessage={errorMessage}
             setErrorMessage={setErrorMessage}
             folders={dropdownFolders}
-            folderId={folderId}
+            folderId={(assemblyFormData && assemblyFormData.folderId) || folderId}
             handleContinue={handleContinue}
             handleSkipToEnd={handleSubmit}
             handleUpdate={handleUpdate}
             uploadFiles={uploadFilesData}
             isLoading={isLoading}
+            isAssembly={isAssembly}
           />
         )}
       </div>

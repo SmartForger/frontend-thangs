@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import * as R from 'ramda'
+import classnames from 'classnames'
 import {
   Button,
   Divider,
@@ -10,33 +11,29 @@ import {
   Spacer,
   Spinner,
   TitleTertiary,
+  Toggle,
+  Tooltip,
 } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as UploadCardIcon } from '@svg/upload-card.svg'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
+import { ReactComponent as InfoIcon } from '@svg/icon-info.svg'
 import { formatBytes } from '@utilities'
 import Dropzone from 'react-dropzone'
 import { FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { overlayview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
-  const {
-    mediaQueries: { md },
-  } = theme
   return {
     UploadModels_UploadZone: {
       width: '100%',
-      height: '100%',
+      height: ({ hasFile }) => (hasFile ? '11rem' : '22.25rem'),
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       borderRadius: '.75rem',
       border: '1px dashed #E5E5F3',
-
-      [md]: {
-        height: ({ hasFile }) => (hasFile ? '11rem' : '22.25rem'),
-      },
 
       '& h3': {
         lineHeight: '1.5rem',
@@ -65,15 +62,40 @@ const useStyles = createUseStyles(theme => {
         flex: 'none',
       },
     },
+    UploadModels_MissingFileIcon: {
+      '& circle': {
+        stroke: '#DA7069',
+      },
+      '& path': {
+        fill: '#DA7069',
+      },
+      '& rect': {
+        fill: '#DA7069',
+      },
+    },
+    UploadModels_SkippedFileIcon: {
+      '& path:first-child': {
+        stroke: '#999',
+      },
+      '& path:last-child': {
+        fill: '#999',
+      },
+    },
     UploadModels_FileName: {
       textOverflow: 'ellipsis',
-      width: '4rem',
+      width: '16rem',
       overflow: 'hidden',
       lineHeight: '1rem !important',
-
-      [md]: {
-        width: '16rem',
+      '&.missing': {
+        color: '#DA7069',
       },
+      '&.skipped': {
+        color: '#999',
+        textDecoration: 'line-through',
+      },
+    },
+    UploadModels_SkipButton: {
+      padding: '0 1rem !important',
     },
     UploadModels_UploadColumn: {
       height: '100%',
@@ -111,12 +133,8 @@ const useStyles = createUseStyles(theme => {
     },
     UploadModels_ButtonWrapper: {
       display: 'flex',
-      flexDirection: 'column-reverse',
+      flexDirection: 'row',
       justifyContent: 'space-between',
-
-      [md]: {
-        flexDirection: 'row',
-      },
 
       '& button': {
         width: '100%',
@@ -138,6 +156,13 @@ const useStyles = createUseStyles(theme => {
       padding: '.625rem 1rem',
       borderRadius: '.5rem',
     },
+    UploadAssemblyLabel: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    UploadAssemblyLabel_Icon: {
+      marginLeft: '.5rem',
+    },
   }
 })
 const noop = () => null
@@ -151,6 +176,10 @@ const UploadModels = ({
   setWarningMessage = noop,
   errorMessage = null,
   warningMessage = null,
+  isAssembly = false,
+  setIsAssembly = noop,
+  missingFiles = [],
+  skipFile = noop,
 }) => {
   const hasFile = Object.keys(uploadFiles).length > 0
   const c = useStyles({ hasFile })
@@ -162,6 +191,10 @@ const UploadModels = ({
     ? Object.keys(uploadFiles).filter(fileId => uploadFiles[fileId].name).length
     : 0
 
+  const toggleAssembly = useCallback(() => {
+    setIsAssembly(!isAssembly)
+  }, [isAssembly, setIsAssembly])
+
   useEffect(() => {
     overlayview('MultiUpload - UploadModels')
   }, [])
@@ -169,8 +202,9 @@ const UploadModels = ({
   useEffect(() => {
     const loadingFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isLoading)
     const warningFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isWarning)
+    const mfiles = missingFiles.filter(f => !f.skipped)
 
-    if (loadingFiles.length === 0) setErrorMessage(null)
+    if (loadingFiles.length === 0 && mfiles.length === 0) setErrorMessage(null)
     if (warningFiles.length !== 0) {
       setWarningMessage(`Notice: Files over ${FILE_SIZE_LIMITS.soft.pretty} may take a long time to
     upload & process.`)
@@ -181,7 +215,16 @@ const UploadModels = ({
     } else {
       setWarningMessage(null)
     }
-  }, [setErrorMessage, setWarningMessage, uploadFiles])
+  }, [setErrorMessage, setWarningMessage, uploadFiles, missingFiles])
+
+  const uploadAssemblyLabel = (
+    <span className={c.UploadAssemblyLabel}>
+      Upload as assembly
+      <Tooltip title='Assemblies allow users to view and download all parts from a single model page.'>
+        <InfoIcon className={c.UploadAssemblyLabel_Icon} />
+      </Tooltip>
+    </span>
+  )
 
   return (
     <>
@@ -219,7 +262,7 @@ const UploadModels = ({
       )}
       {fileLength > 0 && (
         <>
-          <Spacer size={'2rem'} />
+          <Spacer size={'1.5rem'} />
           <TitleTertiary>
             {fileLength > 0 ? `${fileLength} File${fileLength > 1 ? 's' : ''}` : 'Files'}
           </TitleTertiary>
@@ -258,6 +301,54 @@ const UploadModels = ({
               )
             })}
           </div>
+          <TitleTertiary>Missing Files</TitleTertiary>
+          <Spacer size={'.5rem'} />
+          <div>
+            {missingFiles.map(f => (
+              <div key={f.filename}>
+                <Spacer size={'.75rem'} />
+                <div className={c.UploadModels_FileRow}>
+                  <div className={c.UploadModels_Row}>
+                    {f.skipped ? (
+                      <FileIcon className={c.UploadModels_SkippedFileIcon} />
+                    ) : (
+                      <InfoIcon className={c.UploadModels_MissingFileIcon} />
+                    )}
+                    <Spacer size={'.75rem'} />
+                    <SingleLineBodyText
+                      className={classnames(
+                        c.UploadModels_FileName,
+                        f.skipped ? 'skipped' : 'missing'
+                      )}
+                      title={f.filename}
+                    >
+                      {f.filename}
+                    </SingleLineBodyText>
+                  </div>
+                  {!f.skipped && (
+                    <Button
+                      tertiary
+                      className={c.UploadModels_SkipButton}
+                      onClick={() => {
+                        skipFile(f.filename)
+                      }}
+                    >
+                      Skip
+                    </Button>
+                  )}
+                </div>
+                <Spacer size={'.75rem'} />
+                <Divider spacing={0} />
+              </div>
+            ))}
+          </div>
+          <Spacer size={'1rem'} />
+          <Toggle
+            id='upload_assembly'
+            label={uploadAssemblyLabel}
+            checked={isAssembly}
+            onChange={toggleAssembly}
+          />
           <Spacer size={'1.5rem'} />
           <div className={c.UploadModels_ButtonWrapper}>
             <Button secondary onClick={closeOverlay}>
