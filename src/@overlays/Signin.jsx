@@ -228,6 +228,7 @@ const SignInForm = ({
       if (redirectUrl) return (window.location.href = redirectUrl)
       if (window.location.href.includes('sessionExpired'))
         return (window.location.href = '/')
+      if (window.location.href.includes('authFailed')) return (window.location.href = '/')
       return window.location.reload()
     }
   }, [dispatch, inputState, redirectUrl])

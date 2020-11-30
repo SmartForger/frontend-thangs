@@ -5,6 +5,10 @@ const useGoogleLogin = ({ redirectUrl }) => {
   window.crypto.getRandomValues(securityTokenArray)
   const securityToken = securityTokenArray.join('')
   localStorage.setItem('googleSecurityToken', securityToken)
+  const safeRedirectUrl =
+    redirectUrl.includes('authFailed') || redirectUrl.includes('sessionExpired')
+      ? `${window.location.origin}${window.location.pathname}`
+      : redirectUrl
 
   const stringifiedParams = queryString.stringify({
     client_id: process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID,
@@ -16,7 +20,7 @@ const useGoogleLogin = ({ redirectUrl }) => {
     response_type: 'code',
     access_type: 'offline',
     prompt: 'consent',
-    state: encodeURIComponent(`security_token=${securityToken}&url=${redirectUrl}`),
+    state: encodeURIComponent(`security_token=${securityToken}&url=${safeRedirectUrl}`),
   })
 
   return {

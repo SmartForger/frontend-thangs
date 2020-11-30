@@ -344,6 +344,7 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
       if (redirectUrl) return (window.location.href = redirectUrl)
       if (window.location.href.includes('sessionExpired'))
         return (window.location.href = '/')
+      if (window.location.href.includes('authFailed')) return (window.location.href = '/')
       return (window.location.href = '/welcome')
     }
   }, [dispatch, inputState, redirectUrl, source, validateEmail, validatePasswords])

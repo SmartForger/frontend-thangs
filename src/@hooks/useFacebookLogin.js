@@ -5,6 +5,10 @@ const useFacebookLogin = ({ redirectUrl }) => {
   window.crypto.getRandomValues(securityTokenArray)
   const securityToken = securityTokenArray.join('')
   localStorage.setItem('facebookSecurityToken', securityToken)
+  const safeRedirectUrl =
+    redirectUrl.includes('authFailed') || redirectUrl.includes('sessionExpired')
+      ? `${window.location.origin}${window.location.pathname}`
+      : redirectUrl
 
   const stringifiedParams = queryString.stringify({
     client_id: process.env.REACT_APP_FACEBOOK_OAUTH_CLIENT_ID,
@@ -13,7 +17,7 @@ const useFacebookLogin = ({ redirectUrl }) => {
     response_type: 'code',
     auth_type: 'rerequest',
     display: 'popup',
-    state: encodeURIComponent(`security_token=${securityToken}&url=${redirectUrl}`),
+    state: encodeURIComponent(`security_token=${securityToken}&url=${safeRedirectUrl}`),
   })
 
   return {
