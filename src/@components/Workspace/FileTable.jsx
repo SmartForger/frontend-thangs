@@ -24,6 +24,10 @@ import Dropzone from 'react-dropzone'
 import { MODEL_FILE_EXTS } from '@constants/fileUpload'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+
   return {
     FileTable: {
       width: '100%',
@@ -68,11 +72,23 @@ const useStyles = createUseStyles(theme => {
     FileTable_Header__cursor: {
       cursor: 'pointer',
     },
+    FileTable_Header__mobile: {
+      display: 'none',
+      [md]: {
+        display: 'table-cell',
+      },
+    },
     FileTable_Row: {
       display: 'flex',
       flexDirection: 'row',
       position: 'relative',
       alignItems: 'center',
+    },
+    FileTable_Row_Column__mobile: {
+      display: 'none',
+      [md]: {
+        display: 'table-cell',
+      },
     },
     FileTable_Cell: {
       display: 'flex',
@@ -231,7 +247,7 @@ const FileTableHeader = ({ sortedBy, order, onSort = () => {} }) => {
             Filename{sortedBy === COLUMNS.FILENAME && <SortByArrow order={order} />}
           </MetadataSecondary>
         </th>
-        <th>
+        <th className={c.FileTable_Header__mobile}>
           <MetadataSecondary
             className={c.FileTable_Header__cursor}
             onClick={() => {
@@ -241,7 +257,7 @@ const FileTableHeader = ({ sortedBy, order, onSort = () => {} }) => {
             Created{sortedBy === COLUMNS.CREATED && <SortByArrow order={order} />}
           </MetadataSecondary>
         </th>
-        <th>
+        <th className={c.FileTable_Header__mobile}>
           <MetadataSecondary
             className={c.FileTable_Header__cursor}
             onClick={() => {
@@ -251,7 +267,7 @@ const FileTableHeader = ({ sortedBy, order, onSort = () => {} }) => {
             File Type{sortedBy === COLUMNS.FILETYPE && <SortByArrow order={order} />}
           </MetadataSecondary>
         </th>
-        <th>
+        <th className={c.FileTable_Header__mobile}>
           <MetadataSecondary
             className={c.FileTable_Header__cursor}
             onClick={() => {
@@ -261,7 +277,7 @@ const FileTableHeader = ({ sortedBy, order, onSort = () => {} }) => {
             Size{sortedBy === COLUMNS.SIZE && <SortByArrow order={order} />}
           </MetadataSecondary>
         </th>
-        <th>
+        <th className={c.FileTable_Header__mobile}>
           <MetadataSecondary
             className={c.FileTable_Header__cursor}
             onClick={() => {
@@ -272,10 +288,10 @@ const FileTableHeader = ({ sortedBy, order, onSort = () => {} }) => {
             {sortedBy === COLUMNS.CONTRIBUTORS && <SortByArrow order={order} />}
           </MetadataSecondary>
         </th>
-        <th>
+        <th className={c.FileTable_Header__mobile}>
           <MetadataSecondary>Versioned From</MetadataSecondary>
         </th>
-        <th></th>
+        <th className={c.FileTable_Header__mobile}></th>
       </tr>
     </thead>
   )
@@ -301,20 +317,20 @@ const FolderRow = ({ folder }) => {
       <td title={folder.name}>
         <FolderName name={folder.name} />
       </td>
-      <td>
+      <td className={c.FileTable_Row_Column__mobile}>
         <MetadataSecondary>-</MetadataSecondary>
       </td>
-      <td>
+      <td className={c.FileTable_Row_Column__mobile}>
         <MetadataSecondary>-</MetadataSecondary>
       </td>
-      <td>
+      <td className={c.FileTable_Row_Column__mobile}>
         <MetadataSecondary>-</MetadataSecondary>
       </td>
-      <td>
+      <td className={c.FileTable_Row_Column__mobile}>
         <Contributors users={folder.members} />
       </td>
-      <td>-</td>
-      <td>
+      <td className={c.FileTable_Row_Column__mobile}>-</td>
+      <td className={c.FileTable_Row_Column__mobile}>
         <div className={c.MenuButton} onClick={handleFolderMenu} ref={folderMenuRef}>
           <DotStackIcon />
           {showFolderMenu && (
@@ -348,21 +364,21 @@ const FileRow = ({ model }) => {
       <td>
         <FileName name={model.name} />
       </td>
-      <td>
+      <td className={c.FileTable_Row_Column__mobile}>
         <MetadataSecondary>
           {format(new Date(model.uploadDate), 'MMM d, Y, h:mm aaaa')}
         </MetadataSecondary>
       </td>
-      <td>
+      <td className={c.FileTable_Row_Column__mobile}>
         <MetadataSecondary>{model.fileType}</MetadataSecondary>
       </td>
-      <td>
+      <td className={c.FileTable_Row_Column__mobile}>
         <MetadataSecondary>{formatBytes(model.size)}</MetadataSecondary>
       </td>
-      <td>
+      <td className={c.FileTable_Row_Column__mobile}>
         <Contributors users={[model.owner]} />
       </td>
-      <td>
+      <td className={c.FileTable_Row_Column__mobile}>
         {model.previousVersionModelId ? (
           <Link to={`/model/${model.previousVersionModelId}`}>
             {model.previousVersionModelId}
@@ -371,7 +387,7 @@ const FileRow = ({ model }) => {
           '-'
         )}
       </td>
-      <td>
+      <td className={c.FileTable_Row_Column__mobile}>
         <div className={c.MenuButton} onClick={handleFileMenu} ref={fileMenuRef}>
           <DotStackIcon />
           {showFileMenu && (

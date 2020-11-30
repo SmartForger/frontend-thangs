@@ -139,6 +139,11 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'space-between',
       alignItems: 'center',
     },
+    WorkspaceNavbar_NavHeader_Exit: {
+      [md]: {
+        display: 'none',
+      },
+    },
   }
 })
 const noop = () => null
@@ -195,7 +200,7 @@ const WorkspaceNavbar = ({
   const c = useStyles()
   const { dispatch, folderNav } = useStoreon('folderNav')
   const {
-    atom: { data: user },
+    atom: { data: user = {} },
   } = useCurrentUser()
   const history = useHistory()
   const path = history.location.pathname
@@ -280,7 +285,7 @@ const WorkspaceNavbar = ({
               <Logo />
             </Link>
           </div>
-          <ExitIcon onClick={closeMobileNav} />
+          <ExitIcon className={c.WorkspaceNavbar_NavHeader_Exit} onClick={closeMobileNav} />
         </div>
         <Spacer size={'2rem'} />
         <div className={c.WorkspaceNavbar_MobileColumnOnly}>
