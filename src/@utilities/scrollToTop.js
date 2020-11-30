@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import withRouter from 'react-router-dom/es/withRouter'
+import { withRouter } from 'react-router-dom'
 
 export const ScrollToTop = ({ history }) => {
   useEffect(() => {
