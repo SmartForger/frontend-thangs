@@ -24,9 +24,15 @@ const Auth = () => {
 
   useEffect(() => {
     const auth = async () => {
+      console.log('doing auth')
+      console.log('returnedSecurityToken', returnedSecurityToken)
+      console.log('securityToken', securityToken)
       if (returnedSecurityToken !== securityToken)
         return (window.location.href = '/?authFailed=true')
+      console.log('passed securityToken check')
       const { data, error } = await authenticationService.ssoAuth({ code, provider })
+      console.log('passed ssAuth', data)
+      console.log('passed ssAuth', error)
       if (error) {
         track('Third Party Signup - Failed', { source: provider.toUpperCase() })
         return (window.location.href = '/?authFailed=true')
