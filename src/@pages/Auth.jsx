@@ -5,7 +5,7 @@ import { authenticationService } from '@services'
 import * as queryString from 'query-string'
 import { track } from '@utilities/analytics'
 
-const Auth = isLoadingOptimizely => {
+const Auth = ({ isLoadingOptimizely }) => {
   const code = useQuery('code')
   const state = useQuery('state')
   const { security_token: returnedSecurityToken, url } = queryString.parse(
