@@ -7,7 +7,7 @@ import { PREVIEW_MODELS_SIZE } from '@store/modelPreviews/store'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { xs_352, sm, md, md_972, xxl_1454 },
+    mediaQueries: { xs_352, md, md_972, xxl_1454 },
   } = theme
 
   return {
@@ -17,14 +17,10 @@ const useStyles = createUseStyles(theme => {
       margin: '0 auto',
       width: '100%',
       justifyContent: 'center',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(164px, 1fr))',
 
-      [xs_352]: {
-        gap: '.5rem',
+      '@media (min-width: 425px)': {
         gridTemplateColumns: 'repeat(auto-fit, 164px)',
-      },
-
-      [sm]: {
-        gap: '.5rem',
       },
 
       [md_972]: {

@@ -89,7 +89,7 @@ const useStyles = createUseStyles(theme => {
     Landing_Title: {
       display: 'flex',
       alignItems: 'center',
-      marginBottom: '1rem',
+      marginBottom: '1.5rem',
       justifyContent: 'flex-end',
 
       [md]: {
