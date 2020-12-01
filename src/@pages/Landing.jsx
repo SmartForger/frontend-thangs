@@ -259,7 +259,7 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
   const {
     atom: { data: user },
   } = useCurrentUser()
-
+  const history = useHistory()
   const sessionExpired = useQuery('sessionExpired')
   const authFailed = useQuery('authFailed')
   const showSignin = useQuery('showSignin')
@@ -289,7 +289,7 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
   }, [])
 
   useEffect(() => {
-    if (sessionExpired || authFailed)
+    if (sessionExpired || authFailed) {
       dispatch(types.OPEN_OVERLAY, {
         overlayName: 'signIn',
         overlayData: {
@@ -300,6 +300,8 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
           authFailed,
         },
       })
+      history.push('/')
+    }
     if (showSignup) {
       dispatch(types.OPEN_OVERLAY, {
         overlayName: 'signUp',
