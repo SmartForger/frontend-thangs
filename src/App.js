@@ -61,7 +61,7 @@ const App = () => {
               <Route path='/home' component={routeRedirectToProfile()} />
               <Route exact path='/password-reset' component={PasswordReset} />
               <Route
-                path='/password-reset-confirm/:token'
+                path='/password_reset_confirm/:token'
                 component={ConfirmPasswordReset}
               />
               <Route path='/mythangs' component={routeRequiresAuth(MyThangs)} />
