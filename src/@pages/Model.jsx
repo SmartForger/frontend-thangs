@@ -43,7 +43,7 @@ const useStyles = createUseStyles(theme => {
   return {
     Model: {
       width: '100%',
-      maxWidth: '76.5rem',
+      maxWidth: '88rem',
       margin: '0 auto',
     },
     Model_Header: {
@@ -73,16 +73,17 @@ const useStyles = createUseStyles(theme => {
     Model_LeftColumn: {
       flexBasis: '2rem',
       flexGrow: 2,
-      maxWidth: '100%',
+      width: '100%',
 
       [md]: {
         marginRight: '4rem',
-        maxWidth: '60rem',
       },
     },
     Model_RightColumn: {
-      flexBasis: '1rem',
-      flexGrow: 1,
+      [md] :{
+        maxWidth: '28.55rem',
+      },
+      width: '100%',
     },
     Model__mobileOnly: {
       [md]: {
@@ -362,12 +363,24 @@ const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
 
 const StatsAndActions = ({
   c,
+  id,
   className,
   modelData,
   isAuthedUser,
   openSignupOverlay = noop,
   pageTitle,
 }) => {
+  const { [`related-models-${id}`]: related = {} } = useStoreon(
+    `model-${id}`,
+    `related-models-${id}`
+  )
+
+  const {
+    isLoading: isRelatedLoading,
+    isError: isRelatedError,
+    data: relatedData,
+  } = related
+
   return (
     <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
       <div>
@@ -394,6 +407,11 @@ const StatsAndActions = ({
         <ModelStats model={modelData} />
       </div>
       <Divider />
+      <RelatedModels
+        isLoading={isRelatedLoading}
+        isError={isRelatedError}
+        data={relatedData}
+      />
     </div>
   )
 }
@@ -403,18 +421,12 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
   const c = useStyles()
   const { navigateWithFlash } = useFlashNotification()
   const signUpShown = useRef(false)
-  const {
-    dispatch,
-    [`model-${id}`]: modelAtom = {},
-    [`related-models-${id}`]: related = {},
-  } = useStoreon(`model-${id}`, `related-models-${id}`)
+  const { dispatch, [`model-${id}`]: modelAtom = {} } = useStoreon(
+    `model-${id}`,
+    `related-models-${id}`
+  )
 
   const { data: modelData, isLoading, isLoaded, isError } = modelAtom
-  const {
-    isLoading: isRelatedLoading,
-    isError: isRelatedError,
-    data: relatedData,
-  } = related
 
   useEffect(() => {
     dispatch(types.FETCH_MODEL, { id })
@@ -493,17 +505,13 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
                 <Divider />
               </div>
               <StatsAndActions
+                id={id}
                 className={c.Model__mobileOnly}
                 c={c}
                 modelData={modelData}
                 isAuthedUser={!!currentUser}
                 openSignupOverlay={openSignupOverlay}
                 pageTitle={pageTitle}
-              />
-              <RelatedModels
-                isLoading={isRelatedLoading}
-                isError={isRelatedError}
-                data={relatedData}
               />
               <Divider />
               <CommentsForModel
@@ -513,6 +521,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
               />
             </div>
             <StatsAndActions
+              id={id}
               className={c.Model__desktopOnly}
               c={c}
               modelData={modelData}
