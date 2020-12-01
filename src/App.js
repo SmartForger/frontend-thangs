@@ -73,7 +73,12 @@ const App = () => {
                     <Landing isLoadingOptimizely={isLoadingOptimizely} {...props} />
                   )}
                 />
-                <Route path='/authenticate/:provider' component={Auth} />
+                <Route
+                  path='/authenticate/:provider'
+                  render={props => (
+                    <Auth isLoadingOptimizely={isLoadingOptimizely} {...props} />
+                  )}
+                />
                 {/* <Route path='/leave/:provider' component={Deauth} />
               <Route path='/delete/:provider' component={Deauth} /> */}
                 <Route path='/explore/:id' component={Landing} />

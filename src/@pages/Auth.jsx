@@ -5,7 +5,7 @@ import { authenticationService } from '@services'
 import * as queryString from 'query-string'
 import { track } from '@utilities/analytics'
 
-const Auth = () => {
+const Auth = isLoadingOptimizely => {
   const code = useQuery('code')
   const state = useQuery('state')
   const { security_token: returnedSecurityToken, url } = queryString.parse(
@@ -14,8 +14,6 @@ const Auth = () => {
   const { provider } = useParams()
   const googleSecurityToken = window.localStorage.getItem('googleSecurityToken')
   const facebookSecurityToken = window.localStorage.getItem('facebookSecurityToken')
-  window.localStorage.removeItem('googleSecurityToken')
-  window.localStorage.removeItem('facebookSecurityToken')
   let securityToken
   if (provider === 'google')
     securityToken = googleSecurityToken ? googleSecurityToken.toString() : ''
@@ -24,16 +22,12 @@ const Auth = () => {
 
   useEffect(() => {
     const auth = async () => {
-      console.log('doing auth')
-      console.log('provider', provider)
-      console.log('returnedSecurityToken', returnedSecurityToken)
-      console.log('securityToken', securityToken)
       if (returnedSecurityToken !== securityToken)
         return (window.location.href = '/?authFailed=true')
-      console.log('passed securityToken check')
       const { data, error } = await authenticationService.ssoAuth({ code, provider })
-      console.log('passed ssAuth', data)
-      console.log('passed ssAuth', error)
+      window.localStorage.removeItem('googleSecurityToken')
+      window.localStorage.removeItem('facebookSecurityToken')
+
       if (error) {
         track('Third Party Signup - Failed', { source: provider.toUpperCase() })
         return (window.location.href = '/?authFailed=true')
@@ -47,8 +41,8 @@ const Auth = () => {
         return (window.location.href = url ? url : '/')
       }
     }
-    auth()
-  }, [code, provider, securityToken, returnedSecurityToken, url])
+    if (!isLoadingOptimizely) auth()
+  }, [code, provider, securityToken, returnedSecurityToken, url, isLoadingOptimizely])
 
   return null
 }
