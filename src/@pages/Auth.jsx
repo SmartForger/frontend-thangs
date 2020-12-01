@@ -25,6 +25,7 @@ const Auth = () => {
   useEffect(() => {
     const auth = async () => {
       console.log('doing auth')
+      console.log('provider', provider)
       console.log('returnedSecurityToken', returnedSecurityToken)
       console.log('securityToken', securityToken)
       if (returnedSecurityToken !== securityToken)
