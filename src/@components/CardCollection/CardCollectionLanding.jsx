@@ -34,6 +34,10 @@ const useStyles = createUseStyles(theme => {
     },
     ModelCard_Skeleton: {
       paddingBottom: 0,
+      margin: 'auto',
+      width: '100%',
+      borderRadius: '.5rem',
+      minHeight: '17.52rem',
 
       '@media (min-width: 470px)': {
         minHeight: '19.2rem',
@@ -50,10 +54,6 @@ const useStyles = createUseStyles(theme => {
       [xxl]: {
         minHeight: '26.75rem',
       },
-
-      margin: 'auto',
-      width: '100%',
-      borderRadius: '.5rem',
     },
   }
 })
