@@ -13,7 +13,7 @@ const useStyles = createUseStyles(_theme => {
       gridTemplateColumns: 'repeat(auto-fit, minmax(164px, 1fr))',
 
       '@media (min-width: 786px)': {
-        gridTemplateColumns: '221px 221px ',
+        gridTemplateColumns: '221px 221px 221px',
       },
     },
     ModelCard_Skeleton: {
