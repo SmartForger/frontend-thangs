@@ -3,6 +3,9 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { sm_max },
+  } = theme
   return {
     Metadata: {
       ...theme.text.metadataBase,
@@ -15,6 +18,10 @@ const useStyles = createUseStyles(theme => {
     MetadataPrimary: {
       fontSize: '1rem',
       lineHeight: '1rem',
+
+      [sm_max]: {
+        margin: '0 1rem',
+      },
     },
     MetadataSecondary: {
       fontSize: '.75rem',

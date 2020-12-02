@@ -19,6 +19,9 @@ import { CATEGORIES } from '@constants/fileUpload'
 import { overlayview, track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { sm_max },
+  } = theme
   return {
     EnterInfo: {
       width: '27.75rem',
@@ -33,7 +36,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-start',
-      width: '100%',
+      margin: '1rem 1rem',
     },
     EnterInfo_OverlayHeader: {
       lineHeight: '1.5rem !important',
@@ -76,6 +79,10 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
+
+      [sm_max]: {
+        margin: '0 1rem 1rem',
+      },
 
       '& svg': {
         flex: 'none',
@@ -132,6 +139,11 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'row',
       justifyContent: 'space-between',
 
+      [sm_max]: {
+        flexDirection: 'column-reverse',
+        marginBottom: '1rem',
+      },
+
       '& button': {
         width: '100%',
       },
@@ -142,6 +154,10 @@ const useStyles = createUseStyles(theme => {
       fontWeight: 500,
       padding: '.625rem 1rem',
       borderRadius: '.5rem',
+
+      [sm_max]: {
+        margin: '0 1rem',
+      },
     },
     EnterInfo_Thumbnail: {
       flex: 'none',
@@ -159,6 +175,10 @@ const useStyles = createUseStyles(theme => {
         width: '18rem',
         display: 'inline-block',
         lineHeight: '1rem',
+
+        [sm_max]: {
+          margin: '0 1rem',
+        },
       },
     },
     EnterInfo_PrivacyText: {
@@ -272,9 +292,9 @@ const EnterInfo = ({
   const usersFolders = useMemo(() => {
     return folders && folders.length
       ? folders.map(folder => ({
-        value: folder.id,
-        label: folder.name.replace(new RegExp('//', 'g'), '/'),
-      }))
+          value: folder.id,
+          label: folder.name.replace(new RegExp('//', 'g'), '/'),
+        }))
       : []
   }, [folders])
 
@@ -312,7 +332,11 @@ const EnterInfo = ({
           <Spacer size='1rem' />
         </>
       )}
-      <form onSubmit={onFormSubmit(handleSubmit)} data-cy='multi-upload-form'>
+      <form
+        className={c.EnterInfo_Content}
+        onSubmit={onFormSubmit(handleSubmit)}
+        data-cy='multi-upload-form'
+      >
         <div className={c.EnterInfo_Field}>
           <Input
             className={c.EnterInfo_FullWidthInput}
@@ -420,7 +444,7 @@ const EnterInfo = ({
           <Button tertiary onClick={handleSkip} type='button' disabled={isLoading}>
             Apply All
           </Button>
-          <Spacer size={'1rem'} />
+          <Spacer width={'1rem'} />
           <Button type='submit' disabled={isLoading}>
             Continue
           </Button>

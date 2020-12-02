@@ -21,6 +21,9 @@ import { FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { overlayview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { sm_max },
+  } = theme
   return {
     UploadModels_UploadZone: {
       width: '100%',
@@ -48,6 +51,10 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
+
+      [sm_max]: {
+        margin: '0 2rem',
+      },
     },
     UploadModels_Row: {
       display: 'flex',
@@ -63,6 +70,10 @@ const useStyles = createUseStyles(theme => {
       width: '16rem',
       overflow: 'hidden',
       lineHeight: '1rem !important',
+
+      [sm_max]: {
+        width: '4rem',
+      },
     },
     UploadModels_UploadColumn: {
       height: '100%',
@@ -102,6 +113,11 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
+
+      [sm_max]: {
+        flexDirection: 'column-reverse',
+        margin: '3rem .5rem 2rem',
+      },
 
       '& button': {
         width: '100%',

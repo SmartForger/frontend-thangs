@@ -14,15 +14,26 @@ import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/file
 import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { sm_max },
+  } = theme
   return {
     MultiUpload: {
       width: '27.75rem',
       minHeight: '27.75rem',
-      backgroundColor: theme.colors.white[300],
-      borderRadius: '1rem',
+      position: 'relative',
       display: 'flex',
       flexDirection: 'row',
-      position: 'relative',
+      overflow: 'hidden auto',
+      borderRadius: '1rem',
+      backgroundColor: theme.colors.white[300],
+
+      [sm_max]: {
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden auto',
+        borderRadius: '0',
+      },
     },
     MultiUpload_Content: {
       display: 'flex',
@@ -74,6 +85,11 @@ const useStyles = createUseStyles(theme => {
       zIndex: 5,
       borderRadius: '1rem',
       display: 'flex',
+      [sm_max]: {
+        width: '100%',
+        height: '100%',
+        borderRadius: '0',
+      },
     },
   }
 })
@@ -260,7 +276,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
           <Spinner />
         </div>
       )}
-      <Spacer size={'2rem'} />
+      <Spacer width={'2rem'} />
       <div className={c.MultiUpload_Content}>
         <div className={c.MultiUpload_Column}>
           <Spacer size={'1.5rem'} />
@@ -303,7 +319,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
           />
         )}
       </div>
-      <Spacer size={'2rem'} />
+      <Spacer width={'2rem'} />
     </div>
   )
 }
