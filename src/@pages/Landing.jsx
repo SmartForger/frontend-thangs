@@ -11,19 +11,19 @@ import {
   FilterDropdownMenu,
 } from '@components'
 
+import ModelCardLanding from '@components/ModelCard/ModelCardLanding'
 import CardCollectionLanding from '@components/CardCollection/CardCollectionLanding'
 
 import { useCurrentUser, usePageMeta, useQuery } from '@hooks'
-import ModelCards from '@components/CardCollection/ModelCards'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track } from '@utilities/analytics'
 
-const MQS_VALUES = [1440, /*1378,*/ 1096, 924, 736, 470, ]
+const MQS_VALUES = [1440, 1096, 924, 736, 470]
 
-const Landing_Title_MQs = MQS_VALUES.reduce((acc,item) => {
-  return {[`@media (min-width: ${item}px)`]: { width: item-32 }, ...acc}
+const Landing_Title_MQs = MQS_VALUES.reduce((acc, item) => {
+  return { [`@media (min-width: ${item}px)`]: { width: item - 32 }, ...acc }
 }, {})
 
 const useStyles = createUseStyles(theme => {
@@ -256,7 +256,10 @@ const Page = ({
             noResultsText='We have no models to display right now. Please try again later.'
             isLoading={isLoading}
           >
-            <ModelCards items={modelPreviews.data} />
+            {Array.isArray(modelPreviews.data) &&
+              modelPreviews.data.map((model, index) => (
+                <ModelCardLanding key={`model-${model.id}:${index}`} model={model} />
+              ))}
           </CardCollectionLanding>
         </>
       )}
