@@ -31,19 +31,32 @@ const useStyles = createUseStyles(theme => {
       },
     },
     CommentsForModel_CommentBody: {
-      margin: '0.25rem 2.375rem 0',
+      color: theme.colors.black[500],
+      fontSize: '1rem',
+      fontWeight: 500,
+      lineHeight: '1.5rem',
+      margin: '0.25rem 3.5rem 0',
     },
     CommentsForModel_timestamp: {
-      ...theme.text.footerText,
+      ...theme.text.metadataBase,
+      alignItems: 'center',
+      margin: 0,
+      padding: 0,
+      color: theme.colors.grey[300],
       fontSize: '.75rem',
-      margin: '1rem 2.375rem 0',
-      fontWeight: 600,
-      lineHeight: '.75rem',
+      lineHeight: '1rem',
+      display: 'inline-block',
+      textAlign: 'center',
     },
     CommentsForModel_CommentHeader: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
+    },
+    CommentsForModel_CommentHeaderRow: {
+      display: 'flex',
+      alignItems: 'center',
+      flexDirection: 'row',
     },
     CommentsForModel_MenuButton: {
       padding: '0 .5rem',
@@ -64,6 +77,18 @@ const useStyles = createUseStyles(theme => {
       top: 0,
       right: 0,
       zIndex: 1,
+    },
+    CommentsForModel_UserInline: {
+      '& > span': {
+        ...theme.text.bodyBase,
+        fontSize: '1rem',
+        lineHeight: '.75rem',
+        whiteSpace: 'nowrap',
+        display: 'inline',
+        margin: '0 .5rem 0 1rem',
+        padding: 0,
+        color: theme.colors.black[500],
+      },
     },
   }
 })
@@ -107,18 +132,21 @@ const Comment = ({ modelId, comment }) => {
   return (
     <li className={c.CommentsForModel_Comment}>
       <div className={c.CommentsForModel_CommentHeader}>
-        <Link
-          to={{
-            pathname: `/${owner.username}`,
-            state: { fromModel: true },
-          }}
-        >
-          <UserInline
-            className={c.CommentsForModel_UserInline}
-            user={{ ...owner }}
-            size={'1.875rem'}
-          />
-        </Link>
+        <div className={c.CommentsForModel_CommentHeaderRow}>
+          <Link
+            to={{
+              pathname: `/${owner.username}`,
+              state: { fromModel: true },
+            }}
+          >
+            <UserInline
+              className={c.CommentsForModel_UserInline}
+              user={{ ...owner }}
+              size={'2.5rem'}
+            />
+          </Link>
+          <span className={c.CommentsForModel_timestamp}>{`${time} ago`}</span>
+        </div>
         <div
           className={c.CommentsForModel_MenuButton}
           onClick={handleCommentMenu}
@@ -133,7 +161,6 @@ const Comment = ({ modelId, comment }) => {
         </div>
       </div>
       <Markdown className={c.CommentsForModel_CommentBody}>{body}</Markdown>
-      <span className={c.CommentsForModel_timestamp}>{`${time} ago`}</span>
     </li>
   )
 }
