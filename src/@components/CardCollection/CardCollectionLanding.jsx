@@ -1,11 +1,10 @@
-
 import React from 'react'
 import { createUseStyles } from '@style'
 import CardCollectionBase from './CardCollectionBase'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { xxl, },
+    mediaQueries: { xxl },
   } = theme
 
   return {
@@ -15,8 +14,7 @@ const useStyles = createUseStyles(theme => {
       margin: '0 auto',
       width: '100%',
       justifyContent: 'center',
-
-      gridTemplateColumns: 'repeat(auto-fit, minmax(164px, 1fr))',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
 
       '@media (min-width: 490px)': {
         gridTemplateColumns: '221px 221px',
@@ -28,7 +26,7 @@ const useStyles = createUseStyles(theme => {
 
       '@media (min-width: 964px)': {
         gridTemplateColumns: '221px 221px 221px 221px',
-      },  
+      },
 
       [xxl]: {
         gridTemplateColumns: '340px 340px 340px 340px',
@@ -47,7 +45,7 @@ const useStyles = createUseStyles(theme => {
 
       '@media (min-width: 924px)': {
         minHeight: '19.2rem',
-      },  
+      },
 
       [xxl]: {
         minHeight: '26.75rem',
@@ -60,14 +58,10 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const CardCollectionLanding = (
-  props
-) => {
+const CardCollectionLanding = props => {
   const c = useStyles({})
 
-  return (
-    <CardCollectionBase c={c} {...props} />
-  )
+  return <CardCollectionBase c={c} {...props} />
 }
 
 export default CardCollectionLanding
