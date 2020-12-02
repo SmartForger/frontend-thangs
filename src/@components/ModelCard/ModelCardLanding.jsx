@@ -118,7 +118,7 @@ const useStyles = createUseStyles(theme => {
       marginLeft: '1.25rem',
       marginRight: '1.25rem',
 
-      '@media (min-width: 470px)': {
+      '@media (min-width: 490px)': {
         ...MQ_DEPEND_PROPS.ModelCard_UserLine.DS
       },
 
@@ -126,7 +126,7 @@ const useStyles = createUseStyles(theme => {
         ...MQ_DEPEND_PROPS.ModelCard_UserLine.MS
       },
 
-      '@media (min-width: 924px)': {
+      '@media (min-width: 964px)': {
         ...MQ_DEPEND_PROPS.ModelCard_UserLine.DS
       },  
 
@@ -143,7 +143,7 @@ const useStyles = createUseStyles(theme => {
       padding: '0 !important',
       width: '100%',
 
-      '@media (min-width: 470px)': {
+      '@media (min-width: 490px)': {
         ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.DS
       },
 
@@ -151,7 +151,7 @@ const useStyles = createUseStyles(theme => {
         ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.MS
       },
 
-      '@media (min-width: 924px)': {
+      '@media (min-width: 964px)': {
         ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.DS
       },  
 
@@ -170,7 +170,7 @@ const useStyles = createUseStyles(theme => {
       '& > *:last-child': {
         marginTop: '.375rem',
       },
-      '@media (min-width: 470px)': {
+      '@media (min-width: 490px)': {
         ...MQ_DEPEND_PROPS.ModelCard_Footer.DS
       },
 
@@ -178,7 +178,7 @@ const useStyles = createUseStyles(theme => {
         ...MQ_DEPEND_PROPS.ModelCard_Footer.MS
       },
 
-      '@media (min-width: 924px)': {
+      '@media (min-width: 964px)': {
         ...MQ_DEPEND_PROPS.ModelCard_Footer.DS
       },  
 
@@ -199,7 +199,7 @@ const useStyles = createUseStyles(theme => {
       lineHeight: '1rem !important',
       textOverflow: 'ellipsis',
       overflow: 'hidden',
-      '@media (min-width: 470px)': {
+      '@media (min-width: 490px)': {
         ...MQ_DEPEND_PROPS.ModelCard_Name.DS
       },
 
@@ -207,7 +207,7 @@ const useStyles = createUseStyles(theme => {
         ...MQ_DEPEND_PROPS.ModelCard_Name.MS
       },
 
-      '@media (min-width: 924px)': {
+      '@media (min-width: 964px)': {
         ...MQ_DEPEND_PROPS.ModelCard_Name.DS
       },  
 
