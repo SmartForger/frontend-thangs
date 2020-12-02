@@ -125,10 +125,6 @@ const useStyles = createUseStyles(theme => {
       '@media (min-width: 1260px)': {
         ...MQ_DEPEND_PROPS.ModelCard_UserLine.DS
       },
-
-      '@media (min-width: 1440px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_UserLine.MS
-      },
     },
     ModelCard_Thumbnail: {
       margin: 'auto !important',
@@ -145,10 +141,6 @@ const useStyles = createUseStyles(theme => {
 
       '@media (min-width: 1260px)': {
         ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.DS
-      },
-
-      '@media (min-width: 1440px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.MS
       },
     },
     ModelCard_Footer: {
@@ -171,9 +163,6 @@ const useStyles = createUseStyles(theme => {
         ...MQ_DEPEND_PROPS.ModelCard_Footer.DS
       },
 
-      '@media (min-width: 1440px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_Footer.MS
-      },
     },
     ModelCard_Name: {
       fontWeight: 500,
@@ -195,10 +184,6 @@ const useStyles = createUseStyles(theme => {
 
       '@media (min-width: 1260px)': {
         ...MQ_DEPEND_PROPS.ModelCard_Name.DS
-      },
-
-      '@media (min-width: 1440px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_Name.MS
       },
     },
 

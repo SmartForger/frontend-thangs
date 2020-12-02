@@ -23,10 +23,6 @@ const useStyles = createUseStyles(_theme => {
       '@media (min-width: 1260px)': {
         gridTemplateColumns: '221px 221px 221px 221px',
       },  
-
-      '@media (min-width: 1440px)': {
-        gridTemplateColumns: '164px 164px 164px 164px 164px 164px',
-      },
     },
     ModelCard_Skeleton: {
       paddingBottom: 0,
@@ -43,10 +39,6 @@ const useStyles = createUseStyles(_theme => {
         minHeight: '19.2rem',
       },  
 
-      '@media (min-width: 1440px)': {
-        minHeight: '17.52rem',
-      },
-      
       margin: 'auto',
       width: '100%',
       borderRadius: '.5rem',
