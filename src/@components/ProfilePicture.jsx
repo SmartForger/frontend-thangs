@@ -7,6 +7,7 @@ import { ReactComponent as UserIcon } from '@svg/icon-user.svg'
 const useStyles = createUseStyles(theme => {
   return {
     ProfilePicture: {
+      flex: 'none',
       '& span': {
         ...theme.text.avatarDefaultText,
       },

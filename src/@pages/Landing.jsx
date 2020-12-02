@@ -33,12 +33,12 @@ const useStyles = createUseStyles(theme => {
   return {
     Landing: {},
     Landing_Hero: {
-      display: 'flex',
-      padding: '1.5rem 2rem',
-      overflow: 'hidden',
-      position: 'relative',
-      justifyContent: 'center',
       background: theme.colors.purple[900],
+      display: 'flex',
+      justifyContent: 'center',
+      overflow: 'hidden',
+      padding: '1.5rem 2rem',
+      position: 'relative',
 
       [md]: {
         padding: '5rem 6rem',
@@ -62,9 +62,9 @@ const useStyles = createUseStyles(theme => {
     },
     Landing_PromotionalSecondaryText: {
       ...theme.text.landingPageSubtext,
+      marginTop: '1.5rem',
       maxWidth: '42rem',
       minWidth: 0,
-      marginTop: '1.5rem',
 
       [md]: {
         minWidth: '27.125rem',
@@ -85,30 +85,27 @@ const useStyles = createUseStyles(theme => {
     },
     Landing_Background: {
       position: 'absolute',
-      top: '-6rem',
       right: 0,
+      top: '-6rem',
     },
     Landing_Column: {
+      alignItems: 'center',
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
       width: '100%',
     },
     Landing_Title: {
-      display: 'flex',
-      alignItems: 'center',
-      marginBottom: '1.5rem',
-      justifyContent: 'flex-end',
-      [md]: {
-        justifyContent: 'space-between',
-      },
-      width: '100%',
       ...Landing_Title_MQs,
+      alignItems: 'center',
+      display: 'flex',
+      justifyContent: 'space-between',
+      marginBottom: '1.5rem',
+      width: '100%',
 
       '& h2': {
-        display: 'none',
+        fontSize: '1.25rem',
         [md]: {
-          display: 'block',
+          fontSize: '2.25rem',
         },
       },
     },

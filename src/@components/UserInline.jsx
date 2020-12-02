@@ -14,11 +14,13 @@ const useStyles = createUseStyles(theme => {
     UserInline_Info: {
       marginLeft: '.5rem',
       flexGrow: 1,
-
-      lineHeight: '0.5rem',
+      lineHeight: '1rem',
       fontSize: '0.75rem',
       fontWeight: '500',
       color: theme.colors.purple[900],
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
     },
     UserInline_SearchResult: {
       color: theme.colors.grey[300],
@@ -29,15 +31,8 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const UserInline = ({
-  user = {},
-  className,
-  size = '1.75rem',
-  isSearchResult,
-  maxLength,
-}) => {
+const UserInline = ({ user = {}, className, size = '1.75rem', isSearchResult }) => {
   const c = useStyles({})
-  let userName = truncateString(user.username, maxLength || 20)
   return (
     <div className={classnames(className, c.UserInline)}>
       <ProfilePicture
@@ -51,7 +46,7 @@ const UserInline = ({
           [c.UserInline_SearchResult]: isSearchResult,
         })}
       >
-        {userName}
+        {user.username}
       </span>
     </div>
   )
