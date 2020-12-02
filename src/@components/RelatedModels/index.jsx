@@ -1,6 +1,9 @@
 import React from 'react'
-import { CardCollection, Spinner } from '@components'
-import ModelCards from '@components/CardCollection/ModelCards'
+import { Spinner } from '@components'
+
+import ModelCardRelated from '@components/ModelCard/ModelCardRelated'
+import CardCollectionRelated from '@components/CardCollection/CardCollectionRelated'
+
 import { logger } from '@utilities/logging'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -46,15 +49,23 @@ const RelatedModels = ({ isLoading, isError, data = {}, className }) => {
 
   return (
     <div className={classnames(className, c.RelatedModels_Related)}>
-      <h4 className={c.RelatedModels_Header}>
-        Geometrically Similar
-      </h4>
+      <h4 className={c.RelatedModels_Header}>Geometrically Similar</h4>
 
-      <CardCollection maxPerRow={3} noResultsText='No geometrically related matches yet.'>
-        {data.matches && data.matches.length > 0 ? (
-          <ModelCards items={data.matches} geoRelated={true} />
-        ) : null}
-      </CardCollection>
+      <CardCollectionRelated
+        maxPerRow={3}
+        noResultsText='No geometrically related matches yet.'
+      >
+        {data.matches && data.matches.length > 0
+          ? Array.isArray(data.matches) &&
+            data.matches.map((model, index) => (
+              <ModelCardRelated
+                key={`model-${model.id}:${index}`}
+                model={model}
+                geoRelated={true}
+              />
+            ))
+          : null}
+      </CardCollectionRelated>
     </div>
   )
 }

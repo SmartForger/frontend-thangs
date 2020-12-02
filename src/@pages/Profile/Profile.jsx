@@ -4,11 +4,9 @@ import { Helmet } from 'react-helmet'
 import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
 import {
-  CardCollection,
   Layout,
   Markdown,
   MetadataPrimary,
-  ModelCards,
   ProfileButton,
   ProfilePicture,
   ShareDropdown,
@@ -17,6 +15,8 @@ import {
   Spacer,
   Spinner,
 } from '@components'
+import CardCollectionPortfolio from '@components/CardCollection/CardCollectionPortfolio'
+import ModelCardPortfolio from '@components/ModelCard/ModelCardPortfolio'
 import { Message404 } from '@pages/404'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -161,9 +161,12 @@ const ModelsContent = ({ models: modelsData = {} }) => {
   )
 
   return (
-    <CardCollection noResultsText='You have not uploaded any models yet.'>
-      <ModelCards items={sortedModels} />
-    </CardCollection>
+    <CardCollectionPortfolio noResultsText='You have not uploaded any models yet.'>
+      {Array.isArray(sortedModels) &&
+        sortedModels.map((model, index) => (
+          <ModelCardPortfolio key={`model-${model.id}:${index}`} model={model} />
+        ))}
+    </CardCollectionPortfolio>
   )
 }
 
@@ -173,9 +176,12 @@ const LikesContent = ({ models, isLoading }) => {
   }
 
   return (
-    <CardCollection noResultsText='This user has not liked any models yet.'>
-      <ModelCards items={models} />
-    </CardCollection>
+    <CardCollectionPortfolio noResultsText='This user has not liked any models yet.'>
+      {Array.isArray(models) &&
+        models.map((model, index) => (
+          <ModelCardPortfolio key={`model-${model.id}:${index}`} model={model} />
+        ))}
+    </CardCollectionPortfolio>
   )
 }
 
