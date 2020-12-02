@@ -14,9 +14,9 @@ import {
   SingleLineBodyText,
   Spacer,
   Spinner,
+  CardCollectionPortfolio,
+  ModelCardPortfolio,
 } from '@components'
-import CardCollectionPortfolio from '@components/CardCollection/CardCollectionPortfolio'
-import ModelCardPortfolio from '@components/ModelCard/ModelCardPortfolio'
 import { Message404 } from '@pages/404'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'

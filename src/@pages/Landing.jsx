@@ -9,10 +9,9 @@ import {
   TitleSecondary,
   FilterDropdown,
   FilterDropdownMenu,
+  ModelCardLanding,
+  CardCollectionLanding,
 } from '@components'
-
-import ModelCardLanding from '@components/ModelCard/ModelCardLanding'
-import CardCollectionLanding from '@components/CardCollection/CardCollectionLanding'
 
 import { useCurrentUser, usePageMeta, useQuery } from '@hooks'
 import { useStoreon } from 'storeon/react'

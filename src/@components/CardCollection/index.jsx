@@ -1,4 +1,7 @@
 export { default as CardCollection } from './CardCollection'
+export { default as CardCollectionLanding } from './CardCollectionLanding'
+export { default as CardCollectionPortfolio } from './CardCollectionPortfolio'
+export { default as CardCollectionRelated } from './CardCollectionRelated'
 export { default as CardCollectionSearch } from './CardCollectionSearch'
 export { default as FolderCards } from './FolderCards'
 export { default as ModelCards } from './ModelCards'

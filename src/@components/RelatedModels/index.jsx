@@ -1,8 +1,5 @@
 import React from 'react'
-import { Spinner } from '@components'
-
-import ModelCardRelated from '@components/ModelCard/ModelCardRelated'
-import CardCollectionRelated from '@components/CardCollection/CardCollectionRelated'
+import { Spinner, CardCollectionRelated, ModelCardRelated } from '@components'
 
 import { logger } from '@utilities/logging'
 import classnames from 'classnames'
