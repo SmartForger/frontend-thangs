@@ -30,10 +30,6 @@ const useStyles = createUseStyles(theme => {
         gridTemplateColumns: '221px 221px 221px 221px',
       },  
 
-      '@media (min-width: 1096px)': {
-        gridTemplateColumns: '164px 164px 164px 164px 164px 164px',
-      },
-
       [xxl]: {
         gridTemplateColumns: '340px 340px 340px 340px',
       },
@@ -52,10 +48,6 @@ const useStyles = createUseStyles(theme => {
       '@media (min-width: 924px)': {
         minHeight: '19.2rem',
       },  
-
-      '@media (min-width: 1096px)': {
-        minHeight: '17.52rem',
-      },
 
       [xxl]: {
         minHeight: '26.75rem',

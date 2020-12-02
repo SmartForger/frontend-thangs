@@ -19,7 +19,7 @@ import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track } from '@utilities/analytics'
 
-const MQS_VALUES = [1440, 1096, 964, 736, 490]
+const MQS_VALUES = [1440, 964, 736, 490]
 
 const Landing_Title_MQs = MQS_VALUES.reduce((acc, item) => {
   return { [`@media (min-width: ${item}px)`]: { width: item - 32 }, ...acc }

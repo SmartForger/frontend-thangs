@@ -130,10 +130,6 @@ const useStyles = createUseStyles(theme => {
         ...MQ_DEPEND_PROPS.ModelCard_UserLine.DS
       },  
 
-      '@media (min-width: 1096px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_UserLine.MS
-      },
-
       [xxl]: {
         ...MQ_DEPEND_PROPS.ModelCard_UserLine.DB
       },
@@ -154,10 +150,6 @@ const useStyles = createUseStyles(theme => {
       '@media (min-width: 964px)': {
         ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.DS
       },  
-
-      '@media (min-width: 1096px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.MS
-      },
 
       [xxl]: {
         ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.DB
@@ -181,10 +173,6 @@ const useStyles = createUseStyles(theme => {
       '@media (min-width: 964px)': {
         ...MQ_DEPEND_PROPS.ModelCard_Footer.DS
       },  
-
-      '@media (min-width: 1096px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_Footer.MS
-      },
 
       [xxl]: {
         ...MQ_DEPEND_PROPS.ModelCard_Footer.DB
@@ -210,10 +198,6 @@ const useStyles = createUseStyles(theme => {
       '@media (min-width: 964px)': {
         ...MQ_DEPEND_PROPS.ModelCard_Name.DS
       },  
-
-      '@media (min-width: 1096px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_Name.MS
-      },
 
       [xxl]: {
         ...MQ_DEPEND_PROPS.ModelCard_Name.DB
