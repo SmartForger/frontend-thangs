@@ -38,6 +38,7 @@ const useStyles = createUseStyles(theme => {
         maxWidth: '100%',
         zIndex: 1,
         height: 'auto',
+        transform: 'scale(.85)',
 
         '&:before': {
           content: '""',
@@ -106,7 +107,7 @@ const thumbnailUrl = model =>
     ? model.fullThumbnailUrl
     : model.thumbnailUrl
       ? model.thumbnailUrl
-      : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}`
+      : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}?size=456x540`
 
 const getThumbnailUrl = (model = {}) => {
   if (model.thumbnailUrl) return model.thumbnailUrl
