@@ -3,7 +3,6 @@ import { useHistory, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import { useFeature } from '@optimizely/react-sdk'
 import {
-  CardCollection,
   Layout,
   Spacer,
   Spinner,
@@ -11,12 +10,21 @@ import {
   FilterDropdown,
   FilterDropdownMenu,
 } from '@components'
+
+import CardCollectionLanding from '@components/CardCollection/CardCollectionLanding'
+
 import { useCurrentUser, usePageMeta, useQuery } from '@hooks'
 import ModelCards from '@components/CardCollection/ModelCards'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track } from '@utilities/analytics'
+
+const MQS_VALUES = [1440, /*1378,*/ 1096, 924, 736, 470, ]
+
+const Landing_Title_MQs = MQS_VALUES.reduce((acc,item) => {
+  return {[`@media (min-width: ${item}px)`]: { width: item-32 }, ...acc}
+}, {})
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -84,6 +92,7 @@ const useStyles = createUseStyles(theme => {
     Landing_Column: {
       display: 'flex',
       flexDirection: 'column',
+      alignItems: 'center',
       width: '100%',
     },
     Landing_Title: {
@@ -91,10 +100,11 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       marginBottom: '1.5rem',
       justifyContent: 'flex-end',
-
       [md]: {
         justifyContent: 'space-between',
       },
+      width: '100%',
+      ...Landing_Title_MQs,
 
       '& h2': {
         display: 'none',
@@ -242,12 +252,12 @@ const Page = ({
             />
           </div>
 
-          <CardCollection
+          <CardCollectionLanding
             noResultsText='We have no models to display right now. Please try again later.'
             isLoading={isLoading}
           >
             <ModelCards items={modelPreviews.data} />
-          </CardCollection>
+          </CardCollectionLanding>
         </>
       )}
     </div>

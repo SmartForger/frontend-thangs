@@ -5,7 +5,7 @@ import CardCollectionBase from './CardCollectionBase'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { xs_352, md_972, xxl_1454 },
+    mediaQueries: { xs_352, md_972, xxl, xxl_1454 },
   } = theme
 
   return {
@@ -18,16 +18,24 @@ const useStyles = createUseStyles(theme => {
 
       gridTemplateColumns: 'repeat(auto-fit, minmax(164px, 1fr))',
 
-      '@media (min-width: 425px)': {
-        gridTemplateColumns: 'repeat(auto-fit, 164px)',
+      '@media (min-width: 470px)': {
+        gridTemplateColumns: '221px 221px',
       },
 
-      [md_972]: {
-        gridTemplateColumns: 'repeat(auto-fit, 221px)',
+      '@media (min-width: 736px)': {
+        gridTemplateColumns: '164px 164px 164px 164px',
       },
 
-      [xxl_1454]: {
-        gridTemplateColumns: 'repeat(auto-fit, 340px)',
+      '@media (min-width: 924px)': {
+        gridTemplateColumns: '221px 221px 221px 221px',
+      },  
+
+      '@media (min-width: 1096px)': {
+        gridTemplateColumns: '164px 164px 164px 164px 164px 164px',
+      },
+
+      [xxl]: {
+        gridTemplateColumns: '340px 340px 340px 340px',
       },
     },
     ModelCard_Skeleton: {
@@ -49,7 +57,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const CardCollection = (
+const CardCollectionLanding = (
   props
 ) => {
   const c = useStyles({})
@@ -59,4 +67,4 @@ const CardCollection = (
   )
 }
 
-export default CardCollection
+export default CardCollectionLanding
