@@ -2,7 +2,6 @@ import React from 'react'
 import { ProfilePicture } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import { truncateString } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
   return {
