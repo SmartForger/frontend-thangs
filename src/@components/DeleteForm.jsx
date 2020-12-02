@@ -85,6 +85,11 @@ const DeleteForm = ({
           <Spacer size='1rem' />
           <NavLink Icon={FileIcon} label={name} />
         </>
+      ) : type === 'comment' ? (
+        <>
+          <TitleTertiary>Delete Comment</TitleTertiary>
+          <Spacer size='1rem' />
+        </>
       ) : (
         <>
           <TitleTertiary>Delete Folder</TitleTertiary>
@@ -94,7 +99,7 @@ const DeleteForm = ({
       )}
       <Spacer size='1rem' />
       <MultiLineBodyText>
-        Confirm below in order to delete your folder. This action is not reversible.
+        Confirm below in order to delete your {type}. This action is not reversible.
       </MultiLineBodyText>
       <Spacer size='1rem' />
       <form className={c.DeleteForm} onSubmit={handleOnDelete}>

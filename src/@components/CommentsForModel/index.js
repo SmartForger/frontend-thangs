@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useRef, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { formatDistanceStrict } from 'date-fns'
 import { Markdown, Spinner, UserInline } from '@components'
 import NewModelCommentForm from './NewModelCommentForm'
 import VersionComment from './VersionComment'
 import { createUseStyles } from '@style'
-import { useServices } from '@hooks'
+import { useServices, useExternalClick } from '@hooks'
 import classnames from 'classnames'
+import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
+import CommentMenu from './CommentMenu'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -38,6 +40,31 @@ const useStyles = createUseStyles(theme => {
       fontWeight: 600,
       lineHeight: '.75rem',
     },
+    CommentsForModel_CommentHeader: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    CommentsForModel_MenuButton: {
+      padding: '0 .5rem',
+      position: 'relative',
+
+      '& > svg': {
+        padding: '.25rem',
+        borderRadius: '.25rem',
+        border: '1px solid transparent',
+
+        '&:hover': {
+          border: `1px solid ${theme.colors.grey[300]}`,
+        },
+      },
+    },
+    CommentsForModel_CommentMenu: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      zIndex: 1,
+    },
   }
 })
 
@@ -51,33 +78,60 @@ const getParsedBody = str => {
   }
 }
 
-const renderTypedComment = ({ comment, key }) => {
+const renderTypedComment = ({ modelId, comment, key }) => {
   const parsedBody = getParsedBody(comment.body)
   if (typeof parsedBody === 'object') {
     return <VersionComment key={key} comment={{ ...comment, body: parsedBody }} />
   } else {
-    return <Comment key={key} comment={comment} />
+    return <Comment key={key} modelId={modelId} comment={comment} />
   }
 }
 
-const Comment = ({ comment }) => {
+const Comment = ({ modelId, comment }) => {
   const c = useStyles()
   const { owner, body, created } = comment
   const time = formatDistanceStrict(new Date(created), new Date())
+  const commentMenuRef = useRef(null)
+  const [showCommentMenu, setShowCommentMenu] = useState(false)
+
+  useExternalClick(commentMenuRef, () => setShowCommentMenu(false))
+
+  const handleCommentMenu = useCallback(
+    e => {
+      e.stopPropagation()
+      setShowCommentMenu(!showCommentMenu)
+    },
+    [showCommentMenu]
+  )
+
   return (
     <li className={c.CommentsForModel_Comment}>
-      <Link
-        to={{
-          pathname: `/${owner.username}`,
-          state: { fromModel: true },
-        }}
-      >
-        <UserInline
-          className={c.CommentsForModel_UserInline}
-          user={{ ...owner }}
-          size={'1.875rem'}
-        />
-      </Link>
+      <div className={c.CommentsForModel_CommentHeader}>
+        <Link
+          to={{
+            pathname: `/${owner.username}`,
+            state: { fromModel: true },
+          }}
+        >
+          <UserInline
+            className={c.CommentsForModel_UserInline}
+            user={{ ...owner }}
+            size={'1.875rem'}
+          />
+        </Link>
+        <div
+          className={c.CommentsForModel_MenuButton}
+          onClick={handleCommentMenu}
+          ref={commentMenuRef}
+        >
+          <DotStackIcon />
+          {showCommentMenu && (
+            <div className={c.CommentsForModel_CommentMenu}>
+              <CommentMenu modelId={modelId} comment={comment} />
+            </div>
+          )}
+        </div>
+      </div>
       <Markdown className={c.CommentsForModel_CommentBody}>{body}</Markdown>
       <span className={c.CommentsForModel_timestamp}>{`${time} ago`}</span>
     </li>
@@ -108,7 +162,7 @@ const AuthCommentsForModel = ({ c, className, modelId }) => {
       {comments && comments.length && comments.length === 1 ? 'comment' : 'comments'}
       <NewModelCommentForm modelId={modelId} />
       <ul className={c.CommentsForModel_List}>
-        {comments.map((comment, i) => renderTypedComment({ comment, key: i }))}
+        {comments.map((comment, i) => renderTypedComment({ modelId, comment, key: i }))}
       </ul>
     </div>
   )

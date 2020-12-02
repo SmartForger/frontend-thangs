@@ -83,4 +83,73 @@ export default store => {
       }
     }
   )
+  store.on(
+    types.UPDATE_MODEL_COMMENT,
+    async (state, { modelId, commentId, body, onFinish = noop, onError = noop }) => {
+      const atom = `model-comments-${modelId}`
+
+      store.dispatch(types.CHANGE_MODEL_COMMENTS, {
+        status: STATUSES.LOADING,
+        atom,
+      })
+
+      const { error } = await api({
+        method: 'PUT',
+        endpoint: `models/${modelId}/comments/${commentId}`,
+        body: {
+          body,
+        },
+      })
+
+      if (error) {
+        store.dispatch(types.CHANGE_MODEL_COMMENTS, {
+          status: STATUSES.FAILURE,
+          atom,
+        })
+        onError()
+      } else {
+        store.dispatch(types.CHANGE_MODEL_COMMENTS, {
+          status: STATUSES.LOADED,
+          atom,
+          data: state[atom].data.map(comment =>
+            comment.id === commentId ? { ...comment, body } : comment
+          ),
+        })
+        track('Update Comment', { modelId, commentId })
+        onFinish()
+      }
+    }
+  )
+  store.on(
+    types.DELETE_MODEL_COMMENT,
+    async (state, { modelId, commentId, onFinish = noop, onError = noop }) => {
+      const atom = `model-comments-${modelId}`
+
+      store.dispatch(types.CHANGE_MODEL_COMMENTS, {
+        status: STATUSES.LOADING,
+        atom,
+      })
+
+      const { error } = await api({
+        method: 'DELETE',
+        endpoint: `models/${modelId}/comments/${commentId}`,
+      })
+
+      if (error) {
+        store.dispatch(types.CHANGE_MODEL_COMMENTS, {
+          status: STATUSES.FAILURE,
+          atom,
+        })
+        onError()
+      } else {
+        store.dispatch(types.CHANGE_MODEL_COMMENTS, {
+          status: STATUSES.LOADED,
+          atom,
+          data: state[atom].data.filter(comment => comment.id !== commentId),
+        })
+        track('Update Comment', { modelId, commentId })
+        onFinish()
+      }
+    }
+  )
 }

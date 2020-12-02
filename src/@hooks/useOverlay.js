@@ -4,6 +4,7 @@ import {
   AddFolder,
   DeleteFolder,
   DeleteModel,
+  DeleteComment,
   EditFolder,
   EditModel,
   InviteUsers,
@@ -14,6 +15,7 @@ import {
   Signin,
   Signup,
   Upload,
+  EditComment,
 } from '@overlays'
 import { Overlay } from '@components'
 
@@ -31,6 +33,8 @@ const overlayTemplates = {
   signIn: Signin,
   signUp: Signup,
   upload: Upload,
+  editComment: EditComment,
+  deleteComment: DeleteComment,
 }
 
 const useOverlay = () => {

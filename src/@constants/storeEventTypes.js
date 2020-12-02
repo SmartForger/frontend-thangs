@@ -17,6 +17,8 @@ export const INIT_MODEL_COMMENTS = 'init-model-comments'
 export const CHANGE_MODEL_COMMENTS = 'change-comment-status'
 export const NEW_MODEL_COMMENTS = 'new-model-comments'
 export const FETCH_MODEL_COMMENTS = 'fetch-model-comments'
+export const UPDATE_MODEL_COMMENT = 'update-model-comment'
+export const DELETE_MODEL_COMMENT = 'delete-model-comment'
 /* Model Likes Store Events */
 export const LIKE_MODEL = 'like-model'
 export const UNLIKE_MODEL = 'unlike-model'
