@@ -5,7 +5,7 @@ import CardCollectionBase from './CardCollectionBase'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { xs_352, md_972, xxl, xxl_1454 },
+    mediaQueries: { xxl, },
   } = theme
 
   return {
@@ -40,13 +40,24 @@ const useStyles = createUseStyles(theme => {
     },
     ModelCard_Skeleton: {
       paddingBottom: 0,
-      [xs_352]: {
-        minHeight: '17.52rem',
-      },
-      [md_972]: {
+
+      '@media (min-width: 470px)': {
         minHeight: '19.2rem',
       },
-      [xxl_1454]: {
+
+      '@media (min-width: 736px)': {
+        minHeight: '17.52rem',
+      },
+
+      '@media (min-width: 924px)': {
+        minHeight: '19.2rem',
+      },  
+
+      '@media (min-width: 1096px)': {
+        minHeight: '17.52rem',
+      },
+
+      [xxl]: {
         minHeight: '26.75rem',
       },
 

@@ -2,11 +2,7 @@ import React from 'react'
 import { createUseStyles } from '@style'
 import CardCollectionBase from './CardCollectionBase'
 
-const useStyles = createUseStyles(theme => {
-  const {
-    mediaQueries: { xs_352, md_972, xxl_1454 },
-  } = theme
-
+const useStyles = createUseStyles(_theme => {
   return {
     CardCollection: {
       display: 'grid',
@@ -34,16 +30,23 @@ const useStyles = createUseStyles(theme => {
     },
     ModelCard_Skeleton: {
       paddingBottom: 0,
-      [xs_352]: {
-        minHeight: '17.52rem',
-      },
-      [md_972]: {
+
+      '@media (min-width: 786px)': {
         minHeight: '19.2rem',
       },
-      [xxl_1454]: {
-        minHeight: '26.75rem',
+
+      '@media (min-width: 1036px)': {
+        minHeight: '17.52rem',
       },
 
+      '@media (min-width: 1260px)': {
+        minHeight: '19.2rem',
+      },  
+
+      '@media (min-width: 1440px)': {
+        minHeight: '17.52rem',
+      },
+      
       margin: 'auto',
       width: '100%',
       borderRadius: '.5rem',
