@@ -7,7 +7,7 @@ import {
   initialize,
   identify,
   locationChange,
-  updateUserProperties,
+  updateUserExperiments,
 } from '@utilities/analytics'
 import ReactGA from 'react-ga'
 import ReactPixel from 'react-facebook-pixel'
@@ -38,7 +38,7 @@ const AppAnalytics = () => {
   }, [user])
 
   useEffect(() => {
-    updateUserProperties({ sortByVariation: variables.key })
+    updateUserExperiments({ sortByVariation: variables.key })
   }, [variables.key])
 
   useEffect(() => {

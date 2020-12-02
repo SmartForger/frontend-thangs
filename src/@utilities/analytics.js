@@ -37,6 +37,6 @@ export const overlayview = overlay => {
   amplitude.getInstance().logEvent('overlayview', { overlay })
 }
 
-export const updateUserProperties = experiments => {
+export const updateUserExperiments = experiments => {
   amplitude.getInstance().setUserProperties({ experiments })
 }
