@@ -125,7 +125,7 @@ export default store => {
       if (uploadedFiles[fileDataId].name)
         filteredFiles[fileDataId] = uploadedFiles[fileDataId]
     })
-    submitFile(Object.values(filteredFiles)).then(() => {
+    submitFile({ files: Object.values(filteredFiles) }).then(() => {
       track('New Models Uploaded', { amount: uploadedFiles.length })
       store.dispatch(types.UPLOADED_FILES)
       store.dispatch(types.FETCH_THANGS, { onFinish })
@@ -146,7 +146,6 @@ export default store => {
           isPrivate: false,
         })),
       })
-
       files.forEach((file, i) => {
         if (!response[i]) {
           store.dispatch(types.CHANGE_UPLOAD_FILE, {
@@ -155,10 +154,10 @@ export default store => {
             isError: true,
           })
         }
-        track('New Model Uploaded')     
+        track('New Model Uploaded')
       })
     } catch (e) {
-      files.forEach((file, i) => {
+      files.forEach(file => {
         store.dispatch(types.CHANGE_UPLOAD_FILE, {
           id: file.id,
           data: e,

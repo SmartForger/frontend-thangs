@@ -92,22 +92,19 @@ const DeleteComment = ({ modelId, comment }) => {
     dispatch(types.CLOSE_OVERLAY)
   }, [dispatch])
 
-  const handleDelete = useCallback(
-    folder => {
-      track('Delete Comment')
-      dispatch(types.DELETE_MODEL_COMMENT, {
-        modelId,
-        commentId: comment.id,
-        onError: error => {
-          setErrorMessage(error)
-        },
-        onFinish: () => {
-          closeOverlay()
-        }
-      })
-    },
-    [closeOverlay, dispatch, modelId, comment]
-  )
+  const handleDelete = useCallback(() => {
+    track('Delete Comment')
+    dispatch(types.DELETE_MODEL_COMMENT, {
+      modelId,
+      commentId: comment.id,
+      onError: error => {
+        setErrorMessage(error)
+      },
+      onFinish: () => {
+        closeOverlay()
+      },
+    })
+  }, [closeOverlay, dispatch, modelId, comment])
 
   useEffect(() => {
     overlayview('DeleteComment')
