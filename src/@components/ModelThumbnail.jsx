@@ -17,7 +17,6 @@ const useStyles = createUseStyles(theme => {
     ModelThumbnail: {
       ...theme.text.thumbnailErrorText,
       position: 'relative',
-      height: '100%',
       overflow: 'hidden',
       padding: '1rem .5rem',
       display: 'flex',

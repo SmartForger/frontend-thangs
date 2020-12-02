@@ -14,7 +14,7 @@ const useStyles = createUseStyles(theme => {
       margin: '0 auto',
       width: '100%',
       justifyContent: 'center',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(164px, 1fr))',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
 
       '@media (min-width: 490px)': {
         gridTemplateColumns: '221px 221px',
