@@ -20,27 +20,43 @@ const useStyles = createUseStyles(theme => {
       ...theme.text.linkText,
       fontSize: '.75rem',
     },
-    VersionComment_Date: {
-      color: '#88888b',
-      margin: '1rem 2.375rem 0',
+    VersionComment_timestamp: {
+      ...theme.text.metadataBase,
+      alignItems: 'center',
+      margin: 0,
+      padding: 0,
+      color: theme.colors.grey[300],
       fontSize: '.75rem',
-      fontWeight: 600,
-      lineHeight: '.75rem',
+      lineHeight: '1rem',
+      display: 'inline-block',
+      textAlign: 'center',
     },
     UserInline: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
     },
-    UserInline_Info: {
-      marginLeft: '.5rem',
-      flexGrow: 1,
-      fontSize: '1rem',
-      fontWeight: '600',
+    VersionComment_CommentBody: {
       color: theme.colors.black[500],
+      fontSize: '1rem',
+      fontWeight: 500,
+      lineHeight: '1.5rem',
+      margin: '0.25rem 3.5rem 0',
     },
-    CommentsForModel_CommentBody: {
-      margin: '0.25rem 2.375rem 0',
+    VersionComment_HeaderRow: {
+      display: 'flex',
+      alignItems: 'center',
+      flexDirection: 'row',
+    },
+    VersionComment_UserInline: {
+      ...theme.text.bodyBase,
+      fontSize: '1rem',
+      lineHeight: '.75rem',
+      whiteSpace: 'nowrap',
+      display: 'inline',
+      margin: '0 .5rem 0 1rem',
+      padding: 0,
+      color: theme.colors.black[500],
     },
   }
 })
@@ -64,14 +80,14 @@ const VersionComment = ({ comment }) => {
     <li className={c.VersionComment}>
       <div>
         <div className={c.UserInline}>
-          <VersionIcon width={'1.75rem'} height={'1.75rem'} />
-          <span className={c.UserInline_Info}>
-            <div>{owner.username}</div>
-          </span>
+          <VersionIcon width={'2.5rem'} height={'2.5rem'} />
+          <div className={c.VersionComment_HeaderRow}>
+            <span className={c.VersionComment_UserInline}>{owner.username}</span>
+            <span className={c.VersionComment_timestamp}>{` ${time} ago`}</span>
+          </div>
         </div>
       </div>
-      <Markdown className={c.CommentsForModel_CommentBody}>{body}</Markdown>
-      <span className={c.VersionComment_Date}>{` ${time} ago`}</span>
+      <Markdown className={c.VersionComment_CommentBody}>{body}</Markdown>
     </li>
   )
 }
