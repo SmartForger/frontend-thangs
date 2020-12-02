@@ -15,8 +15,6 @@ workflows:
 
   deploy-gcloud:
     jobs:
-<<<<<<< HEAD
-=======
       - cypress/run:
           executor: test-in-staging
           context: gcp-and-physna
@@ -30,7 +28,6 @@ workflows:
             branches:
               only:
                 - development
->>>>>>> corrected context name
       - deploy-staging:
           context: gcp-and-physna
           filters:
