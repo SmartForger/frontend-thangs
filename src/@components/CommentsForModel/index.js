@@ -103,21 +103,24 @@ const getParsedBody = str => {
   }
 }
 
-const renderTypedComment = ({ modelId, comment, key }) => {
+const renderTypedComment = ({ modelId, comment, key, currentUser }) => {
   const parsedBody = getParsedBody(comment.body)
   if (typeof parsedBody === 'object') {
     return <VersionComment key={key} comment={{ ...comment, body: parsedBody }} />
   } else {
-    return <Comment key={key} modelId={modelId} comment={comment} />
+    return (
+      <Comment key={key} modelId={modelId} comment={comment} currentUser={currentUser} />
+    )
   }
 }
 
-const Comment = ({ modelId, comment }) => {
+const Comment = ({ modelId, comment, currentUser }) => {
   const c = useStyles()
   const { owner, body, created } = comment
   const time = formatDistanceStrict(new Date(created), new Date())
   const commentMenuRef = useRef(null)
   const [showCommentMenu, setShowCommentMenu] = useState(false)
+  const canEdit = currentUser.id === owner.id
 
   useExternalClick(commentMenuRef, () => setShowCommentMenu(false))
 
@@ -147,25 +150,27 @@ const Comment = ({ modelId, comment }) => {
           </Link>
           <span className={c.CommentsForModel_timestamp}>{`${time} ago`}</span>
         </div>
-        <div
-          className={c.CommentsForModel_MenuButton}
-          onClick={handleCommentMenu}
-          ref={commentMenuRef}
-        >
-          <DotStackIcon />
-          {showCommentMenu && (
-            <div className={c.CommentsForModel_CommentMenu}>
-              <CommentMenu modelId={modelId} comment={comment} />
-            </div>
-          )}
-        </div>
+        {canEdit && (
+          <div
+            className={c.CommentsForModel_MenuButton}
+            onClick={handleCommentMenu}
+            ref={commentMenuRef}
+          >
+            <DotStackIcon />
+            {showCommentMenu && (
+              <div className={c.CommentsForModel_CommentMenu}>
+                <CommentMenu modelId={modelId} comment={comment} />
+              </div>
+            )}
+          </div>
+        )}
       </div>
       <Markdown className={c.CommentsForModel_CommentBody}>{body}</Markdown>
     </li>
   )
 }
 
-const AuthCommentsForModel = ({ c, className, modelId }) => {
+const AuthCommentsForModel = ({ c, className, modelId, currentUser }) => {
   const { useFetchPerMount } = useServices()
   const {
     atom: { isLoading: loading, isLoaded: loaded, isError: error, data: comments },
@@ -189,7 +194,9 @@ const AuthCommentsForModel = ({ c, className, modelId }) => {
       {comments && comments.length && comments.length === 1 ? 'comment' : 'comments'}
       <NewModelCommentForm modelId={modelId} />
       <ul className={c.CommentsForModel_List}>
-        {comments.map((comment, i) => renderTypedComment({ modelId, comment, key: i }))}
+        {comments.map((comment, i) =>
+          renderTypedComment({ modelId, comment, key: i, currentUser })
+        )}
       </ul>
     </div>
   )
