@@ -150,14 +150,16 @@ export default store => {
       const { error } = await api({
         method: 'POST',
         endpoint: 'models',
-        body: {
-          filename: newFileName,
-          originalFileName: fileName,
-          units: 'mm',
-          searchUpload: false,
-          isPrivate: false,
-          ...otherData,
-        },
+        body: [
+          {
+            filename: newFileName,
+            originalFileName: fileName,
+            units: 'mm',
+            searchUpload: false,
+            isPrivate: false,
+            ...otherData,
+          },
+        ],
       })
 
       if (error) {

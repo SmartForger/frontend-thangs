@@ -71,14 +71,16 @@ export default store => {
       const { data: uploadedData, error } = await api({
         method: 'POST',
         endpoint: 'models',
-        body: {
-          filename,
-          originalFileName,
-          units: 'mm',
-          searchUpload: false,
-          isPrivate: false,
-          ...data,
-        },
+        body: [
+          {
+            filename,
+            originalFileName,
+            units: 'mm',
+            searchUpload: false,
+            isPrivate: false,
+            ...data,
+          },
+        ],
       })
 
       if (error) {
