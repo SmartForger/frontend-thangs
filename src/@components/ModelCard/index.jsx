@@ -1,22 +1,90 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
-import * as R from 'ramda'
-import classnames from 'classnames'
-import { useStoreon } from 'storeon/react'
-import { ReactComponent as ChatIcon } from '@svg/icon-comment.svg'
-import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
-import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
-import * as types from '@constants/storeEventTypes'
-import { ModelThumbnail, UserInline, EditModel } from '@components'
+import React from 'react'
 import { createUseStyles } from '@style'
-import { useCurrentUserId } from '@hooks'
-import { track } from '@utilities/analytics'
+import ModelCardBase from './ModelCardBase'
 
 const useStyles = createUseStyles(theme => {
   const {
     mediaQueries: { xs_352, md_972, xxl_1454 },
   } = theme
+
+  const MQ_DEPEND_PROPS = {
+    ModelCard_UserLine: {
+      MS: {
+        marginBottom: '1rem',
+      },
+      DS: {
+        marginBottom: '1.5rem',
+      },
+      DB: {
+        marginLeft: '1.5rem',
+        marginRight: '1.5rem',
+        marginTop: '1.375rem',
+        marginBottom: '2rem',
+
+        '& > div': {
+          width: '1.875rem !important',
+          height: '1.875rem !important',
+          '& > img': {
+            width: '1.875rem !important',
+            height: '1.875rem !important',
+          },
+        },
+      }
+    },
+    ModelCard_Thumbnail: {
+      MS: {
+        height: '146px !important',
+      },
+      DS: {
+        height: '157px !important',
+      },
+      DB: {
+        height: '270px !important',
+      },
+    },
+    ModelCard_Footer: {
+      MS: {
+        marginTop: '1rem',
+        width: '7.75rem',
+      },
+
+      DS: {
+        marginTop: '1.5rem',
+        width: '11.31rem',
+        '& > *:last-child': {
+          marginTop: '.375rem',
+        },
+      },
+
+      DB: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: '2rem',
+        marginBottom: '1.375rem',
+        marginLeft: '1.5rem',
+        marginRight: '1.5rem',
+        width: 'unset',
+        '& > *:last-child': {
+          marginTop: 0,
+        },
+      },
+    },
+    ModelCard_Name: {
+      MS: {
+        maxWidth: '7.75rem',
+      },
+
+      DS: {
+        maxWidth: '11.31rem',
+      },
+
+      DB: {
+        maxWidth: 'unset',
+      },
+    },
+  }
 
   return {
     '@keyframes spinner': {
@@ -51,27 +119,15 @@ const useStyles = createUseStyles(theme => {
       marginRight: '1.25rem',
 
       [xs_352]: {
-        marginBottom: '1rem',
+        ...MQ_DEPEND_PROPS.ModelCard_UserLine.MS
       },
 
       [md_972]: {
-        marginBottom: '1.5rem',
+        ...MQ_DEPEND_PROPS.ModelCard_UserLine.DS
       },
 
       [xxl_1454]: {
-        marginLeft: '1.5rem',
-        marginRight: '1.5rem',
-        marginTop: '1.375rem',
-        marginBottom: '2rem',
-
-        '& > div': {
-          width: '1.875rem !important',
-          height: '1.875rem !important',
-          '& > img': {
-            width: '1.875rem !important',
-            height: '1.875rem !important',
-          },
-        },
+        ...MQ_DEPEND_PROPS.ModelCard_UserLine.DB
       },
     },
     ModelCard_Thumbnail: {
@@ -80,15 +136,15 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
 
       [xs_352]: {
-        height: '146px !important',
+        ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.MS
       },
 
       [md_972]: {
-        height: '157px !important',
+        ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.DS
       },
 
       [xxl_1454]: {
-        height: '270px !important',
+        ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.DB
       },
     },
     ModelCard_Footer: {
@@ -98,33 +154,16 @@ const useStyles = createUseStyles(theme => {
       '& > *:last-child': {
         marginTop: '.375rem',
       },
-
       [xs_352]: {
-        marginTop: '1rem',
-        width: '7.75rem',
+        ...MQ_DEPEND_PROPS.ModelCard_Footer.MS
       },
 
       [md_972]: {
-        marginTop: '1.5rem',
-        width: '11.31rem',
-        '& > *:last-child': {
-          marginTop: '.375rem',
-        },
+        ...MQ_DEPEND_PROPS.ModelCard_Footer.DS
       },
 
       [xxl_1454]: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginTop: '2rem',
-        marginBottom: '1.375rem',
-        marginLeft: '1.5rem',
-        marginRight: '1.5rem',
-        width: 'unset',
-        '& > *:last-child': {
-          marginTop: 0,
-        },
+        ...MQ_DEPEND_PROPS.ModelCard_Footer.DB
       },
     },
     ModelCard_Name: {
@@ -138,15 +177,15 @@ const useStyles = createUseStyles(theme => {
       overflow: 'hidden',
 
       [xs_352]: {
-        maxWidth: '7.75rem',
+        ...MQ_DEPEND_PROPS.ModelCard_Name.MS
       },
 
       [md_972]: {
-        maxWidth: '11.31rem',
+        ...MQ_DEPEND_PROPS.ModelCard_Name.DS
       },
 
       [xxl_1454]: {
-        maxWidth: 'unset',
+        ...MQ_DEPEND_PROPS.ModelCard_Name.DB
       },
     },
 
@@ -189,169 +228,11 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const CANCELED_TOKEN_MESSAGE = 'canceled'
-
-const LikesAndComments = ({ model }) => {
+const ModelCard = (props) => {
   const c = useStyles()
-  const { dispatch } = useStoreon()
-  const isLikedCancelTokens = useRef({
-    true: axios.CancelToken.source(),
-    false: axios.CancelToken.source(),
-  })
-  const currentUserId = parseInt(useCurrentUserId())
-
-  const [stateLikes, setStateLikes] = useState(model.likes || [])
-
-  const isLiked = useMemo(() => (stateLikes.indexOf(currentUserId) > -1 ? true : false), [
-    stateLikes,
-    currentUserId,
-  ])
-
-  const handleLikeButton = () => {
-    changeLikes(!isLiked)
-    const onError = (e = {}) => {
-      if (e.message !== CANCELED_TOKEN_MESSAGE) {
-        changeLikes(isLiked)
-      }
-    }
-    const onFinish = newLikes => setStateLikes(newLikes)
-
-    isLikedCancelTokens.current[isLiked].cancel(CANCELED_TOKEN_MESSAGE)
-    isLikedCancelTokens.current[!isLiked] = axios.CancelToken.source()
-    dispatch(isLiked ? types.UNLIKE_MODEL_CARD : types.LIKE_MODEL_CARD, {
-      model,
-      onFinish,
-      onError,
-      cancelToken: isLikedCancelTokens.current[!isLiked].token,
-    })
-  }
-
-  const changeLikes = isLiked => {
-    if (isLiked) {
-      setStateLikes(stateLikes => [...stateLikes, currentUserId])
-    } else {
-      setStateLikes(stateLikes => stateLikes.filter(value => value !== currentUserId))
-    }
-  }
-
+ 
   return (
-    <div className={c.ModelCard_LikesAndComments}>
-      <span className={c.ModelCard_ActivityCount} title='Comments'>
-        <ChatIcon />
-        {model.commentsCount}
-      </span>
-      <span
-        title='Like'
-        className={c.ModelCard_ActivityCount}
-        onClick={e => {
-          if (!isNaN(currentUserId)) {
-            e.preventDefault()
-            handleLikeButton()
-          }
-        }}
-      >
-        {isLiked ? (
-          <HeartFilledIcon className={c.ModelCard_Icon__liked} />
-        ) : (
-          <HeartIcon />
-        )}
-        {stateLikes.length}
-      </span>
-    </div>
-  )
-}
-
-const Anchor = ({ children, attributionUrl, to, noLink, ...props }) => {
-  if (noLink) return children
-  return attributionUrl ? (
-    <a href={attributionUrl} target='_blank' rel='noopener noreferrer' {...props}>
-      {children}
-    </a>
-  ) : (
-    <Link to={to.pathname} {...props}>
-      {children}
-    </Link>
-  )
-}
-
-const CardContents = ({
-  className,
-  c,
-  model,
-  modelPath,
-  modelAttributionUrl,
-  isCurrentUserOwner,
-  geoRelated,
-}) => {
-  const userName = R.pathOr('no-user', ['owner', 'username'], model)
-  const onAnchorClick = useCallback(() => {
-    if (geoRelated) track('Geo Related Model Link', { path: modelPath })
-  }, [geoRelated, modelPath])
-
-  return (
-    <div
-      title={modelAttributionUrl || model.name || model.fileName}
-      className={classnames(className, c.ModelCard)}
-      data-cy={R.pathOr('unknown', (['name'], model))}
-    >
-      <Link
-        title={userName}
-        to={{
-          pathname: `/${userName}`,
-          state: { fromModel: true },
-        }}
-      >
-        <UserInline
-          user={model.owner}
-          size={24}
-          maxLength={20}
-          className={c.ModelCard_UserLine}
-        />
-      </Link>
-
-      <Anchor
-        onClick={onAnchorClick}
-        to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
-        attributionUrl={modelAttributionUrl}
-        noLink={!modelPath}
-      >
-        <ModelThumbnail
-          name={model.name}
-          model={model}
-          className={c.ModelCard_Thumbnail}
-        />
-
-        <div className={c.ModelCard_Footer}>
-          <div className={c.ModelCard_Name}>{model.name}</div>
-          <LikesAndComments model={model} />
-        </div>
-      </Anchor>
-
-      {isCurrentUserOwner && (
-        <EditModel className={c.ModelCard_EditModel} model={model} />
-      )}
-    </div>
-  )
-}
-
-const ModelCard = ({ className, model, geoRelated }) => {
-  const c = useStyles()
-  const currentUserId = parseInt(useCurrentUserId())
-  const modelAttributionUrl =
-    model && model.attributionUrl && encodeURI(model.attributionUrl)
-  const modelPath = model.id ? `/model/${model.id}` : modelAttributionUrl
-  const isCurrentUserOwner = `${currentUserId}` === `${R.path(['owner', 'id'], model)}`
-
-  return (
-    <CardContents
-      className={className}
-      model={model}
-      c={c}
-      modelAttributionUrl={modelAttributionUrl}
-      modelPath={modelPath}
-      isCurrentUserOwner={isCurrentUserOwner}
-      geoRelated={geoRelated}
-    />
+    <ModelCardBase c={c} {...props} />
   )
 }
 
