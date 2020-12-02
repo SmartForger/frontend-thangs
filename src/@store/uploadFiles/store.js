@@ -125,55 +125,46 @@ export default store => {
       if (uploadedFiles[fileDataId].name)
         filteredFiles[fileDataId] = uploadedFiles[fileDataId]
     })
-    Promise.all(
-      Object.keys(filteredFiles).map(fileId => {
-        const file = uploadedFiles[fileId]
-        return submitFile({ file })
-      })
-    ).then(() => {
+    submitFile(Object.values(filteredFiles)).then(() => {
       track('New Models Uploaded', { amount: uploadedFiles.length })
       store.dispatch(types.UPLOADED_FILES)
       store.dispatch(types.FETCH_THANGS, { onFinish })
     })
   })
 
-  const submitFile = async ({ file }) => {
+  const submitFile = async ({ files }) => {
     try {
-      const {
-        newFileName,
-        fileName,
-        isError: _e,
-        isLoading: _l,
-        signedUrl: _u,
-        ...otherData
-      } = file
-      const { error } = await api({
+      const response = await api({
         method: 'POST',
         endpoint: 'models',
-        body: [
-          {
-            filename: newFileName,
-            originalFileName: fileName,
-            units: 'mm',
-            searchUpload: false,
-            isPrivate: false,
-            ...otherData,
-          },
-        ],
+        body: files.map(file => ({
+          ...file,
+          filename: file.newFileName,
+          originalFileName: file.fileName,
+          units: 'mm',
+          searchUpload: false,
+          isPrivate: false,
+        })),
       })
 
-      if (error) {
+      files.forEach((file, i) => {
+        if (!response[i]) {
+          store.dispatch(types.CHANGE_UPLOAD_FILE, {
+            id: file.id,
+            data: '',
+            isError: true,
+          })
+        }
+        track('New Model Uploaded')     
+      })
+    } catch (e) {
+      files.forEach((file, i) => {
         store.dispatch(types.CHANGE_UPLOAD_FILE, {
           id: file.id,
-          data: error,
+          data: e,
           isError: true,
         })
-        return
-      }
-      track('New Model Uploaded')
-      return
-    } catch (e) {
-      store.dispatch(types.CHANGE_UPLOAD_FILE, { id: file.id, data: e, isError: true })
+      })
       return
     }
   }
