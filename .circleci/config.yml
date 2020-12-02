@@ -15,6 +15,22 @@ workflows:
 
   deploy-gcloud:
     jobs:
+<<<<<<< HEAD
+=======
+      - cypress/run:
+          executor: test-in-staging
+          context: gcp-and-physna
+          yarn: true
+          start: yarn dev
+          wait-on: 'http://localhost:3000'
+          store_artifacts: true
+          browser: chrome
+          verify-command: yarn cypress verify
+        filters:
+            branches:
+              only:
+                - development
+>>>>>>> corrected context name
       - deploy-staging:
           context: gcp-and-physna
           filters:
