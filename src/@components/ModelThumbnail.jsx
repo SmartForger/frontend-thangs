@@ -106,7 +106,7 @@ const thumbnailUrl = model =>
     ? model.fullThumbnailUrl
     : model.thumbnailUrl
       ? model.thumbnailUrl
-      : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}?size=456x540`
+      : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}`
 
 const getThumbnailUrl = (model = {}) => {
   if (model.thumbnailUrl) return model.thumbnailUrl
