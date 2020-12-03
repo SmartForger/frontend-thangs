@@ -78,7 +78,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     ModelThumbnail_Loader: {
-      // position: 'absolute',
+      position: 'absolute',
     },
   }
 })
