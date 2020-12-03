@@ -64,24 +64,6 @@ const useStyles = createUseStyles(theme => {
         },
       },
     },
-    MyThangs_DesktopOnly: {
-      display: 'none',
-
-      [md]: {
-        display: 'flex',
-        justifyContent: 'center',
-        flexDirection: 'column',
-      },
-    },
-    MyThangs_MobileOnly: {
-      display: 'flex',
-      justifyContent: 'center',
-      flexDirection: 'column',
-
-      [md]: {
-        display: 'none',
-      },
-    },
     Layout_blur: {
       display: 'block',
       filter: 'blur(4px)',
