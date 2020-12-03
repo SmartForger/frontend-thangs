@@ -37,6 +37,7 @@ const useStyles = createUseStyles(theme => {
     },
     ModelSearchResult_Thumbnail: {
       width: '100%',
+      height: '100%',
       padding: '0 !important',
       margin: 'auto',
       borderRadius: '.5rem .5rem 0 0',
