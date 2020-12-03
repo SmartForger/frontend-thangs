@@ -55,8 +55,8 @@ const useStyles = createUseStyles(theme => {
         !showPromo && windowed
           ? '22.875rem'
           : showPromo && windowed
-          ? '45.75rem'
-          : '32rem',
+            ? '45.75rem'
+            : '32rem',
       transition: 'all 450ms',
       opacity: ({ animateIn }) => (animateIn ? 0 : 1),
       top: ({ animateIn }) => (animateIn ? '30px' : 0),
@@ -105,7 +105,7 @@ const Overlay = ({
     setTimeout(() => {
       setIsVisible(true)
     }, 0)
-  }, [])
+  }, [scrollTop])
 
   return (
     <ReactModal
