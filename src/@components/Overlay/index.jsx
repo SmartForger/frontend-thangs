@@ -55,8 +55,8 @@ const useStyles = createUseStyles(theme => {
         !showPromo && windowed
           ? '22.875rem'
           : showPromo && windowed
-            ? '45.75rem'
-            : '32rem',
+          ? '45.75rem'
+          : '32rem',
       transition: 'all 450ms',
       opacity: ({ animateIn }) => (animateIn ? 0 : 1),
       top: ({ animateIn }) => (animateIn ? '30px' : 0),
@@ -89,6 +89,7 @@ const Overlay = ({
   shake = false,
   isHidden,
   dialogue,
+  scrollTop = true,
   ...props
 }) => {
   const overlayRef = useRef(null)
@@ -97,8 +98,10 @@ const Overlay = ({
   // useExternalClick(overlayRef, () => dispatch(types.CLOSE_OVERLAY))
   const c = useStyles({ windowed, animateIn, showPromo, isHidden, dialogue })
   useEffect(() => {
-    document.body.scrollTop = 0
-    document.documentElement.scrollTop = 0
+    if (scrollTop) {
+      document.body.scrollTop = 0
+      document.documentElement.scrollTop = 0
+    }
     setTimeout(() => {
       setIsVisible(true)
     }, 0)
