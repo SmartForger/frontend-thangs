@@ -15,7 +15,6 @@ import { track } from '@utilities/analytics'
 const CANCELED_TOKEN_MESSAGE = 'canceled'
 
 const LikesAndComments = ({ c, model }) => {
-  
   const { dispatch } = useStoreon()
   const isLikedCancelTokens = useRef({
     true: axios.CancelToken.source(),
@@ -110,12 +109,11 @@ const CardContents = ({
   const onAnchorClick = useCallback(() => {
     if (geoRelated) track('Geo Related Model Link', { path: modelPath })
   }, [geoRelated, modelPath])
-
   return (
     <div
       title={modelAttributionUrl || model.name || model.fileName}
       className={classnames(className, c.ModelCard)}
-      data-cy={R.pathOr('unknown', (['name'], model))}
+      data-cy={R.pathOr('unknown', ['name'], model)}
     >
       <Link
         title={userName}

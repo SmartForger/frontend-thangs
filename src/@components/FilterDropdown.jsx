@@ -48,8 +48,8 @@ export const FilterDropdownMenu = ({ options = [], TargetComponent, label }) => 
         {options.map((option, ind) => {
           const isLast = ind === options.length - 1
           return (
-            <>
-              <DropdownItem key={`sort_${ind}`} onClick={option.onClick}>
+            <React.Fragment key={`filter-sort_${ind}`}>
+              <DropdownItem onClick={option.onClick}>
                 <Spacer size={'.5rem'} />
                 <div>
                   <Spacer size={'.5rem'} />
@@ -59,7 +59,7 @@ export const FilterDropdownMenu = ({ options = [], TargetComponent, label }) => 
                 <Spacer size={'.5rem'} />
               </DropdownItem>
               {!isLast && <Spacer size={'.25rem'} />}
-            </>
+            </React.Fragment>
           )
         })}
       </div>
