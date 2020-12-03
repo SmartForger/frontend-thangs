@@ -86,8 +86,7 @@ const CommentMenu = ({ modelId, comment = {} }) => {
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
-      <Spacer size={'.5rem'} />
-      <Divider spacing={'.5rem'} />
+      <Spacer size={'1rem'} />
       <MenuItem className={c.CommentMenu_Item} onClick={handleDelete}>
         <div>
           <Spacer size={'1.5rem'} />
