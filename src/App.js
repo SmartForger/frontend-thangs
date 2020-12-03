@@ -26,6 +26,7 @@ import {
 } from '@components/RouteComponent'
 import { FlashContextProvider } from '@components/Flash'
 import { StoreContext } from 'storeon/react'
+import { useLocalStorage } from '@hooks'
 import { ThemeProvider } from '@style'
 import { GlobalStyles } from '@style/globals'
 import store from 'store'
@@ -43,8 +44,8 @@ export function AppFrame() {
 const App = () => {
   const [isLoadingOptimizely, setIsLoadingOptimizely] = useState(true)
   const user = authenticationService.getCurrentUser()
-  const unAuthId = Math.random().toString(36).substring(2, 15)
-
+  const [experimentationId, setExpId] = useLocalStorage('experimentationId', null)
+  if (!experimentationId) setExpId(Math.random().toString(36).substring(2, 15))
   const optimizely = createInstance({
     sdkKey: process.env.REACT_APP_OPTIMIZELY_API_KEY,
   })
@@ -57,7 +58,7 @@ const App = () => {
     <OptimizelyProvider
       optimizely={optimizely}
       timeout={500}
-      user={{ id: (user || { id: unAuthId }).id }}
+      user={{ id: (user || { id: experimentationId }).id }}
     >
       <StoreContext.Provider value={store}>
         <ErrorBoundary>
