@@ -82,7 +82,7 @@ const useStyles = createUseStyles(theme => {
       '& > span': {
         ...theme.text.bodyBase,
         fontSize: '1rem',
-        lineHeight: '.75rem',
+        lineHeight: '1rem',
         whiteSpace: 'nowrap',
         display: 'inline',
         margin: '0 .5rem 0 1rem',
