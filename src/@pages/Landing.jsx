@@ -150,13 +150,7 @@ const label = sortBy => {
   }
 }
 
-const Page = ({
-  user = {},
-  dispatch,
-  modelPreviews = {},
-  sortBy,
-  isLoadingOptimizely,
-}) => {
+const Page = ({ user = {}, dispatch, modelPreviews = {}, sortBy }) => {
   const c = useStyles({})
   const containerRef = useRef(null)
   const history = useHistory()
@@ -229,36 +223,28 @@ const Page = ({
 
   return (
     <div className={c.Landing_Column} ref={containerRef}>
-      {isLoadingOptimizely && (
-        <>
-          <Spacer size={'2rem'} />
-          <Spinner />
-        </>
-      )}
-      {!isLoadingOptimizely && (
-        <>
-          <div className={c.Landing_Title}>
-            <TitleSecondary>{title(sortBy)}</TitleSecondary>
-            <FilterDropdownMenu
-              user={user}
-              options={sortOptions}
-              TargetComponent={FilterDropdown}
-              dispatch={dispatch}
-              label={label(sortBy)}
-            />
-          </div>
+      <>
+        <div className={c.Landing_Title}>
+          <TitleSecondary>{title(sortBy)}</TitleSecondary>
+          <FilterDropdownMenu
+            user={user}
+            options={sortOptions}
+            TargetComponent={FilterDropdown}
+            dispatch={dispatch}
+            label={label(sortBy)}
+          />
+        </div>
 
-          <CardCollectionLanding
-            noResultsText='We have no models to display right now. Please try again later.'
-            isLoading={isLoading}
-          >
-            {Array.isArray(modelPreviews.data) &&
-              modelPreviews.data.map((model, index) => (
-                <ModelCardLanding key={`model-${model.id}:${index}`} model={model} />
-              ))}
-          </CardCollectionLanding>
-        </>
-      )}
+        <CardCollectionLanding
+          noResultsText='We have no models to display right now. Please try again later.'
+          isLoading={isLoading}
+        >
+          {Array.isArray(modelPreviews.data) &&
+            modelPreviews.data.map((model, index) => (
+              <ModelCardLanding key={`model-${model.id}:${index}`} model={model} />
+            ))}
+        </CardCollectionLanding>
+      </>
     </div>
   )
 }
@@ -341,13 +327,20 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
         <title>{title}</title>
         <meta name='description' content={description} />
       </Helmet>
-      <Page
-        user={user}
-        dispatch={dispatch}
-        modelPreviews={modelPreviews}
-        sortBy={sortBy || defaultSort}
-        isLoadingOptimizely={isLoadingOptimizely}
-      />
+      {!isLoadingOptimizely && (
+        <Page
+          user={user}
+          dispatch={dispatch}
+          modelPreviews={modelPreviews}
+          sortBy={sortBy || defaultSort}
+        />
+      )}
+      {isLoadingOptimizely && (
+        <>
+          <Spacer size={'2rem'} />
+          <Spinner />
+        </>
+      )}
     </Layout>
   )
 }
