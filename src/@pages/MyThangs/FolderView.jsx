@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
@@ -13,11 +13,13 @@ import {
   Spinner,
   TitleTertiary,
   Contributors,
+  FileMenu,
 } from '@components'
 import { useQuery } from '@hooks'
 import { authenticationService } from '@services'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
+import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as InviteIcon } from '@svg/icon-invite.svg'
 import { ReactComponent as PadlockIcon } from '@svg/icon-padlock.svg'
@@ -60,9 +62,16 @@ const useStyles = createUseStyles(theme => {
     },
     FolderView_Row: {
       display: 'flex',
+      position: 'relative',
       alignItems: 'center',
       flexDirection: 'row',
       justifyContent: 'space-between',
+    },
+    FolderView_Row__desktop: {
+      display: 'none',
+      [md]: {
+        display: 'flex',
+      },
     },
     FolderView_TitleAndIcons: {
       display: 'flex',
@@ -85,6 +94,29 @@ const useStyles = createUseStyles(theme => {
     PadlockIcon_Header: {
       flex: 'none',
     },
+    FolderView_MobileMenuButton: {
+      marginRight: '1.5rem',
+      position: 'relative',
+      display: 'unset',
+      [md]: {
+        display: 'none',
+      },
+      '& > svg': {
+        padding: '.25rem',
+        borderRadius: '.25rem',
+        border: '1px solid transparent',
+
+        '&:hover': {
+          border: `1px solid ${theme.colors.grey[300]}`,
+        },
+      },
+    },
+    FolderView_MobileMenu: {
+      position: 'absolute',
+      top: '1.2rem',
+      right: 0,
+      zIndex: 1,
+    },
   }
 })
 
@@ -102,6 +134,8 @@ const getSubfolderId = (path, rootFolder, folder) => {
 const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
+  const [showFileMenu, setShowFileMenu] = useState(false)
+  const fileMenuRef = useRef(null)
   const { id, name } = folder
   const folderPath = name.split('//')
 
@@ -140,6 +174,14 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
       },
     })
   }, [dispatch, folder])
+
+  const handleFileMenu = useCallback(
+    e => {
+      e.stopPropagation()
+      setShowFileMenu(!showFileMenu)
+    },
+    [showFileMenu]
+  )
 
   return (
     <div className={c.FolderView_Row}>
@@ -189,7 +231,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
           )}
         </div>
       </div>
-      <div className={c.FolderView_Row}>
+      <div className={classnames(c.FolderView_Row, c.FolderView_Row__desktop)}>
         <Contributors
           users={rootFolder ? rootFolder.members : folder.members}
           displayLength='10'
@@ -204,6 +246,18 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
           <Spacer size={'.5rem'} />
           Invite Members
         </Button>
+      </div> 
+      <div
+        className={c.FolderView_MobileMenuButton}
+        onClick={handleFileMenu}
+        ref={fileMenuRef}
+      >
+        <DotStackIcon />
+        {showFileMenu && (
+          <div className={c.FolderView_MobileMenu}>
+            <FileMenu type={'folder'} folder={folder} />
+          </div>
+        )}
       </div>
     </div>
   )
@@ -284,7 +338,6 @@ const FolderView = ({
         <main className={classnames(className, c.FolderView)}>
           <Spacer size='2rem' />
           <div className={c.FolderView_Content}>
-            <Spacer size='2rem' />
             <FolderHeader
               folder={folder}
               rootFolder={rootFolder}

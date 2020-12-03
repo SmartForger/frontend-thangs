@@ -111,6 +111,12 @@ const useStyles = createUseStyles(theme => {
     MyThangs_ContextMenu: {
       zIndex: 2,
     },
+    MyThangs_HeaderSpacer: {
+      display: 'none',
+      [md]: {
+        display: 'block',
+      }
+    },
   }
 })
 
@@ -253,7 +259,7 @@ const MyThangs = () => {
             setCurrentView={handleCurrentView}
             openMobileNav={openMobileNav}
           />
-          <Spacer size={'7rem'} />
+          <Spacer size={'7rem'} className={c.MyThangs_HeaderSpacer}/>
           {!isLoaded || isLoading ? (
             <Spinner className={c.Spinner} />
           ) : (

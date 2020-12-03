@@ -84,7 +84,7 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
       alignItems: 'center',
     },
-    FileTable_Row_Column__mobile: {
+    FileTable_Row_Column__desktop: {
       display: 'none',
       [md]: {
         display: 'table-cell',
@@ -317,20 +317,20 @@ const FolderRow = ({ folder }) => {
       <td title={folder.name}>
         <FolderName name={folder.name} />
       </td>
-      <td className={c.FileTable_Row_Column__mobile}>
+      <td className={c.FileTable_Row_Column__desktop}>
         <MetadataSecondary>-</MetadataSecondary>
       </td>
-      <td className={c.FileTable_Row_Column__mobile}>
+      <td className={c.FileTable_Row_Column__desktop}>
         <MetadataSecondary>-</MetadataSecondary>
       </td>
-      <td className={c.FileTable_Row_Column__mobile}>
+      <td className={c.FileTable_Row_Column__desktop}>
         <MetadataSecondary>-</MetadataSecondary>
       </td>
-      <td className={c.FileTable_Row_Column__mobile}>
+      <td className={c.FileTable_Row_Column__desktop}>
         <Contributors users={folder.members} />
       </td>
-      <td className={c.FileTable_Row_Column__mobile}>-</td>
-      <td className={c.FileTable_Row_Column__mobile}>
+      <td className={c.FileTable_Row_Column__desktop}>-</td>
+      <td className={c.FileTable_Row_Column__desktop}>
         <div className={c.MenuButton} onClick={handleFolderMenu} ref={folderMenuRef}>
           <DotStackIcon />
           {showFolderMenu && (
@@ -364,21 +364,21 @@ const FileRow = ({ model }) => {
       <td>
         <FileName name={model.name} />
       </td>
-      <td className={c.FileTable_Row_Column__mobile}>
+      <td className={c.FileTable_Row_Column__desktop}>
         <MetadataSecondary>
           {format(new Date(model.uploadDate), 'MMM d, Y, h:mm aaaa')}
         </MetadataSecondary>
       </td>
-      <td className={c.FileTable_Row_Column__mobile}>
+      <td className={c.FileTable_Row_Column__desktop}>
         <MetadataSecondary>{model.fileType}</MetadataSecondary>
       </td>
-      <td className={c.FileTable_Row_Column__mobile}>
+      <td className={c.FileTable_Row_Column__desktop}>
         <MetadataSecondary>{formatBytes(model.size)}</MetadataSecondary>
       </td>
-      <td className={c.FileTable_Row_Column__mobile}>
+      <td className={c.FileTable_Row_Column__desktop}>
         <Contributors users={[model.owner]} />
       </td>
-      <td className={c.FileTable_Row_Column__mobile}>
+      <td className={c.FileTable_Row_Column__desktop}>
         {model.previousVersionModelId ? (
           <Link to={`/model/${model.previousVersionModelId}`}>
             {model.previousVersionModelId}
@@ -387,7 +387,7 @@ const FileRow = ({ model }) => {
           '-'
         )}
       </td>
-      <td className={c.FileTable_Row_Column__mobile}>
+      <td className={c.FileTable_Row_Column__desktop}>
         <div className={c.MenuButton} onClick={handleFileMenu} ref={fileMenuRef}>
           <DotStackIcon />
           {showFileMenu && (
