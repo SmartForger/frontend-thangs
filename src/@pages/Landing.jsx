@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import { useFeature } from '@optimizely/react-sdk'
@@ -154,17 +154,26 @@ const Page = ({ user = {}, dispatch, modelPreviews = {}, sortBy }) => {
   const c = useStyles({})
   const containerRef = useRef(null)
   const history = useHistory()
+  const [endOfModels, setEndOfModels] = useState(false)
   const { isLoading } = modelPreviews
 
+  const handleOnFinish = useCallback(data => {
+    if (!data.length) setEndOfModels(true)
+  }, [])
+
   useEffect(() => {
-    dispatch(types.FETCH_MODEL_PREVIEW, { sortBy, isInitial: true })
-  }, [dispatch, sortBy])
+    dispatch(types.FETCH_MODEL_PREVIEW, {
+      sortBy,
+      isInitial: true,
+      onFinish: handleOnFinish,
+    })
+  }, [dispatch, handleOnFinish, sortBy])
 
   useEffect(() => {
     const trackScrolling = () => {
       const wrappedElement = containerRef.current
-      if (isBottom(wrappedElement) && !isLoading) {
-        dispatch(types.FETCH_MODEL_PREVIEW, { sortBy })
+      if (isBottom(wrappedElement) && !isLoading && !endOfModels) {
+        dispatch(types.FETCH_MODEL_PREVIEW, { sortBy, onFinish: handleOnFinish })
       }
     }
 
@@ -180,6 +189,7 @@ const Page = ({ user = {}, dispatch, modelPreviews = {}, sortBy }) => {
     type => {
       history.push(`/?sort=${type}`)
       track('Sorted Models', { sortBy: type })
+      setEndOfModels(false)
     },
     [history]
   )

@@ -3,6 +3,7 @@ import * as types from '@constants/storeEventTypes'
 import { STATUSES, getStatusState } from '@store/constants'
 import { track } from '@utilities/analytics'
 export const PREVIEW_MODELS_SIZE = 25
+const noop = () => null
 
 export default store => {
   store.on(types.STORE_INIT, () => ({
@@ -32,7 +33,7 @@ export default store => {
 
   store.on(
     types.FETCH_MODEL_PREVIEW,
-    async (state, { sortBy = 'likes', isInitial = false }) => {
+    async (state, { sortBy = 'likes', isInitial = false, onFinish = noop }) => {
       if (!state.modelPreviews.isLoading) {
         state.modelPreviews.isLoading = true
         store.dispatch(types.LOADING_MODEL_PREVIEW, { isInitial })
@@ -49,6 +50,7 @@ export default store => {
           },
         })
         store.dispatch(types.LOADED_MODEL_PREVIEW, { data, isInitial })
+        onFinish(data)
       }
     }
   )
