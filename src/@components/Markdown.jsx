@@ -35,6 +35,7 @@ const Markdown = ({ children, className }) => {
       source={children}
       allowedTypes={allowedTypes}
       unwrapDisallowed
+      linkTarget={'_blank'}
       className={classnames(className, c.Markdown)}
     />
   )

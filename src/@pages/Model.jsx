@@ -10,6 +10,7 @@ import {
   HoopsModelViewer,
   Layout,
   LikeModelButton,
+  Markdown,
   ModelDetails,
   ModelTitle,
   ModelViewer as BackupViewer,
@@ -486,7 +487,9 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
           <div className={c.Model_Row}>
             <div className={c.Model_LeftColumn}>
               <div>
-                <pre className={c.Model_ModelDescription}>{modelData.description}</pre>
+                <Markdown className={c.Model_ModelDescription}>
+                  {modelData.description}
+                </Markdown>
                 <div className={c.Model_ModelDetails}>
                   <ModelDetails model={modelData} />
                 </div>
