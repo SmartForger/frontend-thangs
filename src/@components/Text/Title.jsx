@@ -3,9 +3,6 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
-  const {
-    mediaQueries: { sm_max },
-  } = theme
   return {
     Title: {
       ...theme.text.titleBase,
@@ -14,9 +11,6 @@ const useStyles = createUseStyles(theme => {
       margin: 0,
       padding: 0,
       color: ({ light }) => (light ? theme.colors.white[100] : theme.colors.black[500]),
-      [sm_max]: {
-        margin: '0 2rem',
-      },
     },
     TitlePrimary: {
       fontSize: '4rem',
