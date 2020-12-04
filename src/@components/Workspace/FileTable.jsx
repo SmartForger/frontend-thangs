@@ -1,6 +1,8 @@
 import React, { useCallback, useState, useRef, useMemo } from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import * as R from 'ramda'
 import { format } from 'date-fns'
+import classnames from 'classnames'
 import {
   Contributors,
   FileContextMenu,
@@ -461,6 +463,7 @@ const getSortedFiles = (files, sortType, order) => {
 }
 
 const FileTable = ({
+  className,
   files = [],
   handleChangeFolder = noop,
   handleEditModel: _h = noop,
@@ -491,7 +494,7 @@ const FileTable = ({
   }, [files, order, sortedBy])
 
   return (
-    <div className={c.FileTable}>
+    <div className={classnames(className, c.FileTable)}>
       {sortedFiles.length > 0 || searchCase ? (
         <>
           <table>
@@ -503,20 +506,7 @@ const FileTable = ({
                   const { id } = file
                   return (
                     <React.Fragment key={`TableRow_${index}`}>
-                      {file.subfolders ? (
-                        <React.Fragment key={`FolderRow_${index}`}>
-                          <ContextMenuTrigger
-                            id={`File_Menu_${id}`}
-                            holdToDisplay={1000}
-                            renderTag={'tr'}
-                            attributes={{
-                              onClick: () => handleChangeFolder(file),
-                            }}
-                          >
-                            <FolderRow folder={file} />
-                          </ContextMenuTrigger>
-                        </React.Fragment>
-                      ) : (
+                      {R.isNil(file.models) ? (
                         <React.Fragment key={`FileRow_${index}`}>
                           <ContextMenuTrigger
                             id={`File_Menu_${id}`}
@@ -527,6 +517,19 @@ const FileTable = ({
                             }}
                           >
                             <FileRow model={file} />
+                          </ContextMenuTrigger>
+                        </React.Fragment>
+                      ) : (
+                        <React.Fragment key={`FolderRow_${index}`}>
+                          <ContextMenuTrigger
+                            id={`File_Menu_${id}`}
+                            holdToDisplay={1000}
+                            renderTag={'tr'}
+                            attributes={{
+                              onClick: () => handleChangeFolder(file),
+                            }}
+                          >
+                            <FolderRow folder={file} />
                           </ContextMenuTrigger>
                         </React.Fragment>
                       )}
@@ -543,20 +546,20 @@ const FileTable = ({
           {sortedFiles.length > 0
             ? sortedFiles.map((file, index) => {
               if (!file) return null
-              const { id, subfolders } = file
-              return subfolders ? (
-                <FileContextMenu
-                  key={`contextMenu_${index}`}
-                  id={id}
-                  folder={file}
-                  type={'folder'}
-                />
-              ) : (
+              const { id, models } = file
+              return R.isNil(models) ? (
                 <FileContextMenu
                   key={`contextMenu_${index}`}
                   id={id}
                   model={file}
                   type={'model'}
+                />
+              ) : (
+                <FileContextMenu
+                  key={`contextMenu_${index}`}
+                  id={id}
+                  folder={file}
+                  type={'folder'}
                 />
               )
             })

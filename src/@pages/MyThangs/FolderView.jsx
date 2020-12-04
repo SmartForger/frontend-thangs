@@ -51,6 +51,12 @@ const useStyles = createUseStyles(theme => {
         minWidth: '56rem',
       },
     },
+    FolderView_FoldersSection: {
+      display: 'none',
+      [md]: {
+        display: 'block',
+      },
+    },
     FolderView_Folders: {
       display: 'flex',
       flexDirection: 'row',
@@ -116,6 +122,19 @@ const useStyles = createUseStyles(theme => {
       top: '1.2rem',
       right: 0,
       zIndex: 1,
+    },
+    FolderView_FileTable__mobile: {
+      display: 'unset',
+      [md]: {
+        display: 'none',
+      },
+    },
+
+    FolderView_FileTable__desktop: {
+      display: 'none',
+      [md]: {
+        display: 'unset',  
+      },
     },
   }
 })
@@ -246,7 +265,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
           <Spacer size={'.5rem'} />
           Invite Members
         </Button>
-      </div> 
+      </div>
       <div
         className={c.FolderView_MobileMenuButton}
         onClick={handleFileMenu}
@@ -331,6 +350,10 @@ const FolderView = ({
   const directSubFolders = subfolders.filter(
     subfolder => !subfolder.name.replace(`${name}//`, '').includes('//')
   )
+  const fileTableFolders = directSubFolders.map(item => ({
+    ...item,
+    name: item.name.split('//').reverse()[0],
+  }))
 
   return (
     <>
@@ -345,7 +368,7 @@ const FolderView = ({
               isSharedFolder={isSharedFolder}
             />
             {directSubFolders.length > 0 && (
-              <>
+              <div className={c.FolderView_FoldersSection}>
                 <Spacer size='4rem' />
                 <TitleTertiary>Folders</TitleTertiary>
                 <div className={c.FolderView_Folders}>
@@ -360,7 +383,7 @@ const FolderView = ({
                     </React.Fragment>
                   ))}
                 </div>
-              </>
+              </div>
             )}
             {models.length > 0 && (
               <>
@@ -370,12 +393,21 @@ const FolderView = ({
               </>
             )}
             <FileTable
+              className={c.FolderView_FileTable__desktop}
               files={models}
               handleEditModel={handleEditModel}
               handleChangeFolder={handleChangeFolder}
               hideDropzone={directSubFolders.length > 0}
               onDrop={onDrop}
-            ></FileTable>
+            />
+            <FileTable
+              className={c.FolderView_FileTable__mobile}
+              files={[...fileTableFolders, ...models]}
+              handleEditModel={handleEditModel}
+              handleChangeFolder={handleChangeFolder}
+              hideDropzone={directSubFolders.length > 0}
+              onDrop={onDrop}
+            />
           </div>
           <Spacer size='2rem' />
         </main>
