@@ -22,6 +22,7 @@ export const NewTheme = {
       viewerText: colors.grey[500],
       viewerControlBorderColor: colors.purple[200],
       viewerControlText: colors.grey[300],
+      border: colors.white[900],
     },
     fonts: {
       headerFont,

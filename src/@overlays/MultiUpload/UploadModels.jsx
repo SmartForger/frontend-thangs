@@ -23,6 +23,7 @@ import { formatBytes } from '@utilities'
 import Dropzone from 'react-dropzone'
 import { FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { overlayview } from '@utilities/analytics'
+import UploadTreeView, { mockFileTree } from './UploadTreeView'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -260,107 +261,112 @@ const UploadModels = ({
           <Spacer size='1rem' />
         </>
       )}
-      {fileLength > 0 && (
-        <>
-          <Spacer size={'1.5rem'} />
-          <TitleTertiary>
-            {fileLength > 0 ? `${fileLength} File${fileLength > 1 ? 's' : ''}` : 'Files'}
-          </TitleTertiary>
-          <Spacer size={'.5rem'} />
-          <div className={c.UploadModels_ScrollableFiles}>
-            {Object.keys(uploadFiles).map((id, index) => {
-              const file = uploadFiles[id]
-              const { name, size, isLoading } = file
-              if (!name) return null
-              return (
-                <div key={`fileUpload_${index}`}>
+      {fileLength > 0 &&
+        (isLoadingFiles ? (
+          <>
+            <Spacer size={'1.5rem'} />
+            <TitleTertiary>
+              {fileLength > 0
+                ? `${fileLength} File${fileLength > 1 ? 's' : ''}`
+                : 'Files'}
+            </TitleTertiary>
+            <Spacer size={'.5rem'} />
+            <div className={c.UploadModels_ScrollableFiles}>
+              {Object.keys(uploadFiles).map((id, index) => {
+                const file = uploadFiles[id]
+                const { name, size, isLoading } = file
+                if (!name) return null
+                return (
+                  <div key={`fileUpload_${index}`}>
+                    <Spacer size={'.75rem'} />
+                    <div className={c.UploadModels_FileRow}>
+                      <div className={c.UploadModels_Row}>
+                        {isLoading ? <Spinner size={'1rem'} /> : <FileIcon />}
+                        <Spacer size={'.75rem'} />
+                        <SingleLineBodyText
+                          className={c.UploadModels_FileName}
+                          title={name}
+                        >
+                          {name}
+                        </SingleLineBodyText>
+                        <Spacer size={'.5rem'} />
+                        <MetadataSecondary>{formatBytes(size)}</MetadataSecondary>
+                      </div>
+                      <div>
+                        <TrashCanIcon
+                          className={c.UploadModels_RemoveBtn}
+                          onClick={() => removeFile(id)}
+                        />
+                      </div>
+                    </div>
+                    <Spacer size={'.75rem'} />
+                    <Divider spacing={0} />
+                  </div>
+                )
+              })}
+            </div>
+            <TitleTertiary>Missing Files</TitleTertiary>
+            <Spacer size={'.5rem'} />
+            <div>
+              {missingFiles.map(f => (
+                <div key={f.filename}>
                   <Spacer size={'.75rem'} />
                   <div className={c.UploadModels_FileRow}>
                     <div className={c.UploadModels_Row}>
-                      {isLoading ? <Spinner size={'1rem'} /> : <FileIcon />}
+                      {f.skipped ? (
+                        <FileIcon className={c.UploadModels_SkippedFileIcon} />
+                      ) : (
+                        <InfoIcon className={c.UploadModels_MissingFileIcon} />
+                      )}
                       <Spacer size={'.75rem'} />
                       <SingleLineBodyText
-                        className={c.UploadModels_FileName}
-                        title={name}
+                        className={classnames(
+                          c.UploadModels_FileName,
+                          f.skipped ? 'skipped' : 'missing'
+                        )}
+                        title={f.filename}
                       >
-                        {name}
+                        {f.filename}
                       </SingleLineBodyText>
-                      <Spacer size={'.5rem'} />
-                      <MetadataSecondary>{formatBytes(size)}</MetadataSecondary>
                     </div>
-                    <div>
-                      <TrashCanIcon
-                        className={c.UploadModels_RemoveBtn}
-                        onClick={() => removeFile(id)}
-                      />
-                    </div>
+                    {!f.skipped && (
+                      <Button
+                        tertiary
+                        className={c.UploadModels_SkipButton}
+                        onClick={() => {
+                          skipFile(f.filename)
+                        }}
+                      >
+                        Skip
+                      </Button>
+                    )}
                   </div>
                   <Spacer size={'.75rem'} />
                   <Divider spacing={0} />
                 </div>
-              )
-            })}
-          </div>
-          <TitleTertiary>Missing Files</TitleTertiary>
-          <Spacer size={'.5rem'} />
-          <div>
-            {missingFiles.map(f => (
-              <div key={f.filename}>
-                <Spacer size={'.75rem'} />
-                <div className={c.UploadModels_FileRow}>
-                  <div className={c.UploadModels_Row}>
-                    {f.skipped ? (
-                      <FileIcon className={c.UploadModels_SkippedFileIcon} />
-                    ) : (
-                      <InfoIcon className={c.UploadModels_MissingFileIcon} />
-                    )}
-                    <Spacer size={'.75rem'} />
-                    <SingleLineBodyText
-                      className={classnames(
-                        c.UploadModels_FileName,
-                        f.skipped ? 'skipped' : 'missing'
-                      )}
-                      title={f.filename}
-                    >
-                      {f.filename}
-                    </SingleLineBodyText>
-                  </div>
-                  {!f.skipped && (
-                    <Button
-                      tertiary
-                      className={c.UploadModels_SkipButton}
-                      onClick={() => {
-                        skipFile(f.filename)
-                      }}
-                    >
-                      Skip
-                    </Button>
-                  )}
-                </div>
-                <Spacer size={'.75rem'} />
-                <Divider spacing={0} />
-              </div>
-            ))}
-          </div>
-          <Spacer size={'1rem'} />
-          <Toggle
-            id='upload_assembly'
-            label={uploadAssemblyLabel}
-            checked={isAssembly}
-            onChange={toggleAssembly}
-          />
-          <Spacer size={'1.5rem'} />
-          <div className={c.UploadModels_ButtonWrapper}>
-            <Button secondary onClick={closeOverlay}>
-              Cancel
-            </Button>
+              ))}
+            </div>
             <Spacer size={'1rem'} />
-            <Button onClick={handleContinue}>
-              {isLoadingFiles ? 'Processing...' : 'Continue'}
-            </Button>
-          </div>
-        </>
-      )}
+            <Toggle
+              id='upload_assembly'
+              label={uploadAssemblyLabel}
+              checked={isAssembly}
+              onChange={toggleAssembly}
+            />
+            <Spacer size={'1.5rem'} />
+            <div className={c.UploadModels_ButtonWrapper}>
+              <Button secondary onClick={closeOverlay}>
+                Cancel
+              </Button>
+              <Spacer size={'1rem'} />
+              <Button onClick={handleContinue}>
+                {isLoadingFiles ? 'Processing...' : 'Continue'}
+              </Button>
+            </div>
+          </>
+        ) : (
+          <UploadTreeView fileTree={mockFileTree} />
+        ))}
       <Spacer size={'2rem'} />
     </>
   )
