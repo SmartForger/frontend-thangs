@@ -2,9 +2,9 @@ import React from 'react'
 import { ContextMenu } from 'react-contextmenu'
 import { AddMenu } from '@components'
 
-const AddContextMenu = ({ folder, className }) => {
+const AddContextMenu = ({ id = 'Add_Menu', folder, className }) => {
   return (
-    <ContextMenu className={className} id='Add_Menu'>
+    <ContextMenu className={className} id={id}>
       <AddMenu folder={folder} />
     </ContextMenu>
   )

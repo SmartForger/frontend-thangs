@@ -274,7 +274,7 @@ const FolderView = ({
 
   return (
     <>
-      <ContextMenuTrigger id='Add_Menu' holdToDisplay={1000}>
+      <ContextMenuTrigger id='Add_Menu_FolderView' holdToDisplay={1000}>
         <main className={classnames(className, c.FolderView)}>
           <Spacer size='2rem' />
           <div className={c.FolderView_Content}>
@@ -321,7 +321,7 @@ const FolderView = ({
           <Spacer size='2rem' />
         </main>
       </ContextMenuTrigger>
-      <AddContextMenu folder={folder} rootFolder={rootFolder} />
+      <AddContextMenu id='Add_Menu_FolderView' folder={folder} rootFolder={rootFolder} />
     </>
   )
 }
