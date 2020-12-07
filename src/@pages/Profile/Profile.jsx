@@ -20,7 +20,7 @@ import {
 import { Message404 } from '@pages/404'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import { useCurrentUserId, usePageMeta } from '@hooks'
+import { useCurrentUserId, usePageMeta, usePerformanceMetrics } from '@hooks'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track } from '@utilities/analytics'
 
@@ -134,11 +134,15 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
-
+const noop = () => null
 const getDescription = R.pathOr('Empty', ['profile', 'description'])
 
-const ModelsContent = ({ models: modelsData = {} }) => {
+const ModelsContent = ({ models: modelsData = {}, getTime = noop }) => {
   const { data: models, isLoaded, isError } = modelsData
+
+  useEffect(() => {
+    if (isLoaded) track('Page Loaded - Profile', { seconds: getTime() })
+  }, [getTime, isLoaded])
 
   if (!isLoaded) {
     return <Spinner />
@@ -196,7 +200,7 @@ const CollectionTitle = ({ selected, onClick, className, title, amount }) => {
   )
 }
 
-const Portfolio = ({ models, likes }) => {
+const Portfolio = ({ models, likes, getTime }) => {
   const c = useStyles({})
 
   const [selected, setSelected] = useState('models')
@@ -207,7 +211,13 @@ const Portfolio = ({ models, likes }) => {
   const TabContent = useCallback(() => {
     switch (selected) {
       case 'models':
-        return <ModelsContent models={models} isCurrentUsersProfile={false} />
+        return (
+          <ModelsContent
+            models={models}
+            isCurrentUsersProfile={false}
+            getTime={getTime}
+          />
+        )
       case 'likes':
         return (
           <LikesContent
@@ -218,7 +228,7 @@ const Portfolio = ({ models, likes }) => {
       default:
         return null
     }
-  }, [models, likes, selected])
+  }, [selected, models, getTime, likes])
 
   return (
     <>
@@ -245,7 +255,7 @@ const Portfolio = ({ models, likes }) => {
   )
 }
 
-const UserPage = ({ user = {}, userId, isCurrentUsersProfile }) => {
+const UserPage = ({ user = {}, userId, isCurrentUsersProfile, getTime }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
   const [showProfileForm, setShowProfileForm] = useState(false)
@@ -308,6 +318,7 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile }) => {
       <Spacer size={'3rem'} />
       <div className={c.Home_Content}>
         <Portfolio
+          getTime={getTime}
           models={ownUserModelsAtom}
           likes={likedUserModelsAtom}
           userId={userId}
@@ -318,7 +329,7 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile }) => {
   )
 }
 
-const PageById = ({ userId, isCurrentUsersProfile }) => {
+const PageById = ({ userId, isCurrentUsersProfile, getTime }) => {
   const { dispatch, [`user-${userId}`]: userData = {} } = useStoreon(`user-${userId}`)
   const { isLoading, isLoaded, isError, data: user } = userData
 
@@ -352,11 +363,12 @@ const PageById = ({ userId, isCurrentUsersProfile }) => {
       userId={userId}
       isCurrentUsersProfile={isCurrentUsersProfile}
       isLoading={isLoading}
+      getTime={getTime}
     />
   )
 }
 
-const PageByUserName = ({ userName }) => {
+const PageByUserName = ({ userName, getTime }) => {
   const { dispatch, [`user-id-${userName}`]: userIdData = {} } = useStoreon(
     `user-id-${userName}`
   )
@@ -410,7 +422,11 @@ const PageByUserName = ({ userName }) => {
         </title>
         <meta name='description' content={description} />
       </Helmet>
-      <PageById userId={userId} isCurrentUsersProfile={isCurrentUsersProfile} />
+      <PageById
+        userId={userId}
+        isCurrentUsersProfile={isCurrentUsersProfile}
+        getTime={getTime}
+      />
     </>
   )
 }
@@ -418,17 +434,19 @@ const PageByUserName = ({ userName }) => {
 const Page = () => {
   const { id, userName } = useParams()
   const identifier = id || userName
+  const { startTimer, getTime } = usePerformanceMetrics()
   useEffect(() => {
     pageview('Profile', identifier)
+    startTimer()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (userName) {
-    return <PageByUserName userName={userName} />
+    return <PageByUserName userName={userName} getTime={getTime} />
   }
 
   if (id) {
-    return <PageById userId={id} />
+    return <PageById userId={id} getTime={getTime} />
   }
 
   return (

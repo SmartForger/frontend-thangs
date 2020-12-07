@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { HowTo, Spinner } from '@components'
-import { useModels } from '@hooks'
+import { useModels, usePerformanceMetrics } from '@hooks'
 import Toolbar from './Toolbar'
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -42,6 +43,7 @@ const HoopsModelViewer = ({ className, model, minimizeTools }) => {
   const [wireColor, setWireColor] = useState()
   const { useHoopsViewer } = useModels()
   const { containerRef, hoops } = useHoopsViewer(model.uploadedFile)
+  const { startTimer, getTime } = usePerformanceMetrics()
 
   const handleResetView = useCallback(() => {
     const [newWireColor, newMeshColor] = hoops.resetImage()
@@ -67,6 +69,15 @@ const HoopsModelViewer = ({ className, model, minimizeTools }) => {
     },
     [hoops]
   )
+
+  useEffect(() => {
+    startTimer()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (hoops.status.isReady) track('Page Loaded - HOOPS Viewer', { seconds: getTime() })
+  }, [getTime, hoops.status.isReady])
 
   return (
     <div className={className}>

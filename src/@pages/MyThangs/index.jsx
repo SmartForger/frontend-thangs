@@ -9,7 +9,7 @@ import {
   AddContextMenu,
 } from '@components'
 import { authenticationService } from '@services'
-import { useOverlay, useStarred } from '@hooks'
+import { useOverlay, usePerformanceMetrics, useStarred } from '@hooks'
 import AllFilesView from './AllFilesView'
 import EditProfileView from './EditProfileView'
 import FolderView from './FolderView'
@@ -21,7 +21,7 @@ import SharedFilesView from './SharedFilesView'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
-import { pageview } from '@utilities/analytics'
+import { pageview, track } from '@utilities/analytics'
 import { ContextMenuTrigger } from 'react-contextmenu'
 
 const useStyles = createUseStyles(theme => {
@@ -134,11 +134,17 @@ const MyThangs = () => {
   const { data: modelData } = models
   const { data: sharedData } = shared
   useStarred()
+  const { startTimer, getTime } = usePerformanceMetrics()
 
   useEffect(() => {
     pageview('MyThangs')
+    startTimer()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (isLoaded) track('Page Loaded - MyThangs', { seconds: getTime() })
+  }, [getTime, isLoaded])
 
   useEffect(() => {
     dispatch(types.FETCH_THANGS, {})

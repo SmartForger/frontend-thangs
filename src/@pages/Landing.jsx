@@ -13,7 +13,7 @@ import {
   CardCollectionLanding,
 } from '@components'
 
-import { useCurrentUser, usePageMeta, useQuery } from '@hooks'
+import { useCurrentUser, usePageMeta, usePerformanceMetrics, useQuery } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
@@ -265,12 +265,14 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
     atom: { data: user },
   } = useCurrentUser()
   const history = useHistory()
+  const { startTimer, getTime } = usePerformanceMetrics()
   const sessionExpired = useQuery('sessionExpired')
   const authFailed = useQuery('authFailed')
   const showSignin = useQuery('showSignin')
   const showSignup = useQuery('showSignup')
   const emailRedirect = useQuery('emailRedirect')
   const sortBy = useQuery('sort')
+  const [hasLoaded, setHasLoaded] = useState(false)
   const pageMetaKey = useMemo(() => {
     if (sortBy) return sortBy
     if (showSignin) return 'showSignin'
@@ -290,6 +292,7 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
     } else {
       pageview('Home')
     }
+    startTimer()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -330,6 +333,13 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
     if (emailRedirect) track('Email Redirect')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (!hasLoaded && modelPreviews.isLoaded) {
+      setHasLoaded(true)
+      track('Page Loaded - Home', { seconds: getTime() })
+    }
+  }, [getTime, hasLoaded, modelPreviews.isLoaded])
 
   return (
     <Layout showNewHero={true}>

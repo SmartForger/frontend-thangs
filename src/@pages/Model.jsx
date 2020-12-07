@@ -32,7 +32,7 @@ import { useLocalStorage } from '@hooks'
 import { Message404 } from './404'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
-import { usePageMeta } from '@hooks'
+import { usePageMeta, usePerformanceMetrics } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track } from '@utilities/analytics'
@@ -400,7 +400,7 @@ const StatsAndActions = ({
 }
 
 const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST
-const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
+const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime }) => {
   const c = useStyles()
   const { navigateWithFlash } = useFlashNotification()
   const signUpShown = useRef(false)
@@ -421,6 +421,10 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer }) => {
     dispatch(types.FETCH_MODEL, { id })
     dispatch(types.FETCH_RELATED_MODELS, { id })
   }, [dispatch, id])
+
+  useEffect(() => {
+    if (isLoaded) track('Page Loaded - Model', { seconds: getTime() })
+  }, [getTime, isLoaded])
 
   const { title, description } = usePageMeta('model')
   const openSignupOverlay = useCallback(
@@ -534,9 +538,11 @@ const Page = () => {
   const { id } = useParams()
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [currentUser] = useLocalStorage('currentUser', null)
+  const { getTime, startTimer } = usePerformanceMetrics()
 
   useEffect(() => {
     pageview('Model', id)
+    startTimer()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -545,6 +551,7 @@ const Page = () => {
       id={id}
       currentUser={currentUser}
       showBackupViewer={showBackupViewer}
+      getTime={getTime}
     />
   )
 }
