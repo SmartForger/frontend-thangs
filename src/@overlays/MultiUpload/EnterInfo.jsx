@@ -20,7 +20,7 @@ import { overlayview, track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { sm_max },
+    mediaQueries: { md },
   } = theme
   return {
     EnterInfo: {
@@ -79,10 +79,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-
-      [sm_max]: {
-        margin: '0 1rem 1rem',
-      },
+      margin: '0 1rem',
 
       '& svg': {
         flex: 'none',
@@ -136,12 +133,11 @@ const useStyles = createUseStyles(theme => {
     },
     EnterInfo_ButtonWrapper: {
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column-reverse',
       justifyContent: 'space-between',
 
-      [sm_max]: {
-        flexDirection: 'column-reverse',
-        marginBottom: '1rem',
+      [md]: {
+        flexDirection: 'row',
       },
 
       '& button': {
@@ -154,10 +150,7 @@ const useStyles = createUseStyles(theme => {
       fontWeight: 500,
       padding: '.625rem 1rem',
       borderRadius: '.5rem',
-
-      [sm_max]: {
-        margin: '0 1rem',
-      },
+      margin: '0 1rem',
     },
     EnterInfo_Thumbnail: {
       flex: 'none',
@@ -175,9 +168,10 @@ const useStyles = createUseStyles(theme => {
         width: '18rem',
         display: 'inline-block',
         lineHeight: '1rem',
+        margin: '0 1rem',
 
-        [sm_max]: {
-          margin: '0 1rem',
+        [md]: {
+          margin: 'unset',
         },
       },
     },

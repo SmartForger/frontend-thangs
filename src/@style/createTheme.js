@@ -6,7 +6,6 @@ const createTheme = (data = {}) => {
     colors,
     text: textMixins,
     mediaQueries: {
-      sm_max: '@media (max-width: 480px)',
       xs: '@media (min-width: 320px)',
       xs_352: '@media (min-width: 352px)',
       sm: '@media (min-width: 480px)',

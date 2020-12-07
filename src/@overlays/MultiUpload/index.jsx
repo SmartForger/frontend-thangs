@@ -15,24 +15,23 @@ import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { sm_max },
+    mediaQueries: { md },
   } = theme
   return {
     MultiUpload: {
-      width: '27.75rem',
-      minHeight: '27.75rem',
+      width: '100%',
+      height: '100%',
       position: 'relative',
       display: 'flex',
       flexDirection: 'row',
       overflow: 'hidden auto',
-      borderRadius: '1rem',
+      borderRadius: '0',
       backgroundColor: theme.colors.white[300],
 
-      [sm_max]: {
-        width: '100%',
-        height: '100%',
-        overflow: 'hidden auto',
-        borderRadius: '0',
+      [md]: {
+        width: '27.75rem',
+        minHeight: '27.75rem',
+        borderRadius: '1rem',
       },
     },
     MultiUpload_Content: {
@@ -81,14 +80,14 @@ const useStyles = createUseStyles(theme => {
       right: 0,
       left: 0,
       bottom: 0,
+      width: '100%',
+      height: '100%',
+      borderRadius: '0',
       backgroundColor: 'rgba(0,0,0,0.29)',
       zIndex: 5,
-      borderRadius: '1rem',
       display: 'flex',
-      [sm_max]: {
-        width: '100%',
-        height: '100%',
-        borderRadius: '0',
+      [md]: {
+        borderRadius: '1rem',
       },
     },
   }

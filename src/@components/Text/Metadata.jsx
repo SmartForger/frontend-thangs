@@ -4,7 +4,7 @@ import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { sm_max },
+    mediaQueries: { md },
   } = theme
   return {
     Metadata: {
@@ -18,9 +18,10 @@ const useStyles = createUseStyles(theme => {
     MetadataPrimary: {
       fontSize: '1rem',
       lineHeight: '1rem',
+      margin: '0 1rem',
 
-      [sm_max]: {
-        margin: '0 1rem',
+      [md]: {
+        margin: 'unset',
       },
     },
     MetadataSecondary: {

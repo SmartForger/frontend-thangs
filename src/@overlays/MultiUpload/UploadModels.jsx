@@ -22,7 +22,7 @@ import { overlayview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { sm_max },
+    mediaQueries: { md },
   } = theme
   return {
     UploadModels_UploadZone: {
@@ -51,10 +51,6 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-
-      [sm_max]: {
-        margin: '0 2rem',
-      },
     },
     UploadModels_Row: {
       display: 'flex',
@@ -67,12 +63,12 @@ const useStyles = createUseStyles(theme => {
     },
     UploadModels_FileName: {
       textOverflow: 'ellipsis',
-      width: '16rem',
+      width: '4rem',
       overflow: 'hidden',
       lineHeight: '1rem !important',
 
-      [sm_max]: {
-        width: '4rem',
+      [md]: {
+        width: '16rem',
       },
     },
     UploadModels_UploadColumn: {
@@ -111,12 +107,11 @@ const useStyles = createUseStyles(theme => {
     },
     UploadModels_ButtonWrapper: {
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column-reverse',
       justifyContent: 'space-between',
 
-      [sm_max]: {
-        flexDirection: 'column-reverse',
-        margin: '3rem .5rem 2rem',
+      [md]: {
+        flexDirection: 'row',
       },
 
       '& button': {

@@ -10,7 +10,7 @@ ReactModal.setAppElement('#root')
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { sm_max },
+    mediaQueries: { md },
   } = theme
 
   return {
@@ -46,23 +46,23 @@ const useStyles = createUseStyles(theme => {
       zIndex: 2,
     },
     Overlay_Content: {
-      height: 'auto',
-      margin: '0 auto',
-      width: ({ dialogue }) => (dialogue ? undefined : '90%'),
-      paddingTop: '2rem',
-      maxWidth: ({ windowed, showPromo }) =>
-        !showPromo && windowed
-          ? '22.875rem'
-          : showPromo && windowed
-          ? '45.75rem'
-          : '32rem',
-      transition: 'all 450ms',
-      opacity: ({ animateIn }) => (animateIn ? 0 : 1),
-      top: ({ animateIn }) => (animateIn ? '30px' : 0),
-      [sm_max]: {
-        height: '100%',
-        width: '100%',
-        paddingTop: '0',
+      height: '100%',
+      width: '100%',
+
+      [md]: {
+        height: 'auto',
+        width: ({ dialogue }) => (dialogue ? 'unset' : '90%'),
+        maxWidth: ({ windowed, showPromo }) =>
+          !showPromo && windowed
+            ? '22.875rem'
+            : showPromo && windowed
+            ? '45.75rem'
+            : '32rem',
+        paddingTop: '2rem',
+        margin: '0 auto',
+        transition: 'all 450ms',
+        opacity: ({ animateIn }) => (animateIn ? 0 : 1),
+        top: ({ animateIn }) => (animateIn ? '30px' : 0),
       },
     },
     Overlay_Content__visible: {
