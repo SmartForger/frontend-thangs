@@ -178,14 +178,6 @@ const MyThangs = () => {
     [history]
   )
 
-  const handleChangeFolder = useCallback(
-    folder => {
-      setCurrentFolderId(folder.id)
-      history.push(`/mythangs/folder/${folder.id}`)
-    },
-    [history]
-  )
-
   const handleEditModel = useCallback(
     model => {
       history.push(`/model/${model.id}`)
@@ -216,6 +208,15 @@ const MyThangs = () => {
   const closeMobileNav = useCallback(() => {
     setMobileNavOpen(false)
   }, [])
+
+  const handleChangeFolder = useCallback(
+    folder => {
+      closeMobileNav()
+      setCurrentFolderId(folder.id)
+      history.push(`/mythangs/folder/${folder.id}`)
+    },
+    [history, closeMobileNav]
+  )
 
   const viewProps = {
     className: c.MyThangs_MainView,

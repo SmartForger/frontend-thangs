@@ -238,24 +238,29 @@ const WorkspaceNavbar = ({
   ])
 
   const handleAllFiles = useCallback(() => {
+    closeMobileNav()
     setCurrentView('all-files')
-  }, [setCurrentView])
+  }, [setCurrentView, closeMobileNav])
 
   const handleClickRecent = useCallback(() => {
+    closeMobileNav()
     setCurrentView('recent-files')
-  }, [setCurrentView])
+  }, [setCurrentView, closeMobileNav])
 
-  const handleClickShared = useCallback(() => setCurrentView('shared-files'), [
-    setCurrentView,
-  ])
+  const handleClickShared = useCallback(() => {
+    closeMobileNav()
+    setCurrentView('shared-files')
+  }, [setCurrentView, closeMobileNav])
 
-  const handleClickLiked = useCallback(() => setCurrentView('liked-models'), [
-    setCurrentView,
-  ])
+  const handleClickLiked = useCallback(() => {
+    closeMobileNav()
+    setCurrentView('liked-models')
+  }, [setCurrentView, closeMobileNav])
 
-  const handleClickSearches = useCallback(() => setCurrentView('saved-searches'), [
-    setCurrentView,
-  ])
+  const handleClickSearches = useCallback(() => {
+    closeMobileNav()
+    setCurrentView('saved-searches')
+  }, [setCurrentView, closeMobileNav])
 
   const handleClickEdit = useCallback(() => setCurrentView('edit-profile'), [
     setCurrentView,
@@ -285,7 +290,10 @@ const WorkspaceNavbar = ({
               <Logo />
             </Link>
           </div>
-          <ExitIcon className={c.WorkspaceNavbar_NavHeader_Exit} onClick={closeMobileNav} />
+          <ExitIcon
+            className={c.WorkspaceNavbar_NavHeader_Exit}
+            onClick={closeMobileNav}
+          />
         </div>
         <Spacer size={'2rem'} />
         <div className={c.WorkspaceNavbar_MobileColumnOnly}>
