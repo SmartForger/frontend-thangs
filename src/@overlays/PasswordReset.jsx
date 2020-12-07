@@ -9,6 +9,7 @@ import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
 import { overlayview } from '@utilities/analytics'
+import { track } from 'react-facebook-pixel'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -106,6 +107,8 @@ const ResetForm = ({ c }) => {
     if (error) {
       setPasswordResetErrorMessage(error.message)
     } else {
+      const partialEmail = inputState.email.substring(0, 5)
+      track('Password Reset Overlay - email requested', { email: partialEmail })
       setPasswordResetSuccessMessage('Email with reset link sent!')
     }
   }, [inputState])

@@ -6,7 +6,7 @@ import { authenticationService } from '@services'
 import { useForm } from '@hooks'
 import { TextInput, Spinner, Button, Layout } from '@components'
 import { createUseStyles } from '@style'
-import { pageview } from '@utilities/analytics'
+import { track, pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -136,6 +136,8 @@ const ResetPage = () => {
     try {
       await authenticationService.resetPasswordForEmail(inputState.email)
       setIsSuccess(true)
+      const partialEmail = inputState.email.substring(0, 5)
+      track('Password Reset Page - email requested', { email: partialEmail })
     } catch (e) {
       setErrorMessage(
         e && e.response && e.response.data ? (
@@ -229,13 +231,17 @@ const ConfirmResetPage = () => {
     setErrorMessage(null)
 
     try {
-      await authenticationService.setPasswordForReset({
+      const { error } = await authenticationService.setPasswordForReset({
         ...inputState,
         token,
       })
-
-      history.push('/')
+      if (!error) {
+        track('Password Reset Confirm - password reset success', { token })
+        history.push('/')
+      }
+      track('Password Reset Confirm - password reset failed', { error })
     } catch (e) {
+      track('Password Reset Confirm - password reset failed', { e })
       setErrorMessage(
         e && e.response && e.response.data ? (
           <ServerErrors errors={e.response.data} />
