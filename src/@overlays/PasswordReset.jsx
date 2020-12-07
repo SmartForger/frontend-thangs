@@ -152,9 +152,11 @@ const ResetForm = ({ c }) => {
             />
             <Spacer size='1rem' />
           </div>
-          <Button className={c.PasswordReset_Button} type='submit' disabled={waiting}>
-            {waiting ? 'Processing...' : 'Send Email'}
-          </Button>
+          {!signupSuccessMessage && (
+            <Button className={c.PasswordReset_Button} type='submit' disabled={waiting}>
+              {waiting ? 'Processing...' : 'Send Email'}
+            </Button>
+          )}
         </form>
         <Spacer className={c.Signin_MobileSpacer} size='4rem' />
       </div>
