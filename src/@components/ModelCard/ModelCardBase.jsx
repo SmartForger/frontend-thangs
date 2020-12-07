@@ -107,7 +107,11 @@ const CardContents = ({
 }) => {
   const userName = R.pathOr('no-user', ['owner', 'username'], model)
   const onAnchorClick = useCallback(() => {
-    if (geoRelated) track('Geo Related Model Link', { path: modelPath })
+    if (geoRelated)
+      track('Geo Related Model Link', {
+        path: modelPath,
+        origin: window.location.pathname,
+      })
   }, [geoRelated, modelPath])
   return (
     <div
