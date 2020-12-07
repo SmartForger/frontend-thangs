@@ -65,13 +65,17 @@ const changePasswordSchema = Joi.object({
   confirmPassword: Joi.string().required(),
 })
 
-const ServerErrors = ({ errors }) => (
-  <ul>
-    {Object.entries(errors).flatMap(([errKey, msgList]) =>
-      msgList.map((errorMessage, i) => <li key={`${errKey}-${i}`}>{errorMessage}</li>)
-    )}
-  </ul>
-)
+const ServerErrors = ({ errors }) => {
+  return typeof errors !== 'object' ? (
+    errors
+  ) : (
+    <ul>
+      {Object.entries(errors).flatMap(([errKey, msgList]) =>
+        msgList.map((errorMessage, i) => <li key={`${errKey}-${i}`}>{errorMessage}</li>)
+      )}
+    </ul>
+  )
+}
 
 const ResetPage = () => {
   const [waiting, setWaiting] = useState(false)
