@@ -15,7 +15,6 @@ const useStyles = createUseStyles(theme => {
       marginTop: '6.5rem',
     },
     PasswordReset_PageHeader: {
-      ...theme.text.darkPageTitleText,
       marginTop: '.25rem',
     },
     PasswordReset_Spinner: {
