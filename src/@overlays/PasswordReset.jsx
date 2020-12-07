@@ -117,7 +117,7 @@ const ResetForm = ({ c }) => {
 
   return (
     <div className={classnames(c.PasswordReset_Row, c.PasswordReset_ResetForm)}>
-      <Spacer size='4rem' />
+      <Spacer size='3rem' />
       <div className={c.PasswordReset_FormWrapper}>
         <Spacer size='4rem' />
         <TitleTertiary>Reset Password</TitleTertiary>
