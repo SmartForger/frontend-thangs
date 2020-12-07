@@ -37,6 +37,9 @@ const useStyles = createUseStyles(_theme => {
     NavLink_Arrow__expanded: {
       transform: 'rotate(90deg)',
     },
+    NavLink_Arrow__disabled: {
+      visibility: 'hidden',
+    },
     NavLink_Link: {
       display: 'flex',
       flexDirection: 'row',
@@ -67,6 +70,7 @@ const LinkContents = ({
   isExpanded,
   isFolder,
   label,
+  isIconDisabled,
 }) => {
   const handleLinkClick = useCallback(() => {
     onArrowClick(true)
@@ -76,11 +80,16 @@ const LinkContents = ({
   const handleArrowClick = useCallback(() => {
     onArrowClick()
   }, [onArrowClick])
-  
+
   return (
     <>
       {isFolder && (
-        <div className={c.NavLink_Arrow} onClick={handleArrowClick}>
+        <div
+          className={classnames(c.NavLink_Arrow, {
+            [c.NavLink_Arrow__disabled]: isIconDisabled,
+          })}
+          onClick={handleArrowClick}
+        >
           <ArrowRightIcon
             className={classnames({ [c.NavLink_Arrow__expanded]: isExpanded })}
           />
@@ -106,6 +115,7 @@ const NavLink = ({
   to,
   selected = false,
   level = 0,
+  isIconDisabled,
 }) => {
   const c = useStyles({ level })
   const { dispatch, folderNav } = useStoreon('folderNav')
@@ -134,6 +144,7 @@ const NavLink = ({
         isExpanded={isExpanded}
         isFolder={isFolder}
         label={label}
+        isIconDisabled={isIconDisabled}
       />
     </Link>
   ) : (
@@ -146,6 +157,7 @@ const NavLink = ({
         onLinkClick={onClick}
         isExpanded={isExpanded}
         isFolder={isFolder}
+        isIconDisabled={isIconDisabled}
         label={label}
       />
     </div>

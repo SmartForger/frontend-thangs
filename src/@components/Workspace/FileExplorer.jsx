@@ -93,7 +93,7 @@ const Folder = ({
 
   const folderName = parentName ? name.replace(`${parentName}//`, '') : name
   const postId = '_nav'
-
+  const isIconDisabled = R.isNil(folder.subfolders) || R.isEmpty(folder.subfolders)
   return (
     <>
       <ContextMenuTrigger id={`File_Menu_${id}${postId}`} holdToDisplay={1000}>
@@ -105,6 +105,7 @@ const Folder = ({
           onClick={handleNavLinkClick}
           selected={currentPath === `/mythangs/folder/${id}`}
           level={level}
+          isIconDisabled={isIconDisabled}
         />
       </ContextMenuTrigger>
       <FileContextMenu id={id} folder={folder} type={'folder'} postId={postId} />
