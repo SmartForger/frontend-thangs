@@ -40,3 +40,19 @@ export const formatBytes = (bytes, decimals = 2) => {
 
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
 }
+
+export const checkTreeLoading = node => {
+  return (
+    node.isLoading || (node.subs && node.subs.some(subnode => checkTreeLoading(subnode)))
+  )
+}
+
+export const checkTreeMissing = node => {
+  return (
+    !node.valid || (node.subs && node.subs.some(subnode => checkTreeMissing(subnode)))
+  )
+}
+
+export const sleep = ms => {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}

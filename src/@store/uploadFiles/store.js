@@ -1,12 +1,15 @@
 import * as types from '@constants/storeEventTypes'
-import { api, uploadFile } from '@services'
+import { api, uploadFile, cancelUpload } from '@services'
 import { track } from '@utilities/analytics'
+import { sleep } from '@utilities'
 import * as R from 'ramda'
 
 const getInitAtom = () => ({
   isLoading: false,
   isError: false,
   data: {},
+  validationTree: null,
+  validating: false,
   isAssembly: false,
   assemblyData: {},
   missingFiles: [
@@ -45,7 +48,7 @@ export default store => {
     return {
       uploadFiles: {
         ...state.uploadFiles,
-        isLoading: true,
+        isLoading: false,
       },
     }
   })
@@ -58,6 +61,33 @@ export default store => {
         ...state.uploadFiles,
         data: newUploadedFiles,
       },
+    }
+  })
+
+  store.on(types.CANCEL_UPLOAD, (state, { filename }) => {
+    const cancelNode = (node) => {
+      const fileIndex = Object.values(state.uploadFiles.data).findIndex(f => f.name === node.name)
+      if (fileIndex >= 0) {
+        cancelUpload(Object.keys(state.uploadFiles.data)[fileIndex])
+      }
+
+      if (node.subs) {
+        node.subs.forEach(subnode => cancelNode(subnode))
+      }
+    }
+
+    const node = state.uploadFiles.validationTree.find(node => node.name === filename)
+    if (node) {
+      cancelNode(node)
+    } else {
+      cancelNode({ name: filename })
+    }
+
+    return {
+      uploadFiles: {
+        ...state.uploadFiles,
+        validationTree: state.uploadFiles.validationTree.filter(node => node.name !== filename)
+      }
     }
   })
 
@@ -77,13 +107,21 @@ export default store => {
   )
 
   store.on(types.CHANGE_UPLOAD_FILE, (state, { id, data, isLoading, isError }) => {
+    const { validating, data: uploadedFiles } = state.uploadFiles
+    const newUploadedFiles = {
+      ...uploadedFiles,
+      [id]: { ...uploadedFiles[id], ...data, isLoading, isError },
+    }
+    const currentFileUploaded = uploadedFiles[id].isLoading !== isLoading
+    const uploadComplete = Object.keys(newUploadedFiles).every(f => !f.isLoading)
+    if (currentFileUploaded && uploadComplete && !validating) {
+      store.dispatch(types.VALIDATE_FILES)
+    }
+
     return {
       uploadFiles: {
         ...state.uploadFiles,
-        data: {
-          ...state.uploadFiles.data,
-          [id]: { ...state.uploadFiles.data[id], ...data, isLoading, isError },
-        },
+        data: newUploadedFiles,
       },
     }
   })
@@ -122,22 +160,84 @@ export default store => {
     }
   })
 
-  store.on(
-    types.UPLOAD_FILE,
-    async (_, { id, file, errorState = undefined /*, cancelToken*/ }) => {
-      store.dispatch(types.INIT_UPLOAD_FILE, {
-        id,
-        file,
-        error: errorState && errorState.message,
-        isLoading: errorState && errorState.error ? false : true,
-        isError: errorState && errorState.error,
-        isWarning: errorState && errorState.warning,
-      })
-      if (!errorState || !errorState.error) {
-        uploadFile(id, file)
-      }
+  store.on(types.VALIDATE_FILES_SUCCESS, (state, data) => {
+    return {
+      uploadFiles: {
+        ...state.uploadFiles,
+        validationTree: data,
+        validating: false,
+      },
     }
-  )
+  })
+
+  store.on(types.VALIDATE_FILES, async state => {
+    // Get API Data
+    const result = [
+      {
+        name: 'Assembly.asm',
+        isAssembly: true,
+        valid: true,
+        subs: [
+          {
+            name: 'Part 1.stl',
+            isAssembly: false,
+            valid: true,
+          },
+          {
+            name: 'Part 2.stl',
+            isAssembly: false,
+            valid: true,
+          },
+          {
+            name: 'Part 3.stl',
+            isAssembly: false,
+            valid: true,
+          },
+          {
+            name: 'Sub-Assembly.asm',
+            isAssembly: true,
+            valid: true,
+            subs: [
+              {
+                name: 'Part 4.stl',
+                isAssembly: false,
+                valid: true,
+              },
+              {
+                name: 'Part 5.stl',
+                isAssembly: false,
+                valid: false,
+                skipped: true,
+              },
+              {
+                name: 'Part 6.stl',
+                isAssembly: false,
+                valid: false,
+              },
+            ],
+          },
+        ],
+      },
+    ]
+
+    await sleep(1000)
+
+    store.dispatch(types.VALIDATE_FILES_SUCCESS, result)
+  })
+
+  store.on(types.UPLOAD_FILE, async (_, { id, file, errorState = undefined }) => {
+    store.dispatch(types.INIT_UPLOAD_FILE, {
+      id,
+      file,
+      error: errorState && errorState.message,
+      isLoading: errorState && errorState.error ? false : true,
+      isError: errorState && errorState.error,
+      isWarning: errorState && errorState.warning,
+    })
+    if (!errorState || !errorState.error) {
+      uploadFile(id, file)
+    }
+  })
 
   store.on(types.SUBMIT_FILES, async (state, { onFinish = noop }) => {
     store.dispatch(types.UPLOADING_FILES)

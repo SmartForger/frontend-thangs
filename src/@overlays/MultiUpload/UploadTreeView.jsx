@@ -1,65 +1,31 @@
 import React from 'react'
 import UploadTreeItem from './UploadTreeItem'
 
-const renderTree = (files, level) => {
-  return files.map(f => (
-    <>
-      <UploadTreeItem key={`${level}-${f.name}`} file={f} level={level} />
-      {f.isAssembly && f.subs && renderTree(f.subs, level + 1)}
-    </>
-  ))
+const renderTree = (files, level, onSkip, onRemove) => {
+  return files.map((f, i)=> {
+    const handleSkip = path => {
+      onSkip([f.name, ...path])
+    }
+
+    return (
+      <>
+        <UploadTreeItem
+          key={`${level}-${f.name}`}
+          file={f}
+          level={level}
+          onSkip={onSkip}
+          onRemove={onRemove}
+        />
+        {f.isAssembly &&
+          f.subs &&
+          renderTree(f.subs, level + 1, handleSkip, onRemove)}
+      </>
+    )
+  })
 }
 
-const UploadTreeView = ({ fileTree }) => {
-  return <div>{renderTree(fileTree, 0)}</div>
+const UploadTreeView = ({ fileTree, onSkip, onRemove }) => {
+  return <div>{renderTree(fileTree, 0, onSkip, onRemove)}</div>
 }
-
-export const mockFileTree = [
-  {
-    name: 'Assembly.asm',
-    isAssembly: true,
-    valid: true,
-    subs: [
-      {
-        name: 'Part 1.stl',
-        isAssembly: false,
-        valid: true,
-      },
-      {
-        name: 'Part 2.stl',
-        isAssembly: false,
-        valid: true,
-      },
-      {
-        name: 'Part 3.stl',
-        isAssembly: false,
-        valid: true,
-      },
-      {
-        name: 'Sub-Assembly.asm',
-        isAssembly: true,
-        valid: true,
-        subs: [
-          {
-            name: 'Part 1.stl',
-            isAssembly: false,
-            valid: true,
-          },
-          {
-            name: 'Part 2.stl',
-            isAssembly: false,
-            valid: false,
-            skipped: true,
-          },
-          {
-            name: 'Part 3.stl',
-            isAssembly: false,
-            valid: false,
-          },
-        ],
-      },
-    ],
-  },
-]
 
 export default UploadTreeView

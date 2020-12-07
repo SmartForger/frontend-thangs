@@ -12,7 +12,6 @@ import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { track } from '@utilities/analytics'
-import { cancelUpload } from '@services'
 import AssemblyInfo from './AssemblyInfo'
 
 const useStyles = createUseStyles(theme => {
@@ -113,7 +112,12 @@ const MultiUpload = ({ initData = null, folderId }) => {
     'shared',
     'uploadFiles'
   )
-  const { data: rawUploadFilesData = {}, isLoading, missingFiles } = uploadFiles
+  const {
+    data: rawUploadFilesData = {},
+    validationTree,
+    isLoading,
+    missingFiles,
+  } = uploadFiles
   const { data: foldersData = [] } = folders
   const { data: sharedData = [] } = shared
   const [activeView, setActiveView] = useState('upload')
@@ -124,12 +128,41 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const [warningMessage, setWarningMessage] = useState(null)
   const c = useStyles({})
   const history = useHistory()
-  // const cancelTokenRef = useRef(axios.CancelToken.source())
+
   const uploadFilesData = {}
   Object.keys(rawUploadFilesData).forEach(fileDataId => {
     if (rawUploadFilesData[fileDataId].name)
       uploadFilesData[fileDataId] = rawUploadFilesData[fileDataId]
   })
+  const uploadTreeData = useMemo(() => {
+    const files = Object.values(rawUploadFilesData)
+    const addTreeLoading = node => {
+      const file = files.find(f => f.name === node.name)
+      const result = {
+        name: node.name,
+        isAssembly: node.isAssembly,
+        valid: node.valid || !file.isError,
+        loading: file.isLoading,
+      }
+
+      if (node.subs) {
+        result.subs = node.subs.map(subnode => addTreeLoading(subnode))
+      }
+      return result
+    }
+
+    if (validationTree && validationTree.length > 0) {
+      return validationTree.map(node => addTreeLoading(node))
+    } else {
+      return files.map(file => ({
+        name: file.name,
+        isAssembly: false,
+        valid: !file.isError,
+        loading: file.isLoading,
+      }))
+    }
+  }, [rawUploadFilesData, validationTree])
+
   const handleFileUpload = useCallback(
     (file, errorState, fileId) => {
       if (R.isNil(file)) {
@@ -175,20 +208,17 @@ const MultiUpload = ({ initData = null, folderId }) => {
     [handleFileUpload]
   )
 
-  const removeFile = index => {
+  const removeFile = filename => {
     track('MultiUpload - Remove File')
-    // dispatch(types.REMOVE_UPLOAD_FILES, { index })
-    cancelUpload(index)
+    dispatch(types.CANCEL_UPLOAD, { filename })
   }
 
-  const skipFile = filename => {
-    console.log('skip file', filename)
-    dispatch(types.SKIP_MISSING_FILE, { filename })
+  const skipFile = path => {
+    console.log('skip file', path)
+    dispatch(types.SKIP_MISSING_FILE, { path })
   }
 
   const closeOverlay = useCallback(() => {
-    // cancelTokenRef.current.cancel('Upload interrupted')
-    // dispatch(types.RESET_UPLOAD_FILES)
     dispatch(types.CLOSE_OVERLAY)
   }, [dispatch])
 
@@ -330,9 +360,9 @@ const MultiUpload = ({ initData = null, folderId }) => {
             onDrop={onDrop}
             removeFile={removeFile}
             uploadFiles={uploadFilesData}
+            uploadTreeData={uploadTreeData}
             isAssembly={isAssembly}
             setIsAssembly={setIsAssembly}
-            missingFiles={missingFiles}
             skipFile={skipFile}
           />
         ) : activeView === 'assemblyInfo' ? (

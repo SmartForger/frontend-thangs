@@ -1,7 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 import { createUseStyles } from '@style'
-import { SingleLineBodyText, Spacer } from '@components'
+import { SingleLineBodyText, Spacer, Spinner } from '@components'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
 import { ReactComponent as TreeOpenIcon } from '@svg/icon-tree-open.svg'
@@ -43,8 +43,16 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const UploadTreeItem = ({ file, level }) => {
+const UploadTreeItem = ({ file, level, onSkip, onRemove }) => {
   const c = useStyles()
+
+  const handleRemove = () => {
+    onRemove(file.name)
+  }
+
+  const handleSkip = () => {
+    onSkip([file.name])
+  }
 
   return (
     <div className={c.UploadTreeItem_Root}>
@@ -52,12 +60,12 @@ const UploadTreeItem = ({ file, level }) => {
       {file.isAssembly ? (
         <>
           {level > 0 && <Spacer size={'1.25rem'} />}
-          <FileIcon />
+          {file.loading ? <Spinner size={'1rem'} /> : <FileIcon />}
         </>
       ) : (
         <>
-          <TreeOpenIcon className={c.UploadTreeItem_OpenIcon} />
-          <ModelIcon />
+          {level > 0 && <TreeOpenIcon className={c.UploadTreeItem_OpenIcon} />}
+          {file.loading ? <Spinner size={'1rem'} /> : <ModelIcon />}
         </>
       )}
       <Spacer size={'0.5rem'} />
@@ -72,9 +80,9 @@ const UploadTreeItem = ({ file, level }) => {
       </SingleLineBodyText>
       <Spacer size={'0.5rem'} />
       <div className={c.UploadTreeItem_Actions}>
-        <CheckIcon />
+        {!file.skipped && !file.valid && <CheckIcon onClick={handleSkip} />}
         <Spacer size={'0.5rem'} />
-        <TrashCanIcon />
+        {level === 0 && <TrashCanIcon onClick={handleRemove} />}
       </div>
     </div>
   )
