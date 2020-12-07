@@ -62,32 +62,32 @@ const noop = () => null
 const LinkContents = ({
   Icon,
   c,
-  handleArrowClick = noop,
-  handleLinkClick = noop,
+  onArrowClick = noop,
+  onLinkClick = noop,
   isExpanded,
   isFolder,
   label,
 }) => {
-  const onLinkClick = useCallback(() => {
-    handleArrowClick(true)
-    handleLinkClick()
-  }, [handleArrowClick, handleLinkClick])
+  const handleLinkClick = useCallback(() => {
+    onArrowClick(true)
+    onLinkClick()
+  }, [onLinkClick, onArrowClick])
 
-  const onArrowClick = useCallback(() => {
-    handleArrowClick()
-  }, [handleArrowClick])
-
+  const handleArrowClick = useCallback(() => {
+    onArrowClick()
+  }, [onArrowClick])
+  
   return (
     <>
       {isFolder && (
-        <div className={c.NavLink_Arrow} onClick={onArrowClick}>
+        <div className={c.NavLink_Arrow} onClick={handleArrowClick}>
           <ArrowRightIcon
             className={classnames({ [c.NavLink_Arrow__expanded]: isExpanded })}
           />
           <Spacer size={'.75rem'} />
         </div>
       )}
-      <div className={c.NavLink_Link} onClick={onLinkClick}>
+      <div className={c.NavLink_Link} onClick={handleLinkClick}>
         <Icon />
         <Spacer size={'.75rem'} />
         <SingleLineBodyText>{label}</SingleLineBodyText>
@@ -129,8 +129,8 @@ const NavLink = ({
       <LinkContents
         Icon={Icon}
         c={c}
-        handleArrowClick={handleArrowClick}
-        handleLinkClick={onClick}
+        onArrowClick={handleArrowClick}
+        onLinkClick={onClick}
         isExpanded={isExpanded}
         isFolder={isFolder}
         label={label}
@@ -142,8 +142,8 @@ const NavLink = ({
       <LinkContents
         Icon={Icon}
         c={c}
-        handleArrowClick={handleArrowClick}
-        handleLinkClick={onClick}
+        onArrowClick={handleArrowClick}
+        onLinkClick={onClick}
         isExpanded={isExpanded}
         isFolder={isFolder}
         label={label}
