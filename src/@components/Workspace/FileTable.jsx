@@ -134,6 +134,7 @@ const useStyles = createUseStyles(theme => {
         position: 'relative',
         margin: '2rem',
         padding: '2rem',
+        top: 'unset',
         left: 'unset',
         transform: 'unset',
       },

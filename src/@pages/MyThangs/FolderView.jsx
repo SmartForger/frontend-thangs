@@ -15,7 +15,7 @@ import {
   Contributors,
   FileMenu,
 } from '@components'
-import { useQuery } from '@hooks'
+import { useExternalClick, useQuery } from '@hooks'
 import { authenticationService } from '@services'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -162,6 +162,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
   const fileMenuRef = useRef(null)
   const { id, name } = folder
   const folderPath = name.split('//')
+  useExternalClick(fileMenuRef, () => setShowFileMenu(false))
 
   const folderPathEnhanced = folderPath.map(path => {
     const subfolder = getSubfolderId(path, rootFolder, folder)
@@ -281,7 +282,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
           <DotStackIcon />
           {showFileMenu && (
             <div className={c.FolderView_MobileMenu}>
-              <FileMenu type={'folder'} folder={folder} />
+              <FileMenu type='folder' folder={folder} />
             </div>
           )}
         </div>
