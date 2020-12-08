@@ -8,8 +8,7 @@ import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
-import { overlayview } from '@utilities/analytics'
-import { track } from 'react-facebook-pixel'
+import { overlayview, track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
