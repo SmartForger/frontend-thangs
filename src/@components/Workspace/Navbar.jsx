@@ -287,7 +287,7 @@ const WorkspaceNavbar = ({
             />
             <Spacer size={'2rem'} />
           </div>
-          <ContextMenuTrigger>
+          <ContextMenuTrigger id='none'>
             <div>
               <Spacer size={'1.5rem'} />
               <NavLink
