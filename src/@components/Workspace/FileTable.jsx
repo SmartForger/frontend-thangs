@@ -601,7 +601,10 @@ const FileTable = ({
                 <div {...getRootProps()}>
                   <input {...getInputProps()} />
                   <DropzoneIcon className={c.FileTable_DropzoneIcon__desktop}/>
-                  <DropzoneMobileIcon className={c.FileTable_DropzoneIcon__mobile} />
+                  {/* TODO: DropzoneMobileIcon is currently broken, waiting for correct
+                  from @Damjan Knezevic */}
+                  <DropzoneIcon className={c.FileTable_DropzoneIcon__mobile} />
+                  {/* <DropzoneMobileIcon className={c.FileTable_DropzoneIcon__mobile} /> */}
                   <Pill className={c.FileTable_UploadButton}>Browse</Pill>
                 </div>
               </section>
