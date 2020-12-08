@@ -129,11 +129,16 @@ const useStyles = createUseStyles(theme => {
         display: 'none',
       },
     },
-
     FolderView_FileTable__desktop: {
       display: 'none',
       [md]: {
-        display: 'unset',  
+        display: 'unset',
+      },
+    },
+    Spacer__mobile: {
+      display: 'none',
+      [md]: {
+        display: 'block',
       },
     },
   }
@@ -203,82 +208,85 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
   )
 
   return (
-    <div className={c.FolderView_Row}>
-      <div className={c.FolderView_TitleAndIcons}>
-        <FolderIcon />
-        <Spacer size={'1rem'} />
-        <div className={c.FolderView_Col}>
-          <div className={c.FolderView_TitleAndIcons}>
-            <div className={c.FolderView_RootLink} onClick={handleClickRoot}>
-              <TitleTertiary>{rootFolderName}</TitleTertiary>
+    <>
+      <Spacer className={c.Spacer__mobile} size='2rem' />
+      <div className={c.FolderView_Row}>
+        <div className={c.FolderView_TitleAndIcons}>
+          <FolderIcon />
+          <Spacer size={'1rem'} />
+          <div className={c.FolderView_Col}>
+            <div className={c.FolderView_TitleAndIcons}>
+              <div className={c.FolderView_RootLink} onClick={handleClickRoot}>
+                <TitleTertiary>{rootFolderName}</TitleTertiary>
+              </div>
+              <Spacer size={'.5rem'} />
+              {!folder.isPublic && (
+                <>
+                  <PadlockIcon className={c.PadlockIcon_Header} />
+                  <Spacer size={'.25rem'} />
+                </>
+              )}
+              <LikeFolderButton folder={folder} minimal onlyShowOwned />
             </div>
-            <Spacer size={'.5rem'} />
-            {!folder.isPublic && (
+            {folderPath.length > 1 && (
               <>
-                <PadlockIcon className={c.PadlockIcon_Header} />
-                <Spacer size={'.25rem'} />
+                <Spacer size={'.5rem'} />
+                <MetadataPrimary>
+                  {folderPathEnhanced.map((pathObj, index) => {
+                    if (index === 0) return null
+                    if (index === folderPathEnhanced.length - 1)
+                      return (
+                        <span
+                          key={`folderCrumb_${pathObj.label}_${index}`}
+                          className={c.FolderView_CurrentFolder}
+                        >
+                          {pathObj.label}
+                        </span>
+                      )
+                    return (
+                      <React.Fragment key={`folderCrumb_${pathObj.label}_${index}`}>
+                        <Link
+                          to={`/mythangs/folder/${pathObj.id}`}
+                        >{`${pathObj.label}`}</Link>
+                        &nbsp;&nbsp;/&nbsp;&nbsp;
+                      </React.Fragment>
+                    )
+                  })}
+                </MetadataPrimary>
               </>
             )}
-            <LikeFolderButton folder={folder} minimal onlyShowOwned />
           </div>
-          {folderPath.length > 1 && (
-            <>
-              <Spacer size={'.5rem'} />
-              <MetadataPrimary>
-                {folderPathEnhanced.map((pathObj, index) => {
-                  if (index === 0) return null
-                  if (index === folderPathEnhanced.length - 1)
-                    return (
-                      <span
-                        key={`folderCrumb_${pathObj.label}_${index}`}
-                        className={c.FolderView_CurrentFolder}
-                      >
-                        {pathObj.label}
-                      </span>
-                    )
-                  return (
-                    <React.Fragment key={`folderCrumb_${pathObj.label}_${index}`}>
-                      <Link
-                        to={`/mythangs/folder/${pathObj.id}`}
-                      >{`${pathObj.label}`}</Link>
-                      &nbsp;&nbsp;/&nbsp;&nbsp;
-                    </React.Fragment>
-                  )
-                })}
-              </MetadataPrimary>
-            </>
+        </div>
+        <div className={classnames(c.FolderView_Row, c.FolderView_Row__desktop)}>
+          <Contributors
+            users={rootFolder ? rootFolder.members : folder.members}
+            displayLength='10'
+          />
+          <Spacer size={'1rem'} />
+          <Button secondary onClick={handleEditFolder}>
+            Edit
+          </Button>
+          <Spacer size={'1rem'} />
+          <Button onClick={handleInviteUsers}>
+            <InviteIcon />
+            <Spacer size={'.5rem'} />
+            Invite Members
+          </Button>
+        </div>
+        <div
+          className={c.FolderView_MobileMenuButton}
+          onClick={handleFileMenu}
+          ref={fileMenuRef}
+        >
+          <DotStackIcon />
+          {showFileMenu && (
+            <div className={c.FolderView_MobileMenu}>
+              <FileMenu type={'folder'} folder={folder} />
+            </div>
           )}
         </div>
       </div>
-      <div className={classnames(c.FolderView_Row, c.FolderView_Row__desktop)}>
-        <Contributors
-          users={rootFolder ? rootFolder.members : folder.members}
-          displayLength='10'
-        />
-        <Spacer size={'1rem'} />
-        <Button secondary onClick={handleEditFolder}>
-          Edit
-        </Button>
-        <Spacer size={'1rem'} />
-        <Button onClick={handleInviteUsers}>
-          <InviteIcon />
-          <Spacer size={'.5rem'} />
-          Invite Members
-        </Button>
-      </div>
-      <div
-        className={c.FolderView_MobileMenuButton}
-        onClick={handleFileMenu}
-        ref={fileMenuRef}
-      >
-        <DotStackIcon />
-        {showFileMenu && (
-          <div className={c.FolderView_MobileMenu}>
-            <FileMenu type={'folder'} folder={folder} />
-          </div>
-        )}
-      </div>
-    </div>
+    </>
   )
 }
 

@@ -19,6 +19,7 @@ import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ArrowUpIcon } from '@svg/icon-arrow-up-sm.svg'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import { ReactComponent as DropzoneIcon } from '@svg/dropzone.svg'
+import { ReactComponent as DropzoneMobileIcon } from '@svg/dropzone-mobile.svg'
 import { formatBytes } from '@utilities'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import { useExternalClick } from '@hooks'
@@ -125,10 +126,19 @@ const useStyles = createUseStyles(theme => {
       width: '10%',
     },
     NoFilesMessage: {
-      margin: '2rem',
-      padding: '2rem',
+      top: '15.75rem',
+      position: 'absolute',
+      left: '50%',
+      transform: 'translate(-50%)',
+      [md]: {
+        position: 'relative',
+        margin: '2rem',
+        padding: '2rem',
+        left: 'unset',
+        transform: 'unset',
+      },
       textAlign: 'center',
-      position: 'relative',
+      
     },
     NoFilesMessage_Icon: {
       position: 'relative',
@@ -174,11 +184,24 @@ const useStyles = createUseStyles(theme => {
       zIndex: 1,
     },
     FileTable_UploadZone: {
-      width: '27rem',
-      margin: '0 auto',
-
+      [md] :{
+        width: '27rem',
+        margin: '0 auto',
+      },
       '& > div': {
         outline: 'none',
+      },
+    },
+    FileTable_DropzoneIcon__mobile: {
+      display: 'initial',
+      [md]: {
+        display: 'none',
+      },
+    },
+    FileTable_DropzoneIcon__desktop: {
+      display: 'none',
+      [md]: {
+        display: 'block',
       },
     },
     FileTable_UploadButton: {
@@ -188,6 +211,10 @@ const useStyles = createUseStyles(theme => {
       left: 0,
       right: 0,
       margin: 'auto',
+      display: 'none',
+      [md]: {
+        display: 'flex',
+      },
     },
   }
 })
@@ -410,56 +437,58 @@ const getCompareByOrder = (a, b, order) => {
 }
 
 const getSortedFiles = (files, sortType, order) => {
-  return [...files]
-    .sort((a, b) => {
-      if (sortType === COLUMNS.FILENAME) {
-        return getCompareByOrder(
-          (a.name || '').toUpperCase(),
-          (b.name || '').toUpperCase(),
-          order
-        )
-      }
+  return (
+    [...files]
+      .sort((a, b) => {
+        if (sortType === COLUMNS.FILENAME) {
+          return getCompareByOrder(
+            (a.name || '').toUpperCase(),
+            (b.name || '').toUpperCase(),
+            order
+          )
+        }
 
-      if (sortType === COLUMNS.CREATED) {
-        return getCompareByOrder(
-          new Date(a.uploadDate).getTime(),
-          new Date(b.uploadDate).getTime(),
-          order
-        )
-      }
+        if (sortType === COLUMNS.CREATED) {
+          return getCompareByOrder(
+            new Date(a.uploadDate).getTime(),
+            new Date(b.uploadDate).getTime(),
+            order
+          )
+        }
 
-      if (sortType === COLUMNS.SIZE) {
-        return getCompareByOrder(a.size, b.size, order)
-      }
+        if (sortType === COLUMNS.SIZE) {
+          return getCompareByOrder(a.size, b.size, order)
+        }
 
-      if (sortType === COLUMNS.FILETYPE) {
-        return getCompareByOrder(
-          (a.fileType || '').toUpperCase(),
-          (b.fileType || '').toUpperCase(),
-          order
-        )
-      }
+        if (sortType === COLUMNS.FILETYPE) {
+          return getCompareByOrder(
+            (a.fileType || '').toUpperCase(),
+            (b.fileType || '').toUpperCase(),
+            order
+          )
+        }
 
-      if (sortType === COLUMNS.CONTRIBUTORS) {
-        return getCompareByOrder(
-          (a.members || []).length,
-          (b.members || []).length,
-          order
-        )
-      }
+        if (sortType === COLUMNS.CONTRIBUTORS) {
+          return getCompareByOrder(
+            (a.members || []).length,
+            (b.members || []).length,
+            order
+          )
+        }
 
-      return 0
-    })
-    // folders always on top
-    .sort((a, b) => {
-      if (a.fileType === undefined && b.fileType !== undefined) {
-        return -1
-      }
-      if (a.fileType !== undefined && b.fileType === undefined) {
-        return 1
-      }
-      return 0
-    })
+        return 0
+      })
+      // folders always on top
+      .sort((a, b) => {
+        if (a.fileType === undefined && b.fileType !== undefined) {
+          return -1
+        }
+        if (a.fileType !== undefined && b.fileType === undefined) {
+          return 1
+        }
+        return 0
+      })
+  )
 }
 
 const FileTable = ({
@@ -481,9 +510,7 @@ const FileTable = ({
   })
   const handleSort = useCallback(
     newSortedBy => {
-      const newOrder = sortedBy !== newSortedBy
-        ? 'asc'
-        : order === 'asc' ? 'desc' : 'asc'
+      const newOrder = sortedBy !== newSortedBy ? 'asc' : order === 'asc' ? 'desc' : 'asc'
 
       setSort({ sortedBy: newSortedBy, order: newOrder })
     },
@@ -572,7 +599,8 @@ const FileTable = ({
               <section className={c.FileTable_UploadZone}>
                 <div {...getRootProps()}>
                   <input {...getInputProps()} />
-                  <DropzoneIcon />
+                  <DropzoneIcon className={c.FileTable_DropzoneIcon__desktop}/>
+                  <DropzoneMobileIcon className={c.FileTable_DropzoneIcon__mobile} />
                   <Pill className={c.FileTable_UploadButton}>Browse</Pill>
                 </div>
               </section>
