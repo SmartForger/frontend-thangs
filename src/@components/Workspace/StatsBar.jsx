@@ -7,7 +7,11 @@ import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
 import { ReactComponent as SharedIcon } from '@svg/icon-shared.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+
   return {
     StatsBar: {
       display: 'flex',
@@ -15,6 +19,9 @@ const useStyles = createUseStyles(_theme => {
       overflowX: 'scroll',
       overflowY: 'hidden',
       whiteSpace: 'nowrap',
+      [md]: {
+        overflowX: 'hidden',
+      },
     },
     StatsBar_Stat: {
       display: 'flex',

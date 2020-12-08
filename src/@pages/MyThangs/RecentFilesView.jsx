@@ -44,6 +44,7 @@ const useStyles = createUseStyles(theme => {
 
       [md]: {
         flexWrap: 'wrap',
+        overflowX: 'hidden',
       },
 
       '& > div': {
