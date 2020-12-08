@@ -13,16 +13,6 @@ const getInitAtom = () => ({
   validating: false,
   isAssembly: false,
   assemblyData: {},
-  missingFiles: [
-    {
-      filename: 'Tail.stl',
-      skipped: false,
-    },
-    {
-      filename: 'Head.stl',
-      skipped: false,
-    },
-  ],
 })
 
 const noop = () => null
@@ -127,7 +117,7 @@ export default store => {
       uploadFiles: {
         ...state.uploadFiles,
         data: newUploadedFiles,
-        validating: currentFileUploaded && uploadComplete && !validating
+        validating: currentFileUploaded && uploadComplete && !validating,
       },
     }
   })
@@ -137,15 +127,6 @@ export default store => {
       uploadFiles: {
         ...state.uploadFiles,
         isAssembly,
-      },
-    }
-  })
-
-  store.on(types.SET_MISSING_FILES, (state, { files }) => {
-    return {
-      uploadFiles: {
-        ...state.uploadFiles,
-        missingFiles: files,
       },
     }
   })

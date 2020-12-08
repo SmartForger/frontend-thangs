@@ -12,6 +12,7 @@ import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { track } from '@utilities/analytics'
+import { checkTreeMissing } from '@utilities'
 import AssemblyInfo from './AssemblyInfo'
 
 const useStyles = createUseStyles(theme => {
@@ -24,7 +25,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       position: 'relative',
-      padding: '2rem'
+      padding: '2rem',
     },
     MultiUpload_Content: {
       display: 'flex',
@@ -98,12 +99,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
     'shared',
     'uploadFiles'
   )
-  const {
-    data: rawUploadFilesData = {},
-    validationTree,
-    isLoading,
-    missingFiles,
-  } = uploadFiles
+  const { data: rawUploadFilesData = {}, validationTree, isLoading } = uploadFiles
   const { data: foldersData = [] } = folders
   const { data: sharedData = [] } = shared
   const [activeView, setActiveView] = useState('upload')
@@ -230,10 +226,14 @@ const MultiUpload = ({ initData = null, folderId }) => {
       const loadingFiles = Object.keys(uploadFilesData).filter(
         id => uploadFilesData[id].isLoading
       )
-      if (loadingFiles.length > 0)
+      if (loadingFiles.length > 0) {
         return setErrorMessage('Please wait until all files are processed')
-      const mfiles = missingFiles.filter(f => !f.skipped)
-      if (mfiles.length > 0) return setErrorMessage('Please handle all missing files')
+      }
+      const hasMissingFile =
+        !validationTree || validationTree.some(node => checkTreeMissing(node))
+      if (hasMissingFile) {
+        return setErrorMessage('Please handle all missing files')
+      }
 
       if (activeView === 'upload') {
         setActiveView(isAssembly ? 'assemblyInfo' : 'enterInfo')
@@ -250,7 +250,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
         }
       }
     },
-    [uploadFilesData, isAssembly, activeView, activeStep, missingFiles, handleSubmit]
+    [uploadFilesData, isAssembly, activeView, activeStep, validationTree, handleSubmit]
   )
 
   const handleBack = useCallback(() => {

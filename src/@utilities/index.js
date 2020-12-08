@@ -49,7 +49,8 @@ export const checkTreeLoading = node => {
 
 export const checkTreeMissing = node => {
   return (
-    !node.valid || (node.subs && node.subs.some(subnode => checkTreeMissing(subnode)))
+    (!node.valid && !node.skipped) ||
+    (node.subs && node.subs.some(subnode => checkTreeMissing(subnode)))
   )
 }
 
