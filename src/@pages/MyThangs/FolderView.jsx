@@ -208,6 +208,8 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
     [showFileMenu]
   )
 
+  const members = rootFolder ? rootFolder.members : folder.members
+
   return (
     <>
       <Spacer className={c.Spacer__mobile} size='2rem' />
@@ -260,7 +262,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
         </div>
         <div className={classnames(c.FolderView_Row, c.FolderView_Row__desktop)}>
           <Contributors
-            users={rootFolder ? rootFolder.members : folder.members}
+            users={members}
             displayLength='10'
           />
           <Spacer size={'1rem'} />
@@ -282,7 +284,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
           <DotStackIcon />
           {showFileMenu && (
             <div className={c.FolderView_MobileMenu}>
-              <FolderMenu type='folder' folder={folder} />
+              <FolderMenu  members={members} type='folder' folder={folder} />
             </div>
           )}
         </div>
@@ -398,9 +400,9 @@ const FolderView = ({
               <>
                 <Spacer size='4rem' />
                 <TitleTertiary>Files</TitleTertiary>
-                <Spacer size='2rem' />{' '}
               </>
             )}
+            <Spacer size='2rem' />{' '}
             <FileTable
               className={c.FolderView_FileTable__desktop}
               files={models}

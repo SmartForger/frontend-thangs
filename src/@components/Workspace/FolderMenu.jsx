@@ -1,9 +1,11 @@
 import React, { useCallback, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
-import { Divider, SingleLineBodyText, Spacer } from '@components'
+import classnames from 'classnames'
+import { Contributors, Divider, SingleLineBodyText, Spacer, Button } from '@components'
 import { createUseStyles } from '@style'
 import { MenuItem } from 'react-contextmenu'
 import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
+import { ReactComponent as InviteIcon } from '@svg/icon-invite.svg'
 import { ReactComponent as DeleteIcon } from '@svg/icon-delete.svg'
 import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
@@ -18,6 +20,7 @@ const useStyles = createUseStyles(theme => {
       boxShadow: '0px 8px 20px 0px rgba(0, 0, 0, 0.16)',
       borderRadius: '.5rem',
       zIndex: 2,
+      minWidth: '18rem',
 
       '& div': {
         display: 'flex',
@@ -36,10 +39,15 @@ const useStyles = createUseStyles(theme => {
         backgroundColor: 'rgba(0, 0, 0, 0.05)',
       },
     },
+    FolderMenu_Item__InviteSection: {
+      justifyContent: 'space-between',
+      marginLeft: '1.5rem',
+      marginRight: '1.5rem',
+    },
   }
 })
 
-const FolderMenu = ({ folder = {} }) => {
+const FolderMenu = ({ folder = {}, members = [] }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
   const currentUserId = authenticationService.getCurrentUserId()
@@ -106,6 +114,23 @@ const FolderMenu = ({ folder = {} }) => {
     [dispatch, folder]
   )
 
+  const handleInviteUsers = useCallback(
+    e => {
+      e.preventDefault()
+      track('File Menu - Invite Members')
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'inviteUsers',
+        overlayData: {
+          folderId: folder.id,
+          animateIn: true,
+          windowed: true,
+          dialogue: true,
+        },
+      })
+    },
+    [dispatch, folder.id]
+  )
+
   return (
     <div className={c.FolderMenu}>
       <Spacer size={'1rem'} />
@@ -138,10 +163,9 @@ const FolderMenu = ({ folder = {} }) => {
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
-      <Spacer size={'.5rem'} />
       {hasDeletePermission && (
         <>
-          <Divider spacing={'.5rem'} />
+          <Divider spacing={'1rem'} />
           <MenuItem className={c.FolderMenu_Item} onClick={removeFolder}>
             <div>
               <Spacer size={'1.5rem'} />
@@ -153,6 +177,18 @@ const FolderMenu = ({ folder = {} }) => {
           </MenuItem>
         </>
       )}
+      <Divider spacing={'1rem'} />
+      <MenuItem
+        className={classnames(c.FolderMenu_Item, c.FolderMenu_Item__InviteSection)}
+        onClick={handleInviteUsers}
+      >
+        <Contributors users={members} displayLength='3' />
+        <Button>
+          <InviteIcon />
+          <Spacer size={'.5rem'} />
+          Invite
+        </Button>
+      </MenuItem>
       <Spacer size={'1rem'} />
     </div>
   )
