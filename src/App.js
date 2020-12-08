@@ -42,7 +42,7 @@ export function AppFrame() {
 }
 
 const App = () => {
-  const [isLoadingOptimizely, setIsLoadingOptimizely] = useState(false)
+  const [isLoadingOptimizely, setIsLoadingOptimizely] = useState(true)
   const user = authenticationService.getCurrentUser()
   const [experimentationId, setExpId] = useLocalStorage('experimentationId', null)
   if (!experimentationId) setExpId(Math.random().toString(36).substring(2, 15))
