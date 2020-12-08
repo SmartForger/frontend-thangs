@@ -15,7 +15,6 @@ import { useForm } from '@hooks'
 import { createUseStyles } from '@style'
 import { formatBytes } from '@utilities'
 import { CATEGORIES } from '@constants/fileUpload'
-import { overlayview, track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -247,28 +246,6 @@ const EnterInfo = ({
     },
     [folders, handleOnInputChange]
   )
-
-  const handleSkip = useCallback(() => {
-    if (!inputState.name || inputState.name === '')
-      return setErrorMessage('Model name is required')
-    if (!inputState.description || inputState.description === '')
-      return setErrorMessage('Model description is required')
-    const filesLeft = Object.keys(uploadFiles).slice(activeStep)
-    filesLeft.forEach(id => {
-      const newData = { ...inputState }
-      newData.name = uploadFiles[id].name
-      handleUpdate({ id, data: newData })
-    })
-    track('Upload - Apply All')
-    handleSkipToEnd({ selectedFolderId: inputState.folderId })
-  }, [
-    inputState,
-    setErrorMessage,
-    uploadFiles,
-    activeStep,
-    handleSkipToEnd,
-    handleUpdate,
-  ])
 
   const selectedCategory = useMemo(() => {
     if (!model) return undefined

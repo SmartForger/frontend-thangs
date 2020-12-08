@@ -118,7 +118,7 @@ export default store => {
       [id]: { ...uploadedFiles[id], ...data, isLoading, isError },
     }
     const currentFileUploaded = uploadedFiles[id].isLoading !== isLoading
-    const uploadComplete = Object.keys(newUploadedFiles).every(f => !f.isLoading)
+    const uploadComplete = Object.values(newUploadedFiles).every(f => !f.isLoading)
     if (currentFileUploaded && uploadComplete && !validating) {
       store.dispatch(types.VALIDATE_FILES)
     }
@@ -127,6 +127,7 @@ export default store => {
       uploadFiles: {
         ...state.uploadFiles,
         data: newUploadedFiles,
+        validating: currentFileUploaded && uploadComplete && !validating
       },
     }
   })

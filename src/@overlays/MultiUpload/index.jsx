@@ -201,7 +201,6 @@ const MultiUpload = ({ initData = null, folderId }) => {
   }
 
   const skipFile = path => {
-    console.log('skip file', path)
     dispatch(types.SKIP_MISSING_FILE, { path })
   }
 
@@ -350,6 +349,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             isAssembly={isAssembly}
             setIsAssembly={setIsAssembly}
             skipFile={skipFile}
+            hasAssembly={validationTree && validationTree.length > 0}
           />
         ) : activeView === 'assemblyInfo' ? (
           <AssemblyInfo

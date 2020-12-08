@@ -1,25 +1,17 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
 import * as R from 'ramda'
-import classnames from 'classnames'
 import {
   Button,
-  Divider,
-  MetadataSecondary,
   MultiLineBodyText,
   Pill,
-  SingleLineBodyText,
   Spacer,
-  Spinner,
   TitleTertiary,
   Toggle,
   Tooltip,
 } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as UploadCardIcon } from '@svg/upload-card.svg'
-import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
-import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as InfoIcon } from '@svg/icon-info.svg'
-import { formatBytes } from '@utilities'
 import Dropzone from 'react-dropzone'
 import { FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { overlayview } from '@utilities/analytics'
@@ -171,6 +163,7 @@ const noop = () => null
 const UploadModels = ({
   uploadFiles,
   uploadTreeData,
+  hasAssembly,
   onDrop = noop,
   removeFile = noop,
   closeOverlay = noop,
@@ -250,6 +243,7 @@ const UploadModels = ({
           </section>
         )}
       </Dropzone>
+      <Spacer size='1rem' />
       {errorMessage && (
         <>
           <h4 className={c.UploadModels_ErrorText}>{errorMessage}</h4>
@@ -263,13 +257,35 @@ const UploadModels = ({
         </>
       )}
       {fileLength > 0 && (
-        <UploadTreeView
-          fileTree={uploadTreeData}
-          onSkip={skipFile}
-          onRemove={removeFile}
-        />
+        <>
+          <UploadTreeView
+            fileTree={uploadTreeData}
+            onSkip={skipFile}
+            onRemove={removeFile}
+          />
+          <Spacer size={'1rem'} />
+          {!hasAssembly && (
+            <>
+              <Toggle
+                id='upload_assembly'
+                label={uploadAssemblyLabel}
+                checked={isAssembly}
+                onChange={toggleAssembly}
+              />
+              <Spacer size={'1.5rem'} />
+            </>
+          )}
+          <div className={c.UploadModels_ButtonWrapper}>
+            <Button secondary onClick={closeOverlay}>
+              Cancel
+            </Button>
+            <Spacer size={'1rem'} />
+            <Button onClick={handleContinue}>
+              {isLoadingFiles ? 'Processing...' : 'Continue'}
+            </Button>
+          </div>
+        </>
       )}
-      <Spacer size={'2rem'} />
     </>
   )
 }
