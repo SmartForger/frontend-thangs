@@ -128,7 +128,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
         name: node.name,
         isAssembly: node.isAssembly,
         valid: node.valid,
-        skipped: node.valid,
+        skipped: node.skipped,
         loading: file.isLoading,
       }
 

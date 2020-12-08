@@ -71,6 +71,8 @@ const UploadTreeItem = ({ file, level, onSkip, onRemove }) => {
     onSkip([file.name])
   }
 
+  console.log(file.name, file.valid, file.skipped)
+
   return (
     <div
       className={cn(c.UploadTreeItem_Root, {

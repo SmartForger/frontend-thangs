@@ -56,3 +56,14 @@ export const checkTreeMissing = node => {
 export const sleep = ms => {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
+
+export const findNodesByPath = (nodes, path) => {
+  if (path.length > 0) {
+    const node = nodes.find(n => n.name === path[0])
+    return node.subs && path.length > 1
+      ? [node, ...findNodesByPath(node.subs, path.slice(1))]
+      : [node]
+  }
+
+  return []
+}

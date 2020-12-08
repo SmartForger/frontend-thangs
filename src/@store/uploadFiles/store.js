@@ -1,7 +1,7 @@
 import * as types from '@constants/storeEventTypes'
 import { api, uploadFile, cancelUpload } from '@services'
 import { track } from '@utilities/analytics'
-import { sleep } from '@utilities'
+import { sleep, findNodesByPath } from '@utilities'
 import * as R from 'ramda'
 import { mockUploadedFiles, mockValidationTree } from 'mocks/assembly-upload'
 
@@ -149,18 +149,32 @@ export default store => {
     }
   })
 
-  store.on(types.SKIP_MISSING_FILE, (state, { filename }) => {
+  store.on(types.SKIP_MISSING_FILE, (state, { path }) => {
+    const { validationTree, data } = state.uploadFiles
+
+    if (validationTree && validationTree.length > 0) {
+      const nodes = findNodesByPath(validationTree, path)
+      if (nodes.length > 0) {
+        nodes[nodes.length - 1].skipped = true
+      }
+
+      return {
+        uploadFiles: {
+          ...state.uploadFiles,
+          validationTree: JSON.parse(JSON.stringify(validationTree)),
+        },
+      }
+    }
+
+    const nodes = findNodesByPath(Object.values(data), path)
+    if (nodes.length > 0) {
+      nodes[nodes.length - 1].skipped = true
+    }
+
     return {
       uploadFiles: {
         ...state.uploadFiles,
-        missingFiles: state.uploadFiles.missingFiles.map(f =>
-          f.filename === filename
-            ? {
-                ...f,
-                skipped: true,
-              }
-            : f
-        ),
+        data: JSON.parse(JSON.stringify(data)),
       },
     }
   })
