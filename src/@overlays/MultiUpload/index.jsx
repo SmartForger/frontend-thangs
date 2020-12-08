@@ -15,25 +15,16 @@ import { track } from '@utilities/analytics'
 import AssemblyInfo from './AssemblyInfo'
 
 const useStyles = createUseStyles(theme => {
-  const {
-    mediaQueries: { md },
-  } = theme
   return {
     MultiUpload: {
-      width: '100%',
-      height: '100%',
-      position: 'relative',
+      width: '27.75rem',
+      minHeight: '27.75rem',
+      backgroundColor: theme.colors.white[300],
+      borderRadius: '1rem',
       display: 'flex',
       flexDirection: 'row',
-      overflow: 'hidden auto',
-      borderRadius: '0',
-      backgroundColor: theme.colors.white[300],
-
-      [md]: {
-        width: '27.75rem',
-        minHeight: '27.75rem',
-        borderRadius: '1rem',
-      },
+      position: 'relative',
+      padding: '2rem'
     },
     MultiUpload_Content: {
       display: 'flex',
@@ -81,15 +72,10 @@ const useStyles = createUseStyles(theme => {
       right: 0,
       left: 0,
       bottom: 0,
-      width: '100%',
-      height: '100%',
-      borderRadius: '0',
       backgroundColor: 'rgba(0,0,0,0.29)',
       zIndex: 5,
+      borderRadius: '1rem',
       display: 'flex',
-      [md]: {
-        borderRadius: '1rem',
-      },
     },
   }
 })
@@ -141,7 +127,8 @@ const MultiUpload = ({ initData = null, folderId }) => {
       const result = {
         name: node.name,
         isAssembly: node.isAssembly,
-        valid: node.valid || !file.isError,
+        valid: node.valid,
+        skipped: node.valid,
         loading: file.isLoading,
       }
 
@@ -334,7 +321,6 @@ const MultiUpload = ({ initData = null, folderId }) => {
           <Spinner />
         </div>
       )}
-      <Spacer width={'2rem'} />
       <div className={c.MultiUpload_Content}>
         <div className={c.MultiUpload_Column}>
           <Spacer size={'1.5rem'} />
@@ -390,7 +376,6 @@ const MultiUpload = ({ initData = null, folderId }) => {
           />
         )}
       </div>
-      <Spacer width={'2rem'} />
     </div>
   )
 }

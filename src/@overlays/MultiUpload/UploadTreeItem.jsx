@@ -17,6 +17,30 @@ const useStyles = createUseStyles(theme => {
       color: '#000',
       display: 'flex',
       alignItems: 'center',
+
+      '&.missing': {
+        '& $UploadTreeItem_FileName': {
+          color: '#DA7069',
+        },
+        '& path[fill]': {
+          fill: '#DA7069',
+        },
+        '& path[stroke]': {
+          stroke: '#DA7069',
+        },
+      },
+      '&.skipped': {
+        '& $UploadTreeItem_FileName': {
+          color: '#999',
+          textDecoration: 'line-through',
+        },
+        '& path[fill]': {
+          fill: '#999',
+        },
+        '& path[stroke]': {
+          stroke: '#999',
+        },
+      },
     },
     UploadTreeItem_OpenIcon: {
       marginRight: '0.5rem',
@@ -26,13 +50,6 @@ const useStyles = createUseStyles(theme => {
       width: '16rem',
       overflow: 'hidden',
       lineHeight: '1rem !important',
-      '&.missing': {
-        color: '#DA7069',
-      },
-      '&.skipped': {
-        color: '#999',
-        textDecoration: 'line-through',
-      },
     },
     UploadTreeItem_Actions: {
       flex: 1,
@@ -55,8 +72,13 @@ const UploadTreeItem = ({ file, level, onSkip, onRemove }) => {
   }
 
   return (
-    <div className={c.UploadTreeItem_Root}>
-      <div style={{ width: 1.5 * level + 'rem' }} />
+    <div
+      className={cn(c.UploadTreeItem_Root, {
+        missing: !file.valid && !file.skipped,
+        skipped: !file.valid && file.skipped,
+      })}
+    >
+      <div style={{ width: 3 * level - 1.5 + 'rem' }} />
       {file.isAssembly ? (
         <>
           {level > 0 && <Spacer size={'1.25rem'} />}
@@ -69,13 +91,7 @@ const UploadTreeItem = ({ file, level, onSkip, onRemove }) => {
         </>
       )}
       <Spacer size={'0.5rem'} />
-      <SingleLineBodyText
-        className={cn(c.UploadModels_FileName, {
-          missing: file.valid && !file.skipped,
-          skipped: file.valid && file.skipped,
-        })}
-        title={file.name}
-      >
+      <SingleLineBodyText className={c.UploadTreeItem_FileName} title={file.name}>
         {file.name}
       </SingleLineBodyText>
       <Spacer size={'0.5rem'} />
