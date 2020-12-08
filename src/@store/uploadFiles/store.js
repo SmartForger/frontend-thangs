@@ -3,6 +3,7 @@ import { api, uploadFile, cancelUpload } from '@services'
 import { track } from '@utilities/analytics'
 import { sleep } from '@utilities'
 import * as R from 'ramda'
+import { mockUploadedFiles, mockValidationTree } from 'mocks/assembly-upload'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -65,8 +66,10 @@ export default store => {
   })
 
   store.on(types.CANCEL_UPLOAD, (state, { filename }) => {
-    const cancelNode = (node) => {
-      const fileIndex = Object.values(state.uploadFiles.data).findIndex(f => f.name === node.name)
+    const cancelNode = node => {
+      const fileIndex = Object.values(state.uploadFiles.data).findIndex(
+        f => f.name === node.name
+      )
       if (fileIndex >= 0) {
         cancelUpload(Object.keys(state.uploadFiles.data)[fileIndex])
       }
@@ -86,8 +89,10 @@ export default store => {
     return {
       uploadFiles: {
         ...state.uploadFiles,
-        validationTree: state.uploadFiles.validationTree.filter(node => node.name !== filename)
-      }
+        validationTree: state.uploadFiles.validationTree.filter(
+          node => node.name !== filename
+        ),
+      },
     }
   })
 
@@ -160,69 +165,35 @@ export default store => {
     }
   })
 
-  store.on(types.VALIDATE_FILES_SUCCESS, (state, data) => {
+  store.on(types.VALIDATE_FILES_SUCCESS, (state, { validationTree, uploadedFiles }) => {
     return {
       uploadFiles: {
         ...state.uploadFiles,
-        validationTree: data,
+        validationTree,
+        data: uploadedFiles, // TO be removed later
         validating: false,
       },
     }
   })
 
+  store.on(types.VALIDATE_FILES_FAILED, state => {
+    return {
+      uploadFiles: {
+        ...state.uploadFiles,
+        validationTree: [],
+        validating: false,
+      },
+    }
+  })
+
+  // TODO: Update with actual API request
   store.on(types.VALIDATE_FILES, async state => {
     // Get API Data
-    const result = [
-      {
-        name: 'Assembly.asm',
-        isAssembly: true,
-        valid: true,
-        subs: [
-          {
-            name: 'Part 1.stl',
-            isAssembly: false,
-            valid: true,
-          },
-          {
-            name: 'Part 2.stl',
-            isAssembly: false,
-            valid: true,
-          },
-          {
-            name: 'Part 3.stl',
-            isAssembly: false,
-            valid: true,
-          },
-          {
-            name: 'Sub-Assembly.asm',
-            isAssembly: true,
-            valid: true,
-            subs: [
-              {
-                name: 'Part 4.stl',
-                isAssembly: false,
-                valid: true,
-              },
-              {
-                name: 'Part 5.stl',
-                isAssembly: false,
-                valid: false,
-                skipped: true,
-              },
-              {
-                name: 'Part 6.stl',
-                isAssembly: false,
-                valid: false,
-              },
-            ],
-          },
-        ],
-      },
-    ]
-
     await sleep(1000)
-
-    store.dispatch(types.VALIDATE_FILES_SUCCESS, result)
+    store.dispatch(types.VALIDATE_FILES_SUCCESS, {
+      validationTree: mockValidationTree,
+      uploadedFiles: mockUploadedFiles,
+    })
   })
 
   store.on(types.UPLOAD_FILE, async (_, { id, file, errorState = undefined }) => {
