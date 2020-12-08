@@ -13,7 +13,7 @@ import {
   Spinner,
   TitleTertiary,
   Contributors,
-  FileMenu,
+  FolderMenu,
 } from '@components'
 import { useExternalClick, useQuery } from '@hooks'
 import { authenticationService } from '@services'
@@ -282,7 +282,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
           <DotStackIcon />
           {showFileMenu && (
             <div className={c.FolderView_MobileMenu}>
-              <FileMenu type='folder' folder={folder} />
+              <FolderMenu type='folder' folder={folder} />
             </div>
           )}
         </div>
