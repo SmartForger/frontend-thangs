@@ -1,16 +1,29 @@
-import React, { useCallback, useEffect, useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import classnames from 'classnames'
-import { Pill, ColorPicker, Spacer, MetadataSecondary, Slider } from '@components'
+import {
+  Pill,
+  ColorPicker,
+  Spacer,
+  MetadataSecondary,
+  DropdownMenu,
+  Slider,
+  SingleLineBodyText,
+} from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ResetIcon } from '@svg/icon-reset.svg'
 import { ReactComponent as WireMode } from '@svg/view-mode-wire.svg'
 import { ReactComponent as ShadedMode } from '@svg/view-mode-shaded.svg'
 import { ReactComponent as XRayMode } from '@svg/view-mode-xray.svg'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
+import { ReactComponent as RemoveIcon } from '@svg/icon-X.svg'
 import { OrientationDropdownMenu, OrientationDropdown } from './OrientationDropdown'
 import { ModelSearchDropdownMenu, ModelSearchDropdown } from './ModelSearchDropdown'
+import { ReactComponent as ShadeColor } from '@svg/view-color-shade.svg'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
   return {
     Toolbar: {
       display: 'flex',
@@ -25,7 +38,7 @@ const useStyles = createUseStyles(_theme => {
     Toolbar_Group: {
       display: 'flex',
       alignItems: 'center',
-      margin: '0 auto',
+      margin: 0,
       padding: 0,
       flexWrap: 'wrap',
     },
@@ -58,99 +71,38 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const NewToolbar = ({ hoops, minimizeTools }) => {
+const NewToolbar = () => {
   const c = useStyles()
   const [mode, setMode] = useState('shaded')
-  const [orientation, setOrientation] = useState('Front')
+  const [orientation, setOrientation] = useState('front')
   const [color, setColor] = useState('#999')
-  const {
-    resetImage,
-    changeColor,
-    changeDrawMode,
-    changeExplosionMagnitude,
-    changeViewOrientation,
-    getViewerSnapshot,
-  } = hoops
 
-  const handleShadedMode = useCallback(() => {
-    changeDrawMode('shaded')
-    setMode('shaded')
-  }, [changeDrawMode])
-
-  const handleWireMode = useCallback(() => {
-    changeDrawMode('wire')
-    setMode('wire')
-  }, [changeDrawMode])
-
-  const handleXRayMode = useCallback(() => {
-    changeDrawMode('xray')
-    setMode('xray')
-  }, [changeDrawMode])
-
-  const handleColorChange = useCallback(
-    color => {
-      debugger
-      changeColor('mesh', color)
-      setColor(color)
-    },
-    [changeColor]
-  )
-
-  const handleSliderChange = useCallback(
-    (e, value) => {
-      changeExplosionMagnitude(value / 10)
-    },
-    [changeExplosionMagnitude]
-  )
-
-  const handleViewChange = useCallback(
-    view => {
-      setOrientation(view)
-      changeViewOrientation(view)
-    },
-    [changeViewOrientation]
-  )
-
-  const handleResetView = useCallback(() => {
-    resetImage()
-    changeExplosionMagnitude(0)
-    handleShadedMode()
-  }, [changeExplosionMagnitude, handleShadedMode, resetImage])
+  const selectViewMode = mode => {
+    setMode(mode)
+  }
 
   const orientationOptions = useMemo(
     () => [
       {
-        label: 'Top',
-        value: 'Top',
-        selected: orientation === 'Top',
-        onClick: () => handleViewChange('Top'),
+        label: 'Front',
+        value: 'front',
+        selected: orientation === 'front',
+        onClick: () => setOrientation('front'),
       },
       {
         label: 'Front',
-        value: 'Front',
-        selected: orientation === 'Front',
-        onClick: () => handleViewChange('Front'),
+        value: 'front',
+        selected: orientation === 'front',
+        onClick: () => setOrientation('front'),
       },
       {
-        label: 'Back',
-        value: 'Back',
-        selected: orientation === 'Back',
-        onClick: () => handleViewChange('Back'),
-      },
-      {
-        label: 'Right',
-        value: 'Right',
-        selected: orientation === 'Right',
-        onClick: () => handleViewChange('Right'),
-      },
-      {
-        label: 'Left',
-        value: 'Left',
-        selected: orientation === 'Left',
-        onClick: () => handleViewChange('Left'),
+        label: 'Top',
+        value: 'top',
+        selected: orientation === 'top',
+        onClick: () => setOrientation('top'),
       },
     ],
-    [handleViewChange, orientation]
+    []
   )
 
   const orientationLabel = useMemo(
@@ -161,86 +113,71 @@ const NewToolbar = ({ hoops, minimizeTools }) => {
   return (
     <div className={c.Toolbar}>
       <div className={c.Toolbar_Group}>
-        <Pill secondary onClick={handleResetView}>
+        <Pill secondary>
           <ResetIcon />
           <Spacer width={'0.25rem'} />
           Reset
         </Pill>
-        {!minimizeTools && (
-          <>
-            <Spacer width={'2rem'} />
-            <div className={c.Toolbar_Group}>
-              <MetadataSecondary>Texture</MetadataSecondary>
-              <Spacer width={'1rem'} />
-              <ShadedMode
-                className={classnames(c.Toolbar_IconButton, {
-                  selected: mode === 'shaded',
-                })}
-                onClick={handleShadedMode}
-              />
-              <Spacer width={'1rem'} />
-              <WireMode
-                className={classnames(c.Toolbar_IconButton, {
-                  selected: mode === 'wire',
-                })}
-                onClick={handleWireMode}
-              />
-              <Spacer width={'1rem'} />
-              <XRayMode
-                className={classnames(c.Toolbar_IconButton, {
-                  selected: mode === 'xray',
-                })}
-                onClick={handleXRayMode}
-              />
-            </div>
-            <Spacer width={'2rem'} />
-            <div className={c.Toolbar_Group}>
-              <MetadataSecondary>Orientation</MetadataSecondary>
-              <Spacer width={'1rem'} />
-              <OrientationDropdownMenu
-                options={orientationOptions}
-                TargetComponent={OrientationDropdown}
-                label={orientationLabel}
-              />
-            </div>
-            <Spacer width={'2rem'} />
-            <div className={c.Toolbar_Group}>
-              <MetadataSecondary>Color</MetadataSecondary>
-              <Spacer width={'1rem'} />
-              <ColorPicker color={color} onChange={handleColorChange}>
-                <div className={c.Toolbar_Group}>
-                  <div
-                    className={c.Toolbar_ColorCircle}
-                    style={{ backgroundColor: color }}
-                  />
-                  <Spacer width={'0.5rem'} />
-                  <ArrowDown />
-                </div>
-              </ColorPicker>
-            </div>
-            <Spacer width={'2rem'} />
-            <div className={c.Toolbar_Group}>
-              <MetadataSecondary>Explode</MetadataSecondary>
-              <Spacer width={'1.5rem'} />
-              <Slider onChange={handleSliderChange} marks={true} steps={60} />
-            </div>
-          </>
-        )}
-      </div>
-      {!minimizeTools && (
+        <Spacer width={'2rem'} />
         <div className={c.Toolbar_Group}>
-          <MetadataSecondary>Explode</MetadataSecondary>
+          <MetadataSecondary>Texture</MetadataSecondary>
           <Spacer width={'1rem'} />
-          <ModelSearchDropdownMenu
-            TargetComponent={ModelSearchDropdown}
-            label='Starship Enterprise'
-            canRemove
-            onRemove={() => {
-              console.log('remove model')
-            }}
+          <ShadedMode
+            className={classnames(c.Toolbar_IconButton, { selected: mode === 'shaded' })}
+            onClick={() => selectViewMode('shaded')}
+          />
+          <Spacer width={'1rem'} />
+          <WireMode
+            className={classnames(c.Toolbar_IconButton, { selected: mode === 'wire' })}
+            onClick={() => selectViewMode('wire')}
+          />
+          <Spacer width={'1rem'} />
+          <XRayMode
+            className={classnames(c.Toolbar_IconButton, { selected: mode === 'xray' })}
+            onClick={() => selectViewMode('xray')}
           />
         </div>
-      )}
+        <Spacer width={'2rem'} />
+        <div className={c.Toolbar_Group}>
+          <MetadataSecondary>Orientation</MetadataSecondary>
+          <Spacer width={'1rem'} />
+          <OrientationDropdownMenu
+            options={orientationOptions}
+            TargetComponent={OrientationDropdown}
+            label={orientationLabel}
+          />
+        </div>
+        <Spacer width={'2rem'} />
+        <div className={c.Toolbar_Group}>
+          <MetadataSecondary>Color</MetadataSecondary>
+          <Spacer width={'1rem'} />
+          <ColorPicker color={color} onChange={color => setColor(color)}>
+            <div className={c.Toolbar_Group}>
+              <div className={c.Toolbar_ColorCircle} style={{ backgroundColor: color }} />
+              <Spacer width={'0.5rem'} />
+              <ArrowDown />
+            </div>
+          </ColorPicker>
+        </div>
+        <Spacer width={'2rem'} />
+        <div className={c.Toolbar_Group}>
+          <MetadataSecondary>Explode</MetadataSecondary>
+          <Spacer width={'1.5rem'} />
+          <Slider />
+        </div>
+      </div>
+      <div className={c.Toolbar_Group}>
+        <MetadataSecondary>Explode</MetadataSecondary>
+        <Spacer width={'1rem'} />
+        <ModelSearchDropdownMenu
+          TargetComponent={ModelSearchDropdown}
+          label='Starship Enterprise'
+          canRemove
+          onRemove={() => {
+            console.log('remove model')
+          }}
+        />
+      </div>
     </div>
   )
 }
