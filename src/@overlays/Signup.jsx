@@ -520,7 +520,7 @@ const Signup = ({ titleMessage, showPromo = true, source }) => {
         showPromo={showPromo}
         source={source}
       />
-      <Spacer className={c.Signup_MobileSpacer} size='4rem' />
+      <Spacer className={c.Signup_MobileSpacer} width='4rem' height='unset' />
     </div>
   )
 }

@@ -390,7 +390,7 @@ const Signin = ({ sessionExpired, authFailed }) => {
         sessionExpired={sessionExpired}
         authFailed={authFailed}
       />
-      <Spacer className={c.Signin_MobileSpacer} size='4rem' />
+      <Spacer className={c.Signin_MobileSpacer} width='4rem' height='unset' />
     </div>
   )
 }
