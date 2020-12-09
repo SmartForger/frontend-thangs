@@ -98,11 +98,12 @@ const useStyles = createUseStyles(theme => {
     },
     Model_ModelViewer: {
       display: 'flex',
-      overflow: 'hidden',
       flexDirection: 'column',
       height: '23.5rem',
       margin: '0 auto',
       width: '100%',
+      boxShadow: '0 12px 24px 0 rgba(0,0,0,0.05)',
+      borderRadius: '1rem',
 
       [sm]: {
         height: '28.75rem',

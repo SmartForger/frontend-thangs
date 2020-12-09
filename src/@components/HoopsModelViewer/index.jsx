@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { HowTo, Spinner } from '@components'
 import { useModels, usePerformanceMetrics } from '@hooks'
 import Toolbar from './Toolbar'
+import NewToolbar from './NewToolbar'
 import DebugToolBar from './DebugToolbar';
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg'
 import classnames from 'classnames'
@@ -16,6 +17,8 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
       flexGrow: 1,
       cursor: 'grab',
+      borderTopLeftRadius: '1rem',
+      borderTopRightRadius: '1rem',
       backgroundColor: '#ffffff',
       '& > div': {
         pointerEvents: 'all',
@@ -100,7 +103,8 @@ const HoopsModelViewer = ({ className, model, minimizeTools }) => {
         <StatusIndicator status={hoops.status} />
         <div ref={containerRef} />
       </div>
-      {hoops.status.isReady && (
+      <NewToolbar />
+      {/*hoops.status.isReady && (
         <Toolbar
           onResetView={handleResetView}
           onDrawModeChange={handleDrawModeChange}
@@ -109,12 +113,12 @@ const HoopsModelViewer = ({ className, model, minimizeTools }) => {
           wireColor={wireColor}
           minimizeTools={minimizeTools}
         />
-      )}
+      )
       <DebugToolBar
         modelName={model.name}
         onChangeViewOrientation={handleSetViewOrientation}
         onGetViewerSnapshot={handleGetViewerSnapshot}
-      />
+      />*/}
     </div>
   )
 }

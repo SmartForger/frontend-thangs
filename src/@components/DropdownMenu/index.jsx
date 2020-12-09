@@ -127,6 +127,7 @@ const DropdownItem = ({ children, to = '#', onClick, className }) => {
 
 const DropdownMenu = ({
   TargetComponent,
+  TargetComponentProps,
   children,
   className,
   label,
@@ -150,6 +151,7 @@ const DropdownMenu = ({
           myThangsMenu={myThangsMenu}
           label={label}
           iconOnly={iconOnly}
+          {...TargetComponentProps}
         />
       ) : (
         <Button tertiary className={c.DropdownMenu_Button} onClick={toggleOpen}>

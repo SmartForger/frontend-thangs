@@ -27,7 +27,7 @@ const useStyles = createUseStyles(theme => {
       gridTemplateRows: 'repeat(2, 1fr)',
       gap: '.75rem',
       padding: '1.5rem',
-      bottom: 'calc(100% + 1.5rem)',
+      top: 'calc(100% + 0.25rem)',
       left: '1rem',
       transform: 'translateX(-50%)',
       borderRadius: '.25rem',
