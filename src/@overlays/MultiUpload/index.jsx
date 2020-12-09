@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom'
 import * as R from 'ramda'
 import { SingleLineBodyText, Spacer, Spinner } from '@components'
 import EnterInfo from './EnterInfo'
-// import AssemblyInfo from './AssemblyInfo'
 import UploadModels from './UploadModels'
 import { createUseStyles } from '@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
@@ -119,7 +118,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const uploadTreeData = useMemo(() => {
     const files = Object.values(rawUploadFilesData)
     const addTreeLoading = node => {
-      const file = files.find(f => f.name === node.name)
+      const file = files.find(f => f.newFileName === node.name)
       const result = {
         name: node.name,
         isAssembly: node.isAssembly,

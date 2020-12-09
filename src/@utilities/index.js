@@ -2,6 +2,7 @@ import * as R from 'ramda'
 
 export * from './PhysnaServer'
 export * from './ensureScriptIsLoaded'
+export * from './tree'
 
 /**
  * Receives Color Hex String: #FFFFFF
@@ -41,30 +42,6 @@ export const formatBytes = (bytes, decimals = 2) => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
 }
 
-export const checkTreeLoading = node => {
-  return (
-    node.isLoading || (node.subs && node.subs.some(subnode => checkTreeLoading(subnode)))
-  )
-}
-
-export const checkTreeMissing = node => {
-  return (
-    (!node.valid && !node.skipped) ||
-    (node.subs && node.subs.some(subnode => checkTreeMissing(subnode)))
-  )
-}
-
 export const sleep = ms => {
   return new Promise(resolve => setTimeout(resolve, ms))
-}
-
-export const findNodesByPath = (nodes, path) => {
-  if (path.length > 0) {
-    const node = nodes.find(n => n.name === path[0])
-    return node.subs && path.length > 1
-      ? [node, ...findNodesByPath(node.subs, path.slice(1))]
-      : [node]
-  }
-
-  return []
 }
