@@ -29,13 +29,14 @@ const useStyles = createUseStyles(theme => {
 
   return {
     Signin: {
-      borderRadius: '1rem',
       display: 'flex',
       flexDirection: 'column',
       overflow: 'hidden',
       position: 'relative',
+      height: '100%',
 
       [md]: {
+        borderRadius: '1rem',
         alignItems: 'stretch',
         flexDirection: 'row',
       },
@@ -56,6 +57,11 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
+      height: '100%',
+
+      [md]: {
+        borderRadius: '1rem',
+      },
     },
     Signin_SignUpPromo: {
       backgroundColor: theme.colors.purple[900],
@@ -81,6 +87,10 @@ const useStyles = createUseStyles(theme => {
     },
     Signin_FormWrapper: {
       width: '100%',
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
     },
     Signin_Form: {
       display: 'flex',
@@ -263,8 +273,8 @@ const SignInForm = ({
                 {authFailed
                   ? 'Something went wrong. Please try again'
                   : sessionExpired
-                    ? 'Session Expired. Please sign back in to continue'
-                    : signinErrorMessage}
+                  ? 'Session Expired. Please sign back in to continue'
+                  : signinErrorMessage}
               </FormError>
               <Spacer size='1rem' />
             </>

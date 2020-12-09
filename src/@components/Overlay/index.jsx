@@ -48,6 +48,7 @@ const useStyles = createUseStyles(theme => {
     Overlay_Content: {
       height: '100%',
       width: '100%',
+      backgroundColor: theme.colors.white[300],
 
       [md]: {
         height: 'auto',
@@ -63,6 +64,7 @@ const useStyles = createUseStyles(theme => {
         transition: 'all 450ms',
         opacity: ({ animateIn }) => (animateIn ? 0 : 1),
         top: ({ animateIn }) => (animateIn ? '30px' : 0),
+        backgroundColor: 'unset',
       },
     },
     Overlay_Content__visible: {

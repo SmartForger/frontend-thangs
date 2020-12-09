@@ -38,13 +38,14 @@ const useStyles = createUseStyles(theme => {
 
   return {
     Signup: {
-      borderRadius: '1rem',
+      height: '100%',
       display: 'flex',
       flexDirection: 'column',
       overflow: 'hidden',
       position: 'relative',
 
       [md]: {
+        borderRadius: '1rem',
         alignItems: 'stretch',
         flexDirection: 'row',
       },
@@ -62,9 +63,14 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
     },
     Signup_Row: {
+      height: '100%',
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
+
+      [md]: {
+        borderRadius: '1rem',
+      },
     },
     Signup_SignUpPromo: {
       backgroundColor: theme.colors.purple[900],
@@ -87,6 +93,10 @@ const useStyles = createUseStyles(theme => {
     },
     Signup_FormWrapper: {
       width: '100%',
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
     },
     Signup_Form: {
       display: 'flex',
