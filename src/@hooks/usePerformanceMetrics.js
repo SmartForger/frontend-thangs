@@ -8,6 +8,7 @@ const usePerformanceMetrics = () => {
   }, [])
 
   const getTime = useCallback(() => {
+    if (!startTime.current || typeof startTime.current.getTime !== 'function') return 0
     var endTime = new Date()
     return (endTime.getTime() - startTime.current.getTime()) / 1000
   }, [])

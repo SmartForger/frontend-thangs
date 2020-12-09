@@ -17,7 +17,7 @@ import { useCurrentUser, usePageMeta, usePerformanceMetrics, useQuery } from '@h
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
-import { pageview, track } from '@utilities/analytics'
+import { pageview, track, perfTrack } from '@utilities/analytics'
 
 const MQS_VALUES = [1440, 964, 736, 490]
 
@@ -337,7 +337,7 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
   useEffect(() => {
     if (!hasLoaded && modelPreviews.isLoaded) {
       setHasLoaded(true)
-      track('Page Loaded - Home', { seconds: getTime() })
+      perfTrack('Page Loaded - Home', getTime())
     }
   }, [getTime, hasLoaded, modelPreviews.isLoaded])
 

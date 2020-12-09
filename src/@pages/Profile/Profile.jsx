@@ -22,7 +22,7 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useCurrentUserId, usePageMeta, usePerformanceMetrics } from '@hooks'
 import * as types from '@constants/storeEventTypes'
-import { pageview, track } from '@utilities/analytics'
+import { pageview, track, perfTrack } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -141,7 +141,9 @@ const ModelsContent = ({ models: modelsData = {}, getTime = noop }) => {
   const { data: models, isLoaded, isError } = modelsData
 
   useEffect(() => {
-    if (isLoaded) track('Page Loaded - Profile', { seconds: getTime() })
+    if (isLoaded) {
+      perfTrack('Page Loaded - Profile', getTime())
+    }
   }, [getTime, isLoaded])
 
   if (!isLoaded) {

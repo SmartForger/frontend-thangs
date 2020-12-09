@@ -23,6 +23,10 @@ export const track = (type, data) => {
   amplitude.getInstance().logEvent(type, data)
 }
 
+export const perfTrack = (type, seconds) => {
+  if (seconds > 0) amplitude.getInstance().logEvent(type, { seconds })
+}
+
 export const pageview = (page, id) => {
   amplitude.getInstance().logEvent('pageview', { page, id })
 }

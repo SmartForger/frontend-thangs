@@ -5,7 +5,7 @@ import Toolbar from './Toolbar'
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import { track } from '@utilities/analytics'
+import { perfTrack } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -76,7 +76,7 @@ const HoopsModelViewer = ({ className, model, minimizeTools }) => {
   }, [])
 
   useEffect(() => {
-    if (hoops.status.isReady) track('Page Loaded - HOOPS Viewer', { seconds: getTime() })
+    if (hoops.status.isReady) perfTrack('Page Loaded - HOOPS Viewer', getTime())
   }, [getTime, hoops.status.isReady])
 
   return (

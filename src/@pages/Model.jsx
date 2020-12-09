@@ -35,7 +35,7 @@ import classnames from 'classnames'
 import { usePageMeta, usePerformanceMetrics } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
-import { pageview, track } from '@utilities/analytics'
+import { pageview, track, perfTrack } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -423,7 +423,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime }) => {
   }, [dispatch, id])
 
   useEffect(() => {
-    if (isLoaded) track('Page Loaded - Model', { seconds: getTime() })
+    if (isLoaded) perfTrack('Page Loaded - Model', getTime())
   }, [getTime, isLoaded])
 
   const { title, description } = usePageMeta('model')

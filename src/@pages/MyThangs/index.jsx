@@ -21,7 +21,7 @@ import SharedFilesView from './SharedFilesView'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
-import { pageview, track } from '@utilities/analytics'
+import { pageview, perfTrack } from '@utilities/analytics'
 import { ContextMenuTrigger } from 'react-contextmenu'
 
 const useStyles = createUseStyles(theme => {
@@ -143,7 +143,7 @@ const MyThangs = () => {
   }, [])
 
   useEffect(() => {
-    if (isLoaded) track('Page Loaded - MyThangs', { seconds: getTime() })
+    if (isLoaded) perfTrack('Page Loaded - MyThangs', getTime())
   }, [getTime, isLoaded])
 
   useEffect(() => {
