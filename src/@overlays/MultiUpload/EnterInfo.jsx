@@ -294,9 +294,9 @@ const EnterInfo = ({
   const usersFolders = useMemo(() => {
     return folders && folders.length
       ? folders.map(folder => ({
-          value: folder.id,
-          label: folder.name.replace(new RegExp('//', 'g'), '/'),
-        }))
+        value: folder.id,
+        label: folder.name.replace(new RegExp('//', 'g'), '/'),
+      }))
       : []
   }, [folders])
 

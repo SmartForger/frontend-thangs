@@ -19,7 +19,7 @@ import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ArrowUpIcon } from '@svg/icon-arrow-up-sm.svg'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import { ReactComponent as DropzoneIcon } from '@svg/dropzone.svg'
-//import { ReactComponent as DropzoneMobileIcon } from '@svg/dropzone-mobile.svg'
+import { ReactComponent as DropzoneMobileIcon } from '@svg/dropzone-mobile.svg'
 import { formatBytes } from '@utilities'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import { useExternalClick } from '@hooks'
@@ -139,7 +139,6 @@ const useStyles = createUseStyles(theme => {
         transform: 'unset',
       },
       textAlign: 'center',
-      
     },
     NoFilesMessage_Icon: {
       position: 'relative',
@@ -185,7 +184,7 @@ const useStyles = createUseStyles(theme => {
       zIndex: 1,
     },
     FileTable_UploadZone: {
-      [md] :{
+      [md]: {
         width: '27rem',
         margin: '0 auto',
       },
@@ -600,11 +599,8 @@ const FileTable = ({
               <section className={c.FileTable_UploadZone}>
                 <div {...getRootProps()}>
                   <input {...getInputProps()} />
-                  <DropzoneIcon className={c.FileTable_DropzoneIcon__desktop}/>
-                  {/* TODO: DropzoneMobileIcon is currently broken, waiting for correct
-                  from @Damjan Knezevic */}
-                  <DropzoneIcon className={c.FileTable_DropzoneIcon__mobile} />
-                  {/* <DropzoneMobileIcon className={c.FileTable_DropzoneIcon__mobile} /> */}
+                  <DropzoneIcon className={c.FileTable_DropzoneIcon__desktop} />
+                  <DropzoneMobileIcon className={c.FileTable_DropzoneIcon__mobile} />
                   <Pill className={c.FileTable_UploadButton}>Browse</Pill>
                 </div>
               </section>

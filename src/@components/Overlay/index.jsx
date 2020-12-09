@@ -58,8 +58,8 @@ const useStyles = createUseStyles(theme => {
           !showPromo && windowed
             ? '22.875rem'
             : showPromo && windowed
-            ? '45.75rem'
-            : '32rem',
+              ? '45.75rem'
+              : '32rem',
         paddingTop: '2rem',
         margin: '0 auto',
         transition: 'all 450ms',
