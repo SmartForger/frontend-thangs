@@ -262,9 +262,10 @@ const WorkspaceNavbar = ({
     setCurrentView('saved-searches')
   }, [setCurrentView, closeMobileNav])
 
-  const handleClickEdit = useCallback(() => setCurrentView('edit-profile'), [
-    setCurrentView,
-  ])
+  const handleClickEdit = useCallback(() => {
+    closeMobileNav()
+    setCurrentView('edit-profile')
+  }, [setCurrentView, closeMobileNav])
 
   const handleClickPortfolio = useCallback(() => {
     history.push(`/${user.username}`)

@@ -4,19 +4,25 @@ import { createUseStyles } from '@style'
 import { useForm } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+
   return {
     EditProfileForm: {
       display: 'flex',
       flexDirection: 'column',
-      maxWidth: '32.5rem',
+      maxWidth: '36.125rem',
     },
     EditProfileForm_ButtonContainer: {
       display: 'flex',
       justifyContent: 'flex-start',
     },
     EditProfileForm_Button: {
-      maxWidth: '100%',
-      width: '10.5rem',
+      width: '100%',
+      [md]: {
+        width: 'unset',
+      },
     },
     EditProfileForm_Field: {
       display: 'flex',
@@ -42,11 +48,16 @@ const useStyles = createUseStyles(theme => {
       backgroundColor: theme.colors.white[400],
     },
     EditProfileForm_Row: {
-      display: 'flex',
-      flexDirection: 'row',
+      display: 'block',
+      [md]: {
+        display: 'flex',
+        flexDirection: 'row',
+      },
     },
     EditProfileForm_HalfWidthInput: {
-      width: 'calc(50% - .5rem) !important',
+      [md]: {
+        width: 'calc(50% - .5rem) !important',
+      }
     },
   }
 })

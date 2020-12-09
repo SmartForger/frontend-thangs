@@ -18,16 +18,74 @@ import { useCurrentUser } from '@hooks'
 import * as types from '@constants/storeEventTypes'
 import { pageview } from '@utilities/analytics'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { xs, md },
+  } = theme
+
   return {
     EditProfile: {
       display: 'flex',
       flexDirection: 'row',
     },
-    EditProfile_Content: {},
+    EditProfile_TitleSecondary: {
+      fontSize: '1.25rem',
+      [md]: {
+        fontSize: '2.25rem',
+      },
+    },
+    EditProfile_Content: {
+      width: '100%',
+      [md]: {
+        width: 'unset',
+      },
+    },
     EditProfile_Row: {
+      display: 'block',
+      textAlign: 'center',
+
+      [md]: {
+        display: 'flex',
+        flexDirection: 'row',
+      },
+    },
+    EditProfile_Column: {
+      display: 'block',
+      textAlign: 'center',
+    },
+    EditProfile_TitleTertiary: {
+      display: 'block',
+      [md]: {
+        display: 'flex',
+      },
+    },
+    EditProfile_UserName: {
+      display: 'block',
+      [md]: {
+        display: 'flex',
+      },
+    },
+
+    EditProfile_ButtonsSection: {
       display: 'flex',
       flexDirection: 'row',
+      justifyContent: 'center',
+      '& > *:not([class^=Spacer])': {
+        width: '100%',
+      },
+      flexWrap: 'wrap',
+      [xs]: {
+        flexWrap: 'nowrap',
+      },
+      [md]: {
+        justifyContent: 'flex-start',
+      },
+    },
+    EditProfile_Spacer__mobile: {
+      display: 'none',
+      [md]: {
+        display: 'block',
+      },
     },
   }
 })
@@ -67,8 +125,10 @@ const EditProfile = ({ className }) => {
     <main className={classnames(className, c.EditProfile)}>
       <Spacer size='2rem' />
       <div className={c.EditProfile_Content}>
-        <Spacer size='2rem' />
-        <TitleSecondary>Profile Settings</TitleSecondary>
+        <Spacer size='2rem' className={c.EditProfile_Spacer__mobile} />
+        <TitleSecondary className={c.EditProfile_TitleSecondary}>
+          Profile Settings
+        </TitleSecondary>
         <Spacer size='2rem' />
         <div className={c.EditProfile_Row}>
           <ProfilePicture
@@ -79,13 +139,15 @@ const EditProfile = ({ className }) => {
           />
           <Spacer size={'1.5rem'} />
           <div className={c.EditProfile_Column}>
-            <TitleTertiary>{user.fullName || user.username}</TitleTertiary>
+            <TitleTertiary className={c.EditProfile_TitleTertiary}>
+              {user.fullName || user.username}
+            </TitleTertiary>
             <Spacer size={'.5rem'} />
-            <MetadataPrimary>
+            <MetadataPrimary className={c.EditProfile_UserName}>
               {user.fullName ? user.username : user.email}
             </MetadataPrimary>
             <Spacer size={'1rem'} />
-            <div className={c.EditProfile_Row}>
+            <div className={c.EditProfile_ButtonsSection}>
               <ChangeablePicture />
               <Spacer size={'1rem'} />
               <Pill secondary onClick={handleDeleteImage}>
