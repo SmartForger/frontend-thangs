@@ -1,8 +1,16 @@
 import React from 'react'
 import UploadTreeItem from './UploadTreeItem'
+import { createUseStyles } from '@style'
+
+const useStyles = createUseStyles(theme => ({
+  UploadTreeView: {
+    flex: 1,
+    overflowY: 'auto',
+  },
+}))
 
 const renderTree = (files, level, onSkip, onRemove) => {
-  return files.map((f, i)=> {
+  return files.map((f, i) => {
     const handleSkip = path => {
       onSkip([f.name, ...path])
     }
@@ -16,16 +24,16 @@ const renderTree = (files, level, onSkip, onRemove) => {
           onSkip={onSkip}
           onRemove={onRemove}
         />
-        {f.isAssembly &&
-          f.subs &&
-          renderTree(f.subs, level + 1, handleSkip, onRemove)}
+        {f.isAssembly && f.subs && renderTree(f.subs, level + 1, handleSkip, onRemove)}
       </>
     )
   })
 }
 
 const UploadTreeView = ({ fileTree, onSkip, onRemove }) => {
-  return <div>{renderTree(fileTree, 0, onSkip, onRemove)}</div>
+  const c = useStyles()
+
+  return <div className={c.UploadTreeView}>{renderTree(fileTree, 0, onSkip, onRemove)}</div>
 }
 
 export default UploadTreeView
