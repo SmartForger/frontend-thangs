@@ -98,7 +98,12 @@ const MultiUpload = ({ initData = null, folderId }) => {
     'shared',
     'uploadFiles'
   )
-  const { data: rawUploadFilesData = {}, validationTree, isLoading } = uploadFiles
+  const {
+    data: rawUploadFilesData = {},
+    validationTree,
+    isLoading,
+    validated,
+  } = uploadFiles
   const { data: foldersData = [] } = folders
   const { data: sharedData = [] } = shared
   const [activeView, setActiveView] = useState('upload')
@@ -247,7 +252,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
         setActiveStep(activeStep + 1)
       }
     },
-    [activeStep, uploadFilesData/*, closeOverlay, history*/]
+    [activeStep, uploadFilesData /*, closeOverlay, history*/]
   )
 
   const handleBack = useCallback(() => {
@@ -346,7 +351,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             isAssembly={isAssembly}
             setIsAssembly={setIsAssembly}
             skipFile={skipFile}
-            hasAssembly={validationTree && validationTree.length > 0}
+            showAssemblyToggle={validated && (!validationTree || validationTree.length === 0)}
           />
         ) : activeView === 'assemblyInfo' ? (
           <AssemblyInfo

@@ -11,6 +11,7 @@ const getInitAtom = () => ({
   data: {},
   validationTree: null,
   validating: false,
+  validated: false,
   isAssembly: false,
   assemblyData: {},
 })
@@ -168,6 +169,7 @@ export default store => {
         validationTree,
         data: uploadedFiles, // TO be removed later
         validating: false,
+        validated: true,
       },
     }
   })
@@ -178,6 +180,7 @@ export default store => {
         ...state.uploadFiles,
         validationTree: [],
         validating: false,
+        validated: true,
       },
     }
   })

@@ -163,7 +163,7 @@ const noop = () => null
 const UploadModels = ({
   uploadFiles,
   uploadTreeData,
-  hasAssembly,
+  showAssemblyToggle,
   onDrop = noop,
   removeFile = noop,
   closeOverlay = noop,
@@ -264,7 +264,7 @@ const UploadModels = ({
             onRemove={removeFile}
           />
           <Spacer size={'1rem'} />
-          {!hasAssembly && (
+          {showAssemblyToggle && (
             <>
               <Toggle
                 id='upload_assembly'
