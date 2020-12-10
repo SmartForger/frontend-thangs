@@ -27,9 +27,12 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       justifyContent: 'flex-start',
       position: 'relative',
+      width: '100%',
+      height: '100%',
 
       [md]: {
         flexDirection: 'row',
+        height: 'unset',
       },
     },
     EditModel_Column: {
@@ -53,7 +56,6 @@ const useStyles = createUseStyles(theme => {
       height: '24rem',
       margin: '0 auto',
       display: 'flex',
-      overflow: 'hidden',
       flexDirection: 'column',
       borderRadius: '1rem 1rem 0 0',
       position: 'relative',
@@ -61,6 +63,7 @@ const useStyles = createUseStyles(theme => {
       borderBottom: `1px solid ${theme.colors.white[900]}`,
 
       [md]: {
+        overflow: 'hidden',
         height: '40rem',
         borderBottom: 'none',
         borderRight: `1px solid ${theme.colors.white[900]}`,

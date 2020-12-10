@@ -1,11 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import {
-  Spacer,
-  Spinner,
-  TitleTertiary,
-  Button,
-  Textarea
-} from '@components'
+import { Spacer, Spinner, Button, Textarea } from '@components'
 import { useForm } from '@hooks'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -13,6 +7,7 @@ import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { overlayview } from '@utilities/analytics'
+import MobileDesktopTitle from '../@components/MobileDesktopTitle'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -20,6 +15,7 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     EditComment: {
+      height: '100%',
       alignItems: 'center',
       backgroundColor: theme.colors.white[300],
       borderRadius: '1rem',
@@ -29,15 +25,18 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
 
       [md]: {
+        height: 'unset',
         flexDirection: 'row',
       },
     },
     EditComment_Column: {
+      height: '100%',
       display: 'flex',
       flexDirection: 'row',
       width: '100%',
 
       [md]: {
+        height: 'unset',
         flexDirection: 'row',
       },
     },
@@ -49,7 +48,15 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
     },
     EditComment_Wrapper: {
-      width: '100%'
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+
+      [md]: {
+        height: 'unset',
+      },
     },
     EditComment_Viewer: {
       width: '100%',
@@ -132,7 +139,7 @@ const EditComment = ({ modelId, comment }) => {
           },
           onError: () => {
             setErrorMessage('Editing comment failed')
-          }
+          },
         })
       }
     },
@@ -163,7 +170,7 @@ const EditComment = ({ modelId, comment }) => {
         <Spacer className={c.EditComment_MobileSpacer} size='2rem' />
         <div className={c.EditComment_Wrapper}>
           <Spacer size='4rem' />
-          <TitleTertiary>Edit Comment</TitleTertiary>
+          <MobileDesktopTitle>Edit Comment</MobileDesktopTitle>
           <Spacer size='1rem' />
           <form className={c.CommentForm} onSubmit={onFormSubmit(formSubmit)}>
             {errorMessage && (

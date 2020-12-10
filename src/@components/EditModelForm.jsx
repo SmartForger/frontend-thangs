@@ -15,12 +15,19 @@ import { useForm } from '@hooks'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
   return {
     EditModelForm: {
       width: '100%',
     },
     EditModelForm_Wrapper: {
-      width: '16.875rem',
+      width: '100%',
+
+      [md]: {
+        width: '16.875rem',
+      },
 
       '& button': {
         width: '100%',
@@ -234,7 +241,7 @@ const EditModelForm = ({
                 if (e) handleOnInputChange('category', e.value)
               }}
             />
-            <Spacer size='1rem' />
+            <Spacer size='2rem' />
             <Button type='submit'>Save Changes</Button>
             <Spacer size='1rem' />
           </form>

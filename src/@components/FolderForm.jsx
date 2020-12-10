@@ -5,6 +5,9 @@ import { createUseStyles } from '@style'
 import { useForm } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
   return {
     FolderForm: {
       width: '100%',
@@ -17,6 +20,11 @@ const useStyles = createUseStyles(theme => {
     FolderForm_ButtonContainer: {
       display: 'flex',
       justifyContent: 'flex-end',
+      flexDirection: 'column-reverse',
+
+      [md]: {
+        flexDirection: 'unset',
+      },
     },
     FolderForm_Button: {
       maxWidth: '100%',
@@ -82,8 +90,8 @@ const FolderForm = ({
   const isPublic = !R.isEmpty(parentFolder)
     ? parentFolder.isPublic
     : !R.isEmpty(folder)
-      ? folder.isPublic
-      : true
+    ? folder.isPublic
+    : true
   const initialState = {
     id: id,
     name: name ? getFolderName(name) : '',

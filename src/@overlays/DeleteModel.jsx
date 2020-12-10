@@ -13,6 +13,7 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     DeleteModel: {
+      height: '100%',
       alignItems: 'center',
       backgroundColor: theme.colors.white[300],
       borderRadius: '1rem',
@@ -22,6 +23,7 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
 
       [md]: {
+        height: 'unset',
         flexDirection: 'row',
       },
     },
@@ -29,8 +31,10 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       width: '100%',
+      height: '100%',
 
       [md]: {
+        height: 'unset',
         flexDirection: 'row',
       },
     },

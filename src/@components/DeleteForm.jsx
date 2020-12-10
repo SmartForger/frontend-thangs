@@ -1,16 +1,28 @@
 import React, { useCallback } from 'react'
-import { Button, MultiLineBodyText, Spacer, TitleTertiary, NavLink } from '@components'
+import { Button, MultiLineBodyText, Spacer, NavLink } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
+import MobileDesktopTitle from './MobileDesktopTitle'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
   return {
     DeleteForm: {
       width: '100%',
     },
     DeleteForm_Wrapper: {
-      width: '18.75rem',
+      height: '100%',
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+
+      [md]: {
+        width: '18.75rem',
+      },
 
       '& button': {
         width: '100%',
@@ -19,6 +31,11 @@ const useStyles = createUseStyles(theme => {
     DeleteForm_ButtonContainer: {
       display: 'flex',
       justifyContent: 'flex-end',
+      flexDirection: 'column-reverse',
+
+      [md]: {
+        flexDirection: 'unset',
+      },
     },
     DeleteForm_Button: {
       maxWidth: '100%',
@@ -81,18 +98,18 @@ const DeleteForm = ({
       <Spacer size='4rem' />
       {type === 'model' ? (
         <>
-          <TitleTertiary>Delete Model</TitleTertiary>
+          <MobileDesktopTitle>Delete Model</MobileDesktopTitle>
           <Spacer size='1rem' />
           <NavLink Icon={FileIcon} label={name} />
         </>
       ) : type === 'comment' ? (
         <>
-          <TitleTertiary>Delete Comment</TitleTertiary>
+          <MobileDesktopTitle>Delete Comment</MobileDesktopTitle>
           <Spacer size='1rem' />
         </>
       ) : (
         <>
-          <TitleTertiary>Delete Folder</TitleTertiary>
+          <MobileDesktopTitle>Delete Folder</MobileDesktopTitle>
           <Spacer size='1rem' />
           <NavLink Icon={FolderIcon} label={name} />
         </>

@@ -10,6 +10,9 @@ import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
   return {
     InviteForm: {
       width: '100%',
@@ -25,6 +28,11 @@ const useStyles = createUseStyles(theme => {
     },
     InviteForm_Row: {
       display: 'flex',
+      flexDirection: 'column',
+
+      [md]: {
+        flexDirection: 'unset',
+      },
     },
     InviteForm_TeamRow: {
       alignItems: 'flex-end',

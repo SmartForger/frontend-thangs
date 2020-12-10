@@ -49,6 +49,7 @@ const useStyles = createUseStyles(theme => {
       height: '100%',
       width: '100%',
       backgroundColor: theme.colors.white[300],
+      overflow: 'auto',
 
       [md]: {
         height: 'auto',

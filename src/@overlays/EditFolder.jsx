@@ -1,17 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import {
-  Spacer,
-  Spinner,
-  FolderForm,
-  TitleTertiary,
-  MultiLineBodyText,
-} from '@components'
+import { Spacer, Spinner, FolderForm, MultiLineBodyText } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { overlayview, track } from '@utilities/analytics'
+import MobileDesktopTitle from '../@components/MobileDesktopTitle'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -26,18 +21,22 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       justifyContent: 'flex-start',
       position: 'relative',
+      height: '100%',
 
       [md]: {
         flexDirection: 'row',
+        height: 'unset',
       },
     },
     EditFolder_Column: {
       display: 'flex',
       flexDirection: 'row',
       width: '100%',
+      height: '100%',
 
       [md]: {
         flexDirection: 'row',
+        height: 'unset',
       },
     },
     EditFolder_ExitButton: {
@@ -75,7 +74,16 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
     },
     EditFolder_Wrapper: {
-      width: '339px',
+      height: '100%',
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+
+      [md]: {
+        width: '339px',
+        height: 'unset',
+      },
     },
     EditFolder_LoaderScreen: {
       position: 'absolute',
@@ -136,7 +144,7 @@ const EditFolder = ({ folder }) => {
         <Spacer className={c.EditFolder_MobileSpacer} size='2rem' />
         <div className={c.EditFolder_Wrapper}>
           <Spacer size='4rem' />
-          <TitleTertiary>Edit Folder</TitleTertiary>
+          <MobileDesktopTitle>Edit Folder</MobileDesktopTitle>
           <Spacer size='1rem' />
           <MultiLineBodyText>Change the name of your folder.</MultiLineBodyText>
           <Spacer size='1rem' />

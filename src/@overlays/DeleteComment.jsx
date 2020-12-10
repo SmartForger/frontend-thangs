@@ -13,6 +13,7 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     DeleteComment: {
+      height: '100%',
       alignItems: 'center',
       backgroundColor: theme.colors.white[300],
       borderRadius: '1rem',
@@ -22,15 +23,18 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
 
       [md]: {
+        height: 'unset',
         flexDirection: 'row',
       },
     },
     DeleteComment_Column: {
+      height: '100%',
       display: 'flex',
       flexDirection: 'row',
       width: '100%',
 
       [md]: {
+        height: 'unset',
         flexDirection: 'row',
       },
     },

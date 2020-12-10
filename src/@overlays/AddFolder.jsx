@@ -1,18 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import {
-  Spacer,
-  FolderForm,
-  TitleTertiary,
-  MultiLineBodyText,
-  Spinner,
-} from '@components'
+import { Spacer, FolderForm, MultiLineBodyText, Spinner } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { overlayview, track } from '@utilities/analytics'
+import MobileDesktopTitle from '../@components/MobileDesktopTitle'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -20,6 +15,7 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     AddFolder: {
+      height: '100%',
       alignItems: 'center',
       backgroundColor: theme.colors.white[300],
       borderRadius: '1rem',
@@ -29,6 +25,7 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
 
       [md]: {
+        height: 'unset',
         flexDirection: 'row',
       },
     },
@@ -36,9 +33,11 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       width: '100%',
+      height: '100%',
 
       [md]: {
         flexDirection: 'row',
+        height: 'unset',
       },
     },
     AddFolder_ExitButton: {
@@ -76,7 +75,15 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
     },
     AddFolder_Wrapper: {
-      width: '339px',
+      height: '100%',
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+
+      [md]: {
+        width: '339px',
+      },
     },
     AddFolder_LoaderScreen: {
       position: 'absolute',
@@ -137,7 +144,7 @@ const AddFolder = ({ folder }) => {
         <Spacer className={c.AddFolder_MobileSpacer} size='2rem' />
         <div className={c.AddFolder_Wrapper}>
           <Spacer size='4rem' />
-          <TitleTertiary>Create New Folder</TitleTertiary>
+          <MobileDesktopTitle>Create New Folder</MobileDesktopTitle>
           <Spacer size='1rem' />
           <MultiLineBodyText>
             Set the name or privacy settings of your folder.

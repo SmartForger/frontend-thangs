@@ -21,18 +21,22 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       justifyContent: 'flex-start',
       position: 'relative',
+      height: '100%',
 
       [md]: {
         flexDirection: 'row',
+        height: 'unset',
       },
     },
     DeleteFolder_Column: {
       display: 'flex',
       flexDirection: 'row',
       width: '100%',
+      height: '100%',
 
       [md]: {
         flexDirection: 'row',
+        height: '100%',
       },
     },
     DeleteFolder_ExitButton: {

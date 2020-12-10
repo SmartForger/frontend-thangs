@@ -4,7 +4,6 @@ import * as R from 'ramda'
 import {
   Spacer,
   InviteUsersForm,
-  TitleTertiary,
   MultiLineBodyText,
   ProfilePicture,
   MetadataSecondary,
@@ -17,6 +16,7 @@ import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import * as types from '@constants/storeEventTypes'
 import { overlayview } from '@utilities/analytics'
 import { logger } from '@utilities/logging'
+import MobileDesktopTitle from '../@components/MobileDesktopTitle'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -24,6 +24,7 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     InviteUsers: {
+      height: '100%',
       alignItems: 'center',
       backgroundColor: theme.colors.white[300],
       borderRadius: '1rem',
@@ -33,6 +34,7 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
 
       [md]: {
+        height: 'unset',
         flexDirection: 'row',
       },
     },
@@ -80,7 +82,14 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
     },
     InviteUsers_Wrapper: {
-      width: '339px',
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+
+      [md]: {
+        width: '339px',
+      },
     },
     InviteUsers_Item: {
       display: 'flex',
@@ -239,7 +248,7 @@ const InviteUsers = ({ folderId: id }) => {
         <Spacer size='2rem' />
         <div className={c.InviteUsers_Wrapper}>
           <Spacer size='4rem' />
-          <TitleTertiary>Add Users By Email</TitleTertiary>
+          <MobileDesktopTitle>Add Users By Email</MobileDesktopTitle>
           <Spacer size='1rem' />
           <MultiLineBodyText>Users without accounts with be emailed.</MultiLineBodyText>
           <Spacer size='1rem' />

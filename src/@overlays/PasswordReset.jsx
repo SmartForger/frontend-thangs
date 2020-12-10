@@ -17,6 +17,7 @@ const useStyles = createUseStyles(theme => {
 
   return {
     PasswordReset: {
+      height: '100%',
       borderRadius: '1rem',
       display: 'flex',
       flexDirection: 'column',
@@ -24,6 +25,7 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
 
       [md]: {
+        height: 'unset',
         alignItems: 'stretch',
         flexDirection: 'row',
       },
@@ -37,15 +39,28 @@ const useStyles = createUseStyles(theme => {
       },
     },
     PasswordReset_Row: {
+      height: '100%',
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
+
+      [md]: {
+        height: 'unset',
+      },
     },
     PasswordReset_ResetForm: {
       backgroundColor: theme.colors.white[300],
     },
     PasswordReset_FormWrapper: {
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
       width: '100%',
+
+      [md]: {
+        height: 'unset',
+      },
     },
     PasswordReset_Form: {
       display: 'flex',
