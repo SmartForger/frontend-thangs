@@ -46,3 +46,5 @@ handlers:
     upload: build/index.html
     expiration: 1m
     secure: always
+    http_headers:
+      X-Frame-Options: DENY
