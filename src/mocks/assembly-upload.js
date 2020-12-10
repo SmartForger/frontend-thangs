@@ -2,43 +2,43 @@
 
 export const mockValidationTree = [
   {
-    name: 'asdf_1.asm',
+    name: 'Assembly.asm',
     isAssembly: true,
     valid: true,
     subs: [
       {
-        name: 'asdf_2.stl',
+        name: 'Part 1.stl',
         isAssembly: false,
         valid: true,
       },
       {
-        name: 'asdf_3.stl',
+        name: 'Part 2.stl',
         isAssembly: false,
         valid: true,
       },
       {
-        name: 'asdf_4.stl',
+        name: 'Part 3.stl',
         isAssembly: false,
         valid: true,
       },
       {
-        name: 'asdf_5.asm',
+        name: 'Sub-Assembly.asm',
         isAssembly: true,
         valid: true,
         subs: [
           {
-            name: 'asdf_6.stl',
+            name: 'Part 4.stl',
             isAssembly: false,
             valid: true,
           },
           {
-            name: 'asdf_7.stl',
+            name: 'Part 5.stl',
             isAssembly: false,
             valid: false,
             skipped: true,
           },
           {
-            name: 'asdf_8.stl',
+            name: 'Part 6.STP',
             isAssembly: false,
             valid: false,
           },
@@ -108,25 +108,5 @@ export const mockUploadedFiles = {
     fileName: 'Part 4.stl',
     signedUrl: 'https://storage.googleapis.com/staging-thangs-uploads/uploads/modesl/random_6',
     newFileName: 'asdf_6.stl',
-  },
-  '7': {
-    name: 'Part 5.stl',
-    size: 6000,
-    isLoading: false,
-    isError: false,
-    isWarning: false,
-    fileName: 'Part 5.stl',
-    signedUrl: 'https://storage.googleapis.com/staging-thangs-uploads/uploads/modesl/random_7',
-    newFileName: 'asdf_7.stl',
-  },
-  '8': {
-    name: 'Part 6.stl',
-    size: 10000,
-    isLoading: false,
-    isError: false,
-    isWarning: false,
-    fileName: 'Part 6.stl',
-    signedUrl: 'https://storage.googleapis.com/staging-thangs-uploads/uploads/modesl/random_8',
-    newFileName: 'asdf_8.stl',
-  },
+  }
 }

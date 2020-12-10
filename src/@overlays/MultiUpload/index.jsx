@@ -118,13 +118,13 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const uploadTreeData = useMemo(() => {
     const files = Object.values(rawUploadFilesData)
     const addTreeLoading = node => {
-      const file = files.find(f => f.newFileName === node.name)
+      const file = files.find(f => f.name === node.name)
       const result = {
         name: node.name,
         isAssembly: node.isAssembly,
         valid: node.valid,
         skipped: node.skipped,
-        loading: file.isLoading,
+        loading: file && file.isLoading,
       }
 
       if (node.subs) {
@@ -196,6 +196,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
   }
 
   const skipFile = path => {
+    track('MultiUpload - Skip File')
     dispatch(types.SKIP_MISSING_FILE, { path })
   }
 
@@ -203,53 +204,50 @@ const MultiUpload = ({ initData = null, folderId }) => {
     dispatch(types.CLOSE_OVERLAY)
   }, [dispatch])
 
-  const handleSubmit = useCallback(
-    ({ selectedFolderId }) => {
-      track('MultiUpload - Submit Files', { amount: Object.keys(uploadFilesData).length })
-      dispatch(types.SUBMIT_FILES, {
-        onFinish: () => {
-          closeOverlay()
-          history.push(
-            selectedFolderId && selectedFolderId !== 'files'
-              ? `/mythangs/folder/${selectedFolderId}`
-              : '/mythangs/all-files'
-          )
-        },
-      })
-    },
-    [closeOverlay, dispatch, history, uploadFilesData]
-  )
+  const continueToAssemblyInfo = useCallback(() => {
+    const loadingFiles = Object.keys(uploadFilesData).filter(
+      id => uploadFilesData[id].isLoading
+    )
+    if (loadingFiles.length > 0) {
+      return setErrorMessage('Please wait until all files are processed')
+    }
+    const hasMissingFile =
+      !validationTree || validationTree.some(node => checkTreeMissing(node))
+    if (hasMissingFile) {
+      return setErrorMessage('Please handle all missing files')
+    }
+
+    setActiveView(isAssembly ? 'assemblyInfo' : 'enterInfo')
+  }, [uploadFilesData, validationTree, isAssembly])
+
+  const continueToModelInfo = ({ data }) => {
+    setAssemblyFormData(data)
+    setActiveView('enterInfo')
+    setActiveStep(0)
+  }
 
   const handleContinue = useCallback(
-    ({ selectedFolderId, data }) => {
-      const loadingFiles = Object.keys(uploadFilesData).filter(
-        id => uploadFilesData[id].isLoading
-      )
-      if (loadingFiles.length > 0) {
-        return setErrorMessage('Please wait until all files are processed')
-      }
-      const hasMissingFile =
-        !validationTree || validationTree.some(node => checkTreeMissing(node))
-      if (hasMissingFile) {
-        return setErrorMessage('Please handle all missing files')
-      }
-
-      if (activeView === 'upload') {
-        setActiveView(isAssembly ? 'assemblyInfo' : 'enterInfo')
-      } else if (activeView === 'assemblyInfo') {
-        setActiveView('enterInfo')
-        setAssemblyFormData(data)
-        setActiveStep(0)
+    ({ selectedFolderId }) => {
+      if (activeStep !== Object.keys(uploadFilesData).length - 1) {
+        console.log('submit models')
+        // track('MultiUpload - Submit Files', {
+        //   amount: Object.keys(uploadFilesData).length,
+        // })
+        // dispatch(types.SUBMIT_FILES, {
+        //   onFinish: () => {
+        //     closeOverlay()
+        //     history.push(
+        //       selectedFolderId && selectedFolderId !== 'files'
+        //         ? `/mythangs/folder/${selectedFolderId}`
+        //         : '/mythangs/all-files'
+        //     )
+        //   },
+        // })
       } else {
-        if (activeStep !== Object.keys(uploadFilesData).length - 1) {
-          track('Upload - Continue')
-          handleSubmit({ selectedFolderId })
-        } else {
-          setActiveStep(activeStep + 1)
-        }
+        setActiveStep(activeStep + 1)
       }
     },
-    [uploadFilesData, isAssembly, activeView, activeStep, validationTree, handleSubmit]
+    [activeStep, uploadFilesData/*, closeOverlay, history*/]
   )
 
   const handleBack = useCallback(() => {
@@ -340,7 +338,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             setErrorMessage={setErrorMessage}
             warningMessage={warningMessage}
             setWarningMessage={setWarningMessage}
-            handleContinue={handleContinue}
+            handleContinue={continueToAssemblyInfo}
             onDrop={onDrop}
             removeFile={removeFile}
             uploadFiles={uploadFilesData}
@@ -356,7 +354,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             folders={dropdownFolders}
             folderId={folderId}
             setErrorMessage={setErrorMessage}
-            handleContinue={handleContinue}
+            handleContinue={continueToModelInfo}
           />
         ) : (
           <EnterInfo
@@ -367,7 +365,6 @@ const MultiUpload = ({ initData = null, folderId }) => {
             folders={dropdownFolders}
             folderId={(assemblyFormData && assemblyFormData.folderId) || folderId}
             handleContinue={handleContinue}
-            handleSkipToEnd={handleSubmit}
             handleUpdate={handleUpdate}
             uploadFiles={uploadFilesData}
             isLoading={isLoading}

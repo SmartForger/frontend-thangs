@@ -71,13 +71,11 @@ const UploadTreeItem = ({ file, level, onSkip, onRemove }) => {
     onSkip([file.name])
   }
 
-  console.log(file.name, file.valid, file.skipped)
-
   return (
     <div
       className={cn(c.UploadTreeItem_Root, {
-        missing: !file.valid && !file.skipped,
-        skipped: !file.valid && file.skipped,
+        missing: !file.loading && !file.valid && !file.skipped,
+        skipped: !file.loading && !file.valid && file.skipped,
       })}
     >
       <div style={{ width: 3 * level - 1.5 + 'rem' }} />
@@ -98,7 +96,9 @@ const UploadTreeItem = ({ file, level, onSkip, onRemove }) => {
       </SingleLineBodyText>
       <Spacer size={'0.5rem'} />
       <div className={c.UploadTreeItem_Actions}>
-        {!file.skipped && !file.valid && <CheckIcon onClick={handleSkip} />}
+        {!file.loading && !file.skipped && !file.valid && (
+          <CheckIcon onClick={handleSkip} />
+        )}
         <Spacer size={'0.5rem'} />
         {level === 0 && <TrashCanIcon onClick={handleRemove} />}
       </div>
