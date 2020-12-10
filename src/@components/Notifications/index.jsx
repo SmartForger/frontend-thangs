@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import * as R from 'ramda'
-
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { logger } from '@utilities/logging'
 import { DropdownMenu, DropdownItem } from '@components/DropdownMenu'
@@ -34,7 +34,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const Notifications = ({ myThangsMenu }) => {
+const Notifications = ({ className, myThangsMenu }) => {
   const c = useStyles()
   const {
     notifications: { data = {}, isLoading, isError, error },
@@ -72,7 +72,7 @@ const Notifications = ({ myThangsMenu }) => {
 
   return (
     <DropdownMenu
-      className={c.Notifications}
+      className={classnames(className, c.Notifications)}
       TargetComponent={NotificationsButton}
       myThangsMenu={myThangsMenu}
     >

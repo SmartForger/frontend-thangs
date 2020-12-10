@@ -73,6 +73,9 @@ const useStyles = createUseStyles(theme => {
       padding: 0,
       width: 'auto',
     },
+    WorkspaceHeader_MobileNotifications: {
+      right: '-3rem',
+    },
   }
 })
 
@@ -93,7 +96,10 @@ const WorkspaceHeader = ({ setCurrentView = noop, openMobileNav = noop }) => {
               <Logo />
             </Link>
             <div className={c.WorkspaceHeader_Row}>
-              <Notifications myThangsMenu={true} />
+              <Notifications
+                className={c.WorkspaceHeader_MobileNotifications}
+                myThangsMenu={true}
+              />
               <Spacer size='1.5rem' />
               <MenuIcon onClick={openMobileNav} />
             </div>
