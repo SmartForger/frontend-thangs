@@ -99,29 +99,24 @@ const MultiUpload = ({ initData = null, folderId }) => {
     'uploadFiles'
   )
   const {
-    data: rawUploadFilesData = {},
+    data: uploadFilesData = {},
     validationTree,
     isLoading,
     validated,
+    isAssembly,
   } = uploadFiles
   const { data: foldersData = [] } = folders
   const { data: sharedData = [] } = shared
   const [activeView, setActiveView] = useState('upload')
   const [activeStep, setActiveStep] = useState(0)
-  const [isAssembly, setIsAssembly] = useState(false)
   const [assemblyFormData, setAssemblyFormData] = useState({})
   const [errorMessage, setErrorMessage] = useState(null)
   const [warningMessage, setWarningMessage] = useState(null)
   const c = useStyles({})
   const history = useHistory()
 
-  const uploadFilesData = {}
-  Object.keys(rawUploadFilesData).forEach(fileDataId => {
-    if (rawUploadFilesData[fileDataId].name)
-      uploadFilesData[fileDataId] = rawUploadFilesData[fileDataId]
-  })
   const uploadTreeData = useMemo(() => {
-    const files = Object.values(rawUploadFilesData)
+    const files = Object.values(uploadFilesData)
     const addTreeLoading = node => {
       const file = files.find(f => f.name === node.name)
       const result = {
@@ -148,7 +143,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
         loading: file.isLoading,
       }))
     }
-  }, [rawUploadFilesData, validationTree])
+  }, [uploadFilesData, validationTree])
 
   const handleFileUpload = useCallback(
     (file, errorState, fileId) => {
@@ -205,9 +200,13 @@ const MultiUpload = ({ initData = null, folderId }) => {
     dispatch(types.SKIP_MISSING_FILE, { path })
   }
 
-  const closeOverlay = useCallback(() => {
+  const closeOverlay = () => {
     dispatch(types.CLOSE_OVERLAY)
-  }, [dispatch])
+  }
+
+  const setIsAssembly = isAssembly => {
+    dispatch(types.SET_IS_ASSEMBLY, { isAssembly })
+  }
 
   const continueToAssemblyInfo = useCallback(() => {
     const loadingFiles = Object.keys(uploadFilesData).filter(
@@ -267,14 +266,11 @@ const MultiUpload = ({ initData = null, folderId }) => {
     }
   }, [activeView, activeStep, isAssembly])
 
-  const handleUpdate = useCallback(
-    ({ id, data }) => {
-      const newData = { ...data }
-      if (newData.folderId === 'files') newData.folderId = null
-      dispatch(types.CHANGE_UPLOAD_FILE, { id, data: newData })
-    },
-    [dispatch]
-  )
+  const handleUpdate = ({ id, data }) => {
+    const newData = { ...data }
+    if (newData.folderId === 'files') newData.folderId = null
+    dispatch(types.CHANGE_UPLOAD_FILE, { id, data: newData })
+  }
 
   const dropdownFolders = useMemo(() => {
     const foldersArray = [...foldersData]
@@ -351,7 +347,9 @@ const MultiUpload = ({ initData = null, folderId }) => {
             isAssembly={isAssembly}
             setIsAssembly={setIsAssembly}
             skipFile={skipFile}
-            showAssemblyToggle={validated && (!validationTree || validationTree.length === 0)}
+            showAssemblyToggle={
+              validated && (!validationTree || validationTree.length === 0)
+            }
           />
         ) : activeView === 'assemblyInfo' ? (
           <AssemblyInfo
