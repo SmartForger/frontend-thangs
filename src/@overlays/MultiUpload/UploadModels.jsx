@@ -27,12 +27,16 @@ const useStyles = createUseStyles(theme => {
   return {
     UploadModels_UploadZone: {
       width: '100%',
-      height: ({ hasFile }) => (hasFile ? '11rem' : '22.25rem'),
+      height: '100%',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       borderRadius: '.75rem',
       border: '1px dashed #E5E5F3',
+
+      [md]: {
+        height: ({ hasFile }) => (hasFile ? '11rem' : '22.25rem'),
+      },
 
       '& h3': {
         lineHeight: '1.5rem',
@@ -215,7 +219,7 @@ const UploadModels = ({
       )}
       {fileLength > 0 && (
         <>
-          <Spacer size={'1.5rem'} />
+          <Spacer size={'2rem'} />
           <TitleTertiary>
             {fileLength > 0 ? `${fileLength} File${fileLength > 1 ? 's' : ''}` : 'Files'}
           </TitleTertiary>
