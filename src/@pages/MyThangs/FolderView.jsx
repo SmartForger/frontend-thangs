@@ -43,11 +43,13 @@ const useStyles = createUseStyles(theme => {
       },
     },
     FolderView_Content: {
-      width: '90%',
+      width: '100%',
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
+      marginLeft: '1.5rem',
       [md]: {
+        marginLeft: '2rem',
         minWidth: '56rem',
       },
     },
@@ -72,6 +74,7 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       flexDirection: 'row',
       justifyContent: 'space-between',
+      marginRight: '1.5rem',
     },
     FolderView_Row__desktop: {
       display: 'none',
@@ -370,7 +373,6 @@ const FolderView = ({
     <>
       <ContextMenuTrigger id='Add_Menu_FolderView' holdToDisplay={1000}>
         <main className={classnames(className, c.FolderView)}>
-          <Spacer size='2rem' />
           <div className={c.FolderView_Content}>
             <FolderHeader
               folder={folder}

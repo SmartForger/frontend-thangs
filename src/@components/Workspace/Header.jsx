@@ -69,7 +69,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     WorkspaceHeader_MobileBoundary: {
-      margin: '1.5rem 2rem',
+      margin: '1.5rem',
       padding: 0,
       width: 'auto',
     },

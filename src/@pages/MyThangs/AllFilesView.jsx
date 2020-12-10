@@ -20,7 +20,9 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
+      marginLeft: '1.5rem',
       [md]: {
+        marginLeft: '2rem',
         minWidth: '56rem',
       },
     },
@@ -95,7 +97,6 @@ const AllFilesView = ({
 
   return (
     <main className={classnames(className, c.AllFilesView)}>
-      <Spacer size='2rem' />
       <div className={c.AllFilesView_Content}>
         <Spacer size='2rem' />
         <TitleTertiary>All Files</TitleTertiary>

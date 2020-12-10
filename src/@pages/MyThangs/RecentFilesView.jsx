@@ -30,7 +30,9 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
+      marginLeft: '1.5rem',
       [md]: {
+        marginLeft: '2rem',
         minWidth: '56rem',
       },
     },
@@ -92,7 +94,6 @@ const RecentFilesView = ({
 
   return (
     <main className={classnames(className, c.RecentFilesView_Row)}>
-      <Spacer size='2rem' />
       <div className={c.RecentFilesView_Content}>
         <Spacer size='2rem' />
         <TitleTertiary>Activity & Contributions</TitleTertiary>

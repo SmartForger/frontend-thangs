@@ -78,6 +78,12 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       alignItems: 'center',
     },
+    SharedFilesView_Spacer: {
+      display: 'none',
+      [md]: {
+        display: 'block',
+      },
+    },
   }
 })
 
@@ -112,7 +118,7 @@ const SharedFilesView = ({
       <div className={c.SharedFilesView_Content}>
         <Spacer size='2rem' />
         <TitleTertiary>Shared Files</TitleTertiary>
-        <Spacer size='4rem' />
+        <Spacer size='4rem' className={c.SharedFilesView_Spacer} />
         {(isLoadingStarred || hasStarred) && (
           <>
             <TitleTertiary>Starred</TitleTertiary>
