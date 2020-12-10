@@ -40,3 +40,40 @@ export const getAssemblyTreePayload = (nodes, uploadedFiles) => {
 
   return nodes.map(checkNode)
 }
+
+export const flattenTree = nodes => {
+  if (!nodes || nodes.length === 0) {
+    return []
+  }
+
+  const addLevel = (node, level = 0) => {
+    const newNode = { ...node, level }
+    const subs = node.subs
+      ? node.subs.reduce((arr, subnode) => [...arr, ...addLevel(subnode, level + 1)], [])
+      : []
+    return [newNode, ...subs]
+  }
+
+  return nodes.reduce((arr, node) => [...arr, ...addLevel(node)], [])
+}
+
+export const findNodeByName = (nodes, name) => {
+  const findNode = (node, name) => {
+    if (node.name === name) {
+      return node
+    } else if (!node.subs) {
+      return null
+    }
+
+    for (let i = 0; i < node.subs.length; i ++) {
+      const subnode = findNode(node.subs[i], name)
+      if (subnode) {
+        return subnode
+      }
+    }
+
+    return null
+  }
+
+  return findNode({ subs: nodes }, name)
+}

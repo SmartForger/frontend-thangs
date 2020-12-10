@@ -195,9 +195,9 @@ const MultiUpload = ({ initData = null, folderId }) => {
     dispatch(types.CANCEL_UPLOAD, { filename })
   }
 
-  const skipFile = path => {
+  const skipFile = filename => {
     track('MultiUpload - Skip File')
-    dispatch(types.SKIP_MISSING_FILE, { path })
+    dispatch(types.SKIP_MISSING_FILE, { filename })
   }
 
   const closeOverlay = () => {

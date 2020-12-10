@@ -60,7 +60,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const UploadTreeItem = ({ file, level, onSkip, onRemove }) => {
+const UploadTreeItem = ({ file, onSkip, onRemove }) => {
   const c = useStyles()
 
   const handleRemove = () => {
@@ -68,7 +68,7 @@ const UploadTreeItem = ({ file, level, onSkip, onRemove }) => {
   }
 
   const handleSkip = () => {
-    onSkip([file.name])
+    onSkip(file.name)
   }
 
   return (
@@ -78,15 +78,15 @@ const UploadTreeItem = ({ file, level, onSkip, onRemove }) => {
         skipped: !file.loading && !file.valid && file.skipped,
       })}
     >
-      <div style={{ width: 3 * level - 1.5 + 'rem' }} />
+      <div style={{ width: 3 * file.level - 1.5 + 'rem' }} />
       {file.isAssembly ? (
         <>
-          {level > 0 && <Spacer size={'1.25rem'} />}
+          {file.level > 0 && <Spacer size={'1.25rem'} />}
           {file.loading ? <Spinner size={'1rem'} /> : <FileIcon />}
         </>
       ) : (
         <>
-          {level > 0 && <TreeOpenIcon className={c.UploadTreeItem_OpenIcon} />}
+          {file.level > 0 && <TreeOpenIcon className={c.UploadTreeItem_OpenIcon} />}
           {file.loading ? <Spinner size={'1rem'} /> : <ModelIcon />}
         </>
       )}
@@ -100,7 +100,7 @@ const UploadTreeItem = ({ file, level, onSkip, onRemove }) => {
           <CheckIcon onClick={handleSkip} />
         )}
         <Spacer size={'0.5rem'} />
-        {level === 0 && <TrashCanIcon onClick={handleRemove} />}
+        {file.level === 0 && <TrashCanIcon onClick={handleRemove} />}
       </div>
     </div>
   )

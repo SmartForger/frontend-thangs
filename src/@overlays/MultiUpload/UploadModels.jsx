@@ -15,8 +15,8 @@ import { ReactComponent as InfoIcon } from '@svg/icon-info.svg'
 import Dropzone from 'react-dropzone'
 import { FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { overlayview } from '@utilities/analytics'
-import { checkTreeMissing } from '@utilities'
-import UploadTreeView from './UploadTreeView'
+import { checkTreeMissing, flattenTree } from '@utilities'
+import UploadTreeItem from './UploadTreeItem'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -157,6 +157,10 @@ const useStyles = createUseStyles(theme => {
     UploadAssemblyLabel_Icon: {
       marginLeft: '.5rem',
     },
+    UploadTreeView: {
+      flex: 1,
+      overflowY: 'auto',
+    },
   }
 })
 const noop = () => null
@@ -185,6 +189,8 @@ const UploadModels = ({
   const fileLength = uploadFiles
     ? Object.keys(uploadFiles).filter(fileId => uploadFiles[fileId].name).length
     : 0
+
+  const files = flattenTree(uploadTreeData)
 
   const toggleAssembly = useCallback(() => {
     setIsAssembly(!isAssembly)
@@ -258,11 +264,16 @@ const UploadModels = ({
       )}
       {fileLength > 0 && (
         <>
-          <UploadTreeView
-            fileTree={uploadTreeData}
-            onSkip={skipFile}
-            onRemove={removeFile}
-          />
+          <div className={c.UploadTreeView}>
+            {files.map(f => (
+              <UploadTreeItem
+                key={f.name}
+                file={f}
+                onSkip={skipFile}
+                onRemove={removeFile}
+              />
+            ))}
+          </div>
           <Spacer size={'1rem'} />
           {showAssemblyToggle && (
             <>
