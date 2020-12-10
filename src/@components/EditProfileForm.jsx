@@ -17,6 +17,9 @@ const useStyles = createUseStyles(theme => {
     EditProfileForm_ButtonContainer: {
       display: 'flex',
       justifyContent: 'flex-start',
+      '& > *:last-child': {
+        marginLeft: '1rem',
+      },
     },
     EditProfileForm_Button: {
       width: '100%',
@@ -165,7 +168,6 @@ const EditProfileForm = ({
             'Save Changes'
           )}
         </Button>
-        <Spacer size={'1rem'} />
         <Button
           secondary
           className={c.EditProfileForm_Button}

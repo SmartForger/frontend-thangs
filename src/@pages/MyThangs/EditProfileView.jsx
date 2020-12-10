@@ -70,8 +70,11 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'center',
-      '& > *:not([class^=Spacer])': {
+      '& > *': {
         width: '100%',
+      },
+      '& > *:last-child': {
+        marginLeft: '1rem',
       },
       flexWrap: 'wrap',
       [xs]: {
@@ -149,7 +152,6 @@ const EditProfile = ({ className }) => {
             <Spacer size={'1rem'} />
             <div className={c.EditProfile_ButtonsSection}>
               <ChangeablePicture />
-              <Spacer size={'1rem'} />
               <Pill secondary onClick={handleDeleteImage}>
                 Delete Image
               </Pill>
