@@ -35,7 +35,6 @@ const useStyles = createUseStyles(theme => {
         margin: 'auto',
         display: 'block',
         maxWidth: '100%',
-        zIndex: 1,
         height: 'auto',
         transform: 'scale(.85)',
 
@@ -148,6 +147,7 @@ const ModelThumbnail = ({ className, model, name, searchModelFileName, showWaldo
         })}
         onClick={loadingState === COMPLETE && !lookingForWaldo ? onSwap : undefined}
       >
+        {loadingState === LOADING && <Loader className={c.ModelThumbnail_Loader} />}
         {src && (
           <img
             src={src}
@@ -157,7 +157,6 @@ const ModelThumbnail = ({ className, model, name, searchModelFileName, showWaldo
             title={model.fileName}
           />
         )}
-        {loadingState === LOADING && <Loader className={c.ModelThumbnail_Loader} />}
       </div>
       {waldoSrc && (
         <div
