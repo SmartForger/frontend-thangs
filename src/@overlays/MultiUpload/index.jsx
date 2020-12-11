@@ -376,7 +376,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             handleUpdate={handleUpdate}
             uploadFiles={uploadFilesData}
             isLoading={isLoading}
-            isAssembly={isAssembly}
+            isAssembly={isAssembly || (validationTree && validationTree.length > 0)}
           />
         )}
       </div>

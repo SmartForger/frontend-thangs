@@ -161,7 +161,7 @@ export default store => {
         data: uploadedFiles, // TO be removed later
         validating: false,
         validated: true,
-        isAssembly: true,
+        isAssembly: validationTree && validationTree.length > 0,
       },
     }
   })

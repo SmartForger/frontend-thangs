@@ -82,7 +82,7 @@ const useStyles = createUseStyles(theme => {
     EnterInfo_FieldRow: {
       display: 'flex',
       flexDirection: 'row',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     EnterInfo_Field: {
       marginBottom: '1rem',
@@ -395,15 +395,17 @@ const EnterInfo = ({
           checked={applyRemaing}
           onChange={ev => setApplyRemaining(ev.target.checked)}
         />
-        <Toggle
-          name='isPrivate'
-          label='Make model private'
-          disabled={folderPrivate}
-          checked={!inputState.isPublic}
-          onChange={ev => {
-            handleOnInputChange('isPublic', !ev.target.checked)
-          }}
-        />
+        {!isAssembly && (
+          <Toggle
+            name='isPrivate'
+            label='Make model private'
+            disabled={folderPrivate}
+            checked={!inputState.isPublic}
+            onChange={ev => {
+              handleOnInputChange('isPublic', !ev.target.checked)
+            }}
+          />
+        )}
         <Spacer size={'1rem'} />
         <div className={c.EnterInfo_ButtonWrapper}>
           <Button type='submit' disabled={isLoading}>

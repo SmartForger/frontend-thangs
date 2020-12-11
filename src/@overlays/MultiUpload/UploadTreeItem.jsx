@@ -57,6 +57,9 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       justifyContent: 'flex-end',
     },
+    UploadTreeItem_Button: {
+      cursor: 'pointer',
+    },
   }
 })
 
@@ -97,10 +100,12 @@ const UploadTreeItem = ({ file, onSkip, onRemove }) => {
       <Spacer size={'0.5rem'} />
       <div className={c.UploadTreeItem_Actions}>
         {!file.loading && !file.skipped && !file.valid && (
-          <CheckIcon onClick={handleSkip} />
+          <CheckIcon className={c.UploadTreeItem_Button} onClick={handleSkip} />
         )}
         <Spacer size={'0.5rem'} />
-        {file.level === 0 && <TrashCanIcon onClick={handleRemove} />}
+        {file.level === 0 && (
+          <TrashCanIcon className={c.UploadTreeItem_Button} onClick={handleRemove} />
+        )}
       </div>
     </div>
   )
