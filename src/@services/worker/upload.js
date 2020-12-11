@@ -27,6 +27,7 @@ function uploadMessageHandler(messageType, data) {
         isLoading: false,
         isError: false,
       })
+      store.dispatch(types.VALIDATE_FILES)
       break
     case 'upload:error':
       store.dispatch(types.CHANGE_UPLOAD_FILE, {

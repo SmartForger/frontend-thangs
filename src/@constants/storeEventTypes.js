@@ -119,6 +119,7 @@ export const SKIP_MISSING_FILE = 'skip-missing-file'
 export const VALIDATE_FILES = 'validate-files'
 export const VALIDATE_FILES_SUCCESS = 'validate-files-success'
 export const VALIDATE_FILES_FAILED = 'validate-files-failed'
+export const SET_VALIDATING = 'set-validating'
 export const CANCEL_UPLOAD = 'cancel-upload'
 /* Users Store Events */
 export const INIT_USER = 'init-user'

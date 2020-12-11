@@ -102,6 +102,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
     data: uploadFilesData = {},
     validationTree,
     isLoading,
+    validating,
     validated,
     isAssembly,
   } = uploadFiles
@@ -208,12 +209,15 @@ const MultiUpload = ({ initData = null, folderId }) => {
     dispatch(types.SET_IS_ASSEMBLY, { isAssembly })
   }
 
-  const continueToAssemblyInfo = useCallback(() => {
+  const continueToNextStep = useCallback(() => {
     const loadingFiles = Object.keys(uploadFilesData).filter(
       id => uploadFilesData[id].isLoading
     )
     if (loadingFiles.length > 0) {
       return setErrorMessage('Please wait until all files are processed')
+    }
+    if (validating) {
+      return setErrorMessage('Please wait until all files are validated')
     }
     const hasMissingFile =
       !validationTree || validationTree.some(node => checkTreeMissing(node))
@@ -222,7 +226,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
     }
 
     setActiveView(isAssembly ? 'assemblyInfo' : 'enterInfo')
-  }, [uploadFilesData, validationTree, isAssembly])
+  }, [uploadFilesData, validationTree, isAssembly, validating])
 
   const continueToModelInfo = ({ data }) => {
     setAssemblyFormData(data)
@@ -339,7 +343,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             setErrorMessage={setErrorMessage}
             warningMessage={warningMessage}
             setWarningMessage={setWarningMessage}
-            handleContinue={continueToAssemblyInfo}
+            handleContinue={continueToNextStep}
             onDrop={onDrop}
             removeFile={removeFile}
             uploadFiles={uploadFilesData}
@@ -347,6 +351,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             isAssembly={isAssembly}
             setIsAssembly={setIsAssembly}
             skipFile={skipFile}
+            validating={validating}
             showAssemblyToggle={
               validated && (!validationTree || validationTree.length === 0)
             }

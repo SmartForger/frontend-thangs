@@ -178,6 +178,7 @@ const UploadModels = ({
   warningMessage = null,
   isAssembly = false,
   setIsAssembly = noop,
+  validating = false,
   skipFile = noop,
 }) => {
   const hasFile = Object.keys(uploadFiles).length > 0
@@ -203,9 +204,8 @@ const UploadModels = ({
   useEffect(() => {
     const loadingFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isLoading)
     const warningFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isWarning)
-    const hasMissingFiles = uploadTreeData.some(node => checkTreeMissing(node))
 
-    if (loadingFiles.length === 0 && !hasMissingFiles) setErrorMessage(null)
+    if (loadingFiles.length === 0 && !validating) setErrorMessage(null)
     if (warningFiles.length !== 0) {
       setWarningMessage(`Notice: Files over ${FILE_SIZE_LIMITS.soft.pretty} may take a long time to
     upload & process.`)
@@ -216,7 +216,7 @@ const UploadModels = ({
     } else {
       setWarningMessage(null)
     }
-  }, [setErrorMessage, setWarningMessage, uploadFiles, uploadTreeData])
+  }, [setErrorMessage, setWarningMessage, uploadFiles, uploadTreeData, validating])
 
   const uploadAssemblyLabel = (
     <span className={c.UploadAssemblyLabel}>
@@ -292,7 +292,7 @@ const UploadModels = ({
             </Button>
             <Spacer size={'1rem'} />
             <Button onClick={handleContinue}>
-              {isLoadingFiles ? 'Processing...' : 'Continue'}
+              {isLoadingFiles || validating ? 'Processing...' : 'Continue'}
             </Button>
           </div>
         </>

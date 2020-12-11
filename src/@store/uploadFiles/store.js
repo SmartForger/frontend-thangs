@@ -177,8 +177,23 @@ export default store => {
     }
   })
 
+  store.on(types.SET_VALIDATING, (state, { validating }) => ({
+    uploadFiles: {
+      ...state.uploadFiles,
+      validating
+    }
+  }))
+
   // TODO: Update with actual API request
   store.on(types.VALIDATE_FILES, async state => {
+    const { data } = state.uploadFiles
+    const isLoading = Object.values(data).some(file => file.isLoading)
+    if (isLoading) {
+      return
+    }
+
+    store.dispatch(types.SET_VALIDATING, { validating: true })
+
     // Get API Data
     await sleep(1000)
     store.dispatch(types.VALIDATE_FILES_SUCCESS, {
