@@ -32,6 +32,12 @@ const Auth = ({ isLoadingOptimizely }) => {
         track('Third Party Signup - Failed', { source: provider.toUpperCase() })
         return (window.location.href = '/?authFailed=true')
       }
+      if (data && data.token && data.token.needEmailAddress) {
+        track('Third Party Signup - More Info', {
+          source: provider.toUpperCase(),
+        })
+        return (window.location.href = '/?moreInfo=true')
+      }
       if (data && data.token && data.token.newUser) {
         track('Third Party Signup - Success', { source: provider.toUpperCase() })
         return (window.location.href = '/welcome')

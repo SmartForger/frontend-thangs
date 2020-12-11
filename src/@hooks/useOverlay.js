@@ -16,6 +16,7 @@ import {
   Signup,
   Upload,
   EditComment,
+  MoreInfo,
 } from '@overlays'
 import { Overlay } from '@components'
 
@@ -32,6 +33,7 @@ const overlayTemplates = {
   searchByUpload: SearchByUpload,
   signIn: Signin,
   signUp: Signup,
+  moreInfo: MoreInfo,
   upload: Upload,
   editComment: EditComment,
   deleteComment: DeleteComment,

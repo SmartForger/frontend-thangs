@@ -268,6 +268,7 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
   const { startTimer, getTime } = usePerformanceMetrics()
   const sessionExpired = useQuery('sessionExpired')
   const authFailed = useQuery('authFailed')
+  const moreInfo = useQuery('moreInfo')
   const showSignin = useQuery('showSignin')
   const showSignup = useQuery('showSignup')
   const emailRedirect = useQuery('emailRedirect')
@@ -309,6 +310,16 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
         },
       })
       history.push('/')
+    }
+    if (moreInfo) {
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'moreInfo',
+        overlayData: {
+          animateIn: true,
+          windowed: true,
+          showPromo: false,
+        },
+      })
     }
     if (showSignup) {
       dispatch(types.OPEN_OVERLAY, {
