@@ -1,7 +1,6 @@
-import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import {default as MuiSlider} from '@material-ui/core/Slider';
-
+import React from 'react'
+import { withStyles } from '@material-ui/core/styles'
+import { default as MuiSlider } from '@material-ui/core/Slider'
 
 const CustomSlider = withStyles({
   root: {
@@ -43,19 +42,19 @@ const CustomSlider = withStyles({
     opacity: 1,
     height: 3,
   },
-})(MuiSlider);
+})(MuiSlider)
 
 function CustomThumbComponent(props) {
   return (
     <span {...props}>
-      <span className="bar" />
-      <span className="bar" />
-      <span className="bar" />
+      <span className='bar' />
+      <span className='bar' />
+      <span className='bar' />
     </span>
-  );
+  )
 }
 
-const Slider = (props) => {
+const Slider = props => {
   return <CustomSlider ThumbComponent={CustomThumbComponent} {...props} />
 }
 

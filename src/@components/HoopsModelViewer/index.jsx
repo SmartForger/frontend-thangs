@@ -3,7 +3,7 @@ import { HowTo, Spinner } from '@components'
 import { useModels, usePerformanceMetrics } from '@hooks'
 import Toolbar from './Toolbar'
 import NewToolbar from './NewToolbar'
-import DebugToolBar from './DebugToolbar';
+import DebugToolBar from './DebugToolbar'
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -43,50 +43,9 @@ const useStyles = createUseStyles(theme => {
 
 const HoopsModelViewer = ({ className, model, minimizeTools }) => {
   const c = useStyles()
-  const [meshColor, setMeshColor] = useState()
-  const [wireColor, setWireColor] = useState()
   const { useHoopsViewer } = useModels()
   const { containerRef, hoops } = useHoopsViewer(model.uploadedFile)
   const { startTimer, getTime } = usePerformanceMetrics()
-
-  const handleResetView = useCallback(() => {
-    const [newWireColor, newMeshColor] = hoops.resetImage()
-    setWireColor(newWireColor)
-    setMeshColor(newMeshColor)
-  }, [hoops])
-
-  const handleDrawModeChange = useCallback(
-    modeName => {
-      hoops.changeDrawMode(modeName)
-    },
-    [hoops]
-  )
-
-  const handleSetViewOrientation = useCallback(
-    orientation => {
-      hoops.changeViewOrientation(orientation)
-    },
-    [hoops]
-  )
-
-  const handleGetViewerSnapshot = useCallback(
-    (fileName) => {
-      hoops.getViewerSnapshot(fileName);
-    },
-    [hoops]
-  )
-
-  const handleColorChange = useCallback(
-    (modeName, colorStr) => {
-      hoops.changeColor(modeName, colorStr)
-      if (modeName === 'wire') {
-        setWireColor(colorStr)
-      } else if (modeName === 'mesh') {
-        setMeshColor(colorStr)
-      }
-    },
-    [hoops]
-  )
 
   useEffect(() => {
     startTimer()
@@ -103,7 +62,7 @@ const HoopsModelViewer = ({ className, model, minimizeTools }) => {
         <StatusIndicator status={hoops.status} />
         <div ref={containerRef} />
       </div>
-      <NewToolbar />
+      {hoops.status.isReady && <NewToolbar hoops={hoops} minimizeTools={minimizeTools} />}
       {/*hoops.status.isReady && (
         <Toolbar
           onResetView={handleResetView}
@@ -136,15 +95,15 @@ const StatusIndicator = ({ status }) => {
           <div className={c.HoopsModelViewer_PlaceholderText}>Loading preview...</div>
         </>
       ) : (
-          status.isError && (
-            <>
-              <ErrorIcon />
-              <div className={c.HoopsModelViewer_PlaceholderText}>
-                Error Loading Preview
+        status.isError && (
+          <>
+            <ErrorIcon />
+            <div className={c.HoopsModelViewer_PlaceholderText}>
+              Error Loading Preview
             </div>
-            </>
-          )
-        )}
+          </>
+        )
+      )}
     </div>
   )
 }
@@ -156,10 +115,10 @@ const ModelViewer = ({ className, model, minimizeTools }) => {
   return seenHowTo ? (
     <HoopsModelViewer className={className} model={model} minimizeTools={minimizeTools} />
   ) : (
-      <div className={classnames(className, c.HoopsModelViewer_WebViewContainer)}>
-        <HowTo setSeenHowTo={setSeenHowTo} />
-      </div>
-    )
+    <div className={classnames(className, c.HoopsModelViewer_WebViewContainer)}>
+      <HowTo setSeenHowTo={setSeenHowTo} />
+    </div>
+  )
 }
 
 export default ModelViewer

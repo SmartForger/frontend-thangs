@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import classnames from 'classnames'
+import { Input } from '@components'
 import { createUseStyles } from '@style'
 
 const COLORS = [
@@ -98,8 +99,16 @@ const ColorPicker = ({ color = '#FFFFFF', onChange, children }) => {
     [onChange, toggleVisible]
   )
 
+  const handleOnInputChange = useCallback(
+    (e, value) => {
+      onChange(value)
+    },
+    [onChange]
+  )
+
   return (
     <div className={c.ColorPicker} onClick={toggleVisible}>
+      <Input onChange={handleOnInputChange} />
       <BlockPicker currentColor={color} onChange={handleChange} visible={visible} />
       {children}
     </div>

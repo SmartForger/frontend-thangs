@@ -217,48 +217,6 @@ const useHoopsViewer = modelFilename => {
     }
   }
 
-  const changeDrawMode = useCallback(modeName => {
-    ensureCurrentHoopsViewer()
-    switch (modeName) {
-      case 'shaded':
-        hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.WireframeOnShaded)
-        break
-      case 'wire':
-        hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.Wireframe)
-        break
-      case 'xray':
-        hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.XRay)
-        break
-      default:
-        logger.error('Unsupported draw mode!', modeName)
-    }
-  }, [])
-
-  const changeViewOrientation = useCallback(orientation => {
-    hoopsViewerRef.current.view.setViewOrientation(Communicator.ViewOrientation[orientation], 100);
-  }, [])
-
-  const getViewerSnapshot = useCallback((fileName) => {
-    hoopsViewerRef.current.takeSnapshot()
-      .then((imgElement) => {
-        let imageHeight = containerRef.current.childNodes[0].offsetHeight;
-        let imageWidth = containerRef.current.childNodes[0].offsetWidth;
-        let timestamp = new Date().toLocaleString();
-        let myCanvasElement = document.createElement("canvas");
-        myCanvasElement.width = imageWidth;
-        myCanvasElement.height = imageHeight;
-        let context = myCanvasElement.getContext('2d');
-        context.fillStyle = "white";
-        context.fillRect(0, 0, imageWidth, imageHeight);
-        context.drawImage(imgElement, 0, 0, imageWidth, imageHeight);
-        let img = myCanvasElement.toDataURL("image/png");
-        let link = document.createElement('a');
-        link.download = `${fileName}-${timestamp}.png`;
-        link.href = img;
-        link.click();
-      });
-  }, [])
-
   const changeColor = useCallback((modeName, colorStr) => {
     ensureCurrentHoopsViewer()
     if (!['wire', 'mesh'].includes(modeName)) {
@@ -291,27 +249,71 @@ const useHoopsViewer = modelFilename => {
     }
   }, [])
 
+  const changeDrawMode = useCallback(modeName => {
+    ensureCurrentHoopsViewer()
+    switch (modeName) {
+      case 'shaded':
+        hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.WireframeOnShaded)
+        break
+      case 'wire':
+        hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.Wireframe)
+        break
+      case 'xray':
+        hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.XRay)
+        break
+      default:
+        logger.error('Unsupported draw mode!', modeName)
+    }
+  }, [])
+
+  const changeExplosionMagnitude = useCallback(magnitude => {
+    ensureCurrentHoopsViewer()
+    hoopsViewerRef.current.explodeManager.setMagnitude(magnitude)
+  }, [])
+
+  const changeViewOrientation = useCallback(orientation => {
+    hoopsViewerRef.current.view.setViewOrientation(
+      Communicator.ViewOrientation[orientation],
+      100
+    )
+  }, [])
+
+  const getViewerSnapshot = useCallback(fileName => {
+    hoopsViewerRef.current.takeSnapshot().then(imgElement => {
+      let imageHeight = containerRef.current.childNodes[0].offsetHeight
+      let imageWidth = containerRef.current.childNodes[0].offsetWidth
+      let timestamp = new Date().toLocaleString()
+      let myCanvasElement = document.createElement('canvas')
+      myCanvasElement.width = imageWidth
+      myCanvasElement.height = imageHeight
+      let context = myCanvasElement.getContext('2d')
+      context.fillStyle = 'white'
+      context.fillRect(0, 0, imageWidth, imageHeight)
+      context.drawImage(imgElement, 0, 0, imageWidth, imageHeight)
+      let img = myCanvasElement.toDataURL('image/png')
+      let link = document.createElement('a')
+      link.download = `${fileName}-${timestamp}.png`
+      link.href = img
+      link.click()
+    })
+  }, [])
+
   const resetImage = useCallback(() => {
     ensureCurrentHoopsViewer()
     hoopsViewerRef.current.reset()
-    changeDrawMode('shaded')
-
-    const wire = '#000000'
-    const mesh = '#88888b'
-    changeColor('wire', wire)
-    changeColor('mesh', mesh)
-    return [wire, mesh]
-  }, [changeColor, changeDrawMode])
+    hoopsViewerRef.current.model.resetNodesColor()
+  }, [])
 
   return {
     containerRef,
     hoops: {
       status: hoopsStatus,
       resetImage,
-      changeDrawMode,
       changeColor,
+      changeDrawMode,
+      changeExplosionMagnitude,
       changeViewOrientation,
-      getViewerSnapshot
+      getViewerSnapshot,
     },
   }
 }
