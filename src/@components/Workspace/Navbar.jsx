@@ -126,6 +126,7 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       margin: '0 auto',
       alignItems: 'center',
+      minHeight: '9.5rem',
 
       '& > div': {
         margin: '0 auto',
