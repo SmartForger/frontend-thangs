@@ -103,22 +103,13 @@ export default store => {
   )
 
   store.on(types.CHANGE_UPLOAD_FILE, (state, { id, data, isLoading, isError }) => {
-    const { validating, data: uploadedFiles } = state.uploadFiles
-    const newUploadedFiles = {
-      ...uploadedFiles,
-      [id]: { ...uploadedFiles[id], ...data, isLoading, isError },
-    }
-    const currentFileUploaded = uploadedFiles[id].isLoading !== isLoading
-    const uploadComplete = Object.values(newUploadedFiles).every(f => !f.isLoading)
-    if (currentFileUploaded && uploadComplete && !validating) {
-      store.dispatch(types.VALIDATE_FILES)
-    }
-
     return {
       uploadFiles: {
         ...state.uploadFiles,
-        data: newUploadedFiles,
-        validating: currentFileUploaded && uploadComplete && !validating,
+        data: {
+          ...state.uploadFiles.data,
+          [id]: { ...state.uploadFiles.data[id], ...data, isLoading, isError },
+        },
       },
     }
   })
