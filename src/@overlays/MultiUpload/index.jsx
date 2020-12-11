@@ -232,7 +232,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
 
   const handleContinue = useCallback(
     ({ selectedFolderId }) => {
-      if (activeStep !== Object.keys(uploadFilesData).length - 1) {
+      if (activeStep === Object.keys(uploadFilesData).length - 1) {
         console.log('submit models')
         // track('MultiUpload - Submit Files', {
         //   amount: Object.keys(uploadFilesData).length,
