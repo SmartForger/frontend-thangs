@@ -4,7 +4,7 @@ import CardCollectionBase from './CardCollectionBase'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { xs_352, md_972, xxl_1454, xxl },
+    mediaQueries: { xs_352, md_972, xxl_1454 },
   } = theme
 
   return {
