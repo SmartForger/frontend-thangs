@@ -31,6 +31,9 @@ const useStyles = createUseStyles(theme => {
         lineHeight: '1rem',
       },
     },
+    StatsBar_StatText: {
+      margin: 0,
+    },
   }
 })
 
@@ -49,7 +52,7 @@ const StatsBar = ({ userActivity = {} }) => {
               : '-'}
           </TitleTertiary>
           <Spacer size='.5rem' />
-          <MetadataPrimary>Contributions</MetadataPrimary>
+          <MetadataPrimary className={c.StatsBar_StatText}>Contributions</MetadataPrimary>
         </div>
       </div>
       <Spacer size={'3rem'} />
@@ -61,7 +64,7 @@ const StatsBar = ({ userActivity = {} }) => {
             {typeof userActivity.uploads === 'number' ? userActivity.uploads : '-'}
           </TitleTertiary>
           <Spacer size='.5rem' />
-          <MetadataPrimary>Models</MetadataPrimary>
+          <MetadataPrimary className={c.StatsBar_StatText}>Models</MetadataPrimary>
         </div>
       </div>
       <Spacer size={'3rem'} />
@@ -73,7 +76,7 @@ const StatsBar = ({ userActivity = {} }) => {
             {typeof userActivity.likes === 'number' ? userActivity.likes : '-'}
           </TitleTertiary>
           <Spacer size='.5rem' />
-          <MetadataPrimary>Likes</MetadataPrimary>
+          <MetadataPrimary className={c.StatsBar_StatText}>Likes</MetadataPrimary>
         </div>
       </div>
       <Spacer size={'3rem'} />
@@ -85,7 +88,7 @@ const StatsBar = ({ userActivity = {} }) => {
             {typeof userActivity.following === 'number' ? userActivity.following : '-'}
           </TitleTertiary>
           <Spacer size='.5rem' />
-          <MetadataPrimary>Following</MetadataPrimary>
+          <MetadataPrimary className={c.StatsBar_StatText}>Following</MetadataPrimary>
         </div>
       </div>
       <Spacer size={'3rem'} />
@@ -97,7 +100,7 @@ const StatsBar = ({ userActivity = {} }) => {
             {typeof userActivity.followers === 'number' ? userActivity.followers : '-'}
           </TitleTertiary>
           <Spacer size='.5rem' />
-          <MetadataPrimary>Followers</MetadataPrimary>
+          <MetadataPrimary className={c.StatsBar_StatText}>Followers</MetadataPrimary>
         </div>
       </div>
       <Spacer size={'3rem'} />

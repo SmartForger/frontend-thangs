@@ -2,6 +2,7 @@ import React, { useCallback } from 'react'
 import { useStoreon } from 'storeon/react'
 import { SingleLineBodyText, Spacer } from '@components'
 import { createUseStyles } from '@style'
+import classnames from 'classnames'
 import { MenuItem } from 'react-contextmenu'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
@@ -31,13 +32,26 @@ const useStyles = createUseStyles(theme => {
       },
     },
     AddMenu_Item: {
-      display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
       cursor: 'pointer',
       width: '100%',
       outline: 'none',
       justifyContent: 'center',
+    },
+    AddMenu_Item__desktop: {
+      display: 'none !important',
+
+      [md]: {
+        display: 'flex',
+      },
+    },
+    AddMenu_Item__mobile: {
+      display: 'flex',
+
+      [md]: {
+        display: 'none !important',
+      },
     },
     AddMenu_Icon: {
       '& path': {
@@ -88,21 +102,31 @@ const AddMenu = ({ folder = {}, sideBar = false }) => {
       <Spacer size={'1rem'} />
       <div className={c.AddMenu_ItemLink} onClick={handleAddFolder}>
         <Spacer size={'1.5rem'} />
-        <MenuItem className={c.AddMenu_Item}>
+        <MenuItem className={classnames(c.AddMenu_Item, c.AddMenu_Item__desktop)}>
           <FolderIcon />
           <Spacer size={'.5rem'} />
           <SingleLineBodyText>Create Folder</SingleLineBodyText>
         </MenuItem>
+        <div className={classnames(c.AddMenu_Item, c.AddMenu_Item__mobile)}>
+          <FolderIcon />
+          <Spacer size={'.5rem'} />
+          <SingleLineBodyText>Create Folder</SingleLineBodyText>
+        </div>
         <Spacer size={'1.5rem'} />
       </div>
       <Spacer size={'.5rem'} />
       <div className={c.AddMenu_ItemLink} onClick={handleUpload}>
         <Spacer size={'1.5rem'} />
-        <MenuItem className={c.AddMenu_Item}>
+        <MenuItem className={classnames(c.AddMenu_Item, c.AddMenu_Item__desktop)}>
           <UploadIcon className={c.AddMenu_Icon} />
           <Spacer size={'.5rem'} />
           <SingleLineBodyText>Upload Models</SingleLineBodyText>
         </MenuItem>
+        <div className={classnames(c.AddMenu_Item, c.AddMenu_Item__mobile)}>
+          <UploadIcon className={c.AddMenu_Icon} />
+          <Spacer size={'.5rem'} />
+          <SingleLineBodyText>Upload Models</SingleLineBodyText>
+        </div>
         <Spacer size={'1.5rem'} />
       </div>
       <Spacer size={'1rem'} />
