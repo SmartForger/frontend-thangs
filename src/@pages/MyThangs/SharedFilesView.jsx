@@ -21,7 +21,9 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
+      marginLeft: '1.5rem',
       [md]: {
+        marginLeft: '2rem',
         minWidth: '56rem',
       },
     },
@@ -60,28 +62,24 @@ const useStyles = createUseStyles(theme => {
     SharedFilesView_Starred: {
       display: 'flex',
       flexDirection: 'row',
-      flexWrap: 'wrap',
       position: 'relative',
+      overflowX: 'scroll',
+      overflowY: 'hidden',
+      whiteSpace: 'nowrap',
+
+      [md]: {
+        flexWrap: 'wrap',
+        overflowX: 'hidden',
+      },
 
       '& > div': {
         marginTop: '1.5rem',
       },
     },
     SharedFilesView_Loader: {
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      background: 'rgba(0,0,0,0.19)',
-      zIndex: 1,
-      top: '-.75rem',
-      left: '-1rem',
-      display: 'flex',
-      alignItems: 'center',
-    },
-    SharedFilesView_Spacer: {
-      display: 'none',
+      marginRight: '1.5rem',
       [md]: {
-        display: 'block',
+        marginRight: '2rem',
       },
     },
   }
@@ -96,10 +94,10 @@ const SharedFilesView = ({
   sharedFolders,
 }) => {
   const c = useStyles({})
-  const { starredSharedFolders = [], isLoading: isLoadingStarred } = useStarred()
-  const hasStarred = useMemo(() => starredSharedFolders.length > 0, [
-    starredSharedFolders.length,
-  ])
+  const {
+    starredSharedFolders = [],
+    isLoading: isLoadingStarred,
+  } = useStarred()
 
   const filteredFolders = useMemo(() => {
     return !R.isEmpty(sharedFolders)
@@ -114,20 +112,22 @@ const SharedFilesView = ({
 
   return (
     <main className={classnames(className, c.SharedFilesView)}>
-      <Spacer size='2rem' />
       <div className={c.SharedFilesView_Content}>
         <Spacer size='2rem' />
         <TitleTertiary>Shared Files</TitleTertiary>
-        <Spacer size='4rem' className={c.SharedFilesView_Spacer} />
-        {(isLoadingStarred || hasStarred) && (
+
+        {isLoadingStarred && (
+          <div className={c.SharedFilesView_Loader}>
+            <Spacer size='4rem' />
+            <Spinner />
+          </div>
+        )}
+
+        {starredSharedFolders.length > 0 && (
           <>
+            <Spacer size='4rem' />
             <TitleTertiary>Starred</TitleTertiary>
             <div className={c.SharedFilesView_Starred}>
-              {isLoadingStarred && (
-                <div className={c.SharedFilesView_Loader}>
-                  <Spinner />
-                </div>
-              )}
               {starredSharedFolders.map((folder, index) => {
                 return (
                   <div className={c.SharedFilesView_StarredRow} key={`starred_${index}`}>
