@@ -3,8 +3,9 @@ import { useCallback, useEffect, useReducer, useRef } from 'react'
 import { colorHexStringToRGBArray, ensureScriptIsLoaded } from '@utilities'
 import axios from 'axios'
 import { logger } from '@utilities/logging'
+import { track } from '@utilities/analytics'
 
-const MODEL_PREP_TIMEOUT = 15000
+const MODEL_PREP_TIMEOUT = 180000
 const MODEL_PREP_ENDPOINT_URI = process.env.REACT_APP_HOOPS_MODEL_PREP_ENDPOINT_URI
 const HOOPS_WS_ENDPOINT_URI = process.env.REACT_APP_HOOPS_WS_ENDPOINT_URI
 
@@ -105,6 +106,7 @@ const useHoopsViewer = modelFilename => {
     debug('1. Initialize Effect')
     if (!hoopsStatus.isUnpreparedModel) {
       debug('  * 1: Bailed')
+      track('Hoops Timeout #1')
       return
     }
     let isActiveEffect = true
@@ -119,6 +121,7 @@ const useHoopsViewer = modelFilename => {
         })
 
         if (!resp.data.ok) {
+          track('HOOPS viewer error', { error: 'Model preparation failed' })
           throw new Error('Model preparation failed.')
         }
 
@@ -129,6 +132,7 @@ const useHoopsViewer = modelFilename => {
       })
       .catch(err => {
         logger.error('Failure initializing Viewer:', err)
+        track('HOOPS FailureInitViewer', { error: JSON.stringify(err) })
         if (isActiveEffect) {
           doTransition(TRANSITIONS.Error)
         }
@@ -171,6 +175,7 @@ const useHoopsViewer = modelFilename => {
 
     if (!hoopsStatus.isPreparedModel) {
       debug('  * 3: Bailed')
+      track('Hoops Timeout #3')
       return
     }
 
@@ -192,6 +197,7 @@ const useHoopsViewer = modelFilename => {
       },
       modelLoadFailure(name, reason, e) {
         console.error('HOOPS failed loading the model:', e)
+        track('Hoops Error ModelLoadFailure', { error: JSON.stringify(e) })
         doTransition(TRANSITIONS.Error)
       },
     })
