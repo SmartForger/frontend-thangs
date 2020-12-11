@@ -125,6 +125,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'column',
       margin: '0 auto',
+      alignItems: 'center',
 
       '& > div': {
         margin: '0 auto',
@@ -133,6 +134,10 @@ const useStyles = createUseStyles(theme => {
       [md]: {
         display: 'none',
       },
+    },
+    WorkspaceNavbar_MobileProfile: {
+      display: 'flex',
+      flexDirection: 'column',
     },
     WorkspaceNavbar_NavHeader: {
       display: 'flex',
@@ -305,12 +310,12 @@ const WorkspaceNavbar = ({
             name={user.fullName || user.username}
           />
           <Spacer size={'.75rem'} />
-          <div>
+          <div className={c.WorkspaceNavbar_MobileProfile}>
             <MultiLineBodyText>{user.fullName || user.username}</MultiLineBodyText>
-            {user.email && (
+            {user.username && (
               <>
                 <Spacer size={'.5rem'} />
-                <MetadataSecondary>{user.email}</MetadataSecondary>
+                <MetadataSecondary>{user.username}</MetadataSecondary>
               </>
             )}
           </div>

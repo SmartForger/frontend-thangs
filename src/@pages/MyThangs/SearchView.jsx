@@ -21,7 +21,9 @@ const useStyles = createUseStyles(theme => {
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
+      marginLeft: '1.5rem',
       [md]: {
+        marginLeft: '2rem',
         minWidth: '56rem',
       },
     },
@@ -79,7 +81,6 @@ const SearchView = ({ className, handleChangeFolder = noop, handleEditModel = no
 
   return (
     <main className={classnames(className, c.SearchView)}>
-      <Spacer size='2rem' />
       <div className={c.SearchView_Content}>
         <Spacer size='2rem' />
         <TitleTertiary>Search Results: {searchTerm}</TitleTertiary>
@@ -96,7 +97,6 @@ const SearchView = ({ className, handleChangeFolder = noop, handleEditModel = no
           ></FileTable>
         )}
       </div>
-      <Spacer size='2rem' />
     </main>
   )
 }
