@@ -21,7 +21,10 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
+      marginLeft: '1.5rem',
+      marginRight: '1.5rem',
       [md]: {
+        marginLeft: '2rem',
         minWidth: '56rem',
       },
     },
@@ -66,7 +69,6 @@ const LikedModelsView = ({ className, userId }) => {
 
   return (
     <main className={classnames(className, c.LikedModels)}>
-      <Spacer size='2rem' />
       <div className={c.LikedModels_Content}>
         <Spacer size='2rem' />
         <TitleTertiary>Liked Models</TitleTertiary>
@@ -75,7 +77,6 @@ const LikedModelsView = ({ className, userId }) => {
           <ModelCards items={filteredModels} />
         </CardCollection>
       </div>
-      <Spacer size='2rem' />
     </main>
   )
 }

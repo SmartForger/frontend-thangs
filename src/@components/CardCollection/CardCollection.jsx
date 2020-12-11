@@ -4,7 +4,7 @@ import CardCollectionBase from './CardCollectionBase'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { xs_352, md_972, xxl_1454 },
+    mediaQueries: { xs_352, md_972, xxl_1454, xxl },
   } = theme
 
   return {
@@ -14,8 +14,7 @@ const useStyles = createUseStyles(theme => {
       margin: '0 auto',
       width: '100%',
       justifyContent: 'center',
-
-      gridTemplateColumns: 'repeat(auto-fit, minmax(164px, 1fr))',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
 
       '@media (min-width: 425px)': {
         gridTemplateColumns: 'repeat(auto-fit, 164px)',
