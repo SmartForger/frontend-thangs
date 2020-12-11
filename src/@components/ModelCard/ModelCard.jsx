@@ -134,10 +134,7 @@ const useStyles = createUseStyles(theme => {
       margin: 'auto !important',
       padding: '0 !important',
       width: '100%',
-
-      [xs_352]: {
-        ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.MS
-      },
+      ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.MS,
 
       [md_972]: {
         ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.DS
