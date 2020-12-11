@@ -11,47 +11,49 @@ executors:
     environment:
         REACT_APP_API_KEY: 'https://staging-api-platform-dot-gcp-and-physna.uc.r.appspot.com/'
 workflows:
-  version: 2
-
-  deploy-gcloud:
-    jobs:
-      - cypress/run:
-          executor: test-in-staging
-          context: gcp-and-physna
-          yarn: true
-          start: yarn dev
-          wait-on: 'http://localhost:3000'
-          store_artifacts: true
-          browser: chrome
-          verify-command: yarn cypress verify
-        filters:
-            branches:
-              only:
-                - development
-      - deploy-staging:
-          context: gcp-and-physna
+    version: 2
+    deploy-gcloud:
+      jobs:
+        - cypress/run:
+            executor: test-in-staging
+            context: gcp-and-physna
+            yarn: true
+            start: yarn dev
+            wait-on: 'http://localhost:3000'
+            store_artifacts: true
+            browser: chrome
+            verify-command: yarn cypress verify
           filters:
-            branches:
-              only:
-                - development
-      - deploy-production:
-          Stack: master
-          context: gcp-and-physna
-          filters:
-            branches:
-              only:
-                - development
-      - deploy-development-thangs:
-          context: thangs-context
-          filters:
-            branches:
-              only:
-                - feature/dev-environment
+              branches:
+                only:
+                  - development
+        - deploy-staging:
+            context: gcp-and-physna
+            filters:
+              branches:
+                only:
+                  - development
+        - deploy-production:
+            Stack: master
+            context: gcp-and-physna
+            filters:
+              branches:
+                only:
+                  - development
+        - deploy-development-thangs:
+            context: thangs-context
+            filters:
+              branches:
+                only:
+                  - feature/dev-environment
 
 jobs:
   deploy-staging:
     docker:
       - image: google/cloud-sdk:303.0.0
+        auth:
+          username: ${DOCKER_HUB_ID}
+          password: ${DOCKER_HUB_PWD}
     parameters:
       NoPromote:
         default: "" # "--no-promote"
@@ -123,6 +125,9 @@ jobs:
   deploy-production:
     docker:
       - image: google/cloud-sdk
+        auth:
+          username: ${DOCKER_HUB_ID}
+          password: ${DOCKER_HUB_PWD}
     parameters:
       NoPromote:
         default: "--no-promote"
@@ -191,6 +196,9 @@ jobs:
   deploy-development-thangs:
     docker:
       - image: google/cloud-sdk:303.0.0
+        auth:
+          username: ${DOCKER_HUB_ID}
+          password: ${DOCKER_HUB_PWD}
     parameters:
       NoPromote:
         default: "" # "--no-promote"
