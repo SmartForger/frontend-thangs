@@ -157,7 +157,12 @@ const AssemblyInfo = ({
   )
 
   const togglePrivate = useCallback(() => {
-    handleOnInputChange('isPrivate', !inputState.isPrivate)
+    const folder = folders.find(folder => folder.id.toString() === inputState.folderId)
+    if (folder && !folder.isPublic) {
+      handleOnInputChange('isPrivate', true)
+    } else {
+      handleOnInputChange('isPrivate', !inputState.isPrivate)
+    }
   }, [inputState, handleOnInputChange])
 
   const handleSubmit = data => {
