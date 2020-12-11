@@ -1,8 +1,9 @@
+import { sendMessage } from './worker'
+
 export function log(file, line, logData) {
-  postMessage({
-    message: 'log',
+  sendMessage('log', {
     file,
     line,
-    logData,
+    logData
   })
 }

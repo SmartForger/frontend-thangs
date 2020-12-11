@@ -1,5 +1,8 @@
 import axios from 'axios'
-import { log } from './logger'
+import { sendMessage, addMessageListener } from './worker'
+
+let token = ''
+let baseUrl = ''
 
 const apiForChain = ({
   method = 'GET',
@@ -8,8 +11,6 @@ const apiForChain = ({
   cancelToken,
   timeout = 300000,
   params,
-  token,
-  baseUrl,
 }) => {
   return axios({
     url: `${baseUrl}${endpoint}`,
@@ -24,7 +25,7 @@ const apiForChain = ({
     ...(params && { params }),
   }).catch(e => {
     if (e && e.response && e.response.status === 403) {
-      postMessage({ message: 'permissionDenied', body })
+      sendMessage('api:403')
     }
 
     return Promise.reject(e)
@@ -35,3 +36,13 @@ export default props =>
   apiForChain(props).catch(e => {
     return Promise.resolve({ data: {}, error: e })
   })
+
+function apiMessageHandler(messageType, data) {
+  if (messageType === 'api:setToken') {
+    token = data.token
+  } else if (messageType === 'api:setBaseUrl') {
+    baseUrl = data.url
+  }
+}
+
+addMessageListener(apiMessageHandler)

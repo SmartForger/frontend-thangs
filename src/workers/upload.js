@@ -1,48 +1,19 @@
 import axios from 'axios'
 import storageService from '../@services/storage.service'
 import api from './api'
-import { log } from './logger'
+import { sendMessage, addMessageListener } from './worker'
 
 const cancellationTokens = {}
 
-log('upload.js', 8, `Worker started`)
-
-onmessage = e => {
-  const { message, id, file, token, baseUrl } = e.data
-
-  switch (message) {
-    case 'upload':
-      handleFileUpload(id, file, token, baseUrl)
-        .then(uploadedUrlData => {
-          postMessage({ message: 'success', id, uploadedUrlData })
-        })
-        .catch(e => {
-          postMessage({ message: 'error', error: e.message })
-        })
-      break
-    case 'cancel':
-      cancelRequest(id)
-      break
-    default:
-      break
-  }
-}
-
-async function handleFileUpload(id, file, token, baseUrl) {
+async function handleFileUpload(id, file) {
   cancellationTokens[id] = axios.CancelToken.source()
 
   try {
-    log('upload.js', 35, `Before API`)
-
     const { data: uploadedUrlData } = await api({
       method: 'GET',
       endpoint: `models/upload-url?fileName=${file.name}`,
       cancelToken: cancellationTokens[id].token,
-      token,
-      baseUrl,
     })
-
-    log('upload.js', 45, `After API`)
 
     await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file, {
       cancelToken: cancellationTokens[id].token,
@@ -50,20 +21,33 @@ async function handleFileUpload(id, file, token, baseUrl) {
 
     delete cancellationTokens[id]
 
-    return uploadedUrlData
+    sendMessage('upload:success', {
+      id,
+      uploadedUrlData,
+    })
   } catch (e) {
-    log('upload.js', 55, e)
-    delete cancellationTokens[id]
-    throw e
+    sendMessage('upload:error', { error: e.message })
   }
+
+  delete cancellationTokens[id]
 }
 
 function cancelRequest(id) {
-  log('upload.js', 61, `Cancel Upload ${id}`)
   if (!cancellationTokens[id]) {
-    postMessage({ message: 'cancelled', id })
+    sendMessage('upload:cancelled', { id })
     return
   }
+
   cancellationTokens[id].cancel('Upload interrupted')
-  postMessage({ message: 'cancelled', id })
+  sendMessage('upload:cancelled', { id })
 }
+
+function uploadMessageHandler(messageType, data) {
+  if (messageType === 'upload:upload') {
+    handleFileUpload(data.id, data.file)
+  } else if (messageType === 'upload:cancel') {
+    cancelRequest(data.id)
+  }
+}
+
+addMessageListener(uploadMessageHandler)

@@ -2,7 +2,7 @@ const path = require('path')
 
 module.exports = {
   entry: {
-    upload: path.resolve(__dirname, './src/workers/upload.js'),
+    index: path.resolve(__dirname, './src/workers/index.js'),
   },
   module: {
     rules: [
