@@ -307,9 +307,14 @@ const WorkspaceNavbar = ({
           <Spacer size={'.75rem'} />
           <div>
             <MultiLineBodyText>{user.fullName || user.username}</MultiLineBodyText>
-            <Spacer size={'.5rem'} />
-            <MetadataSecondary>{user.email}</MetadataSecondary>
+            {user.email && (
+              <>
+                <Spacer size={'.5rem'} />
+                <MetadataSecondary>{user.email}</MetadataSecondary>
+              </>
+            )}
           </div>
+          <Spacer size={'.75rem'} />
         </div>
         <AddMenuDropdown currentFolderId={currentFolderId} folders={folders} />
         <div className={c.WorkspaceNavbar_ScrollableFiles}>
