@@ -63,14 +63,9 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
     },
     Signup_Row: {
-      height: '100%',
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-
-      [md]: {
-        height: 'unset',
-      },
     },
     Signup_SignUpPromo: {
       backgroundColor: theme.colors.purple[900],
