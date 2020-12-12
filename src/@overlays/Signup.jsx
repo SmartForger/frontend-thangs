@@ -41,7 +41,7 @@ const useStyles = createUseStyles(theme => {
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
-      overflow: 'hidden',
+      overflow: 'scroll',
       position: 'relative',
 
       [md]: {
@@ -69,7 +69,7 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
 
       [md]: {
-        borderRadius: '1rem',
+        height: 'unset',
       },
     },
     Signup_SignUpPromo: {
