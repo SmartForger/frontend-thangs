@@ -5,10 +5,9 @@ import { sendMessage, addMessageListener } from './worker'
 
 /* Send messages to worker */
 
-export const uploadFile = (id, file) => {
+export const uploadFiles = files => {
   sendMessage('upload:upload', {
-    id,
-    file,
+    files,
   })
 }
 

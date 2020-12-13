@@ -146,50 +146,44 @@ const MultiUpload = ({ initData = null, folderId }) => {
     }
   }, [uploadFilesData, validationTree])
 
-  const handleFileUpload = useCallback(
-    (file, errorState, fileId) => {
-      if (R.isNil(file)) {
-        return
-      } else {
-        dispatch(types.UPLOAD_FILE, {
-          id: fileId,
-          file,
-          errorState,
-          // cancelToken: cancelTokenRef.current.token,
-        })
-      }
-    },
-    [dispatch]
-  )
+  const onDrop = (acceptedFiles, [rejectedFile], _event) => {
+    track('MultiUpload - OnDrop', { amount: acceptedFiles && acceptedFiles.length })
 
-  const onDrop = useCallback(
-    (acceptedFiles, [rejectedFile], _event) => {
-      track('MultiUpload - OnDrop', { amount: acceptedFiles && acceptedFiles.length })
-      acceptedFiles.forEach(file => {
-        const fileId = Math.random().toString(36).substr(2, 9)
+    const files = acceptedFiles
+      .map(file => {
+        const fileObj = {
+          id: Math.random().toString(36).substr(2, 9),
+          file,
+        }
+
         if (file.size >= FILE_SIZE_LIMITS.hard.size) {
           setErrorMessage(
             `One or more files was over ${FILE_SIZE_LIMITS.hard.pretty}. Try uploading a different file.`
           )
+          return null
         } else if (file.size >= FILE_SIZE_LIMITS.soft.size) {
-          handleFileUpload(file, { warning: ERROR_STATES.SIZE_WARNING }, fileId)
-        } else {
-          handleFileUpload(file, null, fileId)
+          fileObj.errorState = { warning: ERROR_STATES.SIZE_WARNING }
         }
+
+        return fileObj
       })
-      if (rejectedFile) {
-        const filePath = rejectedFile.path.split('.')
-        const fileExt = filePath[filePath.length - 1] || ''
-        track('MultiUpload - Rejected', { fileType: fileExt })
-        setErrorMessage(
-          `One or more files not supported. Supported file extensions include ${MODEL_FILE_EXTS.map(
-            e => e + ' '
-          )}.`
-        )
-      }
-    },
-    [handleFileUpload]
-  )
+      .filter(f => !!f)
+
+    console.log(files)
+
+    dispatch(types.UPLOAD_FILES, { files })
+
+    if (rejectedFile) {
+      const filePath = rejectedFile.path.split('.')
+      const fileExt = filePath[filePath.length - 1] || ''
+      track('MultiUpload - Rejected', { fileType: fileExt })
+      setErrorMessage(
+        `One or more files not supported. Supported file extensions include ${MODEL_FILE_EXTS.map(
+          e => e + ' '
+        )}.`
+      )
+    }
+  }
 
   const removeFile = filename => {
     track('MultiUpload - Remove File')

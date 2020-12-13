@@ -1,20 +1,16 @@
 import axios from 'axios'
+import * as R from 'ramda'
 import storageService from '../@services/storage.service'
 import api from './api'
 import { sendMessage, addMessageListener } from './worker'
+import { log } from './logger'
 
 const cancellationTokens = {}
 
-async function handleFileUpload(id, file) {
+async function uploadSingleFile({ id, file }, uploadedUrlData) {
   cancellationTokens[id] = axios.CancelToken.source()
 
   try {
-    const { data: uploadedUrlData } = await api({
-      method: 'GET',
-      endpoint: `models/upload-url?fileName=${file.name}`,
-      cancelToken: cancellationTokens[id].token,
-    })
-
     await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file, {
       cancelToken: cancellationTokens[id].token,
     })
@@ -26,10 +22,26 @@ async function handleFileUpload(id, file) {
       uploadedUrlData,
     })
   } catch (e) {
+    sendMessage('upload:error', { id, error: e.message })
+  }
+}
+
+async function uploadMultipleFiles(files) {
+  try {
+    const { data: uploadedUrlData } = await api({
+      method: 'POST',
+      endpoint: 'models/upload-urls',
+      body: {
+        fileNames: files.map(f => f.file.name),
+      },
+    })
+
+    files.forEach((f, i) => {
+      uploadSingleFile(f, uploadedUrlData[i])
+    })
+  } catch (e) {
     sendMessage('upload:error', { error: e.message })
   }
-
-  delete cancellationTokens[id]
 }
 
 function cancelRequest(id) {
@@ -44,7 +56,7 @@ function cancelRequest(id) {
 
 function uploadMessageHandler(messageType, data) {
   if (messageType === 'upload:upload') {
-    handleFileUpload(data.id, data.file)
+    uploadMultipleFiles(data.files)
   } else if (messageType === 'upload:cancel') {
     cancelRequest(data.id)
   }

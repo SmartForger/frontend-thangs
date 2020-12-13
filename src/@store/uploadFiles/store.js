@@ -1,5 +1,5 @@
 import * as types from '@constants/storeEventTypes'
-import { api, uploadFile, cancelUpload } from '@services'
+import { api, uploadFiles, cancelUpload } from '@services'
 import { track } from '@utilities/analytics'
 import { sleep, findNodeByName } from '@utilities'
 import * as R from 'ramda'
@@ -87,20 +87,31 @@ export default store => {
     }
   })
 
-  store.on(
-    types.INIT_UPLOAD_FILE,
-    (state, { id, file, isLoading, isError, isWarning }) => {
-      return {
-        uploadFiles: {
-          ...state.uploadFiles,
-          data: {
-            ...state.uploadFiles.data,
-            [id]: { name: file.name, size: file.size, isLoading, isError, isWarning },
-          },
+  store.on(types.INIT_UPLOAD_FILES, (state, { files }) => {
+    const newFilesMap = files.reduce(
+      (newFiles, f) => ({
+        ...newFiles,
+        [f.id]: {
+          name: f.file.name,
+          size: f.file.size,
+          isLoading: f.isLoading,
+          isError: f.isError,
+          isWarning: f.isWarning,
         },
-      }
+      }),
+      {}
+    )
+
+    return {
+      uploadFiles: {
+        ...state.uploadFiles,
+        data: {
+          ...state.uploadFiles.data,
+          ...newFilesMap,
+        },
+      },
     }
-  )
+  })
 
   store.on(types.CHANGE_UPLOAD_FILE, (state, { id, data, isLoading, isError }) => {
     return {
@@ -180,8 +191,8 @@ export default store => {
   store.on(types.SET_VALIDATING, (state, { validating }) => ({
     uploadFiles: {
       ...state.uploadFiles,
-      validating
-    }
+      validating,
+    },
   }))
 
   // TODO: Update with actual API request
@@ -202,18 +213,9 @@ export default store => {
     })
   })
 
-  store.on(types.UPLOAD_FILE, async (_, { id, file, errorState = undefined }) => {
-    store.dispatch(types.INIT_UPLOAD_FILE, {
-      id,
-      file,
-      error: errorState && errorState.message,
-      isLoading: errorState && errorState.error ? false : true,
-      isError: errorState && errorState.error,
-      isWarning: errorState && errorState.warning,
-    })
-    if (!errorState || !errorState.error) {
-      uploadFile(id, file)
-    }
+  store.on(types.UPLOAD_FILES, async (_, { files }) => {
+    store.dispatch(types.INIT_UPLOAD_FILES, { files })
+    uploadFiles(files)
   })
 
   store.on(types.SUBMIT_FILES, async (state, { onFinish = noop }) => {
