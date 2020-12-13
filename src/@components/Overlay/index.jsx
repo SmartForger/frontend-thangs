@@ -87,7 +87,7 @@ const Overlay = ({
   onOverlayClose = noop,
   windowed = false,
   animateIn = false,
-  showPromo = true,
+  showPromo = false,
   shake = false,
   isHidden,
   dialogue,
