@@ -71,6 +71,7 @@ const useStyles = createUseStyles(theme => {
       backgroundColor: theme.colors.purple[900],
       color: theme.colors.white[300],
       position: 'relative',
+      flex: 'none',
     },
     Signup_SignUpPromoSection: {
       width: '100%',

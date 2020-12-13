@@ -67,6 +67,7 @@ const useStyles = createUseStyles(theme => {
       backgroundColor: theme.colors.purple[900],
       color: theme.colors.white[300],
       position: 'relative',
+      flex: 'none',
     },
     Signin_SignUpPromoSection: {
       zIndex: 2,
@@ -273,8 +274,8 @@ const SignInForm = ({
                 {authFailed
                   ? 'Something went wrong. Please try again'
                   : sessionExpired
-                    ? 'Session Expired. Please sign back in to continue'
-                    : signinErrorMessage}
+                  ? 'Session Expired. Please sign back in to continue'
+                  : signinErrorMessage}
               </FormError>
               <Spacer size='1rem' />
             </>
