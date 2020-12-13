@@ -481,7 +481,7 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
   )
 }
 
-const Signup = ({ titleMessage, showPromo = true, source }) => {
+const Signup = ({ titleMessage, showPromo = false, source }) => {
   const c = useStyles({ showPromo })
   const { dispatch } = useStoreon()
 
