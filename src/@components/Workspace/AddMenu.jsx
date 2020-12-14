@@ -86,9 +86,9 @@ const AddMenu = ({ folder = {}, sideBar = false }) => {
   return (
     <div className={c.AddMenu}>
       <Spacer size={'1rem'} />
-      <div className={c.AddMenu_ItemLink} onClick={handleAddFolder}>
+      <div className={c.AddMenu_ItemLink}>
         <Spacer size={'1.5rem'} />
-        <MenuItem className={c.AddMenu_Item}>
+        <MenuItem className={c.AddMenu_Item} onClick={handleAddFolder}>
           <FolderIcon />
           <Spacer size={'.5rem'} />
           <SingleLineBodyText>Create Folder</SingleLineBodyText>
@@ -96,9 +96,9 @@ const AddMenu = ({ folder = {}, sideBar = false }) => {
         <Spacer size={'1.5rem'} />
       </div>
       <Spacer size={'.5rem'} />
-      <div className={c.AddMenu_ItemLink} onClick={handleUpload}>
+      <div className={c.AddMenu_ItemLink}>
         <Spacer size={'1.5rem'} />
-        <MenuItem className={c.AddMenu_Item}>
+        <MenuItem className={c.AddMenu_Item} onClick={handleUpload}>
           <UploadIcon className={c.AddMenu_Icon} />
           <Spacer size={'.5rem'} />
           <SingleLineBodyText>Upload Models</SingleLineBodyText>
