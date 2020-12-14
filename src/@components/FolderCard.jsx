@@ -67,7 +67,7 @@ const FolderCard = ({ handleClick = noop, folder, isSharedFolder, disableStar })
   }, [folder, handleClick])
   return (
     <>
-      <ContextMenuTrigger id={`File_Menu_${FolderId}`} holdToDisplay={1000}>
+      <ContextMenuTrigger id={`File_Menu_${FolderId}`} holdToDisplay={-1}>
         <Card
           className={c.FolderCard}
           size={'14.375rem'}

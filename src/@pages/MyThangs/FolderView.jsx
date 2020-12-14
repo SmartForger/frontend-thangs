@@ -264,10 +264,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
           </div>
         </div>
         <div className={classnames(c.FolderView_Row, c.FolderView_Row__desktop)}>
-          <Contributors
-            users={members}
-            displayLength='10'
-          />
+          <Contributors users={members} displayLength='10' />
           <Spacer size={'1rem'} />
           <Button secondary onClick={handleEditFolder}>
             Edit
@@ -287,7 +284,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
           <DotStackIcon />
           {showFileMenu && (
             <div className={c.FolderView_MobileMenu}>
-              <FolderMenu  members={members} type='folder' folder={folder} />
+              <FolderMenu members={members} type='folder' folder={folder} />
             </div>
           )}
         </div>
@@ -371,7 +368,7 @@ const FolderView = ({
 
   return (
     <>
-      <ContextMenuTrigger id='Add_Menu_FolderView' holdToDisplay={1000}>
+      <ContextMenuTrigger id='Add_Menu_FolderView' holdToDisplay={-1}>
         <main className={classnames(className, c.FolderView)}>
           <div className={c.FolderView_Content}>
             <FolderHeader

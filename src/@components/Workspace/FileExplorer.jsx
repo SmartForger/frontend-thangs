@@ -96,7 +96,7 @@ const Folder = ({
   const isIconDisabled = R.isNil(folder.subfolders) || R.isEmpty(folder.subfolders)
   return (
     <>
-      <ContextMenuTrigger id={`File_Menu_${id}${postId}`} holdToDisplay={1000}>
+      <ContextMenuTrigger id={`File_Menu_${id}${postId}`} holdToDisplay={-1}>
         <NavLink
           Icon={FolderIcon}
           label={folderName}
@@ -141,10 +141,10 @@ const Subfolders = ({
   const files = useMemo(() => {
     return !R.isEmpty(folders)
       ? folders.sort((a, b) => {
-        if (a.name < b.name) return -1
-        else if (a.name > b.name) return 1
-        return 0
-      })
+          if (a.name < b.name) return -1
+          else if (a.name > b.name) return 1
+          return 0
+        })
       : []
   }, [folders])
   return (

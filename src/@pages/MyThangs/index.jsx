@@ -241,7 +241,7 @@ const MyThangs = () => {
           attributes={{
             style: { height: '100%' },
           }}
-          holdToDisplay={1000}
+          holdToDisplay={-1}
         >
           <WorkspaceNavbar
             currentFolderId={currentFolderId}
@@ -269,7 +269,7 @@ const MyThangs = () => {
               attributes={{
                 style: { height: '100%' },
               }}
-              holdToDisplay={1000}
+              holdToDisplay={-1}
             >
               <Switch>
                 <Route

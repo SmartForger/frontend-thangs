@@ -535,7 +535,7 @@ const FileTable = ({
                         <React.Fragment key={`FileRow_${index}`}>
                           <ContextMenuTrigger
                             id={`File_Menu_${id}`}
-                            holdToDisplay={1000}
+                            holdToDisplay={-1}
                             renderTag={'tr'}
                             attributes={{
                               onClick: () => history.push(`/model/${file.id}`),
@@ -548,7 +548,7 @@ const FileTable = ({
                         <React.Fragment key={`FolderRow_${index}`}>
                           <ContextMenuTrigger
                             id={`File_Menu_${id}`}
-                            holdToDisplay={1000}
+                            holdToDisplay={-1}
                             renderTag={'tr'}
                             attributes={{
                               onClick: () => handleChangeFolder(file),
