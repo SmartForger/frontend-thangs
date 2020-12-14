@@ -55,11 +55,7 @@ const useStyles = createUseStyles(theme => {
         height: 'auto',
         width: ({ dialogue }) => (dialogue ? 'unset' : '90%'),
         maxWidth: ({ windowed, showPromo }) =>
-          !showPromo && windowed
-            ? '22.875rem'
-            : showPromo && windowed
-              ? '45.75rem'
-              : '32rem',
+          showPromo && windowed ? '45.75rem' : '28.75rem',
         paddingTop: '2rem',
         margin: '0 auto',
         transition: 'all 450ms',
