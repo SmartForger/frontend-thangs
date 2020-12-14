@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
@@ -295,10 +296,13 @@ const MoreInfoForm = ({ c, dispatch, handleSignInClick }) => {
 const MoreInfo = ({ source }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
+  const history = useHistory()
 
   const closeOverlay = useCallback(() => {
+    authenticationService.logout()
     dispatch(types.CLOSE_OVERLAY)
-  }, [dispatch])
+    history.push('/')
+  }, [dispatch, history])
 
   const handleSignInClick = useCallback(() => {
     dispatch(types.OPEN_OVERLAY, {
