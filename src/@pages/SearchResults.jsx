@@ -309,6 +309,7 @@ const Page = () => {
         animateIn: true,
         windowed: true,
         titleMessage: 'Join to subscribe to new search results alerts.',
+        smallWidth: true,
         source: 'Save Search',
       },
     })

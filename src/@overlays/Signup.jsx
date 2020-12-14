@@ -497,6 +497,7 @@ const Signup = ({ titleMessage, showPromo = false, source }) => {
         animateIn: true,
         windowed: true,
         showPromo: false,
+        smallWidth: true,
       },
     })
   }, [dispatch])

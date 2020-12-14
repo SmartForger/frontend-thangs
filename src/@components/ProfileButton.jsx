@@ -17,6 +17,7 @@ const ProfileButton = ({ user, userId, className }) => {
           animateIn: true,
           windowed: true,
           titleMessage,
+          smallWidth: true,
           source,
         },
       })
@@ -28,7 +29,7 @@ const ProfileButton = ({ user, userId, className }) => {
     return null
   } else {
     const isFollowing = (user || {}).isBeingFollowedByRequester
-    
+
     return (
       <ToggleFollowButton
         className={className}

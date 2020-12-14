@@ -60,6 +60,7 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, dispatch, user }) => {
               overlayData: {
                 animateIn: true,
                 windowed: true,
+                smallWidth: true,
                 source: 'Unlimited Storage',
               },
             })
@@ -83,6 +84,7 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, dispatch, user }) => {
               overlayData: {
                 animateIn: true,
                 windowed: true,
+                smallWidth: true,
                 source: 'Collaboration',
               },
             })

@@ -54,8 +54,8 @@ const useStyles = createUseStyles(theme => {
       [md]: {
         height: 'auto',
         width: ({ dialogue }) => (dialogue ? 'unset' : '90%'),
-        maxWidth: ({ windowed, showPromo }) =>
-          showPromo && windowed ? '45.75rem' : '28.75rem',
+        maxWidth: ({ windowed, showPromo, smallWidth }) =>
+          smallWidth ? '22.875rem' : showPromo && windowed ? '45.75rem' : '32rem',
         paddingTop: '2rem',
         margin: '0 auto',
         transition: 'all 450ms',
@@ -88,13 +88,14 @@ const Overlay = ({
   isHidden,
   dialogue,
   scrollTop = true,
+  smallWidth = false,
   ...props
 }) => {
   const overlayRef = useRef(null)
   const [isVisible, setIsVisible] = useState(false)
   const { dispatch } = useStoreon()
   // useExternalClick(overlayRef, () => dispatch(types.CLOSE_OVERLAY))
-  const c = useStyles({ windowed, animateIn, showPromo, isHidden, dialogue })
+  const c = useStyles({ windowed, animateIn, showPromo, isHidden, dialogue, smallWidth })
   useEffect(() => {
     if (scrollTop) {
       document.body.scrollTop = 0

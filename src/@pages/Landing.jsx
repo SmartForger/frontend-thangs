@@ -307,6 +307,7 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
           showPromo: false,
           sessionExpired,
           authFailed,
+          smallWidth: true,
         },
       })
       history.push('/')
@@ -328,6 +329,7 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
           animateIn: true,
           windowed: true,
           showPromo: true,
+          smallWidth: true,
         },
       })
     } else if (showSignin) {
@@ -337,6 +339,7 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
           animateIn: true,
           windowed: true,
           showPromo: false,
+          smallWidth: true,
         },
       })
     }

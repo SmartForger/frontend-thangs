@@ -311,6 +311,7 @@ const MoreInfo = ({ source }) => {
         animateIn: true,
         windowed: true,
         showPromo: false,
+        smallWidth: true,
       },
     })
   }, [dispatch])

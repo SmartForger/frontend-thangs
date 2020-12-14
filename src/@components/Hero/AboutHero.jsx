@@ -54,6 +54,7 @@ const AboutHero = ({ user }) => {
         animateIn: true,
         windowed: true,
         showPromo: false,
+        smallWidth: true,
         source: 'Header',
       },
     })
@@ -66,6 +67,7 @@ const AboutHero = ({ user }) => {
         animateIn: true,
         windowed: true,
         showPromo: false,
+        smallWidth: true,
       },
     })
   }

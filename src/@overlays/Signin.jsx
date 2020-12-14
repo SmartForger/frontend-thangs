@@ -361,6 +361,7 @@ const Signin = ({ sessionExpired, authFailed }) => {
         animateIn: true,
         windowed: true,
         showPromo: false,
+        smallWidth: true,
       },
     })
   }, [dispatch])

@@ -435,6 +435,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime }) => {
           animateIn: true,
           windowed: true,
           titleMessage,
+          smallWidth: true,
           source,
         },
       })
