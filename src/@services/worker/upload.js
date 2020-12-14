@@ -31,7 +31,9 @@ function uploadMessageHandler(messageType, data) {
     case 'upload:error':
       store.dispatch(types.CHANGE_UPLOAD_FILE, {
         id: data.id,
-        data: data.error,
+        data: {
+          error: data.error
+        },
         isLoading: false,
         isError: true,
       })

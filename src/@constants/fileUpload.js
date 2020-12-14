@@ -22,6 +22,9 @@ export const MODEL_FILE_EXTS = [
   '.x_t', // ParaSolid
   '.xcgm',
   '.xml', // XMLEBOM
+  '.asm',
+  '.par',
+  '.cfg',
 ]
 
 export const FILE_SIZE_LIMITS = {

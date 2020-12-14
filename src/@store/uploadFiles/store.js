@@ -94,9 +94,10 @@ export default store => {
         [f.id]: {
           name: f.file.name,
           size: f.file.size,
-          isLoading: f.isLoading,
-          isError: f.isError,
-          isWarning: f.isWarning,
+          error: f.errorState && f.errorState.message,
+          isLoading: f.errorState && f.errorState.error ? false : true,
+          isError: f.errorState && f.errorState.error,
+          isWarning: f.errorState && f.errorState.warning,
         },
       }),
       {}
@@ -114,6 +115,10 @@ export default store => {
   })
 
   store.on(types.CHANGE_UPLOAD_FILE, (state, { id, data, isLoading, isError }) => {
+    if (!id) {
+      return { uploadFiles: state.uploadFiles }
+    }
+
     return {
       uploadFiles: {
         ...state.uploadFiles,
@@ -169,7 +174,6 @@ export default store => {
       uploadFiles: {
         ...state.uploadFiles,
         validationTree,
-        data: uploadedFiles, // TO be removed later
         validating: false,
         validated: true,
         isAssembly: validationTree && validationTree.length > 0,
@@ -206,11 +210,54 @@ export default store => {
     store.dispatch(types.SET_VALIDATING, { validating: true })
 
     // Get API Data
-    await sleep(1000)
-    store.dispatch(types.VALIDATE_FILES_SUCCESS, {
-      validationTree: mockValidationTree,
-      uploadedFiles: mockUploadedFiles,
-    })
+    try {
+      const { data: responseData } = await api({
+        method: 'POST',
+        endpoint: 'models/validatefiles',
+        body: {
+          fileNames: Object.values(data).map(file => file.newFileName),
+        },
+      })
+
+      let validationTree = []
+      const uploadedFiles = Object.values(data)
+
+      if (responseData.isAssembly !== false) {
+        const transformNode = (node1, node2) => {
+          const newNode = {
+            name: node1.name,
+            isAssembly: node1.isAssembly,
+            valid: node2.valid,
+          }
+
+          if (node1.subs && node1.subs.length > 0) {
+            newNode.subs = node1.subs.map((subnode, i) =>
+              transformNode(node1, node2.subs[i])
+            )
+          }
+
+          return newNode
+        }
+
+        validationTree = responseData.map(model => {
+          const tree = transformNode(model.modelDescription, model.validation)
+
+          const rootFile = R.find(R.propEq('newFileName', tree.name))(uploadedFiles)
+          if (rootFile) {
+            tree.name = rootFile.name
+          }
+
+          return tree
+        })
+      }
+
+      store.dispatch(types.VALIDATE_FILES_SUCCESS, {
+        validationTree,
+      })
+    } catch (e) {
+      console.log(e)
+      store.dispatch(types.VALIDATE_FILES_FAILED)
+    }
   })
 
   store.on(types.UPLOAD_FILES, async (_, { files }) => {
