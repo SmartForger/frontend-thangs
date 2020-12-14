@@ -127,6 +127,7 @@ const useStyles = createUseStyles(theme => {
       margin: '0 auto',
       alignItems: 'center',
       minHeight: '9.5rem',
+      textAlign: 'center',
 
       '& > div': {
         margin: '0 auto',
