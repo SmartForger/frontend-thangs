@@ -5,7 +5,6 @@ import * as EmailValidator from 'email-validator'
 import {
   Button,
   Divider,
-  FormError,
   Input,
   MetadataSecondary,
   SingleLineBodyText,
@@ -138,6 +137,9 @@ const useStyles = createUseStyles(theme => {
         },
       },
     },
+    MoreInfo_Message: {
+      textAlign: 'left',
+    },
   }
 })
 
@@ -149,7 +151,7 @@ const moreInfoSchema = Joi.object({
 const MoreInfoForm = ({ c, dispatch, handleSignInClick }) => {
   const [waiting, setWaiting] = useState(false)
   const [moreInfoErrorMessage, setMoreInfoErrorMessage] = useState(
-    'To complete your registration we need a little more information'
+    'Thank you for using SSO to sign up. We just need a little more information for your new account.'
   )
   const [invalidFields, setInvalidFields] = useState([])
   const showErrorMessage = useMemo(() => moreInfoErrorMessage, [moreInfoErrorMessage])
@@ -225,7 +227,9 @@ const MoreInfoForm = ({ c, dispatch, handleSignInClick }) => {
         <form onSubmit={onFormSubmit(handleUpdateEmail)}>
           {showErrorMessage && (
             <>
-              <FormError>{moreInfoErrorMessage}</FormError>
+              <MetadataSecondary className={c.MoreInfo_Message}>
+                {moreInfoErrorMessage}
+              </MetadataSecondary>
               <Spacer size='1rem' />
             </>
           )}
