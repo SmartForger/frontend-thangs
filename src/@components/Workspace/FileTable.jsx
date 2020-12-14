@@ -88,6 +88,9 @@ const useStyles = createUseStyles(theme => {
     FileTable_Row_Column: {
       minWidth: '5rem',
     },
+    FileTable_Row_Column_Uploaded: {
+      textAlign: 'left',
+    },
     FileTable_Cell: {
       display: 'flex',
       alignItems: 'center',
@@ -389,7 +392,7 @@ const FileRow = ({ model }) => {
         <FileName name={model.name} />
       </td>
       <td className={c.FileTable_Row_Column}>
-        <MetadataSecondary>
+        <MetadataSecondary className={c.FileTable_Row_Column_Uploaded} >
           {format(new Date(model.uploadDate), 'MMM d, Y, h:mm aaaa')}
         </MetadataSecondary>
       </td>
