@@ -231,8 +231,9 @@ export default store => {
           }
 
           if (node1.subs && node1.subs.length > 0) {
-            newNode.subs = node1.subs.map((subnode, i) =>
-              transformNode(node1, node2.subs[i])
+            newNode.subs = R.uniqBy(
+              R.prop('name'),
+              node1.subs.map((subnode, i) => transformNode(subnode, node2.subs[i]))
             )
           }
 
