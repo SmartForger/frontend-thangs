@@ -204,10 +204,9 @@ const EnterInfo = ({
     height: '',
     weight: '',
     category: '',
-    isPublic: true,
   }
 
-  const { onFormSubmit, onInputChange, inputState } = useForm({
+  const { onFormSubmit, onInputChange, inputState, setInputState } = useForm({
     initialState,
   })
 
@@ -248,32 +247,51 @@ const EnterInfo = ({
   )
 
   const selectedCategory = useMemo(() => {
-    if (!model) return undefined
-    return R.find(R.propEq('value', model.category), CATEGORIES)
-  }, [model])
-
-  const selectedFolder = useMemo(() => {
-    if (!folderId || folderId === 'files' || !folders || !folders.length)
-      return { value: 'files', label: 'My Public Files' }
-    const folder = folders.find(folder => folder.id.toString() === folderId.toString())
-    if (folder && !folder.isPublic) {
-      handleOnInputChange('isPublic', false)
-    }
-    return { value: folderId, label: folder.name.replace(new RegExp('//', 'g'), '/') }
-  }, [folderId, folders, handleOnInputChange])
+    if (!inputState) return null
+    return R.find(R.propEq('value', inputState.category), CATEGORIES) || null
+  }, [inputState])
 
   const usersFolders = useMemo(() => {
     return folders && folders.length
-      ? folders.map(folder => ({
-          value: folder.id,
-          label: folder.name.replace(new RegExp('//', 'g'), '/'),
-        }))
-      : []
+      ? [
+          { value: 'files', label: 'My Public Files' },
+          ...folders.map(folder => ({
+            value: folder.id,
+            label: folder.name.replace(new RegExp('//', 'g'), '/'),
+          })),
+        ]
+      : [{ value: 'files', label: 'My Public Files' }]
   }, [folders])
+
+  const selectedFolder = useMemo(() => {
+    if (!inputState) return { value: 'files', label: 'My Public Files' }
+    return R.find(R.propEq('value', inputState.folderId), usersFolders)
+  }, [inputState, usersFolders])
 
   useEffect(() => {
     if (model) handleOnInputChange('name', model.name)
   }, [handleOnInputChange, model])
+
+  useEffect(() => {
+    const data = R.pick(
+      ['name', 'description', 'folderId', 'material', 'height', 'weight', 'category'],
+      model
+    )
+    const modelState = R.merge(
+      {
+        name: (model && model.name) || '',
+        description: '',
+        folderId: folderId || 'files',
+        material: '',
+        height: '',
+        weight: '',
+        category: '',
+      },
+      data
+    )
+    setInputState(modelState)
+    handleFolderChange({ value: modelState.folderId })
+  }, [model, setInputState, folderId])
 
   useEffect(() => {
     if (folderPrivate) {
@@ -336,8 +354,8 @@ const EnterInfo = ({
               className={c.EnterInfo_Select}
               name='folder'
               placeholder={'Select folder'}
-              defaultValue={selectedFolder}
-              options={[{ value: 'files', label: 'My Public Files' }, ...usersFolders]}
+              value={selectedFolder}
+              options={usersFolders}
               onChange={handleFolderChange}
             />
           </div>
@@ -380,7 +398,7 @@ const EnterInfo = ({
             className={c.EnterInfo_Select}
             name='category'
             placeholder='Select category'
-            defaultValue={selectedCategory}
+            value={selectedCategory}
             isClearable
             options={CATEGORIES}
             onChange={e => {
@@ -395,17 +413,6 @@ const EnterInfo = ({
           checked={applyRemaing}
           onChange={ev => setApplyRemaining(ev.target.checked)}
         />
-        {!isAssembly && (
-          <Toggle
-            name='isPrivate'
-            label='Make model private'
-            disabled={folderPrivate}
-            checked={!inputState.isPublic}
-            onChange={ev => {
-              handleOnInputChange('isPublic', !ev.target.checked)
-            }}
-          />
-        )}
         <Spacer size={'1rem'} />
         <div className={c.EnterInfo_ButtonWrapper}>
           <Button type='submit' disabled={isLoading}>

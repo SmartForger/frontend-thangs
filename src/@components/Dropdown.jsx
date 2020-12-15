@@ -27,6 +27,7 @@ const Dropdown = ({
   isClearable,
   options,
   onChange,
+  value,
 }) => {
   const c = useStyles()
 
@@ -39,6 +40,7 @@ const Dropdown = ({
       options={options}
       onChange={onChange}
       isClearable={isClearable}
+      value={value}
       components={{
         IndicatorSeparator: () => null,
         // eslint-disable-next-line react/display-name
