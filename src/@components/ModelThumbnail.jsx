@@ -3,6 +3,7 @@ import ErrorImg from '@svg/image-error-icon.svg'
 import { Loader } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -127,7 +128,10 @@ const ModelThumbnail = ({ className, model, name, searchModelFileName, showWaldo
   const [lookingForWaldo, setLookingForWaldo] = useState(true)
   const [isSwapped, setIsSwapped] = useState(false)
   const onLoad = useCallback(() => setLoadingState(COMPLETE), [])
-  const onError = useCallback(() => setLoadingState(ERROR), [])
+  const onError = useCallback(() => {
+    setLoadingState(ERROR)
+    track('Error - Thumbnail Image', { modelId: model.id })
+  }, [model.id])
   const onFoundWaldo = useCallback(() => setLookingForWaldo(false), [])
   const c = useStyles()
   const onSwap = useCallback(() => {
