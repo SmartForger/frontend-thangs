@@ -1,9 +1,11 @@
 import React, { useCallback, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
-import { Divider, SingleLineBodyText, Spacer } from '@components'
+import classnames from 'classnames'
+import { Contributors, Divider, SingleLineBodyText, Spacer, Button } from '@components'
 import { createUseStyles } from '@style'
 import { MenuItem } from 'react-contextmenu'
 import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
+import { ReactComponent as InviteIcon } from '@svg/icon-invite.svg'
 import { ReactComponent as DeleteIcon } from '@svg/icon-delete.svg'
 import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
@@ -17,7 +19,7 @@ const useStyles = createUseStyles(theme => {
       backgroundColor: theme.colors.white[400],
       boxShadow: '0px 8px 20px 0px rgba(0, 0, 0, 0.16)',
       borderRadius: '.5rem',
-      zIndex: 2,
+      minWidth: '18rem',
 
       '& div': {
         display: 'flex',
@@ -36,26 +38,31 @@ const useStyles = createUseStyles(theme => {
         backgroundColor: 'rgba(0, 0, 0, 0.05)',
       },
     },
+    FolderMenu_Item__InviteSection: {
+      justifyContent: 'space-between',
+      marginLeft: '1.5rem',
+      marginRight: '1.5rem',
+    },
   }
 })
 
-const FolderMenu = ({ folder = {} }) => {
+const FolderMenuInvite = ({ folder = {}, members = [] }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
   const currentUserId = authenticationService.getCurrentUserId()
-  const hasDeletePermission = useMemo(
-    () =>
+  const hasDeletePermission = useMemo(() => {
+    return (
       folder &&
       folder.creator &&
       folder.creator.id &&
-      folder.creator.id.toString() === currentUserId.toString(),
-    [currentUserId, folder]
-  )
+      folder.creator.id.toString() === currentUserId.toString()
+    )
+  }, [currentUserId, folder])
 
   const handleEdit = useCallback(
     e => {
       e.preventDefault()
-      track('Folder Menu - Edit Folder')
+      track('File Menu - Edit Folder')
       dispatch(types.OPEN_OVERLAY, {
         overlayName: 'editFolder',
         overlayData: {
@@ -70,14 +77,13 @@ const FolderMenu = ({ folder = {} }) => {
     [dispatch, folder]
   )
 
-  const handleStarFolder = useCallback(() => {
-    track('Folder Menu - Star Folder')
+  const starFolder = useCallback(() => {
+    track('File Menu - Star Folder')
     dispatch(types.LIKE_FOLDER, { id: folder.id, owner: folder.owner })
   }, [dispatch, folder.id, folder.owner])
 
-  const handleAddFolder = useCallback(e => {
-    e.preventDefault()
-    track('Folder Menu - Create Folder')
+  const addFolder = useCallback(() => {
+    track('File Menu - Create Folder')
     dispatch(types.OPEN_OVERLAY, {
       overlayName: 'addFolder',
       overlayData: {
@@ -89,10 +95,10 @@ const FolderMenu = ({ folder = {} }) => {
     })
   }, [dispatch, folder])
 
-  const handleRemoveFolder = useCallback(
+  const removeFolder = useCallback(
     e => {
       e.preventDefault()
-      track('Folder Menu - Delete Folder')
+      track('File Menu - Delete Folder')
       dispatch(types.OPEN_OVERLAY, {
         overlayName: 'deleteFolder',
         overlayData: {
@@ -105,6 +111,23 @@ const FolderMenu = ({ folder = {} }) => {
       })
     },
     [dispatch, folder]
+  )
+
+  const handleInviteUsers = useCallback(
+    e => {
+      e.preventDefault()
+      track('File Menu - Invite Members')
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'inviteUsers',
+        overlayData: {
+          folderId: folder.id,
+          animateIn: true,
+          windowed: true,
+          dialogue: true,
+        },
+      })
+    },
+    [dispatch, folder.id]
   )
 
   return (
@@ -120,7 +143,7 @@ const FolderMenu = ({ folder = {} }) => {
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      <MenuItem className={c.FolderMenu_Item} onClick={handleAddFolder}>
+      <MenuItem className={c.FolderMenu_Item} onClick={addFolder}>
         <div>
           <Spacer size={'1.5rem'} />
           <FolderIcon />
@@ -130,7 +153,7 @@ const FolderMenu = ({ folder = {} }) => {
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      <MenuItem className={c.FolderMenu_Item} onClick={handleStarFolder}>
+      <MenuItem className={c.FolderMenu_Item} onClick={starFolder}>
         <div>
           <Spacer size={'1.5rem'} />
           <StarIcon />
@@ -139,11 +162,10 @@ const FolderMenu = ({ folder = {} }) => {
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
-      <Spacer size={'.5rem'} />
       {hasDeletePermission && (
         <>
-          <Divider spacing={'.5rem'} />
-          <MenuItem className={c.FolderMenu_Item} onClick={handleRemoveFolder}>
+          <Divider spacing={'1rem'} />
+          <MenuItem className={c.FolderMenu_Item} onClick={removeFolder}>
             <div>
               <Spacer size={'1.5rem'} />
               <DeleteIcon />
@@ -154,9 +176,21 @@ const FolderMenu = ({ folder = {} }) => {
           </MenuItem>
         </>
       )}
+      <Divider spacing={'1rem'} />
+      <MenuItem
+        className={classnames(c.FolderMenu_Item, c.FolderMenu_Item__InviteSection)}
+        onClick={handleInviteUsers}
+      >
+        <Contributors users={members} displayLength='3' />
+        <Button>
+          <InviteIcon />
+          <Spacer size={'.5rem'} />
+          Invite
+        </Button>
+      </MenuItem>
       <Spacer size={'1rem'} />
     </div>
   )
 }
 
-export default FolderMenu
+export default FolderMenuInvite

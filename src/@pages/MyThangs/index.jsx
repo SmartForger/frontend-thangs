@@ -1,12 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom'
+import { ContextMenuTrigger } from 'react-contextmenu'
 import { useStoreon } from 'storeon/react'
+import classnames from 'classnames'
 import {
   WorkspaceHeader,
   WorkspaceNavbar,
   Spacer,
   Spinner,
   AddContextMenu,
+  FileContextMenu,
+  FolderContextMenu,
+  FolderInviteContextMenu,
 } from '@components'
 import { authenticationService } from '@services'
 import { useOverlay, usePerformanceMetrics, useStarred } from '@hooks'
@@ -19,10 +24,8 @@ import SavedSearchesView from './SavedSearchesView'
 import SearchView from './SearchView'
 import SharedFilesView from './SharedFilesView'
 import { createUseStyles } from '@style'
-import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
 import { pageview, perfTrack } from '@utilities/analytics'
-import { ContextMenuTrigger } from 'react-contextmenu'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -115,7 +118,7 @@ const useStyles = createUseStyles(theme => {
       display: 'none',
       [md]: {
         display: 'block',
-      }
+      },
     },
   }
 })
@@ -260,7 +263,7 @@ const MyThangs = () => {
             setCurrentView={handleCurrentView}
             openMobileNav={openMobileNav}
           />
-          <Spacer size={'7rem'} className={c.MyThangs_HeaderSpacer}/>
+          <Spacer size={'7rem'} className={c.MyThangs_HeaderSpacer} />
           {!isLoaded || isLoading ? (
             <Spinner className={c.Spinner} />
           ) : (
@@ -316,6 +319,10 @@ const MyThangs = () => {
         </div>
       </div>
       <AddContextMenu className={c.MyThangs_ContextMenu} />
+
+      <FileContextMenu />
+      <FolderContextMenu />
+      <FolderInviteContextMenu />
     </>
   )
 }

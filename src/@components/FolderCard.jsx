@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import {
   Card,
-  FileContextMenu,
   SingleLineBodyText,
   Spacer,
   LikeFolderButton,
@@ -67,7 +66,11 @@ const FolderCard = ({ handleClick = noop, folder, isSharedFolder, disableStar })
   }, [folder, handleClick])
   return (
     <>
-      <ContextMenuTrigger id={`File_Menu_${FolderId}`} holdToDisplay={-1}>
+      <ContextMenuTrigger
+        id={'Folder_Menu'}
+        collect={() => ({ folder })}
+        holdToDisplay={-1}
+      >
         <Card
           className={c.FolderCard}
           size={'14.375rem'}
@@ -109,7 +112,6 @@ const FolderCard = ({ handleClick = noop, folder, isSharedFolder, disableStar })
           <Spacer size={'2rem'} />
         </Card>
       </ContextMenuTrigger>
-      <FileContextMenu id={FolderId} folder={folder} type={'folder'} />
     </>
   )
 }

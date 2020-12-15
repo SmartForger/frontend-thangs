@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import * as R from 'ramda'
-import { Spacer, NavLink, Spinner, FileContextMenu } from '@components'
+import { Spacer, NavLink, Spinner } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
@@ -92,11 +92,14 @@ const Folder = ({
   }, [folder, handleChangeFolder])
 
   const folderName = parentName ? name.replace(`${parentName}//`, '') : name
-  const postId = '_nav'
-  const isIconDisabled = R.isEmpty(filteredSubfolders)
+  const isIconDisabled = R.isNil(folder.subfolders) || R.isEmpty(folder.subfolders)
   return (
     <>
-      <ContextMenuTrigger id={`File_Menu_${id}${postId}`} holdToDisplay={-1}>
+      <ContextMenuTrigger
+        id={'Folder_Menu'}
+        collect={() => ({ folder })}
+        holdToDisplay={-1}
+      >
         <NavLink
           Icon={FolderIcon}
           label={folderName}
@@ -108,7 +111,6 @@ const Folder = ({
           isIconDisabled={isIconDisabled}
         />
       </ContextMenuTrigger>
-      <FileContextMenu id={id} folder={folder} type={'folder'} postId={postId} />
       <Spacer size={'1rem'} />
       {shouldShowFolderContents && (
         <div className={c.FileExplorer_Folder}>
@@ -141,10 +143,10 @@ const Subfolders = ({
   const files = useMemo(() => {
     return !R.isEmpty(folders)
       ? folders.sort((a, b) => {
-          if (a.name < b.name) return -1
-          else if (a.name > b.name) return 1
-          return 0
-        })
+        if (a.name < b.name) return -1
+        else if (a.name > b.name) return 1
+        return 0
+      })
       : []
   }, [folders])
   return (

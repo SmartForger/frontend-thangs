@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
@@ -13,9 +13,8 @@ import {
   Spinner,
   TitleTertiary,
   Contributors,
-  FolderMenu,
 } from '@components'
-import { useExternalClick, useQuery } from '@hooks'
+import { useQuery } from '@hooks'
 import { authenticationService } from '@services'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -161,11 +160,8 @@ const getSubfolderId = (path, rootFolder, folder) => {
 const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
-  const [showFileMenu, setShowFileMenu] = useState(false)
-  const fileMenuRef = useRef(null)
   const { id, name } = folder
   const folderPath = name.split('//')
-  useExternalClick(fileMenuRef, () => setShowFileMenu(false))
 
   const folderPathEnhanced = folderPath.map(path => {
     const subfolder = getSubfolderId(path, rootFolder, folder)
@@ -202,14 +198,6 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
       },
     })
   }, [dispatch, folder])
-
-  const handleFileMenu = useCallback(
-    e => {
-      e.stopPropagation()
-      setShowFileMenu(!showFileMenu)
-    },
-    [showFileMenu]
-  )
 
   const members = rootFolder ? rootFolder.members : folder.members
 
@@ -278,15 +266,15 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
         </div>
         <div
           className={c.FolderView_MobileMenuButton}
-          onClick={handleFileMenu}
-          ref={fileMenuRef}
+          onClick={e => e.preventDefault()}
         >
-          <DotStackIcon />
-          {showFileMenu && (
-            <div className={c.FolderView_MobileMenu}>
-              <FolderMenu members={members} type='folder' folder={folder} />
-            </div>
-          )}
+          <ContextMenuTrigger
+            id={'Folder_Invite_Menu'}
+            holdToDisplay={0}
+            collect={() => ({ folder, members: folder.members })}
+          >
+            <DotStackIcon />
+          </ContextMenuTrigger>
         </div>
       </div>
     </>

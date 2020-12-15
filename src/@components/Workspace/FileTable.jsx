@@ -4,13 +4,7 @@ import * as R from 'ramda'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import { format } from 'date-fns'
 import classnames from 'classnames'
-import {
-  Contributors,
-  FileContextMenu,
-  Pill,
-  SingleLineBodyText,
-  Spacer,
-} from '@components'
+import { Contributors, Pill, SingleLineBodyText, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { MetadataSecondary } from '@components/Text/Metadata'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
@@ -216,7 +210,9 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-const handleMenuButton = e => { e.stopPropagation() }
+const handleMenuButton = e => {
+  e.stopPropagation()
+}
 
 const COLUMNS = {
   FILENAME: 'filename',
@@ -346,7 +342,11 @@ const FolderRow = ({ folder }) => {
       <td className={c.FileTable_Row_Column}>-</td>
       <td className={c.FileTable_Row_Column}>
         <div className={c.MenuButton} onClick={handleMenuButton}>
-          <ContextMenuTrigger id={`File_Menu_${folder.id}`} holdToDisplay={0}>
+          <ContextMenuTrigger
+            id={'Folder_Menu'}
+            holdToDisplay={0}
+            collect={() => ({ folder })}
+          >
             <DotStackIcon />
           </ContextMenuTrigger>
         </div>
@@ -388,7 +388,11 @@ const FileRow = ({ model }) => {
       </td>
       <td className={c.FileTable_Row_Column}>
         <div className={c.MenuButton} onClick={handleMenuButton}>
-          <ContextMenuTrigger id={`File_Menu_${model.id}`} holdToDisplay={0}>
+          <ContextMenuTrigger
+            id={'File_Menu'}
+            collect={() => ({ model })}
+            holdToDisplay={0}
+          >
             <DotStackIcon />
           </ContextMenuTrigger>
         </div>
@@ -497,18 +501,19 @@ const FileTable = ({
               {sortedFiles.length > 0 ? (
                 sortedFiles.map((file, index) => {
                   if (!file) return null
-                  const { id } = file
+                  
                   return (
                     <React.Fragment key={`TableRow_${index}`}>
                       {R.isNil(file.models) ? (
                         <React.Fragment key={`FileRow_${index}`}>
                           <ContextMenuTrigger
-                            id={`File_Menu_${id}`}
+                            id={'File_Menu'}
                             holdToDisplay={-1}
                             renderTag={'tr'}
                             attributes={{
                               onClick: () => history.push(`/model/${file.id}`),
                             }}
+                            collect={() => ({ model: file })}
                           >
                             <FileRow model={file} />
                           </ContextMenuTrigger>
@@ -516,12 +521,13 @@ const FileTable = ({
                       ) : (
                         <React.Fragment key={`FolderRow_${index}`}>
                           <ContextMenuTrigger
-                            id={`File_Menu_${id}`}
+                            id={'Folder_Menu'}
                             holdToDisplay={-1}
                             renderTag={'tr'}
                             attributes={{
                               onClick: () => handleChangeFolder(file),
                             }}
+                            collect={() => ({ folder: file })}
                           >
                             <FolderRow folder={file} />
                           </ContextMenuTrigger>
@@ -537,27 +543,6 @@ const FileTable = ({
               )}
             </tbody>
           </table>
-          {sortedFiles.length > 0
-            ? sortedFiles.map((file, index) => {
-              if (!file) return null
-              const { id, models } = file
-              return R.isNil(models) ? (
-                <FileContextMenu
-                  key={`contextMenu_${index}`}
-                  id={id}
-                  model={file}
-                  type={'model'}
-                />
-              ) : (
-                <FileContextMenu
-                  key={`contextMenu_${index}`}
-                  id={id}
-                  folder={file}
-                  type={'folder'}
-                />
-              )
-            })
-            : null}
         </>
       ) : !hideDropzone ? (
         <div className={c.NoFilesMessage}>

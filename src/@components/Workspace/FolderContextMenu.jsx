@@ -1,7 +1,7 @@
 import React from 'react'
 import { connectMenu, ContextMenu } from 'react-contextmenu'
 import { createUseStyles } from '@style'
-import { FileMenu } from '@components'
+import { FolderMenu } from '@components'
 
 const useStyles = createUseStyles(() => {
   return {
@@ -11,17 +11,17 @@ const useStyles = createUseStyles(() => {
   }
 })
 
-const FileContextMenu = props => {
+const FolderContextMenu = props => {
   const c = useStyles({})
 
   const { trigger } = props
-  const model = trigger && trigger.model
+  const { folder } = trigger || {}
 
   return (
-    <ContextMenu className={c.ContextMenu} id={'File_Menu'}>
-      {model ? <FileMenu model={model} /> : false}
+    <ContextMenu className={c.ContextMenu} id={'Folder_Menu'}>
+      {folder ? <FolderMenu folder={folder} /> : false}
     </ContextMenu>
   )
 }
 
-export default connectMenu('File_Menu')(FileContextMenu)
+export default connectMenu('Folder_Menu')(FolderContextMenu)

@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react'
 import {
   Card,
-  FileContextMenu,
   LikeModelButton,
   SingleLineBodyText,
   Spacer,
@@ -65,7 +64,7 @@ const FileCard = ({ handleClick = noop, model }) => {
 
   return (
     <>
-      <ContextMenuTrigger id={`File_Menu_${CardId}`} holdToDisplay={-1}>
+      <ContextMenuTrigger id={'File_Menu'} holdToDisplay={-1} collect={() => ({ model })}>
         <Card
           className={c.FileCard}
           size={'14.375rem'}
@@ -92,7 +91,6 @@ const FileCard = ({ handleClick = noop, model }) => {
           <Spacer size={'2rem'} />
         </Card>
       </ContextMenuTrigger>
-      <FileContextMenu id={CardId} model={model} type={'model'} />
     </>
   )
 }
