@@ -104,9 +104,9 @@ const useHoopsViewer = modelFilename => {
 
   useEffect(() => {
     debug('1. Initialize Effect')
+
     if (!hoopsStatus.isUnpreparedModel) {
       debug('  * 1: Bailed')
-      track('Hoops Timeout #1')
       return
     }
     let isActiveEffect = true
@@ -121,7 +121,7 @@ const useHoopsViewer = modelFilename => {
         })
 
         if (!resp.data.ok) {
-          track('HOOPS viewer error', { error: 'Model preparation failed' })
+          track('HOOPS ModelPreparationFailed', { error: 'Model preparation failed' })
           throw new Error('Model preparation failed.')
         }
 
@@ -139,6 +139,7 @@ const useHoopsViewer = modelFilename => {
       })
 
     const timeoutId = setTimeout(() => {
+      track('HOOPS Timeout', JSON.stringify(hoopsStatus))
       prepCancelSource.cancel('Model preparation exceeded timeout.')
     }, MODEL_PREP_TIMEOUT)
 
@@ -175,7 +176,6 @@ const useHoopsViewer = modelFilename => {
 
     if (!hoopsStatus.isPreparedModel) {
       debug('  * 3: Bailed')
-      track('Hoops Timeout #3')
       return
     }
 
@@ -197,7 +197,7 @@ const useHoopsViewer = modelFilename => {
       },
       modelLoadFailure(name, reason, e) {
         console.error('HOOPS failed loading the model:', e)
-        track('Hoops Error ModelLoadFailure', { error: JSON.stringify(e) })
+        track('HOOPS ModelLoadFailure', { error: JSON.stringify(e) })
         doTransition(TRANSITIONS.Error)
       },
     })
