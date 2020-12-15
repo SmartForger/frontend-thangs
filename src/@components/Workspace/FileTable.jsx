@@ -1,12 +1,12 @@
-import React, { useCallback, useState, useRef, useMemo } from 'react'
+import React, { useCallback, useState, useMemo } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import * as R from 'ramda'
+import { ContextMenuTrigger } from 'react-contextmenu'
 import { format } from 'date-fns'
 import classnames from 'classnames'
 import {
   Contributors,
   FileContextMenu,
-  FileMenu,
   Pill,
   SingleLineBodyText,
   Spacer,
@@ -21,8 +21,6 @@ import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import { ReactComponent as DropzoneIcon } from '@svg/dropzone.svg'
 import { ReactComponent as DropzoneMobileIcon } from '@svg/dropzone-mobile.svg'
 import { formatBytes } from '@utilities'
-import { ContextMenuTrigger } from 'react-contextmenu'
-import { useExternalClick } from '@hooks'
 import Dropzone from 'react-dropzone'
 import { MODEL_FILE_EXTS } from '@constants/fileUpload'
 
@@ -218,6 +216,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
+const handleMenuButton = e => { e.stopPropagation() }
 
 const COLUMNS = {
   FILENAME: 'filename',
@@ -326,18 +325,6 @@ const FileTableHeader = ({ sortedBy, order, onSort = () => {} }) => {
 
 const FolderRow = ({ folder }) => {
   const c = useStyles({})
-  const [showFolderMenu, setShowFolderMenu] = useState(false)
-  const folderMenuRef = useRef(null)
-
-  useExternalClick(folderMenuRef, () => setShowFolderMenu(false))
-
-  const handleFolderMenu = useCallback(
-    e => {
-      e.stopPropagation()
-      setShowFolderMenu(!showFolderMenu)
-    },
-    [showFolderMenu]
-  )
 
   return (
     <>
@@ -358,13 +345,10 @@ const FolderRow = ({ folder }) => {
       </td>
       <td className={c.FileTable_Row_Column}>-</td>
       <td className={c.FileTable_Row_Column}>
-        <div className={c.MenuButton} onClick={handleFolderMenu} ref={folderMenuRef}>
-          <DotStackIcon />
-          {showFolderMenu && (
-            <div className={c.FileRowMenu}>
-              <FileMenu folder={folder} type={'folder'} />
-            </div>
-          )}
+        <div className={c.MenuButton} onClick={handleMenuButton}>
+          <ContextMenuTrigger id={`File_Menu_${folder.id}`} holdToDisplay={0}>
+            <DotStackIcon />
+          </ContextMenuTrigger>
         </div>
       </td>
     </>
@@ -373,18 +357,6 @@ const FolderRow = ({ folder }) => {
 
 const FileRow = ({ model }) => {
   const c = useStyles({})
-  const [showFileMenu, setShowFileMenu] = useState(false)
-  const fileMenuRef = useRef(null)
-
-  useExternalClick(fileMenuRef, () => setShowFileMenu(false))
-
-  const handleFileMenu = useCallback(
-    e => {
-      e.stopPropagation()
-      setShowFileMenu(!showFileMenu)
-    },
-    [showFileMenu]
-  )
 
   return (
     <>
@@ -392,7 +364,7 @@ const FileRow = ({ model }) => {
         <FileName name={model.name} />
       </td>
       <td className={c.FileTable_Row_Column}>
-        <MetadataSecondary className={c.FileTable_Row_Column_Uploaded} >
+        <MetadataSecondary className={c.FileTable_Row_Column_Uploaded}>
           {format(new Date(model.uploadDate), 'MMM d, Y, h:mm aaaa')}
         </MetadataSecondary>
       </td>
@@ -415,13 +387,10 @@ const FileRow = ({ model }) => {
         )}
       </td>
       <td className={c.FileTable_Row_Column}>
-        <div className={c.MenuButton} onClick={handleFileMenu} ref={fileMenuRef}>
-          <DotStackIcon />
-          {showFileMenu && (
-            <div className={c.FileRowMenu}>
-              <FileMenu model={model} type={'model'} />
-            </div>
-          )}
+        <div className={c.MenuButton} onClick={handleMenuButton}>
+          <ContextMenuTrigger id={`File_Menu_${model.id}`} holdToDisplay={0}>
+            <DotStackIcon />
+          </ContextMenuTrigger>
         </div>
       </td>
     </>
