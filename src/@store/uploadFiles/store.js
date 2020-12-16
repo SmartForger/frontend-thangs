@@ -261,9 +261,27 @@ export default store => {
     }
   })
 
-  store.on(types.UPLOAD_FILES, async (_, { files }) => {
+  store.on(types.UPLOAD_FILES, async (state, { files }) => {
     store.dispatch(types.INIT_UPLOAD_FILES, { files })
-    uploadFiles(files)
+
+    const { validationTree, data } = state.uploadFiles
+    const uploadedFiles = Object.values(data)
+    const filesWithDirectory = files.map(fileObj => {
+      if (validationTree) {
+        const tree = validationTree.find(t => !!findNodeByName([t], fileObj.file.name))
+        if (tree) {
+          const rootFile = uploadedFiles.find(f => f.name === tree.name)
+          if (rootFile && rootFile.newFileName) {
+            const arr = rootFile.newFileName.split('/')
+            return { ...fileObj, directory: arr[0] }
+          }
+        }
+      }
+
+      return fileObj
+    })
+
+    uploadFiles(filesWithDirectory)
   })
 
   store.on(types.SUBMIT_FILES, async (state, { onFinish = noop }) => {

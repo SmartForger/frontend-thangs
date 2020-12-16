@@ -26,13 +26,14 @@ async function uploadSingleFile({ id, file }, uploadedUrlData) {
   }
 }
 
-async function uploadMultipleFiles(files) {
+async function uploadMultipleFiles({ files, directory }) {
   try {
     const { data: uploadedUrlData } = await api({
       method: 'POST',
       endpoint: 'models/upload-urls',
       body: {
         fileNames: files.map(f => f.file.name),
+        directory,
       },
     })
 
@@ -56,7 +57,25 @@ function cancelRequest(id) {
 
 function uploadMessageHandler(messageType, data) {
   if (messageType === 'upload:upload') {
-    uploadMultipleFiles(data.files)
+    let directoryGroup = {}
+    data.files.map(f => {
+      const key = f.directory || 'none'
+      if (directoryGroup[key]) {
+        directoryGroup[key].files.push(f)
+      } else {
+        directoryGroup[key] = {
+          files: [f],
+        }
+
+        if (key !== 'none') {
+          directoryGroup[key].directory = key
+        }
+      }
+    })
+
+    Object.values(directoryGroup).forEach(dir => {
+      uploadMultipleFiles(dir)
+    })
   } else if (messageType === 'upload:cancel') {
     cancelRequest(data.id)
   }

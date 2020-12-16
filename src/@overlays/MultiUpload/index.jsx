@@ -169,8 +169,6 @@ const MultiUpload = ({ initData = null, folderId }) => {
       })
       .filter(f => !!f)
 
-    console.log(files)
-
     dispatch(types.UPLOAD_FILES, { files })
 
     if (rejectedFile) {
