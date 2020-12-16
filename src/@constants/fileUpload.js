@@ -7,6 +7,7 @@ export const MODEL_FILE_EXTS = [
   '.igs',
   '.ipt', // Inventor
   '.jt',
+  '.obj',
   '.model', // CATIAV4
   '.par', // SolidEdge
   '.prt', // NX, ProE_Creo
