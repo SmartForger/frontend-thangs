@@ -30,8 +30,8 @@ export default store => {
     ...state,
     [atom]: {
       ...state[atom],
-      ...getStatusState(status),
-      data,
+      ...getStatusState(status), 
+      ...(data && { data }),
     },
   }))
 

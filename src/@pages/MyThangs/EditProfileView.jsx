@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useStoreon } from 'storeon/react'
-import * as R from 'ramda'
 import {
   ChangeablePicture,
   EditProfileForm,
@@ -8,7 +7,6 @@ import {
   Pill,
   ProfilePicture,
   Spacer,
-  Spinner,
   TitleSecondary,
   TitleTertiary,
 } from '@components'
@@ -161,16 +159,12 @@ const EditProfile = ({ className }) => {
         <Spacer size='2rem' />
         <TitleTertiary>Information</TitleTertiary>
         <Spacer size='1rem' />
-        {!R.isEmpty(user) ? (
-          <EditProfileForm
-            user={user}
-            handleUpdateProfile={handleUpdateProfile}
-            isLoading={isLoading}
-            errorMessage={errorMessage}
-          />
-        ) : (
-          <Spinner />
-        )}
+        <EditProfileForm
+          user={user}
+          handleUpdateProfile={handleUpdateProfile}
+          errorMessage={errorMessage}
+          disabled={isLoading}
+        />
       </div>
       <Spacer size='2rem' />
     </main>

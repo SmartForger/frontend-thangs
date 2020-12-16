@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Button, FormError, Input, Spinner, Spacer, Textarea } from '@components'
+import { Button, FormError, Input, Spacer, Textarea } from '@components'
 import { createUseStyles } from '@style'
 import { useForm } from '@hooks'
 
@@ -67,9 +67,9 @@ const useStyles = createUseStyles(theme => {
 const noop = () => null
 const EditProfileForm = ({
   user = {},
-  isLoading,
   handleUpdateProfile = noop,
   errorMessage,
+  disabled,
 }) => {
   const c = useStyles()
 
@@ -125,6 +125,7 @@ const EditProfileForm = ({
           label='First Name'
           value={inputState && inputState.firstName}
           onChange={handleOnInputChange}
+          disabled={disabled}
           required
         />
         <Spacer size='1rem' />
@@ -134,6 +135,7 @@ const EditProfileForm = ({
           label='Last Name'
           value={inputState && inputState.lastName}
           onChange={handleOnInputChange}
+          disabled={disabled}
           required
         />
       </div>
@@ -145,6 +147,7 @@ const EditProfileForm = ({
         label='Username'
         value={inputState && inputState.username}
         onChange={handleOnInputChange}
+        disabled={disabled}
         required
       />
       <Spacer size='1rem' />
@@ -155,24 +158,21 @@ const EditProfileForm = ({
         type='description'
         value={inputState && inputState.description}
         onChange={handleOnInputChange}
+        disabled={disabled}
         required
       />
       <Spacer size='1rem' />
       <div className={c.EditProfileForm_ButtonContainer}>
-        <Button className={c.EditProfileForm_Button} type='submit'>
-          {isLoading ? (
-            <div>
-              <Spinner size={'1rem'} />
-            </div>
-          ) : (
-            'Save Changes'
-          )}
+        <Button className={c.EditProfileForm_Button} type='submit' 
+          disabled={disabled}>
+          Save Changes
         </Button>
         <Button
           secondary
           className={c.EditProfileForm_Button}
           onClick={handleCancel}
-          type='button'
+          type='button' 
+          disabled={disabled}
         >
           Cancel
         </Button>

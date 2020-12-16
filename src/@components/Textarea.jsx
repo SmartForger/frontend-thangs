@@ -45,6 +45,7 @@ const Textarea = ({
   value = '',
   error,
   validator,
+  disabled,
 }) => {
   const [valid, setValid] = useState(true)
   const c = useStyles({ invalid: !valid || error })
@@ -70,6 +71,7 @@ const Textarea = ({
         type={type}
         value={value}
         onBlur={handleValidation}
+        disabled={disabled}
       />
     </div>
   )

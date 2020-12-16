@@ -27,6 +27,7 @@ const Input = ({
   required = false,
   type = 'text',
   value = '',
+  disabled,
 }) => {
   const c = useStyles()
   return (
@@ -44,6 +45,7 @@ const Input = ({
         required={required}
         type={type}
         value={value}
+        disabled={disabled}
       />
     </div>
   )
