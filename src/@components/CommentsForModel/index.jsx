@@ -61,7 +61,8 @@ const useStyles = createUseStyles(theme => {
     CommentsForModel_MenuButton: {
       padding: '0 .5rem',
       position: 'relative',
-
+      cursor: 'pointer',
+      
       '& > svg': {
         padding: '.25rem',
         borderRadius: '.25rem',
