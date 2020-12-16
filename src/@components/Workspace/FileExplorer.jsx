@@ -93,7 +93,7 @@ const Folder = ({
 
   const folderName = parentName ? name.replace(`${parentName}//`, '') : name
   const postId = '_nav'
-  const isIconDisabled = R.isNil(folder.subfolders) || R.isEmpty(folder.subfolders)
+  const isIconDisabled = R.isEmpty(filteredSubfolders)
   return (
     <>
       <ContextMenuTrigger id={`File_Menu_${id}${postId}`} holdToDisplay={-1}>
