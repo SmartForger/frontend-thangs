@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import { HowTo, Spinner } from '@components'
 import { useModels, usePerformanceMetrics } from '@hooks'
 import Toolbar from './Toolbar'
-import NewToolbar from './NewToolbar'
-import DebugToolBar from './DebugToolbar'
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -62,22 +60,7 @@ const HoopsModelViewer = ({ className, model, minimizeTools }) => {
         <StatusIndicator status={hoops.status} />
         <div ref={containerRef} />
       </div>
-      {hoops.status.isReady && <NewToolbar hoops={hoops} minimizeTools={minimizeTools} />}
-      {/*hoops.status.isReady && (
-        <Toolbar
-          onResetView={handleResetView}
-          onDrawModeChange={handleDrawModeChange}
-          onColorChange={handleColorChange}
-          meshColor={meshColor}
-          wireColor={wireColor}
-          minimizeTools={minimizeTools}
-        />
-      )
-      <DebugToolBar
-        modelName={model.name}
-        onChangeViewOrientation={handleSetViewOrientation}
-        onGetViewerSnapshot={handleGetViewerSnapshot}
-      />*/}
+      {hoops.status.isReady && <Toolbar hoops={hoops} minimizeTools={minimizeTools} />}
     </div>
   )
 }

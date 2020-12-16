@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react'
 import classnames from 'classnames'
-import { Input } from '@components'
 import { createUseStyles } from '@style'
 
 const COLORS = [
@@ -28,7 +27,7 @@ const useStyles = createUseStyles(theme => {
       gridTemplateRows: 'repeat(2, 1fr)',
       gap: '.75rem',
       padding: '1.5rem',
-      top: 'calc(100% + 0.25rem)',
+      bottom: 'calc(100% + 1.5rem)',
       left: '1rem',
       transform: 'translateX(-50%)',
       borderRadius: '.25rem',
@@ -99,16 +98,8 @@ const ColorPicker = ({ color = '#FFFFFF', onChange, children }) => {
     [onChange, toggleVisible]
   )
 
-  const handleOnInputChange = useCallback(
-    (e, value) => {
-      onChange(value)
-    },
-    [onChange]
-  )
-
   return (
     <div className={c.ColorPicker} onClick={toggleVisible}>
-      <Input onChange={handleOnInputChange} />
       <BlockPicker currentColor={color} onChange={handleChange} visible={visible} />
       {children}
     </div>
