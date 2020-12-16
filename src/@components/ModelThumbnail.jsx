@@ -130,8 +130,8 @@ const ModelThumbnail = ({ className, model, name, searchModelFileName, showWaldo
   const onLoad = useCallback(() => setLoadingState(COMPLETE), [])
   const onError = useCallback(() => {
     setLoadingState(ERROR)
-    track('Error - Thumbnail Image', { modelId: model.id })
-  }, [model.id])
+    track('Error - Thumbnail Image', { modelId: model && model.id })
+  }, [model])
   const onFoundWaldo = useCallback(() => setLookingForWaldo(false), [])
   const c = useStyles()
   const onSwap = useCallback(() => {
