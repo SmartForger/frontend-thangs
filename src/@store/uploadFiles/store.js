@@ -1,7 +1,7 @@
 import * as types from '@constants/storeEventTypes'
 import { api, uploadFiles, cancelUpload } from '@services'
 import { track } from '@utilities/analytics'
-import { sleep, findNodeByName } from '@utilities'
+import { sleep, findNodeByName, flattenTree } from '@utilities'
 import * as R from 'ramda'
 import { mockUploadedFiles, mockValidationTree } from 'mocks/assembly-upload'
 
@@ -27,7 +27,7 @@ export default store => {
     uploadFiles: getInitAtom(),
   }))
 
-  store.on(types.UPLOADING_FILES, state => {
+  store.on(types.SUBMITTING_MODELS, state => {
     return {
       uploadFiles: {
         ...state.uploadFiles,
@@ -36,11 +36,12 @@ export default store => {
     }
   })
 
-  store.on(types.UPLOADED_FILES, state => {
+  store.on(types.SUBMIT_MODELS_FAILED, state => {
     return {
       uploadFiles: {
         ...state.uploadFiles,
         isLoading: false,
+        isError: true,
       },
     }
   })
@@ -135,6 +136,15 @@ export default store => {
       uploadFiles: {
         ...state.uploadFiles,
         isAssembly,
+      },
+    }
+  })
+
+  store.on(types.SET_ASSEMBLY_FORMDATA, (state, { formData }) => {
+    return {
+      uploadFiles: {
+        ...state.uploadFiles,
+        assemblyData: formData,
       },
     }
   })
@@ -284,54 +294,93 @@ export default store => {
     uploadFiles(filesWithDirectory)
   })
 
-  store.on(types.SUBMIT_FILES, async (state, { onFinish = noop }) => {
-    store.dispatch(types.UPLOADING_FILES)
-    const uploadedFiles = R.path(['uploadFiles', 'data'], state) || []
+  store.on(types.SUBMIT_MODELS, async (state, { onFinish = noop }) => {
+    store.dispatch(types.SUBMITTING_MODELS)
+
+    const {
+      data: uploadedFiles,
+      validationTree,
+      assemblyData,
+      isAssembly,
+    } = state.uploadFiles
+
+    const payload = []
+
     const filteredFiles = {}
     Object.keys(uploadedFiles).forEach(fileDataId => {
       if (uploadedFiles[fileDataId].name)
         filteredFiles[fileDataId] = uploadedFiles[fileDataId]
     })
-    submitFile({ files: Object.values(filteredFiles) }).then(() => {
-      track('New Models Uploaded', { amount: uploadedFiles.length })
-      store.dispatch(types.UPLOADED_FILES)
-      store.dispatch(types.FETCH_THANGS, { onFinish })
-    })
-  })
+    const filesArray = Object.values(filteredFiles)
+    const addedFiles = {}
 
-  const submitFile = async ({ files }) => {
+    if (validationTree) {
+      validationTree.forEach(tree => {
+        const nodes = flattenTree([tree])
+        payload.push(createModelObject(nodes, filesArray, assemblyData))
+        nodes.forEach(node => (addedFiles[node.name] = true))
+      })
+    }
+
+    const remainingFiles = filesArray.filter(f => !addedFiles[f.name])
+    if (isAssembly) {
+      if (remainingFiles.length > 0) {
+        payload.push(createModelObject(remainingFiles, remainingFiles, assemblyData))
+      }
+    } else {
+      remainingFiles.forEach(file => {
+        payload.push(createModelObject([file], remainingFiles))
+      })
+    }
+
     try {
       const response = await api({
         method: 'POST',
-        endpoint: 'models',
-        body: files.map(file => ({
-          ...file,
-          filename: file.newFileName,
-          originalFileName: file.fileName,
-          units: 'mm',
-          searchUpload: false,
-          isPrivate: false,
-        })),
+        endpoint: 'models/assembly',
+        body: payload,
       })
-      files.forEach((file, i) => {
-        if (!response[i]) {
-          store.dispatch(types.CHANGE_UPLOAD_FILE, {
-            id: file.id,
-            data: '',
-            isError: true,
-          })
-        }
-        track('New Model Uploaded')
-      })
+      store.dispatch(types.FETCH_THANGS, { onFinish })
     } catch (e) {
-      files.forEach(file => {
-        store.dispatch(types.CHANGE_UPLOAD_FILE, {
-          id: file.id,
-          data: e,
-          isError: true,
-        })
-      })
-      return
+      store.dispatch(types.SUBMIT_MODELS_FAILED)
+    }
+  })
+}
+
+const createModelObject = (treeNodes, filesArray, assemblyData) => {
+  let result
+
+  if (assemblyData) {
+    result = {
+      name: assemblyData.name,
+      description: assemblyData.description,
+      category: assemblyData.category,
+      folderId: assemblyData.folderId,
+      parts: [],
+    }
+  } else {
+    result = {
+      name: treeNodes[0].name,
+      description: treeNodes[0].description,
+      category: treeNodes[0].category,
+      folderId: treeNodes[0].folderId,
+      parts: [],
     }
   }
+
+  treeNodes.forEach(node => {
+    const fileObj = filesArray.find(f => f.name === node.name)
+    if (fileObj) {
+      result.parts.push({
+        name: fileObj.name,
+        originalFileName: fileObj.name,
+        filename: fileObj.newFileName,
+        size: fileObj.size,
+        material: fileObj.material,
+        height: fileObj.height,
+        weight: fileObj.weight,
+      })
+    }
+  })
+
+  return result
 }

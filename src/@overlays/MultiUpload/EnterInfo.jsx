@@ -237,7 +237,7 @@ const EnterInfo = ({
         handleOnInputChange('folderId', e.value)
         if (e.value !== 'files') {
           const folder = folders.find(folder => folder.id === e.value)
-          if (!folder.isPublic) {
+          if (folder && !folder.isPublic) {
             handleOnInputChange('isPublic', false)
           }
         }

@@ -260,7 +260,7 @@ const AssemblyInfo = ({
         />
         <Spacer size={'1rem'} />
         <div className={c.AssemblyInfo_ButtonWrapper}>
-          <Button type='submit' onClick={handleSubmit}>Continue</Button>
+          <Button type='submit'>Continue</Button>
         </div>
       </form>
       <Spacer size={'2rem'} />

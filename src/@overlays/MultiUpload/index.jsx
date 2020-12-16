@@ -105,12 +105,12 @@ const MultiUpload = ({ initData = null, folderId }) => {
     validating,
     validated,
     isAssembly,
+    assemblyData,
   } = uploadFiles
   const { data: foldersData = [] } = folders
   const { data: sharedData = [] } = shared
   const [activeView, setActiveView] = useState('upload')
   const [activeStep, setActiveStep] = useState(0)
-  const [assemblyFormData, setAssemblyFormData] = useState({})
   const [errorMessage, setErrorMessage] = useState(null)
   const [warningMessage, setWarningMessage] = useState(null)
   const c = useStyles({})
@@ -145,6 +145,11 @@ const MultiUpload = ({ initData = null, folderId }) => {
       }))
     }
   }, [uploadFilesData, validationTree])
+
+  const setAssemblyFormData = formData => {
+    console.log('1111', formData)
+    dispatch(types.SET_ASSEMBLY_FORMDATA, { formData })
+  }
 
   const onDrop = (acceptedFiles, [rejectedFile], _event) => {
     track('MultiUpload - OnDrop', { amount: acceptedFiles && acceptedFiles.length })
@@ -221,34 +226,33 @@ const MultiUpload = ({ initData = null, folderId }) => {
   }, [uploadFilesData, validationTree, isAssembly, validating])
 
   const continueToModelInfo = ({ data }) => {
+    console.log('2222', data)
     setAssemblyFormData(data)
     setActiveView('enterInfo')
     setActiveStep(0)
   }
 
-  const handleContinue = useCallback(
-    ({ selectedFolderId }) => {
-      if (activeStep === Object.keys(uploadFilesData).length - 1) {
-        console.log('submit models')
-        // track('MultiUpload - Submit Files', {
-        //   amount: Object.keys(uploadFilesData).length,
-        // })
-        // dispatch(types.SUBMIT_FILES, {
-        //   onFinish: () => {
-        //     closeOverlay()
-        //     history.push(
-        //       selectedFolderId && selectedFolderId !== 'files'
-        //         ? `/mythangs/folder/${selectedFolderId}`
-        //         : '/mythangs/all-files'
-        //     )
-        //   },
-        // })
-      } else {
-        setActiveStep(activeStep + 1)
-      }
-    },
-    [activeStep, uploadFilesData /*, closeOverlay, history*/]
-  )
+  const handleContinue = useCallback(() => {
+    if (activeStep === Object.keys(uploadFilesData).length - 1) {
+      console.log('submit models')
+      track('MultiUpload - Submit Files', {
+        amount: Object.keys(uploadFilesData).length,
+      })
+      dispatch(types.SUBMIT_MODELS, {
+        onFinish: () => {
+          closeOverlay()
+          dispatch(types.RESET_UPLOAD_FILES)
+          history.push(
+            assemblyData && assemblyData.folderId && assemblyData.folderId !== 'files'
+              ? `/mythangs/folder/${assemblyData.folderId}`
+              : '/mythangs/all-files'
+          )
+        },
+      })
+    } else {
+      setActiveStep(activeStep + 1)
+    }
+  }, [activeStep, uploadFilesData, closeOverlay, history, assemblyData])
 
   const handleBack = useCallback(() => {
     setErrorMessage(null)
@@ -350,7 +354,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
           />
         ) : activeView === 'assemblyInfo' ? (
           <AssemblyInfo
-            formData={assemblyFormData}
+            formData={assemblyData}
             folders={dropdownFolders}
             folderId={folderId}
             setErrorMessage={setErrorMessage}
@@ -363,7 +367,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             errorMessage={errorMessage}
             setErrorMessage={setErrorMessage}
             folders={dropdownFolders}
-            folderId={(assemblyFormData && assemblyFormData.folderId) || folderId}
+            folderId={(assemblyData && assemblyData.folderId) || folderId}
             handleContinue={handleContinue}
             handleUpdate={handleUpdate}
             uploadFiles={uploadFilesData}
