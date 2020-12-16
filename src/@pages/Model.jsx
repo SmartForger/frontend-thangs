@@ -44,7 +44,7 @@ const useStyles = createUseStyles(theme => {
   return {
     Model: {
       width: '100%',
-      maxWidth: '76.5rem',
+      maxWidth: '88rem',
       margin: '0 auto',
     },
     Model_Header: {
@@ -97,13 +97,14 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Model_ModelViewer: {
+      backgroundColor: theme.colors.white[400],
+      borderRadius: '1rem',
+      boxShadow: '0 12px 24px 0 rgba(0,0,0,0.05)',
       display: 'flex',
       flexDirection: 'column',
       height: '23.5rem',
       margin: '0 auto',
       width: '100%',
-      boxShadow: '0 12px 24px 0 rgba(0,0,0,0.05)',
-      borderRadius: '1rem',
 
       [sm]: {
         height: '28.75rem',

@@ -27,6 +27,7 @@ const useStyles = createUseStyles(theme => {
       border: `1px solid ${theme.colors.white[900]}`,
       borderRadius: '.75rem',
       boxShadow: '0 1rem 2rem 0 rgba(0,0,0,.1)',
+      margin: '0 auto 2.625rem',
     },
     Toolbar_Group: {
       display: 'flex',
@@ -72,7 +73,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const Toolbar = ({ hoops, minimizeTools }) => {
+const Toolbar = ({ hoops, minimizeTools, modelName }) => {
   const c = useStyles()
   const [mode, setMode] = useState('shaded')
   const [orientation, setOrientation] = useState('Front')
@@ -123,6 +124,10 @@ const Toolbar = ({ hoops, minimizeTools }) => {
     // handleSliderChange(0)
     handleDrawChange('shaded')
   }, [changeExplosionMagnitude, handleDrawChange, resetImage])
+
+  const handleSnapshot = useCallback(() => {
+    getViewerSnapshot(modelName)
+  }, [modelName])
 
   const orientationOptions = useMemo(
     () => [
@@ -206,14 +211,14 @@ const Toolbar = ({ hoops, minimizeTools }) => {
     <div className={c.Toolbar}>
       <Spacer size={'1.5rem'} />
       <div className={c.Toolbar_Group}>
-        <Spacer width={'1rem'} />
+        <Spacer size={'2rem'} />
         <Pill secondary onClick={handleResetView}>
           <ResetIcon />
           <Spacer width={'0.25rem'} />
           Reset
         </Pill>
         <Spacer width={'1rem'} />
-        <Pill secondary onClick={handleResetView}>
+        <Pill secondary onClick={handleSnapshot}>
           <CameraIcon />
           <Spacer width={'0.25rem'} />
           Snapshot
@@ -277,7 +282,7 @@ const Toolbar = ({ hoops, minimizeTools }) => {
             }}
           />
         </div>
-        <Spacer size={'1rem'} />
+        <Spacer size={'2rem'} />
       </div>
       <Spacer size={'1.5rem'} />
     </div>

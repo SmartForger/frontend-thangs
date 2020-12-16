@@ -18,6 +18,8 @@ const useStyles = createUseStyles(theme => {
     ColorPicker: {
       cursor: 'pointer',
       position: 'relative',
+      display: 'flex',
+      alignItems: 'center',
     },
     ColorPicker_BlockPicker: {
       display: ({ visible }) => (visible ? 'grid' : 'none'),

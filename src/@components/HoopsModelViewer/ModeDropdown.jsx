@@ -43,6 +43,10 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
     },
+    ModeDropdown_Icon: {
+      width: 'unset !important',
+      margin: 0,
+    },
   }
 })
 
@@ -64,12 +68,12 @@ export const ModeDropdownMenu = ({ options = [], TargetComponent, label }) => {
             <>
               <DropdownItem key={`sort_${ind}`} onClick={option.onClick}>
                 <div className={c.ModeDropdown_Option}>
-                  <Icon />
-                  <Spacer size={'.75rem'} />
+                  <Icon className={c.ModeDropdown_Icon} />
+                  <Spacer size={'.25rem'} />
                   <LabelText>{option.label}</LabelText>
                 </div>
               </DropdownItem>
-              {!isLast && <Spacer size={'.25rem'} />}
+              {!isLast && <Spacer size={'.5rem'} />}
             </>
           )
         })}

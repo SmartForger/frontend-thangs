@@ -39,7 +39,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const HoopsModelViewer = ({ className, model, minimizeTools }) => {
+const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
   const c = useStyles()
   const { useHoopsViewer } = useModels()
   const { containerRef, hoops } = useHoopsViewer(model.uploadedFile)
@@ -60,7 +60,9 @@ const HoopsModelViewer = ({ className, model, minimizeTools }) => {
         <StatusIndicator status={hoops.status} />
         <div ref={containerRef} />
       </div>
-      {hoops.status.isReady && <Toolbar hoops={hoops} minimizeTools={minimizeTools} />}
+      {hoops.status.isReady && (
+        <Toolbar hoops={hoops} minimizeTools={minimizeTools} modelName={model.name} />
+      )}
     </div>
   )
 }
