@@ -3,7 +3,6 @@ import { Link, useHistory, useParams } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
 import {
-  AddContextMenu,
   Button,
   FileTable,
   FolderCard,
@@ -264,10 +263,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
             Invite Members
           </Button>
         </div>
-        <div
-          className={c.FolderView_MobileMenuButton}
-          onClick={e => e.preventDefault()}
-        >
+        <div className={c.FolderView_MobileMenuButton} onClick={e => e.preventDefault()}>
           <ContextMenuTrigger
             id={'Folder_Invite_Menu'}
             holdToDisplay={0}
@@ -356,7 +352,7 @@ const FolderView = ({
 
   return (
     <>
-      <ContextMenuTrigger id='Add_Menu_FolderView' holdToDisplay={-1}>
+      <ContextMenuTrigger id='Add_Menu' holdToDisplay={-1} collect={() => ({ folder })}>
         <main className={classnames(className, c.FolderView)}>
           <div className={c.FolderView_Content}>
             <FolderHeader
@@ -410,7 +406,6 @@ const FolderView = ({
           <Spacer size='2rem' />
         </main>
       </ContextMenuTrigger>
-      <AddContextMenu id='Add_Menu_FolderView' folder={folder} rootFolder={rootFolder} />
     </>
   )
 }

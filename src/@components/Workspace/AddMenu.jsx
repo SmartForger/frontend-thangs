@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import * as R from 'ramda'
 import { useStoreon } from 'storeon/react'
 import { SingleLineBodyText, Spacer } from '@components'
 import { createUseStyles } from '@style'
@@ -53,35 +54,41 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const AddMenu = ({ folder = {}, sideBar = false }) => {
-  const c = useStyles({ sideBar })
+const AddMenu = () => {
+  const c = useStyles({})
   const { dispatch } = useStoreon()
 
-  const handleAddFolder = useCallback(() => {
-    track('Add Menu - Create Folder')
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'addFolder',
-      overlayData: {
-        folder,
-        animateIn: true,
-        windowed: true,
-        dialogue: true,
-      },
-    })
-  }, [dispatch, folder])
+  const handleAddFolder = useCallback(
+    (_e, data = {}) => {
+      track('Add Menu - Create Folder')
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'addFolder',
+        overlayData: {
+          folder: data.folder,
+          animateIn: true,
+          windowed: true,
+          dialogue: true,
+        },
+      })
+    },
+    [dispatch]
+  )
 
-  const handleUpload = useCallback(() => {
-    track('Add Menu - Upload Models')
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'multiUpload',
-      overlayData: {
-        folderId: folder.id,
-        animateIn: true,
-        windowed: true,
-        dialogue: true,
-      },
-    })
-  }, [dispatch, folder.id])
+  const handleUpload = useCallback(
+    (_e, data = {}) => {
+      track('Add Menu - Upload Models')
+      dispatch(types.OPEN_OVERLAY, {
+        overlayName: 'multiUpload',
+        overlayData: {
+          folderId: R.path(['folder', 'id'], data),
+          animateIn: true,
+          windowed: true,
+          dialogue: true,
+        },
+      })
+    },
+    [dispatch]
+  )
 
   return (
     <div className={c.AddMenu}>

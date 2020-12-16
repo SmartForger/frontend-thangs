@@ -111,9 +111,6 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
       top: '9rem',
     },
-    MyThangs_ContextMenu: {
-      zIndex: 2,
-    },
     MyThangs_HeaderSpacer: {
       display: 'none',
       [md]: {
@@ -318,8 +315,8 @@ const MyThangs = () => {
           )}
         </div>
       </div>
-      <AddContextMenu className={c.MyThangs_ContextMenu} />
 
+      <AddContextMenu />
       <FileContextMenu />
       <FolderContextMenu />
       <FolderInviteContextMenu />

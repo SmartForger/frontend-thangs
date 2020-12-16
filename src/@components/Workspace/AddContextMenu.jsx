@@ -1,11 +1,22 @@
 import React from 'react'
 import { ContextMenu } from 'react-contextmenu'
+import { createUseStyles } from '@style'
 import { AddMenu } from '@components'
 
-const AddContextMenu = ({ id = 'Add_Menu', folder, className }) => {
+const useStyles = createUseStyles(() => {
+  return {
+    ContextMenu: {
+      zIndex: 2,
+    },
+  }
+})
+
+const AddContextMenu = () => {
+  const c = useStyles({})
+
   return (
-    <ContextMenu className={className} id={id}>
-      <AddMenu folder={folder} />
+    <ContextMenu className={c.ContextMenu} id={'Add_Menu'}>
+      <AddMenu />
     </ContextMenu>
   )
 }
