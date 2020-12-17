@@ -23,6 +23,13 @@ const useStyles = createUseStyles(theme => {
       },
     },
 
+    Scanner: {
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+    },
+
     Scanner_line: {
       position: 'absolute',
       top: '5%',
@@ -80,7 +87,7 @@ const Scanner = ({ children, polygonCount }) => {
   const c = useStyles()
 
   return (
-    <div>
+    <div className={c.Scanner}>
       <div className={c.Scanner_container}>
         <div
           className={classnames(c.Scanner_corner_tl, c.Scanner_corner__postion_absolute)}

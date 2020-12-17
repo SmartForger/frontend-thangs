@@ -11,13 +11,29 @@ import { useFileUpload } from '@hooks'
 import { numberWithCommas } from '@utilities'
 import { overlayview } from '@utilities/analytics'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
   return {
+    SearchByUpload_Container: {
+      height: '100%',
+
+      [md]: {
+        height: 'unset',
+      },
+    },
     SearchByUpload: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      marginTop: '4rem',
+      justifyContent: 'center',
+      height: '100%',
+
+      [md]: {
+        height: 'unset',
+        marginTop: '4rem',
+      },
     },
     SearchByUpload_Thumbnail: {
       paddingBottom: 0,
@@ -26,7 +42,7 @@ const useStyles = createUseStyles(_theme => {
       maxWidth: 'calc(100% - 7.375rem)',
       width: '100%',
       borderRadius: '.5rem .5rem 0 0',
-      zIndex: -1,
+      zIndex: 1,
     },
   }
 })
@@ -132,7 +148,7 @@ const SearchByUpload = () => {
   }, [])
 
   return (
-    <div>
+    <div className={c.SearchByUpload_Container}>
       <div className={c.SearchByUpload}>
         {phyndexer.isLoading || thangs.isLoading || model ? (
           !R.isNil(model) ? (

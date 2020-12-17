@@ -20,6 +20,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
+      width: '100%',
     },
   }
 })

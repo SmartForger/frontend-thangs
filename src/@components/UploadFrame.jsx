@@ -4,7 +4,7 @@ import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { xs, sm },
+    mediaQueries: { md },
   } = theme
   return {
     UploadFrame: {
@@ -16,15 +16,11 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'center',
       padding: '1.5rem',
       position: 'relative',
-      border: `1.5px dashed ${theme.colors.grey[100]}`,
       borderRadius: '1rem',
       cursor: ({ currentFile }) => (currentFile ? 'auto' : 'pointer'),
 
-      [xs]: {
-        width: 'auto',
-      },
-      [sm]: {
-        width: '38.75rem',
+      [md]: {
+        border: `1.5px dashed ${theme.colors.grey[100]}`,
       },
     },
   }
