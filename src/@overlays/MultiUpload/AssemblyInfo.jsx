@@ -127,7 +127,6 @@ const AssemblyInfo = ({
     description: '',
     folderId: 'files',
     category: '',
-    isPrivate: false,
     ...formData,
   }
 
@@ -142,28 +141,6 @@ const AssemblyInfo = ({
     },
     [onInputChange, setErrorMessage]
   )
-
-  const handleFolderChange = useCallback(
-    e => {
-      if (e) {
-        handleOnInputChange('folderId', e.value)
-        if (e.value !== 'files') {
-          const folder = folders.find(folder => folder.id === e.value)
-          handleOnInputChange('isPrivate', !folder.isPublic || inputState.isPrivate)
-        }
-      }
-    },
-    [inputState, folders, handleOnInputChange]
-  )
-
-  const togglePrivate = useCallback(() => {
-    const folder = folders.find(folder => folder.id.toString() === inputState.folderId)
-    if (folder && !folder.isPublic) {
-      handleOnInputChange('isPrivate', true)
-    } else {
-      handleOnInputChange('isPrivate', !inputState.isPrivate)
-    }
-  }, [inputState, handleOnInputChange])
 
   const handleSubmit = data => {
     handleContinue({ data })
@@ -234,7 +211,9 @@ const AssemblyInfo = ({
               placeholder={'Select folder'}
               defaultValue={selectedFolder}
               options={[{ value: 'files', label: 'My Public Files' }, ...usersFolders]}
-              onChange={handleFolderChange}
+              onChange={e => {
+                if (e) handleOnInputChange('folderId', e.value)
+              }}
             />
             <Spacer size={'1rem'} />
           </div>
@@ -251,13 +230,6 @@ const AssemblyInfo = ({
             }}
           />
         </div>
-        <Spacer size={'0.5rem'} />
-        <Toggle
-          name='isPrivate'
-          label={'Private assembly'}
-          checked={inputState && inputState.isPrivate}
-          onChange={togglePrivate}
-        />
         <Spacer size={'1rem'} />
         <div className={c.AssemblyInfo_ButtonWrapper}>
           <Button type='submit'>Continue</Button>

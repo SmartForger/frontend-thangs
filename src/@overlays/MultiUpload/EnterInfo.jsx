@@ -231,21 +231,6 @@ const EnterInfo = ({
     [handleUpdate, activeId, handleContinue, inputState, activeStep]
   )
 
-  const handleFolderChange = useCallback(
-    e => {
-      if (e) {
-        handleOnInputChange('folderId', e.value)
-        if (e.value !== 'files') {
-          const folder = folders.find(folder => folder.id === e.value)
-          if (folder && !folder.isPublic) {
-            handleOnInputChange('isPublic', false)
-          }
-        }
-      }
-    },
-    [folders, handleOnInputChange]
-  )
-
   const selectedCategory = useMemo(() => {
     if (!inputState) return null
     return R.find(R.propEq('value', inputState.category), CATEGORIES) || null
@@ -290,7 +275,6 @@ const EnterInfo = ({
       data
     )
     setInputState(modelState)
-    handleFolderChange({ value: modelState.folderId })
   }, [model, setInputState, folderId])
 
   useEffect(() => {
@@ -356,7 +340,9 @@ const EnterInfo = ({
               placeholder={'Select folder'}
               value={selectedFolder}
               options={usersFolders}
-              onChange={handleFolderChange}
+              onChange={e => {
+                if (e) handleOnInputChange('folderId', e.value)
+              }}
             />
           </div>
         ) : null}
