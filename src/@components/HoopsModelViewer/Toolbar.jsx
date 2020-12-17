@@ -1,11 +1,13 @@
 import React, { useCallback, useState, useMemo } from 'react'
-import classnames from 'classnames'
 import { Pill, ColorPicker, Spacer, MetadataSecondary, Slider } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ResetIcon } from '@svg/icon-reset.svg'
 import { ReactComponent as WireMode } from '@svg/view-mode-wire.svg'
 import { ReactComponent as ShadedMode } from '@svg/view-mode-shaded.svg'
 import { ReactComponent as XRayMode } from '@svg/view-mode-xray.svg'
+import { ReactComponent as WireModeSelected } from '@svg/view-mode-wire-selected.svg'
+import { ReactComponent as ShadedModeSelected } from '@svg/view-mode-shaded-selected.svg'
+import { ReactComponent as XRayModeSelected } from '@svg/view-mode-xray-selected.svg'
 import { ReactComponent as TopViewIcon } from '@svg/view-top-icon.svg'
 import { ReactComponent as FrontViewIcon } from '@svg/view-front-icon.svg'
 import { ReactComponent as BackViewIcon } from '@svg/view-back-icon.svg'
@@ -15,7 +17,7 @@ import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ArrowUp } from '@svg/icon-arrow-up-sm.svg'
 import { ReactComponent as CameraIcon } from '@svg/icon-camera.svg'
 import { ModeDropdownMenu, ModeDropdown } from './ModeDropdown'
-import { ModelSearchDropdownMenu, ModelSearchDropdown } from './ModelSearchDropdown'
+import { ModelSearchDropdown } from './ModelSearchDropdown'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -78,6 +80,7 @@ const Toolbar = ({ hoops, minimizeTools, modelName }) => {
   const [mode, setMode] = useState('shaded')
   const [orientation, setOrientation] = useState('Front')
   const [color, setColor] = useState('#999')
+  const [magnitude, setMagnitude] = useState(0)
   const {
     resetImage,
     changeColor,
@@ -98,6 +101,7 @@ const Toolbar = ({ hoops, minimizeTools, modelName }) => {
   const handleSliderChange = useCallback(
     (e, value) => {
       changeExplosionMagnitude(value / 10)
+      setMagnitude(value)
     },
     [changeExplosionMagnitude]
   )
@@ -121,13 +125,14 @@ const Toolbar = ({ hoops, minimizeTools, modelName }) => {
   const handleResetView = useCallback(() => {
     resetImage()
     changeExplosionMagnitude(0)
-    // handleSliderChange(0)
+    setMagnitude(0)
     handleDrawChange('shaded')
+    setColor('#999')
   }, [changeExplosionMagnitude, handleDrawChange, resetImage])
 
   const handleSnapshot = useCallback(() => {
     getViewerSnapshot(modelName)
-  }, [modelName])
+  }, [getViewerSnapshot, modelName])
 
   const orientationOptions = useMemo(
     () => [
@@ -172,7 +177,7 @@ const Toolbar = ({ hoops, minimizeTools, modelName }) => {
 
   const orientationLabel = useMemo(
     () => orientationOptions.find(opt => opt.value === orientation).label,
-    [orientationOptions, orientation]
+    [orientation, orientationOptions]
   )
 
   const drawOptions = useMemo(
@@ -182,6 +187,7 @@ const Toolbar = ({ hoops, minimizeTools, modelName }) => {
         Icon: ShadedMode,
         value: 'shaded',
         selected: mode === 'shaded',
+        selectedIcon: ShadedModeSelected,
         onClick: () => handleDrawChange('shaded'),
       },
       {
@@ -189,6 +195,7 @@ const Toolbar = ({ hoops, minimizeTools, modelName }) => {
         Icon: WireMode,
         value: 'wire',
         selected: mode === 'wire',
+        selectedIcon: WireModeSelected,
         onClick: () => handleDrawChange('wire'),
       },
       {
@@ -196,16 +203,17 @@ const Toolbar = ({ hoops, minimizeTools, modelName }) => {
         Icon: XRayMode,
         value: 'xray',
         selected: mode === 'xray',
+        selectedIcon: XRayModeSelected,
         onClick: () => handleDrawChange('xray'),
       },
     ],
     [handleDrawChange, mode]
   )
 
-  const drawLabel = useMemo(() => drawOptions.find(opt => opt.value === mode).label, [
-    drawOptions,
-    mode,
-  ])
+  const drawIcon = useMemo(
+    () => drawOptions.find(opt => opt.value === mode).selectedIcon,
+    [drawOptions, mode]
+  )
 
   return (
     <div className={c.Toolbar}>
@@ -214,74 +222,78 @@ const Toolbar = ({ hoops, minimizeTools, modelName }) => {
         <Spacer size={'2rem'} />
         <Pill secondary onClick={handleResetView}>
           <ResetIcon />
-          <Spacer width={'0.25rem'} />
+          <Spacer size={'0.25rem'} />
           Reset
         </Pill>
-        <Spacer width={'1rem'} />
-        <Pill secondary onClick={handleSnapshot}>
-          <CameraIcon />
-          <Spacer width={'0.25rem'} />
-          Snapshot
-        </Pill>
-        <Spacer width={'1.125rem'} />
-        <div className={c.Toolbar_VerticalRule}></div>
-        <Spacer width={'1.125rem'} />
-        <div className={c.Toolbar_Group}>
-          <MetadataSecondary>Render</MetadataSecondary>
-          <Spacer width={'1rem'} />
-          <ModeDropdownMenu
-            options={drawOptions}
-            TargetComponent={ModeDropdown}
-            label={drawLabel}
-          />
-        </div>
-        <Spacer width={'1.125rem'} />
-        <div className={c.Toolbar_VerticalRule}></div>
-        <Spacer width={'1.125rem'} />
-        <div className={c.Toolbar_Group}>
-          <MetadataSecondary>Orientation</MetadataSecondary>
-          <Spacer width={'1rem'} />
-          <ModeDropdownMenu
-            options={orientationOptions}
-            TargetComponent={ModeDropdown}
-            label={orientationLabel}
-          />
-        </div>
-        <Spacer width={'1.125rem'} />
-        <div className={c.Toolbar_VerticalRule}></div>
-        <Spacer width={'1.125rem'} />
-        <div className={c.Toolbar_Group}>
-          <MetadataSecondary>Color</MetadataSecondary>
-          <Spacer width={'1rem'} />
-          <ColorPicker color={color} onChange={handleColorChange}>
-            <div className={c.Toolbar_ColorCircle} style={{ backgroundColor: color }} />
-            <Spacer width={'0.5rem'} />
-            <ArrowUp />
-          </ColorPicker>
-        </div>
-        <Spacer width={'1.125rem'} />
-        <div className={c.Toolbar_VerticalRule}></div>
-        <Spacer width={'1.125rem'} />
-        <div className={c.Toolbar_Group}>
-          <MetadataSecondary>Explode</MetadataSecondary>
-          <Spacer width={'1rem'} />
-          <Slider onChange={handleSliderChange} steps={30} />
-        </div>
-        <Spacer width={'1.125rem'} />
-        <div className={c.Toolbar_VerticalRule}></div>
-        <Spacer width={'1.125rem'} />
-        <div className={c.Toolbar_Group}>
-          <MetadataSecondary>ThNl</MetadataSecondary>
-          <Spacer width={'1rem'} />
-          <ModelSearchDropdownMenu
-            TargetComponent={ModelSearchDropdown}
-            label='Starship Enterprise'
-            canRemove
-            onRemove={() => {
-              console.log('remove model')
-            }}
-          />
-        </div>
+        {!minimizeTools && (
+          <>
+            <Spacer size={'1rem'} />
+            <Pill secondary onClick={handleSnapshot}>
+              <CameraIcon />
+              <Spacer size={'0.25rem'} />
+              Snapshot
+            </Pill>
+            <Spacer size={'1.125rem'} />
+            <div className={c.Toolbar_VerticalRule}></div>
+            <Spacer size={'1.125rem'} />
+            <div className={c.Toolbar_Group}>
+              <MetadataSecondary>Render</MetadataSecondary>
+              <Spacer size={'1rem'} />
+              <ModeDropdownMenu
+                options={drawOptions}
+                TargetComponent={ModeDropdown}
+                Icon={drawIcon}
+              />
+            </div>
+            <Spacer size={'1.125rem'} />
+            <div className={c.Toolbar_VerticalRule}></div>
+            <Spacer size={'1.125rem'} />
+            <div className={c.Toolbar_Group}>
+              <MetadataSecondary>Orientation</MetadataSecondary>
+              <Spacer size={'1rem'} />
+              <ModeDropdownMenu
+                options={orientationOptions}
+                TargetComponent={ModeDropdown}
+                label={orientationLabel}
+              />
+            </div>
+            <Spacer size={'1.125rem'} />
+            <div className={c.Toolbar_VerticalRule}></div>
+            <Spacer size={'1.125rem'} />
+            <div className={c.Toolbar_Group}>
+              <MetadataSecondary>Color</MetadataSecondary>
+              <Spacer size={'1rem'} />
+              <ColorPicker color={color} onChange={handleColorChange}>
+                <div
+                  className={c.Toolbar_ColorCircle}
+                  style={{ backgroundColor: color }}
+                />
+                <Spacer size={'0.5rem'} />
+                <ArrowUp />
+              </ColorPicker>
+            </div>
+            <Spacer size={'1.125rem'} />
+            <div className={c.Toolbar_VerticalRule}></div>
+            <Spacer size={'1.125rem'} />
+            <div className={c.Toolbar_Group}>
+              <MetadataSecondary>Explode</MetadataSecondary>
+              <Spacer size={'1rem'} />
+              <Slider onChange={handleSliderChange} steps={30} value={magnitude} />
+            </div>
+            <Spacer size={'1.125rem'} />
+            <div className={c.Toolbar_VerticalRule}></div>
+            <Spacer size={'1.125rem'} />
+            <div className={c.Toolbar_Group}>
+              <MetadataSecondary>ThNl</MetadataSecondary>
+              <Spacer size={'1rem'} />
+              <ModelSearchDropdown
+                label={'Model Assembly'}
+                selectedFile={'selected part'}
+                files={[]}
+              />
+            </div>
+          </>
+        )}
         <Spacer size={'2rem'} />
       </div>
       <Spacer size={'1.5rem'} />

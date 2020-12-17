@@ -1,14 +1,8 @@
-import React from 'react'
-import {
-  Pill,
-  DropdownMenu,
-  DropdownItem,
-  Spacer,
-  LabelText,
-  SingleLineBodyText,
-} from '@components'
+import React, { useCallback, useState } from 'react'
+import { Input, Spacer, SingleLineBodyText } from '@components'
 import { createUseStyles } from '@style'
-import { ReactComponent as RemoveIcon } from '@svg/icon-X.svg'
+import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
+import { ReactComponent as ArrowUp } from '@svg/icon-arrow-up-sm.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -46,42 +40,68 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-export const ModelSearchDropdownMenu = ({
-  TargetComponent,
-  label,
-  canRemove,
-  onRemove,
-}) => {
+export const ModelSearchDropdownMenu = ({ selectedFile, files = [] }) => {
   const c = useStyles({})
+  //Loop through files and build nested tree
+  //Each row has an event handler which on click should change the viewer.
+
+  const handleOnInputChange = useCallback((e, value) => {
+    //filter files by partial search
+  }, [])
 
   return (
-    <DropdownMenu
-      className={c.ModelSearchDropdown}
-      TargetComponent={TargetComponent}
-      TargetComponentProps={{ canRemove, onRemove }}
-      label={label}
-    >
-      <div>Dropdown</div>
-    </DropdownMenu>
+    <div className={c.ModelSearchDropdown}>
+      <Spacer size={'1rem'} />
+      <div>
+        <Spacer size={'1rem'} />
+        <Input
+          id='assembly-search-input'
+          name='part'
+          label='Search models'
+          maxLength='150'
+          type='text'
+          onChange={handleOnInputChange}
+        />
+        <Spacer size={'1rem'} />
+      </div>
+      <Spacer size={'1rem'} />
+    </div>
   )
 }
 
-export const ModelSearchDropdown = ({ onClick = noop, label, canRemove, onRemove }) => {
+export const ModelSearchDropdown = ({
+  label,
+  selectedFile,
+  files = [],
+  onSelectedFile = noop,
+}) => {
   const c = useStyles({})
+  const [isVisible, setIsVisible] = useState(true)
 
   return (
-    <div className={c.ModelSearchDropdown_ClickableButton} onClick={onClick}>
-      <SingleLineBodyText>{label}</SingleLineBodyText>
-      <Spacer size={'.5rem'} />
-      {canRemove && (
-        <RemoveIcon
-          className={c.ModelSearchDropdown_Arrow}
-          onClick={ev => {
-            ev.stopPropagation()
-            onRemove && onRemove()
-          }}
+    <>
+      <div
+        className={c.ModelSearchDropdown_ClickableButton}
+        onClick={ev => {
+          ev.stopPropagation()
+          setIsVisible(!isVisible)
+        }}
+      >
+        <SingleLineBodyText>{label}</SingleLineBodyText>
+        <Spacer size={'.5rem'} />
+        {isVisible ? (
+          <ArrowDown className={c.ModelSearchDropdown_Arrow} />
+        ) : (
+          <ArrowUp className={c.ModelSearchDropdown_Arrow} />
+        )}
+      </div>
+      {isVisible && (
+        <ModelSearchDropdownMenu
+          selectedFile={selectedFile}
+          files={files}
+          onSelectedFile={onSelectedFile}
         />
       )}
-    </div>
+    </>
   )
 }

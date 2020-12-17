@@ -51,7 +51,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-export const ModeDropdownMenu = ({ options = [], TargetComponent, label }) => {
+export const ModeDropdownMenu = ({ options = [], TargetComponent, label, Icon }) => {
   const c = useStyles({})
 
   return (
@@ -59,6 +59,7 @@ export const ModeDropdownMenu = ({ options = [], TargetComponent, label }) => {
       className={c.ModeDropdown}
       TargetComponent={TargetComponent}
       label={label}
+      Icon={Icon}
     >
       <div>
         {options.map((option, ind) => {
@@ -82,12 +83,13 @@ export const ModeDropdownMenu = ({ options = [], TargetComponent, label }) => {
   )
 }
 
-export const ModeDropdown = ({ onClick = noop, label }) => {
+export const ModeDropdown = ({ onClick = noop, label, Icon }) => {
   const c = useStyles({})
 
   return (
     <div className={c.ModeDropdown_ClickableButton} onClick={onClick}>
-      <SingleLineBodyText>{label}</SingleLineBodyText>
+      {Icon && <Icon />}
+      {label && <SingleLineBodyText>{label}</SingleLineBodyText>}
       <Spacer size={'.5rem'} />
       <ArrowUp className={c.ModeDropdown_Arrow} />
     </div>

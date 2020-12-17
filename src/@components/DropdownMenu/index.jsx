@@ -131,6 +131,7 @@ const DropdownMenu = ({
   children,
   className,
   label,
+  Icon,
   myThangsMenu,
   noIcons,
   iconOnly,
@@ -150,6 +151,7 @@ const DropdownMenu = ({
           user={user}
           myThangsMenu={myThangsMenu}
           label={label}
+          Icon={Icon}
           iconOnly={iconOnly}
           {...TargetComponentProps}
         />

@@ -279,7 +279,6 @@ const useHoopsViewer = modelFilename => {
   }, [])
 
   const getViewerSnapshot = useCallback(fileName => {
-    debugger
     hoopsViewerRef.current.takeSnapshot().then(imgElement => {
       let imageHeight = containerRef.current.childNodes[0].offsetHeight
       let imageWidth = containerRef.current.childNodes[0].offsetWidth

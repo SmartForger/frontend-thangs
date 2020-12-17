@@ -44,7 +44,7 @@ const useStyles = createUseStyles(theme => {
   return {
     Model: {
       width: '100%',
-      maxWidth: '88rem',
+      maxWidth: '90rem',
       margin: '0 auto',
     },
     Model_Header: {
