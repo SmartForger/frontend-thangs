@@ -85,7 +85,7 @@ const ModalOverlayStyles = () => {
 
 const initialCrop = { unit: '%', width: 30, aspect: 1 / 1 }
 
-const ChangeablePicture = ({ className }) => {
+const ChangeablePicture = ({ className, disabled }) => {
   const [cropSrc, setCropSrc] = useState(null)
   const [crop, setCrop] = useState()
   const [croppedImg, setCroppedImg] = useState(null)
@@ -180,16 +180,6 @@ const ChangeablePicture = ({ className }) => {
 
   return (
     <form className={classnames(className, c.ChangeablePicture_Form)} ref={formRef}>
-      <label htmlFor='avatar'>
-        <Pill
-          className={c.ChangeablePicture_UploadButton}
-          onClick={e => {
-            e.preventDefault()
-          }}
-        >
-          Upload New Image
-        </Pill>
-      </label>
       <input
         className={c.ChangeablePicture_HiddenInput}
         type='file'
@@ -198,7 +188,17 @@ const ChangeablePicture = ({ className }) => {
         onChange={onSelectFile}
         accept='image/x-png,image/jpeg'
         ref={imageEl}
+        disabled={disabled}
       />
+      <label htmlFor='avatar'>
+        <Pill
+          className={c.ChangeablePicture_UploadButton}
+          onClick={e => e.preventDefault()}
+          disabled={disabled}
+        >
+          Upload New Image
+        </Pill>
+      </label>
       <ModalOverlayStyles />
       <ReactModal
         className={c.ChangeablePicture_Modal}

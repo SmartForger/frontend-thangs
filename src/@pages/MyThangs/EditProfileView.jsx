@@ -149,8 +149,8 @@ const EditProfile = ({ className }) => {
             </MetadataPrimary>
             <Spacer size={'1rem'} />
             <div className={c.EditProfile_ButtonsSection}>
-              <ChangeablePicture />
-              <Pill secondary onClick={handleDeleteImage}>
+              <ChangeablePicture disabled={isLoading}/>
+              <Pill secondary onClick={handleDeleteImage} disabled={isLoading}>
                 Delete Image
               </Pill>
             </div>

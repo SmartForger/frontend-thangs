@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import classnames from 'classnames'
 import { LabelText, Spacer } from '@components'
 import { createUseStyles } from '@style'
@@ -15,7 +15,8 @@ const useStyles = createUseStyles(theme => {
       color: theme.colors.black[500],
       borderRadius: '1rem',
       border: `2px solid ${theme.colors.gold[500]}`,
-      cursor: 'pointer',
+      cursor: ({ disabled }) => disabled ? 'not-allowed' : 'pointer',
+      opacity: ({ disabled }) => disabled ? '0.8' : '1',
     },
     Pill_TextWrapper: {
       display: 'flex',
@@ -31,12 +32,17 @@ const useStyles = createUseStyles(theme => {
   }
 })
 const noop = () => null
-const Pill = ({ children, className, secondary, onClick = noop }) => {
-  const c = useStyles({})
+const Pill = ({ children, className, secondary, onClick = noop, disabled }) => {
+  const c = useStyles({ disabled })
+
+  const getOnClick = useCallback(() => {
+    return disabled ? () => {} : onClick
+  }, [disabled, onClick])
+
   return (
     <div
       className={classnames(className, c.Pill, { [c.PillSecondary]: secondary })}
-      onClick={onClick}
+      onClick={getOnClick()}
     >
       <Spacer size={'.5rem'} />
       <div className={c.Pill_TextWrapper}>
