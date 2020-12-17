@@ -379,19 +379,21 @@ const EnterInfo = ({
             />
           </div>
         </div>
-        <div className={c.EnterInfo_Field}>
-          <Dropdown
-            className={c.EnterInfo_Select}
-            name='category'
-            placeholder='Select category'
-            value={selectedCategory}
-            isClearable
-            options={CATEGORIES}
-            onChange={e => {
-              if (e) handleOnInputChange('category', e.value)
-            }}
-          />
-        </div>
+        {!isAssembly && (
+          <div className={c.EnterInfo_Field}>
+            <Dropdown
+              className={c.EnterInfo_Select}
+              name='category'
+              placeholder='Select category'
+              value={selectedCategory}
+              isClearable
+              options={CATEGORIES}
+              onChange={e => {
+                if (e) handleOnInputChange('category', e.value)
+              }}
+            />
+          </div>
+        )}
         <Spacer size={'.5rem'} />
         <Toggle
           name='applyRemaining'
