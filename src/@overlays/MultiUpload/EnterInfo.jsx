@@ -325,11 +325,11 @@ const EnterInfo = ({
           <Textarea
             id='description-input'
             name='description'
-            label='Description *'
+            label={isAssembly ? 'Description' : 'Description *'}
             type='description'
             value={inputState && inputState.description}
             onChange={handleOnInputChange}
-            required
+            required={!isAssembly}
           />
         </div>
         {!isAssembly && folders && folders.length ? (
