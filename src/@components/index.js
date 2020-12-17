@@ -1,3 +1,4 @@
+export { default as ActionBar } from './ActionBar'
 export { default as AppAnalytics } from './AppAnalytics'
 export { default as Carousel } from './Carousel'
 export * from './CardCollection'

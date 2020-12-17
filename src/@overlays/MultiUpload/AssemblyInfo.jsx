@@ -163,7 +163,7 @@ const AssemblyInfo = ({
     } else {
       handleOnInputChange('isPrivate', !inputState.isPrivate)
     }
-  }, [inputState, handleOnInputChange])
+  }, [folders, inputState.folderId, inputState.isPrivate, handleOnInputChange])
 
   const handleSubmit = data => {
     handleContinue({ data })
@@ -172,9 +172,9 @@ const AssemblyInfo = ({
   const usersFolders = useMemo(() => {
     return folders && folders.length
       ? folders.map(folder => ({
-          value: folder.id,
-          label: folder.name.replace(new RegExp('//', 'g'), '/'),
-        }))
+        value: folder.id,
+        label: folder.name.replace(new RegExp('//', 'g'), '/'),
+      }))
       : []
   }, [folders])
 

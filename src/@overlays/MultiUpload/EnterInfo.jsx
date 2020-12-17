@@ -254,12 +254,12 @@ const EnterInfo = ({
   const usersFolders = useMemo(() => {
     return folders && folders.length
       ? [
-          { value: 'files', label: 'My Public Files' },
-          ...folders.map(folder => ({
-            value: folder.id,
-            label: folder.name.replace(new RegExp('//', 'g'), '/'),
-          })),
-        ]
+        { value: 'files', label: 'My Public Files' },
+        ...folders.map(folder => ({
+          value: folder.id,
+          label: folder.name.replace(new RegExp('//', 'g'), '/'),
+        })),
+      ]
       : [{ value: 'files', label: 'My Public Files' }]
   }, [folders])
 
@@ -291,7 +291,7 @@ const EnterInfo = ({
     )
     setInputState(modelState)
     handleFolderChange({ value: modelState.folderId })
-  }, [model, setInputState, folderId])
+  }, [model, setInputState, folderId, handleFolderChange])
 
   useEffect(() => {
     if (folderPrivate) {

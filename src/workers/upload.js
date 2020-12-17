@@ -1,9 +1,7 @@
 import axios from 'axios'
-import * as R from 'ramda'
 import storageService from '../@services/storage.service'
 import api from './api'
 import { sendMessage, addMessageListener } from './worker'
-import { log } from './logger'
 
 const cancellationTokens = {}
 

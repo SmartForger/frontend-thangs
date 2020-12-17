@@ -151,7 +151,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
     dispatch(types.SET_ASSEMBLY_FORMDATA, { formData })
   }
 
-  const onDrop = (acceptedFiles, [rejectedFile], _event) => {
+  const onDrop = useCallback((acceptedFiles, [rejectedFile], _event) => {
     track('MultiUpload - OnDrop', { amount: acceptedFiles && acceptedFiles.length })
 
     const files = acceptedFiles
@@ -186,7 +186,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
         )}.`
       )
     }
-  }
+  })
 
   const removeFile = filename => {
     track('MultiUpload - Remove File')
@@ -198,9 +198,9 @@ const MultiUpload = ({ initData = null, folderId }) => {
     dispatch(types.SKIP_MISSING_FILE, { filename })
   }
 
-  const closeOverlay = () => {
+  const closeOverlay = useCallback(() => {
     dispatch(types.CLOSE_OVERLAY)
-  }
+  })
 
   const setIsAssembly = isAssembly => {
     dispatch(types.SET_IS_ASSEMBLY, { isAssembly })
@@ -252,7 +252,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
     } else {
       setActiveStep(activeStep + 1)
     }
-  }, [activeStep, uploadFilesData, closeOverlay, history, assemblyData])
+  }, [activeStep, uploadFilesData, dispatch, closeOverlay, history, assemblyData])
 
   const handleBack = useCallback(() => {
     setErrorMessage(null)

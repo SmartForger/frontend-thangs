@@ -138,18 +138,13 @@ const OrientationDropdownMenu = ({ handleChange = noop, selectedValue }) => {
         {options.map((option, ind) => {
           const { Icon = noop } = option
           return (
-            <>
-              <DropdownItem
-                key={`views_${ind}`}
-                onClick={() => handleChange(option.value)}
-              >
-                <div className={c.OrientationDropdown_Row}>
-                  <Icon />
-                  <Spacer size={'.75rem'} />
-                  <LabelText>{option.label}</LabelText>
-                </div>
-              </DropdownItem>
-            </>
+            <DropdownItem key={`views_${ind}`} onClick={() => handleChange(option.value)}>
+              <div className={c.OrientationDropdown_Row}>
+                <Icon />
+                <Spacer size={'.75rem'} />
+                <LabelText>{option.label}</LabelText>
+              </div>
+            </DropdownItem>
           )
         })}
       </div>

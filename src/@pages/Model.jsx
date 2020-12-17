@@ -405,7 +405,7 @@ const StatsAndActions = ({
 const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST
 const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime }) => {
   const c = useStyles()
-  const { navigateWithFlash } = useFlashNotification()
+  const { navigateWithFlash } = useFlashNotification() //TODO: Should be removed
   const signUpShown = useRef(false)
   const {
     dispatch,

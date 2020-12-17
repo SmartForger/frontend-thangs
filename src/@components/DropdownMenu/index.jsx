@@ -97,10 +97,10 @@ const DropdownItem = ({ children, to = '#', onClick, className }) => {
   const { dispatch } = useStoreon()
 
   return (
-    <div className={classnames(className, c.DropdownMenu_ItemWrapper)}>
+    <div className={c.DropdownMenu_ItemWrapper}>
       {onClick ? (
         <div
-          className={c.DropdownMenu_Item}
+          className={classnames(className, c.DropdownMenu_Item)}
           onClick={e => {
             dispatch(types.CLOSE_OVERLAY)
             onClick && onClick(e)

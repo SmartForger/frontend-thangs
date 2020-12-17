@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Header, Footer, FeedbackTooltip } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import { useOverlay } from '@hooks'
+import { useActionBar, useOverlay } from '@hooks'
 import Banner from './Header/Banner'
 import { ReactComponent as ArrowUpIcon } from '@svg/icon-arrow-up.svg'
 
@@ -116,6 +116,19 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       justifyContent: 'center',
     },
+    Layout_theDarkness: {
+      background: 'rgba(0, 0, 0, 0.6)',
+      top: 0,
+      bottom: 0,
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      zIndex: 2,
+      opacity: 0,
+    },
+    Layout_theDarknessComes: {
+      opacity: 1,
+    },
   }
 })
 
@@ -157,6 +170,7 @@ const Layout = ({
 }) => {
   const c = useStyles({})
   const { Overlay, isOverlayOpen, isOverlayHidden } = useOverlay()
+  const { ActionBar, isActionBarOpen, isActionBarHidden } = useActionBar()
 
   return (
     <div
@@ -164,6 +178,11 @@ const Layout = ({
         [c.Layout_blur]: isOverlayOpen && !isOverlayHidden,
       })}
     >
+      <div
+        className={classnames(c.Layout_theDarkness, {
+          [c.Layout_theDarknessComes]: isActionBarOpen && !isActionBarHidden,
+        })}
+      ></div>
       <Header
         showSearchTextFlash={showSearchTextFlash}
         showSearch={showSearch}
@@ -172,6 +191,7 @@ const Layout = ({
         showAboutHero={showAboutHero}
       />
       {Overlay}
+      {ActionBar}
       <div className={c.Layout_Content}>
         {Hero && <Hero />}
         {bannerText && <Banner>{bannerText}</Banner>}

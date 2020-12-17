@@ -1,9 +1,7 @@
 import * as types from '@constants/storeEventTypes'
 import { api, uploadFiles, cancelUpload } from '@services'
-import { track } from '@utilities/analytics'
-import { sleep, findNodeByName, flattenTree } from '@utilities'
+import { findNodeByName, flattenTree } from '@utilities'
 import * as R from 'ramda'
-import { mockUploadedFiles, mockValidationTree } from 'mocks/assembly-upload'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -179,7 +177,7 @@ export default store => {
     }
   })
 
-  store.on(types.VALIDATE_FILES_SUCCESS, (state, { validationTree, uploadedFiles }) => {
+  store.on(types.VALIDATE_FILES_SUCCESS, (state, { validationTree }) => {
     return {
       uploadFiles: {
         ...state.uploadFiles,

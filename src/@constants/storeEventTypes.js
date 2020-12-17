@@ -72,6 +72,10 @@ export const UPDATE_TEAMS = 'update-teams'
 export const OPEN_OVERLAY = 'open-overlay'
 export const CLOSE_OVERLAY = 'close-overlay'
 export const SET_OVERLAY_DATA = 'set-overlay-data'
+/* Action Bar Store Events */
+export const OPEN_ACTION_BAR = 'open-action-bar'
+export const CLOSE_ACTION_BAR = 'close-action-bar'
+export const SET_ACTION_BAR_DATA = 'set-action-bar-data'
 /* Notification Store Events */
 export const FETCH_NOTIFICATIONS = 'fetch-notifications'
 export const READ_NOTIFICATIONS = 'read-notifications'

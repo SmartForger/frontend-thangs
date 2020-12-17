@@ -1,5 +1,6 @@
 import { storeonDevtools } from 'storeon/devtools'
 import { createStoreon } from 'storeon'
+import actionBarStore from '@store/actionBar/store'
 import commentsStore from '@store/comments/store'
 import fileStore from '@store/uploadFiles/store'
 import folderNavStore from '@store/folderNav/store'
@@ -25,6 +26,7 @@ import usersIdsStore from '@store/usersIds/store'
 import usersStore from '@store/users/store'
 
 const storeParts = [
+  actionBarStore,
   commentsStore,
   fileStore,
   folderNavStore,

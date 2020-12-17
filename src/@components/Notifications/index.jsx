@@ -44,7 +44,7 @@ const Notifications = ({ className, myThangsMenu }) => {
   const renderStatusItem = useCallback(() => {
     if (isLoading) {
       return (
-        <DropdownItem className={c.DropdownMenu__Loading}>
+        <DropdownItem>
           <Spinner />
         </DropdownItem>
       )
@@ -66,7 +66,7 @@ const Notifications = ({ className, myThangsMenu }) => {
     }
 
     return null
-  }, [c.DropdownMenu__Loading, notificationsArray, isLoading, isError, error])
+  }, [notificationsArray, isLoading, isError, error])
 
   const statusItem = renderStatusItem()
 

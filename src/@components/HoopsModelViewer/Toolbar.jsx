@@ -1,12 +1,6 @@
-import React, { useCallback, useState, useMemo } from 'react'
+import React, { useCallback, useState } from 'react'
 import { ToolbarDesktop, ToolbarMobile } from '@components'
 import { createUseStyles } from '@style'
-import { ReactComponent as WireMode } from '@svg/view-mode-wire.svg'
-import { ReactComponent as ShadedMode } from '@svg/view-mode-shaded.svg'
-import { ReactComponent as XRayMode } from '@svg/view-mode-xray.svg'
-import { ReactComponent as WireModeSelected } from '@svg/view-mode-wire-selected.svg'
-import { ReactComponent as ShadedModeSelected } from '@svg/view-mode-shaded-selected.svg'
-import { ReactComponent as XRayModeSelected } from '@svg/view-mode-xray-selected.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -32,7 +26,6 @@ const useStyles = createUseStyles(theme => {
 
 const Toolbar = ({ hoops, modelName, isMultipart, isAssembly }) => {
   const c = useStyles({ isMultipart, isAssembly })
-
   //These keep track the UI toolbar state
   const [mode, setMode] = useState('shaded')
   const [orientation, setOrientation] = useState('Front')
