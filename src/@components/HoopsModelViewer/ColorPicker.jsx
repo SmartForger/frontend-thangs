@@ -1,7 +1,9 @@
 import React, { useState, useCallback } from 'react'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-
+import { Spacer } from '@components'
+import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
+import { ReactComponent as ColorBucketIcon } from '@svg/icon-color-bucket.svg'
 const COLORS = [
   '#dbdbdf',
   '#88888b',
@@ -14,6 +16,9 @@ const COLORS = [
 ]
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
   return {
     ColorPicker: {
       cursor: 'pointer',
@@ -56,9 +61,28 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '100%',
       boxSizing: 'border-box',
     },
+    ColorPicker_ColorCircle: {
+      width: '2rem',
+      height: '2rem',
+      borderRadius: '50%',
+    },
     ColorPicker__isSelected: {
       border: `1px solid ${theme.variables.colors.cardBackground}`,
       boxShadow: '0px 0px 6px 0px rgba(0, 0, 0, 0.5)',
+    },
+    ColorPicker__desktop: {
+      display: 'none',
+
+      [md]: {
+        display: 'flex',
+      },
+    },
+    ColorPicker__mobile: {
+      display: 'flex',
+
+      [md]: {
+        display: 'none',
+      },
     },
   }
 })
@@ -84,7 +108,7 @@ const BlockPicker = ({ currentColor, onChange, visible }) => {
   )
 }
 
-const ColorPicker = ({ color = '#FFFFFF', onChange, children }) => {
+const ColorPicker = ({ color = '#FFFFFF', onChange }) => {
   const [visible, setVisible] = useState()
   const c = useStyles({ visible, color })
 
@@ -103,7 +127,13 @@ const ColorPicker = ({ color = '#FFFFFF', onChange, children }) => {
   return (
     <div className={c.ColorPicker} onClick={toggleVisible}>
       <BlockPicker currentColor={color} onChange={handleChange} visible={visible} />
-      {children}
+      <div
+        className={classnames(c.ColorPicker_ColorCircle, c.ColorPicker__desktop)}
+        style={{ backgroundColor: color }}
+      />
+      <ColorBucketIcon className={c.ColorPicker__mobile} />
+      <Spacer size={'0.5rem'} className={c.ColorPicker__desktop} />
+      <ArrowDown className={c.ColorPicker__desktop} />
     </div>
   )
 }

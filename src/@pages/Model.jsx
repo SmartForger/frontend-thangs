@@ -97,9 +97,8 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Model_ModelViewer: {
-      backgroundColor: theme.colors.white[400],
+      backgroundColor: 'transparent',
       borderRadius: '1rem',
-      boxShadow: '0 12px 24px 0 rgba(0,0,0,0.05)',
       display: 'flex',
       flexDirection: 'column',
       height: '23.5rem',
@@ -112,6 +111,8 @@ const useStyles = createUseStyles(theme => {
 
       [md]: {
         height: '37.5rem',
+        backgroundColor: theme.colors.white[400],
+        boxShadow: '0 12px 24px 0 rgba(0,0,0,0.05)',
       },
 
       [lg]: {
@@ -119,7 +120,7 @@ const useStyles = createUseStyles(theme => {
       },
 
       [xl]: {
-        height: '38.5rem',
+        height: '44rem',
       },
     },
     Model_ModelDescription: {

@@ -18,7 +18,7 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.5rem',
       boxShadow: '0px 5px 10px 0px rgba(35, 37, 48, 0.25)',
       width: '12rem',
-      padding: ({ noIcons }) => (noIcons ? '1.5rem 3rem' : '1rem'),
+      padding: ({ noIcons }) => (noIcons ? '1.5rem 3rem' : '.75rem'),
       boxSizing: 'border-box',
       position: 'absolute',
       right: '-6.5rem',
@@ -52,10 +52,9 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       cursor: 'pointer',
       width: '100%',
+      padding: '.25rem',
 
       '& svg': {
-        width: '1.5rem',
-        marginRight: '.5rem',
         color: theme.colors.grey[500],
       },
     },
@@ -142,6 +141,7 @@ const DropdownMenu = ({
   const [isOpenInternal, toggleOpen] = useDropdownMenuState(isOpenExternal)
   const isOpen = isOpenExternal === undefined ? isOpenInternal : isOpenExternal
   const c = useStyles({ isOpen, noIcons, myThangsMenu })
+  console.log('TargetProps', TargetComponentProps)
   return (
     <div className={c.DropdownMenu_Container}>
       {TargetComponent ? (

@@ -8,6 +8,9 @@ import { createUseStyles } from '@style'
 import { perfTrack } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
   return {
     HoopsModelViewer: {},
     HoopsModelViewer_WebViewContainer: {
@@ -17,9 +20,12 @@ const useStyles = createUseStyles(theme => {
       cursor: 'grab',
       borderTopLeftRadius: '1rem',
       borderTopRightRadius: '1rem',
-      backgroundColor: '#ffffff',
+      backgroundColor: 'transparent',
       '& > div': {
         pointerEvents: 'all',
+      },
+      [md]: {
+        backgroundColor: '#ffffff',
       },
     },
     HoopsModelViewer_LoadingContainer: {
