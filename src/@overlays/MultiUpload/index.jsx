@@ -115,6 +115,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const [warningMessage, setWarningMessage] = useState(null)
   const c = useStyles({})
   const history = useHistory()
+  const partCount = Object.keys(uploadFilesData).length;
 
   const uploadTreeData = useMemo(() => {
     const files = Object.values(uploadFilesData)
@@ -147,7 +148,6 @@ const MultiUpload = ({ initData = null, folderId }) => {
   }, [uploadFilesData, validationTree])
 
   const setAssemblyFormData = formData => {
-    console.log('1111', formData)
     dispatch(types.SET_ASSEMBLY_FORMDATA, { formData })
   }
 
@@ -226,17 +226,15 @@ const MultiUpload = ({ initData = null, folderId }) => {
   }, [uploadFilesData, validationTree, isAssembly, validating])
 
   const continueToModelInfo = ({ data }) => {
-    console.log('2222', data)
     setAssemblyFormData(data)
     setActiveView('enterInfo')
     setActiveStep(0)
   }
 
   const handleContinue = useCallback(() => {
-    if (activeStep === Object.keys(uploadFilesData).length - 1) {
-      console.log('submit models')
+    if (activeStep === partCount - 1) {
       track('MultiUpload - Submit Files', {
-        amount: Object.keys(uploadFilesData).length,
+        amount: partCount,
       })
       dispatch(types.SUBMIT_MODELS, {
         onFinish: () => {
@@ -252,7 +250,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
     } else {
       setActiveStep(activeStep + 1)
     }
-  }, [activeStep, uploadFilesData, closeOverlay, history, assemblyData])
+  }, [activeStep, partCount, closeOverlay, history, assemblyData])
 
   const handleBack = useCallback(() => {
     setErrorMessage(null)
@@ -357,6 +355,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             formData={assemblyData}
             folders={dropdownFolders}
             folderId={folderId}
+            partCount={partCount}
             setErrorMessage={setErrorMessage}
             handleContinue={continueToModelInfo}
           />

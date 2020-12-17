@@ -116,6 +116,7 @@ const AssemblyInfo = ({
   folderId,
   folders = {},
   formData = {},
+  partCount = 1,
   setErrorMessage = noop,
   handleContinue = noop,
 }) => {
@@ -167,13 +168,15 @@ const AssemblyInfo = ({
     firstInputRef.current.focus()
   }, [])
 
+  const metaText = partCount > 1 ? `Assembly • ${partCount} Parts` : 'Assembly • 1 Part'
+
   return (
     <>
       <div className={c.AssemblyInfo_Row}>
         <div className={c.AssemblyInfo_ModelInfo}>
           <TitleTertiary>Enter Information</TitleTertiary>
           <Spacer size={'.5rem'} />
-          <MetadataPrimary>Assembly • 4 Parts</MetadataPrimary>
+          <MetadataPrimary>{metaText}</MetadataPrimary>
         </div>
       </div>
       <Spacer size={'1.5rem'} />
@@ -235,7 +238,6 @@ const AssemblyInfo = ({
           <Button type='submit'>Continue</Button>
         </div>
       </form>
-      <Spacer size={'2rem'} />
     </>
   )
 }
