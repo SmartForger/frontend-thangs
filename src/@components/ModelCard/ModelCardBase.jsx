@@ -113,9 +113,10 @@ const CardContents = ({
         origin: window.location.pathname,
       })
   }, [geoRelated, modelPath])
+
   return (
     <div
-      title={modelAttributionUrl || model.name || model.fileName}
+      title={modelAttributionUrl || model.name || model.parts[0].fileName}
       className={classnames(className, c.ModelCard)}
       data-cy={R.pathOr('unknown', ['name'], model)}
     >

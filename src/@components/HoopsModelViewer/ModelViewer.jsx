@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import * as R from 'ramda'
 import { HowTo, Spinner } from '@components'
 import { useModels, usePerformanceMetrics } from '@hooks'
 import Toolbar from './Toolbar'
@@ -46,15 +47,27 @@ const useStyles = createUseStyles(theme => {
 })
 
 const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
+  const [viewerModel, setViewerModel] = useState(null)
   const c = useStyles()
   const { useHoopsViewer } = useModels()
-  const { containerRef, hoops } = useHoopsViewer(model.uploadedFile)
+  const { containerRef, hoops } = useHoopsViewer(viewerModel)
   const { startTimer, getTime } = usePerformanceMetrics()
 
   useEffect(() => {
     startTimer()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    let primaryPart
+    if (model.parts.length > 1) {
+      primaryPart = R.find(R.propEq('isPrimary', true))(model.parts)
+      setViewerModel(primaryPart.filename)
+    } else {
+      primaryPart = model.parts[0]
+      setViewerModel(primaryPart.filename)
+    }
+  }, [model])
 
   useEffect(() => {
     if (hoops.status.isReady) perfTrack('Page Loaded - HOOPS Viewer', getTime())
@@ -67,7 +80,12 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
         <div ref={containerRef} />
       </div>
       {hoops.status.isReady && (
-        <Toolbar hoops={hoops} minimizeTools={minimizeTools} model={model} />
+        <Toolbar
+          hoops={hoops}
+          minimizeTools={minimizeTools}
+          model={model}
+          setViewerModel={setViewerModel}
+        />
       )}
     </div>
   )

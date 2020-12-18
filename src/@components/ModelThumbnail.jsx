@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import * as R from 'ramda'
 import ErrorImg from '@svg/image-error-icon.svg'
 import { Loader } from '@components'
 import classnames from 'classnames'
@@ -91,9 +92,16 @@ const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST
 const TIW_THUMBNAILS_HOST = process.env.REACT_APP_TIW_THUMBNAILS_HOST
 
 const getThumbnailFileName = (model = {}) => {
+  let primaryPart
   if (model.uploadedFile) return model.uploadedFile
-  if (model.fileName) return model.fileName.replace('uploads/models/', '')
   if (model.modelFileName) return model.modelFileName.replace('uploads/models/', '')
+  if (model.parts.length > 1) {
+    primaryPart = R.find(R.propEq('isPrimary', true))(model.parts)
+    if (primaryPart.fileName) return primaryPart.fileName.replace('uploads/models/', '')
+  } else {
+    primaryPart = model.parts[0]
+    return primaryPart.fileName.replace('uploads/models/', '')
+  }
 }
 
 const getWaldoThumbnailUrl = (model = {}, searchModelFileName) => {
@@ -105,22 +113,29 @@ const thumbnailUrl = model =>
   model.fullThumbnailUrl
     ? model.fullThumbnailUrl
     : model.thumbnailUrl
-      ? model.thumbnailUrl
-      : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}?size=456x540`
+    ? model.thumbnailUrl
+    : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}?size=456x540`
 
 const getThumbnailUrl = (model = {}) => {
+  let primaryPart
   if (model.thumbnailUrl) return model.thumbnailUrl
   if (model.uploadedFile) return model.uploadedFile
-  if (model.fileName) return model.fileName.replace('uploads/models/', '')
   if (model.modelFileName) return model.modelFileName.replace('uploads/models/', '')
+  if (model.parts.length > 1) {
+    primaryPart = R.find(R.propEq('isPrimary', true))(model.parts)
+    if (primaryPart.fileName) return primaryPart.fileName.replace('uploads/models/', '')
+  } else {
+    primaryPart = model.parts[0]
+    return primaryPart.fileName.replace('uploads/models/', '')
+  }
 }
 
 const waldoThumbnailUrl = (model, searchModelFileName) =>
   searchModelFileName
     ? `${TIW_THUMBNAILS_HOST}/${getThumbnailFileName(model)}/${getWaldoThumbnailUrl(
-      model,
-      searchModelFileName
-    )}`
+        model,
+        searchModelFileName
+      )}`
     : undefined
 
 const ModelThumbnail = ({ className, model, name, searchModelFileName, showWaldo }) => {
