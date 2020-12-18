@@ -69,7 +69,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-export const PartExplorerMenu = ({ model = {}, files = [] }) => {
+export const PartExplorerMenu = ({ files = [] }) => {
   const c = useStyles({})
   //Loop through files and build nested tree
   //Each row has an event handler which on click should change the viewer.
@@ -80,8 +80,6 @@ export const PartExplorerMenu = ({ model = {}, files = [] }) => {
     },
     [files]
   )
-
-  const handleOnSelect = useCallback(() => {}, [])
 
   return (
     <div className={c.PartExplorerDropdown}>
@@ -102,7 +100,7 @@ export const PartExplorerMenu = ({ model = {}, files = [] }) => {
 
 export const PartExplorerDropdown = ({
   selectedValue: model = {},
-  files = [],
+  // files = [],
   onSelectedFile = noop,
 }) => {
   const c = useStyles({})
@@ -118,13 +116,14 @@ export const PartExplorerDropdown = ({
       },
     })
   }, [dispatch, model, onSelectedFile])
-  console.log('model', model)
+
   return (
     <div
       className={c.PartExplorerDropdown_ClickableButton}
       onClick={ev => {
         ev.stopPropagation()
         setIsVisible(!isVisible)
+        handleOnClick()
       }}
     >
       <ModelThumbnail
@@ -151,7 +150,7 @@ export const PartExplorerDropdown = ({
 
 const PartExplorerDropdownMenu = ({ handleChange = noop, selectedValue }) => {
   const c = useStyles({})
-  console.log('selectedValue', selectedValue)
+
   return (
     <DropdownMenu
       className={c.PartExplorerDropdown}
