@@ -17,7 +17,7 @@ import { ReactComponent as CameraDesktopIcon } from '@svg/icon-camera-desktop.sv
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { lg, xl },
+    mediaQueries: { lg, xl_viewer },
   } = theme
   return {
     Toolbar: {
@@ -38,7 +38,7 @@ const useStyles = createUseStyles(theme => {
       display: 'none',
       alignItems: 'center',
 
-      [xl]: {
+      [xl_viewer]: {
         display: 'flex',
       },
     },
@@ -168,6 +168,7 @@ const Toolbar = ({
               <div className={c.Toolbar_WideText}>
                 <Spacer size={'1rem'} />
                 <Slider onChange={handleSliderChange} steps={30} value={magnitude} />
+                <Spacer size={'1.125rem'} />
               </div>
             </div>
           </>

@@ -43,6 +43,7 @@ const CustomSlider = withStyles({
     color: '#999',
     opacity: 1,
     height: 3,
+    padding: '0 10px',
   },
 })(MuiSlider)
 
