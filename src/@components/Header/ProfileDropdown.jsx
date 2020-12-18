@@ -101,13 +101,19 @@ export const ProfileDropdownMenu = ({
         <Divider spacing={0} />
         <Spacer size={'1rem'} />
         <DropdownItem to={`/${user.username}`}>
-          <PortfolioIcon /> Public Portfolio
+          <PortfolioIcon />
+          <Spacer size={'.75rem'} />
+          Public Portfolio
         </DropdownItem>
         <DropdownItem to={'/mythangs/shared-files'}>
-          <SharedIcon /> Shared with me
+          <SharedIcon />
+          <Spacer size={'.75rem'} />
+          Shared with me
         </DropdownItem>
         <DropdownItem to={'/mythangs/liked-models'}>
-          <HeartIcon /> Liked
+          <HeartIcon />
+          <Spacer size={'.75rem'} />
+          Liked
         </DropdownItem>
         <Spacer size={'1rem'} />
         <Divider spacing={0} />
@@ -122,6 +128,7 @@ export const ProfileDropdownMenu = ({
           }}
         >
           <SignOutIcon />
+          <Spacer size={'.75rem'} />
           {t('header.dropdownMenu.signOut')}
         </DropdownItem>
       </div>
