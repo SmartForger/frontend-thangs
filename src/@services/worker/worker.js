@@ -21,7 +21,7 @@ export const addMessageListener = listener => {
   listeners.push(listener)
 }
 
-function initialize(w) {
+function initialize() {
   sendMessage('api:setBaseUrl', {
     url: process.env.REACT_APP_API_KEY,
   })
@@ -34,6 +34,7 @@ function workerMessageHandler(e) {
 
 function logMessageHandler(messageType, data) {
   if (messageType === 'log') {
+    // eslint-disable-next-line no-console
     console.log('Worker ', data.file, data.line, data.logData)
   }
 }

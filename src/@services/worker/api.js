@@ -11,7 +11,7 @@ export const setToken = token => {
 
 /* Handle messages from worker */
 
-function apiMessageHandler(messageType, data) {
+function apiMessageHandler(messageType) {
   if (messageType === 'api:403') {
     authenticationService.logout()
     window.location.href = '/?sessionExpired=true'

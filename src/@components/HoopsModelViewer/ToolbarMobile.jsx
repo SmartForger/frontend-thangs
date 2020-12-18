@@ -1,15 +1,10 @@
 import React from 'react'
 import {
-  Pill,
   ColorPicker,
   Spacer,
-  MetadataSecondary,
-  Slider,
   DrawModeDropdown,
   ExplodeDropdown,
   OrientationDropdown,
-  PartExplorer,
-  //   PartExplorerMenu,
 } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -83,12 +78,9 @@ const Toolbar = ({
   orientation,
   handleColorChange,
   handleDrawChange,
-  handleResetView,
   handleSliderChange,
   handleSnapshot,
   handleViewChange,
-  setViewerModel,
-  model,
 }) => {
   const c = useStyles({ isAssembly, isMultipart })
   return (

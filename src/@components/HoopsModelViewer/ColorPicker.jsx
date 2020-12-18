@@ -6,7 +6,6 @@ import { Spacer, TitleTertiary } from '@components'
 import { useExternalClick } from '@hooks'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ColorBucketIcon } from '@svg/icon-color-bucket.svg'
-import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import * as types from '@constants/storeEventTypes'
 
 const COLORS = [

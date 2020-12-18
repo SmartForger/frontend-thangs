@@ -1,6 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
-import { LabelText, Spacer } from '@components'
+import { Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { MetadataSecondary } from './Text/Metadata'
 

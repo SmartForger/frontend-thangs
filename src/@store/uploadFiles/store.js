@@ -264,7 +264,6 @@ export default store => {
         validationTree,
       })
     } catch (e) {
-      console.log(e)
       store.dispatch(types.VALIDATE_FILES_FAILED)
     }
   })

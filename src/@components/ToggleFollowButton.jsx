@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react'
 import Skeleton from '@material-ui/lab/Skeleton'
 import { Pill, Spacer } from '@components'
-import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
 import { ReactComponent as FollowIcon } from '@svg/icon-follow.svg'
 import { ReactComponent as UnfollowIcon } from '@svg/icon-unfollow.svg'
 import { createUseStyles } from '@style'

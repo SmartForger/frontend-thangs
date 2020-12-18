@@ -3,12 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import { useFeature } from '@optimizely/react-sdk'
 import { authenticationService } from '@services'
-import {
-  initialize,
-  identify,
-  locationChange,
-  updateUserExperiments,
-} from '@utilities/analytics'
+import { initialize, identify, updateUserExperiments } from '@utilities/analytics'
 import ReactGA from 'react-ga'
 import ReactPixel from 'react-facebook-pixel'
 import { usePageMeta, useQuery } from '@hooks'
