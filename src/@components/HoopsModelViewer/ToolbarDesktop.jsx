@@ -20,7 +20,7 @@ import { ReactComponent as CameraDesktopIcon } from '@svg/icon-camera-desktop.sv
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { lg },
+    mediaQueries: { lg, xl },
   } = theme
   return {
     Toolbar: {
@@ -41,7 +41,7 @@ const useStyles = createUseStyles(theme => {
       display: 'none',
       alignItems: 'center',
 
-      [lg]: {
+      [xl]: {
         display: 'flex',
       },
     },
@@ -87,8 +87,8 @@ const useStyles = createUseStyles(theme => {
 const Toolbar = ({
   color,
   className,
-  isAssembly,
-  isMultipart,
+  isAssembly = true,
+  isMultipart = true,
   magnitude,
   mode,
   orientation,

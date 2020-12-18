@@ -13,7 +13,7 @@ import { ReactComponent as ExplodeIcon } from '@svg/icon-explode.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md, lg },
+    mediaQueries: { md_viewer, lg, xl },
   } = theme
   return {
     ExplodeDropdown: {
@@ -55,24 +55,27 @@ const useStyles = createUseStyles(theme => {
     ExplodeDropdown_Item: {
       justifyContent: 'space-between',
     },
+    ExplodeDropdown_Slider: {
+      width: '8.75rem',
+    },
     ExplodeDropdown__desktop: {
       display: 'none',
 
-      [md]: {
+      [md_viewer]: {
         display: 'flex',
       },
     },
     ExplodeDropdown__mobile: {
       display: 'flex',
 
-      [md]: {
+      [md_viewer]: {
         display: 'none',
       },
     },
     ExplodeDropdown__medium: {
       display: 'flex',
 
-      [lg]: {
+      [xl]: {
         display: 'none',
       },
     },
@@ -111,7 +114,12 @@ const ExplodeMenu = ({ handleSliderChange = noop, magnitude }) => {
       <div>
         <DropdownItem className={c.ExplodeDropdown_Item}>
           <div className={c.ExplodeDropdown_Row}>
-            <Slider onChange={handleSliderChange} steps={30} value={magnitude} />
+            <Slider
+              className={c.ExplodeDropdown_Slider}
+              onChange={handleSliderChange}
+              steps={25}
+              value={magnitude}
+            />
           </div>
         </DropdownItem>
       </div>

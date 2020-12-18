@@ -21,7 +21,7 @@ import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md },
+    mediaQueries: { md, md_viewer },
   } = theme
 
   return {
@@ -69,14 +69,14 @@ const useStyles = createUseStyles(theme => {
     OrientationDropdown__desktop: {
       display: 'none',
 
-      [md]: {
+      [md_viewer]: {
         display: 'flex',
       },
     },
     OrientationDropdown__mobile: {
       display: 'flex',
 
-      [md]: {
+      [md_viewer]: {
         display: 'none',
       },
     },

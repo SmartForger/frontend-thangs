@@ -10,7 +10,7 @@ const createTheme = (data = {}) => {
       xs_352: '@media (min-width: 352px)',
       sm: '@media (min-width: 480px)',
       md: '@media (min-width: 640px)',
-      md_viewer: '@media (min-width: 851px)',
+      md_viewer: '@media (min-width: 842px)',
       md_972: '@media (min-width: 972px)',
       lg: '@media (min-width: 1118px)',
       xl: '@media (min-width: 1235px)',

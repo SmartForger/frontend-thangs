@@ -4,20 +4,20 @@ import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md },
+    mediaQueries: { md_viewer },
   } = theme
   return {
     Toolbar__desktop: {
       display: 'none',
 
-      [md]: {
+      [md_viewer]: {
         display: 'block',
       },
     },
     Toolbar__mobile: {
       display: 'flex',
 
-      [md]: {
+      [md_viewer]: {
         display: 'none !important',
       },
     },

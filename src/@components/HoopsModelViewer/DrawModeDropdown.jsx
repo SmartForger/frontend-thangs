@@ -15,7 +15,7 @@ import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md },
+    mediaQueries: { md, md_viewer },
   } = theme
   return {
     DrawModeDropdown: {
@@ -60,14 +60,14 @@ const useStyles = createUseStyles(theme => {
     DrawModeDropdown__desktop: {
       display: 'none',
 
-      [md]: {
+      [md_viewer]: {
         display: 'flex',
       },
     },
     DrawModeDropdown__mobile: {
       display: 'flex',
 
-      [md]: {
+      [md_viewer]: {
         display: 'none',
       },
     },

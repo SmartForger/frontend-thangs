@@ -4,19 +4,21 @@ import { default as MuiSlider } from '@material-ui/core/Slider'
 
 const CustomSlider = withStyles({
   root: {
-    width: 200,
+    width: '7.25rem',
     color: '#242424',
-    height: 4,
+    height: '.25rem',
     padding: '13px 0',
   },
   thumb: {
-    height: 24,
-    width: 24,
-    borderRadius: 8,
+    height: '1.5rem',
+    width: '1.5rem',
+    borderRadius: '.5rem',
     backgroundColor: '#fff',
     border: '2px solid currentColor',
     marginTop: -11,
     marginLeft: -12,
+    transform: 'translateX(.75rem)',
+
     '&:hover': {
       boxShadow: 'none',
     },

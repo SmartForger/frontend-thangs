@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { Spacer, TitleTertiary } from '@components'
+import { useExternalClick } from '@hooks'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ColorBucketIcon } from '@svg/icon-color-bucket.svg'
 import * as types from '@constants/storeEventTypes'
@@ -20,7 +21,7 @@ const COLORS = [
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md },
+    mediaQueries: { md, md_viewer },
   } = theme
   return {
     ColorPicker: {
@@ -37,10 +38,10 @@ const useStyles = createUseStyles(theme => {
       gridTemplateRows: 'repeat(2, 1fr)',
       gap: '.75rem',
       padding: '1.5rem',
-      bottom: '5.1rem',
+      bottom: '4.2rem',
       left: '1rem',
       transform: 'translateX(-50%)',
-      borderRadius: '.25rem',
+      borderRadius: '.5rem',
       boxShadow: theme.variables.boxShadow,
 
       [md]: {
@@ -99,14 +100,14 @@ const useStyles = createUseStyles(theme => {
     ColorPicker__desktop: {
       display: 'none',
 
-      [md]: {
+      [md_viewer]: {
         display: 'flex',
       },
     },
     ColorPicker__mobile: {
       display: 'flex',
 
-      [md]: {
+      [md_viewer]: {
         display: 'none',
       },
     },
@@ -115,10 +116,11 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const BlockPicker = ({ currentColor, handleChange = noop, visible }) => {
+const BlockPicker = ({ currentColor, handleChange = noop, visible, pickerRef }) => {
   const c = useStyles({ visible, color: currentColor })
+
   return (
-    <div className={c.ColorPicker_BlockPicker} visible={visible}>
+    <div ref={pickerRef} className={c.ColorPicker_BlockPicker} visible={visible}>
       {COLORS.map((color, idx) => {
         const isSelected = color === currentColor
         return (
@@ -166,6 +168,9 @@ const ColorPicker = ({ color = '#FFFFFF', onChange }) => {
   const [visible, setVisible] = useState()
   const c = useStyles({ visible, color })
   const { dispatch } = useStoreon()
+  const pickerRef = useRef(null)
+
+  useExternalClick(pickerRef, () => setVisible(false))
 
   const toggleVisible = useCallback(() => {
     if (!visible) {
@@ -190,7 +195,12 @@ const ColorPicker = ({ color = '#FFFFFF', onChange }) => {
 
   return (
     <div className={c.ColorPicker} onClick={toggleVisible}>
-      <BlockPicker currentColor={color} handleChange={handleChange} visible={visible} />
+      <BlockPicker
+        currentColor={color}
+        handleChange={handleChange}
+        visible={visible}
+        pickerRef={pickerRef}
+      />
       <div
         className={classnames(c.ColorPicker_ColorCircle, c.ColorPicker__desktop)}
         style={{ backgroundColor: color }}
