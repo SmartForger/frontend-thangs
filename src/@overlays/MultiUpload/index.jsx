@@ -24,7 +24,6 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       position: 'relative',
-      padding: '2rem',
     },
     MultiUpload_Content: {
       display: 'flex',
@@ -342,6 +341,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
           <Spinner />
         </div>
       )}
+      <Spacer size={'2rem'} />
       <div className={c.MultiUpload_Content}>
         <div className={c.MultiUpload_Column}>
           <Spacer size={'1.5rem'} />
@@ -401,7 +401,9 @@ const MultiUpload = ({ initData = null, folderId }) => {
             isAssembly={isAssembly || (validationTree && validationTree.length > 0)}
           />
         )}
+        <Spacer size={'2rem'} />
       </div>
+      <Spacer size={'2rem'} />
     </div>
   )
 }

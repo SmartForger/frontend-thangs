@@ -249,7 +249,6 @@ const UploadModels = ({
           </section>
         )}
       </Dropzone>
-      <Spacer size='1rem' />
       {errorMessage && (
         <>
           <h4 className={c.UploadModels_ErrorText}>{errorMessage}</h4>
@@ -264,6 +263,7 @@ const UploadModels = ({
       )}
       {fileLength > 0 && (
         <>
+          <Spacer size='1rem' />
           <div className={c.UploadTreeView}>
             {files.map(f => (
               <UploadTreeItem
