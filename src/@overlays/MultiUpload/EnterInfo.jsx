@@ -19,15 +19,21 @@ import { formatBytes } from '@utilities'
 import { CATEGORIES } from '@constants/fileUpload'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
   return {
     EnterInfo: {
-      width: '27.75rem',
       minHeight: '27.75rem',
       backgroundColor: theme.colors.white[300],
       borderRadius: '1rem',
       display: 'flex',
       flexDirection: 'row',
       position: 'relative',
+
+      [md]: {
+        width: '27.75rem',
+      },
     },
     EnterInfo_Content: {
       display: 'flex',
@@ -165,9 +171,12 @@ const useStyles = createUseStyles(theme => {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
-        width: '18rem',
         display: 'inline-block',
         lineHeight: '1rem',
+
+        [md]: {
+          width: '18rem',
+        },
       },
     },
     EnterInfo_PrivacyText: {
@@ -237,13 +246,13 @@ const EnterInfo = ({
   const usersFolders = useMemo(() => {
     return folders && folders.length
       ? [
-        { value: 'files', label: 'My Public Files', isPublic: true },
-        ...folders.map(folder => ({
-          value: folder.id,
-          label: folder.name.replace(new RegExp('//', 'g'), '/'),
-          isPublic: folder.isPublic,
-        })),
-      ]
+          { value: 'files', label: 'My Public Files', isPublic: true },
+          ...folders.map(folder => ({
+            value: folder.id,
+            label: folder.name.replace(new RegExp('//', 'g'), '/'),
+            isPublic: folder.isPublic,
+          })),
+        ]
       : [{ value: 'files', label: 'My Public Files', isPublic: true }]
   }, [folders])
 

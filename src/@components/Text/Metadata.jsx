@@ -18,7 +18,7 @@ const useStyles = createUseStyles(theme => {
     MetadataPrimary: {
       fontSize: '1rem',
       lineHeight: '1rem',
-      margin: '0 1rem',
+      margin: '0',
 
       [md]: {
         margin: 'unset',

@@ -15,15 +15,21 @@ import { checkTreeMissing } from '@utilities'
 import AssemblyInfo from './AssemblyInfo'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
   return {
     MultiUpload: {
-      width: '27.75rem',
       minHeight: '27.75rem',
       backgroundColor: theme.colors.white[300],
       borderRadius: '1rem',
       display: 'flex',
       flexDirection: 'row',
       position: 'relative',
+
+      [md]: {
+        width: '27.75rem',
+      },
     },
     MultiUpload_Content: {
       display: 'flex',
@@ -75,6 +81,13 @@ const useStyles = createUseStyles(theme => {
       zIndex: 5,
       borderRadius: '1rem',
       display: 'flex',
+    },
+    MultiUpload__desktop: {
+      display: 'none',
+
+      [md]: {
+        display: 'flex',
+      },
     },
   }
 })
@@ -401,7 +414,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             isAssembly={isAssembly || (validationTree && validationTree.length > 0)}
           />
         )}
-        <Spacer size={'2rem'} />
+        <Spacer size={'2rem'} className={c.MultiUpload__desktop} />
       </div>
       <Spacer size={'2rem'} />
     </div>
