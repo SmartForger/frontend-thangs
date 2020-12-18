@@ -13,17 +13,21 @@ import { ReactComponent as ExplodeIcon } from '@svg/icon-explode.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md_viewer, lg, xl },
+    mediaQueries: { md_viewer, lg, xl_viewer },
   } = theme
   return {
     ExplodeDropdown: {
-      width: 'auto',
+      width: '10.75rem',
       color: `${theme.colors.black[500]} !important`,
-      right: '-7rem',
       bottom: '4.25rem',
       display: 'flex',
+      right: '-5rem',
 
-      [lg]: {
+      [md_viewer]: {
+        right: '-1rem',
+      },
+
+      [xl_viewer]: {
         display: 'none',
       },
     },
@@ -75,7 +79,7 @@ const useStyles = createUseStyles(theme => {
     ExplodeDropdown__medium: {
       display: 'flex',
 
-      [xl]: {
+      [xl_viewer]: {
         display: 'none',
       },
     },
@@ -110,9 +114,8 @@ const ExplodeMenu = ({ handleSliderChange = noop, magnitude }) => {
 
   return (
     <>
-      <Spacer className={c.ExplodeDropdown__mobile} size={'.5rem'} />
       <div>
-        <DropdownItem className={c.ExplodeDropdown_Item}>
+        <DropdownItem className={c.ExplodeDropdown_Item} noHover={true}>
           <div className={c.ExplodeDropdown_Row}>
             <Slider
               className={c.ExplodeDropdown_Slider}

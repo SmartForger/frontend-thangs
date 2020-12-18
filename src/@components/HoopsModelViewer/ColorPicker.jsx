@@ -39,7 +39,7 @@ const useStyles = createUseStyles(theme => {
       gap: '.75rem',
       padding: '1.5rem',
       bottom: '4.2rem',
-      left: '1rem',
+      left: '-1.5rem',
       transform: 'translateX(-50%)',
       borderRadius: '.5rem',
       boxShadow: theme.variables.boxShadow,

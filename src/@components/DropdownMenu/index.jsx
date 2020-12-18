@@ -62,7 +62,7 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.5rem',
       padding: '0',
       '&:hover': {
-        backgroundColor: theme.colors.white[800],
+        backgroundColor: ({ noHover }) => (noHover ? 'none' : theme.colors.white[800]),
       },
     },
     DropdownMenu_Container: {
@@ -92,8 +92,8 @@ const useDropdownMenuState = (initialIsOpen = false) => {
   }, [isOpen])
   return [isOpen, toggleOpen]
 }
-const DropdownItem = ({ children, to = '#', onClick, className }) => {
-  const c = useStyles({})
+const DropdownItem = ({ children, to = '#', onClick, className, noHover = false }) => {
+  const c = useStyles({ noHover })
   const { dispatch } = useStoreon()
 
   return (
