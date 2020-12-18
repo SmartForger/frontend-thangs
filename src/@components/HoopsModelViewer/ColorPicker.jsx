@@ -6,6 +6,7 @@ import { Spacer, TitleTertiary } from '@components'
 import { useExternalClick } from '@hooks'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ColorBucketIcon } from '@svg/icon-color-bucket.svg'
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import * as types from '@constants/storeEventTypes'
 
 const COLORS = [
@@ -194,13 +195,8 @@ const ColorPicker = ({ color = '#FFFFFF', onChange }) => {
   )
 
   return (
-    <div className={c.ColorPicker} onClick={toggleVisible}>
-      <BlockPicker
-        currentColor={color}
-        handleChange={handleChange}
-        visible={visible}
-        pickerRef={pickerRef}
-      />
+    <div className={c.ColorPicker} ref={pickerRef} onClick={toggleVisible}>
+      <BlockPicker currentColor={color} handleChange={handleChange} visible={visible} />
       <div
         className={classnames(c.ColorPicker_ColorCircle, c.ColorPicker__desktop)}
         style={{ backgroundColor: color }}

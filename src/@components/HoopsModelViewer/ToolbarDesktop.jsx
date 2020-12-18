@@ -8,14 +8,11 @@ import {
   DrawModeDropdown,
   ExplodeDropdown,
   OrientationDropdown,
-  ModelSearchDropdown,
-  //   ModelSearchDropdownMenu,
+  PartExplorerDropdown,
 } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as ResetIcon } from '@svg/icon-reset.svg'
-import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
-// import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as CameraDesktopIcon } from '@svg/icon-camera-desktop.svg'
 
 const useStyles = createUseStyles(theme => {
@@ -81,6 +78,9 @@ const useStyles = createUseStyles(theme => {
         display: 'none',
       },
     },
+    Toolbar_PartExplorerWrapper: {
+      position: 'relative',
+    },
   }
 })
 
@@ -98,6 +98,8 @@ const Toolbar = ({
   handleSliderChange,
   handleSnapshot,
   handleViewChange,
+  setViewerModel,
+  model,
 }) => {
   const c = useStyles({ isAssembly, isMultipart })
   return (
@@ -175,13 +177,11 @@ const Toolbar = ({
             <Spacer size={'1.125rem'} />
             <div className={c.Toolbar_VerticalRule}></div>
             <Spacer size={'1.125rem'} />
-            <div className={c.Toolbar_Group}>
-              <MetadataSecondary>ThNl</MetadataSecondary>
-              <Spacer size={'1rem'} />
-              <ModelSearchDropdown
-                label={'Model Assembly'}
-                selectedFile={'selected part'}
+            <div className={classnames(c.Toolbar_Group, c.Toolbar_PartExplorerWrapper)}>
+              <PartExplorerDropdown
+                selectedValue={model}
                 files={[]}
+                setViewerModel={setViewerModel}
               />
             </div>
           </>

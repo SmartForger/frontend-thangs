@@ -115,6 +115,15 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const [warningMessage, setWarningMessage] = useState(null)
   const c = useStyles({})
   const history = useHistory()
+  const uploadedFiles = useMemo(() => {
+    const fileIDs = Object.keys(uploadFilesData)
+    return fileIDs
+      .filter(fid => uploadFilesData[fid].name)
+      .map(fid => ({
+        id: fid,
+        ...uploadFilesData[fid],
+      }))
+  }, [uploadFilesData])
 
   const uploadTreeData = useMemo(() => {
     const files = Object.values(uploadFilesData)
@@ -147,46 +156,48 @@ const MultiUpload = ({ initData = null, folderId }) => {
   }, [uploadFilesData, validationTree])
 
   const setAssemblyFormData = formData => {
-    console.log('1111', formData)
     dispatch(types.SET_ASSEMBLY_FORMDATA, { formData })
   }
 
-  const onDrop = useCallback((acceptedFiles, [rejectedFile], _event) => {
-    track('MultiUpload - OnDrop', { amount: acceptedFiles && acceptedFiles.length })
+  const onDrop = useCallback(
+    (acceptedFiles, [rejectedFile], _event) => {
+      track('MultiUpload - OnDrop', { amount: acceptedFiles && acceptedFiles.length })
 
-    const files = acceptedFiles
-      .map(file => {
-        const fileObj = {
-          id: Math.random().toString(36).substr(2, 9),
-          file,
-        }
+      const files = acceptedFiles
+        .map(file => {
+          const fileObj = {
+            id: Math.random().toString(36).substr(2, 9),
+            file,
+          }
 
-        if (file.size >= FILE_SIZE_LIMITS.hard.size) {
-          setErrorMessage(
-            `One or more files was over ${FILE_SIZE_LIMITS.hard.pretty}. Try uploading a different file.`
-          )
-          return null
-        } else if (file.size >= FILE_SIZE_LIMITS.soft.size) {
-          fileObj.errorState = { warning: ERROR_STATES.SIZE_WARNING }
-        }
+          if (file.size >= FILE_SIZE_LIMITS.hard.size) {
+            setErrorMessage(
+              `One or more files was over ${FILE_SIZE_LIMITS.hard.pretty}. Try uploading a different file.`
+            )
+            return null
+          } else if (file.size >= FILE_SIZE_LIMITS.soft.size) {
+            fileObj.errorState = { warning: ERROR_STATES.SIZE_WARNING }
+          }
 
-        return fileObj
-      })
-      .filter(f => !!f)
+          return fileObj
+        })
+        .filter(f => !!f)
 
-    dispatch(types.UPLOAD_FILES, { files })
+      dispatch(types.UPLOAD_FILES, { files })
 
-    if (rejectedFile) {
-      const filePath = rejectedFile.path.split('.')
-      const fileExt = filePath[filePath.length - 1] || ''
-      track('MultiUpload - Rejected', { fileType: fileExt })
-      setErrorMessage(
-        `One or more files not supported. Supported file extensions include ${MODEL_FILE_EXTS.map(
-          e => e + ' '
-        )}.`
-      )
-    }
-  })
+      if (rejectedFile) {
+        const filePath = rejectedFile.path.split('.')
+        const fileExt = filePath[filePath.length - 1] || ''
+        track('MultiUpload - Rejected', { fileType: fileExt })
+        setErrorMessage(
+          `One or more files not supported. Supported file extensions include ${MODEL_FILE_EXTS.map(
+            e => e + ' '
+          )}.`
+        )
+      }
+    },
+    [dispatch]
+  )
 
   const removeFile = filename => {
     track('MultiUpload - Remove File')
@@ -200,7 +211,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
 
   const closeOverlay = useCallback(() => {
     dispatch(types.CLOSE_OVERLAY)
-  })
+  }, [dispatch])
 
   const setIsAssembly = isAssembly => {
     dispatch(types.SET_IS_ASSEMBLY, { isAssembly })
@@ -226,33 +237,52 @@ const MultiUpload = ({ initData = null, folderId }) => {
   }, [uploadFilesData, validationTree, isAssembly, validating])
 
   const continueToModelInfo = ({ data }) => {
-    console.log('2222', data)
     setAssemblyFormData(data)
     setActiveView('enterInfo')
     setActiveStep(0)
   }
 
-  const handleContinue = useCallback(() => {
-    if (activeStep === Object.keys(uploadFilesData).length - 1) {
-      console.log('submit models')
-      track('MultiUpload - Submit Files', {
-        amount: Object.keys(uploadFilesData).length,
-      })
-      dispatch(types.SUBMIT_MODELS, {
-        onFinish: () => {
-          closeOverlay()
-          dispatch(types.RESET_UPLOAD_FILES)
-          history.push(
-            assemblyData && assemblyData.folderId && assemblyData.folderId !== 'files'
-              ? `/mythangs/folder/${assemblyData.folderId}`
-              : '/mythangs/all-files'
-          )
-        },
-      })
-    } else {
-      setActiveStep(activeStep + 1)
-    }
-  }, [activeStep, uploadFilesData, dispatch, closeOverlay, history, assemblyData])
+  const handleUpdate = useCallback(
+    ({ id, data }) => {
+      const newData = { ...data }
+      if (newData.folderId === 'files') newData.folderId = null
+      dispatch(types.CHANGE_UPLOAD_FILE, { id, data: newData })
+    },
+    [dispatch]
+  )
+
+  const submitModels = useCallback(() => {
+    track('MultiUpload - Submit Files', {
+      amount: uploadedFiles.length,
+    })
+    dispatch(types.SUBMIT_MODELS, {
+      onFinish: () => {
+        closeOverlay()
+        dispatch(types.RESET_UPLOAD_FILES)
+        history.push(
+          assemblyData && assemblyData.folderId && assemblyData.folderId !== 'files'
+            ? `/mythangs/folder/${assemblyData.folderId}`
+            : '/mythangs/all-files'
+        )
+      },
+    })
+  }, [uploadedFiles.length, dispatch, closeOverlay, history, assemblyData])
+
+  const handleContinue = useCallback(
+    ({ applyRemaining, data }) => {
+      if (activeStep === uploadedFiles.length - 1) {
+        submitModels()
+      } else if (applyRemaining) {
+        for (let i = activeStep + 1; i < uploadedFiles.length; i++) {
+          handleUpdate({ id: uploadedFiles[i].id, data })
+        }
+        submitModels()
+      } else {
+        setActiveStep(activeStep + 1)
+      }
+    },
+    [activeStep, uploadedFiles, handleUpdate, submitModels]
+  )
 
   const handleBack = useCallback(() => {
     setErrorMessage(null)
@@ -265,12 +295,6 @@ const MultiUpload = ({ initData = null, folderId }) => {
       setActiveView(isAssembly ? 'assemblyInfo' : 'upload')
     }
   }, [activeView, activeStep, isAssembly])
-
-  const handleUpdate = ({ id, data }) => {
-    const newData = { ...data }
-    if (newData.folderId === 'files') newData.folderId = null
-    dispatch(types.CHANGE_UPLOAD_FILE, { id, data: newData })
-  }
 
   const dropdownFolders = useMemo(() => {
     const foldersArray = [...foldersData]
@@ -357,6 +381,8 @@ const MultiUpload = ({ initData = null, folderId }) => {
             formData={assemblyData}
             folders={dropdownFolders}
             folderId={folderId}
+            isMultipart={(!validationTree || validationTree.length === 0) && isAssembly}
+            uploadedFiles={uploadedFiles}
             setErrorMessage={setErrorMessage}
             handleContinue={continueToModelInfo}
           />

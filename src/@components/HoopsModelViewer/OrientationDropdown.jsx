@@ -165,9 +165,8 @@ const OrientationMenu = ({ handleChange = noop }) => {
         {options.map((option, ind) => {
           const { Icon = noop } = option
           return (
-            <>
+            <React.Fragment key={`drawmodes_${ind}`}>
               <DropdownItem
-                key={`drawmodes_${ind}`}
                 onClick={() => handleChange(option.value)}
                 className={c.OrientationDropdown_Item}
               >
@@ -179,7 +178,7 @@ const OrientationMenu = ({ handleChange = noop }) => {
                 <ArrowRightIcon className={c.OrientationDropdown__mobile} />
               </DropdownItem>
               <Spacer className={c.OrientationDropdown__mobile} size={'2rem'} />
-            </>
+            </React.Fragment>
           )
         })}
       </div>

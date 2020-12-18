@@ -1,13 +1,15 @@
-import React, { useCallback, useMemo, useRef, useEffect } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
+import * as R from 'ramda'
 import {
   Button,
   Dropdown,
   Input,
   MetadataPrimary,
+  MetadataSecondary,
   Spacer,
+  SingleLineBodyText,
   Textarea,
   TitleTertiary,
-  Toggle,
 } from '@components'
 import { useForm } from '@hooks'
 import { createUseStyles } from '@style'
@@ -113,9 +115,11 @@ const useStyles = createUseStyles(theme => {
 const noop = () => null
 
 const AssemblyInfo = ({
-  folderId,
+  // folderId,
   folders = {},
   formData = {},
+  isMultipart = false,
+  uploadedFiles = [],
   setErrorMessage = noop,
   handleContinue = noop,
 }) => {
@@ -127,7 +131,7 @@ const AssemblyInfo = ({
     description: '',
     folderId: 'files',
     category: '',
-    isPrivate: false,
+    primary: uploadedFiles[0].name,
     ...formData,
   }
 
@@ -143,52 +147,47 @@ const AssemblyInfo = ({
     [onInputChange, setErrorMessage]
   )
 
-  const handleFolderChange = useCallback(
-    e => {
-      if (e) {
-        handleOnInputChange('folderId', e.value)
-        if (e.value !== 'files') {
-          const folder = folders.find(folder => folder.id === e.value)
-          handleOnInputChange('isPrivate', !folder.isPublic || inputState.isPrivate)
-        }
-      }
-    },
-    [inputState, folders, handleOnInputChange]
-  )
-
-  const togglePrivate = useCallback(() => {
-    const folder = folders.find(folder => folder.id.toString() === inputState.folderId)
-    if (folder && !folder.isPublic) {
-      handleOnInputChange('isPrivate', true)
-    } else {
-      handleOnInputChange('isPrivate', !inputState.isPrivate)
-    }
-  }, [folders, inputState.folderId, inputState.isPrivate, handleOnInputChange])
-
   const handleSubmit = data => {
     handleContinue({ data })
   }
 
   const usersFolders = useMemo(() => {
     return folders && folders.length
-      ? folders.map(folder => ({
-        value: folder.id,
-        label: folder.name.replace(new RegExp('//', 'g'), '/'),
-      }))
-      : []
+      ? [
+          { value: 'files', label: 'My Public Files', isPublic: true },
+          ...folders.map(folder => ({
+            value: folder.id,
+            label: folder.name.replace(new RegExp('//', 'g'), '/'),
+            isPublic: folder.isPublic,
+          })),
+        ]
+      : [{ value: 'files', label: 'My Public Files', isPublic: true }]
   }, [folders])
 
   const selectedFolder = useMemo(() => {
-    if (!folderId || !folders || !folders.length)
-      return { value: 'files', label: 'My Public Files' }
-    const folder = folders.find(folder => folder.id.toString() === folderId.toString())
-    return { value: folderId, label: folder.name.replace(new RegExp('//', 'g'), '/') }
-  }, [folderId, folders])
+    return R.find(R.propEq('value', inputState.folderId), usersFolders)
+  }, [inputState, usersFolders])
 
-  useEffect(() => {
-    // overlayview('MultiUpload - EnterInfo')
-    firstInputRef.current.focus()
-  }, [])
+  const metaText =
+    uploadedFiles.length > 1
+      ? `Assembly • ${uploadedFiles.length} Parts`
+      : 'Assembly • 1 Part'
+  const folderPublic = selectedFolder && selectedFolder.isPublic
+  const fileOptions = useMemo(
+    () =>
+      uploadedFiles.map(
+        f => ({
+          value: f.name,
+          label: f.name,
+        }),
+        [uploadedFiles]
+      ),
+    [uploadedFiles]
+  )
+  const selectedPrimaryModel = useMemo(
+    () => fileOptions.find(f => f.value === inputState.primary) || fileOptions[0],
+    [fileOptions, inputState]
+  )
 
   return (
     <>
@@ -196,7 +195,7 @@ const AssemblyInfo = ({
         <div className={c.AssemblyInfo_ModelInfo}>
           <TitleTertiary>Enter Information</TitleTertiary>
           <Spacer size={'.5rem'} />
-          <MetadataPrimary>Assembly • 4 Parts</MetadataPrimary>
+          <MetadataPrimary>{metaText}</MetadataPrimary>
         </div>
       </div>
       <Spacer size={'1.5rem'} />
@@ -232,9 +231,11 @@ const AssemblyInfo = ({
               className={c.AssemblyInfo_Select}
               name='folder'
               placeholder={'Select folder'}
-              defaultValue={selectedFolder}
-              options={[{ value: 'files', label: 'My Public Files' }, ...usersFolders]}
-              onChange={handleFolderChange}
+              value={selectedFolder}
+              options={usersFolders}
+              onChange={e => {
+                if (e) handleOnInputChange('folderId', e.value)
+              }}
             />
             <Spacer size={'1rem'} />
           </div>
@@ -250,20 +251,43 @@ const AssemblyInfo = ({
               if (e) handleOnInputChange('category', e.value)
             }}
           />
+          <Spacer size={'1rem'} />
         </div>
-        <Spacer size={'0.5rem'} />
-        <Toggle
-          name='isPrivate'
-          label={'Private assembly'}
-          checked={inputState && inputState.isPrivate}
-          onChange={togglePrivate}
-        />
-        <Spacer size={'1rem'} />
+        {isMultipart && (
+          <div>
+            <Dropdown
+              className={c.AssemblyInfo_Select}
+              name='primary'
+              placeholder='Select primary model'
+              options={fileOptions}
+              value={selectedPrimaryModel}
+              onChange={e => {
+                if (e) handleOnInputChange('primary', e.value)
+              }}
+            />
+          </div>
+        )}
+        <Spacer size={'1.5rem'} />
+        <SingleLineBodyText>
+          {folderPublic ? 'Public Model' : 'Private Model'}
+        </SingleLineBodyText>
+        <Spacer size={'.5rem'} />
+        {folderPublic ? (
+          <MetadataSecondary className={c.AssemblyInfo_PrivacyText}>
+            The folder you have selected is Public. This model will be shared publicly
+            towards users on Thangs.
+          </MetadataSecondary>
+        ) : (
+          <MetadataSecondary className={c.AssemblyInfo_PrivacyText}>
+            The folder you have selected is Private. This model will be private and
+            restricted to yourself and those you to choose to share it with.
+          </MetadataSecondary>
+        )}
+        <Spacer size={'1.5rem'} />
         <div className={c.AssemblyInfo_ButtonWrapper}>
           <Button type='submit'>Continue</Button>
         </div>
       </form>
-      <Spacer size={'2rem'} />
     </>
   )
 }

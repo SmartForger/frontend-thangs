@@ -8,20 +8,14 @@ import {
   DrawModeDropdown,
   ExplodeDropdown,
   OrientationDropdown,
-  ModelSearchDropdown,
-  //   ModelSearchDropdownMenu,
+  PartExplorer,
+  //   PartExplorerMenu,
 } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
-import { ReactComponent as ExplodeIcon } from '@svg/icon-explode.svg'
-import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
-// import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as CameraIcon } from '@svg/icon-camera.svg'
 
 const useStyles = createUseStyles(theme => {
-  const {
-    mediaQueries: { md_viewer },
-  } = theme
   return {
     Toolbar: {
       margin: '0 auto 2rem',
@@ -93,6 +87,8 @@ const Toolbar = ({
   handleSliderChange,
   handleSnapshot,
   handleViewChange,
+  setViewerModel,
+  model,
 }) => {
   const c = useStyles({ isAssembly, isMultipart })
   return (

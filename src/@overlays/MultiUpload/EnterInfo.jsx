@@ -5,7 +5,9 @@ import {
   Dropdown,
   Input,
   MetadataPrimary,
+  MetadataSecondary,
   ModelThumbnail,
+  SingleLineBodyText,
   Spacer,
   Textarea,
   Toggle,
@@ -183,7 +185,7 @@ const EnterInfo = ({
   isAssembly = false,
   handleContinue = noop,
   handleUpdate = noop,
-  handleSkipToEnd = noop,
+  // handleSkipToEnd = noop,
   setErrorMessage = noop,
   uploadFiles,
   isLoading,
@@ -195,7 +197,7 @@ const EnterInfo = ({
     activeId,
     uploadFiles,
   ])
-  const [applyRemaing, setApplyRemaining] = useState(false)
+  const [applyRemaining, setApplyRemaining] = useState(false)
   const initialState = {
     name: (model && model.name) || '',
     description: '',
@@ -210,11 +212,6 @@ const EnterInfo = ({
     initialState,
   })
 
-  const folderPrivate = useMemo(() => {
-    const folder = folders.find(folder => folder.id === inputState.folderId)
-    return folder && !folder.isPublic
-  }, [inputState, folders])
-
   const handleOnInputChange = useCallback(
     (key, value) => {
       onInputChange(key, value)
@@ -226,24 +223,9 @@ const EnterInfo = ({
   const handleSubmit = useCallback(
     data => {
       handleUpdate({ id: activeId, data })
-      handleContinue({ selectedFolderId: inputState.folderId, step: activeStep + 1 })
+      handleContinue({ applyRemaining, data })
     },
-    [handleUpdate, activeId, handleContinue, inputState, activeStep]
-  )
-
-  const handleFolderChange = useCallback(
-    e => {
-      if (e) {
-        handleOnInputChange('folderId', e.value)
-        if (e.value !== 'files') {
-          const folder = folders.find(folder => folder.id === e.value)
-          if (folder && !folder.isPublic) {
-            handleOnInputChange('isPublic', false)
-          }
-        }
-      }
-    },
-    [folders, handleOnInputChange]
+    [handleUpdate, activeId, handleContinue, applyRemaining]
   )
 
   const selectedCategory = useMemo(() => {
@@ -254,19 +236,20 @@ const EnterInfo = ({
   const usersFolders = useMemo(() => {
     return folders && folders.length
       ? [
-        { value: 'files', label: 'My Public Files' },
-        ...folders.map(folder => ({
-          value: folder.id,
-          label: folder.name.replace(new RegExp('//', 'g'), '/'),
-        })),
-      ]
-      : [{ value: 'files', label: 'My Public Files' }]
+          { value: 'files', label: 'My Public Files', isPublic: true },
+          ...folders.map(folder => ({
+            value: folder.id,
+            label: folder.name.replace(new RegExp('//', 'g'), '/'),
+            isPublic: folder.isPublic,
+          })),
+        ]
+      : [{ value: 'files', label: 'My Public Files', isPublic: true }]
   }, [folders])
 
   const selectedFolder = useMemo(() => {
-    if (!inputState) return { value: 'files', label: 'My Public Files' }
     return R.find(R.propEq('value', inputState.folderId), usersFolders)
   }, [inputState, usersFolders])
+  const folderPublic = selectedFolder && selectedFolder.isPublic
 
   useEffect(() => {
     if (model) handleOnInputChange('name', model.name)
@@ -290,14 +273,7 @@ const EnterInfo = ({
       data
     )
     setInputState(modelState)
-    handleFolderChange({ value: modelState.folderId })
-  }, [model, setInputState, folderId, handleFolderChange])
-
-  useEffect(() => {
-    if (folderPrivate) {
-      handleOnInputChange('isPublic', false)
-    }
-  }, [folderPrivate, handleOnInputChange])
+  }, [model, setInputState, folderId])
 
   if (!model) return null
 
@@ -341,11 +317,11 @@ const EnterInfo = ({
           <Textarea
             id='description-input'
             name='description'
-            label='Description *'
+            label={isAssembly ? 'Description' : 'Description *'}
             type='description'
             value={inputState && inputState.description}
             onChange={handleOnInputChange}
-            required
+            required={!isAssembly}
           />
         </div>
         {!isAssembly && folders && folders.length ? (
@@ -356,7 +332,9 @@ const EnterInfo = ({
               placeholder={'Select folder'}
               value={selectedFolder}
               options={usersFolders}
-              onChange={handleFolderChange}
+              onChange={e => {
+                if (e) handleOnInputChange('folderId', e.value)
+              }}
             />
           </div>
         ) : null}
@@ -393,34 +371,51 @@ const EnterInfo = ({
             />
           </div>
         </div>
-        <div className={c.EnterInfo_Field}>
-          <Dropdown
-            className={c.EnterInfo_Select}
-            name='category'
-            placeholder='Select category'
-            value={selectedCategory}
-            isClearable
-            options={CATEGORIES}
-            onChange={e => {
-              if (e) handleOnInputChange('category', e.value)
-            }}
-          />
-        </div>
+        {!isAssembly && (
+          <div className={c.EnterInfo_Field}>
+            <Dropdown
+              className={c.EnterInfo_Select}
+              name='category'
+              placeholder='Select category'
+              value={selectedCategory}
+              isClearable
+              options={CATEGORIES}
+              onChange={e => {
+                if (e) handleOnInputChange('category', e.value)
+              }}
+            />
+          </div>
+        )}
         <Spacer size={'.5rem'} />
         <Toggle
           name='applyRemaining'
           label='Apply info to remaining models'
-          checked={applyRemaing}
+          checked={applyRemaining}
           onChange={ev => setApplyRemaining(ev.target.checked)}
         />
         <Spacer size={'1rem'} />
+        <SingleLineBodyText>
+          {folderPublic ? 'Public Model' : 'Private Model'}
+        </SingleLineBodyText>
+        <Spacer size={'.5rem'} />
+        {folderPublic ? (
+          <MetadataSecondary className={c.EnterInfo_PrivacyText}>
+            The folder you have selected is Public. This model will be shared publicly
+            towards users on Thangs.
+          </MetadataSecondary>
+        ) : (
+          <MetadataSecondary className={c.EnterInfo_PrivacyText}>
+            The folder you have selected is Private. This model will be private and
+            restricted to yourself and those you to choose to share it with.
+          </MetadataSecondary>
+        )}
+        <Spacer size={'1.5rem'} />
         <div className={c.EnterInfo_ButtonWrapper}>
           <Button type='submit' disabled={isLoading}>
             Continue
           </Button>
         </div>
       </form>
-      <Spacer size={'2rem'} />
     </>
   )
 }

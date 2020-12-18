@@ -24,7 +24,15 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const Toolbar = ({ hoops, modelName, isMultipart, isAssembly }) => {
+const noop = () => null
+
+const Toolbar = ({
+  hoops,
+  model = {},
+  isMultipart,
+  isAssembly,
+  setViewerModel = noop,
+}) => {
   const c = useStyles({ isMultipart, isAssembly })
   //These keep track the UI toolbar state
   const [mode, setMode] = useState('shaded')
@@ -83,8 +91,8 @@ const Toolbar = ({ hoops, modelName, isMultipart, isAssembly }) => {
   }, [changeExplosionMagnitude, handleDrawChange, resetImage])
 
   const handleSnapshot = useCallback(() => {
-    getViewerSnapshot(modelName)
-  }, [getViewerSnapshot, modelName])
+    getViewerSnapshot(model.name)
+  }, [getViewerSnapshot, model.name])
 
   const toolbarProps = {
     color,
@@ -99,6 +107,8 @@ const Toolbar = ({ hoops, modelName, isMultipart, isAssembly }) => {
     handleSliderChange,
     handleSnapshot,
     handleViewChange,
+    setViewerModel,
+    model,
   }
 
   return (

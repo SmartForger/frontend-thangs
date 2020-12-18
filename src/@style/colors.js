@@ -42,7 +42,7 @@ export const colors = {
   },
   blue: {
     100: '#D6E2EE',
-    200: '#5eaefa',
+    200: '#8FC6FB',
     300: '#1cb2f5',
     400: '#3c9df9',
     500: mains.BLUE,

@@ -67,7 +67,7 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
         <div ref={containerRef} />
       </div>
       {hoops.status.isReady && (
-        <Toolbar hoops={hoops} minimizeTools={minimizeTools} modelName={model.name} />
+        <Toolbar hoops={hoops} minimizeTools={minimizeTools} model={model} />
       )}
     </div>
   )
