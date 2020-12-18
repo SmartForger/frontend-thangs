@@ -119,7 +119,8 @@ const AssemblyInfo = ({
   folderId,
   folders = {},
   formData = {},
-  partCount = 1,
+  isMultipart = false,
+  uploadedFiles = [],
   setErrorMessage = noop,
   handleContinue = noop,
 }) => {
@@ -131,6 +132,7 @@ const AssemblyInfo = ({
     description: '',
     folderId: 'files',
     category: '',
+    primary: uploadedFiles[0].name,
     ...formData,
   }
 
@@ -167,8 +169,24 @@ const AssemblyInfo = ({
     return R.find(R.propEq('value', inputState.folderId), usersFolders)
   }, [inputState, usersFolders])
 
-  const metaText = partCount > 1 ? `Assembly • ${partCount} Parts` : 'Assembly • 1 Part'
+  const metaText =
+    uploadedFiles.length > 1
+      ? `Assembly • ${uploadedFiles.length} Parts`
+      : 'Assembly • 1 Part'
   const folderPublic = selectedFolder && selectedFolder.isPublic
+  const fileOptions = useMemo(() =>
+    uploadedFiles.map(
+      f => ({
+        value: f.name,
+        label: f.name,
+      }),
+      [uploadedFiles]
+    )
+  )
+  const selectedPrimaryModel = useMemo(
+    () => fileOptions.find(f => f.value === inputState.primary) || fileOptions[0],
+    [fileOptions, inputState]
+  )
 
   return (
     <>
@@ -232,7 +250,22 @@ const AssemblyInfo = ({
               if (e) handleOnInputChange('category', e.value)
             }}
           />
+          <Spacer size={'1rem'} />
         </div>
+        {isMultipart && (
+          <div>
+            <Dropdown
+              className={c.AssemblyInfo_Select}
+              name='primary'
+              placeholder='Select primary model'
+              options={fileOptions}
+              value={selectedPrimaryModel}
+              onChange={e => {
+                if (e) handleOnInputChange('primary', e.value)
+              }}
+            />
+          </div>
+        )}
         <Spacer size={'1.5rem'} />
         <SingleLineBodyText>
           {folderPublic ? 'Public Model' : 'Private Model'}

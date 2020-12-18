@@ -378,6 +378,7 @@ const createModelObject = (treeNodes, filesArray, assemblyData) => {
         material: fileObj.material,
         height: fileObj.height,
         weight: fileObj.weight,
+        isPrimary: !assemblyData || assemblyData.primary === fileObj.name
       })
     }
   })

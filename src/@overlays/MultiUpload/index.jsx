@@ -115,7 +115,14 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const [warningMessage, setWarningMessage] = useState(null)
   const c = useStyles({})
   const history = useHistory()
-  const partCount = Object.keys(uploadFilesData).length
+  const uploadedFiles = useMemo(() => {
+    const fileIDs = Object.keys(uploadFilesData)
+    return fileIDs.filter(fid => uploadFilesData[fid].name)
+      .map(fid => ({
+        id: fid,
+        ...uploadFilesData[fid]
+      }))
+  }, [uploadFilesData])
 
   const uploadTreeData = useMemo(() => {
     const files = Object.values(uploadFilesData)
@@ -239,7 +246,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
 
   const submitModels = useCallback(() => {
     track('MultiUpload - Submit Files', {
-      amount: partCount,
+      amount: uploadedFiles.length,
     })
     dispatch(types.SUBMIT_MODELS, {
       onFinish: () => {
@@ -252,23 +259,22 @@ const MultiUpload = ({ initData = null, folderId }) => {
         )
       },
     })
-  }, [history, assemblyData, closeOverlay, partCount])
+  }, [history, assemblyData, closeOverlay, uploadedFiles])
 
   const handleContinue = useCallback(
     ({ applyRemaining, data }) => {
-      if (activeStep === partCount - 1) {
+      if (activeStep === uploadedFiles.length - 1) {
         submitModels()
       } else if (applyRemaining) {
-        const fileIDs = Object.keys(uploadFilesData)
-        for (let i = activeStep + 1; i < fileIDs.length; i++) {
-          handleUpdate({ id: fileIDs[i], data })
+        for (let i = activeStep + 1; i < uploadedFiles.length; i++) {
+          handleUpdate({ id: uploadedFiles[i].id, data })
         }
         submitModels()
       } else {
         setActiveStep(activeStep + 1)
       }
     },
-    [activeStep, partCount, uploadFilesData, handleUpdate, submitModels]
+    [activeStep, uploadedFiles, handleUpdate, submitModels]
   )
 
   const handleBack = useCallback(() => {
@@ -368,7 +374,8 @@ const MultiUpload = ({ initData = null, folderId }) => {
             formData={assemblyData}
             folders={dropdownFolders}
             folderId={folderId}
-            partCount={partCount}
+            isMultipart={(!validationTree || validationTree.length === 0) && isAssembly}
+            uploadedFiles={uploadedFiles}
             setErrorMessage={setErrorMessage}
             handleContinue={continueToModelInfo}
           />

@@ -416,7 +416,6 @@ const EnterInfo = ({
           </Button>
         </div>
       </form>
-      <Spacer size={'2rem'} />
     </>
   )
 }
