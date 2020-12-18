@@ -1,10 +1,13 @@
 import React, { useCallback, useMemo, useRef, useEffect } from 'react'
+import * as R from 'ramda'
 import {
   Button,
   Dropdown,
   Input,
   MetadataPrimary,
+  MetadataSecondary,
   Spacer,
+  SingleLineBodyText,
   Textarea,
   TitleTertiary,
   Toggle,
@@ -149,26 +152,23 @@ const AssemblyInfo = ({
 
   const usersFolders = useMemo(() => {
     return folders && folders.length
-      ? folders.map(folder => ({
-          value: folder.id,
-          label: folder.name.replace(new RegExp('//', 'g'), '/'),
-        }))
-      : []
+      ? [
+          { value: 'files', label: 'My Public Files', isPublic: true },
+          ...folders.map(folder => ({
+            value: folder.id,
+            label: folder.name.replace(new RegExp('//', 'g'), '/'),
+            isPublic: folder.isPublic,
+          })),
+        ]
+      : [{ value: 'files', label: 'My Public Files', isPublic: true }]
   }, [folders])
 
   const selectedFolder = useMemo(() => {
-    if (!folderId || !folders || !folders.length)
-      return { value: 'files', label: 'My Public Files' }
-    const folder = folders.find(folder => folder.id.toString() === folderId.toString())
-    return { value: folderId, label: folder.name.replace(new RegExp('//', 'g'), '/') }
-  }, [folderId, folders])
-
-  useEffect(() => {
-    // overlayview('MultiUpload - EnterInfo')
-    firstInputRef.current.focus()
-  }, [])
+    return R.find(R.propEq('value', inputState.folderId), usersFolders)
+  }, [inputState, usersFolders])
 
   const metaText = partCount > 1 ? `Assembly • ${partCount} Parts` : 'Assembly • 1 Part'
+  const folderPublic = selectedFolder && selectedFolder.isPublic
 
   return (
     <>
@@ -212,8 +212,8 @@ const AssemblyInfo = ({
               className={c.AssemblyInfo_Select}
               name='folder'
               placeholder={'Select folder'}
-              defaultValue={selectedFolder}
-              options={[{ value: 'files', label: 'My Public Files' }, ...usersFolders]}
+              value={selectedFolder}
+              options={usersFolders}
               onChange={e => {
                 if (e) handleOnInputChange('folderId', e.value)
               }}
@@ -233,7 +233,23 @@ const AssemblyInfo = ({
             }}
           />
         </div>
-        <Spacer size={'1rem'} />
+        <Spacer size={'1.5rem'} />
+        <SingleLineBodyText>
+          {folderPublic ? 'Public Model' : 'Private Model'}
+        </SingleLineBodyText>
+        <Spacer size={'.5rem'} />
+        {folderPublic ? (
+          <MetadataSecondary className={c.AssemblyInfo_PrivacyText}>
+            The folder you have selected is Public. This model will be shared publicly
+            towards users on Thangs.
+          </MetadataSecondary>
+        ) : (
+          <MetadataSecondary className={c.AssemblyInfo_PrivacyText}>
+            The folder you have selected is Private. This model will be private and
+            restricted to yourself and those you to choose to share it with.
+          </MetadataSecondary>
+        )}
+        <Spacer size={'1.5rem'} />
         <div className={c.AssemblyInfo_ButtonWrapper}>
           <Button type='submit'>Continue</Button>
         </div>

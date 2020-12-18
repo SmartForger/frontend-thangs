@@ -5,7 +5,9 @@ import {
   Dropdown,
   Input,
   MetadataPrimary,
+  MetadataSecondary,
   ModelThumbnail,
+  SingleLineBodyText,
   Spacer,
   Textarea,
   Toggle,
@@ -210,11 +212,6 @@ const EnterInfo = ({
     initialState,
   })
 
-  const folderPrivate = useMemo(() => {
-    const folder = folders.find(folder => folder.id === inputState.folderId)
-    return folder && !folder.isPublic
-  }, [inputState, folders])
-
   const handleOnInputChange = useCallback(
     (key, value) => {
       onInputChange(key, value)
@@ -239,19 +236,20 @@ const EnterInfo = ({
   const usersFolders = useMemo(() => {
     return folders && folders.length
       ? [
-          { value: 'files', label: 'My Public Files' },
+          { value: 'files', label: 'My Public Files', isPublic: true },
           ...folders.map(folder => ({
             value: folder.id,
             label: folder.name.replace(new RegExp('//', 'g'), '/'),
+            isPublic: folder.isPublic,
           })),
         ]
-      : [{ value: 'files', label: 'My Public Files' }]
+      : [{ value: 'files', label: 'My Public Files', isPublic: true }]
   }, [folders])
 
   const selectedFolder = useMemo(() => {
-    if (!inputState) return { value: 'files', label: 'My Public Files' }
     return R.find(R.propEq('value', inputState.folderId), usersFolders)
   }, [inputState, usersFolders])
+  const folderPublic = selectedFolder && selectedFolder.isPublic
 
   useEffect(() => {
     if (model) handleOnInputChange('name', model.name)
@@ -276,12 +274,6 @@ const EnterInfo = ({
     )
     setInputState(modelState)
   }, [model, setInputState, folderId])
-
-  useEffect(() => {
-    if (folderPrivate) {
-      handleOnInputChange('isPublic', false)
-    }
-  }, [folderPrivate, handleOnInputChange])
 
   if (!model) return null
 
@@ -402,6 +394,22 @@ const EnterInfo = ({
           onChange={ev => setApplyRemaining(ev.target.checked)}
         />
         <Spacer size={'1rem'} />
+        <SingleLineBodyText>
+          {folderPublic ? 'Public Model' : 'Private Model'}
+        </SingleLineBodyText>
+        <Spacer size={'.5rem'} />
+        {folderPublic ? (
+          <MetadataSecondary className={c.EnterInfo_PrivacyText}>
+            The folder you have selected is Public. This model will be shared publicly
+            towards users on Thangs.
+          </MetadataSecondary>
+        ) : (
+          <MetadataSecondary className={c.EnterInfo_PrivacyText}>
+            The folder you have selected is Private. This model will be private and
+            restricted to yourself and those you to choose to share it with.
+          </MetadataSecondary>
+        )}
+        <Spacer size={'1.5rem'} />
         <div className={c.EnterInfo_ButtonWrapper}>
           <Button type='submit' disabled={isLoading}>
             Continue
