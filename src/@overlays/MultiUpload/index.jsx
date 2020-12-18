@@ -115,7 +115,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const [warningMessage, setWarningMessage] = useState(null)
   const c = useStyles({})
   const history = useHistory()
-  const partCount = Object.keys(uploadFilesData).length;
+  const partCount = Object.keys(uploadFilesData).length
 
   const uploadTreeData = useMemo(() => {
     const files = Object.values(uploadFilesData)
@@ -231,26 +231,45 @@ const MultiUpload = ({ initData = null, folderId }) => {
     setActiveStep(0)
   }
 
-  const handleContinue = useCallback(() => {
-    if (activeStep === partCount - 1) {
-      track('MultiUpload - Submit Files', {
-        amount: partCount,
-      })
-      dispatch(types.SUBMIT_MODELS, {
-        onFinish: () => {
-          closeOverlay()
-          dispatch(types.RESET_UPLOAD_FILES)
-          history.push(
-            assemblyData && assemblyData.folderId && assemblyData.folderId !== 'files'
-              ? `/mythangs/folder/${assemblyData.folderId}`
-              : '/mythangs/all-files'
-          )
-        },
-      })
-    } else {
-      setActiveStep(activeStep + 1)
-    }
-  }, [activeStep, partCount, closeOverlay, history, assemblyData])
+  const handleUpdate = ({ id, data }) => {
+    const newData = { ...data }
+    if (newData.folderId === 'files') newData.folderId = null
+    dispatch(types.CHANGE_UPLOAD_FILE, { id, data: newData })
+  }
+
+  const submitModels = useCallback(() => {
+    track('MultiUpload - Submit Files', {
+      amount: partCount,
+    })
+    dispatch(types.SUBMIT_MODELS, {
+      onFinish: () => {
+        closeOverlay()
+        dispatch(types.RESET_UPLOAD_FILES)
+        history.push(
+          assemblyData && assemblyData.folderId && assemblyData.folderId !== 'files'
+            ? `/mythangs/folder/${assemblyData.folderId}`
+            : '/mythangs/all-files'
+        )
+      },
+    })
+  }, [history, assemblyData, closeOverlay, partCount])
+
+  const handleContinue = useCallback(
+    ({ applyRemaining, data }) => {
+      if (activeStep === partCount - 1) {
+        submitModels()
+      } else if (applyRemaining) {
+        const fileIDs = Object.keys(uploadFilesData)
+        for (let i = activeStep + 1; i < fileIDs.length; i++) {
+          handleUpdate({ id: fileIDs[i], data })
+        }
+        submitModels()
+      } else {
+        setActiveStep(activeStep + 1)
+      }
+    },
+    [activeStep, partCount, uploadFilesData, handleUpdate, submitModels]
+  )
 
   const handleBack = useCallback(() => {
     setErrorMessage(null)
@@ -263,12 +282,6 @@ const MultiUpload = ({ initData = null, folderId }) => {
       setActiveView(isAssembly ? 'assemblyInfo' : 'upload')
     }
   }, [activeView, activeStep, isAssembly])
-
-  const handleUpdate = ({ id, data }) => {
-    const newData = { ...data }
-    if (newData.folderId === 'files') newData.folderId = null
-    dispatch(types.CHANGE_UPLOAD_FILE, { id, data: newData })
-  }
 
   const dropdownFolders = useMemo(() => {
     const foldersArray = [...foldersData]

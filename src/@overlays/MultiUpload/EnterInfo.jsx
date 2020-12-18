@@ -197,7 +197,7 @@ const EnterInfo = ({
     activeId,
     uploadFiles,
   ])
-  const [applyRemaing, setApplyRemaining] = useState(false)
+  const [applyRemaining, setApplyRemaining] = useState(false)
   const initialState = {
     name: (model && model.name) || '',
     description: '',
@@ -223,9 +223,9 @@ const EnterInfo = ({
   const handleSubmit = useCallback(
     data => {
       handleUpdate({ id: activeId, data })
-      handleContinue({ selectedFolderId: inputState.folderId, step: activeStep + 1 })
+      handleContinue({ applyRemaining, data })
     },
-    [handleUpdate, activeId, handleContinue, inputState, activeStep]
+    [handleUpdate, activeId, handleContinue, applyRemaining]
   )
 
   const selectedCategory = useMemo(() => {
@@ -390,7 +390,7 @@ const EnterInfo = ({
         <Toggle
           name='applyRemaining'
           label='Apply info to remaining models'
-          checked={applyRemaing}
+          checked={applyRemaining}
           onChange={ev => setApplyRemaining(ev.target.checked)}
         />
         <Spacer size={'1rem'} />
