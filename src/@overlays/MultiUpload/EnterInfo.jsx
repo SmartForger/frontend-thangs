@@ -88,6 +88,7 @@ const useStyles = createUseStyles(theme => {
     },
     EnterInfo_Field: {
       marginBottom: '1rem',
+      flexGrow: 1,
     },
     EnterInfo_FileName: {
       textOverflow: 'ellipsis',
