@@ -27,6 +27,7 @@ export default store => {
   })
 
   store.on(types.CHANGE_USER_STATUS, (state, { atom, status = STATUSES.INIT, data }) => ({
+    ...state,
     [atom]: {
       ...state[atom],
       ...getStatusState(status), 
