@@ -125,9 +125,16 @@ const useStyles = createUseStyles(theme => {
       height: '100%',
       zIndex: 2,
       opacity: 0,
+      visibility: 'hidden',
     },
     Layout_theDarknessComes: {
       opacity: 1,
+      visibility: 'visible',
+
+      [md]: {
+        opacity: 0,
+        visibility: 'hidden',
+      },
     },
   }
 })

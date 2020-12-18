@@ -1,9 +1,12 @@
 import React, { useState, useCallback } from 'react'
+import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import { Spacer } from '@components'
+import { Spacer, TitleTertiary } from '@components'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ColorBucketIcon } from '@svg/icon-color-bucket.svg'
+import * as types from '@constants/storeEventTypes'
+
 const COLORS = [
   '#dbdbdf',
   '#88888b',
@@ -27,7 +30,7 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
     },
     ColorPicker_BlockPicker: {
-      display: ({ visible }) => (visible ? 'grid' : 'none'),
+      display: 'none',
       backgroundColor: theme.variables.colors.cardBackground,
       position: 'absolute',
       gridTemplateColumns: 'repeat(4, 1fr)',
@@ -39,6 +42,10 @@ const useStyles = createUseStyles(theme => {
       transform: 'translateX(-50%)',
       borderRadius: '.25rem',
       boxShadow: theme.variables.boxShadow,
+
+      [md]: {
+        display: ({ visible }) => (visible ? 'grid' : 'none'),
+      },
 
       '&:after': {
         content: '',
@@ -52,6 +59,25 @@ const useStyles = createUseStyles(theme => {
         borderLeft: 'solid 6px transparent',
         borderRight: 'solid 6px transparent',
         zIndex: 1,
+      },
+    },
+    ColorPicker_ActionMenu: {
+      width: '100%',
+
+      '& > div': {
+        display: 'flex',
+        position: 'relative',
+        left: 0,
+        bottom: 0,
+        boxShadow: 'none',
+        transform: 'none',
+        paddingLeft: 0,
+        paddingRight: 0,
+        justifyContent: 'space-between',
+
+        [md]: {
+          display: 'none',
+        },
       },
     },
     ColorPicker_Color: {
@@ -87,7 +113,9 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const BlockPicker = ({ currentColor, onChange, visible }) => {
+const noop = () => null
+
+const BlockPicker = ({ currentColor, handleChange = noop, visible }) => {
   const c = useStyles({ visible, color: currentColor })
   return (
     <div className={c.ColorPicker_BlockPicker} visible={visible}>
@@ -99,7 +127,7 @@ const BlockPicker = ({ currentColor, onChange, visible }) => {
               [c.ColorPicker__isSelected]: isSelected,
             })}
             style={{ backgroundColor: color }}
-            onClick={() => onChange(color)}
+            onClick={() => handleChange(color)}
             key={idx}
           />
         )
@@ -108,13 +136,49 @@ const BlockPicker = ({ currentColor, onChange, visible }) => {
   )
 }
 
+const BlockPickerActionMenu = ({ handleChange = noop }) => {
+  const c = useStyles({})
+  const { dispatch } = useStoreon()
+
+  const handleSelect = useCallback(
+    value => {
+      handleChange(value)
+      dispatch(types.CLOSE_ACTION_BAR)
+    },
+    [dispatch, handleChange]
+  )
+
+  return (
+    <>
+      <Spacer size={'2rem'} />
+      <div className={c.ColorPicker_ActionMenu}>
+        <Spacer size={'2rem'} />
+        <TitleTertiary>Pick a color</TitleTertiary>
+        <BlockPicker handleChange={handleSelect} />
+        <Spacer size={'2rem'} />
+      </div>
+      <Spacer size={'2rem'} />
+    </>
+  )
+}
+
 const ColorPicker = ({ color = '#FFFFFF', onChange }) => {
   const [visible, setVisible] = useState()
   const c = useStyles({ visible, color })
+  const { dispatch } = useStoreon()
 
   const toggleVisible = useCallback(() => {
+    if (!visible) {
+      dispatch(types.OPEN_ACTION_BAR, {
+        Component: BlockPickerActionMenu,
+        data: {
+          selectedValue: color,
+          handleChange: onChange,
+        },
+      })
+    }
     setVisible(!visible)
-  }, [visible])
+  }, [color, dispatch, onChange, visible])
 
   const handleChange = useCallback(
     (...args) => {
@@ -126,7 +190,7 @@ const ColorPicker = ({ color = '#FFFFFF', onChange }) => {
 
   return (
     <div className={c.ColorPicker} onClick={toggleVisible}>
-      <BlockPicker currentColor={color} onChange={handleChange} visible={visible} />
+      <BlockPicker currentColor={color} handleChange={handleChange} visible={visible} />
       <div
         className={classnames(c.ColorPicker_ColorCircle, c.ColorPicker__desktop)}
         style={{ backgroundColor: color }}

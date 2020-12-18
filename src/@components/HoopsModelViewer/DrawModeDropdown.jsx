@@ -34,9 +34,6 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       width: '100%',
     },
-    DrawModeDropdown_Arrow: {
-      '& > path': {},
-    },
     DrawModeDropdown_ClickableButton: {
       cursor: 'pointer',
       display: 'flex',
@@ -128,9 +125,7 @@ const DrawModeDropdown = ({ onClick = noop, handleChange = noop, selectedValue }
       <DrawIcon className={c.DrawModeDropdown__desktop} />
       <DrawMobileIcon className={c.DrawModeDropdown__mobile} />
       <Spacer size={'.5rem'} className={c.DrawModeDropdown__desktop} />
-      <ArrowDownIcon
-        className={classnames(c.DrawModeDropdown_Arrow, c.DrawModeDropdown__desktop)}
-      />
+      <ArrowDownIcon className={c.DrawModeDropdown__desktop} />
     </div>
   )
 }
@@ -140,7 +135,6 @@ const DrawModeMenu = ({ handleChange = noop }) => {
 
   return (
     <>
-      <Spacer className={c.DrawModeDropdown__desktop} size={'1.5rem'} />
       <Spacer className={c.DrawModeDropdown__mobile} size={'2rem'} />
       <div>
         {options.map((option, ind) => {
