@@ -95,13 +95,17 @@ const getThumbnailFileName = (model = {}) => {
   let primaryPart
   if (model.uploadedFile) return model.uploadedFile
   if (model.modelFileName) return model.modelFileName.replace('uploads/models/', '')
-  if (model.parts.length > 1) {
-    primaryPart = R.find(R.propEq('isPrimary', true))(model.parts)
-    if (primaryPart.fileName) return primaryPart.fileName.replace('uploads/models/', '')
-  } else {
-    primaryPart = model.parts[0]
-    return primaryPart.fileName.replace('uploads/models/', '')
+  if (model.parts) {
+    if (model.parts.length > 1) {
+      primaryPart = R.find(R.propEq('isPrimary', true))(model.parts)
+      if (primaryPart.fileName) return primaryPart.fileName.replace('uploads/models/', '')
+    } else {
+      primaryPart = model.parts[0]
+      return primaryPart.fileName.replace('uploads/models/', '')
+    }
   }
+  if (model.fileName) return model.fileName.replace('uploads/models/', '')
+  return 'unknown'
 }
 
 const getWaldoThumbnailUrl = (model = {}, searchModelFileName) => {
@@ -121,13 +125,17 @@ const getThumbnailUrl = (model = {}) => {
   if (model.thumbnailUrl) return model.thumbnailUrl
   if (model.uploadedFile) return model.uploadedFile
   if (model.modelFileName) return model.modelFileName.replace('uploads/models/', '')
-  if (model.parts.length > 1) {
-    primaryPart = R.find(R.propEq('isPrimary', true))(model.parts)
-    if (primaryPart.fileName) return primaryPart.fileName.replace('uploads/models/', '')
-  } else {
-    primaryPart = model.parts[0]
-    return primaryPart.fileName.replace('uploads/models/', '')
+  if (model.parts) {
+    if (model.parts.length > 1) {
+      primaryPart = R.find(R.propEq('isPrimary', true))(model.parts)
+      if (primaryPart.fileName) return primaryPart.fileName.replace('uploads/models/', '')
+    } else {
+      primaryPart = model.parts[0]
+      return primaryPart.fileName.replace('uploads/models/', '')
+    }
   }
+  if (model.fileName) return model.fileName.replace('uploads/models/', '')
+  return 'unknown'
 }
 
 const waldoThumbnailUrl = (model, searchModelFileName) =>

@@ -106,6 +106,7 @@ const CardContents = ({
   geoRelated,
 }) => {
   const userName = R.pathOr('no-user', ['owner', 'username'], model)
+
   const onAnchorClick = useCallback(() => {
     if (geoRelated)
       track('Geo Related Model Link', {
@@ -114,9 +115,23 @@ const CardContents = ({
       })
   }, [geoRelated, modelPath])
 
+  const modelTitle = useMemo(() => {
+    if (modelAttributionUrl) return modelAttributionUrl
+    if (model) {
+      if (model.name) {
+        return model.name
+      }
+      if (model.parts && model.parts.length) {
+        return model.parts[0].fileName
+      }
+      if (model.fileName) return model.fileName
+      return 'unknown'
+    }
+  }, [model, modelAttributionUrl])
+
   return (
     <div
-      title={modelAttributionUrl || model.name || model.parts[0].fileName}
+      title={modelTitle}
       className={classnames(className, c.ModelCard)}
       data-cy={R.pathOr('unknown', ['name'], model)}
     >
