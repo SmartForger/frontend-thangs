@@ -135,11 +135,7 @@ const useStyles = createUseStyles(theme => {
     },
     Model_Detail: {
       justifyContent: 'space-between',
-      flexDirection: 'column',
-
-      [md]: {
-        flexDirection: 'row',
-      },
+      flexDirection: 'row',
     },
     Model_SocialButtons: {
       display: 'flex',

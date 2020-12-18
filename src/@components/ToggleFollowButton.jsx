@@ -1,15 +1,19 @@
 import React, { useCallback } from 'react'
 import Skeleton from '@material-ui/lab/Skeleton'
-import { Button, Spacer } from '@components'
+import { Pill, Spacer } from '@components'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
-import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
+import { ReactComponent as FollowIcon } from '@svg/icon-follow.svg'
+import { ReactComponent as UnfollowIcon } from '@svg/icon-unfollow.svg'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
   return {
     Spinner: {
       width: '1rem',
@@ -22,10 +26,7 @@ const useStyles = createUseStyles(_theme => {
       width: '1rem',
       height: '1rem',
     },
-    ToggleFollowButton: {
-      paddingTop: '.75rem',
-      paddingBottom: '.75rem',
-    },
+    ToggleFollowButton: {},
     ToggleFollowButton_icon: {
       transition: 'all 450ms',
     },
@@ -38,6 +39,13 @@ const useStyles = createUseStyles(_theme => {
       height: '2.5rem !important',
       width: '6.7rem',
       borderRadius: '.5rem',
+    },
+    ToggleFollowButton__desktop: {
+      display: 'none',
+
+      [md]: {
+        display: 'flex',
+      },
     },
   }
 })
@@ -91,24 +99,21 @@ const AuthFollowButton = ({
     !profileUserId ? (
       <Skeleton variant='rect' className={c.ToggleFollowButton_Skeleton} />
     ) : (
-      <Button
+      <Pill
         className={classnames(className, c.ToggleFollowButton)}
         disabled={isLoading || isError}
         onClick={handleClick}
-        secondary
       >
-        {isError ? (
-          <ErrorIcon className={c.ErrorIcon} />
+        {isFollowing ? (
+          <UnfollowIcon className={c.ToggleFollowButton_icon} />
         ) : (
-          <PlusIcon
-            className={classnames(c.ToggleFollowButton_icon, {
-              [c.ToggleFollowButton_icon__unfollow]: isFollowing,
-            })}
-          />
+          <FollowIcon className={c.ToggleFollowButton_icon} />
         )}
-        <Spacer size='.5rem' />
-        {isFollowing ? 'Unfollow' : 'Follow'}
-      </Button>
+        <div className={c.ToggleFollowButton__desktop}>
+          <Spacer size='.5rem' />
+          {isFollowing ? 'Unfollow' : 'Follow'}
+        </div>
+      </Pill>
     )
   ) : null
 }
@@ -120,17 +125,15 @@ const UnauthFollowButton = ({ c, className, openSignupOverlay = noop }) => {
   }, [openSignupOverlay])
 
   return (
-    <Button
-      className={classnames(className, c.ToggleFollowButton)}
-      onClick={handleClick}
-      secondary
-    >
+    <Pill className={classnames(className, c.ToggleFollowButton)} onClick={handleClick}>
       <div>
-        <PlusIcon />
+        <FollowIcon />
       </div>
-      <Spacer size='.5rem' />
-      Follow
-    </Button>
+      <div className={c.ToggleFollowButton__desktop}>
+        <Spacer size='.5rem' />
+        Follow
+      </div>
+    </Pill>
   )
 }
 

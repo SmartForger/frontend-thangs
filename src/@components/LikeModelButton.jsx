@@ -5,7 +5,7 @@ import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as StarFilledIcon } from '@svg/icon-star-filled.svg'
 import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
-import { Button, Spacer } from '@components'
+import { Pill, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 import classnames from 'classnames'
@@ -13,6 +13,9 @@ import { track } from '@utilities/analytics'
 import { authenticationService } from '@services'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
   return {
     '@keyframes spinner': {
       from: {
@@ -64,6 +67,13 @@ const useStyles = createUseStyles(theme => {
       '& path': {
         fill: ({ color }) => (color ? 'transparent' : theme.colors.black[500]),
         stroke: ({ color }) => color || 'transparent',
+      },
+    },
+    LikeModelButton__desktop: {
+      display: 'none',
+
+      [md]: {
+        display: 'flex',
       },
     },
   }
@@ -156,36 +166,42 @@ const AuthLikeModelButton = ({
   }
 
   return (
-    <Button className={className} secondary onClick={handleLikeClicked}>
+    <Pill className={className} onClick={handleLikeClicked}>
       {isModelOfCurrentUser ? (
         <>
           <StarButton liked={liked} c={c} hasChanged={hasChanged} />
-          <Spacer size='.5rem' />
-          {liked ? 'Starred' : 'Star'}
+          <div className={c.LikeModelButton__desktop}>
+            <Spacer size='.5rem' />
+            <span>{liked ? 'Unstar' : 'Star'}</span>
+          </div>
         </>
       ) : (
         <>
           <HeartButton liked={liked} c={c} hasChanged={hasChanged} />
-          <Spacer size='.5rem' />
-          {liked ? 'Liked' : 'Like'}
+          <div className={c.LikeModelButton__desktop}>
+            <Spacer size='.5rem' />
+            <span>{liked ? 'Unlike' : 'Like'}</span>
+          </div>
         </>
       )}
-    </Button>
+    </Pill>
   )
 }
 
 const UnauthLikeModelButton = ({ openSignupOverlay = noop }) => {
+  const c = useStyles({})
+
   const handleClick = useCallback(() => {
     openSignupOverlay('Join to Like, Follow, Share.', 'Like')
     track('SignUp Prompt Overlay', { source: 'Like' })
   }, [openSignupOverlay])
 
   return (
-    <Button onClick={handleClick} secondary>
+    <Pill onClick={handleClick}>
       <HeartFilledIcon />
       <Spacer size='.5rem' />
-      Like
-    </Button>
+      <span className={c.LikeModelButton__desktop}>Like</span>
+    </Pill>
   )
 }
 
