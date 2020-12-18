@@ -92,7 +92,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const EditModel = ({ model, fetchData }) => {
+const EditModel = ({ model }) => {
   const c = useStyles()
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [editModelErrorMessage, setEditModelErrorMessage] = useState(null)
@@ -122,17 +122,6 @@ const EditModel = ({ model, fetchData }) => {
     [dispatch]
   )
 
-  const handleDelete = useCallback(() => {
-    track('Delete Model - Edit Overlay')
-    dispatch(types.DELETE_USER_OWN_MODEL, {
-      id: model.id,
-      fetchData,
-      onFinish: () => {
-        dispatch(types.CLOSE_OVERLAY)
-      },
-    })
-  }, [dispatch, model.id, fetchData])
-
   useEffect(() => {
     overlayview('EditModel')
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -161,8 +150,7 @@ const EditModel = ({ model, fetchData }) => {
         <Spacer className={c.EditModel_MobileSpacer} size='3rem' />
         <EditModelForm
           model={model}
-          handleSubmit={handleSubmit}
-          handleDelete={handleDelete}
+          onSubmit={handleSubmit}
           editModelErrorMessage={editModelErrorMessage}
         />
         <Spacer className={c.EditModel_MobileSpacer} size='3rem' />

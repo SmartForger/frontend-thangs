@@ -14,7 +14,6 @@ export default store => {
   store.on(
     types.CHANGE_RELATED_MODELS,
     (state, { atom, status = STATUSES.INIT, data }) => ({
-      ...state,
       [atom]: {
         ...state[atom],
         ...getStatusState(status),
