@@ -22,7 +22,7 @@ module.exports = {
     extensions: ['*', '.js'],
   },
   output: {
-    path: path.resolve(__dirname, './public/workers'),
+    path: path.resolve(__dirname, './build/workers'),
     filename: '[name].js',
   },
   devServer: {
