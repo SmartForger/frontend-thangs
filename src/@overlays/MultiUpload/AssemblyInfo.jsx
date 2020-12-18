@@ -131,7 +131,7 @@ const AssemblyInfo = ({
     description: '',
     folderId: 'files',
     category: '',
-    primary: uploadedFiles[0].name,
+    primary: '',
     ...formData,
   }
 
@@ -185,7 +185,7 @@ const AssemblyInfo = ({
     [uploadedFiles]
   )
   const selectedPrimaryModel = useMemo(
-    () => fileOptions.find(f => f.value === inputState.primary) || fileOptions[0],
+    () => fileOptions.find(f => f.value === inputState.primary),
     [fileOptions, inputState]
   )
 
