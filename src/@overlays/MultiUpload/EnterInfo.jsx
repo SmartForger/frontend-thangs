@@ -391,7 +391,7 @@ const EnterInfo = ({
               isClearable
               options={CATEGORIES}
               onChange={e => {
-                if (e) handleOnInputChange('category', e.value)
+                handleOnInputChange('category', e ? e.value : null)
               }}
             />
           </div>
