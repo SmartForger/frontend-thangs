@@ -332,9 +332,9 @@ export default store => {
     }
 
     try {
-      const response = await api({
+      await api({
         method: 'POST',
-        endpoint: 'models/assembly',
+        endpoint: 'models',
         body: payload,
       })
       store.dispatch(types.FETCH_THANGS, { onFinish })
