@@ -9,7 +9,7 @@ automatic_scaling:
 
 handlers:
   - url: /workers/(.*)
-    static_files: build/workers/(.*)
+    static_files: build/workers/\1
     upload: build/workers/(.*)
   - url: /robots.txt
     static_files: build/robots.txt
