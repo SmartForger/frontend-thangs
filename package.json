@@ -58,7 +58,7 @@
   },
   "scripts": {
     "start": "serve -s build",
-    "dev": "react-scripts start",
+    "dev": "yarn run build:workers && react-scripts start",
     "build": "react-scripts build",
     "build:production-new": "env-cmd -f .env.production-new npm run build",
     "build:staging": "env-cmd -f .env.staging react-scripts build",
