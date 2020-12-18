@@ -6,6 +6,7 @@ import {
   MetadataSecondary,
   Slider,
   DrawModeDropdown,
+  ExplodeDropdown,
   OrientationDropdown,
   ModelSearchDropdown,
   //   ModelSearchDropdownMenu,
@@ -19,7 +20,7 @@ import { ReactComponent as CameraDesktopIcon } from '@svg/icon-camera-desktop.sv
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md_viewer },
+    mediaQueries: { lg },
   } = theme
   return {
     Toolbar: {
@@ -36,11 +37,11 @@ const useStyles = createUseStyles(theme => {
       padding: 0,
       flexWrap: 'wrap',
     },
-    Toolbar_Text: {
+    Toolbar_WideText: {
       display: 'none',
       alignItems: 'center',
 
-      [md_viewer]: {
+      [lg]: {
         display: 'flex',
       },
     },
@@ -73,6 +74,13 @@ const useStyles = createUseStyles(theme => {
       borderLeft: `1px solid ${theme.colors.white[900]}`,
       height: '2rem',
     },
+    Toolbar__medium: {
+      display: 'flex',
+
+      [lg]: {
+        display: 'none',
+      },
+    },
   }
 })
 
@@ -99,7 +107,7 @@ const Toolbar = ({
         <Spacer size={'2rem'} />
         <Pill secondary onClick={handleResetView}>
           <ResetIcon />
-          <div className={c.Toolbar_Text}>
+          <div className={c.Toolbar_WideText}>
             <Spacer size={'0.25rem'} />
             <span>Reset</span>
           </div>
@@ -107,7 +115,7 @@ const Toolbar = ({
         <Spacer size={'1rem'} />
         <Pill secondary onClick={handleSnapshot}>
           <CameraDesktopIcon />
-          <div className={c.Toolbar_Text}>
+          <div className={c.Toolbar_WideText}>
             <Spacer size={'0.25rem'} />
             <span>Snapshot</span>
           </div>
@@ -116,7 +124,7 @@ const Toolbar = ({
         <div className={c.Toolbar_VerticalRule}></div>
         <Spacer size={'1.125rem'} />
         <div className={c.Toolbar_Group}>
-          <div className={c.Toolbar_Text}>
+          <div className={c.Toolbar_WideText}>
             <MetadataSecondary>Render</MetadataSecondary>
             <Spacer size={'1rem'} />
           </div>
@@ -126,7 +134,7 @@ const Toolbar = ({
         <div className={c.Toolbar_VerticalRule}></div>
         <Spacer size={'1.125rem'} />
         <div className={c.Toolbar_Group}>
-          <div className={c.Toolbar_Text}>
+          <div className={c.Toolbar_WideText}>
             <MetadataSecondary>Orientation</MetadataSecondary>
             <Spacer size={'1rem'} />
           </div>
@@ -139,7 +147,7 @@ const Toolbar = ({
         <div className={c.Toolbar_VerticalRule}></div>
         <Spacer size={'1.125rem'} />
         <div className={c.Toolbar_Group}>
-          <div className={c.Toolbar_Text}>
+          <div className={c.Toolbar_WideText}>
             <MetadataSecondary>Color</MetadataSecondary>
             <Spacer size={'1rem'} />
           </div>
@@ -151,8 +159,11 @@ const Toolbar = ({
             <div className={c.Toolbar_VerticalRule}></div>
             <Spacer size={'1.125rem'} />
             <div className={c.Toolbar_Group}>
-              <MetadataSecondary>Explode</MetadataSecondary>
-              <div className={c.Toolbar_Text}>
+              <ExplodeDropdown
+                selectedValue={magnitude}
+                handleChange={handleSliderChange}
+              />
+              <div className={c.Toolbar_WideText}>
                 <Spacer size={'1rem'} />
                 <Slider onChange={handleSliderChange} steps={30} value={magnitude} />
               </div>

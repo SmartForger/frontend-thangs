@@ -6,6 +6,7 @@ import {
   MetadataSecondary,
   Slider,
   DrawModeDropdown,
+  ExplodeDropdown,
   OrientationDropdown,
   ModelSearchDropdown,
   //   ModelSearchDropdownMenu,
@@ -112,7 +113,10 @@ const Toolbar = ({
         <>
           <div className={c.Toolbar_Group}>
             <Spacer size={'1rem'} />
-            <ExplodeIcon onClick={handleResetView} />
+            <ExplodeDropdown
+              selectedValue={magnitude}
+              handleChange={handleSliderChange}
+            />
             <Spacer size={'1rem'} />
           </div>
           <Spacer size={'.75rem'} />
