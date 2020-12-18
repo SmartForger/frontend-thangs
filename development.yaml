@@ -9,7 +9,7 @@ instance_class: F1
 
 handlers:
   - url: /workers/(.*)
-    static_files: build/workers/(.*)
+    static_files: build/workers/\1
     upload: build/workers/(.*)
   - url: /storybook/
     static_files: storybook/index.html
