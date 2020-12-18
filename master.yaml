@@ -8,6 +8,9 @@ automatic_scaling:
   # min_idle_instances: ...
 
 handlers:
+  - url: /workers/(.*)
+    static_files: build/workers/(.*)
+    upload: build/workers/(.*)
   - url: /robots.txt
     static_files: build/robots.txt
     upload: build/robots.txt
