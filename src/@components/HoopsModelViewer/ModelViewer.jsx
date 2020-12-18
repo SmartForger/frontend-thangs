@@ -69,8 +69,8 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
         return setViewerModel(primaryPart.filename)
       }
     }
-    if (model.filename) {
-      return setViewerModel(model.filename)
+    if (model.uploadedFile) {
+      return setViewerModel(model.uploadedFile)
     }
   }, [model])
 
