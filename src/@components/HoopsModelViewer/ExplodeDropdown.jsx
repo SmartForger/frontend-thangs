@@ -13,7 +13,7 @@ import { ReactComponent as ExplodeIcon } from '@svg/icon-explode.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md_viewer, lg, xl_viewer },
+    mediaQueries: { md_viewer, xl_viewer },
   } = theme
   return {
     ExplodeDropdown: {
