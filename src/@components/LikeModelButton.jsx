@@ -82,7 +82,7 @@ const useStyles = createUseStyles(theme => {
 const noop = () => null
 
 const hasLikedModel = (model, currentUserId) => {
-  return R.includes(parseInt(currentUserId), model.likes)
+  return model.likes ? R.includes(parseInt(currentUserId), model.likes) : false
 }
 
 const HeartButton = ({ liked, c, hasChanged }) => {
