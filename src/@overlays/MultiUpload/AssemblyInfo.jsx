@@ -174,13 +174,13 @@ const AssemblyInfo = ({
   const usersFolders = useMemo(() => {
     return folders && folders.length
       ? [
-          { value: 'files', label: 'My Public Files', isPublic: true },
-          ...folders.map(folder => ({
-            value: folder.id,
-            label: folder.name.replace(new RegExp('//', 'g'), '/'),
-            isPublic: folder.isPublic,
-          })),
-        ]
+        { value: 'files', label: 'My Public Files', isPublic: true },
+        ...folders.map(folder => ({
+          value: folder.id,
+          label: folder.name.replace(new RegExp('//', 'g'), '/'),
+          isPublic: folder.isPublic,
+        })),
+      ]
       : [{ value: 'files', label: 'My Public Files', isPublic: true }]
   }, [folders])
 
