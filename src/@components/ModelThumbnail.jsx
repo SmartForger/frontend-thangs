@@ -99,7 +99,7 @@ const getThumbnailFileName = (model = {}) => {
     if (model.parts.length > 1) {
       primaryPart = R.find(R.propEq('isPrimary', true))(model.parts)
       if (primaryPart.filename) return primaryPart.filename.replace('uploads/models/', '')
-    } else {
+    } else if (model.parts.length === 1) {
       primaryPart = model.parts[0]
       return primaryPart.filename.replace('uploads/models/', '')
     }
@@ -117,8 +117,8 @@ const thumbnailUrl = model =>
   model.fullThumbnailUrl
     ? model.fullThumbnailUrl
     : model.thumbnailUrl
-      ? model.thumbnailUrl
-      : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}?size=456x540`
+    ? model.thumbnailUrl
+    : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}?size=456x540`
 
 const getThumbnailUrl = (model = {}) => {
   let primaryPart
@@ -147,9 +147,9 @@ const getThumbnailUrl = (model = {}) => {
 const waldoThumbnailUrl = (model, searchModelFileName) =>
   searchModelFileName
     ? `${TIW_THUMBNAILS_HOST}/${getThumbnailFileName(model)}/${getWaldoThumbnailUrl(
-      model,
-      searchModelFileName
-    )}`
+        model,
+        searchModelFileName
+      )}`
     : undefined
 
 const ModelThumbnail = ({ className, model, name, searchModelFileName, showWaldo }) => {
