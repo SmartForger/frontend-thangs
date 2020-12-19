@@ -52,6 +52,7 @@ const useStyles = createUseStyles(theme => {
           left: 0,
           height: '100%',
           width: '100%',
+          transform: 'scale(1.15)',
         },
 
         '&:after': {
@@ -60,7 +61,7 @@ const useStyles = createUseStyles(theme => {
           display: 'block',
           top: '72.5%',
           left: '50%',
-          transform: 'translateX(-50%)',
+          transform: 'translateX(-50%) scale(1.15)',
           textAlign: 'center',
         },
       },
@@ -80,6 +81,9 @@ const useStyles = createUseStyles(theme => {
     },
     ModelThumbnail_Loader: {
       position: 'absolute',
+    },
+    ModelThumbnail_Error: {
+      transform: 'none !important',
     },
   }
 })
@@ -179,6 +183,7 @@ const ModelThumbnail = ({ className, model, name, searchModelFileName, showWaldo
         {loadingState === LOADING && <Loader className={c.ModelThumbnail_Loader} />}
         {src && (
           <img
+            className={loadingState === ERROR ? c.ModelThumbnail_Error : undefined}
             src={src}
             alt={`${name} 3d model`}
             onLoad={onLoad}
