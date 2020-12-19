@@ -126,16 +126,12 @@ const getThumbnailUrl = (model = {}) => {
   if (model.uploadedFile) return model.uploadedFile
   if (model.modelFileName) return model.modelFileName.replace('uploads/models/', '')
   if (model.parts) {
-    debugger
     if (model.parts.length > 1) {
-      debugger
       primaryPart = R.find(R.propEq('isPrimary', true))(model.parts)
       if (!primaryPart) primaryPart = model.parts[0]
       if (primaryPart.filename) return primaryPart.filename.replace('uploads/models/', '')
     } else if (model.parts.length === 1) {
       primaryPart = model.parts[0]
-      console.log('model', model)
-      debugger
       if (primaryPart.storageFileName) return primaryPart.storageFileName
       if (primaryPart.filename) return primaryPart.filename.replace('uploads/models/', '')
     }
