@@ -11,8 +11,8 @@ import { ReactComponent as CheckIcon } from '@svg/icon-check.svg'
 const useStyles = createUseStyles(theme => {
   return {
     UploadTreeItem_Root: {
-      paddingBottom: '1rem',
-      paddingTop: '1rem',
+      paddingBottom: '.75rem',
+      paddingTop: '.75rem',
       borderBottom: `1px solid ${theme.variables.colors.border}`,
       color: '#000',
       display: 'flex',

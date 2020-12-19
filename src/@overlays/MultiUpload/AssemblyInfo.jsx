@@ -16,6 +16,9 @@ import { createUseStyles } from '@style'
 import { CATEGORIES } from '@constants/fileUpload'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
   return {
     AssemblyInfo_Row: {
       display: 'flex',
@@ -110,6 +113,13 @@ const useStyles = createUseStyles(theme => {
         width: '100%',
       },
     },
+    AssemblyInfo_TextAreaInput: {
+      minWidth: '20rem',
+
+      [md]: {
+        minWidth: '24.25rem',
+      },
+    },
   }
 })
 const noop = () => null
@@ -154,13 +164,13 @@ const AssemblyInfo = ({
   const usersFolders = useMemo(() => {
     return folders && folders.length
       ? [
-        { value: 'files', label: 'My Public Files', isPublic: true },
-        ...folders.map(folder => ({
-          value: folder.id,
-          label: folder.name.replace(new RegExp('//', 'g'), '/'),
-          isPublic: folder.isPublic,
-        })),
-      ]
+          { value: 'files', label: 'My Public Files', isPublic: true },
+          ...folders.map(folder => ({
+            value: folder.id,
+            label: folder.name.replace(new RegExp('//', 'g'), '/'),
+            isPublic: folder.isPublic,
+          })),
+        ]
       : [{ value: 'files', label: 'My Public Files', isPublic: true }]
   }, [folders])
 
@@ -215,6 +225,7 @@ const AssemblyInfo = ({
         </div>
         <div>
           <Textarea
+            className={c.AssemblyInfo_TextAreaInput}
             id='description-input'
             name='description'
             label='Description *'
@@ -258,12 +269,13 @@ const AssemblyInfo = ({
             <Dropdown
               className={c.AssemblyInfo_Select}
               name='primary'
-              placeholder='Select primary model'
+              placeholder='Select primary model *'
               options={fileOptions}
               value={selectedPrimaryModel}
               onChange={e => {
                 if (e) handleOnInputChange('primary', e.value)
               }}
+              required
             />
           </div>
         )}

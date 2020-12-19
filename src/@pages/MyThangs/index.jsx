@@ -55,6 +55,7 @@ const useStyles = createUseStyles(theme => {
       [md]: {
         '&::-webkit-scrollbar': {
           width: 12,
+          display: 'none',
         },
         '&::-webkit-scrollbar-track': {
           background: 'white',

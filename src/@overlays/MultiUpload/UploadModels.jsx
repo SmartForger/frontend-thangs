@@ -160,6 +160,20 @@ const useStyles = createUseStyles(theme => {
     UploadTreeView: {
       flex: 1,
       overflowY: 'auto',
+      maxHeight: '14rem',
+
+      '&::-webkit-scrollbar': {
+        width: '.75rem',
+      },
+      '&::-webkit-scrollbar-track': {
+        background: theme.colors.white[600],
+        borderRadius: '.5rem',
+      },
+      '&::-webkit-scrollbar-thumb': {
+        backgroundColor: '#C7C7C7',
+        borderRadius: 20,
+        border: `3px solid ${theme.colors.white[600]}`,
+      },
     },
   }
 })
