@@ -1,7 +1,8 @@
 import React from 'react'
 import cn from 'classnames'
 import { createUseStyles } from '@style'
-import { SingleLineBodyText, Spacer, Spinner } from '@components'
+import { SingleLineBodyText, Spacer, Spinner, MetadataSecondary } from '@components'
+import { formatBytes } from '@utilities'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
 import { ReactComponent as TreeOpenIcon } from '@svg/icon-tree-open.svg'
@@ -47,7 +48,6 @@ const useStyles = createUseStyles(theme => {
     },
     UploadTreeItem_FileName: {
       textOverflow: 'ellipsis',
-      width: '16rem',
       overflow: 'hidden',
       lineHeight: '1rem !important',
     },
@@ -93,10 +93,16 @@ const UploadTreeItem = ({ file, onSkip, onRemove }) => {
           {file.loading ? <Spinner size={'1rem'} /> : <ModelIcon />}
         </>
       )}
-      <Spacer size={'0.5rem'} />
+      <Spacer width={'0.5rem'} />
       <SingleLineBodyText className={c.UploadTreeItem_FileName} title={file.name}>
         {file.name}
       </SingleLineBodyText>
+      {file.size && (
+        <>
+          <Spacer width={'0.5rem'} />
+          <MetadataSecondary>{formatBytes(file.size)}</MetadataSecondary>
+        </>
+      )}
       <Spacer size={'0.5rem'} />
       <div className={c.UploadTreeItem_Actions}>
         {!file.loading && !file.skipped && !file.valid && (

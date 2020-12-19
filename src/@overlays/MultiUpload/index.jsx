@@ -143,6 +143,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
       const file = files.find(f => f.name === node.name)
       const result = {
         name: node.name,
+        size: file && file.size,
         isAssembly: node.isAssembly,
         valid: node.valid,
         skipped: node.skipped,
@@ -160,6 +161,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
     } else {
       return files.map(file => ({
         name: file.name,
+        size: file.size,
         isAssembly: false,
         valid: !file.isError,
         loading: file.isLoading,
