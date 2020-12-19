@@ -154,7 +154,7 @@ const AssemblyInfo = ({
     ...formData,
   }
 
-  const { onFormSubmit, onInputChange, inputState, inputErrors } = useForm({
+  const { checkError, onFormSubmit, onInputChange, inputState } = useForm({
     initialValidationSchema: assemblyInfoSchema,
     initialState,
   })
@@ -207,13 +207,6 @@ const AssemblyInfo = ({
   const selectedPrimaryModel = useMemo(
     () => fileOptions.find(f => f.value === inputState.primary),
     [fileOptions, inputState]
-  )
-
-  const checkError = useCallback(
-    field => {
-      return inputErrors.find(error => error.key === field) || {}
-    },
-    [inputErrors]
   )
 
   return (

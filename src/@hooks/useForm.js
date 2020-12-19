@@ -77,7 +77,15 @@ const useForm = (opts = {}) => {
     setInputState(initialState)
   }, [initialState])
 
+  const checkError = useCallback(
+    field => {
+      return inputErrors.find(error => error.key === field) || {}
+    },
+    [inputErrors]
+  )
+
   return {
+    checkError,
     clearAllInputs,
     inputState,
     inputErrors,
