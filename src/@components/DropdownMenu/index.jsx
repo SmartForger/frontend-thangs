@@ -18,7 +18,7 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.5rem',
       boxShadow: '0px 5px 10px 0px rgba(35, 37, 48, 0.25)',
       width: '12rem',
-      padding: ({ noIcons }) => (noIcons ? '1.5rem 3rem' : '.75rem'),
+      padding: ({ noIcons }) => (noIcons ? '1.5rem 3rem' : '1rem'),
       boxSizing: 'border-box',
       position: 'absolute',
       right: '-6.5rem',
@@ -47,12 +47,11 @@ const useStyles = createUseStyles(theme => {
     },
     DropdownMenu_Item: {
       ...theme.text.boldText,
-      lineHeight: '2rem',
+      lineHeight: '1.5rem',
       display: 'inline-flex',
       alignItems: 'center',
       cursor: 'pointer',
       width: '100%',
-      padding: '.25rem',
 
       '& svg': {
         color: theme.colors.grey[500],
