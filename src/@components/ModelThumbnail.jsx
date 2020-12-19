@@ -93,28 +93,30 @@ const COMPLETE = 'COMPLETE'
 const ERROR = 'ERROR'
 
 const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST
+const THUMBNAILS_FOLDER = process.env.REACT_APP_THUMBNAILS_FOLDER
 const TIW_THUMBNAILS_HOST = process.env.REACT_APP_TIW_THUMBNAILS_HOST
 
 const getThumbnailFileName = (model = {}) => {
   let primaryPart
   if (model.uploadedFile) return model.uploadedFile
-  if (model.modelFileName) return model.modelFileName.replace('uploads/models/', '')
+  if (model.modelFileName) return model.modelFileName.replace(THUMBNAILS_FOLDER, '')
   if (model.parts) {
     if (model.parts.length > 1) {
       primaryPart = R.find(R.propEq('isPrimary', true))(model.parts)
-      if (primaryPart.filename) return primaryPart.filename.replace('uploads/models/', '')
+      if (primaryPart.filename)
+        return encodeURIComponent(`${THUMBNAILS_FOLDER}${primaryPart.filename}`)
     } else if (model.parts.length === 1) {
       primaryPart = model.parts[0]
-      return primaryPart.filename.replace('uploads/models/', '')
+      return encodeURIComponent(`${THUMBNAILS_FOLDER}${primaryPart.filename}`)
     }
   }
-  if (model.fileName) return model.fileName.replace('uploads/models/', '')
+  if (model.fileName) return model.fileName.replace(`${THUMBNAILS_FOLDER}`, '')
   return 'unknown'
 }
 
 const getWaldoThumbnailUrl = (model = {}, searchModelFileName) => {
-  if (searchModelFileName) return searchModelFileName.replace('uploads/models/', '')
-  if (model.searchModel) return model.searchModel.replace('uploads/models/', '')
+  if (searchModelFileName) return searchModelFileName.replace(`${THUMBNAILS_FOLDER}`, '')
+  if (model.searchModel) return model.searchModel.replace(`${THUMBNAILS_FOLDER}`, '')
 }
 
 const thumbnailUrl = model =>
@@ -128,19 +130,21 @@ const getThumbnailUrl = (model = {}) => {
   let primaryPart
   if (model.thumbnailUrl) return model.thumbnailUrl
   if (model.uploadedFile) return model.uploadedFile
-  if (model.modelFileName) return model.modelFileName.replace('uploads/models/', '')
+  if (model.modelFileName) return model.modelFileName.replace(`${THUMBNAILS_FOLDER}`, '')
   if (model.parts) {
     if (model.parts.length > 1) {
       primaryPart = R.find(R.propEq('isPrimary', true))(model.parts)
       if (!primaryPart) primaryPart = model.parts[0]
-      if (primaryPart.filename) return primaryPart.filename.replace('uploads/models/', '')
+      if (primaryPart.filename)
+        return encodeURIComponent(`${THUMBNAILS_FOLDER}${primaryPart.filename}`)
     } else if (model.parts.length === 1) {
       primaryPart = model.parts[0]
       if (primaryPart.storageFileName) return primaryPart.storageFileName
-      if (primaryPart.filename) return primaryPart.filename.replace('uploads/models/', '')
+      if (primaryPart.filename)
+        return encodeURIComponent(`${THUMBNAILS_FOLDER}${primaryPart.filename}`)
     }
   }
-  if (model.fileName) return model.fileName.replace('uploads/models/', '')
+  if (model.fileName) return model.fileName.replace(`${THUMBNAILS_FOLDER}`, '')
   return 'unknown'
 }
 

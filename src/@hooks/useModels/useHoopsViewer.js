@@ -116,7 +116,8 @@ const useHoopsViewer = modelFilename => {
     ensureScriptIsLoaded('vendors/hoops/hoops_web_viewer.js')
       .then(async () => {
         debug('  * 1: Preparing Model')
-        const resp = await axios.get(`${MODEL_PREP_ENDPOINT_URI}/${modelFilename}`, {
+        const modelFileURI = encodeURIComponent(`${modelFilename}`)
+        const resp = await axios.get(`${MODEL_PREP_ENDPOINT_URI}/${modelFileURI}`, {
           cancelToken: prepCancelSource.token,
         })
 
