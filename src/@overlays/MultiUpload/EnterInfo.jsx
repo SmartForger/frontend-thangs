@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as R from 'ramda'
+import Joi from '@hapi/joi'
 import {
   Button,
   Dropdown,
@@ -187,19 +188,30 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-const EnterInfo = ({
-  activeStep,
-  errorMessage = '',
-  folderId,
-  folders = {},
-  isAssembly = false,
-  handleContinue = noop,
-  handleUpdate = noop,
-  // handleSkipToEnd = noop,
-  setErrorMessage = noop,
-  uploadFiles,
-  isLoading,
-}) => {
+
+const enterInfoSchema = Joi.object({
+  name: Joi.string().required(),
+  description: Joi.string().required(),
+  material: Joi.string().allow(''),
+  height: Joi.string().allow(''),
+  weight: Joi.string().allow(''),
+  category: Joi.string().allow(''),
+  folderId: Joi.string().allow(''),
+})
+
+const EnterInfo = props => {
+  const {
+    activeStep,
+    errorMessage = '',
+    folderId,
+    folders = {},
+    isAssembly = false,
+    handleContinue = noop,
+    handleUpdate = noop,
+    setErrorMessage = noop,
+    uploadFiles,
+    isLoading,
+  } = props
   const c = useStyles({})
   const firstInputRef = useRef(null)
   const activeId = Object.keys(uploadFiles)[activeStep]
@@ -218,7 +230,8 @@ const EnterInfo = ({
     category: '',
   }
 
-  const { onFormSubmit, onInputChange, inputState, setInputState } = useForm({
+  const { checkError, onFormSubmit, onInputChange, inputState } = useForm({
+    initialValidationSchema: enterInfoSchema,
     initialState,
   })
 
@@ -261,30 +274,6 @@ const EnterInfo = ({
   }, [inputState, usersFolders])
   const folderPublic = selectedFolder && selectedFolder.isPublic
 
-  useEffect(() => {
-    if (model) handleOnInputChange('name', model.name)
-  }, [handleOnInputChange, model])
-
-  useEffect(() => {
-    const data = R.pick(
-      ['name', 'description', 'folderId', 'material', 'height', 'weight', 'category'],
-      model
-    )
-    const modelState = R.merge(
-      {
-        name: (model && model.name) || '',
-        description: '',
-        folderId: folderId || 'files',
-        material: '',
-        height: '',
-        weight: '',
-        category: '',
-      },
-      data
-    )
-    setInputState(modelState)
-  }, [model, setInputState, folderId])
-
   if (!model) return null
 
   return (
@@ -321,6 +310,8 @@ const EnterInfo = ({
             value={inputState && inputState.name}
             required
             inputRef={firstInputRef}
+            error={checkError('name').message}
+            errorMessage={checkError('name').message}
           />
         </div>
         <div className={c.EnterInfo_Field}>
@@ -332,6 +323,8 @@ const EnterInfo = ({
             value={inputState && inputState.description}
             onChange={handleOnInputChange}
             required={!isAssembly}
+            error={checkError('description').message}
+            errorMessage={checkError('description').message}
           />
         </div>
         {!isAssembly && folders && folders.length ? (
@@ -345,6 +338,8 @@ const EnterInfo = ({
               onChange={e => {
                 if (e) handleOnInputChange('folderId', e.value)
               }}
+              error={checkError('folder').message}
+              errorMessage={checkError('folder').message}
             />
           </div>
         ) : null}
@@ -356,6 +351,8 @@ const EnterInfo = ({
             maxLength='50'
             onChange={handleOnInputChange}
             value={inputState && inputState.material}
+            error={checkError('material').message}
+            errorMessage={checkError('material').message}
           />
         </div>
         <div className={c.EnterInfo_FieldRow}>
@@ -367,6 +364,8 @@ const EnterInfo = ({
               maxLength='50'
               onChange={handleOnInputChange}
               value={inputState && inputState.weight}
+              error={checkError('weight').message}
+              errorMessage={checkError('weight').message}
             />
           </div>
           <Spacer size={'1rem'} />
@@ -378,6 +377,8 @@ const EnterInfo = ({
               maxLength='50'
               onChange={handleOnInputChange}
               value={inputState && inputState.height}
+              error={checkError('weight').message}
+              errorMessage={checkError('weight').message}
             />
           </div>
         </div>
@@ -393,6 +394,8 @@ const EnterInfo = ({
               onChange={e => {
                 handleOnInputChange('category', e ? e.value : null)
               }}
+              error={checkError('category').message}
+              errorMessage={checkError('category').message}
             />
           </div>
         )}
