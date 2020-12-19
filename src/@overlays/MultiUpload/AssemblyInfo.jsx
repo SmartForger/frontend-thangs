@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useRef } from 'react'
 import * as R from 'ramda'
+import Joi from '@hapi/joi'
 import {
   Button,
   Dropdown,
@@ -124,6 +125,14 @@ const useStyles = createUseStyles(theme => {
 })
 const noop = () => null
 
+const assemblyInfoSchema = Joi.object({
+  name: Joi.string().required(),
+  description: Joi.string().required(),
+  primary: Joi.string().required(),
+  folderId: Joi.string().allow(''),
+  category: Joi.string().allow(''),
+})
+
 const AssemblyInfo = ({
   // folderId,
   folders = {},
@@ -145,7 +154,8 @@ const AssemblyInfo = ({
     ...formData,
   }
 
-  const { onFormSubmit, onInputChange, inputState } = useForm({
+  const { onFormSubmit, onInputChange, inputState, inputErrors } = useForm({
+    initialValidationSchema: assemblyInfoSchema,
     initialState,
   })
 
@@ -157,20 +167,20 @@ const AssemblyInfo = ({
     [onInputChange, setErrorMessage]
   )
 
-  const handleSubmit = data => {
-    handleContinue({ data })
+  const handleSubmit = (data, isValid) => {
+    if (isValid) handleContinue({ data })
   }
 
   const usersFolders = useMemo(() => {
     return folders && folders.length
       ? [
-        { value: 'files', label: 'My Public Files', isPublic: true },
-        ...folders.map(folder => ({
-          value: folder.id,
-          label: folder.name.replace(new RegExp('//', 'g'), '/'),
-          isPublic: folder.isPublic,
-        })),
-      ]
+          { value: 'files', label: 'My Public Files', isPublic: true },
+          ...folders.map(folder => ({
+            value: folder.id,
+            label: folder.name.replace(new RegExp('//', 'g'), '/'),
+            isPublic: folder.isPublic,
+          })),
+        ]
       : [{ value: 'files', label: 'My Public Files', isPublic: true }]
   }, [folders])
 
@@ -199,6 +209,13 @@ const AssemblyInfo = ({
     [fileOptions, inputState]
   )
 
+  const checkError = useCallback(
+    field => {
+      return inputErrors.find(error => error.key === field) || {}
+    },
+    [inputErrors]
+  )
+
   return (
     <>
       <div className={c.AssemblyInfo_Row}>
@@ -218,8 +235,9 @@ const AssemblyInfo = ({
             maxLength='100'
             onChange={handleOnInputChange}
             value={inputState && inputState.name}
-            required
             inputRef={firstInputRef}
+            error={checkError('name').message}
+            errorMessage={checkError('name').message}
           />
           <Spacer size={'1rem'} />
         </div>
@@ -232,7 +250,8 @@ const AssemblyInfo = ({
             type='description'
             value={inputState && inputState.description}
             onChange={handleOnInputChange}
-            required
+            error={checkError('description').message}
+            errorMessage={checkError('description').message}
           />
           <Spacer size={'1rem'} />
         </div>
@@ -247,6 +266,8 @@ const AssemblyInfo = ({
               onChange={e => {
                 if (e) handleOnInputChange('folderId', e.value)
               }}
+              error={checkError('folder').message}
+              errorMessage={checkError('folder').message}
             />
             <Spacer size={'1rem'} />
           </div>
@@ -261,6 +282,8 @@ const AssemblyInfo = ({
             onChange={e => {
               if (e) handleOnInputChange('category', e.value)
             }}
+            error={checkError('category').message}
+            errorMessage={checkError('category').message}
           />
           <Spacer size={'1rem'} />
         </div>
@@ -275,7 +298,8 @@ const AssemblyInfo = ({
               onChange={e => {
                 if (e) handleOnInputChange('primary', e.value)
               }}
-              required
+              error={checkError('primary').message}
+              errorMessage={checkError('primary').message}
             />
           </div>
         )}

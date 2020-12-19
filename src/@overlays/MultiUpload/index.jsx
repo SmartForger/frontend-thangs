@@ -375,45 +375,46 @@ const MultiUpload = ({ initData = null, folderId }) => {
           <UploadModels
             closeOverlay={closeOverlay}
             errorMessage={errorMessage}
-            setErrorMessage={setErrorMessage}
-            warningMessage={warningMessage}
-            setWarningMessage={setWarningMessage}
             handleContinue={continueToNextStep}
+            isAssembly={isAssembly}
             onDrop={onDrop}
             removeFile={removeFile}
-            uploadFiles={uploadFilesData}
-            uploadTreeData={uploadTreeData}
-            isAssembly={isAssembly}
+            setErrorMessage={setErrorMessage}
             setIsAssembly={setIsAssembly}
-            skipFile={skipFile}
-            validating={validating}
+            setWarningMessage={setWarningMessage}
             showAssemblyToggle={
               validated && (!validationTree || validationTree.length === 0)
             }
+            skipFile={skipFile}
+            uploadFiles={uploadFilesData}
+            uploadTreeData={uploadTreeData}
+            validating={validating}
+            warningMessage={warningMessage}
           />
         ) : activeView === 'assemblyInfo' ? (
           <AssemblyInfo
-            formData={assemblyData}
-            folders={dropdownFolders}
+            errorMessage={errorMessage}
             folderId={folderId}
-            isMultipart={(!validationTree || validationTree.length === 0) && isAssembly}
-            uploadedFiles={uploadedFiles}
-            setErrorMessage={setErrorMessage}
+            folders={dropdownFolders}
+            formData={assemblyData}
             handleContinue={continueToModelInfo}
+            isMultipart={(!validationTree || validationTree.length === 0) && isAssembly}
+            setErrorMessage={setErrorMessage}
+            uploadedFiles={uploadedFiles}
           />
         ) : (
           <EnterInfo
             activeStep={activeStep}
             closeOverlay={closeOverlay}
             errorMessage={errorMessage}
-            setErrorMessage={setErrorMessage}
-            folders={dropdownFolders}
             folderId={(assemblyData && assemblyData.folderId) || folderId}
+            folders={dropdownFolders}
             handleContinue={handleContinue}
             handleUpdate={handleUpdate}
-            uploadFiles={uploadFilesData}
-            isLoading={isLoading}
             isAssembly={isAssembly || (validationTree && validationTree.length > 0)}
+            isLoading={isLoading}
+            setErrorMessage={setErrorMessage}
+            uploadFiles={uploadFilesData}
           />
         )}
         <Spacer size={'2rem'} className={c.MultiUpload__desktop} />

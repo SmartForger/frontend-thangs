@@ -1,15 +1,21 @@
 import React from 'react'
 import classnames from 'classnames'
-import { TextInput } from '@components'
+import { MetadataSecondary, TextInput, Spacer } from '@components'
 import { createUseStyles } from '@style'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     Input: {
       width: '100%',
     },
     TextInput: {
       width: '100%',
+    },
+    Input_ErrorWrapper: {
+      display: 'flex',
+    },
+    Input_ErrorMessage: {
+      color: theme.colors.error,
     },
   }
 })
@@ -18,6 +24,8 @@ const noop = () => null
 const Input = ({
   autoComplete,
   className,
+  disabled,
+  errorMessage,
   id,
   inputRef,
   label,
@@ -27,7 +35,7 @@ const Input = ({
   required = false,
   type = 'text',
   value = '',
-  disabled,
+  ...props
 }) => {
   const c = useStyles()
   return (
@@ -46,7 +54,19 @@ const Input = ({
         type={type}
         value={value}
         disabled={disabled}
+        {...props}
       />
+      {errorMessage && (
+        <>
+          <Spacer size={'.5rem'} />
+          <div className={c.Input_ErrorWrapper}>
+            <Spacer size={'.25rem'} />
+            <MetadataSecondary className={c.Input_ErrorMessage}>
+              {errorMessage}
+            </MetadataSecondary>
+          </div>
+        </>
+      )}
     </div>
   )
 }

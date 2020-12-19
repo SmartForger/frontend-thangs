@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import classnames from 'classnames'
+import { Spacer, MetadataSecondary } from '@components'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -28,6 +29,12 @@ const useStyles = createUseStyles(theme => {
         borderColor: theme.colors.gold[500],
       },
     },
+    Textarea_ErrorWrapper: {
+      display: 'flex',
+    },
+    Textarea_ErrorMessage: {
+      color: theme.colors.error,
+    },
   }
 })
 
@@ -44,6 +51,7 @@ const Textarea = ({
   type = 'text',
   value = '',
   error,
+  errorMessage,
   validator,
   disabled,
 }) => {
@@ -73,6 +81,17 @@ const Textarea = ({
         onBlur={handleValidation}
         disabled={disabled}
       />
+      {errorMessage && (
+        <>
+          <Spacer size={'.5rem'} />
+          <div className={c.Textarea_ErrorWrapper}>
+            <Spacer size={'.25rem'} />
+            <MetadataSecondary className={c.Textarea_ErrorMessage}>
+              {errorMessage}
+            </MetadataSecondary>
+          </div>
+        </>
+      )}
     </div>
   )
 }

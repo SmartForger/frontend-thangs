@@ -37,5 +37,27 @@
         
             }
         }
+    },
+    "input": {
+        "name": {
+            "label": "Name",
+            "errors": {
+                "required": "Please enter a model name",
+                "invalid": "Please enter a valid name"
+            }
+        },
+        "description": {
+            "label": "Description",
+            "errors": {
+                "required": "Please enter a model description",
+                "invalid": "Please enter a valid description"
+            }
+        },
+        "primary": {
+            "label": "Select primary model",
+            "errors": {
+                "required": "Please select a primary model for your assembly"
+            }
+        }
     }
 }

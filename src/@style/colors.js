@@ -74,7 +74,7 @@ export const colors = {
     900: '#000000',
   },
   attention: '#ff0000',
-  error: '#ca2d2c',
+  error: '#DA7069',
   errorBackground: '#edd0d0',
   success: '#00ff00',
   logo: '#7b7b82', //formerly GREY_12

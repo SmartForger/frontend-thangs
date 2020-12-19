@@ -134,6 +134,9 @@ const useStyles = createUseStyles(theme => {
         width: '100%',
       },
     },
+    UploadModels_ButtonSpacer: {
+      flex: 'none',
+    },
     UploadModels_ErrorText: {
       ...theme.text.formErrorText,
       marginTop: '1.5rem',
@@ -304,7 +307,7 @@ const UploadModels = ({
             <Button secondary onClick={closeOverlay}>
               Cancel
             </Button>
-            <Spacer size={'1rem'} />
+            <Spacer size={'1rem'} className={c.UploadModels_ButtonSpacer} />
             <Button onClick={handleContinue}>
               {isLoadingFiles || validating ? 'Processing...' : 'Continue'}
             </Button>

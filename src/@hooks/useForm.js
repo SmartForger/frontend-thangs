@@ -1,18 +1,40 @@
 import { useState, useCallback, useRef } from 'react'
-
+import { useTranslations } from '@hooks'
 const useForm = (opts = {}) => {
   const { initialValidationSchema, initialState } = opts
   const [inputState, setInputState] = useState(initialState || {})
+  const [inputErrors, setInputErrors] = useState([])
   const validationSchema = useRef(initialValidationSchema)
+  const t = useTranslations({})
 
-  const onInputChange = useCallback((key, value) => {
-    setInputState(inputState => {
-      return {
-        ...inputState,
-        [key]: value,
-      }
-    })
-  }, [])
+  const onInputChange = useCallback(
+    (key, value) => {
+      setInputErrors(inputErrors.filter(inputError => inputError.key !== key))
+      setInputState(inputState => {
+        return {
+          ...inputState,
+          [key]: value,
+        }
+      })
+    },
+    [inputErrors]
+  )
+
+  const onInputError = useCallback(
+    errors => {
+      const newInputErrors = Object.keys(errors).map(inputKey => {
+        const { type } = errors[inputKey]
+        return {
+          key: inputKey,
+          message: type
+            ? t(`input.${inputKey}.errors.required`)
+            : t(`input.${inputKey}.errors.invalid`),
+        }
+      })
+      setInputErrors(newInputErrors)
+    },
+    [t]
+  )
 
   const clearAllInputs = () => {
     Object.keys(inputState).forEach(key => {
@@ -36,10 +58,11 @@ const useForm = (opts = {}) => {
         : {}
       /* eslint-enable indent */
       const hasErrors = !!error
+      onInputError(errors)
       return { isValid: !hasErrors, errors }
     }
     return { isValid: true, errors: {} }
-  }, [inputState, validationSchema])
+  }, [inputState, onInputError])
 
   const onFormSubmit = callbackFn => event => {
     if (event) {
@@ -57,6 +80,7 @@ const useForm = (opts = {}) => {
   return {
     clearAllInputs,
     inputState,
+    inputErrors,
     onFormSubmit,
     onInputChange,
     resetForm,
