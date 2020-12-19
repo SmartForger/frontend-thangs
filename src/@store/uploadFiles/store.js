@@ -233,6 +233,7 @@ export default store => {
       if (responseData.isAssembly !== false) {
         const transformNode = (node1, node2) => {
           const newNode = {
+            id: Math.random().toString(36).substr(2, 9) + node1.name,
             name: node1.name,
             isAssembly: node1.isAssembly,
             valid: node2.valid,

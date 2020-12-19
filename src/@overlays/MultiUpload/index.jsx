@@ -142,6 +142,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
     const addTreeLoading = node => {
       const file = files.find(f => f.name === node.name)
       const result = {
+        id: node.id,
         name: node.name,
         size: file && file.size,
         isAssembly: node.isAssembly,

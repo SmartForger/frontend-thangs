@@ -288,7 +288,7 @@ const UploadModels = ({
           <div className={c.UploadTreeView}>
             {files.map(f => (
               <UploadTreeItem
-                key={f.name}
+                key={f.id}
                 file={f}
                 onSkip={skipFile}
                 onRemove={removeFile}
