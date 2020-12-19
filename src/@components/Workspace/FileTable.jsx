@@ -366,7 +366,7 @@ const FileRow = ({ model }) => {
       </td>
       <td className={c.FileTable_Row_Column}>
         <MetadataSecondary className={c.FileTable_Row_Column_Uploaded}>
-          {format(new Date(model.uploadDate), 'MMM d, Y, h:mm aaaa')}
+          {format(new Date(model.created), 'MMM d, Y, h:mm aaaa')}
         </MetadataSecondary>
       </td>
       <td className={c.FileTable_Row_Column}>
@@ -422,8 +422,8 @@ const getSortedFiles = (files, sortType, order) => {
 
         if (sortType === COLUMNS.CREATED) {
           return getCompareByOrder(
-            new Date(a.uploadDate).getTime(),
-            new Date(b.uploadDate).getTime(),
+            new Date(a.created).getTime(),
+            new Date(b.created).getTime(),
             order
           )
         }
