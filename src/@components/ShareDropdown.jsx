@@ -73,38 +73,31 @@ export const ShareDropdownMenu = ({ TargetComponent, iconOnly, title, urlPathnam
       <div>
         <DropdownItem onClick={onFBShare}>
           <FacebookShareButton url={shareUrl} quote={title}>
-            <Spacer size={'.5rem'} />
             <div className={c.ShareDropdown_Row}>
-              <Spacer size={'.5rem'} />
               <ShareFacebook />
+              <Spacer size={'.75rem'} />
               <LabelText>Facebook</LabelText>
-              <Spacer size={'.5rem'} />
             </div>
-            <Spacer size={'.5rem'} />
           </FacebookShareButton>
         </DropdownItem>
+        <Spacer size={'.5rem'} />
         <DropdownItem onClick={onTwitterShare}>
           <TwitterShareButton url={shareUrl} title={title}>
-            <Spacer size={'.5rem'} />
             <div className={c.ShareDropdown_Row}>
-              <Spacer size={'.5rem'} />
               <ShareTwitter />
+              <Spacer size={'.75rem'} />
               <LabelText>Twitter</LabelText>
-              <Spacer size={'.5rem'} />
             </div>
-            <Spacer size={'.5rem'} />
           </TwitterShareButton>
         </DropdownItem>
+        <Spacer size={'.5rem'} />
         <DropdownItem onClick={onRedditShare}>
           <RedditShareButton url={shareUrl} title={title}>
-            <Spacer size={'.5rem'} />
             <div className={c.ShareDropdown_Row}>
-              <Spacer size={'.5rem'} />
               <ShareReddit />
+              <Spacer size={'.75rem'} />
               <LabelText>Reddit</LabelText>
-              <Spacer size={'.5rem'} />
             </div>
-            <Spacer size={'.5rem'} />
           </RedditShareButton>
         </DropdownItem>
       </div>
