@@ -7,6 +7,7 @@ import {
   Button,
   CommentsForModel,
   Divider,
+  EditModelButton,
   HoopsModelViewer,
   Layout,
   LikeModelButton,
@@ -349,11 +350,17 @@ const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
                   isFollowing: !isFollowing,
                 })
               }}
+              hideForOwned={true}
             />
           </div>
           <div>
-            <LikeModelButton model={model} openSignupOverlay={openSignupOverlay} />
+            <LikeModelButton
+              model={model}
+              openSignupOverlay={openSignupOverlay}
+              hideForOwned={true}
+            />
           </div>
+          <EditModelButton model={model} />
         </div>
       )}
     </div>
