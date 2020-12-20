@@ -1,6 +1,5 @@
 export { default as ActionBar } from './ActionBar'
 export { default as AppAnalytics } from './AppAnalytics'
-export { default as Badge } from './Badge'
 export { default as Carousel } from './Carousel'
 export * from './CardCollection'
 export { default as Checkbox } from './Checkbox'
