@@ -8,7 +8,7 @@ import { ReactComponent as ChatIcon } from '@svg/icon-comment.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
 import * as types from '@constants/storeEventTypes'
-import { ModelThumbnail, UserInline, EditModel } from '@components'
+import { ModelThumbnail, UserInline } from '@components'
 import { useCurrentUserId } from '@hooks'
 import { track } from '@utilities/analytics'
 
@@ -102,7 +102,6 @@ const CardContents = ({
   model,
   modelPath,
   modelAttributionUrl,
-  isCurrentUserOwner,
   geoRelated,
 }) => {
   const userName = R.pathOr('no-user', ['owner', 'username'], model)
@@ -167,10 +166,6 @@ const CardContents = ({
           <LikesAndComments model={model} c={c} />
         </div>
       </Anchor>
-
-      {isCurrentUserOwner && (
-        <EditModel className={c.ModelCard_EditModel} model={model} />
-      )}
     </div>
   )
 }
