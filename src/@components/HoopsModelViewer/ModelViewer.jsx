@@ -60,12 +60,14 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
 
   useEffect(() => {
     let primaryPart
-    if (model.parts) {
-      if (model.parts.length > 1) {
-        primaryPart = R.find(R.propEq('isPrimary', true))(model.parts)
+    const { parts } = model
+    if (parts) {
+      if (parts.length > 1) {
+        primaryPart = R.find(R.propEq('isPrimary', true))(parts)
+        if (!primaryPart) primaryPart = parts[0]
         return setViewerModel(primaryPart.filename)
       } else {
-        primaryPart = model.parts[0]
+        primaryPart = parts[0]
         return setViewerModel(primaryPart.filename)
       }
     }
