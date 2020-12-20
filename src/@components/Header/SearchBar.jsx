@@ -65,7 +65,7 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'row',
       width: '100%',
       justifyContent: 'flex-start',
-      minWidth: '18.5rem',
+      minWidth: '15rem',
       margin: '0 auto',
 
       [md]: {

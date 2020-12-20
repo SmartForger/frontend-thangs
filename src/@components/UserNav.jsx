@@ -137,7 +137,6 @@ const UserNav = ({
             {t('header.uploadButtonText')}
           </Button>
         )}
-        <Spacer size='1rem' className={c.UserNav_DesktopOnly} />
       </div>
     )
   }
@@ -150,7 +149,6 @@ const UserNav = ({
       <Button className={c.UserNav_Button} onClick={handleSignIn}>
         {t('header.signInButtonText')}
       </Button>
-      <Spacer size='1rem' className={c.UserNav_DesktopOnly} />
     </div>
   )
 }

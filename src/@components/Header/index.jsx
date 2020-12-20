@@ -32,7 +32,7 @@ const useStyles = createUseStyles(theme => {
       flexGrow: 1,
 
       [md]: {
-        margin: '1.5rem 2rem',
+        margin: '1.5rem 1rem',
       },
     },
     Header_DesktopOnly: {
