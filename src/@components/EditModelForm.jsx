@@ -25,7 +25,7 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
 
       [md]: {
-        width: '16.875rem',
+        width: ({ showViewer }) => (showViewer ? '16.875rem' : '100%'),
       },
 
       '& button': {
@@ -109,8 +109,9 @@ const EditModelForm = ({
   model = {},
   onSubmit = noop,
   editProfileErrorMessage,
+  showViewer,
 }) => {
-  const c = useStyles()
+  const c = useStyles({ showViewer })
   const firstInputRef = useRef(null)
 
   const initialState = {

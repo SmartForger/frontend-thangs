@@ -19,6 +19,7 @@ const EditModelButton = ({ model = {} }) => {
         user: model.owner,
         animateIn: true,
         windowed: true,
+        showViewer: false,
       },
     })
     track('Model page edit clicked')

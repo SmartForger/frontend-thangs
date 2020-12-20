@@ -92,7 +92,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const EditModel = ({ model }) => {
+const EditModel = ({ model, showViewer = true }) => {
   const c = useStyles()
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [editModelErrorMessage, setEditModelErrorMessage] = useState(null)
@@ -135,23 +135,26 @@ const EditModel = ({ model }) => {
         </div>
       )}
       <ExitIcon className={c.EditModel_ExitButton} onClick={closeOverlay} />
-      <div className={classnames(c.EditModel_Column, c.EditModel_ViewerWrapper)}>
-        {showBackupViewer ? (
-          <BackupViewer className={c.EditModel_Viewer} model={model} />
-        ) : (
-          <HoopsModelViewer
-            className={c.EditModel_Viewer}
-            model={model}
-            minimizeTools={true}
-          />
-        )}
-      </div>
+      {showViewer && (
+        <div className={classnames(c.EditModel_Column, c.EditModel_ViewerWrapper)}>
+          {showBackupViewer ? (
+            <BackupViewer className={c.EditModel_Viewer} model={model} />
+          ) : (
+            <HoopsModelViewer
+              className={c.EditModel_Viewer}
+              model={model}
+              minimizeTools={true}
+            />
+          )}
+        </div>
+      )}
       <div className={classnames(c.EditModel_Column, c.EditModel_EditForm)}>
         <Spacer className={c.EditModel_MobileSpacer} size='3rem' />
         <EditModelForm
           model={model}
           onSubmit={handleSubmit}
           editModelErrorMessage={editModelErrorMessage}
+          showViewer={showViewer}
         />
         <Spacer className={c.EditModel_MobileSpacer} size='3rem' />
       </div>
