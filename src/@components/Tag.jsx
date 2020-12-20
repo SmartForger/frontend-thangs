@@ -1,32 +1,31 @@
 import React from 'react'
-import { animated } from 'react-spring'
+import { Spacer, MetadataSecondary } from '@components'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   return {
     Tag: {
-      width: 'fit-content',
-      background: theme.colors.grey[500],
-      color: theme.colors.secondary,
-      margin: '2px',
-      padding: '4px',
-      userSelect: 'none',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      transition: '0.2s all',
-
-      '&:hover': {
-        background: theme.colors.secondary,
-        color: theme.colors.secondary,
-        transform: 'scale(1.05)',
-      },
+      borderRadius: '.125rem',
+      backgroundColor: ({ secondary }) =>
+        secondary ? theme.colors.blue[200] : theme.colors.gold[500],
     },
   }
 })
 
-const Tag = ({ children }) => {
-  const c = useStyles()
-  return <animated.div className={c.Tag}>{children}</animated.div>
+const Tag = ({ secondary, children }) => {
+  const c = useStyles({ secondary })
+
+  return (
+    <div className={c.Tag}>
+      <Spacer size={'.25rem'} />
+      <div>
+        <Spacer size={'.25rem'} />
+        <MetadataSecondary light>{children}</MetadataSecondary>
+        <Spacer size={'.25rem'} />
+      </div>
+      <Spacer size={'.25rem'} />
+    </div>
+  )
 }
 
 export default Tag
