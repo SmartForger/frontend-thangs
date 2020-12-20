@@ -280,10 +280,9 @@ const EnterInfo = props => {
     <>
       <div className={c.EnterInfo_Row}>
         <ModelThumbnail
-          key={model.newFileName}
           className={c.EnterInfo_Thumbnail}
-          name={model}
-          model={{ ...model, uploadedFile: model.newFileName }}
+          name={model.name}
+          model={model}
         />
         <Spacer size={'1rem'} />
         <div className={c.EnterInfo_ModelInfo}>

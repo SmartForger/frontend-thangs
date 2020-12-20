@@ -110,7 +110,8 @@ const getThumbnailFileName = (model = {}) => {
       return encodeURIComponent(`${THUMBNAILS_FOLDER}${primaryPart.filename}`)
     }
   }
-  if (model.fileName) return model.fileName.replace(`${THUMBNAILS_FOLDER}`, '')
+  if (model.newFileName)
+    return `${THUMBNAILS_FOLDER}${encodeURIComponent(model.newFileName)}`
   return 'unknown'
 }
 
@@ -123,8 +124,8 @@ const thumbnailUrl = model =>
   model.fullThumbnailUrl
     ? model.fullThumbnailUrl
     : model.thumbnailUrl
-      ? model.thumbnailUrl
-      : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}?size=456x540`
+    ? model.thumbnailUrl
+    : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}?size=456x540`
 
 const getThumbnailUrl = (model = {}) => {
   let primaryPart
@@ -144,16 +145,17 @@ const getThumbnailUrl = (model = {}) => {
         return encodeURIComponent(`${THUMBNAILS_FOLDER}${primaryPart.filename}`)
     }
   }
-  if (model.fileName) return model.fileName.replace(`${THUMBNAILS_FOLDER}`, '')
+  if (model.newFileName)
+    return `${THUMBNAILS_FOLDER}${encodeURIComponent(model.newFileName)}`
   return 'unknown'
 }
 
 const waldoThumbnailUrl = (model, searchModelFileName) =>
   searchModelFileName
     ? `${TIW_THUMBNAILS_HOST}/${getThumbnailFileName(model)}/${getWaldoThumbnailUrl(
-      model,
-      searchModelFileName
-    )}`
+        model,
+        searchModelFileName
+      )}`
     : undefined
 
 const ModelThumbnail = ({ className, model, name, searchModelFileName, showWaldo }) => {
