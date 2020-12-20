@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import * as R from 'ramda'
@@ -262,6 +262,11 @@ const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
     }
   }, [downloadModel, isAuthedUser, openSignupOverlay])
 
+  const buttonText = useMemo(() => {
+    if (model.isAssembly || model.parts.length > 1) return 'Download All'
+    return 'Download Model'
+  }, [model])
+
   return (
     <Button className={c.Model_SidebarButton} onClick={handleClick}>
       {modelDownloadUrl.isLoading ? (
@@ -269,7 +274,7 @@ const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
       ) : modelDownloadUrl.isError ? (
         'Server Error'
       ) : (
-        'Download Model'
+        buttonText
       )}
     </Button>
   )
