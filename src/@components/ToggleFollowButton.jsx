@@ -49,6 +49,8 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
+const noop = () => null
+
 const AuthFollowButton = ({
   c,
   className,
@@ -61,8 +63,10 @@ const AuthFollowButton = ({
   onActionFailured = noop,
   isFollowing = false,
   dispatch,
+  hideForOwned,
 }) => {
-  const isModelOfCurrentUser = (currentUser && currentUser.id) === profileUserId
+  const isModelOfCurrentUser =
+    (currentUser && currentUser.id) === profileUserId.toString()
   const handleClick = useCallback(
     e => {
       e.preventDefault()
@@ -93,7 +97,7 @@ const AuthFollowButton = ({
       onActionStarted,
     ]
   )
-
+  if (hideForOwned && isModelOfCurrentUser) return null
   return !isModelOfCurrentUser ? (
     !profileUserId ? (
       <Skeleton variant='rect' className={c.ToggleFollowButton_Skeleton} />
@@ -116,7 +120,7 @@ const AuthFollowButton = ({
     )
   ) : null
 }
-const noop = () => null
+
 const UnauthFollowButton = ({ c, className, openSignupOverlay = noop }) => {
   const handleClick = useCallback(() => {
     openSignupOverlay('Join to Like, Follow, Share.', 'Follow')

@@ -121,6 +121,7 @@ const AuthLikeModelButton = ({
   c,
   className,
   currentUserId,
+  hideForOwned,
   model = {},
   minimal,
   onlyShowOwned,
@@ -152,7 +153,7 @@ const AuthLikeModelButton = ({
   )
 
   if (onlyShowOwned && !isModelOfCurrentUser) return null
-
+  if (hideForOwned && isModelOfCurrentUser) return null
   if (minimal) {
     return (
       <div className={className} onClick={handleLikeClicked}>
@@ -212,6 +213,7 @@ const LikeModelButton = ({
   openSignupOverlay = noop,
   minimal,
   onlyShowOwned,
+  hideForOwned,
 }) => {
   const c = useStyles({ color })
   const currentUserId = authenticationService.getCurrentUserId()
@@ -221,6 +223,7 @@ const LikeModelButton = ({
         c={c}
         className={className}
         currentUserId={currentUserId}
+        hideForOwned={hideForOwned}
         model={model}
         minimal={minimal}
         onlyShowOwned={onlyShowOwned}
