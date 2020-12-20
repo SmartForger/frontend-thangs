@@ -13,10 +13,10 @@ const useStyles = createUseStyles(theme => {
       padding: 0,
       backgroundColor: theme.colors.gold[500],
       color: theme.colors.black[500],
-      borderRadius: '1rem',
+      borderRadius: '1.5rem',
       border: `2px solid ${theme.colors.gold[500]}`,
-      cursor: ({ disabled }) => disabled ? 'not-allowed' : 'pointer',
-      opacity: ({ disabled }) => disabled ? '0.8' : '1',
+      cursor: ({ disabled }) => (disabled ? 'not-allowed' : 'pointer'),
+      opacity: ({ disabled }) => (disabled ? '0.8' : '1'),
     },
     Pill_TextWrapper: {
       display: 'flex',
