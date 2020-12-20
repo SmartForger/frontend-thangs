@@ -32,6 +32,7 @@ const Toolbar = ({
   isMultipart,
   isAssembly,
   setViewerModel = noop,
+  selectedFilename,
 }) => {
   const c = useStyles({ isMultipart, isAssembly })
   //These keep track the UI toolbar state
@@ -108,6 +109,7 @@ const Toolbar = ({
     handleSnapshot,
     handleViewChange,
     setViewerModel,
+    selectedFilename,
     model,
   }
 

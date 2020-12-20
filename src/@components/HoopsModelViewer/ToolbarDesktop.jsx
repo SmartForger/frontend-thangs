@@ -98,6 +98,7 @@ const Toolbar = ({
   handleSliderChange,
   handleSnapshot,
   handleViewChange,
+  selectedFilename,
   setViewerModel,
   model,
 }) => {
@@ -180,9 +181,10 @@ const Toolbar = ({
             <Spacer size={'1.125rem'} />
             <div className={classnames(c.Toolbar_Group, c.Toolbar_PartExplorerWrapper)}>
               <PartExplorerDropdown
-                selectedValue={model}
-                files={[]}
                 setViewerModel={setViewerModel}
+                selectedFilename={selectedFilename}
+                model={model}
+                handleChange={setViewerModel}
               />
             </div>
           </>

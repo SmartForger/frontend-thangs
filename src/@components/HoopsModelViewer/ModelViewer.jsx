@@ -92,6 +92,7 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
           minimizeTools={minimizeTools}
           model={model}
           setViewerModel={setViewerModel}
+          selectedFilename={viewerModel}
         />
       )}
     </div>

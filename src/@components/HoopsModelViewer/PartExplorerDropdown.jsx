@@ -1,12 +1,13 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useStoreon } from 'storeon/react'
+import classnames from 'classnames'
 import {
-  Badge,
   DropdownMenu,
   Input,
   ModelThumbnail,
   Spacer,
   SingleLineBodyText,
+  Tag,
   TitleTertiary,
 } from '@components'
 import { createUseStyles } from '@style'
@@ -65,20 +66,102 @@ const useStyles = createUseStyles(theme => {
       maxWidth: '6.5rem',
       lineHeight: '1rem',
     },
+    AssemblyExplorer: {},
+    AssemblyExplorer__selected: {},
+    AssemblyExplorer_Row: {},
   }
 })
 
 const noop = () => null
-export const PartExplorerMenu = ({ files = [] }) => {
+
+const PartSelectorRow = (
+  model,
+  part,
+  handleClick,
+  handleChange,
+  selectedFilename,
+  level
+) => {
+  const c = useStyles({ level })
+  const isAssembly = useMemo(() => part.parts && part.parts.length > 0, [part])
+
+  return (
+    <>
+      <div>
+        <Spacer width={`${level * 8}rem`} />
+        <div
+          className={classnames(c.AssemblyExplorer, {
+            [c.AssemblyExplorer__selected]: selectedFilename === part.filename,
+          })}
+          onClick={handleClick}
+        >
+          <Spacer size={'.5rem'} />
+          <div className={c.AssemblyExplorer_Row}>
+            <Spacer size={'.5rem'} />
+            <ModelThumbnail
+              key={model.newFileName}
+              className={c.PartExplorerDropdown_Thumbnail}
+              name={model}
+              model={{ ...model, uploadedFile: part.fileName }}
+            />
+            <Spacer size={'.75rem'} />
+            <div>
+              <SingleLineBodyText>{part.name}</SingleLineBodyText>
+              <Spacer size={'.5rem'} />
+              <Tag secondary={!isAssembly}>{isAssembly ? 'Assembly' : 'Part'}</Tag>
+            </div>
+          </div>
+          <Spacer size={'.5rem'} />
+        </div>
+      </div>
+      {isAssembly && (
+        <AssemblyExplorer
+          model={model}
+          parts={part.parts}
+          handleChange={handleChange}
+          selectedFilename={selectedFilename}
+          level={level + 1}
+        />
+      )}
+    </>
+  )
+}
+
+const AssemblyExplorer = ({
+  model,
+  parts,
+  handleChange,
+  selectedFilename,
+  level = 0,
+}) => {
+  return parts.map((part, index) => {
+    const handleClick = () => {
+      handleChange(part.filename)
+    }
+
+    return (
+      <PartSelectorRow
+        key={`partRow_${index}`}
+        model={model}
+        part={part}
+        handleClick={handleClick}
+        handleChange={handleChange}
+        selectedFilename={selectedFilename}
+        level={level}
+      />
+    )
+  })
+}
+
+export const PartExplorerMenu = ({ handleChange, model, selectedFilename }) => {
   const c = useStyles({})
-  //Loop through files and build nested tree
-  //Each row has an event handler which on click should change the viewer.
+  const { parts } = model
 
   const handleOnInputChange = useCallback(
     (e, value) => {
-      files.filter(file => file.name.includes(value))
+      parts.filter(file => file.name.includes(value))
     },
-    [files]
+    [parts]
   )
 
   return (
@@ -92,16 +175,22 @@ export const PartExplorerMenu = ({ files = [] }) => {
           type='text'
           onChange={handleOnInputChange}
         />
-        {/* <AssemblyTree /> */}
+        <Spacer size={'1.5rem'} />
+        <AssemblyExplorer
+          model={model}
+          parts={parts}
+          handleChange={handleChange}
+          selectedFilename={selectedFilename}
+        />
       </div>
     </div>
   )
 }
 
 export const PartExplorerDropdown = ({
-  selectedValue: model = {},
-  // files = [],
-  onSelectedFile = noop,
+  model,
+  selectedFilename,
+  handleChange = noop,
 }) => {
   const c = useStyles({})
   const [isVisible, setIsVisible] = useState(true)
@@ -111,11 +200,12 @@ export const PartExplorerDropdown = ({
     dispatch(types.OPEN_ACTION_BAR, {
       Component: PartExplorerActionMenu,
       data: {
-        selectedValue: model,
-        handleChange: onSelectedFile,
+        model,
+        selectedFilename,
+        handleChange,
       },
     })
-  }, [dispatch, model, onSelectedFile])
+  }, [dispatch, model, handleChange, selectedFilename])
 
   return (
     <div
@@ -137,7 +227,7 @@ export const PartExplorerDropdown = ({
         {model.name}
       </SingleLineBodyText>
       <Spacer size={'.5rem'} />
-      {model.isAssembly ? <Badge>Assembly</Badge> : <Badge secondary>Part</Badge>}
+      {model.isAssembly ? <Tag>Assembly</Tag> : <Tag secondary>Part</Tag>}
       <Spacer size={'.5rem'} />
       {isVisible ? (
         <ExitIcon className={c.PartExplorerDropdown_Arrow} />
@@ -148,21 +238,33 @@ export const PartExplorerDropdown = ({
   )
 }
 
-const PartExplorerDropdownMenu = ({ handleChange = noop, selectedValue }) => {
+const PartExplorerDropdownMenu = ({
+  model = {},
+  handleChange = noop,
+  selectedFilename,
+}) => {
   const c = useStyles({})
 
   return (
     <DropdownMenu
       className={c.PartExplorerDropdown}
       TargetComponent={PartExplorerDropdown}
-      TargetComponentProps={{ selectedValue, handleChange }}
+      TargetComponentProps={{ model, handleChange, selectedFilename }}
     >
-      <PartExplorerMenu handleChange={handleChange} />
+      <PartExplorerMenu
+        handleChange={handleChange}
+        model={model}
+        selectedFilename={selectedFilename}
+      />
     </DropdownMenu>
   )
 }
 
-const PartExplorerActionMenu = ({ handleChange = noop }) => {
+const PartExplorerActionMenu = ({
+  model = {},
+  handleChange = noop,
+  selectedFilename,
+}) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
 
@@ -180,7 +282,11 @@ const PartExplorerActionMenu = ({ handleChange = noop }) => {
       <div className={c.PartExplorerDropdown_ActionMenu}>
         <Spacer size={'2rem'} />
         <TitleTertiary>Select a model</TitleTertiary>
-        <PartExplorerMenu handleChange={handleSelect} />
+        <PartExplorerMenu
+          model={model}
+          handleChange={handleSelect}
+          selectedFilename={selectedFilename}
+        />
       </div>
       <Spacer size={'2rem'} />
     </>
