@@ -185,7 +185,7 @@ const useHoopsViewer = modelFilename => {
       container: containerRef.current,
       endpointUri: HOOPS_WS_ENDPOINT_URI,
       enginePath: '/vendors/hoops',
-      model: `${modelFilename}.scz`,
+      model: `${modelFilename.split('/')[1]}.scz`,
       rendererType: Communicator.RendererType.Client,
     })
 
