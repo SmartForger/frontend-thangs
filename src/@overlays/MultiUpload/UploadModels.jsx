@@ -221,6 +221,7 @@ const UploadModels = ({
   useEffect(() => {
     const loadingFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isLoading)
     const warningFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isWarning)
+    const missingFiles = files.filter(f => !f.valid)
 
     if (loadingFiles.length === 0 && !validating) setErrorMessage(null)
     if (warningFiles.length !== 0) {
@@ -229,6 +230,10 @@ const UploadModels = ({
     } else if (Object.keys(uploadFiles).length > 25) {
       setWarningMessage(
         'Notice: Uploading more than 25 files at a time may take a long time to upload & process.'
+      )
+    } else if (missingFiles.length > 0) {
+      setWarningMessage(
+        'Notice: You are missing some parts in your assembly. You can upload them now or continue without them.'
       )
     } else {
       setWarningMessage(null)
