@@ -259,10 +259,8 @@ export const PartExplorerMenu = ({ handleChange, model, selectedFilename }) => {
 
   const handleOnInputChange = useCallback(
     value => {
-      debugger
       if (!value || value === '') setPartsToDisplay(parts)
       const newParts = parts.filter(file => {
-        debugger
         const fileName = file.name.toLowerCase()
         return fileName.includes(value.toLowerCase())
       })
