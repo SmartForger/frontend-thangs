@@ -16,6 +16,7 @@ const useStyles = createUseStyles(theme => {
       color: theme.colors.black[500],
       borderRadius: '.125rem',
       cursor: 'pointer',
+      width: 'fit-content',
     },
     Tag_Text: {
       color: theme.colors.black[900],

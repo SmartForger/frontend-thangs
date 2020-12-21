@@ -1,5 +1,6 @@
 import { colors } from './colors.js'
 import * as textMixins from './text.js'
+import * as mixins from './mixins.js'
 
 const createTheme = (data = {}) => {
   const base = {
@@ -20,6 +21,7 @@ const createTheme = (data = {}) => {
       xxxl: '@media (min-width: 1616px)',
     },
     variables: {},
+    mixins: mixins,
   }
 
   return Object.keys(base).reduce(

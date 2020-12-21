@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { Button } from '@components'
@@ -77,7 +77,13 @@ const useStyles = createUseStyles(theme => {
 
 const useDropdownMenuState = (initialIsOpen = false) => {
   const [isOpen, setIsOpen] = useState(initialIsOpen)
-  const toggleOpen = _e => setIsOpen(!isOpen)
+  const toggleOpen = useCallback(
+    _e => {
+      debugger
+      setIsOpen(!isOpen)
+    },
+    [isOpen]
+  )
   const closeMenu = () => setIsOpen(false)
   useEffect(() => {
     if (isOpen) {
@@ -140,7 +146,6 @@ const DropdownMenu = ({
   const [isOpenInternal, toggleOpen] = useDropdownMenuState(isOpenExternal)
   const isOpen = isOpenExternal === undefined ? isOpenInternal : isOpenExternal
   const c = useStyles({ isOpen, noIcons, myThangsMenu })
-
   return (
     <div className={c.DropdownMenu_Container}>
       {TargetComponent ? (

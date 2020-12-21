@@ -18,12 +18,12 @@ import * as types from '@constants/storeEventTypes'
 const useStyles = createUseStyles(theme => {
   return {
     PartExplorerDropdown: {
+      right: '-2rem',
       width: 'auto',
-      right: 0,
       bottom: '4.2rem',
-      position: 'absolute',
       display: 'flex',
       padding: '1rem',
+      position: 'absolute',
     },
     PartExplorerDropdown_Arrow: {
       width: '0.75rem',
@@ -53,11 +53,12 @@ const useStyles = createUseStyles(theme => {
     },
     PartExplorerDropdown_Thumbnail: {
       flex: 'none',
+      backgroundColor: theme.colors.white[400],
       border: `1px solid ${theme.colors.white[900]}`,
       borderRadius: 4,
       padding: '0px !important',
-      width: '2rem',
-      height: '2rem !important',
+      width: '2.625rem',
+      height: '2.625rem !important',
     },
     PartExplorerDropdown_ModelName: {
       overflow: 'hidden',
@@ -66,29 +67,54 @@ const useStyles = createUseStyles(theme => {
       maxWidth: '6.5rem',
       lineHeight: '1rem',
     },
-    AssemblyExplorer: {},
-    AssemblyExplorer__selected: {},
-    AssemblyExplorer_Row: {},
+    PartExplorerMenu: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    AssemblyExplorer: {
+      maxHeight: '20rem',
+      ...theme.mixins.scrollbar,
+    },
+    AssemblyExplorer__selected: {
+      borderRadius: '.25rem',
+      backgroundColor: theme.colors.white[900],
+    },
+    AssemblyExplorer_Row: {
+      display: 'flex',
+      flexDirection: 'row',
+    },
+    AssemblyExplorer_Spacer: {
+      flex: 'none',
+    },
+    PartSelectorRow: {
+      display: 'flex',
+      flexDirection: 'row',
+    },
+    PartExplorerDropdown_PartText: {
+      overflow: 'hidden',
+      width: '15.5rem',
+      textOverflow: 'ellipsis',
+    },
   }
 })
 
 const noop = () => null
 
-const PartSelectorRow = (
+const PartSelectorRow = ({
   model,
   part,
   handleClick,
   handleChange,
   selectedFilename,
-  level
-) => {
+  level,
+}) => {
   const c = useStyles({ level })
   const isAssembly = useMemo(() => part.parts && part.parts.length > 0, [part])
-
+  console.log('part', part)
   return (
     <>
-      <div>
-        <Spacer width={`${level * 8}rem`} />
+      <div className={c.PartSelectorRow}>
+        <Spacer width={`${level * 8}rem`} height={'2.625rem'} />
         <div
           className={classnames(c.AssemblyExplorer, {
             [c.AssemblyExplorer__selected]: selectedFilename === part.filename,
@@ -101,11 +127,11 @@ const PartSelectorRow = (
             <ModelThumbnail
               key={model.newFileName}
               className={c.PartExplorerDropdown_Thumbnail}
-              name={model}
-              model={{ ...model, uploadedFile: part.fileName }}
+              name={part.name}
+              model={{ ...model, uploadedFile: encodeURIComponent(part.filename) }}
             />
             <Spacer size={'.75rem'} />
-            <div>
+            <div className={c.PartExplorerDropdown_PartText}>
               <SingleLineBodyText>{part.name}</SingleLineBodyText>
               <Spacer size={'.5rem'} />
               <Tag secondary={!isAssembly}>{isAssembly ? 'Assembly' : 'Part'}</Tag>
@@ -134,23 +160,28 @@ const AssemblyExplorer = ({
   selectedFilename,
   level = 0,
 }) => {
-  return parts.map((part, index) => {
-    const handleClick = () => {
-      handleChange(part.filename)
-    }
-
-    return (
-      <PartSelectorRow
-        key={`partRow_${index}`}
-        model={model}
-        part={part}
-        handleClick={handleClick}
-        handleChange={handleChange}
-        selectedFilename={selectedFilename}
-        level={level}
-      />
-    )
-  })
+  const c = useStyles({})
+  return (
+    <div className={c.AssemblyExplorer}>
+      {parts.map((part, index) => {
+        const handleClick = () => {
+          handleChange(part.filename)
+        }
+        console.log('part lvl up', part)
+        return (
+          <PartSelectorRow
+            key={`partRow_${index}_${level}`}
+            model={model}
+            part={part}
+            handleClick={handleClick}
+            handleChange={handleChange}
+            selectedFilename={selectedFilename}
+            level={level}
+          />
+        )
+      })}
+    </div>
+  )
 }
 
 export const PartExplorerMenu = ({ handleChange, model, selectedFilename }) => {
@@ -165,24 +196,22 @@ export const PartExplorerMenu = ({ handleChange, model, selectedFilename }) => {
   )
 
   return (
-    <div className={c.PartExplorerDropdown}>
-      <div>
-        <Input
-          id='assembly-search-input'
-          name='part'
-          label='Search models'
-          maxLength='150'
-          type='text'
-          onChange={handleOnInputChange}
-        />
-        <Spacer size={'1.5rem'} />
-        <AssemblyExplorer
-          model={model}
-          parts={parts}
-          handleChange={handleChange}
-          selectedFilename={selectedFilename}
-        />
-      </div>
+    <div className={c.PartExplorerMenu}>
+      <Input
+        id='assembly-search-input'
+        name='part'
+        label='Search models'
+        maxLength='150'
+        type='text'
+        onChange={handleOnInputChange}
+      />
+      <Spacer size={'1rem'} className={c.AssemblyExplorer_Spacer} />
+      <AssemblyExplorer
+        model={model}
+        parts={parts}
+        handleChange={handleChange}
+        selectedFilename={selectedFilename}
+      />
     </div>
   )
 }
@@ -250,6 +279,7 @@ const PartExplorerDropdownMenu = ({
       className={c.PartExplorerDropdown}
       TargetComponent={PartExplorerDropdown}
       TargetComponentProps={{ model, handleChange, selectedFilename }}
+      isOpen={true}
     >
       <PartExplorerMenu
         handleChange={handleChange}

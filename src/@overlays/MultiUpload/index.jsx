@@ -289,7 +289,8 @@ const MultiUpload = ({ initData = null, folderId }) => {
         submitModels()
       } else if (applyRemaining) {
         for (let i = activeStep + 1; i < uploadedFiles.length; i++) {
-          handleUpdate({ id: uploadedFiles[i].id, data })
+          const newData = { ...data, ...uploadedFiles[i] }
+          handleUpdate(newData)
         }
         submitModels()
       } else {
