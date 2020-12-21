@@ -45,12 +45,34 @@ export default store => {
   })
 
   store.on(types.REMOVE_UPLOAD_FILES, (state, { index }) => {
-    const newUploadedFiles = { ...state.uploadFiles.data }
+    const { data: uploadedFiles, validationTree } = state.uploadFiles
+    const { name: filename } = uploadedFiles[index]
+    const newUploadedFiles = { ...uploadedFiles }
     delete newUploadedFiles[index]
+
+    let newValidationTree = validationTree
+    if (validationTree) {
+      const updateValidField = (node) => {
+        let newNode = node;
+        if (node.name === filename && node.valid) {
+          newNode = { ...node, valid: false }
+        }
+
+        if (node.subs) {
+          newNode.subs = node.subs.map(subnode => updateValidField(subnode))
+        }
+
+        return newNode
+      }
+
+      newValidationTree = updateValidField({ subs: validationTree })
+    }
+
     return {
       uploadFiles: {
         ...state.uploadFiles,
         data: newUploadedFiles,
+        validationTree: newValidationTree.subs
       },
     }
   })
@@ -234,7 +256,7 @@ export default store => {
         const transformNode = (node1, node2) => {
           const newNode = {
             id: Math.random().toString(36).substr(2, 9) + node1.name,
-            name: node1.name,
+            name: node1.name.split(':')[0],
             isAssembly: node1.isAssembly,
             valid: node2.valid,
           }
