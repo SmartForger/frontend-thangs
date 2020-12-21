@@ -3,16 +3,18 @@ import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 import {
   DropdownMenu,
-  Input,
   ModelThumbnail,
+  MultiLineBodyText,
   Spacer,
   SingleLineBodyText,
   Tag,
+  TextInput,
   TitleTertiary,
 } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X-sm.svg'
+import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
@@ -20,7 +22,7 @@ const useStyles = createUseStyles(theme => {
     PartExplorerDropdown: {
       right: '-2rem',
       width: 'auto',
-      bottom: '4.2rem',
+      bottom: '5.1rem',
       display: 'flex',
       padding: '1rem',
       position: 'absolute',
@@ -57,8 +59,9 @@ const useStyles = createUseStyles(theme => {
       border: `1px solid ${theme.colors.white[900]}`,
       borderRadius: 4,
       padding: '0px !important',
-      width: '2.625rem',
-      height: '2.625rem !important',
+      width: '2rem',
+      height: '2rem',
+      boxSizing: 'border-box',
     },
     PartExplorerDropdown_ModelName: {
       overflow: 'hidden',
@@ -82,6 +85,7 @@ const useStyles = createUseStyles(theme => {
     AssemblyExplorer_Row: {
       display: 'flex',
       flexDirection: 'row',
+      cursor: 'pointer',
     },
     AssemblyExplorer_Spacer: {
       flex: 'none',
@@ -91,9 +95,68 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'row',
     },
     PartExplorerDropdown_PartText: {
-      overflow: 'hidden',
       width: '15.5rem',
-      textOverflow: 'ellipsis',
+      display: 'flex',
+      alignItems: 'center',
+
+      '& > span': {
+        overflow: 'hidden',
+        alignItems: 'center',
+        lineHeight: '1rem',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+      },
+    },
+    PartSelectorRow_Thumbnail: {
+      flex: 'none',
+      backgroundColor: theme.colors.white[400],
+      border: `1px solid ${theme.colors.white[900]}`,
+      borderRadius: 4,
+      padding: '0 !important',
+      width: '2.625rem',
+      height: '2.625rem',
+      boxSizing: 'border-box',
+    },
+    SearchBar_Wrapper: {
+      display: 'flex',
+      flexDirection: 'column',
+      position: 'relative',
+      background: theme.colors.white[600],
+      borderRadius: '.5rem',
+      width: '100%',
+
+      '& input': {
+        background: theme.colors.white[600],
+        border: 'none',
+        outline: 'none',
+        fontSize: '1rem',
+        lineHeight: '1.5rem',
+        padding: 0,
+
+        '&::placeholder': {
+          fontSize: '1rem',
+          color: theme.colors.grey[300],
+          fontWeight: 500,
+          lineHeight: '1rem',
+        },
+        '&:focus, &:active': {
+          background: theme.colors.white[600],
+          color: theme.colors.grey[300],
+          '&::placeholder': {
+            color: 'transparent',
+          },
+        },
+        '&:-webkit-autofill': {
+          '-webkit-box-shadow': `0 0 0px 1000px ${theme.colors.white[600]} inset`,
+          '-webkit-text-fill-color': theme.colors.grey[300],
+          border: 'none',
+        },
+      },
+    },
+    SearchBar_Row: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
     },
   }
 })
@@ -110,7 +173,7 @@ const PartSelectorRow = ({
 }) => {
   const c = useStyles({ level })
   const isAssembly = useMemo(() => part.parts && part.parts.length > 0, [part])
-  console.log('part', part)
+
   return (
     <>
       <div className={c.PartSelectorRow}>
@@ -126,16 +189,21 @@ const PartSelectorRow = ({
             <Spacer size={'.5rem'} />
             <ModelThumbnail
               key={model.newFileName}
-              className={c.PartExplorerDropdown_Thumbnail}
+              className={c.PartSelectorRow_Thumbnail}
               name={part.name}
               model={{ ...model, uploadedFile: encodeURIComponent(part.filename) }}
             />
             <Spacer size={'.75rem'} />
             <div className={c.PartExplorerDropdown_PartText}>
               <SingleLineBodyText>{part.name}</SingleLineBodyText>
-              <Spacer size={'.5rem'} />
-              <Tag secondary={!isAssembly}>{isAssembly ? 'Assembly' : 'Part'}</Tag>
+              {model.isAssembly && (
+                <>
+                  <Spacer size={'.5rem'} />
+                  <Tag secondary={!isAssembly}>{isAssembly ? 'Assembly' : 'Part'}</Tag>
+                </>
+              )}
             </div>
+            <Spacer size={'.5rem'} />
           </div>
           <Spacer size={'.5rem'} />
         </div>
@@ -167,7 +235,7 @@ const AssemblyExplorer = ({
         const handleClick = () => {
           handleChange(part.filename)
         }
-        console.log('part lvl up', part)
+
         return (
           <PartSelectorRow
             key={`partRow_${index}_${level}`}
@@ -187,31 +255,54 @@ const AssemblyExplorer = ({
 export const PartExplorerMenu = ({ handleChange, model, selectedFilename }) => {
   const c = useStyles({})
   const { parts } = model
+  const [partsToDisplay, setPartsToDisplay] = useState(parts)
 
   const handleOnInputChange = useCallback(
-    (e, value) => {
-      parts.filter(file => file.name.includes(value))
+    value => {
+      debugger
+      if (!value || value === '') setPartsToDisplay(parts)
+      const newParts = parts.filter(file => {
+        debugger
+        const fileName = file.name.toLowerCase()
+        return fileName.includes(value.toLowerCase())
+      })
+      setPartsToDisplay(newParts)
     },
     [parts]
   )
 
   return (
     <div className={c.PartExplorerMenu}>
-      <Input
-        id='assembly-search-input'
-        name='part'
-        label='Search models'
-        maxLength='150'
-        type='text'
-        onChange={handleOnInputChange}
-      />
+      <div className={classnames(c.SearchBar_Wrapper)}>
+        <Spacer size={'.5rem'} />
+        <div className={c.SearchBar_Row}>
+          <Spacer size={'1rem'} />
+          <SearchIcon
+            className={classnames(c.SearchBar_SearchIcon, c.SearchBar_FormIcon)}
+          />
+          <Spacer size={'.5rem'} />
+          <TextInput
+            name='search'
+            placeholder={'Filter models by name'}
+            className={c.SearchBar_FormInput}
+            onChange={e => {
+              handleOnInputChange(e.target.value)
+            }}
+          />
+        </div>
+        <Spacer size={'.5rem'} />
+      </div>
       <Spacer size={'1rem'} className={c.AssemblyExplorer_Spacer} />
-      <AssemblyExplorer
-        model={model}
-        parts={parts}
-        handleChange={handleChange}
-        selectedFilename={selectedFilename}
-      />
+      {partsToDisplay.length > 0 ? (
+        <AssemblyExplorer
+          model={model}
+          parts={partsToDisplay}
+          handleChange={handleChange}
+          selectedFilename={selectedFilename}
+        />
+      ) : (
+        <MultiLineBodyText>No models found</MultiLineBodyText>
+      )}
     </div>
   )
 }
@@ -253,7 +344,7 @@ export const PartExplorerDropdown = ({
       />
       <Spacer size={'1rem'} />
       <SingleLineBodyText className={c.PartExplorerDropdown_ModelName}>
-        {model.name}
+        {selectedFilename}
       </SingleLineBodyText>
       <Spacer size={'.5rem'} />
       {model.isAssembly ? <Tag>Assembly</Tag> : <Tag secondary>Part</Tag>}

@@ -19,7 +19,7 @@ const useStyles = createUseStyles(theme => {
     ExplodeDropdown: {
       width: '10.75rem',
       color: `${theme.colors.black[500]} !important`,
-      bottom: '4.25rem',
+      bottom: '3.75rem',
       display: 'flex',
       right: '-5rem',
 

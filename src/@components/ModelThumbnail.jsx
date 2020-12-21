@@ -98,7 +98,6 @@ const TIW_THUMBNAILS_HOST = process.env.REACT_APP_TIW_THUMBNAILS_HOST
 
 const getThumbnailFileName = (model = {}) => {
   let primaryPart
-  debugger
   if (model.uploadedFile) return model.uploadedFile
   if (model.modelFileName) return model.modelFileName.replace(THUMBNAILS_FOLDER, '')
   if (model.parts) {
@@ -130,7 +129,6 @@ const thumbnailUrl = model =>
 
 const getThumbnailUrl = (model = {}) => {
   let primaryPart
-  debugger
   if (model.thumbnailUrl) return model.thumbnailUrl
   if (model.uploadedFile) return model.uploadedFile
   if (model.modelFileName) return model.modelFileName.replace(`${THUMBNAILS_FOLDER}`, '')

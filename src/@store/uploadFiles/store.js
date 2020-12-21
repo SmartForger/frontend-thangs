@@ -303,7 +303,6 @@ export default store => {
     } = state.uploadFiles
 
     const payload = []
-    debugger
     const filteredFiles = {}
     Object.keys(uploadedFiles).forEach(fileDataId => {
       if (uploadedFiles[fileDataId].name)
@@ -367,7 +366,6 @@ const createModelObject = (treeNodes, filesArray, assemblyData) => {
 
   treeNodes.forEach(node => {
     const fileObj = filesArray.find(f => f.name === node.name)
-    debugger
     if (fileObj) {
       result.parts.push({
         name: fileObj.name,

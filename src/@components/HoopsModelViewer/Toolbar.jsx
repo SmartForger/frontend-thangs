@@ -26,14 +26,9 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const Toolbar = ({
-  hoops,
-  model = {},
-  isMultipart,
-  isAssembly,
-  setViewerModel = noop,
-  selectedFilename,
-}) => {
+const Toolbar = ({ hoops, model = {}, setViewerModel = noop, selectedFilename }) => {
+  const isMultipart = !model.isAssembly && model.parts.length > 1
+  const isAssembly = model.isAssembly
   const c = useStyles({ isMultipart, isAssembly })
   //These keep track the UI toolbar state
   const [mode, setMode] = useState('shaded')

@@ -79,7 +79,6 @@ const useDropdownMenuState = (initialIsOpen = false) => {
   const [isOpen, setIsOpen] = useState(initialIsOpen)
   const toggleOpen = useCallback(
     _e => {
-      debugger
       setIsOpen(!isOpen)
     },
     [isOpen]
