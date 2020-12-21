@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import * as R from 'ramda'
 import {
   Button,
@@ -196,7 +196,6 @@ const UploadModels = ({
   isAssembly = false,
   setIsAssembly = noop,
   validating = false,
-  skipFile = noop,
 }) => {
   const hasFile = Object.keys(uploadFiles).length > 0
   const c = useStyles({ hasFile })
@@ -207,12 +206,19 @@ const UploadModels = ({
   const fileLength = uploadFiles
     ? Object.keys(uploadFiles).filter(fileId => uploadFiles[fileId].name).length
     : 0
+  const dropzoneRef = useRef()
 
   const files = flattenTree(uploadTreeData)
 
   const toggleAssembly = useCallback(() => {
     setIsAssembly(!isAssembly)
   }, [isAssembly, setIsAssembly])
+
+  const uploadFile = () => {
+    if (dropzoneRef.current) {
+      dropzoneRef.current.open()
+    }
+  }
 
   useEffect(() => {
     overlayview('MultiUpload - UploadModels')
@@ -255,7 +261,7 @@ const UploadModels = ({
 
   return (
     <>
-      <Dropzone onDrop={onDrop} accept={MODEL_FILE_EXTS} maxFiles={25}>
+      <Dropzone onDrop={onDrop} accept={MODEL_FILE_EXTS} ref={dropzoneRef} maxFiles={25}>
         {({ getRootProps, getInputProps }) => (
           <section className={c.UploadModels_UploadZone}>
             <div {...getRootProps()}>
@@ -295,7 +301,7 @@ const UploadModels = ({
               <UploadTreeItem
                 key={f.id}
                 file={f}
-                onSkip={skipFile}
+                onUpload={uploadFile}
                 onRemove={removeFile}
               />
             ))}

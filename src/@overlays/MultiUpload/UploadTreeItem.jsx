@@ -76,15 +76,15 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const UploadTreeItem = ({ file, onSkip, onRemove }) => {
+const UploadTreeItem = ({ file, onUpload, onRemove }) => {
   const c = useStyles()
 
   const handleRemove = () => {
     onRemove(file.name)
   }
 
-  const handleSkip = () => {
-    onSkip(file.name)
+  const handleUpload = () => {
+    onUpload(file.name)
   }
 
   return (
@@ -134,7 +134,7 @@ const UploadTreeItem = ({ file, onSkip, onRemove }) => {
           <UploadIcon
             className={c.UploadTreeItem_Button}
             className={c.UploadTreeItem_Button}
-            onClick={handleSkip}
+            onClick={handleUpload}
           />
         )}
         {file.level === 0 && (
