@@ -95,7 +95,7 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'row',
     },
     PartExplorerDropdown_PartText: {
-      width: '15.5rem',
+      minWidth: '10rem',
       display: 'flex',
       alignItems: 'center',
 
