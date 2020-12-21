@@ -120,7 +120,7 @@ const BlockPicker = ({ currentColor, handleChange = noop, visible, pickerRef }) 
   const c = useStyles({ visible, color: currentColor })
 
   return (
-    <div ref={pickerRef} className={c.ColorPicker_BlockPicker} visible={visible}>
+    <div ref={pickerRef} className={c.ColorPicker_BlockPicker}>
       {COLORS.map((color, idx) => {
         const isSelected = color === currentColor
         return (
