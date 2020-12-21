@@ -57,9 +57,6 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       marginTop: '2rem',
-      '&:first-of-type': {
-        marginTop: '1.5rem',
-      },
     },
     Model_Column: {
       display: 'flex',
@@ -137,6 +134,7 @@ const useStyles = createUseStyles(theme => {
     Model_Detail: {
       justifyContent: 'space-between',
       flexDirection: 'row',
+      margin: 0,
     },
     Model_SocialButtons: {
       display: 'flex',
