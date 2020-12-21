@@ -24,7 +24,7 @@ const useStyles = createUseStyles(theme => {
     mediaQueries: { md },
   } = theme
   return {
-    EnterInfo: {
+    PartInfo: {
       minHeight: '27.75rem',
       backgroundColor: theme.colors.white[300],
       borderRadius: '1rem',
@@ -36,16 +36,16 @@ const useStyles = createUseStyles(theme => {
         width: '27.75rem',
       },
     },
-    EnterInfo_Content: {
+    PartInfo_Content: {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-start',
       width: '100%',
     },
-    EnterInfo_OverlayHeader: {
+    PartInfo_OverlayHeader: {
       lineHeight: '1.5rem !important',
     },
-    EnterInfo_ExitButton: {
+    PartInfo_ExitButton: {
       top: '1.5rem',
       right: '1.5rem',
       cursor: 'pointer',
@@ -53,7 +53,7 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       background: 'white',
     },
-    EnterInfo_UploadZone: {
+    PartInfo_UploadZone: {
       width: '100%',
       height: ({ hasFile }) => (hasFile ? '11rem' : '22.25rem'),
       display: 'flex',
@@ -71,15 +71,15 @@ const useStyles = createUseStyles(theme => {
         outline: 'none',
       },
     },
-    EnterInfo_UploadRow: {
+    PartInfo_UploadRow: {
       height: '100%',
     },
-    EnterInfo_FileRow: {
+    PartInfo_FileRow: {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
     },
-    EnterInfo_Row: {
+    PartInfo_Row: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
@@ -88,35 +88,35 @@ const useStyles = createUseStyles(theme => {
         flex: 'none',
       },
     },
-    EnterInfo_FieldRow: {
+    PartInfo_FieldRow: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
     },
-    EnterInfo_Field: {
+    PartInfo_Field: {
       marginBottom: '1rem',
       flexGrow: 1,
     },
-    EnterInfo_FileName: {
+    PartInfo_FileName: {
       textOverflow: 'ellipsis',
       width: '16rem',
       overflow: 'hidden',
       lineHeight: '1rem !important',
     },
-    EnterInfo_Column: {
+    PartInfo_Column: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
     },
-    EnterInfo_UploadColumn: {
+    PartInfo_UploadColumn: {
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
     },
-    EnterInfo_ScrollableFiles: {
+    PartInfo_ScrollableFiles: {
       display: 'flex',
       flexDirection: 'column',
       overflowX: 'hidden',
@@ -139,11 +139,11 @@ const useStyles = createUseStyles(theme => {
         border: `3px solid ${theme.colors.white[600]}`,
       },
     },
-    EnterInfo_RemoveBtn: {
+    PartInfo_RemoveBtn: {
       cursor: 'pointer',
       zIndex: 1,
     },
-    EnterInfo_ButtonWrapper: {
+    PartInfo_ButtonWrapper: {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -152,14 +152,14 @@ const useStyles = createUseStyles(theme => {
         width: '100%',
       },
     },
-    EnterInfo_ErrorText: {
+    PartInfo_ErrorText: {
       ...theme.text.formErrorText,
       backgroundColor: theme.variables.colors.errorTextBackground,
       fontWeight: 500,
       padding: '.625rem 1rem',
       borderRadius: '.5rem',
     },
-    EnterInfo_Thumbnail: {
+    PartInfo_Thumbnail: {
       flex: 'none',
       border: `1px solid ${theme.colors.white[900]}`,
       borderRadius: 4,
@@ -167,7 +167,7 @@ const useStyles = createUseStyles(theme => {
       width: '3.75rem',
       height: '3.75rem !important',
     },
-    EnterInfo_ModelInfo: {
+    PartInfo_ModelInfo: {
       '& h3': {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
@@ -180,7 +180,7 @@ const useStyles = createUseStyles(theme => {
         },
       },
     },
-    EnterInfo_PrivacyText: {
+    PartInfo_PrivacyText: {
       width: '80%',
       textAlign: 'left !important',
     },
@@ -189,7 +189,7 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const enterInfoSchema = Joi.object({
+const PartInfoSchema = Joi.object({
   name: Joi.string().required(),
   description: Joi.string().required(),
   material: Joi.string().allow(''),
@@ -199,7 +199,7 @@ const enterInfoSchema = Joi.object({
   folderId: Joi.string().allow(''),
 })
 
-const EnterInfo = props => {
+const PartInfo = props => {
   const {
     activeStep,
     errorMessage = '',
@@ -231,7 +231,7 @@ const EnterInfo = props => {
   }
 
   const { checkError, onFormSubmit, onInputChange, inputState } = useForm({
-    initialValidationSchema: enterInfoSchema,
+    initialValidationSchema: PartInfoSchema,
     initialState,
   })
 
@@ -259,13 +259,13 @@ const EnterInfo = props => {
   const usersFolders = useMemo(() => {
     return folders && folders.length
       ? [
-        { value: 'files', label: 'My Public Files', isPublic: true },
-        ...folders.map(folder => ({
-          value: folder.id,
-          label: folder.name.replace(new RegExp('//', 'g'), '/'),
-          isPublic: folder.isPublic,
-        })),
-      ]
+          { value: 'files', label: 'My Public Files', isPublic: true },
+          ...folders.map(folder => ({
+            value: folder.id,
+            label: folder.name.replace(new RegExp('//', 'g'), '/'),
+            isPublic: folder.isPublic,
+          })),
+        ]
       : [{ value: 'files', label: 'My Public Files', isPublic: true }]
   }, [folders])
 
@@ -278,14 +278,14 @@ const EnterInfo = props => {
 
   return (
     <>
-      <div className={c.EnterInfo_Row}>
+      <div className={c.PartInfo_Row}>
         <ModelThumbnail
-          className={c.EnterInfo_Thumbnail}
+          className={c.PartInfo_Thumbnail}
           name={model.name}
           model={model}
         />
         <Spacer size={'1rem'} />
-        <div className={c.EnterInfo_ModelInfo}>
+        <div className={c.PartInfo_ModelInfo}>
           <TitleTertiary title={model.name}>{model.name}</TitleTertiary>
           <Spacer size={'.5rem'} />
           <MetadataPrimary>{formatBytes(model.size)}</MetadataPrimary>
@@ -294,14 +294,14 @@ const EnterInfo = props => {
       <Spacer size={'1.5rem'} />
       {errorMessage && (
         <>
-          <h4 className={c.EnterInfo_ErrorText}>{errorMessage}</h4>
+          <h4 className={c.PartInfo_ErrorText}>{errorMessage}</h4>
           <Spacer size='1rem' />
         </>
       )}
       <form onSubmit={onFormSubmit(handleSubmit)}>
-        <div className={c.EnterInfo_Field}>
+        <div className={c.PartInfo_Field}>
           <Input
-            className={c.EnterInfo_FullWidthInput}
+            className={c.PartInfo_FullWidthInput}
             name='name'
             label='Name *'
             maxLength='100'
@@ -313,7 +313,7 @@ const EnterInfo = props => {
             errorMessage={checkError('name').message}
           />
         </div>
-        <div className={c.EnterInfo_Field}>
+        <div className={c.PartInfo_Field}>
           <Textarea
             id='description-input'
             name='description'
@@ -327,9 +327,9 @@ const EnterInfo = props => {
           />
         </div>
         {!isAssembly && folders && folders.length ? (
-          <div className={c.EnterInfo_Field}>
+          <div className={c.PartInfo_Field}>
             <Dropdown
-              className={c.EnterInfo_Select}
+              className={c.PartInfo_Select}
               name='folder'
               placeholder={'Select folder'}
               value={selectedFolder}
@@ -342,9 +342,9 @@ const EnterInfo = props => {
             />
           </div>
         ) : null}
-        <div className={c.EnterInfo_Field}>
+        <div className={c.PartInfo_Field}>
           <Input
-            className={c.EnterInfo_FullWidthInput}
+            className={c.PartInfo_FullWidthInput}
             name='material'
             label='Material'
             maxLength='50'
@@ -354,10 +354,10 @@ const EnterInfo = props => {
             errorMessage={checkError('material').message}
           />
         </div>
-        <div className={c.EnterInfo_FieldRow}>
-          <div className={c.EnterInfo_Field}>
+        <div className={c.PartInfo_FieldRow}>
+          <div className={c.PartInfo_Field}>
             <Input
-              className={c.EnterInfo_FullWidthInput}
+              className={c.PartInfo_FullWidthInput}
               name='weight'
               label='Weight'
               maxLength='50'
@@ -368,9 +368,9 @@ const EnterInfo = props => {
             />
           </div>
           <Spacer size={'1rem'} />
-          <div className={c.EnterInfo_Field}>
+          <div className={c.PartInfo_Field}>
             <Input
-              className={c.EnterInfo_FullWidthInput}
+              className={c.PartInfo_FullWidthInput}
               name='height'
               label='Height'
               maxLength='50'
@@ -382,9 +382,9 @@ const EnterInfo = props => {
           </div>
         </div>
         {!isAssembly && (
-          <div className={c.EnterInfo_Field}>
+          <div className={c.PartInfo_Field}>
             <Dropdown
-              className={c.EnterInfo_Select}
+              className={c.PartInfo_Select}
               name='category'
               placeholder='Select category'
               value={selectedCategory}
@@ -411,18 +411,18 @@ const EnterInfo = props => {
         </SingleLineBodyText>
         <Spacer size={'.5rem'} />
         {folderPublic ? (
-          <MetadataSecondary className={c.EnterInfo_PrivacyText}>
+          <MetadataSecondary className={c.PartInfo_PrivacyText}>
             The folder you have selected is Public. This model will be shared publicly
             towards users on Thangs.
           </MetadataSecondary>
         ) : (
-          <MetadataSecondary className={c.EnterInfo_PrivacyText}>
+          <MetadataSecondary className={c.PartInfo_PrivacyText}>
             The folder you have selected is Private. This model will be private and
             restricted to yourself and those you to choose to share it with.
           </MetadataSecondary>
         )}
         <Spacer size={'1.5rem'} />
-        <div className={c.EnterInfo_ButtonWrapper}>
+        <div className={c.PartInfo_ButtonWrapper}>
           <Button type='submit' disabled={isLoading}>
             Continue
           </Button>
@@ -432,4 +432,4 @@ const EnterInfo = props => {
   )
 }
 
-export default EnterInfo
+export default PartInfo

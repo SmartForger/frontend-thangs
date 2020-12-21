@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import * as R from 'ramda'
 import { SingleLineBodyText, Spacer, Spinner } from '@components'
-import EnterInfo from './EnterInfo'
+import PartInfo from './PartInfo'
 import UploadModels from './UploadModels'
 import { createUseStyles } from '@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
@@ -99,7 +99,7 @@ const uploadViews = {
   assemblyInfo: {
     title: 'New Assembly',
   },
-  enterInfo: {
+  partInfo: {
     title: 'Enter Information',
   },
 }
@@ -248,12 +248,12 @@ const MultiUpload = ({ initData = null, folderId }) => {
       return setErrorMessage('Please handle all missing files')
     }
 
-    setActiveView(isAssembly ? 'assemblyInfo' : 'enterInfo')
+    setActiveView(isAssembly ? 'assemblyInfo' : 'partInfo')
   }, [uploadFilesData, validationTree, isAssembly, validating])
 
   const continueToModelInfo = ({ data }) => {
     setAssemblyFormData(data)
-    setActiveView('enterInfo')
+    setActiveView('partInfo')
     setActiveStep(0)
   }
 
@@ -405,7 +405,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             uploadedFiles={uploadedFiles}
           />
         ) : (
-          <EnterInfo
+          <PartInfo
             activeStep={activeStep}
             closeOverlay={closeOverlay}
             errorMessage={errorMessage}
