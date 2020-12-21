@@ -92,7 +92,7 @@ const Folder = ({
   }, [folder, handleChangeFolder])
 
   const folderName = parentName ? name.replace(`${parentName}//`, '') : name
-  const isIconDisabled = R.isNil(folder.subfolders) || R.isEmpty(folder.subfolders)
+  const isIconDisabled = R.isEmpty(filteredSubfolders)
   return (
     <>
       <ContextMenuTrigger
