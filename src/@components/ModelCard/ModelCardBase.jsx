@@ -8,7 +8,7 @@ import { ReactComponent as ChatIcon } from '@svg/icon-comment.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
 import * as types from '@constants/storeEventTypes'
-import { ModelThumbnail, UserInline } from '@components'
+import { MetadataSecondary, ModelThumbnail, UserInline } from '@components'
 import { useCurrentUserId } from '@hooks'
 import { track } from '@utilities/analytics'
 
@@ -148,7 +148,6 @@ const CardContents = ({
           className={c.ModelCard_UserLine}
         />
       </Link>
-
       <Anchor
         onClick={onAnchorClick}
         to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
@@ -163,6 +162,7 @@ const CardContents = ({
 
         <div className={c.ModelCard_Footer}>
           <div className={c.ModelCard_Name}>{model.name}</div>
+          <MetadataSecondary>{`${model.parts.length} Parts`}</MetadataSecondary>
           <LikesAndComments model={model} c={c} />
         </div>
       </Anchor>

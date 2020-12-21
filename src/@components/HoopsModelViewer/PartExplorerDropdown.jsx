@@ -26,6 +26,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       padding: '1rem',
       position: 'absolute',
+      overflow: 'hidden',
     },
     PartExplorerDropdown_Arrow: {
       width: '0.75rem',
@@ -74,30 +75,41 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'column',
     },
-    AssemblyExplorer: {
+    AssemblyExplorer_Wrapper: {
       maxHeight: '20rem',
+      overflowY: 'scroll',
       ...theme.mixins.scrollbar,
     },
-    AssemblyExplorer__selected: {
-      borderRadius: '.25rem',
-      backgroundColor: theme.colors.white[900],
-    },
-    AssemblyExplorer_Row: {
+    PartSelectorRow_Row: {
       display: 'flex',
       flexDirection: 'row',
+      cursor: 'pointer',
+    },
+    PartSelectorRow_Column: {
+      display: 'flex',
+      flexDirection: 'column',
       cursor: 'pointer',
     },
     AssemblyExplorer_Spacer: {
       flex: 'none',
     },
     PartSelectorRow: {
+      borderRadius: '.25rem',
       display: 'flex',
       flexDirection: 'row',
+
+      '&:hover': {
+        backgroundColor: theme.colors.white[900],
+      },
+    },
+    PartSelectorRow__selected: {
+      backgroundColor: theme.colors.white[900],
     },
     PartExplorerDropdown_PartText: {
-      minWidth: '10rem',
       display: 'flex',
-      alignItems: 'center',
+      minWidth: '10rem',
+      flexDirection: 'column',
+      justifyContent: 'center',
 
       '& > span': {
         overflow: 'hidden',
@@ -176,16 +188,15 @@ const PartSelectorRow = ({
 
   return (
     <>
-      <div className={c.PartSelectorRow}>
-        <Spacer width={`${level * 8}rem`} height={'2.625rem'} />
-        <div
-          className={classnames(c.AssemblyExplorer, {
-            [c.AssemblyExplorer__selected]: selectedFilename === part.filename,
-          })}
-          onClick={handleClick}
-        >
+      <div
+        className={classnames(c.PartSelectorRow, {
+          [c.PartSelectorRow__selected]: selectedFilename === part.filename,
+        })}
+      >
+        <Spacer width={`${level * 0.5}rem`} height={'2.625rem'} />
+        <div className={c.PartSelectorRow_Column} onClick={handleClick}>
           <Spacer size={'.5rem'} />
-          <div className={c.AssemblyExplorer_Row}>
+          <div className={c.PartSelectorRow_Row}>
             <Spacer size={'.5rem'} />
             <ModelThumbnail
               key={model.newFileName}
@@ -222,6 +233,7 @@ const PartSelectorRow = ({
 }
 
 const AssemblyExplorer = ({
+  className,
   model,
   parts,
   handleChange,
@@ -230,7 +242,7 @@ const AssemblyExplorer = ({
 }) => {
   const c = useStyles({})
   return (
-    <div className={c.AssemblyExplorer}>
+    <div className={classnames(className, c.AssemblyExplorer)}>
       {parts.map((part, index) => {
         const handleClick = () => {
           handleChange(part.filename)
@@ -293,6 +305,7 @@ export const PartExplorerMenu = ({ handleChange, model, selectedFilename }) => {
       <Spacer size={'1rem'} className={c.AssemblyExplorer_Spacer} />
       {partsToDisplay.length > 0 ? (
         <AssemblyExplorer
+          className={c.AssemblyExplorer_Wrapper}
           model={model}
           parts={partsToDisplay}
           handleChange={handleChange}

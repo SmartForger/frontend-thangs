@@ -103,6 +103,7 @@ const Toolbar = ({
   model,
 }) => {
   const c = useStyles({ isAssembly, isMultipart })
+  const showPartSelector = isMultipart || isAssembly
   return (
     <div className={classnames(c.Toolbar, className)}>
       <Spacer size={'1.5rem'} />
@@ -174,7 +175,7 @@ const Toolbar = ({
             </div>
           </>
         )}
-        {isMultipart && (
+        {showPartSelector && (
           <>
             <Spacer size={'1.125rem'} />
             <div className={c.Toolbar_VerticalRule}></div>
