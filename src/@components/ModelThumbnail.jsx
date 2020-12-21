@@ -66,19 +66,6 @@ const useStyles = createUseStyles(theme => {
         },
       },
     },
-    ModelThumbnail_WaldoThumbnail: {
-      position: 'absolute',
-      right: '-.5rem',
-      top: '-.5rem',
-      zIndex: 1000,
-
-      '& img': {
-        width: '5rem',
-        borderRadius: '.5rem',
-        background: theme.colors.white[400],
-        boxShadow: '-1px 2px 4px -1px rgba(0,0,0,0.79)',
-      },
-    },
     ModelThumbnail_Loader: {
       position: 'absolute',
     },
@@ -94,38 +81,13 @@ const ERROR = 'ERROR'
 
 const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST
 const THUMBNAILS_FOLDER = process.env.REACT_APP_THUMBNAILS_FOLDER
-const TIW_THUMBNAILS_HOST = process.env.REACT_APP_TIW_THUMBNAILS_HOST
-
-const getThumbnailFileName = (model = {}) => {
-  let primaryPart
-  if (model.uploadedFile) return model.uploadedFile
-  if (model.modelFileName) return model.modelFileName.replace(THUMBNAILS_FOLDER, '')
-  if (model.parts) {
-    if (model.parts.length > 1) {
-      primaryPart = R.find(R.propEq('isPrimary', true))(model.parts)
-      if (primaryPart.filename)
-        return encodeURIComponent(`${THUMBNAILS_FOLDER}${primaryPart.filename}`)
-    } else if (model.parts.length === 1) {
-      primaryPart = model.parts[0]
-      return encodeURIComponent(`${THUMBNAILS_FOLDER}${primaryPart.filename}`)
-    }
-  }
-  if (model.newFileName)
-    return `${THUMBNAILS_FOLDER}${encodeURIComponent(model.newFileName)}`
-  return 'unknown'
-}
-
-const getWaldoThumbnailUrl = (model = {}, searchModelFileName) => {
-  if (searchModelFileName) return searchModelFileName.replace(`${THUMBNAILS_FOLDER}`, '')
-  if (model.searchModel) return model.searchModel.replace(`${THUMBNAILS_FOLDER}`, '')
-}
 
 const thumbnailUrl = model =>
   model.fullThumbnailUrl
     ? model.fullThumbnailUrl
     : model.thumbnailUrl
-      ? model.thumbnailUrl
-      : `${THUMBNAILS_HOST}/${getThumbnailUrl(model)}?size=456x540`
+    ? model.thumbnailUrl
+    : `${THUMBNAILS_HOST}${getThumbnailUrl(model)}?size=456x540`
 
 const getThumbnailUrl = (model = {}) => {
   let primaryPart
@@ -136,87 +98,42 @@ const getThumbnailUrl = (model = {}) => {
     if (model.parts.length > 1) {
       primaryPart = R.find(R.propEq('isPrimary', true))(model.parts)
       if (!primaryPart) primaryPart = model.parts[0]
-      if (primaryPart.filename)
-        return encodeURIComponent(`${THUMBNAILS_FOLDER}${primaryPart.filename}`)
+      if (primaryPart.filename) return encodeURIComponent(`${primaryPart.filename}`)
     } else if (model.parts.length === 1) {
       primaryPart = model.parts[0]
       if (primaryPart.storageFileName) return primaryPart.storageFileName
-      if (primaryPart.filename)
-        return encodeURIComponent(`${THUMBNAILS_FOLDER}${primaryPart.filename}`)
+      if (primaryPart.filename) return encodeURIComponent(`${primaryPart.filename}`)
     }
   }
-  if (model.newFileName)
-    return `${THUMBNAILS_FOLDER}${encodeURIComponent(model.newFileName)}`
+  if (model.newFileName) return `${encodeURIComponent(model.newFileName)}`
   return 'unknown'
 }
 
-const waldoThumbnailUrl = (model, searchModelFileName) =>
-  searchModelFileName
-    ? `${TIW_THUMBNAILS_HOST}/${getThumbnailFileName(model)}/${getWaldoThumbnailUrl(
-      model,
-      searchModelFileName
-    )}`
-    : undefined
-
-const ModelThumbnail = ({ className, model, name, searchModelFileName, showWaldo }) => {
+const ModelThumbnail = ({ className, model, name }) => {
   const [loadingState, setLoadingState] = useState(LOADING)
-  const [lookingForWaldo, setLookingForWaldo] = useState(true)
-  const [isSwapped, setIsSwapped] = useState(false)
   const onLoad = useCallback(() => setLoadingState(COMPLETE), [])
   const onError = useCallback(() => {
     setLoadingState(ERROR)
     track('Error - Thumbnail Image', { modelId: model && model.id })
   }, [model])
-  const onFoundWaldo = useCallback(() => setLookingForWaldo(false), [])
   const c = useStyles()
-  const onSwap = useCallback(() => {
-    setIsSwapped(!isSwapped)
-  }, [isSwapped])
 
   const src = thumbnailUrl(model)
-  const waldoSrc = showWaldo ? waldoThumbnailUrl(model, searchModelFileName) : undefined
 
   return (
-    <>
-      <div
-        className={classnames({
-          [c.ModelThumbnail_WaldoThumbnail]: isSwapped,
-          [className]: !isSwapped,
-          [c.ModelThumbnail]: !isSwapped,
-        })}
-        onClick={loadingState === COMPLETE && !lookingForWaldo ? onSwap : undefined}
-      >
-        {loadingState === LOADING && <Loader className={c.ModelThumbnail_Loader} />}
-        {src && (
-          <img
-            className={loadingState === ERROR ? c.ModelThumbnail_Error : undefined}
-            src={src}
-            alt={`${name} 3d model`}
-            onLoad={onLoad}
-            onError={onError}
-            title={model.fileName}
-          />
-        )}
-      </div>
-      {waldoSrc && (
-        <div
-          className={classnames({
-            [c.ModelThumbnail_WaldoThumbnail]: !isSwapped,
-            [className]: isSwapped,
-            [c.ModelThumbnail]: isSwapped,
-          })}
-          onClick={loadingState === COMPLETE && !lookingForWaldo ? onSwap : undefined}
-        >
-          <img
-            src={waldoSrc}
-            onLoad={onFoundWaldo}
-            onError={i => (i.target.style.display = 'none')}
-            alt={`${name} 3d model`}
-          />
-          {/* {lookingForWaldo && <Loader />} */}
-        </div>
+    <div className={classnames(className, c.ModelThumbnail)}>
+      {loadingState === LOADING && <Loader className={c.ModelThumbnail_Loader} />}
+      {src && (
+        <img
+          className={loadingState === ERROR ? c.ModelThumbnail_Error : undefined}
+          src={src}
+          alt={`${name} 3d model`}
+          onLoad={onLoad}
+          onError={onError}
+          title={model.fileName}
+        />
       )}
-    </>
+    </div>
   )
 }
 

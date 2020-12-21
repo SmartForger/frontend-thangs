@@ -191,7 +191,7 @@ const PartSelectorRow = ({
               key={model.newFileName}
               className={c.PartSelectorRow_Thumbnail}
               name={part.name}
-              model={{ ...model, uploadedFile: encodeURIComponent(part.filename) }}
+              model={{ ...model, uploadedFile: part.filename.replace('/', '%2F') }}
             />
             <Spacer size={'.75rem'} />
             <div className={c.PartExplorerDropdown_PartText}>

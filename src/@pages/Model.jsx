@@ -481,7 +481,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime }) => {
         />
         <meta
           property='og:image'
-          content={`${THUMBNAILS_HOST}/${modelData.uploadedFile}`}
+          content={`${THUMBNAILS_HOST}${modelData.uploadedFile}`}
         />
       </Helmet>
       <div className={c.Model}>
