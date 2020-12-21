@@ -8,6 +8,7 @@ import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
 import { ReactComponent as TreeOpenIcon } from '@svg/icon-tree-open.svg'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
+import { ReactComponent as InfoIcon } from '@svg/icon-info.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -23,10 +24,10 @@ const useStyles = createUseStyles(theme => {
         '& $UploadTreeItem_FileName': {
           color: '#DA7069',
         },
-        '& $UploadTreeItem_Icon path[fill]': {
+        '& $UploadTreeItem_Icon [fill]': {
           fill: '#DA7069',
         },
-        '& $UploadTreeItem_Icon path[stroke]': {
+        '& $UploadTreeItem_Icon [stroke]': {
           stroke: '#DA7069',
         },
       },
@@ -35,10 +36,10 @@ const useStyles = createUseStyles(theme => {
           color: '#999',
           textDecoration: 'line-through',
         },
-        '& $UploadTreeItem_Icon path[fill]': {
+        '& $UploadTreeItem_Icon [fill]': {
           fill: '#999',
         },
-        '& $UploadTreeItem_Icon path[stroke]': {
+        '& $UploadTreeItem_Icon [stroke]': {
           stroke: '#999',
         },
       },
@@ -65,10 +66,10 @@ const useStyles = createUseStyles(theme => {
         color: '#999',
         textDecoration: 'line-through',
       },
-      '& path[fill]': {
+      '& [fill]': {
         fill: '#000',
       },
-      '& path[stroke]': {
+      '& [stroke]': {
         stroke: '#000',
       },
     },
@@ -97,12 +98,24 @@ const UploadTreeItem = ({ file, onSkip, onRemove }) => {
       {file.isAssembly ? (
         <>
           {file.level > 0 && <Spacer size={'1.25rem'} />}
-          {file.loading ? <Spinner size={'1rem'} /> : <FileIcon className={c.UploadTreeItem_Icon} />}
+          {file.loading ? (
+            <Spinner size={'1rem'} />
+          ) : !file.valid ? (
+            <InfoIcon className={c.UploadTreeItem_Icon} />
+          ) : (
+            <FileIcon className={c.UploadTreeItem_Icon} />
+          )}
         </>
       ) : (
         <>
           {file.level > 0 && <TreeOpenIcon className={c.UploadTreeItem_OpenIcon} />}
-          {file.loading ? <Spinner size={'1rem'} /> : <ModelIcon className={c.UploadTreeItem_Icon} />}
+          {file.loading ? (
+            <Spinner size={'1rem'} />
+          ) : !file.valid ? (
+            <InfoIcon className={c.UploadTreeItem_Icon} />
+          ) : (
+            <ModelIcon className={c.UploadTreeItem_Icon} />
+          )}
         </>
       )}
       <Spacer width={'0.5rem'} />
@@ -118,7 +131,11 @@ const UploadTreeItem = ({ file, onSkip, onRemove }) => {
       <Spacer size={'0.5rem'} />
       <div className={c.UploadTreeItem_Actions}>
         {!file.loading && !file.skipped && !file.valid && (
-          <UploadIcon className={c.UploadTreeItem_Button} className={c.UploadTreeItem_Button} onClick={handleSkip} />
+          <UploadIcon
+            className={c.UploadTreeItem_Button}
+            className={c.UploadTreeItem_Button}
+            onClick={handleSkip}
+          />
         )}
         {file.level === 0 && (
           <TrashCanIcon className={c.UploadTreeItem_Button} onClick={handleRemove} />

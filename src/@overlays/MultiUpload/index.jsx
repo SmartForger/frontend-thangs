@@ -242,11 +242,6 @@ const MultiUpload = ({ initData = null, folderId }) => {
     if (validating) {
       return setErrorMessage('Please wait until all files are validated')
     }
-    const hasMissingFile =
-      !validationTree || validationTree.some(node => checkTreeMissing(node))
-    if (hasMissingFile) {
-      return setErrorMessage('Please handle all missing files')
-    }
 
     setActiveView(isAssembly ? 'assemblyInfo' : 'partInfo')
   }, [uploadFilesData, validationTree, isAssembly, validating])
