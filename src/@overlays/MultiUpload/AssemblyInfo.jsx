@@ -128,6 +128,14 @@ const noop = () => null
 const assemblyInfoSchema = Joi.object({
   name: Joi.string().required(),
   description: Joi.string().required(),
+  primary: Joi.string().allow(''),
+  folderId: Joi.string().allow(''),
+  category: Joi.string().allow(''),
+})
+
+const multiPartInfoSchema = Joi.object({
+  name: Joi.string().required(),
+  description: Joi.string().required(),
   primary: Joi.string().required(),
   folderId: Joi.string().allow(''),
   category: Joi.string().allow(''),
@@ -155,7 +163,7 @@ const AssemblyInfo = ({
   }
 
   const { checkError, onFormSubmit, onInputChange, inputState } = useForm({
-    initialValidationSchema: assemblyInfoSchema,
+    initialValidationSchema: isMultipart ? multiPartInfoSchema : assemblyInfoSchema,
     initialState,
   })
 
