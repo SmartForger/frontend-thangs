@@ -199,6 +199,16 @@ const PartInfoSchema = Joi.object({
   folderId: Joi.string().allow(''),
 })
 
+const AssemblyPartInfoSchema = Joi.object({
+  name: Joi.string().required(),
+  description: Joi.string().allow(''),
+  material: Joi.string().allow(''),
+  height: Joi.string().allow(''),
+  weight: Joi.string().allow(''),
+  category: Joi.string().allow(''),
+  folderId: Joi.string().allow(''),
+})
+
 const PartInfo = props => {
   const {
     activeStep,
@@ -231,7 +241,7 @@ const PartInfo = props => {
   }
 
   const { checkError, onFormSubmit, onInputChange, inputState } = useForm({
-    initialValidationSchema: PartInfoSchema,
+    initialValidationSchema: isAssembly ? AssemblyPartInfoSchema : PartInfoSchema,
     initialState,
   })
 
