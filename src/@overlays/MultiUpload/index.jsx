@@ -246,7 +246,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
     }
 
     setActiveView(isAssembly ? 'assemblyInfo' : 'partInfo')
-  }, [uploadFilesData, validationTree, isAssembly, validating])
+  }, [uploadFilesData, isAssembly, validating])
 
   const continueToModelInfo = ({ data }) => {
     setAssemblyFormData(data)

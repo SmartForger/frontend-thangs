@@ -244,7 +244,7 @@ const UploadModels = ({
     } else {
       setWarningMessage(null)
     }
-  }, [setErrorMessage, setWarningMessage, uploadFiles, uploadTreeData, validating])
+  }, [files, setErrorMessage, setWarningMessage, uploadFiles, uploadTreeData, validating])
 
   const uploadAssemblyLabel = (
     <span className={c.UploadAssemblyLabel}>

@@ -1,7 +1,13 @@
 import React from 'react'
 import cn from 'classnames'
 import { createUseStyles } from '@style'
-import { SingleLineBodyText, Spacer, Spinner, MetadataSecondary, Tooltip } from '@components'
+import {
+  SingleLineBodyText,
+  Spacer,
+  Spinner,
+  MetadataSecondary,
+  Tooltip,
+} from '@components'
 import { formatBytes } from '@utilities'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
@@ -125,11 +131,7 @@ const UploadTreeItem = ({ file, onUpload, onRemove }) => {
       <Spacer size={'0.5rem'} />
       <div className={c.UploadTreeItem_Actions}>
         {!file.loading && !file.skipped && !file.valid && (
-          <UploadIcon
-            className={c.UploadTreeItem_Button}
-            className={c.UploadTreeItem_Button}
-            onClick={handleUpload}
-          />
+          <UploadIcon className={c.UploadTreeItem_Button} onClick={handleUpload} />
         )}
         {file.level === 0 && (
           <TrashCanIcon className={c.UploadTreeItem_Button} onClick={handleRemove} />
