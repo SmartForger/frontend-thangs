@@ -130,6 +130,7 @@ export default store => {
           ...state.uploadFiles.data,
           ...newFilesMap,
         },
+        validated: false,
       },
     }
   })
