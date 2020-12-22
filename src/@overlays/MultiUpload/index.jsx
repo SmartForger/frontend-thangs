@@ -160,7 +160,9 @@ const MultiUpload = ({ initData = null, folderId }) => {
     if (validationTree && validationTree.length > 0) {
       return validationTree.map(node => addTreeLoading(node))
     } else {
-      return files.map(file => ({
+      const keys = Object.keys(uploadFilesData)
+      return files.map((file, i) => ({
+        id: keys[i],
         name: file.name,
         size: file.size,
         isAssembly: false,
