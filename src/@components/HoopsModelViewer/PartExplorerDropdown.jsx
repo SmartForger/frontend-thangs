@@ -181,7 +181,7 @@ const PartSelectorRow = ({
   handleClick,
   handleChange,
   selectedFilename,
-  level,
+  level = 0,
 }) => {
   const c = useStyles({ level })
   const isAssembly = useMemo(() => part.parts && part.parts.length > 0, [part])
@@ -193,7 +193,7 @@ const PartSelectorRow = ({
           [c.PartSelectorRow__selected]: selectedFilename === part.filename,
         })}
       >
-        <Spacer width={`${level * 0.5}rem`} height={'2.625rem'} />
+        {level > 0 && <Spacer width={`${level * 0.5}rem`} height={'2.625rem'} />}
         <div className={c.PartSelectorRow_Column} onClick={handleClick}>
           <Spacer size={'.5rem'} />
           <div className={c.PartSelectorRow_Row}>
