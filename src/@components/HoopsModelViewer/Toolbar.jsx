@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
-import { ToolbarDesktop, ToolbarMobile } from '@components'
+import ToolbarDesktop from './ToolbarDesktop'
+import ToolbarMobile from './ToolbarMobile'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
@@ -31,7 +32,7 @@ const Toolbar = ({ hoops, model = {}, setViewerModel = noop, selectedFilename })
   const isAssembly = model.isAssembly
   const c = useStyles({ isMultipart, isAssembly })
   //These keep track the UI toolbar state
-  const [mode, setMode] = useState('shaded')
+  const [mode, setMode] = useState(null)
   const [orientation, setOrientation] = useState('Front')
   const [color, setColor] = useState('#999')
   const [magnitude, setMagnitude] = useState(0)
@@ -64,6 +65,7 @@ const Toolbar = ({ hoops, model = {}, setViewerModel = noop, selectedFilename })
 
   const handleDrawChange = useCallback(
     view => {
+      debugger
       changeDrawMode(view)
       setMode(view)
     },
@@ -90,6 +92,8 @@ const Toolbar = ({ hoops, model = {}, setViewerModel = noop, selectedFilename })
     getViewerSnapshot(model.name)
   }, [getViewerSnapshot, model.name])
 
+  const showPartSelector = isMultipart || isAssembly
+
   const toolbarProps = {
     color,
     isAssembly,
@@ -105,6 +109,7 @@ const Toolbar = ({ hoops, model = {}, setViewerModel = noop, selectedFilename })
     handleViewChange,
     setViewerModel,
     selectedFilename,
+    showPartSelector,
     model,
   }
 

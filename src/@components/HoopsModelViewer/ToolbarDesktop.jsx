@@ -1,15 +1,9 @@
 import React from 'react'
-import {
-  Pill,
-  ColorPicker,
-  Spacer,
-  MetadataSecondary,
-  Slider,
-  DrawModeDropdown,
-  ExplodeDropdown,
-  OrientationDropdown,
-  PartExplorerDropdown,
-} from '@components'
+import { DrawModeActionMenu, Pill, Spacer, MetadataSecondary, Slider } from '@components'
+import ColorPicker from './ColorPicker'
+import ExplodeDropdown from './ExplodeDropdown'
+import OrientationDropdown from './OrientationDropdown'
+import PartExplorerDropdown from './PartExplorerDropdown'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as ResetIcon } from '@svg/icon-reset.svg'
@@ -100,10 +94,11 @@ const Toolbar = ({
   handleViewChange,
   selectedFilename,
   setViewerModel,
+  showPartSelector,
   model,
 }) => {
   const c = useStyles({ isAssembly, isMultipart })
-  const showPartSelector = isMultipart || isAssembly
+
   return (
     <div className={classnames(c.Toolbar, className)}>
       <Spacer size={'1.5rem'} />
@@ -132,7 +127,7 @@ const Toolbar = ({
             <MetadataSecondary>Render</MetadataSecondary>
             <Spacer size={'1rem'} />
           </div>
-          <DrawModeDropdown selectedValue={mode} handleChange={handleDrawChange} />
+          <DrawModeActionMenu selectedValue={mode} onChange={handleDrawChange} />
         </div>
         <Spacer size={'1.125rem'} />
         <div className={c.Toolbar_VerticalRule}></div>

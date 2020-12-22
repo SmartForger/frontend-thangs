@@ -1,6 +1,5 @@
 export { default as HoopsModelViewer } from './ModelViewer'
 export { default as ColorPicker } from './ColorPicker'
-export { default as DrawModeDropdown } from './DrawModeDropdown'
 export { default as ExplodeDropdown } from './ExplodeDropdown'
 export { default as PartExplorerDropdown } from './PartExplorerDropdown'
 export { default as OrientationDropdown } from './OrientationDropdown'

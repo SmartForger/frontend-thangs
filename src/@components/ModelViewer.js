@@ -1,7 +1,14 @@
+/* This is a backup viewer component to the HOOPS viewer
+  Controlled by a feature flag stored in localStorage. 
+  However we currently have nothing setup to flip that feature flag. 
+  
+  Decisions needed: 
+   - What was the reason to have a backup viewer? 
+   - Are those still valid reason? 
+   - Can we remove this component?
+*/
 import React, { useCallback, useState } from 'react'
-import { ColorPicker, HowTo, Viewer } from '@components'
-import { ReactComponent as ColorIcon1 } from '@svg/icon-color-1.svg'
-import { ReactComponent as ColorIcon2 } from '@svg/icon-color-2.svg'
+import { HowTo, Viewer } from '@components'
 import { ReactComponent as ShadedIcon } from '@svg/icon-shaded.svg'
 import { ReactComponent as CompositeIcon } from '@svg/icon-composite.svg'
 import { ReactComponent as WireframeIcon } from '@svg/icon-wireframe.svg'
@@ -62,8 +69,8 @@ const useStyles = createUseStyles(theme => {
 
 const ModelViewerDisplay = ({ model, className }) => {
   const [mode, setMode] = useState('composite')
-  const [meshColor, setMeshColor] = useState('#ffbc00')
-  const [wireColor, setWireColor] = useState('#014d7c')
+  const [meshColor] = useState('#ffbc00')
+  const [wireColor] = useState('#014d7c')
   const c = useStyles()
 
   const changeMode = useCallback(
@@ -71,20 +78,6 @@ const ModelViewerDisplay = ({ model, className }) => {
       setMode(targetMode)
     },
     [setMode]
-  )
-
-  const changeMeshColor = useCallback(
-    (color, _event) => {
-      setMeshColor(color)
-    },
-    [setMeshColor]
-  )
-
-  const changeWireColor = useCallback(
-    (color, _event) => {
-      setWireColor(color)
-    },
-    [setWireColor]
   )
 
   return (
@@ -124,15 +117,6 @@ const ModelViewerDisplay = ({ model, className }) => {
           >
             <CompositeIcon />
           </div>
-        </div>
-        <div className={c.ModelViewer_ButtonGroup}>
-          <div className={c.ModelViewer_ControlText}>CHANGE COLOR</div>
-          <ColorPicker color={meshColor} onChange={changeMeshColor}>
-            <ColorIcon1 />
-          </ColorPicker>
-          <ColorPicker color={wireColor} onChange={changeWireColor}>
-            <ColorIcon2 />
-          </ColorPicker>
         </div>
         <div className={c.ModelViewer_Placeholder} />
       </div>

@@ -4,6 +4,7 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 import { useExternalClick } from '@hooks'
+import { TitleTertiary, Spacer } from '@components'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -31,10 +32,15 @@ const useStyles = createUseStyles(theme => {
       bottom: 0,
       opacity: 1,
     },
+    ActionBar_ActionMenu: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: '100%',
+    },
   }
 })
 
-const ActionBar = ({ children }) => {
+const ActionBar = ({ children, actionBarTitle }) => {
   const actionBarRef = useRef(null)
   const [isVisible, setIsVisible] = useState(false)
   const { dispatch } = useStoreon()
@@ -54,7 +60,14 @@ const ActionBar = ({ children }) => {
       })}
       ref={actionBarRef}
     >
-      {children}
+      <Spacer size={'2rem'} />
+      <div className={c.ActionBar_ActionMenu}>
+        <Spacer size={'2rem'} />
+        <TitleTertiary>{actionBarTitle}</TitleTertiary>
+        <Spacer size={'2rem'} />
+        {children}
+      </div>
+      <Spacer size={'2rem'} />
     </div>
   )
 }

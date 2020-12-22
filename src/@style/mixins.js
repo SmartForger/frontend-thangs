@@ -1,3 +1,13 @@
+export const flexRow = {
+  display: 'flex',
+  flexDirection: 'row',
+}
+
+export const flexColumn = {
+  display: 'flex',
+  flexDirection: 'column',
+}
+
 export const scrollbar = {
   scrollbarWidth: 'thin',
   scrollbarColor: '#C7C7C7 white',

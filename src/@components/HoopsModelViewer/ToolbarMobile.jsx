@@ -1,11 +1,9 @@
 import React from 'react'
-import {
-  ColorPicker,
-  Spacer,
-  DrawModeDropdown,
-  ExplodeDropdown,
-  OrientationDropdown,
-} from '@components'
+import ColorPicker from './ColorPicker'
+import ExplodeDropdown from './ExplodeDropdown'
+import OrientationDropdown from './OrientationDropdown'
+import PartExplorerDropdown from './PartExplorerDropdown'
+import { DrawModeActionMenu, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as CameraIcon } from '@svg/icon-camera.svg'
@@ -75,56 +73,77 @@ const Toolbar = ({
   isMultipart = true,
   magnitude,
   mode,
+  model,
   orientation,
   handleColorChange,
   handleDrawChange,
   handleSliderChange,
   handleSnapshot,
   handleViewChange,
+  showPartSelector,
+  selectedFilename,
+  setViewerModel,
 }) => {
   const c = useStyles({ isAssembly, isMultipart })
   return (
-    <div className={classnames(c.Toolbar, className)}>
-      <div className={c.Toolbar_Group}>
-        <Spacer size={'1rem'} />
-        <DrawModeDropdown selectedValue={mode} handleChange={handleDrawChange} />
-        <Spacer size={'1rem'} />
+    <>
+      <div className={classnames(c.Toolbar, className)}>
+        <div className={c.Toolbar_Group}>
+          <Spacer size={'1rem'} />
+          <DrawModeActionMenu selectedValue={mode} onChange={handleDrawChange} />
+          <Spacer size={'1rem'} />
+        </div>
+        <Spacer size={'.75rem'} />
+        <div className={c.Toolbar_Group}>
+          <Spacer size={'1rem'} />
+          <ColorPicker color={color} onChange={handleColorChange} />
+          <Spacer size={'1rem'} />
+        </div>
+        <Spacer size={'.75rem'} />
+        {isAssembly && (
+          <>
+            <div className={c.Toolbar_Group}>
+              <Spacer size={'1rem'} />
+              <ExplodeDropdown
+                selectedValue={magnitude}
+                handleChange={handleSliderChange}
+              />
+              <Spacer size={'1rem'} />
+            </div>
+            <Spacer size={'.75rem'} />
+          </>
+        )}
+        <div className={c.Toolbar_Group}>
+          <Spacer size={'1rem'} />
+          <CameraIcon onClick={handleSnapshot} />
+          <Spacer size={'1rem'} />
+        </div>
+        <Spacer size={'.75rem'} />
+        <div className={c.Toolbar_Group}>
+          <Spacer size={'1rem'} />
+          <OrientationDropdown
+            selectedValue={orientation}
+            handleChange={handleViewChange}
+          />
+          <Spacer size={'1rem'} />
+        </div>
       </div>
-      <Spacer size={'.75rem'} />
-      <div className={c.Toolbar_Group}>
-        <Spacer size={'1rem'} />
-        <ColorPicker color={color} onChange={handleColorChange} />
-        <Spacer size={'1rem'} />
-      </div>
-      <Spacer size={'.75rem'} />
-      {isAssembly && (
+      {showPartSelector && (
         <>
-          <div className={c.Toolbar_Group}>
-            <Spacer size={'1rem'} />
-            <ExplodeDropdown
-              selectedValue={magnitude}
-              handleChange={handleSliderChange}
+          <Spacer size={'1.125rem'} />
+          <div className={c.Toolbar_VerticalRule}></div>
+          <Spacer size={'1.125rem'} />
+          <div className={classnames(c.Toolbar_Group, c.Toolbar_PartExplorerWrapper)}>
+            <PartExplorerDropdown
+              setViewerModel={setViewerModel}
+              selectedFilename={selectedFilename}
+              model={model}
+              handleChange={setViewerModel}
             />
-            <Spacer size={'1rem'} />
           </div>
-          <Spacer size={'.75rem'} />
         </>
       )}
-      <div className={c.Toolbar_Group}>
-        <Spacer size={'1rem'} />
-        <CameraIcon onClick={handleSnapshot} />
-        <Spacer size={'1rem'} />
-      </div>
-      <Spacer size={'.75rem'} />
-      <div className={c.Toolbar_Group}>
-        <Spacer size={'1rem'} />
-        <OrientationDropdown
-          selectedValue={orientation}
-          handleChange={handleViewChange}
-        />
-        <Spacer size={'1rem'} />
-      </div>
-    </div>
+    </>
   )
 }
 

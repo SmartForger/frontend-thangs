@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import { Button } from '@components'
+import { Button, Spacer } from '@components'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -17,29 +17,14 @@ const useStyles = createUseStyles(theme => {
       background: theme.colors.white[400],
       borderRadius: '.5rem',
       boxShadow: '0px 5px 10px 0px rgba(35, 37, 48, 0.25)',
-      width: '12rem',
-      padding: ({ noIcons }) => (noIcons ? '1.5rem 3rem' : '1rem'),
       boxSizing: 'border-box',
       position: 'absolute',
       right: '-6.5rem',
       marginTop: '.5rem',
       zIndex: 2,
       overflowY: 'auto',
-      scrollbarWidth: 'thin',
-      scrollbarColor: '#C7C7C7 white',
-
-      '&::-webkit-scrollbar': {
-        width: 12,
-      },
-      '&::-webkit-scrollbar-track': {
-        background: 'white',
-        borderRadius: '.5rem',
-      },
-      '&::-webkit-scrollbar-thumb': {
-        backgroundColor: '#C7C7C7',
-        borderRadius: 20,
-        border: '3px solid white',
-      },
+      ...theme.mixins.scrollbar,
+      ...theme.mixins.flexColumn,
 
       [md]: {
         right: '0rem',
@@ -72,8 +57,13 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       alignItems: 'center',
     },
+    DropdownMenu_Row: {
+      ...theme.mixins.flexRow,
+    },
   }
 })
+
+const noop = () => null
 
 const useDropdownMenuState = (initialIsOpen = false) => {
   const [isOpen, setIsOpen] = useState(initialIsOpen)
@@ -129,28 +119,40 @@ const DropdownItem = ({ children, to = '#', onClick, className, noHover = false 
 }
 
 const DropdownMenu = ({
+  Icon,
   TargetComponent,
   TargetComponentProps,
+  buttonIcon: ButtonIcon = DotStackIcon,
+  borderSize = '1rem',
   children,
   className,
+  iconOnly,
+  isOpen: isOpenExternal = undefined,
+  isOpenByDefault = false,
   label,
-  Icon,
   myThangsMenu,
   noIcons,
-  iconOnly,
-  buttonIcon: ButtonIcon = DotStackIcon,
-  isOpen: isOpenExternal = undefined,
+  onTargetClick = noop,
   user,
 }) => {
-  const [isOpenInternal, toggleOpen] = useDropdownMenuState(isOpenExternal)
-  const isOpen = isOpenExternal === undefined ? isOpenInternal : isOpenExternal
+  const [isOpenInternal, toggleOpen] = useDropdownMenuState(
+    isOpenExternal || isOpenByDefault
+  )
+  const isOpen = !isOpenExternal ? isOpenInternal : isOpenExternal
   const c = useStyles({ isOpen, noIcons, myThangsMenu })
+
+  const handleOnTargetClick = useCallback(() => {
+    debugger
+    onTargetClick()
+    toggleOpen()
+  }, [onTargetClick, toggleOpen])
+
   return (
     <div className={c.DropdownMenu_Container}>
       {TargetComponent ? (
         <TargetComponent
           className={c.DropdownMenu_TargetComponent}
-          onClick={toggleOpen}
+          onClick={handleOnTargetClick}
           user={user}
           myThangsMenu={myThangsMenu}
           label={label}
@@ -163,7 +165,17 @@ const DropdownMenu = ({
           <ButtonIcon />
         </Button>
       )}
-      {isOpen && <div className={classnames(className, c.DropdownMenu)}>{children}</div>}
+      {isOpen && (
+        <div className={classnames(className, c.DropdownMenu)}>
+          <Spacer size={borderSize} />
+          <div className={c.DropdownMenu_Row}>
+            <Spacer size={borderSize} />
+            {children}
+            <Spacer size={borderSize} />
+          </div>
+          <Spacer size={borderSize} />
+        </div>
+      )}
     </div>
   )
 }
