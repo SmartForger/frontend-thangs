@@ -1,7 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 import { createUseStyles } from '@style'
-import { SingleLineBodyText, Spacer, Spinner, MetadataSecondary } from '@components'
+import { SingleLineBodyText, Spacer, Spinner, MetadataSecondary, Tooltip } from '@components'
 import { formatBytes } from '@utilities'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
@@ -104,7 +104,9 @@ const UploadTreeItem = ({ file, onUpload, onRemove }) => {
       {file.loading ? (
         <Spinner size={'1rem'} />
       ) : !file.valid ? (
-        <InfoIcon className={c.UploadTreeItem_Icon} />
+        <Tooltip title='Missing file'>
+          <InfoIcon className={c.UploadTreeItem_Icon} />
+        </Tooltip>
       ) : file.isAssembly ? (
         <FileIcon className={c.UploadTreeItem_Icon} />
       ) : (
