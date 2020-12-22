@@ -53,16 +53,15 @@ export default store => {
     let newValidationTree = validationTree
     if (validationTree) {
       const updateValidField = (node) => {
-        let newNode = node;
         if (node.name === filename && node.valid) {
-          newNode = { ...node, valid: false }
+          return { ...node, valid: false, subs: [] }
         }
 
         if (node.subs) {
-          newNode.subs = node.subs.map(subnode => updateValidField(subnode))
+          node.subs = node.subs.map(subnode => updateValidField(subnode))
         }
 
-        return newNode
+        return node
       }
 
       newValidationTree = updateValidField({ subs: validationTree })

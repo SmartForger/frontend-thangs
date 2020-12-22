@@ -95,28 +95,20 @@ const UploadTreeItem = ({ file, onUpload, onRemove }) => {
       })}
     >
       <div style={{ width: 3 * file.level - 1.5 + 'rem' }} />
-      {file.isAssembly ? (
-        <>
-          {file.level > 0 && <Spacer size={'1.25rem'} />}
-          {file.loading ? (
-            <Spinner size={'1rem'} />
-          ) : !file.valid ? (
-            <InfoIcon className={c.UploadTreeItem_Icon} />
-          ) : (
-            <FileIcon className={c.UploadTreeItem_Icon} />
-          )}
-        </>
+      {file.level > 0 &&
+        (file.subs && file.subs.length > 0 ? (
+          <TreeOpenIcon className={c.UploadTreeItem_OpenIcon} />
+        ) : (
+          <Spacer size={'1.25rem'} />
+        ))}
+      {file.loading ? (
+        <Spinner size={'1rem'} />
+      ) : !file.valid ? (
+        <InfoIcon className={c.UploadTreeItem_Icon} />
+      ) : file.isAssembly ? (
+        <FileIcon className={c.UploadTreeItem_Icon} />
       ) : (
-        <>
-          {file.level > 0 && <TreeOpenIcon className={c.UploadTreeItem_OpenIcon} />}
-          {file.loading ? (
-            <Spinner size={'1rem'} />
-          ) : !file.valid ? (
-            <InfoIcon className={c.UploadTreeItem_Icon} />
-          ) : (
-            <ModelIcon className={c.UploadTreeItem_Icon} />
-          )}
-        </>
+        <ModelIcon className={c.UploadTreeItem_Icon} />
       )}
       <Spacer width={'0.5rem'} />
       <SingleLineBodyText className={c.UploadTreeItem_FileName} title={file.name}>
