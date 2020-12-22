@@ -14,12 +14,12 @@ const UploadTreeNode = ({ node }) => {
   return (
     <div
       className={cn(c.UploadTreeNode, {
-        missing: !node.loading && !node.valid,
+        missing: !node.loading && (!node.valid || !node.treeValid),
       })}
     >
       {node.loading ? (
         <Spinner size={'1rem'} />
-      ) : !node.valid ? (
+      ) : (!node.valid || !node.treeValid) ? (
         <Tooltip title='Missing file'>
           <InfoIcon className={c.UploadTreeNode_Icon} />
         </Tooltip>

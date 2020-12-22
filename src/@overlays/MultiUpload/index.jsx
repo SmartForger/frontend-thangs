@@ -146,13 +146,17 @@ const MultiUpload = ({ initData = null, folderId }) => {
         size: file && file.size,
         isAssembly: node.isAssembly,
         valid: node.valid,
-        skipped: node.skipped,
+        treeValid: node.valid && !node.subs,
         loading: file && file.isLoading,
       }
 
       if (node.subs) {
         result.subs = node.subs.map(subnode => addTreeLoading(subnode))
       }
+
+      result.treeValid =
+        result.valid &&
+        (!result.subs || result.subs.every(subnode => subnode.valid && subnode.treeValid))
       return result
     }
 
@@ -166,6 +170,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
         size: file.size,
         isAssembly: false,
         valid: !file.isError,
+        treeValid: !file.isError,
         loading: file.isLoading,
       }))
     }
