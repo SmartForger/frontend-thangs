@@ -151,6 +151,9 @@ const useStyles = createUseStyles(theme => {
         display: 'none',
       },
     },
+    WorkspaceNavbar_NavSpacer: {
+      flex: 'none',
+    },
   }
 })
 const noop = () => null
@@ -291,7 +294,7 @@ const WorkspaceNavbar = ({
     >
       <Spacer size={'1rem'} />
       <div className={c.WorkspaceNavbar_NavContainer}>
-        <Spacer size={'2rem'} />
+        <Spacer size={'2rem'} className={c.WorkspaceNavbar_NavSpacer} />
         <div className={c.WorkspaceNavbar_NavHeader}>
           <div>
             <Link to={'/'}>
