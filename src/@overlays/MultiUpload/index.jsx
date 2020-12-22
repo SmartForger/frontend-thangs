@@ -11,7 +11,6 @@ import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { track } from '@utilities/analytics'
-import { checkTreeMissing } from '@utilities'
 import AssemblyInfo from './AssemblyInfo'
 
 const useStyles = createUseStyles(theme => {
