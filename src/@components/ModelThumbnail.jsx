@@ -94,6 +94,7 @@ const getThumbnailUrl = (model = {}) => {
   if (model.thumbnailUrl) return model.thumbnailUrl
   if (model.uploadedFile) return model.uploadedFile
   if (model.modelFileName) return model.modelFileName.replace(`${THUMBNAILS_FOLDER}`, '')
+  if (model.compositeMesh) return encodeURIComponent(model.compositeMesh)
   if (model.parts) {
     if (model.parts.length > 1) {
       primaryPart = R.find(R.propEq('isPrimary', true))(model.parts)
