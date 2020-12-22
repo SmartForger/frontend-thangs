@@ -8,6 +8,7 @@ import {
   TitleTertiary,
   Toggle,
   Tooltip,
+  TreeView,
 } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as UploadCardIcon } from '@svg/upload-card.svg'
@@ -16,7 +17,7 @@ import Dropzone from 'react-dropzone'
 import { FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { overlayview } from '@utilities/analytics'
 import { flattenTree } from '@utilities'
-import UploadTreeItem from './UploadTreeItem'
+import UploadTreeNode from './UploadTreeNode'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -207,7 +208,6 @@ const UploadModels = ({
     ? Object.keys(uploadFiles).filter(fileId => uploadFiles[fileId].name).length
     : 0
   const dropzoneRef = useRef()
-
   const files = flattenTree(uploadTreeData)
 
   const toggleAssembly = useCallback(() => {
@@ -282,30 +282,20 @@ const UploadModels = ({
         )}
       </Dropzone>
       {errorMessage && (
-        <>
-          <h4 className={c.UploadModels_ErrorText}>{errorMessage}</h4>
-          <Spacer size='1rem' />
-        </>
+        <h4 className={c.UploadModels_ErrorText}>{errorMessage}</h4>
       )}
       {warningMessage && (
-        <>
-          <h4 className={c.UploadModels_WarningText}>{warningMessage}</h4>
-          <Spacer size='1rem' />
-        </>
+        <h4 className={c.UploadModels_WarningText}>{warningMessage}</h4>
       )}
       {fileLength > 0 && (
         <>
           <Spacer size='1rem' />
-          <div className={c.UploadTreeView}>
-            {files.map(f => (
-              <UploadTreeItem
-                key={f.id}
-                file={f}
-                onUpload={uploadFile}
-                onRemove={removeFile}
-              />
-            ))}
-          </div>
+          <TreeView
+            className={c.UploadTreeView}
+            nodes={uploadTreeData}
+            levelPadding={28}
+            renderNode={node => <UploadTreeNode node={node} />}
+          />
           <Spacer size={'1rem'} />
           {showAssemblyToggle && (
             <>
