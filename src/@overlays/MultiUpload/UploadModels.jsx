@@ -239,7 +239,7 @@ const UploadModels = ({
       )
     } else if (missingFiles.length > 0) {
       setWarningMessage(
-        'Notice: You are missing some parts in your assembly. You can upload them now or continue without them.'
+        'Notice: Some parts are missing in your assembly. You can upload them now or continue without them.'
       )
     } else {
       setWarningMessage(null)
