@@ -188,7 +188,7 @@ const UploadModels = ({
   showAssemblyToggle,
   onDrop = noop,
   removeFile = noop,
-  closeOverlay = noop,
+  onCancel = noop,
   handleContinue = noop,
   setErrorMessage = noop,
   setWarningMessage = noop,
@@ -255,10 +255,6 @@ const UploadModels = ({
     </span>
   )
 
-  const handleCancel = useCallback(() => {
-    closeOverlay()
-  }, [closeOverlay])
-
   return (
     <>
       <Dropzone onDrop={onDrop} accept={MODEL_FILE_EXTS} ref={dropzoneRef} maxFiles={25}>
@@ -312,7 +308,7 @@ const UploadModels = ({
             </>
           )}
           <div className={c.UploadModels_ButtonWrapper}>
-            <Button secondary onClick={handleCancel}>
+            <Button secondary onClick={onCancel}>
               Cancel
             </Button>
             <Spacer size={'1rem'} className={c.UploadModels_ButtonSpacer} />

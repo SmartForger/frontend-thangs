@@ -313,6 +313,11 @@ const MultiUpload = ({ initData = null, folderId }) => {
     }
   }, [activeView, activeStep, isAssembly])
 
+  const handleCancelUploading = () => {
+    closeOverlay();
+    dispatch(types.RESET_UPLOAD_FILES);
+  }
+
   const dropdownFolders = useMemo(() => {
     const foldersArray = [...foldersData]
     const sharedArray = [...sharedData]
@@ -376,7 +381,6 @@ const MultiUpload = ({ initData = null, folderId }) => {
         </div>
         {activeView === 'upload' ? (
           <UploadModels
-            closeOverlay={closeOverlay}
             errorMessage={errorMessage}
             handleContinue={continueToNextStep}
             isAssembly={isAssembly}
@@ -393,6 +397,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             uploadTreeData={uploadTreeData}
             validating={validating}
             warningMessage={warningMessage}
+            onCancel={handleCancelUploading}
           />
         ) : activeView === 'assemblyInfo' ? (
           <AssemblyInfo
