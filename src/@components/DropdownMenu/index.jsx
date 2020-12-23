@@ -142,7 +142,6 @@ const DropdownMenu = ({
   const c = useStyles({ isOpen, noIcons, myThangsMenu })
 
   const handleOnTargetClick = useCallback(() => {
-    debugger
     onTargetClick()
     toggleOpen()
   }, [onTargetClick, toggleOpen])

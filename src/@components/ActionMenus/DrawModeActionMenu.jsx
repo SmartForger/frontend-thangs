@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react'
-import { ActionMenu, DropdownItem, Spacer, LabelText } from '@components'
+import { ActionMenu, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
-import { ReactComponent as ArrowRightIcon } from '@svg/icon-arrow-right.svg'
 import { ReactComponent as WireMode } from '@svg/view-mode-wire.svg'
 import { ReactComponent as ShadedMode } from '@svg/view-mode-shaded.svg'
 import { ReactComponent as XRayMode } from '@svg/view-mode-xray.svg'
@@ -31,14 +30,6 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-    },
-    DrawModeActionMenu_Row: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    DrawModeActionMenu_Item: {
-      justifyContent: 'space-between',
     },
     DrawModeActionMenu__desktop: {
       display: 'none',
@@ -80,34 +71,6 @@ const options = [
 
 const noop = () => null
 
-const DrawModeMenu = ({ onChange = noop }) => {
-  const c = useStyles({})
-  return (
-    <div>
-      {options.map((option, ind) => {
-        const { Icon = noop } = option
-        return (
-          <React.Fragment key={`drawmodes_${ind}`}>
-            <DropdownItem
-              onClick={() => onChange(option.value)}
-              className={c.DrawModeActionMenu_Item}
-            >
-              <div className={c.DrawModeActionMenu_Row}>
-                <Icon />
-                <Spacer size={'.75rem'} />
-                <LabelText>{option.label}</LabelText>
-              </div>
-              <ArrowRightIcon className={c.DrawModeActionMenu__mobile} />
-            </DropdownItem>
-            <Spacer className={c.DrawModeActionMenu__desktop} size={'.25rem'} />
-            <Spacer className={c.DrawModeActionMenu__mobile} size={'2rem'} />
-          </React.Fragment>
-        )
-      })}
-    </div>
-  )
-}
-
 const DrawModeTarget = ({ onClick = noop, selectedValue }) => {
   const c = useStyles({})
   const value = useMemo(() => {
@@ -135,8 +98,7 @@ const DrawModeTarget = ({ onClick = noop, selectedValue }) => {
 const DrawModeActionMenu = ({ onChange = noop, selectedValue }) => {
   return (
     <ActionMenu
-      MenuComponent={DrawModeMenu}
-      MenuComponentProps={{ onChange, actionBarTitle: 'Select Rendering' }}
+      MenuComponentProps={{ onChange, actionBarTitle: 'Select rendering', options }}
       TargetComponent={DrawModeTarget}
       TargetComponentProps={{ selectedValue }}
     />
