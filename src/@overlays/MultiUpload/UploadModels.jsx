@@ -289,6 +289,8 @@ const UploadModels = ({
       {fileLength > 0 && (
         <>
           <Spacer size='1rem' />
+          <TitleTertiary>{fileLength > 1 ? `${fileLength} Files` : '1 File'}</TitleTertiary>
+          <Spacer size='0.5rem' />
           <TreeView
             className={c.UploadTreeView}
             nodes={uploadTreeData}
