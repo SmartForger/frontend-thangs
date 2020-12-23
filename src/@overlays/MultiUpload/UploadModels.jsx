@@ -258,7 +258,7 @@ const UploadModels = ({
   const handleCancel = useCallback(() => {
     closeOverlay()
   }, [closeOverlay])
-  console.log(uploadTreeData)
+
   return (
     <>
       <Dropzone onDrop={onDrop} accept={MODEL_FILE_EXTS} ref={dropzoneRef} maxFiles={25}>

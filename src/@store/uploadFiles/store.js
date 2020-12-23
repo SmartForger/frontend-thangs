@@ -52,7 +52,7 @@ export default store => {
 
     let newValidationTree = validationTree
     if (validationTree) {
-      const updateValidField = (node) => {
+      const updateValidField = node => {
         if (node.name === filename && node.valid) {
           return { ...node, valid: false, subs: [] }
         }
@@ -71,7 +71,7 @@ export default store => {
       uploadFiles: {
         ...state.uploadFiles,
         data: newUploadedFiles,
-        validationTree: newValidationTree.subs
+        validationTree: newValidationTree.subs,
       },
     }
   })
@@ -229,9 +229,8 @@ export default store => {
     },
   }))
 
-  // TODO: Update with actual API request
   store.on(types.VALIDATE_FILES, async state => {
-    const { data } = state.uploadFiles
+    const { data, validationTree: oldValidationTree } = state.uploadFiles
     const isLoading = Object.values(data).some(file => file.isLoading)
     if (isLoading) {
       return
@@ -239,7 +238,6 @@ export default store => {
 
     store.dispatch(types.SET_VALIDATING, { validating: true })
 
-    // Get API Data
     try {
       const { data: responseData } = await api({
         method: 'POST',
@@ -253,10 +251,25 @@ export default store => {
       const uploadedFiles = Object.values(data)
 
       if (responseData.isAssembly !== false) {
+        const oldFileNameIdMap = {}
+        if (oldValidationTree) {
+          const checkName = node => {
+            oldFileNameIdMap[node.name] = node.id
+
+            if (node.subs) {
+              node.subs.forEach(subnode => checkName(subnode))
+            }
+          }
+          oldValidationTree.forEach(node => checkName(node))
+        }
+
         const transformNode = (node1, node2) => {
+          const name = node1.name.split(':')[0]
           const newNode = {
-            id: Math.random().toString(36).substr(2, 9) + node1.name,
-            name: node1.name.split(':')[0],
+            id:
+              oldFileNameIdMap[name] ||
+              Math.random().toString(36).substr(2, 9) + node1.name,
+            name,
             isAssembly: node1.isAssembly,
             valid: node2.valid,
           }
