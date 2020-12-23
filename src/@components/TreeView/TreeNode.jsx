@@ -4,6 +4,25 @@ import { createUseStyles } from '@style'
 import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 
+const useStyles = createUseStyles(_theme => {
+  return {
+    TreeNode_Root: {
+      flex: 1,
+    },
+    TreeNode_Children: {
+      flex: 1,
+    },
+    TreeNode_Row: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    TreeNode_ExpandIcon: {
+      width: '0.75rem',
+      cursor: 'pointer',
+    },
+  }
+})
+
 export const TreeNode = ({ node, renderNode, level, levelPadding }) => {
   const [expanded, setExpanded] = useState(false)
   const c = useStyles()
@@ -42,24 +61,5 @@ export const TreeNode = ({ node, renderNode, level, levelPadding }) => {
     </div>
   )
 }
-
-const useStyles = createUseStyles(theme => {
-  return {
-    TreeNode_Root: {
-      flex: 1,
-    },
-    TreeNode_Children: {
-      flex: 1,
-    },
-    TreeNode_Row: {
-      display: 'flex',
-      alignItems: 'center',
-    },
-    TreeNode_ExpandIcon: {
-      width: '0.75rem',
-      cursor: 'pointer',
-    },
-  }
-})
 
 export default TreeNode

@@ -65,7 +65,6 @@ const Toolbar = ({ hoops, model = {}, setViewerModel = noop, selectedFilename })
 
   const handleDrawChange = useCallback(
     view => {
-      debugger
       changeDrawMode(view)
       setMode(view)
     },

@@ -70,12 +70,12 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       alignItems: 'center',
     },
-    ColorPickerActionMenu_ColorCircle: {
+    ColorPickerTarget_ColorCircle: {
       width: '2rem',
       height: '2rem',
       borderRadius: '50%',
     },
-    ColorPickerActionMenu_ActionMenu: {
+    g: {
       width: '100%',
 
       '& > div': {
@@ -94,32 +94,26 @@ const useStyles = createUseStyles(theme => {
         },
       },
     },
-    ColorPickerActionMenu__desktop: {
+    ColorPicker__desktop: {
       display: 'none',
 
       [md_viewer]: {
         display: 'flex',
       },
     },
-    ColorPickerActionMenu__mobile: {
+    ColorPicker__mobile: {
       display: 'flex',
 
       [md_viewer]: {
         display: 'none',
       },
     },
-    ColorPicker: {
-      cursor: 'pointer',
-      position: 'relative',
-      display: 'flex',
-      alignItems: 'center',
-    },
   }
 })
 
 const noop = () => null
 
-const ColorPickerMenu = ({ currentColor, handleChange = noop, visible, pickerRef }) => {
+const ColorPickerMenu = ({ currentColor, handleChange = noop, visible }) => {
   const c = useStyles({ visible, color: currentColor })
 
   return (
@@ -142,20 +136,17 @@ const ColorPickerMenu = ({ currentColor, handleChange = noop, visible, pickerRef
 }
 
 const ColorPickerTarget = ({ onClick = noop, selectedValue: color }) => {
-  const c = useStyles({ visible, color })
+  const c = useStyles({ color })
 
   return (
     <div className={c.ColorPickerTarget} onClick={onClick}>
       <div
-        className={classnames(
-          c.ColorPickerTarget_ColorCircle,
-          c.ColorPickerTarget__desktop
-        )}
+        className={classnames(c.ColorPickerTarget_ColorCircle, c.ColorPicker__desktop)}
         style={{ backgroundColor: color }}
       />
-      <ColorBucketIcon className={c.ColorPickerTarget__mobile} />
-      <Spacer size={'0.5rem'} className={c.ColorPickerTarget__desktop} />
-      <ArrowDown className={c.ColorPickerTarget__desktop} />
+      <ColorBucketIcon className={c.ColorPicker__mobile} />
+      <Spacer size={'0.5rem'} className={c.ColorPicker__desktop} />
+      <ArrowDown className={c.ColorPicker__desktop} />
     </div>
   )
 }
