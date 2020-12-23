@@ -90,7 +90,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const EditModel = ({ model, showViewer = true }) => {
+const EditModel = ({ model, showViewer = false }) => {
   const c = useStyles()
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [editModelErrorMessage, setEditModelErrorMessage] = useState(null)

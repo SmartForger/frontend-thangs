@@ -261,7 +261,7 @@ const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
   }, [downloadModel, isAuthedUser, openSignupOverlay])
 
   const buttonText = useMemo(() => {
-    if (model.isAssembly || model.parts.length > 1) return 'Download All'
+    if (model.isAssembly || (model.parts && model.parts.length > 1)) return 'Download All'
     return 'Download Model'
   }, [model])
 
