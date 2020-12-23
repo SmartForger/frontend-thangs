@@ -258,7 +258,7 @@ const UploadModels = ({
   const handleCancel = useCallback(() => {
     closeOverlay()
   }, [closeOverlay])
-
+  console.log(uploadTreeData)
   return (
     <>
       <Dropzone onDrop={onDrop} accept={MODEL_FILE_EXTS} ref={dropzoneRef} maxFiles={25}>
@@ -281,12 +281,8 @@ const UploadModels = ({
           </section>
         )}
       </Dropzone>
-      {errorMessage && (
-        <h4 className={c.UploadModels_ErrorText}>{errorMessage}</h4>
-      )}
-      {warningMessage && (
-        <h4 className={c.UploadModels_WarningText}>{warningMessage}</h4>
-      )}
+      {errorMessage && <h4 className={c.UploadModels_ErrorText}>{errorMessage}</h4>}
+      {warningMessage && <h4 className={c.UploadModels_WarningText}>{warningMessage}</h4>}
       {fileLength > 0 && (
         <>
           <Spacer size='1rem' />
@@ -294,7 +290,14 @@ const UploadModels = ({
             className={c.UploadTreeView}
             nodes={uploadTreeData}
             levelPadding={28}
-            renderNode={node => <UploadTreeNode node={node} />}
+            renderNode={(node, level) => (
+              <UploadTreeNode
+                node={node}
+                level={level}
+                onUpload={uploadFile}
+                onRemove={removeFile}
+              />
+            )}
           />
           <Spacer size={'1rem'} />
           {showAssemblyToggle && (

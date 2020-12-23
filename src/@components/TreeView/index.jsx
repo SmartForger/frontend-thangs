@@ -9,6 +9,7 @@ const TreeView = ({ nodes, renderNode, className, levelPadding = 40 }) => {
           key={node.id}
           node={node}
           renderNode={renderNode}
+          level={0}
           levelPadding={levelPadding}
         />
       ))}

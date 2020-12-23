@@ -4,7 +4,7 @@ import { createUseStyles } from '@style'
 import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 
-export const TreeNode = ({ node, renderNode, levelPadding }) => {
+export const TreeNode = ({ node, renderNode, level, levelPadding }) => {
   const [expanded, setExpanded] = useState(false)
   const c = useStyles()
 
@@ -13,22 +13,28 @@ export const TreeNode = ({ node, renderNode, levelPadding }) => {
   }
 
   return (
-    <div>
-      <div className={c.Row}>
+    <div className={c.TreeNode_Root}>
+      <div className={c.TreeNode_Row}>
         <div className={c.TreeNode_ExpandIcon} onClick={toggleExpanded}>
           {node.subs &&
             node.subs.length > 0 &&
             (expanded ? <ArrowDown /> : <ArrowRight />)}
         </div>
         <Spacer size={12} />
-        {renderNode(node)}
+        {renderNode(node, level)}
       </div>
       {expanded && node.subs && node.subs.length > 0 && (
-        <div className={c.Row}>
+        <div className={c.TreeNode_Row}>
           <Spacer size={levelPadding} />
-          <div>
+          <div className={c.TreeNode_Children}>
             {node.subs.map(subnode => (
-              <TreeNode key={subnode.id} node={subnode} renderNode={renderNode} levelPadding={levelPadding} />
+              <TreeNode
+                key={subnode.id}
+                node={subnode}
+                renderNode={renderNode}
+                level={level + 1}
+                levelPadding={levelPadding}
+              />
             ))}
           </div>
         </div>
@@ -39,7 +45,13 @@ export const TreeNode = ({ node, renderNode, levelPadding }) => {
 
 const useStyles = createUseStyles(theme => {
   return {
-    Row: {
+    TreeNode_Root: {
+      flex: 1,
+    },
+    TreeNode_Children: {
+      flex: 1,
+    },
+    TreeNode_Row: {
       display: 'flex',
       alignItems: 'center',
     },
