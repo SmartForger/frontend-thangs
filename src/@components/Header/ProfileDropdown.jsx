@@ -26,6 +26,9 @@ const useStyles = createUseStyles(theme => {
     ProfileDropdown: {
       width: '16.25rem',
     },
+    ProfileDropdown_Container: {
+      width: '100%',
+    },
     ProfileDropdown_Arrow: {
       '& > path': {
         fill: ({ myThangsMenu }) =>
@@ -75,7 +78,7 @@ export const ProfileDropdownMenu = ({
       user={user}
       myThangsMenu={myThangsMenu}
     >
-      <div>
+      <div className={c.ProfileDropdown_Container}>
         <div className={c.ProfileDropdown_Row}>
           <ProfilePicture
             size='2.5rem'
