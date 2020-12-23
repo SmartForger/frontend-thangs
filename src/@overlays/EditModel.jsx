@@ -22,17 +22,15 @@ const useStyles = createUseStyles(theme => {
     EditModel: {
       alignItems: 'center',
       backgroundColor: theme.colors.white[300],
-      borderRadius: '1rem',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-start',
       position: 'relative',
       width: '100%',
-      height: '100%',
 
       [md]: {
         flexDirection: 'row',
-        height: 'unset',
+        borderRadius: '1rem',
       },
     },
     EditModel_Column: {
