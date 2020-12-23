@@ -157,7 +157,7 @@ const useStyles = createUseStyles(theme => {
       padding: '0 .5rem',
       position: 'relative',
       cursor: 'pointer',
-      
+
       '& > svg': {
         padding: '.25rem',
         borderRadius: '.25rem',
@@ -366,14 +366,18 @@ const FileRow = ({ model }) => {
       </td>
       <td className={c.FileTable_Row_Column}>
         <MetadataSecondary className={c.FileTable_Row_Column_Uploaded}>
-          {R.isNil(model.created) ? '-' : format(new Date(model.created), 'MMM d, Y, h:mm aaaa')}
+          {R.isNil(model.created)
+            ? '-'
+            : format(new Date(model.created), 'MMM d, Y, h:mm aaaa')}
         </MetadataSecondary>
       </td>
       <td className={c.FileTable_Row_Column}>
         <MetadataSecondary>{model.fileType}</MetadataSecondary>
       </td>
       <td className={c.FileTable_Row_Column}>
-        <MetadataSecondary>{formatBytes(model.size)}</MetadataSecondary>
+        <MetadataSecondary>
+          {R.isNil(model.size) ? '-' : formatBytes(model.size)} {}
+        </MetadataSecondary>
       </td>
       <td className={c.FileTable_Row_Column}>
         <Contributors users={[model.owner]} />
@@ -502,7 +506,6 @@ const FileTable = ({
               {sortedFiles.length > 0 ? (
                 sortedFiles.map((file, index) => {
                   if (!file) return null
-                  
                   return (
                     <React.Fragment key={`TableRow_${index}`}>
                       {R.isNil(file.models) ? (
