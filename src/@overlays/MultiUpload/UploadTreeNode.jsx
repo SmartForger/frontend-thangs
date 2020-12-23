@@ -71,7 +71,7 @@ const useStyles = createUseStyles(theme => {
       flex: 1,
 
       '&.missing': {
-        '& $UploadTreeItem_FileName': {
+        '& $UploadTreeNode_FileName': {
           color: '#DA7069',
         },
         '& $UploadTreeNode_Icon [fill]': {
