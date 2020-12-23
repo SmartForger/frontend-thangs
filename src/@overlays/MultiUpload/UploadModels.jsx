@@ -178,6 +178,13 @@ const useStyles = createUseStyles(theme => {
         borderRadius: 20,
         border: `3px solid ${theme.colors.white[600]}`,
       },
+      '& .loading': {
+        width: 'calc(100% - 2rem)',
+
+        '& > *': {
+          marginLeft: '1rem',
+        },
+      },
     },
   }
 })
@@ -286,6 +293,7 @@ const UploadModels = ({
             className={c.UploadTreeView}
             nodes={uploadTreeData}
             levelPadding={28}
+            loading={validating || isLoadingFiles}
             renderNode={(node, level) => (
               <UploadTreeNode
                 node={node}
