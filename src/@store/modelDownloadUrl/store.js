@@ -30,13 +30,12 @@ export default store => {
     },
   }))
 
-  store.on(types.FAILED_MODEL_DOWNLOAD_URL, (state, { data }) => ({
+  store.on(types.FAILED_MODEL_DOWNLOAD_URL, state => ({
     modelDownloadUrl: {
       ...state.modelDownloadUrl,
       isLoading: false,
       isLoaded: true,
       isError: true,
-      data,
     },
   }))
 
