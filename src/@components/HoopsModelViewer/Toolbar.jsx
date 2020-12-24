@@ -73,7 +73,6 @@ const Toolbar = ({ hoops, model = {}, setViewerModel = noop, selectedFilename })
 
   const handleViewChange = useCallback(
     view => {
-      console.log('view', view)
       changeViewOrientation(view)
       setOrientation(view)
     },

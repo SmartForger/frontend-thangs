@@ -96,7 +96,6 @@ const ColorPickerMenu = ({ selectedValue: currentColor, onChange = noop }) => {
   const c = useStyles({ color: currentColor })
   const handleBlur = useCallback(
     (e, value) => {
-      debugger
       onChange(value)
     },
     [onChange]

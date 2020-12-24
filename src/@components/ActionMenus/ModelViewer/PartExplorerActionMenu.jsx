@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 import {
   ActionMenu,
@@ -14,7 +13,6 @@ import { createUseStyles } from '@style'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X-sm.svg'
 import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
-import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
