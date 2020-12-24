@@ -57,6 +57,24 @@ export const flattenTree = nodes => {
   return nodes.reduce((arr, node) => [...arr, ...addLevel(node)], [])
 }
 
+export const addPathBy = (nodes, field, parentPath = []) => {
+  if (!nodes || nodes.length === 0) {
+    return []
+  }
+
+  nodes.forEach(node => {
+    if (!node.path) {
+      node.path = {}
+    }
+
+    node.path[field] = [...parentPath, node[field]]
+
+    if (node.subs && node.subs.length > 0) {
+      addPathBy(node.subs, field, node.path[field])
+    }
+  })
+}
+
 export const findNodeByName = (nodes, name) => {
   const findNode = (node, name) => {
     if (node.name === name) {

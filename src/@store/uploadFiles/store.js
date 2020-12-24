@@ -7,7 +7,8 @@ const getInitAtom = () => ({
   isLoading: false,
   isError: false,
   data: {},
-  validationTree: null,
+  formData: {},
+  treeData: {},
   validating: false,
   validated: false,
   isAssembly: false,
@@ -112,6 +113,7 @@ export default store => {
       (newFiles, f) => ({
         ...newFiles,
         [f.id]: {
+          id: f.id,
           name: f.file.name,
           size: f.file.size,
           error: f.errorState && f.errorState.message,
@@ -160,11 +162,14 @@ export default store => {
     }
   })
 
-  store.on(types.SET_ASSEMBLY_FORMDATA, (state, { formData }) => {
+  store.on(types.SET_MODEL_INFO, (state, { id, formData }) => {
     return {
       uploadFiles: {
         ...state.uploadFiles,
-        assemblyData: formData,
+        formData: {
+          ...state.formData,
+          [id]: formData,
+        },
       },
     }
   })
@@ -199,23 +204,22 @@ export default store => {
     }
   })
 
-  store.on(types.VALIDATE_FILES_SUCCESS, (state, { validationTree }) => {
+  store.on(types.VALIDATE_FILES_SUCCESS, (state, { treeData }) => {
     return {
       uploadFiles: {
         ...state.uploadFiles,
-        validationTree,
+        treeData,
         validating: false,
         validated: true,
-        isAssembly: validationTree && validationTree.length > 0,
       },
     }
   })
 
-  store.on(types.VALIDATE_FILES_FAILED, state => {
+  store.on(types.VALIDATE_FILES_FAILED, (state) => {
     return {
       uploadFiles: {
         ...state.uploadFiles,
-        validationTree: [],
+        treeData: {},
         validating: false,
         validated: true,
       },
@@ -230,7 +234,7 @@ export default store => {
   }))
 
   store.on(types.VALIDATE_FILES, async state => {
-    const { data, validationTree: oldValidationTree } = state.uploadFiles
+    const { data } = state.uploadFiles
     const isLoading = Object.values(data).some(file => file.isLoading)
     if (isLoading) {
       return
@@ -247,57 +251,46 @@ export default store => {
         },
       })
 
-      let validationTree = []
-      const uploadedFiles = Object.values(data)
+      const uploadedFiles = Object.values(data).filter(file => !file.isError)
+      const newTreeData = {}
 
       if (responseData.isAssembly !== false) {
-        const oldFileNameIdMap = {}
-        if (oldValidationTree) {
-          const checkName = node => {
-            oldFileNameIdMap[node.name] = node.id
-
-            if (node.subs) {
-              node.subs.forEach(subnode => checkName(subnode))
-            }
-          }
-          oldValidationTree.forEach(node => checkName(node))
-        }
-
-        const transformNode = (node1, node2) => {
+        const transformNode = (node1, node2, parentId = '', rootName = '') => {
           const name = node1.name.split(':')[0]
+          const id = rootName + '/' + node1.name
+          const file = node2.valid && uploadedFiles.find(file => file.name === name)
+
           const newNode = {
-            id:
-              oldFileNameIdMap[name] ||
-              Math.random().toString(36).substr(2, 9) + node1.name,
+            id,
             name,
             isAssembly: node1.isAssembly,
             valid: node2.valid,
+            treeValid: node2.valid && (!node1.subs || !node1.subs.length),
+            parentId,
+            fileId: file ? file.id : '',
           }
+          newTreeData[id] = newNode
 
           if (node1.subs && node1.subs.length > 0) {
-            newNode.subs = R.uniqBy(
-              R.prop('name'),
-              node1.subs.map((subnode, i) => transformNode(subnode, node2.subs[i]))
+            const newSubs = R.uniqBy(
+              R.prop('id'),
+              node1.subs.map((subnode, i) =>
+                transformNode(subnode, node2.subs[i], newNode.id, rootName)
+              )
             )
+            newNode.treeValid = newSubs.every(subnode => subnode.treeValid)
           }
 
           return newNode
         }
 
-        validationTree = responseData.map(model => {
-          const tree = transformNode(model.modelDescription, model.validation)
-
-          const rootFile = R.find(R.propEq('newFileName', tree.name))(uploadedFiles)
-          if (rootFile) {
-            tree.name = rootFile.name
-          }
-
-          return tree
+        responseData.forEach(model => {
+          transformNode(model.modelDescription, model.validation, '', model.root)
         })
       }
 
       store.dispatch(types.VALIDATE_FILES_SUCCESS, {
-        validationTree,
+        treeData: newTreeData,
       })
     } catch (e) {
       store.dispatch(types.VALIDATE_FILES_FAILED)
@@ -307,13 +300,16 @@ export default store => {
   store.on(types.UPLOAD_FILES, async (state, { files }) => {
     store.dispatch(types.INIT_UPLOAD_FILES, { files })
 
-    const { validationTree, data } = state.uploadFiles
-    const uploadedFiles = Object.values(data)
+    const { treeData, data: uploadedFiles } = state.uploadFiles
+    const treeNodes = Object.values(treeData)
     const filesWithDirectory = files.map(fileObj => {
-      if (validationTree) {
-        const tree = validationTree.find(t => !!findNodeByName([t], fileObj.file.name))
+      if (treeNodes.length > 0) {
+        let tree = treeNodes.find(n => n.name === fileObj.file.name)
+        while (tree && tree.parentId) {
+          tree = treeData[tree.parentId]
+        }
         if (tree) {
-          const rootFile = uploadedFiles.find(f => f.name === tree.name)
+          const rootFile = uploadedFiles[tree.fileId]
           if (rootFile && rootFile.newFileName) {
             const arr = rootFile.newFileName.split('/')
             return { ...fileObj, directory: arr[0] }

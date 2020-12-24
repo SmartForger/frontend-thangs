@@ -50,10 +50,6 @@ const useStyles = createUseStyles(_theme => {
     UploadTreeNode_Button: {
       cursor: 'pointer',
       marginRight: '0.5rem',
-      '& $UploadTreeItem_FileName': {
-        color: '#999',
-        textDecoration: 'line-through',
-      },
       '& [fill]': {
         fill: '#000',
       },

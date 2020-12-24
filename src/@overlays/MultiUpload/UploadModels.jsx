@@ -192,11 +192,11 @@ const noop = () => null
 const UploadModels = ({
   uploadFiles,
   uploadTreeData,
-  showAssemblyToggle,
+  allTreeNodes,
   onDrop = noop,
-  removeFile = noop,
+  onRemoveNode = noop,
   onCancel = noop,
-  handleContinue = noop,
+  onContinue = noop,
   setErrorMessage = noop,
   setWarningMessage = noop,
   errorMessage = null,
@@ -204,6 +204,7 @@ const UploadModels = ({
   isAssembly = false,
   setIsAssembly = noop,
   validating = false,
+  showAssemblyToggle,
 }) => {
   const hasFile = Object.keys(uploadFiles).length > 0
   const c = useStyles({ hasFile })
@@ -215,7 +216,6 @@ const UploadModels = ({
     ? Object.keys(uploadFiles).filter(fileId => uploadFiles[fileId].name).length
     : 0
   const dropzoneRef = useRef()
-  const files = flattenTree(uploadTreeData)
 
   const toggleAssembly = useCallback(() => {
     setIsAssembly(!isAssembly)
@@ -234,7 +234,7 @@ const UploadModels = ({
   useEffect(() => {
     const loadingFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isLoading)
     const warningFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isWarning)
-    const missingFiles = files.filter(f => !f.valid)
+    const missingFiles = allTreeNodes.filter(f => !f.valid)
 
     if (loadingFiles.length === 0 && !validating) setErrorMessage(null)
     if (warningFiles.length !== 0) {
@@ -251,7 +251,7 @@ const UploadModels = ({
     } else {
       setWarningMessage(null)
     }
-  }, [files, setErrorMessage, setWarningMessage, uploadFiles, uploadTreeData, validating])
+  }, [allTreeNodes, setErrorMessage, setWarningMessage, uploadFiles, uploadTreeData, validating])
 
   const uploadAssemblyLabel = (
     <span className={c.UploadAssemblyLabel}>
@@ -301,7 +301,7 @@ const UploadModels = ({
                 node={node}
                 level={level}
                 onUpload={uploadFile}
-                onRemove={removeFile}
+                onRemove={onRemoveNode}
               />
             )}
           />
@@ -322,7 +322,7 @@ const UploadModels = ({
               Cancel
             </Button>
             <Spacer size={'1rem'} className={c.UploadModels_ButtonSpacer} />
-            <Button onClick={handleContinue}>
+            <Button onClick={onContinue}>
               {isLoadingFiles || validating ? 'Processing...' : 'Continue'}
             </Button>
           </div>

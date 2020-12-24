@@ -12,6 +12,7 @@ import * as types from '@constants/storeEventTypes'
 import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { track } from '@utilities/analytics'
 import AssemblyInfo from './AssemblyInfo'
+import { flattenTree, addPathBy } from '@utilities/tree'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -111,7 +112,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
   )
   const {
     data: uploadFilesData = {},
-    validationTree,
+    treeData,
     isLoading,
     validating,
     validated,
@@ -124,60 +125,83 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const [activeStep, setActiveStep] = useState(0)
   const [errorMessage, setErrorMessage] = useState(null)
   const [warningMessage, setWarningMessage] = useState(null)
+  const [allTreeNodes, setAllTreeNodes] = useState([])
   const c = useStyles({})
   const history = useHistory()
-  const uploadedFiles = useMemo(() => {
-    const fileIDs = Object.keys(uploadFilesData)
-    return fileIDs
-      .filter(fid => uploadFilesData[fid].name)
-      .map(fid => ({
-        id: fid,
-        ...uploadFilesData[fid],
-      }))
-  }, [uploadFilesData])
 
+  const uploadedFiles = useMemo(
+    () => Object.values(uploadFilesData).filter(file => file.name && !file.isError),
+    [uploadFilesData]
+  )
+  const hasAssembly = useMemo(() => Object.values(treeData).length > 0, [treeData])
   const uploadTreeData = useMemo(() => {
-    const files = Object.values(uploadFilesData)
-    const addTreeLoading = node => {
-      const file = files.find(f => f.name === node.name)
-      const result = {
-        id: node.id,
-        name: node.name,
-        size: file && file.size,
-        isAssembly: node.isAssembly,
-        valid: node.valid,
-        treeValid: node.valid && !node.subs,
+    const keys = Object.keys(treeData)
+    const newTreeData = {}
+    keys.forEach(key => {
+      const file = uploadFilesData[treeData[key].name]
+      newTreeData[key] = {
+        ...treeData[key],
         loading: file && file.isLoading,
       }
+    })
 
-      if (node.subs) {
-        result.subs = node.subs.map(subnode => addTreeLoading(subnode))
-      }
+    const treeNodeNames = Object.values(treeData).map(node => node.name)
+    const singleNodes = uploadedFiles
+      .filter(file => !treeNodeNames.includes(file.name))
+      .map(file => {
+        const id = '/' + file.name
+        newTreeData[id] = {
+          id,
+          name: file.name,
+          isAssembly: false,
+          valid: true,
+          treeValid: true,
+          parentId: null,
+          loading: file.isLoading,
+          fileId: file.id,
+        }
+        return newTreeData[id]
+      })
 
-      result.treeValid =
-        result.valid &&
-        (!result.subs || result.subs.every(subnode => subnode.valid && subnode.treeValid))
-      return result
+    const nodesArray = Object.values(newTreeData)
+    const formNode = nodeId => {
+      const subs = nodesArray
+        .filter(
+          node =>
+            node.parentId === nodeId || (nodeId === 'multipart' && node.parentId === null)
+        )
+        .map(subnode => formNode(subnode.id))
+      return newTreeData[nodeId]
+        ? {
+            ...newTreeData[nodeId],
+            subs,
+          }
+        : { subs }
     }
 
-    if (validationTree && validationTree.length > 0) {
-      return validationTree.map(node => addTreeLoading(node))
+    let trees = formNode('').subs
+
+    if (isAssembly) {
+      trees.push({
+        id: 'multipart',
+        parentId: '',
+        subs: singleNodes,
+      })
+      nodesArray.splice(-singleNodes.length, 0, {
+        id: 'multipart',
+        parentId: '',
+      })
     } else {
-      const keys = Object.keys(uploadFilesData)
-      return files.map((file, i) => ({
-        id: keys[i],
-        name: file.name,
-        size: file.size,
-        isAssembly: false,
-        valid: !file.isError,
-        treeValid: !file.isError,
-        loading: file.isLoading,
-      }))
+      trees = [...trees, ...singleNodes]
     }
-  }, [uploadFilesData, validationTree])
 
-  const setAssemblyFormData = formData => {
-    dispatch(types.SET_ASSEMBLY_FORMDATA, { formData })
+    setAllTreeNodes(nodesArray)
+
+    return trees
+  }, [uploadFilesData, treeData, isAssembly])
+
+  const setModelInfo = (id, formData) => {
+    dispatch(types.SET_MODEL_INFO, { id, formData })
   }
 
   const onDrop = useCallback(
@@ -187,7 +211,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
       const files = acceptedFiles
         .map(file => {
           const fileObj = {
-            id: Math.random().toString(36).substr(2, 9),
+            id: file.name,
             file,
           }
 
@@ -253,7 +277,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
   }, [uploadFilesData, isAssembly, validating])
 
   const continueToModelInfo = ({ data }) => {
-    setAssemblyFormData(data)
+    setModelInfo(data)
     setActiveView('partInfo')
     setActiveStep(0)
   }
@@ -314,8 +338,8 @@ const MultiUpload = ({ initData = null, folderId }) => {
   }, [activeView, activeStep, isAssembly])
 
   const handleCancelUploading = () => {
-    closeOverlay();
-    dispatch(types.RESET_UPLOAD_FILES);
+    closeOverlay()
+    dispatch(types.RESET_UPLOAD_FILES)
   }
 
   const dropdownFolders = useMemo(() => {
@@ -381,23 +405,21 @@ const MultiUpload = ({ initData = null, folderId }) => {
         </div>
         {activeView === 'upload' ? (
           <UploadModels
-            errorMessage={errorMessage}
-            handleContinue={continueToNextStep}
-            isAssembly={isAssembly}
-            onDrop={onDrop}
-            removeFile={removeFile}
-            setErrorMessage={setErrorMessage}
-            setIsAssembly={setIsAssembly}
-            setWarningMessage={setWarningMessage}
-            showAssemblyToggle={
-              validated && (!validationTree || validationTree.length === 0)
-            }
-            skipFile={skipFile}
             uploadFiles={uploadFilesData}
             uploadTreeData={uploadTreeData}
-            validating={validating}
-            warningMessage={warningMessage}
+            allTreeNodes={allTreeNodes}
+            onDrop={onDrop}
+            onRemoveNode={removeFile}
             onCancel={handleCancelUploading}
+            onContinue={continueToNextStep}
+            setErrorMessage={setErrorMessage}
+            setWarningMessage={setWarningMessage}
+            errorMessage={errorMessage}
+            warningMessage={warningMessage}
+            isAssembly={isAssembly}
+            setIsAssembly={setIsAssembly}
+            validating={validating}
+            showAssemblyToggle={validated && !hasAssembly}
           />
         ) : activeView === 'assemblyInfo' ? (
           <AssemblyInfo
@@ -406,7 +428,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             folders={dropdownFolders}
             formData={assemblyData}
             handleContinue={continueToModelInfo}
-            isMultipart={(!validationTree || validationTree.length === 0) && isAssembly}
+            isMultipart={!hasAssembly && isAssembly}
             setErrorMessage={setErrorMessage}
             uploadedFiles={uploadedFiles}
           />
@@ -419,7 +441,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             folders={dropdownFolders}
             handleContinue={handleContinue}
             handleUpdate={handleUpdate}
-            isAssembly={isAssembly || (validationTree && validationTree.length > 0)}
+            isAssembly={isAssembly || hasAssembly}
             isLoading={isLoading}
             setErrorMessage={setErrorMessage}
             uploadFiles={uploadFilesData}
