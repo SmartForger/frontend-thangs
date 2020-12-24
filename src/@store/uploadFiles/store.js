@@ -1,7 +1,6 @@
 import * as types from '@constants/storeEventTypes'
 import { api, uploadFiles, cancelUpload } from '@services'
 import { flattenTree } from '@utilities'
-import * as R from 'ramda'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -235,23 +234,16 @@ export default store => {
             name,
             isAssembly: node1.isAssembly,
             valid: node2.valid,
-            treeValid: node2.valid && (!node1.subs || !node1.subs.length),
             parentId,
             fileId: file ? file.id : '',
           }
           newTreeData[id] = newNode
 
           if (node1.subs && node1.subs.length > 0) {
-            const newSubs = R.uniqBy(
-              R.prop('id'),
-              node1.subs.map((subnode, i) =>
-                transformNode(subnode, node2.subs[i], newNode.id, rootName)
-              )
+            node1.subs.forEach((subnode, i) =>
+              transformNode(subnode, node2.subs[i], newNode.id, rootName)
             )
-            newNode.treeValid = newSubs.every(subnode => subnode.treeValid)
           }
-
-          return newNode
         }
 
         responseData.forEach(model => {

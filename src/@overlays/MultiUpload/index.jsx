@@ -164,18 +164,19 @@ const MultiUpload = ({ initData = null, folderId }) => {
 
     const nodesArray = Object.values(newTreeData)
     const formNode = nodeId => {
-      const subs = nodesArray
+      const newNode = newTreeData[nodeId] || {}
+      newNode.subs = nodesArray
         .filter(
           node =>
             node.parentId === nodeId || (nodeId === 'multipart' && node.parentId === null)
         )
         .map(subnode => formNode(subnode.id))
-      return newTreeData[nodeId]
-        ? {
-            ...newTreeData[nodeId],
-            subs,
-          }
-        : { subs }
+
+      newNode.treeValid =
+        newNode.valid &&
+        (newNode.subs.length === 0 || newNode.subs.every(subnode => subnode.treeValid))
+
+      return newNode
     }
 
     let trees = formNode('').subs
