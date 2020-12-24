@@ -157,6 +157,7 @@ const DropdownMenu = ({
           label={label}
           Icon={Icon}
           iconOnly={iconOnly}
+          isOpen={isOpen}
           {...TargetComponentProps}
         />
       ) : (

@@ -1,9 +1,15 @@
 import React from 'react'
-import { DrawModeActionMenu, Pill, Spacer, MetadataSecondary, Slider } from '@components'
-import ColorPicker from './ColorPicker'
-import ExplodeDropdown from './ExplodeDropdown'
-import OrientationDropdown from './OrientationDropdown'
-import PartExplorerDropdown from './PartExplorerDropdown'
+import {
+  DrawModeActionMenu,
+  ColorPickerActionMenu,
+  ExplodeActionMenu,
+  OrientationActionMenu,
+  PartExplorerActionMenu,
+  Pill,
+  Spacer,
+  MetadataSecondary,
+  Slider,
+} from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as ResetIcon } from '@svg/icon-reset.svg'
@@ -137,9 +143,9 @@ const Toolbar = ({
             <MetadataSecondary>Orientation</MetadataSecondary>
             <Spacer size={'1rem'} />
           </div>
-          <OrientationDropdown
+          <OrientationActionMenu
             selectedValue={orientation}
-            handleChange={handleViewChange}
+            onChange={handleViewChange}
           />
         </div>
         <Spacer size={'1.125rem'} />
@@ -150,7 +156,7 @@ const Toolbar = ({
             <MetadataSecondary>Color</MetadataSecondary>
             <Spacer size={'1rem'} />
           </div>
-          <ColorPicker color={color} onChange={handleColorChange} />
+          <ColorPickerActionMenu selectedValue={color} onChange={handleColorChange} />
         </div>
         {isAssembly && (
           <>
@@ -158,9 +164,9 @@ const Toolbar = ({
             <div className={c.Toolbar_VerticalRule}></div>
             <Spacer size={'1.125rem'} />
             <div className={c.Toolbar_Group}>
-              <ExplodeDropdown
+              <ExplodeActionMenu
                 selectedValue={magnitude}
-                handleChange={handleSliderChange}
+                onChange={handleSliderChange}
               />
               <div className={c.Toolbar_WideText}>
                 <Spacer size={'1rem'} />
@@ -176,11 +182,10 @@ const Toolbar = ({
             <div className={c.Toolbar_VerticalRule}></div>
             <Spacer size={'1.125rem'} />
             <div className={classnames(c.Toolbar_Group, c.Toolbar_PartExplorerWrapper)}>
-              <PartExplorerDropdown
-                setViewerModel={setViewerModel}
-                selectedFilename={selectedFilename}
+              <PartExplorerActionMenu
+                selectedValue={selectedFilename}
                 model={model}
-                handleChange={setViewerModel}
+                onChange={setViewerModel}
               />
             </div>
           </>

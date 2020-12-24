@@ -1,13 +1,6 @@
-import React, { useCallback } from 'react'
-import {
-  DropdownMenu,
-  DropdownItem,
-  Spacer,
-  Slider,
-  MetadataSecondary,
-} from '@components'
+import React from 'react'
+import { ActionMenu, DropdownItem, Spacer, Slider, MetadataSecondary } from '@components'
 import { createUseStyles } from '@style'
-import classnames from 'classnames'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ExplodeIcon } from '@svg/icon-explode.svg'
 
@@ -88,15 +81,11 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const ExplodeDropdown = ({ onClick = noop }) => {
+const ExplodeTarget = ({ onClick = noop }) => {
   const c = useStyles({})
 
-  const handleOnClick = useCallback(() => {
-    onClick()
-  }, [onClick])
-
   return (
-    <div className={c.ExplodeDropdown_ClickableButton} onClick={handleOnClick}>
+    <div className={c.ExplodeDropdown_ClickableButton} onClick={onClick}>
       <MetadataSecondary className={c.ExplodeDropdown__desktop}>
         Explode
       </MetadataSecondary>
@@ -109,7 +98,7 @@ const ExplodeDropdown = ({ onClick = noop }) => {
   )
 }
 
-const ExplodeMenu = ({ handleSliderChange = noop, magnitude }) => {
+const ExplodeMenu = ({ onChange = noop, selectedValue: magnitude }) => {
   const c = useStyles({})
 
   return (
@@ -119,7 +108,7 @@ const ExplodeMenu = ({ handleSliderChange = noop, magnitude }) => {
           <div className={c.ExplodeDropdown_Row}>
             <Slider
               className={c.ExplodeDropdown_Slider}
-              onChange={handleSliderChange}
+              onChange={onChange}
               steps={25}
               value={magnitude}
             />
@@ -131,17 +120,16 @@ const ExplodeMenu = ({ handleSliderChange = noop, magnitude }) => {
   )
 }
 
-const ExplodeDropdownMenu = ({ className, handleChange = noop, selectedValue }) => {
-  const c = useStyles({})
-
+const ExplodeActionMenu = ({ onChange = noop, selectedValue }) => {
   return (
-    <DropdownMenu
-      className={classnames(c.ExplodeDropdown, className)}
-      TargetComponent={ExplodeDropdown}
-    >
-      <ExplodeMenu handleSliderChange={handleChange} magnitude={selectedValue} />
-    </DropdownMenu>
+    <ActionMenu
+      MenuComponent={ExplodeMenu}
+      MenuComponentProps={{ onChange, selectedValue }}
+      TargetComponent={ExplodeTarget}
+      TargetComponentProps={{ selectedValue }}
+      isMobileActionBarActive={false}
+    />
   )
 }
 
-export default ExplodeDropdownMenu
+export default ExplodeActionMenu

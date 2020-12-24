@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import { ActionMenu, Spacer } from '@components'
+import { ActionMenu, Spacer, TextInput } from '@components'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ColorBucketIcon } from '@svg/icon-color-bucket.svg'
 
@@ -23,17 +23,9 @@ const useStyles = createUseStyles(theme => {
   return {
     ColorPickerMenu: {
       display: 'none',
-      backgroundColor: theme.variables.colors.cardBackground,
-      position: 'absolute',
       gridTemplateColumns: 'repeat(4, 1fr)',
       gridTemplateRows: 'repeat(2, 1fr)',
-      gap: '.75rem',
-      padding: '1.5rem',
-      bottom: '4.2rem',
-      left: '-1.5rem',
-      transform: 'translateX(-50%)',
-      borderRadius: '.5rem',
-      boxShadow: theme.variables.boxShadow,
+      gap: '1rem',
 
       [md]: {
         display: 'grid',
@@ -52,6 +44,12 @@ const useStyles = createUseStyles(theme => {
         borderRight: 'solid 6px transparent',
         zIndex: 1,
       },
+    },
+    ColorPickerMenu_Wrapper: {
+      ...theme.mixins.flexColumn,
+    },
+    ColorPickerMenu_FormInput: {
+      width: '9rem',
     },
     ColorPickerMenu_Color: {
       cursor: 'pointer',
@@ -75,25 +73,6 @@ const useStyles = createUseStyles(theme => {
       height: '2rem',
       borderRadius: '50%',
     },
-    g: {
-      width: '100%',
-
-      '& > div': {
-        display: 'flex',
-        position: 'relative',
-        left: 0,
-        bottom: 0,
-        boxShadow: 'none',
-        transform: 'none',
-        paddingLeft: 0,
-        paddingRight: 0,
-        justifyContent: 'space-between',
-
-        [md]: {
-          display: 'none',
-        },
-      },
-    },
     ColorPicker__desktop: {
       display: 'none',
 
@@ -113,24 +92,41 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const ColorPickerMenu = ({ currentColor, handleChange = noop, visible }) => {
-  const c = useStyles({ visible, color: currentColor })
+const ColorPickerMenu = ({ selectedValue: currentColor, onChange = noop }) => {
+  const c = useStyles({ color: currentColor })
+  const handleBlur = useCallback(
+    (e, value) => {
+      debugger
+      onChange(value)
+    },
+    [onChange]
+  )
 
   return (
-    <div className={c.ColorPickerMenu}>
-      {COLORS.map((color, idx) => {
-        const isSelected = color === currentColor
-        return (
-          <div
-            className={classnames(c.ColorPickerMenu_Color, {
-              [c.ColorPickerMenu__isSelected]: isSelected,
-            })}
-            style={{ backgroundColor: color }}
-            onClick={() => handleChange(color)}
-            key={idx}
-          />
-        )
-      })}
+    <div className={c.ColorPickerMenu_Wrapper}>
+      <TextInput
+        name='color'
+        type='text'
+        placeholder={'#999999'}
+        className={c.ColorPickerMenu_FormInput}
+        onBlur={handleBlur}
+      />
+      <Spacer size={'1rem'} />
+      <div className={c.ColorPickerMenu}>
+        {COLORS.map((color, idx) => {
+          const isSelected = color === currentColor
+          return (
+            <div
+              className={classnames(c.ColorPickerMenu_Color, {
+                [c.ColorPickerMenu__isSelected]: isSelected,
+              })}
+              style={{ backgroundColor: color }}
+              onClick={() => onChange(color)}
+              key={`ColorPicker_${idx}`}
+            />
+          )
+        })}
+      </div>
     </div>
   )
 }

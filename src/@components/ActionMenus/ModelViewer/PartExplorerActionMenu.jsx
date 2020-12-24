@@ -2,14 +2,13 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 import {
-  DropdownMenu,
+  ActionMenu,
   ModelThumbnail,
   MultiLineBodyText,
   Spacer,
   SingleLineBodyText,
   Tag,
   TextInput,
-  TitleTertiary,
 } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
@@ -128,6 +127,15 @@ const useStyles = createUseStyles(theme => {
       width: '2.625rem',
       height: '2.625rem',
       boxSizing: 'border-box',
+    },
+    PartExplorerTarget: {
+      ...theme.mixins.flexRow,
+      alignItems: 'center',
+    },
+    PartExplorerTarget_ModelName: {
+      maxWidth: '11rem',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     },
     SearchBar_Wrapper: {
       display: 'flex',
@@ -318,111 +326,47 @@ export const PartExplorerMenu = ({ handleChange, model, selectedFilename }) => {
   )
 }
 
-export const PartExplorerDropdown = ({
-  model,
-  selectedFilename,
-  handleChange = noop,
-}) => {
+export const PartExplorerTarget = ({ isOpen, model = {}, selectedValue: filename }) => {
   const c = useStyles({})
-  const [isVisible, setIsVisible] = useState(true)
-  const { dispatch } = useStoreon()
-
-  const handleOnClick = useCallback(() => {
-    dispatch(types.OPEN_ACTION_BAR, {
-      Component: PartExplorerActionMenu,
-      data: {
-        model,
-        selectedFilename,
-        handleChange,
-      },
-    })
-  }, [dispatch, model, handleChange, selectedFilename])
 
   return (
-    <div
-      className={c.PartExplorerDropdown_ClickableButton}
-      onClick={ev => {
-        ev.stopPropagation()
-        setIsVisible(!isVisible)
-        handleOnClick()
-      }}
-    >
+    <div className={c.PartExplorerTarget}>
       <ModelThumbnail
         key={model.newFileName}
-        className={c.PartExplorerDropdown_Thumbnail}
+        className={c.PartExplorerTarget_Thumbnail}
         name={model}
         model={{ ...model, uploadedFile: model.newFileName }}
       />
       <Spacer size={'1rem'} />
-      <SingleLineBodyText className={c.PartExplorerDropdown_ModelName}>
-        {selectedFilename}
+      <SingleLineBodyText className={c.PartExplorerTarget_ModelName}>
+        {filename}
       </SingleLineBodyText>
       <Spacer size={'.5rem'} />
       {model.isAssembly ? <Tag>Assembly</Tag> : <Tag secondary>Part</Tag>}
       <Spacer size={'.5rem'} />
-      {isVisible ? (
-        <ExitIcon className={c.PartExplorerDropdown_Arrow} />
+      {isOpen ? (
+        <ExitIcon className={c.PartExplorerTarget_Arrow} />
       ) : (
-        <ArrowDown className={c.PartExplorerDropdown_Arrow} />
+        <ArrowDown className={c.PartExplorerTarget_Arrow} />
       )}
     </div>
   )
 }
 
-const PartExplorerDropdownMenu = ({
-  model = {},
-  handleChange = noop,
-  selectedFilename,
-}) => {
-  const c = useStyles({})
-
+const PartExplorerActionMenu = ({ onChange = noop, selectedValue, model }) => {
   return (
-    <DropdownMenu
-      className={c.PartExplorerDropdown}
-      TargetComponent={PartExplorerDropdown}
-      TargetComponentProps={{ model, handleChange, selectedFilename }}
-      isOpen={true}
-    >
-      <PartExplorerMenu
-        handleChange={handleChange}
-        model={model}
-        selectedFilename={selectedFilename}
-      />
-    </DropdownMenu>
+    <ActionMenu
+      MenuComponent={PartExplorerMenu}
+      MenuComponentProps={{
+        onChange,
+        actionBarTitle: 'Select a model',
+        model,
+        selectedValue,
+      }}
+      TargetComponent={PartExplorerTarget}
+      TargetComponentProps={{ selectedValue }}
+    />
   )
 }
 
-const PartExplorerActionMenu = ({
-  model = {},
-  handleChange = noop,
-  selectedFilename,
-}) => {
-  const c = useStyles({})
-  const { dispatch } = useStoreon()
-
-  const handleSelect = useCallback(
-    value => {
-      handleChange(value)
-      dispatch(types.CLOSE_ACTION_BAR)
-    },
-    [dispatch, handleChange]
-  )
-
-  return (
-    <>
-      <Spacer size={'2rem'} />
-      <div className={c.PartExplorerDropdown_ActionMenu}>
-        <Spacer size={'2rem'} />
-        <TitleTertiary>Select a model</TitleTertiary>
-        <PartExplorerMenu
-          model={model}
-          handleChange={handleSelect}
-          selectedFilename={selectedFilename}
-        />
-      </div>
-      <Spacer size={'2rem'} />
-    </>
-  )
-}
-
-export default PartExplorerDropdownMenu
+export default PartExplorerActionMenu

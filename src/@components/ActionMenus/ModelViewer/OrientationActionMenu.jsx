@@ -24,11 +24,18 @@ const useStyles = createUseStyles(theme => {
         display: 'block',
       },
     },
-    OrientationActionMenu_ClickableButton: {
+    OrientationTarget: {
       cursor: 'pointer',
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
+      '& > span': {
+        display: 'none',
+
+        [md_viewer]: {
+          display: 'flex',
+        },
+      },
     },
     OrientationActionMenu__desktop: {
       display: 'none',
@@ -84,20 +91,18 @@ const OrientationTarget = ({ onClick = noop, selectedValue }) => {
   }, [selectedValue])
 
   const selectedOrientation = useMemo(
-    () => options.find(opt => opt.value === value).label,
+    () => options.find(opt => opt.value.toLowerCase() === value.toLowerCase()).label,
     [value]
   )
 
   const SelectedOrientationIcon = useMemo(
-    () => options.find(opt => opt.value === value).Icon,
+    () => options.find(opt => opt.value.toLowerCase() === value.toLowerCase()).Icon,
     [value]
   )
 
   return (
-    <div className={c.OrientationActionMenu_ClickableButton} onClick={onClick}>
-      <SingleLineBodyText className={c.OrientationActionMenu__desktop}>
-        {selectedOrientation}
-      </SingleLineBodyText>
+    <div className={c.OrientationTarget} onClick={onClick}>
+      <SingleLineBodyText>{selectedOrientation}</SingleLineBodyText>
       <SelectedOrientationIcon className={c.OrientationActionMenu__mobile} />
       <Spacer size={'.5rem'} className={c.OrientationActionMenu__desktop} />
       <ArrowDownIcon className={c.OrientationActionMenu__desktop} />

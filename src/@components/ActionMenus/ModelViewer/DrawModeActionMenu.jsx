@@ -78,11 +78,12 @@ const DrawModeTarget = ({ onClick = noop, selectedValue }) => {
   }, [selectedValue])
 
   const DrawIcon = useMemo(() => {
-    return options.find(opt => opt.value === value).DesktopSelectedIcon
+    return options.find(opt => opt.value.toLowerCase() === value.toLowerCase())
+      .DesktopSelectedIcon
   }, [value])
 
   const DrawMobileIcon = useMemo(() => {
-    return options.find(opt => opt.value === value).Icon
+    return options.find(opt => opt.value.toLowerCase() === value.toLowerCase()).Icon
   }, [value])
 
   return (

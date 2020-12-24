@@ -28,12 +28,12 @@ const useStyles = createUseStyles(theme => {
 const noop = () => null
 
 const Toolbar = ({ hoops, model = {}, setViewerModel = noop, selectedFilename }) => {
-  const isMultipart = !model.isAssembly && model.parts.length > 1
+  const isMultipart = !model.isAssembly && model.parts && model.parts.length > 1
   const isAssembly = model.isAssembly
   const c = useStyles({ isMultipart, isAssembly })
   //These keep track the UI toolbar state
   const [mode, setMode] = useState(null)
-  const [orientation, setOrientation] = useState('Front')
+  const [orientation, setOrientation] = useState('front')
   const [color, setColor] = useState('#999')
   const [magnitude, setMagnitude] = useState(0)
 
@@ -73,6 +73,7 @@ const Toolbar = ({ hoops, model = {}, setViewerModel = noop, selectedFilename })
 
   const handleViewChange = useCallback(
     view => {
+      console.log('view', view)
       changeViewOrientation(view)
       setOrientation(view)
     },

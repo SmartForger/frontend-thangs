@@ -1,2 +1,5 @@
-export { default as DrawModeActionMenu } from './DrawModeActionMenu'
-export { default as OrientationActionMenu } from './OrientationActionMenu'
+export { default as DrawModeActionMenu } from './ModelViewer/DrawModeActionMenu'
+export { default as OrientationActionMenu } from './ModelViewer/OrientationActionMenu'
+export { default as ExplodeActionMenu } from './ModelViewer/ExplodeActionMenu'
+export { default as ColorPickerActionMenu } from './ModelViewer/ColorPickerActionMenu'
+export { default as PartExplorerActionMenu } from './ModelViewer/PartExplorerActionMenu'

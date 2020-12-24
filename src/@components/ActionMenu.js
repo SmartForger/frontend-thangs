@@ -85,30 +85,30 @@ const ActionMenu = ({
   MenuComponent = DefaultMenu,
   MenuComponentProps,
   isOpenByDefault = false,
-  showMobileActionBar = true,
+  isMobileActionBarActive = true,
 }) => {
   const c = useStyles()
   const { dispatch } = useStoreon()
-  const { onChange: handleOnChange, ...menuProps } = MenuComponentProps
+  const { onChange, ...menuProps } = MenuComponentProps
 
-  const onChange = useCallback(
+  const handleChange = useCallback(
     value => {
-      handleOnChange(value)
+      onChange(value)
       dispatch(types.CLOSE_ACTION_BAR)
     },
-    [dispatch, handleOnChange]
+    [dispatch, onChange]
   )
 
-  const onTargetClick = useCallback(() => {
-    if (showMobileActionBar)
+  const handleTargetClick = useCallback(() => {
+    if (isMobileActionBarActive)
       dispatch(types.OPEN_ACTION_BAR, {
         Component: MenuComponent,
         data: {
-          onChange,
+          onChange: handleChange,
           ...menuProps,
         },
       })
-  }, [MenuComponent, dispatch, menuProps, onChange, showMobileActionBar])
+  }, [isMobileActionBarActive, dispatch, MenuComponent, handleChange, menuProps])
 
   return (
     <DropdownMenu
@@ -116,9 +116,9 @@ const ActionMenu = ({
       TargetComponent={TargetComponent}
       TargetComponentProps={TargetComponentProps}
       isOpenByDefault={isOpenByDefault}
-      onTargetClick={onTargetClick}
+      onTargetClick={handleTargetClick}
     >
-      <MenuComponent onChange={onChange} {...menuProps} />
+      <MenuComponent onChange={handleChange} {...menuProps} />
     </DropdownMenu>
   )
 }

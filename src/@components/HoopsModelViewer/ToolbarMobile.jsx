@@ -1,9 +1,12 @@
 import React from 'react'
-import ColorPicker from './ColorPicker'
-import ExplodeDropdown from './ExplodeDropdown'
-import OrientationDropdown from './OrientationDropdown'
-import PartExplorerDropdown from './PartExplorerDropdown'
-import { DrawModeActionMenu, Spacer } from '@components'
+import {
+  DrawModeActionMenu,
+  ColorPickerActionMenu,
+  ExplodeActionMenu,
+  OrientationActionMenu,
+  PartExplorerActionMenu,
+  Spacer,
+} from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as CameraIcon } from '@svg/icon-camera.svg'
@@ -96,7 +99,7 @@ const Toolbar = ({
         <Spacer size={'.75rem'} />
         <div className={c.Toolbar_Group}>
           <Spacer size={'1rem'} />
-          <ColorPicker color={color} onChange={handleColorChange} />
+          <ColorPickerActionMenu selectedValue={color} onChange={handleColorChange} />
           <Spacer size={'1rem'} />
         </div>
         <Spacer size={'.75rem'} />
@@ -104,9 +107,9 @@ const Toolbar = ({
           <>
             <div className={c.Toolbar_Group}>
               <Spacer size={'1rem'} />
-              <ExplodeDropdown
+              <ExplodeActionMenu
                 selectedValue={magnitude}
-                handleChange={handleSliderChange}
+                onChange={handleSliderChange}
               />
               <Spacer size={'1rem'} />
             </div>
@@ -121,28 +124,27 @@ const Toolbar = ({
         <Spacer size={'.75rem'} />
         <div className={c.Toolbar_Group}>
           <Spacer size={'1rem'} />
-          <OrientationDropdown
+          <OrientationActionMenu
             selectedValue={orientation}
-            handleChange={handleViewChange}
+            onChange={handleViewChange}
           />
           <Spacer size={'1rem'} />
         </div>
+        {showPartSelector && (
+          <>
+            <Spacer size={'1.125rem'} />
+            <div className={c.Toolbar_VerticalRule}></div>
+            <Spacer size={'1.125rem'} />
+            <div className={classnames(c.Toolbar_Group, c.Toolbar_PartExplorerWrapper)}>
+              <PartExplorerActionMenu
+                selectedValue={selectedFilename}
+                model={model}
+                onChange={setViewerModel}
+              />
+            </div>
+          </>
+        )}
       </div>
-      {showPartSelector && (
-        <>
-          <Spacer size={'1.125rem'} />
-          <div className={c.Toolbar_VerticalRule}></div>
-          <Spacer size={'1.125rem'} />
-          <div className={classnames(c.Toolbar_Group, c.Toolbar_PartExplorerWrapper)}>
-            <PartExplorerDropdown
-              setViewerModel={setViewerModel}
-              selectedFilename={selectedFilename}
-              model={model}
-              handleChange={setViewerModel}
-            />
-          </div>
-        </>
-      )}
     </>
   )
 }
