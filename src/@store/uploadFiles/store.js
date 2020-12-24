@@ -1,6 +1,6 @@
 import * as types from '@constants/storeEventTypes'
 import { api, uploadFiles, cancelUpload } from '@services'
-import { findNodeByName, flattenTree } from '@utilities'
+import { flattenTree } from '@utilities'
 import * as R from 'ramda'
 
 const getInitAtom = () => ({
@@ -170,36 +170,6 @@ export default store => {
           ...state.formData,
           [id]: formData,
         },
-      },
-    }
-  })
-
-  store.on(types.SKIP_MISSING_FILE, (state, { filename }) => {
-    const { validationTree, data } = state.uploadFiles
-
-    if (validationTree && validationTree.length > 0) {
-      const node = findNodeByName(validationTree, filename)
-      if (node) {
-        node.skipped = true
-      }
-
-      return {
-        uploadFiles: {
-          ...state.uploadFiles,
-          validationTree: JSON.parse(JSON.stringify(validationTree)),
-        },
-      }
-    }
-
-    const node = findNodeByName(Object.values(data), filename)
-    if (node) {
-      node.skipped = true
-    }
-
-    return {
-      uploadFiles: {
-        ...state.uploadFiles,
-        data: JSON.parse(JSON.stringify(data)),
       },
     }
   })

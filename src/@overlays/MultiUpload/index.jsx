@@ -12,7 +12,6 @@ import * as types from '@constants/storeEventTypes'
 import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { track } from '@utilities/analytics'
 import AssemblyInfo from './AssemblyInfo'
-import { flattenTree, addPathBy } from '@utilities/tree'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -146,8 +145,8 @@ const MultiUpload = ({ initData = null, folderId }) => {
     })
 
     const treeNodeNames = Object.values(treeData).map(node => node.name)
-    const singleNodes = uploadedFiles
-      .filter(file => !treeNodeNames.includes(file.name))
+    const singleNodes = Object.values(uploadFilesData)
+      .filter(file => file.name && !file.isError && !treeNodeNames.includes(file.name))
       .map(file => {
         const id = '/' + file.name
         newTreeData[id] = {
@@ -247,11 +246,6 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const removeFile = filename => {
     track('MultiUpload - Remove File')
     dispatch(types.CANCEL_UPLOAD, { filename })
-  }
-
-  const skipFile = filename => {
-    track('MultiUpload - Skip File')
-    dispatch(types.SKIP_MISSING_FILE, { filename })
   }
 
   const closeOverlay = useCallback(() => {

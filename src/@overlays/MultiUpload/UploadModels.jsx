@@ -16,7 +16,6 @@ import { ReactComponent as InfoIcon } from '@svg/icon-info.svg'
 import Dropzone from 'react-dropzone'
 import { FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { overlayview } from '@utilities/analytics'
-import { flattenTree } from '@utilities'
 import UploadTreeNode from './UploadTreeNode'
 
 const useStyles = createUseStyles(theme => {
