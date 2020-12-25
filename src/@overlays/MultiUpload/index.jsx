@@ -244,9 +244,9 @@ const MultiUpload = ({ initData = null, folderId }) => {
     [dispatch]
   )
 
-  const removeFile = filename => {
+  const removeFile = node => {
     track('MultiUpload - Remove File')
-    dispatch(types.CANCEL_UPLOAD, { filename })
+    dispatch(types.CANCEL_UPLOAD, { node })
   }
 
   const closeOverlay = useCallback(() => {

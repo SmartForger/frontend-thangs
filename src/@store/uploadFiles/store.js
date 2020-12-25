@@ -46,63 +46,60 @@ export default store => {
 
   store.on(types.REMOVE_UPLOAD_FILES, (state, { index }) => {
     const { data: uploadedFiles, validationTree } = state.uploadFiles
+
+    if (!uploadedFiles[index]) {
+      return
+    }
+
     const { name: filename } = uploadedFiles[index]
     const newUploadedFiles = { ...uploadedFiles }
     delete newUploadedFiles[index]
-
-    let newValidationTree = validationTree
-    if (validationTree) {
-      const updateValidField = node => {
-        if (node.name === filename && node.valid) {
-          return { ...node, valid: false, subs: [] }
-        }
-
-        if (node.subs) {
-          node.subs = node.subs.map(subnode => updateValidField(subnode))
-        }
-
-        return node
-      }
-
-      newValidationTree = updateValidField({ subs: validationTree })
-    }
 
     return {
       uploadFiles: {
         ...state.uploadFiles,
         data: newUploadedFiles,
-        validationTree: newValidationTree.subs,
       },
     }
   })
 
-  store.on(types.CANCEL_UPLOAD, (state, { filename }) => {
-    const cancelNode = node => {
-      const fileIndex = Object.values(state.uploadFiles.data).findIndex(
-        f => f.name === node.name
-      )
-      if (fileIndex >= 0) {
-        cancelUpload(Object.keys(state.uploadFiles.data)[fileIndex])
+  store.on(types.CANCEL_UPLOAD, (state, { node }) => {
+    const { treeData } = state.uploadFiles
+    const newTreeData = { ...treeData }
+
+    const cancelNode = (node, shouldRemoveNode) => {
+      if (!node) {
+        return;
       }
 
-      if (node.subs) {
-        node.subs.forEach(subnode => cancelNode(subnode))
+      if (newTreeData[node.id]) {
+        if (shouldRemoveNode) {
+          delete newTreeData[node.id]
+        } else {
+          newTreeData[node.id] = {
+            ...node,
+            valid: false,
+          }
+        }
+
+        if (node.fileId) {
+          cancelUpload(node.fileId)
+          node.fileId = ''
+        }
+        node.subIds.forEach(subnodeId =>
+          cancelNode(newTreeData[subnodeId], shouldRemoveNode)
+        )
+      } else if (node.fileId) {
+        cancelUpload(node.fileId)
       }
     }
 
-    const node = state.uploadFiles.validationTree.find(node => node.name === filename)
-    if (node) {
-      cancelNode(node)
-    } else {
-      cancelNode({ name: filename })
-    }
+    cancelNode(node, !node.parentId)
 
     return {
       uploadFiles: {
         ...state.uploadFiles,
-        validationTree: state.uploadFiles.validationTree.filter(
-          node => node.name !== filename
-        ),
+        treeData: newTreeData,
       },
     }
   })
@@ -184,7 +181,7 @@ export default store => {
     }
   })
 
-  store.on(types.VALIDATE_FILES_FAILED, (state) => {
+  store.on(types.VALIDATE_FILES_FAILED, state => {
     return {
       uploadFiles: {
         ...state.uploadFiles,
@@ -240,10 +237,14 @@ export default store => {
           newTreeData[id] = newNode
 
           if (node1.subs && node1.subs.length > 0) {
-            node1.subs.forEach((subnode, i) =>
+            newNode.subIds = node1.subs.map((subnode, i) =>
               transformNode(subnode, node2.subs[i], newNode.id, rootName)
             )
+          } else {
+            newNode.subIds = []
           }
+
+          return newNode.id
         }
 
         responseData.forEach(model => {

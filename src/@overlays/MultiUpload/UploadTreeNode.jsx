@@ -64,7 +64,7 @@ const UploadTreeNode = ({ node, level, onUpload, onRemove }) => {
   const c = useStyles()
 
   const handleRemove = () => {
-    onRemove(node.name)
+    onRemove(node)
   }
 
   return (
