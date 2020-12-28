@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useEffect } from 'react'
+import React, { useMemo, useRef, useEffect } from 'react'
 import * as R from 'ramda'
 import Joi from '@hapi/joi'
 import {
@@ -123,7 +123,6 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
-const noop = () => null
 
 const assemblyInfoSchema = Joi.object({
   name: Joi.string().required(),
@@ -133,13 +132,13 @@ const assemblyInfoSchema = Joi.object({
   category: Joi.string().allow(''),
 })
 
-const multiPartInfoSchema = Joi.object({
-  name: Joi.string().required(),
-  description: Joi.string().required(),
-  primary: Joi.string().required(),
-  folderId: Joi.string().allow(''),
-  category: Joi.string().allow(''),
-})
+// const multiPartInfoSchema = Joi.object({
+//   name: Joi.string().required(),
+//   description: Joi.string().required(),
+//   primary: Joi.string().required(),
+//   folderId: Joi.string().allow(''),
+//   category: Joi.string().allow(''),
+// })
 
 const INITIAL_STATE = {
   name: '',
@@ -183,7 +182,7 @@ const AssemblyInfo = ({
   const metaText =
     activeNode.subs.length > 1
       ? `Assembly • ${activeNode.subs.length} Parts`
-      : 'Assembly • ${activeNode.subs.length} Part'
+      : `Assembly • ${activeNode.subs.length} Part`
   const folderPublic = selectedFolder && selectedFolder.isPublic
   const fileOptions = useMemo(
     () =>
@@ -197,11 +196,13 @@ const AssemblyInfo = ({
     () => fileOptions.find(f => f.value === inputState.primary),
     [fileOptions, inputState]
   )
+  const selectedCategory = useMemo(() => {
+    return R.find(R.propEq('value', inputState.category), CATEGORIES) || null
+  }, [inputState])
 
   useEffect(() => {
     setInputState(formData)
-    console.log('Form Data', formData)
-    console.log('Active node', activeNode)
+    // eslint-disable-next-line
   }, [activeNode])
 
   return (
@@ -267,6 +268,7 @@ const AssemblyInfo = ({
             placeholder='Select category'
             isClearable
             options={CATEGORIES}
+            value={selectedCategory}
             onChange={e => {
               if (e) handleOnInputChange('category', e.value)
             }}
