@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import * as R from 'ramda'
 import Joi from '@hapi/joi'
 import {
@@ -187,8 +187,6 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const noop = () => null
-
 const PartInfoSchema = Joi.object({
   name: Joi.string().required(),
   description: Joi.string().required(),
@@ -221,7 +219,6 @@ const PartInfo = props => {
     setErrorMessage,
     onContinue,
     onUpdate,
-    onClose,
   } = props
   const c = useStyles({})
   const firstInputRef = useRef(null)

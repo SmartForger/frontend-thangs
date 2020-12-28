@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+// import { useHistory } from 'react-router-dom'
 import * as R from 'ramda'
 import { SingleLineBodyText, Spacer, Spinner } from '@components'
 import PartInfo from './PartInfo'
@@ -105,7 +105,6 @@ const MultiUpload = ({ initData = null, folderId }) => {
     validating,
     validated,
     isAssembly,
-    assemblyData,
   } = uploadFiles
   const { data: foldersData = [] } = folders
   const { data: sharedData = [] } = shared
@@ -114,7 +113,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const [warningMessage, setWarningMessage] = useState(null)
   const [allTreeNodes, setAllTreeNodes] = useState([])
   const c = useStyles({})
-  const history = useHistory()
+  // const history = useHistory()
 
   const uploadedFiles = useMemo(
     () => Object.values(uploadFilesData).filter(file => file.name && !file.isError),
@@ -426,7 +425,6 @@ const MultiUpload = ({ initData = null, folderId }) => {
             setErrorMessage={setErrorMessage}
             onContinue={handleContinue}
             onUpdate={handleUpdate}
-            onClose={closeOverlay}
           />
         )}
         <Spacer size={'2rem'} className={c.MultiUpload__desktop} />

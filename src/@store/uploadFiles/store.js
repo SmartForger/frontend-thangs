@@ -45,13 +45,8 @@ export default store => {
   })
 
   store.on(types.REMOVE_UPLOAD_FILES, (state, { index }) => {
-    const { data: uploadedFiles, validationTree } = state.uploadFiles
+    const { data: uploadedFiles } = state.uploadFiles
 
-    if (!uploadedFiles[index]) {
-      return
-    }
-
-    const { name: filename } = uploadedFiles[index]
     const newUploadedFiles = { ...uploadedFiles }
     delete newUploadedFiles[index]
 
