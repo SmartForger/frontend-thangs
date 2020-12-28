@@ -9,6 +9,23 @@ const useStyles = createUseStyles(theme => {
     TreeView_Root: {
       position: 'relative',
     },
+    TreeView_Content: {
+      height: '100%',
+      overflowY: 'auto',
+
+      '&::-webkit-scrollbar': {
+        width: '.75rem',
+      },
+      '&::-webkit-scrollbar-track': {
+        background: theme.colors.white[600],
+        borderRadius: '.5rem',
+      },
+      '&::-webkit-scrollbar-thumb': {
+        backgroundColor: '#C7C7C7',
+        borderRadius: 20,
+        border: `3px solid ${theme.colors.white[600]}`,
+      },
+    },
     TreeView_Loading: {
       position: 'absolute',
       width: '100%',
@@ -29,15 +46,17 @@ const TreeView = ({ nodes, renderNode, className, levelPadding = 40, loading }) 
 
   return (
     <div className={cn(c.TreeView_Root, className)}>
-      {nodes.map(node => (
-        <TreeNode
-          key={node.id}
-          node={node}
-          renderNode={renderNode}
-          level={0}
-          levelPadding={levelPadding}
-        />
-      ))}
+      <div className={c.TreeView_Content}>
+        {nodes.map(node => (
+          <TreeNode
+            key={node.id}
+            node={node}
+            renderNode={renderNode}
+            level={0}
+            levelPadding={levelPadding}
+          />
+        ))}
+      </div>
       {loading && (
         <div className={cn(c.TreeView_Loading, 'loading')}>
           <div>

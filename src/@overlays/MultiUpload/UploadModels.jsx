@@ -165,23 +165,11 @@ const useStyles = createUseStyles(theme => {
       overflowY: 'auto',
       maxHeight: '14rem',
 
-      '&::-webkit-scrollbar': {
-        width: '.75rem',
-      },
-      '&::-webkit-scrollbar-track': {
-        background: theme.colors.white[600],
-        borderRadius: '.5rem',
-      },
-      '&::-webkit-scrollbar-thumb': {
-        backgroundColor: '#C7C7C7',
-        borderRadius: 20,
-        border: `3px solid ${theme.colors.white[600]}`,
-      },
       '& .loading': {
         width: 'calc(100% - 2rem)',
 
         '& > *': {
-          marginLeft: '1rem',
+          marginLeft: '2rem',
         },
       },
     },
