@@ -96,12 +96,12 @@ const UploadTreeNode = ({ node, level, onUpload, onRemove }) => {
       )}
       <Spacer size={'0.5rem'} />
       <div className={c.UploadTreeNode_Actions}>
-        {!node.loading && !node.valid && (
-          <UploadIcon className={c.UploadTreeNode_Button} onClick={onUpload} />
-        )}
-        {level === 0 && (
-          <TrashCanIcon className={c.UploadTreeNode_Button} onClick={handleRemove} />
-        )}
+        {!node.loading &&
+          (!node.valid ? (
+            <UploadIcon className={c.UploadTreeNode_Button} onClick={onUpload} />
+          ) : (
+            <TrashCanIcon className={c.UploadTreeNode_Button} onClick={handleRemove} />
+          ))}
       </div>
     </div>
   )
