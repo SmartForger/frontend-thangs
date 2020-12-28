@@ -211,94 +211,69 @@ const AssemblyPartInfoSchema = Joi.object({
 
 const PartInfo = props => {
   const {
-    activeStep,
-    errorMessage = '',
-    folderId,
-    folders = {},
-    isAssembly = false,
-    handleContinue = noop,
-    handleUpdate = noop,
-    setErrorMessage = noop,
-    uploadFiles,
+    activeNode,
+    formData,
+    treeData,
+    filesData,
+    folders,
     isLoading,
+    errorMessage,
+    setErrorMessage,
+    onContinue,
+    onUpdate,
+    onClose,
   } = props
   const c = useStyles({})
   const firstInputRef = useRef(null)
-  const activeId = Object.keys(uploadFiles)[activeStep]
-  const model = useMemo(() => uploadFiles && uploadFiles[activeId], [
-    activeId,
-    uploadFiles,
-  ])
+  const file = filesData[activeNode.fileId]
   const [applyRemaining, setApplyRemaining] = useState(false)
   const initialState = {
-    name: (model && model.name) || '',
+    name: '',
     description: '',
-    folderId: folderId || 'files',
+    folderId: '',
     material: '',
     height: '',
     weight: '',
     category: '',
+    ...formData,
   }
 
+  const isAssembly = !!activeNode.parentId
   const { checkError, onFormSubmit, onInputChange, inputState } = useForm({
     initialValidationSchema: isAssembly ? AssemblyPartInfoSchema : PartInfoSchema,
     initialState,
   })
 
-  const handleOnInputChange = useCallback(
-    (key, value) => {
-      onInputChange(key, value)
-      setErrorMessage(null)
-    },
-    [onInputChange, setErrorMessage]
-  )
+  const handleOnInputChange = (key, value) => {
+    onInputChange(key, value)
+    onUpdate(activeNode.id, { ...inputState, [key]: value })
+    setErrorMessage(null)
+  }
 
-  const handleSubmit = useCallback(
-    data => {
-      handleUpdate({ id: activeId, data })
-      handleContinue({ applyRemaining, data })
-    },
-    [handleUpdate, activeId, handleContinue, applyRemaining]
-  )
+  const handleSubmit = (data, isValid) => {
+    if (isValid) onContinue({ applyRemaining })
+  }
 
   const selectedCategory = useMemo(() => {
-    if (!inputState) return null
     return R.find(R.propEq('value', inputState.category), CATEGORIES) || null
   }, [inputState])
 
-  const usersFolders = useMemo(() => {
-    return folders && folders.length
-      ? [
-        { value: 'files', label: 'My Public Files', isPublic: true },
-        ...folders.map(folder => ({
-          value: folder.id,
-          label: folder.name.replace(new RegExp('//', 'g'), '/'),
-          isPublic: folder.isPublic,
-        })),
-      ]
-      : [{ value: 'files', label: 'My Public Files', isPublic: true }]
-  }, [folders])
-
   const selectedFolder = useMemo(() => {
-    return R.find(R.propEq('value', inputState.folderId), usersFolders)
-  }, [inputState, usersFolders])
+    return R.find(R.propEq('value', inputState.folderId), folders)
+  }, [inputState, folders])
   const folderPublic = selectedFolder && selectedFolder.isPublic
 
-  if (!model) return null
+  if (!file) return null
 
   return (
     <>
       <div className={c.PartInfo_Row}>
-        <ModelThumbnail
-          className={c.PartInfo_Thumbnail}
-          name={model.name}
-          model={model}
-        />
+        <ModelThumbnail className={c.PartInfo_Thumbnail} name={file.name} model={file} />
         <Spacer size={'1rem'} />
         <div className={c.PartInfo_ModelInfo}>
-          <TitleTertiary title={model.name}>{model.name}</TitleTertiary>
+          <TitleTertiary title={activeNode.name}>{activeNode.name}</TitleTertiary>
           <Spacer size={'.5rem'} />
-          <MetadataPrimary>{formatBytes(model.size)}</MetadataPrimary>
+          <MetadataPrimary>{formatBytes(activeNode.size)}</MetadataPrimary>
         </div>
       </div>
       <Spacer size={'1.5rem'} />
@@ -336,14 +311,14 @@ const PartInfo = props => {
             errorMessage={checkError('description').message}
           />
         </div>
-        {!isAssembly && folders && folders.length ? (
+        {!isAssembly && folders && folders.length > 1 ? (
           <div className={c.PartInfo_Field}>
             <Dropdown
               className={c.PartInfo_Select}
               name='folder'
               placeholder={'Select folder'}
               value={selectedFolder}
-              options={usersFolders}
+              options={folders}
               onChange={e => {
                 if (e) handleOnInputChange('folderId', e.value)
               }}

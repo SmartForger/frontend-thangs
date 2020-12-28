@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useCallback, useMemo, useRef, useEffect } from 'react'
 import * as R from 'ramda'
 import Joi from '@hapi/joi'
 import {
@@ -141,81 +141,68 @@ const multiPartInfoSchema = Joi.object({
   category: Joi.string().allow(''),
 })
 
+const INITIAL_STATE = {
+  name: '',
+  description: '',
+  folderId: 'files',
+  category: '',
+  primary: '',
+}
+
 const AssemblyInfo = ({
-  // folderId,
-  folders = {},
-  formData = {},
-  isMultipart = false,
-  uploadedFiles = [],
-  setErrorMessage = noop,
-  handleContinue = noop,
+  activeNode,
+  formData,
+  treeData,
+  folders,
+  errorMessage,
+  setErrorMessage,
+  onContinue,
+  onUpdate,
 }) => {
   const c = useStyles({})
   const firstInputRef = useRef(null)
 
-  const initialState = {
-    name: '',
-    description: '',
-    folderId: 'files',
-    category: '',
-    primary: '',
-    ...formData,
-  }
-
-  const { checkError, onFormSubmit, onInputChange, inputState } = useForm({
-    initialValidationSchema: isMultipart ? multiPartInfoSchema : assemblyInfoSchema,
-    initialState,
+  const { checkError, onFormSubmit, onInputChange, inputState, setInputState } = useForm({
+    initialValidationSchema: assemblyInfoSchema,
+    INITIAL_STATE,
   })
 
-  const handleOnInputChange = useCallback(
-    (key, value) => {
-      onInputChange(key, value)
-      setErrorMessage(null)
-    },
-    [onInputChange, setErrorMessage]
-  )
-
-  const handleSubmit = (data, isValid) => {
-    if (isValid) handleContinue({ data })
+  const handleOnInputChange = (key, value) => {
+    onInputChange(key, value)
+    onUpdate(activeNode.id, { ...inputState, [key]: value })
+    setErrorMessage(null)
   }
 
-  const usersFolders = useMemo(() => {
-    return folders && folders.length
-      ? [
-        { value: 'files', label: 'My Public Files', isPublic: true },
-        ...folders.map(folder => ({
-          value: folder.id,
-          label: folder.name.replace(new RegExp('//', 'g'), '/'),
-          isPublic: folder.isPublic,
-        })),
-      ]
-      : [{ value: 'files', label: 'My Public Files', isPublic: true }]
-  }, [folders])
+  const handleSubmit = (data, isValid) => {
+    if (isValid) onContinue({ data })
+  }
 
   const selectedFolder = useMemo(() => {
-    return R.find(R.propEq('value', inputState.folderId), usersFolders)
-  }, [inputState, usersFolders])
-
+    return R.find(R.propEq('value', inputState.folderId), folders)
+  }, [inputState, folders])
   const metaText =
-    uploadedFiles.length > 1
-      ? `Assembly • ${uploadedFiles.length} Parts`
-      : 'Assembly • 1 Part'
+    activeNode.subs.length > 1
+      ? `Assembly • ${activeNode.subs.length} Parts`
+      : 'Assembly • ${activeNode.subs.length} Part'
   const folderPublic = selectedFolder && selectedFolder.isPublic
   const fileOptions = useMemo(
     () =>
-      uploadedFiles.map(
-        f => ({
-          value: f.name,
-          label: f.name,
-        }),
-        [uploadedFiles]
-      ),
-    [uploadedFiles]
+      activeNode.subs.map(node => ({
+        value: node.id,
+        label: node.name,
+      })),
+    [activeNode]
   )
   const selectedPrimaryModel = useMemo(
     () => fileOptions.find(f => f.value === inputState.primary),
     [fileOptions, inputState]
   )
+
+  useEffect(() => {
+    setInputState(formData)
+    console.log('Form Data', formData)
+    console.log('Active node', activeNode)
+  }, [activeNode])
 
   return (
     <>
@@ -256,14 +243,14 @@ const AssemblyInfo = ({
           />
           <Spacer size={'1rem'} />
         </div>
-        {folders && folders.length ? (
+        {folders && folders.length > 1 ? (
           <div>
             <Dropdown
               className={c.AssemblyInfo_Select}
               name='folder'
               placeholder={'Select folder'}
               value={selectedFolder}
-              options={usersFolders}
+              options={folders}
               onChange={e => {
                 if (e) handleOnInputChange('folderId', e.value)
               }}
@@ -288,7 +275,7 @@ const AssemblyInfo = ({
           />
           <Spacer size={'1rem'} />
         </div>
-        {isMultipart && (
+        {activeNode.id === 'multipart' && (
           <div>
             <Dropdown
               className={c.AssemblyInfo_Select}

@@ -163,7 +163,7 @@ export default store => {
       uploadFiles: {
         ...state.uploadFiles,
         formData: {
-          ...state.formData,
+          ...state.uploadFiles.formData,
           [id]: formData,
         },
       },

@@ -91,18 +91,6 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const uploadViews = {
-  upload: {
-    title: 'Upload Files',
-  },
-  assemblyInfo: {
-    title: 'New Assembly',
-  },
-  partInfo: {
-    title: 'Enter Information',
-  },
-}
-
 const MultiUpload = ({ initData = null, folderId }) => {
   const { dispatch, folders = {}, shared = {}, uploadFiles = {} } = useStoreon(
     'folders',
@@ -112,6 +100,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const {
     data: uploadFilesData = {},
     treeData,
+    formData,
     isLoading,
     validating,
     validated,
@@ -120,8 +109,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
   } = uploadFiles
   const { data: foldersData = [] } = folders
   const { data: sharedData = [] } = shared
-  const [activeView, setActiveView] = useState('upload')
-  const [activeStep, setActiveStep] = useState(0)
+  const [activeView, setActiveView] = useState(-1)
   const [errorMessage, setErrorMessage] = useState(null)
   const [warningMessage, setWarningMessage] = useState(null)
   const [allTreeNodes, setAllTreeNodes] = useState([])
@@ -184,6 +172,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
     if (isAssembly) {
       trees.push({
         id: 'multipart',
+        isAssembly: true,
         parentId: '',
         subs: singleNodes,
       })
@@ -199,10 +188,63 @@ const MultiUpload = ({ initData = null, folderId }) => {
 
     return trees
   }, [uploadFilesData, treeData, isAssembly])
+  const activeNode = useMemo(() => allTreeNodes[activeView] || null, [
+    allTreeNodes,
+    activeView,
+  ])
+  const activeFormData = useMemo(() => {
+    if (!activeNode) return null
 
-  const setModelInfo = (id, formData) => {
-    dispatch(types.SET_MODEL_INFO, { id, formData })
-  }
+    if (formData[activeNode.id]) {
+      return formData[activeNode.id]
+    }
+
+    const initialFormData = { name: activeNode.name, folderId: 'files' }
+    if (formData[activeNode.parentId]) {
+      initialFormData.folderId = formData[activeNode.parentId].folderId
+    }
+
+    return initialFormData
+  }, [activeNode, formData])
+  const dropdownFolders = useMemo(() => {
+    const foldersArray = [...foldersData]
+    const sharedArray = [...sharedData]
+    const combinedArray = []
+    foldersArray.sort((a, b) => {
+      if (a.name.toLowerCase() < b.name.toLowerCase()) return -1
+      else if (a.name.toLowerCase() > b.name.toLowerCase()) return 1
+      return 0
+    })
+    sharedArray.sort((a, b) => {
+      if (a.name.toLowerCase() < b.name.toLowerCase()) return -1
+      else if (a.name.toLowerCase() > b.name.toLowerCase()) return 1
+      return 0
+    })
+    foldersArray.forEach(folder => {
+      combinedArray.push(folder)
+      folder.subfolders.forEach(subfolder => {
+        combinedArray.push(subfolder)
+      })
+    })
+    sharedArray.forEach(folder => {
+      combinedArray.push(folder)
+    })
+
+    const folderOptions = combinedArray.map(folder => ({
+      value: folder.id,
+      label: folder.name.replace(new RegExp('//', 'g'), '/'),
+      isPublic: folder.isPublic,
+    }))
+
+    return [
+      {
+        value: 'files',
+        label: 'My Public Files',
+        isPublic: true,
+      },
+      ...folderOptions,
+    ]
+  }, [foldersData, sharedData])
 
   const onDrop = useCallback(
     (acceptedFiles, [rejectedFile], _event) => {
@@ -257,34 +299,9 @@ const MultiUpload = ({ initData = null, folderId }) => {
     dispatch(types.SET_IS_ASSEMBLY, { isAssembly })
   }
 
-  const continueToNextStep = useCallback(() => {
-    const loadingFiles = Object.keys(uploadFilesData).filter(
-      id => uploadFilesData[id].isLoading
-    )
-    if (loadingFiles.length > 0) {
-      return setErrorMessage('Please wait until all files are processed')
-    }
-    if (validating) {
-      return setErrorMessage('Please wait until all files are validated')
-    }
-
-    setActiveView(isAssembly ? 'assemblyInfo' : 'partInfo')
-  }, [uploadFilesData, isAssembly, validating])
-
-  const continueToModelInfo = ({ data }) => {
-    setModelInfo(data)
-    setActiveView('partInfo')
-    setActiveStep(0)
+  const handleUpdate = (id, data) => {
+    dispatch(types.SET_MODEL_INFO, { id, formData: data })
   }
-
-  const handleUpdate = useCallback(
-    ({ id, data }) => {
-      const newData = { ...data }
-      if (newData.folderId === 'files') newData.folderId = null
-      dispatch(types.CHANGE_UPLOAD_FILE, { id, data: newData })
-    },
-    [dispatch]
-  )
 
   const submitModels = useCallback(() => {
     track('MultiUpload - Submit Files', {
@@ -294,74 +311,40 @@ const MultiUpload = ({ initData = null, folderId }) => {
       onFinish: () => {
         closeOverlay()
         dispatch(types.RESET_UPLOAD_FILES)
-        history.push(
-          assemblyData && assemblyData.folderId && assemblyData.folderId !== 'files'
-            ? `/mythangs/folder/${assemblyData.folderId}`
-            : '/mythangs/all-files'
-        )
+        // history.push(
+        //   assemblyData && assemblyData.folderId && assemblyData.folderId !== 'files'
+        //     ? `/mythangs/folder/${assemblyData.folderId}`
+        //     : '/mythangs/all-files'
+        // )
       },
     })
-  }, [uploadedFiles.length, dispatch, closeOverlay, history, assemblyData])
+  }, [uploadedFiles, dispatch, closeOverlay])
 
   const handleContinue = useCallback(
     ({ applyRemaining, data }) => {
-      if (activeStep === uploadedFiles.length - 1) {
-        submitModels()
-      } else if (applyRemaining) {
-        for (let i = activeStep + 1; i < uploadedFiles.length; i++) {
-          const newData = { ...data, ...uploadedFiles[i] }
-          handleUpdate(newData)
+      let i
+      for (i = activeView + 1; i < allTreeNodes.length; i++) {
+        if (allTreeNodes[i].valid) {
+          setActiveView(i)
+          break
         }
+      }
+      if (i === allTreeNodes.length) {
         submitModels()
-      } else {
-        setActiveStep(activeStep + 1)
       }
     },
-    [activeStep, uploadedFiles, handleUpdate, submitModels]
+    [activeView, allTreeNodes, submitModels]
   )
 
-  const handleBack = useCallback(() => {
+  const handleBack = () => {
     setErrorMessage(null)
-    if (activeView === 'upload') return
-    if (activeView === 'assemblyInfo') {
-      setActiveView('upload')
-    } else if (activeStep > 0) {
-      setActiveStep(activeStep - 1)
-    } else {
-      setActiveView(isAssembly ? 'assemblyInfo' : 'upload')
-    }
-  }, [activeView, activeStep, isAssembly])
+    setActiveView(activeView => activeView - 1)
+  }
 
   const handleCancelUploading = () => {
     closeOverlay()
     dispatch(types.RESET_UPLOAD_FILES)
   }
-
-  const dropdownFolders = useMemo(() => {
-    const foldersArray = [...foldersData]
-    const sharedArray = [...sharedData]
-    const combinedArray = []
-    foldersArray.sort((a, b) => {
-      if (a.name.toLowerCase() < b.name.toLowerCase()) return -1
-      else if (a.name.toLowerCase() > b.name.toLowerCase()) return 1
-      return 0
-    })
-    sharedArray.sort((a, b) => {
-      if (a.name.toLowerCase() < b.name.toLowerCase()) return -1
-      else if (a.name.toLowerCase() > b.name.toLowerCase()) return 1
-      return 0
-    })
-    foldersArray.forEach(folder => {
-      combinedArray.push(folder)
-      folder.subfolders.forEach(subfolder => {
-        combinedArray.push(subfolder)
-      })
-    })
-    sharedArray.forEach(folder => {
-      combinedArray.push(folder)
-    })
-    return combinedArray
-  }, [foldersData, sharedData])
 
   useEffect(() => {
     // dispatch(types.RESET_UPLOAD_FILES)
@@ -389,16 +372,20 @@ const MultiUpload = ({ initData = null, folderId }) => {
           <Spacer size={'1.5rem'} />
           <div className={c.MultiUpload_Row}>
             <SingleLineBodyText className={c.MultiUpload_OverlayHeader}>
-              {uploadViews[activeView].title}
+              {!activeNode
+                ? 'Upload Files'
+                : activeNode.isAssembly
+                ? 'New Assembly'
+                : 'Enter Information'}
             </SingleLineBodyText>
-            {activeView !== 'upload' && (
+            {activeView > -1 && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />
             )}
             <ExitIcon className={c.MultiUpload_ExitButton} onClick={closeOverlay} />
           </div>
           <Spacer size={'1.5rem'} />
         </div>
-        {activeView === 'upload' ? (
+        {!activeNode ? (
           <UploadModels
             uploadFiles={uploadFilesData}
             uploadTreeData={uploadTreeData}
@@ -406,7 +393,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             onDrop={onDrop}
             onRemoveNode={removeFile}
             onCancel={handleCancelUploading}
-            onContinue={continueToNextStep}
+            onContinue={handleContinue}
             setErrorMessage={setErrorMessage}
             setWarningMessage={setWarningMessage}
             errorMessage={errorMessage}
@@ -416,30 +403,30 @@ const MultiUpload = ({ initData = null, folderId }) => {
             validating={validating}
             showAssemblyToggle={validated && !hasAssembly}
           />
-        ) : activeView === 'assemblyInfo' ? (
+        ) : activeNode.isAssembly ? (
           <AssemblyInfo
-            errorMessage={errorMessage}
-            folderId={folderId}
+            activeNode={activeNode}
+            formData={activeFormData}
+            treeData={treeData}
             folders={dropdownFolders}
-            formData={assemblyData}
-            handleContinue={continueToModelInfo}
-            isMultipart={!hasAssembly && isAssembly}
+            errorMessage={errorMessage}
             setErrorMessage={setErrorMessage}
-            uploadedFiles={uploadedFiles}
+            onContinue={handleContinue}
+            onUpdate={handleUpdate}
           />
         ) : (
           <PartInfo
-            activeStep={activeStep}
-            closeOverlay={closeOverlay}
-            errorMessage={errorMessage}
-            folderId={(assemblyData && assemblyData.folderId) || folderId}
+            activeNode={activeNode}
+            formData={activeFormData}
+            treeData={treeData}
+            filesData={uploadFilesData}
             folders={dropdownFolders}
-            handleContinue={handleContinue}
-            handleUpdate={handleUpdate}
-            isAssembly={isAssembly || hasAssembly}
             isLoading={isLoading}
+            errorMessage={errorMessage}
             setErrorMessage={setErrorMessage}
-            uploadFiles={uploadFilesData}
+            onContinue={handleContinue}
+            onUpdate={handleUpdate}
+            onClose={closeOverlay}
           />
         )}
         <Spacer size={'2rem'} className={c.MultiUpload__desktop} />
