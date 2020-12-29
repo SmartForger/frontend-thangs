@@ -335,10 +335,19 @@ const MultiUpload = ({ initData = null, folderId }) => {
     [activeView, allTreeNodes, submitModels]
   )
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
+    let i
+    for (i = activeView - 1; i >= 0; i--) {
+      if (allTreeNodes[i].valid) {
+        setActiveView(i)
+        break
+      }
+    }
+    if (i < 0) {
+      setActiveView(-1)
+    }
     setErrorMessage(null)
-    setActiveView(activeView => activeView - 1)
-  }
+  }, [activeView, allTreeNodes])
 
   const handleCancelUploading = () => {
     closeOverlay()
