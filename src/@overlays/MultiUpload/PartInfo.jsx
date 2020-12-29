@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef, useState, useEffect } from 'react'
 import * as R from 'ramda'
 import Joi from '@hapi/joi'
 import {
@@ -207,6 +207,16 @@ const AssemblyPartInfoSchema = Joi.object({
   folderId: Joi.string().allow(''),
 })
 
+const INITIAL_STATE = {
+  name: '',
+  description: '',
+  folderId: '',
+  material: '',
+  height: '',
+  weight: '',
+  category: '',
+}
+
 const PartInfo = props => {
   const {
     activeNode,
@@ -224,21 +234,11 @@ const PartInfo = props => {
   const firstInputRef = useRef(null)
   const file = filesData[activeNode.fileId]
   const [applyRemaining, setApplyRemaining] = useState(false)
-  const initialState = {
-    name: '',
-    description: '',
-    folderId: '',
-    material: '',
-    height: '',
-    weight: '',
-    category: '',
-    ...formData,
-  }
 
   const isAssembly = !!activeNode.parentId
-  const { checkError, onFormSubmit, onInputChange, inputState } = useForm({
+  const { checkError, onFormSubmit, onInputChange, inputState, setInputState } = useForm({
     initialValidationSchema: isAssembly ? AssemblyPartInfoSchema : PartInfoSchema,
-    initialState,
+    INITIAL_STATE,
   })
 
   const handleOnInputChange = (key, value) => {
@@ -259,6 +259,11 @@ const PartInfo = props => {
     return R.find(R.propEq('value', inputState.folderId), folders)
   }, [inputState, folders])
   const folderPublic = selectedFolder && selectedFolder.isPublic
+
+  useEffect(() => {
+    setInputState(formData)
+    // eslint-disable-next-line
+  }, [activeNode])
 
   if (!file) return null
 
