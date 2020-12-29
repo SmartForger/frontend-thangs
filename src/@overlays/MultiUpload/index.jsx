@@ -171,12 +171,15 @@ const MultiUpload = ({ initData = null, folderId }) => {
     if (isAssembly) {
       trees.push({
         id: 'multipart',
+        name: 'Multi Part Models',
         isAssembly: true,
         parentId: '',
         subs: singleNodes,
       })
       nodesArray.splice(-singleNodes.length, 0, {
         id: 'multipart',
+        name: 'Multi Part Models',
+        isAssembly: true,
         parentId: '',
       })
     } else {

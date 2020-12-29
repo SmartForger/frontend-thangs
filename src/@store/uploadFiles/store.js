@@ -1,6 +1,5 @@
 import * as types from '@constants/storeEventTypes'
 import { api, uploadFiles, cancelUpload } from '@services'
-import { flattenTree } from '@utilities'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -64,7 +63,7 @@ export default store => {
 
     const cancelNode = (node, shouldRemoveNode) => {
       if (!node) {
-        return;
+        return
       }
 
       if (newTreeData[node.id]) {
@@ -284,39 +283,87 @@ export default store => {
   store.on(types.SUBMIT_MODELS, async (state, { onFinish = noop }) => {
     store.dispatch(types.SUBMITTING_MODELS)
 
-    const {
-      data: uploadedFiles,
-      validationTree,
-      assemblyData,
-      isAssembly,
-    } = state.uploadFiles
+    const { data: uploadedFiles, treeData, formData, isAssembly } = state.uploadFiles
 
     const payload = []
-    const filteredFiles = {}
-    Object.keys(uploadedFiles).forEach(fileDataId => {
-      if (uploadedFiles[fileDataId].name)
-        filteredFiles[fileDataId] = uploadedFiles[fileDataId]
-    })
-    const filesArray = Object.values(filteredFiles)
-    const addedFiles = {}
+    const assemblyGroups = {}
+    Object.keys(treeData).forEach(nodeId => {
+      if (!treeData[nodeId].valid) return
 
-    if (validationTree) {
-      validationTree.forEach(tree => {
-        const nodes = flattenTree([tree])
-        payload.push(createModelObject(nodes, filesArray, assemblyData))
-        nodes.forEach(node => (addedFiles[node.name] = true))
-      })
-    }
+      const [rootName] = nodeId.split('/')
 
-    const remainingFiles = filesArray.filter(f => !addedFiles[f.name])
-    if (isAssembly) {
-      if (remainingFiles.length > 0) {
-        payload.push(createModelObject(remainingFiles, remainingFiles, assemblyData))
+      if (!assemblyGroups[rootName]) {
+        assemblyGroups[rootName] = [nodeId]
+      } else {
+        assemblyGroups[rootName].push(nodeId)
       }
-    } else {
-      remainingFiles.forEach(file => {
-        payload.push(createModelObject([file], remainingFiles))
-      })
+    })
+
+    const addedFiles = {}
+    Object.keys(assemblyGroups).forEach(rootName => {
+      const rootNodeId = `${rootName}/${rootName}`
+      const { primary, ...info } = formData[rootNodeId]
+      addedFiles[treeData[rootNodeId].fileId] = true
+
+      info.parts = assemblyGroups[rootName]
+        .filter(nodeId => nodeId !== rootNodeId)
+        .map(nodeId => {
+          const { primary, ...partInfo } = formData[nodeId]
+          const node = treeData[nodeId]
+          const file = uploadedFiles[node.fileId]
+          addedFiles[node.fileId] = true
+
+          return {
+            ...partInfo,
+            originalFileName: file.name,
+            filename: file.newFileName,
+            size: file.size,
+            isPrimary: false,
+          }
+        })
+
+      payload.push(info)
+    })
+
+    const remainingFiles = Object.values(uploadedFiles).filter(
+      f => f.name && !f.isError && !addedFiles[f.name]
+    )
+    if (remainingFiles.length > 0) {
+      if (isAssembly) {
+        const { primary, ...partInfo } = formData['multipart']
+
+        payload.push({
+          ...partInfo,
+          parts: remainingFiles.map(file => {
+            const nodeId = '/' + file.name
+
+            return {
+              ...formData[nodeId],
+              originalFileName: file.name,
+              filename: file.newFileName,
+              size: file.size,
+              isPrimary: primary === nodeId,
+            }
+          }),
+        })
+      } else {
+        remainingFiles.forEach(file => {
+          const nodeId = '/' + file.name
+
+          payload.push({
+            ...formData[nodeId],
+            parts: [
+              {
+                ...formData[nodeId],
+                originalFileName: file.name,
+                filename: file.newFileName,
+                size: file.size,
+                isPrimary: true,
+              },
+            ],
+          })
+        })
+      }
     }
 
     try {
@@ -330,44 +377,4 @@ export default store => {
       store.dispatch(types.SUBMIT_MODELS_FAILED)
     }
   })
-}
-
-const createModelObject = (treeNodes, filesArray, assemblyData) => {
-  let result
-
-  if (assemblyData) {
-    result = {
-      name: assemblyData.name,
-      description: assemblyData.description,
-      category: assemblyData.category,
-      folderId: assemblyData.folderId,
-      parts: [],
-    }
-  } else {
-    result = {
-      name: treeNodes[0].name,
-      description: treeNodes[0].description,
-      category: treeNodes[0].category,
-      folderId: treeNodes[0].folderId,
-      parts: [],
-    }
-  }
-
-  treeNodes.forEach(node => {
-    const fileObj = filesArray.find(f => f.name === node.name)
-    if (fileObj) {
-      result.parts.push({
-        name: fileObj.name,
-        originalFileName: fileObj.name,
-        filename: fileObj.newFileName,
-        size: fileObj.size,
-        material: fileObj.material,
-        height: fileObj.height,
-        weight: fileObj.weight,
-        isPrimary: !assemblyData || assemblyData.primary === fileObj.name,
-      })
-    }
-  })
-
-  return result
 }
