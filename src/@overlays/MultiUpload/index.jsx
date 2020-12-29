@@ -112,6 +112,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [warningMessage, setWarningMessage] = useState(null)
   const [allTreeNodes, setAllTreeNodes] = useState([])
+  const [singlePartsCount, setSinglePartsCount] = useState(0)
   const c = useStyles({})
   // const history = useHistory()
 
@@ -119,7 +120,6 @@ const MultiUpload = ({ initData = null, folderId }) => {
     () => Object.values(uploadFilesData).filter(file => file.name && !file.isError),
     [uploadFilesData]
   )
-  const hasAssembly = useMemo(() => Object.values(treeData).length > 0, [treeData])
   const uploadTreeData = useMemo(() => {
     const keys = Object.keys(treeData)
     const newTreeData = {}
@@ -148,6 +148,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
         }
         return newTreeData[id]
       })
+    setSinglePartsCount(singleNodes.length);
 
     const nodesArray = Object.values(newTreeData)
     const formNode = nodeId => {
@@ -412,7 +413,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
             isAssembly={isAssembly}
             setIsAssembly={setIsAssembly}
             validating={validating}
-            showAssemblyToggle={validated && !hasAssembly}
+            showAssemblyToggle={validated && singlePartsCount > 1}
           />
         ) : activeNode.isAssembly ? (
           <AssemblyInfo
