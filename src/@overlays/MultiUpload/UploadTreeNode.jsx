@@ -22,6 +22,7 @@ const useStyles = createUseStyles(_theme => {
       alignItems: 'center',
       height: '2.5rem',
       flex: 1,
+      minWidth: 0,
 
       '&.missing': {
         '& $UploadTreeNode_FileName': {

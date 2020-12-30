@@ -1,11 +1,19 @@
 import React, { useState } from 'react'
 import { Spacer } from '@components'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
-import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 
 const useStyles = createUseStyles(_theme => {
   return {
+    '@keyframes spin': {
+      '0%': {
+        transform: 'rotate(0deg)',
+      },
+      '100%': {
+        transform: 'rotate(360deg)',
+      },
+    },
     TreeNode_Root: {
       flex: 1,
     },
@@ -19,6 +27,16 @@ const useStyles = createUseStyles(_theme => {
     TreeNode_ExpandIcon: {
       width: '0.75rem',
       cursor: 'pointer',
+      '& svg': {
+        display: 'block',
+        margin: 'auto',
+        transition: 'transform 150ms ease-in-out',
+      },
+    },
+    TreeNode_ExpandIcon__expanded: {
+      '& svg': {
+        transform: 'rotate(90deg)',
+      },
     },
   }
 })
@@ -34,10 +52,13 @@ export const TreeNode = ({ node, renderNode, level, levelPadding }) => {
   return (
     <div className={c.TreeNode_Root}>
       <div className={c.TreeNode_Row}>
-        <div className={c.TreeNode_ExpandIcon} onClick={toggleExpanded}>
-          {node.subs &&
-            node.subs.length > 0 &&
-            (expanded ? <ArrowDown /> : <ArrowRight />)}
+        <div
+          className={classnames(c.TreeNode_ExpandIcon, {
+            [c.TreeNode_ExpandIcon__expanded]: expanded,
+          })}
+          onClick={toggleExpanded}
+        >
+          {node.subs && node.subs.length > 0 && <ArrowRight />}
         </div>
         <Spacer size={12} />
         {renderNode(node, level)}

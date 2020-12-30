@@ -35,6 +35,7 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       justifyContent: 'flex-start',
       width: '100%',
+      minWidth: 0,
     },
     MultiUpload_OverlayHeader: {
       lineHeight: '1.5rem !important',
