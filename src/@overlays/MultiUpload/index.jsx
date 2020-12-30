@@ -128,6 +128,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
       newTreeData[key] = {
         ...treeData[key],
         loading: file && file.isLoading,
+        size: file && file.size,
       }
     })
 
@@ -149,7 +150,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
         }
         return newTreeData[id]
       })
-    setSinglePartsCount(singleNodes.length);
+    setSinglePartsCount(singleNodes.length)
 
     const nodesArray = Object.values(newTreeData)
     const formNode = nodeId => {
@@ -388,6 +389,8 @@ const MultiUpload = ({ initData = null, folderId }) => {
             <SingleLineBodyText className={c.MultiUpload_OverlayHeader}>
               {!activeNode
                 ? 'Upload Files'
+                : activeNode.isAssembly && activeNode.parentId
+                ? 'Sub Assembly'
                 : activeNode.isAssembly
                 ? 'New Assembly'
                 : 'Enter Information'}

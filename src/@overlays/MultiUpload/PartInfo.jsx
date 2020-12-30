@@ -260,6 +260,21 @@ const PartInfo = props => {
   }, [inputState, folders])
   const folderPublic = selectedFolder && selectedFolder.isPublic
 
+  const pathFromRoot = useMemo(() => {
+    if (activeNode.parentId === 'multipart') {
+      return ['Multipart Model', activeNode.name].join(' / ')
+    }
+
+    const path = []
+    let node = activeNode
+    while (node) {
+      path.unshift(node)
+      node = treeData[node.parentId]
+    }
+
+    return path.map(node => node.name).join(' / ')
+  }, [activeNode, treeData])
+
   useEffect(() => {
     setInputState(formData)
     // eslint-disable-next-line
@@ -269,6 +284,14 @@ const PartInfo = props => {
 
   return (
     <>
+      {activeNode.parentId && (
+        <>
+          <div className={c.PartInfo_Row}>
+            <MetadataSecondary>{pathFromRoot}</MetadataSecondary>
+          </div>
+          <Spacer size={'1rem'} />
+        </>
+      )}
       <div className={c.PartInfo_Row}>
         <ModelThumbnail className={c.PartInfo_Thumbnail} name={file.name} model={file} />
         <Spacer size={'1rem'} />
