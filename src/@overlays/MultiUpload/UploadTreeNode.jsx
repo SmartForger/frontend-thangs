@@ -99,9 +99,9 @@ const UploadTreeNode = ({ node, level, onUpload, onRemove }) => {
         {!node.loading &&
           (!node.valid ? (
             <UploadIcon className={c.UploadTreeNode_Button} onClick={onUpload} />
-          ) : (
+          ) : node.id !== 'multipart' ? (
             <TrashCanIcon className={c.UploadTreeNode_Button} onClick={handleRemove} />
-          ))}
+          ) : null)}
       </div>
     </div>
   )

@@ -170,19 +170,20 @@ const MultiUpload = ({ initData = null, folderId }) => {
     let trees = formNode('').subs
 
     if (isAssembly) {
-      trees.push({
+      singleNodes.forEach(node => {
+        node.parentId = 'multipart'
+      })
+      const multipartNode = {
         id: 'multipart',
-        name: 'Multi Part Models',
+        name: 'Multi Part Model',
+        valid: true,
+        treeValid: true,
         isAssembly: true,
         parentId: '',
         subs: singleNodes,
-      })
-      nodesArray.splice(-singleNodes.length, 0, {
-        id: 'multipart',
-        name: 'Multi Part Models',
-        isAssembly: true,
-        parentId: '',
-      })
+      }
+      trees.push(multipartNode)
+      nodesArray.splice(-singleNodes.length, 0, multipartNode)
     } else {
       trees = [...trees, ...singleNodes]
     }
