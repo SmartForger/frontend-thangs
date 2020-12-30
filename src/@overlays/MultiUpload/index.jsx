@@ -139,6 +139,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
         newTreeData[id] = {
           id,
           name: file.name,
+          size: file.size,
           isAssembly: false,
           valid: true,
           treeValid: true,
