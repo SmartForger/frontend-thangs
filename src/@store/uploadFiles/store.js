@@ -302,13 +302,13 @@ export default store => {
     const addedFiles = {}
     Object.keys(assemblyGroups).forEach(rootName => {
       const rootNodeId = `${rootName}/${rootName}`
-      const { primary, ...info } = formData[rootNodeId]
+      const { primary: _p, ...info } = formData[rootNodeId]
       addedFiles[treeData[rootNodeId].fileId] = true
 
       info.parts = assemblyGroups[rootName]
         .filter(nodeId => nodeId !== rootNodeId)
         .map(nodeId => {
-          const { primary, ...partInfo } = formData[nodeId]
+          const { primary: _p, ...partInfo } = formData[nodeId]
           const node = treeData[nodeId]
           const file = uploadedFiles[node.fileId]
           addedFiles[node.fileId] = true

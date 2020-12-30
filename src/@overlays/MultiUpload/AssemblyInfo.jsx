@@ -153,7 +153,7 @@ const AssemblyInfo = ({
   formData,
   treeData,
   folders,
-  errorMessage,
+  errorMessage: _err,
   setErrorMessage,
   onContinue,
   onUpdate,

@@ -92,7 +92,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const MultiUpload = ({ initData = null, folderId }) => {
+const MultiUpload = ({ initData = null, folderId: _f }) => {
   const { dispatch, folders = {}, shared = {}, uploadFiles = {} } = useStoreon(
     'folders',
     'shared',
@@ -328,7 +328,7 @@ const MultiUpload = ({ initData = null, folderId }) => {
   }, [uploadedFiles, dispatch, closeOverlay])
 
   const handleContinue = useCallback(
-    ({ applyRemaining, data }) => {
+    ({ applyRemaining: _aR, data: _d }) => {
       let i
       for (i = activeView + 1; i < allTreeNodes.length; i++) {
         if (allTreeNodes[i].valid) {

@@ -61,7 +61,7 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const UploadTreeNode = ({ node, level, onUpload, onRemove }) => {
+const UploadTreeNode = ({ node, level: _l, onUpload, onRemove }) => {
   const c = useStyles()
 
   const handleRemove = () => {
