@@ -46,24 +46,11 @@ const useStyles = createUseStyles(theme => {
       zIndex: 2,
     },
     Overlay_Content: {
+      ...theme.mixins.scrollbar,
       height: '100%',
       width: '100%',
       backgroundColor: theme.colors.white[300],
       overflow: 'visible',
-
-      '&::-webkit-scrollbar': {
-        width: 12,
-        display: 'none',
-      },
-      '&::-webkit-scrollbar-track': {
-        background: 'white',
-        borderRadius: '.5rem',
-      },
-      '&::-webkit-scrollbar-thumb': {
-        backgroundColor: '#C7C7C7',
-        borderRadius: 20,
-        border: '3px solid white',
-      },
 
       [md]: {
         height: 'auto',

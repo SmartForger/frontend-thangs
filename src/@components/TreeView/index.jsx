@@ -10,21 +10,9 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
     },
     TreeView_Content: {
+      ...theme.mixins.scrollbar,
       height: '100%',
       overflowY: 'auto',
-
-      '&::-webkit-scrollbar': {
-        width: '.75rem',
-      },
-      '&::-webkit-scrollbar-track': {
-        background: theme.colors.white[600],
-        borderRadius: '.5rem',
-      },
-      '&::-webkit-scrollbar-thumb': {
-        backgroundColor: '#C7C7C7',
-        borderRadius: 20,
-        border: `3px solid ${theme.colors.white[600]}`,
-      },
     },
     TreeView_Loading: {
       position: 'absolute',

@@ -95,6 +95,7 @@ const useStyles = createUseStyles(theme => {
       marginLeft: '1rem',
     },
     WorkspaceNavbar_ScrollableFiles: {
+      ...theme.mixins.scrollbar,
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
@@ -104,22 +105,6 @@ const useStyles = createUseStyles(theme => {
       height: '100%',
       paddingTop: '.125rem',
       position: 'relative',
-
-      '&::-webkit-scrollbar': {
-        width: '.75rem',
-        display: 'none',
-      },
-      '&::-webkit-scrollbar-track': {
-        background: theme.colors.white[600],
-        borderRadius: '.5rem',
-        display: 'none',
-      },
-      '&::-webkit-scrollbar-thumb': {
-        backgroundColor: '#C7C7C7',
-        borderRadius: 20,
-        border: `3px solid ${theme.colors.white[600]}`,
-        display: 'none',
-      },
     },
     WorkspaceNavbar_MobileColumnOnly: {
       display: 'flex',

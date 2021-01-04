@@ -49,23 +49,9 @@ const useStyles = createUseStyles(theme => {
     MyThangs_ContentWrapper: {
       flex: 'auto',
       overflow: 'scroll',
-      scrollbarWidth: 'thin',
-      scrollbarColor: '#C7C7C7 white',
 
       [md]: {
-        '&::-webkit-scrollbar': {
-          width: 12,
-          display: 'none',
-        },
-        '&::-webkit-scrollbar-track': {
-          background: 'white',
-          borderRadius: '.5rem',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          backgroundColor: '#C7C7C7',
-          borderRadius: 20,
-          border: '3px solid white',
-        },
+        ...theme.mixins.scrollbar,
       },
     },
     Layout_blur: {

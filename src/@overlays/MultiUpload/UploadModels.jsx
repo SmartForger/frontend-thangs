@@ -99,27 +99,13 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'center',
     },
     UploadModels_ScrollableFiles: {
+      ...theme.mixins.scrollbar,
       display: 'flex',
       flexDirection: 'column',
       overflowX: 'hidden',
       overflowY: 'scroll',
-      scrollbarWidth: 'thin',
-      scrollbarColor: '#C7C7C7 white',
       height: '10.25rem',
       paddingTop: '.125rem',
-
-      '&::-webkit-scrollbar': {
-        width: '.75rem',
-      },
-      '&::-webkit-scrollbar-track': {
-        background: theme.colors.white[400],
-        borderRadius: '.5rem',
-      },
-      '&::-webkit-scrollbar-thumb': {
-        backgroundColor: '#C7C7C7',
-        borderRadius: 20,
-        border: `3px solid ${theme.colors.white[400]}`,
-      },
     },
     UploadModels_RemoveBtn: {
       cursor: 'pointer',
