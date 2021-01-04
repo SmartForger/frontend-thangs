@@ -200,7 +200,7 @@ const PartSelectorRow = ({
         })}
       >
         {level > 0 && <Spacer width={`${level * 0.5}rem`} height={'2.625rem'} />}
-        <div className={c.PartSelectorRow_Column} onClick={handleClick}>
+        <div className={c.PartSelectorRow_Column} onClick={onClick}>
           <Spacer size={'.5rem'} />
           <div className={c.PartSelectorRow_Row}>
             <Spacer size={'.5rem'} />
@@ -366,7 +366,8 @@ const PartExplorerActionMenu = ({ onChange = noop, selectedValue, model }) => {
         selectedValue,
       }}
       TargetComponent={PartExplorerTarget}
-      TargetComponentProps={{ selectedValue }}
+      TargetComponentProps={{ model, selectedValue }}
+      isOpenByDefault={true}
     />
   )
 }
