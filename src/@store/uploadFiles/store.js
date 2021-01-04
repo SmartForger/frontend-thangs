@@ -257,27 +257,15 @@ export default store => {
   store.on(types.UPLOAD_FILES, async (state, { files }) => {
     store.dispatch(types.INIT_UPLOAD_FILES, { files })
 
-    const { treeData, data: uploadedFiles } = state.uploadFiles
-    const treeNodes = Object.values(treeData)
-    const filesWithDirectory = files.map(fileObj => {
-      if (treeNodes.length > 0) {
-        let tree = treeNodes.find(n => n.name === fileObj.file.name)
-        while (tree && tree.parentId) {
-          tree = treeData[tree.parentId]
-        }
-        if (tree) {
-          const rootFile = uploadedFiles[tree.fileId]
-          if (rootFile && rootFile.newFileName) {
-            const arr = rootFile.newFileName.split('/')
-            return { ...fileObj, directory: arr[0] }
-          }
-        }
-      }
+    const { data: uploadedFiles } = state.uploadFiles
+    const oldFile = Object.values(uploadedFiles)[0]
+    if (oldFile) {
+      const [directory] = oldFile.newFileName.split('/')
+      uploadFiles(files, directory)
+      return
+    }
 
-      return fileObj
-    })
-
-    uploadFiles(filesWithDirectory)
+    uploadFiles(files)
   })
 
   store.on(types.SUBMIT_MODELS, async (state, { onFinish = noop }) => {

@@ -22,10 +22,7 @@ module.exports = {
     extensions: ['*', '.js'],
   },
   output: {
-    path: path.resolve(__dirname, './build/workers'),
+    path: path.resolve(__dirname, './public/workers'),
     filename: '[name].js',
-  },
-  devServer: {
-    contentBase: path.resolve(__dirname, './dist/workers'),
   },
 }

@@ -5,9 +5,11 @@ import { sendMessage, addMessageListener } from './worker'
 
 /* Send messages to worker */
 
-export const uploadFiles = files => {
+export const uploadFiles = (files, directory) => {
+  console.log(directory)
   sendMessage('upload:upload', {
     files,
+    directory,
   })
 }
 
@@ -32,7 +34,7 @@ function uploadMessageHandler(messageType, data) {
       store.dispatch(types.CHANGE_UPLOAD_FILE, {
         id: data.id,
         data: {
-          error: data.error
+          error: data.error,
         },
         isLoading: false,
         isError: true,

@@ -85,6 +85,9 @@ jobs:
           paths:
             - ~/.cache/yarn
       - run:
+          name: Build workers
+          command: yarn build:workers
+      - run:
           name: "Build release"
           # Build staging release
           # TODO: This needs to be pulled into a separate job & workflow so that
@@ -92,7 +95,6 @@ jobs:
           #       production steps in the deploy-production workflow.
           command: |
             yarn build:staging
-            yarn build:workers
             VERSION=`git rev-parse --short HEAD`
             sed -i -- "s/%VERSION%/$VERSION/g" build/index.html
       - run:

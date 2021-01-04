@@ -34,7 +34,6 @@ async function uploadMultipleFiles({ files, directory }) {
         directory,
       },
     })
-
     files.forEach((f, i) => {
       uploadSingleFile(f, uploadedUrlData[i])
     })
@@ -55,25 +54,7 @@ function cancelRequest(id) {
 
 function uploadMessageHandler(messageType, data) {
   if (messageType === 'upload:upload') {
-    let directoryGroup = {}
-    data.files.map(f => {
-      const key = f.directory || 'none'
-      if (directoryGroup[key]) {
-        directoryGroup[key].files.push(f)
-      } else {
-        directoryGroup[key] = {
-          files: [f],
-        }
-
-        if (key !== 'none') {
-          directoryGroup[key].directory = key
-        }
-      }
-    })
-
-    Object.values(directoryGroup).forEach(dir => {
-      uploadMultipleFiles(dir)
-    })
+    uploadMultipleFiles(data)
   } else if (messageType === 'upload:cancel') {
     cancelRequest(data.id)
   }
