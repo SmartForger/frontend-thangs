@@ -13,7 +13,6 @@ import {
   SearchByUpload,
   Signin,
   Signup,
-  Upload,
   EditComment,
   MoreInfo,
 } from '@overlays'
@@ -33,7 +32,6 @@ const overlayTemplates = {
   signIn: Signin,
   signUp: Signup,
   moreInfo: MoreInfo,
-  upload: Upload,
   editComment: EditComment,
   deleteComment: DeleteComment,
 }
