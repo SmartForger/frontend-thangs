@@ -41,7 +41,14 @@ const useStyles = createUseStyles(_theme => {
       overflow: 'hidden',
       lineHeight: '1rem !important',
     },
-    UploadTreeNode_Icon: {},
+    UploadTreeNode_Icon: {
+      '& [fill]': {
+        fill: '#000',
+      },
+      '& [stroke]': {
+        stroke: '#000',
+      },
+    },
     UploadTreeNode_Actions: {
       flex: 1,
       display: 'flex',
@@ -75,7 +82,7 @@ const UploadTreeNode = ({ node, level: _l, onUpload, onRemove }) => {
       })}
     >
       {node.loading ? (
-        <Spinner size={'1rem'} />
+        <UploadIcon className={c.UploadTreeNode_Icon} />
       ) : !node.valid || !node.treeValid ? (
         <Tooltip title='Missing file'>
           <InfoIcon className={c.UploadTreeNode_Icon} />
