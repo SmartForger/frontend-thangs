@@ -1,14 +1,14 @@
-import React, { useRef, useState, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { formatDistanceStrict } from 'date-fns'
-import { Markdown, Spinner, UserInline } from '@components'
+import { CommentsActionMenu, Markdown, Spinner, UserInline } from '@components'
 import NewModelCommentForm from './NewModelCommentForm'
 import VersionComment from './VersionComment'
 import { createUseStyles } from '@style'
-import { useServices, useExternalClick } from '@hooks'
+import { useServices } from '@hooks'
 import classnames from 'classnames'
-import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
-import CommentMenu from './CommentMenu'
+import { useStoreon } from 'storeon/react'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -104,33 +104,66 @@ const getParsedBody = str => {
   }
 }
 
-const renderTypedComment = ({ modelId, comment, key, currentUser }) => {
+const renderTypedComment = ({ modelId, comment, key, currentUser, onChange }) => {
   const parsedBody = getParsedBody(comment.body)
   if (typeof parsedBody === 'object') {
     return <VersionComment key={key} comment={{ ...comment, body: parsedBody }} />
   } else {
     return (
-      <Comment key={key} modelId={modelId} comment={comment} currentUser={currentUser} />
+      <Comment
+        key={key}
+        modelId={modelId}
+        onChange={onChange}
+        comment={comment}
+        currentUser={currentUser}
+      />
     )
   }
 }
 
 const Comment = ({ modelId, comment, currentUser }) => {
   const c = useStyles()
+  const { dispatch } = useStoreon()
   const { owner, body, created } = comment
   const time = formatDistanceStrict(new Date(created), new Date())
-  const commentMenuRef = useRef(null)
-  const [showCommentMenu, setShowCommentMenu] = useState(false)
   const canEdit = currentUser.id === owner.id
+  const editComment = () => {
+    dispatch(types.OPEN_OVERLAY, {
+      overlayName: 'editComment',
+      overlayData: {
+        modelId,
+        comment,
+        animateIn: true,
+        windowed: true,
+        scrollTop: false,
+      },
+    })
+  }
 
-  useExternalClick(commentMenuRef, () => setShowCommentMenu(false))
+  const deleteComment = () => {
+    dispatch(types.OPEN_OVERLAY, {
+      overlayName: 'deleteComment',
+      overlayData: {
+        modelId,
+        comment,
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
+        scrollTop: false,
+      },
+    })
+  }
 
-  const handleCommentMenu = useCallback(
-    e => {
-      e.stopPropagation()
-      setShowCommentMenu(!showCommentMenu)
+  const onChange = useCallback(
+    type => {
+      if (type === 'edit') {
+        editComment()
+      } else if (type === 'delete') {
+        deleteComment()
+      }
     },
-    [showCommentMenu]
+    // eslint-disable-next-line
+    []
   )
 
   return (
@@ -151,20 +184,7 @@ const Comment = ({ modelId, comment, currentUser }) => {
           </Link>
           <span className={c.CommentsForModel_timestamp}>{`${time} ago`}</span>
         </div>
-        {canEdit && (
-          <div
-            className={c.CommentsForModel_MenuButton}
-            onClick={handleCommentMenu}
-            ref={commentMenuRef}
-          >
-            <DotStackIcon />
-            {showCommentMenu && (
-              <div className={c.CommentsForModel_CommentMenu}>
-                <CommentMenu modelId={modelId} comment={comment} />
-              </div>
-            )}
-          </div>
-        )}
+        {canEdit && <CommentsActionMenu onChange={onChange} />}
       </div>
       <Markdown className={c.CommentsForModel_CommentBody}>{body}</Markdown>
     </li>
