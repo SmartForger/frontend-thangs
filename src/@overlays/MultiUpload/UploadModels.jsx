@@ -278,6 +278,7 @@ const UploadModels = ({
             nodes={uploadTreeData}
             levelPadding={28}
             loading={validating || isLoadingFiles}
+            defaultExpanded={uploadTreeData.length < 2}
             renderNode={(node, level) => (
               <UploadTreeNode
                 node={node}

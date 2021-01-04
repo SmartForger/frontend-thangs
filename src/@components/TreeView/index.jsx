@@ -29,7 +29,14 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const TreeView = ({ nodes, renderNode, className, levelPadding = 40, loading }) => {
+const TreeView = ({
+  nodes,
+  renderNode,
+  className,
+  levelPadding = 40,
+  loading,
+  defaultExpanded,
+}) => {
   const c = useStyles()
 
   return (
@@ -42,6 +49,7 @@ const TreeView = ({ nodes, renderNode, className, levelPadding = 40, loading }) 
             renderNode={renderNode}
             level={0}
             levelPadding={levelPadding}
+            defaultExpanded={defaultExpanded}
           />
         ))}
       </div>

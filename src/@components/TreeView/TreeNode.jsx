@@ -41,8 +41,14 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-export const TreeNode = ({ node, renderNode, level, levelPadding }) => {
-  const [expanded, setExpanded] = useState(false)
+export const TreeNode = ({
+  node,
+  renderNode,
+  level,
+  levelPadding,
+  defaultExpanded = false,
+}) => {
+  const [expanded, setExpanded] = useState(defaultExpanded)
   const c = useStyles()
 
   const toggleExpanded = () => {
