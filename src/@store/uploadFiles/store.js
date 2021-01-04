@@ -290,25 +290,23 @@ export default store => {
     const addedFiles = {}
     Object.keys(assemblyGroups).forEach(rootName => {
       const rootNodeId = `${rootName}/${rootName}`
-      const { primary: _p, ...info } = formData[rootNodeId]
+      const { primary: _p, ...info } = formData[rootNodeId] || {}
       addedFiles[treeData[rootNodeId].fileId] = true
 
-      info.parts = assemblyGroups[rootName]
-        .filter(nodeId => nodeId !== rootNodeId)
-        .map(nodeId => {
-          const { primary: _p, ...partInfo } = formData[nodeId]
-          const node = treeData[nodeId]
-          const file = uploadedFiles[node.fileId]
-          addedFiles[node.fileId] = true
+      info.parts = assemblyGroups[rootName].map(nodeId => {
+        const { primary: _p, ...partInfo } = formData[nodeId] || {}
+        const node = treeData[nodeId]
+        const file = uploadedFiles[node.fileId]
+        addedFiles[node.fileId] = true
 
-          return {
-            ...partInfo,
-            originalFileName: file.name,
-            filename: file.newFileName,
-            size: file.size,
-            isPrimary: false,
-          }
-        })
+        return {
+          ...partInfo,
+          originalFileName: file.name,
+          filename: file.newFileName,
+          size: file.size,
+          isPrimary: false,
+        }
+      })
 
       payload.push(info)
     })
@@ -318,7 +316,7 @@ export default store => {
     )
     if (remainingFiles.length > 0) {
       if (isAssembly) {
-        const { primary, ...partInfo } = formData['multipart']
+        const { primary, ...partInfo } = formData['multipart'] || {}
 
         payload.push({
           ...partInfo,
