@@ -129,11 +129,18 @@ const useStyles = createUseStyles(theme => {
     PartExplorerTarget: {
       ...theme.mixins.flexRow,
       alignItems: 'center',
+      cursor: 'pointer',
     },
     PartExplorerTarget_ModelName: {
       maxWidth: '11rem',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
+    },
+    PartExplorerTarget_Thumbnail: {
+      flex: '0 0 auto',
+      width: '2rem',
+      height: '2rem !important',
+      padding: '0px !important',
     },
     SearchBar_Wrapper: {
       display: 'flex',
