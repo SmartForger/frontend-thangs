@@ -92,7 +92,7 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const ColorPickerMenu = ({ selectedValue: currentColor, onChange = noop }) => {
+const ColorPickerMenu = ({ onChange = noop, selectedValue: currentColor }) => {
   const c = useStyles({ color: currentColor })
   const handleBlur = useCallback(
     (e, value) => {

@@ -78,11 +78,11 @@ const Toolbar = ({
   mode,
   model,
   orientation,
-  handleColorChange,
-  handleDrawChange,
-  handleSliderChange,
-  handleSnapshot,
-  handleViewChange,
+  onColorChange,
+  onDrawChange,
+  onSliderChange,
+  onSnapshot,
+  onViewChange,
   showPartSelector,
   selectedFilename,
   setViewerModel,
@@ -93,13 +93,13 @@ const Toolbar = ({
       <div className={classnames(c.Toolbar, className)}>
         <div className={c.Toolbar_Group}>
           <Spacer size={'1rem'} />
-          <DrawModeActionMenu selectedValue={mode} onChange={handleDrawChange} />
+          <DrawModeActionMenu selectedValue={mode} onChange={onDrawChange} />
           <Spacer size={'1rem'} />
         </div>
         <Spacer size={'.75rem'} />
         <div className={c.Toolbar_Group}>
           <Spacer size={'1rem'} />
-          <ColorPickerActionMenu selectedValue={color} onChange={handleColorChange} />
+          <ColorPickerActionMenu selectedValue={color} onChange={onColorChange} />
           <Spacer size={'1rem'} />
         </div>
         <Spacer size={'.75rem'} />
@@ -107,10 +107,7 @@ const Toolbar = ({
           <>
             <div className={c.Toolbar_Group}>
               <Spacer size={'1rem'} />
-              <ExplodeActionMenu
-                selectedValue={magnitude}
-                onChange={handleSliderChange}
-              />
+              <ExplodeActionMenu selectedValue={magnitude} onChange={onSliderChange} />
               <Spacer size={'1rem'} />
             </div>
             <Spacer size={'.75rem'} />
@@ -118,16 +115,13 @@ const Toolbar = ({
         )}
         <div className={c.Toolbar_Group}>
           <Spacer size={'1rem'} />
-          <CameraIcon onClick={handleSnapshot} />
+          <CameraIcon onClick={onSnapshot} />
           <Spacer size={'1rem'} />
         </div>
         <Spacer size={'.75rem'} />
         <div className={c.Toolbar_Group}>
           <Spacer size={'1rem'} />
-          <OrientationActionMenu
-            selectedValue={orientation}
-            onChange={handleViewChange}
-          />
+          <OrientationActionMenu selectedValue={orientation} onChange={onViewChange} />
           <Spacer size={'1rem'} />
         </div>
         {showPartSelector && (

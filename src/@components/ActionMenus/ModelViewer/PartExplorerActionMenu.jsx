@@ -184,8 +184,8 @@ const noop = () => null
 const PartSelectorRow = ({
   model,
   part,
-  handleClick,
-  handleChange,
+  onClick,
+  onChange,
   selectedFilename,
   level = 0,
 }) => {
@@ -229,7 +229,7 @@ const PartSelectorRow = ({
         <AssemblyExplorer
           model={model}
           parts={part.parts}
-          handleChange={handleChange}
+          onChange={onChange}
           selectedFilename={selectedFilename}
           level={level + 1}
         />
@@ -242,7 +242,7 @@ const AssemblyExplorer = ({
   className,
   model,
   parts,
-  handleChange,
+  onChange,
   selectedFilename,
   level = 0,
 }) => {
@@ -251,7 +251,7 @@ const AssemblyExplorer = ({
     <div className={classnames(className, c.AssemblyExplorer)}>
       {parts.map((part, index) => {
         const handleClick = () => {
-          handleChange(part.filename)
+          onChange(part.filename)
         }
 
         return (
@@ -259,8 +259,8 @@ const AssemblyExplorer = ({
             key={`partRow_${index}_${level}`}
             model={model}
             part={part}
-            handleClick={handleClick}
-            handleChange={handleChange}
+            onClick={handleClick}
+            onChange={onChange}
             selectedFilename={selectedFilename}
             level={level}
           />
@@ -270,12 +270,12 @@ const AssemblyExplorer = ({
   )
 }
 
-export const PartExplorerMenu = ({ handleChange, model, selectedFilename }) => {
+export const PartExplorerMenu = ({ onChange = noop, model, selectedFilename }) => {
   const c = useStyles({})
   const { parts } = model
   const [partsToDisplay, setPartsToDisplay] = useState(parts)
 
-  const handleOnInputChange = useCallback(
+  const handleInputChange = useCallback(
     value => {
       if (!value || value === '') setPartsToDisplay(parts)
       const newParts = parts.filter(file => {
@@ -302,7 +302,7 @@ export const PartExplorerMenu = ({ handleChange, model, selectedFilename }) => {
             placeholder={'Filter models by name'}
             className={c.SearchBar_FormInput}
             onChange={e => {
-              handleOnInputChange(e.target.value)
+              handleInputChange(e.target.value)
             }}
           />
         </div>
@@ -314,7 +314,7 @@ export const PartExplorerMenu = ({ handleChange, model, selectedFilename }) => {
           className={c.AssemblyExplorer_Wrapper}
           model={model}
           parts={partsToDisplay}
-          handleChange={handleChange}
+          onChange={onChange}
           selectedFilename={selectedFilename}
         />
       ) : (
@@ -324,11 +324,15 @@ export const PartExplorerMenu = ({ handleChange, model, selectedFilename }) => {
   )
 }
 
-export const PartExplorerTarget = ({ isOpen, model = {}, selectedValue: filename }) => {
+export const PartExplorerTarget = ({
+  isOpen,
+  onClick = noop,
+  model = {},
+  selectedValue: fileName,
+}) => {
   const c = useStyles({})
-
   return (
-    <div className={c.PartExplorerTarget}>
+    <div className={c.PartExplorerTarget} onClick={onClick}>
       <ModelThumbnail
         key={model.newFileName}
         className={c.PartExplorerTarget_Thumbnail}
@@ -337,7 +341,7 @@ export const PartExplorerTarget = ({ isOpen, model = {}, selectedValue: filename
       />
       <Spacer size={'1rem'} />
       <SingleLineBodyText className={c.PartExplorerTarget_ModelName}>
-        {filename}
+        {fileName}
       </SingleLineBodyText>
       <Spacer size={'.5rem'} />
       {model.isAssembly ? <Tag>Assembly</Tag> : <Tag secondary>Part</Tag>}

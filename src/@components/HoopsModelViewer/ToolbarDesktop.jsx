@@ -92,12 +92,12 @@ const Toolbar = ({
   magnitude,
   mode,
   orientation,
-  handleColorChange,
-  handleDrawChange,
-  handleResetView,
-  handleSliderChange,
-  handleSnapshot,
-  handleViewChange,
+  onColorChange,
+  onDrawChange,
+  onResetView,
+  onSliderChange,
+  onSnapshot,
+  onViewChange,
   selectedFilename,
   setViewerModel,
   showPartSelector,
@@ -110,7 +110,7 @@ const Toolbar = ({
       <Spacer size={'1.5rem'} />
       <div className={c.Toolbar_Group}>
         <Spacer size={'2rem'} />
-        <Pill secondary onClick={handleResetView}>
+        <Pill secondary onClick={onResetView}>
           <ResetIcon />
           <div className={c.Toolbar_WideText}>
             <Spacer size={'0.25rem'} />
@@ -118,7 +118,7 @@ const Toolbar = ({
           </div>
         </Pill>
         <Spacer size={'1rem'} />
-        <Pill secondary onClick={handleSnapshot}>
+        <Pill secondary onClick={onSnapshot}>
           <CameraDesktopIcon />
           <div className={c.Toolbar_WideText}>
             <Spacer size={'0.25rem'} />
@@ -133,7 +133,7 @@ const Toolbar = ({
             <MetadataSecondary>Render</MetadataSecondary>
             <Spacer size={'1rem'} />
           </div>
-          <DrawModeActionMenu selectedValue={mode} onChange={handleDrawChange} />
+          <DrawModeActionMenu selectedValue={mode} onChange={onDrawChange} />
         </div>
         <Spacer size={'1.125rem'} />
         <div className={c.Toolbar_VerticalRule}></div>
@@ -143,10 +143,7 @@ const Toolbar = ({
             <MetadataSecondary>Orientation</MetadataSecondary>
             <Spacer size={'1rem'} />
           </div>
-          <OrientationActionMenu
-            selectedValue={orientation}
-            onChange={handleViewChange}
-          />
+          <OrientationActionMenu selectedValue={orientation} onChange={onViewChange} />
         </div>
         <Spacer size={'1.125rem'} />
         <div className={c.Toolbar_VerticalRule}></div>
@@ -156,7 +153,7 @@ const Toolbar = ({
             <MetadataSecondary>Color</MetadataSecondary>
             <Spacer size={'1rem'} />
           </div>
-          <ColorPickerActionMenu selectedValue={color} onChange={handleColorChange} />
+          <ColorPickerActionMenu selectedValue={color} onChange={onColorChange} />
         </div>
         {isAssembly && (
           <>
@@ -164,13 +161,10 @@ const Toolbar = ({
             <div className={c.Toolbar_VerticalRule}></div>
             <Spacer size={'1.125rem'} />
             <div className={c.Toolbar_Group}>
-              <ExplodeActionMenu
-                selectedValue={magnitude}
-                onChange={handleSliderChange}
-              />
+              <ExplodeActionMenu selectedValue={magnitude} onChange={onSliderChange} />
               <div className={c.Toolbar_WideText}>
                 <Spacer size={'1rem'} />
-                <Slider onChange={handleSliderChange} steps={30} value={magnitude} />
+                <Slider onChange={onSliderChange} steps={30} value={magnitude} />
                 <Spacer size={'1.125rem'} />
               </div>
             </div>
