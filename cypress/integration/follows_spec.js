@@ -3,7 +3,7 @@ import {
   isTextInsideClass,
   loginByUser,
 } from '../utils/common-methods'
-import { CLASSES, MODEL, PROPS, TEXT, USER, USER2 } from '../utils/constants'
+import { CLASSES, MODEL_CARD, PROPS, TEXT, USER, USER2 } from '../utils/constants'
 import { multiUpload } from '../utils/uploadMethods'
 import api, { apiLogin } from '../utils/api'
 
@@ -104,10 +104,8 @@ describe('User notifications', () => {
       password: USER2.PASSWORD,
     })
     goTo(`/${USER.NAME}`)
-
-    cy.get(`[title="${MODEL.TITLE}"] [class^=ModelCard_Thumbnail]`, {
-      timeout: 20000,
-    }).click()
+    cy.wait(3000)
+    cy.get(MODEL_CARD()).click()
 
     isTextInsideClass(CLASSES.MODEL_PAGE_FOLLOW_BUTTON, TEXT.FOLLOW, PROPS.VISIBLE)
     cy.get(CLASSES.MODEL_PAGE_FOLLOW_BUTTON).first().click()
