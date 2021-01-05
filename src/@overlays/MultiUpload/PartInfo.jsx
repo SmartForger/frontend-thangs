@@ -215,7 +215,6 @@ const PartInfo = props => {
     errorMessage,
     setErrorMessage,
     onContinue,
-    onUpdate,
   } = props
   const c = useStyles({})
   const firstInputRef = useRef(null)
@@ -230,12 +229,11 @@ const PartInfo = props => {
 
   const handleOnInputChange = (key, value) => {
     onInputChange(key, value)
-    onUpdate(activeNode.id, { ...inputState, [key]: value })
     setErrorMessage(null)
   }
 
   const handleSubmit = (data, isValid) => {
-    if (isValid) onContinue({ applyRemaining })
+    if (isValid) onContinue({ applyRemaining, data })
   }
 
   const selectedCategory = useMemo(() => {

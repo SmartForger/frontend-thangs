@@ -164,6 +164,12 @@ const MultiUpload = ({ initData = null, folderId: _f }) => {
         )
         .map(subnode => formNode(subnode.id))
 
+      newNode.subs.sort((sub1, sub2) => {
+        const a = sub1.isAssembly ? 1 : 0
+        const b = sub2.isAssembly ? 1 : 0
+        return a - b
+      })
+
       newNode.treeValid =
         newNode.valid &&
         (newNode.subs.length === 0 || newNode.subs.every(subnode => subnode.treeValid))
@@ -329,15 +335,42 @@ const MultiUpload = ({ initData = null, folderId: _f }) => {
   }, [uploadedFiles, dispatch, closeOverlay])
 
   const handleContinue = useCallback(
-    ({ applyRemaining: _aR, data: _d }) => {
-      let i
-      for (i = activeView + 1; i < allTreeNodes.length; i++) {
+    ({ applyRemaining, data }) => {
+      let i = 0
+
+      if (data) {
+        if (applyRemaining) {
+          const parentId = allTreeNodes[activeView].parentId
+          for (i = activeView; i < allTreeNodes.length; i++) {
+            if (allTreeNodes[i].parentId !== parentId || allTreeNodes[i].isAssembly) {
+              break
+            }
+
+            if (allTreeNodes[i].valid) {
+              dispatch(types.SET_MODEL_INFO, {
+                id: allTreeNodes[i].id,
+                formData:
+                  i === activeView ? data : { ...data, name: allTreeNodes[i].name },
+              })
+            }
+          }
+        } else {
+          i = activeView + 1
+          dispatch(types.SET_MODEL_INFO, {
+            id: allTreeNodes[activeView].id,
+            formData: data,
+          })
+        }
+      }
+
+      for (; i < allTreeNodes.length; i++) {
         if (allTreeNodes[i].valid) {
           setActiveView(i)
           break
         }
       }
       if (i === allTreeNodes.length) {
+        setActiveView(i - 1)
         submitModels()
       }
     },
