@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { Button, Spacer } from '@components'
@@ -6,6 +6,7 @@ import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
+import { useExternalClick } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -65,8 +66,12 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const useDropdownMenuState = (initialIsOpen = false) => {
-  const [isOpen, setIsOpen] = useState(initialIsOpen)
+const useDropdownMenuState = ({
+  dropdownRef,
+  isInitiallyOpen = false,
+  isAutoClosed = true,
+}) => {
+  const [isOpen, setIsOpen] = useState(isInitiallyOpen)
   const toggleOpen = useCallback(
     _e => {
       setIsOpen(!isOpen)
@@ -74,16 +79,9 @@ const useDropdownMenuState = (initialIsOpen = false) => {
     [isOpen]
   )
   const closeMenu = () => setIsOpen(false)
-  useEffect(() => {
-    if (isOpen) {
-      document.addEventListener('click', closeMenu)
-    }
-    return () => {
-      if (isOpen) {
-        document.removeEventListener('click', closeMenu)
-      }
-    }
-  }, [isOpen])
+  useExternalClick(dropdownRef, () => {
+    if (isAutoClosed) closeMenu()
+  })
   return [isOpen, toggleOpen]
 }
 const DropdownItem = ({ children, to = '#', onClick, className, noHover = false }) => {
@@ -127,6 +125,7 @@ const DropdownMenu = ({
   children,
   className,
   iconOnly,
+  isAutoClosed = false,
   isOpen: isOpenExternal = undefined,
   isOpenByDefault = false,
   label,
@@ -135,9 +134,12 @@ const DropdownMenu = ({
   onTargetClick = noop,
   user,
 }) => {
-  const [isOpenInternal, toggleOpen] = useDropdownMenuState(
-    isOpenExternal || isOpenByDefault
-  )
+  const dropdownRef = useRef(null)
+  const [isOpenInternal, toggleOpen] = useDropdownMenuState({
+    dropdownRef,
+    isInitiallyOpen: isOpenExternal || isOpenByDefault,
+    isAutoClosed,
+  })
   const isOpen = !isOpenExternal ? isOpenInternal : isOpenExternal
   const c = useStyles({ isOpen, noIcons, myThangsMenu })
 
