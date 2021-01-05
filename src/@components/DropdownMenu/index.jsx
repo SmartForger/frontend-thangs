@@ -125,7 +125,7 @@ const DropdownMenu = ({
   children,
   className,
   iconOnly,
-  isAutoClosed = false,
+  isAutoClosed = true,
   isOpen: isOpenExternal = undefined,
   isOpenByDefault = false,
   label,
