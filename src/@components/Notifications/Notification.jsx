@@ -11,7 +11,7 @@ import { ReactComponent as UploadIcon } from '@svg/notification-uploaded.svg'
 import { ReactComponent as StarIcon } from '@svg/icon-star-filled.svg'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
-
+import { Spacer } from '@components'
 const useStyles = createUseStyles(theme => {
   return {
     Notification: {},
@@ -142,22 +142,25 @@ const NotificationSnippet = ({
   const countText =
     count > 1 ? `and ${count - 1} ${count === 2 ? 'other' : 'others'} ` : ''
   return (
-    <div className={c.NotificationSnippet_Wrapper}>
-      <Link className={c.NotificationSnippet} to={linkTarget}>
-        <div>
-          <Icon />
-        </div>
-        <div className={c.NotificationSnippet_content}>
-          <div className={c.NotificationSnippet_text}>
-            {`${actorName} `}
-            {countText}
-            <span className={c.NotificationSnippet_verb}>{altVerb || verb}</span>
-            {` ${targetName}`}
+    <>
+      <div className={c.NotificationSnippet_Wrapper}>
+        <Spacer size={'1rem'} />
+        <Link className={c.NotificationSnippet} to={linkTarget}>
+          <div>
+            <Icon />
           </div>
-          <div className={c.NotificationSnippet_time}>{time}</div>
-        </div>
-      </Link>
-    </div>
+          <div className={c.NotificationSnippet_content}>
+            <div className={c.NotificationSnippet_text}>
+              {`${actorName} `}
+              {countText}
+              <span className={c.NotificationSnippet_verb}>{altVerb || verb}</span>
+              {` ${targetName}`}
+            </div>
+            <div className={c.NotificationSnippet_time}>{time}</div>
+          </div>
+        </Link>
+      </div>
+    </>
   )
 }
 

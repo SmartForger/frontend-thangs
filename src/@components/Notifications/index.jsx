@@ -74,6 +74,7 @@ const Notifications = ({ className, myThangsMenu }) => {
       className={classnames(className, c.Notifications)}
       TargetComponent={NotificationsButton}
       myThangsMenu={myThangsMenu}
+      isRow={false}
     >
       {statusItem
         ? statusItem
