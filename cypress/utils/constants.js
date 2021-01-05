@@ -69,7 +69,6 @@ export const CLASSES = {
   UPLOAD_FORM: '[class^=Upload_Column__form]',
   UPLOAD_BUTTON_GROUP: '[class^=UploadForm_ButtonGroup]',
   UPLOAD_BUTTON: '[class^="Button"]',
-  MODEL_CARD: '[class^=ModelCard]',
   MODEL_CARD_EDIT_BUTTON: '[class^=EditModel_EditIcon]',
   MODEL_PAGE_TITLE: '[class^=ModelTitle_Text]',
   MODEL_PAGE_AUTHOR: '[class^=ModelTitle_ProfileAuthor]',
@@ -106,6 +105,8 @@ export const CLASSES = {
   MY_THANGS_NO_FILES: '[class^=NoFilesMessage]',
   MY_THANGS_ALL_FILES_ROW: '[class^=AllFilesView]',
 }
+
+export const MODEL_CARD = (title = MODEL.TITLE) => `[title="${title}"]`
 
 export const DATA_CY = {
   LOGIN_FORM_ERROR: '[data-cy=form-error]',

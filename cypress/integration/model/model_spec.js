@@ -7,11 +7,10 @@ import {
   login,
   removeModelsFoldersFromMyThangs,
 } from '../../utils/common-methods'
-import { CLASSES, MODEL, PATH, PROPS, TEXT } from '../../utils/constants'
+import { CLASSES, MODEL, PATH, PROPS, TEXT, MODEL_CARD } from '../../utils/constants'
 import { commentInput, enterValidValue, TEST_USER_1 } from '../../utils/inputs'
 import { multiUpload } from '../../utils/uploadMethods'
 
-const MODEL_CARD = `[title="${MODEL.TITLE}"]`
 
 describe('The Model Page', () => {
   before(() => {
@@ -29,7 +28,7 @@ describe('The Model Page', () => {
   it('Check model details, comment, stats', () => {
     goTo(PATH.PROFILE)
     cy.wait(3000)
-    cy.get(MODEL_CARD).click()
+    cy.get(MODEL_CARD()).click()
 
     // check for details
     isElement(CLASSES.MODEL_PAGE_TITLE, PROPS.NOT_EMPTY)
