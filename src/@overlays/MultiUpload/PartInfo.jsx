@@ -209,6 +209,7 @@ const PartInfo = props => {
     formData,
     treeData,
     filesData,
+    multipartName,
     folders,
     isLoading,
     errorMessage,
@@ -248,7 +249,7 @@ const PartInfo = props => {
 
   const pathFromRoot = useMemo(() => {
     if (activeNode.parentId === 'multipart') {
-      return ['Multipart Model', activeNode.name].join(' / ')
+      return [multipartName, activeNode.name].join(' / ')
     }
 
     const path = []
@@ -259,7 +260,7 @@ const PartInfo = props => {
     }
 
     return path.map(node => node.name).join(' / ')
-  }, [activeNode, treeData])
+  }, [activeNode, treeData, multipartName])
 
   useEffect(() => {
     setInputState(formData)

@@ -1,12 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
-import {
-  Spacer,
-  SingleLineBodyText,
-  MetadataSecondary,
-  Spinner,
-  Tooltip,
-} from '@components'
+import { Spacer, SingleLineBodyText, MetadataSecondary, Tooltip } from '@components'
 import { createUseStyles } from '@style'
 import { formatBytes } from '@utilities'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
@@ -94,7 +88,7 @@ const UploadTreeNode = ({ node, level: _l, onUpload, onRemove }) => {
       )}
       <Spacer size={12} />
       <SingleLineBodyText className={c.UploadTreeNode_FileName} title={node.name}>
-        {node.name}
+        {node.id === 'multipart' && !node.name ? 'Multipart Model' : node.name}
       </SingleLineBodyText>
       {node.size && (
         <>

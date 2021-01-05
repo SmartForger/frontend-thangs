@@ -115,6 +115,7 @@ const MultiUpload = ({ initData = null, folderId: _f }) => {
   const [allTreeNodes, setAllTreeNodes] = useState([])
   const [singlePartsCount, setSinglePartsCount] = useState(0)
   const c = useStyles({})
+  const multipartName = formData['multipart'] && formData['multipart'].name
   // const history = useHistory()
 
   const uploadedFiles = useMemo(
@@ -178,7 +179,7 @@ const MultiUpload = ({ initData = null, folderId: _f }) => {
       })
       const multipartNode = {
         id: 'multipart',
-        name: 'Multi Part Model',
+        name: multipartName,
         valid: true,
         treeValid: true,
         isAssembly: true,
@@ -194,7 +195,7 @@ const MultiUpload = ({ initData = null, folderId: _f }) => {
     setAllTreeNodes(nodesArray)
 
     return trees
-  }, [uploadFilesData, treeData, isAssembly])
+  }, [uploadFilesData, multipartName, treeData, isAssembly])
   const activeNode = useMemo(() => allTreeNodes[activeView] || null, [
     allTreeNodes,
     activeView,
@@ -438,6 +439,7 @@ const MultiUpload = ({ initData = null, folderId: _f }) => {
             formData={activeFormData}
             treeData={treeData}
             filesData={uploadFilesData}
+            multipartName={multipartName}
             folders={dropdownFolders}
             isLoading={isLoading}
             errorMessage={errorMessage}
