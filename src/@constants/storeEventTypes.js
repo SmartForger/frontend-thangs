@@ -93,11 +93,6 @@ export const ENABLE_SUBSCRIPTION = 'enable-subscription'
 export const DISABLE_SUBSCRIPTION = 'disable-subscription'
 export const DELETE_SUBSCRIPTION = 'delete-subscription'
 export const CHANGE_SEARCH_SUBSCRIPTION_STATUS = 'change-search-subscription-status'
-/* Upload Model Store Events */
-export const UPLOAD_MODEL_PHASE1 = 'upload-model-phase1'
-export const UPLOAD_MODEL_PHASE2 = 'upload-model-phase2'
-export const RESET_UPLOAD_MODEL = 'reset-upload-model'
-export const CHANGE_UPLOAD_MODEL_STATUS = 'change-upload-model-status'
 /* upload Files Store Events */
 export const UPLOAD_FILES = 'upload-files'
 export const SET_UPLOADED_URLS = 'set-uploaded-urls'

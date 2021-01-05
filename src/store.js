@@ -16,7 +16,6 @@ import searchMyThangsStore from '@store/searchMyThangs/store'
 import searchSubscriptionsStore from '@store/searchSubscriptions/store'
 import teamsStore from '@store/teams/store'
 import thangsStore from '@store/thangs/store'
-import uploadModelStore from '@store/uploadModel/store'
 import userAvatarStore from '@store/userAvatar/store'
 import userLikedModelsStore from '@store/userLikedModels/store'
 import userOwnModelsStore from '@store/userOwnModels/store'
@@ -40,7 +39,6 @@ const storeParts = [
   searchSubscriptionsStore,
   teamsStore,
   thangsStore,
-  uploadModelStore,
   userAvatarStore,
   userLikedModelsStore,
   userOwnModelsStore,
