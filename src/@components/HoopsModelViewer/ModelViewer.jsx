@@ -60,19 +60,22 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
 
   useEffect(() => {
     let primaryPart
-    const { parts } = model
+    const { parts, compositeMesh } = model
     if (parts) {
       if (parts.length > 1) {
         primaryPart = R.find(R.propEq('isPrimary', true))(parts)
         if (!primaryPart) primaryPart = parts[0]
-        return setViewerModel(primaryPart.filename)
+        setViewerModel(primaryPart.filename)
       } else {
-        primaryPart = parts[0]
-        return setViewerModel(primaryPart.filename)
+        if (compositeMesh) {
+          setViewerModel(compositeMesh)
+        } else {
+          primaryPart = parts[0]
+          setViewerModel(primaryPart.filename)
+        }
       }
-    }
-    if (model.uploadedFile) {
-      return setViewerModel(model.uploadedFile)
+    } else if (model.uploadedFile) {
+      setViewerModel(model.uploadedFile)
     }
   }, [model])
 
