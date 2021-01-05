@@ -275,7 +275,7 @@ const useHoopsViewer = modelFilename => {
   const changeViewOrientation = useCallback(orientation => {
     hoopsViewerRef.current.view.setViewOrientation(
       Communicator.ViewOrientation[orientation],
-      100
+      1000
     )
   }, [])
 
