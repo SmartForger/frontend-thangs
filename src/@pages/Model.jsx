@@ -321,7 +321,12 @@ const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
   return (
     <div className={classnames(c.Model_Row, c.Model_Detail)}>
       <ModelTitle model={model} />
-      {model.previousVersionModelId && <Revised modelId={model.previousVersionModelId} />}
+      {model.previousVersionModelId && (
+        <Revised
+          modelId={model.previousVersionModelId}
+          key={model.previousVersionModelId}
+        />
+      )}
       {model.id && (
         <div className={c.Model_SocialButtons}>
           <div>

@@ -191,6 +191,7 @@ const UploadModels = ({
   validating = false,
   validated = false,
   showAssemblyToggle,
+  multiple = true,
 }) => {
   const hasFile = Object.keys(uploadFiles).length > 0
   const c = useStyles({ hasFile })
@@ -273,7 +274,13 @@ const UploadModels = ({
 
   return (
     <>
-      <Dropzone onDrop={onDrop} accept={MODEL_FILE_EXTS} ref={dropzoneRef} maxFiles={25}>
+      <Dropzone
+        onDrop={onDrop}
+        accept={MODEL_FILE_EXTS}
+        ref={dropzoneRef}
+        multiple={multiple}
+        maxFiles={25}
+      >
         {({ getRootProps, getInputProps }) => (
           <section className={c.UploadModels_UploadZone}>
             <div {...getRootProps()}>

@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { createUseStyles } from '@style'
 import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
-import { useServices } from '@hooks'
+import * as types from '@constants/storeEventTypes'
 import { Spinner } from '@components'
+import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -33,10 +34,17 @@ const useStyles = createUseStyles(theme => {
 
 const Revised = ({ modelId }) => {
   const c = useStyles()
-  const { useFetchOnce } = useServices()
-  const { atom: model } = useFetchOnce(modelId, 'model')
+  const {
+    dispatch,
+    [`model-${modelId}`]: modelAtom = {},
+  } = useStoreon(`model-${modelId}`)
 
-  if (model.isLoading) {
+  useEffect(() => {
+    dispatch(types.FETCH_MODEL, { id: modelId })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  if (modelAtom.isLoading) {
     return <Spinner />
   }
 

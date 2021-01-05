@@ -95,7 +95,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const MultiUpload = ({ initData = null, folderId = '' }) => {
+const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' }) => {
   const { dispatch, folders = {}, shared = {}, uploadFiles = {} } = useStoreon(
     'folders',
     'shared',
@@ -338,7 +338,10 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
   }
 
   const handleUpdate = (id, data) => {
-    dispatch(types.SET_MODEL_INFO, { id, formData: data })
+    dispatch(types.SET_MODEL_INFO, { id, formData: {
+      ...data,
+      previousVersionModelId,
+    } })
   }
 
   const submitModels = useCallback(() => {
@@ -500,6 +503,7 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
             validating={validating}
             validated={validated}
             showAssemblyToggle={validated && singlePartsCount > 1}
+            multiple={previousVersionModelId ? false : true}
           />
         ) : activeNode.isAssembly ? (
           <AssemblyInfo
