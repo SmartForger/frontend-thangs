@@ -19,7 +19,7 @@ workflows:
           executor: test-in-staging
           context: gcp-and-physna
           yarn: true
-          start: yarn dev
+          start: yarn build:workers && yarn dev
           wait-on: 'http://localhost:3000'
           store_artifacts: true
           browser: chrome
