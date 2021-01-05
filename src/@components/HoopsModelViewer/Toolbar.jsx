@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import ToolbarDesktop from './ToolbarDesktop'
 import ToolbarMobile from './ToolbarMobile'
 import { createUseStyles } from '@style'
@@ -91,6 +91,12 @@ const Toolbar = ({ hoops, model = {}, setViewerModel = noop, selectedFilename })
     getViewerSnapshot(model.name)
   }, [getViewerSnapshot, model.name])
 
+  const selectedModel = useMemo(() => {
+    const selectedPart =
+      model.parts.find(part => (part.filename = selectedFilename)) || {}
+    return selectedPart.name
+  }, [model, selectedFilename])
+
   const showPartSelector = isMultipart || isAssembly
 
   const toolbarProps = {
@@ -107,7 +113,7 @@ const Toolbar = ({ hoops, model = {}, setViewerModel = noop, selectedFilename })
     onSnapshot: handleSnapshot,
     onViewChange: handleViewChange,
     setViewerModel,
-    selectedFilename,
+    selectedFilename: selectedModel,
     showPartSelector,
     model,
   }
