@@ -12,11 +12,11 @@ import {
   clickOnElementByText,
   isElement,
   isElementContainTwoValues,
-} from '../../../utils/common-methods'
-import { CLASSES, MODEL, PATH, PROPS, TEXT, USER, USER2 } from '../../../utils/constants'
-import { commentInput, enterValidValue, uploadInput } from '../../../utils/inputs'
-import { multiUpload } from '../../../utils/uploadMethods'
-import api, { apiLogin } from '../../../utils/api'
+} from '../../utils/common-methods'
+import { CLASSES, MODEL, PATH, PROPS, TEXT, USER, USER2 } from '../../utils/constants'
+import { commentInput, enterValidValue, uploadInput } from '../../utils/inputs'
+import { multiUpload } from '../../utils/uploadMethods'
+import api, { apiLogin } from '../../utils/api'
 
 describe('User notifications', () => {
   before(() => {

@@ -1,28 +1,43 @@
 import 'cypress-file-upload'
 import {
   clickOnElement,
-  clickOnTextInsideClass,
-  goTo,
   isElement,
-  isElementContains,
+  login,
+  openMultiUpload,
+  openNotifications,
+  openProfileDropdown,
   uploadFile,
   urlShouldInclude,
   urlShouldIncludeAfterTimeout,
-} from '../../../utils/common-methods'
+} from '../../utils/common-methods'
 import {
   clearInput,
   enterValidValue,
   inputFocus,
   inputType,
   searchInput,
+  TEST_USER_1,
   uploadInput,
-} from '../../../utils/inputs'
-import { CLASSES, MODEL, PATH, PROPS, TEXT } from '../../../utils/constants'
+} from '../../utils/inputs'
+import { CLASSES, MODEL, PATH, PROPS } from '../../utils/constants'
 
-describe('The Landing Page', () => {
+describe('The Landing Page (authorized)', () => {
   beforeEach(() => {
-    goTo('/')
+    login(TEST_USER_1)
   })
+
+  it('Open Notifications', () => {
+    openNotifications()
+  })
+
+  it('Open Profile', () => {
+    openProfileDropdown()
+  })
+
+  it('Open Upload', () => {
+    openMultiUpload()
+  })
+
   it('Text search provides to results page', () => {
     isElement(searchInput.selector, PROPS.VISIBLE)
     enterValidValue(CLASSES.HEADER_DESKTOP, searchInput)
@@ -52,31 +67,5 @@ describe('The Landing Page', () => {
     urlShouldIncludeAfterTimeout(MODEL.FILENAME, 180000)
     urlShouldInclude('modelId')
     urlShouldInclude('phynId')
-  })
-
-  it('Click on filters', () => {
-    isElement(CLASSES.LANDING_FILTER_BUTTON, PROPS.VISIBLE)
-    clickOnElement(CLASSES.LANDING_FILTER_BUTTON)
-    clickOnTextInsideClass(CLASSES.LANDING_FILTER_DROPDOWN, TEXT.DOWNLOADS)
-    isElementContains(CLASSES.LANDING_TITLE, 'Most Downloaded')
-    clickOnElement(CLASSES.LANDING_FILTER_BUTTON)
-    clickOnTextInsideClass(CLASSES.LANDING_FILTER_DROPDOWN, TEXT.POPULAR)
-    isElementContains(CLASSES.LANDING_TITLE, 'Popular Models')
-    clickOnElement(CLASSES.LANDING_FILTER_BUTTON)
-    clickOnTextInsideClass(CLASSES.LANDING_FILTER_DROPDOWN, TEXT.NEW)
-    isElementContains(CLASSES.LANDING_TITLE, 'New Models')
-    clickOnElement(CLASSES.LANDING_FILTER_BUTTON)
-    clickOnTextInsideClass(CLASSES.LANDING_FILTER_DROPDOWN, TEXT.TRENDING)
-    isElementContains(CLASSES.LANDING_TITLE, 'Trending Models')
-  })
-
-  it('Landing search "#geotests" provides to results page', () => {
-    const searchBar = '[class^=Header_DesktopOnly] [name=search]'
-
-    isElement(searchBar, PROPS.VISIBLE)
-    cy.get(searchBar).focus().type('#geotests', { force: true })
-    clickOnElement(CLASSES.SEARCH_BAR_BUTTON)
-    urlShouldInclude(`${PATH.SEARCH}%23geotests`)
-    isElementContains('[class^=SearchResults_HeaderText]', 'Search Results for #geotests')
   })
 })

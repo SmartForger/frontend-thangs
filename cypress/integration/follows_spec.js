@@ -2,10 +2,10 @@ import {
   goTo,
   isTextInsideClass,
   loginByUser,
-} from '../../utils/common-methods'
-import { CLASSES, MODEL, PROPS, TEXT, USER, USER2 } from '../../utils/constants'
-import { multiUpload } from '../../utils/uploadMethods'
-import api, { apiLogin } from '../../utils/api'
+} from '../utils/common-methods'
+import { CLASSES, MODEL, PROPS, TEXT, USER, USER2 } from '../utils/constants'
+import { multiUpload } from '../utils/uploadMethods'
+import api, { apiLogin } from '../utils/api'
 
 describe('User notifications', () => {
   before(() => {

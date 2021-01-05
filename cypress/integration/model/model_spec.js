@@ -6,10 +6,10 @@ import {
   isTextInsideClass,
   login,
   removeModelsFoldersFromMyThangs,
-} from '../../../utils/common-methods'
-import { CLASSES, MODEL, PATH, PROPS, TEXT } from '../../../utils/constants'
-import { commentInput, enterValidValue, TEST_USER_1 } from '../../../utils/inputs'
-import { multiUpload } from '../../../utils/uploadMethods'
+} from '../../utils/common-methods'
+import { CLASSES, MODEL, PATH, PROPS, TEXT } from '../../utils/constants'
+import { commentInput, enterValidValue, TEST_USER_1 } from '../../utils/inputs'
+import { multiUpload } from '../../utils/uploadMethods'
 
 const MODEL_CARD = `[title="${MODEL.TITLE}"]`
 
