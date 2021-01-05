@@ -193,7 +193,7 @@ const AssemblyPartInfoSchema = Joi.object({
   folderId: Joi.string().allow(''),
 })
 
-const INITIAL_STATE = {
+const initialState = {
   name: '',
   description: '',
   folderId: '',
@@ -224,7 +224,7 @@ const PartInfo = props => {
   const isAssembly = !!activeNode.parentId
   const { checkError, onFormSubmit, onInputChange, inputState, setInputState } = useForm({
     initialValidationSchema: isAssembly ? AssemblyPartInfoSchema : PartInfoSchema,
-    INITIAL_STATE,
+    initialState,
   })
 
   const handleOnInputChange = (key, value) => {
@@ -263,6 +263,7 @@ const PartInfo = props => {
 
   useEffect(() => {
     setInputState(formData)
+    onUpdate(activeNode.id, { ...formData })
     // eslint-disable-next-line
   }, [activeNode])
 
