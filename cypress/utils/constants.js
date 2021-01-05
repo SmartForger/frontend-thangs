@@ -24,7 +24,6 @@ export const PATH = {
   LANDING: '/',
   SEARCH: '/search/',
   MY_THANGS: '/mythangs',
-  EXTERNAL_MODEL: 'model/478',
   PROFILE: `/${USER.NAME}`,
   MY_THANGS_ALL_FILES: '/mythangs/all-files',
 }
@@ -137,7 +136,7 @@ export const TEXT = {
   DELETE_MODEL: 'Delete Model',
   CONFIRM: 'Confirm',
   LIKES: 'likes',
-  CURRENT_YEAR: '2020',
+  CURRENT_YEAR: `${new Date().getFullYear()}`,
   LIKE: 'Like',
   LIKED: 'Liked',
   LIKED_LOWER_CASE: 'liked',

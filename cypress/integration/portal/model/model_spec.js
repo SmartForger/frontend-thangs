@@ -1,24 +1,17 @@
 import 'cypress-file-upload'
 import {
-  clickOnElement,
-  clickOnElementByText,
   clickOnTextInsideClass,
-  deleteSingleFile,
   goTo,
   isElement,
   isTextInsideClass,
   login,
   removeModelsFoldersFromMyThangs,
 } from '../../../utils/common-methods'
-import {
-  CLASSES,
-  MODEL,
-  PATH,
-  PROPS,
-  TEXT,
-} from '../../../utils/constants'
+import { CLASSES, MODEL, PATH, PROPS, TEXT } from '../../../utils/constants'
 import { commentInput, enterValidValue, TEST_USER_1 } from '../../../utils/inputs'
 import { multiUpload } from '../../../utils/uploadMethods'
+
+const MODEL_CARD = `[title="${MODEL.TITLE}"]`
 
 describe('The Model Page', () => {
   before(() => {
@@ -33,47 +26,24 @@ describe('The Model Page', () => {
     multiUpload()
   })
 
-  it('Check model for name, author and description not empty', () => {
+  it('Check model details, comment, stats', () => {
     goTo(PATH.PROFILE)
-    cy.get(`[title="${MODEL.TITLE}"] [class^=ModelCard_Thumbnail]`, {
-      timeout: 20000,
-    }).click()
+    cy.wait(3000)
+    cy.get(MODEL_CARD).click()
+
+    // check for details
     isElement(CLASSES.MODEL_PAGE_TITLE, PROPS.NOT_EMPTY)
     isElement(CLASSES.MODEL_PAGE_AUTHOR, PROPS.NOT_EMPTY)
     isElement(CLASSES.MODEL_PAGE_DESCRIPTION, PROPS.NOT_EMPTY)
-  })
 
-  it('Check model comments', () => {
-    goTo(PATH.PROFILE)
-    cy.get(`[title="${MODEL.TITLE}"] [class^=ModelCard_Thumbnail]`, {
-      timeout: 20000,
-    }).click()
+    // check for comments
     enterValidValue(CLASSES.MODEL_ADD_COMMENT_FORM, commentInput)
     clickOnTextInsideClass(CLASSES.MODEL_ADD_COMMENT_FORM, TEXT.COMMENT)
     isTextInsideClass(CLASSES.MODEL_COMMENT_FORM, MODEL.COMMENT, PROPS.VISIBLE)
-  })
 
-  it('Model has information: likes, downloads, date of upload', () => {
-    goTo(PATH.PROFILE)
-    cy.get(`[title="${MODEL.TITLE}"] [class^=ModelCard_Thumbnail]`, {
-      timeout: 20000,
-    }).click()
+    // check for stats
     isTextInsideClass(CLASSES.MODEL_PAGE_STATS, TEXT.LIKES)
     isTextInsideClass(CLASSES.MODEL_PAGE_STATS, TEXT.DOWNLOADS)
     isTextInsideClass(CLASSES.MODEL_PAGE_STATS, TEXT.CURRENT_YEAR)
-  })
-
-  it('Check for like/unlike button', () => {
-    goTo(PATH.EXTERNAL_MODEL)
-    isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKE, PROPS.VISIBLE)
-    clickOnElementByText(TEXT.LIKE)
-    isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKED, PROPS.VISIBLE)
-    clickOnElementByText(TEXT.LIKED)
-    isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKE, PROPS.VISIBLE)
-    isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKED, PROPS.INVISIBLE)
-  })
-
-  it('Delete model', () => {
-    deleteSingleFile()
   })
 })

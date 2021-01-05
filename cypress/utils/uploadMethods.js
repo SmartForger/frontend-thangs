@@ -1,11 +1,10 @@
 import 'cypress-file-upload'
-import { CLASSES, DATA_CY, PROPS, TEXT, MODEL, PATH } from './constants'
+import { CLASSES, TEXT, MODEL, PATH } from './constants'
 import {
   clickOnElement,
   clickOnElementByText,
   clickOnTextInsideClass,
   goTo,
-  isElement,
   isElementContains,
   openMultiUpload,
   uploadFile,
@@ -17,11 +16,10 @@ export const multiUpload = () => {
   openMultiUpload()
   uploadFile(MODEL.FILENAME, multiUploadInput)
   clickOnElementByText('Continue')
-  isElement(DATA_CY.MULTIUPLOAD_FORM, PROPS.VISIBLE)
-  cy.get(`${DATA_CY.MULTIUPLOAD_FORM} [name=name]`).clear()
-  cy.get(`${DATA_CY.MULTIUPLOAD_FORM} [name=name]`).focus().type(MODEL.TITLE)
-  cy.get(`${DATA_CY.MULTIUPLOAD_FORM} [name=description]`).clear()
-  cy.get(`${DATA_CY.MULTIUPLOAD_FORM} [name=description]`).focus().type(MODEL.DESCRIPTION)
+  cy.get(`[class^=PartInfo_Field] [name=name]`).clear()
+  cy.get(`[class^=PartInfo_Field] [name=name]`).focus().type(MODEL.TITLE)
+  cy.get(`[class^=PartInfo_Field] [name=description]`).clear()
+  cy.get(`[class^=PartInfo_Field] [name=description]`).focus().type(MODEL.DESCRIPTION)
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue')
   urlShouldIncludeAfterTimeout('mythangs/all-files', 10000)
   isElementContains('[class^=FileTable_Row]', MODEL.TITLE)
