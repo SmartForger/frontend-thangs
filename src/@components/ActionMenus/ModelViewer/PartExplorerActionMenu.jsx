@@ -17,31 +17,31 @@ import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 const useStyles = createUseStyles(theme => {
   return {
     PartExplorerDropdown: {
-      right: '-2rem',
-      width: 'auto',
       bottom: '5.1rem',
       display: 'flex',
+      overflow: 'hidden',
       padding: '1rem',
       position: 'absolute',
-      overflow: 'hidden',
+      right: '-2rem',
+      width: 'auto',
     },
     PartExplorerDropdown_Arrow: {
-      width: '0.75rem',
       height: '0.75rem',
+      width: '0.75rem',
       '& > path': {
         fill: '#000',
       },
     },
     PartExplorerDropdown_ClickableButton: {
+      alignItems: 'center',
       cursor: 'pointer',
       display: 'flex',
       flexDirection: 'row',
-      alignItems: 'center',
     },
     PartExplorerDropdown_DropdownMenuDivider: {
-      margin: '.25rem 0',
       border: 'none',
       borderTop: `1px solid ${theme.colors.grey[100]}`,
+      margin: '.25rem 0',
     },
     PartExplorerDropdown_Row: {
       display: 'flex',
@@ -52,40 +52,40 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
     },
     PartExplorerDropdown_Thumbnail: {
-      flex: 'none',
       backgroundColor: theme.colors.white[400],
       border: `1px solid ${theme.colors.white[900]}`,
       borderRadius: 4,
+      boxSizing: 'border-box',
+      flex: 'none',
+      height: '2rem',
       padding: '0px !important',
       width: '2rem',
-      height: '2rem',
-      boxSizing: 'border-box',
     },
     PartExplorerDropdown_ModelName: {
-      overflow: 'hidden',
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
-      maxWidth: '6.5rem',
       lineHeight: '1rem',
+      maxWidth: '6.5rem',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
     },
     PartExplorerMenu: {
       display: 'flex',
       flexDirection: 'column',
     },
     AssemblyExplorer_Wrapper: {
+      ...theme.mixins.scrollbar,
       maxHeight: '20rem',
       overflowY: 'scroll',
-      ...theme.mixins.scrollbar,
     },
     PartSelectorRow_Row: {
+      cursor: 'pointer',
       display: 'flex',
       flexDirection: 'row',
-      cursor: 'pointer',
     },
     PartSelectorRow_Column: {
+      cursor: 'pointer',
       display: 'flex',
       flexDirection: 'column',
-      cursor: 'pointer',
     },
     AssemblyExplorer_Spacer: {
       flex: 'none',
@@ -104,27 +104,27 @@ const useStyles = createUseStyles(theme => {
     },
     PartExplorerDropdown_PartText: {
       display: 'flex',
-      minWidth: '10rem',
       flexDirection: 'column',
       justifyContent: 'center',
+      minWidth: '10rem',
 
       '& > span': {
-        overflow: 'hidden',
         alignItems: 'center',
         lineHeight: '1rem',
-        whiteSpace: 'nowrap',
+        overflow: 'hidden',
         textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
       },
     },
     PartSelectorRow_Thumbnail: {
-      flex: 'none',
       backgroundColor: theme.colors.white[400],
       border: `1px solid ${theme.colors.white[900]}`,
       borderRadius: 4,
+      boxSizing: 'border-box',
+      flex: 'none',
+      height: '2.625rem',
       padding: '0 !important',
       width: '2.625rem',
-      height: '2.625rem',
-      boxSizing: 'border-box',
     },
     PartExplorerTarget: {
       ...theme.mixins.flexRow,
@@ -132,39 +132,42 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
     },
     PartExplorerTarget_ModelName: {
+      lineHeight: '1.25rem !important',
       maxWidth: '11rem',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
-      lineHeight: '1.25rem !important',
     },
     PartExplorerTarget_Thumbnail: {
       flex: '0 0 auto',
-      width: '2rem',
       height: '2rem !important',
       padding: '0px !important',
+      width: '2rem',
     },
     SearchBar_Wrapper: {
+      background: theme.colors.white[600],
+      borderRadius: '.5rem',
       display: 'flex',
       flexDirection: 'column',
       position: 'relative',
-      background: theme.colors.white[600],
-      borderRadius: '.5rem',
       width: '100%',
 
       '& input': {
         background: theme.colors.white[600],
         border: 'none',
-        outline: 'none',
+        color: theme.colors.black[900],
         fontSize: '1rem',
         lineHeight: '1.5rem',
+        outline: 'none',
         padding: 0,
+        width: '100%',
 
         '&::placeholder': {
-          fontSize: '1rem',
-          color: theme.colors.grey[300],
+          color: theme.colors.black[900],
+          fontSize: '.875rem',
           fontWeight: 500,
           lineHeight: '1rem',
         },
+
         '&:focus, &:active': {
           background: theme.colors.white[600],
           color: theme.colors.grey[300],
@@ -172,17 +175,15 @@ const useStyles = createUseStyles(theme => {
             color: 'transparent',
           },
         },
-        '&:-webkit-autofill': {
-          '-webkit-box-shadow': `0 0 0px 1000px ${theme.colors.white[600]} inset`,
-          '-webkit-text-fill-color': theme.colors.grey[300],
-          border: 'none',
-        },
       },
     },
+    SearchBar_Icon: {
+      flex: 'none',
+    },
     SearchBar_Row: {
+      alignItems: 'center',
       display: 'flex',
       flexDirection: 'row',
-      alignItems: 'center',
     },
   }
 })
@@ -301,17 +302,15 @@ export const PartExplorerMenu = ({ onChange = noop, model, selectedFilename }) =
         <Spacer size={'.5rem'} />
         <div className={c.SearchBar_Row}>
           <Spacer size={'1rem'} />
-          <SearchIcon
-            className={classnames(c.SearchBar_SearchIcon, c.SearchBar_FormIcon)}
-          />
+          <SearchIcon className={c.SearchBar_Icon} />
           <Spacer size={'.5rem'} />
           <TextInput
             name='search'
             placeholder={'Filter models by name'}
-            className={c.SearchBar_FormInput}
             onChange={e => {
               handleInputChange(e.target.value)
             }}
+            autocomplete='off'
           />
         </div>
         <Spacer size={'.5rem'} />
