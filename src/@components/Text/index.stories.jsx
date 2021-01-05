@@ -1,11 +1,17 @@
 import React from 'react'
-import * as Text from './'
-
-export const TextStory = () => {
-  return <Text.TitlePrimary>4 Cylinder Engine Project</Text.TitlePrimary>
-}
+import { SingleLineBodyText, MultiLineBodyText, LabelText } from './'
 
 export default {
   title: 'Text',
-  component: TextStory,
 }
+
+export const SingleLineBody = () => (
+  <SingleLineBodyText>This is a SingleLineBodyText</SingleLineBodyText>
+)
+export const MultiLineBody = () => (
+  <MultiLineBodyText>
+    This is a <br />
+    MultiLineBodyText
+  </MultiLineBodyText>
+)
+export const Label = () => <LabelText>This is LabelText Component</LabelText>
