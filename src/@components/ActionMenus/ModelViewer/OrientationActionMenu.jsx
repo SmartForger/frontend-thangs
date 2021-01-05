@@ -25,10 +25,11 @@ const useStyles = createUseStyles(theme => {
       },
     },
     OrientationTarget: {
+      alignItems: 'center',
       cursor: 'pointer',
       display: 'flex',
       flexDirection: 'row',
-      alignItems: 'center',
+      padding: '.625rem 0',
       '& > span': {
         display: 'none',
 

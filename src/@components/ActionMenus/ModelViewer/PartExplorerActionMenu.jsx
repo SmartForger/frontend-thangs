@@ -135,6 +135,7 @@ const useStyles = createUseStyles(theme => {
       maxWidth: '11rem',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
+      lineHeight: '1.25rem !important',
     },
     PartExplorerTarget_Thumbnail: {
       flex: '0 0 auto',
@@ -315,7 +316,7 @@ export const PartExplorerMenu = ({ onChange = noop, model, selectedFilename }) =
         </div>
         <Spacer size={'.5rem'} />
       </div>
-      <Spacer size={'1rem'} className={c.AssemblyExplorer_Spacer} />
+      <Spacer size={'.5rem'} className={c.AssemblyExplorer_Spacer} />
       {partsToDisplay.length > 0 ? (
         <AssemblyExplorer
           className={c.AssemblyExplorer_Wrapper}
