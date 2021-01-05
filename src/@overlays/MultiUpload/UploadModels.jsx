@@ -224,7 +224,14 @@ const UploadModels = ({
     } else {
       setWarningMessage(null)
     }
-  }, [allTreeNodes, setErrorMessage, setWarningMessage, uploadFiles, uploadTreeData, validating])
+  }, [
+    allTreeNodes,
+    setErrorMessage,
+    setWarningMessage,
+    uploadFiles,
+    uploadTreeData,
+    validating,
+  ])
 
   const uploadAssemblyLabel = (
     <span className={c.UploadAssemblyLabel}>
@@ -262,7 +269,9 @@ const UploadModels = ({
       {fileLength > 0 && (
         <>
           <Spacer size='1rem' />
-          <TitleTertiary>{fileLength > 1 ? `${fileLength} Files` : '1 File'}</TitleTertiary>
+          <TitleTertiary>
+            {fileLength > 1 ? `${fileLength} Files` : '1 File'}
+          </TitleTertiary>
           <Spacer size='0.5rem' />
           <TreeView
             className={c.UploadTreeView}
