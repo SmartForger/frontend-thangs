@@ -86,24 +86,31 @@ const thumbnailUrl = model =>
   model.fullThumbnailUrl
     ? model.fullThumbnailUrl
     : model.thumbnailUrl
-      ? model.thumbnailUrl
-      : `${THUMBNAILS_HOST}${getThumbnailUrl(model)}?size=456x540`
+    ? model.thumbnailUrl
+    : `${THUMBNAILS_HOST}${getThumbnailUrl(model)}?size=456x540`
 
 const getThumbnailUrl = (model = {}) => {
   let primaryPart
-  if (model.thumbnailUrl) return model.thumbnailUrl
-  if (model.uploadedFile) return model.uploadedFile
-  if (model.modelFileName) return model.modelFileName.replace(`${THUMBNAILS_FOLDER}`, '')
-  if (model.compositeMesh) return encodeURIComponent(model.compositeMesh)
+  if (model.thumbnailUrl) return `${THUMBNAILS_FOLDER}${model.thumbnailUrl}`
+  if (model.uploadedFile) return `${THUMBNAILS_FOLDER}${model.uploadedFile}`
+  if (model.modelFileName)
+    return `${THUMBNAILS_FOLDER}${model.modelFileName.replace(
+      `${THUMBNAILS_FOLDER}`,
+      ''
+    )}`
+  if (model.compositeMesh) return encodeURIComponent(model.compositeMesh) //CompositeMesh should be moved and this can be removed
   if (model.parts) {
     if (model.parts.length > 1) {
-      primaryPart = R.find(R.propEq('isPrimary', true))(model.parts)
-      if (!primaryPart) primaryPart = model.parts[0]
-      if (primaryPart.filename) return encodeURIComponent(`${primaryPart.filename}`)
+      primaryPart = R.find(R.propEq('isPrimary', true))(model.parts) || model.parts[0]
+      if (primaryPart.filename)
+        return `${THUMBNAILS_FOLDER}${encodeURIComponent(`${primaryPart.filename}`)}`
     } else if (model.parts.length === 1) {
       primaryPart = model.parts[0]
-      if (primaryPart.storageFileName) return primaryPart.storageFileName
-      if (primaryPart.filename) return encodeURIComponent(`${primaryPart.filename}`)
+      if (primaryPart.compositeMesh) return encodeURIComponent(model.compositeMesh) //Once compositeMesh is moved
+      if (primaryPart.storageFileName)
+        return `${THUMBNAILS_FOLDER}${primaryPart.storageFileName}`
+      if (primaryPart.filename)
+        return `${THUMBNAILS_FOLDER}${encodeURIComponent(`${primaryPart.filename}`)}`
     }
   }
   if (model.newFileName) return `${encodeURIComponent(model.newFileName)}`
