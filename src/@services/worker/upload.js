@@ -6,7 +6,6 @@ import { sendMessage, addMessageListener } from './worker'
 /* Send messages to worker */
 
 export const uploadFiles = (files, directory) => {
-  console.log(directory)
   sendMessage('upload:upload', {
     files,
     directory,

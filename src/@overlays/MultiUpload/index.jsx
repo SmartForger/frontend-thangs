@@ -375,7 +375,7 @@ const MultiUpload = ({ initData = null, folderId: _f }) => {
         submitModels()
       }
     },
-    [activeView, allTreeNodes, submitModels]
+    [activeView, allTreeNodes, dispatch, submitModels]
   )
 
   const handleBack = useCallback(() => {
@@ -426,10 +426,10 @@ const MultiUpload = ({ initData = null, folderId: _f }) => {
               {!activeNode
                 ? 'Upload Files'
                 : activeNode.isAssembly && activeNode.parentId
-                ? 'Sub Assembly'
-                : activeNode.isAssembly
-                ? 'New Assembly'
-                : 'Enter Information'}
+                  ? 'Sub Assembly'
+                  : activeNode.isAssembly
+                    ? 'New Assembly'
+                    : 'Enter Information'}
             </SingleLineBodyText>
             {activeView > -1 && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />
