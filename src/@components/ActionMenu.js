@@ -84,6 +84,7 @@ const ActionMenu = ({
   TargetComponentProps,
   MenuComponent = DefaultMenu,
   MenuComponentProps,
+  isAutoClosed = true,
   isOpenByDefault = false,
   isMobileActionBarActive = true,
 }) => {
@@ -115,6 +116,7 @@ const ActionMenu = ({
       className={c.ActionMenu}
       TargetComponent={TargetComponent}
       TargetComponentProps={TargetComponentProps}
+      isAutoClosed={isAutoClosed}
       isOpenByDefault={isOpenByDefault}
       onTargetClick={handleTargetClick}
     >
