@@ -310,7 +310,7 @@ export const PartExplorerMenu = ({ onChange = noop, model, selectedFilename }) =
             onChange={e => {
               handleInputChange(e.target.value)
             }}
-            autocomplete='off'
+            autoComplete='off'
           />
         </div>
         <Spacer size={'.5rem'} />
