@@ -41,11 +41,9 @@ const useStyles = createUseStyles(theme => {
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
-      overflow: 'scroll',
       position: 'relative',
 
       [md]: {
-        borderRadius: '1rem',
         alignItems: 'stretch',
         flexDirection: 'row',
       },
@@ -85,6 +83,12 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '0 0 1rem 1rem',
       [md]: {
         borderRadius: 0,
+      },
+    },
+    Signup_Wrapper: {
+      backgroundColor: theme.colors.white[300],
+      [md]: {
+        borderRadius: '1rem',
       },
     },
     Signup_FormWrapper: {
@@ -356,7 +360,7 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
   }, [dispatch, inputState, redirectUrl, source, validateEmail, validatePasswords])
 
   return (
-    <div className={classnames(c.Signup_Row, c.Signup_SignUpForm)}>
+    <div className={classnames(c.Signup_Row, c.Signup_Wrapper)}>
       <Spacer size='3rem' />
       <div className={c.Signup_FormWrapper}>
         <Spacer size='4rem' />
