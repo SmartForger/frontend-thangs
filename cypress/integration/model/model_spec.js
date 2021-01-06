@@ -5,7 +5,7 @@ import {
   isElement,
   isTextInsideClass,
   login,
-  removeModelsFoldersFromMyThangs,
+  clearModelsAndFolders,
 } from '../../utils/common-methods'
 import { CLASSES, MODEL, PATH, PROPS, TEXT, MODEL_CARD } from '../../utils/constants'
 import { commentInput, enterValidValue, TEST_USER_1 } from '../../utils/inputs'
@@ -14,7 +14,7 @@ import { multiUpload } from '../../utils/uploadMethods'
 
 describe('The Model Page', () => {
   before(() => {
-    removeModelsFoldersFromMyThangs()
+    clearModelsAndFolders()
   })
 
   beforeEach(() => {

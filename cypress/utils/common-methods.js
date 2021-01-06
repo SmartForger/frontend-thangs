@@ -222,14 +222,14 @@ export const isTextInsideClass = (className, text, prop) => {
     : cy.get(className, { timeout: 20000 }).contains(text)
 }
 
-export const removeModelsFoldersFromMyThangs = () => {
+export const clearModelsAndFolders = (user = USER) => {
   if (localStorage.getItem('currentUser')) {
     localStorage.removeItem('currentUser')
   }
-  apiLogin({ userName: USER.EMAIL, password: USER.PASSWORD })
+  apiLogin({ userName: user.EMAIL, password: user.PASSWORD })
     .then(() => {
       return api({
-        endpoint: `users/${USER.ID}/thangs`,
+        endpoint: `users/${user.ID}/thangs`,
         method: 'GET',
       })
     })

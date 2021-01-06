@@ -8,14 +8,14 @@ import {
   isTextInsideClass,
   login,
   openMyThangs,
-  removeModelsFoldersFromMyThangs,
+  clearModelsAndFolders,
 } from '../../utils/common-methods'
 import { CLASSES, FOLDER, PATH, PROPS, TEXT } from '../../utils/constants'
 import { createFolderInput, enterValidValue, TEST_USER_1 } from '../../utils/inputs'
 
 describe('My Thangs Page', () => {
   before(() => {
-    removeModelsFoldersFromMyThangs()
+    clearModelsAndFolders()
   })
 
   beforeEach(() => {
