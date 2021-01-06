@@ -14,10 +14,11 @@ import { ReactComponent as CameraIcon } from '@svg/icon-camera.svg'
 const useStyles = createUseStyles(theme => {
   return {
     Toolbar: {
-      margin: '0 auto 2rem',
+      margin: '0 auto',
       display: 'flex',
       flexDirection: 'row',
       width: '100%',
+      justifyContent: 'center',
     },
     Toolbar_Group: {
       display: 'flex',
@@ -31,6 +32,7 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.75rem',
       boxShadow: '0 1rem 2rem 0 rgba(0,0,0,.1)',
       flexGrow: 1,
+      maxWidth: 100,
     },
     Toolbar_ResetPill: {
       cursor: 'pointer',
@@ -65,6 +67,15 @@ const useStyles = createUseStyles(theme => {
     Toolbar_VerticalRule: {
       borderLeft: `1px solid ${theme.colors.white[900]}`,
       height: '2rem',
+    },
+    Toolbar_Snapshot: {
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      flexDirection: 'row',
+    },
+    Toolbar_PartExplorerWrapper: {
+      maxWidth: '100%',
     },
   }
 })
@@ -115,7 +126,9 @@ const Toolbar = ({
         )}
         <div className={c.Toolbar_Group}>
           <Spacer size={'1rem'} />
-          <CameraIcon onClick={onSnapshot} />
+          <div className={c.Toolbar_Snapshot}>
+            <CameraIcon onClick={onSnapshot} />
+          </div>
           <Spacer size={'1rem'} />
         </div>
         <Spacer size={'.75rem'} />
@@ -124,11 +137,11 @@ const Toolbar = ({
           <OrientationActionMenu selectedValue={orientation} onChange={onViewChange} />
           <Spacer size={'1rem'} />
         </div>
-        {showPartSelector && (
-          <>
-            <Spacer size={'1.125rem'} />
-            <div className={c.Toolbar_VerticalRule}></div>
-            <Spacer size={'1.125rem'} />
+      </div>
+      {showPartSelector && (
+        <>
+          <Spacer size={'1rem'} />
+          <div className={classnames(c.Toolbar, className)}>
             <div className={classnames(c.Toolbar_Group, c.Toolbar_PartExplorerWrapper)}>
               <PartExplorerActionMenu
                 selectedValue={selectedFilename}
@@ -136,9 +149,9 @@ const Toolbar = ({
                 onChange={setViewerModel}
               />
             </div>
-          </>
-        )}
-      </div>
+          </div>
+        </>
+      )}
     </>
   )
 }

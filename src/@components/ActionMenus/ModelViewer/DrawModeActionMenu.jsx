@@ -28,8 +28,8 @@ const useStyles = createUseStyles(theme => {
     DrawModeActionMenu_ClickableButton: {
       cursor: 'pointer',
       display: 'flex',
-      flexDirection: 'row',
       alignItems: 'center',
+      flexDirection: 'row',
     },
     DrawModeActionMenu__desktop: {
       display: 'none',

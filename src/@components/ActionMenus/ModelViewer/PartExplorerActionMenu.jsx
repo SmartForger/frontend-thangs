@@ -339,26 +339,30 @@ export const PartExplorerTarget = ({
 }) => {
   const c = useStyles({})
   return (
-    <div className={c.PartExplorerTarget} onClick={onClick}>
-      <ModelThumbnail
-        key={model.newFileName}
-        className={c.PartExplorerTarget_Thumbnail}
-        name={model}
-        model={{ ...model, uploadedFile: model.newFileName }}
-      />
-      <Spacer size={'1rem'} />
-      <SingleLineBodyText className={c.PartExplorerTarget_ModelName}>
-        {fileName}
-      </SingleLineBodyText>
+    <>
       <Spacer size={'.5rem'} />
-      {model.isAssembly ? <Tag>Assembly</Tag> : <Tag secondary>Part</Tag>}
+      <div className={c.PartExplorerTarget} onClick={onClick}>
+        <ModelThumbnail
+          key={model.newFileName}
+          className={c.PartExplorerTarget_Thumbnail}
+          name={model}
+          model={{ ...model, uploadedFile: model.newFileName }}
+        />
+        <Spacer size={'1rem'} />
+        <SingleLineBodyText className={c.PartExplorerTarget_ModelName}>
+          {fileName}
+        </SingleLineBodyText>
+        <Spacer size={'.5rem'} />
+        {model.isAssembly ? <Tag>Assembly</Tag> : <Tag secondary>Part</Tag>}
+        <Spacer size={'.5rem'} />
+        {isOpen ? (
+          <ExitIcon className={c.PartExplorerTarget_Arrow} />
+        ) : (
+          <ArrowDown className={c.PartExplorerTarget_Arrow} />
+        )}
+      </div>
       <Spacer size={'.5rem'} />
-      {isOpen ? (
-        <ExitIcon className={c.PartExplorerTarget_Arrow} />
-      ) : (
-        <ArrowDown className={c.PartExplorerTarget_Arrow} />
-      )}
-    </div>
+    </>
   )
 }
 

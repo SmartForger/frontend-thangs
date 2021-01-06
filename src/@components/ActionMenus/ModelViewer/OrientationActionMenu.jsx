@@ -29,7 +29,6 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
       display: 'flex',
       flexDirection: 'row',
-      padding: '.625rem 0',
       '& > span': {
         display: 'none',
 
