@@ -289,10 +289,10 @@ const UploadModels = ({
                 <div className={c.UploadModels_UploadColumn}>
                   {R.isEmpty(uploadFiles) && <UploadCardIcon />}
                   <Spacer size={'1rem'} />
-                  <TitleTertiary>Drag & Drop files</TitleTertiary>
-                  <MultiLineBodyText className={c.UploadModels_BrowseText}>
-                    or browse to upload.
-                  </MultiLineBodyText>
+                  <TitleTertiary>
+                    {multiple ? 'Drag & Drop files' : 'Drag & Drop file'}
+                  </TitleTertiary>
+                  <MultiLineBodyText>or browse to upload.</MultiLineBodyText>
                   <Spacer size={'1rem'} />
                   <Pill secondary>Browse</Pill>
                   <Spacer size={'.75rem'} />

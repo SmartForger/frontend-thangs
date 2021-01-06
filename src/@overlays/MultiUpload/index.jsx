@@ -338,10 +338,13 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
   }
 
   const handleUpdate = (id, data) => {
-    dispatch(types.SET_MODEL_INFO, { id, formData: {
-      ...data,
-      previousVersionModelId,
-    } })
+    dispatch(types.SET_MODEL_INFO, {
+      id,
+      formData: {
+        ...data,
+        previousVersionModelId,
+      },
+    })
   }
 
   const submitModels = useCallback(() => {
@@ -471,7 +474,9 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
           <div className={c.MultiUpload_Row}>
             <SingleLineBodyText className={c.MultiUpload_OverlayHeader}>
               {!activeNode
-                ? 'Upload Files'
+                ? previousVersionModelId
+                  ? 'Upload New Version'
+                  : 'Upload Files'
                 : activeNode.isAssembly && activeNode.parentId
                   ? 'Sub Assembly'
                   : activeNode.isAssembly
