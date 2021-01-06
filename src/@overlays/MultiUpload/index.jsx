@@ -12,6 +12,7 @@ import * as types from '@constants/storeEventTypes'
 import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { track } from '@utilities/analytics'
 import AssemblyInfo from './AssemblyInfo'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -116,7 +117,7 @@ const MultiUpload = ({ initData = null, folderId: _f }) => {
   const [singlePartsCount, setSinglePartsCount] = useState(0)
   const c = useStyles({})
   const multipartName = formData['multipart'] && formData['multipart'].name
-  // const history = useHistory()
+  const history = useHistory()
 
   const uploadedFiles = useMemo(
     () => Object.values(uploadFilesData).filter(file => file.name && !file.isError),
@@ -325,14 +326,14 @@ const MultiUpload = ({ initData = null, folderId: _f }) => {
       onFinish: () => {
         closeOverlay()
         dispatch(types.RESET_UPLOAD_FILES)
-        // history.push(
-        //   assemblyData && assemblyData.folderId && assemblyData.folderId !== 'files'
-        //     ? `/mythangs/folder/${assemblyData.folderId}`
-        //     : '/mythangs/all-files'
-        // )
+        history.push(
+          /*assemblyData && assemblyData.folderId && assemblyData.folderId !== 'files'
+            ? `/mythangs/folder/${assemblyData.folderId}`
+            : */ '/mythangs/recent-files'
+        )
       },
     })
-  }, [uploadedFiles, dispatch, closeOverlay])
+  }, [uploadedFiles, dispatch, closeOverlay, history])
 
   const handleContinue = useCallback(
     ({ applyRemaining, data }) => {
