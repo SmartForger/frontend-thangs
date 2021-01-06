@@ -149,7 +149,7 @@ const DropdownMenu = ({
   }, [onTargetClick, toggleOpen])
 
   return (
-    <div className={c.DropdownMenu_Container}>
+    <div className={c.DropdownMenu_Container} ref={dropdownRef}>
       {TargetComponent ? (
         <TargetComponent
           className={c.DropdownMenu_TargetComponent}

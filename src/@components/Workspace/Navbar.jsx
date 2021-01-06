@@ -100,11 +100,14 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       justifyContent: 'space-between',
       overflowX: 'hidden',
-      overflowY: 'scroll',
       scrollbarColor: 'transparent',
       height: '100%',
       paddingTop: '.125rem',
       position: 'relative',
+
+      '&::-webkit-scrollbar-track': {
+        background: 'transparent',
+      },
     },
     WorkspaceNavbar_MobileColumnOnly: {
       display: 'flex',

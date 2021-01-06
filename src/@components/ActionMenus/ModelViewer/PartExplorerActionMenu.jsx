@@ -205,7 +205,7 @@ const PartSelectorRow = ({
     <>
       <div
         className={classnames(c.PartSelectorRow, {
-          [c.PartSelectorRow__selected]: selectedFilename === part.filename,
+          [c.PartSelectorRow__selected]: selectedFilename === part.name,
         })}
       >
         {level > 0 && <Spacer width={`${level * 0.5}rem`} height={'2.625rem'} />}
@@ -370,7 +370,7 @@ const PartExplorerActionMenu = ({ onChange = noop, selectedValue, model }) => {
         onChange,
         actionBarTitle: 'Select a model',
         model,
-        selectedValue,
+        selectedFilename: selectedValue,
       }}
       TargetComponent={PartExplorerTarget}
       TargetComponentProps={{ model, selectedValue }}

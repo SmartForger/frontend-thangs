@@ -13,7 +13,7 @@ export const scrollbar = {
   scrollbarColor: '#C7C7C7 white',
 
   '&::-webkit-scrollbar': {
-    width: '.75rem',
+    width: '.375rem',
   },
   '&::-webkit-scrollbar-track': {
     background: 'white',
@@ -22,6 +22,5 @@ export const scrollbar = {
   '&::-webkit-scrollbar-thumb': {
     backgroundColor: '#C7C7C7',
     borderRadius: 20,
-    border: '3px solid white',
   },
 }

@@ -262,7 +262,6 @@ const PartInfo = props => {
 
   useEffect(() => {
     setInputState(formData)
-    onUpdate(activeNode.id, { ...formData })
     // eslint-disable-next-line
   }, [activeNode])
 
