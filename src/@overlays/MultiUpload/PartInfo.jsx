@@ -296,6 +296,7 @@ const PartInfo = props => {
       <form onSubmit={onFormSubmit(handleSubmit)}>
         <div className={c.PartInfo_Field}>
           <Input
+            autoComplete='off'
             className={c.PartInfo_FullWidthInput}
             name='name'
             label='Name *'

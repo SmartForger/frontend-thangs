@@ -227,6 +227,7 @@ const AssemblyInfo = ({
       <form onSubmit={onFormSubmit(handleSubmit)}>
         <div>
           <Input
+            autoComplete='off'
             className={c.AssemblyInfo_FullWidthInput}
             name='name'
             label='Name *'
