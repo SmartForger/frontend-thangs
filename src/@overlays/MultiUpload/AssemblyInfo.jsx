@@ -112,7 +112,7 @@ const useStyles = createUseStyles(theme => {
 
 const assemblyInfoSchema = Joi.object({
   name: Joi.string().required(),
-  description: Joi.string().required(),
+  description: Joi.string().allow(''),
   primary: Joi.string().allow(''),
   folderId: Joi.string().allow(''),
   category: Joi.string().allow(''),
@@ -245,7 +245,7 @@ const AssemblyInfo = ({
             className={c.AssemblyInfo_TextAreaInput}
             id='description-input'
             name='description'
-            label='Description *'
+            label='Description'
             type='description'
             value={inputState && inputState.description}
             onChange={handleOnInputChange}
