@@ -214,7 +214,7 @@ const MultiUpload = ({ initData = null, folderId: _f }) => {
       return formData[activeNode.id]
     }
 
-    const initialFormData = { name: activeNode.name, folderId: 'files' }
+    const initialFormData = { name: activeNode.name, folderId: '' }
     if (formData[activeNode.parentId]) {
       initialFormData.folderId = formData[activeNode.parentId].folderId
     }
@@ -253,7 +253,7 @@ const MultiUpload = ({ initData = null, folderId: _f }) => {
 
     return [
       {
-        value: 'files',
+        value: '',
         label: 'My Public Files',
         isPublic: true,
       },

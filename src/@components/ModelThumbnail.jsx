@@ -86,40 +86,45 @@ const thumbnailUrl = model =>
   model.fullThumbnailUrl
     ? model.fullThumbnailUrl
     : model.thumbnailUrl
-      ? model.thumbnailUrl
-      : `${THUMBNAILS_HOST}${getThumbnailUrl(model)}size=456x540`
+    ? model.thumbnailUrl
+    : `${THUMBNAILS_HOST}${getThumbnailUrl(model)}size=456x540`
 
 const getThumbnailUrl = (model = {}) => {
+  const {
+    parts,
+    compositeMesh,
+    filename,
+    modelFileName,
+    newFileName,
+    thumbnailUrl,
+    uploadedFile,
+  } = model
   let primaryPart
-  if (model.thumbnailUrl) return `${THUMBNAILS_FOLDER}${model.thumbnailUrl}?`
-  if (model.uploadedFile) return `${THUMBNAILS_FOLDER}${model.uploadedFile}?`
-  if (model.modelFileName)
-    return `${THUMBNAILS_FOLDER}${model.modelFileName.replace(
-      `${THUMBNAILS_FOLDER}`,
-      ''
-    )}?`
-  if (model.compositeMesh) {
-    const [meshFolder, ...compositeModel] = model.compositeMesh.split('/')
-    return `${compositeModel.join('%2F')}?source=${meshFolder}&` //CompositeMesh should be moved and this can be removed
+  if (thumbnailUrl) return `${THUMBNAILS_FOLDER}${thumbnailUrl}?`
+  if (uploadedFile) return `${THUMBNAILS_FOLDER}${uploadedFile}?`
+  if (modelFileName)
+    return `${THUMBNAILS_FOLDER}${modelFileName.replace(`${THUMBNAILS_FOLDER}`, '')}?`
+  if (compositeMesh) {
+    const [meshFolder, ...compositeModel] = compositeMesh.split('/')
+    return `${compositeModel.join('%2F')}?source=${meshFolder}&`
   }
-  if (model.parts) {
-    if (model.parts.length > 1) {
-      primaryPart = R.find(R.propEq('isPrimary', true))(model.parts) || model.parts[0]
-      if (primaryPart.filename)
-        return `${THUMBNAILS_FOLDER}${encodeURIComponent(`${primaryPart.filename}`)}?`
-    } else if (model.parts.length === 1) {
-      primaryPart = model.parts[0]
-      if (primaryPart.compositeMesh) {
-        const [meshFolder, ...compositeModel] = primaryPart.compositeMesh.split('/')
-        return `${compositeModel.join('%2F')}?source=${meshFolder}&` //Once compositeMesh is moved
-      }
-      if (primaryPart.storageFileName)
-        return `${THUMBNAILS_FOLDER}${primaryPart.storageFileName}?`
-      if (primaryPart.filename)
-        return `${THUMBNAILS_FOLDER}${encodeURIComponent(`${primaryPart.filename}`)}?`
+  if (filename) {
+    return `${encodeURIComponent(filename)}?`
+  }
+  if (parts) {
+    if (parts.length > 1) {
+      primaryPart = R.find(R.propEq('isPrimary', true))(parts) || parts[0]
+    } else {
+      primaryPart = parts[0]
+    }
+    if (primaryPart.compositeMesh) {
+      const [meshFolder, ...compositeModel] = primaryPart.compositeMesh.split('/')
+      return `${compositeModel.join('%2F')}?source=${meshFolder}&`
+    } else {
+      return `${THUMBNAILS_FOLDER}${encodeURIComponent(`${primaryPart.filename}`)}?`
     }
   }
-  if (model.newFileName) return `${encodeURIComponent(model.newFileName)}?`
+  if (newFileName) return `${encodeURIComponent(newFileName)}?`
   return 'unknown'
 }
 
@@ -131,7 +136,6 @@ const ModelThumbnail = ({ className, model, name }) => {
     track('Error - Thumbnail Image', { modelId: model && model.id })
   }, [model])
   const c = useStyles()
-
   const src = thumbnailUrl(model)
 
   return (

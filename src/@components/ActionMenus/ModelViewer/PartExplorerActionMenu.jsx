@@ -221,7 +221,7 @@ const PartSelectorRow = ({
               key={model.newFileName}
               className={c.PartSelectorRow_Thumbnail}
               name={part.name}
-              model={{ ...model, uploadedFile: part.filename.replace('/', '%2F') }}
+              model={part}
             />
             <Spacer size={'.75rem'} />
             <div className={c.PartExplorerDropdown_PartText}>
@@ -264,7 +264,7 @@ const AssemblyExplorer = ({
     <div className={classnames(className, c.AssemblyExplorer)}>
       {parts.map((part, index) => {
         const handleClick = () => {
-          onChange(part.filename)
+          onChange(encodeURIComponent(part.filename))
         }
 
         return (

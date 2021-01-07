@@ -88,7 +88,7 @@ const hoopsStatusReducer = (currentStatus, transition) => {
   }
 }
 
-const useHoopsViewer = modelFilename => {
+const useHoopsViewer = ({ modelURL, modelFilename }) => {
   const containerRef = useRef()
   const hoopsViewerRef = useRef()
   const [hoopsStatus, doTransition] = useReducer(
@@ -116,8 +116,7 @@ const useHoopsViewer = modelFilename => {
     ensureScriptIsLoaded('vendors/hoops/hoops_web_viewer.js')
       .then(async () => {
         debug('  * 1: Preparing Model')
-        const modelFileURI = encodeURIComponent(`${modelFilename}`)
-        const resp = await axios.get(`${MODEL_PREP_ENDPOINT_URI}/${modelFileURI}`, {
+        const resp = await axios.get(`${MODEL_PREP_ENDPOINT_URI}/${modelURL}`, {
           cancelToken: prepCancelSource.token,
         })
 
@@ -150,7 +149,7 @@ const useHoopsViewer = modelFilename => {
       clearTimeout(timeoutId)
       prepCancelSource.cancel('Model preparation canceled by user. (Effect cleanup)')
     }
-  }, [hoopsStatus, modelFilename])
+  }, [hoopsStatus, modelFilename, modelURL])
 
   useEffect(() => {
     debug('2. HWV Shutdown Registering Effect')
@@ -181,6 +180,7 @@ const useHoopsViewer = modelFilename => {
     }
 
     debug('  * 3: Create HWV')
+
     const viewer = new Communicator.WebViewer({
       container: containerRef.current,
       endpointUri: HOOPS_WS_ENDPOINT_URI,

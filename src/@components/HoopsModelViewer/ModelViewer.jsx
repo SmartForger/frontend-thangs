@@ -50,7 +50,10 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
   const [viewerModel, setViewerModel] = useState(null)
   const c = useStyles()
   const { useHoopsViewer } = useModels()
-  const { containerRef, hoops } = useHoopsViewer(viewerModel)
+  const { containerRef, hoops } = useHoopsViewer({
+    modelURL: viewerModel,
+    modelFilename: decodeURIComponent(viewerModel).split('?')[0],
+  })
   const { startTimer, getTime } = usePerformanceMetrics()
 
   useEffect(() => {
@@ -59,25 +62,27 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
   }, [])
 
   useEffect(() => {
+    const { parts, uploadedFile } = model
     let primaryPart
-    const { parts, compositeMesh } = model
     if (parts) {
       if (parts.length > 1) {
-        primaryPart = R.find(R.propEq('isPrimary', true))(parts)
-        if (!primaryPart) primaryPart = parts[0]
-        setViewerModel(primaryPart.filename)
+        primaryPart = R.find(R.propEq('isPrimary', true))(parts) || parts[0]
       } else {
-        if (compositeMesh) {
-          setViewerModel(compositeMesh)
-        } else {
-          primaryPart = parts[0]
-          setViewerModel(primaryPart.filename)
-        }
+        primaryPart = parts[0]
       }
-    } else if (model.uploadedFile) {
-      setViewerModel(model.uploadedFile)
     }
-  }, [model])
+    if (primaryPart) {
+      if (primaryPart.compositeMesh) {
+        const [meshFolder, ...compositeModel] = primaryPart.compositeMesh.split('/')
+        setViewerModel(`${compositeModel.join('%2F')}?source=${meshFolder}&`)
+      } else {
+        setViewerModel(encodeURIComponent(primaryPart.filename))
+      }
+    } else if (uploadedFile) {
+      setViewerModel(encodeURIComponent(uploadedFile))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [model.id])
 
   useEffect(() => {
     if (hoops.status.isReady) perfTrack('Page Loaded - HOOPS Viewer', getTime())

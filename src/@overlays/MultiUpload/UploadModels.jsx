@@ -215,7 +215,7 @@ const UploadModels = ({
     upload & process.`)
     } else if (Object.keys(uploadFiles).length > 25) {
       setWarningMessage(
-        'Notice: Uploading more than 25 files at a time may take a long time to upload & process.'
+        'Notice: Uploading more than 25 files at a time may take longer to upload & process.'
       )
     } else if (missingFiles.length > 0) {
       setWarningMessage(
