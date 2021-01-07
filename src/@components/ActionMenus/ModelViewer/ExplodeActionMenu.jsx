@@ -128,6 +128,7 @@ const ExplodeActionMenu = ({ onChange = noop, selectedValue }) => {
       TargetComponent={ExplodeTarget}
       TargetComponentProps={{ selectedValue }}
       isMobileActionBarActive={false}
+      isAutoClosed={false}
     />
   )
 }
