@@ -106,6 +106,7 @@ const OrientationTarget = ({ onClick = noop, selectedValue }) => {
       <SelectedOrientationIcon className={c.OrientationActionMenu__mobile} />
       <Spacer size={'.5rem'} className={c.OrientationActionMenu__desktop} />
       <ArrowDownIcon className={c.OrientationActionMenu__desktop} />
+      <Spacer size={'1.125rem'} />
     </div>
   )
 }

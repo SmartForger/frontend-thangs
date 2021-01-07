@@ -165,6 +165,7 @@ const ColorPickerTarget = ({ onClick = noop, selectedValue: color }) => {
       <ColorBucketIcon className={c.ColorPicker__mobile} />
       <Spacer size={'0.5rem'} className={c.ColorPicker__desktop} />
       <ArrowDown className={c.ColorPicker__desktop} />
+      <Spacer size={'1.125rem'} />
     </div>
   )
 }

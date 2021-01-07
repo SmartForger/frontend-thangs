@@ -92,6 +92,7 @@ const DrawModeTarget = ({ onClick = noop, selectedValue }) => {
       <DrawMobileIcon className={c.DrawModeActionMenu__mobile} />
       <Spacer size={'.5rem'} className={c.DrawModeActionMenu__desktop} />
       <ArrowDownIcon className={c.DrawModeActionMenu__desktop} />
+      <Spacer size={'1.125rem'} />
     </div>
   )
 }

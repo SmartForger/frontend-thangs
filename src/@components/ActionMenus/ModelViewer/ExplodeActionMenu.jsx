@@ -98,7 +98,7 @@ const ExplodeTarget = ({ onClick = noop }) => {
   )
 }
 
-const ExplodeMenu = ({ onChange = noop, selectedValue: magnitude }) => {
+const ExplodeMenu = ({ onChange = noop, selectedValue: magnitude = 0 }) => {
   const c = useStyles({})
 
   return (

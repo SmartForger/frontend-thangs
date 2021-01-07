@@ -94,13 +94,10 @@ const SharedFilesView = ({
   sharedFolders,
 }) => {
   const c = useStyles({})
-  const {
-    starredSharedFolders = [],
-    isLoading: isLoadingStarred,
-  } = useStarred()
+  const { starredSharedFolders = [], isLoading: isLoadingStarred } = useStarred()
 
   const filteredFolders = useMemo(() => {
-    return !R.isEmpty(sharedFolders)
+    return sharedFolders !== undefined && !R.isEmpty(sharedFolders)
       ? sharedFolders.filter(folder => !folder.name.includes('//'))
       : []
   }, [sharedFolders])

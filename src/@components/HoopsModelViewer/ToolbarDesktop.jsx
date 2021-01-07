@@ -89,7 +89,7 @@ const Toolbar = ({
   className,
   isAssembly = true,
   isMultipart = true,
-  magnitude,
+  magnitude = 0,
   mode,
   orientation,
   onColorChange,
@@ -135,7 +135,6 @@ const Toolbar = ({
           </div>
           <DrawModeActionMenu selectedValue={mode} onChange={onDrawChange} />
         </div>
-        <Spacer size={'1.125rem'} />
         <div className={c.Toolbar_VerticalRule}></div>
         <Spacer size={'1.125rem'} />
         <div className={c.Toolbar_Group}>
@@ -145,7 +144,6 @@ const Toolbar = ({
           </div>
           <OrientationActionMenu selectedValue={orientation} onChange={onViewChange} />
         </div>
-        <Spacer size={'1.125rem'} />
         <div className={c.Toolbar_VerticalRule}></div>
         <Spacer size={'1.125rem'} />
         <div className={c.Toolbar_Group}>
@@ -157,7 +155,6 @@ const Toolbar = ({
         </div>
         {isAssembly && (
           <>
-            <Spacer size={'1.125rem'} />
             <div className={c.Toolbar_VerticalRule}></div>
             <Spacer size={'1.125rem'} />
             <div className={c.Toolbar_Group}>
@@ -168,11 +165,11 @@ const Toolbar = ({
                 <Spacer size={'1.125rem'} />
               </div>
             </div>
+            <Spacer size={'1.125rem'} />
           </>
         )}
         {showPartSelector && (
           <>
-            <Spacer size={'1.125rem'} />
             <div className={c.Toolbar_VerticalRule}></div>
             <Spacer size={'1.125rem'} />
             <div className={classnames(c.Toolbar_Group, c.Toolbar_PartExplorerWrapper)}>

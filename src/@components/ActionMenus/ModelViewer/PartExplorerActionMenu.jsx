@@ -116,6 +116,10 @@ const useStyles = createUseStyles(theme => {
         whiteSpace: 'nowrap',
       },
     },
+    PartExplorerActionMenu: {
+      bottom: '5rem !important',
+      right: '-2rem !important',
+    },
     PartSelectorRow_Thumbnail: {
       backgroundColor: theme.colors.white[400],
       border: `1px solid ${theme.colors.white[900]}`,
@@ -340,7 +344,6 @@ export const PartExplorerTarget = ({
   const c = useStyles({})
   return (
     <>
-      <Spacer size={'.5rem'} />
       <div className={c.PartExplorerTarget} onClick={onClick}>
         <ModelThumbnail
           key={model.newFileName}
@@ -361,19 +364,20 @@ export const PartExplorerTarget = ({
           <ArrowDown className={c.PartExplorerTarget_Arrow} />
         )}
       </div>
-      <Spacer size={'.5rem'} />
     </>
   )
 }
 
 const PartExplorerActionMenu = ({ onChange = noop, selectedValue, model }) => {
+  const c = useStyles({})
   return (
     <ActionMenu
       MenuComponent={PartExplorerMenu}
       MenuComponentProps={{
-        onChange,
         actionBarTitle: 'Select a model',
+        className: c.PartExplorerActionMenu,
         model,
+        onChange,
         selectedFilename: selectedValue,
       }}
       TargetComponent={PartExplorerTarget}
