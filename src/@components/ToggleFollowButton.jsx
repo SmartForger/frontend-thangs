@@ -114,7 +114,7 @@ const AuthFollowButton = ({
         )}
         <div className={c.ToggleFollowButton__desktop}>
           <Spacer size='.5rem' />
-          {isFollowing ? 'Unfollow' : 'Follow'}
+          {isFollowing ? 'Following' : 'Follow'}
         </div>
       </Pill>
     )

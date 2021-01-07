@@ -15,7 +15,8 @@ export const updateLike = (updatedModel, state, userId, isLiked) => {
   const newLikedModels = R.path(['models'], newLikes)
   if (isLiked) {
     if (!R.find(R.propEq('id', id.toString()))(newLikedModels)) {
-      newModel.likes = [...newModel.likes, parseInt(userId)]
+      const currentLikes = newModel.likes || []
+      newModel.likes = [...currentLikes, parseInt(userId)]
       newLikes.models.push(newModel)
     }
   } else {

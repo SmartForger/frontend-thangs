@@ -181,7 +181,7 @@ const AuthLikeModelButton = ({
           <HeartButton liked={liked} c={c} hasChanged={hasChanged} />
           <div className={c.LikeModelButton__desktop}>
             <Spacer size='.5rem' />
-            <span>{liked ? 'Unlike' : 'Like'}</span>
+            <span>{liked ? 'Liked' : 'Like'}</span>
           </div>
         </>
       )}

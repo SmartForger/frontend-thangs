@@ -143,7 +143,7 @@ export const TEXT = {
   LIKED_LOWER_CASE: 'liked',
   FOLLOW: 'Follow',
   FOLLOWED: 'followed',
-  UNFOLLOW: 'Unfollow',
+  UNFOLLOW: 'Following',
   UPLOAD: 'Upload',
   COMMENT: 'Comment',
   UPLOAD_NEW_VERSION: 'Upload new version',
