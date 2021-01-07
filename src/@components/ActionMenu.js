@@ -85,8 +85,8 @@ const ActionMenu = ({
   MenuComponent = DefaultMenu,
   MenuComponentProps,
   isAutoClosed = true,
-  isOpenByDefault = false,
   isMobileActionBarActive = true,
+  isOpenByDefault = false,
 }) => {
   const c = useStyles()
   const { dispatch } = useStoreon()

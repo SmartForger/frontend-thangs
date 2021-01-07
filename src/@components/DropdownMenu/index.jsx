@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { Button, Spacer } from '@components'
@@ -6,7 +6,6 @@ import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
-import { useExternalClick } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -66,11 +65,7 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const useDropdownMenuState = ({
-  dropdownRef,
-  isInitiallyOpen = false,
-  isAutoClosed = true,
-}) => {
+const useDropdownMenuState = ({ isInitiallyOpen = false, isAutoClosed = true }) => {
   const [isOpen, setIsOpen] = useState(isInitiallyOpen)
   const toggleOpen = useCallback(
     _e => {
@@ -79,9 +74,16 @@ const useDropdownMenuState = ({
     [isOpen]
   )
   const closeMenu = () => setIsOpen(false)
-  useExternalClick(dropdownRef, () => {
-    if (isAutoClosed) closeMenu()
-  })
+  useEffect(() => {
+    if (isOpen && isAutoClosed) {
+      document.addEventListener('click', closeMenu)
+    }
+    return () => {
+      if (isOpen && isAutoClosed) {
+        document.removeEventListener('click', closeMenu)
+      }
+    }
+  }, [isAutoClosed, isOpen])
   return [isOpen, toggleOpen]
 }
 const DropdownItem = ({ children, to = '#', onClick, className, noHover = false }) => {
