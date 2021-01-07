@@ -3,3 +3,4 @@ export { default as OrientationActionMenu } from './ModelViewer/OrientationActio
 export { default as ExplodeActionMenu } from './ModelViewer/ExplodeActionMenu'
 export { default as ColorPickerActionMenu } from './ModelViewer/ColorPickerActionMenu'
 export { default as PartExplorerActionMenu } from './ModelViewer/PartExplorerActionMenu'
+export { default as LandingSortActionMenu } from './LandingSortActionMenu'

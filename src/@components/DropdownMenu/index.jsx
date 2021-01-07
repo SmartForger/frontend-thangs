@@ -6,6 +6,7 @@ import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
+import { useExternalClick } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -60,12 +61,19 @@ const useStyles = createUseStyles(theme => {
     DropdownMenu_Row: {
       ...theme.mixins.flexRow,
     },
+    DropdownMenu_FullWidth: {
+      width: '100%',
+    },
   }
 })
 
 const noop = () => null
 
-const useDropdownMenuState = ({ isInitiallyOpen = false, isAutoClosed = true }) => {
+const useDropdownMenuState = ({
+  dropdownRef,
+  isInitiallyOpen = false,
+  isAutoClosed = true,
+}) => {
   const [isOpen, setIsOpen] = useState(isInitiallyOpen)
   const toggleOpen = useCallback(
     _e => {
@@ -84,6 +92,7 @@ const useDropdownMenuState = ({ isInitiallyOpen = false, isAutoClosed = true }) 
       }
     }
   }, [isAutoClosed, isOpen])
+  useExternalClick(dropdownRef, closeMenu)
   return [isOpen, toggleOpen]
 }
 const DropdownItem = ({ children, to = '#', onClick, className, noHover = false }) => {
@@ -128,6 +137,7 @@ const DropdownMenu = ({
   className,
   iconOnly,
   isAutoClosed = true,
+  isExternalClosed = false,
   isOpen: isOpenExternal = undefined,
   isOpenByDefault = false,
   label,
@@ -138,7 +148,7 @@ const DropdownMenu = ({
 }) => {
   const dropdownRef = useRef(null)
   const [isOpenInternal, toggleOpen] = useDropdownMenuState({
-    dropdownRef,
+    dropdownRef: isExternalClosed ? dropdownRef : null,
     isInitiallyOpen: isOpenExternal || isOpenByDefault,
     isAutoClosed,
   })
@@ -170,9 +180,9 @@ const DropdownMenu = ({
         </Button>
       )}
       {isOpen && (
-        <div className={classnames(className, c.DropdownMenu)}>
+        <div className={classnames(className, c.DropdownMenu, c.DropdownMenu_Row)}>
           <Spacer size={borderSize} />
-          <div className={c.DropdownMenu_Row}>
+          <div className={c.DropdownMenu_FullWidth}>
             <Spacer size={borderSize} />
             {children}
             <Spacer size={borderSize} />

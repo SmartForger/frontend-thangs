@@ -6,6 +6,7 @@ import { DropdownMenu, DropdownItem, Spacer, LabelText } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowRightIcon } from '@svg/icon-arrow-right.svg'
 import * as types from '@constants/storeEventTypes'
+import classnames from 'classnames'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -13,8 +14,6 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     ActionMenu: {
-      bottom: '4.75rem',
-      right: '-1.125rem !important',
       opacity: 0,
       visibility: 'hidden',
       width: 'auto !important',
@@ -25,7 +24,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     DefaultMenu_Item: {
-      justifyContent: 'space-between',
+      justifyContent: 'left',
     },
     DefaultMenu_Row: {
       ...theme.mixins.flexRow,
@@ -45,6 +44,22 @@ const useStyles = createUseStyles(theme => {
         display: 'none',
       },
     },
+    DefaultMenu_Wrapper: {
+      [md]: {
+        margin: '-.5rem',
+      },
+    },
+    DefaultMenu_MobileRow: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '100%',
+
+      [md]: {
+        display: 'block',
+        width: 'unset',
+      },
+    },
   }
 })
 
@@ -54,23 +69,32 @@ const DefaultMenu = ({ onChange = noop, options = [] }) => {
   const c = useStyles({})
 
   return (
-    <div>
+    <div className={c.DefaultMenu_Wrapper}>
       {options.map((option, ind) => {
-        const { Icon = noop } = option
+        const { Icon = null } = option
         return (
           <React.Fragment key={`drawmodes_${ind}`}>
             <DropdownItem
               onClick={() => onChange(option.value)}
               className={c.DefaultMenu_Item}
             >
-              <div className={c.DefaultMenu_Row}>
-                <Icon />
-                <Spacer size={'.75rem'} />
-                <LabelText>{option.label}</LabelText>
+              <Spacer className={c.DefaultMenu__desktop} size={'.5rem'} />
+              <div className={c.DefaultMenu_MobileRow}>
+                <Spacer className={c.DefaultMenu__desktop} size={'.5rem'} />
+                <div className={c.DefaultMenu_Row}>
+                  {Icon && (
+                    <>
+                      <Icon />
+                      <Spacer size={'.75rem'} />
+                    </>
+                  )}
+                  <LabelText>{option.label}</LabelText>
+                </div>
+                <ArrowRightIcon className={c.DefaultMenu__mobile} />
+                <Spacer className={c.DefaultMenu__desktop} size={'.5rem'} />
               </div>
-              <ArrowRightIcon className={c.DefaultMenu__mobile} />
+              <Spacer className={c.DefaultMenu__desktop} size={'.5rem'} />
             </DropdownItem>
-            <Spacer className={c.DefaultMenu__desktop} size={'.25rem'} />
             <Spacer className={c.DefaultMenu__mobile} size={'2rem'} />
           </React.Fragment>
         )
@@ -85,12 +109,13 @@ const ActionMenu = ({
   MenuComponent = DefaultMenu,
   MenuComponentProps,
   isAutoClosed = true,
+  isExternalClosed = false,
   isMobileActionBarActive = true,
   isOpenByDefault = false,
 }) => {
   const c = useStyles()
   const { dispatch } = useStoreon()
-  const { onChange, ...menuProps } = MenuComponentProps
+  const { onChange, className, ...menuProps } = MenuComponentProps
 
   const handleChange = useCallback(
     value => {
@@ -113,10 +138,11 @@ const ActionMenu = ({
 
   return (
     <DropdownMenu
-      className={c.ActionMenu}
+      className={classnames(className, c.ActionMenu)}
       TargetComponent={TargetComponent}
       TargetComponentProps={TargetComponentProps}
       isAutoClosed={isAutoClosed}
+      isExternalClosed={isExternalClosed}
       isOpenByDefault={isOpenByDefault}
       onTargetClick={handleTargetClick}
     >

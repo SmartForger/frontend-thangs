@@ -7,8 +7,7 @@ import {
   Spacer,
   Spinner,
   TitleSecondary,
-  FilterDropdown,
-  FilterDropdownMenu,
+  LandingSortActionMenu,
   ModelCardLanding,
   CardCollectionLanding,
 } from '@components'
@@ -17,6 +16,7 @@ import { useCurrentUser, usePageMeta, usePerformanceMetrics, useQuery } from '@h
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
+import * as sortTypes from '@constants/sortTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
 
 const MQS_VALUES = [1440, 964, 736, 490]
@@ -113,13 +113,6 @@ const useStyles = createUseStyles(theme => {
 })
 
 const isBottom = el => el.getBoundingClientRect().bottom <= window.innerHeight
-const sortTypes = {
-  likes: 'likes',
-  date: 'date',
-  downloaded: 'downloaded',
-  trending: 'trending',
-}
-
 const title = sortBy => {
   switch (sortBy) {
     case sortTypes.likes:
@@ -135,22 +128,7 @@ const title = sortBy => {
   }
 }
 
-const label = sortBy => {
-  switch (sortBy) {
-    case sortTypes.likes:
-      return 'Popular'
-    case sortTypes.trending:
-      return 'Trending'
-    case sortTypes.date:
-      return 'New'
-    case sortTypes.downloaded:
-      return 'Downloads'
-    default:
-      return 'Models'
-  }
-}
-
-const Page = ({ user = {}, dispatch, modelPreviews = {}, sortBy }) => {
+const Page = ({ dispatch, modelPreviews = {}, sortBy }) => {
   const c = useStyles({})
   const containerRef = useRef(null)
   const history = useHistory()
@@ -194,35 +172,6 @@ const Page = ({ user = {}, dispatch, modelPreviews = {}, sortBy }) => {
     [history]
   )
 
-  const sortOptions = useMemo(() => {
-    return [
-      {
-        label: 'Popular',
-        value: sortTypes.likes,
-        selected: sortBy === sortTypes.likes,
-        onClick: () => handleSortBy(sortTypes.likes),
-      },
-      {
-        label: 'Trending',
-        value: sortTypes.trending,
-        selected: sortBy === sortTypes.trending,
-        onClick: () => handleSortBy(sortTypes.trending),
-      },
-      {
-        label: 'New',
-        value: sortTypes.date,
-        selected: sortBy === sortTypes.date,
-        onClick: () => handleSortBy(sortTypes.date),
-      },
-      {
-        label: 'Downloads',
-        value: sortTypes.downloaded,
-        selected: sortBy === sortTypes.downloaded,
-        onClick: () => handleSortBy(sortTypes.downloaded),
-      },
-    ]
-  }, [handleSortBy, sortBy])
-
   if (modelPreviews.isError) {
     return (
       <div data-cy='fetch-results-error'>
@@ -236,13 +185,7 @@ const Page = ({ user = {}, dispatch, modelPreviews = {}, sortBy }) => {
       <>
         <div className={c.Landing_Title}>
           <TitleSecondary>{title(sortBy)}</TitleSecondary>
-          <FilterDropdownMenu
-            user={user}
-            options={sortOptions}
-            TargetComponent={FilterDropdown}
-            dispatch={dispatch}
-            label={label(sortBy)}
-          />
+          <LandingSortActionMenu selectedValue={sortBy} onChange={handleSortBy} />
         </div>
 
         <CardCollectionLanding

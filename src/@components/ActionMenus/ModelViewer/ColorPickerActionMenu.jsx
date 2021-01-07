@@ -71,6 +71,10 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
       height: '1.5rem',
       width: '1.5rem',
+
+      '&:hover': {
+        border: `2px solid ${theme.colors.grey[300]}`,
+      },
     },
     ColorPickerMenu__isSelected: {
       border: `1px solid ${theme.variables.colors.cardBackground}`,
@@ -172,6 +176,8 @@ const ColorPickerActionMenu = ({ onChange = noop, selectedValue }) => {
       MenuComponentProps={{ onChange, actionBarTitle: 'Pick a color', selectedValue }}
       TargetComponent={ColorPickerTarget}
       TargetComponentProps={{ selectedValue }}
+      isAutoClosed={false}
+      isExternalClosed={true}
     />
   )
 }
