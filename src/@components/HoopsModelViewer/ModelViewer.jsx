@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import * as R from 'ramda'
 import { HowTo, Spinner } from '@components'
 import { useModels, usePerformanceMetrics } from '@hooks'
@@ -7,6 +7,7 @@ import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { perfTrack } from '@utilities/analytics'
+import { flattenTree } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -47,14 +48,29 @@ const useStyles = createUseStyles(theme => {
 })
 
 const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
-  const [viewerModel, setViewerModel] = useState(null)
+  const [selectedModel, setSelectedModel] = useState(null)
+  const [partList, setPartList] = useState([])
   const c = useStyles()
   const { useHoopsViewer } = useModels()
+  const { startTimer, getTime } = usePerformanceMetrics()
+
+  const viewerModel = useMemo(() => {
+    if (selectedModel) {
+      if (selectedModel.compositeMesh) {
+        const [meshFolder, ...compositeModel] = selectedModel.compositeMesh.split('/')
+        return `${compositeModel.join('%2F')}?source=${meshFolder}&`
+      } else if (selectedModel.uploadedFile) {
+        return encodeURIComponent(selectedModel.uploadedFile)
+      } else {
+        return encodeURIComponent(selectedModel.filename)
+      }
+    }
+  }, [selectedModel])
+
   const { containerRef, hoops } = useHoopsViewer({
     modelURL: viewerModel,
     modelFilename: decodeURIComponent(viewerModel).split('?')[0],
   })
-  const { startTimer, getTime } = usePerformanceMetrics()
 
   useEffect(() => {
     startTimer()
@@ -62,7 +78,7 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
   }, [])
 
   useEffect(() => {
-    const { parts, uploadedFile } = model
+    const { parts } = model
     let primaryPart
     if (parts) {
       if (parts.length > 1) {
@@ -70,17 +86,11 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
       } else {
         primaryPart = parts[0]
       }
+    } else {
+      primaryPart = model
     }
-    if (primaryPart) {
-      if (primaryPart.compositeMesh) {
-        const [meshFolder, ...compositeModel] = primaryPart.compositeMesh.split('/')
-        setViewerModel(`${compositeModel.join('%2F')}?source=${meshFolder}&`)
-      } else {
-        setViewerModel(encodeURIComponent(primaryPart.filename))
-      }
-    } else if (uploadedFile) {
-      setViewerModel(encodeURIComponent(uploadedFile))
-    }
+    setSelectedModel(primaryPart)
+    setPartList(flattenTree(model.parts, 'parts'))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [model.id])
 
@@ -99,8 +109,9 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
           hoops={hoops}
           minimizeTools={minimizeTools}
           model={model}
-          setViewerModel={setViewerModel}
-          selectedFilename={viewerModel}
+          setSelectedModel={setSelectedModel}
+          selectedModel={selectedModel}
+          partList={partList}
         />
       )}
     </div>

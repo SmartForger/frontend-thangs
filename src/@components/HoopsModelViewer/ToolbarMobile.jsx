@@ -87,16 +87,16 @@ const Toolbar = ({
   isMultipart = true,
   magnitude,
   mode,
-  model,
   orientation,
   onColorChange,
   onDrawChange,
   onSliderChange,
   onSnapshot,
   onViewChange,
+  partList,
   showPartSelector,
-  selectedFilename,
-  setViewerModel,
+  selectedModel,
+  setSelectedModel,
 }) => {
   const c = useStyles({ isAssembly, isMultipart })
   return (
@@ -144,9 +144,9 @@ const Toolbar = ({
           <div className={classnames(c.Toolbar, className)}>
             <div className={classnames(c.Toolbar_Group, c.Toolbar_PartExplorerWrapper)}>
               <PartExplorerActionMenu
-                selectedValue={selectedFilename}
-                model={model}
-                onChange={setViewerModel}
+                selectedValue={selectedModel}
+                partList={partList}
+                onChange={setSelectedModel}
               />
             </div>
           </div>

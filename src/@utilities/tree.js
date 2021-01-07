@@ -41,15 +41,18 @@ export const getAssemblyTreePayload = (nodes, uploadedFiles) => {
   return nodes.map(checkNode)
 }
 
-export const flattenTree = nodes => {
+export const flattenTree = (nodes, childProp = 'subs') => {
   if (!nodes || nodes.length === 0) {
     return []
   }
 
   const addLevel = (node, level = 0) => {
     const newNode = { ...node, level }
-    const subs = node.subs
-      ? node.subs.reduce((arr, subnode) => [...arr, ...addLevel(subnode, level + 1)], [])
+    const subs = node[childProp]
+      ? node[childProp].reduce(
+        (arr, subnode) => [...arr, ...addLevel(subnode, level + 1)],
+        []
+      )
       : []
     return [newNode, ...subs]
   }
@@ -83,7 +86,7 @@ export const findNodeByName = (nodes, name) => {
       return null
     }
 
-    for (let i = 0; i < node.subs.length; i ++) {
+    for (let i = 0; i < node.subs.length; i++) {
       const subnode = findNode(node.subs[i], name)
       if (subnode) {
         return subnode

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Header, Footer, FeedbackTooltip } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -155,7 +155,12 @@ const BackToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  window.addEventListener('scroll', checkScrollTop)
+  useEffect(() => {
+    window.addEventListener('scroll', checkScrollTop)
+
+    return window.removeEventListener('scroll', checkScrollTop)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (!showScroll) return null
   return (

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import classnames from 'classnames'
 import {
   ActionMenu,
@@ -194,39 +194,32 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const PartSelectorRow = ({
-  model,
-  part,
-  onClick,
-  onChange,
-  selectedFilename,
-  level = 0,
-}) => {
-  const c = useStyles({ level })
-  const isAssembly = useMemo(() => part.parts && part.parts.length > 0, [part])
-
+const PartSelectorRow = ({ part = {}, onClick, selectedPart = {} }) => {
+  const c = useStyles({})
+  const { name: selectedFilename } = selectedPart
+  const { isAssembly, level, name, newFileName } = part
   return (
     <>
       <div
         className={classnames(c.PartSelectorRow, {
-          [c.PartSelectorRow__selected]: selectedFilename === part.name,
+          [c.PartSelectorRow__selected]: selectedFilename === name,
         })}
       >
-        {level > 0 && <Spacer width={`${level * 0.5}rem`} height={'2.625rem'} />}
+        {level > 0 && <Spacer width={`${level * 1.5}rem`} height={'2.625rem'} />}
         <div className={c.PartSelectorRow_Column} onClick={onClick}>
           <Spacer size={'.5rem'} />
           <div className={c.PartSelectorRow_Row}>
             <Spacer size={'.5rem'} />
             <ModelThumbnail
-              key={model.newFileName}
+              key={newFileName}
               className={c.PartSelectorRow_Thumbnail}
-              name={part.name}
+              name={name}
               model={part}
             />
             <Spacer size={'.75rem'} />
             <div className={c.PartExplorerDropdown_PartText}>
-              <SingleLineBodyText>{part.name}</SingleLineBodyText>
-              {model.isAssembly && (
+              <SingleLineBodyText>{name}</SingleLineBodyText>
+              {part.isAssembly && (
                 <>
                   <Spacer size={'.5rem'} />
                   <Tag secondary={!isAssembly}>{isAssembly ? 'Assembly' : 'Part'}</Tag>
@@ -238,44 +231,26 @@ const PartSelectorRow = ({
           <Spacer size={'.5rem'} />
         </div>
       </div>
-      {isAssembly && (
-        <AssemblyExplorer
-          model={model}
-          parts={part.parts}
-          onChange={onChange}
-          selectedFilename={selectedFilename}
-          level={level + 1}
-        />
-      )}
     </>
   )
 }
 
-const AssemblyExplorer = ({
-  className,
-  model,
-  parts,
-  onChange,
-  selectedFilename,
-  level = 0,
-}) => {
+const AssemblyExplorer = ({ className, parts, onChange, selectedPart }) => {
   const c = useStyles({})
   return (
     <div className={classnames(className, c.AssemblyExplorer)}>
       {parts.map((part, index) => {
         const handleClick = () => {
-          onChange(encodeURIComponent(part.filename))
+          onChange(part)
         }
 
         return (
           <PartSelectorRow
-            key={`partRow_${index}_${level}`}
-            model={model}
+            key={`partRow_${index}`}
             part={part}
             onClick={handleClick}
             onChange={onChange}
-            selectedFilename={selectedFilename}
-            level={level}
+            selectedPart={selectedPart}
           />
         )
       })}
@@ -283,21 +258,24 @@ const AssemblyExplorer = ({
   )
 }
 
-export const PartExplorerMenu = ({ onChange = noop, model, selectedFilename }) => {
+export const PartExplorerMenu = ({
+  onChange = noop,
+  partList = [],
+  selectedValue: selectedPart,
+}) => {
   const c = useStyles({})
-  const { parts } = model
-  const [partsToDisplay, setPartsToDisplay] = useState(parts)
+  const [partsToDisplay, setPartsToDisplay] = useState(partList)
 
   const handleInputChange = useCallback(
     value => {
-      if (!value || value === '') setPartsToDisplay(parts)
-      const newParts = parts.filter(file => {
+      if (!value || value === '') setPartsToDisplay(partList)
+      const newParts = partList.filter(file => {
         const fileName = file.name.toLowerCase()
         return fileName.includes(value.toLowerCase())
       })
       setPartsToDisplay(newParts)
     },
-    [parts]
+    [partList]
   )
 
   return (
@@ -323,10 +301,9 @@ export const PartExplorerMenu = ({ onChange = noop, model, selectedFilename }) =
       {partsToDisplay.length > 0 ? (
         <AssemblyExplorer
           className={c.AssemblyExplorer_Wrapper}
-          model={model}
           parts={partsToDisplay}
           onChange={onChange}
-          selectedFilename={selectedFilename}
+          selectedPart={selectedPart}
         />
       ) : (
         <MultiLineBodyText>No models found</MultiLineBodyText>
@@ -338,25 +315,25 @@ export const PartExplorerMenu = ({ onChange = noop, model, selectedFilename }) =
 export const PartExplorerTarget = ({
   isOpen,
   onClick = noop,
-  model = {},
-  selectedValue: fileName,
+  selectedValue: selectedPart = {},
 }) => {
   const c = useStyles({})
+
   return (
     <>
       <div className={c.PartExplorerTarget} onClick={onClick}>
         <ModelThumbnail
-          key={model.newFileName}
+          key={selectedPart.newFileName}
           className={c.PartExplorerTarget_Thumbnail}
-          name={model}
-          model={{ ...model, uploadedFile: model.newFileName }}
+          name={selectedPart.name}
+          model={{ ...selectedPart, uploadedFile: selectedPart.newFileName }}
         />
         <Spacer size={'1rem'} />
         <SingleLineBodyText className={c.PartExplorerTarget_ModelName}>
-          {fileName}
+          {selectedPart.name}
         </SingleLineBodyText>
         <Spacer size={'.5rem'} />
-        {model.isAssembly ? <Tag>Assembly</Tag> : <Tag secondary>Part</Tag>}
+        {selectedPart.isAssembly ? <Tag>Assembly</Tag> : <Tag secondary>Part</Tag>}
         <Spacer size={'.5rem'} />
         {isOpen ? (
           <ExitIcon className={c.PartExplorerTarget_Arrow} />
@@ -368,7 +345,7 @@ export const PartExplorerTarget = ({
   )
 }
 
-const PartExplorerActionMenu = ({ onChange = noop, selectedValue, model }) => {
+const PartExplorerActionMenu = ({ onChange = noop, selectedValue, partList }) => {
   const c = useStyles({})
   return (
     <ActionMenu
@@ -376,12 +353,12 @@ const PartExplorerActionMenu = ({ onChange = noop, selectedValue, model }) => {
       MenuComponentProps={{
         actionBarTitle: 'Select a model',
         className: c.PartExplorerActionMenu,
-        model,
+        partList,
         onChange,
-        selectedFilename: selectedValue,
+        selectedValue,
       }}
       TargetComponent={PartExplorerTarget}
-      TargetComponentProps={{ model, selectedValue }}
+      TargetComponentProps={{ selectedValue }}
       isAutoClosed={false}
       isOpenByDefault={true}
     />

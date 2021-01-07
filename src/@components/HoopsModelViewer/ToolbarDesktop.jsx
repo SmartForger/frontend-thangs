@@ -98,10 +98,10 @@ const Toolbar = ({
   onSliderChange,
   onSnapshot,
   onViewChange,
-  selectedFilename,
-  setViewerModel,
+  partList,
+  selectedModel,
+  setSelectedModel,
   showPartSelector,
-  model,
 }) => {
   const c = useStyles({ isAssembly, isMultipart })
 
@@ -174,9 +174,9 @@ const Toolbar = ({
             <Spacer size={'1.125rem'} />
             <div className={classnames(c.Toolbar_Group, c.Toolbar_PartExplorerWrapper)}>
               <PartExplorerActionMenu
-                selectedValue={selectedFilename}
-                model={model}
-                onChange={setViewerModel}
+                selectedValue={selectedModel}
+                partList={partList}
+                onChange={setSelectedModel}
               />
             </div>
           </>
