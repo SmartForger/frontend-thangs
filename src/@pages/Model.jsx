@@ -466,18 +466,19 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime }) => {
     ? `3D ${modelData.category} model`
     : modelData.owner && modelData.owner.username
   const pageTitle = `${modelData.name} | ${modelMetaTitle}${title}`
+  const modelDescription = modelData.description || ''
   return (
     <>
       <Helmet>
         <title>{pageTitle}</title>
         <meta
           name='description'
-          content={`${description}${modelData.description.slice(0, 129)}`}
+          content={`${description}${modelDescription.slice(0, 129)}`}
         />
         <meta property='og:title' content={pageTitle} />
         <meta
           property='og:description'
-          content={`${modelData.description.slice(0, 129)} ${description}`}
+          content={`${modelDescription.slice(0, 129)} ${description}`}
         />
         <meta
           property='og:image'
@@ -502,7 +503,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime }) => {
             <div className={c.Model_LeftColumn}>
               <div>
                 <Markdown className={c.Model_ModelDescription}>
-                  {modelData.description}
+                  {modelDescription}
                 </Markdown>
                 <div className={c.Model_ModelDetails}>
                   <ModelDetails model={modelData} />
