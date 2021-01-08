@@ -358,7 +358,9 @@ const FolderRow = ({ folder }) => {
 
 const FileRow = ({ model }) => {
   const c = useStyles({})
-
+  // This is to safe-guard against an issue where model comes back as an
+  // empty object from api-platform, not an expected behavior. - BE
+  if (!model || R.isEmpty(model)) return null
   return (
     <>
       <td className={c.FileTable_Row_Column}>
