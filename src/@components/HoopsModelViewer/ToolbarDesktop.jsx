@@ -161,7 +161,7 @@ const Toolbar = ({
               <ExplodeActionMenu selectedValue={magnitude} onChange={onSliderChange} />
               <div className={c.Toolbar_WideText}>
                 <Spacer size={'1rem'} />
-                <Slider onChange={onSliderChange} steps={30} value={magnitude} />
+                <Slider onChange={onSliderChange} steps={40} value={magnitude} />
                 <Spacer size={'1.125rem'} />
               </div>
             </div>

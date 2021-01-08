@@ -109,7 +109,7 @@ const ExplodeMenu = ({ onChange = noop, selectedValue: magnitude = 0 }) => {
             <Slider
               className={c.ExplodeDropdown_Slider}
               onChange={onChange}
-              steps={25}
+              steps={40}
               value={magnitude}
             />
           </div>
