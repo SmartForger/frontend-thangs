@@ -177,6 +177,7 @@ const UploadModels = ({
   isAssembly = false,
   setIsAssembly = noop,
   validating = false,
+  validated = false,
   showAssemblyToggle,
 }) => {
   const hasFile = Object.keys(uploadFiles).length > 0
@@ -213,7 +214,7 @@ const UploadModels = ({
     if (warningFiles.length !== 0) {
       setWarningMessage(`Notice: Files over ${FILE_SIZE_LIMITS.soft.pretty} may take a long time to
     upload & process.`)
-    } else if (Object.keys(uploadFiles).length > 25) {
+    } else if (Object.keys(uploadFiles).length > 25 && !validated) {
       setWarningMessage(
         'Notice: Uploading more than 25 files at a time may take longer to upload & process.'
       )
@@ -230,6 +231,7 @@ const UploadModels = ({
     setWarningMessage,
     uploadFiles,
     uploadTreeData,
+    validated,
     validating,
   ])
 
@@ -277,7 +279,6 @@ const UploadModels = ({
             className={c.UploadTreeView}
             nodes={uploadTreeData}
             levelPadding={28}
-            loading={validating || isLoadingFiles}
             defaultExpanded={uploadTreeData.length < 2}
             renderNode={(node, level) => (
               <UploadTreeNode
@@ -285,6 +286,7 @@ const UploadModels = ({
                 level={level}
                 onUpload={uploadFile}
                 onRemove={onRemoveNode}
+                isLoading={validating}
               />
             )}
           />
@@ -297,9 +299,9 @@ const UploadModels = ({
                 checked={isAssembly}
                 onChange={toggleAssembly}
               />
-              <Spacer size={'1.5rem'} />
             </>
           )}
+          <Spacer size={'1rem'} />
           <div className={c.UploadModels_ButtonWrapper}>
             <Button secondary onClick={onCancel}>
               Cancel

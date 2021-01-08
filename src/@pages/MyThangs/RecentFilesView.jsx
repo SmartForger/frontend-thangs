@@ -111,7 +111,7 @@ const RecentFilesView = ({
               )}
               {starredFolders.map((folder, index) => {
                 return (
-                  <div className={c.RecentFilesView_Row} key={`starred_${index}`}>
+                  <div className={c.RecentFilesView_Row} key={`starred_folders_${index}`}>
                     <FolderCard folder={folder} handleClick={handleChangeFolder} />
                     <Spacer size='2rem' />
                   </div>
@@ -119,7 +119,7 @@ const RecentFilesView = ({
               })}
               {starredModels.map((model, index) => {
                 return (
-                  <div className={c.RecentFilesView_Row} key={`starred_${index}`}>
+                  <div className={c.RecentFilesView_Row} key={`starred_models_${index}`}>
                     <FileCard model={model} handleClick={handleEditModel} />
                     <Spacer size='2rem' />
                   </div>

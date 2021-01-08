@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 // import { useHistory } from 'react-router-dom'
 import * as R from 'ramda'
-import { SingleLineBodyText, Spacer, Spinner } from '@components'
+import { SingleLineBodyText, Spacer } from '@components'
 import PartInfo from './PartInfo'
 import UploadModels from './UploadModels'
 import { createUseStyles } from '@style'
@@ -412,11 +412,6 @@ const MultiUpload = ({ initData = null, folderId: _f }) => {
 
   return (
     <div className={c.MultiUpload} data-cy='multi-upload-overlay'>
-      {isLoading && (
-        <div className={c.MultiUpload_LoaderScreen}>
-          <Spinner />
-        </div>
-      )}
       <Spacer size={'2rem'} />
       <div className={c.MultiUpload_Content}>
         <div className={c.MultiUpload_Column}>
@@ -426,10 +421,10 @@ const MultiUpload = ({ initData = null, folderId: _f }) => {
               {!activeNode
                 ? 'Upload Files'
                 : activeNode.isAssembly && activeNode.parentId
-                  ? 'Sub Assembly'
-                  : activeNode.isAssembly
-                    ? 'New Assembly'
-                    : 'Enter Information'}
+                ? 'Sub Assembly'
+                : activeNode.isAssembly
+                ? 'New Assembly'
+                : 'Enter Information'}
             </SingleLineBodyText>
             {activeView > -1 && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />
@@ -454,6 +449,7 @@ const MultiUpload = ({ initData = null, folderId: _f }) => {
             isAssembly={isAssembly}
             setIsAssembly={setIsAssembly}
             validating={validating}
+            validated={validated}
             showAssemblyToggle={validated && singlePartsCount > 1}
           />
         ) : activeNode.isAssembly ? (

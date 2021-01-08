@@ -24,12 +24,18 @@ const useStyles = createUseStyles(theme => {
       marginTop: '.5rem',
       zIndex: 2,
       overflowY: 'auto',
+      opacity: 0,
+      visibility: 'hidden',
       ...theme.mixins.scrollbar,
       ...theme.mixins.flexColumn,
 
       [md]: {
         right: '0rem',
       },
+    },
+    DropdownMenu__isOpen: {
+      opacity: 1,
+      visibility: 'visible',
     },
     DropdownMenu_Item: {
       ...theme.text.boldText,
@@ -179,17 +185,19 @@ const DropdownMenu = ({
           <ButtonIcon />
         </Button>
       )}
-      {isOpen && (
-        <div className={classnames(className, c.DropdownMenu, c.DropdownMenu_Row)}>
+      <div
+        className={classnames(className, c.DropdownMenu, c.DropdownMenu_Row, {
+          [c.DropdownMenu__isOpen]: isOpen,
+        })}
+      >
+        <Spacer size={borderSize} />
+        <div className={c.DropdownMenu_FullWidth}>
           <Spacer size={borderSize} />
-          <div className={c.DropdownMenu_FullWidth}>
-            <Spacer size={borderSize} />
-            {children}
-            <Spacer size={borderSize} />
-          </div>
+          {children}
           <Spacer size={borderSize} />
         </div>
-      )}
+        <Spacer size={borderSize} />
+      </div>
     </div>
   )
 }

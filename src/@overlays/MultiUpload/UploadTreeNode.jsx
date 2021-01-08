@@ -1,6 +1,12 @@
 import React from 'react'
 import cn from 'classnames'
-import { Spacer, SingleLineBodyText, MetadataSecondary, Tooltip } from '@components'
+import {
+  Spacer,
+  Spinner,
+  SingleLineBodyText,
+  MetadataSecondary,
+  Tooltip,
+} from '@components'
 import { createUseStyles } from '@style'
 import { formatBytes } from '@utilities'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
@@ -62,7 +68,7 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const UploadTreeNode = ({ node, level: _l, onUpload, onRemove }) => {
+const UploadTreeNode = ({ node, level: _l, onUpload, onRemove, isLoading }) => {
   const c = useStyles()
 
   const handleRemove = () => {
@@ -76,7 +82,7 @@ const UploadTreeNode = ({ node, level: _l, onUpload, onRemove }) => {
       })}
     >
       {node.loading ? (
-        <UploadIcon className={c.UploadTreeNode_Icon} />
+        <Spinner size={'1rem'} />
       ) : !node.valid || !node.treeValid ? (
         <Tooltip title='Missing file'>
           <InfoIcon className={c.UploadTreeNode_Icon} />
@@ -93,7 +99,9 @@ const UploadTreeNode = ({ node, level: _l, onUpload, onRemove }) => {
       {node.size && (
         <>
           <Spacer width={'0.5rem'} />
-          <MetadataSecondary>{formatBytes(node.size)}</MetadataSecondary>
+          <MetadataSecondary>
+            {isLoading ? 'validating...' : formatBytes(node.size)}
+          </MetadataSecondary>
         </>
       )}
       <Spacer size={'0.5rem'} />

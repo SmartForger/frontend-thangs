@@ -42,11 +42,12 @@ const TreeView = ({
   return (
     <div className={cn(c.TreeView_Root, className)}>
       <div className={c.TreeView_Content}>
-        {nodes.map(node => (
+        {nodes.map((node, index) => (
           <TreeNode
-            key={node.id}
+            key={`treeNode_${node.id}`}
             node={node}
             renderNode={renderNode}
+            isLastNode={index === nodes.length - 1}
             level={0}
             levelPadding={levelPadding}
             defaultExpanded={defaultExpanded}

@@ -32,10 +32,10 @@ const Toolbar = ({
   model = {},
   partList = [],
   setSelectedModel = noop,
-  selectedModel,
+  selectedModel = {},
 }) => {
   const isMultipart = !model.isAssembly && model.parts && model.parts.length > 1
-  const isAssembly = model.isAssembly
+  const isAssembly = selectedModel.parts && selectedModel.parts.length && !isMultipart
   const c = useStyles({ isMultipart, isAssembly })
   //These keep track the UI toolbar state
   const [mode, setMode] = useState(null)
@@ -97,7 +97,7 @@ const Toolbar = ({
     getViewerSnapshot(model.name)
   }, [getViewerSnapshot, model.name])
 
-  const showPartSelector = isMultipart || isAssembly
+  const showPartSelector = isMultipart || model.isAssembly
 
   const toolbarProps = {
     color,

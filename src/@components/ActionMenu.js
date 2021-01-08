@@ -73,7 +73,7 @@ const DefaultMenu = ({ onChange = noop, options = [] }) => {
       {options.map((option, ind) => {
         const { Icon = null } = option
         return (
-          <React.Fragment key={`drawmodes_${ind}`}>
+          <React.Fragment key={`${option.value}_${ind}`}>
             <DropdownItem
               onClick={() => onChange(option.value)}
               className={c.DefaultMenu_Item}
@@ -126,15 +126,18 @@ const ActionMenu = ({
   )
 
   const handleTargetClick = useCallback(() => {
-    if (isMobileActionBarActive)
-      dispatch(types.OPEN_ACTION_BAR, {
-        Component: MenuComponent,
-        data: {
-          onChange: handleChange,
-          ...menuProps,
-        },
-      })
-  }, [isMobileActionBarActive, dispatch, MenuComponent, handleChange, menuProps])
+    // This is currently causing some major performance issues
+    // with the viewer tool dropdowns i.e part explorer - BE
+    //
+    // if (isMobileActionBarActive)
+    // dispatch(types.OPEN_ACTION_BAR, {
+    //   Component: MenuComponent,
+    //   data: {
+    //     onChange: handleChange,
+    //     ...menuProps,
+    //   },
+    // })
+  }, [])
 
   return (
     <DropdownMenu

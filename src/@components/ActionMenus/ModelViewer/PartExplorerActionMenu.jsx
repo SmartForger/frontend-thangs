@@ -13,6 +13,7 @@ import { createUseStyles } from '@style'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X-sm.svg'
 import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
+import { ReactComponent as IndentArrow } from '@svg/icon-indent-arrow.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -81,6 +82,7 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
       display: 'flex',
       flexDirection: 'row',
+      alignItems: 'center',
     },
     PartSelectorRow_Column: {
       cursor: 'pointer',
@@ -197,7 +199,8 @@ const noop = () => null
 const PartSelectorRow = ({ part = {}, onClick, selectedPart = {} }) => {
   const c = useStyles({})
   const { name: selectedFilename } = selectedPart
-  const { isAssembly, level, name, newFileName } = part
+  const { level, parts = [], name, newFileName } = part
+  const isAssembly = parts.length > 0
   return (
     <>
       <div
@@ -209,6 +212,7 @@ const PartSelectorRow = ({ part = {}, onClick, selectedPart = {} }) => {
         <div className={c.PartSelectorRow_Column} onClick={onClick}>
           <Spacer size={'.5rem'} />
           <div className={c.PartSelectorRow_Row}>
+            {level > 0 && <IndentArrow />}
             <Spacer size={'.5rem'} />
             <ModelThumbnail
               key={newFileName}
@@ -219,12 +223,8 @@ const PartSelectorRow = ({ part = {}, onClick, selectedPart = {} }) => {
             <Spacer size={'.75rem'} />
             <div className={c.PartExplorerDropdown_PartText}>
               <SingleLineBodyText>{name}</SingleLineBodyText>
-              {part.isAssembly && (
-                <>
-                  <Spacer size={'.5rem'} />
-                  <Tag secondary={!isAssembly}>{isAssembly ? 'Assembly' : 'Part'}</Tag>
-                </>
-              )}
+              <Spacer size={'.5rem'} />
+              <Tag secondary={!isAssembly}>{isAssembly ? 'Assembly' : 'Part'}</Tag>
             </div>
             <Spacer size={'.5rem'} />
           </div>
@@ -265,7 +265,6 @@ export const PartExplorerMenu = ({
 }) => {
   const c = useStyles({})
   const [partsToDisplay, setPartsToDisplay] = useState(partList)
-
   const handleInputChange = useCallback(
     value => {
       if (!value || value === '') setPartsToDisplay(partList)
@@ -318,7 +317,6 @@ export const PartExplorerTarget = ({
   selectedValue: selectedPart = {},
 }) => {
   const c = useStyles({})
-
   return (
     <>
       <div className={c.PartExplorerTarget} onClick={onClick}>
@@ -333,7 +331,11 @@ export const PartExplorerTarget = ({
           {selectedPart.name}
         </SingleLineBodyText>
         <Spacer size={'.5rem'} />
-        {selectedPart.isAssembly ? <Tag>Assembly</Tag> : <Tag secondary>Part</Tag>}
+        {selectedPart.parts && selectedPart.parts.length > 0 ? (
+          <Tag>Assembly</Tag>
+        ) : (
+          <Tag secondary>Part</Tag>
+        )}
         <Spacer size={'.5rem'} />
         {isOpen ? (
           <ExitIcon className={c.PartExplorerTarget_Arrow} />
