@@ -322,7 +322,9 @@ const FileTableHeader = ({ sortedBy, order, onSort = () => {} }) => {
 
 const FolderRow = ({ folder }) => {
   const c = useStyles({})
-
+  // This is to safe-guard against an issue where folder comes back as an
+  // empty object from api-platform, not an expected behavior. - BE
+  if (!folder || R.isEmpty(folder)) return null
   return (
     <>
       <td title={folder.name} className={c.FileTable_Row_Column}>
