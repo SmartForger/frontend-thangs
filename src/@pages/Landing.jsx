@@ -193,9 +193,10 @@ const Page = ({ dispatch, modelPreviews = {}, sortBy }) => {
           isLoading={isLoading}
         >
           {Array.isArray(modelPreviews.data) &&
-            modelPreviews.data.map((model, index) => (
-              <ModelCardLanding key={`model-${model.id}:${index}`} model={model} />
-            ))}
+            modelPreviews.data.map((model, index) => {
+              if (!model) return null
+              return <ModelCardLanding key={`model-${model.id}:${index}`} model={model} />
+            })}
         </CardCollectionLanding>
       </>
     </div>
