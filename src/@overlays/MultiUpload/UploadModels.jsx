@@ -307,7 +307,7 @@ const UploadModels = ({
               Cancel
             </Button>
             <Spacer size={'1rem'} className={c.UploadModels_ButtonSpacer} />
-            <Button onClick={onContinue}>
+            <Button onClick={onContinue} disabled={isLoadingFiles || validating}>
               {isLoadingFiles || validating ? 'Processing...' : 'Continue'}
             </Button>
           </div>

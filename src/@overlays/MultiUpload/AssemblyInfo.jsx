@@ -110,13 +110,14 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const assemblyInfoSchema = Joi.object({
-  name: Joi.string().required(),
-  description: Joi.string().allow(''),
-  primary: Joi.string().allow(''),
-  folderId: Joi.string().allow(''),
-  category: Joi.string().allow(''),
-})
+const assemblyInfoSchema = ({ isDescriptionRequired }) =>
+  Joi.object({
+    name: Joi.string().required(),
+    description: isDescriptionRequired ? Joi.string().required() : Joi.string().allow(''),
+    primary: Joi.string().allow(''),
+    folderId: Joi.string().allow(''),
+    category: Joi.string().allow(''),
+  })
 
 // const multiPartInfoSchema = Joi.object({
 //   name: Joi.string().required(),
@@ -146,9 +147,11 @@ const AssemblyInfo = ({
 }) => {
   const c = useStyles({})
   const firstInputRef = useRef(null)
-
+  const isDescriptionRequired = !activeNode.parentId
   const { checkError, onFormSubmit, onInputChange, inputState, setInputState } = useForm({
-    initialValidationSchema: assemblyInfoSchema,
+    initialValidationSchema: assemblyInfoSchema({
+      isDescriptionRequired,
+    }),
     INITIAL_STATE,
   })
 
@@ -245,7 +248,7 @@ const AssemblyInfo = ({
             className={c.AssemblyInfo_TextAreaInput}
             id='description-input'
             name='description'
-            label='Description'
+            label={isDescriptionRequired ? 'Description *' : 'Description'}
             type='description'
             value={inputState && inputState.description}
             onChange={handleOnInputChange}

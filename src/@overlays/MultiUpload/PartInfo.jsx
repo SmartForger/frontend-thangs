@@ -173,25 +173,16 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const PartInfoSchema = Joi.object({
-  name: Joi.string().required(),
-  description: Joi.string().required(),
-  material: Joi.string().allow(''),
-  height: Joi.string().allow(''),
-  weight: Joi.string().allow(''),
-  category: Joi.string().allow(''),
-  folderId: Joi.string().allow(''),
-})
-
-const AssemblyPartInfoSchema = Joi.object({
-  name: Joi.string().required(),
-  description: Joi.string().allow(''),
-  material: Joi.string().allow(''),
-  height: Joi.string().allow(''),
-  weight: Joi.string().allow(''),
-  category: Joi.string().allow(''),
-  folderId: Joi.string().allow(''),
-})
+const PartInfoSchema = ({ isRootPart }) =>
+  Joi.object({
+    name: Joi.string().required(),
+    description: isRootPart ? Joi.string().required() : Joi.string().allow(''),
+    material: Joi.string().allow(''),
+    height: Joi.string().allow(''),
+    weight: Joi.string().allow(''),
+    category: Joi.string().allow(''),
+    folderId: Joi.string().allow(''),
+  })
 
 const initialState = {
   name: '',
@@ -221,9 +212,9 @@ const PartInfo = props => {
   const file = filesData[activeNode.fileId]
   const [applyRemaining, setApplyRemaining] = useState(false)
 
-  const isAssembly = !!activeNode.parentId
+  const isRootPart = !activeNode.parentId
   const { checkError, onFormSubmit, onInputChange, inputState, setInputState } = useForm({
-    initialValidationSchema: isAssembly ? AssemblyPartInfoSchema : PartInfoSchema,
+    initialValidationSchema: PartInfoSchema({ isRootPart }),
     initialState,
   })
 
@@ -313,16 +304,16 @@ const PartInfo = props => {
           <Textarea
             id='description-input'
             name='description'
-            label={isAssembly ? 'Description' : 'Description *'}
+            label={isRootPart ? 'Description' : 'Description *'}
             type='description'
             value={inputState && inputState.description}
             onChange={handleOnInputChange}
-            required={!isAssembly}
+            required={!isRootPart}
             error={checkError('description').message}
             errorMessage={checkError('description').message}
           />
         </div>
-        {!isAssembly && folders && folders.length > 1 ? (
+        {!isRootPart && folders && folders.length > 1 ? (
           <div className={c.PartInfo_Field}>
             <Dropdown
               className={c.PartInfo_Select}
@@ -377,7 +368,7 @@ const PartInfo = props => {
             />
           </div>
         </div>
-        {!isAssembly && (
+        {!isRootPart && (
           <div className={c.PartInfo_Field}>
             <Dropdown
               className={c.PartInfo_Select}

@@ -109,7 +109,7 @@ const getThumbnailUrl = (model = {}) => {
     return `${compositeModel.join('%2F')}?source=${meshFolder}&`
   }
   if (filename) {
-    return `${encodeURIComponent(filename)}?`
+    return `${THUMBNAILS_FOLDER}${encodeURIComponent(filename)}?`
   }
   if (parts) {
     if (parts.length > 1) {
