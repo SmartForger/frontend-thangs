@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 // import { useHistory } from 'react-router-dom'
 import * as R from 'ramda'
-import { SingleLineBodyText, Spacer } from '@components'
+import { SingleLineBodyText, Spacer, Spinner } from '@components'
 import PartInfo from './PartInfo'
 import UploadModels from './UploadModels'
 import { createUseStyles } from '@style'
@@ -412,6 +412,11 @@ const MultiUpload = ({ initData = null, folderId: _f }) => {
 
   return (
     <div className={c.MultiUpload} data-cy='multi-upload-overlay'>
+      {isLoading && (
+        <div className={c.MultiUpload_LoaderScreen}>
+          <Spinner />
+        </div>
+      )}
       <Spacer size={'2rem'} />
       <div className={c.MultiUpload_Content}>
         <div className={c.MultiUpload_Column}>
