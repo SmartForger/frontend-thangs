@@ -199,8 +199,8 @@ const noop = () => null
 const PartSelectorRow = ({ part = {}, onClick, selectedPart = {} }) => {
   const c = useStyles({})
   const { name: selectedFilename } = selectedPart
-  const { level, parts = [], name, newFileName } = part
-  const isAssembly = parts.length > 0
+  const { level, parts, name, newFileName } = part
+  const isAssembly = parts && parts.length > 0
   return (
     <>
       <div
