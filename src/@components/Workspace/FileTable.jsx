@@ -415,6 +415,7 @@ const getCompareByOrder = (a, b, order) => {
 const getSortedFiles = (files, sortType, order) => {
   return (
     [...files]
+      .filter(file => file)
       .sort((a, b) => {
         if (sortType === COLUMNS.FILENAME) {
           return getCompareByOrder(
