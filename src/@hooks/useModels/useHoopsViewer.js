@@ -201,6 +201,13 @@ const useHoopsViewer = ({ modelURL, modelFilename }) => {
         track('HOOPS ModelLoadFailure', { error: JSON.stringify(e) })
         doTransition(TRANSITIONS.Error)
       },
+      // This is to fix the issue with the viewer aspect ratio being
+      // off until the browser is resized or snapshot, for some reason.
+      // Calling resize on this event resizes and doesn't have any flash
+      // as far as I can see - BE
+      firstModelLoaded() {
+        handleResize()
+      },
     })
 
     viewer.start()
