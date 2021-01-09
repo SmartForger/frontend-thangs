@@ -177,7 +177,7 @@ const MyThangs = () => {
       dispatch(types.OPEN_OVERLAY, {
         overlayName: 'multiUpload',
         overlayData: {
-          initData: { acceptedFiles, rejectedFile, e: _event },
+          initData: { acceptedFiles, rejectedFile },
           folderId: currentFolderId,
           animateIn: true,
           windowed: true,
