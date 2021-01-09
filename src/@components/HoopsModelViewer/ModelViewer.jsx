@@ -55,24 +55,6 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
   const { useHoopsViewer } = useModels()
   const { startTimer, getTime } = usePerformanceMetrics()
 
-  const viewerModel = useMemo(() => {
-    if (selectedModel) {
-      if (selectedModel.compositeMesh) {
-        const [meshFolder, ...compositeModel] = selectedModel.compositeMesh.split('/')
-        return `${compositeModel.join('%2F')}?source=${meshFolder}&`
-      } else if (selectedModel.uploadedFile) {
-        return encodeURIComponent(selectedModel.uploadedFile)
-      } else {
-        return encodeURIComponent(selectedModel.filename)
-      }
-    }
-  }, [selectedModel])
-
-  const { containerRef, hoops } = useHoopsViewer({
-    modelURL: viewerModel,
-    modelFilename: decodeURIComponent(viewerModel).split('?')[0],
-  })
-
   useEffect(() => {
     startTimer()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -94,6 +76,29 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
     setPartList(flattenTree(model.parts, 'parts'))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [model.id])
+
+  const viewerModel = useMemo(() => {
+    if (selectedModel) {
+      if (selectedModel.compositeMesh) {
+        const [meshFolder, ...compositeModel] = selectedModel.compositeMesh.split('/')
+        return `${compositeModel.join('%2F')}?source=${meshFolder}&`
+      } else if (selectedModel.uploadedFile) {
+        return encodeURIComponent(selectedModel.uploadedFile)
+      } else {
+        return encodeURIComponent(selectedModel.filename)
+      }
+    } else {
+      if (model.parts && model.parts.length) {
+        return encodeURIComponent(model.parts[0].filename)
+      }
+      return encodeURIComponent(model.filename)
+    }
+  }, [model, selectedModel])
+
+  const { containerRef, hoops } = useHoopsViewer({
+    modelURL: viewerModel,
+    modelFilename: decodeURIComponent(viewerModel).split('?')[0],
+  })
 
   useEffect(() => {
     if (hoops.status.isReady) perfTrack('Page Loaded - HOOPS Viewer', getTime())
