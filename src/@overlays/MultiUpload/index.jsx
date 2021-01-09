@@ -93,7 +93,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const MultiUpload = ({ initData = null, folderId: _f }) => {
+const MultiUpload = ({ initData = null, folderId = '' }) => {
   const { dispatch, folders = {}, shared = {}, uploadFiles = {} } = useStoreon(
     'folders',
     'shared',
@@ -214,13 +214,13 @@ const MultiUpload = ({ initData = null, folderId: _f }) => {
       return formData[activeNode.id]
     }
 
-    const initialFormData = { name: activeNode.name, folderId: '' }
+    const initialFormData = { name: activeNode.name, folderId: folderId }
     if (formData[activeNode.parentId]) {
       initialFormData.folderId = formData[activeNode.parentId].folderId
     }
 
     return initialFormData
-  }, [activeNode, formData])
+  }, [activeNode, folderId, formData])
   const dropdownFolders = useMemo(() => {
     const foldersArray = [...foldersData]
     const sharedArray = [...sharedData]
