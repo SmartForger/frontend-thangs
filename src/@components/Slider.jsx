@@ -16,7 +16,7 @@ const CustomSlider = withStyles({
     backgroundColor: '#fff',
     border: '2px solid currentColor',
     marginTop: -11,
-    marginLeft: -12,
+    marginLeft: -24,
     transform: 'translateX(.75rem)',
 
     '&:hover': {
@@ -39,12 +39,12 @@ const CustomSlider = withStyles({
   track: {
     height: 3,
   },
-  rail: {
-    color: '#999',
-    opacity: 1,
-    height: 3,
-    padding: '0 10px',
-  },
+  // rail: {
+  //   color: '#999',
+  //   opacity: 1,
+  //   height: 3,
+  //   padding: '0 10px',
+  // },
 })(MuiSlider)
 
 function CustomThumbComponent(props) {

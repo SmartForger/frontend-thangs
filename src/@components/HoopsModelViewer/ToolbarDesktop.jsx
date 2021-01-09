@@ -17,7 +17,7 @@ import { ReactComponent as CameraDesktopIcon } from '@svg/icon-camera-desktop.sv
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { lg, xl_viewer },
+    mediaQueries: { md_viewer, lg, xl_viewer },
   } = theme
   return {
     Toolbar: {
@@ -80,6 +80,11 @@ const useStyles = createUseStyles(theme => {
     },
     Toolbar_PartExplorerWrapper: {
       position: 'relative',
+      maxWidth: '35rem',
+
+      [md_viewer]: {
+        maxWidth: '100%',
+      },
     },
   }
 })
@@ -161,7 +166,11 @@ const Toolbar = ({
               <ExplodeActionMenu selectedValue={magnitude} onChange={onSliderChange} />
               <div className={c.Toolbar_WideText}>
                 <Spacer size={'1rem'} />
-                <Slider onChange={onSliderChange} steps={40} value={magnitude} />
+                <Slider
+                  key={'toolMenu_slider'}
+                  onChange={onSliderChange}
+                  value={magnitude}
+                />
                 <Spacer size={'1.125rem'} />
               </div>
             </div>

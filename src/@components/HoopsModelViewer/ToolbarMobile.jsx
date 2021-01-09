@@ -12,6 +12,9 @@ import classnames from 'classnames'
 import { ReactComponent as CameraIcon } from '@svg/icon-camera.svg'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md_viewer },
+  } = theme
   return {
     Toolbar: {
       margin: '0 auto',
@@ -75,7 +78,13 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'row',
     },
     Toolbar_PartExplorerWrapper: {
-      maxWidth: '100%',
+      position: 'relative',
+      maxWidth: '35rem',
+      marginBottom: '3rem',
+
+      [md_viewer]: {
+        maxWidth: '100%',
+      },
     },
   }
 })
