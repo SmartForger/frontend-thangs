@@ -280,7 +280,12 @@ const PartInfo = props => {
         </>
       )}
       <div className={c.PartInfo_Row}>
-        <ModelThumbnail className={c.PartInfo_Thumbnail} name={file.name} model={file} />
+        <ModelThumbnail
+          className={c.PartInfo_Thumbnail}
+          name={file.name}
+          model={file}
+          mini={true}
+        />
         <Spacer size={'1rem'} />
         <div className={c.PartInfo_ModelInfo}>
           <TitleTertiary title={activeNode.name}>{activeNode.name}</TitleTertiary>

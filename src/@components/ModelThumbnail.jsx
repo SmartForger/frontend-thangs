@@ -18,56 +18,63 @@ const useStyles = createUseStyles(theme => {
     },
     ModelThumbnail: {
       ...theme.text.thumbnailErrorText,
-      position: 'relative',
-      overflow: 'hidden',
-      padding: '1rem .5rem',
+      alignItems: 'center',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
-      alignItems: 'center',
+      overflow: 'hidden',
+      padding: '1rem .5rem',
+      position: 'relative',
 
       '& > svg': {
         display: 'block',
-        position: 'absolute',
         height: '100%',
+        position: 'absolute',
         width: '2rem',
       },
 
       '& img': {
-        margin: 'auto',
         display: 'block',
-        maxWidth: '100%',
         height: 'auto',
-        transform: 'scale(.85)',
+        margin: 'auto',
+        maxWidth: '100%',
+        transform: ({ mini }) => (mini ? 'none' : 'scale(.85)'),
 
         '&:before': {
-          content: '""',
-          display: 'block',
           backgroundColor: theme.variables.colors.cardBackground,
           backgroundImage: `url(${ErrorImg})`,
+          backgroundPosition: ({ mini }) => (mini ? 'center center' : 'center 37%'),
           backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center 37%',
-          position: 'absolute',
-          top: 0,
-          left: 0,
+          content: '""',
+          display: 'block',
           height: '100%',
+          left: ({ mini }) => (mini ? '-4px' : 0),
+          padding: ({ mini }) => (mini ? '.25rem' : 'none'),
+          position: 'absolute',
+          top: ({ mini }) => (mini ? '-3px' : 0),
+          transform: ({ mini }) => (mini ? 'scale(.5)' : 'scale(1.15)'),
           width: '100%',
-          transform: 'scale(1.15)',
         },
 
         '&:after': {
           content: '"Image Unavailable"',
-          position: 'absolute',
-          display: 'block',
-          top: '72.5%',
+          display: ({ mini }) => (mini ? 'none' : 'block'),
           left: '50%',
-          transform: 'translateX(-50%) scale(1.15)',
+          position: 'absolute',
           textAlign: 'center',
+          top: '72.5%',
+          transform: 'translateX(-50%) scale(1.15)',
         },
       },
     },
     ModelThumbnail_Loader: {
+      boxShadow: ({ mini }) =>
+        mini
+          ? `inset 0 0 0 8px ${theme.colors.gold[500]}`
+          : `inset 0 0 0 12px ${theme.colors.gold[500]}`,
+      height: ({ mini }) => (mini ? '1.5rem' : '3rem'),
       position: 'absolute',
+      width: ({ mini }) => (mini ? '1.5rem' : '3rem'),
     },
     ModelThumbnail_Error: {
       transform: 'none !important',
@@ -86,8 +93,8 @@ const thumbnailUrl = model =>
   model.fullThumbnailUrl
     ? model.fullThumbnailUrl
     : model.thumbnailUrl
-      ? model.thumbnailUrl
-      : `${THUMBNAILS_HOST}${getThumbnailUrl(model)}size=456x540`
+    ? model.thumbnailUrl
+    : `${THUMBNAILS_HOST}${getThumbnailUrl(model)}size=456x540`
 
 const getThumbnailUrl = (model = {}) => {
   const {
@@ -128,14 +135,14 @@ const getThumbnailUrl = (model = {}) => {
   return 'unknown'
 }
 
-const ModelThumbnail = ({ className, model, name }) => {
+const ModelThumbnail = ({ className, model, name, mini }) => {
   const [loadingState, setLoadingState] = useState(LOADING)
   const onLoad = useCallback(() => setLoadingState(COMPLETE), [])
   const onError = useCallback(() => {
     setLoadingState(ERROR)
     track('Error - Thumbnail Image', { modelId: model && model.id })
   }, [model])
-  const c = useStyles()
+  const c = useStyles({ mini })
   const src = thumbnailUrl(model)
 
   return (
@@ -145,7 +152,7 @@ const ModelThumbnail = ({ className, model, name }) => {
         <img
           className={loadingState === ERROR ? c.ModelThumbnail_Error : undefined}
           src={src}
-          alt={`${name} 3d model`}
+          alt={loadingState === ERROR ? '' : `${name} 3d model`}
           onLoad={onLoad}
           onError={onError}
           title={model.fileName}

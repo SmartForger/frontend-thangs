@@ -16,6 +16,9 @@ import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 import { ReactComponent as IndentArrow } from '@svg/icon-indent-arrow.svg'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md_viewer },
+  } = theme
   return {
     PartExplorerDropdown: {
       bottom: '5.1rem',
@@ -191,6 +194,13 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
     },
+    PartExplorerTarget_mobile: {
+      display: 'flex',
+
+      [md_viewer]: {
+        display: 'none',
+      },
+    },
   }
 })
 
@@ -219,6 +229,7 @@ const PartSelectorRow = ({ part = {}, onClick, selectedPart = {} }) => {
               className={c.PartSelectorRow_Thumbnail}
               name={name}
               model={part}
+              mini={true}
             />
             <Spacer size={'.75rem'} />
             <div className={c.PartExplorerDropdown_PartText}>
@@ -318,13 +329,15 @@ export const PartExplorerTarget = ({
 }) => {
   const c = useStyles({})
   return (
-    <>
+    <div>
+      <Spacer size={'1rem'} className={c.PartExplorerTarget_mobile} />
       <div className={c.PartExplorerTarget} onClick={onClick}>
         <ModelThumbnail
           key={selectedPart.newFileName}
           className={c.PartExplorerTarget_Thumbnail}
           name={selectedPart.name}
           model={{ ...selectedPart, uploadedFile: selectedPart.newFileName }}
+          mini={true}
         />
         <Spacer size={'1rem'} />
         <SingleLineBodyText className={c.PartExplorerTarget_ModelName}>
@@ -343,7 +356,8 @@ export const PartExplorerTarget = ({
           <ArrowDown className={c.PartExplorerTarget_Arrow} />
         )}
       </div>
-    </>
+      <Spacer size={'1rem'} className={c.PartExplorerTarget_mobile} />
+    </div>
   )
 }
 
