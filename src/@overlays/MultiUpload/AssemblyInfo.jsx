@@ -110,10 +110,10 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const assemblyInfoSchema = ({ isDescriptionRequired }) =>
+const assemblyInfoSchema = ({ isRootAssembly }) =>
   Joi.object({
     name: Joi.string().required(),
-    description: isDescriptionRequired ? Joi.string().required() : Joi.string().allow(''),
+    description: isRootAssembly ? Joi.string().required() : Joi.string().allow(''),
     primary: Joi.string().allow(''),
     folderId: Joi.string().allow(''),
     category: Joi.string().allow(''),
@@ -147,10 +147,17 @@ const AssemblyInfo = ({
 }) => {
   const c = useStyles({})
   const firstInputRef = useRef(null)
-  const isDescriptionRequired = !activeNode.parentId
-  const { checkError, onFormSubmit, onInputChange, inputState, setInputState } = useForm({
+  const isRootAssembly = useMemo(() => !activeNode.parentId, [activeNode.parentId])
+  const {
+    checkError,
+    onFormSubmit,
+    onInputChange,
+    inputState,
+    setInputState,
+    updateValidationSchema,
+  } = useForm({
     initialValidationSchema: assemblyInfoSchema({
-      isDescriptionRequired,
+      isRootAssembly,
     }),
     INITIAL_STATE,
   })
@@ -209,6 +216,14 @@ const AssemblyInfo = ({
     // eslint-disable-next-line
   }, [activeNode])
 
+  useEffect(() => {
+    updateValidationSchema(
+      assemblyInfoSchema({
+        isRootAssembly,
+      })
+    )
+  }, [isRootAssembly, updateValidationSchema])
+
   return (
     <>
       {activeNode.parentId && (
@@ -248,7 +263,7 @@ const AssemblyInfo = ({
             className={c.AssemblyInfo_TextAreaInput}
             id='description-input'
             name='description'
-            label={isDescriptionRequired ? 'Description *' : 'Description'}
+            label={isRootAssembly ? 'Description *' : 'Description'}
             type='description'
             value={inputState && inputState.description}
             onChange={handleOnInputChange}

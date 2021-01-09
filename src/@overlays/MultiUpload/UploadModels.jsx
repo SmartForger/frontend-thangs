@@ -5,6 +5,7 @@ import {
   MultiLineBodyText,
   Pill,
   Spacer,
+  Spinner,
   TitleTertiary,
   Toggle,
   Tooltip,
@@ -41,6 +42,10 @@ const useStyles = createUseStyles(theme => {
     },
     UploadModels_UploadRow: {
       height: '100%',
+    },
+    UploadModels_FileTitle: {
+      display: 'flex',
+      alignItems: 'center',
     },
     UploadModels_FileRow: {
       display: 'flex',
@@ -237,8 +242,8 @@ const UploadModels = ({
 
   const uploadAssemblyLabel = (
     <span className={c.UploadAssemblyLabel}>
-      Upload as assembly
-      <Tooltip title='Assemblies allow users to view and download all parts from a single model page.'>
+      Upload parts as multi-part
+      <Tooltip title='Multipart assemblies allow users to view and download all parts from a single model page.'>
         <InfoIcon className={c.UploadAssemblyLabel_Icon} />
       </Tooltip>
     </span>
@@ -272,7 +277,11 @@ const UploadModels = ({
         <>
           <Spacer size='1rem' />
           <TitleTertiary>
-            {fileLength > 1 ? `${fileLength} Files` : '1 File'}
+            <div className={c.UploadModels_FileTitle}>
+              {fileLength > 1 ? `${fileLength} Files` : '1 File'}
+              <Spacer size={'.5rem'} />
+              {isLoadingFiles && <Spinner size={'1rem'} />}
+            </div>
           </TitleTertiary>
           <Spacer size='0.5rem' />
           <TreeView

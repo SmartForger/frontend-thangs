@@ -212,8 +212,15 @@ const PartInfo = props => {
   const file = filesData[activeNode.fileId]
   const [applyRemaining, setApplyRemaining] = useState(false)
 
-  const isRootPart = !activeNode.parentId
-  const { checkError, onFormSubmit, onInputChange, inputState, setInputState } = useForm({
+  const isRootPart = useMemo(() => !activeNode.parentId, [activeNode.parentId])
+  const {
+    checkError,
+    onFormSubmit,
+    onInputChange,
+    inputState,
+    setInputState,
+    updateValidationSchema,
+  } = useForm({
     initialValidationSchema: PartInfoSchema({ isRootPart }),
     initialState,
   })
@@ -255,6 +262,10 @@ const PartInfo = props => {
     setInputState(formData)
     // eslint-disable-next-line
   }, [activeNode])
+
+  useEffect(() => {
+    updateValidationSchema(PartInfoSchema({ isRootPart }))
+  }, [isRootPart, updateValidationSchema])
 
   if (!file) return null
 

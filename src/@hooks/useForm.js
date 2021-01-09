@@ -84,6 +84,10 @@ const useForm = (opts = {}) => {
     [inputErrors]
   )
 
+  const updateValidationSchema = useCallback(newValidationSchema => {
+    validationSchema.current = newValidationSchema
+  }, [])
+
   return {
     checkError,
     clearAllInputs,
@@ -93,6 +97,7 @@ const useForm = (opts = {}) => {
     onInputChange,
     resetForm,
     setInputState,
+    updateValidationSchema,
   }
 }
 

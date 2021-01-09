@@ -133,6 +133,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
+      marginLeft: '1rem',
     },
     WorkspaceNavbar_NavHeader_Exit: {
       [md]: {

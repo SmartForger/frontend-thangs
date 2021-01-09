@@ -9,8 +9,6 @@ const useStyles = createUseStyles(theme => {
   return {
     Metadata: {
       ...theme.text.metadataBase,
-      display: 'flex',
-      alignItems: 'center',
       margin: 0,
       padding: 0,
       color: theme.colors.grey[300],
@@ -27,7 +25,6 @@ const useStyles = createUseStyles(theme => {
     MetadataSecondary: {
       fontSize: '.75rem',
       lineHeight: '1rem',
-      display: 'inline-block',
       textAlign: 'center',
     },
   }
