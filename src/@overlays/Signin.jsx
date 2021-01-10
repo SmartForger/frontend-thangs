@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useStoreon } from 'storeon/react'
 import Joi from '@hapi/joi'
 import {
   Button,
@@ -19,8 +18,8 @@ import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
 import { ReactComponent as FacebookLogo } from '@svg/facebook-logo.svg'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
-import * as types from '@constants/storeEventTypes'
 import { overlayview } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -182,7 +181,7 @@ const signInSchema = Joi.object({
 
 const SignInForm = ({
   c,
-  dispatch,
+  setOverlayData,
   handleSignUpClick,
   handleResetPasswordClick,
   sessionExpired,
@@ -229,10 +228,8 @@ const SignInForm = ({
 
     setWaiting(false)
     if (error) {
-      dispatch(types.SET_OVERLAY_DATA, {
-        overlayData: {
-          shake: true,
-        },
+      setOverlayData({
+        shake: true,
       })
       setSigninErrorMessage(error.data && error.data.message)
     } else {
@@ -242,7 +239,7 @@ const SignInForm = ({
       if (window.location.href.includes('authFailed')) return (window.location.href = '/')
       return window.location.reload()
     }
-  }, [dispatch, inputState, redirectUrl])
+  }, [setOverlayData, inputState, redirectUrl])
 
   return (
     <div className={classnames(c.Signin_Row, c.Signin_SignInForm)}>
@@ -348,34 +345,36 @@ const SignInForm = ({
 
 const Signin = ({ sessionExpired, authFailed }) => {
   const c = useStyles({})
-  const { dispatch } = useStoreon()
+  const { setOverlay, setOverlayData, setOverlayOpen } = useOverlay()
 
   const closeOverlay = useCallback(() => {
-    dispatch(types.CLOSE_OVERLAY)
-  }, [dispatch])
+    setOverlayOpen(false)
+  }, [setOverlayOpen])
 
   const handleSignUpClick = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'signUp',
-      overlayData: {
+    setOverlay({
+      isOpen: true,
+      template: 'signUp',
+      data: {
         animateIn: true,
         windowed: true,
         showPromo: false,
         smallWidth: true,
       },
     })
-  }, [dispatch])
+  }, [setOverlay])
 
   const handleResetPasswordClick = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'passwordReset',
-      overlayData: {
+    setOverlay({
+      isOpen: true,
+      template: 'passwordReset',
+      data: {
         animateIn: true,
         windowed: true,
         showPromo: false,
       },
     })
-  }, [dispatch])
+  }, [setOverlay])
 
   useEffect(() => {
     overlayview('Signin')
@@ -386,7 +385,7 @@ const Signin = ({ sessionExpired, authFailed }) => {
       <ExitIcon className={c.Signin_ExitButton} onClick={closeOverlay} />
       <SignInForm
         c={c}
-        dispatch={dispatch}
+        setOverlayData={setOverlayData}
         handleSignUpClick={handleSignUpClick}
         handleResetPasswordClick={handleResetPasswordClick}
         sessionExpired={sessionExpired}

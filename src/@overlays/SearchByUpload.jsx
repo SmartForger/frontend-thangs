@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react'
 import * as R from 'ramda'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import { UploadProgress, ModelThumbnail, UploaderContent } from '@components'
+import { ModelThumbnail, UploaderContent, UploadProgress } from '@components'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 import Scanner from '@components/Scanner'
@@ -10,6 +10,7 @@ import ScannerPaper from '@components/ScannerPaper'
 import { useFileUpload } from '@hooks'
 import { numberWithCommas } from '@utilities'
 import { overlayview } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -77,21 +78,21 @@ const getFileName = filename => {
   return filenameArray[filenameArray.length - 1]
 }
 
-const SearchByUpload = () => {
+const SearchByUpload = ({
+  model,
+  file: initialFile,
+  errorState: initialErrorState,
+  isExplorerOpened,
+}) => {
   const c = useStyles()
   const history = useHistory()
-  const { dispatch, searchResults, overlay } = useStoreon('searchResults', 'overlay')
+  const { setOverlayOpen } = useOverlay()
+  const { dispatch, searchResults } = useStoreon('searchResults')
   const { phyndexer, thangs, uploadData } = searchResults
   const polygonCount =
     searchResults &&
     searchResults.polygonCount &&
     numberWithCommas(searchResults.polygonCount)
-  const overlayData = (overlay && overlay.overlayData) || {}
-  const model = overlayData.model
-  const initialFile = overlayData.file
-  const initialErrorState = overlayData.errorState
-  const isExplorerOpened = overlayData.isExplorerOpened
-
   const newFileName = R.path(['data', 'newFileName'], uploadData)
 
   const handleFile = useCallback(
@@ -107,14 +108,14 @@ const SearchByUpload = () => {
           ...requiredVariables,
         },
         onFinish: ({ modelId, phyndexerId }) => {
-          dispatch(types.CLOSE_OVERLAY)
+          setOverlayOpen(false)
           history.push(
             `/search/${file ? file.name : ''}?modelId=${modelId}&phynId=${phyndexerId}`
           )
         },
       })
     },
-    [dispatch, history]
+    [dispatch, history, setOverlayOpen]
   )
 
   const { UploadZone, errorState, file, cancelUpload } = useFileUpload({
@@ -138,7 +139,7 @@ const SearchByUpload = () => {
         dispatch(types.GET_RELATED_MODELS, {
           modelId,
           onFinish: () => {
-            dispatch(types.CLOSE_OVERLAY)
+            setOverlayOpen(false)
             history.push(`/search/${searchTerm}?modelId=${modelId}&related=true`)
           },
         })

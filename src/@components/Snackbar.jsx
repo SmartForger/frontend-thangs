@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { createUseStyles } from '@style'
-import { useStoreon } from 'storeon/react'
+import { useOverlay } from '@hooks'
 import { ReactComponent as SnackbarUploadIcon } from '@svg/snackbar-upload.svg'
 import classnames from 'classnames'
-import * as types from '../@constants/storeEventTypes'
 
 const INIT_LEFT = 16
 const SWIPE_START_LEFT = 80
@@ -56,7 +55,7 @@ const useStyles = createUseStyles(theme => {
 const Snackbar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const c = useStyles({ isOpen })
-  const { dispatch } = useStoreon()
+  const { setOverlay } = useOverlay()
   const snackbarRef = useRef(null)
   const snackbarMoveData = useRef({ xStart: undefined })
 
@@ -107,9 +106,10 @@ const Snackbar = () => {
           className={c.Snackbar_Button}
           onClick={e => {
             e.preventDefault()
-            dispatch(types.OPEN_OVERLAY, {
-              overlayName: 'searchByUpload',
-              overlayData: { isExplorerOpened: true },
+            setOverlay({
+              isOpen: true,
+              template: 'searchByUpload',
+              data: { isExplorerOpened: true },
             })
           }}
         >

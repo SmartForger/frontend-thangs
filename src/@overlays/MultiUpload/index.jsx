@@ -13,6 +13,7 @@ import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/file
 import { track } from '@utilities/analytics'
 import AssemblyInfo from './AssemblyInfo'
 import { useHistory } from 'react-router-dom'
+import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -117,6 +118,7 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
   const [singlePartsCount, setSinglePartsCount] = useState(0)
   const c = useStyles({})
   const multipartName = formData['multipart'] && formData['multipart'].name
+  const { setOverlayOpen } = useOverlay()
   const history = useHistory()
 
   const uploadedFiles = useMemo(
@@ -307,8 +309,8 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
   }
 
   const closeOverlay = useCallback(() => {
-    dispatch(types.CLOSE_OVERLAY)
-  }, [dispatch])
+    setOverlayOpen(false)
+  }, [setOverlayOpen])
 
   const setIsAssembly = isAssembly => {
     dispatch(types.SET_IS_ASSEMBLY, { isAssembly })
@@ -393,7 +395,6 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
   }, [activeView, allTreeNodes])
 
   const handleCancelUploading = () => {
-    closeOverlay()
     dispatch(types.RESET_UPLOAD_FILES)
   }
 
@@ -426,10 +427,10 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
               {!activeNode
                 ? 'Upload Files'
                 : activeNode.isAssembly && activeNode.parentId
-                ? 'Sub Assembly'
-                : activeNode.isAssembly
-                ? 'New Assembly'
-                : 'Enter Information'}
+                  ? 'Sub Assembly'
+                  : activeNode.isAssembly
+                    ? 'New Assembly'
+                    : 'Enter Information'}
             </SingleLineBodyText>
             {activeView > -1 && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />

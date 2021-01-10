@@ -82,7 +82,6 @@ const useStyles = createUseStyles(theme => {
 const noop = () => null
 const WorkspaceHeader = ({ setCurrentView = noop, openMobileNav = noop }) => {
   const c = useStyles({})
-  const { dispatch } = useStoreon()
   const {
     atom: { isLoading, data: user },
   } = useCurrentUser()
@@ -116,7 +115,6 @@ const WorkspaceHeader = ({ setCurrentView = noop, openMobileNav = noop }) => {
           </div>
           <div>
             <UserNav
-              dispatch={dispatch}
               isLoading={isLoading}
               user={user}
               showUser={true}

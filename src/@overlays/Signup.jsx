@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useStoreon } from 'storeon/react'
 import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
 import {
@@ -28,8 +27,8 @@ import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
 import { ReactComponent as FacebookLogo } from '@svg/facebook-logo.svg'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
-import * as types from '@constants/storeEventTypes'
 import { overlayview, track } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -247,7 +246,7 @@ const SignUpPromo = ({ c, titleMessage }) => {
   )
 }
 
-const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
+const SignUpForm = ({ c, setOverlayData, handleSignInClick, showPromo, source }) => {
   const [waiting, setWaiting] = useState(false)
   const [signupErrorMessage, setSignupErrorMessage] = useState(null)
   const [invalidFields, setInvalidFields] = useState([])
@@ -294,33 +293,29 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
     if (!EmailValidator.validate(inputState.email)) {
       setInvalidFields(['email'])
       setSignupErrorMessage('Please enter a valid e-mail address')
-      dispatch(types.SET_OVERLAY_DATA, {
-        overlayData: {
-          shake: true,
-        },
+      setOverlayData({
+        shake: true,
       })
       return false
     } else {
       setFieldToValid('email')
       return true
     }
-  }, [dispatch, inputState, setFieldToValid])
+  }, [setOverlayData, inputState, setFieldToValid])
 
   const validatePasswords = useCallback(() => {
     if (inputState.confirmPass !== inputState.password) {
       setInvalidFields(['password'])
       setSignupErrorMessage('Please ensure that both passwords match')
-      dispatch(types.SET_OVERLAY_DATA, {
-        overlayData: {
-          shake: true,
-        },
+      setOverlayData({
+        shake: true,
       })
       return false
     } else {
       setFieldToValid('password')
       return true
     }
-  }, [dispatch, inputState, setFieldToValid])
+  }, [setOverlayData, inputState, setFieldToValid])
 
   const handleSignUp = useCallback(async () => {
     setWaiting(true)
@@ -338,10 +333,8 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
 
     setWaiting(false)
     if (error) {
-      dispatch(types.SET_OVERLAY_DATA, {
-        overlayData: {
-          shake: true,
-        },
+      setOverlayData({
+        shake: true,
       })
       setSignupErrorMessage(error.message)
     } else {
@@ -357,7 +350,7 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
       if (window.location.href.includes('authFailed')) return (window.location.href = '/')
       return (window.location.href = '/welcome')
     }
-  }, [dispatch, inputState, redirectUrl, source, validateEmail, validatePasswords])
+  }, [setOverlayData, inputState, redirectUrl, source, validateEmail, validatePasswords])
 
   return (
     <div className={classnames(c.Signup_Row, c.Signup_Wrapper)}>
@@ -488,23 +481,24 @@ const SignUpForm = ({ c, dispatch, handleSignInClick, showPromo, source }) => {
 
 const Signup = ({ titleMessage, showPromo = false, source }) => {
   const c = useStyles({ showPromo })
-  const { dispatch } = useStoreon()
+  const { setOverlay, setOverlayData, setOverlayOpen } = useOverlay()
 
   const closeOverlay = useCallback(() => {
-    dispatch(types.CLOSE_OVERLAY)
-  }, [dispatch])
+    setOverlayOpen(false)
+  }, [setOverlayOpen])
 
   const handleSignInClick = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'signIn',
-      overlayData: {
+    setOverlay({
+      isOpen: true,
+      template: 'signIn',
+      data: {
         animateIn: true,
         windowed: true,
         showPromo: false,
         smallWidth: true,
       },
     })
-  }, [dispatch])
+  }, [setOverlay])
 
   useEffect(() => {
     overlayview('Signup')
@@ -516,7 +510,7 @@ const Signup = ({ titleMessage, showPromo = false, source }) => {
       {showPromo && <SignUpPromo c={c} titleMessage={titleMessage} />}
       <SignUpForm
         c={c}
-        dispatch={dispatch}
+        setOverlayData={setOverlayData}
         handleSignInClick={handleSignInClick}
         showPromo={showPromo}
         source={source}

@@ -10,10 +10,9 @@ import {
   MultiLineBodyText,
   Spacer,
 } from '@components'
-import { useTranslations } from '@hooks'
+import { useOverlay, useTranslations } from '@hooks'
 import { authenticationService } from '@services'
 import { createUseStyles } from '@style'
-import * as types from '@constants/storeEventTypes'
 
 import { ReactComponent as SharedIcon } from '@svg/icon-shared.svg'
 import { ReactComponent as PortfolioIcon } from '@svg/icon-portfolio.svg'
@@ -60,14 +59,10 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-export const ProfileDropdownMenu = ({
-  dispatch,
-  myThangsMenu,
-  user = {},
-  TargetComponent,
-}) => {
+export const ProfileDropdownMenu = ({ myThangsMenu, user = {}, TargetComponent }) => {
   const c = useStyles({})
   const t = useTranslations({})
+  const { setOverlayOpen } = useOverlay()
   const history = useHistory()
   const hasfullName = user && user.fullName && user.fullName.replace(' ', '')
 
@@ -125,7 +120,7 @@ export const ProfileDropdownMenu = ({
         <Spacer size={'1rem'} />
         <DropdownItem
           onClick={() => {
-            dispatch(types.CLOSE_OVERLAY)
+            setOverlayOpen(false)
             setTimeout(() => {
               authenticationService.logout()
               history.push('/')

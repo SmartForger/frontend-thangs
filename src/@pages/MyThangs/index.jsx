@@ -4,14 +4,14 @@ import { ContextMenuTrigger } from 'react-contextmenu'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 import {
-  WorkspaceHeader,
-  WorkspaceNavbar,
-  Spacer,
-  Spinner,
   AddContextMenu,
   FileContextMenu,
   FolderContextMenu,
   FolderInviteContextMenu,
+  Spacer,
+  Spinner,
+  WorkspaceHeader,
+  WorkspaceNavbar,
 } from '@components'
 import { authenticationService } from '@services'
 import { useOverlay, usePerformanceMetrics, useStarred } from '@hooks'
@@ -126,6 +126,7 @@ const MyThangs = () => {
   const { path } = useRouteMatch()
   const history = useHistory()
   const c = useStyles({})
+  const { setOverlay } = useOverlay()
   const [currentFolderId, setCurrentFolderId] = useState(null)
   const [isMobileNavOpen, setMobileNavOpen] = useState(false)
   const currentUserId = authenticationService.getCurrentUserId()
@@ -174,9 +175,10 @@ const MyThangs = () => {
 
   const onDrop = useCallback(
     (acceptedFiles, rejectedFile, _event) => {
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'multiUpload',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'multiUpload',
+        data: {
           initData: { acceptedFiles, rejectedFile },
           folderId: currentFolderId,
           animateIn: true,
@@ -185,7 +187,7 @@ const MyThangs = () => {
         },
       })
     },
-    [currentFolderId, dispatch]
+    [currentFolderId, setOverlay]
   )
 
   const openMobileNav = useCallback(() => {

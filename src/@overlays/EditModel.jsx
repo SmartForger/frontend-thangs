@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import {
-  Spacer,
-  Spinner,
   EditModelForm,
   HoopsModelViewer,
   ModelViewer as BackupViewer,
+  Spacer,
+  Spinner,
 } from '@components'
 import { useLocalStorage } from '@hooks'
 import { createUseStyles } from '@style'
@@ -12,6 +12,7 @@ import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
+import { useOverlay } from '@hooks'
 import { overlayview, track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
@@ -26,7 +27,6 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       justifyContent: 'flex-start',
       position: 'relative',
-      width: '100%',
 
       [md]: {
         flexDirection: 'row',
@@ -94,13 +94,14 @@ const EditModel = ({ model, showViewer = false }) => {
   const c = useStyles()
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [editModelErrorMessage, setEditModelErrorMessage] = useState(null)
+  const { setOverlayOpen } = useOverlay()
   const { dispatch, [`model-${model.id}`]: modelAtom = {} } = useStoreon(
     `model-${model.id}`
   )
   const { isSaving } = modelAtom
   const closeOverlay = useCallback(() => {
-    dispatch(types.CLOSE_OVERLAY)
-  }, [dispatch])
+    setOverlayOpen(false)
+  }, [setOverlayOpen])
 
   const handleSubmit = useCallback(
     newModelData => {
@@ -113,11 +114,11 @@ const EditModel = ({ model, showViewer = false }) => {
           setEditModelErrorMessage(error)
         },
         onFinish: () => {
-          dispatch(types.CLOSE_OVERLAY)
+          closeOverlay()
         },
       })
     },
-    [dispatch]
+    [closeOverlay, dispatch]
   )
 
   useEffect(() => {

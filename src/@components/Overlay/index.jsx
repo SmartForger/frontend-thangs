@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'
-import ReactModal from 'react-modal'
-import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import * as types from '@constants/storeEventTypes'
+import { useOverlay } from '@hooks'
+import OverlayPortal from './OverlayPortal'
 
-ReactModal.setAppElement('#root')
+export * from './OverlayContext'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -75,13 +73,17 @@ const useStyles = createUseStyles(theme => {
       backfaceVisibility: 'hidden',
       perspective: '1000px',
     },
+    Overlay_blur: {
+      filter: 'blur(4px)',
+      OFilter: 'blur(4px)',
+      MsFilter: 'blur(4px)',
+      MozFilter: 'blur(4px)',
+      WebkitFilter: 'blur(4px)',
+    },
   }
 })
-const noop = () => null
-const Overlay = ({
-  children,
+export const Overlay = ({
   className,
-  onOverlayClose = noop,
   windowed = false,
   animateIn = false,
   showPromo = false,
@@ -92,10 +94,7 @@ const Overlay = ({
   smallWidth = false,
   ...props
 }) => {
-  const overlayRef = useRef(null)
   const [isVisible, setIsVisible] = useState(false)
-  const { dispatch } = useStoreon()
-  // useExternalClick(overlayRef, () => dispatch(types.CLOSE_OVERLAY))
   const c = useStyles({ windowed, animateIn, showPromo, isHidden, dialogue, smallWidth })
   useEffect(() => {
     if (scrollTop) {
@@ -108,39 +107,11 @@ const Overlay = ({
   }, [scrollTop])
 
   return (
-    <ReactModal
-      className={classnames(className, c.Overlay, { [c.Overlay__shake]: shake })}
-      style={{
-        overlay: {
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: windowed ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.9)',
-        },
-      }}
+    <OverlayPortal
+      className={classnames(className, c.Overlay, {
+        [c.Overlay__shake]: shake,
+      })}
       {...props}
-    >
-      <div
-        className={c.Overlay_CloseButton}
-        onClick={() => {
-          onOverlayClose()
-          dispatch(types.CLOSE_OVERLAY)
-        }}
-      >
-        {!windowed && <ExitIcon />}
-      </div>
-      <div
-        className={classnames(c.Overlay_Content, {
-          [c.Overlay_Content__visible]: isVisible,
-        })}
-        ref={overlayRef}
-      >
-        {children}
-      </div>
-    </ReactModal>
+    />
   )
 }
-
-export default Overlay

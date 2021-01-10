@@ -1,10 +1,9 @@
 import React, { useMemo } from 'react'
-import { useStoreon } from 'storeon/react'
 import {} from '@components'
 import { ActionBar } from '@components'
 
 const useActionBar = () => {
-  const { actionBar = {} } = useStoreon('actionBar')
+  const actionBar = {}
   const ActionBarComponent = useMemo(() => {
     const ActionBarView = actionBar.isOpen && actionBar.Component
 

@@ -8,7 +8,6 @@ import { ReactComponent as PromoGeoSearch } from '@svg/promo-geosearch.svg'
 import { ReactComponent as PromoStorage } from '@svg/promo-storage.svg'
 import { ReactComponent as PromoCollab } from '@svg/promo-collab.svg'
 
-import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(_theme => {
@@ -17,7 +16,7 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const LandingCarousel = ({ searchMinimized, searchBarRef, dispatch, user }) => {
+const LandingCarousel = ({ searchMinimized, searchBarRef, setOverlay, user }) => {
   const c = useStyles({})
   const history = useHistory()
   const PromoCards = useMemo(
@@ -45,9 +44,10 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, dispatch, user }) => {
         hoverVideo: 'https://storage.googleapis.com/thangs-pubic/instructionStorage.mp4',
         callback: () => {
           if (user && user.id) {
-            dispatch(types.OPEN_OVERLAY, {
-              overlayName: 'multiUpload',
-              overlayData: {
+            setOverlay({
+              isOpen: true,
+              template: 'multiUpload',
+              data: {
                 animateIn: true,
                 windowed: true,
                 dialogue: true,
@@ -55,9 +55,10 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, dispatch, user }) => {
             })
             track('Value Prop Clicked', { source: 'Unlimited Storage' })
           } else {
-            dispatch(types.OPEN_OVERLAY, {
-              overlayName: 'signUp',
-              overlayData: {
+            setOverlay({
+              isOpen: true,
+              template: 'signUp',
+              data: {
                 animateIn: true,
                 windowed: true,
                 smallWidth: true,
@@ -79,9 +80,10 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, dispatch, user }) => {
             history.push('/mythangs')
             track('Value Prop Clicked', { source: 'Collaboration' })
           } else {
-            dispatch(types.OPEN_OVERLAY, {
-              overlayName: 'signUp',
-              overlayData: {
+            setOverlay({
+              isOpen: true,
+              template: 'signUp',
+              data: {
                 animateIn: true,
                 windowed: true,
                 smallWidth: true,
@@ -93,7 +95,7 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, dispatch, user }) => {
         },
       },
     ],
-    [dispatch, history, searchBarRef, user]
+    [history, searchBarRef, setOverlay, user]
   )
   return (
     <Carousel

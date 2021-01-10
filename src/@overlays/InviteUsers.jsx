@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
 import {
-  Spacer,
   InviteUsersForm,
+  MetadataSecondary,
   MultiLineBodyText,
   ProfilePicture,
-  MetadataSecondary,
   SingleLineBodyText,
+  Spacer,
 } from '@components'
 import { createUseStyles } from '@style'
 import { authenticationService } from '@services'
@@ -16,6 +16,7 @@ import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import * as types from '@constants/storeEventTypes'
 import { overlayview } from '@utilities/analytics'
 import { logger } from '@utilities/logging'
+import { useOverlay } from '@hooks'
 import MobileDesktopTitle from '../@components/MobileDesktopTitle'
 
 const useStyles = createUseStyles(theme => {
@@ -204,7 +205,8 @@ const findFolderById = (id, folders) => {
 const InviteUsers = ({ folderId: id }) => {
   const c = useStyles()
   const [errorMessage, setErrorMessage] = useState(null)
-  const { dispatch, folders, shared } = useStoreon('folders', 'shared')
+  const { setOverlayOpen } = useOverlay()
+  const { folders, shared } = useStoreon('folders', 'shared')
   const { data: folderData = {} } = folders
   const { data: sharedData = {} } = shared
   const allFolders = [...folderData, ...sharedData]
@@ -213,8 +215,8 @@ const InviteUsers = ({ folderId: id }) => {
   }, [allFolders, id])
 
   const closeOverlay = useCallback(() => {
-    dispatch(types.CLOSE_OVERLAY)
-  }, [dispatch])
+    setOverlayOpen(false)
+  }, [setOverlayOpen])
 
   useEffect(() => {
     overlayview('InviteUsers')

@@ -3,21 +3,21 @@ import { useHistory, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import { useFeature } from '@optimizely/react-sdk'
 import {
+  CardCollectionLanding,
+  LandingSortActionMenu,
   Layout,
+  ModelCardLanding,
   Spacer,
   Spinner,
   TitleSecondary,
-  LandingSortActionMenu,
-  ModelCardLanding,
-  CardCollectionLanding,
 } from '@components'
-
 import { useCurrentUser, usePageMeta, usePerformanceMetrics, useQuery } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 import * as sortTypes from '@constants/sortTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
 
 const MQS_VALUES = [1440, 964, 736, 490]
 
@@ -127,13 +127,23 @@ const title = sortBy => {
       return 'Models'
   }
 }
+const noop = () => null
 
-const Page = ({ dispatch, modelPreviews = {}, sortBy }) => {
+const Page = ({ sortBy, getTime = noop }) => {
   const c = useStyles({})
   const containerRef = useRef(null)
   const history = useHistory()
   const [endOfModels, setEndOfModels] = useState(false)
+  const { dispatch, modelPreviews } = useStoreon('modelPreviews')
   const { isLoading } = modelPreviews
+  const [hasLoaded, setHasLoaded] = useState(false)
+
+  useEffect(() => {
+    if (!hasLoaded && modelPreviews.isLoaded) {
+      setHasLoaded(true)
+      perfTrack('Page Loaded - Home', getTime())
+    }
+  }, [getTime, hasLoaded, modelPreviews.isLoaded])
 
   const handleOnFinish = useCallback(data => {
     if (!data.length) setEndOfModels(true)
@@ -204,12 +214,11 @@ const Page = ({ dispatch, modelPreviews = {}, sortBy }) => {
 }
 
 const Landing = ({ newSignUp, isLoadingOptimizely }) => {
-  const { dispatch, modelPreviews } = useStoreon('modelPreviews')
+  const { setOverlay } = useOverlay()
   const {
     atom: { data: user },
   } = useCurrentUser()
   const history = useHistory()
-  const { startTimer, getTime } = usePerformanceMetrics()
   const sessionExpired = useQuery('sessionExpired')
   const authFailed = useQuery('authFailed')
   const moreInfo = useQuery('moreInfo')
@@ -217,7 +226,6 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
   const showSignup = useQuery('showSignup')
   const emailRedirect = useQuery('emailRedirect')
   const sortBy = useQuery('sort')
-  const [hasLoaded, setHasLoaded] = useState(false)
   const pageMetaKey = useMemo(() => {
     if (sortBy) return sortBy
     if (showSignin) return 'showSignin'
@@ -229,6 +237,7 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
   // eslint-disable-next-line no-unused-vars
   const [isEnabled, variables] = useFeature('sortbydefault', { autoUpdate: true })
   const defaultSort = (variables && variables.key) || 'likes'
+  const { startTimer, getTime } = usePerformanceMetrics()
   useEffect(() => {
     if (newSignUp) {
       pageview('Welcome')
@@ -243,9 +252,10 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
 
   useEffect(() => {
     if (sessionExpired || authFailed) {
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'signIn',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'signIn',
+        data: {
           animateIn: true,
           windowed: true,
           showPromo: false,
@@ -257,9 +267,10 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
       history.push('/')
     }
     if (moreInfo) {
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'moreInfo',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'moreInfo',
+        data: {
           animateIn: true,
           windowed: true,
           showPromo: false,
@@ -267,9 +278,10 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
       })
     }
     if (showSignup) {
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'signUp',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'signUp',
+        data: {
           animateIn: true,
           windowed: true,
           showPromo: true,
@@ -277,9 +289,10 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
         },
       })
     } else if (showSignin) {
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'signIn',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'signIn',
+        data: {
           animateIn: true,
           windowed: true,
           showPromo: false,
@@ -292,13 +305,6 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    if (!hasLoaded && modelPreviews.isLoaded) {
-      setHasLoaded(true)
-      perfTrack('Page Loaded - Home', getTime())
-    }
-  }, [getTime, hasLoaded, modelPreviews.isLoaded])
-
   return (
     <Layout showNewHero={true}>
       <Helmet>
@@ -306,12 +312,7 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
         <meta name='description' content={description} />
       </Helmet>
       {!isLoadingOptimizely && (
-        <Page
-          user={user}
-          dispatch={dispatch}
-          modelPreviews={modelPreviews}
-          sortBy={sortBy || defaultSort}
-        />
+        <Page getTime={getTime} user={user} sortBy={sortBy || defaultSort} />
       )}
       {isLoadingOptimizely && (
         <>

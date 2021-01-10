@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Header, Footer, FeedbackTooltip } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import { useActionBar, useOverlay } from '@hooks'
 import Banner from './Header/Banner'
 import { ReactComponent as ArrowUpIcon } from '@svg/icon-arrow-up.svg'
+import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -41,6 +41,10 @@ const useStyles = createUseStyles(theme => {
         backgroundColor: theme.colors.white[700],
       },
     },
+    Container_OverlayOpen: {
+      position: 'fixed',
+      width: '100%',
+    },
     Layout: {
       display: 'flex',
       flexDirection: 'column-reverse',
@@ -55,13 +59,6 @@ const useStyles = createUseStyles(theme => {
       [md]: {
         flexDirection: 'row',
       },
-    },
-    Layout_blur: {
-      filter: 'blur(4px)',
-      OFilter: 'blur(4px)',
-      MsFilter: 'blur(4px)',
-      MozFilter: 'blur(4px)',
-      WebkitFilter: 'blur(4px)',
     },
     Layout_Content: {
       paddingBottom: '7rem',
@@ -116,26 +113,6 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       justifyContent: 'center',
     },
-    Layout_theDarkness: {
-      background: 'rgba(0, 0, 0, 0.6)',
-      top: 0,
-      bottom: 0,
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      zIndex: 2,
-      opacity: 0,
-      visibility: 'hidden',
-    },
-    Layout_theDarknessComes: {
-      opacity: 1,
-      visibility: 'visible',
-
-      [md]: {
-        opacity: 0,
-        visibility: 'hidden',
-      },
-    },
   }
 })
 
@@ -181,20 +158,12 @@ const Layout = ({
   showAboutHero,
 }) => {
   const c = useStyles({})
-  const { Overlay, isOverlayOpen, isOverlayHidden } = useOverlay()
-  const { ActionBar, isActionBarOpen, isActionBarHidden } = useActionBar()
+  const { isOverlayOpen } = useOverlay()
 
   return (
     <div
-      className={classnames(c.Container, {
-        [c.Layout_blur]: isOverlayOpen && !isOverlayHidden,
-      })}
+      className={classnames(c.Container, { [c.Container_OverlayOpen]: isOverlayOpen })}
     >
-      <div
-        className={classnames(c.Layout_theDarkness, {
-          [c.Layout_theDarknessComes]: isActionBarOpen && !isActionBarHidden,
-        })}
-      ></div>
       <Header
         showSearchTextFlash={showSearchTextFlash}
         showSearch={showSearch}
@@ -202,8 +171,7 @@ const Layout = ({
         showNewHero={showNewHero}
         showAboutHero={showAboutHero}
       />
-      {Overlay}
-      {ActionBar}
+
       <div className={c.Layout_Content}>
         {Hero && <Hero />}
         {bannerText && <Banner>{bannerText}</Banner>}

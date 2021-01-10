@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
 import { TextInput } from '@components'
-import { useTranslations } from '@hooks'
+import { useOverlay, useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
-import * as types from '@constants/storeEventTypes'
 
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
@@ -140,7 +138,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
-  const { dispatch } = useStoreon()
+  const { setOverlay, setOverlayOpen } = useOverlay()
   const history = useHistory()
   const c = useStyles({})
   const t = useTranslations({})
@@ -151,7 +149,7 @@ const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
     e.preventDefault()
     if (searchTerm) {
       history.push(`/search/${encodeURIComponent(searchTerm)}`)
-      dispatch(types.CLOSE_OVERLAY)
+      setOverlayOpen(false)
     }
   }
 
@@ -198,9 +196,7 @@ const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
                 className={classnames(c.SearchBar_UploadBar, {
                   [c.SearchBar_UploadBar__expand]: showUploadText,
                 })}
-                onClick={() =>
-                  dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload' })
-                }
+                onClick={() => setOverlay({ isOpen: true, template: 'searchByUpload' })}
                 title={t('header.searchUploadText')}
               >
                 <div className={classnames(c.SearchBar_UploadIcon)}>

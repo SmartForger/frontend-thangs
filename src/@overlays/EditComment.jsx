@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Spacer, Spinner, Button, Textarea } from '@components'
+import { Button, Spacer, Spinner, Textarea } from '@components'
 import { useForm } from '@hooks'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -7,6 +7,7 @@ import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { overlayview } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
 import MobileDesktopTitle from '../@components/MobileDesktopTitle'
 
 const useStyles = createUseStyles(theme => {
@@ -113,6 +114,7 @@ const EditComment = ({ modelId, comment }) => {
   const c = useStyles()
   const [errorMessage, setErrorMessage] = useState(null)
   const { dispatch, comments = {} } = useStoreon('comments')
+  const { setOverlayOpen } = useOverlay()
   const { isSaving } = comments
 
   const initialState = {
@@ -124,8 +126,8 @@ const EditComment = ({ modelId, comment }) => {
   })
 
   const closeOverlay = useCallback(() => {
-    dispatch(types.CLOSE_OVERLAY)
-  }, [dispatch])
+    setOverlayOpen(false)
+  }, [setOverlayOpen])
 
   const formSubmit = useCallback(
     async (inputState, isValid, _errors) => {

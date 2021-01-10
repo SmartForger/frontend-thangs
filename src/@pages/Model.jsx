@@ -20,8 +20,8 @@ import {
   Revised,
   ShareDropdown,
   ShareDropdownMenu,
-  Spinner,
   Spacer,
+  Spinner,
   ToggleFollowButton,
   useFlashNotification,
 } from '@components'
@@ -37,6 +37,7 @@ import { usePageMeta, usePerformanceMetrics } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -300,19 +301,20 @@ const ModelStats = ({ model = {} }) => {
 
 const VersionLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
   const c = useStyles()
-  const { dispatch } = useStoreon()
+  const { setOverlay } = useOverlay()
 
   const handleClick = useCallback(() => {
     if (isAuthedUser) {
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'upload',
-        overlayData: { prevModelId: modelId },
+      setOverlay({
+        isOpen: true,
+        template: 'upload',
+        data: { prevModelId: modelId },
       })
     } else {
       openSignupOverlay('Join to Like, Follow, Share.', 'Version Upload')
       track('SignUp Prompt Overlay', { source: 'Version Upload' })
     }
-  }, [isAuthedUser, dispatch, modelId, openSignupOverlay])
+  }, [isAuthedUser, modelId, openSignupOverlay, setOverlay])
 
   return (
     <Button secondary className={c.Model_SidebarButton} onClick={handleClick}>
@@ -413,6 +415,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime }) => {
   const c = useStyles()
   const { navigateWithFlash } = useFlashNotification() //TODO: Should be removed
   const signUpShown = useRef(false)
+  const { setOverlay } = useOverlay()
   const {
     dispatch,
     [`model-${id}`]: modelAtom = {},
@@ -438,9 +441,10 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime }) => {
   const { title, description } = usePageMeta('model')
   const openSignupOverlay = useCallback(
     (titleMessage, source) => {
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'signUp',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'signUp',
+        data: {
           animateIn: true,
           windowed: true,
           titleMessage,
@@ -450,7 +454,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime }) => {
       })
       signUpShown.current = true
     },
-    [dispatch]
+    [setOverlay]
   )
 
   if (isLoading || !isLoaded) {

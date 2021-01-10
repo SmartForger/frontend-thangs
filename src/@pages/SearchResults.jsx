@@ -4,12 +4,12 @@ import classnames from 'classnames'
 import * as R from 'ramda'
 import { useStoreon } from 'storeon/react'
 import {
-  NoResults,
-  Layout,
   Button,
-  Spacer,
+  Layout,
+  NoResults,
   SaveSearchButton,
   Snackbar,
+  Spacer,
 } from '@components'
 import { useLocalStorage, useQuery } from '@hooks'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
@@ -18,6 +18,7 @@ import ModelSearchResults from '@components/CardCollection/ModelSearchResults'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -111,15 +112,15 @@ const useStyles = createUseStyles(theme => {
 })
 
 const SearchResult = ({
-  models,
-  modelId,
+  c,
+  handleFindRelated,
+  handleReportModel,
   isError,
   isLoading = true,
-  c,
+  modelId,
+  models,
   searchModelFileName,
   showReportModel,
-  handleReportModel,
-  handleFindRelated,
 }) => {
   const filteredModels = models.filter(
     model => model.resultSource !== 'phyndexer' || model.attributionUrl
@@ -141,13 +142,13 @@ const SearchResult = ({
         <>
           {filteredModels && filteredModels.length > 0 ? (
             <ModelSearchResults
+              handleFindRelated={handleFindRelated}
+              handleReportModel={handleReportModel}
               items={filteredModels}
-              showSocial={false}
-              showWaldo={false} //Change back to !!modelId when we want waldo thumbnails back
               searchModelFileName={searchModelFileName}
               showReportModel={showReportModel}
-              handleReportModel={handleReportModel}
-              handleFindRelated={handleFindRelated}
+              showSocial={false}
+              showWaldo={false} //Change back to !!modelId when we want waldo thumbnails back
             />
           ) : null}
         </>
@@ -163,16 +164,16 @@ const SearchResult = ({
 }
 
 const ThangsSearchResult = ({
-  models,
-  modelId,
+  c,
+  handleFindRelated,
+  handleReportModel,
   isError,
   isLoading = true,
   isOtherModelsLoaded,
-  c,
+  modelId,
+  models,
   searchModelFileName,
   showReportModel,
-  handleReportModel,
-  handleFindRelated,
 }) => {
   const searchingText = useMemo(() => {
     return isOtherModelsLoaded
@@ -202,13 +203,13 @@ const ThangsSearchResult = ({
         <>
           {models && models.length > 0 ? (
             <ModelSearchResults
+              handleFindRelated={handleFindRelated}
+              handleReportModel={handleReportModel}
               items={models}
-              showSocial={false}
-              showWaldo={false} //Change back to !!modelId when we want waldo thumbnails back
               searchModelFileName={searchModelFileName}
               showReportModel={showReportModel}
-              handleReportModel={handleReportModel}
-              handleFindRelated={handleFindRelated}
+              showSocial={false}
+              showWaldo={false} //Change back to !!modelId when we want waldo thumbnails back
             />
           ) : null}
         </>
@@ -230,6 +231,7 @@ const Page = () => {
   const modelId = useQuery('modelId')
   const phynId = useQuery('phynId')
   const related = useQuery('related')
+  const { setOverlay, setOverlayOpen } = useOverlay()
   const { dispatch, searchResults, searchSubscriptions } = useStoreon(
     'searchResults',
     'searchSubscriptions'
@@ -273,13 +275,14 @@ const Page = () => {
 
   const handleReportModel = useCallback(
     ({ model }) => {
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'reportModel',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'reportModel',
+        data: {
           model: model,
           afterSend: () => {
             setShowReportModelButtons(false)
-            dispatch(types.CLOSE_OVERLAY)
+            setOverlayOpen(false)
           },
           onOverlayClose: () => {
             setShowReportModelButtons(false)
@@ -287,34 +290,36 @@ const Page = () => {
         },
       })
     },
-    [dispatch]
+    [setOverlay, setOverlayOpen]
   )
 
   const handleFindRelated = useCallback(
     ({ model }) => {
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'searchByUpload',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'searchByUpload',
+        data: {
           model,
         },
       })
     },
-    [dispatch]
+    [setOverlay]
   )
 
   const openSignupOverlay = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'signUp',
-      overlayData: {
+    setOverlay({
+      isOpen: true,
+      template: 'signUp',
+      data: {
         animateIn: true,
-        windowed: true,
-        titleMessage: 'Join to subscribe to new search results alerts.',
         smallWidth: true,
         source: 'Save Search',
+        titleMessage: 'Join to subscribe to new search results alerts.',
+        windowed: true,
       },
     })
     track('SignUp Prompt Overlay', { source: 'Save Search' })
-  }, [dispatch])
+  }, [setOverlay])
 
   const thangsModels = R.path(['data', 'matches'], thangs) || []
   const phyndexerModels = R.path(['data', 'matches'], phyndexer) || []
@@ -337,11 +342,11 @@ const Page = () => {
             </div>
             <SaveSearchButton
               currentUser={currentUser}
-              searchTerm={searchQuery}
+              dispatch={dispatch}
               modelId={modelId}
               openSignupOverlay={openSignupOverlay}
-              dispatch={dispatch}
               searchSubscriptions={searchSubscriptions}
+              searchTerm={searchQuery}
             />
           </div>
         )}
@@ -349,27 +354,27 @@ const Page = () => {
           <>
             {!modelId && (phyndexer.isLoaded || thangs.isLoaded) && <Snackbar />}
             <ThangsSearchResult
-              isLoading={thangs.isLoading}
-              isError={thangs.isError}
-              models={thangsModels}
-              modelId={modelId}
-              searchModelFileName={undefined}
-              isOtherModelsLoaded={phyndexer.isLoaded}
-              showReportModel={showReportModelButtons}
-              handleReportModel={handleReportModel}
-              handleFindRelated={handleFindRelated}
               c={c}
+              handleFindRelated={handleFindRelated}
+              handleReportModel={handleReportModel}
+              isError={thangs.isError}
+              isLoading={thangs.isLoading}
+              isOtherModelsLoaded={phyndexer.isLoaded}
+              modelId={modelId}
+              models={thangsModels}
+              searchModelFileName={undefined}
+              showReportModel={showReportModelButtons}
             />
             <SearchResult
-              isLoading={phyndexer.isLoading}
+              c={c}
+              handleFindRelated={handleFindRelated}
+              handleReportModel={handleReportModel}
               isError={phyndexer.isError}
-              models={phyndexerModels}
+              isLoading={phyndexer.isLoading}
               modelId={modelId}
+              models={phyndexerModels}
               searchModelFileName={undefined}
               showReportModel={showReportModelButtons}
-              handleReportModel={handleReportModel}
-              handleFindRelated={handleFindRelated}
-              c={c}
             />
           </>
         ) : (

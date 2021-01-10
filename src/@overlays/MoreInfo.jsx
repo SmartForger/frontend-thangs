@@ -18,6 +18,7 @@ import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
+import { useOverlay } from '@hooks'
 import { overlayview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
@@ -149,7 +150,13 @@ const moreInfoSchema = Joi.object({
   username: Joi.string().required(),
 })
 
-const MoreInfoForm = ({ c, dispatch, handleSignInClick }) => {
+const MoreInfoForm = ({
+  c,
+  dispatch,
+  handleSignInClick,
+  setOverlayData,
+  setOverlayOpen,
+}) => {
   const [waiting, setWaiting] = useState(false)
   const [moreInfoErrorMessage, setMoreInfoErrorMessage] = useState(
     'Thank you for using SSO to sign up. We just need a little more information for your new account.'
@@ -189,17 +196,15 @@ const MoreInfoForm = ({ c, dispatch, handleSignInClick }) => {
     if (!EmailValidator.validate(inputState.email)) {
       setInvalidFields(['email'])
       setMoreInfoErrorMessage('Please enter a valid e-mail address')
-      dispatch(types.SET_OVERLAY_DATA, {
-        overlayData: {
-          shake: true,
-        },
+      setOverlayData({
+        shake: true,
       })
       return false
     } else {
       setFieldToValid('email')
       return true
     }
-  }, [dispatch, inputState, setFieldToValid])
+  }, [inputState.email, setFieldToValid, setOverlayData])
 
   const handleUpdateEmail = useCallback(async () => {
     setWaiting(true)
@@ -213,10 +218,10 @@ const MoreInfoForm = ({ c, dispatch, handleSignInClick }) => {
         setWaiting(false)
       },
       onFinish: () => {
-        dispatch(types.CLOSE_OVERLAY)
+        setOverlayOpen(false)
       },
     })
-  }, [dispatch, inputState])
+  }, [dispatch, inputState.email, setOverlayOpen])
 
   return (
     <div className={classnames(c.MoreInfo_Row, c.MoreInfo_SignUpForm)}>
@@ -296,25 +301,27 @@ const MoreInfoForm = ({ c, dispatch, handleSignInClick }) => {
 const MoreInfo = ({ source }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
+  const { setOverlay, setOverlayData, setOverlayOpen } = useOverlay()
   const history = useHistory()
 
   const closeOverlay = useCallback(() => {
     authenticationService.logout()
-    dispatch(types.CLOSE_OVERLAY)
+    setOverlayOpen(false)
     history.push('/')
-  }, [dispatch, history])
+  }, [history, setOverlayOpen])
 
   const handleSignInClick = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'signIn',
-      overlayData: {
+    setOverlay({
+      isOpen: true,
+      template: 'signIn',
+      data: {
         animateIn: true,
         windowed: true,
         showPromo: false,
         smallWidth: true,
       },
     })
-  }, [dispatch])
+  }, [setOverlay])
 
   useEffect(() => {
     overlayview('MoreInfo')
@@ -326,6 +333,8 @@ const MoreInfo = ({ source }) => {
       <MoreInfoForm
         c={c}
         dispatch={dispatch}
+        setOverlayOpen={setOverlayOpen}
+        setOverlayData={setOverlayData}
         handleSignInClick={handleSignInClick}
         source={source}
       />

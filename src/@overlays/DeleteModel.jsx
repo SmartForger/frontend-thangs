@@ -5,6 +5,7 @@ import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
+import { useOverlay } from '@hooks'
 import { overlayview, track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
@@ -89,13 +90,14 @@ const useStyles = createUseStyles(theme => {
 const DeleteModel = ({ model, type, folderId }) => {
   const c = useStyles()
   const [errorMessage, setErrorMessage] = useState(null)
+  const { setOverlayOpen } = useOverlay()
   const { dispatch, [`model-${model.id}`]: modelAtom = {} } = useStoreon(
     `model-${model.id}`
   )
   const { isSaving } = modelAtom
   const closeOverlay = useCallback(() => {
-    dispatch(types.CLOSE_OVERLAY)
-  }, [dispatch])
+    setOverlayOpen(false)
+  }, [setOverlayOpen])
 
   const handleSubmit = useCallback(
     model => {

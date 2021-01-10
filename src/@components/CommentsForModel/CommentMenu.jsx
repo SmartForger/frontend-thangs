@@ -1,11 +1,10 @@
 import React, { useCallback } from 'react'
-import { useStoreon } from 'storeon/react'
 import { MenuItem } from 'react-contextmenu'
 import { createUseStyles } from '@style'
+import { useOverlay } from '@hooks'
 import { SingleLineBodyText, Spacer } from '@components'
 import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
 import { ReactComponent as DeleteIcon } from '@svg/icon-delete.svg'
-import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
@@ -38,15 +37,16 @@ const useStyles = createUseStyles(theme => {
 
 const CommentMenu = ({ modelId, comment = {} }) => {
   const c = useStyles({})
-  const { dispatch } = useStoreon()
+  const { setOverlay } = useOverlay()
 
   const handleEdit = useCallback(
     e => {
       e.preventDefault()
       track('File Menu - Edit Model')
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'editComment',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'editComment',
+        data: {
           modelId,
           comment,
           animateIn: true,
@@ -55,15 +55,16 @@ const CommentMenu = ({ modelId, comment = {} }) => {
         },
       })
     },
-    [dispatch, comment, modelId]
+    [setOverlay, modelId, comment]
   )
 
   const handleDelete = useCallback(
     e => {
       e.preventDefault()
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'deleteComment',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'deleteComment',
+        data: {
           modelId,
           comment,
           animateIn: true,
@@ -73,7 +74,7 @@ const CommentMenu = ({ modelId, comment = {} }) => {
         },
       })
     },
-    [dispatch, comment, modelId]
+    [setOverlay, modelId, comment]
   )
 
   return (

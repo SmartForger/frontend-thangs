@@ -1,20 +1,19 @@
 import React, { useCallback } from 'react'
-import { useStoreon } from 'storeon/react'
-import { useCurrentUserId } from '@hooks'
+import { useCurrentUserId, useOverlay } from '@hooks'
 import { Pill, Spacer } from '@components'
 import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
-import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'
 
 const EditModelButton = ({ model = {} }) => {
   const currentUserId = useCurrentUserId()
-  const { dispatch } = useStoreon()
+  const { setOverlay } = useOverlay()
   const isCurrentUser = model.owner && model.owner.id.toString() === currentUserId
 
   const openEditOverlay = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'editModel',
-      overlayData: {
+    setOverlay({
+      isOpen: true,
+      template: 'editModel',
+      data: {
         model,
         user: model.owner,
         animateIn: true,
@@ -23,7 +22,8 @@ const EditModelButton = ({ model = {} }) => {
       },
     })
     track('Model page edit clicked')
-  }, [dispatch, model])
+  }, [model, setOverlay])
+
   if (!isCurrentUser) return null
 
   return (

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Spacer, FolderForm, MultiLineBodyText, Spinner } from '@components'
+import { FolderForm, MultiLineBodyText, Spacer, Spinner } from '@components'
+import { useOverlay } from '@hooks'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
@@ -104,11 +105,12 @@ const AddFolder = ({ folder }) => {
   const history = useHistory()
   const [errorMessage, setErrorMessage] = useState(null)
   const { dispatch, folders = {} } = useStoreon('folders')
+  const { setOverlayOpen } = useOverlay()
   const { isSaving } = folders
 
   const closeOverlay = useCallback(() => {
-    dispatch(types.CLOSE_OVERLAY)
-  }, [dispatch])
+    setOverlayOpen(false)
+  }, [setOverlayOpen])
 
   const handleSubmit = useCallback(
     newFolderData => {

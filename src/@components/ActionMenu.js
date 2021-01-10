@@ -5,7 +5,6 @@ import { useStoreon } from 'storeon/react'
 import { DropdownMenu, DropdownItem, Spacer, LabelText } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowRightIcon } from '@svg/icon-arrow-right.svg'
-import * as types from '@constants/storeEventTypes'
 import classnames from 'classnames'
 
 const useStyles = createUseStyles(theme => {
@@ -114,15 +113,14 @@ const ActionMenu = ({
   isOpenByDefault = false,
 }) => {
   const c = useStyles()
-  const { dispatch } = useStoreon()
   const { onChange, className, ...menuProps } = MenuComponentProps
 
   const handleChange = useCallback(
     value => {
       onChange(value)
-      dispatch(types.CLOSE_ACTION_BAR)
+      // dispatch(types.CLOSE_ACTION_BAR)
     },
-    [dispatch, onChange]
+    [onChange]
   )
 
   const handleTargetClick = useCallback(() => {

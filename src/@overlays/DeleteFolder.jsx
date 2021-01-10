@@ -7,6 +7,7 @@ import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { overlayview, track } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -92,14 +93,15 @@ const DeleteFolder = ({ folder, type }) => {
   const history = useHistory()
   const [errorMessage, setErrorMessage] = useState(null)
   const { dispatch, folders = {} } = useStoreon('folders')
+  const { setOverlayOpen } = useOverlay()
   const { isSaving } = folders
   const isNotRecentFilesPage =
     history.location.pathname !== '/mythangs/recent-files' &&
     history.location.pathname !== '/mythangs'
 
   const closeOverlay = useCallback(() => {
-    dispatch(types.CLOSE_OVERLAY)
-  }, [dispatch])
+    setOverlayOpen(false)
+  }, [setOverlayOpen])
 
   const handleDelete = useCallback(
     folder => {

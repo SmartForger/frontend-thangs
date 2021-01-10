@@ -219,7 +219,7 @@ const UploadModels = ({
     if (warningFiles.length !== 0) {
       setWarningMessage(`Notice: Files over ${FILE_SIZE_LIMITS.soft.pretty} may take a long time to
     upload & process.`)
-    } else if (Object.keys(uploadFiles).length > 25 && !validated) {
+    } else if (Object.keys(uploadFiles).length > 25 && !validated && !validating) {
       setWarningMessage(
         'Notice: Uploading more than 25 files at a time may take longer to upload & process.'
       )

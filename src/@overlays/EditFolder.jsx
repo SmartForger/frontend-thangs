@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Spacer, Spinner, FolderForm, MultiLineBodyText } from '@components'
+import { FolderForm, MultiLineBodyText, Spacer, Spinner } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { overlayview, track } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
 import MobileDesktopTitle from '../@components/MobileDesktopTitle'
 
 const useStyles = createUseStyles(theme => {
@@ -103,11 +104,12 @@ const EditFolder = ({ folder }) => {
   const c = useStyles()
   const [errorMessage, setErrorMessage] = useState(null)
   const { dispatch, folders = {} } = useStoreon('folders')
+  const { setOverlayOpen } = useOverlay()
   const { isSaving } = folders
 
   const closeOverlay = useCallback(() => {
-    dispatch(types.CLOSE_OVERLAY)
-  }, [dispatch])
+    setOverlayOpen(false)
+  }, [setOverlayOpen])
 
   const handleSubmit = useCallback(
     newFolderData => {

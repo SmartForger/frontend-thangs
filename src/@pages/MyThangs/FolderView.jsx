@@ -4,6 +4,7 @@ import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
 import {
   Button,
+  Contributors,
   FileTable,
   FolderCard,
   LikeFolderButton,
@@ -11,7 +12,6 @@ import {
   Spacer,
   Spinner,
   TitleTertiary,
-  Contributors,
 } from '@components'
 import { useQuery } from '@hooks'
 import { authenticationService } from '@services'
@@ -24,6 +24,7 @@ import { ReactComponent as PadlockIcon } from '@svg/icon-padlock.svg'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import * as types from '@constants/storeEventTypes'
 import { pageview } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -158,7 +159,7 @@ const getSubfolderId = (path, rootFolder, folder) => {
 
 const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
   const c = useStyles({})
-  const { dispatch } = useStoreon()
+  const { setOverlay } = useOverlay()
   const { id, name } = folder
   const folderPath = name.split('//')
 
@@ -175,28 +176,30 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
   }, [id, rootFolder, setFolder])
 
   const handleInviteUsers = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'inviteUsers',
-      overlayData: {
+    setOverlay({
+      isOpen: true,
+      template: 'inviteUsers',
+      data: {
         folderId: rootFolder ? rootFolder.id : folder.id,
         animateIn: true,
         windowed: true,
         dialogue: true,
       },
     })
-  }, [dispatch, folder.id, rootFolder])
+  }, [folder.id, rootFolder, setOverlay])
 
   const handleEditFolder = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'editFolder',
-      overlayData: {
+    setOverlay({
+      isOpen: true,
+      template: 'editFolder',
+      data: {
         folder,
         animateIn: true,
         windowed: true,
         dialogue: true,
       },
     })
-  }, [dispatch, folder])
+  }, [folder, setOverlay])
 
   const members = rootFolder ? rootFolder.members : folder.members
 

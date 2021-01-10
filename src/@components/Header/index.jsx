@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
-import { LandingHero, AboutHero, UserNav } from '@components'
-import { useCurrentUser } from '@hooks'
+import { AboutHero, LandingHero, UserNav } from '@components'
+import { useCurrentUser, useOverlay } from '@hooks'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 
@@ -102,10 +102,13 @@ const Header = ({
   showAboutHero = false,
 }) => {
   const { dispatch } = useStoreon()
+  const { setOverlayOpen } = useOverlay()
   const c = useStyles({ showNewHero })
   const {
     atom: { isLoading, data: user },
   } = useCurrentUser()
+
+  const handleClick = useCallback(() => setOverlayOpen(false), [setOverlayOpen])
 
   useEffect(() => {
     dispatch(types.FETCH_MODELS_STATS)
@@ -124,13 +127,7 @@ const Header = ({
               <Link to='/'>
                 <Logo className={c.Header_Logo} />
               </Link>
-              <UserNav
-                c={c}
-                dispatch={dispatch}
-                isLoading={isLoading}
-                user={user}
-                showUser={showUser}
-              />
+              <UserNav c={c} isLoading={isLoading} user={user} showUser={showUser} />
             </div>
           </div>
           <SearchBar />
@@ -140,9 +137,7 @@ const Header = ({
             <div className={classnames(c.Header_Row, c.Header_TopRow)}>
               <div className={c.Header_RowWrapper}>
                 <div className={c.Header_Row}>
-                  <div
-                    onClick={useCallback(() => dispatch(types.CLOSE_OVERLAY), [dispatch])}
-                  >
+                  <div onClick={handleClick}>
                     <Link className={c.Header_LogoWrapper} to='/'>
                       <Logo className={c.Header_Logo} />
                       <LogoText />
@@ -151,13 +146,7 @@ const Header = ({
                   {!showNewHero && <SearchBar />}
                 </div>
               </div>
-              <UserNav
-                c={c}
-                dispatch={dispatch}
-                isLoading={isLoading}
-                user={user}
-                showUser={showUser}
-              />
+              <UserNav c={c} isLoading={isLoading} user={user} showUser={showUser} />
             </div>
             {showNewHero && (
               <LandingHero showSearchTextFlash={showSearchTextFlash} user={user} />

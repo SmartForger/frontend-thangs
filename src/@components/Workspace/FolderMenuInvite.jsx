@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
-import { Contributors, Divider, SingleLineBodyText, Spacer, Button } from '@components'
+import { Button, Contributors, Divider, SingleLineBodyText, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { MenuItem } from 'react-contextmenu'
 import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
@@ -12,6 +12,7 @@ import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import { track } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -49,6 +50,7 @@ const useStyles = createUseStyles(theme => {
 const FolderMenuInvite = ({ folder = {}, members = [] }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
+  const { setOverlay } = useOverlay()
   const currentUserId = authenticationService.getCurrentUserId()
   const hasDeletePermission = useMemo(() => {
     return (
@@ -63,9 +65,10 @@ const FolderMenuInvite = ({ folder = {}, members = [] }) => {
     e => {
       e.preventDefault()
       track('File Menu - Edit Folder')
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'editFolder',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'editFolder',
+        data: {
           folder,
           type: 'folder',
           animateIn: true,
@@ -74,7 +77,7 @@ const FolderMenuInvite = ({ folder = {}, members = [] }) => {
         },
       })
     },
-    [dispatch, folder]
+    [folder, setOverlay]
   )
 
   const starFolder = useCallback(() => {
@@ -84,24 +87,26 @@ const FolderMenuInvite = ({ folder = {}, members = [] }) => {
 
   const addFolder = useCallback(() => {
     track('File Menu - Create Folder')
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'addFolder',
-      overlayData: {
+    setOverlay({
+      isOpen: true,
+      template: 'addFolder',
+      data: {
         folder,
         animateIn: true,
         windowed: true,
         dialogue: true,
       },
     })
-  }, [dispatch, folder])
+  }, [folder, setOverlay])
 
   const removeFolder = useCallback(
     e => {
       e.preventDefault()
       track('File Menu - Delete Folder')
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'deleteFolder',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'deleteFolder',
+        data: {
           folder,
           type: 'folder',
           animateIn: true,
@@ -110,16 +115,17 @@ const FolderMenuInvite = ({ folder = {}, members = [] }) => {
         },
       })
     },
-    [dispatch, folder]
+    [folder, setOverlay]
   )
 
   const handleInviteUsers = useCallback(
     e => {
       e.preventDefault()
       track('File Menu - Invite Members')
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'inviteUsers',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'inviteUsers',
+        data: {
           folderId: folder.id,
           animateIn: true,
           windowed: true,
@@ -127,7 +133,7 @@ const FolderMenuInvite = ({ folder = {}, members = [] }) => {
         },
       })
     },
-    [dispatch, folder.id]
+    [folder.id, setOverlay]
   )
 
   return (

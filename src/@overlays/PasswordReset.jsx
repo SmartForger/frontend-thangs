@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useStoreon } from 'storeon/react'
 import Joi from '@hapi/joi'
 import { Button, Input, TitleTertiary, Spacer } from '@components'
 import { useForm } from '@hooks'
@@ -7,8 +6,8 @@ import { authenticationService } from '@services'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
-import * as types from '@constants/storeEventTypes'
 import { overlayview, track } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -184,10 +183,10 @@ const ResetForm = ({ c }) => {
 
 const PasswordReset = () => {
   const c = useStyles({})
-  const { dispatch } = useStoreon()
+  const { setOverlayOpen } = useOverlay()
   const closeOverlay = useCallback(() => {
-    dispatch(types.CLOSE_OVERLAY)
-  }, [dispatch])
+    setOverlayOpen(false)
+  }, [setOverlayOpen])
   return (
     <div className={c.PasswordReset}>
       <ExitIcon className={c.PasswordReset_ExitButton} onClick={closeOverlay} />

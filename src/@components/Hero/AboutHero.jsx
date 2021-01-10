@@ -1,11 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import * as R from 'ramda'
-import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
-import { Button, Spacer, TitlePrimary, MultiLineBodyText, LabelText } from '@components'
-import { useTranslations } from '@hooks'
-import * as types from '@constants/storeEventTypes'
+import { Button, MultiLineBodyText, LabelText, Spacer, TitlePrimary } from '@components'
+import { useOverlay, useTranslations } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -45,12 +43,13 @@ const useStyles = createUseStyles(theme => {
 const AboutHero = ({ user }) => {
   const c = useStyles({})
   const t = useTranslations({})
-  const { dispatch } = useStoreon()
+  const { setOverlay } = useOverlay()
 
   const handleSignUp = () => {
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'signUp',
-      overlayData: {
+    setOverlay({
+      isOpen: true,
+      template: 'signUp',
+      data: {
         animateIn: true,
         windowed: true,
         showPromo: false,
@@ -61,9 +60,10 @@ const AboutHero = ({ user }) => {
   }
 
   const handleSignIn = () => {
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'signIn',
-      overlayData: {
+    setOverlay({
+      isOpen: true,
+      template: 'signIn',
+      data: {
         animateIn: true,
         windowed: true,
         showPromo: false,

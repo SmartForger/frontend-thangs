@@ -1,12 +1,11 @@
 import React, { useCallback } from 'react'
 import * as R from 'ramda'
-import { useStoreon } from 'storeon/react'
 import { SingleLineBodyText, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { MenuItem } from 'react-contextmenu'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
-import * as types from '@constants/storeEventTypes'
+import { useOverlay } from '@hooks'
 import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
@@ -56,14 +55,15 @@ const useStyles = createUseStyles(theme => {
 
 const AddMenu = () => {
   const c = useStyles({})
-  const { dispatch } = useStoreon()
+  const { setOverlay } = useOverlay()
 
   const handleAddFolder = useCallback(
     (_e, data = {}) => {
       track('Add Menu - Create Folder')
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'addFolder',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'addFolder',
+        data: {
           folder: data.folder,
           animateIn: true,
           windowed: true,
@@ -71,15 +71,16 @@ const AddMenu = () => {
         },
       })
     },
-    [dispatch]
+    [setOverlay]
   )
 
   const handleUpload = useCallback(
     (_e, data = {}) => {
       track('Add Menu - Upload Models')
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'multiUpload',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'multiUpload',
+        data: {
           folderId: R.path(['folder', 'id'], data),
           animateIn: true,
           windowed: true,
@@ -87,7 +88,7 @@ const AddMenu = () => {
         },
       })
     },
-    [dispatch]
+    [setOverlay]
   )
 
   return (

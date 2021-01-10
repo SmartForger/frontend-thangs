@@ -9,6 +9,7 @@ import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
+import { useOverlay } from '@hooks'
 import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
@@ -42,6 +43,7 @@ const useStyles = createUseStyles(theme => {
 const FolderMenu = ({ folder = {} }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
+  const { setOverlay } = useOverlay()
   const currentUserId = authenticationService.getCurrentUserId()
   const hasDeletePermission = useMemo(
     () =>
@@ -56,9 +58,10 @@ const FolderMenu = ({ folder = {} }) => {
     e => {
       e.preventDefault()
       track('Folder Menu - Edit Folder')
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'editFolder',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'editFolder',
+        data: {
           folder,
           type: 'folder',
           animateIn: true,
@@ -67,7 +70,7 @@ const FolderMenu = ({ folder = {} }) => {
         },
       })
     },
-    [dispatch, folder]
+    [folder, setOverlay]
   )
 
   const handleStarFolder = useCallback(() => {
@@ -75,27 +78,32 @@ const FolderMenu = ({ folder = {} }) => {
     dispatch(types.LIKE_FOLDER, { id: folder.id, owner: folder.owner })
   }, [dispatch, folder.id, folder.owner])
 
-  const handleAddFolder = useCallback(e => {
-    e.preventDefault()
-    track('Folder Menu - Create Folder')
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'addFolder',
-      overlayData: {
-        folder,
-        animateIn: true,
-        windowed: true,
-        dialogue: true,
-      },
-    })
-  }, [dispatch, folder])
+  const handleAddFolder = useCallback(
+    e => {
+      e.preventDefault()
+      track('Folder Menu - Create Folder')
+      setOverlay({
+        isOpen: true,
+        template: 'addFolder',
+        data: {
+          folder,
+          animateIn: true,
+          windowed: true,
+          dialogue: true,
+        },
+      })
+    },
+    [folder, setOverlay]
+  )
 
   const handleRemoveFolder = useCallback(
     e => {
       e.preventDefault()
       track('Folder Menu - Delete Folder')
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'deleteFolder',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'deleteFolder',
+        data: {
           folder,
           type: 'folder',
           animateIn: true,
@@ -104,7 +112,7 @@ const FolderMenu = ({ folder = {} }) => {
         },
       })
     },
-    [dispatch, folder]
+    [folder, setOverlay]
   )
 
   return (

@@ -25,7 +25,7 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
 
       [md]: {
-        width: ({ showViewer }) => (showViewer ? '16.875rem' : '100%'),
+        width: ({ showViewer }) => (showViewer ? '16.875rem' : '21.75rem'),
       },
 
       '& button': {

@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import * as R from 'ramda'
-import { Loader, UploadProgress, UploadForm, UploaderContent } from '@components'
+import { Loader, UploadForm, UploadProgress, UploaderContent } from '@components'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { useCurrentUser, useFileUpload } from '@hooks'
 import { overlayview } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -33,7 +34,7 @@ const useStyles = createUseStyles(theme => {
 const Upload = ({ prevModelId }) => {
   const history = useHistory()
   const c = useStyles()
-
+  const { setOverlayOpen } = useOverlay()
   const { uploadModelPhase1, folders, overlay, dispatch } = useStoreon(
     'uploadModelPhase1',
     'folders',
@@ -101,18 +102,18 @@ const Upload = ({ prevModelId }) => {
           ...optionalVariables,
         },
         onFinish: () => {
-          dispatch(types.CLOSE_OVERLAY)
+          setOverlayOpen(false)
           dispatch(types.RESET_UPLOAD_MODEL)
           dispatch(types.FETCH_USER_OWN_MODELS, { id: currentUser.id })
           history.push('/mythangs/all-files')
         },
       })
     },
-    [currentUser, dispatch, file, history, prevModelId]
+    [currentUser.id, dispatch, file, history, prevModelId, setOverlayOpen]
   )
 
   return (
-    <div className={c.Upload} data-cy="upload-overlay">
+    <div className={c.Upload} data-cy='upload-overlay'>
       <div className={c.Upload_Column__frame}>
         {uploadModelPhase1.isLoading ? (
           <UploadProgress />

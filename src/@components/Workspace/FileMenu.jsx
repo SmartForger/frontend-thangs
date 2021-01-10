@@ -10,6 +10,7 @@ import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import { track } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -42,6 +43,7 @@ const useStyles = createUseStyles(theme => {
 const FileMenu = ({ model }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
+  const { setOverlay } = useOverlay()
   const currentUserId = authenticationService.getCurrentUserId()
   const hasDeletePermission = useMemo(() => {
     return (
@@ -56,9 +58,10 @@ const FileMenu = ({ model }) => {
     e => {
       e.preventDefault()
       track('File Menu - Edit Model')
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'editModel',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'editModel',
+        data: {
           model,
           type: 'model',
           animateIn: true,
@@ -66,7 +69,7 @@ const FileMenu = ({ model }) => {
         },
       })
     },
-    [dispatch, model]
+    [model, setOverlay]
   )
 
   const handleDownloadModel = useCallback(
@@ -101,9 +104,10 @@ const FileMenu = ({ model }) => {
     e => {
       e.preventDefault()
       track('File Menu - Delete Model')
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'deleteModel',
-        overlayData: {
+      setOverlay({
+        isOpen: true,
+        template: 'deleteModel',
+        data: {
           model,
           type: 'model',
           animateIn: true,
@@ -112,7 +116,7 @@ const FileMenu = ({ model }) => {
         },
       })
     },
-    [dispatch, model]
+    [model, setOverlay]
   )
 
   return (

@@ -68,10 +68,6 @@ export const SAVED_TEAM = 'saved-team'
 export const ERROR_SAVING_TEAM = 'error-saving-team'
 export const UPDATE_TEAM = 'update-team'
 export const UPDATE_TEAMS = 'update-teams'
-/* Overlay Store Events */
-export const OPEN_OVERLAY = 'open-overlay'
-export const CLOSE_OVERLAY = 'close-overlay'
-export const SET_OVERLAY_DATA = 'set-overlay-data'
 /* Action Bar Store Events */
 export const OPEN_ACTION_BAR = 'open-action-bar'
 export const CLOSE_ACTION_BAR = 'close-action-bar'

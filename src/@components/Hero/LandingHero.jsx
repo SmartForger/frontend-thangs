@@ -5,11 +5,12 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import {
   LandingCarousel,
+  LandingSearchBar,
+  MultiLineBodyText,
   Spacer,
   TitlePrimary,
-  MultiLineBodyText,
-  LandingSearchBar,
 } from '@components'
+import { useOverlay } from '@hooks'
 import { numberWithCommas } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
@@ -58,7 +59,8 @@ const useStyles = createUseStyles(theme => {
 })
 
 const LandingHero = ({ showSearchTextFlash, user }) => {
-  const { dispatch, modelsStats } = useStoreon('modelsStats')
+  const { modelsStats } = useStoreon('modelsStats')
+  const { setOverlay } = useOverlay()
   const [searchMinimized, setMinimizeSearch] = useState(false)
   const c = useStyles({ searchMinimized })
   const searchBarRef = useRef(null)
@@ -105,7 +107,7 @@ const LandingHero = ({ showSearchTextFlash, user }) => {
         className={classnames(c.Header_Carousel, {
           [c.Fade]: searchMinimized,
         })}
-        dispatch={dispatch}
+        setOverlay={setOverlay}
         user={user}
         searchBarRef={searchBarRef}
       />

@@ -3,9 +3,8 @@ import classnames from 'classnames'
 import * as R from 'ramda'
 
 import { Button, Spacer } from '@components'
-import { useTranslations } from '@hooks'
+import { useOverlay, useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
-import * as types from '@constants/storeEventTypes'
 
 import { ProfileDropdown, ProfileDropdownMenu } from './Header/ProfileDropdown'
 import Notifications from '@components/Notifications'
@@ -69,7 +68,6 @@ const useStyles = createUseStyles(theme => {
 })
 
 const UserNav = ({
-  dispatch,
   isLoading,
   user,
   showUser,
@@ -78,11 +76,13 @@ const UserNav = ({
 }) => {
   const c = useStyles()
   const t = useTranslations({})
+  const { setOverlay } = useOverlay()
 
   const handleSignUp = () => {
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'signUp',
-      overlayData: {
+    setOverlay({
+      isOpen: true,
+      template: 'signUp',
+      data: {
         animateIn: true,
         windowed: true,
         showPromo: false,
@@ -93,9 +93,10 @@ const UserNav = ({
   }
 
   const handleSignIn = () => {
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'signIn',
-      overlayData: {
+    setOverlay({
+      isOpen: true,
+      template: 'signIn',
+      data: {
         animateIn: true,
         windowed: true,
         showPromo: false,
@@ -116,7 +117,6 @@ const UserNav = ({
         <ProfileDropdownMenu
           user={user}
           TargetComponent={ProfileDropdown}
-          dispatch={dispatch}
           myThangsMenu={myThangsMenu}
         />
         <Spacer size='1rem' />
@@ -124,9 +124,10 @@ const UserNav = ({
           <Button
             className={classnames(c.UserNav_Button)}
             onClick={() => {
-              dispatch(types.OPEN_OVERLAY, {
-                overlayName: 'multiUpload',
-                overlayData: {
+              setOverlay({
+                isOpen: true,
+                template: 'multiUpload',
+                data: {
                   animateIn: true,
                   windowed: true,
                   dialogue: true,

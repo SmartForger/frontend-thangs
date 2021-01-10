@@ -4,6 +4,7 @@ import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
+import { useOverlay } from '@hooks'
 import * as types from '@constants/storeEventTypes'
 import { overlayview, track } from '@utilities/analytics'
 
@@ -90,11 +91,12 @@ const DeleteComment = ({ modelId, comment }) => {
   const c = useStyles()
   const [errorMessage, setErrorMessage] = useState(null)
   const { dispatch, comments = {} } = useStoreon('comments')
+  const { setOverlayOpen } = useOverlay()
   const { isSaving } = comments
 
   const closeOverlay = useCallback(() => {
-    dispatch(types.CLOSE_OVERLAY)
-  }, [dispatch])
+    setOverlayOpen(false)
+  }, [setOverlayOpen])
 
   const handleDelete = useCallback(() => {
     track('Delete Comment')

@@ -1,13 +1,11 @@
 import React, { useCallback, useRef, useState } from 'react'
 import * as R from 'ramda'
 import { useHistory } from 'react-router-dom'
-import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
 import { Button, TextInput, Spacer } from '@components'
-import { useFileUpload, useTranslations } from '@hooks'
+import { useFileUpload, useOverlay, useTranslations } from '@hooks'
 import { createUseStyles } from '@style'
-import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'
 
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
@@ -205,7 +203,7 @@ const SearchBar = ({
   searchBarRef,
   ...props
 }) => {
-  const { dispatch } = useStoreon()
+  const { setOverlay, setOverlayOpen } = useOverlay()
   const history = useHistory()
   const c = useStyles({})
   const t = useTranslations({})
@@ -218,17 +216,17 @@ const SearchBar = ({
         setMinimizeSearch(true)
         setTimeout(() => {
           history.push(`/search/${encodeURIComponent(searchTerm)}`)
-          dispatch(types.CLOSE_OVERLAY)
+          setOverlayOpen(false)
         }, 1000)
       }
     },
-    [dispatch, history, searchTerm, setMinimizeSearch]
+    [setOverlayOpen, history, searchTerm, setMinimizeSearch]
   )
 
   const handleUploadClick = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, { overlayName: 'searchByUpload' })
+    setOverlay({ isOpen: true, template: 'searchByUpload' })
     track('Upload - Searchbar', { source: 'Searchbar - Upload Icon' })
-  }, [dispatch])
+  }, [setOverlay])
 
   return (
     <div className={classnames(c.SearchBar, className)}>
@@ -279,26 +277,28 @@ const LandingSearchBar = ({ searchBarRef, searchMinimized, setMinimizeSearch }) 
   const c = useStyles({ searchMinimized })
   const [isUploadOpened, setIsUploadOpened] = useState(false)
   const [isDragOvered, setIsDragOvered] = useState(false)
-  const { dispatch } = useStoreon()
+  const { setOverlay } = useOverlay()
   const uploadContainer = useRef(null)
   const searchBarContainer = useRef(null)
   const handleUploadClick = useCallback(() => {
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'searchByUpload',
-      overlayData: { isExplorerOpened: true },
+    setOverlay({
+      isOpen: true,
+      template: 'searchByUpload',
+      data: { isExplorerOpened: true },
     })
     track('Upload - Searchbar', { source: 'Dropdown - Upload Icon' })
-  }, [dispatch])
+  }, [setOverlay])
 
   const handleSetFile = useCallback(
     (file, errorState) => {
-      dispatch(types.OPEN_OVERLAY, {
-        overlayName: 'searchByUpload',
-        overlayData: { file, errorState },
+      setOverlay({
+        isOpen: true,
+        template: 'searchByUpload',
+        data: { file, errorState },
       })
       track('Upload - Searchbar', { source: 'Dropdown - Drag and Drop' })
     },
-    [dispatch]
+    [setOverlay]
   )
 
   const { UploadZone } = useFileUpload({

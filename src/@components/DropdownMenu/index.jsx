@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { useStoreon } from 'storeon/react'
 import { Button, Spacer } from '@components'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import * as types from '@constants/storeEventTypes'
-import { useExternalClick } from '@hooks'
+import { useExternalClick, useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -103,7 +101,7 @@ const useDropdownMenuState = ({
 }
 const DropdownItem = ({ children, to = '#', onClick, className, noHover = false }) => {
   const c = useStyles({ noHover })
-  const { dispatch } = useStoreon()
+  const { setOverlayOpen } = useOverlay()
 
   return (
     <div className={c.DropdownMenu_ItemWrapper}>
@@ -111,7 +109,7 @@ const DropdownItem = ({ children, to = '#', onClick, className, noHover = false 
         <div
           className={classnames(className, c.DropdownMenu_Item)}
           onClick={e => {
-            dispatch(types.CLOSE_OVERLAY)
+            setOverlayOpen(false)
             onClick && onClick(e)
           }}
         >
@@ -122,7 +120,7 @@ const DropdownItem = ({ children, to = '#', onClick, className, noHover = false 
           className={c.DropdownMenu_Item}
           to={to}
           onClick={e => {
-            dispatch(types.CLOSE_OVERLAY)
+            setOverlayOpen(false)
             onClick && onClick(e)
           }}
         >
