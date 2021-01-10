@@ -263,6 +263,19 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
       ...folderOptions,
     ]
   }, [foldersData, sharedData])
+  const partFormTitle = useMemo(() => {
+    if (!activeNode) return ''
+
+    const siblings = allTreeNodes.filter(
+      node => !node.isAssembly && node.parentId === activeNode.parentId
+    )
+    if (siblings.length > 0) {
+      const activeIndex = siblings.findIndex(node => node.id === activeNode.id)
+      return `New Part (${activeIndex + 1}/${siblings.length})`
+    }
+
+    return ''
+  }, [activeNode, allTreeNodes])
 
   const onDrop = useCallback(
     (acceptedFiles, [rejectedFile], _event) => {
@@ -428,10 +441,10 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
               {!activeNode
                 ? 'Upload Files'
                 : activeNode.isAssembly && activeNode.parentId
-                  ? 'Sub Assembly'
-                  : activeNode.isAssembly
-                    ? 'New Assembly'
-                    : 'Enter Information'}
+                ? 'Sub Assembly'
+                : activeNode.isAssembly
+                ? 'New Assembly'
+                : partFormTitle}
             </SingleLineBodyText>
             {activeView > -1 && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />
