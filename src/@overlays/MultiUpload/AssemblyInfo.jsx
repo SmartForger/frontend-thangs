@@ -272,7 +272,7 @@ const AssemblyInfo = ({
           />
           <Spacer size={'1rem'} />
         </div>
-        {folders && folders.length > 1 ? (
+        {isRootAssembly && folders && folders.length > 1 ? (
           <div>
             <Dropdown
               className={c.AssemblyInfo_Select}
@@ -289,22 +289,24 @@ const AssemblyInfo = ({
             <Spacer size={'1rem'} />
           </div>
         ) : null}
-        <div>
-          <Dropdown
-            className={c.AssemblyInfo_Select}
-            name='category'
-            placeholder='Select category'
-            isClearable
-            options={CATEGORIES}
-            value={selectedCategory}
-            onChange={e => {
-              if (e) handleOnInputChange('category', e.value)
-            }}
-            error={checkError('category').message}
-            errorMessage={checkError('category').message}
-          />
-          <Spacer size={'1rem'} />
-        </div>
+        {isRootAssembly && (
+          <div>
+            <Dropdown
+              className={c.AssemblyInfo_Select}
+              name='category'
+              placeholder='Select category'
+              isClearable
+              options={CATEGORIES}
+              value={selectedCategory}
+              onChange={e => {
+                if (e) handleOnInputChange('category', e.value)
+              }}
+              error={checkError('category').message}
+              errorMessage={checkError('category').message}
+            />
+            <Spacer size={'1rem'} />
+          </div>
+        )}
         {activeNode.id === 'multipart' && (
           <div>
             <Dropdown

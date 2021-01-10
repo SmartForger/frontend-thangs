@@ -329,7 +329,7 @@ const PartInfo = props => {
             errorMessage={checkError('description').message}
           />
         </div>
-        {!isRootPart && folders && folders.length > 1 ? (
+        {isRootPart && folders && folders.length > 1 ? (
           <div className={c.PartInfo_Field}>
             <Dropdown
               className={c.PartInfo_Select}
@@ -384,7 +384,7 @@ const PartInfo = props => {
             />
           </div>
         </div>
-        {!isRootPart && (
+        {isRootPart && (
           <div className={c.PartInfo_Field}>
             <Dropdown
               className={c.PartInfo_Select}
