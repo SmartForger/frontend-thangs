@@ -99,25 +99,7 @@ const ExplodeTarget = ({ onClick = noop }) => {
 }
 
 const ExplodeMenu = ({ onChange = noop, selectedValue: magnitude = 0 }) => {
-  const c = useStyles({})
-
-  return (
-    <>
-      <div>
-        <DropdownItem className={c.ExplodeDropdown_Item} noHover={true}>
-          <div className={c.ExplodeDropdown_Row}>
-            <Slider
-              className={c.ExplodeDropdown_Slider}
-              onChange={onChange}
-              steps={40}
-              value={magnitude}
-            />
-          </div>
-        </DropdownItem>
-      </div>
-      <Spacer className={c.ExplodeDropdown__mobile} size={'.5rem'} />
-    </>
-  )
+  return <Slider onChange={onChange} value={magnitude} />
 }
 
 const ExplodeActionMenu = ({ onChange = noop, selectedValue }) => {
