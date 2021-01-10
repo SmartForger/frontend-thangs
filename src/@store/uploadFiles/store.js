@@ -128,7 +128,7 @@ export default store => {
   })
 
   store.on(types.CHANGE_UPLOAD_FILE, (state, { id, data, isLoading, isError }) => {
-    if (!id) {
+    if (!id || !state.uploadFiles.data[id]) {
       return { uploadFiles: state.uploadFiles }
     }
 
