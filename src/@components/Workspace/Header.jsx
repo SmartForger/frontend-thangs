@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { useStoreon } from 'storeon/react'
 import { Divider, Notifications, Spacer, UserNav } from '@components'
 import SearchBar from './SearchBar'
 import { useCurrentUser } from '@hooks'

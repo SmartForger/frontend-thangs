@@ -1,7 +1,6 @@
 // ActionMenu - Component used with DropdownMenu
 
 import React, { useCallback } from 'react'
-import { useStoreon } from 'storeon/react'
 import { DropdownMenu, DropdownItem, Spacer, LabelText } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowRightIcon } from '@svg/icon-arrow-right.svg'
@@ -109,7 +108,7 @@ const ActionMenu = ({
   MenuComponentProps,
   isAutoClosed = true,
   isExternalClosed = false,
-  isMobileActionBarActive = true,
+  // isMobileActionBarActive = true,
   isOpenByDefault = false,
 }) => {
   const c = useStyles()

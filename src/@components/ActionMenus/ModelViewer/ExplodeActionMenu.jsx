@@ -1,5 +1,5 @@
 import React from 'react'
-import { ActionMenu, DropdownItem, Spacer, Slider, MetadataSecondary } from '@components'
+import { ActionMenu, Spacer, Slider, MetadataSecondary } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ExplodeIcon } from '@svg/icon-explode.svg'

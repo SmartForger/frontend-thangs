@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect } from 'react'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import { useOverlay } from '@hooks'
 import OverlayPortal from './OverlayPortal'
 
 export * from './OverlayContext'
@@ -94,16 +93,16 @@ export const Overlay = ({
   smallWidth = false,
   ...props
 }) => {
-  const [isVisible, setIsVisible] = useState(false)
+  // const [isVisible, setIsVisible] = useState(false)
   const c = useStyles({ windowed, animateIn, showPromo, isHidden, dialogue, smallWidth })
   useEffect(() => {
     if (scrollTop) {
       document.body.scrollTop = 0
       document.documentElement.scrollTop = 0
     }
-    setTimeout(() => {
-      setIsVisible(true)
-    }, 0)
+    // setTimeout(() => {
+    //   setIsVisible(true)
+    // }, 0)
   }, [scrollTop])
 
   return (
