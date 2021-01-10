@@ -33,6 +33,12 @@ const useStyles = createUseStyles(theme => {
       position: 'relative',
       top: '30px',
       transition: 'all 450ms',
+      marginTop: 0,
+
+      [md]: {
+        alignItems: 'baseline',
+        marginTop: '20vh',
+      },
 
       '& > div': {
         borderRadius: 0,
