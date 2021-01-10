@@ -27,6 +27,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       position: 'relative',
+      width: '100%',
 
       [md]: {
         width: '27.75rem',

@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import { useStoreon } from 'storeon/react'
-import classnames from 'classnames'
 import {
   AddContextMenu,
   FileContextMenu,
@@ -107,21 +106,6 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const OverlayWrapper = () => {
-  const c = useStyles({})
-  const { Overlay, isOverlayOpen, isOverlayHidden } = useOverlay()
-
-  return (
-    <div
-      className={classnames(c.MyThangs_OverlayWrapper, {
-        [c.Layout_blur]: isOverlayOpen && !isOverlayHidden,
-      })}
-    >
-      {Overlay}
-    </div>
-  )
-}
-
 const MyThangs = () => {
   const { path } = useRouteMatch()
   const history = useHistory()
@@ -224,7 +208,6 @@ const MyThangs = () => {
   return (
     <>
       <div className={c.MyThangs}>
-        <OverlayWrapper />
         <ContextMenuTrigger
           id='Add_Menu'
           attributes={{

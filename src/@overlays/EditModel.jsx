@@ -27,10 +27,12 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       justifyContent: 'flex-start',
       position: 'relative',
+      width: '100%',
 
       [md]: {
         flexDirection: 'row',
         borderRadius: '1rem',
+        width: 'unset',
       },
     },
     EditModel_Column: {

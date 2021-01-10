@@ -33,10 +33,12 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       justifyContent: 'flex-start',
       position: 'relative',
+      width: '100%',
 
       [md]: {
         height: 'unset',
         flexDirection: 'row',
+        width: 'unset',
       },
     },
     InviteUsers_Row: {

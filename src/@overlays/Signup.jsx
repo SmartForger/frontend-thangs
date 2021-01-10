@@ -66,13 +66,22 @@ const useStyles = createUseStyles(theme => {
     },
     Signup_SignUpPromo: {
       backgroundColor: theme.colors.purple[900],
+      borderRadius: 0,
       color: theme.colors.white[300],
       position: 'relative',
       flex: 'none',
+
+      [md]: {
+        borderRadius: '1rem 0 0 1rem',
+      },
     },
     Signup_SignUpPromoSection: {
       width: '100%',
       zIndex: 2,
+
+      [md]: {
+        width: '21.75rem',
+      },
     },
     Signup_SignUpPromoText: {
       maxWidth: '16.875rem',
@@ -87,7 +96,7 @@ const useStyles = createUseStyles(theme => {
     Signup_Wrapper: {
       backgroundColor: theme.colors.white[300],
       [md]: {
-        borderRadius: '1rem',
+        borderRadius: ({ showPromo }) => (showPromo ? '0 1rem 1rem 0' : '1rem'),
       },
     },
     Signup_FormWrapper: {
@@ -96,6 +105,10 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
+
+      [md]: {
+        width: '21.75rem',
+      },
     },
     Signup_Form: {
       display: 'flex',

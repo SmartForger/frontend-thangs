@@ -23,10 +23,12 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'flex-start',
       position: 'relative',
       height: '100%',
+      width: '100%',
 
       [md]: {
         flexDirection: 'row',
         height: 'unset',
+        width: 'unset',
       },
     },
     EditFolder_Column: {

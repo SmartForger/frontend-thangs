@@ -5,8 +5,8 @@ import { Overlay } from '@components'
 let OverlayContext
 let { Provider } = (OverlayContext = React.createContext())
 
-let OverlayProvider = ({ children }) => {
-  let {
+const OverlayProvider = ({ children }) => {
+  const {
     setOverlay,
     setOverlayOpen,
     setOverlayHidden,

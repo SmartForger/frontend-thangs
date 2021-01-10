@@ -1,5 +1,6 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useOverlay } from '@hooks'
@@ -12,12 +13,16 @@ const useStyles = createUseStyles(theme => {
     OverlayPortal: {
       backgroundColor: ({ windowed }) =>
         windowed ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.9)',
-      bottom: '0',
-      left: '0',
+      bottom: 0,
+      left: 0,
       position: 'fixed',
-      right: '0',
-      top: '0',
+      right: 0,
+      top: 0,
       zIndex: 10,
+    },
+    OverlayPortal__isVisible: {
+      opacity: '1 !important',
+      top: '0 !important',
     },
     OverlayContent: {
       display: 'flex',
@@ -25,6 +30,9 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'center',
       alignItems: 'center',
       height: '100%',
+      position: 'relative',
+      top: '30px',
+      transition: 'all 450ms',
 
       '& > div': {
         borderRadius: 0,
@@ -36,10 +44,14 @@ const useStyles = createUseStyles(theme => {
         },
       },
     },
+    OverlayContent__isVisible: {
+      top: 0,
+    },
   }
 })
 
-const OverlayPortal = () => {
+const OverlayPortal = ({ className, scrollTop }) => {
+  const [isVisible, setIsVisible] = useState(false)
   const { setOverlayOpen, OverlayComponent, overlayData = {} } = useOverlay()
   const windowed = overlayData.windowed
   const c = useStyles({ windowed })
@@ -48,10 +60,32 @@ const OverlayPortal = () => {
     setOverlayOpen(false)
   }, [setOverlayOpen])
 
+  useEffect(() => {
+    if (scrollTop) {
+      document.body.scrollTop = 0
+      document.documentElement.scrollTop = 0
+    }
+    if (OverlayComponent) {
+      setTimeout(() => {
+        setIsVisible(true)
+      }, 10)
+    } else {
+      setIsVisible(false)
+    }
+  }, [OverlayComponent, scrollTop])
+
   if (OverlayComponent) {
     return createPortal(
-      <div className={c.OverlayPortal}>
-        <div className={c.OverlayContent}>
+      <div
+        className={classnames(className, c.OverlayPortal, {
+          [c.OverlayPortal__isVisible]: isVisible,
+        })}
+      >
+        <div
+          className={classnames(c.OverlayContent, {
+            [c.OverlayContent__isVisible]: isVisible,
+          })}
+        >
           {!windowed && (
             <div
               className={c.Overlay_CloseButton}
