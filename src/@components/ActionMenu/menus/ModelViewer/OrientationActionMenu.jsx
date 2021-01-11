@@ -112,11 +112,19 @@ const OrientationTarget = ({ onClick = noop, selectedValue }) => {
 }
 
 const OrientationActionMenu = ({ onChange = noop, selectedValue }) => {
+  const menuProps = useMemo(() => {
+    return { onChange, actionBarTitle: 'Select orientation', options }
+  }, [onChange])
+
+  const targetProps = useMemo(() => {
+    return { selectedValue }
+  }, [selectedValue])
+
   return (
     <ActionMenu
-      MenuComponentProps={{ onChange, actionBarTitle: 'Select orientation', options }}
+      MenuComponentProps={menuProps}
       TargetComponent={OrientationTarget}
-      TargetComponentProps={{ selectedValue }}
+      TargetComponentProps={targetProps}
     />
   )
 }

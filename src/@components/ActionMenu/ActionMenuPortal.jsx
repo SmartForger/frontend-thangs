@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import classnames from 'classnames'
-import { Spacer } from '@components'
+import { Spacer, TitleTertiary } from '@components'
 import { useActionMenu } from '@hooks'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md },
+    mediaQueries: { md, md_viewer },
   } = theme
   return {
     ActionMenuPortal: {
-      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+      bottom: 0,
+    },
+    ActionMenuPortal_Background: {
+      position: 'absolute',
+      top: 0,
       bottom: 0,
       left: 0,
-      position: 'fixed',
       right: 0,
-      top: 0,
-      zIndex: 10,
+      backgroundColor: 'rgba(0,0,0,0.9)',
+      zIndex: 1,
+
+      [md_viewer]: {
+        opacity: 0,
+      },
     },
     ActionMenuPortal__isVisible: {
       opacity: '1 !important',
@@ -30,9 +37,9 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       height: '100%',
       position: 'relative',
-      top: '30px',
       transition: 'all 450ms',
       marginTop: 0,
+      width: '100%',
 
       [md]: {
         alignItems: 'baseline',
@@ -42,6 +49,7 @@ const useStyles = createUseStyles(theme => {
       '& > div': {
         borderRadius: 0,
         height: '100%',
+        width: '100%',
 
         [md]: {
           borderRadius: '1rem',
@@ -52,10 +60,17 @@ const useStyles = createUseStyles(theme => {
     ActionMenuContent__isVisible: {
       bottom: 0,
     },
+    ActionMenuContent_Row: {
+      display: 'flex',
+      flexDirection: 'row',
+    },
+    ActionMenuContent_FullWidth: {
+      width: '100%',
+    },
   }
 })
 
-export const ActionMenuPortal = ({ className, scrollTop }) => {
+export const ActionMenuPortal = ({ actionMenuRef, className, scrollTop }) => {
   const [isVisible, setIsVisible] = useState(false)
   const { ActionMenuComponent, actionMenuData = {} } = useActionMenu()
   const c = useStyles()
@@ -72,21 +87,32 @@ export const ActionMenuPortal = ({ className, scrollTop }) => {
 
   if (ActionMenuComponent) {
     return createPortal(
-      <div
-        className={classnames(className, c.ActionMenuPortal, {
-          [c.ActionMenuPortal__isVisible]: isVisible,
-        })}
-      >
+      <>
+        <div className={c.ActionMenuPortal_Background}></div>
         <div
-          className={classnames(c.ActionMenuContent, {
-            [c.ActionMenuContent__isVisible]: isVisible,
+          ref={actionMenuRef}
+          className={classnames(className, c.ActionMenuPortal, {
+            [c.ActionMenuPortal__isVisible]: isVisible,
           })}
         >
-          <Spacer size={'1.5rem'} />
-          <ActionMenuComponent {...actionMenuData} />
-          <Spacer size={'1.5rem'} />
+          <div
+            className={classnames(c.ActionMenuContent, {
+              [c.ActionMenuContent__isVisible]: isVisible,
+            })}
+          >
+            <div className={c.ActionMenuContent_Row}>
+              <Spacer size={'2rem'} />
+              <div className={c.ActionMenuContent_FullWidth}>
+                <Spacer size={'2rem'} />
+                <TitleTertiary>{actionMenuData.actionBarTitle}</TitleTertiary>
+                <Spacer size={'2rem'} />
+                <ActionMenuComponent {...actionMenuData} />
+              </div>
+              <Spacer size={'2rem'} />
+            </div>
+          </div>
         </div>
-      </div>,
+      </>,
       document.querySelector('#actionMenu-root')
     )
   } else return null

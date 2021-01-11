@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { ActionMenu, Spacer, Slider, MetadataSecondary } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
@@ -103,12 +103,20 @@ const ExplodeMenu = ({ onChange = noop, selectedValue: magnitude = 0 }) => {
 }
 
 const ExplodeActionMenu = ({ onChange = noop, selectedValue }) => {
+  const menuProps = useMemo(() => {
+    return { onChange, selectedValue }
+  }, [onChange, selectedValue])
+
+  const targetProps = useMemo(() => {
+    return { selectedValue }
+  }, [selectedValue])
+
   return (
     <ActionMenu
       MenuComponent={ExplodeMenu}
-      MenuComponentProps={{ onChange, selectedValue }}
+      MenuComponentProps={menuProps}
       TargetComponent={ExplodeTarget}
-      TargetComponentProps={{ selectedValue }}
+      TargetComponentProps={targetProps}
       isMobileActionBarActive={false}
       isAutoClosed={false}
     />

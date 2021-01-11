@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 import { ActionMenu, Pill, Spacer } from '@components'
 import { createUseStyles } from '@style'
@@ -81,11 +81,19 @@ const LandingSortTarget = ({ onClick = noop, selectedValue }) => {
 }
 
 const LandingSortActionMenu = ({ onChange = noop, selectedValue }) => {
+  const menuProps = useMemo(() => {
+    return { onChange, actionBarTitle: 'Select sort', options }
+  }, [onChange])
+
+  const targetProps = useMemo(() => {
+    return { selectedValue }
+  }, [selectedValue])
+
   return (
     <ActionMenu
-      MenuComponentProps={{ onChange, actionBarTitle: 'Select sort', options }}
+      MenuComponentProps={menuProps}
       TargetComponent={LandingSortTarget}
-      TargetComponentProps={{ selectedValue }}
+      TargetComponentProps={targetProps}
       isCloseOnSelect={true}
     />
   )

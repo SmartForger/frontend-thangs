@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { ActionMenu, Spacer, SingleLineBodyText, TextInput } from '@components'
@@ -171,12 +171,20 @@ const ColorPickerTarget = ({ onClick = noop, selectedValue: color }) => {
 }
 
 const ColorPickerActionMenu = ({ onChange = noop, selectedValue }) => {
+  const menuProps = useMemo(() => {
+    return { onChange, actionBarTitle: 'Pick a color', selectedValue }
+  }, [onChange, selectedValue])
+
+  const targetProps = useMemo(() => {
+    return { selectedValue }
+  }, [selectedValue])
+
   return (
     <ActionMenu
       MenuComponent={ColorPickerMenu}
-      MenuComponentProps={{ onChange, actionBarTitle: 'Pick a color', selectedValue }}
+      MenuComponentProps={menuProps}
       TargetComponent={ColorPickerTarget}
-      TargetComponentProps={{ selectedValue }}
+      TargetComponentProps={targetProps}
       isAutoClosed={false}
       isExternalClosed={true}
     />

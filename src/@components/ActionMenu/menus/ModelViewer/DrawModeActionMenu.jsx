@@ -98,11 +98,19 @@ const DrawModeTarget = ({ onClick = noop, selectedValue }) => {
 }
 
 const DrawModeActionMenu = ({ onChange = noop, selectedValue }) => {
+  const menuProps = useMemo(() => {
+    return { onChange, actionBarTitle: 'Select rendering', options }
+  }, [onChange])
+
+  const targetProps = useMemo(() => {
+    return { selectedValue }
+  }, [selectedValue])
+
   return (
     <ActionMenu
-      MenuComponentProps={{ onChange, actionBarTitle: 'Select rendering', options }}
+      MenuComponentProps={menuProps}
       TargetComponent={DrawModeTarget}
-      TargetComponentProps={{ selectedValue }}
+      TargetComponentProps={targetProps}
     />
   )
 }

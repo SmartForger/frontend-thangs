@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import classnames from 'classnames'
 import {
   ActionMenu,
@@ -363,18 +363,26 @@ export const PartExplorerTarget = ({
 
 const PartExplorerActionMenu = ({ onChange = noop, selectedValue, partList }) => {
   const c = useStyles({})
+  const menuProps = useMemo(() => {
+    return {
+      actionBarTitle: 'Select a model',
+      className: c.PartExplorerActionMenu,
+      partList,
+      onChange,
+      selectedValue,
+    }
+  }, [c.PartExplorerActionMenu, onChange, partList, selectedValue])
+
+  const targetProps = useMemo(() => {
+    return { selectedValue }
+  }, [selectedValue])
+
   return (
     <ActionMenu
       MenuComponent={PartExplorerMenu}
-      MenuComponentProps={{
-        actionBarTitle: 'Select a model',
-        className: c.PartExplorerActionMenu,
-        partList,
-        onChange,
-        selectedValue,
-      }}
+      MenuComponentProps={menuProps}
       TargetComponent={PartExplorerTarget}
-      TargetComponentProps={{ selectedValue }}
+      TargetComponentProps={targetProps}
       isAutoClosed={false}
       isOpenByDefault={true}
     />

@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useActionMenu, useExternalClick } from '@hooks'
-import ActionMenuPortal from './ActionMenuPortal'
+import { ActionMenuPortal } from './ActionMenuPortal'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -35,12 +35,18 @@ const useStyles = createUseStyles(theme => {
 })
 
 export const MobileActionMenu = ({ className, ...props }) => {
-  const actionBarRef = useRef(null)
-  const { setActionMenuClose } = useActionMenu()
-  useExternalClick(actionBarRef, setActionMenuClose)
+  const actionMenuRef = useRef(null)
+  const { setActionMenuClose, isActionMenuOpen } = useActionMenu()
+  useExternalClick(actionMenuRef, () => {
+    if (isActionMenuOpen) setActionMenuClose()
+  })
   const c = useStyles({})
 
   return (
-    <ActionMenuPortal className={classnames(className, c.MobileActionMenu)} {...props} />
+    <ActionMenuPortal
+      className={classnames(className, c.MobileActionMenu)}
+      actionMenuRef={actionMenuRef}
+      {...props}
+    />
   )
 }

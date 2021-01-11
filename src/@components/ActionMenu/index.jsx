@@ -6,6 +6,7 @@ import { createUseStyles } from '@style'
 import { ReactComponent as ArrowRightIcon } from '@svg/icon-arrow-right.svg'
 import classnames from 'classnames'
 import { useActionMenu } from '@hooks'
+import useWhyDidYouUpdate from '@hooks/dev/useWhyDidYouUpdate'
 
 export * from './ActionMenuContext'
 export * from './ActionMenuPortal'
@@ -18,7 +19,8 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     ActionMenu: {
-      opacity: 0,
+      opacity: ({ isMobileActionBarActive }) =>
+        isMobileActionBarActive ? '0 !important' : 1,
       visibility: 'hidden',
       width: 'auto !important',
 
@@ -107,17 +109,18 @@ const DefaultMenu = ({ onChange = noop, options = [] }) => {
   )
 }
 
-export const ActionMenu = ({
-  TargetComponent,
-  TargetComponentProps,
-  MenuComponent = DefaultMenu,
-  MenuComponentProps,
-  isAutoClosed = true,
-  isExternalClosed = false,
-  isMobileActionBarActive = true,
-  isOpenByDefault = false,
-}) => {
-  const c = useStyles()
+export const ActionMenu = props => {
+  const {
+    TargetComponent,
+    TargetComponentProps,
+    MenuComponent = DefaultMenu,
+    MenuComponentProps,
+    isAutoClosed = true,
+    isExternalClosed = false,
+    isMobileActionBarActive = true,
+    isOpenByDefault = false,
+  } = props
+  const c = useStyles({ isMobileActionBarActive })
   const { onChange, className, ...menuProps } = MenuComponentProps
   const { setActionMenu, setActionMenuClose } = useActionMenu()
   const handleChange = useCallback(
