@@ -57,20 +57,28 @@ export const TreeNode = ({
     setExpanded(!expanded)
   }
 
+  const isAssembly = node.subs && node.subs.length > 0
+  const isAssemblyPart = level > 0 && (!node.subs || !node.subs.length)
   return (
     <>
       <div className={c.TreeNode_Root}>
         <div className={c.TreeNode_Row}>
-          <div
-            className={classnames(c.TreeNode_ExpandIcon, {
-              [c.TreeNode_ExpandIcon__expanded]: expanded,
-            })}
-            onClick={toggleExpanded}
-          >
-            {node.subs && node.subs.length > 0 && <ArrowRight />}
-            {level > 0 && (!node.subs || !node.subs.length) && <IndentArrow />}
-          </div>
-          <Spacer size={12} />
+          {(isAssembly || isAssemblyPart) && (
+            <>
+              <div className={c.TreeNode_Row}>
+                <div
+                  className={classnames(c.TreeNode_ExpandIcon, {
+                    [c.TreeNode_ExpandIcon__expanded]: expanded,
+                  })}
+                  onClick={toggleExpanded}
+                >
+                  {isAssembly && <ArrowRight />}
+                  {isAssemblyPart && <IndentArrow />}
+                </div>
+                <Spacer size={12} />
+              </div>
+            </>
+          )}
           {renderNode(node, level)}
         </div>
         {expanded && node.subs && node.subs.length > 0 && (

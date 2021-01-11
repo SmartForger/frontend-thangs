@@ -19,7 +19,7 @@ const useStyles = createUseStyles(theme => {
       bottom: 0,
       left: 0,
       right: 0,
-      backgroundColor: 'rgba(0,0,0,0.9)',
+      backgroundColor: 'rgba(0,0,0,0.6)',
       zIndex: 1,
 
       [md_viewer]: {
