@@ -5,6 +5,7 @@ import { Loader } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { track } from '@utilities/analytics'
+import * as path from 'path'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -86,20 +87,19 @@ const LOADING = 'LOADING'
 const COMPLETE = 'COMPLETE'
 const ERROR = 'ERROR'
 
-const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST
 const THUMBNAILS_FOLDER = process.env.REACT_APP_THUMBNAILS_FOLDER
+const REACT_APP_MODEL_BUCKET = process.env.REACT_APP_MODEL_BUCKET
 
-const thumbnailUrl = model =>
-  model.fullThumbnailUrl
-    ? model.fullThumbnailUrl
-    : model.thumbnailUrl
-      ? model.thumbnailUrl
-      : `${THUMBNAILS_HOST}${getThumbnailUrl(model)}size=456x540`
+const thumbnailUrl = model => {
+  if (model.fullThumbnailUrl) return model.fullThumbnailUrl
+  if (model.thumbnailUrl) return model.thumbnailUrl
+  let modelUri = `${REACT_APP_MODEL_BUCKET}${getThumbnailUrl(model)}`
+  return modelUri.replace(/\s/g, '_').replace(path.extname(modelUri), '.png')
+}
 
 const getThumbnailUrl = (model = {}) => {
   const {
     parts,
-    compositeMesh,
     filename,
     modelFileName,
     newFileName,
@@ -107,31 +107,22 @@ const getThumbnailUrl = (model = {}) => {
     uploadedFile,
   } = model
   let primaryPart
-  if (thumbnailUrl) return `${THUMBNAILS_FOLDER}${thumbnailUrl}?`
-  if (uploadedFile) return `${THUMBNAILS_FOLDER}${uploadedFile}?`
-  if (modelFileName)
-    return `${THUMBNAILS_FOLDER}${modelFileName.replace(`${THUMBNAILS_FOLDER}`, '')}?`
-  if (compositeMesh) {
-    const [meshFolder, ...compositeModel] = compositeMesh.split('/')
-    return `${compositeModel.join('%2F')}?source=${meshFolder}&`
-  }
+  //This should be the the most common case
   if (filename) {
-    return `${THUMBNAILS_FOLDER}${encodeURIComponent(filename)}?`
+    return filename
   }
+  if (thumbnailUrl) return `${THUMBNAILS_FOLDER}${thumbnailUrl}`
+  if (uploadedFile) return `${THUMBNAILS_FOLDER}${uploadedFile}`
+  if (modelFileName) return encodeURIComponent(modelFileName)
   if (parts) {
     if (parts.length > 1) {
       primaryPart = R.find(R.propEq('isPrimary', true))(parts) || parts[0]
     } else {
       primaryPart = parts[0]
     }
-    if (primaryPart.compositeMesh) {
-      const [meshFolder, ...compositeModel] = primaryPart.compositeMesh.split('/')
-      return `${compositeModel.join('%2F')}?source=${meshFolder}&`
-    } else {
-      return `${THUMBNAILS_FOLDER}${encodeURIComponent(`${primaryPart.filename}`)}?`
-    }
+    return primaryPart.filename
   }
-  if (newFileName) return `${encodeURIComponent(newFileName)}?`
+  if (newFileName) return encodeURIComponent(newFileName)
   return 'unknown'
 }
 

@@ -4,10 +4,10 @@ import { colorHexStringToRGBArray, ensureScriptIsLoaded } from '@utilities'
 import axios from 'axios'
 import { logger } from '@utilities/logging'
 import { track } from '@utilities/analytics'
+import * as path from 'path'
 
 const MODEL_PREP_TIMEOUT = 180000
-const MODEL_PREP_ENDPOINT_URI = process.env.REACT_APP_HOOPS_MODEL_PREP_ENDPOINT_URI
-const HOOPS_WS_ENDPOINT_URI = process.env.REACT_APP_HOOPS_WS_ENDPOINT_URI
+const REACT_APP_MODEL_BUCKET = process.env.REACT_APP_MODEL_BUCKET
 
 const debug = (...args) => {
   if (process.env.REACT_APP_DEBUG) {
@@ -88,7 +88,7 @@ const hoopsStatusReducer = (currentStatus, transition) => {
   }
 }
 
-const useHoopsViewer = ({ modelURL, modelFilename }) => {
+const useHoopsViewer = ({ modelFilename }) => {
   const containerRef = useRef()
   const hoopsViewerRef = useRef()
   const [hoopsStatus, doTransition] = useReducer(
@@ -116,14 +116,14 @@ const useHoopsViewer = ({ modelURL, modelFilename }) => {
     ensureScriptIsLoaded('vendors/hoops/hoops_web_viewer.js')
       .then(async () => {
         debug('  * 1: Preparing Model')
-        const resp = await axios.get(`${MODEL_PREP_ENDPOINT_URI}/${modelURL}`, {
-          cancelToken: prepCancelSource.token,
-        })
+        // const resp = await axios.get(`${MODEL_PREP_ENDPOINT_URI}/${modelURL}`, {
+        //   cancelToken: prepCancelSource.token,
+        // })
 
-        if (!resp.data.ok) {
-          track('HOOPS ModelPreparationFailed', { error: 'Model preparation failed' })
-          throw new Error('Model preparation failed.')
-        }
+        // if (!resp.data.ok) {
+        //   track('HOOPS ModelPreparationFailed', { error: 'Model preparation failed' })
+        //   throw new Error('Model preparation failed.')
+        // }
 
         if (isActiveEffect) {
           debug('  * 1: Done Prepping Model')
@@ -149,7 +149,7 @@ const useHoopsViewer = ({ modelURL, modelFilename }) => {
       clearTimeout(timeoutId)
       prepCancelSource.cancel('Model preparation canceled by user. (Effect cleanup)')
     }
-  }, [hoopsStatus, modelFilename, modelURL])
+  }, [hoopsStatus, modelFilename])
 
   useEffect(() => {
     debug('2. HWV Shutdown Registering Effect')
@@ -180,12 +180,11 @@ const useHoopsViewer = ({ modelURL, modelFilename }) => {
     }
 
     debug('  * 3: Create HWV')
-
+    let modelUri = `${REACT_APP_MODEL_BUCKET}${decodeURIComponent(modelFilename)}`
     const viewer = new Communicator.WebViewer({
       container: containerRef.current,
-      endpointUri: HOOPS_WS_ENDPOINT_URI,
+      endpointUri: modelUri.replace(/\s/g, '_').replace(path.extname(modelUri), '.scs'),
       enginePath: '/vendors/hoops',
-      model: `${modelFilename.split('/')[1] || modelFilename}.scz`,
       rendererType: Communicator.RendererType.Client,
     })
 

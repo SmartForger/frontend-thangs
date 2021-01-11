@@ -40,6 +40,10 @@ const useStyles = createUseStyles(_theme => {
         flex: 'none',
       },
     },
+    UploadTreeNode_FileWrapper: {
+      display: 'flex',
+      alignItems: 'baseline',
+    },
     UploadTreeNode_FileName: {
       textOverflow: 'ellipsis',
       overflow: 'hidden',
@@ -97,17 +101,19 @@ const UploadTreeNode = ({ node, level: _l, onUpload, onRemove, isLoading }) => {
         <ModelIcon className={c.UploadTreeNode_Icon} />
       )}
       <Spacer size={12} />
-      <SingleLineBodyText className={c.UploadTreeNode_FileName} title={node.name}>
-        {node.id === 'multipart' && !node.name ? 'Multipart Model' : node.name}
-      </SingleLineBodyText>
-      {node.size && (
-        <>
-          <Spacer width={'0.5rem'} />
-          <MetadataSecondary>
-            {isLoading ? 'validating...' : formatBytes(node.size)}
-          </MetadataSecondary>
-        </>
-      )}
+      <div className={c.UploadTreeNode_FileWrapper}>
+        <SingleLineBodyText className={c.UploadTreeNode_FileName} title={node.name}>
+          {node.id === 'multipart' && !node.name ? 'Multipart Model' : node.name}
+        </SingleLineBodyText>
+        {node.size && (
+          <>
+            <Spacer width={'0.5rem'} />
+            <MetadataSecondary>
+              {isLoading ? 'validating...' : formatBytes(node.size)}
+            </MetadataSecondary>
+          </>
+        )}
+      </div>
       <Spacer size={'0.5rem'} />
       <div className={c.UploadTreeNode_Actions}>
         {!node.loading && !node.valid ? (

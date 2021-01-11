@@ -73,14 +73,7 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
 
   const viewerModel = useMemo(() => {
     if (selectedModel) {
-      if (selectedModel.compositeMesh) {
-        const [meshFolder, ...compositeModel] = selectedModel.compositeMesh.split('/')
-        return `${compositeModel.join('%2F')}?source=${meshFolder}&`
-      } else if (selectedModel.uploadedFile) {
-        return encodeURIComponent(selectedModel.uploadedFile)
-      } else {
-        return encodeURIComponent(selectedModel.filename)
-      }
+      return encodeURIComponent(selectedModel.filename)
     } else {
       if (model.parts && model.parts.length) {
         return encodeURIComponent(model.parts[0].filename)
@@ -90,8 +83,7 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
   }, [model, selectedModel])
 
   const { containerRef, hoops } = useHoopsViewer({
-    modelURL: viewerModel,
-    modelFilename: decodeURIComponent(viewerModel).split('?')[0],
+    modelFilename: viewerModel,
   })
 
   useEffect(() => {

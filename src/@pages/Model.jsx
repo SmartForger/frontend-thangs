@@ -141,14 +141,10 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'flex-end',
-      marginTop: '1rem',
+      marginTop: 0,
 
       '& > div': {
         marginLeft: '1rem',
-      },
-
-      [md]: {
-        marginTop: 0,
       },
     },
     Model_BackupViewer: {

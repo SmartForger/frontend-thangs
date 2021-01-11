@@ -278,7 +278,7 @@ const UploadModels = ({
           <Spacer size='1rem' />
           <TitleTertiary>
             <div className={c.UploadModels_FileTitle}>
-              {fileLength > 1 ? `${fileLength} Files` : '1 File'}
+              {fileLength > 1 ? `${fileLength} files` : 'File'}
               <Spacer size={'.5rem'} />
               {isLoadingFiles && <Spinner size={'1rem'} />}
             </div>
