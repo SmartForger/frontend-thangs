@@ -32,7 +32,7 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       margin: '0',
       padding: 0,
-      flexWrap: 'wrap',
+      flexWrap: 'nowrap',
     },
     Toolbar_WideText: {
       display: 'none',
