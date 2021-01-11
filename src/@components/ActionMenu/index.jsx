@@ -31,6 +31,10 @@ const useStyles = createUseStyles(theme => {
     DefaultMenu_Item: {
       flexDirection: 'column',
       justifyContent: 'left',
+
+      [md_viewer]: {
+        flexDirection: 'row',
+      },
     },
     DefaultMenu_Row: {
       ...theme.mixins.flexRow,
@@ -226,7 +230,11 @@ export const ActionMenu = props => {
       isOpenByDefault={isOpenByDefault}
       onTargetClick={handleTargetClick}
     >
-      <MenuComponent onChange={handleChange} {...menuProps} />
+      <MenuComponent
+        onChange={handleChange}
+        isMobileActionBarActive={isMobileActionBarActive}
+        {...menuProps}
+      />
     </DropdownMenu>
   )
 }

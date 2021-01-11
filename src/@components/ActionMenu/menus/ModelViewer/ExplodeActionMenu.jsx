@@ -94,6 +94,7 @@ const ExplodeTarget = ({ onClick = noop }) => {
         <Spacer size={'.5rem'} className={c.ExplodeDropdown__desktop} />
         <ArrowDownIcon className={c.ExplodeDropdown__desktop} />
       </div>
+      <Spacer size={'1.125rem'} className={c.ExplodeDropdown__desktop} />
     </div>
   )
 }
@@ -102,14 +103,27 @@ const ExplodeMenu = ({
   onChange = noop,
   onSliderEnd = noop,
   selectedValue: magnitude,
+  key,
 }) => {
-  return <Slider onChangeCommitted={onSliderEnd} onChange={onChange} value={magnitude} />
+  return (
+    <Slider
+      key={key}
+      onChangeCommitted={onSliderEnd}
+      onChange={onChange}
+      value={magnitude}
+    />
+  )
 }
 
-const ExplodeActionMenu = ({ onChange = noop, onSliderEnd = noop, selectedValue }) => {
+const ExplodeActionMenu = ({
+  onChange = noop,
+  onSliderEnd = noop,
+  selectedValue,
+  key,
+}) => {
   const menuProps = useMemo(() => {
-    return { onChange, onSliderEnd, selectedValue }
-  }, [onChange, onSliderEnd, selectedValue])
+    return { onChange, onSliderEnd, selectedValue, key }
+  }, [key, onChange, onSliderEnd, selectedValue])
 
   const targetProps = useMemo(() => {
     return { selectedValue }
@@ -123,6 +137,7 @@ const ExplodeActionMenu = ({ onChange = noop, onSliderEnd = noop, selectedValue 
       TargetComponentProps={targetProps}
       isMobileActionBarActive={false}
       isAutoClosed={false}
+      isExternalClosed={true}
     />
   )
 }

@@ -9,6 +9,11 @@ const CustomSlider = withStyles({
     color: '#242424',
     height: '.25rem',
     padding: '13px 8px',
+    marginBottom: '-.5rem',
+
+    '@media (min-width: 1235px)': {
+      marginBottom: 0,
+    },
   },
   thumb: {
     alignItems: 'center',

@@ -178,7 +178,6 @@ const Toolbar = ({
                 <Spacer size={'1.125rem'} />
               </div>
             </div>
-            <Spacer size={'1.125rem'} />
           </>
         )}
         {showPartSelector && (
