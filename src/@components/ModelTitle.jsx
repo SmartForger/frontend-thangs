@@ -33,7 +33,7 @@ const useStyles = createUseStyles(theme => {
       textDecoration: 'underline',
       marginLeft: '.25rem',
       color: theme.colors.black[500],
-      fontWeight: 600,
+      fontWeight: 500,
     },
   }
 })
