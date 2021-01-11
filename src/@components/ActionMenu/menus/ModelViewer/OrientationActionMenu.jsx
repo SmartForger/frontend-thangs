@@ -113,7 +113,7 @@ const OrientationTarget = ({ onClick = noop, selectedValue }) => {
 
 const OrientationActionMenu = ({ onChange = noop, selectedValue }) => {
   const menuProps = useMemo(() => {
-    return { onChange, actionBarTitle: 'Select orientation', options }
+    return { onChange, actionBarTitle: 'Select orientation', options, tabletLayout: true }
   }, [onChange])
 
   const targetProps = useMemo(() => {

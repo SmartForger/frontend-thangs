@@ -44,7 +44,6 @@ const useStyles = createUseStyles(theme => {
 
       [md]: {
         alignItems: 'baseline',
-        marginTop: '20vh',
       },
 
       '& > div': {
@@ -67,6 +66,9 @@ const useStyles = createUseStyles(theme => {
     },
     ActionMenuContent_FullWidth: {
       width: '100%',
+    },
+    ActionMenuContent_NoFlex: {
+      flex: 'none',
     },
   }
 })
@@ -102,14 +104,14 @@ export const ActionMenuPortal = ({ actionMenuRef, className, scrollTop }) => {
             })}
           >
             <div className={c.ActionMenuContent_Row}>
-              <Spacer size={'2rem'} />
+              <Spacer size={'2rem'} className={c.ActionMenuContent_NoFlex} />
               <div className={c.ActionMenuContent_FullWidth}>
                 <Spacer size={'2rem'} />
                 <TitleTertiary>{actionMenuData.actionBarTitle}</TitleTertiary>
                 <Spacer size={'1rem'} />
                 <ActionMenuComponent {...actionMenuData} />
               </div>
-              <Spacer size={'2rem'} />
+              <Spacer size={'2rem'} className={c.ActionMenuContent_NoFlex} />
             </div>
           </div>
         </div>

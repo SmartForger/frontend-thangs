@@ -43,6 +43,20 @@ const useStyles = createUseStyles(theme => {
         display: 'flex',
       },
     },
+    DefaultMenu__desktopTablet: {
+      display: 'none',
+
+      [md_viewer]: {
+        display: 'flex',
+      },
+    },
+    DefaultMenu__tablet: {
+      display: 'flex',
+
+      [md_viewer]: {
+        display: 'none',
+      },
+    },
     DefaultMenu__mobile: {
       display: 'flex',
 
@@ -55,6 +69,11 @@ const useStyles = createUseStyles(theme => {
         margin: '-.5rem',
       },
     },
+    DefaultMenu_WrapperTablet: {
+      [md_viewer]: {
+        margin: '-.5rem',
+      },
+    },
     DefaultMenu_MobileRow: {
       display: 'flex',
       flexDirection: 'row',
@@ -62,6 +81,17 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
 
       [md]: {
+        display: 'block',
+        width: 'unset',
+      },
+    },
+    DefaultMenu_TabletRow: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '100%',
+
+      [md_viewer]: {
         display: 'block',
         width: 'unset',
       },
@@ -78,11 +108,16 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const DefaultMenu = ({ onChange = noop, options = [] }) => {
-  const c = useStyles({})
+const DefaultMenu = ({ onChange = noop, options = [], tabletLayout }) => {
+  const c = useStyles({ tabletLayout })
 
   return (
-    <div className={c.DefaultMenu_Wrapper}>
+    <div
+      className={classnames({
+        [c.DefaultMenu_Wrapper]: !tabletLayout,
+        [c.DefaultMenu_WrapperTablet]: tabletLayout,
+      })}
+    >
       {options.map((option, ind) => {
         const { Icon = null } = option
         return (
@@ -91,9 +126,26 @@ const DefaultMenu = ({ onChange = noop, options = [] }) => {
               onClick={() => onChange(option.value)}
               className={c.DefaultMenu_Item}
             >
-              <Spacer size={'.5rem'} />
-              <div className={c.DefaultMenu_MobileRow}>
-                <Spacer className={c.DefaultMenu__desktop} size={'.5rem'} />
+              <Spacer
+                size={'.5rem'}
+                className={classnames({
+                  [c.DefaultMenu__mobile]: !tabletLayout,
+                  [c.DefaultMenu__desktopTablet]: tabletLayout,
+                })}
+              />
+              <div
+                className={classnames({
+                  [c.DefaultMenu_MobileRow]: !tabletLayout,
+                  [c.DefaultMenu_TabletRow]: tabletLayout,
+                })}
+              >
+                <Spacer
+                  className={classnames({
+                    [c.DefaultMenu__desktop]: !tabletLayout,
+                    [c.DefaultMenu__desktopTablet]: tabletLayout,
+                  })}
+                  size={'.5rem'}
+                />
                 <div className={c.DefaultMenu_Row}>
                   {Icon && (
                     <>
@@ -103,12 +155,24 @@ const DefaultMenu = ({ onChange = noop, options = [] }) => {
                   )}
                   <LabelText>{option.label}</LabelText>
                 </div>
-                <ArrowRightIcon className={c.DefaultMenu__mobile} />
-                <Spacer className={c.DefaultMenu__desktop} size={'.5rem'} />
+                <ArrowRightIcon className={c.DefaultMenu__tablet} />
+                <Spacer
+                  className={classnames({
+                    [c.DefaultMenu__desktop]: !tabletLayout,
+                    [c.DefaultMenu__desktopTablet]: tabletLayout,
+                  })}
+                  size={'.5rem'}
+                />
               </div>
               <Spacer size={'.5rem'} />
             </DropdownItem>
-            <Spacer className={c.DefaultMenu__mobile} size={'.5rem'} />
+            <Spacer
+              className={classnames({
+                [c.DefaultMenu__mobile]: !tabletLayout,
+                [c.DefaultMenu__tablet]: tabletLayout,
+              })}
+              size={'.5rem'}
+            />
           </React.Fragment>
         )
       })}

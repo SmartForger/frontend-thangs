@@ -264,16 +264,15 @@ const AssemblyExplorer = ({ className, parts, onChange, selectedPart }) => {
         }
 
         return (
-          <>
+          <React.Fragment key={`partRow_${index}`}>
             <PartSelectorRow
-              key={`partRow_${index}`}
               part={part}
               onClick={handleClick}
               onChange={onChange}
               selectedPart={selectedPart}
             />
             {index !== parts.length - 1 && <Spacer size={'.25rem'} />}
-          </>
+          </React.Fragment>
         )
       })}
     </div>
@@ -381,6 +380,7 @@ const PartExplorerActionMenu = ({ onChange = noop, selectedValue, partList }) =>
       partList,
       onChange,
       selectedValue,
+      tabletLayout: true,
     }
   }, [c.PartExplorerActionMenu, onChange, partList, selectedValue])
 

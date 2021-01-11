@@ -6,7 +6,7 @@ import { ActionMenuPortal } from './ActionMenuPortal'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md_viewer },
+    mediaQueries: { md, md_viewer },
   } = theme
 
   return {
@@ -21,20 +21,26 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '1rem 1rem 0 0',
       transition: 'all .4s',
       display: 'flex',
-
-      [md_viewer]: {
-        display: 'none',
-      },
     },
     MobileActionMenu_ActionMenu: {
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
     },
+    MobileActionMenu__mobileOnly: {
+      [md]: {
+        display: 'none',
+      },
+    },
+    MobileActionMenu__tablet: {
+      [md_viewer]: {
+        display: 'none !important',
+      },
+    },
   }
 })
 
-export const MobileActionMenu = ({ className, ...props }) => {
+export const MobileActionMenu = ({ className, tabletLayout, ...props }) => {
   const actionMenuRef = useRef(null)
   const { setActionMenuClose, isActionMenuOpen } = useActionMenu()
   useExternalClick(actionMenuRef, () => {
@@ -44,7 +50,10 @@ export const MobileActionMenu = ({ className, ...props }) => {
 
   return (
     <ActionMenuPortal
-      className={classnames(className, c.MobileActionMenu)}
+      className={classnames(className, c.MobileActionMenu, {
+        [c.MobileActionMenu__mobileOnly]: !tabletLayout,
+        [c.MobileActionMenu__tablet]: tabletLayout,
+      })}
       actionMenuRef={actionMenuRef}
       {...props}
     />

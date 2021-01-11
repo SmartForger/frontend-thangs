@@ -99,7 +99,7 @@ const DrawModeTarget = ({ onClick = noop, selectedValue }) => {
 
 const DrawModeActionMenu = ({ onChange = noop, selectedValue }) => {
   const menuProps = useMemo(() => {
-    return { onChange, actionBarTitle: 'Select rendering', options }
+    return { onChange, actionBarTitle: 'Select rendering', options, tabletLayout: true }
   }, [onChange])
 
   const targetProps = useMemo(() => {

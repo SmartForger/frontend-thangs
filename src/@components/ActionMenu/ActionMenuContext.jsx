@@ -27,7 +27,7 @@ const ActionMenuProvider = ({ children }) => {
         isActionMenuOpen,
       }}
     >
-      <MobileActionMenu />
+      <MobileActionMenu {...actionMenuData} />
       {children}
     </Provider>
   )

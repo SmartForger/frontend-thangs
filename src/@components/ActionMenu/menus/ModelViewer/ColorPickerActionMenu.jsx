@@ -22,14 +22,10 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     ColorPickerMenu: {
-      display: 'none',
+      display: 'grid',
       gap: '1rem',
       gridTemplateColumns: 'repeat(4, 1fr)',
       gridTemplateRows: 'repeat(2, 1fr)',
-
-      [md]: {
-        display: 'grid',
-      },
 
       '&:after': {
         borderLeft: 'solid 6px transparent',
@@ -56,7 +52,7 @@ const useStyles = createUseStyles(theme => {
       padding: '.75rem',
       position: 'relative',
       width: '100%',
-      [md]: {
+      [md_viewer]: {
         width: '9rem',
       },
     },
@@ -152,6 +148,7 @@ const ColorPickerMenu = ({ onChange = noop, selectedValue: currentColor }) => {
           )
         })}
       </div>
+      <Spacer size={'.5rem'} className={c.ColorPicker__mobile} />
     </div>
   )
 }
@@ -175,7 +172,7 @@ const ColorPickerTarget = ({ onClick = noop, selectedValue: color }) => {
 
 const ColorPickerActionMenu = ({ onChange = noop, selectedValue }) => {
   const menuProps = useMemo(() => {
-    return { onChange, actionBarTitle: 'Pick a color', selectedValue }
+    return { onChange, actionBarTitle: 'Pick a color', selectedValue, tabletLayout: true }
   }, [onChange, selectedValue])
 
   const targetProps = useMemo(() => {
