@@ -5,10 +5,10 @@ import { Spacer } from '@components'
 
 const CustomSlider = withStyles({
   root: {
+    width: '7.25rem',
     color: '#242424',
     height: '.25rem',
-    padding: '13px 0',
-    width: '7.25rem',
+    padding: '13px 8px',
   },
   thumb: {
     alignItems: 'center',
@@ -19,7 +19,7 @@ const CustomSlider = withStyles({
     flexDirection: 'row',
     height: '1.5rem',
     justifyContent: 'center',
-    marginLeft: -24,
+    marginLeft: -14,
     marginTop: -11,
     transform: 'translateX(.75rem)',
     width: '1.5rem',

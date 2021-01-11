@@ -98,14 +98,18 @@ const ExplodeTarget = ({ onClick = noop }) => {
   )
 }
 
-const ExplodeMenu = ({ onChange = noop, selectedValue: magnitude = 0 }) => {
-  return <Slider onChange={onChange} value={magnitude} />
+const ExplodeMenu = ({
+  onChange = noop,
+  onSliderEnd = noop,
+  selectedValue: magnitude,
+}) => {
+  return <Slider onChangeCommitted={onSliderEnd} onChange={onChange} value={magnitude} />
 }
 
-const ExplodeActionMenu = ({ onChange = noop, selectedValue }) => {
+const ExplodeActionMenu = ({ onChange = noop, onSliderEnd = noop, selectedValue }) => {
   const menuProps = useMemo(() => {
-    return { onChange, selectedValue }
-  }, [onChange, selectedValue])
+    return { onChange, onSliderEnd, selectedValue }
+  }, [onChange, onSliderEnd, selectedValue])
 
   const targetProps = useMemo(() => {
     return { selectedValue }

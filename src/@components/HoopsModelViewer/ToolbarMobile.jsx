@@ -94,7 +94,7 @@ const Toolbar = ({
   className,
   isAssembly = true,
   isMultipart = true,
-  magnitude,
+  magnitude = 0,
   mode,
   orientation,
   onColorChange,
@@ -127,7 +127,11 @@ const Toolbar = ({
           <>
             <div className={c.Toolbar_Group}>
               <Spacer size={'1rem'} />
-              <ExplodeActionMenu selectedValue={magnitude} onChange={onSliderChange} />
+              <ExplodeActionMenu
+                selectedValue={magnitude}
+                onSliderEnd={onSliderChange}
+                onChange={onSliderChange}
+              />
               <Spacer size={'1rem'} />
             </div>
             <Spacer size={'.75rem'} />
