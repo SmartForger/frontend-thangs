@@ -5,6 +5,12 @@ import { DropdownMenu, DropdownItem, Spacer, LabelText } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowRightIcon } from '@svg/icon-arrow-right.svg'
 import classnames from 'classnames'
+import { useActionMenu } from '@hooks'
+
+export * from './ActionMenuContext'
+export * from './ActionMenuPortal'
+export * from './MobileActionMenu'
+export * from './menus'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -101,40 +107,38 @@ const DefaultMenu = ({ onChange = noop, options = [] }) => {
   )
 }
 
-const ActionMenu = ({
+export const ActionMenu = ({
   TargetComponent,
   TargetComponentProps,
   MenuComponent = DefaultMenu,
   MenuComponentProps,
   isAutoClosed = true,
   isExternalClosed = false,
-  // isMobileActionBarActive = true,
+  isMobileActionBarActive = true,
   isOpenByDefault = false,
 }) => {
   const c = useStyles()
   const { onChange, className, ...menuProps } = MenuComponentProps
-
+  const { setActionMenu, setActionMenuClose } = useActionMenu()
   const handleChange = useCallback(
     value => {
       onChange(value)
-      // dispatch(types.CLOSE_ACTION_BAR)
+      setActionMenuClose()
     },
-    [onChange]
+    [onChange, setActionMenuClose]
   )
 
   const handleTargetClick = useCallback(() => {
-    // This is currently causing some major performance issues
-    // with the viewer tool dropdowns i.e part explorer - BE
-    //
-    // if (isMobileActionBarActive)
-    // dispatch(types.OPEN_ACTION_BAR, {
-    //   Component: MenuComponent,
-    //   data: {
-    //     onChange: handleChange,
-    //     ...menuProps,
-    //   },
-    // })
-  }, [])
+    if (isMobileActionBarActive)
+      setActionMenu({
+        isOpen: true,
+        Component: MenuComponent,
+        data: {
+          onChange: handleChange,
+          ...menuProps,
+        },
+      })
+  }, [MenuComponent, handleChange, isMobileActionBarActive, menuProps, setActionMenu])
 
   return (
     <DropdownMenu
@@ -150,5 +154,3 @@ const ActionMenu = ({
     </DropdownMenu>
   )
 }
-
-export default ActionMenu

@@ -68,10 +68,6 @@ export const SAVED_TEAM = 'saved-team'
 export const ERROR_SAVING_TEAM = 'error-saving-team'
 export const UPDATE_TEAM = 'update-team'
 export const UPDATE_TEAMS = 'update-teams'
-/* Action Bar Store Events */
-export const OPEN_ACTION_BAR = 'open-action-bar'
-export const CLOSE_ACTION_BAR = 'close-action-bar'
-export const SET_ACTION_BAR_DATA = 'set-action-bar-data'
 /* Notification Store Events */
 export const FETCH_NOTIFICATIONS = 'fetch-notifications'
 export const READ_NOTIFICATIONS = 'read-notifications'

@@ -1,4 +1,4 @@
-export { default as useActionBar } from '@hooks/useActionBar'
+export * from '@hooks/useActionMenu'
 export { default as useCurrentUser } from '@hooks/useCurrentUser'
 export { default as useCurrentUserId } from '@hooks/useCurrentUserId'
 export { default as useExternalClick } from '@hooks/useExternalClick'

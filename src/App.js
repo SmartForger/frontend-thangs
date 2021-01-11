@@ -18,7 +18,7 @@ import {
   TermsAndConditions,
 } from '@pages'
 import { ErrorBoundary } from './ErrorBoundary'
-import { AppAnalytics, OverlayProvider } from '@components'
+import { ActionMenuProvider, AppAnalytics, OverlayProvider } from '@components'
 import {
   routeRequiresAuth,
   routeRequiresKick,
@@ -69,58 +69,60 @@ const App = () => {
               <AppAnalytics />
               <ScrollToTop />
               <OverlayProvider>
-                <Switch>
-                  <Route
-                    exact
-                    path='/'
-                    render={props => (
-                      <Landing isLoadingOptimizely={isLoadingOptimizely} {...props} />
-                    )}
-                  />
-                  <Route
-                    path='/authenticate/:provider'
-                    render={props => (
-                      <Auth isLoadingOptimizely={isLoadingOptimizely} {...props} />
-                    )}
-                  />
-                  <Route path='/explore/:id' component={Landing} />
-                  <Route
-                    path='/welcome'
-                    render={props => <Landing {...props} newSignUp={true} />}
-                  />
-                  <Route
-                    path='/terms-and-conditions'
-                    exact
-                    component={TermsAndConditions}
-                  />
-                  <Route path='/privacy-policy' exact component={PrivacyPolicy} />
-                  <Route path='/about-us' exact component={AboutUs} />
-                  <Route path='/home' component={routeRedirectToProfile()} />
-                  <Route exact path='/password-reset' component={PasswordReset} />
-                  <Route
-                    path='/password_reset_confirm/:token'
-                    component={ConfirmPasswordReset}
-                  />
-                  <Route path='/mythangs' component={routeRequiresAuth(MyThangs)} />
-                  <Route exact path='/profile/:id' component={Profile} />
-                  <Route
-                    exact
-                    path='/profile/'
-                    component={routeRequiresAuth(RedirectProfile)}
-                  />
-                  <Route
-                    path='/model/:id'
-                    exact
-                    component={routeRequiresKick(ModelDetail)}
-                  />
-                  <Route
-                    path={['/search/:searchQuery', '/search']}
-                    component={SearchResults}
-                  />
-                  <Route path='/:userName' component={Profile} />
-                  <Route path='/404' component={Page404} status={404} />
-                  <Route path='*' component={Page404} status={404} />
-                </Switch>
+                <ActionMenuProvider>
+                  <Switch>
+                    <Route
+                      exact
+                      path='/'
+                      render={props => (
+                        <Landing isLoadingOptimizely={isLoadingOptimizely} {...props} />
+                      )}
+                    />
+                    <Route
+                      path='/authenticate/:provider'
+                      render={props => (
+                        <Auth isLoadingOptimizely={isLoadingOptimizely} {...props} />
+                      )}
+                    />
+                    <Route path='/explore/:id' component={Landing} />
+                    <Route
+                      path='/welcome'
+                      render={props => <Landing {...props} newSignUp={true} />}
+                    />
+                    <Route
+                      path='/terms-and-conditions'
+                      exact
+                      component={TermsAndConditions}
+                    />
+                    <Route path='/privacy-policy' exact component={PrivacyPolicy} />
+                    <Route path='/about-us' exact component={AboutUs} />
+                    <Route path='/home' component={routeRedirectToProfile()} />
+                    <Route exact path='/password-reset' component={PasswordReset} />
+                    <Route
+                      path='/password_reset_confirm/:token'
+                      component={ConfirmPasswordReset}
+                    />
+                    <Route path='/mythangs' component={routeRequiresAuth(MyThangs)} />
+                    <Route exact path='/profile/:id' component={Profile} />
+                    <Route
+                      exact
+                      path='/profile/'
+                      component={routeRequiresAuth(RedirectProfile)}
+                    />
+                    <Route
+                      path='/model/:id'
+                      exact
+                      component={routeRequiresKick(ModelDetail)}
+                    />
+                    <Route
+                      path={['/search/:searchQuery', '/search']}
+                      component={SearchResults}
+                    />
+                    <Route path='/:userName' component={Profile} />
+                    <Route path='/404' component={Page404} status={404} />
+                    <Route path='*' component={Page404} status={404} />
+                  </Switch>
+                </ActionMenuProvider>
               </OverlayProvider>
             </ThemeProvider>
           </FlashContextProvider>

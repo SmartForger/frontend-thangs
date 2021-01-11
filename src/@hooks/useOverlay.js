@@ -58,7 +58,7 @@ const useOverlayProvider = () => {
     },
     { isOpen: false, template: null, data: {} }
   )
-
+  console.log('overlay', overlay)
   const setOverlay = overlayObj => {
     dispatch({
       type: 'all',
@@ -101,7 +101,7 @@ const useOverlayProvider = () => {
       (overlay.isOpen && overlay.template && overlayTemplates[overlay.template]) || null
     )
   }, [overlay])
-
+  debugger
   return {
     setOverlay,
     setOverlayOpen,
@@ -117,6 +117,7 @@ const useOverlayProvider = () => {
 }
 
 const useOverlay = () => {
+  debugger
   return useContext(OverlayContext)
 }
 

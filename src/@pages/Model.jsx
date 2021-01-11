@@ -41,7 +41,7 @@ import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { sm, md, lg, xl },
+    mediaQueries: { sm, md, md_viewer, lg, xl },
   } = theme
   return {
     Model: {
@@ -108,7 +108,7 @@ const useStyles = createUseStyles(theme => {
         height: '28.75rem',
       },
 
-      [md]: {
+      [md_viewer]: {
         height: '37.5rem',
         backgroundColor: theme.colors.white[400],
         boxShadow: '0 12px 24px 0 rgba(0,0,0,0.05)',

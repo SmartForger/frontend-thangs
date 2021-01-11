@@ -1,6 +1,4 @@
-export * from './ActionMenus'
-export { default as ActionBar } from './ActionBar'
-export { default as ActionMenu } from './ActionMenu'
+export * from './ActionMenu'
 export { default as AppAnalytics } from './AppAnalytics'
 export { default as Carousel } from './Carousel'
 export * from './CardCollection'

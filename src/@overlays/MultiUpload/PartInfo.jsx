@@ -213,6 +213,8 @@ const PartInfo = props => {
   const [applyRemaining, setApplyRemaining] = useState(false)
 
   const isRootPart = useMemo(() => !activeNode.parentId, [activeNode.parentId])
+  console.log('activeNode - asm', activeNode)
+  console.log('isRootPart', isRootPart)
   const {
     checkError,
     onFormSubmit,
