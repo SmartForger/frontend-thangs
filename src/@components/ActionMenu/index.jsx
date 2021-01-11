@@ -6,7 +6,6 @@ import { createUseStyles } from '@style'
 import { ReactComponent as ArrowRightIcon } from '@svg/icon-arrow-right.svg'
 import classnames from 'classnames'
 import { useActionMenu } from '@hooks'
-import useWhyDidYouUpdate from '@hooks/dev/useWhyDidYouUpdate'
 
 export * from './ActionMenuContext'
 export * from './ActionMenuPortal'
@@ -19,9 +18,9 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     ActionMenu: {
-      opacity: ({ isMobileActionBarActive }) =>
-        isMobileActionBarActive ? '0 !important' : 1,
-      visibility: 'hidden',
+      opacity: ({ isMobileActive }) => (isMobileActive ? '0 !important' : 1),
+      visibility: ({ isMobileActive }) =>
+        isMobileActive ? 'hidden !important' : 'visible',
       width: 'auto !important',
 
       [md]: {
@@ -65,6 +64,9 @@ const useStyles = createUseStyles(theme => {
         display: 'block',
         width: 'unset',
       },
+    },
+    ActionMenu__hidden: {
+      //TODO
     },
   }
 })
@@ -120,7 +122,7 @@ export const ActionMenu = props => {
     isMobileActionBarActive = true,
     isOpenByDefault = false,
   } = props
-  const c = useStyles({ isMobileActionBarActive })
+  const c = useStyles({})
   const { onChange, className, ...menuProps } = MenuComponentProps
   const { setActionMenu, setActionMenuClose } = useActionMenu()
   const handleChange = useCallback(
@@ -145,7 +147,9 @@ export const ActionMenu = props => {
 
   return (
     <DropdownMenu
-      className={classnames(className, c.ActionMenu)}
+      className={classnames(className, c.ActionMenu, {
+        [c.ActionMenu__hidden]: isMobileActionBarActive,
+      })}
       TargetComponent={TargetComponent}
       TargetComponentProps={TargetComponentProps}
       isAutoClosed={isAutoClosed}

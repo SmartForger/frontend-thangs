@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import Banner from './Header/Banner'
 import { ReactComponent as ArrowUpIcon } from '@svg/icon-arrow-up.svg'
-import { useOverlay } from '@hooks'
+import { useActionMenu, useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -44,6 +44,15 @@ const useStyles = createUseStyles(theme => {
     Container_OverlayOpen: {
       position: 'fixed',
       width: '100%',
+    },
+    Container_MobileOverlayOpen: {
+      position: 'fixed',
+      width: '100%',
+
+      [md]: {
+        position: 'unset',
+        width: 'auto',
+      },
     },
     Layout: {
       display: 'flex',
@@ -158,11 +167,15 @@ const Layout = ({
   showAboutHero,
 }) => {
   const c = useStyles({})
+  const { isActionMenuOpen } = useActionMenu()
   const { isOverlayOpen } = useOverlay()
 
   return (
     <div
-      className={classnames(c.Container, { [c.Container_OverlayOpen]: isOverlayOpen })}
+      className={classnames(c.Container, {
+        [c.Container_OverlayOpen]: isOverlayOpen,
+        [c.Container_MobileOverlayOpen]: isActionMenuOpen,
+      })}
     >
       <Header
         showSearchTextFlash={showSearchTextFlash}
