@@ -15,7 +15,10 @@ import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
   return {
     UploadTreeNode: {
       display: 'flex',
@@ -42,12 +45,17 @@ const useStyles = createUseStyles(_theme => {
     },
     UploadTreeNode_FileWrapper: {
       display: 'flex',
-      alignItems: 'baseline',
+      alignItems: 'center',
     },
     UploadTreeNode_FileName: {
       textOverflow: 'ellipsis',
       overflow: 'hidden',
       lineHeight: '1rem !important',
+      maxWidth: '11rem',
+
+      [md]: {
+        maxWidth: '14rem',
+      },
     },
     UploadTreeNode_Icon: {
       '& [fill]': {

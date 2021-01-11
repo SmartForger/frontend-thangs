@@ -75,6 +75,11 @@ const useStyles = createUseStyles(theme => {
     PartExplorerMenu: {
       display: 'flex',
       flexDirection: 'column',
+      maxWidth: '100%',
+
+      [md_viewer]: {
+        maxWidth: '21.5rem',
+      },
     },
     AssemblyExplorer_Wrapper: {
       ...theme.mixins.scrollbar,
@@ -91,6 +96,7 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
       display: 'flex',
       flexDirection: 'column',
+      overflow: 'hidden',
     },
     AssemblyExplorer_Spacer: {
       flex: 'none',
@@ -99,6 +105,7 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.25rem',
       display: 'flex',
       flexDirection: 'row',
+      overflow: 'hidden',
 
       '&:hover': {
         backgroundColor: theme.colors.white[900],
@@ -217,6 +224,7 @@ const PartSelectorRow = ({ part = {}, onClick, selectedPart = {} }) => {
         className={classnames(c.PartSelectorRow, {
           [c.PartSelectorRow__selected]: selectedFilename === name,
         })}
+        title={name}
       >
         {level > 0 && <Spacer width={`${level * 1.5}rem`} height={'2.625rem'} />}
         <div className={c.PartSelectorRow_Column} onClick={onClick}>
@@ -256,13 +264,16 @@ const AssemblyExplorer = ({ className, parts, onChange, selectedPart }) => {
         }
 
         return (
-          <PartSelectorRow
-            key={`partRow_${index}`}
-            part={part}
-            onClick={handleClick}
-            onChange={onChange}
-            selectedPart={selectedPart}
-          />
+          <>
+            <PartSelectorRow
+              key={`partRow_${index}`}
+              part={part}
+              onClick={handleClick}
+              onChange={onChange}
+              selectedPart={selectedPart}
+            />
+            {index !== parts.length - 1 && <Spacer size={'.25rem'} />}
+          </>
         )
       })}
     </div>

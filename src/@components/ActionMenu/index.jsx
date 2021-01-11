@@ -14,7 +14,7 @@ export * from './menus'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md },
+    mediaQueries: { md, md_viewer },
   } = theme
   return {
     ActionMenu: {
@@ -66,7 +66,11 @@ const useStyles = createUseStyles(theme => {
       },
     },
     ActionMenu__hidden: {
-      //TODO
+      display: 'none !important',
+
+      [md_viewer]: {
+        display: 'flex !important',
+      },
     },
   }
 })
