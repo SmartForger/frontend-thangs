@@ -106,7 +106,7 @@ export const ActionMenuPortal = ({ actionMenuRef, className, scrollTop }) => {
               <div className={c.ActionMenuContent_FullWidth}>
                 <Spacer size={'2rem'} />
                 <TitleTertiary>{actionMenuData.actionBarTitle}</TitleTertiary>
-                <Spacer size={'2rem'} />
+                <Spacer size={'1rem'} />
                 <ActionMenuComponent {...actionMenuData} />
               </div>
               <Spacer size={'2rem'} />

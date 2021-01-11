@@ -6,7 +6,7 @@ import { ActionMenuPortal } from './ActionMenuPortal'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md },
+    mediaQueries: { md_viewer },
   } = theme
 
   return {
@@ -22,7 +22,7 @@ const useStyles = createUseStyles(theme => {
       transition: 'all .4s',
       display: 'flex',
 
-      [md]: {
+      [md_viewer]: {
         display: 'none',
       },
     },

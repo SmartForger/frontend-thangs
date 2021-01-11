@@ -29,6 +29,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     DefaultMenu_Item: {
+      flexDirection: 'column',
       justifyContent: 'left',
     },
     DefaultMenu_Row: {
@@ -90,7 +91,7 @@ const DefaultMenu = ({ onChange = noop, options = [] }) => {
               onClick={() => onChange(option.value)}
               className={c.DefaultMenu_Item}
             >
-              <Spacer className={c.DefaultMenu__desktop} size={'.5rem'} />
+              <Spacer size={'.5rem'} />
               <div className={c.DefaultMenu_MobileRow}>
                 <Spacer className={c.DefaultMenu__desktop} size={'.5rem'} />
                 <div className={c.DefaultMenu_Row}>
@@ -105,9 +106,9 @@ const DefaultMenu = ({ onChange = noop, options = [] }) => {
                 <ArrowRightIcon className={c.DefaultMenu__mobile} />
                 <Spacer className={c.DefaultMenu__desktop} size={'.5rem'} />
               </div>
-              <Spacer className={c.DefaultMenu__desktop} size={'.5rem'} />
+              <Spacer size={'.5rem'} />
             </DropdownItem>
-            <Spacer className={c.DefaultMenu__mobile} size={'2rem'} />
+            <Spacer className={c.DefaultMenu__mobile} size={'.5rem'} />
           </React.Fragment>
         )
       })}

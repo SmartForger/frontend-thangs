@@ -55,7 +55,10 @@ const useStyles = createUseStyles(theme => {
       boxSizing: 'border-box',
       padding: '.75rem',
       position: 'relative',
-      width: '9rem',
+      width: '100%',
+      [md]: {
+        width: '9rem',
+      },
     },
     ColorPickerMenu_HiddenInput: {
       height: '2.5rem',
