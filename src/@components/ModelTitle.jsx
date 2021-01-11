@@ -30,9 +30,9 @@ const useStyles = createUseStyles(theme => {
     ModelTitle_ProfileLink: {
       ...theme.text.linkText,
       display: 'block',
-      textDecoration: 'none',
+      textDecoration: 'underline',
       marginLeft: '.25rem',
-      color: theme.colors.gold[500],
+      color: theme.colors.black[500],
       fontWeight: 600,
     },
   }
