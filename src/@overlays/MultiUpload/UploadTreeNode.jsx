@@ -35,6 +35,10 @@ const useStyles = createUseStyles(_theme => {
           stroke: '#DA7069',
         },
       },
+
+      '& > svg': {
+        flex: 'none',
+      },
     },
     UploadTreeNode_FileName: {
       textOverflow: 'ellipsis',

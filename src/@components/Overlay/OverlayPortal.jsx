@@ -74,7 +74,7 @@ const OverlayPortal = ({ className, scrollTop }) => {
     if (OverlayComponent) {
       setTimeout(() => {
         setIsVisible(true)
-      }, 10)
+      }, 0)
     } else {
       setIsVisible(false)
     }

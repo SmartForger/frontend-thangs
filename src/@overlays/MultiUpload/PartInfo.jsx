@@ -320,7 +320,7 @@ const PartInfo = props => {
           <Textarea
             id='description-input'
             name='description'
-            label={isRootPart ? 'Description' : 'Description *'}
+            label={isRootPart ? 'Description *' : 'Description'}
             type='description'
             value={inputState && inputState.description}
             onChange={handleOnInputChange}
