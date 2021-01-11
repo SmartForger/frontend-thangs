@@ -147,9 +147,8 @@ const AssemblyInfo = ({
 }) => {
   const c = useStyles({})
   const firstInputRef = useRef(null)
-  console.log('activeNode - asm', activeNode)
   const isRootAssembly = useMemo(() => !activeNode.parentId, [activeNode.parentId])
-  console.log('isRootAssembly', isRootAssembly)
+
   const {
     checkError,
     onFormSubmit,

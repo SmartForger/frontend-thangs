@@ -18,7 +18,7 @@ const COLORS = [
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md, md_viewer },
+    mediaQueries: { md_viewer },
   } = theme
   return {
     ColorPickerMenu: {

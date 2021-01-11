@@ -58,7 +58,7 @@ const useOverlayProvider = () => {
     },
     { isOpen: false, template: null, data: {} }
   )
-  console.log('overlay', overlay)
+
   const setOverlay = overlayObj => {
     dispatch({
       type: 'all',
