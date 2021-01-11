@@ -43,16 +43,32 @@ export default store => {
     }
   })
 
-  store.on(types.REMOVE_UPLOAD_FILES, (state, { index }) => {
-    const { data: uploadedFiles } = state.uploadFiles
+  store.on(types.REMOVE_UPLOAD_FILES, (state, { nodeFileMap, shouldRemove }) => {
+    const { data: uploadedFiles, treeData } = state.uploadFiles
 
     const newUploadedFiles = { ...uploadedFiles }
-    delete newUploadedFiles[index]
+
+    Object.values(nodeFileMap).forEach(fileId => {
+      if (fileId) {
+        delete newUploadedFiles[fileId]
+      }
+    })
+
+    const nodeIds = Object.keys(nodeFileMap)
+    const newTreeData = { ...treeData }
+    nodeIds.forEach(nodeId => {
+      if (shouldRemove) {
+        delete newTreeData[nodeId]
+      } else if (newTreeData[nodeId]) {
+        newTreeData[nodeId].fileId = ''
+      }
+    })
 
     return {
       uploadFiles: {
         ...state.uploadFiles,
         data: newUploadedFiles,
+        treeData: newTreeData,
       },
     }
   })
@@ -61,41 +77,23 @@ export default store => {
     const { treeData } = state.uploadFiles
     const newTreeData = { ...treeData }
 
-    const cancelNode = (node, shouldRemoveNode) => {
+    const nodeFileMap = {}
+
+    const findNodesToRemove = node => {
       if (!node) {
         return
       }
 
+      nodeFileMap[node.id] = node.fileId
       if (newTreeData[node.id]) {
-        if (shouldRemoveNode) {
-          delete newTreeData[node.id]
-        } else {
-          newTreeData[node.id] = {
-            ...node,
-            valid: false,
-          }
-        }
-
-        if (node.fileId) {
-          cancelUpload(node.fileId)
-          node.fileId = ''
-        }
-        node.subIds.forEach(subnodeId =>
-          cancelNode(newTreeData[subnodeId], shouldRemoveNode)
-        )
-      } else if (node.fileId) {
-        cancelUpload(node.fileId)
+        node.subIds.forEach(subnodeId => {
+          findNodesToRemove(newTreeData[subnodeId])
+        })
       }
     }
 
-    cancelNode(node, !node.parentId)
-
-    return {
-      uploadFiles: {
-        ...state.uploadFiles,
-        treeData: newTreeData,
-      },
-    }
+    findNodesToRemove(node)
+    cancelUpload(nodeFileMap, !node.parentId)
   })
 
   store.on(types.INIT_UPLOAD_FILES, (state, { files }) => {

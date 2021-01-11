@@ -12,8 +12,8 @@ export const uploadFiles = (files, directory) => {
   })
 }
 
-export const cancelUpload = id => {
-  sendMessage('upload:cancel', { id })
+export const cancelUpload = (nodeFileMap, shouldRemove) => {
+  sendMessage('upload:cancel', { nodeFileMap, shouldRemove })
 }
 
 /* Handle messages from worker */
@@ -40,7 +40,7 @@ function uploadMessageHandler(messageType, data) {
       })
       break
     case 'upload:cancelled':
-      store.dispatch(types.REMOVE_UPLOAD_FILES, { index: data.id })
+      store.dispatch(types.REMOVE_UPLOAD_FILES, data)
       break
     default:
       break

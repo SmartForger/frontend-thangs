@@ -42,21 +42,26 @@ async function uploadMultipleFiles({ files, directory }) {
   }
 }
 
-function cancelRequest(id) {
-  if (!cancellationTokens[id]) {
-    sendMessage('upload:cancelled', { id })
+function cancelRequest(fileId) {
+  if (!cancellationTokens[fileId]) {
     return
   }
 
-  cancellationTokens[id].cancel('Upload interrupted')
-  sendMessage('upload:cancelled', { id })
+  cancellationTokens[fileId].cancel('Upload interrupted')
+}
+
+function cancelRequests({ nodeFileMap, shouldRemove }) {
+  Object.values(nodeFileMap).forEach(fileId => {
+    cancelRequest(fileId)
+  })
+  sendMessage('upload:cancelled', { nodeFileMap, shouldRemove })
 }
 
 function uploadMessageHandler(messageType, data) {
   if (messageType === 'upload:upload') {
     uploadMultipleFiles(data)
   } else if (messageType === 'upload:cancel') {
-    cancelRequest(data.id)
+    cancelRequests(data)
   }
 }
 
