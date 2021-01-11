@@ -24,6 +24,7 @@ const useStyles = createUseStyles(theme => {
 
       [md_viewer]: {
         opacity: 0,
+        visibility: 'hidden',
       },
     },
     ActionMenuPortal__isVisible: {

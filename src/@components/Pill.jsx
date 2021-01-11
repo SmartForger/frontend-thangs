@@ -46,9 +46,9 @@ const Pill = ({ children, className, secondary, onClick = noop, disabled }) => {
     >
       <Spacer size={'.5rem'} />
       <div className={c.Pill_TextWrapper}>
-        <Spacer size={'.75rem'} />
+        <Spacer size={'.75rem'} mobileSize={'.5rem'} />
         <LabelText small>{children}</LabelText>
-        <Spacer size={'.75rem'} />
+        <Spacer size={'.75rem'} mobileSize={'.5rem'} />
       </div>
       <Spacer size={'.5rem'} />
     </div>

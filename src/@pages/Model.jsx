@@ -142,10 +142,6 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       justifyContent: 'flex-end',
       marginTop: 0,
-
-      '& > div': {
-        marginLeft: '1rem',
-      },
     },
     Model_BackupViewer: {
       height: '38.5rem',
@@ -354,6 +350,7 @@ const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
               hideForOwned={true}
             />
           </div>
+          <Spacer size={'1rem'} mobileSize={'.5rem'} />
           <div>
             <LikeModelButton
               model={model}
