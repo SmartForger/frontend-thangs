@@ -28,7 +28,7 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       alignItems: 'center',
       borderRadius: '.75rem',
-      border: '1px dashed #E5E5F3',
+      border: `1px dashed ${theme.colors.white[900]}`,
 
       '& h3': {
         lineHeight: '1.5rem',
@@ -164,6 +164,9 @@ const useStyles = createUseStyles(theme => {
         },
       },
     },
+    UploadModels_BrowseText: {
+      color: theme.colors.grey[300],
+    },
   }
 })
 const noop = () => null
@@ -261,7 +264,9 @@ const UploadModels = ({
                   {R.isEmpty(uploadFiles) && <UploadCardIcon />}
                   <Spacer size={'1rem'} />
                   <TitleTertiary>Drag & Drop files</TitleTertiary>
-                  <MultiLineBodyText>or browse to upload.</MultiLineBodyText>
+                  <MultiLineBodyText className={c.UploadModels_BrowseText}>
+                    or browse to upload.
+                  </MultiLineBodyText>
                   <Spacer size={'1rem'} />
                   <Pill secondary>Browse</Pill>
                   <Spacer size={'.75rem'} />
