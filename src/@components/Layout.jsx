@@ -167,8 +167,8 @@ const Layout = ({
   showAboutHero,
 }) => {
   const c = useStyles({})
-  const { isActionMenuOpen } = useActionMenu()
-  const { isOverlayOpen } = useOverlay()
+  const { isActionMenuOpen } = useActionMenu() || {}
+  const { isOverlayOpen } = useOverlay() || {}
 
   return (
     <div
