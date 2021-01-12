@@ -6,7 +6,7 @@ import { ReactComponent as ExplodeIcon } from '@svg/icon-explode.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md_viewer, xl_viewer },
+    mediaQueries: { md, md_viewer, xl_viewer },
   } = theme
   return {
     ExplodeDropdown: {
@@ -62,6 +62,17 @@ const useStyles = createUseStyles(theme => {
         display: 'flex',
       },
     },
+    ExplodeDropdown__tablet: {
+      display: 'none',
+
+      [md_viewer]: {
+        display: 'block',
+      },
+
+      [xl_viewer]: {
+        display: 'none',
+      },
+    },
     ExplodeDropdown__mobile: {
       display: 'flex',
 
@@ -94,7 +105,7 @@ const ExplodeTarget = ({ onClick = noop }) => {
         <Spacer size={'.5rem'} className={c.ExplodeDropdown__desktop} />
         <ArrowDownIcon className={c.ExplodeDropdown__desktop} />
       </div>
-      <Spacer size={'1.125rem'} className={c.ExplodeDropdown__desktop} />
+      <Spacer size={'1.125rem'} className={c.ExplodeDropdown__tablet} />
     </div>
   )
 }

@@ -86,6 +86,13 @@ const useStyles = createUseStyles(theme => {
         maxWidth: '100%',
       },
     },
+    Toolbar__mobile: {
+      display: 'flex',
+
+      [md_viewer]: {
+        display: 'none',
+      },
+    },
   }
 })
 
@@ -153,7 +160,7 @@ const Toolbar = ({
       </div>
       {showPartSelector && (
         <>
-          <Spacer size={'1rem'} />
+          <Spacer size={'1rem'} className={c.Toolbar__mobile} />
           <div className={classnames(c.Toolbar, className)}>
             <div className={classnames(c.Toolbar_Group, c.Toolbar_PartExplorerWrapper)}>
               <PartExplorerActionMenu

@@ -17,7 +17,7 @@ import { ReactComponent as IndentArrow } from '@svg/icon-indent-arrow.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md_viewer },
+    mediaQueries: { md_972, md_viewer },
   } = theme
   return {
     PartExplorerDropdown: {
@@ -76,8 +76,11 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'column',
       maxWidth: '100%',
-
       [md_viewer]: {
+        maxWidth: '15rem',
+      },
+
+      [md_972]: {
         maxWidth: '21.5rem',
       },
     },
@@ -91,6 +94,10 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
+
+      '& > svg': {
+        flex: 'none',
+      },
     },
     PartSelectorRow_Column: {
       cursor: 'pointer',
@@ -131,6 +138,10 @@ const useStyles = createUseStyles(theme => {
     PartExplorerActionMenu: {
       bottom: '5rem !important',
       right: '-2rem !important',
+
+      '& div': {
+        flex: 'none',
+      },
     },
     PartSelectorRow_Thumbnail: {
       backgroundColor: theme.colors.white[400],
@@ -152,12 +163,29 @@ const useStyles = createUseStyles(theme => {
       maxWidth: '11rem',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
+
+      [md_viewer]: {
+        maxWidth: '9rem',
+      },
+
+      [md_972]: {
+        maxWidth: '11rem',
+      },
     },
     PartExplorerTarget_Thumbnail: {
       flex: '0 0 auto',
       height: '2rem !important',
       padding: '0px !important',
       width: '2rem',
+    },
+    PartExplorerTarget__tablet: {
+      [md_viewer]: {
+        display: 'none !important',
+      },
+
+      [md_972]: {
+        display: 'flex !important',
+      },
     },
     SearchBar_Wrapper: {
       background: theme.colors.white[600],
@@ -355,9 +383,11 @@ export const PartExplorerTarget = ({
         </SingleLineBodyText>
         <Spacer size={'.5rem'} />
         {selectedPart.parts && selectedPart.parts.length > 0 ? (
-          <Tag>Assembly</Tag>
+          <Tag className={c.PartExplorerTarget__tablet}>Assembly</Tag>
         ) : (
-          <Tag secondary>Part</Tag>
+          <Tag className={c.PartExplorerTarget__tablet} secondary>
+            Part
+          </Tag>
         )}
         <Spacer size={'.5rem'} />
         {isOpen ? (

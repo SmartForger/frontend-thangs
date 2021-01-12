@@ -67,6 +67,7 @@ const useStyles = createUseStyles(theme => {
     },
     DropdownMenu_FullWidth: {
       width: '100%',
+      flex: 'unset !important',
     },
   }
 })

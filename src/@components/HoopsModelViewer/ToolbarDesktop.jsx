@@ -17,7 +17,7 @@ import { ReactComponent as CameraDesktopIcon } from '@svg/icon-camera-desktop.sv
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md_viewer, lg, xl_viewer },
+    mediaQueries: { md_viewer, lg, xl_viewer, xxl_viewer },
   } = theme
   return {
     Toolbar: {
@@ -39,6 +39,14 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
 
       [xl_viewer]: {
+        display: 'flex',
+      },
+    },
+    Toolbar_ExtraWideText: {
+      display: 'none',
+      alignItems: 'center',
+
+      [xxl_viewer]: {
         display: 'flex',
       },
     },
@@ -117,7 +125,7 @@ const Toolbar = ({
         <Spacer size={'2rem'} />
         <Pill secondary onClick={onResetView}>
           <ResetIcon />
-          <div className={c.Toolbar_WideText}>
+          <div className={c.Toolbar_ExtraWideText}>
             <Spacer size={'0.25rem'} />
             <span>Reset</span>
           </div>
@@ -125,7 +133,7 @@ const Toolbar = ({
         <Spacer size={'1rem'} />
         <Pill secondary onClick={onSnapshot}>
           <CameraDesktopIcon />
-          <div className={c.Toolbar_WideText}>
+          <div className={c.Toolbar_ExtraWideText}>
             <Spacer size={'0.25rem'} />
             <span>Snapshot</span>
           </div>
