@@ -111,11 +111,16 @@ const getThumbnailUrl = (model = {}) => {
     uploadedFile,
   } = model
   let primaryPart
-  //This should be the the most common case
+  //This should be the the most common case for model cards
   if (filename) {
-    return filename
+    if (filename.includes(THUMBNAILS_FOLDER)) {
+      return filename
+    } else {
+      return `${THUMBNAILS_FOLDER}${filename}`
+    }
   }
   if (thumbnailUrl) return `${THUMBNAILS_FOLDER}${thumbnailUrl}`
+  //This is used by the Search By Model overlay for generating the "scanner" thumbnail
   if (uploadedFile) return `${THUMBNAILS_FOLDER}${uploadedFile}`
   if (modelFileName) return encodeURIComponent(modelFileName)
   if (parts) {
@@ -126,7 +131,14 @@ const getThumbnailUrl = (model = {}) => {
     }
     return primaryPart.filename
   }
-  if (newFileName) return encodeURIComponent(newFileName)
+  //This is used by the model uploader to generate small thumbnails in the "Enter Part Info" overlay
+  if (newFileName) {
+    if (newFileName.includes(THUMBNAILS_FOLDER)) {
+      return encodeURIComponent(newFileName)
+    } else {
+      return `${THUMBNAILS_FOLDER}${encodeURIComponent(newFileName)}`
+    }
+  }
   return 'unknown'
 }
 
