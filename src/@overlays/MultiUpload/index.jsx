@@ -184,6 +184,11 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
     let trees = formNode('').subs
 
     if (isAssembly) {
+      if (singleNodes.length < 2) {
+        dispatch(types.SET_IS_ASSEMBLY, { isAssembly: false })
+        return singleNodes
+      }
+
       singleNodes.forEach(node => {
         node.parentId = 'multipart'
       })
