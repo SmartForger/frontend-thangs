@@ -91,7 +91,14 @@ export default store => {
       }
     }
 
-    findNodesToRemove(node)
+    if (node.id === 'multipart') {
+      node.subs.forEach(subnode => {
+        nodeFileMap[subnode.id] = subnode.fileId
+      })
+    } else {
+      findNodesToRemove(node)
+    }
+
     cancelUpload(nodeFileMap, !node.parentId)
   })
 
