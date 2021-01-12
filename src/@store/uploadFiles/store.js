@@ -75,7 +75,6 @@ export default store => {
 
   store.on(types.CANCEL_UPLOAD, (state, { node }) => {
     const { treeData } = state.uploadFiles
-    const newTreeData = { ...treeData }
 
     const nodeFileMap = {}
 
@@ -85,9 +84,9 @@ export default store => {
       }
 
       nodeFileMap[node.id] = node.fileId
-      if (newTreeData[node.id]) {
+      if (node.subIds) {
         node.subIds.forEach(subnodeId => {
-          findNodesToRemove(newTreeData[subnodeId])
+          findNodesToRemove(treeData[subnodeId])
         })
       }
     }
