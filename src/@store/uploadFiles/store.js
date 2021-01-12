@@ -215,8 +215,10 @@ export default store => {
       if (responseData.isAssembly !== false) {
         const transformNode = (node1, node2, parentId = '', rootName = '') => {
           const name = node1.name.split(':')[0]
+          const filePaths = node1.filename.split('\\')
+          const filename = filePaths[filePaths.length - 1]
           const id = rootName + '/' + node1.name
-          const file = node2.valid && uploadedFiles.find(file => file.name === name)
+          const file = node2.valid && uploadedFiles.find(file => file.name === filename)
 
           const newNode = {
             id,

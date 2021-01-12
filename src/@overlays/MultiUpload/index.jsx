@@ -138,9 +138,9 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
       }
     })
 
-    const treeNodeNames = Object.values(treeData).map(node => node.name)
+    const treeNodeFiles = Object.values(treeData).map(node => node.fileId)
     const singleNodes = Object.values(uploadFilesData)
-      .filter(file => file.name && !file.isError && !treeNodeNames.includes(file.name))
+      .filter(file => file.name && !file.isError && !treeNodeFiles.includes(file.name))
       .map(file => {
         const id = '/' + file.name
         newTreeData[id] = {
