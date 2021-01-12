@@ -88,12 +88,16 @@ const COMPLETE = 'COMPLETE'
 const ERROR = 'ERROR'
 
 const THUMBNAILS_FOLDER = process.env.REACT_APP_THUMBNAILS_FOLDER
+const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST
 const REACT_APP_MODEL_BUCKET = process.env.REACT_APP_MODEL_BUCKET
 
-const thumbnailUrl = model => {
+const thumbnailUrl = (model, useThumbnailer) => {
   if (model.fullThumbnailUrl) return model.fullThumbnailUrl
   if (model.thumbnailUrl) return model.thumbnailUrl
-  let modelUri = `${REACT_APP_MODEL_BUCKET}${getThumbnailUrl(model)}`
+  let modelUri = useThumbnailer
+    ? `${THUMBNAILS_HOST}${getThumbnailUrl(model)}`
+    : `${REACT_APP_MODEL_BUCKET}${getThumbnailUrl(model)}`
+  if (useThumbnailer) return modelUri
   return modelUri.replace(/\s/g, '_').replace(path.extname(modelUri), '.png')
 }
 
@@ -126,7 +130,7 @@ const getThumbnailUrl = (model = {}) => {
   return 'unknown'
 }
 
-const ModelThumbnail = ({ className, model, name, mini }) => {
+const ModelThumbnail = ({ className, model, name, mini, useThumbnailer = false }) => {
   const [loadingState, setLoadingState] = useState(LOADING)
   const onLoad = useCallback(() => setLoadingState(COMPLETE), [])
   const onError = useCallback(() => {
@@ -134,7 +138,7 @@ const ModelThumbnail = ({ className, model, name, mini }) => {
     track('Error - Thumbnail Image', { modelId: model && model.id })
   }, [model])
   const c = useStyles({ mini })
-  const src = thumbnailUrl(model)
+  const src = thumbnailUrl(model, useThumbnailer)
 
   return (
     <div className={classnames(className, c.ModelThumbnail)}>

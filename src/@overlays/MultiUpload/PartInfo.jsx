@@ -285,6 +285,7 @@ const PartInfo = props => {
           name={file.name}
           model={file}
           mini={true}
+          useThumbnailer={true}
         />
         <Spacer size={'1rem'} />
         <div className={c.PartInfo_ModelInfo}>

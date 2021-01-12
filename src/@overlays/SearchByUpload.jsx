@@ -65,7 +65,7 @@ const ScannerThumbnail = ({ model, polygonCount }) => {
         className={c.SearchByUpload_Thumbnail}
         name={model && model.name}
         model={model}
-        showWaldo={false}
+        useThumbnailer={true}
       />
     </Scanner>
   )
