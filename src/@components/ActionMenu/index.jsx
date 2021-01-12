@@ -36,6 +36,14 @@ const useStyles = createUseStyles(theme => {
         flexDirection: 'row',
       },
     },
+    DefaultMenu_Item__mobileOnly: {
+      flexDirection: 'column',
+      justifyContent: 'left',
+
+      [md]: {
+        flexDirection: 'row',
+      },
+    },
     DefaultMenu_Row: {
       ...theme.mixins.flexRow,
       alignItems: 'center',
@@ -100,7 +108,14 @@ const useStyles = createUseStyles(theme => {
         width: 'unset',
       },
     },
-    ActionMenu__hidden: {
+    ActionMenu__hidden__mobileOnly: {
+      display: 'none !important',
+
+      [md]: {
+        display: 'flex !important',
+      },
+    },
+    ActionMenu__hidden__mobileTablet: {
       display: 'none !important',
 
       [md_viewer]: {
@@ -112,7 +127,7 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const DefaultMenu = ({ onChange = noop, options = [], tabletLayout }) => {
+const DefaultMenu = ({ onChange = noop, options = [], tabletLayout, isMobileOnly }) => {
   const c = useStyles({ tabletLayout })
 
   return (
@@ -128,7 +143,10 @@ const DefaultMenu = ({ onChange = noop, options = [], tabletLayout }) => {
           <React.Fragment key={`${option.value}_${ind}`}>
             <DropdownItem
               onClick={() => onChange(option.value)}
-              className={c.DefaultMenu_Item}
+              className={classnames({
+                [c.DefaultMenu_Item]: !isMobileOnly,
+                [c.DefaultMenu_Item__mobileOnly]: isMobileOnly,
+              })}
             >
               <Spacer
                 size={'.5rem'}
@@ -137,6 +155,9 @@ const DefaultMenu = ({ onChange = noop, options = [], tabletLayout }) => {
                   [c.DefaultMenu__desktopTablet]: tabletLayout,
                 })}
               />
+              {(!tabletLayout || isMobileOnly) && (
+                <Spacer size={'.5rem'} className={c.DefaultMenu__desktopTablet} />
+              )}
               <div
                 className={classnames({
                   [c.DefaultMenu_MobileRow]: !tabletLayout,
@@ -159,7 +180,12 @@ const DefaultMenu = ({ onChange = noop, options = [], tabletLayout }) => {
                   )}
                   <LabelText>{option.label}</LabelText>
                 </div>
-                <ArrowRightIcon className={c.DefaultMenu__tablet} />
+                <ArrowRightIcon
+                  className={classnames({
+                    [c.DefaultMenu__mobile]: isMobileOnly,
+                    [c.DefaultMenu__tablet]: !isMobileOnly,
+                  })}
+                />
                 <Spacer
                   className={classnames({
                     [c.DefaultMenu__desktop]: !tabletLayout,
@@ -194,6 +220,7 @@ export const ActionMenu = props => {
     isExternalClosed = false,
     isMobileActionBarActive = true,
     isOpenByDefault = false,
+    isMobileOnly = false,
   } = props
   const c = useStyles({})
   const { onChange, className, ...menuProps } = MenuComponentProps
@@ -221,7 +248,8 @@ export const ActionMenu = props => {
   return (
     <DropdownMenu
       className={classnames(className, c.ActionMenu, {
-        [c.ActionMenu__hidden]: isMobileActionBarActive,
+        [c.ActionMenu__hidden__mobileOnly]: isMobileActionBarActive && isMobileOnly,
+        [c.ActionMenu__hidden__mobileTablet]: isMobileActionBarActive && !isMobileOnly,
       })}
       TargetComponent={TargetComponent}
       TargetComponentProps={TargetComponentProps}
@@ -233,6 +261,7 @@ export const ActionMenu = props => {
       <MenuComponent
         onChange={handleChange}
         isMobileActionBarActive={isMobileActionBarActive}
+        isMobileOnly={isMobileOnly}
         {...menuProps}
       />
     </DropdownMenu>

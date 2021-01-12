@@ -55,6 +55,7 @@ export const MobileActionMenu = ({ className, tabletLayout, ...props }) => {
         [c.MobileActionMenu__tablet]: tabletLayout,
       })}
       actionMenuRef={actionMenuRef}
+      mobileOnly={!tabletLayout}
       {...props}
     />
   )

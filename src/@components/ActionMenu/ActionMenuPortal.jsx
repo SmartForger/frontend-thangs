@@ -21,7 +21,14 @@ const useStyles = createUseStyles(theme => {
       right: 0,
       backgroundColor: 'rgba(0,0,0,0.6)',
       zIndex: 1,
-
+    },
+    ActionMenuPortal_Background__mobileOnly: {
+      [md]: {
+        opacity: 0,
+        visibility: 'hidden',
+      },
+    },
+    ActionMenuPortal_Background__mobileTablet: {
       [md_viewer]: {
         opacity: 0,
         visibility: 'hidden',
@@ -73,7 +80,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-export const ActionMenuPortal = ({ actionMenuRef, className, scrollTop }) => {
+export const ActionMenuPortal = ({ actionMenuRef, className, scrollTop, mobileOnly }) => {
   const [isVisible, setIsVisible] = useState(false)
   const { ActionMenuComponent, actionMenuData = {} } = useActionMenu()
   const c = useStyles()
@@ -91,7 +98,12 @@ export const ActionMenuPortal = ({ actionMenuRef, className, scrollTop }) => {
   if (ActionMenuComponent) {
     return createPortal(
       <>
-        <div className={c.ActionMenuPortal_Background}></div>
+        <div
+          className={classnames(c.ActionMenuPortal_Background, {
+            [c.ActionMenuPortal_Background__mobileOnly]: mobileOnly,
+            [c.ActionMenuPortal_Background__mobileTablet]: !mobileOnly,
+          })}
+        ></div>
         <div
           ref={actionMenuRef}
           className={classnames(className, c.ActionMenuPortal, {

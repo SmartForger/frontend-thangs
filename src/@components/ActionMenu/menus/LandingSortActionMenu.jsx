@@ -82,7 +82,7 @@ const LandingSortTarget = ({ onClick = noop, selectedValue }) => {
 
 const LandingSortActionMenu = ({ onChange = noop, selectedValue }) => {
   const menuProps = useMemo(() => {
-    return { onChange, actionBarTitle: 'Select sort', options }
+    return { onChange, actionBarTitle: 'Select sort', options, tabletLayout: false }
   }, [onChange])
 
   const targetProps = useMemo(() => {
@@ -95,6 +95,7 @@ const LandingSortActionMenu = ({ onChange = noop, selectedValue }) => {
       TargetComponent={LandingSortTarget}
       TargetComponentProps={targetProps}
       isCloseOnSelect={true}
+      isMobileOnly={true}
     />
   )
 }
