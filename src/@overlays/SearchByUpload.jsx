@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import * as R from 'ramda'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
@@ -7,7 +7,7 @@ import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 import Scanner from '@components/Scanner'
 import ScannerPaper from '@components/ScannerPaper'
-import { useFileUpload } from '@hooks'
+import { useExternalClick, useFileUpload } from '@hooks'
 import { numberWithCommas } from '@utilities'
 import { overlayview } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
@@ -84,10 +84,15 @@ const SearchByUpload = ({
   errorState: initialErrorState,
   isExplorerOpened,
 }) => {
+  const containerRef = useRef(null)
   const c = useStyles()
   const history = useHistory()
   const { setOverlayOpen } = useOverlay()
   const { dispatch, searchResults } = useStoreon('searchResults')
+  const closeOverlay = useCallback(() => {
+    setOverlayOpen(false)
+  }, [setOverlayOpen])
+  useExternalClick(containerRef, closeOverlay)
   const { phyndexer, thangs, uploadData } = searchResults
   const polygonCount =
     searchResults &&
@@ -149,7 +154,7 @@ const SearchByUpload = ({
   }, [])
 
   return (
-    <div className={c.SearchByUpload_Container}>
+    <div ref={containerRef} className={c.SearchByUpload_Container}>
       <div className={c.SearchByUpload}>
         {phyndexer.isLoading || thangs.isLoading || model ? (
           !R.isNil(model) ? (
