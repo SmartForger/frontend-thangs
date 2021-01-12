@@ -96,13 +96,10 @@ export default store => {
     searchResults: getInitAtom(),
   }))
 
-  store.on(
-    types.GET_TEXT_SEARCH_RESULTS,
-    (_state, { searchTerm }) => {
-      store.dispatch(types.GET_THANGS_TEXT_SEARCH_RESULTS, { searchTerm })
-      store.dispatch(types.GET_PHYNDEXER_TEXT_SEARCH_RESULTS, { searchTerm })
-    }
-  )
+  store.on(types.GET_TEXT_SEARCH_RESULTS, (_state, { searchTerm }) => {
+    store.dispatch(types.GET_THANGS_TEXT_SEARCH_RESULTS, { searchTerm })
+    store.dispatch(types.GET_PHYNDEXER_TEXT_SEARCH_RESULTS, { searchTerm })
+  })
 
   store.on(
     types.GET_THANGS_TEXT_SEARCH_RESULTS,
@@ -178,10 +175,13 @@ export default store => {
           data: { matches },
         })
 
-        track(`Phyndexer Text search - ${matches.length > 0 ? 'Results' : 'No Results'}`, {
-          searchTerm,
-          numOfMatches: matches.length,
-        })
+        track(
+          `Phyndexer Text search - ${matches.length > 0 ? 'Results' : 'No Results'}`,
+          {
+            searchTerm,
+            numOfMatches: matches.length,
+          }
+        )
 
         onFinish(error)
       }
@@ -316,7 +316,7 @@ export default store => {
         .then(() =>
           apiForChain({
             method: 'GET',
-            endpoint: `models/related/${modelId}`,
+            endpoint: `models/geo-related/${modelId}`,
           })
         )
         .then(({ data }) => {
@@ -368,7 +368,7 @@ export default store => {
 
       const { data, error } = await api({
         method: 'GET',
-        endpoint: `models/phyn-related/${newPhyndexerId}`,
+        endpoint: `models/v1/phyn-related/${newPhyndexerId}`,
       })
 
       if (error) {
