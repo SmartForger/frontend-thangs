@@ -24,7 +24,7 @@ const useStyles = createUseStyles(_theme => {
     Overlay: {
       transition: 'all 450ms',
       opacity: 0,
-      overflow: 'scroll',
+      overflowY: 'scroll',
     },
     Overlay__shake: {
       animation: '$shake 0.82s cubic-bezier(.36,.07,.19,.97) both',
