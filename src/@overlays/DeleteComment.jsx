@@ -22,6 +22,7 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       justifyContent: 'flex-start',
       position: 'relative',
+      width: '100%',
 
       [md]: {
         height: 'unset',
