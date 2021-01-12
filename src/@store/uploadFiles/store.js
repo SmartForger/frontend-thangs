@@ -216,7 +216,8 @@ export default store => {
           const name = node1.name.split(':')[0]
           const filePaths = node1.filename.split('\\')
           const filename = filePaths[filePaths.length - 1]
-          const id = rootName + '/' + node1.name
+          const suffix = Math.random().toString().replace('0.', '')
+          const id = rootName + '/' + node1.name + '/' + suffix
           const file = node2.valid && uploadedFiles.find(file => file.name === filename)
 
           const newNode = {
