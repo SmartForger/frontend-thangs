@@ -82,21 +82,24 @@ export const TreeNode = ({
           {renderNode(node, level)}
         </div>
         {expanded && node.subs && node.subs.length > 0 && (
-          <div className={c.TreeNode_Row}>
-            <Spacer size={levelPadding} />
-            <div className={c.TreeNode_Children}>
-              {node.subs.map((subnode, index) => (
-                <TreeNode
-                  isLastNode={index === node.subs.length - 1}
-                  key={`subnode_${subnode.id}`}
-                  level={level + 1}
-                  levelPadding={levelPadding}
-                  node={subnode}
-                  renderNode={renderNode}
-                />
-              ))}
+          <>
+            <Divider spacing={0} />
+            <div className={c.TreeNode_Row}>
+              <Spacer size={levelPadding} />
+              <div className={c.TreeNode_Children}>
+                {node.subs.map((subnode, index) => (
+                  <TreeNode
+                    isLastNode={index === node.subs.length - 1}
+                    key={`subnode_${subnode.id}`}
+                    level={level + 1}
+                    levelPadding={levelPadding}
+                    node={subnode}
+                    renderNode={renderNode}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          </>
         )}
       </div>
       {!isLastNode && <Divider spacing={0} />}
