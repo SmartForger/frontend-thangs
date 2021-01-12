@@ -289,7 +289,9 @@ export default store => {
 
     const addedFiles = {}
     Object.keys(assemblyGroups).forEach(rootName => {
-      const rootNodeId = `${rootName}/${rootName}`
+      const rootNodeId = assemblyGroups[rootName].find(
+        nodeId => !treeData[nodeId].parentId
+      )
       const { primary: _p, ...info } = formData[rootNodeId] || {}
       addedFiles[treeData[rootNodeId].fileId] = true
 

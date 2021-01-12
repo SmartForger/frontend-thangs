@@ -130,7 +130,7 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
     const keys = Object.keys(treeData)
     const newTreeData = {}
     keys.forEach(key => {
-      const file = uploadFilesData[treeData[key].name]
+      const file = uploadFilesData[treeData[key].fileId]
       newTreeData[key] = {
         ...treeData[key],
         loading: file && file.isLoading,
