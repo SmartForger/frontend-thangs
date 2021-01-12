@@ -210,7 +210,7 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
     setAllTreeNodes(nodesArray)
 
     return trees
-  }, [uploadFilesData, multipartName, treeData, isAssembly])
+  }, [treeData, uploadFilesData, isAssembly, multipartName, dispatch])
   const activeNode = useMemo(() => allTreeNodes[activeView] || null, [
     allTreeNodes,
     activeView,
@@ -446,10 +446,10 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
               {!activeNode
                 ? 'Upload Files'
                 : activeNode.isAssembly && activeNode.parentId
-                ? 'Sub Assembly'
-                : activeNode.isAssembly
-                ? 'New Assembly'
-                : partFormTitle}
+                  ? 'Sub Assembly'
+                  : activeNode.isAssembly
+                    ? 'New Assembly'
+                    : partFormTitle}
             </SingleLineBodyText>
             {activeView > -1 && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />
