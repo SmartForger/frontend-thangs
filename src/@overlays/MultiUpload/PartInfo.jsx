@@ -324,7 +324,7 @@ const PartInfo = props => {
             type='description'
             value={inputState && inputState.description}
             onChange={handleOnInputChange}
-            required={!isRootPart}
+            required={isRootPart}
             error={checkError('description').message}
             errorMessage={checkError('description').message}
           />
