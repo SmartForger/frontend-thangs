@@ -15,19 +15,23 @@ import { track } from '@utilities/analytics'
 const CANCELED_TOKEN_MESSAGE = 'canceled'
 
 const LikesAndComments = ({ c, model }) => {
-  const { dispatch } = useStoreon()
+  const currentUserId = parseInt(useCurrentUserId())
+  const { dispatch, [`user-${currentUserId}`]: userAtom = {} } = useStoreon(
+    `user-${currentUserId}`
+  )
   const isLikedCancelTokens = useRef({
     true: axios.CancelToken.source(),
     false: axios.CancelToken.source(),
   })
-  const currentUserId = parseInt(useCurrentUserId())
 
   const [stateLikes, setStateLikes] = useState(model.likes || [])
 
-  const isLiked = useMemo(() => (stateLikes.indexOf(currentUserId) > -1 ? true : false), [
-    stateLikes,
-    currentUserId,
-  ])
+  const isLiked = useMemo(() => {
+    const userData = userAtom.data
+    if (userData && userData.likes && R.includes(parseInt(model.id), userData.likes))
+      return true
+    return stateLikes.indexOf(currentUserId) > -1 ? true : false
+  }, [userAtom.data, model.id, stateLikes, currentUserId])
 
   const handleLikeButton = () => {
     changeLikes(!isLiked)
@@ -77,7 +81,7 @@ const LikesAndComments = ({ c, model }) => {
         ) : (
           <HeartIcon />
         )}
-        {stateLikes.length}
+        {isLiked ? Math.max(stateLikes.length, 1) : stateLikes.length}
       </span>
     </div>
   )

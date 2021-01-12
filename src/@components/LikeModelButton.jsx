@@ -81,8 +81,11 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const hasLikedModel = (model, currentUserId) => {
-  return model.likes ? R.includes(parseInt(currentUserId), model.likes) : false
+const hasLikedModel = (model, currentUser = {}) => {
+  const userData = currentUser.data
+  if (userData && userData.likes && R.includes(parseInt(model.id), userData.likes))
+    return true
+  return model.likes ? R.includes(parseInt(currentUser), model.likes) : false
 }
 
 const HeartButton = ({ liked, c, hasChanged }) => {
@@ -131,8 +134,10 @@ const AuthLikeModelButton = ({
     currentUserId,
     owner.id,
   ])
-  const { dispatch } = useStoreon()
-  const [liked, setLiked] = useState(hasLikedModel(model, currentUserId))
+  const { dispatch, [`user-${currentUserId}`]: userAtom = {} } = useStoreon(
+    `user-${currentUserId}`
+  )
+  const [liked, setLiked] = useState(hasLikedModel(model, userAtom))
   const [hasChanged, setHasChanged] = useState(false)
   const handleLikeClicked = useCallback(
     e => {
