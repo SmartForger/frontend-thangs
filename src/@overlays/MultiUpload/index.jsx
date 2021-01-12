@@ -486,7 +486,6 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
             errorMessage={errorMessage}
             setErrorMessage={setErrorMessage}
             onContinue={handleContinue}
-            onUpdate={handleUpdate}
           />
         ) : (
           <PartInfo

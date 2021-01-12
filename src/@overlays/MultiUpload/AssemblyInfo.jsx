@@ -143,7 +143,6 @@ const AssemblyInfo = ({
   errorMessage: _err,
   setErrorMessage,
   onContinue,
-  onUpdate,
 }) => {
   const c = useStyles({})
   const firstInputRef = useRef(null)
@@ -165,7 +164,6 @@ const AssemblyInfo = ({
 
   const handleOnInputChange = (key, value) => {
     onInputChange(key, value)
-    onUpdate(activeNode.id, { ...inputState, [key]: value })
     setErrorMessage(null)
   }
 
