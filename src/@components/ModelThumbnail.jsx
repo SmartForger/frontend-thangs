@@ -112,13 +112,7 @@ const getThumbnailUrl = (model = {}) => {
   } = model
   let primaryPart
   //This should be the the most common case for model cards
-  if (filename) {
-    if (filename.includes(THUMBNAILS_FOLDER)) {
-      return filename
-    } else {
-      return `${THUMBNAILS_FOLDER}${filename}`
-    }
-  }
+  if (filename) return filename
   if (thumbnailUrl) return `${THUMBNAILS_FOLDER}${thumbnailUrl}`
   //This is used by the Search By Model overlay for generating the "scanner" thumbnail
   if (uploadedFile) return `${THUMBNAILS_FOLDER}${uploadedFile}`

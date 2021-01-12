@@ -55,6 +55,12 @@ const useStyles = createUseStyles(theme => {
     },
     Overlay_CloseButton: {
       position: 'absolute',
+      cursor: 'pointer',
+      top: '10%',
+
+      [md]: {
+        top: 0,
+      },
     },
   }
 })
