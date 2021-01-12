@@ -37,7 +37,7 @@ const useStyles = createUseStyles(theme => {
 
       [md]: {
         alignItems: 'baseline',
-        marginTop: '20vh',
+        marginTop: '10vh',
       },
 
       '& > div': {
