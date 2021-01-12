@@ -24,6 +24,7 @@ const useStyles = createUseStyles(theme => {
   return {
     ProfileDropdown: {
       width: '16.25rem',
+      zIndex: 10,
     },
     ProfileDropdown_Container: {
       width: '100%',
