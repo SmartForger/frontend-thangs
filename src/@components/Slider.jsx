@@ -10,6 +10,7 @@ const CustomSlider = withStyles({
     height: '.25rem',
     padding: '13px 8px',
     marginBottom: '-.5rem',
+    marginRight: '1.05rem',
 
     '@media (min-width: 1235px)': {
       marginBottom: 0,
