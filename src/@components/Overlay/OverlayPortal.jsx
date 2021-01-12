@@ -53,6 +53,9 @@ const useStyles = createUseStyles(theme => {
     OverlayContent__isVisible: {
       top: 0,
     },
+    Overlay_CloseButton: {
+      position: 'absolute',
+    },
   }
 })
 
@@ -96,7 +99,11 @@ const OverlayPortal = ({ className, scrollTop }) => {
             <div
               className={c.Overlay_CloseButton}
               onClick={() => {
-                overlayData.onOverlayClose()
+                if (
+                  overlayData.onOverlayClose &&
+                  typeof overlayData.onOverlayClose === 'function'
+                )
+                  overlayData.onOverlayClose()
                 handleClose()
               }}
             >
