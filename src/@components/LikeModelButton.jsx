@@ -205,7 +205,7 @@ const UnauthLikeModelButton = ({ openSignupOverlay = noop }) => {
   return (
     <Pill onClick={handleClick}>
       <HeartFilledIcon />
-      <Spacer size='.5rem' />
+      <Spacer size='.5rem' className={c.LikeModelButton__desktop} />
       <span className={c.LikeModelButton__desktop}>Like</span>
     </Pill>
   )

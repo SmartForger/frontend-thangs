@@ -11,14 +11,18 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     OverlayPortal: {
-      backgroundColor: ({ windowed }) =>
-        windowed ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.9)',
+      backgroundColor: theme.colors.white[300],
       bottom: 0,
       left: 0,
       position: 'fixed',
       right: 0,
       top: 0,
       zIndex: 10,
+
+      [md]: {
+        backgroundColor: ({ windowed }) =>
+          windowed ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.9)',
+      },
     },
     OverlayPortal__isVisible: {
       opacity: '1 !important',
