@@ -86,7 +86,7 @@ const useStyles = createUseStyles(theme => {
     },
     AssemblyExplorer_Wrapper: {
       ...theme.mixins.scrollbar,
-      maxHeight: '20rem',
+      maxHeight: '28rem',
       overflowY: 'scroll',
     },
     PartSelectorRow_Row: {

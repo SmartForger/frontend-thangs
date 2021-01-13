@@ -41,7 +41,7 @@ import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { sm, md, md_viewer, lg, xl },
+    mediaQueries: { md, md_viewer, lg, xl },
   } = theme
   return {
     Model: {
