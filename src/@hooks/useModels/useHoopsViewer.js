@@ -196,9 +196,9 @@ const useHoopsViewer = ({ modelFilename }) => {
         doTransition(TRANSITIONS.LoadingDone)
       },
       modelLoadFailure(name, reason, e) {
+        doTransition(TRANSITIONS.Error)
         console.error('HOOPS failed loading the model:', e)
         track('HOOPS ModelLoadFailure', { error: JSON.stringify(e) })
-        doTransition(TRANSITIONS.Error)
       },
       // This is to fix the issue with the viewer aspect ratio being
       // off until the browser is resized or snapshot, for some reason.

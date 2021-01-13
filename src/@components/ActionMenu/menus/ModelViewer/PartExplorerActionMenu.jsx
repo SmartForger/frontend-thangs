@@ -266,6 +266,7 @@ const PartSelectorRow = ({ part = {}, onClick, selectedPart = {} }) => {
               name={name}
               model={part}
               mini={true}
+              lazyLoad={true}
             />
             <Spacer size={'.75rem'} />
             <div className={c.PartExplorerDropdown_PartText}>
