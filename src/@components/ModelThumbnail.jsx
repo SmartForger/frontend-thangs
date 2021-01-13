@@ -115,7 +115,7 @@ const getThumbnailUrl = (model = {}) => {
   if (filename) return filename
   if (thumbnailUrl) return `${THUMBNAILS_FOLDER}${thumbnailUrl}`
   //This is used by the Search By Model overlay for generating the "scanner" thumbnail
-  if (uploadedFile) return `${THUMBNAILS_FOLDER}${uploadedFile}`
+  if (uploadedFile) return `${uploadedFile}`
   if (modelFileName) return encodeURIComponent(modelFileName)
   if (parts) {
     if (parts.length > 1) {
