@@ -75,6 +75,7 @@ export default store => {
           status: STATUSES.SAVED,
           atom: `model-${id}`,
         })
+        store.dispatch(types.FETCH_MODEL, { id })
         store.dispatch(types.FETCH_THANGS, {})
       }
     }
@@ -260,17 +261,14 @@ export default store => {
     }
   )
 
-  store.on(
-    types.LOCAL_FOLLOW_MODEL_OWNER,
-    async (state, { id, isFollowing }) => {
-      const model = state[`model-${id}`].data
-      model.owner.isFollowedByRequester = !isFollowing
+  store.on(types.LOCAL_FOLLOW_MODEL_OWNER, async (state, { id, isFollowing }) => {
+    const model = state[`model-${id}`].data
+    model.owner.isFollowedByRequester = !isFollowing
 
-      store.dispatch(types.CHANGE_MODEL_STATUS, {
-        status: STATUSES.LOADED,
-        atom: `model-${id}`,
-        data: { ...model },
-      })
-    }
-  )
+    store.dispatch(types.CHANGE_MODEL_STATUS, {
+      status: STATUSES.LOADED,
+      atom: `model-${id}`,
+      data: { ...model },
+    })
+  })
 }
