@@ -17,26 +17,6 @@ const useStyles = createUseStyles(theme => {
     mediaQueries: { md },
   } = theme
   return {
-    '@keyframes spinner': {
-      from: {
-        '-moz-transform': 'rotateY(0deg)',
-        '-ms-transform': 'rotateY(0deg)',
-        transform: 'rotateY(0deg)',
-      },
-      to: {
-        '-moz-transform': 'rotateY(-180deg)',
-        '-ms-transform': 'rotateY(-180deg)',
-        transform: 'rotateY(-180deg)',
-      },
-    },
-    LikeModelIcon__liked: {
-      animation: '$spinner 250ms linear 0s 1',
-
-      '-webkit-transform-style': 'preserve-3d',
-      '-moz-transform-style': 'preserve-3d',
-      '-ms-transform-style': 'preserve-3d',
-      'transform-style': 'preserve-3d',
-    },
     LikeStarIcon__filled: {
       '& path': {
         fill: ({ color }) => color || theme.colors.black[500],
@@ -48,14 +28,6 @@ const useStyles = createUseStyles(theme => {
         fill: ({ color }) => color || undefined,
         stroke: ({ color }) => color || undefined,
       },
-    },
-    LikeStarIcon__unliked: {
-      animation: '$spinner 250ms linear 0s 1 reverse',
-
-      '-webkit-transform-style': 'preserve-3d',
-      '-moz-transform-style': 'preserve-3d',
-      '-ms-transform-style': 'preserve-3d',
-      'transform-style': 'preserve-3d',
     },
     LikeStarIcon__unfilled: {
       '& path': {

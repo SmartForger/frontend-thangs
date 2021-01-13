@@ -100,13 +100,9 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '1rem',
       display: 'flex',
       flexDirection: 'column',
-      height: '23.5rem',
+      height: '28.75rem',
       margin: '0 auto',
       width: '100%',
-
-      [sm]: {
-        height: '28.75rem',
-      },
 
       [md_viewer]: {
         height: '37.5rem',
