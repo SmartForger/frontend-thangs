@@ -103,55 +103,6 @@ const useHoopsViewer = ({ modelFilename }) => {
   }, [])
 
   useEffect(() => {
-    debug('1. Initialize Effect')
-
-    if (!hoopsStatus.isUnpreparedModel) {
-      debug('  * 1: Bailed')
-      return
-    }
-    let isActiveEffect = true
-    const prepCancelSource = axios.CancelToken.source()
-
-    debug('  * 1: Loading Script')
-    ensureScriptIsLoaded('vendors/hoops/hoops_web_viewer.js')
-      .then(async () => {
-        debug('  * 1: Preparing Model')
-        // const resp = await axios.get(`${MODEL_PREP_ENDPOINT_URI}/${modelURL}`, {
-        //   cancelToken: prepCancelSource.token,
-        // })
-
-        // if (!resp.data.ok) {
-        //   track('HOOPS ModelPreparationFailed', { error: 'Model preparation failed' })
-        //   throw new Error('Model preparation failed.')
-        // }
-
-        if (isActiveEffect) {
-          debug('  * 1: Done Prepping Model')
-          doTransition(TRANSITIONS.PrepareModelDone)
-        }
-      })
-      .catch(err => {
-        logger.error('Failure initializing Viewer:', err)
-        track('HOOPS FailureInitViewer', { error: JSON.stringify(err) })
-        if (isActiveEffect) {
-          doTransition(TRANSITIONS.Error)
-        }
-      })
-
-    const timeoutId = setTimeout(() => {
-      track('HOOPS Timeout', JSON.stringify(hoopsStatus))
-      prepCancelSource.cancel('Model preparation exceeded timeout.')
-    }, MODEL_PREP_TIMEOUT)
-
-    return () => {
-      debug('  * 1: Cleanup. Cancel any pending model prep request.')
-      isActiveEffect = false
-      clearTimeout(timeoutId)
-      prepCancelSource.cancel('Model preparation canceled by user. (Effect cleanup)')
-    }
-  }, [hoopsStatus, modelFilename])
-
-  useEffect(() => {
     debug('2. HWV Shutdown Registering Effect')
     return () => {
       if (hoopsViewerRef.current) {
