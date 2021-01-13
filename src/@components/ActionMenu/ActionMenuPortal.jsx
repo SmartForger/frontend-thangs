@@ -73,6 +73,7 @@ const useStyles = createUseStyles(theme => {
     },
     ActionMenuContent_FullWidth: {
       width: '100%',
+      overflow: 'hidden',
     },
     ActionMenuContent_NoFlex: {
       flex: 'none',
