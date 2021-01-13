@@ -30,7 +30,7 @@ const LikesAndComments = ({ c, model }) => {
     const userData = userAtom.data
     if (userData && userData.likes && R.includes(parseInt(model.id), userData.likes))
       return true
-    return stateLikes.indexOf(currentUserId) > -1 ? true : false
+    return stateLikes && stateLikes.indexOf(currentUserId) > -1 ? true : false
   }, [userAtom.data, model.id, stateLikes, currentUserId])
 
   const handleLikeButton = () => {
