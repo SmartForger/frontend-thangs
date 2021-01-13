@@ -116,7 +116,7 @@ const useOverlayProvider = () => {
 }
 
 const useOverlay = () => {
-  return useContext(OverlayContext)
+  return useContext(OverlayContext) || {}
 }
 
 export { useOverlay, useOverlayProvider }
