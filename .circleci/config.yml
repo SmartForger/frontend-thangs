@@ -238,6 +238,9 @@ jobs:
           paths:
             - ~/.cache/yarn
       - run:
+          name: Build workers
+          command: yarn build:workers
+      - run:
           name: "Build release"
           # Build staging release
           # TODO: This needs to be pulled into a separate job & workflow so that
