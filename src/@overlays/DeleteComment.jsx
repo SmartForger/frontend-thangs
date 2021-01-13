@@ -25,6 +25,7 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
 
       [md]: {
+        width: 'unset',
         height: 'unset',
         flexDirection: 'row',
       },
