@@ -24,7 +24,7 @@ const LikesAndComments = ({ c, model }) => {
     false: axios.CancelToken.source(),
   })
 
-  const [stateLikes, setStateLikes] = useState(model.likes || [])
+  const [stateLikes, setStateLikes] = useState(model.likes || new Array(model.likesCount))
 
   const isLiked = useMemo(() => {
     const userData = userAtom.data
