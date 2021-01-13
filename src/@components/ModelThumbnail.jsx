@@ -136,7 +136,14 @@ const getThumbnailUrl = (model = {}) => {
   return 'unknown'
 }
 
-const ModelThumbnail = ({ className, model, name, mini, useThumbnailer = false }) => {
+const ModelThumbnail = ({
+  className,
+  model,
+  name,
+  mini,
+  useThumbnailer = false,
+  lazyLoad = false,
+}) => {
   const [loadingState, setLoadingState] = useState(LOADING)
   const onLoad = useCallback(() => setLoadingState(COMPLETE), [])
   const onError = useCallback(() => {
@@ -157,6 +164,7 @@ const ModelThumbnail = ({ className, model, name, mini, useThumbnailer = false }
           onLoad={onLoad}
           onError={onError}
           title={model.fileName}
+          loading={lazyLoad ? 'lazy' : 'auto'}
         />
       )}
     </div>
