@@ -225,8 +225,8 @@ const useHoopsViewer = ({ modelFilename }) => {
   }
 
   const changeColor = useCallback((modeName, colorStr) => {
-    ensureCurrentHoopsViewer()
     track('changeColor', { color: colorStr })
+    ensureCurrentHoopsViewer()
     if (!['wire', 'mesh'].includes(modeName)) {
       throw new Error(`Unsupported HOOPS color change mode: ${modeName}`)
     }
@@ -258,8 +258,8 @@ const useHoopsViewer = ({ modelFilename }) => {
   }, [])
 
   const changeDrawMode = useCallback(modeName => {
-    ensureCurrentHoopsViewer()
     track('changeDrawMode', { mode: modeName })
+    ensureCurrentHoopsViewer()
     switch (modeName) {
       case 'shaded':
         hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.WireframeOnShaded)
@@ -276,8 +276,8 @@ const useHoopsViewer = ({ modelFilename }) => {
   }, [])
 
   const changeExplosionMagnitude = useCallback(magnitude => {
-    ensureCurrentHoopsViewer()
     track('changeExplosionMagnitude')
+    ensureCurrentHoopsViewer()
     hoopsViewerRef.current.explodeManager.setMagnitude(magnitude)
   }, [])
 
@@ -290,8 +290,8 @@ const useHoopsViewer = ({ modelFilename }) => {
   }, [])
 
   const getViewerSnapshot = useCallback(fileName => {
+    track('getViewerSnapshot')
     hoopsViewerRef.current.takeSnapshot().then(imgElement => {
-      track('getViewerSnapshot')
       let imageHeight = containerRef.current.childNodes[0].offsetHeight
       let imageWidth = containerRef.current.childNodes[0].offsetWidth
       let timestamp = new Date().toLocaleString()
@@ -311,8 +311,8 @@ const useHoopsViewer = ({ modelFilename }) => {
   }, [])
 
   const resetImage = useCallback(() => {
-    ensureCurrentHoopsViewer()
     track('resetViewer')
+    ensureCurrentHoopsViewer()
     hoopsViewerRef.current.reset()
     hoopsViewerRef.current.model.resetNodesColor()
   }, [])
