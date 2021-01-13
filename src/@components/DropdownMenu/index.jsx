@@ -49,7 +49,7 @@ const useStyles = createUseStyles(theme => {
     },
     DropdownMenu_ItemWrapper: {
       borderRadius: '.5rem',
-      padding: '0',
+      padding: '.5rem',
       '&:hover': {
         backgroundColor: ({ noHover }) => (noHover ? 'none' : theme.colors.white[800]),
       },
