@@ -1,7 +1,5 @@
 import { useCallback, useState } from 'react'
 
-import { logger } from '@utilities/logging'
-
 //crc: a hook to store data in local storage
 const useLocalStorage = (key, initialValue) => {
   //State to store the value
@@ -14,7 +12,6 @@ const useLocalStorage = (key, initialValue) => {
       return item ? JSON.parse(item) : initialValue
     } catch (error) {
       // If error also return initialValue
-      logger.log(error)
       return initialValue
     }
   })
@@ -31,7 +28,6 @@ const useLocalStorage = (key, initialValue) => {
         window.localStorage.setItem(key, JSON.stringify(valueToStore))
       } catch (error) {
         // A more advanced implementation would handle the error case
-        logger.log(error)
       }
     },
     [key, storedValue]

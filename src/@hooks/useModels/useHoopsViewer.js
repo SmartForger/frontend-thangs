@@ -2,7 +2,6 @@
 import { useCallback, useEffect, useReducer, useRef } from 'react'
 import { colorHexStringToRGBArray, ensureScriptIsLoaded } from '@utilities'
 import axios from 'axios'
-import { logger } from '@utilities/logging'
 import { track } from '@utilities/analytics'
 import * as path from 'path'
 
@@ -11,7 +10,8 @@ const REACT_APP_MODEL_BUCKET = process.env.REACT_APP_MODEL_BUCKET
 
 const debug = (...args) => {
   if (process.env.REACT_APP_DEBUG) {
-    logger.debug(...args)
+    // eslint-disable-next-line no-console
+    console.log('debug', ...args)
   }
 }
 
@@ -131,7 +131,6 @@ const useHoopsViewer = ({ modelFilename }) => {
         }
       })
       .catch(err => {
-        logger.error('Failure initializing Viewer:', err)
         track('HOOPS FailureInitViewer', { error: JSON.stringify(err) })
         if (isActiveEffect) {
           doTransition(TRANSITIONS.Error)
@@ -159,7 +158,7 @@ const useHoopsViewer = ({ modelFilename }) => {
         try {
           hoopsViewerRef.current.shutdown()
         } catch (e) {
-          logger.error('HWV failed to shutdown:', e)
+          return
         } finally {
           hoopsViewerRef.current = null
         }
@@ -253,7 +252,7 @@ const useHoopsViewer = ({ modelFilename }) => {
         model.setNodesFaceColor(nodeIds, hColor)
       }
     } catch (e) {
-      logger.error('Caught HOOPS error setting color:', e)
+      return
     }
   }, [])
 
@@ -271,7 +270,7 @@ const useHoopsViewer = ({ modelFilename }) => {
         hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.XRay)
         break
       default:
-        logger.error('Unsupported draw mode!', modeName)
+        return
     }
   }, [])
 

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader'
-import { logger } from '@utilities/logging'
 
 const useStl = url => {
   const [data, setData] = useState(null)
@@ -24,8 +23,6 @@ const useStl = url => {
         setData(geometry)
         setLoading(false)
       } catch (e) {
-        logger.error('Could not load model data', e)
-
         setError(e)
       }
     }

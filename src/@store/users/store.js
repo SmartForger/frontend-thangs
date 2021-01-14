@@ -3,7 +3,6 @@ import api from '@services/api'
 import { STATUSES, getStatusState } from '@store/constants'
 import { authenticationService } from '@services'
 import * as types from '@constants/storeEventTypes'
-import { logger } from '@utilities/logging'
 
 const noop = () => null
 
@@ -30,7 +29,7 @@ export default store => {
     ...state,
     [atom]: {
       ...state[atom],
-      ...getStatusState(status), 
+      ...getStatusState(status),
       ...(data && { data }),
     },
   }))
@@ -81,7 +80,6 @@ export default store => {
           (error.response && error.response.data && error.response.data.message) ||
             'Something has gone wrong. Please try again'
         )
-        logger.error('Error when trying to update the user', error)
       } else {
         store.dispatch(types.FETCH_CURRENT_USER, { onFinish })
       }
@@ -151,7 +149,7 @@ export default store => {
     store.dispatch(types.CHANGE_USER_STATUS, {
       status: STATUSES.LOADED,
       atom: `user-${id}`,
-      data: {...user},
+      data: { ...user },
     })
   })
 

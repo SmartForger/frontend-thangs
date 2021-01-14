@@ -3,7 +3,6 @@ import * as R from 'ramda'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import { STATUSES, getStatusState } from '@store/constants'
-import { logger } from '@utilities/logging'
 import { track } from '@utilities/analytics'
 import { removeModel, updateLike } from './updater'
 
@@ -68,7 +67,6 @@ export default store => {
           atom: `model-${id}`,
         })
         onError(error.message)
-        logger.error('Error when trying to update the model', error)
       } else {
         onFinish()
         store.dispatch(types.CHANGE_MODEL_STATUS, {
@@ -102,7 +100,6 @@ export default store => {
           atom: `model-${id}`,
         })
         onError(error.message)
-        logger.error('Error when trying to update the model', error)
       } else {
         onFinish()
         store.dispatch(types.CHANGE_MODEL_STATUS, {

@@ -4,7 +4,6 @@ import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
-import { logger } from '@utilities/logging'
 import TagManager from 'react-gtm-module'
 import { getWorker } from './@services/worker'
 
@@ -29,11 +28,5 @@ ReactDOM.render(<App />, document.getElementById('root'))
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister()
-
-logger.init({
-  googleCloudApiKey: process.env.REACT_APP_GOOGLE_CLOUD_ERROR_REPORTING_KEY,
-  googleCloudProjectId: process.env.REACT_APP_GOOGLE_CLOUD_PROJECT_ID,
-  environment: process.env.NODE_ENV,
-})
 
 getWorker()

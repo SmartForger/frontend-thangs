@@ -15,7 +15,6 @@ import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import * as types from '@constants/storeEventTypes'
 import { overlayview } from '@utilities/analytics'
-import { logger } from '@utilities/logging'
 import { useOverlay } from '@hooks'
 import MobileDesktopTitle from '../@components/MobileDesktopTitle'
 
@@ -226,7 +225,6 @@ const InviteUsers = ({ folderId: id }) => {
   }, [])
 
   if (!folder) {
-    logger.error(`Error loading invite overlay for ${id}`)
     return (
       <div className={c.InviteUsers}>
         <ExitIcon className={c.InviteUsers_ExitButton} onClick={closeOverlay} />

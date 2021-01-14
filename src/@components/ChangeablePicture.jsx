@@ -3,7 +3,6 @@ import ReactCrop from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 import ReactModal from 'react-modal'
 import md5 from 'md5'
-import { logger } from '@utilities/logging'
 import { Button, Pill } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -148,7 +147,6 @@ const ChangeablePicture = ({ className, disabled }) => {
     return new Promise((resolve, _reject) => {
       canvas.toBlob(blob => {
         if (!blob) {
-          logger.error('Canvas is empty')
           return
         }
         blob.name = fileName

@@ -2,7 +2,6 @@ import React, { useCallback } from 'react'
 import * as R from 'ramda'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import { logger } from '@utilities/logging'
 import { DropdownMenu, DropdownItem } from '@components/DropdownMenu'
 import NotificationsButton from './NotificationsButton'
 import { useStoreon } from 'storeon/react'
@@ -50,7 +49,6 @@ const Notifications = ({ className, myThangsMenu }) => {
         </DropdownItem>
       )
     } else if (isError && R.isEmpty(notificationsArray)) {
-      logger.error('error', error)
       return (
         <DropdownItem>
           <NoResults>

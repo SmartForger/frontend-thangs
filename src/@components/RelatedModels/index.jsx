@@ -1,7 +1,5 @@
 import React from 'react'
 import { Spinner, CardCollectionRelated, ModelCardRelated } from '@components'
-
-import { logger } from '@utilities/logging'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
@@ -44,7 +42,6 @@ const RelatedModels = ({ isLoading, isError, data = {}, className }) => {
   if (isLoading) {
     return <Spinner />
   } else if (isError) {
-    logger.error('error', isError)
     return <Spinner />
   }
   track('Related Models Shown', { matches: (data.matches && data.matches.length) || 0 })

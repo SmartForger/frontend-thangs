@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Layout } from '@components'
-import { logger } from '@utilities/logging'
 
 function ErrorMessage() {
   return (
@@ -19,11 +18,6 @@ export class ErrorBoundary extends Component {
 
   static getDerivedStateFromError(_error) {
     return { hasError: true }
-  }
-
-  componentDidCatch(error, errorInfo) {
-    // We should consider sending these errors to some logging service
-    logger.error('Uncaught error:', error, '\nMore info:', errorInfo)
   }
 
   render() {
