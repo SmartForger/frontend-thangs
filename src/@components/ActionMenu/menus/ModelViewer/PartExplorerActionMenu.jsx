@@ -17,7 +17,7 @@ import { ReactComponent as IndentArrow } from '@svg/icon-indent-arrow.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md_972, md_viewer },
+    mediaQueries: { xl, md_972, md_viewer },
   } = theme
   return {
     PartExplorerDropdown: {
@@ -86,8 +86,12 @@ const useStyles = createUseStyles(theme => {
     },
     AssemblyExplorer_Wrapper: {
       ...theme.mixins.scrollbar,
-      maxHeight: '28rem',
       overflowY: 'scroll',
+      maxHeight: '23rem',
+
+      [xl]: {
+        maxHeight: '28rem',
+      },
     },
     PartSelectorRow_Row: {
       cursor: 'pointer',
