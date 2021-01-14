@@ -1,5 +1,6 @@
 import * as types from '@constants/storeEventTypes'
 import { api, uploadFiles, cancelUpload } from '@services'
+import { track } from '@utilities/analytics'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -284,7 +285,7 @@ export default store => {
     const assemblyGroups = {}
     Object.keys(treeData).forEach(nodeId => {
       if (!treeData[nodeId].valid) return
-
+      track('New Model Uploaded')
       const [rootName] = nodeId.split('/')
 
       if (!assemblyGroups[rootName]) {
