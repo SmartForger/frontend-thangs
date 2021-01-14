@@ -37,7 +37,7 @@ const useStyles = createUseStyles(theme => {
 const Notifications = ({ className, myThangsMenu }) => {
   const c = useStyles()
   const {
-    notifications: { data = {}, isLoading, isError, error },
+    notifications: { data = {}, isLoading, isError },
   } = useStoreon('notifications')
   const { notifications: notificationsArray } = data
 
@@ -65,7 +65,7 @@ const Notifications = ({ className, myThangsMenu }) => {
     }
 
     return null
-  }, [notificationsArray, isLoading, isError, error])
+  }, [notificationsArray, isLoading, isError])
 
   const statusItem = renderStatusItem()
 
