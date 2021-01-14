@@ -157,8 +157,6 @@ const useHoopsViewer = ({ modelFilename }) => {
         debug('  ** 2: Cleanup!  HWV Shutdown! **')
         try {
           hoopsViewerRef.current.shutdown()
-        } catch (e) {
-          return
         } finally {
           hoopsViewerRef.current = null
         }
