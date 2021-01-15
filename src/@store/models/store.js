@@ -54,6 +54,7 @@ export default store => {
       store.dispatch(types.CHANGE_MODEL_STATUS, {
         status: STATUSES.SAVING,
         atom: `model-${id}`,
+        data: updatedModel,
       })
       const { error } = await api({
         method: 'PUT',
@@ -68,13 +69,14 @@ export default store => {
         })
         onError(error.message)
       } else {
-        onFinish()
         store.dispatch(types.CHANGE_MODEL_STATUS, {
           status: STATUSES.SAVED,
           atom: `model-${id}`,
+          data: updatedModel,
         })
         store.dispatch(types.FETCH_MODEL, { id })
         store.dispatch(types.FETCH_THANGS, {})
+        onFinish()
       }
     }
   )

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
 
@@ -20,12 +20,12 @@ const useStyles = createUseStyles(theme => {
     },
     SearchBar_Wrapper: {
       alignItems: 'center',
-      display: 'flex',
-      position: 'relative',
-      width: '100%',
-      margin: '0 1rem 1rem',
       background: theme.colors.purple[800],
       borderRadius: '.5rem',
+      display: 'flex',
+      margin: '0 1rem 1rem',
+      position: 'relative',
+      width: '100%',
 
       [md]: {
         margin: 0,
@@ -34,14 +34,14 @@ const useStyles = createUseStyles(theme => {
       '& input': {
         background: theme.colors.purple[800],
         border: 'none',
-        outline: 'none',
         fontSize: '1rem',
-        padding: '.5rem .75rem .5rem 2.25rem',
         lineHeight: '1.5rem',
+        outline: 'none',
+        padding: '.5rem .75rem .5rem 2.25rem',
 
         '&::placeholder': {
-          fontSize: '1rem',
           color: theme.colors.grey[500],
+          fontSize: '1rem',
           fontWeight: 500,
         },
         '&:focus, &:active': {
@@ -61,10 +61,10 @@ const useStyles = createUseStyles(theme => {
     SearchBar_Form: {
       display: 'flex',
       flexDirection: 'row',
-      width: '100%',
       justifyContent: 'flex-start',
-      minWidth: '15rem',
       margin: '0 auto',
+      minWidth: '15rem',
+      width: '100%',
 
       [md]: {
         width: '80%',
@@ -98,22 +98,22 @@ const useStyles = createUseStyles(theme => {
       },
     },
     SearchBar_SearchActionIcon: {
+      cursor: 'pointer',
       position: 'absolute',
       right: '.75rem',
-      cursor: 'pointer',
     },
     SearchBar_UploadBar: {
-      width: 18,
-      display: 'flex',
       alignItems: 'center',
-      flexDirection: 'row',
       color: theme.colors.gold[500],
+      cursor: 'pointer',
+      display: 'flex',
+      flexDirection: 'row',
       overflow: 'hidden',
-      transition: 'width 1.4s',
-      whiteSpace: 'nowrap',
       position: 'absolute',
       right: '2.75rem',
-      cursor: 'pointer',
+      transition: 'width 1.4s',
+      whiteSpace: 'nowrap',
+      width: 18,
 
       '& path, & polygon': {
         fill: theme.colors.gold[500],
@@ -145,13 +145,20 @@ const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
   const [searchTerm, setSearchTerm] = useState(undefined)
   const [showUploadText, setShowUploadText] = useState(false)
 
-  const handleSearchSubmit = e => {
-    e.preventDefault()
-    if (searchTerm) {
-      history.push(`/search/${encodeURIComponent(searchTerm)}`)
-      setOverlayOpen(false)
-    }
-  }
+  const handleSearchSubmit = useCallback(
+    e => {
+      e.preventDefault()
+      if (searchTerm) {
+        history.push(`/search/${encodeURIComponent(searchTerm)}`)
+        setOverlayOpen(false)
+      }
+    },
+    [history, searchTerm, setOverlayOpen]
+  )
+
+  const handleSearchByModel = useCallback(() => {
+    setOverlay({ isOpen: true, template: 'searchByUpload' })
+  }, [setOverlay])
 
   useEffect(() => {
     let timeout1, timeout2
@@ -165,8 +172,8 @@ const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
     }
 
     return () => {
-      clearTimeout(timeout2)
       clearTimeout(timeout1)
+      clearTimeout(timeout2)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -196,7 +203,7 @@ const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
                 className={classnames(c.SearchBar_UploadBar, {
                   [c.SearchBar_UploadBar__expand]: showUploadText,
                 })}
-                onClick={() => setOverlay({ isOpen: true, template: 'searchByUpload' })}
+                onClick={handleSearchByModel}
                 title={t('header.searchUploadText')}
               >
                 <div className={classnames(c.SearchBar_UploadIcon)}>

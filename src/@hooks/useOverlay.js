@@ -43,7 +43,7 @@ const useOverlayProvider = () => {
     (state, action) => {
       switch (action.type) {
         case 'all':
-          return { ...state, ...action.payload }
+          return { ...action.payload }
         case 'open':
           return { ...state, isOpen: action.payload }
         case 'hidden':
