@@ -51,6 +51,7 @@ export default store => {
     types.UPDATE_MODEL,
     async (_, { id, model: updatedModel, onError = noop, onFinish = noop }) => {
       if (R.isNil(id)) return
+      const oldModel = (store[`model-${id}`] && store[`model-${id}`].data) || {}
       store.dispatch(types.CHANGE_MODEL_STATUS, {
         status: STATUSES.SAVING,
         atom: `model-${id}`,
@@ -66,6 +67,7 @@ export default store => {
         store.dispatch(types.CHANGE_MODEL_STATUS, {
           status: STATUSES.FAILURE,
           atom: `model-${id}`,
+          data: oldModel,
         })
         onError(error.message)
       } else {
