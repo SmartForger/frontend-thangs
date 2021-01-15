@@ -25,7 +25,6 @@ export const MODEL_FILE_EXTS = [
   '.x_b', // ParaSolid_Binary
   '.x_t', // ParaSolid
   '.xcgm',
-  '.xml', // XMLEBOM
   '.asm',
   '.par',
 ]
