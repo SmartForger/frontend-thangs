@@ -430,7 +430,7 @@ const PartExplorerActionMenu = ({ onChange = noop, selectedValue, partList }) =>
       TargetComponent={PartExplorerTarget}
       TargetComponentProps={targetProps}
       isAutoClosed={false}
-      isOpenByDefault={true}
+      isOpenByDefault={false}
     />
   )
 }
