@@ -5,7 +5,6 @@ import axios from 'axios'
 import { track } from '@utilities/analytics'
 import * as path from 'path'
 
-const MODEL_PREP_TIMEOUT = 180000
 const REACT_APP_MODEL_BUCKET = process.env.REACT_APP_MODEL_BUCKET
 
 const debug = (...args) => {
@@ -29,17 +28,13 @@ const debug = (...args) => {
  *              - - - - - > (Errored) < - - - - - -
  */
 const STATES = {
-  UnpreparedModel: 'S_UNPREPARED_MODEL',
-  PreparedModel: 'S_PREPARED_MODEL',
-  Ready: 'S_READY',
-  Errored: 'S_ERRORED',
-}
-
-const TRANSITIONS = {
-  PrepareModelDone: 'T_PREPARE_MODEL_DONE',
-  LoadModelDone: 'T_LOAD_MODEL_DONE',
-  Reset: 'T_RESET',
-  Error: 'T_ERROR',
+  INIT: 0,
+  SCRIPT_READY: 1,
+  ERROR: 2,
+  HWV_READY: 3,
+  MODEL_LOADING: 4,
+  MODEL_LOADED: 5,
+  MODEL_ERROR: 6,
 }
 
 class HoopsStatus {
@@ -51,107 +46,121 @@ class HoopsStatus {
     return this._state
   }
 
+  get isReady() {
+    return this._state > STATES.ERROR
+  }
+
+  get statusOverlayHidden() {
+    return this._state === STATES.ERROR || this._state === STATES.MODEL_LOADED
+  }
+
   get isPending() {
-    return this.state === STATES.UnpreparedModel || this.state === STATES.PreparedModel
-  }
-
-  get isUnpreparedModel() {
-    return this.state === STATES.UnpreparedModel
-  }
-
-  get isPreparedModel() {
-    return this.state === STATES.PreparedModel
+    return this._state <= STATES.MODEL_LOADING && this._state !== STATES.ERROR
   }
 
   get isError() {
-    return this.state === STATES.Errored
-  }
-
-  get isReady() {
-    return this.state === STATES.Ready
+    return this._state === STATES.ERROR || this._state === STATES.MODEL_ERROR
   }
 }
 
-const hoopsStatusReducer = (currentStatus, transition) => {
-  debug(`> Reducer Action: ${currentStatus.state} -> ${transition}`)
-  switch (transition) {
-    case TRANSITIONS.PrepareModelDone:
-      return new HoopsStatus(STATES.PreparedModel)
-    case TRANSITIONS.LoadingDone:
-      return new HoopsStatus(STATES.Ready)
-    case TRANSITIONS.Reset:
-      return new HoopsStatus(STATES.UnpreparedModel)
-    case TRANSITIONS.Error:
-      return new HoopsStatus(STATES.Errored)
-    default:
-      return currentStatus
-  }
+const hoopsStatusReducer = (currentStatus, nextStatus) => {
+  debug(`> Reducer Action: ${currentStatus.state} -> ${nextStatus}`)
+  return new HoopsStatus(nextStatus)
 }
 
 const useHoopsViewer = ({ modelFilename }) => {
   const containerRef = useRef()
   const hoopsViewerRef = useRef()
-  const [hoopsStatus, doTransition] = useReducer(
+  const [hoopsStatus, setHoopsStatus] = useReducer(
     hoopsStatusReducer,
-    new HoopsStatus(STATES.UnpreparedModel)
+    new HoopsStatus(STATES.INIT)
   )
+  const cancelTokenRef = useRef()
+  const hoopsStatusRef = useRef(new HoopsStatus(STATES.INIT))
 
-  const handleResize = useCallback(() => {
-    if (hoopsViewerRef.current && hoopsViewerRef.current.resizeCanvas) {
-      hoopsViewerRef.current.resizeCanvas()
+  const doTransition = status => {
+    setHoopsStatus(status)
+    hoopsStatusRef.current = new HoopsStatus(status)
+  }
+
+  const createHWV = () =>
+    new Promise((resolve, reject) => {
+      const viewer = new Communicator.WebViewer({
+        container: containerRef.current,
+        enginePath: '/vendors/hoops',
+        rendererType: Communicator.RendererType.Client,
+      })
+
+      viewer.setCallbacks({
+        sceneReady() {
+          viewer.view.setBackgroundColor(null, null)
+          resolve()
+        },
+        modelLoadFailure(name, reason, e) {
+          console.error('HOOPS failed loading the model:', e)
+          track('HOOPS ModelLoadFailure', { error: JSON.stringify(e) })
+          reject(e)
+        },
+      })
+
+      viewer.start()
+
+      hoopsViewerRef.current = viewer
+    })
+
+  const loadModel = useCallback(async filename => {
+    if (!hoopsStatusRef.current.isReady) {
+      return
+    }
+
+    try {
+      if (cancelTokenRef.current) {
+        cancelTokenRef.current.cancel('Getting model interrupted')
+      }
+
+      doTransition(STATES.MODEL_LOADING)
+      const modelUri = `${REACT_APP_MODEL_BUCKET}${decodeURIComponent(filename)}`
+      const endpointUri = modelUri
+        .replace(/\s/g, '_')
+        .replace(path.extname(modelUri), '.scs')
+
+      cancelTokenRef.current = axios.CancelToken.source()
+      const { data } = await axios.get(endpointUri, {
+        cancelToken: cancelTokenRef.current.token,
+        responseType: 'arraybuffer',
+      })
+
+      const model = hoopsViewerRef.current.model
+      await model.clear()
+      const rootNode = model.getAbsoluteRootNode()
+      await model.loadSubtreeFromScsBuffer(rootNode, new Uint8Array(data))
+
+      doTransition(STATES.MODEL_LOADED)
+      cancelTokenRef.current = null
+    } catch (err) {
+      try {
+        await hoopsViewerRef.current.model.clear()
+        doTransition(STATES.MODEL_ERROR)
+      } catch (err) {}
     }
   }, [])
 
   useEffect(() => {
-    debug('1. Initialize Effect')
-
-    if (!hoopsStatus.isUnpreparedModel) {
-      debug('  * 1: Bailed')
-      return
-    }
-    let isActiveEffect = true
-    const prepCancelSource = axios.CancelToken.source()
-
-    debug('  * 1: Loading Script')
     ensureScriptIsLoaded('vendors/hoops/hoops_web_viewer.js')
-      .then(async () => {
-        debug('  * 1: Preparing Model')
-        // const resp = await axios.get(`${MODEL_PREP_ENDPOINT_URI}/${modelURL}`, {
-        //   cancelToken: prepCancelSource.token,
-        // })
-
-        // if (!resp.data.ok) {
-        //   track('HOOPS ModelPreparationFailed', { error: 'Model preparation failed' })
-        //   throw new Error('Model preparation failed.')
-        // }
-
-        if (isActiveEffect) {
-          debug('  * 1: Done Prepping Model')
-          doTransition(TRANSITIONS.PrepareModelDone)
+      .then(() => createHWV())
+      .then(() => {
+        doTransition(STATES.HWV_READY)
+        if (modelFilename) {
+          setTimeout(() => {
+            loadModel(modelFilename)
+          }, 200)
         }
       })
       .catch(err => {
-        track('HOOPS FailureInitViewer', { error: JSON.stringify(err) })
-        if (isActiveEffect) {
-          doTransition(TRANSITIONS.Error)
-        }
+        console.error(err)
+        doTransition(STATES.ERROR)
       })
 
-    const timeoutId = setTimeout(() => {
-      track('HOOPS Timeout', JSON.stringify(hoopsStatus))
-      prepCancelSource.cancel('Model preparation exceeded timeout.')
-    }, MODEL_PREP_TIMEOUT)
-
-    return () => {
-      debug('  * 1: Cleanup. Cancel any pending model prep request.')
-      isActiveEffect = false
-      clearTimeout(timeoutId)
-      prepCancelSource.cancel('Model preparation canceled by user. (Effect cleanup)')
-    }
-  }, [hoopsStatus, modelFilename])
-
-  useEffect(() => {
-    debug('2. HWV Shutdown Registering Effect')
     return () => {
       if (hoopsViewerRef.current) {
         debug('  ** 2: Cleanup!  HWV Shutdown! **')
@@ -160,60 +169,13 @@ const useHoopsViewer = ({ modelFilename }) => {
         } finally {
           hoopsViewerRef.current = null
         }
-        doTransition(TRANSITIONS.Reset)
       }
     }
-  }, [modelFilename])
+  }, [])
 
   useEffect(() => {
-    debug('3. HWV Creation Effect')
-
-    debug('  * 3: Add resizer')
-    window.addEventListener('resize', handleResize)
-
-    if (!hoopsStatus.isPreparedModel) {
-      debug('  * 3: Bailed')
-      return
-    }
-
-    debug('  * 3: Create HWV')
-    let modelUri = `${REACT_APP_MODEL_BUCKET}${decodeURIComponent(modelFilename)}`
-    const viewer = new Communicator.WebViewer({
-      container: containerRef.current,
-      endpointUri: modelUri.replace(/\s/g, '_').replace(path.extname(modelUri), '.scs'),
-      enginePath: '/vendors/hoops',
-      rendererType: Communicator.RendererType.Client,
-    })
-
-    viewer.setCallbacks({
-      sceneReady() {
-        // passing "null" sets the background to transparent
-        debug('  * 3: HWV Model Load')
-        viewer.view.setBackgroundColor(null, null)
-        doTransition(TRANSITIONS.LoadingDone)
-      },
-      modelLoadFailure(name, reason, e) {
-        doTransition(TRANSITIONS.Error)
-        console.error('HOOPS failed loading the model:', e)
-        track('HOOPS ModelLoadFailure', { error: JSON.stringify(e) })
-      },
-      // This is to fix the issue with the viewer aspect ratio being
-      // off until the browser is resized or snapshot, for some reason.
-      // Calling resize on this event resizes and doesn't have any flash
-      // as far as I can see - BE
-      firstModelLoaded() {
-        handleResize()
-      },
-    })
-
-    viewer.start()
-
-    hoopsViewerRef.current = viewer
-    return () => {
-      debug('  * 3: Cleanup! remove resizer')
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [hoopsStatus, modelFilename, handleResize])
+    loadModel(modelFilename)
+  }, [modelFilename])
 
   const ensureCurrentHoopsViewer = () => {
     if (!hoopsViewerRef.current) {

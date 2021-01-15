@@ -30,9 +30,14 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'center',
       alignItems: 'center',
       position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
+      width: '100%',
+      height: '100%',
+      left: 0,
+      top: 0,
+
+      '& svg': {
+        margin: 0,
+      },
     },
     HoopsModelViewer_PlaceholderText: {
       ...theme.text.viewerLoadingText,
@@ -93,8 +98,8 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
   return (
     <div className={className}>
       <div className={c.HoopsModelViewer_WebViewContainer}>
-        <StatusIndicator status={hoops.status} />
         <div ref={containerRef} />
+        {!hoops.status.statusOverlayHidden && <StatusIndicator status={hoops.status} />}
       </div>
       {hoops.status.isReady && (
         <Toolbar
@@ -112,9 +117,7 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
 
 const StatusIndicator = ({ status }) => {
   const c = useStyles()
-  if (status.isReady) {
-    return null
-  }
+
   return (
     <div className={c.HoopsModelViewer_LoadingContainer}>
       {status.isPending ? (
