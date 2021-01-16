@@ -318,7 +318,7 @@ const VersionLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
 const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
   const c = useStyles()
   const { dispatch } = useStoreon()
-  const isFollowing = R.pathOr(false, ['owner', 'isFollowedByRequester'], model)
+  const isFollowing = R.pathOr(false, ['owner', 'isBeingFollowedByRequester'], model)
   return (
     <div className={classnames(c.Model_Row, c.Model_Detail)}>
       <ModelTitle model={model} />
