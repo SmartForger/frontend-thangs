@@ -102,10 +102,12 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       width: '100%',
+      padding: '.5rem',
 
       [md_viewer]: {
         display: 'block',
         width: 'unset',
+        padding: '0',
       },
     },
     ActionMenu__hidden__mobileOnly: {

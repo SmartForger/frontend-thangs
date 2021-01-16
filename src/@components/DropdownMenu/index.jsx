@@ -8,7 +8,7 @@ import { useExternalClick, useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md, md_viewer },
+    mediaQueries: { md },
   } = theme
 
   return {
@@ -49,13 +49,9 @@ const useStyles = createUseStyles(theme => {
     },
     DropdownMenu_ItemWrapper: {
       borderRadius: '.5rem',
-      padding: '0.5rem',
+      padding: '0',
       '&:hover': {
         backgroundColor: ({ noHover }) => (noHover ? 'none' : theme.colors.white[800]),
-      },
-
-      [md_viewer]: {
-        padding: '0',
       },
     },
     DropdownMenu_Container: {
