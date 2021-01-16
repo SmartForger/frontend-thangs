@@ -4,16 +4,16 @@ const shouldTrack = () => apiKey !== undefined
 
 const initialize = () => {
   if (shouldTrack()) {
-    ;(function (p, e, n, d, o) {
+    (function(p, e, n, d, o) {
       var v, w, x, y, z
       o = p[d] = p[d] || {}
       o._q = []
       v = ['initialize', 'identify', 'updateOptions', 'pageLoad']
       for (w = 0, x = v.length; w < x; ++w)
-        (function (m) {
+        (function(m) {
           o[m] =
             o[m] ||
-            function () {
+            function() {
               o._q[m === v[0] ? 'unshift' : 'push'](
                 [m].concat([].slice.call(arguments, 0))
               )
@@ -41,21 +41,21 @@ const identify = (user, options = {}) => {
 
   const userDetails = user
     ? {
-        visitor: {
-          id: user.id,
-          name: user.username,
-          email: user.email,
-          inviteCode: options.inviteCode || undefined,
-        },
-        // Accounts are a separate concept in Pendo's system, which group many
-        // users. Currently we don't have a concept for this, so we can just
-        // reuse user details.
-        account: {
-          id: user.id,
-          name: user.username,
-          inviteCode: options.inviteCode || undefined,
-        },
-      }
+      visitor: {
+        id: user.id,
+        name: user.username,
+        email: user.email,
+        inviteCode: options.inviteCode || undefined,
+      },
+      // Accounts are a separate concept in Pendo's system, which group many
+      // users. Currently we don't have a concept for this, so we can just
+      // reuse user details.
+      account: {
+        id: user.id,
+        name: user.username,
+        inviteCode: options.inviteCode || undefined,
+      },
+    }
     : {}
   window.pendo.identify(userDetails)
 }

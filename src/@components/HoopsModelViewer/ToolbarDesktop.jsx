@@ -13,7 +13,7 @@ import {
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as ResetIcon } from '@svg/icon-reset.svg'
-import { ReactComponent as CameraDesktopIcon } from '@svg/icon-camera-desktop.svg'
+// import { ReactComponent as CameraDesktopIcon } from '@svg/icon-camera-desktop.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -109,7 +109,7 @@ const Toolbar = ({
   onDrawChange,
   onResetView,
   onSliderChange,
-  onSnapshot,
+  // onSnapshot,
   onViewChange,
   partList,
   selectedModel,

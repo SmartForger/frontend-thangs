@@ -9,7 +9,7 @@ import {
 } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
-import { ReactComponent as CameraIcon } from '@svg/icon-camera.svg'
+// import { ReactComponent as CameraIcon } from '@svg/icon-camera.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -107,7 +107,7 @@ const Toolbar = ({
   onColorChange,
   onDrawChange,
   onSliderChange,
-  onSnapshot,
+  // onSnapshot,
   onViewChange,
   partList,
   showPartSelector,
