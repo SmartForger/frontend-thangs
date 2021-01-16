@@ -180,7 +180,11 @@ const useHoopsViewer = ({ modelFilename }) => {
         doTransition(STATES.ERROR)
       })
 
+    window.addEventListener('resize', handleResize)
+
     return () => {
+      window.removeEventListener('resize', handleResize)
+
       if (hoopsViewerRef.current) {
         debug('  ** 2: Cleanup!  HWV Shutdown! **')
         try {
