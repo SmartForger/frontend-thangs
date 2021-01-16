@@ -83,6 +83,17 @@ const useHoopsViewer = ({ modelFilename }) => {
     hoopsStatusRef.current = new HoopsStatus(status)
   }
 
+  const handleResize = useCallback(() => {
+    if (
+      hoopsViewerRef &&
+      hoopsViewerRef.current &&
+      hoopsViewerRef.current.resizeCanvas &&
+      typeof hoopsViewerRef.current.resizeCanvas === 'function'
+    ) {
+      hoopsViewerRef.current.resizeCanvas()
+    }
+  }, [])
+
   const createHWV = () =>
     new Promise((resolve, reject) => {
       const viewer = new Communicator.WebViewer({
@@ -100,6 +111,13 @@ const useHoopsViewer = ({ modelFilename }) => {
           console.error('HOOPS failed loading the model:', e)
           track('HOOPS ModelLoadFailure', { error: JSON.stringify(e) })
           reject(e)
+        },
+        // This is to fix the issue with the viewer aspect ratio being
+        // off until the browser is resized or snapshot, for some reason.
+        // Calling resize on this event resizes and doesn't have any flash
+        // as far as I can see - BE
+        firstModelLoaded() {
+          handleResize()
         },
       })
 
