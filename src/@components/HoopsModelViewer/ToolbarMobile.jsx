@@ -144,14 +144,14 @@ const Toolbar = ({
             <Spacer size={'.75rem'} />
           </>
         )}
-        <div className={c.Toolbar_Group}>
+        {/* <div className={c.Toolbar_Group}>
           <Spacer size={'1rem'} />
           <div className={c.Toolbar_Snapshot}>
             <CameraIcon onClick={onSnapshot} />
           </div>
           <Spacer size={'1rem'} />
         </div>
-        <Spacer size={'.75rem'} />
+        <Spacer size={'.75rem'} /> */}
         <div className={c.Toolbar_Group}>
           <Spacer size={'1rem'} />
           <OrientationActionMenu selectedValue={orientation} onChange={onViewChange} />

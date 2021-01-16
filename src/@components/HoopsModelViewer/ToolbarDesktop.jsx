@@ -130,14 +130,14 @@ const Toolbar = ({
             <span>Reset</span>
           </div>
         </Pill>
-        <Spacer size={'1rem'} />
+        {/* <Spacer size={'1rem'} />
         <Pill secondary onClick={onSnapshot}>
           <CameraDesktopIcon />
           <div className={c.Toolbar_ExtraWideText}>
             <Spacer size={'0.25rem'} />
             <span>Snapshot</span>
           </div>
-        </Pill>
+        </Pill> */}
         <Spacer size={'1.125rem'} />
         <div className={c.Toolbar_VerticalRule}></div>
         <Spacer size={'1.125rem'} />
