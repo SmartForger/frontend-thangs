@@ -121,7 +121,7 @@ export const ActionMenuPortal = ({ actionMenuRef, className, scrollTop, mobileOn
               <div className={c.ActionMenuContent_FullWidth}>
                 <Spacer size={'2rem'} />
                 <TitleTertiary>{actionMenuData.actionBarTitle}</TitleTertiary>
-                <Spacer size={'1rem'} />
+                <Spacer size={'1.5rem'} />
                 <ActionMenuComponent {...actionMenuData} />
               </div>
               <Spacer size={'2rem'} className={c.ActionMenuContent_NoFlex} />
