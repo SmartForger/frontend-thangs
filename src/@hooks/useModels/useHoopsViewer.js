@@ -141,6 +141,7 @@ const useHoopsViewer = ({ modelFilename }) => {
       try {
         await hoopsViewerRef.current.model.clear()
         doTransition(STATES.MODEL_ERROR)
+        // eslint-disable-next-line no-empty
       } catch (err) {}
     }
   }, [])
@@ -171,11 +172,12 @@ const useHoopsViewer = ({ modelFilename }) => {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     loadModel(modelFilename)
-  }, [modelFilename])
+  }, [loadModel, modelFilename])
 
   const ensureCurrentHoopsViewer = () => {
     if (!hoopsViewerRef.current) {
