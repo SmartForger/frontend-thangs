@@ -108,7 +108,11 @@ const Header = ({
     atom: { isLoading, data: user },
   } = useCurrentUser()
 
-  const handleClick = useCallback(() => setOverlayOpen(false), [setOverlayOpen])
+  const handleClick = useCallback(() => {
+    if (setOverlayOpen) {
+      setOverlayOpen(false)
+    }
+  }, [setOverlayOpen])
 
   useEffect(() => {
     dispatch(types.FETCH_MODELS_STATS)
