@@ -160,7 +160,7 @@ const useStyles = createUseStyles(theme => {
       right: '.375rem',
     },
     SearchBar_UploadBar: {
-      width: 18,
+      width: '1.125rem',
       display: 'flex',
       alignItems: 'center',
       flexDirection: 'row',
