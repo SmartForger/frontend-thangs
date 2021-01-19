@@ -285,7 +285,6 @@ export default store => {
     const assemblyGroups = {}
     Object.keys(treeData).forEach(nodeId => {
       if (!treeData[nodeId].valid) return
-      track('New Model Uploaded')
       const [rootName] = nodeId.split('/')
 
       if (!assemblyGroups[rootName]) {
@@ -361,6 +360,14 @@ export default store => {
         })
       }
     }
+
+    payload.forEach(model => {
+      if (model.parts && model.parts.length) {
+        model.parts.forEach(() => {
+          track('New Model Uploaded')
+        })
+      }
+    })
 
     try {
       await api({
