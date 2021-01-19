@@ -212,7 +212,7 @@ const useStyles = createUseStyles(theme => {
         '&::placeholder': {
           color: theme.colors.black[900],
           fontSize: '.875rem',
-          fontWeight: 500,
+          fontWeight: '500',
           lineHeight: '1rem',
         },
 
