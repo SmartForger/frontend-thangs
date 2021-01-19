@@ -22,13 +22,13 @@ import UploadTreeNode from './UploadTreeNode'
 const useStyles = createUseStyles(theme => {
   return {
     UploadModels_UploadZone: {
-      width: '100%',
-      height: ({ hasFile }) => (hasFile ? '11rem' : '22.25rem'),
+      alignItems: 'center',
+      border: `1px dashed ${theme.colors.white[900]}`,
+      borderRadius: '.75rem',
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
-      borderRadius: '.75rem',
-      border: `1px dashed ${theme.colors.white[900]}`,
+      height: ({ hasFile }) => (hasFile ? '11rem' : '22.25rem'),
+      width: '100%',
 
       '& h3': {
         lineHeight: '1.5rem',
@@ -36,16 +36,16 @@ const useStyles = createUseStyles(theme => {
 
       '& > div': {
         height: '100%',
-        width: '100%',
         outline: 'none',
+        width: '100%',
       },
     },
     UploadModels_UploadRow: {
       height: '100%',
     },
     UploadModels_FileTitle: {
-      display: 'flex',
       alignItems: 'center',
+      display: 'flex',
     },
     UploadModels_FileRow: {
       display: 'flex',
@@ -53,9 +53,9 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'space-between',
     },
     UploadModels_Row: {
+      alignItems: 'center',
       display: 'flex',
       flexDirection: 'row',
-      alignItems: 'center',
 
       '& svg': {
         flex: 'none',
@@ -81,10 +81,10 @@ const useStyles = createUseStyles(theme => {
       },
     },
     UploadModels_FileName: {
+      lineHeight: '1rem !important',
+      overflow: 'hidden',
       textOverflow: 'ellipsis',
       width: '16rem',
-      overflow: 'hidden',
-      lineHeight: '1rem !important',
       '&.missing': {
         color: '#DA7069',
       },
@@ -97,19 +97,19 @@ const useStyles = createUseStyles(theme => {
       padding: '0 1rem !important',
     },
     UploadModels_UploadColumn: {
-      height: '100%',
+      alignItems: 'center',
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
+      height: '100%',
       justifyContent: 'center',
     },
     UploadModels_ScrollableFiles: {
       ...theme.mixins.scrollbar,
       display: 'flex',
       flexDirection: 'column',
+      height: '10.25rem',
       overflowX: 'hidden',
       overflowY: 'scroll',
-      height: '10.25rem',
       paddingTop: '.125rem',
     },
     UploadModels_RemoveBtn: {
@@ -130,19 +130,20 @@ const useStyles = createUseStyles(theme => {
     },
     UploadModels_ErrorText: {
       ...theme.text.formErrorText,
-      marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
-      fontWeight: '500',
-      padding: '.625rem 1rem',
       borderRadius: '.5rem',
+      fontWeight: '500',
+      marginTop: '1.5rem',
+      padding: '.625rem 1rem',
+      wordBreak: 'break-word',
     },
     UploadModels_WarningText: {
-      color: '#C29C45',
-      marginTop: '1.5rem',
       backgroundColor: '#FEFAEC',
-      fontWeight: '500',
-      padding: '.625rem 1rem',
       borderRadius: '.5rem',
+      color: '#C29C45',
+      fontWeight: '500',
+      marginTop: '1.5rem',
+      padding: '.625rem 1rem',
     },
     UploadAssemblyLabel: {
       display: 'flex',
@@ -153,8 +154,8 @@ const useStyles = createUseStyles(theme => {
     },
     UploadTreeView: {
       flex: 1,
-      overflowY: 'auto',
       maxHeight: '14rem',
+      overflowY: 'auto',
 
       '& .loading': {
         width: 'calc(100% - 2rem)',

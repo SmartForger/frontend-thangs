@@ -314,7 +314,7 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
         track('MultiUpload - Rejected', { fileType: fileExt })
         setErrorMessage(
           `One or more files not supported. Supported file extensions include ${MODEL_FILE_EXTS.map(
-            e => e + ' '
+            e => ' ' + e.replace('.', '')
           )}.`
         )
       }
@@ -446,10 +446,10 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
               {!activeNode
                 ? 'Upload Files'
                 : activeNode.isAssembly && activeNode.parentId
-                ? 'Sub Assembly'
-                : activeNode.isAssembly
-                ? 'New Assembly'
-                : partFormTitle}
+                  ? 'Sub Assembly'
+                  : activeNode.isAssembly
+                    ? 'New Assembly'
+                    : partFormTitle}
             </SingleLineBodyText>
             {activeView > -1 && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />
