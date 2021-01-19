@@ -22,7 +22,7 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       justifyContent: 'spaceAround',
       transition: 'all 400ms',
-      opacity: 1,
+      opacity: '1',
     },
     Header_LandingTitle: {
       color: theme.colors.white[400],
@@ -32,7 +32,7 @@ const useStyles = createUseStyles(theme => {
       color: theme.colors.white[400],
       textAlign: 'center',
       transition: 'all 400ms',
-      opacity: 1,
+      opacity: '1',
       display: 'inline-block !important',
       maxWidth: '35rem',
 
@@ -42,7 +42,7 @@ const useStyles = createUseStyles(theme => {
     },
     Header_Carousel: {
       transition: 'all 400ms',
-      opacity: 1,
+      opacity: '1',
     },
     Header_AboutThangs: {
       display: 'flex',
@@ -53,7 +53,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Fade: {
-      opacity: 1,
+      opacity: '1',
     },
   }
 })

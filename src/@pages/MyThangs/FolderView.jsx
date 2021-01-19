@@ -123,7 +123,7 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       top: '1.2rem',
       right: 0,
-      zIndex: 1,
+      zIndex: '1',
     },
     FolderView_FileTable__mobile: {
       display: 'unset',

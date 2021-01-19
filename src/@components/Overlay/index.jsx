@@ -23,7 +23,7 @@ const useStyles = createUseStyles(_theme => {
     },
     Overlay: {
       transition: 'all 450ms',
-      opacity: 0,
+      opacity: '0',
       overflowY: 'scroll',
     },
     Overlay__shake: {

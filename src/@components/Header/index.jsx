@@ -49,11 +49,11 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       background: 'rgba(0, 0, 0, 0.5)',
       display: 'none',
-      zIndex: 0,
+      zIndex: '0',
     },
     Header_DesktopWrapper: {
       transition: 'all 450ms',
-      opacity: 1,
+      opacity: '1',
     },
     Header_MobileOnly: {
       display: 'flex',

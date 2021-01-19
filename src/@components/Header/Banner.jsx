@@ -5,7 +5,7 @@ const useStyles = createUseStyles(theme => {
   return {
     Banner: {},
     Banner_TopRowText: {
-      fontWeight: 600,
+      fontWeight: '600',
       lineHeight: '1.5rem',
       textAlign: 'center',
       color: theme.colors.black[500],

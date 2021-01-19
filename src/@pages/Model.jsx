@@ -170,7 +170,7 @@ const useStyles = createUseStyles(theme => {
       '& > span': {
         display: 'flex',
         alignItems: 'center',
-        fontWeight: 500,
+        fontWeight: '500',
         marginBottom: '.5rem',
         '&:last-of-type': {
           marginBottom: 0,

@@ -24,7 +24,7 @@ const useStyles = createUseStyles(theme => {
 
       '& > p': {
         margin: 0,
-        fontWeight: 500,
+        fontWeight: '500',
         whiteSpace: 'nowrap',
 
         [md]: {

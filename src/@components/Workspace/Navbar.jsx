@@ -46,7 +46,7 @@ const useStyles = createUseStyles(theme => {
       height: '100%',
       position: 'absolute',
       width: '100%',
-      zIndex: 1,
+      zIndex: '1',
 
       [md]: {
         display: 'flex',
@@ -66,7 +66,7 @@ const useStyles = createUseStyles(theme => {
     },
     WorkspaceNavbar_AddWrapper: {
       position: 'relative',
-      zIndex: 2,
+      zIndex: '2',
 
       [md]: {
         marginLeft: '1rem',

@@ -47,7 +47,7 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
       '&.selected': {
         '& g[opacity]': {
-          opacity: 1,
+          opacity: '1',
         },
       },
       display: 'none',

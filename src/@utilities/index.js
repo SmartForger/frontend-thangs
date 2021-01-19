@@ -15,6 +15,7 @@ export const colorHexStringToRGBArray = colorStr =>
     .map(tuple => parseInt(tuple, 16))
 
 export const numberWithCommas = x => {
+  if (!x) return undefined
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 

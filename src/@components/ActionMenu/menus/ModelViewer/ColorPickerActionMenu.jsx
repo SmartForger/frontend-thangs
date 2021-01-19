@@ -38,7 +38,7 @@ const useStyles = createUseStyles(theme => {
         top: 'calc(100% - 1px)',
         transform: 'translateX(-50%)',
         width: 0,
-        zIndex: 1,
+        zIndex: '1',
       },
     },
     ColorPickerMenu_Wrapper: {
@@ -59,7 +59,7 @@ const useStyles = createUseStyles(theme => {
     ColorPickerMenu_HiddenInput: {
       height: '2.5rem',
       left: 0,
-      opacity: 0,
+      opacity: '0',
       position: 'absolute',
       top: 0,
       width: '100%',

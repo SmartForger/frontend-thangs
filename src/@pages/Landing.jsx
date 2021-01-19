@@ -47,7 +47,7 @@ const useStyles = createUseStyles(theme => {
     Landing_TextContainer: {
       maxWidth: theme.variables.maxWidth,
       width: '100%',
-      zIndex: 2,
+      zIndex: '2',
     },
     Landing_PromotionalText: {
       fontFamily: theme.variables.fonts.headerFont,

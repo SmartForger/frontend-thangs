@@ -43,7 +43,7 @@ const useStyles = createUseStyles(theme => {
       maxWidth: 'calc(100% - 7.375rem)',
       width: '100%',
       borderRadius: '.5rem .5rem 0 0',
-      zIndex: 1,
+      zIndex: '1',
     },
   }
 })

@@ -62,7 +62,7 @@ const useStyles = createUseStyles(theme => {
       ...theme.text.formErrorText,
       marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
-      fontWeight: 500,
+      fontWeight: '500',
       padding: '.625rem 1rem',
       borderRadius: '.5rem',
     },
@@ -90,8 +90,8 @@ const FolderForm = ({
   const isPublic = !R.isEmpty(parentFolder)
     ? parentFolder.isPublic
     : !R.isEmpty(folder)
-      ? folder.isPublic
-      : true
+    ? folder.isPublic
+    : true
   const initialState = {
     id: id,
     name: name ? getFolderName(name) : '',

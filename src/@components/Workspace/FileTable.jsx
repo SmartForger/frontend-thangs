@@ -172,7 +172,7 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       top: 0,
       right: 0,
-      zIndex: 1,
+      zIndex: '1',
     },
     FileTable_UploadZone: {
       [md]: {

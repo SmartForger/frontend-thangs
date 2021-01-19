@@ -28,7 +28,7 @@ const useStyles = createUseStyles(theme => {
         cursor: 'not-allowed',
         opacity: '0.8',
         '&:hover': {
-          opacity: 1,
+          opacity: '1',
         },
       },
     },

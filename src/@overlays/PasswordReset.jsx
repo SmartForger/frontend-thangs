@@ -79,7 +79,7 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       top: '2rem',
       right: '2rem',
-      zIndex: 4,
+      zIndex: '4',
       cursor: 'pointer',
       fill: theme.colors.black[500],
     },

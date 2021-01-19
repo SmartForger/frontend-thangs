@@ -29,7 +29,7 @@ const useStyles = createUseStyles(theme => {
             height: '1.875rem !important',
           },
         },
-      }
+      },
     },
     ModelCard_Thumbnail: {
       MS: {
@@ -110,7 +110,7 @@ const useStyles = createUseStyles(theme => {
       '&:hover': {
         transition: 'all 400ms',
         boxShadow: '0px 20px 80px rgba(0, 0, 0, 0.2)',
-        zIndex: 1,
+        zIndex: '1',
       },
     },
     ModelCard_UserLine: {
@@ -119,19 +119,19 @@ const useStyles = createUseStyles(theme => {
       marginRight: '1.25rem',
 
       '@media (min-width: 490px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_UserLine.DS
+        ...MQ_DEPEND_PROPS.ModelCard_UserLine.DS,
       },
 
       '@media (min-width: 736px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_UserLine.MS
+        ...MQ_DEPEND_PROPS.ModelCard_UserLine.MS,
       },
 
       '@media (min-width: 964px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_UserLine.DS
-      },  
+        ...MQ_DEPEND_PROPS.ModelCard_UserLine.DS,
+      },
 
       [xxl]: {
-        ...MQ_DEPEND_PROPS.ModelCard_UserLine.DB
+        ...MQ_DEPEND_PROPS.ModelCard_UserLine.DB,
       },
     },
     ModelCard_Thumbnail: {
@@ -141,15 +141,15 @@ const useStyles = createUseStyles(theme => {
       ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.DS,
 
       '@media (min-width: 736px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.MS
+        ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.MS,
       },
 
       '@media (min-width: 964px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.DS
-      },  
+        ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.DS,
+      },
 
       [xxl]: {
-        ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.DB
+        ...MQ_DEPEND_PROPS.ModelCard_Thumbnail.DB,
       },
     },
     ModelCard_Footer: {
@@ -160,23 +160,23 @@ const useStyles = createUseStyles(theme => {
         marginTop: '.375rem',
       },
       '@media (min-width: 490px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_Footer.DS
+        ...MQ_DEPEND_PROPS.ModelCard_Footer.DS,
       },
 
       '@media (min-width: 736px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_Footer.MS
+        ...MQ_DEPEND_PROPS.ModelCard_Footer.MS,
       },
 
       '@media (min-width: 964px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_Footer.DS
-      },  
+        ...MQ_DEPEND_PROPS.ModelCard_Footer.DS,
+      },
 
       [xxl]: {
-        ...MQ_DEPEND_PROPS.ModelCard_Footer.DB
+        ...MQ_DEPEND_PROPS.ModelCard_Footer.DB,
       },
     },
     ModelCard_Name: {
-      fontWeight: 500,
+      fontWeight: '500',
       fontSize: '.875rem',
       color: theme.colors.black[100],
 
@@ -185,19 +185,19 @@ const useStyles = createUseStyles(theme => {
       textOverflow: 'ellipsis',
       overflow: 'hidden',
       '@media (min-width: 490px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_Name.DS
+        ...MQ_DEPEND_PROPS.ModelCard_Name.DS,
       },
 
       '@media (min-width: 736px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_Name.MS
+        ...MQ_DEPEND_PROPS.ModelCard_Name.MS,
       },
 
       '@media (min-width: 964px)': {
-        ...MQ_DEPEND_PROPS.ModelCard_Name.DS
-      },  
+        ...MQ_DEPEND_PROPS.ModelCard_Name.DS,
+      },
 
       [xxl]: {
-        ...MQ_DEPEND_PROPS.ModelCard_Name.DB
+        ...MQ_DEPEND_PROPS.ModelCard_Name.DB,
       },
     },
 
@@ -240,12 +240,10 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const ModelCard = (props) => {
+const ModelCard = props => {
   const c = useStyles()
- 
-  return (
-    <ModelCardBase c={c} {...props} />
-  )
+
+  return <ModelCardBase c={c} {...props} />
 }
 
 export default ModelCard

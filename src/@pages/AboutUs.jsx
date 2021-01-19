@@ -99,7 +99,7 @@ const useStyles = createUseStyles(theme => {
       background: theme.colors.purple[900],
       '& > h1, & > span': {
         color: theme.colors.white[400],
-        zIndex: 1,
+        zIndex: '1',
         textAlign: 'center',
       },
       '& > div': {

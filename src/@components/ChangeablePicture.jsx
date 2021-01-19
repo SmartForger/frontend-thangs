@@ -66,7 +66,7 @@ const useModalOverlayStyles = createUseStyles(_theme => {
         right: 0,
         bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.75)',
-        zIndex: 2,
+        zIndex: '2',
       },
       '.ReactCrop__image': {
         maxHeight: '80vh',

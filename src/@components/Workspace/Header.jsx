@@ -17,7 +17,7 @@ const useStyles = createUseStyles(theme => {
       backgroundColor: theme.colors.white[400],
       display: 'flex',
       flexDirection: 'column',
-      zIndex: 2,
+      zIndex: '2',
 
       [md]: {
         position: 'fixed',

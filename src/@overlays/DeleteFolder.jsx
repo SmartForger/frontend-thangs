@@ -44,7 +44,7 @@ const useStyles = createUseStyles(theme => {
       top: '2rem',
       right: '2rem',
       cursor: 'pointer',
-      zIndex: 4,
+      zIndex: '4',
       position: 'absolute',
     },
     DeleteFolder_ViewerWrapper: {
@@ -81,7 +81,7 @@ const useStyles = createUseStyles(theme => {
       left: 0,
       bottom: 0,
       backgroundColor: 'rgba(0,0,0,0.29)',
-      zIndex: 5,
+      zIndex: '5',
       borderRadius: '1rem',
       display: 'flex',
     },

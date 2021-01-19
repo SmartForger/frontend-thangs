@@ -129,7 +129,7 @@ const useStyles = createUseStyles(theme => {
       bottom: 0,
       left: 0,
       right: 'auto',
-      zIndex: 0,
+      zIndex: '0',
       [md]: {
         left: 'auto',
         right: 0,
@@ -139,7 +139,7 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       top: '2rem',
       right: '2rem',
-      zIndex: 4,
+      zIndex: '4',
       cursor: 'pointer',
 
       '& path': {
@@ -260,8 +260,8 @@ const SignInForm = ({
                 {authFailed
                   ? 'Something went wrong. Please try again'
                   : sessionExpired
-                    ? 'Session Expired. Please sign back in to continue'
-                    : signinErrorMessage}
+                  ? 'Session Expired. Please sign back in to continue'
+                  : signinErrorMessage}
               </FormError>
               <Spacer size='1rem' />
             </>

@@ -33,7 +33,7 @@ const useStyles = createUseStyles(theme => {
     CommentsForModel_CommentBody: {
       color: theme.colors.black[500],
       fontSize: '1rem',
-      fontWeight: 500,
+      fontWeight: '500',
       lineHeight: '1.5rem',
       margin: '0.25rem 3.5rem 0',
     },
@@ -62,7 +62,7 @@ const useStyles = createUseStyles(theme => {
       padding: '0 .5rem',
       position: 'relative',
       cursor: 'pointer',
-      
+
       '& > svg': {
         padding: '.25rem',
         borderRadius: '.25rem',
@@ -77,7 +77,7 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       top: 0,
       right: 0,
-      zIndex: 1,
+      zIndex: '1',
     },
     CommentsForModel_UserInline: {
       '& > span': {

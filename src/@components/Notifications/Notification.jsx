@@ -28,7 +28,7 @@ const useStyles = createUseStyles(theme => {
     Notification_Verb: {
       ...theme.text.commentPostedText,
       textTransform: 'capitalize',
-      fontWeight: 600,
+      fontWeight: '600',
     },
     Notification_TargetName: {
       ...theme.text.commentPostedText,

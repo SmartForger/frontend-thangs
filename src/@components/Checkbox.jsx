@@ -20,7 +20,7 @@ const useStyles = createUseStyles(theme => {
 
       '& input': {
         position: 'absolute',
-        opacity: 0,
+        opacity: '0',
         cursor: 'pointer',
         height: 0,
         width: 0,
@@ -55,7 +55,7 @@ const useStyles = createUseStyles(theme => {
     },
     Checkbox: {
       position: 'absolute',
-      opacity: 0,
+      opacity: '0',
       cursor: 'pointer',
       height: 0,
       width: 0,

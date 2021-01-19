@@ -30,7 +30,7 @@ const useStyles = createUseStyles(theme => {
       '&:hover': {
         '& div > span': {
           [lg]: {
-            opacity: 1,
+            opacity: '1',
           },
         },
 
@@ -57,7 +57,7 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
 
       [lg]: {
-        opacity: 0,
+        opacity: '0',
       },
     },
     SearchCard_SearchType: {

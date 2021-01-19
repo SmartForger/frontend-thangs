@@ -44,7 +44,7 @@ const useStyles = createUseStyles(theme => {
         '&::placeholder': {
           fontSize: '1rem',
           color: theme.colors.grey[300],
-          fontWeight: 500,
+          fontWeight: '500',
           lineHeight: '1rem',
         },
         '&:focus, &:active': {

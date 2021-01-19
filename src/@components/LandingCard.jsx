@@ -27,8 +27,8 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '1rem',
       padding: '.5rem .5rem .25rem .5rem',
       backgroundColor: theme.colors.white[400],
-      zIndex: 1,
-      opacity: 0,
+      zIndex: '1',
+      opacity: '0',
       visibility: 'hidden',
       transition: 'all 450ms',
 

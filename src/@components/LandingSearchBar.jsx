@@ -20,16 +20,16 @@ const useStyles = createUseStyles(theme => {
   return {
     LandingSearchBar: {
       maxWidth: '44rem',
-      opacity: 1,
+      opacity: '1',
       position: 'relative',
       top: 0,
       transition: 'all 450ms',
       width: '100%',
-      zIndex: 1,
+      zIndex: '1',
     },
 
     LandingSearchBar_minimized: {
-      opacity: 1,
+      opacity: '1',
       top: 0,
     },
 
@@ -100,7 +100,7 @@ const useStyles = createUseStyles(theme => {
         '&::placeholder': {
           fontSize: '1rem',
           color: theme.colors.grey[500],
-          fontWeight: 500,
+          fontWeight: '500',
         },
         '&:focus, &:active': {
           color: theme.variables.colors.textInput,

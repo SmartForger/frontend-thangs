@@ -60,12 +60,12 @@ const useStyles = createUseStyles(theme => {
     },
     AssemblyInfo_RemoveBtn: {
       cursor: 'pointer',
-      zIndex: 1,
+      zIndex: '1',
     },
     AssemblyInfo_ErrorText: {
       ...theme.text.formErrorText,
       backgroundColor: theme.variables.colors.errorTextBackground,
-      fontWeight: 500,
+      fontWeight: '500',
       padding: '.625rem 1rem',
       borderRadius: '.5rem',
     },

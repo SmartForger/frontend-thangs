@@ -6,7 +6,7 @@ import { AddMenu } from '@components'
 const useStyles = createUseStyles(() => {
   return {
     ContextMenu: {
-      zIndex: 2,
+      zIndex: '2',
     },
   }
 })

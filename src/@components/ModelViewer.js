@@ -47,7 +47,7 @@ const useStyles = createUseStyles(theme => {
     },
     ModelViewer_ControlText: {
       marginRight: '1rem',
-      fontWeight: 500,
+      fontWeight: '500',
       fontSize: '75rem',
       color: theme.variables.colors.viewerControlText,
     },

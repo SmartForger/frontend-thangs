@@ -77,7 +77,7 @@ const useStyles = createUseStyles(theme => {
     },
     Signup_SignUpPromoSection: {
       width: '100%',
-      zIndex: 2,
+      zIndex: '2',
 
       [md]: {
         width: '21.75rem',
@@ -152,7 +152,7 @@ const useStyles = createUseStyles(theme => {
       bottom: 0,
       left: 0,
       right: 'auto',
-      zIndex: 0,
+      zIndex: '0',
       [md]: {
         left: 'auto',
         right: 0,
@@ -162,7 +162,7 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       top: '2rem',
       right: '2rem',
-      zIndex: 4,
+      zIndex: '4',
       cursor: 'pointer',
 
       '& path': {

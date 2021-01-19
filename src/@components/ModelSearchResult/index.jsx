@@ -69,14 +69,14 @@ const useStyles = createUseStyles(theme => {
     ModelSearchResult_Name: {
       fontSize: '1.125rem',
       lineHeight: '1.125rem',
-      fontWeight: 600,
+      fontWeight: '600',
       marginTop: '.5rem',
       color: theme.colors.purple[900],
     },
     ModelSearchResult_Description: {
       fontSize: '1rem',
       lineHeight: '1.5rem',
-      fontWeight: 500,
+      fontWeight: '500',
       marginTop: '.25rem',
       color: theme.colors.grey[700],
     },
@@ -135,10 +135,10 @@ const useStyles = createUseStyles(theme => {
       },
     },
     ModelSearchResult_ExternalLink: {
-      zIndex: 1,
+      zIndex: '1',
     },
     ModelSearchResult_ThangsLink: {
-      zIndex: 1,
+      zIndex: '1',
     },
     ModelSearchResult_ReportModelButton: {
       '& > svg': {
@@ -148,7 +148,7 @@ const useStyles = createUseStyles(theme => {
     ModelSearchResult_FindRelatedLink: {
       marginTop: '1rem',
       fontSize: '1rem',
-      fontWeight: 500,
+      fontWeight: '500',
       lineHeight: '1rem',
       cursor: 'pointer',
       textDecoration: 'underline',

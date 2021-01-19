@@ -17,7 +17,7 @@ const useStyles = createUseStyles(theme => {
       position: 'fixed',
       right: 0,
       top: 0,
-      zIndex: 10,
+      zIndex: '10',
 
       [md]: {
         backgroundColor: ({ windowed }) =>

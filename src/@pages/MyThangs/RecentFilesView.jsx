@@ -56,7 +56,7 @@ const useStyles = createUseStyles(theme => {
     RecentFilesView_Loader: {
       width: '100%',
       height: '5rem',
-      zIndex: 1,
+      zIndex: '1',
       display: 'flex',
       alignItems: 'center',
     },

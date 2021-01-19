@@ -15,7 +15,7 @@ const useStyles = createUseStyles(theme => {
         marginLeft: '-.5rem',
       },
       '& span': {
-        fontWeight: 500,
+        fontWeight: '500',
         fontSize: '.75rem',
         lineHeight: '1rem',
         borderRadius: '100%',

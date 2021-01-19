@@ -20,17 +20,17 @@ const useStyles = createUseStyles(theme => {
       left: 0,
       right: 0,
       backgroundColor: 'rgba(0,0,0,0.6)',
-      zIndex: 1,
+      zIndex: '1',
     },
     ActionMenuPortal_Background__mobileOnly: {
       [md]: {
-        opacity: 0,
+        opacity: '0',
         visibility: 'hidden',
       },
     },
     ActionMenuPortal_Background__mobileTablet: {
       [md_viewer]: {
-        opacity: 0,
+        opacity: '0',
         visibility: 'hidden',
       },
     },

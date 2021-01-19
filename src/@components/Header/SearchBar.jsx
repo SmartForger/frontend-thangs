@@ -42,7 +42,7 @@ const useStyles = createUseStyles(theme => {
         '&::placeholder': {
           color: theme.colors.grey[500],
           fontSize: '1rem',
-          fontWeight: 500,
+          fontWeight: '500',
         },
         '&:focus, &:active': {
           background: theme.colors.purple[800],
@@ -113,7 +113,7 @@ const useStyles = createUseStyles(theme => {
       right: '2.75rem',
       transition: 'width 1.4s',
       whiteSpace: 'nowrap',
-      width: 18,
+      width: '1.125rem',
 
       '& path, & polygon': {
         fill: theme.colors.gold[500],

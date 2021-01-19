@@ -39,7 +39,7 @@ const useStyles = createUseStyles(theme => {
     VersionComment_CommentBody: {
       color: theme.colors.black[500],
       fontSize: '1rem',
-      fontWeight: 500,
+      fontWeight: '500',
       lineHeight: '1.5rem',
       margin: '0.25rem 3.5rem 0',
     },

@@ -33,7 +33,7 @@ const useStyles = createUseStyles(theme => {
       height: '0.75rem',
       width: '0.75rem',
       '& > path': {
-        fill: '#000',
+        fill: theme.colors.black[300],
       },
     },
     PartExplorerDropdown_ClickableButton: {

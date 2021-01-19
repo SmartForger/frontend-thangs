@@ -21,7 +21,7 @@ const globals = theme => {
 
       a: {
         textDecoration: 'none',
-        fontWeight: 500,
+        fontWeight: '500',
         color: theme.variables.colors.linkText,
       },
 
@@ -42,7 +42,7 @@ const globals = theme => {
       },
 
       '.ReactModal__Overlay': {
-        zIndex: 2,
+        zIndex: '2',
       },
 
       '.ReactModal__Body--open': {

@@ -19,7 +19,7 @@ const useStyles = createUseStyles(theme => {
       maxHeight: '25.5rem',
       right: '-11.75rem',
       marginTop: '1rem',
-      zIndex: 10,
+      zIndex: '10',
 
       [sm]: {
         right: '0',

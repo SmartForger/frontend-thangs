@@ -114,7 +114,7 @@ const useStyles = createUseStyles(theme => {
     },
     UploadModels_RemoveBtn: {
       cursor: 'pointer',
-      zIndex: 1,
+      zIndex: '1',
     },
     UploadModels_ButtonWrapper: {
       display: 'flex',
@@ -132,7 +132,7 @@ const useStyles = createUseStyles(theme => {
       ...theme.text.formErrorText,
       marginTop: '1.5rem',
       backgroundColor: theme.variables.colors.errorTextBackground,
-      fontWeight: 500,
+      fontWeight: '500',
       padding: '.625rem 1rem',
       borderRadius: '.5rem',
     },
@@ -140,7 +140,7 @@ const useStyles = createUseStyles(theme => {
       color: '#C29C45',
       marginTop: '1.5rem',
       backgroundColor: '#FEFAEC',
-      fontWeight: 500,
+      fontWeight: '500',
       padding: '.625rem 1rem',
       borderRadius: '.5rem',
     },

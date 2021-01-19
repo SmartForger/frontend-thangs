@@ -106,7 +106,7 @@ const useStyles = createUseStyles(theme => {
       '&:hover': {
         transition: 'all 400ms',
         boxShadow: '0px 20px 80px rgba(0, 0, 0, 0.2)',
-        zIndex: 1,
+        zIndex: '1',
       },
     },
     ModelCard_UserLine: {
@@ -140,7 +140,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     ModelCard_Name: {
-      fontWeight: 500,
+      fontWeight: '500',
       fontSize: '.875rem',
       color: theme.colors.black[100],
 

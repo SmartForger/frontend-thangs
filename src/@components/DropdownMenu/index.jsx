@@ -20,9 +20,9 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       right: '-6.5rem',
       marginTop: '.5rem',
-      zIndex: 2,
+      zIndex: '2',
       overflowY: 'auto',
-      opacity: 0,
+      opacity: '0',
       visibility: 'hidden',
       ...theme.mixins.scrollbar,
       ...theme.mixins.flexColumn,
@@ -32,7 +32,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     DropdownMenu__isOpen: {
-      opacity: 1,
+      opacity: '1',
       visibility: 'visible',
     },
     DropdownMenu_Item: {

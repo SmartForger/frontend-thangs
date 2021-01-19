@@ -11,7 +11,7 @@ const useStyles = createUseStyles(theme => {
       borderBottom: `2px solid ${theme.colors.darkgrey}`,
       transform: ({ open }) => (open ? 'translateY(-1vh)' : 'translateY(-90vh)'),
       transition: '0.5s all',
-      zIndex: 9,
+      zIndex: '9',
     },
     ShelfButton: {
       background: theme.colors.grey,

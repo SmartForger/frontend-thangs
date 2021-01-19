@@ -18,7 +18,7 @@ const useStyles = createUseStyles(theme => {
       backgroundColor: theme.colors.white[400],
       boxShadow: '0px 8px 20px 0px rgba(0, 0, 0, 0.16)',
       borderRadius: '.5rem',
-      zIndex: 2,
+      zIndex: '2',
       width: '100%',
 
       '& div': {

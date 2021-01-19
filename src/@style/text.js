@@ -6,28 +6,28 @@ export const LEXEND_DECA = 'Lexend Deca'
 export const titleBase = {
   fontFamily: MONTSERRAT,
   fontStyle: 'normal',
-  fontWeight: 600,
+  fontWeight: '600',
   letterSpacing: '-0.015em',
 }
 
 export const metadataBase = {
   fontFamily: MONTSERRAT,
   fontStyle: 'normal',
-  fontWeight: 500,
+  fontWeight: '500',
   letterSpacing: '-0.02em',
 }
 
 export const bodyBase = {
   fontFamily: MONTSERRAT,
   fontStyle: 'normal',
-  fontWeight: 500,
+  fontWeight: '500',
   letterSpacing: '-0.02em',
 }
 
 export const labelBase = {
   fontFamily: MONTSERRAT,
   fontStyle: 'normal',
-  fontWeight: 500,
+  fontWeight: '500',
   letterSpacing: '-0.02em',
 }
 
@@ -57,7 +57,7 @@ export const profileAboutText = {
 
 export const formCalloutText = {
   fontSize: '1rem',
-  fontWeight: 600,
+  fontWeight: '600',
   lineHeight: '1.5rem',
 }
 
@@ -68,7 +68,7 @@ export const subheaderText = {
 
 export const modelTitleText = {
   fontSize: '1.125rem',
-  fontWeight: 600,
+  fontWeight: '600',
   color: colors.purple[900],
   lineHeight: '1.125rem',
 }
@@ -80,13 +80,13 @@ export const darkPageTitleText = {
 }
 
 export const linkText = {
-  fontWeight: 500,
+  fontWeight: '500',
   textDecoration: 'none',
   color: colors.blue[500],
 }
 
 export const snackbarLinkText = {
-  fontWeight: 500,
+  fontWeight: '500',
   textDecoration: 'underline',
   color: colors.gold[500],
 }
@@ -105,7 +105,7 @@ export const primaryButtonText = {
 
 export const secondaryButtonText = {
   color: colors.purple[900],
-  fontWeight: 500,
+  fontWeight: '500',
 
   '& > svg, & g': {
     fill: colors.purple[900],
@@ -114,7 +114,7 @@ export const secondaryButtonText = {
 
 export const darkButtonText = {
   color: colors.white[700],
-  fontWeight: 500,
+  fontWeight: '500',
 }
 
 export const smallInfoMessageText = {
@@ -133,7 +133,7 @@ export const infoMessageText = {
 
 export const modelDetailsLabelText = {
   fontSize: '.75rem',
-  fontWeight: 600,
+  fontWeight: '600',
   color: colors.purple[400],
 }
 
@@ -146,18 +146,18 @@ export const landingPageText = {
 export const landingPageSubtext = {
   color: colors.purple[300],
   fontSize: '1rem',
-  fontWeight: 300,
+  fontWeight: '300',
   lineHeight: '1.5rem',
 }
 
 export const viewerToolbarText = {
   color: colors.grey[300],
   fontSize: '.75rem',
-  fontWeight: 500,
+  fontWeight: '500',
 }
 
 export const viewerLoadingText = {
-  fontWeight: 500,
+  fontWeight: '500',
   fontSize: '1rem',
 }
 
@@ -167,18 +167,18 @@ export const formSuccessText = {
 
 export const formErrorText = {
   color: colors.error,
-  fontWeight: 500,
+  fontWeight: '500',
 }
 
 export const thumbnailErrorText = {
   color: colors.purple[200],
-  fontWeight: 500,
+  fontWeight: '500',
 }
 
 export const thumbnailActivityCountText = {
   fontSize: '.75rem',
   color: colors.purple[900],
-  fontWeight: 500,
+  fontWeight: '500',
 }
 
 export const zeroStateText = {
@@ -199,7 +199,7 @@ export const commentPostedText = {
 
 export const commentUsername = {
   fontSize: '1rem',
-  fontWeight: 500,
+  fontWeight: '500',
 }
 
 export const howToTitle = {
@@ -215,7 +215,7 @@ export const regularText = {
 
 export const boldText = {
   fontSize: '.875rem',
-  fontWeight: 500,
+  fontWeight: '500',
   color: colors.grey[700],
 }
 

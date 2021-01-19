@@ -53,7 +53,7 @@ const useStyles = createUseStyles(theme => {
       top: '2rem',
       right: '2rem',
       cursor: 'pointer',
-      zIndex: 4,
+      zIndex: '4',
       position: 'absolute',
     },
     InviteUsers_ViewerWrapper: {

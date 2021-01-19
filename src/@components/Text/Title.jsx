@@ -26,7 +26,7 @@ const useStyles = createUseStyles(theme => {
     },
     TitleQuaternary: {
       fontSize: '.875rem',
-      fontWeight: 500,
+      fontWeight: '500',
       lineHeight: '.625rem',
     },
   }

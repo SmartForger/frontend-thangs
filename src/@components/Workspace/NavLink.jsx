@@ -28,7 +28,7 @@ const useStyles = createUseStyles(_theme => {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-      zIndex: 1,
+      zIndex: '1',
 
       '& svg': {
         transition: 'transform 150ms ease-in-out',
@@ -46,14 +46,14 @@ const useStyles = createUseStyles(_theme => {
       alignItems: 'center',
       padding: '2px 0',
       cursor: 'pointer',
-      zIndex: 1,
+      zIndex: '1',
     },
     NavLink__selected: {
       width: '18.5rem',
       height: '2.5rem',
       background: '#E2E2E7',
       position: 'absolute',
-      zIndex: 0,
+      zIndex: '0',
       left: 0,
       borderRadius: '.5rem',
     },

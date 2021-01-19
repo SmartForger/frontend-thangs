@@ -18,13 +18,13 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     ActionMenu: {
-      opacity: ({ isMobileActive }) => (isMobileActive ? '0 !important' : 1),
+      opacity: ({ isMobileActive }) => (isMobileActive ? '0 !important' : '1'),
       visibility: ({ isMobileActive }) =>
         isMobileActive ? 'hidden !important' : 'visible',
       width: 'auto !important',
 
       [md]: {
-        opacity: 1,
+        opacity: '1',
         visibility: 'visible',
       },
     },

@@ -47,7 +47,7 @@ const useStyles = createUseStyles(theme => {
       top: '1.5rem',
       right: '1.5rem',
       cursor: 'pointer',
-      zIndex: 4,
+      zIndex: '4',
       position: 'absolute',
       background: 'white',
     },
@@ -55,7 +55,7 @@ const useStyles = createUseStyles(theme => {
       top: '1.5rem',
       left: '1.5rem',
       cursor: 'pointer',
-      zIndex: 4,
+      zIndex: '4',
       position: 'absolute',
       background: 'white',
     },
@@ -81,7 +81,7 @@ const useStyles = createUseStyles(theme => {
       left: 0,
       bottom: 0,
       backgroundColor: 'rgba(0,0,0,0.29)',
-      zIndex: 5,
+      zIndex: '5',
       borderRadius: '1rem',
       display: 'flex',
     },
@@ -446,10 +446,10 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
               {!activeNode
                 ? 'Upload Files'
                 : activeNode.isAssembly && activeNode.parentId
-                  ? 'Sub Assembly'
-                  : activeNode.isAssembly
-                    ? 'New Assembly'
-                    : partFormTitle}
+                ? 'Sub Assembly'
+                : activeNode.isAssembly
+                ? 'New Assembly'
+                : partFormTitle}
             </SingleLineBodyText>
             {activeView > -1 && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />

@@ -15,21 +15,21 @@ const useStyles = createUseStyles(theme => {
     '@keyframes notificationsSlideIn': {
       from: {
         width: 0,
-        opacity: 0,
+        opacity: '0',
       },
       to: {
         width: '15rem',
-        opacity: 1,
+        opacity: '1',
       },
     },
     '@keyframes notificationsSlideOut': {
       from: {
         width: '15rem',
-        opacity: 1,
+        opacity: '1',
       },
       to: {
         width: 0,
-        opacity: 0,
+        opacity: '0',
       },
     },
     Container: {
@@ -107,7 +107,7 @@ const useStyles = createUseStyles(theme => {
       position: 'fixed',
       bottom: '3rem',
       right: '2rem',
-      zIndex: 1,
+      zIndex: '1',
     },
     BackToTop: {
       backgroundColor: theme.colors.gold[500],
@@ -116,7 +116,7 @@ const useStyles = createUseStyles(theme => {
       height: '2.5rem',
       right: '2rem',
       bottom: '6rem',
-      zIndex: 1,
+      zIndex: '1',
       position: 'fixed',
       display: 'flex',
       alignItems: 'center',

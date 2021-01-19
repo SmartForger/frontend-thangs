@@ -49,7 +49,7 @@ const useStyles = createUseStyles(theme => {
       top: '1.5rem',
       right: '1.5rem',
       cursor: 'pointer',
-      zIndex: 4,
+      zIndex: '4',
       position: 'absolute',
       background: 'white',
     },
@@ -127,7 +127,7 @@ const useStyles = createUseStyles(theme => {
     },
     PartInfo_RemoveBtn: {
       cursor: 'pointer',
-      zIndex: 1,
+      zIndex: '1',
     },
     PartInfo_ButtonWrapper: {
       display: 'flex',
@@ -141,7 +141,7 @@ const useStyles = createUseStyles(theme => {
     PartInfo_ErrorText: {
       ...theme.text.formErrorText,
       backgroundColor: theme.variables.colors.errorTextBackground,
-      fontWeight: 500,
+      fontWeight: '500',
       padding: '.625rem 1rem',
       borderRadius: '.5rem',
     },
