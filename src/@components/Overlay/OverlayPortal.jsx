@@ -112,8 +112,9 @@ const OverlayPortal = ({ className, scrollTop }) => {
                 if (
                   overlayData.onOverlayClose &&
                   typeof overlayData.onOverlayClose === 'function'
-                )
+                ) {
                   overlayData.onOverlayClose()
+                }
                 handleClose()
               }}
             >

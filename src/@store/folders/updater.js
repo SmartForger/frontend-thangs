@@ -31,7 +31,7 @@ export const createNewFolders = (newFolderData, oldFolders) => {
 //Updates a folder in folders array
 //If updateFolder has a root, it will replace the folder in the subfolders array of the root folder.
 //If updateFolder has no root, it will replace the folder in the folders array.
-export const updateFolder = (newFolder, oldFolders) => {
+export const updateFolder = (newFolder = {}, oldFolders) => {
   const { id: folderId, root } = newFolder
   const newFolders = [...oldFolders]
   if (root) {
@@ -40,7 +40,7 @@ export const updateFolder = (newFolder, oldFolders) => {
     const subFolders = [...newFolders[parentFolderIndex].subfolders]
     newFolders[parentFolderIndex].subfolders = []
     subFolders.forEach(subfolder => {
-      if (folderId.toString() === subfolder.id.toString()) {
+      if (subfolder.id && subfolder.id.toString() === folderId.toString()) {
         newFolders[parentFolderIndex].subfolders.push(newFolder)
       } else {
         newFolders[parentFolderIndex].subfolders.push(subfolder)
@@ -77,6 +77,8 @@ export const updateLike = (folderId, state, userId, isLiked) => {
     if (
       newLikes.folders &&
       newLikes.folders.length &&
+      updatedFolder &&
+      updatedFolder.id &&
       !R.find(R.propEq('id', updatedFolder.id.toString()))(newLikes.folders)
     ) {
       updatedFolder.likes = [...updatedFolder.likes, parseInt(userId)]

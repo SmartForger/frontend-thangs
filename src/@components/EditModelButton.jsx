@@ -7,7 +7,8 @@ import { track } from '@utilities/analytics'
 const EditModelButton = ({ model = {} }) => {
   const currentUserId = useCurrentUserId()
   const { setOverlay } = useOverlay()
-  const isCurrentUser = model.owner && model.owner.id.toString() === currentUserId
+  const isCurrentUser =
+    model.owner && model.owner.id && model.owner.id.toString() === currentUserId
 
   const openEditOverlay = useCallback(() => {
     setOverlay({

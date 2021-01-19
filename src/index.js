@@ -12,15 +12,17 @@ const tagManagerArgs = {
 }
 
 TagManager.initialize(tagManagerArgs)
-Sentry.init({
-  dsn: process.env.REACT_APP_SENTRY_ID,
-  autoSessionTracking: true,
-  integrations: [new Integrations.BrowserTracing()],
+if (process.env.REACT_APP_SENTRY_ID) {
+  Sentry.init({
+    dsn: process.env.REACT_APP_SENTRY_ID,
+    autoSessionTracking: true,
+    integrations: [new Integrations.BrowserTracing()],
 
-  // We recommend adjusting this value in production, or using tracesSampler
-  // for finer control
-  tracesSampleRate: 1.0,
-})
+    // We recommend adjusting this value in production, or using tracesSampler
+    // for finer control
+    tracesSampleRate: 1.0,
+  })
+}
 
 ReactDOM.render(<App />, document.getElementById('root'))
 
