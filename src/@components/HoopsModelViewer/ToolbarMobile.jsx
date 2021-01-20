@@ -99,8 +99,8 @@ const useStyles = createUseStyles(theme => {
 const Toolbar = ({
   color,
   className,
-  isAssembly = true,
-  isMultipart = true,
+  isAssembly,
+  isMultipart,
   magnitude = 0,
   mode,
   orientation,
