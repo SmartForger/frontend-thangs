@@ -40,6 +40,7 @@ const useStyles = createUseStyles(theme => {
       boxShadow: '0px 0px 8px rgba(255, 188, 0, 0.75)',
       borderRadius: 1,
       animation: '$scan 1.5s infinite alternate ease-in-out',
+      zIndex: '20',
     },
     Scanner_container: {
       position: 'relative',
