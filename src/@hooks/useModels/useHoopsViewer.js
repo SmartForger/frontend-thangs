@@ -88,7 +88,8 @@ const useHoopsViewer = ({ modelFilename }) => {
       hoopsViewerRef &&
       hoopsViewerRef.current &&
       hoopsViewerRef.current.resizeCanvas &&
-      typeof hoopsViewerRef.current.resizeCanvas === 'function'
+      typeof hoopsViewerRef.current.resizeCanvas === 'function' &&
+      hoopsStatusRef.current.isReady
     ) {
       hoopsViewerRef.current.resizeCanvas()
     }
@@ -109,7 +110,6 @@ const useHoopsViewer = ({ modelFilename }) => {
         },
         modelLoadFailure(name, reason, e) {
           console.error('HOOPS failed loading the model:', e)
-          track('HOOPS ModelLoadFailure', { error: JSON.stringify(e) })
           reject(e)
         },
         // This is to fix the issue with the viewer aspect ratio being
