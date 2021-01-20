@@ -143,6 +143,7 @@ const useStyles = createUseStyles(theme => {
     PartExplorerActionMenu: {
       bottom: '5rem !important',
       right: '-2rem !important',
+      maxHeight: '80vh',
     },
     PartSelectorRow_Thumbnail: {
       backgroundColor: theme.colors.white[400],
@@ -282,11 +283,34 @@ const PartSelectorRow = ({ part = {}, level, onClick, selectedPart = {} }) => {
   )
 }
 
-const AssemblyExplorer = ({ className, parts, onChange, selectedPart }) => {
+const AssemblyExplorer = ({
+  className,
+  parts,
+  partTree,
+  isSearchingParts,
+  onChange,
+  selectedPart,
+}) => {
+  if (isSearchingParts) {
+    return (
+      <>
+        {parts.map(part => (
+          <PartSelectorRow
+            key={part.id}
+            part={part}
+            level={0}
+            selectedPart={selectedPart}
+            onClick={() => onChange(part)}
+          />
+        ))}
+      </>
+    )
+  }
+
   return (
     <TreeView
       className={className}
-      nodes={parts}
+      nodes={partTree}
       levelPadding={20}
       defaultExpanded={parts.length < 2}
       rootCollapsible={false}
@@ -305,6 +329,7 @@ const AssemblyExplorer = ({ className, parts, onChange, selectedPart }) => {
 export const PartExplorerMenu = ({
   onChange = noop,
   partList = [],
+  partTreeData = [],
   selectedValue: selectedPart,
 }) => {
   const c = useStyles({})
@@ -345,6 +370,8 @@ export const PartExplorerMenu = ({
         <AssemblyExplorer
           className={c.AssemblyExplorer_Wrapper}
           parts={partsToDisplay}
+          partTree={partTreeData}
+          isSearchingParts={partsToDisplay.length < partList.length}
           onChange={onChange}
           selectedPart={selectedPart}
         />
@@ -396,18 +423,24 @@ export const PartExplorerTarget = ({
   )
 }
 
-const PartExplorerActionMenu = ({ onChange = noop, selectedValue, partList }) => {
+const PartExplorerActionMenu = ({
+  onChange = noop,
+  selectedValue,
+  partList,
+  partTreeData,
+}) => {
   const c = useStyles({})
   const menuProps = useMemo(() => {
     return {
       actionBarTitle: 'Select a model',
       className: c.PartExplorerActionMenu,
       partList,
+      partTreeData,
       onChange,
       selectedValue,
       tabletLayout: true,
     }
-  }, [c.PartExplorerActionMenu, onChange, partList, selectedValue])
+  }, [c.PartExplorerActionMenu, onChange, partList, partTreeData, selectedValue])
 
   const targetProps = useMemo(() => {
     return { selectedValue }

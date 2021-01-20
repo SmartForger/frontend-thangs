@@ -7,6 +7,7 @@ import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { perfTrack } from '@utilities/analytics'
+import { flattenTree } from '@utilities/tree'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -49,6 +50,7 @@ const useStyles = createUseStyles(theme => {
 const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
   const [selectedModel, setSelectedModel] = useState(null)
   const [partList, setPartList] = useState([])
+  const [partTreeData, setPartTreeData] = useState([])
   const c = useStyles()
   const { useHoopsViewer } = useModels()
   const { startTimer, getTime } = usePerformanceMetrics()
@@ -87,7 +89,8 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
     })
 
     setSelectedModel(primaryPart)
-    setPartList(model.parts)
+    setPartTreeData(model.parts)
+    setPartList(flattenTree(model.parts))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [model.id])
 
@@ -124,6 +127,7 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
           setSelectedModel={setSelectedModel}
           selectedModel={selectedModel}
           partList={partList}
+          partTreeData={partTreeData}
         />
       )}
     </div>

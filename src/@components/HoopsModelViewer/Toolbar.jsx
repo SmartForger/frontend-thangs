@@ -31,6 +31,7 @@ const Toolbar = ({
   hoops,
   model = {},
   partList = [],
+  partTreeData = [],
   setSelectedModel = noop,
   selectedModel = {},
 }) => {
@@ -113,6 +114,7 @@ const Toolbar = ({
     onSnapshot: handleSnapshot,
     onViewChange: handleViewChange,
     partList,
+    partTreeData,
     setSelectedModel,
     selectedModel,
     showPartSelector,
