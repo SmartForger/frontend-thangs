@@ -365,6 +365,8 @@ export default store => {
       if (model.parts && model.parts.length) {
         model.parts.forEach(() => {
           track('New Model Uploaded')
+        model.parts.forEach(part => {
+          track('New Model Uploaded', { filename: part.filename })
         })
       }
     })
