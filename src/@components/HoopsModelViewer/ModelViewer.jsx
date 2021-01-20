@@ -7,7 +7,6 @@ import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { perfTrack } from '@utilities/analytics'
-import { flattenTree } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -71,8 +70,24 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
     } else {
       primaryPart = model
     }
+
+    const setPartIdAndSubs = part => {
+      part.id = Math.random().toString().slice(2)
+      part.subs = part.parts
+
+      if (part.subs) {
+        part.subs.forEach(subnode => {
+          setPartIdAndSubs(subnode)
+        })
+      }
+    }
+
+    model.parts.forEach(part => {
+      setPartIdAndSubs(part)
+    })
+
     setSelectedModel(primaryPart)
-    setPartList(flattenTree(model.parts, 'parts'))
+    setPartList(model.parts)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [model.id])
 

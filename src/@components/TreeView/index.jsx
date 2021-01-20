@@ -36,6 +36,7 @@ const TreeView = ({
   levelPadding = 40,
   loading,
   defaultExpanded,
+  rootCollapsible,
 }) => {
   const c = useStyles()
 
@@ -51,6 +52,7 @@ const TreeView = ({
             level={0}
             levelPadding={levelPadding}
             defaultExpanded={defaultExpanded}
+            rootCollapsible={rootCollapsible}
           />
         ))}
       </div>

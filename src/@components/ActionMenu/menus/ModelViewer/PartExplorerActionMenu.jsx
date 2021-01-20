@@ -8,12 +8,12 @@ import {
   SingleLineBodyText,
   Tag,
   TextInput,
+  TreeView,
 } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X-sm.svg'
 import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
-import { ReactComponent as IndentArrow } from '@svg/icon-indent-arrow.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -117,6 +117,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       overflow: 'hidden',
+      flex: 1,
 
       '&:hover': {
         backgroundColor: theme.colors.white[900],
@@ -142,10 +143,6 @@ const useStyles = createUseStyles(theme => {
     PartExplorerActionMenu: {
       bottom: '5rem !important',
       right: '-2rem !important',
-
-      '& div': {
-        flex: 'none',
-      },
     },
     PartSelectorRow_Thumbnail: {
       backgroundColor: theme.colors.white[400],
@@ -245,10 +242,10 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const PartSelectorRow = ({ part = {}, onClick, selectedPart = {} }) => {
+const PartSelectorRow = ({ part = {}, level, onClick, selectedPart = {} }) => {
   const c = useStyles({})
   const { name: selectedFilename } = selectedPart
-  const { level, parts, name, newFileName } = part
+  const { parts, name, newFileName } = part
   const isAssembly = parts && parts.length > 0
   return (
     <>
@@ -258,11 +255,9 @@ const PartSelectorRow = ({ part = {}, onClick, selectedPart = {} }) => {
         })}
         title={name}
       >
-        {level > 0 && <Spacer width={`${level * 1.5}rem`} height={'2.625rem'} />}
         <div className={c.PartSelectorRow_Column} onClick={onClick}>
           <Spacer size={'.5rem'} />
           <div className={c.PartSelectorRow_Row}>
-            {level > 0 && <IndentArrow />}
             <Spacer size={'.5rem'} />
             <ModelThumbnail
               key={newFileName}
@@ -288,27 +283,22 @@ const PartSelectorRow = ({ part = {}, onClick, selectedPart = {} }) => {
 }
 
 const AssemblyExplorer = ({ className, parts, onChange, selectedPart }) => {
-  const c = useStyles({})
   return (
-    <div className={classnames(className, c.AssemblyExplorer)}>
-      {parts.map((part, index) => {
-        const handleClick = () => {
-          onChange(part)
-        }
-
-        return (
-          <React.Fragment key={`partRow_${index}`}>
-            <PartSelectorRow
-              part={part}
-              onClick={handleClick}
-              onChange={onChange}
-              selectedPart={selectedPart}
-            />
-            {index !== parts.length - 1 && <Spacer size={'.25rem'} />}
-          </React.Fragment>
-        )
-      })}
-    </div>
+    <TreeView
+      className={className}
+      nodes={parts}
+      levelPadding={20}
+      defaultExpanded={parts.length < 2}
+      rootCollapsible={false}
+      renderNode={(node, level) => (
+        <PartSelectorRow
+          part={node}
+          level={level}
+          selectedPart={selectedPart}
+          onClick={() => onChange(node)}
+        />
+      )}
+    />
   )
 }
 

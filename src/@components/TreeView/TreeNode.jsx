@@ -44,13 +44,14 @@ const useStyles = createUseStyles(_theme => {
 
 export const TreeNode = ({
   defaultExpanded = false,
+  rootCollapsible = true,
   isLastNode = false,
   level,
   levelPadding,
   node,
   renderNode,
 }) => {
-  const [expanded, setExpanded] = useState(defaultExpanded)
+  const [expanded, setExpanded] = useState(defaultExpanded || !rootCollapsible)
   const c = useStyles()
 
   const toggleExpanded = () => {
@@ -63,7 +64,7 @@ export const TreeNode = ({
     <>
       <div className={c.TreeNode_Root}>
         <div className={c.TreeNode_Row}>
-          {(isAssembly || isAssemblyPart) && (
+          {(isAssembly || isAssemblyPart) && rootCollapsible && (
             <>
               <div className={c.TreeNode_Row}>
                 <div
