@@ -17,6 +17,7 @@ const useStyles = createUseStyles(theme => {
       border: `2px solid ${theme.colors.gold[500]}`,
       cursor: ({ disabled }) => (disabled ? 'not-allowed' : 'pointer'),
       opacity: ({ disabled }) => (disabled ? '0.8' : '1'),
+      userSelect: 'none',
     },
     Pill_TextWrapper: {
       display: 'flex',
