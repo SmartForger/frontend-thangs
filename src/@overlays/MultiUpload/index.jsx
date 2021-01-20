@@ -130,7 +130,7 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
     const keys = Object.keys(treeData)
     const newTreeData = {}
     keys.forEach(key => {
-      const file = uploadFilesData[treeData[key].fileId]
+      const file = uploadedFiles.find(f => f.name === treeData[key].filename)
       newTreeData[key] = {
         ...treeData[key],
         loading: file && file.isLoading,
@@ -138,8 +138,8 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
       }
     })
 
-    const treeNodeFiles = Object.values(treeData).map(node => node.fileId)
-    const singleNodes = Object.values(uploadFilesData)
+    const treeNodeFiles = Object.values(treeData).map(node => node.filename)
+    const singleNodes = uploadedFiles
       .filter(file => file.name && !file.isError && !treeNodeFiles.includes(file.name))
       .map(file => {
         const id = '/' + file.name
@@ -158,21 +158,19 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
       })
     setSinglePartsCount(singleNodes.length)
 
-    const nodesArray = Object.values(newTreeData)
+    const nodesArray = []
     const formNode = nodeId => {
       const newNode = newTreeData[nodeId] || {}
-      newNode.subs = nodesArray
-        .filter(
-          node =>
-            node.parentId === nodeId || (nodeId === 'multipart' && node.parentId === null)
-        )
-        .map(subnode => formNode(subnode.id))
-
-      newNode.subs.sort((sub1, sub2) => {
-        const a = sub1.isAssembly ? 1 : 0
-        const b = sub2.isAssembly ? 1 : 0
-        return a - b
-      })
+      if (nodeId) {
+        nodesArray.push(newNode)
+      }
+      newNode.subs = nodeId
+        ? newNode.subIds
+          ? newNode.subIds.map(subId => formNode(subId))
+          : []
+        : Object.values(newTreeData)
+            .filter(node => !node.parentId)
+            .map(node => formNode(node.id))
 
       newNode.treeValid =
         newNode.valid &&
@@ -203,14 +201,12 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
       }
       trees.push(multipartNode)
       nodesArray.splice(-singleNodes.length, 0, multipartNode)
-    } else {
-      trees = [...trees, ...singleNodes]
     }
 
     setAllTreeNodes(nodesArray)
 
     return trees
-  }, [treeData, uploadFilesData, isAssembly, multipartName, dispatch])
+  }, [treeData, uploadedFiles, isAssembly, multipartName, dispatch])
   const activeNode = useMemo(() => allTreeNodes[activeView] || null, [
     allTreeNodes,
     activeView,
@@ -446,10 +442,10 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
               {!activeNode
                 ? 'Upload Files'
                 : activeNode.isAssembly && activeNode.parentId
-                  ? 'Sub Assembly'
-                  : activeNode.isAssembly
-                    ? 'New Assembly'
-                    : partFormTitle}
+                ? 'Sub Assembly'
+                : activeNode.isAssembly
+                ? 'New Assembly'
+                : partFormTitle}
             </SingleLineBodyText>
             {activeView > -1 && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />

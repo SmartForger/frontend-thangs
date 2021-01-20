@@ -226,7 +226,7 @@ export default store => {
           const filename = filePaths[filePaths.length - 1]
           const suffix = Math.random().toString().replace('0.', '')
           const id = rootName + '/' + node1.name + '/' + suffix
-          const file = node2.valid && uploadedFiles.find(file => file.name === filename)
+          const file = uploadedFiles.find(file => file.name === filename)
 
           const newNode = {
             id,
@@ -235,6 +235,7 @@ export default store => {
             valid: node2.valid,
             parentId,
             fileId: file ? file.id : '',
+            filename,
           }
           newTreeData[id] = newNode
 
@@ -242,6 +243,11 @@ export default store => {
             newNode.subIds = node1.subs.map((subnode, i) =>
               transformNode(subnode, node2.subs[i], newNode.id, rootName)
             )
+            newNode.subIds.sort((subId1, subId2) => {
+              const a = newTreeData[subId1].isAssembly ? 1 : 0
+              const b = newTreeData[subId2].isAssembly ? 1 : 0
+              return a - b
+            })
           } else {
             newNode.subIds = []
           }
