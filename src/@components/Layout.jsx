@@ -56,7 +56,6 @@ const useStyles = createUseStyles(theme => {
     },
     Layout: {
       display: 'flex',
-      flexDirection: 'column-reverse',
       margin: 'auto',
       maxWidth: theme.variables.maxWidth,
       paddingTop: '2rem',
