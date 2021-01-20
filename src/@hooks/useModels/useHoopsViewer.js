@@ -105,7 +105,7 @@ const useHoopsViewer = ({ modelFilename }) => {
 
       viewer.setCallbacks({
         sceneReady() {
-          viewer.view.setBackgroundColor(null, null)
+          viewer && viewer.view && viewer.view.setBackgroundColor(null, null)
           resolve()
         },
         modelLoadFailure(name, reason, e) {
@@ -243,18 +243,20 @@ const useHoopsViewer = ({ modelFilename }) => {
   const changeDrawMode = useCallback(modeName => {
     track('changeDrawMode', { mode: modeName })
     ensureCurrentHoopsViewer()
-    switch (modeName) {
-      case 'shaded':
-        hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.WireframeOnShaded)
-        break
-      case 'wire':
-        hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.Wireframe)
-        break
-      case 'xray':
-        hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.XRay)
-        break
-      default:
-        return
+    if (hoopsViewerRef && hoopsViewerRef.current && hoopsViewerRef.current.view) {
+      switch (modeName) {
+        case 'shaded':
+          hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.WireframeOnShaded)
+          break
+        case 'wire':
+          hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.Wireframe)
+          break
+        case 'xray':
+          hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.XRay)
+          break
+        default:
+          return
+      }
     }
   }, [])
 
