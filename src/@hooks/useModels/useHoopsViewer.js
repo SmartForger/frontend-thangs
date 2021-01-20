@@ -132,7 +132,7 @@ const useHoopsViewer = ({ modelFilename }) => {
     }
 
     try {
-      if (cancelTokenRef.current) {
+      if (cancelTokenRef && cancelTokenRef.current) {
         cancelTokenRef.current.cancel('Getting model interrupted')
       }
 
@@ -148,7 +148,8 @@ const useHoopsViewer = ({ modelFilename }) => {
         responseType: 'arraybuffer',
       })
 
-      const model = hoopsViewerRef.current.model
+      const model =
+        hoopsViewerRef && hoopsViewerRef.current && hoopsViewerRef.current.model
       await model.clear()
       const rootNode = model.getAbsoluteRootNode()
       await model.loadSubtreeFromScsBuffer(rootNode, new Uint8Array(data))
@@ -157,8 +158,10 @@ const useHoopsViewer = ({ modelFilename }) => {
       cancelTokenRef.current = null
     } catch (err) {
       try {
-        await hoopsViewerRef.current.model.clear()
-        doTransition(STATES.MODEL_ERROR)
+        if (hoopsViewerRef && hoopsViewerRef.current && hoopsViewerRef.current.model) {
+          await hoopsViewerRef.current.model.clear()
+          doTransition(STATES.MODEL_ERROR)
+        }
         // eslint-disable-next-line no-empty
       } catch (err) {}
     }
@@ -185,7 +188,7 @@ const useHoopsViewer = ({ modelFilename }) => {
     return () => {
       window.removeEventListener('resize', handleResize)
 
-      if (hoopsViewerRef.current) {
+      if (hoopsViewerRef && hoopsViewerRef.current) {
         debug('  ** 2: Cleanup!  HWV Shutdown! **')
         try {
           hoopsViewerRef.current.shutdown()
@@ -215,7 +218,7 @@ const useHoopsViewer = ({ modelFilename }) => {
     }
 
     const hColor = new Communicator.Color(...colorHexStringToRGBArray(colorStr))
-    const model = hoopsViewerRef.current.model
+    const model = hoopsViewerRef && hoopsViewerRef.current && hoopsViewerRef.current.model
 
     const gatherLeafNodeIds = nodes => {
       return nodes.flatMap(node => {
@@ -263,43 +266,62 @@ const useHoopsViewer = ({ modelFilename }) => {
   const changeExplosionMagnitude = useCallback(magnitude => {
     track('changeExplosionMagnitude')
     ensureCurrentHoopsViewer()
-    hoopsViewerRef.current.explodeManager.setMagnitude(magnitude)
+    hoopsViewerRef &&
+      hoopsViewerRef.current &&
+      hoopsViewerRef.current.explodeManager &&
+      hoopsViewerRef.current.explodeManager.setMagnitude(magnitude)
   }, [])
 
   const changeViewOrientation = useCallback(orientation => {
     track('changeViewOrientation', { orientation })
-    hoopsViewerRef.current.view.setViewOrientation(
-      Communicator.ViewOrientation[orientation],
-      1000
-    )
+    hoopsViewerRef &&
+      hoopsViewerRef.current &&
+      hoopsViewerRef.current.view &&
+      hoopsViewerRef.current.view.setViewOrientation(
+        Communicator.ViewOrientation[orientation],
+        1000
+      )
   }, [])
 
   const getViewerSnapshot = useCallback(fileName => {
     track('getViewerSnapshot')
-    hoopsViewerRef.current.takeSnapshot().then(imgElement => {
-      let imageHeight = containerRef.current.childNodes[0].offsetHeight
-      let imageWidth = containerRef.current.childNodes[0].offsetWidth
-      let timestamp = new Date().toLocaleString()
-      let myCanvasElement = document.createElement('canvas')
-      myCanvasElement.width = imageWidth
-      myCanvasElement.height = imageHeight
-      let context = myCanvasElement.getContext('2d')
-      context.fillStyle = 'white'
-      context.fillRect(0, 0, imageWidth, imageHeight)
-      context.drawImage(imgElement, 0, 0, imageWidth, imageHeight)
-      let img = myCanvasElement.toDataURL('image/png')
-      let link = document.createElement('a')
-      link.download = `${fileName}-${timestamp}.png`
-      link.href = img
-      link.click()
-    })
+    hoopsViewerRef &&
+      hoopsViewerRef.current &&
+      hoopsViewerRef.current.takeSnapshot().then(imgElement => {
+        let imageHeight =
+          containerRef &&
+          containerRef.current &&
+          containerRef.current.childNodes[0] &&
+          containerRef.current.childNodes[0].offsetHeight
+        let imageWidth =
+          containerRef &&
+          containerRef.current &&
+          containerRef.current.childNodes[0] &&
+          containerRef.current.childNodes[0].offsetWidth
+        let timestamp = new Date().toLocaleString()
+        let myCanvasElement = document.createElement('canvas')
+        myCanvasElement.width = imageWidth
+        myCanvasElement.height = imageHeight
+        let context = myCanvasElement.getContext('2d')
+        context.fillStyle = 'white'
+        context.fillRect(0, 0, imageWidth, imageHeight)
+        context.drawImage(imgElement, 0, 0, imageWidth, imageHeight)
+        let img = myCanvasElement.toDataURL('image/png')
+        let link = document.createElement('a')
+        link.download = `${fileName}-${timestamp}.png`
+        link.href = img
+        link.click()
+      })
   }, [])
 
   const resetImage = useCallback(() => {
     track('resetViewer')
     ensureCurrentHoopsViewer()
-    hoopsViewerRef.current.reset()
-    hoopsViewerRef.current.model.resetNodesColor()
+    hoopsViewerRef && hoopsViewerRef.current && hoopsViewerRef.current.reset()
+    hoopsViewerRef &&
+      hoopsViewerRef.current &&
+      hoopsViewerRef.current.model &&
+      hoopsViewerRef.current.model.resetNodesColor()
   }, [])
 
   return {
