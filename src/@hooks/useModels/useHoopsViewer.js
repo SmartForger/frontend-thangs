@@ -109,7 +109,7 @@ const useHoopsViewer = ({ modelFilename }) => {
           resolve()
         },
         modelLoadFailure(name, reason, e) {
-          console.error('HOOPS failed loading the model:', e)
+          console.error('HOOPS failed loading the model:', name, reason, e)
           reject(e)
         },
         // This is to fix the issue with the viewer aspect ratio being
