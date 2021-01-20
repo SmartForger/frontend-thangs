@@ -377,6 +377,7 @@ export default store => {
       })
       store.dispatch(types.FETCH_THANGS, { onFinish })
     } catch (e) {
+      track('Model Uploaded Error', { error: e })
       store.dispatch(types.SUBMIT_MODELS_FAILED)
     }
   })
