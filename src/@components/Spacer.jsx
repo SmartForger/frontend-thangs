@@ -11,7 +11,6 @@ const useStyles = createUseStyles(theme => {
     Spacer: {
       width: ({ mobileSize, size, width }) => mobileSize || size || width || '100%',
       height: ({ mobileSize, size, height }) => mobileSize || size || height || '100%',
-      flex: 'none',
 
       [md]: {
         width: ({ size, width }) => size || width || '100%',
