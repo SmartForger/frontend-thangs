@@ -42,6 +42,8 @@ const TreeView = ({
     item: '',
     itemSelected: '',
   },
+  showDivider = true,
+  rowSpacing,
 }) => {
   const c = useStyles()
 
@@ -60,6 +62,8 @@ const TreeView = ({
             rootCollapsible={rootCollapsible}
             isSelected={isSelected}
             classes={classes}
+            showDivider={showDivider}
+            rowSpacing={rowSpacing}
           />
         ))}
       </div>

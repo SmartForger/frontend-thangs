@@ -77,11 +77,13 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       maxWidth: '100%',
       [md_viewer]: {
+        width: '15rem',
         maxWidth: '15rem',
       },
 
       [md_972]: {
-        maxWidth: '21.5rem',
+        width: '17.5rem',
+        maxWidth: '17.5rem',
       },
     },
     AssemblyExplorer_Wrapper: {
@@ -113,13 +115,14 @@ const useStyles = createUseStyles(theme => {
       flex: 'none',
     },
     PartSelectorRow: {
-      borderRadius: '.25rem',
       display: 'flex',
       flexDirection: 'row',
       overflow: 'hidden',
       flex: 1,
     },
     PartSelectorRow__hover: {
+      borderRadius: '.25rem',
+
       '&:hover': {
         backgroundColor: theme.colors.white[900],
       },
@@ -304,6 +307,8 @@ const AssemblyExplorer = ({
         item: c.PartSelectorRow__hover,
         itemSelected: c.PartSelectorRow__selected,
       }}
+      showDivider={false}
+      rowSpacing='.25rem'
       renderNode={(node, level) => (
         <PartSelectorRow part={node} level={level} onClick={() => onChange(node)} />
       )}

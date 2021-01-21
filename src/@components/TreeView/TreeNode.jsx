@@ -52,6 +52,8 @@ export const TreeNode = ({
   renderNode,
   isSelected,
   classes,
+  showDivider,
+  rowSpacing,
 }) => {
   const [expanded, setExpanded] = useState(defaultExpanded || !rootCollapsible)
   const c = useStyles()
@@ -91,7 +93,8 @@ export const TreeNode = ({
         </div>
         {expanded && node.subs && node.subs.length > 0 && (
           <>
-            <Divider spacing={0} />
+            {showDivider && <Divider spacing={0} />}
+            {rowSpacing && <Spacer size={rowSpacing} />}
             {node.subs.map((subnode, index) => (
               <TreeNode
                 isLastNode={index === node.subs.length - 1}
@@ -102,12 +105,15 @@ export const TreeNode = ({
                 renderNode={renderNode}
                 isSelected={isSelected}
                 classes={classes}
+                showDivider={showDivider}
+                rowSpacing={rowSpacing}
               />
             ))}
           </>
         )}
       </div>
-      {!isLastNode && <Divider spacing={0} />}
+      {!isLastNode && showDivider && <Divider spacing={0} />}
+      {rowSpacing && <Spacer size={rowSpacing} />}
     </>
   )
 }
