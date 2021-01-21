@@ -18,12 +18,12 @@ const useStyles = createUseStyles(_theme => {
     TreeNode_Root: {
       flex: 1,
     },
-    TreeNode_Children: {
-      flex: 1,
-    },
     TreeNode_Row: {
       display: 'flex',
       alignItems: 'center',
+    },
+    TreeNode_Spacer: {
+      flex: 'none',
     },
     TreeNode_ExpandIcon: {
       width: '0.75rem',
@@ -50,6 +50,8 @@ export const TreeNode = ({
   levelPadding,
   node,
   renderNode,
+  isSelected,
+  classes,
 }) => {
   const [expanded, setExpanded] = useState(defaultExpanded || !rootCollapsible)
   const c = useStyles()
@@ -63,7 +65,12 @@ export const TreeNode = ({
   return (
     <>
       <div className={c.TreeNode_Root}>
-        <div className={c.TreeNode_Row}>
+        <div
+          className={classnames(c.TreeNode_Row, classes.item, {
+            [classes.itemSelected]: isSelected(node),
+          })}
+        >
+          <Spacer className={c.TreeNode_Spacer} width={levelPadding * level + 'px'} />
           {(isAssembly || isAssemblyPart) && rootCollapsible && (
             <>
               <div className={c.TreeNode_Row}>
@@ -85,21 +92,18 @@ export const TreeNode = ({
         {expanded && node.subs && node.subs.length > 0 && (
           <>
             <Divider spacing={0} />
-            <div className={c.TreeNode_Row}>
-              <Spacer size={levelPadding} />
-              <div className={c.TreeNode_Children}>
-                {node.subs.map((subnode, index) => (
-                  <TreeNode
-                    isLastNode={index === node.subs.length - 1}
-                    key={`subnode_${subnode.id}`}
-                    level={level + 1}
-                    levelPadding={levelPadding}
-                    node={subnode}
-                    renderNode={renderNode}
-                  />
-                ))}
-              </div>
-            </div>
+            {node.subs.map((subnode, index) => (
+              <TreeNode
+                isLastNode={index === node.subs.length - 1}
+                key={`subnode_${subnode.id}`}
+                level={level + 1}
+                levelPadding={levelPadding}
+                node={subnode}
+                renderNode={renderNode}
+                isSelected={isSelected}
+                classes={classes}
+              />
+            ))}
           </>
         )}
       </div>

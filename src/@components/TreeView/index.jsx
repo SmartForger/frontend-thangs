@@ -37,6 +37,11 @@ const TreeView = ({
   loading,
   defaultExpanded,
   rootCollapsible,
+  isSelected = () => false,
+  classes = {
+    item: '',
+    itemSelected: '',
+  },
 }) => {
   const c = useStyles()
 
@@ -53,6 +58,8 @@ const TreeView = ({
             levelPadding={levelPadding}
             defaultExpanded={defaultExpanded}
             rootCollapsible={rootCollapsible}
+            isSelected={isSelected}
+            classes={classes}
           />
         ))}
       </div>

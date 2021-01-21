@@ -118,7 +118,8 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'row',
       overflow: 'hidden',
       flex: 1,
-
+    },
+    PartSelectorRow__hover: {
       '&:hover': {
         backgroundColor: theme.colors.white[900],
       },
@@ -243,19 +244,13 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const PartSelectorRow = ({ part = {}, level, onClick, selectedPart = {} }) => {
+const PartSelectorRow = ({ part = {}, onClick }) => {
   const c = useStyles({})
-  const { name: selectedFilename } = selectedPart
   const { parts, name, newFileName } = part
   const isAssembly = parts && parts.length > 0
   return (
     <>
-      <div
-        className={classnames(c.PartSelectorRow, {
-          [c.PartSelectorRow__selected]: selectedFilename === name,
-        })}
-        title={name}
-      >
+      <div className={c.PartSelectorRow} title={name}>
         <div className={c.PartSelectorRow_Column} onClick={onClick}>
           <Spacer size={'.5rem'} />
           <div className={c.PartSelectorRow_Row}>
@@ -291,36 +286,26 @@ const AssemblyExplorer = ({
   onChange,
   selectedPart,
 }) => {
-  if (isSearchingParts) {
-    return (
-      <>
-        {parts.map(part => (
-          <PartSelectorRow
-            key={part.id}
-            part={part}
-            level={0}
-            selectedPart={selectedPart}
-            onClick={() => onChange(part)}
-          />
-        ))}
-      </>
-    )
-  }
+  const c = useStyles()
+
+  const treeData = useMemo(() => {
+    return isSearchingParts ? parts.map(p => ({ ...p, subs: [] })) : partTree
+  }, [parts, partTree, isSearchingParts])
 
   return (
     <TreeView
       className={className}
-      nodes={partTree}
+      nodes={treeData}
       levelPadding={20}
       defaultExpanded={parts.length < 2}
       rootCollapsible={false}
+      isSelected={node => node.name === selectedPart.name}
+      classes={{
+        item: c.PartSelectorRow__hover,
+        itemSelected: c.PartSelectorRow__selected,
+      }}
       renderNode={(node, level) => (
-        <PartSelectorRow
-          part={node}
-          level={level}
-          selectedPart={selectedPart}
-          onClick={() => onChange(node)}
-        />
+        <PartSelectorRow part={node} level={level} onClick={() => onChange(node)} />
       )}
     />
   )
