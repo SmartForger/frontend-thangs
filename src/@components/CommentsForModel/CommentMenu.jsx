@@ -51,7 +51,6 @@ const CommentMenu = ({ modelId, comment = {} }) => {
           comment,
           animateIn: true,
           windowed: true,
-          scrollTop: false,
         },
       })
     },
@@ -70,7 +69,6 @@ const CommentMenu = ({ modelId, comment = {} }) => {
           animateIn: true,
           windowed: true,
           dialogue: true,
-          scrollTop: false,
         },
       })
     },
