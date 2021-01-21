@@ -146,7 +146,6 @@ const DropdownMenu = ({
   isOpen: isOpenExternal = undefined,
   isOpenByDefault = false,
   label,
-  isRow = true,
   myThangsMenu,
   noIcons,
   onTargetClick = noop,

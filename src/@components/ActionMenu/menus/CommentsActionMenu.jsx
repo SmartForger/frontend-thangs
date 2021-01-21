@@ -1,7 +1,7 @@
 import React from 'react'
-import { ActionMenu } from '@components'
+import { ActionMenu } from '@components/index'
 import { createUseStyles } from '@style'
-import { ReactComponent as DotStackIcon } from '../../@svg/dot-stack-icon.svg'
+import { ReactComponent as DotStackIcon } from '../../../@svg/dot-stack-icon.svg'
 import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
 import { ReactComponent as DeleteIcon } from '@svg/icon-delete.svg'
 

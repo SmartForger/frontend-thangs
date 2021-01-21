@@ -5,10 +5,9 @@ import { CommentsActionMenu, Markdown, Spinner, UserInline } from '@components'
 import NewModelCommentForm from './NewModelCommentForm'
 import VersionComment from './VersionComment'
 import { createUseStyles } from '@style'
-import { useServices } from '@hooks'
+import { useOverlay, useServices } from '@hooks'
 import classnames from 'classnames'
-import { useStoreon } from 'storeon/react'
-import * as types from '@constants/storeEventTypes'
+import { track } from '../../@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -123,35 +122,38 @@ const renderTypedComment = ({ modelId, comment, key, currentUser, onChange }) =>
 
 const Comment = ({ modelId, comment, currentUser }) => {
   const c = useStyles()
-  const { dispatch } = useStoreon()
+  const { setOverlay } = useOverlay()
   const { owner, body, created } = comment
   const time = formatDistanceStrict(new Date(created), new Date())
   const canEdit = currentUser.id === owner.id
   const editComment = () => {
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'editComment',
-      overlayData: {
+    setOverlay({
+      isOpen: true,
+      template: 'editComment',
+      data: {
         modelId,
         comment,
         animateIn: true,
         windowed: true,
-        scrollTop: false,
+        showViewer: false,
       },
     })
+    track('Model page edit comment clicked')
   }
 
   const deleteComment = () => {
-    dispatch(types.OPEN_OVERLAY, {
-      overlayName: 'deleteComment',
-      overlayData: {
+    setOverlay({
+      isOpen: true,
+      template: 'deleteComment',
+      data: {
         modelId,
         comment,
         animateIn: true,
         windowed: true,
-        dialogue: true,
-        scrollTop: false,
+        showViewer: false,
       },
     })
+    track('Model page delete comment clicked')
   }
 
   const onChange = useCallback(
