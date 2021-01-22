@@ -33,7 +33,7 @@ const useStyles = createUseStyles(theme => {
       height: '0.75rem',
       width: '0.75rem',
       '& > path': {
-        fill: theme.colors.black[300],
+        fill: '#000',
       },
     },
     PartExplorerDropdown_ClickableButton: {
@@ -145,8 +145,8 @@ const useStyles = createUseStyles(theme => {
       },
     },
     PartExplorerActionMenu: {
-      bottom: '5rem !important',
-      right: '-2rem !important',
+      bottom: '5rem',
+      right: '0',
       maxHeight: '80vh',
     },
     PartSelectorRow_Thumbnail: {
@@ -158,6 +158,10 @@ const useStyles = createUseStyles(theme => {
       height: '2.625rem',
       padding: '0 !important',
       width: '2.625rem',
+
+      '& + div': {
+        flex: 'none',
+      },
     },
     PartExplorerTarget: {
       ...theme.mixins.flexRow,
@@ -214,7 +218,7 @@ const useStyles = createUseStyles(theme => {
         '&::placeholder': {
           color: theme.colors.black[900],
           fontSize: '.875rem',
-          fontWeight: '500',
+          fontWeight: 500,
           lineHeight: '1rem',
         },
 
@@ -443,7 +447,7 @@ const PartExplorerActionMenu = ({
       TargetComponent={PartExplorerTarget}
       TargetComponentProps={targetProps}
       isAutoClosed={false}
-      isOpenByDefault={false}
+      isOpenByDefault={true}
     />
   )
 }

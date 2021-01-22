@@ -102,6 +102,7 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       height: '28.75rem',
       margin: '0 auto',
+      position: 'relative',
       width: '100%',
 
       [md_viewer]: {

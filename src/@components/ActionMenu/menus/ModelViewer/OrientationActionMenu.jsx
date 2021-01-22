@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { ActionMenu, Spacer, SingleLineBodyText } from '@components'
+import { ActionMenu, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as TopViewIcon } from '@svg/view-top-icon.svg'
@@ -7,6 +7,11 @@ import { ReactComponent as FrontViewIcon } from '@svg/view-front-icon.svg'
 import { ReactComponent as BackViewIcon } from '@svg/view-back-icon.svg'
 import { ReactComponent as RightViewIcon } from '@svg/view-right-icon.svg'
 import { ReactComponent as LeftViewIcon } from '@svg/view-left-icon.svg'
+import { ReactComponent as TopViewSelected } from '@svg/view-top-icon-selected.svg'
+import { ReactComponent as FrontViewSelected } from '@svg/view-front-icon-selected.svg'
+import { ReactComponent as BackViewSelected } from '@svg/view-back-icon-selected.svg'
+import { ReactComponent as RightViewSelected } from '@svg/view-right-icon-selected.svg'
+import { ReactComponent as LeftViewSelected } from '@svg/view-left-icon-selected.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -16,8 +21,8 @@ const useStyles = createUseStyles(theme => {
     OrientationActionMenu: {
       width: 'auto',
       color: `${theme.colors.black[500]} !important`,
-      right: '-1rem',
-      bottom: '4.25rem',
+      bottom: '5rem',
+      right: '0',
       display: 'none',
 
       [md]: {
@@ -59,26 +64,31 @@ const options = [
     label: 'Top',
     Icon: TopViewIcon,
     value: 'Top',
+    DesktopSelectedIcon: TopViewSelected,
   },
   {
     label: 'Front',
     Icon: FrontViewIcon,
     value: 'Front',
+    DesktopSelectedIcon: FrontViewSelected,
   },
   {
     label: 'Back',
     Icon: BackViewIcon,
     value: 'Back',
+    DesktopSelectedIcon: BackViewSelected,
   },
   {
     label: 'Right',
     Icon: RightViewIcon,
     value: 'Right',
+    DesktopSelectedIcon: RightViewSelected,
   },
   {
     label: 'Left',
     Icon: LeftViewIcon,
     value: 'Left',
+    DesktopSelectedIcon: LeftViewSelected,
   },
 ]
 
@@ -90,20 +100,22 @@ const OrientationTarget = ({ onClick = noop, selectedValue }) => {
     return selectedValue || options[0].value
   }, [selectedValue])
 
-  const selectedOrientation = useMemo(
-    () => options.find(opt => opt.value.toLowerCase() === value.toLowerCase()).label,
+  const SelectedOrientationIcon = useMemo(
+    () =>
+      options.find(opt => opt.value.toLowerCase() === value.toLowerCase())
+        .DesktopSelectedIcon,
     [value]
   )
 
-  const SelectedOrientationIcon = useMemo(
+  const SelectedOrientationMobileIcon = useMemo(
     () => options.find(opt => opt.value.toLowerCase() === value.toLowerCase()).Icon,
     [value]
   )
 
   return (
     <div className={c.OrientationTarget} onClick={onClick}>
-      <SingleLineBodyText>{selectedOrientation}</SingleLineBodyText>
-      <SelectedOrientationIcon className={c.OrientationActionMenu__mobile} />
+      <SelectedOrientationIcon className={c.OrientationActionMenu__desktop} />
+      <SelectedOrientationMobileIcon className={c.OrientationActionMenu__mobile} />
       <Spacer size={'.5rem'} className={c.OrientationActionMenu__desktop} />
       <ArrowDownIcon className={c.OrientationActionMenu__desktop} />
       <Spacer size={'1.125rem'} className={c.OrientationActionMenu__desktop} />
@@ -113,7 +125,12 @@ const OrientationTarget = ({ onClick = noop, selectedValue }) => {
 
 const OrientationActionMenu = ({ onChange = noop, selectedValue }) => {
   const menuProps = useMemo(() => {
-    return { onChange, actionBarTitle: 'Select orientation', options, tabletLayout: true }
+    return {
+      onChange,
+      actionBarTitle: 'Select orientation',
+      options,
+      tabletLayout: true,
+    }
   }, [onChange])
 
   const targetProps = useMemo(() => {
@@ -125,6 +142,7 @@ const OrientationActionMenu = ({ onChange = noop, selectedValue }) => {
       MenuComponentProps={menuProps}
       TargetComponent={OrientationTarget}
       TargetComponentProps={targetProps}
+      showTop={true}
     />
   )
 }

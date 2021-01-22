@@ -18,6 +18,7 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     ActionMenu: {
+      bottom: ({ showTop }) => (showTop ? '5rem' : undefined),
       opacity: ({ isMobileActive }) => (isMobileActive ? '0 !important' : '1'),
       visibility: ({ isMobileActive }) =>
         isMobileActive ? 'hidden !important' : 'visible',
@@ -223,8 +224,9 @@ export const ActionMenu = props => {
     isMobileActionBarActive = true,
     isOpenByDefault = false,
     isMobileOnly = false,
+    showTop,
   } = props
-  const c = useStyles({})
+  const c = useStyles({ showTop })
   const { onChange, className, ...menuProps } = MenuComponentProps
   const { setActionMenu, setActionMenuClose } = useActionMenu()
   const handleChange = useCallback(

@@ -17,8 +17,8 @@ const useStyles = createUseStyles(theme => {
     DrawModeActionMenu: {
       width: 'auto',
       color: `${theme.colors.black[500]} !important`,
-      right: '-1rem',
-      bottom: '4.25rem',
+      bottom: '5rem',
+      right: '0',
       display: 'none',
 
       [md]: {
@@ -99,7 +99,12 @@ const DrawModeTarget = ({ onClick = noop, selectedValue }) => {
 
 const DrawModeActionMenu = ({ onChange = noop, selectedValue }) => {
   const menuProps = useMemo(() => {
-    return { onChange, actionBarTitle: 'Select rendering', options, tabletLayout: true }
+    return {
+      onChange,
+      actionBarTitle: 'Select rendering',
+      options,
+      tabletLayout: true,
+    }
   }, [onChange])
 
   const targetProps = useMemo(() => {
@@ -111,6 +116,7 @@ const DrawModeActionMenu = ({ onChange = noop, selectedValue }) => {
       MenuComponentProps={menuProps}
       TargetComponent={DrawModeTarget}
       TargetComponentProps={targetProps}
+      showTop={true}
     />
   )
 }

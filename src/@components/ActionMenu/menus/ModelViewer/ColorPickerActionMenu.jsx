@@ -172,7 +172,12 @@ const ColorPickerTarget = ({ onClick = noop, selectedValue: color }) => {
 
 const ColorPickerActionMenu = ({ onChange = noop, selectedValue }) => {
   const menuProps = useMemo(() => {
-    return { onChange, actionBarTitle: 'Pick a color', selectedValue, tabletLayout: true }
+    return {
+      onChange,
+      actionBarTitle: 'Pick a color',
+      selectedValue,
+      tabletLayout: true,
+    }
   }, [onChange, selectedValue])
 
   const targetProps = useMemo(() => {
@@ -185,8 +190,9 @@ const ColorPickerActionMenu = ({ onChange = noop, selectedValue }) => {
       MenuComponentProps={menuProps}
       TargetComponent={ColorPickerTarget}
       TargetComponentProps={targetProps}
-      isAutoClosed={false}
+      isAutoClosed={true}
       isExternalClosed={true}
+      showTop={true}
     />
   )
 }

@@ -1,14 +1,14 @@
 import React from 'react'
 import {
-  DrawModeActionMenu,
   ColorPickerActionMenu,
+  DrawModeActionMenu,
   ExplodeActionMenu,
+  MetadataSecondary,
   OrientationActionMenu,
   PartExplorerActionMenu,
   Pill,
-  Spacer,
-  MetadataSecondary,
   Slider,
+  Spacer,
 } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -17,36 +17,50 @@ import { ReactComponent as ResetIcon } from '@svg/icon-reset.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md_viewer, lg, xl_viewer, xxl_viewer },
+    mediaQueries: { md_viewer, lg, lg_viewer, xl_viewer },
   } = theme
   return {
     Toolbar: {
-      backgroundColor: theme.colors.white[400],
+      backgroundColor: 'rgba(255,255,255,.8)',
       border: `1px solid ${theme.colors.white[900]}`,
-      borderRadius: '.75rem',
-      boxShadow: '0 1rem 2rem 0 rgba(0,0,0,.1)',
-      margin: '0 auto 2.625rem',
+      borderLeft: 0,
+      borderRight: 0,
+      borderBottom: 0,
+      position: 'absolute',
+      bottom: 0,
+      width: 'calc(100% - 4rem)',
+      padding: '0 2rem',
+
+      '& div': {
+        flex: 'none',
+      },
     },
     Toolbar_Group: {
-      display: 'flex',
       alignItems: 'center',
+      display: 'flex',
+      flexWrap: 'nowrap',
       margin: '0',
       padding: 0,
-      flexWrap: 'nowrap',
+      justifyContent: ({ isMultipart, isAssembly }) =>
+        isMultipart ? 'space-between' : isAssembly ? 'space-between' : 'center',
+    },
+    Toolbar_Text: {
+      display: 'flex',
     },
     Toolbar_WideText: {
-      display: 'none',
       alignItems: 'center',
+      display: ({ isMultipart, isAssembly }) =>
+        isMultipart || isAssembly ? 'none' : 'flex',
 
-      [xl_viewer]: {
-        display: 'flex',
+      [lg_viewer]: {
+        display: 'flex !important',
       },
     },
     Toolbar_ExtraWideText: {
-      display: 'none',
       alignItems: 'center',
+      display: 'none',
 
-      [xxl_viewer]: {
+      [xl_viewer]: {
         display: 'flex',
       },
     },
@@ -55,9 +69,9 @@ const useStyles = createUseStyles(theme => {
       margin: '0 auto !important',
     },
     Toolbar_IconButton: {
-      width: '2rem',
-      height: '2rem',
       cursor: 'pointer',
+      height: '2rem',
+      width: '2rem',
       '&.selected': {
         '& g[opacity]': {
           opacity: '1',
@@ -69,8 +83,8 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
     },
     Toolbar_RemoveIcon: {
-      width: '.75rem',
       height: '.75rem',
+      width: '.75rem',
       '& path': {
         fill: theme.colors.black[500],
       },
@@ -87,8 +101,8 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Toolbar_PartExplorerWrapper: {
-      position: 'relative',
       maxWidth: ({ isAssembly }) => (isAssembly ? '35rem' : '27.5rem'),
+      position: 'relative',
 
       [md_viewer]: {
         maxWidth: '100%',
@@ -98,19 +112,19 @@ const useStyles = createUseStyles(theme => {
 })
 
 const Toolbar = ({
-  color,
+  // onSnapshot,
   className,
+  color,
   isAssembly,
   isMultipart,
   magnitude = 0,
   mode,
-  orientation,
   onColorChange,
   onDrawChange,
   onResetView,
   onSliderChange,
-  // onSnapshot,
   onViewChange,
+  orientation,
   partList,
   partTreeData,
   selectedModel,
@@ -123,10 +137,9 @@ const Toolbar = ({
     <div className={classnames(c.Toolbar, className)}>
       <Spacer size={'1.5rem'} />
       <div className={c.Toolbar_Group}>
-        <Spacer size={'2rem'} />
         <Pill secondary onClick={onResetView}>
           <ResetIcon />
-          <div className={c.Toolbar_ExtraWideText}>
+          <div className={c.Toolbar_WideText}>
             <Spacer size={'0.25rem'} />
             <span>Reset</span>
           </div>
@@ -140,70 +153,83 @@ const Toolbar = ({
           </div>
         </Pill> */}
         <Spacer size={'1.125rem'} />
-        <div className={c.Toolbar_VerticalRule}></div>
-        <Spacer size={'1.125rem'} />
-        <div className={c.Toolbar_Group}>
-          <div className={c.Toolbar_WideText}>
-            <MetadataSecondary>Render</MetadataSecondary>
-            <Spacer size={'1rem'} />
-          </div>
-          <DrawModeActionMenu selectedValue={mode} onChange={onDrawChange} />
-        </div>
-        <div className={c.Toolbar_VerticalRule}></div>
-        <Spacer size={'1.125rem'} />
-        <div className={c.Toolbar_Group}>
-          <div className={c.Toolbar_WideText}>
-            <MetadataSecondary>Orientation</MetadataSecondary>
-            <Spacer size={'1rem'} />
-          </div>
-          <OrientationActionMenu selectedValue={orientation} onChange={onViewChange} />
-        </div>
-        <div className={c.Toolbar_VerticalRule}></div>
-        <Spacer size={'1.125rem'} />
-        <div className={c.Toolbar_Group}>
-          <div className={c.Toolbar_WideText}>
-            <MetadataSecondary>Color</MetadataSecondary>
-            <Spacer size={'1rem'} />
-          </div>
-          <ColorPickerActionMenu selectedValue={color} onChange={onColorChange} />
-        </div>
-        {isAssembly && (
-          <>
-            <div className={c.Toolbar_VerticalRule}></div>
-            <Spacer size={'1.125rem'} />
-            <div className={c.Toolbar_Group}>
-              <ExplodeActionMenu
-                selectedValue={magnitude}
-                onSliderEnd={onSliderChange}
-                onChange={onSliderChange}
-              />
-              <div className={c.Toolbar_WideText}>
-                <Spacer size={'1rem'} />
-                <Slider
-                  key={'toolMenu_slider'}
-                  onChange={onSliderChange}
-                  value={magnitude}
-                />
-                <Spacer size={'1.125rem'} />
-              </div>
+        <div className={c.Toolbar_Text}>
+          <div className={c.Toolbar_VerticalRule}></div>
+          <Spacer size={'1.125rem'} />
+          <div className={c.Toolbar_Group}>
+            <div
+              className={classnames(c.Toolbar_Text, {
+                [c.Toolbar_ExtraWideText]: isAssembly,
+              })}
+            >
+              <MetadataSecondary>Render</MetadataSecondary>
+              <Spacer size={'1rem'} />
             </div>
-          </>
-        )}
+            <DrawModeActionMenu selectedValue={mode} onChange={onDrawChange} />
+          </div>
+          <div className={c.Toolbar_VerticalRule}></div>
+          <Spacer size={'1.125rem'} />
+          <div className={c.Toolbar_Group}>
+            <div
+              className={classnames(c.Toolbar_Text, {
+                [c.Toolbar_ExtraWideText]: isAssembly,
+              })}
+            >
+              <MetadataSecondary>Orientation</MetadataSecondary>
+              <Spacer size={'1rem'} />
+            </div>
+            <OrientationActionMenu selectedValue={orientation} onChange={onViewChange} />
+          </div>
+          <div className={c.Toolbar_VerticalRule}></div>
+          <Spacer size={'1.125rem'} />
+          <div className={c.Toolbar_Group}>
+            <div
+              className={classnames(c.Toolbar_Text, {
+                [c.Toolbar_ExtraWideText]: isAssembly,
+              })}
+            >
+              <MetadataSecondary>Color</MetadataSecondary>
+              <Spacer size={'1rem'} />
+            </div>
+            <ColorPickerActionMenu selectedValue={color} onChange={onColorChange} />
+          </div>
+          {isAssembly && (
+            <>
+              <div className={c.Toolbar_VerticalRule}></div>
+              <Spacer size={'1.125rem'} />
+              <div className={c.Toolbar_Group}>
+                <ExplodeActionMenu
+                  onChange={onSliderChange}
+                  onSliderEnd={onSliderChange}
+                  selectedValue={magnitude}
+                />
+                <div className={c.Toolbar_Text}>
+                  <Spacer size={'1rem'} />
+                  <Slider
+                    key={'toolMenu_slider'}
+                    onChange={onSliderChange}
+                    value={magnitude}
+                  />
+                  <Spacer size={'1.125rem'} />
+                </div>
+              </div>
+            </>
+          )}
+          {showPartSelector && <div className={c.Toolbar_VerticalRule}></div>}
+        </div>
         {showPartSelector && (
           <>
-            <div className={c.Toolbar_VerticalRule}></div>
             <Spacer size={'1.125rem'} />
             <div className={classnames(c.Toolbar_Group, c.Toolbar_PartExplorerWrapper)}>
               <PartExplorerActionMenu
-                selectedValue={selectedModel}
+                onChange={setSelectedModel}
                 partList={partList}
                 partTreeData={partTreeData}
-                onChange={setSelectedModel}
+                selectedValue={selectedModel}
               />
             </div>
           </>
         )}
-        <Spacer size={'2rem'} />
       </div>
       <Spacer size={'1.5rem'} />
     </div>
