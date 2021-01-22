@@ -294,8 +294,13 @@ const VersionLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
     if (isAuthedUser) {
       setOverlay({
         isOpen: true,
-        template: 'upload',
-        data: { prevModelId: modelId },
+        template: 'multiUpload',
+        data: {
+          animateIn: true,
+          windowed: true,
+          dialogue: true,
+          previousVersionModelId: modelId,
+        },
       })
     } else {
       openSignupOverlay('Join to Like, Follow, Share.', 'Version Upload')

@@ -410,7 +410,7 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
           i = activeView + 1
           dispatch(types.SET_MODEL_INFO, {
             id: allTreeNodes[activeView].id,
-            formData: data,
+            formData: { ...data, previousVersionModelId },
           })
         }
       }
@@ -426,7 +426,14 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
         submitModels()
       }
     },
-    [activeView, allTreeNodes, dispatch, submitModels, errorMessage]
+    [
+      activeView,
+      allTreeNodes,
+      dispatch,
+      submitModels,
+      errorMessage,
+      previousVersionModelId,
+    ]
   )
 
   const handleBack = useCallback(() => {
