@@ -135,7 +135,8 @@ const SearchByUpload = ({
     overlayview('SearchByUpload')
     if (model) {
       const modelId = model.id || model.modelId
-      const { phyndexerId: phynId } = model.parts.find(part => part.phyndexerId) || {}
+      const { phyndexerId: phynId } =
+        (model.parts && model.parts.find(part => part.phyndexerId)) || {}
       const searchTerm =
         model.uploadedFile ||
         model.modelFileName ||
