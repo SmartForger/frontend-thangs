@@ -268,6 +268,7 @@ const Page = () => {
     if (related && modelId && !phyndexer.isLoaded && !thangs.isLoaded) {
       dispatch(types.GET_RELATED_MODELS, {
         modelId,
+        phynId,
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

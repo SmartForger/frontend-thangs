@@ -135,6 +135,7 @@ const SearchByUpload = ({
     overlayview('SearchByUpload')
     if (model) {
       const modelId = model.id || model.modelId
+      const { phyndexerId: phynId } = model.parts.find(part => part.phyndexerId) || {}
       const searchTerm =
         model.uploadedFile ||
         model.modelFileName ||
@@ -143,9 +144,12 @@ const SearchByUpload = ({
       if (modelId) {
         dispatch(types.GET_RELATED_MODELS, {
           modelId,
+          phynId,
           onFinish: () => {
             setOverlayOpen(false)
-            history.push(`/search/${searchTerm}?modelId=${modelId}&related=true`)
+            history.push(
+              `/search/${searchTerm}?modelId=${modelId}&phynId=${phynId}&related=true`
+            )
           },
         })
       }

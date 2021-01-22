@@ -407,7 +407,7 @@ export default store => {
   )
   store.on(
     types.GET_RELATED_MODELS,
-    async (_state, { modelId, onFinish = noop, onError = noop }) => {
+    async (_state, { modelId, phynId, onFinish = noop, onError = noop }) => {
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.THANGS,
         status: STATUSES.LOADING,
@@ -416,6 +416,13 @@ export default store => {
         atom: ATOMS.PHYNDEXER,
         status: STATUSES.LOADING,
       })
+
+      const { error: statusError } = await getPhynStatus({ newPhyndexerId: phynId })
+      if (statusError) {
+        store.dispatch(types.ERROR_POLLING_PHYNDEXER, {
+          data: statusError,
+        })
+      }
 
       const { data, error } = await api({
         method: 'GET',
