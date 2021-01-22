@@ -324,16 +324,21 @@ const useHoopsViewer = ({ modelFilename }) => {
       hoopsViewerRef.current.model.resetNodesColor()
   }, [])
 
+  const highlightPart = useCallback(nodeId => {
+    hoopsViewerRef.current.selectionManager.selectNode(nodeId)
+  }, [])
+
   return {
     containerRef,
     hoops: {
-      status: hoopsStatus,
-      resetImage,
       changeColor,
       changeDrawMode,
       changeExplosionMagnitude,
       changeViewOrientation,
       getViewerSnapshot,
+      highlightPart,
+      resetImage,
+      status: hoopsStatus,
     },
   }
 }
