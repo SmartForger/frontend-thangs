@@ -274,34 +274,37 @@ const UploadModels = ({
 
   return (
     <>
-      <Dropzone
-        onDrop={onDrop}
-        accept={MODEL_FILE_EXTS}
-        ref={dropzoneRef}
-        multiple={multiple}
-        maxFiles={25}
-      >
-        {({ getRootProps, getInputProps }) => (
-          <section className={c.UploadModels_UploadZone}>
-            <div {...getRootProps()}>
-              <input {...getInputProps()} name='multi-upload' />
-              <div className={c.UploadModels_UploadRow}>
-                <div className={c.UploadModels_UploadColumn}>
-                  {R.isEmpty(uploadFiles) && <UploadCardIcon />}
-                  <Spacer size={'1rem'} />
-                  <TitleTertiary>
-                    {multiple ? 'Drag & Drop files' : 'Drag & Drop file'}
-                  </TitleTertiary>
-                  <MultiLineBodyText>or browse to upload.</MultiLineBodyText>
-                  <Spacer size={'1rem'} />
-                  <Pill secondary>Browse</Pill>
-                  <Spacer size={'.75rem'} />
+      {(multiple || (!multiple && !hasFile)) && (
+        <Dropzone
+          onDrop={onDrop}
+          accept={MODEL_FILE_EXTS}
+          ref={dropzoneRef}
+          multiple={multiple}
+          maxFiles={25}
+        >
+          {({ getRootProps, getInputProps }) => (
+            <section className={c.UploadModels_UploadZone}>
+              <div {...getRootProps()}>
+                <input {...getInputProps()} name='multi-upload' />
+                <div className={c.UploadModels_UploadRow}>
+                  <div className={c.UploadModels_UploadColumn}>
+                    {R.isEmpty(uploadFiles) && <UploadCardIcon />}
+                    <Spacer size={'1rem'} />
+                    <TitleTertiary>
+                      {multiple ? 'Drag & Drop files' : 'Drag & Drop file'}
+                    </TitleTertiary>
+                    <MultiLineBodyText>or browse to upload.</MultiLineBodyText>
+                    <Spacer size={'1rem'} />
+                    <Pill secondary>Browse</Pill>
+                    <Spacer size={'.75rem'} />
+                  </div>
                 </div>
               </div>
-            </div>
-          </section>
-        )}
-      </Dropzone>
+            </section>
+          )}
+        </Dropzone>
+      )}
+
       {errorMessage && <h4 className={c.UploadModels_ErrorText}>{errorMessage}</h4>}
       {warningMessage && <h4 className={c.UploadModels_WarningText}>{warningMessage}</h4>}
       {fileLength > 0 && (
