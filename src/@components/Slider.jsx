@@ -10,7 +10,6 @@ const CustomSlider = withStyles({
     height: '.25rem',
     padding: '13px 8px',
     marginBottom: 0,
-    marginRight: '1.05rem',
 
     '@media (min-width: 1000px)': {
       width: '7.25rem',
@@ -25,7 +24,7 @@ const CustomSlider = withStyles({
     flexDirection: 'row',
     height: '1.5rem',
     justifyContent: 'center',
-    marginLeft: -14,
+    marginLeft: -24,
     marginTop: -11,
     transform: 'translateX(.75rem)',
     width: '1.5rem',
@@ -49,10 +48,12 @@ const CustomSlider = withStyles({
   track: {
     borderRadius: 4,
     height: 4,
+    left: 0,
   },
   rail: {
     borderRadius: 4,
     height: 4,
+    left: 0,
   },
 })(MuiSlider)
 

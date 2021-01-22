@@ -4,6 +4,7 @@ import { colorHexStringToRGBArray, ensureScriptIsLoaded } from '@utilities'
 import axios from 'axios'
 import { track } from '@utilities/analytics'
 import * as path from 'path'
+import { throttle } from 'lodash'
 
 const REACT_APP_MODEL_BUCKET = process.env.REACT_APP_MODEL_BUCKET
 
@@ -204,15 +205,12 @@ const useHoopsViewer = ({ modelFilename }) => {
     loadModel(modelFilename)
   }, [loadModel, modelFilename])
 
-  const ensureCurrentHoopsViewer = () => {
+  const changeColor = useCallback((modeName, colorStr) => {
+    track('changeColor', { color: colorStr })
     if (!hoopsViewerRef.current) {
       return
     }
-  }
 
-  const changeColor = useCallback((modeName, colorStr) => {
-    track('changeColor', { color: colorStr })
-    ensureCurrentHoopsViewer()
     if (!['wire', 'mesh'].includes(modeName)) {
       throw new Error(`Unsupported HOOPS color change mode: ${modeName}`)
     }
@@ -245,7 +243,10 @@ const useHoopsViewer = ({ modelFilename }) => {
 
   const changeDrawMode = useCallback(modeName => {
     track('changeDrawMode', { mode: modeName })
-    ensureCurrentHoopsViewer()
+    if (!hoopsViewerRef.current) {
+      return
+    }
+
     if (hoopsViewerRef && hoopsViewerRef.current && hoopsViewerRef.current.view) {
       switch (modeName) {
         case 'shaded':
@@ -263,14 +264,20 @@ const useHoopsViewer = ({ modelFilename }) => {
     }
   }, [])
 
-  const changeExplosionMagnitude = useCallback(magnitude => {
-    track('changeExplosionMagnitude')
-    ensureCurrentHoopsViewer()
-    hoopsViewerRef &&
-      hoopsViewerRef.current &&
-      hoopsViewerRef.current.explodeManager &&
-      hoopsViewerRef.current.explodeManager.setMagnitude(magnitude)
-  }, [])
+  const changeExplosionMagnitude = useCallback(
+    throttle(magnitude => {
+      track('changeExplosionMagnitude')
+      if (!hoopsViewerRef.current) {
+        return
+      }
+
+      hoopsViewerRef &&
+        hoopsViewerRef.current &&
+        hoopsViewerRef.current.explodeManager &&
+        hoopsViewerRef.current.explodeManager.setMagnitude(magnitude)
+    }, 500),
+    []
+  )
 
   const changeViewOrientation = useCallback(orientation => {
     track('changeViewOrientation', { orientation })
@@ -316,7 +323,10 @@ const useHoopsViewer = ({ modelFilename }) => {
 
   const resetImage = useCallback(() => {
     track('resetViewer')
-    ensureCurrentHoopsViewer()
+    if (!hoopsViewerRef.current) {
+      return
+    }
+
     hoopsViewerRef && hoopsViewerRef.current && hoopsViewerRef.current.reset()
     hoopsViewerRef &&
       hoopsViewerRef.current &&

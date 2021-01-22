@@ -28,6 +28,9 @@ const useStyles = createUseStyles(theme => {
         display: 'none',
       },
     },
+    ExplodeMenu: {
+      padding: '0 0.5rem',
+    },
   }
 })
 
@@ -52,13 +55,17 @@ const ExplodeMenu = ({
   selectedValue: magnitude,
   key,
 }) => {
+  const c = useStyles()
+
   return (
-    <Slider
-      key={key}
-      onChangeCommitted={onSliderEnd}
-      onChange={onChange}
-      value={magnitude}
-    />
+    <div className={c.ExplodeMenu}>
+      <Slider
+        key={key}
+        onChangeCommitted={(ev, value) => onSliderEnd(value)}
+        onChange={(ev, value) => onChange(value)}
+        value={magnitude}
+      />
+    </div>
   )
 }
 

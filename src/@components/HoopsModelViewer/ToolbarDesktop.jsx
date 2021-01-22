@@ -198,16 +198,13 @@ const Toolbar = ({
               <div className={c.Toolbar_VerticalRule}></div>
               <Spacer size={'1.125rem'} />
               <div className={c.Toolbar_Group}>
-                <ExplodeActionMenu
-                  onChange={onSliderChange}
-                  onSliderEnd={onSliderChange}
-                  selectedValue={magnitude}
-                />
+                <MetadataSecondary>Explode</MetadataSecondary>
+                <Spacer size={'1rem'} />
                 <div className={c.Toolbar_Text}>
                   <Spacer size={'1rem'} />
                   <Slider
                     key={'toolMenu_slider'}
-                    onChange={onSliderChange}
+                    onChange={(ev, value) => onSliderChange(value)}
                     value={magnitude}
                   />
                   <Spacer size={'1.125rem'} />

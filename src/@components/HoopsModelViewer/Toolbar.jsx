@@ -63,7 +63,7 @@ const Toolbar = ({
   )
 
   const handleSliderChange = useCallback(
-    (e, value) => {
+    value => {
       changeExplosionMagnitude(value / 20)
       setMagnitude(value)
     },
