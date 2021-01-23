@@ -29,6 +29,9 @@ function uploadMessageHandler(messageType, data) {
       })
       store.dispatch(types.VALIDATE_FILES)
       break
+    case 'upload:urls':
+      store.dispatch(types.SET_UPLOADED_URLS, data)
+      break
     case 'upload:error':
       store.dispatch(types.CHANGE_UPLOAD_FILE, {
         id: data.id,

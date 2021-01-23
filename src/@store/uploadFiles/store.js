@@ -1,6 +1,7 @@
 import * as types from '@constants/storeEventTypes'
 import { api, uploadFiles, cancelUpload } from '@services'
 import { track } from '@utilities/analytics'
+import { sleep } from '@utilities'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -130,6 +131,17 @@ export default store => {
         validated: false,
       },
     }
+  })
+
+  store.on(types.SET_UPLOADED_URLS, (state, { fileIds, uploadedUrlData }) => {
+    const { data: uploadedFiles } = state.uploadFiles
+
+    fileIds.forEach((fileId, i) => {
+      uploadedFiles[fileId] = {
+        ...uploadedFiles[fileId],
+        ...uploadedUrlData[i],
+      }
+    })
   })
 
   store.on(types.CHANGE_UPLOAD_FILE, (state, { id, data, isLoading, isError }) => {
@@ -269,10 +281,16 @@ export default store => {
   })
 
   store.on(types.UPLOAD_FILES, async (state, { files }) => {
+    let allFiles = Object.values(state.uploadFiles.data)
+    let oldFile = allFiles.find(f => f.newFileName)
+    while (allFiles.length > 0 && !oldFile) {
+      await sleep(500)
+      allFiles = Object.values(state.uploadFiles.data)
+      oldFile = allFiles.find(f => f.newFileName)
+    }
+
     store.dispatch(types.INIT_UPLOAD_FILES, { files })
 
-    const { data: uploadedFiles } = state.uploadFiles
-    const oldFile = Object.values(uploadedFiles)[0]
     if (oldFile) {
       const [directory] = oldFile.newFileName.split('/')
       uploadFiles(files, directory)

@@ -100,6 +100,7 @@ export const RESET_UPLOAD_MODEL = 'reset-upload-model'
 export const CHANGE_UPLOAD_MODEL_STATUS = 'change-upload-model-status'
 /* upload Files Store Events */
 export const UPLOAD_FILES = 'upload-files'
+export const SET_UPLOADED_URLS = 'set-uploaded-urls'
 export const CHANGE_UPLOAD_FILE = 'change-upload-files'
 export const RESET_UPLOAD_FILES = 'reset-upload-files'
 export const REMOVE_UPLOAD_FILES = 'remove-upload-files'

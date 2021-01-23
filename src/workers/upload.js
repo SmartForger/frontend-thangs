@@ -34,6 +34,12 @@ async function uploadMultipleFiles({ files, directory }) {
         directory,
       },
     })
+
+    sendMessage('upload:urls', {
+      fileIds: files.map(f => f.id),
+      uploadedUrlData,
+    })
+
     files.forEach((f, i) => {
       uploadSingleFile(f, uploadedUrlData[i])
     })
