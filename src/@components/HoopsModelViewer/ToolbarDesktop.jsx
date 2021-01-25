@@ -2,7 +2,6 @@ import React from 'react'
 import {
   ColorPickerActionMenu,
   DrawModeActionMenu,
-  ExplodeActionMenu,
   MetadataSecondary,
   OrientationActionMenu,
   PartExplorerActionMenu,
