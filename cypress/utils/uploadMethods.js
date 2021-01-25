@@ -21,7 +21,7 @@ export const multiUpload = () => {
   cy.get(`[class^=PartInfo_Field] [name=description]`).clear()
   cy.get(`[class^=PartInfo_Field] [name=description]`).focus().type(MODEL.DESCRIPTION)
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue')
-  urlShouldIncludeAfterTimeout('mythangs/all-files', 10000)
+  urlShouldIncludeAfterTimeout('mythangs/recent-files', 10000)
   isElementContains('[class^=FileTable_Row]', MODEL.TITLE)
 }
 
