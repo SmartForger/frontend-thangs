@@ -29,15 +29,19 @@ import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
-import { useLocalStorage } from '@hooks'
 import { Message404 } from './404'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
-import { usePageMeta, usePerformanceMetrics } from '@hooks'
+import {
+  useOverlay,
+  usePageMeta,
+  usePerformanceMetrics,
+  useLocalStorage,
+  useQuery,
+} from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
-import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -401,7 +405,7 @@ const StatsAndActions = ({
 }
 
 const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST
-const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime }) => {
+const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios }) => {
   const c = useStyles()
   const { navigateWithFlash } = useFlashNotification() //TODO: Should be removed
   const signUpShown = useRef(false)
@@ -411,7 +415,6 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime }) => {
     [`model-${id}`]: modelAtom = {},
     [`related-models-${id}`]: related = {},
   } = useStoreon(`model-${id}`, `related-models-${id}`)
-
   const { data: modelData, isLoading, isLoaded, isError } = modelAtom
   const {
     isLoading: isRelatedLoading,
@@ -421,8 +424,8 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime }) => {
 
   useEffect(() => {
     dispatch(types.FETCH_MODEL, { id })
-    dispatch(types.FETCH_RELATED_MODELS, { id })
-  }, [dispatch, id])
+    dispatch(types.FETCH_RELATED_MODELS, { id, geoRatios })
+  }, [dispatch, geoRatios, id])
 
   useEffect(() => {
     if (isLoaded) perfTrack('Page Loaded - Model', getTime())
@@ -544,6 +547,12 @@ const Page = () => {
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [currentUser] = useLocalStorage('currentUser', null)
   const { getTime, startTimer } = usePerformanceMetrics()
+  const geoRatios = {
+    gr: useQuery('gr'),
+    pvp: useQuery('pvp'),
+    pip: useQuery('pip'),
+    pd: useQuery('pd'),
+  }
 
   useEffect(() => {
     pageview('Model', id)
@@ -557,6 +566,7 @@ const Page = () => {
       currentUser={currentUser}
       showBackupViewer={showBackupViewer}
       getTime={getTime}
+      geoRatios={geoRatios}
     />
   )
 }

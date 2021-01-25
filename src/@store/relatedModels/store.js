@@ -2,6 +2,18 @@ import api from '@services/api'
 import { STATUSES, getStatusState } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
 
+const buildGeoRatioURL = (startURL, data) => {
+  const dataQuery = Object.keys(data).reduce((acc, curVal) => {
+    let newAcc = ''
+    if (data[curVal]) {
+      if (!acc.includes('?')) newAcc = '?'
+      newAcc += `${curVal}=${data[curVal]}&`
+    }
+    return acc + newAcc
+  }, '')
+  return startURL + dataQuery
+}
+
 export default store => {
   store.on(types.STORE_INIT, () => ({}))
 
@@ -22,14 +34,14 @@ export default store => {
       },
     })
   )
-  store.on(types.FETCH_RELATED_MODELS, async (_, { id }) => {
+  store.on(types.FETCH_RELATED_MODELS, async (_, { id, geoRatios }) => {
     store.dispatch(types.CHANGE_RELATED_MODELS, {
       status: STATUSES.LOADING,
       atom: `related-models-${id}`,
     })
     const { data, error } = await api({
       method: 'GET',
-      endpoint: `models/related/${id}`,
+      endpoint: buildGeoRatioURL(`models/related/${id}`, geoRatios),
     })
 
     if (error) {
