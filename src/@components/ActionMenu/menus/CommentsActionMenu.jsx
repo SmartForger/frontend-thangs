@@ -78,8 +78,11 @@ const CommentsActionMenu = ({ modelId, comment, onChange = noop }) => {
         onChange,
         actionBarTitle: 'Select action',
         options,
+        tabletLayout: false,
       }}
       TargetComponent={CommentsTarget}
+      isCloseOnSelect={true}
+      isMobileOnly={true}
     />
   )
 }
