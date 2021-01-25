@@ -1,5 +1,4 @@
 import {
-  clickOnElement,
   clickOnTextInsideClass,
   editAndSaveFile,
   goTo,
@@ -9,7 +8,6 @@ import {
   loginByUser,
   urlShouldIncludeAfterTimeout,
   openNotifications,
-  clickOnElementByText,
   isElement,
   isElementContainTwoValues,
 } from '../../utils/common-methods'
@@ -153,7 +151,7 @@ describe('User notifications', () => {
 
     //like
     isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKE, PROPS.VISIBLE)
-    clickOnElementByText(TEXT.LIKE)
+    clickOnTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKE)
     isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKED, PROPS.VISIBLE)
 
     //comment
