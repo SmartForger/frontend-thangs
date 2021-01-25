@@ -47,6 +47,14 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
+const findPrimaryPart = parts => {
+  if (parts.length > 1) {
+    return R.find(R.propEq('isPrimary', true))(parts) || parts[0]
+  } else {
+    return parts[0]
+  }
+}
+
 const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
   const [selectedModel, setSelectedModel] = useState(null)
   const [partList, setPartList] = useState([])
@@ -64,11 +72,7 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
     const { parts } = model
     let primaryPart
     if (parts) {
-      if (parts.length > 1) {
-        primaryPart = R.find(R.propEq('isPrimary', true))(parts) || parts[0]
-      } else {
-        primaryPart = parts[0]
-      }
+      primaryPart = findPrimaryPart(parts)
     } else {
       primaryPart = model
     }
@@ -87,7 +91,9 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
     model.parts.forEach(part => {
       setPartIdAndSubs(part)
     })
-
+    model.parts.sort((a, b) => {
+      return a.isPrimary === b.isPrimary ? 0 : a.isPrimary ? -1 : 1
+    })
     setSelectedModel(primaryPart)
     setPartTreeData(model.parts)
     setPartList(flattenTree(model.parts))
@@ -98,8 +104,10 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
     if (selectedModel) {
       return encodeURIComponent(selectedModel.filename)
     } else {
-      if (model.parts && model.parts.length) {
-        return encodeURIComponent(model.parts[0].filename)
+      const { parts } = model
+      if (parts && parts.length) {
+        const primaryPart = findPrimaryPart(parts)
+        return encodeURIComponent(primaryPart.filename)
       }
       return encodeURIComponent(model.filename)
     }
