@@ -117,9 +117,9 @@ const useHoopsViewer = ({ modelFilename }) => {
         // off until the browser is resized or snapshot, for some reason.
         // Calling resize on this event resizes and doesn't have any flash
         // as far as I can see - BE
-        firstModelLoaded() {
-          handleResize()
-        },
+        // firstModelLoaded() {
+        //   handleResize()
+        // },
       })
 
       viewer.start()
@@ -292,33 +292,33 @@ const useHoopsViewer = ({ modelFilename }) => {
 
   const getViewerSnapshot = useCallback(fileName => {
     track('getViewerSnapshot')
-    hoopsViewerRef &&
-      hoopsViewerRef.current &&
-      hoopsViewerRef.current.takeSnapshot().then(imgElement => {
-        let imageHeight =
-          containerRef &&
-          containerRef.current &&
-          containerRef.current.childNodes[0] &&
-          containerRef.current.childNodes[0].offsetHeight
-        let imageWidth =
-          containerRef &&
-          containerRef.current &&
-          containerRef.current.childNodes[0] &&
-          containerRef.current.childNodes[0].offsetWidth
-        let timestamp = new Date().toLocaleString()
-        let myCanvasElement = document.createElement('canvas')
-        myCanvasElement.width = imageWidth
-        myCanvasElement.height = imageHeight
-        let context = myCanvasElement.getContext('2d')
-        context.fillStyle = 'white'
-        context.fillRect(0, 0, imageWidth, imageHeight)
-        context.drawImage(imgElement, 0, 0, imageWidth, imageHeight)
-        let img = myCanvasElement.toDataURL('image/png')
-        let link = document.createElement('a')
-        link.download = `${fileName}-${timestamp}.png`
-        link.href = img
-        link.click()
-      })
+
+    if (!hoopsViewerRef.current || !containerRef.current) {
+      return
+    }
+
+    const canvasSize = hoopsViewerRef.current.view.getCanvasSize()
+    const config = new Communicator.SnapshotConfig(
+      canvasSize.x,
+      canvasSize.y,
+      Communicator.SnapshotLayer.Model
+    )
+
+    hoopsViewerRef.current.takeSnapshot(config).then(imgElement => {
+      let timestamp = new Date().toLocaleString()
+      let myCanvasElement = document.createElement('canvas')
+      myCanvasElement.width = canvasSize.x
+      myCanvasElement.height = canvasSize.y
+      let context = myCanvasElement.getContext('2d')
+      context.fillStyle = 'white'
+      context.fillRect(0, 0, canvasSize.x, canvasSize.y)
+      context.drawImage(imgElement, 0, 0, canvasSize.x, canvasSize.y)
+      let img = myCanvasElement.toDataURL('image/png')
+      let link = document.createElement('a')
+      link.download = `${fileName}-${timestamp}.png`
+      link.href = img
+      link.click()
+    })
   }, [])
 
   const resetImage = useCallback(() => {

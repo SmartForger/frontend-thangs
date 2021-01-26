@@ -12,7 +12,7 @@ import {
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { ReactComponent as ResetIcon } from '@svg/icon-reset.svg'
-// import { ReactComponent as CameraDesktopIcon } from '@svg/icon-camera-desktop.svg'
+import { ReactComponent as CameraDesktopIcon } from '@svg/icon-camera-desktop.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -116,7 +116,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const Toolbar = ({
-  // onSnapshot,
+  onSnapshot,
   className,
   color,
   isAssembly,
@@ -148,14 +148,14 @@ const Toolbar = ({
             <span>Reset</span>
           </div>
         </Pill>
-        {/* <Spacer size={'1rem'} />
+        <Spacer size={'1rem'} />
         <Pill secondary onClick={onSnapshot}>
           <CameraDesktopIcon />
           <div className={c.Toolbar_ExtraWideText}>
             <Spacer size={'0.25rem'} />
             <span>Snapshot</span>
           </div>
-        </Pill> */}
+        </Pill>
         <Spacer size={'1.125rem'} />
         <div className={c.Toolbar_Text}>
           <div className={c.Toolbar_VerticalRule}></div>
