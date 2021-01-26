@@ -63,6 +63,7 @@ export default store => {
         delete newTreeData[nodeId]
       } else if (newTreeData[nodeId]) {
         newTreeData[nodeId].fileId = ''
+        newTreeData[nodeId].valid = false
       }
     })
 

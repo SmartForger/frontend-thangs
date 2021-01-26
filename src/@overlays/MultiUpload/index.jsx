@@ -354,6 +354,10 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
 
   const handleContinue = useCallback(
     ({ applyRemaining, data }) => {
+      if (errorMessage) {
+        return
+      }
+
       let i = 0
 
       if (data) {
@@ -392,7 +396,7 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
         submitModels()
       }
     },
-    [activeView, allTreeNodes, dispatch, submitModels]
+    [activeView, allTreeNodes, dispatch, submitModels, errorMessage]
   )
 
   const handleBack = useCallback(() => {

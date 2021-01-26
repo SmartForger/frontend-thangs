@@ -219,7 +219,22 @@ const UploadModels = ({
     const warningFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isWarning)
     const missingFiles = allTreeNodes.filter(f => !f.valid)
 
-    if (loadingFiles.length === 0 && !validating) setErrorMessage(null)
+    if (loadingFiles.length === 0 && !validating) {
+      const checkPartFile = node => {
+        return (
+          node.valid &&
+          (!node.isAssembly || node.subs.some(subnode => checkPartFile(subnode)))
+        )
+      }
+      console.log(uploadTreeData)
+      const hasPartFiles = uploadTreeData.every(root => checkPartFile(root))
+
+      if (hasPartFiles) {
+        setErrorMessage(null)
+      } else {
+        setErrorMessage('Trees should have at least 1 part file')
+      }
+    }
     if (warningFiles.length !== 0) {
       setWarningMessage(`Notice: Files over ${FILE_SIZE_LIMITS.soft.pretty} may take a long time to
     upload & process.`)
