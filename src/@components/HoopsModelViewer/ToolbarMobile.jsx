@@ -80,7 +80,6 @@ const useStyles = createUseStyles(theme => {
     Toolbar_PartExplorerWrapper: {
       position: 'relative',
       maxWidth: ({ isAssembly }) => (isAssembly ? '27.75rem' : '20.5rem'),
-      marginBottom: '3rem',
 
       [md_viewer]: {
         maxWidth: '100%',
