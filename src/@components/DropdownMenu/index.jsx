@@ -15,7 +15,6 @@ const useStyles = createUseStyles(theme => {
     DropdownMenu: {
       background: theme.colors.white[400],
       borderRadius: '.5rem',
-      bottom: '3rem',
       boxShadow: '0 1rem 2rem 0 rgba(0,0,0,0.15)',
       boxSizing: 'border-box',
       position: 'absolute',
@@ -30,7 +29,6 @@ const useStyles = createUseStyles(theme => {
 
       [md]: {
         right: '0rem',
-        bottom: '5rem',
       },
     },
     DropdownMenu__isOpen: {
