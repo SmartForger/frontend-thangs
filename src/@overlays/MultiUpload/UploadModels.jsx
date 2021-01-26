@@ -226,7 +226,7 @@ const UploadModels = ({
           (!node.isAssembly || node.subs.some(subnode => checkPartFile(subnode)))
         )
       }
-      console.log(uploadTreeData)
+
       const hasPartFiles = uploadTreeData.every(root => checkPartFile(root))
 
       if (hasPartFiles) {
