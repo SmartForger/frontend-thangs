@@ -29,7 +29,10 @@ const useStyles = createUseStyles(theme => {
       },
     },
     ExplodeMenu: {
-      padding: '0 0.5rem',
+      padding: '0 0.75rem',
+    },
+    ExplodeDropdownMenu: {
+      bottom: '3rem !important',
     },
   }
 })
@@ -75,9 +78,11 @@ const ExplodeActionMenu = ({
   selectedValue,
   key,
 }) => {
+  const c = useStyles({})
+
   const menuProps = useMemo(() => {
-    return { onChange, onSliderEnd, selectedValue, key }
-  }, [key, onChange, onSliderEnd, selectedValue])
+    return { onChange, onSliderEnd, selectedValue, key, className: c.ExplodeDropdownMenu }
+  }, [c.ExplodeDropdownMenu, key, onChange, onSliderEnd, selectedValue])
 
   const targetProps = useMemo(() => {
     return { selectedValue }

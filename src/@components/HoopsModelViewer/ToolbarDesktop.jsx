@@ -16,7 +16,7 @@ import { ReactComponent as ResetIcon } from '@svg/icon-reset.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md_viewer, lg, lg_viewer, xl_viewer },
+    mediaQueries: { md_viewer, lg, lg_viewer, xl },
   } = theme
   return {
     Toolbar: {
@@ -27,11 +27,16 @@ const useStyles = createUseStyles(theme => {
       borderBottom: 0,
       position: 'absolute',
       bottom: 0,
-      width: 'calc(100% - 4rem)',
-      padding: '0 2rem',
+      width: 'calc(100% - 2rem)',
+      padding: '0 1rem',
 
       '& div': {
         flex: 'none',
+      },
+
+      [lg_viewer]: {
+        padding: '0 2rem',
+        width: 'calc(100% - 4rem)',
       },
     },
     Toolbar_Group: {
@@ -59,7 +64,7 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       display: 'none',
 
-      [xl_viewer]: {
+      [xl]: {
         display: 'flex',
       },
     },
@@ -198,7 +203,7 @@ const Toolbar = ({
               <Spacer size={'1.125rem'} />
               <div className={c.Toolbar_Group}>
                 <MetadataSecondary>Explode</MetadataSecondary>
-                <Spacer size={'1rem'} />
+                <Spacer size={'.5rem'} />
                 <div className={c.Toolbar_Text}>
                   <Spacer size={'1rem'} />
                   <Slider

@@ -178,7 +178,7 @@ const useStyles = createUseStyles(theme => {
         maxWidth: '9rem',
       },
 
-      [md_972]: {
+      [xl]: {
         maxWidth: '11rem',
       },
     },
@@ -405,7 +405,7 @@ export const PartExplorerTarget = ({
             Part
           </Tag>
         )}
-        <Spacer size={'.5rem'} />
+        <Spacer className={c.PartExplorerTarget__tablet} size={'.5rem'} />
         {isOpen ? (
           <ExitIcon className={c.PartExplorerTarget_Arrow} />
         ) : (

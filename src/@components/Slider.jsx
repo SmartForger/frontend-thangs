@@ -5,14 +5,18 @@ import { Spacer } from '@components'
 
 const CustomSlider = withStyles({
   root: {
-    width: '6.25rem',
+    width: '5.25rem',
     color: '#242424',
     height: '.25rem',
-    padding: '13px 8px',
+    padding: '13px 8px 7px 8px',
     marginBottom: 0,
 
     '@media (min-width: 1000px)': {
       width: '7.25rem',
+    },
+
+    '@media (min-width: 842px)': {
+      padding: '13px 8px',
     },
   },
   thumb: {

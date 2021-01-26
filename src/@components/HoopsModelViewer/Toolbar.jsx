@@ -36,7 +36,9 @@ const Toolbar = ({
   selectedModel = {},
 }) => {
   const isMultipart = !model.isAssembly && model.parts && model.parts.length > 1
-  const isAssembly = selectedModel.parts && selectedModel.parts.length && !isMultipart
+  const isAssembly =
+    (selectedModel.parts && selectedModel.parts.length && !isMultipart) ||
+    selectedModel.parentId !== undefined
   const c = useStyles({ isMultipart, isAssembly })
   //These keep track the UI toolbar state
   const [mode, setMode] = useState(null)
