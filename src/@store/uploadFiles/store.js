@@ -230,9 +230,8 @@ export default store => {
 
       const uploadedFiles = Object.values(data).filter(file => !file.isError)
       const newTreeData = {}
-
       if (responseData.isAssembly !== false) {
-        const transformNode = (node1, node2, parentId = '', rootName = '') => {
+        const transformNode = (node1, node2, parentId = '', rootName = '', modelId) => {
           const name = node1.name.split(':')[0]
           const filePaths = node1.filename.split('\\')
           const filename = filePaths[filePaths.length - 1]
@@ -241,13 +240,14 @@ export default store => {
           const file = uploadedFiles.find(file => file.name === filename)
 
           const newNode = {
-            id,
-            name,
-            isAssembly: node1.isAssembly,
-            valid: node2.valid,
-            parentId,
+            aggregatorId: modelId,
             fileId: file ? file.id : '',
             filename,
+            id,
+            isAssembly: node1.isAssembly,
+            name,
+            parentId,
+            valid: node2.valid,
           }
           newTreeData[id] = newNode
 
@@ -268,10 +268,15 @@ export default store => {
         }
 
         responseData.forEach(model => {
-          transformNode(model.modelDescription, model.validation, '', model.root)
+          transformNode(
+            model.modelDescription,
+            model.validation,
+            '',
+            model.root,
+            model.modelId
+          )
         })
       }
-
       store.dispatch(types.VALIDATE_FILES_SUCCESS, {
         treeData: newTreeData,
       })
@@ -325,13 +330,12 @@ export default store => {
       )
       const { primary: _p, ...info } = formData[rootNodeId] || {}
       addedFiles[treeData[rootNodeId].fileId] = true
-
+      info.aggregatorId = treeData[rootNodeId].aggregatorId
       info.parts = assemblyGroups[rootName].map(nodeId => {
         const { primary: _p, ...partInfo } = formData[nodeId] || {}
         const node = treeData[nodeId]
         const file = uploadedFiles[node.fileId]
         addedFiles[node.fileId] = true
-
         return {
           ...partInfo,
           originalFileName: file.name,
