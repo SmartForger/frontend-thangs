@@ -16,7 +16,7 @@ import { ReactComponent as CameraDesktopIcon } from '@svg/icon-camera-desktop.sv
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md_viewer, lg, lg_viewer, xl },
+    mediaQueries: { md_viewer, lg, lg_viewer, lgr_viewer, xl },
   } = theme
   return {
     Toolbar: {
@@ -56,7 +56,7 @@ const useStyles = createUseStyles(theme => {
       display: ({ isMultipart, isAssembly }) =>
         isMultipart || isAssembly ? 'none' : 'flex',
 
-      [lg_viewer]: {
+      [lgr_viewer]: {
         display: 'flex !important',
       },
     },
@@ -141,22 +141,24 @@ const Toolbar = ({
     <div className={classnames(c.Toolbar, className)}>
       <Spacer size={'1.5rem'} />
       <div className={c.Toolbar_Group}>
-        <Pill secondary onClick={onResetView}>
-          <ResetIcon />
-          <div className={c.Toolbar_WideText}>
-            <Spacer size={'0.25rem'} />
-            <span>Reset</span>
-          </div>
-        </Pill>
-        <Spacer size={'1rem'} />
-        <Pill secondary onClick={onSnapshot}>
-          <CameraDesktopIcon />
-          <div className={c.Toolbar_ExtraWideText}>
-            <Spacer size={'0.25rem'} />
-            <span>Snapshot</span>
-          </div>
-        </Pill>
-        <Spacer size={'1.125rem'} />
+        <div className={c.Toolbar_Text}>
+          <Pill secondary onClick={onResetView}>
+            <ResetIcon />
+            <div className={c.Toolbar_WideText}>
+              <Spacer size={'0.25rem'} />
+              <span>Reset</span>
+            </div>
+          </Pill>
+          <Spacer size={'1rem'} />
+          <Pill secondary onClick={onSnapshot}>
+            <CameraDesktopIcon />
+            <div className={c.Toolbar_WideText}>
+              <Spacer size={'0.25rem'} />
+              <span>Snapshot</span>
+            </div>
+          </Pill>
+          <Spacer size={'1.125rem'} />
+        </div>
         <div className={c.Toolbar_Text}>
           <div className={c.Toolbar_VerticalRule}></div>
           <Spacer size={'1.125rem'} />

@@ -14,6 +14,7 @@ const createTheme = (data = {}) => {
       md_viewer: '@media (min-width: 842px)',
       md_972: '@media (min-width: 972px)',
       lg_viewer: '@media (min-width: 920px)',
+      lgr_viewer: '@media (min-width: 1028px)',
       lg: '@media (min-width: 1118px)',
       xl_viewer: '@media (min-width: 1182px)',
       xl: '@media (min-width: 1235px)',

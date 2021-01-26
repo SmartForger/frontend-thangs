@@ -17,7 +17,7 @@ import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { xl, md_972, md_viewer },
+    mediaQueries: { xl, md_972, md_viewer, lg_viewer },
   } = theme
   return {
     PartExplorerDropdown: {
@@ -175,6 +175,10 @@ const useStyles = createUseStyles(theme => {
       textOverflow: 'ellipsis',
 
       [md_viewer]: {
+        maxWidth: '5.5rem',
+      },
+
+      [lg_viewer]: {
         maxWidth: '9rem',
       },
 
