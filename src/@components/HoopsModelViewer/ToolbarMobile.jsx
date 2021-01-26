@@ -9,7 +9,7 @@ import {
 } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
-// import { ReactComponent as CameraIcon } from '@svg/icon-camera.svg'
+import { ReactComponent as CameraIcon } from '@svg/icon-camera.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -106,7 +106,7 @@ const Toolbar = ({
   onColorChange,
   onDrawChange,
   onSliderChange,
-  // onSnapshot,
+  onSnapshot,
   onViewChange,
   partList,
   partTreeData,
@@ -144,14 +144,14 @@ const Toolbar = ({
             <Spacer size={'.75rem'} />
           </>
         )}
-        {/* <div className={c.Toolbar_Group}>
+        <div className={c.Toolbar_Group}>
           <Spacer size={'1rem'} />
           <div className={c.Toolbar_Snapshot}>
             <CameraIcon onClick={onSnapshot} />
           </div>
           <Spacer size={'1rem'} />
         </div>
-        <Spacer size={'.75rem'} /> */}
+        <Spacer size={'.75rem'} />
         <div className={c.Toolbar_Group}>
           <Spacer size={'1rem'} />
           <OrientationActionMenu selectedValue={orientation} onChange={onViewChange} />
