@@ -386,9 +386,13 @@ export default store => {
     }
 
     payload.forEach(model => {
+      const parts = []
       if (model.parts && model.parts.length) {
         model.parts.forEach(part => {
-          track('New Model Uploaded', { filename: part.filename })
+          if (!parts.includes(part.filename)) {
+            parts.push(part.filename)
+            track('New Model Uploaded', { filename: part.filename })
+          }
         })
       }
     })
