@@ -64,7 +64,7 @@ const useStyles = createUseStyles(theme => {
           left: '50%',
           position: 'absolute',
           textAlign: 'center',
-          top: '72.5%',
+          top: '75.5%',
           transform: 'translateX(-50%) scale(1.15)',
         },
       },
