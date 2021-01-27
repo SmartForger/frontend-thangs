@@ -266,7 +266,6 @@ const useHoopsViewer = ({ modelFilename }) => {
 
   const changeExplosionMagnitude = useCallback(
     throttle(magnitude => {
-      track('changeExplosionMagnitude')
       if (!hoopsViewerRef.current) {
         return
       }
