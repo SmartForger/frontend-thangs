@@ -46,6 +46,7 @@ const useStyles = createUseStyles(theme => {
           backgroundImage: `url(${ErrorImg})`,
           backgroundPosition: ({ mini }) => (mini ? 'center center' : 'center 37%'),
           backgroundRepeat: 'no-repeat',
+          backgroundSize: ({ mini }) => (mini ? 'contain' : 'auto'),
           content: '""',
           display: 'block',
           height: '100%',
