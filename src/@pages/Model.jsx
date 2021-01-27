@@ -23,7 +23,6 @@ import {
   Spacer,
   Spinner,
   ToggleFollowButton,
-  useFlashNotification,
 } from '@components'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
@@ -407,7 +406,6 @@ const StatsAndActions = ({
 const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST
 const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios }) => {
   const c = useStyles()
-  const { navigateWithFlash } = useFlashNotification() //TODO: Should be removed
   const signUpShown = useRef(false)
   const { setOverlay } = useOverlay()
   const {
@@ -453,7 +451,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
   if (isLoading || !isLoaded) {
     return <Spinner />
   } else if (R.isEmpty(modelData)) {
-    navigateWithFlash('/home', 'The model entered does not exist')
+    return <Message404 />
   } else if (!modelData) {
     return <Message404 />
   } else if (isError) {
