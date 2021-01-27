@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import * as R from 'ramda'
 import {
   Button,
+  MetadataSecondary,
   MultiLineBodyText,
   Pill,
   Spacer,
@@ -283,6 +284,10 @@ const UploadModels = ({
                   <MultiLineBodyText className={c.UploadModels_BrowseText}>
                     or browse to upload.
                   </MultiLineBodyText>
+                  <MetadataSecondary>
+                    For full assembly support (eg. Part Explorer, Explode view), please
+                    upload the native assembly and part files (eg. asm/prt, SLDASM/SLDPRT)
+                  </MetadataSecondary>
                   <Spacer size={'1rem'} />
                   <Pill secondary>Browse</Pill>
                   <Spacer size={'.75rem'} />
