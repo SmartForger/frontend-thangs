@@ -143,7 +143,7 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
       .filter(file => file.name && !file.isError && !treeNodeFiles.includes(file.name))
       .map(file => {
         const id = '/' + file.name
-        newTreeData[id] = {
+        const result = {
           id,
           name: file.name,
           size: file.size,
@@ -154,11 +154,16 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
           loading: file.isLoading,
           fileId: file.id,
         }
-        return newTreeData[id]
+
+        if (!isAssembly) {
+          newTreeData[id] = result
+        }
+
+        return result
       })
     setSinglePartsCount(singleNodes.length)
 
-    const nodesArray = []
+    let nodesArray = []
     const formNode = nodeId => {
       const newNode = newTreeData[nodeId] || {}
       if (nodeId) {
@@ -169,8 +174,8 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
           ? newNode.subIds.map(subId => formNode(subId))
           : []
         : Object.values(newTreeData)
-          .filter(node => !node.parentId)
-          .map(node => formNode(node.id))
+            .filter(node => !node.parentId)
+            .map(node => formNode(node.id))
 
       newNode.treeValid =
         newNode.valid &&
@@ -200,7 +205,8 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
         subs: singleNodes,
       }
       trees.push(multipartNode)
-      nodesArray.splice(-singleNodes.length, 0, multipartNode)
+      nodesArray.push(multipartNode)
+      nodesArray = nodesArray.concat(singleNodes)
     }
 
     setAllTreeNodes(nodesArray)
@@ -446,10 +452,10 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
               {!activeNode
                 ? 'Upload Files'
                 : activeNode.isAssembly && activeNode.parentId
-                  ? 'Sub Assembly'
-                  : activeNode.isAssembly
-                    ? 'New Assembly'
-                    : partFormTitle}
+                ? 'Sub Assembly'
+                : activeNode.isAssembly
+                ? 'New Assembly'
+                : partFormTitle}
             </SingleLineBodyText>
             {activeView > -1 && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />
