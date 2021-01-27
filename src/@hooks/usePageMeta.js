@@ -11,11 +11,17 @@ const usePageMeta = page => {
       return {
         title: metaData.modelTitle,
         description: metaData.modelDescription,
+        descriptionCreatedBy: metaData.modelDescriptionCreatedBy,
+        descriptionPrefix: metaData.modelDescriptionPrefix,
+        descriptionPostfix: metaData.modelDescriptionPostfix,
+        defaultDescription: metaData.modelDescriptionDefault,
       }
     case 'profile':
       return {
         title: metaData.profileTitle,
         description: metaData.profileDescription,
+        descriptionPostfix: metaData.profilePostfix,
+        descriptionDefault: metaData.profileDescriptionDefault,
       }
     case 'aboutUs':
       return {

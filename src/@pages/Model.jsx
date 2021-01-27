@@ -429,7 +429,14 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
     if (isLoaded) perfTrack('Page Loaded - Model', getTime())
   }, [getTime, isLoaded])
 
-  const { title, description } = usePageMeta('model')
+  const {
+    title,
+    description,
+    descriptionCreatedBy,
+    descriptionPrefix,
+    descriptionPostfix,
+    defaultDescription,
+  } = usePageMeta('model')
   const openSignupOverlay = useCallback(
     (titleMessage, source) => {
       setOverlay({
@@ -460,15 +467,18 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
   const modelMetaTitle = modelData.category
     ? `3D ${modelData.category} model`
     : modelData.owner && modelData.owner.username
-  const pageTitle = `${modelData.name} | ${modelMetaTitle}${title}`
-  const modelDescription = modelData.description || ''
+  const modelAuthor = modelData.owner && modelData.owner.username
+  const pageTitle = `${modelData.name}${descriptionPostfix} | ${modelMetaTitle}${title}`
+  const modelDescription = modelData.description || defaultDescription
   return (
     <>
       <Helmet>
         <title>{pageTitle}</title>
         <meta
           name='description'
-          content={`${description}${modelDescription.slice(0, 129)}`}
+          content={`${descriptionPrefix}${
+            modelData.name
+          }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
         />
         <meta property='og:title' content={pageTitle} />
         <meta
@@ -541,7 +551,8 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
 }
 
 const Page = () => {
-  const { id } = useParams()
+  const { id, identifier } = useParams()
+  console.log(identifier)
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [currentUser] = useLocalStorage('currentUser', null)
   const { getTime, startTimer } = usePerformanceMetrics()

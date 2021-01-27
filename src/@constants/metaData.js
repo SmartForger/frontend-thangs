@@ -2,10 +2,17 @@ export const aboutUsDescription =
   'Thangs is the most powerful search platform for the 3D modeling community. Our unique geometric search allows users to upload 3D models and find similar.'
 export const aboutUsTitle = 'Thangs | About Us | The fastest growing 3D community'
 export const modelDescription = 'Sign up and download for free. '
+export const modelDescriptionPrefix = '3D model of '
+export const modelDescriptionPostfix = ' - 3D model'
+export const modelDescriptionCreatedBy = 'created by '
+export const modelDescriptionDefault = 'Free to download or discover similar.'
 export const modelTitle = ' | Thangs'
 export const profileDescription =
   'Sign up for your free profile on Thangs 3D model community. Search over 1 million 3D models. Store 3D models, share & collaborate with other Thangs users'
 export const profileTitle = ' | Thangs'
+export const profilePostfix = ' Thangs community collaborator.'
+export const profileDescriptionDefault =
+  ' 3D model contributions for the Thangs community. View all models, free to download. Follow your favorite designers.'
 export const searchDescription =
   'Search free 3D models. Upload 3D model to find similar models. Use geometric search to find over 1 million free 3D models.'
 export const searchTitle =

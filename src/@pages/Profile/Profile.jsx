@@ -331,9 +331,15 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, getTime }) => {
   )
 }
 
-const PageById = ({ userId, isCurrentUsersProfile, getTime }) => {
+const PageById = ({ userId, isCurrentUsersProfile, getTime, userName }) => {
   const { dispatch, [`user-${userId}`]: userData = {} } = useStoreon(`user-${userId}`)
   const { isLoading, isLoaded, isError, data: user } = userData
+  const { title, descriptionPostfix, descriptionDefault } = usePageMeta('profile')
+  const description = 'getDescription(user)'
+  let profileDescription = `${userName}.${description ? description : descriptionDefault}`
+  if (profileDescription.length < 160 && description) {
+    profileDescription += `${descriptionPostfix}`
+  }
 
   useEffect(() => {
     dispatch(types.FETCH_USER, { id: userId })
@@ -360,13 +366,22 @@ const PageById = ({ userId, isCurrentUsersProfile, getTime }) => {
   }
 
   return (
-    <UserPage
-      user={user}
-      userId={userId}
-      isCurrentUsersProfile={isCurrentUsersProfile}
-      isLoading={isLoading}
-      getTime={getTime}
-    />
+    <>
+      <Helmet>
+        <title>
+          {userName} - 3D model uploads
+          {title}
+        </title>
+        <meta name='description' content={profileDescription} />
+      </Helmet>
+      <UserPage
+        user={user}
+        userId={userId}
+        isCurrentUsersProfile={isCurrentUsersProfile}
+        isLoading={isLoading}
+        getTime={getTime}
+      />
+    </>
   )
 }
 
@@ -376,7 +391,6 @@ const PageByUserName = ({ userName, getTime }) => {
   )
   const history = useHistory()
   const { isLoaded, isError, data: userId } = userIdData
-  const { title, description } = usePageMeta('profile')
   const currentUserId = useCurrentUserId()
   const isCurrentUsersProfile = useMemo(() => currentUserId === userId, [
     currentUserId,
@@ -417,14 +431,8 @@ const PageByUserName = ({ userName, getTime }) => {
 
   return (
     <>
-      <Helmet>
-        <title>
-          {userName} - 3D model uploads
-          {title}
-        </title>
-        <meta name='description' content={description} />
-      </Helmet>
       <PageById
+        userName={userName}
         userId={userId}
         isCurrentUsersProfile={isCurrentUsersProfile}
         getTime={getTime}
