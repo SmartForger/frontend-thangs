@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import * as R from 'ramda'
-import ErrorImg from '@svg/image-error-icon.svg'
+import ErrorImg from '@svg/image-loading-icon.svg'
 import { Loader } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
