@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
 import { history } from './history'
-import { createInstance, OptimizelyProvider } from '@optimizely/react-sdk'
+import { createInstance, OptimizelyProvider, setLogger } from '@optimizely/react-sdk'
 import {
   AboutUs,
   Auth,
@@ -50,7 +50,7 @@ const App = () => {
   const optimizely = createInstance({
     sdkKey: process.env.REACT_APP_OPTIMIZELY_API_KEY,
   })
-
+  setLogger(null)
   optimizely.onReady({ timeout: 5000 }).then(() => {
     setIsLoadingOptimizely(false)
   })
