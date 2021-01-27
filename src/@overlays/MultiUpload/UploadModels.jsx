@@ -232,7 +232,7 @@ const UploadModels = ({
       if (hasPartFiles) {
         setErrorMessage(null)
       } else {
-        setErrorMessage('Trees should have at least 1 part file')
+        setErrorMessage('Assembly require at least 1 part file')
       }
     }
     if (warningFiles.length !== 0) {
