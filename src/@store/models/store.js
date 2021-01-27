@@ -29,19 +29,19 @@ export default store => {
     if (!silentUpdate) {
       store.dispatch(types.CHANGE_MODEL_STATUS, {
         status: STATUSES.LOADING,
-        atom: `model-${id}`,
+        atom: 'model',
       })
     }
     const { data, error } = await api({ method: 'GET', endpoint: `models/${id}` })
     if (error || R.isEmpty(data)) {
       store.dispatch(types.CHANGE_MODEL_STATUS, {
         status: STATUSES.FAILURE,
-        atom: `model-${id}`,
+        atom: 'model',
       })
     } else {
       store.dispatch(types.CHANGE_MODEL_STATUS, {
         status: STATUSES.LOADED,
-        atom: `model-${id}`,
+        atom: 'model',
         data,
       })
     }
@@ -51,10 +51,10 @@ export default store => {
     types.UPDATE_MODEL,
     async (_, { id, model: updatedModel, onError = noop, onFinish = noop }) => {
       if (R.isNil(id)) return
-      const oldModel = (store[`model-${id}`] && store[`model-${id}`].data) || {}
+      const oldModel = (store['model'] && store['model'].data) || {}
       store.dispatch(types.CHANGE_MODEL_STATUS, {
         status: STATUSES.SAVING,
-        atom: `model-${id}`,
+        atom: 'model',
         data: updatedModel,
       })
       const { error } = await api({
@@ -66,14 +66,14 @@ export default store => {
       if (error) {
         store.dispatch(types.CHANGE_MODEL_STATUS, {
           status: STATUSES.FAILURE,
-          atom: `model-${id}`,
+          atom: 'model',
           data: oldModel,
         })
         onError(error.message)
       } else {
         store.dispatch(types.CHANGE_MODEL_STATUS, {
           status: STATUSES.SAVED,
-          atom: `model-${id}`,
+          atom: 'model',
           data: updatedModel,
         })
         store.dispatch(types.FETCH_MODEL, { id })
@@ -90,7 +90,7 @@ export default store => {
       const { id } = model
       store.dispatch(types.CHANGE_MODEL_STATUS, {
         status: STATUSES.SAVING,
-        atom: `model-${id}`,
+        atom: 'model',
       })
 
       const { error } = await api({
@@ -101,14 +101,14 @@ export default store => {
       if (error) {
         store.dispatch(types.CHANGE_MODEL_STATUS, {
           status: STATUSES.FAILURE,
-          atom: `model-${id}`,
+          atom: 'model',
         })
         onError(error.message)
       } else {
         onFinish()
         store.dispatch(types.CHANGE_MODEL_STATUS, {
           status: STATUSES.SAVED,
-          atom: `model-${id}`,
+          atom: 'model',
         })
         const newModels = removeModel(model, state.models.data)
         store.dispatch(types.UPDATE_MODELS, newModels)
@@ -263,12 +263,12 @@ export default store => {
   )
 
   store.on(types.LOCAL_FOLLOW_MODEL_OWNER, async (state, { id, isFollowing }) => {
-    const model = state[`model-${id}`].data
+    const model = state['model'].data
     model.owner.isBeingFollowedByRequester = !isFollowing
 
     store.dispatch(types.CHANGE_MODEL_STATUS, {
       status: STATUSES.LOADED,
-      atom: `model-${id}`,
+      atom: 'model',
       data: { ...model },
     })
   })

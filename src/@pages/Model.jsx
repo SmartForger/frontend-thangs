@@ -410,9 +410,9 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
   const { setOverlay } = useOverlay()
   const {
     dispatch,
-    [`model-${id}`]: modelAtom = {},
+    model: modelAtom = {},
     [`related-models-${id}`]: related = {},
-  } = useStoreon(`model-${id}`, `related-models-${id}`)
+  } = useStoreon('model', `related-models-${id}`)
   const { data: modelData, isLoading, isLoaded, isError } = modelAtom
   const {
     isLoading: isRelatedLoading,
