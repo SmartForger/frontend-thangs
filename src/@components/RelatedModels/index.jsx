@@ -36,7 +36,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const RelatedModels = ({ isLoading, isError, data = {}, className }) => {
+const RelatedModels = ({ isLoading, isError, data = {}, className, modelName }) => {
   const c = useStyles()
 
   if (isLoading) {
@@ -50,7 +50,7 @@ const RelatedModels = ({ isLoading, isError, data = {}, className }) => {
     <div className={classnames(className, c.RelatedModels_Related)}>
       <div className={c.RelatedModels_Header}>
         <UploadIcon width={'1rem'} height={'1rem'} />
-        Geometrically Related
+        Geometrically Related to {modelName}
       </div>
 
       <CardCollectionRelated

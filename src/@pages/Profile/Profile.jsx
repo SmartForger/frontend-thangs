@@ -286,7 +286,7 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, getTime }) => {
           </div>
           <div>
             <Spacer size={'2rem'} />
-            <h1 className={c.Profile_Name}>{user.fullName}</h1>
+            <h1 className={c.Profile_Name}>{user.username} Profile and Models</h1>
             {!showProfileForm && <MetadataPrimary>{user.username}</MetadataPrimary>}
           </div>
         </div>

@@ -524,6 +524,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
                 pageTitle={pageTitle}
               />
               <RelatedModels
+                modelName={modelData && modelData.name}
                 isLoading={isRelatedLoading}
                 isError={isRelatedError}
                 data={relatedData}
