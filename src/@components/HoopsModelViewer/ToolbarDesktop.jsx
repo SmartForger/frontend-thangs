@@ -16,7 +16,7 @@ import { ReactComponent as CameraDesktopIcon } from '@svg/icon-camera-desktop.sv
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md_viewer, lg, lg_viewer, lgr_viewer, xl },
+    mediaQueries: { md_viewer, lg, lg_viewer, xxl_viewer, xl },
   } = theme
   return {
     Toolbar: {
@@ -56,7 +56,7 @@ const useStyles = createUseStyles(theme => {
       display: ({ isMultipart, isAssembly }) =>
         isMultipart || isAssembly ? 'none' : 'flex',
 
-      [lgr_viewer]: {
+      [xxl_viewer]: {
         display: 'flex !important',
       },
     },
