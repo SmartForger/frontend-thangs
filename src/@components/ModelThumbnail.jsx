@@ -58,7 +58,7 @@ const useStyles = createUseStyles(theme => {
         },
 
         '&:after': {
-          content: '"Image Unavailable"',
+          content: '"Image Processing..."',
           display: ({ mini }) => (mini ? 'none' : 'block'),
           left: '50%',
           position: 'absolute',
