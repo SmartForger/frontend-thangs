@@ -551,8 +551,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
 }
 
 const Page = () => {
-  const { id, identifier } = useParams()
-  console.log(identifier)
+  const { id } = useParams()
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [currentUser] = useLocalStorage('currentUser', null)
   const { getTime, startTimer } = usePerformanceMetrics()
