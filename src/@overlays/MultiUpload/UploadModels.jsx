@@ -169,6 +169,9 @@ const useStyles = createUseStyles(theme => {
     UploadModels_BrowseText: {
       color: theme.colors.grey[300],
     },
+    UploadModels_AssemblyText: {
+      paddingTop: '1rem',
+    },
   }
 })
 const noop = () => null
@@ -284,7 +287,7 @@ const UploadModels = ({
                   <MultiLineBodyText className={c.UploadModels_BrowseText}>
                     or browse to upload.
                   </MultiLineBodyText>
-                  <MetadataSecondary>
+                  <MetadataSecondary className={c.UploadModels_AssemblyText}>
                     For full assembly support (eg. Part Explorer, Explode view), please
                     upload the native assembly and part files (eg. asm/prt, SLDASM/SLDPRT)
                   </MetadataSecondary>

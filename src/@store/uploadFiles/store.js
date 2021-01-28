@@ -415,6 +415,9 @@ export default store => {
           payload: JSON.stringify(payload),
         })
       }
+      // data should be an array. If the nodeJS timeout hits we will
+      // receive an empty object instead. Hitting the nodeJS timeout
+      // doesn't necessarily mean the model has failed just taking longer to process - BE
       if (data && data.length) {
         track('Model Uploaded Succeeded', { data, payload: JSON.stringify(payload) })
       } else {
