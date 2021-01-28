@@ -117,9 +117,15 @@ const useHoopsViewer = ({ modelFilename }) => {
         // off until the browser is resized or snapshot, for some reason.
         // Calling resize on this event resizes and doesn't have any flash
         // as far as I can see - BE
-        // firstModelLoaded() {
-        //   handleResize()
-        // },
+        firstModelLoaded() {
+          handleResize()
+          viewer &&
+            viewer.view &&
+            viewer.view.setViewOrientation(
+              Communicator.ViewOrientation['TopLeftFront'],
+              1000
+            )
+        },
       })
 
       viewer.start()

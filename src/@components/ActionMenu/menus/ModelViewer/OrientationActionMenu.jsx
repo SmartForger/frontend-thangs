@@ -15,6 +15,24 @@ import { ReactComponent as BackViewSelected } from '@svg/view-back-icon-selected
 import { ReactComponent as RightViewSelected } from '@svg/view-right-icon-selected.svg'
 import { ReactComponent as LeftViewSelected } from '@svg/view-left-icon-selected.svg'
 
+import { ReactComponent as TopLeftBackViewIcon } from '@svg/view-topleftback-icon.svg'
+import { ReactComponent as TopRightBackViewIcon } from '@svg/view-toprightback-icon.svg'
+import { ReactComponent as TopLeftFrontViewIcon } from '@svg/view-topleftfront-icon.svg'
+import { ReactComponent as TopRightFrontViewIcon } from '@svg/view-toprightfront-icon.svg'
+import { ReactComponent as BottomLeftBackViewIcon } from '@svg/view-bottomleftback-icon.svg'
+import { ReactComponent as BottomRightBackViewIcon } from '@svg/view-bottomrightback-icon.svg'
+import { ReactComponent as BottomLeftFrontViewIcon } from '@svg/view-bottomleftfront-icon.svg'
+import { ReactComponent as BottomRightFrontViewIcon } from '@svg/view-bottomrightfront-icon.svg'
+
+import { ReactComponent as TopLeftBackViewSelected } from '@svg/view-topleftback-icon-selected.svg'
+import { ReactComponent as TopRightBackViewSelected } from '@svg/view-toprightback-icon-selected.svg'
+import { ReactComponent as TopLeftFrontViewSelected } from '@svg/view-topleftfront-icon-selected.svg'
+import { ReactComponent as TopRightFrontViewSelected } from '@svg/view-toprightfront-icon-selected.svg'
+import { ReactComponent as BottomLeftBackViewSelected } from '@svg/view-bottomleftback-icon-selected.svg'
+import { ReactComponent as BottomRightBackViewSelected } from '@svg/view-bottomrightback-icon-selected.svg'
+import { ReactComponent as BottomLeftFrontViewSelected } from '@svg/view-bottomleftfront-icon-selected.svg'
+import { ReactComponent as BottomRightFrontViewSelected } from '@svg/view-bottomrightfront-icon-selected.svg'
+
 const useStyles = createUseStyles(theme => {
   const {
     mediaQueries: { md, md_viewer },
@@ -97,6 +115,54 @@ const options = [
     Icon: LeftViewIcon,
     value: 'Left',
     DesktopSelectedIcon: LeftViewSelected,
+  },
+  {
+    label: 'TopLeftBack',
+    Icon: TopLeftBackViewIcon,
+    value: 'TopLeftBack',
+    DesktopSelectedIcon: TopLeftBackViewSelected,
+  },
+  {
+    label: 'TopRightBack',
+    Icon: TopRightBackViewIcon,
+    value: 'TopRightBack',
+    DesktopSelectedIcon: TopRightBackViewSelected,
+  },
+  {
+    label: 'TopLeftFront',
+    Icon: TopLeftFrontViewIcon,
+    value: 'TopLeftFront',
+    DesktopSelectedIcon: TopLeftFrontViewSelected,
+  },
+  {
+    label: 'TopRightFront',
+    Icon: TopRightFrontViewIcon,
+    value: 'TopRightFront',
+    DesktopSelectedIcon: TopRightFrontViewSelected,
+  },
+  {
+    label: 'BottomLeftBack',
+    Icon: BottomLeftBackViewIcon,
+    value: 'BottomLeftBack',
+    DesktopSelectedIcon: BottomLeftBackViewSelected,
+  },
+  {
+    label: 'BottomRightBack',
+    Icon: BottomRightBackViewIcon,
+    value: 'BottomRightBack',
+    DesktopSelectedIcon: BottomRightBackViewSelected,
+  },
+  {
+    label: 'BottomLeftFront',
+    Icon: BottomLeftFrontViewIcon,
+    value: 'BottomLeftFront',
+    DesktopSelectedIcon: BottomLeftFrontViewSelected,
+  },
+  {
+    label: 'BottomRightFront',
+    Icon: BottomRightFrontViewIcon,
+    value: 'BottomRightFront',
+    DesktopSelectedIcon: BottomRightFrontViewSelected,
   },
 ]
 

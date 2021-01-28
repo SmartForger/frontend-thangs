@@ -42,7 +42,7 @@ const Toolbar = ({
   const c = useStyles({ isMultipart, isAssembly })
   //These keep track the UI toolbar state
   const [mode, setMode] = useState(null)
-  const [orientation, setOrientation] = useState('front')
+  const [orientation, setOrientation] = useState('TopLeftFront')
   const [color, setColor] = useState('#999')
   const [magnitude, setMagnitude] = useState(0)
 
