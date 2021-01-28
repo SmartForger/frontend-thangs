@@ -19,9 +19,9 @@ const trackParts = (model, eventName) => {
   const parts = []
   if (model.parts && model.parts.length) {
     model.parts.forEach(part => {
-      if (!parts.includes(part.filename)) {
-        parts.push(part.filename)
-        track(eventName, { filename: part.filename })
+      if (!parts.includes(part.name)) {
+        parts.push(part.name)
+        track(eventName, { filename: part.name })
       }
     })
   }
