@@ -277,11 +277,11 @@ const ModelStats = ({ model = {} }) => {
     <div className={c.Model_ModelStats}>
       <span>
         <HeartIcon width={12} height={12} />
-        {model.likesCount} likes
+        {model.likesCount}&nbsp;Likes
       </span>
       <span>
         <DownloadIcon width={12} height={12} />
-        {model.downloadCount} Downloads
+        {model.downloadCount}&nbsp;Downloads
       </span>
       <span>
         <CalendarIcon width={12} height={12} />
