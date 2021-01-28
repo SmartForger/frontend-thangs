@@ -53,6 +53,7 @@
     "react-spring": "^8.0.27",
     "react-three-fiber": "^4.0.10",
     "react-tooltip": "^4.2.9",
+    "react-window": "^1.8.6",
     "serve": "^11.3.0",
     "stackdriver-errors-js": "^0.8.0",
     "storeon": "^3.0.3",

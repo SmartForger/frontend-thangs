@@ -8,8 +8,8 @@ import {
   SingleLineBodyText,
   Tag,
   TextInput,
-  TreeView,
 } from '@components'
+import { FixedSizeList } from 'react-window'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X-sm.svg'
@@ -118,7 +118,6 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       overflow: 'hidden',
-      flex: 1,
     },
     PartSelectorRow__hover: {
       borderRadius: '.25rem',
@@ -289,49 +288,32 @@ const PartSelectorRow = ({ part = {}, onClick }) => {
   )
 }
 
-const AssemblyExplorer = ({
-  className,
-  parts,
-  partTree,
-  isSearchingParts,
-  onChange,
-  selectedPart,
-}) => {
+const AssemblyExplorer = ({ className, parts, onChange, selectedPart }) => {
   const c = useStyles()
-
-  const treeData = useMemo(() => {
-    return isSearchingParts ? parts : partTree
-  }, [parts, partTree, isSearchingParts])
 
   return useMemo(
     () => (
-      <TreeView
+      <FixedSizeList
         className={className}
-        nodes={partTree}
-        levelPadding={20}
-        defaultExpanded={parts.length < 2}
-        rootCollapsible={false}
-        isSelected={node => node.name === selectedPart.name}
-        classes={{
-          item: c.PartSelectorRow__hover,
-          itemSelected: c.PartSelectorRow__selected,
-        }}
-        showDivider={false}
-        rowSpacing='.25rem'
-        subnodeField='parts'
-        renderNode={(node, level) => (
-          <PartSelectorRow part={node} level={level} onClick={() => onChange(node)} />
+        width={280}
+        height={300}
+        itemCount={parts.length}
+        itemSize={58}
+      >
+        {({ index, style }) => (
+          <div style={style}>
+            <PartSelectorRow part={parts[index]} onClick={() => onChange(parts[index])} />
+          </div>
         )}
-      />
+      </FixedSizeList>
     ),
-    [treeData, selectedPart.name]
+    [parts, selectedPart.name]
   )
 }
 
 export const PartExplorerMenu = ({
   onChange = noop,
   partList = [],
-  partTreeData = [],
   selectedValue: selectedPart,
 }) => {
   const c = useStyles({})
@@ -372,8 +354,6 @@ export const PartExplorerMenu = ({
         <AssemblyExplorer
           className={c.AssemblyExplorer_Wrapper}
           parts={partsToDisplay}
-          partTree={partTreeData}
-          isSearchingParts={partsToDisplay.length < partList.length}
           onChange={onChange}
           selectedPart={selectedPart}
         />
@@ -425,24 +405,18 @@ export const PartExplorerTarget = ({
   )
 }
 
-const PartExplorerActionMenu = ({
-  onChange = noop,
-  selectedValue,
-  partList,
-  partTreeData,
-}) => {
+const PartExplorerActionMenu = ({ onChange = noop, selectedValue, partList }) => {
   const c = useStyles({})
   const menuProps = useMemo(() => {
     return {
       actionBarTitle: 'Select a model',
       className: c.PartExplorerActionMenu,
       partList,
-      partTreeData,
       onChange,
       selectedValue,
       tabletLayout: true,
     }
-  }, [c.PartExplorerActionMenu, onChange, partList, partTreeData, selectedValue])
+  }, [c.PartExplorerActionMenu, onChange, partList, selectedValue])
 
   const targetProps = useMemo(() => {
     return { selectedValue }

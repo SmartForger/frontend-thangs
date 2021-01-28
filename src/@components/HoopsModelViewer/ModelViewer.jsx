@@ -58,7 +58,6 @@ const findPrimaryPart = parts => {
 const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
   const [selectedModel, setSelectedModel] = useState(null)
   const [partList, setPartList] = useState([])
-  const [partTreeData, setPartTreeData] = useState([])
   const c = useStyles()
   const { useHoopsViewer } = useModels()
   const { startTimer, getTime } = usePerformanceMetrics()
@@ -77,25 +76,12 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
       primaryPart = model
     }
 
-    const setPartId = part => {
-      part.id = Math.random().toString().slice(2)
-
-      if (part.parts) {
-        part.parts.forEach(subnode => {
-          setPartId(subnode)
-        })
-      }
-    }
     if (model.parts) {
-      model.parts.forEach(part => {
-        setPartId(part)
-      })
       model.parts.sort((a, b) => {
         return a.isPrimary === b.isPrimary ? 0 : a.isPrimary ? -1 : 1
       })
       setSelectedModel(primaryPart)
-      setPartTreeData(model.parts)
-      setPartList(flattenTree(model.parts))
+      setPartList(flattenTree(model.parts, 'parts'))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [model.id])
@@ -135,7 +121,6 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
           setSelectedModel={setSelectedModel}
           selectedModel={selectedModel}
           partList={partList}
-          partTreeData={partTreeData}
         />
       )}
     </div>

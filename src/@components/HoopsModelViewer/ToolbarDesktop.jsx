@@ -130,7 +130,6 @@ const Toolbar = ({
   onViewChange,
   orientation,
   partList,
-  partTreeData,
   selectedModel,
   setSelectedModel,
   showPartSelector,
@@ -227,7 +226,6 @@ const Toolbar = ({
               <PartExplorerActionMenu
                 onChange={setSelectedModel}
                 partList={partList}
-                partTreeData={partTreeData}
                 selectedValue={selectedModel}
               />
             </div>
