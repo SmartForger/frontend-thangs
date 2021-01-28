@@ -16,6 +16,7 @@ const getInitAtom = () => ({
 })
 
 const trackParts = (model, eventName) => {
+  track(eventName, { filename: model.name })
   const parts = []
   if (model.parts && model.parts.length) {
     model.parts.forEach(part => {
@@ -445,7 +446,6 @@ export default store => {
               payload: JSON.stringify(payload),
             })
             eventName = eventName.replace('Model', 'Part')
-            track(eventName)
             trackParts(payload[index], eventName)
           })
         }
