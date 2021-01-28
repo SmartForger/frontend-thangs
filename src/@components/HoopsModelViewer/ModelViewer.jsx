@@ -77,19 +77,18 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
       primaryPart = model
     }
 
-    const setPartIdAndSubs = part => {
+    const setPartId = part => {
       part.id = Math.random().toString().slice(2)
-      part.subs = part.parts
 
-      if (part.subs) {
-        part.subs.forEach(subnode => {
-          setPartIdAndSubs(subnode)
+      if (part.parts) {
+        part.parts.forEach(subnode => {
+          setPartId(subnode)
         })
       }
     }
     if (model.parts) {
       model.parts.forEach(part => {
-        setPartIdAndSubs(part)
+        setPartId(part)
       })
       model.parts.sort((a, b) => {
         return a.isPrimary === b.isPrimary ? 0 : a.isPrimary ? -1 : 1

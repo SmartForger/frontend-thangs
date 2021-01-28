@@ -54,6 +54,7 @@ export const TreeNode = ({
   classes,
   showDivider,
   rowSpacing,
+  subnodeField,
 }) => {
   const [expanded, setExpanded] = useState(defaultExpanded || !rootCollapsible)
   const c = useStyles()
@@ -62,8 +63,11 @@ export const TreeNode = ({
     setExpanded(!expanded)
   }
 
-  const isAssembly = node.subs && node.subs.length > 0
-  const isAssemblyPart = level > 0 && (!node.subs || !node.subs.length)
+  console.log(22222, node.id)
+
+  const subnodes = node[subnodeField] || []
+  const isAssembly = subnodes.length > 0
+  const isAssemblyPart = level > 0 && subnodes.length === 0
   return (
     <>
       <div className={c.TreeNode_Root}>
@@ -91,13 +95,13 @@ export const TreeNode = ({
           )}
           {renderNode(node, level)}
         </div>
-        {expanded && node.subs && node.subs.length > 0 && (
+        {expanded && subnodes.length > 0 && (
           <>
             {showDivider && <Divider spacing={0} />}
             {rowSpacing && <Spacer size={rowSpacing} />}
-            {node.subs.map((subnode, index) => (
+            {subnodes.map((subnode, index) => (
               <TreeNode
-                isLastNode={index === node.subs.length - 1}
+                isLastNode={index === subnodes.length - 1}
                 key={`subnode_${subnode.id}`}
                 level={level + 1}
                 levelPadding={levelPadding}
@@ -107,6 +111,7 @@ export const TreeNode = ({
                 classes={classes}
                 showDivider={showDivider}
                 rowSpacing={rowSpacing}
+                subnodeField={subnodeField}
               />
             ))}
           </>

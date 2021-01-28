@@ -44,6 +44,7 @@ const TreeView = ({
   },
   showDivider = true,
   rowSpacing,
+  subnodeField = 'subs',
 }) => {
   const c = useStyles()
 
@@ -64,6 +65,7 @@ const TreeView = ({
             classes={classes}
             showDivider={showDivider}
             rowSpacing={rowSpacing}
+            subnodeField={subnodeField}
           />
         ))}
       </div>

@@ -300,27 +300,31 @@ const AssemblyExplorer = ({
   const c = useStyles()
 
   const treeData = useMemo(() => {
-    return isSearchingParts ? parts.map(p => ({ ...p, subs: [] })) : partTree
+    return isSearchingParts ? parts : partTree
   }, [parts, partTree, isSearchingParts])
 
-  return (
-    <TreeView
-      className={className}
-      nodes={treeData}
-      levelPadding={20}
-      defaultExpanded={parts.length < 2}
-      rootCollapsible={false}
-      isSelected={node => node.name === selectedPart.name}
-      classes={{
-        item: c.PartSelectorRow__hover,
-        itemSelected: c.PartSelectorRow__selected,
-      }}
-      showDivider={false}
-      rowSpacing='.25rem'
-      renderNode={(node, level) => (
-        <PartSelectorRow part={node} level={level} onClick={() => onChange(node)} />
-      )}
-    />
+  return useMemo(
+    () => (
+      <TreeView
+        className={className}
+        nodes={partTree}
+        levelPadding={20}
+        defaultExpanded={parts.length < 2}
+        rootCollapsible={false}
+        isSelected={node => node.name === selectedPart.name}
+        classes={{
+          item: c.PartSelectorRow__hover,
+          itemSelected: c.PartSelectorRow__selected,
+        }}
+        showDivider={false}
+        rowSpacing='.25rem'
+        subnodeField='parts'
+        renderNode={(node, level) => (
+          <PartSelectorRow part={node} level={level} onClick={() => onChange(node)} />
+        )}
+      />
+    ),
+    [treeData, selectedPart.name]
   )
 }
 

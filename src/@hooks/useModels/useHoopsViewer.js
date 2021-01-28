@@ -199,9 +199,8 @@ const useHoopsViewer = ({ modelFilename }) => {
         debug('  ** 2: Cleanup!  HWV Shutdown! **')
         try {
           hoopsViewerRef.current.shutdown()
-        } finally {
           hoopsViewerRef.current = null
-        }
+        } catch (err) {}
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
