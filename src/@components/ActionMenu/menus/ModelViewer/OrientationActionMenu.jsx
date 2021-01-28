@@ -3,11 +3,13 @@ import { ActionMenu, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as TopViewIcon } from '@svg/view-top-icon.svg'
+import { ReactComponent as BottomViewIcon } from '@svg/view-bottom-icon.svg'
 import { ReactComponent as FrontViewIcon } from '@svg/view-front-icon.svg'
 import { ReactComponent as BackViewIcon } from '@svg/view-back-icon.svg'
 import { ReactComponent as RightViewIcon } from '@svg/view-right-icon.svg'
 import { ReactComponent as LeftViewIcon } from '@svg/view-left-icon.svg'
 import { ReactComponent as TopViewSelected } from '@svg/view-top-icon-selected.svg'
+import { ReactComponent as BottomViewSelected } from '@svg/view-bottom-icon-selected.svg'
 import { ReactComponent as FrontViewSelected } from '@svg/view-front-icon-selected.svg'
 import { ReactComponent as BackViewSelected } from '@svg/view-back-icon-selected.svg'
 import { ReactComponent as RightViewSelected } from '@svg/view-right-icon-selected.svg'
@@ -65,6 +67,12 @@ const options = [
     Icon: TopViewIcon,
     value: 'Top',
     DesktopSelectedIcon: TopViewSelected,
+  },
+  {
+    label: 'Bottom',
+    Icon: BottomViewIcon,
+    value: 'Bottom',
+    DesktopSelectedIcon: BottomViewSelected,
   },
   {
     label: 'Front',
