@@ -129,16 +129,16 @@ const options = [
     DesktopSelectedIcon: TopRightBackViewSelected,
   },
   {
-    label: 'TopLeftFront',
-    Icon: TopLeftFrontViewIcon,
-    value: 'TopLeftFront',
-    DesktopSelectedIcon: TopLeftFrontViewSelected,
-  },
-  {
     label: 'TopRightFront',
     Icon: TopRightFrontViewIcon,
     value: 'TopRightFront',
     DesktopSelectedIcon: TopRightFrontViewSelected,
+  },
+  {
+    label: 'TopLeftFront',
+    Icon: TopLeftFrontViewIcon,
+    value: 'TopLeftFront',
+    DesktopSelectedIcon: TopLeftFrontViewSelected,
   },
   {
     label: 'BottomLeftBack',
@@ -153,16 +153,16 @@ const options = [
     DesktopSelectedIcon: BottomRightBackViewSelected,
   },
   {
-    label: 'BottomLeftFront',
-    Icon: BottomLeftFrontViewIcon,
-    value: 'BottomLeftFront',
-    DesktopSelectedIcon: BottomLeftFrontViewSelected,
-  },
-  {
     label: 'BottomRightFront',
     Icon: BottomRightFrontViewIcon,
     value: 'BottomRightFront',
     DesktopSelectedIcon: BottomRightFrontViewSelected,
+  },
+  {
+    label: 'BottomLeftFront',
+    Icon: BottomLeftFrontViewIcon,
+    value: 'BottomLeftFront',
+    DesktopSelectedIcon: BottomLeftFrontViewSelected,
   },
 ]
 
