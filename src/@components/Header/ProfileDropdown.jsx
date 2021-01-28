@@ -62,10 +62,6 @@ const useStyles = createUseStyles(theme => {
 const noop = () => null
 export const ProfileDropdownMenu = ({ myThangsMenu, user = {}, TargetComponent }) => {
   const c = useStyles({})
-  const t = useTranslations({})
-  const { setOverlayOpen } = useOverlay()
-  const history = useHistory()
-  const hasfullName = user && user.fullName && user.fullName.replace(' ', '')
 
   return (
     <DropdownMenu
@@ -74,66 +70,78 @@ export const ProfileDropdownMenu = ({ myThangsMenu, user = {}, TargetComponent }
       user={user}
       myThangsMenu={myThangsMenu}
     >
-      <div className={c.ProfileDropdown_Container}>
-        <div className={c.ProfileDropdown_Row}>
-          <ProfilePicture
-            size='2.5rem'
-            name={user.fullName}
-            userName={user.username}
-            src={user.profile.avatarUrl}
-          />
-          <Spacer size={'.75rem'} />
-          <div className={c.ProfileDropdown_Column}>
-            <MultiLineBodyText>
-              {hasfullName ? user.fullName : user.username}
-            </MultiLineBodyText>
-            <Link to={'/mythangs/edit-profile'}>
-              <MetadataSecondary>Profile Settings</MetadataSecondary>
-            </Link>
-          </div>
-        </div>
-        <Spacer size={'1rem'} />
-        <Link to={'/mythangs'}>
-          <Pill secondary>View My Thangs</Pill>
-        </Link>
-        <Spacer size={'1rem'} />
-        <Divider spacing={0} />
-        <Spacer size={'1rem'} />
-        <DropdownItem to={`/${user.username}`}>
-          <PortfolioIcon />
-          <Spacer size={'.75rem'} />
-          Public Portfolio
-        </DropdownItem>
-        <Spacer size={'.5rem'} />
-        <DropdownItem to={'/mythangs/shared-files'}>
-          <SharedIcon />
-          <Spacer size={'.75rem'} />
-          Shared with me
-        </DropdownItem>
-        <Spacer size={'.5rem'} />
-        <DropdownItem to={'/mythangs/liked-models'}>
-          <HeartIcon />
-          <Spacer size={'.75rem'} />
-          Liked
-        </DropdownItem>
-        <Spacer size={'1rem'} />
-        <Divider spacing={0} />
-        <Spacer size={'1rem'} />
-        <DropdownItem
-          onClick={() => {
-            setOverlayOpen(false)
-            setTimeout(() => {
-              authenticationService.logout()
-              history.push('/')
-            }, 250)
-          }}
-        >
-          <SignOutIcon />
-          <Spacer size={'.75rem'} />
-          {t('header.dropdownMenu.signOut')}
-        </DropdownItem>
-      </div>
+      <ProfileDropdownMenuContainer user={user}/>
     </DropdownMenu>
+  )
+}
+
+export const ProfileDropdownMenuContainer = ({ user = {} }) => {
+  const c = useStyles({})
+  const t = useTranslations({})
+  const { setOverlayOpen } = useOverlay()
+  const history = useHistory()
+  const hasfullName = user && user.fullName && user.fullName.replace(' ', '')
+
+  return (
+    <div className={c.ProfileDropdown_Container}>
+      <div className={c.ProfileDropdown_Row}>
+        <ProfilePicture
+          size='2.5rem'
+          name={user.fullName}
+          userName={user.username}
+          src={user.profile.avatarUrl}
+        />
+        <Spacer size={'.75rem'} />
+        <div className={c.ProfileDropdown_Column}>
+          <MultiLineBodyText>
+            {hasfullName ? user.fullName : user.username}
+          </MultiLineBodyText>
+          <Link to={'/mythangs/edit-profile'}>
+            <MetadataSecondary>Profile Settings</MetadataSecondary>
+          </Link>
+        </div>
+      </div>
+      <Spacer size={'1rem'} />
+      <Link to={'/mythangs'}>
+        <Pill secondary>View My Thangs</Pill>
+      </Link>
+      <Spacer size={'1rem'} />
+      <Divider spacing={0} />
+      <Spacer size={'1rem'} />
+      <DropdownItem to={`/${user.username}`}>
+        <PortfolioIcon />
+        <Spacer size={'.75rem'} />
+        Public Portfolio
+      </DropdownItem>
+      <Spacer size={'.5rem'} />
+      <DropdownItem to={'/mythangs/shared-files'}>
+        <SharedIcon />
+        <Spacer size={'.75rem'} />
+        Shared with me
+      </DropdownItem>
+      <Spacer size={'.5rem'} />
+      <DropdownItem to={'/mythangs/liked-models'}>
+        <HeartIcon />
+        <Spacer size={'.75rem'} />
+        Liked
+      </DropdownItem>
+      <Spacer size={'1rem'} />
+      <Divider spacing={0} />
+      <Spacer size={'1rem'} />
+      <DropdownItem
+        onClick={() => {
+          setOverlayOpen(false)
+          setTimeout(() => {
+            authenticationService.logout()
+            history.push('/')
+          }, 250)
+        }}
+      >
+        <SignOutIcon />
+        <Spacer size={'.75rem'} />
+        {t('header.dropdownMenu.signOut')}
+      </DropdownItem>
+    </div>
   )
 }
 
