@@ -403,6 +403,7 @@ export default store => {
     }
 
     payload.forEach(model => {
+      track('New Model Upload Attempt')
       trackParts(model, 'New Part Upload Attempt')
     })
 
@@ -444,6 +445,7 @@ export default store => {
               payload: JSON.stringify(payload),
             })
             eventName = eventName.replace('Model', 'Part')
+            track(eventName)
             trackParts(payload[index], eventName)
           })
         }
