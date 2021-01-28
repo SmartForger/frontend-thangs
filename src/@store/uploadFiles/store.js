@@ -15,6 +15,18 @@ const getInitAtom = () => ({
   assemblyData: {},
 })
 
+const trackParts = (model, eventName) => {
+  const parts = []
+  if (model.parts && model.parts.length) {
+    model.parts.forEach(part => {
+      if (!parts.includes(part.filename)) {
+        parts.push(part.filename)
+        track(eventName, { filename: part.filename })
+      }
+    })
+  }
+}
+
 const noop = () => null
 
 export default store => {
@@ -391,15 +403,7 @@ export default store => {
     }
 
     payload.forEach(model => {
-      const parts = []
-      if (model.parts && model.parts.length) {
-        model.parts.forEach(part => {
-          if (!parts.includes(part.filename)) {
-            parts.push(part.filename)
-            track('New Model Uploaded', { filename: part.filename })
-          }
-        })
-      }
+      trackParts(model, 'New Model Uploaded')
     })
 
     try {
@@ -408,26 +412,44 @@ export default store => {
         endpoint: 'models',
         body: payload,
       })
-      if (error) {
-        track('Model Uploaded Failed', {
-          data,
-          error,
-          payload: JSON.stringify(payload),
-        })
-      }
+      store.dispatch(types.FETCH_THANGS, { onFinish })
+      let eventName = ''
+      if (error) eventName = 'Model Uploaded Failed - Error'
       // data should be an array. If the nodeJS timeout hits we will
       // receive an empty object instead. Hitting the nodeJS timeout
       // doesn't necessarily mean the model has failed just taking longer to process - BE
-      if (data && data.length) {
-        track('Model Uploaded Succeeded', { data, payload: JSON.stringify(payload) })
-      } else {
-        track('Model Uploaded Possibly Failed', {
+      if (!data || !data.length) eventName = 'Model Uploaded Failed - Empty Object'
+      if (eventName !== '') {
+        track(eventName, {
           data,
           error,
           payload: JSON.stringify(payload),
         })
+      } else {
+        if (data && data.length) {
+          data.forEach(model => {
+            if (model === null) {
+              eventName = 'Model Uploaded Failed - Null Array'
+            } else {
+              eventName = 'Model Uploaded Succeeded'
+            }
+            track(eventName, {
+              data,
+              error,
+              payload: JSON.stringify(payload),
+            })
+          })
+        }
       }
-      store.dispatch(types.FETCH_THANGS, { onFinish })
+      eventName = eventName.replace('Model', 'Part')
+      payload.forEach(model => {
+        if (model === null) {
+          eventName = 'Model Uploaded Failed - Null Array'
+        } else {
+          eventName = 'Model Uploaded Succeeded'
+        }
+        trackParts(model, eventName)
+      })
     } catch (e) {
       track('Model Uploaded Error', { error: e })
       store.dispatch(types.SUBMIT_MODELS_FAILED)

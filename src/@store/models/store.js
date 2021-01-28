@@ -262,7 +262,7 @@ export default store => {
     }
   )
 
-  store.on(types.LOCAL_FOLLOW_MODEL_OWNER, async (state, { id, isFollowing }) => {
+  store.on(types.LOCAL_FOLLOW_MODEL_OWNER, async (state, { isFollowing }) => {
     const model = state['model'].data
     model.owner.isBeingFollowedByRequester = !isFollowing
 

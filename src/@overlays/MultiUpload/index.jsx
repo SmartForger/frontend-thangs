@@ -342,9 +342,17 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
   }
 
   const submitModels = useCallback(() => {
-    track('MultiUpload - Submit Files', {
-      amount: uploadedFiles.length,
-    })
+    const files = []
+    if (uploadedFiles && uploadedFiles.length) {
+      uploadedFiles.forEach(file => {
+        if (!files.includes(file.name)) {
+          files.push(file.name)
+        }
+      })
+      track('MultiUpload - Submit Files', {
+        amount: files.length,
+      })
+    }
     dispatch(types.SUBMIT_MODELS, {
       onFinish: () => {
         closeOverlay()
