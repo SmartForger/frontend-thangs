@@ -403,7 +403,7 @@ export default store => {
     }
 
     payload.forEach(model => {
-      trackParts(model, 'New Part Uploaded')
+      trackParts(model, 'New Part Upload Attempt')
     })
 
     try {
@@ -425,9 +425,14 @@ export default store => {
           error,
           payload: JSON.stringify(payload),
         })
+        eventName = eventName.replace('Model', 'Part')
+        payload.forEach(model => {
+          console.log(eventName)
+          trackParts(model, eventName)
+        })
       } else {
         if (data && data.length) {
-          data.forEach(model => {
+          data.forEach((model, index) => {
             if (model === null) {
               eventName = 'Model Uploaded Failed - Null Array'
             } else {
@@ -438,19 +443,11 @@ export default store => {
               error,
               payload: JSON.stringify(payload),
             })
+            eventName = eventName.replace('Model', 'Part')
+            trackParts(payload[index], eventName)
           })
         }
       }
-
-      payload.forEach(model => {
-        if (model === null) {
-          eventName = 'Model Uploaded Failed - Null Array'
-        } else {
-          eventName = 'Model Uploaded Succeeded'
-        }
-        eventName = eventName.replace('Model', 'Part')
-        trackParts(model, eventName)
-      })
     } catch (e) {
       track('Model Uploaded Error', { error: e })
       store.dispatch(types.SUBMIT_MODELS_FAILED)
