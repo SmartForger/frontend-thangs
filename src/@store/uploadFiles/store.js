@@ -403,11 +403,27 @@ export default store => {
     })
 
     try {
-      await api({
+      const { data, error } = await api({
         method: 'POST',
         endpoint: 'models',
         body: payload,
       })
+      if (error) {
+        track('Model Uploaded Failed', {
+          data,
+          error,
+          payload: JSON.stringify(payload),
+        })
+      }
+      if (data && data.length) {
+        track('Model Uploaded Succeeded', { data, payload: JSON.stringify(payload) })
+      } else {
+        track('Model Uploaded Possibly Failed', {
+          data,
+          error,
+          payload: JSON.stringify(payload),
+        })
+      }
       store.dispatch(types.FETCH_THANGS, { onFinish })
     } catch (e) {
       track('Model Uploaded Error', { error: e })
