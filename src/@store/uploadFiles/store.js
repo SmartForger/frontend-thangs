@@ -403,7 +403,7 @@ export default store => {
     }
 
     payload.forEach(model => {
-      trackParts(model, 'New Model Uploaded')
+      trackParts(model, 'New Part Uploaded')
     })
 
     try {
@@ -441,13 +441,14 @@ export default store => {
           })
         }
       }
-      eventName = eventName.replace('Model', 'Part')
+
       payload.forEach(model => {
         if (model === null) {
           eventName = 'Model Uploaded Failed - Null Array'
         } else {
           eventName = 'Model Uploaded Succeeded'
         }
+        eventName = eventName.replace('Model', 'Part')
         trackParts(model, eventName)
       })
     } catch (e) {
