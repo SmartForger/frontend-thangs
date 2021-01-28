@@ -4,6 +4,7 @@ module.exports = {
         '@storybook/preset-create-react-app',
         '@storybook/addon-actions',
         '@storybook/addon-links',
+        '@storybook/addon-knobs'
     ],
     webpackFinal: async (config, { configType }) => {
         // By default build-storybook builds in Webpack's production mode.
