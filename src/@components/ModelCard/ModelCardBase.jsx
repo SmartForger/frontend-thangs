@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import * as R from 'ramda'
@@ -24,40 +24,43 @@ const LikesAndComments = ({ c, model }) => {
     false: axios.CancelToken.source(),
   })
 
-  const [stateLikes, setStateLikes] = useState(model.likes || new Array(model.likesCount))
+  const [likesCount, setLikesCount] = useState(model.likesCount || 0)
+  const [isLiked, setIsLiked] = useState(false)
 
-  const isLiked = useMemo(() => {
-    const userData = userAtom.data
-    if (userData && userData.likes && R.includes(parseInt(model.id), userData.likes))
-      return true
-    return stateLikes && stateLikes.indexOf(currentUserId) > -1 ? true : false
-  }, [userAtom.data, model.id, stateLikes, currentUserId])
+  useEffect(() => {
+    const likes = R.pathOr([], ['data', 'likes'], userAtom)
+    const isModelInLikedArray = R.includes(parseInt(model.id), likes)
+
+    setIsLiked(isModelInLikedArray)
+  }, [model, userAtom])
 
   const handleLikeButton = () => {
-    changeLikes(!isLiked)
+    const newIsLiked = !isLiked
+    setIsLiked(newIsLiked)
+    changeLikes(newIsLiked)
+
     const onError = (e = {}) => {
       if (e.message !== CANCELED_TOKEN_MESSAGE) {
-        changeLikes(isLiked)
+        changeLikes(newIsLiked)
       }
     }
-    const onFinish = newLikes => setStateLikes(newLikes)
 
+    const onFinish = newLikes => setLikesCount(newLikes)
+    
     isLikedCancelTokens.current[isLiked].cancel(CANCELED_TOKEN_MESSAGE)
     isLikedCancelTokens.current[!isLiked] = axios.CancelToken.source()
-    dispatch(isLiked ? types.UNLIKE_MODEL_CARD : types.LIKE_MODEL_CARD, {
-      model,
+    
+    dispatch(types.LIKE_MODEL_CARD, {
+      modelId: model.id,
+      isLiked: newIsLiked,
       onFinish,
       onError,
-      cancelToken: isLikedCancelTokens.current[!isLiked].token,
+      cancelToken: isLikedCancelTokens.current[newIsLiked].token,
     })
   }
 
   const changeLikes = isLiked => {
-    if (isLiked) {
-      setStateLikes(stateLikes => [...stateLikes, currentUserId])
-    } else {
-      setStateLikes(stateLikes => stateLikes.filter(value => value !== currentUserId))
-    }
+    setLikesCount(likesCount + (isLiked ? 1 : -1))
   }
 
   return (
@@ -81,7 +84,10 @@ const LikesAndComments = ({ c, model }) => {
         ) : (
           <HeartIcon />
         )}
-        {isLiked ? Math.max(stateLikes.length, 1) : stateLikes.length}
+        {isLiked 
+          ? Math.max(likesCount, 1) 
+          : Math.max(likesCount, 0)
+        }
       </span>
     </div>
   )

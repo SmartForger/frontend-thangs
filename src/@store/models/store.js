@@ -207,56 +207,42 @@ export default store => {
 
   store.on(
     types.LIKE_MODEL_CARD,
-    async (_state, { model, onFinish = noop, onError = noop, cancelToken }) => {
-      const id = model.id
+    async (
+      _state,
+      { modelId, isLiked, onFinish = noop, onError = noop, cancelToken }
+    ) => {
+      
+      const endpoint = isLiked 
+        ? `models/${modelId}/like` 
+        : `models/${modelId}/unlike`
+
       const { error } = await api({
         method: 'POST',
-        endpoint: `models/${id}/like`,
+        endpoint,
         cancelToken,
       })
 
       if (error) {
         onError(error)
       } else {
-        track('Model Liked', { id })
+        store.dispatch(types.LOCAL_UPDATE_LIKES, {
+          modelId,
+          isLiked,
+        })
+        
+        const trackText = isLiked 
+          ? 'Model Liked' 
+          : 'Model Unliked'
+        track(trackText, { modelId })
 
         const { data } = await api({
           method: 'GET',
-          endpoint: `models/${id}`,
+          endpoint: `models/${modelId}`,
           cancelToken,
         })
-        const newLikes = data.likes
-        if (!R.isNil(newLikes)) {
-          onFinish(newLikes)
-        }
-      }
-    }
-  )
 
-  store.on(
-    types.UNLIKE_MODEL_CARD,
-    async (_state, { model, onFinish = noop, onError = noop, cancelToken }) => {
-      const id = model.id
-      const { error } = await api({
-        method: 'POST',
-        endpoint: `models/${id}/unlike`,
-        cancelToken,
-      })
-
-      if (error) {
-        onError(error)
-      } else {
-        track('Model Unliked', { id })
-
-        const { data } = await api({
-          method: 'GET',
-          endpoint: `models/${id}`,
-          cancelToken,
-        })
-        const newLikes = data.likes
-        if (!R.isNil(newLikes)) {
-          onFinish(newLikes)
-        }
+        const { likesCount = 0 } = data || {}
+        onFinish(likesCount)
       }
     }
   )

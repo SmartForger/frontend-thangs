@@ -86,6 +86,20 @@ export default store => {
     }
   )
 
+  store.on(types.LOCAL_UPDATE_LIKES, (state, { isLiked, modelId }) => {
+    const userId = authenticationService.getCurrentUserId()
+    const likes = R.pathOr([], [`user-${userId}`, 'data', 'likes'], state)
+    const updatedLikes = isLiked
+      ? [...likes.filter(value => value !== userId), parseInt(modelId)]
+      : likes.filter(value => value !== parseInt(modelId))
+
+    store.dispatch(types.CHANGE_USER_STATUS, {
+      status: STATUSES.LOADED,
+      atom: `user-${userId}`,
+      data: { ...state[`user-${userId}`].data, likes: updatedLikes },
+    })
+  })
+
   store.on(types.FOLLOW_USER, async (_, { id, onFinish = noop, onError = noop }) => {
     store.dispatch(types.CHANGE_USER_STATUS, {
       status: STATUSES.LOADING,
