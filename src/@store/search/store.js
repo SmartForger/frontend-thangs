@@ -12,35 +12,16 @@ const ATOMS = {
   UPLOAD_DATA: 'uploadData',
 }
 
-const getPhynStatus = intervalRequest(
-  ({ newPhyndexerId }) => async (resolve, reject, cancelToken) => {
+const getStatus = intervalRequest(
+  ({ modelId }) => async (resolve, reject, cancelToken) => {
     const { data, error } = await api({
       method: 'GET',
-      endpoint: `models/phyn-status/${newPhyndexerId}`,
+      endpoint: `models/phyn-status/${modelId}`,
       cancelToken,
       timeout: 60000,
     })
     if (data === 'error' || error) {
       resolve({ error: error || 'error' })
-    }
-    if (data === 'completed') resolve(data)
-  },
-  {
-    interval: 5000,
-    timeout: 10 * 60 * 1000,
-  }
-)
-
-const getThangsStatus = intervalRequest(
-  ({ modelId }) => async (resolve, reject, cancelToken) => {
-    const { data, error } = await api({
-      method: 'GET',
-      endpoint: `models/status/${modelId}`,
-      cancelToken,
-      timeout: 60000,
-    })
-    if (data === 'error' || error) {
-      reject(data || error)
     }
     if (data === 'completed') resolve(data)
   },
@@ -92,6 +73,7 @@ export default store => {
       },
     },
   }))
+
   store.on(types.RESET_SEARCH_RESULTS, () => ({
     searchResults: getInitAtom(),
   }))
@@ -254,7 +236,7 @@ export default store => {
           })
         })
         .then(({ data: uploadedData }) => {
-          const { newPhyndexerId: phyndexerId, newModelId: modelId } = uploadedData
+          const { newPhyndexerId: phyndexerId } = uploadedData
 
           store.on(types.CHANGE_SEARCH_RESULTS_STATUS, state => ({
             searchResults: {
@@ -263,24 +245,16 @@ export default store => {
             },
           }))
 
-          store.dispatch(types.GET_RELATED_MODELS_VIA_PHYNDEXER, {
-            newPhyndexerId: phyndexerId,
-            newModelId: modelId,
+          store.dispatch(types.GET_RELATED_MODELS, {
+            modelId: phyndexerId,
             onFinish: props => {
-              handleFinish(ATOMS.PHYNDEXER, { ...props, phyndexerId, modelId })
-            },
-          })
-
-          store.dispatch(types.GET_RELATED_MODELS_VIA_THANGS, {
-            modelId,
-            onFinish: props => {
-              handleFinish(ATOMS.THANGS, { ...props, phyndexerId, modelId })
+              handleFinish(ATOMS.THANGS, { ...props, phyndexerId })
+              handleFinish(ATOMS.PHYNDEXER, { ...props, phyndexerId })
             },
           })
 
           track('Model Search Started', {
             phyndexerId,
-            modelId: `${modelId}`,
           })
         })
         .catch(error => {
@@ -304,62 +278,18 @@ export default store => {
     }
   )
   store.on(
-    types.GET_RELATED_MODELS_VIA_THANGS,
-    (_state, { modelId, onFinish = noop, onError = noop }) => {
-      if (!modelId) return
+    types.GET_RELATED_MODELS,
+    async (_state, { modelId, onFinish = noop, onError = noop }) => {
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.THANGS,
         status: STATUSES.LOADING,
       })
-
-      getThangsStatus({ modelId })
-        .then(() =>
-          apiForChain({
-            method: 'GET',
-            endpoint: `models/geo-related/${modelId}`,
-          })
-        )
-        .then(({ data }) => {
-          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-            atom: ATOMS.THANGS,
-            status: STATUSES.LOADED,
-            data: data,
-          })
-
-          track(
-            `Thangs Model Search - ${
-              data && data.matches && data.matches.length && data.matches.length > 0
-                ? 'Results'
-                : 'No Results'
-            }`,
-            {
-              modelId,
-              numOfMatches: (data && data.matches && data.matches.length) || 0,
-            }
-          )
-          onFinish(data)
-        })
-        .catch(error => {
-          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-            atom: ATOMS.THANGS,
-            status: STATUSES.FAILURE,
-            data: error,
-          })
-          return onError(error)
-        })
-    }
-  )
-  store.on(
-    types.GET_RELATED_MODELS_VIA_PHYNDEXER,
-    async (_state, { newPhyndexerId, newModelId, onFinish = noop, onError = noop }) => {
-      if (!newPhyndexerId) return
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.PHYNDEXER,
         status: STATUSES.LOADING,
-        data: { newModelId },
       })
 
-      const { error: statusError } = await getPhynStatus({ newPhyndexerId })
+      const { error: statusError } = await getStatus({ modelId })
       if (statusError) {
         store.dispatch(types.ERROR_POLLING_PHYNDEXER, {
           data: statusError,
@@ -368,72 +298,12 @@ export default store => {
 
       const { data, error } = await api({
         method: 'GET',
-        endpoint: `models/v1/phyn-related/${newPhyndexerId}`,
-      })
-
-      if (error) {
-        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-          atom: ATOMS.PHYNDEXER,
-          status: STATUSES.FAILURE,
-          data: error,
-        })
-        onFinish({ modelId: newModelId, matches: [] })
-        return onError(error)
-      } else {
-        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-          atom: ATOMS.PHYNDEXER,
-          status: STATUSES.LOADED,
-          data,
-        })
-
-        track(
-          `Phyndexer Model Search - ${
-            data && data.matches && data.matches.length && data.matches.length > 0
-              ? 'Results'
-              : 'No Results'
-          }`,
-          {
-            phyndexerId: newPhyndexerId,
-            numOfMatches: (data && data.matches && data.matches.length) || 0,
-          }
-        )
-        onFinish({
-          modelId: newModelId,
-          phyndexerId: newPhyndexerId,
-          matches: data && data.matches,
-        })
-      }
-    }
-  )
-  store.on(
-    types.GET_RELATED_MODELS,
-    async (_state, { modelId, phynId, onFinish = noop, onError = noop }) => {
-      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-        atom: ATOMS.THANGS,
-        status: STATUSES.LOADING,
-      })
-      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-        atom: ATOMS.PHYNDEXER,
-        status: STATUSES.LOADING,
-      })
-
-      if (phynId) {
-        const { error: statusError } = await getPhynStatus({ newPhyndexerId: phynId })
-        if (statusError) {
-          store.dispatch(types.ERROR_POLLING_PHYNDEXER, {
-            data: statusError,
-          })
-        }
-      }
-
-      const { data, error } = await api({
-        method: 'GET',
         endpoint: `models/match/${modelId}`,
       })
 
-      track('View Related Search Started', {
-        modelId,
-      })
+      // track('View Related Search Started', {
+      //   modelId,
+      // })
 
       if (error) {
         store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
@@ -448,11 +318,11 @@ export default store => {
         })
         onError(error)
       } else {
-        let numOfMatches = 0
+        // let numOfMatches = 0
         if (data && Array.isArray(data)) {
           data.forEach(result => {
             const { collection, status, ...searchData } = result
-            numOfMatches += searchData && searchData.matches && searchData.matches.length
+            // numOfMatches += searchData && searchData.matches && searchData.matches.length
             if (status === 'completed') {
               store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
                 atom: collection,
@@ -469,10 +339,10 @@ export default store => {
           })
         }
 
-        track(`View Related Search - ${numOfMatches > 0 ? 'Results' : 'No Results'}`, {
-          modelId,
-          numOfMatches,
-        })
+        // track(`View Related Search - ${numOfMatches > 0 ? 'Results' : 'No Results'}`, {
+        //   modelId,
+        //   numOfMatches,
+        // })
 
         onFinish()
       }
