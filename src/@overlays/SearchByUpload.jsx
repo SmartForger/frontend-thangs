@@ -89,10 +89,10 @@ const SearchByUpload = ({
   const history = useHistory()
   const { setOverlayOpen } = useOverlay()
   const { dispatch, searchResults } = useStoreon('searchResults')
-  const closeOverlay = useCallback(() => {
-    setOverlayOpen(false)
-  }, [setOverlayOpen])
-  useExternalClick(containerRef, closeOverlay)
+  // const closeOverlay = useCallback(() => {
+  //   setOverlayOpen(false)
+  // }, [setOverlayOpen])
+  // useExternalClick(containerRef, closeOverlay)
   const { phyndexer, thangs, uploadData } = searchResults
   const polygonCount =
     searchResults &&
@@ -148,7 +148,7 @@ const SearchByUpload = ({
       if (modelId) {
         dispatch(types.GET_RELATED_MODELS, {
           modelId,
-          phynId,
+          phyndexerId: phynId,
           onFinish: () => {
             setOverlayOpen(false)
             history.push(
