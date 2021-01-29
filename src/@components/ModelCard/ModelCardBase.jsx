@@ -177,7 +177,8 @@ const ModelCardBase = ({ c, className, model, geoRelated }) => {
   const currentUserId = parseInt(useCurrentUserId())
   const modelAttributionUrl =
     model && model.attributionUrl && encodeURI(model.attributionUrl)
-  const modelPath = model.id ? `/model/${model.id}` : modelAttributionUrl
+  const modelIdPath = model.id ? `/model/${model.id}` : modelAttributionUrl
+  const modelPath = model.identifier ? `/${model.identifier}` : modelIdPath
   const isCurrentUserOwner = `${currentUserId}` === `${R.path(['owner', 'id'], model)}`
 
   return (

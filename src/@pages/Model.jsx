@@ -552,7 +552,8 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
 }
 
 const Page = () => {
-  const { id } = useParams()
+  const { id, modelString } = useParams()
+  const modelId = modelString ? modelString.split('-').pop() : id
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [currentUser] = useLocalStorage('currentUser', null)
   const { getTime, startTimer } = usePerformanceMetrics()
@@ -564,14 +565,14 @@ const Page = () => {
   }
 
   useEffect(() => {
-    pageview('Model', id)
+    pageview('Model', modelId)
     startTimer()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <ModelDetailPage
-      id={id}
+      id={modelId}
       currentUser={currentUser}
       showBackupViewer={showBackupViewer}
       getTime={getTime}

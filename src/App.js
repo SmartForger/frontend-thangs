@@ -116,6 +116,7 @@ const App = () => {
                     path={['/search/:searchQuery', '/search']}
                     component={SearchResults}
                   />
+                  <Route path='/:userName/:modelString' component={ModelDetail} />
                   <Route path='/:userName' component={Profile} />
                   <Route path='/404' component={Page404} status={404} />
                   <Route path='*' component={Page404} status={404} />
