@@ -58,7 +58,7 @@ export default store => {
           const { status, matches } = result
           // numOfMatches += searchData && searchData.matches && searchData.matches.length
           if (status === 'completed') {
-            results.matches.push(...matches)
+            results.matches = [...matches]
           }
         })
         results.matches.sort((a, b) => (a.id === b.id ? 0 : a.id ? -1 : 1))
