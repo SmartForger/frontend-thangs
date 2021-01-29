@@ -258,7 +258,8 @@ const Page = () => {
     }
     if ((modelId || phynId) && !phyndexer.isLoaded && !thangs.isLoaded) {
       dispatch(types.GET_RELATED_MODELS, {
-        modelId: phynId || modelId,
+        modelId: modelId,
+        phyndexerId: phynId,
         geoRelated: !related,
       })
     }
@@ -313,8 +314,8 @@ const Page = () => {
     track('SignUp Prompt Overlay', { source: 'Save Search' })
   }, [setOverlay])
 
-  const thangsModels = R.path(['data', 'matches'], thangs) || []
-  const phyndexerModels = R.path(['data', 'matches'], phyndexer) || []
+  const thangsModels = R.path(['data'], thangs) || []
+  const phyndexerModels = R.path(['data'], phyndexer) || []
   const resultCount = phyndexerModels.length + thangsModels.length
 
   return (

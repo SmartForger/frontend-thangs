@@ -35,12 +35,12 @@ const noop = () => null
 const getInitAtom = () => ({
   [ATOMS.THANGS]: {
     ...getStatusState(STATUSES.INIT),
-    data: {},
+    data: [],
   },
   [ATOMS.PHYNDEXER]: {
     ...getStatusState(STATUSES.INIT),
     isPollingError: false,
-    data: {},
+    data: [],
   },
   [ATOMS.UPLOAD_DATA]: {
     ...getStatusState(STATUSES.INIT),
@@ -112,7 +112,7 @@ export default store => {
         store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
           atom: ATOMS.THANGS,
           status: STATUSES.LOADED,
-          data: { matches },
+          data: matches,
         })
 
         track(`Thangs Text search - ${matches.length > 0 ? 'Results' : 'No Results'}`, {
@@ -154,7 +154,7 @@ export default store => {
         store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
           atom: ATOMS.PHYNDEXER,
           status: STATUSES.LOADED,
-          data: { matches },
+          data: matches,
         })
 
         track(
@@ -195,19 +195,6 @@ export default store => {
 
       let uploadedUrlData
 
-      const emptyMatchesTypes = []
-
-      const handleFinish = (type, props) => {
-        emptyMatchesTypes.push(type)
-        if (
-          (R.path(['matches', 'length'], props) || 0) > 0 ||
-          (emptyMatchesTypes.includes(ATOMS.PHYNDEXER) &&
-            emptyMatchesTypes.includes(ATOMS.THANGS))
-        ) {
-          onFinish(props)
-        }
-      }
-
       apiForChain({
         method: 'GET',
         endpoint: `models/upload-url?fileName=${file.name}`,
@@ -236,7 +223,7 @@ export default store => {
           })
         })
         .then(({ data: uploadedData }) => {
-          const { newPhyndexerId: phyndexerId } = uploadedData
+          const { newPhyndexerId: phyndexerId, newModelId: modelId } = uploadedData
 
           store.on(types.CHANGE_SEARCH_RESULTS_STATUS, state => ({
             searchResults: {
@@ -246,7 +233,9 @@ export default store => {
           }))
 
           store.dispatch(types.GET_RELATED_MODELS, {
-            modelId: phyndexerId,
+            modelId,
+            phyndexerId,
+            onFinish,
           })
 
           track('Model Search Started', {
@@ -275,7 +264,10 @@ export default store => {
   )
   store.on(
     types.GET_RELATED_MODELS,
-    async (_state, { modelId, onFinish = noop, onError = noop, geoRelated = true }) => {
+    async (
+      _state,
+      { modelId, phyndexerId, onFinish = noop, onError = noop, geoRelated = true }
+    ) => {
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.THANGS,
         status: STATUSES.LOADING,
@@ -286,7 +278,7 @@ export default store => {
       })
 
       if (geoRelated) {
-        const { error: statusError } = await getStatus({ modelId })
+        const { error: statusError } = await getStatus({ modelId: phyndexerId })
         if (statusError) {
           store.dispatch(types.ERROR_POLLING_PHYNDEXER, {
             data: statusError,
@@ -296,7 +288,7 @@ export default store => {
 
       const { data, error } = await api({
         method: 'GET',
-        endpoint: `models/match/${modelId}`,
+        endpoint: `models/match/${phyndexerId}`,
       })
 
       // track('View Related Search Started', {
@@ -319,19 +311,19 @@ export default store => {
         // let numOfMatches = 0
         if (data && Array.isArray(data)) {
           data.forEach(result => {
-            const { collection, status, ...searchData } = result
+            const { collection, status, matches } = result
             // numOfMatches += searchData && searchData.matches && searchData.matches.length
             if (status === 'completed') {
               store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
                 atom: collection,
                 status: STATUSES.LOADED,
-                data: { ...searchData },
+                data: matches,
               })
             } else if (status === 'error') {
               store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
                 atom: collection,
                 status: STATUSES.FAILURE,
-                data: { ...searchData },
+                data: matches,
               })
             }
           })
@@ -342,7 +334,7 @@ export default store => {
         //   numOfMatches,
         // })
 
-        onFinish()
+        onFinish({ modelId, phyndexerId })
       }
     }
   )
