@@ -149,6 +149,7 @@ const SearchByUpload = ({
         dispatch(types.GET_RELATED_MODELS, {
           modelId,
           phyndexerId: phynId,
+          geoRelated: false,
           onFinish: () => {
             setOverlayOpen(false)
             history.push(

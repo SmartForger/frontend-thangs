@@ -237,10 +237,6 @@ export default store => {
             phyndexerId,
             onFinish,
           })
-
-          track('Model Search Started', {
-            phyndexerId,
-          })
         })
         .catch(error => {
           store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
@@ -278,22 +274,28 @@ export default store => {
       })
 
       if (geoRelated) {
+        track('Model Search Started', {
+          phyndexerId,
+          modelId,
+        })
+
         const { error: statusError } = await getStatus({ modelId: phyndexerId })
         if (statusError) {
           store.dispatch(types.ERROR_POLLING_PHYNDEXER, {
             data: statusError,
           })
         }
+      } else {
+        track('View Related Search Started', {
+          phyndexerId,
+          modelId,
+        })
       }
 
       const { data, error } = await api({
         method: 'GET',
         endpoint: `models/match/${phyndexerId}`,
       })
-
-      // track('View Related Search Started', {
-      //   modelId,
-      // })
 
       if (error) {
         store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
@@ -308,11 +310,14 @@ export default store => {
         })
         onError(error)
       } else {
-        // let numOfMatches = 0
+        let matchCount = {
+          thangs: 0,
+          phyndexer: 0,
+        }
         if (data && Array.isArray(data)) {
           data.forEach(result => {
-            const { collection, status, matches } = result
-            // numOfMatches += searchData && searchData.matches && searchData.matches.length
+            const { collection, status, matches = [] } = result
+            matchCount[collection] = matches.length
             if (status === 'completed') {
               store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
                 atom: collection,
@@ -328,11 +333,22 @@ export default store => {
             }
           })
         }
-
-        // track(`View Related Search - ${numOfMatches > 0 ? 'Results' : 'No Results'}`, {
-        //   modelId,
-        //   numOfMatches,
-        // })
+        const numOfMatches = matchCount.thangs + matchCount.phyndexer
+        if (geoRelated) {
+          track(`Model Search - ${numOfMatches > 0 ? 'Results' : 'No Results'}`, {
+            phyndexerId,
+            modelId,
+            thangsCount: matchCount.thangs,
+            phynCount: matchCount.phyndexer,
+          })
+        } else {
+          track(`View Related Search - ${numOfMatches > 0 ? 'Results' : 'No Results'}`, {
+            phyndexerId,
+            modelId,
+            thangsCount: matchCount.thangs,
+            phynCount: matchCount.phyndexer,
+          })
+        }
 
         onFinish({ modelId, phyndexerId })
       }
