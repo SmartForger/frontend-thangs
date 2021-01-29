@@ -16,7 +16,6 @@ const getInitAtom = () => ({
 })
 
 const trackParts = (model, eventName) => {
-  track(eventName, { filename: model.name })
   const parts = []
   if (model.parts && model.parts.length) {
     model.parts.forEach(part => {
