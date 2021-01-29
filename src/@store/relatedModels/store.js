@@ -51,14 +51,17 @@ export default store => {
       })
     } else {
       if (data && Array.isArray(data)) {
-        const results = {}
+        const results = {
+          matches: [],
+        }
         data.forEach(result => {
           const { status, matches } = result
           // numOfMatches += searchData && searchData.matches && searchData.matches.length
           if (status === 'completed') {
-            results.matches.push(matches)
+            results.matches.push(...matches)
           }
         })
+        results.matches.sort((a, b) => (a.id === b.id ? 0 : a.id ? -1 : 1))
         store.dispatch(types.CHANGE_RELATED_MODELS, {
           status: STATUSES.LOADED,
           atom: `related-models-${id}`,
