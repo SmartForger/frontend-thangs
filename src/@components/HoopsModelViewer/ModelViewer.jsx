@@ -87,16 +87,17 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
         })
       }
     }
-
-    model.parts.forEach(part => {
-      setPartIdAndSubs(part)
-    })
-    model.parts.sort((a, b) => {
-      return a.isPrimary === b.isPrimary ? 0 : a.isPrimary ? -1 : 1
-    })
-    setSelectedModel(primaryPart)
-    setPartTreeData(model.parts)
-    setPartList(flattenTree(model.parts))
+    if (model.parts) {
+      model.parts.forEach(part => {
+        setPartIdAndSubs(part)
+      })
+      model.parts.sort((a, b) => {
+        return a.isPrimary === b.isPrimary ? 0 : a.isPrimary ? -1 : 1
+      })
+      setSelectedModel(primaryPart)
+      setPartTreeData(model.parts)
+      setPartList(flattenTree(model.parts))
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [model.id])
 
