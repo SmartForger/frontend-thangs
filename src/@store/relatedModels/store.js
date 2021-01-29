@@ -55,9 +55,9 @@ export default store => {
           matches: [],
         }
         data.forEach(result => {
-          const { status, matches } = result
+          const { collection, status, matches } = result
           // numOfMatches += searchData && searchData.matches && searchData.matches.length
-          if (status === 'completed') {
+          if (status === 'completed' && collection === 'thangs') {
             results.matches = [...matches]
           }
         })
