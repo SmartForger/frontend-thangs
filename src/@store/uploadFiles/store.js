@@ -428,7 +428,6 @@ export default store => {
         })
         eventName = eventName.replace('Model', 'Part')
         payload.forEach(model => {
-          console.log(eventName)
           trackParts(model, eventName)
         })
       } else {
