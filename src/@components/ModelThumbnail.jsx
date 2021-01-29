@@ -8,6 +8,9 @@ import { track } from '@utilities/analytics'
 import * as path from 'path'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { xxl },
+  } = theme
   return {
     '@keyframes spin': {
       '0%': {
@@ -66,6 +69,10 @@ const useStyles = createUseStyles(theme => {
           textAlign: 'center',
           top: '75.5%',
           transform: 'translateX(-50%) scale(1.15)',
+
+          [xxl]: {
+            top: '65.5%',
+          },
         },
       },
     },
