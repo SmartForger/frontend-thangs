@@ -256,19 +256,10 @@ const Page = () => {
         searchTerm: decodeURIComponent(searchQuery),
       })
     }
-    if (!related && modelId && phynId && !phyndexer.isLoaded && !thangs.isLoaded) {
-      dispatch(types.GET_RELATED_MODELS_VIA_THANGS, {
-        modelId: modelId,
-      })
-      dispatch(types.GET_RELATED_MODELS_VIA_PHYNDEXER, {
-        newModelId: modelId,
-        newPhyndexerId: phynId,
-      })
-    }
-    if (related && modelId && !phyndexer.isLoaded && !thangs.isLoaded) {
+    if ((modelId || phynId) && !phyndexer.isLoaded && !thangs.isLoaded) {
       dispatch(types.GET_RELATED_MODELS, {
-        modelId,
-        phynId,
+        modelId: phynId || modelId,
+        geoRelated: !related,
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -247,10 +247,6 @@ export default store => {
 
           store.dispatch(types.GET_RELATED_MODELS, {
             modelId: phyndexerId,
-            onFinish: props => {
-              handleFinish(ATOMS.THANGS, { ...props, phyndexerId })
-              handleFinish(ATOMS.PHYNDEXER, { ...props, phyndexerId })
-            },
           })
 
           track('Model Search Started', {
@@ -279,7 +275,7 @@ export default store => {
   )
   store.on(
     types.GET_RELATED_MODELS,
-    async (_state, { modelId, onFinish = noop, onError = noop }) => {
+    async (_state, { modelId, onFinish = noop, onError = noop, geoRelated = true }) => {
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.THANGS,
         status: STATUSES.LOADING,
@@ -289,11 +285,13 @@ export default store => {
         status: STATUSES.LOADING,
       })
 
-      const { error: statusError } = await getStatus({ modelId })
-      if (statusError) {
-        store.dispatch(types.ERROR_POLLING_PHYNDEXER, {
-          data: statusError,
-        })
+      if (geoRelated) {
+        const { error: statusError } = await getStatus({ modelId })
+        if (statusError) {
+          store.dispatch(types.ERROR_POLLING_PHYNDEXER, {
+            data: statusError,
+          })
+        }
       }
 
       const { data, error } = await api({

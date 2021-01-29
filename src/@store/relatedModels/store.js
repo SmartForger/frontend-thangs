@@ -50,11 +50,21 @@ export default store => {
         atom: `related-models-${id}`,
       })
     } else {
-      store.dispatch(types.CHANGE_RELATED_MODELS, {
-        status: STATUSES.LOADED,
-        atom: `related-models-${id}`,
-        data,
-      })
+      if (data && Array.isArray(data)) {
+        const results = {}
+        data.forEach(result => {
+          const { status, matches } = result
+          // numOfMatches += searchData && searchData.matches && searchData.matches.length
+          if (status === 'completed') {
+            results.matches.push(matches)
+          }
+        })
+        store.dispatch(types.CHANGE_RELATED_MODELS, {
+          status: STATUSES.LOADED,
+          atom: `related-models-${id}`,
+          data: results,
+        })
+      }
     }
   })
 }
