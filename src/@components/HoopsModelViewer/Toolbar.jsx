@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react'
 import ToolbarDesktop from './ToolbarDesktop'
 import ToolbarMobile from './ToolbarMobile'
 import { createUseStyles } from '@style'
+import useIsMobile from '@hooks/useIsMobile'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -44,6 +45,7 @@ const Toolbar = ({
   const [orientation, setOrientation] = useState('TopLeftFront')
   const [color, setColor] = useState('#999')
   const [magnitude, setMagnitude] = useState(0)
+  const isMobile = useIsMobile()
 
   //These control the HOOPS viewer
   const {
@@ -121,11 +123,10 @@ const Toolbar = ({
     model,
   }
 
-  return (
-    <>
-      <ToolbarDesktop className={c.Toolbar__desktop} {...toolbarProps} />
-      <ToolbarMobile className={c.Toolbar__mobile} {...toolbarProps} />
-    </>
+  return isMobile ? (
+    <ToolbarMobile className={c.Toolbar__mobile} {...toolbarProps} />
+  ) : (
+    <ToolbarDesktop className={c.Toolbar__desktop} {...toolbarProps} />
   )
 }
 
