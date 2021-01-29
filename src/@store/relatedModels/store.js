@@ -41,7 +41,7 @@ export default store => {
     })
     const { data, error } = await api({
       method: 'GET',
-      endpoint: buildGeoRatioURL(`models/related/${id}`, geoRatios),
+      endpoint: buildGeoRatioURL(`models/related-thangs/${id}`, geoRatios),
     })
 
     if (error) {
