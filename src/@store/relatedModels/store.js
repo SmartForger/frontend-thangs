@@ -44,7 +44,9 @@ export default store => {
     store.dispatch(types.CHANGE_RELATED_MODELS, {
       status: STATUSES.LOADED,
       atom: `related-models-${id}`,
-      data: [],
+      data: {
+        matches: [],
+      },
     })
     // const { data, error } = await api({
     //   method: 'GET',
