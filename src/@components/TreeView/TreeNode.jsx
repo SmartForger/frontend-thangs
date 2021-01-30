@@ -63,8 +63,6 @@ export const TreeNode = ({
     setExpanded(!expanded)
   }
 
-  console.log(22222, node.id)
-
   const subnodes = node[subnodeField] || []
   const isAssembly = subnodes.length > 0
   const isAssemblyPart = level > 0 && subnodes.length === 0

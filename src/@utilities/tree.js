@@ -50,10 +50,14 @@ export const flattenTree = (nodes, childProp = 'subs') => {
     const newNode = { ...node, level }
     const subs = node[childProp]
       ? node[childProp].reduce(
-        (arr, subnode) => [...arr, ...addLevel(subnode, level + 1)],
-        []
-      )
+          (arr, subnode) => [...arr, ...addLevel(subnode, level + 1)],
+          []
+        )
       : []
+    delete newNode[childProp]
+    if (!newNode.id) {
+      newNode.id = Math.random().toString().slice(2)
+    }
     return [newNode, ...subs]
   }
 

@@ -8,8 +8,8 @@ import {
   SingleLineBodyText,
   Tag,
   TextInput,
+  InfiniteTreeView,
 } from '@components'
-import { FixedSizeList } from 'react-window'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X-sm.svg'
@@ -289,25 +289,15 @@ const PartSelectorRow = ({ part = {}, onClick }) => {
 }
 
 const AssemblyExplorer = ({ className, parts, onChange, selectedPart }) => {
-  const c = useStyles()
-
-  return useMemo(
-    () => (
-      <FixedSizeList
-        className={className}
-        width={280}
-        height={300}
-        itemCount={parts.length}
-        itemSize={58}
-      >
-        {({ index, style }) => (
-          <div style={style}>
-            <PartSelectorRow part={parts[index]} onClick={() => onChange(parts[index])} />
-          </div>
-        )}
-      </FixedSizeList>
-    ),
-    [parts, selectedPart.name]
+  return (
+    <InfiniteTreeView
+      className={className}
+      width={280}
+      height={300}
+      itemHeight={58}
+      nodes={parts}
+      renderNode={node => <PartSelectorRow part={node} onClick={() => onChange(node)} />}
+    />
   )
 }
 
@@ -325,7 +315,7 @@ export const PartExplorerMenu = ({
         const fileName = file.name.toLowerCase()
         return fileName.includes(value.toLowerCase())
       })
-      setPartsToDisplay(newParts)
+      setPartsToDisplay(newParts.map(file => ({ ...file, level: 0 })))
     },
     [partList]
   )
