@@ -11,7 +11,5 @@ export default {
 }
 
 export const ProfileDropdownMenuTest2 = () => {
-  return (
-    <ProfileDropdownMenu user={user} isOpen={true} />
-  ) 
+  return <ProfileDropdownMenu user={user} isOpen={true} />
 }
