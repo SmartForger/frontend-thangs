@@ -110,6 +110,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'column',
       overflow: 'hidden',
+      flex: '1 !important',
     },
     AssemblyExplorer_Spacer: {
       flex: 'none',
@@ -118,6 +119,7 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       overflow: 'hidden',
+      flex: '1 !important',
     },
     PartSelectorRow__hover: {
       borderRadius: '.25rem',
@@ -133,7 +135,8 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
-      minWidth: '10rem',
+      minWidth: '0',
+      flex: '1 !important',
 
       '& > span': {
         alignItems: 'center',
@@ -256,8 +259,8 @@ const noop = () => null
 
 const PartSelectorRow = ({ part = {}, onClick }) => {
   const c = useStyles({})
-  const { parts, name, newFileName } = part
-  const isAssembly = parts && parts.length > 0
+  const { hasChildren, name, newFileName } = part
+
   return (
     <>
       <div className={c.PartSelectorRow} title={name}>
@@ -277,7 +280,7 @@ const PartSelectorRow = ({ part = {}, onClick }) => {
             <div className={c.PartExplorerDropdown_PartText}>
               <SingleLineBodyText>{name}</SingleLineBodyText>
               <Spacer size={'.5rem'} />
-              <Tag secondary={!isAssembly}>{isAssembly ? 'Assembly' : 'Part'}</Tag>
+              <Tag secondary={!hasChildren}>{hasChildren ? 'Assembly' : 'Part'}</Tag>
             </div>
             <Spacer size={'.5rem'} />
           </div>
@@ -312,12 +315,16 @@ export const PartExplorerMenu = ({
   const [partsToDisplay, setPartsToDisplay] = useState(partList)
   const handleInputChange = useCallback(
     value => {
-      if (!value || value === '') setPartsToDisplay(partList)
+      if (!value || value === '') {
+        setPartsToDisplay(partList)
+        return
+      }
+
       const newParts = partList.filter(file => {
         const fileName = file.name.toLowerCase()
         return fileName.includes(value.toLowerCase())
       })
-      setPartsToDisplay(newParts.map(file => ({ ...file, level: 0 })))
+      setPartsToDisplay(newParts.map(file => ({ ...file, level: 1 })))
     },
     [partList]
   )
