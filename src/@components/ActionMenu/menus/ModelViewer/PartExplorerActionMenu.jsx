@@ -288,14 +288,16 @@ const PartSelectorRow = ({ part = {}, onClick }) => {
   )
 }
 
-const AssemblyExplorer = ({ className, parts, onChange, selectedPart }) => {
+const AssemblyExplorer = ({ classes, parts, onChange, selectedPart }) => {
   return (
     <InfiniteTreeView
-      className={className}
+      classes={classes}
       width={280}
       height={300}
       itemHeight={58}
+      levelPadding={20}
       nodes={parts}
+      isSelected={node => node.id === selectedPart.id}
       renderNode={node => <PartSelectorRow part={node} onClick={() => onChange(node)} />}
     />
   )
@@ -342,7 +344,11 @@ export const PartExplorerMenu = ({
       <Spacer size={'.5rem'} className={c.AssemblyExplorer_Spacer} />
       {partsToDisplay.length > 0 ? (
         <AssemblyExplorer
-          className={c.AssemblyExplorer_Wrapper}
+          classes={{
+            root: c.AssemblyExplorer_Wrapper,
+            item: c.PartSelectorRow__hover,
+            itemSelected: c.PartSelectorRow__selected,
+          }}
           parts={partsToDisplay}
           onChange={onChange}
           selectedPart={selectedPart}

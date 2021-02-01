@@ -32,61 +32,77 @@ const useStyles = createUseStyles(theme => {
 })
 
 const Row = memo(({ data, index, style }) => {
-  const { items, classes, renderNode, toggleNode } = data
+  const {
+    items,
+    hasMultiRoots,
+    isSelected,
+    levelPadding,
+    classes,
+    renderNode,
+    toggleNode,
+  } = data
   const node = items[index]
 
   return (
     <div
-      className={classes.TreeNode}
+      className={classnames(classes.TreeNode, classes.item, {
+        [classes.itemSelected]: isSelected(node),
+      })}
       style={{
         ...style,
-        paddingLeft: 40 * node.level,
+        paddingLeft: levelPadding * node.level,
       }}
     >
-      <div
-        className={classnames(classes.TreeNode_ExpandIcon, {
-          [classes.TreeNode_ExpandIcon__expanded]: !node.isLeaf && !node.closed,
-        })}
-        onClick={() => toggleNode(node)}
-      >
-        {node.isLeaf ? <IndentArrow /> : <ArrowRight />}
-      </div>
+      {(node.level > 0 || hasMultiRoots) && (
+        <div
+          className={classnames(classes.TreeNode_ExpandIcon, {
+            [classes.TreeNode_ExpandIcon__expanded]: !node.isLeaf && !node.closed,
+          })}
+          onClick={() => toggleNode(node)}
+        >
+          {node.isLeaf ? <IndentArrow /> : <ArrowRight />}
+        </div>
+      )}
       {renderNode(node)}
     </div>
   )
 }, areEqual)
 
 const InfiniteTreeView = ({
-  className,
+  classes,
   nodes,
   renderNode,
   itemHeight,
   width,
   height,
+  levelPadding = 40,
+  isSelected = () => false,
 }) => {
-  const [foldedNodes, setFoldedNodes] = useState([])
+  const [expandedNodes, setExpandedNodes] = useState([])
   const c = useStyles()
 
   const toggleNode = useCallback(node => {
-    setFoldedNodes(folded => {
-      const index = folded.indexOf(node.id)
+    setExpandedNodes(expanded => {
+      const index = expanded.indexOf(node.id)
       if (index >= 0) {
-        folded.splice(index, 1)
+        expanded.splice(index, 1)
       } else {
-        folded.push(node.id)
+        expanded.push(node.id)
       }
-      return folded.slice()
+      return expanded.slice()
     })
   }, [])
 
   const filteredNodes = useMemo(() => {
     const newNodes = []
     let lastLevel = nodes.length
+    const hasMultiRoots = nodes.filter(node => node.level === 0).length > 1
+
     nodes.forEach((node, i) => {
       if (node.level <= lastLevel) {
         const { parts, ...newNode } = node
         newNode.isLeaf = !nodes[i + 1] || nodes[i + 1].level <= node.level
-        if (foldedNodes.includes(node.id)) {
+        if ((node.level > 0 || hasMultiRoots) && !expandedNodes.includes(node.id)) {
           lastLevel = node.level
           newNode.closed = true
         } else {
@@ -97,21 +113,25 @@ const InfiniteTreeView = ({
     })
 
     return newNodes
-  }, [nodes, foldedNodes])
+  }, [nodes, expandedNodes])
 
-  const itemData = useMemo(
-    () => ({
+  const itemData = useMemo(() => {
+    const hasMultiRoots = filteredNodes.filter(node => node.level === 0).length > 1
+
+    return {
       items: filteredNodes,
+      hasMultiRoots,
       toggleNode,
       renderNode,
-      classes: c,
-    }),
-    [filteredNodes, toggleNode, renderNode]
-  )
+      classes: { ...c, ...classes },
+      levelPadding,
+      isSelected,
+    }
+  }, [filteredNodes, toggleNode, renderNode, levelPadding, isSelected, classes])
 
   return (
     <FixedSizeList
-      className={className}
+      className={classes.root}
       width={width}
       height={height}
       itemData={itemData}
