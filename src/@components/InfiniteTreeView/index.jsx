@@ -127,7 +127,7 @@ const InfiniteTreeView = ({
       levelPadding,
       isSelected,
     }
-  }, [filteredNodes, toggleNode, renderNode, levelPadding, isSelected, classes])
+  }, [filteredNodes, toggleNode, renderNode, levelPadding, isSelected, c, classes])
 
   return (
     <FixedSizeList
