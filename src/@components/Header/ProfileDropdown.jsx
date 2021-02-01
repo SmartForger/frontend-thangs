@@ -20,7 +20,7 @@ import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as SignOutIcon } from '@svg/icon-signout.svg'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 
-const useStyles = createUseStyles(theme => {
+export const useStyles = createUseStyles(theme => {
   return {
     ProfileDropdown: {
       width: '16.25rem',
