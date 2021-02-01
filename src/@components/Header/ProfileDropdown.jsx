@@ -20,7 +20,7 @@ import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as SignOutIcon } from '@svg/icon-signout.svg'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 
-export const useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(theme => {
   return {
     ProfileDropdown: {
       width: '16.25rem',
@@ -60,7 +60,7 @@ export const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-export const ProfileDropdownMenu = ({ myThangsMenu, user = {}, TargetComponent }) => {
+export const ProfileDropdownMenu = ({ myThangsMenu, user = {}, TargetComponent, ...props }) => {
   const c = useStyles({})
 
   return (
@@ -69,6 +69,7 @@ export const ProfileDropdownMenu = ({ myThangsMenu, user = {}, TargetComponent }
       TargetComponent={TargetComponent}
       user={user}
       myThangsMenu={myThangsMenu}
+      {...props}
     >
       <ProfileDropdownMenuContainer user={user}/>
     </DropdownMenu>
