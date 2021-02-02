@@ -11,7 +11,7 @@ const RedirectModel = () => {
   useEffect(() => {
     dispatch(types.FETCH_MODEL, { id: modelId })
   }, [dispatch, modelId])
-  debugger
+
   if (isError) return <Redirect to={'/'} />
   if (modelData && modelData.identifier)
     return <Redirect to={`/${modelData.identifier}`} />

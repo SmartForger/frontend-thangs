@@ -18,8 +18,7 @@ import {
   ProgressText,
   RelatedModels,
   Revised,
-  ShareDropdown,
-  ShareDropdownMenu,
+  ShareActionMenu,
   Spacer,
   Spinner,
   ToggleFollowButton,
@@ -383,11 +382,7 @@ const StatsAndActions = ({
             openSignupOverlay={openSignupOverlay}
           />
           <Spacer size='.5rem' />
-          <ShareDropdownMenu
-            TargetComponent={ShareDropdown}
-            iconOnly={true}
-            title={pageTitle}
-          />
+          <ShareActionMenu iconOnly={true} title={pageTitle} model={modelData} />
         </div>
         <Spacer size='1rem' />
         <VersionLink

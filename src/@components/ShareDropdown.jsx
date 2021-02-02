@@ -46,10 +46,16 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-export const ShareDropdownMenu = ({ TargetComponent, iconOnly, title, urlPathname }) => {
+export const ShareDropdownMenu = ({
+  TargetComponent,
+  iconOnly,
+  model,
+  title,
+  urlPathname,
+}) => {
   const c = useStyles({})
-  const shareUrl = `${window.location.origin}/social${
-    urlPathname || window.location.pathname
+  const shareUrl = `${window.location.origin}/m${
+    model ? `/${model.id}` : urlPathname || window.location.pathname
   }`
 
   const onFBShare = useCallback(() => {

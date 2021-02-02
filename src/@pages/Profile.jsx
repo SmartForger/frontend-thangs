@@ -9,8 +9,7 @@ import {
   MetadataPrimary,
   ProfileButton,
   ProfilePicture,
-  ShareDropdown,
-  ShareDropdownMenu,
+  ShareActionMenu,
   SingleLineBodyText,
   Spacer,
   Spinner,
@@ -307,11 +306,10 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, getTime }) => {
                   <Spacer size={'1rem'} />
                 </>
               )}
-              <ShareDropdownMenu
-                TargetComponent={ShareDropdown}
+              <ShareActionMenu
                 iconOnly={false}
                 title={`${user.username} - 3D model uploads`}
-                urlPathname={`/portfolio/${userId}`}
+                profileId={userId}
               />
             </div>
           </div>

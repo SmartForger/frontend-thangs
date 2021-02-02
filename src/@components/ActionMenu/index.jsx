@@ -36,14 +36,14 @@ const useStyles = createUseStyles(theme => {
       [md_viewer]: {
         flexDirection: 'row',
       },
+
+      '& > button': {
+        width: '100%',
+      },
     },
     DefaultMenu_Item__mobileOnly: {
       flexDirection: 'column',
       justifyContent: 'left',
-
-      [md]: {
-        flexDirection: 'row',
-      },
     },
     DefaultMenu_Row: {
       ...theme.mixins.flexRow,
@@ -94,8 +94,7 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
 
       [md]: {
-        display: 'block',
-        width: 'unset',
+        justifyContent: 'left',
       },
     },
     DefaultMenu_TabletRow: {
@@ -130,6 +129,14 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
+const wrapIfComponent = ({ Component, children, props }) => {
+  if (Component) {
+    return <Component {...props}>{children}</Component>
+  } else {
+    return children
+  }
+}
+
 const DefaultMenu = ({ onChange = noop, options = [], tabletLayout, isMobileOnly }) => {
   const c = useStyles({ tabletLayout })
 
@@ -141,63 +148,76 @@ const DefaultMenu = ({ onChange = noop, options = [], tabletLayout, isMobileOnly
       })}
     >
       {options.map((option, ind) => {
-        const { Icon = null } = option
+        const { Icon = null, Component = null, props = {} } = option
         return (
           <React.Fragment key={`${option.value}_${ind}`}>
             <DropdownItem
-              onClick={() => onChange(option.value)}
+              onClick={
+                option.onClick && typeof option.onClick === 'function'
+                  ? option.onClick()
+                  : () => onChange(option.value)
+              }
               className={classnames({
                 [c.DefaultMenu_Item]: !isMobileOnly,
                 [c.DefaultMenu_Item__mobileOnly]: isMobileOnly,
               })}
             >
-              <Spacer
-                size={'.5rem'}
-                className={classnames({
-                  [c.DefaultMenu__mobile]: !tabletLayout,
-                  [c.DefaultMenu__desktopTablet]: tabletLayout,
-                })}
-              />
-              {(!tabletLayout || isMobileOnly) && (
-                <Spacer size={'.5rem'} className={c.DefaultMenu__desktopTablet} />
-              )}
-              <div
-                className={classnames({
-                  [c.DefaultMenu_MobileRow]: !tabletLayout,
-                  [c.DefaultMenu_TabletRow]: tabletLayout,
-                })}
-              >
-                <Spacer
-                  className={classnames({
-                    [c.DefaultMenu__desktop]: !tabletLayout,
-                    [c.DefaultMenu__desktopTablet]: tabletLayout,
-                  })}
-                  size={'.5rem'}
-                />
-                <div className={c.DefaultMenu_Row}>
-                  {Icon && (
-                    <>
-                      <Icon />
-                      <Spacer size={'.75rem'} />
-                    </>
-                  )}
-                  <LabelText>{option.label}</LabelText>
-                </div>
-                <ArrowRightIcon
-                  className={classnames({
-                    [c.DefaultMenu__mobile]: isMobileOnly,
-                    [c.DefaultMenu__tablet]: !isMobileOnly,
-                  })}
-                />
-                <Spacer
-                  className={classnames({
-                    [c.DefaultMenu__desktop]: !tabletLayout,
-                    [c.DefaultMenu__desktopTablet]: tabletLayout,
-                  })}
-                  size={'.5rem'}
-                />
-              </div>
-              <Spacer size={'.5rem'} />
+              {' '}
+              {wrapIfComponent({
+                Component,
+                children: (
+                  <>
+                    <Spacer
+                      size={'.5rem'}
+                      className={classnames({
+                        [c.DefaultMenu__mobile]: !tabletLayout,
+                        [c.DefaultMenu__desktopTablet]: tabletLayout,
+                      })}
+                    />
+                    {(!tabletLayout || isMobileOnly) && (
+                      <Spacer size={'.5rem'} className={c.DefaultMenu__desktopTablet} />
+                    )}
+                    <div
+                      className={classnames({
+                        [c.DefaultMenu_MobileRow]: !tabletLayout,
+                        [c.DefaultMenu_TabletRow]: tabletLayout,
+                      })}
+                    >
+                      <Spacer
+                        className={classnames({
+                          [c.DefaultMenu__desktop]: !tabletLayout,
+                          [c.DefaultMenu__desktopTablet]: tabletLayout,
+                        })}
+                        size={'.5rem'}
+                      />
+                      <div className={c.DefaultMenu_Row}>
+                        {Icon && (
+                          <>
+                            <Icon />
+                            <Spacer size={'.75rem'} />
+                          </>
+                        )}
+                        <LabelText>{option.label}</LabelText>
+                      </div>
+                      <ArrowRightIcon
+                        className={classnames({
+                          [c.DefaultMenu__mobile]: isMobileOnly,
+                          [c.DefaultMenu__tablet]: !isMobileOnly,
+                        })}
+                      />
+                      <Spacer
+                        className={classnames({
+                          [c.DefaultMenu__desktop]: !tabletLayout,
+                          [c.DefaultMenu__desktopTablet]: tabletLayout,
+                        })}
+                        size={'.5rem'}
+                      />
+                    </div>
+                    <Spacer size={'.5rem'} />
+                  </>
+                ),
+                props,
+              })}
             </DropdownItem>
             <Spacer
               className={classnames({

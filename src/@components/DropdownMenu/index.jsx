@@ -37,9 +37,9 @@ const useStyles = createUseStyles(theme => {
     },
     DropdownMenu_Item: {
       ...theme.text.boldText,
+      alignItems: 'baseline',
       lineHeight: '1.5rem',
       display: 'inline-flex',
-      alignItems: 'center',
       cursor: 'pointer',
       width: '100%',
 
@@ -48,6 +48,8 @@ const useStyles = createUseStyles(theme => {
       },
     },
     DropdownMenu_ItemWrapper: {
+      display: 'flex',
+      flex: 'none',
       borderRadius: '.5rem',
       padding: '0',
       '&:hover': {

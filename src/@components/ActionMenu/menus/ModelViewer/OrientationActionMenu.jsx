@@ -35,20 +35,9 @@ import { ReactComponent as BottomRightFrontViewSelected } from '@svg/view-bottom
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md, md_viewer },
+    mediaQueries: { md_viewer },
   } = theme
   return {
-    OrientationActionMenu: {
-      width: 'auto',
-      color: `${theme.colors.black[500]} !important`,
-      bottom: '5rem',
-      right: '0',
-      display: 'none',
-
-      [md]: {
-        display: 'block',
-      },
-    },
     OrientationTarget: {
       alignItems: 'center',
       cursor: 'pointer',
