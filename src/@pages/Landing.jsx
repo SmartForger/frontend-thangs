@@ -204,8 +204,7 @@ const Page = ({ sortBy, getTime = noop }) => {
         >
           {Array.isArray(modelPreviews.data) &&
             modelPreviews.data.map((model, index) => {
-              //Temp removing some bad models - BE
-              if (!model || model.id === '10567' || model.id === '10601') return null
+              if (!model) return null
               return <ModelCardLanding key={`model-${model.id}:${index}`} model={model} />
             })}
         </CardCollectionLanding>
