@@ -5,7 +5,7 @@ import { createUseStyles } from '@style'
 import { ReactComponent as IndentArrow } from '@svg/icon-indent-arrow.svg'
 import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
 
-const useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(_theme => {
   return {
     TreeNode: {
       boxSizing: 'border-box',
@@ -67,6 +67,7 @@ const Row = memo(({ data, index, style }) => {
     </div>
   )
 }, areEqual)
+Row.displayName = 'InfiniteTreeRowComponent'
 
 const InfiniteTreeView = ({
   classes,
@@ -100,7 +101,7 @@ const InfiniteTreeView = ({
 
     nodes.forEach((node, i) => {
       if (node.level <= lastLevel) {
-        const { parts, ...newNode } = node
+        const { parts: _p, ...newNode } = node
         newNode.isLeaf = !nodes[i + 1] || nodes[i + 1].level <= node.level
         if ((node.level > 0 || hasMultiRoots) && !expandedNodes.includes(node.id)) {
           lastLevel = node.level

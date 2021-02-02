@@ -19,11 +19,7 @@ import {
 } from '@pages'
 import { ErrorBoundary } from './ErrorBoundary'
 import { ActionMenuProvider, AppAnalytics, OverlayProvider } from '@components'
-import {
-  routeRequiresAuth,
-  routeRequiresKick,
-  routeRedirectToProfile,
-} from '@components/RouteComponent'
+import { routeRequiresAuth, routeRedirectToProfile } from '@components/RouteComponent'
 import { StoreContext } from 'storeon/react'
 import { useLocalStorage } from '@hooks'
 import { ThemeProvider } from '@style'
