@@ -2,6 +2,8 @@ dispatch:
   # Production routes
   - url: "thangs.com/social/*"
     service: prod-api-platform
+  - url: "thangs.com/m/*"
+  service: prod-api-platform
   - url: "thangs.com/*"
     service: thangs-react
   - url: "www.thangs.com/*"
@@ -14,6 +16,8 @@ dispatch:
   # Staging routes
   - url: "staging.thangs.com/social/*"
     service: staging-api-platform
+  - url: "staging.thangs.com/m/*"
+  service: staging-api-platform
   - url: "staging.thangs.com/*"
     service: staging-thangs-frontend
   - url: "www.staging.thangs.com/*"
