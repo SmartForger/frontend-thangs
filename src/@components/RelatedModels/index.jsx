@@ -20,13 +20,16 @@ const useStyles = createUseStyles(theme => {
       height: '1.5rem',
     },
     RelatedModels_Header: {
-      ...theme.text.formCalloutText,
       marginBottom: '1.5rem',
       display: 'flex',
       alignItems: 'center',
 
       '& > svg': {
         marginRight: '.5rem',
+      },
+
+      '& > h2': {
+        ...theme.text.formCalloutText,
       },
     },
     RelatedModels_Related: {
@@ -36,38 +39,36 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const RelatedModels = ({ isLoading, isError, data = {}, className, modelName }) => {
+const RelatedModels = ({ isLoading, data = {}, className, modelName }) => {
   const c = useStyles()
 
-  if (isLoading) {
-    return <Spinner />
-  } else if (isError) {
-    return <Spinner />
-  }
   track('Related Models Shown', { matches: (data.matches && data.matches.length) || 0 })
 
   return (
     <div className={classnames(className, c.RelatedModels_Related)}>
       <div className={c.RelatedModels_Header}>
         <UploadIcon width={'1rem'} height={'1rem'} />
-        Geometrically Related to {modelName}
+        <h2>Geometrically Related to {modelName}</h2>
       </div>
-
-      <CardCollectionRelated
-        maxPerRow={3}
-        noResultsText='No geometrically related matches yet.'
-      >
-        {data.matches && data.matches.length > 0
-          ? Array.isArray(data.matches) &&
-            data.matches.map((model, index) => (
-              <ModelCardRelated
-                key={`model-${model.id}:${index}`}
-                model={model}
-                geoRelated={true}
-              />
-            ))
-          : null}
-      </CardCollectionRelated>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <CardCollectionRelated
+          maxPerRow={3}
+          noResultsText='No geometrically related matches yet.'
+        >
+          {data.matches && data.matches.length > 0
+            ? Array.isArray(data.matches) &&
+              data.matches.map((model, index) => (
+                <ModelCardRelated
+                  key={`model-${model.id}:${index}`}
+                  model={model}
+                  geoRelated={true}
+                />
+              ))
+            : null}
+        </CardCollectionRelated>
+      )}
     </div>
   )
 }

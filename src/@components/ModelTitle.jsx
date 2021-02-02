@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { ProfilePicture } from '@components'
+import { ProfilePicture, Spacer } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -29,10 +29,11 @@ const useStyles = createUseStyles(theme => {
     },
     ModelTitle_ProfileLink: {
       ...theme.text.linkText,
+      display: 'block',
       textDecoration: 'underline',
-      marginLeft: '.25rem',
       color: theme.colors.black[500],
       fontWeight: '500',
+      fontSize: '.875rem',
     },
   }
 })
@@ -60,23 +61,22 @@ const ModelTitle = ({ model, className }) => {
         </Link>
       )}
       <div className={c.ModelTitle_Content}>
-        <h1 className={c.ModelTitle_Text}>
-          {model.name}
-          {user && (
-            <span>
-              &nbsp;by
-              <Link
-                className={c.ModelTitle_ProfileLink}
-                to={{
-                  pathname: `/${user.username}`,
-                  state: { fromModel: true },
-                }}
-              >
-                {user.username}
-              </Link>
-            </span>
-          )}
-        </h1>
+        <h1 className={c.ModelTitle_Text}>{model.name}</h1>
+        {user && (
+          <span className={c.ModelTitle_ProfileAuthor}>
+            by
+            <Spacer size={'.25rem'} />
+            <Link
+              className={c.ModelTitle_ProfileLink}
+              to={{
+                pathname: `/${user.username}`,
+                state: { fromModel: true },
+              }}
+            >
+              <h1 className={c.ModelTitle_ProfileLink}>{user.username}</h1>
+            </Link>
+          </span>
+        )}
       </div>
     </div>
   )
