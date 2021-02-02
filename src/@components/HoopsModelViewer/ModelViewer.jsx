@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import * as R from 'ramda'
-import { HowTo, Spinner } from '@components'
+import { HowTo, ModelThumbnail, Spinner } from '@components'
 import { useModels, usePerformanceMetrics } from '@hooks'
 import Toolbar from './Toolbar'
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg'
@@ -119,11 +119,17 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
     if (hoops.status.isReady) perfTrack('Page Loaded - HOOPS Viewer', getTime())
   }, [getTime, hoops.status.isReady])
 
+  const modelAlt = `${model.name} by ${model.owner && model.owner.username} full viewable`
   return (
     <div className={className}>
       <div className={c.HoopsModelViewer_WebViewContainer}>
         <div ref={containerRef} />
-        {!hoops.status.statusOverlayHidden && <StatusIndicator status={hoops.status} />}
+        {!hoops.status.statusOverlayHidden && (
+          <>
+            <ModelThumbnail model={model} name={modelAlt} />
+            <StatusIndicator status={hoops.status} />
+          </>
+        )}
       </div>
       {hoops.status.isReady && (
         <Toolbar

@@ -430,12 +430,11 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
   }, [getTime, isLoaded])
 
   const {
-    title,
-    description,
     descriptionCreatedBy,
     descriptionPrefix,
-    descriptionSuffix,
     defaultDescription,
+    titleSuffix,
+    titlePrefix,
   } = usePageMeta('model')
   const openSignupOverlay = useCallback(
     (titleMessage, source) => {
@@ -464,11 +463,18 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
   } else if (isError) {
     return <div>Error loading Model</div>
   }
-  const modelMetaTitle = modelData.category
-    ? `3D ${modelData.category} model`
-    : modelData.owner && modelData.owner.username
-  const modelAuthor = modelData.owner && modelData.owner.username
-  const pageTitle = `${modelData.name}${descriptionSuffix} | ${modelMetaTitle}${title}`
+  let titleCharCount = 60
+  let modelTitle = modelData.name
+  let modelAuthor = modelData.owner && modelData.owner.username
+  titleCharCount = titleCharCount - titleSuffix.length
+  titleCharCount = titleCharCount - titlePrefix.length
+  if (titleCharCount < modelTitle.length)
+    modelTitle = modelTitle.substring(0, titleCharCount)
+  titleCharCount = titleCharCount - modelTitle.length
+  const modelTitleAuthor = titleCharCount >= modelAuthor.length + 3 ? modelAuthor : ''
+  const pageTitle = `${modelTitle}${titlePrefix}|${
+    modelTitleAuthor ? ` ${modelTitleAuthor} |` : ''
+  }${titleSuffix}`
   const modelDescription = modelData.description || defaultDescription
   return (
     <>
@@ -483,7 +489,9 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
         <meta property='og:title' content={pageTitle} />
         <meta
           property='og:description'
-          content={`${modelDescription.slice(0, 129)} ${description}`}
+          content={`${descriptionPrefix}${
+            modelData.name
+          }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
         />
         <meta
           property='og:image'

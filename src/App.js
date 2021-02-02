@@ -13,7 +13,7 @@ import {
   PasswordReset,
   PrivacyPolicy,
   Profile,
-  RedirectProfile,
+  RedirectModel,
   SearchResults,
   TermsAndConditions,
 } from '@pages'
@@ -103,11 +103,6 @@ const App = () => {
                   <Route path='/mythangs' component={routeRequiresAuth(MyThangs)} />
                   <Route exact path='/profile/:id' component={Profile} />
                   <Route
-                    exact
-                    path='/profile/'
-                    component={routeRequiresAuth(RedirectProfile)}
-                  />
-                  <Route
                     path='/model/:id'
                     exact
                     component={routeRequiresKick(ModelDetail)}
@@ -116,6 +111,7 @@ const App = () => {
                     path={['/search/:searchQuery', '/search']}
                     component={SearchResults}
                   />
+                  <Route path='/model/:modelId' component={RedirectModel} />
                   <Route path='/:userName/:modelString' component={ModelDetail} />
                   <Route path='/:userName' component={Profile} />
                   <Route path='/404' component={Page404} status={404} />
