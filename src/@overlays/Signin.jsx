@@ -168,6 +168,30 @@ const signInSchema = Joi.object({
   password: Joi.string().required(),
 })
 
+export const SigninGoogleButton = () => {
+  const c = useStyles({})
+
+  return (
+    <Button secondary className={c.Signin_withGoogleButton}>
+      <GoogleLogo />
+      <Spacer size={'.5rem'} />
+      <LabelText>Log in with Google</LabelText>
+    </Button>
+  )
+}
+
+export const SigninFacebookButton = () => {
+  const c = useStyles({})
+
+  return (
+    <Button secondary className={c.Signin_withFacebookButton}>
+      <FacebookLogo />
+      <Spacer size={'.5rem'} />
+      <LabelText>Log in with Facebook</LabelText>
+    </Button>
+  )
+}
+
 const SignInForm = ({
   c,
   setOverlayData,
@@ -238,19 +262,11 @@ const SignInForm = ({
         <TitleTertiary>Log in</TitleTertiary>
         <Spacer size='2rem' />
         <a href={googleLoginUrl}>
-          <Button secondary className={c.Signin_withGoogleButton}>
-            <GoogleLogo />
-            <Spacer size={'.5rem'} />
-            <LabelText>Log in with Google</LabelText>
-          </Button>
+          <SigninGoogleButton />
         </a>
         <Spacer size='1rem' />
         <a href={facebookLoginUrl}>
-          <Button secondary className={c.Signin_withFacebookButton}>
-            <FacebookLogo />
-            <Spacer size={'.5rem'} />
-            <LabelText>Log in with Facebook</LabelText>
-          </Button>
+          <SigninFacebookButton />
         </a>
         <Divider spacing={'1.5rem'} />
         <form onSubmit={onFormSubmit(handleSignIn)}>
