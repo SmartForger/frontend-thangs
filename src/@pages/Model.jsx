@@ -417,7 +417,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
   const {
     isLoading: isRelatedLoading,
     isError: isRelatedError,
-    data: relatedData,
+    data: relatedCollectionArray,
   } = related
 
   useEffect(() => {
@@ -535,7 +535,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
                 modelName={modelData && modelData.name}
                 isLoading={isRelatedLoading}
                 isError={isRelatedError}
-                data={relatedData}
+                data={relatedCollectionArray}
               />
               <Divider />
               <CommentsForModel

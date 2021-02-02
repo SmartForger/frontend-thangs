@@ -39,7 +39,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const RelatedModels = ({ isLoading, data = {}, className, modelName }) => {
+const RelatedModels = ({ isLoading, data = [], className, modelName }) => {
   const c = useStyles()
 
   track('Related Models Shown', { matches: (data.matches && data.matches.length) || 0 })
@@ -53,21 +53,26 @@ const RelatedModels = ({ isLoading, data = {}, className, modelName }) => {
       {isLoading ? (
         <Spinner />
       ) : (
-        <CardCollectionRelated
-          maxPerRow={3}
-          noResultsText='No geometrically related matches yet.'
-        >
-          {data.matches && data.matches.length > 0
-            ? Array.isArray(data.matches) &&
-              data.matches.map((model, index) => (
-                <ModelCardRelated
-                  key={`model-${model.id}:${index}`}
-                  model={model}
-                  geoRelated={true}
-                />
-              ))
-            : null}
-        </CardCollectionRelated>
+        data.map((collection, index) => {
+          return (
+            <CardCollectionRelated
+              key={`collection-${index}`}
+              maxPerRow={3}
+              noResultsText='No geometrically related matches yet.'
+            >
+              {collection.matches && collection.matches.length > 0
+                ? Array.isArray(collection.matches) &&
+                  collection.matches.map((model, index) => (
+                    <ModelCardRelated
+                      key={`model-${model.id}:${index}`}
+                      model={model}
+                      geoRelated={true}
+                    />
+                  ))
+                : null}
+            </CardCollectionRelated>
+          )
+        })
       )}
     </div>
   )

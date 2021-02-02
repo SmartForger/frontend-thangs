@@ -6,7 +6,11 @@ const buildGeoRatioURL = (startURL, data) => {
   const dataQuery = Object.keys(data).reduce((acc, curVal) => {
     let newAcc = ''
     if (data[curVal]) {
-      if (!acc.includes('?')) newAcc = '?'
+      if (!acc.includes('?')) {
+        newAcc = '?'
+      } else {
+        newAcc = '&'
+      }
       newAcc += `${curVal}=${data[curVal]}&`
     }
     return acc + newAcc
@@ -41,7 +45,7 @@ export default store => {
     })
     const { data, error } = await api({
       method: 'GET',
-      endpoint: buildGeoRatioURL(`models/related-thangs/${id}`, geoRatios),
+      endpoint: buildGeoRatioURL(`models/match/${id}?scope=thangs`, geoRatios),
     })
 
     if (error) {
