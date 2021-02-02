@@ -5,7 +5,13 @@ import { ReactComponent as ShareIcon } from '@svg/share-icon.svg'
 import { ReactComponent as ShareFacebook } from '@svg/share-facebook.svg'
 import { ReactComponent as ShareTwitter } from '@svg/share-twitter.svg'
 import { ReactComponent as ShareReddit } from '@svg/share-reddit.svg'
-import { FacebookShareButton, RedditShareButton, TwitterShareButton } from 'react-share'
+import { ReactComponent as SharePinterest } from '@svg/share-pinterest.svg'
+import {
+  FacebookShareButton,
+  PinterestShareButton,
+  RedditShareButton,
+  TwitterShareButton,
+} from 'react-share'
 import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
@@ -64,6 +70,12 @@ export const ShareDropdownMenu = ({ TargetComponent, iconOnly, title, urlPathnam
     })
   }, [urlPathname])
 
+  const onPinterestShare = useCallback(() => {
+    track(`Share ${urlPathname ? 'portfolio' : 'model'} - Pinterest`, {
+      subject: window.location.pathname,
+    })
+  }, [urlPathname])
+
   return (
     <DropdownMenu
       className={c.ShareDropdown}
@@ -99,6 +111,16 @@ export const ShareDropdownMenu = ({ TargetComponent, iconOnly, title, urlPathnam
               <LabelText>Reddit</LabelText>
             </div>
           </RedditShareButton>
+        </DropdownItem>
+        <Spacer size={'.5rem'} />
+        <DropdownItem onClick={onPinterestShare}>
+          <PinterestShareButton url={shareUrl} media={title}>
+            <div className={c.ShareDropdown_Row}>
+              <SharePinterest />
+              <Spacer size={'.75rem'} />
+              <LabelText>Pinterest</LabelText>
+            </div>
+          </PinterestShareButton>
         </DropdownItem>
       </div>
     </DropdownMenu>

@@ -4,6 +4,7 @@ import { createUseStyles } from '@style'
 import { ReactComponent as FacebookIcon } from '@svg/social-facebook.svg'
 import { ReactComponent as InstagramIcon } from '@svg/social-instagram.svg'
 import { ReactComponent as TwitterIcon } from '@svg/social-twitter.svg'
+import { ReactComponent as PinterestIcon } from '@svg/share-pinterest.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -79,6 +80,15 @@ const Footer = () => {
               href='https://twitter.com/Thangs3D'
             >
               <TwitterIcon />
+            </a>
+          </li>
+          <li>
+            <a
+              target='_blank'
+              rel='noopener noreferrer'
+              href='https://www.pinterest.com/Thangs3D/_created/'
+            >
+              <PinterestIcon />
             </a>
           </li>
         </ul>
