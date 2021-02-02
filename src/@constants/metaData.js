@@ -3,14 +3,14 @@ export const aboutUsDescription =
 export const aboutUsTitle = 'Thangs | About Us | The fastest growing 3D community'
 export const modelDescription = 'Sign up and download for free. '
 export const modelDescriptionPrefix = '3D model of '
-export const modelDescriptionPostfix = ' - 3D model'
+export const modelDescriptionSuffix = ' - 3D model'
 export const modelDescriptionCreatedBy = 'created by '
 export const modelDescriptionDefault = 'Free to download or discover similar.'
 export const modelTitle = ' | Thangs'
 export const profileDescription =
   'Sign up for your free profile on Thangs 3D model community. Search over 1 million 3D models. Store 3D models, share & collaborate with other Thangs users'
 export const profileTitle = ' | Thangs'
-export const profilePostfix = ' Thangs community collaborator.'
+export const profileSuffix = ' Thangs community collaborator.'
 export const profileDescriptionDefault =
   ' 3D model contributions for the Thangs community. View all models, free to download. Follow your favorite designers.'
 export const searchDescription =

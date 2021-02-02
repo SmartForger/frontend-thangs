@@ -434,7 +434,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
     description,
     descriptionCreatedBy,
     descriptionPrefix,
-    descriptionPostfix,
+    descriptionSuffix,
     defaultDescription,
   } = usePageMeta('model')
   const openSignupOverlay = useCallback(
@@ -468,7 +468,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
     ? `3D ${modelData.category} model`
     : modelData.owner && modelData.owner.username
   const modelAuthor = modelData.owner && modelData.owner.username
-  const pageTitle = `${modelData.name}${descriptionPostfix} | ${modelMetaTitle}${title}`
+  const pageTitle = `${modelData.name}${descriptionSuffix} | ${modelMetaTitle}${title}`
   const modelDescription = modelData.description || defaultDescription
   return (
     <>

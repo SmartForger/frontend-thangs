@@ -334,11 +334,11 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, getTime }) => {
 const PageById = ({ userId, isCurrentUsersProfile, getTime, userName }) => {
   const { dispatch, [`user-${userId}`]: userData = {} } = useStoreon(`user-${userId}`)
   const { isLoading, isLoaded, isError, data: user } = userData
-  const { title, descriptionPostfix, descriptionDefault } = usePageMeta('profile')
+  const { title, descriptionSuffix, descriptionDefault } = usePageMeta('profile')
   const description = 'getDescription(user)'
   let profileDescription = `${userName}.${description ? description : descriptionDefault}`
   if (profileDescription.length < 160 && description) {
-    profileDescription += `${descriptionPostfix}`
+    profileDescription += `${descriptionSuffix}`
   }
 
   useEffect(() => {
