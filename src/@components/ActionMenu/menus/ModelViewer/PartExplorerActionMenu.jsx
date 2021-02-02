@@ -296,7 +296,7 @@ const AssemblyExplorer = ({ classes, parts, onChange, selectedPart }) => {
     <InfiniteTreeView
       classes={classes}
       width={280}
-      height={300}
+      maxHeight={300}
       itemHeight={58}
       levelPadding={20}
       nodes={parts}

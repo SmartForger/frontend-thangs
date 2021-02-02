@@ -75,7 +75,7 @@ const InfiniteTreeView = ({
   renderNode,
   itemHeight,
   width,
-  height,
+  maxHeight,
   levelPadding = 40,
   isSelected = () => false,
 }) => {
@@ -115,6 +115,8 @@ const InfiniteTreeView = ({
 
     return newNodes
   }, [nodes, expandedNodes])
+  const explorerHeight = filteredNodes.length * itemHeight
+  const height = Math.min(explorerHeight, maxHeight)
 
   const itemData = useMemo(() => {
     const hasMultiRoots = filteredNodes.filter(node => node.level === 0).length > 1
