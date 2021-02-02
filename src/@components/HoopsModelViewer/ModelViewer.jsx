@@ -77,9 +77,21 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
     }
 
     if (model.parts) {
-      model.parts.sort((a, b) => {
-        return a.isPrimary === b.isPrimary ? 0 : a.isPrimary ? -1 : 1
-      })
+      const sortParts = node => {
+        if (node.parts) {
+          node.parts.sort((a, b) => {
+            const valA = a.isPrimary ? 2 : a.parts && a.parts.length > 0 ? 1 : 0
+            const valB = b.isPrimary ? 2 : b.parts && b.parts.length > 0 ? 1 : 0
+
+            return valB - valA
+          })
+          node.parts.forEach(a => {
+            sortParts(a)
+          })
+        }
+      }
+      sortParts(model)
+
       setSelectedModel(primaryPart)
       setPartList(flattenTree(model.parts, 'parts'))
     }
