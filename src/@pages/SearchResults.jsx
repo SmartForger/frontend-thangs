@@ -122,9 +122,10 @@ const SearchResult = ({
   searchModelFileName,
   showReportModel,
 }) => {
-  const filteredModels = models.filter(
-    model => model.resultSource !== 'phyndexer' || model.attributionUrl
-  )
+  const filteredModels =
+    models && models.length
+      ? models.filter(model => model.resultSource !== 'phyndexer' || model.attributionUrl)
+      : []
   return (
     <div className={c.SearchResults_Results}>
       <div className={c.SearchResults_ResultsHeader}>

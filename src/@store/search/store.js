@@ -16,7 +16,7 @@ const getStatus = intervalRequest(
   ({ modelId }) => async (resolve, reject, cancelToken) => {
     const { data, error } = await api({
       method: 'GET',
-      endpoint: `models/phyn-status/${modelId}`,
+      endpoint: `models/status/${modelId}`,
       cancelToken,
       timeout: 60000,
     })
@@ -279,7 +279,9 @@ export default store => {
           modelId,
         })
 
-        const { error: statusError } = await getStatus({ modelId: phyndexerId })
+        const { error: statusError } = await getStatus({
+          modelId: phyndexerId || modelId,
+        })
         if (statusError) {
           store.dispatch(types.ERROR_POLLING_PHYNDEXER, {
             data: statusError,
@@ -294,7 +296,7 @@ export default store => {
 
       const { data, error } = await api({
         method: 'GET',
-        endpoint: `models/match/${phyndexerId}`,
+        endpoint: `models/match/${phyndexerId || modelId}`,
       })
 
       if (error) {
