@@ -1,5 +1,4 @@
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 import FileTable from './FileTable'
 
 const files = JSON.parse(
@@ -8,7 +7,6 @@ const files = JSON.parse(
 
 export default {
   title: 'Organism/Table',
-  decorators: [story => <MemoryRouter>{story()}</MemoryRouter>],
 }
 
 export const FileTableTest = () => {

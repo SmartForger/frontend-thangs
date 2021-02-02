@@ -1,4 +1,5 @@
 import React from 'react'
+import { MemoryRouter } from 'react-router'
 import { ThemeProvider, createUseStyles } from '@style'
 import { addDecorator } from '@storybook/react'
 import { GlobalStyles } from '@style/globals'
@@ -22,7 +23,9 @@ addDecorator(storyFn => {
   return (
     <ThemeProvider>
       <GlobalStyles />
-      <div className={c.Container}>{storyFn()}</div>
+      <MemoryRouter>
+        <div className={c.Container}>{storyFn()}</div>
+      </MemoryRouter>
     </ThemeProvider>
   )
 })

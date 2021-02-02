@@ -1,12 +1,10 @@
 import React from 'react'
 import { StoreContext } from 'storeon/react'
 import { createStoreon } from 'storeon'
-import { MemoryRouter } from 'react-router'
 import Header from './'
 
 export default {
   title: 'Organism/Header',
-  decorators: [story => <MemoryRouter>{story()}</MemoryRouter>],
 }
 
 const currentUser = JSON.parse(
@@ -35,8 +33,8 @@ const authStoreObj = {
     isLoaded: true,
     isLoading: false,
     isError: false,
-    data: { notifications: []},
-  }
+    data: { notifications: [] },
+  },
 }
 
 export const DesktopHeaderUnauth = () => {
