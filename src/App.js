@@ -103,11 +103,6 @@ const App = () => {
                   <Route path='/mythangs' component={routeRequiresAuth(MyThangs)} />
                   <Route exact path='/profile/:id' component={Profile} />
                   <Route
-                    path='/model/:id'
-                    exact
-                    component={routeRequiresKick(ModelDetail)}
-                  />
-                  <Route
                     path={['/search/:searchQuery', '/search']}
                     component={SearchResults}
                   />
