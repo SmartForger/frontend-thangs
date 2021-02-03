@@ -12,6 +12,7 @@ import {
   RedditShareButton,
   TwitterShareButton,
 } from 'react-share'
+import { useCopy } from '@hooks'
 import { buildThumbnailUrl, track } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
@@ -67,50 +68,59 @@ const ShareActionMenu = ({ iconOnly, model, profileId, title, user }) => {
   const mediaUrl = model
     ? buildThumbnailUrl(model, false)
     : user && user.profile && user.profile.avatarUrl
-
-  const options = [
-    {
-      label: 'Facebook',
-      Icon: ShareFacebook,
-      value: 'Facebook',
-      Component: FacebookShareButton,
-      props: {
-        url: shareUrl,
-        quote: title,
+  const { copied, copy } = useCopy(shareUrl)
+  const options = useMemo(
+    () => [
+      {
+        label: 'Facebook',
+        Icon: ShareFacebook,
+        value: 'Facebook',
+        Component: FacebookShareButton,
+        props: {
+          url: shareUrl,
+          quote: title,
+        },
       },
-    },
-    {
-      label: 'Twitter',
-      Icon: ShareTwitter,
-      value: 'Twitter',
-      Component: TwitterShareButton,
-      props: {
-        url: shareUrl,
-        title,
+      {
+        label: 'Twitter',
+        Icon: ShareTwitter,
+        value: 'Twitter',
+        Component: TwitterShareButton,
+        props: {
+          url: shareUrl,
+          title,
+        },
       },
-    },
-    {
-      label: 'Reddit',
-      Icon: ShareReddit,
-      value: 'Reddit',
-      Component: RedditShareButton,
-      props: {
-        url: shareUrl,
-        title,
+      {
+        label: 'Reddit',
+        Icon: ShareReddit,
+        value: 'Reddit',
+        Component: RedditShareButton,
+        props: {
+          url: shareUrl,
+          title,
+        },
       },
-    },
-    {
-      label: 'Pinterest',
-      Icon: SharePinterest,
-      value: 'Pinterest',
-      Component: PinterestShareButton,
-      props: {
-        media: mediaUrl,
-        description: title,
-        url: String(window.location),
+      {
+        label: 'Pinterest',
+        Icon: SharePinterest,
+        value: 'Pinterest',
+        Component: PinterestShareButton,
+        props: {
+          media: mediaUrl,
+          description: title,
+          url: String(window.location),
+        },
       },
-    },
-  ]
+      {
+        label: copied === false ? 'Copy Share URL' : 'Copied URL',
+        Icon: ShareIcon,
+        value: 'Copy Share URL',
+        onClick: copy,
+      },
+    ],
+    [copied, copy, mediaUrl, shareUrl, title]
+  )
   const onShare = useCallback(
     source => {
       track(`Share ${model ? 'model' : 'portfolio'} - ${source}`, {

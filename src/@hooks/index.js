@@ -1,4 +1,5 @@
 export * from '@hooks/useActionMenu'
+export { default as useCopy } from '@hooks/useCopy'
 export { default as useCurrentUser } from '@hooks/useCurrentUser'
 export { default as useCurrentUserId } from '@hooks/useCurrentUserId'
 export { default as useExternalClick } from '@hooks/useExternalClick'

@@ -194,7 +194,6 @@ const CardContents = ({
 
 const ModelCardBase = ({ c, className, model, geoRelated }) => {
   const currentUserId = parseInt(useCurrentUserId())
-  debugger
   const modelAttributionUrl =
     model && model.attributionUrl && encodeURI(model.attributionUrl)
   const modelIdPath = model.id ? `/model/${model.id}` : modelAttributionUrl
