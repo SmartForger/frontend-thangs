@@ -6,6 +6,12 @@ import { GlobalStyles } from '@style/globals'
 
 const useStyles = createUseStyles(theme => {
   return {
+    Description: {
+      position: 'absolute',
+      top: 50,
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+    },
     Container: {
       display: 'flex',
       width: '100%',
@@ -24,7 +30,9 @@ addDecorator(storyFn => {
     <ThemeProvider>
       <GlobalStyles />
       <MemoryRouter>
-        <div className={c.Container}>{storyFn()}</div>
+        <div className={c.Description}>To change viewport (mobile, desctop) please choose menu "Change the size over preview"</div>
+        <div className={c.Container}>
+          {storyFn()}</div>
       </MemoryRouter>
     </ThemeProvider>
   )
