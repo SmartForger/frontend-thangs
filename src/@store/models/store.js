@@ -157,6 +157,10 @@ export default store => {
         atom: `user-liked-models-${currentUserId}`,
         data: newLikes,
       })
+      store.dispatch(types.LOCAL_UPDATE_LIKES, {
+        modelId: model.id,
+        isLiked: true,
+      })
     }
   })
 
@@ -201,6 +205,10 @@ export default store => {
         status: STATUSES.LOADED,
         atom: `user-liked-models-${currentUserId}`,
         data: newLikes,
+      })
+      store.dispatch(types.LOCAL_UPDATE_LIKES, {
+        modelId: model.id,
+        isLiked: false,
       })
     }
   })
