@@ -40,6 +40,7 @@ import {
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
+import { useFeature } from '@optimizely/react-sdk'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -399,7 +400,14 @@ const StatsAndActions = ({
 }
 
 const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST
-const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios }) => {
+const ModelDetailPage = ({
+  id,
+  currentUser,
+  showBackupViewer,
+  getTime,
+  geoRatios,
+  isLoadingOptimizely,
+}) => {
   const c = useStyles()
   const signUpShown = useRef(false)
   const { setOverlay } = useOverlay()
@@ -420,12 +428,13 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
     isError: isRelatedPhynError,
     data: relatedPhynCollectionArray = [],
   } = relatedPhyn
-
+  const [isEnabled] = useFeature('showPhynRelated', { autoUpdate: true })
   useEffect(() => {
     dispatch(types.FETCH_MODEL, { id })
     dispatch(types.FETCH_RELATED_MODELS, { id, geoRatios })
-    dispatch(types.FETCH_RELATED_MODELS_PHYN, { id, geoRatios })
-  }, [dispatch, geoRatios, id])
+    if (!isLoadingOptimizely && isEnabled)
+      dispatch(types.FETCH_RELATED_MODELS_PHYN, { id, geoRatios })
+  }, [dispatch, geoRatios, id, isEnabled, isLoadingOptimizely])
 
   useEffect(() => {
     if (isLoaded) perfTrack('Page Loaded - Model', getTime())
@@ -472,6 +481,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
   RelatedThangsComponent.displayName = 'RelatedThangsComponent'
 
   const RelatedPhynComponent = React.memo(() => {
+    if (isLoadingOptimizely || !isEnabled) return null
     return relatedPhynCollectionArray.map((collection, index) => {
       return (
         <RelatedModels
@@ -590,7 +600,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
   )
 }
 
-const Page = () => {
+const Page = ({ isLoadingOptimizely }) => {
   const { id, modelString } = useParams()
   const modelId = modelString ? modelString.split('-').pop() : id
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
@@ -616,14 +626,15 @@ const Page = () => {
       showBackupViewer={showBackupViewer}
       getTime={getTime}
       geoRatios={geoRatios}
+      isLoadingOptimizely={isLoadingOptimizely}
     />
   )
 }
 
-const ModelDetail = () => {
+const ModelDetail = ({ isLoadingOptimizely }) => {
   return (
     <Layout>
-      <Page />
+      <Page isLoadingOptimizely={isLoadingOptimizely} />
     </Layout>
   )
 }

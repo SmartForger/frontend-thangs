@@ -65,13 +65,7 @@ const App = () => {
             <OverlayProvider>
               <ActionMenuProvider>
                 <Switch>
-                  <Route
-                    exact
-                    path='/'
-                    render={props => (
-                      <Landing isLoadingOptimizely={isLoadingOptimizely} {...props} />
-                    )}
-                  />
+                  <Route exact path='/' render={props => <Landing {...props} />} />
                   <Route
                     path='/authenticate/:provider'
                     render={props => (
@@ -103,7 +97,12 @@ const App = () => {
                     component={SearchResults}
                   />
                   <Route path='/model/:modelId' component={RedirectModel} />
-                  <Route path='/:userName/:modelString' component={ModelDetail} />
+                  <Route
+                    path='/:userName/:modelString'
+                    render={props => (
+                      <ModelDetail isLoadingOptimizely={isLoadingOptimizely} {...props} />
+                    )}
+                  />
                   <Route path='/:userName' component={Profile} />
                   <Route path='/404' component={Page404} status={404} />
                   <Route path='*' component={Page404} status={404} />

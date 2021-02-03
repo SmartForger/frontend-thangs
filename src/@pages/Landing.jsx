@@ -1,14 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
-import { useFeature } from '@optimizely/react-sdk'
 import {
   CardCollectionLanding,
   LandingSortActionMenu,
   Layout,
   ModelCardLanding,
-  Spacer,
-  Spinner,
   TitleSecondary,
 } from '@components'
 import { useCurrentUser, usePageMeta, usePerformanceMetrics, useQuery } from '@hooks'
@@ -213,7 +210,7 @@ const Page = ({ sortBy, getTime = noop }) => {
   )
 }
 
-const Landing = ({ newSignUp, isLoadingOptimizely }) => {
+const Landing = ({ newSignUp }) => {
   const { setOverlay } = useOverlay()
   const {
     atom: { data: user },
@@ -234,9 +231,6 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
   }, [showSignin, showSignup, sortBy])
   const { title, description } = usePageMeta(pageMetaKey)
   const { id } = useParams()
-  // eslint-disable-next-line no-unused-vars
-  const [isEnabled, variables] = useFeature('sortbydefault', { autoUpdate: true })
-  const defaultSort = (variables && variables.key) || 'likes'
   const { startTimer, getTime } = usePerformanceMetrics()
   useEffect(() => {
     if (newSignUp) {
@@ -311,15 +305,7 @@ const Landing = ({ newSignUp, isLoadingOptimizely }) => {
         <title>{title}</title>
         <meta name='description' content={description} />
       </Helmet>
-      {!isLoadingOptimizely && (
-        <Page getTime={getTime} user={user} sortBy={sortBy || defaultSort} />
-      )}
-      {isLoadingOptimizely && (
-        <>
-          <Spacer size={'2rem'} />
-          <Spinner />
-        </>
-      )}
+      <Page getTime={getTime} user={user} sortBy={'trending'} />
     </Layout>
   )
 }

@@ -21,7 +21,7 @@ const AppAnalytics = () => {
   const { title, description } = usePageMeta('App')
   const user = authenticationService.getCurrentUser()
   // eslint-disable-next-line no-unused-vars
-  const [isEnabled, variables] = useFeature('sortbydefault', { autoUpdate: true })
+  const [isEnabled, variables] = useFeature('showPhynRelated', { autoUpdate: true })
 
   useEffect(() => {
     ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID)
@@ -31,14 +31,14 @@ const AppAnalytics = () => {
       analyticsInitialized.current = true
     }
     if (user && !userIdentified.current) {
-      identify({ user, inviteCode, experiments: { sortByVariation: variables.key } })
+      identify({ user, inviteCode, experiments: { showPhynVariation: variables.key } })
       userIdentified.current = true
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   useEffect(() => {
-    updateUserExperiments({ sortByVariation: variables.key })
+    updateUserExperiments({ showPhynVariation: variables.key })
   }, [variables.key])
 
   useEffect(() => {
