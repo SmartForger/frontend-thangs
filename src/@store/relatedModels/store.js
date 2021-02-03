@@ -45,7 +45,7 @@ export default store => {
     })
     const { data, error } = await api({
       method: 'GET',
-      endpoint: buildGeoRatioURL(`models/match/${id}?scope=thangs`, geoRatios),
+      endpoint: buildGeoRatioURL(`models/match/${id}`, geoRatios),
     })
 
     if (error) {
