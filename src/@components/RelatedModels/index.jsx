@@ -41,15 +41,16 @@ const useStyles = createUseStyles(theme => {
 
 const RelatedModels = ({
   isLoading,
+  isHideEmpty = false,
   isPublicResults = false,
-  data = [],
+  data = {},
   className,
   modelName,
 }) => {
   const c = useStyles()
 
   track('Related Models Shown', { matches: (data.matches && data.matches.length) || 0 })
-
+  if (isHideEmpty && (!data || !data.match || !data.matches.length)) return null
   return (
     <div className={classnames(className, c.RelatedModels_Related)}>
       <div className={c.RelatedModels_Header}>
@@ -61,26 +62,21 @@ const RelatedModels = ({
       {isLoading ? (
         <Spinner />
       ) : (
-        data.map((collection, index) => {
-          return (
-            <CardCollectionRelated
-              key={`collection-${index}`}
-              maxPerRow={3}
-              noResultsText='No geometrically related matches yet.'
-            >
-              {collection.matches && collection.matches.length > 0
-                ? Array.isArray(collection.matches) &&
-                  collection.matches.map((model, index) => (
-                    <ModelCardRelated
-                      key={`model-${model.id}:${index}`}
-                      model={model}
-                      geoRelated={true}
-                    />
-                  ))
-                : null}
-            </CardCollectionRelated>
-          )
-        })
+        <CardCollectionRelated
+          maxPerRow={3}
+          noResultsText='No geometrically related matches yet.'
+        >
+          {data.matches && data.matches.length > 0
+            ? Array.isArray(data.matches) &&
+              data.matches.map((model, index) => (
+                <ModelCardRelated
+                  key={`model-${model.id}:${index}`}
+                  model={model}
+                  geoRelated={true}
+                />
+              ))
+            : null}
+        </CardCollectionRelated>
       )}
     </div>
   )

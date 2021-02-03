@@ -413,12 +413,12 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
   const {
     isLoading: isRelatedLoading,
     isError: isRelatedError,
-    data: relatedCollectionArray,
+    data: relatedCollectionArray = [{}],
   } = related
   const {
     isLoading: isRelatedPhynLoading,
     isError: isRelatedPhynError,
-    data: relatedPhynCollectionArray,
+    data: relatedPhynCollectionArray = [],
   } = relatedPhyn
 
   useEffect(() => {
@@ -456,6 +456,38 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
     [setOverlay]
   )
 
+  const RelatedThangsComponent = React.memo(() => {
+    return relatedCollectionArray.map((collection, index) => {
+      return (
+        <RelatedModels
+          key={`thangsRelated-${index}`}
+          modelName={modelData && modelData.name}
+          isLoading={isRelatedLoading}
+          isError={isRelatedError}
+          data={collection}
+        />
+      )
+    })
+  }, [isRelatedError, isRelatedLoading, modelData, relatedCollectionArray])
+  RelatedThangsComponent.displayName = 'RelatedThangsComponent'
+
+  const RelatedPhynComponent = React.memo(() => {
+    return relatedPhynCollectionArray.map((collection, index) => {
+      return (
+        <RelatedModels
+          key={`thangsRelated-${index}`}
+          modelName={modelData && modelData.name}
+          isLoading={isRelatedPhynLoading}
+          isError={isRelatedPhynError}
+          data={collection}
+          isPublicResults={true}
+          isHideEmpty={true}
+        />
+      )
+    })
+  }, [isRelatedPhynError, isRelatedPhynLoading, modelData, relatedPhynCollectionArray])
+  RelatedPhynComponent.displayName = 'RelatedPhynComponent'
+
   if (isLoading || !isLoaded) {
     return <Spinner />
   } else if (R.isEmpty(modelData)) {
@@ -478,6 +510,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
     modelTitleAuthor ? ` ${modelTitleAuthor} |` : ''
   }${titleSuffix}`
   const modelDescription = modelData.description || defaultDescription
+
   return (
     <>
       <Helmet>
@@ -533,19 +566,8 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
                 openSignupOverlay={openSignupOverlay}
                 pageTitle={pageTitle}
               />
-              <RelatedModels
-                modelName={modelData && modelData.name}
-                isLoading={isRelatedLoading}
-                isError={isRelatedError}
-                data={relatedCollectionArray}
-              />
-              <RelatedModels
-                modelName={modelData && modelData.name}
-                isLoading={isRelatedPhynLoading}
-                isError={isRelatedPhynError}
-                data={relatedPhynCollectionArray}
-                isPublicResults={true}
-              />
+              <RelatedThangsComponent />
+              <RelatedPhynComponent />
               <Divider />
               <CommentsForModel
                 modelId={modelData.id}
