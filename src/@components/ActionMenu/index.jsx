@@ -175,7 +175,7 @@ const DefaultMenu = ({ onChange = noop, options = [], tabletLayout, isMobileOnly
                       })}
                     />
                     {(!tabletLayout || isMobileOnly) && (
-                      <Spacer size={'.5rem'} className={c.DefaultMenu__desktopTablet} />
+                      <Spacer size={'.5rem'} className={c.DefaultMenu__desktop} />
                     )}
                     <div
                       className={classnames({

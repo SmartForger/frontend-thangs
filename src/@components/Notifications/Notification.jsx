@@ -144,7 +144,6 @@ const NotificationSnippet = ({
   return (
     <>
       <div className={c.NotificationSnippet_Wrapper}>
-        <Spacer size={'1rem'} />
         <Link className={c.NotificationSnippet} to={linkTarget}>
           <div>
             <Icon />
