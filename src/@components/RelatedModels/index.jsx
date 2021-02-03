@@ -36,6 +36,9 @@ const useStyles = createUseStyles(theme => {
       gridArea: 'related',
       marginBottom: '2rem',
     },
+    RelatedModels_LoadingIcon: {
+      flex: 'none',
+    },
   }
 })
 
@@ -50,11 +53,15 @@ const RelatedModels = ({
   const c = useStyles()
 
   track('Related Models Shown', { matches: (data.matches && data.matches.length) || 0 })
-  if (isHideEmpty && (!data || !data.match || !data.matches.length)) return null
+  if (isHideEmpty && (!data || !data.matches || !data.matches.length)) return null
   return (
     <div className={classnames(className, c.RelatedModels_Related)}>
       <div className={c.RelatedModels_Header}>
-        <UploadIcon width={'1rem'} height={'1rem'} />
+        <UploadIcon
+          className={c.RelatedModels_LoadingIcon}
+          width={'1rem'}
+          height={'1rem'}
+        />
         <h2>
           Geometrically Related {isPublicResults ? 'found elsewhere' : `to ${modelName}`}
         </h2>

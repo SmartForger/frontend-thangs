@@ -118,6 +118,17 @@ const useStyles = createUseStyles(theme => {
         ...MQ_DEPEND_PROPS.ModelCard_UserLine.MS,
       },
     },
+    ModelCard_ExternalLine: {
+      alignItems: 'center',
+      display: 'flex',
+      margin: '1.125rem',
+      marginLeft: '1.25rem',
+      marginRight: '1.25rem',
+
+      '@media (min-width: 786px)': {
+        ...MQ_DEPEND_PROPS.ModelCard_UserLine.MS,
+      },
+    },
     ModelCard_Thumbnail: {
       margin: 'auto !important',
       padding: '0 !important',
@@ -188,6 +199,16 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       right: '1rem',
       top: '1rem',
+    },
+    ModelCard_AttributionUrl: {
+      color: theme.colors.purple[900],
+      overflow: 'hidden',
+      fontSize: '0.75rem',
+      fontWeight: 500,
+      lineHeight: '1rem',
+      marginLeft: '.5rem',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
     },
   }
 })

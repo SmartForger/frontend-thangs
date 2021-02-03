@@ -460,11 +460,11 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
     return relatedCollectionArray.map((collection, index) => {
       return (
         <RelatedModels
+          data={collection}
+          isError={isRelatedError}
+          isLoading={isRelatedLoading}
           key={`thangsRelated-${index}`}
           modelName={modelData && modelData.name}
-          isLoading={isRelatedLoading}
-          isError={isRelatedError}
-          data={collection}
         />
       )
     })
@@ -475,13 +475,13 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
     return relatedPhynCollectionArray.map((collection, index) => {
       return (
         <RelatedModels
+          data={collection}
+          isError={isRelatedPhynError}
+          isHideEmpty={true}
+          isLoading={isRelatedPhynLoading}
+          isPublicResults={true}
           key={`thangsRelated-${index}`}
           modelName={modelData && modelData.name}
-          isLoading={isRelatedPhynLoading}
-          isError={isRelatedPhynError}
-          data={collection}
-          isPublicResults={true}
-          isHideEmpty={true}
         />
       )
     })

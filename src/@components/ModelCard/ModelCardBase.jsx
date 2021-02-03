@@ -5,10 +5,11 @@ import * as R from 'ramda'
 import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
 import { ReactComponent as ChatIcon } from '@svg/icon-comment.svg'
+import { ReactComponent as GlobeIcon } from '@svg/icon-globe2.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
 import * as types from '@constants/storeEventTypes'
-import { ModelThumbnail, UserInline } from '@components'
+import { MetadataSecondary, ModelThumbnail, UserInline } from '@components'
 import { useCurrentUserId } from '@hooks'
 import { track } from '@utilities/analytics'
 
@@ -46,10 +47,10 @@ const LikesAndComments = ({ c, model }) => {
     }
 
     const onFinish = newLikes => setLikesCount(newLikes)
-    
+
     isLikedCancelTokens.current[isLiked].cancel(CANCELED_TOKEN_MESSAGE)
     isLikedCancelTokens.current[!isLiked] = axios.CancelToken.source()
-    
+
     dispatch(types.LIKE_MODEL_CARD, {
       modelId: model.id,
       isLiked: newIsLiked,
@@ -84,10 +85,7 @@ const LikesAndComments = ({ c, model }) => {
         ) : (
           <HeartIcon />
         )}
-        {isLiked 
-          ? Math.max(likesCount, 1) 
-          : Math.max(likesCount, 0)
-        }
+        {isLiked ? Math.max(likesCount, 1) : Math.max(likesCount, 0)}
       </span>
     </div>
   )
@@ -144,20 +142,35 @@ const CardContents = ({
       className={classnames(className, c.ModelCard)}
       data-cy={R.pathOr('unknown', ['name'], model)}
     >
-      <Link
-        title={userName}
-        to={{
-          pathname: `/${userName}`,
-          state: { fromModel: true },
-        }}
-      >
-        <UserInline
-          user={model.owner}
-          size={24}
-          maxLength={20}
-          className={c.ModelCard_UserLine}
-        />
-      </Link>
+      {userName !== 'no-user' ? (
+        <Link
+          title={userName}
+          to={{
+            pathname: `/${userName}`,
+            state: { fromModel: true },
+          }}
+        >
+          <UserInline
+            user={model.owner}
+            size={24}
+            maxLength={20}
+            className={c.ModelCard_UserLine}
+          />
+        </Link>
+      ) : (
+        <a
+          className={c.ModelCard_ExternalLine}
+          href={modelAttributionUrl}
+          target='_blank'
+          rel='noopener noreferrer'
+          onClick={() => console.log('track this click')}
+        >
+          <GlobeIcon />
+          <MetadataSecondary light className={c.ModelCard_AttributionUrl}>
+            {modelAttributionUrl}
+          </MetadataSecondary>
+        </a>
+      )}
       <Anchor
         onClick={onAnchorClick}
         to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
@@ -172,7 +185,7 @@ const CardContents = ({
 
         <div className={c.ModelCard_Footer}>
           <div className={c.ModelCard_Name}>{model.name}</div>
-          <LikesAndComments model={model} c={c} />
+          {userName !== 'no-user' && <LikesAndComments model={model} c={c} />}
         </div>
       </Anchor>
     </div>
@@ -181,6 +194,7 @@ const CardContents = ({
 
 const ModelCardBase = ({ c, className, model, geoRelated }) => {
   const currentUserId = parseInt(useCurrentUserId())
+  debugger
   const modelAttributionUrl =
     model && model.attributionUrl && encodeURI(model.attributionUrl)
   const modelIdPath = model.id ? `/model/${model.id}` : modelAttributionUrl
@@ -190,6 +204,7 @@ const ModelCardBase = ({ c, className, model, geoRelated }) => {
   return (
     <CardContents
       className={className}
+      attributionUrl
       model={model}
       c={c}
       modelAttributionUrl={modelAttributionUrl}
