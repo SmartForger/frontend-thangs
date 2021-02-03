@@ -1,8 +1,10 @@
 import * as R from 'ramda'
 
+export * from './analytics'
 export * from './PhysnaServer'
 export * from './ensureScriptIsLoaded'
 export * from './tree'
+export * from './model'
 
 /**
  * Receives Color Hex String: #FFFFFF

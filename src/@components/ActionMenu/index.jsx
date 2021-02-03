@@ -28,6 +28,10 @@ const useStyles = createUseStyles(theme => {
         opacity: '1',
         visibility: 'visible',
       },
+
+      '& button': {
+        outline: 'none',
+      },
     },
     DefaultMenu_Item: {
       flexDirection: 'column',

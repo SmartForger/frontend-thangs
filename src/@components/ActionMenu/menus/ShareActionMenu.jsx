@@ -12,7 +12,7 @@ import {
   RedditShareButton,
   TwitterShareButton,
 } from 'react-share'
-import { track } from '@utilities/analytics'
+import { buildThumbnailUrl, track } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -60,10 +60,14 @@ const ShareTarget = ({ onClick = noop, iconOnly = false }) => {
   )
 }
 
-const ShareActionMenu = ({ model, profileId, title }) => {
+const ShareActionMenu = ({ iconOnly, model, profileId, title, user }) => {
   const shareUrl = `${window.location.origin}/${
     model ? `m/${model.id}` : `u/${profileId}` || window.location.pathname
   }`
+  const mediaUrl = model
+    ? buildThumbnailUrl(model, false)
+    : user && user.profile && user.profile.avatarUrl
+
   const options = [
     {
       label: 'Facebook',
@@ -101,8 +105,8 @@ const ShareActionMenu = ({ model, profileId, title }) => {
       value: 'Pinterest',
       Component: PinterestShareButton,
       props: {
-        url: shareUrl,
-        title,
+        media: mediaUrl,
+        description: title,
       },
     },
   ]
@@ -123,6 +127,7 @@ const ShareActionMenu = ({ model, profileId, title }) => {
     <ActionMenu
       MenuComponentProps={menuProps}
       TargetComponent={ShareTarget}
+      TargetComponentProps={{ iconOnly }}
       isCloseOnSelect={true}
       isMobileOnly={true}
     />

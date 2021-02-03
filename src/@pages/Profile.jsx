@@ -285,7 +285,7 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, getTime }) => {
           </div>
           <div>
             <Spacer size={'2rem'} />
-            <h1 className={c.Profile_Name}>{user.username} Profile and Models</h1>
+            <h1 className={c.Profile_Name}>{user.username}</h1>
             {!showProfileForm && <MetadataPrimary>{user.username}</MetadataPrimary>}
           </div>
         </div>
@@ -310,6 +310,7 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, getTime }) => {
                 iconOnly={false}
                 title={`${user.username} - 3D model uploads`}
                 profileId={userId}
+                user={user}
               />
             </div>
           </div>

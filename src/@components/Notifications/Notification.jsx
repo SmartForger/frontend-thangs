@@ -11,7 +11,7 @@ import { ReactComponent as UploadIcon } from '@svg/notification-uploaded.svg'
 import { ReactComponent as StarIcon } from '@svg/icon-star-filled.svg'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
-import { Spacer } from '@components'
+
 const useStyles = createUseStyles(theme => {
   return {
     Notification: {},
