@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import ToolbarDesktop from './ToolbarDesktop'
 import ToolbarMobile from './ToolbarMobile'
 import { createUseStyles } from '@style'
-import useIsMobile from '@hooks/useIsMobile'
+import { useIsMobile } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {

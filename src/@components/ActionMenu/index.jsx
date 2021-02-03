@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownItem, Spacer, LabelText } from '@components'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowRightIcon } from '@svg/icon-arrow-right.svg'
 import classnames from 'classnames'
-import { useActionMenu } from '@hooks'
+import { useActionMenu, useIsMobile } from '@hooks'
 
 export * from './ActionMenuContext'
 export * from './ActionMenuPortal'
@@ -253,6 +253,7 @@ export const ActionMenu = props => {
   const c = useStyles({ showTop })
   const { onChange, className, ...menuProps } = MenuComponentProps
   const { setActionMenu, setActionMenuClose } = useActionMenu()
+  const isMobile = useIsMobile()
   const handleChange = useCallback(
     value => {
       onChange(value)
@@ -262,7 +263,7 @@ export const ActionMenu = props => {
   )
 
   const handleTargetClick = useCallback(() => {
-    if (isMobileActionBarActive)
+    if (isMobileActionBarActive && isMobile)
       setActionMenu({
         isOpen: true,
         Component: MenuComponent,
@@ -271,7 +272,14 @@ export const ActionMenu = props => {
           ...menuProps,
         },
       })
-  }, [MenuComponent, handleChange, isMobileActionBarActive, menuProps, setActionMenu])
+  }, [
+    MenuComponent,
+    handleChange,
+    isMobile,
+    isMobileActionBarActive,
+    menuProps,
+    setActionMenu,
+  ])
 
   return (
     <DropdownMenu
