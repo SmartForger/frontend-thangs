@@ -107,6 +107,7 @@ const ShareActionMenu = ({ iconOnly, model, profileId, title, user }) => {
       props: {
         media: mediaUrl,
         description: title,
+        url: String(window.location),
       },
     },
   ]
