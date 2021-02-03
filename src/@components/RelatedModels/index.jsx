@@ -39,7 +39,13 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const RelatedModels = ({ isLoading, data = [], className, modelName }) => {
+const RelatedModels = ({
+  isLoading,
+  isPublicResults = false,
+  data = [],
+  className,
+  modelName,
+}) => {
   const c = useStyles()
 
   track('Related Models Shown', { matches: (data.matches && data.matches.length) || 0 })
@@ -48,7 +54,9 @@ const RelatedModels = ({ isLoading, data = [], className, modelName }) => {
     <div className={classnames(className, c.RelatedModels_Related)}>
       <div className={c.RelatedModels_Header}>
         <UploadIcon width={'1rem'} height={'1rem'} />
-        <h2>Geometrically Related to {modelName}</h2>
+        <h2>
+          Geometrically Related {isPublicResults ? 'from elsewhere' : `to ${modelName}`}
+        </h2>
       </div>
       {isLoading ? (
         <Spinner />

@@ -26,6 +26,10 @@ export default store => {
       ...getStatusState(STATUSES.INIT),
       data: {},
     },
+    [`related-models-phyn-${id}`]: {
+      ...getStatusState(STATUSES.INIT),
+      data: {},
+    },
   }))
   store.on(
     types.CHANGE_RELATED_MODELS,
@@ -45,7 +49,7 @@ export default store => {
     })
     const { data, error } = await api({
       method: 'GET',
-      endpoint: buildGeoRatioURL(`models/match/${id}`, geoRatios),
+      endpoint: buildGeoRatioURL(`models/match/${id}?scope=thangs`, geoRatios),
     })
 
     if (error) {
@@ -57,6 +61,29 @@ export default store => {
       store.dispatch(types.CHANGE_RELATED_MODELS, {
         status: STATUSES.LOADED,
         atom: `related-models-${id}`,
+        data,
+      })
+    }
+  })
+  store.on(types.FETCH_RELATED_MODELS_PHYN, async (_, { id, geoRatios }) => {
+    store.dispatch(types.CHANGE_RELATED_MODELS, {
+      status: STATUSES.LOADING,
+      atom: `related-models-phyn-${id}`,
+    })
+    const { data, error } = await api({
+      method: 'GET',
+      endpoint: buildGeoRatioURL(`models/match/${id}?scope=phyn`, geoRatios),
+    })
+
+    if (error) {
+      store.dispatch(types.CHANGE_RELATED_MODELS, {
+        status: STATUSES.FAILURE,
+        atom: `related-models-phyn-${id}`,
+      })
+    } else {
+      store.dispatch(types.CHANGE_RELATED_MODELS, {
+        status: STATUSES.LOADED,
+        atom: `related-models-phyn-${id}`,
         data,
       })
     }

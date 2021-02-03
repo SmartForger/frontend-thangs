@@ -14,6 +14,7 @@ export const LOCAL_FOLLOW_MODEL_OWNER = 'local-follow-model-owner'
 export const INIT_RELATED_MODELS = 'init-related-models'
 export const CHANGE_RELATED_MODELS = 'change-related-model-status'
 export const FETCH_RELATED_MODELS = 'fetch-related-models'
+export const FETCH_RELATED_MODELS_PHYN = 'fetch-related-models-phyn'
 /* Model Comments Store Events */
 export const INIT_MODEL_COMMENTS = 'init-model-comments'
 export const CHANGE_MODEL_COMMENTS = 'change-comment-status'

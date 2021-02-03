@@ -407,17 +407,24 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
     dispatch,
     model: modelAtom = {},
     [`related-models-${id}`]: related = {},
-  } = useStoreon('model', `related-models-${id}`)
+    [`related-models-phyn-${id}`]: relatedPhyn = {},
+  } = useStoreon('model', `related-models-${id}`, `related-models-phyn-${id}`)
   const { data: modelData, isLoading, isLoaded, isError } = modelAtom
   const {
     isLoading: isRelatedLoading,
     isError: isRelatedError,
     data: relatedCollectionArray,
   } = related
+  const {
+    isLoading: isRelatedPhynLoading,
+    isError: isRelatedPhynError,
+    data: relatedPhynCollectionArray,
+  } = relatedPhyn
 
   useEffect(() => {
     dispatch(types.FETCH_MODEL, { id })
     dispatch(types.FETCH_RELATED_MODELS, { id, geoRatios })
+    dispatch(types.FETCH_RELATED_MODELS_PHYN, { id, geoRatios })
   }, [dispatch, geoRatios, id])
 
   useEffect(() => {
@@ -531,6 +538,13 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
                 isLoading={isRelatedLoading}
                 isError={isRelatedError}
                 data={relatedCollectionArray}
+              />
+              <RelatedModels
+                modelName={modelData && modelData.name}
+                isLoading={isRelatedPhynLoading}
+                isError={isRelatedPhynError}
+                data={relatedPhynCollectionArray}
+                isPublicResults={true}
               />
               <Divider />
               <CommentsForModel
