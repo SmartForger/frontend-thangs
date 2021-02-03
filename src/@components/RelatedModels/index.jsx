@@ -55,7 +55,7 @@ const RelatedModels = ({
       <div className={c.RelatedModels_Header}>
         <UploadIcon width={'1rem'} height={'1rem'} />
         <h2>
-          Geometrically Related {isPublicResults ? 'from elsewhere' : `to ${modelName}`}
+          Geometrically Related {isPublicResults ? 'found elsewhere' : `to ${modelName}`}
         </h2>
       </div>
       {isLoading ? (
