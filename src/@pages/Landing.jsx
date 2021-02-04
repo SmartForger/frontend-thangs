@@ -305,7 +305,7 @@ const Landing = ({ newSignUp }) => {
         <title>{title}</title>
         <meta name='description' content={description} />
       </Helmet>
-      <Page getTime={getTime} user={user} sortBy={'trending'} />
+      <Page getTime={getTime} user={user} sortBy={sortBy || 'trending'} />
     </Layout>
   )
 }
