@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 import * as R from 'ramda'
 import { HowTo, ModelThumbnail, Spinner } from '@components'
 import { useModels, usePerformanceMetrics } from '@hooks'
@@ -57,7 +57,9 @@ const findPrimaryPart = parts => {
 
 const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
   const [selectedModel, setSelectedModel] = useState(null)
+  const [highlightedModel, setHighlightedModel] = useState(null)
   const [partList, setPartList] = useState([])
+  const partListRef = useRef([])
   const c = useStyles()
   const { useHoopsViewer } = useModels()
   const { startTimer, getTime } = usePerformanceMetrics()
@@ -93,7 +95,9 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
       sortParts(model)
 
       setSelectedModel(primaryPart)
-      setPartList(flattenTree(model.parts, 'parts'))
+      const list = flattenTree(model.parts, 'parts')
+      setPartList(list)
+      partListRef.current = list
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [model.id])
@@ -111,8 +115,19 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
     }
   }, [model, selectedModel])
 
+  const selectModel = node => {
+    setSelectedModel(node)
+    setHighlightedModel(node)
+  }
+
   const { containerRef, hoops } = useHoopsViewer({
     modelFilename: viewerModel,
+    onHighlight: name => {
+      const node = partListRef.current.find(node => node.originalPartName === name)
+      if (node) {
+        setHighlightedModel(node)
+      }
+    },
   })
 
   useEffect(() => {
@@ -136,8 +151,9 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
           hoops={hoops}
           minimizeTools={minimizeTools}
           model={model}
-          setSelectedModel={setSelectedModel}
+          setSelectedModel={selectModel}
           selectedModel={selectedModel}
+          highlightedModel={highlightedModel}
           partList={partList}
         />
       )}

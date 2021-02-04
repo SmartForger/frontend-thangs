@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, memo } from 'react'
+import React, { useState, useMemo, useCallback, useRef, memo } from 'react'
 import { FixedSizeList, areEqual } from 'react-window'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -69,6 +69,25 @@ const Row = memo(({ data, index, style }) => {
 }, areEqual)
 Row.displayName = 'InfiniteTreeRowComponent'
 
+const isLeaf = (nodes, i) => {
+  return !nodes[i + 1] || nodes[i + 1].level <= nodes[i].level
+}
+
+const findParentIndex = (nodes, index) => {
+  const parentLevel = nodes[index].level - 1
+  if (parentLevel < 0) {
+    return -1
+  }
+
+  for (let j = index - 1; j >= 0; j--) {
+    if (nodes[j].level === parentLevel) {
+      return j
+    }
+  }
+
+  return -1
+}
+
 const InfiniteTreeView = ({
   classes,
   nodes,
@@ -77,10 +96,13 @@ const InfiniteTreeView = ({
   width,
   maxHeight,
   levelPadding = 40,
+  scrollToItem,
   isSelected = () => false,
 }) => {
   const [expandedNodes, setExpandedNodes] = useState([])
+  const prevScrollToItem = useRef({})
   const c = useStyles()
+  const listRef = useRef()
 
   const toggleNode = useCallback(node => {
     setExpandedNodes(expanded => {
@@ -99,10 +121,33 @@ const InfiniteTreeView = ({
     let lastLevel = nodes.length
     const hasMultiRoots = nodes.filter(node => node.level === 0).length > 1
 
+    let shouldScroll = false
+    if (scrollToItem && scrollToItem.id !== prevScrollToItem.current.id) {
+      let shouldUpdateExpanded = false
+
+      const index = nodes.findIndex(node => node.id === scrollToItem.id)
+      let parentIndex = findParentIndex(nodes, index)
+      while (parentIndex >= 0) {
+        const parent = nodes[parentIndex]
+        if (!expandedNodes.includes(parent.id)) {
+          expandedNodes.push(parent.id)
+          shouldUpdateExpanded = true
+        }
+        parentIndex = findParentIndex(nodes, parentIndex)
+      }
+
+      if (shouldUpdateExpanded) {
+        setExpandedNodes(expandedNodes.slice())
+      }
+
+      shouldScroll = true
+      prevScrollToItem.current = scrollToItem
+    }
+
     nodes.forEach((node, i) => {
       if (node.level <= lastLevel) {
         const { parts: _p, ...newNode } = node
-        newNode.isLeaf = !nodes[i + 1] || nodes[i + 1].level <= node.level
+        newNode.isLeaf = isLeaf(nodes, i)
         if ((node.level > 0 || hasMultiRoots) && !expandedNodes.includes(node.id)) {
           lastLevel = node.level
           newNode.closed = true
@@ -113,8 +158,16 @@ const InfiniteTreeView = ({
       }
     })
 
+    if (shouldScroll && listRef.current) {
+      const index = newNodes.findIndex(node => node.id === scrollToItem.id)
+      if (index >= 0) {
+        listRef.current.scrollToItem(index, 'center')
+      }
+    }
+
     return newNodes
-  }, [nodes, expandedNodes])
+  }, [nodes, expandedNodes, scrollToItem])
+
   const explorerHeight = filteredNodes.length * itemHeight
   const height = Math.min(explorerHeight, maxHeight)
 
@@ -134,6 +187,7 @@ const InfiniteTreeView = ({
 
   return (
     <FixedSizeList
+      ref={listRef}
       className={classes.root}
       width={width}
       height={height}
