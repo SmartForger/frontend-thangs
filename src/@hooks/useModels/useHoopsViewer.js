@@ -130,13 +130,14 @@ const useHoopsViewer = ({ modelFilename, onHighlight }) => {
         },
         selectionArray(selections) {
           if (selections.length > 0 && onHighlight) {
-            for (const selectionItem of selections) {
+            selections.forEach(selectionItem => {
               let nodeId = selectionItem.getSelection().getNodeId()
               let index = -2
 
               while (nodeId && index < 0) {
-                index = allModelNodes.current.findIndex(node => node.id === nodeId)
-                nodeId = viewer.model.getNodeParent(nodeId)
+                const partId = nodeId
+                index = allModelNodes.current.findIndex(node => node.id === partId)
+                nodeId = viewer.model.getNodeParent(partId)
               }
 
               if (
@@ -146,7 +147,7 @@ const useHoopsViewer = ({ modelFilename, onHighlight }) => {
                 selectedNodes.current[1] = allModelNodes.current[index].id
                 onHighlight(allModelNodes.current[index].name)
               }
-            }
+            })
           }
         },
       })
