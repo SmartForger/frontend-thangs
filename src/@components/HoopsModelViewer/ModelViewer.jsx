@@ -141,7 +141,9 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
         <div ref={containerRef} />
         {!hoops.status.statusOverlayHidden && (
           <>
-            {!hoops.status.isError && <ModelThumbnail model={model} name={modelAlt} />}
+            {!hoops.status.isError && !hoops.status.isReady && (
+              <ModelThumbnail model={model} name={modelAlt} />
+            )}
             <StatusIndicator status={hoops.status} />
           </>
         )}
