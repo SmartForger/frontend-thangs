@@ -174,8 +174,8 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
           ? newNode.subIds.map(subId => formNode(subId))
           : []
         : Object.values(newTreeData)
-          .filter(node => !node.parentId)
-          .map(node => formNode(node.id))
+            .filter(node => !node.parentId)
+            .map(node => formNode(node.id))
 
       newNode.treeValid =
         newNode.valid &&
@@ -376,18 +376,28 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
 
       if (data) {
         if (applyRemaining) {
-          const parentId = allTreeNodes[activeView].parentId
+          // const parentId = allTreeNodes[activeView].parentId
           for (i = activeView; i < allTreeNodes.length; i++) {
-            if (allTreeNodes[i].parentId !== parentId || allTreeNodes[i].isAssembly) {
-              break
-            }
+            // if (allTreeNodes[i].parentId !== parentId || allTreeNodes[i].isAssembly) {
+            //   break
+            // }
+            const treeNode = allTreeNodes[i]
 
-            if (allTreeNodes[i].valid) {
-              dispatch(types.SET_MODEL_INFO, {
-                id: allTreeNodes[i].id,
-                formData:
-                  i === activeView ? data : { ...data, name: allTreeNodes[i].name },
-              })
+            if (treeNode.valid) {
+              if (treeNode.isAssembly) {
+                dispatch(types.SET_MODEL_INFO, {
+                  id: treeNode.id,
+                  formData:
+                    i === activeView
+                      ? data
+                      : { description: data.description, name: treeNode.name },
+                })
+              } else {
+                dispatch(types.SET_MODEL_INFO, {
+                  id: treeNode.id,
+                  formData: i === activeView ? data : { ...data, name: treeNode.name },
+                })
+              }
             }
           }
         } else {
@@ -460,10 +470,10 @@ const MultiUpload = ({ initData = null, folderId = '' }) => {
               {!activeNode
                 ? 'Upload Files'
                 : activeNode.isAssembly && activeNode.parentId
-                  ? 'Sub Assembly'
-                  : activeNode.isAssembly
-                    ? 'New Assembly'
-                    : partFormTitle}
+                ? 'Sub Assembly'
+                : activeNode.isAssembly
+                ? 'New Assembly'
+                : partFormTitle}
             </SingleLineBodyText>
             {activeView > -1 && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />

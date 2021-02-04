@@ -267,8 +267,6 @@ const PartInfo = props => {
     updateValidationSchema(PartInfoSchema({ isRootPart }))
   }, [isRootPart, updateValidationSchema])
 
-  if (!file) return null
-
   return (
     <>
       {activeNode.parentId && (
@@ -280,18 +278,27 @@ const PartInfo = props => {
         </>
       )}
       <div className={c.PartInfo_Row}>
-        <ModelThumbnail
-          className={c.PartInfo_Thumbnail}
-          name={file.name}
-          model={file}
-          mini={true}
-          useThumbnailer={true}
-        />
-        <Spacer size={'1rem'} />
+        {file && (
+          <>
+            <ModelThumbnail
+              className={c.PartInfo_Thumbnail}
+              name={file.name}
+              model={file}
+              mini={true}
+              useThumbnailer={true}
+            />
+            <Spacer size={'1rem'} />
+          </>
+        )}
+
         <div className={c.PartInfo_ModelInfo}>
           <TitleTertiary title={activeNode.name}>{activeNode.name}</TitleTertiary>
-          <Spacer size={'.5rem'} />
-          <MetadataPrimary>{formatBytes(activeNode.size)}</MetadataPrimary>
+          {activeNode.size && (
+            <>
+              <Spacer size={'.5rem'} />
+              <MetadataPrimary>{formatBytes(activeNode.size)}</MetadataPrimary>
+            </>
+          )}
         </div>
       </div>
       <Spacer size={'1.5rem'} />

@@ -352,10 +352,10 @@ export default store => {
         addedFiles[node.fileId] = true
         return {
           ...partInfo,
-          originalFileName: file.name,
+          originalFileName: file ? file.name : node.filename,
           originalPartName: node.originalPartName,
-          filename: file.newFileName,
-          size: file.size,
+          filename: file ? file.newFileName : node.filename,
+          size: file ? file.size : 0,
           isPrimary: false,
         }
       })
