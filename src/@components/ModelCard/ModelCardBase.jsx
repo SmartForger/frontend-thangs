@@ -163,7 +163,6 @@ const CardContents = ({
           href={modelAttributionUrl}
           target='_blank'
           rel='noopener noreferrer'
-          onClick={() => console.log('track this click')}
         >
           <GlobeIcon />
           <MetadataSecondary light className={c.ModelCard_AttributionUrl}>
