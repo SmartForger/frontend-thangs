@@ -31,9 +31,11 @@ addDecorator(storyFn => {
     <ThemeProvider>
       <GlobalStyles />
       <MemoryRouter>
-        <div className={c.Description}>To change viewport (mobile, desktop) please choose menu "Change the size over preview"</div>
-        <div className={c.Container}>
-          {storyFn()}</div>
+        <div className={c.Description}>
+          To change viewport (mobile, desktop) please choose menu "Change the size over
+          preview"
+        </div>
+        <div className={c.Container}>{storyFn()}</div>
       </MemoryRouter>
     </ThemeProvider>
   )
