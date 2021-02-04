@@ -4,21 +4,22 @@ import {
   goTo,
   isElement,
   isTextInsideClass,
-  login,
   clearModelsAndFolders,
+  loginByUser,
 } from '../../utils/common-methods'
-import { CLASSES, MODEL, PATH, PROPS, TEXT, MODEL_CARD } from '../../utils/constants'
-import { commentInput, enterValidValue, TEST_USER_1 } from '../../utils/inputs'
+import { CLASSES, MODEL, USER3, PROPS, TEXT, MODEL_CARD } from '../../utils/constants'
+import { commentInput, enterValidValue } from '../../utils/inputs'
 import { multiUpload } from '../../utils/uploadMethods'
 
+const user = USER3
 
 describe('The Model Page', () => {
   before(() => {
-    clearModelsAndFolders()
+    clearModelsAndFolders(user)
   })
 
   beforeEach(() => {
-    login(TEST_USER_1)
+    loginByUser({ email: user.EMAIL, password: user.PASSWORD })
   })
 
   it('Check redirect to my thangs after upload of model', () => {
@@ -26,9 +27,8 @@ describe('The Model Page', () => {
   })
 
   it('Check model details, comment, stats', () => {
-    goTo(PATH.PROFILE)
-    cy.wait(3000)
-    cy.get(MODEL_CARD()).click()
+    goTo(`/${user.NAME}`)
+    cy.get(MODEL_CARD(), { timeout: 2000 }).click()
 
     // check for details
     isElement(CLASSES.MODEL_PAGE_TITLE, PROPS.NOT_EMPTY)
