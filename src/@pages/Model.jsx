@@ -428,7 +428,7 @@ const ModelDetailPage = ({
     isError: isRelatedPhynError,
     data: relatedPhynCollectionArray = [],
   } = relatedPhyn
-  const [isEnabled] = useFeature('showPhynRelated', { autoUpdate: true })
+  const [isEnabled] = useFeature('showphynrelated', { autoUpdate: true })
   useEffect(() => {
     dispatch(types.FETCH_MODEL, { id })
     dispatch(types.FETCH_RELATED_MODELS, { id, geoRatios })
