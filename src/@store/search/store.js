@@ -296,7 +296,9 @@ export default store => {
 
       const { data, error } = await api({
         method: 'GET',
-        endpoint: `models/match/${modelId || phyndexerId}`,
+        endpoint: `models/match/${modelId || phyndexerId}${
+          geoRelated ? `?scope=${modelId ? 'thangs' : 'phyn'}` : ''
+        }`,
       })
 
       if (error) {
