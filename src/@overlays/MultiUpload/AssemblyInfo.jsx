@@ -110,11 +110,11 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const assemblyInfoSchema = ({ isRootAssembly }) =>
+const assemblyInfoSchema = ({ isRootAssembly, isMultipart }) =>
   Joi.object({
     name: Joi.string().required(),
     description: isRootAssembly ? Joi.string().required() : Joi.string().allow(''),
-    primary: Joi.string().allow(''),
+    primary: isMultipart ? Joi.string().required() : Joi.string().allow(''),
     folderId: Joi.string().allow(''),
     category: Joi.string().allow(''),
   })
@@ -147,6 +147,7 @@ const AssemblyInfo = ({
   const c = useStyles({})
   const firstInputRef = useRef(null)
   const isRootAssembly = useMemo(() => !activeNode.parentId, [activeNode.parentId])
+  const isMultipart = activeNode.id === 'multipart'
 
   const {
     checkError,
@@ -158,6 +159,7 @@ const AssemblyInfo = ({
   } = useForm({
     initialValidationSchema: assemblyInfoSchema({
       isRootAssembly,
+      isMultipart,
     }),
     INITIAL_STATE,
   })
@@ -219,9 +221,10 @@ const AssemblyInfo = ({
     updateValidationSchema(
       assemblyInfoSchema({
         isRootAssembly,
+        isMultipart,
       })
     )
-  }, [isRootAssembly, updateValidationSchema])
+  }, [isRootAssembly, isMultipart, updateValidationSchema])
 
   return (
     <>
@@ -306,7 +309,7 @@ const AssemblyInfo = ({
             <Spacer size={'1rem'} />
           </div>
         )}
-        {activeNode.id === 'multipart' && (
+        {isMultipart && (
           <div>
             <Dropdown
               className={c.AssemblyInfo_Select}
