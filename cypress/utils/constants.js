@@ -25,6 +25,15 @@ export const USER3 = {
   NAME: 'test+3j4tj34t',
 }
 
+export const USER4 = {
+  ID: 301,
+  EMAIL: 'test-cypress-3n43tn@test.com',
+  INVALID_EMAIL: 'test.test@test.com',
+  PASSWORD: 'test',
+  INVALID_PASSWORD: 'badPassword',
+  NAME: 'test-cypress-3n43tn',
+}
+
 export const FOLDER = {
   NAME: 'TestFolder',
 }
