@@ -236,6 +236,7 @@ export default store => {
             modelId,
             phyndexerId,
             onFinish,
+            geoSearch: true,
           })
         })
         .catch(error => {
@@ -262,7 +263,14 @@ export default store => {
     types.GET_RELATED_MODELS,
     async (
       _state,
-      { modelId, phyndexerId, onFinish = noop, onError = noop, geoRelated = true }
+      {
+        modelId,
+        phyndexerId,
+        onFinish = noop,
+        onError = noop,
+        geoRelated = true,
+        geoSearch = false,
+      }
     ) => {
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.THANGS,
@@ -297,7 +305,7 @@ export default store => {
       const { data, error } = await api({
         method: 'GET',
         endpoint: `models/match/${modelId || phyndexerId}${
-          geoRelated ? `?scope=${modelId ? 'thangs' : 'phyn'}` : ''
+          !geoSearch ? `?scope=${modelId ? 'thangs' : 'phyn'}` : ''
         }`,
       })
 
