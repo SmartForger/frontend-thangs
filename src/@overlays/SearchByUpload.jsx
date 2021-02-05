@@ -115,7 +115,9 @@ const SearchByUpload = ({
         onFinish: ({ modelId, phyndexerId }) => {
           setOverlayOpen(false)
           history.push(
-            `/search/${file ? file.name : ''}?modelId=${modelId}&phynId=${phyndexerId}`
+            `/search/${file ? file.name : ''}?${
+              modelId ? `modelId=${modelId}&` : ''
+            }phynId=${phyndexerId}`
           )
         },
       })
