@@ -280,7 +280,7 @@ export default store => {
         })
 
         const { error: statusError } = await getStatus({
-          modelId: phyndexerId || modelId,
+          modelId: modelId || phyndexerId,
         })
         if (statusError) {
           store.dispatch(types.ERROR_POLLING_PHYNDEXER, {
@@ -296,7 +296,7 @@ export default store => {
 
       const { data, error } = await api({
         method: 'GET',
-        endpoint: `models/match/${phyndexerId || modelId}`,
+        endpoint: `models/match/${modelId || phyndexerId}`,
       })
 
       if (error) {
