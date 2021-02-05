@@ -47,7 +47,7 @@ const Auth = () => {
         return (window.location.href = url ? url : '/')
       }
     }
-    // if (!isLoadingOptimizely) auth()
+    auth()
   }, [code, provider, securityToken, returnedSecurityToken, url])
 
   return null
