@@ -259,6 +259,7 @@ export default store => {
             id,
             isAssembly: node1.isAssembly,
             name,
+            originalPartName: node1.name,
             parentId,
             valid: node2.valid,
           }
@@ -351,9 +352,10 @@ export default store => {
         addedFiles[node.fileId] = true
         return {
           ...partInfo,
-          originalFileName: file.name,
-          filename: file.newFileName,
-          size: file.size,
+          originalFileName: file ? file.name : node.filename,
+          originalPartName: node.originalPartName,
+          filename: file ? file.newFileName : node.filename,
+          size: file ? file.size : 0,
           isPrimary: false,
         }
       })
@@ -376,6 +378,7 @@ export default store => {
             return {
               ...formData[nodeId],
               originalFileName: file.name,
+              originalPartName: file.name,
               filename: file.newFileName,
               size: file.size,
               isPrimary: primary === nodeId,
@@ -392,6 +395,7 @@ export default store => {
               {
                 ...formData[nodeId],
                 originalFileName: file.name,
+                originalPartName: file.name,
                 filename: file.newFileName,
                 size: file.size,
                 isPrimary: true,

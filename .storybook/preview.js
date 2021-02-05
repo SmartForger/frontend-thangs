@@ -11,6 +11,7 @@ const useStyles = createUseStyles(theme => {
       top: 50,
       left: '50%',
       transform: 'translate(-50%, -50%)',
+      zIndex: 1,
     },
     Container: {
       display: 'flex',
@@ -30,9 +31,11 @@ addDecorator(storyFn => {
     <ThemeProvider>
       <GlobalStyles />
       <MemoryRouter>
-        <div className={c.Description}>To change viewport (mobile, desctop) please choose menu "Change the size over preview"</div>
-        <div className={c.Container}>
-          {storyFn()}</div>
+        <div className={c.Description}>
+          To change viewport (mobile, desktop) please choose menu "Change the size over
+          preview"
+        </div>
+        <div className={c.Container}>{storyFn()}</div>
       </MemoryRouter>
     </ThemeProvider>
   )

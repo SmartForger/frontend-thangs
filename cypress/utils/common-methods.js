@@ -7,6 +7,7 @@ import {
   TEXT,
   MODEL,
   USER,
+  USER2,
 } from './constants'
 import {
   clearInput,
@@ -239,7 +240,7 @@ export const clearModelsAndFolders = (user = USER) => {
       const models = data.models || []
       const folders = data.folders || []
 
-      cy.log('########################### User models', models.length)
+      log('User models', models.length)
 
       const deleteModelRec = async modelsIds => {
         if (modelsIds.length > 0) {
@@ -250,13 +251,13 @@ export const clearModelsAndFolders = (user = USER) => {
             method: 'DELETE',
           })
 
-          cy.log('########################### Model deleted', modelId)
+          log('Model deleted', modelId)
 
           deleteModelRec(modelsIds)
         }
       }
 
-      cy.log('########################### User folders', folders.length)
+      log('User folders', folders.length)
 
       const deleteFolderRec = async foldersIds => {
         if (foldersIds.length > 0) {
@@ -267,7 +268,7 @@ export const clearModelsAndFolders = (user = USER) => {
             method: 'DELETE',
           })
 
-          cy.log('########################### Folder deleted', folderId)
+          log('Folder deleted', folderId)
 
           deleteFolderRec(foldersIds)
         }
@@ -277,4 +278,42 @@ export const clearModelsAndFolders = (user = USER) => {
       deleteFolderRec(folders.map(folder => folder.id))
       localStorage.removeItem('currentUser')
     })
+}
+
+//User A unfollows user B if it needs
+export const unfollowUser = (userA = USER, userB = USER2) => {
+  apiLogin({ userName: userA.EMAIL, password: userA.PASSWORD })
+    .then(() => {
+      return api({
+        endpoint: `users/${userB.ID}`,
+        method: 'GET',
+      })
+    })
+
+    .then(response => {
+      const isFollowed = (response.body || {}).isBeingFollowedByRequester
+
+      if (isFollowed) {
+        log(userA.NAME, 'is followed', userB.NAME)
+        log('unfollow initiated')
+
+        return api({
+          endpoint: `users/${userB.ID}/unfollow`,
+          method: 'DELETE',
+        })
+      } else {
+        log(userA.NAME, 'is NOT followed', userB.NAME)
+        return Promise.resolve('ok')
+      }
+    })
+    .then(response => {
+      log(
+        'Finished',
+        response === 'End' && JSON.stringify(response)
+      )
+    })
+}
+
+export const log = (...args) => {
+  cy.log(`⏩⏩⏩⏩⏩⏩⏩⏩  ${args.join(' ')}`)
 }

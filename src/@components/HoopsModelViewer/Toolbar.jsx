@@ -35,6 +35,7 @@ const Toolbar = ({
   partTreeData = [],
   setSelectedModel = noop,
   selectedModel = {},
+  highlightedModel = {},
 }) => {
   const isMultipart = !model.isAssembly && model.parts && model.parts.length > 1
   const isAssembly =
@@ -56,6 +57,7 @@ const Toolbar = ({
     changeExplosionMagnitude,
     changeViewOrientation,
     getViewerSnapshot,
+    highlightPart,
   } = hoops
 
   const handleColorChange = useCallback(
@@ -102,6 +104,17 @@ const Toolbar = ({
     getViewerSnapshot(model.name)
   }, [getViewerSnapshot, model.name])
 
+  const handlePartHover = useCallback(
+    node => {
+      highlightPart(node.originalPartName)
+    },
+    [highlightPart]
+  )
+
+  const handleLeavePartList = useCallback(() => {
+    highlightPart(null)
+  }, [highlightPart])
+
   const showPartSelector = isMultipart || model.isAssembly
 
   const toolbarProps = {
@@ -117,10 +130,13 @@ const Toolbar = ({
     onSliderChange: handleSliderChange,
     onSnapshot: handleSnapshot,
     onViewChange: handleViewChange,
+    onHoverPart: handlePartHover,
+    onLeaveList: handleLeavePartList,
     partList,
     partTreeData,
     setSelectedModel,
     selectedModel,
+    highlightedModel: highlightedModel || {},
     showPartSelector,
     model,
   }

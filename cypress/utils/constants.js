@@ -16,6 +16,24 @@ export const USER2 = {
   NAME: 'test2',
 }
 
+export const USER3 = {
+  ID: 300,
+  EMAIL: 'test+3j4tj34t@test.com',
+  INVALID_EMAIL: 'test.test@test.com',
+  PASSWORD: 'test',
+  INVALID_PASSWORD: 'badPassword',
+  NAME: 'test+3j4tj34t',
+}
+
+export const USER4 = {
+  ID: 301,
+  EMAIL: 'test-cypress-3n43tn@test.com',
+  INVALID_EMAIL: 'test.test@test.com',
+  PASSWORD: 'test',
+  INVALID_PASSWORD: 'badPassword',
+  NAME: 'test-cypress-3n43tn',
+}
+
 export const FOLDER = {
   NAME: 'TestFolder',
 }
@@ -136,7 +154,7 @@ export const TEXT = {
   TRENDING: 'Trending',
   DELETE_MODEL: 'Delete Model',
   CONFIRM: 'Confirm',
-  LIKES: 'likes',
+  LIKES: 'Likes',
   CURRENT_YEAR: `${new Date().getFullYear()}`,
   LIKE: 'Like',
   LIKED: 'Liked',

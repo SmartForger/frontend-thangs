@@ -131,8 +131,11 @@ const Toolbar = ({
   orientation,
   partList,
   selectedModel,
+  highlightedModel,
   setSelectedModel,
   showPartSelector,
+  onHoverPart,
+  onLeaveList,
 }) => {
   const c = useStyles({ isAssembly, isMultipart })
 
@@ -225,8 +228,11 @@ const Toolbar = ({
             <div className={classnames(c.Toolbar_Group, c.Toolbar_PartExplorerWrapper)}>
               <PartExplorerActionMenu
                 onChange={setSelectedModel}
+                onHoverPart={onHoverPart}
+                onLeave={onLeaveList}
                 partList={partList}
                 selectedValue={selectedModel}
+                highlightedValue={highlightedModel}
               />
             </div>
           </>

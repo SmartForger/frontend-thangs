@@ -40,6 +40,7 @@ import {
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
+// import { useFeature } from '@optimizely/react-sdk'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -399,7 +400,14 @@ const StatsAndActions = ({
 }
 
 const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST
-const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios }) => {
+const ModelDetailPage = ({
+  id,
+  currentUser,
+  showBackupViewer,
+  getTime,
+  geoRatios,
+  showExternalResults,
+}) => {
   const c = useStyles()
   const signUpShown = useRef(false)
   const { setOverlay } = useOverlay()
@@ -420,12 +428,11 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
     isError: isRelatedPhynError,
     data: relatedPhynCollectionArray = [],
   } = relatedPhyn
-
   useEffect(() => {
     dispatch(types.FETCH_MODEL, { id })
     dispatch(types.FETCH_RELATED_MODELS, { id, geoRatios })
-    dispatch(types.FETCH_RELATED_MODELS_PHYN, { id, geoRatios })
-  }, [dispatch, geoRatios, id])
+    if (showExternalResults) dispatch(types.FETCH_RELATED_MODELS_PHYN, { id, geoRatios })
+  }, [dispatch, geoRatios, id, showExternalResults])
 
   useEffect(() => {
     if (isLoaded) perfTrack('Page Loaded - Model', getTime())
@@ -472,6 +479,7 @@ const ModelDetailPage = ({ id, currentUser, showBackupViewer, getTime, geoRatios
   RelatedThangsComponent.displayName = 'RelatedThangsComponent'
 
   const RelatedPhynComponent = React.memo(() => {
+    if (!showExternalResults) return null
     return relatedPhynCollectionArray.map((collection, index) => {
       return (
         <RelatedModels
@@ -594,6 +602,7 @@ const Page = () => {
   const { id, modelString } = useParams()
   const modelId = modelString ? modelString.split('-').pop() : id
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
+  const [showExternalResults] = useLocalStorage('showExternalResults', false)
   const [currentUser] = useLocalStorage('currentUser', null)
   const { getTime, startTimer } = usePerformanceMetrics()
   const geoRatios = {
@@ -614,6 +623,7 @@ const Page = () => {
       id={modelId}
       currentUser={currentUser}
       showBackupViewer={showBackupViewer}
+      showExternalResults={showExternalResults}
       getTime={getTime}
       geoRatios={geoRatios}
     />

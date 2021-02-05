@@ -69,7 +69,7 @@ const hoopsStatusReducer = (currentStatus, nextStatus) => {
   return new HoopsStatus(nextStatus)
 }
 
-const useHoopsViewer = ({ modelFilename }) => {
+const useHoopsViewer = ({ modelFilename, onHighlight }) => {
   const containerRef = useRef()
   const hoopsViewerRef = useRef()
   const [hoopsStatus, setHoopsStatus] = useReducer(
@@ -78,6 +78,8 @@ const useHoopsViewer = ({ modelFilename }) => {
   )
   const cancelTokenRef = useRef()
   const hoopsStatusRef = useRef(new HoopsStatus(STATES.INIT))
+  const allModelNodes = useRef([])
+  const selectedNodes = useRef([])
 
   const doTransition = status => {
     setHoopsStatus(status)
@@ -126,6 +128,30 @@ const useHoopsViewer = ({ modelFilename }) => {
               1000
             )
         },
+        selectionArray(selections) {
+          const getIndexNodeId = (nodes, id) => {
+            return nodes.current.findIndex(node => node.id === id)
+          }
+          if (selections.length > 0 && onHighlight) {
+            selections.forEach(selectionItem => {
+              let nodeId = selectionItem.getSelection().getNodeId()
+              let index = -2
+
+              while (nodeId && index < 0) {
+                index = getIndexNodeId(allModelNodes, nodeId)
+                nodeId = viewer.model.getNodeParent(nodeId)
+              }
+
+              if (
+                index >= 0 &&
+                selectedNodes.current[0] !== allModelNodes.current[index].id
+              ) {
+                selectedNodes.current[1] = allModelNodes.current[index].id
+                onHighlight(allModelNodes.current[index].name)
+              }
+            })
+          }
+        },
       })
 
       viewer.start()
@@ -160,6 +186,31 @@ const useHoopsViewer = ({ modelFilename }) => {
       await model.clear()
       const rootNode = model.getAbsoluteRootNode()
       await model.loadSubtreeFromScsBuffer(rootNode, new Uint8Array(data))
+
+      // window.__hoopsViewer = hoopsViewerRef.current
+
+      const getAllNodes = (model, node, result) => {
+        const nodeName = model.getNodeName(node)
+        const nodeType = model.getNodeType(node)
+        if (nodeType > 1) {
+          return
+        }
+
+        result.push({
+          id: node,
+          name: nodeName,
+        })
+        const children = model.getNodeChildren(node)
+        if (children.length > 0) {
+          children.forEach(subnode => {
+            getAllNodes(model, subnode, result)
+          })
+        }
+      }
+
+      const allNodes = []
+      getAllNodes(model, rootNode, allNodes)
+      allModelNodes.current = allNodes.reverse()
 
       doTransition(STATES.MODEL_LOADED)
       cancelTokenRef.current = null
@@ -340,8 +391,19 @@ const useHoopsViewer = ({ modelFilename }) => {
       hoopsViewerRef.current.model.resetNodesColor()
   }, [])
 
-  const highlightPart = useCallback(nodeId => {
-    hoopsViewerRef.current.selectionManager.selectNode(nodeId)
+  const highlightPart = useCallback(nodeName => {
+    const node = allModelNodes.current.find(node => node.name === nodeName)
+    if (node) {
+      selectedNodes.current[0] = node.id
+      hoopsViewerRef.current.selectionManager.selectNode(node.id)
+    } else {
+      selectedNodes.current[0] = null
+      hoopsViewerRef.current.selectionManager.selectNode(null)
+
+      if (selectedNodes.current[1]) {
+        hoopsViewerRef.current.selectionManager.selectNode(selectedNodes.current[1])
+      }
+    }
   }, [])
 
   return {

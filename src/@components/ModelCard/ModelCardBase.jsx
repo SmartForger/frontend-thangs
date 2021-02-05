@@ -163,7 +163,6 @@ const CardContents = ({
           href={modelAttributionUrl}
           target='_blank'
           rel='noopener noreferrer'
-          onClick={() => console.log('track this click')}
         >
           <GlobeIcon />
           <MetadataSecondary light className={c.ModelCard_AttributionUrl}>
@@ -194,7 +193,6 @@ const CardContents = ({
 
 const ModelCardBase = ({ c, className, model, geoRelated }) => {
   const currentUserId = parseInt(useCurrentUserId())
-  debugger
   const modelAttributionUrl =
     model && model.attributionUrl && encodeURI(model.attributionUrl)
   const modelIdPath = model.id ? `/model/${model.id}` : modelAttributionUrl

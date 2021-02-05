@@ -158,7 +158,7 @@ const DefaultMenu = ({ onChange = noop, options = [], tabletLayout, isMobileOnly
             <DropdownItem
               onClick={
                 option.onClick && typeof option.onClick === 'function'
-                  ? option.onClick()
+                  ? option.onClick
                   : () => onChange(option.value)
               }
               className={classnames({

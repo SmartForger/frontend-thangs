@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState, useRef } from 'react'
 import classnames from 'classnames'
 import {
   ActionMenu,
@@ -257,41 +257,50 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const PartSelectorRow = ({ part = {}, onClick }) => {
+const PartSelectorRow = ({ part = {}, onClick, onEnter }) => {
   const c = useStyles({})
   const { hasChildren, name, newFileName } = part
 
+  const handleMouseEnter = () => {
+    onEnter && onEnter(part)
+  }
+
   return (
-    <>
-      <div className={c.PartSelectorRow} title={name}>
-        <div className={c.PartSelectorRow_Column} onClick={onClick}>
+    <div className={c.PartSelectorRow} title={name} onMouseEnter={handleMouseEnter}>
+      <div className={c.PartSelectorRow_Column} onClick={onClick}>
+        <Spacer size={'.5rem'} />
+        <div className={c.PartSelectorRow_Row}>
           <Spacer size={'.5rem'} />
-          <div className={c.PartSelectorRow_Row}>
+          <ModelThumbnail
+            key={newFileName}
+            className={c.PartSelectorRow_Thumbnail}
+            name={name}
+            model={part}
+            mini={true}
+            lazyLoad={true}
+          />
+          <Spacer size={'.75rem'} />
+          <div className={c.PartExplorerDropdown_PartText}>
+            <SingleLineBodyText>{name}</SingleLineBodyText>
             <Spacer size={'.5rem'} />
-            <ModelThumbnail
-              key={newFileName}
-              className={c.PartSelectorRow_Thumbnail}
-              name={name}
-              model={part}
-              mini={true}
-              lazyLoad={true}
-            />
-            <Spacer size={'.75rem'} />
-            <div className={c.PartExplorerDropdown_PartText}>
-              <SingleLineBodyText>{name}</SingleLineBodyText>
-              <Spacer size={'.5rem'} />
-              <Tag secondary={!hasChildren}>{hasChildren ? 'Assembly' : 'Part'}</Tag>
-            </div>
-            <Spacer size={'.5rem'} />
+            <Tag secondary={!hasChildren}>{hasChildren ? 'Assembly' : 'Part'}</Tag>
           </div>
           <Spacer size={'.5rem'} />
         </div>
+        <Spacer size={'.5rem'} />
       </div>
-    </>
+    </div>
   )
 }
 
-const AssemblyExplorer = ({ classes, parts, onChange, selectedPart }) => {
+const AssemblyExplorer = ({
+  classes,
+  parts,
+  onChange,
+  selectedParts,
+  scrollToItem,
+  onHoverPart,
+}) => {
   return (
     <InfiniteTreeView
       classes={classes}
@@ -300,8 +309,15 @@ const AssemblyExplorer = ({ classes, parts, onChange, selectedPart }) => {
       itemHeight={58}
       levelPadding={20}
       nodes={parts}
-      isSelected={node => node.id === selectedPart.id}
-      renderNode={node => <PartSelectorRow part={node} onClick={() => onChange(node)} />}
+      isSelected={node => selectedParts.includes(node.id)}
+      scrollToItem={scrollToItem}
+      renderNode={node => (
+        <PartSelectorRow
+          part={node}
+          onClick={() => onChange(node)}
+          onEnter={onHoverPart}
+        />
+      )}
     />
   )
 }
@@ -309,9 +325,13 @@ const AssemblyExplorer = ({ classes, parts, onChange, selectedPart }) => {
 export const PartExplorerMenu = ({
   onChange = noop,
   partList = [],
-  selectedValue: selectedPart,
+  selectedValue,
+  highlightedValue,
+  onHoverPart,
+  onLeave,
 }) => {
   const c = useStyles({})
+  const containerRef = useRef()
   const [partsToDisplay, setPartsToDisplay] = useState(partList)
   const handleInputChange = useCallback(
     value => {
@@ -329,8 +349,26 @@ export const PartExplorerMenu = ({
     [partList]
   )
 
+  const highlightedParts = useMemo(() => {
+    const result = []
+    if (selectedValue.id) {
+      result.push(selectedValue.id)
+    }
+    if (highlightedValue.id) {
+      result.push(highlightedValue.id)
+    }
+
+    return result
+  }, [selectedValue.id, highlightedValue.id])
+
+  const handleMouseOut = useCallback(() => {
+    if (onLeave) {
+      onLeave()
+    }
+  }, [onLeave])
+
   return (
-    <div className={c.PartExplorerMenu}>
+    <div className={c.PartExplorerMenu} ref={containerRef} onMouseLeave={handleMouseOut}>
       <div className={classnames(c.SearchBar_Wrapper)}>
         <Spacer size={'.5rem'} />
         <div className={c.SearchBar_Row}>
@@ -358,7 +396,10 @@ export const PartExplorerMenu = ({
           }}
           parts={partsToDisplay}
           onChange={onChange}
-          selectedPart={selectedPart}
+          onHoverPart={onHoverPart}
+          onLeave={onLeave}
+          selectedParts={highlightedParts}
+          scrollToItem={highlightedValue}
         />
       ) : (
         <MultiLineBodyText>No models found</MultiLineBodyText>
@@ -408,7 +449,14 @@ export const PartExplorerTarget = ({
   )
 }
 
-const PartExplorerActionMenu = ({ onChange = noop, selectedValue, partList }) => {
+const PartExplorerActionMenu = ({
+  onChange = noop,
+  onHoverPart,
+  onLeave,
+  selectedValue,
+  highlightedValue,
+  partList,
+}) => {
   const c = useStyles({})
   const menuProps = useMemo(() => {
     return {
@@ -416,10 +464,21 @@ const PartExplorerActionMenu = ({ onChange = noop, selectedValue, partList }) =>
       className: c.PartExplorerActionMenu,
       partList,
       onChange,
+      onHoverPart,
+      onLeave,
       selectedValue,
+      highlightedValue,
       tabletLayout: true,
     }
-  }, [c.PartExplorerActionMenu, onChange, partList, selectedValue])
+  }, [
+    c.PartExplorerActionMenu,
+    onChange,
+    onHoverPart,
+    onLeave,
+    partList,
+    selectedValue,
+    highlightedValue,
+  ])
 
   const targetProps = useMemo(() => {
     return { selectedValue }
