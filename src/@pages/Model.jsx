@@ -40,7 +40,7 @@ import {
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
-import { useFeature } from '@optimizely/react-sdk'
+// import { useFeature } from '@optimizely/react-sdk'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -406,7 +406,7 @@ const ModelDetailPage = ({
   showBackupViewer,
   getTime,
   geoRatios,
-  isLoadingOptimizely,
+  showExternalResults,
 }) => {
   const c = useStyles()
   const signUpShown = useRef(false)
@@ -428,13 +428,11 @@ const ModelDetailPage = ({
     isError: isRelatedPhynError,
     data: relatedPhynCollectionArray = [],
   } = relatedPhyn
-  const [isEnabled] = useFeature('showphynrelated', { autoUpdate: true })
   useEffect(() => {
     dispatch(types.FETCH_MODEL, { id })
     dispatch(types.FETCH_RELATED_MODELS, { id, geoRatios })
-    if (!isLoadingOptimizely && isEnabled)
-      dispatch(types.FETCH_RELATED_MODELS_PHYN, { id, geoRatios })
-  }, [dispatch, geoRatios, id, isEnabled, isLoadingOptimizely])
+    if (showExternalResults) dispatch(types.FETCH_RELATED_MODELS_PHYN, { id, geoRatios })
+  }, [dispatch, geoRatios, id, showExternalResults])
 
   useEffect(() => {
     if (isLoaded) perfTrack('Page Loaded - Model', getTime())
@@ -481,7 +479,7 @@ const ModelDetailPage = ({
   RelatedThangsComponent.displayName = 'RelatedThangsComponent'
 
   const RelatedPhynComponent = React.memo(() => {
-    if (isLoadingOptimizely || !isEnabled) return null
+    if (!showExternalResults) return null
     return relatedPhynCollectionArray.map((collection, index) => {
       return (
         <RelatedModels
@@ -600,10 +598,11 @@ const ModelDetailPage = ({
   )
 }
 
-const Page = ({ isLoadingOptimizely }) => {
+const Page = () => {
   const { id, modelString } = useParams()
   const modelId = modelString ? modelString.split('-').pop() : id
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
+  const [showExternalResults] = useLocalStorage('showExternalResults', false)
   const [currentUser] = useLocalStorage('currentUser', null)
   const { getTime, startTimer } = usePerformanceMetrics()
   const geoRatios = {
@@ -624,17 +623,17 @@ const Page = ({ isLoadingOptimizely }) => {
       id={modelId}
       currentUser={currentUser}
       showBackupViewer={showBackupViewer}
+      showExternalResults={showExternalResults}
       getTime={getTime}
       geoRatios={geoRatios}
-      isLoadingOptimizely={isLoadingOptimizely}
     />
   )
 }
 
-const ModelDetail = ({ isLoadingOptimizely }) => {
+const ModelDetail = () => {
   return (
     <Layout>
-      <Page isLoadingOptimizely={isLoadingOptimizely} />
+      <Page />
     </Layout>
   )
 }
