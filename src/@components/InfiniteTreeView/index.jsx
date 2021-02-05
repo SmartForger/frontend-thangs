@@ -161,7 +161,9 @@ const InfiniteTreeView = ({
     if (shouldScroll && listRef.current) {
       const index = newNodes.findIndex(node => node.id === scrollToItem.id)
       if (index >= 0) {
-        listRef.current.scrollToItem(index, 'center')
+        setTimeout(() => {
+          listRef.current.scrollToItem(index)
+        })
       }
     }
 

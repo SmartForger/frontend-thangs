@@ -131,6 +131,7 @@ const Toolbar = ({
   orientation,
   partList,
   selectedModel,
+  highlightedModel,
   setSelectedModel,
   showPartSelector,
   onHoverPart,
@@ -231,6 +232,7 @@ const Toolbar = ({
                 onLeave={onLeaveList}
                 partList={partList}
                 selectedValue={selectedModel}
+                highlightedValue={highlightedModel}
               />
             </div>
           </>

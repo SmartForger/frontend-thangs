@@ -70,14 +70,6 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
   }, [])
 
   useEffect(() => {
-    const { parts } = model
-    let primaryPart
-    if (parts) {
-      primaryPart = findPrimaryPart(parts)
-    } else {
-      primaryPart = model
-    }
-
     if (model.parts) {
       const sortParts = node => {
         if (node.parts) {
@@ -94,10 +86,10 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
       }
       sortParts(model)
 
-      setSelectedModel(primaryPart)
       const list = flattenTree(model.parts, 'parts')
       setPartList(list)
       partListRef.current = list
+      setSelectedModel(findPrimaryPart(list))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [model.id])

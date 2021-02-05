@@ -133,7 +133,8 @@ const Toolbar = ({
     onLeaveList: handleLeavePartList,
     partList,
     setSelectedModel,
-    selectedModel: highlightedModel || {},
+    selectedModel,
+    highlightedModel: highlightedModel || {},
     showPartSelector,
     model,
   }

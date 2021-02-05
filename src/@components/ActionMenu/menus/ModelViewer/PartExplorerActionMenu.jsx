@@ -293,7 +293,14 @@ const PartSelectorRow = ({ part = {}, onClick, onEnter }) => {
   )
 }
 
-const AssemblyExplorer = ({ classes, parts, onChange, selectedPart, onHoverPart }) => {
+const AssemblyExplorer = ({
+  classes,
+  parts,
+  onChange,
+  selectedParts,
+  scrollToItem,
+  onHoverPart,
+}) => {
   return (
     <InfiniteTreeView
       classes={classes}
@@ -302,8 +309,8 @@ const AssemblyExplorer = ({ classes, parts, onChange, selectedPart, onHoverPart 
       itemHeight={58}
       levelPadding={20}
       nodes={parts}
-      isSelected={node => node.id === selectedPart.id}
-      scrollToItem={selectedPart}
+      isSelected={node => selectedParts.includes(node.id)}
+      scrollToItem={scrollToItem}
       renderNode={node => (
         <PartSelectorRow
           part={node}
@@ -318,7 +325,8 @@ const AssemblyExplorer = ({ classes, parts, onChange, selectedPart, onHoverPart 
 export const PartExplorerMenu = ({
   onChange = noop,
   partList = [],
-  selectedValue: selectedPart,
+  selectedValue,
+  highlightedValue,
   onHoverPart,
   onLeave,
 }) => {
@@ -340,6 +348,18 @@ export const PartExplorerMenu = ({
     },
     [partList]
   )
+
+  const highlightedParts = useMemo(() => {
+    const result = []
+    if (selectedValue.id) {
+      result.push(selectedValue.id)
+    }
+    if (highlightedValue.id) {
+      result.push(highlightedValue.id)
+    }
+
+    return result
+  }, [selectedValue.id, highlightedValue.id])
 
   const handleMouseOut = useCallback(() => {
     if (onLeave) {
@@ -378,7 +398,8 @@ export const PartExplorerMenu = ({
           onChange={onChange}
           onHoverPart={onHoverPart}
           onLeave={onLeave}
-          selectedPart={selectedPart}
+          selectedParts={highlightedParts}
+          scrollToItem={highlightedValue}
         />
       ) : (
         <MultiLineBodyText>No models found</MultiLineBodyText>
@@ -433,6 +454,7 @@ const PartExplorerActionMenu = ({
   onHoverPart,
   onLeave,
   selectedValue,
+  highlightedValue,
   partList,
 }) => {
   const c = useStyles({})
@@ -445,9 +467,18 @@ const PartExplorerActionMenu = ({
       onHoverPart,
       onLeave,
       selectedValue,
+      highlightedValue,
       tabletLayout: true,
     }
-  }, [c.PartExplorerActionMenu, onChange, onHoverPart, onLeave, partList, selectedValue])
+  }, [
+    c.PartExplorerActionMenu,
+    onChange,
+    onHoverPart,
+    onLeave,
+    partList,
+    selectedValue,
+    highlightedValue,
+  ])
 
   const targetProps = useMemo(() => {
     return { selectedValue }
