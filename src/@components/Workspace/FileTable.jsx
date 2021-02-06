@@ -511,6 +511,9 @@ const FileTable = ({
               {sortedFiles.length > 0 ? (
                 sortedFiles.map((file, index) => {
                   if (!file) return null
+                  const modelPath = file.identifier
+                    ? `/${file.identifier}`
+                    : `/model/${file.id}`
                   return (
                     <React.Fragment key={`TableRow_${index}`}>
                       {R.isNil(file.models) ? (
@@ -520,7 +523,7 @@ const FileTable = ({
                             holdToDisplay={-1}
                             renderTag={'tr'}
                             attributes={{
-                              onClick: () => history.push(`/model/${file.id}`),
+                              onClick: () => history.push(modelPath),
                             }}
                             collect={() => ({ model: file })}
                           >
