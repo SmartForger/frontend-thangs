@@ -112,7 +112,7 @@ const useStyles = createUseStyles(theme => {
 
 const assemblyInfoSchema = ({ isRootAssembly, isMultipart }) =>
   Joi.object({
-    name: Joi.string().required(),
+    name: Joi.string().pattern(new RegExp('^[^/]+$')).required(),
     description: isRootAssembly ? Joi.string().required() : Joi.string().allow(''),
     primary: isMultipart ? Joi.string().required() : Joi.string().allow(''),
     folderId: Joi.string().allow(''),
