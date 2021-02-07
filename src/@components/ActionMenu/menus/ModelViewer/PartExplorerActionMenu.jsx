@@ -351,15 +351,15 @@ export const PartExplorerMenu = ({
 
   const highlightedParts = useMemo(() => {
     const result = []
-    if (selectedValue.id) {
+    if (selectedValue && selectedValue.id) {
       result.push(selectedValue.id)
     }
-    if (highlightedValue.id) {
+    if (highlightedValue && highlightedValue.id) {
       result.push(highlightedValue.id)
     }
 
     return result
-  }, [selectedValue.id, highlightedValue.id])
+  }, [selectedValue, highlightedValue])
 
   const handleMouseOut = useCallback(() => {
     if (onLeave) {
