@@ -15,8 +15,13 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+import { goTo } from '../utils/common-methods'
+import { PATH } from '../utils/constants'
+// import { authenticationService } from '../../src/@services';
 
-before(() => {})
+before(() => {
+  goTo(PATH.LANDING)
+})
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
