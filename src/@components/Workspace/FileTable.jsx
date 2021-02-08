@@ -388,7 +388,7 @@ const FileRow = ({ model }) => {
       </td>
       <td className={c.FileTable_Row_Column}>
         {model.previousVersionModelId ? (
-          <Link to={`/model/${model.previousVersionModelId}`}>
+          <Link to={`/models/${model.previousVersionModelId}`}>
             {model.previousVersionModelId}
           </Link>
         ) : (
