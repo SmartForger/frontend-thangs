@@ -3,17 +3,17 @@ import {
   isTextInsideClass,
   loginByUser,
 } from '../utils/common-methods'
-import { CLASSES, MODEL_CARD, PROPS, TEXT, USER, USER2 } from '../utils/constants'
+import { CLASSES, MODEL_CARD, PROPS, TEXT, USER, USER2, USER3, USER4 } from '../utils/constants'
 import { multiUpload } from '../utils/uploadMethods'
 import api, { apiLogin } from '../utils/api'
 
 describe('User notifications', () => {
   before(() => {
     // BE-reset: Test2 unfollows Test if it needs
-    apiLogin({ userName: USER2.EMAIL, password: USER2.PASSWORD })
+    apiLogin({ userName: USER4.EMAIL, password: USER4.PASSWORD })
       .then(() => {
         return api({
-          endpoint: `users/${USER.ID}`,
+          endpoint: `users/${USER3.ID}`,
           method: 'GET',
         })
       })
@@ -25,7 +25,7 @@ describe('User notifications', () => {
         cy.log('########################### Is followed', isFollowed)
         if (isFollowed) {
           return api({
-            endpoint: `users/${USER.ID}/unfollow`,
+            endpoint: `users/${USER3.ID}/unfollow`,
             method: 'DELETE',
           })
         } else {
@@ -40,10 +40,10 @@ describe('User notifications', () => {
       })
 
     // BE-reset: Test1 delete all the models
-    apiLogin({ userName: USER.EMAIL, password: USER.PASSWORD })
+    apiLogin({ userName: USER3.EMAIL, password: USER3.PASSWORD })
       .then(() => {
         return api({
-          endpoint: `users/${USER.ID}/thangs`,
+          endpoint: `users/${USER3.ID}/thangs`,
           method: 'GET',
         })
       })
@@ -77,18 +77,18 @@ describe('User notifications', () => {
     localStorage.clear()
 
     loginByUser({
-      email: USER.EMAIL,
-      password: USER.PASSWORD,
+      email: USER3.EMAIL,
+      password: USER3.PASSWORD,
     })
     multiUpload()
   })
 
   it('User2 follows and unfollows User1 from public portfolio', () => {
     loginByUser({
-      email: USER2.EMAIL,
-      password: USER2.PASSWORD,
+      email: USER4.EMAIL,
+      password: USER4.PASSWORD,
     })
-    goTo(`/${USER.NAME}`)
+    goTo(`/${USER3.NAME}`)
 
     isTextInsideClass(CLASSES.PROFILE_FOLLOW_BUTTON, TEXT.FOLLOW, PROPS.VISIBLE)
     cy.get(CLASSES.PROFILE_FOLLOW_BUTTON).click()
@@ -100,10 +100,10 @@ describe('User notifications', () => {
 
   it('User2 follows and unfollows User1 from model', () => {
     loginByUser({
-      email: USER2.EMAIL,
-      password: USER2.PASSWORD,
+      email: USER4.EMAIL,
+      password: USER4.PASSWORD,
     })
-    goTo(`/${USER.NAME}`)
+    goTo(`/${USER3.NAME}`)
     cy.wait(3000)
     cy.get(MODEL_CARD()).click()
 
