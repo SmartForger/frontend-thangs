@@ -1,12 +1,8 @@
 import {
   clickOnTextInsideClass,
-  editAndSaveFile,
   goTo,
   isTextInsideClass,
-  uploadFile,
-  isElementContains,
   loginByUser,
-  urlShouldIncludeAfterTimeout,
   openNotifications,
   isElement,
   isElementContainTwoValues,
@@ -17,14 +13,13 @@ import {
 import {
   CLASSES,
   MODEL,
-  PATH,
   PROPS,
   TEXT,
   USER3,
   USER4,
   MODEL_CARD,
 } from '../../utils/constants'
-import { commentInput, enterValidValue, uploadInput } from '../../utils/inputs'
+import { commentInput, enterValidValue } from '../../utils/inputs'
 import { multiUpload } from '../../utils/uploadMethods'
 
 const ACTION_USER1 = USER3
@@ -65,9 +60,7 @@ describe('User notifications', () => {
     })
     goTo(`/${ACTION_USER1.NAME}`)
 
-    cy.get(`[title="${MODEL.TITLE}"] [class^=ModelCard_Thumbnail]`, {
-      timeout: 20000,
-    }).click()
+    cy.get(MODEL_CARD(), { timeout: 2000 }).click()
 
     log('likes')
     isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKE, PROPS.VISIBLE)
@@ -87,11 +80,6 @@ describe('User notifications', () => {
     urlShouldIncludeAfterTimeout(PATH.MY_THANGS_ALL_FILES, 10000)
     isElementContains(CLASSES.MY_THANGS_ALL_FILES_ROW, MODEL.TITLE)
     */
-
-    log('download')
-    goTo(`/${ACTION_USER1.NAME}`)
-    cy.get(MODEL_CARD(), { timeout: 2000 }).click()
-    clickOnTextInsideClass(CLASSES.MODEL_SIDEBAR_BUTTON, TEXT.DOWNLOAD_MODEL_BUTTON)
   })
 
   it('User1 check notifications', () => {
