@@ -6,20 +6,20 @@ import {
   goTo,
   isElement,
   isTextInsideClass,
-  login,
   openMyThangs,
   clearModelsAndFolders,
+  loginByUser,
 } from '../../utils/common-methods'
-import { CLASSES, FOLDER, PATH, PROPS, TEXT } from '../../utils/constants'
-import { createFolderInput, enterValidValue, TEST_USER_1 } from '../../utils/inputs'
+import { CLASSES, FOLDER, PATH, PROPS, TEXT, USER3 } from '../../utils/constants'
+import { createFolderInput, enterValidValue } from '../../utils/inputs'
 
 describe('My Thangs Page', () => {
   before(() => {
-    clearModelsAndFolders()
+    clearModelsAndFolders(USER3)
   })
 
   beforeEach(() => {
-    login(TEST_USER_1)
+    loginByUser({ email: USER3.EMAIL, password: USER3.PASSWORD })
   })
 
   it('My Thangs page loaded successfully', () => {
