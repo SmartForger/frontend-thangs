@@ -372,7 +372,7 @@ const FileRow = ({ model }) => {
         <MetadataSecondary className={c.FileTable_Row_Column_Uploaded}>
           {R.isNil(model.created)
             ? '-'
-            : format(new Date(model.created), 'MMM d, Y, h:mm aaaa')}
+            : format(new Date(model.created), 'MMM d, y, h:mm aaaa')}
         </MetadataSecondary>
       </td>
       <td className={c.FileTable_Row_Column}>
