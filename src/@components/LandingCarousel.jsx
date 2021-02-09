@@ -26,8 +26,8 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, setOverlay, user }) =>
         title: 'Geometric Search',
         linkText: 'Use your model',
         text: 'to find geometrically related models.',
-        /*hoverVideo:
-          'https://storage.googleapis.com/thangs-pubic/instructionGeometricSearch.mp4',*/
+        hoverVideo:
+          'https://storage.googleapis.com/thangs-pubic/instructionGeometricSearch.mp4',
         callback: () => {
           searchBarRef.current.focus()
           track('Value Prop Clicked', {
@@ -41,9 +41,7 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, setOverlay, user }) =>
         title: 'Unlimited Storage',
         linkText: 'Upload',
         text: 'as many models as your heart desires.',
-        /*
         hoverVideo: 'https://storage.googleapis.com/thangs-pubic/instructionStorage.mp4',
-*/
         callback: () => {
           if (user && user.id) {
             setOverlay({
@@ -76,9 +74,7 @@ const LandingCarousel = ({ searchMinimized, searchBarRef, setOverlay, user }) =>
         title: 'Collaboration',
         linkText: 'Invite',
         text: 'your friends and work together on projects.',
-        /*
         hoverVideo: 'https://storage.googleapis.com/thangs-pubic/instructionCollab.mp4',
-*/
         callback: () => {
           if (user && user.id) {
             history.push('/mythangs')
