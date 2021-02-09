@@ -59,7 +59,6 @@ describe('User notifications', () => {
       password: SUPPORT_USER2.PASSWORD,
     })
     goTo(`/${ACTION_USER1.NAME}`)
-
     cy.get(MODEL_CARD(), { timeout: 2000 }).click()
 
     log('likes')
@@ -71,6 +70,10 @@ describe('User notifications', () => {
     enterValidValue(CLASSES.MODEL_ADD_COMMENT_FORM, commentInput)
     clickOnTextInsideClass(CLASSES.MODEL_ADD_COMMENT_FORM, TEXT.COMMENT)
     isTextInsideClass(CLASSES.MODEL_COMMENT_FORM, MODEL.COMMENT, PROPS.VISIBLE)
+
+    log('download')
+    clickOnTextInsideClass(CLASSES.MODEL_SIDEBAR_BUTTON, TEXT.DOWNLOAD_MODEL_BUTTON)
+
     /*
     // TODO: Actualize version upload, need to be merged
     //version
