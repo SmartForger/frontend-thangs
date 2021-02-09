@@ -316,7 +316,7 @@ export const clearModelsAndFolders = (user = USER) => {
 }
 
 //User A unfollows user B if it needs
-export const unfollowUser = (userA = USER, userB = USER2) => {
+export const unfollowUser = (userA = USER, userB = USER2) => 
   apiLogin({ userName: userA.EMAIL, password: userA.PASSWORD })
     .then(() => {
       return api({
@@ -344,7 +344,7 @@ export const unfollowUser = (userA = USER, userB = USER2) => {
     .then(response => {
       log('Finished', response === 'End' && JSON.stringify(response))
     })
-}
+
 
 export const log = (...args) => {
   cy.log(`⏩⏩⏩⏩⏩⏩⏩⏩  ${args.join(' ')}`)

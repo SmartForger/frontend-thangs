@@ -19,7 +19,7 @@ import { registerUser } from '../utils/common-methods'
 
 before(() => {
   registerUser('activeUser')
-  registerUser('sideUserUuid')
+  registerUser('sideUser')
 })
 
 // Alternatively you can use CommonJS syntax:
