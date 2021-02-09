@@ -252,7 +252,7 @@ const Page = () => {
   }, [])
 
   useEffect(() => {
-    if (!modelId || !phynId) {
+    if (!modelId && !phynId) {
       dispatch(types.GET_TEXT_SEARCH_RESULTS, {
         searchTerm: decodeURIComponent(searchQuery),
       })
