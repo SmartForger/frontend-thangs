@@ -15,12 +15,11 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
-import { goTo } from '../utils/common-methods'
-import { PATH } from '../utils/constants'
-// import { authenticationService } from '../../src/@services';
+import { registerUser } from '../utils/common-methods'
 
 before(() => {
-  goTo(PATH.LANDING)
+  registerUser('activeUser')
+  registerUser('sideUserUuid')
 })
 
 // Alternatively you can use CommonJS syntax:

@@ -1,3 +1,4 @@
+import * as R from 'ramda'
 import {
   CLASSES,
   DATA_CY,
@@ -61,6 +62,14 @@ export const isElementContainTwoValues = (el, value1, value2) => {
 
 export const urlShouldIncludeAfterTimeout = (path, timeout) => {
   cy.url({ timeout: timeout }).should('include', path)
+}
+
+export const getGeneratedUser = uuid => {
+  return {
+    EMAIL: `cypress-test-${uuid}@test.com`,
+    PASSWORD: 'test',
+    NAME: `cypress-test-${uuid}`,
+  }
 }
 
 export const login = user => {
@@ -223,6 +232,32 @@ export const isTextInsideClass = (className, text, prop) => {
     : cy.get(className, { timeout: 20000 }).contains(text)
 }
 
+export const registerUser = userKey => {
+  const uuid = `${new Date().valueOf()}`
+  const user = getGeneratedUser(uuid)
+  const { EMAIL: email, PASSWORD: password, NAME: username } = user
+
+  api({
+    endpoint: 'users',
+    method: 'POST',
+    body: {
+      email,
+      password,
+      firstName: '',
+      lastName: '',
+      username,
+      registrationCode: 'alpha',
+    },
+  }).then(z => {
+    const newUserIdJSON = R.pathOr({}, ['allRequestResponses', 0, 'Response Body'], z)
+    const newUserId = JSON.parse(newUserIdJSON).id
+    const userWithId = { ID: newUserId, ...user }
+
+    log('Registered user:', JSON.stringify(userWithId))
+    cy.setCookie(userKey, JSON.stringify(userWithId))
+  })
+}
+
 export const clearModelsAndFolders = (user = USER) => {
   if (localStorage.getItem('currentUser')) {
     localStorage.removeItem('currentUser')
@@ -307,10 +342,7 @@ export const unfollowUser = (userA = USER, userB = USER2) => {
       }
     })
     .then(response => {
-      log(
-        'Finished',
-        response === 'End' && JSON.stringify(response)
-      )
+      log('Finished', response === 'End' && JSON.stringify(response))
     })
 }
 
