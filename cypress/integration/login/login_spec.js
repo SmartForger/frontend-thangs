@@ -2,6 +2,7 @@ import { CLASSES, PROPS, TEXT } from '../../utils/constants'
 import {
   clickOnElement,
   clickOnElementByText,
+  goTo,
   isElement,
   isTextInsideClass,
   signOut,
@@ -36,13 +37,14 @@ export function checkSignupLinkOnLogin() {
 
 describe('The Login Page test cases with before and after conditions', () => {
   beforeEach(() => {
+    goTo('/')
     openLogin()
   })
-
+  
   afterEach(() => {
     closeLogin()
   })
-
+  
   it('Login overlay loaded successfully', () => {
     isElement(CLASSES.LOGIN_FORM, PROPS.VISIBLE)
   })
@@ -63,6 +65,7 @@ describe('The Login Page test cases with before and after conditions', () => {
 
 describe('The Login Page test cases with before condition', () => {
   beforeEach(() => {
+    goTo('/')
     openLogin()
   })
 

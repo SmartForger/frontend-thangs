@@ -2,6 +2,7 @@ import { CLASSES, PROPS, TEXT } from '../../utils/constants'
 import {
   clickOnElement,
   clickOnElementByText,
+  goTo,
   isElement,
   isTextInsideClass,
 } from '../../utils/common-methods'
@@ -37,6 +38,7 @@ export function checkLoginLinkOnSignup() {
 
 describe('The Signup Page test cases with before and after conditions', () => {
   beforeEach(() => {
+    goTo('/')
     openSignup()
   })
 
@@ -70,23 +72,3 @@ describe('The Signup Page test cases with before and after conditions', () => {
     isTextInsideClass(CLASSES.SIGNUP_LOGIN_ERROR, TEXT.SIGNUP_CONFIRM_PASS_ERROR)
   })
 })
-
-/*
-describe('The Signup Page test cases with before condition', () => {
-  beforeEach(() => {
-    openSignup()
-  })
-
-  it('Signup form successfully closed', () => {
-    closeSignup()
-  })
-
-  it('Signup successfully completed', () => {
-    enterValidValue(CLASSES.LOGIN_FORM, emailInput)
-    enterValidValue(CLASSES.LOGIN_FORM, passwordInput)
-    clickOnElement(CLASSES.LOGIN_BUTTON)
-    isElement(CLASSES.LOGIN_FORM, PROPS.INVISIBLE)
-    isElement(CLASSES.USER_NAVBAR, PROPS.VISIBLE)
-  })
-})
-*/
