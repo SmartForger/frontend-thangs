@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Divider, Spacer } from '@components'
+import Divider from '@components/Divider'
+import Spacer from '@components/Spacer'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
@@ -83,6 +84,7 @@ export const TreeNode = ({
                     [c.TreeNode_ExpandIcon__expanded]: expanded,
                   })}
                   onClick={toggleExpanded}
+                  data-jest='toggle'
                 >
                   {isAssembly && <ArrowRight />}
                   {isAssemblyPart && <IndentArrow />}
