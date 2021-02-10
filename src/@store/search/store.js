@@ -305,7 +305,7 @@ export default store => {
       const { data, error } = await api({
         method: 'GET',
         endpoint: `models/match/${modelId || phyndexerId}${
-          !geoSearch ? `?scope=${modelId ? 'thangs' : 'phyn'}` : ''
+          !geoSearch && !modelId ? '?scope=phyn' : ''
         }`,
       })
 
