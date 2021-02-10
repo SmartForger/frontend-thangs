@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import * as Sentry from '@sentry/react'
-import { Integrations } from '@sentry/tracing'
+// import * as Sentry from '@sentry/react'
+// import { Integrations } from '@sentry/tracing'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import TagManager from 'react-gtm-module'
@@ -12,17 +12,17 @@ const tagManagerArgs = {
 }
 
 TagManager.initialize(tagManagerArgs)
-if (process.env.REACT_APP_SENTRY_ID) {
-  Sentry.init({
-    dsn: process.env.REACT_APP_SENTRY_ID,
-    autoSessionTracking: true,
-    integrations: [new Integrations.BrowserTracing()],
+// if (process.env.REACT_APP_SENTRY_ID) {
+//   Sentry.init({
+//     dsn: process.env.REACT_APP_SENTRY_ID,
+//     autoSessionTracking: true,
+//     integrations: [new Integrations.BrowserTracing()],
 
-    // We recommend adjusting this value in production, or using tracesSampler
-    // for finer control
-    tracesSampleRate: 0.1,
-  })
-}
+//     // We recommend adjusting this value in production, or using tracesSampler
+//     // for finer control
+//     tracesSampleRate: 0.1,
+//   })
+// }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 
