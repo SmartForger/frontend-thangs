@@ -17,6 +17,10 @@
 import './commands'
 import { registerUser } from '../utils/common-methods'
 
+Cypress.Cookies.defaults({
+  preserve: ['activeUser', 'sideUser'],
+})
+
 before(() => {
   registerUser('activeUser')
   registerUser('sideUser')
