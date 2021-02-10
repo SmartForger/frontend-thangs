@@ -11,37 +11,45 @@ executors:
     environment:
         REACT_APP_API_KEY: 'https://staging-api-platform-dot-gcp-and-physna.uc.r.appspot.com/'
 workflows:
-  version: 2
-
-  deploy-gcloud:
-    jobs:
-      - cypress/run:
-          executor: test-in-staging
-          context: gcp-and-physna
-          yarn: true
-          start: yarn build:workers && yarn dev
-          wait-on: 'http://localhost:3000'
-          store_artifacts: true
-          browser: chrome
-          verify-command: yarn cypress verify
-      - deploy-staging:
-          context: gcp-and-physna
-          filters:
-            branches:
-              only:
-                - development
-      - deploy-production:
-          Stack: master
-          context: gcp-and-physna
-          filters:
-            branches:
-              only:
-                - development
+    version: 2
+    deploy-gcloud:
+      jobs:
+        - cypress/run:
+            executor: test-in-staging
+            context: gcp-and-physna
+            yarn: true
+            start: yarn dev
+            wait-on: 'http://localhost:3000'
+            store_artifacts: true
+            browser: chrome
+            verify-command: yarn cypress verify
+        - deploy-staging:
+            context: gcp-and-physna
+            filters:
+              branches:
+                only:
+                  - development
+        - deploy-production:
+            Stack: master
+            context: gcp-and-physna
+            filters:
+              branches:
+                only:
+                  - development
+        - deploy-development-thangs:
+            context: thangs-context
+            filters:
+              branches:
+                only:
+                  - feature/dev-environment
 
 jobs:
   deploy-staging:
     docker:
       - image: google/cloud-sdk:303.0.0
+        auth:
+          username: ${DOCKER_HUB_ID}
+          password: ${DOCKER_HUB_PWD}
     parameters:
       NoPromote:
         default: "" # "--no-promote"
@@ -113,6 +121,9 @@ jobs:
   deploy-production:
     docker:
       - image: google/cloud-sdk
+        auth:
+          username: ${DOCKER_HUB_ID}
+          password: ${DOCKER_HUB_PWD}
     parameters:
       NoPromote:
         default: "--no-promote"
@@ -166,6 +177,77 @@ jobs:
           #       production steps in the deploy-production workflow.
           command: |
             yarn build
+            VERSION=`git rev-parse --short HEAD`
+            sed -i -- "s/%VERSION%/$VERSION/g" build/index.html
+      - run:
+          name: "Deploy build"
+          command: |
+            # Store service account
+            echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcloud-service-key.json
+            # Initialize gcloud CLI
+            gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+            gcloud app deploy --quiet <<parameters.Stack>>.yaml <<parameters.NoPromote>> <<parameters.Version>>
+  deploy-development-thangs:
+    docker:
+      - image: google/cloud-sdk:303.0.0
+        auth:
+          username: ${DOCKER_HUB_ID}
+          password: ${DOCKER_HUB_PWD}
+    parameters:
+      NoPromote:
+        default: "" # "--no-promote"
+        type: string
+        description: "add --no-promote to deploy without routing traffic to new version"
+      Version:
+        default: "--version \"${CIRCLE_SHA1:0:8}\""
+        type: string
+        description: "add --version someVersionName if you want to assign a version"
+      Stack:
+        default: "development-thangs" #${CIRCLE_BRANCH}
+        type: string
+    steps:
+      - checkout
+      - run:
+          name: Install node
+          command: |
+            curl -sL https://deb.nodesource.com/setup_12.x | bash -
+            apt-get install -y nodejs
+      - run:
+          name: Install yarn
+          command: |
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+            echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+            apt update && apt install yarn
+      - run:
+          name: Check node & yarn versions
+          command: |
+            node -v
+            yarn -v
+      - restore_cache:
+          name: Restore yarn packages from cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install dependencies
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          name: Save yarn packages to cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+      - run:
+          name: Build workers
+          command: yarn build:workers
+      - run:
+          name: "Build release"
+          # Build staging release
+          # TODO: This needs to be pulled into a separate job & workflow so that
+          #       we can run staging steps in the deploy-staging workflow and
+          #       production steps in the deploy-production workflow.
+          command: |
+            yarn build:staging
             VERSION=`git rev-parse --short HEAD`
             sed -i -- "s/%VERSION%/$VERSION/g" build/index.html
       - run:
