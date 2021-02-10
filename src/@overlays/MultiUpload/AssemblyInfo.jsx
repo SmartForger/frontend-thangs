@@ -112,20 +112,12 @@ const useStyles = createUseStyles(theme => {
 
 const assemblyInfoSchema = ({ isRootAssembly, isMultipart }) =>
   Joi.object({
-    name: Joi.string().pattern(new RegExp('^[a-zA-Z0-9_\\-\\.\\s]+$')).required(),
+    name: Joi.string().pattern(new RegExp('^[^/]+$')).required(),
     description: isRootAssembly ? Joi.string().required() : Joi.string().allow(''),
     primary: isMultipart ? Joi.string().required() : Joi.string().allow(''),
     folderId: Joi.string().allow(''),
     category: Joi.string().allow(''),
   })
-
-// const multiPartInfoSchema = Joi.object({
-//   name: Joi.string().required(),
-//   description: Joi.string().required(),
-//   primary: Joi.string().required(),
-//   folderId: Joi.string().allow(''),
-//   category: Joi.string().allow(''),
-// })
 
 const INITIAL_STATE = {
   name: '',

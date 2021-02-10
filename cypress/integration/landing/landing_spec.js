@@ -44,7 +44,9 @@ describe('The Landing Page', () => {
     clearInput(CLASSES.HEADER_DESKTOP, searchInput)
     isElement(CLASSES.LANDING_SEARCH_BAR_UPLOAD, PROPS.VISIBLE)
   })
-
+  
+  // Blocked by BE
+  /*
   it('Search by upload provides to results page', () => {
     inputFocus(CLASSES.HEADER_DESKTOP, searchInput)
     isElement(CLASSES.LANDING_SEARCH_BAR_UPLOAD, PROPS.VISIBLE)
@@ -53,6 +55,7 @@ describe('The Landing Page', () => {
     urlShouldInclude('modelId')
     urlShouldInclude('phynId')
   })
+  */
 
   it('Click on filters', () => {
     isElement(CLASSES.LANDING_FILTER_BUTTON, PROPS.VISIBLE)

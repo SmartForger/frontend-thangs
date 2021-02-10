@@ -285,7 +285,7 @@ const ModelStats = ({ model = {} }) => {
       </span>
       <span>
         <CalendarIcon width={12} height={12} />
-        {model.created && format(new Date(model.created), 'MMMM d, Y')}
+        {model.created && format(new Date(model.created), 'MMMM d, y')}
       </span>
     </div>
   )

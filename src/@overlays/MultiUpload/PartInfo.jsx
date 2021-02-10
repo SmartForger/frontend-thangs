@@ -175,7 +175,7 @@ const useStyles = createUseStyles(theme => {
 
 const PartInfoSchema = ({ isRootPart }) =>
   Joi.object({
-    name: Joi.string().required(),
+    name: Joi.string().pattern(new RegExp('^[^/]+$')).required(),
     description: isRootPart ? Joi.string().required() : Joi.string().allow(''),
     material: Joi.string().allow(''),
     height: Joi.string().allow(''),
