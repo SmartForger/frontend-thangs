@@ -15,7 +15,7 @@
 yarn install
 ```
 
-3. Create a file named `.env.development` in the root folder and make sure it contains the necessary details for your dev environment:
+3. Create a file named `.env.development.local` in the root folder and make sure it contains the necessary details for your dev environment:
 
 ```ini
 REACT_APP_API_KEY=(Url pointing to the instance of "thangs-social-service" you are currently working with, eg: http://localhost:8000/api/)
@@ -274,7 +274,7 @@ With these considerations in mind, make sure to always follow our branching stra
 > https://www.apollographql.com/docs/react/data/fragments/#fragments-on-unions-and-interfaces
 
 - Make sure you have `thangs-social-service` running locally
-- Update your `.env.development` to include credentials for that service
+- Update your `.env.development.local` to include credentials for that service
 - Run `yarn update-fragments`
 
 ## Storybook
