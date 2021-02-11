@@ -43,6 +43,7 @@ const useStyles = createUseStyles(theme => {
       ...theme.text.viewerLoadingText,
       marginTop: '1.5rem',
       textAlign: 'center',
+      zIndex: 2,
     },
   }
 })
