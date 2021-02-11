@@ -8,6 +8,7 @@ import Spinner from '../Spinner'
 describe('TreeView', () => {
   let defaultProps = {
     nodes: [createNode([createNode()])],
+    // eslint-disable-next-line react/display-name
     renderNode: node => <div data-jest='node'>{node.name}</div>,
   }
 

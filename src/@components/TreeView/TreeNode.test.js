@@ -9,6 +9,7 @@ describe('TreeNode', () => {
     level: 0,
     levelPadding: 40,
     node: createNode(),
+    // eslint-disable-next-line react/display-name
     renderNode: node => <div data-jest='node'>{node.name}</div>,
     classes: {},
     subnodeField: 'subs',
