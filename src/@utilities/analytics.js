@@ -1,21 +1,17 @@
-import * as pendo from '@vendors/pendo'
 import amplitude from 'amplitude-js'
 
 export const initialize = () => {
   const amplitudeKey = process.env.REACT_APP_AMPLITUDE_ID
   amplitude.getInstance().init(amplitudeKey)
-  pendo.initialize()
 }
 
 export const identify = ({ user, inviteCode, experiments }) => {
-  pendo.identify(user, { inviteCode })
   const userId = user.id.padStart(5, '0')
   amplitude.getInstance().setUserId(userId)
   amplitude.getInstance().setUserProperties({ inviteCode, experiments })
 }
 
 export const track = (type, data) => {
-  pendo.track(type, data)
   amplitude.getInstance().logEvent(type, data)
 }
 
