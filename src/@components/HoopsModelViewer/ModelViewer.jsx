@@ -131,7 +131,7 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
       <div className={c.HoopsModelViewer_WebViewContainer}>
         <div ref={containerRef} />
         {!hoops.status.statusOverlayHidden && (
-          <StatusIndicator status={hoops.status} model={model} />
+          <StatusIndicator status={hoops.status} model={selectedModel || model} />
         )}
       </div>
       {hoops.status.isReady && (
@@ -156,12 +156,14 @@ const StatusIndicator = ({ status, model }) => {
     <div className={c.HoopsModelViewer_LoadingContainer}>
       {status.isPending ? (
         <>
-          <ModelThumbnail
-            model={model}
-            name={modelAlt}
-            showFallback={false}
-            showLoader={false}
-          />
+          {!status.isReady && (
+            <ModelThumbnail
+              model={model}
+              name={modelAlt}
+              showFallback={false}
+              showLoader={false}
+            />
+          )}
           <Spinner />
           <div className={c.HoopsModelViewer_PlaceholderText}>Loading preview...</div>
         </>
