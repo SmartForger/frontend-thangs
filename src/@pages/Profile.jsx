@@ -367,10 +367,7 @@ const PageById = ({ userId, isCurrentUsersProfile, getTime, userName }) => {
   return (
     <>
       <Helmet>
-        <title>
-          {userName} - 3D model uploads
-          {title}
-        </title>
+        <title>{`${userName} - 3D model uploads ${title}`}</title>
         <meta name='description' content={profileDescription} />
       </Helmet>
       <UserPage
