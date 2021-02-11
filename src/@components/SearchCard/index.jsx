@@ -63,11 +63,6 @@ const useStyles = createUseStyles(theme => {
     SearchCard_SearchType: {
       color: theme.colors.grey[300],
     },
-    SearchCard_ToggleBar: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
   }
 })
 
@@ -141,10 +136,11 @@ const SearchCard = ({ className, search = {} }) => {
         <Spacer size='.75rem' />
         <Divider spacing={0} />
         <Spacer size='1rem' />
-        <div className={c.SearchCard_ToggleBar}>
-          <SingleLineBodyText>Get notified of new models</SingleLineBodyText>
-          <Checkbox checked={enabled} onChange={handleToggle} />
-        </div>
+        <Checkbox
+          label='Get notified of new models'
+          checked={enabled}
+          onChange={handleToggle}
+        />
         <Spacer size='1rem' />
       </div>
       <Spacer size='1.5rem' />

@@ -2,6 +2,7 @@ import React from 'react'
 import { ReactComponent as Checkmark } from '@svg/checkbox-check.svg'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
+import { SingleLineBodyText } from './Text/Body'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -60,6 +61,11 @@ const useStyles = createUseStyles(theme => {
       height: 0,
       width: 0,
     },
+    Checkbox_Bar: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
     Checkbox__checked: {
       background: theme.colors.black[500],
 
@@ -88,4 +94,15 @@ const Checkbox = ({ id, name, checked, onChange = noop }) => {
   )
 }
 
-export default Checkbox
+const CheckboxWidthLabel = ({ label, ...props }) => {
+  const c = useStyles({})
+
+  return (
+    <div className={c.Checkbox_Bar}>
+      <SingleLineBodyText>{label}</SingleLineBodyText>
+      <Checkbox {...props} />
+    </div>
+  )
+}
+
+export default CheckboxWidthLabel
