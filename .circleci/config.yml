@@ -25,23 +25,11 @@ workflows:
             verify-command: yarn cypress verify
         - deploy-staging:
             context: gcp-and-physna
-            filters:
-              branches:
-                only:
-                  - development
         - deploy-production:
             Stack: master
             context: gcp-and-physna
-            filters:
-              branches:
-                only:
-                  - development
         - deploy-development-thangs:
             context: thangs-context
-            filters:
-              branches:
-                only:
-                  - feature/dev-environment
 
 jobs:
   deploy-staging:
@@ -97,10 +85,6 @@ jobs:
           command: yarn build:workers
       - run:
           name: "Build release"
-          # Build staging release
-          # TODO: This needs to be pulled into a separate job & workflow so that
-          #       we can run staging steps in the deploy-staging workflow and
-          #       production steps in the deploy-production workflow.
           command: |
             yarn build:staging
             VERSION=`git rev-parse --short HEAD`
@@ -171,10 +155,6 @@ jobs:
           command: yarn build:workers
       - run:
           name: "Build release"
-          # Build staging release
-          # TODO: This needs to be pulled into a separate job & workflow so that
-          #       we can run staging steps in the deploy-staging workflow and
-          #       production steps in the deploy-production workflow.
           command: |
             yarn build
             VERSION=`git rev-parse --short HEAD`
@@ -242,12 +222,8 @@ jobs:
           command: yarn build:workers
       - run:
           name: "Build release"
-          # Build staging release
-          # TODO: This needs to be pulled into a separate job & workflow so that
-          #       we can run staging steps in the deploy-staging workflow and
-          #       production steps in the deploy-production workflow.
           command: |
-            yarn build:staging
+            yarn build:development
             VERSION=`git rev-parse --short HEAD`
             sed -i -- "s/%VERSION%/$VERSION/g" build/index.html
       - run:
