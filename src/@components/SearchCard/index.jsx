@@ -5,7 +5,6 @@ import {
   Checkbox,
   Divider,
   Spacer,
-  SingleLineBodyText,
   MultiLineBodyText,
   TitleTertiary,
   Pill,
