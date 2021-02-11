@@ -30,13 +30,7 @@ import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { Message404 } from './404'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
-import {
-  useOverlay,
-  usePageMeta,
-  usePerformanceMetrics,
-  useLocalStorage,
-  useQuery,
-} from '@hooks'
+import { useOverlay, usePageMeta, usePerformanceMetrics, useLocalStorage } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
@@ -229,6 +223,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 const noop = () => null
+
 const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
   const c = useStyles()
   const { dispatch, modelDownloadUrl } = useStoreon('modelDownloadUrl')
@@ -405,7 +400,6 @@ const ModelDetailPage = ({
   currentUser,
   showBackupViewer,
   getTime,
-  geoRatios,
   showExternalResults,
 }) => {
   const c = useStyles()
@@ -428,11 +422,12 @@ const ModelDetailPage = ({
     isError: isRelatedPhynError,
     data: relatedPhynCollectionArray = [],
   } = relatedPhyn
+
   useEffect(() => {
     dispatch(types.FETCH_MODEL, { id })
-    dispatch(types.FETCH_RELATED_MODELS, { id, geoRatios })
-    if (showExternalResults) dispatch(types.FETCH_RELATED_MODELS_PHYN, { id, geoRatios })
-  }, [dispatch, geoRatios, id, showExternalResults])
+    dispatch(types.FETCH_RELATED_MODELS, { id })
+    if (showExternalResults) dispatch(types.FETCH_RELATED_MODELS_PHYN, { id })
+  }, [dispatch, id, showExternalResults])
 
   useEffect(() => {
     if (isLoaded) perfTrack('Page Loaded - Model', getTime())
@@ -605,12 +600,6 @@ const Page = () => {
   const [showExternalResults] = useLocalStorage('showExternalResults', false)
   const [currentUser] = useLocalStorage('currentUser', null)
   const { getTime, startTimer } = usePerformanceMetrics()
-  const geoRatios = {
-    gr: useQuery('gr'),
-    pvp: useQuery('pvp'),
-    pip: useQuery('pip'),
-    pd: useQuery('pd'),
-  }
 
   useEffect(() => {
     pageview('Model', modelId)
@@ -625,7 +614,6 @@ const Page = () => {
       showBackupViewer={showBackupViewer}
       showExternalResults={showExternalResults}
       getTime={getTime}
-      geoRatios={geoRatios}
     />
   )
 }

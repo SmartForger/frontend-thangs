@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-export default function useWhyDidYouUpdate(name, props) {
+const useWhyDidYouUpdate = (name, props) => {
   // Get a mutable ref object where we can store props ...
   // ... for comparison next time this hook runs.
   const previousProps = useRef()
@@ -25,7 +25,7 @@ export default function useWhyDidYouUpdate(name, props) {
 
       // If changesObj not empty then output to console
       if (Object.keys(changesObj).length) {
-        // console.log('[why-did-you-update]', name, changesObj)
+        console.log('[why-did-you-update]', name, changesObj)
       }
     }
 
@@ -33,3 +33,5 @@ export default function useWhyDidYouUpdate(name, props) {
     previousProps.current = props
   })
 }
+
+export default useWhyDidYouUpdate

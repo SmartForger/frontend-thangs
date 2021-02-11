@@ -20,7 +20,7 @@ export const CheckboxTest = () => {
   }
 
   return (
-    <div class={c.Container}>
+    <div className={c.Container}>
       <Checkbox {...props} />
     </div>
   )

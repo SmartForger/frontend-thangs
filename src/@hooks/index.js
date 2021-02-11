@@ -1,3 +1,4 @@
+export * from '@hooks/dev'
 export * from '@hooks/useActionMenu'
 export { default as useCopy } from '@hooks/useCopy'
 export { default as useCurrentUser } from '@hooks/useCurrentUser'
