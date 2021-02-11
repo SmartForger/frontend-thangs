@@ -5,6 +5,7 @@ import {
   goTo,
   isElement,
   isTextInsideClass,
+  setDynamicEmail,
   signOut,
 } from '../../utils/common-methods'
 import {
@@ -15,6 +16,7 @@ import {
   passwordInput,
 } from '../../utils/inputs'
 
+let activeUser
 export function openLogin() {
   isElement(CLASSES.LOGIN_FORM, PROPS.INVISIBLE)
   clickOnElementByText(TEXT.LOG_IN)
@@ -36,15 +38,21 @@ export function checkSignupLinkOnLogin() {
 }
 
 describe('The Login Page test cases with before and after conditions', () => {
+  before(() => {
+    cy.getCookie('activeUser').then(({ value }) => {
+      activeUser = JSON.parse(value)
+      setDynamicEmail(emailInput, activeUser)
+    })
+  })
   beforeEach(() => {
     goTo('/')
     openLogin()
   })
-  
+
   afterEach(() => {
     closeLogin()
   })
-  
+
   it('Login overlay loaded successfully', () => {
     isElement(CLASSES.LOGIN_FORM, PROPS.VISIBLE)
   })

@@ -11,15 +11,18 @@ import { CLASSES, MODEL, USER3, PROPS, TEXT, MODEL_CARD } from '../../utils/cons
 import { commentInput, enterValidValue } from '../../utils/inputs'
 import { multiUpload } from '../../utils/uploadMethods'
 
-const user = USER3
+let activeUser
 
 describe('The Model Page', () => {
   before(() => {
-    clearModelsAndFolders(user)
+    cy.getCookie('activeUser').then(({ value }) => {
+      activeUser = JSON.parse(value)
+      clearModelsAndFolders(activeUser)
+    })
   })
 
   beforeEach(() => {
-    loginByUser({ email: user.EMAIL, password: user.PASSWORD })
+    loginByUser({ email: activeUser.EMAIL, password: activeUser.PASSWORD })
   })
 
   it('Check redirect to my thangs after upload of model', () => {
@@ -27,8 +30,8 @@ describe('The Model Page', () => {
   })
 
   it('Check model details, comment, stats', () => {
-    goTo(`/${user.NAME}`)
-    cy.get(MODEL_CARD(), { timeout: 2000 }).click()
+    goTo(`/${activeUser.NAME}`)
+    clickOnTextInsideClass(CLASSES.MODEL_CARD, MODEL.TITLE)
 
     // check for details
     isElement(CLASSES.MODEL_PAGE_TITLE, PROPS.NOT_EMPTY)

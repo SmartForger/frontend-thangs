@@ -87,6 +87,7 @@ export const CLASSES = {
   UPLOAD_FORM: '[class^=Upload_Column__form]',
   UPLOAD_BUTTON_GROUP: '[class^=UploadForm_ButtonGroup]',
   UPLOAD_BUTTON: '[class^="Button"]',
+  MODEL_CARD: '[class^=ModelCard]',
   MODEL_CARD_EDIT_BUTTON: '[class^=EditModel_EditIcon]',
   MODEL_PAGE_TITLE: '[class^=ModelTitle_Text]',
   MODEL_PAGE_AUTHOR: '[class^=ModelTitle_ProfileAuthor]',

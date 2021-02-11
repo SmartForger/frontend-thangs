@@ -13,13 +13,18 @@ import {
 import { CLASSES, FOLDER, PATH, PROPS, TEXT, USER3 } from '../../utils/constants'
 import { createFolderInput, enterValidValue } from '../../utils/inputs'
 
+let activeUser
+
 describe('My Thangs Page', () => {
   before(() => {
-    clearModelsAndFolders(USER3)
+    cy.getCookie('activeUser').then(({ value }) => {
+      activeUser = JSON.parse(value)
+      clearModelsAndFolders(activeUser)
+    })
   })
 
   beforeEach(() => {
-    loginByUser({ email: USER3.EMAIL, password: USER3.PASSWORD })
+    loginByUser({ email: activeUser.EMAIL, password: activeUser.PASSWORD })
   })
 
   it('My Thangs page loaded successfully', () => {

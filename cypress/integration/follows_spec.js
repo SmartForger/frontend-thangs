@@ -11,7 +11,7 @@ import { multiUpload } from '../utils/uploadMethods'
 let activeUser
 let sideUser
 
-describe('User notifications', () => {
+describe('User follows', () => {
   before(() => {
     cy.getCookie('activeUser').then(({ value }) => {
       activeUser = JSON.parse(value)
@@ -54,7 +54,7 @@ describe('User notifications', () => {
       password: sideUser.PASSWORD,
     })
     goTo(`/${activeUser.NAME}`)
-    
+
     cy.get(MODEL_CARD(), { timeout: 2000 }).click()
 
     isTextInsideClass(CLASSES.MODEL_PAGE_FOLLOW_BUTTON, TEXT.FOLLOW, PROPS.VISIBLE)
