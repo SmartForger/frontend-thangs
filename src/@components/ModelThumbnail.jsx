@@ -111,7 +111,7 @@ const ModelThumbnail = ({
   }, [model])
   const c = useStyles({ mini })
   const src = buildThumbnailUrl(model, useThumbnailer)
-  const showImg = !showFallback && loadingState !== COMPLETE
+  const showImg = showFallback || (!showFallback && loadingState !== COMPLETE)
   return (
     <div className={classnames(className, c.ModelThumbnail)}>
       {loadingState === LOADING && showLoader && (
