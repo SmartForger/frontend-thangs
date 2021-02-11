@@ -19,7 +19,12 @@ import {
 import { Message404 } from '@pages/404'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import { useCurrentUserId, usePageMeta, usePerformanceMetrics } from '@hooks'
+import {
+  useCurrentUserId,
+  usePageMeta,
+  usePerformanceMetrics,
+  useWhyDidYouUpdate,
+} from '@hooks'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
 
@@ -256,20 +261,17 @@ const Portfolio = ({ models, likes, getTime }) => {
   )
 }
 
-const UserPage = ({ user = {}, userId, isCurrentUsersProfile, getTime }) => {
+const UserPage = ({
+  user = {},
+  userId,
+  isCurrentUsersProfile,
+  getTime,
+  ownUserModelsAtom,
+  likedUserModelsAtom,
+}) => {
   const c = useStyles({})
-  const { dispatch } = useStoreon()
   const [showProfileForm, setShowProfileForm] = useState(false)
   const description = getDescription(user)
-  const {
-    [`user-own-models-${userId}`]: ownUserModelsAtom = {},
-    [`user-liked-models-${userId}`]: likedUserModelsAtom = {},
-  } = useStoreon(`user-own-models-${userId}`, `user-liked-models-${userId}`)
-
-  useEffect(() => {
-    dispatch(types.FETCH_USER_OWN_MODELS, { id: userId })
-    dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId })
-  }, [dispatch, userId])
 
   return (
     <div className={c.Home}>
@@ -331,7 +333,16 @@ const UserPage = ({ user = {}, userId, isCurrentUsersProfile, getTime }) => {
 }
 
 const PageById = ({ userId, isCurrentUsersProfile, getTime, userName }) => {
-  const { dispatch, [`user-${userId}`]: userData = {} } = useStoreon(`user-${userId}`)
+  const {
+    dispatch,
+    [`user-${userId}`]: userData = {},
+    [`user-own-models-${userId}`]: ownUserModelsAtom = {},
+    [`user-liked-models-${userId}`]: likedUserModelsAtom = {},
+  } = useStoreon(
+    `user-${userId}`,
+    `user-own-models-${userId}`,
+    `user-liked-models-${userId}`
+  )
   const { isLoading, isLoaded, isError, data: user } = userData
   const { title, descriptionSuffix, descriptionDefault } = usePageMeta('profile')
   const description = 'getDescription(user)'
@@ -342,6 +353,8 @@ const PageById = ({ userId, isCurrentUsersProfile, getTime, userName }) => {
 
   useEffect(() => {
     dispatch(types.FETCH_USER, { id: userId })
+    dispatch(types.FETCH_USER_OWN_MODELS, { id: userId })
+    dispatch(types.FETCH_USER_LIKED_MODELS, { id: userId })
   }, [dispatch, userId])
 
   if (!isLoaded) {
@@ -363,7 +376,7 @@ const PageById = ({ userId, isCurrentUsersProfile, getTime, userName }) => {
       </div>
     )
   }
-
+  console.log('profile', user, userId, isCurrentUsersProfile, isLoading, getTime)
   return (
     <>
       <Helmet>
@@ -376,6 +389,8 @@ const PageById = ({ userId, isCurrentUsersProfile, getTime, userName }) => {
         isCurrentUsersProfile={isCurrentUsersProfile}
         isLoading={isLoading}
         getTime={getTime}
+        ownUserModelsAtom={ownUserModelsAtom}
+        likedUserModelsAtom={likedUserModelsAtom}
       />
     </>
   )
@@ -405,6 +420,7 @@ const PageByUserName = ({ userName, getTime }) => {
       track('Portfolio', { userName })
     }
   }, [isCurrentUsersProfile, isExternalReferral, isLoaded, userName])
+
   if (!isLoaded) {
     return <Spinner />
   }
@@ -426,33 +442,26 @@ const PageByUserName = ({ userName, getTime }) => {
   }
 
   return (
-    <>
-      <PageById
-        userName={userName}
-        userId={userId}
-        isCurrentUsersProfile={isCurrentUsersProfile}
-        getTime={getTime}
-      />
-    </>
+    <PageById
+      userName={userName}
+      userId={userId}
+      isCurrentUsersProfile={isCurrentUsersProfile}
+      getTime={getTime}
+    />
   )
 }
 
 const Page = () => {
-  const { id, userName } = useParams()
-  const identifier = id || userName
+  const { userName } = useParams()
   const { startTimer, getTime } = usePerformanceMetrics()
   useEffect(() => {
-    pageview('Profile', identifier)
+    pageview('Profile', userName)
     startTimer()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (userName) {
     return <PageByUserName userName={userName} getTime={getTime} />
-  }
-
-  if (id) {
-    return <PageById userId={id} getTime={getTime} />
   }
 
   return (

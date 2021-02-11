@@ -14,6 +14,7 @@ import {
   PrivacyPolicy,
   Profile,
   RedirectModel,
+  RedirectProfile,
   SearchResults,
   TermsAndConditions,
 } from '@pages'
@@ -91,12 +92,14 @@ const App = () => {
                     component={ConfirmPasswordReset}
                   />
                   <Route path='/mythangs' component={routeRequiresAuth(MyThangs)} />
-                  <Route exact path='/profile/:id' component={Profile} />
                   <Route
                     path={['/search/:searchQuery', '/search']}
                     component={SearchResults}
                   />
+                  <Route path='/profile/:id' component={RedirectProfile} />
+                  <Route path='/u/:id' component={RedirectProfile} />
                   <Route path='/model/:modelId' component={RedirectModel} />
+                  <Route path='/m/:modelId' component={RedirectModel} />
                   <Route
                     path='/:userName/:modelString'
                     render={props => (
