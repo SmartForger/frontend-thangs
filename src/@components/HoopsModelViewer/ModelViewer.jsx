@@ -126,18 +126,12 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
     if (hoops.status.isReady) perfTrack('Page Loaded - HOOPS Viewer', getTime())
   }, [getTime, hoops.status.isReady])
 
-  const modelAlt = `${model.name} by ${model.owner && model.owner.username} full viewable`
   return (
     <div className={className}>
       <div className={c.HoopsModelViewer_WebViewContainer}>
         <div ref={containerRef} />
         {!hoops.status.statusOverlayHidden && (
-          <>
-            {!hoops.status.isError && !hoops.status.isReady && (
-              <ModelThumbnail model={model} name={modelAlt} />
-            )}
-            <StatusIndicator status={hoops.status} />
-          </>
+          <StatusIndicator status={hoops.status} model={model} />
         )}
       </div>
       {hoops.status.isReady && (
@@ -155,13 +149,14 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
   )
 }
 
-const StatusIndicator = ({ status }) => {
+const StatusIndicator = ({ status, model }) => {
   const c = useStyles()
-
+  const modelAlt = `${model.name} by ${model.owner && model.owner.username} full viewable`
   return (
     <div className={c.HoopsModelViewer_LoadingContainer}>
       {status.isPending ? (
         <>
+          <ModelThumbnail model={model} name={modelAlt} showFallback={false} />
           <Spinner />
           <div className={c.HoopsModelViewer_PlaceholderText}>Loading preview...</div>
         </>

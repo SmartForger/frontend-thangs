@@ -95,11 +95,13 @@ const ERROR = 'ERROR'
 
 const ModelThumbnail = ({
   className,
+  showFallback = true,
+  lazyLoad = false,
+  showLoader = true,
+  mini,
   model,
   name,
-  mini,
   useThumbnailer = false,
-  lazyLoad = false,
 }) => {
   const [loadingState, setLoadingState] = useState(LOADING)
   const onLoad = useCallback(() => setLoadingState(COMPLETE), [])
@@ -109,11 +111,13 @@ const ModelThumbnail = ({
   }, [model])
   const c = useStyles({ mini })
   const src = buildThumbnailUrl(model, useThumbnailer)
-
+  const showImg = !showFallback && loadingState !== COMPLETE && src
   return (
     <div className={classnames(className, c.ModelThumbnail)}>
-      {loadingState === LOADING && <Loader className={c.ModelThumbnail_Loader} />}
-      {src && (
+      {loadingState === LOADING && showLoader && (
+        <Loader className={c.ModelThumbnail_Loader} />
+      )}
+      {showImg && (
         <img
           className={loadingState === ERROR ? c.ModelThumbnail_Error : undefined}
           src={src}
