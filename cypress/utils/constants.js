@@ -53,6 +53,13 @@ export const MODEL = {
   COMMENT: 'Test comment',
 }
 
+export const VERSION_MODEL = {
+  FILENAME: 'Cover_Plate_E_0.par',
+  TITLE: 'Version Model Name',
+  DESCRIPTION: 'Version Model Description',
+  COMMENT: 'Version Model Comment',
+}
+
 export const MODEL_TEST_TITLE = `[title="${MODEL.TITLE}"]`
 
 export const SEARCH = {

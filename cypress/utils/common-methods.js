@@ -255,6 +255,7 @@ export const registerUser = userKey => {
 
     log('Registered user:', JSON.stringify(userWithId))
     cy.setCookie(userKey, JSON.stringify(userWithId))
+    window[userKey] = userWithId
   })
 }
 

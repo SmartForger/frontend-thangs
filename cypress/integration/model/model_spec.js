@@ -9,7 +9,7 @@ import {
 } from '../../utils/common-methods'
 import { CLASSES, MODEL, USER3, PROPS, TEXT, MODEL_CARD } from '../../utils/constants'
 import { commentInput, enterValidValue } from '../../utils/inputs'
-import { multiUpload } from '../../utils/uploadMethods'
+import { multiUpload, versionUpload } from '../../utils/uploadMethods'
 
 let activeUser
 
@@ -47,5 +47,8 @@ describe('The Model Page', () => {
     isTextInsideClass(CLASSES.MODEL_PAGE_STATS, TEXT.LIKES)
     isTextInsideClass(CLASSES.MODEL_PAGE_STATS, TEXT.DOWNLOADS)
     isTextInsideClass(CLASSES.MODEL_PAGE_STATS, TEXT.CURRENT_YEAR)
+
+    //upload new verison
+    versionUpload()
   })
 })

@@ -1,5 +1,5 @@
 import 'cypress-file-upload'
-import { CLASSES, TEXT, MODEL, PATH } from './constants'
+import { CLASSES, TEXT, MODEL, PATH, VERSION_MODEL } from './constants'
 import {
   clickOnElement,
   clickOnElementByText,
@@ -23,6 +23,22 @@ export const multiUpload = () => {
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue')
   urlShouldIncludeAfterTimeout('mythangs/recent-files', 10000)
   isElementContains('[class^=FileTable_Row]', MODEL.TITLE)
+}
+
+export const versionUpload = () => {
+  clickOnElementByText('Upload new version')
+  uploadFile(VERSION_MODEL.FILENAME, multiUploadInput)
+  clickOnElementByText('Continue')
+  cy.get(`[class^=PartInfo_Field] [name=name]`).clear()
+  cy.get(`[class^=PartInfo_Field] [name=name]`).focus().type(VERSION_MODEL.TITLE)
+  cy.get(`[class^=PartInfo_Field] [name=description]`).clear()
+  cy.get(`[class^=PartInfo_Field] [name=description]`)
+    .focus()
+    .type(VERSION_MODEL.DESCRIPTION)
+  clickOnTextInsideClass(CLASSES.BUTTON, 'Continue')
+  urlShouldIncludeAfterTimeout('mythangs/recent-files', 10000)
+  isElementContains('[class^=FileTable_Row]', VERSION_MODEL.TITLE)
+  cy.get('[class^=FileTable_Row_Column] a[href^="/model"]').click()
 }
 
 export const deleteModel = (modelName = MODEL.TITLE) => {
