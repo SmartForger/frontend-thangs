@@ -8,6 +8,9 @@ instance_class: F1
   # min_idle_instances: ...
 
 handlers:
+  - url: /workers/(.*)
+    static_files: build/workers/\1
+    upload: build/workers/(.*)
   - url: /robots.txt
     static_files: build/robots.txt
     upload: build/robots.txt
