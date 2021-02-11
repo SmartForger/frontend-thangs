@@ -2,6 +2,7 @@ import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { formatDistanceStrict } from 'date-fns'
+import { useCurrentUserId } from '@hooks'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as GrantAccessIcon } from '@svg/notification-grant-access.svg'
 import { ReactComponent as HeartIcon } from '@svg/notification-heart.svg'
@@ -166,6 +167,7 @@ const NotificationSnippet = ({
 const Notification = ({ id, actor, className, count, target, timestamp, verb }) => {
   const c = useStyles()
   const { dispatch } = useStoreon()
+  const currentUserId = useCurrentUserId()
   const time = formatDistanceStrict(new Date(timestamp), new Date())
   const displayTime = `${time} ago`
   let altVerb = undefined
@@ -183,15 +185,15 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
   switch (verb) {
     case 'commented':
       IconComponent = CommentIcon
-      linkTarget = target && target.id ? `/model/${target.id}` : '/'
+      linkTarget = target && target.id ? `/m/${target.id}` : '/'
       break
     case 'downloaded':
       IconComponent = DownloadIcon
-      linkTarget = target && target.id ? `/model/${target.id}` : '/'
+      linkTarget = target && target.id ? `/m/${target.id}` : '/'
       break
     case 'followed':
       IconComponent = PlusIcon
-      linkTarget = target && target.id ? `/profile/${target.id}` : '/'
+      linkTarget = target && target.id ? `/u/${target.id}` : '/'
       break
     case 'invited':
       IconComponent = GrantAccessIcon
@@ -207,15 +209,15 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
       break
     case 'liked':
       IconComponent = HeartIcon
-      linkTarget = target && target.id ? `/model/${target.id}` : '/'
+      linkTarget = target && target.id ? `/m/${target.id}` : '/'
       break
     case 'uploaded':
       IconComponent = UploadIcon
-      linkTarget = target && target.id ? `/model/${target.id}` : '/'
+      linkTarget = target && target.id ? `/m/${target.id}` : '/'
       break
     case 'uploadedNewVersion':
       IconComponent = UploadIcon
-      linkTarget = target && target.id ? `/model/${target.id}` : '/'
+      linkTarget = target && target.id ? `/m/${target.id}` : '/'
       altVerb = 'uploaded new version'
       break
     case 'uploaded-to-folder':
@@ -233,7 +235,9 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
   }
 
   if (verb === 'invitedOther') return null
-
+  const newTargetObj = target
+  if (target && target.id && target.id.toString() === currentUserId)
+    newTargetObj.name = 'you'
   return (
     <NotificationSnippet
       c={c}
@@ -242,7 +246,7 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
       time={displayTime}
       id={id}
       actor={actor}
-      target={target}
+      target={newTargetObj}
       targetNameAlt={targetNameAlt}
       verb={verb}
       altVerb={altVerb}
