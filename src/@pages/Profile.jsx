@@ -19,12 +19,7 @@ import {
 import { Message404 } from '@pages/404'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import {
-  useCurrentUserId,
-  usePageMeta,
-  usePerformanceMetrics,
-  useWhyDidYouUpdate,
-} from '@hooks'
+import { useCurrentUserId, usePageMeta, usePerformanceMetrics } from '@hooks'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
 
@@ -376,7 +371,7 @@ const PageById = ({ userId, isCurrentUsersProfile, getTime, userName }) => {
       </div>
     )
   }
-  console.log('profile', user, userId, isCurrentUsersProfile, isLoading, getTime)
+
   return (
     <>
       <Helmet>
