@@ -21,7 +21,7 @@ module.exports = (on, config) => {
 
   // modify env var value
   config.env.REACT_APP_API_KEY =
-    'https://staging-api-platform-dot-gcp-and-physna.uc.r.appspot.com/'
+    'https://development-api-platform-dot-thangs.uc.r.appspot.com/'
 
   return config
 }
