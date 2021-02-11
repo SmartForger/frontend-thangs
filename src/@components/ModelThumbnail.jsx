@@ -83,8 +83,14 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       width: ({ mini }) => (mini ? '1.5rem' : '3rem'),
     },
-    ModelThumbnail_Error: {
+    ModelThumbnail__error: {
       transform: 'none !important',
+    },
+    ModelThumbnail__hidden: {
+      display: 'none !important',
+    },
+    ModelThumbnail__background: {
+      position: 'absolute',
     },
   }
 })
@@ -113,13 +119,20 @@ const ModelThumbnail = ({
   const src = buildThumbnailUrl(model, useThumbnailer)
   const showImg = showFallback || loadingState === COMPLETE
   return (
-    <div className={classnames(className, c.ModelThumbnail)}>
+    <div
+      className={classnames(className, c.ModelThumbnail, {
+        [c.ModelThumbnail__background]: !showFallback,
+      })}
+    >
       {loadingState === LOADING && showLoader && (
         <Loader className={c.ModelThumbnail_Loader} />
       )}
-      {showImg && src && (
+      {src && (
         <img
-          className={loadingState === ERROR ? c.ModelThumbnail_Error : undefined}
+          className={classnames({
+            [c.ModelThumbnail__error]: loadingState === ERROR,
+            [c.ModelThumbnail__hidden]: !showImg,
+          })}
           src={src}
           alt={loadingState === ERROR ? '' : `${name} 3d model`}
           onLoad={onLoad}

@@ -156,7 +156,12 @@ const StatusIndicator = ({ status, model }) => {
     <div className={c.HoopsModelViewer_LoadingContainer}>
       {status.isPending ? (
         <>
-          <ModelThumbnail model={model} name={modelAlt} showFallback={false} />
+          <ModelThumbnail
+            model={model}
+            name={modelAlt}
+            showFallback={false}
+            showLoader={false}
+          />
           <Spinner />
           <div className={c.HoopsModelViewer_PlaceholderText}>Loading preview...</div>
         </>
