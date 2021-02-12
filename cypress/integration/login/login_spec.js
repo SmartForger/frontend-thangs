@@ -5,13 +5,12 @@ import {
   goTo,
   isElement,
   isTextInsideClass,
-  setDynamicEmail,
+  loginByUser,
   signOut,
 } from '../../utils/common-methods'
 import {
   clearInput,
   enterInvalidValue,
-  enterValidValue,
   emailInput,
   passwordInput,
 } from '../../utils/inputs'
@@ -41,7 +40,6 @@ describe('The Login Page test cases with before and after conditions', () => {
   before(() => {
     cy.getCookie('activeUser').then(({ value }) => {
       activeUser = JSON.parse(value)
-      setDynamicEmail(emailInput, activeUser)
     })
   })
   beforeEach(() => {
@@ -82,11 +80,7 @@ describe('The Login Page test cases with before condition', () => {
   })
 
   it('Login successfully completed', () => {
-    enterValidValue(CLASSES.LOGIN_FORM, emailInput)
-    enterValidValue(CLASSES.LOGIN_FORM, passwordInput)
-    clickOnElement(CLASSES.LOGIN_BUTTON)
-    isElement(CLASSES.LOGIN_FORM, PROPS.INVISIBLE)
-    isElement(CLASSES.USER_NAVBAR, PROPS.VISIBLE)
+    loginByUser({ email: activeUser.EMAIL, password: activeUser.PASSWORD })
     signOut()
   })
 })

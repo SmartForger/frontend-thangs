@@ -2,27 +2,20 @@ import 'cypress-file-upload'
 import {
   clickOnElement,
   isElement,
-  login,
+  loginByUser,
   openMultiUpload,
   openNotifications,
   openProfileDropdown,
-  setDynamicEmail,
-  signOut,
-  uploadFile,
   urlShouldInclude,
-  urlShouldIncludeAfterTimeout,
 } from '../../utils/common-methods'
 import {
   clearInput,
-  emailInput,
   enterValidValue,
   inputFocus,
   inputType,
   searchInput,
-  TEST_USER_1,
-  uploadInput,
 } from '../../utils/inputs'
-import { CLASSES, MODEL, PATH, PROPS } from '../../utils/constants'
+import { CLASSES, PATH, PROPS } from '../../utils/constants'
 
 let activeUser
 
@@ -30,11 +23,10 @@ describe('The Landing Page (authorized)', () => {
   before(() => {
     cy.getCookie('activeUser').then(({ value }) => {
       activeUser = JSON.parse(value)
-      setDynamicEmail(TEST_USER_1.emailInput, activeUser)
     })
   })
   beforeEach(() => {
-    login(TEST_USER_1)
+    loginByUser({ email: activeUser.EMAIL, password: activeUser.PASSWORD })
   })
 
   it('Open Notifications', () => {

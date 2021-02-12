@@ -10,7 +10,7 @@ import {
   clearModelsAndFolders,
   log,
 } from '../../utils/common-methods'
-import { CLASSES, MODEL, PROPS, TEXT, MODEL_CARD } from '../../utils/constants'
+import { CLASSES, MODEL, PROPS, TEXT } from '../../utils/constants'
 import { commentInput, enterValidValue } from '../../utils/inputs'
 import { multiUpload } from '../../utils/uploadMethods'
 
@@ -56,7 +56,7 @@ describe('User notifications', () => {
       password: sideUser.PASSWORD,
     })
     goTo(`/${activeUser.NAME}`)
-    cy.get(MODEL_CARD(), { timeout: 2000 }).click()
+    clickOnTextInsideClass(CLASSES.MODEL_CARD, MODEL.TITLE)
 
     log('likes')
     isTextInsideClass(CLASSES.MODEL_PAGE_LIKE_BUTTON, TEXT.LIKE, PROPS.VISIBLE)

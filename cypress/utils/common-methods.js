@@ -348,9 +348,3 @@ export const unfollowUser = (userA = USER, userB = USER2) =>
 export const log = (...args) => {
   cy.log(`⏩⏩⏩⏩⏩⏩⏩⏩  ${args.join(' ')}`)
 }
-
-export const setDynamicEmail = (input, dynamicUser) => {
-  if (input && input.validInput && dynamicUser && dynamicUser.EMAIL) {
-    input.validInput = dynamicUser.EMAIL
-  }
-}
