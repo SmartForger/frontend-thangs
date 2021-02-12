@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import classnames from 'classnames'
 import {
   Pill,
   ProfilePicture,
@@ -60,18 +61,24 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-export const ProfileDropdownMenu = ({ myThangsMenu, user = {}, TargetComponent, ...props }) => {
+export const ProfileDropdownMenu = ({
+  className,
+  myThangsMenu,
+  user = {},
+  TargetComponent,
+  ...props
+}) => {
   const c = useStyles({})
 
   return (
     <DropdownMenu
-      className={c.ProfileDropdown}
+      className={classnames(className, c.ProfileDropdown)}
       TargetComponent={TargetComponent}
       user={user}
       myThangsMenu={myThangsMenu}
       {...props}
     >
-      <ProfileDropdownMenuContainer user={user}/>
+      <ProfileDropdownMenuContainer user={user} />
     </DropdownMenu>
   )
 }
