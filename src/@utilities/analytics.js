@@ -2,7 +2,7 @@ import amplitude from 'amplitude-js'
 
 // This does not include profile and model because
 // those are now both vanity-urls and need to be
-// detected by the process of elimination. See locationChange() - BE
+// detected by the process of elimination. See locationChangegit() - BE
 const pages = [
   '404',
   'about-us',
