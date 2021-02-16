@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Spinner, CardCollectionRelated, ModelCardRelated } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
@@ -52,7 +52,11 @@ const RelatedModels = ({
 }) => {
   const c = useStyles()
 
-  track('Related Models Shown', { matches: (data.matches && data.matches.length) || 0 })
+  useEffect(() => {
+    track('Related Models Shown', { matches: (data.matches && data.matches.length) || 0 })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   if (isHideEmpty && (!data || !data.matches || !data.matches.length)) return null
   return (
     <div className={classnames(className, c.RelatedModels_Related)}>
