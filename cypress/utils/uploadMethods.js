@@ -6,6 +6,7 @@ import {
   clickOnTextInsideClass,
   goTo,
   isElementContains,
+  isElementContainTwoValues,
   openMultiUpload,
   uploadFile,
   urlShouldIncludeAfterTimeout,
@@ -38,7 +39,7 @@ export const versionUpload = () => {
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue')
   urlShouldIncludeAfterTimeout('mythangs/recent-files', 10000)
   isElementContains('[class^=FileTable_Row]', VERSION_MODEL.TITLE)
-  cy.get('[class^=FileTable_Row_Column] a[href^="/model"]').click()
+  cy.get('[class^=FileTable_Row_Column] a[href^="/model"]').should('not.contain', '-')
 }
 
 export const deleteModel = (modelName = MODEL.TITLE) => {

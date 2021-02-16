@@ -7,7 +7,15 @@ import {
   clearModelsAndFolders,
   loginByUser,
 } from '../../utils/common-methods'
-import { CLASSES, MODEL, USER3, PROPS, TEXT, MODEL_CARD } from '../../utils/constants'
+import {
+  CLASSES,
+  MODEL,
+  USER3,
+  PROPS,
+  TEXT,
+  MODEL_CARD,
+  VERSION_MODEL,
+} from '../../utils/constants'
 import { commentInput, enterValidValue } from '../../utils/inputs'
 import { multiUpload, versionUpload } from '../../utils/uploadMethods'
 
@@ -50,5 +58,10 @@ describe('The Model Page', () => {
 
     //upload new verison
     versionUpload()
+    goTo(`/${user.NAME}`)
+    cy.wait(5000)
+    cy.get(MODEL_CARD(VERSION_MODEL.TITLE)).click()
+    cy.get('[class^=Revised_Label] a[href^="/model"]').click()
+    isTextInsideClass('[class^=ModelTitle_Text]', MODEL.TITLE)
   })
 })
