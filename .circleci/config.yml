@@ -19,7 +19,7 @@ workflows:
             context: gcp-and-physna
             yarn: true
             start: yarn run build:workers && yarn dev
-            wait-on: 'http://localhost:3000'
+            wait-on: 'https://localhost:3000'
             store_artifacts: true
             browser: chrome
             verify-command: yarn cypress verify
