@@ -223,7 +223,7 @@ const Page = ({ sortBy, getTime = noop }) => {
               return <ModelCardLanding key={`model-${model.id}:${index}`} model={model} />
             })}
         </CardCollectionLanding>
-        {numOfPage >= 4 && (
+        {numOfPage >= 5 && (
           <div className={c.Landing_LoadMore}>
             <Spacer size='2rem' />
             <Pill onClick={handleLoadMore}>More Thangs</Pill>
