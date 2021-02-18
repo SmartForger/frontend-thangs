@@ -63,8 +63,8 @@ const App = () => {
             <GlobalStyles />
             <AppAnalytics />
             <ScrollToTop />
-            <OverlayProvider>
-              <ActionMenuProvider>
+            <ActionMenuProvider>
+              <OverlayProvider>
                 <Switch>
                   <Route exact path='/' render={props => <Landing {...props} />} />
                   <Route
@@ -111,8 +111,8 @@ const App = () => {
                   <Route path='/404' component={Page404} status={404} />
                   <Route path='*' component={Page404} status={404} />
                 </Switch>
-              </ActionMenuProvider>
-            </OverlayProvider>
+              </OverlayProvider>
+            </ActionMenuProvider>
           </ThemeProvider>
         </ErrorBoundary>
       </StoreContext.Provider>
