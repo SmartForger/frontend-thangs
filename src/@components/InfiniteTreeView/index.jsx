@@ -40,6 +40,7 @@ const Row = memo(({ data, index, style }) => {
     classes,
     renderNode,
     toggleNode,
+    hideRowIcons,
   } = data
   const node = items[index]
 
@@ -53,7 +54,7 @@ const Row = memo(({ data, index, style }) => {
         paddingLeft: levelPadding * node.level,
       }}
     >
-      {(node.level > 0 || hasMultiRoots) && (
+      {(node.level > 0 || hasMultiRoots) && !hideRowIcons && (
         <div
           className={classnames(classes.TreeNode_ExpandIcon, {
             [classes.TreeNode_ExpandIcon__expanded]: !node.isLeaf && !node.closed,
@@ -63,7 +64,7 @@ const Row = memo(({ data, index, style }) => {
           {node.isLeaf ? <IndentArrow /> : <ArrowRight />}
         </div>
       )}
-      {renderNode(node)}
+      {renderNode(node, { toggleNode })}
     </div>
   )
 }, areEqual)
@@ -98,6 +99,7 @@ const InfiniteTreeView = ({
   levelPadding = 40,
   scrollToItem,
   isSelected = () => false,
+  hideRowIcons,
 }) => {
   const [expandedNodes, setExpandedNodes] = useState([])
   const prevScrollToItem = useRef({})
@@ -184,8 +186,18 @@ const InfiniteTreeView = ({
       classes: { ...c, ...classes },
       levelPadding,
       isSelected,
+      hideRowIcons,
     }
-  }, [filteredNodes, toggleNode, renderNode, levelPadding, isSelected, c, classes])
+  }, [
+    filteredNodes,
+    toggleNode,
+    renderNode,
+    levelPadding,
+    isSelected,
+    c,
+    classes,
+    hideRowIcons,
+  ])
 
   return (
     <FixedSizeList

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
 import * as R from 'ramda'
-import { FileTable, FolderCard, Spacer, TitleTertiary } from '@components'
+import { FolderCard, Spacer, TitleTertiary } from '@components'
+import FileTable from '@components/Workspace/FileTableNew'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { pageview } from '@utilities/analytics'
@@ -14,6 +15,7 @@ const useStyles = createUseStyles(theme => {
     AllFilesView: {
       display: 'flex',
       flexDirection: 'row',
+      overflowY: 'scroll',
     },
     AllFilesView_Content: {
       height: '100%',
@@ -87,12 +89,12 @@ const AllFilesView = ({
   const sortedFolders = useMemo(() => {
     return folders !== undefined && R.isEmpty(folders)
       ? folders
-        .sort((a, b) => {
-          if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
-          else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
-          return 0
-        })
-        .filter(folder => !folder.name.includes('//'))
+          .sort((a, b) => {
+            if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
+            else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
+            return 0
+          })
+          .filter(folder => !folder.name.includes('//'))
       : []
   }, [folders])
 
@@ -132,9 +134,9 @@ const AllFilesView = ({
           sortedBy={'created'}
           hideDropzone={sortedFolders.length > 0}
           onDrop={onDrop}
-        ></FileTable>
+          height={32}
+        />
       </div>
-      <Spacer size='2rem' />
     </main>
   )
 }

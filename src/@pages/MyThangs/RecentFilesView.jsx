@@ -2,13 +2,13 @@ import React, { useEffect, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
 import {
   FileCard,
-  FileTable,
   FolderCard,
   Spacer,
   Spinner,
   StatsBar,
   TitleTertiary,
 } from '@components'
+import FileTable from '@components/Workspace/FileTableNew'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { useStarred } from '@hooks'
@@ -86,7 +86,7 @@ const RecentFilesView = ({
   const files = useMemo(() => {
     return [folderData, modelData].flat()
   }, [folderData, modelData])
-  
+
   useEffect(() => {
     pageview('MyThangs - RecentFiles')
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
 import * as R from 'ramda'
-import { FileTable, FolderCard, Spacer, Spinner, TitleTertiary } from '@components'
+import { FolderCard, Spacer, Spinner, TitleTertiary } from '@components'
+import FileTable from '@components/Workspace/FileTableNew'
 import { useStarred } from '@hooks'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'

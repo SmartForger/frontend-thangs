@@ -444,14 +444,6 @@ const getSortedFiles = (files, sortType, order) => {
           return getCompareByOrder(a.size, b.size, order)
         }
 
-        if (sortType === COLUMNS.FILETYPE) {
-          return getCompareByOrder(
-            (a.fileType || '').toUpperCase(),
-            (b.fileType || '').toUpperCase(),
-            order
-          )
-        }
-
         if (sortType === COLUMNS.CONTRIBUTORS) {
           return getCompareByOrder(
             (a.members || []).length,
