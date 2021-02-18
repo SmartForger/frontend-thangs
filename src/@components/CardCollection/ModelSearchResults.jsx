@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { ModelSearchResult, Pill } from '@components'
 import { createUseStyles } from '@style'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -17,6 +18,7 @@ const ModelSearchResults = ({ items = [], showLoadMore, ...props }) => {
 
   const handleMoreThangs = useCallback(() => {
     setLoadedCount(loadedCount + 10)
+    track('More Thangs - Search')
   }, [loadedCount])
 
   const filteredItems = useMemo(
@@ -24,6 +26,7 @@ const ModelSearchResults = ({ items = [], showLoadMore, ...props }) => {
       Array.isArray(items) ? (loadedCount ? items.slice(0, loadedCount) : items) : [],
     [items, loadedCount]
   )
+
   return (
     <>
       {filteredItems.map((model, index) => (

@@ -194,6 +194,7 @@ const Page = ({ sortBy, getTime = noop }) => {
 
   const handleLoadMore = useCallback(() => {
     dispatch(types.FETCH_MODEL_PREVIEW, { sortBy, onFinish: handleOnFinish })
+    track('More Thangs - Landing')
   }, [dispatch, handleOnFinish, sortBy])
 
   if (modelPreviews.isError) {
