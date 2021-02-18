@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { ModelSearchResult, Pill } from '@components'
 import { createUseStyles } from '@style'
 
@@ -19,11 +19,11 @@ const ModelSearchResults = ({ items = [], showLoadMore, ...props }) => {
     setLoadedCount(loadedCount + 10)
   }, [loadedCount])
 
-  const filteredItems = Array.isArray(items)
-    ? loadedCount
-      ? items.slice(0, loadedCount)
-      : items
-    : []
+  const filteredItems = useMemo(
+    () =>
+      Array.isArray(items) ? (loadedCount ? items.slice(0, loadedCount) : items) : [],
+    [items, loadedCount]
+  )
   return (
     <>
       {filteredItems.map((model, index) => (
@@ -34,7 +34,7 @@ const ModelSearchResults = ({ items = [], showLoadMore, ...props }) => {
           {...props}
         />
       ))}
-      {showLoadMore && (
+      {showLoadMore && loadedCount < items.length && (
         <div className={c.ModelSearchResult_LoadMore}>
           <Pill onClick={handleMoreThangs}>More Thangs</Pill>
         </div>
