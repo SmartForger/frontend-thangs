@@ -19,7 +19,11 @@ const ModelSearchResults = ({ items = [], showLoadMore, ...props }) => {
     setLoadedCount(loadedCount + 10)
   }, [loadedCount])
 
-  const filteredItems = (Array.isArray(items) && items.slice(0, loadedCount)) || []
+  const filteredItems = Array.isArray(items)
+    ? loadedCount
+      ? items.slice(0, loadedCount)
+      : items
+    : []
   return (
     <>
       {filteredItems.map((model, index) => (
