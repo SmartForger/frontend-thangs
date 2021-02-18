@@ -211,6 +211,7 @@ const ThangsSearchResult = ({
               showReportModel={showReportModel}
               showSocial={false}
               showWaldo={false} //Change back to !!modelId when we want waldo thumbnails back
+              showLoadMore={true}
             />
           ) : null}
         </>

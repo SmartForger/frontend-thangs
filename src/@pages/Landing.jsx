@@ -6,7 +6,9 @@ import {
   LandingSortActionMenu,
   Layout,
   ModelCardLanding,
+  Pill,
   TitleSecondary,
+  Spacer,
 } from '@components'
 import { useCurrentUser, usePageMeta, usePerformanceMetrics, useQuery } from '@hooks'
 import { useStoreon } from 'storeon/react'
@@ -106,6 +108,11 @@ const useStyles = createUseStyles(theme => {
         },
       },
     },
+    Landing_LoadMore: {
+      display: 'flex',
+      justifyContent: 'center',
+      flexDirection: 'column',
+    },
   }
 })
 
@@ -131,6 +138,7 @@ const Page = ({ sortBy, getTime = noop }) => {
   const containerRef = useRef(null)
   const history = useHistory()
   const [endOfModels, setEndOfModels] = useState(false)
+  const [numOfPage, setNumOfPage] = useState(1)
   const { dispatch, modelPreviews } = useStoreon('modelPreviews')
   const { isLoading } = modelPreviews
   const [hasLoaded, setHasLoaded] = useState(false)
@@ -147,6 +155,10 @@ const Page = ({ sortBy, getTime = noop }) => {
   }, [])
 
   useEffect(() => {
+    setNumOfPage(1)
+  }, [sortBy])
+
+  useEffect(() => {
     dispatch(types.FETCH_MODEL_PREVIEW, {
       sortBy,
       isInitial: true,
@@ -157,8 +169,9 @@ const Page = ({ sortBy, getTime = noop }) => {
   useEffect(() => {
     const trackScrolling = () => {
       const wrappedElement = containerRef.current
-      if (isBottom(wrappedElement) && !isLoading && !endOfModels) {
+      if (isBottom(wrappedElement) && !isLoading && !endOfModels && numOfPage < 4) {
         dispatch(types.FETCH_MODEL_PREVIEW, { sortBy, onFinish: handleOnFinish })
+        setNumOfPage(numOfPage + 1)
       }
     }
 
@@ -178,6 +191,10 @@ const Page = ({ sortBy, getTime = noop }) => {
     },
     [history]
   )
+
+  const handleLoadMore = useCallback(() => {
+    dispatch(types.FETCH_MODEL_PREVIEW, { sortBy, onFinish: handleOnFinish })
+  }, [dispatch, handleOnFinish, sortBy])
 
   if (modelPreviews.isError) {
     return (
@@ -205,6 +222,12 @@ const Page = ({ sortBy, getTime = noop }) => {
               return <ModelCardLanding key={`model-${model.id}:${index}`} model={model} />
             })}
         </CardCollectionLanding>
+        {numOfPage >= 4 && (
+          <div className={c.Landing_LoadMore}>
+            <Spacer size='2rem' />
+            <Pill onClick={handleLoadMore}>More Thangs</Pill>
+          </div>
+        )}
       </>
     </div>
   )
