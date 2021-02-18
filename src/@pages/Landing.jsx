@@ -132,6 +132,7 @@ const title = sortBy => {
   }
 }
 const noop = () => null
+const finiteScrollCount = 5
 
 const Page = ({ sortBy, getTime = noop }) => {
   const c = useStyles({})
@@ -169,7 +170,12 @@ const Page = ({ sortBy, getTime = noop }) => {
   useEffect(() => {
     const trackScrolling = () => {
       const wrappedElement = containerRef.current
-      if (isBottom(wrappedElement) && !isLoading && !endOfModels && numOfPage < 4) {
+      if (
+        isBottom(wrappedElement) &&
+        !isLoading &&
+        !endOfModels &&
+        numOfPage < finiteScrollCount
+      ) {
         dispatch(types.FETCH_MODEL_PREVIEW, { sortBy, onFinish: handleOnFinish })
         setNumOfPage(numOfPage + 1)
       }
@@ -223,7 +229,7 @@ const Page = ({ sortBy, getTime = noop }) => {
               return <ModelCardLanding key={`model-${model.id}:${index}`} model={model} />
             })}
         </CardCollectionLanding>
-        {numOfPage >= 5 && (
+        {numOfPage >= finiteScrollCount && (
           <div className={c.Landing_LoadMore}>
             <Spacer size='2rem' />
             <Pill onClick={handleLoadMore}>More Thangs</Pill>
