@@ -17,6 +17,9 @@ handlers:
   - url: /robots.txt
     static_files: build/robots.txt
     upload: build/robots.txt
+  - url: /sitemap.xml
+    static_files: build/sitemap.xml
+    upload: build/sitemap.xml
   - url: /storybook/(.*)
     static_files: storybook/\1
     upload: storybook/(.*)
