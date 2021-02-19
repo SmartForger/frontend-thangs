@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import * as R from 'ramda'
@@ -421,6 +421,7 @@ const ModelDetailPage = ({
     [`related-models-${id}`]: related = {},
     [`related-models-phyn-${id}`]: relatedPhyn = {},
   } = useStoreon('model', `related-models-${id}`, `related-models-phyn-${id}`)
+  const [initialized, setInitialized] = useState(false)
   const { data: modelData, isLoading, isLoaded, isError } = modelAtom
   const {
     isLoading: isRelatedLoading,
@@ -436,6 +437,7 @@ const ModelDetailPage = ({
   useEffect(() => {
     dispatch(types.FETCH_MODEL, { id })
     dispatch(types.FETCH_RELATED_MODELS, { id })
+    setInitialized(true)
     if (showExternalResults) dispatch(types.FETCH_RELATED_MODELS_PHYN, { id })
   }, [dispatch, id, showExternalResults])
 
@@ -501,7 +503,7 @@ const ModelDetailPage = ({
   }, [isRelatedPhynError, isRelatedPhynLoading, modelData, relatedPhynCollectionArray])
   RelatedPhynComponent.displayName = 'RelatedPhynComponent'
 
-  if (isLoading || !isLoaded) {
+  if (isLoading || !isLoaded || !initialized) {
     return <Spinner />
   } else if (R.isEmpty(modelData)) {
     return <Message404 />
