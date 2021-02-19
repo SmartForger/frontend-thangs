@@ -1,3 +1,3 @@
 User-agent: *
 
-Sitemap: https://thangs.com/sitemap.txt
+Sitemap: https://thangs.com/sitemap.xml
