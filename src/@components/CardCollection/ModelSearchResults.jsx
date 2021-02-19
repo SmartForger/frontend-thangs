@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { ModelSearchResult, Pill, Spacer } from '@components'
+import { Divider, ModelSearchResult, Pill, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { track } from '@utilities/analytics'
 import { ReactComponent as FromThangsLogo } from '@svg/fromThangs.svg'
@@ -7,13 +7,21 @@ import { ReactComponent as FromThangsLogo } from '@svg/fromThangs.svg'
 const useStyles = createUseStyles(_theme => {
   return {
     ModelSearchResult_LoadMore: {
+      backdropFilter: 'blur(7px)',
       display: 'flex',
+      flexDirection: 'column',
       justifyContent: 'center',
+      marginTop: '-15rem',
+      zIndex: 1,
+    },
+    ModelSearchResult_LoadMoreBtn: {
+      margin: '0 auto !important',
+      width: '50%',
     },
     ModelSearchResult_LoadMoreLogo: {
       height: '1rem',
-      width: 'auto',
       marginLeft: '0.5rem',
+      width: 'auto',
 
       '& path:last-child': {
         transform: 'translate(0, -12%)',
@@ -49,14 +57,21 @@ const ModelSearchResults = ({ items = [], showLoadMore, ...props }) => {
       ))}
       {showLoadMore && loadedCount < items.length && (
         <div className={c.ModelSearchResult_LoadMore}>
-          <Pill secondary onClick={handleMoreThangs}>
+          <Spacer size='8rem' />
+          <Pill
+            className={c.ModelSearchResult_LoadMoreBtn}
+            secondary
+            onClick={handleMoreThangs}
+          >
             <Spacer size='1rem' />
             <div>More Results</div>
             <FromThangsLogo className={c.ModelSearchResult_LoadMoreLogo} />
             <Spacer size='1rem' />
           </Pill>
+          <Spacer size='10rem' />
         </div>
       )}
+      <Divider />
     </>
   )
 }

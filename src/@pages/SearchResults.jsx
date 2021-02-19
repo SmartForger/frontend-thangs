@@ -15,6 +15,7 @@ import { useLocalStorage, useQuery } from '@hooks'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import { ReactComponent as FromThangsLogo } from '@svg/fromThangs.svg'
+import { ReactComponent as GlobeIcon } from '@svg/icon-globe.svg'
 import ModelSearchResults from '@components/CardCollection/ModelSearchResults'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
@@ -140,6 +141,7 @@ const SearchResult = ({
   return (
     <div className={c.SearchResults_Results}>
       <div className={c.SearchResults_ResultsHeader}>
+        <GlobeIcon />
         <span className={c.SearchResults_ResultsHeaderText}>
           {modelId ? 'Similar geometry found elsewhere' : 'Models found elsewhere'}
         </span>
@@ -203,7 +205,7 @@ const ThangsSearchResult = ({
         </span>
       </div>
       {isLoading ? (
-        <>{modelId && <NoResults>{searchingText}</NoResults>}</>
+        <NoResults>{searchingText}</NoResults>
       ) : isError ? (
         <>
           {modelId && (
