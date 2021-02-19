@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { Divider, ModelSearchResult, Pill, Spacer } from '@components'
+import { ModelSearchResult, Pill, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { track } from '@utilities/analytics'
 import { ReactComponent as FromThangsLogo } from '@svg/fromThangs.svg'
