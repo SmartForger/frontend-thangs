@@ -2,12 +2,16 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { ModelSearchResult, Pill } from '@components'
 import { createUseStyles } from '@style'
 import { track } from '@utilities/analytics'
+import { ReactComponent as FromThangsLogo } from '@svg/fromThangs.svg'
 
 const useStyles = createUseStyles(_theme => {
   return {
     ModelSearchResult_LoadMore: {
       display: 'flex',
       justifyContent: 'center',
+    },
+    ModelSearchResult_LoadMoreLogo: {
+      transform: 'scale(.75)',
     },
   }
 })
@@ -39,7 +43,10 @@ const ModelSearchResults = ({ items = [], showLoadMore, ...props }) => {
       ))}
       {showLoadMore && loadedCount < items.length && (
         <div className={c.ModelSearchResult_LoadMore}>
-          <Pill onClick={handleMoreThangs}>More Thangs</Pill>
+          <Pill secondary onClick={handleMoreThangs}>
+            <div>More Results</div>
+            <FromThangsLogo className={c.ModelSearchResult_LoadMoreLogo} />
+          </Pill>
         </div>
       )}
     </>
