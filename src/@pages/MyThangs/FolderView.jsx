@@ -5,6 +5,7 @@ import * as R from 'ramda'
 import {
   Button,
   Contributors,
+  FileTable,
   FolderCard,
   LikeFolderButton,
   MetadataPrimary,
@@ -12,7 +13,6 @@ import {
   Spinner,
   TitleTertiary,
 } from '@components'
-import FileTable from '@components/Workspace/FileTableNew'
 import { useQuery } from '@hooks'
 import { authenticationService } from '@services'
 import { createUseStyles } from '@style'

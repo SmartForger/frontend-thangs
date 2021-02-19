@@ -7,7 +7,6 @@ import {
   FileContextMenu,
   FolderContextMenu,
   FolderInviteContextMenu,
-  SubpartContextMenu,
   Spacer,
   Spinner,
   WorkspaceHeader,
@@ -237,7 +236,13 @@ const MyThangs = () => {
           {!isLoaded || isLoading ? (
             <Spinner className={c.Spinner} />
           ) : (
-            <ContextMenuTrigger id='Add_Menu' holdToDisplay={-1}>
+            <ContextMenuTrigger
+              id='Add_Menu'
+              attributes={{
+                style: { height: '100%' },
+              }}
+              holdToDisplay={-1}
+            >
               <Switch>
                 <Route
                   exact
@@ -286,7 +291,6 @@ const MyThangs = () => {
       <AddContextMenu />
       <FileContextMenu />
       <FolderContextMenu />
-      <SubpartContextMenu />
       <FolderInviteContextMenu />
     </>
   )

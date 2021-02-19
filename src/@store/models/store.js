@@ -55,7 +55,7 @@ export default store => {
       store.dispatch(types.CHANGE_MODEL_STATUS, {
         status: STATUSES.SAVING,
         atom: 'model',
-        data: oldModel,
+        data: state.model.data,
       })
       const { error } = await api({
         method: 'PUT',
@@ -74,7 +74,7 @@ export default store => {
         store.dispatch(types.CHANGE_MODEL_STATUS, {
           status: STATUSES.SAVED,
           atom: 'model',
-          data: { ...oldModel, ...updatedModel },
+          data: { ...state.model.data, ...updatedModel },
         })
         store.dispatch(types.FETCH_THANGS, {})
         onFinish()
@@ -219,7 +219,10 @@ export default store => {
       _state,
       { modelId, isLiked, onFinish = noop, onError = noop, cancelToken }
     ) => {
-      const endpoint = isLiked ? `models/${modelId}/like` : `models/${modelId}/unlike`
+      
+      const endpoint = isLiked 
+        ? `models/${modelId}/like` 
+        : `models/${modelId}/unlike`
 
       const { error } = await api({
         method: 'POST',
@@ -234,8 +237,10 @@ export default store => {
           modelId,
           isLiked,
         })
-
-        const trackText = isLiked ? 'Model Liked' : 'Model Unliked'
+        
+        const trackText = isLiked 
+          ? 'Model Liked' 
+          : 'Model Unliked'
         track(trackText, { modelId })
 
         const { data } = await api({
