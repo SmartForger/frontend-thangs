@@ -7,16 +7,13 @@ import { ReactComponent as FromThangsLogo } from '@svg/fromThangs.svg'
 const useStyles = createUseStyles(_theme => {
   return {
     ModelSearchResult_LoadMore: {
-      backdropFilter: 'blur(7px)',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
-      marginTop: '-15rem',
       zIndex: 1,
     },
     ModelSearchResult_LoadMoreBtn: {
       margin: '0 auto !important',
-      width: '50%',
     },
     ModelSearchResult_LoadMoreLogo: {
       height: '1rem',
@@ -57,7 +54,7 @@ const ModelSearchResults = ({ items = [], showLoadMore, ...props }) => {
       ))}
       {showLoadMore && loadedCount < items.length && (
         <div className={c.ModelSearchResult_LoadMore}>
-          <Spacer size='8rem' />
+          <Spacer size='1rem' />
           <Pill
             className={c.ModelSearchResult_LoadMoreBtn}
             secondary
@@ -68,10 +65,9 @@ const ModelSearchResults = ({ items = [], showLoadMore, ...props }) => {
             <FromThangsLogo className={c.ModelSearchResult_LoadMoreLogo} />
             <Spacer size='1rem' />
           </Pill>
-          <Spacer size='10rem' />
+          <Spacer size='2rem' />
         </div>
       )}
-      <Divider />
     </>
   )
 }
