@@ -14,6 +14,7 @@ import {
 import { useLocalStorage, useQuery } from '@hooks'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
+import { ReactComponent as FromThangsLogo } from '@svg/fromThangs.svg'
 import ModelSearchResults from '@components/CardCollection/ModelSearchResults'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
@@ -61,6 +62,16 @@ const useStyles = createUseStyles(theme => {
       fontSize: '1rem',
       lineHeight: '1.5rem',
       color: theme.colors.purple[900],
+    },
+    SearchResults_FromThangsLogo: {
+      height: '1rem',
+      width: 'auto',
+      marginLeft: '0.5rem',
+      transform: 'translateY(3px)',
+
+      '& path:last-child': {
+        transform: 'translate(0, -12%)',
+      },
     },
     SearchResult_ResultCountText: {
       ...theme.text.searchResultsHeader,
@@ -187,7 +198,8 @@ const ThangsSearchResult = ({
       <div className={c.SearchResults_ResultsHeader}>
         <UploadIcon className={classnames({ [c.Spinner]: isLoading })} />
         <span className={c.SearchResults_ResultsHeaderText}>
-          {modelId ? 'Similar geometry on Thangs' : 'Models on Thangs'}
+          {modelId ? 'Similar geometry' : 'Models'}
+          <FromThangsLogo className={c.SearchResults_FromThangsLogo} />
         </span>
       </div>
       {isLoading ? (

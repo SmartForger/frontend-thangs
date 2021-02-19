@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { ModelSearchResult, Pill } from '@components'
+import { ModelSearchResult, Pill, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { track } from '@utilities/analytics'
 import { ReactComponent as FromThangsLogo } from '@svg/fromThangs.svg'
@@ -11,7 +11,13 @@ const useStyles = createUseStyles(_theme => {
       justifyContent: 'center',
     },
     ModelSearchResult_LoadMoreLogo: {
-      transform: 'scale(.75)',
+      height: '1rem',
+      width: 'auto',
+      marginLeft: '0.5rem',
+
+      '& path:last-child': {
+        transform: 'translate(0, -12%)',
+      },
     },
   }
 })
@@ -44,8 +50,10 @@ const ModelSearchResults = ({ items = [], showLoadMore, ...props }) => {
       {showLoadMore && loadedCount < items.length && (
         <div className={c.ModelSearchResult_LoadMore}>
           <Pill secondary onClick={handleMoreThangs}>
+            <Spacer size='1rem' />
             <div>More Results</div>
             <FromThangsLogo className={c.ModelSearchResult_LoadMoreLogo} />
+            <Spacer size='1rem' />
           </Pill>
         </div>
       )}
