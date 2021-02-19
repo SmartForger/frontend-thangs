@@ -138,12 +138,11 @@ const BackToTop = () => {
 
   const scrollTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.addEventListener('scroll', checkScrollTop)
   }
 
   useEffect(() => {
     window.addEventListener('scroll', checkScrollTop)
-
-    return window.removeEventListener('scroll', checkScrollTop)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
