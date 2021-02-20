@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
+import { useHistory } from 'react-router-dom'
 import { Divider, SingleLineBodyText, Spacer } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { MenuItem } from 'react-contextmenu'
@@ -7,6 +8,7 @@ import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
 import { ReactComponent as DownloadIcon } from '@svg/icon-download.svg'
 import { ReactComponent as DeleteIcon } from '@svg/icon-delete.svg'
 import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
+import { ReactComponent as OpenIcon } from '@svg/external-link.svg'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import { track } from '@utilities/analytics'
@@ -37,6 +39,14 @@ const useStyles = createUseStyles(theme => {
         backgroundColor: 'rgba(0, 0, 0, 0.05)',
       },
     },
+    FileMenu_OpenIcon: {
+      marginLeft: '-4px',
+      transform: 'translateX(2px)',
+
+      '& path': {
+        fill: '#000',
+      },
+    },
   }
 })
 
@@ -45,6 +55,7 @@ const FileMenu = ({ model }) => {
   const { dispatch } = useStoreon()
   const { setOverlay } = useOverlay()
   const currentUserId = authenticationService.getCurrentUserId()
+  const history = useHistory()
   const hasDeletePermission = useMemo(() => {
     return (
       model &&
@@ -119,9 +130,29 @@ const FileMenu = ({ model }) => {
     [model, setOverlay]
   )
 
+  const handleOpenNewTab = useCallback(
+    e => {
+      e.preventDefault()
+
+      const modelPath = model.identifier ? `/${model.identifier}` : `/model/${model.id}`
+      window.open(modelPath, '_blank')
+    },
+    [model]
+  )
+
   return (
     <div className={c.FileMenu}>
       <Spacer size={'1rem'} />
+      <MenuItem className={c.FileMenu_Item} onClick={handleOpenNewTab}>
+        <div>
+          <Spacer size={'1.5rem'} />
+          <OpenIcon className={c.FileMenu_OpenIcon} />
+          <Spacer size={'.5rem'} />
+          <SingleLineBodyText>Open in New Tab</SingleLineBodyText>
+          <Spacer size={'1.5rem'} />
+        </div>
+      </MenuItem>
+      <Spacer size={'.5rem'} />
       <MenuItem className={c.FileMenu_Item} onClick={handleEdit}>
         <div>
           <Spacer size={'1.5rem'} />
@@ -132,18 +163,16 @@ const FileMenu = ({ model }) => {
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      <>
-        <MenuItem className={c.FileMenu_Item} onClick={handleDownloadModel}>
-          <div>
-            <Spacer size={'1.5rem'} />
-            <DownloadIcon />
-            <Spacer size={'.5rem'} />
-            <SingleLineBodyText>Download</SingleLineBodyText>
-            <Spacer size={'1.5rem'} />
-          </div>
-        </MenuItem>
-        <Spacer size={'.5rem'} />
-      </>
+      <MenuItem className={c.FileMenu_Item} onClick={handleDownloadModel}>
+        <div>
+          <Spacer size={'1.5rem'} />
+          <DownloadIcon />
+          <Spacer size={'.5rem'} />
+          <SingleLineBodyText>Download</SingleLineBodyText>
+          <Spacer size={'1.5rem'} />
+        </div>
+      </MenuItem>
+      <Spacer size={'.5rem'} />
       <MenuItem className={c.FileMenu_Item} onClick={handleStar}>
         <div>
           <Spacer size={'1.5rem'} />
