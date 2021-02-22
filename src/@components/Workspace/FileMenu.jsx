@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
-import { useHistory } from 'react-router-dom'
 import { Divider, SingleLineBodyText, Spacer } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { MenuItem } from 'react-contextmenu'
@@ -55,7 +54,6 @@ const FileMenu = ({ model }) => {
   const { dispatch } = useStoreon()
   const { setOverlay } = useOverlay()
   const currentUserId = authenticationService.getCurrentUserId()
-  const history = useHistory()
   const hasDeletePermission = useMemo(() => {
     return (
       model &&
