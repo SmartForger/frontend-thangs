@@ -451,7 +451,10 @@ const FileTable = ({
                 className={cn(c.FileTable_ExpandIcon, {
                   [c.FileTable_ExpandIcon__expanded]: !node.isLeaf && !node.closed,
                 })}
-                onClick={() => toggleNode(node)}
+                onClick={ev => {
+                  ev.stopPropagation()
+                  toggleNode(node)
+                }}
               >
                 {node.isLeaf ? (
                   node.isFolder ? (
