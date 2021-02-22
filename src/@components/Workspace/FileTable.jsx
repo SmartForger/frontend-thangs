@@ -4,6 +4,7 @@ import * as R from 'ramda'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import { format } from 'date-fns'
 import classnames from 'classnames'
+import { useStoreon } from 'storeon/react'
 import { Contributors, Pill, SingleLineBodyText, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { MetadataSecondary } from '@components/Text/Metadata'
@@ -17,6 +18,7 @@ import { ReactComponent as DropzoneMobileIcon } from '@svg/dropzone-mobile.svg'
 import { formatBytes } from '@utilities'
 import Dropzone from 'react-dropzone'
 import { MODEL_FILE_EXTS } from '@constants/fileUpload'
+import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -487,6 +489,7 @@ const FileTable = ({
 }) => {
   const c = useStyles({})
   const history = useHistory()
+  const { dispatch } = useStoreon()
 
   const [{ sortedBy, order }, setSort] = useState({
     sortedBy: initialSortedBy || COLUMNS.FILENAME,
@@ -526,7 +529,13 @@ const FileTable = ({
                             holdToDisplay={-1}
                             renderTag={'tr'}
                             attributes={{
-                              onClick: () => history.push(modelPath),
+                              onClick: () => {
+                                dispatch(types.CHANGE_MODEL_STATUS, {
+                                  atom: 'model',
+                                  data: null,
+                                })
+                                history.push(modelPath)
+                              },
                             }}
                             collect={() => ({ model: file })}
                           >
