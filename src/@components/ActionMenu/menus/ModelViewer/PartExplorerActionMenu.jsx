@@ -123,6 +123,7 @@ const useStyles = createUseStyles(theme => {
     },
     PartSelectorRow__hover: {
       borderRadius: '.25rem',
+      height: '58px !important',
 
       '&:hover': {
         backgroundColor: theme.colors.white[900],
@@ -306,7 +307,7 @@ const AssemblyExplorer = ({
       classes={classes}
       width={280}
       maxHeight={300}
-      itemHeight={58}
+      itemHeight={62}
       levelPadding={20}
       nodes={parts}
       isSelected={node => selectedParts.includes(node.id)}
