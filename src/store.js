@@ -21,6 +21,8 @@ import userLikedModelsStore from '@store/userLikedModels/store'
 import userOwnModelsStore from '@store/userOwnModels/store'
 import usersIdsStore from '@store/usersIds/store'
 import usersStore from '@store/users/store'
+import licenseStore from '@store/license/store'
+import licenseDownloadUrl from '@store/licenseDownloadUrl/store'
 
 const storeParts = [
   commentsStore,
@@ -44,6 +46,8 @@ const storeParts = [
   userOwnModelsStore,
   usersIdsStore,
   usersStore,
+  licenseStore,
+  licenseDownloadUrl,
 ]
 
 const store = createStoreon([

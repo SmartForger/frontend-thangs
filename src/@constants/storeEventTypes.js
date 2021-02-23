@@ -36,6 +36,11 @@ export const FETCH_MODEL_DOWNLOAD_URL = 'fetch-model-download-url'
 export const LOADING_MODEL_DOWNLOAD_URL = 'loading-model-download-url'
 export const LOADED_MODEL_DOWNLOAD_URL = 'loaded-model-download-url'
 export const FAILED_MODEL_DOWNLOAD_URL = 'failed-model-download-url'
+/* License Download URL Store Events */
+export const FETCH_LICENSE_DOWNLOAD_URL = 'fetch-license-download-url'
+export const LOADING_LICENSE_DOWNLOAD_URL = 'loading-license-download-url'
+export const LOADED_LICENSE_DOWNLOAD_URL = 'loaded-license-download-url'
+export const FAILED_LICENSE_DOWNLOAD_URL = 'failed-license-download-url'
 /* Folder Store Events */
 export const UPDATE_FOLDERS = 'update-folders'
 export const UPDATE_FOLDER = 'update-folder'
@@ -149,6 +154,11 @@ export const FETCH_MODELS_STATS = 'fetch-models-stats'
 export const LOADING_MODELS_STATS = 'loading-models-stats'
 export const LOADED_MODELS_STATS = 'loaded-models-stats'
 export const FAILED_MODELS_STATS = 'failed-models-stats'
+/* Model License Store Events */
+export const FETCH_MODEL_LICENSE = 'fetch-model-license'
+export const LOADING_MODEL_LICENSE = 'loading-model-license'
+export const LOADED_MODEL_LICENSE = 'loaded-model-license'
+export const FAILED_MODEL_LICENSE = 'failed-model-license'
 /* My Thangs Store Events */
 export const FETCH_THANGS = 'fetch-thangs'
 export const UPDATE_THANGS = 'update-thangs'

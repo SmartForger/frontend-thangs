@@ -24,6 +24,7 @@ import {
   ToggleFollowButton,
 } from '@components'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
+import { ReactComponent as LicenseIcon } from '@svg/license.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
@@ -178,10 +179,37 @@ const useStyles = createUseStyles(theme => {
       '& svg': {
         marginRight: '.5rem',
       },
+    },
+    Model_LicenseLink: {
+      textDecoration: 'underline',
+      display: 'inline',
+      cursor: 'pointer',
+    },
+    Model_LicenseText: {
+      fontSize: '.75rem',
+      fontStyle: 'normal',
+      fontWeight: 500,
+      lineHeight: '1rem',
+      letterSpacing: '-0.02em',
+    },
+    Model_License: {
+      display: 'flex',
+      flexDirection: 'row',
+      marginBottom: '2rem',
+      justifyContent: 'center',
 
-      '& svg, & path': {
-        fill: theme.colors.gold[500],
-        stroke: theme.colors.gold[500],
+      '& > span': {
+        display: 'flex',
+        alignItems: 'center',
+        fontWeight: '500',
+        marginBottom: '.5rem',
+        '&:last-of-type': {
+          marginBottom: 0,
+        },
+      },
+
+      '& svg': {
+        marginRight: '.5rem',
       },
     },
     Model_VersionHeader: {
@@ -319,6 +347,43 @@ const VersionLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
   )
 }
 
+const LicenseText = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
+  const c = useStyles()
+  const { setOverlay } = useOverlay()
+
+  const handleClick = useCallback(() => {
+    if (isAuthedUser) {
+      setOverlay({
+        isOpen: true,
+        template: 'license',
+        data: {
+          animateIn: true,
+          smallWidth: true,
+          windowed: true,
+          model: model,
+        },
+      })
+    } else {
+      openSignupOverlay('Join to Like, Follow, Share.', 'CC License')
+      track('SignUp Prompt Overlay', { source: 'CC License' })
+    }
+  }, [isAuthedUser, model, openSignupOverlay, setOverlay])
+
+  return (
+    <div className={c.Model_License}>
+      <span>
+        <LicenseIcon />
+        <div className={c.Model_LicenseText}>
+          This model is restricted by copyright license.&nbsp;
+          <div className={c.Model_LicenseLink} onClick={handleClick}>
+            View License
+          </div>
+        </div>
+      </span>
+    </div>
+  )
+}
+
 const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
   const c = useStyles()
   const { dispatch } = useStoreon()
@@ -396,6 +461,16 @@ const StatsAndActions = ({
           isAuthedUser={isAuthedUser}
           openSignupOverlay={openSignupOverlay}
         />
+        {modelData.license ? (
+          <>
+            <Spacer size='1rem' />
+            <LicenseText
+              model={modelData}
+              isAuthedUser={isAuthedUser}
+              openSignupOverlay={openSignupOverlay}
+            />
+          </>
+        ) : null}
         <Divider />
         <ModelStats model={modelData} />
       </div>

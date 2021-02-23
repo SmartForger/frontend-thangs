@@ -15,6 +15,7 @@ import {
   Signup,
   EditComment,
   MoreInfo,
+  License,
 } from '@overlays'
 import { OverlayContext } from '@components'
 
@@ -26,6 +27,7 @@ const overlayTemplates = {
   editModel: EditModel,
   inviteUsers: InviteUsers,
   multiUpload: MultiUpload,
+  license: License,
   passwordReset: PasswordReset,
   reportModel: ReportModel,
   searchByUpload: SearchByUpload,

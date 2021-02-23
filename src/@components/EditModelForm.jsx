@@ -71,6 +71,43 @@ const useStyles = createUseStyles(theme => {
     EditModel_ModelName: {
       wordBreak: 'break-all',
     },
+    EditForm_FieldRow: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    EditForm_Field: {
+      marginBottom: '1rem',
+      flexGrow: 1,
+    },
+    EditForm_LicenseButton: {
+      ...theme.variables.button,
+      padding: '0.5rem 0.75rem',
+      width: '100%',
+      alignItems: 'center',
+      backgroundColor: theme.colors.gold[500],
+      border: 'none',
+      borderRadius: '.5rem',
+      color: theme.colors.black[500],
+      cursor: 'pointer',
+      display: 'flex',
+      justifyContent: 'center',
+      outline: 'none',
+      textAlign: 'center',
+      userSelect: 'none',
+      whiteSpace: 'nowrap',
+      fontSize: '1rem',
+      lineHeight: '1rem',
+      fontWeight: '500',
+
+      '&:hover': {
+        backgroundColor: theme.colors.gold[700],
+      },
+    },
+    EditForm_LicenseClearButton: {
+      cursor: 'pointer',
+      marginBottom: '1rem',
+    },
     EditModelForm_ModelTitle: {
       display: 'flex',
       flexDirection: 'row',
@@ -113,6 +150,7 @@ const EditModelForm = ({
 }) => {
   const c = useStyles({ showViewer })
   const firstInputRef = useRef(null)
+  const hiddenFileInput = React.useRef(null)
 
   const initialState = {
     id: model.id,
@@ -128,6 +166,8 @@ const EditModelForm = ({
     initialState,
   })
 
+  const licenseName = inputState && inputState.license && inputState.license.name
+
   const handleOnInputChange = useCallback(
     (key, value) => {
       onInputChange(key, value)
@@ -142,6 +182,21 @@ const EditModelForm = ({
   useEffect(() => {
     firstInputRef.current.focus()
   }, [])
+
+  const handleUploadLicenseClick = event => {
+    event.preventDefault()
+    hiddenFileInput.current.click()
+  }
+
+  const handleClearLicense = () => {
+    onInputChange('license', null)
+    inputState.license = null
+  }
+
+  const handleUploadLicenseChange = event => {
+    onInputChange('license', event.target.files[0])
+    //TODO: add upload logic and license value
+  }
 
   return (
     <div className={c.EditModelForm_Wrapper}>
@@ -179,6 +234,36 @@ const EditModelForm = ({
             required
           />
           <Spacer size='1rem' />
+          <div className={c.EditForm_FieldRow}>
+            <div className={c.EditForm_Field}>
+              <Input
+                disabled={true}
+                name='license'
+                label={licenseName ? inputState.license.name : 'Attach license'}
+              />
+            </div>
+            <Spacer size={'.5rem'} />
+            {inputState.license ? (
+              <div onClick={handleClearLicense} className={c.EditForm_LicenseClearButton}>
+                X
+              </div>
+            ) : null}
+            <Spacer size={'1rem'} />
+            <div className={c.EditForm_Field}>
+              <button
+                className={c.EditForm_LicenseButton}
+                onClick={handleUploadLicenseClick}
+              >
+                Browse
+              </button>
+              <input
+                type='file'
+                onChange={handleUploadLicenseChange}
+                ref={hiddenFileInput}
+                style={{ display: 'none' }}
+              />
+            </div>
+          </div>
           <Textarea
             id='description-input'
             name='description'

@@ -18,6 +18,8 @@ import { useForm } from '@hooks'
 import { createUseStyles } from '@style'
 import { formatBytes } from '@utilities'
 import { CATEGORIES } from '@constants/fileUpload'
+// import * as types from '../../@constants/storeEventTypes'
+// import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -138,6 +140,34 @@ const useStyles = createUseStyles(theme => {
         width: '100%',
       },
     },
+    PartInfo_LicenseButton: {
+      ...theme.variables.button,
+      padding: '0.5rem 0.75rem',
+      width: '100%',
+      alignItems: 'center',
+      backgroundColor: theme.colors.gold[500],
+      border: 'none',
+      borderRadius: '.5rem',
+      color: theme.colors.black[500],
+      cursor: 'pointer',
+      display: 'flex',
+      justifyContent: 'center',
+      outline: 'none',
+      textAlign: 'center',
+      userSelect: 'none',
+      whiteSpace: 'nowrap',
+      fontSize: '1rem',
+      lineHeight: '1rem',
+      fontWeight: '500',
+
+      '&:hover': {
+        backgroundColor: theme.colors.gold[700],
+      },
+    },
+    PartInfo_LicenseClearButton: {
+      cursor: 'pointer',
+      marginBottom: '1rem',
+    },
     PartInfo_ErrorText: {
       ...theme.text.formErrorText,
       backgroundColor: theme.variables.colors.errorTextBackground,
@@ -182,7 +212,7 @@ const PartInfoSchema = ({ isRootPart }) =>
     weight: Joi.string().allow(''),
     category: Joi.string().allow(''),
     folderId: Joi.string().allow(''),
-  })
+  }).unknown(true)
 
 const initialState = {
   name: '',
@@ -192,6 +222,7 @@ const initialState = {
   height: '',
   weight: '',
   category: '',
+  license: '',
 }
 
 const PartInfo = props => {
@@ -208,7 +239,9 @@ const PartInfo = props => {
     onContinue,
   } = props
   const c = useStyles({})
+  // const { dispatch } = useStoreon()
   const firstInputRef = useRef(null)
+  const hiddenFileInput = React.useRef(null)
   const file = filesData[activeNode.fileId]
   const [applyRemaining, setApplyRemaining] = useState(false)
 
@@ -224,6 +257,20 @@ const PartInfo = props => {
     initialValidationSchema: PartInfoSchema({ isRootPart }),
     initialState,
   })
+
+  const handleUploadLicenseClick = event => {
+    event.preventDefault()
+    hiddenFileInput.current.click()
+  }
+
+  const handleClearLicense = () => {
+    onInputChange('license', null)
+  }
+
+  const handleUploadLicenseChange = event => {
+    onInputChange('license', event.target.files[0])
+    //TODO: add upload logic and license value
+  }
 
   const handleOnInputChange = (key, value) => {
     onInputChange(key, value)
@@ -258,6 +305,7 @@ const PartInfo = props => {
     return path.map(node => node.name).join(' / ')
   }, [activeNode, treeData, multipartName])
 
+  const licenseName = inputState && inputState.license && inputState.license.name
   useEffect(() => {
     setInputState(formData)
     // eslint-disable-next-line
@@ -323,6 +371,36 @@ const PartInfo = props => {
             error={checkError('name').message}
             errorMessage={checkError('name').message}
           />
+        </div>
+        <div className={c.PartInfo_FieldRow}>
+          <div className={c.PartInfo_Field}>
+            <Input
+              disabled={true}
+              name='license'
+              label={licenseName ? inputState.license.name : 'Attach license'}
+            />
+          </div>
+          <Spacer size={'.5rem'} />
+          {inputState.license ? (
+            <div onClick={handleClearLicense} className={c.PartInfo_LicenseClearButton}>
+              X
+            </div>
+          ) : null}
+          <Spacer size={'1rem'} />
+          <div className={c.PartInfo_Field}>
+            <button
+              className={c.PartInfo_LicenseButton}
+              onClick={handleUploadLicenseClick}
+            >
+              Browse
+            </button>
+            <input
+              type='file'
+              onChange={handleUploadLicenseChange}
+              ref={hiddenFileInput}
+              style={{ display: 'none' }}
+            />
+          </div>
         </div>
         <div className={c.PartInfo_Field}>
           <Textarea
