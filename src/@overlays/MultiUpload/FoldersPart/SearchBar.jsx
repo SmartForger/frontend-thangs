@@ -1,11 +1,10 @@
-import React, { useState, useRef } from 'react'
+import React from 'react'
 import classnames from 'classnames'
 
 import { TextInput } from '@components'
 import { createUseStyles } from '@style'
 
 import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
-import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -97,40 +96,23 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const SearchBar = ({ setCurrentView, placeholder = 'Search to find your models' }) => {
+const SearchBar = ({ onChange = () => {}, value = '' }) => {
   const c = useStyles({})
-  const [searchTerm, setSearchTerm] = useState(undefined)
-  const inputRef = useRef(null)
-
-  const handleSearchSubmit = e => {
-    e.preventDefault()
-    track('Search My Thangs', { searchTerm })
-    if (searchTerm) {
-      setCurrentView(`searchFiles/${searchTerm}`)
-      setSearchTerm(undefined)
-      inputRef.current.blur()
-    }
-  }
 
   return (
     <div className={c.SearchBar}>
-      <form className={c.SearchBar_Form} onSubmit={handleSearchSubmit}>
+      <form className={c.SearchBar_Form}>
         <div className={classnames(c.SearchBar_Wrapper)}>
           <SearchIcon
             className={classnames(c.SearchBar_SearchIcon, c.SearchBar_FormIcon)}
-            onClick={handleSearchSubmit}
           />
           <TextInput
-            name='search'
-            inputRef={inputRef}
-            placeholder={placeholder}
+            placeholder={'Search'}
             className={classnames(c.SearchBar_FormInput, {
-              [c.SearchBar_FormInput_active]: searchTerm,
+              [c.SearchBar_FormInput_active]: true,
             })}
-            onChange={e => {
-              setSearchTerm(e.target.value)
-            }}
-            value={searchTerm || ''}
+            onChange={onChange}
+            value={value}
           />
         </div>
       </form>

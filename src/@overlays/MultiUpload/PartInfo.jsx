@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react'
 import * as R from 'ramda'
+import classnames from 'classnames'
 import Joi from '@hapi/joi'
 import {
   Button,
@@ -101,6 +102,14 @@ const useStyles = createUseStyles(theme => {
       marginBottom: '1rem',
       position: 'relative',
     },
+    PartInfo_Field__FolderMenu: {
+      '& > div': {
+        width: '100%',
+      },
+    },
+    PartInfo_FolderMenu: {
+      width: '100%',
+    },
     PartInfo_FileName: {
       lineHeight: '1rem !important',
       overflow: 'hidden',
@@ -176,6 +185,8 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
+
+const noop = () => null
 
 const PartInfoSchema = ({ isRootPart }) =>
   Joi.object({
@@ -318,6 +329,23 @@ const PartInfo = props => {
         </>
       )}
       <form onSubmit={onFormSubmit(handleSubmit)}>
+        <div className={classnames(c.PartInfo_Field, c.PartInfo_Field__FolderMenu)}>
+          <FoldersDropdownMenu
+            myThangsMenu={false}
+            className={c.PartInfo_FolderMenu}
+            folders={folders}
+            onChange={value => {
+              handleOnInputChange('folderId', value)
+            }}
+            TargetComponent={({ onClick = noop }) => (
+              <Input
+                label={'Folder'}
+                onClick={onClick}
+                value={(selectedFolder || {}).label}
+              />
+            )}
+          />
+        </div>
         <div className={c.PartInfo_Field}>
           <Input
             autoComplete='off'

@@ -1,19 +1,26 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
+import { useForm } from '@hooks'
 import classnames from 'classnames'
+import * as types from '@constants/storeEventTypes'
+import { track } from '@utilities/analytics'
 import {
   Divider,
   DropdownMenu,
   DropdownItem,
   SingleLineBodyText,
   Spacer,
+  Input,
+  Toggle,
+  Button,
 } from '@components'
 import { createUseStyles } from '@style'
-
+import { ReactComponent as ArrowLeftIcon } from '@svg/icon-arrow-left.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
 import SearchBar from './SearchBar'
+import { useStoreon } from 'storeon/react'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     FoldersDropdown: {
       width: '16.25rem',
@@ -23,27 +30,54 @@ const useStyles = createUseStyles(_theme => {
       width: '100%',
     },
     FoldersDropdown_ItemsContainer: {
-      maxHeight: '22rem',
+      maxHeight: '10rem',
       overflowY: 'auto',
-      whiteSpace: 'nowrap',
+      /*
+      overflowY: 'auto',
+      scrollbarWidth: 'none',
+      ['-ms-overflow-style']: 'none',
+      */
+    },
+
+    MultiUpload_Column: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+
+    FolderForm_Button: {
+      width: '100%',
+    },
+    FolderForm_ErrorText: {
+      ...theme.text.formErrorText,
+      marginTop: '1.5rem',
+      backgroundColor: theme.variables.colors.errorTextBackground,
+      fontWeight: '500',
+      padding: '.625rem 1rem',
+      borderRadius: '.5rem',
     },
 
     Zz: {
-      display: 'flex',
-      alignItems: 'center',
+      display: 'flex !important',
+      alignItems: 'center !important',
     },
   }
 })
 
-const noop = () => null
 export const FoldersDropdownMenu = ({
   className,
   myThangsMenu,
   user = {},
   TargetComponent,
+  folders,
+
+  onChange,
   ...props
 }) => {
   const c = useStyles({})
+  const [isOpen, setIsOpen] = useState(undefined)
+  const hanldeClose = () => {
+    setIsOpen(false)
+  }
 
   return (
     <DropdownMenu
@@ -51,44 +85,158 @@ export const FoldersDropdownMenu = ({
       TargetComponent={TargetComponent}
       user={user}
       myThangsMenu={myThangsMenu}
+      isAutoClosed={false}
       {...props}
     >
-      <FoldersDropdownMenuContainer user={user} />
+      <FoldersDropdownMenuContainer
+        folders={folders}
+        onChange={value => {
+          hanldeClose()
+          onChange(value)
+        }}
+      />
     </DropdownMenu>
   )
 }
 
-export const FoldersDropdownMenuContainer = ({ folders = [] }) => {
+const NewFolderScreen = ({ onChange = () => {} }) => {
   const c = useStyles({})
+  const { dispatch } = useStoreon()
+  const [errorMessage, setErrorMessage] = useState(null)
+  const { onFormSubmit, onInputChange, inputState } = useForm({
+    initialState: { name: '', isPublic: false },
+  })
+
+  const handleSubmit = useCallback(
+    data => {
+      track('Create Folder', { isPrivate: !data.isPublic })
+      dispatch(types.CREATE_FOLDER, {
+        data,
+        onError: error => {
+          setErrorMessage((error || {}).message)
+        },
+        onFinish: id => {
+          if (id) onChange(id)
+        },
+      })
+    },
+    [dispatch, onChange]
+  )
 
   return (
-    <div className={c.FoldersDropdown_Container}>
-      <SearchBar placeholder={'Search'} setCurrentView={() => {}} />
-      <div className={c.FoldersDropdown_ItemsContainer}>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(value => {
-          return (
-            <React.Fragment key={value}>
-              <Spacer size={'1rem'} />
+    <form onSubmit={onFormSubmit(handleSubmit)}>
+      {errorMessage && (
+        <>
+          <h4 className={c.FolderForm_ErrorText}>{errorMessage}</h4>
+          <Spacer size='1rem' />
+        </>
+      )}
+      <Spacer size='1rem' />
+      <Input
+        onChange={(_key, value) => {
+          onInputChange('name', value)
+        }}
+        label='Folder Name'
+        maxLength='150'
+        value={inputState.name}
+      />
+      <Toggle
+        onChange={e => {
+          onInputChange('isPublic', !e.target.checked)
+        }}
+        label={'Private Folder'}
+        checked={!inputState.isPublic}
+      />
+      <Spacer size='1rem' />
+      <Button className={c.FolderForm_Button} type='submit'>
+        Create
+      </Button>
+    </form>
+  )
+}
 
-              <DropdownItem className={c.Zz} onClick={() => {}}>
+const FoldersScreen = ({
+  onChange,
+  folders = [
+    { isPublic: true, label: 'My Public Files', value: '9755' },
+    {
+      isPublic: true,
+      label: 'Folder1',
+      value: '1308',
+    },
+  ],
+}) => {
+  const c = useStyles({})
+  const [searchTerm, setSearchTerm] = useState(null)
+  const filteredFolders =
+    searchTerm === null
+      ? [...folders]
+      : folders.filter(folder => folder.label.includes(searchTerm))
+
+  return (
+    <>
+      <SearchBar onChange={e => setSearchTerm(e.target.value)} value={searchTerm || ''} />
+      <Spacer size={'1.5rem'} />
+      <div className={c.FoldersDropdown_ItemsContainer}>
+        {filteredFolders.map(folder => {
+          return (
+            <React.Fragment key={folder.value}>
+              <div
+                className={c.Zz}
+                onClick={() => {
+                  onChange(folder.value)
+                }}
+              >
                 <FolderIcon />
                 <Spacer size={'.5rem'} />
-                <SingleLineBodyText>Folder{value}</SingleLineBodyText>
-              </DropdownItem>
+                <SingleLineBodyText>{folder.label}</SingleLineBodyText>
+              </div>
+              <Spacer size={'1rem'} />
             </React.Fragment>
           )
         })}
       </div>
-
-      <Spacer size={'1rem'} />
       <Divider spacing={0} />
       <Spacer size={'1rem'} />
+    </>
+  )
+}
 
-      <DropdownItem className={c.Zz} onClick={() => {}}>
-        <PlusIcon />
-        <Spacer size={'.5rem'} />
-        <SingleLineBodyText> Create new folder</SingleLineBodyText>
-      </DropdownItem>
+export const FoldersDropdownMenuContainer = ({ onChange = () => {}, folders }) => {
+  const c = useStyles({})
+  const [isCreateMode, setIsCreateMode] = useState(false)
+
+  return (
+    <div className={c.FoldersDropdown_Container}>
+      {isCreateMode ? (
+        <>
+          <div
+            className={c.MultiUpload_Column}
+            onClick={() => {
+              setIsCreateMode(false)
+            }}
+          >
+            <ArrowLeftIcon />
+            <Spacer size='.5rem' />
+            <SingleLineBodyText>Back</SingleLineBodyText>
+          </div>
+          <NewFolderScreen onChange={onChange} />{' '}
+        </>
+      ) : (
+        <>
+          <FoldersScreen folders={folders} onChange={onChange} />
+          <div
+            className={c.Zz}
+            onClick={() => {
+              setIsCreateMode(true)
+            }}
+          >
+            <PlusIcon />
+            <Spacer size={'.5rem'} />
+            <SingleLineBodyText> Create new folder</SingleLineBodyText>
+          </div>
+        </>
+      )}
     </div>
   )
 }
