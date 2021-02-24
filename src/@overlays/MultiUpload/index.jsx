@@ -174,8 +174,8 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
           ? newNode.subIds.map(subId => formNode(subId))
           : []
         : Object.values(newTreeData)
-          .filter(node => !node.parentId)
-          .map(node => formNode(node.id))
+            .filter(node => !node.parentId)
+            .map(node => formNode(node.id))
 
       newNode.treeValid =
         newNode.valid &&
@@ -270,6 +270,7 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
       ...folderOptions,
     ]
   }, [foldersData, sharedData])
+
   const partFormTitle = useMemo(() => {
     if (!activeNode) return ''
 
@@ -278,7 +279,9 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
     )
     if (siblings.length > 0) {
       const activeIndex = siblings.findIndex(node => node.id === activeNode.id)
-      return `New Part (${activeIndex + 1}/${siblings.length})`
+      return `New ${activeNode.parentId ? 'Part' : 'Model'} ${
+        siblings.length > 1 ? `(${activeIndex + 1}/${siblings.length})` : ''
+      }`
     }
 
     return ''
@@ -485,10 +488,10 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
                   ? 'Upload New Version'
                   : 'Upload Files'
                 : activeNode.isAssembly && activeNode.parentId
-                  ? 'Sub Assembly'
-                  : activeNode.isAssembly
-                    ? 'New Assembly'
-                    : partFormTitle}
+                ? 'Sub Assembly'
+                : activeNode.isAssembly
+                ? 'New Assembly'
+                : partFormTitle}
             </SingleLineBodyText>
             {activeView > -1 && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />

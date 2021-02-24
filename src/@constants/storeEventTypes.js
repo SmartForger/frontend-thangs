@@ -41,6 +41,7 @@ export const FETCH_LICENSE_DOWNLOAD_URL = 'fetch-license-download-url'
 export const LOADING_LICENSE_DOWNLOAD_URL = 'loading-license-download-url'
 export const LOADED_LICENSE_DOWNLOAD_URL = 'loaded-license-download-url'
 export const FAILED_LICENSE_DOWNLOAD_URL = 'failed-license-download-url'
+export const UPLOAD_MODEL_LICENSE = 'upload-model-license'
 /* Folder Store Events */
 export const UPDATE_FOLDERS = 'update-folders'
 export const UPDATE_FOLDER = 'update-folder'

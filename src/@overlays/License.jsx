@@ -13,8 +13,8 @@ import { createUseStyles } from '@style'
 import classnames from 'classnames'
 import { overlayview, track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
-import { ReactComponent as DownloadIcon } from '../@svg/notification-downloaded.svg'
-import * as types from '../@constants/storeEventTypes'
+import { ReactComponent as DownloadIcon } from '@svg/icon-download.svg'
+import * as types from '@constants/storeEventTypes'
 import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
 
@@ -178,15 +178,13 @@ const LicenseContent = ({ c, model }) => {
         </div>
         <Divider spacing={'1rem'} />
         <ModelTitle closeOverlay={closeLicenseOverlay} model={model} />
-        <Divider spacing={'1.5rem'} />
+        <Divider spacing={'1rem'} />
         <Spacer size='.5rem' />
         {license.isLoading && !license.isLoaded && <Spinner />}
         {license.isLoaded && licenseText && (
-          <>
-            <div className={c.License_TextContainer}>
-              <div className={c.License_Text}>{license.data.licenseText}</div>
-            </div>
-          </>
+          <div className={c.License_TextContainer}>
+            <div className={c.License_Text}>{license.data.licenseText}</div>
+          </div>
         )}
         <Spacer size='1.5rem' />
         <Button onClick={closeLicenseOverlay} className={c.License_ConfirmButton}>

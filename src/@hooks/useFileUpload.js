@@ -10,6 +10,7 @@ const useFileUpload = ({
   errorState: initialErrorState,
   isExplorerOpened = false,
   noClick = false,
+  acceptedFormats = [],
 }) => {
   const [file, setFile] = useState(initialFile)
   const [errorState, setErrorState] = useState(initialErrorState)
@@ -62,7 +63,7 @@ const useFileUpload = ({
   const { getRootProps, getInputProps, open } = useDropzone({
     noClick,
     onDrop,
-    accept: MODEL_FILE_EXTS,
+    accept: acceptedFormats.length ? acceptedFormats : MODEL_FILE_EXTS,
   })
 
   const UploadZone = useCallback(

@@ -210,6 +210,7 @@ const useStyles = createUseStyles(theme => {
 
       '& svg': {
         marginRight: '.5rem',
+        flex: 'none',
       },
     },
     Model_VersionHeader: {
@@ -374,9 +375,9 @@ const LicenseText = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
       <span>
         <LicenseIcon />
         <div className={c.Model_LicenseText}>
-          This model is restricted by copyright license.&nbsp;
+          This model is restricted by licensing terms.&nbsp;
           <div className={c.Model_LicenseLink} onClick={handleClick}>
-            View License
+            View&nbsp;license.
           </div>
         </div>
       </span>

@@ -4,6 +4,7 @@ import {
   Button,
   Dropdown,
   Input,
+  LicenseField,
   LikeModelButton,
   Textarea,
   TitleTertiary,
@@ -126,6 +127,11 @@ const useStyles = createUseStyles(theme => {
         flex: 'none',
       },
     },
+    EditModelForm_FieldRow: {
+      alignItems: 'baseline',
+      display: 'flex',
+      flexDirection: 'row',
+    },
   }
 })
 const noop = () => null
@@ -150,7 +156,6 @@ const EditModelForm = ({
 }) => {
   const c = useStyles({ showViewer })
   const firstInputRef = useRef(null)
-  const hiddenFileInput = React.useRef(null)
 
   const initialState = {
     id: model.id,
@@ -166,14 +171,16 @@ const EditModelForm = ({
     initialState,
   })
 
-  const licenseName = inputState && inputState.license && inputState.license.name
-
   const handleOnInputChange = useCallback(
     (key, value) => {
       onInputChange(key, value)
     },
     [onInputChange]
   )
+
+  const handleLicenseChange = data => {
+    onInputChange('license', data)
+  }
 
   const selectedCategory = useMemo(() => {
     return R.find(R.propEq('value', model.category), CATEGORIES)
@@ -182,21 +189,6 @@ const EditModelForm = ({
   useEffect(() => {
     firstInputRef.current.focus()
   }, [])
-
-  const handleUploadLicenseClick = event => {
-    event.preventDefault()
-    hiddenFileInput.current.click()
-  }
-
-  const handleClearLicense = () => {
-    onInputChange('license', null)
-    inputState.license = null
-  }
-
-  const handleUploadLicenseChange = event => {
-    onInputChange('license', event.target.files[0])
-    //TODO: add upload logic and license value
-  }
 
   return (
     <div className={c.EditModelForm_Wrapper}>
@@ -234,36 +226,12 @@ const EditModelForm = ({
             required
           />
           <Spacer size='1rem' />
-          <div className={c.EditForm_FieldRow}>
-            <div className={c.EditForm_Field}>
-              <Input
-                disabled={true}
-                name='license'
-                label={licenseName ? inputState.license.name : 'Attach license'}
-              />
-            </div>
-            <Spacer size={'.5rem'} />
-            {inputState.license ? (
-              <div onClick={handleClearLicense} className={c.EditForm_LicenseClearButton}>
-                X
-              </div>
-            ) : null}
-            <Spacer size={'1rem'} />
-            <div className={c.EditForm_Field}>
-              <button
-                className={c.EditForm_LicenseButton}
-                onClick={handleUploadLicenseClick}
-              >
-                Browse
-              </button>
-              <input
-                type='file'
-                onChange={handleUploadLicenseChange}
-                ref={hiddenFileInput}
-                style={{ display: 'none' }}
-              />
-            </div>
-          </div>
+          <LicenseField
+            model={model}
+            className={c.EditModelForm_FieldRow}
+            onChange={handleLicenseChange}
+            value={inputState && inputState.license}
+          />
           <Textarea
             id='description-input'
             name='description'

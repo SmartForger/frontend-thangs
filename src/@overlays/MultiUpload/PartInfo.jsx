@@ -5,6 +5,7 @@ import {
   Button,
   Dropdown,
   Input,
+  LicenseField,
   MetadataPrimary,
   MetadataSecondary,
   ModelThumbnail,
@@ -27,11 +28,11 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     PartInfo: {
-      minHeight: '27.75rem',
       backgroundColor: theme.colors.white[300],
       borderRadius: '1rem',
       display: 'flex',
       flexDirection: 'row',
+      minHeight: '27.75rem',
       position: 'relative',
 
       [md]: {
@@ -56,13 +57,13 @@ const useStyles = createUseStyles(theme => {
       background: 'white',
     },
     PartInfo_UploadZone: {
-      width: '100%',
-      height: ({ hasFile }) => (hasFile ? '11rem' : '22.25rem'),
+      alignItems: 'center',
+      border: '1px dashed #E5E5F3',
+      borderRadius: '.75rem',
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
-      borderRadius: '.75rem',
-      border: '1px dashed #E5E5F3',
+      height: ({ hasFile }) => (hasFile ? '11rem' : '22.25rem'),
+      width: '100%',
 
       '& h3': {
         lineHeight: '1.5rem',
@@ -91,40 +92,41 @@ const useStyles = createUseStyles(theme => {
       },
     },
     PartInfo_FieldRow: {
+      alignItems: 'baseline',
       display: 'flex',
       flexDirection: 'row',
-      alignItems: 'center',
     },
     PartInfo_Field: {
-      marginBottom: '1rem',
       flexGrow: 1,
+      marginBottom: '1rem',
+      position: 'relative',
     },
     PartInfo_FileName: {
+      lineHeight: '1rem !important',
+      overflow: 'hidden',
       textOverflow: 'ellipsis',
       width: '16rem',
-      overflow: 'hidden',
-      lineHeight: '1rem !important',
     },
     PartInfo_Column: {
+      alignItems: 'center',
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
       justifyContent: 'center',
     },
     PartInfo_UploadColumn: {
-      height: '100%',
+      alignItems: 'center',
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
+      height: '100%',
       justifyContent: 'center',
     },
     PartInfo_ScrollableFiles: {
       ...theme.mixins.scrollbar,
       display: 'flex',
       flexDirection: 'column',
+      height: '10.25rem',
       overflowX: 'hidden',
       overflowY: 'scroll',
-      height: '10.25rem',
       paddingTop: '.125rem',
     },
     PartInfo_RemoveBtn: {
@@ -140,56 +142,28 @@ const useStyles = createUseStyles(theme => {
         width: '100%',
       },
     },
-    PartInfo_LicenseButton: {
-      ...theme.variables.button,
-      padding: '0.5rem 0.75rem',
-      width: '100%',
-      alignItems: 'center',
-      backgroundColor: theme.colors.gold[500],
-      border: 'none',
-      borderRadius: '.5rem',
-      color: theme.colors.black[500],
-      cursor: 'pointer',
-      display: 'flex',
-      justifyContent: 'center',
-      outline: 'none',
-      textAlign: 'center',
-      userSelect: 'none',
-      whiteSpace: 'nowrap',
-      fontSize: '1rem',
-      lineHeight: '1rem',
-      fontWeight: '500',
-
-      '&:hover': {
-        backgroundColor: theme.colors.gold[700],
-      },
-    },
-    PartInfo_LicenseClearButton: {
-      cursor: 'pointer',
-      marginBottom: '1rem',
-    },
     PartInfo_ErrorText: {
       ...theme.text.formErrorText,
       backgroundColor: theme.variables.colors.errorTextBackground,
+      borderRadius: '.5rem',
       fontWeight: '500',
       padding: '.625rem 1rem',
-      borderRadius: '.5rem',
     },
     PartInfo_Thumbnail: {
-      flex: 'none',
       border: `1px solid ${theme.colors.white[900]}`,
       borderRadius: 4,
+      flex: 'none',
+      height: '3.75rem !important',
       padding: '0px !important',
       width: '3.75rem',
-      height: '3.75rem !important',
     },
     PartInfo_ModelInfo: {
       '& h3': {
+        display: 'inline-block',
+        lineHeight: '1rem',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
-        display: 'inline-block',
-        lineHeight: '1rem',
 
         [md]: {
           width: '18rem',
@@ -197,8 +171,8 @@ const useStyles = createUseStyles(theme => {
       },
     },
     PartInfo_PrivacyText: {
-      width: '80%',
       textAlign: 'left !important',
+      width: '80%',
     },
   }
 })
@@ -239,9 +213,7 @@ const PartInfo = props => {
     onContinue,
   } = props
   const c = useStyles({})
-  // const { dispatch } = useStoreon()
   const firstInputRef = useRef(null)
-  const hiddenFileInput = React.useRef(null)
   const file = filesData[activeNode.fileId]
   const [applyRemaining, setApplyRemaining] = useState(false)
 
@@ -258,23 +230,13 @@ const PartInfo = props => {
     initialState,
   })
 
-  const handleUploadLicenseClick = event => {
-    event.preventDefault()
-    hiddenFileInput.current.click()
-  }
-
-  const handleClearLicense = () => {
-    onInputChange('license', null)
-  }
-
-  const handleUploadLicenseChange = event => {
-    onInputChange('license', event.target.files[0])
-    //TODO: add upload logic and license value
-  }
-
   const handleOnInputChange = (key, value) => {
     onInputChange(key, value)
     setErrorMessage(null)
+  }
+
+  const handleLicenseChange = data => {
+    onInputChange('license', data)
   }
 
   const handleSubmit = (data, isValid) => {
@@ -305,7 +267,6 @@ const PartInfo = props => {
     return path.map(node => node.name).join(' / ')
   }, [activeNode, treeData, multipartName])
 
-  const licenseName = inputState && inputState.license && inputState.license.name
   useEffect(() => {
     setInputState(formData)
     // eslint-disable-next-line
@@ -372,36 +333,14 @@ const PartInfo = props => {
             errorMessage={checkError('name').message}
           />
         </div>
-        <div className={c.PartInfo_FieldRow}>
-          <div className={c.PartInfo_Field}>
-            <Input
-              disabled={true}
-              name='license'
-              label={licenseName ? inputState.license.name : 'Attach license'}
-            />
-          </div>
-          <Spacer size={'.5rem'} />
-          {inputState.license ? (
-            <div onClick={handleClearLicense} className={c.PartInfo_LicenseClearButton}>
-              X
-            </div>
-          ) : null}
-          <Spacer size={'1rem'} />
-          <div className={c.PartInfo_Field}>
-            <button
-              className={c.PartInfo_LicenseButton}
-              onClick={handleUploadLicenseClick}
-            >
-              Browse
-            </button>
-            <input
-              type='file'
-              onChange={handleUploadLicenseChange}
-              ref={hiddenFileInput}
-              style={{ display: 'none' }}
-            />
-          </div>
-        </div>
+        {!activeNode.parentId && (
+          <LicenseField
+            model={file}
+            className={c.PartInfo_FieldRow}
+            onChange={handleLicenseChange}
+            value={inputState && inputState.license}
+          />
+        )}
         <div className={c.PartInfo_Field}>
           <Textarea
             id='description-input'
