@@ -1,7 +1,6 @@
 import * as types from '@constants/storeEventTypes'
 import api from '@services/api'
 import { storageService } from '@services'
-import apiForChain from '@services/api/apiForChain'
 
 const getInitAtom = () => ({
   isLoaded: false,
@@ -63,8 +62,7 @@ export default store => {
     types.UPLOAD_MODEL_LICENSE,
     async (state, { file, directory, onFinish = noop, onError = noop }) => {
       let uploadedUrlData
-
-      apiForChain({
+      const { data, error } = await api({
         method: 'POST',
         endpoint: 'models/upload-urls',
         body: {
@@ -72,21 +70,16 @@ export default store => {
           directory,
         },
       })
-        .then(({ data = {} }) => {
-          uploadedUrlData = data
-          return storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file)
-        })
-        .then(() => {
-          store.dispatch(types.LOADED_MODEL_LICENSE, {
-            uploadedUrlData,
-          })
-          console.log('in the then', onFinish)
-          return onFinish(uploadedUrlData.newFileName)
-        })
-        .catch(error => {
-          store.dispatch(types.FAILED_MODEL_LICENSE)
-          return onError(error)
-        })
+      if (error) {
+        store.dispatch(types.FAILED_MODEL_LICENSE)
+        return onError(error)
+      }
+      uploadedUrlData = data[0]
+      await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file)
+      store.dispatch(types.LOADED_MODEL_LICENSE, {
+        uploadedUrlData,
+      })
+      return onFinish(uploadedUrlData.newFileName)
     }
   )
 }
