@@ -150,7 +150,7 @@ const LicenseContent = ({ c, model }) => {
     // eslint-disable-next-line
   }, [])
 
-  const confirmOverlay = useCallback(() => {
+  const closeLicenseOverlay = useCallback(() => {
     setOverlayOpen(false)
   }, [setOverlayOpen])
 
@@ -177,7 +177,7 @@ const LicenseContent = ({ c, model }) => {
           </div>
         </div>
         <Divider spacing={'1rem'} />
-        <ModelTitle model={model} />
+        <ModelTitle closeOverlay={closeLicenseOverlay} model={model} />
         <Divider spacing={'1.5rem'} />
         <Spacer size='.5rem' />
         {license.isLoading && !license.isLoaded && <Spinner />}
@@ -189,7 +189,7 @@ const LicenseContent = ({ c, model }) => {
           </>
         )}
         <Spacer size='1.5rem' />
-        <Button onClick={confirmOverlay} className={c.License_ConfirmButton}>
+        <Button onClick={closeLicenseOverlay} className={c.License_ConfirmButton}>
           Close
         </Button>
       </div>

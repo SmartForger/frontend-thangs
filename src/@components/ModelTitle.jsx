@@ -38,13 +38,14 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const ModelTitle = ({ model, className }) => {
+const ModelTitle = ({ model, className, closeOverlay }) => {
   const c = useStyles()
   const user = model && model.owner
   return (
     <div className={classnames(className, c.ModelTitle_Container)}>
       {user && (
         <Link
+          onClick={closeOverlay}
           className={c.ModelTitle_ProfileLink}
           to={{
             pathname: `/${user.username}`,
@@ -67,6 +68,7 @@ const ModelTitle = ({ model, className }) => {
             by
             <Spacer size={'.25rem'} />
             <Link
+              onClick={closeOverlay}
               className={c.ModelTitle_ProfileLink}
               to={{
                 pathname: `/${user.username}`,
