@@ -95,7 +95,7 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
           name: model.name,
           isAssembly: true,
         }
-        list = flattenTree([model], 'parts')
+        list = flattenTree([root], 'parts')
       } else {
         list = flattenTree(model.parts, 'parts')
       }
