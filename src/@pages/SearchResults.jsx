@@ -249,9 +249,10 @@ const Page = () => {
   const phynId = useQuery('phynId')
   const related = useQuery('related')
   const { setOverlay, setOverlayOpen } = useOverlay()
-  const { dispatch, searchResults, searchSubscriptions } = useStoreon(
+  const { dispatch, searchResults, searchSubscriptions, modelsStats } = useStoreon(
     'searchResults',
-    'searchSubscriptions'
+    'searchSubscriptions',
+    'modelsStats'
   )
   const { phyndexer, text, thangs } = searchResults
   const [showReportModelButtons, setShowReportModelButtons] = useState(false)
@@ -367,10 +368,15 @@ const Page = () => {
             {!modelId && !phynId ? (
               <TextSearchResults
                 isError={text.isError}
+                isLoaded={text.isLoaded}
                 isLoading={text.isLoading}
                 items={textModels}
                 onFindRelated={handleFindRelated}
                 onReportModel={handleReportModel}
+                searchTerm={searchQuery}
+                totalModelCount={
+                  modelsStats && modelsStats.data && modelsStats.data.modelsIngested
+                }
               />
             ) : (
               <>

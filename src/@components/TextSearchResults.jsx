@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
-import { Card, ModelThumbnail, ProfilePicture, Spacer } from '@components'
+import { Card, ModelThumbnail, NoResults, ProfilePicture, Spacer } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
-import { truncateString, getExternalAvatar } from '@utilities'
+import { numberWithCommas, truncateString, getExternalAvatar } from '@utilities'
 import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
@@ -299,16 +299,33 @@ const TextSearchResult = ({ model, onFindRelated = noop, onReportModel = noop })
 
 const TextSearchResults = ({
   isError,
+  isLoaded,
   isLoading,
   items,
   onFindRelated,
   onReportModel,
+  searchTerm,
+  totalModelCount,
 }) => {
   if (isError) {
-    //do something about it
+    return (
+      <NoResults>Error! We were not able to load results. Please try again.</NoResults>
+    )
   }
   if (isLoading) {
-    //do something about it
+    const loadingText = `Searching ${
+      numberWithCommas(totalModelCount) || '1,500,000'
+    } models to find the best results
+    for ${searchTerm}`
+    return <NoResults>{loadingText}</NoResults>
+  }
+  if (isLoaded && !items.length) {
+    return (
+      <NoResults>
+        No results found. <b>Save your search</b> and we will notify you when there are
+        matches.
+      </NoResults>
+    )
   }
   return items.map((item, ind) => (
     <TextSearchResult
