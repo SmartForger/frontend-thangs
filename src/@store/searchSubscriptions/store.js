@@ -20,11 +20,7 @@ export default store => {
     store.dispatch(types.CHANGE_SEARCH_SUBSCRIPTION_STATUS, {
       status: STATUSES.LOADING,
     })
-    const subscriptionBody = modelId
-      ? {
-        modelId,
-      }
-      : { searchTerm }
+    const subscriptionBody = modelId ? { modelId } : { searchTerm }
 
     const { error } = await api({
       method: 'POST',
