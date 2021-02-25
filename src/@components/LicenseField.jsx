@@ -32,7 +32,7 @@ const LicenseField = ({ className, onChange = noop, value, model = {} }) => {
     [model.newFileName]
   )
   const displayValue = useMemo(() => {
-    if (!value) return 'Attach License'
+    if (!value) return null
     const fullValue = value.split('/')
     return fullValue[fullValue.length - 1]
   }, [value])
