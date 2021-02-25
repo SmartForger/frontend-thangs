@@ -96,11 +96,13 @@ const useStyles = createUseStyles(theme => {
 })
 
 const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' }) => {
-  const { dispatch, folders = {}, shared = {}, uploadFiles = {} } = useStoreon(
-    'folders',
-    'shared',
-    'uploadFiles'
-  )
+  const {
+    dispatch,
+    folders = {},
+    license = {},
+    shared = {},
+    uploadFiles = {},
+  } = useStoreon('folders', 'license', 'shared', 'uploadFiles')
   const {
     data: uploadFilesData = {},
     treeData,
@@ -112,6 +114,7 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
   } = uploadFiles
   const { data: foldersData = [] } = folders
   const { data: sharedData = [] } = shared
+  const { isLoading: isLoadingLicense } = license
   const [activeView, setActiveView] = useState(-1)
   const [errorMessage, setErrorMessage] = useState(null)
   const [warningMessage, setWarningMessage] = useState(null)
@@ -174,8 +177,8 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
           ? newNode.subIds.map(subId => formNode(subId))
           : []
         : Object.values(newTreeData)
-          .filter(node => !node.parentId)
-          .map(node => formNode(node.id))
+            .filter(node => !node.parentId)
+            .map(node => formNode(node.id))
 
       newNode.treeValid =
         newNode.valid &&
@@ -377,7 +380,7 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
 
   const handleContinue = useCallback(
     ({ applyRemaining, data }) => {
-      if (errorMessage) {
+      if (errorMessage || isLoadingLicense) {
         return
       }
 
@@ -430,12 +433,13 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
       }
     },
     [
-      activeView,
-      allTreeNodes,
-      dispatch,
-      submitModels,
       errorMessage,
+      isLoadingLicense,
+      allTreeNodes,
+      activeView,
+      dispatch,
       previousVersionModelId,
+      submitModels,
     ]
   )
 
@@ -488,10 +492,10 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
                   ? 'Upload New Version'
                   : 'Upload Files'
                 : activeNode.isAssembly && activeNode.parentId
-                  ? 'Sub Assembly'
-                  : activeNode.isAssembly
-                    ? 'New Assembly'
-                    : partFormTitle}
+                ? 'Sub Assembly'
+                : activeNode.isAssembly
+                ? 'New Assembly'
+                : partFormTitle}
             </SingleLineBodyText>
             {activeView > -1 && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />
@@ -502,47 +506,48 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
         </div>
         {!activeNode ? (
           <UploadModels
-            uploadFiles={uploadFilesData}
-            uploadTreeData={uploadTreeData}
             allTreeNodes={allTreeNodes}
-            onDrop={onDrop}
-            onRemoveNode={removeFile}
+            errorMessage={errorMessage}
+            isAssembly={isAssembly}
+            multiple={previousVersionModelId ? false : true}
             onCancel={handleCancelUploading}
             onContinue={handleContinue}
+            onDrop={onDrop}
+            onRemoveNode={removeFile}
             setErrorMessage={setErrorMessage}
-            setWarningMessage={setWarningMessage}
-            errorMessage={errorMessage}
-            warningMessage={warningMessage}
-            isAssembly={isAssembly}
             setIsAssembly={setIsAssembly}
-            validating={validating}
-            validated={validated}
+            setWarningMessage={setWarningMessage}
             showAssemblyToggle={validated && singlePartsCount > 1}
-            multiple={previousVersionModelId ? false : true}
+            uploadFiles={uploadFilesData}
+            uploadTreeData={uploadTreeData}
+            validated={validated}
+            validating={validating}
+            warningMessage={warningMessage}
           />
         ) : activeNode.isAssembly ? (
           <AssemblyInfo
             activeNode={activeNode}
-            formData={activeFormData}
-            treeData={treeData}
-            folders={dropdownFolders}
             errorMessage={errorMessage}
-            setErrorMessage={setErrorMessage}
+            filesData={uploadFilesData}
+            folders={dropdownFolders}
+            formData={activeFormData}
             onContinue={handleContinue}
+            setErrorMessage={setErrorMessage}
+            treeData={treeData}
           />
         ) : (
           <PartInfo
             activeNode={activeNode}
-            formData={activeFormData}
-            treeData={treeData}
-            filesData={uploadFilesData}
-            multipartName={multipartName}
-            folders={dropdownFolders}
-            isLoading={isLoading}
             errorMessage={errorMessage}
-            setErrorMessage={setErrorMessage}
+            filesData={uploadFilesData}
+            folders={dropdownFolders}
+            formData={activeFormData}
+            isLoading={isLoading}
+            multipartName={multipartName}
             onContinue={handleContinue}
             onUpdate={handleUpdate}
+            setErrorMessage={setErrorMessage}
+            treeData={treeData}
           />
         )}
         <Spacer size={'2rem'} className={c.MultiUpload__desktop} />

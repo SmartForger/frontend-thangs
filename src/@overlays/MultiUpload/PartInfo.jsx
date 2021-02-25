@@ -202,15 +202,15 @@ const initialState = {
 const PartInfo = props => {
   const {
     activeNode,
-    formData,
-    treeData,
-    filesData,
-    multipartName,
-    folders,
-    isLoading,
     errorMessage,
-    setErrorMessage,
+    filesData,
+    folders,
+    formData,
+    isLoading,
+    multipartName,
     onContinue,
+    setErrorMessage,
+    treeData,
   } = props
   const c = useStyles({})
   const firstInputRef = useRef(null)

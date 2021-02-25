@@ -5,6 +5,7 @@ import {
   Button,
   Dropdown,
   Input,
+  LicenseField,
   MetadataPrimary,
   MetadataSecondary,
   Spacer,
@@ -29,6 +30,11 @@ const useStyles = createUseStyles(theme => {
       '& svg': {
         flex: 'none',
       },
+    },
+    AssemblyInfo_FieldRow: {
+      alignItems: 'baseline',
+      display: 'flex',
+      flexDirection: 'row',
     },
     AssemblyInfo_FileName: {
       textOverflow: 'ellipsis',
@@ -117,6 +123,7 @@ const assemblyInfoSchema = ({ isRootAssembly, isMultipart }) =>
     primary: isMultipart ? Joi.string().required() : Joi.string().allow(''),
     folderId: Joi.string().allow(''),
     category: Joi.string().allow(''),
+    license: Joi.string().allow(''),
   })
 
 const INITIAL_STATE = {
@@ -125,21 +132,24 @@ const INITIAL_STATE = {
   folderId: 'files',
   category: '',
   primary: '',
+  license: null,
 }
 
 const AssemblyInfo = ({
   activeNode,
-  formData,
-  treeData,
-  folders,
   errorMessage: _err,
-  setErrorMessage,
+  filesData,
+  folders,
+  formData,
   onContinue,
+  setErrorMessage,
+  treeData,
 }) => {
   const c = useStyles({})
   const firstInputRef = useRef(null)
   const isRootAssembly = useMemo(() => !activeNode.parentId, [activeNode.parentId])
   const isMultipart = activeNode.id === 'multipart'
+  const file = filesData[activeNode.fileId]
 
   const {
     checkError,
@@ -159,6 +169,10 @@ const AssemblyInfo = ({
   const handleOnInputChange = (key, value) => {
     onInputChange(key, value)
     setErrorMessage(null)
+  }
+
+  const handleLicenseChange = data => {
+    onInputChange('license', data)
   }
 
   const handleSubmit = (data, isValid) => {
@@ -252,6 +266,14 @@ const AssemblyInfo = ({
           />
           <Spacer size={'1rem'} />
         </div>
+        {!activeNode.parentId && (
+          <LicenseField
+            model={file}
+            className={c.AssemblyInfo_FieldRow}
+            onChange={handleLicenseChange}
+            value={inputState && inputState.license}
+          />
+        )}
         <div>
           <Textarea
             className={c.AssemblyInfo_TextAreaInput}
