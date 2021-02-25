@@ -23,13 +23,29 @@ workflows:
             store_artifacts: true
             browser: chrome
             verify-command: yarn cypress verify
+            filters:
+              branches:
+                only:
+                  - development
         - deploy-staging:
             context: gcp-and-physna
+            filters:
+              branches:
+                only:
+                  - development
         - deploy-production:
             Stack: master
             context: gcp-and-physna
+            filters:
+              branches:
+                only:
+                  - development
         - deploy-development-thangs:
             context: thangs-context
+            filters:
+              branches:
+                only:
+                  - development
 
 jobs:
   deploy-staging:
