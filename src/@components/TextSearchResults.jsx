@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
-import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import { Card, ModelThumbnail, ProfilePicture, Spacer } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'

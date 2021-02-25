@@ -1,4 +1,3 @@
-import * as R from 'ramda'
 import api from '@services/api'
 import { storageService, intervalRequest } from '@services'
 import apiForChain from '@services/api/apiForChain'
