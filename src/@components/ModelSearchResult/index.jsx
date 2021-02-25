@@ -159,7 +159,6 @@ const useStyles = createUseStyles(theme => {
 const noop = () => null
 
 const ThangsModelDetails = ({
-  c,
   model,
   modelPath,
   isLiked = false,
@@ -167,6 +166,7 @@ const ThangsModelDetails = ({
   handleReportModel = noop,
   handleFindRelated = noop,
 }) => {
+  const c = useStyles()
   let formattedModelName = truncateString(model.name, 40)
   let formattedModelDescription = truncateString(model.description, 144)
   let modelLikeCount = model && model.likes && model.likes.length
@@ -216,7 +216,6 @@ const ThangsModelDetails = ({
 }
 
 const ExternalModelDetails = ({
-  c,
   model = {},
   modelAttributionUrl,
   modelPath,
@@ -224,6 +223,7 @@ const ExternalModelDetails = ({
   handleReportModel = noop,
   handleFindRelated = noop,
 }) => {
+  const c = useStyles()
   const { modelTitle, modelDescription, modelFileName } = model
   let formattedModelDescription = truncateString(modelDescription, 144)
   return (
@@ -294,7 +294,6 @@ const Anchor = ({ children, attributionUrl, to, noLink, ...props }) => {
 }
 
 const ResultContents = ({
-  c,
   className,
   model,
   modelAttributionUrl,
@@ -308,6 +307,8 @@ const ResultContents = ({
   showSocial,
   showWaldo,
 }) => {
+  const c = useStyles()
+
   return (
     <div className={c.ModelSearchResult_ResultContents}>
       <Anchor
@@ -325,24 +326,22 @@ const ResultContents = ({
         </Card>
       </Anchor>
       <div>
-        {model.resultSource === 'phyndexer' ? (
-          <ExternalModelDetails
-            c={c}
-            model={model}
-            modelAttributionUrl={modelAttributionUrl}
-            modelPath={modelPath}
-            showReportModel={showReportModel}
-            handleReportModel={handleReportModel}
-            handleFindRelated={handleFindRelated}
-          />
-        ) : (
+        {model.scope === 'thangs' ? (
           <ThangsModelDetails
-            c={c}
             model={model}
             modelPath={modelPath}
             showOwner={showOwner}
             showSocial={showSocial}
             isLiked={isLiked}
+            showReportModel={showReportModel}
+            handleReportModel={handleReportModel}
+            handleFindRelated={handleFindRelated}
+          />
+        ) : (
+          <ExternalModelDetails
+            model={model}
+            modelAttributionUrl={modelAttributionUrl}
+            modelPath={modelPath}
             showReportModel={showReportModel}
             handleReportModel={handleReportModel}
             handleFindRelated={handleFindRelated}
@@ -358,7 +357,6 @@ const ModelSearchResult = ({
   model,
   withOwner,
   showSocial = true,
-  showWaldo,
   showReportModel,
   searchModelFileName,
   handleReportModel = noop,
@@ -368,15 +366,19 @@ const ModelSearchResult = ({
   const currentUserId = parseInt(useCurrentUserId())
   const showOwner = withOwner && !!model.owner
   const isLiked = model && model.likes && model.likes.includes(currentUserId)
+  // All text search results now have attributionUrl, regardless of scope.
   const modelAttributionUrl =
     model && model.attributionUrl && encodeURI(model.attributionUrl)
+  // These variables are used for geo searches.
+  // Could choose to go with attributionUrl for geo searches for simplicity.
+  // BE to talk to RC & CC about this
   const modelIdPath = model.id ? `/model/${model.id}` : modelAttributionUrl
   const modelPath = model.identifier ? `/${model.identifier}` : modelIdPath
   return (
     <div
       className={classnames({
-        [c.ModelSearchResult_ExternalLink]: model.resultSource === 'phyndexer',
-        [c.ModelSearchResult_ThangsLink]: model.resultSource !== 'phyndexer',
+        [c.ModelSearchResult_ExternalLink]: model.scope !== 'thangs',
+        [c.ModelSearchResult_ThangsLink]: model.scope === 'thangs',
       })}
     >
       <ResultContents
@@ -384,8 +386,6 @@ const ModelSearchResult = ({
         model={model}
         showOwner={showOwner}
         showSocial={showSocial}
-        showWaldo={showWaldo}
-        c={c}
         isLiked={isLiked}
         modelAttributionUrl={modelAttributionUrl}
         searchModelFileName={searchModelFileName}

@@ -10,6 +10,7 @@ import {
   SaveSearchButton,
   Snackbar,
   Spacer,
+  TextSearchResults,
 } from '@components'
 import { useLocalStorage, useQuery } from '@hooks'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
@@ -252,7 +253,7 @@ const Page = () => {
     'searchResults',
     'searchSubscriptions'
   )
-  const { phyndexer, thangs } = searchResults
+  const { phyndexer, text, thangs } = searchResults
   const [showReportModelButtons, setShowReportModelButtons] = useState(false)
 
   useEffect(() => {
@@ -332,7 +333,8 @@ const Page = () => {
 
   const thangsModels = R.path(['data'], thangs) || []
   const phyndexerModels = R.path(['data'], phyndexer) || []
-  const resultCount = phyndexerModels.length + thangsModels.length
+  const textModels = R.path(['data'], text) || []
+  const resultCount = phyndexerModels.length + thangsModels.length + textModels.length
 
   return (
     <div className={c.SearchResults_Page}>
@@ -345,7 +347,7 @@ const Page = () => {
               </h1>
               {resultCount && resultCount > 0 ? (
                 <div className={c.SearchResult_ResultCountText}>
-                  About {resultCount} results
+                  {resultCount} results
                 </div>
               ) : null}
             </div>
@@ -362,29 +364,45 @@ const Page = () => {
         {searchQuery ? (
           <>
             {!modelId && (phyndexer.isLoaded || thangs.isLoaded) && <Snackbar />}
-            <ThangsSearchResult
-              c={c}
-              handleFindRelated={handleFindRelated}
-              handleReportModel={handleReportModel}
-              isError={thangs.isError}
-              isLoading={thangs.isLoading}
-              isOtherModelsLoaded={phyndexer.isLoaded}
-              modelId={modelId}
-              models={thangsModels}
-              searchModelFileName={undefined}
-              showReportModel={showReportModelButtons}
-            />
-            <SearchResult
-              c={c}
-              handleFindRelated={handleFindRelated}
-              handleReportModel={handleReportModel}
-              isError={phyndexer.isError}
-              isLoading={phyndexer.isLoading}
-              modelId={modelId}
-              models={phyndexerModels}
-              searchModelFileName={undefined}
-              showReportModel={showReportModelButtons}
-            />
+            {!modelId && !phynId ? (
+              <TextSearchResults
+                isError={text.isError}
+                isLoading={text.isLoading}
+                items={textModels}
+                onFindRelated={handleFindRelated}
+                onReportModel={handleReportModel}
+              />
+            ) : (
+              <>
+                {modelId && (
+                  <ThangsSearchResult
+                    c={c}
+                    handleFindRelated={handleFindRelated}
+                    handleReportModel={handleReportModel}
+                    isError={thangs.isError}
+                    isLoading={thangs.isLoading}
+                    isOtherModelsLoaded={phyndexer.isLoaded}
+                    modelId={modelId}
+                    models={thangsModels}
+                    searchModelFileName={undefined}
+                    showReportModel={showReportModelButtons}
+                  />
+                )}
+                {phynId && (
+                  <SearchResult
+                    c={c}
+                    handleFindRelated={handleFindRelated}
+                    handleReportModel={handleReportModel}
+                    isError={phyndexer.isError}
+                    isLoading={phyndexer.isLoading}
+                    modelId={modelId}
+                    models={phyndexerModels}
+                    searchModelFileName={undefined}
+                    showReportModel={showReportModelButtons}
+                  />
+                )}
+              </>
+            )}
           </>
         ) : (
           <NoResults>

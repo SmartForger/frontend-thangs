@@ -49,3 +49,21 @@ const getThumbnailUrl = (model = {}) => {
   }
   return 'unknown'
 }
+
+export const getExternalAvatar = attributionUrl => {
+  if (attributionUrl.includes('3delicious')) return '/assets/3delicious.png'
+  if (attributionUrl.includes('all3dfree')) return '/assets/all3dfree.png'
+  if (attributionUrl.includes('archive3d')) return '/assets/archive3d.png'
+  if (attributionUrl.includes('archibaseplanet')) return '/assets/archibase.png'
+  if (attributionUrl.includes('gates')) return '/assets/gates.png'
+  if (attributionUrl.includes('grainger')) return '/assets/grainger.png'
+  if (attributionUrl.includes('halderusa')) return '/assets/halderusa.png'
+  if (attributionUrl.includes('mcmaster')) return '/assets/mcmaster.png'
+  if (attributionUrl.includes('myminifactory')) return '/assets/myminifactory.png'
+  if (attributionUrl.includes('parker')) return '/assets/parker.png'
+  if (attributionUrl.includes('prusaprinters')) return '/assets/prusaprinters.png'
+  if (attributionUrl.includes('schaeffler')) return '/assets/schaeffler.png'
+  if (attributionUrl.includes('sweethome3d')) return '/assets/sweethome3d.png'
+  if (attributionUrl.includes('thingiverse')) return '/assets/thingiverse.png'
+  if (attributionUrl.includes('youmagine')) return '/assets/youmagine.png'
+}
