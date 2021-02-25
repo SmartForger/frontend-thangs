@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useRef, forwardRef } from 'react'
 import { useForm } from '@hooks'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
@@ -6,7 +6,6 @@ import { track } from '@utilities/analytics'
 import {
   Divider,
   DropdownMenu,
-  DropdownItem,
   SingleLineBodyText,
   Spacer,
   Input,
@@ -32,11 +31,6 @@ const useStyles = createUseStyles(theme => {
     FoldersDropdown_ItemsContainer: {
       maxHeight: '10rem',
       overflowY: 'auto',
-      /*
-      overflowY: 'auto',
-      scrollbarWidth: 'none',
-      ['-ms-overflow-style']: 'none',
-      */
     },
 
     MultiUpload_Column: {
@@ -55,44 +49,43 @@ const useStyles = createUseStyles(theme => {
       padding: '.625rem 1rem',
       borderRadius: '.5rem',
     },
-
-    Zz: {
+    FoldersDropdown_FolderItem: {
       display: 'flex !important',
       alignItems: 'center !important',
+      cursor: 'pointer',
     },
   }
 })
 
 export const FoldersDropdownMenu = ({
   className,
-  myThangsMenu,
-  user = {},
   TargetComponent,
   folders,
-
   onChange,
   ...props
 }) => {
   const c = useStyles({})
-  const [isOpen, setIsOpen] = useState(undefined)
+  const targetRef = useRef(null)
+  const [isOpen, setIsOpen] = useState(true)
+
   const hanldeClose = () => {
     setIsOpen(false)
+    console.log('----->', 'targetRef', targetRef)
   }
 
   return (
     <DropdownMenu
       className={classnames(className, c.FoldersDropdown)}
       TargetComponent={TargetComponent}
-      user={user}
-      myThangsMenu={myThangsMenu}
+      TargetComponentProps={{ ref: targetRef }}
       isAutoClosed={false}
       {...props}
     >
       <FoldersDropdownMenuContainer
         folders={folders}
         onChange={value => {
-          hanldeClose()
           onChange(value)
+          hanldeClose()
         }}
       />
     </DropdownMenu>
@@ -182,7 +175,7 @@ const FoldersScreen = ({
           return (
             <React.Fragment key={folder.value}>
               <div
-                className={c.Zz}
+                className={c.FoldersDropdown_FolderItem}
                 onClick={() => {
                   onChange(folder.value)
                 }}
@@ -211,7 +204,7 @@ export const FoldersDropdownMenuContainer = ({ onChange = () => {}, folders }) =
       {isCreateMode ? (
         <>
           <div
-            className={c.MultiUpload_Column}
+            className={c.FoldersDropdown_FolderItem}
             onClick={() => {
               setIsCreateMode(false)
             }}
@@ -226,7 +219,7 @@ export const FoldersDropdownMenuContainer = ({ onChange = () => {}, folders }) =
         <>
           <FoldersScreen folders={folders} onChange={onChange} />
           <div
-            className={c.Zz}
+            className={c.FoldersDropdown_FolderItem}
             onClick={() => {
               setIsCreateMode(true)
             }}

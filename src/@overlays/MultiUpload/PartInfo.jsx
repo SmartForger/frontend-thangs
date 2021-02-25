@@ -382,6 +382,7 @@ const PartInfo = props => {
             errorMessage={checkError('description').message}
           />
         </div>
+        {/*
         {isRootPart && folders && folders.length > 1 ? (
           <div className={c.PartInfo_Field}>
             <Dropdown
@@ -398,6 +399,7 @@ const PartInfo = props => {
             />
           </div>
         ) : null}
+        */}
         <div className={c.PartInfo_Field}>
           <Input
             className={c.PartInfo_FullWidthInput}
