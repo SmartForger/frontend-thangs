@@ -6,22 +6,35 @@ import {
   clickOnTextInsideClass,
   goTo,
   isElementContains,
-  isElementContainTwoValues,
   openMultiUpload,
   uploadFile,
   urlShouldIncludeAfterTimeout,
 } from './common-methods'
-import { multiUploadInput } from './inputs'
+import { licenseUploadInput, multiUploadInput } from './inputs'
 
 export const multiUpload = () => {
   openMultiUpload()
   uploadFile(MODEL.FILENAME, multiUploadInput)
   clickOnElementByText('Continue')
-  cy.get(`[class^=PartInfo_Field] [name=name]`).clear()
-  cy.get(`[class^=PartInfo_Field] [name=name]`).focus().type(MODEL.TITLE)
-  cy.get(`[class^=PartInfo_Field] [name=description]`).clear()
-  cy.get(`[class^=PartInfo_Field] [name=description]`).focus().type(MODEL.DESCRIPTION)
+  cy.get('[class^=PartInfo_Field] [name=name]').clear()
+  cy.get('[class^=PartInfo_Field] [name=name]').focus().type(MODEL.TITLE)
+  cy.get('[class^=PartInfo_Field] [name=description]').clear()
+  cy.get('[class^=PartInfo_Field] [name=description]').focus().type(MODEL.DESCRIPTION)
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue')
+  urlShouldIncludeAfterTimeout('mythangs/recent-files', 10000)
+  isElementContains('[class^=FileTable_Row]', MODEL.TITLE)
+}
+
+export const licenseUpload = () => {
+  openMultiUpload()
+  uploadFile(MODEL.FILENAME, multiUploadInput)
+  clickOnElementByText('Continue')
+  uploadFile(MODEL.LICENSE, licenseUploadInput)
+  cy.get('[class^=PartInfo_Field] [name=name]').clear()
+  cy.get('[class^=PartInfo_Field] [name=name]').focus().type(MODEL.TITLE)
+  cy.get('[class^=PartInfo_Field] [name=description]').clear()
+  cy.get('[class^=PartInfo_Field] [name=description]').focus().type(MODEL.DESCRIPTION)
+  clickOnTextInsideClass(CLASSES.BUTTON, 'Continue', { timeout: 3000 })
   urlShouldIncludeAfterTimeout('mythangs/recent-files', 10000)
   isElementContains('[class^=FileTable_Row]', MODEL.TITLE)
 }
@@ -30,10 +43,10 @@ export const versionUpload = () => {
   clickOnElementByText('Upload new version')
   uploadFile(VERSION_MODEL.FILENAME, multiUploadInput)
   clickOnElementByText('Continue')
-  cy.get(`[class^=PartInfo_Field] [name=name]`).clear()
-  cy.get(`[class^=PartInfo_Field] [name=name]`).focus().type(VERSION_MODEL.TITLE)
-  cy.get(`[class^=PartInfo_Field] [name=description]`).clear()
-  cy.get(`[class^=PartInfo_Field] [name=description]`)
+  cy.get('[class^=PartInfo_Field] [name=name]').clear()
+  cy.get('[class^=PartInfo_Field] [name=name]').focus().type(VERSION_MODEL.TITLE)
+  cy.get('[class^=PartInfo_Field] [name=description]').clear()
+  cy.get('[class^=PartInfo_Field] [name=description]')
     .focus()
     .type(VERSION_MODEL.DESCRIPTION)
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue')

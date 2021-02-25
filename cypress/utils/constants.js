@@ -48,6 +48,7 @@ export const PATH = {
 
 export const MODEL = {
   FILENAME: 'horn1.stl',
+  LICENSE: 'LICENSE.txt',
   TITLE: 'Test Name',
   DESCRIPTION: 'Test Description',
   COMMENT: 'Test comment',
@@ -82,6 +83,7 @@ export const CLASSES = {
   NOTIFICATIONS_DROPDOWN: '[class^="NotificationsButton"] + [class*="DropdownMenu"]',
   NOTIFICATIONS_TEXT: '[class^=NotificationSnippet_text]',
   PROFILE_BUTTON: '[class^=ProfileDropdown_ClickableButton]',
+  PROFILE_NAME: '[class^=Profile_Name]',
   PROFILE_DROPDOWN:
     '[class^="ProfileDropdown_ClickableButton"] + [class*="DropdownMenu"]',
   SEARCH_BAR_BUTTON: '[class^=SearchBar_SearchButton]',
@@ -95,6 +97,16 @@ export const CLASSES = {
   UPLOAD_BUTTON_GROUP: '[class^=UploadForm_ButtonGroup]',
   UPLOAD_BUTTON: '[class^="Button"]',
   MODEL_CARD: '[class^=ModelCard]',
+  MODEL_LICENSE: '[class^=Model_License]',
+  MODEL_LICENSE_LINK: '[class^=Model_LicenseLink]',
+  MODEL_LICENSE_FORM: '[class^=License_FormWrapper]',
+  MODEL_LICENSE_TITLE_TEXT: '[class^=ModelTitle_Text]',
+  MODEL_LICENSE_TEXT: '[class^=License_Text]',
+  MODEL_LICENSE_EXIT: '[class^=License_ExitButton]',
+  MODEL_LICENSE_CLOSE: '[class^=License_ConfirmButton]',
+  MODEL_LICENSE_OWNER_AVATAR: '[class^=ModelTitle_OwnerProfilePicture]',
+  MODEL_LICENSE_OWNER_LINK: '[class^=ModelTitle_ProfileLink]',
+  MODEL_LICENSE_DOWNLOAD: '[class^=License_Download]',
   MODEL_CARD_EDIT_BUTTON: '[class^=EditModel_EditIcon]',
   MODEL_PAGE_TITLE: '[class^=ModelTitle_Text]',
   MODEL_PAGE_AUTHOR: '[class^=ModelTitle_ProfileAuthor]',

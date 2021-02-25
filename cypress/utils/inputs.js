@@ -8,6 +8,7 @@ export const inputSelectors = {
   search: '[name=search]',
   upload: '[name=upload]',
   multiUpload: '[name=multi-upload]',
+  licenseUpload: '[name=license-upload]',
   modelTitle: '[name=name]',
   modelDescription: '[name=description]',
   comment: '[name=body]',
@@ -86,6 +87,11 @@ export const TEST_USER_1 = {
 export const multiUploadInput = {
   type: 'file',
   selector: inputSelectors.multiUpload,
+}
+
+export const licenseUploadInput = {
+  type: 'file',
+  selector: inputSelectors.licenseUpload,
 }
 
 export const findInput = (el, input, index = 0) => {

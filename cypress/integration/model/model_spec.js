@@ -10,7 +10,6 @@ import {
 import {
   CLASSES,
   MODEL,
-  USER3,
   PROPS,
   TEXT,
   MODEL_CARD,

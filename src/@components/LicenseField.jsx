@@ -100,6 +100,7 @@ const LicenseField = ({ className, onChange = noop, value, model = {} }) => {
       <div>
         <Button onClick={handleLicenseClick}>Browse</Button>
         <input
+          name='license-upload'
           type='file'
           onChange={handleLicenseChange}
           ref={hiddenFileInput}
