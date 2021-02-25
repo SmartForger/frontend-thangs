@@ -26,7 +26,7 @@ const LicenseField = ({ className, onChange = noop, value, model = {} }) => {
   const c = useStyles()
   const hiddenFileInput = React.useRef(null)
   const { dispatch, license } = useStoreon('license')
-  const { isLoading, isLoaded, isError, data } = license
+  const { isLoading } = license
   const directory = useMemo(
     () => (model.newFileName ? model.newFileName.split('/')[0] : ''),
     [model.newFileName]
@@ -52,7 +52,6 @@ const LicenseField = ({ className, onChange = noop, value, model = {} }) => {
 
   const handleSuccess = useCallback(
     file => {
-      console.log('SUCCESS', file)
       onChange(file)
     },
     [onChange]
@@ -69,6 +68,7 @@ const LicenseField = ({ className, onChange = noop, value, model = {} }) => {
         dispatch(types.UPLOAD_MODEL_LICENSE, {
           file: file.name,
           directory,
+          modelId: model.id || null,
           onFinish: handleSuccess,
           onError: handleError,
         })
@@ -76,7 +76,7 @@ const LicenseField = ({ className, onChange = noop, value, model = {} }) => {
         onChange(null)
       }
     },
-    [directory, dispatch, handleError, handleSuccess, onChange]
+    [directory, dispatch, handleError, handleSuccess, model.id, onChange]
   )
 
   return (
