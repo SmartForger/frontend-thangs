@@ -26,19 +26,20 @@ const LicenseField = ({ className, onChange = noop, value, model = {} }) => {
   const c = useStyles()
   const hiddenFileInput = React.useRef(null)
   const { dispatch, license } = useStoreon('license')
-  const { isLoading } = license
+  const { isLoading, isError } = license
   const directory = useMemo(
     () => (model.newFileName ? model.newFileName.split('/')[0] : ''),
     [model.newFileName]
   )
   const displayValue = useMemo(() => {
-    if (!value) return null
+    if (!value) return 'Attach License'
     const fullValue = value.split('/')
     return fullValue[fullValue.length - 1]
   }, [value])
 
   const handleLicenseClick = useCallback(
     event => {
+      // Ignore all clicks while license is loading
       if (isLoading) return
       event.preventDefault()
       hiddenFileInput.current.click()
@@ -72,11 +73,9 @@ const LicenseField = ({ className, onChange = noop, value, model = {} }) => {
           onFinish: handleSuccess,
           onError: handleError,
         })
-      } else {
-        onChange(null)
       }
     },
-    [directory, dispatch, handleError, handleSuccess, model.id, onChange]
+    [directory, dispatch, handleError, handleSuccess, model.id]
   )
 
   return (
@@ -87,6 +86,8 @@ const LicenseField = ({ className, onChange = noop, value, model = {} }) => {
             disabled={true}
             name='license'
             label={displayValue || 'Attach license'}
+            errorMessage={isError && 'There has been an error, please try again'}
+            error={isError}
           />
         </div>
         {displayValue ? (

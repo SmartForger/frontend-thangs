@@ -21,6 +21,7 @@ export default store => {
       ...state.license,
       isLoading: true,
       isLoaded: false,
+      isError: false,
     },
   }))
 
@@ -29,6 +30,7 @@ export default store => {
       ...state.license,
       isLoading: false,
       isLoaded: true,
+      isError: false,
       data,
     },
   }))
