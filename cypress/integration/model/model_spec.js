@@ -58,9 +58,8 @@ describe('The Model Page', () => {
 
     //upload new verison
     versionUpload()
-    goTo(`/${user.NAME}`)
-    cy.wait(5000)
-    cy.get(MODEL_CARD(VERSION_MODEL.TITLE)).click()
+    goTo(`/${activeUser.NAME}`)
+    cy.get(MODEL_CARD(VERSION_MODEL.TITLE), { timeout: 5000 }).click()
     cy.get('[class^=Revised_Label] a[href^="/model"]').click()
     isTextInsideClass('[class^=ModelTitle_Text]', MODEL.TITLE)
   })
