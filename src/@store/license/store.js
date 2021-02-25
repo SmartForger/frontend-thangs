@@ -62,7 +62,7 @@ export default store => {
 
   store.on(
     types.UPLOAD_MODEL_LICENSE,
-    async (state, { file, directory, modelId, onFinish = noop, onError = noop }) => {
+    async (state, { file, directory, onFinish = noop, onError = noop }) => {
       let uploadedUrlData
       const { data, error } = await api({
         method: 'POST',
