@@ -52,6 +52,7 @@ const getThumbnailUrl = (model = {}) => {
 
 export const getExternalAvatar = attributionUrl => {
   if (attributionUrl.includes('3delicious')) return '/assets/3delicious.png'
+  if (attributionUrl.includes('3dmag')) return '/assets/3dmag.png'
   if (attributionUrl.includes('all3dfree')) return '/assets/all3dfree.png'
   if (attributionUrl.includes('archive3d')) return '/assets/archive3d.png'
   if (attributionUrl.includes('archibaseplanet')) return '/assets/archibase.png'
