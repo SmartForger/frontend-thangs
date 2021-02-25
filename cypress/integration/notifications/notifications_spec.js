@@ -24,9 +24,12 @@ describe('User notifications', () => {
     cy.getCookie('sideUser').then(({ value }) => {
       sideUser = JSON.parse(value)
       unfollowUser(sideUser, activeUser)
-      clearModelsAndFolders(activeUser)
-      clearModelsAndFolders(sideUser)
     })
+  })
+
+  after(() => {
+    clearModelsAndFolders(activeUser)
+    clearModelsAndFolders(sideUser)
   })
 
   it('User2 follows User1', () => {

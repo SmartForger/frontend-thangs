@@ -49,9 +49,9 @@ export const PATH = {
 export const MODEL = {
   FILENAME: 'horn1.stl',
   LICENSE: 'LICENSE.txt',
-  TITLE: 'Test Name',
-  DESCRIPTION: 'Test Description',
-  COMMENT: 'Test comment',
+  TITLE: 'Cypress Test Model',
+  DESCRIPTION: 'Cypress Test Description',
+  COMMENT: 'Cypress Test comment',
 }
 
 export const VERSION_MODEL = {

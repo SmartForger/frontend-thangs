@@ -16,12 +16,15 @@ describe('The Model Page', () => {
   before(() => {
     cy.getCookie('activeUser').then(({ value }) => {
       activeUser = JSON.parse(value)
-      clearModelsAndFolders(activeUser)
     })
   })
 
   beforeEach(() => {
     loginByUser({ email: activeUser.EMAIL, password: activeUser.PASSWORD })
+  })
+
+  after(() => {
+    clearModelsAndFolders(activeUser)
   })
 
   it('Check upload model with the license and license text on model page', () => {
