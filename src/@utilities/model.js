@@ -61,6 +61,7 @@ export const getExternalAvatar = attributionUrl => {
   if (attributionUrl.includes('halderusa')) return '/assets/halderusa.png'
   if (attributionUrl.includes('mcmaster')) return '/assets/mcmaster.png'
   if (attributionUrl.includes('myminifactory')) return '/assets/myminifactory.png'
+  if (attributionUrl.includes('opengameart')) return '/assets/opengameart.png'
   if (attributionUrl.includes('parker')) return '/assets/parker.png'
   if (attributionUrl.includes('partcommunity')) return '/assets/partcommunity.png'
   if (attributionUrl.includes('prusaprinters')) return '/assets/prusaprinters.png'
