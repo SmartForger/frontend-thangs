@@ -54,6 +54,11 @@ const useStyles = createUseStyles(theme => {
         flexDirection: 'row',
       },
     },
+    TextSearchResult_Column: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      flexDirection: 'column',
+    },
     TextSearchResult_Content: {
       padding: '.5rem 0',
       display: 'flex',
@@ -150,6 +155,15 @@ const useStyles = createUseStyles(theme => {
       lineHeight: '1rem',
       cursor: 'pointer',
       textDecoration: 'underline',
+    },
+    TextSearchResult_ReportModelLink: {
+      fontSize: '.75rem',
+      fontWeight: '500',
+      cursor: 'pointer',
+
+      '&:hover': {
+        textDecoration: 'underline',
+      },
     },
   }
 })
@@ -265,13 +279,19 @@ const TextSearchResult = ({ model, onFindRelated = noop, onReportModel = noop })
             />
           </Card>
         </Anchor>
-        <div>
+        <div className={c.TextSearchResult_Column}>
           <ModelDetails
             model={model}
             modelAttributionUrl={modelAttributionUrl}
             onReportModel={onReportModel}
             onFindRelated={onFindRelated}
           />
+          <div
+            className={c.TextSearchResult_ReportModelLink}
+            onClick={() => onReportModel({ model })}
+          >
+            Report Model
+          </div>
         </div>
       </div>
     </div>

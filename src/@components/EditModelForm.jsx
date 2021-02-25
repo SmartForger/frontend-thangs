@@ -165,6 +165,7 @@ const EditModelForm = ({
     height: model.height || '',
     weight: model.weight || '',
     category: model.category || '',
+    license: model.license || null,
   }
 
   const { onFormSubmit, onInputChange, inputState } = useForm({
