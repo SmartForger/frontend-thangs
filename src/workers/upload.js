@@ -1,5 +1,5 @@
 import axios from 'axios'
-import storageService from '../@services/storage.service'
+import storageService from '@services/storage.service'
 import api from './api'
 import { sendMessage, addMessageListener } from './worker'
 

@@ -66,9 +66,10 @@ export default store => {
       let uploadedUrlData
       const { data, error } = await api({
         method: 'POST',
-        endpoint: `models/${directory || modelId}/upload-collateral-file-urls`,
+        endpoint: 'models/upload-urls',
         body: {
-          fileNames: [file],
+          fileNames: [file.name],
+          directory,
         },
       })
       if (error) {

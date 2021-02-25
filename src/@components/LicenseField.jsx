@@ -67,7 +67,7 @@ const LicenseField = ({ className, onChange = noop, value, model = {} }) => {
       const file = event.target.files[0] || null
       if (file) {
         dispatch(types.UPLOAD_MODEL_LICENSE, {
-          file: file.name,
+          file,
           directory,
           modelId: model.id || null,
           onFinish: handleSuccess,

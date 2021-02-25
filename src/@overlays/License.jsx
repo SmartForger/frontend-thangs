@@ -83,21 +83,26 @@ const useStyles = createUseStyles(theme => {
       flexFlow: 'column nowrap',
     },
     License_TextContainer: {
+      ...theme.mixins.scrollbar,
       backgroundColor: '#F7F7FB',
-      width: '100%',
-      height: 'auto',
-      maxHeight: '18rem',
-      textAlign: 'left',
-      overflow: 'scroll',
-      display: 'flex',
-      flexDirection: 'column',
-      overflowWrap: 'break-word',
       borderRadius: '1rem',
+      display: 'flex',
+      height: 'auto',
+      maxHeight: '30rem',
+      overflowX: 'hidden',
+      overflowY: 'auto',
+      width: '100%',
+
+      '&::-webkit-scrollbar-track': {
+        background: '#F7F7FB',
+      },
     },
     License_Text: {
-      color: theme.colors.black[500],
-      alignItems: 'center',
-      padding: '1rem 1.5rem 1rem 1.5rem',
+      display: 'flex',
+      flexWrap: 'wrap',
+      padding: '0 1rem',
+      whiteSpace: 'break-spaces',
+      width: '100%',
     },
     License_ConfirmButton: {
       marginBottom: '2rem',
@@ -183,7 +188,7 @@ const LicenseContent = ({ c, model }) => {
         {license.isLoading && !license.isLoaded && <Spinner />}
         {license.isLoaded && licenseText && (
           <div className={c.License_TextContainer}>
-            <div className={c.License_Text}>{license.data.licenseText}</div>
+            <pre className={c.License_Text}>{license.data.licenseText}</pre>
           </div>
         )}
         <Spacer size='1.5rem' />
