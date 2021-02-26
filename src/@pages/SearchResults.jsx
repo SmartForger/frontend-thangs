@@ -343,6 +343,7 @@ const Page = () => {
   const phyndexerModels = R.path(['data'], phyndexer) || []
   const textModels = R.path(['data'], text) || []
   const resultCount = phyndexerModels.length + thangsModels.length + textModels.length
+  const isLoading = thangs.isLoading || phyndexer.isLoading || text.isLoading
 
   const handleFilterChange = useCallback(value => {
     setSearchScope(value)
@@ -356,29 +357,28 @@ const Page = () => {
           <div className={c.SearchResults_Header}>
             <div className={c.SearchResults_HeaderTextWrapper}>
               <h1 className={c.SearchResults_HeaderText}>
-                Search Results for {decodeURIComponent(searchQuery)}
+                {isLoading ? 'Loading' : resultCount} results for{' '}
+                {decodeURIComponent(searchQuery)}
               </h1>
-              {resultCount && resultCount > 0 ? (
-                <div className={c.SearchResult_ResultCountText}>
-                  {resultCount} results
+              <div className={c.SearchResult_ResultCountText}>
+                <div className={c.SearchResults_FilterBar}>
+                  Results from
+                  <Spacer size='.5rem' />
+                  <SearchSourceFilterActionMenu
+                    selectedValue={searchScope}
+                    onChange={handleFilterChange}
+                  />
                 </div>
-              ) : null}
+              </div>
             </div>
-            <div className={c.SearchResults_FilterBar}>
-              <SearchSourceFilterActionMenu
-                selectedValue={searchScope}
-                onChange={handleFilterChange}
-              />
-              <Spacer size='1rem' />
-              <SaveSearchButton
-                currentUser={currentUser}
-                dispatch={dispatch}
-                modelId={modelId}
-                openSignupOverlay={openSignupOverlay}
-                searchSubscriptions={searchSubscriptions}
-                searchTerm={searchQuery}
-              />
-            </div>
+            <SaveSearchButton
+              currentUser={currentUser}
+              dispatch={dispatch}
+              modelId={modelId}
+              openSignupOverlay={openSignupOverlay}
+              searchSubscriptions={searchSubscriptions}
+              searchTerm={searchQuery}
+            />
           </div>
         )}
         {searchQuery ? (

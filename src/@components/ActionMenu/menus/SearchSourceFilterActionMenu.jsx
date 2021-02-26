@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
-import { ActionMenu, Pill, Spacer } from '@components'
+import { ActionMenu, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import * as R from 'ramda'
 
@@ -10,11 +10,12 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     SearchSourceFilterActionMenu: {},
-    SearchSourceFilterActionMenu_ClickableButton: {
+    SearchSourceFilter_ClickableButton: {
+      alignItems: 'center',
       cursor: 'pointer',
       display: 'flex',
       flexDirection: 'row',
-      alignItems: 'center',
+      borderBottom: '1px solid',
     },
     SearchSourceFilterActionMenu__desktop: {
       display: 'none',
@@ -30,6 +31,11 @@ const useStyles = createUseStyles(theme => {
         display: 'none',
       },
     },
+    SearchSourceFilter_DownArrow: {
+      '& path': {
+        fill: '#999999',
+      },
+    },
   }
 })
 
@@ -37,7 +43,7 @@ const noop = () => null
 
 const options = [
   {
-    label: 'Best Overall',
+    label: 'All',
     value: 'all',
   },
   {
@@ -61,11 +67,14 @@ const label = selectedValue => {
 const SearchSourceFilterTarget = ({ onClick = noop, selectedValue }) => {
   const c = useStyles({})
   return (
-    <Pill className={c.SearchSourceFilter_ClickableButton} onClick={onClick}>
-      <ArrowDownIcon />
-      <Spacer size={'.5rem'} />
-      {label(selectedValue)}
-    </Pill>
+    <>
+      <Spacer size='.25rem' />
+      <div className={c.SearchSourceFilter_ClickableButton} onClick={onClick}>
+        <ArrowDownIcon className={c.SearchSourceFilter_DownArrow} />
+        <Spacer size='.25rem' />
+        {label(selectedValue)}
+      </div>
+    </>
   )
 }
 

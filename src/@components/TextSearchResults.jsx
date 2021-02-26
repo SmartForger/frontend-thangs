@@ -321,7 +321,7 @@ const TextSearchResults = ({
       <NoResults>Error! We were not able to load results. Please try again.</NoResults>
     )
   }
-  if (isLoading) {
+  if (isLoading && !items.length) {
     const loadingText = `Searching ${
       numberWithCommas(totalModelCount) || '1,500,000'
     } models to find the best results
