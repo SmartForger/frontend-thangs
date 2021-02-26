@@ -86,7 +86,7 @@ const RecentFilesView = ({
   const files = useMemo(() => {
     return [folderData, modelData].flat()
   }, [folderData, modelData])
-  
+
   useEffect(() => {
     pageview('MyThangs - RecentFiles')
     // eslint-disable-next-line react-hooks/exhaustive-deps

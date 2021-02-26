@@ -15,13 +15,12 @@ import {
   Textarea,
   Toggle,
   TitleTertiary,
+  SelectFolderActionMenu,
 } from '@components'
 import { useForm } from '@hooks'
 import { createUseStyles } from '@style'
 import { formatBytes } from '@utilities'
 import { CATEGORIES } from '@constants/fileUpload'
-// import * as types from '../../@constants/storeEventTypes'
-// import { useStoreon } from 'storeon/react'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -330,13 +329,7 @@ const PartInfo = props => {
       )}
       <form onSubmit={onFormSubmit(handleSubmit)}>
         <div className={classnames(c.PartInfo_Field, c.PartInfo_Field__FolderMenu)}>
-          <FoldersDropdownMenu
-            myThangsMenu={false}
-            className={c.PartInfo_FolderMenu}
-            folders={folders}
-            onChange={value => {
-              handleOnInputChange('folderId', value)
-            }}
+          <SelectFolderActionMenu
             TargetComponent={({ onClick = noop }) => (
               <Input
                 label={'Folder'}
@@ -344,6 +337,10 @@ const PartInfo = props => {
                 value={(selectedFolder || {}).label}
               />
             )}
+            onChange={value => {
+              handleOnInputChange('folderId', value)
+            }}
+            folders={folders}
           />
         </div>
         <div className={c.PartInfo_Field}>
@@ -382,24 +379,6 @@ const PartInfo = props => {
             errorMessage={checkError('description').message}
           />
         </div>
-        {/*
-        {isRootPart && folders && folders.length > 1 ? (
-          <div className={c.PartInfo_Field}>
-            <Dropdown
-              className={c.PartInfo_Select}
-              name='folder'
-              placeholder={'Select folder'}
-              value={selectedFolder}
-              options={folders}
-              onChange={e => {
-                if (e) handleOnInputChange('folderId', e.value)
-              }}
-              error={checkError('folder').message}
-              errorMessage={checkError('folder').message}
-            />
-          </div>
-        ) : null}
-        */}
         <div className={c.PartInfo_Field}>
           <Input
             className={c.PartInfo_FullWidthInput}

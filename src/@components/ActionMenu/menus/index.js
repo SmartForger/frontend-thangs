@@ -7,3 +7,4 @@ export { default as OrientationActionMenu } from './ModelViewer/OrientationActio
 export { default as PartExplorerActionMenu } from './ModelViewer/PartExplorerActionMenu'
 export { default as ShareActionMenu } from './ShareActionMenu'
 export { default as SearchSourceFilterActionMenu } from './SearchSourceFilterActionMenu'
+export { default as SelectFolderActionMenu } from './SelectFolderActionMenu'
