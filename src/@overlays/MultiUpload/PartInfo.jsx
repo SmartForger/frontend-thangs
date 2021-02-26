@@ -214,7 +214,6 @@ const PartInfo = props => {
     activeNode,
     errorMessage,
     filesData,
-    folders,
     formData,
     isLoading,
     multipartName,
@@ -257,11 +256,6 @@ const PartInfo = props => {
     return R.find(R.propEq('value', inputState.category), CATEGORIES) || null
   }, [inputState])
 
-  const selectedFolder = useMemo(() => {
-    return R.find(R.propEq('value', inputState.folderId), folders)
-  }, [inputState, folders])
-  const folderPublic = selectedFolder && selectedFolder.isPublic
-
   const pathFromRoot = useMemo(() => {
     if (activeNode.parentId === 'multipart') {
       return [multipartName, activeNode.name].join(' / ')
@@ -285,6 +279,10 @@ const PartInfo = props => {
   useEffect(() => {
     updateValidationSchema(PartInfoSchema({ isRootPart }))
   }, [isRootPart, updateValidationSchema])
+
+  const folderPublic = useMemo(() => {
+    return inputState && inputState.folder && inputState.folder.isPublic
+  }, [inputState])
 
   return (
     <>
@@ -330,17 +328,10 @@ const PartInfo = props => {
       <form onSubmit={onFormSubmit(handleSubmit)}>
         <div className={classnames(c.PartInfo_Field, c.PartInfo_Field__FolderMenu)}>
           <SelectFolderActionMenu
-            TargetComponent={({ onClick = noop }) => (
-              <Input
-                label={'Folder'}
-                onClick={onClick}
-                value={(selectedFolder || {}).label}
-              />
-            )}
             onChange={value => {
-              handleOnInputChange('folderId', value)
+              handleOnInputChange('folder', value)
             }}
-            folders={folders}
+            selectedValue={inputState.folder}
           />
         </div>
         <div className={c.PartInfo_Field}>

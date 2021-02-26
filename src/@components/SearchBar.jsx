@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useRef } from 'react'
 import classnames from 'classnames'
 
 import { TextInput } from '@components'
@@ -95,24 +95,45 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
-
-const SearchBar = ({ onChange = () => {}, value = '' }) => {
+const noop = () => null
+const SearchBar = ({
+  setCurrentView = noop,
+  placeholder = 'Search to find',
+  onSearch = noop,
+}) => {
   const c = useStyles({})
+  const [searchTerm, setSearchTerm] = useState(undefined)
+  const inputRef = useRef(null)
+
+  const handleSearchSubmit = e => {
+    e.preventDefault()
+    onSearch(searchTerm)
+    if (searchTerm) {
+      setCurrentView(`searchFiles/${searchTerm}`)
+      setSearchTerm(undefined)
+      inputRef.current.blur()
+    }
+  }
 
   return (
     <div className={c.SearchBar}>
-      <form className={c.SearchBar_Form}>
+      <form className={c.SearchBar_Form} onSubmit={handleSearchSubmit}>
         <div className={classnames(c.SearchBar_Wrapper)}>
           <SearchIcon
             className={classnames(c.SearchBar_SearchIcon, c.SearchBar_FormIcon)}
+            onClick={handleSearchSubmit}
           />
           <TextInput
-            placeholder={'Search'}
+            name='search'
+            inputRef={inputRef}
+            placeholder={placeholder}
             className={classnames(c.SearchBar_FormInput, {
-              [c.SearchBar_FormInput_active]: true,
+              [c.SearchBar_FormInput_active]: searchTerm,
             })}
-            onChange={onChange}
-            value={value}
+            onChange={e => {
+              setSearchTerm(e.target.value)
+            }}
+            value={searchTerm || ''}
           />
         </div>
       </form>

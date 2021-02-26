@@ -104,7 +104,7 @@ const useDropdownMenuState = ({
 }
 const DropdownItem = ({ children, to = '#', onClick, className, noHover = false }) => {
   const c = useStyles({ noHover })
-  const { setOverlayOpen } = useOverlay()
+  const { setOverlayOpen = noop } = useOverlay()
 
   return (
     <div className={c.DropdownMenu_ItemWrapper}>
@@ -112,6 +112,7 @@ const DropdownItem = ({ children, to = '#', onClick, className, noHover = false 
         <div
           className={classnames(className, c.DropdownMenu_Item)}
           onClick={e => {
+            console.log('because you clicked')
             setOverlayOpen(false)
             onClick && onClick(e)
           }}

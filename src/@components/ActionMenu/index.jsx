@@ -22,7 +22,7 @@ const useStyles = createUseStyles(theme => {
       opacity: ({ isMobileActive }) => (isMobileActive ? '0 !important' : '1'),
       visibility: ({ isMobileActive }) =>
         isMobileActive ? 'hidden !important' : 'visible',
-      width: 'auto !important',
+      width: 'auto',
 
       [md]: {
         opacity: '1',
@@ -245,6 +245,7 @@ export const ActionMenu = props => {
     MenuComponentProps,
     isAutoClosed = true,
     isExternalClosed = false,
+    isClosedOnChange = false,
     isMobileActionBarActive = true,
     isOpenByDefault = false,
     isMobileOnly = false,
@@ -258,8 +259,9 @@ export const ActionMenu = props => {
     value => {
       onChange(value)
       setActionMenuClose()
+      if (isClosedOnChange) console.log('do something')
     },
-    [onChange, setActionMenuClose]
+    [isClosedOnChange, onChange, setActionMenuClose]
   )
 
   const handleTargetClick = useCallback(() => {

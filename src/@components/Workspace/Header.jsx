@@ -1,11 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Divider, Notifications, Spacer, UserNav } from '@components'
-import SearchBar from './SearchBar'
+import { Divider, Notifications, SearchBar, Spacer, UserNav } from '@components'
 import { useCurrentUser } from '@hooks'
 import { createUseStyles } from '@style'
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as MenuIcon } from '@svg/icon-menu.svg'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -102,7 +102,11 @@ const WorkspaceHeader = ({ setCurrentView = noop, openMobileNav = noop }) => {
               <MenuIcon onClick={openMobileNav} />
             </div>
           </div>
-          <SearchBar setCurrentView={setCurrentView} />
+          <SearchBar
+            setCurrentView={setCurrentView}
+            placeholder='Search to find your models'
+            onSearch={term => track('Search My Thangs', { searchTerm: term })}
+          />
         </div>
       </div>
       <div className={c.WorkspaceHeader_DesktopOnly}>
@@ -110,7 +114,11 @@ const WorkspaceHeader = ({ setCurrentView = noop, openMobileNav = noop }) => {
         <div className={c.WorkspaceHeader_Content}>
           <div className={c.WorkspaceHeader_DesktopRow}>
             <Spacer size='2rem' />
-            <SearchBar setCurrentView={setCurrentView} />
+            <SearchBar
+              setCurrentView={setCurrentView}
+              placeholder='Search to find your models'
+              onSearch={term => track('Search My Thangs', { searchTerm: term })}
+            />
           </div>
           <div>
             <UserNav

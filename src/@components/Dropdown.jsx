@@ -103,7 +103,7 @@ const Dropdown = ({
           valueContainer: base => {
             return {
               ...base,
-              padding: '8px 16px',
+              padding: '0.75rem 1rem',
             }
           },
         }}

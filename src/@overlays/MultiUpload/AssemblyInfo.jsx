@@ -8,6 +8,7 @@ import {
   LicenseField,
   MetadataPrimary,
   MetadataSecondary,
+  SelectFolderActionMenu,
   Spacer,
   SingleLineBodyText,
   Textarea,
@@ -139,7 +140,6 @@ const AssemblyInfo = ({
   activeNode,
   errorMessage: _err,
   filesData,
-  folders,
   formData,
   onContinue,
   setErrorMessage,
@@ -179,14 +179,15 @@ const AssemblyInfo = ({
     if (isValid) onContinue({ data })
   }
 
-  const selectedFolder = useMemo(() => {
-    return R.find(R.propEq('value', inputState.folderId), folders)
-  }, [inputState, folders])
   const metaText =
     activeNode.subs.length > 1
       ? `Assembly • ${activeNode.subs.length} Parts`
       : `Assembly • ${activeNode.subs.length} Part`
-  const folderPublic = selectedFolder && selectedFolder.isPublic
+
+  const folderPublic = useMemo(() => {
+    return inputState && inputState.folder && inputState.folder.isPublic
+  }, [inputState])
+
   const fileOptions = useMemo(
     () =>
       activeNode.subs.map(node => ({
@@ -288,23 +289,12 @@ const AssemblyInfo = ({
           />
           <Spacer size={'1rem'} />
         </div>
-        {isRootAssembly && folders && folders.length > 1 ? (
-          <div>
-            <Dropdown
-              className={c.AssemblyInfo_Select}
-              name='folder'
-              placeholder={'Select folder'}
-              value={selectedFolder}
-              options={folders}
-              onChange={e => {
-                if (e) handleOnInputChange('folderId', e.value)
-              }}
-              error={checkError('folder').message}
-              errorMessage={checkError('folder').message}
-            />
-            <Spacer size={'1rem'} />
-          </div>
-        ) : null}
+        <SelectFolderActionMenu
+          onChange={value => {
+            handleOnInputChange('folder', value)
+          }}
+          selectedValue={inputState.folder}
+        />
         {isRootAssembly && (
           <div>
             <Dropdown

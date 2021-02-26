@@ -96,13 +96,10 @@ const useStyles = createUseStyles(theme => {
 })
 
 const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' }) => {
-  const {
-    dispatch,
-    folders = {},
-    license = {},
-    shared = {},
-    uploadFiles = {},
-  } = useStoreon('folders', 'license', 'shared', 'uploadFiles')
+  const { dispatch, license = {}, uploadFiles = {} } = useStoreon(
+    'license',
+    'uploadFiles'
+  )
   const {
     data: uploadFilesData = {},
     treeData,
@@ -112,8 +109,6 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
     validated,
     isAssembly,
   } = uploadFiles
-  const { data: foldersData = [] } = folders
-  const { data: sharedData = [] } = shared
   const { isLoading: isLoadingLicense } = license
   const [activeView, setActiveView] = useState(-1)
   const [errorMessage, setErrorMessage] = useState(null)
@@ -177,8 +172,8 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
           ? newNode.subIds.map(subId => formNode(subId))
           : []
         : Object.values(newTreeData)
-          .filter(node => !node.parentId)
-          .map(node => formNode(node.id))
+            .filter(node => !node.parentId)
+            .map(node => formNode(node.id))
 
       newNode.treeValid =
         newNode.valid &&
@@ -234,45 +229,6 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
 
     return initialFormData
   }, [activeNode, folderId, formData])
-  const dropdownFolders = useMemo(() => {
-    const foldersArray = [...foldersData]
-    const sharedArray = [...sharedData]
-    const combinedArray = []
-    foldersArray.sort((a, b) => {
-      if (a.name.toLowerCase() < b.name.toLowerCase()) return -1
-      else if (a.name.toLowerCase() > b.name.toLowerCase()) return 1
-      return 0
-    })
-    sharedArray.sort((a, b) => {
-      if (a.name.toLowerCase() < b.name.toLowerCase()) return -1
-      else if (a.name.toLowerCase() > b.name.toLowerCase()) return 1
-      return 0
-    })
-    foldersArray.forEach(folder => {
-      combinedArray.push(folder)
-      folder.subfolders.forEach(subfolder => {
-        combinedArray.push(subfolder)
-      })
-    })
-    sharedArray.forEach(folder => {
-      combinedArray.push(folder)
-    })
-
-    const folderOptions = combinedArray.map(folder => ({
-      value: folder.id,
-      label: folder.name.replace(new RegExp('//', 'g'), '/'),
-      isPublic: folder.isPublic,
-    }))
-
-    return [
-      {
-        value: '',
-        label: 'My Public Files',
-        isPublic: true,
-      },
-      ...folderOptions,
-    ]
-  }, [foldersData, sharedData])
 
   const partFormTitle = useMemo(() => {
     if (!activeNode) return ''
@@ -462,15 +418,6 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
   }
 
   useEffect(() => {
-    // dispatch(types.RESET_UPLOAD_FILES)
-    const { data: folderData } = folders
-    if (R.isEmpty(folderData)) {
-      dispatch(types.FETCH_THANGS, {})
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
     if (initData) onDrop(initData.acceptedFiles, initData.rejectedFile, initData.e)
   }, [initData, onDrop])
 
@@ -492,10 +439,10 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
                   ? 'Upload New Version'
                   : 'Upload Files'
                 : activeNode.isAssembly && activeNode.parentId
-                  ? 'Sub Assembly'
-                  : activeNode.isAssembly
-                    ? 'New Assembly'
-                    : partFormTitle}
+                ? 'Sub Assembly'
+                : activeNode.isAssembly
+                ? 'New Assembly'
+                : partFormTitle}
             </SingleLineBodyText>
             {activeView > -1 && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />
@@ -529,7 +476,6 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
             activeNode={activeNode}
             errorMessage={errorMessage}
             filesData={uploadFilesData}
-            folders={dropdownFolders}
             formData={activeFormData}
             onContinue={handleContinue}
             setErrorMessage={setErrorMessage}
@@ -540,7 +486,6 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
             activeNode={activeNode}
             errorMessage={errorMessage}
             filesData={uploadFilesData}
-            folders={dropdownFolders}
             formData={activeFormData}
             isLoading={isLoading}
             multipartName={multipartName}
