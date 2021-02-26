@@ -6,7 +6,6 @@ import {
   openNotifications,
   isElement,
   isElementContainTwoValues,
-  unfollowUser,
   clearModelsAndFolders,
   log,
 } from '../../utils/common-methods'
@@ -23,7 +22,7 @@ describe('User notifications', () => {
     })
     cy.getCookie('sideUser').then(({ value }) => {
       sideUser = JSON.parse(value)
-      unfollowUser(sideUser, activeUser)
+      // unfollowUser(sideUser, activeUser)
     })
   })
 
