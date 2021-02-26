@@ -49,6 +49,7 @@ const LicenseField = ({ className, onChange = noop, value, model = {} }) => {
 
   const handleClearLicense = useCallback(() => {
     onChange(null)
+    hiddenFileInput.current.value = ''
   }, [onChange])
 
   const handleSuccess = useCallback(
@@ -60,6 +61,7 @@ const LicenseField = ({ className, onChange = noop, value, model = {} }) => {
 
   const handleError = useCallback(() => {
     onChange(null)
+    hiddenFileInput.current.value = ''
   }, [onChange])
 
   const handleLicenseChange = useCallback(
