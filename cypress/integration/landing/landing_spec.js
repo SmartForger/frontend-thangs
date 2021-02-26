@@ -44,7 +44,7 @@ describe('The Landing Page', () => {
     clearInput(CLASSES.HEADER_DESKTOP, searchInput)
     isElement(CLASSES.LANDING_SEARCH_BAR_UPLOAD, PROPS.VISIBLE)
   })
-  
+
   // Blocked by BE
   /*
   it('Search by upload provides to results page', () => {
@@ -80,6 +80,6 @@ describe('The Landing Page', () => {
     cy.get(searchBar).focus().type('#geotests', { force: true })
     clickOnElement(CLASSES.SEARCH_BAR_BUTTON)
     urlShouldInclude(`${PATH.SEARCH}%23geotests`)
-    isElementContains('[class^=SearchResults_HeaderText]', 'Search Results for #geotests')
+    isElementContains('[class^=SearchResults_HeaderText]', 'results for #geotests')
   })
 })
