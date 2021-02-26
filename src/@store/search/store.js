@@ -84,7 +84,7 @@ export default store => {
 
   store.on(
     types.GET_TEXT_SEARCH_RESULTS,
-    async (_state, { searchTerm, onFinish = noop, onError = noop }) => {
+    async (_state, { searchTerm, scope, onFinish = noop, onError = noop }) => {
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.TEXT,
         status: STATUSES.LOADING,
@@ -93,7 +93,7 @@ export default store => {
       const { data = [], error } = await api({
         method: 'GET',
         endpoint: 'models/search-by-text',
-        params: { searchTerm },
+        params: { searchTerm, scope: scope && scope !== 'all' ? scope : '' },
       })
 
       track('Text Search Started', {

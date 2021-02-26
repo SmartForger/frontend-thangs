@@ -11,6 +11,7 @@ import {
   Snackbar,
   Spacer,
   TextSearchResults,
+  SearchSourceFilterActionMenu,
 } from '@components'
 import { useLocalStorage, useQuery } from '@hooks'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
@@ -120,6 +121,11 @@ const useStyles = createUseStyles(theme => {
         fill: theme.colors.purple[400],
         width: '.75rem',
       },
+    },
+    SearchResults_FilterBar: {
+      alignItems: 'center',
+      display: 'flex',
+      flexDirection: 'row',
     },
   }
 })
@@ -256,7 +262,7 @@ const Page = () => {
   )
   const { phyndexer, text, thangs } = searchResults
   const [showReportModelButtons, setShowReportModelButtons] = useState(false)
-
+  const [searchScope, setSearchScope] = useState('all')
   useEffect(() => {
     if (related) {
       pageview('SearchResults Related')
@@ -272,6 +278,7 @@ const Page = () => {
     if (!modelId && !phynId) {
       dispatch(types.GET_TEXT_SEARCH_RESULTS, {
         searchTerm: decodeURIComponent(searchQuery),
+        scope: searchScope,
       })
     }
     if ((modelId || phynId) && !phyndexer.isLoaded && !thangs.isLoaded) {
@@ -282,7 +289,7 @@ const Page = () => {
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery, modelId])
+  }, [searchQuery, modelId, searchScope])
 
   const handleReportModel = useCallback(
     ({ model }) => {
@@ -337,6 +344,11 @@ const Page = () => {
   const textModels = R.path(['data'], text) || []
   const resultCount = phyndexerModels.length + thangsModels.length + textModels.length
 
+  const handleFilterChange = useCallback(value => {
+    setSearchScope(value)
+    track('Search Filter Change', { filter: value })
+  }, [])
+
   return (
     <div className={c.SearchResults_Page}>
       <div className={c.SearchResults_MainContent}>
@@ -352,14 +364,21 @@ const Page = () => {
                 </div>
               ) : null}
             </div>
-            <SaveSearchButton
-              currentUser={currentUser}
-              dispatch={dispatch}
-              modelId={modelId}
-              openSignupOverlay={openSignupOverlay}
-              searchSubscriptions={searchSubscriptions}
-              searchTerm={searchQuery}
-            />
+            <div className={c.SearchResults_FilterBar}>
+              <SearchSourceFilterActionMenu
+                selectedValue={searchScope}
+                onChange={handleFilterChange}
+              />
+              <Spacer size='1rem' />
+              <SaveSearchButton
+                currentUser={currentUser}
+                dispatch={dispatch}
+                modelId={modelId}
+                openSignupOverlay={openSignupOverlay}
+                searchSubscriptions={searchSubscriptions}
+                searchTerm={searchQuery}
+              />
+            </div>
           </div>
         )}
         {searchQuery ? (
@@ -373,6 +392,7 @@ const Page = () => {
                 items={textModels}
                 onFindRelated={handleFindRelated}
                 onReportModel={handleReportModel}
+                searchScope={searchScope}
                 searchTerm={searchQuery}
                 totalModelCount={
                   modelsStats && modelsStats.data && modelsStats.data.modelsIngested
@@ -407,6 +427,17 @@ const Page = () => {
                     showReportModel={showReportModelButtons}
                   />
                 )}
+                {resultCount && resultCount > 0 ? (
+                  <Button
+                    tertiary
+                    className={c.SearchResults_ReportModelButton}
+                    onClick={() => setShowReportModelButtons(!showReportModelButtons)}
+                  >
+                    <FlagIcon />
+                    <Spacer size='.5rem' />
+                    Report a Model
+                  </Button>
+                ) : null}
               </>
             )}
           </>
@@ -416,17 +447,6 @@ const Page = () => {
             model to find geometrically related matches to the model you upload.
           </NoResults>
         )}
-        {resultCount && resultCount > 0 ? (
-          <Button
-            tertiary
-            className={c.SearchResults_ReportModelButton}
-            onClick={() => setShowReportModelButtons(!showReportModelButtons)}
-          >
-            <FlagIcon />
-            <Spacer size='.5rem' />
-            Report a Model
-          </Button>
-        ) : null}
       </div>
     </div>
   )

@@ -11,39 +11,11 @@ import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
-    '@keyframes spinner': {
-      from: {
-        '-moz-transform': 'rotateY(0deg)',
-        '-ms-transform': 'rotateY(0deg)',
-        transform: 'rotateY(0deg)',
-      },
-      to: {
-        '-moz-transform': 'rotateY(-180deg)',
-        '-ms-transform': 'rotateY(-180deg)',
-        transform: 'rotateY(-180deg)',
-      },
-    },
     SaveSearchButton: {},
     SaveSearchIcon: {
       '& path': {
         fill: theme.colors.black[500],
       },
-    },
-    SaveSearchIcon__saved: {
-      animation: '$spinner 250ms linear 0s 1',
-
-      '-webkit-transform-style': 'preserve-3d',
-      '-moz-transform-style': 'preserve-3d',
-      '-ms-transform-style': 'preserve-3d',
-      'transform-style': 'preserve-3d',
-    },
-    SaveSearchIcon__unsaved: {
-      animation: '$spinner 250ms linear 0s 1 reverse',
-
-      '-webkit-transform-style': 'preserve-3d',
-      '-moz-transform-style': 'preserve-3d',
-      '-ms-transform-style': 'preserve-3d',
-      'transform-style': 'preserve-3d',
     },
     SaveSearchButton_Tooltip: {
       opacity: '1 !important',

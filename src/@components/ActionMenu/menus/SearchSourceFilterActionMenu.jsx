@@ -2,7 +2,6 @@ import React, { useMemo } from 'react'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 import { ActionMenu, Pill, Spacer } from '@components'
 import { createUseStyles } from '@style'
-import * as sortTypes from '@constants/sortTypes'
 import * as R from 'ramda'
 
 const useStyles = createUseStyles(theme => {
@@ -10,21 +9,21 @@ const useStyles = createUseStyles(theme => {
     mediaQueries: { md_viewer },
   } = theme
   return {
-    LandingSortActionMenu: {},
-    LandingSortActionMenu_ClickableButton: {
+    SearchSourceFilterActionMenu: {},
+    SearchSourceFilterActionMenu_ClickableButton: {
       cursor: 'pointer',
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
     },
-    LandingSortActionMenu__desktop: {
+    SearchSourceFilterActionMenu__desktop: {
       display: 'none',
 
       [md_viewer]: {
         display: 'flex',
       },
     },
-    LandingSortActionMenu__mobile: {
+    SearchSourceFilterActionMenu__mobile: {
       display: 'flex',
 
       [md_viewer]: {
@@ -38,20 +37,16 @@ const noop = () => null
 
 const options = [
   {
-    label: 'Popular',
-    value: sortTypes.likes,
+    label: 'Best Overall',
+    value: 'all',
   },
   {
-    label: 'Trending',
-    value: sortTypes.trending,
+    label: 'Thangs Only',
+    value: 'thangs',
   },
   {
-    label: 'New',
-    value: sortTypes.date,
-  },
-  {
-    label: 'Downloads',
-    value: sortTypes.downloaded,
+    label: 'External Only',
+    value: 'phyn',
   },
 ]
 
@@ -60,13 +55,13 @@ const label = selectedValue => {
   if (selectedSort) {
     return selectedSort.label
   }
-  return 'Models'
+  return 'All'
 }
 
-const LandingSortTarget = ({ onClick = noop, selectedValue }) => {
+const SearchSourceFilterTarget = ({ onClick = noop, selectedValue }) => {
   const c = useStyles({})
   return (
-    <Pill className={c.LandingSort_ClickableButton} onClick={onClick}>
+    <Pill className={c.SearchSourceFilter_ClickableButton} onClick={onClick}>
       <ArrowDownIcon />
       <Spacer size={'.5rem'} />
       {label(selectedValue)}
@@ -74,9 +69,14 @@ const LandingSortTarget = ({ onClick = noop, selectedValue }) => {
   )
 }
 
-const LandingSortActionMenu = ({ onChange = noop, selectedValue }) => {
+const SearchSourceFilterActionMenu = ({ onChange = noop, selectedValue }) => {
   const menuProps = useMemo(() => {
-    return { onChange, actionBarTitle: 'Select sort', options, tabletLayout: false }
+    return {
+      onChange,
+      actionBarTitle: 'Select Search Filter',
+      options,
+      tabletLayout: false,
+    }
   }, [onChange])
 
   const targetProps = useMemo(() => {
@@ -86,7 +86,7 @@ const LandingSortActionMenu = ({ onChange = noop, selectedValue }) => {
   return (
     <ActionMenu
       MenuComponentProps={menuProps}
-      TargetComponent={LandingSortTarget}
+      TargetComponent={SearchSourceFilterTarget}
       TargetComponentProps={targetProps}
       isCloseOnSelect={true}
       isMobileOnly={true}
@@ -94,4 +94,4 @@ const LandingSortActionMenu = ({ onChange = noop, selectedValue }) => {
   )
 }
 
-export default LandingSortActionMenu
+export default SearchSourceFilterActionMenu

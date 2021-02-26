@@ -169,18 +169,18 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const Anchor = ({ children, to, isExternal, ...props }) => {
+const Anchor = ({ children, to, isExternal, scope, ...props }) => {
   const onClick = useCallback(() => {
     if (isExternal) {
-      track('External Model Link', { path: to.pathname, type: 'text' })
+      track('External Model Link', { path: to.pathname, type: 'text', scope })
     } else {
-      track('Thangs Model Link', { path: to.pathname, type: 'text' })
+      track('Thangs Model Link', { path: to.pathname, type: 'text', scope })
     }
-  }, [isExternal, to.pathname])
-
+  }, [isExternal, scope, to.pathname])
+  const thangsPath = !isExternal ? to.pathname.split('.com').pop() : to.pathname
   return isExternal ? (
     <a
-      href={to.pathname}
+      href={encodeURI(thangsPath)}
       target='_blank'
       rel='noopener noreferrer'
       onClick={onClick}
@@ -189,13 +189,13 @@ const Anchor = ({ children, to, isExternal, ...props }) => {
       {children}
     </a>
   ) : (
-    <Link to={to.pathname} onClick={onClick} {...props}>
+    <Link to={encodeURI(thangsPath)} onClick={onClick} {...props}>
       {children}
     </Link>
   )
 }
 
-const ModelDetails = ({ model = {}, modelAttributionUrl, onFindRelated = noop }) => {
+const ModelDetails = ({ isExternalModel, model = {}, onFindRelated = noop, scope }) => {
   const c = useStyles()
   const {
     attributionUrl,
@@ -206,6 +206,7 @@ const ModelDetails = ({ model = {}, modelAttributionUrl, onFindRelated = noop })
     ownerFirstName,
     ownerLastName,
     ownerAvatarUrl,
+    ownerUsername,
   } = model
   let formattedModelDescription = truncateString(modelDescription, 144)
 
@@ -213,10 +214,11 @@ const ModelDetails = ({ model = {}, modelAttributionUrl, onFindRelated = noop })
     <div className={c.TextSearchResult_Content}>
       <Anchor
         to={{
-          pathname: modelAttributionUrl,
+          pathname: attributionUrl,
           state: { prevPath: window.location.href },
         }}
-        isExternal={model.scope !== 'thangs'}
+        isExternal={isExternalModel}
+        scope={scope}
       >
         <div className={c.TextSearchResult_Attribution}>
           <div>
@@ -231,10 +233,10 @@ const ModelDetails = ({ model = {}, modelAttributionUrl, onFindRelated = noop })
               </>
             )}
             <span className={c.TextSearchResult_ExternalUrl} title={model.attributionUrl}>
-              {ownerEmail ? ownerEmail : model.attributionUrl}
+              {ownerEmail ? ownerUsername || ownerEmail : model.attributionUrl}
             </span>
           </div>
-          {model.scope !== 'thangs' && <ExternalLinkIcon />}
+          {isExternalModel && <ExternalLinkIcon />}
         </div>
         <div className={c.TextSearchResult_Name}>{modelTitle || modelFileName}</div>
         <div className={c.TextSearchResult_Description}>{formattedModelDescription}</div>
@@ -249,17 +251,21 @@ const ModelDetails = ({ model = {}, modelAttributionUrl, onFindRelated = noop })
   )
 }
 
-const TextSearchResult = ({ model, onFindRelated = noop, onReportModel = noop }) => {
+const TextSearchResult = ({
+  model,
+  onFindRelated = noop,
+  onReportModel = noop,
+  scope,
+}) => {
   const c = useStyles()
 
-  const modelAttributionUrl =
-    model && model.attributionUrl && encodeURI(model.attributionUrl)
-
+  const modelAttributionUrl = model && model.attributionUrl
+  const isExternalModel = !model.scope.includes('thangs')
   return (
     <div
       className={classnames({
-        [c.TextSearchResult_ExternalLink]: model.scope !== 'thangs',
-        [c.TextSearchResult_ThangsLink]: model.scope === 'thangs',
+        [c.TextSearchResult_ExternalLink]: isExternalModel,
+        [c.TextSearchResult_ThangsLink]: !isExternalModel,
       })}
     >
       <div className={c.TextSearchResult_ResultContents}>
@@ -268,7 +274,8 @@ const TextSearchResult = ({ model, onFindRelated = noop, onReportModel = noop })
             pathname: modelAttributionUrl,
             state: { prevPath: window.location.href },
           }}
-          isExternal={model.scope !== 'thangs'}
+          isExternal={isExternalModel}
+          scope={scope}
         >
           <Card className={c.TextSearchResult_ThumbnailWrapper}>
             <ModelThumbnail
@@ -281,9 +288,10 @@ const TextSearchResult = ({ model, onFindRelated = noop, onReportModel = noop })
         <div className={c.TextSearchResult_Column}>
           <ModelDetails
             model={model}
-            modelAttributionUrl={modelAttributionUrl}
             onReportModel={onReportModel}
             onFindRelated={onFindRelated}
+            isExternalModel={isExternalModel}
+            scope={scope}
           />
           <div
             className={c.TextSearchResult_ReportModelLink}
@@ -304,6 +312,7 @@ const TextSearchResults = ({
   items,
   onFindRelated,
   onReportModel,
+  searchScope: scope,
   searchTerm,
   totalModelCount,
 }) => {
@@ -333,6 +342,7 @@ const TextSearchResults = ({
       model={item}
       onFindRelated={onFindRelated}
       onReportModel={onReportModel}
+      scope={scope}
     />
   ))
 }
