@@ -1,11 +1,12 @@
 import {
   clearModelsAndFolders,
+  clickOnTextInsideClass,
   goTo,
   isTextInsideClass,
   loginByUser,
   unfollowUser,
 } from '../utils/common-methods'
-import { CLASSES, MODEL_CARD, PROPS, TEXT } from '../utils/constants'
+import { CLASSES, MODEL, PROPS, TEXT } from '../utils/constants'
 import { multiUpload } from '../utils/uploadMethods'
 
 describe('User follows', () => {
@@ -58,7 +59,7 @@ describe('User follows', () => {
     })
     goTo(`/${activeUser.NAME}`)
 
-    cy.get(MODEL_CARD(), { timeout: 2000 }).click()
+    clickOnTextInsideClass(CLASSES.MODEL_CARD, MODEL.TITLE)
 
     isTextInsideClass(CLASSES.MODEL_PAGE_FOLLOW_BUTTON, TEXT.FOLLOW, PROPS.VISIBLE)
     cy.get(CLASSES.MODEL_PAGE_FOLLOW_BUTTON).first().click()

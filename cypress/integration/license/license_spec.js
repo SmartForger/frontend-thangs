@@ -12,7 +12,7 @@ import { licenseUpload } from '../../utils/uploadMethods'
 
 let activeUser
 
-describe('The Model Page', () => {
+describe('The Model License', () => {
   before(() => {
     cy.getCookie('activeUser').then(({ value }) => {
       activeUser = JSON.parse(value)

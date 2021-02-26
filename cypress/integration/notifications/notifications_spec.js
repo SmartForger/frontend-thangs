@@ -22,13 +22,7 @@ describe('User notifications', () => {
     })
     cy.getCookie('sideUser').then(({ value }) => {
       sideUser = JSON.parse(value)
-      // unfollowUser(sideUser, activeUser)
     })
-  })
-
-  after(() => {
-    clearModelsAndFolders(activeUser)
-    clearModelsAndFolders(sideUser)
   })
 
   it('User2 follows User1', () => {
@@ -133,5 +127,21 @@ describe('User notifications', () => {
 
     log('is followed')
     isElementContainTwoValues(CLASSES.NOTIFICATIONS_TEXT, sideUser.NAME, TEXT.FOLLOWED)
+  })
+
+  it('User1 delete his notifications', () => {
+    loginByUser({
+      email: activeUser.EMAIL,
+      password: activeUser.PASSWORD,
+    })
+    clearModelsAndFolders(activeUser)
+  })
+
+  it('User2 delete his notifications', () => {
+    loginByUser({
+      email: sideUser.EMAIL,
+      password: sideUser.PASSWORD,
+    })
+    clearModelsAndFolders(sideUser)
   })
 })
