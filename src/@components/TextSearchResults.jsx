@@ -261,6 +261,8 @@ const TextSearchResult = ({
 
   const modelAttributionUrl = model && model.attributionUrl
   const isExternalModel = !model.scope.includes('thangs')
+
+  if (!modelAttributionUrl) return null
   return (
     <div
       className={classnames({
