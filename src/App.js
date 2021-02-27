@@ -99,6 +99,7 @@ const App = () => {
                   <Route path='/profile/:id' component={RedirectProfile} />
                   <Route path='/u/:id' component={RedirectProfile} />
                   <Route path='/model/:modelId' component={RedirectModel} />
+                  <Route path='/models/:modelId' component={RedirectModel} />
                   <Route path='/m/:modelId' component={RedirectModel} />
                   <Route
                     path='/:userName/:modelString'
