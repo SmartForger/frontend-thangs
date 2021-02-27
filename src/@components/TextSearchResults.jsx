@@ -169,7 +169,7 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const Anchor = ({ children, to, isExternal, scope, ...props }) => {
+const Anchor = ({ children, to = {}, isExternal, scope, ...props }) => {
   const onClick = useCallback(() => {
     if (isExternal) {
       track('External Model Link', { path: to.pathname, type: 'text', scope })
@@ -177,6 +177,7 @@ const Anchor = ({ children, to, isExternal, scope, ...props }) => {
       track('Thangs Model Link', { path: to.pathname, type: 'text', scope })
     }
   }, [isExternal, scope, to.pathname])
+  if (!to.pathname) return children
   const thangsPath = !isExternal ? to.pathname.split('.com').pop() : to.pathname
   return isExternal ? (
     <a
