@@ -4,6 +4,7 @@ import { ReactComponent as ClearIcon } from '@svg/icon-X-sm.svg'
 import { Button, Input, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
+import { track } from '@utilities/analytics'
 
 const noop = () => null
 const useStyles = createUseStyles(_theme => {
@@ -50,7 +51,8 @@ const LicenseField = ({ className, onChange = noop, value, model = {} }) => {
   const handleClearLicense = useCallback(() => {
     onChange(null)
     hiddenFileInput.current.value = ''
-  }, [onChange])
+    track('License Removed', { model: model.id })
+  }, [model.id, onChange])
 
   const handleSuccess = useCallback(
     file => {
@@ -71,10 +73,11 @@ const LicenseField = ({ className, onChange = noop, value, model = {} }) => {
         dispatch(types.UPLOAD_MODEL_LICENSE, {
           file,
           directory,
-          modelId: model.id || null,
+          modelId: model.id,
           onFinish: handleSuccess,
           onError: handleError,
         })
+        track('License Added', { model: model.id })
       }
     },
     [directory, dispatch, handleError, handleSuccess, model.id]
