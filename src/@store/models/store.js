@@ -25,27 +25,33 @@ export default store => {
       },
     })
   )
-  store.on(types.FETCH_MODEL, async (_state, { id, silentUpdate = false }) => {
-    if (!silentUpdate) {
-      store.dispatch(types.CHANGE_MODEL_STATUS, {
-        status: STATUSES.LOADING,
-        atom: 'model',
-      })
+  store.on(
+    types.FETCH_MODEL,
+    async (_state, { id, silentUpdate = false, onFinish = noop, onError = noop }) => {
+      if (!silentUpdate) {
+        store.dispatch(types.CHANGE_MODEL_STATUS, {
+          status: STATUSES.LOADING,
+          atom: 'model',
+        })
+      }
+
+      const { data, error } = await api({ method: 'GET', endpoint: `models/${id}` })
+      if (error || R.isEmpty(data)) {
+        store.dispatch(types.CHANGE_MODEL_STATUS, {
+          status: STATUSES.FAILURE,
+          atom: 'model',
+        })
+        onError()
+      } else {
+        store.dispatch(types.CHANGE_MODEL_STATUS, {
+          status: STATUSES.LOADED,
+          atom: 'model',
+          data,
+        })
+        onFinish(data)
+      }
     }
-    const { data, error } = await api({ method: 'GET', endpoint: `models/${id}` })
-    if (error || R.isEmpty(data)) {
-      store.dispatch(types.CHANGE_MODEL_STATUS, {
-        status: STATUSES.FAILURE,
-        atom: 'model',
-      })
-    } else {
-      store.dispatch(types.CHANGE_MODEL_STATUS, {
-        status: STATUSES.LOADED,
-        atom: 'model',
-        data,
-      })
-    }
-  })
+  )
 
   store.on(
     types.UPDATE_MODEL,
@@ -219,10 +225,7 @@ export default store => {
       _state,
       { modelId, isLiked, onFinish = noop, onError = noop, cancelToken }
     ) => {
-      
-      const endpoint = isLiked 
-        ? `models/${modelId}/like` 
-        : `models/${modelId}/unlike`
+      const endpoint = isLiked ? `models/${modelId}/like` : `models/${modelId}/unlike`
 
       const { error } = await api({
         method: 'POST',
@@ -237,10 +240,8 @@ export default store => {
           modelId,
           isLiked,
         })
-        
-        const trackText = isLiked 
-          ? 'Model Liked' 
-          : 'Model Unliked'
+
+        const trackText = isLiked ? 'Model Liked' : 'Model Unliked'
         track(trackText, { modelId })
 
         const { data } = await api({
