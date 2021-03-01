@@ -215,7 +215,7 @@ const SearchBar = ({
       if (searchTerm) {
         setMinimizeSearch(true)
         setTimeout(() => {
-          history.push(`/search/${encodeURIComponent(searchTerm)}`)
+          history.push(`/search/${encodeURIComponent(encodeURIComponent(searchTerm))}`)
           if (setOverlayOpen) {
             setOverlayOpen(false)
           }

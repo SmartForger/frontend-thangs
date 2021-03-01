@@ -149,7 +149,7 @@ const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
     e => {
       e.preventDefault()
       if (searchTerm) {
-        history.push(`/search/${encodeURIComponent(searchTerm)}`)
+        history.push(`/search/${encodeURIComponent(encodeURIComponent(searchTerm))}`)
         setOverlayOpen(false)
       }
     },
