@@ -98,7 +98,7 @@ export default store => {
       const { data = [], error } = await api({
         method: 'GET',
         endpoint: 'models/search-by-text',
-        params: { searchTerm, scope: scope && scope !== 'all' ? scope : '' },
+        params: { searchTerm, scope: scope && scope !== 'all' ? scope : '', size: 200 },
       })
 
       track('Text Search Started', {
