@@ -1,3 +1,5 @@
+// https://stackoverflow.com/questions/48523058/encoding-uri-using-link-of-react-router-dom-not-working
+
 import React, { useCallback, useRef, useState } from 'react'
 import * as R from 'ramda'
 import { useHistory } from 'react-router-dom'
