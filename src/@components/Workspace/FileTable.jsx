@@ -530,10 +530,6 @@ const FileTable = ({
                             renderTag={'tr'}
                             attributes={{
                               onClick: () => {
-                                dispatch(types.CHANGE_MODEL_STATUS, {
-                                  atom: 'model',
-                                  data: null,
-                                })
                                 history.push(modelPath)
                               },
                             }}
