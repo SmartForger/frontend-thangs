@@ -103,6 +103,7 @@ export default store => {
 
       track('Text Search Started', {
         searchTerm,
+        searchScope: scope,
       })
 
       if (error) {
@@ -121,6 +122,7 @@ export default store => {
 
         track(`Text search - ${data.length > 0 ? 'Results' : 'No Results'}`, {
           searchTerm,
+          searchScope: scope,
           numOfMatches: data.length,
         })
 
