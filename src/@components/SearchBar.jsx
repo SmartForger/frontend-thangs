@@ -100,6 +100,7 @@ const SearchBar = ({
   setCurrentView = noop,
   placeholder = 'Search to find',
   onSearch = noop,
+  submitOnChange = false,
 }) => {
   const c = useStyles({})
   const [searchTerm, setSearchTerm] = useState(undefined)
@@ -132,6 +133,9 @@ const SearchBar = ({
             })}
             onChange={e => {
               setSearchTerm(e.target.value)
+              if (submitOnChange) {
+                onSearch(e.target.value)
+              }
             }}
             value={searchTerm || ''}
           />

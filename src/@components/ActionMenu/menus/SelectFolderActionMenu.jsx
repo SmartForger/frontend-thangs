@@ -23,6 +23,12 @@ import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
   return {
+    SelectFolderMenu_Wrapper: {
+      '& > div': {
+        width: '100% !important',
+      },
+    },
+
     SelectFolderMenu: {
       position: 'relative',
     },
@@ -90,6 +96,7 @@ const FoldersScreen = ({ onChange, folders = [] }) => {
           setSearchTerm(term)
         }}
         placeholder='Search for folder'
+        submitOnChange={true}
       />
       <Spacer size={'1.5rem'} />
       <div className={c.SelectFolderMenu_ItemsContainer}>
@@ -137,7 +144,14 @@ const NewFolderScreen = ({ onChange = noop, onBack = noop }) => {
           setErrorMessage((error || {}).message)
         },
         onFinish: id => {
-          if (id) onChange(id)
+          if (id) {
+            onChange({
+              value: id,
+              label: data.name,
+              isPublic: data.isPublic,
+            })
+            onBack()
+          }
         },
       })
     },
@@ -197,13 +211,20 @@ export const SelectFolderMenu = ({ onChange = noop, options = [] }) => {
     onChange(folder)
   }
 
-  const handleCreateNew = useCallback(() => {
-    setIsCreateMode(true)
-  }, [])
+  const handleCreateNew = useCallback(
+    ev => {
+      setTimeout(() => {
+        setIsCreateMode(true)
+      }, 100)
+    },
+    [setIsCreateMode]
+  )
 
   const onBack = useCallback(() => {
-    setIsCreateMode(false)
-  }, [])
+    setTimeout(() => {
+      setIsCreateMode(false)
+    }, 100)
+  }, [setIsCreateMode])
 
   return (
     <>
@@ -314,15 +335,17 @@ const SelectFolderActionMenu = ({ onChange = noop, selectedValue }) => {
   }, [])
 
   return (
-    <ActionMenu
-      MenuComponent={SelectFolderMenu}
-      MenuComponentProps={menuProps}
-      TargetComponent={SelectFolderTarget}
-      TargetComponentProps={targetProps}
-      isAutoClosed={false}
-      isClosedOnChange={true}
-      isExternalClosed={true}
-    />
+    <div className={c.SelectFolderMenu_Wrapper}>
+      <ActionMenu
+        MenuComponent={SelectFolderMenu}
+        MenuComponentProps={menuProps}
+        TargetComponent={SelectFolderTarget}
+        TargetComponentProps={targetProps}
+        isAutoClosed={false}
+        isClosedOnChange={true}
+        isExternalClosed={true}
+      />
+    </div>
   )
 }
 

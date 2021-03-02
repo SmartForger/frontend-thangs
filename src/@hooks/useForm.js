@@ -66,6 +66,7 @@ const useForm = (opts = {}) => {
 
   const onFormSubmit = callbackFn => event => {
     if (event) {
+      event.stopPropagation()
       event.preventDefault()
     }
 

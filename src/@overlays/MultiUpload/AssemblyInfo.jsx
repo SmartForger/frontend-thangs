@@ -295,6 +295,7 @@ const AssemblyInfo = ({
           }}
           selectedValue={inputState.folder}
         />
+        <Spacer size={'1rem'} />
         {isRootAssembly && (
           <div>
             <Dropdown

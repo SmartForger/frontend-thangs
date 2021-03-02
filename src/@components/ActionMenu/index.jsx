@@ -259,7 +259,6 @@ export const ActionMenu = props => {
     value => {
       onChange(value)
       setActionMenuClose()
-      if (isClosedOnChange) console.log('do something')
     },
     [isClosedOnChange, onChange, setActionMenuClose]
   )
@@ -296,12 +295,17 @@ export const ActionMenu = props => {
       isOpenByDefault={isOpenByDefault}
       onTargetClick={handleTargetClick}
     >
-      <MenuComponent
-        onChange={handleChange}
-        isMobileActionBarActive={isMobileActionBarActive}
-        isMobileOnly={isMobileOnly}
-        {...menuProps}
-      />
+      {({ toggleOpen }) => (
+        <MenuComponent
+          onChange={val => {
+            toggleOpen()
+            handleChange(val)
+          }}
+          isMobileActionBarActive={isMobileActionBarActive}
+          isMobileOnly={isMobileOnly}
+          {...menuProps}
+        />
+      )}
     </DropdownMenu>
   )
 }

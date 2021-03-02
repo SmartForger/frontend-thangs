@@ -88,7 +88,9 @@ const useDropdownMenuState = ({
     },
     [isOpen]
   )
-  const closeMenu = () => setIsOpen(false)
+  const closeMenu = () => {
+    setIsOpen(false)
+  }
   useEffect(() => {
     if (isOpen && isAutoClosed) {
       document.addEventListener('click', closeMenu)
@@ -195,7 +197,7 @@ const DropdownMenu = ({
         <Spacer size={borderSize} />
         <div className={c.DropdownMenu_FullWidth}>
           <Spacer size={borderSize} />
-          {children}
+          {typeof children === 'function' ? children({ toggleOpen }) : children}
           <Spacer size={borderSize} />
         </div>
         <Spacer size={borderSize} />
