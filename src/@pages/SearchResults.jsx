@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import classnames from 'classnames'
 import * as R from 'ramda'
 import { useStoreon } from 'storeon/react'
@@ -242,8 +242,15 @@ const ThangsSearchResult = ({
 }
 
 const Page = () => {
+  const FILTER_PHYNDEXER = 'phyn'
+  const FILTER_THANGS = 'thangs'
+  const FILTER_DEFAULT = 'all'
+
   const c = useStyles()
   const [currentUser] = useLocalStorage('currentUser', null)
+  const history = useHistory()
+  const queryParams = new URLSearchParams(history.location.search)
+  const filter = queryParams.get('filter')
   const { searchQuery } = useParams()
   const modelId = useQuery('modelId')
   const phynId = useQuery('phynId')
@@ -255,7 +262,23 @@ const Page = () => {
     'modelsStats'
   )
   const { phyndexer, text, thangs } = searchResults
-  const [searchScope, setSearchScope] = useState('all')
+  const [showReportModelButtons, setShowReportModelButtons] = useState(false)
+  const [searchScope, setSearchScope] = useState(FILTER_DEFAULT)
+
+  useEffect(() => {
+    switch (filter) {
+      case FILTER_PHYNDEXER:
+        setSearchScope(FILTER_PHYNDEXER)
+        break
+      case FILTER_THANGS:
+        setSearchScope(FILTER_THANGS)
+        break
+      default:
+        setSearchScope(FILTER_DEFAULT)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   useEffect(() => {
     if (related) {
       pageview('SearchResults Related')
@@ -269,6 +292,7 @@ const Page = () => {
 
   useEffect(() => {
     if (!modelId && !phynId) {
+      history.push(`${searchQuery}?filter=${searchScope}`)
       dispatch(types.GET_TEXT_SEARCH_RESULTS, {
         searchTerm: decodeURIComponent(searchQuery),
         scope: searchScope,
