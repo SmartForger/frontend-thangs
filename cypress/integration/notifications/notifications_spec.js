@@ -8,6 +8,7 @@ import {
   isElementContainTwoValues,
   clearModelsAndFolders,
   log,
+  unfollowUser,
 } from '../../utils/common-methods'
 import { CLASSES, MODEL, PROPS, TEXT } from '../../utils/constants'
 import { commentInput, enterValidValue } from '../../utils/inputs'
@@ -15,6 +16,7 @@ import { multiUpload } from '../../utils/uploadMethods'
 
 let activeUser
 let sideUser
+
 describe('User notifications', () => {
   before(() => {
     cy.getCookie('activeUser').then(({ value }) => {
@@ -22,6 +24,9 @@ describe('User notifications', () => {
     })
     cy.getCookie('sideUser').then(({ value }) => {
       sideUser = JSON.parse(value)
+      unfollowUser(sideUser, activeUser)
+      clearModelsAndFolders(activeUser)
+      clearModelsAndFolders(sideUser)
     })
   })
 

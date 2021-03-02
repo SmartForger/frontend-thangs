@@ -9,10 +9,10 @@ import {
 import { CLASSES, MODEL, PROPS, TEXT } from '../utils/constants'
 import { multiUpload } from '../utils/uploadMethods'
 
-describe('User follows', () => {
-  let activeUser
-  let sideUser
+let activeUser
+let sideUser
 
+describe('User follows', () => {
   before(() => {
     cy.getCookie('activeUser').then(({ value }) => {
       activeUser = JSON.parse(value)
@@ -21,11 +21,8 @@ describe('User follows', () => {
       sideUser = JSON.parse(value)
 
       unfollowUser(sideUser, activeUser)
+      clearModelsAndFolders(activeUser)
     })
-  })
-
-  after(() => {
-    clearModelsAndFolders(activeUser)
   })
 
   it('User1 uploads model', () => {

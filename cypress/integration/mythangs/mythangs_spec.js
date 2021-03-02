@@ -19,15 +19,12 @@ describe('My Thangs Page', () => {
   before(() => {
     cy.getCookie('activeUser').then(({ value }) => {
       activeUser = JSON.parse(value)
+      clearModelsAndFolders(activeUser)
     })
   })
 
   beforeEach(() => {
     loginByUser({ email: activeUser.EMAIL, password: activeUser.PASSWORD })
-  })
-
-  after(() => {
-    clearModelsAndFolders(activeUser)
   })
 
   it('My Thangs page loaded successfully', () => {
