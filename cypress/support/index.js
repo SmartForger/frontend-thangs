@@ -15,7 +15,11 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
-import { registerUser } from '../utils/common-methods'
+import {
+  clearModelsAndFolders,
+  registerUser,
+  unfollowUser,
+} from '../utils/common-methods'
 
 Cypress.Cookies.defaults({
   preserve: ['activeUser', 'sideUser'],
@@ -26,5 +30,20 @@ before(() => {
   registerUser('sideUser')
 })
 
+after(() => {
+  let activeUser
+  let sideUser
+
+  cy.getCookie('activeUser').then(({ value }) => {
+    activeUser = JSON.parse(value)
+  })
+  cy.getCookie('sideUser').then(({ value }) => {
+    sideUser = JSON.parse(value)
+
+    unfollowUser(sideUser, activeUser)
+    clearModelsAndFolders(activeUser)
+    clearModelsAndFolders(sideUser)
+  })
+})
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
