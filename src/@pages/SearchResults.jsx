@@ -139,7 +139,6 @@ const SearchResult = ({
   modelId,
   models,
   searchModelFileName,
-  showReportModel,
 }) => {
   const filteredModels =
     models && models.length
@@ -167,7 +166,6 @@ const SearchResult = ({
               handleReportModel={handleReportModel}
               items={filteredModels}
               searchModelFileName={searchModelFileName}
-              showReportModel={showReportModel}
               showSocial={false}
               showWaldo={false} //Change back to !!modelId when we want waldo thumbnails back
             />
@@ -194,7 +192,6 @@ const ThangsSearchResult = ({
   modelId,
   models,
   searchModelFileName,
-  showReportModel,
 }) => {
   const searchingText = useMemo(() => {
     return isOtherModelsLoaded
@@ -229,7 +226,6 @@ const ThangsSearchResult = ({
               handleReportModel={handleReportModel}
               items={models}
               searchModelFileName={searchModelFileName}
-              showReportModel={showReportModel}
               showSocial={false}
               showWaldo={false} //Change back to !!modelId when we want waldo thumbnails back
               showLoadMore={true}
@@ -261,7 +257,6 @@ const Page = () => {
     'modelsStats'
   )
   const { phyndexer, text, thangs } = searchResults
-  const [showReportModelButtons, setShowReportModelButtons] = useState(false)
   const [searchScope, setSearchScope] = useState('all')
   useEffect(() => {
     if (related) {
@@ -281,11 +276,12 @@ const Page = () => {
         scope: searchScope,
       })
     }
-    if ((modelId || phynId) && !phyndexer.isLoaded && !thangs.isLoaded) {
+    if (modelId || phynId) {
       dispatch(types.GET_RELATED_MODELS, {
         modelId: modelId,
         phyndexerId: phynId,
         geoRelated: !related,
+        scope: searchScope,
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -299,11 +295,7 @@ const Page = () => {
         data: {
           model: model,
           afterSend: () => {
-            setShowReportModelButtons(false)
             setOverlayOpen(false)
-          },
-          onOverlayClose: () => {
-            setShowReportModelButtons(false)
           },
         },
       })
@@ -400,43 +392,30 @@ const Page = () => {
               />
             ) : (
               <>
-                {modelId && (
+                {modelId || (phynId && searchScope !== 'phyn') ? (
                   <ThangsSearchResult
                     c={c}
                     handleFindRelated={handleFindRelated}
-                    handleReportModel={handleReportModel}
+                    onReportModel={handleReportModel}
                     isError={thangs.isError}
                     isLoading={thangs.isLoading}
                     isOtherModelsLoaded={phyndexer.isLoaded}
                     modelId={modelId}
                     models={thangsModels}
                     searchModelFileName={undefined}
-                    showReportModel={showReportModelButtons}
                   />
-                )}
-                {phynId && (
+                ) : null}
+                {phynId && searchScope !== 'thangs' ? (
                   <SearchResult
                     c={c}
                     handleFindRelated={handleFindRelated}
-                    handleReportModel={handleReportModel}
+                    onReportModel={handleReportModel}
                     isError={phyndexer.isError}
                     isLoading={phyndexer.isLoading}
                     modelId={modelId}
                     models={phyndexerModels}
                     searchModelFileName={undefined}
-                    showReportModel={showReportModelButtons}
                   />
-                )}
-                {resultCount && resultCount > 0 ? (
-                  <Button
-                    tertiary
-                    className={c.SearchResults_ReportModelButton}
-                    onClick={() => setShowReportModelButtons(!showReportModelButtons)}
-                  >
-                    <FlagIcon />
-                    <Spacer size='.5rem' />
-                    Report a Model
-                  </Button>
                 ) : null}
               </>
             )}

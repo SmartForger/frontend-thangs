@@ -231,6 +231,7 @@ export default store => {
         onError = noop,
         geoRelated = true,
         geoSearch = false,
+        scope,
       }
     ) => {
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
@@ -266,7 +267,7 @@ export default store => {
       const { data, error } = await api({
         method: 'GET',
         endpoint: `models/match/${modelId || phyndexerId}${
-          !geoSearch && !modelId ? '?scope=phyn' : ''
+          scope ? `?scope=${scope}` : ''
         }`,
       })
 

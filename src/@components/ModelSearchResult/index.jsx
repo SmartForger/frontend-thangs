@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom'
 import { ReactComponent as ChatIcon } from '@svg/icon-comment.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
-import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
-import { Button, Card, ModelThumbnail, UserInline } from '@components'
+import { Card, ModelThumbnail, UserInline } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { useCurrentUserId } from '@hooks'
@@ -57,11 +56,17 @@ const useStyles = createUseStyles(theme => {
         flexDirection: 'row',
       },
     },
-    ModelSearchResult_Content: {
-      padding: '.5rem 0',
+    ModelSearchResult_Column: {
       display: 'flex',
       justifyContent: 'space-between',
       flexDirection: 'column',
+      height: '100%',
+    },
+    ModelSearchResult_Content: {
+      padding: '.5rem 0',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
     },
     ModelSearchResult_UserDetails: {
       display: 'flex',
@@ -153,6 +158,15 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
       textDecoration: 'underline',
     },
+    ModelSearchResult_ReportModelLink: {
+      fontSize: '.75rem',
+      fontWeight: '500',
+      cursor: 'pointer',
+
+      '&:hover': {
+        textDecoration: 'underline',
+      },
+    },
   }
 })
 
@@ -162,8 +176,7 @@ const ThangsModelDetails = ({
   model,
   modelPath,
   isLiked = false,
-  showReportModel,
-  handleReportModel = noop,
+  onReportModel = noop,
   handleFindRelated = noop,
 }) => {
   const c = useStyles()
@@ -173,44 +186,46 @@ const ThangsModelDetails = ({
   if (modelLikeCount && Array.isArray(modelLikeCount))
     modelLikeCount = modelLikeCount.length
   return (
-    <div className={c.ModelSearchResult_Content}>
-      <Anchor to={{ pathname: modelPath, state: { prevPath: window.location.href } }}>
-        <div className={c.ModelSearchResult_UserDetails}>
-          <UserInline size='1.25rem' user={model.owner} isSearchResult={true} />
-          <div className={c.ModelSearchResult_Row}>
-            <div className={c.ModelSearchResult_ActivityIndicators}>
-              <span className={c.ModelSearchResult_ActivityCount}>
-                <ChatIcon />
-                {model.commentsCount}
-              </span>
-              <span className={c.ModelSearchResult_ActivityCount}>
-                <HeartIcon
-                  className={classnames(c.ModelSearchResult_Icon, {
-                    [c.ModelSearchResult_Icon__liked]: isLiked,
-                  })}
-                />
-                {modelLikeCount}
-              </span>
+    <div className={c.ModelSearchResult_Column}>
+      <div className={c.ModelSearchResult_Content}>
+        <Anchor to={{ pathname: modelPath, state: { prevPath: window.location.href } }}>
+          <div className={c.ModelSearchResult_UserDetails}>
+            <UserInline size='1.25rem' user={model.owner} isSearchResult={true} />
+            <div className={c.ModelSearchResult_Row}>
+              <div className={c.ModelSearchResult_ActivityIndicators}>
+                <span className={c.ModelSearchResult_ActivityCount}>
+                  <ChatIcon />
+                  {model.commentsCount}
+                </span>
+                <span className={c.ModelSearchResult_ActivityCount}>
+                  <HeartIcon
+                    className={classnames(c.ModelSearchResult_Icon, {
+                      [c.ModelSearchResult_Icon__liked]: isLiked,
+                    })}
+                  />
+                  {modelLikeCount}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-        <div className={c.ModelSearchResult_Name}>{formattedModelName}</div>
-        <div className={c.ModelSearchResult_Description}>{formattedModelDescription}</div>
-      </Anchor>
-      <div
-        className={c.ModelSearchResult_FindRelatedLink}
-        onClick={() => handleFindRelated({ model })}
-      >
-        View related models
-      </div>
-      {showReportModel && (
-        <Button
-          className={c.ModelSearchResult_ReportModelButton}
-          onClick={() => handleReportModel({ model })}
+          <div className={c.ModelSearchResult_Name}>{formattedModelName}</div>
+          <div className={c.ModelSearchResult_Description}>
+            {formattedModelDescription}
+          </div>
+        </Anchor>
+        <div
+          className={c.ModelSearchResult_FindRelatedLink}
+          onClick={() => handleFindRelated({ model })}
         >
-          <FlagIcon />
-        </Button>
-      )}
+          View related models
+        </div>
+      </div>
+      <div
+        className={c.ModelSearchResult_ReportModelLink}
+        onClick={() => onReportModel({ model })}
+      >
+        Report Model
+      </div>
     </div>
   )
 }
@@ -219,49 +234,50 @@ const ExternalModelDetails = ({
   model = {},
   modelAttributionUrl,
   modelPath,
-  showReportModel,
-  handleReportModel = noop,
+  onReportModel = noop,
   handleFindRelated = noop,
 }) => {
   const c = useStyles()
   const { modelTitle, modelDescription, modelFileName } = model
   let formattedModelDescription = truncateString(modelDescription, 144)
   return (
-    <div className={c.ModelSearchResult_Content}>
-      <Anchor
-        to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
-        attributionUrl={modelAttributionUrl}
-      >
-        <div className={c.ModelSearchResult_ExternalUrlWrapper}>
-          <div>
-            <span
-              className={c.ModelSearchResult_ExternalUrl}
-              title={model.attributionUrl}
-            >
-              {model.attributionUrl}
-            </span>
-          </div>
-          <div>
-            <ExternalLinkIcon />
-          </div>
-        </div>
-        <div className={c.ModelSearchResult_Name}>{modelTitle || modelFileName}</div>
-        <div className={c.ModelSearchResult_Description}>{formattedModelDescription}</div>
-      </Anchor>
-      <div
-        className={c.ModelSearchResult_FindRelatedLink}
-        onClick={() => handleFindRelated({ model })}
-      >
-        View related models
-      </div>
-      {showReportModel && (
-        <Button
-          className={c.ModelSearchResult_ReportModelButton}
-          onClick={() => handleReportModel({ model })}
+    <div className={c.ModelSearchResult_Column}>
+      <div className={c.ModelSearchResult_Content}>
+        <Anchor
+          to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
+          attributionUrl={modelAttributionUrl}
         >
-          <FlagIcon />
-        </Button>
-      )}
+          <div className={c.ModelSearchResult_ExternalUrlWrapper}>
+            <div>
+              <span
+                className={c.ModelSearchResult_ExternalUrl}
+                title={model.attributionUrl}
+              >
+                {model.attributionUrl}
+              </span>
+            </div>
+            <div>
+              <ExternalLinkIcon />
+            </div>
+          </div>
+          <div className={c.ModelSearchResult_Name}>{modelTitle || modelFileName}</div>
+          <div className={c.ModelSearchResult_Description}>
+            {formattedModelDescription}
+          </div>
+        </Anchor>
+        <div
+          className={c.ModelSearchResult_FindRelatedLink}
+          onClick={() => handleFindRelated({ model })}
+        >
+          View related models
+        </div>
+      </div>
+      <div
+        className={c.ModelSearchResult_ReportModelLink}
+        onClick={() => onReportModel({ model })}
+      >
+        Report Model
+      </div>
     </div>
   )
 }
@@ -298,12 +314,11 @@ const ResultContents = ({
   model,
   modelAttributionUrl,
   modelPath,
-  handleReportModel = noop,
+  onReportModel = noop,
   handleFindRelated = noop,
   isLiked,
   searchModelFileName,
   showOwner,
-  showReportModel,
   showSocial,
   showWaldo,
 }) => {
@@ -326,24 +341,22 @@ const ResultContents = ({
         </Card>
       </Anchor>
       <div>
-        {model.scope === 'thangs' ? (
+        {model.scope === 'phyndexer' ? (
+          <ExternalModelDetails
+            model={model}
+            modelAttributionUrl={modelAttributionUrl}
+            modelPath={modelPath}
+            onReportModel={onReportModel}
+            handleFindRelated={handleFindRelated}
+          />
+        ) : (
           <ThangsModelDetails
             model={model}
             modelPath={modelPath}
             showOwner={showOwner}
             showSocial={showSocial}
             isLiked={isLiked}
-            showReportModel={showReportModel}
-            handleReportModel={handleReportModel}
-            handleFindRelated={handleFindRelated}
-          />
-        ) : (
-          <ExternalModelDetails
-            model={model}
-            modelAttributionUrl={modelAttributionUrl}
-            modelPath={modelPath}
-            showReportModel={showReportModel}
-            handleReportModel={handleReportModel}
+            onReportModel={onReportModel}
             handleFindRelated={handleFindRelated}
           />
         )}
@@ -357,9 +370,8 @@ const ModelSearchResult = ({
   model,
   withOwner,
   showSocial = true,
-  showReportModel,
   searchModelFileName,
-  handleReportModel = noop,
+  onReportModel = noop,
   handleFindRelated = noop,
 }) => {
   const c = useStyles()
@@ -390,8 +402,7 @@ const ModelSearchResult = ({
         modelAttributionUrl={modelAttributionUrl}
         searchModelFileName={searchModelFileName}
         modelPath={modelPath}
-        showReportModel={showReportModel}
-        handleReportModel={handleReportModel}
+        onReportModel={onReportModel}
         handleFindRelated={handleFindRelated}
       />
     </div>
