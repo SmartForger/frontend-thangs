@@ -19,9 +19,6 @@ import { createUseStyles } from '@style'
 import { CATEGORIES } from '@constants/fileUpload'
 
 const useStyles = createUseStyles(theme => {
-  const {
-    mediaQueries: { md },
-  } = theme
   return {
     AssemblyInfo_Row: {
       display: 'flex',
@@ -109,10 +106,6 @@ const useStyles = createUseStyles(theme => {
     },
     AssemblyInfo_TextAreaInput: {
       minWidth: '20rem',
-
-      [md]: {
-        minWidth: '24.25rem',
-      },
     },
   }
 })
@@ -134,7 +127,7 @@ const INITIAL_STATE = {
   folderId: 'files',
   category: '',
   primary: '',
-  license: null,
+  license: '',
 }
 
 const AssemblyInfo = ({
@@ -253,43 +246,6 @@ const AssemblyInfo = ({
       </div>
       <Spacer size={'1.5rem'} />
       <form onSubmit={onFormSubmit(handleSubmit)}>
-        <div>
-          <Input
-            autoComplete='off'
-            className={c.AssemblyInfo_FullWidthInput}
-            name='name'
-            label='Name *'
-            maxLength='100'
-            onChange={handleOnInputChange}
-            value={inputState && inputState.name}
-            inputRef={firstInputRef}
-            error={checkError('name').message}
-            errorMessage={checkError('name').message}
-          />
-          <Spacer size={'1rem'} />
-        </div>
-        {!activeNode.parentId && (
-          <LicenseField
-            model={file}
-            className={c.AssemblyInfo_FieldRow}
-            onChange={handleLicenseChange}
-            value={inputState && inputState.license}
-          />
-        )}
-        <div>
-          <Textarea
-            className={c.AssemblyInfo_TextAreaInput}
-            id='description-input'
-            name='description'
-            label={isRootAssembly ? 'Description *' : 'Description'}
-            type='description'
-            value={inputState && inputState.description}
-            onChange={handleOnInputChange}
-            error={checkError('description').message}
-            errorMessage={checkError('description').message}
-          />
-          <Spacer size={'1rem'} />
-        </div>
         <SelectFolderActionMenu
           onChange={value => {
             handleOnInputChange('folderId', value)
@@ -299,24 +255,39 @@ const AssemblyInfo = ({
           errorMessage={checkError('folderId').message}
         />
         <Spacer size={'1rem'} />
-        {isRootAssembly && (
-          <div>
-            <Dropdown
-              className={c.AssemblyInfo_Select}
-              name='category'
-              placeholder='Select category'
-              isClearable
-              options={CATEGORIES}
-              value={selectedCategory}
-              onChange={e => {
-                if (e) handleOnInputChange('category', e.value)
-              }}
-              error={checkError('category').message}
-              errorMessage={checkError('category').message}
-            />
-            <Spacer size={'1rem'} />
-          </div>
+        <Input
+          autoComplete='off'
+          className={c.AssemblyInfo_FullWidthInput}
+          name='name'
+          label='Name *'
+          maxLength='100'
+          onChange={handleOnInputChange}
+          value={inputState && inputState.name}
+          inputRef={firstInputRef}
+          error={checkError('name').message}
+          errorMessage={checkError('name').message}
+        />
+        <Spacer size={'1rem'} />
+        {!activeNode.parentId && (
+          <LicenseField
+            model={file}
+            className={c.AssemblyInfo_FieldRow}
+            onChange={handleLicenseChange}
+            value={inputState && inputState.license}
+          />
         )}
+        <Textarea
+          className={c.AssemblyInfo_TextAreaInput}
+          id='description-input'
+          name='description'
+          label={isRootAssembly ? 'Description *' : 'Description'}
+          type='description'
+          value={inputState && inputState.description}
+          onChange={handleOnInputChange}
+          error={checkError('description').message}
+          errorMessage={checkError('description').message}
+        />
+        <Spacer size={'1rem'} />
         {isMultipart && (
           <div>
             <Dropdown
@@ -331,7 +302,23 @@ const AssemblyInfo = ({
               error={checkError('primary').message}
               errorMessage={checkError('primary').message}
             />
+            <Spacer size={'1rem'} />
           </div>
+        )}
+        {isRootAssembly && (
+          <Dropdown
+            className={c.AssemblyInfo_Select}
+            name='category'
+            placeholder='Select category'
+            isClearable
+            options={CATEGORIES}
+            value={selectedCategory}
+            onChange={e => {
+              if (e) handleOnInputChange('category', e.value)
+            }}
+            error={checkError('category').message}
+            errorMessage={checkError('category').message}
+          />
         )}
         <Spacer size={'1.5rem'} />
         <SingleLineBodyText>

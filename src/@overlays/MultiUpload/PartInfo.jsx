@@ -185,8 +185,6 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const noop = () => null
-
 const PartInfoSchema = ({ isRootPart }) =>
   Joi.object({
     name: Joi.string().pattern(new RegExp('^[^/]+$')).required(),

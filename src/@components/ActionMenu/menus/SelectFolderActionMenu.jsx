@@ -151,7 +151,7 @@ const NewFolderScreen = ({ onChange = noop, onBack = noop }) => {
         },
       })
     },
-    [dispatch, onChange]
+    [dispatch, onChange, onBack]
   )
 
   return (

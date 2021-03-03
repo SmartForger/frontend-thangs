@@ -245,7 +245,6 @@ export const ActionMenu = props => {
     MenuComponentProps,
     isAutoClosed = true,
     isExternalClosed = false,
-    isClosedOnChange = false,
     isMobileActionBarActive = true,
     isOpenByDefault = false,
     isMobileOnly = false,
@@ -260,7 +259,7 @@ export const ActionMenu = props => {
       onChange(value)
       setActionMenuClose()
     },
-    [isClosedOnChange, onChange, setActionMenuClose]
+    [onChange, setActionMenuClose]
   )
 
   const handleTargetClick = useCallback(() => {

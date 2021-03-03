@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 // import { useHistory } from 'react-router-dom'
-import * as R from 'ramda'
 import { SingleLineBodyText, Spacer, Spinner } from '@components'
 import PartInfo from './PartInfo'
 import UploadModels from './UploadModels'
