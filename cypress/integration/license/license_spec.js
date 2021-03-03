@@ -6,9 +6,12 @@ import {
   clearModelsAndFolders,
   loginByUser,
   clickOnElement,
+  uploadFile,
+  clickOnElementByText,
 } from '../../utils/common-methods'
-import { CLASSES, MODEL, PROPS } from '../../utils/constants'
-import { licenseUpload } from '../../utils/uploadMethods'
+import { CLASSES, MODEL, PROPS, TEXT } from '../../utils/constants'
+import { licenseUpload, multiUpload } from '../../utils/uploadMethods'
+import { licenseUploadInput } from '../../utils/inputs'
 
 let activeUser
 
@@ -22,6 +25,25 @@ describe('The Model License', () => {
 
   beforeEach(() => {
     loginByUser({ email: activeUser.EMAIL, password: activeUser.PASSWORD })
+  })
+
+  it('Check upload model without license, add it & check', () => {
+    multiUpload()
+    clickOnElement(CLASSES.USER_NAVBAR)
+    clickOnElementByText('Public Portfolio')
+    clickOnTextInsideClass(CLASSES.MODEL_CARD, MODEL.TITLE)
+    isElement(CLASSES.MODEL_LICENSE, PROPS.INVISIBLE)
+    clickOnElementByText(TEXT.EDIT_MODEL_BUTTON)
+    cy.get('[class^=LicenseField_Field] [name=license]')
+      .invoke('attr', 'placeholder')
+      .should('contain', 'Attach license')
+    uploadFile(MODEL.LICENSE, licenseUploadInput)
+    cy.get('[class^=LicenseField_Field] [name=license]', { timeout: 5000 })
+      .invoke('attr', 'placeholder')
+      .should('contain', MODEL.LICENSE)
+    clickOnElementByText('Save Changes')
+    isElement(CLASSES.MODEL_LICENSE, PROPS.VISIBLE)
+    clearModelsAndFolders()
   })
 
   it('Check upload model with the license and license text on model page', () => {
@@ -65,5 +87,22 @@ describe('The Model License', () => {
     isElement(CLASSES.MODEL_LICENSE_CLOSE, PROPS.VISIBLE)
     clickOnElement(CLASSES.MODEL_LICENSE_CLOSE)
     isElement(CLASSES.MODEL_LICENSE_LINK, PROPS.VISIBLE)
+  })
+
+  it('Check update license', () => {
+    goTo(`/${activeUser.NAME}`)
+    clickOnTextInsideClass(CLASSES.MODEL_CARD, MODEL.TITLE)
+    isElement(CLASSES.MODEL_LICENSE, PROPS.INVISIBLE)
+    clickOnElementByText(TEXT.EDIT_MODEL_BUTTON)
+    cy.get('[class^=LicenseField_Field] [name=license]')
+      .invoke('attr', 'placeholder')
+      .should('contain', MODEL.LICENSE)
+    uploadFile(MODEL.LICENSE_NEW, licenseUploadInput)
+    cy.get('[class^=LicenseField_Field] [name=license]', { timeout: 5000 })
+      .invoke('attr', 'placeholder')
+      .should('contain', MODEL.LICENSE_NEW)
+    clickOnElementByText('Save Changes')
+    isElement(CLASSES.MODEL_LICENSE, PROPS.VISIBLE)
+    clickOnElement(CLASSES.MODEL_LICENSE_LINK)
   })
 })

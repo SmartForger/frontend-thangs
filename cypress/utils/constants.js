@@ -49,6 +49,7 @@ export const PATH = {
 export const MODEL = {
   FILENAME: 'horn1.stl',
   LICENSE: 'LICENSE.txt',
+  LICENSE_NEW: 'LICENSE-NEW.txt',
   TITLE: 'Cypress Test Model',
   DESCRIPTION: 'Cypress Test Description',
   COMMENT: 'Cypress Test comment',
@@ -142,6 +143,7 @@ export const CLASSES = {
   MY_THANGS_DELETE_FORM_BUTTON: '[class^=DeleteForm_Button]',
   MY_THANGS_NO_FILES: '[class^=NoFilesMessage]',
   MY_THANGS_ALL_FILES_ROW: '[class^=AllFilesView]',
+  PILL_BUTTON: '[class^=Pill]',
 }
 
 export const MODEL_CARD = (title = MODEL.TITLE) => `[title="${title}"]`
@@ -188,6 +190,7 @@ export const TEXT = {
   NEW_VERSION_UPLOADED: 'New Version Uploaded',
   REMOVE: 'Remove',
   DELETE: 'Delete',
+  EDIT_MODEL_BUTTON: 'Edit Model',
   DOWNLOAD_MODEL_BUTTON: 'Download Model',
   VIEW_MY_THANGS: 'View My Thangs',
   ADD_NEW: 'Add New',
