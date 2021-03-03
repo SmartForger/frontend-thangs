@@ -137,7 +137,7 @@ const ModelThumbnail = ({
           alt={loadingState === ERROR ? '' : `${name} 3d model`}
           onLoad={onLoad}
           onError={onError}
-          title={model.fileName}
+          title={model.modelFileName || model.fileName}
           loading={lazyLoad ? 'lazy' : 'auto'}
         />
       )}
