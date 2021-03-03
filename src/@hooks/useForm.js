@@ -26,9 +26,12 @@ const useForm = (opts = {}) => {
         const { type } = errors[inputKey]
         return {
           key: inputKey,
-          message: type
-            ? t(`input.${inputKey}.errors.required`)
-            : t(`input.${inputKey}.errors.invalid`),
+          message:
+            type === 'string.pattern.base'
+              ? t(`input.${inputKey}.errors.pattern`)
+              : type
+              ? t(`input.${inputKey}.errors.required`)
+              : t(`input.${inputKey}.errors.invalid`),
         }
       })
       setInputErrors(newInputErrors)

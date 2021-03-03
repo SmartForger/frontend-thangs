@@ -43,7 +43,8 @@
             "label": "Name",
             "errors": {
                 "required": "Please enter a model name",
-                "invalid": "Please enter a valid name"
+                "invalid": "Please enter a valid name",
+                "pattern": "Please enter model name without special characters ('/')"
             }
         },
         "description": {
