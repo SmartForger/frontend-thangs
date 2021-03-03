@@ -56,9 +56,8 @@ export const urlShouldInclude = path => {
   cy.url().should('include', path)
 }
 
-export const isElementContainTwoValues = (el, value1, value2) => {
+export const isElementContainTwoValues = (el, value1, value2) =>
   cy.get(el, { timeout: 15000 }).should(PROPS.CONTAIN, value1).and(PROPS.CONTAIN, value2)
-}
 
 export const urlShouldIncludeAfterTimeout = (path, timeout) => {
   cy.url({ timeout: timeout }).should('include', path)
@@ -343,6 +342,36 @@ export const unfollowUser = (userA = USER, userB = USER2) =>
       }
     })
     .then(response => {
+      localStorage.removeItem('currentUser')
+      log('Finished', response === 'End' && JSON.stringify(response))
+    })
+
+//User A follows user B
+export const followUser = (userA = USER, userB = USER2) =>
+  apiLogin({ userName: userA.EMAIL, password: userA.PASSWORD })
+    .then(() => {
+      return api({
+        endpoint: `users/${userB.ID}`,
+        method: 'GET',
+      })
+    })
+
+    .then(response => {
+      const isFollowed = (response.body || {}).isBeingFollowedByRequester
+
+      if (!isFollowed) {
+        log('follow initiated')
+
+        return api({
+          endpoint: `users/${userB.ID}/follow`,
+          method: 'POST',
+        })
+      } else {
+        return Promise.resolve('ok')
+      }
+    })
+    .then(response => {
+      localStorage.removeItem('currentUser')
       log('Finished', response === 'End' && JSON.stringify(response))
     })
 
