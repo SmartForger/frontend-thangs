@@ -191,17 +191,18 @@ const PartInfoSchema = ({ isRootPart }) =>
   Joi.object({
     name: Joi.string().pattern(new RegExp('^[^/]+$')).required(),
     description: isRootPart ? Joi.string().required() : Joi.string().allow(''),
+    folderId: Joi.string().required(),
     material: Joi.string().allow(''),
     height: Joi.string().allow(''),
     weight: Joi.string().allow(''),
     category: Joi.string().allow(''),
-    folderId: Joi.string().allow(''),
+    previousVersionModelId: Joi.string().allow(''),
   }).unknown(true)
 
 const initialState = {
   name: '',
   description: '',
-  folderId: '',
+  folderId: 'files',
   material: '',
   height: '',
   weight: '',
@@ -329,9 +330,11 @@ const PartInfo = props => {
         <div className={classnames(c.PartInfo_Field, c.PartInfo_Field__FolderMenu)}>
           <SelectFolderActionMenu
             onChange={value => {
-              handleOnInputChange('folder', value)
+              handleOnInputChange('folderId', value)
             }}
-            selectedValue={inputState.folder}
+            selectedValue={inputState.folderId}
+            error={checkError('folderId').message}
+            errorMessage={checkError('folderId').message}
           />
         </div>
         <div className={c.PartInfo_Field}>

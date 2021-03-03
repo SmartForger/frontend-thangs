@@ -66,7 +66,7 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       cursor: 'pointer',
       display: 'flex',
-      height: '100%',
+      height: '3rem',
       position: 'absolute',
       right: '1rem',
       top: 0,
@@ -86,14 +86,14 @@ const FoldersScreen = ({ onChange, folders = [] }) => {
   const filteredFolders =
     searchTerm === null
       ? [...folders]
-      : folders.filter(folder => folder.label.includes(searchTerm))
+      : folders.filter(folder => folder.label.toLowerCase().includes(searchTerm))
 
   return (
     <>
       <SearchBar
         onSearch={term => {
           track('Search Upload Folders', { searchTerm: term })
-          setSearchTerm(term)
+          setSearchTerm(term.toLowerCase())
         }}
         placeholder='Search for folder'
         submitOnChange={true}
@@ -109,7 +109,7 @@ const FoldersScreen = ({ onChange, folders = [] }) => {
                   c.SelectFolderMenu_Row__clickable
                 )}
                 onClick={() => {
-                  onChange(folder)
+                  onChange(folder.value)
                 }}
               >
                 <FolderIcon />
@@ -145,11 +145,7 @@ const NewFolderScreen = ({ onChange = noop, onBack = noop }) => {
         },
         onFinish: id => {
           if (id) {
-            onChange({
-              value: id,
-              label: data.name,
-              isPublic: data.isPublic,
-            })
+            onChange(id)
             onBack()
           }
         },
@@ -207,8 +203,8 @@ export const SelectFolderMenu = ({ onChange = noop, options = [] }) => {
   const c = useStyles({})
   const [isCreateMode, setIsCreateMode] = useState(false)
 
-  const handleClick = folder => {
-    onChange(folder)
+  const handleClick = folderId => {
+    onChange(folderId)
   }
 
   const handleCreateNew = useCallback(
@@ -250,7 +246,12 @@ export const SelectFolderMenu = ({ onChange = noop, options = [] }) => {
   )
 }
 
-export const SelectFolderTarget = ({ selectedValue, onClick = noop }) => {
+export const SelectFolderTarget = ({
+  selectedValue,
+  error,
+  errorMessage,
+  onClick = noop,
+}) => {
   const c = useStyles({})
   return (
     <div onClick={onClick}>
@@ -258,6 +259,8 @@ export const SelectFolderTarget = ({ selectedValue, onClick = noop }) => {
         className={c.SelectFolderTarget}
         label={'Choose Folder'}
         value={(selectedValue || {}).label}
+        error={error}
+        errorMessage={errorMessage}
       />
       <div className={c.SelectFolderTarget_Icon}>
         <ArrowDownIcon />
@@ -266,7 +269,12 @@ export const SelectFolderTarget = ({ selectedValue, onClick = noop }) => {
   )
 }
 
-const SelectFolderActionMenu = ({ onChange = noop, selectedValue }) => {
+const SelectFolderActionMenu = ({
+  onChange = noop,
+  selectedValue,
+  error,
+  errorMessage,
+}) => {
   const c = useStyles({})
   const { dispatch, folders = {}, shared = {} } = useStoreon('folders', 'shared')
   const { data: foldersData = [] } = folders
@@ -304,7 +312,7 @@ const SelectFolderActionMenu = ({ onChange = noop, selectedValue }) => {
 
     return [
       {
-        value: '',
+        value: 'files',
         label: 'My Public Files',
         isPublic: true,
       },
@@ -322,8 +330,9 @@ const SelectFolderActionMenu = ({ onChange = noop, selectedValue }) => {
   }, [c.SelectFolderActionMenu, dropdownFolders, onChange])
 
   const targetProps = useMemo(() => {
-    return { selectedValue }
-  }, [selectedValue])
+    const folder = dropdownFolders.find(folder => folder.value === selectedValue)
+    return { selectedValue: folder, error, errorMessage }
+  }, [dropdownFolders, selectedValue, error, errorMessage])
 
   useEffect(() => {
     // dispatch(types.RESET_UPLOAD_FILES)

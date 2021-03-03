@@ -121,10 +121,11 @@ const assemblyInfoSchema = ({ isRootAssembly, isMultipart }) =>
   Joi.object({
     name: Joi.string().pattern(new RegExp('^[^/]+$')).required(),
     description: isRootAssembly ? Joi.string().required() : Joi.string().allow(''),
+    folderId: Joi.string().required(),
     primary: isMultipart ? Joi.string().required() : Joi.string().allow(''),
-    folderId: Joi.string().allow(''),
     category: Joi.string().allow(''),
     license: Joi.string().allow(''),
+    previousVersionModelId: Joi.string().allow(''),
   })
 
 const INITIAL_STATE = {
@@ -220,7 +221,7 @@ const AssemblyInfo = ({
   }, [activeNode, treeData])
 
   useEffect(() => {
-    setInputState(formData)
+    setInputState(formData.folderId ? formData : INITIAL_STATE)
     // eslint-disable-next-line
   }, [activeNode])
 
@@ -291,9 +292,11 @@ const AssemblyInfo = ({
         </div>
         <SelectFolderActionMenu
           onChange={value => {
-            handleOnInputChange('folder', value)
+            handleOnInputChange('folderId', value)
           }}
-          selectedValue={inputState.folder}
+          selectedValue={inputState.folderId}
+          error={checkError('folderId').message}
+          errorMessage={checkError('folderId').message}
         />
         <Spacer size={'1rem'} />
         {isRootAssembly && (
