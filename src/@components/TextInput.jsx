@@ -10,7 +10,7 @@ const useStyles = createUseStyles(theme => {
       borderWidth: ({ invalid }) => (invalid ? '2px' : '1px'),
       color: ({ invalid }) =>
         invalid ? theme.colors.error : theme.variables.colors.textInput,
-      padding: '.75rem 1rem',
+      padding: '.6875rem 1rem',
       display: 'inline-block',
       borderStyle: 'solid',
       borderRadius: '.5rem',
