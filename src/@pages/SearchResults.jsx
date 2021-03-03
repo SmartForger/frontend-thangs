@@ -4,7 +4,6 @@ import classnames from 'classnames'
 import * as R from 'ramda'
 import { useStoreon } from 'storeon/react'
 import {
-  Button,
   Layout,
   NoResults,
   SaveSearchButton,
@@ -15,7 +14,6 @@ import {
 } from '@components'
 import { useLocalStorage, useQuery } from '@hooks'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
-import { ReactComponent as FlagIcon } from '@svg/flag-icon.svg'
 import { ReactComponent as FromThangsLogo } from '@svg/fromThangs.svg'
 import { ReactComponent as GlobeIcon } from '@svg/icon-globe.svg'
 import ModelSearchResults from '@components/CardCollection/ModelSearchResults'
