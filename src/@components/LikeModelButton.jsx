@@ -17,6 +17,10 @@ const useStyles = createUseStyles(theme => {
     mediaQueries: { md },
   } = theme
   return {
+    LikeIcon: {
+      width: '.75rem',
+      height: '.75rem',
+    },
     LikeStarIcon__filled: {
       '& path': {
         fill: ({ color }) => color || theme.colors.black[500],
@@ -63,13 +67,13 @@ const hasLikedModel = (model, currentUser = {}) => {
 const HeartButton = ({ liked, c, hasChanged }) => {
   return liked ? (
     <HeartFilledIcon
-      className={classnames(c.LikeHeartIcon__filled, {
+      className={classnames(c.LikeIcon, c.LikeHeartIcon__filled, {
         [c.LikeModelIcon__liked]: hasChanged,
       })}
     />
   ) : (
     <HeartIcon
-      className={classnames(c.LikeHeartIcon__unfilled, {
+      className={classnames(c.LikeIcon, c.LikeHeartIcon__unfilled, {
         [c.LikeModelIcon__unliked]: hasChanged,
       })}
     />
@@ -79,13 +83,13 @@ const HeartButton = ({ liked, c, hasChanged }) => {
 const StarButton = ({ liked, c, hasChanged }) => {
   return liked ? (
     <StarFilledIcon
-      className={classnames(c.LikeStarIcon__filled, {
+      className={classnames(c.LikeIcon, c.LikeStarIcon__filled, {
         [c.LikeModelIcon__liked]: hasChanged,
       })}
     />
   ) : (
     <StarIcon
-      className={classnames(c.LikeStarIcon__unfilled, {
+      className={classnames(c.LikeIcon, c.LikeStarIcon__unfilled, {
         [c.LikeModelIcon__unliked]: hasChanged,
       })}
     />
