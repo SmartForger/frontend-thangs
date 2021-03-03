@@ -19,7 +19,6 @@ describe('The Model License', () => {
   before(() => {
     cy.getCookie('activeUser').then(({ value }) => {
       activeUser = JSON.parse(value)
-      clearModelsAndFolders(activeUser)
     })
   })
 
@@ -44,6 +43,10 @@ describe('The Model License', () => {
     clickOnElementByText('Save Changes')
     isElement(CLASSES.MODEL_LICENSE, PROPS.VISIBLE)
     clearModelsAndFolders()
+  })
+
+  after(() => {
+    clearModelsAndFolders(activeUser)
   })
 
   it('Check upload model with the license and license text on model page', () => {
