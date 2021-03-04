@@ -14,14 +14,20 @@ describe('User follows', () => {
   let sideUser
 
   before(() => {
-    cy.getCookie('activeUser').then(({ value }) => {
-      activeUser = JSON.parse(value)
-    })
-    cy.getCookie('sideUser').then(({ value }) => {
-      sideUser = JSON.parse(value)
+    cy.getCookies()
+      .then(cookies => {
+        const cookieValues = cookies.reduce(
+          (acc, cookie) => ({ ...acc, [cookie.name]: cookie.value }),
+          {}
+        )
 
-      unfollowUser(sideUser, activeUser)
-    })
+        activeUser = JSON.parse(cookieValues['activeUser'])
+        sideUser = JSON.parse(cookieValues['sideUser'])
+
+        return Promise.resolve()
+      })
+      .then(() => unfollowUser(sideUser, activeUser))
+      .then(() => clearModelsAndFolders(activeUser))
   })
 
   it('User1 uploads model', () => {
