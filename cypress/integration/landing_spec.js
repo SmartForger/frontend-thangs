@@ -8,7 +8,7 @@ import {
   uploadFile,
   urlShouldInclude,
   urlShouldIncludeAfterTimeout,
-} from '../../utils/common-methods'
+} from '../utils/common-methods'
 import {
   clearInput,
   enterValidValue,
@@ -16,8 +16,8 @@ import {
   inputType,
   searchInput,
   uploadInput,
-} from '../../utils/inputs'
-import { CLASSES, MODEL, PATH, PROPS, TEXT } from '../../utils/constants'
+} from '../utils/inputs'
+import { CLASSES, MODEL, PATH, PROPS, TEXT } from '../utils/constants'
 
 describe('The Landing Page', () => {
   beforeEach(() => {
