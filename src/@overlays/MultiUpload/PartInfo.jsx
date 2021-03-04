@@ -189,7 +189,7 @@ const PartInfoSchema = ({ isRootPart }) =>
   Joi.object({
     name: Joi.string().pattern(new RegExp('^[^/]+$')).required(),
     description: isRootPart ? Joi.string().required() : Joi.string().allow(''),
-    folderId: Joi.string().required(),
+    folderId: Joi.string().allow(''),
     material: Joi.string().allow(''),
     height: Joi.string().allow(''),
     weight: Joi.string().allow(''),
@@ -200,7 +200,7 @@ const PartInfoSchema = ({ isRootPart }) =>
 const initialState = {
   name: '',
   description: '',
-  folderId: 'files',
+  folderId: '',
   material: '',
   height: '',
   weight: '',

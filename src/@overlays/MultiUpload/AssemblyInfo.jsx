@@ -114,7 +114,7 @@ const assemblyInfoSchema = ({ isRootAssembly, isMultipart }) =>
   Joi.object({
     name: Joi.string().pattern(new RegExp('^[^/]+$')).required(),
     description: isRootAssembly ? Joi.string().required() : Joi.string().allow(''),
-    folderId: Joi.string().required(),
+    folderId: Joi.string().allow(''),
     primary: isMultipart ? Joi.string().required() : Joi.string().allow(''),
     category: Joi.string().allow(''),
     license: Joi.string().allow(''),
@@ -124,7 +124,7 @@ const assemblyInfoSchema = ({ isRootAssembly, isMultipart }) =>
 const INITIAL_STATE = {
   name: '',
   description: '',
-  folderId: 'files',
+  folderId: '',
   category: '',
   primary: '',
   license: '',

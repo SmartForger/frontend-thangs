@@ -66,7 +66,7 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       cursor: 'pointer',
       display: 'flex',
-      height: '3rem',
+      height: '2.5rem',
       position: 'absolute',
       right: '1rem',
       top: 0,
@@ -312,7 +312,7 @@ const SelectFolderActionMenu = ({
 
     return [
       {
-        value: 'files',
+        value: '',
         label: 'My Public Files',
         isPublic: true,
       },
