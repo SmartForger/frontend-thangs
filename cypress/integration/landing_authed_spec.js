@@ -7,15 +7,15 @@ import {
   openNotifications,
   openProfileDropdown,
   urlShouldInclude,
-} from '../../utils/common-methods'
+} from '../utils/common-methods'
 import {
   clearInput,
   enterValidValue,
   inputFocus,
   inputType,
   searchInput,
-} from '../../utils/inputs'
-import { CLASSES, PATH, PROPS } from '../../utils/constants'
+} from '../utils/inputs'
+import { CLASSES, PATH, PROPS } from '../utils/constants'
 
 let activeUser
 

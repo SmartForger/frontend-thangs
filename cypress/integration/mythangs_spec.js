@@ -9,9 +9,9 @@ import {
   openMyThangs,
   clearModelsAndFolders,
   loginByUser,
-} from '../../utils/common-methods'
-import { CLASSES, FOLDER, PATH, PROPS, TEXT, USER3 } from '../../utils/constants'
-import { createFolderInput, enterValidValue } from '../../utils/inputs'
+} from '../utils/common-methods'
+import { CLASSES, FOLDER, PATH, PROPS, TEXT } from '../utils/constants'
+import { createFolderInput, enterValidValue } from '../utils/inputs'
 
 let activeUser
 

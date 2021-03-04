@@ -8,10 +8,10 @@ import {
   clickOnElement,
   uploadFile,
   clickOnElementByText,
-} from '../../utils/common-methods'
-import { CLASSES, MODEL, PROPS, TEXT } from '../../utils/constants'
-import { licenseUpload, multiUpload } from '../../utils/uploadMethods'
-import { licenseUploadInput } from '../../utils/inputs'
+} from '../utils/common-methods'
+import { CLASSES, MODEL, PROPS, TEXT } from '../utils/constants'
+import { licenseUpload, multiUpload } from '../utils/uploadMethods'
+import { licenseUploadInput } from '../utils/inputs'
 
 let activeUser
 

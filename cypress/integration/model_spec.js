@@ -6,7 +6,7 @@ import {
   isTextInsideClass,
   clearModelsAndFolders,
   loginByUser,
-} from '../../utils/common-methods'
+} from '../utils/common-methods'
 import {
   CLASSES,
   MODEL,
@@ -14,9 +14,9 @@ import {
   TEXT,
   MODEL_CARD,
   VERSION_MODEL,
-} from '../../utils/constants'
-import { commentInput, enterValidValue } from '../../utils/inputs'
-import { multiUpload, versionUpload } from '../../utils/uploadMethods'
+} from '../utils/constants'
+import { commentInput, enterValidValue } from '../utils/inputs'
+import { multiUpload, versionUpload } from '../utils/uploadMethods'
 
 let activeUser
 

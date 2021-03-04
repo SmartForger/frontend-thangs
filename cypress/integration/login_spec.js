@@ -1,4 +1,4 @@
-import { CLASSES, PROPS, TEXT } from '../../utils/constants'
+import { CLASSES, PROPS, TEXT } from '../utils/constants'
 import {
   clickOnElement,
   clickOnElementByText,
@@ -7,13 +7,13 @@ import {
   isTextInsideClass,
   loginByUser,
   signOut,
-} from '../../utils/common-methods'
+} from '../utils/common-methods'
 import {
   clearInput,
   enterInvalidValue,
   emailInput,
   passwordInput,
-} from '../../utils/inputs'
+} from '../utils/inputs'
 
 let activeUser
 export function openLogin() {

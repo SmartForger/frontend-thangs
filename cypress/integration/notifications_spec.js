@@ -8,10 +8,10 @@ import {
   isElementContainTwoValues,
   clearModelsAndFolders,
   log,
-} from '../../utils/common-methods'
-import { CLASSES, MODEL, PROPS, TEXT } from '../../utils/constants'
-import { commentInput, enterValidValue } from '../../utils/inputs'
-import { multiUpload } from '../../utils/uploadMethods'
+} from '../utils/common-methods'
+import { CLASSES, MODEL, PROPS, TEXT } from '../utils/constants'
+import { commentInput, enterValidValue } from '../utils/inputs'
+import { multiUpload } from '../utils/uploadMethods'
 
 let activeUser
 let sideUser

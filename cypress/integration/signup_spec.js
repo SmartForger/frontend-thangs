@@ -1,11 +1,11 @@
-import { CLASSES, PROPS, TEXT } from '../../utils/constants'
+import { CLASSES, PROPS, TEXT } from '../utils/constants'
 import {
   clickOnElement,
   clickOnElementByText,
   goTo,
   isElement,
   isTextInsideClass,
-} from '../../utils/common-methods'
+} from '../utils/common-methods'
 import {
   enterInvalidValue,
   enterValidValue,
@@ -14,7 +14,7 @@ import {
   usernameInput,
   confirmPasswordInput,
   enterWrongValue,
-} from '../../utils/inputs'
+} from '../utils/inputs'
 
 export function openSignup() {
   isElement(CLASSES.SIGNUP_FORM, PROPS.INVISIBLE)
