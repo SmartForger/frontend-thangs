@@ -259,7 +259,6 @@ const Page = () => {
     'modelsStats'
   )
   const { phyndexer, text, thangs } = searchResults
-  const [showReportModelButtons, setShowReportModelButtons] = useState(false)
   const [searchScope, setSearchScope] = useState(FILTER_DEFAULT)
 
   useMemo(() => {
@@ -349,13 +348,10 @@ const Page = () => {
   const resultCount = phyndexerModels.length + thangsModels.length + textModels.length
   const isLoading = thangs.isLoading || phyndexer.isLoading || text.isLoading
 
-  const handleFilterChange = useCallback(
-    value => {
-      setSearchScope(value)
-      track('Search Filter Change', { filter: value })
-    },
-    [history]
-  )
+  const handleFilterChange = useCallback(value => {
+    setSearchScope(value)
+    track('Search Filter Change', { filter: value })
+  }, [])
 
   return (
     <div className={c.SearchResults_Page}>
