@@ -262,7 +262,7 @@ export const clearModelsAndFolders = (user = USER) => {
   if (localStorage.getItem('currentUser')) {
     localStorage.removeItem('currentUser')
   }
-  apiLogin({ userName: user.EMAIL, password: user.PASSWORD })
+  return apiLogin({ userName: user.EMAIL, password: user.PASSWORD })
     .then(() => {
       return api({
         endpoint: `users/${user.ID}/thangs`,
@@ -312,6 +312,8 @@ export const clearModelsAndFolders = (user = USER) => {
       deleteModelRec(models.map(model => model.id))
       deleteFolderRec(folders.map(folder => folder.id))
       localStorage.removeItem('currentUser')
+
+      return Promise.resolve('ok')
     })
 }
 
@@ -344,6 +346,8 @@ export const unfollowUser = (userA = USER, userB = USER2) =>
     .then(response => {
       localStorage.removeItem('currentUser')
       log('Finished', response === 'End' && JSON.stringify(response))
+
+      return Promise.resolve('ok')
     })
 
 //User A follows user B
@@ -373,6 +377,8 @@ export const followUser = (userA = USER, userB = USER2) =>
     .then(response => {
       localStorage.removeItem('currentUser')
       log('Finished', response === 'End' && JSON.stringify(response))
+
+      return Promise.resolve('ok')
     })
 
 export const log = (...args) => {
