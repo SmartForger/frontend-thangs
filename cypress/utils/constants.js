@@ -208,7 +208,7 @@ export const TEXT = {
 
 export const PROPS = {
   VISIBLE: 'be.visible',
-  INVISIBLE: 'not.be.visible',
+  INVISIBLE: 'not.exist',
   NOT_EMPTY: 'not.be.empty',
   CONTAIN: 'contain',
 }
