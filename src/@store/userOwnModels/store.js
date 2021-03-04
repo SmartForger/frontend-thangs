@@ -15,7 +15,6 @@ export default store => {
   store.on(
     types.CHANGE_USER_OWNED_MODELS_STATUS,
     (state, { atom, status = STATUSES.INIT, data }) => ({
-      ...state,
       [atom]: {
         ...state[atom],
         ...getStatusState(status),
