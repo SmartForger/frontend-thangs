@@ -30,8 +30,8 @@ const useForm = (opts = {}) => {
             type === 'string.pattern.base'
               ? t(`input.${inputKey}.errors.pattern`)
               : type
-              ? t(`input.${inputKey}.errors.required`)
-              : t(`input.${inputKey}.errors.invalid`),
+                ? t(`input.${inputKey}.errors.required`)
+                : t(`input.${inputKey}.errors.invalid`),
         }
       })
       setInputErrors(newInputErrors)

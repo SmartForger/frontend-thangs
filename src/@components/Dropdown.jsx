@@ -11,7 +11,7 @@ const useStyles = createUseStyles(theme => {
       border: ({ error }) =>
         error ? `1px solid ${theme.colors.error}` : '1px solid #ddd',
       borderRadius: '.5rem',
-      height: `2.5rem`,
+      height: '2.5rem',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
