@@ -242,15 +242,12 @@ const ThangsSearchResult = ({
 }
 
 const Page = () => {
-  const FILTER_PHYNDEXER = 'phyn'
-  const FILTER_THANGS = 'thangs'
   const FILTER_DEFAULT = 'all'
 
   const c = useStyles()
   const [currentUser] = useLocalStorage('currentUser', null)
   const history = useHistory()
-  const queryParams = new URLSearchParams(history.location.search)
-  const filter = queryParams.get('filter')
+  const filter = useQuery('filter')
   const { searchQuery } = useParams()
   const modelId = useQuery('modelId')
   const phynId = useQuery('phynId')
@@ -265,16 +262,9 @@ const Page = () => {
   const [showReportModelButtons, setShowReportModelButtons] = useState(false)
   const [searchScope, setSearchScope] = useState(FILTER_DEFAULT)
 
-  useEffect(() => {
-    switch (filter) {
-      case FILTER_PHYNDEXER:
-        setSearchScope(FILTER_PHYNDEXER)
-        break
-      case FILTER_THANGS:
-        setSearchScope(FILTER_THANGS)
-        break
-      default:
-        setSearchScope(FILTER_DEFAULT)
+  useMemo(() => {
+    if (filter) {
+      setSearchScope(filter)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -292,7 +282,7 @@ const Page = () => {
 
   useEffect(() => {
     if (!modelId && !phynId) {
-      history.push(`${searchQuery}?filter=${searchScope}`)
+      history.push(`?filter=${searchScope}`)
       dispatch(types.GET_TEXT_SEARCH_RESULTS, {
         searchTerm: decodeURIComponent(searchQuery),
         scope: searchScope,
@@ -359,10 +349,13 @@ const Page = () => {
   const resultCount = phyndexerModels.length + thangsModels.length + textModels.length
   const isLoading = thangs.isLoading || phyndexer.isLoading || text.isLoading
 
-  const handleFilterChange = useCallback(value => {
-    setSearchScope(value)
-    track('Search Filter Change', { filter: value })
-  }, [])
+  const handleFilterChange = useCallback(
+    value => {
+      setSearchScope(value)
+      track('Search Filter Change', { filter: value })
+    },
+    [history]
+  )
 
   return (
     <div className={c.SearchResults_Page}>
