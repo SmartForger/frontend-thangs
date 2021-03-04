@@ -28,8 +28,11 @@ const useStyles = createUseStyles(theme => {
     ToggleFollowButton: {},
     ToggleFollowButton_icon: {
       transition: 'all 450ms',
-      width: '.75rem',
-      height: '.75rem',
+
+      [md]: {
+        width: '.75rem',
+        height: '.75rem',
+      },
     },
     ToggleFollowButton_icon__unfollow: {
       transform: 'rotate(45deg)',

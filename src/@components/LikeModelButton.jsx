@@ -18,8 +18,10 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     LikeIcon: {
-      width: '.75rem',
-      height: '.75rem',
+      [md]: {
+        width: '.75rem',
+        height: '.75rem',
+      },
     },
     LikeStarIcon__filled: {
       '& path': {
