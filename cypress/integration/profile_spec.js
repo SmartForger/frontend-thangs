@@ -24,10 +24,6 @@ describe('Profile', () => {
     })
   })
 
-  after(() => {
-    clearModelsAndFolders(activeUser)
-  })
-
   it('Side user upploads model', () => {
     loginByUser({
       email: sideUser.EMAIL,

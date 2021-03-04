@@ -26,10 +26,6 @@ describe('My Thangs Page', () => {
     loginByUser({ email: activeUser.EMAIL, password: activeUser.PASSWORD })
   })
 
-  after(() => {
-    clearModelsAndFolders(activeUser)
-  })
-
   it('My Thangs page loaded successfully', () => {
     goTo(PATH.MY_THANGS)
     isElement(CLASSES.MY_THANGS_NAVBAR, PROPS.VISIBLE)

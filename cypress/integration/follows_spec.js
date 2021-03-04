@@ -24,10 +24,6 @@ describe('User follows', () => {
     })
   })
 
-  after(() => {
-    clearModelsAndFolders(activeUser)
-  })
-
   it('User1 uploads model', () => {
     localStorage.clear()
 

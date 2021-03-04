@@ -45,10 +45,6 @@ describe('The Model License', () => {
     clearModelsAndFolders()
   })
 
-  after(() => {
-    clearModelsAndFolders(activeUser)
-  })
-
   it('Check upload model with the license and license text on model page', () => {
     licenseUpload()
     goTo(`/${activeUser.NAME}`)
