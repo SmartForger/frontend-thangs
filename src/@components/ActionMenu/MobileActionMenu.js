@@ -16,7 +16,7 @@ const useStyles = createUseStyles(theme => {
       overflow: 'auto',
       opacity: '0',
       position: 'fixed',
-      zIndex: '3',
+      zIndex: '11',
       bottom: '-200px',
       borderRadius: '1rem 1rem 0 0',
       transition: 'all .4s',

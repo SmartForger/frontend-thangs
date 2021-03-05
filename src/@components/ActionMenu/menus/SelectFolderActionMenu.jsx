@@ -22,6 +22,10 @@ import { track } from '@utilities/analytics'
 import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md },
+  } = theme
+
   return {
     SelectFolderMenu_Wrapper: {
       '& > div': {
@@ -73,6 +77,11 @@ const useStyles = createUseStyles(theme => {
 
       '& path': {
         fill: theme.colors.grey[300],
+      },
+    },
+    SelectFolderMenu_Content: {
+      [md]: {
+        marginBottom: '1rem',
       },
     },
   }
@@ -223,7 +232,7 @@ export const SelectFolderMenu = ({ onChange = noop, options = [] }) => {
   }, [setIsCreateMode])
 
   return (
-    <>
+    <div className={c.SelectFolderMenu}>
       {isCreateMode ? (
         <NewFolderScreen onBack={onBack} onChange={onChange} />
       ) : (
@@ -242,7 +251,7 @@ export const SelectFolderMenu = ({ onChange = noop, options = [] }) => {
           </div>
         </>
       )}
-    </>
+    </div>
   )
 }
 
@@ -351,8 +360,8 @@ const SelectFolderActionMenu = ({
         TargetComponent={SelectFolderTarget}
         TargetComponentProps={targetProps}
         isAutoClosed={false}
-        isClosedOnChange={true}
         isExternalClosed={true}
+        isMobileOnly
       />
     </div>
   )
