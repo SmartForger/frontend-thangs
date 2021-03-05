@@ -15,7 +15,7 @@ export default breakpoint => {
     return () => {
       window.removeEventListener('resize', resizeHandler)
     }
-  }, [])
+  }, [breakpoint])
 
   return isMobile
 }
