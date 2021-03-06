@@ -20,7 +20,7 @@ const useStyles = createUseStyles(theme => {
       left: 0,
       right: 0,
       backgroundColor: 'rgba(0,0,0,0.6)',
-      zIndex: '1',
+      zIndex: '11',
     },
     ActionMenuPortal_Background__mobileOnly: {
       [md]: {
