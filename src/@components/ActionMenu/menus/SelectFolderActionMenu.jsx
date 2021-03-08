@@ -146,7 +146,7 @@ const NewFolderScreen = ({ onChange = noop, onBack = noop }) => {
 
   const handleSubmit = useCallback(
     data => {
-      track('Create Folder', { isPrivate: !data.isPublic })
+      track('Create Folder - Submit - Upload Flow', { isPrivate: !data.isPublic })
       dispatch(types.CREATE_FOLDER, {
         data,
         onError: error => {
@@ -217,9 +217,10 @@ export const SelectFolderMenu = ({ onChange = noop, options = [] }) => {
   }
 
   const handleCreateNew = useCallback(
-    ev => {
+    _ev => {
       setTimeout(() => {
         setIsCreateMode(true)
+        track('Create Folder - Form Show - Upload Flow')
       }, 100)
     },
     [setIsCreateMode]
@@ -262,8 +263,13 @@ export const SelectFolderTarget = ({
   onClick = noop,
 }) => {
   const c = useStyles({})
+  const handleClick = useCallback(() => {
+    track('Choose Folder - Click - Upload Flow')
+    onClick()
+  }, [onClick])
+
   return (
-    <div onClick={onClick}>
+    <div onClick={handleClick}>
       <Input
         className={c.SelectFolderTarget}
         label={'Choose Folder'}
