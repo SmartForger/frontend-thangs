@@ -147,7 +147,7 @@ export const editAndSaveFile = () => {
 export const fillAndSubmitMultiuploadForm = () => {
   isElement(DATA_CY.MULTIUPLOAD_FORM, PROPS.VISIBLE)
   cy.get(`${DATA_CY.MULTIUPLOAD_FORM} [name=name]`).clear()
-  cy.get(`${DATA_CY.MULTIUPLOAD_FORM} [name=name]`).focus().type(MODEL.FILENAME)
+  cy.get(`${DATA_CY.MULTIUPLOAD_FORM} [name=name]`).focus().type(MODEL.FILENAME_STL)
   cy.get(`${DATA_CY.MULTIUPLOAD_FORM} [name=description]`).clear()
   cy.get(`${DATA_CY.MULTIUPLOAD_FORM} [name=description]`).focus().type(MODEL.DESCRIPTION)
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue')

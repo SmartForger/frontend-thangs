@@ -50,8 +50,8 @@ describe('The Landing Page', () => {
   it('Search by upload provides to results page', () => {
     inputFocus(CLASSES.HEADER_DESKTOP, searchInput)
     isElement(CLASSES.LANDING_SEARCH_BAR_UPLOAD, PROPS.VISIBLE)
-    uploadFile(MODEL.FILENAME, uploadInput)
-    urlShouldIncludeAfterTimeout(MODEL.FILENAME, 180000)
+    uploadFile(MODEL.FILENAME_STL, uploadInput)
+    urlShouldIncludeAfterTimeout(MODEL.FILENAME_STL, 180000)
     urlShouldInclude('modelId')
     urlShouldInclude('phynId')
   })

@@ -47,11 +47,17 @@ export const PATH = {
 }
 
 export const MODEL = {
-  FILENAME: 'horn1.stl',
+  FILENAME_STL: 'horn1.stl',
+  FILENAME_ASM: 'JS Clamp - H215.SLDASM',
+  FILENAME_ASM_PART_1: 'Part1.SLDPRT',
+  FILENAME_MULTIPART_1: 'bolt1.par',
+  FILENAME_MULTIPART_2: 'case1.par',
   LICENSE: 'LICENSE.txt',
   LICENSE_NEW: 'LICENSE-NEW.txt',
   TITLE: 'Cypress Test Model',
+  TITLE_ASM: 'JS Clamp - H215',
   DESCRIPTION: 'Cypress Test Description',
+  TITLE_MULTIPART: 'Multipart test name',
   COMMENT: 'Cypress Test comment',
 }
 
@@ -97,6 +103,8 @@ export const CLASSES = {
   UPLOAD_FORM: '[class^=Upload_Column__form]',
   UPLOAD_BUTTON_GROUP: '[class^=UploadForm_ButtonGroup]',
   UPLOAD_BUTTON: '[class^="Button"]',
+  UPLOAD_ERROR_TEXT: '[class^=UploadModels_ErrorText]',
+  UPLOAD_HEADER: '[class^=MultiUpload_OverlayHeader]',
   MODEL_CARD: '[class^=ModelCard]',
   MODEL_LICENSE: '[class^=Model_License]',
   MODEL_LICENSE_LINK: '[class^=Model_LicenseLink]',

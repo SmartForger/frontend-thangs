@@ -16,7 +16,15 @@ import {
   VERSION_MODEL,
 } from '../utils/constants'
 import { commentInput, enterValidValue } from '../utils/inputs'
-import { multiUpload, versionUpload } from '../utils/uploadMethods'
+import {
+  assemblyUpload,
+  assemblyUploadAfterError,
+  assemblyUploadError,
+  multiPartAsAsmUpload,
+  multiPartUpload,
+  multiUpload,
+  versionUpload,
+} from '../utils/uploadMethods'
 
 let activeUser
 
@@ -31,8 +39,28 @@ describe('The Model Page', () => {
     loginByUser({ email: activeUser.EMAIL, password: activeUser.PASSWORD })
   })
 
+  after(() => {
+    clearModelsAndFolders(activeUser)
+  })
+
   it('Check redirect to my thangs after upload of model', () => {
     multiUpload()
+  })
+
+  it('Check asm upload error', () => {
+    assemblyUploadError()
+  })
+
+  it('Check asm upload after error', () => {
+    assemblyUploadAfterError()
+  })
+
+  it('Check asm upload', () => {
+    assemblyUpload()
+  })
+
+  it('Check multipart upload', () => {
+    multiPartAsAsmUpload()
   })
 
   it('Check model details, comment, stats', () => {

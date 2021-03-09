@@ -83,7 +83,7 @@ describe('User notifications', () => {
       // TODO: Actualize version upload, need to be merged
       //version
       clickOnTextInsideClass(CLASSES.MODEL_SIDEBAR_BUTTON, TEXT.UPLOAD_NEW_VERSION)
-      uploadFile(MODEL.FILENAME, uploadInput)
+      uploadFile(MODEL.FILENAME_STL, uploadInput)
       editAndSaveFile()
       urlShouldIncludeAfterTimeout(PATH.MY_THANGS_ALL_FILES, 10000)
       isElementContains(CLASSES.MY_THANGS_ALL_FILES_ROW, MODEL.TITLE)
