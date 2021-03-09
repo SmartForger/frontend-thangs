@@ -1,4 +1,5 @@
 import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
+import { isIOS } from '@utilities'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
@@ -63,7 +64,11 @@ const useFileUpload = ({
   const { getRootProps, getInputProps, open } = useDropzone({
     noClick,
     onDrop,
-    accept: acceptedFormats.length ? acceptedFormats : MODEL_FILE_EXTS,
+    accept: acceptedFormats.length
+      ? acceptedFormats
+      : isIOS()
+      ? undefined
+      : MODEL_FILE_EXTS,
   })
 
   const UploadZone = useCallback(

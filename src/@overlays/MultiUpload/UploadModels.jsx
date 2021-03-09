@@ -18,6 +18,7 @@ import Dropzone from 'react-dropzone'
 import { FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { overlayview } from '@utilities/analytics'
 import UploadTreeNode from './UploadTreeNode'
+import { isIOS } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -277,7 +278,7 @@ const UploadModels = ({
       {(multiple || (!multiple && !hasFile)) && (
         <Dropzone
           onDrop={onDrop}
-          accept={MODEL_FILE_EXTS}
+          accept={isIOS() ? undefined : MODEL_FILE_EXTS}
           ref={dropzoneRef}
           multiple={multiple}
           maxFiles={25}
