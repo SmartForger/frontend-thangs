@@ -32,15 +32,7 @@ const useStyles = createUseStyles(_theme => {
 })
 
 const Row = memo(({ data, index, style }) => {
-  const {
-    items,
-    hasMultiRoots,
-    isSelected,
-    levelPadding,
-    classes,
-    renderNode,
-    toggleNode,
-  } = data
+  const { items, isSelected, levelPadding, classes, renderNode, toggleNode } = data
   const node = items[index]
 
   return (
@@ -53,7 +45,7 @@ const Row = memo(({ data, index, style }) => {
         paddingLeft: levelPadding * node.level,
       }}
     >
-      {(node.level > 0 || hasMultiRoots) && (
+      {node.level > 0 && (
         <div
           className={classnames(classes.TreeNode_ExpandIcon, {
             [classes.TreeNode_ExpandIcon__expanded]: !node.isLeaf && !node.closed,
@@ -122,18 +114,20 @@ const InfiniteTreeView = ({
     const hasMultiRoots = nodes.filter(node => node.level === 0).length > 1
 
     let shouldScroll = false
-    if (scrollToItem && scrollToItem.id !== prevScrollToItem.current.id) {
+    if (scrollToItem && scrollToItem.id) {
       let shouldUpdateExpanded = false
 
       const index = nodes.findIndex(node => node.id === scrollToItem.id)
-      let parentIndex = findParentIndex(nodes, index)
-      while (parentIndex >= 0) {
-        const parent = nodes[parentIndex]
-        if (!expandedNodes.includes(parent.id)) {
-          expandedNodes.push(parent.id)
-          shouldUpdateExpanded = true
+      if (index >= 0) {
+        let parentIndex = findParentIndex(nodes, index)
+        while (parentIndex >= 0) {
+          const parent = nodes[parentIndex]
+          if (!expandedNodes.includes(parent.id)) {
+            expandedNodes.push(parent.id)
+            shouldUpdateExpanded = true
+          }
+          parentIndex = findParentIndex(nodes, parentIndex)
         }
-        parentIndex = findParentIndex(nodes, parentIndex)
       }
 
       if (shouldUpdateExpanded) {
@@ -174,11 +168,8 @@ const InfiniteTreeView = ({
   const height = Math.min(explorerHeight, maxHeight)
 
   const itemData = useMemo(() => {
-    const hasMultiRoots = filteredNodes.filter(node => node.level === 0).length > 1
-
     return {
       items: filteredNodes,
-      hasMultiRoots,
       toggleNode,
       renderNode,
       classes: { ...c, ...classes },

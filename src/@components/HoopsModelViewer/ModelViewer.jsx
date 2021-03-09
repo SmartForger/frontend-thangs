@@ -87,18 +87,7 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
       }
       sortParts(model)
 
-      // If multi-part assembly
-      let list = []
-      if (!model.isAssembly && model.parts.length > 1) {
-        const root = {
-          parts: model.parts,
-          name: model.name,
-          isAssembly: true,
-        }
-        list = flattenTree([root], 'parts')
-      } else {
-        list = flattenTree(model.parts, 'parts')
-      }
+      const list = flattenTree(model.parts, 'parts')
 
       setPartList(list)
       partListRef.current = list
