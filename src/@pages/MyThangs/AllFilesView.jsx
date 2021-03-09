@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from 'react'
-import * as R from 'ramda'
 import { FileTable, FolderCard, Spacer, TitleTertiary } from '@components'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
