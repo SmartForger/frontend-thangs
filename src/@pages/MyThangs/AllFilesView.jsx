@@ -85,15 +85,13 @@ const AllFilesView = ({
   }, [])
 
   const sortedFolders = useMemo(() => {
-    return folders !== undefined && R.isEmpty(folders)
-      ? folders
-        .sort((a, b) => {
-          if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
-          else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
-          return 0
-        })
-        .filter(folder => !folder.name.includes('//'))
-      : []
+    return (folders || [])
+      .sort((a, b) => {
+        if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
+        else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
+        return 0
+      })
+      .filter(folder => !folder.name.includes('//'))
   }, [folders])
 
   return (
