@@ -171,8 +171,8 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
           ? newNode.subIds.map(subId => formNode(subId))
           : []
         : Object.values(newTreeData)
-          .filter(node => !node.parentId)
-          .map(node => formNode(node.id))
+            .filter(node => !node.parentId)
+            .map(node => formNode(node.id))
 
       newNode.treeValid =
         newNode.valid &&
@@ -247,10 +247,14 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
 
   const onDrop = useCallback(
     (acceptedFiles, [rejectedFile], _event) => {
-      track('MultiUpload - OnDrop', { amount: acceptedFiles && acceptedFiles.length })
-
       const files = acceptedFiles
         .map(file => {
+          const ext = `.${file.name.split('.').slice(-1)[0].toLowerCase()}`
+          if (!MODEL_FILE_EXTS.includes(ext)) {
+            rejectedFile = file
+            return null
+          }
+
           const fileObj = {
             id: file.name,
             file,
@@ -268,6 +272,8 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
           return fileObj
         })
         .filter(f => !!f)
+
+      track('MultiUpload - OnDrop', { amount: acceptedFiles && acceptedFiles.length })
 
       dispatch(types.UPLOAD_FILES, { files })
 
@@ -438,10 +444,10 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
                   ? 'Upload New Version'
                   : 'Upload Files'
                 : activeNode.isAssembly && activeNode.parentId
-                  ? 'Sub Assembly'
-                  : activeNode.isAssembly
-                    ? 'New Assembly'
-                    : partFormTitle}
+                ? 'Sub Assembly'
+                : activeNode.isAssembly
+                ? 'New Assembly'
+                : partFormTitle}
             </SingleLineBodyText>
             {activeView > -1 && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />

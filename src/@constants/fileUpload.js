@@ -2,8 +2,8 @@ export const MODEL_FILE_EXTS = [
   '.3dxml', // THREE_D_XML
   '.asab', // ACIS_Assembly_Binary
   '.asat', // ACIS_Assembly
-  '.CATPart', // CATIAV5
-  '.CATProduct', // CATIAV5_Assembly
+  '.catpart', // CATIAV5
+  '.catproduct', // CATIAV5_Assembly
   '.dwg',
   '.dxf',
   '.iges',
