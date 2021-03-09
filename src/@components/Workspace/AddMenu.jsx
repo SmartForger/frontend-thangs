@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import * as R from 'ramda'
 import { SingleLineBodyText, Spacer } from '@components'
 import { createUseStyles } from '@style'
 import { MenuItem } from 'react-contextmenu'
@@ -53,43 +52,37 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const AddMenu = () => {
+const AddMenu = ({ folder = {} }) => {
   const c = useStyles({})
   const { setOverlay } = useOverlay()
 
-  const handleAddFolder = useCallback(
-    (_e, data = {}) => {
-      track('Add Menu - Create Folder')
-      setOverlay({
-        isOpen: true,
-        template: 'addFolder',
-        data: {
-          folder: data.folder,
-          animateIn: true,
-          windowed: true,
-          dialogue: true,
-        },
-      })
-    },
-    [setOverlay]
-  )
+  const handleAddFolder = useCallback(() => {
+    track('Add Menu - Create Folder')
+    setOverlay({
+      isOpen: true,
+      template: 'addFolder',
+      data: {
+        folder,
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
+      },
+    })
+  }, [folder, setOverlay])
 
-  const handleUpload = useCallback(
-    (_e, data = {}) => {
-      track('Add Menu - Upload Models')
-      setOverlay({
-        isOpen: true,
-        template: 'multiUpload',
-        data: {
-          folderId: R.path(['folder', 'id'], data),
-          animateIn: true,
-          windowed: true,
-          dialogue: true,
-        },
-      })
-    },
-    [setOverlay]
-  )
+  const handleUpload = useCallback(() => {
+    track('Add Menu - Upload Models')
+    setOverlay({
+      isOpen: true,
+      template: 'multiUpload',
+      data: {
+        folderId: folder.id,
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
+      },
+    })
+  }, [folder, setOverlay])
 
   return (
     <div className={c.AddMenu}>

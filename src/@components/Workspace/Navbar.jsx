@@ -178,7 +178,7 @@ const AddMenuDropdown = ({ currentFolderId, folders }) => {
       </Button>
       {showCreateMenu && (
         <div className={c.WorkspaceNavbar_AddMenu}>
-          <AddMenu folder={folder} sideBar={true} />
+          <AddMenu folder={folder} />
         </div>
       )}
     </div>
