@@ -1,6 +1,6 @@
 {
   "$schema": "https://on.cypress.io/cypress.schema.json",
-  "baseUrl": "http://localhost:3000",
+  "baseUrl": "https://localhost:3000",
   "viewportHeight": 1080,
   "viewportWidth": 1920
 }
