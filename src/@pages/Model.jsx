@@ -39,7 +39,7 @@ import { pageview, track, perfTrack } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
-    mediaQueries: { md, md_viewer, lg, xl },
+    mediaQueries: { md, md_viewer, lg_viewer, lgr_viewer, lg, xl },
   } = theme
   return {
     Model: {
@@ -72,9 +72,18 @@ const useStyles = createUseStyles(theme => {
       flexBasis: '2rem',
       flexGrow: 2,
       maxWidth: '100%',
+      marginRight: '4rem',
 
       [md]: {
-        marginRight: '4rem',
+        maxWidth: '22rem',
+      },
+      [lg_viewer]: {
+        maxWidth: '30rem',
+      },
+      [lgr_viewer]: {
+        maxWidth: '40rem',
+      },
+      [xl]: {
         maxWidth: '60rem',
       },
     },
