@@ -22,15 +22,17 @@ export default store => {
     },
     folders: {
       ...state.folders,
-      data: event.folders,
+      data: [
+        ...event.folders,
+        ...event.shared.map(folder => ({
+          ...folder,
+          shared: true,
+        })),
+      ],
     },
     models: {
       ...state.models,
       data: event.models,
-    },
-    shared: {
-      ...state.shared,
-      data: event.shared,
     },
   }))
 

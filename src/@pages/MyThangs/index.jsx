@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import { useStoreon } from 'storeon/react'
@@ -117,13 +117,17 @@ const MyThangs = () => {
   const { dispatch, folders = {}, models = {}, shared = {}, thangs } = useStoreon(
     'folders',
     'models',
-    'thangs',
-    'shared'
+    'thangs'
   )
   const { isLoading, isLoaded } = thangs
-  const { data: folderData } = folders
   const { data: modelData } = models
-  const { data: sharedData } = shared
+  const folderData = useMemo(() => folders.data.filter(folder => !folder.shared), [
+    folders.data,
+  ])
+  const sharedData = useMemo(() => folders.filter(folder => folder.shared), [
+    folders.data,
+  ])
+
   useStarred()
   const { startTimer, getTime } = usePerformanceMetrics()
 
