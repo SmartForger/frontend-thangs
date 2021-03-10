@@ -300,6 +300,10 @@ export default store => {
   })
 
   store.on(types.UPLOAD_FILES, async (state, { files }) => {
+    if (!files || files.length === 0) {
+      return
+    }
+
     let allFiles = Object.values(state.uploadFiles.data)
     let oldFile = allFiles.find(f => f.newFileName)
     while (allFiles.length > 0 && !oldFile) {
