@@ -1,5 +1,14 @@
 import 'cypress-file-upload'
-import { CLASSES, TEXT, MODEL, PATH, VERSION_MODEL, PROPS } from './constants'
+import {
+  CLASSES,
+  TEXT,
+  MODEL,
+  PATH,
+  VERSION_MODEL,
+  PROPS,
+  ASM_MODEL,
+  MULTIPART_MODEL,
+} from './constants'
 import {
   clickOnElement,
   clickOnElementByText,
@@ -28,67 +37,67 @@ export const multiUpload = () => {
 
 export const assemblyUploadError = () => {
   openMultiUpload()
-  uploadFile(MODEL.FILENAME_ASM, multiUploadInput)
+  uploadFile(ASM_MODEL.FILENAME, multiUploadInput)
   isElement(CLASSES.UPLOAD_ERROR_TEXT, PROPS.VISIBLE)
   isElementContains(CLASSES.UPLOAD_ERROR_TEXT, 'Assembly require at least 1 part file')
 }
 
 export const assemblyUploadAfterError = () => {
   openMultiUpload()
-  uploadFile(MODEL.FILENAME_ASM, multiUploadInput)
+  uploadFile(ASM_MODEL.FILENAME, multiUploadInput)
   isElement(CLASSES.UPLOAD_ERROR_TEXT, PROPS.VISIBLE)
   isElementContains(CLASSES.UPLOAD_ERROR_TEXT, 'Assembly require at least 1 part file')
-  uploadFile(MODEL.FILENAME_ASM_PART_1, multiUploadInput)
+  uploadFile(ASM_MODEL.FILENAME_PART_1, multiUploadInput)
   isElement(CLASSES.UPLOAD_ERROR_TEXT, PROPS.INVISIBLE)
   clickOnElementByText('Continue')
   cy.get('[class^=AssemblyInfo_TextAreaInput] [name=description]').clear()
   cy.get('[class^=AssemblyInfo_TextAreaInput] [name=description]')
     .focus()
-    .type(MODEL.DESCRIPTION)
+    .type(ASM_MODEL.DESCRIPTION)
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue', { timeout: 3000 })
 }
 
 export const assemblyUpload = () => {
   openMultiUpload()
-  uploadFile(MODEL.FILENAME_ASM, multiUploadInput)
-  uploadFile(MODEL.FILENAME_ASM_PART_1, multiUploadInput)
+  uploadFile(ASM_MODEL.FILENAME, multiUploadInput)
+  uploadFile(ASM_MODEL.FILENAME_PART_1, multiUploadInput)
   isElement(CLASSES.UPLOAD_ERROR_TEXT, PROPS.INVISIBLE)
   clickOnElementByText('Continue')
   isElementContains(CLASSES.UPLOAD_HEADER, 'New Assembly')
   cy.get('[class^=Input] [name=name]').clear()
-  cy.get('[class^=Input] [name=name]').focus().type(MODEL.TITLE_ASM)
+  cy.get('[class^=Input] [name=name]').focus().type(ASM_MODEL.TITLE)
   cy.get('[class^=AssemblyInfo_TextAreaInput] [name=description]').clear()
   cy.get('[class^=AssemblyInfo_TextAreaInput] [name=description]')
     .focus()
-    .type(MODEL.DESCRIPTION)
+    .type(ASM_MODEL.DESCRIPTION)
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue', { timeout: 3000 })
   isElementContains(CLASSES.UPLOAD_HEADER, 'New Part')
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue', { timeout: 3000 })
   urlShouldIncludeAfterTimeout('mythangs/recent-files', 10000)
-  isElementContains('[class^=FileTable_Row]', MODEL.TITLE_ASM)
+  isElementContains('[class^=FileTable_Row]', ASM_MODEL.TITLE)
 }
 
 export const multiPartAsAsmUpload = () => {
   openMultiUpload()
-  uploadFile(MODEL.FILENAME_MULTIPART_1, multiUploadInput)
-  uploadFile(MODEL.FILENAME_MULTIPART_2, multiUploadInput)
+  uploadFile(MULTIPART_MODEL.FILENAME_1, multiUploadInput)
+  uploadFile(MULTIPART_MODEL.FILENAME_2, multiUploadInput)
   clickOnElement(CLASSES.MY_THANGS_FOLDER_FORM_TOGGLE_BUTTON)
   clickOnElementByText('Continue')
   isElementContains(CLASSES.UPLOAD_HEADER, 'New Assembly')
   cy.get('[class^=Input] [name=name]').clear()
-  cy.get('[class^=Input] [name=name]').focus().type(MODEL.TITLE_MULTIPART)
+  cy.get('[class^=Input] [name=name]').focus().type(MULTIPART_MODEL.TITLE)
   cy.get('[class^=AssemblyInfo_TextAreaInput] [name=description]').clear()
   cy.get('[class^=AssemblyInfo_TextAreaInput] [name=description]')
     .focus()
-    .type(MODEL.DESCRIPTION)
+    .type(MULTIPART_MODEL.DESCRIPTION)
   clickOnTextInsideClass('[class^=Dropdown]', 'Select primary model *')
-  isElementContains('[class^=Dropdown]', MODEL.FILENAME_MULTIPART_2)
-  clickOnTextInsideClass('[class^=Dropdown]', MODEL.FILENAME_MULTIPART_2)
+  isElementContains('[class^=Dropdown]', MULTIPART_MODEL.FILENAME_2)
+  clickOnTextInsideClass('[class^=Dropdown]', MULTIPART_MODEL.FILENAME_2)
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue', { timeout: 3000 })
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue', { timeout: 3000 })
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue', { timeout: 3000 })
   urlShouldIncludeAfterTimeout('mythangs/recent-files', 10000)
-  isElementContains('[class^=FileTable_Row]', MODEL.TITLE_MULTIPART)
+  isElementContains('[class^=FileTable_Row]', MULTIPART_MODEL.TITLE)
 }
 
 export const licenseUpload = () => {

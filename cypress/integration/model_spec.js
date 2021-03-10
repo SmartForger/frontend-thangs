@@ -39,10 +39,6 @@ describe('The Model Page', () => {
     loginByUser({ email: activeUser.EMAIL, password: activeUser.PASSWORD })
   })
 
-  after(() => {
-    clearModelsAndFolders(activeUser)
-  })
-
   it('Check redirect to my thangs after upload of model', () => {
     multiUpload()
   })

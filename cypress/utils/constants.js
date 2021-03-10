@@ -48,17 +48,25 @@ export const PATH = {
 
 export const MODEL = {
   FILENAME_STL: 'horn1.stl',
-  FILENAME_ASM: 'JS Clamp - H215.SLDASM',
-  FILENAME_ASM_PART_1: 'Part1.SLDPRT',
-  FILENAME_MULTIPART_1: 'bolt1.par',
-  FILENAME_MULTIPART_2: 'case1.par',
   LICENSE: 'LICENSE.txt',
   LICENSE_NEW: 'LICENSE-NEW.txt',
   TITLE: 'Cypress Test Model',
-  TITLE_ASM: 'JS Clamp - H215',
   DESCRIPTION: 'Cypress Test Description',
-  TITLE_MULTIPART: 'Multipart test name',
   COMMENT: 'Cypress Test comment',
+}
+
+export const ASM_MODEL = {
+  FILENAME: 'JS Clamp - H215.SLDASM',
+  FILENAME_PART_1: 'Part1.SLDPRT',
+  TITLE: 'JS Clamp - H215',
+  DESCRIPTION: 'ASM Model Description',
+}
+
+export const MULTIPART_MODEL = {
+  FILENAME_1: 'bolt1.par',
+  FILENAME_2: 'case1.par',
+  TITLE: 'Multipart test name',
+  DESCRIPTION: 'Multipart Model Description',
 }
 
 export const VERSION_MODEL = {
