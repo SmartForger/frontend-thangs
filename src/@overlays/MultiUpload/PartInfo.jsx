@@ -195,7 +195,7 @@ const PartInfoSchema = ({ isRootPart }) =>
     weight: Joi.string().allow(''),
     category: Joi.string().allow(''),
     previousVersionModelId: Joi.string().allow(''),
-  }).unknown(true)
+  })
 
 const initialState = {
   name: '',
@@ -344,7 +344,6 @@ const PartInfo = props => {
             maxLength='100'
             onChange={handleOnInputChange}
             value={inputState && inputState.name}
-            required
             inputRef={firstInputRef}
             error={checkError('name').message}
             errorMessage={checkError('name').message}
@@ -366,7 +365,6 @@ const PartInfo = props => {
             type='description'
             value={inputState && inputState.description}
             onChange={handleOnInputChange}
-            required={isRootPart}
             error={checkError('description').message}
             errorMessage={checkError('description').message}
           />
