@@ -224,15 +224,7 @@ export default store => {
     types.GET_RELATED_MODELS,
     async (
       _state,
-      {
-        modelId,
-        phyndexerId,
-        onFinish = noop,
-        onError = noop,
-        geoRelated = true,
-        geoSearch = false,
-        scope,
-      }
+      { modelId, phyndexerId, onFinish = noop, onError = noop, geoRelated = true, scope }
     ) => {
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.THANGS,

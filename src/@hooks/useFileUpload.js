@@ -67,8 +67,8 @@ const useFileUpload = ({
     accept: acceptedFormats.length
       ? acceptedFormats
       : isIOS()
-      ? undefined
-      : MODEL_FILE_EXTS,
+        ? undefined
+        : MODEL_FILE_EXTS,
   })
 
   const UploadZone = useCallback(
