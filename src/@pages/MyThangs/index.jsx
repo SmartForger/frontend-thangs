@@ -114,7 +114,7 @@ const MyThangs = () => {
   const [currentFolderId, setCurrentFolderId] = useState(null)
   const [isMobileNavOpen, setMobileNavOpen] = useState(false)
   const currentUserId = authenticationService.getCurrentUserId()
-  const { dispatch, folders = {}, models = {}, shared = {}, thangs } = useStoreon(
+  const { dispatch, folders = {}, models = {}, thangs } = useStoreon(
     'folders',
     'models',
     'thangs'
@@ -124,7 +124,7 @@ const MyThangs = () => {
   const folderData = useMemo(() => folders.data.filter(folder => !folder.shared), [
     folders.data,
   ])
-  const sharedData = useMemo(() => folders.filter(folder => folder.shared), [
+  const sharedData = useMemo(() => folders.data.filter(folder => folder.shared), [
     folders.data,
   ])
 

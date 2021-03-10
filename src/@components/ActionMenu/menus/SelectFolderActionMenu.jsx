@@ -294,13 +294,12 @@ const SelectFolderActionMenu = ({
   selectedValue,
 }) => {
   const c = useStyles({})
-  const { dispatch, folders = {}, shared = {} } = useStoreon('folders', 'shared')
+  const { dispatch, folders = {} } = useStoreon('folders')
   const { data: foldersData = [] } = folders
-  const { data: sharedData = [] } = shared
 
   const dropdownFolders = useMemo(() => {
-    const foldersArray = [...foldersData]
-    const sharedArray = [...sharedData]
+    const foldersArray = foldersData.filter(folder => !folder.shared)
+    const sharedArray = foldersData.filter(folder => folder.shared)
     const combinedArray = []
     foldersArray.sort((a, b) => {
       if (a.name.toLowerCase() < b.name.toLowerCase()) return -1
@@ -336,7 +335,7 @@ const SelectFolderActionMenu = ({
       },
       ...folderOptions,
     ]
-  }, [foldersData, sharedData])
+  }, [foldersData])
 
   const menuProps = useMemo(() => {
     return {
