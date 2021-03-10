@@ -25,7 +25,7 @@ export const isElement = (el, prop) => {
 }
 
 export const isElementContains = (element, text) => {
-  cy.get(element, { timeout: 5000 }).contains(text).should(PROPS.VISIBLE)
+  cy.get(element, { timeout: 10000 }).contains(text).should(PROPS.VISIBLE)
 }
 
 export const isElementNotEmptyAndValid = (el, prop, value) => {
