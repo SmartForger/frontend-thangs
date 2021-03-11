@@ -84,7 +84,8 @@ const RecentFilesView = ({
     [starredFolders.length, starredModels.length]
   )
   const files = useMemo(() => {
-    return [folderData, modelData].flat()
+    const rootFolders = folderData.filter(folder => !folder.name.includes('//'))
+    return [rootFolders, modelData].flat()
   }, [folderData, modelData])
 
   useEffect(() => {

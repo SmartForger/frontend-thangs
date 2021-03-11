@@ -6,6 +6,7 @@ import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ContextMenuTrigger } from 'react-contextmenu'
+import { getSubFolders } from '@utilities'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -46,21 +47,18 @@ const useStyles = createUseStyles(_theme => {
 const noop = () => null
 
 const Folder = ({
+  allFolders = [],
   folder = {},
   folderNav,
   isExpanded,
   parentName,
   parentKey,
-  subfolders: originalSubfolders,
   handleChangeFolder = noop,
   level,
 }) => {
   const c = useStyles({})
-  const { id, name, subfolders = originalSubfolders } = folder
-  const filteredSubfolders =
-    subfolders && subfolders.length
-      ? subfolders.filter(child => child.name.includes(name))
-      : []
+  const { id, name } = folder
+  const filteredSubfolders = getSubFolders(allFolders, name)
   const [showFolderContents, setShowFolderContents] = useState(false)
   const history = useHistory()
   const currentPath = history.location.pathname
@@ -115,6 +113,7 @@ const Folder = ({
       {shouldShowFolderContents && (
         <div className={c.FileExplorer_Folder}>
           <Subfolders
+            allFolders={allFolders}
             folders={filteredSubfolders}
             folderNav={folderNav}
             parentName={name}
@@ -130,6 +129,7 @@ const Folder = ({
 }
 
 const Subfolders = ({
+  allFolders,
   folders,
   folderNav,
   parentName,
@@ -143,19 +143,19 @@ const Subfolders = ({
   const files = useMemo(() => {
     return !R.isEmpty(folders)
       ? folders.sort((a, b) => {
-        if (a.name < b.name) return -1
-        else if (a.name > b.name) return 1
-        return 0
-      })
+          if (a.name < b.name) return -1
+          else if (a.name > b.name) return 1
+          return 0
+        })
       : []
   }, [folders])
+
   return (
     <>
       {files.map((folder, index) => {
         const { id, name } = folder
         const isExpanded = folderNav[id]
         const newParentKey = parentKey ? `${parentKey}_${index}` : index
-        const subfolders = folders.filter(folder => folder.name !== name)
         let folderName = name
         if (parentName) {
           folderName = folderName.replace(`${parentName}//`, '')
@@ -172,12 +172,12 @@ const Subfolders = ({
             <Spacer size={'2rem'} />
             <div>
               <Folder
+                allFolders={allFolders}
                 folder={folder}
                 folderNav={folderNav}
                 parentName={parentName}
                 parentKey={newParentKey}
                 isExpanded={isExpanded}
-                subfolders={subfolders}
                 handleChangeFolder={handleChangeFolder}
                 handleModelClick={handleModelClick}
                 level={level}
@@ -202,6 +202,7 @@ const RootFolders = ({
 
   return (
     <Subfolders
+      allFolders={folders}
       folders={filteredRootFolders}
       folderNav={folderNav}
       showFiles={true}
