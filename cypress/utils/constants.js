@@ -113,6 +113,7 @@ export const CLASSES = {
   UPLOAD_BUTTON: '[class^="Button"]',
   UPLOAD_ERROR_TEXT: '[class^=UploadModels_ErrorText]',
   UPLOAD_HEADER: '[class^=MultiUpload_OverlayHeader]',
+  UPLOAD_WARNING_TEXT: '[class^=UploadModels_WarningText]',
   MODEL_CARD: '[class^=ModelCard]',
   MODEL_LICENSE: '[class^=Model_License]',
   MODEL_LICENSE_LINK: '[class^=Model_LicenseLink]',
@@ -220,6 +221,8 @@ export const TEXT = {
   COMMENTED: 'commented',
   DOWNLOADED: 'downloaded',
   UPLOADED_NEW_VERSION: 'uploaded new version',
+  UPLOAD_WARNING_TEXT:
+    'Notice: Some parts are missing in your assembly. You can upload them now or continue without them.',
 }
 
 export const PROPS = {

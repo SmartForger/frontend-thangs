@@ -31,7 +31,7 @@ export const multiUpload = () => {
   cy.get('[class^=PartInfo_Field] [name=description]').clear()
   cy.get('[class^=PartInfo_Field] [name=description]').focus().type(MODEL.DESCRIPTION)
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue')
-  urlShouldIncludeAfterTimeout('mythangs/recent-files', 10000)
+  urlShouldIncludeAfterTimeout('mythangs/recent-files')
   isElementContains('[class^=FileTable_Row]', MODEL.TITLE)
 }
 
@@ -62,7 +62,8 @@ export const assemblyUpload = () => {
   uploadFile(ASM_MODEL.FILENAME, multiUploadInput)
   uploadFile(ASM_MODEL.FILENAME_PART_1, multiUploadInput)
   isElement(CLASSES.UPLOAD_ERROR_TEXT, PROPS.INVISIBLE)
-  isElementContains(CLASSES.BUTTON, 'Processing...')
+  isElement(CLASSES.UPLOAD_WARNING_TEXT, PROPS.VISIBLE)
+  isElementContains(CLASSES.UPLOAD_WARNING_TEXT, TEXT.UPLOAD_WARNING_TEXT)
   isElementContains(CLASSES.BUTTON, 'Continue')
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue', { timeout: 3000 })
   isElementContains(CLASSES.UPLOAD_HEADER, 'New Assembly')
@@ -75,7 +76,7 @@ export const assemblyUpload = () => {
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue', { timeout: 3000 })
   isElementContains(CLASSES.UPLOAD_HEADER, 'New Part')
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue', { timeout: 3000 })
-  urlShouldIncludeAfterTimeout('mythangs/recent-files', 10000)
+  urlShouldIncludeAfterTimeout('mythangs/recent-files')
   isElementContains('[class^=FileTable_Row]', ASM_MODEL.TITLE)
 }
 
@@ -98,7 +99,7 @@ export const multiPartAsAsmUpload = () => {
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue', { timeout: 3000 })
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue', { timeout: 3000 })
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue', { timeout: 3000 })
-  urlShouldIncludeAfterTimeout('mythangs/recent-files', 10000)
+  urlShouldIncludeAfterTimeout('mythangs/recent-files')
   isElementContains('[class^=FileTable_Row]', MULTIPART_MODEL.TITLE)
 }
 
@@ -112,7 +113,7 @@ export const licenseUpload = () => {
   cy.get('[class^=PartInfo_Field] [name=description]').clear()
   cy.get('[class^=PartInfo_Field] [name=description]').focus().type(MODEL.DESCRIPTION)
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue', { timeout: 3000 })
-  urlShouldIncludeAfterTimeout('mythangs/recent-files', 10000)
+  urlShouldIncludeAfterTimeout('mythangs/recent-files')
   isElementContains('[class^=FileTable_Row]', MODEL.TITLE)
 }
 
@@ -127,7 +128,7 @@ export const versionUpload = () => {
     .focus()
     .type(VERSION_MODEL.DESCRIPTION)
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue')
-  urlShouldIncludeAfterTimeout('mythangs/recent-files', 10000)
+  urlShouldIncludeAfterTimeout('mythangs/recent-files')
   isElementContains('[class^=FileTable_Row]', VERSION_MODEL.TITLE)
   cy.get('[class^=FileTable_Row_Column] a[href^="/model"]').should('not.contain', '-')
 }

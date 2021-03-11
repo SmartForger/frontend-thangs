@@ -60,7 +60,7 @@ export const isElementContainTwoValues = (el, value1, value2) =>
   cy.get(el, { timeout: 15000 }).should(PROPS.CONTAIN, value1).and(PROPS.CONTAIN, value2)
 
 export const urlShouldIncludeAfterTimeout = (path, timeout) => {
-  cy.url({ timeout: timeout }).should('include', path)
+  cy.url({ timeout: timeout ? timeout : 15000 }).should('include', path)
 }
 
 export const getGeneratedUser = uuid => {
