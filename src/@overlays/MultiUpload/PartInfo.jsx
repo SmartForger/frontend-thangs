@@ -325,16 +325,18 @@ const PartInfo = props => {
         </>
       )}
       <form onSubmit={onFormSubmit(handleSubmit)}>
-        <div className={classnames(c.PartInfo_Field, c.PartInfo_Field__FolderMenu)}>
-          <SelectFolderActionMenu
-            onChange={value => {
-              handleOnInputChange('folderId', value)
-            }}
-            selectedValue={inputState.folderId}
-            error={checkError('folderId').message}
-            errorMessage={checkError('folderId').message}
-          />
-        </div>
+        {isRootPart && (
+          <div className={classnames(c.PartInfo_Field, c.PartInfo_Field__FolderMenu)}>
+            <SelectFolderActionMenu
+              onChange={value => {
+                handleOnInputChange('folderId', value)
+              }}
+              selectedValue={inputState.folderId}
+              error={checkError('folderId').message}
+              errorMessage={checkError('folderId').message}
+            />
+          </div>
+        )}
         <div className={c.PartInfo_Field}>
           <Input
             autoComplete='off'
