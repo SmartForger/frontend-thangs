@@ -66,7 +66,6 @@ export const assemblyUpload = () => {
   isElementContains(CLASSES.UPLOAD_WARNING_TEXT, TEXT.UPLOAD_WARNING_TEXT)
   isElementContains(CLASSES.BUTTON, 'Continue')
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue', { timeout: 3000 })
-  isElementContains(CLASSES.UPLOAD_HEADER, 'New Assembly')
   cy.get('[class^=Input] [name=name]').clear()
   cy.get('[class^=Input] [name=name]').focus().type(ASM_MODEL.TITLE)
   cy.get('[class^=AssemblyInfo_TextAreaInput] [name=description]').clear()
