@@ -434,21 +434,25 @@ const PartInfo = props => {
           checked={applyRemaining}
           onChange={ev => setApplyRemaining(ev.target.checked)}
         />
-        <Spacer size={'1rem'} />
-        <SingleLineBodyText>
-          {folderPublic ? 'Public Model' : 'Private Model'}
-        </SingleLineBodyText>
-        <Spacer size={'.5rem'} />
-        {folderPublic ? (
-          <MetadataSecondary className={c.PartInfo_PrivacyText}>
-            The folder you have selected is Public. This model will be shared publicly
-            towards users on Thangs.
-          </MetadataSecondary>
-        ) : (
-          <MetadataSecondary className={c.PartInfo_PrivacyText}>
-            The folder you have selected is Private. This model will be private and
-            restricted to yourself and those you to choose to share it with.
-          </MetadataSecondary>
+        {isRootPart && (
+          <>
+            <Spacer size={'1rem'} />
+            <SingleLineBodyText>
+              {folderPublic ? 'Public Model' : 'Private Model'}
+            </SingleLineBodyText>
+            <Spacer size={'.5rem'} />
+            {folderPublic ? (
+              <MetadataSecondary className={c.PartInfo_PrivacyText}>
+                The folder you have selected is Public. This model will be shared publicly
+                towards users on Thangs.
+              </MetadataSecondary>
+            ) : (
+              <MetadataSecondary className={c.PartInfo_PrivacyText}>
+                The folder you have selected is Private. This model will be private and
+                restricted to yourself and those you to choose to share it with.
+              </MetadataSecondary>
+            )}
+          </>
         )}
         <Spacer size={'1.5rem'} />
         <div className={c.PartInfo_ButtonWrapper}>
