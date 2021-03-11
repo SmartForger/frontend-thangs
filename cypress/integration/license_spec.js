@@ -65,7 +65,7 @@ describe('The Model License', () => {
     isElement(CLASSES.MODEL_LICENSE, PROPS.VISIBLE)
   })
 
-  it.only('Check multiparts as asm model upload with the license and license text on model page', () => {
+  it('Check multiparts as asm model upload with the license and license text on model page', () => {
     multipartLicenseUpload()
     goTo(`/${activeUser.NAME}`)
     clickOnTextInsideClass(CLASSES.MODEL_CARD, MULTIPART_MODEL.TITLE)
