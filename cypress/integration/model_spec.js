@@ -48,7 +48,7 @@ describe('The Model Page', () => {
     assemblyUpload()
   })
 
-  it.only('Check multipart upload', () => {
+  it('Check multipart upload', () => {
     multipartUpload()
   })
 
