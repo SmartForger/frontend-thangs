@@ -58,6 +58,8 @@ export const MODEL = {
 export const ASM_MODEL = {
   FILENAME: 'JS Clamp - H215.SLDASM',
   FILENAME_PART_1: 'Part1.SLDPRT',
+  LICENSE: 'LICENSE.txt',
+  LICENSE_NEW: 'LICENSE-NEW.txt',
   TITLE: 'JS Clamp - H215',
   DESCRIPTION: 'ASM Model Description',
 }
@@ -65,8 +67,12 @@ export const ASM_MODEL = {
 export const MULTIPART_MODEL = {
   FILENAME_1: 'bolt1.par',
   FILENAME_2: 'case1.par',
+  LICENSE: 'LICENSE.txt',
+  LICENSE_NEW: 'LICENSE-NEW.txt',
   TITLE: 'Multipart test name',
+  TITLE_2: 'Multipart test name 2',
   DESCRIPTION: 'Multipart Model Description',
+  DESCRIPTION_2: 'Multipart Model Description 2',
 }
 
 export const VERSION_MODEL = {

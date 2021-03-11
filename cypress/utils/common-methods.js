@@ -33,7 +33,7 @@ export const isElementNotEmptyAndValid = (el, prop, value) => {
 }
 
 export const clickOnElementByText = text => {
-  cy.contains(text, { timeout: 7000 }).click({ force: true })
+  cy.contains(text, { timeout: 15000 }).click({ force: true })
 }
 
 export const rightClickOnElement = el => {

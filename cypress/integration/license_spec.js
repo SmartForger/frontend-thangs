@@ -9,8 +9,21 @@ import {
   uploadFile,
   clickOnElementByText,
 } from '../utils/common-methods'
-import { CLASSES, MODEL, PROPS, TEXT } from '../utils/constants'
-import { licenseUpload, multiUpload } from '../utils/uploadMethods'
+import {
+  ASM_MODEL,
+  CLASSES,
+  MODEL,
+  MULTIPART_MODEL,
+  PROPS,
+  TEXT,
+} from '../utils/constants'
+import {
+  asmLicenseUpload,
+  licenseUpload,
+  multipartAsAsmLicenseUpload,
+  multipartLicenseUpload,
+  multiUpload,
+} from '../utils/uploadMethods'
 import { licenseUploadInput } from '../utils/inputs'
 
 let activeUser
@@ -45,10 +58,34 @@ describe('The Model License', () => {
     clearModelsAndFolders()
   })
 
+  it('Check upload asm model with the license and license text on model page', () => {
+    asmLicenseUpload()
+    goTo(`/${activeUser.NAME}`)
+    clickOnTextInsideClass(CLASSES.MODEL_CARD, ASM_MODEL.TITLE)
+    isElement(CLASSES.MODEL_LICENSE, PROPS.VISIBLE)
+  })
+
+  it.only('Check multiparts as asm model upload with the license and license text on model page', () => {
+    multipartLicenseUpload()
+    goTo(`/${activeUser.NAME}`)
+    clickOnTextInsideClass(CLASSES.MODEL_CARD, MULTIPART_MODEL.TITLE)
+    isElement(CLASSES.MODEL_LICENSE, PROPS.VISIBLE)
+    cy.go('back')
+    clickOnTextInsideClass(CLASSES.MODEL_CARD, MULTIPART_MODEL.TITLE_2)
+    isElement(CLASSES.MODEL_LICENSE, PROPS.VISIBLE)
+  })
+
   it('Check upload model with the license and license text on model page', () => {
     licenseUpload()
     goTo(`/${activeUser.NAME}`)
     clickOnTextInsideClass(CLASSES.MODEL_CARD, MODEL.TITLE)
+    isElement(CLASSES.MODEL_LICENSE, PROPS.VISIBLE)
+  })
+
+  it('Check upload multipart model with the license and license text on model page', () => {
+    multipartLicenseUpload()
+    goTo(`/${activeUser.NAME}`)
+    clickOnTextInsideClass(CLASSES.MODEL_CARD, MULTIPART_MODEL.TITLE)
     isElement(CLASSES.MODEL_LICENSE, PROPS.VISIBLE)
   })
 

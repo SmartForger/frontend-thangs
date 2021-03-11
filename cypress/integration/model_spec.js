@@ -14,6 +14,7 @@ import {
   assemblyUploadAfterError,
   assemblyUploadError,
   multiPartAsAsmUpload,
+  multipartUpload,
   multiUpload,
   versionUpload,
 } from '../utils/uploadMethods'
@@ -47,7 +48,11 @@ describe('The Model Page', () => {
     assemblyUpload()
   })
 
-  it('Check multipart upload', () => {
+  it.only('Check multipart upload', () => {
+    multipartUpload()
+  })
+
+  it('Check multipart as asm upload', () => {
     multiPartAsAsmUpload()
   })
 
