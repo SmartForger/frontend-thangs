@@ -4,24 +4,16 @@ import {
   goTo,
   isElement,
   isTextInsideClass,
-  clearModelsAndFolders,
   loginByUser,
+  clickOnElementByText,
 } from '../utils/common-methods'
-import {
-  CLASSES,
-  MODEL,
-  PROPS,
-  TEXT,
-  MODEL_CARD,
-  VERSION_MODEL,
-} from '../utils/constants'
+import { CLASSES, MODEL, PROPS, TEXT, VERSION_MODEL } from '../utils/constants'
 import { commentInput, enterValidValue } from '../utils/inputs'
 import {
   assemblyUpload,
   assemblyUploadAfterError,
   assemblyUploadError,
   multiPartAsAsmUpload,
-  multiPartUpload,
   multiUpload,
   versionUpload,
 } from '../utils/uploadMethods'
@@ -81,7 +73,7 @@ describe('The Model Page', () => {
     //upload new verison
     versionUpload()
     goTo(`/${activeUser.NAME}`)
-    cy.get(MODEL_CARD(VERSION_MODEL.TITLE), { timeout: 5000 }).click()
+    clickOnElementByText(VERSION_MODEL.TITLE)
     cy.get('[class^=Revised_Label] a[href^="/model"]').click()
     isTextInsideClass('[class^=ModelTitle_Text]', MODEL.TITLE)
   })
