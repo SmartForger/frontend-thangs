@@ -195,7 +195,7 @@ const PartInfoSchema = ({ isRootPart }) =>
     weight: Joi.string().allow(''),
     category: Joi.string().allow(''),
     previousVersionModelId: Joi.string().allow(''),
-  })
+  }).unknown(true)
 
 const initialState = {
   name: '',
