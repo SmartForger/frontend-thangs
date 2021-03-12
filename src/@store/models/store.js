@@ -65,7 +65,7 @@ export default store => {
       })
       const { error } = await api({
         method: 'PUT',
-        endpoint: `models/${id}/details`,
+        endpoint: `models/${id}`,
         body: updatedModel,
       })
 
