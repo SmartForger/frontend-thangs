@@ -97,13 +97,6 @@ const FoldersScreen = ({ onChange, folders = [] }) => {
       ? [...folders]
       : folders.filter(folder => folder.label.toLowerCase().includes(searchTerm))
 
-  const handleChange = useCallback(
-    folder => {
-      onChange(folder)
-    },
-    [onChange]
-  )
-
   return (
     <>
       <SearchBar
@@ -124,7 +117,7 @@ const FoldersScreen = ({ onChange, folders = [] }) => {
                   c.SelectFolderMenu_Row,
                   c.SelectFolderMenu_Row__clickable
                 )}
-                onClick={handleChange}
+                onClick={() => onChange(folder)}
               >
                 <FolderIcon />
                 <Spacer size={'.5rem'} />
@@ -217,9 +210,12 @@ export const SelectFolderMenu = ({ onChange = noop, options = [] }) => {
   const c = useStyles({})
   const [isCreateMode, setIsCreateMode] = useState(false)
 
-  const handleClick = folderId => {
-    onChange(folderId)
-  }
+  const handleChange = useCallback(
+    folder => {
+      if (folder) onChange(folder)
+    },
+    [onChange]
+  )
 
   const handleCreateNew = useCallback(
     _ev => {
@@ -240,10 +236,10 @@ export const SelectFolderMenu = ({ onChange = noop, options = [] }) => {
   return (
     <div className={c.SelectFolderMenu}>
       {isCreateMode ? (
-        <NewFolderScreen onBack={onBack} onChange={onChange} />
+        <NewFolderScreen onBack={onBack} onChange={handleChange} />
       ) : (
         <>
-          <FoldersScreen folders={options} onChange={handleClick} />
+          <FoldersScreen folders={options} onChange={handleChange} />
           <div
             className={classnames(
               c.SelectFolderMenu_Row,
@@ -290,10 +286,11 @@ export const SelectFolderTarget = ({
 }
 
 const SelectFolderActionMenu = ({
-  onChange = noop,
-  selectedValue,
   error,
   errorMessage,
+  initialValue,
+  onChange = noop,
+  selectedValue,
 }) => {
   const c = useStyles({})
   const { dispatch, folders = {}, shared = {} } = useStoreon('folders', 'shared')
@@ -350,15 +347,23 @@ const SelectFolderActionMenu = ({
   }, [c.SelectFolderActionMenu, dropdownFolders, onChange])
 
   const targetProps = useMemo(() => {
-    const folder = dropdownFolders.find(folder => folder.value === selectedValue)
+    const folder = dropdownFolders.find(folder => {
+      return folder.value === selectedValue
+    })
     return { selectedValue: folder, error, errorMessage }
-  }, [dropdownFolders, selectedValue, error, errorMessage])
+  }, [dropdownFolders, error, errorMessage, selectedValue])
 
   useEffect(() => {
     // dispatch(types.RESET_UPLOAD_FILES)
     const { data: folderData } = folders
     if (R.isEmpty(folderData)) {
       dispatch(types.FETCH_THANGS, {})
+    }
+    if (initialValue) {
+      const folder = dropdownFolders.find(folder => {
+        return folder.value === initialValue
+      })
+      onChange(folder)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

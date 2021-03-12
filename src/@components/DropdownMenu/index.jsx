@@ -114,7 +114,6 @@ const DropdownItem = ({ children, to = '#', onClick, className, noHover = false 
         <div
           className={classnames(className, c.DropdownMenu_Item)}
           onClick={e => {
-            console.log('because you clicked')
             setOverlayOpen(false)
             onClick && onClick(e)
           }}

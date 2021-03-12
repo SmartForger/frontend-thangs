@@ -251,7 +251,7 @@ export const ActionMenu = props => {
     showTop,
   } = props
   const c = useStyles({ showTop })
-  const { onChange, className, ...menuProps } = MenuComponentProps
+  const { onChange = noop, className, ...menuProps } = MenuComponentProps
   const { setActionMenu, setActionMenuClose } = useActionMenu()
   const isMobile = useIsMobile(isMobileOnly ? 640 : 842)
   const handleChange = useCallback(

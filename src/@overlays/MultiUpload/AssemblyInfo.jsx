@@ -145,6 +145,7 @@ const AssemblyInfo = ({
   const isMultipart = activeNode.id === 'multipart'
   const file = filesData[activeNode.fileId]
   const [folderPublic, setFolderPublic] = useState(true)
+  const [initialFolderValue] = useState(formData && formData.folderId)
 
   const {
     checkError,
@@ -178,7 +179,7 @@ const AssemblyInfo = ({
 
   const handleFolderChange = useCallback(
     folder => {
-      handleOnInputChange('folderId', folder.id)
+      handleOnInputChange('folderId', folder.value)
       setFolderPublic(folder.isPublic)
     },
     [handleOnInputChange]
@@ -261,10 +262,11 @@ const AssemblyInfo = ({
       <Spacer size={'1.5rem'} />
       <form onSubmit={onFormSubmit(handleSubmit)}>
         <SelectFolderActionMenu
-          onChange={handleFolderChange}
-          selectedValue={inputState.folderId}
           error={checkError('folderId').message}
           errorMessage={checkError('folderId').message}
+          initialValue={initialFolderValue}
+          onChange={handleFolderChange}
+          selectedValue={inputState.folderId}
         />
         <Spacer size={'1rem'} />
         <Input

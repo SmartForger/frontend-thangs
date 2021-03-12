@@ -225,6 +225,7 @@ const PartInfo = props => {
   const file = filesData[activeNode.fileId]
   const [applyRemaining, setApplyRemaining] = useState(false)
   const [folderPublic, setFolderPublic] = useState(true)
+  const [initialFolderValue] = useState(formData && formData.folderId)
 
   const isRootPart = useMemo(() => !activeNode.parentId, [activeNode.parentId])
   const {
@@ -256,7 +257,7 @@ const PartInfo = props => {
 
   const handleFolderChange = useCallback(
     folder => {
-      handleOnInputChange('folderId', folder.id)
+      handleOnInputChange('folderId', folder.value)
       setFolderPublic(folder.isPublic)
     },
     [handleOnInputChange]
@@ -342,10 +343,11 @@ const PartInfo = props => {
         {isRootPart && (
           <div className={classnames(c.PartInfo_Field, c.PartInfo_Field__FolderMenu)}>
             <SelectFolderActionMenu
-              onChange={handleFolderChange}
-              selectedValue={inputState.folderId}
               error={checkError('folderId').message}
               errorMessage={checkError('folderId').message}
+              initialValue={initialFolderValue}
+              onChange={handleFolderChange}
+              selectedValue={inputState.folderId}
             />
           </div>
         )}

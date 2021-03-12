@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-// import { useHistory } from 'react-router-dom'
 import { SingleLineBodyText, Spacer, Spinner } from '@components'
 import PartInfo from './PartInfo'
 import UploadModels from './UploadModels'
@@ -171,8 +170,8 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
           ? newNode.subIds.map(subId => formNode(subId))
           : []
         : Object.values(newTreeData)
-            .filter(node => !node.parentId)
-            .map(node => formNode(node.id))
+          .filter(node => !node.parentId)
+          .map(node => formNode(node.id))
 
       newNode.treeValid =
         newNode.valid &&
@@ -251,12 +250,11 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
         .map(file => {
           const ext = `.${file.name.split('.').slice(-1)[0].toLowerCase()}`
           if (!MODEL_FILE_EXTS.includes(ext)) {
-            console.log(222)
             setErrorMessage(
               `${file.name} is not a supported file type.
               Supported file extensions include ${MODEL_FILE_EXTS.map(
-                e => ' ' + e.replace('.', '')
-              )}.`
+    e => ' ' + e.replace('.', '')
+  )}.`
             )
             return null
           }
@@ -450,10 +448,10 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
                   ? 'Upload New Version'
                   : 'Upload Files'
                 : activeNode.isAssembly && activeNode.parentId
-                ? 'Sub Assembly'
-                : activeNode.isAssembly
-                ? 'New Assembly'
-                : partFormTitle}
+                  ? 'Sub Assembly'
+                  : activeNode.isAssembly
+                    ? 'New Assembly'
+                    : partFormTitle}
             </SingleLineBodyText>
             {activeView > -1 && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />

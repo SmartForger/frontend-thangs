@@ -196,7 +196,7 @@ const Comment = ({ modelId, comment, currentUser }) => {
 const AuthCommentsForModel = ({ c, className, modelId, currentUser }) => {
   const { useFetchPerMount } = useServices()
   const {
-    atom: { isLoading: loading, isLoaded: loaded, isError: error, data: comments },
+    atom: { isLoading: loading, isLoaded: loaded, isError: error, data: comments = [] },
   } = useFetchPerMount(modelId, 'model-comments')
 
   if (error) {
@@ -213,13 +213,15 @@ const AuthCommentsForModel = ({ c, className, modelId, currentUser }) => {
 
   return (
     <div className={classnames(className, c.CommentsForModel)}>
-      {comments && comments.length}{' '}
+      {(comments && comments.length) || 0}{' '}
       {comments && comments.length && comments.length === 1 ? 'comment' : 'comments'}
       <NewModelCommentForm modelId={modelId} />
       <ul className={c.CommentsForModel_List}>
-        {comments.map((comment, i) =>
-          renderTypedComment({ modelId, comment, key: i, currentUser })
-        )}
+        {comments &&
+          comments.length &&
+          comments.map((comment, i) =>
+            renderTypedComment({ modelId, comment, key: i, currentUser })
+          )}
       </ul>
     </div>
   )
