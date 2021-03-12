@@ -217,11 +217,9 @@ const AuthCommentsForModel = ({ c, className, modelId, currentUser }) => {
       {comments && comments.length && comments.length === 1 ? 'comment' : 'comments'}
       <NewModelCommentForm modelId={modelId} />
       <ul className={c.CommentsForModel_List}>
-        {comments &&
-          comments.length &&
-          comments.map((comment, i) =>
-            renderTypedComment({ modelId, comment, key: i, currentUser })
-          )}
+        {comments.map((comment, i) =>
+          renderTypedComment({ modelId, comment, key: i, currentUser })
+        )}
       </ul>
     </div>
   )

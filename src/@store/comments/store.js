@@ -13,7 +13,7 @@ export default store => {
   store.on(types.INIT_MODEL_COMMENTS, (_, { id }) => ({
     [`model-comments-${id}`]: {
       ...getStatusState(STATUSES.INIT),
-      data: {},
+      data: [],
     },
   }))
   store.on(
