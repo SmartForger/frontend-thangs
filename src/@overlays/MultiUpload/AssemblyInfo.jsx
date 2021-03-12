@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as R from 'ramda'
 import Joi from '@hapi/joi'
 import {
@@ -144,6 +144,7 @@ const AssemblyInfo = ({
   const isRootAssembly = useMemo(() => !activeNode.parentId, [activeNode.parentId])
   const isMultipart = activeNode.id === 'multipart'
   const file = filesData[activeNode.fileId]
+  const [folderPublic, setFolderPublic] = useState(true)
 
   const {
     checkError,
@@ -160,27 +161,40 @@ const AssemblyInfo = ({
     INITIAL_STATE,
   })
 
-  const handleOnInputChange = (key, value) => {
-    onInputChange(key, value)
-    setErrorMessage(null)
-  }
+  const handleOnInputChange = useCallback(
+    (key, value) => {
+      onInputChange(key, value)
+      setErrorMessage(null)
+    },
+    [onInputChange, setErrorMessage]
+  )
 
-  const handleLicenseChange = data => {
-    onInputChange('license', data)
-  }
+  const handleLicenseChange = useCallback(
+    data => {
+      onInputChange('license', data)
+    },
+    [onInputChange]
+  )
 
-  const handleSubmit = (data, isValid) => {
-    if (isValid) onContinue({ data })
-  }
+  const handleFolderChange = useCallback(
+    folder => {
+      handleOnInputChange('folderId', folder.id)
+      setFolderPublic(folder.isPublic)
+    },
+    [handleOnInputChange]
+  )
+
+  const handleSubmit = useCallback(
+    (data, isValid) => {
+      if (isValid) onContinue({ data })
+    },
+    [onContinue]
+  )
 
   const metaText =
     activeNode.subs.length > 1
       ? `Assembly • ${activeNode.subs.length} Parts`
       : `Assembly • ${activeNode.subs.length} Part`
-
-  const folderPublic = useMemo(() => {
-    return inputState && inputState.folder && inputState.folder.isPublic
-  }, [inputState])
 
   const fileOptions = useMemo(
     () =>
@@ -247,9 +261,7 @@ const AssemblyInfo = ({
       <Spacer size={'1.5rem'} />
       <form onSubmit={onFormSubmit(handleSubmit)}>
         <SelectFolderActionMenu
-          onChange={value => {
-            handleOnInputChange('folderId', value)
-          }}
+          onChange={handleFolderChange}
           selectedValue={inputState.folderId}
           error={checkError('folderId').message}
           errorMessage={checkError('folderId').message}

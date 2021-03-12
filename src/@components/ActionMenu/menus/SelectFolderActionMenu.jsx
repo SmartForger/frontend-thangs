@@ -97,6 +97,13 @@ const FoldersScreen = ({ onChange, folders = [] }) => {
       ? [...folders]
       : folders.filter(folder => folder.label.toLowerCase().includes(searchTerm))
 
+  const handleChange = useCallback(
+    folder => {
+      onChange(folder)
+    },
+    [onChange]
+  )
+
   return (
     <>
       <SearchBar
@@ -117,9 +124,7 @@ const FoldersScreen = ({ onChange, folders = [] }) => {
                   c.SelectFolderMenu_Row,
                   c.SelectFolderMenu_Row__clickable
                 )}
-                onClick={() => {
-                  onChange(folder.value)
-                }}
+                onClick={handleChange}
               >
                 <FolderIcon />
                 <Spacer size={'.5rem'} />
@@ -154,7 +159,7 @@ const NewFolderScreen = ({ onChange = noop, onBack = noop }) => {
         },
         onFinish: id => {
           if (id) {
-            onChange(id)
+            onChange(data)
             onBack()
           }
         },

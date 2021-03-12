@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState, useEffect } from 'react'
+import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react'
 import * as R from 'ramda'
 import classnames from 'classnames'
 import Joi from '@hapi/joi'
@@ -224,6 +224,7 @@ const PartInfo = props => {
   const firstInputRef = useRef(null)
   const file = filesData[activeNode.fileId]
   const [applyRemaining, setApplyRemaining] = useState(false)
+  const [folderPublic, setFolderPublic] = useState(true)
 
   const isRootPart = useMemo(() => !activeNode.parentId, [activeNode.parentId])
   const {
@@ -238,18 +239,35 @@ const PartInfo = props => {
     initialState,
   })
 
-  const handleOnInputChange = (key, value) => {
-    onInputChange(key, value)
-    setErrorMessage(null)
-  }
+  const handleOnInputChange = useCallback(
+    (key, value) => {
+      onInputChange(key, value)
+      setErrorMessage(null)
+    },
+    [onInputChange, setErrorMessage]
+  )
 
-  const handleLicenseChange = data => {
-    onInputChange('license', data)
-  }
+  const handleLicenseChange = useCallback(
+    data => {
+      onInputChange('license', data)
+    },
+    [onInputChange]
+  )
 
-  const handleSubmit = (data, isValid) => {
-    if (isValid) onContinue({ applyRemaining, data })
-  }
+  const handleFolderChange = useCallback(
+    folder => {
+      handleOnInputChange('folderId', folder.id)
+      setFolderPublic(folder.isPublic)
+    },
+    [handleOnInputChange]
+  )
+
+  const handleSubmit = useCallback(
+    (data, isValid) => {
+      if (isValid) onContinue({ applyRemaining, data })
+    },
+    [applyRemaining, onContinue]
+  )
 
   const selectedCategory = useMemo(() => {
     return R.find(R.propEq('value', inputState.category), CATEGORIES) || null
@@ -278,10 +296,6 @@ const PartInfo = props => {
   useEffect(() => {
     updateValidationSchema(PartInfoSchema({ isRootPart }))
   }, [isRootPart, updateValidationSchema])
-
-  const folderPublic = useMemo(() => {
-    return inputState && inputState.folder && inputState.folder.isPublic
-  }, [inputState])
 
   return (
     <>
@@ -328,9 +342,7 @@ const PartInfo = props => {
         {isRootPart && (
           <div className={classnames(c.PartInfo_Field, c.PartInfo_Field__FolderMenu)}>
             <SelectFolderActionMenu
-              onChange={value => {
-                handleOnInputChange('folderId', value)
-              }}
+              onChange={handleFolderChange}
               selectedValue={inputState.folderId}
               error={checkError('folderId').message}
               errorMessage={checkError('folderId').message}
