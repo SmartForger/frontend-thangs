@@ -24,9 +24,8 @@ export const isElement = (el, prop) => {
   cy.get(el, { timeout: 5000 }).should(prop)
 }
 
-export const isElementContains = (element, text) => {
+export const isElementContains = (element, text) =>
   cy.get(element, { timeout: 10000 }).contains(text).should(PROPS.VISIBLE)
-}
 
 export const isElementNotEmptyAndValid = (el, prop, value) => {
   cy.get(el, { timeout: 5000 }).should(prop).and('match', value)
