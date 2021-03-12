@@ -152,7 +152,7 @@ const NewFolderScreen = ({ onChange = noop, onBack = noop }) => {
         },
         onFinish: id => {
           if (id) {
-            onChange(data)
+            onChange({ ...data, value: id })
             onBack()
           }
         },
