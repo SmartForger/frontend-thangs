@@ -169,14 +169,19 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const Anchor = ({ children, to = {}, isExternal, scope, ...props }) => {
+const Anchor = ({ children, to = {}, isExternal, scope, searchIndex, ...props }) => {
   const onClick = useCallback(() => {
     if (isExternal) {
-      track('External Model Link', { path: to.pathname, type: 'text', scope })
+      track('External Model Link', {
+        path: to.pathname,
+        type: 'text',
+        scope,
+        searchIndex,
+      })
     } else {
-      track('Thangs Model Link', { path: to.pathname, type: 'text', scope })
+      track('Thangs Model Link', { path: to.pathname, type: 'text', scope, searchIndex })
     }
-  }, [isExternal, scope, to.pathname])
+  }, [isExternal, scope, searchIndex, to.pathname])
   if (!to.pathname) return children
   const thangsPath = !isExternal ? to.pathname.split('.com').pop() : to.pathname
   return isExternal ? (
@@ -257,6 +262,7 @@ const TextSearchResult = ({
   onFindRelated = noop,
   onReportModel = noop,
   scope,
+  searchIndex,
 }) => {
   const c = useStyles()
 
@@ -279,6 +285,7 @@ const TextSearchResult = ({
           }}
           isExternal={isExternalModel}
           scope={scope}
+          searchIndex={searchIndex}
         >
           <Card className={c.TextSearchResult_ThumbnailWrapper}>
             <ModelThumbnail
@@ -346,6 +353,7 @@ const TextSearchResults = ({
       onFindRelated={onFindRelated}
       onReportModel={onReportModel}
       scope={scope}
+      searchIndex={ind}
     />
   ))
 }
