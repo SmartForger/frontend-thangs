@@ -55,6 +55,7 @@ const Row = memo(({ data, index, style }) => {
     </div>
   )
 }, areEqual)
+
 Row.displayName = 'InfiniteTreeRowComponent'
 
 const isLeaf = (nodes, i) => {
