@@ -4,7 +4,13 @@ import cn from 'classnames'
 import { format } from 'date-fns'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import InfiniteTreeView from '@components/InfiniteTreeView'
-import { SingleLineBodyText, MetadataSecondary, Contributors, Pill } from '@components'
+import {
+  Contributors,
+  MetadataSecondary,
+  Pill,
+  SingleLineBodyText,
+  Spacer,
+} from '@components'
 import { flattenTree } from '@utilities/tree'
 import { formatBytes } from '@utilities'
 import { createUseStyles } from '@style'
@@ -34,6 +40,9 @@ const useStyles = createUseStyles(theme => {
     FileTable_Item: {
       borderBottom: `1px solid ${theme.colors.white[900]}`,
     },
+    FileTable_Item__selected: {
+      backgroundColor: theme.colors.purple[200],
+    },
     FileTable_FileRow: {
       display: 'flex',
       width: '100%',
@@ -58,6 +67,7 @@ const useStyles = createUseStyles(theme => {
       color: '#000',
     },
     FileTable_Cell: {
+      display: 'flex',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
@@ -74,16 +84,16 @@ const useStyles = createUseStyles(theme => {
     },
     FileTable_Date: {
       width: '18%',
-      justifyContent: 'center',
+      justifyContent: 'left',
     },
     FileTable_Size: {
       width: '9%',
-      justifyContent: 'center',
+      justifyContent: 'left',
     },
     FileTable_Contributors: {
       width: '14%',
       display: 'flex',
-      justifyContent: 'center',
+      justifyContent: 'left',
     },
     FileTable_Action: {
       width: '7%',
@@ -335,6 +345,7 @@ const FileTable = ({
   const containerRef = useRef()
   const history = useHistory()
   const [maxHeight, setMaxHeight] = useState(300)
+  const [selectedFiles, setSelectedFiles] = useState([])
   const [{ sortedBy, order }, setSort] = useState({
     sortedBy: initialSortedBy || COLUMNS.FILENAME,
     order: 'desc',
@@ -430,8 +441,16 @@ const FileTable = ({
         if (node.isFolder) {
           handleChangeFolder(node)
         } else {
-          const modelPath = node.identifier ? `/${node.identifier}` : `/model/${node.id}`
-          history.push(modelPath)
+          if (selectedFiles.includes(node.id)) {
+            const modelPath = node.identifier
+              ? `/${node.identifier}`
+              : `/model/${node.id}`
+            history.push(modelPath)
+          } else {
+            setSelectedFiles([node.id])
+          }
+          // Select - Highlight Row - Show Toolbar (myThangs model page) -
+          // If selected already - Navigate to myThangs model preview view
         }
       }
 
@@ -507,19 +526,21 @@ const FileTable = ({
       {allNodes.length > 0 || searchCase ? (
         <>
           <FileTableHeader sortedBy={sortedBy} onSort={handleSort} order={order} />
-
+          <Spacer size={'1rem'} />
           {allNodes.length > 0 ? (
             <InfiniteTreeView
               classes={{
                 root: c.FileTable_Body,
                 item: c.FileTable_Item,
+                itemSelected: c.FileTable_Item__selected,
               }}
-              maxHeight={maxHeight}
-              itemHeight={60}
+              hideRowIcons
+              isSelected={node => selectedFiles.includes(node.id)}
+              itemHeight={48}
               levelPadding={0}
+              maxHeight={maxHeight}
               nodes={allNodes}
               renderNode={renderNode}
-              hideRowIcons
             />
           ) : (
             <SingleLineBodyText className={c.NoResultsFound}>

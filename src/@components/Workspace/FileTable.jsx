@@ -510,6 +510,7 @@ const FileTable = ({
         <>
           <table>
             <FileTableHeader sortedBy={sortedBy} onSort={handleSort} order={order} />
+            <Spacer size={'1rem'} />
             <tbody>
               {sortedFiles.length > 0 ? (
                 sortedFiles.map((file, index) => {
