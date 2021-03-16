@@ -37,6 +37,10 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
       outline: 'none',
       justifyContent: 'center',
+
+      [md]: {
+        justifyContent: 'left',
+      },
     },
     AddMenu_Icon: {
       '& path': {

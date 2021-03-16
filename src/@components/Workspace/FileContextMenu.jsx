@@ -15,7 +15,7 @@ const FileContextMenu = props => {
   const c = useStyles({})
 
   const { trigger } = props
-  const model = trigger && trigger.model
+  const { model } = trigger || {}
 
   return (
     <ContextMenu className={c.ContextMenu} id={'File_Menu'}>

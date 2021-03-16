@@ -7,6 +7,7 @@ import {
   FileContextMenu,
   FolderContextMenu,
   FolderInviteContextMenu,
+  SubpartContextMenu,
   Spacer,
   Spinner,
   WorkspaceHeader,
@@ -291,6 +292,7 @@ const MyThangs = () => {
       <FileContextMenu />
       <FolderContextMenu />
       <FolderInviteContextMenu />
+      <SubpartContextMenu />
     </>
   )
 }

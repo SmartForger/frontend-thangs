@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
 import { Divider, SingleLineBodyText, Spacer } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
+import { createUseStyles } from '@style'
 import { MenuItem } from 'react-contextmenu'
 import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
 import { ReactComponent as DownloadIcon } from '@svg/icon-download.svg'
@@ -17,7 +17,7 @@ import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   return {
-    FileMenu: {
+    SubpartMenu: {
       backgroundColor: theme.colors.white[400],
       boxShadow: '0px 8px 20px 0px rgba(0, 0, 0, 0.16)',
       borderRadius: '.5rem',
@@ -29,7 +29,7 @@ const useStyles = createUseStyles(theme => {
         alignItems: 'center',
       },
     },
-    FileMenu_Item: {
+    SubpartMenu_Item: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
@@ -40,7 +40,7 @@ const useStyles = createUseStyles(theme => {
         backgroundColor: 'rgba(0, 0, 0, 0.05)',
       },
     },
-    FileMenu_OpenIcon: {
+    SubpartMenu_OpenIcon: {
       marginLeft: '-4px',
       transform: 'translateX(2px)',
 
@@ -51,7 +51,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const FileMenu = ({ model }) => {
+const SubpartMenu = ({ model }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
   const { setOverlay } = useOverlay()
@@ -149,7 +149,7 @@ const FileMenu = ({ model }) => {
     [currentUserId, dispatch, model]
   )
 
-  const handleDeleteFile = useCallback(
+  const handleRemoveFile = useCallback(
     e => {
       e.preventDefault()
       track('File Menu - Delete Model')
@@ -178,9 +178,9 @@ const FileMenu = ({ model }) => {
   )
 
   return (
-    <div className={c.FileMenu}>
+    <div className={c.SubpartMenu}>
       <Spacer size={'1rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={handleNewVersion}>
+      <MenuItem className={c.SubpartMenu_Item} onClick={handleNewVersion}>
         <div>
           <Spacer size={'1.5rem'} />
           <UploadIcon />
@@ -190,7 +190,7 @@ const FileMenu = ({ model }) => {
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={handleNewPart}>
+      <MenuItem className={c.SubpartMenu_Item} onClick={handleNewPart}>
         <div>
           <Spacer size={'1.5rem'} />
           <UploadIcon />
@@ -200,7 +200,7 @@ const FileMenu = ({ model }) => {
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={handleNewVersion}>
+      <MenuItem className={c.SubpartMenu_Item} onClick={handleNewVersion}>
         <div>
           <Spacer size={'1.5rem'} />
           <ShareIcon />
@@ -210,27 +210,27 @@ const FileMenu = ({ model }) => {
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={handleOpenNewTab}>
+      <MenuItem className={c.SubpartMenu_Item} onClick={handleOpenNewTab}>
         <div>
           <Spacer size={'1.5rem'} />
-          <OpenIcon className={c.FileMenu_OpenIcon} />
+          <OpenIcon className={c.SubpartMenu_OpenIcon} />
           <Spacer size={'.5rem'} />
           <SingleLineBodyText>Move to</SingleLineBodyText>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={handleOpenNewTab}>
+      <MenuItem className={c.SubpartMenu_Item} onClick={handleOpenNewTab}>
         <div>
           <Spacer size={'1.5rem'} />
-          <OpenIcon className={c.FileMenu_OpenIcon} />
+          <OpenIcon className={c.SubpartMenu_OpenIcon} />
           <Spacer size={'.5rem'} />
           <SingleLineBodyText>Go to Model Page</SingleLineBodyText>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={handleStar}>
+      <MenuItem className={c.SubpartMenu_Item} onClick={handleStar}>
         <div>
           <Spacer size={'1.5rem'} />
           <StarIcon />
@@ -240,7 +240,7 @@ const FileMenu = ({ model }) => {
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={handleEdit}>
+      <MenuItem className={c.SubpartMenu_Item} onClick={handleEdit}>
         <div>
           <Spacer size={'1.5rem'} />
           <EditIcon />
@@ -250,7 +250,7 @@ const FileMenu = ({ model }) => {
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={handleDownloadModel}>
+      <MenuItem className={c.SubpartMenu_Item} onClick={handleDownloadModel}>
         <div>
           <Spacer size={'1.5rem'} />
           <DownloadIcon />
@@ -263,7 +263,7 @@ const FileMenu = ({ model }) => {
       {hasDeletePermission && (
         <>
           <Divider spacing={'.5rem'} />
-          <MenuItem className={c.FileMenu_Item} onClick={handleDeleteFile}>
+          <MenuItem className={c.SubpartMenu_Item} onClick={handleRemoveFile}>
             <div>
               <Spacer size={'1.5rem'} />
               <DeleteIcon />
@@ -279,4 +279,4 @@ const FileMenu = ({ model }) => {
   )
 }
 
-export default FileMenu
+export default SubpartMenu
