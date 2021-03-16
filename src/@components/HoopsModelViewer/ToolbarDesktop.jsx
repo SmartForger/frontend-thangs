@@ -29,6 +29,7 @@ const useStyles = createUseStyles(theme => {
       bottom: 0,
       width: 'calc(100% - 2rem)',
       padding: '0 1rem',
+      borderRadius: '0 0 1rem 1rem',
 
       '& div': {
         flex: 'none',
