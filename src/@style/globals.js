@@ -7,6 +7,10 @@ const globals = theme => {
         height: '100%',
       },
 
+      '#root': {
+        overflow: 'auto',
+      },
+
       body: {
         '-moz-osx-font-smoothing': 'grayscale',
         '-webkit-font-smoothing': 'antialiased',

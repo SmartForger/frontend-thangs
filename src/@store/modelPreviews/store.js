@@ -18,7 +18,7 @@ export default store => {
     modelPreviews: {
       ...state.modelPreviews,
       ...getStatusState(STATUSES.LOADING),
-      ...(isInitial && { data: [] }),
+      ...(isInitial && { data: [], pageToLoad: 1 }),
     },
   }))
 
@@ -27,13 +27,18 @@ export default store => {
       ...state.modelPreviews,
       ...getStatusState(STATUSES.LOADED),
       data: isInitial ? data : [...state.modelPreviews.data, ...data],
-      pageToLoad: isInitial ? 1 : state.modelPreviews.pageToLoad + 1,
+      pageToLoad: isInitial
+        ? 1
+        : state.modelPreviews.pageToLoad + Math.floor(data.length / PREVIEW_MODELS_SIZE),
     },
   }))
 
   store.on(
     types.FETCH_MODEL_PREVIEW,
-    async (state, { sortBy = 'likes', isInitial = false, onFinish = noop }) => {
+    async (
+      state,
+      { sortBy = 'likes', isInitial = false, pageCount = 1, onFinish = noop }
+    ) => {
       if (!state.modelPreviews.isLoading) {
         state.modelPreviews.isLoading = true
         store.dispatch(types.LOADING_MODEL_PREVIEW, { isInitial })
@@ -46,7 +51,7 @@ export default store => {
             sortBy,
             sortDir: 'desc',
             page: isInitial ? 0 : state.modelPreviews.pageToLoad,
-            pageSize: PREVIEW_MODELS_SIZE,
+            pageSize: PREVIEW_MODELS_SIZE * pageCount,
           },
         })
         store.dispatch(types.LOADED_MODEL_PREVIEW, { data, isInitial })

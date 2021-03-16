@@ -17,6 +17,7 @@ import * as types from '@constants/storeEventTypes'
 import * as sortTypes from '@constants/sortTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
+import usePageScroll from '@hooks/usePageScroll'
 
 const MQS_VALUES = [1440, 964, 736, 490]
 
@@ -116,7 +117,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const isBottom = el => el.getBoundingClientRect().bottom <= window.innerHeight
+const isBottom = el => el.scrollTop + el.clientHeight >= el.scrollHeight
 const title = sortBy => {
   switch (sortBy) {
     case sortTypes.likes:
@@ -139,52 +140,49 @@ const Page = ({ sortBy, getTime = noop }) => {
   const containerRef = useRef(null)
   const history = useHistory()
   const [endOfModels, setEndOfModels] = useState(false)
-  const [numOfPage, setNumOfPage] = useState(1)
   const { dispatch, modelPreviews } = useStoreon('modelPreviews')
-  const { isLoading } = modelPreviews
-  const [hasLoaded, setHasLoaded] = useState(false)
+  const { isLoading, isLoaded } = modelPreviews
+  const [loadedCount, setLoadedCount] = useState(isLoaded ? -1 : 0)
+  const savedPages = usePageScroll('landing_scroll', loadedCount > 0, sortBy)
+  const [numOfPage, setNumOfPage] = useState(savedPages)
 
   useEffect(() => {
-    if (!hasLoaded && modelPreviews.isLoaded) {
-      setHasLoaded(true)
+    if (loadedCount < 1 && isLoaded) {
+      setLoadedCount(loadedCount + 1)
+    }
+
+    if (loadedCount > 0 && isLoaded) {
       perfTrack('Page Loaded - Home', getTime())
     }
-  }, [getTime, hasLoaded, modelPreviews.isLoaded])
+  }, [getTime, loadedCount, isLoaded])
 
   const handleOnFinish = useCallback(data => {
     if (!data.length) setEndOfModels(true)
   }, [])
 
   useEffect(() => {
-    setNumOfPage(1)
-  }, [sortBy])
-
-  useEffect(() => {
     dispatch(types.FETCH_MODEL_PREVIEW, {
       sortBy,
       isInitial: true,
+      pageCount: numOfPage,
       onFinish: handleOnFinish,
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, handleOnFinish, sortBy])
 
   useEffect(() => {
+    const el = document.getElementById('root')
     const trackScrolling = () => {
-      const wrappedElement = containerRef.current
-      if (
-        isBottom(wrappedElement) &&
-        !isLoading &&
-        !endOfModels &&
-        numOfPage < finiteScrollCount
-      ) {
+      if (isBottom(el) && !isLoading && !endOfModels && numOfPage < finiteScrollCount) {
         dispatch(types.FETCH_MODEL_PREVIEW, { sortBy, onFinish: handleOnFinish })
         setNumOfPage(numOfPage + 1)
       }
     }
 
-    document.addEventListener('scroll', trackScrolling)
+    el.addEventListener('scroll', trackScrolling)
     trackScrolling()
     return () => {
-      document.removeEventListener('scroll', trackScrolling)
+      el.removeEventListener('scroll', trackScrolling)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, isLoading, sortBy])
@@ -193,6 +191,7 @@ const Page = ({ sortBy, getTime = noop }) => {
     type => {
       history.push(`/?sort=${type}`)
       track('Sorted Models', { sortBy: type })
+      setNumOfPage(1)
       setEndOfModels(false)
     },
     [history]
