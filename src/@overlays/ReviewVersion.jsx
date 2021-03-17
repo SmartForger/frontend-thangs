@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Button, Compare, Spacer, Textarea, OverlayWrapper } from '@components'
+import { Compare, Spacer, Textarea, OverlayWrapper } from '@components'
 import { useForm } from '@hooks'
 import { createUseStyles } from '@style'
 import { useStoreon } from 'storeon/react'
@@ -47,7 +47,6 @@ const ReviewVersion = ({ model = {}, part = {} }) => {
   const [errorMessage, setErrorMessage] = useState(null)
   const { setOverlay } = useOverlay()
   const { dispatch } = useStoreon()
-  console.log('model', model, 'part', part)
   const modelId = (model && model.modelId) || (part && part.modelId)
   const initialState = {
     message: `Updated ${part && part.name}.`,

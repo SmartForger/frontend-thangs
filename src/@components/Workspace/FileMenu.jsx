@@ -180,11 +180,13 @@ const FileMenu = ({ model = {} }) => {
 
   const handleMoveTo = useCallback(e => {
     e.preventDefault()
+    // eslint-disable-next-line no-console
     console.log('Open an overlay')
   }, [])
 
   const handleShare = useCallback(e => {
     e.preventDefault()
+    // eslint-disable-next-line no-console
     console.log('Open an overlay')
   }, [])
 

@@ -362,7 +362,6 @@ const FileTable = ({
 
   const allNodes = useMemo(() => {
     let result = []
-    debugger
     const sorted = getSortedFiles(files, sortedBy, order)
     sorted.forEach(model => {
       if (model.parts) {
@@ -421,24 +420,23 @@ const FileTable = ({
 
   const renderNode = useCallback(
     (node, { toggleNode }) => {
-      if (!node.isFolder) console.log(node.level === 0, node)
       const menuProps = node.isFolder
         ? {
-            id: 'Folder_Menu',
-            attributes: {
-              className: c.FileTable_FileRow,
-            },
-            collect: () => ({ folder: node }),
-          }
+          id: 'Folder_Menu',
+          attributes: {
+            className: c.FileTable_FileRow,
+          },
+          collect: () => ({ folder: node }),
+        }
         : node.level === 0
-        ? {
+          ? {
             id: 'File_Menu',
             attributes: {
               className: c.FileTable_FileRow,
             },
             collect: () => ({ model: node }),
           }
-        : {
+          : {
             id: 'Subpart_Menu',
             attributes: {
               className: c.FileTable_FileRow,

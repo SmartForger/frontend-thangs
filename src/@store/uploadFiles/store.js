@@ -471,7 +471,6 @@ export default store => {
     async (state, { message, modelId, part, onFinish = noop }) => {
       store.dispatch(types.SUBMITTING_MODELS)
       const { data: uploadedFiles } = state.uploadFiles
-      console.log('model', modelId)
       const partsPayload = []
       Object.keys(uploadedFiles).forEach(file => {
         partsPayload.push({

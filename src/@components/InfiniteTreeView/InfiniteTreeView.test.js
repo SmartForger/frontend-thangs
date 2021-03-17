@@ -25,6 +25,7 @@ describe('InfiniteTreeView', () => {
         .fill(0)
         .map(() => createLevelNode(1)),
     ],
+    // eslint-disable-next-line react/display-name
     renderNode: node => <div data-jest='node'>{node.name}</div>,
     itemHeight: 30,
     width: 300,

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import * as R from 'ramda'
 import {
-  Button,
   MultiLineBodyText,
   Pill,
   Spacer,

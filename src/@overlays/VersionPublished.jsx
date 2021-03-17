@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { Compare, Spacer, Textarea, OverlayWrapper } from '@components'
+import React, { useCallback } from 'react'
+import { Spacer, OverlayWrapper } from '@components'
 import { useHistory } from 'react-router-dom'
 import { createUseStyles } from '@style'
 import { useCurrentUser, useOverlay } from '@hooks'
