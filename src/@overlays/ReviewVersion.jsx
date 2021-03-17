@@ -41,7 +41,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const ReviewVersion = ({ model = {}, part = {} }) => {
+const ReviewVersion = ({ model = {}, part = {}, files }) => {
   const c = useStyles()
   const [waiting, setWaiting] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
@@ -124,7 +124,13 @@ const ReviewVersion = ({ model = {}, part = {} }) => {
       onContinue={onFormSubmit(formSubmit)}
       continueText={'Submit'}
     >
-      <Compare model1={model || part} model2={model || part} />
+      {Object.keys(files).map((fileKey, ind) => (
+        <Compare
+          key={`CompareViewer_${ind}`}
+          model1={model || part}
+          model2={files[fileKey]}
+        />
+      ))}
       <form className={c.ReviewVersion_Form}>
         {errorMessage && (
           <>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { HoopsModelViewer } from '@components'
+import { ModelThumbnail, Spacer, Tag } from '@components'
 import { createUseStyles } from '@style'
 
 const useStyles = createUseStyles(_theme => {
@@ -7,6 +7,16 @@ const useStyles = createUseStyles(_theme => {
     Compare: {
       display: 'flex',
       flexDirection: 'row',
+    },
+    Compare_Tag: {
+      position: 'absolute',
+      top: '1rem',
+      left: '1rem',
+    },
+    Compare_Viewer: {
+      position: 'relative',
+      borderRadius: '.5rem',
+      background: '#F7F7FB',
     },
   }
 })
@@ -16,16 +26,23 @@ const Compare = ({ model1: model1Data, model2: model2Data }) => {
 
   return (
     <div className={c.Compare}>
-      <HoopsModelViewer
-        className={c.Model_ModelViewer}
-        model={model1Data}
-        minimizeTools={true}
-      />
-      <HoopsModelViewer
-        className={c.Model_ModelViewer}
-        model={model2Data}
-        minimizeTools={true}
-      />
+      <div className={c.Compare_Viewer}>
+        <Tag className={c.Compare_Tag} color={'#999999'} lightText>
+          {model1Data.name}
+        </Tag>
+        <ModelThumbnail className={c.Model_ModelViewer} model={model1Data} />
+      </div>
+      <Spacer size={'1rem'} />
+      <div className={c.Compare_Viewer}>
+        <Tag className={c.Compare_Tag} color={'#30BE93'} lightText>
+          New Version
+        </Tag>
+        <ModelThumbnail
+          className={c.Model_ModelViewer}
+          model={model2Data}
+          useThumbnailer={true}
+        />
+      </div>
     </div>
   )
 }
