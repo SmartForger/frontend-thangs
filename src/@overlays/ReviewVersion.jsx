@@ -48,6 +48,7 @@ const ReviewVersion = ({ model = {}, part = {} }) => {
   const { setOverlay } = useOverlay()
   const { dispatch } = useStoreon()
   console.log('model', model, 'part', part)
+  const modelId = (model && model.modelId) || (part && part.modelId)
   const initialState = {
     message: `Updated ${part && part.name}.`,
   }
@@ -61,7 +62,7 @@ const ReviewVersion = ({ model = {}, part = {} }) => {
       if (isValid) {
         setWaiting(true)
         dispatch(types.SUBMIT_NEW_VERSION, {
-          modelId: model.id,
+          modelId,
           part,
           message: inputState.message,
           onFinish: () => {
@@ -72,7 +73,7 @@ const ReviewVersion = ({ model = {}, part = {} }) => {
                 animateIn: false,
                 windowed: true,
                 dialogue: true,
-                modelId: model.id,
+                modelId,
               },
             })
           },
@@ -83,7 +84,7 @@ const ReviewVersion = ({ model = {}, part = {} }) => {
         })
       }
     },
-    [dispatch, model, part, setOverlay]
+    [dispatch, modelId, part, setOverlay]
   )
 
   const handleOnInputChange = useCallback(

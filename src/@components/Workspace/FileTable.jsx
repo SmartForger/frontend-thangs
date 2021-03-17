@@ -377,26 +377,33 @@ const FileTable = ({
           likeCount,
           owner,
         } = model
-        model.parts[0] = {
-          ...model.parts[0],
-          created,
-          aggregatorId,
-          category,
-          description,
-          folderId,
-          id,
-          identifier,
-          likeCount,
-          contributors: [owner],
-          owner,
+        // For single part and asm
+        if (model.parts.length === 1) {
+          model.parts[0] = {
+            ...model.parts[0],
+            created,
+            aggregatorId,
+            category,
+            description,
+            folderId,
+            id,
+            identifier,
+            likeCount,
+            contributors: [owner],
+            owner,
+          }
         }
 
         sortParts(model, sortedBy === COLUMNS.SIZE, order)
-        const list = flattenTree(model.parts, 'parts')
 
+        // Pass [model] for multi-part model
+        // Pass model.parts for single and asm models
+        // REPLACED - const list = flattenTree(model.parts, 'parts')
+        const list = flattenTree(model.parts.length > 1 ? [model] : model.parts, 'parts')
         list.forEach(item => {
           item.contributors = [owner]
           item.created = created
+          item.modelId = id
         })
         result = result.concat(list)
       } else {
@@ -414,6 +421,7 @@ const FileTable = ({
 
   const renderNode = useCallback(
     (node, { toggleNode }) => {
+      if (!node.isFolder) console.log(node.level === 0, node)
       const menuProps = node.isFolder
         ? {
             id: 'Folder_Menu',

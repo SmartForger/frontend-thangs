@@ -51,19 +51,21 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const SubpartMenu = ({ part: model }) => {
+const SubpartMenu = ({ part }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
   const { setOverlay } = useOverlay()
   const currentUserId = authenticationService.getCurrentUserId()
+  // Needs fixed, possibly add owner to part
   const hasDeletePermission = useMemo(() => {
-    return (
-      model &&
-      model.owner &&
-      model.owner.id &&
-      model.owner.id.toString() === currentUserId.toString()
-    )
-  }, [model, currentUserId])
+    return false
+    //   return (
+    //     model &&
+    //     model.owner &&
+    //     model.owner.id &&
+    //     model.owner.id.toString() === currentUserId.toString()
+    //   )
+  }, [])
 
   const handleNewVersion = useCallback(
     e => {
@@ -76,12 +78,12 @@ const SubpartMenu = ({ part: model }) => {
           animateIn: true,
           windowed: true,
           dialogue: true,
-          part: model,
+          part,
           action: 'update',
         },
       })
     },
-    [model, setOverlay]
+    [part, setOverlay]
   )
 
   const handleNewPart = useCallback(
@@ -95,12 +97,12 @@ const SubpartMenu = ({ part: model }) => {
           animateIn: true,
           windowed: true,
           dialogue: true,
-          model: model,
+          part,
           action: 'add',
         },
       })
     },
-    [model, setOverlay]
+    [part, setOverlay]
   )
 
   const handleEdit = useCallback(
@@ -111,14 +113,14 @@ const SubpartMenu = ({ part: model }) => {
         isOpen: true,
         template: 'editModel',
         data: {
-          model,
-          type: 'model',
+          part,
+          type: 'part',
           animateIn: true,
           windowed: true,
         },
       })
     },
-    [model, setOverlay]
+    [part, setOverlay]
   )
 
   const handleDownloadModel = useCallback(
@@ -126,13 +128,13 @@ const SubpartMenu = ({ part: model }) => {
       e.preventDefault()
       track('File Menu - Download Model')
       dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
-        id: model.id,
+        id: part.modelId,
         onFinish: downloadUrl => {
           window.location.assign(downloadUrl)
         },
       })
     },
-    [dispatch, model]
+    [dispatch, part.modelId]
   )
 
   const handleStar = useCallback(
@@ -140,41 +142,41 @@ const SubpartMenu = ({ part: model }) => {
       e.preventDefault()
       track('File Menu - Star Model')
       dispatch(types.LIKE_MODEL, {
-        id: model.id,
-        model,
+        id: part.modelId,
+        part,
         currentUserId,
-        owner: model.owner,
+        owner: part.owner,
       })
     },
-    [currentUserId, dispatch, model]
+    [currentUserId, dispatch, part]
   )
 
   const handleRemoveFile = useCallback(
     e => {
       e.preventDefault()
-      track('File Menu - Delete Model')
+      track('File Menu - Delete Part')
       setOverlay({
         isOpen: true,
         template: 'deleteModel',
         data: {
-          model,
-          type: 'model',
+          part,
+          type: 'part',
           animateIn: true,
           windowed: true,
           dialogue: true,
         },
       })
     },
-    [model, setOverlay]
+    [part, setOverlay]
   )
 
   const handleOpenNewTab = useCallback(
     e => {
       e.preventDefault()
-      const modelPath = model.identifier ? `/${model.identifier}` : `/model/${model.id}`
+      const modelPath = `/model/${part.modelId}`
       window.open(modelPath, '_blank')
     },
-    [model]
+    [part.modelId]
   )
 
   return (
