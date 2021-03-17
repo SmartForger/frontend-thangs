@@ -133,7 +133,7 @@ const FolderMenu = ({ folder = {} }) => {
           <Spacer size={'1.5rem'} />
           <FolderIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Create Folder</SingleLineBodyText>
+          <SingleLineBodyText>Create folder</SingleLineBodyText>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
@@ -143,7 +143,7 @@ const FolderMenu = ({ folder = {} }) => {
           <Spacer size={'1.5rem'} />
           <StarIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Add to starred</SingleLineBodyText>
+          <SingleLineBodyText>Add to Starred</SingleLineBodyText>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>

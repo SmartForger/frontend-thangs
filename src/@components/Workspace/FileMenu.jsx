@@ -51,7 +51,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const FileMenu = ({ model }) => {
+const FileMenu = ({ model = {} }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
   const { setOverlay } = useOverlay()
@@ -64,11 +64,12 @@ const FileMenu = ({ model }) => {
       model.owner.id.toString() === currentUserId.toString()
     )
   }, [model, currentUserId])
+  const { isAssembly } = model
 
   const handleNewVersion = useCallback(
     e => {
       e.preventDefault()
-      track()
+      // track()
       setOverlay({
         isOpen: true,
         template: 'multiUpload',
@@ -76,7 +77,7 @@ const FileMenu = ({ model }) => {
           animateIn: true,
           windowed: true,
           dialogue: true,
-          model: model,
+          model,
           action: 'update',
         },
       })
@@ -87,7 +88,7 @@ const FileMenu = ({ model }) => {
   const handleNewPart = useCallback(
     e => {
       e.preventDefault()
-      track()
+      // track()
       setOverlay({
         isOpen: true,
         template: 'multiUpload',
@@ -95,7 +96,7 @@ const FileMenu = ({ model }) => {
           animateIn: true,
           windowed: true,
           dialogue: true,
-          model: model,
+          model,
           action: 'add',
         },
       })
@@ -168,7 +169,7 @@ const FileMenu = ({ model }) => {
     [model, setOverlay]
   )
 
-  const handleOpenNewTab = useCallback(
+  const handleGoToModel = useCallback(
     e => {
       e.preventDefault()
       const modelPath = model.identifier ? `/${model.identifier}` : `/model/${model.id}`
@@ -176,6 +177,16 @@ const FileMenu = ({ model }) => {
     },
     [model]
   )
+
+  const handleMoveTo = useCallback(e => {
+    e.preventDefault()
+    console.log('Open an overlay')
+  }, [])
+
+  const handleShare = useCallback(e => {
+    e.preventDefault()
+    console.log('Open an overlay')
+  }, [])
 
   return (
     <div className={c.FileMenu}>
@@ -185,22 +196,24 @@ const FileMenu = ({ model }) => {
           <Spacer size={'1.5rem'} />
           <UploadIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Upload New Version</SingleLineBodyText>
+          <SingleLineBodyText>Upload new version</SingleLineBodyText>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={handleNewPart}>
-        <div>
-          <Spacer size={'1.5rem'} />
-          <UploadIcon />
-          <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Upload New Part</SingleLineBodyText>
-          <Spacer size={'1.5rem'} />
-        </div>
-      </MenuItem>
+      {!isAssembly && (
+        <MenuItem className={c.FileMenu_Item} onClick={handleNewPart}>
+          <div>
+            <Spacer size={'1.5rem'} />
+            <UploadIcon />
+            <Spacer size={'.5rem'} />
+            <SingleLineBodyText>Add new part</SingleLineBodyText>
+            <Spacer size={'1.5rem'} />
+          </div>
+        </MenuItem>
+      )}
       <Spacer size={'.5rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={handleNewVersion}>
+      <MenuItem className={c.FileMenu_Item} onClick={handleShare}>
         <div>
           <Spacer size={'1.5rem'} />
           <ShareIcon />
@@ -210,7 +223,7 @@ const FileMenu = ({ model }) => {
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={handleOpenNewTab}>
+      <MenuItem className={c.FileMenu_Item} onClick={handleMoveTo}>
         <div>
           <Spacer size={'1.5rem'} />
           <OpenIcon className={c.FileMenu_OpenIcon} />
@@ -220,12 +233,12 @@ const FileMenu = ({ model }) => {
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={handleOpenNewTab}>
+      <MenuItem className={c.FileMenu_Item} onClick={handleGoToModel}>
         <div>
           <Spacer size={'1.5rem'} />
           <OpenIcon className={c.FileMenu_OpenIcon} />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Go to Model Page</SingleLineBodyText>
+          <SingleLineBodyText>Go to model page</SingleLineBodyText>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
@@ -235,7 +248,7 @@ const FileMenu = ({ model }) => {
           <Spacer size={'1.5rem'} />
           <StarIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Add to starred</SingleLineBodyText>
+          <SingleLineBodyText>Add to Starred</SingleLineBodyText>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>

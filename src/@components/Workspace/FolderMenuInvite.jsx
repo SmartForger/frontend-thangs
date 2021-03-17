@@ -164,7 +164,7 @@ const FolderMenuInvite = ({ folder = {}, members = [] }) => {
           <Spacer size={'1.5rem'} />
           <StarIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Add to starred</SingleLineBodyText>
+          <SingleLineBodyText>Add to Starred</SingleLineBodyText>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>

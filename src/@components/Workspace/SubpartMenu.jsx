@@ -51,7 +51,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const SubpartMenu = ({ model }) => {
+const SubpartMenu = ({ part: model }) => {
   const c = useStyles({})
   const { dispatch } = useStoreon()
   const { setOverlay } = useOverlay()
@@ -68,7 +68,7 @@ const SubpartMenu = ({ model }) => {
   const handleNewVersion = useCallback(
     e => {
       e.preventDefault()
-      track()
+      // track()
       setOverlay({
         isOpen: true,
         template: 'multiUpload',
@@ -76,7 +76,7 @@ const SubpartMenu = ({ model }) => {
           animateIn: true,
           windowed: true,
           dialogue: true,
-          model: model,
+          part: model,
           action: 'update',
         },
       })
@@ -87,7 +87,7 @@ const SubpartMenu = ({ model }) => {
   const handleNewPart = useCallback(
     e => {
       e.preventDefault()
-      track()
+      // track()
       setOverlay({
         isOpen: true,
         template: 'multiUpload',
@@ -185,7 +185,7 @@ const SubpartMenu = ({ model }) => {
           <Spacer size={'1.5rem'} />
           <UploadIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Upload New Version</SingleLineBodyText>
+          <SingleLineBodyText>Upload new version</SingleLineBodyText>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
@@ -195,7 +195,7 @@ const SubpartMenu = ({ model }) => {
           <Spacer size={'1.5rem'} />
           <UploadIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Upload New Part</SingleLineBodyText>
+          <SingleLineBodyText>Add new part</SingleLineBodyText>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
@@ -225,7 +225,7 @@ const SubpartMenu = ({ model }) => {
           <Spacer size={'1.5rem'} />
           <OpenIcon className={c.SubpartMenu_OpenIcon} />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Go to Model Page</SingleLineBodyText>
+          <SingleLineBodyText>Go to model page</SingleLineBodyText>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
@@ -235,7 +235,7 @@ const SubpartMenu = ({ model }) => {
           <Spacer size={'1.5rem'} />
           <StarIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Add to starred</SingleLineBodyText>
+          <SingleLineBodyText>Add to Starred</SingleLineBodyText>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>

@@ -1,10 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { SingleLineBodyText, Spacer, Spinner } from '@components'
+import { OverlayWrapper } from '@components'
 import PartInfo from './PartInfo'
 import UploadModels from './UploadModels'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import { ReactComponent as ArrowLeftIcon } from '@svg/icon-arrow-left.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
@@ -13,87 +10,51 @@ import AssemblyInfo from './AssemblyInfo'
 import { useHistory } from 'react-router-dom'
 import { useOverlay } from '@hooks'
 
-const useStyles = createUseStyles(theme => {
-  const {
-    mediaQueries: { md },
-  } = theme
-  return {
-    MultiUpload: {
-      minHeight: '27.75rem',
-      backgroundColor: theme.colors.white[300],
-      borderRadius: '1rem',
-      display: 'flex',
-      flexDirection: 'row',
-      position: 'relative',
-      width: '100%',
+const NewModelUpload = ({
+  activeNode,
+  errorMessage,
+  uploadFilesData,
+  activeFormData,
+  isLoading,
+  multipartName,
+  handleContinue,
+  handleUpdate,
+  setErrorMessage,
+  treeData,
+}) => {
+  return activeNode.isAssembly ? (
+    <AssemblyInfo
+      activeNode={activeNode}
+      errorMessage={errorMessage}
+      filesData={uploadFilesData}
+      formData={activeFormData}
+      onContinue={handleContinue}
+      setErrorMessage={setErrorMessage}
+      treeData={treeData}
+    />
+  ) : (
+    <PartInfo
+      activeNode={activeNode}
+      errorMessage={errorMessage}
+      filesData={uploadFilesData}
+      formData={activeFormData}
+      isLoading={isLoading}
+      multipartName={multipartName}
+      onContinue={handleContinue}
+      onUpdate={handleUpdate}
+      setErrorMessage={setErrorMessage}
+      treeData={treeData}
+    />
+  )
+}
 
-      [md]: {
-        width: '27.75rem',
-      },
-    },
-    MultiUpload_Content: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'flex-start',
-      width: '100%',
-      minWidth: 0,
-    },
-    MultiUpload_OverlayHeader: {
-      lineHeight: '1.5rem !important',
-    },
-    MultiUpload_ExitButton: {
-      top: '1.5rem',
-      right: '1.5rem',
-      cursor: 'pointer',
-      zIndex: '4',
-      position: 'absolute',
-      background: 'white',
-    },
-    MultiUpload_BackButton: {
-      top: '1.5rem',
-      left: '1.5rem',
-      cursor: 'pointer',
-      zIndex: '4',
-      position: 'absolute',
-      background: 'white',
-    },
-    MultiUpload_Row: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-
-      '& svg': {
-        flex: 'none',
-      },
-    },
-    MultiUpload_Column: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    MultiUpload_LoaderScreen: {
-      position: 'absolute',
-      top: 0,
-      right: 0,
-      left: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0,0,0,0.29)',
-      zIndex: '5',
-      borderRadius: '1rem',
-      display: 'flex',
-    },
-    MultiUpload__desktop: {
-      display: 'none',
-
-      [md]: {
-        display: 'flex',
-      },
-    },
-  }
-})
-
-const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' }) => {
+const MultiUpload = ({
+  initData = null,
+  previousVersionModelId,
+  folderId = '',
+  model,
+  part,
+}) => {
   const { dispatch, license = {}, uploadFiles = {} } = useStoreon(
     'license',
     'uploadFiles'
@@ -113,9 +74,8 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
   const [warningMessage, setWarningMessage] = useState(null)
   const [allTreeNodes, setAllTreeNodes] = useState([])
   const [singlePartsCount, setSinglePartsCount] = useState(0)
-  const c = useStyles({})
   const multipartName = formData['multipart'] && formData['multipart'].name
-  const { setOverlayOpen } = useOverlay()
+  const { setOverlay, setOverlayOpen } = useOverlay()
   const history = useHistory()
 
   const uploadedFiles = useMemo(
@@ -170,8 +130,8 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
           ? newNode.subIds.map(subId => formNode(subId))
           : []
         : Object.values(newTreeData)
-          .filter(node => !node.parentId)
-          .map(node => formNode(node.id))
+            .filter(node => !node.parentId)
+            .map(node => formNode(node.id))
 
       newNode.treeValid =
         newNode.valid &&
@@ -253,8 +213,8 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
             setErrorMessage(
               `${file.name} is not a supported file type.
               Supported file extensions include ${MODEL_FILE_EXTS.map(
-    e => ' ' + e.replace('.', '')
-  )}.`
+                e => ' ' + e.replace('.', '')
+              )}.`
             )
             return null
           }
@@ -345,6 +305,35 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
         return
       }
 
+      if (model || part) {
+        if (part || (model && model.isLeaf)) {
+          setOverlay({
+            isOpen: true,
+            template: 'reviewVersion',
+            data: {
+              animateIn: false,
+              windowed: true,
+              dialogue: true,
+              model: model || part,
+              part: part || model,
+            },
+          })
+        } else {
+          setOverlay({
+            isOpen: true,
+            template: 'selectVersionModel',
+            data: {
+              animateIn: false,
+              windowed: true,
+              dialogue: true,
+              model,
+              part,
+            },
+          })
+        }
+        return
+      }
+
       let i = 0
 
       if (data) {
@@ -396,7 +385,10 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
     [
       errorMessage,
       isLoadingLicense,
+      model,
+      part,
       allTreeNodes,
+      setOverlay,
       activeView,
       dispatch,
       previousVersionModelId,
@@ -426,84 +418,71 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
     if (initData) onDrop(initData.acceptedFiles, initData.rejectedFile, initData.e)
   }, [initData, onDrop])
 
+  const overlayHeader = useMemo(() => {
+    return !activeNode
+      ? previousVersionModelId || model || part
+        ? 'Upload New Version'
+        : 'Upload Files'
+      : activeNode.isAssembly && activeNode.parentId
+      ? 'Sub Assembly'
+      : activeNode.isAssembly
+      ? 'New Assembly'
+      : partFormTitle
+  }, [activeNode, model, part, partFormTitle, previousVersionModelId])
+
+  const fileLength = useMemo(
+    () =>
+      uploadFilesData
+        ? Object.keys(uploadFilesData).filter(fileId => uploadFilesData[fileId].name)
+            .length
+        : 0,
+    [uploadFilesData]
+  )
+
   return (
-    <div className={c.MultiUpload} data-cy='multi-upload-overlay'>
-      {isLoading && (
-        <div className={c.MultiUpload_LoaderScreen}>
-          <Spinner />
-        </div>
+    <OverlayWrapper
+      dataCy={'multi-upload-overlay'}
+      isLoading={isLoading || isLoadingLicense}
+      onBack={activeView > -1 && handleBack}
+      onCancel={fileLength > 0 && handleCancelUploading}
+      onContinue={fileLength > 0 && handleContinue}
+      overlayHeader={overlayHeader}
+    >
+      {!activeNode ? (
+        <UploadModels
+          allTreeNodes={allTreeNodes}
+          errorMessage={errorMessage}
+          isAssembly={isAssembly}
+          multiple={
+            previousVersionModelId || part || (model && model.isLeaf) ? false : true
+          }
+          onDrop={onDrop}
+          onRemoveNode={removeFile}
+          setErrorMessage={setErrorMessage}
+          setIsAssembly={setIsAssembly}
+          setWarningMessage={setWarningMessage}
+          showAssemblyToggle={validated && singlePartsCount > 1}
+          uploadFiles={uploadFilesData}
+          uploadTreeData={uploadTreeData}
+          validated={validated}
+          validating={validating}
+          warningMessage={warningMessage}
+        />
+      ) : (
+        <NewModelUpload
+          activeNode={activeNode}
+          errorMessage={errorMessage}
+          uploadFilesData={uploadFilesData}
+          activeFormData={activeFormData}
+          isLoading={isLoading}
+          multipartName={multipartName}
+          handleContinue={handleContinue}
+          handleUpdate={handleUpdate}
+          setErrorMessage={setErrorMessage}
+          treeData={treeData}
+        />
       )}
-      <Spacer size={'2rem'} />
-      <div className={c.MultiUpload_Content}>
-        <div className={c.MultiUpload_Column}>
-          <Spacer size={'1.5rem'} />
-          <div className={c.MultiUpload_Row}>
-            <SingleLineBodyText className={c.MultiUpload_OverlayHeader}>
-              {!activeNode
-                ? previousVersionModelId
-                  ? 'Upload New Version'
-                  : 'Upload Files'
-                : activeNode.isAssembly && activeNode.parentId
-                  ? 'Sub Assembly'
-                  : activeNode.isAssembly
-                    ? 'New Assembly'
-                    : partFormTitle}
-            </SingleLineBodyText>
-            {activeView > -1 && (
-              <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />
-            )}
-            <ExitIcon className={c.MultiUpload_ExitButton} onClick={closeOverlay} />
-          </div>
-          <Spacer size={'1.5rem'} />
-        </div>
-        {!activeNode ? (
-          <UploadModels
-            allTreeNodes={allTreeNodes}
-            errorMessage={errorMessage}
-            isAssembly={isAssembly}
-            multiple={previousVersionModelId ? false : true}
-            onCancel={handleCancelUploading}
-            onContinue={handleContinue}
-            onDrop={onDrop}
-            onRemoveNode={removeFile}
-            setErrorMessage={setErrorMessage}
-            setIsAssembly={setIsAssembly}
-            setWarningMessage={setWarningMessage}
-            showAssemblyToggle={validated && singlePartsCount > 1}
-            uploadFiles={uploadFilesData}
-            uploadTreeData={uploadTreeData}
-            validated={validated}
-            validating={validating}
-            warningMessage={warningMessage}
-          />
-        ) : activeNode.isAssembly ? (
-          <AssemblyInfo
-            activeNode={activeNode}
-            errorMessage={errorMessage}
-            filesData={uploadFilesData}
-            formData={activeFormData}
-            onContinue={handleContinue}
-            setErrorMessage={setErrorMessage}
-            treeData={treeData}
-          />
-        ) : (
-          <PartInfo
-            activeNode={activeNode}
-            errorMessage={errorMessage}
-            filesData={uploadFilesData}
-            formData={activeFormData}
-            isLoading={isLoading}
-            multipartName={multipartName}
-            onContinue={handleContinue}
-            onUpdate={handleUpdate}
-            setErrorMessage={setErrorMessage}
-            treeData={treeData}
-          />
-        )}
-        <Spacer size={'2rem'} className={c.MultiUpload__desktop} />
-      </div>
-      <Spacer size={'2rem'} />
-    </div>
+    </OverlayWrapper>
   )
 }
 

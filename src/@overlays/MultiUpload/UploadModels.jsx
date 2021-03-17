@@ -117,18 +117,6 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
       zIndex: '1',
     },
-    UploadModels_ButtonWrapper: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-
-      '& button': {
-        width: '100%',
-      },
-    },
-    UploadModels_ButtonSpacer: {
-      flex: 'none',
-    },
     UploadModels_ErrorText: {
       ...theme.text.formErrorText,
       backgroundColor: theme.variables.colors.errorTextBackground,
@@ -181,8 +169,6 @@ const UploadModels = ({
   allTreeNodes,
   onDrop = noop,
   onRemoveNode = noop,
-  onCancel = noop,
-  onContinue = noop,
   setErrorMessage = noop,
   setWarningMessage = noop,
   errorMessage = null,
@@ -346,15 +332,6 @@ const UploadModels = ({
             </>
           )}
           <Spacer size={'1rem'} />
-          <div className={c.UploadModels_ButtonWrapper}>
-            <Button secondary onClick={onCancel}>
-              Cancel
-            </Button>
-            <Spacer size={'1rem'} className={c.UploadModels_ButtonSpacer} />
-            <Button onClick={onContinue} disabled={isLoadingFiles || validating}>
-              {isLoadingFiles || validating ? 'Processing...' : 'Continue'}
-            </Button>
-          </div>
         </>
       )}
     </>

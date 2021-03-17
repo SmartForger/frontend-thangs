@@ -178,3 +178,5 @@ export const LOADED_SEARCH_MY_THANGS = 'loaded-search-my-thangs'
 /* Experiments */
 export const FETCH_EXPERIMENTS = 'fetch-experiments'
 export const CHANGE_EXPERIMENTS_STATUS = 'change-experiments-status'
+/* Versioning */
+export const SUBMIT_NEW_VERSION = 'submit-new-version'
