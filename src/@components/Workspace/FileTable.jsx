@@ -10,6 +10,7 @@ import {
   Pill,
   SingleLineBodyText,
   Spacer,
+  TableHeader,
 } from '@components'
 import { flattenTree } from '@utilities/tree'
 import { formatBytes } from '@utilities'
@@ -284,49 +285,42 @@ const SortByArrow = ({ order }) => {
   )
 }
 
-const FileTableHeader = ({ sortedBy, order, onSort = () => {} }) => {
+const FileTableHeader = ({ sortedBy, order, onSort = noop }) => {
   const c = useStyles()
+  const colData = useMemo(
+    () => [
+      {
+        key: COLUMNS.FILENAME,
+        className: c.FileTable_FileName,
+        title: 'Filename',
+      },
+      {
+        key: COLUMNS.CREATED,
+        className: c.FileTable_Date,
+        title: 'Created',
+      },
+      {
+        key: COLUMNS.SIZE,
+        className: c.FileTable_Size,
+        title: 'Filename',
+      },
+      {
+        key: COLUMNS.CONTRIBUTORS,
+        className: c.FileTable_Contributors,
+        title: 'Contributors',
+      },
+    ],
+    [c]
+  )
 
   return (
-    <div className={c.FileTable_HeaderRow}>
-      <MetadataSecondary
-        className={cn(c.FileTable_FileName, c.FileTable_HeaderCell)}
-        onClick={() => {
-          onSort(COLUMNS.FILENAME)
-        }}
-      >
-        Filename
-        {sortedBy === COLUMNS.FILENAME && <SortByArrow order={order} />}
-      </MetadataSecondary>
-      <MetadataSecondary
-        className={cn(c.FileTable_Date, c.FileTable_HeaderCell)}
-        onClick={() => {
-          onSort(COLUMNS.CREATED)
-        }}
-      >
-        Created
-        {sortedBy === COLUMNS.CREATED && <SortByArrow order={order} />}
-      </MetadataSecondary>
-      <MetadataSecondary
-        className={cn(c.FileTable_Size, c.FileTable_HeaderCell)}
-        onClick={() => {
-          onSort(COLUMNS.SIZE)
-        }}
-      >
-        Size
-        {sortedBy === COLUMNS.SIZE && <SortByArrow order={order} />}
-      </MetadataSecondary>
-      <MetadataSecondary
-        className={cn(c.FileTable_Contributors, c.FileTable_HeaderCell)}
-        onClick={() => {
-          onSort(COLUMNS.CONTRIBUTORS)
-        }}
-      >
-        Contributors
-        {sortedBy === COLUMNS.CONTRIBUTORS && <SortByArrow order={order} />}
-      </MetadataSecondary>
-      <div className={cn(c.FileTable_Action, c.FileTable_HeaderCell)} />
-    </div>
+    <TableHeader
+      columns={colData}
+      sortBy={sortedBy}
+      order={order}
+      onSort={onSort}
+      showContextMenus={true}
+    />
   )
 }
 

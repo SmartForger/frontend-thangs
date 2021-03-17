@@ -316,6 +316,7 @@ const MultiUpload = ({
               dialogue: true,
               model: model || part,
               part: part || model,
+              files: uploadFilesData,
             },
           })
         } else {
