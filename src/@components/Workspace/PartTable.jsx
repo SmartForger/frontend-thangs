@@ -191,12 +191,12 @@ const PartTable = ({
     ) => {
       const menuProps = showContextMenus
         ? {
-            id: 'Subpart_Menu',
-            attributes: {
-              className: c.PartTable_FileRow,
-            },
-            collect: () => ({ part: node }),
-          }
+          id: 'Subpart_Menu',
+          attributes: {
+            className: c.PartTable_FileRow,
+          },
+          collect: () => ({ part: node }),
+        }
         : null
 
       const handleClick = () => {
