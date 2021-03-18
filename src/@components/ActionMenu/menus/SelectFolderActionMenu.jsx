@@ -273,6 +273,7 @@ export const SelectFolderTarget = ({
     <div onClick={handleClick}>
       <Input
         className={c.SelectFolderTarget}
+        name='folderName'
         label={'Choose Folder'}
         value={(selectedValue || {}).label}
         error={error}

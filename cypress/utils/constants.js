@@ -34,8 +34,14 @@ export const USER4 = {
   NAME: 'test-cypress-3n43tn',
 }
 
-export const FOLDER = {
-  NAME: 'TestFolder',
+export const PUBLIC_FOLDER = {
+  NAME: 'Public Test Folder',
+  NEW_NAME: 'New Public Test Folder',
+}
+
+export const PRIVATE_FOLDER = {
+  NAME: 'Private Test Folder',
+  NEW_NAME: 'New Private Test Folder',
 }
 
 export const PATH = {
@@ -157,7 +163,7 @@ export const CLASSES = {
   MY_THANGS_EDIT_PROFILE: '[class^=EditProfile_Content]',
   HEADER_NOTIFICATIONS_UNREAD_BADGE: '[class^=NotificationsButton_UnreadBadge]',
   MY_THANGS_ADD_FOLDER: '[class^=AddFolder_Column]',
-  MY_THANGS_INPUT: '[class^=Input]',
+  INPUT: '[class^=Input]',
   MY_THANGS_FOLDER_FORM_BUTTONS: '[class^=FolderForm_ButtonContainer]',
   MY_THANGS_FOLDER_FORM_TOGGLE_BUTTON: '[class^=Toggle_Button]',
   MY_THANGS_FOLDER_VIEW_ROW: '[class^=FolderView_Row]',
@@ -167,6 +173,14 @@ export const CLASSES = {
   MY_THANGS_NO_FILES: '[class^=NoFilesMessage]',
   MY_THANGS_ALL_FILES_ROW: '[class^=AllFilesView]',
   PILL_BUTTON: '[class^=Pill]',
+  UPLOAD_PRIVACY_HEADER: '[class^=BodyText]',
+  UPLOAD_PRIVACY_TEXT: '[class^=PartInfo_PrivacyText]',
+  UPLOAD_SELECT_FOLDER: '[class^=SelectFolderTarget]',
+  UPLOAD_SELECT_FOLDER_ICON: '[class^=SelectFolderTarget_Icon]',
+  UPLOAD_FOLDERS_TO_SELECT: '[class^=SelectFolderMenu_ItemsContainer]',
+  UPLOAD_CREATE_FOLDER_BUTTON: '[class^=SelectFolderMenu_Row__clickable]',
+  UPLOAD_CREATE_FOLDER_MENU: '[class^=SelectFolderActionMenu]',
+  UPLOAD_CREATE_FOLDER_TOGGLE_BUTTON: '[class^=Toggle_Label]',
 }
 
 export const MODEL_CARD = (title = MODEL.TITLE) => `[title="${title}"]`
@@ -221,7 +235,9 @@ export const TEXT = {
   LIKED_MODELS: 'Liked Models',
   SAVED_SEARCHES: 'Saved Searches',
   PROFILE_SETTINGS: 'Profile Settings',
+  CREATE: 'Create',
   CREATE_FOLDER: 'Create Folder',
+  CREATE_NEW_FOLDER: 'Create new folder',
   FOLDER_NAME: 'Folder Name',
   SAVE: 'Save',
   COMMENTED: 'commented',
@@ -229,6 +245,12 @@ export const TEXT = {
   UPLOADED_NEW_VERSION: 'uploaded new version',
   UPLOAD_WARNING_TEXT:
     'Notice: Some parts are missing in your assembly. You can upload them now or continue without them.',
+  UPLOAD_PRIVACY_HEADER_PUBLIC: 'Public Model',
+  UPLOAD_PRIVACY_HEADER_PRIVATE: 'Private Model',
+  UPLOAD_PRIVACY_TEXT_PUBLIC:
+    'The folder you have selected is Public. This model will be shared publicly towards users on Thangs.',
+  UPLOAD_PRIVACY_TEXT_PRIVATE:
+    'The folder you have selected is Private. This model will be private and restricted to yourself and those you to choose to share it with.',
 }
 
 export const PROPS = {

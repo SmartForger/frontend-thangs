@@ -9,18 +9,9 @@ import {
   uploadFile,
   clickOnElementByText,
 } from '../utils/common-methods'
+import { CLASSES, MODEL, MULTIPART_MODEL, PROPS, TEXT } from '../utils/constants'
 import {
-  ASM_MODEL,
-  CLASSES,
-  MODEL,
-  MULTIPART_MODEL,
-  PROPS,
-  TEXT,
-} from '../utils/constants'
-import {
-  asmLicenseUpload,
   licenseUpload,
-  multipartAsAsmLicenseUpload,
   multipartLicenseUpload,
   multiUpload,
 } from '../utils/uploadMethods'
@@ -58,12 +49,13 @@ describe('The Model License', () => {
     clearModelsAndFolders()
   })
 
-  it('Check upload asm model with the license and license text on model page', () => {
+  //TODO: See 'Check asm upload' test description.
+  /*it('Check upload asm model with the license and license text on model page', () => {
     asmLicenseUpload()
     goTo(`/${activeUser.NAME}`)
     clickOnTextInsideClass(CLASSES.MODEL_CARD, ASM_MODEL.TITLE)
     isElement(CLASSES.MODEL_LICENSE, PROPS.VISIBLE)
-  })
+  })*/
 
   it('Check multiparts as asm model upload with the license and license text on model page', () => {
     multipartLicenseUpload()

@@ -1,4 +1,4 @@
-import { FOLDER, MODEL, SEARCH, USER } from './constants'
+import { PUBLIC_FOLDER, MODEL, SEARCH, USER, PRIVATE_FOLDER } from './constants'
 
 export const inputSelectors = {
   email: '[name=email]',
@@ -21,8 +21,26 @@ export const usernameInput = {
   selector: inputSelectors.username,
 }
 
-export const createFolderInput = {
-  validInput: FOLDER.NAME,
+export const createPublicFolderInput = {
+  validInput: PUBLIC_FOLDER.NAME,
+  type: 'text',
+  selector: inputSelectors.createFolder,
+}
+
+export const createPublicFolderFromSelectInput = {
+  validInput: PUBLIC_FOLDER.NEW_NAME,
+  type: 'text',
+  selector: inputSelectors.createFolder,
+}
+
+export const createPrivateFolderInput = {
+  validInput: PRIVATE_FOLDER.NAME,
+  type: 'text',
+  selector: inputSelectors.createFolder,
+}
+
+export const createPrivateFolderFromSelectInput = {
+  validInput: PRIVATE_FOLDER.NEW_NAME,
   type: 'text',
   selector: inputSelectors.createFolder,
 }

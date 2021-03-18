@@ -230,6 +230,20 @@ export const isTextInsideClass = (className, text, prop) => {
     : cy.get(className, { timeout: 20000 }).contains(text)
 }
 
+export const createFolder = (input, type, name) => {
+  openMyThangs()
+  clickOnTextInsideClass(CLASSES.MY_THANGS_NAVBAR, TEXT.ADD_NEW)
+  isElement(CLASSES.MY_THANGS_ADD_MENU, PROPS.VISIBLE)
+  clickOnTextInsideClass(CLASSES.MY_THANGS_ADD_MENU, TEXT.CREATE_FOLDER)
+  if (type === 'private') {
+    clickOnElement(CLASSES.MY_THANGS_FOLDER_FORM_TOGGLE_BUTTON)
+  }
+  isElement(CLASSES.MY_THANGS_ADD_FOLDER, PROPS.VISIBLE)
+  enterValidValue(CLASSES.INPUT, input)
+  clickOnTextInsideClass(CLASSES.MY_THANGS_FOLDER_FORM_BUTTONS, TEXT.SAVE)
+  isTextInsideClass(CLASSES.MY_THANGS_FOLDER_VIEW_ROW, name, PROPS.VISIBLE)
+}
+
 export const registerUser = userKey => {
   const uuid = `${new Date().valueOf()}`
   const user = getGeneratedUser(uuid)
