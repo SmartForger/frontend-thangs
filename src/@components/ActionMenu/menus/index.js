@@ -1,3 +1,4 @@
+export { default as ARDownloadActionMenu } from './ARDownloadActionMenu'
 export { default as ColorPickerActionMenu } from './ModelViewer/ColorPickerActionMenu'
 export { default as CommentsActionMenu } from './CommentsActionMenu'
 export { default as DrawModeActionMenu } from './ModelViewer/DrawModeActionMenu'

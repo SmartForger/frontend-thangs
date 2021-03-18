@@ -12,14 +12,15 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       margin: 0,
       padding: 0,
-      backgroundColor: theme.colors.gold[500],
+      backgroundColor: ({ color }) => color || theme.colors.gold[500],
       color: theme.colors.black[500],
-      borderRadius: '.125rem',
+      borderRadius: '.25rem',
       cursor: 'pointer',
       width: 'fit-content',
     },
     Tag_Text: {
-      color: theme.colors.black[900],
+      color: ({ lightText }) =>
+        lightText ? theme.colors.white[400] : theme.colors.black[900],
       lineHeight: '.5rem',
     },
     Tag_TextWrapper: {
@@ -35,8 +36,8 @@ const useStyles = createUseStyles(theme => {
   }
 })
 const noop = () => null
-const Tag = ({ children, className, secondary, onClick = noop }) => {
-  const c = useStyles({})
+const Tag = ({ children, className, color, lightText, secondary, onClick = noop }) => {
+  const c = useStyles({ color, lightText })
   return (
     <div
       className={classnames(className, c.Tag, { [c.Tag_Secondary]: secondary })}

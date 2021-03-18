@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet'
 import * as R from 'ramda'
 import { format } from 'date-fns'
 import {
+  ARDownloadActionMenu,
   Button,
   CommentsForModel,
   Divider,
@@ -27,7 +28,6 @@ import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as LicenseIcon } from '@svg/license.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
-import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { Message404 } from './404'
 import { createUseStyles } from '@style'
 import classnames from 'classnames'
@@ -72,9 +72,9 @@ const useStyles = createUseStyles(theme => {
       flexBasis: '2rem',
       flexGrow: 2,
       maxWidth: '100%',
-      marginRight: '4rem',
 
       [md]: {
+        marginRight: '4rem',
         maxWidth: '22rem',
       },
       [lg_viewer]: {
@@ -258,6 +258,17 @@ const useStyles = createUseStyles(theme => {
       display: 'inline-flex',
       width: '100%',
     },
+    Model_DownloadAR: {
+      width: '100%',
+
+      '& > div': {
+        width: '100%',
+      },
+
+      '& > div > div': {
+        width: '100%',
+      },
+    },
   }
 })
 const noop = () => null
@@ -304,6 +315,41 @@ const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
   )
 }
 
+const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
+  const c = useStyles()
+  const { dispatch } = useStoreon()
+  const downloadModel = useCallback(
+    format =>
+      dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
+        id: model.id,
+        targetFormat: format,
+        onFinish: downloadUrl => {
+          window.location.assign(downloadUrl)
+          track('Download AR Model', { format, modelId: model.id })
+        },
+      }),
+    [dispatch, model.id]
+  )
+
+  const handleClick = useCallback(
+    format => {
+      if (isAuthedUser) {
+        downloadModel(format)
+      } else {
+        openSignupOverlay('Join to download AR models.', 'Download')
+        track('SignUp Prompt Overlay', { source: 'Download AR', format })
+      }
+    },
+    [downloadModel, isAuthedUser, openSignupOverlay]
+  )
+
+  return (
+    <div className={c.Model_DownloadAR}>
+      <ARDownloadActionMenu onChange={handleClick} />
+    </div>
+  )
+}
+
 const ModelStats = ({ model = {} }) => {
   const c = useStyles()
   return (
@@ -324,38 +370,38 @@ const ModelStats = ({ model = {} }) => {
   )
 }
 
-const VersionLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
-  const c = useStyles()
-  const { setOverlay } = useOverlay()
+// const VersionLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
+//   const c = useStyles()
+//   const { setOverlay } = useOverlay()
 
-  const handleClick = useCallback(() => {
-    if (isAuthedUser) {
-      setOverlay({
-        isOpen: true,
-        template: 'multiUpload',
-        data: {
-          animateIn: true,
-          windowed: true,
-          dialogue: true,
-          previousVersionModelId: modelId,
-        },
-      })
-    } else {
-      openSignupOverlay('Join to Like, Follow, Share.', 'Version Upload')
-      track('SignUp Prompt Overlay', { source: 'Version Upload' })
-    }
-  }, [isAuthedUser, modelId, openSignupOverlay, setOverlay])
+//   const handleClick = useCallback(() => {
+//     if (isAuthedUser) {
+//       setOverlay({
+//         isOpen: true,
+//         template: 'multiUpload',
+//         data: {
+//           animateIn: true,
+//           windowed: true,
+//           dialogue: true,
+//           previousVersionModelId: modelId,
+//         },
+//       })
+//     } else {
+//       openSignupOverlay('Join to Like, Follow, Share.', 'Version Upload')
+//       track('SignUp Prompt Overlay', { source: 'Version Upload' })
+//     }
+//   }, [isAuthedUser, modelId, openSignupOverlay, setOverlay])
 
-  return (
-    <Button secondary className={c.Model_SidebarButton} onClick={handleClick}>
-      <div>
-        <UploadIcon className={c.Model_VersionButton} />
-      </div>
-      <Spacer size='.5rem' />
-      Upload new version
-    </Button>
-  )
-}
+//   return (
+//     <Button secondary className={c.Model_SidebarButton} onClick={handleClick}>
+//       <div>
+//         <UploadIcon className={c.Model_VersionButton} />
+//       </div>
+//       <Spacer size='.5rem' />
+//       Upload new version
+//     </Button>
+//   )
+// }
 
 const LicenseText = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
   const c = useStyles()
@@ -466,8 +512,8 @@ const StatsAndActions = ({
           <ShareActionMenu iconOnly={true} title={pageTitle} model={modelData} />
         </div>
         <Spacer size='1rem' />
-        <VersionLink
-          modelId={modelData.id}
+        <DownloadARLink
+          model={modelData}
           isAuthedUser={isAuthedUser}
           openSignupOverlay={openSignupOverlay}
         />
