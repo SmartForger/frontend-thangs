@@ -385,6 +385,7 @@ const FileTable = ({
           item.contributors = [owner]
           item.created = created
           item.modelId = id
+          item.parts = item.hasChildren ? model.parts : undefined
         })
         result = result.concat(list)
       } else {
@@ -404,21 +405,21 @@ const FileTable = ({
     (node, { toggleNode }) => {
       const menuProps = node.isFolder
         ? {
-          id: 'Folder_Menu',
-          attributes: {
-            className: c.FileTable_FileRow,
-          },
-          collect: () => ({ folder: node }),
-        }
+            id: 'Folder_Menu',
+            attributes: {
+              className: c.FileTable_FileRow,
+            },
+            collect: () => ({ folder: node }),
+          }
         : node.level === 0
-          ? {
+        ? {
             id: 'File_Menu',
             attributes: {
               className: c.FileTable_FileRow,
             },
             collect: () => ({ model: node }),
           }
-          : {
+        : {
             id: 'Subpart_Menu',
             attributes: {
               className: c.FileTable_FileRow,

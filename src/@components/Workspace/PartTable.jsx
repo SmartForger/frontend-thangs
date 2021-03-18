@@ -130,11 +130,12 @@ const PartTableHeader = ({ sortedBy, order, onSort = noop }) => {
 const PartTable = ({
   className,
   file,
+  filterTerm,
   heightOffset = 0,
   model = {},
+  searchCase,
   selectedParts,
   setSelectedParts,
-  searchCase,
   showContextMenus = false,
   sortedBy: initialSortedBy,
 }) => {
@@ -177,9 +178,11 @@ const PartTable = ({
     let result = []
     let parts = model
     sortParts(parts, sortedBy === COLUMNS.SIZE, order)
-    const list = flattenTree(model.parts, 'parts')
+    const list = flattenTree(model.parts, 'parts').filter(part =>
+      part.name.includes(filterTerm)
+    )
     return result.concat(list)
-  }, [model, sortedBy, order])
+  }, [model, sortedBy, order, filterTerm])
 
   const renderNode = useCallback(
     (
@@ -188,12 +191,12 @@ const PartTable = ({
     ) => {
       const menuProps = showContextMenus
         ? {
-          id: 'Subpart_Menu',
-          attributes: {
-            className: c.PartTable_FileRow,
-          },
-          collect: () => ({ part: node }),
-        }
+            id: 'Subpart_Menu',
+            attributes: {
+              className: c.PartTable_FileRow,
+            },
+            collect: () => ({ part: node }),
+          }
         : null
 
       const handleClick = () => {
