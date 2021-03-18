@@ -112,6 +112,7 @@ const OverlayWrapper = ({
   onContinue,
   cancelText = 'Close',
   continueText = 'Continue',
+  hideButtons,
 }) => {
   const c = useStyles({})
   const { setOverlayOpen } = useOverlay()
@@ -155,7 +156,7 @@ const OverlayWrapper = ({
           </>
         )}
         {children}
-        {onContinue || onCancel ? (
+        {!hideButtons && (onContinue || onCancel) ? (
           <div className={c.OverlayWrapper_ButtonWrapper}>
             {onCancel && (
               <>

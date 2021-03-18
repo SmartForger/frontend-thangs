@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState, useRef } from 'react'
-import classnames from 'classnames'
 import {
   ActionMenu,
   ModelThumbnail,
@@ -7,13 +6,12 @@ import {
   Spacer,
   SingleLineBodyText,
   Tag,
-  TextInput,
+  SearchInput,
   InfiniteTreeView,
 } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X-sm.svg'
-import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -204,48 +202,6 @@ const useStyles = createUseStyles(theme => {
         display: 'flex !important',
       },
     },
-    SearchBar_Wrapper: {
-      background: theme.colors.white[600],
-      borderRadius: '.5rem',
-      display: 'flex',
-      flexDirection: 'column',
-      position: 'relative',
-      width: '100%',
-
-      '& input': {
-        background: theme.colors.white[600],
-        border: 'none',
-        color: theme.colors.black[900],
-        fontSize: '1rem',
-        lineHeight: '1.5rem',
-        outline: 'none',
-        padding: 0,
-        width: '100%',
-
-        '&::placeholder': {
-          color: theme.colors.black[900],
-          fontSize: '.875rem',
-          fontWeight: 500,
-          lineHeight: '1rem',
-        },
-
-        '&:focus, &:active': {
-          background: theme.colors.white[600],
-          color: theme.colors.grey[300],
-          '&::placeholder': {
-            color: 'transparent',
-          },
-        },
-      },
-    },
-    SearchBar_Icon: {
-      flex: 'none',
-    },
-    SearchBar_Row: {
-      alignItems: 'center',
-      display: 'flex',
-      flexDirection: 'row',
-    },
     PartExplorerTarget_mobile: {
       display: 'flex',
 
@@ -369,23 +325,7 @@ export const PartExplorerMenu = ({
 
   return (
     <div className={c.PartExplorerMenu} ref={containerRef} onMouseLeave={handleMouseOut}>
-      <div className={classnames(c.SearchBar_Wrapper)}>
-        <Spacer size={'.5rem'} />
-        <div className={c.SearchBar_Row}>
-          <Spacer size={'1rem'} />
-          <SearchIcon className={c.SearchBar_Icon} />
-          <Spacer size={'.5rem'} />
-          <TextInput
-            name='search'
-            placeholder={'Filter models by name'}
-            onChange={e => {
-              handleInputChange(e.target.value)
-            }}
-            autoComplete='off'
-          />
-        </div>
-        <Spacer size={'.5rem'} />
-      </div>
+      <SearchInput onChange={handleInputChange} />
       <Spacer size={'.5rem'} className={c.AssemblyExplorer_Spacer} />
       {partsToDisplay.length > 0 ? (
         <AssemblyExplorer

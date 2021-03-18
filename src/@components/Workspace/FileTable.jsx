@@ -275,16 +275,6 @@ const sortParts = (node, sortBySize, sortOrder) => {
   }
 }
 
-const SortByArrow = ({ order }) => {
-  const c = useStyles()
-
-  return order === 'asc' ? (
-    <ArrowUpIcon className={c.FileTable_SortOrder} />
-  ) : (
-    <ArrowDownIcon className={c.FileTable_SortOrder} />
-  )
-}
-
 const FileTableHeader = ({ sortedBy, order, onSort = noop }) => {
   const c = useStyles()
   const colData = useMemo(
@@ -416,21 +406,21 @@ const FileTable = ({
     (node, { toggleNode }) => {
       const menuProps = node.isFolder
         ? {
-          id: 'Folder_Menu',
-          attributes: {
-            className: c.FileTable_FileRow,
-          },
-          collect: () => ({ folder: node }),
-        }
+            id: 'Folder_Menu',
+            attributes: {
+              className: c.FileTable_FileRow,
+            },
+            collect: () => ({ folder: node }),
+          }
         : node.level === 0
-          ? {
+        ? {
             id: 'File_Menu',
             attributes: {
               className: c.FileTable_FileRow,
             },
             collect: () => ({ model: node }),
           }
-          : {
+        : {
             id: 'Subpart_Menu',
             attributes: {
               className: c.FileTable_FileRow,
@@ -528,7 +518,7 @@ const FileTable = ({
       {allNodes.length > 0 || searchCase ? (
         <>
           <FileTableHeader sortedBy={sortedBy} onSort={handleSort} order={order} />
-          <Spacer size={'1rem'} />
+          <Spacer size={'.5rem'} />
           {allNodes.length > 0 ? (
             <InfiniteTreeView
               classes={{

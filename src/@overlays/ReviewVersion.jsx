@@ -43,11 +43,13 @@ const useStyles = createUseStyles(theme => {
 
 const ReviewVersion = ({ model = {}, part = {}, files }) => {
   const c = useStyles()
+  const { dispatch, uploadFiles = {} } = useStoreon('uploadFiles')
+  const { formData } = uploadFiles
   const [waiting, setWaiting] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
   const { setOverlay } = useOverlay()
-  const { dispatch } = useStoreon()
-  const modelId = (model && model.modelId) || (part && part.modelId)
+  // When coming from model page we have model and model.id
+  const modelId = (model && model.id) || (part && part.modelId)
   const initialState = {
     message: `Updated ${part && part.name}.`,
   }
@@ -58,6 +60,7 @@ const ReviewVersion = ({ model = {}, part = {}, files }) => {
 
   const formSubmit = useCallback(
     async (inputState, isValid, _errors) => {
+      debugger
       if (isValid) {
         setWaiting(true)
         dispatch(types.SUBMIT_NEW_VERSION, {
@@ -65,6 +68,7 @@ const ReviewVersion = ({ model = {}, part = {}, files }) => {
           part,
           message: inputState.message,
           onFinish: () => {
+            dispatch(types.RESET_UPLOAD_FILES)
             setOverlay({
               isOpen: true,
               template: 'versionPublished',
@@ -78,7 +82,9 @@ const ReviewVersion = ({ model = {}, part = {}, files }) => {
           },
           onError: () => {
             setWaiting(false)
-            setErrorMessage('Submitting new version failed')
+            setErrorMessage(
+              'Oh no! Something went wrong on our end. Sorry about that! Please try again later.'
+            )
           },
         })
       }
@@ -122,22 +128,26 @@ const ReviewVersion = ({ model = {}, part = {}, files }) => {
       isLoading={waiting}
       onCancel={handleBack}
       onContinue={onFormSubmit(formSubmit)}
+      cancelText={'Back'}
       continueText={'Submit'}
     >
+      {errorMessage && (
+        <>
+          <h4 className={c.ReviewVersion_ErrorText}>{errorMessage}</h4>
+          <Spacer size='1rem' />
+        </>
+      )}
       {Object.keys(files).map((fileKey, ind) => (
-        <Compare
-          key={`CompareViewer_${ind}`}
-          model1={model || part}
-          model2={files[fileKey]}
-        />
+        <>
+          <Compare
+            key={`CompareViewer_${ind}`}
+            model1={formData && formData[fileKey] && formData[fileKey].previousParts}
+            model2={files[fileKey]}
+          />
+          <Spacer size={'1rem'} />
+        </>
       ))}
       <form className={c.ReviewVersion_Form}>
-        {errorMessage && (
-          <>
-            <h4 className={c.ReviewVersion_ErrorText}>{errorMessage}</h4>
-            <Spacer size='1rem' />
-          </>
-        )}
         <Textarea
           className={c.ReviewVersion_TextArea}
           name='message'

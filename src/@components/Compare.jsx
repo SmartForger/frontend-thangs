@@ -21,16 +21,16 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const Compare = ({ model1: model1Data, model2: model2Data }) => {
+const Compare = ({ model1: model1Data = [], model2: model2Data }) => {
   const c = useStyles({})
 
   return (
     <div className={c.Compare}>
       <div className={c.Compare_Viewer}>
         <Tag className={c.Compare_Tag} color={'#999999'} lightText>
-          {model1Data.name}
+          {model1Data[0] && model1Data[0].name}
         </Tag>
-        <ModelThumbnail className={c.Model_ModelViewer} model={model1Data} />
+        <ModelThumbnail className={c.Model_ModelViewer} model={model1Data[0] || {}} />
       </div>
       <Spacer size={'1rem'} />
       <div className={c.Compare_Viewer}>

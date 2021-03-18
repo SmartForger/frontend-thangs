@@ -220,7 +220,7 @@ const FileMenu = ({ model = {} }) => {
           <Spacer size={'1.5rem'} />
           <ShareIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Share</SingleLineBodyText>
+          <SingleLineBodyText>Invite</SingleLineBodyText>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>

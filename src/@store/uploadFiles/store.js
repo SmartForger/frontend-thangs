@@ -468,24 +468,24 @@ export default store => {
 
   store.on(
     types.SUBMIT_NEW_VERSION,
-    async (state, { message, modelId, part, onFinish = noop }) => {
+    async (state, { message, modelId, onFinish = noop, onError = noop }) => {
       store.dispatch(types.SUBMITTING_MODELS)
-      const { data: uploadedFiles } = state.uploadFiles
+      const { data: uploadedFiles, formData } = state.uploadFiles
       const partsPayload = []
       Object.keys(uploadedFiles).forEach(file => {
-        partsPayload.push({
-          action: 'edit',
-          name: part.name,
-          originalFileName: part.originalFileName,
-          originalPartName: part.originalPartName,
-          filename: uploadedFiles[file].newFileName,
-          size: uploadedFiles[file].size,
-          previousPartIdentifier: part.partIdentifier,
+        formData[file].previousParts.forEach(part => {
+          partsPayload.push({
+            action: 'edit',
+            ...part,
+            filename: uploadedFiles[file].newFileName,
+            size: uploadedFiles[file].size,
+            previousPartIdentifier: part.partIdentifier,
+          })
         })
       })
 
       try {
-        await api({
+        const { error } = await api({
           method: 'PUT',
           endpoint: `models/${modelId}`,
           body: {
@@ -493,6 +493,12 @@ export default store => {
             parts: partsPayload,
           },
         })
+        if (error) {
+          onError()
+          track('Model Uploaded Error', { error })
+          store.dispatch(types.SUBMIT_MODELS_FAILED)
+          return
+        }
         store.dispatch(types.FETCH_THANGS, {})
         onFinish()
       } catch (e) {

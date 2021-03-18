@@ -1,30 +1,10 @@
-import React, { useMemo, useCallback, useRef, useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import React from 'react'
 import cn from 'classnames'
-import { format } from 'date-fns'
 import { ContextMenuTrigger } from 'react-contextmenu'
-import InfiniteTreeView from '@components/InfiniteTreeView'
-import {
-  Contributors,
-  MetadataSecondary,
-  Pill,
-  SingleLineBodyText,
-  Spacer,
-} from '@components'
-import { flattenTree } from '@utilities/tree'
-import { formatBytes } from '@utilities'
+import { MetadataSecondary, Spacer } from '@components'
 import { createUseStyles } from '@style'
-import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ArrowUpIcon } from '@svg/icon-arrow-up-sm.svg'
-import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
-import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
-import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
-import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
-import { ReactComponent as DropzoneIcon } from '@svg/dropzone.svg'
-import { ReactComponent as DropzoneMobileIcon } from '@svg/dropzone-mobile.svg'
-import Dropzone from 'react-dropzone'
-import { MODEL_FILE_EXTS } from '@constants/fileUpload'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -187,6 +167,15 @@ const SortByArrow = ({ order }) => {
   )
 }
 
+// const Table = ({
+//   columns = [],
+//   showContextMenus,
+// }) => {
+//   return (
+//     <TableHeader></TableHeader>
+//   )
+// }
+
 const TableHeader = ({
   columns = [],
   sortBy,
@@ -195,26 +184,28 @@ const TableHeader = ({
   onSort = noop,
 }) => {
   const c = useStyles()
-  console.log('sortBy1', sortBy)
   return (
-    <div className={c.Table_HeaderRow}>
-      {columns.map((col, ind) => {
-        const { key, className, title } = col
-        console.log('sortBy2', sortBy)
-        return (
-          <MetadataSecondary
-            key={`table_header_${key}${ind}`}
-            className={cn(className, c.Table_HeaderCell)}
-            onClick={() => {
-              onSort(key)
-            }}
-          >
-            {title}
-            {sortBy === key && <SortByArrow order={order} />}
-          </MetadataSecondary>
-        )
-      })}
-      {showContextMenus && <div className={cn(c.Table_Action, c.Table_HeaderCell)} />}
+    <div>
+      <Spacer size={'.625rem'} />
+      <div className={c.Table_HeaderRow}>
+        {columns.map((col, ind) => {
+          const { key, className, title } = col
+          return (
+            <MetadataSecondary
+              key={`table_header_${key}${ind}`}
+              className={cn(className, c.Table_HeaderCell)}
+              onClick={() => {
+                onSort(key)
+              }}
+            >
+              {title}
+              {sortBy === key && <SortByArrow order={order} />}
+            </MetadataSecondary>
+          )
+        })}
+        {showContextMenus && <div className={cn(c.Table_Action, c.Table_HeaderCell)} />}
+      </div>
+      <Spacer size={'.625rem'} />
     </div>
   )
 }
