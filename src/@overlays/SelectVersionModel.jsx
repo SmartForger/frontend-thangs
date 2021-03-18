@@ -50,11 +50,10 @@ const SelectVersionModel = ({ model, part, files, fileIndex }) => {
   }, [])
 
   const handleContinue = useCallback(() => {
-    debugger
     const previousParts = model.parts.filter(part =>
       selectedParts.includes(part.partIdentifier)
     )
-    console.log('previousParts', previousParts)
+
     dispatch(types.SET_MODEL_INFO, {
       id: currentFile.id,
       formData: {

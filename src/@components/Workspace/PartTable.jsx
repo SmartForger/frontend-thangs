@@ -144,21 +144,17 @@ const PartTable = ({
 
   const addSelectedParts = useCallback(
     id => {
-      console.log('add', id)
       const newSelectedParts = [...selectedParts]
       newSelectedParts.push(id)
       setSelectedParts(newSelectedParts)
-      console.log('add', newSelectedParts)
     },
     [selectedParts, setSelectedParts]
   )
 
   const removeSelectedFile = useCallback(
     id => {
-      console.log('remove', id)
       const newSelectedParts = [...selectedParts].filter(partId => partId !== id)
       setSelectedParts(newSelectedParts)
-      console.log('remove', newSelectedParts)
     },
     [selectedParts, setSelectedParts]
   )
@@ -192,12 +188,12 @@ const PartTable = ({
     ) => {
       const menuProps = showContextMenus
         ? {
-            id: 'Subpart_Menu',
-            attributes: {
-              className: c.PartTable_FileRow,
-            },
-            collect: () => ({ part: node }),
-          }
+          id: 'Subpart_Menu',
+          attributes: {
+            className: c.PartTable_FileRow,
+          },
+          collect: () => ({ part: node }),
+        }
         : null
 
       const handleClick = () => {
@@ -258,7 +254,6 @@ const PartTable = ({
     //Check if any parts original files match
     const newSelectedParts = []
     allNodes.forEach(node => {
-      console.log(node)
       if (node.originalFileName === file.fileName) {
         newSelectedParts.push(node.partIdentifier)
       }

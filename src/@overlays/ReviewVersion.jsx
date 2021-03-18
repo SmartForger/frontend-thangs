@@ -60,7 +60,6 @@ const ReviewVersion = ({ model = {}, part = {}, files }) => {
 
   const formSubmit = useCallback(
     async (inputState, isValid, _errors) => {
-      debugger
       if (isValid) {
         setWaiting(true)
         dispatch(types.SUBMIT_NEW_VERSION, {

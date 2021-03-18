@@ -16,8 +16,6 @@ import { flattenTree } from '@utilities/tree'
 import { formatBytes } from '@utilities'
 import { createUseStyles } from '@style'
 import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
-import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
-import { ReactComponent as ArrowUpIcon } from '@svg/icon-arrow-up-sm.svg'
 import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
@@ -406,21 +404,21 @@ const FileTable = ({
     (node, { toggleNode }) => {
       const menuProps = node.isFolder
         ? {
-            id: 'Folder_Menu',
-            attributes: {
-              className: c.FileTable_FileRow,
-            },
-            collect: () => ({ folder: node }),
-          }
+          id: 'Folder_Menu',
+          attributes: {
+            className: c.FileTable_FileRow,
+          },
+          collect: () => ({ folder: node }),
+        }
         : node.level === 0
-        ? {
+          ? {
             id: 'File_Menu',
             attributes: {
               className: c.FileTable_FileRow,
             },
             collect: () => ({ model: node }),
           }
-        : {
+          : {
             id: 'Subpart_Menu',
             attributes: {
               className: c.FileTable_FileRow,
