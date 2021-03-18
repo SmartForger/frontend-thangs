@@ -20,7 +20,7 @@ import ModelSearchResults from '@components/CardCollection/ModelSearchResults'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track } from '@utilities/analytics'
-import { useOverlay } from '@hooks'
+import { useOverlay, usePageScroll } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -246,7 +246,6 @@ const Page = () => {
   const FILTER_DEFAULT = 'all'
   const containerRef = useRef(null)
   const c = useStyles()
-  const [numOfPage, setNumOfPage] = useState(0)
   const [endOfModels, setEndOfModels] = useState(false)
   const [currentUser] = useLocalStorage('currentUser', null)
   const history = useHistory()
@@ -263,6 +262,15 @@ const Page = () => {
   )
   const { phyndexer, text, thangs } = searchResults
   const [searchScope, setSearchScope] = useState(FILTER_DEFAULT)
+  const [loadedCount, setLoadedCount] = useState(isLoaded ? -1 : 0)
+  const savedPages = usePageScroll('search_scroll', loadedCount > 0, searchScope)
+  const [numOfPage, setNumOfPage] = useState(savedPages)
+
+  useEffect(() => {
+    if (loadedCount < 1 && isLoaded) {
+      setLoadedCount(loadedCount + 1)
+    }
+  }, [loadedCount])
 
   useEffect(() => {
     if (filter) {
