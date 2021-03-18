@@ -383,6 +383,7 @@ const FileTable = ({
         const list = flattenTree(model.parts.length > 1 ? [model] : model.parts, 'parts')
         list.forEach(item => {
           item.contributors = [owner]
+          item.owner = owner
           item.created = created
           item.modelId = id
           item.parts = item.hasChildren ? model.parts : undefined

@@ -69,7 +69,7 @@ const FileMenu = ({ model = {} }) => {
   const handleNewVersion = useCallback(
     e => {
       e.preventDefault()
-      // track()
+      track('File Menu - New Verison')
       setOverlay({
         isOpen: true,
         template: 'multiUpload',
@@ -88,7 +88,7 @@ const FileMenu = ({ model = {} }) => {
   const handleNewPart = useCallback(
     e => {
       e.preventDefault()
-      // track()
+      track('File Menu - Add Part')
       setOverlay({
         isOpen: true,
         template: 'multiUpload',

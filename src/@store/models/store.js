@@ -121,6 +121,82 @@ export default store => {
     }
   )
 
+  store.on(types.ADD_PART, async (state, { part, onError = noop, onFinish = noop }) => {
+    const { modelId: id } = part
+    store.dispatch(types.CHANGE_MODEL_STATUS, {
+      status: STATUSES.SAVING,
+      atom: 'model',
+    })
+    const { error } = await api({
+      method: 'PUT',
+      endpoint: `models/${id}`,
+      body: {
+        message: `Add ${part.name}`,
+        parts: [
+          {
+            action: 'add',
+            partIdentifier: part.identifier,
+          },
+        ],
+      },
+    })
+
+    if (error) {
+      store.dispatch(types.CHANGE_MODEL_STATUS, {
+        status: STATUSES.FAILURE,
+        atom: 'model',
+      })
+      onError(error.message)
+    } else {
+      onFinish()
+      store.dispatch(types.CHANGE_MODEL_STATUS, {
+        status: STATUSES.SAVED,
+        atom: 'model',
+      })
+      store.dispatch(types.FETCH_THANGS, {})
+    }
+  })
+
+  store.on(
+    types.DELETE_PART,
+    async (state, { part, onError = noop, onFinish = noop }) => {
+      if (R.isNil(part) || R.isEmpty(part)) return
+      const { modelId: id } = part
+      store.dispatch(types.CHANGE_MODEL_STATUS, {
+        status: STATUSES.SAVING,
+        atom: 'model',
+      })
+      const { error } = await api({
+        method: 'PUT',
+        endpoint: `models/${id}`,
+        body: {
+          message: `Deleted ${part.name}`,
+          parts: [
+            {
+              action: 'delete',
+              partIdentifier: part.identifier,
+            },
+          ],
+        },
+      })
+
+      if (error) {
+        store.dispatch(types.CHANGE_MODEL_STATUS, {
+          status: STATUSES.FAILURE,
+          atom: 'model',
+        })
+        onError(error.message)
+      } else {
+        onFinish()
+        store.dispatch(types.CHANGE_MODEL_STATUS, {
+          status: STATUSES.SAVED,
+          atom: 'model',
+        })
+        store.dispatch(types.FETCH_THANGS, {})
+      }
+    }
+  )
+
   store.on(types.LIKE_MODEL, async (state, { model, onError = noop }) => {
     const id = model.id
     const currentUserId = authenticationService.getCurrentUserId()

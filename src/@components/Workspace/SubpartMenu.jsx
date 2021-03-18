@@ -56,16 +56,14 @@ const SubpartMenu = ({ part }) => {
   const { dispatch } = useStoreon()
   const { setOverlay } = useOverlay()
   const currentUserId = authenticationService.getCurrentUserId()
-  // Needs fixed, possibly add owner to part
   const hasDeletePermission = useMemo(() => {
-    return false
-    //   return (
-    //     model &&
-    //     model.owner &&
-    //     model.owner.id &&
-    //     model.owner.id.toString() === currentUserId.toString()
-    //   )
-  }, [])
+    return (
+      part &&
+      part.owner &&
+      part.owner.id &&
+      part.owner.id.toString() === currentUserId.toString()
+    )
+  }, [currentUserId, part])
 
   const handleNewVersion = useCallback(
     e => {

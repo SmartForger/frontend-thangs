@@ -54,6 +54,7 @@ const MultiUpload = ({
   folderId = '',
   model,
   part,
+  action,
 }) => {
   const { dispatch, license = {}, uploadFiles = {} } = useStoreon(
     'license',
@@ -305,36 +306,41 @@ const MultiUpload = ({
         return
       }
 
-      if (model || part) {
-        if (part || (model && model.isLeaf)) {
-          setOverlay({
-            isOpen: true,
-            template: 'reviewVersion',
-            data: {
-              animateIn: false,
-              windowed: true,
-              dialogue: true,
-              model: model || part,
-              part: part || model,
-              files: uploadFilesData,
-            },
-          })
-        } else {
-          setOverlay({
-            isOpen: true,
-            template: 'selectVersionModel',
-            data: {
-              animateIn: false,
-              windowed: true,
-              dialogue: true,
-              model,
-              part,
-              files: uploadFilesData,
-              fileIndex: 0,
-            },
-          })
+      if (action !== 'add') {
+        if (model || part) {
+          if (part || (model && model.isLeaf)) {
+            setOverlay({
+              isOpen: true,
+              template: 'reviewVersion',
+              data: {
+                animateIn: false,
+                windowed: true,
+                dialogue: true,
+                model: model || part,
+                part: part || model,
+                files: uploadFilesData,
+              },
+            })
+          } else {
+            setOverlay({
+              isOpen: true,
+              template: 'selectVersionModel',
+              data: {
+                animateIn: false,
+                windowed: true,
+                dialogue: true,
+                model,
+                part,
+                files: uploadFilesData,
+                fileIndex: 0,
+              },
+            })
+          }
+          return
         }
-        return
+      } else {
+        //Handle Add Part flow
+        //if not already an assembly make it a multipart
       }
 
       let i = 0
@@ -389,9 +395,10 @@ const MultiUpload = ({
       errorMessage,
       isLoading,
       isLoadingLicense,
+      action,
+      allTreeNodes,
       model,
       part,
-      allTreeNodes,
       setOverlay,
       uploadFilesData,
       activeView,
@@ -425,15 +432,17 @@ const MultiUpload = ({
 
   const overlayHeader = useMemo(() => {
     return !activeNode
-      ? previousVersionModelId || model || part
-        ? 'Upload New Version'
-        : 'Upload Files'
+      ? action === 'add'
+        ? 'Upload New Parts'
+        : previousVersionModelId || model || part
+          ? 'Upload New Version'
+          : 'Upload Files'
       : activeNode.isAssembly && activeNode.parentId
         ? 'Sub Assembly'
         : activeNode.isAssembly
           ? 'New Assembly'
           : partFormTitle
-  }, [activeNode, model, part, partFormTitle, previousVersionModelId])
+  }, [action, activeNode, model, part, partFormTitle, previousVersionModelId])
 
   const fileLength = useMemo(
     () =>
@@ -461,7 +470,10 @@ const MultiUpload = ({
           errorMessage={errorMessage}
           isAssembly={isAssembly}
           multiple={
-            previousVersionModelId || part || (model && model.isLeaf) ? false : true
+            action !== 'add' &&
+            (previousVersionModelId || part || (model && model.isLeaf))
+              ? false
+              : true
           }
           onDrop={onDrop}
           onRemoveNode={removeFile}
