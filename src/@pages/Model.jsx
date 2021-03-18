@@ -499,6 +499,9 @@ const StatsAndActions = ({
   openSignupOverlay = noop,
   pageTitle,
 }) => {
+  const isARSupported =
+    modelData.parts[0].filename.includes('stl') ||
+    modelData.parts[0].filename.includes('obj')
   return (
     <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
       <div>
@@ -512,11 +515,13 @@ const StatsAndActions = ({
           <ShareActionMenu iconOnly={true} title={pageTitle} model={modelData} />
         </div>
         <Spacer size='1rem' />
-        <DownloadARLink
-          model={modelData}
-          isAuthedUser={isAuthedUser}
-          openSignupOverlay={openSignupOverlay}
-        />
+        {isARSupported && (
+          <DownloadARLink
+            model={modelData}
+            isAuthedUser={isAuthedUser}
+            openSignupOverlay={openSignupOverlay}
+          />
+        )}
         {modelData.license ? (
           <>
             <Spacer size='1rem' />
