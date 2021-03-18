@@ -322,7 +322,7 @@ const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
     format =>
       dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
         id: model.id,
-        targetFormat: format,
+        format,
         onFinish: downloadUrl => {
           window.location.assign(downloadUrl)
           track('Download AR Model', { format, modelId: model.id })

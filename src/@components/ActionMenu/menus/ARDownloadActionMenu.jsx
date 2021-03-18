@@ -73,6 +73,7 @@ const ARDownloadActionMenu = ({ onChange = noop }) => {
       actionBarTitle: 'Download AR Model',
       options,
       tabletLayout: false,
+      alignItems: 'center',
     }
   }, [onChange, options])
 

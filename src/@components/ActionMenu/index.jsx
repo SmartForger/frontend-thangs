@@ -98,7 +98,7 @@ const useStyles = createUseStyles(theme => {
       width: '100%',
 
       [md]: {
-        justifyContent: 'left',
+        justifyContent: ({ alignItems }) => alignItems || 'left',
       },
     },
     DefaultMenu_TabletRow: {
@@ -141,8 +141,14 @@ const wrapIfComponent = ({ Component, children, props }) => {
   }
 }
 
-const DefaultMenu = ({ onChange = noop, options = [], tabletLayout, isMobileOnly }) => {
-  const c = useStyles({ tabletLayout })
+const DefaultMenu = ({
+  onChange = noop,
+  options = [],
+  tabletLayout,
+  isMobileOnly,
+  alignItems = 'left',
+}) => {
+  const c = useStyles({ tabletLayout, alignItems })
 
   return (
     <div
