@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import classnames from 'classnames'
 import * as R from 'ramda'
@@ -240,11 +240,14 @@ const ThangsSearchResult = ({
     </div>
   )
 }
-
+const finiteScrollCount = 8
+const isBottom = el => el.getBoundingClientRect().bottom <= window.innerHeight
 const Page = () => {
   const FILTER_DEFAULT = 'all'
-
+  const containerRef = useRef(null)
   const c = useStyles()
+  const [numOfPage, setNumOfPage] = useState(0)
+  const [endOfModels, setEndOfModels] = useState(false)
   const [currentUser] = useLocalStorage('currentUser', null)
   const history = useHistory()
   const filter = useQuery('filter')
@@ -261,11 +264,15 @@ const Page = () => {
   const { phyndexer, text, thangs } = searchResults
   const [searchScope, setSearchScope] = useState(FILTER_DEFAULT)
 
-  useMemo(() => {
+  useEffect(() => {
     if (filter) {
       setSearchScope(filter)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const handleOnFinish = useCallback(data => {
+    if (!data.length) setEndOfModels(true)
   }, [])
 
   useEffect(() => {
@@ -286,6 +293,29 @@ const Page = () => {
         searchTerm: decodeURIComponent(searchQuery),
         scope: searchScope,
       })
+
+      const trackScrolling = () => {
+        const wrappedElement = containerRef.current
+        if (
+          isBottom(wrappedElement) &&
+          !isLoading &&
+          !endOfModels &&
+          numOfPage < finiteScrollCount
+        ) {
+          dispatch(types.GET_TEXT_SEARCH_RESULTS, {
+            searchTerm: decodeURIComponent(searchQuery),
+            scope: searchScope,
+            onFinish: handleOnFinish,
+          })
+          setNumOfPage(numOfPage + 1)
+        }
+      }
+
+      document.addEventListener('scroll', trackScrolling)
+      trackScrolling()
+      return () => {
+        document.removeEventListener('scroll', trackScrolling)
+      }
     }
     if (modelId || phynId) {
       dispatch(types.GET_RELATED_MODELS, {
@@ -354,7 +384,7 @@ const Page = () => {
   }, [])
 
   return (
-    <div className={c.SearchResults_Page}>
+    <div className={c.SearchResults_Page} ref={containerRef}>
       <div className={c.SearchResults_MainContent}>
         {searchQuery && (
           <div className={c.SearchResults_Header}>

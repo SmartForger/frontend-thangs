@@ -12,6 +12,8 @@ const ATOMS = {
   UPLOAD_DATA: 'uploadData',
 }
 
+const SEARCH_MODELS_SIZE = 200
+
 const getStatus = intervalRequest(
   ({ modelId }) => async (resolve, reject, cancelToken) => {
     const { data, error } = await api({
@@ -84,7 +86,7 @@ export default store => {
 
   store.on(
     types.GET_TEXT_SEARCH_RESULTS,
-    async (state, { searchTerm, scope, onFinish = noop, onError = noop }) => {
+    async (state, { searchTerm, scope, pageToLoad, onFinish = noop, onError = noop }) => {
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.TEXT,
         status: STATUSES.LOADING,
@@ -98,7 +100,12 @@ export default store => {
       const { data = [], error } = await api({
         method: 'GET',
         endpoint: 'models/search-by-text',
-        params: { searchTerm, scope: scope && scope !== 'all' ? scope : '', size: 200 },
+        params: {
+          searchTerm,
+          scope: scope && scope !== 'all' ? scope : '',
+          page: pageToLoad || 0,
+          pageSize: SEARCH_MODELS_SIZE,
+        },
       })
 
       track('Text Search Started', {
@@ -126,7 +133,7 @@ export default store => {
           numOfMatches: data.length,
         })
 
-        onFinish(error)
+        onFinish(data)
       }
     }
   )
