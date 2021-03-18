@@ -134,7 +134,7 @@ const AssemblyInfo = ({
   activeNode,
   errorMessage: _err,
   filesData,
-  formData,
+  formData = INITIAL_STATE,
   onContinue,
   setErrorMessage,
   treeData,
@@ -229,7 +229,7 @@ const AssemblyInfo = ({
   }, [activeNode, treeData])
 
   useEffect(() => {
-    setInputState(formData.folderId ? formData : INITIAL_STATE)
+    setInputState(formData)
     // eslint-disable-next-line
   }, [activeNode])
 
