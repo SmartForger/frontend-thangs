@@ -12,7 +12,7 @@ const ATOMS = {
   UPLOAD_DATA: 'uploadData',
 }
 
-const SEARCH_MODELS_SIZE = 200
+const SEARCH_RESULT_SIZE = 50
 
 const getStatus = intervalRequest(
   ({ modelId }) => async (resolve, reject, cancelToken) => {
@@ -38,15 +38,18 @@ const getInitAtom = () => ({
   [ATOMS.TEXT]: {
     ...getStatusState(STATUSES.INIT),
     data: [],
+    pageToLoad: 0,
   },
   [ATOMS.THANGS]: {
     ...getStatusState(STATUSES.INIT),
     data: [],
+    pageToLoad: 0,
   },
   [ATOMS.PHYNDEXER]: {
     ...getStatusState(STATUSES.INIT),
     isPollingError: false,
     data: [],
+    pageToLoad: 0,
   },
   [ATOMS.UPLOAD_DATA]: {
     ...getStatusState(STATUSES.INIT),
@@ -60,12 +63,13 @@ export default store => {
     searchResults: getInitAtom(),
   }))
 
-  store.on(types.CHANGE_SEARCH_RESULTS_STATUS, (state, { atom, status, data }) => ({
+  store.on(types.CHANGE_SEARCH_RESULTS_STATUS, (state, { atom, status, isInitial }) => ({
     searchResults: {
       ...state.searchResults,
       [atom]: {
+        ...state.searchResults[atom],
         ...getStatusState(status),
-        ...(data && { data }),
+        ...(isInitial && { data: [], pageToLoad: 1 }),
       },
     },
   }))
@@ -84,56 +88,92 @@ export default store => {
     searchResults: getInitAtom(),
   }))
 
+  store.on(types.LOADED_SEARCH_RESULTS, (state, { atom, data, isInitial }) => ({
+    searchResults: {
+      ...state.searchResults,
+      ...getStatusState(STATUSES.LOADED),
+      [atom]: {
+        ...state.searchResults[atom],
+        data: isInitial ? data : [...state.searchResults[atom].data, ...data],
+        pageToLoad: isInitial
+          ? 1
+          : state.searchResults[atom].pageToLoad +
+            Math.floor(data.length / SEARCH_RESULT_SIZE),
+      },
+    },
+  }))
+
   store.on(
-    types.GET_TEXT_SEARCH_RESULTS,
-    async (state, { searchTerm, scope, pageToLoad, onFinish = noop, onError = noop }) => {
-      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-        atom: ATOMS.TEXT,
-        status: STATUSES.LOADING,
-        data:
-          state &&
-          state.searchResults &&
-          state.searchResults[ATOMS.TEXT] &&
-          state.searchResults[ATOMS.TEXT].data,
-      })
-
-      const { data = [], error } = await api({
-        method: 'GET',
-        endpoint: 'models/search-by-text',
-        params: {
-          searchTerm,
-          scope: scope && scope !== 'all' ? scope : '',
-          page: pageToLoad || 0,
-          pageSize: SEARCH_MODELS_SIZE,
-        },
-      })
-
-      track('Text Search Started', {
+    types.FETCH_TEXT_SEARCH_RESULTS,
+    async (
+      state,
+      {
+        isInitial = false,
+        onError = noop,
+        onFinish = noop,
+        pageCount = 1,
+        scope,
         searchTerm,
-        searchScope: scope,
-      })
-
-      if (error) {
+      }
+    ) => {
+      if (!state.searchResults[ATOMS.TEXT].isLoading) {
         store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
           atom: ATOMS.TEXT,
-          status: STATUSES.FAILURE,
-          data: error,
+          status: STATUSES.LOADING,
+          data:
+            state &&
+            state.searchResults &&
+            state.searchResults[ATOMS.TEXT] &&
+            state.searchResults[ATOMS.TEXT].data,
+          isInitial,
         })
-        onError(error)
-      } else {
-        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
-          atom: ATOMS.TEXT,
-          status: STATUSES.LOADED,
-          data,
+        const { data = [], error } = await api({
+          method: 'GET',
+          endpoint: 'models/search-by-text',
+          params: {
+            searchTerm,
+            scope: scope && scope !== 'all' ? scope : '',
+            page: isInitial ? 0 : state.searchResults[ATOMS.TEXT].pageToLoad,
+            pageSize: isInitial && pageCount === 1 ? 200 : SEARCH_RESULT_SIZE * pageCount,
+          },
         })
 
-        track(`Text search - ${data.length > 0 ? 'Results' : 'No Results'}`, {
+        track('Text Search Started', {
           searchTerm,
           searchScope: scope,
-          numOfMatches: data.length,
         })
 
-        onFinish(data)
+        if (error) {
+          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+            atom: ATOMS.TEXT,
+            status: STATUSES.FAILURE,
+            data: error,
+          })
+          onError(error)
+        } else {
+          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+            atom: ATOMS.TEXT,
+            status: STATUSES.LOADED,
+            data:
+              state &&
+              state.searchResults &&
+              state.searchResults[ATOMS.TEXT] &&
+              state.searchResults[ATOMS.TEXT].data,
+          })
+          store.dispatch(types.LOADED_SEARCH_RESULTS, {
+            atom: ATOMS.TEXT,
+            data,
+            isInitial,
+          })
+
+          track(`Text search - ${data.length > 0 ? 'Results' : 'No Results'}`, {
+            searchTerm,
+            searchScope: scope,
+            numOfMatches: data.length,
+          })
+
+          onFinish({ data, endOfData: !data.length || data.length < SEARCH_RESULT_SIZE })
+        }
       }
     }
   )

@@ -83,7 +83,7 @@ export const CHANGE_NOTIFICATION_STATUS = 'change-notification-status'
 /* Search Result Store Events */
 export const RESET_SEARCH_RESULTS = 'reset-search-results'
 export const GET_MODEL_SEARCH_RESULTS = 'get-model-search-results'
-export const GET_TEXT_SEARCH_RESULTS = 'get-text-search-results'
+export const FETCH_TEXT_SEARCH_RESULTS = 'get-text-search-results'
 export const GET_THANGS_TEXT_SEARCH_RESULTS = 'get-thangs-text-search-results'
 export const GET_PHYNDEXER_TEXT_SEARCH_RESULTS = 'get-phyndexer-text-search-results'
 export const GET_RELATED_MODELS_VIA_THANGS = 'get-related-models-via-thangs'
@@ -91,6 +91,7 @@ export const GET_RELATED_MODELS_VIA_PHYNDEXER = 'get-related-models-via-phyndexe
 export const GET_RELATED_MODELS = 'get-related-models'
 export const CHANGE_SEARCH_RESULTS_STATUS = 'change-search-results-status'
 export const ERROR_POLLING_PHYNDEXER = 'error-polling-phyndexer'
+export const LOADED_SEARCH_RESULTS = 'loaded-search-results'
 /* Search Subscription Events */
 export const SAVE_SUBSCRIPTION = 'save-subscription'
 export const FETCH_SUBSCRIPTIONS = 'get-subscriptions'

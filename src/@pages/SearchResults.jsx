@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import classnames from 'classnames'
 import * as R from 'ramda'
@@ -11,8 +11,9 @@ import {
   Spacer,
   TextSearchResults,
   SearchSourceFilterActionMenu,
+  Pill,
 } from '@components'
-import { useLocalStorage, useQuery } from '@hooks'
+import { useLocalStorage, useQuery, useInfiniteScroll } from '@hooks'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 import { ReactComponent as FromThangsLogo } from '@svg/fromThangs.svg'
 import { ReactComponent as GlobeIcon } from '@svg/icon-globe.svg'
@@ -240,11 +241,11 @@ const ThangsSearchResult = ({
     </div>
   )
 }
-const finiteScrollCount = 8
-const isBottom = el => el.getBoundingClientRect().bottom <= window.innerHeight
+
+const maxScrollCount = 10
+
 const Page = () => {
   const FILTER_DEFAULT = 'all'
-  const containerRef = useRef(null)
   const c = useStyles()
   const [endOfModels, setEndOfModels] = useState(false)
   const [currentUser] = useLocalStorage('currentUser', null)
@@ -262,15 +263,25 @@ const Page = () => {
   )
   const { phyndexer, text, thangs } = searchResults
   const [searchScope, setSearchScope] = useState(FILTER_DEFAULT)
-  const [loadedCount, setLoadedCount] = useState(isLoaded ? -1 : 0)
-  const savedPages = usePageScroll('search_scroll', loadedCount > 0, searchScope)
-  const [numOfPage, setNumOfPage] = useState(savedPages)
+  const [loadedCount, setLoadedCount] = useState(text.isLoaded ? -1 : 0)
+  const savedPages = usePageScroll(
+    'search_scroll',
+    loadedCount > 0,
+    searchScope,
+    searchQuery
+  )
+  const thangsModels = R.path(['data'], thangs) || []
+  const phyndexerModels = R.path(['data'], phyndexer) || []
+  const textModels = R.path(['data'], text) || []
+  const resultCount = phyndexerModels.length + thangsModels.length + textModels.length
+  const isLoading = thangs.isLoading || phyndexer.isLoading || text.isLoading
+  const isScrollPaused = useMemo(() => isLoading || endOfModels, [endOfModels, isLoading])
 
   useEffect(() => {
-    if (loadedCount < 1 && isLoaded) {
+    if (loadedCount < 1 && text.isLoaded) {
       setLoadedCount(loadedCount + 1)
     }
-  }, [loadedCount])
+  }, [loadedCount, text.isLoaded])
 
   useEffect(() => {
     if (filter) {
@@ -279,8 +290,8 @@ const Page = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleOnFinish = useCallback(data => {
-    if (!data.length) setEndOfModels(true)
+  const handleFinish = useCallback(data => {
+    if (data.endOfData) setEndOfModels(true)
   }, [])
 
   useEffect(() => {
@@ -295,35 +306,16 @@ const Page = () => {
   }, [])
 
   useEffect(() => {
+    resetScroll()
     if (!modelId && !phynId) {
       history.push(`?filter=${searchScope}`)
-      dispatch(types.GET_TEXT_SEARCH_RESULTS, {
+      dispatch(types.FETCH_TEXT_SEARCH_RESULTS, {
         searchTerm: decodeURIComponent(searchQuery),
         scope: searchScope,
+        pageCount: savedPages || 1,
+        isInitial: true,
+        onFinish: handleFinish,
       })
-
-      const trackScrolling = () => {
-        const wrappedElement = containerRef.current
-        if (
-          isBottom(wrappedElement) &&
-          !isLoading &&
-          !endOfModels &&
-          numOfPage < finiteScrollCount
-        ) {
-          dispatch(types.GET_TEXT_SEARCH_RESULTS, {
-            searchTerm: decodeURIComponent(searchQuery),
-            scope: searchScope,
-            onFinish: handleOnFinish,
-          })
-          setNumOfPage(numOfPage + 1)
-        }
-      }
-
-      document.addEventListener('scroll', trackScrolling)
-      trackScrolling()
-      return () => {
-        document.removeEventListener('scroll', trackScrolling)
-      }
     }
     if (modelId || phynId) {
       dispatch(types.GET_RELATED_MODELS, {
@@ -335,6 +327,31 @@ const Page = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, modelId, searchScope])
+
+  const onScroll = useCallback(() => {
+    dispatch(types.FETCH_TEXT_SEARCH_RESULTS, {
+      searchTerm: decodeURIComponent(searchQuery),
+      scope: searchScope,
+      onFinish: handleFinish,
+    })
+    track('Infinite Load - Search', { searchTerm: searchQuery, searchScope })
+  }, [dispatch, handleFinish, searchQuery, searchScope])
+
+  const handleLoadMore = useCallback(() => {
+    dispatch(types.FETCH_TEXT_SEARCH_RESULTS, {
+      searchTerm: decodeURIComponent(searchQuery),
+      scope: searchScope,
+      onFinish: handleFinish,
+    })
+    track('More Thangs - Search', { searchTerm: searchQuery, searchScope })
+  }, [dispatch, handleFinish, searchQuery, searchScope])
+
+  const { resetScroll, isMaxScrollReached } = useInfiniteScroll({
+    initialCount: savedPages,
+    isPaused: isScrollPaused,
+    maxScrollCount,
+    onScroll,
+  })
 
   const handleReportModel = useCallback(
     ({ model }) => {
@@ -380,25 +397,20 @@ const Page = () => {
     track('SignUp Prompt Overlay', { source: 'Save Search' })
   }, [setOverlay])
 
-  const thangsModels = R.path(['data'], thangs) || []
-  const phyndexerModels = R.path(['data'], phyndexer) || []
-  const textModels = R.path(['data'], text) || []
-  const resultCount = phyndexerModels.length + thangsModels.length + textModels.length
-  const isLoading = thangs.isLoading || phyndexer.isLoading || text.isLoading
-
   const handleFilterChange = useCallback(value => {
     setSearchScope(value)
     track('Search Filter Change', { filter: value })
   }, [])
 
   return (
-    <div className={c.SearchResults_Page} ref={containerRef}>
+    <div className={c.SearchResults_Page}>
       <div className={c.SearchResults_MainContent}>
         {searchQuery && (
           <div className={c.SearchResults_Header}>
             <div className={c.SearchResults_HeaderTextWrapper}>
               <h1 className={c.SearchResults_HeaderText}>
-                {isLoading ? 'Loading' : resultCount} results for{' '}
+                {isLoading ? 'Loading' : resultCount}
+                {!isLoading && !endOfModels ? '+' : ''} results for{' '}
                 {decodeURIComponent(searchQuery)}
               </h1>
               <div className={c.SearchResult_ResultCountText}>
@@ -467,6 +479,12 @@ const Page = () => {
                   />
                 ) : null}
               </>
+            )}
+            {isMaxScrollReached && (
+              <div className={c.Landing_LoadMore}>
+                <Spacer size='2rem' />
+                <Pill onClick={handleLoadMore}>More Thangs</Pill>
+              </div>
             )}
           </>
         ) : (

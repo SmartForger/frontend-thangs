@@ -6,6 +6,7 @@ import classnames from 'classnames'
 import { createUseStyles } from '@style'
 import { numberWithCommas, truncateString, getExternalAvatar } from '@utilities'
 import { track } from '@utilities/analytics'
+import Skeleton from '@material-ui/lab/Skeleton'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -163,6 +164,42 @@ const useStyles = createUseStyles(theme => {
       '&:hover': {
         textDecoration: 'underline',
       },
+    },
+    TextSearchResult_Thumbnail_Skeleton: {
+      width: '13.375rem',
+      margin: 'auto',
+      borderRadius: '.5rem',
+      height: '100% !important',
+    },
+    TextSearchResult_Text_Skeleton: {
+      height: '1rem !important',
+      width: '20rem',
+      margin: 'auto',
+      borderRadius: '.5rem',
+      paddingBottom: '1rem',
+    },
+    TextSearchResult_Title_Skeleton: {
+      height: '5rem',
+      width: '20rem',
+      margin: 'auto',
+      borderRadius: '.5rem',
+      paddingBottom: '1rem',
+    },
+    TextSearchResult_Subtext_Skeleton: {
+      height: '5rem !important',
+      width: '20rem',
+      margin: 'auto',
+      borderRadius: '.5rem',
+      paddingBottom: '1rem',
+    },
+    TextSearchResult_Skeleton_Row: {
+      display: 'flex',
+      flexDirection: 'row',
+      height: '13.375rem',
+    },
+    TextSearchResult_Skeleton_Column: {
+      display: 'flex',
+      flexDirection: 'column',
     },
   }
 })
@@ -326,6 +363,8 @@ const TextSearchResults = ({
   searchTerm,
   totalModelCount,
 }) => {
+  const c = useStyles()
+  let results = []
   if (isError) {
     return (
       <NoResults>Error! We were not able to load results. Please try again.</NoResults>
@@ -346,7 +385,7 @@ const TextSearchResults = ({
       </NoResults>
     )
   }
-  return items.map((item, ind) => (
+  results = items.map((item, ind) => (
     <TextSearchResult
       key={`textResult_${ind}`}
       model={item}
@@ -356,6 +395,50 @@ const TextSearchResults = ({
       searchIndex={ind}
     />
   ))
+  if (isLoading) {
+    results.push(
+      ...[...Array(10).keys()].map(key => {
+        return (
+          <>
+            <div
+              className={c.TextSearchResult_Skeleton_Row}
+              key={`skeletonSearchCard-${key}`}
+            >
+              <div>
+                <Skeleton
+                  variant='rect'
+                  className={c.TextSearchResult_Thumbnail_Skeleton}
+                />
+              </div>
+              <Spacer size={'1.5rem'} />
+              <div className={c.TextSearchResult_Skeleton_Column}>
+                <div>
+                  <Skeleton variant='rect' className={c.TextSearchResult_Text_Skeleton} />
+                </div>
+                <Spacer size={'.5rem'} />
+                <div>
+                  <Skeleton
+                    variant='rect'
+                    className={c.TextSearchResult_Title_Skeleton}
+                  />
+                </div>
+                <Spacer size={'.5rem'} />
+                <div>
+                  <Skeleton
+                    variant='rect'
+                    className={c.TextSearchResult_Subtext_Skeleton}
+                  />
+                </div>
+              </div>
+            </div>
+            <Spacer size={'1.5rem'} />
+          </>
+        )
+      })
+    )
+  }
+
+  return results
 }
 
 export default TextSearchResults

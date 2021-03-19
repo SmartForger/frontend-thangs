@@ -10,7 +10,7 @@ export default store => {
     modelPreviews: {
       ...getStatusState(STATUSES.INIT),
       data: [],
-      pageToLoad: 1,
+      pageToLoad: 0,
     },
   }))
 
@@ -37,10 +37,9 @@ export default store => {
     types.FETCH_MODEL_PREVIEW,
     async (
       state,
-      { sortBy = 'likes', isInitial = false, pageCount = 1, onFinish = noop }
+      { isInitial = false, onFinish = noop, pageCount = 1, sortBy = 'likes' }
     ) => {
       if (!state.modelPreviews.isLoading) {
-        state.modelPreviews.isLoading = true
         store.dispatch(types.LOADING_MODEL_PREVIEW, { isInitial })
         if (!isInitial)
           track('Load More', { page: state.modelPreviews.pageToLoad, sortBy })

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import {
@@ -10,14 +10,20 @@ import {
   TitleSecondary,
   Spacer,
 } from '@components'
-import { useCurrentUser, usePageMeta, usePerformanceMetrics, useQuery } from '@hooks'
+import {
+  useCurrentUser,
+  usePageMeta,
+  usePerformanceMetrics,
+  useQuery,
+  usePageScroll,
+  useInfiniteScroll,
+} from '@hooks'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 import * as sortTypes from '@constants/sortTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
-import usePageScroll from '@hooks/usePageScroll'
 
 const MQS_VALUES = [1440, 964, 736, 490]
 
@@ -117,7 +123,6 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const isBottom = el => el.scrollTop + el.clientHeight >= el.scrollHeight
 const title = sortBy => {
   switch (sortBy) {
     case sortTypes.likes:
@@ -133,19 +138,18 @@ const title = sortBy => {
   }
 }
 const noop = () => null
-const finiteScrollCount = 5
+const maxScrollCount = 10
 
 const Page = ({ sortBy, getTime = noop }) => {
   const c = useStyles({})
-  const containerRef = useRef(null)
   const history = useHistory()
-  const [endOfModels, setEndOfModels] = useState(false)
   const { dispatch, modelPreviews } = useStoreon('modelPreviews')
   const { isLoading, isLoaded } = modelPreviews
+  const [endOfModels, setEndOfModels] = useState(false)
   const [loadedCount, setLoadedCount] = useState(isLoaded ? -1 : 0)
+  // Handles returning user to previous spot
   const savedPages = usePageScroll('landing_scroll', loadedCount > 0, sortBy)
-  const [numOfPage, setNumOfPage] = useState(savedPages)
-
+  const isScrollPaused = useMemo(() => isLoading || endOfModels, [endOfModels, isLoading])
   useEffect(() => {
     if (loadedCount < 1 && isLoaded) {
       setLoadedCount(loadedCount + 1)
@@ -156,51 +160,48 @@ const Page = ({ sortBy, getTime = noop }) => {
     }
   }, [getTime, loadedCount, isLoaded])
 
-  const handleOnFinish = useCallback(data => {
-    if (!data.length) setEndOfModels(true)
-  }, [])
+  const handleFinish = useCallback(
+    data => {
+      if (!data.length) setEndOfModels(true)
+    },
+    [setEndOfModels]
+  )
 
   useEffect(() => {
+    resetScroll()
+    setEndOfModels(false)
     dispatch(types.FETCH_MODEL_PREVIEW, {
-      sortBy,
       isInitial: true,
-      pageCount: numOfPage,
-      onFinish: handleOnFinish,
+      onFinish: handleFinish,
+      pageCount: savedPages || 1,
+      sortBy,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, handleOnFinish, sortBy])
+  }, [dispatch, handleFinish, sortBy])
 
-  useEffect(() => {
-    const el = document.getElementById('root')
-    const trackScrolling = () => {
-      if (isBottom(el) && !isLoading && !endOfModels && numOfPage < finiteScrollCount) {
-        dispatch(types.FETCH_MODEL_PREVIEW, { sortBy, onFinish: handleOnFinish })
-        setNumOfPage(numOfPage + 1)
-      }
-    }
+  const onScroll = useCallback(() => {
+    dispatch(types.FETCH_MODEL_PREVIEW, { sortBy, onFinish: handleFinish })
+  }, [dispatch, handleFinish, sortBy])
 
-    el.addEventListener('scroll', trackScrolling)
-    trackScrolling()
-    return () => {
-      el.removeEventListener('scroll', trackScrolling)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, isLoading, sortBy])
+  const { resetScroll, isMaxScrollReached } = useInfiniteScroll({
+    initialCount: savedPages,
+    isPaused: isScrollPaused,
+    maxScrollCount,
+    onScroll,
+  })
 
   const handleSortBy = useCallback(
     type => {
       history.push(`/?sort=${type}`)
       track('Sorted Models', { sortBy: type })
-      setNumOfPage(1)
-      setEndOfModels(false)
     },
     [history]
   )
 
   const handleLoadMore = useCallback(() => {
-    dispatch(types.FETCH_MODEL_PREVIEW, { sortBy, onFinish: handleOnFinish })
+    dispatch(types.FETCH_MODEL_PREVIEW, { sortBy, onFinish: handleFinish })
     track('More Thangs - Landing')
-  }, [dispatch, handleOnFinish, sortBy])
+  }, [dispatch, handleFinish, sortBy])
 
   if (modelPreviews.isError) {
     return (
@@ -211,30 +212,28 @@ const Page = ({ sortBy, getTime = noop }) => {
   }
 
   return (
-    <div className={c.Landing_Column} ref={containerRef}>
-      <>
-        <div className={c.Landing_Title}>
-          <TitleSecondary>{title(sortBy)}</TitleSecondary>
-          <LandingSortActionMenu selectedValue={sortBy} onChange={handleSortBy} />
-        </div>
+    <div className={c.Landing_Column}>
+      <div className={c.Landing_Title}>
+        <TitleSecondary>{title(sortBy)}</TitleSecondary>
+        <LandingSortActionMenu selectedValue={sortBy} onChange={handleSortBy} />
+      </div>
 
-        <CardCollectionLanding
-          noResultsText='We have no models to display right now. Please try again later.'
-          isLoading={isLoading}
-        >
-          {Array.isArray(modelPreviews.data) &&
-            modelPreviews.data.map((model, index) => {
-              if (!model) return null
-              return <ModelCardLanding key={`model-${model.id}:${index}`} model={model} />
-            })}
-        </CardCollectionLanding>
-        {numOfPage >= finiteScrollCount && (
-          <div className={c.Landing_LoadMore}>
-            <Spacer size='2rem' />
-            <Pill onClick={handleLoadMore}>More Thangs</Pill>
-          </div>
-        )}
-      </>
+      <CardCollectionLanding
+        noResultsText='We have no models to display right now. Please try again later.'
+        isLoading={isLoading}
+      >
+        {Array.isArray(modelPreviews.data) &&
+          modelPreviews.data.map((model, index) => {
+            if (!model) return null
+            return <ModelCardLanding key={`model-${model.id}:${index}`} model={model} />
+          })}
+      </CardCollectionLanding>
+      {isMaxScrollReached && (
+        <div className={c.Landing_LoadMore}>
+          <Spacer size='2rem' />
+          <Pill onClick={handleLoadMore}>More Thangs</Pill>
+        </div>
+      )}
     </div>
   )
 }
