@@ -148,7 +148,7 @@ const Page = ({ sortBy, getTime = noop }) => {
   const [endOfModels, setEndOfModels] = useState(false)
   const [loadedCount, setLoadedCount] = useState(isLoaded ? -1 : 0)
   // Handles returning user to previous spot
-  const savedPages = usePageScroll('landing_scroll', loadedCount > 0, sortBy)
+  // const savedPages = usePageScroll('landing_scroll', loadedCount > 0, sortBy)
   const isScrollPaused = useMemo(() => isLoading || endOfModels, [endOfModels, isLoading])
   useEffect(() => {
     if (loadedCount < 1 && isLoaded) {
@@ -173,7 +173,7 @@ const Page = ({ sortBy, getTime = noop }) => {
     dispatch(types.FETCH_MODEL_PREVIEW, {
       isInitial: true,
       onFinish: handleFinish,
-      pageCount: savedPages || 1,
+      pageCount: 1, //savedPages || 1,
       sortBy,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -184,7 +184,7 @@ const Page = ({ sortBy, getTime = noop }) => {
   }, [dispatch, handleFinish, sortBy])
 
   const { resetScroll, isMaxScrollReached } = useInfiniteScroll({
-    initialCount: savedPages,
+    initialCount: 1, //savedPages,
     isPaused: isScrollPaused,
     maxScrollCount,
     onScroll,

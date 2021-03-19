@@ -264,12 +264,12 @@ const Page = () => {
   const { phyndexer, text, thangs } = searchResults
   const [searchScope, setSearchScope] = useState(FILTER_DEFAULT)
   const [loadedCount, setLoadedCount] = useState(text.isLoaded ? -1 : 0)
-  const savedPages = usePageScroll(
-    'search_scroll',
-    loadedCount > 0,
-    searchScope,
-    searchQuery
-  )
+  // const savedPages = usePageScroll(
+  //   'search_scroll',
+  //   loadedCount > 0,
+  //   searchScope,
+  //   searchQuery
+  // )
   const thangsModels = R.path(['data'], thangs) || []
   const phyndexerModels = R.path(['data'], phyndexer) || []
   const textModels = R.path(['data'], text) || []
@@ -312,7 +312,7 @@ const Page = () => {
       dispatch(types.FETCH_TEXT_SEARCH_RESULTS, {
         searchTerm: decodeURIComponent(searchQuery),
         scope: searchScope,
-        pageCount: savedPages || 1,
+        pageCount: 1, //savedPages || 1,
         isInitial: true,
         onFinish: handleFinish,
       })
@@ -347,7 +347,7 @@ const Page = () => {
   }, [dispatch, handleFinish, searchQuery, searchScope])
 
   const { resetScroll, isMaxScrollReached } = useInfiniteScroll({
-    initialCount: savedPages,
+    initialCount: 1, //savedPages,
     isPaused: isScrollPaused,
     maxScrollCount,
     onScroll,
