@@ -132,7 +132,7 @@ export default store => {
           endpoint: 'models/search-by-text',
           params: {
             searchTerm,
-            scope: scope && scope !== 'all' ? scope : '',
+            scope: scope || 'all',
             page: isInitial ? 0 : state.searchResults[ATOMS.TEXT].pageToLoad,
             pageSize: isInitial && pageCount === 1 ? 200 : SEARCH_RESULT_SIZE * pageCount,
           },
