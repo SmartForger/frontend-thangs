@@ -501,9 +501,14 @@ const StatsAndActions = ({
   openSignupOverlay = noop,
   pageTitle,
 }) => {
-  const isARSupported =
-    modelData.parts[0].filename.includes('stl') ||
-    modelData.parts[0].filename.includes('obj')
+  const filename =
+    modelData &&
+    modelData.parts &&
+    modelData.parts.length &&
+    modelData.parts[0] &&
+    modelData.parts[0].filename &&
+    modelData.parts[0].filename.toLowerCase()
+  const isARSupported = filename.includes('stl') || filename.includes('obj')
   return (
     <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
       <div>
