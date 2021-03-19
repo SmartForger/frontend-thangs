@@ -77,12 +77,12 @@ describe('My Thangs Page', () => {
     isElement(CLASSES.USER_NAVBAR, PROPS.INVISIBLE)
   })
 
-  it.only('Create public folder', () => {
+  it('Create public folder', () => {
     createFolder(createPublicFolderInput, 'public', PUBLIC_FOLDER.NAME)
     deleteSingleFile()
   })
 
-  it.only('Create private folder', () => {
+  it('Create private folder', () => {
     createFolder(createPrivateFolderInput, 'private', PRIVATE_FOLDER.NAME)
     deleteSingleFile()
   })
