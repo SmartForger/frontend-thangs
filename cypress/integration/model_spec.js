@@ -145,10 +145,10 @@ describe('The Model Page', () => {
     isTextInsideClass(CLASSES.MODEL_PAGE_STATS, TEXT.CURRENT_YEAR)
 
     //upload new verison
-    versionUpload()
+    /*versionUpload()
     goTo(`/${activeUser.NAME}`)
     clickOnElementByText(VERSION_MODEL.TITLE)
     cy.get('[class^=Revised_Label] a[href^="/model"]').click()
-    isTextInsideClass('[class^=ModelTitle_Text]', MODEL.TITLE)
+    isTextInsideClass('[class^=ModelTitle_Text]', MODEL.TITLE)*/
   })
 })
