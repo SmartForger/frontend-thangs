@@ -15,7 +15,7 @@ import {
   usePageMeta,
   usePerformanceMetrics,
   useQuery,
-  usePageScroll,
+  // usePageScroll,
   useInfiniteScroll,
 } from '@hooks'
 import { useStoreon } from 'storeon/react'

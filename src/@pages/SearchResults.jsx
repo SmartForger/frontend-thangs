@@ -21,7 +21,10 @@ import ModelSearchResults from '@components/CardCollection/ModelSearchResults'
 import { createUseStyles } from '@style'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track } from '@utilities/analytics'
-import { useOverlay, usePageScroll } from '@hooks'
+import {
+  useOverlay,
+  //usePageScroll
+} from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
