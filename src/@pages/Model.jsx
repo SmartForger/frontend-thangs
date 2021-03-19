@@ -319,7 +319,8 @@ const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
   const c = useStyles()
   const { dispatch } = useStoreon()
   const downloadModel = useCallback(
-    format =>
+    format => {
+      if (format !== 'android') return //TEMP - Remove once ios is available
       dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
         id: model.id,
         format,
@@ -327,7 +328,8 @@ const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
           window.location.assign(downloadUrl)
           track('Download AR Model', { format, modelId: model.id })
         },
-      }),
+      })
+    },
     [dispatch, model.id]
   )
 

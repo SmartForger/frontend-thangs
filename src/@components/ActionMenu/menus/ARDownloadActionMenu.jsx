@@ -56,12 +56,12 @@ const ARDownloadActionMenu = ({ onChange = noop }) => {
   const options = useMemo(
     () => [
       {
-        label: 'Download for iOS',
-        value: 'ios',
-      },
-      {
         label: 'Download for Android',
         value: 'android',
+      },
+      {
+        label: 'Download for iOS (Coming Soon)',
+        value: 'ios',
       },
     ],
     []
