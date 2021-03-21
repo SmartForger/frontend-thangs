@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 const noop = () => {}
 
 // Using the boundingRect so we can get the decimal value for the root height, and then adding a 1px buffer
-const isBottom = el => el.scrollTop + el.clientHeigh + 1 >= el.scrollHeight
+const isBottom = el => el.scrollTop + el.clientHeight + 1 >= el.scrollHeight
 
 const useInfiniteScroll = ({
   onScroll = noop,
