@@ -90,6 +90,7 @@ export const GET_RELATED_MODELS_VIA_THANGS = 'get-related-models-via-thangs'
 export const GET_RELATED_MODELS_VIA_PHYNDEXER = 'get-related-models-via-phyndexer'
 export const GET_RELATED_MODELS = 'get-related-models'
 export const CHANGE_SEARCH_RESULTS_STATUS = 'change-search-results-status'
+export const CHANGE_TEXT_RESULTS_STATUS = 'change-text-results-status'
 export const ERROR_POLLING_PHYNDEXER = 'error-polling-phyndexer'
 export const LOADED_SEARCH_RESULTS = 'loaded-search-results'
 /* Search Subscription Events */
