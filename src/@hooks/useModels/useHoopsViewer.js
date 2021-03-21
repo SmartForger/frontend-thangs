@@ -170,7 +170,10 @@ const useHoopsViewer = ({ modelFilename, onHighlight }) => {
       }
 
       doTransition(STATES.MODEL_LOADING)
-      const modelUri = `${REACT_APP_MODEL_BUCKET}${decodeURIComponent(filename)}`
+      const modelUri = `${REACT_APP_MODEL_BUCKET}${decodeURIComponent(filename).replace(
+        '#',
+        encodeURIComponent('#')
+      )}`
       const endpointUri = modelUri
         .replace(/\s/g, '_')
         .replace(path.extname(modelUri), '.scs')
