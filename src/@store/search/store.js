@@ -63,13 +63,24 @@ export default store => {
     searchResults: getInitAtom(),
   }))
 
-  store.on(types.CHANGE_SEARCH_RESULTS_STATUS, (state, { atom, status, isInitial }) => ({
+  store.on(types.CHANGE_TEXT_RESULTS_STATUS, (state, { atom, status, isInitial }) => ({
     searchResults: {
       ...state.searchResults,
       [atom]: {
         ...state.searchResults[atom],
         ...getStatusState(status),
         ...(isInitial && { data: [], pageToLoad: 1 }),
+      },
+    },
+  }))
+
+  store.on(types.CHANGE_SEARCH_RESULTS_STATUS, (state, { atom, status, data }) => ({
+    searchResults: {
+      ...state.searchResults,
+      [atom]: {
+        ...state.searchResults[atom],
+        ...getStatusState(status),
+        ...(data && { data }),
       },
     },
   }))
@@ -117,7 +128,7 @@ export default store => {
       }
     ) => {
       if (!state.searchResults[ATOMS.TEXT].isLoading) {
-        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+        store.dispatch(types.CHANGE_TEXT_RESULTS_STATUS, {
           atom: ATOMS.TEXT,
           status: STATUSES.LOADING,
           data:
@@ -144,14 +155,14 @@ export default store => {
         })
 
         if (error) {
-          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+          store.dispatch(types.CHANGE_TEXT_RESULTS_STATUS, {
             atom: ATOMS.TEXT,
             status: STATUSES.FAILURE,
             data: error,
           })
           onError(error)
         } else {
-          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+          store.dispatch(types.CHANGE_TEXT_RESULTS_STATUS, {
             atom: ATOMS.TEXT,
             status: STATUSES.LOADED,
             data:
@@ -271,7 +282,7 @@ export default store => {
     types.GET_RELATED_MODELS,
     async (
       _state,
-      { modelId, phyndexerId, onFinish = noop, onError = noop, geoRelated = true, scope }
+      { modelId, phyndexerId, onFinish = noop, onError = noop, geoSearch = true, scope }
     ) => {
       store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.THANGS,
@@ -282,7 +293,7 @@ export default store => {
         status: STATUSES.LOADING,
       })
 
-      if (geoRelated) {
+      if (geoSearch) {
         track('Model Search Started', {
           phyndexerId,
           modelId,
@@ -347,7 +358,7 @@ export default store => {
           })
         }
         const numOfMatches = matchCount.thangs + matchCount.phyndexer
-        if (geoRelated) {
+        if (geoSearch) {
           track(`Model Search - ${numOfMatches > 0 ? 'Results' : 'No Results'}`, {
             phyndexerId,
             modelId,

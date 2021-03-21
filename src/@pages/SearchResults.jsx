@@ -324,7 +324,7 @@ const Page = () => {
       dispatch(types.GET_RELATED_MODELS, {
         modelId: modelId,
         phyndexerId: phynId,
-        geoRelated: !related,
+        geoSearch: !related,
         scope: searchScope,
       })
     }
