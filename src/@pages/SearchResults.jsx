@@ -417,7 +417,7 @@ const Page = () => {
           <div className={c.SearchResults_Header}>
             <div className={c.SearchResults_HeaderTextWrapper}>
               <h1 className={c.SearchResults_HeaderText}>
-                {isLoading ? 'Loading' : resultCount}
+                {isLoading ? 'Loading' : resultCount}{' '}
                 {/* {!isLoading && !endOfModels ? '+' : ''}  */}
                 results for {decodeURIComponent(searchQuery)}
               </h1>
