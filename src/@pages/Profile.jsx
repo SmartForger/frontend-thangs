@@ -6,7 +6,6 @@ import * as R from 'ramda'
 import {
   Layout,
   Markdown,
-  MetadataPrimary,
   ProfileButton,
   ProfilePicture,
   ShareActionMenu,
@@ -265,7 +264,6 @@ const UserPage = ({
   likedUserModelsAtom,
 }) => {
   const c = useStyles({})
-  const [showProfileForm, setShowProfileForm] = useState(false)
   const description = getDescription(user)
 
   return (
