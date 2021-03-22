@@ -216,7 +216,10 @@ export default store => {
 
       apiForChain({
         method: 'GET',
-        endpoint: `models/upload-url?fileName=${file.name}`,
+        endpoint: `models/upload-url?fileName=${file.name.replace(
+          '#',
+          encodeURIComponent('#')
+        )}`,
       })
         .then(({ data }) => {
           uploadedUrlData = data

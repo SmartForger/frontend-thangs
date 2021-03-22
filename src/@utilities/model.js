@@ -7,7 +7,7 @@ const REACT_APP_MODEL_BUCKET = process.env.REACT_APP_MODEL_BUCKET
 
 export const buildThumbnailUrl = (model, useThumbnailer) => {
   if (model.fullThumbnailUrl) return model.fullThumbnailUrl
-  if (model.thumbnailUrl) return model.thumbnailUrl
+  if (model.thumbnailUrl) return model.thumbnailUrl.replace('#', encodeURIComponent('#'))
   let modelUri = useThumbnailer
     ? `${THUMBNAILS_HOST}${getThumbnailUrl(model)}`
     : `${REACT_APP_MODEL_BUCKET}${getThumbnailUrl(model)}`
