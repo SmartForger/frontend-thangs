@@ -130,6 +130,9 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'row',
       justifyContent: 'flex-end',
     },
+    Profile_Markdown: {
+      wordBreak: 'break-word',
+    },
   }
 })
 const noop = () => null
