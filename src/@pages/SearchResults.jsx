@@ -265,7 +265,7 @@ const Page = () => {
     'modelsStats'
   )
   const { phyndexer, text, thangs } = searchResults
-  const [searchScope, setSearchScope] = useState(FILTER_DEFAULT)
+  const [searchScope, setSearchScope] = useState(filter || FILTER_DEFAULT)
   const [loadedCount, setLoadedCount] = useState(text.isLoaded ? -1 : 0)
   // const savedPages = usePageScroll(
   //   'search_scroll',
@@ -278,7 +278,12 @@ const Page = () => {
   const textModels = R.path(['data'], text) || []
   const resultCount = phyndexerModels.length + thangsModels.length + textModels.length
   const isLoading = thangs.isLoading || phyndexer.isLoading || text.isLoading
-  const isScrollPaused = useMemo(() => isLoading || endOfModels || modelId || phynId, [endOfModels, isLoading, modelId, phynId])
+  const isScrollPaused = useMemo(() => isLoading || endOfModels || modelId || phynId, [
+    endOfModels,
+    isLoading,
+    modelId,
+    phynId,
+  ])
 
   useEffect(() => {
     if (loadedCount < 1 && text.isLoaded) {
