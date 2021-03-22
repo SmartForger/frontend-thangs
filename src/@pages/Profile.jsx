@@ -282,8 +282,7 @@ const UserPage = ({
           </div>
           <div>
             <Spacer size={'2rem'} />
-            <h1 className={c.Profile_Name}>{user.username}</h1>
-            {!showProfileForm && <MetadataPrimary>{user.username}</MetadataPrimary>}
+            <h1 className={c.Profile_Name}>{user.username && user.username.split('@')[0]}</h1>
           </div>
         </div>
         <div className={c.Profile_Details}>
