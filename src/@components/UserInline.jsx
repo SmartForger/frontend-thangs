@@ -45,7 +45,7 @@ const UserInline = ({ user = {}, className, size = '1.75rem', isSearchResult }) 
           [c.UserInline_SearchResult]: isSearchResult,
         })}
       >
-        {user.username}
+        {user.username && user.username.split('@')[0]}
       </span>
     </div>
   )
