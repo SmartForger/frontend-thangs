@@ -245,7 +245,6 @@ const ModelDetails = ({ isExternalModel, model = {}, onFindRelated = noop, scope
     modelTitle,
     modelDescription,
     modelFileName,
-    ownerEmail,
     ownerFirstName,
     ownerLastName,
     ownerAvatarUrl,
@@ -276,7 +275,7 @@ const ModelDetails = ({ isExternalModel, model = {}, onFindRelated = noop, scope
               </>
             )}
             <span className={c.TextSearchResult_ExternalUrl} title={model.attributionUrl}>
-              {ownerEmail ? ownerUsername || ownerEmail.split('@')[0] : model.attributionUrl}
+              {ownerUsername || model.attributionUrl}
             </span>
           </div>
           {isExternalModel && <ExternalLinkIcon />}
