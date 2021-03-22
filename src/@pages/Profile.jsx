@@ -280,7 +280,9 @@ const UserPage = ({
           </div>
           <div>
             <Spacer size={'2rem'} />
-            <h1 className={c.Profile_Name}>{user.username && user.username.split('@')[0]}</h1>
+            <h1 className={c.Profile_Name}>
+              {user.username && user.username.split('@')[0]}
+            </h1>
           </div>
         </div>
         <div className={c.Profile_Details}>
@@ -295,7 +297,6 @@ const UserPage = ({
                     className={c.Profile_ProfileButton}
                     user={user}
                     userId={userId}
-                    onEditClick={setShowProfileForm}
                   />
                   <Spacer size={'1rem'} />
                 </>
