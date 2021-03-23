@@ -1,6 +1,6 @@
 import React from 'react'
 import { ContextMenu } from 'react-contextmenu'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { AddMenu } from '@components'
 
 const useStyles = createUseStyles(() => {

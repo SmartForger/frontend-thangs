@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import classnames from 'classnames'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ActionMenu, Spacer, SingleLineBodyText, TextInput } from '@components'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ColorBucketIcon } from '@svg/icon-color-bucket.svg'

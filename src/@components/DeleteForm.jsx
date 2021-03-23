@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { Button, MultiLineBodyText, Spacer, NavLink } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import MobileDesktopTitle from './MobileDesktopTitle'

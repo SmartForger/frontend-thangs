@@ -1,6 +1,6 @@
 import React from 'react'
 import { ReactComponent as Checkmark } from '@svg/checkbox-check.svg'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import { SingleLineBodyText } from './Text/Body'
 

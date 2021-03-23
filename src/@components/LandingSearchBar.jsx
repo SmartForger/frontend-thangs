@@ -7,7 +7,7 @@ import classnames from 'classnames'
 
 import { Button, TextInput, Spacer } from '@components'
 import { useFileUpload, useOverlay, useTranslations } from '@hooks'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { track } from '@utilities/analytics'
 
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'

@@ -1,6 +1,6 @@
 import React from 'react'
 import { text, number, boolean } from '@storybook/addon-knobs'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import Input from './Input'
 
 const defaultText =

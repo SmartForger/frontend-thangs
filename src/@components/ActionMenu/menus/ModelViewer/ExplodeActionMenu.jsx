@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { ActionMenu, Slider, MetadataSecondary } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ExplodeIcon } from '@svg/icon-explode.svg'
 
 const useStyles = createUseStyles(theme => {

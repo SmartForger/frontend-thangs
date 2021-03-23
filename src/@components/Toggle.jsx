@@ -1,6 +1,6 @@
 import React from 'react'
 import { Spacer, SingleLineBodyText } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import ReactTooltip from 'react-tooltip'
 
 const useStyles = createUseStyles(theme => {

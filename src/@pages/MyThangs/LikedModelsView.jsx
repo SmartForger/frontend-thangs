@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import { CardCollection, ModelCards, Spinner, Spacer, TitleTertiary } from '@components'
 import * as types from '@constants/storeEventTypes'

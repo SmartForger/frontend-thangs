@@ -1,5 +1,5 @@
 import React from 'react'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { SigninFacebookButton, SigninGoogleButton } from '@overlays/Signin'
 
 export default {

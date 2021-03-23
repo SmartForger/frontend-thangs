@@ -10,7 +10,7 @@ import {
   TitleTertiary,
   Spacer,
 } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useForm } from '@hooks'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 

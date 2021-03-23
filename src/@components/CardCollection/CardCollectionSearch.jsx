@@ -2,7 +2,7 @@ import React from 'react'
 import { NoResults } from '@components'
 import Skeleton from '@material-ui/lab/Skeleton'
 import classnames from 'classnames'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { PREVIEW_MODELS_SIZE } from '@store/modelPreviews/store'
 
 const useStyles = createUseStyles(theme => {

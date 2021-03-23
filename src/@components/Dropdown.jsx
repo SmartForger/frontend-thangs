@@ -2,7 +2,7 @@ import React from 'react'
 import Select from 'react-select'
 import classnames from 'classnames'
 import { Spacer, MetadataSecondary } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down.svg'
 
 const useStyles = createUseStyles(theme => {

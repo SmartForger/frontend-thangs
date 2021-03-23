@@ -1,6 +1,6 @@
 import React from 'react'
 import { StoreContext } from 'storeon/react'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { createStoreon } from 'storeon'
 import CardCollectionRelated from './CardCollectionRelated'
 import ModelCardRelated from '@components/ModelCard/ModelCardRelated'

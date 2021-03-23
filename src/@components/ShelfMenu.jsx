@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 
 const useStyles = createUseStyles(theme => {
   return {

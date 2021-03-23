@@ -10,7 +10,7 @@ import {
   Pill,
 } from '@components'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
 

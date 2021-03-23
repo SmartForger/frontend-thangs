@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useHistory } from 'react-router-dom'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import { Carousel } from '@components'
 

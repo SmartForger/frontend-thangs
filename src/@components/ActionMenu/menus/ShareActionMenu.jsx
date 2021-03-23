@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import { ActionMenu, Button, Spacer } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ShareIcon } from '@svg/share-icon.svg'
 import { ReactComponent as ShareFacebook } from '@svg/share-facebook.svg'
 import { ReactComponent as ShareTwitter } from '@svg/share-twitter.svg'

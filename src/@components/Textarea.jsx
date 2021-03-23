@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import classnames from 'classnames'
 import { Spacer, MetadataSecondary } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 
 const useStyles = createUseStyles(theme => {
   return {

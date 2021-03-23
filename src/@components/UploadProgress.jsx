@@ -1,6 +1,6 @@
 import React from 'react'
 import { ProgressText, UploadFrame, Loader } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 
 const useStyles = createUseStyles(theme => {
   return {

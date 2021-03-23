@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Button, Spacer } from '@components'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import classnames from 'classnames'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useExternalClick, useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {

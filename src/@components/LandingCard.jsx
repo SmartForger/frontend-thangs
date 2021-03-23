@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { Spacer, TitleTertiary, MultiLineBodyText } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import loader from '@media/loader.gif'
 import classnames from 'classnames'
 

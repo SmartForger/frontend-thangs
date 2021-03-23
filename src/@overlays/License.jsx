@@ -9,7 +9,7 @@ import {
   TitleTertiary,
 } from '@components'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import { overlayview, track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'

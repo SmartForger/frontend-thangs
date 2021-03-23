@@ -7,7 +7,7 @@ import {
   MetadataSecondary,
   Tooltip,
 } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { formatBytes } from '@utilities'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as InfoIcon } from '@svg/icon-info.svg'

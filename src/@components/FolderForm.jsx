@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import * as R from 'ramda'
 import { Button, Input, Spacer, Toggle } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useForm } from '@hooks'
 
 const useStyles = createUseStyles(theme => {

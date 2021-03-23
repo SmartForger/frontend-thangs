@@ -9,7 +9,7 @@ import {
   TitlePrimary,
 } from '@components'
 import { usePageMeta, useTranslations } from '@hooks'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 
 import { ReactComponent as SearchAboutUsIcon } from '@svg/aboutUs-search.svg'

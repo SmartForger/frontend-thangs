@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import ToolbarDesktop from './ToolbarDesktop'
 import ToolbarMobile from './ToolbarMobile'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useIsMobile } from '@hooks'
 
 const useStyles = createUseStyles(theme => {

@@ -4,7 +4,7 @@ import * as EmailValidator from 'email-validator'
 import { useForm } from '@hooks'
 import { TextInput, Spinner, Button } from '@components'
 import { ReactComponent as ErrorIcon } from '@svg/error-triangle.svg'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { overlayview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {

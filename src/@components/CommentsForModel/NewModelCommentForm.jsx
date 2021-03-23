@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { useForm } from '@hooks'
 import { Button, TextInput } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'

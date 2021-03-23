@@ -22,7 +22,7 @@ import RecentFilesView from './RecentFilesView'
 import SavedSearchesView from './SavedSearchesView'
 import SearchView from './SearchView'
 import SharedFilesView from './SharedFilesView'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import * as types from '@constants/storeEventTypes'
 import { pageview, perfTrack } from '@utilities/analytics'
 

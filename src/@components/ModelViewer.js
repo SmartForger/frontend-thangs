@@ -12,7 +12,7 @@ import { HowTo, Viewer } from '@components'
 import { ReactComponent as ShadedIcon } from '@svg/icon-shaded.svg'
 import { ReactComponent as CompositeIcon } from '@svg/icon-composite.svg'
 import { ReactComponent as WireframeIcon } from '@svg/icon-wireframe.svg'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 
 const useStyles = createUseStyles(theme => {
   return {

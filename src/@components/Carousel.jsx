@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { LandingCard, Spacer } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import loader from '@media/loader.gif'
 

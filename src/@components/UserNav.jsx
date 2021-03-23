@@ -4,7 +4,7 @@ import * as R from 'ramda'
 
 import { Button, Spacer } from '@components'
 import { useOverlay, useTranslations } from '@hooks'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 
 import { ProfileDropdown, ProfileDropdownMenu } from './Header/ProfileDropdown'
 import Notifications from '@components/Notifications'

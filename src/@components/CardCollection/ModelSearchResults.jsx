@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { ModelSearchResult, Pill, Spacer } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { track } from '@utilities/analytics'
 import { ReactComponent as FromThangsLogo } from '@svg/fromThangs.svg'
 

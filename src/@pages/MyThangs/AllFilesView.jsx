@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 import { FileTable, FolderCard, Spacer, TitleTertiary } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import { pageview } from '@utilities/analytics'
 

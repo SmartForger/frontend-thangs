@@ -14,7 +14,7 @@ import {
   Spacer,
   TitleTertiary,
 } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import { authenticationService } from '@services'
 import { useCurrentUser, useExternalClick } from '@hooks'

@@ -10,7 +10,7 @@ import {
   TitleSecondary,
   TitleTertiary,
 } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import { useCurrentUser } from '@hooks'
 import * as types from '@constants/storeEventTypes'

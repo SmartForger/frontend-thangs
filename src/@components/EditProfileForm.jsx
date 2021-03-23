@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { Button, FormError, Input, Spacer, Textarea } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useForm } from '@hooks'
 
 const useStyles = createUseStyles(theme => {

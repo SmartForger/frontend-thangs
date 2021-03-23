@@ -1,6 +1,6 @@
 import React from 'react'
 import { Pill, DropdownMenu, DropdownItem, Spacer, LabelText } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 
 const useStyles = createUseStyles(theme => {

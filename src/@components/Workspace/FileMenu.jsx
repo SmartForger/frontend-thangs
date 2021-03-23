@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
 import { Divider, SingleLineBodyText, Spacer } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { MenuItem } from 'react-contextmenu'
 import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
 import { ReactComponent as DownloadIcon } from '@svg/icon-download.svg'

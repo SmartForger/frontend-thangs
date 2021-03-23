@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as FacebookIcon } from '@svg/social-facebook.svg'
 import { ReactComponent as InstagramIcon } from '@svg/social-instagram.svg'
 import { ReactComponent as TwitterIcon } from '@svg/social-twitter.svg'

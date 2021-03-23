@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Header, Footer, FeedbackTooltip } from '@components'
 import classnames from 'classnames'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import Banner from './Header/Banner'
 import { ReactComponent as ArrowUpIcon } from '@svg/icon-arrow-up.svg'
 import { useActionMenu, useOverlay } from '@hooks'

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 import { ActionMenu, Spacer } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import * as R from 'ramda'
 
 const useStyles = createUseStyles(theme => {

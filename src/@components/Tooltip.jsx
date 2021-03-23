@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tooltip as MuiTooltip } from '@material-ui/core'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 
 const useStyles = createUseStyles(theme => ({
   tooltip: {

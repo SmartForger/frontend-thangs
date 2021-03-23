@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import classnames from 'classnames'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useActionMenu, useExternalClick } from '@hooks'
 import { ActionMenuPortal } from './ActionMenuPortal'
 

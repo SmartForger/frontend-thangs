@@ -2,7 +2,7 @@
 
 import React, { useCallback } from 'react'
 import { DropdownMenu, DropdownItem, Spacer, LabelText } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ArrowRightIcon } from '@svg/icon-arrow-right.svg'
 import classnames from 'classnames'
 import { useActionMenu, useIsMobile } from '@hooks'

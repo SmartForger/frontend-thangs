@@ -9,7 +9,7 @@ import {
   StatsBar,
   TitleTertiary,
 } from '@components'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import { useStarred } from '@hooks'
 import { pageview } from '@utilities/analytics'

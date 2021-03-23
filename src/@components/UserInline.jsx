@@ -1,7 +1,7 @@
 import React from 'react'
 import { ProfilePicture } from '@components'
 import classnames from 'classnames'
-import { createUseStyles } from '@physna/voxel-ui'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 
 const useStyles = createUseStyles(theme => {
   return {
