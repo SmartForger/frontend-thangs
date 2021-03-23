@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import classnames from 'classnames'
 import { LabelText, Spacer } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 
 const useStyles = createUseStyles(theme => {
   return {

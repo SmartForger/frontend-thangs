@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Spinner, CardCollectionRelated, ModelCardRelated } from '@components'
 import classnames from 'classnames'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 import { track } from '@utilities/analytics'
 

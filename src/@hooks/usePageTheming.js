@@ -1,4 +1,4 @@
-import { NewTheme, NewDarkTheme } from '@style/themes'
+import { NewTheme, NewDarkTheme } from '@physna/voxel-ui'
 
 const usePageTheming = location => {
   const { pathname } = location

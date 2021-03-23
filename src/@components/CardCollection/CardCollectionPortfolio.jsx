@@ -1,5 +1,5 @@
 import React from 'react'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import CardCollectionBase from './CardCollectionBase'
 
 const useStyles = createUseStyles(_theme => {
@@ -22,7 +22,7 @@ const useStyles = createUseStyles(_theme => {
 
       '@media (min-width: 1260px)': {
         gridTemplateColumns: '221px 221px 221px 221px',
-      },  
+      },
     },
     ModelCard_Skeleton: {
       paddingBottom: 0,
@@ -37,7 +37,7 @@ const useStyles = createUseStyles(_theme => {
 
       '@media (min-width: 1260px)': {
         minHeight: '19.2rem',
-      },  
+      },
 
       margin: 'auto',
       width: '100%',
@@ -46,14 +46,10 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const CardCollectionPortfolio = (
-  props
-) => {
+const CardCollectionPortfolio = props => {
   const c = useStyles({})
 
-  return (
-    <CardCollectionBase c={c} {...props} />
-  )
+  return <CardCollectionBase c={c} {...props} />
 }
 
 export default CardCollectionPortfolio

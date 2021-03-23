@@ -1,7 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 import { Button } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 
 const useStyles = createUseStyles(theme => {
   const {

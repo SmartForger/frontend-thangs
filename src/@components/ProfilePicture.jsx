@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import Avatar from 'react-avatar'
 import classnames from 'classnames'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { ReactComponent as UserIcon } from '@svg/icon-user.svg'
 
 const useStyles = createUseStyles(theme => {

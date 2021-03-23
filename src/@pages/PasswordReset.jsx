@@ -5,7 +5,7 @@ import * as EmailValidator from 'email-validator'
 import { authenticationService } from '@services'
 import { useForm } from '@hooks'
 import { TextInput, Spinner, Button, Layout } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { track, pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {

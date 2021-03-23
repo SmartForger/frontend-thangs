@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { MenuItem } from 'react-contextmenu'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { useOverlay } from '@hooks'
 import { SingleLineBodyText, Spacer } from '@components'
 import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'

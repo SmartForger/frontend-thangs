@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import * as R from 'ramda'
 import classnames from 'classnames'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { DropdownMenu, DropdownItem } from '@components/DropdownMenu'
 import NotificationsButton from './NotificationsButton'
 import { useStoreon } from 'storeon/react'

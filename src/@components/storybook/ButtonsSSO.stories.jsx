@@ -1,5 +1,5 @@
 import React from 'react'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { SigninFacebookButton, SigninGoogleButton } from '@overlays/Signin'
 
 export default {
@@ -11,8 +11,8 @@ const useStyles = createUseStyles(_theme => {
     Container: {
       '& > *': {
         margin: '3rem',
-      }
-    }
+      },
+    },
   }
 })
 

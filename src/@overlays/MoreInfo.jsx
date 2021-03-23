@@ -15,7 +15,7 @@ import {
 import { useForm } from '@hooks'
 import { authenticationService } from '@services'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
 import { useOverlay } from '@hooks'

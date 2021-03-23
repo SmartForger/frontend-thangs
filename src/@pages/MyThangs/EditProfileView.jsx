@@ -10,7 +10,7 @@ import {
   TitleSecondary,
   TitleTertiary,
 } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import classnames from 'classnames'
 import { useCurrentUser } from '@hooks'
 import * as types from '@constants/storeEventTypes'
@@ -149,7 +149,7 @@ const EditProfile = ({ className }) => {
             </MetadataPrimary>
             <Spacer size={'1rem'} />
             <div className={c.EditProfile_ButtonsSection}>
-              <ChangeablePicture disabled={isLoading}/>
+              <ChangeablePicture disabled={isLoading} />
               <Pill secondary onClick={handleDeleteImage} disabled={isLoading}>
                 Delete Image
               </Pill>

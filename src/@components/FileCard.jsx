@@ -6,7 +6,7 @@ import {
   Spacer,
   MetadataSecondary,
 } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { ReactComponent as FileCardIcon } from '@svg/file-card.svg'
 import { ContextMenuTrigger } from 'react-contextmenu'
 

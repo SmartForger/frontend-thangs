@@ -5,7 +5,7 @@ import { ReactComponent as ColorIcon2 } from '@svg/icon-color-2.svg'
 import { ReactComponent as ShadedIcon } from '@svg/icon-shaded.svg'
 import { ReactComponent as CompositeIcon } from '@svg/icon-composite.svg'
 import { ReactComponent as WireframeIcon } from '@svg/icon-wireframe.svg'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 
 const useStyles = createUseStyles(theme => {
   return {

@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import ErrorImg from '@svg/image-loading-icon.svg'
 import { Loader } from '@components'
 import classnames from 'classnames'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { buildThumbnailUrl, track } from '@utilities'
 
 const useStyles = createUseStyles(theme => {

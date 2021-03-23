@@ -1,7 +1,7 @@
 import React from 'react'
 import { StoreContext } from 'storeon/react'
 import { createStoreon } from 'storeon'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import ModelCardLanding from './ModelCardLanding'
 
 export default {

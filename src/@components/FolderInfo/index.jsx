@@ -1,7 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 import { ReactComponent as FolderIcon } from '@svg/folder-icon.svg'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 
 const useStyles = createUseStyles(theme => {
   return {

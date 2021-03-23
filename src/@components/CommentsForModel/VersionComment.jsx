@@ -2,7 +2,7 @@ import React from 'react'
 import { formatDistanceStrict } from 'date-fns'
 import { Markdown } from '@components'
 import { ReactComponent as VersionIcon } from '@svg/icon-version.svg'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 
 const useStyles = createUseStyles(theme => {
   return {

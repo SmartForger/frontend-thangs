@@ -9,7 +9,7 @@ import {
   Slider,
   Spacer,
 } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import classnames from 'classnames'
 import { ReactComponent as ResetIcon } from '@svg/icon-reset.svg'
 import { ReactComponent as CameraDesktopIcon } from '@svg/icon-camera-desktop.svg'

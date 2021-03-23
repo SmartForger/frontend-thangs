@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { SingleLineBodyText, Spacer } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { MenuItem } from 'react-contextmenu'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'

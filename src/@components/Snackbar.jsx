@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { useOverlay } from '@hooks'
 import { ReactComponent as SnackbarUploadIcon } from '@svg/snackbar-upload.svg'
 import classnames from 'classnames'

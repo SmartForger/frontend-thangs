@@ -13,7 +13,7 @@ import {
   Toggle,
 } from '@components'
 import { useForm } from '@hooks'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down.svg'
 import { ReactComponent as ArrowLeftIcon } from '@svg/icon-arrow-left.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'

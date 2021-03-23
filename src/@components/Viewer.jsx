@@ -1,6 +1,6 @@
 import React, { useRef, useState, useCallback, useMemo } from 'react'
 import { Canvas, useFrame, useThree, extend } from 'react-three-fiber'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 
 import * as THREE from 'three'
 import { useModels } from '@hooks'

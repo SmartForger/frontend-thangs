@@ -18,7 +18,7 @@ import {
   SelectFolderActionMenu,
 } from '@components'
 import { useForm } from '@hooks'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { formatBytes } from '@utilities'
 import { CATEGORIES } from '@constants/fileUpload'
 

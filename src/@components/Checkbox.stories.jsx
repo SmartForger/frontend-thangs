@@ -1,5 +1,5 @@
 import React from 'react'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { text, boolean } from '@storybook/addon-knobs'
 import Checkbox from './Checkbox'
 

@@ -17,7 +17,7 @@ import {
 } from '@components'
 import { Message404 } from '@pages/404'
 import classnames from 'classnames'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { useCurrentUserId, usePageMeta, usePerformanceMetrics } from '@hooks'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'

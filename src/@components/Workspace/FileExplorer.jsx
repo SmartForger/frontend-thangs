@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import * as R from 'ramda'
 import { Spacer, NavLink, Spinner } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import classnames from 'classnames'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ContextMenuTrigger } from 'react-contextmenu'
@@ -143,10 +143,10 @@ const Subfolders = ({
   const files = useMemo(() => {
     return !R.isEmpty(folders)
       ? folders.sort((a, b) => {
-        if (a.name < b.name) return -1
-        else if (a.name > b.name) return 1
-        return 0
-      })
+          if (a.name < b.name) return -1
+          else if (a.name > b.name) return 1
+          return 0
+        })
       : []
   }, [folders])
   return (

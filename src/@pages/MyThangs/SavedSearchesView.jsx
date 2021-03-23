@@ -1,9 +1,15 @@
 import React, { useEffect } from 'react'
 import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import classnames from 'classnames'
-import { CardCollectionSearch, SearchCards, Spinner, Spacer, TitleTertiary } from '@components'
+import {
+  CardCollectionSearch,
+  SearchCards,
+  Spinner,
+  Spacer,
+  TitleTertiary,
+} from '@components'
 import * as types from '@constants/storeEventTypes'
 import { pageview } from '@utilities/analytics'
 

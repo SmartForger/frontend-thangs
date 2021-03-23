@@ -5,7 +5,7 @@ import ReactModal from 'react-modal'
 import md5 from 'md5'
 import { Button, Pill } from '@components'
 import classnames from 'classnames'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 

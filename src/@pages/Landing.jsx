@@ -19,7 +19,7 @@ import {
   useInfiniteScroll,
 } from '@hooks'
 import { useStoreon } from 'storeon/react'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import * as types from '@constants/storeEventTypes'
 import * as sortTypes from '@constants/sortTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'

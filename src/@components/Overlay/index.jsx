@@ -1,6 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import OverlayPortal from './OverlayPortal'
 
 export * from './OverlayContext'

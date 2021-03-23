@@ -1,11 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
-import {
-  Card,
-  SingleLineBodyText,
-  Spacer,
-  LikeFolderButton,
-} from '@components'
-import { createUseStyles } from '@style'
+import { Card, SingleLineBodyText, Spacer, LikeFolderButton } from '@components'
+import { createUseStyles } from '@physna/voxel-ui'
 import { ReactComponent as FolderCardIcon } from '@svg/folder-card.svg'
 import { ReactComponent as PadlockIcon } from '@svg/icon-padlock-blue.svg'
 import { ReactComponent as SharedFolderIcon } from '@svg/icon-sharedfolder.svg'

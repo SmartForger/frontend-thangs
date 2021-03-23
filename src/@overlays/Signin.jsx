@@ -16,7 +16,7 @@ import { authenticationService } from '@services'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
 import { ReactComponent as FacebookLogo } from '@svg/facebook-logo.svg'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import classnames from 'classnames'
 import { overlayview } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
@@ -276,8 +276,8 @@ const SignInForm = ({
                 {authFailed
                   ? 'Something went wrong. Please try again'
                   : sessionExpired
-                    ? 'Session Expired. Please sign back in to continue'
-                    : signinErrorMessage}
+                  ? 'Session Expired. Please sign back in to continue'
+                  : signinErrorMessage}
               </FormError>
               <Spacer size='1rem' />
             </>

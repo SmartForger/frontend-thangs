@@ -4,7 +4,7 @@ import { formatDistanceStrict } from 'date-fns'
 import { CommentsActionMenu, Markdown, Spinner, UserInline } from '@components'
 import NewModelCommentForm from './NewModelCommentForm'
 import VersionComment from './VersionComment'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { useOverlay, useServices } from '@hooks'
 import classnames from 'classnames'
 import { track } from '../../@utilities/analytics'
@@ -219,8 +219,8 @@ const AuthCommentsForModel = ({ c, className, modelId, currentUser }) => {
       <ul className={c.CommentsForModel_List}>
         {comments && comments.length
           ? comments.map((comment, i) =>
-            renderTypedComment({ modelId, comment, key: i, currentUser })
-          )
+              renderTypedComment({ modelId, comment, key: i, currentUser })
+            )
           : null}
       </ul>
     </div>

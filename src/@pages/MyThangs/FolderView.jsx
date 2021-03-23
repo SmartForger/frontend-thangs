@@ -15,7 +15,7 @@ import {
 } from '@components'
 import { useQuery } from '@hooks'
 import { authenticationService } from '@services'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import classnames from 'classnames'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'

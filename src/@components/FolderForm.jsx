@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import * as R from 'ramda'
 import { Button, Input, Spacer, Toggle } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { useForm } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
@@ -90,8 +90,8 @@ const FolderForm = ({
   const isPublic = !R.isEmpty(parentFolder)
     ? parentFolder.isPublic
     : !R.isEmpty(folder)
-      ? folder.isPublic
-      : true
+    ? folder.isPublic
+    : true
   const initialState = {
     id: id,
     name: name ? getFolderName(name) : '',

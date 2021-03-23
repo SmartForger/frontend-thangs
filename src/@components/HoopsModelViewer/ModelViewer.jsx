@@ -5,7 +5,7 @@ import { useModels, usePerformanceMetrics } from '@hooks'
 import Toolbar from './Toolbar'
 import { ReactComponent as ErrorIcon } from '@svg/image-error-icon.svg'
 import classnames from 'classnames'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { perfTrack } from '@utilities/analytics'
 import { flattenTree } from '@utilities/tree'
 

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { ActionMenu, Button, Spacer } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { ReactComponent as ARIcon } from '@svg/icon-ar.svg'
 
 const useStyles = createUseStyles(theme => {

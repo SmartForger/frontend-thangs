@@ -1,7 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 import { MetadataSecondary, TextInput, Spacer } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 
 const useStyles = createUseStyles(theme => {
   return {

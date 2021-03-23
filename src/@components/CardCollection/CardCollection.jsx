@@ -1,5 +1,5 @@
 import React from 'react'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import CardCollectionBase from './CardCollectionBase'
 
 const useStyles = createUseStyles(theme => {
@@ -47,14 +47,10 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const CardCollection = (
-  props
-) => {
+const CardCollection = props => {
   const c = useStyles({})
 
-  return (
-    <CardCollectionBase c={c} {...props} />
-  )
+  return <CardCollectionBase c={c} {...props} />
 }
 
 export default CardCollection

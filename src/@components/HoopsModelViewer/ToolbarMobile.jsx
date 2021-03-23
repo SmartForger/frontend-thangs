@@ -7,7 +7,7 @@ import {
   PartExplorerActionMenu,
   Spacer,
 } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import classnames from 'classnames'
 import { ReactComponent as CameraIcon } from '@svg/icon-camera.svg'
 

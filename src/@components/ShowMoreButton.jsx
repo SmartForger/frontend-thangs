@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { Button, Spinner } from '@components'
 import classnames from 'classnames'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 
 const useStyles = createUseStyles(theme => {
   return {

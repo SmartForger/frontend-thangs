@@ -1,7 +1,7 @@
 import React from 'react'
 import * as R from 'ramda'
 import classnames from 'classnames'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 
 const useStyles = createUseStyles(theme => {
   return {

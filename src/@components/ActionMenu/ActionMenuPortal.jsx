@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import classnames from 'classnames'
 import { Spacer, TitleTertiary } from '@components'
 import { useActionMenu } from '@hooks'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 
 const useStyles = createUseStyles(theme => {
   const {

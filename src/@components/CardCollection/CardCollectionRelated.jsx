@@ -1,5 +1,5 @@
 import React from 'react'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import CardCollectionBase from './CardCollectionBase'
 
 const useStyles = createUseStyles(_theme => {

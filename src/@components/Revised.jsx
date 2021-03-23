@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { ReactComponent as VersionIcon } from '@svg/version-icon.svg'
 
 const useStyles = createUseStyles(theme => {

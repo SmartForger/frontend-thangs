@@ -11,7 +11,7 @@ import {
   Tooltip,
   TreeView,
 } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { ReactComponent as UploadCardIcon } from '@svg/upload-card.svg'
 import { ReactComponent as InfoIcon } from '@svg/icon-info.svg'
 import Dropzone from 'react-dropzone'

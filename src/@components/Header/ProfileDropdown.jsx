@@ -13,7 +13,7 @@ import {
 } from '@components'
 import { useOverlay, useTranslations } from '@hooks'
 import { authenticationService } from '@services'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 
 import { ReactComponent as SharedIcon } from '@svg/icon-shared.svg'
 import { ReactComponent as PortfolioIcon } from '@svg/icon-portfolio.svg'

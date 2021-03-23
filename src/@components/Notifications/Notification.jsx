@@ -10,7 +10,7 @@ import { ReactComponent as CommentIcon } from '@svg/notification-comment.svg'
 import { ReactComponent as PlusIcon } from '@svg/notification-plus.svg'
 import { ReactComponent as UploadIcon } from '@svg/notification-uploaded.svg'
 import { ReactComponent as StarIcon } from '@svg/icon-star-filled.svg'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {

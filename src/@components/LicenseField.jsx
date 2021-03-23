@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
 import { ReactComponent as ClearIcon } from '@svg/icon-X-sm.svg'
 import { Button, Input, Spacer } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'
 

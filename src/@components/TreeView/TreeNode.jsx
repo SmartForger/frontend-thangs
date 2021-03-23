@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Divider from '@components/Divider'
 import Spacer from '@components/Spacer'
 import classnames from 'classnames'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
 import { ReactComponent as IndentArrow } from '@svg/icon-indent-arrow.svg'
 

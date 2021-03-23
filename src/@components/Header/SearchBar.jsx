@@ -6,7 +6,7 @@ import classnames from 'classnames'
 
 import { TextInput } from '@components'
 import { useOverlay, useTranslations } from '@hooks'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'

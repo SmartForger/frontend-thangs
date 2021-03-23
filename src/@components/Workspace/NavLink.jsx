@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import classnames from 'classnames'
 import { Link } from 'react-router-dom'
 import { Spacer, SingleLineBodyText } from '@components'

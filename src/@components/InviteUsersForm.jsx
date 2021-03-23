@@ -5,7 +5,7 @@ import * as R from 'ramda'
 import * as EmailValidator from 'email-validator'
 import { Button, Spinner, TextInput, Spacer } from '@components'
 import classnames from 'classnames'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 

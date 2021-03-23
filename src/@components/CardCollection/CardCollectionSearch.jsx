@@ -2,7 +2,7 @@ import React from 'react'
 import { NoResults } from '@components'
 import Skeleton from '@material-ui/lab/Skeleton'
 import classnames from 'classnames'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { PREVIEW_MODELS_SIZE } from '@store/modelPreviews/store'
 
 const useStyles = createUseStyles(theme => {
@@ -45,25 +45,26 @@ const CardCollectionSearch = ({
   if (children) {
     const allItemsCount = Array.isArray(children)
       ? children.reduce(
-        (acc, child) => (child.props.items && acc + child.props.items.length) || 0,
-        0
-      )
+          (acc, child) => (child.props.items && acc + child.props.items.length) || 0,
+          0
+        )
       : (children.props.items && children.props.items.length) || 0
 
     return (
       <div
         className={classnames(c.CardCollection, {
-          [c.CardCollection__singleRow]: (allItemsCount < maxPerRow) && !isLoading,
+          [c.CardCollection__singleRow]: allItemsCount < maxPerRow && !isLoading,
         })}
       >
         {children}
-        {isLoading && [...Array(PREVIEW_MODELS_SIZE).keys()].map(key => (
-          <Skeleton
-            variant='rect'
-            className={c.ModelCard_Skeleton}
-            key={`skeletonCard-${key}`}
-          />
-        ))}
+        {isLoading &&
+          [...Array(PREVIEW_MODELS_SIZE).keys()].map(key => (
+            <Skeleton
+              variant='rect'
+              className={c.ModelCard_Skeleton}
+              key={`skeletonCard-${key}`}
+            />
+          ))}
       </div>
     )
   } else {

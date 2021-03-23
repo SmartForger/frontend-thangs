@@ -1,6 +1,6 @@
 import React from 'react'
 import { Spacer, TitleTertiary, MetadataPrimary } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 
 import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
 import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'

@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import classnames from 'classnames'
 
 import { TextInput } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 
 import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 

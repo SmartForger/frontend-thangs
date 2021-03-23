@@ -1,5 +1,5 @@
 import React from 'react'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import ModelSearchResults from './ModelSearchResults'
 
 const items = JSON.parse(

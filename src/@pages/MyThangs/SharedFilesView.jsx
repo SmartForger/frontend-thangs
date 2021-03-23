@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react'
 import * as R from 'ramda'
 import { FileTable, FolderCard, Spacer, Spinner, TitleTertiary } from '@components'
 import { useStarred } from '@hooks'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import classnames from 'classnames'
 import { pageview } from '@utilities/analytics'
 

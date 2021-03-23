@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tooltip as MuiTooltip } from '@material-ui/core'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 
 const useStyles = createUseStyles(theme => ({
   tooltip: {
@@ -9,17 +9,17 @@ const useStyles = createUseStyles(theme => ({
     color: `${theme.variables.colors.mainFontColor} !important`,
     fontSize: '16px !important',
     padding: '12px 16px !important',
-    maxWidth: '382px !important'
+    maxWidth: '382px !important',
   },
   arrow: {
-    color: '#F7F7FB !important'
-  }
+    color: '#F7F7FB !important',
+  },
 }))
 
 const Tooltip = props => {
   const c = useStyles()
 
-  return <MuiTooltip arrow placement="top" classes={c} {...props} />
+  return <MuiTooltip arrow placement='top' classes={c} {...props} />
 }
 
 export default Tooltip

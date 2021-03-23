@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 import { ActionMenu, Pill, Spacer } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import * as sortTypes from '@constants/sortTypes'
 import * as R from 'ramda'
 

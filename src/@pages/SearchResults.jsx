@@ -18,7 +18,7 @@ import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 import { ReactComponent as FromThangsLogo } from '@svg/fromThangs.svg'
 import { ReactComponent as GlobeIcon } from '@svg/icon-globe.svg'
 import ModelSearchResults from '@components/CardCollection/ModelSearchResults'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track } from '@utilities/analytics'
 import {

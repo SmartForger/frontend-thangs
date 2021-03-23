@@ -1,6 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import TreeNode from './TreeNode'
 import Spinner from '../Spinner'
 

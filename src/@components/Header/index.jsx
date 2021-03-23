@@ -5,7 +5,7 @@ import classnames from 'classnames'
 
 import { AboutHero, LandingHero, UserNav } from '@components'
 import { useCurrentUser, useOverlay } from '@hooks'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import * as types from '@constants/storeEventTypes'
 
 import { ReactComponent as Logo } from '@svg/logo.svg'

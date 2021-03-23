@@ -1,8 +1,7 @@
 import React from 'react'
 import { MemoryRouter } from 'react-router'
-import { ThemeProvider, createUseStyles } from '@style'
+import { ThemeProvider, createUseStyles, GlobalStyles } from '@physna/voxel-ui'
 import { addDecorator } from '@storybook/react'
-import { GlobalStyles } from '@style/globals'
 
 const useStyles = createUseStyles(theme => {
   return {

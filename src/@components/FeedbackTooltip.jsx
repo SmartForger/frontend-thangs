@@ -1,5 +1,5 @@
 import React from 'react'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { ReactComponent as FeedbackIcon } from '@svg/icon-feedback.svg'
 import classnames from 'classnames'
 import ReactTooltip from 'react-tooltip'

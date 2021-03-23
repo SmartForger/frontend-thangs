@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { Button, FormError, Input, Spacer, Textarea } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { useForm } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
@@ -60,7 +60,7 @@ const useStyles = createUseStyles(theme => {
     EditProfileForm_HalfWidthInput: {
       [md]: {
         width: 'calc(50% - .5rem) !important',
-      }
+      },
     },
   }
 })
@@ -163,15 +163,14 @@ const EditProfileForm = ({
       />
       <Spacer size='1rem' />
       <div className={c.EditProfileForm_ButtonContainer}>
-        <Button className={c.EditProfileForm_Button} type='submit' 
-          disabled={disabled}>
+        <Button className={c.EditProfileForm_Button} type='submit' disabled={disabled}>
           Save Changes
         </Button>
         <Button
           secondary
           className={c.EditProfileForm_Button}
           onClick={handleCancel}
-          type='button' 
+          type='button'
           disabled={disabled}
         >
           Cancel

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback, useRef, memo } from 'react'
 import { FixedSizeList, areEqual } from 'react-window'
 import classnames from 'classnames'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { ReactComponent as IndentArrow } from '@svg/icon-indent-arrow.svg'
 import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
 

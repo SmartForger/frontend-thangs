@@ -10,7 +10,7 @@ import {
   TextInput,
   InfiniteTreeView,
 } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui'
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X-sm.svg'
 import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
