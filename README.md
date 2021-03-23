@@ -9,13 +9,19 @@
 
 1. Clone the repository
 
-2. Run the following command in the root directory:
+1. Create a personal token with minimum `read:packages` permissions in your [GitHub account settings](https://github.com/settings/tokens)
+
+1. Copy `.yarnrc.example` to `.yarnrc` and replace `${GH_PACKAGE_TOKEN}` with your personal token
+
+    - Alternatively, you can add `export GH_PACKAGE_TOKEN=YOUR_TOKEN_HERE` to your .bashrc/.zshrc/shell profile after copying `.yarnrc.example` to `.yarnrc`
+
+1. Run the following command in the root directory:
 
 ```bash
 yarn install
 ```
 
-3. Create a file named `.env.development.local` in the root folder and make sure it contains the necessary details for your dev environment:
+5. Create a file named `.env.development.local` in the root folder and make sure it contains the necessary details for your dev environment:
 
 ```ini
 REACT_APP_API_KEY=(Url pointing to the instance of "thangs-social-service" you are currently working with, eg: http://localhost:8000/api/)
@@ -35,7 +41,7 @@ SCRIPTS_SOCIAL_SERVICE_EMAIL=user@email.com
 SCRIPTS_SOCIAL_SERVICE_PASSWORD=user
 ```
 
-4. Run the following command in the terminal to start the app:
+6. Run the following command in the terminal to start the app:
 
 ```bash
 yarn run dev
