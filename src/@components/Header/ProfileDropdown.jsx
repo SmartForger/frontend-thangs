@@ -97,7 +97,7 @@ export const ProfileDropdownMenuContainer = ({ user = {} }) => {
           size='2.5rem'
           name={user.fullName}
           userName={user.username}
-          src={user.profile.avatarUrl}
+          src={user.profile && user.profile.avatarUrl}
         />
         <Spacer size={'.75rem'} />
         <div className={c.ProfileDropdown_Column}>

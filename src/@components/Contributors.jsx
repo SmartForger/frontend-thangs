@@ -59,7 +59,7 @@ const Contributors = ({ fileId, users = [], displayLength = 2 }) => {
               size='1.875rem'
               name={user.fullName}
               userName={user.username}
-              src={user.profile.avatarUrl}
+              src={user.profile && user.profile.avatarUrl}
               bordered
             />
           </div>

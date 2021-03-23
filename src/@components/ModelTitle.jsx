@@ -57,7 +57,7 @@ const ModelTitle = ({ model, className, closeOverlay }) => {
             size='2.5rem'
             name={user.fullName}
             userName={user.username}
-            src={user.profile.avatarUrl}
+            src={user.profile && user.profile.avatarUrl}
           />
         </Link>
       )}
