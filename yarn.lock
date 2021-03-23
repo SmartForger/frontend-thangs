@@ -1858,9 +1858,9 @@
     utility-types "^2.1.0 || ^3.0.0"
 
 "@physna/voxel-ui@^0.1.0":
-  version "0.1.2"
-  resolved "https://npm.pkg.github.com/download/@physna/voxel-ui/0.1.2/82543819a84fc97c6780f2873e0cdf6026994d5322208d255dda0bcca53da0e2#49b2881f1d3b54357d0f588a6372cc36a943fabc"
-  integrity sha512-NGRlvonNoOafcV/Sua7NJ+AqQPgpLMmM0LddRH8eC/IsQmj1wZOBc58i+logeV2IJWjlS05zEspJ8XR3BEPA6w==
+  version "0.1.3"
+  resolved "https://npm.pkg.github.com/download/@physna/voxel-ui/0.1.3/2f93678a9bdf240b7033f844b28c63dffb033bd3639730e67ac50925d237a4f1#0e08b600fe258c1600b7b47d87ed58e173e3fe0e"
+  integrity sha512-KMh/kEEV7jx6qeRFMywCewKCqH240baCwZbl+Tn+K3Eg6Ya95qDfcF7BPRcoQy788+hwhxcaxYp6JcQN/CS8mg==
   dependencies:
     axios "^0.21.1"
     classnames "^2.2.6"
