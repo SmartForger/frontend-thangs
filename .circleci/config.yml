@@ -89,6 +89,9 @@ jobs:
           keys:
             - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
+          name: Generate .yarnrc to allow imports of private GH packages
+          command: cp .yarnrc.example .yarnrc
+      - run:
           name: Install dependencies
           command: yarn install --frozen-lockfile
       - save_cache:
@@ -159,6 +162,9 @@ jobs:
           keys:
             - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
+          name: Generate .yarnrc to allow imports of private GH packages
+          command: cp .yarnrc.example .yarnrc
+      - run:
           name: Install dependencies
           command: yarn install --frozen-lockfile
       - save_cache:
@@ -225,6 +231,9 @@ jobs:
           name: Restore yarn packages from cache
           keys:
             - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: Generate .yarnrc to allow imports of private GH packages
+          command: cp .yarnrc.example .yarnrc
       - run:
           name: Install dependencies
           command: yarn install --frozen-lockfile
