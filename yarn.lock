@@ -1857,10 +1857,10 @@
     prop-types "^15.6.2"
     utility-types "^2.1.0 || ^3.0.0"
 
-"@physna/voxel-ui@0.1.8-alpha.0":
-  version "0.1.8-alpha.0"
-  resolved "https://npm.pkg.github.com/download/@physna/voxel-ui/0.1.8-alpha.0/49e0d79a38bfbf2cb46098fae0b51b6e15a5e70f9f65e3c4c3a8e7cad662fe4a#a7b36a76fc0ad11ac66e6a0bc70151c85816bb59"
-  integrity sha512-bNLivvuLqpKmhoUDQnRyFP2W6NMXtdZUAYUd17tQsjDxo5l+e4M2bhi2QcV2NdrTUUE8HyxaLSgEt9ZJllfIhw==
+"@physna/voxel-ui@^0.1.15":
+  version "0.1.15"
+  resolved "https://registry.yarnpkg.com/@physna/voxel-ui/-/voxel-ui-0.1.15.tgz#6b6c3e0ab34197123340352f7288f47a7bb8cc01"
+  integrity sha512-TKIv/kX2mhvFoT0+srNb4Z8yPUw1ce6Lu6zEfuk6ipLp9wBDqY4653Lz+Ecyh6MdK1JvODW1dFrhsIgn7IfRjA==
   dependencies:
     axios "^0.21.1"
     classnames "^2.2.6"
@@ -5684,7 +5684,7 @@ css-jss@10.5.1:
 
 css-jss@10.6.0:
   version "10.6.0"
-  resolved "https://registry.npmjs.org/css-jss/-/css-jss-10.6.0.tgz#db5de90a4b53ca05d7e1c6bcec0c1ba8f1c1bcea"
+  resolved "https://registry.yarnpkg.com/css-jss/-/css-jss-10.6.0.tgz#db5de90a4b53ca05d7e1c6bcec0c1ba8f1c1bcea"
   integrity sha512-4SE0tWggVM6Y4UTcKMoZXFBuhzycY6fKEdONr7wn89SIFd4eXiUZ0f5f4tLwXyFOW2q13JReXp8n9vSLKp48/g==
   dependencies:
     "@babel/runtime" "^7.3.1"
@@ -10130,7 +10130,7 @@ jss-plugin-camel-case@10.5.1, jss-plugin-camel-case@^10.5.1:
 
 jss-plugin-camel-case@10.6.0:
   version "10.6.0"
-  resolved "https://registry.npmjs.org/jss-plugin-camel-case/-/jss-plugin-camel-case-10.6.0.tgz#93d2cd704bf0c4af70cc40fb52d74b8a2554b170"
+  resolved "https://registry.yarnpkg.com/jss-plugin-camel-case/-/jss-plugin-camel-case-10.6.0.tgz#93d2cd704bf0c4af70cc40fb52d74b8a2554b170"
   integrity sha512-JdLpA3aI/npwj3nDMKk308pvnhoSzkW3PXlbgHAzfx0yHWnPPVUjPhXFtLJzgKZge8lsfkUxvYSQ3X2OYIFU6A==
   dependencies:
     "@babel/runtime" "^7.3.1"
@@ -10148,7 +10148,7 @@ jss-plugin-compose@10.5.1:
 
 jss-plugin-compose@10.6.0:
   version "10.6.0"
-  resolved "https://registry.npmjs.org/jss-plugin-compose/-/jss-plugin-compose-10.6.0.tgz#0bf058814ea9b47e87cc61f1261aab881daa403b"
+  resolved "https://registry.yarnpkg.com/jss-plugin-compose/-/jss-plugin-compose-10.6.0.tgz#0bf058814ea9b47e87cc61f1261aab881daa403b"
   integrity sha512-zBhI5ZDVX30h4N+rPunAfbwHVDWlme0JPiLBT0TSg24aX+QhjpogZSKHv9pn23NqIdiz3aIJmrNVnJ5rwNKQKA==
   dependencies:
     "@babel/runtime" "^7.3.1"
@@ -10165,7 +10165,7 @@ jss-plugin-default-unit@10.5.1, jss-plugin-default-unit@^10.5.1:
 
 jss-plugin-default-unit@10.6.0:
   version "10.6.0"
-  resolved "https://registry.npmjs.org/jss-plugin-default-unit/-/jss-plugin-default-unit-10.6.0.tgz#af47972486819b375f0f3a9e0213403a84b5ef3b"
+  resolved "https://registry.yarnpkg.com/jss-plugin-default-unit/-/jss-plugin-default-unit-10.6.0.tgz#af47972486819b375f0f3a9e0213403a84b5ef3b"
   integrity sha512-7y4cAScMHAxvslBK2JRK37ES9UT0YfTIXWgzUWD5euvR+JR3q+o8sQKzBw7GmkQRfZijrRJKNTiSt1PBsLI9/w==
   dependencies:
     "@babel/runtime" "^7.3.1"
@@ -10181,7 +10181,7 @@ jss-plugin-expand@10.5.1:
 
 jss-plugin-expand@10.6.0:
   version "10.6.0"
-  resolved "https://registry.npmjs.org/jss-plugin-expand/-/jss-plugin-expand-10.6.0.tgz#7eabb6d14f407c38b4d6013588d6641a2e869723"
+  resolved "https://registry.yarnpkg.com/jss-plugin-expand/-/jss-plugin-expand-10.6.0.tgz#7eabb6d14f407c38b4d6013588d6641a2e869723"
   integrity sha512-TYVfKS3l8kNaClWW3PA9AhFr9ixhBnKcdGwZDRH3WRGDmdX0RYOhpfScscRXQM1HAlqaXLRqiP+NYGCK6QBgOg==
   dependencies:
     "@babel/runtime" "^7.3.1"
@@ -10198,7 +10198,7 @@ jss-plugin-extend@10.5.1:
 
 jss-plugin-extend@10.6.0:
   version "10.6.0"
-  resolved "https://registry.npmjs.org/jss-plugin-extend/-/jss-plugin-extend-10.6.0.tgz#7611d5d96781b833e5b4aa3eb8599525e790143b"
+  resolved "https://registry.yarnpkg.com/jss-plugin-extend/-/jss-plugin-extend-10.6.0.tgz#7611d5d96781b833e5b4aa3eb8599525e790143b"
   integrity sha512-eY/zKMT+aUOdHegTDzTznq8Nwsv0PEb5AyJfo8A1B9jPxzzLTGcFOl9S6JZoYRxMh9TWxA5lOULMIjgKAKzUcQ==
   dependencies:
     "@babel/runtime" "^7.3.1"
@@ -10215,7 +10215,7 @@ jss-plugin-global@10.5.1, jss-plugin-global@^10.5.1:
 
 jss-plugin-global@10.6.0:
   version "10.6.0"
-  resolved "https://registry.npmjs.org/jss-plugin-global/-/jss-plugin-global-10.6.0.tgz#3e8011f760f399cbadcca7f10a485b729c50e3ed"
+  resolved "https://registry.yarnpkg.com/jss-plugin-global/-/jss-plugin-global-10.6.0.tgz#3e8011f760f399cbadcca7f10a485b729c50e3ed"
   integrity sha512-I3w7ji/UXPi3VuWrTCbHG9rVCgB4yoBQLehGDTmsnDfXQb3r1l3WIdcO8JFp9m0YMmyy2CU7UOV6oPI7/Tmu+w==
   dependencies:
     "@babel/runtime" "^7.3.1"
@@ -10232,7 +10232,7 @@ jss-plugin-nested@10.5.1, jss-plugin-nested@^10.5.1:
 
 jss-plugin-nested@10.6.0:
   version "10.6.0"
-  resolved "https://registry.npmjs.org/jss-plugin-nested/-/jss-plugin-nested-10.6.0.tgz#5f83c5c337d3b38004834e8426957715a0251641"
+  resolved "https://registry.yarnpkg.com/jss-plugin-nested/-/jss-plugin-nested-10.6.0.tgz#5f83c5c337d3b38004834e8426957715a0251641"
   integrity sha512-fOFQWgd98H89E6aJSNkEh2fAXquC9aZcAVjSw4q4RoQ9gU++emg18encR4AT4OOIFl4lQwt5nEyBBRn9V1Rk8g==
   dependencies:
     "@babel/runtime" "^7.3.1"
@@ -10249,7 +10249,7 @@ jss-plugin-props-sort@10.5.1, jss-plugin-props-sort@^10.5.1:
 
 jss-plugin-props-sort@10.6.0:
   version "10.6.0"
-  resolved "https://registry.npmjs.org/jss-plugin-props-sort/-/jss-plugin-props-sort-10.6.0.tgz#297879f35f9fe21196448579fee37bcde28ce6bc"
+  resolved "https://registry.yarnpkg.com/jss-plugin-props-sort/-/jss-plugin-props-sort-10.6.0.tgz#297879f35f9fe21196448579fee37bcde28ce6bc"
   integrity sha512-oMCe7hgho2FllNc60d9VAfdtMrZPo9n1Iu6RNa+3p9n0Bkvnv/XX5San8fTPujrTBScPqv9mOE0nWVvIaohNuw==
   dependencies:
     "@babel/runtime" "^7.3.1"
@@ -10266,7 +10266,7 @@ jss-plugin-rule-value-function@10.5.1, jss-plugin-rule-value-function@^10.5.1:
 
 jss-plugin-rule-value-function@10.6.0:
   version "10.6.0"
-  resolved "https://registry.npmjs.org/jss-plugin-rule-value-function/-/jss-plugin-rule-value-function-10.6.0.tgz#3c1a557236a139d0151e70a82c810ccce1c1c5ea"
+  resolved "https://registry.yarnpkg.com/jss-plugin-rule-value-function/-/jss-plugin-rule-value-function-10.6.0.tgz#3c1a557236a139d0151e70a82c810ccce1c1c5ea"
   integrity sha512-TKFqhRTDHN1QrPTMYRlIQUOC2FFQb271+AbnetURKlGvRl/eWLswcgHQajwuxI464uZk91sPiTtdGi7r7XaWfA==
   dependencies:
     "@babel/runtime" "^7.3.1"
@@ -10284,7 +10284,7 @@ jss-plugin-rule-value-observable@10.5.1:
 
 jss-plugin-rule-value-observable@10.6.0:
   version "10.6.0"
-  resolved "https://registry.npmjs.org/jss-plugin-rule-value-observable/-/jss-plugin-rule-value-observable-10.6.0.tgz#2b3252cc1507d0154bd9e50f4527ad8073d67b6b"
+  resolved "https://registry.yarnpkg.com/jss-plugin-rule-value-observable/-/jss-plugin-rule-value-observable-10.6.0.tgz#2b3252cc1507d0154bd9e50f4527ad8073d67b6b"
   integrity sha512-+N6S8UZ+Tu+G2Fbu/UrfLI/JyaTi/KfkPbKsVRfyg/C/IdI+p9+H67HncMIFYEi/KnNj5fqvMNSDe4ag/lqbHw==
   dependencies:
     "@babel/runtime" "^7.3.1"
@@ -10302,7 +10302,7 @@ jss-plugin-template@10.5.1:
 
 jss-plugin-template@10.6.0:
   version "10.6.0"
-  resolved "https://registry.npmjs.org/jss-plugin-template/-/jss-plugin-template-10.6.0.tgz#75b1643044f3191b9d447589439053c597854704"
+  resolved "https://registry.yarnpkg.com/jss-plugin-template/-/jss-plugin-template-10.6.0.tgz#75b1643044f3191b9d447589439053c597854704"
   integrity sha512-P3iaIR6AqTOoutwP7Y2KVCq4jShEMACrwKf8W9gsS3ppnIeBg4OCAQvLKmqunApkEoIk0711xbW9XPi9CYy3zg==
   dependencies:
     "@babel/runtime" "^7.3.1"
@@ -10320,7 +10320,7 @@ jss-plugin-vendor-prefixer@10.5.1, jss-plugin-vendor-prefixer@^10.5.1:
 
 jss-plugin-vendor-prefixer@10.6.0:
   version "10.6.0"
-  resolved "https://registry.npmjs.org/jss-plugin-vendor-prefixer/-/jss-plugin-vendor-prefixer-10.6.0.tgz#e1fcd499352846890c38085b11dbd7aa1c4f2c78"
+  resolved "https://registry.yarnpkg.com/jss-plugin-vendor-prefixer/-/jss-plugin-vendor-prefixer-10.6.0.tgz#e1fcd499352846890c38085b11dbd7aa1c4f2c78"
   integrity sha512-doJ7MouBXT1lypLLctCwb4nJ6lDYqrTfVS3LtXgox42Xz0gXusXIIDboeh6UwnSmox90QpVnub7au8ybrb0krQ==
   dependencies:
     "@babel/runtime" "^7.3.1"
@@ -10349,7 +10349,7 @@ jss-preset-default@10.5.1:
 
 jss-preset-default@10.6.0:
   version "10.6.0"
-  resolved "https://registry.npmjs.org/jss-preset-default/-/jss-preset-default-10.6.0.tgz#b5471858adede57efd8d139c85dd44601b55dc94"
+  resolved "https://registry.yarnpkg.com/jss-preset-default/-/jss-preset-default-10.6.0.tgz#b5471858adede57efd8d139c85dd44601b55dc94"
   integrity sha512-TuHDZiuxGLLJ/LIMLAzO5uf2PnLOCR6yF5GHQLPp59YTascmwEldJfR0tuqjKa8B2F/v708ZvzE1Dw0Ao7UIcA==
   dependencies:
     "@babel/runtime" "^7.3.1"
@@ -10380,7 +10380,7 @@ jss@10.5.1, jss@^10.5.1:
 
 jss@10.6.0:
   version "10.6.0"
-  resolved "https://registry.npmjs.org/jss/-/jss-10.6.0.tgz#d92ff9d0f214f65ca1718591b68e107be4774149"
+  resolved "https://registry.yarnpkg.com/jss/-/jss-10.6.0.tgz#d92ff9d0f214f65ca1718591b68e107be4774149"
   integrity sha512-n7SHdCozmxnzYGXBHe0NsO0eUf9TvsHVq2MXvi4JmTn3x5raynodDVE/9VQmBdWFyyj9HpHZ2B4xNZ7MMy7lkw==
   dependencies:
     "@babel/runtime" "^7.3.1"
@@ -13639,7 +13639,7 @@ react-jss@^10.3.0:
 
 react-jss@^10.6.0:
   version "10.6.0"
-  resolved "https://registry.npmjs.org/react-jss/-/react-jss-10.6.0.tgz#3d1538d085c55f7b0bc3607a61943f588e56f0f6"
+  resolved "https://registry.yarnpkg.com/react-jss/-/react-jss-10.6.0.tgz#3d1538d085c55f7b0bc3607a61943f588e56f0f6"
   integrity sha512-uCvOHMoQrB+cD8l6K6+gIStqBhTyjPM/55sXHfujlr0E4GclQg0ZR26nyGyh7XB+v9a2FfMp6Y4L2Bc1Z+L1oQ==
   dependencies:
     "@babel/runtime" "^7.3.1"
