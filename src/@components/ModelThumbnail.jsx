@@ -89,6 +89,22 @@ const useStyles = createUseStyles(theme => {
     ModelThumbnail__hidden: {
       display: 'none !important',
     },
+    ModelThumbnail_overlay: {
+      zIndex: 1,
+      position: 'absolute',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '100%',
+      height: '100%',
+      backgroundColor: theme.colors.purple[900],
+      color: theme.colors.white[500],
+      opacity: 0.7,
+
+      '& svg, & path': {
+        fill: theme.colors.white[500],
+      },
+    },
     ModelThumbnail__background: {
       position: 'absolute',
     },
@@ -102,6 +118,8 @@ const ERROR = 'ERROR'
 const ModelThumbnail = ({
   className,
   showFallback = true,
+  showOverlay = false,
+  overlayContent = '',
   lazyLoad = false,
   showLoader = true,
   mini,
@@ -124,6 +142,7 @@ const ModelThumbnail = ({
         [c.ModelThumbnail__background]: !showFallback,
       })}
     >
+      {showOverlay && <div className={c.ModelThumbnail_overlay}>{overlayContent}</div>}
       {loadingState === LOADING && showLoader && (
         <Loader className={c.ModelThumbnail_Loader} />
       )}

@@ -1,7 +1,14 @@
 import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
-import { Card, ModelThumbnail, NoResults, ProfilePicture, Spacer } from '@components'
+import {
+  Card,
+  ModelThumbnail,
+  NoResults,
+  ProfilePicture,
+  Spacer,
+  PartThumbnailList,
+} from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { numberWithCommas, truncateString, getExternalAvatar } from '@utilities'
@@ -238,6 +245,17 @@ const Anchor = ({ children, to = {}, isExternal, scope, searchIndex, ...props })
   )
 }
 
+function generateTestParts(model) {
+  const partCount = Math.random() > 0.5 ? Math.floor(Math.random() * 100) : 0
+  const parts = []
+
+  for (let i = 0; i < partCount; i++) {
+    parts.push(model)
+  }
+
+  return parts
+}
+
 const ModelDetails = ({ isExternalModel, model = {}, onFindRelated = noop, scope }) => {
   const c = useStyles()
   const {
@@ -249,6 +267,7 @@ const ModelDetails = ({ isExternalModel, model = {}, onFindRelated = noop, scope
     ownerLastName,
     ownerAvatarUrl,
     ownerUsername,
+    parts = generateTestParts(model),
   } = model
   let formattedModelDescription = truncateString(modelDescription, 144)
 
@@ -283,6 +302,7 @@ const ModelDetails = ({ isExternalModel, model = {}, onFindRelated = noop, scope
         <div className={c.TextSearchResult_Name}>{modelTitle || modelFileName}</div>
         <div className={c.TextSearchResult_Description}>{formattedModelDescription}</div>
       </Anchor>
+      {parts && parts.length > 0 && <PartThumbnailList parts={parts} />}
       <div
         className={c.TextSearchResult_FindRelatedLink}
         onClick={() => onFindRelated({ model })}
