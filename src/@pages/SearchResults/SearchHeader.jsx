@@ -4,7 +4,7 @@ import { SaveSearchButton, Spacer, SearchSourceFilterActionMenu } from '@compone
 import { useLocalStorage } from '@hooks'
 import { track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 
 const useStyles = createUseStyles(theme => {
   const {

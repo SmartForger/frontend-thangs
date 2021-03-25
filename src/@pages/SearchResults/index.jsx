@@ -5,7 +5,7 @@ import GeoSearch from './GeoSearch'
 import { useQuery } from '@hooks'
 import { pageview } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 
 const useStyles = createUseStyles(_theme => {
   return {

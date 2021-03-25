@@ -9,7 +9,7 @@ import { ReactComponent as UploadIcon } from '@svg/icon-loader.svg'
 import { ReactComponent as FromThangsLogo } from '@svg/fromThangs.svg'
 import { ReactComponent as GlobeIcon } from '@svg/icon-globe.svg'
 import ModelSearchResults from '@components/CardCollection/ModelSearchResults'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import * as types from '@constants/storeEventTypes'
 import SearchHeader from './SearchHeader'
 

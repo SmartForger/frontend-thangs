@@ -2,7 +2,7 @@ import React from 'react'
 import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
 import { Card, ModelThumbnail, MetadataSecondary, Spacer } from '@components'
 import classnames from 'classnames'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 
 const useStyles = createUseStyles(theme => {
   const {
