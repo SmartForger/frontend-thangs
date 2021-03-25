@@ -20,21 +20,24 @@
     ```
 1. Create a file named `.env.development.local` in the root folder and make sure it contains the necessary details for your dev environment:
     ```ini
-    REACT_APP_API_KEY=(Url pointing to the instance of "thangs-social-service" you are currently working with, eg: http://localhost:8000/api/)
     REACT_APP_WEBSITE_NAME=(The Document Title you wish to display)
+    REACT_APP_API_KEY=https://development-api-platform-dot-thangs.uc.r.appspot.com/
+    REACT_APP_IMG_PATH=(Url for the thumbnailer you are currently using **not currently relevant)
     NODE_PATH="src/"
     HTTPS=false
-    REACT_APP_HOOPS_MODEL_PREP_ENDPOINT_URI=https://hoops-scs-dot-gcp-and-physna.uc.r.appspot.com/api/prepare-model
-    REACT_APP_HOOPS_WS_ENDPOINT_URI=wss://hoops-scs-dot-gcp-and-physna.uc.r.appspot.com
-
-    REACT_APP_GOOGLE_CLOUD_PROJECT_ID=gcp-and-physna
+    GENERATE_SOURCEMAP=false
+    REACT_APP_HOOPS_MODEL_PREP_ENDPOINT_URI=https://dev-thangs-hoops-server-dot-thangs.uc.r.appspot.com/api/prepare-model
+    REACT_APP_HOOPS_WS_ENDPOINT_URI=wss://dev-thangs-hoops-server-dot-thangs.uc.r.appspot.com
+    REACT_APP_THUMBNAILS_HOST=https://development-thangs-thumbs-dot-thangs.uc.r.appspot.com/convert/
+    REACT_APP_TIW_THUMBNAILS_HOST=https://development-thangs-thumbs-dot-thangs.uc.r.appspot.com/tiw
+    REACT_APP_MODEL_BUCKET=https://storage.googleapis.com/thangs-public/thumbnails/production/
+    REACT_APP_GOOGLE_CLOUD_PROJECT_ID=thangs
     REACT_APP_GOOGLE_CLOUD_ERROR_REPORTING_KEY=AIzaSyCUmGwa9UJArRbPKt5YvT8ogf8EnEJCRyQ
-    REACT_APP_THUMBNAILS_HOST=http://localhost:1000/convert
-    REACT_APP_TIW_THUMBNAILS_HOST=http://localhost:1000/tiw
-
-    SCRIPTS_SOCIAL_SERVICE_URL=http://localhost:8000
-    SCRIPTS_SOCIAL_SERVICE_EMAIL=user@email.com
-    SCRIPTS_SOCIAL_SERVICE_PASSWORD=user
+    REACT_APP_GOOGLE_OAUTH_CLIENT_ID=652666760169-ndjpimc700rnh4hevhe94ep5225coa9v.apps.googleusercontent.com
+    REACT_APP_GOOGLE_OAUTH_REDIRECT_URI=https://development.thangs.com/authenticate/google
+    REACT_APP_FACEBOOK_OAUTH_CLIENT_ID=1012480789175810
+    REACT_APP_FACEBOOK_OAUTH_REDIRECT_URI=https://development.thangs.com/authenticate/facebook
+    REACT_APP_OPTIMIZELY_API_KEY=RnhiUtviYt3wbWKaEdpLN
     ```
 1. Run the following command in the terminal to start the app:
     ```bash
