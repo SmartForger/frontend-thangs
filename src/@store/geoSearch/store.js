@@ -6,13 +6,10 @@ import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'
 
 const ATOMS = {
-  TEXT: 'text',
   THANGS: 'thangs',
   PHYNDEXER: 'phyndexer',
   UPLOAD_DATA: 'uploadData',
 }
-
-const SEARCH_RESULT_SIZE = 50
 
 const getStatus = intervalRequest(
   ({ modelId }) => async (resolve, reject, cancelToken) => {
@@ -35,11 +32,6 @@ const getStatus = intervalRequest(
 
 const noop = () => null
 const getInitAtom = () => ({
-  [ATOMS.TEXT]: {
-    ...getStatusState(STATUSES.INIT),
-    data: [],
-    pageToLoad: 0,
-  },
   [ATOMS.THANGS]: {
     ...getStatusState(STATUSES.INIT),
     data: [],
@@ -60,25 +52,14 @@ const getInitAtom = () => ({
 
 export default store => {
   store.on(types.STORE_INIT, () => ({
-    searchResults: getInitAtom(),
+    geoSearchResults: getInitAtom(),
   }))
 
-  store.on(types.CHANGE_TEXT_RESULTS_STATUS, (state, { atom, status, isInitial }) => ({
-    searchResults: {
-      ...state.searchResults,
+  store.on(types.CHANGE_GEO_SEARCH_RESULTS_STATUS, (state, { atom, status, data }) => ({
+    geoSearchResults: {
+      ...state.geoSearchResults,
       [atom]: {
-        ...state.searchResults[atom],
-        ...getStatusState(status),
-        ...(isInitial && { data: [], pageToLoad: 1 }),
-      },
-    },
-  }))
-
-  store.on(types.CHANGE_SEARCH_RESULTS_STATUS, (state, { atom, status, data }) => ({
-    searchResults: {
-      ...state.searchResults,
-      [atom]: {
-        ...state.searchResults[atom],
+        ...state.geoSearchResults[atom],
         ...getStatusState(status),
         ...(data && { data }),
       },
@@ -86,128 +67,38 @@ export default store => {
   }))
 
   store.on(types.ERROR_POLLING_PHYNDEXER, state => ({
-    searchResults: {
-      ...state.searchResults,
+    geoSearchResults: {
+      ...state.geoSearchResults,
       phyndexer: {
-        ...state.searchResults.phyndexer,
+        ...state.geoSearchResults.phyndexer,
         isPollingError: true,
       },
     },
   }))
 
-  store.on(types.RESET_SEARCH_RESULTS, () => ({
-    searchResults: getInitAtom(),
-  }))
-
-  store.on(types.LOADED_SEARCH_RESULTS, (state, { atom, data, isInitial }) => ({
-    searchResults: {
-      ...state.searchResults,
-      ...getStatusState(STATUSES.LOADED),
-      [atom]: {
-        ...state.searchResults[atom],
-        data: isInitial ? data : [...state.searchResults[atom].data, ...data],
-        pageToLoad: isInitial
-          ? 1
-          : state.searchResults[atom].pageToLoad +
-            Math.floor(data.length / SEARCH_RESULT_SIZE),
-      },
-    },
+  store.on(types.RESET_GEO_SEARCH_RESULTS, () => ({
+    geoSearchResults: getInitAtom(),
   }))
 
   store.on(
-    types.FETCH_TEXT_SEARCH_RESULTS,
-    async (
-      state,
-      {
-        isInitial = false,
-        onError = noop,
-        onFinish = noop,
-        pageCount = 1,
-        scope,
-        searchTerm,
-      }
-    ) => {
-      if (!state.searchResults[ATOMS.TEXT].isLoading) {
-        store.dispatch(types.CHANGE_TEXT_RESULTS_STATUS, {
-          atom: ATOMS.TEXT,
-          status: STATUSES.LOADING,
-          data:
-            state &&
-            state.searchResults &&
-            state.searchResults[ATOMS.TEXT] &&
-            state.searchResults[ATOMS.TEXT].data,
-          isInitial,
-        })
-        const { data = [], error } = await api({
-          method: 'GET',
-          endpoint: 'models/search-by-text',
-          params: {
-            searchTerm,
-            scope: scope || 'all',
-            page: isInitial ? 0 : state.searchResults[ATOMS.TEXT].pageToLoad,
-            pageSize: isInitial && pageCount === 1 ? 200 : SEARCH_RESULT_SIZE * pageCount,
-          },
-        })
-
-        track('Text Search Started', {
-          searchTerm,
-          searchScope: scope,
-        })
-
-        if (error) {
-          store.dispatch(types.CHANGE_TEXT_RESULTS_STATUS, {
-            atom: ATOMS.TEXT,
-            status: STATUSES.FAILURE,
-            data: error,
-          })
-          onError(error)
-        } else {
-          store.dispatch(types.CHANGE_TEXT_RESULTS_STATUS, {
-            atom: ATOMS.TEXT,
-            status: STATUSES.LOADED,
-            data:
-              state &&
-              state.searchResults &&
-              state.searchResults[ATOMS.TEXT] &&
-              state.searchResults[ATOMS.TEXT].data,
-          })
-          store.dispatch(types.LOADED_SEARCH_RESULTS, {
-            atom: ATOMS.TEXT,
-            data,
-            isInitial,
-          })
-
-          track(`Text search - ${data.length > 0 ? 'Results' : 'No Results'}`, {
-            searchTerm,
-            searchScope: scope,
-            numOfMatches: data.length,
-          })
-
-          onFinish({ data, endOfData: !data.length || data.length < SEARCH_RESULT_SIZE })
-        }
-      }
-    }
-  )
-
-  store.on(
-    types.GET_MODEL_SEARCH_RESULTS,
+    types.FETCH_GEO_SEARCH_RESULTS,
     (_state, { file, data, onFinish = noop, onError = noop }) => {
-      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+      store.dispatch(types.CHANGE_GEO_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.PHYNDEXER,
         status: STATUSES.LOADING,
       })
-      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+      store.dispatch(types.CHANGE_GEO_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.THANGS,
         status: STATUSES.LOADING,
       })
-      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+      store.dispatch(types.CHANGE_GEO_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.UPLOAD_DATA,
         status: STATUSES.LOADING,
       })
 
-      store.on(types.CHANGE_SEARCH_RESULTS_STATUS, state => ({
-        searchResults: {
-          ...state.searchResults,
+      store.on(types.CHANGE_GEO_SEARCH_RESULTS_STATUS, state => ({
+        geoSearchResults: {
+          ...state.geoSearchResults,
           polygonCount: null,
         },
       }))
@@ -226,7 +117,7 @@ export default store => {
           return storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file)
         })
         .then(() => {
-          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+          store.dispatch(types.CHANGE_GEO_SEARCH_RESULTS_STATUS, {
             atom: ATOMS.UPLOAD_DATA,
             status: STATUSES.LOADED,
             data: uploadedUrlData,
@@ -247,9 +138,9 @@ export default store => {
         .then(({ data: uploadedData }) => {
           const { newPhyndexerId: phyndexerId, newModelId: modelId } = uploadedData
 
-          store.on(types.CHANGE_SEARCH_RESULTS_STATUS, state => ({
-            searchResults: {
-              ...state.searchResults,
+          store.on(types.CHANGE_GEO_SEARCH_RESULTS_STATUS, state => ({
+            geoSearchResults: {
+              ...state.geoSearchResults,
               polygonCount: uploadedData.polygonCount ? uploadedData.polygonCount : null,
             },
           }))
@@ -262,17 +153,17 @@ export default store => {
           })
         })
         .catch(error => {
-          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+          store.dispatch(types.CHANGE_GEO_SEARCH_RESULTS_STATUS, {
             atom: ATOMS.PHYNDEXER,
             status: STATUSES.FAILURE,
             data: error,
           })
-          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+          store.dispatch(types.CHANGE_GEO_SEARCH_RESULTS_STATUS, {
             atom: ATOMS.THANGS,
             status: STATUSES.FAILURE,
             data: error,
           })
-          store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+          store.dispatch(types.CHANGE_GEO_SEARCH_RESULTS_STATUS, {
             atom: ATOMS.UPLOAD_DATA,
             status: STATUSES.FAILURE,
             data: error,
@@ -287,11 +178,11 @@ export default store => {
       _state,
       { modelId, phyndexerId, onFinish = noop, onError = noop, geoSearch = true, scope }
     ) => {
-      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+      store.dispatch(types.CHANGE_GEO_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.THANGS,
         status: STATUSES.LOADING,
       })
-      store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+      store.dispatch(types.CHANGE_GEO_SEARCH_RESULTS_STATUS, {
         atom: ATOMS.PHYNDEXER,
         status: STATUSES.LOADING,
       })
@@ -325,12 +216,12 @@ export default store => {
       })
 
       if (error) {
-        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+        store.dispatch(types.CHANGE_GEO_SEARCH_RESULTS_STATUS, {
           atom: ATOMS.THANGS,
           status: STATUSES.FAILURE,
           data: error,
         })
-        store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+        store.dispatch(types.CHANGE_GEO_SEARCH_RESULTS_STATUS, {
           atom: ATOMS.PHYNDEXER,
           status: STATUSES.FAILURE,
           data: error,
@@ -346,13 +237,13 @@ export default store => {
             const { collection, status, matches = [] } = result
             matchCount[collection] = matches.length
             if (status === 'completed') {
-              store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+              store.dispatch(types.CHANGE_GEO_SEARCH_RESULTS_STATUS, {
                 atom: collection,
                 status: STATUSES.LOADED,
                 data: matches,
               })
             } else if (status === 'error') {
-              store.dispatch(types.CHANGE_SEARCH_RESULTS_STATUS, {
+              store.dispatch(types.CHANGE_GEO_SEARCH_RESULTS_STATUS, {
                 atom: collection,
                 status: STATUSES.FAILURE,
                 data: matches,

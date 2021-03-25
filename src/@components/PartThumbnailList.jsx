@@ -1,6 +1,6 @@
 import React from 'react'
 import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
-import { Card, ModelThumbnail, MetadataSecondary } from '@components'
+import { Card, ModelThumbnail, MetadataSecondary, Spacer } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@style'
 
@@ -70,6 +70,7 @@ export const PartThumbnailList = ({ parts, maximumPartsToDisplay = 12 }) => {
       <MetadataSecondary className={c.PartThumbnailList_Metadata}>
         Other parts in this model ({parts.length})
       </MetadataSecondary>
+      <Spacer size={'0.75rem'} />
       <div className={c.PartThumbnailList_ThumbnailsRow}>
         {parts.slice(0, maximumPartsToDisplay).map((part, i) => (
           <Card

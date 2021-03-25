@@ -97,9 +97,9 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'center',
       width: '100%',
       height: '100%',
-      backgroundColor: theme.colors.purple[900],
+      // Apply opacity directly to the hex value so our text doesn't lose opacity
+      backgroundColor: `${theme.colors.purple[900]}b3`,
       color: theme.colors.white[500],
-      opacity: 0.7,
 
       '& svg, & path': {
         fill: theme.colors.white[500],

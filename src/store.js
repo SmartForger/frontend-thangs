@@ -11,7 +11,8 @@ import modelsStatsStore from '@store/modelsStats/store'
 import modelsStore from '@store/models/store'
 import notificationsStore from '@store/notifications/store'
 import relatedModelsStore from '@store/relatedModels/store'
-import searchStore from '@store/search/store'
+import geoSearchStore from '@store/geoSearch/store'
+import textSearchStore from '@store/textSearch/store'
 import searchMyThangsStore from '@store/searchMyThangs/store'
 import searchSubscriptionsStore from '@store/searchSubscriptions/store'
 import teamsStore from '@store/teams/store'
@@ -36,7 +37,8 @@ const storeParts = [
   modelsStore,
   notificationsStore,
   relatedModelsStore,
-  searchStore,
+  geoSearchStore,
+  textSearchStore,
   searchMyThangsStore,
   searchSubscriptionsStore,
   teamsStore,

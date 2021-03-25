@@ -88,16 +88,16 @@ const SearchByUpload = ({
   const c = useStyles()
   const history = useHistory()
   const { setOverlayOpen } = useOverlay()
-  const { dispatch, searchResults } = useStoreon('searchResults')
+  const { dispatch, geoSearchResults } = useStoreon('geoSearchResults')
   // const closeOverlay = useCallback(() => {
   //   setOverlayOpen(false)
   // }, [setOverlayOpen])
   // useExternalClick(containerRef, closeOverlay)
-  const { phyndexer, thangs, uploadData } = searchResults
+  const { phyndexer, thangs, uploadData } = geoSearchResults
   const polygonCount =
-    searchResults &&
-    searchResults.polygonCount &&
-    numberWithCommas(searchResults.polygonCount)
+    geoSearchResults &&
+    geoSearchResults.polygonCount &&
+    numberWithCommas(geoSearchResults.polygonCount)
   const newFileName = R.path(['data', 'newFileName'], uploadData)
 
   const handleFile = useCallback(
@@ -107,7 +107,7 @@ const SearchByUpload = ({
         name: sanitizeFileName(file.name),
         size: file.size,
       }
-      dispatch(types.GET_MODEL_SEARCH_RESULTS, {
+      dispatch(types.FETCH_GEO_SEARCH_RESULTS, {
         file,
         data: {
           ...requiredVariables,
@@ -133,7 +133,7 @@ const SearchByUpload = ({
   })
 
   useEffect(() => {
-    dispatch(types.RESET_SEARCH_RESULTS)
+    dispatch(types.RESET_GEO_SEARCH_RESULTS)
     overlayview('SearchByUpload')
     if (model) {
       const modelId = model.id || model.modelId

@@ -29,8 +29,8 @@ const useStyles = createUseStyles(theme => {
       marginRight: '1.5rem',
 
       [md]: {
-        width: '13.25rem',
-        height: '13.25rem !important',
+        width: '16.25rem',
+        height: '16.25rem !important',
       },
 
       '&:after': {
@@ -173,40 +173,55 @@ const useStyles = createUseStyles(theme => {
       },
     },
     TextSearchResult_Thumbnail_Skeleton: {
-      width: '13.375rem',
+      width: '100%',
+      height: '16.375rem !important',
       margin: 'auto',
       borderRadius: '.5rem',
-      height: '100% !important',
+
+      [md]: {
+        height: '100% !important',
+        width: '16.375rem',
+      },
     },
     TextSearchResult_Text_Skeleton: {
       height: '1rem !important',
-      width: '20rem',
+      width: '100%',
       margin: 'auto',
       borderRadius: '.5rem',
       paddingBottom: '1rem',
     },
     TextSearchResult_Title_Skeleton: {
       height: '5rem',
-      width: '20rem',
+      width: '100%',
       margin: 'auto',
       borderRadius: '.5rem',
       paddingBottom: '1rem',
     },
     TextSearchResult_Subtext_Skeleton: {
       height: '5rem !important',
-      width: '20rem',
+      width: '100%',
       margin: 'auto',
       borderRadius: '.5rem',
       paddingBottom: '1rem',
     },
     TextSearchResult_Skeleton_Row: {
       display: 'flex',
-      flexDirection: 'row',
-      height: '13.375rem',
+      flexDirection: 'column',
+      height: '16.375rem',
+      width: '100%',
+
+      [md]: {
+        flexDirection: 'row',
+      },
     },
     TextSearchResult_Skeleton_Column: {
-      display: 'flex',
-      flexDirection: 'column',
+      display: 'none',
+
+      [md]: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '50%',
+      },
     },
   }
 })
@@ -245,16 +260,16 @@ const Anchor = ({ children, to = {}, isExternal, scope, searchIndex, ...props })
   )
 }
 
-function generateTestParts(model) {
-  const partCount = Math.random() > 0.5 ? Math.floor(Math.random() * 100) : 0
-  const parts = []
+// function generateTestParts(model) {
+//   const partCount = Math.random() > 0.5 ? Math.floor(Math.random() * 100) : 0
+//   const parts = []
 
-  for (let i = 0; i < partCount; i++) {
-    parts.push(model)
-  }
+//   for (let i = 0; i < partCount; i++) {
+//     parts.push(model)
+//   }
 
-  return parts
-}
+//   return parts
+// }
 
 const ModelDetails = ({ isExternalModel, model = {}, onFindRelated = noop, scope }) => {
   const c = useStyles()
@@ -267,7 +282,7 @@ const ModelDetails = ({ isExternalModel, model = {}, onFindRelated = noop, scope
     ownerLastName,
     ownerAvatarUrl,
     ownerUsername,
-    parts = generateTestParts(model),
+    parts,
   } = model
   let formattedModelDescription = truncateString(modelDescription, 144)
 
@@ -301,8 +316,13 @@ const ModelDetails = ({ isExternalModel, model = {}, onFindRelated = noop, scope
         </div>
         <div className={c.TextSearchResult_Name}>{modelTitle || modelFileName}</div>
         <div className={c.TextSearchResult_Description}>{formattedModelDescription}</div>
+        {parts && parts.length > 0 && (
+          <>
+            <Spacer size={'1rem'} />
+            <PartThumbnailList parts={parts} />
+          </>
+        )}
       </Anchor>
-      {parts && parts.length > 0 && <PartThumbnailList parts={parts} />}
       <div
         className={c.TextSearchResult_FindRelatedLink}
         onClick={() => onFindRelated({ model })}
