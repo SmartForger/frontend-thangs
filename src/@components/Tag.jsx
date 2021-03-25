@@ -12,15 +12,20 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       margin: 0,
       padding: 0,
-      backgroundColor: ({ color }) => color || theme.colors.gold[500],
+      backgroundColor: ({ color, secondary }) =>
+        color ? color : secondary ? theme.colors.blue[200] : theme.colors.gold[500],
       color: theme.colors.black[500],
       borderRadius: '.25rem',
       cursor: 'pointer',
       width: 'fit-content',
     },
     Tag_Text: {
-      color: ({ lightText }) =>
-        lightText ? theme.colors.white[400] : theme.colors.black[900],
+      color: ({ lightText, textColor }) =>
+        textColor
+          ? textColor
+          : lightText
+          ? theme.colors.white[400]
+          : theme.colors.black[900],
       lineHeight: '.5rem',
     },
     Tag_TextWrapper: {
@@ -30,19 +35,21 @@ const useStyles = createUseStyles(theme => {
       margin: 0,
       padding: 0,
     },
-    Tag_Secondary: {
-      backgroundColor: theme.colors.blue[200],
-    },
   }
 })
 const noop = () => null
-const Tag = ({ children, className, color, lightText, secondary, onClick = noop }) => {
-  const c = useStyles({ color, lightText })
+const Tag = ({
+  children,
+  className,
+  color,
+  textColor,
+  lightText,
+  secondary,
+  onClick = noop,
+}) => {
+  const c = useStyles({ color, lightText, secondary, textColor })
   return (
-    <div
-      className={classnames(className, c.Tag, { [c.Tag_Secondary]: secondary })}
-      onClick={onClick}
-    >
+    <div className={classnames(className, c.Tag)} onClick={onClick}>
       <Spacer size={'.25rem'} />
       <div className={c.Tag_TextWrapper}>
         <Spacer size={'.5rem'} />
