@@ -8,44 +8,38 @@
 ## Usage
 
 1. Clone the repository
-
-1. Create a personal token with minimum `read:packages` permissions in your [GitHub account settings](https://github.com/settings/tokens)
-
-1. Copy `.yarnrc.example` to `.yarnrc` and replace `${GH_PACKAGE_TOKEN}` with your personal token
-
-    - Alternatively, you can add `export GH_PACKAGE_TOKEN=YOUR_TOKEN_HERE` to your .bashrc/.zshrc/shell profile after copying `.yarnrc.example` to `.yarnrc`
-
+1. If you are currently not a part of Physna's private NPM org, reach out to Raul or Brandon for an invite
+1. If you are not currently logged into NPM in your terminal, run `npm adduser` on your machine and log in with your credentials
+1. Once you're logged in, run `npm token create` and follow the prompts to create your token
+    - For `thangs-react`, you only need a readonly token
+1. In your .bashrc/.zshrc/shell profile, add `export NPM_TOKEN=YOUR_TOKEN_HERE`
+1. Reload your terminal or manually export the token to your path
 1. Run the following command in the root directory:
+    ```bash
+    yarn install
+    ```
+1. Create a file named `.env.development.local` in the root folder and make sure it contains the necessary details for your dev environment:
+    ```ini
+    REACT_APP_API_KEY=(Url pointing to the instance of "thangs-social-service" you are currently working with, eg: http://localhost:8000/api/)
+    REACT_APP_WEBSITE_NAME=(The Document Title you wish to display)
+    NODE_PATH="src/"
+    HTTPS=false
+    REACT_APP_HOOPS_MODEL_PREP_ENDPOINT_URI=https://hoops-scs-dot-gcp-and-physna.uc.r.appspot.com/api/prepare-model
+    REACT_APP_HOOPS_WS_ENDPOINT_URI=wss://hoops-scs-dot-gcp-and-physna.uc.r.appspot.com
 
-```bash
-yarn install
-```
+    REACT_APP_GOOGLE_CLOUD_PROJECT_ID=gcp-and-physna
+    REACT_APP_GOOGLE_CLOUD_ERROR_REPORTING_KEY=AIzaSyCUmGwa9UJArRbPKt5YvT8ogf8EnEJCRyQ
+    REACT_APP_THUMBNAILS_HOST=http://localhost:1000/convert
+    REACT_APP_TIW_THUMBNAILS_HOST=http://localhost:1000/tiw
 
-5. Create a file named `.env.development.local` in the root folder and make sure it contains the necessary details for your dev environment:
-
-```ini
-REACT_APP_API_KEY=(Url pointing to the instance of "thangs-social-service" you are currently working with, eg: http://localhost:8000/api/)
-REACT_APP_WEBSITE_NAME=(The Document Title you wish to display)
-NODE_PATH="src/"
-HTTPS=false
-REACT_APP_HOOPS_MODEL_PREP_ENDPOINT_URI=https://hoops-scs-dot-gcp-and-physna.uc.r.appspot.com/api/prepare-model
-REACT_APP_HOOPS_WS_ENDPOINT_URI=wss://hoops-scs-dot-gcp-and-physna.uc.r.appspot.com
-
-REACT_APP_GOOGLE_CLOUD_PROJECT_ID=gcp-and-physna
-REACT_APP_GOOGLE_CLOUD_ERROR_REPORTING_KEY=AIzaSyCUmGwa9UJArRbPKt5YvT8ogf8EnEJCRyQ
-REACT_APP_THUMBNAILS_HOST=http://localhost:1000/convert
-REACT_APP_TIW_THUMBNAILS_HOST=http://localhost:1000/tiw
-
-SCRIPTS_SOCIAL_SERVICE_URL=http://localhost:8000
-SCRIPTS_SOCIAL_SERVICE_EMAIL=user@email.com
-SCRIPTS_SOCIAL_SERVICE_PASSWORD=user
-```
-
-6. Run the following command in the terminal to start the app:
-
-```bash
-yarn run dev
-```
+    SCRIPTS_SOCIAL_SERVICE_URL=http://localhost:8000
+    SCRIPTS_SOCIAL_SERVICE_EMAIL=user@email.com
+    SCRIPTS_SOCIAL_SERVICE_PASSWORD=user
+    ```
+1. Run the following command in the terminal to start the app:
+    ```bash
+    yarn run dev
+    ```
 
 ## Tests
 

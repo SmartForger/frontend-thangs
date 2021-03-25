@@ -1,3 +1,0 @@
-# Replace `${GH_PACKAGE_TOKEN}` with your personal token
-registry "https://registry.npmjs.org"
-"@physna:registry" "https://npm.pkg.github.com/:_authToken=${GH_PACKAGE_TOKEN}"
