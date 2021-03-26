@@ -10,6 +10,7 @@ const getInitialState = () => ({
   ...getStatusState(STATUSES.INIT),
   data: [],
   pageToLoad: 0,
+  bookmark: '',
 })
 
 export default store => {
@@ -21,7 +22,7 @@ export default store => {
     textSearchResults: {
       ...state.textSearchResults,
       ...getStatusState(status),
-      ...(isInitial && { data: [], pageToLoad: 1 }),
+      ...(isInitial && { data: [], pageToLoad: 1, bookmark: '' }),
     },
   }))
 
@@ -29,11 +30,12 @@ export default store => {
     textSearchResults: getInitialState(),
   }))
 
-  store.on(types.LOADED_TEXT_SEARCH_RESULTS, (state, { data, isInitial }) => ({
+  store.on(types.LOADED_TEXT_SEARCH_RESULTS, (state, { data, bookmark, isInitial }) => ({
     textSearchResults: {
       ...state.textSearchResults,
       ...getStatusState(STATUSES.LOADED),
       data: isInitial ? data : [...state.textSearchResults.data, ...data],
+      bookmark,
       pageToLoad: isInitial
         ? 1
         : state.textSearchResults.pageToLoad +
@@ -57,14 +59,15 @@ export default store => {
       if (!state.textSearchResults.isLoading) {
         store.dispatch(types.CHANGE_TEXT_SEARCH_RESULTS_STATUS, {
           status: STATUSES.LOADING,
-          data: state && state.textSearchResults && state.textSearchResults.data,
           isInitial,
         })
-        const { data = [], error } = await api({
+        const { data = {}, error } = await api({
           method: 'GET',
           endpoint: 'models/search-by-text',
           params: {
             searchTerm,
+            collapse: true,
+            bookmark: state.textSearchResults.bookmark,
             scope: scope || 'all',
             page: isInitial ? 0 : state.textSearchResults.pageToLoad,
             pageSize: isInitial && pageCount === 1 ? 200 : SEARCH_RESULT_SIZE * pageCount,
@@ -79,20 +82,15 @@ export default store => {
         if (error) {
           store.dispatch(types.CHANGE_TEXT_SEARCH_RESULTS_STATUS, {
             status: STATUSES.FAILURE,
-            data: error,
           })
           onError(error)
         } else {
           store.dispatch(types.CHANGE_TEXT_SEARCH_RESULTS_STATUS, {
             status: STATUSES.LOADED,
-            data:
-              state &&
-              state.textSearchResults &&
-              state.textSearchResults &&
-              state.textSearchResults.data,
           })
           store.dispatch(types.LOADED_TEXT_SEARCH_RESULTS, {
-            data,
+            data: data?.results ? data.results : data,
+            bookmark: data?.nextBookmark ? data.nextBookmark : '',
             isInitial,
           })
 
