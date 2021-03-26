@@ -1,6 +1,12 @@
 import React from 'react'
 import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
-import { Card, ModelThumbnail, MetadataSecondary, Spacer } from '@components'
+import {
+  Card,
+  MetadataSecondary,
+  ModelThumbnail,
+  SearchAnchor,
+  Spacer,
+} from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 
@@ -63,7 +69,12 @@ const MorePartsIndicator = ({ remainingPartCount }) => {
   )
 }
 
-export const PartThumbnailList = ({ parts, maximumPartsToDisplay = 12 }) => {
+export const PartThumbnailList = ({
+  parts,
+  isExternalModel,
+  scope,
+  maximumPartsToDisplay = 12,
+}) => {
   const c = useStyles()
   return (
     <div>
@@ -73,26 +84,34 @@ export const PartThumbnailList = ({ parts, maximumPartsToDisplay = 12 }) => {
       <Spacer size={'0.75rem'} />
       <div className={c.PartThumbnailList_ThumbnailsRow}>
         {parts.slice(0, maximumPartsToDisplay).map((part, i) => (
-          <Card
+          <SearchAnchor
             key={part.modelId}
-            className={classnames(c.PartThumbnailList_PartThumbnailWrapper)}
+            to={{
+              pathname: part.attributionUrl,
+              search: `?preselectPart=${part.modelId}`,
+              state: { prevPath: window.location.href },
+            }}
+            isExternal={isExternalModel}
+            scope={scope}
           >
-            <ModelThumbnail
-              className={c.PartThumbnailList_Thumbnail}
-              name={part.modelFileName}
-              model={part}
-              showOverlay={
-                maximumPartsToDisplay === i + 1 && parts.length > maximumPartsToDisplay
-              }
-              overlayContent={
-                <MorePartsIndicator
-                  // Bump count by one since we should include the part that we are overlapping
-                  remainingPartCount={parts.length - maximumPartsToDisplay + 1}
-                />
-              }
-              mini
-            />
-          </Card>
+            <Card className={classnames(c.PartThumbnailList_PartThumbnailWrapper)}>
+              <ModelThumbnail
+                className={c.PartThumbnailList_Thumbnail}
+                name={part.modelFileName}
+                model={part}
+                showOverlay={
+                  maximumPartsToDisplay === i + 1 && parts.length > maximumPartsToDisplay
+                }
+                overlayContent={
+                  <MorePartsIndicator
+                    // Bump count by one since we should include the part that we are overlapping
+                    remainingPartCount={parts.length - maximumPartsToDisplay + 1}
+                  />
+                }
+                mini
+              />
+            </Card>
+          </SearchAnchor>
         ))}
       </div>
     </div>

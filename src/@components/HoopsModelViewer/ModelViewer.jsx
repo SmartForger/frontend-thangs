@@ -48,15 +48,37 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const findPrimaryPart = parts => {
-  if (parts.length > 1) {
+// Passing null as partId will return the primary part
+const findPart = (parts, partId = null) => {
+  if (partId) {
+    return R.find(R.propEq('phyndexerId', partId))(parts) || parts[0]
+  } else if (parts.length > 1) {
     return R.find(R.propEq('isPrimary', true))(parts) || parts[0]
   } else {
     return parts[0]
   }
 }
 
-const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
+const sortParts = node => {
+  if (node.parts) {
+    node.parts.sort((a, b) => {
+      const valA = a.isPrimary ? 2 : a.parts && a.parts.length > 0 ? 1 : 0
+      const valB = b.isPrimary ? 2 : b.parts && b.parts.length > 0 ? 1 : 0
+
+      return valB - valA
+    })
+    node.parts.forEach(a => {
+      sortParts(a)
+    })
+  }
+}
+
+const HoopsModelViewer = ({
+  className,
+  model = {},
+  minimizeTools,
+  preselectedPart = null,
+}) => {
   const [selectedModel, setSelectedModel] = useState(null)
   const [highlightedModel, setHighlightedModel] = useState(null)
   const [partList, setPartList] = useState([])
@@ -72,26 +94,13 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
 
   useEffect(() => {
     if (model.parts) {
-      const sortParts = node => {
-        if (node.parts) {
-          node.parts.sort((a, b) => {
-            const valA = a.isPrimary ? 2 : a.parts && a.parts.length > 0 ? 1 : 0
-            const valB = b.isPrimary ? 2 : b.parts && b.parts.length > 0 ? 1 : 0
-
-            return valB - valA
-          })
-          node.parts.forEach(a => {
-            sortParts(a)
-          })
-        }
-      }
       sortParts(model)
 
       const list = flattenTree(model.parts, 'parts')
 
       setPartList(list)
       partListRef.current = list
-      setSelectedModel(findPrimaryPart(list))
+      setSelectedModel(findPart(list, preselectedPart))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [model.id])
@@ -100,14 +109,14 @@ const HoopsModelViewer = ({ className, model = {}, minimizeTools }) => {
     if (selectedModel) {
       return encodeURIComponent(selectedModel.filename)
     } else {
-      const { parts } = model
+      const parts = flattenTree(model.parts, 'parts')
       if (parts && parts.length) {
-        const primaryPart = findPrimaryPart(parts)
-        return encodeURIComponent(primaryPart.filename)
+        const part = findPart(parts, preselectedPart)
+        return encodeURIComponent(part.filename)
       }
       return encodeURIComponent(model.filename)
     }
-  }, [model, selectedModel])
+  }, [model, selectedModel, preselectedPart])
 
   const selectModel = node => {
     setSelectedModel(node)
@@ -183,12 +192,17 @@ const StatusIndicator = ({ status, model }) => {
   )
 }
 
-const ModelViewer = ({ className, model, minimizeTools }) => {
+const ModelViewer = ({ className, model, minimizeTools, preselectedPart }) => {
   const c = useStyles()
   const [seenHowTo, setSeenHowTo] = useState(true) //useLocalStorage('seenHowTo', false)
 
   return seenHowTo ? (
-    <HoopsModelViewer className={className} model={model} minimizeTools={minimizeTools} />
+    <HoopsModelViewer
+      className={className}
+      model={model}
+      minimizeTools={minimizeTools}
+      preselectedPart={preselectedPart}
+    />
   ) : (
     <div className={classnames(className, c.HoopsModelViewer_WebViewContainer)}>
       <HowTo setSeenHowTo={setSeenHowTo} />

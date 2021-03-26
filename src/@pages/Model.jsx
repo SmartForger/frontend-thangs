@@ -31,7 +31,13 @@ import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
 import { Message404 } from './404'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
-import { useOverlay, usePageMeta, usePerformanceMetrics, useLocalStorage } from '@hooks'
+import {
+  useOverlay,
+  usePageMeta,
+  usePerformanceMetrics,
+  useLocalStorage,
+  useQuery,
+} from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
@@ -554,6 +560,7 @@ const ModelDetailPage = ({
   showBackupViewer,
   getTime,
   showExternalResults,
+  preselectedPart,
 }) => {
   const c = useStyles()
   const signUpShown = useRef(false)
@@ -702,7 +709,11 @@ const ModelDetailPage = ({
             {showBackupViewer ? (
               <BackupViewer className={c.Model_BackupViewer} model={modelData} />
             ) : (
-              <HoopsModelViewer className={c.Model_ModelViewer} model={modelData} />
+              <HoopsModelViewer
+                className={c.Model_ModelViewer}
+                model={modelData}
+                preselectedPart={preselectedPart}
+              />
             )}
           </div>
           <div className={c.Model_Row}>
@@ -750,6 +761,7 @@ const ModelDetailPage = ({
 
 const Page = () => {
   const { id, modelString } = useParams()
+  const preselectedPart = useQuery('preselectPart')
   const modelId = modelString ? modelString.split('-').pop() : id
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [showExternalResults] = useLocalStorage('showExternalResults', false)
@@ -769,6 +781,7 @@ const Page = () => {
       showBackupViewer={showBackupViewer}
       showExternalResults={showExternalResults}
       getTime={getTime}
+      preselectedPart={preselectedPart}
     />
   )
 }
