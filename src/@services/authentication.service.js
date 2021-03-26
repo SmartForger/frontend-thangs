@@ -39,6 +39,14 @@ function clearCurrentUser() {
   currentUser = undefined
 }
 
+function getExpIdInLocalStorage() {
+  return localStorage.getItem('expId')
+}
+
+function setExpIdInLocalStorage(id) {
+  localStorage.setItem('expId', id)
+}
+
 const login = async ({ email, password }) => {
   const authUrl = `${process.env.REACT_APP_API_KEY}auth`
   const requestOptions = {
@@ -245,6 +253,8 @@ const authenticationService = {
       return currentUser.id
     }
   },
+  getExpIdInLocalStorage,
+  setExpIdInLocalStorage,
 }
 
 export default authenticationService

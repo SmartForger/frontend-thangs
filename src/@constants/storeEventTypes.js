@@ -173,3 +173,6 @@ export const UPDATE_SEARCH_MY_THANGS = 'update-search-my-thangs'
 export const ERROR_SEARCH_MY_THANGS = 'error-search-my-thangs'
 export const LOADING_SEARCH_MY_THANGS = 'loading-search-my-thangs'
 export const LOADED_SEARCH_MY_THANGS = 'loaded-search-my-thangs'
+/* Experiments */
+export const FETCH_EXPERIMENTS = 'fetch-experiments'
+export const CHANGE_EXPERIMENTS_STATUS = 'change-experiments-status'

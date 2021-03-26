@@ -74,11 +74,19 @@ export default store => {
           },
         })
 
-        track('Text Search Started', {
-          searchTerm,
-          searchScope: scope,
-          pageCount: isInitial ? 0 : state.textSearchResults.pageToLoad,
-        })
+        if (isInitial || state.textSearchResults.pageToLoad === 0) {
+          track('Text Search Started', {
+            searchTerm,
+            searchScope: scope,
+            pageCount: isInitial ? 0 : state.textSearchResults.pageToLoad,
+          })
+        } else {
+          track('Text Search - Infinite Scroll', {
+            searchTerm,
+            searchScope: scope,
+            pageCount: state.textSearchResults.pageToLoad,
+          })
+        }
 
         if (error) {
           store.dispatch(types.CHANGE_TEXT_SEARCH_RESULTS_STATUS, {

@@ -1,17 +1,18 @@
 import React, { useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
-// import { useFeature } from '@optimizely/react-sdk'
+import { useStoreon } from 'storeon/react'
 import { authenticationService } from '@services'
 import {
   initialize,
   identify,
   locationChange,
-  // updateUserExperiments,
+  updateUserExperiments,
 } from '@utilities/analytics'
 import ReactGA from 'react-ga'
 import ReactPixel from 'react-facebook-pixel'
 import { usePageMeta, useQuery } from '@hooks'
+import * as types from '@constants/storeEventTypes'
 
 const AppAnalytics = () => {
   const location = useLocation()
@@ -20,6 +21,7 @@ const AppAnalytics = () => {
   const analyticsInitialized = useRef(false)
   const { title, description } = usePageMeta('App')
   const user = authenticationService.getCurrentUser()
+  const { dispatch, experiments } = useStoreon('experiments')
   // eslint-disable-next-line no-unused-vars
   // const [isEnabled] = useFeature('showphynrelated', { autoUpdate: true })
 
@@ -34,12 +36,14 @@ const AppAnalytics = () => {
       identify({ user, inviteCode, experiments: {} })
       userIdentified.current = true
     }
+
+    dispatch(types.FETCH_EXPERIMENTS)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
-  // useEffect(() => {
-  // updateUserExperiments({ showPhynVariation: isEnabled })
-  // }, [isEnabled])
+  useEffect(() => {
+    if (experiments?.data) updateUserExperiments(experiments?.data)
+  }, [experiments])
 
   useEffect(() => {
     ReactGA.pageview(location.pathname + location.search)

@@ -47,6 +47,7 @@ const AuthSaveSearchButton = ({
   searchTerm,
   searchSubscriptions,
   dispatch,
+  iconOnly,
 }) => {
   const [saved, setSaved] = useState(
     !!hasSavedSearch(searchSubscriptions.data, searchTerm, modelId)
@@ -81,38 +82,58 @@ const AuthSaveSearchButton = ({
 
   return (
     <>
-      <Button
-        className={classnames(c.SaveSearchButton)}
-        secondary
-        disabled={searchSubscriptions.isLoading || searchSubscriptions.isError}
-        onClick={handleSavedClicked}
-        data-for='save-search'
-        data-tip='Save to your profile'
-        data-type='light'
-        data-class={c.SaveSearchButton_Tooltip}
-      >
-        {saved ? (
+      {!iconOnly && (
+        <Button
+          className={classnames(c.SaveSearchButton)}
+          secondary
+          disabled={searchSubscriptions.isLoading || searchSubscriptions.isError}
+          onClick={handleSavedClicked}
+          data-for='save-search'
+          data-tip='Save to your profile'
+          data-type='light'
+          data-class={c.SaveSearchButton_Tooltip}
+        >
+          {saved ? (
+            <HeartFilledIcon
+              className={classnames(c.SaveSearchIcon, {
+                [c.SaveSearchIcon__saved]: hasChanged,
+              })}
+            />
+          ) : (
+            <HeartIcon
+              className={classnames(c.SaveSearchIcon, {
+                [c.SaveSearchIcon__unsaved]: hasChanged,
+              })}
+            />
+          )}
+          <Spacer size='.5rem' />
+          {saved ? 'Saved' : 'Save Search'}
+        </Button>
+      )}
+      {iconOnly &&
+        (saved ? (
           <HeartFilledIcon
             className={classnames(c.SaveSearchIcon, {
               [c.SaveSearchIcon__saved]: hasChanged,
             })}
+            onClick={handleSavedClicked}
           />
         ) : (
           <HeartIcon
             className={classnames(c.SaveSearchIcon, {
               [c.SaveSearchIcon__unsaved]: hasChanged,
             })}
+            onClick={handleSavedClicked}
+            data-for='save-search'
+            data-tip='Save this search'
           />
-        )}
-        <Spacer size='.5rem' />
-        {saved ? 'Saved' : 'Save Search'}
-      </Button>
-      {!saved && <ReactTooltip id='save-search' effect='solid' />}
+        ))}
+      {!saved && <ReactTooltip id='save-search' type='light' />}
     </>
   )
 }
 const noop = () => null
-const UnauthSaveSearchButton = ({ c, openSignupOverlay = noop }) => {
+const UnauthSaveSearchButton = ({ c, openSignupOverlay = noop, iconOnly }) => {
   const handleClick = useCallback(() => {
     openSignupOverlay('Join to Like, Follow, Share.', 'Like')
     track('SignUp Prompt Overlay', { source: 'Like' })
@@ -120,23 +141,37 @@ const UnauthSaveSearchButton = ({ c, openSignupOverlay = noop }) => {
 
   return (
     <>
-      <Button
-        className={classnames(c.SaveSearchButton)}
-        onClick={handleClick}
-        secondary
-        data-for='save-search'
-        data-tip='Help us improve! Give us your feedback.'
-      >
-        <HeartFilledIcon className={c.SaveSearchIcon} />
-        <Spacer size='.5rem' />
-        Save Search
-      </Button>
-      <ReactTooltip
-        id='save-search'
-        className={c.SaveSearchButton_Tooltip}
-        place={'top'}
-        effect='solid'
-      />
+      {!iconOnly && (
+        <>
+          <Button
+            className={classnames(c.SaveSearchButton)}
+            onClick={handleClick}
+            secondary
+            data-for='save-search'
+            data-tip='Save this search'
+          >
+            <HeartFilledIcon className={c.SaveSearchIcon} />
+            <Spacer size='.5rem' />
+            Save Search
+          </Button>
+        </>
+      )}
+      {iconOnly && (
+        <>
+          <HeartFilledIcon
+            className={c.SaveSearchIcon}
+            onClick={handleClick}
+            data-for='save-search'
+            data-tip='Save this search'
+          />
+          <ReactTooltip
+            id='save-search'
+            className={c.SaveSearchButton_Tooltip}
+            place={'top'}
+            effect='solid'
+          />
+        </>
+      )}
     </>
   )
 }
@@ -148,6 +183,7 @@ const SaveSearchButton = ({
   openSignupOverlay = noop,
   dispatch = noop,
   searchSubscriptions,
+  iconOnly = false,
 }) => {
   const c = useStyles()
   if (currentUser) {
@@ -158,10 +194,17 @@ const SaveSearchButton = ({
         searchTerm={searchTerm}
         searchSubscriptions={searchSubscriptions}
         dispatch={dispatch}
+        iconOnly={iconOnly}
       />
     )
   }
-  return <UnauthSaveSearchButton c={c} openSignupOverlay={openSignupOverlay} />
+  return (
+    <UnauthSaveSearchButton
+      c={c}
+      openSignupOverlay={openSignupOverlay}
+      iconOnly={iconOnly}
+    />
+  )
 }
 
 export default SaveSearchButton

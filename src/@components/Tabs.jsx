@@ -9,7 +9,7 @@ const useStyles = createUseStyles(theme => {
   } = theme
 
   return {
-    TabsWrapper: {
+    Tabs_Wrapper: {
       display: 'flex',
       justifyContent: 'center',
       width: '100%',
@@ -19,14 +19,16 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Tabs: {
+      backgroundColor: theme.colors.white[400],
+      borderRadius: '1.5rem',
       display: 'flex',
       justifyContent: 'flex-end',
       padding: '.25rem',
-      backgroundColor: theme.colors.white[400],
-      borderRadius: '.5rem',
     },
     Tabs_Button: {
+      borderRadius: '1.5rem',
       color: theme.colors.black[500],
+      padding: '.5rem 1rem',
     },
   }
 })
@@ -34,7 +36,7 @@ const noop = () => null
 const Tabs = ({ className, options = [] }) => {
   const c = useStyles({})
   return (
-    <div className={classnames(className, c.TabsWrapper)}>
+    <div className={classnames(className, c.Tabs_Wrapper)}>
       <div className={c.Tabs}>
         {options.map((option, ind) => {
           const { label, selected, onClick = noop } = option

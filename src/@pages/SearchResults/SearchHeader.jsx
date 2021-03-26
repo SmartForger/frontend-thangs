@@ -1,10 +1,11 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useStoreon } from 'storeon/react'
-import { SaveSearchButton, Spacer, SearchSourceFilterActionMenu } from '@components'
+import { SaveSearchButton, Spacer, SearchSourceFilterActionMenu, Tabs } from '@components'
 import { useLocalStorage } from '@hooks'
 import { track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import Skeleton from '@material-ui/lab/Skeleton'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -31,11 +32,14 @@ const useStyles = createUseStyles(theme => {
       marginRight: '.5rem',
     },
     SearchResults_Header: {
+      flexDirection: 'column',
       display: 'flex',
-      flexDirection: 'row',
       justifyContent: 'space-between',
       color: theme.colors.purple[900],
       marginBottom: '1.5rem',
+      [md]: {
+        flexDirection: 'row',
+      },
     },
     SearchResults_HeaderTextWrapper: {
       display: 'flex',
@@ -109,6 +113,32 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
     },
+    SearchResults_SearchTerm: {
+      color: theme.colors.black[900],
+    },
+    SearchResults_SearchText: {
+      textDecoration: 'underline',
+    },
+    SearchHeader_TabFilter: {
+      marginTop: '1rem',
+
+      [md]: {
+        marginTop: 0,
+      },
+    },
+    SearchResults_Button_Skeleton: {
+      width: '12rem',
+      height: '3rem !important',
+      flexDirection: 'column',
+      borderRadius: '.5rem',
+    },
+    SearchResults_Text_Skeleton: {
+      width: '12rem',
+      height: '2rem !important',
+      marginTop: '.25rem',
+      borderRadius: '.5rem',
+      flexDirection: 'column',
+    },
   }
 })
 const noop = () => null
@@ -122,9 +152,37 @@ const SearchHeader = ({
   setFilter = noop,
 }) => {
   const c = useStyles()
-  const { dispatch, searchSubscriptions } = useStoreon('searchSubscriptions')
+  const [filterExperimentType, setFilterExperimentType] = useState('control')
+  const { dispatch, searchSubscriptions, experiments } = useStoreon(
+    'searchSubscriptions',
+    'experiments'
+  )
   const [currentUser] = useLocalStorage('currentUser', null)
   const { setOverlay } = useOverlay()
+
+  useEffect(() => {
+    if (experiments?.data?.search_header_filter === 'tab') setFilterExperimentType('tab')
+  }, [experiments])
+
+  const filterOptions = useMemo(() => {
+    return [
+      {
+        label: 'Best Match',
+        onClick: () => setFilter('all'),
+        selected: filter === 'all',
+      },
+      {
+        label: 'Thangs',
+        onClick: () => setFilter('thangs'),
+        selected: filter === 'thangs',
+      },
+      {
+        label: 'External',
+        onClick: () => setFilter('phyn'),
+        selected: filter === 'phyn',
+      },
+    ]
+  }, [filter, setFilter])
 
   const openSignupOverlay = useCallback(() => {
     setOverlay({
@@ -152,30 +210,69 @@ const SearchHeader = ({
   return (
     <div className={c.SearchResults_Header}>
       <div className={c.SearchResults_HeaderTextWrapper}>
-        <h1 className={c.SearchResults_HeaderText}>
-          {isLoading ? 'Loading' : resultCount}
-          {!isLoading && !endOfModels ? '+' : ''} results for{' '}
-          {decodeURIComponent(searchQuery)}
-        </h1>
+        {experiments?.isLoading ? (
+          <Skeleton variant='rect' className={c.SearchResults_Text_Skeleton} />
+        ) : filterExperimentType === 'control' ? (
+          <h1 className={c.SearchResults_HeaderText}>
+            {isLoading ? 'Loading' : resultCount}
+            {!isLoading && !endOfModels ? '+' : ''} results for{' '}
+            {decodeURIComponent(searchQuery)}
+          </h1>
+        ) : (
+          <h1 className={c.SearchResults_HeaderText}>Search results</h1>
+        )}
         <div className={c.SearchResult_ResultCountText}>
-          <div className={c.SearchResults_FilterBar}>
-            Results from
-            <Spacer size='.5rem' />
-            <SearchSourceFilterActionMenu
-              selectedValue={filter}
-              onChange={handleFilterChange}
-            />
-          </div>
+          {experiments?.isLoading ? (
+            <Skeleton variant='rect' className={c.SearchResults_Text_Skeleton} />
+          ) : filterExperimentType === 'control' ? (
+            <div className={c.SearchResults_FilterBar}>
+              Results from
+              <Spacer size='.5rem' />
+              <SearchSourceFilterActionMenu
+                selectedValue={filter}
+                onChange={handleFilterChange}
+              />
+            </div>
+          ) : (
+            <div className={c.SearchResults_FilterBar}>
+              At least {resultCount} results for{' '}
+              <div className={c.SearchResults_SearchTerm}>
+                &nbsp; &quot;
+                <span className={c.SearchResults_SearchText}>
+                  {decodeURIComponent(searchQuery)}
+                </span>
+                &quot;
+              </div>
+              <Spacer size={'.5rem'} />
+              <SaveSearchButton
+                currentUser={currentUser}
+                dispatch={dispatch}
+                modelId={modelId}
+                openSignupOverlay={openSignupOverlay}
+                searchSubscriptions={searchSubscriptions}
+                searchTerm={searchQuery}
+                iconOnly={true}
+              />
+            </div>
+          )}
         </div>
       </div>
-      <SaveSearchButton
-        currentUser={currentUser}
-        dispatch={dispatch}
-        modelId={modelId}
-        openSignupOverlay={openSignupOverlay}
-        searchSubscriptions={searchSubscriptions}
-        searchTerm={searchQuery}
-      />
+      {experiments?.isLoading ? (
+        <Skeleton variant='rect' className={c.SearchResults_Button_Skeleton} />
+      ) : filterExperimentType === 'control' ? (
+        <SaveSearchButton
+          currentUser={currentUser}
+          dispatch={dispatch}
+          modelId={modelId}
+          openSignupOverlay={openSignupOverlay}
+          searchSubscriptions={searchSubscriptions}
+          searchTerm={searchQuery}
+        />
+      ) : (
+        <div className={c.SearchHeader_TabFilter}>
+          <Tabs options={filterOptions} />
+        </div>
+      )}
     </div>
   )
 }
