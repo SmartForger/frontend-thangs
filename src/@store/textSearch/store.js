@@ -3,7 +3,7 @@ import { getStatusState, STATUSES } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'
 
-const SEARCH_RESULT_SIZE = 100
+const SEARCH_RESULT_SIZE = 50
 
 const noop = () => null
 const getInitialState = () => ({

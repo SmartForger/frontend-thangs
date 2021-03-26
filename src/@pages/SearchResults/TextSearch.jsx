@@ -107,7 +107,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const maxScrollCount = 10
+const maxScrollCount = 20
 const noop = () => null
 const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
   const FILTER_DEFAULT = 'all'
