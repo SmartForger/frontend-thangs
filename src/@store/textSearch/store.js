@@ -79,6 +79,7 @@ export default store => {
         track('Text Search Started', {
           searchTerm,
           searchScope: scope,
+          pageCount: isInitial ? 0 : state.textSearchResults.pageToLoad,
         })
 
         if (error) {
