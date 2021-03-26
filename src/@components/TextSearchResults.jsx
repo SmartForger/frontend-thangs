@@ -1,18 +1,17 @@
-import React, { useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react'
 import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
 import {
   Card,
   ModelThumbnail,
   NoResults,
-  ProfilePicture,
-  Spacer,
   PartThumbnailList,
+  ProfilePicture,
+  SearchAnchor,
+  Spacer,
 } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { numberWithCommas, truncateString, getExternalAvatar } from '@utilities'
-import { track } from '@utilities/analytics'
 import Skeleton from '@material-ui/lab/Skeleton'
 
 const useStyles = createUseStyles(theme => {
@@ -228,58 +227,6 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const Anchor = ({
-  children,
-  to = {},
-  isExternal,
-  scope,
-  searchIndex,
-  onThangsClick = noop,
-  ...props
-}) => {
-  const onClick = useCallback(() => {
-    if (isExternal) {
-      track('External Model Link', {
-        path: to.pathname,
-        type: 'text',
-        scope,
-        searchIndex,
-      })
-    } else {
-      onThangsClick(searchIndex)
-      track('Thangs Model Link', { path: to.pathname, type: 'text', scope, searchIndex })
-    }
-  }, [isExternal, onThangsClick, scope, searchIndex, to.pathname])
-  if (!to.pathname) return children
-  const thangsPath = !isExternal ? to.pathname.split('.com').pop() : to.pathname
-  return isExternal ? (
-    <a
-      href={encodeURI(thangsPath)}
-      target='_blank'
-      rel='noopener noreferrer'
-      onClick={onClick}
-      {...props}
-    >
-      {children}
-    </a>
-  ) : (
-    <Link to={encodeURI(thangsPath)} onClick={onClick} {...props}>
-      {children}
-    </Link>
-  )
-}
-
-// function generateTestParts(model) {
-//   const partCount = Math.random() > 0.5 ? Math.floor(Math.random() * 100) : 0
-//   const parts = []
-
-//   for (let i = 0; i < partCount; i++) {
-//     parts.push(model)
-//   }
-
-//   return parts
-// }
-
 const ModelDetails = ({
   isExternalModel,
   model = {},
@@ -301,7 +248,7 @@ const ModelDetails = ({
 
   return (
     <div className={c.TextSearchResult_Content}>
-      <Anchor
+      <SearchAnchor
         to={{
           pathname: attributionUrl,
           state: { prevPath: window.location.href },
@@ -330,13 +277,17 @@ const ModelDetails = ({
         </div>
         <div className={c.TextSearchResult_Name}>{modelTitle || modelFileName}</div>
         <div className={c.TextSearchResult_Description}>{formattedModelDescription}</div>
-        {parts && parts.length > 0 && (
-          <>
-            <Spacer size={'1rem'} />
-            <PartThumbnailList parts={parts} />
-          </>
-        )}
-      </Anchor>
+      </SearchAnchor>
+      {parts && parts.length > 0 && (
+        <>
+          <Spacer size={'1rem'} />
+          <PartThumbnailList
+            parts={parts}
+            isExternalModel={isExternalModel}
+            scope={scope}
+          />
+        </>
+      )}
       <div
         className={c.TextSearchResult_FindRelatedLink}
         onClick={() => onFindRelated({ model })}
@@ -371,7 +322,7 @@ const TextSearchResult = ({
       ref={spotCheckRef}
     >
       <div className={c.TextSearchResult_ResultContents}>
-        <Anchor
+        <SearchAnchor
           to={{
             pathname: modelAttributionUrl,
             state: { prevPath: window.location.href },
@@ -388,7 +339,7 @@ const TextSearchResult = ({
               model={model}
             />
           </Card>
-        </Anchor>
+        </SearchAnchor>
         <div className={c.TextSearchResult_Column}>
           <ModelDetails
             model={model}
