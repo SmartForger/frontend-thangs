@@ -10,7 +10,6 @@ const getInitialState = () => ({
   ...getStatusState(STATUSES.INIT),
   data: [],
   pageToLoad: 0,
-  bookmark: '',
 })
 
 export default store => {
@@ -22,7 +21,7 @@ export default store => {
     textSearchResults: {
       ...state.textSearchResults,
       ...getStatusState(status),
-      ...(isInitial && { data: [], pageToLoad: 1, bookmark: '' }),
+      ...(isInitial && { data: [], pageToLoad: 1 }),
     },
   }))
 
@@ -30,12 +29,11 @@ export default store => {
     textSearchResults: getInitialState(),
   }))
 
-  store.on(types.LOADED_TEXT_SEARCH_RESULTS, (state, { data, bookmark, isInitial }) => ({
+  store.on(types.LOADED_TEXT_SEARCH_RESULTS, (state, { data, isInitial }) => ({
     textSearchResults: {
       ...state.textSearchResults,
       ...getStatusState(STATUSES.LOADED),
       data: isInitial ? data : [...state.textSearchResults.data, ...data],
-      bookmark,
       pageToLoad: isInitial
         ? 1
         : state.textSearchResults.pageToLoad +
@@ -67,7 +65,6 @@ export default store => {
           params: {
             searchTerm,
             collapse: true,
-            bookmark: state.textSearchResults.bookmark,
             scope: scope || 'all',
             page: isInitial ? 0 : state.textSearchResults.pageToLoad,
             pageSize:
@@ -77,7 +74,7 @@ export default store => {
           },
         })
 
-        const { results, nextBookmark } = data
+        const { results } = data
 
         track('Text Search Started', {
           searchTerm,
@@ -95,7 +92,6 @@ export default store => {
           })
           store.dispatch(types.LOADED_TEXT_SEARCH_RESULTS, {
             data: results ?? [],
-            bookmark: nextBookmark ?? '',
             isInitial,
           })
 
