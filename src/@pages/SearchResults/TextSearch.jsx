@@ -177,13 +177,17 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
     onScroll,
   })
 
+  const models = useMemo(() => textModels.filter(model => model.attributionUrl), [
+    textModels,
+  ])
+
   return (
     <>
       {searchQuery && (
         <SearchHeader
           filter={filter}
           isLoading={textSearchResults.isLoading}
-          resultCount={textModels.length}
+          resultCount={models.length}
           endOfModels={endOfModels}
           searchQuery={searchQuery}
           setFilter={setSearchScope}
@@ -195,7 +199,7 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
             isError={textSearchResults.isError}
             isLoaded={textSearchResults.isLoaded}
             isLoading={textSearchResults.isLoading}
-            items={textModels}
+            items={models}
             onFindRelated={onFindRelated}
             onReportModel={onReportModel}
             searchScope={searchScope}
