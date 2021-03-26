@@ -3,7 +3,7 @@ import { getStatusState, STATUSES } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'
 
-const SEARCH_RESULT_SIZE = 50
+const SEARCH_RESULT_SIZE = 100
 
 const noop = () => null
 const getInitialState = () => ({
@@ -70,9 +70,14 @@ export default store => {
             bookmark: state.textSearchResults.bookmark,
             scope: scope || 'all',
             page: isInitial ? 0 : state.textSearchResults.pageToLoad,
-            pageSize: isInitial && pageCount === 1 ? 200 : SEARCH_RESULT_SIZE * pageCount,
+            pageSize:
+              isInitial && pageCount === 1
+                ? SEARCH_RESULT_SIZE
+                : SEARCH_RESULT_SIZE * pageCount,
           },
         })
+
+        const { results, nextBookmark } = data
 
         track('Text Search Started', {
           searchTerm,
@@ -89,8 +94,8 @@ export default store => {
             status: STATUSES.LOADED,
           })
           store.dispatch(types.LOADED_TEXT_SEARCH_RESULTS, {
-            data: data?.results ? data.results : data,
-            bookmark: data?.nextBookmark ? data.nextBookmark : '',
+            data: results ?? [],
+            bookmark: nextBookmark ?? '',
             isInitial,
           })
 
@@ -100,7 +105,10 @@ export default store => {
             numOfMatches: data.length,
           })
 
-          onFinish({ data, endOfData: !data.length || data.length < SEARCH_RESULT_SIZE })
+          onFinish({
+            data,
+            endOfData: !results.length || results.length < SEARCH_RESULT_SIZE,
+          })
         }
       }
     }

@@ -20,10 +20,12 @@ const useInfiniteScroll = ({
   useEffect(() => {
     const el = document.getElementById('root')
     const trackScrolling = () => {
-      if (isBottom(el) && !isPaused && !isMaxScrollReached) {
-        onScroll()
-        setCount(count + 1)
-      }
+      setTimeout(() => {
+        if (isBottom(el) && !isPaused && !isMaxScrollReached) {
+          onScroll()
+          setCount(count + 1)
+        }
+      })
     }
 
     el.addEventListener('scroll', trackScrolling)
