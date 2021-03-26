@@ -153,10 +153,10 @@ const Page = ({ sortBy, getTime = noop }) => {
   })
 
   useEffect(() => {
-    if (spotCheck && !isLoading && spotCheckRef.current) {
+    if (spotCheck && !isLoading && isLoaded && spotCheckRef.current) {
       spotCheckRef.current.scrollIntoView({ block: 'center' })
     }
-  }, [isLoading, spotCheck, spotCheckRef])
+  }, [isLoaded, isLoading, spotCheck, spotCheckRef])
 
   useEffect(() => {
     if (loadedCount < 1 && isLoaded) {
@@ -176,15 +176,15 @@ const Page = ({ sortBy, getTime = noop }) => {
   )
 
   useEffect(() => {
-    resetScroll()
-    setEndOfModels(false)
-    dispatch(types.FETCH_MODEL_PREVIEW, {
-      isInitial: true,
-      onFinish: handleFinish,
-      pageCount: 1, //savedPages || 1,
-      sortBy,
-      spotCheck,
-    })
+    if (!spotCheck) {
+      resetScroll()
+      setEndOfModels(false)
+      dispatch(types.FETCH_MODEL_PREVIEW, {
+        isInitial: true,
+        onFinish: handleFinish,
+        sortBy,
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, handleFinish, sortBy])
 

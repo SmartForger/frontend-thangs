@@ -150,16 +150,18 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
   }, [])
 
   useEffect(() => {
-    resetScroll()
-    history.push(`?filter=${searchScope}`)
-    dispatch(types.FETCH_TEXT_SEARCH_RESULTS, {
-      searchTerm: decodeURIComponent(searchQuery),
-      scope: searchScope,
-      pageCount: 1, //savedPages || 1,
-      isInitial: true,
-      onFinish: handleFinish,
-      spotCheck,
-    })
+    if (!spotCheck) {
+      resetScroll()
+      history.push(`?filter=${searchScope}`)
+      dispatch(types.FETCH_TEXT_SEARCH_RESULTS, {
+        searchTerm: decodeURIComponent(searchQuery),
+        scope: searchScope,
+        pageCount: 1, //savedPages || 1,
+        isInitial: true,
+        onFinish: handleFinish,
+        spotCheck,
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, searchScope])
 
