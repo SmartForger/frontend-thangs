@@ -15,6 +15,20 @@ const getInitAtom = () => ({
   saveError: false,
   data: [],
 })
+
+const getRootFolderId = (folders, parentId) => {
+  let folder = { parentId }
+  while (folder.parentId) {
+    folder = folders[folder.parentId]
+
+    if (!folder) {
+      return ''
+    }
+  }
+
+  return folder.id || ''
+}
+
 const noop = () => null
 export default store => {
   store.on(types.STORE_INIT, () => ({
@@ -125,10 +139,13 @@ export default store => {
     types.DELETE_FOLDER,
     async (state, { folder, onFinish = noop, onError = noop }) => {
       store.dispatch(types.SAVING_FOLDER)
-      const { id: folderId } = folder
+      const { id: folderId, parentId } = folder
+
+      let rootId = getRootFolderId(state.folders.data, parentId)
+
       const { error } = await api({
         method: 'DELETE',
-        endpoint: `folders/${folderId}`,
+        endpoint: parentId ? `folders/${rootId}/${folderId}` : `folders/${folderId}`,
       })
       if (error) {
         store.dispatch(types.ERROR_FOLDER)
