@@ -59,7 +59,7 @@ export default store => {
           status: STATUSES.LOADING,
           isInitial,
         })
-        const { data = {}, error } = await api({
+        const { data = [], error } = await api({
           method: 'GET',
           endpoint: 'models/search-by-text',
           params: {
@@ -73,8 +73,6 @@ export default store => {
                 : SEARCH_RESULT_SIZE * pageCount,
           },
         })
-
-        const { results } = data
 
         track('Text Search Started', {
           searchTerm,
@@ -92,7 +90,7 @@ export default store => {
             status: STATUSES.LOADED,
           })
           store.dispatch(types.LOADED_TEXT_SEARCH_RESULTS, {
-            data: results ?? [],
+            data,
             isInitial,
           })
 
@@ -104,7 +102,7 @@ export default store => {
 
           onFinish({
             data,
-            endOfData: !results.length || results.length < SEARCH_RESULT_SIZE,
+            endOfData: !data.length || data.length < SEARCH_RESULT_SIZE,
           })
         }
       }
