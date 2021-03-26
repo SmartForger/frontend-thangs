@@ -219,8 +219,8 @@ const AuthCommentsForModel = ({ c, className, modelId, currentUser }) => {
       <ul className={c.CommentsForModel_List}>
         {comments && comments.length
           ? comments.map((comment, i) =>
-              renderTypedComment({ modelId, comment, key: i, currentUser })
-            )
+            renderTypedComment({ modelId, comment, key: i, currentUser })
+          )
           : null}
       </ul>
     </div>

@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import * as R from 'ramda'
 import { useStoreon } from 'storeon/react'
 import { NoResults, Spacer, TextSearchResults, Pill } from '@components'
-import { useQuery, useInfiniteScroll } from '@hooks'
+import { useQuery, useInfiniteScroll, useSpotCheck } from '@hooks'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'
@@ -127,6 +127,10 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
   const textModels = R.path(['data'], textSearchResults) || []
   const isLoading = textSearchResults.isLoading
   const isScrollPaused = useMemo(() => isLoading || endOfModels, [endOfModels, isLoading])
+  const { spotCheck, spotCheckRef, setSpotCheck } = useSpotCheck('text_search_scroll', {
+    searchQuery,
+    filter,
+  })
 
   useEffect(() => {
     if (filter) {
@@ -134,6 +138,12 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (spotCheck && !textSearchResults.isLoading && spotCheckRef.current) {
+      spotCheckRef.current.scrollIntoView({ block: 'center' })
+    }
+  }, [textSearchResults.isLoading, spotCheck, spotCheckRef])
 
   const handleFinish = useCallback(data => {
     if (data.endOfData) setEndOfModels(true)
@@ -148,6 +158,7 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
       pageCount: 1, //savedPages || 1,
       isInitial: true,
       onFinish: handleFinish,
+      spotCheck,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, searchScope])
@@ -177,6 +188,16 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
     onScroll,
   })
 
+  const onThangsClick = useCallback(
+    result => {
+      setSpotCheck(result, {
+        searchQuery,
+        filter,
+      })
+    },
+    [filter, searchQuery, setSpotCheck]
+  )
+
   const models = useMemo(() => textModels.filter(model => model.attributionUrl), [
     textModels,
   ])
@@ -200,10 +221,13 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
             isLoaded={textSearchResults.isLoaded}
             isLoading={textSearchResults.isLoading}
             items={models}
+            onThangsClick={onThangsClick}
             onFindRelated={onFindRelated}
             onReportModel={onReportModel}
             searchScope={searchScope}
             searchTerm={searchQuery}
+            spotCheckIndex={spotCheck}
+            spotCheckRef={spotCheckRef}
             totalModelCount={
               modelsStats && modelsStats.data && modelsStats.data.modelsIngested
             }

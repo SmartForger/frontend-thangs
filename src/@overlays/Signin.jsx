@@ -276,8 +276,8 @@ const SignInForm = ({
                 {authFailed
                   ? 'Something went wrong. Please try again'
                   : sessionExpired
-                  ? 'Session Expired. Please sign back in to continue'
-                  : signinErrorMessage}
+                    ? 'Session Expired. Please sign back in to continue'
+                    : signinErrorMessage}
               </FormError>
               <Spacer size='1rem' />
             </>

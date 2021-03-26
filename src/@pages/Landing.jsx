@@ -23,7 +23,7 @@ import { createUseStyles } from '@physna/voxel-ui/@style'
 import * as types from '@constants/storeEventTypes'
 import * as sortTypes from '@constants/sortTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
-import { useOverlay } from '@hooks'
+import { useOverlay, useSpotCheck } from '@hooks'
 
 const MQS_VALUES = [1440, 964, 736, 490]
 
@@ -147,9 +147,17 @@ const Page = ({ sortBy, getTime = noop }) => {
   const { isLoading, isLoaded } = modelPreviews
   const [endOfModels, setEndOfModels] = useState(false)
   const [loadedCount, setLoadedCount] = useState(isLoaded ? -1 : 0)
-  // Handles returning user to previous spot
-  // const savedPages = usePageScroll('landing_scroll', loadedCount > 0, sortBy)
   const isScrollPaused = useMemo(() => isLoading || endOfModels, [endOfModels, isLoading])
+  const { spotCheck, spotCheckRef, setSpotCheck } = useSpotCheck('landing_scroll', {
+    sortBy,
+  })
+
+  useEffect(() => {
+    if (spotCheck && !isLoading && spotCheckRef.current) {
+      spotCheckRef.current.scrollIntoView({ block: 'center' })
+    }
+  }, [isLoading, spotCheck, spotCheckRef])
+
   useEffect(() => {
     if (loadedCount < 1 && isLoaded) {
       setLoadedCount(loadedCount + 1)
@@ -175,6 +183,7 @@ const Page = ({ sortBy, getTime = noop }) => {
       onFinish: handleFinish,
       pageCount: 1, //savedPages || 1,
       sortBy,
+      spotCheck,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, handleFinish, sortBy])
@@ -189,6 +198,13 @@ const Page = ({ sortBy, getTime = noop }) => {
     maxScrollCount,
     onScroll,
   })
+
+  const handleClick = useCallback(
+    spot => {
+      setSpotCheck(spot, { sortBy })
+    },
+    [setSpotCheck, sortBy]
+  )
 
   const handleSortBy = useCallback(
     type => {
@@ -225,7 +241,15 @@ const Page = ({ sortBy, getTime = noop }) => {
         {Array.isArray(modelPreviews.data) &&
           modelPreviews.data.map((model, index) => {
             if (!model) return null
-            return <ModelCardLanding key={`model-${model.id}:${index}`} model={model} />
+            return (
+              <ModelCardLanding
+                key={`model-${model.id}:${index}`}
+                model={model}
+                onClick={handleClick}
+                spotCheckIndex={index}
+                spotCheckRef={spotCheck === index ? spotCheckRef : undefined}
+              />
+            )
           })}
       </CardCollectionLanding>
       {isMaxScrollReached && (

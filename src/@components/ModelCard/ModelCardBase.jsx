@@ -111,16 +111,22 @@ const CardContents = ({
   modelPath,
   modelAttributionUrl,
   geoRelated,
+  onClick,
+  spotCheckIndex,
+  spotCheckRef,
 }) => {
   const userName = R.pathOr('no-user', ['owner', 'username'], model)
 
   const onAnchorClick = useCallback(() => {
-    if (geoRelated)
+    if (geoRelated) {
       track('Geo Related Model Link', {
         path: modelPath,
         origin: window.location.pathname,
       })
-  }, [geoRelated, modelPath])
+    } else {
+      onClick(spotCheckIndex)
+    }
+  }, [geoRelated, modelPath, onClick, spotCheckIndex])
 
   const modelTitle = useMemo(() => {
     if (modelAttributionUrl) return modelAttributionUrl
@@ -141,6 +147,7 @@ const CardContents = ({
       title={modelTitle}
       className={classnames(className, c.ModelCard)}
       data-cy={R.pathOr('unknown', ['name'], model)}
+      ref={spotCheckRef}
     >
       {userName !== 'no-user' ? (
         <Link
@@ -191,7 +198,15 @@ const CardContents = ({
   )
 }
 
-const ModelCardBase = ({ c, className, model, geoRelated }) => {
+const ModelCardBase = ({
+  c,
+  className,
+  model,
+  geoRelated,
+  onClick,
+  spotCheckIndex,
+  spotCheckRef,
+}) => {
   const currentUserId = parseInt(useCurrentUserId())
   const modelAttributionUrl =
     model && model.attributionUrl && encodeURI(model.attributionUrl)
@@ -209,6 +224,9 @@ const ModelCardBase = ({ c, className, model, geoRelated }) => {
       modelPath={modelPath}
       isCurrentUserOwner={isCurrentUserOwner}
       geoRelated={geoRelated}
+      onClick={onClick}
+      spotCheckIndex={spotCheckIndex}
+      spotCheckRef={spotCheckRef}
     />
   )
 }

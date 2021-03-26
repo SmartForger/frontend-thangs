@@ -228,7 +228,15 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const Anchor = ({ children, to = {}, isExternal, scope, searchIndex, ...props }) => {
+const Anchor = ({
+  children,
+  to = {},
+  isExternal,
+  scope,
+  searchIndex,
+  onThangsClick = noop,
+  ...props
+}) => {
   const onClick = useCallback(() => {
     if (isExternal) {
       track('External Model Link', {
@@ -238,9 +246,10 @@ const Anchor = ({ children, to = {}, isExternal, scope, searchIndex, ...props })
         searchIndex,
       })
     } else {
+      onThangsClick(searchIndex)
       track('Thangs Model Link', { path: to.pathname, type: 'text', scope, searchIndex })
     }
-  }, [isExternal, scope, searchIndex, to.pathname])
+  }, [isExternal, onThangsClick, scope, searchIndex, to.pathname])
   if (!to.pathname) return children
   const thangsPath = !isExternal ? to.pathname.split('.com').pop() : to.pathname
   return isExternal ? (
@@ -271,7 +280,13 @@ const Anchor = ({ children, to = {}, isExternal, scope, searchIndex, ...props })
 //   return parts
 // }
 
-const ModelDetails = ({ isExternalModel, model = {}, onFindRelated = noop, scope }) => {
+const ModelDetails = ({
+  isExternalModel,
+  model = {},
+  onFindRelated = noop,
+  onThangsClick = noop,
+  scope,
+}) => {
   const c = useStyles()
   const {
     attributionUrl,
@@ -295,6 +310,7 @@ const ModelDetails = ({ isExternalModel, model = {}, onFindRelated = noop, scope
         }}
         isExternal={isExternalModel}
         scope={scope}
+        onThangsClick={onThangsClick}
       >
         <div className={c.TextSearchResult_Attribution}>
           <div>
@@ -335,10 +351,12 @@ const ModelDetails = ({ isExternalModel, model = {}, onFindRelated = noop, scope
 
 const TextSearchResult = ({
   model,
+  onThangsClick = noop,
   onFindRelated = noop,
   onReportModel = noop,
   scope,
   searchIndex,
+  spotCheckRef,
 }) => {
   const c = useStyles()
 
@@ -352,6 +370,7 @@ const TextSearchResult = ({
         [c.TextSearchResult_ExternalLink]: isExternalModel,
         [c.TextSearchResult_ThangsLink]: !isExternalModel,
       })}
+      ref={spotCheckRef}
     >
       <div className={c.TextSearchResult_ResultContents}>
         <Anchor
@@ -362,6 +381,7 @@ const TextSearchResult = ({
           isExternal={isExternalModel}
           scope={scope}
           searchIndex={searchIndex}
+          onThangsClick={onThangsClick}
         >
           <Card className={c.TextSearchResult_ThumbnailWrapper}>
             <ModelThumbnail
@@ -374,6 +394,7 @@ const TextSearchResult = ({
         <div className={c.TextSearchResult_Column}>
           <ModelDetails
             model={model}
+            onThangsClick={onThangsClick}
             onReportModel={onReportModel}
             onFindRelated={onFindRelated}
             isExternalModel={isExternalModel}
@@ -396,10 +417,13 @@ const TextSearchResults = ({
   isLoaded,
   isLoading,
   items,
+  onThangsClick,
   onFindRelated,
   onReportModel,
   searchScope: scope,
   searchTerm,
+  spotCheckRef,
+  spotCheckIndex,
   totalModelCount,
 }) => {
   const c = useStyles()
@@ -430,8 +454,10 @@ const TextSearchResults = ({
       model={item}
       onFindRelated={onFindRelated}
       onReportModel={onReportModel}
+      onThangsClick={onThangsClick}
       scope={scope}
       searchIndex={ind}
+      spotCheckRef={spotCheckIndex === ind ? spotCheckRef : undefined}
     />
   ))
   if (isLoading) {

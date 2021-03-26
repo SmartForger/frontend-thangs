@@ -45,9 +45,9 @@ const CardCollectionSearch = ({
   if (children) {
     const allItemsCount = Array.isArray(children)
       ? children.reduce(
-          (acc, child) => (child.props.items && acc + child.props.items.length) || 0,
-          0
-        )
+        (acc, child) => (child.props.items && acc + child.props.items.length) || 0,
+        0
+      )
       : (children.props.items && children.props.items.length) || 0
 
     return (
