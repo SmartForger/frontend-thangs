@@ -60,7 +60,7 @@ const ARDownloadActionMenu = ({ onChange = noop }) => {
         value: 'android',
       },
       {
-        label: 'Download for iOS',
+        label: 'Download for iOS (Coming Soon)',
         value: 'ios',
       },
     ],
