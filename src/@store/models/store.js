@@ -117,7 +117,6 @@ export default store => {
         })
         const newModels = removeModel(model, state.models.data)
         store.dispatch(types.UPDATE_MODELS, newModels)
-        store.dispatch(types.DELETE_MODEL_FROM_FOLDER, { model })
       }
     }
   )

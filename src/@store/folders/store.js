@@ -145,13 +145,6 @@ export default store => {
     }
   )
 
-  store.on(types.DELETE_MODEL_FROM_FOLDER, async (state, { model }) => {
-    store.dispatch(types.SAVING_FOLDER)
-    const newFolders = removeModelFromFolder(model, state.folders.data)
-    store.dispatch(types.UPDATE_FOLDERS, newFolders)
-    store.dispatch(types.SAVED_FOLDER)
-  })
-
   store.on(
     types.FETCH_FOLDER,
     async (state, { folderId, inviteCode, onFinish = noop }) => {

@@ -68,8 +68,7 @@ const findFolderById = (id, folders = []) => {
 }
 
 export const updateLike = (folderId, state, userId, isLiked) => {
-  const allFolders = [...state.folders.data, ...state.shared.data]
-  const updatedFolder = findFolderById(folderId, allFolders)
+  const updatedFolder = state.folders.data[folderId] || {}
   const oldLikes = state[`user-liked-models-${userId}`].data
   const newLikes = { ...oldLikes }
 
@@ -91,34 +90,8 @@ export const updateLike = (folderId, state, userId, isLiked) => {
 }
 
 export const removeFolder = (folder, oldFolders) => {
-  const { id: folderId, root } = folder
-  const newFolders = [...oldFolders]
-  if (root) {
-    const parentFolderIndex = R.findIndex(R.propEq('id', root.toString()))(newFolders)
-    const newSubfolders = newFolders[parentFolderIndex].subfolders
-    newFolders[parentFolderIndex].subfolders = R.reject(
-      folder => folder.id === folderId,
-      newSubfolders
-    )
-    return newFolders
-  } else {
-    const folders = R.reject(folder => folder.id === folderId, newFolders)
-    return folders
-  }
-}
-
-export const removeModelFromFolder = (model, oldFolders) => {
-  const { id: modelId } = model
-  const newFolders = [...oldFolders]
-  return newFolders.map(rootFolder => {
-    const { subfolders } = rootFolder
-    const newRootFolder = { ...rootFolder }
-    newRootFolder.models = R.reject(model => model.id === modelId, rootFolder.models)
-    newRootFolder.subfolders = subfolders.map(subfolder => {
-      const newSubFolder = { ...subfolder }
-      newSubFolder.models = R.reject(model => model.id === modelId, subfolder.models)
-      return newSubFolder
-    })
-    return newRootFolder
-  })
+  const { id: folderId } = folder
+  const newFolders = { ...oldFolders }
+  delete newFolders[folderId]
+  return newFolders
 }
