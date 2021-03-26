@@ -55,18 +55,6 @@ export const updateFolder = (newFolder = {}, oldFolders) => {
   }
 }
 
-const findFolderById = (id, folders = []) => {
-  const rootFolder = R.find(R.propEq('id', id.toString()))(folders) || {}
-  if (!R.isEmpty(rootFolder)) return rootFolder
-  let subFolder = false
-  folders.some(folder => {
-    const subfolders = folder.subfolders || []
-    subFolder = R.find(R.propEq('id', id.toString()))(subfolders) || false
-    return subFolder
-  })
-  return subFolder
-}
-
 export const updateLike = (folderId, state, userId, isLiked) => {
   const updatedFolder = state.folders.data[folderId] || {}
   const oldLikes = state[`user-liked-models-${userId}`].data

@@ -4,13 +4,7 @@ import { STATUSES } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import { track } from '@utilities/analytics'
-import {
-  createNewFolders,
-  removeFolder,
-  removeModelFromFolder,
-  updateFolder,
-  updateLike,
-} from './updater'
+import { createNewFolders, removeFolder, updateFolder, updateLike } from './updater'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -112,7 +106,11 @@ export default store => {
       } else {
         track('Folder Created')
         const newFolders = createNewFolders(
-          { ...newFolderData, id: data.folderId, currentUser: state.currentUser.data },
+          {
+            ...newFolderData,
+            id: Math.random().toString().slice(2),
+            currentUser: state.currentUser.data,
+          },
           state.folders.data
         )
         store.dispatch(types.UPDATE_FOLDERS, newFolders)

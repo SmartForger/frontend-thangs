@@ -218,6 +218,7 @@ const MyThangs = () => {
             style: { height: '100%' },
           }}
           holdToDisplay={-1}
+          collect={() => ({ folder: folders[currentFolderId] })}
         >
           <WorkspaceNavbar
             currentFolderId={currentFolderId}
@@ -246,6 +247,7 @@ const MyThangs = () => {
                 style: { height: '100%' },
               }}
               holdToDisplay={-1}
+              collect={() => ({ folder: folders[currentFolderId] })}
             >
               <Switch>
                 <Route
