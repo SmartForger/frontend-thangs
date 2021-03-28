@@ -293,8 +293,6 @@ const ModelDetails = ({
     modelTitle,
     modelDescription,
     modelFileName,
-    ownerFirstName,
-    ownerLastName,
     ownerAvatarUrl,
     ownerUsername,
     parts,
@@ -318,7 +316,7 @@ const ModelDetails = ({
               <>
                 <ProfilePicture
                   size='1.25rem'
-                  name={`${ownerFirstName} ${ownerLastName}`}
+                  name={ownerUsername}
                   src={ownerAvatarUrl || getExternalAvatar(attributionUrl)}
                 />
                 <Spacer size='.25rem' />
