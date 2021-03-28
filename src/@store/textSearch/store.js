@@ -74,17 +74,17 @@ export default store => {
           },
         })
 
-        if (isInitial || state.textSearchResults.pageToLoad === 0) {
+        if (isInitial || state?.textSearchResults?.pageToLoad === 0) {
           track('Text Search Started', {
             searchTerm,
             searchScope: scope,
-            pageCount: isInitial ? 0 : state.textSearchResults.pageToLoad,
+            pageCount: isInitial ? 0 : state?.textSearchResults?.pageToLoad,
           })
         } else {
           track('Text Search - Infinite Scroll', {
             searchTerm,
             searchScope: scope,
-            pageCount: state.textSearchResults.pageToLoad,
+            pageCount: state?.textSearchResults?.pageToLoad,
           })
         }
 
