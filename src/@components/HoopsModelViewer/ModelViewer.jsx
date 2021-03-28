@@ -112,6 +112,9 @@ const HoopsModelViewer = ({
       const parts = flattenTree(model.parts, 'parts')
       if (parts && parts.length) {
         const part = findPart(parts, preselectedPart)
+        if (preselectedPart) {
+          setHighlightedModel(part.phyndexerId)
+        }
         return encodeURIComponent(part.filename)
       }
       return encodeURIComponent(model.filename)

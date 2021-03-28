@@ -358,7 +358,6 @@ export const PartExplorerMenu = ({
     if (highlightedValue && highlightedValue.id) {
       result.push(highlightedValue.id)
     }
-
     return result
   }, [selectedValue, highlightedValue])
 
