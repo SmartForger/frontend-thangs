@@ -152,6 +152,7 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
   useEffect(() => {
     if (!spotCheck) {
       resetScroll()
+      setEndOfModels(false)
       history.push(`?filter=${searchScope}`)
       dispatch(types.FETCH_TEXT_SEARCH_RESULTS, {
         searchTerm: decodeURIComponent(searchQuery),
