@@ -155,7 +155,9 @@ const SearchByUpload = ({
           onFinish: () => {
             setOverlayOpen(false)
             history.push(
-              `/search/${searchTerm}?modelId=${modelId}&phynId=${phynId}&related=true`
+              `/search/${encodeURIComponent(
+                searchTerm
+              )}?modelId=${modelId}&phynId=${phynId}&related=true`
             )
           },
         })
