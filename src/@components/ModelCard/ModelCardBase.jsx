@@ -103,7 +103,7 @@ const Anchor = ({ children, attributionUrl, to, noLink, ...props }) => {
     </Link>
   )
 }
-
+const noop = () => null
 const CardContents = ({
   className,
   c,
@@ -111,7 +111,7 @@ const CardContents = ({
   modelPath,
   modelAttributionUrl,
   geoRelated,
-  onClick,
+  onClick = noop,
   spotCheckIndex,
   spotCheckRef,
 }) => {
