@@ -110,7 +110,7 @@ export default store => {
 
           onFinish({
             data,
-            endOfData: !data.length || data.length < SEARCH_RESULT_SIZE,
+            endOfData: !data.length,
           })
         }
       }
