@@ -2,18 +2,11 @@ import React, { useCallback, useState, useMemo } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import * as R from 'ramda'
 import { ContextMenuTrigger } from 'react-contextmenu'
-import {
-  Contributors,
-  MetadataSecondary,
-  Pill,
-  SingleLineBodyText,
-  Spacer,
-} from '@components'
-import { flattenTree } from '@utilities/tree'
-import { formatBytes } from '@utilities'
+import { format } from 'date-fns'
+import classnames from 'classnames'
+import { Contributors, Pill, SingleLineBodyText, Spacer } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
-import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
+import { MetadataSecondary } from '@components/Text/Metadata'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
@@ -21,6 +14,7 @@ import { ReactComponent as ArrowUpIcon } from '@svg/icon-arrow-up-sm.svg'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import { ReactComponent as DropzoneIcon } from '@svg/dropzone.svg'
 import { ReactComponent as DropzoneMobileIcon } from '@svg/dropzone-mobile.svg'
+import { formatBytes } from '@utilities'
 import Dropzone from 'react-dropzone'
 import { MODEL_FILE_EXTS } from '@constants/fileUpload'
 
@@ -506,175 +500,9 @@ const FileTable = ({
     },
     [sortedBy, order]
   )
-
-  const allNodes = useMemo(() => {
-    let result = []
-    const sorted = getSortedFiles(files, sortedBy, order)
-    sorted.forEach(model => {
-      if (model.parts) {
-        const {
-          created,
-          aggregatorId,
-          category,
-          description,
-          folderId,
-          id,
-          identifier,
-          likeCount,
-          owner,
-        } = model
-        // For single part and asm
-        if (model.parts.length === 1) {
-          model.parts[0] = {
-            ...model.parts[0],
-            created,
-            aggregatorId,
-            category,
-            description,
-            folderId,
-            id,
-            identifier,
-            likeCount,
-            contributors: [owner],
-            owner,
-          }
-        }
-
-        sortParts(model, sortedBy === COLUMNS.SIZE, order)
-        // Pass [model] for multi-part model
-        // Pass model.parts for single and asm models
-        const list = flattenTree(model.parts.length > 1 ? [model] : model.parts, 'parts')
-        list.forEach(item => {
-          item.contributors = [owner]
-          item.owner = owner
-          item.created = created
-          item.modelId = id
-          item.parts = item.hasChildren ? model.parts : undefined
-        })
-        result = result.concat(list)
-      } else {
-        result.push({
-          ...model,
-          contributors: model.members,
-          level: 0,
-          isFolder: true,
-        })
-      }
-    })
-
-    return result
-  }, [files, sortedBy, order])
-
-  const renderNode = useCallback(
-    (node, { toggleNode }) => {
-      const menuProps = node.isFolder
-        ? {
-            id: 'Folder_Menu',
-            attributes: {
-              className: c.FileTable_FileRow,
-            },
-            collect: () => ({ folder: node }),
-          }
-        : node.level === 0
-        ? {
-            id: 'File_Menu',
-            attributes: {
-              className: c.FileTable_FileRow,
-            },
-            collect: () => ({ model: node }),
-          }
-        : {
-            id: 'Subpart_Menu',
-            attributes: {
-              className: c.FileTable_FileRow,
-            },
-            collect: () => ({ part: node }),
-          }
-
-      const handleClick = () => {
-        if (node.isFolder) {
-          handleChangeFolder(node)
-        } else {
-          if (selectedFiles.includes(node.id)) {
-            const modelPath = node.identifier
-              ? `/${node.identifier}`
-              : `/model/${node.id}`
-            history.push(modelPath)
-          } else {
-            setSelectedFiles([node.id])
-          }
-          // Select - Highlight Row - Show Toolbar (myThangs model page) -
-          // If selected already - Navigate to myThangs model preview view
-        }
-      }
-
-      return (
-        <ContextMenuTrigger holdToDisplay={-1} {...menuProps}>
-          <div
-            className={cn(c.FileTable_FileRow, {
-              [c.FileTable_MissingFile]: !node.valid,
-            })}
-            onClick={handleClick}
-          >
-            <Spacer size={'.5rem'} />
-            <div
-              className={cn(c.FileTable_FileName, c.FileTable_Cell)}
-              style={{ paddingLeft: node.level * 24 }}
-            >
-              <div
-                className={cn(c.FileTable_ExpandIcon, {
-                  [c.FileTable_ExpandIcon__expanded]: !node.isLeaf && !node.closed,
-                })}
-                onClick={ev => {
-                  ev.stopPropagation()
-                  toggleNode(node)
-                }}
-              >
-                {node.isLeaf ? (
-                  node.isFolder ? (
-                    <FolderIcon />
-                  ) : (
-                    <ModelIcon />
-                  )
-                ) : (
-                  <ArrowRight />
-                )}
-              </div>
-              {!node.isLeaf && <FileIcon className={c.FileTable_AssemblyIcon} />}
-              <SingleLineBodyText>{node.name}</SingleLineBodyText>
-            </div>
-            <MetadataSecondary className={cn(c.FileTable_Date, c.FileTable_Cell)}>
-              {!node.created
-                ? '-'
-                : format(new Date(node.created), 'MMM d, y, h:mm aaaa')}
-            </MetadataSecondary>
-            <MetadataSecondary className={cn(c.FileTable_Size, c.FileTable_Cell)}>
-              {!node.size ? '-' : formatBytes(node.size)}
-            </MetadataSecondary>
-            <div className={cn(c.FileTable_Contributors, c.FileTable_Cell)}>
-              {!node.contributors ? '-' : <Contributors users={node.contributors} />}
-            </div>
-            <div
-              className={cn(c.FileTable_Action, c.FileTable_Cell)}
-              onClick={handleMenuButton}
-            >
-              <ContextMenuTrigger holdToDisplay={0} {...menuProps}>
-                <DotStackIcon />
-              </ContextMenuTrigger>
-            </div>
-          </div>
-        </ContextMenuTrigger>
-      )
-    },
-    [c, handleChangeFolder, history, selectedFiles]
-  )
-
-  useEffect(() => {
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect()
-      setMaxHeight(window.innerHeight - rect.top - heightOffset)
-    }
-  }, [heightOffset])
+  const sortedFiles = useMemo(() => {
+    return getSortedFiles(files, sortedBy, order)
+  }, [files, order, sortedBy])
 
   return (
     <div className={classnames(className, c.FileTable)}>
