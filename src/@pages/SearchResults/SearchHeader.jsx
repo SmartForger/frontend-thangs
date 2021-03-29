@@ -169,7 +169,7 @@ const SearchHeader = ({
       {
         label: 'Best Match',
         onClick: () => setFilter('all'),
-        selected: filter === 'all',
+        selected: !filter || filter === 'all',
       },
       {
         label: 'Thangs',
