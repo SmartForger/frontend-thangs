@@ -52,7 +52,7 @@ const Footer = () => {
   const c = useStyles()
   return (
     <div className={c.Footer}>
-      <p>Thangs® 2020 by Physna Inc</p>
+      <p>Thangs® 2021 by Physna Inc</p>
       <div>
         <ul className={c.Footer_Social}>
           <li>
