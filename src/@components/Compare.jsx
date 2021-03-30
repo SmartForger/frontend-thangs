@@ -1,6 +1,6 @@
 import React from 'react'
 import { ModelThumbnail, Spacer, Tag } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 
 const useStyles = createUseStyles(_theme => {
   return {

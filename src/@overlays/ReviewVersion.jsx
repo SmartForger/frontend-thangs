@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Compare, Spacer, Textarea, OverlayWrapper } from '@components'
 import { useForm } from '@hooks'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { overlayview } from '@utilities/analytics'

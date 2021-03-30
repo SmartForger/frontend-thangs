@@ -17,6 +17,7 @@ import { authenticationService } from '@services'
 import { useOverlay, usePerformanceMetrics, useStarred } from '@hooks'
 import AllFilesView from './AllFilesView'
 import EditProfileView from './EditProfileView'
+import FileView from './FileView'
 import FolderView from './FolderView'
 import LikedModelsView from './LikedModelsView'
 import RecentFilesView from './RecentFilesView'
@@ -264,6 +265,10 @@ const MyThangs = () => {
                 <Route
                   path={`${path}/folder/:folderId`}
                   render={() => <FolderView {...viewProps} />}
+                />
+                <Route
+                  path={`${path}/file/:fileId`}
+                  render={() => <FileView {...viewProps} />}
                 />
                 <Route
                   path={`${path}/liked-models`}

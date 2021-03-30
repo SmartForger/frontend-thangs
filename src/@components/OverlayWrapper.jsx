@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { Button, SingleLineBodyText, Spacer, Spinner } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as ArrowLeftIcon } from '@svg/icon-arrow-left.svg'
 import { useOverlay } from '@hooks'

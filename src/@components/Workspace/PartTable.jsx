@@ -4,7 +4,7 @@ import { ContextMenuTrigger } from 'react-contextmenu'
 import InfiniteTreeView from '@components/InfiniteTreeView'
 import { Checkbox, SingleLineBodyText, Spacer, TableHeader, Tag } from '@components'
 import { flattenTree } from '@utilities/tree'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 
 const useStyles = createUseStyles(theme => {
@@ -191,12 +191,12 @@ const PartTable = ({
     ) => {
       const menuProps = showContextMenus
         ? {
-          id: 'Subpart_Menu',
-          attributes: {
-            className: c.PartTable_FileRow,
-          },
-          collect: () => ({ part: node }),
-        }
+            id: 'Subpart_Menu',
+            attributes: {
+              className: c.PartTable_FileRow,
+            },
+            collect: () => ({ part: node }),
+          }
         : null
 
       const handleClick = () => {

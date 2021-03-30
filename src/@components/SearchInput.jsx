@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import classnames from 'classnames'
 import { Spacer, TextInput } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 
 const useStyles = createUseStyles(theme => {

@@ -9,7 +9,7 @@ import {
 } from '@components'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { useOverlay } from '@hooks'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { overlayview } from '@utilities/analytics'
 import * as types from '@constants/storeEventTypes'
 

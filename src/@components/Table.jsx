@@ -2,7 +2,7 @@ import React from 'react'
 import cn from 'classnames'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import { MetadataSecondary, Spacer } from '@components'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ArrowUpIcon } from '@svg/icon-arrow-up-sm.svg'
 

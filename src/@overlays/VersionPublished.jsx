@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { Spacer, OverlayWrapper } from '@components'
 import { useHistory } from 'react-router-dom'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useCurrentUser, useOverlay } from '@hooks'
 import { TitleTertiary } from '@components/Text/Title'
 import { MultiLineBodyText } from '@components/Text/Body'

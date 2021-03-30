@@ -14,7 +14,7 @@ import {
 } from '@components'
 import { flattenTree } from '@utilities/tree'
 import { formatBytes } from '@utilities'
-import { createUseStyles } from '@style'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
 import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
@@ -290,7 +290,7 @@ const FileTableHeader = ({ sortedBy, order, onSort = noop }) => {
       {
         key: COLUMNS.SIZE,
         className: c.FileTable_Size,
-        title: 'Filename',
+        title: 'Size',
       },
       {
         key: COLUMNS.CONTRIBUTORS,
@@ -406,21 +406,21 @@ const FileTable = ({
     (node, { toggleNode }) => {
       const menuProps = node.isFolder
         ? {
-          id: 'Folder_Menu',
-          attributes: {
-            className: c.FileTable_FileRow,
-          },
-          collect: () => ({ folder: node }),
-        }
+            id: 'Folder_Menu',
+            attributes: {
+              className: c.FileTable_FileRow,
+            },
+            collect: () => ({ folder: node }),
+          }
         : node.level === 0
-          ? {
+        ? {
             id: 'File_Menu',
             attributes: {
               className: c.FileTable_FileRow,
             },
             collect: () => ({ model: node }),
           }
-          : {
+        : {
             id: 'Subpart_Menu',
             attributes: {
               className: c.FileTable_FileRow,
