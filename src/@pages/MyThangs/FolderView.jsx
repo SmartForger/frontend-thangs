@@ -1,14 +1,11 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
-import { Link, useHistory, useParams } from 'react-router-dom'
+import React, { useEffect, useMemo } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
 import {
-  Button,
-  Contributors,
   FileTable,
   FolderCard,
-  LikeFolderButton,
-  MetadataPrimary,
+  FolderHeader,
   Spacer,
   Spinner,
   TitleTertiary,
@@ -17,16 +14,10 @@ import { useQuery } from '@hooks'
 import { authenticationService } from '@services'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
-import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
-import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
-import { ReactComponent as InviteIcon } from '@svg/icon-invite.svg'
-import { ReactComponent as PadlockIcon } from '@svg/icon-padlock.svg'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import * as types from '@constants/storeEventTypes'
 import { pageview } from '@utilities/analytics'
-import { useOverlay } from '@hooks'
 import { getFolderModels, getSubFolders } from '@selectors'
-import { buildPath } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -149,120 +140,6 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-
-const FolderHeader = ({ folder, folders, rootFolder, setFolder = noop }) => {
-  const c = useStyles({})
-  const { setOverlay } = useOverlay()
-  const { id } = folder
-  const folderPath = useMemo(() => {
-    return buildPath(folders, id, folder => ({
-      label: folder.name,
-      id: folder.id,
-    }))
-  }, [folders, id])
-  const folderName = folder.name
-
-  const handleClickRoot = useCallback(() => {
-    if (id !== rootFolder.id) setFolder(rootFolder)
-  }, [id, rootFolder, setFolder])
-
-  const handleInviteUsers = useCallback(() => {
-    setOverlay({
-      isOpen: true,
-      template: 'inviteUsers',
-      data: {
-        folderId: rootFolder ? rootFolder.id : folder.id,
-        animateIn: true,
-        windowed: true,
-        dialogue: true,
-      },
-    })
-  }, [folder.id, rootFolder, setOverlay])
-
-  const handleEditFolder = useCallback(() => {
-    setOverlay({
-      isOpen: true,
-      template: 'editFolder',
-      data: {
-        folder,
-        animateIn: true,
-        windowed: true,
-        dialogue: true,
-      },
-    })
-  }, [folder, setOverlay])
-
-  const members = rootFolder ? rootFolder.members : folder.members
-
-  return (
-    <>
-      <Spacer className={c.Spacer__mobile} size='2rem' />
-      <div className={c.FolderView_Row}>
-        <div className={c.FolderView_TitleAndIcons}>
-          <FolderIcon />
-          <Spacer size={'1rem'} />
-          <div className={c.FolderView_Col}>
-            <div className={c.FolderView_TitleAndIcons}>
-              <div className={c.FolderView_RootLink} onClick={handleClickRoot}>
-                <TitleTertiary>{folderName}</TitleTertiary>
-              </div>
-              <Spacer size={'.5rem'} />
-              {!folder.isPublic && (
-                <>
-                  <PadlockIcon className={c.PadlockIcon_Header} />
-                  <Spacer size={'.25rem'} />
-                </>
-              )}
-              <LikeFolderButton folder={folder} minimal onlyShowOwned />
-            </div>
-            {folderPath.length > 1 && (
-              <>
-                <Spacer size={'.5rem'} />
-                <MetadataPrimary>
-                  {folderPath.map((pathObj, index) => {
-                    if (index === folderPath.length - 1) return null
-                    return (
-                      <React.Fragment key={`folderCrumb_${pathObj.id}`}>
-                        <Link
-                          to={`/mythangs/folder/${pathObj.id}`}
-                        >{`${pathObj.label}`}</Link>
-                        {index !== folderPath.length - 2 && (
-                          <>&nbsp;&nbsp;/&nbsp;&nbsp;</>
-                        )}
-                      </React.Fragment>
-                    )
-                  })}
-                </MetadataPrimary>
-              </>
-            )}
-          </div>
-        </div>
-        <div className={classnames(c.FolderView_Row, c.FolderView_Row__desktop)}>
-          <Contributors users={members} displayLength='10' />
-          <Spacer size={'1rem'} />
-          <Button secondary onClick={handleEditFolder}>
-            Edit
-          </Button>
-          <Spacer size={'1rem'} />
-          <Button onClick={handleInviteUsers}>
-            <InviteIcon />
-            <Spacer size={'.5rem'} />
-            Invite Members
-          </Button>
-        </div>
-        <div className={c.FolderView_MobileMenuButton} onClick={e => e.preventDefault()}>
-          <ContextMenuTrigger
-            id={'Folder_Invite_Menu'}
-            holdToDisplay={0}
-            collect={() => ({ folder, members: folder.members })}
-          >
-            <DotStackIcon />
-          </ContextMenuTrigger>
-        </div>
-      </div>
-    </>
-  )
-}
 
 const findFolderById = (id, folders) => {
   const rootFolder = R.find(R.propEq('id', id.toString()))(folders) || {}

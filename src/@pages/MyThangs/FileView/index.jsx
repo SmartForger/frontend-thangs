@@ -4,12 +4,12 @@ import { useStoreon } from 'storeon/react'
 import {
   ContainerColumn,
   ContainerRow,
-  CollaboratorInfo,
-  HoopsModelViewer,
+  // CollaboratorInfo,
+  // HoopsModelViewer,
   Spacer,
   FileHeader,
   ModelStatBar,
-  ModelInfo,
+  ModelInfoBox,
   TabbedFileContent,
 } from '@components'
 import { CompareModels } from '@physna/compare-ui'
@@ -89,7 +89,7 @@ const getCounts = model => {
   }
 }
 
-const FileView = ({ className }) => {
+const FileView = ({ className, folders }) => {
   const c = useStyles()
   const { fileId: id } = useParams()
   const [activePart, setActivePart] = useState([id])
@@ -119,7 +119,7 @@ const FileView = ({ className }) => {
       ) : (
         <div className={c.FileView_Content}>
           <Spacer size='2rem' />
-          <FileHeader model={modelData} />{' '}
+          <FileHeader file={modelData} folders={folders} />
           {/* This needs to know the modelData and the names and ids of all parent folders of model */}
           <Spacer size='2rem' />
           {/* <HoopsModelViewer
@@ -162,13 +162,13 @@ const FileView = ({ className }) => {
                 likeCount={likeCount}
               />
               <Spacer size='2rem' />
-              <ModelInfo
+              <ModelInfoBox
                 model={modelData}
                 folderName={'Public Files'}
                 modelPrivacy='Private'
               />
               <Spacer size='2rem' />
-              <CollaboratorInfo owner={modelData.owner} collaborators={[]} />
+              {/* <CollaboratorInfo owner={modelData.owner} collaborators={[]} /> */}
             </ContainerColumn>
             <Spacer size='4rem' />
             <ContainerColumn fullWidth className={c.FileView_RightColumn}>

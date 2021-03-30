@@ -103,8 +103,13 @@ const useStyles = createUseStyles(theme => {
       paddingTop: '.125rem',
       position: 'relative',
 
+      '&::-webkit-scrollbar-thumb': {
+        border: `3px solid ${theme.colors.white[600]}`,
+        borderRadius: 20,
+        backgroundColor: '#C7C7C7',
+      },
       '&::-webkit-scrollbar-track': {
-        background: 'transparent',
+        background: theme.colors.white[600],
       },
     },
     WorkspaceNavbar_MobileColumnOnly: {

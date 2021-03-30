@@ -5,6 +5,7 @@ import { format } from 'date-fns'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import InfiniteTreeView from '@components/InfiniteTreeView'
 import {
+  ContainerColumn,
   Contributors,
   MetadataSecondary,
   Pill,
@@ -429,29 +430,27 @@ const FileTable = ({
           }
 
       const handleClick = () => {
+        setSelectedFiles([node.id])
+      }
+
+      const handleDoubleClick = () => {
         if (node.isFolder) {
           handleChangeFolder(node)
         } else {
-          if (selectedFiles.includes(node.id)) {
-            const modelPath = node.identifier
-              ? `/${node.identifier}`
-              : `/model/${node.id}`
-            history.push(modelPath)
-          } else {
-            setSelectedFiles([node.id])
-          }
-          // Select - Highlight Row - Show Toolbar (myThangs model page) -
-          // If selected already - Navigate to myThangs model preview view
+          const modelPath = `/mythangs/file/${node.id}`
+          history.push(modelPath)
         }
       }
 
+      const isSelected = selectedFiles.includes(node.id)
       return (
         <ContextMenuTrigger holdToDisplay={-1} {...menuProps}>
           <div
             className={cn(c.FileTable_FileRow, {
               [c.FileTable_MissingFile]: !node.valid,
             })}
-            onClick={handleClick}
+            onClick={!isSelected && handleClick}
+            onDoubleClick={isSelected && handleDoubleClick}
           >
             <Spacer size={'.5rem'} />
             <div
@@ -514,7 +513,7 @@ const FileTable = ({
   }, [heightOffset])
 
   return (
-    <div className={className} ref={containerRef}>
+    <ContainerColumn className={className} elementRef={containerRef} fullWidth>
       {allNodes.length > 0 || searchCase ? (
         <>
           <FileTableHeader sortedBy={sortedBy} onSort={handleSort} order={order} />
@@ -556,7 +555,7 @@ const FileTable = ({
           </Dropzone>
         </div>
       ) : null}
-    </div>
+    </ContainerColumn>
   )
 }
 
