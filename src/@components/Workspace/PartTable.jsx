@@ -131,7 +131,8 @@ const PartTable = ({
   className,
   file,
   filterTerm,
-  heightOffset = 0,
+  // heightOffset = 0,
+  minHeight = 300,
   model = {},
   searchCase,
   selectedParts,
@@ -141,7 +142,6 @@ const PartTable = ({
 }) => {
   const c = useStyles()
   const containerRef = useRef()
-  const [maxHeight, setMaxHeight] = useState(300)
 
   const addSelectedParts = useCallback(
     id => {
@@ -264,13 +264,6 @@ const PartTable = ({
     setSelectedParts(newSelectedParts)
   }, [allNodes, file, setSelectedParts])
 
-  useEffect(() => {
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect()
-      setMaxHeight(window.innerHeight - rect.top - heightOffset)
-    }
-  }, [heightOffset])
-
   return (
     <div className={className} ref={containerRef}>
       {allNodes.length > 0 || searchCase ? (
@@ -289,7 +282,7 @@ const PartTable = ({
               }
               itemHeight={48}
               levelPadding={0}
-              maxHeight={maxHeight}
+              minHeight={minHeight}
               nodes={allNodes}
               renderNode={renderNode}
               nodeProps={{ selectedParts, addSelectedParts, removeSelectedFile }}

@@ -24,7 +24,7 @@ const VersionPublished = ({ modelId }) => {
   const { setOverlayOpen } = useOverlay()
 
   const handleViewModel = useCallback(() => {
-    history.push(`/model/${modelId}`)
+    history.push(`/mythangs/file/${modelId}`)
     setOverlayOpen(false)
   }, [history, modelId, setOverlayOpen])
 
