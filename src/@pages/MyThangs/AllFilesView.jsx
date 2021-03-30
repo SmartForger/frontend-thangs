@@ -3,6 +3,7 @@ import { FileTable, FolderCard, Spacer, TitleTertiary } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import { pageview } from '@utilities/analytics'
+import { getRootFolders } from '@selectors'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -72,7 +73,7 @@ const AllFilesView = ({
   className,
   handleChangeFolder = noop,
   handleEditModel = noop,
-  myFolders: folders,
+  folders,
   models,
   onDrop = noop,
 }) => {
@@ -84,13 +85,13 @@ const AllFilesView = ({
   }, [])
 
   const sortedFolders = useMemo(() => {
-    return (folders || [])
+    return getRootFolders(folders)
+      .filter(folder => !folder.shared)
       .sort((a, b) => {
         if (a.name.toUpperCase() < b.name.toUpperCase()) return -1
         else if (a.name.toUpperCase() > b.name.toUpperCase()) return 1
         return 0
       })
-      .filter(folder => !folder.name.includes('//'))
   }, [folders])
 
   return (
@@ -124,11 +125,12 @@ const AllFilesView = ({
         )}
         <FileTable
           files={models || []}
-          handleEditModel={handleEditModel}
           handleChangeFolder={handleChangeFolder}
-          sortedBy={'created'}
+          handleEditModel={handleEditModel}
+          heightOffset={0}
           hideDropzone={sortedFolders.length > 0}
           onDrop={onDrop}
+          sortedBy={'created'}
         ></FileTable>
       </div>
       <Spacer size='2rem' />

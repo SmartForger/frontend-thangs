@@ -99,7 +99,7 @@ const FolderMenuInvite = ({ folder = {}, members = [] }) => {
     })
   }, [folder, setOverlay])
 
-  const removeFolder = useCallback(
+  const deleteFolder = useCallback(
     e => {
       e.preventDefault()
       track('File Menu - Delete Folder')
@@ -171,12 +171,12 @@ const FolderMenuInvite = ({ folder = {}, members = [] }) => {
       {hasDeletePermission && (
         <>
           <Divider spacing={'1rem'} />
-          <MenuItem className={c.FolderMenu_Item} onClick={removeFolder}>
+          <MenuItem className={c.FolderMenu_Item} onClick={deleteFolder}>
             <div>
               <Spacer size={'1.5rem'} />
               <DeleteIcon />
               <Spacer size={'.5rem'} />
-              <SingleLineBodyText>Remove</SingleLineBodyText>
+              <SingleLineBodyText>Delete</SingleLineBodyText>
               <Spacer size={'1.5rem'} />
             </div>
           </MenuItem>

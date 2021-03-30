@@ -25,7 +25,8 @@ import { ContextMenuTrigger } from 'react-contextmenu'
 import * as types from '@constants/storeEventTypes'
 import { pageview } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
-import { getSubFolders } from '@utilities'
+import { getFolderModels, getSubFolders } from '@selectors'
+import { buildPath } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -149,20 +150,17 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const FolderHeader = ({ folder, allFolders, rootFolder, setFolder = noop }) => {
+const FolderHeader = ({ folder, folders, rootFolder, setFolder = noop }) => {
   const c = useStyles({})
   const { setOverlay } = useOverlay()
-  const { id, name } = folder
-  const folderPath = name.split('//')
-
-  const folderPathEnhanced = folderPath.map((path, i) => {
-    const folderName = folderPath.slice(0, i + 1).join('//')
-    const subfolder = allFolders.find(f => f.name === folderName)
-    if (!subfolder) return null
-    const { id: pathId } = subfolder
-    return { label: path, id: pathId }
-  })
-  const rootFolderName = folderPath[0]
+  const { id } = folder
+  const folderPath = useMemo(() => {
+    return buildPath(folders, id, folder => ({
+      label: folder.name,
+      id: folder.id,
+    }))
+  }, [folders, id])
+  const folderName = folder.name
 
   const handleClickRoot = useCallback(() => {
     if (id !== rootFolder.id) setFolder(rootFolder)
@@ -195,7 +193,7 @@ const FolderHeader = ({ folder, allFolders, rootFolder, setFolder = noop }) => {
   }, [folder, setOverlay])
 
   const members = rootFolder ? rootFolder.members : folder.members
-
+  console.log(folderPath)
   return (
     <>
       <Spacer className={c.Spacer__mobile} size='2rem' />
@@ -206,7 +204,7 @@ const FolderHeader = ({ folder, allFolders, rootFolder, setFolder = noop }) => {
           <div className={c.FolderView_Col}>
             <div className={c.FolderView_TitleAndIcons}>
               <div className={c.FolderView_RootLink} onClick={handleClickRoot}>
-                <TitleTertiary>{rootFolderName}</TitleTertiary>
+                <TitleTertiary>{folderName}</TitleTertiary>
               </div>
               <Spacer size={'.5rem'} />
               {!folder.isPublic && (
@@ -221,23 +219,16 @@ const FolderHeader = ({ folder, allFolders, rootFolder, setFolder = noop }) => {
               <>
                 <Spacer size={'.5rem'} />
                 <MetadataPrimary>
-                  {folderPathEnhanced.map((pathObj, index) => {
-                    if (index === 0) return null
-                    if (index === folderPathEnhanced.length - 1)
-                      return (
-                        <span
-                          key={`folderCrumb_${pathObj.label}_${index}`}
-                          className={c.FolderView_CurrentFolder}
-                        >
-                          {pathObj.label}
-                        </span>
-                      )
+                  {folderPath.map((pathObj, index) => {
+                    if (index === folderPath.length - 1) return null
                     return (
-                      <React.Fragment key={`folderCrumb_${pathObj.label}_${index}`}>
+                      <React.Fragment key={`folderCrumb_${pathObj.id}`}>
                         <Link
                           to={`/mythangs/folder/${pathObj.id}`}
                         >{`${pathObj.label}`}</Link>
-                        &nbsp;&nbsp;/&nbsp;&nbsp;
+                        {index !== folderPath.length - 2 && (
+                          <>&nbsp;&nbsp;/&nbsp;&nbsp;</>
+                        )}
                       </React.Fragment>
                     )
                   })}
@@ -289,10 +280,9 @@ const FolderView = ({
   className,
   handleChangeFolder = noop,
   handleEditModel = noop,
-  myFolders: folders,
   onDrop = noop,
   setCurrentFolderId = noop,
-  sharedFolders: shared = [],
+  folders,
   models,
 }) => {
   const currentUserId = authenticationService.getCurrentUserId()
@@ -301,13 +291,9 @@ const FolderView = ({
   const history = useHistory()
   const { dispatch } = useStoreon()
   const { folderId: id } = useParams()
-  const allFolders = [...folders, ...shared]
-  const folder = id ? findFolderById(id, allFolders) : {}
+  const folder = folders[id] || {}
   const isSharedFolder = folder.creator && folder.creator.id !== currentUserId
-  const { name = '' } = folder
-  const folderModels = useMemo(() => {
-    return models.filter(model => model.folderId === id)
-  }, [models, id])
+  const folderModels = useMemo(() => getFolderModels(models, id), [models, id])
 
   useEffect(() => {
     // This is for setting the current folder id
@@ -328,7 +314,7 @@ const FolderView = ({
         },
       })
   }, [dispatch, history, id, inviteCode])
-  if (!folder && !R.isEmpty(allFolders)) {
+  if (!folder && !R.isEmpty(folders)) {
     return <main className={classnames(className, c.FolderView)}>Folder not found.</main>
   }
 
@@ -341,11 +327,7 @@ const FolderView = ({
   }
 
   const rootFolder = folder.root ? findFolderById(folder.root, folders) : folder
-  const directSubFolders = getSubFolders(allFolders, name)
-  const fileTableFolders = directSubFolders.map(item => ({
-    ...item,
-    name: item.name.split('//').reverse()[0],
-  }))
+  const directSubFolders = getSubFolders(folders, id)
 
   return (
     <>
@@ -354,7 +336,7 @@ const FolderView = ({
           <div className={c.FolderView_Content}>
             <FolderHeader
               folder={folder}
-              allFolders={allFolders}
+              folders={folders}
               rootFolder={rootFolder}
               setFolder={handleChangeFolder}
               isSharedFolder={isSharedFolder}
@@ -391,14 +373,16 @@ const FolderView = ({
               handleChangeFolder={handleChangeFolder}
               hideDropzone={directSubFolders.length > 0}
               onDrop={onDrop}
+              heightOffset={8}
             />
             <FileTable
               className={c.FolderView_FileTable__mobile}
-              files={[...fileTableFolders, ...folderModels]}
+              files={[...directSubFolders, ...folderModels]}
               handleEditModel={handleEditModel}
               handleChangeFolder={handleChangeFolder}
               hideDropzone={directSubFolders.length > 0}
               onDrop={onDrop}
+              heightOffset={8}
             />
           </div>
           <Spacer size='2rem' />

@@ -20,6 +20,7 @@ import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
 import { track } from '@utilities/analytics'
 import * as types from '@constants/storeEventTypes'
+import { buildPath } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -54,6 +55,10 @@ const useStyles = createUseStyles(theme => {
     SelectFolderMenu_Row: {
       ...theme.mixins.flexRow,
       alignItems: 'center',
+
+      '& > svg': {
+        flex: 'none',
+      },
     },
 
     SelectFolderMenu__fullWidth: {
@@ -295,37 +300,33 @@ const SelectFolderActionMenu = ({
 }) => {
   const c = useStyles({})
   const { dispatch, folders = {} } = useStoreon('folders')
-  const { data: foldersData = [] } = folders
+  const { data: foldersData = {} } = folders
 
   const dropdownFolders = useMemo(() => {
-    const foldersArray = foldersData.filter(folder => !folder.shared)
-    const sharedArray = foldersData.filter(folder => folder.shared)
-    const combinedArray = []
-    foldersArray.sort((a, b) => {
-      if (a.name.toLowerCase() < b.name.toLowerCase()) return -1
-      else if (a.name.toLowerCase() > b.name.toLowerCase()) return 1
-      return 0
-    })
-    sharedArray.sort((a, b) => {
-      if (a.name.toLowerCase() < b.name.toLowerCase()) return -1
-      else if (a.name.toLowerCase() > b.name.toLowerCase()) return 1
-      return 0
-    })
-    foldersArray.forEach(folder => {
-      combinedArray.push(folder)
-      folder.subfolders.forEach(subfolder => {
-        combinedArray.push(subfolder)
-      })
-    })
-    sharedArray.forEach(folder => {
-      combinedArray.push(folder)
-    })
+    const foldersArray = R.values(foldersData)
 
-    const folderOptions = combinedArray.map(folder => ({
-      value: folder.id,
-      label: folder.name.replace(new RegExp('//', 'g'), '/'),
-      isPublic: folder.isPublic,
-    }))
+    const folderOptions = foldersArray.map(folder => {
+      const label = buildPath(foldersData, folder.id, folder => folder.name).join(' / ')
+
+      return {
+        value: folder.id,
+        label,
+        isPublic: folder.isPublic,
+        shared: folder.shared,
+      }
+    })
+    folderOptions.sort((a, b) => {
+      const sharedA = a.shared ? 0 : 1
+      const sharedB = b.shared ? 0 : 1
+
+      // Sort by: shared
+      if (sharedA !== sharedB) {
+        return sharedA - sharedB
+      }
+
+      // Sort by: name
+      return a.label.toLowerCase().localeCompare(b.label.toLowerCase())
+    })
 
     return [
       {

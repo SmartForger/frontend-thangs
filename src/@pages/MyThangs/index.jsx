@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import { useStoreon } from 'storeon/react'
@@ -121,12 +121,6 @@ const MyThangs = () => {
   )
   const { isLoading, isLoaded } = thangs
   const { data: modelData } = models
-  const folderData = useMemo(() => folders.data.filter(folder => !folder.shared), [
-    folders.data,
-  ])
-  const sharedData = useMemo(() => folders.data.filter(folder => folder.shared), [
-    folders.data,
-  ])
 
   useStarred()
   const { startTimer, getTime } = usePerformanceMetrics()
@@ -201,8 +195,7 @@ const MyThangs = () => {
     setCurrentFolderId,
     handleEditModel,
     handleChangeFolder,
-    myFolders: folderData,
-    sharedFolders: sharedData,
+    folders: folders.data,
     models: modelData,
     userId: currentUserId,
     onDrop,
@@ -222,7 +215,7 @@ const MyThangs = () => {
         >
           <WorkspaceNavbar
             currentFolderId={currentFolderId}
-            folders={folderData}
+            folders={folders.data}
             handleChangeFolder={handleChangeFolder}
             handleEditModel={handleEditModel}
             isLoadingThangs={isLoading}

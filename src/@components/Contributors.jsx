@@ -30,11 +30,11 @@ const useStyles = createUseStyles(theme => {
 
 const Contributors = ({ fileId, users = [], displayLength = 2 }) => {
   const c = useStyles({})
-  users = users.filter(user => user && (user.fullName || user.username))
-  let confirmedContributors = users.filter(user => user && user.fullName)
+  const filteredUsers = users.filter(user => user && (user.fullName || user.username))
+  let confirmedContributors = filteredUsers.filter(user => user.fullName)
   return (
     <div className={c.Contributors}>
-      {users.map((user, index) => {
+      {filteredUsers.map((user, index) => {
         if (index === displayLength && confirmedContributors.length > displayLength + 1) {
           let undisplayedUserCount = `+ ${confirmedContributors.length - displayLength}`
           let undisplayedUserList = confirmedContributors

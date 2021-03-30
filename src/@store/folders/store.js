@@ -15,20 +15,6 @@ const getInitAtom = () => ({
   saveError: false,
   data: [],
 })
-
-const getRootFolderId = (folders, parentId) => {
-  let folder = { parentId }
-  while (folder.parentId) {
-    folder = folders[folder.parentId]
-
-    if (!folder) {
-      return ''
-    }
-  }
-
-  return folder.id || ''
-}
-
 const noop = () => null
 export default store => {
   store.on(types.STORE_INIT, () => ({
@@ -107,11 +93,14 @@ export default store => {
 
   store.on(
     types.CREATE_FOLDER,
-    async (state, { data: newFolderData, onFinish, onError }) => {
+    async (state, { data: newFolderData, parentId, onFinish, onError }) => {
+      const { data: folders } = state.folders
+      const root = getRootFolderId(folders, parentId)
+
       store.dispatch(types.SAVING_FOLDER)
       const { data, error } = await api({
         method: 'POST',
-        endpoint: 'folders',
+        endpoint: `folders/${root}`,
         body: newFolderData,
       })
       if (error) {
@@ -128,7 +117,7 @@ export default store => {
           state.folders.data
         )
         store.dispatch(types.UPDATE_FOLDERS, newFolders)
-        onFinish(data.folderId)
+        onFinish(data.rootFolderId)
         store.dispatch(types.SAVED_FOLDER)
         store.dispatch(types.FETCH_THANGS, { silentUpdate: true })
       }
@@ -185,17 +174,22 @@ export default store => {
   store.on(
     types.EDIT_FOLDER,
     async (
-      _,
+      state,
       { id: folderId, folder: updatedFolder, onError = noop, onFinish = noop }
     ) => {
       if (R.isNil(folderId)) return
       store.dispatch(types.SAVING_FOLDER)
+
+      const { data: folders } = state.folders
+      const root = getRootFolderId(folders, updatedFolder.parentId)
+
       const userId = authenticationService.getCurrentUserId()
       const { error } = await api({
         method: 'PUT',
-        endpoint: `folders/${folderId}`,
+        endpoint: `folders/${root || folderId}`,
         body: {
           name: updatedFolder.name,
+          folderId: root ? folderId : undefined,
         },
       })
 
@@ -304,4 +298,17 @@ export default store => {
       store.dispatch(types.SAVED_FOLDER)
     }
   })
+}
+
+function getRootFolderId(folders, parentId) {
+  let folder = { parentId }
+  while (folder.parentId) {
+    folder = folders[folder.parentId]
+
+    if (!folder) {
+      return ''
+    }
+  }
+
+  return folder.id || ''
 }

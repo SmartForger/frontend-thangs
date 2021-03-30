@@ -10,6 +10,9 @@ export const DELETE_MODEL = 'delete-model'
 export const SAVED_MODEL = 'saved-model'
 export const SAVING_MODEL = 'saving-model'
 export const LOCAL_FOLLOW_MODEL_OWNER = 'local-follow-model-owner'
+/* Part Store Events */
+export const ADD_PART = 'add-part'
+export const DELETE_PART = 'delete-part'
 /* Related Model Events */
 export const INIT_RELATED_MODELS = 'init-related-models'
 export const CHANGE_RELATED_MODELS = 'change-related-model-status'

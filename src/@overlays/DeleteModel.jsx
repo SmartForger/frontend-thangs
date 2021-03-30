@@ -87,13 +87,14 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const DeleteModel = ({ model, type, folderId }) => {
+const DeleteModel = ({ model, part, type, folderId }) => {
   const c = useStyles()
   const [errorMessage, setErrorMessage] = useState(null)
   const { setOverlayOpen } = useOverlay()
-  const { dispatch, [`model-${model.id}`]: modelAtom = {} } = useStoreon(
-    `model-${model.id}`
-  )
+  const {
+    dispatch,
+    [`model-${model ? model.id : part.modelId}`]: modelAtom = {},
+  } = useStoreon(`model-${model ? model.id : part.modelId}`)
   const { isSaving } = modelAtom
   const closeOverlay = useCallback(() => {
     setOverlayOpen(false)
@@ -101,23 +102,36 @@ const DeleteModel = ({ model, type, folderId }) => {
 
   const handleSubmit = useCallback(
     model => {
-      track('Delete Model - Overlay')
-      dispatch(types.DELETE_MODEL, {
-        model,
-        folderId,
-        onError: error => {
-          setErrorMessage(error)
-        },
-        onFinish: () => {
-          closeOverlay()
-        },
-      })
+      track(`Delete ${type === 'model' ? 'Model' : 'Part'} - Overlay`)
+      if (type === 'model') {
+        dispatch(types.DELETE_MODEL, {
+          model,
+          folderId,
+          onError: error => {
+            setErrorMessage(error)
+          },
+          onFinish: () => {
+            closeOverlay()
+          },
+        })
+      } else if (type === 'part') {
+        dispatch(types.DELETE_PART, {
+          part,
+          folderId,
+          onError: error => {
+            setErrorMessage(error)
+          },
+          onFinish: () => {
+            closeOverlay()
+          },
+        })
+      }
     },
-    [closeOverlay, dispatch, folderId]
+    [closeOverlay, dispatch, folderId, part, type]
   )
 
   useEffect(() => {
-    overlayview('DeleteModel')
+    overlayview(`Delete${type === 'model' ? 'Model' : 'Part'}`)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -133,6 +147,7 @@ const DeleteModel = ({ model, type, folderId }) => {
         <Spacer className={c.DeleteModel_MobileSpacer} size='2rem' />
         <DeleteForm
           model={model}
+          part={part}
           type={type}
           handleDelete={handleSubmit}
           handleCancel={closeOverlay}

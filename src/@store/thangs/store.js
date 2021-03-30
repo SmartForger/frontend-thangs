@@ -2,6 +2,7 @@ import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import * as R from 'ramda'
+import { arrayToDictionary } from '@utilities'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -17,31 +18,22 @@ export default store => {
   }))
 
   store.on(types.UPDATE_THANGS, (state, event) => {
+    const { folders, models: rootModels } = event
     let models = [
       ...R.pathOr([], ['models', 'data'], state),
-      ...event.models.map(m => ({ ...m, id: +m.id })),
+      ...rootModels.map(m => ({ ...m, id: +m.id, isPublic: true })),
     ]
-    const allFolders = []
-
-    const addFoldersToArray = (folders, isShared) => {
-      folders.forEach(folder => {
-        const { subfolders, models: folderModels, ...folderInfo } = folder
-        if (isShared) {
-          folderInfo.shared = true
-        }
-        folderInfo.models = []
-        folderInfo.subfolders = []
-        allFolders.push(folderInfo)
-        models = models.concat(folderModels.filter(m => m.id))
-
-        if (subfolders && subfolders.length > 0) {
-          addFoldersToArray(subfolders, isShared)
-        }
-      })
-    }
-    addFoldersToArray(event.folders)
-    addFoldersToArray(event.shared, true)
-
+    folders.forEach(folder => {
+      models = [
+        ...models,
+        ...folder.models.map(model => {
+          model.isPublic = folder.isPublic
+          return model
+        }),
+      ]
+      delete folder.models
+      delete folder.subfolders
+    })
     models = R.uniqBy(R.prop('id'), models)
 
     return {
@@ -51,7 +43,7 @@ export default store => {
       },
       folders: {
         ...state.folders,
-        data: allFolders,
+        data: arrayToDictionary(event.folders),
       },
       models: {
         ...state.models,

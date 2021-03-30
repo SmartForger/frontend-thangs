@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Button, MultiLineBodyText, Spacer, NavLink } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
@@ -76,13 +76,24 @@ const noop = () => null
 const DeleteForm = ({
   folder = {},
   model = {},
+  part = {},
   type,
   handleDelete = noop,
   handleCancel = noop,
   errorMessage,
 }) => {
   const c = useStyles()
-  const subject = type === 'model' ? model : folder
+  const subject = useMemo(() => {
+    switch (type) {
+      case 'model':
+        return model
+      case 'part':
+        return part
+      case 'folder':
+        return folder
+      default:
+    }
+  }, [folder, model, part, type])
   const { name } = subject
 
   const handleOnDelete = useCallback(

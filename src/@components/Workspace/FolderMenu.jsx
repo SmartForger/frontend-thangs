@@ -96,7 +96,7 @@ const FolderMenu = ({ folder = {} }) => {
     [folder, setOverlay]
   )
 
-  const handleRemoveFolder = useCallback(
+  const handleDeleteFolder = useCallback(
     e => {
       e.preventDefault()
       track('Folder Menu - Delete Folder')
@@ -151,12 +151,12 @@ const FolderMenu = ({ folder = {} }) => {
       {hasDeletePermission && (
         <>
           <Divider spacing={'.5rem'} />
-          <MenuItem className={c.FolderMenu_Item} onClick={handleRemoveFolder}>
+          <MenuItem className={c.FolderMenu_Item} onClick={handleDeleteFolder}>
             <div>
               <Spacer size={'1.5rem'} />
               <DeleteIcon />
               <Spacer size={'.5rem'} />
-              <SingleLineBodyText>Remove</SingleLineBodyText>
+              <SingleLineBodyText>Delete</SingleLineBodyText>
               <Spacer size={'1.5rem'} />
             </div>
           </MenuItem>

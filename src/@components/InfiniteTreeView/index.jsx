@@ -2,8 +2,6 @@ import React, { useState, useMemo, useCallback, useRef, memo } from 'react'
 import { FixedSizeList, areEqual } from 'react-window'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { ReactComponent as IndentArrow } from '@svg/icon-indent-arrow.svg'
-import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -32,7 +30,15 @@ const useStyles = createUseStyles(_theme => {
 })
 
 const Row = memo(({ data, index, style }) => {
-  const { items, isSelected, levelPadding, classes, renderNode, toggleNode } = data
+  const {
+    items,
+    isSelected,
+    levelPadding,
+    classes,
+    renderNode,
+    toggleNode,
+    nodeProps,
+  } = data
   const node = items[index]
 
   return (
@@ -45,17 +51,7 @@ const Row = memo(({ data, index, style }) => {
         paddingLeft: levelPadding * node.level,
       }}
     >
-      {node.level > 0 && (
-        <div
-          className={classnames(classes.TreeNode_ExpandIcon, {
-            [classes.TreeNode_ExpandIcon__expanded]: !node.isLeaf && !node.closed,
-          })}
-          onClick={() => toggleNode(node)}
-        >
-          {node.isLeaf ? <IndentArrow /> : <ArrowRight />}
-        </div>
-      )}
-      {renderNode(node)}
+      {renderNode(node, { toggleNode, ...nodeProps })}
     </div>
   )
 }, areEqual)
@@ -83,6 +79,7 @@ const findParentIndex = (nodes, index) => {
 const InfiniteTreeView = ({
   classes,
   nodes,
+  nodeProps,
   renderNode,
   itemHeight,
   width,
@@ -140,7 +137,7 @@ const InfiniteTreeView = ({
 
     nodes.forEach((node, i) => {
       if (node.level <= lastLevel) {
-        const { parts: _p, ...newNode } = node
+        const { ...newNode } = node
         newNode.isLeaf = isLeaf(nodes, i)
         if ((node.level > 0 || hasMultiRoots) && !expandedNodes.includes(node.id)) {
           lastLevel = node.level
@@ -175,8 +172,18 @@ const InfiniteTreeView = ({
       classes: { ...c, ...classes },
       levelPadding,
       isSelected,
+      nodeProps,
     }
-  }, [filteredNodes, toggleNode, renderNode, levelPadding, isSelected, c, classes])
+  }, [
+    filteredNodes,
+    toggleNode,
+    renderNode,
+    c,
+    classes,
+    levelPadding,
+    isSelected,
+    nodeProps,
+  ])
 
   return (
     <FixedSizeList
