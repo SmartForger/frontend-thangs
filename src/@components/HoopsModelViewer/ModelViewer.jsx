@@ -101,6 +101,9 @@ const HoopsModelViewer = ({
       setPartList(list)
       partListRef.current = list
       setSelectedModel(findPart(list, preselectedPart))
+      if (preselectedPart) {
+        setHighlightedModel(findPart(list, preselectedPart))
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [model.id])
@@ -112,9 +115,6 @@ const HoopsModelViewer = ({
       const parts = flattenTree(model.parts, 'parts')
       if (parts && parts.length) {
         const part = findPart(parts, preselectedPart)
-        if (preselectedPart) {
-          setHighlightedModel(part.phyndexerId)
-        }
         return encodeURIComponent(part.filename)
       }
       return encodeURIComponent(model.filename)

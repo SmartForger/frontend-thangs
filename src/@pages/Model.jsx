@@ -761,7 +761,7 @@ const ModelDetailPage = ({
 
 const Page = () => {
   const { id, modelString } = useParams()
-  const preselectedPart = useQuery('preselectPart')
+  const preselectedPart = useQuery('part')
   const modelId = modelString ? modelString.split('-').pop() : id
   const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [showExternalResults] = useLocalStorage('showExternalResults', false)

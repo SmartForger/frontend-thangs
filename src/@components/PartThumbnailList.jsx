@@ -88,7 +88,7 @@ export const PartThumbnailList = ({
             key={part.modelId}
             to={{
               pathname: part.attributionUrl,
-              search: `?preselectPart=${part.modelId}`,
+              search: `?part=${part.modelId}`,
               state: { prevPath: window.location.href },
             }}
             isExternal={isExternalModel}
