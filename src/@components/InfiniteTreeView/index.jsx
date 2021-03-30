@@ -163,7 +163,7 @@ const InfiniteTreeView = ({
 
     return newNodes
     // Passing listRef.current in the deps here is intentional (albeit not recommended) so that we can scroll to a highlighted item on the initial render
-    // Eventually we should refactor the scrolling and tree building logic out of filteredNodes so that we can call scroll when the ref is set instead of relying this useMemo to update
+    // Eventually we should refactor the scrolling and tree building logic out of filteredNodes so that we can call scroll when the ref is set instead of relying on the useMemo to update
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodes, expandedNodes, scrollToItem, listRef.current])
 
