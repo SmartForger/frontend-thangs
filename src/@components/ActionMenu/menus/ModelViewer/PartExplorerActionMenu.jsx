@@ -491,6 +491,7 @@ const PartExplorerActionMenu = ({
       TargetComponent={PartExplorerTarget}
       TargetComponentProps={targetProps}
       isAutoClosed={false}
+      isExternalClosed={true}
       isOpenByDefault={true}
     />
   )
