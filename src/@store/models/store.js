@@ -32,6 +32,17 @@ export default store => {
   store.on(
     types.FETCH_MODEL,
     async (state, { id, silentUpdate = false, onFinish = noop, onError = noop }) => {
+      const { data: allModels } = state.models
+      const model = (allModels || []).find(m => m.id === +id)
+      if (model) {
+        store.dispatch(types.CHANGE_MODEL_STATUS, {
+          status: STATUSES.LOADED,
+          atom: 'model',
+          data: model,
+        })
+        return
+      }
+
       if (!silentUpdate) {
         store.dispatch(types.CHANGE_MODEL_STATUS, {
           status: STATUSES.LOADING,
