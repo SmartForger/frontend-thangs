@@ -135,7 +135,7 @@ export const buildPath = (dict, id, mapFunc, parentField = 'parentId') => {
   let item = dict[id]
   while (item && item[parentField]) {
     item = dict[item[parentField]]
-    path.push(item)
+    if (item) path.push(item)
   }
 
   const reverseMap = R.compose(R.map(mapFunc), R.reverse)

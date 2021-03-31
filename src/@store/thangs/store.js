@@ -28,6 +28,7 @@ export default store => {
         ...models,
         ...folder.models.map(model => {
           model.isPublic = folder.isPublic
+          model.folderId = folder.id
           return model
         }),
       ]

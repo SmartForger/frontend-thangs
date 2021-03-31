@@ -421,7 +421,11 @@ export default store => {
         endpoint: 'models',
         body: payload,
       })
-      store.dispatch(types.FETCH_THANGS, { onFinish })
+      store.dispatch(types.FETCH_THANGS, {
+        onFinish: () => {
+          onFinish(payload[0].folderId)
+        },
+      })
       let eventName = ''
       if (error) eventName = 'Model Uploaded Failed - Error'
       // data should be an array. If the nodeJS timeout hits we will
