@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { ContextMenuTrigger } from 'react-contextmenu'
+import * as R from 'ramda'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import {
   Pill,
@@ -30,11 +31,17 @@ const FileHeader = ({ file = {}, folders = [] }) => {
   const { setOverlay } = useOverlay()
   const { folderId: id, name } = file
   const folderPath = useMemo(() => {
-    if (!folders.length) return []
-    return buildPath(folders, id, folder => ({
+    const result = buildPath(folders, id, folder => ({
       label: folder.name,
       id: folder.id,
     }))
+
+    result.push({
+      id,
+      label: R.pathOr('', [id, 'name'], folders),
+    })
+
+    return result
   }, [folders, id])
 
   const folder = folders[id] || {}
