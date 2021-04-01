@@ -387,14 +387,13 @@ const ModelStats = ({ model = {} }) => {
 }
 
 const AddPrintPhotoLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
-  const c = useStyles()
   const { setOverlay } = useOverlay()
 
   const handleClick = useCallback(() => {
     if (isAuthedUser) {
       setOverlay({
         isOpen: true,
-        template: 'multiUpload',
+        template: 'multiPhotoUpload',
         data: {
           animateIn: true,
           windowed: true,
@@ -419,7 +418,7 @@ const AddPrintPhotoLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) 
   )
 }
 
-const ModelPrints = ({ model = {} }) => {
+const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => {
   const c = useStyles()
   return (
     <div className={c.Model_ModelPrints}>
@@ -431,7 +430,11 @@ const ModelPrints = ({ model = {} }) => {
         No prints added yet, be the first to upload a photo!
       </MultiLineBodyText>
       <Spacer size='1.5rem' />
-      <AddPrintPhotoLink />
+      <AddPrintPhotoLink
+        model={model}
+        isAuthedUser={isAuthedUser}
+        openSignupOverlay={openSignupOverlay}
+      />
     </div>
   )
 }
@@ -605,7 +608,11 @@ const StatsActionsAndPrints = ({
       <Divider />
       <ModelStats model={modelData} />
       <Divider />
-      <ModelPrints model={modelData} />
+      <ModelPrints
+        model={modelData}
+        isAuthedUser={isAuthedUser}
+        openSignupOverlay={openSignupOverlay}
+      />
       <Divider />
     </div>
   )
