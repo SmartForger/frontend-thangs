@@ -7,6 +7,7 @@ import {
   ARDownloadActionMenu,
   Button,
   CommentsForModel,
+  ContainerRow,
   Divider,
   EditModelButton,
   HoopsModelViewer,
@@ -275,6 +276,12 @@ const useStyles = createUseStyles(theme => {
         width: '100%',
       },
     },
+    ViewARLink: {
+      display: 'block',
+      [md_viewer]: {
+        display: 'none',
+      },
+    },
   }
 })
 const noop = () => null
@@ -355,6 +362,18 @@ const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
     <div className={c.Model_DownloadAR}>
       <ARDownloadActionMenu onChange={handleClick} />
     </div>
+  )
+}
+
+const ViewARLink = ({ model }) => {
+  const c = useStyles({})
+  return (
+    <a
+      className={c.ViewARLink}
+      href={`intent://arvr.google.com/scene-viewer/1.0?file=${model.androidUrl}#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
+    >
+      <Button onClick={e => e.preventDefault()}>View on Mobile [beta]</Button>
+    </a>
   )
 }
 
@@ -507,14 +526,6 @@ const StatsAndActions = ({
   openSignupOverlay = noop,
   pageTitle,
 }) => {
-  const filename =
-    modelData &&
-    modelData.parts &&
-    modelData.parts.length &&
-    modelData.parts[0] &&
-    modelData.parts[0].filename &&
-    modelData.parts[0].filename.toLowerCase()
-  const isARSupported = filename.includes('stl') || filename.includes('obj')
   return (
     <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
       <div>
@@ -528,13 +539,14 @@ const StatsAndActions = ({
           <ShareActionMenu iconOnly={true} title={pageTitle} model={modelData} />
         </div>
         <Spacer size='1rem' />
-        {isARSupported && (
+        <ContainerRow>
           <DownloadARLink
             model={modelData}
             isAuthedUser={isAuthedUser}
             openSignupOverlay={openSignupOverlay}
           />
-        )}
+          <ViewARLink model={modelData} />
+        </ContainerRow>
         {modelData.license ? (
           <>
             <Spacer size='1rem' />
