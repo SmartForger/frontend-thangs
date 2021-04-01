@@ -7,6 +7,7 @@ import {
   ARDownloadActionMenu,
   Button,
   CommentsForModel,
+  ContainerColumn,
   Divider,
   EditModelButton,
   HoopsModelViewer,
@@ -30,7 +31,11 @@ import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as LicenseIcon } from '@svg/license.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
+<<<<<<< HEAD
 import { ReactComponent as PhotoIcon } from '@svg/icon-photo.svg'
+=======
+import { ReactComponent as AndroidIcon } from '@svg/icon-android.svg'
+>>>>>>> development
 import { Message404 } from './404'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
@@ -283,6 +288,17 @@ const useStyles = createUseStyles(theme => {
         width: '100%',
       },
     },
+    ViewARLink: {
+      display: 'block',
+
+      '& > button': {
+        width: '100%',
+      },
+
+      [md_viewer]: {
+        display: 'none',
+      },
+    },
   }
 })
 const noop = () => null
@@ -340,7 +356,7 @@ const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
         format,
         onFinish: downloadUrl => {
           window.location.assign(downloadUrl)
-          track('Download AR Model', { format, modelId: model.id })
+          track('Download AR', { format, modelId: model.id })
         },
       })
     },
@@ -363,6 +379,38 @@ const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
     <div className={c.Model_DownloadAR}>
       <ARDownloadActionMenu onChange={handleClick} />
     </div>
+  )
+}
+
+const ViewARLink = ({ model }) => {
+  const c = useStyles({})
+  const { parts } = model
+  let primaryPart = null
+  if (parts) {
+    if (parts.length > 1) {
+      primaryPart = R.find(R.propEq('isPrimary', true))(parts) || parts[0]
+    } else {
+      primaryPart = parts[0]
+    }
+  }
+  if (!primaryPart || !primaryPart.androidUrl) return null
+  return (
+    <>
+      <Spacer size={'1rem'} />
+      <a
+        className={c.ViewARLink}
+        href={`intent://arvr.google.com/scene-viewer/1.0?file=${primaryPart?.androidUrl?.replace(
+          '#',
+          encodeURIComponent('#')
+        )}#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
+      >
+        <Button secondary onClick={e => e.preventDefault()}>
+          View on&nbsp;
+          <AndroidIcon />
+          Mobile [beta]
+        </Button>
+      </a>
+    </>
   )
 }
 
@@ -568,14 +616,6 @@ const StatsActionsAndPrints = ({
   openSignupOverlay = noop,
   pageTitle,
 }) => {
-  const filename =
-    modelData &&
-    modelData.parts &&
-    modelData.parts.length &&
-    modelData.parts[0] &&
-    modelData.parts[0].filename &&
-    modelData.parts[0].filename.toLowerCase()
-  const isARSupported = filename.includes('stl') || filename.includes('obj')
   return (
     <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
       <div>
@@ -589,13 +629,14 @@ const StatsActionsAndPrints = ({
           <ShareActionMenu iconOnly={true} title={pageTitle} model={modelData} />
         </div>
         <Spacer size='1rem' />
-        {isARSupported && (
+        <ContainerColumn>
           <DownloadARLink
             model={modelData}
             isAuthedUser={isAuthedUser}
             openSignupOverlay={openSignupOverlay}
           />
-        )}
+          <ViewARLink model={modelData} />
+        </ContainerColumn>
         {modelData.license ? (
           <>
             <Spacer size='1rem' />

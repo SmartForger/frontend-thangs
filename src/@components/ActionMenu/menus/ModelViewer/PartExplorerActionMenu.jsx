@@ -430,7 +430,7 @@ export const PartExplorerTarget = ({
           {selectedPart.name}
         </SingleLineBodyText>
         <Spacer size={'.5rem'} />
-        {selectedPart.parts && selectedPart.parts.length > 0 ? (
+        {selectedPart.hasChildren ? (
           <Tag className={c.PartExplorerTarget__tablet}>Assembly</Tag>
         ) : (
           <Tag className={c.PartExplorerTarget__tablet} secondary>
@@ -491,6 +491,7 @@ const PartExplorerActionMenu = ({
       TargetComponent={PartExplorerTarget}
       TargetComponentProps={targetProps}
       isAutoClosed={false}
+      isExternalClosed={true}
       isOpenByDefault={true}
     />
   )

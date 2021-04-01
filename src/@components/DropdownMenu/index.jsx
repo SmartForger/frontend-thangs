@@ -83,18 +83,20 @@ const useDropdownMenuState = ({
 }) => {
   const [isOpen, setIsOpen] = useState(isInitiallyOpen)
   const toggleOpen = useCallback(
-    _e => {
-      setIsOpen(!isOpen)
+    (forceToggle = false) => {
+      setIsOpen(!isAutoClosed && !forceToggle ? true : !isOpen)
     },
-    [isOpen]
+    [isOpen, isAutoClosed]
   )
   const closeMenu = () => {
     setIsOpen(false)
   }
+
   useEffect(() => {
     if (isOpen && isAutoClosed) {
       document.addEventListener('click', closeMenu)
     }
+
     return () => {
       if (isOpen && isAutoClosed) {
         document.removeEventListener('click', closeMenu)
@@ -166,7 +168,7 @@ const DropdownMenu = ({
 
   const handleOnTargetClick = useCallback(() => {
     onTargetClick()
-    toggleOpen()
+    toggleOpen(true)
   }, [onTargetClick, toggleOpen])
 
   return (

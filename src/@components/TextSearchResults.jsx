@@ -325,6 +325,7 @@ const TextSearchResult = ({
         <SearchAnchor
           to={{
             pathname: modelAttributionUrl,
+            search: model?.parts?.length > 0 ? `?part=${model.modelId}` : null,
             state: { prevPath: window.location.href },
           }}
           isExternal={isExternalModel}
