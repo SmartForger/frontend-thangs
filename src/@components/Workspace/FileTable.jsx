@@ -449,8 +449,8 @@ const FileTable = ({
             className={cn(c.FileTable_FileRow, {
               [c.FileTable_MissingFile]: !node.valid,
             })}
-            onClick={!isSelected && handleClick}
-            onDoubleClick={isSelected && handleDoubleClick}
+            onClick={!isSelected ? handleClick : noop}
+            onDoubleClick={isSelected ? handleDoubleClick : noop}
           >
             <Spacer size={'.5rem'} />
             <div

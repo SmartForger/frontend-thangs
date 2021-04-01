@@ -5,13 +5,7 @@ const noop = () => null
 const FileHistory = props => {
   const { model, onRowSelect = noop } = props
 
-  return (
-    <FileTable
-      files={[model]}
-      handleChangeFolder={onRowSelect}
-      sortedBy='created'
-    ></FileTable>
-  )
+  return <div>File History</div>
 }
 
 export default FileHistory
