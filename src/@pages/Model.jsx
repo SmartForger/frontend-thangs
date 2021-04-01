@@ -578,41 +578,43 @@ const StatsActionsAndPrints = ({
   const isARSupported = filename.includes('stl') || filename.includes('obj')
   return (
     <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
-      <div className={c.Model_DownloadAndShareContainer}>
-        <DownloadLink
-          model={modelData}
-          isAuthedUser={isAuthedUser}
-          openSignupOverlay={openSignupOverlay}
-        />
-        <Spacer size='.5rem' />
-        <ShareActionMenu iconOnly={true} title={pageTitle} model={modelData} />
-      </div>
-      <Spacer size='1rem' />
-      {isARSupported && (
-        <DownloadARLink
-          model={modelData}
-          isAuthedUser={isAuthedUser}
-          openSignupOverlay={openSignupOverlay}
-        />
-      )}
-      {modelData.license ? (
-        <>
-          <Spacer size='1rem' />
-          <LicenseText
+      <div>
+        <div className={c.Model_DownloadAndShareContainer}>
+          <DownloadLink
             model={modelData}
             isAuthedUser={isAuthedUser}
             openSignupOverlay={openSignupOverlay}
           />
-        </>
-      ) : null}
-      <Divider />
-      <ModelStats model={modelData} />
-      <Divider />
-      <ModelPrints
-        model={modelData}
-        isAuthedUser={isAuthedUser}
-        openSignupOverlay={openSignupOverlay}
-      />
+          <Spacer size='.5rem' />
+          <ShareActionMenu iconOnly={true} title={pageTitle} model={modelData} />
+        </div>
+        <Spacer size='1rem' />
+        {isARSupported && (
+          <DownloadARLink
+            model={modelData}
+            isAuthedUser={isAuthedUser}
+            openSignupOverlay={openSignupOverlay}
+          />
+        )}
+        {modelData.license ? (
+          <>
+            <Spacer size='1rem' />
+            <LicenseText
+              model={modelData}
+              isAuthedUser={isAuthedUser}
+              openSignupOverlay={openSignupOverlay}
+            />
+          </>
+        ) : null}
+        <Divider />
+        <ModelStats model={modelData} />
+        <Divider />
+        <ModelPrints
+          model={modelData}
+          isAuthedUser={isAuthedUser}
+          openSignupOverlay={openSignupOverlay}
+        />
+      </div>
       <Divider />
     </div>
   )
