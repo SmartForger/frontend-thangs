@@ -16,18 +16,21 @@ import {
   ModelDetails,
   ModelTitle,
   ModelViewer as BackupViewer,
+  MultiLineBodyText,
   ProgressText,
   RelatedModels,
   Revised,
   ShareActionMenu,
   Spacer,
   Spinner,
+  TitleTertiary,
   ToggleFollowButton,
 } from '@components'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as LicenseIcon } from '@svg/license.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
+import { ReactComponent as PhotoIcon } from '@svg/icon-photo.svg'
 import { Message404 } from './404'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
@@ -41,6 +44,7 @@ import {
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
+
 // import { useFeature } from '@optimizely/react-sdk'
 
 const useStyles = createUseStyles(theme => {
@@ -194,6 +198,10 @@ const useStyles = createUseStyles(theme => {
       '& svg': {
         marginRight: '.5rem',
       },
+    },
+    Model_ModelPrints: {
+      display: 'flex',
+      flexDirection: 'column',
     },
     Model_LicenseLink: {
       textDecoration: 'underline',
@@ -378,6 +386,56 @@ const ModelStats = ({ model = {} }) => {
   )
 }
 
+const AddPrintPhotoLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
+  const c = useStyles()
+  const { setOverlay } = useOverlay()
+
+  const handleClick = useCallback(() => {
+    if (isAuthedUser) {
+      setOverlay({
+        isOpen: true,
+        template: 'multiUpload',
+        data: {
+          animateIn: true,
+          windowed: true,
+          dialogue: true,
+          previousVersionModelId: modelId,
+        },
+      })
+    } else {
+      openSignupOverlay('Join to Like, Follow, Share.', 'Version Upload')
+      track('SignUp Prompt Overlay', { source: 'Version Upload' })
+    }
+  }, [isAuthedUser, modelId, openSignupOverlay, setOverlay])
+
+  return (
+    <Button secondary onClick={handleClick}>
+      <div>
+        <PhotoIcon />
+      </div>
+      <Spacer size='.5rem' />
+      Add photo
+    </Button>
+  )
+}
+
+const ModelPrints = ({ model = {} }) => {
+  const c = useStyles()
+  return (
+    <div className={c.Model_ModelPrints}>
+      <TitleTertiary>
+        Model prints
+      </TitleTertiary>
+      <Spacer size='.5rem' />
+      <MultiLineBodyText>
+        No prints added yet, be the first to upload a photo!
+      </MultiLineBodyText>
+      <Spacer size='1.5rem' />
+      <AddPrintPhotoLink />
+    </div>
+  )
+}
+
 // const VersionLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
 //   const c = useStyles()
 //   const { setOverlay } = useOverlay()
@@ -499,7 +557,7 @@ const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
   )
 }
 
-const StatsAndActions = ({
+const StatsActionsAndPrints = ({
   c,
   className,
   modelData,
@@ -517,37 +575,37 @@ const StatsAndActions = ({
   const isARSupported = filename.includes('stl') || filename.includes('obj')
   return (
     <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
-      <div>
-        <div className={c.Model_DownloadAndShareContainer}>
-          <DownloadLink
-            model={modelData}
-            isAuthedUser={isAuthedUser}
-            openSignupOverlay={openSignupOverlay}
-          />
-          <Spacer size='.5rem' />
-          <ShareActionMenu iconOnly={true} title={pageTitle} model={modelData} />
-        </div>
-        <Spacer size='1rem' />
-        {isARSupported && (
-          <DownloadARLink
-            model={modelData}
-            isAuthedUser={isAuthedUser}
-            openSignupOverlay={openSignupOverlay}
-          />
-        )}
-        {modelData.license ? (
-          <>
-            <Spacer size='1rem' />
-            <LicenseText
-              model={modelData}
-              isAuthedUser={isAuthedUser}
-              openSignupOverlay={openSignupOverlay}
-            />
-          </>
-        ) : null}
-        <Divider />
-        <ModelStats model={modelData} />
+      <div className={c.Model_DownloadAndShareContainer}>
+        <DownloadLink
+          model={modelData}
+          isAuthedUser={isAuthedUser}
+          openSignupOverlay={openSignupOverlay}
+        />
+        <Spacer size='.5rem' />
+        <ShareActionMenu iconOnly={true} title={pageTitle} model={modelData} />
       </div>
+      <Spacer size='1rem' />
+      {isARSupported && (
+        <DownloadARLink
+          model={modelData}
+          isAuthedUser={isAuthedUser}
+          openSignupOverlay={openSignupOverlay}
+        />
+      )}
+      {modelData.license ? (
+        <>
+          <Spacer size='1rem' />
+          <LicenseText
+            model={modelData}
+            isAuthedUser={isAuthedUser}
+            openSignupOverlay={openSignupOverlay}
+          />
+        </>
+      ) : null}
+      <Divider />
+      <ModelStats model={modelData} />
+      <Divider />
+      <ModelPrints model={modelData} />
       <Divider />
     </div>
   )
@@ -671,9 +729,8 @@ const ModelDetailPage = ({
     modelTitle = modelTitle.substring(0, titleCharCount)
   titleCharCount = titleCharCount - modelTitle.length
   const modelTitleAuthor = titleCharCount >= modelAuthor.length + 3 ? modelAuthor : ''
-  const pageTitle = `${modelTitle}${titlePrefix}|${
-    modelTitleAuthor ? ` ${modelTitleAuthor} |` : ''
-  }${titleSuffix}`
+  const pageTitle = `${modelTitle}${titlePrefix}|${modelTitleAuthor ? ` ${modelTitleAuthor} |` : ''
+    }${titleSuffix}`
   const modelDescription = modelData.description || defaultDescription
 
   return (
@@ -682,16 +739,14 @@ const ModelDetailPage = ({
         <title>{pageTitle}</title>
         <meta
           name='description'
-          content={`${descriptionPrefix}${
-            modelData.name
-          }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
+          content={`${descriptionPrefix}${modelData.name
+            }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
         />
         <meta property='og:title' content={pageTitle} />
         <meta
           property='og:description'
-          content={`${descriptionPrefix}${
-            modelData.name
-          }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
+          content={`${descriptionPrefix}${modelData.name
+            }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
         />
         <meta
           property='og:image'
@@ -727,7 +782,7 @@ const ModelDetailPage = ({
                 </div>
                 <Divider />
               </div>
-              <StatsAndActions
+              <StatsActionsAndPrints
                 className={c.Model__mobileOnly}
                 c={c}
                 modelData={modelData}
@@ -744,7 +799,7 @@ const ModelDetailPage = ({
                 openSignupOverlay={openSignupOverlay}
               />
             </div>
-            <StatsAndActions
+            <StatsActionsAndPrints
               className={c.Model__desktopOnly}
               c={c}
               modelData={modelData}
