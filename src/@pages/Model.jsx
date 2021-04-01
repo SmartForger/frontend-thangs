@@ -29,6 +29,7 @@ import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as LicenseIcon } from '@svg/license.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
+import { ReactComponent as AndroidIcon } from '@svg/icon-android.svg'
 import { Message404 } from './404'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
@@ -278,6 +279,11 @@ const useStyles = createUseStyles(theme => {
     },
     ViewARLink: {
       display: 'block',
+
+      '& > button': {
+        width: '100%',
+      },
+
       [md_viewer]: {
         display: 'none',
       },
@@ -339,7 +345,7 @@ const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
         format,
         onFinish: downloadUrl => {
           window.location.assign(downloadUrl)
-          track('Download AR Model', { format, modelId: model.id })
+          track('Download AR', { format, modelId: model.id })
         },
       })
     },
@@ -368,12 +374,19 @@ const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
 const ViewARLink = ({ model }) => {
   const c = useStyles({})
   return (
-    <a
-      className={c.ViewARLink}
-      href={`intent://arvr.google.com/scene-viewer/1.0?file=${model.androidUrl}#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-    >
-      <Button onClick={e => e.preventDefault()}>View on Mobile [beta]</Button>
-    </a>
+    <>
+      <Spacer size={'1rem'} />
+      <a
+        className={c.ViewARLink}
+        href={`intent://arvr.google.com/scene-viewer/1.0?file=${model.androidUrl}#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
+      >
+        <Button secondary onClick={e => e.preventDefault()}>
+          View on&nbsp;
+          <AndroidIcon />
+          Mobile [beta]
+        </Button>
+      </a>
+    </>
   )
 }
 
