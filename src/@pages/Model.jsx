@@ -31,11 +31,8 @@ import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as LicenseIcon } from '@svg/license.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
-<<<<<<< HEAD
 import { ReactComponent as PhotoIcon } from '@svg/icon-photo.svg'
-=======
 import { ReactComponent as AndroidIcon } from '@svg/icon-android.svg'
->>>>>>> development
 import { Message404 } from './404'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
