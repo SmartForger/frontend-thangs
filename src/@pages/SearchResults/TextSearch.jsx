@@ -172,7 +172,6 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
       scope: searchScope,
       onFinish: handleFinish,
     })
-    track('Infinite Load - Search', { searchTerm: searchQuery, searchScope })
   }, [dispatch, handleFinish, searchQuery, searchScope])
 
   const handleLoadMore = useCallback(() => {
