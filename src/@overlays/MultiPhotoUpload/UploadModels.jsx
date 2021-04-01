@@ -15,7 +15,7 @@ import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as UploadCardIcon } from '@svg/upload-card.svg'
 import { ReactComponent as InfoIcon } from '@svg/icon-info.svg'
 import Dropzone from 'react-dropzone'
-import { FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
+import { FILE_SIZE_LIMITS, PHOTO_FILE_EXTS } from '@constants/fileUpload'
 import { overlayview } from '@utilities/analytics'
 import UploadTreeNode from './UploadTreeNode'
 import { isIOS } from '@utilities'
@@ -187,8 +187,6 @@ const UploadModels = ({
   setWarningMessage = noop,
   errorMessage = null,
   warningMessage = null,
-  isAssembly = false,
-  setIsAssembly = noop,
   validating = false,
   validated = false,
   showAssemblyToggle,
@@ -204,10 +202,6 @@ const UploadModels = ({
     ? Object.keys(uploadFiles).filter(fileId => uploadFiles[fileId].name).length
     : 0
   const dropzoneRef = useRef()
-
-  const toggleAssembly = useCallback(() => {
-    setIsAssembly(!isAssembly)
-  }, [isAssembly, setIsAssembly])
 
   const uploadFile = () => {
     if (dropzoneRef.current) {
@@ -227,8 +221,7 @@ const UploadModels = ({
     if (loadingFiles.length === 0 && !validating) {
       const checkPartFile = node => {
         return (
-          node.valid &&
-          (!node.isAssembly || node.subs.some(subnode => checkPartFile(subnode)))
+          node.valid && node.subs.some(subnode => checkPartFile(subnode))
         )
       }
 
@@ -278,7 +271,7 @@ const UploadModels = ({
       {(multiple || (!multiple && !hasFile)) && (
         <Dropzone
           onDrop={onDrop}
-          accept={isIOS() ? undefined : MODEL_FILE_EXTS}
+          accept={isIOS() ? undefined : PHOTO_FILE_EXTS}
           ref={dropzoneRef}
           multiple={multiple}
           maxFiles={25}
@@ -292,7 +285,7 @@ const UploadModels = ({
                     {R.isEmpty(uploadFiles) && <UploadCardIcon />}
                     <Spacer size={'1rem'} />
                     <TitleTertiary>
-                      {multiple ? 'Drag & Drop files' : 'Drag & Drop file'}
+                      {multiple ? 'Drag & Drop photos' : 'Drag & Drop photo'}
                     </TitleTertiary>
                     <MultiLineBodyText>or browse to upload.</MultiLineBodyText>
                     <Spacer size={'1rem'} />
@@ -334,17 +327,6 @@ const UploadModels = ({
               />
             )}
           />
-          <Spacer size={'1rem'} />
-          {showAssemblyToggle && (
-            <>
-              <Toggle
-                id='upload_assembly'
-                label={uploadAssemblyLabel}
-                checked={isAssembly}
-                onChange={toggleAssembly}
-              />
-            </>
-          )}
           <Spacer size={'1rem'} />
           <div className={c.UploadModels_ButtonWrapper}>
             <Button secondary onClick={onCancel}>

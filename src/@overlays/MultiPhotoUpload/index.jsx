@@ -1,13 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { SingleLineBodyText, Spacer, Spinner } from '@components'
-import PartInfo from './PartInfo'
 import UploadModels from './UploadModels'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as ArrowLeftIcon } from '@svg/icon-arrow-left.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
-import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
+import { ERROR_STATES, FILE_SIZE_LIMITS, PHOTO_FILE_EXTS } from '@constants/fileUpload'
 import { track } from '@utilities/analytics'
 import AssemblyInfo from './AssemblyInfo'
 import { useHistory } from 'react-router-dom'
@@ -93,7 +92,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' }) => {
+const MultiPhotoUpload = ({ initData = null, previousVersionModelId, folderId = '' }) => {
   const { dispatch, license = {}, uploadFiles = {} } = useStoreon(
     'license',
     'uploadFiles'
@@ -105,7 +104,6 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
     isLoading,
     validating,
     validated,
-    isAssembly,
   } = uploadFiles
   const { isLoading: isLoadingLicense } = license
   const [activeView, setActiveView] = useState(-1)
@@ -143,16 +141,11 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
           id,
           name: file.name,
           size: file.size,
-          isAssembly: false,
           valid: true,
           treeValid: true,
           parentId: null,
           loading: file.isLoading,
           fileId: file.id,
-        }
-
-        if (!isAssembly) {
-          newTreeData[id] = result
         }
 
         return result
@@ -182,33 +175,30 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
 
     let trees = formNode('').subs
 
-    if (isAssembly) {
-      if (singleNodes.length < 2) {
-        dispatch(types.SET_IS_ASSEMBLY, { isAssembly: false })
-        return singleNodes
-      }
-
-      singleNodes.forEach(node => {
-        node.parentId = 'multipart'
-      })
-      const multipartNode = {
-        id: 'multipart',
-        name: multipartName,
-        valid: true,
-        treeValid: true,
-        isAssembly: true,
-        parentId: '',
-        subs: singleNodes,
-      }
-      trees.push(multipartNode)
-      nodesArray.push(multipartNode)
-      nodesArray = nodesArray.concat(singleNodes)
+    if (singleNodes.length < 2) {
+      return singleNodes
     }
+
+    singleNodes.forEach(node => {
+      node.parentId = 'multipart'
+    })
+    const multipartNode = {
+      id: 'multipart',
+      name: multipartName,
+      valid: true,
+      treeValid: true,
+      isAssembly: true,
+      parentId: '',
+      subs: singleNodes,
+    }
+    trees.push(multipartNode)
+    nodesArray.push(multipartNode)
+    nodesArray = nodesArray.concat(singleNodes)
 
     setAllTreeNodes(nodesArray)
 
     return trees
-  }, [treeData, uploadedFiles, isAssembly, multipartName, dispatch])
+  }, [treeData, uploadedFiles, multipartName, dispatch])
   const activeNode = useMemo(() => allTreeNodes[activeView] || null, [
     allTreeNodes,
     activeView,
@@ -228,33 +218,17 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
     return initialFormData
   }, [activeNode, folderId, formData])
 
-  const partFormTitle = useMemo(() => {
-    if (!activeNode) return ''
-
-    const siblings = allTreeNodes.filter(
-      node => !node.isAssembly && node.parentId === activeNode.parentId
-    )
-    if (siblings.length > 0) {
-      const activeIndex = siblings.findIndex(node => node.id === activeNode.id)
-      return `New ${activeNode.parentId ? 'Part' : 'Model'} ${
-        siblings.length > 1 ? `(${activeIndex + 1}/${siblings.length})` : ''
-      }`
-    }
-
-    return ''
-  }, [activeNode, allTreeNodes])
-
   const onDrop = useCallback(
     (acceptedFiles, [rejectedFile], _event) => {
       const files = acceptedFiles
         .map(file => {
           const ext = `.${file.name.split('.').slice(-1)[0].toLowerCase()}`
-          if (!MODEL_FILE_EXTS.includes(ext)) {
+          if (!PHOTO_FILE_EXTS.includes(ext)) {
             setErrorMessage(
               `${file.name} is not a supported file type.
-              Supported file extensions include ${MODEL_FILE_EXTS.map(
-    e => ' ' + e.replace('.', '')
-  )}.`
+              Supported file extensions include ${PHOTO_FILE_EXTS.map(
+                e => ' ' + e.replace('.', '')
+              )}.`
             )
             return null
           }
@@ -277,16 +251,16 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
         })
         .filter(f => !!f)
 
-      track('MultiUpload - OnDrop', { amount: files && files.length })
+      track('MultiPhotoUpload - OnDrop', { amount: files && files.length })
 
       dispatch(types.UPLOAD_FILES, { files })
 
       if (rejectedFile) {
         const filePath = rejectedFile.path.split('.')
         const fileExt = filePath[filePath.length - 1] || ''
-        track('MultiUpload - Rejected', { fileType: fileExt })
+        track('MultiPhotoUpload - Rejected', { fileType: fileExt })
         setErrorMessage(
-          `One or more files not supported. Supported file extensions include ${MODEL_FILE_EXTS.map(
+          `One or more files not supported. Supported file extensions include ${PHOTO_FILE_EXTS.map(
             e => ' ' + e.replace('.', '')
           )}.`
         )
@@ -296,7 +270,7 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
   )
 
   const removeFile = node => {
-    track('MultiUpload - Remove File')
+    track('MultiPhotoUpload - Remove File')
     dispatch(types.CANCEL_UPLOAD, { node })
   }
 
@@ -304,19 +278,6 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
     setOverlayOpen(false)
   }, [setOverlayOpen])
 
-  const setIsAssembly = isAssembly => {
-    dispatch(types.SET_IS_ASSEMBLY, { isAssembly })
-  }
-
-  const handleUpdate = (id, data) => {
-    dispatch(types.SET_MODEL_INFO, {
-      id,
-      formData: {
-        ...data,
-        previousVersionModelId,
-      },
-    })
-  }
 
   const submitModels = useCallback(() => {
     const files = []
@@ -326,7 +287,7 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
           files.push(file.name)
         }
       })
-      track('MultiUpload - Submit Files', {
+      track('MultiPhotoUpload - Submit Files', {
         amount: files.length,
       })
     }
@@ -353,11 +314,7 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
 
       if (data) {
         if (applyRemaining) {
-          // const parentId = allTreeNodes[activeView].parentId
           for (i = activeView; i < allTreeNodes.length; i++) {
-            // if (allTreeNodes[i].parentId !== parentId || allTreeNodes[i].isAssembly) {
-            //   break
-            // }
             const treeNode = allTreeNodes[i]
 
             if (treeNode.valid) {
@@ -444,14 +401,8 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
           <div className={c.MultiUpload_Row}>
             <SingleLineBodyText className={c.MultiUpload_OverlayHeader}>
               {!activeNode
-                ? previousVersionModelId
-                  ? 'Upload New Version'
-                  : 'Upload Files'
-                : activeNode.isAssembly && activeNode.parentId
-                  ? 'Sub Assembly'
-                  : activeNode.isAssembly
-                    ? 'New Assembly'
-                    : partFormTitle}
+                ? 'Upload Print Photos'
+                : 'Something Else'}
             </SingleLineBodyText>
             {activeView > -1 && (
               <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />
@@ -464,14 +415,12 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
           <UploadModels
             allTreeNodes={allTreeNodes}
             errorMessage={errorMessage}
-            isAssembly={isAssembly}
             multiple={previousVersionModelId ? false : true}
             onCancel={handleCancelUploading}
             onContinue={handleContinue}
             onDrop={onDrop}
             onRemoveNode={removeFile}
             setErrorMessage={setErrorMessage}
-            setIsAssembly={setIsAssembly}
             setWarningMessage={setWarningMessage}
             showAssemblyToggle={validated && singlePartsCount > 1}
             uploadFiles={uploadFilesData}
@@ -480,26 +429,13 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
             validating={validating}
             warningMessage={warningMessage}
           />
-        ) : activeNode.isAssembly ? (
+        ) : (
           <AssemblyInfo
             activeNode={activeNode}
             errorMessage={errorMessage}
             filesData={uploadFilesData}
             formData={activeFormData}
             onContinue={handleContinue}
-            setErrorMessage={setErrorMessage}
-            treeData={treeData}
-          />
-        ) : (
-          <PartInfo
-            activeNode={activeNode}
-            errorMessage={errorMessage}
-            filesData={uploadFilesData}
-            formData={activeFormData}
-            isLoading={isLoading}
-            multipartName={multipartName}
-            onContinue={handleContinue}
-            onUpdate={handleUpdate}
             setErrorMessage={setErrorMessage}
             treeData={treeData}
           />
@@ -511,4 +447,4 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
   )
 }
 
-export default MultiUpload
+export default MultiPhotoUpload
