@@ -21,12 +21,10 @@ const useStyles = createUseStyles(_theme => {
         marginBottom: '.75rem',
       },
     },
-    FileDiscussion_Loading: {
-      display: 'flex',
-      justifyContent: 'center',
-    },
   }
 })
+
+const noop = () => null
 
 const getParsedBody = str => {
   try {
@@ -67,22 +65,24 @@ const FileDiscussion = props => {
     return <div>Error loading discussions</div>
   }
 
+  if (loading || !loaded) {
+    return (
+      <div>
+        <Spinner />
+      </div>
+    )
+  }
+
   return (
     <div className={c.FileDiscussion}>
       <NewModelCommentForm modelId={model.id} currentUser={currentUser} />
-
       <ul className={c.FileDiscussion_List}>
         {comments && comments.length
           ? comments.map((comment, i) =>
-            renderTypedComment({ modelId: model.id, comment, key: i, currentUser })
-          )
+              renderTypedComment({ modelId: model.id, comment, key: i, currentUser })
+            )
           : null}
       </ul>
-      {(loading || !loaded) && (
-        <div className={c.FileDiscussion_Loading}>
-          <Spinner />
-        </div>
-      )}
     </div>
   )
 }
