@@ -373,12 +373,25 @@ const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
 
 const ViewARLink = ({ model }) => {
   const c = useStyles({})
+  const { parts } = model
+  let primaryPart = null
+  if (parts) {
+    if (parts.length > 1) {
+      primaryPart = R.find(R.propEq('isPrimary', true))(parts) || parts[0]
+    } else {
+      primaryPart = parts[0]
+    }
+  }
+  if (!primaryPart || !primaryPart.androidUrl) return null
   return (
     <>
       <Spacer size={'1rem'} />
       <a
         className={c.ViewARLink}
-        href={`intent://arvr.google.com/scene-viewer/1.0?file=${model.androidUrl}#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
+        href={`intent://arvr.google.com/scene-viewer/1.0?file=${primaryPart?.androidUrl?.replace(
+          '#',
+          encodeURIComponent('#')
+        )}#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
       >
         <Button secondary onClick={e => e.preventDefault()}>
           View on&nbsp;
