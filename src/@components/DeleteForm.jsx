@@ -92,6 +92,7 @@ const DeleteForm = ({
       case 'folder':
         return folder
       default:
+        return {}
     }
   }, [folder, model, part, type])
   const { name } = subject
