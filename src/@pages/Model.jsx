@@ -7,7 +7,7 @@ import {
   ARDownloadActionMenu,
   Button,
   CommentsForModel,
-  ContainerRow,
+  ContainerColumn,
   Divider,
   EditModelButton,
   HoopsModelViewer,
@@ -539,14 +539,14 @@ const StatsAndActions = ({
           <ShareActionMenu iconOnly={true} title={pageTitle} model={modelData} />
         </div>
         <Spacer size='1rem' />
-        <ContainerRow>
+        <ContainerColumn>
           <DownloadARLink
             model={modelData}
             isAuthedUser={isAuthedUser}
             openSignupOverlay={openSignupOverlay}
           />
           <ViewARLink model={modelData} />
-        </ContainerRow>
+        </ContainerColumn>
         {modelData.license ? (
           <>
             <Spacer size='1rem' />
