@@ -5,6 +5,10 @@ const THUMBNAILS_FOLDER = process.env.REACT_APP_THUMBNAILS_FOLDER
 const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST
 const REACT_APP_MODEL_BUCKET = process.env.REACT_APP_MODEL_BUCKET
 
+// Only ever hide the "View related models" link if we know that there are exactly 0 matches; otherwise, show the link
+export const shouldShowViewRelated = model =>
+  model.nMatchedModels !== 0 && model.matchingData?.nMatchedModels !== 0
+
 export const buildThumbnailUrl = (model, useThumbnailer) => {
   if (model.fullThumbnailUrl) return model.fullThumbnailUrl
   if (model.thumbnailUrl) return model.thumbnailUrl.replace('#', encodeURIComponent('#'))

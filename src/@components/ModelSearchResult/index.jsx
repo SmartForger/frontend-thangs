@@ -7,7 +7,7 @@ import { Card, ModelThumbnail, UserInline } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useCurrentUserId } from '@hooks'
-import { truncateString } from '@utilities'
+import { truncateString, shouldShowViewRelated } from '@utilities'
 import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
@@ -213,12 +213,14 @@ const ThangsModelDetails = ({
             {formattedModelDescription}
           </div>
         </Anchor>
-        <div
-          className={c.ModelSearchResult_FindRelatedLink}
-          onClick={() => handleFindRelated({ model })}
-        >
-          View related models
-        </div>
+        {shouldShowViewRelated(model) && (
+          <div
+            className={c.ModelSearchResult_FindRelatedLink}
+            onClick={() => handleFindRelated({ model })}
+          >
+            View related models
+          </div>
+        )}
       </div>
       <div
         className={c.ModelSearchResult_ReportModelLink}
@@ -265,12 +267,14 @@ const ExternalModelDetails = ({
             {formattedModelDescription}
           </div>
         </Anchor>
-        <div
-          className={c.ModelSearchResult_FindRelatedLink}
-          onClick={() => handleFindRelated({ model })}
-        >
-          View related models
-        </div>
+        {shouldShowViewRelated(model) && (
+          <div
+            className={c.ModelSearchResult_FindRelatedLink}
+            onClick={() => handleFindRelated({ model })}
+          >
+            View related models
+          </div>
+        )}
       </div>
       <div
         className={c.ModelSearchResult_ReportModelLink}

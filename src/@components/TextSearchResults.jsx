@@ -11,7 +11,12 @@ import {
 } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { numberWithCommas, truncateString, getExternalAvatar } from '@utilities'
+import {
+  numberWithCommas,
+  truncateString,
+  getExternalAvatar,
+  shouldShowViewRelated,
+} from '@utilities'
 import Skeleton from '@material-ui/lab/Skeleton'
 
 const useStyles = createUseStyles(theme => {
@@ -288,12 +293,14 @@ const ModelDetails = ({
           />
         </>
       )}
-      <div
-        className={c.TextSearchResult_FindRelatedLink}
-        onClick={() => onFindRelated({ model })}
-      >
-        View related models
-      </div>
+      {shouldShowViewRelated(model) && (
+        <div
+          className={c.TextSearchResult_FindRelatedLink}
+          onClick={() => onFindRelated({ model })}
+        >
+          View related models
+        </div>
+      )}
     </div>
   )
 }
@@ -414,11 +421,8 @@ const TextSearchResults = ({
     results.push(
       ...[...Array(10).keys()].map(key => {
         return (
-          <>
-            <div
-              className={c.TextSearchResult_Skeleton_Row}
-              key={`skeletonSearchCard-${key}`}
-            >
+          <React.Fragment key={`skeletonSearchCard-${key}`}>
+            <div className={c.TextSearchResult_Skeleton_Row}>
               <div>
                 <Skeleton
                   variant='rect'
@@ -447,7 +451,7 @@ const TextSearchResults = ({
               </div>
             </div>
             <Spacer size={'1.5rem'} />
-          </>
+          </React.Fragment>
         )
       })
     )
