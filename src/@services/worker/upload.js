@@ -27,10 +27,17 @@ function uploadMessageHandler(messageType, data) {
         isLoading: false,
         isError: false,
       })
+      store.dispatch(types.CHANGE_UPLOAD_ATTACHMENT_FILE, {
+        id: data.id,
+        data: data.uploadedUrlData,
+        isLoading: false,
+        isError: false,
+      })
       store.dispatch(types.VALIDATE_FILES)
       break
     case 'upload:urls':
       store.dispatch(types.SET_UPLOADED_URLS, data)
+      store.dispatch(types.SET_UPLOADED_ATTACHMENT_URLS, data)
       break
     case 'upload:error':
       store.dispatch(types.CHANGE_UPLOAD_FILE, {

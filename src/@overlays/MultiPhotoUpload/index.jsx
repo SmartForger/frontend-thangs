@@ -3,12 +3,10 @@ import { SingleLineBodyText, Spacer, Spinner } from '@components'
 import UploadModels from './UploadModels'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import { ReactComponent as ArrowLeftIcon } from '@svg/icon-arrow-left.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { ERROR_STATES, FILE_SIZE_LIMITS, PHOTO_FILE_EXTS } from '@constants/fileUpload'
 import { track } from '@utilities/analytics'
-import AssemblyInfo from './AssemblyInfo'
 import { useHistory } from 'react-router-dom'
 import { useOverlay } from '@hooks'
 
@@ -92,27 +90,19 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const MultiPhotoUpload = ({ initData = null, previousVersionModelId, folderId = '' }) => {
-  const { dispatch, license = {}, uploadFiles = {} } = useStoreon(
-    'license',
-    'uploadFiles'
+const MultiPhotoUpload = ({ initData = null }) => {
+  const { dispatch, uploadAttachmentFiles = {} } = useStoreon(
+    'uploadAttachmentFiles'
   )
+
   const {
     data: uploadFilesData = {},
-    treeData,
     formData,
     isLoading,
-    validating,
-    validated,
-  } = uploadFiles
-  const { isLoading: isLoadingLicense } = license
-  const [activeView, setActiveView] = useState(-1)
+  } = uploadAttachmentFiles
   const [errorMessage, setErrorMessage] = useState(null)
   const [warningMessage, setWarningMessage] = useState(null)
-  const [allTreeNodes, setAllTreeNodes] = useState([])
-  const [singlePartsCount, setSinglePartsCount] = useState(0)
   const c = useStyles({})
-  const multipartName = formData['multipart'] && formData['multipart'].name
   const { setOverlayOpen } = useOverlay()
   const history = useHistory()
 
@@ -120,103 +110,6 @@ const MultiPhotoUpload = ({ initData = null, previousVersionModelId, folderId = 
     () => Object.values(uploadFilesData).filter(file => file.name && !file.isError),
     [uploadFilesData]
   )
-  const uploadTreeData = useMemo(() => {
-    const keys = Object.keys(treeData)
-    const newTreeData = {}
-    keys.forEach(key => {
-      const file = uploadedFiles.find(f => f.name === treeData[key].filename)
-      newTreeData[key] = {
-        ...treeData[key],
-        loading: file && file.isLoading,
-        size: file && file.size,
-      }
-    })
-
-    const treeNodeFiles = Object.values(treeData).map(node => node.filename)
-    const singleNodes = uploadedFiles
-      .filter(file => file.name && !file.isError && !treeNodeFiles.includes(file.name))
-      .map(file => {
-        const id = '/' + file.name
-        const result = {
-          id,
-          name: file.name,
-          size: file.size,
-          valid: true,
-          treeValid: true,
-          parentId: null,
-          loading: file.isLoading,
-          fileId: file.id,
-        }
-
-        return result
-      })
-    setSinglePartsCount(singleNodes.length)
-
-    let nodesArray = []
-    const formNode = nodeId => {
-      const newNode = newTreeData[nodeId] || {}
-      if (nodeId) {
-        nodesArray.push(newNode)
-      }
-      newNode.subs = nodeId
-        ? newNode.subIds
-          ? newNode.subIds.map(subId => formNode(subId))
-          : []
-        : Object.values(newTreeData)
-          .filter(node => !node.parentId)
-          .map(node => formNode(node.id))
-
-      newNode.treeValid =
-        newNode.valid &&
-        (newNode.subs.length === 0 || newNode.subs.every(subnode => subnode.treeValid))
-
-      return newNode
-    }
-
-    let trees = formNode('').subs
-
-    if (singleNodes.length < 2) {
-      return singleNodes
-    }
-
-    singleNodes.forEach(node => {
-      node.parentId = 'multipart'
-    })
-    const multipartNode = {
-      id: 'multipart',
-      name: multipartName,
-      valid: true,
-      treeValid: true,
-      isAssembly: true,
-      parentId: '',
-      subs: singleNodes,
-    }
-    trees.push(multipartNode)
-    nodesArray.push(multipartNode)
-    nodesArray = nodesArray.concat(singleNodes)
-
-    setAllTreeNodes(nodesArray)
-
-    return trees
-  }, [treeData, uploadedFiles, multipartName, dispatch])
-  const activeNode = useMemo(() => allTreeNodes[activeView] || null, [
-    allTreeNodes,
-    activeView,
-  ])
-  const activeFormData = useMemo(() => {
-    if (!activeNode) return null
-
-    if (formData[activeNode.id]) {
-      return formData[activeNode.id]
-    }
-
-    const initialFormData = { name: activeNode.name, folderId: folderId }
-    if (formData[activeNode.parentId]) {
-      initialFormData.folderId = formData[activeNode.parentId].folderId
-    }
-
-    return initialFormData
-  }, [activeNode, folderId, formData])
 
   const onDrop = useCallback(
     (acceptedFiles, [rejectedFile], _event) => {
@@ -279,7 +172,7 @@ const MultiPhotoUpload = ({ initData = null, previousVersionModelId, folderId = 
   }, [setOverlayOpen])
 
 
-  const submitModels = useCallback(() => {
+  const submitAttachments = useCallback(() => {
     const files = []
     if (uploadedFiles && uploadedFiles.length) {
       uploadedFiles.forEach(file => {
@@ -287,97 +180,37 @@ const MultiPhotoUpload = ({ initData = null, previousVersionModelId, folderId = 
           files.push(file.name)
         }
       })
-      track('MultiPhotoUpload - Submit Files', {
+      track('MultiPhotoUpload - Submit Attachments', {
         amount: files.length,
       })
     }
-    dispatch(types.SUBMIT_MODELS, {
-      onFinish: () => {
-        closeOverlay()
-        dispatch(types.RESET_UPLOAD_FILES)
-        history.push(
-          /*assemblyData && assemblyData.folderId && assemblyData.folderId !== 'files'
-            ? `/mythangs/folder/${assemblyData.folderId}`
-            : */ '/mythangs/recent-files'
-        )
-      },
-    })
+    // dispatch(types.SUBMIT_MODELS, {
+    //   onFinish: () => {
+    //     closeOverlay()
+    //     dispatch(types.RESET_UPLOAD_FILES)
+    //     history.push(
+    //       /*assemblyData && assemblyData.folderId && assemblyData.folderId !== 'files'
+    //         ? `/mythangs/folder/${assemblyData.folderId}`
+    //         : */ '/mythangs/recent-files'
+    //     )
+    //   },
+    // })
   }, [uploadedFiles, dispatch, closeOverlay, history])
 
   const handleContinue = useCallback(
-    ({ applyRemaining, data }) => {
-      if (errorMessage || isLoadingLicense) {
+    ({ data }) => {
+      // TODO[MARCEL]: Figure out what action to take next. If all attachments have been presented to user
+      // to add captions, then submit them and show the submitted success overlay
+      if (errorMessage) {
         return
       }
-
-      let i = 0
-
-      if (data) {
-        if (applyRemaining) {
-          for (i = activeView; i < allTreeNodes.length; i++) {
-            const treeNode = allTreeNodes[i]
-
-            if (treeNode.valid) {
-              if (treeNode.isAssembly) {
-                dispatch(types.SET_MODEL_INFO, {
-                  id: treeNode.id,
-                  formData:
-                    i === activeView
-                      ? data
-                      : { description: data.description, name: treeNode.name },
-                })
-              } else {
-                dispatch(types.SET_MODEL_INFO, {
-                  id: treeNode.id,
-                  formData: i === activeView ? data : { ...data, name: treeNode.name },
-                })
-              }
-            }
-          }
-        } else {
-          i = activeView + 1
-          dispatch(types.SET_MODEL_INFO, {
-            id: allTreeNodes[activeView].id,
-            formData: { ...data, previousVersionModelId },
-          })
-        }
-      }
-
-      for (; i < allTreeNodes.length; i++) {
-        if (allTreeNodes[i].valid) {
-          setActiveView(i)
-          break
-        }
-      }
-      if (i === allTreeNodes.length) {
-        setActiveView(i - 1)
-        submitModels()
-      }
+      submitAttachments()
     },
     [
       errorMessage,
-      isLoadingLicense,
-      allTreeNodes,
-      activeView,
-      dispatch,
-      previousVersionModelId,
-      submitModels,
+      submitAttachments,
     ]
   )
-
-  const handleBack = useCallback(() => {
-    let i
-    for (i = activeView - 1; i >= 0; i--) {
-      if (allTreeNodes[i].valid) {
-        setActiveView(i)
-        break
-      }
-    }
-    if (i < 0) {
-      setActiveView(-1)
-    }
-    setErrorMessage(null)
-  }, [activeView, allTreeNodes])
 
   const handleCancelUploading = () => {
     dispatch(types.RESET_UPLOAD_FILES)
@@ -400,46 +233,23 @@ const MultiPhotoUpload = ({ initData = null, previousVersionModelId, folderId = 
           <Spacer size={'1.5rem'} />
           <div className={c.MultiUpload_Row}>
             <SingleLineBodyText className={c.MultiUpload_OverlayHeader}>
-              {!activeNode
-                ? 'Upload Print Photos'
-                : 'Something Else'}
+              Upload Print Photos
             </SingleLineBodyText>
-            {activeView > -1 && (
-              <ArrowLeftIcon className={c.MultiUpload_BackButton} onClick={handleBack} />
-            )}
             <ExitIcon className={c.MultiUpload_ExitButton} onClick={closeOverlay} />
           </div>
           <Spacer size={'1.5rem'} />
         </div>
-        {!activeNode ? (
-          <UploadModels
-            allTreeNodes={allTreeNodes}
-            errorMessage={errorMessage}
-            multiple={previousVersionModelId ? false : true}
-            onCancel={handleCancelUploading}
-            onContinue={handleContinue}
-            onDrop={onDrop}
-            onRemoveNode={removeFile}
-            setErrorMessage={setErrorMessage}
-            setWarningMessage={setWarningMessage}
-            showAssemblyToggle={validated && singlePartsCount > 1}
-            uploadFiles={uploadFilesData}
-            uploadTreeData={uploadTreeData}
-            validated={validated}
-            validating={validating}
-            warningMessage={warningMessage}
-          />
-        ) : (
-          <AssemblyInfo
-            activeNode={activeNode}
-            errorMessage={errorMessage}
-            filesData={uploadFilesData}
-            formData={activeFormData}
-            onContinue={handleContinue}
-            setErrorMessage={setErrorMessage}
-            treeData={treeData}
-          />
-        )}
+        <UploadModels
+          errorMessage={errorMessage}
+          onCancel={handleCancelUploading}
+          onContinue={handleContinue}
+          onDrop={onDrop}
+          onRemoveNode={removeFile}
+          setErrorMessage={setErrorMessage}
+          setWarningMessage={setWarningMessage}
+          uploadFiles={uploadFilesData}
+          warningMessage={warningMessage}
+        />
         <Spacer size={'2rem'} className={c.MultiUpload__desktop} />
       </div>
       <Spacer size={'2rem'} />

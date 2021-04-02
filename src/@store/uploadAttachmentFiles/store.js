@@ -8,11 +8,6 @@ const getInitAtom = () => ({
   isError: false,
   data: {},
   formData: {},
-  treeData: {},
-  validating: false,
-  validated: false,
-  isAssembly: false,
-  assemblyData: {},
 })
 
 const trackParts = (model, eventName) => {
@@ -31,34 +26,34 @@ const noop = () => null
 
 export default store => {
   store.on(types.STORE_INIT, () => ({
-    uploadFiles: getInitAtom(),
+    uploadAttachmentFiles: getInitAtom(),
   }))
 
   store.on(types.RESET_UPLOAD_FILES, () => ({
-    uploadFiles: getInitAtom(),
+    uploadAttachmentFiles: getInitAtom(),
   }))
 
-  store.on(types.SUBMITTING_MODELS, state => {
+  store.on(types.SUBMITTING_ATTACHMENTS, state => {
     return {
-      uploadFiles: {
-        ...state.uploadFiles,
+      uploadAttachmentFiles: {
+        ...state.uploadAttachmentFiles,
         isLoading: true,
       },
     }
   })
 
-  store.on(types.SUBMIT_MODELS_FAILED, state => {
+  store.on(types.SUBMIT_ATTACHMENTS_FAILED, state => {
     return {
-      uploadFiles: {
-        ...state.uploadFiles,
+      uploadAttachmentFiles: {
+        ...state.uploadAttachmentFiles,
         isLoading: false,
         isError: true,
       },
     }
   })
 
-  store.on(types.REMOVE_UPLOAD_FILES, (state, { nodeFileMap, shouldRemove }) => {
-    const { data: uploadedFiles, treeData } = state.uploadFiles
+  store.on(types.REMOVE_UPLOAD_ATTACHMENT_FILE, (state, { nodeFileMap, shouldRemove }) => {
+    const { data: uploadedFiles } = state.uploadAttachmentFiles
 
     const newUploadedFiles = { ...uploadedFiles }
 
@@ -68,56 +63,16 @@ export default store => {
       }
     })
 
-    const nodeIds = Object.keys(nodeFileMap)
-    const newTreeData = { ...treeData }
-    nodeIds.forEach(nodeId => {
-      if (shouldRemove) {
-        delete newTreeData[nodeId]
-      } else if (newTreeData[nodeId]) {
-        newTreeData[nodeId].fileId = ''
-        newTreeData[nodeId].valid = false
-      }
-    })
-
     return {
-      uploadFiles: {
-        ...state.uploadFiles,
+      uploadAttachmentFiles: {
+        ...state.uploadAttachmentFiles,
         data: newUploadedFiles,
-        treeData: newTreeData,
       },
     }
   })
 
-  store.on(types.CANCEL_UPLOAD, (state, { node }) => {
-    const { treeData } = state.uploadFiles
 
-    const nodeFileMap = {}
-
-    const findNodesToRemove = node => {
-      if (!node) {
-        return
-      }
-
-      nodeFileMap[node.id] = node.fileId
-      if (node.subIds) {
-        node.subIds.forEach(subnodeId => {
-          findNodesToRemove(treeData[subnodeId])
-        })
-      }
-    }
-
-    if (node.id === 'multipart') {
-      node.subs.forEach(subnode => {
-        nodeFileMap[subnode.id] = subnode.fileId
-      })
-    } else {
-      findNodesToRemove(node)
-    }
-
-    cancelUpload(nodeFileMap, !node.parentId)
-  })
-
-  store.on(types.INIT_UPLOAD_FILES, (state, { files }) => {
+  store.on(types.INIT_UPLOAD_ATTACHMENT_FILES, (state, { files }) => {
     const newFilesMap = files.reduce(
       (newFiles, f) => ({
         ...newFiles,
@@ -135,19 +90,18 @@ export default store => {
     )
 
     return {
-      uploadFiles: {
-        ...state.uploadFiles,
+      uploadAttachmentFiles: {
+        ...state.uploadAttachmentFiles,
         data: {
-          ...state.uploadFiles.data,
+          ...state.uploadAttachmentFiles.data,
           ...newFilesMap,
         },
-        validated: false,
       },
     }
   })
 
-  store.on(types.SET_UPLOADED_URLS, (state, { fileIds, uploadedUrlData }) => {
-    const { data: uploadedFiles } = state.uploadFiles
+  store.on(types.SET_UPLOADED_ATTACHMENT_URLS, (state, { fileIds, uploadedUrlData }) => {
+    const { data: uploadedFiles } = state.uploadAttachmentFiles
 
     fileIds.forEach((fileId, i) => {
       uploadedFiles[fileId] = {
@@ -157,162 +111,48 @@ export default store => {
     })
   })
 
-  store.on(types.CHANGE_UPLOAD_FILE, (state, { id, data, isLoading, isError }) => {
-    if (!id || !state.uploadFiles.data[id]) {
-      return { uploadFiles: state.uploadFiles }
+  store.on(types.CHANGE_UPLOAD_ATTACHMENT_FILE, (state, { id, data, isLoading, isError }) => {
+    if (!id || !state.uploadAttachmentFiles.data[id]) {
+      return { uploadAttachmentFiles: state.uploadAttachmentFiles }
     }
 
     return {
-      uploadFiles: {
-        ...state.uploadFiles,
+      uploadAttachmentFiles: {
+        ...state.uploadAttachmentFiles,
         data: {
-          ...state.uploadFiles.data,
-          [id]: { ...state.uploadFiles.data[id], ...data, isLoading, isError },
+          ...state.uploadAttachmentFiles.data,
+          [id]: { ...state.uploadAttachmentFiles.data[id], ...data, isLoading, isError },
         },
       },
     }
   })
 
-  store.on(types.SET_IS_ASSEMBLY, (state, { isAssembly }) => {
+  store.on(types.SET_ATTACHMENT_INFO, (state, { id, formData }) => {
     return {
-      uploadFiles: {
-        ...state.uploadFiles,
-        isAssembly,
-      },
-    }
-  })
-
-  store.on(types.SET_MODEL_INFO, (state, { id, formData }) => {
-    return {
-      uploadFiles: {
-        ...state.uploadFiles,
+      uploadAttachmentFiles: {
+        ...state.uploadAttachmentFiles,
         formData: {
-          ...state.uploadFiles.formData,
+          ...state.uploadAttachmentFiles.formData,
           [id]: formData,
         },
       },
     }
   })
 
-  store.on(types.VALIDATE_FILES_SUCCESS, (state, { treeData }) => {
-    return {
-      uploadFiles: {
-        ...state.uploadFiles,
-        treeData,
-        validating: false,
-        validated: true,
-      },
-    }
-  })
-
-  store.on(types.VALIDATE_FILES_FAILED, state => {
-    return {
-      uploadFiles: {
-        ...state.uploadFiles,
-        treeData: {},
-        validating: false,
-        validated: true,
-      },
-    }
-  })
-
-  store.on(types.SET_VALIDATING, (state, { validating }) => ({
-    uploadFiles: {
-      ...state.uploadFiles,
-      validating,
-    },
-  }))
-
-  store.on(types.VALIDATE_FILES, async state => {
-    const { data } = state.uploadFiles
-    const isLoading = Object.values(data).some(file => file.isLoading)
-    if (isLoading) {
-      return
-    }
-
-    store.dispatch(types.SET_VALIDATING, { validating: true })
-
-    try {
-      const { data: responseData } = await api({
-        method: 'POST',
-        endpoint: 'models/validatefiles',
-        body: {
-          fileNames: Object.values(data).map(file => file.newFileName),
-        },
-      })
-
-      const uploadedFiles = Object.values(data).filter(file => !file.isError)
-      const newTreeData = {}
-      if (responseData.isAssembly !== false) {
-        const transformNode = (node1, node2, parentId = '', rootName = '', modelId) => {
-          const name = node1.name.split(':')[0]
-          const filePaths = node1.filename.split('\\')
-          const filename = filePaths[filePaths.length - 1]
-          const suffix = Math.random().toString().replace('0.', '')
-          const id = rootName + '/' + node1.name + '/' + suffix
-          const file = uploadedFiles.find(file => file.name === filename)
-
-          const newNode = {
-            aggregatorId: modelId,
-            fileId: file ? file.id : '',
-            filename,
-            id,
-            isAssembly: node1.isAssembly,
-            name,
-            originalPartName: node1.name,
-            parentId,
-            valid: node2.valid,
-          }
-          newTreeData[id] = newNode
-
-          if (node1.subs && node1.subs.length > 0) {
-            newNode.subIds = node1.subs.map((subnode, i) =>
-              transformNode(subnode, node2.subs[i], newNode.id, rootName)
-            )
-            newNode.subIds.sort((subId1, subId2) => {
-              const a = newTreeData[subId1].isAssembly ? 1 : 0
-              const b = newTreeData[subId2].isAssembly ? 1 : 0
-              return a - b
-            })
-          } else {
-            newNode.subIds = []
-          }
-
-          return newNode.id
-        }
-
-        responseData.forEach(model => {
-          transformNode(
-            model.modelDescription,
-            model.validation,
-            '',
-            model.root,
-            model.modelId
-          )
-        })
-      }
-      store.dispatch(types.VALIDATE_FILES_SUCCESS, {
-        treeData: newTreeData,
-      })
-    } catch (e) {
-      store.dispatch(types.VALIDATE_FILES_FAILED)
-    }
-  })
-
-  store.on(types.UPLOAD_FILES, async (state, { files }) => {
+  store.on(types.UPLOAD_ATTACHMENT_FILES, async (state, { files }) => {
     if (!files || files.length === 0) {
       return
     }
 
-    let allFiles = Object.values(state.uploadFiles.data)
+    let allFiles = Object.values(state.uploadAttachmentFiles.data)
     let oldFile = allFiles.find(f => f.newFileName)
     while (allFiles.length > 0 && !oldFile) {
       await sleep(500)
-      allFiles = Object.values(state.uploadFiles.data)
+      allFiles = Object.values(state.uploadAttachmentFiles.data)
       oldFile = allFiles.find(f => f.newFileName)
     }
 
-    store.dispatch(types.INIT_UPLOAD_FILES, { files })
+    store.dispatch(types.INIT_UPLOAD_ATTACHMENT_FILES, { files })
 
     if (oldFile) {
       const [directory] = oldFile.newFileName.split('/')
@@ -323,10 +163,10 @@ export default store => {
     uploadFiles(files)
   })
 
-  store.on(types.SUBMIT_MODELS, async (state, { onFinish = noop }) => {
+  store.on(types.SUBMIT_ATTACHMENTS, async (state, { onFinish = noop }) => {
     store.dispatch(types.SUBMITTING_MODELS)
 
-    const { data: uploadedFiles, treeData, formData, isAssembly } = state.uploadFiles
+    const { data: uploadedFiles, treeData, formData, isAssembly } = state.uploadAttachmentFiles
 
     const payload = []
     const assemblyGroups = {}

@@ -94,9 +94,9 @@ const useStyles = createUseStyles(theme => {
 })
 
 const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' }) => {
-  const { dispatch, license = {}, uploadFiles = {} } = useStoreon(
+  const { dispatch, license = {}, uploadModelFiles = {} } = useStoreon(
     'license',
-    'uploadFiles'
+    'uploadModelFiles'
   )
   const {
     data: uploadFilesData = {},
@@ -106,7 +106,7 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
     validating,
     validated,
     isAssembly,
-  } = uploadFiles
+  } = uploadModelFiles
   const { isLoading: isLoadingLicense } = license
   const [activeView, setActiveView] = useState(-1)
   const [errorMessage, setErrorMessage] = useState(null)
@@ -236,9 +236,8 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
     )
     if (siblings.length > 0) {
       const activeIndex = siblings.findIndex(node => node.id === activeNode.id)
-      return `New ${activeNode.parentId ? 'Part' : 'Model'} ${
-        siblings.length > 1 ? `(${activeIndex + 1}/${siblings.length})` : ''
-      }`
+      return `New ${activeNode.parentId ? 'Part' : 'Model'} ${siblings.length > 1 ? `(${activeIndex + 1}/${siblings.length})` : ''
+        }`
     }
 
     return ''
@@ -253,8 +252,8 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
             setErrorMessage(
               `${file.name} is not a supported file type.
               Supported file extensions include ${MODEL_FILE_EXTS.map(
-    e => ' ' + e.replace('.', '')
-  )}.`
+                e => ' ' + e.replace('.', '')
+              )}.`
             )
             return null
           }

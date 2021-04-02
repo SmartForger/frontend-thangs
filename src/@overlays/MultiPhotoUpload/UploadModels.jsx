@@ -7,17 +7,12 @@ import {
   Spacer,
   Spinner,
   TitleTertiary,
-  Toggle,
-  Tooltip,
-  TreeView,
 } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as UploadCardIcon } from '@svg/upload-card.svg'
-import { ReactComponent as InfoIcon } from '@svg/icon-info.svg'
 import Dropzone from 'react-dropzone'
 import { FILE_SIZE_LIMITS, PHOTO_FILE_EXTS } from '@constants/fileUpload'
 import { overlayview } from '@utilities/analytics'
-import UploadTreeNode from './UploadTreeNode'
 import { isIOS } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
@@ -177,20 +172,13 @@ const useStyles = createUseStyles(theme => {
 const noop = () => null
 const UploadModels = ({
   uploadFiles,
-  uploadTreeData,
-  allTreeNodes,
   onDrop = noop,
-  onRemoveNode = noop,
   onCancel = noop,
   onContinue = noop,
   setErrorMessage = noop,
   setWarningMessage = noop,
   errorMessage = null,
   warningMessage = null,
-  validating = false,
-  validated = false,
-  showAssemblyToggle,
-  multiple = true,
 }) => {
   const hasFile = Object.keys(uploadFiles).length > 0
   const c = useStyles({ hasFile })
@@ -199,105 +187,67 @@ const UploadModels = ({
     return loadingFiles.length > 0
   }, [uploadFiles])
   const fileLength = uploadFiles
-    ? Object.keys(uploadFiles).filter(fileId => uploadFiles[fileId].name).length
+    ? Object.keys(uploadFiles).filter(fileId => uploadFiles[fileId].fileName).length
     : 0
   const dropzoneRef = useRef()
 
-  const uploadFile = () => {
-    if (dropzoneRef.current) {
-      dropzoneRef.current.open()
-    }
-  }
-
   useEffect(() => {
-    overlayview('MultiUpload - UploadModels')
+    overlayview('MultiPhotoUpload - UploadModels')
   }, [])
 
   useEffect(() => {
     const loadingFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isLoading)
     const warningFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isWarning)
-    const missingFiles = allTreeNodes.filter(f => !f.valid)
 
-    if (loadingFiles.length === 0 && !validating) {
-      const checkPartFile = node => {
-        return (
-          node.valid && node.subs.some(subnode => checkPartFile(subnode))
-        )
-      }
-
-      const hasPartFiles = uploadTreeData.every(root => checkPartFile(root))
-
-      if (hasPartFiles) {
-        setErrorMessage(null)
-      } else {
-        setErrorMessage('Assembly require at least 1 part file')
-      }
+    if (loadingFiles.length === 0) {
+      setErrorMessage(null)
     }
     if (warningFiles.length !== 0) {
       setWarningMessage(`Notice: Files over ${FILE_SIZE_LIMITS.soft.pretty} may take a long time to
     upload & process.`)
-    } else if (Object.keys(uploadFiles).length > 25 && !validated && !validating) {
+    } else if (Object.keys(uploadFiles).length > 25) {
       setWarningMessage(
         'Notice: Uploading more than 25 files at a time may take longer to upload & process.'
-      )
-    } else if (missingFiles.length > 0) {
-      setWarningMessage(
-        'Notice: Some parts are missing in your assembly. You can upload them now or continue without them.'
       )
     } else {
       setWarningMessage(null)
     }
   }, [
-    allTreeNodes,
     setErrorMessage,
     setWarningMessage,
     uploadFiles,
-    uploadTreeData,
-    validated,
-    validating,
   ])
-
-  const uploadAssemblyLabel = (
-    <span className={c.UploadAssemblyLabel}>
-      Upload parts as multi-part
-      <Tooltip title='Multipart assemblies allow users to view and download all parts from a single model page.'>
-        <InfoIcon className={c.UploadAssemblyLabel_Icon} />
-      </Tooltip>
-    </span>
-  )
 
   return (
     <>
-      {(multiple || (!multiple && !hasFile)) && (
-        <Dropzone
-          onDrop={onDrop}
-          accept={isIOS() ? undefined : PHOTO_FILE_EXTS}
-          ref={dropzoneRef}
-          multiple={multiple}
-          maxFiles={25}
-        >
-          {({ getRootProps, getInputProps }) => (
-            <section className={c.UploadModels_UploadZone}>
-              <div {...getRootProps()}>
-                <input {...getInputProps()} name='multi-upload' />
-                <div className={c.UploadModels_UploadRow}>
-                  <div className={c.UploadModels_UploadColumn}>
-                    {R.isEmpty(uploadFiles) && <UploadCardIcon />}
-                    <Spacer size={'1rem'} />
-                    <TitleTertiary>
-                      {multiple ? 'Drag & Drop photos' : 'Drag & Drop photo'}
-                    </TitleTertiary>
-                    <MultiLineBodyText>or browse to upload.</MultiLineBodyText>
-                    <Spacer size={'1rem'} />
-                    <Pill secondary>Browse</Pill>
-                    <Spacer size={'.75rem'} />
-                  </div>
+      <Dropzone
+        onDrop={onDrop}
+        accept={isIOS() ? undefined : PHOTO_FILE_EXTS}
+        ref={dropzoneRef}
+        multiple={true}
+        maxFiles={25}
+      >
+        {({ getRootProps, getInputProps }) => (
+          <section className={c.UploadModels_UploadZone}>
+            <div {...getRootProps()}>
+              <input {...getInputProps()} name='multi-upload' />
+              <div className={c.UploadModels_UploadRow}>
+                <div className={c.UploadModels_UploadColumn}>
+                  {R.isEmpty(uploadFiles) && <UploadCardIcon />}
+                  <Spacer size={'1rem'} />
+                  <TitleTertiary>
+                    Drag & Drop photos
+                  </TitleTertiary>
+                  <MultiLineBodyText>or browse to upload.</MultiLineBodyText>
+                  <Spacer size={'1rem'} />
+                  <Pill secondary>Browse</Pill>
+                  <Spacer size={'.75rem'} />
                 </div>
               </div>
-            </section>
-          )}
-        </Dropzone>
-      )}
+            </div>
+          </section>
+        )}
+      </Dropzone>
 
       {errorMessage && <h4 className={c.UploadModels_ErrorText}>{errorMessage}</h4>}
       {warningMessage && <h4 className={c.UploadModels_WarningText}>{warningMessage}</h4>}
@@ -312,29 +262,15 @@ const UploadModels = ({
             </div>
           </TitleTertiary>
           <Spacer size='0.5rem' />
-          <TreeView
-            className={c.UploadTreeView}
-            nodes={uploadTreeData}
-            levelPadding={28}
-            defaultExpanded={uploadTreeData.length < 2}
-            renderNode={(node, level) => (
-              <UploadTreeNode
-                node={node}
-                level={level}
-                onUpload={uploadFile}
-                onRemove={onRemoveNode}
-                isLoading={validating}
-              />
-            )}
-          />
+          {Object.values(uploadFiles).map(f => <div>{f.fileName}</div>)}
           <Spacer size={'1rem'} />
           <div className={c.UploadModels_ButtonWrapper}>
             <Button secondary onClick={onCancel}>
               Cancel
             </Button>
             <Spacer size={'1rem'} className={c.UploadModels_ButtonSpacer} />
-            <Button onClick={onContinue} disabled={isLoadingFiles || validating}>
-              {isLoadingFiles || validating ? 'Processing...' : 'Continue'}
+            <Button onClick={onContinue} disabled={isLoadingFiles}>
+              {isLoadingFiles ? 'Processing...' : 'Continue'}
             </Button>
           </div>
         </>
