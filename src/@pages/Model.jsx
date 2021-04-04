@@ -24,6 +24,7 @@ import {
   Spacer,
   Spinner,
   ToggleFollowButton,
+  LabelText,
 } from '@components'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as LicenseIcon } from '@svg/license.svg'
@@ -278,7 +279,31 @@ const useStyles = createUseStyles(theme => {
       },
     },
     ViewARLink: {
-      display: 'block',
+      alignItems: 'center',
+      backgroundColor: theme.colors.white[900],
+      border: 'none',
+      borderRadius: '.5rem',
+      color: theme.colors.black[500],
+      cursor: 'pointer',
+      display: 'flex',
+      justifyContent: 'center',
+      outline: 'none',
+      padding: '.75rem 1rem',
+      textAlign: 'center',
+      userSelect: 'none',
+      whiteSpace: 'nowrap',
+
+      '&:hover': {
+        backgroundColor: theme.colors.grey[100],
+      },
+
+      '&:disabled': {
+        cursor: 'not-allowed',
+        opacity: '0.8',
+        '&:hover': {
+          opacity: '1',
+        },
+      },
 
       '& > button': {
         width: '100%',
@@ -393,11 +418,11 @@ const ViewARLink = ({ model }) => {
           encodeURIComponent('#')
         )}#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
       >
-        <Button secondary onClick={e => e.preventDefault()}>
+        <LabelText>
           View on&nbsp;
           <AndroidIcon />
           Mobile [beta]
-        </Button>
+        </LabelText>
       </a>
     </>
   )
