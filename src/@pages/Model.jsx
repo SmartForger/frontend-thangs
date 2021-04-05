@@ -36,6 +36,7 @@ import { Message404 } from './404'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import {
+  useIsAndroid,
   useOverlay,
   usePageMeta,
   usePerformanceMetrics,
@@ -620,6 +621,7 @@ const StatsAndActions = ({
   openSignupOverlay = noop,
   pageTitle,
 }) => {
+  const isAndroid = useIsAndroid()
   return (
     <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
       <div>
@@ -639,7 +641,7 @@ const StatsAndActions = ({
             isAuthedUser={isAuthedUser}
             openSignupOverlay={openSignupOverlay}
           />
-          <ViewARLink model={modelData} />
+          {isAndroid && <ViewARLink model={modelData} />}
         </ContainerColumn>
         {modelData.license ? (
           <>
