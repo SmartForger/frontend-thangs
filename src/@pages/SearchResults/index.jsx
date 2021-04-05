@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { Layout } from '@components'
 import TextSearch from './TextSearch'
 import GeoSearch from './GeoSearch'
 import { useQuery } from '@hooks'
 import { pageview } from '@utilities/analytics'
-import { useOverlay } from '@hooks'
+import { useLocalStorage, useOverlay } from '@hooks'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 
 const useStyles = createUseStyles(_theme => {
@@ -25,6 +25,8 @@ const Page = () => {
   const modelId = useQuery('modelId')
   const phynId = useQuery('phynId')
   const related = useQuery('related')
+  const [currentUser] = useLocalStorage('currentUser', null)
+  const isAuthedUser = useMemo(() => !!currentUser, [currentUser])
   const { setOverlay, setOverlayOpen } = useOverlay()
 
   useEffect(() => {
@@ -67,6 +69,23 @@ const Page = () => {
     [setOverlay]
   )
 
+  const handleSignup = useCallback(
+    (titleMessage, source) => {
+      setOverlay({
+        isOpen: true,
+        template: 'signUp',
+        data: {
+          animateIn: true,
+          windowed: true,
+          titleMessage,
+          smallWidth: true,
+          source,
+        },
+      })
+    },
+    [setOverlay]
+  )
+
   return (
     <div className={c.SearchResults_Page}>
       <div className={c.SearchResults_MainContent}>
@@ -74,11 +93,15 @@ const Page = () => {
           <TextSearch
             onFindRelated={handleFindRelated}
             onReportModel={handleReportModel}
+            onSignupRequired={handleSignup}
+            isAuthedUser={isAuthedUser}
           />
         ) : (
           <GeoSearch
             onFindRelated={handleFindRelated}
             onReportModel={handleReportModel}
+            onSignupRequired={handleSignup}
+            isAuthedUser={isAuthedUser}
           />
         )}
       </div>

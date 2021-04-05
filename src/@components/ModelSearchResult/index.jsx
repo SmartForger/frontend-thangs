@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { ReactComponent as ChatIcon } from '@svg/icon-comment.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
-import { Card, ModelThumbnail, UserInline } from '@components'
+import { Card, ModelThumbnail, UserInline, Spacer, DownloadARLink } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useCurrentUserId } from '@hooks'
@@ -177,7 +177,9 @@ const noop = () => null
 const ThangsModelDetails = ({
   model,
   modelPath,
+  isAuthedUser,
   isLiked = false,
+  onSignupRequired = noop,
   onReportModel = noop,
   handleFindRelated = noop,
 }) => {
@@ -223,6 +225,12 @@ const ThangsModelDetails = ({
             View related models
           </div>
         )}
+        <Spacer size={'1rem'} />
+        <DownloadARLink
+          model={model}
+          isAuthedUser={isAuthedUser}
+          openSignupOverlay={onSignupRequired}
+        />
       </div>
       <div
         className={c.ModelSearchResult_ReportModelLink}
@@ -238,6 +246,8 @@ const ExternalModelDetails = ({
   model = {},
   modelAttributionUrl,
   modelPath,
+  isAuthedUser,
+  onSignupRequired = noop,
   onReportModel = noop,
   handleFindRelated = noop,
 }) => {
@@ -277,6 +287,12 @@ const ExternalModelDetails = ({
             View related models
           </div>
         )}
+        <Spacer size={'1rem'} />
+        <DownloadARLink
+          model={model}
+          isAuthedUser={isAuthedUser}
+          openSignupOverlay={onSignupRequired}
+        />
       </div>
       <div
         className={c.ModelSearchResult_ReportModelLink}
@@ -321,7 +337,9 @@ const ResultContents = ({
   modelAttributionUrl,
   modelPath,
   onReportModel = noop,
+  onSignupRequired = noop,
   handleFindRelated = noop,
+  isAuthedUser,
   isLiked,
   searchModelFileName,
   showOwner,
@@ -352,6 +370,8 @@ const ResultContents = ({
             model={model}
             modelAttributionUrl={modelAttributionUrl}
             modelPath={modelPath}
+            isAuthedUser={isAuthedUser}
+            onSignupRequired={onSignupRequired}
             onReportModel={onReportModel}
             handleFindRelated={handleFindRelated}
           />
@@ -361,7 +381,9 @@ const ResultContents = ({
             modelPath={modelPath}
             showOwner={showOwner}
             showSocial={showSocial}
+            isAuthedUser={isAuthedUser}
             isLiked={isLiked}
+            onSignupRequired={onSignupRequired}
             onReportModel={onReportModel}
             handleFindRelated={handleFindRelated}
           />
@@ -377,7 +399,9 @@ const ModelSearchResult = ({
   withOwner,
   showSocial = true,
   searchModelFileName,
+  isAuthedUser,
   onReportModel = noop,
+  onSignupRequired = noop,
   handleFindRelated = noop,
 }) => {
   const c = useStyles()
@@ -404,11 +428,13 @@ const ModelSearchResult = ({
         model={model}
         showOwner={showOwner}
         showSocial={showSocial}
+        isAuthedUser={isAuthedUser}
         isLiked={isLiked}
         modelAttributionUrl={modelAttributionUrl}
         searchModelFileName={searchModelFileName}
         modelPath={modelPath}
         onReportModel={onReportModel}
+        onSignupRequired={onSignupRequired}
         handleFindRelated={handleFindRelated}
       />
     </div>

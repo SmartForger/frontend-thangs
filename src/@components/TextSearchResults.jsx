@@ -2,6 +2,7 @@ import React from 'react'
 import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
 import {
   Card,
+  DownloadARLink,
   ModelThumbnail,
   NoResults,
   PartThumbnailList,
@@ -239,6 +240,8 @@ const ModelDetails = ({
   model = {},
   onFindRelated = noop,
   onThangsClick = noop,
+  onSignupRequired = noop,
+  isAuthedUser,
   scope,
   searchIndex,
 }) => {
@@ -307,6 +310,12 @@ const ModelDetails = ({
           View related models
         </div>
       )}
+      <Spacer size={'1rem'} />
+      <DownloadARLink
+        model={model}
+        isAuthedUser={isAuthedUser}
+        openSignupOverlay={onSignupRequired}
+      />
     </div>
   )
 }
@@ -316,6 +325,8 @@ const TextSearchResult = ({
   onThangsClick = noop,
   onFindRelated = noop,
   onReportModel = noop,
+  onSignupRequired = noop,
+  isAuthedUser,
   scope,
   searchIndex,
   spotCheckRef,
@@ -361,6 +372,8 @@ const TextSearchResult = ({
             onThangsClick={onThangsClick}
             onReportModel={onReportModel}
             onFindRelated={onFindRelated}
+            onSignupRequired={onSignupRequired}
+            isAuthedUser={isAuthedUser}
             isExternalModel={isExternalModel}
             scope={scope}
             searchIndex={searchIndex}
@@ -384,6 +397,8 @@ const TextSearchResults = ({
   onThangsClick,
   onFindRelated,
   onReportModel,
+  onSignupRequired,
+  isAuthedUser,
   searchScope: scope,
   searchTerm,
   spotCheckRef,
@@ -420,6 +435,8 @@ const TextSearchResults = ({
       onFindRelated={onFindRelated}
       onReportModel={onReportModel}
       onThangsClick={onThangsClick}
+      onSignupRequired={onSignupRequired}
+      isAuthedUser={isAuthedUser}
       scope={scope}
       searchIndex={ind}
       spotCheckRef={spotCheckIndex === ind ? spotCheckRef : undefined}
