@@ -426,14 +426,13 @@ const ViewARLink = ({ model }) => {
 
   const detectIfOpenedTimeoutRef = useRef()
   const timeoutIfLinkDoesntBlur = () => {
-    if (!cannotOpenVRLink) {
-      setIsOpeningViewer(true)
-      detectIfOpenedTimeoutRef.current = window.setTimeout(() => {
-        detectIfOpenedTimeoutRef.current = null
-        setCannotOpenVRLink(true)
-        setIsOpeningViewer(false)
-      }, 2000)
-    }
+    setCannotOpenVRLink(false)
+    setIsOpeningViewer(true)
+    detectIfOpenedTimeoutRef.current = window.setTimeout(() => {
+      detectIfOpenedTimeoutRef.current = null
+      setCannotOpenVRLink(true)
+      setIsOpeningViewer(false)
+    }, 2000)
   }
 
   const considerOpenedIfBlurred = () => {
@@ -468,32 +467,32 @@ const ViewARLink = ({ model }) => {
         )}#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
       >
         {cannotOpenVRLink ? (
-          <MultiLineBodyText multiline>
-            Oh no! Your device doesn&apos;t support this type of link
-          </MultiLineBodyText>
+          <>
+            <ARIcon className={c.ViewARLink_ARBadge} />
+            <Spacer size={'.5rem'} />
+            <MultiLineBodyText multiline>
+              Unable to Open Android Native AR Viewer on This Device
+            </MultiLineBodyText>
+          </>
         ) : (
           <div className={c.ViewARLink_Container}>
             <ARIcon className={c.ViewARLink_ARBadge} />
             <Spacer size={'.5rem'} />
             <LabelText className={c.ViewARLink_Text}>
-              Open AR Model via
-              <span className={c.ViewARLink_AndroidOS}>
-                &nbsp;
-                <AndroidIcon />
-                &nbsp;OS
-              </span>
-              (No&nbsp;App&nbsp;Required)
-              {isOpeningViewer && (
-                <>
-                  <Spacer size={'1rem'} />
-                  <Spinner className={c.ViewARLink_Spinner} />
-                </>
-              )}
+              Android Native AR Viewer (No&nbsp;App&nbsp;Required)
             </LabelText>
             <Spacer size={'.5rem'} />
-            <Tag className={c.BetaTag} lightText>
-              BETA
-            </Tag>
+
+            {isOpeningViewer ? (
+              <>
+                <Spacer size={'1rem'} />
+                <Spinner className={c.ViewARLink_Spinner} />
+              </>
+            ) : (
+              <Tag className={c.BetaTag} lightText>
+                BETA
+              </Tag>
+            )}
           </div>
         )}
       </a>
