@@ -331,6 +331,8 @@ const useStyles = createUseStyles(theme => {
     },
     ViewARLink_Text: {
       flexWrap: 'wrap',
+      whiteSpace: 'pre-wrap',
+      textAlign: 'left',
     },
     ViewARLink_Spinner: {
       width: '1rem',
@@ -470,9 +472,9 @@ const ViewARLink = ({ model }) => {
           <>
             <ARIcon className={c.ViewARLink_ARBadge} />
             <Spacer size={'.5rem'} />
-            <MultiLineBodyText multiline>
+            <LabelText className={c.ViewARLink_Text}>
               Unable to Open Android Native AR Viewer on This Device
-            </MultiLineBodyText>
+            </LabelText>
           </>
         ) : (
           <div className={c.ViewARLink_Container}>
