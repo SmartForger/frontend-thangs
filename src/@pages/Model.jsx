@@ -25,6 +25,7 @@ import {
   Spinner,
   ToggleFollowButton,
   LabelText,
+  MultiLineBodyText,
 } from '@components'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as LicenseIcon } from '@svg/license.svg'
@@ -291,13 +292,15 @@ const useStyles = createUseStyles(theme => {
       padding: '.75rem 1rem',
       textAlign: 'center',
       userSelect: 'none',
-      whiteSpace: 'nowrap',
+
+      overflow: 'hidden',
+      whitespace: 'break-spaces',
 
       '&:hover': {
         backgroundColor: theme.colors.grey[100],
       },
 
-      '&:disabled': {
+      '&[disabled]': {
         cursor: 'not-allowed',
         opacity: '0.8',
         '&:hover': {
@@ -305,13 +308,13 @@ const useStyles = createUseStyles(theme => {
         },
       },
 
-      '& > button': {
-        width: '100%',
-      },
-
       [md_viewer]: {
         display: 'none',
       },
+    },
+    ViewARLink_Spinner: {
+      width: '1rem',
+      height: '1rem',
     },
   }
 })
@@ -398,6 +401,29 @@ const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
 
 const ViewARLink = ({ model }) => {
   const c = useStyles({})
+  const [isOpeningViewer, setIsOpeningViewer] = useState(false)
+  const [cannotOpenVRLink, setCannotOpenVRLink] = useState(false)
+
+  const detectIfOpenedTimeoutRef = useRef()
+  const timeoutIfLinkDoesntBlur = () => {
+    if (!cannotOpenVRLink) {
+      setIsOpeningViewer(true)
+      detectIfOpenedTimeoutRef.current = window.setTimeout(() => {
+        detectIfOpenedTimeoutRef.current = null
+        setCannotOpenVRLink(true)
+        setIsOpeningViewer(false)
+      }, 2000)
+    }
+  }
+
+  const considerOpenedIfBlurred = () => {
+    if (detectIfOpenedTimeoutRef.current) {
+      setIsOpeningViewer(false)
+      window.clearTimeout(detectIfOpenedTimeoutRef.current)
+      detectIfOpenedTimeoutRef.current = null
+    }
+  }
+
   const { parts } = model
   let primaryPart = null
   if (parts) {
@@ -413,16 +439,33 @@ const ViewARLink = ({ model }) => {
       <Spacer size={'1rem'} />
       <a
         className={c.ViewARLink}
+        disabled={cannotOpenVRLink}
+        onClick={timeoutIfLinkDoesntBlur}
+        onBlur={considerOpenedIfBlurred}
         href={`intent://arvr.google.com/scene-viewer/1.0?file=${primaryPart?.androidUrl?.replace(
           '#',
           encodeURIComponent('#')
         )}#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
       >
-        <LabelText>
-          View on&nbsp;
-          <AndroidIcon />
-          Mobile [beta]
-        </LabelText>
+        {cannotOpenVRLink ? (
+          <MultiLineBodyText multiline>
+            Oh no! Your device doesn&apos;t support this type of link
+          </MultiLineBodyText>
+        ) : (
+          <>
+            <LabelText>
+              View on&nbsp;
+              <AndroidIcon />
+              Mobile [beta]
+              {isOpeningViewer && (
+                <>
+                  <Spacer size={'1rem'} />
+                  <Spinner className={c.ViewARLink_Spinner} />
+                </>
+              )}
+            </LabelText>
+          </>
+        )}
       </a>
     </>
   )
