@@ -25,17 +25,15 @@ import {
   Spinner,
   ToggleFollowButton,
   LabelText,
-  MultiLineBodyText,
   Tag,
 } from '@components'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as LicenseIcon } from '@svg/license.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
-import { ReactComponent as AndroidIcon } from '@svg/icon-android.svg'
 import { ReactComponent as ARIcon } from '@svg/icon-ar.svg'
 import { Message404 } from './404'
-import { createUseStyles, NewTheme } from '@physna/voxel-ui/@style'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import {
   useIsAndroid,
