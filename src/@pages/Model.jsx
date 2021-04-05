@@ -438,7 +438,7 @@ const AddPrintPhotoLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) 
     if (isAuthedUser) {
       setOverlay({
         isOpen: true,
-        template: 'multiPhotoUpload',
+        template: 'attachmentUpload',
         data: {
           animateIn: true,
           windowed: true,

@@ -1,6 +1,7 @@
 import { useContext, useMemo, useReducer } from 'react'
 import {
   AddFolder,
+  AttachmentUpload,
   DeleteFolder,
   DeleteModel,
   DeleteComment,
@@ -8,7 +9,6 @@ import {
   EditModel,
   InviteUsers,
   MultiUpload,
-  MultiPhotoUpload,
   PasswordReset,
   ReportModel,
   SearchByUpload,
@@ -22,13 +22,13 @@ import { OverlayContext } from '@components'
 
 const overlayTemplates = {
   addFolder: AddFolder,
+  attachmentUpload: AttachmentUpload,
   deleteFolder: DeleteFolder,
   deleteModel: DeleteModel,
   editFolder: EditFolder,
   editModel: EditModel,
   inviteUsers: InviteUsers,
   multiUpload: MultiUpload,
-  multiPhotoUpload: MultiPhotoUpload,
   license: License,
   passwordReset: PasswordReset,
   reportModel: ReportModel,

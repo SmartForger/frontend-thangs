@@ -192,7 +192,7 @@ const UploadModels = ({
   const dropzoneRef = useRef()
 
   useEffect(() => {
-    overlayview('MultiPhotoUpload - UploadModels')
+    overlayview('AttachmentUpload - UploadModels')
   }, [])
 
   useEffect(() => {

@@ -90,7 +90,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const MultiPhotoUpload = ({ initData = null }) => {
+const AttachmentUpload = ({ initData = null }) => {
   const { dispatch, uploadAttachmentFiles = {} } = useStoreon(
     'uploadAttachmentFiles'
   )
@@ -144,14 +144,14 @@ const MultiPhotoUpload = ({ initData = null }) => {
         })
         .filter(f => !!f)
 
-      track('MultiPhotoUpload - OnDrop', { amount: files && files.length })
+      track('AttachmentUpload - OnDrop', { amount: files && files.length })
 
       dispatch(types.UPLOAD_FILES, { files })
 
       if (rejectedFile) {
         const filePath = rejectedFile.path.split('.')
         const fileExt = filePath[filePath.length - 1] || ''
-        track('MultiPhotoUpload - Rejected', { fileType: fileExt })
+        track('AttachmentUpload - Rejected', { fileType: fileExt })
         setErrorMessage(
           `One or more files not supported. Supported file extensions include ${PHOTO_FILE_EXTS.map(
             e => ' ' + e.replace('.', '')
@@ -163,7 +163,7 @@ const MultiPhotoUpload = ({ initData = null }) => {
   )
 
   const removeFile = node => {
-    track('MultiPhotoUpload - Remove File')
+    track('AttachmentUpload - Remove File')
     dispatch(types.CANCEL_UPLOAD, { node })
   }
 
@@ -180,7 +180,7 @@ const MultiPhotoUpload = ({ initData = null }) => {
           files.push(file.name)
         }
       })
-      track('MultiPhotoUpload - Submit Attachments', {
+      track('AttachmentUpload - Submit Attachments', {
         amount: files.length,
       })
     }
@@ -257,4 +257,4 @@ const MultiPhotoUpload = ({ initData = null }) => {
   )
 }
 
-export default MultiPhotoUpload
+export default AttachmentUpload
