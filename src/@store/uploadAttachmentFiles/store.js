@@ -8,6 +8,8 @@ const getInitAtom = () => ({
   isError: false,
   data: {},
   formData: {},
+  attachments: [],
+  rawFiles: [],
 })
 
 const trackParts = (model, eventName) => {
@@ -52,24 +54,24 @@ export default store => {
     }
   })
 
-  store.on(types.REMOVE_UPLOAD_ATTACHMENT_FILE, (state, { nodeFileMap, shouldRemove }) => {
-    const { data: uploadedFiles } = state.uploadAttachmentFiles
+  // store.on(types.REMOVE_UPLOAD_ATTACHMENT_FILE, (state, { nodeFileMap, shouldRemove }) => {
+  //   const { data: uploadedFiles } = state.uploadAttachmentFiles
 
-    const newUploadedFiles = { ...uploadedFiles }
+  //   const newUploadedFiles = { ...uploadedFiles }
 
-    Object.values(nodeFileMap).forEach(fileId => {
-      if (fileId) {
-        delete newUploadedFiles[fileId]
-      }
-    })
+  //   Object.values(nodeFileMap).forEach(fileId => {
+  //     if (fileId) {
+  //       delete newUploadedFiles[fileId]
+  //     }
+  //   })
 
-    return {
-      uploadAttachmentFiles: {
-        ...state.uploadAttachmentFiles,
-        data: newUploadedFiles,
-      },
-    }
-  })
+  //   return {
+  //     uploadAttachmentFiles: {
+  //       ...state.uploadAttachmentFiles,
+  //       data: newUploadedFiles,
+  //     },
+  //   }
+  // })
 
 
   store.on(types.INIT_UPLOAD_ATTACHMENT_FILES, (state, { files }) => {
@@ -92,6 +94,7 @@ export default store => {
     return {
       uploadAttachmentFiles: {
         ...state.uploadAttachmentFiles,
+        rawFiles: files,
         data: {
           ...state.uploadAttachmentFiles.data,
           ...newFilesMap,
@@ -111,6 +114,7 @@ export default store => {
     })
   })
 
+  // TODO[MARCEL]: Rename to "INITIALIZE_ATTACHMENTS"?
   store.on(types.CHANGE_UPLOAD_ATTACHMENT_FILE, (state, { id, data, isLoading, isError }) => {
     if (!id || !state.uploadAttachmentFiles.data[id]) {
       return { uploadAttachmentFiles: state.uploadAttachmentFiles }
@@ -123,6 +127,13 @@ export default store => {
           ...state.uploadAttachmentFiles.data,
           [id]: { ...state.uploadAttachmentFiles.data[id], ...data, isLoading, isError },
         },
+        attachments: [
+          ...state.uploadAttachmentFiles.attachments,
+          {
+            filename: data.signedUrl,
+            caption: '',
+          }
+        ]
       },
     }
   })
@@ -144,22 +155,7 @@ export default store => {
       return
     }
 
-    let allFiles = Object.values(state.uploadAttachmentFiles.data)
-    let oldFile = allFiles.find(f => f.newFileName)
-    while (allFiles.length > 0 && !oldFile) {
-      await sleep(500)
-      allFiles = Object.values(state.uploadAttachmentFiles.data)
-      oldFile = allFiles.find(f => f.newFileName)
-    }
-
     store.dispatch(types.INIT_UPLOAD_ATTACHMENT_FILES, { files })
-
-    if (oldFile) {
-      const [directory] = oldFile.newFileName.split('/')
-      uploadFiles(files, directory)
-      return
-    }
-
     uploadFiles(files)
   })
 

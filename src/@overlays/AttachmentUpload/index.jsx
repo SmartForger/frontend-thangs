@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { SingleLineBodyText, Spacer, Spinner } from '@components'
 import UploadFiles from './UploadFiles'
+import Attachment from './Attachment'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
@@ -97,11 +98,13 @@ const AttachmentUpload = ({ initData = null }) => {
 
   const {
     data: uploadFilesData = {},
-    formData,
+    attachments = [],
+    rawFiles = [],
     isLoading,
   } = uploadAttachmentFiles
   const [errorMessage, setErrorMessage] = useState(null)
   const [warningMessage, setWarningMessage] = useState(null)
+  const [activeAttachmentIndex, setActiveAttachmentIndex] = useState(0)
   const c = useStyles({})
   const { setOverlayOpen } = useOverlay()
   const history = useHistory()
@@ -146,7 +149,7 @@ const AttachmentUpload = ({ initData = null }) => {
 
       track('AttachmentUpload - OnDrop', { amount: files && files.length })
 
-      dispatch(types.UPLOAD_FILES, { files })
+      dispatch(types.UPLOAD_ATTACHMENT_FILES, { files })
 
       if (rejectedFile) {
         const filePath = rejectedFile.path.split('.')
@@ -160,6 +163,11 @@ const AttachmentUpload = ({ initData = null }) => {
       }
     },
     [dispatch]
+  )
+
+  const activeAttachment = useMemo(
+    () => attachments[activeAttachmentIndex],
+    [attachments, activeAttachmentIndex]
   )
 
   const removeFile = node => {
@@ -233,23 +241,29 @@ const AttachmentUpload = ({ initData = null }) => {
           <Spacer size={'1.5rem'} />
           <div className={c.MultiUpload_Row}>
             <SingleLineBodyText className={c.MultiUpload_OverlayHeader}>
-              Upload Print Photos
+              {activeAttachment ? `Add Print Photo (${activeAttachmentIndex + 1}/${attachments.length})` : 'Upload Print Photos'}
             </SingleLineBodyText>
             <ExitIcon className={c.MultiUpload_ExitButton} onClick={closeOverlay} />
           </div>
           <Spacer size={'1.5rem'} />
         </div>
-        <UploadFiles
-          errorMessage={errorMessage}
-          onCancel={handleCancelUploading}
-          onContinue={handleContinue}
-          onDrop={onDrop}
-          onRemoveNode={removeFile}
-          setErrorMessage={setErrorMessage}
-          setWarningMessage={setWarningMessage}
-          uploadFiles={uploadFilesData}
-          warningMessage={warningMessage}
-        />
+        {activeAttachment ? (
+          <Attachment
+            attachment={activeAttachment}
+            rawFiles={rawFiles}
+          />) : (
+          <UploadFiles
+            errorMessage={errorMessage}
+            onCancel={handleCancelUploading}
+            onContinue={handleContinue}
+            onDrop={onDrop}
+            onRemoveNode={removeFile}
+            setErrorMessage={setErrorMessage}
+            setWarningMessage={setWarningMessage}
+            uploadFiles={uploadFilesData}
+            warningMessage={warningMessage}
+          />
+        )}
         <Spacer size={'2rem'} className={c.MultiUpload__desktop} />
       </div>
       <Spacer size={'2rem'} />

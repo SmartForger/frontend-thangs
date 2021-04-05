@@ -124,6 +124,7 @@ export const UPLOAD_ATTACHMENT_FILES = 'upload-attachment-files'
 export const SET_UPLOADED_ATTACHMENT_URLS = 'set-uploaded-attachment-urls'
 export const CHANGE_UPLOAD_ATTACHMENT_FILE = 'change-upload-attachment-file'
 export const RESET_UPLOAD_ATTACHMENT_FILES = 'reset-upload-attachment-files'
+// TODO[MARCEL]: Remove "REMOVE_UPLOAD_ATTACHMENT_FILE" and other unused types added
 export const REMOVE_UPLOAD_ATTACHMENT_FILE = 'remove-upload-attachment-file'
 export const INIT_UPLOAD_ATTACHMENT_FILES = 'init-upload-attachment-files'
 export const SUBMIT_ATTACHMENT_FILE = 'submit-attachment-file'

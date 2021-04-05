@@ -27,6 +27,7 @@ function uploadMessageHandler(messageType, data) {
         isLoading: false,
         isError: false,
       })
+      // TODO: Use separate message types for attachment files and model files
       store.dispatch(types.CHANGE_UPLOAD_ATTACHMENT_FILE, {
         id: data.id,
         data: data.uploadedUrlData,
