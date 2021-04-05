@@ -4,11 +4,11 @@ import { Helmet } from 'react-helmet'
 import * as R from 'ramda'
 import { format } from 'date-fns'
 import {
-  ARDownloadActionMenu,
   Button,
   CommentsForModel,
   ContainerColumn,
   Divider,
+  DownloadARLink,
   HoopsModelViewer,
   Layout,
   LikeModelButton,
@@ -42,6 +42,7 @@ import {
 } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
+import { canDownloadAR } from '@utilities'
 import { pageview, track, perfTrack } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
@@ -319,70 +320,6 @@ const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
         buttonText
       )}
     </Button>
-  )
-}
-
-const UNSUPPORTED_EXTENSIONS = ['igs', 'step', 'x_t']
-
-const canDownloadAR = model => {
-  const { parts } = model
-  if (parts) {
-    // Only check the primary part since that is the one we export to AR
-    let primaryPart = null
-    if (parts.length > 1) {
-      primaryPart = R.find(R.propEq('isPrimary', true))(parts) || parts[0]
-    } else {
-      primaryPart = parts[0]
-    }
-
-    const partExt = primaryPart.filename.split('.').pop()
-    return !UNSUPPORTED_EXTENSIONS.includes(partExt.toLowerCase())
-  }
-
-  return false
-}
-
-const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
-  const c = useStyles()
-  const isARSupported = useMemo(() => canDownloadAR(model), [model])
-  const { dispatch } = useStoreon()
-  const downloadModel = useCallback(
-    format => {
-      if (format !== 'android') return //TEMP - Remove once ios is available
-      dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
-        id: model.id,
-        format,
-        onFinish: downloadUrl => {
-          window.location.assign(downloadUrl)
-          track('Download AR', { format, modelId: model.id })
-        },
-      })
-    },
-    [dispatch, model.id]
-  )
-
-  const handleClick = useCallback(
-    format => {
-      if (isAuthedUser) {
-        downloadModel(format)
-      } else {
-        openSignupOverlay('Join to download AR models.', 'Download')
-        track('SignUp Prompt Overlay', { source: 'Download AR', format })
-      }
-    },
-    [downloadModel, isAuthedUser, openSignupOverlay]
-  )
-
-  return (
-    <>
-      {isARSupported ? (
-        <div className={c.Model_DownloadAR}>
-          <ARDownloadActionMenu onChange={handleClick} />
-        </div>
-      ) : (
-        <></>
-      )}
-    </>
   )
 }
 
@@ -702,7 +639,8 @@ const ModelDetailPage = ({
     modelTitle = modelTitle.substring(0, titleCharCount)
   titleCharCount = titleCharCount - modelTitle.length
   const modelTitleAuthor = titleCharCount >= modelAuthor.length + 3 ? modelAuthor : ''
-  const pageTitle = `${modelTitle}${titlePrefix}|${modelTitleAuthor ? ` ${modelTitleAuthor} |` : ''
+  const pageTitle = `${modelTitle}${titlePrefix}|${
+    modelTitleAuthor ? ` ${modelTitleAuthor} |` : ''
   }${titleSuffix}`
   const modelDescription = modelData.description || defaultDescription
 
@@ -712,13 +650,15 @@ const ModelDetailPage = ({
         <title>{pageTitle}</title>
         <meta
           name='description'
-          content={`${descriptionPrefix}${modelData.name
+          content={`${descriptionPrefix}${
+            modelData.name
           }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
         />
         <meta property='og:title' content={pageTitle} />
         <meta
           property='og:description'
-          content={`${descriptionPrefix}${modelData.name
+          content={`${descriptionPrefix}${
+            modelData.name
           }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
         />
         <meta

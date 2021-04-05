@@ -8,6 +8,26 @@ const REACT_APP_MODEL_BUCKET = process.env.REACT_APP_MODEL_BUCKET
 export const shouldShowViewRelated = model =>
   model.nMatchedModels !== 0 && model.matchingData?.nMatchedModels !== 0
 
+const UNSUPPORTED_EXTENSIONS = ['igs', 'step', 'x_t']
+
+export const canDownloadAR = model => {
+  const { parts } = model
+  if (parts) {
+    // Only check the primary part since that is the one we export to AR
+    let primaryPart = null
+    if (parts.length > 1) {
+      primaryPart = R.find(R.propEq('isPrimary', true))(parts) || parts[0]
+    } else {
+      primaryPart = parts[0]
+    }
+
+    const partExt = primaryPart.filename.split('.').pop()
+    return !UNSUPPORTED_EXTENSIONS.includes(partExt.toLowerCase())
+  }
+
+  return false
+}
+
 export const buildThumbnailUrl = (model, useThumbnailer) => {
   if (model.fullThumbnailUrl) return model.fullThumbnailUrl
   if (model.thumbnailUrl) return model.thumbnailUrl.replace('#', encodeURIComponent('#'))
