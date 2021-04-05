@@ -17,7 +17,7 @@ import { isIOS } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
   return {
-    UploadModels_UploadZone: {
+    UploadFiles_UploadZone: {
       alignItems: 'center',
       border: `1px dashed ${theme.colors.white[900]}`,
       borderRadius: '.75rem',
@@ -36,19 +36,19 @@ const useStyles = createUseStyles(theme => {
         width: '100%',
       },
     },
-    UploadModels_UploadRow: {
+    UploadFiles_UploadRow: {
       height: '100%',
     },
-    UploadModels_FileTitle: {
+    UploadFiles_FileTitle: {
       alignItems: 'center',
       display: 'flex',
     },
-    UploadModels_FileRow: {
+    UploadFiles_FileRow: {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
     },
-    UploadModels_Row: {
+    UploadFiles_Row: {
       alignItems: 'center',
       display: 'flex',
       flexDirection: 'row',
@@ -57,7 +57,7 @@ const useStyles = createUseStyles(theme => {
         flex: 'none',
       },
     },
-    UploadModels_MissingFileIcon: {
+    UploadFiles_MissingFileIcon: {
       '& circle': {
         stroke: '#DA7069',
       },
@@ -68,7 +68,7 @@ const useStyles = createUseStyles(theme => {
         fill: '#DA7069',
       },
     },
-    UploadModels_SkippedFileIcon: {
+    UploadFiles_SkippedFileIcon: {
       '& path:first-child': {
         stroke: '#999',
       },
@@ -76,7 +76,7 @@ const useStyles = createUseStyles(theme => {
         fill: '#999',
       },
     },
-    UploadModels_FileName: {
+    UploadFiles_FileName: {
       lineHeight: '1rem !important',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
@@ -89,17 +89,17 @@ const useStyles = createUseStyles(theme => {
         textDecoration: 'line-through',
       },
     },
-    UploadModels_SkipButton: {
+    UploadFiles_SkipButton: {
       padding: '0 1rem !important',
     },
-    UploadModels_UploadColumn: {
+    UploadFiles_UploadColumn: {
       alignItems: 'center',
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
       justifyContent: 'center',
     },
-    UploadModels_ScrollableFiles: {
+    UploadFiles_ScrollableFiles: {
       ...theme.mixins.scrollbar,
       display: 'flex',
       flexDirection: 'column',
@@ -108,11 +108,11 @@ const useStyles = createUseStyles(theme => {
       overflowY: 'scroll',
       paddingTop: '.125rem',
     },
-    UploadModels_RemoveBtn: {
+    UploadFiles_RemoveBtn: {
       cursor: 'pointer',
       zIndex: '1',
     },
-    UploadModels_ButtonWrapper: {
+    UploadFiles_ButtonWrapper: {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -121,10 +121,10 @@ const useStyles = createUseStyles(theme => {
         width: '100%',
       },
     },
-    UploadModels_ButtonSpacer: {
+    UploadFiles_ButtonSpacer: {
       flex: 'none',
     },
-    UploadModels_ErrorText: {
+    UploadFiles_ErrorText: {
       ...theme.text.formErrorText,
       backgroundColor: theme.variables.colors.errorTextBackground,
       borderRadius: '.5rem',
@@ -133,7 +133,7 @@ const useStyles = createUseStyles(theme => {
       padding: '.625rem 1rem',
       wordBreak: 'break-word',
     },
-    UploadModels_WarningText: {
+    UploadFiles_WarningText: {
       backgroundColor: '#FEFAEC',
       borderRadius: '.5rem',
       color: '#C29C45',
@@ -161,16 +161,16 @@ const useStyles = createUseStyles(theme => {
         },
       },
     },
-    UploadModels_BrowseText: {
+    UploadFiles_BrowseText: {
       color: theme.colors.grey[300],
     },
-    UploadModels_AssemblyText: {
+    UploadFiles_AssemblyText: {
       paddingTop: '1rem',
     },
   }
 })
 const noop = () => null
-const UploadModels = ({
+const UploadFiles = ({
   uploadFiles,
   onDrop = noop,
   onCancel = noop,
@@ -192,7 +192,7 @@ const UploadModels = ({
   const dropzoneRef = useRef()
 
   useEffect(() => {
-    overlayview('AttachmentUpload - UploadModels')
+    overlayview('AttachmentUpload - UploadFiles')
   }, [])
 
   useEffect(() => {
@@ -228,11 +228,11 @@ const UploadModels = ({
         maxFiles={25}
       >
         {({ getRootProps, getInputProps }) => (
-          <section className={c.UploadModels_UploadZone}>
+          <section className={c.UploadFiles_UploadZone}>
             <div {...getRootProps()}>
               <input {...getInputProps()} name='multi-upload' />
-              <div className={c.UploadModels_UploadRow}>
-                <div className={c.UploadModels_UploadColumn}>
+              <div className={c.UploadFiles_UploadRow}>
+                <div className={c.UploadFiles_UploadColumn}>
                   {R.isEmpty(uploadFiles) && <UploadCardIcon />}
                   <Spacer size={'1rem'} />
                   <TitleTertiary>
@@ -249,13 +249,13 @@ const UploadModels = ({
         )}
       </Dropzone>
 
-      {errorMessage && <h4 className={c.UploadModels_ErrorText}>{errorMessage}</h4>}
-      {warningMessage && <h4 className={c.UploadModels_WarningText}>{warningMessage}</h4>}
+      {errorMessage && <h4 className={c.UploadFiles_ErrorText}>{errorMessage}</h4>}
+      {warningMessage && <h4 className={c.UploadFiles_WarningText}>{warningMessage}</h4>}
       {fileLength > 0 && (
         <>
           <Spacer size='1rem' />
           <TitleTertiary>
-            <div className={c.UploadModels_FileTitle}>
+            <div className={c.UploadFiles_FileTitle}>
               {fileLength > 1 ? `${fileLength} files` : 'File'}
               <Spacer size={'.5rem'} />
               {isLoadingFiles && <Spinner size={'1rem'} />}
@@ -264,11 +264,11 @@ const UploadModels = ({
           <Spacer size='0.5rem' />
           {Object.values(uploadFiles).map(f => <div>{f.fileName}</div>)}
           <Spacer size={'1rem'} />
-          <div className={c.UploadModels_ButtonWrapper}>
+          <div className={c.UploadFiles_ButtonWrapper}>
             <Button secondary onClick={onCancel}>
               Cancel
             </Button>
-            <Spacer size={'1rem'} className={c.UploadModels_ButtonSpacer} />
+            <Spacer size={'1rem'} className={c.UploadFiles_ButtonSpacer} />
             <Button onClick={onContinue} disabled={isLoadingFiles}>
               {isLoadingFiles ? 'Processing...' : 'Continue'}
             </Button>
@@ -279,4 +279,4 @@ const UploadModels = ({
   )
 }
 
-export default UploadModels
+export default UploadFiles

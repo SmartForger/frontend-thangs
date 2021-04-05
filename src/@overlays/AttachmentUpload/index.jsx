@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { SingleLineBodyText, Spacer, Spinner } from '@components'
-import UploadModels from './UploadModels'
+import UploadModels from './UploadFiles'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
