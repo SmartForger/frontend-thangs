@@ -26,14 +26,16 @@ import {
   ToggleFollowButton,
   LabelText,
   MultiLineBodyText,
+  Tag,
 } from '@components'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as LicenseIcon } from '@svg/license.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
 import { ReactComponent as AndroidIcon } from '@svg/icon-android.svg'
+import { ReactComponent as ARIcon } from '@svg/icon-ar.svg'
 import { Message404 } from './404'
-import { createUseStyles } from '@physna/voxel-ui/@style'
+import { createUseStyles, NewTheme } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import {
   useIsAndroid,
@@ -294,9 +296,6 @@ const useStyles = createUseStyles(theme => {
       textAlign: 'center',
       userSelect: 'none',
 
-      overflow: 'hidden',
-      whitespace: 'break-spaces',
-
       '&:hover': {
         backgroundColor: theme.colors.grey[100],
       },
@@ -312,6 +311,26 @@ const useStyles = createUseStyles(theme => {
       [md_viewer]: {
         display: 'none',
       },
+    },
+    BetaTag: {
+      backgroundColor: theme.colors.grey[400],
+      height: 'max-content',
+    },
+    ViewARLink_Container: {
+      display: 'flex',
+      overflow: 'hidden',
+      whiteSpace: 'break-spaces',
+      alignItems: 'center',
+    },
+    ViewARLink_ARBadge: {
+      borderRadius: '.25rem',
+      minWidth: '34px',
+    },
+    ViewARLink_AndroidOS: {
+      display: 'flex',
+    },
+    ViewARLink_Text: {
+      flexWrap: 'wrap',
     },
     ViewARLink_Spinner: {
       width: '1rem',
@@ -453,11 +472,17 @@ const ViewARLink = ({ model }) => {
             Oh no! Your device doesn&apos;t support this type of link
           </MultiLineBodyText>
         ) : (
-          <>
-            <LabelText>
-              View on&nbsp;
-              <AndroidIcon />
-              Mobile [beta]
+          <div className={c.ViewARLink_Container}>
+            <ARIcon className={c.ViewARLink_ARBadge} />
+            <Spacer size={'.5rem'} />
+            <LabelText className={c.ViewARLink_Text}>
+              Open AR Model via
+              <span className={c.ViewARLink_AndroidOS}>
+                &nbsp;
+                <AndroidIcon />
+                &nbsp;OS
+              </span>
+              (No&nbsp;App&nbsp;Required)
               {isOpeningViewer && (
                 <>
                   <Spacer size={'1rem'} />
@@ -465,7 +490,11 @@ const ViewARLink = ({ model }) => {
                 </>
               )}
             </LabelText>
-          </>
+            <Spacer size={'.5rem'} />
+            <Tag className={c.BetaTag} lightText>
+              BETA
+            </Tag>
+          </div>
         )}
       </a>
     </>

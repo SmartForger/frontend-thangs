@@ -34,6 +34,15 @@ const useStyles = createUseStyles(theme => {
 
       '& svg': {
         borderRadius: '.25rem',
+        minWidth: '34px',
+      },
+    },
+    ARDownloadTarget_Text: {
+      textAlign: 'left',
+      whiteSpace: 'pre-wrap',
+
+      [md_viewer]: {
+        whiteSpace: 'none',
       },
     },
   }
@@ -47,7 +56,9 @@ const ARDownloadTarget = ({ onClick = noop }) => {
     <Button secondary className={c.ARDownloadTarget} onClick={onClick}>
       <ARIcon />
       <Spacer size={'.5rem'} />
-      Download AR Model
+      <span className={c.ARDownloadTarget_Text}>
+        Download GLB for AR Viewing (App&nbsp;Required)
+      </span>
     </Button>
   )
 }
