@@ -8,7 +8,6 @@ import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { ERROR_STATES, FILE_SIZE_LIMITS, PHOTO_FILE_EXTS } from '@constants/fileUpload'
 import { track } from '@utilities/analytics'
-import { useHistory } from 'react-router-dom'
 import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
@@ -97,22 +96,14 @@ const AttachmentUpload = ({ initData = null }) => {
   )
 
   const {
-    data: uploadFilesData = {},
     attachments = [],
-    rawFiles = [],
+    fileData = [],
     isLoading,
   } = uploadAttachmentFiles
   const [errorMessage, setErrorMessage] = useState(null)
-  const [warningMessage, setWarningMessage] = useState(null)
   const [activeAttachmentIndex, setActiveAttachmentIndex] = useState(0)
   const c = useStyles({})
   const { setOverlayOpen } = useOverlay()
-  const history = useHistory()
-
-  const uploadedFiles = useMemo(
-    () => Object.values(uploadFilesData).filter(file => file.name && !file.isError),
-    [uploadFilesData]
-  )
 
   const onDrop = useCallback(
     (acceptedFiles, [rejectedFile], _event) => {
@@ -170,59 +161,20 @@ const AttachmentUpload = ({ initData = null }) => {
     [attachments, activeAttachmentIndex]
   )
 
-  const removeFile = node => {
-    track('AttachmentUpload - Remove File')
-    dispatch(types.CANCEL_UPLOAD, { node })
-  }
-
   const closeOverlay = useCallback(() => {
     setOverlayOpen(false)
   }, [setOverlayOpen])
 
-
-  const submitAttachments = useCallback(() => {
-    const files = []
-    if (uploadedFiles && uploadedFiles.length) {
-      uploadedFiles.forEach(file => {
-        if (!files.includes(file.name)) {
-          files.push(file.name)
-        }
-      })
-      track('AttachmentUpload - Submit Attachments', {
-        amount: files.length,
-      })
-    }
-    // dispatch(types.SUBMIT_MODELS, {
-    //   onFinish: () => {
-    //     closeOverlay()
-    //     dispatch(types.RESET_UPLOAD_FILES)
-    //     history.push(
-    //       /*assemblyData && assemblyData.folderId && assemblyData.folderId !== 'files'
-    //         ? `/mythangs/folder/${assemblyData.folderId}`
-    //         : */ '/mythangs/recent-files'
-    //     )
-    //   },
-    // })
-  }, [uploadedFiles, dispatch, closeOverlay, history])
-
   const handleContinue = useCallback(
     ({ data }) => {
-      // TODO[MARCEL]: Figure out what action to take next. If all attachments have been presented to user
-      // to add captions, then submit them and show the submitted success overlay
-      if (errorMessage) {
-        return
+      if (activeAttachmentIndex < attachments.length) {
+        setActiveAttachmentIndex(prevVal => prevVal + 1)
+      } else {
+        // TODO[MARCEL]: submit and show "photos submitted" overlay
       }
-      submitAttachments()
     },
-    [
-      errorMessage,
-      submitAttachments,
-    ]
+    [attachments, activeAttachmentIndex]
   )
-
-  const handleCancelUploading = () => {
-    dispatch(types.RESET_UPLOAD_FILES)
-  }
 
   useEffect(() => {
     if (initData) onDrop(initData.acceptedFiles, initData.rejectedFile, initData.e)
@@ -250,18 +202,13 @@ const AttachmentUpload = ({ initData = null }) => {
         {activeAttachment ? (
           <Attachment
             attachment={activeAttachment}
-            rawFiles={rawFiles}
+            activeAttachmentIndex={activeAttachmentIndex}
+            fileData={fileData}
+            onContinue={handleContinue}
           />) : (
           <UploadFiles
-            errorMessage={errorMessage}
-            onCancel={handleCancelUploading}
-            onContinue={handleContinue}
             onDrop={onDrop}
-            onRemoveNode={removeFile}
-            setErrorMessage={setErrorMessage}
-            setWarningMessage={setWarningMessage}
-            uploadFiles={uploadFilesData}
-            warningMessage={warningMessage}
+            isLoading={isLoading}
           />
         )}
         <Spacer size={'2rem'} className={c.MultiUpload__desktop} />
