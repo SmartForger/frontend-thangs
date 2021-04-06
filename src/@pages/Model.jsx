@@ -325,7 +325,6 @@ const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
 const UNSUPPORTED_EXTENSIONS = ['igs', 'step', 'x_t']
 
 const canDownloadAR = model => {
-  console.warn(model)
   const { parts } = model
   if (parts) {
     // Only check the primary part since that is the one we export to AR
