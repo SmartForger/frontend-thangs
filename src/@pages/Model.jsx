@@ -24,19 +24,15 @@ import {
   Spacer,
   Spinner,
   ToggleFollowButton,
-  LabelText,
-  Tag,
 } from '@components'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as LicenseIcon } from '@svg/license.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
-import { ReactComponent as ARIcon } from '@svg/icon-ar.svg'
 import { Message404 } from './404'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import {
-  useIsAndroid,
   useOverlay,
   usePageMeta,
   usePerformanceMetrics,
@@ -280,62 +276,6 @@ const useStyles = createUseStyles(theme => {
         width: '100%',
       },
     },
-    ViewARLink: {
-      alignItems: 'center',
-      backgroundColor: theme.colors.white[900],
-      border: 'none',
-      borderRadius: '.5rem',
-      color: theme.colors.black[500],
-      cursor: 'pointer',
-      display: 'flex',
-      justifyContent: 'center',
-      outline: 'none',
-      padding: '.75rem 1rem',
-      textAlign: 'center',
-      userSelect: 'none',
-
-      '&:hover': {
-        backgroundColor: theme.colors.grey[100],
-      },
-
-      '&[disabled]': {
-        cursor: 'not-allowed',
-        opacity: '0.8',
-        '&:hover': {
-          opacity: '1',
-        },
-      },
-
-      [md_viewer]: {
-        display: 'none',
-      },
-    },
-    BetaTag: {
-      backgroundColor: theme.colors.grey[400],
-      height: 'max-content',
-    },
-    ViewARLink_Container: {
-      display: 'flex',
-      overflow: 'hidden',
-      whiteSpace: 'break-spaces',
-      alignItems: 'center',
-    },
-    ViewARLink_ARBadge: {
-      borderRadius: '.25rem',
-      minWidth: '34px',
-    },
-    ViewARLink_AndroidOS: {
-      display: 'flex',
-    },
-    ViewARLink_Text: {
-      flexWrap: 'wrap',
-      whiteSpace: 'pre-wrap',
-      textAlign: 'left',
-    },
-    ViewARLink_Spinner: {
-      width: '1rem',
-      height: '1rem',
-    },
   }
 })
 const noop = () => null
@@ -382,8 +322,30 @@ const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
   )
 }
 
+const UNSUPPORTED_EXTENSIONS = ['igs', 'step', 'x_t']
+
+const canDownloadAR = model => {
+  console.warn(model)
+  const { parts } = model
+  if (parts) {
+    // Only check the primary part since that is the one we export to AR
+    let primaryPart = null
+    if (parts.length > 1) {
+      primaryPart = R.find(R.propEq('isPrimary', true))(parts) || parts[0]
+    } else {
+      primaryPart = parts[0]
+    }
+
+    const partExt = primaryPart.filename.split('.').pop()
+    return !UNSUPPORTED_EXTENSIONS.includes(partExt.toLowerCase())
+  }
+
+  return false
+}
+
 const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
   const c = useStyles()
+  const isARSupported = useMemo(() => canDownloadAR(model), [model])
   const { dispatch } = useStoreon()
   const downloadModel = useCallback(
     format => {
@@ -413,89 +375,14 @@ const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
   )
 
   return (
-    <div className={c.Model_DownloadAR}>
-      <ARDownloadActionMenu onChange={handleClick} />
-    </div>
-  )
-}
-
-const ViewARLink = ({ model }) => {
-  const c = useStyles({})
-  const [isOpeningViewer, setIsOpeningViewer] = useState(false)
-  const [cannotOpenVRLink, setCannotOpenVRLink] = useState(false)
-
-  const detectIfOpenedTimeoutRef = useRef()
-  const timeoutIfLinkDoesntBlur = () => {
-    setCannotOpenVRLink(false)
-    setIsOpeningViewer(true)
-    detectIfOpenedTimeoutRef.current = window.setTimeout(() => {
-      detectIfOpenedTimeoutRef.current = null
-      setCannotOpenVRLink(true)
-      setIsOpeningViewer(false)
-    }, 2000)
-  }
-
-  const considerOpenedIfBlurred = () => {
-    if (detectIfOpenedTimeoutRef.current) {
-      setIsOpeningViewer(false)
-      window.clearTimeout(detectIfOpenedTimeoutRef.current)
-      detectIfOpenedTimeoutRef.current = null
-    }
-  }
-
-  const { parts } = model
-  let primaryPart = null
-  if (parts) {
-    if (parts.length > 1) {
-      primaryPart = R.find(R.propEq('isPrimary', true))(parts) || parts[0]
-    } else {
-      primaryPart = parts[0]
-    }
-  }
-  if (!primaryPart || !primaryPart.androidUrl) return null
-  return (
     <>
-      <Spacer size={'1rem'} />
-      <a
-        className={c.ViewARLink}
-        disabled={cannotOpenVRLink}
-        onClick={timeoutIfLinkDoesntBlur}
-        onBlur={considerOpenedIfBlurred}
-        href={`intent://arvr.google.com/scene-viewer/1.0?file=${primaryPart?.androidUrl?.replace(
-          '#',
-          encodeURIComponent('#')
-        )}#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-      >
-        {cannotOpenVRLink ? (
-          <>
-            <ARIcon className={c.ViewARLink_ARBadge} />
-            <Spacer size={'.5rem'} />
-            <LabelText className={c.ViewARLink_Text}>
-              Unable to Open Android Native AR Viewer on This Device
-            </LabelText>
-          </>
-        ) : (
-          <div className={c.ViewARLink_Container}>
-            <ARIcon className={c.ViewARLink_ARBadge} />
-            <Spacer size={'.5rem'} />
-            <LabelText className={c.ViewARLink_Text}>
-              Android Native AR Viewer (No&nbsp;App&nbsp;Required)
-            </LabelText>
-            <Spacer size={'.5rem'} />
-
-            {isOpeningViewer ? (
-              <>
-                <Spacer size={'1rem'} />
-                <Spinner className={c.ViewARLink_Spinner} />
-              </>
-            ) : (
-              <Tag className={c.BetaTag} lightText>
-                BETA
-              </Tag>
-            )}
-          </div>
-        )}
-      </a>
+      {isARSupported ? (
+        <div className={c.Model_DownloadAR}>
+          <ARDownloadActionMenu onChange={handleClick} />
+        </div>
+      ) : (
+        <></>
+      )}
     </>
   )
 }
@@ -649,7 +536,7 @@ const StatsAndActions = ({
   openSignupOverlay = noop,
   pageTitle,
 }) => {
-  const isAndroid = useIsAndroid()
+  const isARSupported = useMemo(() => canDownloadAR(modelData), [modelData])
   return (
     <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
       <div>
@@ -662,15 +549,18 @@ const StatsAndActions = ({
           <Spacer size='.5rem' />
           <ShareActionMenu iconOnly={true} title={pageTitle} model={modelData} />
         </div>
-        <Spacer size='1rem' />
-        <ContainerColumn>
-          <DownloadARLink
-            model={modelData}
-            isAuthedUser={isAuthedUser}
-            openSignupOverlay={openSignupOverlay}
-          />
-          {isAndroid && <ViewARLink model={modelData} />}
-        </ContainerColumn>
+        {isARSupported && (
+          <>
+            <Spacer size='1rem' />
+            <ContainerColumn>
+              <DownloadARLink
+                model={modelData}
+                isAuthedUser={isAuthedUser}
+                openSignupOverlay={openSignupOverlay}
+              />
+            </ContainerColumn>
+          </>
+        )}
         {modelData.license ? (
           <>
             <Spacer size='1rem' />

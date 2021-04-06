@@ -42,7 +42,7 @@ const useStyles = createUseStyles(theme => {
       whiteSpace: 'pre-wrap',
 
       [md_viewer]: {
-        whiteSpace: 'none',
+        whiteSpace: 'unset',
       },
     },
   }
