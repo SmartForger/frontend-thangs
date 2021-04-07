@@ -157,7 +157,7 @@ const NewFolderScreen = ({ onChange = noop, onBack = noop }) => {
         },
         onFinish: id => {
           if (id) {
-            onChange({ ...data, value: id })
+            onChange({ label: data.name, isPublic: data.isPublic, value: id.toString() })
             onBack()
           }
         },
