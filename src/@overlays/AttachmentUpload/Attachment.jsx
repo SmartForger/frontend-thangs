@@ -23,6 +23,10 @@ const useStyles = createUseStyles(() => {
     },
     Attachment_Image: {
       borderRadius: '12px',
+      width: '100%',
+    },
+    Attachment_ImageWrapper: {
+      minHeight: '10rem',
     },
   }
 })
@@ -31,7 +35,6 @@ const noop = () => null
 const Attachment = ({
   attachment,
   numOfAttachments,
-  onBack = noop,
   onCancel = noop,
   onContinue = noop,
   onInputChange = noop,
@@ -43,9 +46,6 @@ const Attachment = ({
     overlayview('AttachmentUpload - Attachment')
   }, [])
 
-  const isFirstAttachment = useMemo(() => {
-    return attachment.position === 0
-  }, [attachment])
   const isLastAttachment = useMemo(() => {
     return (attachment.position + 1) === numOfAttachments
   }, [attachment, numOfAttachments])
@@ -53,7 +53,9 @@ const Attachment = ({
 
   return (
     <>
-      <img src={imageUrl} className={c.Attachment_Image} alt="photo preview" />
+      <div className={c.Attachment_ImageWrapper}>
+        <img src={imageUrl} className={c.Attachment_Image} alt={attachment.file.id} />
+      </div>
       <Spacer size={'1rem'} />
       <Textarea
         name='caption'
@@ -63,7 +65,7 @@ const Attachment = ({
       />
       <Spacer size={'1.5rem'} />
       <div className={c.Attachment_ButtonWrapper}>
-        <Button secondary onClick={onCancel}>
+        <Button tertiary onClick={onCancel}>
           Cancel
         </Button>
         <Spacer size={'1rem'} className={c.Attachment_ButtonSpacer} />

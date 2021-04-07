@@ -2,12 +2,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { SingleLineBodyText, Spacer, Spinner } from '@components'
 import UploadFiles from './UploadFiles'
 import Attachment from './Attachment'
+import Error from './Error'
+import Submitted from './Submitted'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as ArrowLeftIcon } from '@svg/icon-arrow-left.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
-import { ERROR_STATES, FILE_SIZE_LIMITS, PHOTO_FILE_EXTS } from '@constants/fileUpload'
+import { PHOTO_FILE_EXTS } from '@constants/fileUpload'
 import { track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
 
@@ -17,7 +19,7 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     AttachmentUpload: {
-      minHeight: '27.75rem',
+      minHeight: ({ isError }) => (isError ? '17rem' : '27.75rem'),
       backgroundColor: theme.colors.white[300],
       borderRadius: '1rem',
       display: 'flex',
@@ -95,54 +97,19 @@ const AttachmentUpload = ({ modelId }) => {
   const { dispatch, uploadAttachmentFiles = {} } = useStoreon(
     'uploadAttachmentFiles'
   )
-
   const {
     attachments = {},
     isLoading,
+    isError,
+    isSubmitted,
   } = uploadAttachmentFiles
   const [errorMessage, setErrorMessage] = useState(null)
   const [activeAttachmentPosition, setActiveAttachmentPosition] = useState(0)
-  const [attachmentsSubmitted, setAttachmentsSubmitted] = useState(false)
-  const c = useStyles({})
+  const c = useStyles({ isError })
   const { setOverlayOpen } = useOverlay()
 
   const onDrop = useCallback(
     (acceptedFiles, [rejectedFile], _event) => {
-      const files = acceptedFiles
-        .map(file => {
-          const ext = `.${file.name.split('.').slice(-1)[0].toLowerCase()}`
-          if (!PHOTO_FILE_EXTS.includes(ext)) {
-            setErrorMessage(
-              `${file.name} is not a supported file type.
-              Supported file extensions include ${PHOTO_FILE_EXTS.map(
-                e => ' ' + e.replace('.', '')
-              )}.`
-            )
-            return null
-          }
-
-          const fileObj = {
-            id: file.name,
-            file,
-          }
-
-          if (file.size >= FILE_SIZE_LIMITS.hard.size) {
-            setErrorMessage(
-              `One or more files was over ${FILE_SIZE_LIMITS.hard.pretty}. Try uploading a different file.`
-            )
-            return null
-          } else if (file.size >= FILE_SIZE_LIMITS.soft.size) {
-            fileObj.errorState = { warning: ERROR_STATES.SIZE_WARNING }
-          }
-
-          return fileObj
-        })
-        .filter(f => !!f)
-
-      track('AttachmentUpload - OnDrop', { amount: files && files.length })
-
-      dispatch(types.UPLOAD_ATTACHMENT_FILES, { files })
-
       if (rejectedFile) {
         const filePath = rejectedFile.path.split('.')
         const fileExt = filePath[filePath.length - 1] || ''
@@ -152,6 +119,10 @@ const AttachmentUpload = ({ modelId }) => {
             e => ' ' + e.replace('.', '')
           )}.`
         )
+      } else {
+        const files = acceptedFiles.map(file => ({ id: file.name, file }))
+        track('AttachmentUpload - OnDrop', { amount: files && files.length })
+        dispatch(types.UPLOAD_ATTACHMENT_FILES, { files })
       }
     },
     [dispatch]
@@ -168,13 +139,16 @@ const AttachmentUpload = ({ modelId }) => {
 
   const handleContinue = () => setActiveAttachmentPosition(prevVal => prevVal + 1)
   const handleBack = () => setActiveAttachmentPosition(prevVal => prevVal - 1)
-
+  const handleRetry = () => dispatch(types.RESET_UPLOAD_ATTACHMENT_FILES)
+  const handleCancel = () => {
+    dispatch(types.RESET_UPLOAD_ATTACHMENT_FILES)
+    closeOverlay()
+  }
   const handleSubmit = useCallback(
     () => {
       dispatch(types.SUBMIT_ATTACHMENTS, { modelId })
-      setAttachmentsSubmitted(true)
     },
-    [attachments]
+    [dispatch]
   )
 
   const handleInputChange = useCallback(
@@ -191,14 +165,15 @@ const AttachmentUpload = ({ modelId }) => {
 
   const formatOverlayTitle = useMemo(
     () => {
-      if (attachmentsSubmitted) return 'Photos Submitted'
+      if (isError) return 'Submit Failed'
+      if (isSubmitted) return 'Photos Submitted'
       if (Object.values(attachments).length === 0) return 'Upload Print Photos'
 
       const attachmentLength = Object.values(attachments).length
       const photoPositionDisplay = `(${activeAttachmentPosition + 1}/${attachmentLength})`
       return `Add Print Photo ${attachmentLength > 1 ? photoPositionDisplay : ''}`
     },
-    [attachmentsSubmitted, activeAttachmentPosition, attachments]
+    [isError, isSubmitted, activeAttachmentPosition, attachments]
   )
 
   const numOfAttachments = Object.values(attachments).length
@@ -219,26 +194,29 @@ const AttachmentUpload = ({ modelId }) => {
               {formatOverlayTitle}
             </SingleLineBodyText>
             {activeAttachment && activeAttachmentPosition > 0 && (<ArrowLeftIcon className={c.AttachmentUpload_BackButton} onClick={handleBack} />)}
-            <ExitIcon className={c.AttachmentUpload_ExitButton} onClick={closeOverlay} />
+            <ExitIcon className={c.AttachmentUpload_ExitButton} onClick={handleCancel} />
           </div>
           <Spacer size={'1.5rem'} />
         </div>
-        {attachmentsSubmitted ? (
-          <div>Yipee!</div>
+        {isError ? (
+          <Error onCancel={handleCancel} onRetry={handleRetry} />
+        ) : (isSubmitted ? (
+          <Submitted onClose={closeOverlay} />
         ) :
           activeAttachment ? (
             <Attachment
               attachment={activeAttachment}
               numOfAttachments={numOfAttachments}
-              onCancel={closeOverlay}
+              onCancel={handleCancel}
               onContinue={handleContinue}
               onInputChange={handleInputChange}
               onSubmit={handleSubmit}
             />) : (
             <UploadFiles
               onDrop={onDrop}
+              errorMessage={errorMessage}
             />
-          )}
+          ))}
         <Spacer size={'2rem'} className={c.AttachmentUpload__desktop} />
       </div>
       <Spacer size={'2rem'} />

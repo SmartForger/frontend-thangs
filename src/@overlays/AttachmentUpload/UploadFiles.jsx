@@ -43,11 +43,21 @@ const useStyles = createUseStyles(theme => {
       height: '100%',
       justifyContent: 'center',
     },
+    UploadFiles_ErrorText: {
+      ...theme.text.formErrorText,
+      backgroundColor: theme.variables.colors.errorTextBackground,
+      borderRadius: '.5rem',
+      fontWeight: '500',
+      marginTop: '1.5rem',
+      padding: '.625rem 1rem',
+      wordBreak: 'break-word',
+    },
   }
 })
 const noop = () => null
 const UploadFiles = ({
   onDrop = noop,
+  errorMessage = null,
 }) => {
   const c = useStyles()
   const dropzoneRef = useRef()
@@ -86,6 +96,7 @@ const UploadFiles = ({
           </section>
         )}
       </Dropzone>
+      {errorMessage && <h4 className={c.UploadFiles_ErrorText}>{errorMessage}</h4>}
     </>
   )
 }

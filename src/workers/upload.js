@@ -82,7 +82,7 @@ async function uploadMultipleAttachmentFiles({ files, directory }) {
   try {
     const { data: uploadedUrlData } = await api({
       method: 'POST',
-      endpoint: 'models/upload-urls',
+      endpoint: 'attachments/upload-urls',
       body: {
         fileNames: files.map(f => f.file.name),
         directory,

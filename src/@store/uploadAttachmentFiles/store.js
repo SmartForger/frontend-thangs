@@ -4,6 +4,7 @@ import { api, uploadAttachmentFiles } from '@services'
 const getInitAtom = () => ({
   isLoading: false,
   isError: false,
+  isSubmitted: false,
   data: {},
   attachments: {},
 })
@@ -15,7 +16,7 @@ export default store => {
     uploadAttachmentFiles: getInitAtom(),
   }))
 
-  store.on(types.RESET_UPLOAD_FILES, () => ({
+  store.on(types.RESET_UPLOAD_ATTACHMENT_FILES, () => ({
     uploadAttachmentFiles: getInitAtom(),
   }))
 
@@ -44,6 +45,7 @@ export default store => {
         ...state.uploadAttachmentFiles,
         isLoading: false,
         isError: false,
+        isSubmitted: true,
       },
     }
   })
@@ -169,6 +171,7 @@ export default store => {
           return res
         })
         .catch(() => store.dispatch(types.SUBMIT_ATTACHMENTS_FAILED))
+      if (results.some(res => res.error)) throw new Error('Unable to submit attachment')
     } catch (error) {
       store.dispatch(types.SUBMIT_ATTACHMENTS_FAILED)
     }
