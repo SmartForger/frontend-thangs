@@ -8,7 +8,7 @@ import NewModelCommentForm from './NewModelCommentForm'
 import Comment from './Comment'
 import VersionComment from './VersionComment'
 
-const useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(_theme => {
   return {
     FileDiscussion: {
       width: '100%',
@@ -27,8 +27,6 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
-
-const noop = () => null
 
 const getParsedBody = str => {
   try {
@@ -58,7 +56,7 @@ const renderTypedComment = ({ modelId, comment, key, currentUser, onChange }) =>
 
 const FileDiscussion = props => {
   const c = useStyles()
-  const { model, onRowSelect = noop } = props
+  const { model } = props
   const { useFetchPerMount } = useServices()
   const {
     atom: { isLoading: loading, isLoaded: loaded, isError: error, data: comments = [] },

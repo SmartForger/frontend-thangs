@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
 import { history } from './history'
 import {
@@ -21,10 +21,8 @@ import { ErrorBoundary } from './ErrorBoundary'
 import { ActionMenuProvider, AppAnalytics, OverlayProvider } from '@components'
 import { routeRequiresAuth, routeRedirectToProfile } from '@components/RouteComponent'
 import { StoreContext } from 'storeon/react'
-import { useLocalStorage } from '@hooks'
 import { ThemeProvider, GlobalStyles } from '@physna/voxel-ui/@style'
 import store from 'store'
-import { authenticationService } from '@services'
 import ScrollToTop from './@utilities/scrollToTop'
 
 export function AppFrame() {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { FormError, Spacer, Spinner } from '@components'
 
-const ModelInfoBox = ({ modelData = {}, isLoading, isError, error }) => {
+const ModelInfoBox = ({ isLoading, isError, error }) => {
   if (isLoading) return <Spinner />
   if (isError) {
     return (

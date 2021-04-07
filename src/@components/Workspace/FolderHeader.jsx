@@ -138,9 +138,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const noop = () => null
-
-const FolderHeader = ({ folder, folders, rootFolder, setFolder = noop }) => {
+const FolderHeader = ({ folder, folders, rootFolder }) => {
   const c = useStyles({})
   const { setOverlay } = useOverlay()
   const { id } = folder

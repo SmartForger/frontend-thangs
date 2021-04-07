@@ -131,8 +131,8 @@ const MultiUpload = ({
           ? newNode.subIds.map(subId => formNode(subId))
           : []
         : Object.values(newTreeData)
-            .filter(node => !node.parentId)
-            .map(node => formNode(node.id))
+          .filter(node => !node.parentId)
+          .map(node => formNode(node.id))
 
       newNode.treeValid =
         newNode.valid &&
@@ -214,8 +214,8 @@ const MultiUpload = ({
             setErrorMessage(
               `${file.name} is not a supported file type.
               Supported file extensions include ${MODEL_FILE_EXTS.map(
-                e => ' ' + e.replace('.', '')
-              )}.`
+    e => ' ' + e.replace('.', '')
+  )}.`
             )
             return null
           }
@@ -445,20 +445,20 @@ const MultiUpload = ({
       ? action === 'add'
         ? 'Upload New Parts'
         : previousVersionModelId || model || part
-        ? 'Upload New Version'
-        : 'Upload Files'
+          ? 'Upload New Version'
+          : 'Upload Files'
       : activeNode.isAssembly && activeNode.parentId
-      ? 'Sub Assembly'
-      : activeNode.isAssembly
-      ? 'New Assembly'
-      : partFormTitle
+        ? 'Sub Assembly'
+        : activeNode.isAssembly
+          ? 'New Assembly'
+          : partFormTitle
   }, [action, activeNode, model, part, partFormTitle, previousVersionModelId])
 
   const fileLength = useMemo(
     () =>
       uploadFilesData
         ? Object.keys(uploadFilesData).filter(fileId => uploadFilesData[fileId].name)
-            .length
+          .length
         : 0,
     [uploadFilesData]
   )

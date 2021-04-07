@@ -78,9 +78,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const noop = () => null
-
-const getCounts = model => {
+const getCounts = () => {
   const collaboratorCount = 3
   const likeCount = 3
   return {
@@ -92,7 +90,7 @@ const getCounts = model => {
 const FileView = ({ className, folders }) => {
   const c = useStyles()
   const { fileId: id } = useParams()
-  const [activePart, setActivePart] = useState([id])
+  const [_activePart, setActivePart] = useState([id])
   const { dispatch, model = {}, modelHistory = {} } = useStoreon('model', 'modelHistory')
   const { data: modelData, isLoading } = model
   const {

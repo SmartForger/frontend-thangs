@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { formatDistanceStrict } from 'date-fns'
 import { createUseStyles } from '@physna/voxel-ui/@style'

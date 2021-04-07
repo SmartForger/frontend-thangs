@@ -170,8 +170,8 @@ const InfiniteTreeView = ({
   const height = maxHeight
     ? Math.min(explorerHeight, maxHeight)
     : minHeight
-    ? Math.max(explorerHeight, minHeight)
-    : explorerHeight
+      ? Math.max(explorerHeight, minHeight)
+      : explorerHeight
 
   const itemData = useMemo(() => {
     return {
