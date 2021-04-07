@@ -5,7 +5,6 @@ const getInitAtom = () => ({
   isLoading: false,
   isError: false,
   data: {},
-  formData: {},
   attachments: {},
 })
 
@@ -103,7 +102,6 @@ export default store => {
     })
   })
 
-  // TODO[MARCEL]: Rename to "INITIALIZE_ATTACHMENTS"?
   store.on(types.CHANGE_UPLOAD_ATTACHMENT_FILE, (state, { id, data, isLoading, isError }) => {
     if (!id || !state.uploadAttachmentFiles.data[id]) {
       return { uploadAttachmentFiles: state.uploadAttachmentFiles }

@@ -4,6 +4,7 @@ import UploadFiles from './UploadFiles'
 import Attachment from './Attachment'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
+import { ReactComponent as ArrowLeftIcon } from '@svg/icon-arrow-left.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { ERROR_STATES, FILE_SIZE_LIMITS, PHOTO_FILE_EXTS } from '@constants/fileUpload'
@@ -15,7 +16,7 @@ const useStyles = createUseStyles(theme => {
     mediaQueries: { md },
   } = theme
   return {
-    MultiUpload: {
+    AttachmentUpload: {
       minHeight: '27.75rem',
       backgroundColor: theme.colors.white[300],
       borderRadius: '1rem',
@@ -28,17 +29,17 @@ const useStyles = createUseStyles(theme => {
         width: '27.75rem',
       },
     },
-    MultiUpload_Content: {
+    AttachmentUpload_Content: {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-start',
       width: '100%',
       minWidth: 0,
     },
-    MultiUpload_OverlayHeader: {
+    AttachmentUpload_OverlayHeader: {
       lineHeight: '1.5rem !important',
     },
-    MultiUpload_ExitButton: {
+    AttachmentUpload_ExitButton: {
       top: '1.5rem',
       right: '1.5rem',
       cursor: 'pointer',
@@ -46,7 +47,7 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       background: 'white',
     },
-    MultiUpload_BackButton: {
+    AttachmentUpload_BackButton: {
       top: '1.5rem',
       left: '1.5rem',
       cursor: 'pointer',
@@ -54,7 +55,7 @@ const useStyles = createUseStyles(theme => {
       position: 'absolute',
       background: 'white',
     },
-    MultiUpload_Row: {
+    AttachmentUpload_Row: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
@@ -63,13 +64,13 @@ const useStyles = createUseStyles(theme => {
         flex: 'none',
       },
     },
-    MultiUpload_Column: {
+    AttachmentUpload_Column: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
     },
-    MultiUpload_LoaderScreen: {
+    AttachmentUpload_LoaderScreen: {
       position: 'absolute',
       top: 0,
       right: 0,
@@ -80,7 +81,7 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '1rem',
       display: 'flex',
     },
-    MultiUpload__desktop: {
+    AttachmentUpload__desktop: {
       display: 'none',
 
       [md]: {
@@ -166,6 +167,7 @@ const AttachmentUpload = ({ modelId }) => {
   }, [setOverlayOpen])
 
   const handleContinue = () => setActiveAttachmentPosition(prevVal => prevVal + 1)
+  const handleBack = () => setActiveAttachmentPosition(prevVal => prevVal - 1)
 
   const handleSubmit = useCallback(
     () => {
@@ -202,21 +204,22 @@ const AttachmentUpload = ({ modelId }) => {
   const numOfAttachments = Object.values(attachments).length
 
   return (
-    <div className={c.MultiUpload} data-cy='multi-upload-overlay'>
+    <div className={c.AttachmentUpload} data-cy='multi-upload-overlay'>
       {isLoading && (
-        <div className={c.MultiUpload_LoaderScreen}>
+        <div className={c.AttachmentUpload_LoaderScreen}>
           <Spinner />
         </div>
       )}
       <Spacer size={'2rem'} />
-      <div className={c.MultiUpload_Content}>
-        <div className={c.MultiUpload_Column}>
+      <div className={c.AttachmentUpload_Content}>
+        <div className={c.AttachmentUpload_Column}>
           <Spacer size={'1.5rem'} />
-          <div className={c.MultiUpload_Row}>
-            <SingleLineBodyText className={c.MultiUpload_OverlayHeader}>
+          <div className={c.AttachmentUpload_Row}>
+            <SingleLineBodyText className={c.AttachmentUpload_OverlayHeader}>
               {formatOverlayTitle}
             </SingleLineBodyText>
-            <ExitIcon className={c.MultiUpload_ExitButton} onClick={closeOverlay} />
+            {activeAttachment && activeAttachmentPosition > 0 && (<ArrowLeftIcon className={c.AttachmentUpload_BackButton} onClick={handleBack} />)}
+            <ExitIcon className={c.AttachmentUpload_ExitButton} onClick={closeOverlay} />
           </div>
           <Spacer size={'1.5rem'} />
         </div>
@@ -236,7 +239,7 @@ const AttachmentUpload = ({ modelId }) => {
               onDrop={onDrop}
             />
           )}
-        <Spacer size={'2rem'} className={c.MultiUpload__desktop} />
+        <Spacer size={'2rem'} className={c.AttachmentUpload__desktop} />
       </div>
       <Spacer size={'2rem'} />
     </div>

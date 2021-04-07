@@ -31,6 +31,7 @@ const noop = () => null
 const Attachment = ({
   attachment,
   numOfAttachments,
+  onBack = noop,
   onCancel = noop,
   onContinue = noop,
   onInputChange = noop,
