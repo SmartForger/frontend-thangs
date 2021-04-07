@@ -443,7 +443,7 @@ const AddPrintPhotoLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) 
           animateIn: true,
           windowed: true,
           dialogue: true,
-          previousVersionModelId: modelId,
+          modelId,
         },
       })
     } else {
@@ -476,7 +476,7 @@ const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => 
       </MultiLineBodyText>
       <Spacer size='1.5rem' />
       <AddPrintPhotoLink
-        model={model}
+        modelId={model.id}
         isAuthedUser={isAuthedUser}
         openSignupOverlay={openSignupOverlay}
       />

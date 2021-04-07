@@ -1,13 +1,12 @@
 import * as types from '@constants/storeEventTypes'
-import { api, uploadFiles, cancelUpload } from '@services'
+import { api, uploadAttachmentFiles } from '@services'
 
 const getInitAtom = () => ({
   isLoading: false,
   isError: false,
   data: {},
   formData: {},
-  fileData: [],
-  attachments: [],
+  attachments: {},
 })
 
 const noop = () => null
@@ -40,6 +39,16 @@ export default store => {
     }
   })
 
+  store.on(types.SUBMIT_ATTACHMENTS_SUCCEEDED, state => {
+    return {
+      uploadAttachmentFiles: {
+        ...state.uploadAttachmentFiles,
+        isLoading: false,
+        isError: false,
+      },
+    }
+  })
+
   store.on(types.INIT_UPLOAD_ATTACHMENT_FILES, (state, { files }) => {
     const newFilesMap = files.reduce(
       (newFiles, f) => ({
@@ -57,15 +66,28 @@ export default store => {
       {}
     )
 
+    const attachments = files.reduce(
+      (attachments, file, curIndex) => ({
+        ...attachments,
+        [file.id]: {
+          id: file.id,
+          position: curIndex,
+          file: file.file,
+          filename: '',
+          caption: '',
+        },
+      }),
+      {}
+    )
+
     return {
       uploadAttachmentFiles: {
         ...state.uploadAttachmentFiles,
-        fileData: files,
+        attachments,
         data: {
           ...state.uploadAttachmentFiles.data,
           ...newFilesMap,
         },
-        isLoading: false,
       },
     }
   })
@@ -79,13 +101,6 @@ export default store => {
         ...uploadedUrlData[i],
       }
     })
-
-    return {
-      uploadAttachmentFiles: {
-        ...state.uploadAttachmentFiles,
-        isLoading: true,
-      }
-    }
   })
 
   // TODO[MARCEL]: Rename to "INITIALIZE_ATTACHMENTS"?
@@ -101,25 +116,28 @@ export default store => {
           ...state.uploadAttachmentFiles.data,
           [id]: { ...state.uploadAttachmentFiles.data[id], ...data, isLoading, isError },
         },
-        attachments: [
+        attachments: {
           ...state.uploadAttachmentFiles.attachments,
-          {
-            filename: data.signedUrl,
-            caption: '',
-          }
-        ],
+          [id]: {
+            ...state.uploadAttachmentFiles.attachments[id],
+            filename: data.newFileName,
+          },
+        },
         isLoading: false,
       },
     }
   })
 
-  store.on(types.SET_ATTACHMENT_INFO, (state, { id, formData }) => {
+  store.on(types.SET_ATTACHMENT_INFO, (state, { id, updatedAttachmentData }) => {
     return {
       uploadAttachmentFiles: {
         ...state.uploadAttachmentFiles,
-        formData: {
-          ...state.uploadAttachmentFiles.formData,
-          [id]: formData,
+        attachments: {
+          ...state.uploadAttachmentFiles.attachments,
+          [id]: {
+            ...state.uploadAttachmentFiles.attachments[id],
+            ...updatedAttachmentData,
+          },
         },
       },
     }
@@ -131,11 +149,30 @@ export default store => {
     }
 
     store.dispatch(types.INIT_UPLOAD_ATTACHMENT_FILES, { files })
-    uploadFiles(files)
+    uploadAttachmentFiles(files)
   })
 
-  store.on(types.SUBMIT_ATTACHMENTS, async (state, { onFinish = noop }) => {
-    store.dispatch(types.SUBMITTING_ATTACHMENTS)
-    // TODO[MARCEL]: Submit attachments
+  store.on(types.SUBMIT_ATTACHMENTS, async (state, { modelId }) => {
+    try {
+      store.dispatch(types.SUBMITTING_ATTACHMENTS)
+      const attachments = Object.values(state.uploadAttachmentFiles.attachments)
+      const getRequests = () => attachments.map(async ({ filename, caption }) => await api({
+          method: 'POST',
+          endpoint: `models/${modelId}/attachment`,
+          body: {
+            filename,
+            caption,
+          },
+        })
+      )
+      const results = await Promise.all(getRequests())
+        .then((res) => {
+          store.dispatch(types.SUBMIT_ATTACHMENTS_SUCCEEDED)
+          return res
+        })
+        .catch(() => store.dispatch(types.SUBMIT_ATTACHMENTS_FAILED))
+    } catch (error) {
+      store.dispatch(types.SUBMIT_ATTACHMENTS_FAILED)
+    }
   })
 }

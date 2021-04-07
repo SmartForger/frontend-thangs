@@ -90,18 +90,18 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const AttachmentUpload = ({ initData = null }) => {
+const AttachmentUpload = ({ modelId }) => {
   const { dispatch, uploadAttachmentFiles = {} } = useStoreon(
     'uploadAttachmentFiles'
   )
 
   const {
-    attachments = [],
-    fileData = [],
+    attachments = {},
     isLoading,
   } = uploadAttachmentFiles
   const [errorMessage, setErrorMessage] = useState(null)
-  const [activeAttachmentIndex, setActiveAttachmentIndex] = useState(0)
+  const [activeAttachmentPosition, setActiveAttachmentPosition] = useState(0)
+  const [attachmentsSubmitted, setAttachmentsSubmitted] = useState(false)
   const c = useStyles({})
   const { setOverlayOpen } = useOverlay()
 
@@ -157,28 +157,49 @@ const AttachmentUpload = ({ initData = null }) => {
   )
 
   const activeAttachment = useMemo(
-    () => attachments[activeAttachmentIndex],
-    [attachments, activeAttachmentIndex]
+    () => Object.values(attachments).find(f => f.position === activeAttachmentPosition),
+    [attachments, activeAttachmentPosition]
   )
 
   const closeOverlay = useCallback(() => {
     setOverlayOpen(false)
   }, [setOverlayOpen])
 
-  const handleContinue = useCallback(
-    ({ data }) => {
-      if (activeAttachmentIndex < attachments.length) {
-        setActiveAttachmentIndex(prevVal => prevVal + 1)
-      } else {
-        // TODO[MARCEL]: submit and show "photos submitted" overlay
-      }
+  const handleContinue = () => setActiveAttachmentPosition(prevVal => prevVal + 1)
+
+  const handleSubmit = useCallback(
+    () => {
+      dispatch(types.SUBMIT_ATTACHMENTS, { modelId })
+      setAttachmentsSubmitted(true)
     },
-    [attachments, activeAttachmentIndex]
+    [attachments]
   )
 
-  useEffect(() => {
-    if (initData) onDrop(initData.acceptedFiles, initData.rejectedFile, initData.e)
-  }, [initData, onDrop])
+  const handleInputChange = useCallback(
+    (field, newValue) => {
+      dispatch(types.SET_ATTACHMENT_INFO, {
+        id: activeAttachment.id,
+        updatedAttachmentData: {
+          [field]: newValue,
+        },
+      })
+    },
+    [activeAttachment]
+  )
+
+  const formatOverlayTitle = useMemo(
+    () => {
+      if (attachmentsSubmitted) return 'Photos Submitted'
+      if (Object.values(attachments).length === 0) return 'Upload Print Photos'
+
+      const attachmentLength = Object.values(attachments).length
+      const photoPositionDisplay = `(${activeAttachmentPosition + 1}/${attachmentLength})`
+      return `Add Print Photo ${attachmentLength > 1 ? photoPositionDisplay : ''}`
+    },
+    [attachmentsSubmitted, activeAttachmentPosition, attachments]
+  )
+
+  const numOfAttachments = Object.values(attachments).length
 
   return (
     <div className={c.MultiUpload} data-cy='multi-upload-overlay'>
@@ -193,24 +214,28 @@ const AttachmentUpload = ({ initData = null }) => {
           <Spacer size={'1.5rem'} />
           <div className={c.MultiUpload_Row}>
             <SingleLineBodyText className={c.MultiUpload_OverlayHeader}>
-              {activeAttachment ? `Add Print Photo (${activeAttachmentIndex + 1}/${attachments.length})` : 'Upload Print Photos'}
+              {formatOverlayTitle}
             </SingleLineBodyText>
             <ExitIcon className={c.MultiUpload_ExitButton} onClick={closeOverlay} />
           </div>
           <Spacer size={'1.5rem'} />
         </div>
-        {activeAttachment ? (
-          <Attachment
-            attachment={activeAttachment}
-            activeAttachmentIndex={activeAttachmentIndex}
-            fileData={fileData}
-            onContinue={handleContinue}
-          />) : (
-          <UploadFiles
-            onDrop={onDrop}
-            isLoading={isLoading}
-          />
-        )}
+        {attachmentsSubmitted ? (
+          <div>Yipee!</div>
+        ) :
+          activeAttachment ? (
+            <Attachment
+              attachment={activeAttachment}
+              numOfAttachments={numOfAttachments}
+              onCancel={closeOverlay}
+              onContinue={handleContinue}
+              onInputChange={handleInputChange}
+              onSubmit={handleSubmit}
+            />) : (
+            <UploadFiles
+              onDrop={onDrop}
+            />
+          )}
         <Spacer size={'2rem'} className={c.MultiUpload__desktop} />
       </div>
       <Spacer size={'2rem'} />

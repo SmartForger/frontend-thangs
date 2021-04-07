@@ -130,6 +130,7 @@ export const INIT_UPLOAD_ATTACHMENT_FILES = 'init-upload-attachment-files'
 export const SUBMIT_ATTACHMENT_FILE = 'submit-attachment-file'
 export const SUBMIT_ATTACHMENTS = 'submit-attachments'
 export const SUBMIT_ATTACHMENTS_FAILED = 'submit-attachments-failed'
+export const SUBMIT_ATTACHMENTS_SUCCEEDED = 'submit-attachments-succeeded'
 export const SUBMITTING_ATTACHMENTS = 'submitting-attachments'
 export const SET_ATTACHMENT_INFO = 'set-attachment-info'
 /* Users Store Events */

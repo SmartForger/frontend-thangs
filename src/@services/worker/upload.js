@@ -5,6 +5,7 @@ import { sendMessage, addMessageListener } from './worker'
 
 /* Send messages to worker */
 
+/* Model files */
 export const uploadFiles = (files, directory) => {
   sendMessage('upload:upload', {
     files,
@@ -14,6 +15,14 @@ export const uploadFiles = (files, directory) => {
 
 export const cancelUpload = (nodeFileMap, shouldRemove) => {
   sendMessage('upload:cancel', { nodeFileMap, shouldRemove })
+}
+
+/* Attachment files */
+export const uploadAttachmentFiles = (files, directory) => {
+  sendMessage('uploadAttachments:upload', {
+    files,
+    directory,
+  })
 }
 
 /* Handle messages from worker */
@@ -27,18 +36,10 @@ function uploadMessageHandler(messageType, data) {
         isLoading: false,
         isError: false,
       })
-      // TODO: Use separate message types for attachment files and model files
-      store.dispatch(types.CHANGE_UPLOAD_ATTACHMENT_FILE, {
-        id: data.id,
-        data: data.uploadedUrlData,
-        isLoading: false,
-        isError: false,
-      })
       store.dispatch(types.VALIDATE_FILES)
       break
     case 'upload:urls':
       store.dispatch(types.SET_UPLOADED_URLS, data)
-      store.dispatch(types.SET_UPLOADED_ATTACHMENT_URLS, data)
       break
     case 'upload:error':
       store.dispatch(types.CHANGE_UPLOAD_FILE, {
@@ -52,6 +53,27 @@ function uploadMessageHandler(messageType, data) {
       break
     case 'upload:cancelled':
       store.dispatch(types.REMOVE_UPLOAD_FILES, data)
+      break
+    case 'uploadAttachments:success':
+      store.dispatch(types.CHANGE_UPLOAD_ATTACHMENT_FILE, {
+        id: data.id,
+        data: data.uploadedUrlData,
+        isLoading: false,
+        isError: false,
+      })
+      break
+    case 'uploadAttachments:urls':
+      store.dispatch(types.SET_UPLOADED_ATTACHMENT_URLS, data)
+      break
+    case 'uploadAttachments:error':
+      store.dispatch(types.CHANGE_UPLOAD_ATTACHMENT_FILE, {
+        id: data.id,
+        data: {
+          error: data.error,
+        },
+        isLoading: false,
+        isError: true,
+      })
       break
     default:
       break

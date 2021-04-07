@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import {
   Button,
   Spacer,
-  Spinner,
   Textarea,
 } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { overlayview } from '@utilities/analytics'
 
-const useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(() => {
   return {
     Attachment_ButtonWrapper: {
       display: 'flex',
@@ -31,32 +30,35 @@ const useStyles = createUseStyles(theme => {
 const noop = () => null
 const Attachment = ({
   attachment,
-  activeAttachmentIndex,
-  fileData,
+  numOfAttachments,
   onCancel = noop,
   onContinue = noop,
+  onInputChange = noop,
+  onSubmit = noop,
 }) => {
-  const c = useStyles({ hasFile: true })
-
-  const [caption, setCaption] = useState('')
+  const c = useStyles()
 
   useEffect(() => {
     overlayview('AttachmentUpload - Attachment')
   }, [])
 
-  const onCaptionInputChange = (_, newValue) => {
-    setCaption(newValue)
-  }
+  const isFirstAttachment = useMemo(() => {
+    return attachment.position === 0
+  }, [attachment])
+  const isLastAttachment = useMemo(() => {
+    return (attachment.position + 1) === numOfAttachments
+  }, [attachment, numOfAttachments])
+  const imageUrl = useMemo(() => URL.createObjectURL(attachment.file), [attachment.file])
 
   return (
     <>
-      <img src={URL.createObjectURL(fileData[activeAttachmentIndex].file)} className={c.Attachment_Image} />
+      <img src={imageUrl} className={c.Attachment_Image} alt="photo preview" />
       <Spacer size={'1rem'} />
       <Textarea
         name='caption'
         label='Caption'
-        value={caption}
-        onChange={onCaptionInputChange}
+        value={attachment.caption}
+        onChange={onInputChange}
       />
       <Spacer size={'1.5rem'} />
       <div className={c.Attachment_ButtonWrapper}>
@@ -64,9 +66,15 @@ const Attachment = ({
           Cancel
         </Button>
         <Spacer size={'1rem'} className={c.Attachment_ButtonSpacer} />
-        <Button onClick={onContinue}>
-          Continue
-        </Button>
+        {isLastAttachment ? (
+          <Button onClick={onSubmit}>
+            Submit
+          </Button>
+        ) : (
+          <Button onClick={onContinue}>
+            Continue
+          </Button>
+        )}
       </div>
     </>
   )
