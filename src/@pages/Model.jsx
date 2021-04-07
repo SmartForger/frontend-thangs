@@ -42,7 +42,6 @@ import {
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
-// import { useFeature } from '@optimizely/react-sdk'
 
 const useStyles = createUseStyles(theme => {
   const {
