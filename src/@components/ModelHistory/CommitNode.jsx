@@ -1,6 +1,5 @@
 import React from 'react'
 import { format } from 'date-fns'
-
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Body, Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
 
