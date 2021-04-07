@@ -90,7 +90,8 @@ const getCounts = () => {
 const FileView = ({ className, folders }) => {
   const c = useStyles()
   const { fileId: id } = useParams()
-  const [_activePart, setActivePart] = useState([id])
+  // eslint-disable-next-line no-unused-vars
+  const [activePart, setActivePart] = useState([id])
   const { dispatch, model = {}, modelHistory = {} } = useStoreon('model', 'modelHistory')
   const { data: modelData, isLoading } = model
   const {
