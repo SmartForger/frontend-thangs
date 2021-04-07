@@ -1,11 +1,13 @@
 import React from 'react'
-import { FileTable } from '@components'
+import ModelHistory from '@components/ModelHistory'
+import { ContainerColumn } from '@components'
 
-const noop = () => null
-const FileHistory = props => {
-  const { model, onRowSelect = noop } = props
-
-  return <div>File History</div>
+const FileHistory = () => {
+  return (
+    <ContainerColumn fullWidth>
+      <ModelHistory />
+    </ContainerColumn>
+  )
 }
 
 export default FileHistory

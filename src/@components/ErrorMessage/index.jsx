@@ -1,11 +1,10 @@
 import React from 'react'
+import { Spacer } from '@components'
 
-const ErrorMessage = () => {
+const ErrorMessage = ({ message }) => {
   return (
     <>
-      <h4 className={c.EditModel_ErrorText} data-cy='edit-model-error'>
-        {editProfileErrorMessage}
-      </h4>
+      <h4 data-cy='edit-model-error'>{message}</h4>
       <Spacer size='1rem' />
     </>
   )

@@ -130,7 +130,7 @@ export const arrayToDictionary = (data, idField = 'id') =>
   R.map(R.prop(0), R.groupBy(R.prop(idField), data))
 
 export const buildPath = (dict, id, mapFunc, parentField = 'parentId') => {
-  const path = [dict[id]]
+  const path = dict[id] ? [dict[id]] : []
 
   let item = dict[id]
   while (item && item[parentField]) {
