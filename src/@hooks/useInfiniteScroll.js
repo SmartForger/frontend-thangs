@@ -2,20 +2,25 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 const noop = () => {}
 
-// Using the boundingRect so we can get the decimal value for the root height, and then adding a 1px buffer
-const isBottom = el => el.scrollTop + el.clientHeight + 40 >= el.scrollHeight
-
 const useInfiniteScroll = ({
   onScroll = noop,
   initialCount = 0,
   isPaused,
   maxScrollCount,
+  scrollBuffer = 40,
 }) => {
   const [count, setCount] = useState(initialCount)
   const isMaxScrollReached = useMemo(() => count >= maxScrollCount, [
     count,
     maxScrollCount,
   ])
+
+  const isBottom = useCallback(
+    el => {
+      return el.scrollTop + el.clientHeight + scrollBuffer >= el.scrollHeight
+    },
+    [scrollBuffer]
+  )
 
   useEffect(() => {
     const el = document.getElementById('root')
@@ -33,7 +38,7 @@ const useInfiniteScroll = ({
     return () => {
       el.removeEventListener('scroll', trackScrolling)
     }
-  }, [count, isMaxScrollReached, isPaused, onScroll, setCount])
+  }, [count, isMaxScrollReached, isPaused, onScroll, setCount, isBottom])
 
   const resetScroll = useCallback(() => {
     setCount(0)

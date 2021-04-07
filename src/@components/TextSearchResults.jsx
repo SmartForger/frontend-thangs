@@ -313,6 +313,7 @@ const TextSearchResult = ({
   scope,
   searchIndex,
   spotCheckRef,
+  firstCardRef,
 }) => {
   const c = useStyles()
 
@@ -326,7 +327,7 @@ const TextSearchResult = ({
         [c.TextSearchResult_ExternalLink]: isExternalModel,
         [c.TextSearchResult_ThangsLink]: !isExternalModel,
       })}
-      ref={spotCheckRef}
+      ref={firstCardRef ?? spotCheckRef}
     >
       <div className={c.TextSearchResult_ResultContents}>
         <SearchAnchor
@@ -381,6 +382,7 @@ const TextSearchResults = ({
   searchTerm,
   spotCheckRef,
   spotCheckIndex,
+  firstCardRef,
   totalModelCount,
 }) => {
   const c = useStyles()
@@ -415,6 +417,7 @@ const TextSearchResults = ({
       scope={scope}
       searchIndex={ind}
       spotCheckRef={spotCheckIndex === ind ? spotCheckRef : undefined}
+      firstCardRef={ind === 0 ? firstCardRef : undefined}
     />
   ))
   if (isLoading) {

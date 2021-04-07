@@ -183,11 +183,17 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
     track('More Thangs - Search', { searchTerm: searchQuery, searchScope })
   }, [dispatch, handleFinish, searchQuery, searchScope])
 
+  const [cardHeight, setCardHeight] = useState()
+  const firstCardRef = useCallback(element => {
+    const height = element?.getBoundingClientRect()?.height
+    setCardHeight(height ? 2 * height : undefined)
+  }, [])
   const { resetScroll, isMaxScrollReached } = useInfiniteScroll({
     initialCount: 1, //savedPages,
     isPaused: isScrollPaused,
     maxScrollCount,
     onScroll,
+    scrollBuffer: cardHeight,
   })
 
   const onThangsClick = useCallback(
@@ -230,6 +236,7 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
             searchTerm={searchQuery}
             spotCheckIndex={spotCheck}
             spotCheckRef={spotCheckRef}
+            firstCardRef={firstCardRef}
             totalModelCount={
               modelsStats && modelsStats.data && modelsStats.data.modelsIngested
             }
