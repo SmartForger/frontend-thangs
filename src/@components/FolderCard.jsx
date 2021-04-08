@@ -29,13 +29,13 @@ const useStyles = createUseStyles(theme => {
     },
     FolderCard_Title: {
       textOverflow: 'ellipsis',
-      maxWidth: '10.5rem',
+      maxWidth: '9.5rem',
       overflow: 'hidden',
       flex: 'none',
       lineHeight: '1rem !important',
     },
     FolderCard_IconWrapper: {
-      height: '127px',
+      // height: '127px',
       flex: 'none',
       display: 'flex',
       alignItems: 'center',
@@ -68,7 +68,7 @@ const FolderCard = ({ handleClick = noop, folder, isSharedFolder, disableStar })
       >
         <Card
           className={c.FolderCard}
-          size={'14.375rem'}
+          size={'11.375rem'}
           backgroundColor={'#F7F7FB'}
           onClick={handleFolderClick}
         >
