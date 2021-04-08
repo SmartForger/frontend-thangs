@@ -28,7 +28,6 @@ import {
   ToggleFollowButton,
 } from '@components'
 import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
-import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as LicenseIcon } from '@svg/license.svg'
