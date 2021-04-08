@@ -10,3 +10,4 @@ export { default as PartExplorerActionMenu } from './ModelViewer/PartExplorerAct
 export { default as ShareActionMenu } from './ShareActionMenu'
 export { default as SearchSourceFilterActionMenu } from './SearchSourceFilterActionMenu'
 export { default as SelectFolderActionMenu } from './SelectFolderActionMenu'
+export { default as CollaboratorActionMenu } from './CollaboratorActionMenu'
