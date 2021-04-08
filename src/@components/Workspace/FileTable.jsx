@@ -6,8 +6,10 @@ import { ContextMenuTrigger } from 'react-contextmenu'
 import InfiniteTreeView from '@components/InfiniteTreeView'
 import {
   ContainerColumn,
+  ContainerRow,
   Contributors,
   MetadataSecondary,
+  ModelActionToolbar,
   Pill,
   SingleLineBodyText,
   Spacer,
@@ -512,8 +514,20 @@ const FileTable = ({
     }
   }, [heightOffset])
 
+  const selectedNode = allNodes.find(node => node.id === selectedFiles[0])
+  const isSelectedNodeModel = (node) => {
+    if (!node) return false
+    return !node.isFolder
+  }
+
   return (
     <ContainerColumn className={className} elementRef={containerRef} fullWidth>
+      {isSelectedNodeModel(selectedNode) && (
+        <>
+          <ContainerRow fullWidth justifyContent='flex-end'><ModelActionToolbar model={selectedNode} /></ContainerRow>
+          <Spacer size='1rem' />
+        </>
+      )}
       {allNodes.length > 0 || searchCase ? (
         <>
           <FileTableHeader sortedBy={sortedBy} onSort={handleSort} order={order} />
