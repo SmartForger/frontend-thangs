@@ -205,6 +205,20 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'column',
     },
+    Model_ModelPrint_Image: {
+      width: '6.25rem',
+      height: '6.25rem',
+      borderRadius: '0.75rem',
+      objectFit: 'cover',
+    },
+    Model_ModelPrint_ImagesWrapper: {
+      display: 'flex',
+      flexWrap: 'wrap',
+
+      '& > img': {
+        margin: '0.5rem',
+      }
+    },
     Model_LicenseLink: {
       textDecoration: 'underline',
       display: 'inline',
@@ -481,9 +495,17 @@ const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => 
       </TitleTertiary>
       <Spacer size='.5rem' />
       <MultiLineBodyText>
+        {modelAttachments.data.length ? (
+          <div className={c.Model_ModelPrint_ImagesWrapper}>
+            {modelAttachments.data.map(a => (
+              <img key={a.id} className={c.Model_ModelPrint_Image} src={a.imageUrl} />
+            )
+            )}
+          </div>
+        ) : (
+          'No prints added yet, be the first to upload a photo!'
+        )}
 
-        No prints added yet, be the first to upload a photo!
-        {modelAttachments.data.map(a => <div>{a.imageUrl}</div>)}
       </MultiLineBodyText>
       <Spacer size='1.5rem' />
       <AddPrintPhotoLink
