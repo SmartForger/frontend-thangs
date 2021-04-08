@@ -4,9 +4,12 @@ import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import { ReactComponent as OpenIcon } from '@svg/external-link.svg'
 import { ReactComponent as ShareIcon } from '@svg/icon-sharedfolder.svg'
+import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
+import { ReactComponent as DownloadIcon } from '@svg/icon-download.svg'
 import { useHistory } from 'react-router-dom'
 import { track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
+import { MODEL_MENU_OPTIONS } from '@constants/menuOptions'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -47,11 +50,6 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const GO_TO_MY_THANGS = 'go-to-my-thangs'
-const INVITE = 'invite'
-
-
-
 const noop = () => null
 
 const ModelActionTarget = ({ onClick = noop }) => {
@@ -64,22 +62,53 @@ const ModelActionTarget = ({ onClick = noop }) => {
   )
 }
 
-const ModelActionMenu = ({ model, onChange = noop }) => {
+const ModelActionMenu = ({ model = {}, isExpandedOptions = false, omitOptions = [], onChange = noop }) => {
   const history = useHistory()
   const { setOverlay } = useOverlay()
 
   const options = [
-    {
-      label: 'Go to My Thangs',
-      Icon: OpenIcon,
-      value: GO_TO_MY_THANGS,
-    },
-    model.folderId && {
-      label: 'Invite',
-      Icon: ShareIcon,
-      value: INVITE,
-    },
-  ].filter(Boolean)
+    ...(!isExpandedOptions ? [
+      {
+        label: 'Go to My Thangs',
+        Icon: OpenIcon,
+        value: MODEL_MENU_OPTIONS.GO_TO_MY_THANGS,
+      },
+    ] : []),
+    ...(model.folderId ? [
+      {
+        label: 'Invite',
+        Icon: ShareIcon,
+        value: MODEL_MENU_OPTIONS.INVITE,
+      }
+    ] : []),
+    ...(isExpandedOptions ? [
+      {
+        label: 'Go to Model',
+        Icon: OpenIcon,
+        value: MODEL_MENU_OPTIONS.GO_TO_MODEL,
+      },
+      {
+        label: 'Move to',
+        Icon: OpenIcon,
+        value: MODEL_MENU_OPTIONS.MOVE_MODEL,
+      },
+      {
+        label: 'Add to Starred',
+        Icon: StarIcon,
+        value: MODEL_MENU_OPTIONS.ADD_TO_STARRED,
+      },
+      {
+        label: 'Download',
+        Icon: DownloadIcon,
+        value: MODEL_MENU_OPTIONS.DOWNLOAD,
+      },
+      {
+        label: 'Delete',
+        Icon: StarIcon,
+        value: MODEL_MENU_OPTIONS.DELETE,
+      },
+    ] : [])
+  ].filter(opt => !omitOptions.includes(opt.value))
 
   const handleGoToMyThangs = () => {
     history.push(`/mythangs/file/${model.id}`)
@@ -104,10 +133,20 @@ const ModelActionMenu = ({ model, onChange = noop }) => {
 
   const handleOnChange = (value) => {
     switch (value) {
-      case GO_TO_MY_THANGS:
+      case MODEL_MENU_OPTIONS.GO_TO_MY_THANGS:
         return handleGoToMyThangs()
-      case INVITE:
+      case MODEL_MENU_OPTIONS.INVITE:
         return handleInviteUsers()
+      case MODEL_MENU_OPTIONS.GO_TO_MODEL:
+        return noop()
+      case MODEL_MENU_OPTIONS.MOVE_MODEL:
+        return noop()
+      case MODEL_MENU_OPTIONS.ADD_TO_STARRED:
+        return noop()
+      case MODEL_MENU_OPTIONS.DOWNLOAD:
+        return noop()
+      case MODEL_MENU_OPTIONS.DELETE:
+        return noop()
       default:
         return onChange(value)
     }
@@ -124,7 +163,6 @@ const ModelActionMenu = ({ model, onChange = noop }) => {
       }}
       TargetComponent={ModelActionTarget}
       isCloseOnSelect={true}
-      isMobileOnly={true}
     />
   )
 }

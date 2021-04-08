@@ -10,6 +10,7 @@ import {
   Contributors,
   MetadataSecondary,
   ModelActionToolbar,
+  ModelActionMenu,
   Pill,
   SingleLineBodyText,
   Spacer,
@@ -178,9 +179,6 @@ const useStyles = createUseStyles(theme => {
 })
 
 const noop = () => null
-const handleMenuButton = e => {
-  e.stopPropagation()
-}
 
 const COLUMNS = {
   FILENAME: 'filename',
@@ -494,11 +492,8 @@ const FileTable = ({
             </div>
             <div
               className={cn(c.FileTable_Action, c.FileTable_Cell)}
-              onClick={handleMenuButton}
             >
-              <ContextMenuTrigger holdToDisplay={0} {...menuProps}>
-                <DotStackIcon />
-              </ContextMenuTrigger>
+              <ModelActionMenu model={node} isExpandedOptions />
             </div>
           </div>
         </ContextMenuTrigger>
@@ -522,12 +517,15 @@ const FileTable = ({
 
   return (
     <ContainerColumn className={className} elementRef={containerRef} fullWidth>
-      {isSelectedNodeModel(selectedNode) && (
+      {isSelectedNodeModel(selectedNode) ? (
         <>
-          <ContainerRow fullWidth justifyContent='flex-end'><ModelActionToolbar model={selectedNode} /></ContainerRow>
-          <Spacer size='1rem' />
+          <ContainerRow fullWidth justifyContent='flex-end'>
+            <ModelActionToolbar model={selectedNode} />
+            <Spacer width='4rem' />
+          </ContainerRow>
+          <Spacer size='0.5rem' />
         </>
-      )}
+      ) : (<Spacer size='2.375rem' />)}
       {allNodes.length > 0 || searchCase ? (
         <>
           <FileTableHeader sortedBy={sortedBy} onSort={handleSort} order={order} />
