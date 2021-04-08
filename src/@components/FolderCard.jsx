@@ -93,13 +93,11 @@ const FolderCard = ({ handleClick = noop, folder, isSharedFolder, disableStar })
             </SingleLineBodyText>
             {!isPublic && (
               <>
-                <Spacer size={'.25rem'} />
                 <PadlockIcon />
               </>
             )}
             {members.length > 1 && (
               <>
-                <Spacer size={'.25rem'} />
                 <SharedFolderIcon />
               </>
             )}
