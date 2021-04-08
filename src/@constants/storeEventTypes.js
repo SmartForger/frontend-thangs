@@ -172,6 +172,11 @@ export const FETCH_MODEL_LICENSE = 'fetch-model-license'
 export const LOADING_MODEL_LICENSE = 'loading-model-license'
 export const LOADED_MODEL_LICENSE = 'loaded-model-license'
 export const FAILED_MODEL_LICENSE = 'failed-model-license'
+/* Model Attachments Store Events */
+export const FETCH_MODEL_ATTACHMENTS = 'fetch-model-attachments'
+export const LOADING_MODEL_ATTACHMENTS = 'loading-model-attachments'
+export const LOADED_MODEL_ATTACHMENTS = 'loaded-model-attachments'
+export const FAILED_MODEL_ATTACHMENTS = 'failed-model-attachments'
 /* My Thangs Store Events */
 export const FETCH_THANGS = 'fetch-thangs'
 export const UPDATE_THANGS = 'update-thangs'

@@ -9,8 +9,6 @@ const getInitAtom = () => ({
   attachments: {},
 })
 
-const noop = () => null
-
 export default store => {
   store.on(types.STORE_INIT, () => ({
     uploadAttachmentFiles: getInitAtom(),

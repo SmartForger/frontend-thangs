@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { SingleLineBodyText, Spacer, Spinner } from '@components'
 import UploadFiles from './UploadFiles'
 import Attachment from './Attachment'
@@ -144,12 +144,7 @@ const AttachmentUpload = ({ modelId }) => {
     dispatch(types.RESET_UPLOAD_ATTACHMENT_FILES)
     closeOverlay()
   }
-  const handleSubmit = useCallback(
-    () => {
-      dispatch(types.SUBMIT_ATTACHMENTS, { modelId })
-    },
-    [dispatch]
-  )
+  const handleSubmit = () => dispatch(types.SUBMIT_ATTACHMENTS, { modelId })
 
   const handleInputChange = useCallback(
     (field, newValue) => {
@@ -160,7 +155,7 @@ const AttachmentUpload = ({ modelId }) => {
         },
       })
     },
-    [activeAttachment]
+    [activeAttachment, dispatch]
   )
 
   const formatOverlayTitle = useMemo(
@@ -201,7 +196,7 @@ const AttachmentUpload = ({ modelId }) => {
         {isError ? (
           <Error onCancel={handleCancel} onRetry={handleRetry} />
         ) : (isSubmitted ? (
-          <Submitted onClose={closeOverlay} />
+          <Submitted onClose={handleCancel} />
         ) :
           activeAttachment ? (
             <Attachment

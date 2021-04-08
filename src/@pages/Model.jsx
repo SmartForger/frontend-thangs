@@ -465,6 +465,15 @@ const AddPrintPhotoLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) 
 
 const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => {
   const c = useStyles()
+  const {
+    dispatch,
+    modelAttachments = {},
+  } = useStoreon('modelAttachments')
+
+  useEffect(() => {
+    dispatch(types.FETCH_MODEL_ATTACHMENTS, { modelId: model.id })
+  }, [dispatch, model.id])
+
   return (
     <div className={c.Model_ModelPrints}>
       <TitleTertiary>
@@ -472,7 +481,9 @@ const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => 
       </TitleTertiary>
       <Spacer size='.5rem' />
       <MultiLineBodyText>
+
         No prints added yet, be the first to upload a photo!
+        {modelAttachments.data.map(a => <div>{a.imageUrl}</div>)}
       </MultiLineBodyText>
       <Spacer size='1.5rem' />
       <AddPrintPhotoLink
