@@ -22,8 +22,6 @@ const AppAnalytics = () => {
   const { title, description } = usePageMeta('App')
   const user = authenticationService.getCurrentUser()
   const { dispatch, experiments } = useStoreon('experiments')
-  // eslint-disable-next-line no-unused-vars
-  // const [isEnabled] = useFeature('showphynrelated', { autoUpdate: true })
 
   useEffect(() => {
     ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID)
