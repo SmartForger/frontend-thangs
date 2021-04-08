@@ -29,10 +29,14 @@ const useStyles = createUseStyles(theme => {
     PillSecondary: {
       backgroundColor: theme.colors.white[900],
     },
+    PillTertiary: {
+      backgroundColor: 'transparent',
+      border: `2px solid ${theme.colors.black[900]}`,
+    },
   }
 })
 const noop = () => null
-const Pill = ({ children, className, secondary, onClick = noop, disabled }) => {
+const Pill = ({ children, className, secondary, tertiary, onClick = noop, disabled }) => {
   const c = useStyles({ disabled })
 
   const getOnClick = useCallback(() => {
@@ -43,6 +47,7 @@ const Pill = ({ children, className, secondary, onClick = noop, disabled }) => {
     <div
       className={classnames(className, c.Pill, {
         [c.PillSecondary]: secondary,
+        [c.PillTertiary]: tertiary,
       })}
       onClick={getOnClick()}
     >

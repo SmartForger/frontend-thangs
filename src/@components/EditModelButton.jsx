@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { useOverlay } from '@hooks'
 import { Pill, Spacer } from '@components'
-import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
+import { ReactComponent as EditIcon } from '@svg/icon-edit-sm.svg'
 import { track } from '@utilities/analytics'
 
 const EditModelButton = ({ model = {} }) => {

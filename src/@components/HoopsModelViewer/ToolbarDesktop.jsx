@@ -145,7 +145,7 @@ const Toolbar = ({
       <Spacer size={'1.5rem'} />
       <div className={c.Toolbar_Group}>
         <div className={c.Toolbar_Text}>
-          <Pill secondary onClick={onResetView}>
+          <Pill tertiary onClick={onResetView}>
             <ResetIcon />
             <div className={c.Toolbar_WideText}>
               <Spacer size={'0.25rem'} />
@@ -153,7 +153,7 @@ const Toolbar = ({
             </div>
           </Pill>
           <Spacer size={'1rem'} />
-          <Pill secondary onClick={onSnapshot}>
+          <Pill tertiary onClick={onSnapshot}>
             <CameraDesktopIcon />
             <div className={c.Toolbar_WideText}>
               <Spacer size={'0.25rem'} />
