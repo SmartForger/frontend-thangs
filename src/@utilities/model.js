@@ -48,7 +48,7 @@ const getThumbnailUrl = (model = {}) => {
     if (newFileName.includes(THUMBNAILS_FOLDER)) {
       return encodeURIComponent(newFileName)
     } else {
-      return `${THUMBNAILS_FOLDER}${encodeURIComponent(newFileName)}`
+      return encodeURIComponent(newFileName)
     }
   }
   return 'unknown'

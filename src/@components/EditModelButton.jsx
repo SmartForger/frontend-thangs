@@ -1,14 +1,11 @@
 import React, { useCallback } from 'react'
-import { useCurrentUserId, useOverlay } from '@hooks'
+import { useOverlay } from '@hooks'
 import { Pill, Spacer } from '@components'
 import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
 import { track } from '@utilities/analytics'
 
 const EditModelButton = ({ model = {} }) => {
-  const currentUserId = useCurrentUserId()
   const { setOverlay } = useOverlay()
-  const isCurrentUser =
-    model.owner && model.owner.id && model.owner.id.toString() === currentUserId
 
   const openEditOverlay = useCallback(() => {
     setOverlay({
@@ -25,12 +22,10 @@ const EditModelButton = ({ model = {} }) => {
     track('Model page edit clicked')
   }, [model, setOverlay])
 
-  if (!isCurrentUser) return null
-
   return (
     <Pill secondary onClick={openEditOverlay}>
       <EditIcon />
-      <Spacer size={'.5rem'} />
+      <Spacer size={'.25rem'} />
       Edit Model
     </Pill>
   )
