@@ -8,6 +8,10 @@ import { removeModel, updateLike } from './updater'
 
 const noop = () => null
 export default store => {
+  store.on(types.STORE_INIT, () => ({
+    models: {},
+  }))
+
   store.on(types.UPDATE_MODELS, (state, event) => ({
     models: {
       ...state.models,
@@ -27,18 +31,7 @@ export default store => {
   )
   store.on(
     types.FETCH_MODEL,
-    async (_state, { id, silentUpdate = false, onFinish = noop, onError = noop }) => {
-      const { data: allModels } = _state.models
-      const model = (allModels || []).find(m => m.id === +id)
-      if (model) {
-        store.dispatch(types.CHANGE_MODEL_STATUS, {
-          status: STATUSES.LOADED,
-          atom: 'model',
-          data: model,
-        })
-        return
-      }
-
+    async (state, { id, silentUpdate = false, onFinish = noop, onError = noop }) => {
       if (!silentUpdate) {
         store.dispatch(types.CHANGE_MODEL_STATUS, {
           status: STATUSES.LOADING,
