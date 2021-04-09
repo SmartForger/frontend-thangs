@@ -259,7 +259,12 @@ export const ActionMenu = props => {
     showTop,
   } = props
   const c = useStyles({ showTop })
-  const { onChange = noop, className, ...menuProps } = MenuComponentProps
+  const {
+    onChange = noop,
+    className,
+    containerClassName,
+    ...menuProps
+  } = MenuComponentProps
   const { setActionMenu, setActionMenuClose } = useActionMenu()
   const isMobile = useIsMobile(isMobileOnly ? 640 : 842)
   const handleChange = useCallback(
@@ -295,6 +300,7 @@ export const ActionMenu = props => {
         [c.ActionMenu__hidden__mobileOnly]: isMobileActionBarActive && isMobileOnly,
         [c.ActionMenu__hidden__mobileTablet]: isMobileActionBarActive && !isMobileOnly,
       })}
+      containerClassName={containerClassName}
       TargetComponent={TargetComponent}
       TargetComponentProps={TargetComponentProps}
       isAutoClosed={isAutoClosed}

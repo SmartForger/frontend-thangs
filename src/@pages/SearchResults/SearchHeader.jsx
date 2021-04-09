@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useStoreon } from 'storeon/react'
 import {
   ContainerRow,
@@ -54,6 +54,8 @@ const useStyles = createUseStyles(theme => {
     },
     SearchResults_HeaderText: {
       ...theme.text.searchResultsHeader,
+      display: 'flex',
+      flexWrap: 'wrap',
       fontSize: '1rem',
       lineHeight: '1.5rem',
       color: theme.colors.purple[900],
@@ -118,6 +120,10 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       display: 'flex',
       flexDirection: 'row',
+      flexWrap: 'wrap',
+    },
+    SearchResults_FilterButton: {
+      width: '100%',
     },
     SearchResults_SearchTerm: {
       color: theme.colors.black[900],
@@ -150,6 +156,29 @@ const useStyles = createUseStyles(theme => {
 })
 const noop = () => null
 
+const parseSearchQuery = (query, isExactMatchSearch, className) => {
+  let decodedQuery = decodeURIComponent(query)
+
+  if (isExactMatchSearch) {
+    decodedQuery = [
+      () => <ContainerRow className={className}>&quot;{decodedQuery}&quot;</ContainerRow>,
+    ]
+  } else {
+    decodedQuery = decodedQuery
+      .split(/\s+/)
+      .map(partial => () => <>&quot;{partial}&quot;</>)
+      .map((QueryPart, i, allParts) => (
+        <ContainerRow className={className} key={`query-string-segment-${i}`}>
+          <QueryPart />
+          {i < allParts.length - 1 && <>&#44;</>}
+          <Spacer size='0.25rem' />
+        </ContainerRow>
+      ))
+  }
+
+  return decodedQuery
+}
+
 const ControlSearchHeader = ({
   disabled,
   filter,
@@ -173,14 +202,15 @@ const ControlSearchHeader = ({
       <div className={c.SearchResults_HeaderTextWrapper}>
         <h1 className={c.SearchResults_HeaderText}>
           {isLoading ? 'Loading' : resultCount}
-          {!isLoading && !endOfModels ? '+' : ''} results for{' '}
-          {decodeURIComponent(searchQuery)}
+          {!isLoading && !endOfModels ? '+' : ''} results for
+          <Spacer size='0.25rem' />
+          {parseSearchQuery(searchQuery, isExactMatchSearch)}
         </h1>
-
+        <Spacer size='0.25rem' />
         <div className={c.SearchResult_ResultCountText}>
           <div className={c.SearchResults_FilterBar}>
             Results from
-            <Spacer size='.5rem' />
+            <Spacer size='.25rem' />
             <SearchSourceFilterActionMenu
               disabled={disabled}
               selectedValue={filter}
@@ -189,20 +219,22 @@ const ControlSearchHeader = ({
             />
             {showExactSearchFilter && (
               <>
-                <Spacer size='.5rem' />
-                with
-                <Spacer size='.5rem' />
-                <ExactSearchFilterActionMenu
-                  disabled={disabled}
-                  selectedValue={isExactMatchSearch}
-                  onChange={onExactMatchSearchChange}
-                  thin
-                />
+                <Spacer width='.25rem' height='2rem' />
+                <ContainerRow alignItems='center'>
+                  with&nbsp;
+                  <ExactSearchFilterActionMenu
+                    disabled={disabled}
+                    selectedValue={isExactMatchSearch}
+                    onChange={onExactMatchSearchChange}
+                    thin
+                  />
+                </ContainerRow>
               </>
             )}
           </div>
         </div>
       </div>
+      <Spacer size='0' mobileSize='1rem' />
       <SaveSearchButton
         currentUser={currentUser}
         dispatch={dispatch}
@@ -240,13 +272,12 @@ const TabSearchHeader = ({
         <div className={c.SearchResult_ResultCountText}>
           <div className={c.SearchResults_FilterBar}>
             {isLoading ? 'Loading' : `At least ${resultCount}`} results for{' '}
-            <div className={c.SearchResults_SearchTerm}>
-              &nbsp; &quot;
-              <span className={c.SearchResults_SearchText}>
-                {decodeURIComponent(searchQuery)}
-              </span>
-              &quot;
-            </div>
+            <Spacer size='0.25rem' />
+            {parseSearchQuery(
+              searchQuery,
+              isExactMatchSearch,
+              c.SearchResults_SearchTerm
+            )}
             <Spacer size={'.5rem'} />
             <SaveSearchButton
               currentUser={currentUser}
@@ -260,15 +291,22 @@ const TabSearchHeader = ({
           </div>
         </div>
       </div>
-      <div className={c.SearchHeader_TabFilter}>
+      <Spacer size='0' mobileSize='0.25rem' />
+      <ContainerRow className={c.SearchHeader_TabFilter}>
+        <SearchSourceFilterActionMenu
+          selectedValue={filter}
+          onChange={onFilterChange}
+          className={c.SearchResults_FilterButton}
+        />
         {showExactSearchFilter && (
           <>
+            <Spacer size='.5rem' />
             <ExactSearchFilterActionMenu
               disabled={disabled}
               selectedValue={isExactMatchSearch}
               onChange={onExactMatchSearchChange}
+              className={c.SearchResults_FilterButton}
             />
-            <Spacer size='.5rem' />{' '}
           </>
         )}
         <SearchSourceFilterActionMenu
@@ -276,7 +314,7 @@ const TabSearchHeader = ({
           disabled={disabled}
           onChange={onFilterChange}
         />
-      </div>
+      </ContainerRow>
     </div>
   )
 }
@@ -352,7 +390,7 @@ const SearchHeader = ({
     <>
       {experiments?.isLoading ? (
         <SearchHeaderSkeleton />
-      ) : false && filterExperimentType === 'control' ? (
+      ) : false /*filterExperimentType === 'control' */ ? (
         <ControlSearchHeader
           disabled={isLoading}
           filter={filter}

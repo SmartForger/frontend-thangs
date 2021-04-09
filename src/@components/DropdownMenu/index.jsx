@@ -145,6 +145,7 @@ const DropdownMenu = ({
   buttonIcon: ButtonIcon = DotStackIcon,
   borderSize = '1rem',
   children,
+  containerClassName,
   className,
   iconOnly,
   isAutoClosed = true,
@@ -172,7 +173,10 @@ const DropdownMenu = ({
   }, [onTargetClick, toggleOpen])
 
   return (
-    <div className={c.DropdownMenu_Container} ref={dropdownRef}>
+    <div
+      className={classnames(containerClassName, c.DropdownMenu_Container)}
+      ref={dropdownRef}
+    >
       {TargetComponent ? (
         <TargetComponent
           className={c.DropdownMenu_TargetComponent}

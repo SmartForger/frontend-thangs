@@ -65,7 +65,7 @@ const ExactSearchFilterTarget = ({ onClick = noop, selectedValue, thin }) => {
   const c = useStyles({})
   return (
     <>
-      <Spacer width='.25rem' />
+      <Spacer width='.25rem' height='0' />
       <Pill tertiary thin={thin} onClick={onClick}>
         {thin ? (
           <MetadataSecondary className={c.ExactSearchFilterActionMenu_Text}>
@@ -74,7 +74,7 @@ const ExactSearchFilterTarget = ({ onClick = noop, selectedValue, thin }) => {
         ) : (
           <>{label(selectedValue)}</>
         )}
-        <Spacer width='.25rem' />
+        <Spacer width='.25rem' height='0' />
         <ArrowDownIcon className={c.ExactSearchFilter_DownArrow} />
       </Pill>
     </>
@@ -84,6 +84,7 @@ const ExactSearchFilterTarget = ({ onClick = noop, selectedValue, thin }) => {
 const ExactSearchFilterActionMenu = ({
   onChange = noop,
   selectedValue,
+  className = '',
   disabled = false,
   thin = false,
 }) => {
@@ -93,8 +94,9 @@ const ExactSearchFilterActionMenu = ({
       actionBarTitle: 'Select Search Filter',
       options,
       tabletLayout: false,
+      containerClassName: className,
     }
-  }, [disabled, onChange])
+  }, [disabled, onChange, className])
 
   const targetProps = useMemo(() => {
     return { disabled, selectedValue, thin }

@@ -69,7 +69,7 @@ const SearchSourceFilterTarget = ({ onClick = noop, selectedValue, disabled, thi
   const c = useStyles({})
   return (
     <>
-      <Spacer width='.25rem' />
+      <Spacer width='.25rem' height='0' />
       <Pill tertiary thin={thin} onClick={disabled ? noop : onClick}>
         {thin ? (
           <MetadataSecondary className={c.SearchSourceFilterActionMenu_Text}>
@@ -78,7 +78,7 @@ const SearchSourceFilterTarget = ({ onClick = noop, selectedValue, disabled, thi
         ) : (
           <>{label(selectedValue)}</>
         )}
-        <Spacer width='.25rem' />
+        <Spacer width='.25rem' height='0' />
         <ArrowDownIcon className={c.SearchSourceFilter_DownArrow} />
       </Pill>
     </>
@@ -88,6 +88,7 @@ const SearchSourceFilterTarget = ({ onClick = noop, selectedValue, disabled, thi
 const SearchSourceFilterActionMenu = ({
   onChange = noop,
   selectedValue,
+  className = '',
   disabled = false,
   thin = false,
 }) => {
@@ -97,8 +98,9 @@ const SearchSourceFilterActionMenu = ({
       actionBarTitle: 'Select Search Filter',
       options,
       tabletLayout: false,
+      containerClassName: className,
     }
-  }, [disabled, onChange])
+  }, [disabled, onChange, className])
 
   const targetProps = useMemo(() => {
     return { disabled, selectedValue, thin }
