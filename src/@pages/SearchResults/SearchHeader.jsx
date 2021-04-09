@@ -1,6 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useStoreon } from 'storeon/react'
-import { SaveSearchButton, Spacer, SearchSourceFilterActionMenu, Tabs } from '@components'
+import {
+  ContainerRow,
+  ExactSearchFilterActionMenu,
+  SaveSearchButton,
+  Spacer,
+  SearchSourceFilterActionMenu,
+} from '@components'
 import { useLocalStorage } from '@hooks'
 import { track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
@@ -120,6 +126,7 @@ const useStyles = createUseStyles(theme => {
       textDecoration: 'underline',
     },
     SearchHeader_TabFilter: {
+      // display: 'flex',
       marginTop: '1rem',
 
       [md]: {
@@ -142,47 +149,173 @@ const useStyles = createUseStyles(theme => {
   }
 })
 const noop = () => null
+
+const ControlSearchHeader = ({
+  disabled,
+  filter,
+  onFilterChange = noop,
+  isExactMatchSearch,
+  onExactMatchSearchChange = noop,
+  isLoading = true,
+  endOfModels = true,
+  modelId,
+  resultCount,
+  searchQuery,
+  currentUser,
+  openSignupOverlay = noop,
+  showExactSearchFilter,
+}) => {
+  const c = useStyles()
+  const { dispatch, searchSubscriptions } = useStoreon('searchSubscriptions')
+
+  return (
+    <div className={c.SearchResults_Header}>
+      <div className={c.SearchResults_HeaderTextWrapper}>
+        <h1 className={c.SearchResults_HeaderText}>
+          {isLoading ? 'Loading' : resultCount}
+          {!isLoading && !endOfModels ? '+' : ''} results for{' '}
+          {decodeURIComponent(searchQuery)}
+        </h1>
+
+        <div className={c.SearchResult_ResultCountText}>
+          <div className={c.SearchResults_FilterBar}>
+            Results from
+            <Spacer size='.5rem' />
+            <SearchSourceFilterActionMenu
+              disabled={disabled}
+              selectedValue={filter}
+              onChange={onFilterChange}
+              thin
+            />
+            {showExactSearchFilter && (
+              <>
+                <Spacer size='.5rem' />
+                with
+                <Spacer size='.5rem' />
+                <ExactSearchFilterActionMenu
+                  disabled={disabled}
+                  selectedValue={isExactMatchSearch}
+                  onChange={onExactMatchSearchChange}
+                  thin
+                />
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+      <SaveSearchButton
+        currentUser={currentUser}
+        dispatch={dispatch}
+        modelId={modelId}
+        openSignupOverlay={openSignupOverlay}
+        searchSubscriptions={searchSubscriptions}
+        searchTerm={searchQuery}
+      />
+    </div>
+  )
+}
+
+const TabSearchHeader = ({
+  disabled,
+  filter,
+  onFilterChange = noop,
+  isExactMatchSearch,
+  onExactMatchSearchChange = noop,
+  isLoading = true,
+  modelId,
+  resultCount,
+  searchQuery,
+  currentUser,
+  openSignupOverlay = noop,
+  showExactSearchFilter,
+}) => {
+  const c = useStyles()
+  const { dispatch, searchSubscriptions } = useStoreon('searchSubscriptions')
+
+  return (
+    <div className={c.SearchResults_Header}>
+      <div className={c.SearchResults_HeaderTextWrapper}>
+        <h1 className={c.SearchResults_HeaderText}>Search results</h1>
+
+        <div className={c.SearchResult_ResultCountText}>
+          <div className={c.SearchResults_FilterBar}>
+            {isLoading ? 'Loading' : `At least ${resultCount}`} results for{' '}
+            <div className={c.SearchResults_SearchTerm}>
+              &nbsp; &quot;
+              <span className={c.SearchResults_SearchText}>
+                {decodeURIComponent(searchQuery)}
+              </span>
+              &quot;
+            </div>
+            <Spacer size={'.5rem'} />
+            <SaveSearchButton
+              currentUser={currentUser}
+              dispatch={dispatch}
+              modelId={modelId}
+              openSignupOverlay={openSignupOverlay}
+              searchSubscriptions={searchSubscriptions}
+              searchTerm={searchQuery}
+              iconOnly={true}
+            />
+          </div>
+        </div>
+      </div>
+      <div className={c.SearchHeader_TabFilter}>
+        {showExactSearchFilter && (
+          <>
+            <ExactSearchFilterActionMenu
+              disabled={disabled}
+              selectedValue={isExactMatchSearch}
+              onChange={onExactMatchSearchChange}
+            />
+            <Spacer size='.5rem' />{' '}
+          </>
+        )}
+        <SearchSourceFilterActionMenu
+          selectedValue={filter}
+          disabled={disabled}
+          onChange={onFilterChange}
+        />
+      </div>
+    </div>
+  )
+}
+
+const SearchHeaderSkeleton = () => {
+  const c = useStyles()
+  return (
+    <div className={c.SearchResults_Header}>
+      <div className={c.SearchResults_HeaderTextWrapper}>
+        <Skeleton variant='rect' className={c.SearchResults_Text_Skeleton} />
+        <div className={c.SearchResult_ResultCountText}>
+          <Skeleton variant='rect' className={c.SearchResults_Text_Skeleton} />
+        </div>
+      </div>
+      <Skeleton variant='rect' className={c.SearchResults_Button_Skeleton} />
+    </div>
+  )
+}
+
 const SearchHeader = ({
   filter,
+  isExactMatchSearch = false,
   isLoading = true,
   endOfModels = true,
   modelId,
   resultCount,
   searchQuery,
   setFilter = noop,
+  setExactMatchSearch = noop,
+  showExactSearchFilter = false,
 }) => {
-  const c = useStyles()
   const [filterExperimentType, setFilterExperimentType] = useState('control')
-  const { dispatch, searchSubscriptions, experiments } = useStoreon(
-    'searchSubscriptions',
-    'experiments'
-  )
+  const { experiments } = useStoreon('experiments')
   const [currentUser] = useLocalStorage('currentUser', null)
   const { setOverlay } = useOverlay()
 
   useEffect(() => {
     if (experiments?.data?.search_header_filter === 'tab') setFilterExperimentType('tab')
   }, [experiments])
-
-  const filterOptions = useMemo(() => {
-    return [
-      {
-        label: 'Best Match',
-        onClick: () => setFilter('all'),
-        selected: filter !== 'thangs' && filter !== 'phyn',
-      },
-      {
-        label: 'Thangs',
-        onClick: () => setFilter('thangs'),
-        selected: filter === 'thangs',
-      },
-      {
-        label: 'External',
-        onClick: () => setFilter('phyn'),
-        selected: filter === 'phyn',
-      },
-    ]
-  }, [filter, setFilter])
 
   const openSignupOverlay = useCallback(() => {
     setOverlay({
@@ -207,77 +340,52 @@ const SearchHeader = ({
     [setFilter]
   )
 
+  const handleExactMatchFilterChange = useCallback(
+    value => {
+      setExactMatchSearch(value)
+      track('Exact Search Change', { exactSearch: value })
+    },
+    [setExactMatchSearch]
+  )
+
   return (
-    <div className={c.SearchResults_Header}>
-      <div className={c.SearchResults_HeaderTextWrapper}>
-        {experiments?.isLoading ? (
-          <Skeleton variant='rect' className={c.SearchResults_Text_Skeleton} />
-        ) : filterExperimentType === 'control' ? (
-          <h1 className={c.SearchResults_HeaderText}>
-            {isLoading ? 'Loading' : resultCount}
-            {!isLoading && !endOfModels ? '+' : ''} results for{' '}
-            {decodeURIComponent(searchQuery)}
-          </h1>
-        ) : (
-          <h1 className={c.SearchResults_HeaderText}>Search results</h1>
-        )}
-        <div className={c.SearchResult_ResultCountText}>
-          {experiments?.isLoading ? (
-            <Skeleton variant='rect' className={c.SearchResults_Text_Skeleton} />
-          ) : filterExperimentType === 'control' ? (
-            <div className={c.SearchResults_FilterBar}>
-              Results from
-              <Spacer size='.5rem' />
-              <SearchSourceFilterActionMenu
-                selectedValue={filter}
-                onChange={handleFilterChange}
-                disabled={isLoading}
-              />
-            </div>
-          ) : (
-            <div className={c.SearchResults_FilterBar}>
-              At least {resultCount} results for{' '}
-              <div className={c.SearchResults_SearchTerm}>
-                &nbsp; &quot;
-                <span className={c.SearchResults_SearchText}>
-                  {decodeURIComponent(searchQuery)}
-                </span>
-                &quot;
-              </div>
-              <Spacer size={'.5rem'} />
-              <SaveSearchButton
-                currentUser={currentUser}
-                dispatch={dispatch}
-                modelId={modelId}
-                openSignupOverlay={openSignupOverlay}
-                searchSubscriptions={searchSubscriptions}
-                searchTerm={searchQuery}
-                iconOnly={true}
-              />
-            </div>
-          )}
-        </div>
-      </div>
+    <>
       {experiments?.isLoading ? (
-        <Skeleton variant='rect' className={c.SearchResults_Button_Skeleton} />
-      ) : filterExperimentType === 'control' ? (
-        <>
-          <Spacer size={'1rem'} />
-          <SaveSearchButton
-            currentUser={currentUser}
-            dispatch={dispatch}
-            modelId={modelId}
-            openSignupOverlay={openSignupOverlay}
-            searchSubscriptions={searchSubscriptions}
-            searchTerm={searchQuery}
-          />
-        </>
+        <SearchHeaderSkeleton />
+      ) : false && filterExperimentType === 'control' ? (
+        <ControlSearchHeader
+          disabled={isLoading}
+          filter={filter}
+          onFilterChange={handleFilterChange}
+          isExactMatchSearch={isExactMatchSearch}
+          onExactMatchSearchChange={handleExactMatchFilterChange}
+          isLoading={isLoading}
+          endOfModels={endOfModels}
+          modelId={modelId}
+          resultCount={resultCount}
+          searchQuery={searchQuery}
+          currentUser={currentUser}
+          openSignupOverlay={openSignupOverlay}
+          showExactSearchFilter={showExactSearchFilter}
+        />
       ) : (
-        <div className={c.SearchHeader_TabFilter}>
-          <Tabs options={filterOptions} disabled={isLoading} />
-        </div>
+        <TabSearchHeader
+          disabled={isLoading}
+          filter={filter}
+          onFilterChange={handleFilterChange}
+          isExactMatchSearch={isExactMatchSearch}
+          onExactMatchSearchChange={handleExactMatchFilterChange}
+          isLoading={isLoading}
+          endOfModels={endOfModels}
+          modelId={modelId}
+          resultCount={resultCount}
+          searchQuery={searchQuery}
+          currentUser={currentUser}
+          openSignupOverlay={openSignupOverlay}
+          showExactSearchFilter={showExactSearchFilter}
+        />
       )}
-    </div>
+    </>
   )
 }
 

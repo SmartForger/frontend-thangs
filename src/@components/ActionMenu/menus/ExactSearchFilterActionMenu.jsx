@@ -9,30 +9,30 @@ const useStyles = createUseStyles(theme => {
     mediaQueries: { md_viewer },
   } = theme
   return {
-    SearchSourceFilterActionMenu_Text: {
+    ExactSearchFilterActionMenu_Text: {
       color: theme.colors.black[500],
     },
-    SearchSourceFilter_ClickableButton: {
+    ExactSearchFilter_ClickableButton: {
       alignItems: 'center',
       cursor: 'pointer',
       display: 'flex',
       flexDirection: 'row',
     },
-    SearchSourceFilterActionMenu__desktop: {
+    ExactSearchFilterActionMenu__desktop: {
       display: 'none',
 
       [md_viewer]: {
         display: 'flex',
       },
     },
-    SearchSourceFilterActionMenu__mobile: {
+    ExactSearchFilterActionMenu__mobile: {
       display: 'flex',
 
       [md_viewer]: {
         display: 'none',
       },
     },
-    SearchSourceFilter_DownArrow: {
+    ExactSearchFilter_DownArrow: {
       '& path': {
         fill: '#999999',
       },
@@ -44,16 +44,12 @@ const noop = () => null
 
 const options = [
   {
-    label: 'All Sources',
-    value: 'all',
+    label: 'Exact Match',
+    value: true,
   },
   {
-    label: 'Thangs Only',
-    value: 'thangs',
-  },
-  {
-    label: 'External Only',
-    value: 'phyn',
+    label: 'Partial Match',
+    value: false,
   },
 ]
 
@@ -65,27 +61,27 @@ const label = selectedValue => {
   return 'All'
 }
 
-const SearchSourceFilterTarget = ({ onClick = noop, selectedValue, disabled, thin }) => {
+const ExactSearchFilterTarget = ({ onClick = noop, selectedValue, thin }) => {
   const c = useStyles({})
   return (
     <>
       <Spacer width='.25rem' />
-      <Pill tertiary thin={thin} onClick={disabled ? noop : onClick}>
+      <Pill tertiary thin={thin} onClick={onClick}>
         {thin ? (
-          <MetadataSecondary className={c.SearchSourceFilterActionMenu_Text}>
+          <MetadataSecondary className={c.ExactSearchFilterActionMenu_Text}>
             {label(selectedValue)}
           </MetadataSecondary>
         ) : (
           <>{label(selectedValue)}</>
         )}
         <Spacer width='.25rem' />
-        <ArrowDownIcon className={c.SearchSourceFilter_DownArrow} />
+        <ArrowDownIcon className={c.ExactSearchFilter_DownArrow} />
       </Pill>
     </>
   )
 }
 
-const SearchSourceFilterActionMenu = ({
+const ExactSearchFilterActionMenu = ({
   onChange = noop,
   selectedValue,
   disabled = false,
@@ -107,7 +103,7 @@ const SearchSourceFilterActionMenu = ({
   return (
     <ActionMenu
       MenuComponentProps={menuProps}
-      TargetComponent={SearchSourceFilterTarget}
+      TargetComponent={ExactSearchFilterTarget}
       TargetComponentProps={targetProps}
       isCloseOnSelect={true}
       isMobileOnly={true}
@@ -115,4 +111,4 @@ const SearchSourceFilterActionMenu = ({
   )
 }
 
-export default SearchSourceFilterActionMenu
+export default ExactSearchFilterActionMenu

@@ -194,10 +194,13 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
         <SearchHeader
           filter={filter}
           isLoading={isLoading}
+          setFilter={setSearchScope}
+          isExactMatchSearch={true}
+          setExactMatchSearch={noop}
           resultCount={models.length}
           endOfModels={endOfModels}
           searchQuery={searchQuery}
-          setFilter={setSearchScope}
+          showExactSearchFilter
         />
       )}
       {searchQuery ? (
