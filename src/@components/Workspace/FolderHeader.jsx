@@ -1,8 +1,8 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  Button,
   Contributors,
+  FolderActionToolbar,
   LikeFolderButton,
   MetadataPrimary,
   Spacer,
@@ -12,10 +12,8 @@ import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
-import { ReactComponent as InviteIcon } from '@svg/icon-invite.svg'
 import { ReactComponent as PadlockIcon } from '@svg/icon-padlock.svg'
 import { ContextMenuTrigger } from 'react-contextmenu'
-import { useOverlay } from '@hooks'
 import { buildPath } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
@@ -140,7 +138,6 @@ const useStyles = createUseStyles(theme => {
 
 const FolderHeader = ({ folder, folders, rootFolder }) => {
   const c = useStyles({})
-  const { setOverlay } = useOverlay()
   const { id } = folder
   const folderPath = useMemo(() => {
     return buildPath(folders, id, folder => ({
@@ -149,33 +146,6 @@ const FolderHeader = ({ folder, folders, rootFolder }) => {
     }))
   }, [folders, id])
   const folderName = folder.name
-
-  const handleInviteUsers = useCallback(() => {
-    setOverlay({
-      isOpen: true,
-      template: 'inviteUsers',
-      data: {
-        folderId: rootFolder ? rootFolder.id : folder.id,
-        animateIn: true,
-        windowed: true,
-        dialogue: true,
-      },
-    })
-  }, [folder.id, rootFolder, setOverlay])
-
-  const handleEditFolder = useCallback(() => {
-    setOverlay({
-      isOpen: true,
-      template: 'editFolder',
-      data: {
-        folder,
-        animateIn: true,
-        windowed: true,
-        dialogue: true,
-      },
-    })
-  }, [folder, setOverlay])
-
   const members = rootFolder ? rootFolder.members : folder.members
 
   return (
@@ -224,15 +194,7 @@ const FolderHeader = ({ folder, folders, rootFolder }) => {
         <div className={classnames(c.FolderView_Row, c.FolderView_Row__desktop)}>
           <Contributors users={members} displayLength='10' />
           <Spacer size={'1rem'} />
-          <Button secondary onClick={handleEditFolder}>
-            Edit
-          </Button>
-          <Spacer size={'1rem'} />
-          <Button onClick={handleInviteUsers}>
-            <InviteIcon />
-            <Spacer size={'.5rem'} />
-            Invite Members
-          </Button>
+          <FolderActionToolbar folder={folder} />
         </div>
         <div className={c.FolderView_MobileMenuButton} onClick={e => e.preventDefault()}>
           <ContextMenuTrigger
