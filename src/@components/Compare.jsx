@@ -17,6 +17,7 @@ const useStyles = createUseStyles(_theme => {
       position: 'relative',
       borderRadius: '.5rem',
       background: '#F7F7FB',
+      width: 'calc(50% - .5rem)',
     },
   }
 })
