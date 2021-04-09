@@ -28,7 +28,7 @@ const Compare = ({ model1: model1Data = [], model2: model2Data }) => {
   return (
     <div className={c.Compare}>
       <div className={c.Compare_Viewer}>
-        <Tag className={c.Compare_Tag} color={'#999999'} lightText>
+        <Tag className={c.Compare_Tag} color={'#999999'} maxWidth={'9.375rem'} lightText>
           {model1Data[0] && model1Data[0].name}
         </Tag>
         <ModelThumbnail className={c.Model_ModelViewer} model={model1Data[0] || {}} />
