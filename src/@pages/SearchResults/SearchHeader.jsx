@@ -404,7 +404,7 @@ const SearchHeader = ({
     <>
       {experiments?.isLoading ? (
         <SearchHeaderSkeleton />
-      ) : true /*filterExperimentType === 'control' */ ? (
+      ) : filterExperimentType === 'control' ? (
         <ControlSearchHeader
           disabled={isLoading}
           filter={filter}
