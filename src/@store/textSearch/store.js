@@ -44,7 +44,14 @@ export default store => {
     types.FETCH_TEXT_SEARCH_RESULTS,
     async (
       state,
-      { isInitial = false, onError = noop, onFinish = noop, scope, searchTerm }
+      {
+        isInitial = false,
+        onError = noop,
+        onFinish = noop,
+        scope,
+        isExactMatch,
+        searchTerm,
+      }
     ) => {
       if (state.textSearchResults.isLoading) return
       if (isInitial) store.dispatch(types.RESET_TEXT_SEARCH_RESULTS)
@@ -59,6 +66,7 @@ export default store => {
           searchTerm,
           collapse: true,
           scope: scope || 'all',
+          narrow: isExactMatch ?? 'false',
           page: isInitial ? 0 : state.textSearchResults.pageToLoad,
           pageSize: SEARCH_RESULT_SIZE,
         },
@@ -68,12 +76,14 @@ export default store => {
         track('Text Search Started', {
           searchTerm,
           searchScope: scope,
+          isExactMatch,
           pageCount: isInitial ? 0 : state?.textSearchResults?.pageToLoad,
         })
       } else {
         track('Text Search - Infinite Scroll', {
           searchTerm,
           searchScope: scope,
+          isExactMatch,
           pageCount: state?.textSearchResults?.pageToLoad,
         })
       }

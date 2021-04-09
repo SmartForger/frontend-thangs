@@ -6,7 +6,6 @@ import { NoResults, Spacer, TextSearchResults, Pill } from '@components'
 import { useQuery, useInfiniteScroll, useSpotCheck } from '@hooks'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import * as types from '@constants/storeEventTypes'
-import { track } from '@utilities/analytics'
 import SearchHeader from './SearchHeader'
 
 const useStyles = createUseStyles(theme => {
@@ -140,6 +139,7 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
       dispatch(types.FETCH_TEXT_SEARCH_RESULTS, {
         searchTerm: decodeURIComponent(searchQuery),
         scope: filter,
+        isExactMatch: exact,
         isInitial: true,
         spotCheck,
       })
@@ -151,16 +151,17 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
     dispatch(types.FETCH_TEXT_SEARCH_RESULTS, {
       searchTerm: decodeURIComponent(searchQuery),
       scope: filter,
+      isExactMatch: exact,
     })
-  }, [dispatch, filter, searchQuery])
+  }, [dispatch, filter, searchQuery, exact])
 
   const handleLoadMore = useCallback(() => {
     dispatch(types.FETCH_TEXT_SEARCH_RESULTS, {
       searchTerm: decodeURIComponent(searchQuery),
       scope: filter,
+      isExactMatch: exact,
     })
-    track('More Thangs - Search', { searchTerm: searchQuery, filter })
-  }, [dispatch, searchQuery, filter])
+  }, [dispatch, searchQuery, filter, exact])
 
   const [cardHeight, setCardHeight] = useState()
   const firstCardRef = useCallback(element => {
