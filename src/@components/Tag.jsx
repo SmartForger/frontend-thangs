@@ -24,8 +24,8 @@ const useStyles = createUseStyles(theme => {
         textColor
           ? textColor
           : lightText
-          ? theme.colors.white[400]
-          : theme.colors.black[900],
+            ? theme.colors.white[400]
+            : theme.colors.black[900],
       lineHeight: '.5rem',
       overflow: 'hidden',
       textOverflow: 'ellipsis',

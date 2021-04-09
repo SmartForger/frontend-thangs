@@ -1,9 +1,8 @@
 import React from 'react'
-import classnames from 'classnames'
 import { createUseStyles, Title, Label, Spacer } from '@physna/voxel-ui'
 import { ContainerColumn, ContainerRow } from '@components'
 
-const useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(_theme => {
   return {
     MetaInfo_Icon: {
       width: '2.5rem',

@@ -3,12 +3,12 @@ import React from 'react'
 const HeartIcon = ({ size = 16, color = '#F47575', filled = false }) => {
   const fillProps = filled
     ? {
-        fill: color,
-      }
+      fill: color,
+    }
     : {
-        stroke: color,
-        strokeWidth: 1.4,
-      }
+      stroke: color,
+      strokeWidth: 1.4,
+    }
 
   return (
     <svg width={size} height={size} viewBox='-1 -1 18 18' fill='none'>

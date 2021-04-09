@@ -2,7 +2,7 @@ import React from 'react'
 import { ContainerRow, ProfilePicture, CollaboratorActionMenu } from '@components'
 import { Body, createUseStyles, Spacer, Metadata } from '@physna/voxel-ui'
 
-const useStyles = createUseStyles(theme => ({
+const useStyles = createUseStyles(_theme => ({
   Collaborator_Info: {
     flex: 1,
   },
@@ -26,7 +26,7 @@ const Collaborator = ({ user, relation }) => {
         <Spacer size='.25rem' />
         <Metadata type={1}>{relation}</Metadata>
       </div>
-      {relation !== 'Owner' && <CollaboratorActionMenu onChange={console.log} />}
+      {relation !== 'Owner' && <CollaboratorActionMenu />}
     </ContainerRow>
   )
 }
