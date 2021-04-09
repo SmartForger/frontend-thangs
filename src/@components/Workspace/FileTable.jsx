@@ -71,7 +71,7 @@ const useStyles = createUseStyles(theme => {
     },
     FileTable_Cell: {
       display: 'flex',
-      overflow: 'hidden',
+      // overflow: 'hidden',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
       flex: 'none',
@@ -494,6 +494,14 @@ const FileTable = ({
               className={cn(c.FileTable_Action, c.FileTable_Cell)}
             >
               <ModelActionMenu model={node} isExpandedOptions />
+            </div>
+            <div
+              className={cn(c.FileTable_Action, c.FileTable_Cell)}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ContextMenuTrigger holdToDisplay={0} {...menuProps}>
+                <DotStackIcon />
+              </ContextMenuTrigger>
             </div>
           </div>
         </ContextMenuTrigger>
