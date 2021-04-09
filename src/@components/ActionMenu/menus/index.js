@@ -3,6 +3,7 @@ export { default as ColorPickerActionMenu } from './ModelViewer/ColorPickerActio
 export { default as CommentsActionMenu } from './CommentsActionMenu'
 export { default as DrawModeActionMenu } from './ModelViewer/DrawModeActionMenu'
 export { default as ExplodeActionMenu } from './ModelViewer/ExplodeActionMenu'
+export { default as FolderActionMenu } from './FolderActionMenu'
 export { default as LandingSortActionMenu } from './LandingSortActionMenu'
 export { default as ModelActionMenu } from './ModelActionMenu'
 export { default as ModelHistoryPartActionMenu } from './ModelHistoryPartActionMenu'

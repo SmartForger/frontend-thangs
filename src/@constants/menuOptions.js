@@ -9,3 +9,10 @@ export const MODEL_MENU_OPTIONS = {
   DOWNLOAD: 'download',
   DELETE: 'delete',
 }
+
+export const FOLDER_MENU_OPTIONS = {
+  EDIT: 'edit',
+  CREATE_FOLDER: 'create-folder',
+  ADD_TO_STARRED: 'add-to-starred',
+  DELETE: 'delete',
+}

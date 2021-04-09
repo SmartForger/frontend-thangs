@@ -12,6 +12,7 @@ import {
   MetadataPrimary,
   Spacer,
   TitleTertiary,
+  ModelActionToolbar,
 } from '@components'
 import { useOverlay } from '@hooks'
 import { buildPath } from '@utilities'
@@ -118,21 +119,7 @@ const FileHeader = ({ file = {}, folders = [] }) => {
       <ContainerRow alignItems={'center'}>
         <Contributors users={members} displayLength='10' onClick={handleInviteUsers} />
         <Spacer size={'1rem'} />
-        <Pill onClick={handleNewVersion}>
-          <UploadIcon />
-          <Spacer size={'.5rem'} />
-          New version
-        </Pill>
-        <Spacer size='.5rem' />
-        <div onClick={e => e.preventDefault()}>
-          <ContextMenuTrigger
-            id={'File_Menu'}
-            holdToDisplay={-1}
-            collect={() => ({ model: file })}
-          >
-            <DotStackIcon />
-          </ContextMenuTrigger>
-        </div>
+        <ModelActionToolbar model={file} isExpandedOptions />
       </ContainerRow>
     </ContainerRow>
   )

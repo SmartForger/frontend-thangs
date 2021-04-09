@@ -8,6 +8,7 @@ import {
   ContainerColumn,
   ContainerRow,
   Contributors,
+  FolderActionMenu,
   MetadataSecondary,
   ModelActionToolbar,
   ModelActionMenu,
@@ -492,7 +493,8 @@ const FileTable = ({
             <div
               className={cn(c.FileTable_Action, c.FileTable_Cell)}
             >
-              <ModelActionMenu model={node} isExpandedOptions />
+              {node.isFolder ? (<FolderActionMenu folder={node} />)
+                : (<ModelActionMenu model={node} isExpandedOptions />)}
             </div>
           </div>
         </ContextMenuTrigger>
