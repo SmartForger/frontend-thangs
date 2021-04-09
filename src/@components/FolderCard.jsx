@@ -35,7 +35,6 @@ const useStyles = createUseStyles(theme => {
       lineHeight: '1rem !important',
     },
     FolderCard_IconWrapper: {
-      // height: '127px',
       flex: 'none',
       display: 'flex',
       alignItems: 'center',
