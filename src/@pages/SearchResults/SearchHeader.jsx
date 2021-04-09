@@ -156,27 +156,37 @@ const useStyles = createUseStyles(theme => {
 })
 const noop = () => null
 
-const parseSearchQuery = (query, isExactMatchSearch, className) => {
-  let decodedQuery = decodeURIComponent(query)
+const ParsedSearchQuery = ({
+  searchQuery,
+  isExactMatchSearch,
+  isExactOrPartial,
+  className,
+}) => {
+  const decodedQuery = decodeURIComponent(searchQuery)
 
-  if (isExactMatchSearch) {
-    decodedQuery = [
-      () => <ContainerRow className={className}>&quot;{decodedQuery}&quot;</ContainerRow>,
-    ]
-  } else {
-    decodedQuery = decodedQuery
-      .split(/\s+/)
-      .map(partial => () => <>&quot;{partial}&quot;</>)
-      .map((QueryPart, i, allParts) => (
-        <ContainerRow className={className} key={`query-string-segment-${i}`}>
-          <QueryPart />
-          {i < allParts.length - 1 && <>&#44;</>}
-          <Spacer size='0.25rem' />
-        </ContainerRow>
-      ))
-  }
-
-  return decodedQuery
+  return (
+    <>
+      {isExactMatchSearch || !isExactOrPartial ? (
+        <ContainerRow className={className}>&quot;{decodedQuery}&quot;</ContainerRow>
+      ) : (
+        <>
+          {decodedQuery
+            .split(/\s+/)
+            .map(partial => () => <>&quot;{partial}&quot;</>)
+            .map((QueryPart, i, allParts) => (
+              <ContainerRow
+                className={className}
+                key={`query-string-internal-segment-${i}`}
+              >
+                <QueryPart />
+                {i < allParts.length - 1 && <>&#44;</>}
+                <Spacer size='0.25rem' />
+              </ContainerRow>
+            ))}
+        </>
+      )}
+    </>
+  )
 }
 
 const ControlSearchHeader = ({
@@ -204,7 +214,12 @@ const ControlSearchHeader = ({
           {isLoading ? 'Loading' : resultCount}
           {!isLoading && !endOfModels ? '+' : ''} results for
           <Spacer size='0.25rem' />
-          {parseSearchQuery(searchQuery, isExactMatchSearch)}
+          <ParsedSearchQuery
+            searchQuery={searchQuery}
+            isExactOrPartial={showExactSearchFilter}
+            isExactMatchSearch={isExactMatchSearch}
+            className={c.SearchResults_SearchTerm}
+          />
         </h1>
         <Spacer size='0.25rem' />
         <div className={c.SearchResult_ResultCountText}>
@@ -263,7 +278,6 @@ const TabSearchHeader = ({
 }) => {
   const c = useStyles()
   const { dispatch, searchSubscriptions } = useStoreon('searchSubscriptions')
-
   return (
     <div className={c.SearchResults_Header}>
       <div className={c.SearchResults_HeaderTextWrapper}>
@@ -273,11 +287,12 @@ const TabSearchHeader = ({
           <div className={c.SearchResults_FilterBar}>
             {isLoading ? 'Loading' : `At least ${resultCount}`} results for{' '}
             <Spacer size='0.25rem' />
-            {parseSearchQuery(
-              searchQuery,
-              isExactMatchSearch,
-              c.SearchResults_SearchTerm
-            )}
+            <ParsedSearchQuery
+              searchQuery={searchQuery}
+              isExactOrPartial={showExactSearchFilter}
+              isExactMatchSearch={isExactMatchSearch}
+              className={c.SearchResults_SearchTerm}
+            />
             <Spacer size={'.5rem'} />
             <SaveSearchButton
               currentUser={currentUser}
@@ -342,8 +357,7 @@ const SearchHeader = ({
   modelId,
   resultCount,
   searchQuery,
-  setFilter = noop,
-  setExactMatchSearch = noop,
+  setFilters = noop,
   showExactSearchFilter = false,
 }) => {
   const [filterExperimentType, setFilterExperimentType] = useState('control')
@@ -372,25 +386,25 @@ const SearchHeader = ({
 
   const handleFilterChange = useCallback(
     value => {
-      setFilter(value)
+      setFilters({ scopeFilter: value, exactFilter: isExactMatchSearch })
       track('Search Filter Change', { filter: value })
     },
-    [setFilter]
+    [setFilters, isExactMatchSearch]
   )
 
   const handleExactMatchFilterChange = useCallback(
     value => {
-      setExactMatchSearch(value)
+      setFilters({ scopeFilter: filter, exactFilter: value })
       track('Exact Search Change', { exactSearch: value })
     },
-    [setExactMatchSearch]
+    [setFilters, filter]
   )
 
   return (
     <>
       {experiments?.isLoading ? (
         <SearchHeaderSkeleton />
-      ) : false /*filterExperimentType === 'control' */ ? (
+      ) : true /*filterExperimentType === 'control' */ ? (
         <ControlSearchHeader
           disabled={isLoading}
           filter={filter}

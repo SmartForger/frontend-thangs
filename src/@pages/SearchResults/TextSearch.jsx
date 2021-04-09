@@ -93,10 +93,12 @@ const maxScrollCount = 20
 const noop = () => null
 const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
   const FILTER_DEFAULT = 'all'
+  const EXACT_SEARCH_DEFAULT = false
   const c = useStyles()
   const [endOfModels, setEndOfModels] = useState(false)
   const history = useHistory()
   const filter = useQuery('filter') || FILTER_DEFAULT
+  const exact = useQuery('exact') || EXACT_SEARCH_DEFAULT
   const { searchQuery } = useParams()
 
   const { dispatch, textSearchResults, modelsStats } = useStoreon(
@@ -104,13 +106,13 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
     'modelsStats'
   )
 
-  const setSearchScope = useCallback(
-    newFilter => {
-      if (newFilter !== filter) {
-        history.push(`?filter=${newFilter}`)
+  const setSearchFilters = useCallback(
+    ({ scopeFilter, exactFilter }) => {
+      if (scopeFilter !== filter || exactFilter !== exact) {
+        history.push(`?filter=${scopeFilter}&exact=${exactFilter}`)
       }
     },
-    [filter, history]
+    [filter, history, exact]
   )
 
   const textModels = R.path(['data'], textSearchResults) || []
@@ -143,7 +145,7 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery, filter])
+  }, [searchQuery, filter, exact])
 
   const onScroll = useCallback(() => {
     dispatch(types.FETCH_TEXT_SEARCH_RESULTS, {
@@ -193,10 +195,9 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
       {searchQuery && (
         <SearchHeader
           filter={filter}
+          isExactMatchSearch={exact}
+          setFilters={setSearchFilters}
           isLoading={isLoading}
-          setFilter={setSearchScope}
-          isExactMatchSearch={false}
-          setExactMatchSearch={noop}
           resultCount={models.length}
           endOfModels={endOfModels}
           searchQuery={searchQuery}
