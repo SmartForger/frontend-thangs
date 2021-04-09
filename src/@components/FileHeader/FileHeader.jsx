@@ -1,10 +1,8 @@
 import React, { useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { ContextMenuTrigger } from 'react-contextmenu'
 import * as R from 'ramda'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import {
-  Pill,
   ContainerColumn,
   ContainerRow,
   Contributors,
@@ -16,10 +14,8 @@ import {
 } from '@components'
 import { useOverlay } from '@hooks'
 import { buildPath } from '@utilities'
-import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as PadlockIcon } from '@svg/icon-padlock.svg'
-import { ReactComponent as UploadIcon } from '@svg/icon-upload-black.svg'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -46,7 +42,7 @@ const FileHeader = ({ file = {}, folders = [] }) => {
   }, [folders, id])
 
   const folder = folders[id] || {}
-  const members = folder && folder.members
+  const members = (folder && folder.members) || []
 
   const handleInviteUsers = useCallback(() => {
     setOverlay({
@@ -60,24 +56,6 @@ const FileHeader = ({ file = {}, folders = [] }) => {
       },
     })
   }, [id, setOverlay])
-
-  const handleNewVersion = useCallback(
-    e => {
-      e.preventDefault()
-      setOverlay({
-        isOpen: true,
-        template: 'multiUpload',
-        data: {
-          animateIn: true,
-          windowed: true,
-          dialogue: true,
-          model: file,
-          action: 'update',
-        },
-      })
-    },
-    [file, setOverlay]
-  )
 
   return (
     <ContainerRow alignItems={'center'} justifyContent={'space-between'}>
@@ -117,7 +95,7 @@ const FileHeader = ({ file = {}, folders = [] }) => {
         </ContainerColumn>
       </ContainerRow>
       <ContainerRow alignItems={'center'}>
-        <Contributors users={members} displayLength='10' onClick={handleInviteUsers} />
+        <Contributors users={R.isEmpty(folder) ? [] : [folder.creator, ...members]} displayLength='10' onClick={handleInviteUsers} />
         <Spacer size={'1rem'} />
         <ModelActionToolbar model={file} isExpandedOptions />
       </ContainerRow>

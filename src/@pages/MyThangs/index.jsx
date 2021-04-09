@@ -6,7 +6,6 @@ import {
   AddContextMenu,
   FileContextMenu,
   FolderContextMenu,
-  FolderInviteContextMenu,
   SubpartContextMenu,
   Spacer,
   Spinner,
@@ -296,7 +295,6 @@ const MyThangs = () => {
       <AddContextMenu />
       <FileContextMenu />
       <FolderContextMenu />
-      <FolderInviteContextMenu />
       <SubpartContextMenu />
     </>
   )

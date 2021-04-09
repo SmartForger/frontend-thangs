@@ -6,6 +6,7 @@ const useStyles = createUseStyles(theme => {
   return {
     Contributors: {
       display: 'flex',
+      cursor: 'pointer',
     },
     Contributors_Avatar: {
       backgroundColor: theme.colors.white[400],

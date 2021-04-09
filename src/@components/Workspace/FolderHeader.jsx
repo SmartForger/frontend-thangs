@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Contributors,
@@ -10,11 +10,11 @@ import {
 } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
-import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as PadlockIcon } from '@svg/icon-padlock.svg'
-import { ContextMenuTrigger } from 'react-contextmenu'
 import { buildPath } from '@utilities'
+import { useOverlay } from '@hooks'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -92,23 +92,6 @@ const useStyles = createUseStyles(theme => {
     PadlockIcon_Header: {
       flex: 'none',
     },
-    FolderView_MobileMenuButton: {
-      marginRight: '1.5rem',
-      position: 'relative',
-      display: 'unset',
-      [md]: {
-        display: 'none',
-      },
-      '& > svg': {
-        padding: '.25rem',
-        borderRadius: '.25rem',
-        border: '1px solid transparent',
-
-        '&:hover': {
-          border: `1px solid ${theme.colors.grey[300]}`,
-        },
-      },
-    },
     FolderView_MobileMenu: {
       position: 'absolute',
       top: '1.2rem',
@@ -139,6 +122,7 @@ const useStyles = createUseStyles(theme => {
 const FolderHeader = ({ folder, folders, rootFolder }) => {
   const c = useStyles({})
   const { id } = folder
+  const { setOverlay } = useOverlay()
   const folderPath = useMemo(() => {
     return buildPath(folders, id, folder => ({
       label: folder.name,
@@ -146,7 +130,24 @@ const FolderHeader = ({ folder, folders, rootFolder }) => {
     }))
   }, [folders, id])
   const folderName = folder.name
-  const members = rootFolder ? rootFolder.members : folder.members
+  const members = folder.members || []
+
+  const handleInviteUsers = useCallback(
+    () => {
+      track('File Menu - Invite Members')
+      setOverlay({
+        isOpen: true,
+        template: 'inviteUsers',
+        data: {
+          folderId: folder.id,
+          animateIn: true,
+          windowed: true,
+          dialogue: true,
+        },
+      })
+    },
+    [folder.id, setOverlay]
+  )
 
   return (
     <>
@@ -192,18 +193,9 @@ const FolderHeader = ({ folder, folders, rootFolder }) => {
           </div>
         </div>
         <div className={classnames(c.FolderView_Row, c.FolderView_Row__desktop)}>
-          <Contributors users={members} displayLength='10' />
+          <Contributors onClick={handleInviteUsers} users={[folder.creator, ...members]} displayLength='10' />
           <Spacer size={'1rem'} />
           <FolderActionToolbar folder={folder} />
-        </div>
-        <div className={c.FolderView_MobileMenuButton} onClick={e => e.preventDefault()}>
-          <ContextMenuTrigger
-            id={'Folder_Invite_Menu'}
-            holdToDisplay={0}
-            collect={() => ({ folder, members: folder.members })}
-          >
-            <DotStackIcon />
-          </ContextMenuTrigger>
         </div>
       </div>
     </>
