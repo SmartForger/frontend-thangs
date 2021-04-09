@@ -262,7 +262,7 @@ const SearchHeader = ({
         <Skeleton variant='rect' className={c.SearchResults_Button_Skeleton} />
       ) : filterExperimentType === 'control' ? (
         <>
-          <Spacer size={'.5rem'} />
+          <Spacer size={'1rem'} />
           <SaveSearchButton
             currentUser={currentUser}
             dispatch={dispatch}
