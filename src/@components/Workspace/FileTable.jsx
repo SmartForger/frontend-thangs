@@ -22,7 +22,6 @@ import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
 import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
-import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as DropzoneIcon } from '@svg/dropzone.svg'
 import { ReactComponent as DropzoneMobileIcon } from '@svg/dropzone-mobile.svg'
@@ -37,11 +36,12 @@ const useStyles = createUseStyles(theme => {
   return {
     FileTable_Body: {
       ...theme.mixins.scrollbar,
-      overflowX: 'hidden !important',
-      overflowY: 'scroll !important',
+      overflowX: 'visible !important',
+      overflowY: 'visible !important',
     },
     FileTable_Item: {
       borderBottom: `1px solid ${theme.colors.white[900]}`,
+      overflow: 'visible',
     },
     FileTable_Item__selected: {
       backgroundColor: theme.colors.purple[200],
@@ -71,7 +71,6 @@ const useStyles = createUseStyles(theme => {
     },
     FileTable_Cell: {
       display: 'flex',
-      // overflow: 'hidden',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
       flex: 'none',
@@ -495,14 +494,6 @@ const FileTable = ({
             >
               <ModelActionMenu model={node} isExpandedOptions />
             </div>
-            <div
-              className={cn(c.FileTable_Action, c.FileTable_Cell)}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <ContextMenuTrigger holdToDisplay={0} {...menuProps}>
-                <DotStackIcon />
-              </ContextMenuTrigger>
-            </div>
           </div>
         </ContextMenuTrigger>
       )
@@ -528,7 +519,7 @@ const FileTable = ({
       {isSelectedNodeModel(selectedNode) ? (
         <>
           <ContainerRow fullWidth justifyContent='flex-end'>
-            <ModelActionToolbar model={selectedNode} />
+            <ModelActionToolbar model={selectedNode} isExpandedOptions />
             <Spacer width='4rem' />
           </ContainerRow>
           <Spacer size='0.5rem' />

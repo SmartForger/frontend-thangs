@@ -163,6 +163,7 @@ const ModelActionMenu = ({ model = {}, isExpandedOptions = false, omitOptions = 
       }}
       TargetComponent={ModelActionTarget}
       isCloseOnSelect={true}
+      isMobileOnly={true} // TODO: Fix isMobileOnly. Using this to add spacers between items.
     />
   )
 }
