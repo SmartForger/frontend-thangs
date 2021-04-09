@@ -281,7 +281,7 @@ const UploadModels = ({
                     </TitleTertiary>
                     <MultiLineBodyText>or browse to upload.</MultiLineBodyText>
                     <Spacer size={'1rem'} />
-                    <Pill secondary>Browse</Pill>
+                    <Pill tertiary>Browse</Pill>
                     <Spacer size={'.75rem'} />
                   </div>
                 </div>
