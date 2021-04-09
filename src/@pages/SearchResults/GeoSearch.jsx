@@ -29,24 +29,6 @@ const useStyles = createUseStyles(theme => {
     SearchResults_MatchingIcon: {
       marginRight: '.5rem',
     },
-    SearchResults_Header: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      color: theme.colors.purple[900],
-      marginBottom: '1.5rem',
-    },
-    SearchResults_HeaderTextWrapper: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'flex-start',
-    },
-    SearchResults_HeaderText: {
-      ...theme.text.searchResultsHeader,
-      fontSize: '1rem',
-      lineHeight: '1.5rem',
-      color: theme.colors.purple[900],
-    },
     SearchResults_FromThangsLogo: {
       height: '1rem',
       width: 'auto',
