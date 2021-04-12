@@ -231,6 +231,7 @@ const SearchHeader = ({
               <SearchSourceFilterActionMenu
                 selectedValue={filter}
                 onChange={handleFilterChange}
+                disabled={isLoading}
               />
             </div>
           ) : (
@@ -270,7 +271,7 @@ const SearchHeader = ({
         />
       ) : (
         <div className={c.SearchHeader_TabFilter}>
-          <Tabs options={filterOptions} />
+          <Tabs options={filterOptions} disabled={isLoading} />
         </div>
       )}
     </div>
