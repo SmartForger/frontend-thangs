@@ -147,18 +147,21 @@ const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
   const [searchTerm, setSearchTerm] = useState(undefined)
   const [showUploadText, setShowUploadText] = useState(false)
   const filter = useQuery('filter')
+  const exact = useQuery('exact')
 
   const handleSearchSubmit = useCallback(
     e => {
       e.preventDefault()
       if (searchTerm) {
         history.push(
-          `/search/${encodeURIComponent(encodeURIComponent(searchTerm))}?filter=${filter}`
+          `/search/${encodeURIComponent(
+            encodeURIComponent(searchTerm)
+          )}?filter=${filter}&exact=${exact}`
         )
         setOverlayOpen(false)
       }
     },
-    [filter, history, searchTerm, setOverlayOpen]
+    [filter, exact, history, searchTerm, setOverlayOpen]
   )
 
   const handleSearchByModel = useCallback(() => {
