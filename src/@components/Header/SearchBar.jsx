@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
 
 import { TextInput } from '@components'
-import { useOverlay, useTranslations } from '@hooks'
+import { useOverlay, useQuery, useTranslations } from '@hooks'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
@@ -146,16 +146,19 @@ const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
   const t = useTranslations({})
   const [searchTerm, setSearchTerm] = useState(undefined)
   const [showUploadText, setShowUploadText] = useState(false)
+  const filter = useQuery('filter')
 
   const handleSearchSubmit = useCallback(
     e => {
       e.preventDefault()
       if (searchTerm) {
-        history.push(`/search/${encodeURIComponent(encodeURIComponent(searchTerm))}`)
+        history.push(
+          `/search/${encodeURIComponent(encodeURIComponent(searchTerm))}?filter=${filter}`
+        )
         setOverlayOpen(false)
       }
     },
-    [history, searchTerm, setOverlayOpen]
+    [filter, history, searchTerm, setOverlayOpen]
   )
 
   const handleSearchByModel = useCallback(() => {
