@@ -84,6 +84,8 @@ const useStyles = createUseStyles(theme => {
       fontWeight: '500',
       marginTop: '.25rem',
       color: theme.colors.grey[700],
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     },
     ModelSearchResult_DetailsInline: {
       display: 'flex',
