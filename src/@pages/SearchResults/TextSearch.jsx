@@ -114,7 +114,7 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
   const c = useStyles()
   const [endOfModels, setEndOfModels] = useState(false)
   const history = useHistory()
-  const filter = useQuery('filter')
+  const filter = useQuery('filter') || FILTER_DEFAULT
   const { searchQuery } = useParams()
 
   const { dispatch, textSearchResults, modelsStats } = useStoreon(
@@ -122,74 +122,70 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
     'modelsStats'
   )
 
-  const [searchScope, setSearchScope] = useState(filter || FILTER_DEFAULT)
+  const setSearchScope = useCallback(
+    newFilter => {
+      if (newFilter !== filter) {
+        history.push(`?filter=${newFilter}`)
+      }
+    },
+    [filter, history]
+  )
 
   const textModels = R.path(['data'], textSearchResults) || []
-  const isLoading = textSearchResults.isLoading
-  const isScrollPaused = useMemo(() => isLoading || endOfModels, [endOfModels, isLoading])
+  const { endOfData, isLoading, isError, pageToLoad } = textSearchResults
+  const isScrollPaused = useMemo(() => !pageToLoad || isLoading || endOfData, [
+    endOfData,
+    isLoading,
+    pageToLoad,
+  ])
   const { spotCheck, spotCheckRef, setSpotCheck } = useSpotCheck('text_search_scroll', {
     searchQuery,
     filter,
   })
 
   useEffect(() => {
-    if (filter) {
-      setSearchScope(filter)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    if (spotCheck && !textSearchResults.isLoading && spotCheckRef.current) {
+    if (spotCheck && !isLoading && spotCheckRef.current) {
       spotCheckRef.current.scrollIntoView({ block: 'center' })
     }
-  }, [textSearchResults.isLoading, spotCheck, spotCheckRef])
-
-  const handleFinish = useCallback(data => {
-    if (data.endOfData) setEndOfModels(true)
-  }, [])
+  }, [isLoading, spotCheck, spotCheckRef])
 
   useEffect(() => {
     if (!spotCheck) {
       resetScroll()
       setEndOfModels(false)
-      history.push(`?filter=${searchScope}`)
       dispatch(types.FETCH_TEXT_SEARCH_RESULTS, {
         searchTerm: decodeURIComponent(searchQuery),
-        scope: searchScope,
-        pageCount: 1, //savedPages || 1,
+        scope: filter,
         isInitial: true,
-        onFinish: handleFinish,
         spotCheck,
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery, searchScope])
+  }, [searchQuery, filter])
 
   const onScroll = useCallback(() => {
     dispatch(types.FETCH_TEXT_SEARCH_RESULTS, {
       searchTerm: decodeURIComponent(searchQuery),
-      scope: searchScope,
-      onFinish: handleFinish,
+      scope: filter,
     })
-  }, [dispatch, handleFinish, searchQuery, searchScope])
+  }, [dispatch, filter, searchQuery])
 
   const handleLoadMore = useCallback(() => {
     dispatch(types.FETCH_TEXT_SEARCH_RESULTS, {
       searchTerm: decodeURIComponent(searchQuery),
-      scope: searchScope,
-      onFinish: handleFinish,
+      scope: filter,
     })
-    track('More Thangs - Search', { searchTerm: searchQuery, searchScope })
-  }, [dispatch, handleFinish, searchQuery, searchScope])
+    track('More Thangs - Search', { searchTerm: searchQuery, filter })
+  }, [dispatch, searchQuery, filter])
 
   const [cardHeight, setCardHeight] = useState()
   const firstCardRef = useCallback(element => {
     const height = element?.getBoundingClientRect()?.height
     setCardHeight(height ? 2 * height : undefined)
   }, [])
+
   const { resetScroll, isMaxScrollReached } = useInfiniteScroll({
-    initialCount: 1, //savedPages,
+    initialCount: 1,
     isPaused: isScrollPaused,
     maxScrollCount,
     onScroll,
@@ -215,7 +211,7 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
       {searchQuery && (
         <SearchHeader
           filter={filter}
-          isLoading={textSearchResults.isLoading}
+          isLoading={isLoading}
           resultCount={models.length}
           endOfModels={endOfModels}
           searchQuery={searchQuery}
@@ -225,14 +221,13 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
       {searchQuery ? (
         <>
           <TextSearchResults
-            isError={textSearchResults.isError}
-            isLoaded={textSearchResults.isLoaded}
-            isLoading={textSearchResults.isLoading}
+            isError={isError}
+            isLoading={isLoading}
             items={models}
             onThangsClick={onThangsClick}
             onFindRelated={onFindRelated}
             onReportModel={onReportModel}
-            searchScope={searchScope}
+            searchScope={filter}
             searchTerm={searchQuery}
             spotCheckIndex={spotCheck}
             spotCheckRef={spotCheckRef}

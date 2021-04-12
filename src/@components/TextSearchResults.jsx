@@ -377,7 +377,6 @@ const TextSearchResult = ({
 
 const TextSearchResults = ({
   isError,
-  isLoaded,
   isLoading,
   items,
   onThangsClick,
@@ -404,7 +403,7 @@ const TextSearchResults = ({
     for ${searchTerm}`
     return <NoResults>{loadingText}</NoResults>
   }
-  if (isLoaded && !items.length) {
+  if (!isLoading && !items.length) {
     return (
       <NoResults>
         No results found. <b>Save your search</b> and we will notify you when there are

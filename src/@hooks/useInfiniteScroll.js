@@ -23,20 +23,20 @@ const useInfiniteScroll = ({
   )
 
   useEffect(() => {
-    const el = document.getElementById('root')
+    const getScrollContainer = () => document.getElementById('root')
     const trackScrolling = () => {
       setTimeout(() => {
-        if (isBottom(el) && !isPaused && !isMaxScrollReached) {
+        if (isBottom(getScrollContainer()) && !isPaused && !isMaxScrollReached) {
           onScroll()
           setCount(count + 1)
         }
       })
     }
 
-    el.addEventListener('scroll', trackScrolling)
+    getScrollContainer().addEventListener('scroll', trackScrolling)
     trackScrolling()
     return () => {
-      el.removeEventListener('scroll', trackScrolling)
+      getScrollContainer().removeEventListener('scroll', trackScrolling)
     }
   }, [count, isMaxScrollReached, isPaused, onScroll, setCount, isBottom])
 
