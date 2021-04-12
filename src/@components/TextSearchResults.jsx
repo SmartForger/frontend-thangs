@@ -238,6 +238,7 @@ const ModelDetails = ({
   onFindRelated = noop,
   onThangsClick = noop,
   scope,
+  searchIndex,
 }) => {
   const c = useStyles()
   const {
@@ -261,6 +262,7 @@ const ModelDetails = ({
         isExternal={isExternalModel}
         scope={scope}
         onThangsClick={onThangsClick}
+        searchIndex={searchIndex}
       >
         <div className={c.TextSearchResult_Attribution}>
           <div>
@@ -287,9 +289,11 @@ const ModelDetails = ({
         <>
           <Spacer size={'1rem'} />
           <PartThumbnailList
-            parts={parts}
             isExternalModel={isExternalModel}
+            onThangsClick={onThangsClick}
+            parts={parts}
             scope={scope}
+            searchIndex={searchIndex}
           />
         </>
       )}
@@ -357,6 +361,7 @@ const TextSearchResult = ({
             onFindRelated={onFindRelated}
             isExternalModel={isExternalModel}
             scope={scope}
+            searchIndex={searchIndex}
           />
           <div
             className={c.TextSearchResult_ReportModelLink}
