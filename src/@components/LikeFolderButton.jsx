@@ -60,7 +60,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const hasLikedFolder = (folderData, currentUserId) => {
-  return R.includes(parseInt(currentUserId), folderData.likes)
+  return R.includes(parseInt(currentUserId), (folderData && folderData.likes) || [])
 }
 
 const HeartButton = ({ liked, c, hasChanged }) => {

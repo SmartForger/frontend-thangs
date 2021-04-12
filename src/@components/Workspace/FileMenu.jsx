@@ -100,7 +100,7 @@ const FileMenu = ({ model }) => {
     [currentUserId, dispatch, model]
   )
 
-  const handleRemoveFile = useCallback(
+  const handleDeleteFile = useCallback(
     e => {
       e.preventDefault()
       track('File Menu - Delete Model')
@@ -157,12 +157,12 @@ const FileMenu = ({ model }) => {
       {hasDeletePermission && (
         <>
           <Divider spacing={'.5rem'} />
-          <MenuItem className={c.FileMenu_Item} onClick={handleRemoveFile}>
+          <MenuItem className={c.FileMenu_Item} onClick={handleDeleteFile}>
             <div>
               <Spacer size={'1.5rem'} />
               <DeleteIcon />
               <Spacer size={'.5rem'} />
-              <SingleLineBodyText>Remove</SingleLineBodyText>
+              <SingleLineBodyText>Delete</SingleLineBodyText>
               <Spacer size={'1.5rem'} />
             </div>
           </MenuItem>

@@ -7,3 +7,9 @@ export const createNode = (subs = []) => ({
   name: chance.guid(),
   subs,
 })
+
+export const createLevelNode = level => ({
+  id: chance.guid(),
+  name: chance.guid(),
+  level,
+})

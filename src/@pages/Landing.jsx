@@ -191,11 +191,17 @@ const Page = ({ sortBy, getTime = noop }) => {
     dispatch(types.FETCH_MODEL_PREVIEW, { sortBy, onFinish: handleFinish })
   }, [dispatch, handleFinish, sortBy])
 
+  const [cardHeight, setCardHeight] = useState()
+  const firstCardRef = useCallback(element => {
+    const height = element?.getBoundingClientRect()?.height
+    setCardHeight(height ? 2 * height : undefined)
+  }, [])
   const { resetScroll, isMaxScrollReached } = useInfiniteScroll({
     initialCount: 1, //savedPages,
     isPaused: isScrollPaused,
     maxScrollCount,
     onScroll,
+    scrollBuffer: cardHeight,
   })
 
   const handleClick = useCallback(
@@ -247,6 +253,7 @@ const Page = ({ sortBy, getTime = noop }) => {
                 onClick={handleClick}
                 spotCheckIndex={index}
                 spotCheckRef={spotCheck === index ? spotCheckRef : undefined}
+                firstCardRef={index === 0 ? firstCardRef : undefined}
               />
             )
           })}

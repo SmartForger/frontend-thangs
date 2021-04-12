@@ -13,6 +13,7 @@ import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import { useStarred } from '@hooks'
 import { pageview } from '@utilities/analytics'
+import { getMyFolders } from '@selectors'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -68,7 +69,7 @@ const RecentFilesView = ({
   handleChangeFolder = noop,
   handleEditModel = noop,
   onDrop = noop,
-  myFolders: folderData,
+  folders,
   models: modelData,
 }) => {
   const c = useStyles({})
@@ -84,8 +85,9 @@ const RecentFilesView = ({
     [starredFolders.length, starredModels.length]
   )
   const files = useMemo(() => {
-    return [folderData, modelData].flat()
-  }, [folderData, modelData])
+    const rootFolders = getMyFolders(folders).filter(folder => !folder.parentId)
+    return [rootFolders, modelData].flat()
+  }, [folders, modelData])
 
   useEffect(() => {
     pageview('MyThangs - RecentFiles')
@@ -137,6 +139,7 @@ const RecentFilesView = ({
           handleEditModel={handleEditModel}
           sortedBy='created'
           onDrop={onDrop}
+          heightOffset={8}
         ></FileTable>
       </div>
       <Spacer size='2rem' />

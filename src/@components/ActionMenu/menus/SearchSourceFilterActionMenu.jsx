@@ -64,12 +64,15 @@ const label = selectedValue => {
   return 'All'
 }
 
-const SearchSourceFilterTarget = ({ onClick = noop, selectedValue }) => {
+const SearchSourceFilterTarget = ({ onClick = noop, selectedValue, disabled }) => {
   const c = useStyles({})
   return (
     <>
       <Spacer size='.25rem' />
-      <div className={c.SearchSourceFilter_ClickableButton} onClick={onClick}>
+      <div
+        className={c.SearchSourceFilter_ClickableButton}
+        onClick={disabled ? noop : onClick}
+      >
         <ArrowDownIcon className={c.SearchSourceFilter_DownArrow} />
         <Spacer size='.25rem' />
         {label(selectedValue)}
@@ -78,19 +81,23 @@ const SearchSourceFilterTarget = ({ onClick = noop, selectedValue }) => {
   )
 }
 
-const SearchSourceFilterActionMenu = ({ onChange = noop, selectedValue }) => {
+const SearchSourceFilterActionMenu = ({
+  onChange = noop,
+  selectedValue,
+  disabled = false,
+}) => {
   const menuProps = useMemo(() => {
     return {
-      onChange,
+      onChange: disabled ? noop : onChange,
       actionBarTitle: 'Select Search Filter',
       options,
       tabletLayout: false,
     }
-  }, [onChange])
+  }, [disabled, onChange])
 
   const targetProps = useMemo(() => {
-    return { selectedValue }
-  }, [selectedValue])
+    return { selectedValue, disabled }
+  }, [disabled, selectedValue])
 
   return (
     <ActionMenu

@@ -114,6 +114,7 @@ const CardContents = ({
   onClick = noop,
   spotCheckIndex,
   spotCheckRef,
+  firstCardRef,
 }) => {
   const userName = R.pathOr('no-user', ['owner', 'username'], model)
 
@@ -147,7 +148,7 @@ const CardContents = ({
       title={modelTitle}
       className={classnames(className, c.ModelCard)}
       data-cy={R.pathOr('unknown', ['name'], model)}
-      ref={spotCheckRef}
+      ref={firstCardRef ?? spotCheckRef}
     >
       {userName !== 'no-user' ? (
         <Link
@@ -206,6 +207,7 @@ const ModelCardBase = ({
   onClick,
   spotCheckIndex,
   spotCheckRef,
+  firstCardRef,
 }) => {
   const currentUserId = parseInt(useCurrentUserId())
   const modelAttributionUrl =
@@ -227,6 +229,7 @@ const ModelCardBase = ({
       onClick={onClick}
       spotCheckIndex={spotCheckIndex}
       spotCheckRef={spotCheckRef}
+      firstCardRef={firstCardRef}
     />
   )
 }

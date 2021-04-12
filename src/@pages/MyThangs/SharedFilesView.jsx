@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo } from 'react'
-import * as R from 'ramda'
 import { FileTable, FolderCard, Spacer, Spinner, TitleTertiary } from '@components'
 import { useStarred } from '@hooks'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import { pageview } from '@utilities/analytics'
+import { getSharedFolders } from '@selectors'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -91,16 +91,14 @@ const SharedFilesView = ({
   className,
   handleChangeFolder = noop,
   handleEditModel = noop,
-  sharedFolders,
+  folders,
 }) => {
   const c = useStyles({})
   const { starredSharedFolders = [], isLoading: isLoadingStarred } = useStarred()
 
   const filteredFolders = useMemo(() => {
-    return sharedFolders !== undefined && !R.isEmpty(sharedFolders)
-      ? sharedFolders.filter(folder => !folder.name.includes('//'))
-      : []
-  }, [sharedFolders])
+    return getSharedFolders(folders).filter(folder => !folder.parentId)
+  }, [folders])
 
   useEffect(() => {
     pageview('MyThangs - SharedView')

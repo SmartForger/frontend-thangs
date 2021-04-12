@@ -330,14 +330,10 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
       })
     }
     dispatch(types.SUBMIT_MODELS, {
-      onFinish: () => {
+      onFinish: folderId => {
         closeOverlay()
         dispatch(types.RESET_UPLOAD_FILES)
-        history.push(
-          /*assemblyData && assemblyData.folderId && assemblyData.folderId !== 'files'
-            ? `/mythangs/folder/${assemblyData.folderId}`
-            : */ '/mythangs/recent-files'
-        )
+        history.push(folderId ? `/mythangs/folder/${folderId}` : '/mythangs/all-files')
       },
     })
   }, [uploadedFiles, dispatch, closeOverlay, history])

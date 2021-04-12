@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
@@ -25,6 +25,8 @@ import { ContextMenuTrigger } from 'react-contextmenu'
 import * as types from '@constants/storeEventTypes'
 import { pageview } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
+import { getFolderModels, getSubFolders } from '@selectors'
+import { buildPath } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -148,28 +150,17 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const getSubfolderId = (path, rootFolder, folder) => {
-  if (!rootFolder) return { id: folder.id }
-  if (path === rootFolder.name) return { id: rootFolder.id }
-  return rootFolder.subfolders.find(folder => {
-    const folderName = folder.name.split('//').reverse()[0]
-    return folderName === path
-  })
-}
-
-const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
+const FolderHeader = ({ folder, folders, rootFolder, setFolder = noop }) => {
   const c = useStyles({})
   const { setOverlay } = useOverlay()
-  const { id, name } = folder
-  const folderPath = name.split('//')
-
-  const folderPathEnhanced = folderPath.map(path => {
-    const subfolder = getSubfolderId(path, rootFolder, folder)
-    if (!subfolder) return null
-    const { id: pathId } = subfolder
-    return { label: path, id: pathId }
-  })
-  const rootFolderName = folderPath[0]
+  const { id } = folder
+  const folderPath = useMemo(() => {
+    return buildPath(folders, id, folder => ({
+      label: folder.name,
+      id: folder.id,
+    }))
+  }, [folders, id])
+  const folderName = folder.name
 
   const handleClickRoot = useCallback(() => {
     if (id !== rootFolder.id) setFolder(rootFolder)
@@ -213,7 +204,7 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
           <div className={c.FolderView_Col}>
             <div className={c.FolderView_TitleAndIcons}>
               <div className={c.FolderView_RootLink} onClick={handleClickRoot}>
-                <TitleTertiary>{rootFolderName}</TitleTertiary>
+                <TitleTertiary>{folderName}</TitleTertiary>
               </div>
               <Spacer size={'.5rem'} />
               {!folder.isPublic && (
@@ -228,23 +219,16 @@ const FolderHeader = ({ folder, rootFolder, setFolder = noop }) => {
               <>
                 <Spacer size={'.5rem'} />
                 <MetadataPrimary>
-                  {folderPathEnhanced.map((pathObj, index) => {
-                    if (index === 0) return null
-                    if (index === folderPathEnhanced.length - 1)
-                      return (
-                        <span
-                          key={`folderCrumb_${pathObj.label}_${index}`}
-                          className={c.FolderView_CurrentFolder}
-                        >
-                          {pathObj.label}
-                        </span>
-                      )
+                  {folderPath.map((pathObj, index) => {
+                    if (index === folderPath.length - 1) return null
                     return (
-                      <React.Fragment key={`folderCrumb_${pathObj.label}_${index}`}>
+                      <React.Fragment key={`folderCrumb_${pathObj.id}`}>
                         <Link
                           to={`/mythangs/folder/${pathObj.id}`}
                         >{`${pathObj.label}`}</Link>
-                        &nbsp;&nbsp;/&nbsp;&nbsp;
+                        {index !== folderPath.length - 2 && (
+                          <>&nbsp;&nbsp;/&nbsp;&nbsp;</>
+                        )}
                       </React.Fragment>
                     )
                   })}
@@ -296,10 +280,10 @@ const FolderView = ({
   className,
   handleChangeFolder = noop,
   handleEditModel = noop,
-  myFolders: folders,
   onDrop = noop,
   setCurrentFolderId = noop,
-  sharedFolders: shared,
+  folders,
+  models,
 }) => {
   const currentUserId = authenticationService.getCurrentUserId()
   const c = useStyles({})
@@ -307,9 +291,9 @@ const FolderView = ({
   const history = useHistory()
   const { dispatch } = useStoreon()
   const { folderId: id } = useParams()
-  const allFolders = [...folders, ...shared]
-  const folder = id ? findFolderById(id, allFolders) : {}
+  const folder = folders[id] || {}
   const isSharedFolder = folder.creator && folder.creator.id !== currentUserId
+  const folderModels = useMemo(() => getFolderModels(models, id), [models, id])
 
   useEffect(() => {
     // This is for setting the current folder id
@@ -330,7 +314,7 @@ const FolderView = ({
         },
       })
   }, [dispatch, history, id, inviteCode])
-  if (!folder && !R.isEmpty(allFolders)) {
+  if (!folder && !R.isEmpty(folders)) {
     return <main className={classnames(className, c.FolderView)}>Folder not found.</main>
   }
 
@@ -342,16 +326,8 @@ const FolderView = ({
     )
   }
 
-  const { name = '', models = [] } = folder
   const rootFolder = folder.root ? findFolderById(folder.root, folders) : folder
-  const { subfolders = [] } = rootFolder
-  const directSubFolders = subfolders.filter(
-    subfolder => !subfolder.name.replace(`${name}//`, '').includes('//')
-  )
-  const fileTableFolders = directSubFolders.map(item => ({
-    ...item,
-    name: item.name.split('//').reverse()[0],
-  }))
+  const directSubFolders = getSubFolders(folders, id)
 
   return (
     <>
@@ -360,6 +336,7 @@ const FolderView = ({
           <div className={c.FolderView_Content}>
             <FolderHeader
               folder={folder}
+              folders={folders}
               rootFolder={rootFolder}
               setFolder={handleChangeFolder}
               isSharedFolder={isSharedFolder}
@@ -382,7 +359,7 @@ const FolderView = ({
                 </div>
               </div>
             )}
-            {models.length > 0 && (
+            {folderModels.length > 0 && (
               <>
                 <Spacer size='4rem' />
                 <TitleTertiary>Files</TitleTertiary>
@@ -391,19 +368,21 @@ const FolderView = ({
             <Spacer size='2rem' />{' '}
             <FileTable
               className={c.FolderView_FileTable__desktop}
-              files={models}
+              files={folderModels}
               handleEditModel={handleEditModel}
               handleChangeFolder={handleChangeFolder}
               hideDropzone={directSubFolders.length > 0}
               onDrop={onDrop}
+              heightOffset={8}
             />
             <FileTable
               className={c.FolderView_FileTable__mobile}
-              files={[...fileTableFolders, ...models]}
+              files={[...directSubFolders, ...folderModels]}
               handleEditModel={handleEditModel}
               handleChangeFolder={handleChangeFolder}
               hideDropzone={directSubFolders.length > 0}
               onDrop={onDrop}
+              heightOffset={8}
             />
           </div>
           <Spacer size='2rem' />

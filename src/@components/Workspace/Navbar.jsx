@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { useStoreon } from 'storeon/react'
 import { Link, useHistory } from 'react-router-dom'
-import * as R from 'ramda'
 import {
   AddMenu,
   Button,
@@ -29,7 +28,6 @@ import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 import { ReactComponent as SettingsIcon } from '@svg/icon-settings.svg'
 import { ReactComponent as SharedIcon } from '@svg/icon-shared.svg'
 import { ReactComponent as SignOutIcon } from '@svg/icon-signout.svg'
-import * as types from '@constants/storeEventTypes'
 import { ContextMenuTrigger } from 'react-contextmenu'
 
 const useStyles = createUseStyles(theme => {
@@ -146,28 +144,13 @@ const useStyles = createUseStyles(theme => {
   }
 })
 const noop = () => null
-const findFolderById = (id, folders) => {
-  const rootFolder = R.find(R.propEq('id', id.toString()))(folders) || {}
-  if (!R.isEmpty(rootFolder)) return rootFolder
-  let subFolder = false
-  folders.some(folder => {
-    const subfolders = folder.subfolders
-    subFolder = R.find(R.propEq('id', id.toString()))(subfolders) || false
-    return subFolder
-  })
-  return subFolder
-}
 
-const AddMenuDropdown = ({ currentFolderId, folders }) => {
+const AddMenuDropdown = ({ folder = {} }) => {
   const c = useStyles()
   const addMenuRef = useRef(null)
   const [showCreateMenu, setShowCreateMenu] = useState(false)
   const handleClickCreate = useCallback(() => setShowCreateMenu(true), [])
   useExternalClick(addMenuRef, () => setShowCreateMenu(false))
-
-  const folder = useMemo(() => {
-    return currentFolderId ? findFolderById(currentFolderId, folders) : {}
-  }, [currentFolderId, folders])
 
   return (
     <div className={c.WorkspaceNavbar_AddWrapper} ref={addMenuRef}>
@@ -206,30 +189,21 @@ const WorkspaceNavbar = ({
   const [showFileExplorer, setShowFileExplorer] = useState(false)
 
   useEffect(() => {
-    let timeout
     if (folderNav.files) {
-      timeout = setTimeout(() => {
-        setShowFileExplorer(true)
-      }, 200)
+      setShowFileExplorer(true)
     } else {
-      timeout = setTimeout(() => {
-        setShowFileExplorer(false)
-      }, 450)
-    }
-
-    return () => {
-      clearTimeout(timeout)
+      setShowFileExplorer(false)
     }
   }, [dispatch, folderNav.files, setShowFileExplorer])
 
-  useEffect(() => {
-    const filteredRootFolders = () => {
-      return folders.filter(folder => !folder.root && !folder.name.includes('//'))
-    }
-    if (filteredRootFolders.length > 0 && filteredRootFolders.length < 11) {
-      dispatch(types.FOLDER_OPEN, { id: 'files' })
-    }
-  }, [dispatch, folders])
+  // useEffect(() => {
+  //   const filteredRootFolders = () => {
+  //     return folders.filter(folder => !folder.root && !folder.name.includes('//'))
+  //   }
+  //   if (filteredRootFolders.length > 0 && filteredRootFolders.length < 11) {
+  //     dispatch(types.FOLDER_OPEN, { id: 'files' })
+  //   }
+  // }, [dispatch, folders])
 
   const shouldShowFileExplorer = useMemo(() => showFileExplorer || folderNav.files, [
     folderNav.files,
@@ -315,7 +289,7 @@ const WorkspaceNavbar = ({
           </div>
           <Spacer size={'.75rem'} />
         </div>
-        <AddMenuDropdown currentFolderId={currentFolderId} folders={folders} />
+        <AddMenuDropdown folder={folders[currentFolderId]} />
         <div className={c.WorkspaceNavbar_ScrollableFiles}>
           <div>
             <TitleTertiary className={c.WorkspaceNavbar_NavLink}>My Thangs</TitleTertiary>

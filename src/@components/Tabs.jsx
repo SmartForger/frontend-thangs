@@ -33,7 +33,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 const noop = () => null
-const Tabs = ({ className, options = [] }) => {
+const Tabs = ({ className, options = [], disabled = false }) => {
   const c = useStyles({})
   return (
     <div className={classnames(className, c.Tabs_Wrapper)}>
@@ -42,7 +42,11 @@ const Tabs = ({ className, options = [] }) => {
           const { label, selected, onClick = noop } = option
           return (
             <div key={`Tab_${ind}`}>
-              <Button className={c.Tabs_Button} tertiary={!selected} onClick={onClick}>
+              <Button
+                className={c.Tabs_Button}
+                tertiary={!selected}
+                onClick={disabled ? noop : onClick}
+              >
                 {label}
               </Button>
             </div>

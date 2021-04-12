@@ -231,6 +231,7 @@ const SearchHeader = ({
               <SearchSourceFilterActionMenu
                 selectedValue={filter}
                 onChange={handleFilterChange}
+                disabled={isLoading}
               />
             </div>
           ) : (
@@ -260,17 +261,20 @@ const SearchHeader = ({
       {experiments?.isLoading ? (
         <Skeleton variant='rect' className={c.SearchResults_Button_Skeleton} />
       ) : filterExperimentType === 'control' ? (
-        <SaveSearchButton
-          currentUser={currentUser}
-          dispatch={dispatch}
-          modelId={modelId}
-          openSignupOverlay={openSignupOverlay}
-          searchSubscriptions={searchSubscriptions}
-          searchTerm={searchQuery}
-        />
+        <>
+          <Spacer size={'.5rem'} />
+          <SaveSearchButton
+            currentUser={currentUser}
+            dispatch={dispatch}
+            modelId={modelId}
+            openSignupOverlay={openSignupOverlay}
+            searchSubscriptions={searchSubscriptions}
+            searchTerm={searchQuery}
+          />
+        </>
       ) : (
         <div className={c.SearchHeader_TabFilter}>
-          <Tabs options={filterOptions} />
+          <Tabs options={filterOptions} disabled={isLoading} />
         </div>
       )}
     </div>

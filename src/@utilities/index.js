@@ -5,6 +5,7 @@ export * from './PhysnaServer'
 export * from './ensureScriptIsLoaded'
 export * from './tree'
 export * from './model'
+export * from './selectors'
 
 /**
  * Receives Color Hex String: #FFFFFF

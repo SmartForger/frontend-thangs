@@ -11,7 +11,12 @@ import {
 } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { numberWithCommas, truncateString, getExternalAvatar } from '@utilities'
+import {
+  numberWithCommas,
+  truncateString,
+  getExternalAvatar,
+  shouldShowViewRelated,
+} from '@utilities'
 import Skeleton from '@material-ui/lab/Skeleton'
 
 const useStyles = createUseStyles(theme => {
@@ -233,6 +238,7 @@ const ModelDetails = ({
   onFindRelated = noop,
   onThangsClick = noop,
   scope,
+  searchIndex,
 }) => {
   const c = useStyles()
   const {
@@ -256,6 +262,7 @@ const ModelDetails = ({
         isExternal={isExternalModel}
         scope={scope}
         onThangsClick={onThangsClick}
+        searchIndex={searchIndex}
       >
         <div className={c.TextSearchResult_Attribution}>
           <div>
@@ -282,18 +289,22 @@ const ModelDetails = ({
         <>
           <Spacer size={'1rem'} />
           <PartThumbnailList
-            parts={parts}
             isExternalModel={isExternalModel}
+            onThangsClick={onThangsClick}
+            parts={parts}
             scope={scope}
+            searchIndex={searchIndex}
           />
         </>
       )}
-      <div
-        className={c.TextSearchResult_FindRelatedLink}
-        onClick={() => onFindRelated({ model })}
-      >
-        View related models
-      </div>
+      {shouldShowViewRelated(model) && (
+        <div
+          className={c.TextSearchResult_FindRelatedLink}
+          onClick={() => onFindRelated({ model })}
+        >
+          View related models
+        </div>
+      )}
     </div>
   )
 }
@@ -306,6 +317,7 @@ const TextSearchResult = ({
   scope,
   searchIndex,
   spotCheckRef,
+  firstCardRef,
 }) => {
   const c = useStyles()
 
@@ -319,7 +331,7 @@ const TextSearchResult = ({
         [c.TextSearchResult_ExternalLink]: isExternalModel,
         [c.TextSearchResult_ThangsLink]: !isExternalModel,
       })}
-      ref={spotCheckRef}
+      ref={firstCardRef ?? spotCheckRef}
     >
       <div className={c.TextSearchResult_ResultContents}>
         <SearchAnchor
@@ -349,6 +361,7 @@ const TextSearchResult = ({
             onFindRelated={onFindRelated}
             isExternalModel={isExternalModel}
             scope={scope}
+            searchIndex={searchIndex}
           />
           <div
             className={c.TextSearchResult_ReportModelLink}
@@ -364,7 +377,6 @@ const TextSearchResult = ({
 
 const TextSearchResults = ({
   isError,
-  isLoaded,
   isLoading,
   items,
   onThangsClick,
@@ -374,6 +386,7 @@ const TextSearchResults = ({
   searchTerm,
   spotCheckRef,
   spotCheckIndex,
+  firstCardRef,
   totalModelCount,
 }) => {
   const c = useStyles()
@@ -384,13 +397,12 @@ const TextSearchResults = ({
     )
   }
   if (isLoading && !items.length) {
-    const loadingText = `Searching ${
-      numberWithCommas(totalModelCount) || '1,500,000'
-    } models to find the best results
+    const loadingText = `Searching ${numberWithCommas(totalModelCount) || '1,500,000'
+      } models to find the best results
     for ${searchTerm}`
     return <NoResults>{loadingText}</NoResults>
   }
-  if (isLoaded && !items.length) {
+  if (!isLoading && !items.length) {
     return (
       <NoResults>
         No results found. <b>Save your search</b> and we will notify you when there are
@@ -408,17 +420,15 @@ const TextSearchResults = ({
       scope={scope}
       searchIndex={ind}
       spotCheckRef={spotCheckIndex === ind ? spotCheckRef : undefined}
+      firstCardRef={ind === 0 ? firstCardRef : undefined}
     />
   ))
   if (isLoading) {
     results.push(
       ...[...Array(10).keys()].map(key => {
         return (
-          <>
-            <div
-              className={c.TextSearchResult_Skeleton_Row}
-              key={`skeletonSearchCard-${key}`}
-            >
+          <React.Fragment key={`skeletonSearchCard-${key}`}>
+            <div className={c.TextSearchResult_Skeleton_Row}>
               <div>
                 <Skeleton
                   variant='rect'
@@ -447,7 +457,7 @@ const TextSearchResults = ({
               </div>
             </div>
             <Spacer size={'1.5rem'} />
-          </>
+          </React.Fragment>
         )
       })
     )

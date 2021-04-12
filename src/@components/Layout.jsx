@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Header, Footer, FeedbackTooltip } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
@@ -125,32 +125,40 @@ const useStyles = createUseStyles(theme => {
 })
 
 const BackToTop = () => {
+  const getScrollContainer = () => document.getElementById('root')
   const c = useStyles({})
   const [showScroll, setShowScroll] = useState(false)
 
-  const checkScrollTop = () => {
-    if (!showScroll && window.pageYOffset > 800) {
+  const checkScrollTop = useCallback(() => {
+    const container = getScrollContainer()
+
+    if (!showScroll && container.scrollTop > container.clientHeight) {
       setShowScroll(true)
-    } else if (showScroll && window.pageYOffset <= 800) {
+    } else if (showScroll && container.scrollTop <= container.clientHeight) {
       setShowScroll(false)
     }
-  }
+  }, [showScroll])
 
   const scrollTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-    window.addEventListener('scroll', checkScrollTop)
+    getScrollContainer().scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   useEffect(() => {
-    window.addEventListener('scroll', checkScrollTop)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    getScrollContainer().addEventListener('scroll', checkScrollTop)
 
-  if (!showScroll) return null
+    return () => getScrollContainer()?.removeEventListener('scroll', checkScrollTop)
+  }, [checkScrollTop])
+
   return (
-    <div className={c.BackToTop} onClick={scrollTop}>
-      <ArrowUpIcon />
-    </div>
+    <>
+      {!showScroll ? (
+        <></>
+      ) : (
+        <div className={c.BackToTop} onClick={scrollTop}>
+          <ArrowUpIcon />
+        </div>
+      )}
+    </>
   )
 }
 

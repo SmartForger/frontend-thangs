@@ -69,13 +69,6 @@ const useStyles = createUseStyles(theme => {
   }
 })
 const noop = () => null
-const getFolderName = fullFolderName => {
-  return fullFolderName.split('//').reverse()[0]
-}
-
-const getParentName = fullFolderName => {
-  return fullFolderName.split('//').slice(0, -1).join('//')
-}
 
 const FolderForm = ({
   folder = {}, //editing a folder
@@ -94,7 +87,7 @@ const FolderForm = ({
       : true
   const initialState = {
     id: id,
-    name: name ? getFolderName(name) : '',
+    name: name || '',
     isPublic: isPublic,
   }
 
@@ -118,18 +111,15 @@ const FolderForm = ({
 
   const handleFolderSubmit = useCallback(
     data => {
-      const newData = { ...data }
-      if (!R.isEmpty(folder) && folder.root) {
-        newData.name = `${getParentName(folder.name)}//${data.name}`
-      } else if (!R.isEmpty(parentFolder)) {
-        newData.name = `${parentFolder.name}//${data.name}`
-      }
-      newData.root = !R.isEmpty(parentFolder)
-        ? parentFolder.root
-          ? parentFolder.root
-          : parentFolder.id
-        : undefined
-      handleSubmit(newData)
+      handleSubmit({
+        ...data,
+        parentId:
+          parentFolder && parentFolder.id
+            ? parentFolder.id
+            : folder
+              ? folder.parentId
+              : '',
+      })
     },
     [folder, handleSubmit, parentFolder]
   )

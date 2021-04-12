@@ -104,3 +104,40 @@ export const findNodeByName = (nodes, name) => {
 
   return findNode({ subs: nodes }, name)
 }
+
+export const buildTree = (treeItems, idField = 'id', parentField = 'parentId') => {
+  const rootItems = treeItems
+    .filter(item => !item[parentField])
+    .map(item => ({ ...item }))
+
+  const addSubItems = node => {
+    node.subs = treeItems
+      .filter(item => item[parentField] === node[idField])
+      .map(item => ({ ...item }))
+    node.subs.forEach(subnode => {
+      addSubItems(subnode)
+    })
+  }
+
+  rootItems.forEach(root => {
+    addSubItems(root)
+  })
+
+  return rootItems
+}
+
+export const arrayToDictionary = (data, idField = 'id') =>
+  R.map(R.prop(0), R.groupBy(R.prop(idField), data))
+
+export const buildPath = (dict, id, mapFunc, parentField = 'parentId') => {
+  const path = [dict[id]]
+
+  let item = dict[id]
+  while (item && item[parentField]) {
+    item = dict[item[parentField]]
+    if (item) path.push(item)
+  }
+
+  const reverseMap = R.compose(R.map(mapFunc), R.reverse)
+  return reverseMap(path)
+}

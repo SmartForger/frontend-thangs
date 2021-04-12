@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useStoreon } from 'storeon/react'
-import * as R from 'ramda'
 import {
   InviteUsersForm,
   MetadataSecondary,
@@ -199,21 +198,14 @@ const UserList = ({
   )
 }
 
-const findFolderById = (id, folders) => {
-  return R.find(R.propEq('id', id.toString()))(folders) || {}
-}
-
 const InviteUsers = ({ folderId: id }) => {
   const c = useStyles()
   const [errorMessage, setErrorMessage] = useState(null)
   const { setOverlayOpen } = useOverlay()
-  const { folders, shared } = useStoreon('folders', 'shared')
-  const { data: folderData = {} } = folders
-  const { data: sharedData = {} } = shared
-  const allFolders = [...folderData, ...sharedData]
-  const folder = useMemo(() => {
-    return !R.isEmpty(allFolders) ? findFolderById(id, allFolders) : undefined
-  }, [allFolders, id])
+  const { folders } = useStoreon('folders')
+  const { data: allFolders = {} } = folders
+
+  const folder = allFolders[id]
 
   const closeOverlay = useCallback(() => {
     setOverlayOpen(false)

@@ -117,6 +117,7 @@ const AddFolder = ({ folder }) => {
       track('Create Folder', { isPrivate: !newFolderData.isPublic })
       dispatch(types.CREATE_FOLDER, {
         data: newFolderData,
+        parentId: folder.id,
         onError: error => {
           setErrorMessage(error.message)
         },
@@ -126,7 +127,7 @@ const AddFolder = ({ folder }) => {
         },
       })
     },
-    [closeOverlay, dispatch, history]
+    [closeOverlay, dispatch, folder.id, history]
   )
 
   useEffect(() => {

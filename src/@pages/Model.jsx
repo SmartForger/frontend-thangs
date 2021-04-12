@@ -356,8 +356,29 @@ const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
   )
 }
 
+const UNSUPPORTED_EXTENSIONS = ['igs', 'step', 'x_t']
+
+const canDownloadAR = model => {
+  const { parts } = model
+  if (parts) {
+    // Only check the primary part since that is the one we export to AR
+    let primaryPart = null
+    if (parts.length > 1) {
+      primaryPart = R.find(R.propEq('isPrimary', true))(parts) || parts[0]
+    } else {
+      primaryPart = parts[0]
+    }
+
+    const partExt = primaryPart.filename.split('.').pop()
+    return !UNSUPPORTED_EXTENSIONS.includes(partExt.toLowerCase())
+  }
+
+  return false
+}
+
 const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
   const c = useStyles()
+  const isARSupported = useMemo(() => canDownloadAR(model), [model])
   const { dispatch } = useStoreon()
   const downloadModel = useCallback(
     format => {
@@ -387,9 +408,15 @@ const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
   )
 
   return (
-    <div className={c.Model_DownloadAR}>
-      <ARDownloadActionMenu onChange={handleClick} />
-    </div>
+    <>
+      {isARSupported ? (
+        <div className={c.Model_DownloadAR}>
+          <ARDownloadActionMenu onChange={handleClick} />
+        </div>
+      ) : (
+        <></>
+      )}
+    </>
   )
 }
 
@@ -646,6 +673,7 @@ const StatsActionsAndPrints = ({
   openSignupOverlay = noop,
   pageTitle,
 }) => {
+  const isARSupported = useMemo(() => canDownloadAR(modelData), [modelData])
   return (
     <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
       <div>
@@ -658,15 +686,18 @@ const StatsActionsAndPrints = ({
           <Spacer size='.5rem' />
           <ShareActionMenu iconOnly={true} title={pageTitle} model={modelData} />
         </div>
-        <Spacer size='1rem' />
-        <ContainerColumn>
-          <DownloadARLink
-            model={modelData}
-            isAuthedUser={isAuthedUser}
-            openSignupOverlay={openSignupOverlay}
-          />
-          <ViewARLink model={modelData} />
-        </ContainerColumn>
+        {isARSupported && (
+          <>
+            <Spacer size='1rem' />
+            <ContainerColumn>
+              <DownloadARLink
+                model={modelData}
+                isAuthedUser={isAuthedUser}
+                openSignupOverlay={openSignupOverlay}
+              />
+            </ContainerColumn>
+          </>
+        )}
         {modelData.license ? (
           <>
             <Spacer size='1rem' />

@@ -114,16 +114,14 @@ const MyThangs = () => {
   const [currentFolderId, setCurrentFolderId] = useState(null)
   const [isMobileNavOpen, setMobileNavOpen] = useState(false)
   const currentUserId = authenticationService.getCurrentUserId()
-  const { dispatch, folders = {}, models = {}, shared = {}, thangs } = useStoreon(
+  const { dispatch, folders = {}, models = {}, thangs } = useStoreon(
     'folders',
     'models',
-    'thangs',
-    'shared'
+    'thangs'
   )
   const { isLoading, isLoaded } = thangs
-  const { data: folderData } = folders
   const { data: modelData } = models
-  const { data: sharedData } = shared
+
   useStarred()
   const { startTimer, getTime } = usePerformanceMetrics()
 
@@ -197,8 +195,7 @@ const MyThangs = () => {
     setCurrentFolderId,
     handleEditModel,
     handleChangeFolder,
-    myFolders: folderData,
-    sharedFolders: sharedData,
+    folders: folders.data,
     models: modelData,
     userId: currentUserId,
     onDrop,
@@ -214,10 +211,11 @@ const MyThangs = () => {
             style: { height: '100%' },
           }}
           holdToDisplay={-1}
+          collect={() => ({ folder: folders[currentFolderId] })}
         >
           <WorkspaceNavbar
             currentFolderId={currentFolderId}
-            folders={folderData}
+            folders={folders.data}
             handleChangeFolder={handleChangeFolder}
             handleEditModel={handleEditModel}
             isLoadingThangs={isLoading}
@@ -242,6 +240,7 @@ const MyThangs = () => {
                 style: { height: '100%' },
               }}
               holdToDisplay={-1}
+              collect={() => ({ folder: folders[currentFolderId] })}
             >
               <Switch>
                 <Route

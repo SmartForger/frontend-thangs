@@ -10,6 +10,7 @@ const getInitialState = () => ({
   ...getStatusState(STATUSES.INIT),
   data: [],
   pageToLoad: 0,
+  endOfData: false,
 })
 
 export default store => {
@@ -21,7 +22,7 @@ export default store => {
     textSearchResults: {
       ...state.textSearchResults,
       ...getStatusState(status),
-      ...(isInitial && { data: [], pageToLoad: 1 }),
+      ...(isInitial && { data: [] }),
     },
   }))
 
@@ -34,10 +35,8 @@ export default store => {
       ...state.textSearchResults,
       ...getStatusState(STATUSES.LOADED),
       data: isInitial ? data : [...state.textSearchResults.data, ...data],
-      pageToLoad: isInitial
-        ? 1
-        : state.textSearchResults.pageToLoad +
-          Math.floor(data.length / SEARCH_RESULT_SIZE),
+      pageToLoad: isInitial ? 1 : state.textSearchResults.pageToLoad + 1,
+      endOfData: !data.length,
     },
   }))
 
@@ -45,74 +44,61 @@ export default store => {
     types.FETCH_TEXT_SEARCH_RESULTS,
     async (
       state,
-      {
-        isInitial = false,
-        onError = noop,
-        onFinish = noop,
-        pageCount = 1,
-        scope,
-        searchTerm,
-      }
+      { isInitial = false, onError = noop, onFinish = noop, scope, searchTerm }
     ) => {
-      if (!state.textSearchResults.isLoading) {
+      if (state.textSearchResults.isLoading) return
+      if (isInitial) store.dispatch(types.RESET_TEXT_SEARCH_RESULTS)
+      store.dispatch(types.CHANGE_TEXT_SEARCH_RESULTS_STATUS, {
+        status: STATUSES.LOADING,
+        isInitial,
+      })
+      const { data = [], error } = await api({
+        method: 'GET',
+        endpoint: 'models/search-by-text',
+        params: {
+          searchTerm,
+          collapse: true,
+          scope: scope || 'all',
+          page: isInitial ? 0 : state.textSearchResults.pageToLoad,
+          pageSize: SEARCH_RESULT_SIZE,
+        },
+      })
+
+      if (isInitial) {
+        track('Text Search Started', {
+          searchTerm,
+          searchScope: scope,
+          pageCount: isInitial ? 0 : state?.textSearchResults?.pageToLoad,
+        })
+      } else {
+        track('Text Search - Infinite Scroll', {
+          searchTerm,
+          searchScope: scope,
+          pageCount: state?.textSearchResults?.pageToLoad,
+        })
+      }
+
+      if (error) {
         store.dispatch(types.CHANGE_TEXT_SEARCH_RESULTS_STATUS, {
-          status: STATUSES.LOADING,
+          status: STATUSES.FAILURE,
+        })
+        onError(error)
+      } else {
+        store.dispatch(types.LOADED_TEXT_SEARCH_RESULTS, {
+          data,
           isInitial,
         })
-        const { data = [], error } = await api({
-          method: 'GET',
-          endpoint: 'models/search-by-text',
-          params: {
-            searchTerm,
-            collapse: true,
-            scope: scope || 'all',
-            page: isInitial ? 0 : state.textSearchResults.pageToLoad,
-            pageSize:
-              isInitial && pageCount === 1
-                ? SEARCH_RESULT_SIZE
-                : SEARCH_RESULT_SIZE * pageCount,
-          },
+
+        track(`Text search - ${data.length > 0 ? 'Results' : 'No Results'}`, {
+          searchTerm,
+          searchScope: scope,
+          numOfMatches: data.length,
         })
 
-        if (isInitial || state?.textSearchResults?.pageToLoad === 0) {
-          track('Text Search Started', {
-            searchTerm,
-            searchScope: scope,
-            pageCount: isInitial ? 0 : state?.textSearchResults?.pageToLoad,
-          })
-        } else {
-          track('Text Search - Infinite Scroll', {
-            searchTerm,
-            searchScope: scope,
-            pageCount: state?.textSearchResults?.pageToLoad,
-          })
-        }
-
-        if (error) {
-          store.dispatch(types.CHANGE_TEXT_SEARCH_RESULTS_STATUS, {
-            status: STATUSES.FAILURE,
-          })
-          onError(error)
-        } else {
-          store.dispatch(types.CHANGE_TEXT_SEARCH_RESULTS_STATUS, {
-            status: STATUSES.LOADED,
-          })
-          store.dispatch(types.LOADED_TEXT_SEARCH_RESULTS, {
-            data,
-            isInitial,
-          })
-
-          track(`Text search - ${data.length > 0 ? 'Results' : 'No Results'}`, {
-            searchTerm,
-            searchScope: scope,
-            numOfMatches: data.length,
-          })
-
-          onFinish({
-            data,
-            endOfData: !data.length,
-          })
-        }
+        onFinish({
+          data,
+          endOfData: !data.length,
+        })
       }
     }
   )

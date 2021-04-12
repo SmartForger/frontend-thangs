@@ -4,13 +4,7 @@ import { STATUSES } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import { track } from '@utilities/analytics'
-import {
-  createNewFolders,
-  removeFolder,
-  removeModelFromFolder,
-  updateFolder,
-  updateLike,
-} from './updater'
+import { createNewFolders, removeFolder, updateFolder, updateLike } from './updater'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -99,11 +93,14 @@ export default store => {
 
   store.on(
     types.CREATE_FOLDER,
-    async (state, { data: newFolderData, onFinish, onError }) => {
+    async (state, { data: newFolderData, parentId, onFinish, onError }) => {
+      const { data: folders } = state.folders
+      const root = getRootFolderId(folders, parentId)
+
       store.dispatch(types.SAVING_FOLDER)
       const { data, error } = await api({
         method: 'POST',
-        endpoint: 'folders',
+        endpoint: `folders/${root}`,
         body: newFolderData,
       })
       if (error) {
@@ -112,11 +109,15 @@ export default store => {
       } else {
         track('Folder Created')
         const newFolders = createNewFolders(
-          { ...newFolderData, id: data.folderId, currentUser: state.currentUser.data },
+          {
+            ...newFolderData,
+            id: Math.random().toString().slice(2),
+            currentUser: state.currentUser.data,
+          },
           state.folders.data
         )
         store.dispatch(types.UPDATE_FOLDERS, newFolders)
-        onFinish(data.folderId)
+        onFinish(data.rootFolderId)
         store.dispatch(types.SAVED_FOLDER)
         store.dispatch(types.FETCH_THANGS, { silentUpdate: true })
       }
@@ -127,10 +128,13 @@ export default store => {
     types.DELETE_FOLDER,
     async (state, { folder, onFinish = noop, onError = noop }) => {
       store.dispatch(types.SAVING_FOLDER)
-      const { id: folderId } = folder
+      const { id: folderId, parentId } = folder
+
+      let rootId = getRootFolderId(state.folders.data, parentId)
+
       const { error } = await api({
         method: 'DELETE',
-        endpoint: `folders/${folderId}`,
+        endpoint: parentId ? `folders/${rootId}/${folderId}` : `folders/${folderId}`,
       })
       if (error) {
         store.dispatch(types.ERROR_FOLDER)
@@ -144,13 +148,6 @@ export default store => {
       }
     }
   )
-
-  store.on(types.DELETE_MODEL_FROM_FOLDER, async (state, { model }) => {
-    store.dispatch(types.SAVING_FOLDER)
-    const newFolders = removeModelFromFolder(model, state.folders.data)
-    store.dispatch(types.UPDATE_FOLDERS, newFolders)
-    store.dispatch(types.SAVED_FOLDER)
-  })
 
   store.on(
     types.FETCH_FOLDER,
@@ -177,17 +174,22 @@ export default store => {
   store.on(
     types.EDIT_FOLDER,
     async (
-      _,
+      state,
       { id: folderId, folder: updatedFolder, onError = noop, onFinish = noop }
     ) => {
       if (R.isNil(folderId)) return
       store.dispatch(types.SAVING_FOLDER)
+
+      const { data: folders } = state.folders
+      const root = getRootFolderId(folders, updatedFolder.parentId)
+
       const userId = authenticationService.getCurrentUserId()
       const { error } = await api({
         method: 'PUT',
-        endpoint: `folders/${folderId}`,
+        endpoint: `folders/${root || folderId}`,
         body: {
           name: updatedFolder.name,
+          folderId: root ? folderId : undefined,
         },
       })
 
@@ -296,4 +298,17 @@ export default store => {
       store.dispatch(types.SAVED_FOLDER)
     }
   })
+}
+
+function getRootFolderId(folders, parentId) {
+  let folder = { parentId }
+  while (folder.parentId) {
+    folder = folders[folder.parentId]
+
+    if (!folder) {
+      return ''
+    }
+  }
+
+  return folder.id || ''
 }

@@ -1,6 +1,8 @@
 import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
+import * as R from 'ramda'
+import { arrayToDictionary } from '@utilities'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -15,24 +17,41 @@ export default store => {
     thangs: getInitAtom(),
   }))
 
-  store.on(types.UPDATE_THANGS, (state, event) => ({
-    activity: {
-      ...state.activity,
-      data: event.activity,
-    },
-    folders: {
-      ...state.folders,
-      data: event.folders,
-    },
-    models: {
-      ...state.models,
-      data: event.models,
-    },
-    shared: {
-      ...state.shared,
-      data: event.shared,
-    },
-  }))
+  store.on(types.UPDATE_THANGS, (state, event) => {
+    const { folders, models: rootModels } = event
+    let models = [
+      ...R.pathOr([], ['models', 'data'], state),
+      ...rootModels.map(m => ({ ...m, id: +m.id, isPublic: true })),
+    ]
+    folders.forEach(folder => {
+      models = [
+        ...models,
+        ...folder.models.map(model => {
+          model.isPublic = folder.isPublic
+          model.folderId = folder.id
+          return model
+        }),
+      ]
+      delete folder.models
+      delete folder.subfolders
+    })
+    models = R.uniqBy(R.prop('id'), models)
+
+    return {
+      activity: {
+        ...state.activity,
+        data: event.activity,
+      },
+      folders: {
+        ...state.folders,
+        data: arrayToDictionary(event.folders),
+      },
+      models: {
+        ...state.models,
+        data: models,
+      },
+    }
+  })
 
   store.on(types.ERROR_THANGS, (state, _event) => ({
     thangs: {

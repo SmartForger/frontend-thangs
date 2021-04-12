@@ -68,7 +68,7 @@ const useStyles = createUseStyles(theme => {
       ...theme.mixins.flexRow,
     },
     DropdownMenu_FullWidth: {
-      width: '100%',
+      width: ({ borderSize }) => `calc(100% - (${borderSize} * 2))`,
       flex: 'unset !important',
     },
   }
@@ -164,7 +164,7 @@ const DropdownMenu = ({
     isAutoClosed,
   })
   const isOpen = !isOpenExternal ? isOpenInternal : isOpenExternal
-  const c = useStyles({ isOpen, noIcons, myThangsMenu })
+  const c = useStyles({ borderSize, isOpen, noIcons, myThangsMenu })
 
   const handleOnTargetClick = useCallback(() => {
     onTargetClick()

@@ -70,10 +70,12 @@ const MorePartsIndicator = ({ remainingPartCount }) => {
 }
 
 export const PartThumbnailList = ({
-  parts,
   isExternalModel,
+  onThangsClick,
+  parts,
   scope,
   maximumPartsToDisplay = 12,
+  searchIndex,
 }) => {
   const c = useStyles()
   return (
@@ -91,8 +93,10 @@ export const PartThumbnailList = ({
               search: `?part=${part.modelId}`,
               state: { prevPath: window.location.href },
             }}
+            onThangsClick={onThangsClick}
             isExternal={isExternalModel}
             scope={scope}
+            searchIndex={searchIndex}
           >
             <Card className={classnames(c.PartThumbnailList_PartThumbnailWrapper)}>
               <ModelThumbnail
