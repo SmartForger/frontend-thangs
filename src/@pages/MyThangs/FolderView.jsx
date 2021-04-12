@@ -193,7 +193,7 @@ const FolderHeader = ({ folder, folders, rootFolder, setFolder = noop }) => {
   }, [folder, setOverlay])
 
   const members = rootFolder ? rootFolder.members : folder.members
-  console.log(folderPath)
+
   return (
     <>
       <Spacer className={c.Spacer__mobile} size='2rem' />

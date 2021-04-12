@@ -50,9 +50,9 @@ export const flattenTree = (nodes, childProp = 'subs') => {
     const newNode = { ...node, level }
     const subs = node[childProp]
       ? node[childProp].reduce(
-          (arr, subnode) => [...arr, ...addLevel(subnode, level + 1)],
-          []
-        )
+        (arr, subnode) => [...arr, ...addLevel(subnode, level + 1)],
+        []
+      )
       : []
     delete newNode[childProp]
     newNode.hasChildren = subs.length > 0

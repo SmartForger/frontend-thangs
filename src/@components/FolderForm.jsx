@@ -83,8 +83,8 @@ const FolderForm = ({
   const isPublic = !R.isEmpty(parentFolder)
     ? parentFolder.isPublic
     : !R.isEmpty(folder)
-    ? folder.isPublic
-    : true
+      ? folder.isPublic
+      : true
   const initialState = {
     id: id,
     name: name || '',
@@ -117,8 +117,8 @@ const FolderForm = ({
           parentFolder && parentFolder.id
             ? parentFolder.id
             : folder
-            ? folder.parentId
-            : '',
+              ? folder.parentId
+              : '',
       })
     },
     [folder, handleSubmit, parentFolder]

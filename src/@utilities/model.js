@@ -41,7 +41,7 @@ const getThumbnailUrl = (model = {}) => {
     } else {
       primaryPart = parts[0]
     }
-    return primaryPart.filename.replace('#', encodeURIComponent('#'))
+    if (primaryPart) return primaryPart.filename.replace('#', encodeURIComponent('#'))
   }
   //This is used by the model uploader to generate small thumbnails in the "Enter Part Info" overlay
   if (newFileName) {

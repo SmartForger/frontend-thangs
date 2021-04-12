@@ -11,7 +11,6 @@ export const getSubFolders = (foldersDict, folderId) =>
 
 export const getSharedFolders = foldersDict => filterFoldersDict(isShared, foldersDict)
 
-export const getMyFolders = (foldersDict, userId) =>
-  filterFoldersDict(isNotShared, foldersDict)
+export const getMyFolders = foldersDict => filterFoldersDict(isNotShared, foldersDict)
 
 export const getRootFolders = foldersDict => filterFoldersDict(hasNoParent, foldersDict)

@@ -19,9 +19,9 @@ export const createNewFolders = (newFolderData, oldFolders) => {
 
   return id
     ? {
-        ...oldFolders,
-        [id]: newFolder,
-      }
+      ...oldFolders,
+      [id]: newFolder,
+    }
     : oldFolders
 }
 
@@ -32,9 +32,9 @@ export const updateFolder = (newFolder = {}, oldFolders) => {
   const { id } = newFolder
   return id
     ? {
-        ...oldFolders,
-        [id]: newFolder,
-      }
+      ...oldFolders,
+      [id]: newFolder,
+    }
     : oldFolders
 }
 
