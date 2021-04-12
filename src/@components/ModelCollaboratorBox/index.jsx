@@ -1,0 +1,2 @@
+import ModelCollaboratorBoxContainer from './ModelCollaboratorBoxContainer'
+export default ModelCollaboratorBoxContainer

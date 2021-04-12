@@ -55,7 +55,7 @@ const CommitNode = ({ message, tag, created, author = {}, isActive, isInitial })
             color={isActive ? '#13BD98' : '#DCF7F1'}
             textColor={isActive ? '#FFFFFF' : '#00A187'}
           >
-            {tag}
+            {tag.toString().slice(0, 7)}
           </Tag>
         </ContainerRow>
         <Spacer size={'.5rem'} />

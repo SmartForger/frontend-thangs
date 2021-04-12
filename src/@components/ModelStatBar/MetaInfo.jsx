@@ -1,6 +1,7 @@
 import React from 'react'
 import { createUseStyles, Title, Label, Spacer } from '@physna/voxel-ui'
 import { ContainerColumn, ContainerRow } from '@components'
+import { numberWithCommas } from '@utilities'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -12,6 +13,12 @@ const useStyles = createUseStyles(_theme => {
       justifyContent: 'center',
       marginRight: '0.75rem',
       borderRadius: '50%',
+    },
+    MetaInfo_Title: {
+      lineHeight: '1.25rem',
+    },
+    MetaInfo_Label: {
+      color: theme.colors.grey[400],
     },
   }
 })
@@ -25,9 +32,13 @@ const MetaInfo = ({ label, value, icon, iconColor, className }) => {
         {icon}
       </div>
       <ContainerColumn>
-        <Title headerLevel='h3'>{value}</Title>
+        <Title className={c.MetaInfo_Title} headerLevel='h3'>
+          {numberWithCommas(value)}
+        </Title>
         <Spacer size='0.25rem' />
-        <Label>{label}</Label>
+        <Label className={c.MetaInfo_Label} small>
+          {label}
+        </Label>
       </ContainerColumn>
     </ContainerRow>
   )
