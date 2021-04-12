@@ -107,7 +107,7 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
 
   const setSearchFilters = useCallback(
     ({ scopeFilter, exactFilter }) => {
-      if (scopeFilter !== filter || exactFilter !== exact) {
+      if (scopeFilter !== filter || `${exactFilter}` !== exact) {
         history.push(`?filter=${scopeFilter}&exact=${exactFilter}`)
       }
     },
@@ -196,7 +196,7 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
       {searchQuery && (
         <SearchHeader
           filter={filter}
-          isExactMatchSearch={exact}
+          isExactMatchSearch={exact.toLowerCase() === 'true'}
           setFilters={setSearchFilters}
           isLoading={isLoading}
           resultCount={models.length}

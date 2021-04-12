@@ -311,6 +311,7 @@ const TabSearchHeader = ({
         <SearchSourceFilterActionMenu
           selectedValue={filter}
           onChange={onFilterChange}
+          disabled={disabled}
           className={c.SearchResults_FilterButton}
         />
         {showExactSearchFilter && (
@@ -324,11 +325,6 @@ const TabSearchHeader = ({
             />
           </>
         )}
-        <SearchSourceFilterActionMenu
-          selectedValue={filter}
-          disabled={disabled}
-          onChange={onFilterChange}
-        />
       </ContainerRow>
     </div>
   )
