@@ -196,7 +196,7 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
       {searchQuery && (
         <SearchHeader
           filter={filter}
-          isExactMatchSearch={exact.toLowerCase() === 'true'}
+          isExactMatchSearch={exact && exact?.toLowerCase() === 'true'}
           setFilters={setSearchFilters}
           isLoading={isLoading}
           resultCount={models.length}
