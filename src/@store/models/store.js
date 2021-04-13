@@ -138,7 +138,7 @@ export default store => {
         message: `Add ${part.name}`,
         events: [
           {
-            action: 'add',
+            action: 'addedPart',
             partIdentifier: part.identifier,
           },
         ],
@@ -177,7 +177,7 @@ export default store => {
           message: `Deleted ${part.name}`,
           events: [
             {
-              action: 'delete',
+              action: 'deletedPart',
               partIdentifier: part.identifier,
             },
           ],

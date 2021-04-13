@@ -475,7 +475,7 @@ export default store => {
       Object.keys(uploadedFiles).forEach(file => {
         formData[file].previousParts.forEach(part => {
           events.push({
-            action: 'edit',
+            action: 'replacedPart',
             filename: uploadedFiles[file].newFileName,
             size: uploadedFiles[file].size,
             partIdentifier: part.partIdentifier,
