@@ -1,19 +1,15 @@
 import React, { useEffect, useMemo } from 'react'
+import * as R from 'ramda'
+import classnames from 'classnames'
 import { useHistory, useParams } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import * as R from 'ramda'
-import {
-  FileTable,
-  FolderCard,
-  FolderHeader,
-  Spacer,
-  Spinner,
-  TitleTertiary,
-} from '@components'
+
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
+import { FileTable, FolderCard, FolderHeader, Spacer, Spinner } from '@components'
 import { useQuery } from '@hooks'
 import { authenticationService } from '@services'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import classnames from 'classnames'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import * as types from '@constants/storeEventTypes'
 import { pageview } from '@utilities/analytics'
@@ -221,7 +217,7 @@ const FolderView = ({
             {directSubFolders.length > 0 && (
               <div className={c.FolderView_FoldersSection}>
                 <Spacer size='4rem' />
-                <TitleTertiary>Folders</TitleTertiary>
+                <Title headerLevel={HeaderLevel.tertiary}>Folders</Title>
                 <div className={c.FolderView_Folders}>
                   {directSubFolders.map((subfolder, index) => (
                     <React.Fragment key={`folder=${subfolder.id}_${index}`}>
@@ -239,7 +235,7 @@ const FolderView = ({
             {folderModels.length > 0 && (
               <>
                 <Spacer size='4rem' />
-                <TitleTertiary>Files</TitleTertiary>
+                <Title headerLevel={HeaderLevel.tertiary}>Files</Title>
               </>
             )}
             <Spacer size='2rem' />{' '}

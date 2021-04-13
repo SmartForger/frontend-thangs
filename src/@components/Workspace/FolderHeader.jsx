@@ -1,20 +1,23 @@
 import React, { useMemo, useCallback } from 'react'
+import classnames from 'classnames'
 import { Link } from 'react-router-dom'
+
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   Contributors,
   FolderActionToolbar,
   LikeFolderButton,
   MetadataPrimary,
   Spacer,
-  TitleTertiary,
 } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import classnames from 'classnames'
-import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
-import { ReactComponent as PadlockIcon } from '@svg/icon-padlock.svg'
 import { buildPath } from '@utilities'
 import { useOverlay } from '@hooks'
 import { track } from '@utilities/analytics'
+
+import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
+import { ReactComponent as PadlockIcon } from '@svg/icon-padlock.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -119,7 +122,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const FolderHeader = ({ folder, folders, rootFolder }) => {
+const FolderHeader = ({ folder, folders }) => {
   const c = useStyles({})
   const { id } = folder
   const { setOverlay } = useOverlay()
@@ -132,22 +135,19 @@ const FolderHeader = ({ folder, folders, rootFolder }) => {
   const folderName = folder.name
   const members = folder.members || []
 
-  const handleInviteUsers = useCallback(
-    () => {
-      track('File Menu - Invite Members')
-      setOverlay({
-        isOpen: true,
-        template: 'inviteUsers',
-        data: {
-          folderId: folder.id,
-          animateIn: true,
-          windowed: true,
-          dialogue: true,
-        },
-      })
-    },
-    [folder.id, setOverlay]
-  )
+  const handleInviteUsers = useCallback(() => {
+    track('File Menu - Invite Members')
+    setOverlay({
+      isOpen: true,
+      template: 'inviteUsers',
+      data: {
+        folderId: folder.id,
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
+      },
+    })
+  }, [folder.id, setOverlay])
 
   return (
     <>
@@ -159,7 +159,7 @@ const FolderHeader = ({ folder, folders, rootFolder }) => {
           <div className={c.FolderView_Col}>
             <div className={c.FolderView_TitleAndIcons}>
               <div className={c.FolderView_RootLink}>
-                <TitleTertiary>{folderName}</TitleTertiary>
+                <Title headerLevel={HeaderLevel.tertiary}>{folderName}</Title>
               </div>
               <Spacer size={'.5rem'} />
               {!folder.isPublic && (
@@ -193,7 +193,11 @@ const FolderHeader = ({ folder, folders, rootFolder }) => {
           </div>
         </div>
         <div className={classnames(c.FolderView_Row, c.FolderView_Row__desktop)}>
-          <Contributors onClick={handleInviteUsers} users={[folder.creator, ...members]} displayLength='10' />
+          <Contributors
+            onClick={handleInviteUsers}
+            users={[folder.creator, ...members]}
+            displayLength='10'
+          />
           <Spacer size={'1rem'} />
           <FolderActionToolbar folder={folder} />
         </div>

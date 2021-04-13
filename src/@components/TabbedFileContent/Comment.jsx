@@ -1,10 +1,13 @@
 import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { formatDistanceStrict } from 'date-fns'
+
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { CommentsActionMenu, Markdown, TitleTertiary, ProfilePicture } from '@components'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
+import { CommentsActionMenu, Markdown, ProfilePicture } from '@components'
 import { useOverlay } from '@hooks'
-import { track } from '../../@utilities/analytics'
+import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -126,7 +129,9 @@ const Comment = ({ modelId, comment, currentUser }) => {
       <div className={c.CommentsForModel_Content}>
         <div className={c.CommentsForModel_CommentHeader}>
           <div className={c.CommentsForModel_CommentHeaderRow}>
-            <TitleTertiary>{owner.fullName.trim() || owner.username}</TitleTertiary>
+            <Title headerLevel={HeaderLevel.tertiary}>
+              {owner.fullName.trim() || owner.username}
+            </Title>
             <span className={c.CommentsForModel_timestamp}>{`${time} ago`}</span>
           </div>
           {canEdit && <CommentsActionMenu onChange={onChange} />}

@@ -1,7 +1,10 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react'
 import * as R from 'ramda'
-import classnames from 'classnames'
 import Joi from '@hapi/joi'
+import classnames from 'classnames'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   Button,
   Dropdown,
@@ -14,11 +17,9 @@ import {
   Spacer,
   Textarea,
   Toggle,
-  TitleTertiary,
   SelectFolderActionMenu,
 } from '@components'
 import { useForm } from '@hooks'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import { formatBytes } from '@utilities'
 import { CATEGORIES } from '@constants/fileUpload'
 
@@ -323,7 +324,9 @@ const PartInfo = props => {
         )}
 
         <div className={c.PartInfo_ModelInfo}>
-          <TitleTertiary title={activeNode.name}>{activeNode.name}</TitleTertiary>
+          <Title headerLevel={HeaderLevel.tertiary} title={activeNode.name}>
+            {activeNode.name}
+          </Title>
           {activeNode.size && (
             <>
               <Spacer size={'.5rem'} />

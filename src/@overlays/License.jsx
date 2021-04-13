@@ -1,4 +1,10 @@
 import React, { useCallback, useEffect } from 'react'
+import classnames from 'classnames'
+import * as R from 'ramda'
+import { useStoreon } from 'storeon/react'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   Button,
   Divider,
@@ -6,17 +12,12 @@ import {
   SingleLineBodyText,
   Spacer,
   Spinner,
-  TitleTertiary,
 } from '@components'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import classnames from 'classnames'
 import { overlayview, track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
 import { ReactComponent as DownloadIcon } from '@svg/icon-download.svg'
 import * as types from '@constants/storeEventTypes'
-import { useStoreon } from 'storeon/react'
-import * as R from 'ramda'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -175,7 +176,7 @@ const LicenseContent = ({ c, model }) => {
       <div className={c.License_FormWrapper}>
         <Spacer size='4rem' />
         <div className={c.License_Title}>
-          <TitleTertiary>Creative Commons License</TitleTertiary>
+          <Title headerLevel={HeaderLevel.tertiary}>Creative Commons License</Title>
           <div onClick={handleDownload} className={c.License_Download}>
             <DownloadIcon width={12} height={12} />
             &nbsp;Download

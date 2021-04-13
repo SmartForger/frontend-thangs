@@ -1,8 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import Joi from '@hapi/joi'
+import classnames from 'classnames'
+import * as EmailValidator from 'email-validator'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import Joi from '@hapi/joi'
-import * as EmailValidator from 'email-validator'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   Button,
   Divider,
@@ -10,13 +14,10 @@ import {
   MetadataSecondary,
   SingleLineBodyText,
   Spacer,
-  TitleTertiary,
 } from '@components'
 import { useForm } from '@hooks'
 import { authenticationService } from '@services'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
 import { useOverlay } from '@hooks'
 import { overlayview } from '@utilities/analytics'
@@ -228,7 +229,7 @@ const MoreInfoForm = ({
       <Spacer size='3rem' />
       <div className={c.MoreInfo_FormWrapper}>
         <Spacer size='4rem' />
-        <TitleTertiary>{'Finish Registration'}</TitleTertiary>
+        <Title headerLevel={HeaderLevel.tertiary}>{'Finish Registration'}</Title>
         <Divider spacing={'1.5rem'} />
         <form onSubmit={onFormSubmit(handleUpdateEmail)}>
           {showErrorMessage && (

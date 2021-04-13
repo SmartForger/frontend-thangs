@@ -1,7 +1,10 @@
 import React, { useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import * as R from 'ramda'
+
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   ContainerColumn,
   ContainerRow,
@@ -9,11 +12,11 @@ import {
   LikeFolderButton,
   MetadataPrimary,
   Spacer,
-  TitleTertiary,
   ModelActionToolbar,
 } from '@components'
 import { useOverlay } from '@hooks'
 import { buildPath } from '@utilities'
+
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as PadlockIcon } from '@svg/icon-padlock.svg'
 
@@ -64,7 +67,7 @@ const FileHeader = ({ file = {}, folders = [] }) => {
         <Spacer size={'1rem'} />
         <ContainerColumn>
           <ContainerRow>
-            <TitleTertiary>{name}</TitleTertiary>
+            <Title headerLevel={HeaderLevel.tertiary}>{name}</Title>
             <Spacer size={'.5rem'} />
             {folder && folder.isPublic && (
               <>
@@ -95,7 +98,11 @@ const FileHeader = ({ file = {}, folders = [] }) => {
         </ContainerColumn>
       </ContainerRow>
       <ContainerRow alignItems={'center'}>
-        <Contributors users={R.isEmpty(folder) ? [] : [folder.creator, ...members]} displayLength='10' onClick={handleInviteUsers} />
+        <Contributors
+          users={R.isEmpty(folder) ? [] : [folder.creator, ...members]}
+          displayLength='10'
+          onClick={handleInviteUsers}
+        />
         <Spacer size={'1rem'} />
         <ModelActionToolbar model={file} isExpandedOptions />
       </ContainerRow>

@@ -1,16 +1,10 @@
 import React, { useEffect, useMemo } from 'react'
-import { useStoreon } from 'storeon/react'
-import {
-  FileCard,
-  FileTable,
-  FolderCard,
-  Spacer,
-  Spinner,
-  StatsBar,
-  TitleTertiary,
-} from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
+import { useStoreon } from 'storeon/react'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
+import { FileCard, FileTable, FolderCard, Spacer, Spinner, StatsBar } from '@components'
 import { useStarred } from '@hooks'
 import { pageview } from '@utilities/analytics'
 import { getMyFolders } from '@selectors'
@@ -98,13 +92,13 @@ const RecentFilesView = ({
     <main className={classnames(className, c.RecentFilesView_Row)}>
       <div className={c.RecentFilesView_Content}>
         <Spacer size='2rem' />
-        <TitleTertiary>Activity & Contributions</TitleTertiary>
+        <Title headerLevel={HeaderLevel.tertiary}>Activity & Contributions</Title>
         <Spacer size='2rem' />
         <StatsBar userActivity={activityData} />
         {(isLoadingStarred || hasStarred) && (
           <>
             <Spacer size='4rem' />
-            <TitleTertiary>Starred</TitleTertiary>
+            <Title headerLevel={HeaderLevel.tertiary}>Starred</Title>
             <div className={c.RecentFilesView_Starred}>
               {isLoadingStarred && (
                 <div className={c.RecentFilesView_Loader}>
@@ -131,7 +125,8 @@ const RecentFilesView = ({
           </>
         )}
         <Spacer size='4rem' />
-        <TitleTertiary>Recent</TitleTertiary>
+        <Title headerLevel={HeaderLevel.tertiary}>Recent</Title>
+        <Spacer size='2rem' />
         <FileTable
           files={files}
           handleChangeFolder={handleChangeFolder}

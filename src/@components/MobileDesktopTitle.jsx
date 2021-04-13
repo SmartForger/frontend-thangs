@@ -1,18 +1,15 @@
 import React from 'react'
-import { TitleSecondary, TitleTertiary } from './Text'
-import useDeviceDetect from '../@hooks/useDeviceDetect'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
+import useDeviceDetect from '@hooks/useDeviceDetect'
 
 const MobileDesktopTitle = ({ children }) => {
   const { isMobile } = useDeviceDetect()
 
   return (
-    <>
-      {isMobile ? (
-        <TitleSecondary>{children}</TitleSecondary>
-      ) : (
-        <TitleTertiary>{children}</TitleTertiary>
-      )}
-    </>
+    <Title headerLevel={isMobile ? HeaderLevel.secondary : HeaderLevel.tertiary}>
+      {children}
+    </Title>
   )
 }
 export default MobileDesktopTitle

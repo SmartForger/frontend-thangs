@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as R from 'ramda'
 import Joi from '@hapi/joi'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   Button,
   Dropdown,
@@ -12,10 +15,8 @@ import {
   Spacer,
   SingleLineBodyText,
   Textarea,
-  TitleTertiary,
 } from '@components'
 import { useForm } from '@hooks'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import { CATEGORIES } from '@constants/fileUpload'
 
 const useStyles = createUseStyles(theme => {
@@ -254,7 +255,7 @@ const AssemblyInfo = ({
       )}
       <div className={c.AssemblyInfo_Row}>
         <div className={c.AssemblyInfo_ModelInfo}>
-          <TitleTertiary>Enter Information</TitleTertiary>
+          <Title headerLevel={HeaderLevel.tertiary}>Enter Information</Title>
           <Spacer size={'.5rem'} />
           <MetadataPrimary>{metaText}</MetadataPrimary>
         </div>

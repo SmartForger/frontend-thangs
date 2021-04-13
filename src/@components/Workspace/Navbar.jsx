@@ -1,6 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
+import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
 import { Link, useHistory } from 'react-router-dom'
+import { ContextMenuTrigger } from 'react-contextmenu'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   AddMenu,
   Button,
@@ -11,10 +16,7 @@ import {
   MultiLineBodyText,
   NavLink,
   Spacer,
-  TitleTertiary,
 } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import classnames from 'classnames'
 import { authenticationService } from '@services'
 import { useCurrentUser, useExternalClick } from '@hooks'
 import { ReactComponent as Logo } from '@svg/logo.svg'
@@ -28,7 +30,6 @@ import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 import { ReactComponent as SettingsIcon } from '@svg/icon-settings.svg'
 import { ReactComponent as SharedIcon } from '@svg/icon-shared.svg'
 import { ReactComponent as SignOutIcon } from '@svg/icon-signout.svg'
-import { ContextMenuTrigger } from 'react-contextmenu'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -297,7 +298,12 @@ const WorkspaceNavbar = ({
         <AddMenuDropdown folder={folders[currentFolderId]} />
         <div className={c.WorkspaceNavbar_ScrollableFiles}>
           <div>
-            <TitleTertiary className={c.WorkspaceNavbar_NavLink}>My Thangs</TitleTertiary>
+            <Title
+              headerLevel={HeaderLevel.tertiary}
+              className={c.WorkspaceNavbar_NavLink}
+            >
+              My Thangs
+            </Title>
             <Spacer size={'2rem'} />
             <NavLink
               className={c.WorkspaceNavbar_NavLink}

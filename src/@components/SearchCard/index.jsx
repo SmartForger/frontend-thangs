@@ -1,17 +1,12 @@
 import React, { useCallback, useState } from 'react'
+import classnames from 'classnames'
 import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import {
-  Checkbox,
-  Divider,
-  Spacer,
-  MultiLineBodyText,
-  TitleTertiary,
-  Pill,
-} from '@components'
-import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import classnames from 'classnames'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Checkbox, Divider, Spacer, MultiLineBodyText, Pill } from '@components'
+import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import * as types from '@constants/storeEventTypes'
 
 const useStyles = createUseStyles(theme => {
@@ -111,7 +106,9 @@ const SearchCard = ({ className, search = {} }) => {
             onClick={handleSearch}
           >
             <div className={c.SearchCard_Title}>
-              <TitleTertiary>{modelId ? `#${modelId}` : searchTerm}</TitleTertiary>
+              <Title headerLevel={HeaderLevel.tertiary}>
+                {modelId ? `#${modelId}` : searchTerm}
+              </Title>
               <Spacer size='.5rem' />
               {newResultCount > 0 && (
                 <>

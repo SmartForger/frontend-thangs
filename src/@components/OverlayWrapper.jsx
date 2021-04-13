@@ -1,11 +1,14 @@
 import React, { useCallback } from 'react'
-import { Button, SingleLineBodyText, Spacer, Spinner } from '@components'
+
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Button, SingleLineBodyText, Spacer, Spinner } from '@components'
+import { useOverlay } from '@hooks'
+import { MultiLineBodyText } from '@components/Text/Body'
+
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as ArrowLeftIcon } from '@svg/icon-arrow-left.svg'
-import { useOverlay } from '@hooks'
-import { TitleTertiary } from '@components/Text/Title'
-import { MultiLineBodyText } from '@components/Text/Body'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -145,7 +148,7 @@ const OverlayWrapper = ({
         </div>
         {overlayTitle && (
           <>
-            <TitleTertiary>{overlayTitle}</TitleTertiary>
+            <Title headerLevel={HeaderLevel.tertiary}>{overlayTitle}</Title>
             <Spacer size={'.5rem'} />
           </>
         )}

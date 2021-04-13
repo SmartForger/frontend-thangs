@@ -1,6 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
+import classnames from 'classnames'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   Button,
   Divider,
@@ -11,8 +15,6 @@ import {
   MultiLineBodyText,
   SingleLineBodyText,
   Spacer,
-  TitleSecondary,
-  TitleTertiary,
 } from '@components'
 import { useForm, useGoogleLogin, useFacebookLogin, useQuery } from '@hooks'
 import { authenticationService } from '@services'
@@ -25,8 +27,6 @@ import { ReactComponent as HeartIcon } from '@svg/icon-heart.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
 import { ReactComponent as FacebookLogo } from '@svg/facebook-logo.svg'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import classnames from 'classnames'
 import { overlayview, track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
 
@@ -209,7 +209,9 @@ const SignUpPromo = ({ c, titleMessage }) => {
       <div className={c.Signup_SignUpPromoSection}>
         <div>
           <Spacer size='4rem' />
-          <TitleSecondary light>{titleMessage || 'Where Thangs happen.'}</TitleSecondary>
+          <Title headerLevel={HeaderLevel.secondary} light>
+            {titleMessage || 'Where Thangs happen.'}
+          </Title>
           <Spacer size='2rem' />
           <MultiLineBodyText light className={c.Signup_SignUpPromoText}>
             Join for free and experience one of the fastest growing modeling communities
@@ -370,7 +372,9 @@ const SignUpForm = ({ c, setOverlayData, handleSignInClick, showPromo, source })
       <Spacer size='3rem' />
       <div className={c.Signup_FormWrapper}>
         <Spacer size='4rem' />
-        <TitleTertiary>{showPromo ? 'Sign Up For Free' : 'Create Account'}</TitleTertiary>
+        <Title headerLevel={HeaderLevel.tertiary}>
+          {showPromo ? 'Sign Up For Free' : 'Create Account'}
+        </Title>
         <Spacer size='2rem' />
         <a
           href={googleLoginUrl}

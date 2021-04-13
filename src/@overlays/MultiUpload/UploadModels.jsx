@@ -1,19 +1,20 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import Dropzone from 'react-dropzone'
 import * as R from 'ramda'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   MultiLineBodyText,
   Pill,
   Spacer,
   Spinner,
-  TitleTertiary,
   Toggle,
   Tooltip,
   TreeView,
 } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as UploadCardIcon } from '@svg/upload-card.svg'
 import { ReactComponent as InfoIcon } from '@svg/icon-info.svg'
-import Dropzone from 'react-dropzone'
 import { FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { overlayview } from '@utilities/analytics'
 import UploadTreeNode from './UploadTreeNode'
@@ -276,9 +277,9 @@ const UploadModels = ({
                   <div className={c.UploadModels_UploadColumn}>
                     {R.isEmpty(uploadFiles) && <UploadCardIcon />}
                     <Spacer size={'1rem'} />
-                    <TitleTertiary>
+                    <Title headerLevel={HeaderLevel.tertiary}>
                       {multiple ? 'Drag & Drop files' : 'Drag & Drop file'}
-                    </TitleTertiary>
+                    </Title>
                     <MultiLineBodyText>or browse to upload.</MultiLineBodyText>
                     <Spacer size={'1rem'} />
                     <Pill tertiary>Browse</Pill>
@@ -296,13 +297,13 @@ const UploadModels = ({
       {fileLength > 0 && (
         <>
           <Spacer size='1rem' />
-          <TitleTertiary>
+          <Title headerLevel={HeaderLevel.tertiary}>
             <div className={c.UploadModels_FileTitle}>
               {fileLength > 1 ? `${fileLength} files` : 'File'}
               <Spacer size={'.5rem'} />
               {isLoadingFiles && <Spinner size={'1rem'} />}
             </div>
-          </TitleTertiary>
+          </Title>
           <Spacer size='0.5rem' />
           <TreeView
             className={c.UploadTreeView}

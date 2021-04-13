@@ -3,13 +3,8 @@ import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import {
-  LandingCarousel,
-  LandingSearchBar,
-  MultiLineBodyText,
-  Spacer,
-  TitlePrimary,
-} from '@components'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+import { LandingCarousel, LandingSearchBar, MultiLineBodyText, Spacer } from '@components'
 import { useOverlay } from '@hooks'
 import { numberWithCommas } from '@utilities'
 
@@ -75,14 +70,15 @@ const LandingHero = ({ showSearchTextFlash, user }) => {
     <>
       <div className={c.Header_Landing}>
         <Spacer size={'1rem'} />
-        <TitlePrimary
+        <Title
+          headerLevel={HeaderLevel.primary}
           light
           className={classnames(c.Header_LandingTitle, {
             [c.Fade]: searchMinimized,
           })}
         >
           Let&apos;s find Thangs.
-        </TitlePrimary>
+        </Title>
         <Spacer size={'1rem'} />
         <MultiLineBodyText
           light

@@ -1,15 +1,10 @@
 import React, { useEffect, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
 import { Helmet } from 'react-helmet'
-import {
-  Layout,
-  TitleSecondary,
-  MultiLineBodyText,
-  Spacer,
-  TitlePrimary,
-} from '@components'
+import { Layout, MultiLineBodyText, Spacer } from '@components'
 import { usePageMeta, useTranslations } from '@hooks'
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
 import classnames from 'classnames'
 
 import { ReactComponent as SearchAboutUsIcon } from '@svg/aboutUs-search.svg'
@@ -179,7 +174,7 @@ const AboutUs = () => {
                   <div className={c.AboutUs_ValuePropText}>
                     <Icon />
                     <Spacer size='1rem' />
-                    <TitleSecondary>{title}</TitleSecondary>
+                    <Title headerLevel={HeaderLevel.secondary}>{title}</Title>
                     <Spacer size='1rem' />
                     <MultiLineBodyText>{body}</MultiLineBodyText>
                   </div>
@@ -206,7 +201,9 @@ const AboutUs = () => {
           <div className={c.AboutUs_ModelText}>
             <Spacer size='6rem' />
             <BackgroundLeft className={c.AboutUs_BackgroundLeft} />
-            <TitlePrimary>{modelsIngested || '1,000,000'} models</TitlePrimary>
+            <Title headerLevel={HeaderLevel.primary}>
+              {modelsIngested || '1,000,000'} models
+            </Title>
             <Spacer size='1rem' />
             <MultiLineBodyText>
               ...indexed and ready to be searched. And growing fast.

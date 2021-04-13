@@ -1,15 +1,11 @@
 import React, { useEffect } from 'react'
-import { useStoreon } from 'storeon/react'
-import * as R from 'ramda'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
-import {
-  CardCollectionSearch,
-  SearchCards,
-  Spinner,
-  Spacer,
-  TitleTertiary,
-} from '@components'
+import * as R from 'ramda'
+import { useStoreon } from 'storeon/react'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
+import { CardCollectionSearch, SearchCards, Spinner, Spacer } from '@components'
 import * as types from '@constants/storeEventTypes'
 import { pageview } from '@utilities/analytics'
 
@@ -85,7 +81,7 @@ const SavedSearches = ({ className }) => {
       <Spacer size='2rem' />
       <div className={c.SavedSearches_Content}>
         <Spacer size='2rem' />
-        <TitleTertiary>Saved Searches</TitleTertiary>
+        <Title headerLevel={HeaderLevel.tertiary}>Saved Searches</Title>
         <Spacer size='2rem' />
         <CardCollectionSearch
           cardWidth={'22.5rem'}
