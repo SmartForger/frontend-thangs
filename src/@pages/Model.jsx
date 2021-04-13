@@ -15,23 +15,21 @@ import {
   LikeModelButton,
   Markdown,
   ModelDetails,
+  ModelPrints,
   ModelTitle,
   ModelViewer as BackupViewer,
-  MultiLineBodyText,
   ProgressText,
   RelatedModels,
   Revised,
   ShareActionMenu,
   Spacer,
   Spinner,
-  TitleTertiary,
   ToggleFollowButton,
 } from '@components'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as LicenseIcon } from '@svg/license.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
-import { ReactComponent as PhotoIcon } from '@svg/icon-photo.svg'
 import { ReactComponent as AndroidIcon } from '@svg/icon-android.svg'
 import { Message404 } from './404'
 import { createUseStyles } from '@physna/voxel-ui/@style'
@@ -200,24 +198,6 @@ const useStyles = createUseStyles(theme => {
       '& svg': {
         marginRight: '.5rem',
       },
-    },
-    Model_ModelPrints: {
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    Model_ModelPrint_Image: {
-      width: '6.25rem',
-      height: '6.25rem',
-      borderRadius: '0.75rem',
-      objectFit: 'cover',
-    },
-    Model_ModelPrint_ImagesWrapper: {
-      display: 'flex',
-      flexWrap: 'wrap',
-
-      '& > img': {
-        margin: '0.5rem',
-      }
     },
     Model_LicenseLink: {
       textDecoration: 'underline',
@@ -468,78 +448,6 @@ const ModelStats = ({ model = {} }) => {
         <CalendarIcon width={12} height={12} />
         {model.created && format(new Date(model.created), 'MMMM d, y')}
       </span>
-    </div>
-  )
-}
-
-const AddPrintPhotoLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) => {
-  const { setOverlay } = useOverlay()
-
-  const handleClick = useCallback(() => {
-    if (isAuthedUser) {
-      setOverlay({
-        isOpen: true,
-        template: 'attachmentUpload',
-        data: {
-          animateIn: true,
-          windowed: true,
-          dialogue: true,
-          modelId,
-        },
-      })
-    } else {
-      openSignupOverlay('Join to Like, Follow, Share.', 'Version Upload')
-      track('SignUp Prompt Overlay', { source: 'Version Upload' })
-    }
-  }, [isAuthedUser, modelId, openSignupOverlay, setOverlay])
-
-  return (
-    <Button secondary onClick={handleClick}>
-      <div>
-        <PhotoIcon />
-      </div>
-      <Spacer size='.5rem' />
-      Add photo
-    </Button>
-  )
-}
-
-const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => {
-  const c = useStyles()
-  const {
-    dispatch,
-    modelAttachments = {},
-  } = useStoreon('modelAttachments')
-
-  useEffect(() => {
-    dispatch(types.FETCH_MODEL_ATTACHMENTS, { modelId: model.id })
-  }, [dispatch, model.id])
-
-  return (
-    <div className={c.Model_ModelPrints}>
-      <TitleTertiary>
-        Model prints
-      </TitleTertiary>
-      <Spacer size='.5rem' />
-      <MultiLineBodyText>
-        {modelAttachments.data.length ? (
-          <div className={c.Model_ModelPrint_ImagesWrapper}>
-            {modelAttachments.data.map(a => (
-              <img key={a.id} className={c.Model_ModelPrint_Image} src={a.imageUrl} />
-            )
-            )}
-          </div>
-        ) : (
-          'No prints added yet, be the first to upload a photo!'
-        )}
-
-      </MultiLineBodyText>
-      <Spacer size='1.5rem' />
-      <AddPrintPhotoLink
-        modelId={model.id}
-        isAuthedUser={isAuthedUser}
-        openSignupOverlay={openSignupOverlay}
-      />
     </div>
   )
 }

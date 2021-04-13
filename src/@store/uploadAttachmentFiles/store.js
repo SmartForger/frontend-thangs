@@ -166,6 +166,7 @@ export default store => {
       const results = await Promise.all(getRequests())
         .then((res) => {
           store.dispatch(types.SUBMIT_ATTACHMENTS_SUCCEEDED)
+          store.dispatch(types.FETCH_MODEL_ATTACHMENTS, { modelId })
           return res
         })
         .catch(() => store.dispatch(types.SUBMIT_ATTACHMENTS_FAILED))
