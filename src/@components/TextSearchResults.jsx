@@ -2,12 +2,14 @@ import React from 'react'
 import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
 import {
   Card,
+  ContainerRow,
   DownloadARLink,
   ModelThumbnail,
   NoResults,
   PartThumbnailList,
   ProfilePicture,
   SearchAnchor,
+  SearchResultDetailsMenu,
   Spacer,
 } from '@components'
 import classnames from 'classnames'
@@ -68,8 +70,9 @@ const useStyles = createUseStyles(theme => {
     },
     TextSearchResult_Column: {
       display: 'flex',
-      justifyContent: 'space-between',
+      justifyContent: 'center',
       flexDirection: 'column',
+      flexGrow: 1,
     },
     TextSearchResult_Content: {
       padding: '.5rem 0',
@@ -162,6 +165,14 @@ const useStyles = createUseStyles(theme => {
         margin: '0 !important',
       },
     },
+    TextSearchResult_DetailFooterLink: {
+      fontSize: '1rem',
+      fontWeight: '500',
+      lineHeight: '1rem',
+      cursor: 'pointer',
+      textDecoration: 'underline',
+      color: theme.colors.blue[500],
+    },
     TextSearchResult_FindRelatedLink: {
       marginTop: '1rem',
       fontSize: '1rem',
@@ -241,11 +252,13 @@ const ModelDetails = ({
   onFindRelated = noop,
   onThangsClick = noop,
   onSignupRequired = noop,
+  onReportModel = noop,
   isAuthedUser,
   scope,
   searchIndex,
 }) => {
   const c = useStyles()
+
   const {
     attributionUrl,
     modelTitle,
@@ -259,18 +272,18 @@ const ModelDetails = ({
 
   return (
     <div className={c.TextSearchResult_Content}>
-      <SearchAnchor
-        to={{
-          pathname: attributionUrl,
-          state: { prevPath: window.location.href },
-        }}
-        isExternal={isExternalModel}
-        scope={scope}
-        onThangsClick={onThangsClick}
-        searchIndex={searchIndex}
-      >
-        <div className={c.TextSearchResult_Attribution}>
-          <div>
+      <div className={c.TextSearchResult_Attribution}>
+        <SearchAnchor
+          to={{
+            pathname: attributionUrl,
+            state: { prevPath: window.location.href },
+          }}
+          isExternal={isExternalModel}
+          scope={scope}
+          onThangsClick={onThangsClick}
+          searchIndex={searchIndex}
+        >
+          <ContainerRow alignItems='center'>
             {attributionUrl && (
               <>
                 <ProfilePicture
@@ -284,9 +297,20 @@ const ModelDetails = ({
             <span className={c.TextSearchResult_ExternalUrl} title={model.attributionUrl}>
               {(ownerUsername && ownerUsername.split('@')[0]) || model.attributionUrl}
             </span>
-          </div>
-          {isExternalModel && <ExternalLinkIcon />}
-        </div>
+            {isExternalModel && <ExternalLinkIcon />}
+          </ContainerRow>
+        </SearchAnchor>
+        <SearchResultDetailsMenu model={model} onReportModel={onReportModel} />
+      </div>
+      <SearchAnchor
+        to={{
+          pathname: attributionUrl,
+          state: { prevPath: window.location.href },
+        }}
+        isExternal={isExternalModel}
+        scope={scope}
+        onThangsClick={onThangsClick}
+      >
         <div className={c.TextSearchResult_Name}>{modelTitle || modelFileName}</div>
         <div className={c.TextSearchResult_Description}>{formattedModelDescription}</div>
       </SearchAnchor>
@@ -302,20 +326,30 @@ const ModelDetails = ({
           />
         </>
       )}
-      {shouldShowViewRelated(model) && (
-        <div
-          className={c.TextSearchResult_FindRelatedLink}
-          onClick={() => onFindRelated({ model })}
-        >
-          View related models
-        </div>
-      )}
-      <Spacer size={'1rem'} />
-      <DownloadARLink
-        model={model}
-        isAuthedUser={isAuthedUser}
-        openSignupOverlay={onSignupRequired}
-      />
+      <Spacer size={'1.5rem'} />
+      <ContainerRow>
+        {shouldShowViewRelated(model) && (
+          <>
+            <div
+              className={c.TextSearchResult_DetailFooterLink}
+              onClick={() => onFindRelated({ model })}
+            >
+              View Related Models
+            </div>
+            <Spacer size={'1rem'} />
+          </>
+        )}
+        <DownloadARLink
+          model={model}
+          isAuthedUser={isAuthedUser}
+          openSignupOverlay={onSignupRequired}
+          TargetComponent={({ onClick = noop }) => (
+            <div onClick={onClick} className={c.TextSearchResult_DetailFooterLink}>
+              Download AR Model
+            </div>
+          )}
+        />
+      </ContainerRow>
     </div>
   )
 }
@@ -378,12 +412,6 @@ const TextSearchResult = ({
             scope={scope}
             searchIndex={searchIndex}
           />
-          <div
-            className={c.TextSearchResult_ReportModelLink}
-            onClick={() => onReportModel({ model })}
-          >
-            Report Model
-          </div>
         </div>
       </div>
     </div>

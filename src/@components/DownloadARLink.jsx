@@ -10,21 +10,24 @@ import { track } from '@utilities/analytics'
 const useStyles = createUseStyles(() => {
   return {
     DownloadARLink: {
-      width: '100%',
-
       '& > div': {
         width: '100%',
       },
 
       '& > div > div': {
-        width: '100%',
+        width: 'fit-content',
       },
     },
   }
 })
 
 const noop = () => null
-const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
+const DownloadARLink = ({
+  model,
+  isAuthedUser,
+  openSignupOverlay = noop,
+  TargetComponent,
+}) => {
   const c = useStyles()
   const isARSupported = useMemo(() => canDownloadAR(model), [model])
   const { dispatch } = useStoreon()
@@ -59,7 +62,10 @@ const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
     <>
       {isARSupported ? (
         <div className={c.DownloadARLink}>
-          <ARDownloadActionMenu onChange={handleClick} />
+          <ARDownloadActionMenu
+            onChange={handleClick}
+            TargetComponent={TargetComponent}
+          />
         </div>
       ) : (
         <></>
