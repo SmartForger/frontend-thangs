@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useStoreon } from 'storeon/react'
 import {
   ContainerRow,
-  ExactSearchFilterActionMenu,
   SaveSearchButton,
   Spacer,
   SearchSourceFilterActionMenu,
@@ -167,7 +166,7 @@ const ParsedSearchQuery = ({
   return (
     <>
       {isExactMatchSearch || !isExactOrPartial ? (
-        <ContainerRow className={className}>&quot;{decodedQuery}&quot;</ContainerRow>
+        <ContainerRow className={className}>{decodedQuery}</ContainerRow>
       ) : (
         <>
           {decodedQuery
@@ -194,7 +193,6 @@ const ControlSearchHeader = ({
   filter,
   onFilterChange = noop,
   isExactMatchSearch,
-  onExactMatchSearchChange = noop,
   isLoading = true,
   endOfModels = true,
   modelId,
@@ -232,20 +230,6 @@ const ControlSearchHeader = ({
               onChange={onFilterChange}
               thin
             />
-            {showExactSearchFilter && (
-              <>
-                <Spacer width='.25rem' height='2rem' />
-                <ContainerRow alignItems='center'>
-                  with&nbsp;
-                  <ExactSearchFilterActionMenu
-                    disabled={disabled}
-                    selectedValue={isExactMatchSearch}
-                    onChange={onExactMatchSearchChange}
-                    thin
-                  />
-                </ContainerRow>
-              </>
-            )}
           </div>
         </div>
       </div>
@@ -267,7 +251,6 @@ const TabSearchHeader = ({
   filter,
   onFilterChange = noop,
   isExactMatchSearch,
-  onExactMatchSearchChange = noop,
   isLoading = true,
   modelId,
   resultCount,
@@ -314,17 +297,6 @@ const TabSearchHeader = ({
           disabled={disabled}
           className={c.SearchResults_FilterButton}
         />
-        {showExactSearchFilter && (
-          <>
-            <Spacer size='.5rem' />
-            <ExactSearchFilterActionMenu
-              disabled={disabled}
-              selectedValue={isExactMatchSearch}
-              onChange={onExactMatchSearchChange}
-              className={c.SearchResults_FilterButton}
-            />
-          </>
-        )}
       </ContainerRow>
     </div>
   )
@@ -382,18 +354,10 @@ const SearchHeader = ({
 
   const handleFilterChange = useCallback(
     value => {
-      setFilters({ scopeFilter: value, exactFilter: isExactMatchSearch })
+      setFilters({ scopeFilter: value })
       track('Search Filter Change', { filter: value })
     },
-    [setFilters, isExactMatchSearch]
-  )
-
-  const handleExactMatchFilterChange = useCallback(
-    value => {
-      setFilters({ scopeFilter: filter, exactFilter: value })
-      track('Exact Search Change', { exactSearch: value })
-    },
-    [setFilters, filter]
+    [setFilters]
   )
 
   return (
@@ -406,7 +370,6 @@ const SearchHeader = ({
           filter={filter}
           onFilterChange={handleFilterChange}
           isExactMatchSearch={isExactMatchSearch}
-          onExactMatchSearchChange={handleExactMatchFilterChange}
           isLoading={isLoading}
           endOfModels={endOfModels}
           modelId={modelId}
@@ -422,7 +385,6 @@ const SearchHeader = ({
           filter={filter}
           onFilterChange={handleFilterChange}
           isExactMatchSearch={isExactMatchSearch}
-          onExactMatchSearchChange={handleExactMatchFilterChange}
           isLoading={isLoading}
           endOfModels={endOfModels}
           modelId={modelId}

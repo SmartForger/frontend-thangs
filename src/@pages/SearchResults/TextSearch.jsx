@@ -92,12 +92,10 @@ const maxScrollCount = 20
 const noop = () => null
 const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
   const FILTER_DEFAULT = 'all'
-  const EXACT_SEARCH_DEFAULT = false
   const c = useStyles()
   const [endOfModels, setEndOfModels] = useState(false)
   const history = useHistory()
   const filter = useQuery('filter') || FILTER_DEFAULT
-  const exact = useQuery('exact') || EXACT_SEARCH_DEFAULT
   const { searchQuery } = useParams()
 
   const { dispatch, textSearchResults, modelsStats } = useStoreon(
@@ -105,13 +103,17 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
     'modelsStats'
   )
 
+  const isExactMatch = useMemo(() => textSearchResults.isExactSearchMode, [
+    textSearchResults.isExactSearchMode,
+  ])
+
   const setSearchFilters = useCallback(
-    ({ scopeFilter, exactFilter }) => {
-      if (scopeFilter !== filter || `${exactFilter}` !== exact) {
-        history.push(`?filter=${scopeFilter}&exact=${exactFilter}`)
+    ({ scopeFilter }) => {
+      if (scopeFilter !== filter) {
+        history.push(`?filter=${scopeFilter}`)
       }
     },
-    [filter, history, exact]
+    [filter, history]
   )
 
   const textModels = R.path(['data'], textSearchResults) || []
@@ -139,29 +141,26 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
       dispatch(types.FETCH_TEXT_SEARCH_RESULTS, {
         searchTerm: decodeURIComponent(searchQuery),
         scope: filter,
-        isExactMatch: exact,
         isInitial: true,
         spotCheck,
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery, filter, exact])
+  }, [searchQuery, filter])
 
   const onScroll = useCallback(() => {
     dispatch(types.FETCH_TEXT_SEARCH_RESULTS, {
       searchTerm: decodeURIComponent(searchQuery),
       scope: filter,
-      isExactMatch: exact,
     })
-  }, [dispatch, filter, searchQuery, exact])
+  }, [dispatch, filter, searchQuery])
 
   const handleLoadMore = useCallback(() => {
     dispatch(types.FETCH_TEXT_SEARCH_RESULTS, {
       searchTerm: decodeURIComponent(searchQuery),
       scope: filter,
-      isExactMatch: exact,
     })
-  }, [dispatch, searchQuery, filter, exact])
+  }, [dispatch, searchQuery, filter])
 
   const [cardHeight, setCardHeight] = useState()
   const firstCardRef = useCallback(element => {
@@ -196,7 +195,7 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
       {searchQuery && (
         <SearchHeader
           filter={filter}
-          isExactMatchSearch={exact && exact?.toLowerCase() === 'true'}
+          isExactMatchSearch={isExactMatch}
           setFilters={setSearchFilters}
           isLoading={isLoading}
           resultCount={models.length}
