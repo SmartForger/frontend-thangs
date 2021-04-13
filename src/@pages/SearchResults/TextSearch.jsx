@@ -89,13 +89,8 @@ const useStyles = createUseStyles(theme => {
 })
 
 const maxScrollCount = 20
-const noop = () => null
-const TextSearchPage = ({
-  isAuthedUser,
-  onFindRelated = noop,
-  onReportModel = noop,
-  onSignupRequired = noop,
-}) => {
+
+const TextSearchPage = () => {
   const FILTER_DEFAULT = 'all'
   const c = useStyles()
   const [endOfModels, setEndOfModels] = useState(false)
@@ -206,15 +201,11 @@ const TextSearchPage = ({
       {searchQuery ? (
         <>
           <TextSearchResults
-            isAuthedUser={isAuthedUser}
             isError={isError}
             isLoaded={isLoaded}
             isLoading={isLoading}
             items={models}
             onThangsClick={onThangsClick}
-            onFindRelated={onFindRelated}
-            onReportModel={onReportModel}
-            onSignupRequired={onSignupRequired}
             searchScope={filter}
             searchTerm={searchQuery}
             spotCheckIndex={spotCheck}

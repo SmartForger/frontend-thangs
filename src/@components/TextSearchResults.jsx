@@ -1,26 +1,25 @@
-import React from 'react'
-import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
+import React, { useContext } from 'react'
+import classnames from 'classnames'
+import Skeleton from '@material-ui/lab/Skeleton'
+
+import { createUseStyles } from '@physna/voxel-ui/@style'
+
 import {
   Card,
   ContainerRow,
-  DownloadARLink,
   ModelThumbnail,
   NoResults,
   PartThumbnailList,
   ProfilePicture,
   SearchAnchor,
   SearchResultDetailsMenu,
+  SearchResultFooter,
   Spacer,
 } from '@components'
-import classnames from 'classnames'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import {
-  numberWithCommas,
-  truncateString,
-  getExternalAvatar,
-  shouldShowViewRelated,
-} from '@utilities'
-import Skeleton from '@material-ui/lab/Skeleton'
+import { numberWithCommas, truncateString, getExternalAvatar } from '@utilities'
+import { SearchActionContext } from '@pages/SearchResults/SearchActions'
+
+import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -165,22 +164,6 @@ const useStyles = createUseStyles(theme => {
         margin: '0 !important',
       },
     },
-    TextSearchResult_DetailFooterLink: {
-      fontSize: '1rem',
-      fontWeight: '500',
-      lineHeight: '1rem',
-      cursor: 'pointer',
-      textDecoration: 'underline',
-      color: theme.colors.blue[500],
-    },
-    TextSearchResult_FindRelatedLink: {
-      marginTop: '1rem',
-      fontSize: '1rem',
-      fontWeight: '500',
-      lineHeight: '1rem',
-      cursor: 'pointer',
-      textDecoration: 'underline',
-    },
     TextSearchResult_ReportModelLink: {
       fontSize: '.75rem',
       fontWeight: '500',
@@ -249,15 +232,12 @@ const noop = () => null
 const ModelDetails = ({
   isExternalModel,
   model = {},
-  onFindRelated = noop,
   onThangsClick = noop,
-  onSignupRequired = noop,
-  onReportModel = noop,
-  isAuthedUser,
   scope,
   searchIndex,
 }) => {
   const c = useStyles()
+  const { reportModel, findRelated } = useContext(SearchActionContext)
 
   const {
     attributionUrl,
@@ -300,7 +280,7 @@ const ModelDetails = ({
             {isExternalModel && <ExternalLinkIcon />}
           </ContainerRow>
         </SearchAnchor>
-        <SearchResultDetailsMenu model={model} onReportModel={onReportModel} />
+        <SearchResultDetailsMenu model={model} onReportModel={reportModel} />
       </div>
       <SearchAnchor
         to={{
@@ -327,29 +307,7 @@ const ModelDetails = ({
         </>
       )}
       <Spacer size={'1.5rem'} />
-      <ContainerRow>
-        {shouldShowViewRelated(model) && (
-          <>
-            <div
-              className={c.TextSearchResult_DetailFooterLink}
-              onClick={() => onFindRelated({ model })}
-            >
-              View Related Models
-            </div>
-            <Spacer size={'1rem'} />
-          </>
-        )}
-        <DownloadARLink
-          model={model}
-          isAuthedUser={isAuthedUser}
-          openSignupOverlay={onSignupRequired}
-          TargetComponent={({ onClick = noop }) => (
-            <div onClick={onClick} className={c.TextSearchResult_DetailFooterLink}>
-              Download AR Model
-            </div>
-          )}
-        />
-      </ContainerRow>
+      <SearchResultFooter model={model} onFindRelated={findRelated} />
     </div>
   )
 }
@@ -357,10 +315,6 @@ const ModelDetails = ({
 const TextSearchResult = ({
   model,
   onThangsClick = noop,
-  onFindRelated = noop,
-  onReportModel = noop,
-  onSignupRequired = noop,
-  isAuthedUser,
   scope,
   searchIndex,
   spotCheckRef,
@@ -404,10 +358,6 @@ const TextSearchResult = ({
           <ModelDetails
             model={model}
             onThangsClick={onThangsClick}
-            onReportModel={onReportModel}
-            onFindRelated={onFindRelated}
-            onSignupRequired={onSignupRequired}
-            isAuthedUser={isAuthedUser}
             isExternalModel={isExternalModel}
             scope={scope}
             searchIndex={searchIndex}
@@ -423,10 +373,6 @@ const TextSearchResults = ({
   isLoading,
   items,
   onThangsClick,
-  onFindRelated,
-  onReportModel,
-  onSignupRequired,
-  isAuthedUser,
   searchScope: scope,
   searchTerm,
   spotCheckRef,
@@ -460,11 +406,7 @@ const TextSearchResults = ({
     <TextSearchResult
       key={`textResult_${ind}`}
       model={item}
-      onFindRelated={onFindRelated}
-      onReportModel={onReportModel}
       onThangsClick={onThangsClick}
-      onSignupRequired={onSignupRequired}
-      isAuthedUser={isAuthedUser}
       scope={scope}
       searchIndex={ind}
       spotCheckRef={spotCheckIndex === ind ? spotCheckRef : undefined}

@@ -35,7 +35,7 @@ const DownloadARLink = ({
     format => {
       if (format !== 'android') return //TEMP - Remove once ios is available
       dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
-        id: model.id,
+        id: model.id ?? model.modelId,
         format,
         onFinish: downloadUrl => {
           window.location.assign(downloadUrl)
@@ -43,7 +43,7 @@ const DownloadARLink = ({
         },
       })
     },
-    [dispatch, model.id]
+    [dispatch, model.id, model.modelId]
   )
 
   const handleClick = useCallback(

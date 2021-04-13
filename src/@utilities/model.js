@@ -11,8 +11,13 @@ export const shouldShowViewRelated = model =>
 const UNSUPPORTED_EXTENSIONS = ['igs', 'step', 'x_t']
 
 export const canDownloadAR = model => {
+  const isSupported = filename => {
+    const extension = filename.split('.').pop()
+    return !UNSUPPORTED_EXTENSIONS.includes(extension.toLowerCase())
+  }
+
   const { parts } = model
-  if (parts) {
+  if (parts?.length > 0) {
     // Only check the primary part since that is the one we export to AR
     let primaryPart = null
     if (parts.length > 1) {
@@ -21,8 +26,9 @@ export const canDownloadAR = model => {
       primaryPart = parts[0]
     }
 
-    const partExt = primaryPart.filename.split('.').pop()
-    return !UNSUPPORTED_EXTENSIONS.includes(partExt.toLowerCase())
+    return isSupported(primaryPart.filename ?? primaryPart.fileName)
+  } else if (model.fileName) {
+    return isSupported(model.fileName)
   }
 
   return false

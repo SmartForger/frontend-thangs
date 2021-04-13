@@ -92,12 +92,8 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
-const noop = () => null
+
 const SearchResult = ({
-  onFindRelated = noop,
-  onReportModel = noop,
-  onSignupRequired = noop,
-  isAuthedUser,
   isError,
   isLoading = true,
   modelId,
@@ -127,10 +123,6 @@ const SearchResult = ({
         <>
           {filteredModels && filteredModels.length > 0 ? (
             <ModelSearchResults
-              isAuthedUser={isAuthedUser}
-              onSignupRequired={onSignupRequired}
-              handleFindRelated={onFindRelated}
-              onReportModel={onReportModel}
               items={filteredModels}
               searchModelFileName={searchModelFileName}
               showSocial={false}
@@ -150,10 +142,6 @@ const SearchResult = ({
 }
 
 const ThangsSearchResult = ({
-  onFindRelated,
-  onReportModel,
-  onSignupRequired = noop,
-  isAuthedUser,
   isError,
   isLoading = true,
   isOtherModelsLoaded,
@@ -191,10 +179,6 @@ const ThangsSearchResult = ({
         <>
           {models && models.length > 0 ? (
             <ModelSearchResults
-              isAuthedUser={isAuthedUser}
-              onSignupRequired={onSignupRequired}
-              handleFindRelated={onFindRelated}
-              onReportModel={onReportModel}
               items={models}
               searchModelFileName={searchModelFileName}
               showSocial={false}
@@ -214,12 +198,7 @@ const ThangsSearchResult = ({
   )
 }
 
-const GeoSearchPage = ({
-  isAuthedUser,
-  onFindRelated = noop,
-  onReportModel = noop,
-  onSignupRequired = noop,
-}) => {
+const GeoSearchPage = () => {
   const FILTER_ALL = 'all'
   const FILTER_THANGS = 'thangs'
   const FILTER_PHYN = 'phyn'
@@ -282,10 +261,6 @@ const GeoSearchPage = ({
         <>
           {filter !== FILTER_PHYN && (modelId || phynId) ? (
             <ThangsSearchResult
-              onFindRelated={onFindRelated}
-              onReportModel={onReportModel}
-              onSignupRequired={onSignupRequired}
-              isAuthedUser={isAuthedUser}
               isError={thangs.isError}
               isLoading={thangs.isLoading}
               isOtherModelsLoaded={phyndexer.isLoaded}
@@ -296,10 +271,6 @@ const GeoSearchPage = ({
           ) : null}
           {phynId && filter !== FILTER_THANGS ? (
             <SearchResult
-              onFindRelated={onFindRelated}
-              onReportModel={onReportModel}
-              onSignupRequired={onSignupRequired}
-              isAuthedUser={isAuthedUser}
               isError={phyndexer.isError}
               isLoading={phyndexer.isLoading}
               modelId={modelId}

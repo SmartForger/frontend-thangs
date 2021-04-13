@@ -59,7 +59,7 @@ const DotStackTarget = ({ onClick = noop }) => {
   )
 }
 
-const DotStackActionMenu = ({ onChange = noop, options = [], actionMenuTitle = '' }) => {
+const DotStackActionMenu = ({ onChange = noop, options = [], actionMenuTitle }) => {
   const menuProps = useMemo(() => {
     return {
       onChange,
