@@ -1,8 +1,12 @@
 import React, { useMemo } from 'react'
-import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
-import { ActionMenu, MetadataSecondary, Pill, Spacer } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import * as R from 'ramda'
+
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
+import { ActionMenu, Pill, Spacer } from '@components'
+
+import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -72,9 +76,12 @@ const SearchSourceFilterTarget = ({ onClick = noop, selectedValue, disabled, thi
       <Spacer width='.25rem' height='0' />
       <Pill tertiary thin={thin} onClick={disabled ? noop : onClick}>
         {thin ? (
-          <MetadataSecondary className={c.SearchSourceFilterActionMenu_Text}>
+          <Metadata
+            type={MetadataType.secondary}
+            className={c.SearchSourceFilterActionMenu_Text}
+          >
             {label(selectedValue)}
-          </MetadataSecondary>
+          </Metadata>
         ) : (
           <>{label(selectedValue)}</>
         )}
