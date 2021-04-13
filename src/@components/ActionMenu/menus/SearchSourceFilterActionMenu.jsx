@@ -44,7 +44,7 @@ const noop = () => null
 
 const options = [
   {
-    label: 'All Sources',
+    label: 'Best Match',
     value: 'all',
   },
   {

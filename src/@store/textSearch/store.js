@@ -4,7 +4,7 @@ import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'
 
 const SEARCH_RESULT_SIZE = 50
-const EXACT_MODE_REGEX = /^".+"$/
+const EXACT_MODE_REGEX = /^"([^"]+)"$/
 
 const noop = () => null
 const getInitialState = () => ({
