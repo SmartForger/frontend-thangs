@@ -119,7 +119,7 @@ jobs:
             gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
             gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
-            gcloud app deploy --quiet <<parameters.Stack>>.yaml <<parameters.NoPromote>> <<parameters.Version>>
+            gcloud app deploy --quiet development.yaml <<parameters.NoPromote>> <<parameters.Version>>
   deploy-production:
     docker:
       - image: google/cloud-sdk
