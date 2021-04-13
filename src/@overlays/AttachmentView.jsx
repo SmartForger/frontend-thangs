@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react'
-import { Spacer, Spinner, UserInline } from '@components'
+import { MultiLineBodyText, Spacer, Spinner, UserInline } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as ArrowLeftIcon } from '@svg/icon-arrow-left.svg'
@@ -37,8 +37,8 @@ const useStyles = createUseStyles(theme => {
       }
     },
     AttachmentView_ExitButton: {
-      top: '1.5rem',
-      right: '1.5rem',
+      top: '1.75rem',
+      right: '1.75rem',
       cursor: 'pointer',
       zIndex: '4',
       position: 'absolute',
@@ -63,12 +63,11 @@ const useStyles = createUseStyles(theme => {
       justifyContent: 'space-between',
       width: '100%'
     },
-    AttachmentView_CaptionText: {
-      color: theme.colors.black[300]
-    },
     AttachmentView_CaptionPosition: {
       color: theme.colors.black[300],
-      fontSize: '12px',
+      fontSize: '0.75rem',
+      lineHeight: '2',
+      minWidth: '2rem',
     }
   }
 })
@@ -103,13 +102,13 @@ const AttachmentView = ({ initialAttachmentIndex, attachments }) => {
     <div className={c.AttachmentView}>
       <div className={c.AttachmentView_Content}>
         <div className={c.AttachmentView_Column}>
-          <Spacer size={'0.75rem'} />
+          <Spacer size={'1rem'} />
           <div className={c.AttachmentView_Row}>
             <Spacer size={'1.5rem'} />
             <UserInline user={activeAttachment.owner} className={c.AttachmentView_UserInfo} size='2.5rem' />
           </div>
           <ExitIcon className={c.AttachmentView_ExitButton} onClick={closeOverlay} />
-          <Spacer size={'0.75rem'} />
+          <Spacer size={'1rem'} />
         </div>
         <img
           className={c.AttachmentView_Image}
@@ -120,9 +119,9 @@ const AttachmentView = ({ initialAttachmentIndex, attachments }) => {
           <div className={c.AttachmentView_CaptionRow}>
             <Spacer width={'1.5rem'} />
             <div className={c.AttachmentView_CaptionWrapper}>
-              <div className={c.AttachmentView_CaptionText}>
+              <MultiLineBodyText>
                 {activeAttachment.caption}
-              </div>
+              </MultiLineBodyText>
               <div className={c.AttachmentView_CaptionPosition}>
                 {attachmentPosition}
               </div>
