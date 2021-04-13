@@ -4,7 +4,12 @@ import { useStoreon } from 'storeon/react'
 import { Link, useHistory } from 'react-router-dom'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+import {
+  Title,
+  HeaderLevel,
+  Metadata,
+  MetadataType,
+} from '@physna/voxel-ui/@atoms/Typography'
 
 import {
   AddMenu,
@@ -12,7 +17,6 @@ import {
   Divider,
   FileExplorer,
   ProfilePicture,
-  MetadataSecondary,
   MultiLineBodyText,
   NavLink,
   Spacer,
@@ -289,7 +293,7 @@ const WorkspaceNavbar = ({
             {user.username && (
               <>
                 <Spacer size={'.5rem'} />
-                <MetadataSecondary>{user.username}</MetadataSecondary>
+                <Metadata type={MetadataType.secondary}>{user.username}</Metadata>
               </>
             )}
           </div>

@@ -1,7 +1,9 @@
 import React from 'react'
 import classnames from 'classnames'
-import { MetadataSecondary, TextInput, Spacer } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
+import { TextInput, Spacer } from '@components'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -61,9 +63,9 @@ const Input = ({
           <Spacer size={'.5rem'} />
           <div className={c.Input_ErrorWrapper}>
             <Spacer size={'.25rem'} />
-            <MetadataSecondary className={c.Input_ErrorMessage}>
+            <Metadata type={MetadataType.secondary} className={c.Input_ErrorMessage}>
               {errorMessage}
-            </MetadataSecondary>
+            </Metadata>
           </div>
         </>
       )}

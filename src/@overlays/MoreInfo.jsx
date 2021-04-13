@@ -4,23 +4,23 @@ import classnames from 'classnames'
 import * as EmailValidator from 'email-validator'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
 
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import {
-  Button,
-  Divider,
-  Input,
-  MetadataSecondary,
-  SingleLineBodyText,
-  Spacer,
-} from '@components'
+  Title,
+  HeaderLevel,
+  Metadata,
+  MetadataType,
+} from '@physna/voxel-ui/@atoms/Typography'
+
+import { Button, Divider, Input, SingleLineBodyText, Spacer } from '@components'
 import { useForm } from '@hooks'
 import { authenticationService } from '@services'
-import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import * as types from '@constants/storeEventTypes'
 import { useOverlay } from '@hooks'
 import { overlayview } from '@utilities/analytics'
+
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -234,9 +234,9 @@ const MoreInfoForm = ({
         <form onSubmit={onFormSubmit(handleUpdateEmail)}>
           {showErrorMessage && (
             <>
-              <MetadataSecondary className={c.MoreInfo_Message}>
+              <Metadata type={MetadataType.secondary} className={c.MoreInfo_Message}>
                 {moreInfoErrorMessage}
-              </MetadataSecondary>
+              </Metadata>
               <Spacer size='1rem' />
             </>
           )}
@@ -270,7 +270,7 @@ const MoreInfoForm = ({
             {waiting ? 'Processing...' : 'Finish'}
           </Button>
           <Spacer size='.75rem' />
-          <MetadataSecondary>
+          <Metadata type={MetadataType.secondary}>
             Click “Sign up” to agree to Thangs&apos;&nbsp;
             <a href='/terms-and-conditions' target='_blank'>
               terms and conditions
@@ -280,7 +280,7 @@ const MoreInfoForm = ({
               Privacy Policy
             </a>{' '}
             applies to you.
-          </MetadataSecondary>
+          </Metadata>
         </form>
         <Divider spacing={'1.5rem'} />
         <div className={c.MoreInfo_HasAccount}>

@@ -1,15 +1,18 @@
 import React, { useMemo, useCallback, useRef, useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import cn from 'classnames'
+import Dropzone from 'react-dropzone'
+import { useHistory } from 'react-router-dom'
 import { format } from 'date-fns'
 import { ContextMenuTrigger } from 'react-contextmenu'
-import InfiniteTreeView from '@components/InfiniteTreeView'
+
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   ContainerColumn,
   ContainerRow,
   Contributors,
   FolderActionMenu,
-  MetadataSecondary,
   ModelActionToolbar,
   ModelActionMenu,
   Pill,
@@ -17,17 +20,17 @@ import {
   Spacer,
   TableHeader,
 } from '@components'
-import { flattenTree } from '@utilities/tree'
+import InfiniteTreeView from '@components/InfiniteTreeView'
 import { formatBytes } from '@utilities'
-import { createUseStyles } from '@physna/voxel-ui/@style'
+import { flattenTree } from '@utilities/tree'
+import { MODEL_FILE_EXTS } from '@constants/fileUpload'
+
 import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
-import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as DropzoneIcon } from '@svg/dropzone.svg'
 import { ReactComponent as DropzoneMobileIcon } from '@svg/dropzone-mobile.svg'
-import Dropzone from 'react-dropzone'
-import { MODEL_FILE_EXTS } from '@constants/fileUpload'
+import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -479,22 +482,29 @@ const FileTable = ({
               {!node.isLeaf && <FileIcon className={c.FileTable_AssemblyIcon} />}
               <SingleLineBodyText>{node.name}</SingleLineBodyText>
             </div>
-            <MetadataSecondary className={cn(c.FileTable_Date, c.FileTable_Cell)}>
+            <Metadata
+              type={MetadataType.secondary}
+              className={cn(c.FileTable_Date, c.FileTable_Cell)}
+            >
               {!node.created
                 ? '-'
                 : format(new Date(node.created), 'MMM d, y, h:mm aaaa')}
-            </MetadataSecondary>
-            <MetadataSecondary className={cn(c.FileTable_Size, c.FileTable_Cell)}>
+            </Metadata>
+            <Metadata
+              type={MetadataType.secondary}
+              className={cn(c.FileTable_Size, c.FileTable_Cell)}
+            >
               {!node.size ? '-' : formatBytes(node.size)}
-            </MetadataSecondary>
+            </Metadata>
             <div className={cn(c.FileTable_Contributors, c.FileTable_Cell)}>
               {!node.contributors ? '-' : <Contributors users={node.contributors} />}
             </div>
-            <div
-              className={cn(c.FileTable_Action, c.FileTable_Cell)}
-            >
-              {node.isFolder ? (<FolderActionMenu folder={node} />)
-                : (<ModelActionMenu model={node} isExpandedOptions />)}
+            <div className={cn(c.FileTable_Action, c.FileTable_Cell)}>
+              {node.isFolder ? (
+                <FolderActionMenu folder={node} />
+              ) : (
+                <ModelActionMenu model={node} isExpandedOptions />
+              )}
             </div>
           </div>
         </ContextMenuTrigger>
@@ -511,7 +521,7 @@ const FileTable = ({
   }, [heightOffset])
 
   const selectedNode = allNodes.find(node => node.id === selectedFiles[0])
-  const isSelectedNodeModel = (node) => {
+  const isSelectedNodeModel = node => {
     if (!node) return false
     return !node.isFolder
   }
@@ -526,7 +536,9 @@ const FileTable = ({
           </ContainerRow>
           <Spacer size='0.5rem' />
         </>
-      ) : (<Spacer size='2.375rem' />)}
+      ) : (
+        <Spacer size='2.375rem' />
+      )}
       {allNodes.length > 0 || searchCase ? (
         <>
           <FileTableHeader sortedBy={sortedBy} onSort={handleSort} order={order} />

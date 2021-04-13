@@ -3,7 +3,12 @@ import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+import {
+  Title,
+  HeaderLevel,
+  Metadata,
+  MetadataType,
+} from '@physna/voxel-ui/@atoms/Typography'
 
 import {
   Button,
@@ -11,13 +16,15 @@ import {
   FormError,
   Input,
   LabelText,
-  MetadataSecondary,
   MultiLineBodyText,
   SingleLineBodyText,
   Spacer,
 } from '@components'
 import { useForm, useGoogleLogin, useFacebookLogin, useQuery } from '@hooks'
 import { authenticationService } from '@services'
+import { overlayview, track } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
+
 import { ReactComponent as BackgroundSvg } from '@svg/overlay-background.svg'
 import { ReactComponent as VersionControlIcon } from '@svg/icon-version-control.svg'
 import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
@@ -27,8 +34,6 @@ import { ReactComponent as HeartIcon } from '@svg/icon-heart.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
 import { ReactComponent as FacebookLogo } from '@svg/facebook-logo.svg'
-import { overlayview, track } from '@utilities/analytics'
-import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -467,7 +472,7 @@ const SignUpForm = ({ c, setOverlayData, handleSignInClick, showPromo, source })
             {waiting ? 'Processing...' : 'Sign up'}
           </Button>
           <Spacer size='.75rem' />
-          <MetadataSecondary>
+          <Metadata type={MetadataType.secondary}>
             Click “Sign up” to agree to Thangs&apos;&nbsp;
             <a href='/terms-and-conditions' target='_blank'>
               terms and conditions
@@ -477,7 +482,7 @@ const SignUpForm = ({ c, setOverlayData, handleSignInClick, showPromo, source })
               Privacy Policy
             </a>{' '}
             applies to you.
-          </MetadataSecondary>
+          </Metadata>
         </form>
         <Divider spacing={'1.5rem'} />
         <div className={c.Signup_HasAccount}>

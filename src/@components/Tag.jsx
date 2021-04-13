@@ -1,8 +1,9 @@
 import React from 'react'
 import classnames from 'classnames'
-import { Spacer } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { MetadataSecondary } from './Text/Metadata'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Spacer } from '@components'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -24,8 +25,8 @@ const useStyles = createUseStyles(theme => {
         textColor
           ? textColor
           : lightText
-            ? theme.colors.white[400]
-            : theme.colors.black[900],
+          ? theme.colors.white[400]
+          : theme.colors.black[900],
       lineHeight: '.5rem',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
@@ -58,7 +59,9 @@ const Tag = ({
       <Spacer size={'.25rem'} />
       <div className={c.Tag_TextWrapper}>
         <Spacer size={'.5rem'} />
-        <MetadataSecondary className={c.Tag_Text}>{children}</MetadataSecondary>
+        <Metadata type={MetadataType.secondary} className={c.Tag_Text}>
+          {children}
+        </Metadata>
         <Spacer size={'.5rem'} />
       </div>
       <Spacer size={'.25rem'} />

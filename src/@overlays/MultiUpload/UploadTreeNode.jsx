@@ -1,13 +1,9 @@
 import React from 'react'
 import cn from 'classnames'
-import {
-  Spacer,
-  Spinner,
-  SingleLineBodyText,
-  MetadataSecondary,
-  Tooltip,
-} from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Spacer, Spinner, SingleLineBodyText, Tooltip } from '@components'
 import { formatBytes } from '@utilities'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as InfoIcon } from '@svg/icon-info.svg'
@@ -116,9 +112,9 @@ const UploadTreeNode = ({ node, level: _l, onUpload, onRemove, isLoading }) => {
         {node.size && (
           <>
             <Spacer width={'0.5rem'} />
-            <MetadataSecondary>
+            <Metadata type={MetadataType.secondary}>
               {isLoading ? 'validating...' : formatBytes(node.size)}
-            </MetadataSecondary>
+            </Metadata>
           </>
         )}
       </div>

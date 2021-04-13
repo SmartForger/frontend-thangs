@@ -1,19 +1,20 @@
 import React from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import classnames from 'classnames'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   Pill,
   ProfilePicture,
   Divider,
   DropdownMenu,
   DropdownItem,
-  MetadataSecondary,
   MultiLineBodyText,
   Spacer,
 } from '@components'
 import { useOverlay, useTranslations } from '@hooks'
 import { authenticationService } from '@services'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 
 import { ReactComponent as SharedIcon } from '@svg/icon-shared.svg'
 import { ReactComponent as PortfolioIcon } from '@svg/icon-portfolio.svg'
@@ -105,7 +106,7 @@ export const ProfileDropdownMenuContainer = ({ user = {} }) => {
             {hasfullName ? user.fullName : user.username}
           </MultiLineBodyText>
           <Link to={'/mythangs/edit-profile'}>
-            <MetadataSecondary>Profile Settings</MetadataSecondary>
+            <Metadata type={MetadataType.secondary}>Profile Settings</Metadata>
           </Link>
         </div>
       </div>

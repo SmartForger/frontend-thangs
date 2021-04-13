@@ -4,12 +4,14 @@ import axios from 'axios'
 import * as R from 'ramda'
 import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
 import { ReactComponent as ChatIcon } from '@svg/icon-comment.svg'
 import { ReactComponent as GlobeIcon } from '@svg/icon-globe2.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
 import * as types from '@constants/storeEventTypes'
-import { MetadataSecondary, ModelThumbnail, UserInline } from '@components'
+import { ModelThumbnail, UserInline } from '@components'
 import { useCurrentUserId } from '@hooks'
 import { track } from '@utilities/analytics'
 
@@ -173,9 +175,13 @@ const CardContents = ({
           rel='noopener noreferrer'
         >
           <GlobeIcon />
-          <MetadataSecondary light className={c.ModelCard_AttributionUrl}>
+          <Metadata
+            type={MetadataType.secondary}
+            light
+            className={c.ModelCard_AttributionUrl}
+          >
             {modelAttributionUrl}
-          </MetadataSecondary>
+          </Metadata>
         </a>
       )}
       <Anchor

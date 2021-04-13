@@ -3,15 +3,18 @@ import * as R from 'ramda'
 import Joi from '@hapi/joi'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+import {
+  Title,
+  HeaderLevel,
+  Metadata,
+  MetadataType,
+} from '@physna/voxel-ui/@atoms/Typography'
 
 import {
   Button,
   Dropdown,
   Input,
   LicenseField,
-  MetadataPrimary,
-  MetadataSecondary,
   ModelThumbnail,
   SingleLineBodyText,
   Spacer,
@@ -304,7 +307,7 @@ const PartInfo = props => {
       {activeNode.parentId && (
         <>
           <div className={c.PartInfo_Row}>
-            <MetadataSecondary>{pathFromRoot}</MetadataSecondary>
+            <Metadata type={MetadataType.secondary}>{pathFromRoot}</Metadata>
           </div>
           <Spacer size={'1rem'} />
         </>
@@ -330,7 +333,9 @@ const PartInfo = props => {
           {activeNode.size && (
             <>
               <Spacer size={'.5rem'} />
-              <MetadataPrimary>{formatBytes(activeNode.size)}</MetadataPrimary>
+              <Metadata type={MetadataType.primary}>
+                {formatBytes(activeNode.size)}
+              </Metadata>
             </>
           )}
         </div>
@@ -459,15 +464,15 @@ const PartInfo = props => {
             </SingleLineBodyText>
             <Spacer size={'.5rem'} />
             {folderPublic ? (
-              <MetadataSecondary className={c.PartInfo_PrivacyText}>
+              <Metadata type={MetadataType.secondary} className={c.PartInfo_PrivacyText}>
                 The folder you have selected is Public. This model will be shared publicly
                 towards users on Thangs.
-              </MetadataSecondary>
+              </Metadata>
             ) : (
-              <MetadataSecondary className={c.PartInfo_PrivacyText}>
+              <Metadata type={MetadataType.secondary} className={c.PartInfo_PrivacyText}>
                 The folder you have selected is Private. This model will be private and
                 restricted to yourself and those you to choose to share it with.
-              </MetadataSecondary>
+              </Metadata>
             )}
           </>
         )}

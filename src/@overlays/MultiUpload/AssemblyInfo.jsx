@@ -2,15 +2,18 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as R from 'ramda'
 import Joi from '@hapi/joi'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+import {
+  Title,
+  HeaderLevel,
+  Metadata,
+  MetadataType,
+} from '@physna/voxel-ui/@atoms/Typography'
 
 import {
   Button,
   Dropdown,
   Input,
   LicenseField,
-  MetadataPrimary,
-  MetadataSecondary,
   SelectFolderActionMenu,
   Spacer,
   SingleLineBodyText,
@@ -248,7 +251,7 @@ const AssemblyInfo = ({
       {activeNode.parentId && (
         <>
           <div className={c.PartInfo_Row}>
-            <MetadataSecondary>{pathFromRoot}</MetadataSecondary>
+            <Metadata type={MetadataType.secondary}>{pathFromRoot}</Metadata>
           </div>
           <Spacer size={'1rem'} />
         </>
@@ -257,7 +260,7 @@ const AssemblyInfo = ({
         <div className={c.AssemblyInfo_ModelInfo}>
           <Title headerLevel={HeaderLevel.tertiary}>Enter Information</Title>
           <Spacer size={'.5rem'} />
-          <MetadataPrimary>{metaText}</MetadataPrimary>
+          <Metadata type={MetadataType.primary}>{metaText}</Metadata>
         </div>
       </div>
       <Spacer size={'1.5rem'} />
@@ -341,15 +344,15 @@ const AssemblyInfo = ({
         </SingleLineBodyText>
         <Spacer size={'.5rem'} />
         {folderPublic ? (
-          <MetadataSecondary className={c.AssemblyInfo_PrivacyText}>
+          <Metadata type={MetadataType.secondary} className={c.AssemblyInfo_PrivacyText}>
             The folder you have selected is Public. This model will be shared publicly
             towards users on Thangs.
-          </MetadataSecondary>
+          </Metadata>
         ) : (
-          <MetadataSecondary className={c.AssemblyInfo_PrivacyText}>
+          <Metadata type={MetadataType.secondary} className={c.AssemblyInfo_PrivacyText}>
             The folder you have selected is Private. This model will be private and
             restricted to yourself and those you to choose to share it with.
-          </MetadataSecondary>
+          </Metadata>
         )}
         <Spacer size={'1.5rem'} />
         <div className={c.AssemblyInfo_ButtonWrapper}>

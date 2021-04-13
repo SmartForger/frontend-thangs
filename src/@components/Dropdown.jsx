@@ -1,8 +1,10 @@
 import React from 'react'
 import Select from 'react-select'
 import classnames from 'classnames'
-import { Spacer, MetadataSecondary } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Spacer } from '@components'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down.svg'
 
 const useStyles = createUseStyles(theme => {
@@ -117,9 +119,9 @@ const Dropdown = ({
           <Spacer size={'.5rem'} />
           <div className={c.Dropdown_ErrorWrapper}>
             <Spacer size={'.25rem'} />
-            <MetadataSecondary className={c.Dropdown_ErrorMessage}>
+            <Metadata type={MetadataType.secondary} className={c.Dropdown_ErrorMessage}>
               {errorMessage}
-            </MetadataSecondary>
+            </Metadata>
           </div>
         </>
       )}

@@ -3,15 +3,14 @@ import classnames from 'classnames'
 import { Link } from 'react-router-dom'
 
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
-
 import {
-  Contributors,
-  FolderActionToolbar,
-  LikeFolderButton,
-  MetadataPrimary,
-  Spacer,
-} from '@components'
+  Title,
+  HeaderLevel,
+  Metadata,
+  MetadataType,
+} from '@physna/voxel-ui/@atoms/Typography'
+
+import { Contributors, FolderActionToolbar, LikeFolderButton, Spacer } from '@components'
 import { buildPath } from '@utilities'
 import { useOverlay } from '@hooks'
 import { track } from '@utilities/analytics'
@@ -173,7 +172,7 @@ const FolderHeader = ({ folder, folders }) => {
             {folderPath.length > 1 && (
               <>
                 <Spacer size={'.5rem'} />
-                <MetadataPrimary>
+                <Metadata type={MetadataType.primary}>
                   {folderPath.map((pathObj, index) => {
                     if (index === folderPath.length - 1) return null
                     return (
@@ -187,7 +186,7 @@ const FolderHeader = ({ folder, folders }) => {
                       </React.Fragment>
                     )
                   })}
-                </MetadataPrimary>
+                </Metadata>
               </>
             )}
           </div>

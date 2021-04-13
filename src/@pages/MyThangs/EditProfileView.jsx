@@ -2,12 +2,16 @@ import React, { useCallback, useEffect, useState } from 'react'
 import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+import {
+  Title,
+  HeaderLevel,
+  Metadata,
+  MetadataType,
+} from '@physna/voxel-ui/@atoms/Typography'
 
 import {
   ChangeablePicture,
   EditProfileForm,
-  MetadataPrimary,
   Pill,
   ProfilePicture,
   Spacer,
@@ -150,9 +154,9 @@ const EditProfile = ({ className }) => {
               {user.fullName || user.username}
             </Title>
             <Spacer size={'.5rem'} />
-            <MetadataPrimary className={c.EditProfile_UserName}>
+            <Metadata type={MetadataType.primary} className={c.EditProfile_UserName}>
               {user.fullName ? user.username : user.email}
-            </MetadataPrimary>
+            </Metadata>
             <Spacer size={'1rem'} />
             <div className={c.EditProfile_ButtonsSection}>
               <ChangeablePicture disabled={isLoading} />

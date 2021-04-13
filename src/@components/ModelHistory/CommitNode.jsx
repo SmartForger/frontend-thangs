@@ -1,16 +1,19 @@
 import React from 'react'
 import { format } from 'date-fns'
+
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   ContainerRow,
   ContainerColumn,
-  MetadataSecondary,
   Spacer,
   SingleLineBodyText,
   Tag,
   ProfilePicture,
 } from '@components'
+
 import { ReactComponent as InitialCommitIcon } from '@svg/icon-check.svg'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -65,12 +68,12 @@ const CommitNode = ({ message, tag, created, author = {}, isActive, isInitial })
         </ContainerRow>
         <Spacer size={'.5rem'} />
         <ContainerRow>
-          <MetadataSecondary>
+          <Metadata type={MetadataType.secondary}>
             Date {format(new Date(created), 'MMM d, h:mm a')} by
-          </MetadataSecondary>
-          <MetadataSecondary className={c.CommitNode_Author}>
+          </Metadata>
+          <Metadata type={MetadataType.secondary} className={c.CommitNode_Author}>
             {author.username}
-          </MetadataSecondary>
+          </Metadata>
         </ContainerRow>
       </ContainerColumn>
     </ContainerRow>

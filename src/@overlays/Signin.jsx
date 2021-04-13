@@ -2,7 +2,12 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Joi from '@hapi/joi'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+import {
+  Title,
+  HeaderLevel,
+  Metadata,
+  MetadataType,
+} from '@physna/voxel-ui/@atoms/Typography'
 
 import {
   Button,
@@ -10,17 +15,17 @@ import {
   FormError,
   Input,
   LabelText,
-  MetadataSecondary,
   SingleLineBodyText,
   Spacer,
 } from '@components'
 import { useForm, useGoogleLogin, useFacebookLogin, useQuery } from '@hooks'
 import { authenticationService } from '@services'
+import { overlayview } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
+
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
 import { ReactComponent as FacebookLogo } from '@svg/facebook-logo.svg'
-import { overlayview } from '@utilities/analytics'
-import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -321,7 +326,7 @@ const SignInForm = ({
           Reset Password
         </Button>
         <Spacer size='1rem' />
-        <MetadataSecondary>
+        <Metadata type={MetadataType.secondary}>
           Click “Log in” to agree to Thangs&apos;&nbsp;
           <a href='/terms-and-conditions' target='_blank'>
             terms and conditions
@@ -331,7 +336,7 @@ const SignInForm = ({
             Privacy Policy
           </a>{' '}
           applies to you.
-        </MetadataSecondary>
+        </Metadata>
         <Divider spacing={'1.5rem'} />
         <div className={c.Signin_HasAccount}>
           <SingleLineBodyText>New to Thangs?</SingleLineBodyText>

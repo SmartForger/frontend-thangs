@@ -1,14 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useStoreon } from 'storeon/react'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   InviteUsersForm,
-  MetadataSecondary,
   MultiLineBodyText,
   ProfilePicture,
   SingleLineBodyText,
   Spacer,
 } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import { authenticationService } from '@services'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
@@ -163,7 +164,7 @@ const UserList = ({
                 <div className={c.InviteUsers_Column}>
                   <SingleLineBodyText>{user.username}</SingleLineBodyText>
                   <Spacer size={'.5rem'} />
-                  <MetadataSecondary>{user.email}</MetadataSecondary>
+                  <Metadata type={MetadataType.secondary}>{user.email}</Metadata>
                 </div>
               </div>
               {isCurrentUserOwner && !isOwner && !isPending && (

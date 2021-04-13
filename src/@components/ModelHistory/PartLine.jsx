@@ -1,15 +1,17 @@
 import React from 'react'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   ContainerRow,
   ContainerColumn,
-  MetadataSecondary,
   Spacer,
   SingleLineBodyText,
   ModelHistoryPartActionMenu,
 } from '@components'
-import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import { formatBytes } from '@utilities'
+
+import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -36,7 +38,9 @@ const PartLine = ({ name, size }) => {
               <Spacer size={'1rem'} />
               <SingleLineBodyText>{name}</SingleLineBodyText>
               <Spacer size={'.5rem'} />
-              <MetadataSecondary>{!size ? '' : formatBytes(size)}</MetadataSecondary>
+              <Metadata type={MetadataType.secondary}>
+                {!size ? '' : formatBytes(size)}
+              </Metadata>
             </ContainerRow>
             <ContainerRow>
               <ModelHistoryPartActionMenu />

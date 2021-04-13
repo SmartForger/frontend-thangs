@@ -1,8 +1,12 @@
 import React from 'react'
 import cn from 'classnames'
 import { ContextMenuTrigger } from 'react-contextmenu'
-import { MetadataSecondary, Spacer } from '@components'
+
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Spacer } from '@components'
+
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ArrowUpIcon } from '@svg/icon-arrow-up-sm.svg'
 
@@ -191,7 +195,8 @@ const TableHeader = ({
         {columns.map((col, ind) => {
           const { key, className, title } = col
           return (
-            <MetadataSecondary
+            <Metadata
+              type={MetadataType.secondary}
               key={`table_header_${key}${ind}`}
               className={cn(className, c.Table_HeaderCell)}
               onClick={() => {
@@ -200,7 +205,7 @@ const TableHeader = ({
             >
               {title}
               {sortBy === key && <SortByArrow order={order} />}
-            </MetadataSecondary>
+            </Metadata>
           )
         })}
         {showContextMenus && <div className={cn(c.Table_Action, c.Table_HeaderCell)} />}

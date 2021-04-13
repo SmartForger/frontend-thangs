@@ -1,9 +1,13 @@
 import React from 'react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+import {
+  Title,
+  HeaderLevel,
+  Metadata,
+  MetadataType,
+} from '@physna/voxel-ui/@atoms/Typography'
 
-import { Spacer, MetadataPrimary } from '@components'
-
+import { Spacer } from '@components'
 import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
 import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
 import { ReactComponent as SharedIcon } from '@svg/icon-shared.svg'
@@ -54,7 +58,9 @@ const StatsBar = ({ userActivity = {} }) => {
               : '-'}
           </Title>
           <Spacer size='.5rem' />
-          <MetadataPrimary className={c.StatsBar_StatText}>Contributions</MetadataPrimary>
+          <Metadata type={MetadataType.primary} className={c.StatsBar_StatText}>
+            Contributions
+          </Metadata>
         </div>
       </div>
       <Spacer size={'3rem'} />
@@ -66,7 +72,9 @@ const StatsBar = ({ userActivity = {} }) => {
             {typeof userActivity.uploads === 'number' ? userActivity.uploads : '-'}
           </Title>
           <Spacer size='.5rem' />
-          <MetadataPrimary className={c.StatsBar_StatText}>Models</MetadataPrimary>
+          <Metadata type={MetadataType.primary} className={c.StatsBar_StatText}>
+            Models
+          </Metadata>
         </div>
       </div>
       <Spacer size={'3rem'} />
@@ -78,7 +86,9 @@ const StatsBar = ({ userActivity = {} }) => {
             {typeof userActivity.likes === 'number' ? userActivity.likes : '-'}
           </Title>
           <Spacer size='.5rem' />
-          <MetadataPrimary className={c.StatsBar_StatText}>Likes</MetadataPrimary>
+          <Metadata type={MetadataType.primary} className={c.StatsBar_StatText}>
+            Likes
+          </Metadata>
         </div>
       </div>
       <Spacer size={'3rem'} />
@@ -90,7 +100,9 @@ const StatsBar = ({ userActivity = {} }) => {
             {typeof userActivity.following === 'number' ? userActivity.following : '-'}
           </Title>
           <Spacer size='.5rem' />
-          <MetadataPrimary className={c.StatsBar_StatText}>Following</MetadataPrimary>
+          <Metadata type={MetadataType.primary} className={c.StatsBar_StatText}>
+            Following
+          </Metadata>
         </div>
       </div>
       <Spacer size={'3rem'} />
@@ -102,7 +114,9 @@ const StatsBar = ({ userActivity = {} }) => {
             {typeof userActivity.followers === 'number' ? userActivity.followers : '-'}
           </Title>
           <Spacer size='.5rem' />
-          <MetadataPrimary className={c.StatsBar_StatText}>Followers</MetadataPrimary>
+          <Metadata type={MetadataType.primary} className={c.StatsBar_StatText}>
+            Followers
+          </Metadata>
         </div>
       </div>
       <Spacer size={'3rem'} />
