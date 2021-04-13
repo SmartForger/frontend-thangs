@@ -74,7 +74,7 @@ const SearchSourceFilterTarget = ({ onClick = noop, selectedValue, disabled, thi
   return (
     <>
       <Spacer width='.25rem' height='0' />
-      <Pill tertiary thin={thin} onClick={disabled ? noop : onClick}>
+      <Pill secondary thin={thin} onClick={disabled ? noop : onClick}>
         {thin ? (
           <Metadata
             type={MetadataType.secondary}
