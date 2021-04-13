@@ -1,6 +1,8 @@
 import React from 'react'
-import { Pill, DropdownMenu, DropdownItem, Spacer, LabelText } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Label } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Pill, DropdownMenu, DropdownItem, Spacer } from '@components'
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 
 const useStyles = createUseStyles(theme => {
@@ -53,7 +55,7 @@ export const FilterDropdownMenu = ({ options = [], TargetComponent, label }) => 
                 <Spacer size={'.5rem'} />
                 <div>
                   <Spacer size={'.5rem'} />
-                  <LabelText>{option.label}</LabelText>
+                  <Label>{option.label}</Label>
                   <Spacer size={'.5rem'} />
                 </div>
                 <Spacer size={'.5rem'} />

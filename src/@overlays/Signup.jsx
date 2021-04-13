@@ -8,6 +8,7 @@ import {
   HeaderLevel,
   Metadata,
   MetadataType,
+  Label,
 } from '@physna/voxel-ui/@atoms/Typography'
 
 import {
@@ -15,15 +16,13 @@ import {
   Divider,
   FormError,
   Input,
-  LabelText,
   MultiLineBodyText,
   SingleLineBodyText,
   Spacer,
 } from '@components'
-import { useForm, useGoogleLogin, useFacebookLogin, useQuery } from '@hooks'
+import { useForm, useGoogleLogin, useFacebookLogin, useQuery, useOverlay } from '@hooks'
 import { authenticationService } from '@services'
 import { overlayview, track } from '@utilities/analytics'
-import { useOverlay } from '@hooks'
 
 import { ReactComponent as BackgroundSvg } from '@svg/overlay-background.svg'
 import { ReactComponent as VersionControlIcon } from '@svg/icon-version-control.svg'
@@ -391,7 +390,7 @@ const SignUpForm = ({ c, setOverlayData, handleSignInClick, showPromo, source })
           <Button secondary className={c.Signup_withGoogleButton}>
             <GoogleLogo />
             <Spacer size={'.5rem'} />
-            <LabelText>Sign up with Google</LabelText>
+            <Label>Sign up with Google</Label>
           </Button>
         </a>
         <Spacer size='1rem' />
@@ -405,7 +404,7 @@ const SignUpForm = ({ c, setOverlayData, handleSignInClick, showPromo, source })
           <Button secondary className={c.Signup_withFacebookButton}>
             <FacebookLogo />
             <Spacer size={'.5rem'} />
-            <LabelText>Sign up with Facebook</LabelText>
+            <Label>Sign up with Facebook</Label>
           </Button>
         </a>
         <Divider spacing={'1.5rem'} />

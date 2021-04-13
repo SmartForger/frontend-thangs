@@ -7,6 +7,7 @@ import {
   HeaderLevel,
   Metadata,
   MetadataType,
+  Label,
 } from '@physna/voxel-ui/@atoms/Typography'
 
 import {
@@ -14,7 +15,6 @@ import {
   Divider,
   FormError,
   Input,
-  LabelText,
   SingleLineBodyText,
   Spacer,
 } from '@components'
@@ -181,7 +181,7 @@ export const SigninGoogleButton = () => {
     <Button secondary className={c.Signin_withGoogleButton}>
       <GoogleLogo />
       <Spacer size={'.5rem'} />
-      <LabelText>Log in with Google</LabelText>
+      <Label>Log in with Google</Label>
     </Button>
   )
 }
@@ -193,7 +193,7 @@ export const SigninFacebookButton = () => {
     <Button secondary className={c.Signin_withFacebookButton}>
       <FacebookLogo />
       <Spacer size={'.5rem'} />
-      <LabelText>Log in with Facebook</LabelText>
+      <Label>Log in with Facebook</Label>
     </Button>
   )
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { LabelText } from '@components'
+import { Label } from '@physna/voxel-ui/@atoms/Typography'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -65,7 +65,7 @@ const Button = ({
       })}
       {...props}
     >
-      <LabelText>{children}</LabelText>
+      <Label>{children}</Label>
     </button>
   )
 }

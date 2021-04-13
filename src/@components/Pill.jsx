@@ -1,7 +1,9 @@
 import React, { useCallback } from 'react'
 import classnames from 'classnames'
-import { LabelText, Spacer } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Label } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Spacer } from '@components'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -54,7 +56,7 @@ const Pill = ({ children, className, secondary, tertiary, onClick = noop, disabl
       <Spacer size={'.5rem'} />
       <div className={c.Pill_TextWrapper}>
         <Spacer size={'.75rem'} mobileSize={'.5rem'} />
-        <LabelText small>{children}</LabelText>
+        <Label small>{children}</Label>
         <Spacer size={'.75rem'} mobileSize={'.5rem'} />
       </div>
       <Spacer size={'.5rem'} />

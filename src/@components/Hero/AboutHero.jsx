@@ -2,9 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import * as R from 'ramda'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+import { Title, HeaderLevel, Label } from '@physna/voxel-ui/@atoms/Typography'
 
-import { Button, MultiLineBodyText, LabelText, Spacer } from '@components'
+import { Button, MultiLineBodyText, Spacer } from '@components'
 import { useOverlay, useTranslations } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
@@ -94,7 +94,7 @@ const AboutHero = ({ user }) => {
         ) : (
           <div className={c.AboutHero_Link}>
             <Link to={'/'}>
-              <LabelText>Start finding Thangs</LabelText>
+              <Label>Start finding Thangs</Label>
             </Link>
           </div>
         )}

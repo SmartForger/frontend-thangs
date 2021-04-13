@@ -1,10 +1,12 @@
 // ActionMenu - Component used with DropdownMenu
 
 import React, { useCallback } from 'react'
-import { DropdownMenu, DropdownItem, Spacer, LabelText } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import { ReactComponent as ArrowRightIcon } from '@svg/icon-arrow-right.svg'
 import classnames from 'classnames'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Label } from '@physna/voxel-ui/@atoms/Typography'
+
+import { DropdownMenu, DropdownItem, Spacer } from '@components'
+import { ReactComponent as ArrowRightIcon } from '@svg/icon-arrow-right.svg'
 import { useActionMenu, useIsMobile } from '@hooks'
 
 export * from './ActionMenuContext'
@@ -207,7 +209,7 @@ const DefaultMenu = ({
                             <Spacer size={'.75rem'} />
                           </>
                         )}
-                        <LabelText>{option.label}</LabelText>
+                        <Label>{option.label}</Label>
                       </div>
                       <ArrowRightIcon
                         className={classnames({
