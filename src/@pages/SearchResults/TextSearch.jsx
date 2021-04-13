@@ -103,10 +103,6 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
     'modelsStats'
   )
 
-  const isExactMatch = useMemo(() => textSearchResults.isExactSearchMode, [
-    textSearchResults.isExactSearchMode,
-  ])
-
   const setSearchFilters = useCallback(
     ({ scopeFilter }) => {
       if (scopeFilter !== filter) {
@@ -195,13 +191,11 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
       {searchQuery && (
         <SearchHeader
           filter={filter}
-          isExactMatchSearch={isExactMatch}
           setFilters={setSearchFilters}
           isLoading={isLoading}
           resultCount={models.length}
           endOfModels={endOfModels}
           searchQuery={searchQuery}
-          showExactSearchFilter
         />
       )}
       {searchQuery ? (

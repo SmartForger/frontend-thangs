@@ -155,44 +155,16 @@ const useStyles = createUseStyles(theme => {
 })
 const noop = () => null
 
-const ParsedSearchQuery = ({
-  searchQuery,
-  isExactMatchSearch,
-  isExactOrPartial,
-  className,
-}) => {
+const ParsedSearchQuery = ({ searchQuery, className }) => {
   const decodedQuery = decodeURIComponent(searchQuery)
 
-  return (
-    <>
-      {isExactMatchSearch || !isExactOrPartial ? (
-        <ContainerRow className={className}>{decodedQuery}</ContainerRow>
-      ) : (
-        <>
-          {decodedQuery
-            .split(/\s+/)
-            .map(partial => () => <>&quot;{partial}&quot;</>)
-            .map((QueryPart, i, allParts) => (
-              <ContainerRow
-                className={className}
-                key={`query-string-internal-segment-${i}`}
-              >
-                <QueryPart />
-                {i < allParts.length - 1 && <>&#44;</>}
-                <Spacer size='0.25rem' />
-              </ContainerRow>
-            ))}
-        </>
-      )}
-    </>
-  )
+  return <ContainerRow className={className}>&quot;{decodedQuery}&quot;</ContainerRow>
 }
 
 const ControlSearchHeader = ({
   disabled,
   filter,
   onFilterChange = noop,
-  isExactMatchSearch,
   isLoading = true,
   endOfModels = true,
   modelId,
@@ -200,7 +172,6 @@ const ControlSearchHeader = ({
   searchQuery,
   currentUser,
   openSignupOverlay = noop,
-  showExactSearchFilter,
 }) => {
   const c = useStyles()
   const { dispatch, searchSubscriptions } = useStoreon('searchSubscriptions')
@@ -214,8 +185,6 @@ const ControlSearchHeader = ({
           <Spacer size='0.25rem' />
           <ParsedSearchQuery
             searchQuery={searchQuery}
-            isExactOrPartial={showExactSearchFilter}
-            isExactMatchSearch={isExactMatchSearch}
             className={c.SearchResults_SearchTerm}
           />
         </h1>
@@ -250,14 +219,12 @@ const TabSearchHeader = ({
   disabled,
   filter,
   onFilterChange = noop,
-  isExactMatchSearch,
   isLoading = true,
   modelId,
   resultCount,
   searchQuery,
   currentUser,
   openSignupOverlay = noop,
-  showExactSearchFilter,
 }) => {
   const c = useStyles()
   const { dispatch, searchSubscriptions } = useStoreon('searchSubscriptions')
@@ -272,8 +239,6 @@ const TabSearchHeader = ({
             <Spacer size='0.25rem' />
             <ParsedSearchQuery
               searchQuery={searchQuery}
-              isExactOrPartial={showExactSearchFilter}
-              isExactMatchSearch={isExactMatchSearch}
               className={c.SearchResults_SearchTerm}
             />
             <Spacer size={'.5rem'} />
@@ -319,14 +284,12 @@ const SearchHeaderSkeleton = () => {
 
 const SearchHeader = ({
   filter,
-  isExactMatchSearch = false,
   isLoading = true,
   endOfModels = true,
   modelId,
   resultCount,
   searchQuery,
   setFilters = noop,
-  showExactSearchFilter = false,
 }) => {
   const [filterExperimentType, setFilterExperimentType] = useState('control')
   const { experiments } = useStoreon('experiments')
@@ -369,7 +332,6 @@ const SearchHeader = ({
           disabled={isLoading}
           filter={filter}
           onFilterChange={handleFilterChange}
-          isExactMatchSearch={isExactMatchSearch}
           isLoading={isLoading}
           endOfModels={endOfModels}
           modelId={modelId}
@@ -377,14 +339,12 @@ const SearchHeader = ({
           searchQuery={searchQuery}
           currentUser={currentUser}
           openSignupOverlay={openSignupOverlay}
-          showExactSearchFilter={showExactSearchFilter}
         />
       ) : (
         <TabSearchHeader
           disabled={isLoading}
           filter={filter}
           onFilterChange={handleFilterChange}
-          isExactMatchSearch={isExactMatchSearch}
           isLoading={isLoading}
           endOfModels={endOfModels}
           modelId={modelId}
@@ -392,7 +352,6 @@ const SearchHeader = ({
           searchQuery={searchQuery}
           currentUser={currentUser}
           openSignupOverlay={openSignupOverlay}
-          showExactSearchFilter={showExactSearchFilter}
         />
       )}
     </>
