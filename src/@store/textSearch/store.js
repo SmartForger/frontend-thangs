@@ -58,7 +58,7 @@ export default store => {
         method: 'GET',
         endpoint: 'models/search-by-text',
         params: {
-          searchTerm: searchTerm,
+          searchTerm,
           narrow: true,
           collapse: true,
           scope: scope || 'all',
@@ -69,13 +69,13 @@ export default store => {
 
       if (isInitial) {
         track('Text Search Started', {
-          searchTerm: searchTerm,
+          searchTerm,
           searchScope: scope,
           pageCount: isInitial ? 0 : state?.textSearchResults?.pageToLoad,
         })
       } else {
         track('Text Search - Infinite Scroll', {
-          searchTerm: searchTerm,
+          searchTerm,
           searchScope: scope,
           pageCount: state?.textSearchResults?.pageToLoad,
         })
@@ -93,7 +93,7 @@ export default store => {
         })
 
         track(`Text search - ${data.length > 0 ? 'Results' : 'No Results'}`, {
-          searchTerm: searchTerm,
+          searchTerm,
           searchScope: scope,
           numOfMatches: data.length,
         })

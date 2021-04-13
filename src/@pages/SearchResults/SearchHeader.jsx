@@ -131,7 +131,6 @@ const useStyles = createUseStyles(theme => {
       textDecoration: 'underline',
     },
     SearchHeader_TabFilter: {
-      // display: 'flex',
       marginTop: '1rem',
 
       [md]: {
