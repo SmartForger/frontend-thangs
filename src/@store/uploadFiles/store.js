@@ -471,10 +471,10 @@ export default store => {
     async (state, { message, modelId, onFinish = noop, onError = noop }) => {
       store.dispatch(types.SUBMITTING_MODELS)
       const { data: uploadedFiles, formData } = state.uploadFiles
-      const partsPayload = []
+      const events = []
       Object.keys(uploadedFiles).forEach(file => {
         formData[file].previousParts.forEach(part => {
-          partsPayload.push({
+          events.push({
             action: 'edit',
             filename: uploadedFiles[file].newFileName,
             size: uploadedFiles[file].size,
@@ -489,7 +489,7 @@ export default store => {
           endpoint: `models/${modelId}`,
           body: {
             message,
-            parts: partsPayload,
+            events,
           },
         })
         if (error) {

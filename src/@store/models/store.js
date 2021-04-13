@@ -136,7 +136,7 @@ export default store => {
       endpoint: `models/${id}`,
       body: {
         message: `Add ${part.name}`,
-        parts: [
+        events: [
           {
             action: 'add',
             partIdentifier: part.identifier,
@@ -175,7 +175,7 @@ export default store => {
         endpoint: `models/${id}`,
         body: {
           message: `Deleted ${part.name}`,
-          parts: [
+          events: [
             {
               action: 'delete',
               partIdentifier: part.identifier,
