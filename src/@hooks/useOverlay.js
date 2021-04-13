@@ -2,6 +2,7 @@ import { useContext, useMemo, useReducer } from 'react'
 import {
   AddFolder,
   AttachmentUpload,
+  AttachmentView,
   DeleteFolder,
   DeleteModel,
   DeleteComment,
@@ -23,6 +24,7 @@ import { OverlayContext } from '@components'
 const overlayTemplates = {
   addFolder: AddFolder,
   attachmentUpload: AttachmentUpload,
+  attachmentView: AttachmentView,
   deleteFolder: DeleteFolder,
   deleteModel: DeleteModel,
   editFolder: EditFolder,

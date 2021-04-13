@@ -30,6 +30,7 @@ const useStyles = createUseStyles(theme => {
       height: '6.25rem',
       borderRadius: '0.75rem',
       objectFit: 'cover',
+      cursor: 'pointer'
     },
   }
 })
@@ -69,6 +70,7 @@ const AddPrintPhotoLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) 
 }
 
 const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => {
+  const { setOverlay } = useOverlay()
   const c = useStyles()
   const {
     dispatch,
@@ -79,6 +81,21 @@ const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => 
   useEffect(() => {
     dispatch(types.FETCH_MODEL_ATTACHMENTS, { modelId: model.id })
   }, [dispatch, model.id])
+
+  const handleImageClick = useCallback(
+    (initialAttachmentIndex) => {
+      setOverlay({
+        isOpen: true,
+        template: 'attachmentView',
+        data: {
+          animateIn: true,
+          windowed: true,
+          dialogue: true,
+          initialAttachmentIndex,
+          attachments,
+        },
+      })
+    }, [attachments, setOverlay])
 
   return (
     <div className={c.ModelPrints}>
@@ -91,8 +108,13 @@ const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => 
         <>
           <Spacer size='2rem' />
           <div className={c.ModelPrints_ImagesWrapper}>
-            {attachments.map(a => (
-              <img key={a.id} className={c.ModelPrints_Image} src={a.imageUrl} />
+            {attachments.map((a, i) => (
+              <img
+                key={a.id}
+                className={c.ModelPrints_Image}
+                src={a.imageUrl}
+                onClick={() => handleImageClick(i)}
+              />
             )
             )}
           </div>

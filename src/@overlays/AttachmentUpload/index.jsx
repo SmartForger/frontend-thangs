@@ -174,7 +174,7 @@ const AttachmentUpload = ({ modelId }) => {
   const numOfAttachments = Object.values(attachments).length
 
   return (
-    <div className={c.AttachmentUpload} data-cy='multi-upload-overlay'>
+    <div className={c.AttachmentUpload}>
       {isLoading && (
         <div className={c.AttachmentUpload_LoaderScreen}>
           <Spinner />
