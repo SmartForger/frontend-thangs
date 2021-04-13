@@ -1,13 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { FolderForm, MultiLineBodyText, Spacer, Spinner } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
-import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
+
+import { FolderForm, Spacer, Spinner } from '@components'
 import * as types from '@constants/storeEventTypes'
 import { overlayview, track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
 import MobileDesktopTitle from '../@components/MobileDesktopTitle'
+
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -150,7 +153,7 @@ const EditFolder = ({ folder }) => {
           <Spacer size='4rem' />
           <MobileDesktopTitle>Edit Folder</MobileDesktopTitle>
           <Spacer size='1rem' />
-          <MultiLineBodyText>Change the name of your folder.</MultiLineBodyText>
+          <Body multiline>Change the name of your folder.</Body>
           <Spacer size='1rem' />
           <FolderForm
             errorMessage={errorMessage}

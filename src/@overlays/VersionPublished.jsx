@@ -2,11 +2,10 @@ import React, { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
 
 import { Spacer, OverlayWrapper } from '@components'
 import { useCurrentUser, useOverlay } from '@hooks'
-import { MultiLineBodyText } from '@components/Text/Body'
 
 import { ReactComponent as NewVersionIcon } from '@svg/new-version-published.svg'
 
@@ -52,9 +51,7 @@ const VersionPublished = ({ modelId }) => {
           userData.firstName || userData.username
         }, your changes have been published!`}</Title>
       <Spacer size={'.5rem'} />
-      <MultiLineBodyText>
-        Your changes can now be viewed on your model page
-      </MultiLineBodyText>
+      <Body multiline>Your changes can now be viewed on your model page</Body>
     </OverlayWrapper>
   )
 }

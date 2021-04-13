@@ -1,19 +1,23 @@
 import React, { useCallback, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
-import { Divider, SingleLineBodyText, Spacer } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import { MenuItem } from 'react-contextmenu'
-import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
-import { ReactComponent as DownloadIcon } from '@svg/icon-download.svg'
-import { ReactComponent as UploadIcon } from '@svg/icon-upload-black.svg'
-import { ReactComponent as DeleteIcon } from '@svg/icon-delete.svg'
-import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
-import { ReactComponent as OpenIcon } from '@svg/external-link.svg'
-import { ReactComponent as ShareIcon } from '@svg/icon-sharedfolder.svg'
+
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Divider, Spacer } from '@components'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import { track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
+
+import { ReactComponent as DeleteIcon } from '@svg/icon-delete.svg'
+import { ReactComponent as DownloadIcon } from '@svg/icon-download.svg'
+import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
+import { ReactComponent as OpenIcon } from '@svg/external-link.svg'
+import { ReactComponent as ShareIcon } from '@svg/icon-sharedfolder.svg'
+import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
+import { ReactComponent as UploadIcon } from '@svg/icon-upload-black.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -198,7 +202,7 @@ const FileMenu = ({ model = {} }) => {
           <Spacer size={'1.5rem'} />
           <UploadIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Upload new version</SingleLineBodyText>
+          <Body>Upload new version</Body>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
@@ -209,7 +213,7 @@ const FileMenu = ({ model = {} }) => {
             <Spacer size={'1.5rem'} />
             <UploadIcon />
             <Spacer size={'.5rem'} />
-            <SingleLineBodyText>Add new part</SingleLineBodyText>
+            <Body>Add new part</Body>
             <Spacer size={'1.5rem'} />
           </div>
         </MenuItem>
@@ -220,7 +224,7 @@ const FileMenu = ({ model = {} }) => {
           <Spacer size={'1.5rem'} />
           <ShareIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Invite</SingleLineBodyText>
+          <Body>Invite</Body>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
@@ -230,7 +234,7 @@ const FileMenu = ({ model = {} }) => {
           <Spacer size={'1.5rem'} />
           <OpenIcon className={c.FileMenu_OpenIcon} />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Move to</SingleLineBodyText>
+          <Body>Move to</Body>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
@@ -240,7 +244,7 @@ const FileMenu = ({ model = {} }) => {
           <Spacer size={'1.5rem'} />
           <OpenIcon className={c.FileMenu_OpenIcon} />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Go to model page</SingleLineBodyText>
+          <Body>Go to model page</Body>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
@@ -250,7 +254,7 @@ const FileMenu = ({ model = {} }) => {
           <Spacer size={'1.5rem'} />
           <StarIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Add to Starred</SingleLineBodyText>
+          <Body>Add to starred</Body>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
@@ -260,7 +264,7 @@ const FileMenu = ({ model = {} }) => {
           <Spacer size={'1.5rem'} />
           <EditIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Edit</SingleLineBodyText>
+          <Body>Edit</Body>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
@@ -270,7 +274,7 @@ const FileMenu = ({ model = {} }) => {
           <Spacer size={'1.5rem'} />
           <DownloadIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Download</SingleLineBodyText>
+          <Body>Download</Body>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
@@ -283,7 +287,7 @@ const FileMenu = ({ model = {} }) => {
               <Spacer size={'1.5rem'} />
               <DeleteIcon />
               <Spacer size={'.5rem'} />
-              <SingleLineBodyText>Delete</SingleLineBodyText>
+              <Body>Delete</Body>
               <Spacer size={'1.5rem'} />
             </div>
           </MenuItem>

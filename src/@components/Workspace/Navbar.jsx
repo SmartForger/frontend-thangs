@@ -5,6 +5,7 @@ import { Link, useHistory } from 'react-router-dom'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import {
+  Body,
   Title,
   HeaderLevel,
   Metadata,
@@ -17,12 +18,12 @@ import {
   Divider,
   FileExplorer,
   ProfilePicture,
-  MultiLineBodyText,
   NavLink,
   Spacer,
 } from '@components'
 import { authenticationService } from '@services'
 import { useCurrentUser, useExternalClick } from '@hooks'
+
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as ClockIcon } from '@svg/icon-clock.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
@@ -289,7 +290,7 @@ const WorkspaceNavbar = ({
           />
           <Spacer size={'.75rem'} />
           <div className={c.WorkspaceNavbar_MobileProfile}>
-            <MultiLineBodyText>{user.fullName || user.username}</MultiLineBodyText>
+            <Body multiline>{user.fullName || user.username}</Body>
             {user.username && (
               <>
                 <Spacer size={'.5rem'} />

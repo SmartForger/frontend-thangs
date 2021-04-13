@@ -1,11 +1,14 @@
 import React, { useCallback } from 'react'
-import { SingleLineBodyText, Spacer } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import { MenuItem } from 'react-contextmenu'
-import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
-import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Spacer } from '@components'
 import { useOverlay } from '@hooks'
 import { track } from '@utilities/analytics'
+
+import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
+import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -96,7 +99,7 @@ const AddMenu = ({ folder = {} }) => {
         <MenuItem className={c.AddMenu_Item} onClick={handleAddFolder}>
           <FolderIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Create Folder</SingleLineBodyText>
+          <Body>Create Folder</Body>
         </MenuItem>
         <Spacer size={'1.5rem'} />
       </div>
@@ -106,7 +109,7 @@ const AddMenu = ({ folder = {} }) => {
         <MenuItem className={c.AddMenu_Item} onClick={handleUpload}>
           <UploadIcon className={c.AddMenu_Icon} />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Upload Models</SingleLineBodyText>
+          <Body>Upload Models</Body>
         </MenuItem>
         <Spacer size={'1.5rem'} />
       </div>

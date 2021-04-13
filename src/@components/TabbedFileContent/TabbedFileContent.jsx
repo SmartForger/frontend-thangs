@@ -1,7 +1,10 @@
 import React from 'react'
-import { ContainerColumn, ContainerRow, SingleLineBodyText, Spacer } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
+
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
+
+import { ContainerColumn, ContainerRow, Spacer } from '@components'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -38,13 +41,13 @@ const TabbedFileContent = props => {
                 className={c.TabbedFileContent__clickable}
                 onClick={handleClick}
               >
-                <SingleLineBodyText
+                <Body
                   className={classnames({
                     [c.TabbedFileContent_Text__selected]: selectedKey === tab.key,
                   })}
                 >
                   {tab.label}
-                </SingleLineBodyText>
+                </Body>
                 <Spacer size={'.5rem'} />
                 <div
                   className={classnames(c.TabbedFileContent_Underline, {

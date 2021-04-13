@@ -2,16 +2,9 @@ import React from 'react'
 import { format } from 'date-fns'
 
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+import { Body, Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
 
-import {
-  ContainerRow,
-  ContainerColumn,
-  Spacer,
-  SingleLineBodyText,
-  Tag,
-  ProfilePicture,
-} from '@components'
+import { ContainerRow, ContainerColumn, Spacer, Tag, ProfilePicture } from '@components'
 
 import { ReactComponent as InitialCommitIcon } from '@svg/icon-check.svg'
 
@@ -57,7 +50,7 @@ const CommitNode = ({ message, tag, created, author = {}, isActive, isInitial })
       <ContainerColumn>
         <Spacer size={'.25rem'} />
         <ContainerRow alignItems={'center'}>
-          <SingleLineBodyText>{message}</SingleLineBodyText>
+          <Body>{message}</Body>
           <Spacer size={'.25rem'} />
           <Tag
             color={isActive ? '#13BD98' : '#DCF7F1'}

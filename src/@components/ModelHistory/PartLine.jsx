@@ -1,12 +1,11 @@
 import React from 'react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+import { Body, Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
 
 import {
   ContainerRow,
   ContainerColumn,
   Spacer,
-  SingleLineBodyText,
   ModelHistoryPartActionMenu,
 } from '@components'
 import { formatBytes } from '@utilities'
@@ -36,7 +35,7 @@ const PartLine = ({ name, size }) => {
               <Spacer size={'1rem'} />
               <FileIcon />
               <Spacer size={'1rem'} />
-              <SingleLineBodyText>{name}</SingleLineBodyText>
+              <Body>{name}</Body>
               <Spacer size={'.5rem'} />
               <Metadata type={MetadataType.secondary}>
                 {!size ? '' : formatBytes(size)}

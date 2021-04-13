@@ -1,16 +1,19 @@
 import React, { useCallback, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
-import { Divider, SingleLineBodyText, Spacer } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import { MenuItem } from 'react-contextmenu'
-import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
-import { ReactComponent as DeleteIcon } from '@svg/icon-delete.svg'
-import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
-import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Divider, Spacer } from '@components'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import { useOverlay } from '@hooks'
 import { track } from '@utilities/analytics'
+
+import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
+import { ReactComponent as DeleteIcon } from '@svg/icon-delete.svg'
+import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
+import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -123,7 +126,7 @@ const FolderMenu = ({ folder = {} }) => {
           <Spacer size={'1.5rem'} />
           <EditIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Edit</SingleLineBodyText>
+          <Body>Edit</Body>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
@@ -133,7 +136,7 @@ const FolderMenu = ({ folder = {} }) => {
           <Spacer size={'1.5rem'} />
           <FolderIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Create folder</SingleLineBodyText>
+          <Body>Create Folder</Body>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
@@ -143,7 +146,7 @@ const FolderMenu = ({ folder = {} }) => {
           <Spacer size={'1.5rem'} />
           <StarIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Add to Starred</SingleLineBodyText>
+          <Body>Add to Starred</Body>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
@@ -156,7 +159,7 @@ const FolderMenu = ({ folder = {} }) => {
               <Spacer size={'1.5rem'} />
               <DeleteIcon />
               <Spacer size={'.5rem'} />
-              <SingleLineBodyText>Delete</SingleLineBodyText>
+              <Body>Delete</Body>
               <Spacer size={'1.5rem'} />
             </div>
           </MenuItem>

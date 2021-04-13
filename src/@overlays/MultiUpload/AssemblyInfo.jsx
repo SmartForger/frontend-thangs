@@ -3,6 +3,7 @@ import * as R from 'ramda'
 import Joi from '@hapi/joi'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import {
+  Body,
   Title,
   HeaderLevel,
   Metadata,
@@ -16,7 +17,6 @@ import {
   LicenseField,
   SelectFolderActionMenu,
   Spacer,
-  SingleLineBodyText,
   Textarea,
 } from '@components'
 import { useForm } from '@hooks'
@@ -339,9 +339,7 @@ const AssemblyInfo = ({
           />
         )}
         <Spacer size={'1.5rem'} />
-        <SingleLineBodyText>
-          {folderPublic ? 'Public Model' : 'Private Model'}
-        </SingleLineBodyText>
+        <Body>{folderPublic ? 'Public Model' : 'Private Model'}</Body>
         <Spacer size={'.5rem'} />
         {folderPublic ? (
           <Metadata type={MetadataType.secondary} className={c.AssemblyInfo_PrivacyText}>

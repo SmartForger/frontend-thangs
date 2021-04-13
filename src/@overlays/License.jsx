@@ -3,21 +3,15 @@ import classnames from 'classnames'
 import * as R from 'ramda'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
 
-import {
-  Button,
-  Divider,
-  ModelTitle,
-  SingleLineBodyText,
-  Spacer,
-  Spinner,
-} from '@components'
-import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
+import { Button, Divider, ModelTitle, Spacer, Spinner } from '@components'
 import { overlayview, track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
-import { ReactComponent as DownloadIcon } from '@svg/icon-download.svg'
 import * as types from '@constants/storeEventTypes'
+
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
+import { ReactComponent as DownloadIcon } from '@svg/icon-download.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -217,7 +211,7 @@ const License = ({ model }) => {
   return (
     <div className={c.License}>
       <ExitIcon className={c.License_ExitButton} onClick={closeOverlay} />
-      <SingleLineBodyText className={c.License_Header}>Model license</SingleLineBodyText>
+      <Body className={c.License_Header}>Model license</Body>
       <LicenseContent c={c} model={model} setOverlayData={setOverlayData} />
       <Spacer className={c.License_MobileSpacer} width='4rem' height='unset' />
     </div>

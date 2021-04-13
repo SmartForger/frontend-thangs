@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+import { Body, Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
 
-import { Card, LikeModelButton, SingleLineBodyText, Spacer } from '@components'
+import { Card, LikeModelButton, Spacer } from '@components'
 
 import { ReactComponent as FileCardIcon } from '@svg/file-card.svg'
 
@@ -84,7 +84,7 @@ const FileCard = ({ handleClick = noop, model }) => {
             </Metadata>
           </div>
           <Spacer size={'2rem'} />
-          <SingleLineBodyText className={c.FileCard_Name}>{name}</SingleLineBodyText>
+          <Body className={c.FileCard_Name}>{name}</Body>
           <Spacer size={'2rem'} />
         </Card>
       </ContextMenuTrigger>

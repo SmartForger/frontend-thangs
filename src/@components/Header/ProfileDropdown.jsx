@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+import { Body, Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
 
 import {
   Pill,
@@ -10,7 +10,6 @@ import {
   Divider,
   DropdownMenu,
   DropdownItem,
-  MultiLineBodyText,
   Spacer,
 } from '@components'
 import { useOverlay, useTranslations } from '@hooks'
@@ -102,9 +101,7 @@ export const ProfileDropdownMenuContainer = ({ user = {} }) => {
         />
         <Spacer size={'.75rem'} />
         <div className={c.ProfileDropdown_Column}>
-          <MultiLineBodyText>
-            {hasfullName ? user.fullName : user.username}
-          </MultiLineBodyText>
+          <Body multiline>{hasfullName ? user.fullName : user.username}</Body>
           <Link to={'/mythangs/edit-profile'}>
             <Metadata type={MetadataType.secondary}>Profile Settings</Metadata>
           </Link>

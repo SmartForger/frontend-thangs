@@ -3,6 +3,7 @@ import Joi from '@hapi/joi'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import {
+  Body,
   Title,
   HeaderLevel,
   Metadata,
@@ -10,14 +11,7 @@ import {
   Label,
 } from '@physna/voxel-ui/@atoms/Typography'
 
-import {
-  Button,
-  Divider,
-  FormError,
-  Input,
-  SingleLineBodyText,
-  Spacer,
-} from '@components'
+import { Button, Divider, FormError, Input, Spacer } from '@components'
 import { useForm, useGoogleLogin, useFacebookLogin, useQuery } from '@hooks'
 import { authenticationService } from '@services'
 import { overlayview } from '@utilities/analytics'
@@ -339,7 +333,7 @@ const SignInForm = ({
         </Metadata>
         <Divider spacing={'1.5rem'} />
         <div className={c.Signin_HasAccount}>
-          <SingleLineBodyText>New to Thangs?</SingleLineBodyText>
+          <Body>New to Thangs?</Body>
           <Button
             tertiary
             className={c.Signin_HasAccountButton}

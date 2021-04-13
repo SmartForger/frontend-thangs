@@ -1,17 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useStoreon } from 'storeon/react'
-import {
-  OverlayWrapper,
-  SearchInput,
-  SingleLineBodyText,
-  Spacer,
-  PartTable,
-} from '@components'
-import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
-import { useOverlay } from '@hooks'
+
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { overlayview } from '@utilities/analytics'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
+
 import * as types from '@constants/storeEventTypes'
+import { OverlayWrapper, SearchInput, Spacer, PartTable } from '@components'
+import { useOverlay } from '@hooks'
+import { overlayview } from '@utilities/analytics'
+
+import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -152,7 +150,7 @@ const SelectVersionModel = ({ model, part, files, fileIndex }) => {
       <div className={c.SelectVersionModel_NewFile}>
         <FileIcon />
         <Spacer size={'.5rem'} />
-        <SingleLineBodyText>{currentFile && currentFile.name}</SingleLineBodyText>
+        <Body>{currentFile && currentFile.name}</Body>
       </div>
       <Spacer size={'1rem'} />
       <SearchInput onChange={handleFilterChange} />

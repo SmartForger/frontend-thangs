@@ -2,9 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import * as R from 'ramda'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel, Label } from '@physna/voxel-ui/@atoms/Typography'
+import { Body, Title, HeaderLevel, Label } from '@physna/voxel-ui/@atoms/Typography'
 
-import { Button, MultiLineBodyText, Spacer } from '@components'
+import { Button, Spacer } from '@components'
 import { useOverlay, useTranslations } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
@@ -80,7 +80,7 @@ const AboutHero = ({ user }) => {
       <div className={c.AboutHero}>
         <Title headerLevel={HeaderLevel.primary}>{t('aboutUs.title')}</Title>
         <Spacer size={'1rem'} />
-        <MultiLineBodyText>{t('aboutUs.body')}</MultiLineBodyText>
+        <Body multiline>{t('aboutUs.body')}</Body>
         <Spacer size={'2rem'} />
         {R.isEmpty(user) ? (
           <div className={c.AboutHero_ButtonWrapper}>

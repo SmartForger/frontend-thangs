@@ -2,23 +2,16 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import Dropzone from 'react-dropzone'
 import * as R from 'ramda'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
 
-import {
-  MultiLineBodyText,
-  Pill,
-  Spacer,
-  Spinner,
-  Toggle,
-  Tooltip,
-  TreeView,
-} from '@components'
-import { ReactComponent as UploadCardIcon } from '@svg/upload-card.svg'
-import { ReactComponent as InfoIcon } from '@svg/icon-info.svg'
+import { Pill, Spacer, Spinner, Toggle, Tooltip, TreeView } from '@components'
 import { FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { overlayview } from '@utilities/analytics'
 import UploadTreeNode from './UploadTreeNode'
 import { isIOS } from '@utilities'
+
+import { ReactComponent as UploadCardIcon } from '@svg/upload-card.svg'
+import { ReactComponent as InfoIcon } from '@svg/icon-info.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -280,7 +273,7 @@ const UploadModels = ({
                     <Title headerLevel={HeaderLevel.tertiary}>
                       {multiple ? 'Drag & Drop files' : 'Drag & Drop file'}
                     </Title>
-                    <MultiLineBodyText>or browse to upload.</MultiLineBodyText>
+                    <Body multiline>or browse to upload.</Body>
                     <Spacer size={'1rem'} />
                     <Pill tertiary>Browse</Pill>
                     <Spacer size={'.75rem'} />

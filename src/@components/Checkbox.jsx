@@ -1,8 +1,9 @@
 import React from 'react'
-import { ReactComponent as Checkmark } from '@svg/checkbox-check.svg'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
-import { SingleLineBodyText } from './Text/Body'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
+
+import { ReactComponent as Checkmark } from '@svg/checkbox-check.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -99,7 +100,7 @@ const CheckboxWidthLabel = ({ label, ...props }) => {
 
   return (
     <div className={c.Checkbox_Bar}>
-      <SingleLineBodyText>{label}</SingleLineBodyText>
+      <Body>{label}</Body>
       <Checkbox {...props} />
     </div>
   )

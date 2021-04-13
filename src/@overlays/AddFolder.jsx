@@ -1,14 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import { FolderForm, MultiLineBodyText, Spacer, Spinner } from '@components'
-import { useOverlay } from '@hooks'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
-import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
+import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
+
+import { FolderForm, Spacer, Spinner } from '@components'
+import { useOverlay } from '@hooks'
 import * as types from '@constants/storeEventTypes'
 import { overlayview, track } from '@utilities/analytics'
 import MobileDesktopTitle from '../@components/MobileDesktopTitle'
+
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -149,9 +152,7 @@ const AddFolder = ({ folder }) => {
           <Spacer size='4rem' />
           <MobileDesktopTitle>Create New Folder</MobileDesktopTitle>
           <Spacer size='1rem' />
-          <MultiLineBodyText>
-            Set the name or privacy settings of your folder.
-          </MultiLineBodyText>
+          <Body multiline>Set the name or privacy settings of your folder.</Body>
           <Spacer size='1rem' />
           <FolderForm
             handleSubmit={handleSubmit}

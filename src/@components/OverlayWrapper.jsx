@@ -1,11 +1,10 @@
 import React, { useCallback } from 'react'
 
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
 
-import { Button, SingleLineBodyText, Spacer, Spinner } from '@components'
+import { Button, Spacer, Spinner } from '@components'
 import { useOverlay } from '@hooks'
-import { MultiLineBodyText } from '@components/Text/Body'
 
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as ArrowLeftIcon } from '@svg/icon-arrow-left.svg'
@@ -136,9 +135,7 @@ const OverlayWrapper = ({
         <div className={c.OverlayWrapper_Column}>
           <Spacer size={'1.5rem'} />
           <div className={c.OverlayWrapper_Row}>
-            <SingleLineBodyText className={c.OverlayWrapper_OverlayHeader}>
-              {overlayHeader}
-            </SingleLineBodyText>
+            <Body className={c.OverlayWrapper_OverlayHeader}>{overlayHeader}</Body>
             {onBack && (
               <ArrowLeftIcon className={c.OverlayWrapper_BackButton} onClick={onBack} />
             )}
@@ -154,7 +151,7 @@ const OverlayWrapper = ({
         )}
         {overlaySubTitle && (
           <>
-            <MultiLineBodyText>{overlaySubTitle}</MultiLineBodyText>
+            <Body multiline>{overlaySubTitle}</Body>
             <Spacer size={'1rem'} />
           </>
         )}

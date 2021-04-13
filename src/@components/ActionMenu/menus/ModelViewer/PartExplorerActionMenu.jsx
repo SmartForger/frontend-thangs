@@ -1,15 +1,17 @@
 import React, { useCallback, useMemo, useState, useRef } from 'react'
+
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   ActionMenu,
   ModelThumbnail,
-  MultiLineBodyText,
   Spacer,
-  SingleLineBodyText,
   Tag,
   SearchInput,
   InfiniteTreeView,
 } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
+
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X-sm.svg'
 
@@ -238,7 +240,7 @@ const PartSelectorRow = ({ part = {}, onClick, onEnter }) => {
           />
           <Spacer size={'.75rem'} />
           <div className={c.PartExplorerDropdown_PartText}>
-            <SingleLineBodyText>{name}</SingleLineBodyText>
+            <Body>{name}</Body>
             <Spacer size={'.5rem'} />
             <Tag secondary={!hasChildren}>{hasChildren ? 'Assembly' : 'Part'}</Tag>
           </div>
@@ -342,7 +344,7 @@ export const PartExplorerMenu = ({
           scrollToItem={highlightedValue}
         />
       ) : (
-        <MultiLineBodyText>No models found</MultiLineBodyText>
+        <Body multiline>No models found</Body>
       )}
     </div>
   )
@@ -366,9 +368,7 @@ export const PartExplorerTarget = ({
           mini={true}
         />
         <Spacer size={'1rem'} />
-        <SingleLineBodyText className={c.PartExplorerTarget_ModelName}>
-          {selectedPart.name}
-        </SingleLineBodyText>
+        <Body className={c.PartExplorerTarget_ModelName}>{selectedPart.name}</Body>
         <Spacer size={'.5rem'} />
         {selectedPart.hasChildren ? (
           <Tag className={c.PartExplorerTarget__tablet}>Assembly</Tag>

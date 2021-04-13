@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { useStoreon } from 'storeon/react'
+
 import { OverlayWrapper } from '@components'
 import PartInfo from './PartInfo'
 import UploadModels from './UploadModels'
-import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { track } from '@utilities/analytics'
 import AssemblyInfo from './AssemblyInfo'
-import { useHistory } from 'react-router-dom'
 import { useOverlay } from '@hooks'
 
 const NewModelUpload = ({

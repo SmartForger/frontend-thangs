@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react'
+import classnames from 'classnames'
 import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
-import { LandingCarousel, LandingSearchBar, MultiLineBodyText, Spacer } from '@components'
+import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+import { LandingCarousel, LandingSearchBar, Spacer } from '@components'
 import { useOverlay } from '@hooks'
 import { numberWithCommas } from '@utilities'
 
@@ -80,7 +80,8 @@ const LandingHero = ({ showSearchTextFlash, user }) => {
           Let&apos;s find Thangs.
         </Title>
         <Spacer size={'1rem'} />
-        <MultiLineBodyText
+        <Body
+          multiline
           light
           className={classnames(c.Header_LandingBody, {
             [c.Fade]: searchMinimized,
@@ -89,7 +90,7 @@ const LandingHero = ({ showSearchTextFlash, user }) => {
           Thangs is the fastest growing 3d community with over{' '}
           {modelsIngested || '1,000,000'} available models to search, store, and
           collaborate. <Link to={'/about-us'}>Learn more</Link>
-        </MultiLineBodyText>
+        </Body>
         <Spacer size={'2rem'} />
         <LandingSearchBar
           showSearchTextFlash={showSearchTextFlash}

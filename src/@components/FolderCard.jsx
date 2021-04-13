@@ -1,10 +1,12 @@
 import React, { useCallback, useMemo } from 'react'
-import { Card, SingleLineBodyText, Spacer, LikeFolderButton } from '@components'
+import { ContextMenuTrigger } from 'react-contextmenu'
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Card, Spacer, LikeFolderButton } from '@components'
 import { ReactComponent as FolderCardIcon } from '@svg/folder-card.svg'
 import { ReactComponent as PadlockIcon } from '@svg/icon-padlock-blue.svg'
 import { ReactComponent as SharedFolderIcon } from '@svg/icon-sharedfolder.svg'
-import { ContextMenuTrigger } from 'react-contextmenu'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -87,9 +89,7 @@ const FolderCard = ({ handleClick = noop, folder, isSharedFolder, disableStar })
           </div>
           <Spacer size={'2rem'} />
           <div className={c.FolderCard_Row}>
-            <SingleLineBodyText className={c.FolderCard_Title}>
-              {displayName}
-            </SingleLineBodyText>
+            <Body className={c.FolderCard_Title}>{displayName}</Body>
             {!isPublic && (
               <>
                 <PadlockIcon />

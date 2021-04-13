@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
 
-import { Spacer, MultiLineBodyText } from '@components'
+import { Spacer } from '@components'
 import loader from '@media/loader.gif'
 
 const useStyles = createUseStyles(theme => {
@@ -128,12 +128,12 @@ const LandingCard = ({ card = {}, handleClick }) => {
         <div className={c.LandingCard_Text}>
           <Title headerLevel={HeaderLevel.tertiary}>{title}</Title>
           <Spacer size={'.5rem'} />
-          <MultiLineBodyText>
+          <Body multiline>
             <div className={c.LandingCard_Link} onClick={callback}>
               {linkText}
             </div>{' '}
             {text}
-          </MultiLineBodyText>
+          </Body>
         </div>
         <Spacer size={'1rem'} />
         {hoverVideo && <HoverVideo c={c} video={hoverVideo} showVideo={showVideo} />}

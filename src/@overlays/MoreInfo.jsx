@@ -1,19 +1,20 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import * as EmailValidator from 'email-validator'
 import Joi from '@hapi/joi'
 import classnames from 'classnames'
-import * as EmailValidator from 'email-validator'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import {
+  Body,
   Title,
   HeaderLevel,
   Metadata,
   MetadataType,
 } from '@physna/voxel-ui/@atoms/Typography'
 
-import { Button, Divider, Input, SingleLineBodyText, Spacer } from '@components'
+import { Button, Divider, Input, Spacer } from '@components'
 import { useForm } from '@hooks'
 import { authenticationService } from '@services'
 import * as types from '@constants/storeEventTypes'
@@ -284,7 +285,7 @@ const MoreInfoForm = ({
         </form>
         <Divider spacing={'1.5rem'} />
         <div className={c.MoreInfo_HasAccount}>
-          <SingleLineBodyText>Already a member?</SingleLineBodyText>
+          <Body>Already a member?</Body>
           <Button
             tertiary
             className={c.MoreInfo_HasAccountButton}

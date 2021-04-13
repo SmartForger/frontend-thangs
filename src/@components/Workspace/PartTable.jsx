@@ -1,10 +1,14 @@
 import React, { useMemo, useCallback, useRef, useEffect, useState } from 'react'
 import cn from 'classnames'
 import { ContextMenuTrigger } from 'react-contextmenu'
-import InfiniteTreeView from '@components/InfiniteTreeView'
-import { Checkbox, SingleLineBodyText, Spacer, TableHeader, Tag } from '@components'
-import { flattenTree } from '@utilities/tree'
+
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
+
+import InfiniteTreeView from '@components/InfiniteTreeView'
+import { Checkbox, Spacer, TableHeader, Tag } from '@components'
+import { flattenTree } from '@utilities/tree'
+
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 
 const useStyles = createUseStyles(theme => {
@@ -221,7 +225,7 @@ const PartTable = ({
                   <Spacer size={'.5rem'} />
                 </>
               )}
-              <SingleLineBodyText>{node.name}</SingleLineBodyText>
+              <Body>{node.name}</Body>
             </div>
             <div className={cn(c.PartTable_Contributors, c.PartTable_Cell)}>
               <Tag lightText color={'#30BE93'}>
@@ -288,9 +292,7 @@ const PartTable = ({
               nodeProps={{ selectedParts, addSelectedParts, removeSelectedFile }}
             />
           ) : (
-            <SingleLineBodyText className={c.NoResultsFound}>
-              No Results Found
-            </SingleLineBodyText>
+            <Body className={c.NoResultsFound}>No Results Found</Body>
           )}
         </>
       ) : null}

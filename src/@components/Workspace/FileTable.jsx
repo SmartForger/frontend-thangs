@@ -6,7 +6,7 @@ import { format } from 'date-fns'
 import { ContextMenuTrigger } from 'react-contextmenu'
 
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+import { Body, Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
 
 import {
   ContainerColumn,
@@ -16,7 +16,6 @@ import {
   ModelActionToolbar,
   ModelActionMenu,
   Pill,
-  SingleLineBodyText,
   Spacer,
   TableHeader,
 } from '@components'
@@ -26,10 +25,10 @@ import { flattenTree } from '@utilities/tree'
 import { MODEL_FILE_EXTS } from '@constants/fileUpload'
 
 import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
-import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
-import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as DropzoneIcon } from '@svg/dropzone.svg'
 import { ReactComponent as DropzoneMobileIcon } from '@svg/dropzone-mobile.svg'
+import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
+import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
 
 const useStyles = createUseStyles(theme => {
@@ -480,7 +479,7 @@ const FileTable = ({
                 )}
               </div>
               {!node.isLeaf && <FileIcon className={c.FileTable_AssemblyIcon} />}
-              <SingleLineBodyText>{node.name}</SingleLineBodyText>
+              <Body>{node.name}</Body>
             </div>
             <Metadata
               type={MetadataType.secondary}
@@ -559,9 +558,7 @@ const FileTable = ({
               renderNode={renderNode}
             />
           ) : (
-            <SingleLineBodyText className={c.NoResultsFound}>
-              No Results Found
-            </SingleLineBodyText>
+            <Body className={c.NoResultsFound}>No Results Found</Body>
           )}
         </>
       ) : !hideDropzone ? (

@@ -2,8 +2,10 @@ import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react'
 import * as R from 'ramda'
 import Joi from '@hapi/joi'
 import classnames from 'classnames'
+
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import {
+  Body,
   Title,
   HeaderLevel,
   Metadata,
@@ -16,7 +18,6 @@ import {
   Input,
   LicenseField,
   ModelThumbnail,
-  SingleLineBodyText,
   Spacer,
   Textarea,
   Toggle,
@@ -459,9 +460,7 @@ const PartInfo = props => {
         {isRootPart && (
           <>
             <Spacer size={'1rem'} />
-            <SingleLineBodyText>
-              {folderPublic ? 'Public Model' : 'Private Model'}
-            </SingleLineBodyText>
+            <Body>{folderPublic ? 'Public Model' : 'Private Model'}</Body>
             <Spacer size={'.5rem'} />
             {folderPublic ? (
               <Metadata type={MetadataType.secondary} className={c.PartInfo_PrivacyText}>

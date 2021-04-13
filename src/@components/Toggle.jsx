@@ -1,7 +1,9 @@
 import React from 'react'
-import { Spacer, SingleLineBodyText } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import ReactTooltip from 'react-tooltip'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Spacer } from '@components'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -105,7 +107,7 @@ const ToggleSwitch = ({
     <div className={c.ToggleSwitch}>
       <Spacer size={'1rem'} />
       <div className={c.ToggleRow}>
-        <SingleLineBodyText>{label}</SingleLineBodyText>
+        <Body>{label}</Body>
         <Toggle
           name={name}
           checked={checked}
