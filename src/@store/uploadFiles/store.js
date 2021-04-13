@@ -476,10 +476,9 @@ export default store => {
         formData[file].previousParts.forEach(part => {
           partsPayload.push({
             action: 'edit',
-            ...part,
             filename: uploadedFiles[file].newFileName,
             size: uploadedFiles[file].size,
-            previousPartIdentifier: part.partIdentifier,
+            partIdentifier: part.partIdentifier,
           })
         })
       })
