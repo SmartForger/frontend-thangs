@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react'
-import { MultiLineBodyText, Spacer, Spinner, UserInline } from '@components'
+import { ContainerRow, ContainerColumn, MultiLineBodyText, Spacer, UserInline } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import { ReactComponent as ArrowLeftIcon } from '@svg/icon-arrow-left.svg'
+import ArrowLeftIcon from '@svg/icon-arrow-left'
+import ArrowRightIcon from '@svg/icon-arrow-right'
 import { useOverlay } from '@hooks'
-import { overlayview, track } from '@utilities/analytics'
+import { overlayview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -68,11 +69,12 @@ const useStyles = createUseStyles(theme => {
       fontSize: '0.75rem',
       lineHeight: '2',
       minWidth: '2rem',
+    },
+    AttachmentView_NavigationArrow: {
+      cursor: 'pointer',
     }
   }
 })
-
-const noop = () => null
 
 const AttachmentView = ({ initialAttachmentIndex, attachments }) => {
   const c = useStyles()
@@ -95,43 +97,61 @@ const AttachmentView = ({ initialAttachmentIndex, attachments }) => {
 
   useEffect(() => {
     overlayview('AttachmentView')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  })
 
   return (
-    <div className={c.AttachmentView}>
-      <div className={c.AttachmentView_Content}>
-        <div className={c.AttachmentView_Column}>
-          <Spacer size={'1rem'} />
-          <div className={c.AttachmentView_Row}>
-            <Spacer size={'1.5rem'} />
-            <UserInline user={activeAttachment.owner} className={c.AttachmentView_UserInfo} size='2.5rem' />
-          </div>
-          <ExitIcon className={c.AttachmentView_ExitButton} onClick={closeOverlay} />
-          <Spacer size={'1rem'} />
-        </div>
-        <img
-          className={c.AttachmentView_Image}
-          src={activeAttachment.imageUrl}
+    <ContainerRow>
+      <ContainerRow alignItems='center'>
+        <ArrowLeftIcon
+          color={'#FFFFFF'}
+          className={c.AttachmentView_NavigationArrow}
+          onClick={() => setActiveAttachmentIndex(prevVal => prevVal - 1)}
         />
-        <div>
-          <Spacer size={'1.5rem'} />
-          <div className={c.AttachmentView_CaptionRow}>
-            <Spacer width={'1.5rem'} />
-            <div className={c.AttachmentView_CaptionWrapper}>
-              <MultiLineBodyText>
-                {activeAttachment.caption}
-              </MultiLineBodyText>
-              <div className={c.AttachmentView_CaptionPosition}>
-                {attachmentPosition}
-              </div>
+        <Spacer size='1rem' />
+      </ContainerRow>
+      <div className={c.AttachmentView}>
+        <div className={c.AttachmentView_Content}>
+          <div className={c.AttachmentView_Column}>
+            <Spacer size={'1rem'} />
+            <div className={c.AttachmentView_Row}>
+              <Spacer size={'1.5rem'} />
+              <UserInline user={activeAttachment.owner} className={c.AttachmentView_UserInfo} size='2.5rem' />
             </div>
-            <Spacer width={'1.5rem'} />
+            <ExitIcon className={c.AttachmentView_ExitButton} onClick={closeOverlay} />
+            <Spacer size={'1rem'} />
           </div>
-          <Spacer size={'1.5rem'} />
+          <img
+            className={c.AttachmentView_Image}
+            alt={activeAttachment.caption}
+            src={activeAttachment.imageUrl}
+          />
+          <div>
+            <Spacer size={'1.5rem'} />
+            <div className={c.AttachmentView_CaptionRow}>
+              <Spacer width={'1.5rem'} />
+              <div className={c.AttachmentView_CaptionWrapper}>
+                <MultiLineBodyText>
+                  {activeAttachment.caption}
+                </MultiLineBodyText>
+                <div className={c.AttachmentView_CaptionPosition}>
+                  {attachmentPosition}
+                </div>
+              </div>
+              <Spacer width={'1.5rem'} />
+            </div>
+            <Spacer size={'1.5rem'} />
+          </div>
         </div>
       </div>
-    </div>
+      <ContainerRow alignItems='center'>
+        <Spacer size='1rem' />
+        <ArrowRightIcon
+          color={'#FFFFFF'}
+          className={c.AttachmentView_NavigationArrow}
+          onClick={() => setActiveAttachmentIndex(prevVal => prevVal + 1)}
+        />
+      </ContainerRow>
+    </ContainerRow>
   )
 }
 

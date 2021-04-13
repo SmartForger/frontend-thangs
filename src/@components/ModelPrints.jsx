@@ -113,6 +113,7 @@ const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => 
                 key={a.id}
                 className={c.ModelPrints_Image}
                 src={a.imageUrl}
+                alt={a.caption}
                 onClick={() => handleImageClick(i)}
               />
             )
