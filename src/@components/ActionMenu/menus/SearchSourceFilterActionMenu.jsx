@@ -139,7 +139,7 @@ const SearchSourceFilterActionMenu = ({
       targetVariant,
       onChange: disabled ? noop : onChange,
     }
-  }, [disabled, selectedValue, targetVariant, thin])
+  }, [disabled, onChange, selectedValue, targetVariant, thin])
 
   return (
     <ActionMenu
