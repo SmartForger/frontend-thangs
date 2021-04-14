@@ -7,7 +7,7 @@ import { shouldShowViewRelated } from '@utilities'
 const useStyles = createUseStyles(theme => {
   return {
     SearchResultFooter_Link: {
-      fontSize: '1rem',
+      fontSize: '.75rem',
       fontWeight: '500',
       lineHeight: '1rem',
       cursor: 'pointer',

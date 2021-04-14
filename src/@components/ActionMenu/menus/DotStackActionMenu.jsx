@@ -9,7 +9,11 @@ const useStyles = createUseStyles(theme => {
     mediaQueries: { md_viewer },
   } = theme
   return {
-    DotStackActionMenu: {},
+    DotStackActionMenu: {
+      top: '1rem',
+      left: '.5rem',
+      right: 'unset !important',
+    },
     DotStackActionMenu_ClickableButton: {
       cursor: 'pointer',
       display: 'flex',
@@ -60,8 +64,10 @@ const DotStackTarget = ({ onClick = noop }) => {
 }
 
 const DotStackActionMenu = ({ onChange = noop, options = [], actionMenuTitle }) => {
+  const c = useStyles({})
   const menuProps = useMemo(() => {
     return {
+      className: c.DotStackActionMenu,
       onChange,
       actionBarTitle: actionMenuTitle,
       options,

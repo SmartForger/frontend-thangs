@@ -37,7 +37,15 @@ const useStyles = createUseStyles(theme => {
   }
 })
 const noop = () => null
-const Pill = ({ children, className, secondary, tertiary, onClick = noop, disabled }) => {
+const Pill = ({
+  children,
+  className,
+  secondary,
+  tertiary,
+  onClick = noop,
+  disabled,
+  thin,
+}) => {
   const c = useStyles({ disabled })
 
   const getOnClick = useCallback(() => {
@@ -52,13 +60,13 @@ const Pill = ({ children, className, secondary, tertiary, onClick = noop, disabl
       })}
       onClick={getOnClick()}
     >
-      <Spacer size={'.5rem'} />
+      {!thin && <Spacer size={'.5rem'} />}
       <div className={c.Pill_TextWrapper}>
         <Spacer size={'.75rem'} mobileSize={'.5rem'} />
         <LabelText small>{children}</LabelText>
         <Spacer size={'.75rem'} mobileSize={'.5rem'} />
       </div>
-      <Spacer size={'.5rem'} />
+      {!thin && <Spacer size={'.5rem'} />}
     </div>
   )
 }
