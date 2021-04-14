@@ -261,6 +261,7 @@ const TabSearchHeader = ({
           onChange={onFilterChange}
           disabled={disabled}
           className={c.SearchResults_FilterButton}
+          variant={'tabs'}
         />
       </ContainerRow>
     </div>

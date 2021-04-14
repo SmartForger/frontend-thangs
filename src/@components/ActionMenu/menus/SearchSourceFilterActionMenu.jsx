@@ -4,7 +4,7 @@ import * as R from 'ramda'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
 
-import { ActionMenu, Pill, Spacer } from '@components'
+import { ActionMenu, Pill, Spacer, Tabs } from '@components'
 
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 
@@ -66,11 +66,28 @@ const label = selectedValue => {
   if (selectedSort) {
     return selectedSort.label
   }
-  return 'All'
+  return 'Best Match'
 }
 
-const SearchSourceFilterTarget = ({ onClick = noop, selectedValue, disabled, thin }) => {
+const SearchSourceFilterTarget = ({
+  onClick = noop,
+  onChange = noop,
+  selectedValue,
+  disabled,
+  thin,
+  targetVariant,
+}) => {
   const c = useStyles({})
+  if (targetVariant === 'tabs') {
+    return (
+      <Tabs
+        disabled={disabled}
+        options={options}
+        onChange={onChange}
+        selectedValue={selectedValue}
+      />
+    )
+  }
   return (
     <>
       <Spacer width='.25rem' height='0' />
@@ -98,6 +115,7 @@ const SearchSourceFilterActionMenu = ({
   className = '',
   disabled = false,
   thin = false,
+  targetVariant = 'dots',
 }) => {
   const menuProps = useMemo(() => {
     return {
@@ -110,8 +128,14 @@ const SearchSourceFilterActionMenu = ({
   }, [disabled, onChange, className])
 
   const targetProps = useMemo(() => {
-    return { disabled, selectedValue, thin }
-  }, [disabled, selectedValue, thin])
+    return {
+      disabled,
+      selectedValue,
+      thin,
+      targetVariant,
+      onChange: disabled ? noop : onChange,
+    }
+  }, [disabled, selectedValue, targetVariant, thin])
 
   return (
     <ActionMenu

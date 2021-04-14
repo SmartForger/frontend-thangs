@@ -69,7 +69,6 @@ const useStyles = createUseStyles(theme => {
     },
     TextSearchResult_Column: {
       display: 'flex',
-      justifyContent: 'center',
       flexDirection: 'column',
       flexGrow: 1,
     },
