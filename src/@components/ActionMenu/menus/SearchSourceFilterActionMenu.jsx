@@ -79,12 +79,16 @@ const SearchSourceFilterTarget = ({
 }) => {
   const c = useStyles({})
   if (targetVariant === 'tabs') {
+    const defaultValue = {
+      label: 'Best Match',
+      value: 'all',
+    }
     return (
       <Tabs
         disabled={disabled}
         options={options}
         onChange={onChange}
-        selectedValue={selectedValue}
+        selectedValue={selectedValue || defaultValue}
       />
     )
   }
