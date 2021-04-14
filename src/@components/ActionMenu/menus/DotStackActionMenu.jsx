@@ -74,7 +74,7 @@ const DotStackActionMenu = ({ onChange = noop, options = [], actionMenuTitle }) 
       tabletLayout: false,
       alignItems: 'center',
     }
-  }, [onChange, options, actionMenuTitle])
+  }, [c.DotStackActionMenu, onChange, actionMenuTitle, options])
 
   return (
     <ActionMenu
