@@ -57,7 +57,7 @@ const MultiUpload = ({
   part,
   action,
 }) => {
-  const { dispatch, license = {}, uploadFiles = {} } = useStoreon(
+  const { dispatch, license = {}, uploadModelFiles = {} } = useStoreon(
     'license',
     'uploadModelFiles'
   )

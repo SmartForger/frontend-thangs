@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react'
-import {
-  Button,
-  MultiLineBodyText,
-  Spacer,
-  TitleTertiary,
-} from '@components'
+import { Button, Spacer } from '@components'
+import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { overlayview } from '@utilities/analytics'
 
@@ -40,13 +36,13 @@ const Submitted = ({
   return (
     <>
       <Spacer size={'1rem'} />
-      <TitleTertiary>
+      <Title headerLevel={HeaderLevel.tertiary}>
         Photo submit failed
-      </TitleTertiary>
+      </Title>
       <Spacer size={'0.75rem'} />
-      <MultiLineBodyText>
+      <Body multiline>
         Something went wrong and we couldn't submit your model photos. Please try again.
-      </MultiLineBodyText>
+      </Body>
       <Spacer size={'3rem'} />
       <div className={c.Error_ButtonWrapper}>
         <Button tertiary onClick={onCancel}>

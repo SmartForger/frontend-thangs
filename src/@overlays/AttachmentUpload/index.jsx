@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { SingleLineBodyText, Spacer, Spinner } from '@components'
+import { Spacer, Spinner } from '@components'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
 import UploadFiles from './UploadFiles'
 import Attachment from './Attachment'
 import Error from './Error'
@@ -185,9 +186,9 @@ const AttachmentUpload = ({ modelId }) => {
         <div className={c.AttachmentUpload_Column}>
           <Spacer size={'1.5rem'} />
           <div className={c.AttachmentUpload_Row}>
-            <SingleLineBodyText className={c.AttachmentUpload_OverlayHeader}>
+            <Body className={c.AttachmentUpload_OverlayHeader}>
               {formatOverlayTitle}
-            </SingleLineBodyText>
+            </Body>
             {activeAttachment && activeAttachmentPosition > 0 && (<ArrowLeftIcon className={c.AttachmentUpload_BackButton} onClick={handleBack} />)}
             <ExitIcon className={c.AttachmentUpload_ExitButton} onClick={handleCancel} />
           </div>

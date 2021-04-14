@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react'
-import {
-  Button,
-  MultiLineBodyText,
-  Spacer,
-  TitleTertiary
-} from '@components'
+import { Button, Spacer } from '@components'
+import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
 import { ReactComponent as PhotosSubmitted } from '@svg/photos-submitted.svg'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { overlayview } from '@utilities/analytics'
@@ -45,15 +41,15 @@ const Submitted = ({
         <PhotosSubmitted />
       </div>
       <Spacer size={'2rem'} />
-      <TitleTertiary>
+      <Title headerLevel={HeaderLevel.tertiary}>
         Your photos have been submitted!
-      </TitleTertiary>
+      </Title>
       <Spacer size={'0.75rem'} />
-      <MultiLineBodyText>
+      <Body multiline>
         Thank you for being a part of the Thangs community. Your photos are
         being processed and will appear on the model's page when they have
         been approved.
-      </MultiLineBodyText>
+      </Body>
       <Spacer size={'1.5rem'} />
       <div className={c.Submitted_ButtonWrapper}>
         <Button onClick={onClose}>

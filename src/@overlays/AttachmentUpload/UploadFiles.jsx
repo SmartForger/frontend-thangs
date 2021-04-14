@@ -1,10 +1,6 @@
 import React, { useEffect, useRef } from 'react'
-import {
-  MultiLineBodyText,
-  Pill,
-  Spacer,
-  TitleTertiary,
-} from '@components'
+import { Pill, Spacer } from '@components'
+import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as UploadCardIcon } from '@svg/upload-card.svg'
 import Dropzone from 'react-dropzone'
@@ -83,10 +79,10 @@ const UploadFiles = ({
                 <div className={c.UploadFiles_UploadColumn}>
                   <UploadCardIcon />
                   <Spacer size={'1rem'} />
-                  <TitleTertiary>
+                  <Title headerLevel={HeaderLevel.tertiary}>
                     Drag & Drop photos
-                  </TitleTertiary>
-                  <MultiLineBodyText>or browse to upload.</MultiLineBodyText>
+                  </Title>
+                  <Body multiline>or browse to upload.</Body>
                   <Spacer size={'1rem'} />
                   <Pill secondary>Browse</Pill>
                   <Spacer size={'.75rem'} />

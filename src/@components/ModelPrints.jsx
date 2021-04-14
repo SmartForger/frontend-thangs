@@ -1,13 +1,8 @@
 import React, { useEffect, useCallback } from 'react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useStoreon } from 'storeon/react'
-import {
-  Button,
-  MultiLineBodyText,
-  Spacer,
-  Spinner,
-  TitleTertiary,
-} from '@components'
+import { Button, Spacer, Spinner } from '@components'
+import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
 import { useOverlay } from '@hooks'
 import { ReactComponent as PhotoIcon } from '@svg/icon-photo.svg'
 import * as types from '@constants/storeEventTypes'
@@ -99,9 +94,9 @@ const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => 
 
   return (
     <div className={c.ModelPrints}>
-      <TitleTertiary>
+      <Title headerLevel={HeaderLevel.tertiary}>
         Model prints
-      </TitleTertiary>
+      </Title>
       {isLoading ? (
         <Spinner />
       ) : attachments.length ? (
@@ -123,9 +118,9 @@ const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => 
       ) : (
         <>
           <Spacer size='.5rem' />
-          <MultiLineBodyText>
+          <Body multiline>
             No prints added yet, be the first to upload a photo!
-          </MultiLineBodyText>
+          </Body>
         </>
       )}
       <Spacer size='1.5rem' />
