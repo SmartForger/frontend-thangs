@@ -45,7 +45,8 @@ export default store => {
       method: 'GET',
       endpoint: `models/${id}/download-url?targetFormat=${format}`,
     })
-    if (error) {
+
+    if (error || data?.fileName === 'Error') {
       store.dispatch(types.FAILED_MODEL_DOWNLOAD_URL)
     } else {
       store.dispatch(types.LOADED_MODEL_DOWNLOAD_URL, { data })

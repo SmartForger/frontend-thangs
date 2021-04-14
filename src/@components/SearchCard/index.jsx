@@ -1,18 +1,14 @@
 import React, { useCallback, useState } from 'react'
+import classnames from 'classnames'
 import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import {
-  Checkbox,
-  Divider,
-  Spacer,
-  MultiLineBodyText,
-  TitleTertiary,
-  Pill,
-} from '@components'
-import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import classnames from 'classnames'
+import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Checkbox, Divider, Spacer, Pill } from '@components'
 import * as types from '@constants/storeEventTypes'
+
+import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -111,7 +107,9 @@ const SearchCard = ({ className, search = {} }) => {
             onClick={handleSearch}
           >
             <div className={c.SearchCard_Title}>
-              <TitleTertiary>{modelId ? `#${modelId}` : searchTerm}</TitleTertiary>
+              <Title headerLevel={HeaderLevel.tertiary}>
+                {modelId ? `#${modelId}` : searchTerm}
+              </Title>
               <Spacer size='.5rem' />
               {newResultCount > 0 && (
                 <>
@@ -122,16 +120,16 @@ const SearchCard = ({ className, search = {} }) => {
             </div>
           </Link>
           <span className={c.SearchCard_RemoveButton} onClick={handleDelete}>
-            <MultiLineBodyText>
+            <Body multiline>
               <Spacer size={'.5rem'} />
               <TrashCanIcon />
-            </MultiLineBodyText>
+            </Body>
           </span>
         </div>
         <Spacer size='.75rem' />
-        <MultiLineBodyText className={c.SearchCard_SearchType}>
+        <Body multiline className={c.SearchCard_SearchType}>
           {modelId ? 'Model Search' : 'Text Search'}
-        </MultiLineBodyText>
+        </Body>
         <Spacer size='.75rem' />
         <Divider spacing={0} />
         <Spacer size='1rem' />

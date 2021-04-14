@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useEffect, useMemo, useCallback } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import classnames from 'classnames'
 import * as R from 'ramda'
 import { useStoreon } from 'storeon/react'
@@ -28,24 +28,6 @@ const useStyles = createUseStyles(theme => {
     },
     SearchResults_MatchingIcon: {
       marginRight: '.5rem',
-    },
-    SearchResults_Header: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      color: theme.colors.purple[900],
-      marginBottom: '1.5rem',
-    },
-    SearchResults_HeaderTextWrapper: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'flex-start',
-    },
-    SearchResults_HeaderText: {
-      ...theme.text.searchResultsHeader,
-      fontSize: '1rem',
-      lineHeight: '1.5rem',
-      color: theme.colors.purple[900],
     },
     SearchResults_FromThangsLogo: {
       height: '1rem',
@@ -110,10 +92,8 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
-const noop = () => null
+
 const SearchResult = ({
-  onFindRelated,
-  onReportModel,
   isError,
   isLoading = true,
   modelId,
@@ -143,8 +123,6 @@ const SearchResult = ({
         <>
           {filteredModels && filteredModels.length > 0 ? (
             <ModelSearchResults
-              handleFindRelated={onFindRelated}
-              onReportModel={onReportModel}
               items={filteredModels}
               searchModelFileName={searchModelFileName}
               showSocial={false}
@@ -164,8 +142,6 @@ const SearchResult = ({
 }
 
 const ThangsSearchResult = ({
-  onFindRelated,
-  onReportModel,
   isError,
   isLoading = true,
   isOtherModelsLoaded,
@@ -203,8 +179,6 @@ const ThangsSearchResult = ({
         <>
           {models && models.length > 0 ? (
             <ModelSearchResults
-              handleFindRelated={onFindRelated}
-              onReportModel={onReportModel}
               items={models}
               searchModelFileName={searchModelFileName}
               showSocial={false}
@@ -224,31 +198,53 @@ const ThangsSearchResult = ({
   )
 }
 
-const GeoSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
-  const FILTER_DEFAULT = 'all'
-  const filter = useQuery('filter')
+const GeoSearchPage = () => {
+  const FILTER_ALL = 'all'
+  const FILTER_THANGS = 'thangs'
+  const FILTER_PHYN = 'phyn'
+
+  const filter = useQuery('filter') || FILTER_ALL
   const { searchQuery } = useParams()
   const modelId = useQuery('modelId')
   const phynId = useQuery('phynId')
   const related = useQuery('related')
   const { dispatch, geoSearchResults } = useStoreon('geoSearchResults')
+  const history = useHistory()
 
   const { phyndexer, thangs } = geoSearchResults
-  const [searchScope, setSearchScope] = useState(filter || FILTER_DEFAULT)
   const thangsModels = R.path(['data'], thangs) || []
   const phyndexerModels = R.path(['data'], phyndexer) || []
   const resultCount = phyndexerModels.length + thangsModels.length
-  const isLoading = thangs.isLoading || phyndexer.isLoading
+  const isLoading = useMemo(() => {
+    if (filter === FILTER_ALL) {
+      return thangs.isLoading || phyndexer.isLoading
+    } else if (filter === FILTER_THANGS) {
+      return thangs.isLoading
+    } else {
+      return phyndexer.isLoading
+    }
+  }, [filter, thangs.isLoading, phyndexer.isLoading])
+
+  const setSearchFilters = useCallback(
+    ({ scopeFilter }) => {
+      if (scopeFilter !== filter) {
+        history.push(
+          `?modelId=${modelId}&phynId=${phynId}&related=${related}&filter=${scopeFilter}`
+        )
+      }
+    },
+    [modelId, phynId, related, filter, history]
+  )
 
   useEffect(() => {
     dispatch(types.GET_RELATED_MODELS, {
       modelId: modelId,
       phyndexerId: phynId,
       geoSearch: !related,
-      scope: searchScope,
+      scope: filter,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery, modelId, searchScope])
+  }, [searchQuery, modelId, filter])
 
   return (
     <>
@@ -258,15 +254,13 @@ const GeoSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
           isLoading={isLoading}
           resultCount={resultCount}
           searchQuery={searchQuery}
-          setFilter={setSearchScope}
+          setFilters={setSearchFilters}
         />
       )}
       {searchQuery ? (
         <>
-          {modelId || (phynId && searchScope !== 'phyn') ? (
+          {filter !== FILTER_PHYN && (modelId || phynId) ? (
             <ThangsSearchResult
-              onFindRelated={onFindRelated}
-              onReportModel={onReportModel}
               isError={thangs.isError}
               isLoading={thangs.isLoading}
               isOtherModelsLoaded={phyndexer.isLoaded}
@@ -275,10 +269,8 @@ const GeoSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
               searchModelFileName={undefined}
             />
           ) : null}
-          {phynId && searchScope !== 'thangs' ? (
+          {phynId && filter !== FILTER_THANGS ? (
             <SearchResult
-              onFindRelated={onFindRelated}
-              onReportModel={onReportModel}
               isError={phyndexer.isError}
               isLoading={phyndexer.isLoading}
               modelId={modelId}

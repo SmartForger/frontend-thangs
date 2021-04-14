@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { createPortal } from 'react-dom'
 import classnames from 'classnames'
-import { Spacer, TitleTertiary } from '@components'
-import { useActionMenu } from '@hooks'
+import { createPortal } from 'react-dom'
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Spacer } from '@components'
+import { useActionMenu } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -120,8 +122,14 @@ export const ActionMenuPortal = ({ actionMenuRef, className, scrollTop, mobileOn
               <Spacer size={'2rem'} className={c.ActionMenuContent_NoFlex} />
               <div className={c.ActionMenuContent_FullWidth}>
                 <Spacer size={'2rem'} />
-                <TitleTertiary>{actionMenuData.actionBarTitle}</TitleTertiary>
-                <Spacer size={'1.5rem'} />
+                {actionMenuData?.actionBarTitle?.length > 0 && (
+                  <>
+                    <Title headerLevel={HeaderLevel.tertiary}>
+                      {actionMenuData.actionBarTitle}
+                    </Title>
+                    <Spacer size={'1.5rem'} />
+                  </>
+                )}
                 <ActionMenuComponent {...actionMenuData} />
               </div>
               <Spacer size={'2rem'} className={c.ActionMenuContent_NoFlex} />

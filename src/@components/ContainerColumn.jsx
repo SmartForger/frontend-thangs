@@ -7,6 +7,7 @@ const useStyles = createUseStyles(_theme => {
     ContainerColumn: {
       display: 'flex',
       flexDirection: 'column',
+      flexWrap: ({ wrap }) => wrap,
       alignItems: ({ alignItems }) => alignItems,
       justifyContent: ({ justifyContent }) => justifyContent,
       width: ({ fullWidth }) => fullWidth && '100%',
@@ -21,11 +22,12 @@ const ContainerColumn = ({
   children,
   alignItems = 'normal',
   justifyContent = 'normal',
+  wrap = 'nowrap',
   fullWidth,
   onClick = noop,
   elementRef,
 }) => {
-  const c = useStyles({ alignItems, justifyContent, fullWidth })
+  const c = useStyles({ alignItems, justifyContent, fullWidth, wrap })
 
   return (
     <div

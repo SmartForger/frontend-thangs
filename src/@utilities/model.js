@@ -1,13 +1,38 @@
 import * as R from 'ramda'
 import * as path from 'path'
 
-const THUMBNAILS_FOLDER = process.env.REACT_APP_THUMBNAILS_FOLDER
 const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST
 const REACT_APP_MODEL_BUCKET = process.env.REACT_APP_MODEL_BUCKET
 
 // Only ever hide the "View related models" link if we know that there are exactly 0 matches; otherwise, show the link
 export const shouldShowViewRelated = model =>
   model.nMatchedModels !== 0 && model.matchingData?.nMatchedModels !== 0
+
+const UNSUPPORTED_EXTENSIONS = ['igs', 'step', 'x_t']
+
+export const canDownloadAR = model => {
+  const isSupported = filename => {
+    const extension = filename.split('.').pop()
+    return !UNSUPPORTED_EXTENSIONS.includes(extension.toLowerCase())
+  }
+
+  const { parts } = model
+  if (parts?.length > 0) {
+    // Only check the primary part since that is the one we export to AR
+    let primaryPart = null
+    if (parts.length > 1) {
+      primaryPart = R.find(R.propEq('isPrimary', true))(parts) || parts[0]
+    } else {
+      primaryPart = parts[0]
+    }
+
+    return isSupported(primaryPart.filename ?? primaryPart.fileName)
+  } else if (model.fileName) {
+    return isSupported(model.fileName)
+  }
+
+  return false
+}
 
 export const buildThumbnailUrl = (model, useThumbnailer) => {
   if (model.fullThumbnailUrl) return model.fullThumbnailUrl
@@ -31,7 +56,7 @@ const getThumbnailUrl = (model = {}) => {
   let primaryPart
   //This should be the the most common case for model cards
   if (filename) return filename
-  if (thumbnailUrl) return `${THUMBNAILS_FOLDER}${thumbnailUrl}`
+  if (thumbnailUrl) return `${thumbnailUrl}`
   //This is used by the Search By Model overlay for generating the "scanner" thumbnail
   if (uploadedFile) return `${uploadedFile}`
   if (modelFileName) return encodeURIComponent(modelFileName)
@@ -44,13 +69,8 @@ const getThumbnailUrl = (model = {}) => {
     if (primaryPart) return primaryPart.filename.replace('#', encodeURIComponent('#'))
   }
   //This is used by the model uploader to generate small thumbnails in the "Enter Part Info" overlay
-  if (newFileName) {
-    if (newFileName.includes(THUMBNAILS_FOLDER)) {
-      return encodeURIComponent(newFileName)
-    } else {
-      return `${THUMBNAILS_FOLDER}${encodeURIComponent(newFileName)}`
-    }
-  }
+  if (newFileName) return encodeURIComponent(newFileName)
+
   return 'unknown'
 }
 

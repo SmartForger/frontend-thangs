@@ -48,15 +48,18 @@ export default store => {
     ) => {
       if (state.textSearchResults.isLoading) return
       if (isInitial) store.dispatch(types.RESET_TEXT_SEARCH_RESULTS)
+
       store.dispatch(types.CHANGE_TEXT_SEARCH_RESULTS_STATUS, {
         status: STATUSES.LOADING,
         isInitial,
       })
+
       const { data = [], error } = await api({
         method: 'GET',
         endpoint: 'models/search-by-text',
         params: {
           searchTerm,
+          narrow: true,
           collapse: true,
           scope: scope || 'all',
           page: isInitial ? 0 : state.textSearchResults.pageToLoad,

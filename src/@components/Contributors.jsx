@@ -6,6 +6,7 @@ const useStyles = createUseStyles(theme => {
   return {
     Contributors: {
       display: 'flex',
+      cursor: 'pointer',
     },
     Contributors_Avatar: {
       backgroundColor: theme.colors.white[400],
@@ -28,12 +29,14 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const Contributors = ({ fileId, users = [], displayLength = 2 }) => {
+const noop = () => null
+
+const Contributors = ({ fileId, users = [], displayLength = 2, onClick = noop }) => {
   const c = useStyles({})
   const filteredUsers = users.filter(user => user && (user.fullName || user.username))
   let confirmedContributors = filteredUsers.filter(user => user.fullName)
   return (
-    <div className={c.Contributors}>
+    <div className={c.Contributors} onClick={onClick}>
       {filteredUsers.map((user, index) => {
         if (index === displayLength && confirmedContributors.length > displayLength + 1) {
           let undisplayedUserCount = `+ ${confirmedContributors.length - displayLength}`

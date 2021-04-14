@@ -1,23 +1,25 @@
-import React from 'react'
-import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
+import React, { useContext } from 'react'
+import classnames from 'classnames'
+import Skeleton from '@material-ui/lab/Skeleton'
+
+import { createUseStyles } from '@physna/voxel-ui/@style'
+
 import {
   Card,
+  ContainerRow,
   ModelThumbnail,
   NoResults,
   PartThumbnailList,
   ProfilePicture,
   SearchAnchor,
+  SearchResultDetailsMenu,
+  SearchResultFooter,
   Spacer,
 } from '@components'
-import classnames from 'classnames'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import {
-  numberWithCommas,
-  truncateString,
-  getExternalAvatar,
-  shouldShowViewRelated,
-} from '@utilities'
-import Skeleton from '@material-ui/lab/Skeleton'
+import { numberWithCommas, truncateString, getExternalAvatar } from '@utilities'
+import { SearchActionContext } from '@pages/SearchResults/SearchActions'
+
+import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -67,8 +69,9 @@ const useStyles = createUseStyles(theme => {
     },
     TextSearchResult_Column: {
       display: 'flex',
-      justifyContent: 'space-between',
+      justifyContent: 'center',
       flexDirection: 'column',
+      flexGrow: 1,
     },
     TextSearchResult_Content: {
       padding: '.5rem 0',
@@ -161,14 +164,6 @@ const useStyles = createUseStyles(theme => {
         margin: '0 !important',
       },
     },
-    TextSearchResult_FindRelatedLink: {
-      marginTop: '1rem',
-      fontSize: '1rem',
-      fontWeight: '500',
-      lineHeight: '1rem',
-      cursor: 'pointer',
-      textDecoration: 'underline',
-    },
     TextSearchResult_ReportModelLink: {
       fontSize: '.75rem',
       fontWeight: '500',
@@ -237,12 +232,13 @@ const noop = () => null
 const ModelDetails = ({
   isExternalModel,
   model = {},
-  onFindRelated = noop,
   onThangsClick = noop,
   scope,
   searchIndex,
 }) => {
   const c = useStyles()
+  const { reportModel, findRelated } = useContext(SearchActionContext)
+
   const {
     attributionUrl,
     modelTitle,
@@ -256,18 +252,18 @@ const ModelDetails = ({
 
   return (
     <div className={c.TextSearchResult_Content}>
-      <SearchAnchor
-        to={{
-          pathname: attributionUrl,
-          state: { prevPath: window.location.href },
-        }}
-        isExternal={isExternalModel}
-        scope={scope}
-        onThangsClick={onThangsClick}
-        searchIndex={searchIndex}
-      >
-        <div className={c.TextSearchResult_Attribution}>
-          <div>
+      <div className={c.TextSearchResult_Attribution}>
+        <SearchAnchor
+          to={{
+            pathname: attributionUrl,
+            state: { prevPath: window.location.href },
+          }}
+          isExternal={isExternalModel}
+          scope={scope}
+          onThangsClick={onThangsClick}
+          searchIndex={searchIndex}
+        >
+          <ContainerRow alignItems='center'>
             {attributionUrl && (
               <>
                 <ProfilePicture
@@ -281,9 +277,20 @@ const ModelDetails = ({
             <span className={c.TextSearchResult_ExternalUrl} title={model.attributionUrl}>
               {(ownerUsername && ownerUsername.split('@')[0]) || model.attributionUrl}
             </span>
-          </div>
-          {isExternalModel && <ExternalLinkIcon />}
-        </div>
+            {isExternalModel && <ExternalLinkIcon />}
+          </ContainerRow>
+        </SearchAnchor>
+        <SearchResultDetailsMenu model={model} onReportModel={reportModel} />
+      </div>
+      <SearchAnchor
+        to={{
+          pathname: attributionUrl,
+          state: { prevPath: window.location.href },
+        }}
+        isExternal={isExternalModel}
+        scope={scope}
+        onThangsClick={onThangsClick}
+      >
         <div className={c.TextSearchResult_Name}>{modelTitle || modelFileName}</div>
         <div className={c.TextSearchResult_Description}>{formattedModelDescription}</div>
       </SearchAnchor>
@@ -299,14 +306,8 @@ const ModelDetails = ({
           />
         </>
       )}
-      {shouldShowViewRelated(model) && (
-        <div
-          className={c.TextSearchResult_FindRelatedLink}
-          onClick={() => onFindRelated({ model })}
-        >
-          View related models
-        </div>
-      )}
+      <Spacer size={'1.5rem'} />
+      <SearchResultFooter model={model} onFindRelated={findRelated} />
     </div>
   )
 }
@@ -314,8 +315,6 @@ const ModelDetails = ({
 const TextSearchResult = ({
   model,
   onThangsClick = noop,
-  onFindRelated = noop,
-  onReportModel = noop,
   scope,
   searchIndex,
   spotCheckRef,
@@ -359,18 +358,10 @@ const TextSearchResult = ({
           <ModelDetails
             model={model}
             onThangsClick={onThangsClick}
-            onReportModel={onReportModel}
-            onFindRelated={onFindRelated}
             isExternalModel={isExternalModel}
             scope={scope}
             searchIndex={searchIndex}
           />
-          <div
-            className={c.TextSearchResult_ReportModelLink}
-            onClick={() => onReportModel({ model })}
-          >
-            Report Model
-          </div>
         </div>
       </div>
     </div>
@@ -382,8 +373,6 @@ const TextSearchResults = ({
   isLoading,
   items,
   onThangsClick,
-  onFindRelated,
-  onReportModel,
   searchScope: scope,
   searchTerm,
   spotCheckRef,
@@ -417,8 +406,6 @@ const TextSearchResults = ({
     <TextSearchResult
       key={`textResult_${ind}`}
       model={item}
-      onFindRelated={onFindRelated}
-      onReportModel={onReportModel}
       onThangsClick={onThangsClick}
       scope={scope}
       searchIndex={ind}

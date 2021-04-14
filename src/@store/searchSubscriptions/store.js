@@ -1,6 +1,7 @@
 import api from '@services/api'
 import { STATUSES, getStatusState } from '@store/constants'
 import * as types from '@constants/storeEventTypes'
+import { track } from '@utilities/analytics'
 
 export default store => {
   store.on(types.STORE_INIT, () => ({
@@ -35,6 +36,7 @@ export default store => {
       })
     } else {
       store.dispatch(types.FETCH_SUBSCRIPTIONS)
+      track('Save Search Subscription', { searchTerm })
     }
   })
 
