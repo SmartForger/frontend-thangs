@@ -95,6 +95,14 @@ const AttachmentView = ({ initialAttachmentIndex, attachments }) => {
     return `${activeAttachmentIndex + 1} / ${attachmentsLength}`
   }, [attachments, activeAttachmentIndex])
 
+  const hasPreviousAttachment = useMemo(() => {
+    return activeAttachmentIndex > 0
+  }, [activeAttachmentIndex])
+
+  const hasNextAttachment = useMemo(() => {
+    return (activeAttachmentIndex + 1) < attachments.length
+  }, [attachments, activeAttachmentIndex])
+
   useEffect(() => {
     overlayview('AttachmentView')
   })
@@ -102,11 +110,13 @@ const AttachmentView = ({ initialAttachmentIndex, attachments }) => {
   return (
     <ContainerRow>
       <ContainerRow alignItems='center'>
-        <ArrowLeftIcon
-          color={'#FFFFFF'}
-          className={c.AttachmentView_NavigationArrow}
-          onClick={() => setActiveAttachmentIndex(prevVal => prevVal - 1)}
-        />
+        {hasPreviousAttachment && (
+          <ArrowLeftIcon
+            color={'#FFFFFF'}
+            className={c.AttachmentView_NavigationArrow}
+            onClick={() => setActiveAttachmentIndex(prevVal => prevVal - 1)}
+          />
+        )}
         <Spacer size='1rem' />
       </ContainerRow>
       <div className={c.AttachmentView}>
@@ -145,11 +155,13 @@ const AttachmentView = ({ initialAttachmentIndex, attachments }) => {
       </div>
       <ContainerRow alignItems='center'>
         <Spacer size='1rem' />
-        <ArrowRightIcon
-          color={'#FFFFFF'}
-          className={c.AttachmentView_NavigationArrow}
-          onClick={() => setActiveAttachmentIndex(prevVal => prevVal + 1)}
-        />
+        {hasNextAttachment && (
+          <ArrowRightIcon
+            color={'#FFFFFF'}
+            className={c.AttachmentView_NavigationArrow}
+            onClick={() => setActiveAttachmentIndex(prevVal => prevVal + 1)}
+          />
+        )}
       </ContainerRow>
     </ContainerRow>
   )
