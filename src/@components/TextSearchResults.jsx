@@ -306,7 +306,7 @@ const ModelDetails = ({
           />
         </>
       )}
-      <Spacer size={'1.5rem'} />
+      <Spacer size={'1rem'} />
       <SearchResultFooter model={model} onFindRelated={findRelated} />
     </div>
   )
