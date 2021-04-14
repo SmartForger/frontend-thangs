@@ -37,13 +37,13 @@ const useStyles = createUseStyles(theme => {
       marginRight: '.5rem',
     },
     SearchResults_Header: {
-      alignItems: 'center',
       color: theme.colors.purple[900],
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
       marginBottom: '1.5rem',
       [md]: {
+        alignItems: 'center',
         flexDirection: 'row',
       },
     },
