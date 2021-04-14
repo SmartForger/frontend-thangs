@@ -299,7 +299,7 @@ export default store => {
     }
   })
 
-  store.on(types.UPLOAD_FILES, async (state, { files }) => {
+  store.on(types.UPLOAD_FILES, async (state, { files, modelId }) => {
     if (!files || files.length === 0) {
       return
     }
@@ -313,14 +313,13 @@ export default store => {
     }
 
     store.dispatch(types.INIT_UPLOAD_FILES, { files })
-
     if (oldFile) {
       const [directory] = oldFile.newFileName.split('/')
-      uploadFiles(files, directory)
+      uploadFiles({ files, directory, modelId })
       return
     }
 
-    uploadFiles(files)
+    uploadFiles({ files, modelId })
   })
 
   store.on(types.SUBMIT_MODELS, async (state, { onFinish = noop }) => {

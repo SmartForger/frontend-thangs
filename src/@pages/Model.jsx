@@ -703,7 +703,7 @@ const ModelDetailPage = ({
   titleCharCount = titleCharCount - modelTitle.length
   const modelTitleAuthor = titleCharCount >= modelAuthor.length + 3 ? modelAuthor : ''
   const pageTitle = `${modelTitle}${titlePrefix}|${modelTitleAuthor ? ` ${modelTitleAuthor} |` : ''
-    }${titleSuffix}`
+  }${titleSuffix}`
   const modelDescription = modelData.description || defaultDescription
 
   return (
@@ -713,13 +713,13 @@ const ModelDetailPage = ({
         <meta
           name='description'
           content={`${descriptionPrefix}${modelData.name
-            }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
+          }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
         />
         <meta property='og:title' content={pageTitle} />
         <meta
           property='og:description'
           content={`${descriptionPrefix}${modelData.name
-            }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
+          }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
         />
         <meta
           property='og:image'

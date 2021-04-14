@@ -241,7 +241,7 @@ const MultiUpload = ({
 
       track('MultiUpload - OnDrop', { amount: files && files.length })
 
-      dispatch(types.UPLOAD_FILES, { files })
+      dispatch(types.UPLOAD_FILES, { files, modelId: model.id || null })
 
       if (rejectedFile) {
         const filePath = rejectedFile.path.split('.')
@@ -254,7 +254,7 @@ const MultiUpload = ({
         )
       }
     },
-    [dispatch]
+    [dispatch, model.id]
   )
 
   const removeFile = node => {
