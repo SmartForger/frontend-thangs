@@ -28,9 +28,13 @@ const SearchResultFooter = ({ model, onFindRelated }) => {
         <>
           <div
             className={c.SearchResultFooter_Link}
-            onClick={() => onFindRelated({ model })}
+            onClick={() => onFindRelated({ model, matches: model?.nMatchedModels })}
           >
-            View Related Models
+            {model.nMatchedModels > 0
+              ? `View ${model?.nMatchedModels || ''} Related Model${
+                  model?.nMatchedModels > 1 ? 's' : ''
+                }`
+              : 'Find Related Models'}
           </div>
           <Spacer size={'1rem'} />
         </>
