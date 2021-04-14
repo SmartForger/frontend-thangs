@@ -1,21 +1,26 @@
 import React, { useMemo } from 'react'
-import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
-import { ActionMenu, Spacer } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import * as R from 'ramda'
+
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
+import { ActionMenu, Pill, Spacer } from '@components'
+
+import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down-sm.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
     mediaQueries: { md_viewer },
   } = theme
   return {
-    SearchSourceFilterActionMenu: {},
+    SearchSourceFilterActionMenu_Text: {
+      color: theme.colors.black[500],
+    },
     SearchSourceFilter_ClickableButton: {
       alignItems: 'center',
       cursor: 'pointer',
       display: 'flex',
       flexDirection: 'row',
-      borderBottom: '1px solid',
     },
     SearchSourceFilterActionMenu__desktop: {
       display: 'none',
@@ -43,7 +48,7 @@ const noop = () => null
 
 const options = [
   {
-    label: 'All',
+    label: 'Best Match',
     value: 'all',
   },
   {
@@ -64,19 +69,25 @@ const label = selectedValue => {
   return 'All'
 }
 
-const SearchSourceFilterTarget = ({ onClick = noop, selectedValue, disabled }) => {
+const SearchSourceFilterTarget = ({ onClick = noop, selectedValue, disabled, thin }) => {
   const c = useStyles({})
   return (
     <>
-      <Spacer size='.25rem' />
-      <div
-        className={c.SearchSourceFilter_ClickableButton}
-        onClick={disabled ? noop : onClick}
-      >
+      <Spacer width='.25rem' height='0' />
+      <Pill secondary thin={thin} onClick={disabled ? noop : onClick}>
+        {thin ? (
+          <Metadata
+            type={MetadataType.secondary}
+            className={c.SearchSourceFilterActionMenu_Text}
+          >
+            {label(selectedValue)}
+          </Metadata>
+        ) : (
+          <>{label(selectedValue)}</>
+        )}
+        <Spacer width='.25rem' height='0' />
         <ArrowDownIcon className={c.SearchSourceFilter_DownArrow} />
-        <Spacer size='.25rem' />
-        {label(selectedValue)}
-      </div>
+      </Pill>
     </>
   )
 }
@@ -84,7 +95,9 @@ const SearchSourceFilterTarget = ({ onClick = noop, selectedValue, disabled }) =
 const SearchSourceFilterActionMenu = ({
   onChange = noop,
   selectedValue,
+  className = '',
   disabled = false,
+  thin = false,
 }) => {
   const menuProps = useMemo(() => {
     return {
@@ -92,12 +105,13 @@ const SearchSourceFilterActionMenu = ({
       actionBarTitle: 'Select Search Filter',
       options,
       tabletLayout: false,
+      containerClassName: className,
     }
-  }, [disabled, onChange])
+  }, [disabled, onChange, className])
 
   const targetProps = useMemo(() => {
-    return { selectedValue, disabled }
-  }, [disabled, selectedValue])
+    return { disabled, selectedValue, thin }
+  }, [disabled, selectedValue, thin])
 
   return (
     <ActionMenu

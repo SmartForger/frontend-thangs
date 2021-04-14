@@ -1,22 +1,17 @@
 import React, { useCallback, useEffect } from 'react'
-import {
-  Button,
-  Divider,
-  ModelTitle,
-  SingleLineBodyText,
-  Spacer,
-  Spinner,
-  TitleTertiary,
-} from '@components'
-import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
+import * as R from 'ramda'
+import { useStoreon } from 'storeon/react'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Button, Divider, ModelTitle, Spacer, Spinner } from '@components'
 import { overlayview, track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
-import { ReactComponent as DownloadIcon } from '@svg/icon-download.svg'
 import * as types from '@constants/storeEventTypes'
-import { useStoreon } from 'storeon/react'
-import * as R from 'ramda'
+
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
+import { ReactComponent as DownloadIcon } from '@svg/icon-download.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -175,7 +170,7 @@ const LicenseContent = ({ c, model }) => {
       <div className={c.License_FormWrapper}>
         <Spacer size='4rem' />
         <div className={c.License_Title}>
-          <TitleTertiary>Creative Commons License</TitleTertiary>
+          <Title headerLevel={HeaderLevel.tertiary}>Creative Commons License</Title>
           <div onClick={handleDownload} className={c.License_Download}>
             <DownloadIcon width={12} height={12} />
             &nbsp;Download
@@ -216,7 +211,7 @@ const License = ({ model }) => {
   return (
     <div className={c.License}>
       <ExitIcon className={c.License_ExitButton} onClick={closeOverlay} />
-      <SingleLineBodyText className={c.License_Header}>Model license</SingleLineBodyText>
+      <Body className={c.License_Header}>Model license</Body>
       <LicenseContent c={c} model={model} setOverlayData={setOverlayData} />
       <Spacer className={c.License_MobileSpacer} width='4rem' height='unset' />
     </div>

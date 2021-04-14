@@ -1,6 +1,7 @@
 import React from 'react'
+
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { MetadataPrimary, SingleLineBodyText } from './Text'
+import { Body, Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -35,8 +36,8 @@ const ScannerPaper = ({ polygonCount }) => {
       <div>
         {polygonCount ? (
           <>
-            <SingleLineBodyText>{polygonCount}</SingleLineBodyText>
-            <MetadataPrimary>polygons scanned</MetadataPrimary>
+            <Body>{polygonCount}</Body>
+            <Metadata type={MetadataType.primary}>polygons scanned</Metadata>
           </>
         ) : null}
       </div>

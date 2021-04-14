@@ -1,21 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useStoreon } from 'storeon/react'
-import {
-  InviteUsersForm,
-  MetadataSecondary,
-  MultiLineBodyText,
-  ProfilePicture,
-  SingleLineBodyText,
-  Spacer,
-} from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body, Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
+import { InviteUsersForm, ProfilePicture, Spacer } from '@components'
 import { authenticationService } from '@services'
-import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 import * as types from '@constants/storeEventTypes'
 import { overlayview } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
 import MobileDesktopTitle from '../@components/MobileDesktopTitle'
+
+import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
+import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -161,9 +157,9 @@ const UserList = ({
                 />
                 <Spacer size={'1rem'} />
                 <div className={c.InviteUsers_Column}>
-                  <SingleLineBodyText>{user.username}</SingleLineBodyText>
+                  <Body>{user.username}</Body>
                   <Spacer size={'.5rem'} />
-                  <MetadataSecondary>{user.email}</MetadataSecondary>
+                  <Metadata type={MetadataType.secondary}>{user.email}</Metadata>
                 </div>
               </div>
               {isCurrentUserOwner && !isOwner && !isPending && (
@@ -224,9 +220,7 @@ const InviteUsers = ({ folderId: id }) => {
           <Spacer size='2rem' />
           <div className={c.InviteUsers_Wrapper}>
             <Spacer size='4rem' />
-            <MultiLineBodyText>
-              There was an error in loading. Please try again
-            </MultiLineBodyText>
+            <Body multiline>There was an error in loading. Please try again</Body>
             <Spacer size='2rem' />
           </div>
           <Spacer size='2rem' />
@@ -244,7 +238,7 @@ const InviteUsers = ({ folderId: id }) => {
           <Spacer size='4rem' />
           <MobileDesktopTitle>Add Users By Email</MobileDesktopTitle>
           <Spacer size='1rem' />
-          <MultiLineBodyText>Users without accounts with be emailed.</MultiLineBodyText>
+          <Body multiline>Users without accounts with be emailed.</Body>
           <Spacer size='1rem' />
           <InviteUsersForm
             folderId={folder.id}

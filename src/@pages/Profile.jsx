@@ -1,23 +1,24 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import * as R from 'ramda'
+import classnames from 'classnames'
 import { useHistory, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import { useStoreon } from 'storeon/react'
-import * as R from 'ramda'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   Layout,
   Markdown,
   ProfileButton,
   ProfilePicture,
   ShareActionMenu,
-  SingleLineBodyText,
   Spacer,
   Spinner,
   CardCollectionPortfolio,
   ModelCardPortfolio,
 } from '@components'
 import { Message404 } from '@pages/404'
-import classnames from 'classnames'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useCurrentUserId, usePageMeta, usePerformanceMetrics } from '@hooks'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
@@ -196,9 +197,7 @@ const CollectionTitle = ({ selected, onClick, className, title, amount }) => {
   const c = useStyles({ selected })
   return (
     <div className={classnames(className, c.Home_Row)} onClick={onClick}>
-      <SingleLineBodyText>
-        {amount ? [title, amount].join(' ') : title}
-      </SingleLineBodyText>
+      <Body>{amount ? [title, amount].join(' ') : title}</Body>
     </div>
   )
 }

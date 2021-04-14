@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react'
+import classnames from 'classnames'
 import { useParams } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import { FileTable, Spacer, TitleTertiary, Spinner } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import classnames from 'classnames'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
+import { FileTable, Spacer, Spinner } from '@components'
 import * as types from '@constants/storeEventTypes'
 import { pageview } from '@utilities/analytics'
 
@@ -84,7 +86,7 @@ const SearchView = ({ className, handleChangeFolder = noop, handleEditModel = no
     <main className={classnames(className, c.SearchView)}>
       <div className={c.SearchView_Content}>
         <Spacer size='2rem' />
-        <TitleTertiary>Search Results: {searchTerm}</TitleTertiary>
+        <Title headerLevel={HeaderLevel.tertiary}>Search Results: {searchTerm}</Title>
         <Spacer size='2rem' />
         {isLoading ? (
           <Spinner />

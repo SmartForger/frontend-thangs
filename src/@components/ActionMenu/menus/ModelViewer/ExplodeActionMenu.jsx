@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react'
-import { ActionMenu, Slider, MetadataSecondary } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
+import { ActionMenu, Slider } from '@components'
 import { ReactComponent as ExplodeIcon } from '@svg/icon-explode.svg'
 
 const useStyles = createUseStyles(theme => {
@@ -44,9 +46,9 @@ const ExplodeTarget = ({ onClick = noop }) => {
 
   return (
     <div className={c.ExplodeDropdown_ClickableButton} onClick={onClick}>
-      <MetadataSecondary className={c.ExplodeDropdown__desktop}>
+      <Metadata type={MetadataType.secondary} className={c.ExplodeDropdown__desktop}>
         Explode
-      </MetadataSecondary>
+      </Metadata>
       <ExplodeIcon className={c.ExplodeDropdown__mobile} />
     </div>
   )

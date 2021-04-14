@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Joi from '@hapi/joi'
-import { Button, Input, TitleTertiary, Spacer } from '@components'
+import classnames from 'classnames'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Button, Input, Spacer } from '@components'
 import { useForm } from '@hooks'
 import { authenticationService } from '@services'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import classnames from 'classnames'
 import { overlayview, track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
 
@@ -136,7 +138,7 @@ const ResetForm = ({ c }) => {
       <Spacer size='3rem' />
       <div className={c.PasswordReset_FormWrapper}>
         <Spacer size='4rem' />
-        <TitleTertiary>Reset Password</TitleTertiary>
+        <Title headerLevel={HeaderLevel.tertiary}>Reset Password</Title>
         <Spacer size='2rem' />
         <form onSubmit={onFormSubmit(handlePasswordReset)} data-cy='signup-form'>
           {signupErrorMessage && (

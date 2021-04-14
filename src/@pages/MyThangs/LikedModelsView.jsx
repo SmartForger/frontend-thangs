@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo } from 'react'
+import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import classnames from 'classnames'
-import { CardCollection, ModelCards, Spinner, Spacer, TitleTertiary } from '@components'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
+import { CardCollection, ModelCards, Spinner, Spacer } from '@components'
 import * as types from '@constants/storeEventTypes'
 import { pageview } from '@utilities/analytics'
 
@@ -71,7 +73,7 @@ const LikedModelsView = ({ className, userId }) => {
     <main className={classnames(className, c.LikedModels)}>
       <div className={c.LikedModels_Content}>
         <Spacer size='2rem' />
-        <TitleTertiary>Liked Models</TitleTertiary>
+        <Title headerLevel={HeaderLevel.tertiary}>Liked Models</Title>
         <Spacer size='2rem' />
         <CardCollection noResultsText='You have not liked any models yet.'>
           <ModelCards items={filteredModels} />

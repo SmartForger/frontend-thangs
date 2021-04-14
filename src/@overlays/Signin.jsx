@@ -1,25 +1,25 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Joi from '@hapi/joi'
+import classnames from 'classnames'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import {
-  Button,
-  Divider,
-  FormError,
-  Input,
-  LabelText,
-  MetadataSecondary,
-  SingleLineBodyText,
-  Spacer,
-  TitleTertiary,
-} from '@components'
+  Body,
+  Title,
+  HeaderLevel,
+  Metadata,
+  MetadataType,
+  Label,
+} from '@physna/voxel-ui/@atoms/Typography'
+
+import { Button, Divider, FormError, Input, Spacer } from '@components'
 import { useForm, useGoogleLogin, useFacebookLogin, useQuery } from '@hooks'
 import { authenticationService } from '@services'
+import { overlayview } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
+
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
 import { ReactComponent as FacebookLogo } from '@svg/facebook-logo.svg'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import classnames from 'classnames'
-import { overlayview } from '@utilities/analytics'
-import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -175,7 +175,7 @@ export const SigninGoogleButton = () => {
     <Button secondary className={c.Signin_withGoogleButton}>
       <GoogleLogo />
       <Spacer size={'.5rem'} />
-      <LabelText>Log in with Google</LabelText>
+      <Label>Log in with Google</Label>
     </Button>
   )
 }
@@ -187,7 +187,7 @@ export const SigninFacebookButton = () => {
     <Button secondary className={c.Signin_withFacebookButton}>
       <FacebookLogo />
       <Spacer size={'.5rem'} />
-      <LabelText>Log in with Facebook</LabelText>
+      <Label>Log in with Facebook</Label>
     </Button>
   )
 }
@@ -259,7 +259,7 @@ const SignInForm = ({
       <Spacer size='3rem' />
       <div className={c.Signin_FormWrapper}>
         <Spacer size='4rem' />
-        <TitleTertiary>Log in</TitleTertiary>
+        <Title headerLevel={HeaderLevel.tertiary}>Log in</Title>
         <Spacer size='2rem' />
         <a href={googleLoginUrl}>
           <SigninGoogleButton />
@@ -320,7 +320,7 @@ const SignInForm = ({
           Reset Password
         </Button>
         <Spacer size='1rem' />
-        <MetadataSecondary>
+        <Metadata type={MetadataType.secondary}>
           Click “Log in” to agree to Thangs&apos;&nbsp;
           <a href='/terms-and-conditions' target='_blank'>
             terms and conditions
@@ -330,10 +330,10 @@ const SignInForm = ({
             Privacy Policy
           </a>{' '}
           applies to you.
-        </MetadataSecondary>
+        </Metadata>
         <Divider spacing={'1.5rem'} />
         <div className={c.Signin_HasAccount}>
-          <SingleLineBodyText>New to Thangs?</SingleLineBodyText>
+          <Body>New to Thangs?</Body>
           <Button
             tertiary
             className={c.Signin_HasAccountButton}

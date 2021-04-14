@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import * as R from 'ramda'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   Button,
   Dropdown,
@@ -7,10 +10,8 @@ import {
   LicenseField,
   LikeModelButton,
   Textarea,
-  TitleTertiary,
   Spacer,
 } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useForm } from '@hooks'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 
@@ -198,7 +199,9 @@ const EditModelForm = ({
         <div className={c.EditModelForm_ModelTitle}>
           <FileIcon />
           <Spacer size={'1rem'} />
-          <TitleTertiary title={model.name}>{model.name}</TitleTertiary>
+          <Title headerLevel={HeaderLevel.tertiary} title={model.name}>
+            {model.name}
+          </Title>
           <Spacer size={'.5rem'} />
           <LikeModelButton className={c.FileCard_Star} model={model} minimal />
         </div>

@@ -1,14 +1,10 @@
 import React from 'react'
-import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
-import {
-  Card,
-  MetadataSecondary,
-  ModelThumbnail,
-  SearchAnchor,
-  Spacer,
-} from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Card, ModelThumbnail, SearchAnchor, Spacer } from '@components'
+import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -80,9 +76,9 @@ export const PartThumbnailList = ({
   const c = useStyles()
   return (
     <div>
-      <MetadataSecondary className={c.PartThumbnailList_Metadata}>
+      <Metadata type={MetadataType.secondary} className={c.PartThumbnailList_Metadata}>
         Other parts in this model ({parts.length})
-      </MetadataSecondary>
+      </Metadata>
       <Spacer size={'0.75rem'} />
       <div className={c.PartThumbnailList_ThumbnailsRow}>
         {parts.slice(0, maximumPartsToDisplay).map((part, i) => (

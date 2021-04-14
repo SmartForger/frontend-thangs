@@ -9,11 +9,11 @@ import {
   CommentsForModel,
   ContainerColumn,
   Divider,
-  EditModelButton,
   HoopsModelViewer,
   Layout,
   LikeModelButton,
   Markdown,
+  ModelActionToolbar,
   ModelDetails,
   ModelPrints,
   ModelTitle,
@@ -26,15 +26,16 @@ import {
   Spinner,
   ToggleFollowButton,
 } from '@components'
+import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
+import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as LicenseIcon } from '@svg/license.svg'
-import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
-import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
 import { ReactComponent as AndroidIcon } from '@svg/icon-android.svg'
 import { Message404 } from './404'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import {
+  useCurrentUserId,
   useOverlay,
   usePageMeta,
   usePerformanceMetrics,
@@ -44,8 +45,6 @@ import {
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
-
-// import { useFeature } from '@optimizely/react-sdk'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -523,9 +522,14 @@ const LicenseText = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
 }
 
 const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
+  const currentUserId = useCurrentUserId()
+  // We should expand this to isOwnerOrCollaborator but with a better name - BE
+  const isOwner =
+    model.owner && model.owner.id && model.owner.id.toString() === currentUserId
   const c = useStyles()
   const { dispatch } = useStoreon()
   const isFollowing = R.pathOr(false, ['owner', 'isBeingFollowedByRequester'], model)
+  if (!model.id) return null
   return (
     <div className={classnames(c.Model_Row, c.Model_Detail)}>
       <ModelTitle model={model} />
@@ -535,7 +539,9 @@ const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
           key={model.previousVersionModelId}
         />
       )}
-      {model.id && (
+      {isOwner ? (
+        <ModelActionToolbar model={model} />
+      ) : (
         <div className={c.Model_SocialButtons}>
           <div>
             <ToggleFollowButton
@@ -566,7 +572,6 @@ const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
               hideForOwned={true}
             />
           </div>
-          <EditModelButton model={model} />
         </div>
       )}
     </div>

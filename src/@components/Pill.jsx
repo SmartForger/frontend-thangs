@@ -1,7 +1,9 @@
 import React, { useCallback } from 'react'
 import classnames from 'classnames'
-import { LabelText, Spacer } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Label } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Spacer } from '@components'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -14,7 +16,7 @@ const useStyles = createUseStyles(theme => {
       backgroundColor: theme.colors.gold[500],
       color: theme.colors.black[500],
       borderRadius: '1.5rem',
-      border: `2px solid ${theme.colors.gold[500]}`,
+      border: 'none',
       cursor: ({ disabled }) => (disabled ? 'not-allowed' : 'pointer'),
       opacity: ({ disabled }) => (disabled ? '0.8' : '1'),
       userSelect: 'none',
@@ -27,17 +29,24 @@ const useStyles = createUseStyles(theme => {
       padding: 0,
     },
     PillSecondary: {
-      backgroundColor: 'transparent',
-      border: `2px solid ${theme.colors.black[500]}`,
+      backgroundColor: theme.colors.white[900],
     },
     PillTertiary: {
-      backgroundColor: theme.colors.white[900],
-      border: `2px solid ${theme.colors.white[900]}`,
+      backgroundColor: 'transparent',
+      border: `2px solid ${theme.colors.black[900]}`,
     },
   }
 })
 const noop = () => null
-const Pill = ({ children, className, secondary, tertiary, onClick = noop, disabled }) => {
+const Pill = ({
+  children,
+  className,
+  secondary,
+  tertiary,
+  onClick = noop,
+  disabled,
+  thin,
+}) => {
   const c = useStyles({ disabled })
 
   const getOnClick = useCallback(() => {
@@ -52,13 +61,13 @@ const Pill = ({ children, className, secondary, tertiary, onClick = noop, disabl
       })}
       onClick={getOnClick()}
     >
-      <Spacer size={'.5rem'} />
+      {!thin && <Spacer size={'.5rem'} />}
       <div className={c.Pill_TextWrapper}>
         <Spacer size={'.75rem'} mobileSize={'.5rem'} />
-        <LabelText small>{children}</LabelText>
+        <Label small>{children}</Label>
         <Spacer size={'.75rem'} mobileSize={'.5rem'} />
       </div>
-      <Spacer size={'.5rem'} />
+      {!thin && <Spacer size={'.5rem'} />}
     </div>
   )
 }

@@ -1,16 +1,13 @@
 import React, { useEffect, useMemo } from 'react'
+import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
 import { Helmet } from 'react-helmet'
-import {
-  Layout,
-  TitleSecondary,
-  MultiLineBodyText,
-  Spacer,
-  TitlePrimary,
-} from '@components'
-import { usePageMeta, useTranslations } from '@hooks'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import classnames from 'classnames'
+import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Layout, Spacer } from '@components'
+import { usePageMeta, useTranslations } from '@hooks'
+import { pageview } from '@utilities/analytics'
 
 import { ReactComponent as SearchAboutUsIcon } from '@svg/aboutUs-search.svg'
 import { ReactComponent as StorageAboutUsIcon } from '@svg/aboutUs-storage.svg'
@@ -18,7 +15,6 @@ import { ReactComponent as CollaborationAboutUsIcon } from '@svg/aboutUs-collabo
 import { ReactComponent as BackgroundLeft } from '@svg/aboutUs-leftSide-tinkers.svg'
 import { ReactComponent as BackgroundRight } from '@svg/aboutUs-rightSide-tinkers.svg'
 import loader from '@media/loader.gif'
-import { pageview } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -179,9 +175,9 @@ const AboutUs = () => {
                   <div className={c.AboutUs_ValuePropText}>
                     <Icon />
                     <Spacer size='1rem' />
-                    <TitleSecondary>{title}</TitleSecondary>
+                    <Title headerLevel={HeaderLevel.secondary}>{title}</Title>
                     <Spacer size='1rem' />
-                    <MultiLineBodyText>{body}</MultiLineBodyText>
+                    <Body multiline>{body}</Body>
                   </div>
                   <Spacer size='4rem' />
                   <video
@@ -206,11 +202,11 @@ const AboutUs = () => {
           <div className={c.AboutUs_ModelText}>
             <Spacer size='6rem' />
             <BackgroundLeft className={c.AboutUs_BackgroundLeft} />
-            <TitlePrimary>{modelsIngested || '1,000,000'} models</TitlePrimary>
+            <Title headerLevel={HeaderLevel.primary}>
+              {modelsIngested || '1,000,000'} models
+            </Title>
             <Spacer size='1rem' />
-            <MultiLineBodyText>
-              ...indexed and ready to be searched. And growing fast.
-            </MultiLineBodyText>
+            <Body multiline>...indexed and ready to be searched. And growing fast.</Body>
             <BackgroundRight className={c.AboutUs_BackgroundRight} />
             <Spacer size='6rem' />
           </div>

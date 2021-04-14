@@ -93,7 +93,7 @@ const CommentMenu = ({ modelId, comment = {} }) => {
           <Spacer size={'1.5rem'} />
           <DeleteIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Remove</SingleLineBodyText>
+          <SingleLineBodyText>Delete</SingleLineBodyText>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>

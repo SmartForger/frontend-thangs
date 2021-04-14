@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo } from 'react'
-import { Button, MultiLineBodyText, Spacer, NavLink } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Button, Spacer, NavLink } from '@components'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import MobileDesktopTitle from './MobileDesktopTitle'
@@ -92,6 +94,7 @@ const DeleteForm = ({
       case 'folder':
         return folder
       default:
+        return {}
     }
   }, [folder, model, part, type])
   const { name } = subject
@@ -126,9 +129,9 @@ const DeleteForm = ({
         </>
       )}
       <Spacer size='1rem' />
-      <MultiLineBodyText>
+      <Body multiline>
         Confirm below in order to delete your {type}. This action is not reversible.
-      </MultiLineBodyText>
+      </Body>
       <Spacer size='1rem' />
       <form className={c.DeleteForm} onSubmit={handleOnDelete}>
         {errorMessage && (

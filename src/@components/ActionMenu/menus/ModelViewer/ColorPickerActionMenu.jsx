@@ -1,7 +1,10 @@
 import React, { useCallback, useMemo } from 'react'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { ActionMenu, Spacer, SingleLineBodyText, TextInput } from '@components'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
+
+import { ActionMenu, Spacer, TextInput } from '@components'
+
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
 import { ReactComponent as ColorBucketIcon } from '@svg/icon-color-bucket.svg'
 
@@ -130,7 +133,7 @@ const ColorPickerMenu = ({ onChange = noop, selectedValue: currentColor }) => {
           className={c.ColorPickerMenu_HiddenInput}
           onChange={handleChange}
         />
-        <SingleLineBodyText>{currentColor}</SingleLineBodyText>
+        <Body>{currentColor}</Body>
       </div>
       <Spacer size={'1rem'} />
       <div className={c.ColorPickerMenu}>

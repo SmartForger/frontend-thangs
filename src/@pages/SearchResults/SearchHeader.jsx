@@ -1,6 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useStoreon } from 'storeon/react'
-import { SaveSearchButton, Spacer, SearchSourceFilterActionMenu, Tabs } from '@components'
+import {
+  ContainerRow,
+  SaveSearchButton,
+  Spacer,
+  SearchSourceFilterActionMenu,
+} from '@components'
 import { useLocalStorage } from '@hooks'
 import { track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
@@ -48,6 +53,8 @@ const useStyles = createUseStyles(theme => {
     },
     SearchResults_HeaderText: {
       ...theme.text.searchResultsHeader,
+      display: 'flex',
+      flexWrap: 'wrap',
       fontSize: '1rem',
       lineHeight: '1.5rem',
       color: theme.colors.purple[900],
@@ -112,6 +119,10 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       display: 'flex',
       flexDirection: 'row',
+      flexWrap: 'wrap',
+    },
+    SearchResults_FilterButton: {
+      width: '100%',
     },
     SearchResults_SearchTerm: {
       color: theme.colors.black[900],
@@ -142,6 +153,134 @@ const useStyles = createUseStyles(theme => {
   }
 })
 const noop = () => null
+
+const ParsedSearchQuery = ({ searchQuery, className }) => {
+  const decodedQuery = decodeURIComponent(searchQuery)
+
+  return <ContainerRow className={className}>&quot;{decodedQuery}&quot;</ContainerRow>
+}
+
+const ControlSearchHeader = ({
+  disabled,
+  filter,
+  onFilterChange = noop,
+  isLoading = true,
+  endOfModels = true,
+  modelId,
+  resultCount,
+  searchQuery,
+  currentUser,
+  openSignupOverlay = noop,
+}) => {
+  const c = useStyles()
+  const { dispatch, searchSubscriptions } = useStoreon('searchSubscriptions')
+
+  return (
+    <div className={c.SearchResults_Header}>
+      <div className={c.SearchResults_HeaderTextWrapper}>
+        <h1 className={c.SearchResults_HeaderText}>
+          {isLoading ? 'Loading' : resultCount}
+          {!isLoading && !endOfModels ? '+' : ''} results for
+          <Spacer size='0.25rem' />
+          <ParsedSearchQuery
+            searchQuery={searchQuery}
+            className={c.SearchResults_SearchTerm}
+          />
+        </h1>
+        <Spacer size='0.25rem' />
+        <div className={c.SearchResult_ResultCountText}>
+          <div className={c.SearchResults_FilterBar}>
+            Results from
+            <Spacer size='.25rem' />
+            <SearchSourceFilterActionMenu
+              disabled={disabled}
+              selectedValue={filter}
+              onChange={onFilterChange}
+              thin
+            />
+          </div>
+        </div>
+      </div>
+      <Spacer size='0' mobileSize='1rem' />
+      <SaveSearchButton
+        currentUser={currentUser}
+        dispatch={dispatch}
+        modelId={modelId}
+        openSignupOverlay={openSignupOverlay}
+        searchSubscriptions={searchSubscriptions}
+        searchTerm={searchQuery}
+      />
+    </div>
+  )
+}
+
+const TabSearchHeader = ({
+  disabled,
+  filter,
+  onFilterChange = noop,
+  isLoading = true,
+  modelId,
+  resultCount,
+  searchQuery,
+  currentUser,
+  openSignupOverlay = noop,
+}) => {
+  const c = useStyles()
+  const { dispatch, searchSubscriptions } = useStoreon('searchSubscriptions')
+  return (
+    <div className={c.SearchResults_Header}>
+      <div className={c.SearchResults_HeaderTextWrapper}>
+        <h1 className={c.SearchResults_HeaderText}>Search results</h1>
+
+        <div className={c.SearchResult_ResultCountText}>
+          <div className={c.SearchResults_FilterBar}>
+            {isLoading ? 'Loading' : `At least ${resultCount}`} results for{' '}
+            <Spacer size='0.25rem' />
+            <ParsedSearchQuery
+              searchQuery={searchQuery}
+              className={c.SearchResults_SearchTerm}
+            />
+            <Spacer size={'.5rem'} />
+            <SaveSearchButton
+              currentUser={currentUser}
+              dispatch={dispatch}
+              modelId={modelId}
+              openSignupOverlay={openSignupOverlay}
+              searchSubscriptions={searchSubscriptions}
+              searchTerm={searchQuery}
+              iconOnly={true}
+            />
+          </div>
+        </div>
+      </div>
+      <Spacer size='0' mobileSize='0.25rem' />
+      <ContainerRow className={c.SearchHeader_TabFilter}>
+        <SearchSourceFilterActionMenu
+          selectedValue={filter}
+          onChange={onFilterChange}
+          disabled={disabled}
+          className={c.SearchResults_FilterButton}
+        />
+      </ContainerRow>
+    </div>
+  )
+}
+
+const SearchHeaderSkeleton = () => {
+  const c = useStyles()
+  return (
+    <div className={c.SearchResults_Header}>
+      <div className={c.SearchResults_HeaderTextWrapper}>
+        <Skeleton variant='rect' className={c.SearchResults_Text_Skeleton} />
+        <div className={c.SearchResult_ResultCountText}>
+          <Skeleton variant='rect' className={c.SearchResults_Text_Skeleton} />
+        </div>
+      </div>
+      <Skeleton variant='rect' className={c.SearchResults_Button_Skeleton} />
+    </div>
+  )
+}
+
 const SearchHeader = ({
   filter,
   isLoading = true,
@@ -149,40 +288,16 @@ const SearchHeader = ({
   modelId,
   resultCount,
   searchQuery,
-  setFilter = noop,
+  setFilters = noop,
 }) => {
-  const c = useStyles()
   const [filterExperimentType, setFilterExperimentType] = useState('control')
-  const { dispatch, searchSubscriptions, experiments } = useStoreon(
-    'searchSubscriptions',
-    'experiments'
-  )
+  const { experiments } = useStoreon('experiments')
   const [currentUser] = useLocalStorage('currentUser', null)
   const { setOverlay } = useOverlay()
 
   useEffect(() => {
     if (experiments?.data?.search_header_filter === 'tab') setFilterExperimentType('tab')
   }, [experiments])
-
-  const filterOptions = useMemo(() => {
-    return [
-      {
-        label: 'Best Match',
-        onClick: () => setFilter('all'),
-        selected: filter !== 'thangs' && filter !== 'phyn',
-      },
-      {
-        label: 'Thangs',
-        onClick: () => setFilter('thangs'),
-        selected: filter === 'thangs',
-      },
-      {
-        label: 'External',
-        onClick: () => setFilter('phyn'),
-        selected: filter === 'phyn',
-      },
-    ]
-  }, [filter, setFilter])
 
   const openSignupOverlay = useCallback(() => {
     setOverlay({
@@ -201,83 +316,44 @@ const SearchHeader = ({
 
   const handleFilterChange = useCallback(
     value => {
-      setFilter(value)
+      setFilters({ scopeFilter: value })
       track('Search Filter Change', { filter: value })
     },
-    [setFilter]
+    [setFilters]
   )
 
   return (
-    <div className={c.SearchResults_Header}>
-      <div className={c.SearchResults_HeaderTextWrapper}>
-        {experiments?.isLoading ? (
-          <Skeleton variant='rect' className={c.SearchResults_Text_Skeleton} />
-        ) : filterExperimentType === 'control' ? (
-          <h1 className={c.SearchResults_HeaderText}>
-            {isLoading ? 'Loading' : resultCount}
-            {!isLoading && !endOfModels ? '+' : ''} results for{' '}
-            {decodeURIComponent(searchQuery)}
-          </h1>
-        ) : (
-          <h1 className={c.SearchResults_HeaderText}>Search results</h1>
-        )}
-        <div className={c.SearchResult_ResultCountText}>
-          {experiments?.isLoading ? (
-            <Skeleton variant='rect' className={c.SearchResults_Text_Skeleton} />
-          ) : filterExperimentType === 'control' ? (
-            <div className={c.SearchResults_FilterBar}>
-              Results from
-              <Spacer size='.5rem' />
-              <SearchSourceFilterActionMenu
-                selectedValue={filter}
-                onChange={handleFilterChange}
-                disabled={isLoading}
-              />
-            </div>
-          ) : (
-            <div className={c.SearchResults_FilterBar}>
-              At least {resultCount} results for{' '}
-              <div className={c.SearchResults_SearchTerm}>
-                &nbsp; &quot;
-                <span className={c.SearchResults_SearchText}>
-                  {decodeURIComponent(searchQuery)}
-                </span>
-                &quot;
-              </div>
-              <Spacer size={'.5rem'} />
-              <SaveSearchButton
-                currentUser={currentUser}
-                dispatch={dispatch}
-                modelId={modelId}
-                openSignupOverlay={openSignupOverlay}
-                searchSubscriptions={searchSubscriptions}
-                searchTerm={searchQuery}
-                iconOnly={true}
-              />
-            </div>
-          )}
-        </div>
-      </div>
+    <>
       {experiments?.isLoading ? (
-        <Skeleton variant='rect' className={c.SearchResults_Button_Skeleton} />
+        <SearchHeaderSkeleton />
       ) : filterExperimentType === 'control' ? (
-        <>
-          <Spacer size={'.5rem'} />
-          <SaveSearchButton
-            currentUser={currentUser}
-            dispatch={dispatch}
-            modelId={modelId}
-            openSignupOverlay={openSignupOverlay}
-            searchSubscriptions={searchSubscriptions}
-            searchTerm={searchQuery}
-          />
-        </>
+        <ControlSearchHeader
+          disabled={isLoading}
+          filter={filter}
+          onFilterChange={handleFilterChange}
+          isLoading={isLoading}
+          endOfModels={endOfModels}
+          modelId={modelId}
+          resultCount={resultCount}
+          searchQuery={searchQuery}
+          currentUser={currentUser}
+          openSignupOverlay={openSignupOverlay}
+        />
       ) : (
-        <div className={c.SearchHeader_TabFilter}>
-          <Tabs options={filterOptions} disabled={isLoading} />
-        </div>
+        <TabSearchHeader
+          disabled={isLoading}
+          filter={filter}
+          onFilterChange={handleFilterChange}
+          isLoading={isLoading}
+          endOfModels={endOfModels}
+          modelId={modelId}
+          resultCount={resultCount}
+          searchQuery={searchQuery}
+          currentUser={currentUser}
+          openSignupOverlay={openSignupOverlay}
+        />
       )}
-    </div>
+    </>
   )
 }
 

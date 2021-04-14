@@ -55,6 +55,7 @@ const Row = memo(({ data, index, style }) => {
     </div>
   )
 }, areEqual)
+
 Row.displayName = 'InfiniteTreeRowComponent'
 
 const isLeaf = (nodes, i) => {
@@ -84,6 +85,7 @@ const InfiniteTreeView = ({
   itemHeight,
   width,
   maxHeight,
+  minHeight,
   levelPadding = 40,
   scrollToItem,
   isSelected = () => false,
@@ -165,7 +167,11 @@ const InfiniteTreeView = ({
   }, [nodes, expandedNodes, scrollToItem, listRef.current])
 
   const explorerHeight = filteredNodes.length * itemHeight
-  const height = Math.min(explorerHeight, maxHeight)
+  const height = maxHeight
+    ? Math.min(explorerHeight, maxHeight)
+    : minHeight
+      ? Math.max(explorerHeight, minHeight)
+      : explorerHeight
 
   const itemData = useMemo(() => {
     return {

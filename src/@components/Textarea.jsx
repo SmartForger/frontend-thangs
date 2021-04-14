@@ -1,7 +1,9 @@
 import React, { useCallback, useState } from 'react'
 import classnames from 'classnames'
-import { Spacer, MetadataSecondary } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Spacer } from '@components'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -87,9 +89,9 @@ const Textarea = ({
           <Spacer size={'.5rem'} />
           <div className={c.Textarea_ErrorWrapper}>
             <Spacer size={'.25rem'} />
-            <MetadataSecondary className={c.Textarea_ErrorMessage}>
+            <Metadata type={MetadataType.secondary} className={c.Textarea_ErrorMessage}>
               {errorMessage}
-            </MetadataSecondary>
+            </Metadata>
           </div>
         </>
       )}

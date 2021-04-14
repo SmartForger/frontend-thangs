@@ -1,24 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
-import * as R from 'ramda'
-import {
-  Button,
-  MultiLineBodyText,
-  Pill,
-  Spacer,
-  Spinner,
-  TitleTertiary,
-  Toggle,
-  Tooltip,
-  TreeView,
-} from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import { ReactComponent as UploadCardIcon } from '@svg/upload-card.svg'
-import { ReactComponent as InfoIcon } from '@svg/icon-info.svg'
 import Dropzone from 'react-dropzone'
+import * as R from 'ramda'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Pill, Spacer, Spinner, Toggle, Tooltip, TreeView } from '@components'
 import { FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { overlayview } from '@utilities/analytics'
 import UploadTreeNode from './UploadTreeNode'
 import { isIOS } from '@utilities'
+
+import { ReactComponent as UploadCardIcon } from '@svg/upload-card.svg'
+import { ReactComponent as InfoIcon } from '@svg/icon-info.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -117,18 +110,6 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
       zIndex: '1',
     },
-    UploadModels_ButtonWrapper: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-
-      '& button': {
-        width: '100%',
-      },
-    },
-    UploadModels_ButtonSpacer: {
-      flex: 'none',
-    },
     UploadModels_ErrorText: {
       ...theme.text.formErrorText,
       backgroundColor: theme.variables.colors.errorTextBackground,
@@ -181,8 +162,6 @@ const UploadModels = ({
   allTreeNodes,
   onDrop = noop,
   onRemoveNode = noop,
-  onCancel = noop,
-  onContinue = noop,
   setErrorMessage = noop,
   setWarningMessage = noop,
   errorMessage = null,
@@ -291,12 +270,12 @@ const UploadModels = ({
                   <div className={c.UploadModels_UploadColumn}>
                     {R.isEmpty(uploadFiles) && <UploadCardIcon />}
                     <Spacer size={'1rem'} />
-                    <TitleTertiary>
+                    <Title headerLevel={HeaderLevel.tertiary}>
                       {multiple ? 'Drag & Drop files' : 'Drag & Drop file'}
-                    </TitleTertiary>
-                    <MultiLineBodyText>or browse to upload.</MultiLineBodyText>
+                    </Title>
+                    <Body multiline>or browse to upload.</Body>
                     <Spacer size={'1rem'} />
-                    <Pill secondary>Browse</Pill>
+                    <Pill tertiary>Browse</Pill>
                     <Spacer size={'.75rem'} />
                   </div>
                 </div>
@@ -311,13 +290,13 @@ const UploadModels = ({
       {fileLength > 0 && (
         <>
           <Spacer size='1rem' />
-          <TitleTertiary>
+          <Title headerLevel={HeaderLevel.tertiary}>
             <div className={c.UploadModels_FileTitle}>
               {fileLength > 1 ? `${fileLength} files` : 'File'}
               <Spacer size={'.5rem'} />
               {isLoadingFiles && <Spinner size={'1rem'} />}
             </div>
-          </TitleTertiary>
+          </Title>
           <Spacer size='0.5rem' />
           <TreeView
             className={c.UploadTreeView}
@@ -346,15 +325,6 @@ const UploadModels = ({
             </>
           )}
           <Spacer size={'1rem'} />
-          <div className={c.UploadModels_ButtonWrapper}>
-            <Button secondary onClick={onCancel}>
-              Cancel
-            </Button>
-            <Spacer size={'1rem'} className={c.UploadModels_ButtonSpacer} />
-            <Button onClick={onContinue} disabled={isLoadingFiles || validating}>
-              {isLoadingFiles || validating ? 'Processing...' : 'Continue'}
-            </Button>
-          </div>
         </>
       )}
     </>

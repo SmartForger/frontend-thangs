@@ -1,21 +1,25 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as R from 'ramda'
 import Joi from '@hapi/joi'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import {
+  Body,
+  Title,
+  HeaderLevel,
+  Metadata,
+  MetadataType,
+} from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   Button,
   Dropdown,
   Input,
   LicenseField,
-  MetadataPrimary,
-  MetadataSecondary,
   SelectFolderActionMenu,
   Spacer,
-  SingleLineBodyText,
   Textarea,
-  TitleTertiary,
 } from '@components'
 import { useForm } from '@hooks'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import { CATEGORIES } from '@constants/fileUpload'
 
 const useStyles = createUseStyles(theme => {
@@ -247,16 +251,16 @@ const AssemblyInfo = ({
       {activeNode.parentId && (
         <>
           <div className={c.PartInfo_Row}>
-            <MetadataSecondary>{pathFromRoot}</MetadataSecondary>
+            <Metadata type={MetadataType.secondary}>{pathFromRoot}</Metadata>
           </div>
           <Spacer size={'1rem'} />
         </>
       )}
       <div className={c.AssemblyInfo_Row}>
         <div className={c.AssemblyInfo_ModelInfo}>
-          <TitleTertiary>Enter Information</TitleTertiary>
+          <Title headerLevel={HeaderLevel.tertiary}>Enter Information</Title>
           <Spacer size={'.5rem'} />
-          <MetadataPrimary>{metaText}</MetadataPrimary>
+          <Metadata type={MetadataType.primary}>{metaText}</Metadata>
         </div>
       </div>
       <Spacer size={'1.5rem'} />
@@ -335,20 +339,18 @@ const AssemblyInfo = ({
           />
         )}
         <Spacer size={'1.5rem'} />
-        <SingleLineBodyText>
-          {folderPublic ? 'Public Model' : 'Private Model'}
-        </SingleLineBodyText>
+        <Body>{folderPublic ? 'Public Model' : 'Private Model'}</Body>
         <Spacer size={'.5rem'} />
         {folderPublic ? (
-          <MetadataSecondary className={c.AssemblyInfo_PrivacyText}>
+          <Metadata type={MetadataType.secondary} className={c.AssemblyInfo_PrivacyText}>
             The folder you have selected is Public. This model will be shared publicly
             towards users on Thangs.
-          </MetadataSecondary>
+          </Metadata>
         ) : (
-          <MetadataSecondary className={c.AssemblyInfo_PrivacyText}>
+          <Metadata type={MetadataType.secondary} className={c.AssemblyInfo_PrivacyText}>
             The folder you have selected is Private. This model will be private and
             restricted to yourself and those you to choose to share it with.
-          </MetadataSecondary>
+          </Metadata>
         )}
         <Spacer size={'1.5rem'} />
         <div className={c.AssemblyInfo_ButtonWrapper}>

@@ -1,11 +1,14 @@
 import React, { useCallback, useMemo } from 'react'
-import { useStoreon } from 'storeon/react'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
+import { useStoreon } from 'storeon/react'
 import { Link } from 'react-router-dom'
-import { Spacer, SingleLineBodyText } from '@components'
-import { ReactComponent as ArrowRightIcon } from '@svg/icon-arrow-right-sm.svg'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Spacer } from '@components'
 import * as types from '@constants/storeEventTypes'
+
+import { ReactComponent as ArrowRightIcon } from '@svg/icon-arrow-right-sm.svg'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -99,7 +102,7 @@ const LinkContents = ({
       <div className={c.NavLink_Link} onClick={handleLinkClick}>
         <Icon />
         <Spacer size={'.75rem'} />
-        <SingleLineBodyText>{label}</SingleLineBodyText>
+        <Body>{label}</Body>
       </div>
     </>
   )

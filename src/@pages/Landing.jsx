@@ -1,13 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
+import { useStoreon } from 'storeon/react'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   CardCollectionLanding,
   LandingSortActionMenu,
   Layout,
   ModelCardLanding,
   Pill,
-  TitleSecondary,
   Spacer,
 } from '@components'
 import {
@@ -17,8 +20,6 @@ import {
   useQuery,
   useInfiniteScroll,
 } from '@hooks'
-import { useStoreon } from 'storeon/react'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import * as types from '@constants/storeEventTypes'
 import * as sortTypes from '@constants/sortTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
@@ -235,7 +236,7 @@ const Page = ({ sortBy, getTime = noop }) => {
   return (
     <div className={c.Landing_Column}>
       <div className={c.Landing_Title}>
-        <TitleSecondary>{title(sortBy)}</TitleSecondary>
+        <Title headerLevel={HeaderLevel.secondary}>{title(sortBy)}</Title>
         <LandingSortActionMenu selectedValue={sortBy} onChange={handleSortBy} />
       </div>
 

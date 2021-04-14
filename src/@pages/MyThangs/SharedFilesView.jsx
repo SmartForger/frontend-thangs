@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo } from 'react'
-import { FileTable, FolderCard, Spacer, Spinner, TitleTertiary } from '@components'
-import { useStarred } from '@hooks'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
+import { FileTable, FolderCard, Spacer, Spinner } from '@components'
+import { useStarred } from '@hooks'
 import { pageview } from '@utilities/analytics'
 import { getSharedFolders } from '@selectors'
 
@@ -109,7 +111,7 @@ const SharedFilesView = ({
     <main className={classnames(className, c.SharedFilesView)}>
       <div className={c.SharedFilesView_Content}>
         <Spacer size='2rem' />
-        <TitleTertiary>Shared Files</TitleTertiary>
+        <Title headerLevel={HeaderLevel.tertiary}>Shared Files</Title>
 
         {isLoadingStarred && (
           <div className={c.SharedFilesView_Loader}>
@@ -121,7 +123,7 @@ const SharedFilesView = ({
         {starredSharedFolders.length > 0 && (
           <>
             <Spacer size='4rem' />
-            <TitleTertiary>Starred</TitleTertiary>
+            <Title headerLevel={HeaderLevel.tertiary}>Starred</Title>
             <div className={c.SharedFilesView_Starred}>
               {starredSharedFolders.map((folder, index) => {
                 return (
@@ -139,7 +141,7 @@ const SharedFilesView = ({
           </>
         )}
         <Spacer size='4rem' />
-        <TitleTertiary>Files</TitleTertiary>
+        <Title headerLevel={HeaderLevel.tertiary}>Files</Title>
         <Spacer size='2rem' />
         <FileTable
           files={filteredFolders}

@@ -1,17 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import {
+  Title,
+  HeaderLevel,
+  Metadata,
+  MetadataType,
+} from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   ChangeablePicture,
   EditProfileForm,
-  MetadataPrimary,
   Pill,
   ProfilePicture,
   Spacer,
-  TitleSecondary,
-  TitleTertiary,
 } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import classnames from 'classnames'
 import { useCurrentUser } from '@hooks'
 import * as types from '@constants/storeEventTypes'
 import { pageview } from '@utilities/analytics'
@@ -127,9 +131,12 @@ const EditProfile = ({ className }) => {
       <Spacer size='2rem' />
       <div className={c.EditProfile_Content}>
         <Spacer size='2rem' className={c.EditProfile_Spacer__mobile} />
-        <TitleSecondary className={c.EditProfile_TitleSecondary}>
+        <Title
+          headerLevel={HeaderLevel.secondary}
+          className={c.EditProfile_TitleSecondary}
+        >
           Profile Settings
-        </TitleSecondary>
+        </Title>
         <Spacer size='2rem' />
         <div className={c.EditProfile_Row}>
           <ProfilePicture
@@ -140,13 +147,16 @@ const EditProfile = ({ className }) => {
           />
           <Spacer size={'1.5rem'} />
           <div className={c.EditProfile_Column}>
-            <TitleTertiary className={c.EditProfile_TitleTertiary}>
+            <Title
+              headerLevel={HeaderLevel.tertiary}
+              className={c.EditProfile_TitleTertiary}
+            >
               {user.fullName || user.username}
-            </TitleTertiary>
+            </Title>
             <Spacer size={'.5rem'} />
-            <MetadataPrimary className={c.EditProfile_UserName}>
+            <Metadata type={MetadataType.primary} className={c.EditProfile_UserName}>
               {user.fullName ? user.username : user.email}
-            </MetadataPrimary>
+            </Metadata>
             <Spacer size={'1rem'} />
             <div className={c.EditProfile_ButtonsSection}>
               <ChangeablePicture disabled={isLoading} />
@@ -157,7 +167,7 @@ const EditProfile = ({ className }) => {
           </div>
         </div>
         <Spacer size='2rem' />
-        <TitleTertiary>Information</TitleTertiary>
+        <Title headerLevel={HeaderLevel.tertiary}>Information</Title>
         <Spacer size='1rem' />
         <EditProfileForm
           user={user}

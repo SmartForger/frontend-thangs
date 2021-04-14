@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo } from 'react'
-import { FileTable, FolderCard, Spacer, TitleTertiary } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
+
+import { FileTable, FolderCard, Spacer } from '@components'
 import { pageview } from '@utilities/analytics'
 import { getRootFolders } from '@selectors'
 
@@ -98,11 +100,11 @@ const AllFilesView = ({
     <main className={classnames(className, c.AllFilesView)}>
       <div className={c.AllFilesView_Content}>
         <Spacer size='2rem' />
-        <TitleTertiary>All Files</TitleTertiary>
+        <Title headerLevel={HeaderLevel.tertiary}>All Files</Title>
         {sortedFolders.length > 0 && (
           <>
             <Spacer size='4rem' />
-            <TitleTertiary>Folders</TitleTertiary>
+            <Title headerLevel={HeaderLevel.tertiary}>Folders</Title>
             <div className={c.AllFilesView_Folders}>
               {sortedFolders.map((folder, index) => (
                 <div
@@ -119,7 +121,7 @@ const AllFilesView = ({
         {models.length > 0 && (
           <>
             <Spacer size='4rem' />
-            <TitleTertiary>My Public Files</TitleTertiary>
+            <Title headerLevel={HeaderLevel.tertiary}>My Public Files</Title>
             <Spacer size='2rem' />
           </>
         )}

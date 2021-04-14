@@ -8,6 +8,10 @@ import { removeModel, updateLike } from './updater'
 
 const noop = () => null
 export default store => {
+  store.on(types.STORE_INIT, () => ({
+    models: {},
+  }))
+
   store.on(types.UPDATE_MODELS, (state, event) => ({
     models: {
       ...state.models,
@@ -27,7 +31,7 @@ export default store => {
   )
   store.on(
     types.FETCH_MODEL,
-    async (_state, { id, silentUpdate = false, onFinish = noop, onError = noop }) => {
+    async (state, { id, silentUpdate = false, onFinish = noop, onError = noop }) => {
       if (!silentUpdate) {
         store.dispatch(types.CHANGE_MODEL_STATUS, {
           status: STATUSES.LOADING,
@@ -117,6 +121,82 @@ export default store => {
         })
         const newModels = removeModel(model, state.models.data)
         store.dispatch(types.UPDATE_MODELS, newModels)
+      }
+    }
+  )
+
+  store.on(types.ADD_PART, async (state, { part, onError = noop, onFinish = noop }) => {
+    const { modelId: id } = part
+    store.dispatch(types.CHANGE_MODEL_STATUS, {
+      status: STATUSES.SAVING,
+      atom: 'model',
+    })
+    const { error } = await api({
+      method: 'PUT',
+      endpoint: `models/${id}`,
+      body: {
+        message: `Add ${part.name}`,
+        events: [
+          {
+            action: 'addedPart',
+            partIdentifier: part.identifier,
+          },
+        ],
+      },
+    })
+
+    if (error) {
+      store.dispatch(types.CHANGE_MODEL_STATUS, {
+        status: STATUSES.FAILURE,
+        atom: 'model',
+      })
+      onError(error.message)
+    } else {
+      onFinish()
+      store.dispatch(types.CHANGE_MODEL_STATUS, {
+        status: STATUSES.SAVED,
+        atom: 'model',
+      })
+      store.dispatch(types.FETCH_THANGS, {})
+    }
+  })
+
+  store.on(
+    types.DELETE_PART,
+    async (state, { part, onError = noop, onFinish = noop }) => {
+      if (R.isNil(part) || R.isEmpty(part)) return
+      const { modelId: id } = part
+      store.dispatch(types.CHANGE_MODEL_STATUS, {
+        status: STATUSES.SAVING,
+        atom: 'model',
+      })
+      const { error } = await api({
+        method: 'PUT',
+        endpoint: `models/${id}`,
+        body: {
+          message: `Deleted ${part.name}`,
+          events: [
+            {
+              action: 'deletedPart',
+              partIdentifier: part.identifier,
+            },
+          ],
+        },
+      })
+
+      if (error) {
+        store.dispatch(types.CHANGE_MODEL_STATUS, {
+          status: STATUSES.FAILURE,
+          atom: 'model',
+        })
+        onError(error.message)
+      } else {
+        onFinish()
+        store.dispatch(types.CHANGE_MODEL_STATUS, {
+          status: STATUSES.SAVED,
+          atom: 'model',
+        })
+        store.dispatch(types.FETCH_THANGS, {})
       }
     }
   )

@@ -1,26 +1,28 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useStoreon } from 'storeon/react'
-import classnames from 'classnames'
 import * as R from 'ramda'
+import classnames from 'classnames'
+import { useStoreon } from 'storeon/react'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   ActionMenu,
   Button,
   Divider,
   Input,
-  SingleLineBodyText,
   SearchBar,
   Spacer,
   Toggle,
 } from '@components'
 import { useForm } from '@hooks'
-import { createUseStyles } from '@physna/voxel-ui/@style'
+import { track } from '@utilities/analytics'
+import * as types from '@constants/storeEventTypes'
+import { buildPath } from '@utilities'
+
 import { ReactComponent as ArrowDownIcon } from '@svg/icon-arrow-down.svg'
 import { ReactComponent as ArrowLeftIcon } from '@svg/icon-arrow-left.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
-import { track } from '@utilities/analytics'
-import * as types from '@constants/storeEventTypes'
-import { buildPath } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -126,7 +128,7 @@ const FoldersScreen = ({ onChange, folders = [] }) => {
               >
                 <FolderIcon />
                 <Spacer size={'.5rem'} />
-                <SingleLineBodyText>{folder.label}</SingleLineBodyText>
+                <Body>{folder.label}</Body>
               </div>
               <Spacer size={'1rem'} />
             </React.Fragment>
@@ -174,7 +176,7 @@ const NewFolderScreen = ({ onChange = noop, onBack = noop }) => {
       >
         <ArrowLeftIcon />
         <Spacer size='.5rem' />
-        <SingleLineBodyText>Back</SingleLineBodyText>
+        <Body>Back</Body>
       </div>
       <form onSubmit={onFormSubmit(handleSubmit)}>
         {errorMessage && (
@@ -254,7 +256,7 @@ export const SelectFolderMenu = ({ onChange = noop, options = [] }) => {
           >
             <PlusIcon />
             <Spacer size={'.5rem'} />
-            <SingleLineBodyText> Create new folder</SingleLineBodyText>
+            <Body> Create new folder</Body>
           </div>
         </>
       )}

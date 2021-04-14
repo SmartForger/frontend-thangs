@@ -1,21 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
+import Joi from '@hapi/joi'
+import classnames from 'classnames'
+import { createUseStyles } from '@physna/voxel-ui/@style'
 import {
-  Button,
-  Divider,
-  FormError,
-  Input,
-  LabelText,
-  MetadataSecondary,
-  MultiLineBodyText,
-  SingleLineBodyText,
-  Spacer,
-  TitleSecondary,
-  TitleTertiary,
-} from '@components'
-import { useForm, useGoogleLogin, useFacebookLogin, useQuery } from '@hooks'
+  Body,
+  Title,
+  HeaderLevel,
+  Metadata,
+  MetadataType,
+  Label,
+} from '@physna/voxel-ui/@atoms/Typography'
+
+import { Button, Divider, FormError, Input, Spacer } from '@components'
+import { useForm, useGoogleLogin, useFacebookLogin, useQuery, useOverlay } from '@hooks'
 import { authenticationService } from '@services'
+import { overlayview, track } from '@utilities/analytics'
+
 import { ReactComponent as BackgroundSvg } from '@svg/overlay-background.svg'
 import { ReactComponent as VersionControlIcon } from '@svg/icon-version-control.svg'
 import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
@@ -25,10 +26,6 @@ import { ReactComponent as HeartIcon } from '@svg/icon-heart.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
 import { ReactComponent as FacebookLogo } from '@svg/facebook-logo.svg'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import classnames from 'classnames'
-import { overlayview, track } from '@utilities/analytics'
-import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -209,43 +206,55 @@ const SignUpPromo = ({ c, titleMessage }) => {
       <div className={c.Signup_SignUpPromoSection}>
         <div>
           <Spacer size='4rem' />
-          <TitleSecondary light>{titleMessage || 'Where Thangs happen.'}</TitleSecondary>
+          <Title headerLevel={HeaderLevel.secondary} light>
+            {titleMessage || 'Where Thangs happen.'}
+          </Title>
           <Spacer size='2rem' />
-          <MultiLineBodyText light className={c.Signup_SignUpPromoText}>
+          <Body multiline light className={c.Signup_SignUpPromoText}>
             Join for free and experience one of the fastest growing modeling communities
             with collaboration, geometric searches, over 1 million free models and much
             more.
-          </MultiLineBodyText>
+          </Body>
           <Spacer size='2rem' />
           <div className={c.Signup_Column}>
             <div className={c.Signup_Row}>
               <SearchIcon className={c.Search_Icon} />
               <Spacer size='.5rem' />
-              <MultiLineBodyText light>Geometric Search</MultiLineBodyText>
+              <Body multiline light>
+                Geometric Search
+              </Body>
             </div>
             <Spacer size='.5rem' />
             <div className={c.Signup_Row}>
               <StorageIcon />
               <Spacer size='.5rem' />
-              <MultiLineBodyText light>Unlimited storage</MultiLineBodyText>
+              <Body multiline light>
+                Unlimited storage
+              </Body>
             </div>
             <Spacer size='.5rem' />
             <div className={c.Signup_Row}>
               <CollabIcon />
               <Spacer size='.5rem' />
-              <MultiLineBodyText light>Collaboration</MultiLineBodyText>
+              <Body multiline light>
+                Collaboration
+              </Body>
             </div>
             <Spacer size='.5rem' />
             <div className={c.Signup_Row}>
               <HeartIcon />
               <Spacer size='.5rem' />
-              <MultiLineBodyText light>Completely Free</MultiLineBodyText>
+              <Body multiline light>
+                Completely Free
+              </Body>
             </div>
             <Spacer size='.5rem' />
             <div className={c.Signup_Row}>
               <VersionControlIcon />
               <Spacer size='.5rem' />
-              <MultiLineBodyText light>Version Control</MultiLineBodyText>
+              <Body multiline light>
+                Version Control
+              </Body>
             </div>
           </div>
           <Spacer size='4rem' />
@@ -370,7 +379,9 @@ const SignUpForm = ({ c, setOverlayData, handleSignInClick, showPromo, source })
       <Spacer size='3rem' />
       <div className={c.Signup_FormWrapper}>
         <Spacer size='4rem' />
-        <TitleTertiary>{showPromo ? 'Sign Up For Free' : 'Create Account'}</TitleTertiary>
+        <Title headerLevel={HeaderLevel.tertiary}>
+          {showPromo ? 'Sign Up For Free' : 'Create Account'}
+        </Title>
         <Spacer size='2rem' />
         <a
           href={googleLoginUrl}
@@ -382,7 +393,7 @@ const SignUpForm = ({ c, setOverlayData, handleSignInClick, showPromo, source })
           <Button secondary className={c.Signup_withGoogleButton}>
             <GoogleLogo />
             <Spacer size={'.5rem'} />
-            <LabelText>Sign up with Google</LabelText>
+            <Label>Sign up with Google</Label>
           </Button>
         </a>
         <Spacer size='1rem' />
@@ -396,7 +407,7 @@ const SignUpForm = ({ c, setOverlayData, handleSignInClick, showPromo, source })
           <Button secondary className={c.Signup_withFacebookButton}>
             <FacebookLogo />
             <Spacer size={'.5rem'} />
-            <LabelText>Sign up with Facebook</LabelText>
+            <Label>Sign up with Facebook</Label>
           </Button>
         </a>
         <Divider spacing={'1.5rem'} />
@@ -463,7 +474,7 @@ const SignUpForm = ({ c, setOverlayData, handleSignInClick, showPromo, source })
             {waiting ? 'Processing...' : 'Sign up'}
           </Button>
           <Spacer size='.75rem' />
-          <MetadataSecondary>
+          <Metadata type={MetadataType.secondary}>
             Click “Sign up” to agree to Thangs&apos;&nbsp;
             <a href='/terms-and-conditions' target='_blank'>
               terms and conditions
@@ -473,11 +484,11 @@ const SignUpForm = ({ c, setOverlayData, handleSignInClick, showPromo, source })
               Privacy Policy
             </a>{' '}
             applies to you.
-          </MetadataSecondary>
+          </Metadata>
         </form>
         <Divider spacing={'1.5rem'} />
         <div className={c.Signup_HasAccount}>
-          <SingleLineBodyText>Already a member?</SingleLineBodyText>
+          <Body>Already a member?</Body>
           <Button
             tertiary
             className={c.Signup_HasAccountButton}

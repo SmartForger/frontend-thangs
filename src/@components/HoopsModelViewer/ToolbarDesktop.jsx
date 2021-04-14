@@ -1,16 +1,17 @@
 import React from 'react'
+import classnames from 'classnames'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   ColorPickerActionMenu,
   DrawModeActionMenu,
-  MetadataSecondary,
   OrientationActionMenu,
   PartExplorerActionMenu,
   Pill,
   Slider,
   Spacer,
 } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import classnames from 'classnames'
 import { ReactComponent as ResetIcon } from '@svg/icon-reset.svg'
 import { ReactComponent as CameraDesktopIcon } from '@svg/icon-camera-desktop.svg'
 
@@ -29,6 +30,7 @@ const useStyles = createUseStyles(theme => {
       bottom: 0,
       width: 'calc(100% - 2rem)',
       padding: '0 1rem',
+      borderRadius: '0 0 1rem 1rem',
 
       '& div': {
         flex: 'none',
@@ -144,7 +146,7 @@ const Toolbar = ({
       <Spacer size={'1.5rem'} />
       <div className={c.Toolbar_Group}>
         <div className={c.Toolbar_Text}>
-          <Pill secondary onClick={onResetView}>
+          <Pill tertiary onClick={onResetView}>
             <ResetIcon />
             <div className={c.Toolbar_WideText}>
               <Spacer size={'0.25rem'} />
@@ -152,7 +154,7 @@ const Toolbar = ({
             </div>
           </Pill>
           <Spacer size={'1rem'} />
-          <Pill secondary onClick={onSnapshot}>
+          <Pill tertiary onClick={onSnapshot}>
             <CameraDesktopIcon />
             <div className={c.Toolbar_WideText}>
               <Spacer size={'0.25rem'} />
@@ -170,7 +172,7 @@ const Toolbar = ({
                 [c.Toolbar_ExtraWideText]: isAssembly,
               })}
             >
-              <MetadataSecondary>Render</MetadataSecondary>
+              <Metadata type={MetadataType.secondary}>Render</Metadata>
               <Spacer size={'1rem'} />
             </div>
             <DrawModeActionMenu selectedValue={mode} onChange={onDrawChange} />
@@ -183,7 +185,7 @@ const Toolbar = ({
                 [c.Toolbar_ExtraWideText]: isAssembly,
               })}
             >
-              <MetadataSecondary>Orientation</MetadataSecondary>
+              <Metadata type={MetadataType.secondary}>Orientation</Metadata>
               <Spacer size={'1rem'} />
             </div>
             <OrientationActionMenu selectedValue={orientation} onChange={onViewChange} />
@@ -196,7 +198,7 @@ const Toolbar = ({
                 [c.Toolbar_ExtraWideText]: isAssembly,
               })}
             >
-              <MetadataSecondary>Color</MetadataSecondary>
+              <Metadata type={MetadataType.secondary}>Color</Metadata>
               <Spacer size={'1rem'} />
             </div>
             <ColorPickerActionMenu selectedValue={color} onChange={onColorChange} />
@@ -206,7 +208,7 @@ const Toolbar = ({
               <div className={c.Toolbar_VerticalRule}></div>
               <Spacer size={'1.125rem'} />
               <div className={c.Toolbar_Group}>
-                <MetadataSecondary>Explode</MetadataSecondary>
+                <Metadata type={MetadataType.secondary}>Explode</Metadata>
                 <Spacer size={'.5rem'} />
                 <div className={c.Toolbar_Text}>
                   <Spacer size={'1rem'} />

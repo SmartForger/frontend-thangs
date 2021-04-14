@@ -1,19 +1,19 @@
 import React from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import classnames from 'classnames'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body, Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   Pill,
   ProfilePicture,
   Divider,
   DropdownMenu,
   DropdownItem,
-  MetadataSecondary,
-  MultiLineBodyText,
   Spacer,
 } from '@components'
 import { useOverlay, useTranslations } from '@hooks'
 import { authenticationService } from '@services'
-import { createUseStyles } from '@physna/voxel-ui/@style'
 
 import { ReactComponent as SharedIcon } from '@svg/icon-shared.svg'
 import { ReactComponent as PortfolioIcon } from '@svg/icon-portfolio.svg'
@@ -101,17 +101,15 @@ export const ProfileDropdownMenuContainer = ({ user = {} }) => {
         />
         <Spacer size={'.75rem'} />
         <div className={c.ProfileDropdown_Column}>
-          <MultiLineBodyText>
-            {hasfullName ? user.fullName : user.username}
-          </MultiLineBodyText>
+          <Body multiline>{hasfullName ? user.fullName : user.username}</Body>
           <Link to={'/mythangs/edit-profile'}>
-            <MetadataSecondary>Profile Settings</MetadataSecondary>
+            <Metadata type={MetadataType.secondary}>Profile Settings</Metadata>
           </Link>
         </div>
       </div>
       <Spacer size={'1rem'} />
       <Link to={'/mythangs'}>
-        <Pill secondary>View My Thangs</Pill>
+        <Pill tertiary>View My Thangs</Pill>
       </Link>
       <Spacer size={'1rem'} />
       <Divider spacing={0} />

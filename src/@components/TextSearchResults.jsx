@@ -87,11 +87,13 @@ const useStyles = createUseStyles(theme => {
       color: theme.colors.purple[900],
     },
     TextSearchResult_Description: {
-      fontSize: '1rem',
-      lineHeight: '1.5rem',
-      fontWeight: '500',
-      marginTop: '.25rem',
       color: theme.colors.grey[700],
+      fontSize: '1rem',
+      fontWeight: 500,
+      lineHeight: '1.5rem',
+      marginTop: '.25rem',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     },
     TextSearchResult_DetailsInline: {
       display: 'flex',

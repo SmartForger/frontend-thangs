@@ -29,8 +29,10 @@ export const initialize = () => {
 }
 
 export const identify = ({ user, inviteCode, experiments }) => {
-  const userId = user.id.padStart(5, '0')
-  amplitude.getInstance().setUserId(userId)
+  if (user) {
+    const userId = user?.id?.padStart(5, '0')
+    amplitude.getInstance().setUserId(userId)
+  }
   amplitude.getInstance().setUserProperties({ inviteCode, experiments })
 }
 

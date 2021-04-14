@@ -216,9 +216,7 @@ const InviteUsersForm = ({
           afterAction()
         },
         onError: error => {
-          onError({
-            server: error,
-          })
+          onError(error.message || 'Oops. Something went wrong. Please try again later.')
         },
       })
     },

@@ -1,14 +1,11 @@
 import React from 'react'
 import cn from 'classnames'
-import {
-  Spacer,
-  Spinner,
-  SingleLineBodyText,
-  MetadataSecondary,
-  Tooltip,
-} from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Body, Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+
+import { Spacer, Spinner, Tooltip } from '@components'
 import { formatBytes } from '@utilities'
+
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as InfoIcon } from '@svg/icon-info.svg'
 import { ReactComponent as TrashCanIcon } from '@svg/trash-can-icon.svg'
@@ -110,15 +107,15 @@ const UploadTreeNode = ({ node, level: _l, onUpload, onRemove, isLoading }) => {
       )}
       <Spacer size={12} />
       <div className={c.UploadTreeNode_FileWrapper}>
-        <SingleLineBodyText className={c.UploadTreeNode_FileName} title={node.name}>
+        <Body className={c.UploadTreeNode_FileName} title={node.name}>
           {node.id === 'multipart' && !node.name ? 'Multipart Model' : node.name}
-        </SingleLineBodyText>
+        </Body>
         {node.size && (
           <>
             <Spacer width={'0.5rem'} />
-            <MetadataSecondary>
+            <Metadata type={MetadataType.secondary}>
               {isLoading ? 'validating...' : formatBytes(node.size)}
-            </MetadataSecondary>
+            </Metadata>
           </>
         )}
       </div>

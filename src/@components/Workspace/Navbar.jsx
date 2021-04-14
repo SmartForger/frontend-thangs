@@ -1,22 +1,29 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
+import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
 import { Link, useHistory } from 'react-router-dom'
+import { ContextMenuTrigger } from 'react-contextmenu'
+import { createUseStyles } from '@physna/voxel-ui/@style'
+import {
+  Body,
+  Title,
+  HeaderLevel,
+  Metadata,
+  MetadataType,
+} from '@physna/voxel-ui/@atoms/Typography'
+
 import {
   AddMenu,
   Button,
   Divider,
   FileExplorer,
   ProfilePicture,
-  MetadataSecondary,
-  MultiLineBodyText,
   NavLink,
   Spacer,
-  TitleTertiary,
 } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import classnames from 'classnames'
 import { authenticationService } from '@services'
 import { useCurrentUser, useExternalClick } from '@hooks'
+
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as ClockIcon } from '@svg/icon-clock.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
@@ -28,7 +35,6 @@ import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 import { ReactComponent as SettingsIcon } from '@svg/icon-settings.svg'
 import { ReactComponent as SharedIcon } from '@svg/icon-shared.svg'
 import { ReactComponent as SignOutIcon } from '@svg/icon-signout.svg'
-import { ContextMenuTrigger } from 'react-contextmenu'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -103,8 +109,13 @@ const useStyles = createUseStyles(theme => {
       paddingTop: '.125rem',
       position: 'relative',
 
+      '&::-webkit-scrollbar-thumb': {
+        border: `3px solid ${theme.colors.white[600]}`,
+        borderRadius: 20,
+        backgroundColor: '#C7C7C7',
+      },
       '&::-webkit-scrollbar-track': {
-        background: 'transparent',
+        background: theme.colors.white[600],
       },
     },
     WorkspaceNavbar_MobileColumnOnly: {
@@ -279,11 +290,11 @@ const WorkspaceNavbar = ({
           />
           <Spacer size={'.75rem'} />
           <div className={c.WorkspaceNavbar_MobileProfile}>
-            <MultiLineBodyText>{user.fullName || user.username}</MultiLineBodyText>
+            <Body multiline>{user.fullName || user.username}</Body>
             {user.username && (
               <>
                 <Spacer size={'.5rem'} />
-                <MetadataSecondary>{user.username}</MetadataSecondary>
+                <Metadata type={MetadataType.secondary}>{user.username}</Metadata>
               </>
             )}
           </div>
@@ -292,7 +303,12 @@ const WorkspaceNavbar = ({
         <AddMenuDropdown folder={folders[currentFolderId]} />
         <div className={c.WorkspaceNavbar_ScrollableFiles}>
           <div>
-            <TitleTertiary className={c.WorkspaceNavbar_NavLink}>My Thangs</TitleTertiary>
+            <Title
+              headerLevel={HeaderLevel.tertiary}
+              className={c.WorkspaceNavbar_NavLink}
+            >
+              My Thangs
+            </Title>
             <Spacer size={'2rem'} />
             <NavLink
               className={c.WorkspaceNavbar_NavLink}

@@ -6,7 +6,6 @@ import { NoResults, Spacer, TextSearchResults, Pill } from '@components'
 import { useQuery, useInfiniteScroll, useSpotCheck } from '@hooks'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import * as types from '@constants/storeEventTypes'
-import { track } from '@utilities/analytics'
 import SearchHeader from './SearchHeader'
 
 const useStyles = createUseStyles(theme => {
@@ -24,24 +23,6 @@ const useStyles = createUseStyles(theme => {
     },
     SearchResults_MatchingIcon: {
       marginRight: '.5rem',
-    },
-    SearchResults_Header: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      color: theme.colors.purple[900],
-      marginBottom: '1.5rem',
-    },
-    SearchResults_HeaderTextWrapper: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'flex-start',
-    },
-    SearchResults_HeaderText: {
-      ...theme.text.searchResultsHeader,
-      fontSize: '1rem',
-      lineHeight: '1.5rem',
-      color: theme.colors.purple[900],
     },
     SearchResults_FromThangsLogo: {
       height: '1rem',
@@ -122,10 +103,10 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
     'modelsStats'
   )
 
-  const setSearchScope = useCallback(
-    newFilter => {
-      if (newFilter !== filter) {
-        history.push(`?filter=${newFilter}`)
+  const setSearchFilters = useCallback(
+    ({ scopeFilter }) => {
+      if (scopeFilter !== filter) {
+        history.push(`?filter=${scopeFilter}`)
       }
     },
     [filter, history]
@@ -175,7 +156,6 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
       searchTerm: decodeURIComponent(searchQuery),
       scope: filter,
     })
-    track('More Thangs - Search', { searchTerm: searchQuery, filter })
   }, [dispatch, searchQuery, filter])
 
   const [cardHeight, setCardHeight] = useState()
@@ -211,11 +191,11 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
       {searchQuery && (
         <SearchHeader
           filter={filter}
+          setFilters={setSearchFilters}
           isLoading={isLoading}
           resultCount={models.length}
           endOfModels={endOfModels}
           searchQuery={searchQuery}
-          setFilter={setSearchScope}
         />
       )}
       {searchQuery ? (

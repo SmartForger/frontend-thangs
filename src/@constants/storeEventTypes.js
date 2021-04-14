@@ -10,6 +10,9 @@ export const DELETE_MODEL = 'delete-model'
 export const SAVED_MODEL = 'saved-model'
 export const SAVING_MODEL = 'saving-model'
 export const LOCAL_FOLLOW_MODEL_OWNER = 'local-follow-model-owner'
+/* Model History Store Events */
+export const FETCH_MODEL_HISTORY = 'fetch-model-history'
+export const CHANGE_MODEL_HISTORY_STATUS = 'change-model-history-status'
 /* Part Store Events */
 export const ADD_PART = 'add-part'
 export const DELETE_PART = 'delete-part'
@@ -194,3 +197,5 @@ export const LOADED_SEARCH_MY_THANGS = 'loaded-search-my-thangs'
 /* Experiments */
 export const FETCH_EXPERIMENTS = 'fetch-experiments'
 export const CHANGE_EXPERIMENTS_STATUS = 'change-experiments-status'
+/* Versioning */
+export const SUBMIT_NEW_VERSION = 'submit-new-version'

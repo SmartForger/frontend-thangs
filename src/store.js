@@ -9,6 +9,7 @@ import folderStore from '@store/folders/store'
 import modelAttachments from '@store/modelAttachments/store'
 import modelDownloadUrl from '@store/modelDownloadUrl/store'
 import modelFileStore from '@store/uploadModelFiles/store'
+import modelHistory from '@store/modelHistory/store'
 import modelPreviewsStore from '@store/modelPreviews/store'
 import modelsStatsStore from '@store/modelsStats/store'
 import modelsStore from '@store/models/store'
@@ -38,6 +39,7 @@ const storeParts = [
   modelAttachments,
   modelDownloadUrl,
   modelFileStore,
+  modelHistory,
   modelPreviewsStore,
   modelsStatsStore,
   modelsStore,

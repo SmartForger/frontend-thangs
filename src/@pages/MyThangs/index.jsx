@@ -6,7 +6,7 @@ import {
   AddContextMenu,
   FileContextMenu,
   FolderContextMenu,
-  FolderInviteContextMenu,
+  SubpartContextMenu,
   Spacer,
   Spinner,
   WorkspaceHeader,
@@ -16,6 +16,7 @@ import { authenticationService } from '@services'
 import { useOverlay, usePerformanceMetrics, useStarred } from '@hooks'
 import AllFilesView from './AllFilesView'
 import EditProfileView from './EditProfileView'
+import FileView from './FileView'
 import FolderView from './FolderView'
 import LikedModelsView from './LikedModelsView'
 import RecentFilesView from './RecentFilesView'
@@ -265,6 +266,10 @@ const MyThangs = () => {
                   render={() => <FolderView {...viewProps} />}
                 />
                 <Route
+                  path={`${path}/file/:fileId`}
+                  render={() => <FileView {...viewProps} />}
+                />
+                <Route
                   path={`${path}/liked-models`}
                   render={() => <LikedModelsView {...viewProps} />}
                 />
@@ -290,7 +295,7 @@ const MyThangs = () => {
       <AddContextMenu />
       <FileContextMenu />
       <FolderContextMenu />
-      <FolderInviteContextMenu />
+      <SubpartContextMenu />
     </>
   )
 }

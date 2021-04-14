@@ -148,10 +148,9 @@ const HoopsModelViewer = ({
           <StatusIndicator status={hoops.status} model={selectedModel || model} />
         )}
       </div>
-      {hoops.status.isReady && (
+      {!minimizeTools && hoops.status.isReady && (
         <Toolbar
           hoops={hoops}
-          minimizeTools={minimizeTools}
           model={model}
           setSelectedModel={selectModel}
           selectedModel={selectedModel}
