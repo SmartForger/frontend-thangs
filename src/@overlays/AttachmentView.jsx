@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react'
-import { ContainerRow, Spacer, UserInline } from '@components'
-import { Body } from '@physna/voxel-ui/@atoms/Typography'
+import { ContainerRow, Markdown, Spacer, UserInline } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import ArrowLeftIcon from '@svg/icon-arrow-left'
@@ -141,9 +140,9 @@ const AttachmentView = ({ initialAttachmentIndex, attachments }) => {
             <div className={c.AttachmentView_CaptionRow}>
               <Spacer width={'1.5rem'} />
               <div className={c.AttachmentView_CaptionWrapper}>
-                <Body multiline>
+                <Markdown>
                   {activeAttachment.caption}
-                </Body>
+                </Markdown>
                 <div className={c.AttachmentView_CaptionPosition}>
                   {attachmentPosition}
                 </div>

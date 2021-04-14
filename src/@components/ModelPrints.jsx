@@ -17,7 +17,6 @@ const useStyles = createUseStyles(theme => {
     ModelPrints_ImagesWrapper: {
       display: 'grid',
       gap: '1rem',
-      justifyItems: 'center',
       gridTemplateColumns: 'repeat(auto-fit, minmax(6rem, 1fr))',
     },
     ModelPrints_Image: {
