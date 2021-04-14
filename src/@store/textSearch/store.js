@@ -59,7 +59,7 @@ export default store => {
         endpoint: 'models/search-by-text',
         params: {
           searchTerm,
-          narrow: true,
+          narrow: false,
           collapse: true,
           scope: scope || 'all',
           page: isInitial ? 0 : state.textSearchResults.pageToLoad,
