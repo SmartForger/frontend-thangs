@@ -33,7 +33,7 @@ const SearchResultFooter = ({ model, onFindRelated }) => {
             {model.nMatchedModels > 0
               ? `View ${model?.nMatchedModels || ''} Related Model${
                   model?.nMatchedModels > 1 ? 's' : ''
-                }`
+              }`
               : 'Find Related Models'}
           </div>
           <Spacer size={'1rem'} />
