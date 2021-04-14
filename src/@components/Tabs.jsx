@@ -49,7 +49,7 @@ const Tabs = ({
           const handleChange = () => {
             onChange(value)
           }
-          const selected = selectedValue.value === value
+          const selected = selectedValue === value
           return (
             <div key={`Tab_${ind}`}>
               <Button

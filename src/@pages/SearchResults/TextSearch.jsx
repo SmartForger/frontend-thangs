@@ -105,7 +105,7 @@ const TextSearchPage = () => {
 
   const setSearchFilters = useCallback(
     ({ scopeFilter }) => {
-      if (scopeFilter !== filter) {
+      if (scopeFilter !== filter && scopeFilter) {
         history.push(`?filter=${scopeFilter}`)
       }
     },
