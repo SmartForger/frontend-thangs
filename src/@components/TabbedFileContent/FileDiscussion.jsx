@@ -28,8 +28,6 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const noop = () => null
-
 const getParsedBody = str => {
   try {
     const strQuotesReplaces = str.replace(/'/g, '"')
