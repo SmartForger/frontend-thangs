@@ -32,8 +32,7 @@ workflows:
             filters:
               branches:
                 only:
-                  - development
-                  - ar/download-from-search
+                  - ar-search-release
         - deploy-production:
             Stack: master
             context: gcp-and-physna
@@ -47,7 +46,6 @@ workflows:
               branches:
                 only:
                   - development
-                  - ar/download-from-search
 
 jobs:
   deploy-staging:
