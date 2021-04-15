@@ -52,11 +52,11 @@ const options = [
     value: 'all',
   },
   {
-    label: 'Thangs Only',
+    label: 'Thangs',
     value: 'thangs',
   },
   {
-    label: 'External Only',
+    label: 'External',
     value: 'phyn',
   },
 ]
