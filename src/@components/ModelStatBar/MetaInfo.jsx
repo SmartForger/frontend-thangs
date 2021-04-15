@@ -3,7 +3,7 @@ import { createUseStyles, Title, Label, Spacer } from '@physna/voxel-ui'
 import { ContainerColumn, ContainerRow } from '@components'
 import { numberWithCommas } from '@utilities'
 
-const useStyles = createUseStyles(_theme => {
+const useStyles = createUseStyles(theme => {
   return {
     MetaInfo_Icon: {
       width: '2.5rem',

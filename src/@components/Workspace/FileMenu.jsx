@@ -68,7 +68,7 @@ const FileMenu = ({ model = {} }) => {
       model.owner.id.toString() === currentUserId.toString()
     )
   }, [model, currentUserId])
-  const { isAssembly } = model
+  // const { isAssembly } = model
 
   const handleNewVersion = useCallback(
     e => {
@@ -81,7 +81,9 @@ const FileMenu = ({ model = {} }) => {
           animateIn: true,
           windowed: true,
           dialogue: true,
-          model,
+          versionData: {
+            modelId: model.id,
+          },
           action: 'update',
         },
       })
@@ -89,24 +91,24 @@ const FileMenu = ({ model = {} }) => {
     [model, setOverlay]
   )
 
-  const handleNewPart = useCallback(
-    e => {
-      e.preventDefault()
-      track('File Menu - Add Part')
-      setOverlay({
-        isOpen: true,
-        template: 'multiUpload',
-        data: {
-          animateIn: true,
-          windowed: true,
-          dialogue: true,
-          model,
-          action: 'add',
-        },
-      })
-    },
-    [model, setOverlay]
-  )
+  // const handleNewPart = useCallback(
+  //   e => {
+  //     e.preventDefault()
+  //     track('File Menu - Add Part')
+  //     setOverlay({
+  //       isOpen: true,
+  //       template: 'multiUpload',
+  //       data: {
+  //         animateIn: true,
+  //         windowed: true,
+  //         dialogue: true,
+  //         model,
+  //         action: 'add',
+  //       },
+  //     })
+  //   },
+  //   [model, setOverlay]
+  // )
 
   const handleEdit = useCallback(
     e => {
@@ -207,7 +209,7 @@ const FileMenu = ({ model = {} }) => {
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      {!isAssembly && (
+      {/* {!isAssembly && (
         <MenuItem className={c.FileMenu_Item} onClick={handleNewPart}>
           <div>
             <Spacer size={'1.5rem'} />
@@ -217,7 +219,7 @@ const FileMenu = ({ model = {} }) => {
             <Spacer size={'1.5rem'} />
           </div>
         </MenuItem>
-      )}
+      )} */}
       <Spacer size={'.5rem'} />
       <MenuItem className={c.FileMenu_Item} onClick={handleShare}>
         <div>

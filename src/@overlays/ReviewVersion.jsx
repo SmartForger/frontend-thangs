@@ -106,11 +106,12 @@ const ReviewVersion = ({ model = {}, part = {}, files }) => {
         animateIn: true,
         windowed: true,
         dialogue: true,
-        model,
-        part,
+        versionData: {
+          modelId,
+        },
       },
     })
-  }, [model, part, setOverlay])
+  }, [modelId, setOverlay])
 
   useEffect(() => {
     overlayview('ReviewVersion')

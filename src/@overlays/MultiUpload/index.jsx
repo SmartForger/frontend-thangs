@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 
-import { OverlayWrapper } from '@components'
+import { OverlayWrapper, Spinner } from '@components'
 import PartInfo from './PartInfo'
 import UploadModels from './UploadModels'
 import * as types from '@constants/storeEventTypes'
@@ -53,13 +53,13 @@ const MultiUpload = ({
   initData = null,
   previousVersionModelId,
   folderId = '',
-  model,
-  part,
+  versionData,
   action,
 }) => {
-  const { dispatch, license = {}, uploadFiles = {} } = useStoreon(
+  const { dispatch, license = {}, uploadFiles = {}, model = {} } = useStoreon(
     'license',
-    'uploadFiles'
+    'uploadFiles',
+    'model'
   )
   const {
     data: uploadFilesData = {},
@@ -71,6 +71,7 @@ const MultiUpload = ({
     isAssembly,
   } = uploadFiles
   const { isLoading: isLoadingLicense } = license
+  const { data: modelData = {}, isLoading: isLoadingModel } = model
   const [activeView, setActiveView] = useState(-1)
   const [errorMessage, setErrorMessage] = useState(null)
   const [warningMessage, setWarningMessage] = useState(null)
@@ -132,8 +133,8 @@ const MultiUpload = ({
           ? newNode.subIds.map(subId => formNode(subId))
           : []
         : Object.values(newTreeData)
-          .filter(node => !node.parentId)
-          .map(node => formNode(node.id))
+            .filter(node => !node.parentId)
+            .map(node => formNode(node.id))
 
       newNode.treeValid =
         newNode.valid &&
@@ -215,8 +216,8 @@ const MultiUpload = ({
             setErrorMessage(
               `${file.name} is not a supported file type.
               Supported file extensions include ${MODEL_FILE_EXTS.map(
-    e => ' ' + e.replace('.', '')
-  )}.`
+                e => ' ' + e.replace('.', '')
+              )}.`
             )
             return null
           }
@@ -308,15 +309,15 @@ const MultiUpload = ({
       }
 
       if (action !== 'add') {
-        if (model || part) {
-          if ((model && model.isLeaf) || part) {
-            const versioningModel = model || part
+        if (model) {
+          if ((model && model.isLeaf) || versionData?.partId) {
             const currentFileKey = Object.keys(uploadFilesData)[0]
             const currentFile = uploadFilesData[currentFileKey]
+            const singlePart = model.parts[0]
             dispatch(types.SET_MODEL_INFO, {
               id: currentFile.id,
               formData: {
-                previousParts: [versioningModel],
+                previousParts: [singlePart],
               },
             })
 
@@ -327,8 +328,8 @@ const MultiUpload = ({
                 animateIn: false,
                 windowed: true,
                 dialogue: true,
-                model: model || part,
-                part: part || model,
+                model,
+                partId: singlePart.id,
                 files: uploadFilesData,
               },
             })
@@ -341,7 +342,6 @@ const MultiUpload = ({
                 windowed: true,
                 dialogue: true,
                 model,
-                part,
                 files: uploadFilesData,
                 fileIndex: 0,
               },
@@ -409,11 +409,11 @@ const MultiUpload = ({
       action,
       allTreeNodes,
       model,
-      part,
-      setOverlay,
+      versionData,
       uploadFilesData,
-      activeView,
       dispatch,
+      setOverlay,
+      activeView,
       previousVersionModelId,
       submitModels,
     ]
@@ -439,27 +439,30 @@ const MultiUpload = ({
 
   useEffect(() => {
     if (initData) onDrop(initData.acceptedFiles, initData.rejectedFile, initData.e)
-  }, [initData, onDrop])
+    if (versionData) {
+      dispatch(types.FETCH_MODEL, { id: versionData.modelId })
+    }
+  }, [dispatch, initData, onDrop, versionData])
 
   const overlayHeader = useMemo(() => {
     return !activeNode
       ? action === 'add'
         ? 'Upload New Parts'
-        : previousVersionModelId || model || part
-          ? 'Upload New Version'
-          : 'Upload Files'
+        : previousVersionModelId || versionData
+        ? 'Upload New Version'
+        : 'Upload Files'
       : activeNode.isAssembly && activeNode.parentId
-        ? 'Sub Assembly'
-        : activeNode.isAssembly
-          ? 'New Assembly'
-          : partFormTitle
-  }, [action, activeNode, model, part, partFormTitle, previousVersionModelId])
+      ? 'Sub Assembly'
+      : activeNode.isAssembly
+      ? 'New Assembly'
+      : partFormTitle
+  }, [action, activeNode, partFormTitle, previousVersionModelId, versionData])
 
   const fileLength = useMemo(
     () =>
       uploadFilesData
         ? Object.keys(uploadFilesData).filter(fileId => uploadFilesData[fileId].name)
-          .length
+            .length
         : 0,
     [uploadFilesData]
   )
@@ -475,14 +478,16 @@ const MultiUpload = ({
       cancelText={'Cancel'}
       hideButtons={activeNode}
     >
-      {!activeNode ? (
+      {isLoadingModel ? (
+        <Spinner />
+      ) : !activeNode ? (
         <UploadModels
           allTreeNodes={allTreeNodes}
           errorMessage={errorMessage}
           isAssembly={isAssembly}
           multiple={
             action !== 'add' &&
-            (previousVersionModelId || part || (model && model.isLeaf))
+            (previousVersionModelId || versionData?.partId || (model && model.isLeaf))
               ? false
               : true
           }
@@ -491,7 +496,9 @@ const MultiUpload = ({
           setErrorMessage={setErrorMessage}
           setIsAssembly={setIsAssembly}
           setWarningMessage={setWarningMessage}
-          showAssemblyToggle={validated && singlePartsCount > 1 && !model && !part}
+          showAssemblyToggle={
+            validated && singlePartsCount > 1 && !model && !versionData?.partId
+          }
           uploadFiles={uploadFilesData}
           uploadTreeData={uploadTreeData}
           validated={validated}

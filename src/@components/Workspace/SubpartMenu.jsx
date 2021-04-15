@@ -68,7 +68,7 @@ const SubpartMenu = ({ part }) => {
       part.owner.id.toString() === currentUserId.toString()
     )
   }, [currentUserId, part])
-
+  console.log('part', part)
   const handleNewVersion = useCallback(
     e => {
       e.preventDefault()
@@ -80,7 +80,9 @@ const SubpartMenu = ({ part }) => {
           animateIn: true,
           windowed: true,
           dialogue: true,
-          part,
+          versionData: {
+            partId: part.id,
+          },
           action: 'update',
         },
       })
@@ -88,24 +90,24 @@ const SubpartMenu = ({ part }) => {
     [part, setOverlay]
   )
 
-  const handleNewPart = useCallback(
-    e => {
-      e.preventDefault()
-      // track()
-      setOverlay({
-        isOpen: true,
-        template: 'multiUpload',
-        data: {
-          animateIn: true,
-          windowed: true,
-          dialogue: true,
-          part,
-          action: 'add',
-        },
-      })
-    },
-    [part, setOverlay]
-  )
+  // const handleNewPart = useCallback(
+  //   e => {
+  //     e.preventDefault()
+  //     // track()
+  //     setOverlay({
+  //       isOpen: true,
+  //       template: 'multiUpload',
+  //       data: {
+  //         animateIn: true,
+  //         windowed: true,
+  //         dialogue: true,
+  //         part,
+  //         action: 'add',
+  //       },
+  //     })
+  //   },
+  //   [part, setOverlay]
+  // )
 
   const handleEdit = useCallback(
     e => {
@@ -194,7 +196,7 @@ const SubpartMenu = ({ part }) => {
         </div>
       </MenuItem>
       <Spacer size={'.5rem'} />
-      <MenuItem className={c.SubpartMenu_Item} onClick={handleNewPart}>
+      {/* <MenuItem className={c.SubpartMenu_Item} onClick={handleNewPart}>
         <div>
           <Spacer size={'1.5rem'} />
           <UploadIcon />
@@ -202,8 +204,8 @@ const SubpartMenu = ({ part }) => {
           <Body>Add new part</Body>
           <Spacer size={'1.5rem'} />
         </div>
-      </MenuItem>
-      <Spacer size={'.5rem'} />
+      </MenuItem> */}
+      {/* <Spacer size={'.5rem'} /> */}
       <MenuItem className={c.SubpartMenu_Item} onClick={handleNewVersion}>
         <div>
           <Spacer size={'1.5rem'} />
