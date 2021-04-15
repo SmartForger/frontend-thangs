@@ -6,10 +6,11 @@ import { sendMessage, addMessageListener } from './worker'
 /* Send messages to worker */
 
 /* Model files */
-export const uploadFiles = (files, directory) => {
+export const uploadFiles = ({ files, directory, modelId }) => {
   sendMessage('upload:upload', {
     files,
     directory,
+    modelId,
   })
 }
 
@@ -26,7 +27,6 @@ export const uploadAttachmentFiles = (files, directory) => {
 }
 
 /* Handle messages from worker */
-
 function uploadMessageHandler(messageType, data) {
   switch (messageType) {
     case 'upload:success':

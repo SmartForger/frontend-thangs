@@ -63,7 +63,10 @@ const ARDownloadTarget = ({ onClick = noop }) => {
   )
 }
 
-const ARDownloadActionMenu = ({ onChange = noop }) => {
+const ARDownloadActionMenu = ({
+  onChange = noop,
+  TargetComponent = ARDownloadTarget,
+}) => {
   const options = useMemo(
     () => [
       {
@@ -91,7 +94,7 @@ const ARDownloadActionMenu = ({ onChange = noop }) => {
   return (
     <ActionMenu
       MenuComponentProps={menuProps}
-      TargetComponent={ARDownloadTarget}
+      TargetComponent={TargetComponent}
       isCloseOnSelect={true}
       isMobileOnly={true}
     />

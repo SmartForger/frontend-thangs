@@ -1,6 +1,5 @@
 import React from 'react'
 import { format } from 'date-fns'
-
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Body, Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
 
@@ -56,7 +55,7 @@ const CommitNode = ({ message, tag, created, author = {}, isActive, isInitial })
             color={isActive ? '#13BD98' : '#DCF7F1'}
             textColor={isActive ? '#FFFFFF' : '#00A187'}
           >
-            {tag}
+            {tag.toString().slice(0, 7)}
           </Tag>
         </ContainerRow>
         <Spacer size={'.5rem'} />

@@ -89,8 +89,8 @@ const useStyles = createUseStyles(theme => {
 })
 
 const maxScrollCount = 20
-const noop = () => null
-const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
+
+const TextSearchPage = () => {
   const FILTER_DEFAULT = 'all'
   const c = useStyles()
   const [endOfModels, setEndOfModels] = useState(false)
@@ -105,7 +105,7 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
 
   const setSearchFilters = useCallback(
     ({ scopeFilter }) => {
-      if (scopeFilter !== filter) {
+      if (scopeFilter !== filter && scopeFilter) {
         history.push(`?filter=${scopeFilter}`)
       }
     },
@@ -113,7 +113,7 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
   )
 
   const textModels = R.path(['data'], textSearchResults) || []
-  const { endOfData, isLoading, isError, pageToLoad } = textSearchResults
+  const { endOfData, isLoading, isLoaded, isError, pageToLoad } = textSearchResults
   const isScrollPaused = useMemo(() => !pageToLoad || isLoading || endOfData, [
     endOfData,
     isLoading,
@@ -202,11 +202,10 @@ const TextSearchPage = ({ onFindRelated = noop, onReportModel = noop }) => {
         <>
           <TextSearchResults
             isError={isError}
+            isLoaded={isLoaded}
             isLoading={isLoading}
             items={models}
             onThangsClick={onThangsClick}
-            onFindRelated={onFindRelated}
-            onReportModel={onReportModel}
             searchScope={filter}
             searchTerm={searchQuery}
             spotCheckIndex={spotCheck}

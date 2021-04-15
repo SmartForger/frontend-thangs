@@ -126,7 +126,6 @@ const RecentFilesView = ({
         )}
         <Spacer size='4rem' />
         <Title headerLevel={HeaderLevel.tertiary}>Recent</Title>
-        <Spacer size='2rem' />
         <FileTable
           files={files}
           handleChangeFolder={handleChangeFolder}

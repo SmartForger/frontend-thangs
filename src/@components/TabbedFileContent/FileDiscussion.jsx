@@ -74,8 +74,8 @@ const FileDiscussion = props => {
       <ul className={c.FileDiscussion_List}>
         {comments && comments.length
           ? comments.map((comment, i) =>
-            renderTypedComment({ modelId: model.id, comment, key: i, currentUser })
-          )
+              renderTypedComment({ modelId: model.id, comment, key: i, currentUser })
+            )
           : null}
       </ul>
       {(loading || !loaded) && (

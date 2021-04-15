@@ -4,11 +4,11 @@ import { Helmet } from 'react-helmet'
 import * as R from 'ramda'
 import { format } from 'date-fns'
 import {
-  ARDownloadActionMenu,
   Button,
   CommentsForModel,
   ContainerColumn,
   Divider,
+  DownloadARLink,
   HoopsModelViewer,
   Layout,
   LikeModelButton,
@@ -44,6 +44,7 @@ import {
 } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
+import { canDownloadAR } from '@utilities'
 import { pageview, track, perfTrack } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
@@ -332,102 +333,6 @@ const DownloadLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
         buttonText
       )}
     </Button>
-  )
-}
-
-const UNSUPPORTED_EXTENSIONS = ['igs', 'step', 'x_t']
-
-const canDownloadAR = model => {
-  const { parts } = model
-  if (parts) {
-    // Only check the primary part since that is the one we export to AR
-    let primaryPart = null
-    if (parts.length > 1) {
-      primaryPart = R.find(R.propEq('isPrimary', true))(parts) || parts[0]
-    } else {
-      primaryPart = parts[0]
-    }
-
-    const partExt = primaryPart.filename.split('.').pop()
-    return !UNSUPPORTED_EXTENSIONS.includes(partExt.toLowerCase())
-  }
-
-  return false
-}
-
-const DownloadARLink = ({ model, isAuthedUser, openSignupOverlay = noop }) => {
-  const c = useStyles()
-  const isARSupported = useMemo(() => canDownloadAR(model), [model])
-  const { dispatch } = useStoreon()
-  const downloadModel = useCallback(
-    format => {
-      if (format !== 'android') return //TEMP - Remove once ios is available
-      dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
-        id: model.id,
-        format,
-        onFinish: downloadUrl => {
-          window.location.assign(downloadUrl)
-          track('Download AR', { format, modelId: model.id })
-        },
-      })
-    },
-    [dispatch, model.id]
-  )
-
-  const handleClick = useCallback(
-    format => {
-      if (isAuthedUser) {
-        downloadModel(format)
-      } else {
-        openSignupOverlay('Join to download AR models.', 'Download')
-        track('SignUp Prompt Overlay', { source: 'Download AR', format })
-      }
-    },
-    [downloadModel, isAuthedUser, openSignupOverlay]
-  )
-
-  return (
-    <>
-      {isARSupported ? (
-        <div className={c.Model_DownloadAR}>
-          <ARDownloadActionMenu onChange={handleClick} />
-        </div>
-      ) : (
-        <></>
-      )}
-    </>
-  )
-}
-
-const ViewARLink = ({ model }) => {
-  const c = useStyles({})
-  const { parts } = model
-  let primaryPart = null
-  if (parts) {
-    if (parts.length > 1) {
-      primaryPart = R.find(R.propEq('isPrimary', true))(parts) || parts[0]
-    } else {
-      primaryPart = parts[0]
-    }
-  }
-  if (!primaryPart || !primaryPart.androidUrl) return null
-  return (
-    <>
-      <Spacer size={'1rem'} />
-      <a
-        className={c.ViewARLink}
-        href={`intent://arvr.google.com/scene-viewer/1.0?file=${primaryPart?.androidUrl?.replace(
-          '#',
-          encodeURIComponent('#')
-        )}#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-      >
-        <Button secondary onClick={e => e.preventDefault()}>
-          View on&nbsp;
-          <AndroidIcon />
-          Mobile [beta]
-        </Button>
-      </a>
-    </>
   )
 }
 

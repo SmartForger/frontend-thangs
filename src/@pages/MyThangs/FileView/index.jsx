@@ -4,12 +4,11 @@ import { useStoreon } from 'storeon/react'
 import {
   ContainerColumn,
   ContainerRow,
-  // CollaboratorInfo,
-  // HoopsModelViewer,
   Spacer,
   FileHeader,
   ModelStatBar,
   ModelInfoBox,
+  ModelCollaboratorBox,
   TabbedFileContent,
 } from '@components'
 import { CompareModels } from '@physna/compare-ui'
@@ -44,6 +43,7 @@ const useStyles = createUseStyles(theme => {
 
       '& > div': {
         width: '100%',
+        boxSizing: 'border-box',
       },
     },
     FileView_RightColumn: {
@@ -167,6 +167,7 @@ const FileView = ({ className, folders }) => {
                 modelPrivacy='Private'
               />
               <Spacer size='2rem' />
+              <ModelCollaboratorBox />
               {/* <CollaboratorInfo owner={modelData.owner} collaborators={[]} /> */}
             </ContainerColumn>
             <Spacer size='4rem' />

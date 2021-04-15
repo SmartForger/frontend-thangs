@@ -48,7 +48,7 @@ const ModelHistory = ({ modelHistory = [], isLoading, isError, error }) => {
       <div key={`entry_${ind}`} className={c.ModelHistory}>
         <CommitNode
           message={entry.message}
-          tag={entry.sha}
+          tag={entry.sha && entry.sha.substring(0, 7)}
           created={entry.commits[0].created}
           author={entry.commits[0].owner}
           isActive={ind === 0}

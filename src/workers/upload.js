@@ -25,7 +25,7 @@ async function uploadSingleFile({ id, file }, uploadedUrlData) {
   }
 }
 
-async function uploadMultipleFiles({ files, directory }) {
+async function uploadMultipleFiles({ files, directory, modelId }) {
   try {
     const { data: uploadedUrlData } = await api({
       method: 'POST',
@@ -33,6 +33,7 @@ async function uploadMultipleFiles({ files, directory }) {
       body: {
         fileNames: files.map(f => f.file.name),
         directory,
+        modelId,
       },
     })
 

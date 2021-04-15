@@ -5,7 +5,7 @@ import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Body } from '@physna/voxel-ui/@atoms/Typography'
 
 import * as types from '@constants/storeEventTypes'
-import { OverlayWrapper, SearchInput, Spacer, PartTable } from '@components'
+import { OverlayWrapper, SearchInput, Spacer, Spinner, PartTable } from '@components'
 import { useOverlay } from '@hooks'
 import { overlayview } from '@utilities/analytics'
 
@@ -26,7 +26,7 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const SelectVersionModel = ({ model, part, files, fileIndex }) => {
+const SelectVersionModel = ({ model, partId, files, fileIndex }) => {
   const c = useStyles()
   const { dispatch } = useStoreon()
   const [selectedParts, setSelectedParts] = useState([])
@@ -67,8 +67,8 @@ const SelectVersionModel = ({ model, part, files, fileIndex }) => {
           animateIn: false,
           windowed: true,
           dialogue: true,
-          model: model || part,
-          part: part || model,
+          model,
+          partId,
           files,
         },
       })
@@ -81,7 +81,7 @@ const SelectVersionModel = ({ model, part, files, fileIndex }) => {
           windowed: true,
           dialogue: true,
           model,
-          part,
+          partId,
           files,
           fileIndex: fileIndex + 1,
         },
@@ -94,7 +94,7 @@ const SelectVersionModel = ({ model, part, files, fileIndex }) => {
     files,
     lastFile,
     model,
-    part,
+    partId,
     selectedParts,
     setOverlay,
   ])
@@ -109,8 +109,10 @@ const SelectVersionModel = ({ model, part, files, fileIndex }) => {
           windowed: true,
           dialogue: true,
           action: 'update',
-          model,
-          part,
+          versionData: {
+            modelId: model,
+            partId,
+          },
         },
       })
     } else {
@@ -122,13 +124,13 @@ const SelectVersionModel = ({ model, part, files, fileIndex }) => {
           windowed: true,
           dialogue: true,
           model,
-          part,
+          partId,
           files,
           fileIndex: fileIndex - 1,
         },
       })
     }
-  }, [fileIndex, files, model, part, setOverlay])
+  }, [fileIndex, files, model, partId, setOverlay])
 
   useEffect(() => {
     overlayview('SelectVersionModel')

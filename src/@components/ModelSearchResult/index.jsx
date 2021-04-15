@@ -1,14 +1,26 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
+import classnames from 'classnames'
 import { Link } from 'react-router-dom'
+
+import { createUseStyles } from '@physna/voxel-ui/@style'
+
+import {
+  Card,
+  ModelThumbnail,
+  UserInline,
+  SearchResultDetailsMenu,
+  SearchResultFooter,
+  Spacer,
+  ContainerRow,
+} from '@components'
+import { useCurrentUserId } from '@hooks'
+import { truncateString } from '@utilities'
+import { track } from '@utilities/analytics'
+import { SearchActionContext } from '@pages/SearchResults/SearchActions'
+
 import { ReactComponent as ChatIcon } from '@svg/icon-comment.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as ExternalLinkIcon } from '@svg/external-link.svg'
-import { Card, ModelThumbnail, UserInline } from '@components'
-import classnames from 'classnames'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import { useCurrentUserId } from '@hooks'
-import { truncateString, shouldShowViewRelated } from '@utilities'
-import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -58,7 +70,7 @@ const useStyles = createUseStyles(theme => {
     },
     ModelSearchResult_Column: {
       display: 'flex',
-      justifyContent: 'space-between',
+      justifyContent: 'center',
       flexDirection: 'column',
       height: '100%',
     },
@@ -67,9 +79,6 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
-    },
-    ModelSearchResult_UserDetails: {
-      display: 'flex',
     },
     ModelSearchResult_Name: {
       fontSize: '1.125rem',
@@ -94,6 +103,7 @@ const useStyles = createUseStyles(theme => {
     },
     ModelSearchResult_ExternalUrlWrapper: {
       display: 'flex',
+      alignItems: 'center',
       whiteSpace: 'pre-wrap',
       wordBreak: 'break-word',
 
@@ -190,45 +200,38 @@ const ThangsModelDetails = ({
   return (
     <div className={c.ModelSearchResult_Column}>
       <div className={c.ModelSearchResult_Content}>
-        <Anchor to={{ pathname: modelPath, state: { prevPath: window.location.href } }}>
-          <div className={c.ModelSearchResult_UserDetails}>
-            <UserInline size='1.25rem' user={model.owner} isSearchResult={true} />
-            <div className={c.ModelSearchResult_Row}>
-              <div className={c.ModelSearchResult_ActivityIndicators}>
-                <span className={c.ModelSearchResult_ActivityCount}>
-                  <ChatIcon />
-                  {model.commentsCount}
-                </span>
-                <span className={c.ModelSearchResult_ActivityCount}>
-                  <HeartIcon
-                    className={classnames(c.ModelSearchResult_Icon, {
-                      [c.ModelSearchResult_Icon__liked]: isLiked,
-                    })}
-                  />
-                  {modelLikeCount}
-                </span>
+        <ContainerRow alignItems='center'>
+          <Anchor to={{ pathname: modelPath, state: { prevPath: window.location.href } }}>
+            <ContainerRow alignItems='center'>
+              <UserInline size='1.25rem' user={model.owner} isSearchResult={true} />
+              <div className={c.ModelSearchResult_Row}>
+                <div className={c.ModelSearchResult_ActivityIndicators}>
+                  <span className={c.ModelSearchResult_ActivityCount}>
+                    <ChatIcon />
+                    {model.commentsCount}
+                  </span>
+                  <span className={c.ModelSearchResult_ActivityCount}>
+                    <HeartIcon
+                      className={classnames(c.ModelSearchResult_Icon, {
+                        [c.ModelSearchResult_Icon__liked]: isLiked,
+                      })}
+                    />
+                    {modelLikeCount}
+                  </span>
+                </div>
               </div>
-            </div>
-          </div>
+            </ContainerRow>
+          </Anchor>
+          <SearchResultDetailsMenu model={model} onReportModel={onReportModel} />
+        </ContainerRow>
+        <Anchor to={{ pathname: modelPath, state: { prevPath: window.location.href } }}>
           <div className={c.ModelSearchResult_Name}>{formattedModelName}</div>
           <div className={c.ModelSearchResult_Description}>
             {formattedModelDescription}
           </div>
         </Anchor>
-        {shouldShowViewRelated(model) && (
-          <div
-            className={c.ModelSearchResult_FindRelatedLink}
-            onClick={() => handleFindRelated({ model })}
-          >
-            View related models
-          </div>
-        )}
-      </div>
-      <div
-        className={c.ModelSearchResult_ReportModelLink}
-        onClick={() => onReportModel({ model })}
-      >
-        Report Model
+        <Spacer size={'1.5rem'} />
+        <SearchResultFooter model={model} onFindRelated={handleFindRelated} />
       </div>
     </div>
   )
@@ -247,42 +250,38 @@ const ExternalModelDetails = ({
   return (
     <div className={c.ModelSearchResult_Column}>
       <div className={c.ModelSearchResult_Content}>
+        <div className={c.ModelSearchResult_ExternalUrlWrapper}>
+          <Anchor
+            to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
+            attributionUrl={modelAttributionUrl}
+          >
+            <ContainerRow alignItems='center'>
+              <div>
+                <span
+                  className={c.ModelSearchResult_ExternalUrl}
+                  title={model.attributionUrl}
+                >
+                  {model.attributionUrl}
+                </span>
+              </div>
+              <div>
+                <ExternalLinkIcon />
+              </div>
+            </ContainerRow>
+          </Anchor>
+          <SearchResultDetailsMenu model={model} onReportModel={onReportModel} />
+        </div>
         <Anchor
           to={{ pathname: modelPath, state: { prevPath: window.location.href } }}
           attributionUrl={modelAttributionUrl}
         >
-          <div className={c.ModelSearchResult_ExternalUrlWrapper}>
-            <div>
-              <span
-                className={c.ModelSearchResult_ExternalUrl}
-                title={model.attributionUrl}
-              >
-                {model.attributionUrl}
-              </span>
-            </div>
-            <div>
-              <ExternalLinkIcon />
-            </div>
-          </div>
           <div className={c.ModelSearchResult_Name}>{modelTitle || modelFileName}</div>
           <div className={c.ModelSearchResult_Description}>
             {formattedModelDescription}
           </div>
         </Anchor>
-        {shouldShowViewRelated(model) && (
-          <div
-            className={c.ModelSearchResult_FindRelatedLink}
-            onClick={() => handleFindRelated({ model })}
-          >
-            View related models
-          </div>
-        )}
-      </div>
-      <div
-        className={c.ModelSearchResult_ReportModelLink}
-        onClick={() => onReportModel({ model })}
-      >
-        Report Model
+        <Spacer size={'1.5rem'} />
+        <SearchResultFooter model={model} onFindRelated={handleFindRelated} />
       </div>
     </div>
   )
@@ -320,13 +319,13 @@ const ResultContents = ({
   model,
   modelAttributionUrl,
   modelPath,
-  onReportModel = noop,
-  handleFindRelated = noop,
   isLiked,
   searchModelFileName,
   showOwner,
   showSocial,
   showWaldo,
+  onReportModel,
+  handleFindRelated,
 }) => {
   const c = useStyles()
 
@@ -377,10 +376,10 @@ const ModelSearchResult = ({
   withOwner,
   showSocial = true,
   searchModelFileName,
-  onReportModel = noop,
-  handleFindRelated = noop,
 }) => {
   const c = useStyles()
+  const { reportModel, findRelated } = useContext(SearchActionContext)
+
   const currentUserId = parseInt(useCurrentUserId())
   const showOwner = withOwner && !!model.owner
   const isLiked = model && model.likes && model.likes.includes(currentUserId)
@@ -408,8 +407,8 @@ const ModelSearchResult = ({
         modelAttributionUrl={modelAttributionUrl}
         searchModelFileName={searchModelFileName}
         modelPath={modelPath}
-        onReportModel={onReportModel}
-        handleFindRelated={handleFindRelated}
+        onReportModel={reportModel}
+        handleFindRelated={findRelated}
       />
     </div>
   )

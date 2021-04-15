@@ -515,7 +515,7 @@ const FileTable = ({
   useEffect(() => {
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect()
-      setMaxHeight(window.innerHeight - rect.top - heightOffset)
+      setMaxHeight(Math.max(window.innerHeight - rect.top - heightOffset, 500))
     }
   }, [heightOffset])
 
@@ -554,6 +554,7 @@ const FileTable = ({
               itemHeight={48}
               levelPadding={0}
               maxHeight={maxHeight}
+              minHeight={500}
               nodes={allNodes}
               renderNode={renderNode}
             />

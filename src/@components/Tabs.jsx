@@ -33,19 +33,29 @@ const useStyles = createUseStyles(theme => {
   }
 })
 const noop = () => null
-const Tabs = ({ className, options = [], disabled = false }) => {
+const Tabs = ({
+  className,
+  options = [],
+  disabled = false,
+  onChange = noop,
+  selectedValue,
+}) => {
   const c = useStyles({})
   return (
     <div className={classnames(className, c.Tabs_Wrapper)}>
       <div className={c.Tabs}>
         {options.map((option, ind) => {
-          const { label, selected, onClick = noop } = option
+          const { label, value } = option
+          const handleChange = () => {
+            onChange(value)
+          }
+          const selected = selectedValue === value
           return (
             <div key={`Tab_${ind}`}>
               <Button
                 className={c.Tabs_Button}
                 tertiary={!selected}
-                onClick={disabled ? noop : onClick}
+                onClick={disabled ? noop : handleChange}
               >
                 {label}
               </Button>

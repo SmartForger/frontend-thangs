@@ -1,17 +1,14 @@
 import React from 'react'
 import { useStoreon } from 'storeon/react'
-import ModelStatBar from './ModelStatBar'
+import ModelCollaboratorBox from './ModelCollaboratorBox'
 
-const ModelStatBarContainer = props => {
+const ModelCollaboratorBoxContainer = props => {
   const { dispatch, model } = useStoreon('model')
-  const { modelHistory } = useStoreon('modelHistory')
-
   const { data = [], isLoading, isError, error } = model
   return (
-    <ModelStatBar
+    <ModelCollaboratorBox
       {...props}
       modelData={data}
-      history={modelHistory.data}
       dispatch={dispatch}
       isLoading={isLoading}
       isError={isError}
@@ -20,6 +17,6 @@ const ModelStatBarContainer = props => {
   )
 }
 
-ModelStatBarContainer.displayName = 'ModelStatBarContainer'
+ModelCollaboratorBoxContainer.displayName = 'ModelCollaboratorBoxContainer'
 
-export default ModelStatBarContainer
+export default ModelCollaboratorBoxContainer

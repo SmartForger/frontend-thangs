@@ -122,10 +122,14 @@ export const ActionMenuPortal = ({ actionMenuRef, className, scrollTop, mobileOn
               <Spacer size={'2rem'} className={c.ActionMenuContent_NoFlex} />
               <div className={c.ActionMenuContent_FullWidth}>
                 <Spacer size={'2rem'} />
-                <Title headerLevel={HeaderLevel.tertiary}>
-                  {actionMenuData.actionBarTitle}
-                </Title>
-                <Spacer size={'1.5rem'} />
+                {actionMenuData?.actionBarTitle?.length > 0 && (
+                  <>
+                    <Title headerLevel={HeaderLevel.tertiary}>
+                      {actionMenuData.actionBarTitle}
+                    </Title>
+                    <Spacer size={'1.5rem'} />
+                  </>
+                )}
                 <ActionMenuComponent {...actionMenuData} />
               </div>
               <Spacer size={'2rem'} className={c.ActionMenuContent_NoFlex} />
