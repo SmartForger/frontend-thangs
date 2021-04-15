@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Compare, Spacer, Textarea, OverlayWrapper } from '@components'
 import { useForm } from '@hooks'
 import { createUseStyles } from '@physna/voxel-ui/@style'
@@ -41,17 +41,25 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const ReviewVersion = ({ model = {}, part = {}, files }) => {
+const ReviewVersion = () => {
   const c = useStyles()
-  const { dispatch, uploadFiles = {} } = useStoreon('uploadFiles')
-  const { formData } = uploadFiles
+  const { dispatch, uploadFiles = {}, model = {} } = useStoreon('model', 'uploadFiles')
+  const { data: files = {}, formData } = uploadFiles
+  const { data: modelData = {}, isLoading: isLoadingModel } = model
   const [waiting, setWaiting] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
   const { setOverlay } = useOverlay()
-  const modelId = model && model.id
-  const initialState = {
-    message: `Updated ${part && part.name}.`,
-  }
+  const modelId = modelData && modelData.id
+  const initialState = useMemo(() => {
+    const partNames = Object.keys(files)
+      .map(fileKey => {
+        return formData[fileKey].previousParts.map(part => part.name)
+      })
+      .flat()
+    return {
+      message: `Updated ${partNames.join(', ')}.`,
+    }
+  }, [files, formData])
 
   const { onFormSubmit, onInputChange, inputState } = useForm({
     initialState,
@@ -123,7 +131,7 @@ const ReviewVersion = ({ model = {}, part = {}, files }) => {
       overlaySubTitle={
         'Review your model changes and write a message to keep track of your version history.'
       }
-      isLoading={waiting}
+      isLoading={waiting || isLoadingModel}
       onCancel={handleBack}
       onContinue={onFormSubmit(formSubmit)}
       cancelText={'Back'}

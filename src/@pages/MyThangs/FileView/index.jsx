@@ -6,10 +6,12 @@ import {
   ContainerRow,
   Spacer,
   FileHeader,
+  HoopsModelViewer,
   ModelStatBar,
   ModelInfoBox,
   ModelCollaboratorBox,
   TabbedFileContent,
+  Tabs,
 } from '@components'
 import { CompareModels } from '@physna/compare-ui'
 import { createUseStyles } from '@physna/voxel-ui/@style'
@@ -75,6 +77,9 @@ const useStyles = createUseStyles(theme => {
     FileView_CompareWrapper: {
       height: '25rem',
     },
+    FileView_Tabs: {
+      justifyContent: 'center',
+    },
   }
 })
 
@@ -92,6 +97,7 @@ const FileView = ({ className, folders }) => {
   const { fileId: id } = useParams()
   // eslint-disable-next-line no-unused-vars
   const [activePart, setActivePart] = useState([id])
+  const [activeViewer, setActiveViewer] = useState('single')
   const { dispatch, model = {}, modelHistory = {} } = useStoreon('model', 'modelHistory')
   const { data: modelData, isLoading } = model
   const {
@@ -110,7 +116,19 @@ const FileView = ({ className, folders }) => {
   }, [])
 
   const { collaboratorCount, likeCount } = getCounts(modelData)
-
+  const handleViewerChange = useCallback(viewerType => {
+    setActiveViewer(viewerType)
+  }, [])
+  const viewerOptions = [
+    {
+      label: 'Single',
+      value: 'single',
+    },
+    {
+      label: 'Compare',
+      value: 'compare',
+    },
+  ]
   return (
     <main className={classnames(className, c.FileView)}>
       {isLoading || !modelData ? (
@@ -121,35 +139,46 @@ const FileView = ({ className, folders }) => {
           <FileHeader file={modelData} folders={folders} />
           {/* This needs to know the modelData and the names and ids of all parent folders of model */}
           <Spacer size='2rem' />
-          {/* <HoopsModelViewer
-            className={c.Model_ModelViewer}
-            model={modelData}
-            minimizeTools={true}
-            initialSelectedModel={activePart}
-          /> */}
-          <ContainerRow className={c.FileView_CompareWrapper}>
-            <CompareModels
-              modelAId={'367ccd6b-003f-4ae9-9d25-22cf3afc0a8f'}
-              modelBId={'b2ded074-3c20-474c-858b-1dbdec39ca27'}
-              modelABucket={'dev-tenant1-headless-bucket'}
-              modelBBucket={'dev-tenant1-headless-bucket'}
-              destinationBucket={'localdev-najela-alignment-service'}
-              comparisonServiceEndpoint={
-                'https://staging-comparison-service-dot-gcp-and-physna.uc.r.appspot.com/'
-              }
-              comparisonsToDisplay={{
-                model_a: true,
-                model_b: false,
-                difference_a: true,
-                difference_b: true,
-                intersection_a: false,
-                intersection_b: false,
-              }}
-              variant={{
-                type: 'sideBySide',
-              }}
+          <Tabs
+            className={c.FileView_Tabs}
+            onChange={handleViewerChange}
+            options={viewerOptions}
+            selectedValue={activeViewer}
+          />
+          <Spacer size='1rem' />
+          {activeViewer === 'single' && (
+            <HoopsModelViewer
+              className={c.Model_ModelViewer}
+              model={modelData}
+              minimizeTools={true}
+              initialSelectedModel={activePart}
             />
-          </ContainerRow>
+          )}
+          {activeViewer === 'compare' && (
+            <ContainerRow className={c.FileView_CompareWrapper}>
+              <CompareModels
+                modelAId={'367ccd6b-003f-4ae9-9d25-22cf3afc0a8f'}
+                modelBId={'b2ded074-3c20-474c-858b-1dbdec39ca27'}
+                modelABucket={'dev-tenant1-headless-bucket'}
+                modelBBucket={'dev-tenant1-headless-bucket'}
+                destinationBucket={'localdev-najela-alignment-service'}
+                comparisonServiceEndpoint={
+                  'https://staging-comparison-service-dot-gcp-and-physna.uc.r.appspot.com/'
+                }
+                comparisonsToDisplay={{
+                  model_a: true,
+                  model_b: false,
+                  difference_a: true,
+                  difference_b: true,
+                  intersection_a: false,
+                  intersection_b: false,
+                }}
+                variant={{
+                  type: 'sideBySide',
+                }}
+              />
+            </ContainerRow>
+          )}
           <Spacer size='2rem' />
           <ContainerRow>
             <ContainerColumn className={c.FileView_LeftColumn}>

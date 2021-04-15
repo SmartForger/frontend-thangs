@@ -9,7 +9,6 @@ import { removeModel, updateLike } from './updater'
 const noop = () => null
 export default store => {
   store.on(types.STORE_INIT, () => ({
-    models: [],
     model: {},
   }))
 
@@ -131,6 +130,7 @@ export default store => {
           status: STATUSES.SAVED,
           atom: 'model',
         })
+        // state.models is found in the thangsStore
         const newModels = removeModel(model, state.models.data)
         store.dispatch(types.UPDATE_MODELS, newModels)
       }

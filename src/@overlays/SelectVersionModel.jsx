@@ -67,9 +67,6 @@ const SelectVersionModel = ({ model, partId, files, fileIndex }) => {
           animateIn: false,
           windowed: true,
           dialogue: true,
-          model,
-          partId,
-          files,
         },
       })
     } else {

@@ -9,7 +9,7 @@ import * as types from '@constants/storeEventTypes'
 import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { track } from '@utilities/analytics'
 import AssemblyInfo from './AssemblyInfo'
-import { useOverlay } from '@hooks'
+import { useWhyDidYouUpdate, useOverlay } from '@hooks'
 
 const NewModelUpload = ({
   activeNode,
@@ -49,11 +49,22 @@ const NewModelUpload = ({
   )
 }
 
+// New Files being uploaded
+// - Multi-upload
+// - handles single, multi, and asm models
+//
+// New Version being upload
+// - Single-upload for Single parts and Multi for multi
+// -
+//
+// Add Part
+// - Multi-upload
+//
 const MultiUpload = ({
-  initData = null,
-  previousVersionModelId,
-  folderId = '',
-  versionData,
+  initData = null, //This is used for when files have pre-uploaded before this overlay shows
+  previousVersionModelId, //This was previously used for v1 versioning, however behaves like forking
+  folderId = '', //preselected folder
+  versionData, //actionType = string, modelId (req), partId (opt)
 }) => {
   const { dispatch, license = {}, uploadFiles = {}, model = {} } = useStoreon(
     'license',
@@ -243,7 +254,7 @@ const MultiUpload = ({
 
       dispatch(types.UPLOAD_FILES, {
         files,
-        modelId: (modelData && modelData.id) || null,
+        modelId: (versionData && versionData.modelId) || null,
       })
 
       if (rejectedFile) {
@@ -311,10 +322,12 @@ const MultiUpload = ({
       }
 
       if (versionData) {
+        //Single Part and Selected Part of Multi/asm flow
         if (modelData?.parts?.length === 1 || versionData?.partId) {
           const currentFileKey = Object.keys(uploadFilesData)[0]
           const currentFile = uploadFilesData[currentFileKey]
           const singlePart = modelData.parts[0]
+          debugger
           dispatch(types.SET_MODEL_INFO, {
             id: currentFile.id,
             formData: {
@@ -329,9 +342,6 @@ const MultiUpload = ({
               animateIn: false,
               windowed: true,
               dialogue: true,
-              model: modelData,
-              part: singlePart,
-              files: uploadFilesData,
             },
           })
         } else {
@@ -436,10 +446,11 @@ const MultiUpload = ({
 
   useEffect(() => {
     if (initData) onDrop(initData.acceptedFiles, initData.rejectedFile, initData.e)
-    if (versionData?.modelId) {
-      dispatch(types.FETCH_MODEL, { id: versionData?.modelId })
+    if (versionData && versionData.modelId) {
+      dispatch(types.FETCH_MODEL, { id: versionData.modelId })
     }
-  }, [dispatch, initData, onDrop, versionData.modelId])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const overlayHeader = useMemo(() => {
     return !activeNode
