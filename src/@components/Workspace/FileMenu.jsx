@@ -83,8 +83,8 @@ const FileMenu = ({ model = {} }) => {
           dialogue: true,
           versionData: {
             modelId: model.id,
+            actionType: 'update',
           },
-          action: 'update',
         },
       })
     },
@@ -220,7 +220,7 @@ const FileMenu = ({ model = {} }) => {
           </div>
         </MenuItem>
       )} */}
-      <Spacer size={'.5rem'} />
+      {/* <Spacer size={'.5rem'} /> */}
       <MenuItem className={c.FileMenu_Item} onClick={handleShare}>
         <div>
           <Spacer size={'1.5rem'} />

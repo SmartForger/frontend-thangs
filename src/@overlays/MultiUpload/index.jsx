@@ -54,7 +54,6 @@ const MultiUpload = ({
   previousVersionModelId,
   folderId = '',
   versionData,
-  action,
 }) => {
   const { dispatch, license = {}, uploadFiles = {}, model = {} } = useStoreon(
     'license',
@@ -242,7 +241,10 @@ const MultiUpload = ({
 
       track('MultiUpload - OnDrop', { amount: files && files.length })
 
-      dispatch(types.UPLOAD_FILES, { files, modelId: (model && model.id) || null })
+      dispatch(types.UPLOAD_FILES, {
+        files,
+        modelId: (modelData && modelData.id) || null,
+      })
 
       if (rejectedFile) {
         const filePath = rejectedFile.path.split('.')
@@ -255,7 +257,7 @@ const MultiUpload = ({
         )
       }
     },
-    [dispatch, model]
+    [dispatch, modelData]
   )
 
   const removeFile = node => {
@@ -308,50 +310,45 @@ const MultiUpload = ({
         return
       }
 
-      if (action !== 'add') {
-        if (model) {
-          if ((model && model.isLeaf) || versionData?.partId) {
-            const currentFileKey = Object.keys(uploadFilesData)[0]
-            const currentFile = uploadFilesData[currentFileKey]
-            const singlePart = model.parts[0]
-            dispatch(types.SET_MODEL_INFO, {
-              id: currentFile.id,
-              formData: {
-                previousParts: [singlePart],
-              },
-            })
+      if (versionData) {
+        if (modelData?.parts?.length === 1 || versionData?.partId) {
+          const currentFileKey = Object.keys(uploadFilesData)[0]
+          const currentFile = uploadFilesData[currentFileKey]
+          const singlePart = modelData.parts[0]
+          dispatch(types.SET_MODEL_INFO, {
+            id: currentFile.id,
+            formData: {
+              previousParts: [singlePart],
+            },
+          })
 
-            setOverlay({
-              isOpen: true,
-              template: 'reviewVersion',
-              data: {
-                animateIn: false,
-                windowed: true,
-                dialogue: true,
-                model,
-                partId: singlePart.id,
-                files: uploadFilesData,
-              },
-            })
-          } else {
-            setOverlay({
-              isOpen: true,
-              template: 'selectVersionModel',
-              data: {
-                animateIn: false,
-                windowed: true,
-                dialogue: true,
-                model,
-                files: uploadFilesData,
-                fileIndex: 0,
-              },
-            })
-          }
-          return
+          setOverlay({
+            isOpen: true,
+            template: 'reviewVersion',
+            data: {
+              animateIn: false,
+              windowed: true,
+              dialogue: true,
+              model: modelData,
+              part: singlePart,
+              files: uploadFilesData,
+            },
+          })
+        } else {
+          setOverlay({
+            isOpen: true,
+            template: 'selectVersionModel',
+            data: {
+              animateIn: false,
+              windowed: true,
+              dialogue: true,
+              model,
+              files: uploadFilesData,
+              fileIndex: 0,
+            },
+          })
         }
-      } else {
-        //Handle Add Part flow
-        //if not already an assembly make it a multipart
+        return
       }
 
       let i = 0
@@ -406,13 +403,13 @@ const MultiUpload = ({
       errorMessage,
       isLoading,
       isLoadingLicense,
-      action,
-      allTreeNodes,
-      model,
       versionData,
+      allTreeNodes,
+      modelData,
       uploadFilesData,
       dispatch,
       setOverlay,
+      model,
       activeView,
       previousVersionModelId,
       submitModels,
@@ -439,16 +436,14 @@ const MultiUpload = ({
 
   useEffect(() => {
     if (initData) onDrop(initData.acceptedFiles, initData.rejectedFile, initData.e)
-    if (versionData) {
-      dispatch(types.FETCH_MODEL, { id: versionData.modelId })
+    if (versionData?.modelId) {
+      dispatch(types.FETCH_MODEL, { id: versionData?.modelId })
     }
-  }, [dispatch, initData, onDrop, versionData])
+  }, [dispatch, initData, onDrop, versionData.modelId])
 
   const overlayHeader = useMemo(() => {
     return !activeNode
-      ? action === 'add'
-        ? 'Upload New Parts'
-        : previousVersionModelId || versionData
+      ? previousVersionModelId || versionData
         ? 'Upload New Version'
         : 'Upload Files'
       : activeNode.isAssembly && activeNode.parentId
@@ -456,7 +451,7 @@ const MultiUpload = ({
       : activeNode.isAssembly
       ? 'New Assembly'
       : partFormTitle
-  }, [action, activeNode, partFormTitle, previousVersionModelId, versionData])
+  }, [activeNode, partFormTitle, previousVersionModelId, versionData])
 
   const fileLength = useMemo(
     () =>
@@ -486,8 +481,9 @@ const MultiUpload = ({
           errorMessage={errorMessage}
           isAssembly={isAssembly}
           multiple={
-            action !== 'add' &&
-            (previousVersionModelId || versionData?.partId || (model && model.isLeaf))
+            previousVersionModelId ||
+            versionData?.partId ||
+            modelData?.parts?.length === 1
               ? false
               : true
           }

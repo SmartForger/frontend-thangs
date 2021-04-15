@@ -477,7 +477,7 @@ export default store => {
             action: 'replacedPart',
             filename: uploadedFiles[file].newFileName,
             size: uploadedFiles[file].size,
-            partIdentifier: part.identifier,
+            partIdentifier: part.partIdentifier,
           })
         })
       })

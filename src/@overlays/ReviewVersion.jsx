@@ -48,8 +48,7 @@ const ReviewVersion = ({ model = {}, part = {}, files }) => {
   const [waiting, setWaiting] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
   const { setOverlay } = useOverlay()
-  // When coming from model page we have model and model.id
-  const modelId = (model && model.id) || (part && part.modelId)
+  const modelId = model && model.id
   const initialState = {
     message: `Updated ${part && part.name}.`,
   }
@@ -64,7 +63,6 @@ const ReviewVersion = ({ model = {}, part = {}, files }) => {
         setWaiting(true)
         dispatch(types.SUBMIT_NEW_VERSION, {
           modelId,
-          part,
           message: inputState.message,
           onFinish: () => {
             dispatch(types.RESET_UPLOAD_FILES)
@@ -88,7 +86,7 @@ const ReviewVersion = ({ model = {}, part = {}, files }) => {
         })
       }
     },
-    [dispatch, modelId, part, setOverlay]
+    [dispatch, modelId, setOverlay]
   )
 
   const handleOnInputChange = useCallback(
@@ -138,14 +136,14 @@ const ReviewVersion = ({ model = {}, part = {}, files }) => {
         </>
       )}
       {Object.keys(files).map((fileKey, ind) => (
-        <>
+        <React.Fragment key={`Compare_${ind}`}>
           <Compare
             key={`CompareViewer_${ind}`}
             model1={formData && formData[fileKey] && formData[fileKey].previousParts}
             model2={files[fileKey]}
           />
           <Spacer size={'1rem'} />
-        </>
+        </React.Fragment>
       ))}
       <form className={c.ReviewVersion_Form}>
         <Textarea

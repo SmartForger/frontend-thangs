@@ -9,15 +9,17 @@ import { removeModel, updateLike } from './updater'
 const noop = () => null
 export default store => {
   store.on(types.STORE_INIT, () => ({
-    models: {},
+    models: [],
+    model: {},
   }))
 
   store.on(types.UPDATE_MODELS, (state, event) => ({
-    models: {
-      ...state.models,
+    model: {
+      ...state.model,
       data: event,
     },
   }))
+
   store.on(
     types.CHANGE_MODEL_STATUS,
     (state, { atom, status = STATUSES.INIT, data }) => ({
@@ -32,13 +34,12 @@ export default store => {
   store.on(
     types.FETCH_MODEL,
     async (state, { id, silentUpdate = false, onFinish = noop, onError = noop }) => {
-      const { data: allModels } = state.models
-      const model = (allModels || []).find(m => m.id === +id)
-      if (model) {
+      const { data: loadedModel = {} } = state.model
+      if (loadedModel.id === id) {
         store.dispatch(types.CHANGE_MODEL_STATUS, {
           status: STATUSES.LOADED,
           atom: 'model',
-          data: model,
+          data: loadedModel,
         })
         return
       }
