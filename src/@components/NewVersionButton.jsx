@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import { useCurrentUserId, useOverlay } from '@hooks'
 import { Pill, Spacer } from '@components'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload-black-sm.svg'

@@ -9,7 +9,7 @@ import * as types from '@constants/storeEventTypes'
 import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { track } from '@utilities/analytics'
 import AssemblyInfo from './AssemblyInfo'
-import { useWhyDidYouUpdate, useOverlay } from '@hooks'
+import { useOverlay } from '@hooks'
 
 const NewModelUpload = ({
   activeNode,
@@ -54,7 +54,8 @@ const NewModelUpload = ({
 // - handles single, multi, and asm models
 //
 // New Version being upload
-// - Single-upload for Single parts and Multi for multi
+// - SinglePart-upload :check:
+// - MultiPart-MultiPartUpload :wip:
 // -
 //
 // Add Part
@@ -143,8 +144,8 @@ const MultiUpload = ({
           ? newNode.subIds.map(subId => formNode(subId))
           : []
         : Object.values(newTreeData)
-            .filter(node => !node.parentId)
-            .map(node => formNode(node.id))
+          .filter(node => !node.parentId)
+          .map(node => formNode(node.id))
 
       newNode.treeValid =
         newNode.valid &&
@@ -226,8 +227,8 @@ const MultiUpload = ({
             setErrorMessage(
               `${file.name} is not a supported file type.
               Supported file extensions include ${MODEL_FILE_EXTS.map(
-                e => ' ' + e.replace('.', '')
-              )}.`
+    e => ' ' + e.replace('.', '')
+  )}.`
             )
             return null
           }
@@ -268,7 +269,7 @@ const MultiUpload = ({
         )
       }
     },
-    [dispatch, modelData]
+    [dispatch, versionData]
   )
 
   const removeFile = node => {
@@ -326,8 +327,10 @@ const MultiUpload = ({
         if (modelData?.parts?.length === 1 || versionData?.partId) {
           const currentFileKey = Object.keys(uploadFilesData)[0]
           const currentFile = uploadFilesData[currentFileKey]
-          const singlePart = modelData.parts[0]
-          debugger
+          const singlePart = versionData?.partId
+            ? modelData.parts.find(part => part.partIdentifier === versionData?.partId)
+            : modelData.parts[0]
+
           dispatch(types.SET_MODEL_INFO, {
             id: currentFile.id,
             formData: {
@@ -345,6 +348,7 @@ const MultiUpload = ({
             },
           })
         } else {
+          //Multipart - no part pre-selected
           setOverlay({
             isOpen: true,
             template: 'selectVersionModel',
@@ -352,8 +356,6 @@ const MultiUpload = ({
               animateIn: false,
               windowed: true,
               dialogue: true,
-              model,
-              files: uploadFilesData,
               fileIndex: 0,
             },
           })
@@ -419,7 +421,6 @@ const MultiUpload = ({
       uploadFilesData,
       dispatch,
       setOverlay,
-      model,
       activeView,
       previousVersionModelId,
       submitModels,
@@ -458,17 +459,17 @@ const MultiUpload = ({
         ? 'Upload New Version'
         : 'Upload Files'
       : activeNode.isAssembly && activeNode.parentId
-      ? 'Sub Assembly'
-      : activeNode.isAssembly
-      ? 'New Assembly'
-      : partFormTitle
+        ? 'Sub Assembly'
+        : activeNode.isAssembly
+          ? 'New Assembly'
+          : partFormTitle
   }, [activeNode, partFormTitle, previousVersionModelId, versionData])
 
   const fileLength = useMemo(
     () =>
       uploadFilesData
         ? Object.keys(uploadFilesData).filter(fileId => uploadFilesData[fileId].name)
-            .length
+          .length
         : 0,
     [uploadFilesData]
   )
@@ -503,9 +504,7 @@ const MultiUpload = ({
           setErrorMessage={setErrorMessage}
           setIsAssembly={setIsAssembly}
           setWarningMessage={setWarningMessage}
-          showAssemblyToggle={
-            validated && singlePartsCount > 1 && !model && !versionData?.partId
-          }
+          showAssemblyToggle={validated && singlePartsCount > 1 && !versionData}
           uploadFiles={uploadFilesData}
           uploadTreeData={uploadTreeData}
           validated={validated}

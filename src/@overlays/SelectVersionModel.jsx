@@ -5,7 +5,7 @@ import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Body } from '@physna/voxel-ui/@atoms/Typography'
 
 import * as types from '@constants/storeEventTypes'
-import { OverlayWrapper, SearchInput, Spacer, Spinner, PartTable } from '@components'
+import { OverlayWrapper, SearchInput, Spacer, PartTable } from '@components'
 import { useOverlay } from '@hooks'
 import { overlayview } from '@utilities/analytics'
 
@@ -26,9 +26,11 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const SelectVersionModel = ({ model, partId, files, fileIndex }) => {
+const SelectVersionModel = ({ fileIndex }) => {
   const c = useStyles()
-  const { dispatch } = useStoreon()
+  const { dispatch, uploadFiles = {}, model = {} } = useStoreon('model', 'uploadFiles')
+  const { data: files = {} } = uploadFiles
+  const { data: modelData = {}, isLoading: isLoadingModel } = model
   const [selectedParts, setSelectedParts] = useState([])
   const [inputState, setInputState] = useState({
     filter: '',
@@ -48,7 +50,7 @@ const SelectVersionModel = ({ model, partId, files, fileIndex }) => {
   }, [])
 
   const handleContinue = useCallback(() => {
-    const previousParts = model.parts.filter(part =>
+    const previousParts = modelData.parts.filter(part =>
       selectedParts.includes(part.partIdentifier)
     )
 
@@ -77,9 +79,6 @@ const SelectVersionModel = ({ model, partId, files, fileIndex }) => {
           animateIn: false,
           windowed: true,
           dialogue: true,
-          model,
-          partId,
-          files,
           fileIndex: fileIndex + 1,
         },
       })
@@ -88,10 +87,8 @@ const SelectVersionModel = ({ model, partId, files, fileIndex }) => {
     currentFile.id,
     dispatch,
     fileIndex,
-    files,
     lastFile,
-    model,
-    partId,
+    modelData.parts,
     selectedParts,
     setOverlay,
   ])
@@ -107,8 +104,7 @@ const SelectVersionModel = ({ model, partId, files, fileIndex }) => {
           dialogue: true,
           action: 'update',
           versionData: {
-            modelId: model,
-            partId,
+            modelId: model.id,
           },
         },
       })
@@ -120,14 +116,11 @@ const SelectVersionModel = ({ model, partId, files, fileIndex }) => {
           animateIn: false,
           windowed: true,
           dialogue: true,
-          model,
-          partId,
-          files,
           fileIndex: fileIndex - 1,
         },
       })
     }
-  }, [fileIndex, files, model, partId, setOverlay])
+  }, [fileIndex, model, setOverlay])
 
   useEffect(() => {
     overlayview('SelectVersionModel')
@@ -145,6 +138,7 @@ const SelectVersionModel = ({ model, partId, files, fileIndex }) => {
       onContinue={handleContinue}
       cancelText={'Back'}
       continueText={'Continue'}
+      isLoading={isLoadingModel}
     >
       <div className={c.SelectVersionModel_NewFile}>
         <FileIcon />
@@ -155,7 +149,7 @@ const SelectVersionModel = ({ model, partId, files, fileIndex }) => {
       <SearchInput onChange={handleFilterChange} />
       <Spacer size={'.5rem'} />
       <PartTable
-        model={model}
+        model={modelData}
         selectedParts={selectedParts}
         setSelectedParts={setSelectedParts}
         filterTerm={inputState.filter}
