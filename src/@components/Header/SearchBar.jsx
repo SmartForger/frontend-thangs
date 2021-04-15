@@ -146,7 +146,7 @@ const SearchBar = ({ showSearchTextFlash = false, isMobile }) => {
   const t = useTranslations({})
   const [searchTerm, setSearchTerm] = useState(undefined)
   const [showUploadText, setShowUploadText] = useState(false)
-  const filter = useQuery('filter')
+  const filter = useQuery('filter') || ''
 
   const handleSearchSubmit = useCallback(
     e => {
