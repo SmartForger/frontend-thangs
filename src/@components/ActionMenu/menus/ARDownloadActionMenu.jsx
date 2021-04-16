@@ -74,7 +74,7 @@ const ARDownloadActionMenu = ({
         value: 'android',
       },
       {
-        label: 'Download for iOS (Coming Soon)',
+        label: 'Download for iOS',
         value: 'ios',
       },
     ],

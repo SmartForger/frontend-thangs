@@ -1798,14 +1798,6 @@
   resolved "https://registry.yarnpkg.com/@open-draft/until/-/until-1.0.3.tgz#db9cc719191a62e7d9200f6e7bab21c5b848adca"
   integrity sha512-Aq58f5HiWdyDlFffbbSjAlv596h/cOnt2DO1w3DOC7OJ5EHs0hd/nycJfiu9RJbT6Yk6F1knnRRXNSpxoIVZ9Q==
 
-"@physna/compare-ui@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@physna/compare-ui/-/compare-ui-0.4.0.tgz#24e372112b4e7e6e347212cec30a61440cdf13d7"
-  integrity sha512-EcIxA6/n8BLHiHpf5/IgAFXUzyiw04vQ9eYotuHZngGctcLw23oxU0L29zQtAtQY888EoosO4KFYQHANa1znPg==
-  dependencies:
-    "@physna/voxel-ui" "^0.4.0"
-    axios "^0.21.1"
-
 "@physna/voxel-ui@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@physna/voxel-ui/-/voxel-ui-0.4.0.tgz#a76ecb26b0cfd2fea24e604a66028270391b5bd4"
