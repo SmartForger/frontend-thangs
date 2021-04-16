@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 
 import { ContainerRow, DownloadARLink, Spacer } from '@components'
-import { shouldShowViewRelated } from '@utilities'
+import { shouldShowViewRelated, canDownloadAR } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -21,6 +21,7 @@ const noop = () => null
 
 const SearchResultFooter = ({ model, onFindRelated }) => {
   const c = useStyles()
+  const isARSupported = useMemo(() => canDownloadAR(model), [model])
 
   return (
     <ContainerRow>
@@ -39,16 +40,19 @@ const SearchResultFooter = ({ model, onFindRelated }) => {
           <Spacer size={'1rem'} />
         </>
       )}
-      <DownloadARLink
-        model={model}
-        isAuthedUser={true}
-        openSignupOverlay={noop}
-        TargetComponent={({ onClick = noop }) => (
-          <div onClick={onClick} className={c.SearchResultFooter_Link}>
-            Download AR Model
-          </div>
-        )}
-      />
+      {isARSupported && (
+        <DownloadARLink
+          model={model}
+          isAuthedUser={true}
+          openSignupOverlay={noop}
+          downloadTrackingEvent='Download AR from Search'
+          TargetComponent={({ onClick = noop }) => (
+            <div onClick={onClick} className={c.SearchResultFooter_Link}>
+              Download AR Model
+            </div>
+          )}
+        />
+      )}
     </ContainerRow>
   )
 }
