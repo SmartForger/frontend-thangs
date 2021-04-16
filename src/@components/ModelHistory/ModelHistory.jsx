@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Spacer, Spinner } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import ErrorMessage from '../ErrorMessage'
@@ -24,8 +24,31 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const ModelHistory = ({ modelHistory = [], isLoading, isError, error }) => {
+const ModelHistory = ({
+  modelHistory = [],
+  modelData = {},
+  isLoading,
+  isError,
+  error,
+}) => {
   const c = useStyles()
+  const fakeFirstCommit = useMemo(() => {
+    const commits = modelData.parts.map(part => {
+      return {
+        action: 'addPart',
+        created: modelData.created,
+        owner: modelData.owner,
+        partIdentifier: part.partIdentifier,
+        size: part.size,
+      }
+    })
+
+    return {
+      commits,
+      message: 'Created new model',
+      sha: 'Life',
+    }
+  }, [modelData])
 
   if (isLoading) return <Spinner />
   if (isError) {
@@ -36,14 +59,14 @@ const ModelHistory = ({ modelHistory = [], isLoading, isError, error }) => {
       </>
     )
   }
-  const newHistory = [...modelHistory]
+
+  const newHistory = [fakeFirstCommit, ...modelHistory]
   return newHistory.reverse().map((entry, ind) => {
     if (!entry.commits || entry.commits.length === 0) {
       return null
     }
 
     const isInitial = newHistory.length - 1 === ind
-
     return (
       <div key={`entry_${ind}`} className={c.ModelHistory}>
         <CommitNode
@@ -56,12 +79,17 @@ const ModelHistory = ({ modelHistory = [], isLoading, isError, error }) => {
         />
         <Spacer size={'.75rem'} />
         {entry.commits.map((commit, ind) => {
-          if (!commit || !commit.name) return null
+          if (!commit) return null
+          const part = modelData.parts.find(
+            part => part.partIdentifier === commit.partIdentifier
+          )
+          const partName = part?.name
           return (
             <PartLine
               key={`commit_${commit.previousPartIdentifier}_${ind}`}
-              name={commit.name}
+              name={partName}
               size={commit.size}
+              isInitial={isInitial}
             />
           )
         })}

@@ -3,16 +3,23 @@ import { useStoreon } from 'storeon/react'
 import ModelHistory from './ModelHistory'
 
 const ModelHistoryContainer = props => {
-  const { dispatch, modelHistory } = useStoreon('modelHistory')
+  const { dispatch, model, modelHistory } = useStoreon('model', 'modelHistory')
+  const {
+    data: modelData = {},
+    isLoading: isLoadingModel,
+    isError: isErrorModel,
+    error: errorModel,
+  } = model
   const { data = [], isLoading, isError, error } = modelHistory
   return (
     <ModelHistory
       {...props}
       modelHistory={data}
+      modelData={modelData}
       dispatch={dispatch}
-      isLoading={isLoading}
-      isError={isError}
-      error={error}
+      isLoading={isLoading || isLoadingModel}
+      isError={isError || isErrorModel}
+      error={error || errorModel}
     />
   )
 }

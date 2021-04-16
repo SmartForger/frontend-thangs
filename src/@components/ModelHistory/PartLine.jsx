@@ -17,11 +17,12 @@ const useStyles = createUseStyles(theme => {
     PartLine: {
       border: `1px solid ${theme.colors.white[900]}`,
       borderRadius: '.5rem',
+      maxWidth: '30rem',
     },
   }
 })
 
-const PartLine = ({ name, size }) => {
+const PartLine = ({ name, size, isInitial = false }) => {
   const c = useStyles()
 
   return (
@@ -41,10 +42,12 @@ const PartLine = ({ name, size }) => {
                 {!size ? '' : formatBytes(size)}
               </Metadata>
             </ContainerRow>
-            <ContainerRow>
-              <ModelHistoryPartActionMenu />
-              <Spacer size={'1rem'} />
-            </ContainerRow>
+            {!isInitial && (
+              <ContainerRow>
+                <ModelHistoryPartActionMenu />
+                <Spacer size={'1rem'} />
+              </ContainerRow>
+            )}
           </ContainerRow>
           <Spacer size={'1rem'} />
         </ContainerColumn>

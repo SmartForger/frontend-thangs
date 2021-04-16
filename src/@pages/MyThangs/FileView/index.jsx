@@ -56,7 +56,7 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.5rem',
       display: 'flex',
       flexDirection: 'column',
-      height: '28.75rem',
+      height: '40.5rem !important',
       margin: '0 auto',
       position: 'relative',
       width: '100%',
@@ -75,7 +75,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     FileView_CompareWrapper: {
-      height: '25rem',
+      height: '40.5rem',
     },
     FileView_Tabs: {
       justifyContent: 'center',
