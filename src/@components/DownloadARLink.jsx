@@ -66,4 +66,4 @@ const DownloadARLink = ({
   )
 }
 
-export default DownloadARLink
+export { DownloadARLink }
