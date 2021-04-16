@@ -6,7 +6,6 @@ export default {
 }
 
 export const SliderTest = () => {
-
   return (
     <div>
       <Slider />

@@ -4,6 +4,6 @@ export function log(file, line, logData) {
   sendMessage('log', {
     file,
     line,
-    logData
+    logData,
   })
 }

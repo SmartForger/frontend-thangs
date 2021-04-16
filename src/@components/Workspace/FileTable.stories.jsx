@@ -10,10 +10,5 @@ export default {
 }
 
 export const FileTableTest = () => {
-  return (
-    <FileTable 
-      files={files}
-      sortedBy='created'
-    />
-  ) 
+  return <FileTable files={files} sortedBy='created' />
 }
