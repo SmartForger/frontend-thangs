@@ -1,10 +1,9 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 
 import { ARDownloadActionMenu } from '@components'
 import * as types from '@constants/storeEventTypes'
-import { canDownloadAR } from '@utilities'
 import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(() => {
@@ -29,7 +28,6 @@ const DownloadARLink = ({
   TargetComponent,
 }) => {
   const c = useStyles()
-  const isARSupported = useMemo(() => canDownloadAR(model), [model])
   const { dispatch } = useStoreon()
   const downloadModel = useCallback(
     format => {
@@ -58,19 +56,13 @@ const DownloadARLink = ({
   )
 
   return (
-    <>
-      {isARSupported ? (
-        <div className={c.DownloadARLink}>
-          <ARDownloadActionMenu
-            onChange={handleClick}
-            TargetComponent={TargetComponent}
-          />
-        </div>
-      ) : (
-        <></>
-      )}
-    </>
+    <div className={c.DownloadARLink}>
+      <ARDownloadActionMenu
+        onChange={handleClick}
+        TargetComponent={TargetComponent}
+      />
+    </div>
   )
 }
 
-export { DownloadARLink }
+export default DownloadARLink
