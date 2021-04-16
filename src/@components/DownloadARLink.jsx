@@ -26,6 +26,7 @@ const DownloadARLink = ({
   isAuthedUser,
   openSignupOverlay = noop,
   TargetComponent,
+  downloadTrackingEvent = 'Download AR',
 }) => {
   const c = useStyles()
   const { dispatch } = useStoreon()
@@ -36,11 +37,11 @@ const DownloadARLink = ({
         format,
         onFinish: downloadUrl => {
           window.location.assign(downloadUrl)
-          track('Download AR', { format, modelId: model.id })
+          track(downloadTrackingEvent, { format, modelId: model.id })
         },
       })
     },
-    [dispatch, model.id, model.modelId]
+    [downloadTrackingEvent, dispatch, model.id, model.modelId]
   )
 
   const handleClick = useCallback(
