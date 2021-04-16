@@ -1,11 +1,6 @@
 import React, { useCallback } from 'react'
 import { FOLDER_MENU_OPTIONS } from '@constants/menuOptions'
-import {
-  ContainerRow,
-  FolderActionMenu,
-  Pill,
-  Spacer,
-} from '@components'
+import { ContainerRow, FolderActionMenu, Pill, Spacer } from '@components'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload-black.svg'
 import { useOverlay } from '@hooks'
@@ -30,7 +25,6 @@ const ModelActionToolbar = ({ folder = {} }) => {
 
   const handleUpload = useCallback(() => {
     track('Add Menu - Upload Models')
-
     setOverlay({
       isOpen: true,
       template: 'multiUpload',
