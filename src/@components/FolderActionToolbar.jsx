@@ -30,6 +30,7 @@ const ModelActionToolbar = ({ folder = {} }) => {
 
   const handleUpload = useCallback(() => {
     track('Add Menu - Upload Models')
+
     setOverlay({
       isOpen: true,
       template: 'multiUpload',
