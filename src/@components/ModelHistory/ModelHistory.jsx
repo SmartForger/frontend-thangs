@@ -59,8 +59,14 @@ const ModelHistory = ({
       </>
     )
   }
-
+  const partSHAs = {}
   const newHistory = [fakeFirstCommit, ...modelHistory]
+  newHistory.forEach(version => {
+    version.commits.forEach(commit => {
+      if (!partSHAs[version.sha]) partSHAs[version.sha] = []
+      partSHAs[version.sha].push(commit.partIdentifier)
+    })
+  })
   return newHistory.reverse().map((entry, ind) => {
     if (!entry.commits || entry.commits.length === 0) {
       return null
@@ -84,12 +90,18 @@ const ModelHistory = ({
             part => part.partIdentifier === commit.partIdentifier
           )
           const partName = part?.name
+          const prevSHA = Object.keys(partSHAs).find(sha => {
+            console.log(partSHAs)
+            partSHAs[sha].includes(commit.partIdentifier)
+          })
           return (
             <PartLine
               key={`commit_${commit.previousPartIdentifier}_${ind}`}
               name={partName}
               size={commit.size}
               isInitial={isInitial}
+              sha={entry.sha}
+              prevSHA={prevSHA}
             />
           )
         })}

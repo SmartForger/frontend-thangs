@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import {
+  CompareViewer,
   ContainerColumn,
   ContainerRow,
   Spacer,
@@ -13,7 +14,6 @@ import {
   TabbedFileContent,
   Tabs,
 } from '@components'
-import { CompareModels } from '@physna/compare-ui'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
@@ -73,9 +73,6 @@ const useStyles = createUseStyles(theme => {
       [xl]: {
         height: '40.5rem',
       },
-    },
-    FileView_CompareWrapper: {
-      height: '40.5rem',
     },
     FileView_Tabs: {
       justifyContent: 'center',
@@ -139,12 +136,14 @@ const FileView = ({ className, folders }) => {
           <FileHeader file={modelData} folders={folders} />
           {/* This needs to know the modelData and the names and ids of all parent folders of model */}
           <Spacer size='2rem' />
-          <Tabs
-            className={c.FileView_Tabs}
-            onChange={handleViewerChange}
-            options={viewerOptions}
-            selectedValue={activeViewer}
-          />
+          {historyData.length && (
+            <Tabs
+              className={c.FileView_Tabs}
+              onChange={handleViewerChange}
+              options={viewerOptions}
+              selectedValue={activeViewer}
+            />
+          )}
           <Spacer size='1rem' />
           {activeViewer === 'single' && (
             <HoopsModelViewer
@@ -154,31 +153,7 @@ const FileView = ({ className, folders }) => {
               initialSelectedModel={activePart}
             />
           )}
-          {activeViewer === 'compare' && (
-            <ContainerRow className={c.FileView_CompareWrapper}>
-              <CompareModels
-                modelAId={'367ccd6b-003f-4ae9-9d25-22cf3afc0a8f'}
-                modelBId={'b2ded074-3c20-474c-858b-1dbdec39ca27'}
-                modelABucket={'dev-tenant1-headless-bucket'}
-                modelBBucket={'dev-tenant1-headless-bucket'}
-                destinationBucket={'localdev-najela-alignment-service'}
-                comparisonServiceEndpoint={
-                  'https://staging-comparison-service-dot-gcp-and-physna.uc.r.appspot.com/'
-                }
-                comparisonsToDisplay={{
-                  model_a: true,
-                  model_b: false,
-                  difference_a: true,
-                  difference_b: true,
-                  intersection_a: false,
-                  intersection_b: false,
-                }}
-                variant={{
-                  type: 'sideBySide',
-                }}
-              />
-            </ContainerRow>
-          )}
+          {historyData.length && activeViewer === 'compare' && <CompareViewer />}
           <Spacer size='2rem' />
           <ContainerRow>
             <ContainerColumn className={c.FileView_LeftColumn}>
@@ -196,8 +171,7 @@ const FileView = ({ className, folders }) => {
                 modelPrivacy='Private'
               />
               <Spacer size='2rem' />
-              <ModelCollaboratorBox />
-              {/* <CollaboratorInfo owner={modelData.owner} collaborators={[]} /> */}
+              {modelData.folderId && <ModelCollaboratorBox />}
             </ContainerColumn>
             <Spacer size='4rem' />
             <ContainerColumn fullWidth className={c.FileView_RightColumn}>

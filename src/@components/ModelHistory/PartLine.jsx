@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Body, Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
 
@@ -9,7 +10,7 @@ import {
   ModelHistoryPartActionMenu,
 } from '@components'
 import { formatBytes } from '@utilities'
-
+import * as types from '@constants/storeEventTypes'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 
 const useStyles = createUseStyles(theme => {
@@ -22,8 +23,16 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const PartLine = ({ name, size, isInitial = false }) => {
+const PartLine = ({ name, sha, prevSHA, size, isInitial = false }) => {
   const c = useStyles()
+  const { dispatch } = useStoreon()
+
+  const handleChange = useCallback(() => {
+    dispatch(types.SET_COMPARE_MODELS, {
+      model1: prevSHA,
+      model2: sha,
+    })
+  }, [dispatch, prevSHA, sha])
 
   return (
     <React.Fragment>
@@ -44,7 +53,7 @@ const PartLine = ({ name, size, isInitial = false }) => {
             </ContainerRow>
             {!isInitial && (
               <ContainerRow>
-                <ModelHistoryPartActionMenu />
+                <ModelHistoryPartActionMenu onChange={handleChange} />
                 <Spacer size={'1rem'} />
               </ContainerRow>
             )}

@@ -144,8 +144,8 @@ const MultiUpload = ({
           ? newNode.subIds.map(subId => formNode(subId))
           : []
         : Object.values(newTreeData)
-          .filter(node => !node.parentId)
-          .map(node => formNode(node.id))
+            .filter(node => !node.parentId)
+            .map(node => formNode(node.id))
 
       newNode.treeValid =
         newNode.valid &&
@@ -227,8 +227,8 @@ const MultiUpload = ({
             setErrorMessage(
               `${file.name} is not a supported file type.
               Supported file extensions include ${MODEL_FILE_EXTS.map(
-    e => ' ' + e.replace('.', '')
-  )}.`
+                e => ' ' + e.replace('.', '')
+              )}.`
             )
             return null
           }
@@ -254,6 +254,11 @@ const MultiUpload = ({
       track('MultiUpload - OnDrop', { amount: files && files.length })
 
       dispatch(types.UPLOAD_FILES, {
+        files,
+        modelId: (versionData && versionData.modelId) || null,
+      })
+
+      dispatch(types.GET_UPLOAD_COMPARE_ID, {
         files,
         modelId: (versionData && versionData.modelId) || null,
       })
@@ -324,6 +329,7 @@ const MultiUpload = ({
 
       if (versionData) {
         //Single Part and Selected Part of Multi/asm flow
+        dispatch(types.GET_UPLOAD_COMPARE_ID, {})
         if (modelData?.parts?.length === 1 || versionData?.partId) {
           const currentFileKey = Object.keys(uploadFilesData)[0]
           const currentFile = uploadFilesData[currentFileKey]
@@ -459,17 +465,17 @@ const MultiUpload = ({
         ? 'Upload New Version'
         : 'Upload Files'
       : activeNode.isAssembly && activeNode.parentId
-        ? 'Sub Assembly'
-        : activeNode.isAssembly
-          ? 'New Assembly'
-          : partFormTitle
+      ? 'Sub Assembly'
+      : activeNode.isAssembly
+      ? 'New Assembly'
+      : partFormTitle
   }, [activeNode, partFormTitle, previousVersionModelId, versionData])
 
   const fileLength = useMemo(
     () =>
       uploadFilesData
         ? Object.keys(uploadFilesData).filter(fileId => uploadFilesData[fileId].name)
-          .length
+            .length
         : 0,
     [uploadFilesData]
   )
@@ -480,6 +486,7 @@ const MultiUpload = ({
       isLoading={isLoading || isLoadingLicense}
       onBack={activeView > -1 && handleBack}
       onCancel={fileLength > 0 && handleCancelUploading}
+      onClose={handleCancelUploading}
       onContinue={fileLength > 0 && handleContinue}
       overlayHeader={overlayHeader}
       cancelText={'Cancel'}
@@ -509,6 +516,7 @@ const MultiUpload = ({
           uploadTreeData={uploadTreeData}
           validated={validated}
           validating={validating}
+          versionData={versionData}
           warningMessage={warningMessage}
         />
       ) : (
