@@ -1,5 +1,24 @@
 # Thangs Front-end
 
+- [Thangs Front-end](#thangs-front-end)
+  - [Requirements](#requirements)
+  - [Usage](#usage)
+  - [Tests](#tests)
+    - [Cypress setup](#cypress-setup)
+  - [Local development with API Platform](#local-development-with-api-platform)
+  - [Formatting (with Prettier)](#formatting-with-prettier)
+    - [Editor configuration](#editor-configuration)
+  - [Deploying to Production](#deploying-to-production)
+  - [HOOPS Communicator and Web Viewer](#hoops-communicator-and-web-viewer)
+    - [Summary of Hoops Data Model](#summary-of-hoops-data-model)
+    - [Hoops Usage](#hoops-usage)
+  - [GAE Routing](#gae-routing)
+  - [Updating CORS rules on Google Cloud Storage buckets](#updating-cors-rules-on-google-cloud-storage-buckets)
+  - [Circle Ci](#circle-ci)
+  - [Updating Query fragments](#updating-query-fragments)
+  - [Storybook](#storybook)
+    - [How to run](#how-to-run)
+
 ## Requirements
 
 - [NodeJs (> 10.xx.x)](https://nodejs.org/en/)
@@ -55,7 +74,7 @@ yarn test
 Open Cypress (integration & UI tests) with:
 
 ```bash
-yarn cypress
+yarn cypress:open
 ```
 
 Run Cypress tests headless with:
@@ -64,12 +83,33 @@ Run Cypress tests headless with:
 yarn test:cypress
 ```
 
+See Cypress options with:
+
+```bash
+yarn cypress
+```
+
+### Cypress setup
+Make sure you are pointed at staging and using HTTPS by setting these keys in .env.development.local:
+
+```ini
+REACT_APP_API_KEY=https://staging-api-platform-dot-gcp-and-physna.uc.r.appspot.com/
+HTTPS=true
+```
+
+## Local development with API Platform
+To have the Thangs React app work with your local version of [API Platform](https://github.com/physna/api-platform), start up the API Platform and set this key in .env.development.local:
+
+```ini
+REACT_APP_API_KEY='http://localhost:8080/'
+```
+
 ## Formatting (with [Prettier](https://prettier.io/))
 
 Run manually with:
 
 ```bash
-yarn run lint --fix
+yarn lint --fix
 ```
 
 ### Editor configuration

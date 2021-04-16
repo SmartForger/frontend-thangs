@@ -76,11 +76,11 @@
     "build:storybook": "build-storybook -c .storybook -s public -o storybook",
     "lint": "eslint --ext .js,.jsx src",
     "cypress:open": "cypress open",
-    "cypress:run": "yarn run cypress run",
-    "cypress:run:chrome": "yarn run cypress run --browser chrome",
-    "cypress:run:chromium": "yarn run cypress run --browser chromium",
-    "cypress:run:chrome:headless": "yarn run cypress run --headless --browser chrome",
-    "cypress:run:chromium:headless": "yarn run cypress run ----headless browser chromium",
+    "cypress:run": "cypress run",
+    "cypress:run:chrome": "cypress run --browser chrome",
+    "cypress:run:chromium": "cypress run --browser chromium",
+    "cypress:run:chrome:headless": "cypress run --headless --browser chrome",
+    "cypress:run:chromium:headless": "cypress run ----headless browser chromium",
     "build:workers": "webpack --config webpack.worker.js"
   },
   "browserslist": {
