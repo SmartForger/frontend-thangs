@@ -66,130 +66,126 @@ const ModelActionTarget = ({ onClick = noop }) => {
   )
 }
 
-const ModelActionMenu = ({ model = {}, isExpandedOptions = false, omitOptions = [], onChange = noop }) => {
+const ModelActionMenu = ({
+  model = {},
+  isExpandedOptions = false,
+  omitOptions = [],
+  onChange = noop,
+}) => {
   const history = useHistory()
   const { dispatch } = useStoreon()
   const { setOverlay } = useOverlay()
   const currentUserId = authenticationService.getCurrentUserId()
 
   const options = [
-    ...(!isExpandedOptions ? [
-      {
-        label: 'Go to My Thangs',
-        Icon: OpenIcon,
-        value: MODEL_MENU_OPTIONS.GO_TO_MY_THANGS,
-      },
-    ] : []),
-    ...(model.folderId ? [
-      {
-        label: 'Invite',
-        Icon: ShareIcon,
-        value: MODEL_MENU_OPTIONS.INVITE,
-      }
-    ] : []),
-    ...(isExpandedOptions ? [
-      {
-        label: 'Go to Model',
-        Icon: OpenIcon,
-        value: MODEL_MENU_OPTIONS.GO_TO_MODEL,
-      },
-      {
-        label: 'Move to',
-        Icon: OpenIcon,
-        value: MODEL_MENU_OPTIONS.MOVE_MODEL,
-      },
-      {
-        label: 'Add to Starred',
-        Icon: StarIcon,
-        value: MODEL_MENU_OPTIONS.ADD_TO_STARRED,
-      },
-      {
-        label: 'Download',
-        Icon: DownloadIcon,
-        value: MODEL_MENU_OPTIONS.DOWNLOAD,
-      },
-      {
-        label: 'Delete',
-        Icon: DeleteIcon,
-        value: MODEL_MENU_OPTIONS.DELETE,
-      },
-    ] : [])
+    ...(!isExpandedOptions
+      ? [
+        {
+          label: 'Go to My Thangs',
+          Icon: OpenIcon,
+          value: MODEL_MENU_OPTIONS.GO_TO_MY_THANGS,
+        },
+      ]
+      : []),
+    ...(model.folderId
+      ? [
+        {
+          label: 'Invite',
+          Icon: ShareIcon,
+          value: MODEL_MENU_OPTIONS.INVITE,
+        },
+      ]
+      : []),
+    ...(isExpandedOptions
+      ? [
+        {
+          label: 'Go to Model',
+          Icon: OpenIcon,
+          value: MODEL_MENU_OPTIONS.GO_TO_MODEL,
+        },
+        {
+          label: 'Move to',
+          Icon: OpenIcon,
+          value: MODEL_MENU_OPTIONS.MOVE_MODEL,
+        },
+        {
+          label: 'Add to Starred',
+          Icon: StarIcon,
+          value: MODEL_MENU_OPTIONS.ADD_TO_STARRED,
+        },
+        {
+          label: 'Download',
+          Icon: DownloadIcon,
+          value: MODEL_MENU_OPTIONS.DOWNLOAD,
+        },
+        {
+          label: 'Delete',
+          Icon: DeleteIcon,
+          value: MODEL_MENU_OPTIONS.DELETE,
+        },
+      ]
+      : []),
   ].filter(opt => !omitOptions.includes(opt.value))
 
   const handleGoToMyThangs = () => {
     history.push(`/mythangs/file/${model.id}`)
   }
 
-  const handleInviteUsers = useCallback(
-    () => {
-      track('Model Action Menu - Invite Members')
-      setOverlay({
-        isOpen: true,
-        template: 'inviteUsers',
-        data: {
-          folderId: model.folderId,
-          animateIn: true,
-          windowed: true,
-          dialogue: true,
-        },
-      })
-    },
-    [model.folderId, setOverlay]
-  )
+  const handleInviteUsers = useCallback(() => {
+    track('Model Action Menu - Invite Members')
+    setOverlay({
+      isOpen: true,
+      template: 'inviteUsers',
+      data: {
+        folderId: model.folderId,
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
+      },
+    })
+  }, [model.folderId, setOverlay])
 
-  const handleGoToModel = useCallback(
-    () => {
-      const modelPath = model.identifier ? `/${model.identifier}` : `/model/${model.id}`
-      window.open(modelPath, '_blank')
-    },
-    [model]
-  )
+  const handleGoToModel = useCallback(() => {
+    const modelPath = model.identifier ? `/${model.identifier}` : `/model/${model.id}`
+    window.open(modelPath, '_blank')
+  }, [model])
 
-  const handleStar = useCallback(
-    () => {
-      track('File Menu - Star Model')
-      dispatch(types.LIKE_MODEL, {
-        id: model.id,
+  const handleStar = useCallback(() => {
+    track('File Menu - Star Model')
+    dispatch(types.LIKE_MODEL, {
+      id: model.id,
+      model,
+      currentUserId,
+      owner: model.owner,
+    })
+  }, [currentUserId, dispatch, model])
+
+  const handleDownloadModel = useCallback(() => {
+    track('File Menu - Download Model')
+    dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
+      id: model.id,
+      onFinish: downloadUrl => {
+        window.location.assign(downloadUrl)
+      },
+    })
+  }, [dispatch, model])
+
+  const handleDeleteFile = useCallback(() => {
+    track('File Menu - Delete Model')
+    setOverlay({
+      isOpen: true,
+      template: 'deleteModel',
+      data: {
         model,
-        currentUserId,
-        owner: model.owner,
-      })
-    },
-    [currentUserId, dispatch, model]
-  )
+        type: 'model',
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
+      },
+    })
+  }, [model, setOverlay])
 
-  const handleDownloadModel = useCallback(
-    () => {
-      track('File Menu - Download Model')
-      dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
-        id: model.id,
-        onFinish: downloadUrl => {
-          window.location.assign(downloadUrl)
-        },
-      })
-    },
-    [dispatch, model]
-  )
-
-  const handleDeleteFile = useCallback(
-    () => {
-      track('File Menu - Delete Model')
-      setOverlay({
-        isOpen: true,
-        template: 'deleteModel',
-        data: {
-          model,
-          type: 'model',
-          animateIn: true,
-          windowed: true,
-          dialogue: true,
-        },
-      })
-    },
-    [model, setOverlay]
-  )
-
-  const handleOnChange = (value) => {
+  const handleOnChange = value => {
     switch (value) {
       case MODEL_MENU_OPTIONS.GO_TO_MY_THANGS:
         return handleGoToMyThangs()
