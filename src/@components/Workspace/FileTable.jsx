@@ -39,8 +39,6 @@ const useStyles = createUseStyles(theme => {
   return {
     FileTable_Body: {
       ...theme.mixins.scrollbar,
-      overflowX: 'visible !important',
-      overflowY: 'visible !important',
     },
     FileTable_Item: {
       borderBottom: `1px solid ${theme.colors.white[900]}`,
@@ -329,7 +327,7 @@ const FileTable = ({
   const c = useStyles()
   const containerRef = useRef()
   const history = useHistory()
-  const [maxHeight, setMaxHeight] = useState(300)
+  const [maxHeight, setMaxHeight] = useState(500)
   const [selectedFiles, setSelectedFiles] = useState([])
   const [{ sortedBy, order }, setSort] = useState({
     sortedBy: initialSortedBy || COLUMNS.FILENAME,
@@ -416,14 +414,14 @@ const FileTable = ({
           collect: () => ({ folder: node }),
         }
         : node.level === 0
-          ? {
+        ? {
             id: 'File_Menu',
             attributes: {
               className: c.FileTable_FileRow,
             },
             collect: () => ({ model: node }),
           }
-          : {
+        : {
             id: 'Subpart_Menu',
             attributes: {
               className: c.FileTable_FileRow,
