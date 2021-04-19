@@ -2,7 +2,8 @@ import React, { useRef, useState } from 'react'
 import * as R from 'ramda'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 
-import { Spacer, Spinner, LabelText, Tag } from '@components'
+import { Spacer, Spinner, Tag } from '@components'
+import { Label } from '@physna/voxel-ui/@atoms/Typography'
 
 import { ReactComponent as ARIcon } from '@svg/icon-ar.svg'
 
@@ -121,17 +122,17 @@ const ViewNativeARLink = ({ model }) => {
           <>
             <ARIcon className={c.ViewARLink_ARBadge} />
             <Spacer size={'.5rem'} />
-            <LabelText className={c.ViewARLink_Text}>
+            <Label className={c.ViewARLink_Text}>
               Unable to Open Android Native AR Viewer on This Device
-            </LabelText>
+            </Label>
           </>
         ) : (
           <div className={c.ViewARLink_Container}>
             <ARIcon className={c.ViewARLink_ARBadge} />
             <Spacer size={'.5rem'} />
-            <LabelText className={c.ViewARLink_Text}>
+            <Label className={c.ViewARLink_Text}>
               Android Native AR Viewer (No&nbsp;App&nbsp;Required)
-            </LabelText>
+            </Label>
             <Spacer size={'.5rem'} />
 
             {isOpeningViewer ? (
@@ -151,4 +152,4 @@ const ViewNativeARLink = ({ model }) => {
   )
 }
 
-export { ViewNativeARLink }
+export default ViewNativeARLink
