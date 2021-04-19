@@ -243,6 +243,8 @@ export default store => {
 
       const uploadedFiles = Object.values(data).filter(file => !file.isError)
       const newTreeData = {}
+
+      // TODO - responseData is now an array, we need to verify that this is still valid
       if (responseData.isAssembly !== false) {
         const transformNode = (node1, node2, parentId = '', rootName = '', modelId) => {
           const name = node1.name.split(':')[0]
@@ -330,6 +332,7 @@ export default store => {
 
     const payload = []
     const assemblyGroups = {}
+
     Object.keys(treeData).forEach(nodeId => {
       if (!treeData[nodeId].valid) return
       const [rootName] = nodeId.split('/')
@@ -360,7 +363,7 @@ export default store => {
           originalPartName: node.originalPartName,
           filename: file ? file.newFileName : node.filename,
           size: file ? file.size : 0,
-          isPrimary: false,
+          isPrimary: _p ? _p === nodeId : false,
         }
       })
 
@@ -373,7 +376,6 @@ export default store => {
     if (remainingFiles.length > 0) {
       if (isAssembly) {
         const { primary, ...partInfo } = formData['multipart'] || {}
-
         payload.push({
           ...partInfo,
           parts: remainingFiles.map(file => {
