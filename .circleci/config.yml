@@ -40,7 +40,6 @@ workflows:
               branches:
                 only:
                   - development
-                  - hotfix/4-18-obj-thumbnails
         - deploy-development-thangs:
             context: thangs-context
             filters:
