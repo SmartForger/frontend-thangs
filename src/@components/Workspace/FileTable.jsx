@@ -487,7 +487,6 @@ const FileTable = ({
 }) => {
   const c = useStyles({})
   const history = useHistory()
-
   const [{ sortedBy, order }, setSort] = useState({
     sortedBy: initialSortedBy || COLUMNS.FILENAME,
     order: 'desc',

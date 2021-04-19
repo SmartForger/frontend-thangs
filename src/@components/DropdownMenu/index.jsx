@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
+import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 import { Button, Spacer } from '@components'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
@@ -138,6 +139,39 @@ const DropdownItem = ({ children, to = '#', onClick, className, noHover = false 
   )
 }
 
+const MenuWrapper = ({
+  c,
+  className,
+  isOpen,
+  borderSize,
+  toggleOpen,
+  renderContent,
+  anchorElement,
+}) => {
+  if (!isOpen) {
+    return null
+  }
+
+  return createPortal(
+    <div
+      className={classnames(className, c.DropdownMenu, c.DropdownMenu_Row, {
+        [c.DropdownMenu__isOpen]: isOpen,
+      })}
+    >
+      <Spacer size={borderSize} />
+      <div className={c.DropdownMenu_FullWidth}>
+        <Spacer size={borderSize} />
+        {typeof renderContent === 'function'
+          ? renderContent({ toggleOpen })
+          : renderContent}
+        <Spacer size={borderSize} />
+      </div>
+      <Spacer size={borderSize} />
+    </div>,
+    anchorElement
+  )
+}
+
 const DropdownMenu = ({
   Icon,
   TargetComponent,
@@ -194,19 +228,15 @@ const DropdownMenu = ({
           <ButtonIcon />
         </Button>
       )}
-      <div
-        className={classnames(className, c.DropdownMenu, c.DropdownMenu_Row, {
-          [c.DropdownMenu__isOpen]: isOpen,
-        })}
-      >
-        <Spacer size={borderSize} />
-        <div className={c.DropdownMenu_FullWidth}>
-          <Spacer size={borderSize} />
-          {typeof children === 'function' ? children({ toggleOpen }) : children}
-          <Spacer size={borderSize} />
-        </div>
-        <Spacer size={borderSize} />
-      </div>
+      <MenuWrapper
+        c={c}
+        className={className}
+        borderSize={borderSize}
+        isOpen={isOpen}
+        toggleOpen={toggleOpen}
+        renderContent={children}
+        anchorElement={dropdownRef.current}
+      />
     </div>
   )
 }
