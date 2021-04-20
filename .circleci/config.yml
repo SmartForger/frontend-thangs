@@ -40,6 +40,7 @@ workflows:
               branches:
                 only:
                   - development
+                  - ar-search-release
         - deploy-development-thangs:
             context: thangs-context
             filters:
