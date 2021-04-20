@@ -49,11 +49,23 @@ const NewModelUpload = ({
   )
 }
 
+// New Files being uploaded
+// - Multi-upload
+// - handles single, multi, and asm models
+//
+// New Version being upload
+// - SinglePart-upload :check:
+// - MultiPart-MultiPartUpload :wip:
+// -
+//
+// Add Part
+// - Multi-upload
+//
 const MultiUpload = ({
-  initData = null,
-  previousVersionModelId,
-  folderId = '',
-  versionData,
+  initData = null, //This is used for when files have pre-uploaded before this overlay shows
+  previousVersionModelId, //This was previously used for v1 versioning, however behaves like forking
+  folderId = '', //preselected folder
+  versionData, //actionType = string, modelId (req), partId (opt)
 }) => {
   const { dispatch, license = {}, uploadModelFiles = {}, model = {} } = useStoreon(
     'license',
@@ -242,7 +254,12 @@ const MultiUpload = ({
 
       dispatch(types.UPLOAD_FILES, {
         files,
-        modelId: (modelData && modelData.id) || null,
+        modelId: (versionData && versionData.modelId) || null,
+      })
+
+      dispatch(types.GET_UPLOAD_COMPARE_ID, {
+        files,
+        modelId: (versionData && versionData.modelId) || null,
       })
 
       if (rejectedFile) {
@@ -256,7 +273,7 @@ const MultiUpload = ({
         )
       }
     },
-    [dispatch, modelData]
+    [dispatch, versionData]
   )
 
   const removeFile = node => {
@@ -310,10 +327,15 @@ const MultiUpload = ({
       }
 
       if (versionData) {
+        //Single Part and Selected Part of Multi/asm flow
+        dispatch(types.GET_UPLOAD_COMPARE_ID, {})
         if (modelData?.parts?.length === 1 || versionData?.partId) {
           const currentFileKey = Object.keys(uploadFilesData)[0]
           const currentFile = uploadFilesData[currentFileKey]
-          const singlePart = modelData.parts[0]
+          const singlePart = versionData?.partId
+            ? modelData.parts.find(part => part.partIdentifier === versionData?.partId)
+            : modelData.parts[0]
+
           dispatch(types.SET_MODEL_INFO, {
             id: currentFile.id,
             formData: {
@@ -328,12 +350,10 @@ const MultiUpload = ({
               animateIn: false,
               windowed: true,
               dialogue: true,
-              model: modelData,
-              part: singlePart,
-              files: uploadFilesData,
             },
           })
         } else {
+          //Multipart - no part pre-selected
           setOverlay({
             isOpen: true,
             template: 'selectVersionModel',
@@ -341,8 +361,6 @@ const MultiUpload = ({
               animateIn: false,
               windowed: true,
               dialogue: true,
-              model,
-              files: uploadFilesData,
               fileIndex: 0,
             },
           })
@@ -408,7 +426,6 @@ const MultiUpload = ({
       uploadFilesData,
       dispatch,
       setOverlay,
-      model,
       activeView,
       previousVersionModelId,
       submitModels,
@@ -435,10 +452,11 @@ const MultiUpload = ({
 
   useEffect(() => {
     if (initData) onDrop(initData.acceptedFiles, initData.rejectedFile, initData.e)
-    if (versionData?.modelId) {
-      dispatch(types.FETCH_MODEL, { id: versionData?.modelId })
+    if (versionData && versionData.modelId) {
+      dispatch(types.FETCH_MODEL, { id: versionData.modelId })
     }
-  }, [dispatch, initData, onDrop, versionData.modelId])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const overlayHeader = useMemo(() => {
     return !activeNode
@@ -467,6 +485,7 @@ const MultiUpload = ({
       isLoading={isLoading || isLoadingLicense}
       onBack={activeView > -1 && handleBack}
       onCancel={fileLength > 0 && handleCancelUploading}
+      onClose={handleCancelUploading}
       onContinue={fileLength > 0 && handleContinue}
       overlayHeader={overlayHeader}
       cancelText={'Cancel'}
@@ -491,13 +510,12 @@ const MultiUpload = ({
           setErrorMessage={setErrorMessage}
           setIsAssembly={setIsAssembly}
           setWarningMessage={setWarningMessage}
-          showAssemblyToggle={
-            validated && singlePartsCount > 1 && !model && !versionData?.partId
-          }
+          showAssemblyToggle={validated && singlePartsCount > 1 && !versionData}
           uploadFiles={uploadFilesData}
           uploadTreeData={uploadTreeData}
           validated={validated}
           validating={validating}
+          versionData={versionData}
           warningMessage={warningMessage}
         />
       ) : (

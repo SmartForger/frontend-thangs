@@ -134,6 +134,8 @@ const INITIAL_STATE = {
   license: '',
 }
 
+const OBJ_EXTENSION_REGEX = /\.obj$/
+
 const AssemblyInfo = ({
   activeNode,
   errorMessage: _err,
@@ -146,10 +148,23 @@ const AssemblyInfo = ({
   const c = useStyles({})
   const firstInputRef = useRef(null)
   const isRootAssembly = useMemo(() => !activeNode.parentId, [activeNode.parentId])
+  const isObjAssembly = useMemo(
+    () =>
+      activeNode?.isAssembly && OBJ_EXTENSION_REGEX.test(activeNode?.name?.toLowerCase()),
+    [activeNode.isAssembly, activeNode.name]
+  )
   const isMultipart = activeNode.id === 'multipart'
   const file = filesData[activeNode.fileId]
   const [folderPublic, setFolderPublic] = useState(true)
   const [initialFolderValue] = useState(formData && formData.folderId)
+
+  // HOTFIX 4/18/21 - Make the root assembly part of an OBJ the primary part
+  useEffect(() => {
+    if (isObjAssembly) {
+      formData.primary = activeNode.id
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isObjAssembly])
 
   const {
     checkError,

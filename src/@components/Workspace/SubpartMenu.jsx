@@ -68,7 +68,7 @@ const SubpartMenu = ({ part }) => {
       part.owner.id.toString() === currentUserId.toString()
     )
   }, [currentUserId, part])
-  console.log('part', part)
+
   const handleNewVersion = useCallback(
     e => {
       e.preventDefault()
@@ -81,7 +81,8 @@ const SubpartMenu = ({ part }) => {
           windowed: true,
           dialogue: true,
           versionData: {
-            partId: part.id,
+            modelId: part.modelId,
+            partId: part.partIdentifier,
           },
           action: 'update',
         },

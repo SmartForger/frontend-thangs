@@ -90,65 +90,56 @@ const FolderActionMenu = ({ folder = {}, omitOptions = [], onChange = noop }) =>
     },
   ].filter(opt => !omitOptions.includes(opt.value))
 
-  const handleEdit = useCallback(
-    () => {
-      track('Folder Menu - Edit Folder')
-      setOverlay({
-        isOpen: true,
-        template: 'editFolder',
-        data: {
-          folder,
-          type: 'folder',
-          animateIn: true,
-          windowed: true,
-          dialogue: true,
-        },
-      })
-    },
-    [folder, setOverlay]
-  )
+  const handleEdit = useCallback(() => {
+    track('Folder Menu - Edit Folder')
+    setOverlay({
+      isOpen: true,
+      template: 'editFolder',
+      data: {
+        folder,
+        type: 'folder',
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
+      },
+    })
+  }, [folder, setOverlay])
 
   const handleStarFolder = useCallback(() => {
     track('Folder Menu - Star Folder')
     dispatch(types.LIKE_FOLDER, { id: folder.id, owner: folder.owner })
   }, [dispatch, folder.id, folder.owner])
 
-  const handleAddFolder = useCallback(
-    () => {
-      track('Folder Menu - Create Folder')
-      setOverlay({
-        isOpen: true,
-        template: 'addFolder',
-        data: {
-          folder,
-          animateIn: true,
-          windowed: true,
-          dialogue: true,
-        },
-      })
-    },
-    [folder, setOverlay]
-  )
+  const handleAddFolder = useCallback(() => {
+    track('Folder Menu - Create Folder')
+    setOverlay({
+      isOpen: true,
+      template: 'addFolder',
+      data: {
+        folder,
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
+      },
+    })
+  }, [folder, setOverlay])
 
-  const handleDeleteFolder = useCallback(
-    () => {
-      track('Folder Menu - Delete Folder')
-      setOverlay({
-        isOpen: true,
-        template: 'deleteFolder',
-        data: {
-          folder,
-          type: 'folder',
-          animateIn: true,
-          windowed: true,
-          dialogue: true,
-        },
-      })
-    },
-    [folder, setOverlay]
-  )
+  const handleDeleteFolder = useCallback(() => {
+    track('Folder Menu - Delete Folder')
+    setOverlay({
+      isOpen: true,
+      template: 'deleteFolder',
+      data: {
+        folder,
+        type: 'folder',
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
+      },
+    })
+  }, [folder, setOverlay])
 
-  const handleOnChange = (value) => {
+  const handleOnChange = value => {
     switch (value) {
       case FOLDER_MENU_OPTIONS.EDIT:
         return handleEdit()

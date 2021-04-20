@@ -25,6 +25,7 @@ import {
   Spacer,
   Spinner,
   ToggleFollowButton,
+  ViewNativeARLink
 } from '@components'
 import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
@@ -513,6 +514,7 @@ const StatsActionsAndPrints = ({
                 isAuthedUser={isAuthedUser}
                 openSignupOverlay={openSignupOverlay}
               />
+              <ViewNativeARLink model={modelData} />
             </ContainerColumn>
           </>
         )}

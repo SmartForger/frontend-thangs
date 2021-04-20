@@ -26,6 +26,9 @@ const useStyles = createUseStyles(theme => {
       color: theme.colors.blue[500],
       marginLeft: '0.25rem',
     },
+    CommitNode_Message: {
+      maxWidth: '30rem',
+    },
   }
 })
 
@@ -48,8 +51,8 @@ const CommitNode = ({ message, tag, created, author = {}, isActive, isInitial })
       <Spacer size={'1.5rem'} />
       <ContainerColumn>
         <Spacer size={'.25rem'} />
-        <ContainerRow alignItems={'center'}>
-          <Body>{message}</Body>
+        <ContainerRow alignItems={'center'} className={c.CommitNode_Message}>
+          <Body multiline>{message}</Body>
           <Spacer size={'.25rem'} />
           <Tag
             color={isActive ? '#13BD98' : '#DCF7F1'}

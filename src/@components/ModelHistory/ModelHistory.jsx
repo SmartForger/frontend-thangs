@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Spacer, Spinner } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import ErrorMessage from '../ErrorMessage'
@@ -24,8 +24,31 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const ModelHistory = ({ modelHistory = [], isLoading, isError, error }) => {
+const ModelHistory = ({
+  modelHistory = [],
+  modelData = {},
+  isLoading,
+  isError,
+  error,
+}) => {
   const c = useStyles()
+  const fakeFirstCommit = useMemo(() => {
+    const commits = modelData.parts.map(part => {
+      return {
+        action: 'addPart',
+        created: modelData.created,
+        owner: modelData.owner,
+        partIdentifier: part.partIdentifier,
+        size: part.size,
+      }
+    })
+
+    return {
+      commits,
+      message: 'Created new model',
+      sha: 'Life',
+    }
+  }, [modelData])
 
   if (isLoading) return <Spinner />
   if (isError) {
@@ -36,14 +59,20 @@ const ModelHistory = ({ modelHistory = [], isLoading, isError, error }) => {
       </>
     )
   }
-  const newHistory = [...modelHistory]
+  const partSHAs = {}
+  const newHistory = [fakeFirstCommit, ...modelHistory]
+  newHistory.forEach(version => {
+    version.commits.forEach(commit => {
+      if (!partSHAs[version.sha]) partSHAs[version.sha] = []
+      partSHAs[version.sha].push(commit.partIdentifier)
+    })
+  })
   return newHistory.reverse().map((entry, ind) => {
     if (!entry.commits || entry.commits.length === 0) {
       return null
     }
 
     const isInitial = newHistory.length - 1 === ind
-
     return (
       <div key={`entry_${ind}`} className={c.ModelHistory}>
         <CommitNode
@@ -56,12 +85,23 @@ const ModelHistory = ({ modelHistory = [], isLoading, isError, error }) => {
         />
         <Spacer size={'.75rem'} />
         {entry.commits.map((commit, ind) => {
-          if (!commit || !commit.name) return null
+          if (!commit) return null
+          const part = modelData.parts.find(
+            part => part.partIdentifier === commit.partIdentifier
+          )
+          const partName = part?.name
+          const prevSHA = Object.keys(partSHAs).find(sha => {
+            console.log(partSHAs)
+            partSHAs[sha].includes(commit.partIdentifier)
+          })
           return (
             <PartLine
               key={`commit_${commit.previousPartIdentifier}_${ind}`}
-              name={commit.name}
+              name={partName}
               size={commit.size}
+              isInitial={isInitial}
+              sha={entry.sha}
+              prevSHA={prevSHA}
             />
           )
         })}

@@ -101,6 +101,7 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
+const noop = () => null
 
 const OverlayWrapper = ({
   isLoading,
@@ -111,6 +112,7 @@ const OverlayWrapper = ({
   dataCy,
   onBack,
   onCancel,
+  onClose = noop,
   onContinue,
   cancelText = 'Close',
   continueText = 'Continue',
@@ -120,8 +122,9 @@ const OverlayWrapper = ({
   const { setOverlayOpen } = useOverlay()
 
   const closeOverlay = useCallback(() => {
+    onClose()
     setOverlayOpen(false)
-  }, [setOverlayOpen])
+  }, [onClose, setOverlayOpen])
 
   return (
     <div className={c.overlayWrapper} data-cy={dataCy}>

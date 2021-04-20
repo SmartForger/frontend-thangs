@@ -15,6 +15,7 @@ const SubpartContextMenu = props => {
   const c = useStyles({})
 
   const { trigger } = props
+
   const { part } = trigger || {}
 
   return (

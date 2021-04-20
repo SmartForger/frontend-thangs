@@ -2,6 +2,7 @@ import { storeonDevtools } from 'storeon/devtools'
 import { createStoreon } from 'storeon'
 import attachmentFileStore from '@store/uploadAttachmentFiles/store'
 import commentsStore from '@store/comments/store'
+import compareStore from '@store/compare/store'
 import experimentsStore from '@store/experiments/store'
 import folderNavStore from '@store/folderNav/store'
 import folderLikesStore from '@store/folderLikes/store'
@@ -19,7 +20,6 @@ import geoSearchStore from '@store/geoSearch/store'
 import textSearchStore from '@store/textSearch/store'
 import searchMyThangsStore from '@store/searchMyThangs/store'
 import searchSubscriptionsStore from '@store/searchSubscriptions/store'
-import teamsStore from '@store/teams/store'
 import thangsStore from '@store/thangs/store'
 import userAvatarStore from '@store/userAvatar/store'
 import userLikedModelsStore from '@store/userLikedModels/store'
@@ -32,6 +32,7 @@ import licenseDownloadUrl from '@store/licenseDownloadUrl/store'
 const storeParts = [
   attachmentFileStore,
   commentsStore,
+  compareStore,
   experimentsStore,
   folderNavStore,
   folderLikesStore,
@@ -49,7 +50,6 @@ const storeParts = [
   textSearchStore,
   searchMyThangsStore,
   searchSubscriptionsStore,
-  teamsStore,
   thangsStore,
   userAvatarStore,
   userLikedModelsStore,

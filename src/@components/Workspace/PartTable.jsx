@@ -6,7 +6,7 @@ import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Body } from '@physna/voxel-ui/@atoms/Typography'
 
 import InfiniteTreeView from '@components/InfiniteTreeView'
-import { Checkbox, Spacer, TableHeader, Tag } from '@components'
+import { Checkbox, Spacer, TableHeader } from '@components'
 import { flattenTree } from '@utilities/tree'
 
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
@@ -114,7 +114,7 @@ const PartTableHeader = ({ sortedBy, order, onSort = noop }) => {
       {
         key: COLUMNS.SCORE,
         className: c.PartTable_Score,
-        title: 'Score',
+        title: '',
       },
     ],
     [c]
@@ -227,11 +227,7 @@ const PartTable = ({
               )}
               <Body>{node.name}</Body>
             </div>
-            <div className={cn(c.PartTable_Contributors, c.PartTable_Cell)}>
-              <Tag lightText color={'#30BE93'}>
-                98%
-              </Tag>
-            </div>
+            <div className={cn(c.PartTable_Contributors, c.PartTable_Cell)}>See Diff</div>
             {showContextMenus && (
               <div
                 className={cn(c.PartTable_Action, c.PartTable_Cell)}

@@ -19,6 +19,10 @@ const useStyles = createUseStyles(_theme => {
       background: '#F7F7FB',
       width: 'calc(50% - .5rem)',
     },
+    Model_ModelViewer: {
+      padding: 0,
+      height: '100%',
+    },
   }
 })
 
