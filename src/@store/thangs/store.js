@@ -23,18 +23,21 @@ export default store => {
       ...R.pathOr([], ['models', 'data'], state),
       ...rootModels.map(m => ({ ...m, id: +m.id, isPublic: true })),
     ]
-    folders.forEach(folder => {
-      models = [
-        ...models,
-        ...folder.models.map(model => {
-          model.isPublic = folder.isPublic
-          model.folderId = folder.id
-          return model
-        }),
-      ]
-      delete folder.models
-      delete folder.subfolders
-    })
+
+    if (folders && folders.length > 0) {
+      folders.forEach(folder => {
+        models = [
+          ...models,
+          ...folder.models.map(model => {
+            model.isPublic = folder.isPublic
+            model.folderId = folder.id
+            return model
+          }),
+        ]
+        delete folder.models
+        delete folder.subfolders
+      })
+    }
     models = R.uniqBy(R.prop('id'), models)
 
     return {
