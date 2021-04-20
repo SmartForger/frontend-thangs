@@ -1,12 +1,18 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
-import { ContainerRow, ContainerColumn, Markdown, Spacer, UserInline } from '@components'
+import {
+  ContainerRow,
+  ContainerColumn,
+  DotStackActionMenu,
+  Markdown,
+  Spacer,
+  UserInline,
+} from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import ArrowLeftIcon from '@svg/IconArrowLeft'
 import ArrowRightIcon from '@svg/IconArrowRight'
 import TrashCanIcon from '@svg/TrashCanIcon'
-import FlagIcon from '@svg/FlagIcon'
 import { useOverlay, useCurrentUserId } from '@hooks'
 import { overlayview } from '@utilities/analytics'
 import * as types from '@constants/storeEventTypes'
@@ -39,7 +45,7 @@ const useStyles = createUseStyles(theme => {
     AttachmentView_UserInfo: {
       '& span': {
         fontSize: '1rem',
-      }
+      },
     },
     AttachmentView_ExitButton: {
       top: '1.75rem',
@@ -61,12 +67,13 @@ const useStyles = createUseStyles(theme => {
     },
     AttachmentView_CaptionRow: {
       display: 'flex',
-      flexDirection: 'row'
+      flexDirection: 'row',
     },
     AttachmentView_CaptionWrapper: {
       display: 'flex',
       justifyContent: 'space-between',
-      width: '100%'
+      width: '100%',
+      overflowWrap: 'anywhere',
     },
     AttachmentView_CaptionPosition: {
       color: theme.colors.black[300],
@@ -85,29 +92,31 @@ const useStyles = createUseStyles(theme => {
     AttachmentView_ReportLink: {
       cursor: 'pointer',
       fontWeight: 500,
-      color: theme.colors.grey[300],
-    }
+      color: theme.colors.white[300],
+    },
   }
 })
 
 const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
   const c = useStyles()
-  const [activeAttachmentIndex, setActiveAttachmentIndex] = useState(initialAttachmentIndex)
-  const { dispatch, modelAttachments = {}, } = useStoreon('modelAttachments')
+  const [activeAttachmentIndex, setActiveAttachmentIndex] = useState(
+    initialAttachmentIndex
+  )
+  const { dispatch, modelAttachments = {} } = useStoreon('modelAttachments')
   const { data: attachments } = modelAttachments
-  const { setOverlayOpen } = useOverlay()
+  const { setOverlayOpen, setOverlay } = useOverlay()
 
   const closeOverlay = useCallback(() => {
     setOverlayOpen(false)
   }, [setOverlayOpen])
 
-  const activeAttachment = useMemo(
-    () => attachments[activeAttachmentIndex],
-    [attachments, activeAttachmentIndex]
-  )
+  const activeAttachment = useMemo(() => attachments[activeAttachmentIndex], [
+    attachments,
+    activeAttachmentIndex,
+  ])
 
   const attachmentPosition = useMemo(() => {
-    const attachmentsLength = attachments.length;
+    const attachmentsLength = attachments.length
     return `${activeAttachmentIndex + 1} / ${attachmentsLength}`
   }, [attachments, activeAttachmentIndex])
 
@@ -116,32 +125,78 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
   }, [activeAttachmentIndex])
 
   const hasNextAttachment = useMemo(() => {
-    return (activeAttachmentIndex + 1) < attachments.length
+    return activeAttachmentIndex + 1 < attachments.length
   }, [attachments, activeAttachmentIndex])
 
   useEffect(() => {
     overlayview('AttachmentView')
   })
 
-  const handleRemove = useCallback((attachmentId, modelId) => {
-    dispatch(types.DELETE_MODEL_ATTACHMENT, { attachmentId, modelId })
-    if (hasPreviousAttachment) {
-      setActiveAttachmentIndex(prevVal => prevVal - 1)
-    } else if (hasNextAttachment) {
-      setActiveAttachmentIndex(prevVal => prevVal + 1)
-    } else {
-      closeOverlay()
-    }
-  }, [dispatch])
+  const handleRemove = useCallback(
+    (attachmentId, modelId) => {
+      dispatch(types.DELETE_MODEL_ATTACHMENT, {
+        attachmentId,
+        modelId,
+        onFinish: updatedAttachments => {
+          const attachmentAtCurrentIndex = updatedAttachments[activeAttachmentIndex]
+          const attachmentAtPreviousIndex = updatedAttachments[activeAttachmentIndex - 1]
+          if (attachmentAtCurrentIndex?.id) {
+            return
+          } else if (attachmentAtPreviousIndex?.id) {
+            setActiveAttachmentIndex(prevVal => prevVal - 1)
+          } else {
+            closeOverlay()
+          }
+        },
+      })
+    },
+    [dispatch, activeAttachmentIndex, setActiveAttachmentIndex, closeOverlay]
+  )
 
-  const handleReport = useCallback((attachmentId) => {
-    dispatch(types.REPORT_MODEL_ATTACHMENT, { attachmentId })
-  }, [dispatch])
+  const handleReport = useCallback(() => {
+    setOverlay({
+      isOpen: true,
+      template: 'report',
+      data: {
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
+        attachmentId: activeAttachment.id,
+      },
+    })
+  }, [setOverlay, activeAttachment.id])
 
   const currentUserId = useCurrentUserId()
   const userCanRemoveImage = useMemo(() => {
-    return [`${modelOwnerId}`, activeAttachment.owner.id].includes(currentUserId);
-  }, [modelOwnerId, activeAttachment.owner.id, currentUserId])
+    const attachmentOwnerId = activeAttachment?.owner?.id
+    if (!modelOwnerId || !attachmentOwnerId) return false
+    return [`${modelOwnerId}`, attachmentOwnerId].includes(currentUserId)
+  }, [modelOwnerId, activeAttachment, currentUserId])
+
+  const AttachmentOptions = () => {
+    const REPORT = 'report'
+
+    const options = [
+      {
+        label: 'Report',
+        value: REPORT,
+      },
+    ]
+
+    const handleSelect = eventType => {
+      switch (eventType) {
+        case REPORT:
+          handleReport(activeAttachment.id)
+          break
+        default:
+          break
+      }
+    }
+
+    return (
+      <DotStackActionMenu options={options} onChange={handleSelect} color='#FFFFFF' />
+    )
+  }
 
   return (
     <ContainerRow>
@@ -162,7 +217,11 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
               <Spacer size={'1rem'} />
               <div className={c.AttachmentView_Row}>
                 <Spacer size={'1.5rem'} />
-                <UserInline user={activeAttachment.owner} className={c.AttachmentView_UserInfo} size='2.5rem' />
+                <UserInline
+                  user={activeAttachment.owner}
+                  className={c.AttachmentView_UserInfo}
+                  size='2.5rem'
+                />
               </div>
               <ExitIcon className={c.AttachmentView_ExitButton} onClick={closeOverlay} />
               <Spacer size={'1rem'} />
@@ -177,9 +236,8 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
               <div className={c.AttachmentView_CaptionRow}>
                 <Spacer width={'1.5rem'} />
                 <div className={c.AttachmentView_CaptionWrapper}>
-                  <Markdown>
-                    {activeAttachment.caption}
-                  </Markdown>
+                  <Markdown>{activeAttachment.caption}</Markdown>
+                  <Spacer width={'0.5rem'} />
                   <div className={c.AttachmentView_CaptionPosition}>
                     {attachmentPosition}
                   </div>
@@ -193,18 +251,24 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
         <ContainerColumn>
           <Spacer size='0.5rem' />
           <ContainerRow justifyContent='flex-end'>
-            <ContainerRow className={c.AttachmentView_ReportLink} onClick={() => handleReport(activeAttachment.id)}>
-              <FlagIcon color='#999999' />
-              <Spacer size='0.25rem' />
-              Report
-            </ContainerRow>
-            <Spacer size='1rem' />
             {userCanRemoveImage && (
-              <ContainerRow className={c.AttachmentView_RemoveLink} onClick={() => handleRemove(activeAttachment.id, activeAttachment.modelId)}>
-                <TrashCanIcon color='#FFFFFF' />
-                <Spacer size='0.25rem' />
-                Remove
-              </ContainerRow>)}
+              <>
+                <ContainerRow
+                  className={c.AttachmentView_RemoveLink}
+                  onClick={() =>
+                    handleRemove(activeAttachment.id, activeAttachment.modelId)
+                  }
+                >
+                  <TrashCanIcon color='#FFFFFF' />
+                  <Spacer size='0.25rem' />
+                  Remove
+                </ContainerRow>
+                <Spacer size='0.5rem' />
+              </>
+            )}
+            <ContainerRow className={c.AttachmentView_ReportLink}>
+              <AttachmentOptions />
+            </ContainerRow>
           </ContainerRow>
         </ContainerColumn>
       </ContainerColumn>
@@ -218,7 +282,7 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
           />
         )}
       </ContainerRow>
-    </ContainerRow >
+    </ContainerRow>
   )
 }
 

@@ -24,7 +24,7 @@ const useStyles = createUseStyles(() => {
       height: '6.25rem',
       borderRadius: '0.75rem',
       objectFit: 'cover',
-      cursor: 'pointer'
+      cursor: 'pointer',
     },
   }
 })
@@ -66,10 +66,7 @@ const AddPrintPhotoLink = ({ modelId, isAuthedUser, openSignupOverlay = noop }) 
 const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => {
   const { setOverlay } = useOverlay()
   const c = useStyles()
-  const {
-    dispatch,
-    modelAttachments = {},
-  } = useStoreon('modelAttachments')
+  const { dispatch, modelAttachments = {} } = useStoreon('modelAttachments')
   const { data: attachments, isLoading } = modelAttachments
 
   useEffect(() => {
@@ -77,7 +74,7 @@ const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => 
   }, [dispatch, model.id])
 
   const handleImageClick = useCallback(
-    (initialAttachmentIndex) => {
+    initialAttachmentIndex => {
       setOverlay({
         isOpen: true,
         template: 'attachmentView',
@@ -90,13 +87,13 @@ const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => 
           modelOwnerId: model.owner.id,
         },
       })
-    }, [attachments, setOverlay])
+    },
+    [attachments, setOverlay, model.owner.id]
+  )
 
   return (
     <div className={c.ModelPrints}>
-      <Title headerLevel={HeaderLevel.tertiary}>
-        Model prints
-      </Title>
+      <Title headerLevel={HeaderLevel.tertiary}>Community Uploads</Title>
       {isLoading ? (
         <Spinner />
       ) : attachments.length ? (
@@ -111,16 +108,13 @@ const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => 
                 alt={a.caption}
                 onClick={() => handleImageClick(i)}
               />
-            )
-            )}
+            ))}
           </div>
         </>
       ) : (
         <>
           <Spacer size='.5rem' />
-          <Body multiline>
-            No prints added yet, be the first to upload a photo!
-          </Body>
+          <Body multiline>No photos added yet, be the first to upload a photo!</Body>
         </>
       )}
       <Spacer size='1.5rem' />

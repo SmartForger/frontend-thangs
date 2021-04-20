@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 
 import { ActionMenu } from '@components'
-import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
+import DotStackIcon from '@svg/DotStackIcon'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -50,16 +50,21 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const DotStackTarget = ({ onClick = noop }) => {
+const DotStackTarget = ({ onClick = noop, color = '#000000' }) => {
   const c = useStyles({})
   return (
     <div className={c.DotStackTarget} onClick={onClick}>
-      <DotStackIcon />
+      <DotStackIcon color={color} />
     </div>
   )
 }
 
-const DotStackActionMenu = ({ onChange = noop, options = [], actionMenuTitle }) => {
+const DotStackActionMenu = ({
+  onChange = noop,
+  options = [],
+  actionMenuTitle,
+  color,
+}) => {
   const menuProps = useMemo(() => {
     return {
       onChange,
@@ -73,7 +78,7 @@ const DotStackActionMenu = ({ onChange = noop, options = [], actionMenuTitle }) 
   return (
     <ActionMenu
       MenuComponentProps={menuProps}
-      TargetComponent={DotStackTarget}
+      TargetComponent={targetProps => <DotStackTarget color={color} {...targetProps} />}
       isCloseOnSelect={true}
       isMobileOnly={true}
     />

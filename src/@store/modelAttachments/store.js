@@ -1,6 +1,8 @@
 import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
 
+const noop = () => null
+
 const getInitAtom = () => ({
   isLoaded: false,
   isLoading: false,
@@ -39,7 +41,7 @@ export default store => {
     },
   }))
 
-  store.on(types.FETCH_MODEL_ATTACHMENTS, async (_, { modelId }) => {
+  store.on(types.FETCH_MODEL_ATTACHMENTS, async (_, { modelId, onFinish = noop }) => {
     store.dispatch(types.LOADING_MODEL_ATTACHMENTS)
     const { data, error } = await api({
       method: 'GET',
@@ -49,30 +51,22 @@ export default store => {
     if (error) {
       store.dispatch(types.FAILED_MODEL_ATTACHMENTS)
     } else {
+      onFinish(data)
       store.dispatch(types.LOADED_MODEL_ATTACHMENTS, { data })
     }
   })
 
-  store.on(types.DELETE_MODEL_ATTACHMENT, async (_state, { attachmentId, modelId }) => {
-    const { error } = await api({
-      method: 'DELETE',
-      endpoint: `attachments/${attachmentId}`,
-    })
+  store.on(
+    types.DELETE_MODEL_ATTACHMENT,
+    async (_state, { attachmentId, modelId, onFinish = noop }) => {
+      const { error } = await api({
+        method: 'DELETE',
+        endpoint: `attachments/${attachmentId}`,
+      })
 
-    if (!error) {
-      store.dispatch(types.FETCH_MODEL_ATTACHMENTS, { modelId })
+      if (!error) {
+        store.dispatch(types.FETCH_MODEL_ATTACHMENTS, { modelId, onFinish })
+      }
     }
-  })
-
-  store.on(types.REPORT_MODEL_ATTACHMENT, async (_state, { attachmentId }) => {
-    // TODO: Figure out how this would work
-    // await api({
-    //   method: 'POST',
-    //   endpoint: `attachments/${attachmentId}/takedown`,
-    //   body: {
-    //     email,
-    //     reason,
-    //   },
-    // })
-  })
+  )
 }

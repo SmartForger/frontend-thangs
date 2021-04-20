@@ -95,15 +95,8 @@ const useStyles = createUseStyles(theme => {
 })
 
 const AttachmentUpload = ({ modelId }) => {
-  const { dispatch, uploadAttachmentFiles = {} } = useStoreon(
-    'uploadAttachmentFiles'
-  )
-  const {
-    attachments = {},
-    isLoading,
-    isError,
-    isSubmitted,
-  } = uploadAttachmentFiles
+  const { dispatch, uploadAttachmentFiles = {} } = useStoreon('uploadAttachmentFiles')
+  const { attachments = {}, isLoading, isError, isSubmitted } = uploadAttachmentFiles
   const [errorMessage, setErrorMessage] = useState(null)
   const [activeAttachmentPosition, setActiveAttachmentPosition] = useState(0)
   const c = useStyles({ isError })
@@ -159,18 +152,15 @@ const AttachmentUpload = ({ modelId }) => {
     [activeAttachment, dispatch]
   )
 
-  const formatOverlayTitle = useMemo(
-    () => {
-      if (isError) return 'Submit Failed'
-      if (isSubmitted) return 'Photos Submitted'
-      if (Object.values(attachments).length === 0) return 'Upload Print Photos'
+  const formatOverlayTitle = useMemo(() => {
+    if (isError) return 'Submit Failed'
+    if (isSubmitted) return 'Photos Submitted'
+    if (Object.values(attachments).length === 0) return 'Upload Model Photos'
 
-      const attachmentLength = Object.values(attachments).length
-      const photoPositionDisplay = `(${activeAttachmentPosition + 1}/${attachmentLength})`
-      return `Add Print Photo ${attachmentLength > 1 ? photoPositionDisplay : ''}`
-    },
-    [isError, isSubmitted, activeAttachmentPosition, attachments]
-  )
+    const attachmentLength = Object.values(attachments).length
+    const photoPositionDisplay = `(${activeAttachmentPosition + 1}/${attachmentLength})`
+    return `Add Model Photo ${attachmentLength > 1 ? photoPositionDisplay : ''}`
+  }, [isError, isSubmitted, activeAttachmentPosition, attachments])
 
   const numOfAttachments = Object.values(attachments).length
 
@@ -186,33 +176,33 @@ const AttachmentUpload = ({ modelId }) => {
         <div className={c.AttachmentUpload_Column}>
           <Spacer size={'1.5rem'} />
           <div className={c.AttachmentUpload_Row}>
-            <Body className={c.AttachmentUpload_OverlayHeader}>
-              {formatOverlayTitle}
-            </Body>
-            {activeAttachment && activeAttachmentPosition > 0 && (<ArrowLeftIcon className={c.AttachmentUpload_BackButton} onClick={handleBack} />)}
+            <Body className={c.AttachmentUpload_OverlayHeader}>{formatOverlayTitle}</Body>
+            {activeAttachment && activeAttachmentPosition > 0 && (
+              <ArrowLeftIcon
+                className={c.AttachmentUpload_BackButton}
+                onClick={handleBack}
+              />
+            )}
             <ExitIcon className={c.AttachmentUpload_ExitButton} onClick={handleCancel} />
           </div>
           <Spacer size={'1.5rem'} />
         </div>
         {isError ? (
           <Error onCancel={handleCancel} onRetry={handleRetry} />
-        ) : (isSubmitted ? (
+        ) : isSubmitted ? (
           <Submitted onClose={handleCancel} />
-        ) :
-          activeAttachment ? (
-            <Attachment
-              attachment={activeAttachment}
-              numOfAttachments={numOfAttachments}
-              onCancel={handleCancel}
-              onContinue={handleContinue}
-              onInputChange={handleInputChange}
-              onSubmit={handleSubmit}
-            />) : (
-            <UploadFiles
-              onDrop={onDrop}
-              errorMessage={errorMessage}
-            />
-          ))}
+        ) : activeAttachment ? (
+          <Attachment
+            attachment={activeAttachment}
+            numOfAttachments={numOfAttachments}
+            onCancel={handleCancel}
+            onContinue={handleContinue}
+            onInputChange={handleInputChange}
+            onSubmit={handleSubmit}
+          />
+        ) : (
+          <UploadFiles onDrop={onDrop} errorMessage={errorMessage} />
+        )}
         <Spacer size={'2rem'} className={c.AttachmentUpload__desktop} />
       </div>
       <Spacer size={'2rem'} />
