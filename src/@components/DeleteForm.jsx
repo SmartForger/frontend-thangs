@@ -134,15 +134,16 @@ const DeleteForm = ({
         </>
       )}
       <Spacer size='1rem' />
-      <MultiLineBodyText>
-        Confirm below in order to delete your {type}. This action is not reversible.
-      </MultiLineBodyText>
-      <Spacer size='1rem' />
       <img
         className={c.AttachmentView_Image}
         alt={activeAttachment.caption}
         src={activeAttachment.imageUrl}
       />
+      <Spacer size='1rem' />
+      <MultiLineBodyText>
+        Confirm below in order to delete your {type}. This action is not reversible.
+      </MultiLineBodyText>
+      <Spacer size='1rem' />
       <form className={c.DeleteForm} onSubmit={handleOnDelete}>
         {errorMessage && (
           <>

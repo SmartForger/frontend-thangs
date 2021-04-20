@@ -63,7 +63,6 @@ const useStyles = createUseStyles(theme => {
       minWidth: 0,
     },
     AttachmentView_Image: {
-      minHeight: '20.8rem',
       width: '100%',
     },
     AttachmentView_CaptionRow: {

@@ -121,6 +121,7 @@ const DeleteAttachment = ({ activeAttachment, modelId, onFinish = noop }) => {
       <div className={classnames(c.DeleteAttachment_Column, c.DeleteAttachment_EditForm)}>
         <Spacer className={c.EditFolder_MobileSpacer} size='2rem' />
         <DeleteForm
+          activeAttachment={activeAttachment}
           handleDelete={handleDelete}
           handleCancel={closeOverlay}
           type={'upload'}
