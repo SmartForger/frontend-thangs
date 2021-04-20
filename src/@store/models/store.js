@@ -57,11 +57,14 @@ export default store => {
     types.UPDATE_MODEL,
     async (state, { id, model: updatedModel, onError = noop, onFinish = noop }) => {
       if (R.isNil(id)) return
-      const oldModel = (store['model'] && store['model'].data) || {}
+      const oldModel =
+        (state['model'] && state['model'].data) ??
+        state.models.data.find(model => model.id === id) ??
+        {}
       store.dispatch(types.CHANGE_MODEL_STATUS, {
         status: STATUSES.SAVING,
         atom: 'model',
-        data: state.model.data,
+        data: oldModel,
       })
       const { error } = await api({
         method: 'PUT',
@@ -80,7 +83,7 @@ export default store => {
         store.dispatch(types.CHANGE_MODEL_STATUS, {
           status: STATUSES.SAVED,
           atom: 'model',
-          data: { ...state.model.data, ...updatedModel },
+          data: { ...oldModel, ...updatedModel },
         })
         store.dispatch(types.FETCH_THANGS, {})
         onFinish()

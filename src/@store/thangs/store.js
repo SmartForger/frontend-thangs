@@ -18,27 +18,29 @@ export default store => {
   }))
 
   store.on(types.UPDATE_THANGS, (state, event) => {
-    const { folders, models: rootModels } = event
+    const { folders = [], models: rootModels } = event
     let models = [
       ...R.pathOr([], ['models', 'data'], state),
       ...rootModels.map(m => ({ ...m, id: +m.id, isPublic: true })),
     ]
 
-    if (folders && folders.length > 0) {
-      folders.forEach(folder => {
-        models = [
-          ...models,
-          ...folder.models.map(model => {
-            model.isPublic = folder.isPublic
-            model.folderId = folder.id
-            return model
-          }),
-        ]
-        delete folder.models
-        delete folder.subfolders
-      })
-    }
-    models = R.uniqBy(R.prop('id'), models)
+    folders.forEach(folder => {
+      models = [
+        ...models,
+        ...folder.models.map(model => {
+          model.isPublic = folder.isPublic
+          model.folderId = folder.id
+          return model
+        }),
+      ]
+      delete folder.models
+      delete folder.subfolders
+    })
+
+    // HOTFIX 4/20/21 - Updating a file will cause us to join the existing models with updates from backend, but uniqBy will always take the first match
+    // Instead of refactoring this to either not join both arrays or be intelligent about the merge, I'm reversing the array so that we always pick the newest
+    // version of a model instead of the one we fetched first
+    models = R.uniqBy(R.prop('id'), models.reverse())
 
     return {
       activity: {
@@ -47,7 +49,7 @@ export default store => {
       },
       folders: {
         ...state.folders,
-        data: arrayToDictionary(event.folders),
+        data: arrayToDictionary(folders),
       },
       models: {
         ...state.models,
