@@ -15,7 +15,6 @@ import ArrowRightIcon from '@svg/IconArrowRight'
 import TrashCanIcon from '@svg/TrashCanIcon'
 import { useOverlay, useCurrentUserId, useIsMobile } from '@hooks'
 import { overlayview } from '@utilities/analytics'
-import * as types from '@constants/storeEventTypes'
 import classnames from 'classnames'
 
 const useStyles = createUseStyles(theme => {

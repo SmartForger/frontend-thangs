@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { DeleteForm, Spacer, Spinner } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
-import { overlayview, track } from '@utilities/analytics'
+import { overlayview } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {

@@ -1,5 +1,6 @@
 import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
+import { track } from '@utilities'
 
 const noop = () => null
 
@@ -66,6 +67,7 @@ export default store => {
 
       if (!error) {
         store.dispatch(types.FETCH_MODEL_ATTACHMENTS, { modelId, onFinish })
+        track('Model Attachment Deleted', { modelId, attachmentId })
       }
     }
   )

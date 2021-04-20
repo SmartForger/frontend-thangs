@@ -1,5 +1,6 @@
 import * as types from '@constants/storeEventTypes'
 import { api, uploadAttachmentFiles } from '@services'
+import { track } from '@utilities'
 
 const getInitAtom = () => ({
   isLoading: false,
@@ -102,29 +103,37 @@ export default store => {
     })
   })
 
-  store.on(types.CHANGE_UPLOAD_ATTACHMENT_FILE, (state, { id, data, isLoading, isError }) => {
-    if (!id || !state.uploadAttachmentFiles.data[id]) {
-      return { uploadAttachmentFiles: state.uploadAttachmentFiles }
-    }
+  store.on(
+    types.CHANGE_UPLOAD_ATTACHMENT_FILE,
+    (state, { id, data, isLoading, isError }) => {
+      if (!id || !state.uploadAttachmentFiles.data[id]) {
+        return { uploadAttachmentFiles: state.uploadAttachmentFiles }
+      }
 
-    return {
-      uploadAttachmentFiles: {
-        ...state.uploadAttachmentFiles,
-        data: {
-          ...state.uploadAttachmentFiles.data,
-          [id]: { ...state.uploadAttachmentFiles.data[id], ...data, isLoading, isError },
-        },
-        attachments: {
-          ...state.uploadAttachmentFiles.attachments,
-          [id]: {
-            ...state.uploadAttachmentFiles.attachments[id],
-            filename: data.newFileName,
+      return {
+        uploadAttachmentFiles: {
+          ...state.uploadAttachmentFiles,
+          data: {
+            ...state.uploadAttachmentFiles.data,
+            [id]: {
+              ...state.uploadAttachmentFiles.data[id],
+              ...data,
+              isLoading,
+              isError,
+            },
           },
+          attachments: {
+            ...state.uploadAttachmentFiles.attachments,
+            [id]: {
+              ...state.uploadAttachmentFiles.attachments[id],
+              filename: data.newFileName,
+            },
+          },
+          isLoading: false,
         },
-        isLoading: false,
-      },
+      }
     }
-  })
+  )
 
   store.on(types.SET_ATTACHMENT_INFO, (state, { id, updatedAttachmentData }) => {
     return {
@@ -154,23 +163,27 @@ export default store => {
     try {
       store.dispatch(types.SUBMITTING_ATTACHMENTS)
       const attachments = Object.values(state.uploadAttachmentFiles.attachments)
-      const getRequests = () => attachments.map(async ({ filename, caption }) => await api({
-        method: 'POST',
-        endpoint: `models/${modelId}/attachment`,
-        body: {
-          filename,
-          caption,
-        },
-      })
-      )
+      const getRequests = () =>
+        attachments.map(
+          async ({ filename, caption }) =>
+            await api({
+              method: 'POST',
+              endpoint: `models/${modelId}/attachment`,
+              body: {
+                filename,
+                caption,
+              },
+            })
+        )
       const results = await Promise.all(getRequests())
-        .then((res) => {
+        .then(res => {
           store.dispatch(types.SUBMIT_ATTACHMENTS_SUCCEEDED)
           store.dispatch(types.FETCH_MODEL_ATTACHMENTS, { modelId })
           return res
         })
         .catch(() => store.dispatch(types.SUBMIT_ATTACHMENTS_FAILED))
       if (results.some(res => res.error)) throw new Error('Unable to submit attachment')
+      track('Model Attachment Uploaded', { modelId })
     } catch (error) {
       store.dispatch(types.SUBMIT_ATTACHMENTS_FAILED)
     }
