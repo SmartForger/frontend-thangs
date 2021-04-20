@@ -31,17 +31,17 @@ const noop = () => null
 
 export default store => {
   store.on(types.STORE_INIT, () => ({
-    uploadFiles: getInitAtom(),
+    uploadModelFiles: getInitAtom(),
   }))
 
   store.on(types.RESET_UPLOAD_FILES, () => ({
-    uploadFiles: getInitAtom(),
+    uploadModelFiles: getInitAtom(),
   }))
 
   store.on(types.SUBMITTING_MODELS, state => {
     return {
-      uploadFiles: {
-        ...state.uploadFiles,
+      uploadModelFiles: {
+        ...state.uploadModelFiles,
         isLoading: true,
       },
     }
@@ -49,8 +49,8 @@ export default store => {
 
   store.on(types.SUBMIT_MODELS_FAILED, state => {
     return {
-      uploadFiles: {
-        ...state.uploadFiles,
+      uploadModelFiles: {
+        ...state.uploadModelFiles,
         isLoading: false,
         isError: true,
       },
@@ -58,7 +58,7 @@ export default store => {
   })
 
   store.on(types.REMOVE_UPLOAD_FILES, (state, { nodeFileMap, shouldRemove }) => {
-    const { data: uploadedFiles, treeData } = state.uploadFiles
+    const { data: uploadedFiles, treeData } = state.uploadModelFiles
 
     const newUploadedFiles = { ...uploadedFiles }
 
@@ -80,8 +80,8 @@ export default store => {
     })
 
     return {
-      uploadFiles: {
-        ...state.uploadFiles,
+      uploadModelFiles: {
+        ...state.uploadModelFiles,
         data: newUploadedFiles,
         treeData: newTreeData,
       },
@@ -89,7 +89,7 @@ export default store => {
   })
 
   store.on(types.CANCEL_UPLOAD, (state, { node }) => {
-    const { treeData } = state.uploadFiles
+    const { treeData } = state.uploadModelFiles
 
     const nodeFileMap = {}
 
@@ -135,10 +135,10 @@ export default store => {
     )
 
     return {
-      uploadFiles: {
-        ...state.uploadFiles,
+      uploadModelFiles: {
+        ...state.uploadModelFiles,
         data: {
-          ...state.uploadFiles.data,
+          ...state.uploadModelFiles.data,
           ...newFilesMap,
         },
         validated: false,
@@ -147,7 +147,7 @@ export default store => {
   })
 
   store.on(types.SET_UPLOADED_URLS, (state, { fileIds, uploadedUrlData }) => {
-    const { data: uploadedFiles } = state.uploadFiles
+    const { data: uploadedFiles } = state.uploadModelFiles
 
     fileIds.forEach((fileId, i) => {
       uploadedFiles[fileId] = {
@@ -158,16 +158,16 @@ export default store => {
   })
 
   store.on(types.CHANGE_UPLOAD_FILE, (state, { id, data, isLoading, isError }) => {
-    if (!id || !state.uploadFiles.data[id]) {
-      return { uploadFiles: state.uploadFiles }
+    if (!id || !state.uploadModelFiles.data[id]) {
+      return { uploadModelFiles: state.uploadModelFiles }
     }
 
     return {
-      uploadFiles: {
-        ...state.uploadFiles,
+      uploadModelFiles: {
+        ...state.uploadModelFiles,
         data: {
-          ...state.uploadFiles.data,
-          [id]: { ...state.uploadFiles.data[id], ...data, isLoading, isError },
+          ...state.uploadModelFiles.data,
+          [id]: { ...state.uploadModelFiles.data[id], ...data, isLoading, isError },
         },
       },
     }
@@ -175,8 +175,8 @@ export default store => {
 
   store.on(types.SET_IS_ASSEMBLY, (state, { isAssembly }) => {
     return {
-      uploadFiles: {
-        ...state.uploadFiles,
+      uploadModelFiles: {
+        ...state.uploadModelFiles,
         isAssembly,
       },
     }
@@ -184,10 +184,10 @@ export default store => {
 
   store.on(types.SET_MODEL_INFO, (state, { id, formData }) => {
     return {
-      uploadFiles: {
-        ...state.uploadFiles,
+      uploadModelFiles: {
+        ...state.uploadModelFiles,
         formData: {
-          ...state.uploadFiles.formData,
+          ...state.uploadModelFiles.formData,
           [id]: formData,
         },
       },
@@ -196,8 +196,8 @@ export default store => {
 
   store.on(types.VALIDATE_FILES_SUCCESS, (state, { treeData }) => {
     return {
-      uploadFiles: {
-        ...state.uploadFiles,
+      uploadModelFiles: {
+        ...state.uploadModelFiles,
         treeData,
         validating: false,
         validated: true,
@@ -207,8 +207,8 @@ export default store => {
 
   store.on(types.VALIDATE_FILES_FAILED, state => {
     return {
-      uploadFiles: {
-        ...state.uploadFiles,
+      uploadModelFiles: {
+        ...state.uploadModelFiles,
         treeData: {},
         validating: false,
         validated: true,
@@ -217,14 +217,14 @@ export default store => {
   })
 
   store.on(types.SET_VALIDATING, (state, { validating }) => ({
-    uploadFiles: {
-      ...state.uploadFiles,
+    uploadModelFiles: {
+      ...state.uploadModelFiles,
       validating,
     },
   }))
 
   store.on(types.VALIDATE_FILES, async state => {
-    const { data } = state.uploadFiles
+    const { data } = state.uploadModelFiles
     const isLoading = Object.values(data).some(file => file.isLoading)
     if (isLoading) {
       return
@@ -306,11 +306,11 @@ export default store => {
       return
     }
 
-    let allFiles = Object.values(state.uploadFiles.data)
+    let allFiles = Object.values(state.uploadModelFiles.data)
     let oldFile = allFiles.find(f => f.newFileName)
     while (allFiles.length > 0 && !oldFile) {
       await sleep(500)
-      allFiles = Object.values(state.uploadFiles.data)
+      allFiles = Object.values(state.uploadModelFiles.data)
       oldFile = allFiles.find(f => f.newFileName)
     }
 
@@ -328,7 +328,7 @@ export default store => {
   store.on(types.SUBMIT_MODELS, async (state, { onFinish = noop }) => {
     store.dispatch(types.SUBMITTING_MODELS)
 
-    const { data: uploadedFiles, treeData, formData, isAssembly } = state.uploadFiles
+    const { data: uploadedFiles, treeData, formData, isAssembly } = state.uploadModelFiles
 
     const payload = []
     const assemblyGroups = {}

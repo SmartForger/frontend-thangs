@@ -2,7 +2,8 @@ import React, { useCallback } from 'react'
 import { MenuItem } from 'react-contextmenu'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useOverlay } from '@hooks'
-import { SingleLineBodyText, Spacer } from '@components'
+import { Spacer } from '@components'
+import { Body } from '@physna/voxel-ui/@atoms/Typography'
 import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
 import { ReactComponent as DeleteIcon } from '@svg/icon-delete.svg'
 import { track } from '@utilities/analytics'
@@ -83,7 +84,7 @@ const CommentMenu = ({ modelId, comment = {} }) => {
           <Spacer size={'1.5rem'} />
           <EditIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Edit</SingleLineBodyText>
+          <Body>Edit</Body>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>
@@ -93,7 +94,7 @@ const CommentMenu = ({ modelId, comment = {} }) => {
           <Spacer size={'1.5rem'} />
           <DeleteIcon />
           <Spacer size={'.5rem'} />
-          <SingleLineBodyText>Remove</SingleLineBodyText>
+          <Body>Delete</Body>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>

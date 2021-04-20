@@ -1,12 +1,14 @@
 import { storeonDevtools } from 'storeon/devtools'
 import { createStoreon } from 'storeon'
+import attachmentFileStore from '@store/uploadAttachmentFiles/store'
 import commentsStore from '@store/comments/store'
 import experimentsStore from '@store/experiments/store'
-import fileStore from '@store/uploadFiles/store'
 import folderNavStore from '@store/folderNav/store'
 import folderLikesStore from '@store/folderLikes/store'
 import folderStore from '@store/folders/store'
+import modelAttachments from '@store/modelAttachments/store'
 import modelDownloadUrl from '@store/modelDownloadUrl/store'
+import modelFileStore from '@store/uploadModelFiles/store'
 import modelPreviewsStore from '@store/modelPreviews/store'
 import modelsStatsStore from '@store/modelsStats/store'
 import modelsStore from '@store/models/store'
@@ -27,13 +29,15 @@ import licenseStore from '@store/license/store'
 import licenseDownloadUrl from '@store/licenseDownloadUrl/store'
 
 const storeParts = [
+  attachmentFileStore,
   commentsStore,
   experimentsStore,
-  fileStore,
   folderNavStore,
   folderLikesStore,
   folderStore,
+  modelAttachments,
   modelDownloadUrl,
+  modelFileStore,
   modelPreviewsStore,
   modelsStatsStore,
   modelsStore,

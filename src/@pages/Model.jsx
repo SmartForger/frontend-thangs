@@ -15,6 +15,7 @@ import {
   LikeModelButton,
   Markdown,
   ModelDetails,
+  ModelPrints,
   ModelTitle,
   ModelViewer as BackupViewer,
   ProgressText,
@@ -43,6 +44,7 @@ import {
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
+
 // import { useFeature } from '@optimizely/react-sdk'
 
 const useStyles = createUseStyles(theme => {
@@ -453,7 +455,7 @@ const Details = ({ currentUser, model, openSignupOverlay = noop }) => {
   )
 }
 
-const StatsAndActions = ({
+const StatsActionsAndPrints = ({
   c,
   className,
   modelData,
@@ -498,6 +500,12 @@ const StatsAndActions = ({
         ) : null}
         <Divider />
         <ModelStats model={modelData} />
+        <Divider />
+        <ModelPrints
+          model={modelData}
+          isAuthedUser={isAuthedUser}
+          openSignupOverlay={openSignupOverlay}
+        />
       </div>
       <Divider />
     </div>
@@ -678,7 +686,7 @@ const ModelDetailPage = ({
                 </div>
                 <Divider />
               </div>
-              <StatsAndActions
+              <StatsActionsAndPrints
                 className={c.Model__mobileOnly}
                 c={c}
                 modelData={modelData}
@@ -695,7 +703,7 @@ const ModelDetailPage = ({
                 openSignupOverlay={openSignupOverlay}
               />
             </div>
-            <StatsAndActions
+            <StatsActionsAndPrints
               className={c.Model__desktopOnly}
               c={c}
               modelData={modelData}

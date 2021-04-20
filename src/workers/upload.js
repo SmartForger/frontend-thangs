@@ -5,6 +5,7 @@ import { sendMessage, addMessageListener } from './worker'
 
 const cancellationTokens = {}
 
+/* Model files */
 async function uploadSingleFile({ id, file }, uploadedUrlData) {
   cancellationTokens[id] = axios.CancelToken.source()
 
@@ -63,11 +64,58 @@ function cancelRequests({ nodeFileMap, shouldRemove }) {
   sendMessage('upload:cancelled', { nodeFileMap, shouldRemove })
 }
 
+/* Attachment files */
+async function uploadSingleAttachmentFile({ id, file }, uploadedUrlData) {
+  try {
+    await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file)
+
+    sendMessage('uploadAttachments:success', {
+      id,
+      uploadedUrlData,
+    })
+  } catch (e) {
+    sendMessage('uploadAttachments:error', { id, error: e.message })
+  }
+}
+
+async function uploadMultipleAttachmentFiles({ files, directory }) {
+  try {
+    const { data: uploadedUrlData } = await api({
+      method: 'POST',
+      endpoint: 'attachments/upload-urls',
+      body: {
+        fileNames: files.map(f => f.file.name),
+        directory,
+      },
+    })
+
+    sendMessage('uploadAttachments:urls', {
+      fileIds: files.map(f => f.id),
+      uploadedUrlData,
+    })
+
+    files.forEach((f, i) => {
+      uploadSingleAttachmentFile(f, uploadedUrlData[i])
+    })
+  } catch (e) {
+    sendMessage('uploadAttachments:error', { error: e.message })
+  }
+}
+
+/* Message handling */
 function uploadMessageHandler(messageType, data) {
-  if (messageType === 'upload:upload') {
-    uploadMultipleFiles(data)
-  } else if (messageType === 'upload:cancel') {
-    cancelRequests(data)
+  switch (messageType) {
+    case 'upload:upload':
+      uploadMultipleFiles(data)
+      break
+    case 'upload:cancel':
+      cancelRequests(data)
+      break
+    case 'uploadAttachments:upload':
+      uploadMultipleAttachmentFiles(data)
+      break
+    default:
+      break
   }
 }
 

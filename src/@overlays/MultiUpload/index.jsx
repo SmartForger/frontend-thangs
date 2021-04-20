@@ -94,9 +94,9 @@ const useStyles = createUseStyles(theme => {
 })
 
 const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' }) => {
-  const { dispatch, license = {}, uploadFiles = {} } = useStoreon(
+  const { dispatch, license = {}, uploadModelFiles = {} } = useStoreon(
     'license',
-    'uploadFiles'
+    'uploadModelFiles'
   )
   const {
     data: uploadFilesData = {},
@@ -106,7 +106,7 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
     validating,
     validated,
     isAssembly,
-  } = uploadFiles
+  } = uploadModelFiles
   const { isLoading: isLoadingLicense } = license
   const [activeView, setActiveView] = useState(-1)
   const [errorMessage, setErrorMessage] = useState(null)

@@ -29,6 +29,12 @@ export const MODEL_FILE_EXTS = [
   '.par',
 ]
 
+export const PHOTO_FILE_EXTS = [
+  '.jpg',
+  '.jpeg',
+  '.png',
+]
+
 export const FILE_SIZE_LIMITS = {
   hard: {
     size: 250_000_000,
