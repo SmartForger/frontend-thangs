@@ -85,10 +85,11 @@ const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => 
           initialAttachmentIndex,
           attachments,
           modelOwnerId: model.owner.id,
+          modelId: model.id,
         },
       })
     },
-    [attachments, setOverlay, model.owner.id]
+    [setOverlay, attachments, model.owner.id, model.id]
   )
 
   return (

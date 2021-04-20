@@ -111,6 +111,9 @@ const useStyles = createUseStyles(theme => {
       fontWeight: 500,
       color: theme.colors.white[300],
     },
+    AttachmentView_Caption: {
+      width: '100%',
+    },
     Navigation_Mobile: {
       padding: '0 1rem',
 
@@ -134,15 +137,15 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
+const AttachmentView = ({ initialAttachmentIndex, modelOwnerId, modelId }) => {
   const c = useStyles()
   const [activeAttachmentIndex, setActiveAttachmentIndex] = useState(
     initialAttachmentIndex
   )
-  const { dispatch, modelAttachments = {} } = useStoreon('modelAttachments')
+  const { modelAttachments = {} } = useStoreon('modelAttachments')
   const { data: attachments } = modelAttachments
   const { setOverlayOpen, setOverlay } = useOverlay()
-  const isMobile = useIsMobile()
+  const isMobile = useIsMobile(640)
 
   const closeOverlay = useCallback(() => {
     setOverlayOpen(false)
@@ -170,11 +173,16 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
     overlayview('AttachmentView')
   })
 
-  const handleRemove = useCallback(
-    (attachmentId, modelId) => {
-      dispatch(types.DELETE_MODEL_ATTACHMENT, {
-        attachmentId,
+  const handleRemove = useCallback(() => {
+    setOverlay({
+      isOpen: true,
+      template: 'deleteAttachment',
+      data: {
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
         modelId,
+        activeAttachment,
         onFinish: updatedAttachments => {
           const attachmentAtCurrentIndex = updatedAttachments[activeAttachmentIndex]
           const attachmentAtPreviousIndex = updatedAttachments[activeAttachmentIndex - 1]
@@ -186,10 +194,9 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
             closeOverlay()
           }
         },
-      })
-    },
-    [dispatch, activeAttachmentIndex, setActiveAttachmentIndex, closeOverlay]
-  )
+      },
+    })
+  }, [setOverlay, modelId, activeAttachment, activeAttachmentIndex, closeOverlay])
 
   const handleReport = useCallback(() => {
     setOverlay({
@@ -250,16 +257,18 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
 
   return (
     <MagicContainer>
-      <ContainerRow alignItems='center' className={c.AttachmentView_Arrow}>
-        {hasPreviousAttachment && (
-          <ArrowLeftIcon
-            color={'#FFFFFF'}
-            className={c.AttachmentView_NavigationArrow}
-            onClick={() => setActiveAttachmentIndex(prevVal => prevVal - 1)}
-          />
-        )}
-        <Spacer size='1rem' />
-      </ContainerRow>
+      {!isMobile && (
+        <ContainerRow alignItems='center' className={c.AttachmentView_Arrow}>
+          {hasPreviousAttachment && (
+            <ArrowLeftIcon
+              color={'#FFFFFF'}
+              className={c.AttachmentView_NavigationArrow}
+              onClick={() => setActiveAttachmentIndex(prevVal => prevVal - 1)}
+            />
+          )}
+          <Spacer size='1rem' />
+        </ContainerRow>
+      )}
       <ContainerColumn>
         <div className={c.AttachmentView}>
           <div className={c.AttachmentView_Content}>
@@ -286,7 +295,9 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
               <div className={c.AttachmentView_CaptionRow}>
                 <Spacer width={'1.5rem'} />
                 <div className={c.AttachmentView_CaptionWrapper}>
-                  <Markdown>{activeAttachment.caption}</Markdown>
+                  <Markdown className={c.AttachmentView_Caption}>
+                    {activeAttachment.caption}
+                  </Markdown>
                   <Spacer width={'0.5rem'} />
                   <div className={c.AttachmentView_CaptionPosition}>
                     {attachmentPosition}

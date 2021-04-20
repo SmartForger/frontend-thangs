@@ -77,6 +77,7 @@ const DeleteForm = ({
   folder = {},
   model = {},
   part = {},
+  activeAttachment = {},
   type,
   handleDelete = noop,
   handleCancel = noop,
@@ -91,9 +92,11 @@ const DeleteForm = ({
         return part
       case 'folder':
         return folder
+      case 'upload':
+        return activeAttachment
       default:
     }
-  }, [folder, model, part, type])
+  }, [folder, model, part, type, activeAttachment])
   const { name } = subject
 
   const handleOnDelete = useCallback(
@@ -118,6 +121,11 @@ const DeleteForm = ({
           <MobileDesktopTitle>Delete Comment</MobileDesktopTitle>
           <Spacer size='1rem' />
         </>
+      ) : type === 'upload' ? (
+        <>
+          <MobileDesktopTitle>Delete Upload</MobileDesktopTitle>
+          <Spacer size='1rem' />
+        </>
       ) : (
         <>
           <MobileDesktopTitle>Delete Folder</MobileDesktopTitle>
@@ -130,6 +138,11 @@ const DeleteForm = ({
         Confirm below in order to delete your {type}. This action is not reversible.
       </MultiLineBodyText>
       <Spacer size='1rem' />
+      <img
+        className={c.AttachmentView_Image}
+        alt={activeAttachment.caption}
+        src={activeAttachment.imageUrl}
+      />
       <form className={c.DeleteForm} onSubmit={handleOnDelete}>
         {errorMessage && (
           <>
