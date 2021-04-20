@@ -167,6 +167,45 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId, modelId }) => {
     return activeAttachmentIndex + 1 < attachments.length
   }, [attachments, activeAttachmentIndex])
 
+  const handleFinish = useCallback(
+    updatedAttachments => {
+      const attachmentAtCurrentIndex = updatedAttachments[activeAttachmentIndex]
+      const attachmentAtPreviousIndex = updatedAttachments[activeAttachmentIndex - 1]
+      if (attachmentAtCurrentIndex?.id) {
+        setOverlay({
+          isOpen: true,
+          template: 'attachmentView',
+          data: {
+            animateIn: true,
+            windowed: true,
+            dialogue: true,
+            initialAttachmentIndex: activeAttachmentIndex,
+            attachments,
+            modelOwnerId: modelOwnerId,
+            modelId: modelId,
+          },
+        })
+      } else if (attachmentAtPreviousIndex?.id) {
+        setOverlay({
+          isOpen: true,
+          template: 'attachmentView',
+          data: {
+            animateIn: true,
+            windowed: true,
+            dialogue: true,
+            initialAttachmentIndex: activeAttachmentIndex - 1,
+            attachments,
+            modelOwnerId: modelOwnerId,
+            modelId: modelId,
+          },
+        })
+      } else {
+        closeOverlay()
+      }
+    },
+    [activeAttachmentIndex, attachments, closeOverlay, modelId, modelOwnerId, setOverlay]
+  )
+
   useEffect(() => {
     overlayview('AttachmentView')
   })
@@ -181,20 +220,10 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId, modelId }) => {
         dialogue: true,
         modelId,
         activeAttachment,
-        onFinish: updatedAttachments => {
-          const attachmentAtCurrentIndex = updatedAttachments[activeAttachmentIndex]
-          const attachmentAtPreviousIndex = updatedAttachments[activeAttachmentIndex - 1]
-          if (attachmentAtCurrentIndex?.id) {
-            return
-          } else if (attachmentAtPreviousIndex?.id) {
-            setActiveAttachmentIndex(prevVal => prevVal - 1)
-          } else {
-            closeOverlay()
-          }
-        },
+        onFinish: handleFinish,
       },
     })
-  }, [setOverlay, modelId, activeAttachment, activeAttachmentIndex, closeOverlay])
+  }, [setOverlay, modelId, activeAttachment, handleFinish])
 
   const handleReport = useCallback(() => {
     setOverlay({
