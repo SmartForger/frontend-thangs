@@ -46,6 +46,8 @@ const DownloadARLink = ({
 
   const handleClick = useCallback(
     format => {
+      if (format === 'ios') return
+
       if (isAuthedUser) {
         downloadModel(format)
       } else {
@@ -58,10 +60,7 @@ const DownloadARLink = ({
 
   return (
     <div className={c.DownloadARLink}>
-      <ARDownloadActionMenu
-        onChange={handleClick}
-        TargetComponent={TargetComponent}
-      />
+      <ARDownloadActionMenu onChange={handleClick} TargetComponent={TargetComponent} />
     </div>
   )
 }
