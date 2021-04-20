@@ -120,7 +120,7 @@ const useStyles = createUseStyles(theme => {
     },
     Navigation_MobileArrowWrapper: {
       width: '100%',
-      justifyContent: 'space-between !important',
+      justifyContent: 'flex-end !important',
 
       [md]: {
         width: 'unset',
@@ -128,8 +128,8 @@ const useStyles = createUseStyles(theme => {
         alignItems: 'center !important',
       },
     },
-    Navigation_MobileArrowWrapper_noPrev: {
-      justifyContent: 'flex-end !important',
+    Navigation_MobileArrowWrapper_hasPrev: {
+      justifyContent: 'space-between !important',
     },
   }
 })
@@ -333,7 +333,7 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
         <Spacer size='1rem' />
         <ContainerRow
           className={classnames(c.Navigation_MobileArrowWrapper, {
-            [c.Navigation_MobileArrowWrapper_noPrev]: !hasPreviousAttachment,
+            [c.Navigation_MobileArrowWrapper_hasPrev]: hasPreviousAttachment,
           })}
         >
           {isMobile && hasPreviousAttachment && (
