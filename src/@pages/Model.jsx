@@ -24,7 +24,6 @@ import {
   Spacer,
   Spinner,
   ToggleFollowButton,
-  ViewNativeARLink
 } from '@components'
 import { canDownloadAR } from '@utilities'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
@@ -484,7 +483,6 @@ const StatsAndActions = ({
                 isAuthedUser={isAuthedUser}
                 openSignupOverlay={openSignupOverlay}
               />
-              <ViewNativeARLink model={modelData} />
             </ContainerColumn>
           </>
         )}
@@ -624,7 +622,8 @@ const ModelDetailPage = ({
     modelTitle = modelTitle.substring(0, titleCharCount)
   titleCharCount = titleCharCount - modelTitle.length
   const modelTitleAuthor = titleCharCount >= modelAuthor.length + 3 ? modelAuthor : ''
-  const pageTitle = `${modelTitle}${titlePrefix}|${modelTitleAuthor ? ` ${modelTitleAuthor} |` : ''
+  const pageTitle = `${modelTitle}${titlePrefix}|${
+    modelTitleAuthor ? ` ${modelTitleAuthor} |` : ''
   }${titleSuffix}`
   const modelDescription = modelData.description || defaultDescription
 
@@ -634,13 +633,15 @@ const ModelDetailPage = ({
         <title>{pageTitle}</title>
         <meta
           name='description'
-          content={`${descriptionPrefix}${modelData.name
+          content={`${descriptionPrefix}${
+            modelData.name
           }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
         />
         <meta property='og:title' content={pageTitle} />
         <meta
           property='og:description'
-          content={`${descriptionPrefix}${modelData.name
+          content={`${descriptionPrefix}${
+            modelData.name
           }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
         />
         <meta
