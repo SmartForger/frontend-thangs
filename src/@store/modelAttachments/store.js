@@ -52,4 +52,27 @@ export default store => {
       store.dispatch(types.LOADED_MODEL_ATTACHMENTS, { data })
     }
   })
+
+  store.on(types.DELETE_MODEL_ATTACHMENT, async (_state, { attachmentId, modelId }) => {
+    const { error } = await api({
+      method: 'DELETE',
+      endpoint: `attachments/${attachmentId}`,
+    })
+
+    if (!error) {
+      store.dispatch(types.FETCH_MODEL_ATTACHMENTS, { modelId })
+    }
+  })
+
+  store.on(types.REPORT_MODEL_ATTACHMENT, async (_state, { attachmentId }) => {
+    // TODO: Figure out how this would work
+    // await api({
+    //   method: 'POST',
+    //   endpoint: `attachments/${attachmentId}/takedown`,
+    //   body: {
+    //     email,
+    //     reason,
+    //   },
+    // })
+  })
 }

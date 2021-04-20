@@ -180,6 +180,8 @@ export const FETCH_MODEL_ATTACHMENTS = 'fetch-model-attachments'
 export const LOADING_MODEL_ATTACHMENTS = 'loading-model-attachments'
 export const LOADED_MODEL_ATTACHMENTS = 'loaded-model-attachments'
 export const FAILED_MODEL_ATTACHMENTS = 'failed-model-attachments'
+export const DELETE_MODEL_ATTACHMENT = 'delete-model-attachment'
+export const REPORT_MODEL_ATTACHMENT = 'report-model-attachment'
 /* My Thangs Store Events */
 export const FETCH_THANGS = 'fetch-thangs'
 export const UPDATE_THANGS = 'update-thangs'

@@ -8,7 +8,7 @@ import { ReactComponent as PhotoIcon } from '@svg/icon-photo.svg'
 import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'
 
-const useStyles = createUseStyles(theme => {
+const useStyles = createUseStyles(() => {
   return {
     ModelPrints: {
       display: 'flex',
@@ -17,7 +17,7 @@ const useStyles = createUseStyles(theme => {
     ModelPrints_ImagesWrapper: {
       display: 'grid',
       gap: '1rem',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(6rem, 1fr))',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(5rem, 6rem))',
     },
     ModelPrints_Image: {
       width: '6.25rem',
@@ -87,6 +87,7 @@ const ModelPrints = ({ model = {}, isAuthedUser, openSignupOverlay = noop }) => 
           dialogue: true,
           initialAttachmentIndex,
           attachments,
+          modelOwnerId: model.owner.id,
         },
       })
     }, [attachments, setOverlay])
