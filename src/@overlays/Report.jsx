@@ -24,6 +24,7 @@ const useStyles = createUseStyles(theme => {
       minHeight: '30rem',
 
       [md]: {
+        minWidth: '35rem',
         height: 'unset',
       },
     },
@@ -123,7 +124,7 @@ const Report = ({ attachmentId }) => {
         <iframe
           title='Report Upload'
           src={`https://docs.google.com/forms/d/e/1FAIpQLSdhD649tDEuS_dhJYl0VAst-Sjgmu9mHfysv3kaPfjMywL6hA/viewform?entry.1683063574=${document.location.href}&entry.1433027243=${attachmentId}&embedded=true`}
-          width='640'
+          width='100%'
           height='883'
           frameBorder='0'
           marginHeight='0'
