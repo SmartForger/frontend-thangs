@@ -138,7 +138,10 @@ const AttachmentUpload = ({ modelId }) => {
     dispatch(types.RESET_UPLOAD_ATTACHMENT_FILES)
     closeOverlay()
   }
-  const handleSubmit = () => dispatch(types.SUBMIT_ATTACHMENTS, { modelId })
+  const handleSubmit = useCallback(() => {
+    if (isLoading) return
+    dispatch(types.SUBMIT_ATTACHMENTS, { modelId })
+  }, [dispatch, isLoading, modelId])
 
   const handleInputChange = useCallback(
     (field, newValue) => {

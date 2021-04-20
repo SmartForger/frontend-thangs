@@ -155,13 +155,13 @@ export default store => {
       store.dispatch(types.SUBMITTING_ATTACHMENTS)
       const attachments = Object.values(state.uploadAttachmentFiles.attachments)
       const getRequests = () => attachments.map(async ({ filename, caption }) => await api({
-          method: 'POST',
-          endpoint: `models/${modelId}/attachment`,
-          body: {
-            filename,
-            caption,
-          },
-        })
+        method: 'POST',
+        endpoint: `models/${modelId}/attachment`,
+        body: {
+          filename,
+          caption,
+        },
+      })
       )
       const results = await Promise.all(getRequests())
         .then((res) => {

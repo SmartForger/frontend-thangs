@@ -13,9 +13,10 @@ import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import ArrowLeftIcon from '@svg/IconArrowLeft'
 import ArrowRightIcon from '@svg/IconArrowRight'
 import TrashCanIcon from '@svg/TrashCanIcon'
-import { useOverlay, useCurrentUserId } from '@hooks'
+import { useOverlay, useCurrentUserId, useIsMobile } from '@hooks'
 import { overlayview } from '@utilities/analytics'
 import * as types from '@constants/storeEventTypes'
+import classnames from 'classnames'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -63,6 +64,7 @@ const useStyles = createUseStyles(theme => {
       minWidth: 0,
     },
     AttachmentView_Image: {
+      minHeight: '20.8rem',
       width: '100%',
     },
     AttachmentView_CaptionRow: {
@@ -71,9 +73,13 @@ const useStyles = createUseStyles(theme => {
     },
     AttachmentView_CaptionWrapper: {
       display: 'flex',
-      justifyContent: 'space-between',
       width: '100%',
       overflowWrap: 'anywhere',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+      [md]: {
+        justifyContent: 'normal',
+      },
     },
     AttachmentView_CaptionPosition: {
       color: theme.colors.black[300],
@@ -83,16 +89,47 @@ const useStyles = createUseStyles(theme => {
     },
     AttachmentView_NavigationArrow: {
       cursor: 'pointer',
+      '& > path': {
+        fill: theme.colors.black[500],
+      },
+      [md]: {
+        '& > path': {
+          fill: theme.colors.white[400],
+        },
+      },
     },
     AttachmentView_RemoveLink: {
       cursor: 'pointer',
       fontWeight: 500,
-      color: theme.colors.white[300],
+      color: theme.colors.black[500],
+      [md]: {
+        color: theme.colors.white[300],
+      },
     },
     AttachmentView_ReportLink: {
       cursor: 'pointer',
       fontWeight: 500,
       color: theme.colors.white[300],
+    },
+    Navigation_Mobile: {
+      padding: '0 1rem',
+
+      [md]: {
+        padding: 0,
+      },
+    },
+    Navigation_MobileArrowWrapper: {
+      width: '100%',
+      justifyContent: 'space-between !important',
+
+      [md]: {
+        width: 'unset',
+        justifyContent: 'unset',
+        alignItems: 'center !important',
+      },
+    },
+    Navigation_MobileArrowWrapper_noPrev: {
+      justifyContent: 'flex-end !important',
     },
   }
 })
@@ -105,6 +142,7 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
   const { dispatch, modelAttachments = {} } = useStoreon('modelAttachments')
   const { data: attachments } = modelAttachments
   const { setOverlayOpen, setOverlay } = useOverlay()
+  const isMobile = useIsMobile()
 
   const closeOverlay = useCallback(() => {
     setOverlayOpen(false)
@@ -194,13 +232,25 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
     }
 
     return (
-      <DotStackActionMenu options={options} onChange={handleSelect} color='#FFFFFF' />
+      <DotStackActionMenu
+        options={options}
+        onChange={handleSelect}
+        color={isMobile ? '#000000' : '#FFFFFF'}
+      />
     )
   }
 
+  const MagicContainer = ({ className, children }) => {
+    if (isMobile) {
+      return <ContainerColumn className={className}>{children}</ContainerColumn>
+    } else {
+      return <ContainerRow className={className}>{children}</ContainerRow>
+    }
+  }
+
   return (
-    <ContainerRow>
-      <ContainerRow alignItems='center'>
+    <MagicContainer>
+      <ContainerRow alignItems='center' className={c.AttachmentView_Arrow}>
         {hasPreviousAttachment && (
           <ArrowLeftIcon
             color={'#FFFFFF'}
@@ -241,6 +291,11 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
                   <div className={c.AttachmentView_CaptionPosition}>
                     {attachmentPosition}
                   </div>
+                  {isMobile && (
+                    <ContainerRow className={c.AttachmentView_ReportLink}>
+                      <AttachmentOptions />
+                    </ContainerRow>
+                  )}
                 </div>
                 <Spacer width={'1.5rem'} />
               </div>
@@ -259,30 +314,45 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
                     handleRemove(activeAttachment.id, activeAttachment.modelId)
                   }
                 >
-                  <TrashCanIcon color='#FFFFFF' />
+                  <TrashCanIcon color={isMobile ? '#000000' : '#FFFFFF'} />
                   <Spacer size='0.25rem' />
                   Remove
                 </ContainerRow>
                 <Spacer size='0.5rem' />
               </>
             )}
-            <ContainerRow className={c.AttachmentView_ReportLink}>
-              <AttachmentOptions />
-            </ContainerRow>
+            {!isMobile && (
+              <ContainerRow className={c.AttachmentView_ReportLink}>
+                <AttachmentOptions />
+              </ContainerRow>
+            )}
           </ContainerRow>
         </ContainerColumn>
       </ContainerColumn>
-      <ContainerRow alignItems='center'>
+      <MagicContainer className={c.Navigation_Mobile}>
         <Spacer size='1rem' />
-        {hasNextAttachment && (
-          <ArrowRightIcon
-            color='#FFFFFF'
-            className={c.AttachmentView_NavigationArrow}
-            onClick={() => setActiveAttachmentIndex(prevVal => prevVal + 1)}
-          />
-        )}
-      </ContainerRow>
-    </ContainerRow>
+        <ContainerRow
+          className={classnames(c.Navigation_MobileArrowWrapper, {
+            [c.Navigation_MobileArrowWrapper_noPrev]: !hasPreviousAttachment,
+          })}
+        >
+          {isMobile && hasPreviousAttachment && (
+            <ArrowLeftIcon
+              color={'#FFFFFF'}
+              className={c.AttachmentView_NavigationArrow}
+              onClick={() => setActiveAttachmentIndex(prevVal => prevVal - 1)}
+            />
+          )}
+          {hasNextAttachment && (
+            <ArrowRightIcon
+              color='#FFFFFF'
+              className={c.AttachmentView_NavigationArrow}
+              onClick={() => setActiveAttachmentIndex(prevVal => prevVal + 1)}
+            />
+          )}
+        </ContainerRow>
+      </MagicContainer>
+    </MagicContainer>
   )
 }
 
