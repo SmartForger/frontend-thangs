@@ -244,38 +244,71 @@ const MultiUpload = ({ initData = null, previousVersionModelId, folderId = '' })
     return ''
   }, [activeNode, allTreeNodes])
 
+  const isFile = async file => {
+    return new Promise(resolve => {
+      const NOT_FOUND_ERROR = 'NotFoundError'
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        // If we know the file type, then it's an actual file
+        if (file.type !== '') {
+          resolve(true)
+
+          // This occurs when the file viewer confuses a folder for a file based on the extension in the file name
+        } else if (reader.error && reader.error.name === NOT_FOUND_ERROR) {
+          resolve(false)
+        } else {
+          resolve(true)
+        }
+      }
+
+      reader.readAsBinaryString(file)
+    })
+  }
+
   const onDrop = useCallback(
-    (acceptedFiles, [rejectedFile], _event) => {
-      const files = acceptedFiles
-        .map(file => {
-          const ext = `.${file.name.split('.').slice(-1)[0].toLowerCase()}`
-          if (!MODEL_FILE_EXTS.includes(ext)) {
-            setErrorMessage(
-              `${file.name} is not a supported file type.
+    async (acceptedFiles, [rejectedFile], _event) => {
+      setErrorMessage()
+      const files = (
+        await Promise.all(
+          acceptedFiles.map(async file => {
+            const ext = `.${file.name.split('.').slice(-1)[0].toLowerCase()}`
+
+            const isAFile = await isFile(file)
+            if (!isAFile) {
+              setErrorMessage(
+                `${file.name} appears to be a folder instead of a valid ${ext} file. Please remove the extension from the folder name and retry your upload.`
+              )
+              return null
+            }
+
+            if (!MODEL_FILE_EXTS.includes(ext)) {
+              setErrorMessage(
+                `${file.name} is not a supported file type.
               Supported file extensions include ${MODEL_FILE_EXTS.map(
-    e => ' ' + e.replace('.', '')
-  )}.`
-            )
-            return null
-          }
+          e => ' ' + e.replace('.', '')
+        )}.`
+              )
+              return null
+            }
 
-          const fileObj = {
-            id: file.name,
-            file,
-          }
+            const fileObj = {
+              id: file.name,
+              file,
+            }
 
-          if (file.size >= FILE_SIZE_LIMITS.hard.size) {
-            setErrorMessage(
-              `One or more files was over ${FILE_SIZE_LIMITS.hard.pretty}. Try uploading a different file.`
-            )
-            return null
-          } else if (file.size >= FILE_SIZE_LIMITS.soft.size) {
-            fileObj.errorState = { warning: ERROR_STATES.SIZE_WARNING }
-          }
+            if (file.size >= FILE_SIZE_LIMITS.hard.size) {
+              setErrorMessage(
+                `One or more files was over ${FILE_SIZE_LIMITS.hard.pretty}. Try uploading a different file.`
+              )
+              return null
+            } else if (file.size >= FILE_SIZE_LIMITS.soft.size) {
+              fileObj.errorState = { warning: ERROR_STATES.SIZE_WARNING }
+            }
 
-          return fileObj
-        })
-        .filter(f => !!f)
+            return fileObj
+          })
+        )
+      ).filter(f => !!f)
 
       track('MultiUpload - OnDrop', { amount: files && files.length })
 
