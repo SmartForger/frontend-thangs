@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState, useRef } from 'react'
+import cn from 'classnames'
 
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Body } from '@physna/voxel-ui/@atoms/Typography'
@@ -13,6 +14,7 @@ import {
 } from '@components'
 
 import { ReactComponent as ArrowDown } from '@svg/icon-arrow-down-sm.svg'
+import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X-sm.svg'
 
 const useStyles = createUseStyles(theme => {
@@ -120,6 +122,7 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'row',
       overflow: 'hidden',
       flex: '1 !important',
+      alignItems: 'center',
     },
     PartSelectorRow__hover: {
       borderRadius: '.25rem',
@@ -131,6 +134,20 @@ const useStyles = createUseStyles(theme => {
     },
     PartSelectorRow__selected: {
       backgroundColor: theme.colors.white[900],
+    },
+    PartSelectorRow_ExpandIcon: {
+      width: '0.75rem',
+      cursor: 'pointer',
+      '& svg': {
+        display: 'block',
+        margin: 'auto',
+        transition: 'transform 150ms ease-in-out',
+      },
+    },
+    PartSelectorRow_ExpandIcon__expanded: {
+      '& svg': {
+        transform: 'rotate(90deg)',
+      },
     },
     PartExplorerDropdown_PartText: {
       display: 'flex',
@@ -216,7 +233,7 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const PartSelectorRow = ({ part = {}, onClick, onEnter }) => {
+const PartSelectorRow = ({ part = {}, onClick, onEnter, toggleNode }) => {
   const c = useStyles({})
   const { hasChildren, name, newFileName } = part
 
@@ -226,6 +243,21 @@ const PartSelectorRow = ({ part = {}, onClick, onEnter }) => {
 
   return (
     <div className={c.PartSelectorRow} title={name} onMouseEnter={handleMouseEnter}>
+      {!part.isLeaf ? (
+        <div
+          className={cn(c.PartSelectorRow_ExpandIcon, {
+            [c.PartSelectorRow_ExpandIcon__expanded]: !part.closed,
+          })}
+          onClick={ev => {
+            ev.stopPropagation()
+            toggleNode(part)
+          }}
+        >
+          <ArrowRight />
+        </div>
+      ) : (
+        <Spacer size={'.75rem'} />
+      )}
       <div className={c.PartSelectorRow_Column} onClick={onClick}>
         <Spacer size={'.5rem'} />
         <div className={c.PartSelectorRow_Row}>
@@ -270,11 +302,12 @@ const AssemblyExplorer = ({
       nodes={parts}
       isSelected={node => selectedParts.includes(node.id)}
       scrollToItem={scrollToItem}
-      renderNode={node => (
+      renderNode={(node, { toggleNode }) => (
         <PartSelectorRow
           part={node}
           onClick={() => onChange(node)}
           onEnter={onHoverPart}
+          toggleNode={toggleNode}
         />
       )}
     />
