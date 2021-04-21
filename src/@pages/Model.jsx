@@ -84,8 +84,9 @@ const useStyles = createUseStyles(theme => {
       maxWidth: '100%',
 
       [md]: {
-        marginRight: '4rem',
+        paddingRight: '4rem',
         maxWidth: '22rem',
+        overflow: 'hidden',
       },
       [lg_viewer]: {
         maxWidth: '30rem',

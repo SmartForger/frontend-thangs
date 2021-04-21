@@ -148,31 +148,27 @@ const MenuWrapper = ({
   renderContent,
   anchorElement,
 }) => {
-  if (!isOpen) {
+  if (!isOpen || !anchorElement) {
     return null
   }
 
-  return anchorElement ? (
-    createPortal(
-      <div
-        className={classnames(className, c.DropdownMenu, c.DropdownMenu_Row, {
-          [c.DropdownMenu__isOpen]: isOpen,
-        })}
-      >
+  return createPortal(
+    <div
+      className={classnames(className, c.DropdownMenu, c.DropdownMenu_Row, {
+        [c.DropdownMenu__isOpen]: isOpen,
+      })}
+    >
+      <Spacer size={borderSize} />
+      <div className={c.DropdownMenu_FullWidth}>
         <Spacer size={borderSize} />
-        <div className={c.DropdownMenu_FullWidth}>
-          <Spacer size={borderSize} />
-          {typeof renderContent === 'function'
-            ? renderContent({ toggleOpen })
-            : renderContent}
-          <Spacer size={borderSize} />
-        </div>
+        {typeof renderContent === 'function'
+          ? renderContent({ toggleOpen })
+          : renderContent}
         <Spacer size={borderSize} />
-      </div>,
-      anchorElement
-    )
-  ) : (
-    <></>
+      </div>
+      <Spacer size={borderSize} />
+    </div>,
+    anchorElement
   )
 }
 
