@@ -151,9 +151,9 @@ const AttachmentUpload = ({ modelId }) => {
   }, [uploadFiles])
 
   const handleSubmit = useCallback(() => {
-    if (isLoading || isLoadingFiles) return
+    if (isLoadingFiles) return
     dispatch(types.SUBMIT_ATTACHMENTS, { modelId })
-  }, [dispatch, isLoading, isLoadingFiles, modelId])
+  }, [dispatch, isLoadingFiles, modelId])
 
   const handleInputChange = useCallback(
     (field, newValue) => {
