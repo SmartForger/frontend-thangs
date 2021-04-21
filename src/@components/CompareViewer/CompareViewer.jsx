@@ -13,7 +13,7 @@ const useStyles = createUseStyles(_theme => {
 
 const Compare = ({ model1, model2, token, isLoading }) => {
   const c = useStyles({})
-  debugger
+
   return (
     <ContainerRow className={c.FileView_CompareWrapper}>
       {isLoading && <Spinner />}

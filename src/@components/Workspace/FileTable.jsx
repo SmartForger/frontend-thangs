@@ -13,8 +13,9 @@ import {
   ContainerRow,
   Contributors,
   FolderActionMenu,
-  ModelActionToolbar,
+  FolderActionToolbar,
   ModelActionMenu,
+  ModelActionToolbar,
   Pill,
   Spacer,
   TableHeader,
@@ -414,14 +415,14 @@ const FileTable = ({
           collect: () => ({ folder: node }),
         }
         : node.level === 0
-        ? {
+          ? {
             id: 'File_Menu',
             attributes: {
               className: c.FileTable_FileRow,
             },
             collect: () => ({ model: node }),
           }
-        : {
+          : {
             id: 'Subpart_Menu',
             attributes: {
               className: c.FileTable_FileRow,
@@ -525,14 +526,24 @@ const FileTable = ({
 
   return (
     <ContainerColumn className={className} elementRef={containerRef} fullWidth>
-      {isSelectedNodeModel(selectedNode) ? (
-        <>
-          <ContainerRow fullWidth justifyContent='flex-end'>
-            <ModelActionToolbar model={selectedNode} isExpandedOptions />
-            <Spacer width='4rem' />
-          </ContainerRow>
-          <Spacer size='0.5rem' />
-        </>
+      {selectedNode ? (
+        isSelectedNodeModel(selectedNode) ? (
+          <>
+            <ContainerRow fullWidth justifyContent='flex-end'>
+              <ModelActionToolbar model={selectedNode} isExpandedOptions />
+              <Spacer width='4rem' />
+            </ContainerRow>
+            <Spacer size='0.5rem' />
+          </>
+        ) : (
+          <>
+            <ContainerRow fullWidth justifyContent='flex-end'>
+              <FolderActionToolbar folder={selectedNode} isExpandedOptions />
+              <Spacer width='4rem' />
+            </ContainerRow>
+            <Spacer size='0.5rem' />
+          </>
+        )
       ) : (
         <Spacer size='2.375rem' />
       )}

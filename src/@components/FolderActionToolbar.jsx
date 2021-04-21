@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react'
 import { FOLDER_MENU_OPTIONS } from '@constants/menuOptions'
 import { ContainerRow, FolderActionMenu, Pill, Spacer } from '@components'
-import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
-import { ReactComponent as UploadIcon } from '@svg/icon-upload-black.svg'
+import { ReactComponent as FolderIcon } from '@svg/folder-icon.svg'
+import { ReactComponent as UploadIcon } from '@svg/icon-upload-black-sm.svg'
 import { useOverlay } from '@hooks'
 import { track } from '@utilities/analytics'
 
@@ -39,7 +39,7 @@ const ModelActionToolbar = ({ folder = {} }) => {
 
   return (
     <ContainerRow alignItems={'center'}>
-      <Pill secondary onClick={handleUpload}>
+      <Pill primary onClick={handleUpload}>
         <UploadIcon />
         <Spacer size={'0.5rem'} />
         Upload Models

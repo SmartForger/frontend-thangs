@@ -34,7 +34,7 @@ const NewVersionButton = ({ model = {} }) => {
   if (!isCurrentUser) return null
 
   return (
-    <Pill secondary onClick={handleNewVersion}>
+    <Pill primary onClick={handleNewVersion}>
       <UploadIcon />
       <Spacer size={'.25rem'} />
       New version
