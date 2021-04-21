@@ -119,7 +119,7 @@ const AllFilesView = ({
         {models.length > 0 && (
           <>
             <Spacer size='4rem' />
-            <TitleTertiary>My Public Files</TitleTertiary>
+            <TitleTertiary>My Files</TitleTertiary>
             <Spacer size='2rem' />
           </>
         )}
