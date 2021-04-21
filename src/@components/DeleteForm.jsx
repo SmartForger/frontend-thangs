@@ -27,6 +27,10 @@ const useStyles = createUseStyles(theme => {
       '& button': {
         width: '100%',
       },
+
+      '& img': {
+        width: '100%',
+      },
     },
     DeleteForm_ButtonContainer: {
       display: 'flex',
