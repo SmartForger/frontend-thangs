@@ -14,7 +14,7 @@ import ArrowLeftIcon from '@svg/IconArrowLeft'
 import ArrowRightIcon from '@svg/IconArrowRight'
 import TrashCanIcon from '@svg/TrashCanIcon'
 import { useOverlay, useCurrentUserId, useIsMobile } from '@hooks'
-import { overlayview } from '@utilities/analytics'
+import { overlayview, track } from '@utilities/analytics'
 import classnames from 'classnames'
 
 const useStyles = createUseStyles(theme => {
@@ -135,7 +135,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const AttachmentView = ({ initialAttachmentIndex, modelOwnerId, modelId }) => {
+const AttachmentView = ({ initialAttachmentIndex = 0, modelOwnerId, modelId }) => {
   const c = useStyles()
   const [activeAttachmentIndex, setActiveAttachmentIndex] = useState(
     initialAttachmentIndex
@@ -171,7 +171,7 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId, modelId }) => {
     updatedAttachments => {
       const attachmentAtCurrentIndex = updatedAttachments[activeAttachmentIndex]
       const attachmentAtPreviousIndex = updatedAttachments[activeAttachmentIndex - 1]
-      if (attachmentAtCurrentIndex?.id) {
+      if (attachmentAtCurrentIndex?.id || attachmentAtPreviousIndex?.id) {
         setOverlay({
           isOpen: true,
           template: 'attachmentView',
@@ -179,21 +179,9 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId, modelId }) => {
             animateIn: true,
             windowed: true,
             dialogue: true,
-            initialAttachmentIndex: activeAttachmentIndex,
-            attachments,
-            modelOwnerId: modelOwnerId,
-            modelId: modelId,
-          },
-        })
-      } else if (attachmentAtPreviousIndex?.id) {
-        setOverlay({
-          isOpen: true,
-          template: 'attachmentView',
-          data: {
-            animateIn: true,
-            windowed: true,
-            dialogue: true,
-            initialAttachmentIndex: activeAttachmentIndex - 1,
+            initialAttachmentIndex: attachmentAtPreviousIndex?.id
+              ? activeAttachmentIndex - 1
+              : activeAttachmentIndex,
             attachments,
             modelOwnerId: modelOwnerId,
             modelId: modelId,
@@ -207,8 +195,12 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId, modelId }) => {
   )
 
   useEffect(() => {
+    track('Model Attachment Viewed', { modelId, attachmentId: activeAttachment.id })
+  }, [activeAttachment.id, modelId])
+
+  useEffect(() => {
     overlayview('AttachmentView')
-  })
+  }, [])
 
   const handleRemove = useCallback(() => {
     setOverlay({
