@@ -33,8 +33,8 @@ export default store => {
           return model
         }),
       ]
-      delete folder.models
-      delete folder.subfolders
+      // delete folder.models
+      // delete folder.subfolders
     })
 
     // HOTFIX 4/20/21 - Updating a file will cause us to join the existing models with updates from backend, but uniqBy will always take the first match
