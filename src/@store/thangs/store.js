@@ -21,21 +21,28 @@ export default store => {
     const { folders = [], models: rootModels } = event
     let models = [
       ...R.pathOr([], ['models', 'data'], state),
-      ...rootModels.map(m => ({ ...m, id: +m.id, isPublic: true })),
+      ...rootModels.map(m => ({ ...m, id: +m.id })),
     ]
+    const allFolders = []
 
-    folders.forEach(folder => {
-      models = [
-        ...models,
-        ...folder.models.map(model => {
-          model.isPublic = folder.isPublic
-          model.folderId = folder.id
-          return model
-        }),
-      ]
-      // delete folder.models
-      // delete folder.subfolders
-    })
+    const addFoldersToArray = (folders, isShared) => {
+      folders.forEach(folder => {
+        const { subfolders, models: folderModels, ...folderInfo } = folder
+        if (isShared) {
+          folderInfo.shared = true
+        }
+        folderInfo.models = []
+        folderInfo.subfolders = []
+        allFolders.push(folderInfo)
+        models = models.concat(folderModels.filter(m => m.id))
+
+        if (subfolders && subfolders.length > 0) {
+          addFoldersToArray(subfolders, isShared)
+        }
+      })
+    }
+    addFoldersToArray(event.folders)
+    addFoldersToArray(event.shared, true)
 
     // HOTFIX 4/20/21 - Updating a file will cause us to join the existing models with updates from backend, but uniqBy will always take the first match
     // Instead of refactoring this to either not join both arrays or be intelligent about the merge, I'm reversing the array so that we always pick the newest
