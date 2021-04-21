@@ -1,9 +1,5 @@
 import React, { useEffect, useMemo } from 'react'
-import {
-  Button,
-  Spacer,
-  Textarea,
-} from '@components'
+import { Button, Spacer, Textarea } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { overlayview } from '@utilities/analytics'
 
@@ -34,6 +30,7 @@ const useStyles = createUseStyles(() => {
 const noop = () => null
 const Attachment = ({
   attachment,
+  isLoading,
   numOfAttachments,
   onCancel = noop,
   onContinue = noop,
@@ -47,7 +44,7 @@ const Attachment = ({
   }, [])
 
   const isLastAttachment = useMemo(() => {
-    return (attachment.position + 1) === numOfAttachments
+    return attachment.position + 1 === numOfAttachments
   }, [attachment, numOfAttachments])
   const imageUrl = useMemo(() => URL.createObjectURL(attachment.file), [attachment.file])
 
@@ -70,12 +67,10 @@ const Attachment = ({
         </Button>
         <Spacer size={'1rem'} className={c.Attachment_ButtonSpacer} />
         {isLastAttachment ? (
-          <Button onClick={onSubmit}>
-            Submit
-          </Button>
+          <Button onClick={onSubmit}>Submit</Button>
         ) : (
-          <Button onClick={onContinue}>
-            Continue
+          <Button onClick={onContinue} disabled={isLoading}>
+            {isLoading ? 'Loading' : 'Continue'}
           </Button>
         )}
       </div>

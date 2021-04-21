@@ -96,7 +96,13 @@ const useStyles = createUseStyles(theme => {
 
 const AttachmentUpload = ({ modelId }) => {
   const { dispatch, uploadAttachmentFiles = {} } = useStoreon('uploadAttachmentFiles')
-  const { attachments = {}, isLoading, isError, isSubmitted } = uploadAttachmentFiles
+  const {
+    attachments = {},
+    data: uploadFiles = {},
+    isLoading,
+    isError,
+    isSubmitted,
+  } = uploadAttachmentFiles
   const [errorMessage, setErrorMessage] = useState(null)
   const [activeAttachmentPosition, setActiveAttachmentPosition] = useState(0)
   const c = useStyles({ isError })
@@ -138,7 +144,16 @@ const AttachmentUpload = ({ modelId }) => {
     dispatch(types.RESET_UPLOAD_ATTACHMENT_FILES)
     closeOverlay()
   }
-  const handleSubmit = () => dispatch(types.SUBMIT_ATTACHMENTS, { modelId })
+
+  const isLoadingFiles = useMemo(() => {
+    const loadingFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isLoading)
+    return loadingFiles.length > 0
+  }, [uploadFiles])
+
+  const handleSubmit = useCallback(() => {
+    if (isLoadingFiles) return
+    dispatch(types.SUBMIT_ATTACHMENTS, { modelId })
+  }, [dispatch, isLoadingFiles, modelId])
 
   const handleInputChange = useCallback(
     (field, newValue) => {
@@ -194,6 +209,7 @@ const AttachmentUpload = ({ modelId }) => {
         ) : activeAttachment ? (
           <Attachment
             attachment={activeAttachment}
+            isLoading={isLoadingFiles}
             numOfAttachments={numOfAttachments}
             onCancel={handleCancel}
             onContinue={handleContinue}

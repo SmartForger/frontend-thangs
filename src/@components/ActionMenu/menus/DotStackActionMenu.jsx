@@ -2,14 +2,18 @@ import React, { useMemo } from 'react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 
 import { ActionMenu } from '@components'
-import DotStackIcon from '@svg/DotStackIcon'
+import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
     mediaQueries: { md_viewer },
   } = theme
   return {
-    DotStackActionMenu: {},
+    DotStackActionMenu: {
+      top: '1rem',
+      left: '.5rem',
+      right: 'unset !important',
+    },
     DotStackActionMenu_ClickableButton: {
       cursor: 'pointer',
       display: 'flex',
@@ -65,15 +69,18 @@ const DotStackActionMenu = ({
   actionMenuTitle,
   color,
 }) => {
+  const c = useStyles({})
+
   const menuProps = useMemo(() => {
     return {
+      className: c.DotStackActionMenu,
       onChange,
       actionBarTitle: actionMenuTitle,
       options,
       tabletLayout: false,
       alignItems: 'center',
     }
-  }, [onChange, options, actionMenuTitle])
+  }, [c.DotStackActionMenu, onChange, options, actionMenuTitle])
 
   return (
     <ActionMenu

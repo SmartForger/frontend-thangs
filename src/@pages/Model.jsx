@@ -25,13 +25,13 @@ import {
   Spacer,
   Spinner,
   ToggleFollowButton,
-  ViewNativeARLink
+  ViewNativeARLink,
 } from '@components'
 import { ReactComponent as CalendarIcon } from '@svg/icon-calendar.svg'
 import { ReactComponent as DownloadIcon } from '@svg/notification-downloaded.svg'
+import { canDownloadAR } from '@utilities'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
 import { ReactComponent as LicenseIcon } from '@svg/license.svg'
-import { ReactComponent as AndroidIcon } from '@svg/icon-android.svg'
 import { Message404 } from './404'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
@@ -45,7 +45,6 @@ import {
 } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
-import { canDownloadAR } from '@utilities'
 import { pageview, track, perfTrack } from '@utilities/analytics'
 
 const useStyles = createUseStyles(theme => {
@@ -268,28 +267,6 @@ const useStyles = createUseStyles(theme => {
     Model_DownloadAndShareContainer: {
       display: 'inline-flex',
       width: '100%',
-    },
-    Model_DownloadAR: {
-      width: '100%',
-
-      '& > div': {
-        width: '100%',
-      },
-
-      '& > div > div': {
-        width: '100%',
-      },
-    },
-    ViewARLink: {
-      display: 'block',
-
-      '& > button': {
-        width: '100%',
-      },
-
-      [md_viewer]: {
-        display: 'none',
-      },
     },
   }
 })
@@ -660,8 +637,9 @@ const ModelDetailPage = ({
     modelTitle = modelTitle.substring(0, titleCharCount)
   titleCharCount = titleCharCount - modelTitle.length
   const modelTitleAuthor = titleCharCount >= modelAuthor.length + 3 ? modelAuthor : ''
-  const pageTitle = `${modelTitle}${titlePrefix}|${modelTitleAuthor ? ` ${modelTitleAuthor} |` : ''
-    }${titleSuffix}`
+  const pageTitle = `${modelTitle}${titlePrefix}|${
+    modelTitleAuthor ? ` ${modelTitleAuthor} |` : ''
+  }${titleSuffix}`
   const modelDescription = modelData.description || defaultDescription
 
   return (
@@ -670,14 +648,16 @@ const ModelDetailPage = ({
         <title>{pageTitle}</title>
         <meta
           name='description'
-          content={`${descriptionPrefix}${modelData.name
-            }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
+          content={`${descriptionPrefix}${
+            modelData.name
+          }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
         />
         <meta property='og:title' content={pageTitle} />
         <meta
           property='og:description'
-          content={`${descriptionPrefix}${modelData.name
-            }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
+          content={`${descriptionPrefix}${
+            modelData.name
+          }, ${descriptionCreatedBy}${modelAuthor}. ${modelDescription.slice(0, 160)}`}
         />
         <meta
           property='og:image'

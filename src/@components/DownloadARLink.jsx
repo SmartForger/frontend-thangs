@@ -1,10 +1,9 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 
 import { ARDownloadActionMenu } from '@components'
 import * as types from '@constants/storeEventTypes'
-import { canDownloadAR } from '@utilities'
 import { track } from '@utilities/analytics'
 
 const useStyles = createUseStyles(() => {
@@ -27,23 +26,22 @@ const DownloadARLink = ({
   isAuthedUser,
   openSignupOverlay = noop,
   TargetComponent,
+  downloadTrackingEvent = 'Download AR',
 }) => {
   const c = useStyles()
-  const isARSupported = useMemo(() => canDownloadAR(model), [model])
   const { dispatch } = useStoreon()
   const downloadModel = useCallback(
     format => {
-      if (format !== 'android') return //TEMP - Remove once ios is available
       dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
         id: model.id ?? model.modelId,
         format,
         onFinish: downloadUrl => {
           window.location.assign(downloadUrl)
-          track('Download AR', { format, modelId: model.id })
+          track(downloadTrackingEvent, { format, modelId: model.id })
         },
       })
     },
-    [dispatch, model.id, model.modelId]
+    [downloadTrackingEvent, dispatch, model.id, model.modelId]
   )
 
   const handleClick = useCallback(
@@ -59,19 +57,10 @@ const DownloadARLink = ({
   )
 
   return (
-    <>
-      {isARSupported ? (
-        <div className={c.DownloadARLink}>
-          <ARDownloadActionMenu
-            onChange={handleClick}
-            TargetComponent={TargetComponent}
-          />
-        </div>
-      ) : (
-        <></>
-      )}
-    </>
+    <div className={c.DownloadARLink}>
+      <ARDownloadActionMenu onChange={handleClick} TargetComponent={TargetComponent} />
+    </div>
   )
 }
 
-export { DownloadARLink }
+export default DownloadARLink

@@ -276,7 +276,12 @@ const ModelDetails = ({
             <span className={c.TextSearchResult_ExternalUrl} title={model.attributionUrl}>
               {(ownerUsername && ownerUsername.split('@')[0]) || model.attributionUrl}
             </span>
-            {isExternalModel && <ExternalLinkIcon />}
+            {isExternalModel && (
+              <>
+                <Spacer size={'.25rem'}></Spacer>
+                <ExternalLinkIcon />
+              </>
+            )}
           </ContainerRow>
         </SearchAnchor>
         <SearchResultDetailsMenu model={model} onReportModel={reportModel} />
@@ -387,8 +392,9 @@ const TextSearchResults = ({
     )
   }
   if (isLoading && !items.length) {
-    const loadingText = `Searching ${numberWithCommas(totalModelCount) || '1,500,000'
-      } models to find the best results
+    const loadingText = `Searching ${
+      numberWithCommas(totalModelCount) || '1,500,000'
+    } models to find the best results
     for ${searchTerm}`
     return <NoResults>{loadingText}</NoResults>
   }

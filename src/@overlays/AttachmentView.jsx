@@ -13,9 +13,9 @@ import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import ArrowLeftIcon from '@svg/IconArrowLeft'
 import ArrowRightIcon from '@svg/IconArrowRight'
 import TrashCanIcon from '@svg/TrashCanIcon'
-import { useOverlay, useCurrentUserId } from '@hooks'
+import { useOverlay, useCurrentUserId, useIsMobile } from '@hooks'
 import { overlayview } from '@utilities/analytics'
-import * as types from '@constants/storeEventTypes'
+import classnames from 'classnames'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -71,9 +71,13 @@ const useStyles = createUseStyles(theme => {
     },
     AttachmentView_CaptionWrapper: {
       display: 'flex',
-      justifyContent: 'space-between',
       width: '100%',
       overflowWrap: 'anywhere',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+      [md]: {
+        justifyContent: 'normal',
+      },
     },
     AttachmentView_CaptionPosition: {
       color: theme.colors.black[300],
@@ -83,28 +87,63 @@ const useStyles = createUseStyles(theme => {
     },
     AttachmentView_NavigationArrow: {
       cursor: 'pointer',
+      '& > path': {
+        fill: theme.colors.black[500],
+      },
+      [md]: {
+        '& > path': {
+          fill: theme.colors.white[400],
+        },
+      },
     },
     AttachmentView_RemoveLink: {
       cursor: 'pointer',
       fontWeight: 500,
-      color: theme.colors.white[300],
+      color: theme.colors.black[500],
+      [md]: {
+        color: theme.colors.white[300],
+      },
     },
     AttachmentView_ReportLink: {
       cursor: 'pointer',
       fontWeight: 500,
       color: theme.colors.white[300],
     },
+    AttachmentView_Caption: {
+      width: '100%',
+    },
+    Navigation_Mobile: {
+      padding: '0 1rem',
+
+      [md]: {
+        padding: 0,
+      },
+    },
+    Navigation_MobileArrowWrapper: {
+      width: '100%',
+      justifyContent: 'flex-end !important',
+
+      [md]: {
+        width: 'unset',
+        justifyContent: 'unset',
+        alignItems: 'center !important',
+      },
+    },
+    Navigation_MobileArrowWrapper_hasPrev: {
+      justifyContent: 'space-between !important',
+    },
   }
 })
 
-const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
+const AttachmentView = ({ initialAttachmentIndex, modelOwnerId, modelId }) => {
   const c = useStyles()
   const [activeAttachmentIndex, setActiveAttachmentIndex] = useState(
     initialAttachmentIndex
   )
-  const { dispatch, modelAttachments = {} } = useStoreon('modelAttachments')
+  const { modelAttachments = {} } = useStoreon('modelAttachments')
   const { data: attachments } = modelAttachments
   const { setOverlayOpen, setOverlay } = useOverlay()
+  const isMobile = useIsMobile(640)
 
   const closeOverlay = useCallback(() => {
     setOverlayOpen(false)
@@ -128,30 +167,63 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
     return activeAttachmentIndex + 1 < attachments.length
   }, [attachments, activeAttachmentIndex])
 
+  const handleFinish = useCallback(
+    updatedAttachments => {
+      const attachmentAtCurrentIndex = updatedAttachments[activeAttachmentIndex]
+      const attachmentAtPreviousIndex = updatedAttachments[activeAttachmentIndex - 1]
+      if (attachmentAtCurrentIndex?.id) {
+        setOverlay({
+          isOpen: true,
+          template: 'attachmentView',
+          data: {
+            animateIn: true,
+            windowed: true,
+            dialogue: true,
+            initialAttachmentIndex: activeAttachmentIndex,
+            attachments,
+            modelOwnerId: modelOwnerId,
+            modelId: modelId,
+          },
+        })
+      } else if (attachmentAtPreviousIndex?.id) {
+        setOverlay({
+          isOpen: true,
+          template: 'attachmentView',
+          data: {
+            animateIn: true,
+            windowed: true,
+            dialogue: true,
+            initialAttachmentIndex: activeAttachmentIndex - 1,
+            attachments,
+            modelOwnerId: modelOwnerId,
+            modelId: modelId,
+          },
+        })
+      } else {
+        closeOverlay()
+      }
+    },
+    [activeAttachmentIndex, attachments, closeOverlay, modelId, modelOwnerId, setOverlay]
+  )
+
   useEffect(() => {
     overlayview('AttachmentView')
   })
 
-  const handleRemove = useCallback(
-    (attachmentId, modelId) => {
-      dispatch(types.DELETE_MODEL_ATTACHMENT, {
-        attachmentId,
+  const handleRemove = useCallback(() => {
+    setOverlay({
+      isOpen: true,
+      template: 'deleteAttachment',
+      data: {
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
         modelId,
-        onFinish: updatedAttachments => {
-          const attachmentAtCurrentIndex = updatedAttachments[activeAttachmentIndex]
-          const attachmentAtPreviousIndex = updatedAttachments[activeAttachmentIndex - 1]
-          if (attachmentAtCurrentIndex?.id) {
-            return
-          } else if (attachmentAtPreviousIndex?.id) {
-            setActiveAttachmentIndex(prevVal => prevVal - 1)
-          } else {
-            closeOverlay()
-          }
-        },
-      })
-    },
-    [dispatch, activeAttachmentIndex, setActiveAttachmentIndex, closeOverlay]
-  )
+        activeAttachment,
+        onFinish: handleFinish,
+      },
+    })
+  }, [setOverlay, modelId, activeAttachment, handleFinish])
 
   const handleReport = useCallback(() => {
     setOverlay({
@@ -194,22 +266,36 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
     }
 
     return (
-      <DotStackActionMenu options={options} onChange={handleSelect} color='#FFFFFF' />
+      <DotStackActionMenu
+        options={options}
+        onChange={handleSelect}
+        color={isMobile ? '#000000' : '#FFFFFF'}
+      />
     )
   }
 
+  const MagicContainer = ({ className, children }) => {
+    if (isMobile) {
+      return <ContainerColumn className={className}>{children}</ContainerColumn>
+    } else {
+      return <ContainerRow className={className}>{children}</ContainerRow>
+    }
+  }
+
   return (
-    <ContainerRow>
-      <ContainerRow alignItems='center'>
-        {hasPreviousAttachment && (
-          <ArrowLeftIcon
-            color={'#FFFFFF'}
-            className={c.AttachmentView_NavigationArrow}
-            onClick={() => setActiveAttachmentIndex(prevVal => prevVal - 1)}
-          />
-        )}
-        <Spacer size='1rem' />
-      </ContainerRow>
+    <MagicContainer>
+      {!isMobile && (
+        <ContainerRow alignItems='center' className={c.AttachmentView_Arrow}>
+          {hasPreviousAttachment && (
+            <ArrowLeftIcon
+              color={'#FFFFFF'}
+              className={c.AttachmentView_NavigationArrow}
+              onClick={() => setActiveAttachmentIndex(prevVal => prevVal - 1)}
+            />
+          )}
+          <Spacer size='1rem' />
+        </ContainerRow>
+      )}
       <ContainerColumn>
         <div className={c.AttachmentView}>
           <div className={c.AttachmentView_Content}>
@@ -236,11 +322,18 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
               <div className={c.AttachmentView_CaptionRow}>
                 <Spacer width={'1.5rem'} />
                 <div className={c.AttachmentView_CaptionWrapper}>
-                  <Markdown>{activeAttachment.caption}</Markdown>
+                  <Markdown className={c.AttachmentView_Caption}>
+                    {activeAttachment.caption}
+                  </Markdown>
                   <Spacer width={'0.5rem'} />
                   <div className={c.AttachmentView_CaptionPosition}>
                     {attachmentPosition}
                   </div>
+                  {isMobile && (
+                    <ContainerRow className={c.AttachmentView_ReportLink}>
+                      <AttachmentOptions />
+                    </ContainerRow>
+                  )}
                 </div>
                 <Spacer width={'1.5rem'} />
               </div>
@@ -259,30 +352,45 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId }) => {
                     handleRemove(activeAttachment.id, activeAttachment.modelId)
                   }
                 >
-                  <TrashCanIcon color='#FFFFFF' />
+                  <TrashCanIcon color={isMobile ? '#000000' : '#FFFFFF'} />
                   <Spacer size='0.25rem' />
                   Remove
                 </ContainerRow>
                 <Spacer size='0.5rem' />
               </>
             )}
-            <ContainerRow className={c.AttachmentView_ReportLink}>
-              <AttachmentOptions />
-            </ContainerRow>
+            {!isMobile && (
+              <ContainerRow className={c.AttachmentView_ReportLink}>
+                <AttachmentOptions />
+              </ContainerRow>
+            )}
           </ContainerRow>
         </ContainerColumn>
       </ContainerColumn>
-      <ContainerRow alignItems='center'>
+      <MagicContainer className={c.Navigation_Mobile}>
         <Spacer size='1rem' />
-        {hasNextAttachment && (
-          <ArrowRightIcon
-            color='#FFFFFF'
-            className={c.AttachmentView_NavigationArrow}
-            onClick={() => setActiveAttachmentIndex(prevVal => prevVal + 1)}
-          />
-        )}
-      </ContainerRow>
-    </ContainerRow>
+        <ContainerRow
+          className={classnames(c.Navigation_MobileArrowWrapper, {
+            [c.Navigation_MobileArrowWrapper_hasPrev]: hasPreviousAttachment,
+          })}
+        >
+          {isMobile && hasPreviousAttachment && (
+            <ArrowLeftIcon
+              color={'#FFFFFF'}
+              className={c.AttachmentView_NavigationArrow}
+              onClick={() => setActiveAttachmentIndex(prevVal => prevVal - 1)}
+            />
+          )}
+          {hasNextAttachment && (
+            <ArrowRightIcon
+              color='#FFFFFF'
+              className={c.AttachmentView_NavigationArrow}
+              onClick={() => setActiveAttachmentIndex(prevVal => prevVal + 1)}
+            />
+          )}
+        </ContainerRow>
+      </MagicContainer>
+    </MagicContainer>
   )
 }
 

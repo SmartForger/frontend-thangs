@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect } from 'react'
-import classnames from 'classnames'
+import { DeleteForm, Spacer, Spinner } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-
-import { Spacer } from '@components'
+import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import { useOverlay } from '@hooks'
+import { useStoreon } from 'storeon/react'
+import * as types from '@constants/storeEventTypes'
 import { overlayview } from '@utilities/analytics'
+import { useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
     mediaQueries: { md },
   } = theme
   return {
-    Report: {
-      height: '100%',
+    DeleteAttachment: {
       alignItems: 'center',
       backgroundColor: theme.colors.white[300],
       borderRadius: '1rem',
@@ -21,17 +21,6 @@ const useStyles = createUseStyles(theme => {
       flexDirection: 'column',
       justifyContent: 'flex-start',
       position: 'relative',
-      minHeight: '30rem',
-
-      [md]: {
-        minWidth: '35rem',
-        height: 'unset',
-      },
-    },
-    Report_Column: {
-      display: 'flex',
-      flexDirection: 'row',
-      width: '100%',
       height: '100%',
 
       [md]: {
@@ -39,14 +28,25 @@ const useStyles = createUseStyles(theme => {
         height: 'unset',
       },
     },
-    Report_ExitButton: {
+    DeleteAttachment_Column: {
+      display: 'flex',
+      flexDirection: 'row',
+      width: '100%',
+      height: '100%',
+
+      [md]: {
+        flexDirection: 'row',
+        height: '100%',
+      },
+    },
+    DeleteAttachment_ExitButton: {
       top: '2rem',
       right: '2rem',
       cursor: 'pointer',
       zIndex: '4',
       position: 'absolute',
     },
-    Report_ViewerWrapper: {
+    DeleteAttachment_ViewerWrapper: {
       width: '100%',
       height: '24rem',
       margin: '0 auto',
@@ -65,7 +65,7 @@ const useStyles = createUseStyles(theme => {
         borderRadius: '1rem 0 0 1rem',
       },
     },
-    Report_Viewer: {
+    DeleteAttachment_Viewer: {
       width: '100%',
       height: '100%',
       margin: '0 auto',
@@ -73,22 +73,7 @@ const useStyles = createUseStyles(theme => {
       overflow: 'hidden',
       flexDirection: 'column',
     },
-    Report_Wrapper: {
-      height: '100%',
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-
-      [md]: {
-        width: '339px',
-      },
-
-      '& #ff-compose': {
-        width: 'calc(100% - 1rem)',
-      },
-    },
-    Report_LoaderScreen: {
+    DeleteAttachment_LoaderScreen: {
       position: 'absolute',
       top: 0,
       right: 0,
@@ -101,40 +86,50 @@ const useStyles = createUseStyles(theme => {
     },
   }
 })
-
-const Report = ({ attachmentId }) => {
+const noop = () => null
+const DeleteAttachment = ({ activeAttachment, modelId, onFinish = noop }) => {
   const c = useStyles()
-
+  const { dispatch, folders = {} } = useStoreon('folders')
   const { setOverlayOpen } = useOverlay()
+  const { isSaving } = folders
 
   const closeOverlay = useCallback(() => {
     setOverlayOpen(false)
   }, [setOverlayOpen])
 
+  const handleDelete = useCallback(() => {
+    dispatch(types.DELETE_MODEL_ATTACHMENT, {
+      attachmentId: activeAttachment.id,
+      modelId,
+      onFinish,
+    })
+  }, [activeAttachment.id, dispatch, modelId, onFinish])
+
   useEffect(() => {
-    overlayview('Report')
+    overlayview('DeleteAttachment')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
-    <div className={c.Report}>
-      <ExitIcon className={c.Report_ExitButton} onClick={closeOverlay} />
-      <Spacer size='4rem' />
-      <div className={classnames(c.Report_Column, c.Report_EditForm)}>
-        <iframe
-          title='Report Upload'
-          src={`https://docs.google.com/forms/d/e/1FAIpQLSdhD649tDEuS_dhJYl0VAst-Sjgmu9mHfysv3kaPfjMywL6hA/viewform?entry.1683063574=${document.location.href}&entry.1433027243=${attachmentId}&embedded=true`}
-          width='100%'
-          height='883'
-          frameBorder='0'
-          marginHeight='0'
-          marginWidth='0'
-        >
-          Loading…
-        </iframe>
+    <div className={c.DeleteAttachment}>
+      {isSaving && (
+        <div className={c.DeleteAttachment_LoaderScreen}>
+          <Spinner />
+        </div>
+      )}
+      <ExitIcon className={c.DeleteAttachment_ExitButton} onClick={closeOverlay} />
+      <div className={classnames(c.DeleteAttachment_Column, c.DeleteAttachment_EditForm)}>
+        <Spacer className={c.EditFolder_MobileSpacer} size='2rem' />
+        <DeleteForm
+          activeAttachment={activeAttachment}
+          handleDelete={handleDelete}
+          handleCancel={closeOverlay}
+          type={'upload'}
+        />
+        <Spacer className={c.EditFolder_MobileSpacer} size='2rem' />
       </div>
     </div>
   )
 }
 
-export default Report
+export default DeleteAttachment

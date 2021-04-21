@@ -25,9 +25,7 @@ const useStyles = createUseStyles(() => {
   }
 })
 
-const Submitted = ({
-  onClose = noop,
-}) => {
+const Submitted = ({ onClose = noop }) => {
   const c = useStyles()
 
   useEffect(() => {
@@ -41,20 +39,15 @@ const Submitted = ({
         <PhotosSubmitted />
       </div>
       <Spacer size={'2rem'} />
-      <Title headerLevel={HeaderLevel.tertiary}>
-        Your photos have been submitted!
-      </Title>
+      <Title headerLevel={HeaderLevel.tertiary}>Your photos have been submitted!</Title>
       <Spacer size={'0.75rem'} />
       <Body multiline>
-        Thank you for being a part of the Thangs community. Your photos are
-        being processed and will appear on the model's page when they have
-        been approved.
+        Your photos are being processed and will appear on the model&apos;s page when they
+        have been approved.
       </Body>
       <Spacer size={'1.5rem'} />
       <div className={c.Submitted_ButtonWrapper}>
-        <Button onClick={onClose}>
-          Close
-        </Button>
+        <Button onClick={onClose}>Close</Button>
       </div>
     </>
   )

@@ -121,7 +121,7 @@ const AllFilesView = ({
         {models.length > 0 && (
           <>
             <Spacer size='4rem' />
-            <Title headerLevel={HeaderLevel.tertiary}>My Public Files</Title>
+            <Title headerLevel={HeaderLevel.tertiary}>My Files</Title>
             <Spacer size='2rem' />
           </>
         )}

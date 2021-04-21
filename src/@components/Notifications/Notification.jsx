@@ -10,6 +10,7 @@ import { ReactComponent as CommentIcon } from '@svg/notification-comment.svg'
 import { ReactComponent as PlusIcon } from '@svg/notification-plus.svg'
 import { ReactComponent as UploadIcon } from '@svg/notification-uploaded.svg'
 import { ReactComponent as StarIcon } from '@svg/icon-star-filled.svg'
+import { ReactComponent as PhotoIcon } from '@svg/icon-photo.svg'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import * as types from '@constants/storeEventTypes'
 
@@ -230,14 +231,44 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
       linkTarget = target && target.id ? `/mythangs/folder/${target.id}` : '/mythangs'
       altVerb = 'liked folder'
       break
+    case 'attachmentCreated':
+      // Only if another user posts a photo to your model
+      IconComponent = PhotoIcon
+      linkTarget = target && target.id ? `/m/${target.id}` : '/'
+      altVerb = 'posted a model photo to'
+      break
+    case 'attachmentDeleted':
+      // Only if owner deletes a photo you posted
+      IconComponent = PhotoIcon
+      linkTarget = target && target.id ? `/m/${target.id}` : '/'
+      altVerb = 'deleted your model photo for'
+      break
+    case 'attachmentApproved':
+      IconComponent = PhotoIcon
+      linkTarget = target && target.id ? `/m/${target.id}` : '/'
+      altVerb = 'model photo was approved for'
+      break
+    case 'attachmentRejected':
+      IconComponent = PhotoIcon
+      linkTarget = target && target.id ? `/m/${target.id}` : '/'
+      altVerb = 'model photo was rejected for'
+      break
     default:
       break
   }
 
   if (verb === 'invitedOther') return null
   const newTargetObj = target
-  if (target && target.id && target.id.toString() === currentUserId)
+  if (target && target.id && target.id.toString() === currentUserId) {
     newTargetObj.name = 'you'
+  }
+
+  const newActor = { ...actor }
+  if (newActor.id === currentUserId) {
+    if (verb === 'attachmentApproved' || verb === 'attachmentRejected') {
+      newActor.name = 'your'
+    }
+  }
   return (
     <NotificationSnippet
       c={c}
@@ -245,7 +276,7 @@ const Notification = ({ id, actor, className, count, target, timestamp, verb }) 
       count={count}
       time={displayTime}
       id={id}
-      actor={actor}
+      actor={newActor}
       target={newTargetObj}
       targetNameAlt={targetNameAlt}
       verb={verb}

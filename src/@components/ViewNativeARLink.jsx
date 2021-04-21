@@ -65,8 +65,8 @@ const useStyles = createUseStyles(theme => {
       textAlign: 'left',
     },
     ViewARLink_Spinner: {
-      width: '1rem',
-      height: '1rem',
+      width: '2rem',
+      height: '2rem',
     },
   }
 })
@@ -116,7 +116,7 @@ const ViewNativeARLink = ({ model }) => {
         href={`intent://arvr.google.com/scene-viewer/1.0?file=${primaryPart?.androidUrl?.replace(
           '#',
           encodeURIComponent('#')
-        )}#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
+        )}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
       >
         {cannotOpenVRLink ? (
           <>

@@ -91,8 +91,7 @@ const ModelHistory = ({
           )
           const partName = part?.name
           const prevSHA = Object.keys(partSHAs).find(sha => {
-            console.log(partSHAs)
-            partSHAs[sha].includes(commit.partIdentifier)
+            return partSHAs[sha].includes(commit.partIdentifier)
           })
           return (
             <PartLine
