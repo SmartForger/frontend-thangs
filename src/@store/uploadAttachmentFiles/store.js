@@ -164,17 +164,20 @@ export default store => {
       store.dispatch(types.SUBMITTING_ATTACHMENTS)
       const attachments = Object.values(state.uploadAttachmentFiles.attachments)
       const getRequests = () =>
-        attachments.map(
-          async ({ filename, caption }) =>
-            await api({
-              method: 'POST',
-              endpoint: `models/${modelId}/attachment`,
-              body: {
-                filename,
-                caption,
-              },
-            })
-        )
+        attachments.map(async ({ filename, caption }) => {
+          const { error } = await api({
+            method: 'POST',
+            endpoint: `models/${modelId}/attachment`,
+            body: {
+              filename,
+              caption,
+            },
+          })
+          if (!error) {
+            track('Model Attachment Uploaded', { modelId, filename })
+          }
+          return { error }
+        })
       const results = await Promise.all(getRequests())
         .then(res => {
           store.dispatch(types.SUBMIT_ATTACHMENTS_SUCCEEDED)
@@ -183,7 +186,6 @@ export default store => {
         })
         .catch(() => store.dispatch(types.SUBMIT_ATTACHMENTS_FAILED))
       if (results.some(res => res.error)) throw new Error('Unable to submit attachment')
-      track('Model Attachment Uploaded', { modelId })
     } catch (error) {
       store.dispatch(types.SUBMIT_ATTACHMENTS_FAILED)
     }
