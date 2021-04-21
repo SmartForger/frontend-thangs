@@ -471,14 +471,14 @@ export default store => {
     types.SUBMIT_NEW_VERSION,
     async (state, { message, modelId, onFinish = noop, onError = noop }) => {
       store.dispatch(types.SUBMITTING_MODELS)
-      const { data: uploadedFiles, formData } = state.uploadFiles
+      const { data: uploadModelFiles, formData } = state.uploadModelFiles
       const events = []
-      Object.keys(uploadedFiles).forEach(file => {
+      Object.keys(uploadModelFiles).forEach(file => {
         formData[file].previousParts.forEach(part => {
           events.push({
             action: 'replacedPart',
-            filename: uploadedFiles[file].newFileName,
-            size: uploadedFiles[file].size,
+            filename: uploadModelFiles[file].newFileName,
+            size: uploadModelFiles[file].size,
             partIdentifier: part.partIdentifier,
           })
         })

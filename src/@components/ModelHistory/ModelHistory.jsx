@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Spacer, Spinner } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import ErrorMessage from '../ErrorMessage'
@@ -32,24 +32,6 @@ const ModelHistory = ({
   error,
 }) => {
   const c = useStyles()
-  const fakeFirstCommit = useMemo(() => {
-    const commits = modelData.parts.map(part => {
-      return {
-        action: 'addPart',
-        created: modelData.created,
-        owner: modelData.owner,
-        partIdentifier: part.partIdentifier,
-        size: part.size,
-      }
-    })
-
-    return {
-      commits,
-      message: 'Created new model',
-      sha: 'Life',
-    }
-  }, [modelData])
-
   if (isLoading) return <Spinner />
   if (isError) {
     return (
@@ -60,15 +42,15 @@ const ModelHistory = ({
     )
   }
   const partSHAs = {}
-  const newHistory = [fakeFirstCommit, ...modelHistory]
+  const newHistory = [...modelHistory]
   newHistory.forEach(version => {
-    version.commits.forEach(commit => {
+    version.changes.forEach(commit => {
       if (!partSHAs[version.sha]) partSHAs[version.sha] = []
       partSHAs[version.sha].push(commit.partIdentifier)
     })
   })
   return newHistory.reverse().map((entry, ind) => {
-    if (!entry.commits || entry.commits.length === 0) {
+    if (!entry.changes || entry.changes.length === 0) {
       return null
     }
 
@@ -78,13 +60,13 @@ const ModelHistory = ({
         <CommitNode
           message={entry.message}
           tag={entry.sha && entry.sha.substring(0, 7)}
-          created={entry.commits[0].created}
-          author={entry.commits[0].owner}
+          created={entry.created}
+          author={entry.owner}
           isActive={ind === 0}
           isInitial={isInitial}
         />
         <Spacer size={'.75rem'} />
-        {entry.commits.map((commit, ind) => {
+        {entry.changes.map((commit, ind) => {
           if (!commit) return null
           const part = modelData.parts.find(
             part => part.partIdentifier === commit.partIdentifier

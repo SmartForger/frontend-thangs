@@ -43,8 +43,11 @@ const useStyles = createUseStyles(theme => {
 
 const ReviewVersion = () => {
   const c = useStyles()
-  const { dispatch, uploadFiles = {}, model = {} } = useStoreon('model', 'uploadFiles')
-  const { data: files = {}, formData } = uploadFiles
+  const { dispatch, uploadModelFiles = {}, model = {} } = useStoreon(
+    'model',
+    'uploadModelFiles'
+  )
+  const { data: files = {}, formData } = uploadModelFiles
   const { data: modelData = {}, isLoading: isLoadingModel } = model
   const [waiting, setWaiting] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)

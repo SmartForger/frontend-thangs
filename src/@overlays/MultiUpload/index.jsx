@@ -291,10 +291,10 @@ const MultiUpload = ({
         modelId: (versionData && versionData.modelId) || null,
       })
 
-      dispatch(types.GET_UPLOAD_COMPARE_ID, {
-        files,
-        modelId: (versionData && versionData.modelId) || null,
-      })
+      // dispatch(types.GET_UPLOAD_COMPARE_ID, {
+      //   files,
+      //   modelId: (versionData && versionData.modelId) || null,
+      // })
 
       if (rejectedFile) {
         const filePath = rejectedFile.path.split('.')
@@ -362,7 +362,7 @@ const MultiUpload = ({
 
       if (versionData) {
         //Single Part and Selected Part of Multi/asm flow
-        dispatch(types.GET_UPLOAD_COMPARE_ID, {})
+        // dispatch(types.GET_UPLOAD_COMPARE_ID, {})
         if (modelData?.parts?.length === 1 || versionData?.partId) {
           const currentFileKey = Object.keys(uploadFilesData)[0]
           const currentFile = uploadFilesData[currentFileKey]

@@ -28,8 +28,11 @@ const useStyles = createUseStyles(_theme => {
 
 const SelectVersionModel = ({ fileIndex }) => {
   const c = useStyles()
-  const { dispatch, uploadFiles = {}, model = {} } = useStoreon('model', 'uploadFiles')
-  const { data: files = {} } = uploadFiles
+  const { dispatch, uploadModelFiles = {}, model = {} } = useStoreon(
+    'model',
+    'uploadModelFiles'
+  )
+  const { data: files = {} } = uploadModelFiles
   const { data: modelData = {}, isLoading: isLoadingModel } = model
   const [selectedParts, setSelectedParts] = useState([])
   const [inputState, setInputState] = useState({
