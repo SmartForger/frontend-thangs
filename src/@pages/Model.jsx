@@ -46,6 +46,7 @@ import {
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
 import { pageview, track, perfTrack } from '@utilities/analytics'
+import { useIsFeatureOn } from '@hooks/useExperiments'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -471,6 +472,8 @@ const StatsActionsAndPrints = ({
   pageTitle,
 }) => {
   const isARSupported = useMemo(() => canDownloadAR(modelData), [modelData])
+  const communityUploadEnabled = useIsFeatureOn('community_uploads_feature')
+
   return (
     <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
       <div>
@@ -509,11 +512,13 @@ const StatsActionsAndPrints = ({
         <Divider />
         <ModelStats model={modelData} />
         <Divider />
-        <ModelPrints
-          model={modelData}
-          isAuthedUser={isAuthedUser}
-          openSignupOverlay={openSignupOverlay}
-        />
+        {communityUploadEnabled && (
+          <ModelPrints
+            model={modelData}
+            isAuthedUser={isAuthedUser}
+            openSignupOverlay={openSignupOverlay}
+          />
+        )}
       </div>
       <Divider />
     </div>

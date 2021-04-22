@@ -10,6 +10,7 @@ import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import { track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
+import { useIsFeatureOn } from '@hooks/useExperiments'
 
 import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
 import { ReactComponent as DownloadIcon } from '@svg/icon-download.svg'
@@ -68,6 +69,7 @@ const SubpartMenu = ({ part }) => {
       part.owner.id.toString() === currentUserId.toString()
     )
   }, [currentUserId, part])
+  const newVersionFeatureEnabled = useIsFeatureOn('new_versions_feature')
 
   const handleNewVersion = useCallback(
     e => {
@@ -187,15 +189,17 @@ const SubpartMenu = ({ part }) => {
   return (
     <div className={c.SubpartMenu}>
       <Spacer size={'1rem'} />
-      <MenuItem className={c.SubpartMenu_Item} onClick={handleNewVersion}>
-        <div>
-          <Spacer size={'1.5rem'} />
-          <UploadIcon />
-          <Spacer size={'.5rem'} />
-          <Body>Upload new version</Body>
-          <Spacer size={'1.5rem'} />
-        </div>
-      </MenuItem>
+      {newVersionFeatureEnabled && (
+        <MenuItem className={c.SubpartMenu_Item} onClick={handleNewVersion}>
+          <div>
+            <Spacer size={'1.5rem'} />
+            <UploadIcon />
+            <Spacer size={'.5rem'} />
+            <Body>Upload new version</Body>
+            <Spacer size={'1.5rem'} />
+          </div>
+        </MenuItem>
+      )}
       <Spacer size={'.5rem'} />
       {/* <MenuItem className={c.SubpartMenu_Item} onClick={handleNewPart}>
         <div>

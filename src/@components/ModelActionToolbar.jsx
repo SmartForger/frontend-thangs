@@ -8,11 +8,14 @@ import {
   NewVersionButton,
   Spacer,
 } from '@components'
+import { useIsFeatureOn } from '@hooks/useExperiments'
 
 const ModelActionToolbar = ({ model = {}, isExpandedOptions = false }) => {
+  const newVersionFeatureEnabled = useIsFeatureOn('new_versions_feature')
+
   return (
     <ContainerRow alignItems={'center'}>
-      <NewVersionButton model={model} />
+      {newVersionFeatureEnabled && <NewVersionButton model={model} />}
       <Spacer size={'1rem'} />
       <EditModelButton model={model} />
       <Spacer size={'1rem'} />

@@ -10,6 +10,7 @@ import { ERROR_STATES, FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/file
 import { track } from '@utilities/analytics'
 import AssemblyInfo from './AssemblyInfo'
 import { useOverlay } from '@hooks'
+import { useIsFeatureOn } from '@hooks/useExperiments'
 
 const NewModelUpload = ({
   activeNode,
@@ -91,6 +92,7 @@ const MultiUpload = ({
   const multipartName = formData['multipart'] && formData['multipart'].name
   const { setOverlay, setOverlayOpen } = useOverlay()
   const history = useHistory()
+  const modelPageFeatureEnabled = useIsFeatureOn('mythangs_model_page_feature')
 
   const uploadedFiles = useMemo(
     () => Object.values(uploadFilesData).filter(file => file.name && !file.isError),
@@ -144,8 +146,8 @@ const MultiUpload = ({
           ? newNode.subIds.map(subId => formNode(subId))
           : []
         : Object.values(newTreeData)
-          .filter(node => !node.parentId)
-          .map(node => formNode(node.id))
+            .filter(node => !node.parentId)
+            .map(node => formNode(node.id))
 
       newNode.treeValid =
         newNode.valid &&
@@ -259,8 +261,8 @@ const MultiUpload = ({
               setErrorMessage(
                 `${file.name} is not a supported file type.
               Supported file extensions include ${MODEL_FILE_EXTS.map(
-          e => ' ' + e.replace('.', '')
-        )}.`
+                e => ' ' + e.replace('.', '')
+              )}.`
               )
               return null
             }
@@ -346,13 +348,17 @@ const MultiUpload = ({
       })
     }
     dispatch(types.SUBMIT_MODELS, {
-      onFinish: folderId => {
+      onFinish: ({ folderId, modelIds }) => {
         closeOverlay()
         dispatch(types.RESET_UPLOAD_FILES)
-        history.push(folderId ? `/mythangs/folder/${folderId}` : '/mythangs/all-files')
+        if (modelPageFeatureEnabled) {
+          history.push(`/mythangs/file/${modelIds[0]}`)
+        } else {
+          history.push(folderId ? `/mythangs/folder/${folderId}` : '/mythangs/all-files')
+        }
       },
     })
-  }, [uploadedFiles, dispatch, closeOverlay, history])
+  }, [uploadedFiles, dispatch, closeOverlay, history, modelPageFeatureEnabled])
 
   const handleContinue = useCallback(
     ({ applyRemaining, data }) => {
@@ -498,17 +504,17 @@ const MultiUpload = ({
         ? 'Upload New Version'
         : 'Upload Files'
       : activeNode.isAssembly && activeNode.parentId
-        ? 'Sub Assembly'
-        : activeNode.isAssembly
-          ? 'New Assembly'
-          : partFormTitle
+      ? 'Sub Assembly'
+      : activeNode.isAssembly
+      ? 'New Assembly'
+      : partFormTitle
   }, [activeNode, partFormTitle, previousVersionModelId, versionData])
 
   const fileLength = useMemo(
     () =>
       uploadFilesData
         ? Object.keys(uploadFilesData).filter(fileId => uploadFilesData[fileId].name)
-          .length
+            .length
         : 0,
     [uploadFilesData]
   )

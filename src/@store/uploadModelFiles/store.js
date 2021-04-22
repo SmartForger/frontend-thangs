@@ -424,7 +424,10 @@ export default store => {
       })
       store.dispatch(types.FETCH_THANGS, {
         onFinish: () => {
-          onFinish(payload[0].folderId)
+          onFinish({
+            modelIds: data,
+            folderId: payload[0].folderId,
+          })
         },
       })
       let eventName = ''

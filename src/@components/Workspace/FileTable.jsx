@@ -24,6 +24,7 @@ import InfiniteTreeView from '@components/InfiniteTreeView'
 import { formatBytes } from '@utilities'
 import { flattenTree } from '@utilities/tree'
 import { MODEL_FILE_EXTS } from '@constants/fileUpload'
+import { useIsFeatureOn } from '@hooks/useExperiments'
 
 import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
 import { ReactComponent as DropzoneIcon } from '@svg/dropzone.svg'
@@ -334,6 +335,7 @@ const FileTable = ({
     sortedBy: initialSortedBy || COLUMNS.FILENAME,
     order: 'desc',
   })
+  const modelPageFeatureEnabled = useIsFeatureOn('mythangs_model_page_feature')
 
   const handleSort = useCallback(
     newSortedBy => {
@@ -408,12 +410,12 @@ const FileTable = ({
     (node, { toggleNode }) => {
       const menuProps = node.isFolder
         ? {
-          id: 'Folder_Menu',
-          attributes: {
-            className: c.FileTable_FileRow,
-          },
-          collect: () => ({ folder: node }),
-        }
+            id: 'Folder_Menu',
+            attributes: {
+              className: c.FileTable_FileRow,
+            },
+            collect: () => ({ folder: node }),
+          }
         : node.level === 0
           ? {
             id: 'File_Menu',
@@ -437,7 +439,7 @@ const FileTable = ({
       const handleDoubleClick = () => {
         if (node.isFolder) {
           handleChangeFolder(node)
-        } else {
+        } else if (modelPageFeatureEnabled) {
           const modelPath = `/mythangs/file/${node.id}`
           history.push(modelPath)
         }
@@ -508,7 +510,7 @@ const FileTable = ({
         </ContextMenuTrigger>
       )
     },
-    [c, handleChangeFolder, history, selectedFiles]
+    [c, handleChangeFolder, history, selectedFiles, modelPageFeatureEnabled]
   )
 
   useEffect(() => {

@@ -10,6 +10,7 @@ import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import { track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
+import { useIsFeatureOn } from '@hooks/useExperiments'
 
 import { ReactComponent as DeleteIcon } from '@svg/icon-delete.svg'
 import { ReactComponent as DownloadIcon } from '@svg/icon-download.svg'
@@ -69,6 +70,7 @@ const FileMenu = ({ model = {} }) => {
     )
   }, [model, currentUserId])
   // const { isAssembly } = model
+  const newVersionFeatureEnabled = useIsFeatureOn('new_versions_feature')
 
   const handleNewVersion = useCallback(
     e => {
@@ -199,15 +201,17 @@ const FileMenu = ({ model = {} }) => {
   return (
     <div className={c.FileMenu}>
       <Spacer size={'1rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={handleNewVersion}>
-        <div>
-          <Spacer size={'1.5rem'} />
-          <UploadIcon />
-          <Spacer size={'.5rem'} />
-          <Body>Upload new version</Body>
-          <Spacer size={'1.5rem'} />
-        </div>
-      </MenuItem>
+      {newVersionFeatureEnabled && (
+        <MenuItem className={c.FileMenu_Item} onClick={handleNewVersion}>
+          <div>
+            <Spacer size={'1.5rem'} />
+            <UploadIcon />
+            <Spacer size={'.5rem'} />
+            <Body>Upload new version</Body>
+            <Spacer size={'1.5rem'} />
+          </div>
+        </MenuItem>
+      )}
       <Spacer size={'.5rem'} />
       {/* {!isAssembly && (
         <MenuItem className={c.FileMenu_Item} onClick={handleNewPart}>
