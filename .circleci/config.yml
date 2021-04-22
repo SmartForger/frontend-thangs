@@ -32,7 +32,7 @@ workflows:
             filters:
               branches:
                 only:
-                  - ar-search-release
+                  - development
         - deploy-production:
             Stack: master
             context: gcp-and-physna
