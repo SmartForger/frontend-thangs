@@ -23,17 +23,24 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const PartLine = ({ name, sha, prevSHA, size, isInitial = false, setActiveViewer }) => {
+const PartLine = ({
+  name,
+  phynId,
+  prevPhynId,
+  size,
+  isInitial = false,
+  setActiveViewer,
+}) => {
   const c = useStyles()
   const { dispatch } = useStoreon()
 
   const handleChange = useCallback(() => {
     dispatch(types.SET_COMPARE_MODELS, {
-      model1: prevSHA,
-      model2: sha,
+      model1: prevPhynId,
+      model2: phynId,
     })
     setActiveViewer('compare')
-  }, [dispatch, prevSHA, setActiveViewer, sha])
+  }, [dispatch, prevPhynId, setActiveViewer, phynId])
 
   return (
     <React.Fragment>

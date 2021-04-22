@@ -42,51 +42,57 @@ const ModelHistory = ({
       </>
     )
   }
-  const partSHAs = {}
-  const newHistory = [...modelHistory]
-  newHistory.forEach(version => {
-    version.changes.forEach(commit => {
-      if (!partSHAs[version.sha]) partSHAs[version.sha] = []
-      partSHAs[version.sha].push(commit.partIdentifier)
-    })
-  })
-  return newHistory.reverse().map((entry, ind) => {
-    if (!entry.changes || entry.changes.length === 0) {
+  const reversedHistory = [...modelHistory].reverse()
+  return reversedHistory.map((commit, ind) => {
+    if (!commit.changes || commit.changes.length === 0) {
       return null
     }
 
-    const isInitial = newHistory.length - 1 === ind
-    const { changes } = entry
+    const isInitial = reversedHistory.length - 1 === ind
+    const { changes } = commit
 
     return (
-      <div key={`entry_${ind}`} className={c.ModelHistory}>
+      <div key={`commit_${ind}`} className={c.ModelHistory}>
         <CommitNode
-          message={entry.message}
-          tag={entry.sha && entry.sha.substring(0, 7)}
-          created={entry.created}
-          author={entry.owner}
+          message={commit.message}
+          tag={commit.sha && commit.sha.substring(0, 7)}
+          created={commit.created}
+          author={commit.owner}
           isActive={ind === 0}
           isInitial={isInitial}
         />
         <Spacer size={'.75rem'} />
-        {changes.map((commit, ind) => {
-          if (!commit) return null
-          const part = modelData.parts.find(
-            part => part.partIdentifier === commit.partIdentifier
-          )
+        {changes.map((change, ind) => {
+          if (!change) return null
+          const part =
+            modelData.parts.find(part => part.partIdentifier === change.partIdentifier) ||
+            {}
           const partName = part?.name
-          const prevSHA =
-            Object.keys(partSHAs).find(sha => {
-              return partSHAs[sha].includes(commit.partIdentifier)
-            }) ?? '00000000-0000-0000-0000-000000000000'
+          const initialCommit = '00000000-0000-0000-0000-000000000000'
+          const phynId = change.phyndexerId
+          let prevPhynId
+          reversedHistory.slice(ind + 1).find(commit => {
+            return commit.changes.find(change => {
+              if (change.partIdentifier === part.partIdentifier) {
+                prevPhynId = change.phyndexerId
+                return true
+              } else if (
+                change.filename === part.filename &&
+                commit.sha === initialCommit
+              ) {
+                prevPhynId = change.phyndexerId
+                return true
+              }
+            })
+          })
           return (
-            <React.Fragment key={`commit_${commit.previousPartIdentifier}_${ind}`}>
+            <React.Fragment key={`change_${change.previousPartIdentifier}_${ind}`}>
               <PartLine
                 name={partName}
-                size={commit.size}
+                size={change.size}
                 isInitial={isInitial}
-                sha={entry.sha}
-                prevSHA={prevSHA}
+                phynId={phynId}
+                prevPhynId={prevPhynId}
                 setActiveViewer={setActiveViewer}
               />
               {changes.length - 1 === ind && <Spacer size={'.5rem'} />}
