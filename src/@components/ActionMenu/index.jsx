@@ -311,7 +311,7 @@ export const ActionMenu = props => {
       {({ toggleOpen }) => (
         <MenuComponent
           onChange={val => {
-            toggleOpen()
+            toggleOpen(true)
             handleChange(val)
           }}
           isMobileActionBarActive={isMobileActionBarActive}
