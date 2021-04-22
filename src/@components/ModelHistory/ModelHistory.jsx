@@ -83,6 +83,7 @@ const ModelHistory = ({
                 prevPhynId = change.phyndexerId
                 return true
               }
+              return false
             })
           })
           return (
