@@ -3,10 +3,9 @@ import { useStoreon } from 'storeon/react'
 import CompareViewer from './CompareViewer'
 import * as types from '@constants/storeEventTypes'
 
-const CompareViewerContainer = props => {
-  const { phynId1, phynId2 } = props
+const CompareViewerContainer = () => {
   const { dispatch, compare } = useStoreon('compare')
-  const { token, isLoading: isLoadingToken } = compare
+  const { token, isLoading: isLoadingToken, model1, model2 } = compare
 
   useEffect(() => {
     dispatch(types.FETCH_COMPARE_TOKEN)
@@ -14,8 +13,8 @@ const CompareViewerContainer = props => {
 
   return (
     <CompareViewer
-      model1={phynId1}
-      model2={phynId2}
+      model1={model1}
+      model2={model2}
       token={token}
       isLoading={!token || isLoadingToken}
     />

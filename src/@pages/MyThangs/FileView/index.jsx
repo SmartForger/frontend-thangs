@@ -175,7 +175,11 @@ const FileView = ({ className, folders }) => {
             </ContainerColumn>
             <Spacer size='4rem' />
             <ContainerColumn fullWidth className={c.FileView_RightColumn}>
-              <TabbedFileContent model={modelData} onRowSelect={handleRowSelect} />
+              <TabbedFileContent
+                model={modelData}
+                onRowSelect={handleRowSelect}
+                setActiveViewer={setActiveViewer}
+              />
             </ContainerColumn>
           </ContainerRow>
         </div>

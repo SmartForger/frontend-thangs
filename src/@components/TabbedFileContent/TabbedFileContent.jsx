@@ -24,7 +24,14 @@ const useStyles = createUseStyles(theme => {
 })
 
 const TabbedFileContent = props => {
-  const { tabs = [], selected: selectedKey, setSelected, model, onRowSelect } = props
+  const {
+    tabs = [],
+    selected: selectedKey,
+    setSelected,
+    model,
+    onRowSelect,
+    setActiveViewer,
+  } = props
   const c = useStyles()
   const selectedTab = tabs.find(tab => tab.key === selectedKey) || {}
   const { Component } = selectedTab
@@ -61,7 +68,11 @@ const TabbedFileContent = props => {
         })}
       </ContainerRow>
       <ContainerRow fullWidth>
-        <Component model={model} onRowSelect={onRowSelect} />
+        <Component
+          model={model}
+          onRowSelect={onRowSelect}
+          setActiveViewer={setActiveViewer}
+        />
       </ContainerRow>
     </>
   )

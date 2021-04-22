@@ -23,7 +23,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const PartLine = ({ name, sha, prevSHA, size, isInitial = false }) => {
+const PartLine = ({ name, sha, prevSHA, size, isInitial = false, setActiveViewer }) => {
   const c = useStyles()
   const { dispatch } = useStoreon()
 
@@ -32,7 +32,8 @@ const PartLine = ({ name, sha, prevSHA, size, isInitial = false }) => {
       model1: prevSHA,
       model2: sha,
     })
-  }, [dispatch, prevSHA, sha])
+    setActiveViewer('compare')
+  }, [dispatch, prevSHA, setActiveViewer, sha])
 
   return (
     <React.Fragment>
@@ -61,7 +62,6 @@ const PartLine = ({ name, sha, prevSHA, size, isInitial = false }) => {
           <Spacer size={'1rem'} />
         </ContainerColumn>
       </ContainerRow>
-      <Spacer size={'.5rem'} />
     </React.Fragment>
   )
 }

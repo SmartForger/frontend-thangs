@@ -20,16 +20,18 @@ export default store => {
     },
   }))
 
-  store.on(types.LOADING_COMPARE_TOKEN, () => ({
+  store.on(types.LOADING_COMPARE_TOKEN, state => ({
     compare: {
+      ...state.compare,
       token: undefined,
       isLoading: true,
       isError: false,
     },
   }))
 
-  store.on(types.LOADED_COMPARE_TOKEN, (_state, { data }) => ({
+  store.on(types.LOADED_COMPARE_TOKEN, (state, { data }) => ({
     compare: {
+      ...state.compare,
       token: data.token,
       isLoading: false,
       isError: false,

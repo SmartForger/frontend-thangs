@@ -44,7 +44,7 @@ const MenuTarget = ({ onClick = noop }) => {
   )
 }
 
-const ModelHistoryPartActionMenu = (onChange = noop) => {
+const ModelHistoryPartActionMenu = ({ onChange = noop }) => {
   const options = useMemo(
     () => [
       {

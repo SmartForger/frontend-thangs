@@ -30,6 +30,7 @@ const ModelHistory = ({
   isLoading,
   isError,
   error,
+  setActiveViewer,
 }) => {
   const c = useStyles()
   if (isLoading) return <Spinner />
@@ -55,6 +56,8 @@ const ModelHistory = ({
     }
 
     const isInitial = newHistory.length - 1 === ind
+    const { changes } = entry
+
     return (
       <div key={`entry_${ind}`} className={c.ModelHistory}>
         <CommitNode
@@ -66,27 +69,30 @@ const ModelHistory = ({
           isInitial={isInitial}
         />
         <Spacer size={'.75rem'} />
-        {entry.changes.map((commit, ind) => {
+        {changes.map((commit, ind) => {
           if (!commit) return null
           const part = modelData.parts.find(
             part => part.partIdentifier === commit.partIdentifier
           )
           const partName = part?.name
-          const prevSHA = Object.keys(partSHAs).find(sha => {
-            return partSHAs[sha].includes(commit.partIdentifier)
-          })
+          const prevSHA =
+            Object.keys(partSHAs).find(sha => {
+              return partSHAs[sha].includes(commit.partIdentifier)
+            }) ?? '00000000-0000-0000-0000-000000000000'
           return (
-            <PartLine
-              key={`commit_${commit.previousPartIdentifier}_${ind}`}
-              name={partName}
-              size={commit.size}
-              isInitial={isInitial}
-              sha={entry.sha}
-              prevSHA={prevSHA}
-            />
+            <React.Fragment key={`commit_${commit.previousPartIdentifier}_${ind}`}>
+              <PartLine
+                name={partName}
+                size={commit.size}
+                isInitial={isInitial}
+                sha={entry.sha}
+                prevSHA={prevSHA}
+                setActiveViewer={setActiveViewer}
+              />
+              {changes.length - 1 === ind && <Spacer size={'.5rem'} />}
+            </React.Fragment>
           )
         })}
-        <Spacer size={'1.5rem'} />
         {!isInitial && <div className={c.AvatarConnector} />}
       </div>
     )

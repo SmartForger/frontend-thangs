@@ -35,7 +35,7 @@ const useStyles = createUseStyles(theme => {
 const CommitNode = ({ message, tag, created, author = {}, isActive, isInitial }) => {
   const c = useStyles()
   return (
-    <ContainerRow>
+    <ContainerRow alignItems={'center'}>
       <div className={c.CommitNode_Icon}>
         {isInitial ? (
           <InitialCommitIcon />
@@ -52,7 +52,7 @@ const CommitNode = ({ message, tag, created, author = {}, isActive, isInitial })
       <ContainerColumn>
         <Spacer size={'.25rem'} />
         <ContainerRow alignItems={'center'} className={c.CommitNode_Message}>
-          <Body multiline>{message}</Body>
+          <Body>{message}</Body>
           <Spacer size={'.25rem'} />
           <Tag
             color={isActive ? '#13BD98' : '#DCF7F1'}
