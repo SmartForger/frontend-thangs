@@ -19,9 +19,9 @@ const Compare = ({ model1, model2, token, isLoading }) => {
       {isLoading && <Spinner />}
       {!isLoading && (
         <CompareModels
-          token={token}
+          token={token.token}
           tokenScope={'buckets'}
-          tokenExpiresAt={undefined}
+          tokenExpiresAt={token.token_expires_at}
           modelAId={model1}
           modelBId={model2}
           modelABucket={process.env.REACT_APP_COMPARE_BUCKET}

@@ -32,7 +32,7 @@ export default store => {
   store.on(types.LOADED_COMPARE_TOKEN, (state, { data }) => ({
     compare: {
       ...state.compare,
-      token: data.token,
+      token: data,
       isLoading: false,
       isError: false,
     },
