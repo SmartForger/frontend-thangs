@@ -14,5 +14,5 @@ export const useExperiments = feature => {
 
 export const useIsFeatureOn = feature => {
   const value = useExperiments(feature)
-  return value !== false
+  return !value //TODO: Flip before go-live
 }
