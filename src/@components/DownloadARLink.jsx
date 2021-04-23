@@ -36,7 +36,7 @@ const DownloadARLink = ({
         id: model.id ?? model.modelId,
         format,
         onFinish: downloadUrl => {
-          window.location.assign(downloadUrl)
+          window.location.assign(`${downloadUrl}&bypassCache=true`)
           track(downloadTrackingEvent, { format, modelId: model.id })
         },
       })
