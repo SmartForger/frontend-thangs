@@ -57,7 +57,7 @@ const ARDownloadTarget = ({ onClick = noop }) => {
       <ARIcon />
       <Spacer size={'.5rem'} />
       <span className={c.ARDownloadTarget_Text}>
-        Download GLB for AR Viewing (App&nbsp;Required)
+        Download Model for AR (App&nbsp;Required)
       </span>
     </Button>
   )
@@ -74,7 +74,7 @@ const ARDownloadActionMenu = ({
         value: 'android',
       },
       {
-        label: 'Download for iOS (Coming Soon)',
+        label: 'Download for iOS',
         value: 'ios',
       },
     ],

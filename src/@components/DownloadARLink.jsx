@@ -46,8 +46,6 @@ const DownloadARLink = ({
 
   const handleClick = useCallback(
     format => {
-      if (format === 'ios') return
-
       if (isAuthedUser) {
         downloadModel(format)
       } else {
