@@ -37,6 +37,7 @@ const Compare = ({ model1, model2, token, isLoading }) => {
           }}
           variant={{
             type: 'sideBySide',
+            syncCameras: true,
           }}
         />
       )}
