@@ -486,7 +486,12 @@ const StatsActionsAndPrints = ({
                 isAuthedUser={isAuthedUser}
                 openSignupOverlay={openSignupOverlay}
               />
-              <ViewNativeARLink model={modelData} />
+              <Spacer size='1rem' />
+              <ViewNativeARLink
+                model={modelData}
+                isAuthedUser={isAuthedUser}
+                openSignupOverlay={openSignupOverlay}
+              />
             </ContainerColumn>
           </>
         )}

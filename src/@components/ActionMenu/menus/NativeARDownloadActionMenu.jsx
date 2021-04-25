@@ -8,21 +8,21 @@ const useStyles = createUseStyles(theme => {
     mediaQueries: { md_viewer },
   } = theme
   return {
-    ARDownloadActionMenu: {},
-    ARDownloadActionMenu_ClickableButton: {
+    NativeARDownloadActionMenu: {},
+    NativeARDownloadActionMenu_ClickableButton: {
       cursor: 'pointer',
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
     },
-    ARDownloadActionMenu__desktop: {
+    NativeARDownloadActionMenu__desktop: {
       display: 'none',
 
       [md_viewer]: {
         display: 'flex',
       },
     },
-    ARDownloadActionMenu__mobile: {
+    NativeARDownloadActionMenu__mobile: {
       display: 'flex',
 
       [md_viewer]: {
@@ -56,12 +56,12 @@ const ARDownloadTarget = ({ onClick = noop }) => {
     <Button secondary className={c.ARDownloadTarget} onClick={onClick}>
       <ARIcon />
       <Spacer size={'.5rem'} />
-      <span className={c.ARDownloadTarget_Text}>Download AR</span>
+      <span className={c.ARDownloadTarget_Text}>Open Using Mobile AR</span>
     </Button>
   )
 }
 
-const ARDownloadActionMenu = ({
+const NativeARDownloadActionMenu = ({
   onChange = noop,
   TargetComponent = ARDownloadTarget,
 }) => {
@@ -99,4 +99,4 @@ const ARDownloadActionMenu = ({
   )
 }
 
-export default ARDownloadActionMenu
+export default NativeARDownloadActionMenu

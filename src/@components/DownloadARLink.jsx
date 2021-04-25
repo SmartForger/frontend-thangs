@@ -36,12 +36,27 @@ const DownloadARLink = ({
         id: model.id ?? model.modelId,
         format,
         onFinish: downloadUrl => {
-          window.location.assign(`${downloadUrl}&bypassCache=true`)
-          track(downloadTrackingEvent, { format, modelId: model.id })
+          const link = document.createElement('a')
+          link.href = downloadUrl
+          link.download = (
+            model.name ||
+            model.modelFileName ||
+            'thangs_model'
+          ).replaceAll('.', '_')
+          link.click()
+
+          track(downloadTrackingEvent, { format, modelId: model.id ?? model.modelId })
         },
       })
     },
-    [downloadTrackingEvent, dispatch, model.id, model.modelId]
+    [
+      downloadTrackingEvent,
+      dispatch,
+      model.id,
+      model.modelId,
+      model.name,
+      model.modelFileName,
+    ]
   )
 
   const handleClick = useCallback(
