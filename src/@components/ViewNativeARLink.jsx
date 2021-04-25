@@ -4,12 +4,20 @@ import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 
 import * as types from '@constants/storeEventTypes'
-import { NativeARDownloadActionMenu } from '@components'
+import { NativeARDownloadActionMenu, Spacer } from '@components'
 import { track } from '@utilities/analytics'
 
-const useStyles = createUseStyles(() => {
+const useStyles = createUseStyles(theme => {
+  const {
+    mediaQueries: { md_viewer },
+  } = theme
+
   return {
     ViewNativeARLink: {
+      [md_viewer]: {
+        display: 'none',
+      },
+
       '& > div': {
         width: '100%',
       },
@@ -69,6 +77,7 @@ const ViewNativeARLink = ({
 
   return (
     <div className={c.ViewNativeARLink}>
+      <Spacer size='1rem' />
       <NativeARDownloadActionMenu onChange={handleClick} />
     </div>
   )
