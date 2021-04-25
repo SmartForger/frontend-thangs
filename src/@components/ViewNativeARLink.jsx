@@ -49,13 +49,18 @@ const ViewNativeARLink = ({
 
           if (format === 'android') {
             const link = document.createElement('a')
-            link.href = `intent://arvr.google.com/scene-viewer/1.0?file=${downloadUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`.replaceAll(
+            link.href = `intent://arvr.google.com/scene-viewer/1.0?file=${downloadUrl.replaceAll(
               '#',
               encodeURIComponent('#')
-            )
+            )}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`
             link.click()
           } else if (format === 'ios') {
-            window.location.assign(downloadUrl)
+            window.location.assign(
+              `${downloadUrl.replaceAll(
+                '#',
+                encodeURIComponent('#')
+              )}&cacheBuster=${Date.now()}`
+            )
           }
         },
       })

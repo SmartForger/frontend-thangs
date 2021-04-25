@@ -43,7 +43,7 @@ export default store => {
     store.dispatch(types.LOADING_MODEL_DOWNLOAD_URL)
     const { data, error } = await api({
       method: 'GET',
-      endpoint: `models/${id}/download-url?targetFormat=${format}#cacheBuster=${Date.now()}`,
+      endpoint: `models/${id}/download-url?targetFormat=${format}`,
     })
 
     if (error || data?.fileName === 'Error') {

@@ -37,7 +37,10 @@ const DownloadARLink = ({
         format,
         onFinish: downloadUrl => {
           const link = document.createElement('a')
-          link.href = downloadUrl
+          link.href = `${downloadUrl.replaceAll(
+            '#',
+            encodeURIComponent('#')
+          )}&cacheBuster=${Date.now()}`
           link.download = (
             model.name ||
             model.modelFileName ||
