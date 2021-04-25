@@ -37,23 +37,18 @@ const ViewNativeARLink = ({
         id: model.id ?? model.modelId,
         format,
         onFinish: downloadUrl => {
-          let url = '',
-            rel = ''
+          track(trackingEvent, { format, modelId: model.id ?? model.modelId })
 
           if (format === 'android') {
-            url = `intent://arvr.google.com/scene-viewer/1.0?file=${downloadUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`
+            const link = document.createElement('a')
+            link.href = `intent://arvr.google.com/scene-viewer/1.0?file=${downloadUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`.replaceAll(
+              '#',
+              encodeURIComponent('#')
+            )
+            link.click()
           } else if (format === 'ios') {
-            rel = 'ar'
-            url = downloadUrl
+            window.location.assign(downloadUrl)
           }
-          const link = document.createElement('a')
-          if (rel.length > 0) {
-            link.rel = rel
-          }
-          link.href = url.replaceAll('#', encodeURIComponent('#'))
-          link.click()
-
-          track(trackingEvent, { format, modelId: model.id ?? model.modelId })
         },
       })
     },
