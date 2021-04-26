@@ -25,6 +25,7 @@ import {
   Spacer,
   Spinner,
   ToggleFollowButton,
+  ViewNativeARLink,
 } from '@components'
 import { canDownloadAR } from '@utilities'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
@@ -481,6 +482,11 @@ const StatsActionsAndPrints = ({
             <Spacer size='1rem' />
             <ContainerColumn>
               <DownloadARLink
+                model={modelData}
+                isAuthedUser={isAuthedUser}
+                openSignupOverlay={openSignupOverlay}
+              />
+              <ViewNativeARLink
                 model={modelData}
                 isAuthedUser={isAuthedUser}
                 openSignupOverlay={openSignupOverlay}
