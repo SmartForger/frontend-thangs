@@ -45,15 +45,7 @@ const useStyles = createUseStyles(theme => {
       position: 'fixed',
       width: '100%',
     },
-    Container_MobileOverlayOpen: {
-      position: 'fixed',
-      width: '100%',
-
-      [md]: {
-        position: 'unset',
-        width: 'auto',
-      },
-    },
+    Container_MobileOverlayOpen: {},
     Layout: {
       display: 'flex',
       margin: 'auto',
