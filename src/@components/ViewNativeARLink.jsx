@@ -93,7 +93,7 @@ const ViewNativeARLink = ({
         },
       })
     },
-    [dispatch, model.id, model.modelId, trackingEvent]
+    [dispatch, model, trackingEvent]
   )
 
   const handleClick = useCallback(
