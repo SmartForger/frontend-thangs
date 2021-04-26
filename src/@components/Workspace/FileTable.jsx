@@ -410,12 +410,12 @@ const FileTable = ({
     (node, { toggleNode }) => {
       const menuProps = node.isFolder
         ? {
-            id: 'Folder_Menu',
-            attributes: {
-              className: c.FileTable_FileRow,
-            },
-            collect: () => ({ folder: node }),
-          }
+          id: 'Folder_Menu',
+          attributes: {
+            className: c.FileTable_FileRow,
+          },
+          collect: () => ({ folder: node }),
+        }
         : node.level === 0
           ? {
             id: 'File_Menu',
