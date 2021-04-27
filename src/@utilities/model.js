@@ -8,7 +8,7 @@ const REACT_APP_MODEL_BUCKET = process.env.REACT_APP_MODEL_BUCKET
 export const shouldShowViewRelated = model =>
   model.nMatchedModels !== 0 && model.matchingData?.nMatchedModels !== 0
 
-const UNSUPPORTED_EXTENSIONS = ['igs', 'step', 'x_t']
+const UNSUPPORTED_EXTENSIONS = []
 
 export const canDownloadAR = model => {
   const isSupported = filename => {
