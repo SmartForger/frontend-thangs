@@ -9,17 +9,9 @@ import { NativeARDownloadActionMenu, Spacer } from '@components'
 import { track } from '@utilities/analytics'
 import axios from 'axios'
 
-const useStyles = createUseStyles(theme => {
-  const {
-    mediaQueries: { md_viewer },
-  } = theme
-
+const useStyles = createUseStyles(() => {
   return {
     ViewNativeARLink: {
-      [md_viewer]: {
-        display: 'none',
-      },
-
       '& > div': {
         width: '100%',
       },
@@ -111,7 +103,11 @@ const ViewNativeARLink = ({
   return (
     <div className={c.ViewNativeARLink}>
       <Spacer size='1rem' />
-      <NativeARDownloadActionMenu onChange={handleClick} />
+      <NativeARDownloadActionMenu
+        disableIOS={true}
+        disableAndroid={true}
+        onChange={handleClick}
+      />
     </div>
   )
 }

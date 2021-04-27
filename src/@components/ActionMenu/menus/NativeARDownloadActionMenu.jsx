@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { ActionMenu, Button, Spacer } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ARIcon } from '@svg/icon-ar.svg'
+import { useIsAndroid, useIsIOS } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -65,18 +66,23 @@ const NativeARDownloadActionMenu = ({
   onChange = noop,
   TargetComponent = ARDownloadTarget,
 }) => {
+  const isAndroid = useIsAndroid()
+  const isIOS = useIsIOS()
+
   const options = useMemo(
     () => [
       {
         label: 'Download for Android',
         value: 'android',
+        disabled: !isAndroid,
       },
       {
         label: 'Download for iOS',
         value: 'ios',
+        disabled: !isIOS,
       },
     ],
-    []
+    [isAndroid, isIOS]
   )
 
   const menuProps = useMemo(() => {

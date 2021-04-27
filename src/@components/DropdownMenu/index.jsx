@@ -44,6 +44,8 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
       width: '100%',
 
+      opacity: ({ disabled }) => (disabled ? '0.8' : '1'),
+
       '& svg': {
         color: theme.colors.grey[500],
       },
@@ -107,8 +109,15 @@ const useDropdownMenuState = ({
   useExternalClick(dropdownRef, closeMenu)
   return [isOpen, toggleOpen]
 }
-const DropdownItem = ({ children, to = '#', onClick, className, noHover = false }) => {
-  const c = useStyles({ noHover })
+const DropdownItem = ({
+  children,
+  to = '#',
+  onClick,
+  className,
+  noHover = false,
+  disabled = false,
+}) => {
+  const c = useStyles({ noHover, disabled })
   const { setOverlayOpen = noop } = useOverlay()
 
   return (
@@ -117,8 +126,10 @@ const DropdownItem = ({ children, to = '#', onClick, className, noHover = false 
         <div
           className={classnames(className, c.DropdownMenu_Item)}
           onClick={e => {
-            setOverlayOpen(false)
-            onClick && onClick(e)
+            if (!disabled) {
+              setOverlayOpen(false)
+              onClick && onClick(e)
+            }
           }}
         >
           {children}
