@@ -56,7 +56,7 @@ const ARDownloadTarget = ({ onClick = noop }) => {
     <Button secondary className={c.ARDownloadTarget} onClick={onClick}>
       <ARIcon />
       <Spacer size={'.5rem'} />
-      <span className={c.ARDownloadTarget_Text}>Download AR</span>
+      <span className={c.ARDownloadTarget_Text}>Download Augmented Reality</span>
     </Button>
   )
 }
