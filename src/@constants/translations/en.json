@@ -1,6 +1,6 @@
 {
     "header": {
-        "searchPlaceholderText": "Search By Text or Upload",
+        "searchPlaceholderText": "Search By Text, \"Exact Phrases\", or Upload",
         "searchTextTitle": "Search By Text",
         "searchUploadText": "Upload for Search",
         "signUpButtonText": "Sign up",

@@ -74,7 +74,8 @@ const useStyles = createUseStyles(theme => {
       },
     },
     SearchBar_FormInput: {
-      width: '100%',
+      textOverflow: 'ellipsis',
+      width: 'calc(100% - 60px)',
       [md]: {
         width: '80%',
       },

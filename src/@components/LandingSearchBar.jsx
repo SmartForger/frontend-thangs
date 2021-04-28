@@ -127,7 +127,8 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.5rem',
     },
     SearchBar_FormInput: {
-      width: '100%',
+      textOverflow: 'ellipsis',
+      width: 'calc(100% - 190px)',
     },
     SearchBar_FormInput_active: {
       color: theme.colors.white[400],
