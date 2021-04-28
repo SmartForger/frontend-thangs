@@ -12,6 +12,7 @@ import {
 
 import { FOLDER_MENU_OPTIONS } from '@constants/menuOptions'
 import {
+  ContainerColumn,
   ContainerRow,
   FolderActionMenu,
   FolderActionToolbar,
@@ -126,7 +127,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const FolderHeader = ({ folder, folders, selectedModel }) => {
+const FolderHeader = ({ folder, folders, selectedModel, toolbarRef }) => {
   const c = useStyles({})
   const { id } = folder
   const folderPath = useMemo(() => {
@@ -141,11 +142,14 @@ const FolderHeader = ({ folder, folders, selectedModel }) => {
     <>
       <Spacer className={c.Spacer__mobile} size='2rem' />
       <div className={c.FolderView_Row}>
-        <div className={c.FolderView_TitleAndIcons}>
-          {folder.isPublic ? <FolderIcon /> : <PrivateFolderIcon />}
+        <ContainerRow>
+          <ContainerColumn>
+            <Spacer size={'.5rem'} />
+            {folder.isPublic ? <FolderIcon /> : <PrivateFolderIcon />}
+          </ContainerColumn>
           <Spacer size={'1rem'} />
           <div className={c.FolderView_Col}>
-            <div className={c.FolderView_TitleAndIcons}>
+            <ContainerRow alignItems={'center'}>
               <div className={c.FolderView_RootLink}>
                 <Title headerLevel={HeaderLevel.tertiary}>{folderName}</Title>
               </div>
@@ -157,10 +161,9 @@ const FolderHeader = ({ folder, folders, selectedModel }) => {
                   FOLDER_MENU_OPTIONS.ADD_TO_STARRED,
                 ]}
               />
-            </div>
+            </ContainerRow>
             {folderPath.length > 1 && (
               <>
-                <Spacer size={'.5rem'} />
                 <Metadata type={MetadataType.primary}>
                   {folderPath.map((pathObj, index) => {
                     if (index === folderPath.length - 1) return null
@@ -179,8 +182,11 @@ const FolderHeader = ({ folder, folders, selectedModel }) => {
               </>
             )}
           </div>
-        </div>
-        <div className={classnames(c.FolderView_Row, c.FolderView_Row__desktop)}>
+        </ContainerRow>
+        <div
+          className={classnames(c.FolderView_Row, c.FolderView_Row__desktop)}
+          ref={toolbarRef}
+        >
           {selectedModel && (
             <>
               <ContainerRow className={c.FolderView_ModelActionToolbar}>

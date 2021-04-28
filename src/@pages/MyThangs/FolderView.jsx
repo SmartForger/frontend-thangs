@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react'
+import React, { useEffect, useState, useMemo, useCallback, useRef } from 'react'
 import * as R from 'ramda'
 import classnames from 'classnames'
 import { useHistory, useParams } from 'react-router-dom'
@@ -155,8 +155,8 @@ const FolderView = ({
   const folder = folders[id] || {}
   const isSharedFolder = folder.creator && folder.creator.id !== currentUserId
   const folderModels = useMemo(() => getFolderModels(models, id), [models, id])
-
   const [selectedModel, setSelectedModel] = useState(null)
+  const toolbarRef = useRef()
 
   useEffect(() => {
     // This is for setting the current folder id
@@ -208,6 +208,7 @@ const FolderView = ({
               folder={folder}
               folders={folders}
               selectedModel={selectedModel}
+              toolbarRef={toolbarRef}
             />
             {directSubFolders.length > 0 && (
               <div className={c.FolderView_FoldersSection}>
@@ -239,6 +240,7 @@ const FolderView = ({
               isToolbarShown={false}
               onChange={handleOnChange}
               title='Files'
+              toolbarRef={toolbarRef}
             />
             <FileTable
               className={c.FolderView_FileTable__mobile}

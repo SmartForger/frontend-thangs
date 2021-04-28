@@ -6,7 +6,7 @@ const useExternalClick = (ref, callback) => {
     const handleClick = e => {
       if (ref.length) {
         const result = ref.every(
-          elRef => !elRef.current || !elRef.current.contains(e.target)
+          elRef => !elRef || !elRef.current || !elRef.current.contains(e.target)
         )
         if (result) {
           callback()

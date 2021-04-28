@@ -37,6 +37,7 @@ import { ReactComponent as DropzoneIcon } from '@svg/dropzone.svg'
 import { ReactComponent as DropzoneMobileIcon } from '@svg/dropzone-mobile.svg'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
+import { ReactComponent as PrivateFolderIcon } from '@svg/icon-folder-private.svg'
 import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
 import { useExternalClick } from '@hooks'
 
@@ -339,6 +340,7 @@ const FileTable = ({
   isToolbarShown = true,
   sortedBy: initialSortedBy,
   title,
+  toolbarRef,
 }) => {
   const c = useStyles()
   const containerRef = useRef()
@@ -423,7 +425,7 @@ const FileTable = ({
     return result
   }, [files, sortedBy, order])
 
-  useExternalClick([rowRef, menuRef], () => {
+  useExternalClick([rowRef, menuRef, toolbarRef], () => {
     if (!isOverlayOpen) {
       setSelectedFiles([])
       onChange({})
@@ -476,7 +478,6 @@ const FileTable = ({
       }
 
       const isSelected = selectedFiles.includes(node.id)
-
       return (
         <ContextMenuTrigger holdToDisplay={-1} {...menuProps}>
           <div
@@ -503,7 +504,11 @@ const FileTable = ({
               >
                 {node.isLeaf ? (
                   node.isFolder ? (
-                    <FolderIcon />
+                    node.isPublic ? (
+                      <FolderIcon />
+                    ) : (
+                      <PrivateFolderIcon />
+                    )
                   ) : (
                     <ModelIcon />
                   )
@@ -572,7 +577,12 @@ const FileTable = ({
           }
           elementRef={menuRef}
         >
-          {title && <Title headerLevel={HeaderLevel.tertiary}>{title}</Title>}
+          {title && (
+            <ContainerRow>
+              <Title headerLevel={HeaderLevel.tertiary}>{title}</Title>
+              <Spacer size={'2rem'} />
+            </ContainerRow>
+          )}
           {selectedNode && isToolbarShown ? (
             isSelectedNodeModel(selectedNode) ? (
               <ModelActionToolbar model={selectedNode} isExpandedOptions />
