@@ -542,7 +542,7 @@ const FileTable = ({
         </ContextMenuTrigger>
       )
     },
-    [c, handleChangeFolder, history, selectedFiles, modelPageFeatureEnabled]
+    [c, handleChangeFolder, history, selectedFiles, modelPageFeatureEnabled, onChange]
   )
 
   useEffect(() => {
