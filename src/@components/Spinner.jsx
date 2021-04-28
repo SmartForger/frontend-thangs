@@ -37,14 +37,20 @@ const useStyles = createUseStyles(theme => {
       stroke: theme.colors.white[900],
       strokeLinecap: 'round',
     },
+    Spinner_TopLevelView: {
+      position: 'relative',
+      top: '9rem',
+    },
   }
 })
 
-const Spinner = ({ className, size = '3rem', ...otherProps }) => {
+const Spinner = ({ className, size = '3rem', isTopLevelView = false, ...otherProps }) => {
   const c = useStyles({ size })
   return (
     <svg
-      className={classnames(className, c.Spinner)}
+      className={classnames(className, c.Spinner, {
+        [c.Spinner_TopLevelView]: isTopLevelView,
+      })}
       {...otherProps}
       viewBox='0 0 50 50'
       data-cy='loading-spinner'

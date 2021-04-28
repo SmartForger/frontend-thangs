@@ -5,19 +5,20 @@ import {
   CompareViewer,
   ContainerColumn,
   ContainerRow,
-  Spacer,
   FileHeader,
   HoopsModelViewer,
-  ModelStatBar,
-  ModelInfoBox,
   ModelCollaboratorBox,
+  ModelInfoBox,
+  ModelStatBar,
+  Spacer,
+  Spinner,
   TabbedFileContent,
   Tabs,
 } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
+import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
 import classnames from 'classnames'
 import * as types from '@constants/storeEventTypes'
-import FileViewSkeleton from './ViewSkeleton'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -126,65 +127,80 @@ const FileView = ({ className, folders }) => {
       value: 'compare',
     },
   ]
+
   return (
-    <main className={classnames(className, c.FileView)}>
-      {isLoading || !modelData ? (
-        <FileViewSkeleton />
-      ) : (
-        <div className={c.FileView_Content}>
-          <Spacer size='2rem' />
-          <FileHeader file={modelData} folders={folders} />
-          {/* This needs to know the modelData and the names and ids of all parent folders of model */}
-          <Spacer size='2rem' />
-          {historyData.length && (
-            <Tabs
-              className={c.FileView_Tabs}
-              onChange={handleViewerChange}
-              options={viewerOptions}
-              selectedValue={activeViewer}
-            />
-          )}
-          <Spacer size='1rem' />
-          {activeViewer === 'single' && (
-            <HoopsModelViewer
-              className={c.Model_ModelViewer}
-              model={modelData}
-              minimizeTools={true}
-              initialSelectedModel={activePart}
-            />
-          )}
-          {historyData.length && activeViewer === 'compare' && <CompareViewer />}
-          <Spacer size='2rem' />
+    <>
+      {isLoading ? (
+        <Spinner isTopLevelView />
+      ) : !modelData ? (
+        <>
+          <Spacer size='1.5rem' />
           <ContainerRow>
-            <ContainerColumn className={c.FileView_LeftColumn}>
-              <ModelStatBar
-                collaboratorCount={collaboratorCount}
-                versionCount={
-                  isLoadingHistory || isErrorHistory ? '?' : historyData.length
-                }
-                likeCount={likeCount}
-              />
-              <Spacer size='2rem' />
-              <ModelInfoBox
-                model={modelData}
-                folderName={'Public Files'}
-                modelPrivacy='Private'
-              />
-              <Spacer size='2rem' />
-              {modelData.folderId && <ModelCollaboratorBox />}
-            </ContainerColumn>
-            <Spacer size='4rem' />
-            <ContainerColumn fullWidth className={c.FileView_RightColumn}>
-              <TabbedFileContent
-                model={modelData}
-                onRowSelect={handleRowSelect}
-                setActiveViewer={setActiveViewer}
-              />
-            </ContainerColumn>
+            <Spacer size='1rem' />
+            <Title headerLevel={HeaderLevel.tertiary}>
+              This model doesn&apos;t exist or you don&apos;t appear to have access.
+            </Title>
+            <Spacer size='1rem' />
           </ContainerRow>
-        </div>
+          <Spacer size='1rem' />
+        </>
+      ) : (
+        <main className={classnames(className, c.FileView)}>
+          <div className={c.FileView_Content}>
+            <Spacer size='2rem' />
+            <FileHeader file={modelData} folders={folders} />
+            {/* This needs to know the modelData and the names and ids of all parent folders of model */}
+            <Spacer size='2rem' />
+            {historyData.length && (
+              <Tabs
+                className={c.FileView_Tabs}
+                onChange={handleViewerChange}
+                options={viewerOptions}
+                selectedValue={activeViewer}
+              />
+            )}
+            <Spacer size='1rem' />
+            {activeViewer === 'single' && (
+              <HoopsModelViewer
+                className={c.Model_ModelViewer}
+                model={modelData}
+                minimizeTools={true}
+                initialSelectedModel={activePart}
+              />
+            )}
+            {historyData.length && activeViewer === 'compare' && <CompareViewer />}
+            <Spacer size='2rem' />
+            <ContainerRow>
+              <ContainerColumn className={c.FileView_LeftColumn}>
+                <ModelStatBar
+                  collaboratorCount={collaboratorCount}
+                  versionCount={
+                    isLoadingHistory || isErrorHistory ? '?' : historyData.length
+                  }
+                  likeCount={likeCount}
+                />
+                <Spacer size='2rem' />
+                <ModelInfoBox
+                  model={modelData}
+                  folderName={'Public Files'}
+                  modelPrivacy='Private'
+                />
+                <Spacer size='2rem' />
+                {modelData.folderId && <ModelCollaboratorBox />}
+              </ContainerColumn>
+              <Spacer size='4rem' />
+              <ContainerColumn fullWidth className={c.FileView_RightColumn}>
+                <TabbedFileContent
+                  model={modelData}
+                  onRowSelect={handleRowSelect}
+                  setActiveViewer={setActiveViewer}
+                />
+              </ContainerColumn>
+            </ContainerRow>
+          </div>
+        </main>
       )}
-    </main>
+    </>
   )
 }
 

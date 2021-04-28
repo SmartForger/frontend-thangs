@@ -94,10 +94,6 @@ const useStyles = createUseStyles(theme => {
         outline: 'none',
       },
     },
-    Spinner: {
-      position: 'relative',
-      top: '9rem',
-    },
     MyThangs_HeaderSpacer: {
       display: 'none',
       [md]: {
@@ -233,7 +229,7 @@ const MyThangs = () => {
           />
           <Spacer size={'7rem'} className={c.MyThangs_HeaderSpacer} />
           {!isLoaded || isLoading ? (
-            <Spinner className={c.Spinner} />
+            <Spinner isTopLevelView />
           ) : (
             <ContextMenuTrigger
               id='Add_Menu'
