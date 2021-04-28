@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useRef, useEffect, useState } from 'react'
+import React, { useMemo, useCallback, useRef, useState } from 'react'
 import cn from 'classnames'
 import Dropzone from 'react-dropzone'
 import { useHistory } from 'react-router-dom'
@@ -99,6 +99,8 @@ const useStyles = createUseStyles(theme => {
     FileTable_FileName: {
       alignItems: 'center',
       overflow: 'hidden',
+      display: 'flex',
+      flex: '1',
 
       '& > span': {
         overflow: 'hidden',
@@ -360,7 +362,6 @@ const FileTable = ({
   handleChangeFolder = noop,
   handleEditModel: _h = noop,
   onChange = noop,
-  heightOffset = 32,
   hideDropzone = false,
   onDrop = noop,
   searchCase,
@@ -371,6 +372,7 @@ const FileTable = ({
   hasSubtree = true,
 }) => {
   const c = useStyles()
+  const containerRef = useRef()
   const rowRef = useRef()
   const menuRef = useRef()
   const history = useHistory()
@@ -464,7 +466,7 @@ const FileTable = ({
             },
             collect: () => ({ model: node }),
           }
-          : {
+        : {
             id: 'Subpart_Menu',
             attributes: {
               className: c.FileTable_FileRow,
@@ -474,6 +476,7 @@ const FileTable = ({
 
       const handleClick = () => {
         setSelectedFiles([{ ...node, level }])
+        onChange(node)
       }
 
       const handleDoubleClick = () => {
@@ -571,8 +574,7 @@ const FileTable = ({
     [c, handleChangeFolder, history, selectedFiles, modelPageFeatureEnabled, onChange]
   )
 
-  const showToolbar =
-    selectedFiles[0] && selectedFiles[0].level === 0 && selectedFiles[0].parts
+  const isRootSelected = selectedFiles[0] && selectedFiles[0].level === 0
   const isMultipart = files.length === 1 && files[0].parts && files[0].parts.length > 1
 
   return (
