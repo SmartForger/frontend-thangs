@@ -519,6 +519,15 @@ const MultiUpload = ({
     [uploadFilesData]
   )
 
+  const isMultiple = useMemo(() => {
+    if (versionData) {
+      if (versionData?.partId || modelData?.parts.length === 1) {
+        return false
+      }
+    }
+    return true
+  }, [versionData, modelData])
+
   return (
     <OverlayWrapper
       dataCy={'multi-upload-overlay'}
@@ -538,13 +547,7 @@ const MultiUpload = ({
           allTreeNodes={allTreeNodes}
           errorMessage={errorMessage}
           isAssembly={isAssembly}
-          multiple={
-            previousVersionModelId ||
-            versionData?.partId ||
-            modelData?.parts?.length === 1
-              ? false
-              : true
-          }
+          multiple={isMultiple}
           onDrop={onDrop}
           onRemoveNode={removeFile}
           setErrorMessage={setErrorMessage}
