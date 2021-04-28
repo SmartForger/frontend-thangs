@@ -241,6 +241,7 @@ const FolderView = ({
               onChange={handleOnChange}
               title='Files'
               toolbarRef={toolbarRef}
+              hasSubtree={false}
             />
             <FileTable
               className={c.FolderView_FileTable__mobile}
@@ -251,6 +252,7 @@ const FolderView = ({
               onDrop={onDrop}
               heightOffset={8}
               title='Files'
+              hasSubtree={false}
             />
           </div>
           <Spacer size='2rem' />

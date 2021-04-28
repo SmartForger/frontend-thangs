@@ -128,7 +128,8 @@ const AllFilesView = ({
           onDrop={onDrop}
           sortedBy={'created'}
           title='My Models'
-        />
+          hasSubtree={false}
+        ></FileTable>
       </div>
       <Spacer size='2rem' />
     </main>

@@ -92,6 +92,7 @@ const useStyles = createUseStyles(theme => {
       ...theme.mixins.scrollbar,
       overflowY: 'scroll',
       maxHeight: '23rem',
+      width: '100% !important',
 
       [xl]: {
         maxHeight: '28rem',

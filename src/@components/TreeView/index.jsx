@@ -41,16 +41,18 @@ const TreeView = ({
   classes = {
     item: '',
     itemSelected: '',
+    container: '',
   },
   showDivider = true,
   rowSpacing,
   subnodeField = 'subs',
+  showExpandIcon = true,
 }) => {
   const c = useStyles()
 
   return (
     <div className={cn(c.TreeView_Root, className)}>
-      <div className={c.TreeView_Content}>
+      <div className={cn(c.TreeView_Content, classes.container)}>
         {nodes.map((node, index) => (
           <TreeNode
             key={`treeNode_${node.id}`}
@@ -66,6 +68,7 @@ const TreeView = ({
             showDivider={showDivider}
             rowSpacing={rowSpacing}
             subnodeField={subnodeField}
+            showExpandIcon={showExpandIcon}
           />
         ))}
       </div>

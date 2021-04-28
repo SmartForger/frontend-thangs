@@ -56,6 +56,7 @@ export const TreeNode = ({
   showDivider,
   rowSpacing,
   subnodeField,
+  showExpandIcon = true,
 }) => {
   const [expanded, setExpanded] = useState(defaultExpanded || !rootCollapsible)
   const c = useStyles()
@@ -76,7 +77,7 @@ export const TreeNode = ({
           })}
         >
           <Spacer className={c.TreeNode_Spacer} width={levelPadding * level + 'px'} />
-          {(isAssembly || isAssemblyPart) && rootCollapsible && (
+          {(isAssembly || isAssemblyPart) && rootCollapsible && showExpandIcon && (
             <>
               <div className={c.TreeNode_Row}>
                 <div
@@ -93,7 +94,7 @@ export const TreeNode = ({
               </div>
             </>
           )}
-          {renderNode(node, level)}
+          {renderNode(node, level, expanded, toggleExpanded)}
         </div>
         {expanded && subnodes.length > 0 && (
           <>
@@ -112,6 +113,7 @@ export const TreeNode = ({
                 showDivider={showDivider}
                 rowSpacing={rowSpacing}
                 subnodeField={subnodeField}
+                showExpandIcon={showExpandIcon}
               />
             ))}
           </>

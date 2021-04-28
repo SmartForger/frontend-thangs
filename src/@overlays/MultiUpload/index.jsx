@@ -98,6 +98,9 @@ const MultiUpload = ({
     () => Object.values(uploadFilesData).filter(file => file.name && !file.isError),
     [uploadFilesData]
   )
+  const allFilesUploaded = useMemo(() => uploadedFiles.every(file => !file.isLoading), [
+    uploadedFiles,
+  ])
   const uploadTreeData = useMemo(() => {
     const keys = Object.keys(treeData)
     const newTreeData = {}
@@ -146,8 +149,8 @@ const MultiUpload = ({
           ? newNode.subIds.map(subId => formNode(subId))
           : []
         : Object.values(newTreeData)
-          .filter(node => !node.parentId)
-          .map(node => formNode(node.id))
+            .filter(node => !node.parentId)
+            .map(node => formNode(node.id))
 
       newNode.treeValid =
         newNode.valid &&
@@ -261,8 +264,8 @@ const MultiUpload = ({
               setErrorMessage(
                 `${file.name} is not a supported file type.
               Supported file extensions include ${MODEL_FILE_EXTS.map(
-          e => ' ' + e.replace('.', '')
-        )}.`
+                e => ' ' + e.replace('.', '')
+              )}.`
               )
               return null
             }
@@ -504,20 +507,11 @@ const MultiUpload = ({
         ? 'Upload New Version'
         : 'Upload Files'
       : activeNode.isAssembly && activeNode.parentId
-        ? 'Sub Assembly'
-        : activeNode.isAssembly
-          ? 'New Assembly'
-          : partFormTitle
+      ? 'Sub Assembly'
+      : activeNode.isAssembly
+      ? 'New Assembly'
+      : partFormTitle
   }, [activeNode, partFormTitle, previousVersionModelId, versionData])
-
-  const fileLength = useMemo(
-    () =>
-      uploadFilesData
-        ? Object.keys(uploadFilesData).filter(fileId => uploadFilesData[fileId].name)
-          .length
-        : 0,
-    [uploadFilesData]
-  )
 
   const isMultiple = useMemo(() => {
     if (versionData) {
@@ -533,9 +527,9 @@ const MultiUpload = ({
       dataCy={'multi-upload-overlay'}
       isLoading={isLoading || isLoadingLicense}
       onBack={activeView > -1 && handleBack}
-      onCancel={fileLength > 0 && handleCancelUploading}
+      onCancel={uploadedFiles.length > 0 && handleCancelUploading}
       onClose={handleCancelUploading}
-      onContinue={fileLength > 0 && handleContinue}
+      onContinue={allFilesUploaded && handleContinue}
       overlayHeader={overlayHeader}
       cancelText={'Cancel'}
       hideButtons={activeNode}

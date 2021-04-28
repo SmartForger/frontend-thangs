@@ -97,6 +97,7 @@ const SearchView = ({ className, handleChangeFolder = noop, handleEditModel = no
             handleChangeFolder={handleChangeFolder}
             sortedBy={'filename'}
             searchCase={true}
+            hasSubtree={false}
           ></FileTable>
         )}
       </div>

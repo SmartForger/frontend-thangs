@@ -118,6 +118,7 @@ const RecentFilesView = ({
           isToolbarShown={true}
           sortedBy='created'
           title='Recent'
+          hasSubtree={false}
         ></FileTable>
       </div>
       <Spacer size='2rem' />

@@ -149,6 +149,7 @@ const SharedFilesView = ({
           handleEditModel={handleEditModel}
           handleChangeFolder={handleChangeFolder}
           searchCase={true}
+          hasSubtree={false}
         ></FileTable>
       </div>
       <Spacer size='2rem' />

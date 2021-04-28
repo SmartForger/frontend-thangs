@@ -25,14 +25,15 @@ import {
   Pill,
   Spacer,
   TableHeader,
+  TreeView,
 } from '@components'
-import InfiniteTreeView from '@components/InfiniteTreeView'
 import { formatBytes } from '@utilities'
-import { flattenTree } from '@utilities/tree'
 import { MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { useIsFeatureOn, useOverlay } from '@hooks'
 
 import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
+import { ReactComponent as AssemblyIcon } from '@svg/icon-assembly.svg'
+import { ReactComponent as MultipartIcon } from '@svg/icon-multipart.svg'
 import { ReactComponent as DropzoneIcon } from '@svg/dropzone.svg'
 import { ReactComponent as DropzoneMobileIcon } from '@svg/dropzone-mobile.svg'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
@@ -48,11 +49,12 @@ const useStyles = createUseStyles(theme => {
 
   return {
     FileTable_Body: {
-      ...theme.mixins.scrollbar,
+      overflow: 'visible',
     },
     FileTable_Item: {
       borderBottom: `1px solid ${theme.colors.white[900]}`,
       overflow: 'visible',
+      height: '3rem',
       '&:hover': {
         backgroundColor: theme.colors.white[600],
       },
@@ -96,8 +98,13 @@ const useStyles = createUseStyles(theme => {
     },
     FileTable_FileName: {
       alignItems: 'center',
-      display: 'flex',
-      flex: '1',
+      overflow: 'hidden',
+
+      '& > span': {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        lineHeight: '1rem',
+      },
     },
     FileTable_Date: {
       justifyContent: 'left',
@@ -119,6 +126,7 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
       marginRight: '0.75rem',
       width: '0.75rem',
+      flex: 'none',
       '& svg': {
         display: 'block',
         margin: 'auto',
@@ -130,8 +138,9 @@ const useStyles = createUseStyles(theme => {
         transform: 'rotate(90deg)',
       },
     },
-    FileTable_AssemblyIcon: {
+    FileTable_Icon: {
       marginRight: '0.5rem',
+      flex: 'none',
     },
     FileTable_MissingFile: {
       color: theme.colors.errorTextColor,
@@ -288,6 +297,24 @@ const sortParts = (node, sortBySize, sortOrder) => {
   }
 }
 
+const addAdditionalInfoToSubparts = (nodes, info) => {
+  return nodes.map(node => {
+    if (node.parts) {
+      node.parts = addAdditionalInfoToSubparts(node.parts, info)
+    }
+
+    return { ...node, ...info }
+  })
+}
+
+const calcFileSize = file => {
+  if (!file.parts) {
+    return 0
+  }
+
+  return file.parts.reduce((sum, part) => sum + (part.size || 0) + calcFileSize(part), 0)
+}
+
 const FileTableHeader = ({ sortedBy, order, onSort = noop }) => {
   const c = useStyles()
   const colData = useMemo(
@@ -341,13 +368,12 @@ const FileTable = ({
   sortedBy: initialSortedBy,
   title,
   toolbarRef,
+  hasSubtree = true,
 }) => {
   const c = useStyles()
-  const containerRef = useRef()
   const rowRef = useRef()
   const menuRef = useRef()
   const history = useHistory()
-  const [maxHeight, setMaxHeight] = useState(500)
   const [selectedFiles, setSelectedFiles] = useState([])
   const [{ sortedBy, order }, setSort] = useState({
     sortedBy: initialSortedBy || COLUMNS.FILENAME,
@@ -365,65 +391,53 @@ const FileTable = ({
     [sortedBy, order]
   )
 
-  const allNodes = useMemo(() => {
-    let result = []
-    const sorted = getSortedFiles(files, sortedBy, order)
-    sorted.forEach(model => {
-      if (model.parts) {
-        const {
-          created,
-          aggregatorId,
-          category,
-          description,
-          folderId,
-          id,
-          identifier,
-          likeCount,
-          owner,
-        } = model
-        // For single part and asm
-        if (model.parts.length === 1) {
-          model.parts[0] = {
-            ...model.parts[0],
-            created,
-            aggregatorId,
-            category,
-            description,
-            folderId,
-            id,
-            identifier,
-            likeCount,
-            contributors: [owner],
-            owner,
-          }
+  const nodes = useMemo(() => {
+    let result = getSortedFiles(files, sortedBy, order)
+
+    const sortAndAddIdsToParts = nodes => {
+      return nodes.map(node => {
+        const newNode = { ...node }
+        if (!newNode.id) {
+          newNode.id = node.partIdentifier || Math.random().toString().slice(2)
         }
 
-        sortParts(model, sortedBy === COLUMNS.SIZE, order)
+        if (newNode.parts) {
+          newNode.parts = sortAndAddIdsToParts(newNode.parts)
+          sortParts(newNode, sortedBy === COLUMNS.SIZE, order)
+        }
 
-        // Pass [model] for multi-part model
-        // Pass model.parts for single and asm models
-        // REPLACED - const list = flattenTree(model.parts, 'parts')
-        const list = flattenTree(model.parts.length > 1 ? [model] : model.parts, 'parts')
-        list.forEach(item => {
-          item.contributors = [owner]
-          item.owner = owner
-          item.created = created
-          item.modelId = id
-          item.parts = item.hasChildren ? model.parts : undefined
-        })
-        result = result.concat(list)
-      } else {
-        result.push({
-          ...model,
-          contributors: [model.creator],
-          level: 0,
-          isFolder: true,
-        })
+        return newNode
+      })
+    }
+
+    result = result.map(f => {
+      if (f.parts) {
+        return {
+          ...f,
+          contributors: [f.owner],
+          size: calcFileSize(f),
+          parts: hasSubtree
+            ? addAdditionalInfoToSubparts(
+                f.parts.length === 1 ? f.parts[0].parts || [] : f.parts,
+                {
+                  created: f.created,
+                  contributors: [f.owner],
+                }
+              )
+            : [],
+          nodeType: f.isAssembly
+            ? 'assembly'
+            : f.parts.length > 1
+            ? 'multipart'
+            : 'singlepart',
+        }
       }
+
+      return { ...f, isFolder: true }
     })
 
-    return result
-  }, [files, sortedBy, order])
+    return sortAndAddIdsToParts(result)
+  }, [files, hasSubtree, sortedBy, order])
 
   useExternalClick([rowRef, menuRef, toolbarRef], () => {
     if (!isOverlayOpen) {
@@ -433,17 +447,17 @@ const FileTable = ({
   })
 
   const renderNode = useCallback(
-    (node, { toggleNode }) => {
+    (node, level, expanded, toggleExpanded) => {
       const menuProps = node.isFolder
         ? {
-          id: 'Folder_Menu',
-          attributes: {
-            className: c.FileTable_FileRow,
-          },
-          collect: () => ({ folder: node }),
-        }
-        : node.level === 0
-          ? {
+            id: 'Folder_Menu',
+            attributes: {
+              className: c.FileTable_FileRow,
+            },
+            collect: () => ({ folder: node }),
+          }
+        : level === 0
+        ? {
             id: 'File_Menu',
             attributes: {
               className: c.FileTable_FileRow,
@@ -458,14 +472,8 @@ const FileTable = ({
             collect: () => ({ part: node }),
           }
 
-      const handleClick = e => {
-        e.stopPropagation()
-        if (isSelected) {
-          // setSelectedFiles([])
-        } else {
-          setSelectedFiles([node.id])
-          onChange(node)
-        }
+      const handleClick = () => {
+        setSelectedFiles([{ ...node, level }])
       }
 
       const handleDoubleClick = () => {
@@ -478,6 +486,9 @@ const FileTable = ({
       }
 
       const isSelected = selectedFiles.includes(node.id)
+      const isLeaf = !node.parts || node.parts.length === 0
+      const isFolder = level === 0 && !node.parts
+
       return (
         <ContextMenuTrigger holdToDisplay={-1} {...menuProps}>
           <div
@@ -491,15 +502,15 @@ const FileTable = ({
             <Spacer size={'.5rem'} />
             <div
               className={cn(c.FileTable_FileName, c.FileTable_Cell)}
-              style={{ paddingLeft: node.level * 24 }}
+              style={{ paddingLeft: level * 24 }}
             >
               <div
                 className={cn(c.FileTable_ExpandIcon, {
-                  [c.FileTable_ExpandIcon__expanded]: !node.isLeaf && !node.closed,
+                  [c.FileTable_ExpandIcon__expanded]: expanded && !isLeaf,
                 })}
                 onClick={ev => {
                   ev.stopPropagation()
-                  toggleNode(node)
+                  toggleExpanded()
                 }}
               >
                 {node.isLeaf ? (
@@ -516,7 +527,17 @@ const FileTable = ({
                   <ArrowRight />
                 )}
               </div>
-              {!node.isLeaf && <FileIcon className={c.FileTable_AssemblyIcon} />}
+              {isFolder ? (
+                <FolderIcon className={c.FileTable_Icon} />
+              ) : node.nodeType === 'assembly' ? (
+                <AssemblyIcon className={c.FileTable_Icon} />
+              ) : node.nodeType === 'multipart' ? (
+                <MultipartIcon className={c.FileTable_Icon} />
+              ) : !isLeaf ? (
+                <FileIcon className={c.FileTable_Icon} />
+              ) : (
+                <ModelIcon className={c.FileTable_Icon} />
+              )}
               <Body>{node.name}</Body>
             </div>
             <Metadata
@@ -550,18 +571,9 @@ const FileTable = ({
     [c, handleChangeFolder, history, selectedFiles, modelPageFeatureEnabled, onChange]
   )
 
-  useEffect(() => {
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect()
-      setMaxHeight(Math.max(window.innerHeight - rect.top - heightOffset, 500))
-    }
-  }, [heightOffset])
-
-  const selectedNode = allNodes.find(node => node.id === selectedFiles[0])
-  const isSelectedNodeModel = node => {
-    if (!node) return false
-    return !node.isFolder
-  }
+  const showToolbar =
+    selectedFiles[0] && selectedFiles[0].level === 0 && selectedFiles[0].parts
+  const isMultipart = files.length === 1 && files[0].parts && files[0].parts.length > 1
 
   return (
     <>
@@ -592,31 +604,31 @@ const FileTable = ({
           ) : null}
         </ContainerRow>
         <Spacer size='1.375rem' />
-        {allNodes.length > 0 || searchCase ? (
-          <>
-            <FileTableHeader sortedBy={sortedBy} onSort={handleSort} order={order} />
-            <Spacer size={'.5rem'} />
-            {allNodes.length > 0 ? (
-              <InfiniteTreeView
-                classes={{
-                  root: c.FileTable_Body,
-                  item: c.FileTable_Item,
-                  itemSelected: c.FileTable_Item__selected,
-                }}
-                hideRowIcons
-                isSelected={node => selectedFiles.includes(node.id)}
-                itemHeight={48}
-                levelPadding={0}
-                maxHeight={maxHeight}
-                minHeight={500}
-                nodes={allNodes}
-                renderNode={renderNode}
-              />
-            ) : (
-              <Body className={c.NoResultsFound}>No Results Found</Body>
-            )}
-          </>
-        ) : !hideDropzone ? (
+      {files.length > 0 || searchCase ? (
+        <>
+          <FileTableHeader sortedBy={sortedBy} onSort={handleSort} order={order} />
+          <Spacer size={'.5rem'} />
+          {files.length > 0 ? (
+            <TreeView
+              nodes={nodes}
+              subnodeField='parts'
+              renderNode={renderNode}
+              showDivider
+              showExpandIcon={false}
+              levelPadding={0}
+              classes={{
+                item: c.FileTable_Item,
+                itemSelected: c.FileTable_Item__selected,
+                container: c.FileTable_Body,
+              }}
+              isSelected={node => selectedFiles.findIndex(n => n.id === node.id) >= 0}
+              defaultExpanded={isMultipart}
+            />
+          ) : (
+            <Body className={c.NoResultsFound}>No Results Found</Body>
+          )}
+        </>
+      ) : !hideDropzone ? (
           <div className={c.NoFilesMessage}>
             <Dropzone onDrop={onDrop} accept={MODEL_FILE_EXTS} maxFiles={25}>
               {({ getRootProps, getInputProps }) => (
