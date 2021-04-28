@@ -4,7 +4,7 @@ import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
 
-import { FileCard, FileTable, FolderCard, Spacer, Spinner, StatsBar } from '@components'
+import { FileCard, FileTable, FolderCard, Spacer, StatsBar } from '@components'
 import { useStarred } from '@hooks'
 import { pageview } from '@utilities/analytics'
 import { getMyFolders } from '@selectors'
@@ -48,13 +48,6 @@ const useStyles = createUseStyles(theme => {
         marginTop: '1.5rem',
       },
     },
-    RecentFilesView_Loader: {
-      width: '100%',
-      height: '5rem',
-      zIndex: '1',
-      display: 'flex',
-      alignItems: 'center',
-    },
   }
 })
 const noop = () => null
@@ -69,11 +62,7 @@ const RecentFilesView = ({
   const c = useStyles({})
   const { activity } = useStoreon('activity')
   const { data: activityData } = activity
-  const {
-    starredModels = [],
-    starredFolders = [],
-    isLoading: isLoadingStarred,
-  } = useStarred()
+  const { starredModels = [], starredFolders = [] } = useStarred()
   const hasStarred = useMemo(
     () => starredFolders.length > 0 || starredModels.length > 0,
     [starredFolders.length, starredModels.length]
@@ -95,16 +84,11 @@ const RecentFilesView = ({
         <Title headerLevel={HeaderLevel.tertiary}>Activity & Contributions</Title>
         <Spacer size='2rem' />
         <StatsBar userActivity={activityData} />
-        {(isLoadingStarred || hasStarred) && (
+        {hasStarred && (
           <>
             <Spacer size='4rem' />
             <Title headerLevel={HeaderLevel.tertiary}>Starred</Title>
             <div className={c.RecentFilesView_Starred}>
-              {isLoadingStarred && (
-                <div className={c.RecentFilesView_Loader}>
-                  <Spinner />
-                </div>
-              )}
               {starredFolders.map((folder, index) => {
                 return (
                   <div className={c.RecentFilesView_Row} key={`starred_folders_${index}`}>
@@ -125,14 +109,15 @@ const RecentFilesView = ({
           </>
         )}
         <Spacer size='4rem' />
-        <Title headerLevel={HeaderLevel.tertiary}>Recent</Title>
         <FileTable
           files={files}
           handleChangeFolder={handleChangeFolder}
           handleEditModel={handleEditModel}
-          sortedBy='created'
-          onDrop={onDrop}
           heightOffset={8}
+          onDrop={onDrop}
+          isToolbarShown={true}
+          sortedBy='created'
+          title='Recent'
         ></FileTable>
       </div>
       <Spacer size='2rem' />

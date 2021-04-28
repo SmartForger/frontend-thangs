@@ -25,11 +25,16 @@ const ContainerRow = ({
   wrap = 'nowrap',
   fullWidth,
   onClick = noop,
+  elementRef,
 }) => {
   const c = useStyles({ alignItems, justifyContent, fullWidth, wrap })
 
   return (
-    <div className={classnames(className, c.ContainerRow)} onClick={onClick}>
+    <div
+      className={classnames(className, c.ContainerRow)}
+      onClick={onClick}
+      ref={elementRef}
+    >
       {children}
     </div>
   )

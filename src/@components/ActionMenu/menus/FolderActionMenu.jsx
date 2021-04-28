@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react'
 import { useStoreon } from 'storeon/react'
-import { ActionMenu } from '@components'
+import { DotStackActionMenu } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import { ReactComponent as OpenIcon } from '@svg/external-link.svg'
 import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
@@ -18,10 +17,6 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     FolderActionMenu: {
-      width: 'auto',
-      color: `${theme.colors.black[500]} !important`,
-      right: '-1rem',
-      bottom: '4.25rem',
       display: 'none',
 
       [md]: {
@@ -53,19 +48,15 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const FolderActionTarget = ({ onClick = noop }) => {
-  const c = useStyles({})
-
-  return (
-    <div className={c.FolderActionMenu_ClickableButton} onClick={onClick}>
-      <DotStackIcon />
-    </div>
-  )
-}
-
-const FolderActionMenu = ({ folder = {}, omitOptions = [], onChange = noop }) => {
+const FolderActionMenu = ({
+  folder = {},
+  omitOptions = [],
+  isStaticBackground = false,
+  onChange = noop,
+}) => {
   const { setOverlay } = useOverlay()
   const { dispatch } = useStoreon()
+  const c = useStyles({})
 
   const options = [
     {
@@ -155,16 +146,13 @@ const FolderActionMenu = ({ folder = {}, omitOptions = [], onChange = noop }) =>
   }
 
   return (
-    <ActionMenu
-      MenuComponentProps={{
-        onChange: handleOnChange,
-        actionBarTitle: 'Select action',
-        options,
-        tabletLayout: false,
-      }}
-      TargetComponent={FolderActionTarget}
-      isCloseOnSelect={true}
-      isMobileOnly={true} // TODO: Fix isMobileOnly. Using this to add spacers between items.
+    <DotStackActionMenu
+      onChange={handleOnChange}
+      actionMenuTitle='Select action'
+      alignItems='left'
+      isStaticBackground={isStaticBackground}
+      options={options}
+      menuComponentProps={{ className: c.FolderActionMenu }}
     />
   )
 }

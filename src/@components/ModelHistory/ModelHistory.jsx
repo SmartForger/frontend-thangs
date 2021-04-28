@@ -65,22 +65,23 @@ const ModelHistory = ({
         {changes.map((change, ind) => {
           if (!change) return null
           const part =
-            modelData.parts.find(part => part.partIdentifier === change.partIdentifier) ||
-            {}
+            modelData.parts.find(part =>
+              [change.partIdentifier, change.filename].includes(part.partIdentifier)
+            ) || {}
           const partName = part?.name
           const initialCommit = '00000000-0000-0000-0000-000000000000'
           const phynId = change.phyndexerId
           let prevPhynId
           reversedHistory.slice(ind + 1).find(commit => {
-            return commit.changes.find(change => {
-              if (change.partIdentifier === part.partIdentifier) {
-                prevPhynId = change.phyndexerId
+            return commit.changes.find(partChange => {
+              if (partChange.partIdentifier === part.partIdentifier) {
+                prevPhynId = partChange.phyndexerId
                 return true
               } else if (
-                change.filename === part.filename &&
+                partChange.filename === part.filename &&
                 commit.sha === initialCommit
               ) {
-                prevPhynId = change.phyndexerId
+                prevPhynId = partChange.phyndexerId
                 return true
               }
               return false

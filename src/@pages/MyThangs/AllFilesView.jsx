@@ -116,13 +116,7 @@ const AllFilesView = ({
                 </div>
               ))}
             </div>
-          </>
-        )}
-        {models.length > 0 && (
-          <>
             <Spacer size='4rem' />
-            <Title headerLevel={HeaderLevel.tertiary}>My Files</Title>
-            <Spacer size='2rem' />
           </>
         )}
         <FileTable
@@ -133,7 +127,8 @@ const AllFilesView = ({
           hideDropzone={sortedFolders.length > 0}
           onDrop={onDrop}
           sortedBy={'created'}
-        ></FileTable>
+          title='My Models'
+        />
       </div>
       <Spacer size='2rem' />
     </main>

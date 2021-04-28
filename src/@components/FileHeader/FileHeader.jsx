@@ -79,7 +79,7 @@ const FileHeader = ({ file = {}, folders = [] }) => {
                 <Spacer size={'.25rem'} />
               </>
             )}
-            <LikeFolderButton folder={folder} minimal onlyShowOwned />
+            <LikeFolderButton folder={folder} onlyShowOwned />
           </ContainerRow>
           {folderPath.length > 1 && (
             <>

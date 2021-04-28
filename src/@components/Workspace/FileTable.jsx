@@ -6,7 +6,13 @@ import { format } from 'date-fns'
 import { ContextMenuTrigger } from 'react-contextmenu'
 
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Body, Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+import {
+  Body,
+  Metadata,
+  MetadataType,
+  Title,
+  HeaderLevel,
+} from '@physna/voxel-ui/@atoms/Typography'
 
 import {
   ContainerColumn,
@@ -24,7 +30,7 @@ import InfiniteTreeView from '@components/InfiniteTreeView'
 import { formatBytes } from '@utilities'
 import { flattenTree } from '@utilities/tree'
 import { MODEL_FILE_EXTS } from '@constants/fileUpload'
-import { useIsFeatureOn } from '@hooks/useExperiments'
+import { useIsFeatureOn, useOverlay } from '@hooks'
 
 import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
 import { ReactComponent as DropzoneIcon } from '@svg/dropzone.svg'
@@ -32,6 +38,7 @@ import { ReactComponent as DropzoneMobileIcon } from '@svg/dropzone-mobile.svg'
 import { ReactComponent as FileIcon } from '@svg/icon-file.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
+import { useExternalClick } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -45,68 +52,72 @@ const useStyles = createUseStyles(theme => {
     FileTable_Item: {
       borderBottom: `1px solid ${theme.colors.white[900]}`,
       overflow: 'visible',
+      '&:hover': {
+        backgroundColor: theme.colors.white[600],
+      },
     },
     FileTable_Item__selected: {
-      backgroundColor: theme.colors.purple[200],
+      backgroundColor: `${theme.colors.white[800]} !important`, //TODO: Design calls for a slightly diff. Need to update colors to reflect voxel.
     },
     FileTable_FileRow: {
-      display: 'flex',
-      width: '100%',
       alignItems: 'center',
       cursor: 'pointer',
+      display: 'flex',
+      height: '3rem',
+      width: '100%',
     },
     FileTable_HeaderRow: {
       display: 'flex',
-      width: '100%',
       overflowY: 'scroll',
+      width: '100%',
       ...theme.mixins.scrollbar,
     },
     FileTable_HeaderCell: {
+      alignItems: 'center',
+      color: '#000',
+      cursor: 'pointer',
+      display: 'flex',
+      flex: 'none',
       overflow: 'hidden',
+      paddingRight: '1rem',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
-      flex: 'none',
-      paddingRight: '1rem',
-      display: 'flex',
-      alignItems: 'center',
-      cursor: 'pointer',
-      color: '#000',
     },
     FileTable_Cell: {
       display: 'flex',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
       flex: 'none',
       paddingRight: '1rem',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
     },
     FileTable_SortOrder: {
       marginLeft: '0.25rem',
     },
     FileTable_FileName: {
-      flex: '1',
-      display: 'flex',
       alignItems: 'center',
+      display: 'flex',
+      flex: '1',
     },
     FileTable_Date: {
-      width: '18%',
       justifyContent: 'left',
+      width: '18%',
     },
     FileTable_Size: {
-      width: '9%',
       justifyContent: 'left',
+      width: '9%',
     },
     FileTable_Contributors: {
-      width: '14%',
       display: 'flex',
       justifyContent: 'left',
+      width: '14%',
     },
     FileTable_Action: {
       width: '7%',
     },
     FileTable_ExpandIcon: {
-      width: '0.75rem',
       cursor: 'pointer',
       marginRight: '0.75rem',
+      width: '0.75rem',
       '& svg': {
         display: 'block',
         margin: 'auto',
@@ -126,28 +137,28 @@ const useStyles = createUseStyles(theme => {
     },
     NoResultsFound: {
       display: 'flex',
-      padding: '2rem',
       justifyContent: 'center',
+      padding: '2rem',
     },
     NoFilesMessage: {
-      top: '15.75rem',
-      position: 'absolute',
       left: '50%',
+      position: 'absolute',
+      top: '15.75rem',
       transform: 'translate(-50%)',
       [md]: {
-        position: 'relative',
+        left: 'unset',
         margin: '2rem',
         padding: '2rem',
+        position: 'relative',
         top: 'unset',
-        left: 'unset',
         transform: 'unset',
       },
       textAlign: 'center',
     },
     FileTable_UploadZone: {
       [md]: {
-        width: '27rem',
         margin: '0 auto',
+        width: '27rem',
       },
       '& > div': {
         outline: 'none',
@@ -166,13 +177,13 @@ const useStyles = createUseStyles(theme => {
       },
     },
     FileTable_UploadButton: {
-      width: '5.25rem',
-      position: 'absolute',
       bottom: '8rem',
-      left: 0,
-      right: 0,
-      margin: 'auto',
       display: 'none',
+      left: 0,
+      margin: 'auto',
+      position: 'absolute',
+      right: 0,
+      width: '5.25rem',
       [md]: {
         display: 'flex',
       },
@@ -320,14 +331,19 @@ const FileTable = ({
   files = [],
   handleChangeFolder = noop,
   handleEditModel: _h = noop,
-  sortedBy: initialSortedBy,
-  searchCase,
+  onChange = noop,
+  heightOffset = 32,
   hideDropzone = false,
   onDrop = noop,
-  heightOffset = 32,
+  searchCase,
+  isToolbarShown = true,
+  sortedBy: initialSortedBy,
+  title,
 }) => {
   const c = useStyles()
   const containerRef = useRef()
+  const rowRef = useRef()
+  const menuRef = useRef()
   const history = useHistory()
   const [maxHeight, setMaxHeight] = useState(500)
   const [selectedFiles, setSelectedFiles] = useState([])
@@ -335,6 +351,7 @@ const FileTable = ({
     sortedBy: initialSortedBy || COLUMNS.FILENAME,
     order: 'desc',
   })
+  const { isOverlayOpen } = useOverlay()
   const modelPageFeatureEnabled = useIsFeatureOn('mythangs_model_page_feature')
 
   const handleSort = useCallback(
@@ -396,7 +413,7 @@ const FileTable = ({
       } else {
         result.push({
           ...model,
-          contributors: model.members,
+          contributors: [model.creator],
           level: 0,
           isFolder: true,
         })
@@ -405,6 +422,13 @@ const FileTable = ({
 
     return result
   }, [files, sortedBy, order])
+
+  useExternalClick([rowRef, menuRef], () => {
+    if (!isOverlayOpen) {
+      setSelectedFiles([])
+      onChange({})
+    }
+  })
 
   const renderNode = useCallback(
     (node, { toggleNode }) => {
@@ -432,8 +456,14 @@ const FileTable = ({
             collect: () => ({ part: node }),
           }
 
-      const handleClick = () => {
-        setSelectedFiles([node.id])
+      const handleClick = e => {
+        e.stopPropagation()
+        if (isSelected) {
+          // setSelectedFiles([])
+        } else {
+          setSelectedFiles([node.id])
+          onChange(node)
+        }
       }
 
       const handleDoubleClick = () => {
@@ -446,14 +476,16 @@ const FileTable = ({
       }
 
       const isSelected = selectedFiles.includes(node.id)
+
       return (
         <ContextMenuTrigger holdToDisplay={-1} {...menuProps}>
           <div
             className={cn(c.FileTable_FileRow, {
               [c.FileTable_MissingFile]: !node.valid,
             })}
-            onClick={!isSelected ? handleClick : noop}
-            onDoubleClick={isSelected ? handleDoubleClick : noop}
+            onClick={handleClick}
+            onDoubleClick={handleDoubleClick}
+            ref={isSelected ? rowRef : undefined}
           >
             <Spacer size={'.5rem'} />
             <div
@@ -527,69 +559,71 @@ const FileTable = ({
   }
 
   return (
-    <ContainerColumn className={className} elementRef={containerRef} fullWidth>
-      {selectedNode ? (
-        isSelectedNodeModel(selectedNode) ? (
-          <>
-            <ContainerRow fullWidth justifyContent='flex-end'>
+    <>
+      <ContainerColumn className={className} elementRef={containerRef} fullWidth>
+        <ContainerRow
+          fullWidth
+          justifyContent={
+            title && selectedNode && isToolbarShown
+              ? 'space-between'
+              : title
+                ? 'flex-start'
+                : 'flex-end'
+          }
+          elementRef={menuRef}
+        >
+          {title && <Title headerLevel={HeaderLevel.tertiary}>{title}</Title>}
+          {selectedNode && isToolbarShown ? (
+            isSelectedNodeModel(selectedNode) ? (
               <ModelActionToolbar model={selectedNode} isExpandedOptions />
-              <Spacer width='4rem' />
-            </ContainerRow>
-            <Spacer size='0.5rem' />
-          </>
-        ) : (
-          <>
-            <ContainerRow fullWidth justifyContent='flex-end'>
+            ) : (
               <FolderActionToolbar folder={selectedNode} isExpandedOptions />
-              <Spacer width='4rem' />
-            </ContainerRow>
-            <Spacer size='0.5rem' />
-          </>
-        )
-      ) : (
-        <Spacer size='2.375rem' />
-      )}
-      {allNodes.length > 0 || searchCase ? (
-        <>
-          <FileTableHeader sortedBy={sortedBy} onSort={handleSort} order={order} />
-          <Spacer size={'.5rem'} />
-          {allNodes.length > 0 ? (
-            <InfiniteTreeView
-              classes={{
-                root: c.FileTable_Body,
-                item: c.FileTable_Item,
-                itemSelected: c.FileTable_Item__selected,
-              }}
-              hideRowIcons
-              isSelected={node => selectedFiles.includes(node.id)}
-              itemHeight={48}
-              levelPadding={0}
-              maxHeight={maxHeight}
-              minHeight={500}
-              nodes={allNodes}
-              renderNode={renderNode}
-            />
-          ) : (
-            <Body className={c.NoResultsFound}>No Results Found</Body>
-          )}
-        </>
-      ) : !hideDropzone ? (
-        <div className={c.NoFilesMessage}>
-          <Dropzone onDrop={onDrop} accept={MODEL_FILE_EXTS} maxFiles={25}>
-            {({ getRootProps, getInputProps }) => (
-              <section className={c.FileTable_UploadZone}>
-                <div {...getRootProps()}>
-                  <input {...getInputProps()} />
-                  <DropzoneIcon className={c.FileTable_DropzoneIcon__desktop} />
-                  <DropzoneMobileIcon className={c.FileTable_DropzoneIcon__mobile} />
-                  <Pill className={c.FileTable_UploadButton}>Browse</Pill>
-                </div>
-              </section>
+            )
+          ) : null}
+        </ContainerRow>
+        <Spacer size='1.375rem' />
+        {allNodes.length > 0 || searchCase ? (
+          <>
+            <FileTableHeader sortedBy={sortedBy} onSort={handleSort} order={order} />
+            <Spacer size={'.5rem'} />
+            {allNodes.length > 0 ? (
+              <InfiniteTreeView
+                classes={{
+                  root: c.FileTable_Body,
+                  item: c.FileTable_Item,
+                  itemSelected: c.FileTable_Item__selected,
+                }}
+                hideRowIcons
+                isSelected={node => selectedFiles.includes(node.id)}
+                itemHeight={48}
+                levelPadding={0}
+                maxHeight={maxHeight}
+                minHeight={500}
+                nodes={allNodes}
+                renderNode={renderNode}
+              />
+            ) : (
+              <Body className={c.NoResultsFound}>No Results Found</Body>
             )}
-          </Dropzone>
-        </div>
-      ) : null}
-    </ContainerColumn>
+          </>
+        ) : !hideDropzone ? (
+          <div className={c.NoFilesMessage}>
+            <Dropzone onDrop={onDrop} accept={MODEL_FILE_EXTS} maxFiles={25}>
+              {({ getRootProps, getInputProps }) => (
+                <section className={c.FileTable_UploadZone}>
+                  <div {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    <DropzoneIcon className={c.FileTable_DropzoneIcon__desktop} />
+                    <DropzoneMobileIcon className={c.FileTable_DropzoneIcon__mobile} />
+                    <Pill className={c.FileTable_UploadButton}>Browse</Pill>
+                  </div>
+                </section>
+              )}
+            </Dropzone>
+          </div>
+        ) : null}
+      </ContainerColumn>
+    </>
   )
 }
 

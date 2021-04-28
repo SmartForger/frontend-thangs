@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 
-import { ActionMenu } from '@components'
+import { ActionMenu, IconButton } from '@components'
 import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 
 const useStyles = createUseStyles(theme => {
@@ -34,40 +34,27 @@ const useStyles = createUseStyles(theme => {
         display: 'none',
       },
     },
-    DotStackTarget: {
-      display: 'flex',
-
-      '& svg': {
-        minWidth: '34px',
-      },
-    },
-    DotStackTarget_Text: {
-      textAlign: 'left',
-      whiteSpace: 'pre-wrap',
-
-      [md_viewer]: {
-        whiteSpace: 'none',
-      },
-    },
   }
 })
 
 const noop = () => null
 
-const DotStackTarget = ({ onClick = noop, color = '#000000' }) => {
-  const c = useStyles({})
+const DotStackTarget = ({ onClick = noop, color = '#000000', isStaticBackground }) => {
   return (
-    <div className={c.DotStackTarget} onClick={onClick}>
+    <IconButton isHoverable={!isStaticBackground} onClick={onClick}>
       <DotStackIcon color={color} />
-    </div>
+    </IconButton>
   )
 }
 
 const DotStackActionMenu = ({
+  actionMenuTitle,
+  alignItems = 'center',
+  color,
+  isStaticBackground,
+  menuComponentProps,
   onChange = noop,
   options = [],
-  actionMenuTitle,
-  color,
 }) => {
   const c = useStyles({})
 
@@ -78,14 +65,28 @@ const DotStackActionMenu = ({
       actionBarTitle: actionMenuTitle,
       options,
       tabletLayout: false,
-      alignItems: 'center',
+      alignItems,
+      ...menuComponentProps,
     }
-  }, [c.DotStackActionMenu, onChange, options, actionMenuTitle])
+  }, [
+    c.DotStackActionMenu,
+    onChange,
+    options,
+    actionMenuTitle,
+    alignItems,
+    menuComponentProps,
+  ])
+
+  const targetComponentProps = useMemo(() => ({ isStaticBackground, color }), [
+    isStaticBackground,
+    color,
+  ])
 
   return (
     <ActionMenu
       MenuComponentProps={menuProps}
-      TargetComponent={targetProps => <DotStackTarget color={color} {...targetProps} />}
+      TargetComponent={DotStackTarget}
+      TargetComponentProps={targetComponentProps}
       isCloseOnSelect={true}
       isMobileOnly={true}
     />

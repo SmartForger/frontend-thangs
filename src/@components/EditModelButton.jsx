@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { useOverlay } from '@hooks'
-import { Pill, Spacer } from '@components'
-import { ReactComponent as EditIcon } from '@svg/icon-edit-sm.svg'
+import { IconButton } from '@components'
+import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
 import { track } from '@utilities/analytics'
 
 const EditModelButton = ({ model = {} }) => {
@@ -23,11 +23,9 @@ const EditModelButton = ({ model = {} }) => {
   }, [model, setOverlay])
 
   return (
-    <Pill secondary onClick={openEditOverlay}>
+    <IconButton onClick={openEditOverlay}>
       <EditIcon />
-      <Spacer size={'.25rem'} />
-      Edit Model
-    </Pill>
+    </IconButton>
   )
 }
 

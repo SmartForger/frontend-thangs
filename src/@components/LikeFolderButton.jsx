@@ -1,11 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { useStoreon } from 'storeon/react'
 import * as R from 'ramda'
-import { ReactComponent as HeartFilledIcon } from '@svg/heart-filled-icon.svg'
-import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
 import { ReactComponent as StarFilledIcon } from '@svg/icon-star-filled.svg'
 import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
-import { Button, Spacer } from '@components'
+import { IconButton } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import * as types from '@constants/storeEventTypes'
 import classnames from 'classnames'
@@ -51,8 +49,7 @@ const useStyles = createUseStyles(theme => {
     },
     LikeFolderIcon__unfilled: {
       '& path': {
-        fill: ({ color, showStar }) =>
-          color || showStar ? 'transparent' : theme.colors.black[500],
+        fill: 'transparent',
         stroke: ({ color }) => color || theme.colors.black[500],
       },
     },
@@ -63,23 +60,27 @@ const hasLikedFolder = (folderData, currentUserId) => {
   return R.includes(parseInt(currentUserId), (folderData && folderData.likes) || [])
 }
 
-const HeartButton = ({ liked, c, hasChanged }) => {
+const StarButton = ({ liked, c, hasChanged, onClick }) => {
   return liked ? (
-    <HeartFilledIcon
-      className={classnames(c.LikeFolderIcon, c.LikeFolderIcon__filled, {
-        [c.LikeFolderIcon__liked]: hasChanged,
-      })}
-    />
+    <IconButton onClick={onClick}>
+      <StarFilledIcon
+        className={classnames(c.LikeFolderIcon, c.LikeFolderIcon__filled, {
+          [c.LikeFolderIcon__liked]: hasChanged,
+        })}
+      />
+    </IconButton>
   ) : (
-    <HeartIcon
-      className={classnames(c.LikeFolderIcon, c.LikeFolderIcon__unfilled, {
-        [c.LikeFolderIcon__unliked]: hasChanged,
-      })}
-    />
+    <IconButton onClick={onClick}>
+      <StarIcon
+        className={classnames(c.LikeFolderIcon, c.LikeFolderIcon__unfilled, {
+          [c.LikeFolderIcon__unliked]: hasChanged,
+        })}
+      />
+    </IconButton>
   )
 }
 
-const StarButton = ({ liked, c, hasChanged }) => {
+const StarMinimalButton = ({ liked, c, hasChanged }) => {
   return liked ? (
     <StarFilledIcon
       className={classnames(c.LikeFolderIcon, c.LikeFolderIcon__filled, {
@@ -95,14 +96,7 @@ const StarButton = ({ liked, c, hasChanged }) => {
   )
 }
 
-const LikeFolderButton = ({
-  className,
-  color,
-  folder = {},
-  minimal,
-  onlyShowOwned,
-  shared,
-}) => {
+const LikeFolderButton = ({ className, color, folder = {}, minimal, onlyShowOwned }) => {
   const { dispatch } = useStoreon()
   const currentUserId = authenticationService.getCurrentUserId()
   const { id, creator = {} } = folder
@@ -110,10 +104,7 @@ const LikeFolderButton = ({
     () => String(currentUserId) === String(creator.id),
     [currentUserId, creator.id]
   )
-  const showStar = useMemo(() => {
-    return isFolderOfCurrentUser || shared
-  }, [isFolderOfCurrentUser, shared])
-  const c = useStyles({ color, showStar })
+  const c = useStyles({ color })
 
   const [liked, setLiked] = useState(hasLikedFolder(folder, currentUserId))
   const [hasChanged, setHasChanged] = useState(false)
@@ -140,30 +131,13 @@ const LikeFolderButton = ({
   if (minimal) {
     return (
       <div className={className} onClick={handleLikeClicked}>
-        {showStar ? (
-          <StarButton liked={liked} c={c} hasChanged={hasChanged} />
-        ) : (
-          <HeartButton liked={liked} c={c} hasChanged={hasChanged} />
-        )}
+        <StarMinimalButton liked={liked} c={c} hasChanged={hasChanged} />
       </div>
     )
   }
 
   return (
-    <Button
-      className={classnames(className, c.LikeFolderButton)}
-      secondary
-      onClick={handleLikeClicked}
-    >
-      <div>
-        {showStar ? (
-          <StarButton liked={liked} c={c} hasChanged={hasChanged} />
-        ) : (
-          <HeartButton liked={liked} c={c} hasChanged={hasChanged} />
-        )}
-      </div>
-      <Spacer size='.5rem' />
-    </Button>
+    <StarButton liked={liked} c={c} onClick={handleLikeClicked} hasChanged={hasChanged} />
   )
 }
 

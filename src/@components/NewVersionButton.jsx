@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { useCurrentUserId, useOverlay } from '@hooks'
 import { Pill, Spacer } from '@components'
-import { ReactComponent as UploadIcon } from '@svg/icon-upload-black-sm.svg'
+import { ReactComponent as NewModelVersionIcon } from '@svg/icon-model-new-version.svg'
 import { track } from '@utilities/analytics'
 
 const NewVersionButton = ({ model = {} }) => {
@@ -35,8 +35,8 @@ const NewVersionButton = ({ model = {} }) => {
 
   return (
     <Pill primary onClick={handleNewVersion}>
-      <UploadIcon />
-      <Spacer size={'.25rem'} />
+      <NewModelVersionIcon />
+      <Spacer size={'0.5rem'} />
       New version
     </Pill>
   )

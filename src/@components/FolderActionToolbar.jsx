@@ -1,16 +1,38 @@
 import React, { useCallback } from 'react'
-import { FOLDER_MENU_OPTIONS } from '@constants/menuOptions'
-import { ContainerRow, FolderActionMenu, Pill, Spacer } from '@components'
-import { ReactComponent as FolderIcon } from '@svg/folder-icon.svg'
-import { ReactComponent as UploadIcon } from '@svg/icon-upload-black-sm.svg'
+
+import {
+  Contributors,
+  ContainerRow,
+  LikeFolderButton,
+  Pill,
+  Spacer,
+  IconButton,
+} from '@components'
+import { ReactComponent as FolderIcon } from '@svg/icon-add-folder.svg'
+import { ReactComponent as UploadIcon } from '@svg/icon-upload-black.svg'
+import { ReactComponent as UploadIconSmall } from '@svg/icon-upload-black-sm.svg'
 import { useOverlay } from '@hooks'
 import { track } from '@utilities/analytics'
 
-const ModelActionToolbar = ({ folder = {} }) => {
+const FolderActionToolbar = ({ folder = {}, isPrimaryActionHidden = false }) => {
   const { setOverlay } = useOverlay()
 
+  const handleInviteUsers = useCallback(() => {
+    track('FolderActionToolbar - Invite Members')
+    setOverlay({
+      isOpen: true,
+      template: 'inviteUsers',
+      data: {
+        folderId: folder.id,
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
+      },
+    })
+  }, [folder.id, setOverlay])
+
   const handleAddFolder = useCallback(() => {
-    track('Add Menu - Create Folder')
+    track('FolderActionToolbar - Create Folder')
     setOverlay({
       isOpen: true,
       template: 'addFolder',
@@ -24,7 +46,7 @@ const ModelActionToolbar = ({ folder = {} }) => {
   }, [folder, setOverlay])
 
   const handleUpload = useCallback(() => {
-    track('Add Menu - Upload Models')
+    track('FolderActionToolbar - Upload Models')
     setOverlay({
       isOpen: true,
       template: 'multiUpload',
@@ -39,24 +61,31 @@ const ModelActionToolbar = ({ folder = {} }) => {
 
   return (
     <ContainerRow alignItems={'center'}>
-      <Pill primary onClick={handleUpload}>
-        <UploadIcon />
-        <Spacer size={'0.5rem'} />
-        Upload Models
-      </Pill>
-      <Spacer size={'1rem'} />
-      <Pill secondary onClick={handleAddFolder}>
+      {isPrimaryActionHidden ? (
+        <IconButton onClick={handleUpload}>
+          <UploadIcon />
+        </IconButton>
+      ) : (
+        <Pill primary onClick={handleUpload}>
+          <UploadIconSmall />
+          <Spacer size={'0.5rem'} />
+          Upload
+        </Pill>
+      )}
+      <Spacer size={'0.5rem'} />
+      <IconButton onClick={handleAddFolder}>
         <FolderIcon />
-        <Spacer size={'0.5rem'} />
-        Add Folder
-      </Pill>
-      <Spacer size={'1rem'} />
-      <FolderActionMenu
-        folder={folder}
-        omitOptions={[FOLDER_MENU_OPTIONS.CREATE_FOLDER]}
+      </IconButton>
+      <Spacer size={'0.5rem'} />
+      <LikeFolderButton folder={folder} onlyShowOwned />
+      <Spacer size={'0.5rem'} />
+      <Contributors
+        onClick={handleInviteUsers}
+        users={[folder.creator, ...(folder?.members || [])]}
+        displayLength='5'
       />
     </ContainerRow>
   )
 }
 
-export default ModelActionToolbar
+export default FolderActionToolbar

@@ -310,16 +310,6 @@ This repo is managed by Circle Ci which comes with two considerations:
 
 With these considerations in mind, make sure to always follow our branching strategy and create PR's for any changes, and when merging into `development` if there are possible breaking changes, let the team know in slack (others may be currently testing in staging)
 
-## Updating Query fragments
-
-> This was required in order to support union types for multiple notification
-> types.
-> https://www.apollographql.com/docs/react/data/fragments/#fragments-on-unions-and-interfaces
-
-- Make sure you have `thangs-social-service` running locally
-- Update your `.env.development.local` to include credentials for that service
-- Run `yarn update-fragments`
-
 ## Storybook
 
 This is a tool we use to make it easier to develop and iterate on components in

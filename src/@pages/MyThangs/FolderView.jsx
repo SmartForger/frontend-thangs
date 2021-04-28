@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import * as R from 'ramda'
 import classnames from 'classnames'
 import { useHistory, useParams } from 'react-router-dom'
@@ -137,18 +137,6 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const findFolderById = (id, folders) => {
-  const rootFolder = R.find(R.propEq('id', id.toString()))(folders) || {}
-  if (!R.isEmpty(rootFolder)) return rootFolder
-  let subFolder = false
-  folders.some(folder => {
-    const subfolders = folder.subfolders
-    subFolder = R.find(R.propEq('id', id.toString()))(subfolders) || false
-    return subFolder
-  })
-  return subFolder
-}
-
 const FolderView = ({
   className,
   handleChangeFolder = noop,
@@ -167,6 +155,8 @@ const FolderView = ({
   const folder = folders[id] || {}
   const isSharedFolder = folder.creator && folder.creator.id !== currentUserId
   const folderModels = useMemo(() => getFolderModels(models, id), [models, id])
+
+  const [selectedModel, setSelectedModel] = useState(null)
 
   useEffect(() => {
     // This is for setting the current folder id
@@ -187,6 +177,14 @@ const FolderView = ({
         },
       })
   }, [dispatch, history, id, inviteCode])
+
+  const handleOnChange = useCallback(
+    model => {
+      setSelectedModel(model?.id ? model : null)
+    },
+    [setSelectedModel]
+  )
+
   if (!folder && !R.isEmpty(folders)) {
     return <main className={classnames(className, c.FolderView)}>Folder not found.</main>
   }
@@ -199,7 +197,6 @@ const FolderView = ({
     )
   }
 
-  const rootFolder = folder.root ? findFolderById(folder.root, folders) : folder
   const directSubFolders = getSubFolders(folders, id)
 
   return (
@@ -210,9 +207,7 @@ const FolderView = ({
             <FolderHeader
               folder={folder}
               folders={folders}
-              rootFolder={rootFolder}
-              setFolder={handleChangeFolder}
-              isSharedFolder={isSharedFolder}
+              selectedModel={selectedModel}
             />
             {directSubFolders.length > 0 && (
               <div className={c.FolderView_FoldersSection}>
@@ -232,12 +227,6 @@ const FolderView = ({
                 </div>
               </div>
             )}
-            {folderModels.length > 0 && (
-              <>
-                <Spacer size='4rem' />
-                <Title headerLevel={HeaderLevel.tertiary}>Files</Title>
-              </>
-            )}
             <Spacer size='2rem' />{' '}
             <FileTable
               className={c.FolderView_FileTable__desktop}
@@ -247,6 +236,9 @@ const FolderView = ({
               hideDropzone={directSubFolders.length > 0}
               onDrop={onDrop}
               heightOffset={8}
+              isToolbarShown={false}
+              onChange={handleOnChange}
+              title='Files'
             />
             <FileTable
               className={c.FolderView_FileTable__mobile}
@@ -256,6 +248,7 @@ const FolderView = ({
               hideDropzone={directSubFolders.length > 0}
               onDrop={onDrop}
               heightOffset={8}
+              title='Files'
             />
           </div>
           <Spacer size='2rem' />

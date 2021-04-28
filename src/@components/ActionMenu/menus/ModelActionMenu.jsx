@@ -1,9 +1,8 @@
 import React, { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import { ActionMenu } from '@components'
+import { DotStackActionMenu } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { ReactComponent as DotStackIcon } from '@svg/dot-stack-icon.svg'
 import { ReactComponent as OpenIcon } from '@svg/external-link.svg'
 import { ReactComponent as ShareIcon } from '@svg/icon-sharedfolder.svg'
 import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
@@ -21,10 +20,6 @@ const useStyles = createUseStyles(theme => {
   } = theme
   return {
     ModelActionMenu: {
-      width: 'auto',
-      color: `${theme.colors.black[500]} !important`,
-      right: '-1rem',
-      bottom: '4.25rem',
       display: 'none',
 
       [md]: {
@@ -56,19 +51,10 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const ModelActionTarget = ({ onClick = noop }) => {
-  const c = useStyles({})
-
-  return (
-    <div className={c.ModelActionMenu_ClickableButton} onClick={onClick}>
-      <DotStackIcon />
-    </div>
-  )
-}
-
 const ModelActionMenu = ({
   model = {},
   isExpandedOptions = false,
+  isStaticBackground = false,
   omitOptions = [],
   onChange = noop,
 }) => {
@@ -76,6 +62,7 @@ const ModelActionMenu = ({
   const { dispatch } = useStoreon()
   const { setOverlay } = useOverlay()
   const currentUserId = authenticationService.getCurrentUserId()
+  const c = useStyles({})
 
   const options = [
     ...(!isExpandedOptions
@@ -207,17 +194,13 @@ const ModelActionMenu = ({
   }
 
   return (
-    <ActionMenu
-      MenuComponentProps={{
-        modelId: model.id,
-        onChange: handleOnChange,
-        actionBarTitle: 'Select action',
-        options,
-        tabletLayout: false,
-      }}
-      TargetComponent={ModelActionTarget}
-      isCloseOnSelect={true}
-      isMobileOnly={true} // TODO: Fix isMobileOnly. Using this to add spacers between items.
+    <DotStackActionMenu
+      onChange={handleOnChange}
+      actionMenuTitle='Select action'
+      alignItems='left'
+      isStaticBackground={isStaticBackground}
+      options={options}
+      menuComponentProps={{ className: c.ModelActionMenu }}
     />
   )
 }

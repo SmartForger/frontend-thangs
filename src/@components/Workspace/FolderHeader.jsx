@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react'
+import React, { useMemo } from 'react'
 import classnames from 'classnames'
 import { Link } from 'react-router-dom'
 
@@ -10,13 +10,18 @@ import {
   MetadataType,
 } from '@physna/voxel-ui/@atoms/Typography'
 
-import { Contributors, FolderActionToolbar, LikeFolderButton, Spacer } from '@components'
+import { FOLDER_MENU_OPTIONS } from '@constants/menuOptions'
+import {
+  ContainerRow,
+  FolderActionMenu,
+  FolderActionToolbar,
+  ModelActionToolbar,
+  Spacer,
+} from '@components'
 import { buildPath } from '@utilities'
-import { useOverlay } from '@hooks'
-import { track } from '@utilities/analytics'
 
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
-import { ReactComponent as PadlockIcon } from '@svg/icon-padlock.svg'
+import { ReactComponent as PrivateFolderIcon } from '@svg/icon-folder-private.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -91,9 +96,6 @@ const useStyles = createUseStyles(theme => {
     FolderView_RootLink: {
       cursor: 'pointer',
     },
-    PadlockIcon_Header: {
-      flex: 'none',
-    },
     FolderView_MobileMenu: {
       position: 'absolute',
       top: '1.2rem',
@@ -118,13 +120,15 @@ const useStyles = createUseStyles(theme => {
         display: 'block',
       },
     },
+    FolderView_ModelActionToolbar: {
+      borderRight: `1px solid ${theme.colors.white[900]}`,
+    },
   }
 })
 
-const FolderHeader = ({ folder, folders }) => {
+const FolderHeader = ({ folder, folders, selectedModel }) => {
   const c = useStyles({})
   const { id } = folder
-  const { setOverlay } = useOverlay()
   const folderPath = useMemo(() => {
     return buildPath(folders, id, folder => ({
       label: folder.name,
@@ -132,42 +136,27 @@ const FolderHeader = ({ folder, folders }) => {
     }))
   }, [folders, id])
   const folderName = folder.name
-  const members = folder.members || []
-
-  const handleInviteUsers = useCallback(() => {
-    track('File Menu - Invite Members')
-    setOverlay({
-      isOpen: true,
-      template: 'inviteUsers',
-      data: {
-        folderId: folder.id,
-        animateIn: true,
-        windowed: true,
-        dialogue: true,
-      },
-    })
-  }, [folder.id, setOverlay])
 
   return (
     <>
       <Spacer className={c.Spacer__mobile} size='2rem' />
       <div className={c.FolderView_Row}>
         <div className={c.FolderView_TitleAndIcons}>
-          <FolderIcon />
+          {folder.isPublic ? <FolderIcon /> : <PrivateFolderIcon />}
           <Spacer size={'1rem'} />
           <div className={c.FolderView_Col}>
             <div className={c.FolderView_TitleAndIcons}>
               <div className={c.FolderView_RootLink}>
                 <Title headerLevel={HeaderLevel.tertiary}>{folderName}</Title>
               </div>
-              <Spacer size={'.5rem'} />
-              {!folder.isPublic && (
-                <>
-                  <PadlockIcon className={c.PadlockIcon_Header} />
-                  <Spacer size={'.25rem'} />
-                </>
-              )}
-              <LikeFolderButton folder={folder} minimal onlyShowOwned />
+              <Spacer size={'1rem'} />
+              <FolderActionMenu
+                folder={folder}
+                omitOptions={[
+                  FOLDER_MENU_OPTIONS.CREATE_FOLDER,
+                  FOLDER_MENU_OPTIONS.ADD_TO_STARRED,
+                ]}
+              />
             </div>
             {folderPath.length > 1 && (
               <>
@@ -192,13 +181,16 @@ const FolderHeader = ({ folder, folders }) => {
           </div>
         </div>
         <div className={classnames(c.FolderView_Row, c.FolderView_Row__desktop)}>
-          <Contributors
-            onClick={handleInviteUsers}
-            users={[folder.creator, ...members]}
-            displayLength='10'
-          />
-          <Spacer size={'1rem'} />
-          <FolderActionToolbar folder={folder} />
+          {selectedModel && (
+            <>
+              <ContainerRow className={c.FolderView_ModelActionToolbar}>
+                <ModelActionToolbar model={selectedModel} />
+                <Spacer size='1rem' />
+              </ContainerRow>
+              <Spacer size='1rem' />
+            </>
+          )}
+          <FolderActionToolbar folder={folder} isPrimaryActionHidden={selectedModel} />
         </div>
       </div>
     </>

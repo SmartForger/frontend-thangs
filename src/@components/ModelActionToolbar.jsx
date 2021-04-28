@@ -16,12 +16,13 @@ const ModelActionToolbar = ({ model = {}, isExpandedOptions = false }) => {
   return (
     <ContainerRow alignItems={'center'}>
       {newVersionFeatureEnabled && <NewVersionButton model={model} />}
-      <Spacer size={'1rem'} />
+      <Spacer size={'0.5rem'} />
       <EditModelButton model={model} />
-      <Spacer size={'1rem'} />
+      <Spacer size={'0.5rem'} />
       <ModelActionMenu
         model={model}
         isExpandedOptions={isExpandedOptions}
+        isStaticBackground
         omitOptions={[MODEL_MENU_OPTIONS.NEW_VERSION, MODEL_MENU_OPTIONS.EDIT]}
       />
     </ContainerRow>
