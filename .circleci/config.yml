@@ -32,15 +32,14 @@ workflows:
             filters:
               branches:
                 only:
-                  - ar-search-release
+                  - master
         - deploy-production:
             Stack: master
             context: gcp-and-physna
             filters:
               branches:
                 only:
-                  - development
-                  - ar-search-release
+                  - master
         - deploy-development-thangs:
             context: thangs-context
             filters:
