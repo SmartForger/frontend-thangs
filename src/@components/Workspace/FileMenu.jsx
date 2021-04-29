@@ -186,12 +186,6 @@ const FileMenu = ({ model = {} }) => {
     [model]
   )
 
-  const handleMoveTo = useCallback(e => {
-    e.preventDefault()
-    // eslint-disable-next-line no-console
-    console.log('Open an overlay')
-  }, [])
-
   const handleShare = useCallback(e => {
     e.preventDefault()
     // eslint-disable-next-line no-console
@@ -231,16 +225,6 @@ const FileMenu = ({ model = {} }) => {
           <ShareIcon />
           <Spacer size={'.5rem'} />
           <Body>Invite</Body>
-          <Spacer size={'1.5rem'} />
-        </div>
-      </MenuItem>
-      <Spacer size={'.5rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={handleMoveTo}>
-        <div>
-          <Spacer size={'1.5rem'} />
-          <OpenIcon className={c.FileMenu_OpenIcon} />
-          <Spacer size={'.5rem'} />
-          <Body>Move to</Body>
           <Spacer size={'1.5rem'} />
         </div>
       </MenuItem>

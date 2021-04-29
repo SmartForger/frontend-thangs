@@ -91,11 +91,6 @@ const ModelActionMenu = ({
           value: MODEL_MENU_OPTIONS.GO_TO_MODEL,
         },
         {
-          label: 'Move to',
-          Icon: OpenIcon,
-          value: MODEL_MENU_OPTIONS.MOVE_MODEL,
-        },
-        {
           label: 'Add to Starred',
           Icon: StarIcon,
           value: MODEL_MENU_OPTIONS.ADD_TO_STARRED,

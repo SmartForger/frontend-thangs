@@ -226,16 +226,6 @@ const SubpartMenu = ({ part }) => {
           <Spacer size={'1.5rem'} />
           <OpenIcon className={c.SubpartMenu_OpenIcon} />
           <Spacer size={'.5rem'} />
-          <Body>Move to</Body>
-          <Spacer size={'1.5rem'} />
-        </div>
-      </MenuItem>
-      <Spacer size={'.5rem'} />
-      <MenuItem className={c.SubpartMenu_Item} onClick={handleOpenNewTab}>
-        <div>
-          <Spacer size={'1.5rem'} />
-          <OpenIcon className={c.SubpartMenu_OpenIcon} />
-          <Spacer size={'.5rem'} />
           <Body>Go to model page</Body>
           <Spacer size={'1.5rem'} />
         </div>
