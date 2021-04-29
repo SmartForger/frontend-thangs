@@ -1,15 +1,13 @@
-import * as R from 'ramda'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
 
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
 
 import * as types from '@constants/storeEventTypes'
 import { useIsIOS, useIsAndroid, useLocalStorage } from '@hooks'
 import { Button, ContainerColumn, Spacer } from '@components'
 import { track } from '@utilities/analytics'
-import { Link, Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -40,29 +38,7 @@ const ViewNativeARLink = ({
   const { dispatch, arDownload } = useStoreon('arDownload')
   const isIOS = useIsIOS()
   const isAndroid = useIsAndroid()
-  const isNativeEnabled = useLocalStorage('physna-native-ar', true)
-
-  const primaryPart = useMemo(() => {
-    const { parts } = model
-    if (parts) {
-      if (parts.length > 1) {
-        return R.find(R.propEq('isPrimary', true))(parts) || parts[0]
-      } else {
-        return parts[0]
-      }
-    }
-
-    return null
-  }, [model])
-  const [downloadURL, setDownloadURL] = useState(null)
-  useEffect(() => {
-    dispatch(types.FETCH_AR_DOWNLOAD_URL, {
-      id: model.id,
-      format: 'android',
-      mode: 'foo',
-      onFinish: url => setDownloadURL(url),
-    })
-  }, [dispatch, model.id])
+  const isNativeEnabled = useLocalStorage('physna-native-ar', false)
 
   const isLoading = useMemo(() => arDownload.isViewMode && arDownload.isLoading, [
     arDownload.isLoading,
@@ -104,186 +80,6 @@ const ViewNativeARLink = ({
               </Metadata>
             </ContainerColumn>
           </Button>
-          {downloadURL && primaryPart && (
-            <ContainerColumn>
-              <Title headerLevel={HeaderLevel.secondary}>AR Core</Title>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${primaryPart.androidUrl.replaceAll(
-                  '#',
-                  encodeURIComponent('#')
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Android URL - No encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${encodeURI(
-                  primaryPart.androidUrl.replaceAll('#', encodeURIComponent('#'))
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Android URL - Single encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${encodeURI(
-                  encodeURI(
-                    primaryPart.androidUrl.replaceAll('#', encodeURIComponent('#'))
-                  )
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Android URL - Double encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${encodeURIComponent(
-                  primaryPart.androidUrl.replaceAll('#', encodeURIComponent('#'))
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Android URL - Single component encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${encodeURIComponent(
-                  encodeURIComponent(
-                    primaryPart.androidUrl.replaceAll('#', encodeURIComponent('#'))
-                  )
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Android URL - Double component encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${downloadURL.replaceAll(
-                  '#',
-                  encodeURIComponent('#')
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Download URL - No encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${encodeURI(
-                  downloadURL.replaceAll('#', encodeURIComponent('#'))
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Download URL - Single encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${encodeURI(
-                  encodeURI(downloadURL.replaceAll('#', encodeURIComponent('#')))
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Download URL - Double encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${encodeURIComponent(
-                  downloadURL.replaceAll('#', encodeURIComponent('#'))
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Download URL - Single component encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${encodeURIComponent(
-                  encodeURIComponent(downloadURL.replaceAll('#', encodeURIComponent('#')))
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Download URL - Double component encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Title headerLevel={HeaderLevel.secondary}>Quick Searchbox</Title>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${primaryPart.androidUrl.replaceAll(
-                  '#',
-                  encodeURIComponent('#')
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Android URL - No encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${encodeURI(
-                  primaryPart.androidUrl.replaceAll('#', encodeURIComponent('#'))
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Android URL - Single encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${encodeURI(
-                  encodeURI(
-                    primaryPart.androidUrl.replaceAll('#', encodeURIComponent('#'))
-                  )
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Android URL - Double encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${encodeURIComponent(
-                  primaryPart.androidUrl.replaceAll('#', encodeURIComponent('#'))
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Android URL - Single component encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${encodeURIComponent(
-                  encodeURIComponent(
-                    primaryPart.androidUrl.replaceAll('#', encodeURIComponent('#'))
-                  )
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Android URL - Double component encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${downloadURL.replaceAll(
-                  '#',
-                  encodeURIComponent('#')
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Download URL - No encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${encodeURI(
-                  downloadURL.replaceAll('#', encodeURIComponent('#'))
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Download URL - Single encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${encodeURI(
-                  encodeURI(downloadURL.replaceAll('#', encodeURIComponent('#')))
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Download URL - Double encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${encodeURIComponent(
-                  downloadURL.replaceAll('#', encodeURIComponent('#'))
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Download URL - Single component encoding
-              </Link>
-              <Spacer size='0.5rem' />
-              <Link
-                to={`intent://arvr.google.com/scene-viewer/1.1?file=${encodeURIComponent(
-                  encodeURIComponent(downloadURL.replaceAll('#', encodeURIComponent('#')))
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`}
-              >
-                Download URL - Double component encoding
-              </Link>
-              <Spacer size='0.5rem' />
-            </ContainerColumn>
-          )}
         </ContainerColumn>
       )}
     </>

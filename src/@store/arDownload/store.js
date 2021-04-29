@@ -1,6 +1,4 @@
-import * as R from 'ramda'
 import axios from 'axios'
-import { saveAs } from 'file-saver'
 
 import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
@@ -80,12 +78,59 @@ export default store => {
         format,
         mode: AR_MODE.DOWNLOAD,
         onFinish: async url => {
-          // const res = await axios.get(url)
-          // debugger
-          saveAs(
-            `${url.replaceAll('#', encodeURIComponent('#'))}&cacheBuster=${Date.now()}`,
-            fileName
-          )
+          // YES - Safari, NO - Chrome, FF
+          // window.location.assign(
+          //   `${url.replaceAll('#', encodeURIComponent('#'))}&cacheBuster=${Date.now()}`
+          // )
+
+          // YES - Safari, NO - Chrome, FF
+          // const link = document.createElement('a')
+          // link.download = `${fileName}.${format === 'android' ? 'glb' : 'usdz'}`
+          // link.href = `${url.replaceAll(
+          //   '#',
+          //   encodeURIComponent('#')
+          // )}&cacheBuster=${Date.now()}`
+          // link.click()
+
+          // YES - Safari, FF(usdz kinda), NO - Chrome, FF(glb)
+          // const { data } = await axios.get(
+          //   `${url.replaceAll('#', encodeURIComponent('#'))}&cacheBuster=${Date.now()}`
+          // )
+          // saveAs(
+          //   new Blob([data], {
+          //     type: format === 'android' ? 'model/gltf-binary' : 'model/vnd.usdz+zip',
+          //   }),
+          //   `${fileName}.${format === 'android' ? 'glb' : 'usdz'}`
+          // )
+
+          // YES - Safari, NO - Chrome, FF
+          // const { data } = await axios.get(
+          //   `${url.replaceAll('#', encodeURIComponent('#'))}&cacheBuster=${Date.now()}`
+          // )
+          // saveAs(
+          //   new File([data], fileName, {
+          //     type: format === 'android' ? 'model/gltf-binary' : 'model/vnd.usdz+zip',
+          //   })
+          // )
+
+          // YES - Safari, NO - Chrome, FF
+          // saveAs(
+          //   `${url.replaceAll('#', encodeURIComponent('#'))}&cacheBuster=${Date.now()}`,
+          //   `${fileName}.${format === 'android' ? 'glb' : 'usdz'}`,
+          //   {
+          //     type: format === 'android' ? 'model/gltf-binary' : 'model/vnd.usdz+zip',
+          //   }
+          // )
+
+          // YES - Safari, FF, NO - Chrome
+          const iframe = document.createElement('iframe')
+          iframe.src = `${url.replaceAll(
+            '#',
+            encodeURIComponent('#')
+          )}&cacheBuster=${Date.now()}`
+          iframe.id = 'download-ar'
+          iframe.style.display = 'none'
+          document.body.appendChild(iframe)
 
           track(trackingEvent, { format, modelId: id, fileName })
           store.dispatch(types.LOADED_AR_DOWNLOAD, { mode: AR_MODE.DOWNLOAD })
@@ -108,46 +153,24 @@ export default store => {
         onFinish: async url => {
           // Native Android viewer requires the file to be loaded first, so this call forces us to generate the model if not already available
           if (format === 'android') {
-            const { parts } = model
-            let primaryPart = null
-            if (parts) {
-              if (parts.length > 1) {
-                primaryPart = R.find(R.propEq('isPrimary', true))(parts) || parts[0]
-              } else {
-                primaryPart = parts[0]
+            let isGLBReady = false
+            try {
+              const { error } = await axios.get(url)
+              if (!error) {
+                isGLBReady = true
               }
-            }
-
-            if (primaryPart && primaryPart.androidUrl) {
-              let isGLBReady = false
-              try {
-                const { error } = await axios.get(url)
-                if (!error) {
-                  isGLBReady = true
-                }
-              } catch (e) {
-                if (e.isAxiosError) {
-                  isGLBReady = true
-                }
+            } catch (e) {
+              if (e.isAxiosError) {
+                isGLBReady = true
               }
-
+            } finally {
               if (isGLBReady) {
                 const link = document.createElement('a')
                 // One
-                link.href = `intent://arvr.google.com/scene-viewer/1.0?file=${primaryPart.androidUrl.replaceAll(
-                  '#',
-                  encodeURIComponent('#')
+                link.href = `intent://arvr.google.com/scene-viewer/1.1?file=${encodeURIComponent(
+                  encodeURIComponent(url)
                 )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`
 
-                // Two
-                // link.href = `intent://arvr.google.com/scene-viewer/1.0?file=${encodeURI(
-                //   url.replaceAll('#', encodeURIComponent('#'))
-                // )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`
-
-                // Three
-                // link.href = `intent://arvr.google.com/scene-viewer/1.0?file=${encodeURI(
-                //   encodeURI(url.replaceAll('#', encodeURIComponent('#')))
-                // )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`
                 link.appendChild(document.createTextNode('Open intent'))
                 link.click()
               } else {
