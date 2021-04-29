@@ -207,18 +207,6 @@ const FileMenu = ({ model = {} }) => {
         </MenuItem>
       )}
       <Spacer size={'.5rem'} />
-      {/* {!isAssembly && (
-        <MenuItem className={c.FileMenu_Item} onClick={handleNewPart}>
-          <div>
-            <Spacer size={'1.5rem'} />
-            <UploadIcon />
-            <Spacer size={'.5rem'} />
-            <Body>Add new part</Body>
-            <Spacer size={'1.5rem'} />
-          </div>
-        </MenuItem>
-      )} */}
-      {/* <Spacer size={'.5rem'} /> */}
       <MenuItem className={c.FileMenu_Item} onClick={handleShare}>
         <div>
           <Spacer size={'1.5rem'} />
