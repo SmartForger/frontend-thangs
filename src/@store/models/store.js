@@ -32,9 +32,12 @@ export default store => {
   )
   store.on(
     types.FETCH_MODEL,
-    async (state, { id, silentUpdate = false, onFinish = noop, onError = noop }) => {
+    async (
+      state,
+      { id, silentUpdate = false, forceRefresh = false, onFinish = noop, onError = noop }
+    ) => {
       const { data: loadedModel = {} } = state.model
-      if (loadedModel.id === id) {
+      if (!forceRefresh && loadedModel.id === id) {
         store.dispatch(types.CHANGE_MODEL_STATUS, {
           status: STATUSES.LOADED,
           atom: 'model',

@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
 
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
@@ -18,17 +17,11 @@ const useStyles = createUseStyles(_theme => {
   }
 })
 
-const VersionPublished = ({ modelId }) => {
+const VersionPublished = () => {
   const c = useStyles()
-  const history = useHistory()
   const { atom: user = {} } = useCurrentUser()
   const { data: userData } = user
   const { setOverlayOpen } = useOverlay()
-
-  const handleViewModel = useCallback(() => {
-    history.push(`/mythangs/file/${modelId}`)
-    setOverlayOpen(false)
-  }, [history, modelId, setOverlayOpen])
 
   const handleClose = useCallback(() => {
     setOverlayOpen(false)
@@ -38,9 +31,7 @@ const VersionPublished = ({ modelId }) => {
     <OverlayWrapper
       overlayHeader={'New Version Published'}
       onCancel={handleClose}
-      onContinue={handleViewModel}
       cancelText={'Close'}
-      continueText={'View Model'}
     >
       <NewVersionIcon />
       <Spacer size={'3rem'} />

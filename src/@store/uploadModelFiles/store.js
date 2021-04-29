@@ -503,6 +503,7 @@ export default store => {
           return
         }
         store.dispatch(types.FETCH_THANGS, {})
+        store.dispatch(types.FETCH_MODEL, { id: modelId, forceRefresh: true })
         onFinish()
       } catch (e) {
         track('Model Uploaded Error', { error: e })

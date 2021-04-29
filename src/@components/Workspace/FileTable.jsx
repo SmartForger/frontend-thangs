@@ -481,6 +481,8 @@ const FileTable = ({
         } else if (modelPageFeatureEnabled) {
           const modelPath = `/mythangs/file/${node.id}`
           history.push(modelPath)
+        } else {
+          if (node?.identifier) history.push(node.identifier)
         }
       }
 

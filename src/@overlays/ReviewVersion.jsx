@@ -84,7 +84,6 @@ const ReviewVersion = () => {
                 animateIn: false,
                 windowed: true,
                 dialogue: true,
-                modelId,
               },
             })
           },

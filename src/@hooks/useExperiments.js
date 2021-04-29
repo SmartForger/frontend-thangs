@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
+import useLocalStorage from './useLocalStorage'
 
 export const useExperiments = feature => {
   const { experiments } = useStoreon('experiments')
@@ -13,6 +14,7 @@ export const useExperiments = feature => {
 }
 
 export const useIsFeatureOn = feature => {
+  const [storedValue] = useLocalStorage(feature)
   const value = useExperiments(feature)
-  return !value //TODO: Flip before go-live
+  return typeof storedValue !== 'undefined' ? storedValue : !value // TODO: Flip before go-live
 }
