@@ -69,6 +69,13 @@ const hoopsStatusReducer = (currentStatus, nextStatus) => {
   return new HoopsStatus(nextStatus)
 }
 
+const changeExplosionMagnitudeThrottled = throttle((hoopsViewerRef, magnitude) => {
+  if (!hoopsViewerRef.current || !hoopsViewerRef.current.explodeManager) {
+    return
+  }
+  hoopsViewerRef.current.explodeManager.setMagnitude(magnitude)
+}, 500)
+
 const useHoopsViewer = ({ modelFilename, onHighlight }) => {
   const containerRef = useRef()
   const hoopsViewerRef = useRef()
@@ -329,16 +336,12 @@ const useHoopsViewer = ({ modelFilename, onHighlight }) => {
     },
     [hoopsViewerRef]
   )
-  const changeExplosionMagnitude = throttle(magnitude => {
-    if (!hoopsViewerRef.current) {
-      return
-    }
-
-    hoopsViewerRef &&
-      hoopsViewerRef.current &&
-      hoopsViewerRef.current.explodeManager &&
-      hoopsViewerRef.current.explodeManager.setMagnitude(magnitude)
-  }, 500)
+  const changeExplosionMagnitude = useCallback(
+    magnitude => {
+      changeExplosionMagnitudeThrottled(hoopsViewerRef, magnitude)
+    },
+    [hoopsViewerRef]
+  )
 
   const changeViewOrientation = useCallback(
     orientation => {
