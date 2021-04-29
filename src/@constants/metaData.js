@@ -1,6 +1,6 @@
 export const aboutUsDescription =
   'Thangs is the most powerful search platform for the 3D modeling community. Our unique geometric search allows users to upload 3D models and find similar.'
-export const aboutUsTitle = 'Thangs | About Us | The fastest growing 3D community'
+export const aboutUsTitle = 'Thangs | About Us | Free 3D model community'
 export const modelDescription = 'Sign up and download for free. '
 export const modelDescriptionPrefix = '3D model of '
 export const modelDescriptionCreatedBy = 'created by '
@@ -21,7 +21,7 @@ export const thangsDescription =
   '3D Model Community for 3D model enthusiasts. Use geometric search to find over 1 million free 3D models. Download 3D models & upload models to collaborate.'
 export const thangsTitle =
   '3D model community. Search & download free 3D models. Share 3D models'
-export const homeTitle = 'Thangs | The fastest growing 3D community | Geometric Search'
+export const homeTitle = 'Thangs | Free 3D model community | Geometric Search'
 export const homeDescription =
   'Welcome to Thangs. The free 3D community for collaboration; with unlimited downloads and secure storage. The only platform with geometric search.'
 export const likesTitle = 'Popular models for 3D enthusiasts | Free Downloads | Thangs'
@@ -39,6 +39,6 @@ export const trendingDescription =
 export const showSigninTitle = 'Thangs | Sign In | Upload and share 3D models'
 export const showSigninDescription =
   'Start collaborating with 3D hobbyist and 3D engineers.  Thangs offers free private collaboration with team and public sharing. Sign in now.'
-export const showSignupTitle = 'Join Now | Thangs | The fastest growing 3D Community'
+export const showSignupTitle = 'Join Now | Thangs | Free 3D model community'
 export const showSignupDescription =
   'Welcome to Thangs. The free 3D community for collaboration; with unlimited downloads and secure storage. The only platform with geometric search. Join now.'
