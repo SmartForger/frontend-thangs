@@ -302,28 +302,33 @@ const useHoopsViewer = ({ modelFilename, onHighlight }) => {
     }
   }, [])
 
-  const changeDrawMode = useCallback(modeName => {
-    track('changeDrawMode', { mode: modeName })
-    if (!hoopsViewerRef.current) {
-      return
-    }
-
-    if (hoopsViewerRef && hoopsViewerRef.current && hoopsViewerRef.current.view) {
-      switch (modeName) {
-        case 'shaded':
-          hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.WireframeOnShaded)
-          break
-        case 'wire':
-          hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.Wireframe)
-          break
-        case 'xray':
-          hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.XRay)
-          break
-        default:
-          return
+  const changeDrawMode = useCallback(
+    modeName => {
+      track('changeDrawMode', { mode: modeName })
+      if (!hoopsViewerRef.current) {
+        return
       }
-    }
-  }, [])
+
+      if (hoopsViewerRef && hoopsViewerRef.current && hoopsViewerRef.current.view) {
+        switch (modeName) {
+          case 'shaded':
+            hoopsViewerRef.current.view.setDrawMode(
+              Communicator.DrawMode.WireframeOnShaded
+            )
+            break
+          case 'wire':
+            hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.Wireframe)
+            break
+          case 'xray':
+            hoopsViewerRef.current.view.setDrawMode(Communicator.DrawMode.XRay)
+            break
+          default:
+            return
+        }
+      }
+    },
+    [hoopsViewerRef]
+  )
 
   const changeExplosionMagnitude = useCallback(
     throttle(magnitude => {
@@ -336,50 +341,56 @@ const useHoopsViewer = ({ modelFilename, onHighlight }) => {
         hoopsViewerRef.current.explodeManager &&
         hoopsViewerRef.current.explodeManager.setMagnitude(magnitude)
     }, 500),
-    []
+    [hoopsViewerRef]
   )
 
-  const changeViewOrientation = useCallback(orientation => {
-    track('changeViewOrientation', { orientation })
-    hoopsViewerRef &&
-      hoopsViewerRef.current &&
-      hoopsViewerRef.current.view &&
-      hoopsViewerRef.current.view.setViewOrientation(
-        Communicator.ViewOrientation[orientation],
-        1000
+  const changeViewOrientation = useCallback(
+    orientation => {
+      track('changeViewOrientation', { orientation })
+      hoopsViewerRef &&
+        hoopsViewerRef.current &&
+        hoopsViewerRef.current.view &&
+        hoopsViewerRef.current.view.setViewOrientation(
+          Communicator.ViewOrientation[orientation],
+          1000
+        )
+    },
+    [hoopsViewerRef]
+  )
+
+  const getViewerSnapshot = useCallback(
+    fileName => {
+      track('getViewerSnapshot')
+
+      if (!hoopsViewerRef.current || !containerRef.current) {
+        return
+      }
+
+      const canvasSize = hoopsViewerRef.current.view.getCanvasSize()
+      const config = new Communicator.SnapshotConfig(
+        canvasSize.x,
+        canvasSize.y,
+        Communicator.SnapshotLayer.Model
       )
-  }, [])
 
-  const getViewerSnapshot = useCallback(fileName => {
-    track('getViewerSnapshot')
-
-    if (!hoopsViewerRef.current || !containerRef.current) {
-      return
-    }
-
-    const canvasSize = hoopsViewerRef.current.view.getCanvasSize()
-    const config = new Communicator.SnapshotConfig(
-      canvasSize.x,
-      canvasSize.y,
-      Communicator.SnapshotLayer.Model
-    )
-
-    hoopsViewerRef.current.takeSnapshot(config).then(imgElement => {
-      let timestamp = new Date().toLocaleString()
-      let myCanvasElement = document.createElement('canvas')
-      myCanvasElement.width = canvasSize.x
-      myCanvasElement.height = canvasSize.y
-      let context = myCanvasElement.getContext('2d')
-      context.fillStyle = 'white'
-      context.fillRect(0, 0, canvasSize.x, canvasSize.y)
-      context.drawImage(imgElement, 0, 0, canvasSize.x, canvasSize.y)
-      let img = myCanvasElement.toDataURL('image/png')
-      let link = document.createElement('a')
-      link.download = `${fileName}-${timestamp}.png`
-      link.href = img
-      link.click()
-    })
-  }, [])
+      hoopsViewerRef.current.takeSnapshot(config).then(imgElement => {
+        let timestamp = new Date().toLocaleString()
+        let myCanvasElement = document.createElement('canvas')
+        myCanvasElement.width = canvasSize.x
+        myCanvasElement.height = canvasSize.y
+        let context = myCanvasElement.getContext('2d')
+        context.fillStyle = 'white'
+        context.fillRect(0, 0, canvasSize.x, canvasSize.y)
+        context.drawImage(imgElement, 0, 0, canvasSize.x, canvasSize.y)
+        let img = myCanvasElement.toDataURL('image/png')
+        let link = document.createElement('a')
+        link.download = `${fileName}-${timestamp}.png`
+        link.href = img
+        link.click()
+      })
+    },
+    [hoopsViewerRef, containerRef]
+  )
 
   const resetImage = useCallback(() => {
     track('resetViewer')
@@ -392,22 +403,25 @@ const useHoopsViewer = ({ modelFilename, onHighlight }) => {
       hoopsViewerRef.current &&
       hoopsViewerRef.current.model &&
       hoopsViewerRef.current.model.resetNodesColor()
-  }, [])
+  }, [hoopsViewerRef])
 
-  const highlightPart = useCallback(nodeName => {
-    const node = allModelNodes.current.find(node => node.name === nodeName)
-    if (node) {
-      selectedNodes.current[0] = node.id
-      hoopsViewerRef.current.selectionManager.selectNode(node.id)
-    } else {
-      selectedNodes.current[0] = null
-      hoopsViewerRef.current.selectionManager.selectNode(null)
+  const highlightPart = useCallback(
+    nodeName => {
+      const node = allModelNodes.current.find(node => node.name === nodeName)
+      if (node) {
+        selectedNodes.current[0] = node.id
+        hoopsViewerRef.current.selectionManager.selectNode(node.id)
+      } else {
+        selectedNodes.current[0] = null
+        hoopsViewerRef.current.selectionManager.selectNode(null)
 
-      if (selectedNodes.current[1]) {
-        hoopsViewerRef.current.selectionManager.selectNode(selectedNodes.current[1])
+        if (selectedNodes.current[1]) {
+          hoopsViewerRef.current.selectionManager.selectNode(selectedNodes.current[1])
+        }
       }
-    }
-  }, [])
+    },
+    [hoopsViewerRef, allModelNodes, selectedNodes]
+  )
 
   return {
     containerRef,

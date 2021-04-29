@@ -112,7 +112,9 @@ const TextSearchPage = () => {
     [filter, history]
   )
 
-  const textModels = R.path(['data'], textSearchResults) || []
+  const textModels = useMemo(() => R.path(['data'], textSearchResults) || [], [
+    textSearchResults,
+  ])
   const { endOfData, isLoading, isLoaded, isError, pageToLoad } = textSearchResults
   const isScrollPaused = useMemo(() => !pageToLoad || isLoading || endOfData, [
     endOfData,
