@@ -79,16 +79,14 @@ export default store => {
         id,
         format,
         mode: AR_MODE.DOWNLOAD,
-        onFinish: url => {
-          try {
-            saveAs(
-              `${url.replaceAll('#', encodeURIComponent('#'))}&cacheBuster=${Date.now()}`,
-              fileName
-            )
-          } catch (e) {
-            console.log(e)
-            debugger
-          }
+        onFinish: async url => {
+          // const res = await axios.get(url)
+          // debugger
+          saveAs(
+            `${url.replaceAll('#', encodeURIComponent('#'))}&cacheBuster=${Date.now()}`,
+            fileName
+          )
+
           track(trackingEvent, { format, modelId: id, fileName })
           store.dispatch(types.LOADED_AR_DOWNLOAD, { mode: AR_MODE.DOWNLOAD })
         },
@@ -135,10 +133,21 @@ export default store => {
 
               if (isGLBReady) {
                 const link = document.createElement('a')
+                // One
                 link.href = `intent://arvr.google.com/scene-viewer/1.0?file=${primaryPart.androidUrl.replaceAll(
                   '#',
                   encodeURIComponent('#')
                 )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`
+
+                // Two
+                // link.href = `intent://arvr.google.com/scene-viewer/1.0?file=${encodeURI(
+                //   url.replaceAll('#', encodeURIComponent('#'))
+                // )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`
+
+                // Three
+                // link.href = `intent://arvr.google.com/scene-viewer/1.0?file=${encodeURI(
+                //   encodeURI(url.replaceAll('#', encodeURIComponent('#')))
+                // )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`
                 link.appendChild(document.createTextNode('Open intent'))
                 link.click()
               } else {
