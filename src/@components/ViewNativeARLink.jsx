@@ -7,8 +7,9 @@ import * as types from '@constants/storeEventTypes'
 import { useIsIOS, useIsAndroid, useLocalStorage } from '@hooks'
 import { Button, ContainerColumn, Spacer } from '@components'
 import { track } from '@utilities/analytics'
+import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
 
-const useStyles = createUseStyles(() => {
+const useStyles = createUseStyles(theme => {
   return {
     ViewNativeARLink: {
       '& > div': {
@@ -18,6 +19,10 @@ const useStyles = createUseStyles(() => {
       '& > div > div': {
         width: 'fit-content',
       },
+    },
+
+    ViewNativeARLink_Subtext: {
+      color: theme.colors.grey[700],
     },
   }
 })
@@ -65,7 +70,15 @@ const ViewNativeARLink = ({
         <ContainerColumn className={c.ViewNativeARLink}>
           <Spacer size='1rem' />
           <Button secondary onClick={handleClick}>
-            {isLoading ? 'Loading Augmented Reality...' : 'Open Augmented Reality'}
+            <ContainerColumn>
+              {isLoading ? 'Loading Augmented Reality...' : 'Open Augmented Reality'}
+              <Metadata
+                type={MetadataType.secondary}
+                className={c.ViewNativeARLink_Subtext}
+              >
+                Mobile Only, No App Required
+              </Metadata>
+            </ContainerColumn>
           </Button>
         </ContainerColumn>
       )}
