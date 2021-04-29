@@ -99,7 +99,7 @@ const ARDownloadActionMenu = ({
   const menuProps = useMemo(() => {
     return {
       onChange,
-      actionBarTitle: 'Download Augmented Reality for',
+      actionBarTitle: 'Download Augmented Reality',
       options,
       tabletLayout: false,
       alignItems: 'center',

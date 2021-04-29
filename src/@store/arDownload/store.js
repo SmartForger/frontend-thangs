@@ -80,10 +80,15 @@ export default store => {
         format,
         mode: AR_MODE.DOWNLOAD,
         onFinish: url => {
-          saveAs(
-            `${url.replaceAll('#', encodeURIComponent('#'))}&cacheBuster=${Date.now()}`,
-            fileName
-          )
+          try {
+            saveAs(
+              `${url.replaceAll('#', encodeURIComponent('#'))}&cacheBuster=${Date.now()}`,
+              fileName
+            )
+          } catch (e) {
+            console.log(e)
+            debugger
+          }
           track(trackingEvent, { format, modelId: id, fileName })
           store.dispatch(types.LOADED_AR_DOWNLOAD, { mode: AR_MODE.DOWNLOAD })
         },
@@ -133,7 +138,8 @@ export default store => {
                 link.href = `intent://arvr.google.com/scene-viewer/1.0?file=${primaryPart.androidUrl.replaceAll(
                   '#',
                   encodeURIComponent('#')
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`
+                )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`
+                link.appendChild(document.createTextNode('Open intent'))
                 link.click()
               } else {
                 store.dispatch(types.FAILED_AR_DOWNLOAD, { mode: AR_MODE.VIEW })
