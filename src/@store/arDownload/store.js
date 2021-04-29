@@ -3,11 +3,10 @@ import axios from 'axios'
 import api from '@services/api'
 import * as types from '@constants/storeEventTypes'
 import { track } from '@utilities/analytics'
+import { STATUSES, getStatusState } from '@store/constants'
 
 const getInitAtom = () => ({
-  isLoaded: false,
-  isLoading: false,
-  isError: false,
+  ...getStatusState(STATUSES.INIT),
   data: {},
 })
 
@@ -24,20 +23,18 @@ export default store => {
   store.on(types.LOADING_AR_DOWNLOAD, (state, { mode }) => ({
     arDownload: {
       ...state.arDownload,
+      ...getStatusState(STATUSES.LOADING),
       isViewMode: AR_MODE.VIEW === mode,
       isDownloadMode: AR_MODE.DOWNLOAD === mode,
-      isLoading: true,
-      isLoaded: false,
     },
   }))
 
   store.on(types.LOADED_AR_DOWNLOAD, (state, { data, mode }) => ({
     arDownload: {
       ...state.arDownload,
+      ...getStatusState(STATUSES.LOADED),
       isViewMode: AR_MODE.VIEW === mode,
       isDownloadMode: AR_MODE.DOWNLOAD === mode,
-      isLoading: false,
-      isLoaded: true,
       data,
     },
   }))
@@ -45,11 +42,9 @@ export default store => {
   store.on(types.FAILED_AR_DOWNLOAD, (state, { mode }) => ({
     arDownload: {
       ...state.arDownload,
+      ...getStatusState(STATUSES.FAILURE),
       isViewMode: AR_MODE.VIEW === mode,
       isDownloadMode: AR_MODE.DOWNLOAD === mode,
-      isLoading: false,
-      isLoaded: true,
-      isError: true,
     },
   }))
 
