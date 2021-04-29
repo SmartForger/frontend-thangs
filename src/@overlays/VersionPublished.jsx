@@ -42,7 +42,7 @@ const VersionPublished = () => {
           userData.firstName || userData.username
         }, your changes have been published!`}</Title>
       <Spacer size={'.5rem'} />
-      <Body multiline>Your changes can now be viewed on your model page</Body>
+      <Body multiline>Your changes can now be viewed on your model page.</Body>
     </OverlayWrapper>
   )
 }
