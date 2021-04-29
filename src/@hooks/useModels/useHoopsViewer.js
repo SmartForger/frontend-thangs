@@ -329,20 +329,16 @@ const useHoopsViewer = ({ modelFilename, onHighlight }) => {
     },
     [hoopsViewerRef]
   )
+  const changeExplosionMagnitude = throttle(magnitude => {
+    if (!hoopsViewerRef.current) {
+      return
+    }
 
-  const changeExplosionMagnitude = useCallback(
-    throttle(magnitude => {
-      if (!hoopsViewerRef.current) {
-        return
-      }
-
-      hoopsViewerRef &&
-        hoopsViewerRef.current &&
-        hoopsViewerRef.current.explodeManager &&
-        hoopsViewerRef.current.explodeManager.setMagnitude(magnitude)
-    }, 500),
-    [hoopsViewerRef]
-  )
+    hoopsViewerRef &&
+      hoopsViewerRef.current &&
+      hoopsViewerRef.current.explodeManager &&
+      hoopsViewerRef.current.explodeManager.setMagnitude(magnitude)
+  }, 500)
 
   const changeViewOrientation = useCallback(
     orientation => {
