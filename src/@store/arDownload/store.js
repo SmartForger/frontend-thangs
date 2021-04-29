@@ -78,51 +78,8 @@ export default store => {
         format,
         mode: AR_MODE.DOWNLOAD,
         onFinish: async url => {
-          // YES - Safari, NO - Chrome, FF
-          // window.location.assign(
-          //   `${url.replaceAll('#', encodeURIComponent('#'))}&cacheBuster=${Date.now()}`
-          // )
-
-          // YES - Safari, NO - Chrome, FF
-          // const link = document.createElement('a')
-          // link.download = `${fileName}.${format === 'android' ? 'glb' : 'usdz'}`
-          // link.href = `${url.replaceAll(
-          //   '#',
-          //   encodeURIComponent('#')
-          // )}&cacheBuster=${Date.now()}`
-          // link.click()
-
-          // YES - Safari, FF(usdz kinda), NO - Chrome, FF(glb)
-          // const { data } = await axios.get(
-          //   `${url.replaceAll('#', encodeURIComponent('#'))}&cacheBuster=${Date.now()}`
-          // )
-          // saveAs(
-          //   new Blob([data], {
-          //     type: format === 'android' ? 'model/gltf-binary' : 'model/vnd.usdz+zip',
-          //   }),
-          //   `${fileName}.${format === 'android' ? 'glb' : 'usdz'}`
-          // )
-
-          // YES - Safari, NO - Chrome, FF
-          // const { data } = await axios.get(
-          //   `${url.replaceAll('#', encodeURIComponent('#'))}&cacheBuster=${Date.now()}`
-          // )
-          // saveAs(
-          //   new File([data], fileName, {
-          //     type: format === 'android' ? 'model/gltf-binary' : 'model/vnd.usdz+zip',
-          //   })
-          // )
-
-          // YES - Safari, NO - Chrome, FF
-          // saveAs(
-          //   `${url.replaceAll('#', encodeURIComponent('#'))}&cacheBuster=${Date.now()}`,
-          //   `${fileName}.${format === 'android' ? 'glb' : 'usdz'}`,
-          //   {
-          //     type: format === 'android' ? 'model/gltf-binary' : 'model/vnd.usdz+zip',
-          //   }
-          // )
-
-          // YES - Safari, FF, NO - Chrome
+          // Downloading via iframe seems to have the best coverage in terms of forcing the download flow
+          // Safari and Firefox both work fine, but Chrome autoopens like a jerk still
           const iframe = document.createElement('iframe')
           iframe.src = `${url.replaceAll(
             '#',
