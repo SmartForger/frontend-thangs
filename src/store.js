@@ -1,5 +1,6 @@
 import { storeonDevtools } from 'storeon/devtools'
 import { createStoreon } from 'storeon'
+import arDownloadStore from '@store/arDownload/store'
 import attachmentFileStore from '@store/uploadAttachmentFiles/store'
 import commentsStore from '@store/comments/store'
 import experimentsStore from '@store/experiments/store'
@@ -29,6 +30,7 @@ import licenseStore from '@store/license/store'
 import licenseDownloadUrl from '@store/licenseDownloadUrl/store'
 
 const storeParts = [
+  arDownloadStore,
   attachmentFileStore,
   commentsStore,
   experimentsStore,

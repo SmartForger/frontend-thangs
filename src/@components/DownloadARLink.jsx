@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 
@@ -29,38 +29,23 @@ const DownloadARLink = ({
   downloadTrackingEvent = 'Download AR',
 }) => {
   const c = useStyles()
-  const { dispatch } = useStoreon()
+  const { dispatch, arDownload } = useStoreon('arDownload')
   const downloadModel = useCallback(
     format => {
-      dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
+      dispatch(types.DOWNLOAD_AR_MODEL, {
         id: model.id ?? model.modelId,
+        fileName: model.name ?? model.fileName,
         format,
-        onFinish: downloadUrl => {
-          const link = document.createElement('a')
-          link.href = `${downloadUrl.replaceAll(
-            '#',
-            encodeURIComponent('#')
-          )}&cacheBuster=${Date.now()}`
-          link.download = (
-            model.name ||
-            model.modelFileName ||
-            'thangs_model'
-          ).replaceAll('.', '_')
-          link.click()
-
-          track(downloadTrackingEvent, { format, modelId: model.id ?? model.modelId })
-        },
+        trackingEvent: downloadTrackingEvent,
       })
     },
-    [
-      downloadTrackingEvent,
-      dispatch,
-      model.id,
-      model.modelId,
-      model.name,
-      model.modelFileName,
-    ]
+    [dispatch, model.id, model.modelId, model.name, model.fileName, downloadTrackingEvent]
   )
+
+  const isLoading = useMemo(() => arDownload.isDownloadMode && arDownload.isLoading, [
+    arDownload.isDownloadMode,
+    arDownload.isLoading,
+  ])
 
   const handleClick = useCallback(
     format => {
@@ -76,7 +61,11 @@ const DownloadARLink = ({
 
   return (
     <div className={c.DownloadARLink}>
-      <ARDownloadActionMenu onChange={handleClick} TargetComponent={TargetComponent} />
+      <ARDownloadActionMenu
+        onChange={handleClick}
+        TargetComponent={TargetComponent}
+        isLoading={isLoading}
+      />
     </div>
   )
 }

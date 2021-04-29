@@ -25,6 +25,7 @@ import {
   Spacer,
   Spinner,
   ToggleFollowButton,
+  ViewNativeARLink,
 } from '@components'
 import { canDownloadAR } from '@utilities'
 import { ReactComponent as HeartIcon } from '@svg/dropdown-heart.svg'
@@ -40,8 +41,8 @@ import {
   usePerformanceMetrics,
   useLocalStorage,
   useQuery,
-  // useIsAndroid,
-  // useIsIOS,
+  useIsAndroid,
+  useIsIOS,
 } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
@@ -466,8 +467,8 @@ const StatsActionsAndPrints = ({
   pageTitle,
 }) => {
   const isARSupported = useMemo(() => canDownloadAR(modelData), [modelData])
-  // const isAndroid = useIsAndroid()
-  // const isIOS = useIsIOS()
+  const isAndroid = useIsAndroid()
+  const isIOS = useIsIOS()
 
   return (
     <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
@@ -490,7 +491,7 @@ const StatsActionsAndPrints = ({
                 isAuthedUser={isAuthedUser}
                 openSignupOverlay={openSignupOverlay}
               />
-              {/* {isAndroid || isIOS ? (
+              {isAndroid || isIOS ? (
                 <ViewNativeARLink
                   model={modelData}
                   isAuthedUser={isAuthedUser}
@@ -498,7 +499,7 @@ const StatsActionsAndPrints = ({
                 />
               ) : (
                 <></>
-              )} */}
+              )}
             </ContainerColumn>
           </>
         )}
