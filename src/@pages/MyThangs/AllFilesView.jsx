@@ -104,7 +104,7 @@ const AllFilesView = ({
         {sortedFolders.length > 0 && (
           <>
             <Spacer size='4rem' />
-            <Title headerLevel={HeaderLevel.tertiary}>Folders</Title>
+            <Title headerLevel={HeaderLevel.tertiary}>My Folders</Title>
             <div className={c.AllFilesView_Folders}>
               {sortedFolders.map((folder, index) => (
                 <div
