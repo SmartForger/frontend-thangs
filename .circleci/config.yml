@@ -33,6 +33,7 @@ workflows:
               branches:
                 only:
                   - master
+                  - ar/better-file-downloads
         - deploy-production:
             Stack: master
             context: gcp-and-physna
