@@ -145,8 +145,10 @@ export default store => {
               '#',
               encodeURIComponent('#')
             )}&cacheBuster=${Date.now()}`
-            // This should stop the navigate-away in safari
+            // This should stop the navigate-away in Safari and make Safari-based browsers work better
             link.rel = 'ar'
+            link.appendChild(document.createElement('img'))
+
             link.click()
           }
 
