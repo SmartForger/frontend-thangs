@@ -140,9 +140,14 @@ export default store => {
               }
             }
           } else if (format === 'ios') {
-            window.location.assign(
-              `${url.replaceAll('#', encodeURIComponent('#'))}&cacheBuster=${Date.now()}`
-            )
+            const link = document.createElement('a')
+            link.href = `${url.replaceAll(
+              '#',
+              encodeURIComponent('#')
+            )}&cacheBuster=${Date.now()}`
+            // This should stop the navigate-away in safari
+            link.rel = 'ar'
+            link.click()
           }
 
           store.dispatch(types.LOADED_AR_DOWNLOAD, { mode: AR_MODE.VIEW })
