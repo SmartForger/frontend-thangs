@@ -24,7 +24,7 @@ const SearchResultFooter = ({ model, onFindRelated }) => {
   const isARSupported = useMemo(() => canDownloadAR(model), [model])
 
   return (
-    <ContainerRow>
+    <ContainerRow wrap='wrap'>
       {shouldShowViewRelated(model) && (
         <>
           <div
@@ -42,9 +42,9 @@ const SearchResultFooter = ({ model, onFindRelated }) => {
           isAuthedUser={true}
           openSignupOverlay={noop}
           downloadTrackingEvent='Download AR from Search'
-          TargetComponent={({ onClick = noop }) => (
+          TargetComponent={({ onClick = noop, isLoading }) => (
             <div onClick={onClick} className={c.SearchResultFooter_Link}>
-              Download AR Model
+              {isLoading ? 'Downloading Augmented Reality' : 'Download Augmented Reality'}
             </div>
           )}
         />
