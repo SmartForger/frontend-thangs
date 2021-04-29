@@ -420,18 +420,18 @@ const FileTable = ({
           size: calcFileSize(f),
           parts: hasSubtree
             ? addAdditionalInfoToSubparts(
-                f.parts.length === 1 ? f.parts[0].parts || [] : f.parts,
-                {
-                  created: f.created,
-                  contributors: [f.owner],
-                }
-              )
+              f.parts.length === 1 ? f.parts[0].parts || [] : f.parts,
+              {
+                created: f.created,
+                contributors: [f.owner],
+              }
+            )
             : [],
           nodeType: f.isAssembly
             ? 'assembly'
             : f.parts.length > 1
-            ? 'multipart'
-            : 'singlepart',
+              ? 'multipart'
+              : 'singlepart',
         }
       }
 
@@ -452,21 +452,21 @@ const FileTable = ({
     (node, level, expanded, toggleExpanded) => {
       const menuProps = node.isFolder
         ? {
-            id: 'Folder_Menu',
-            attributes: {
-              className: c.FileTable_FileRow,
-            },
-            collect: () => ({ folder: node }),
-          }
+          id: 'Folder_Menu',
+          attributes: {
+            className: c.FileTable_FileRow,
+          },
+          collect: () => ({ folder: node }),
+        }
         : level === 0
-        ? {
+          ? {
             id: 'File_Menu',
             attributes: {
               className: c.FileTable_FileRow,
             },
             collect: () => ({ model: node }),
           }
-        : {
+          : {
             id: 'Subpart_Menu',
             attributes: {
               className: c.FileTable_FileRow,
@@ -475,7 +475,7 @@ const FileTable = ({
           }
 
       const handleClick = () => {
-        setSelectedFiles([{ ...node, level }])
+        setSelectedFiles([node.id])
         onChange(node)
       }
 
@@ -516,22 +516,14 @@ const FileTable = ({
                   toggleExpanded()
                 }}
               >
-                {node.isLeaf ? (
-                  node.isFolder ? (
-                    node.isPublic ? (
-                      <FolderIcon />
-                    ) : (
-                      <PrivateFolderIcon />
-                    )
-                  ) : (
-                    <ModelIcon />
-                  )
-                ) : (
-                  <ArrowRight />
-                )}
+                {!isLeaf && <ArrowRight />}
               </div>
               {isFolder ? (
-                <FolderIcon className={c.FileTable_Icon} />
+                node.isPublic ? (
+                  <FolderIcon className={c.FileTable_Icon} />
+                ) : (
+                  <PrivateFolderIcon />
+                )
               ) : node.nodeType === 'assembly' ? (
                 <AssemblyIcon className={c.FileTable_Icon} />
               ) : node.nodeType === 'multipart' ? (
@@ -574,8 +566,12 @@ const FileTable = ({
     [c, handleChangeFolder, history, selectedFiles, modelPageFeatureEnabled, onChange]
   )
 
-  const isRootSelected = selectedFiles[0] && selectedFiles[0].level === 0
   const isMultipart = files.length === 1 && files[0].parts && files[0].parts.length > 1
+  const selectedNode = nodes.find(node => node.id === selectedFiles[0])
+  const isSelectedNodeModel = node => {
+    if (!node) return false
+    return !node.isFolder
+  }
 
   return (
     <>
@@ -606,31 +602,31 @@ const FileTable = ({
           ) : null}
         </ContainerRow>
         <Spacer size='1.375rem' />
-      {files.length > 0 || searchCase ? (
-        <>
-          <FileTableHeader sortedBy={sortedBy} onSort={handleSort} order={order} />
-          <Spacer size={'.5rem'} />
-          {files.length > 0 ? (
-            <TreeView
-              nodes={nodes}
-              subnodeField='parts'
-              renderNode={renderNode}
-              showDivider
-              showExpandIcon={false}
-              levelPadding={0}
-              classes={{
-                item: c.FileTable_Item,
-                itemSelected: c.FileTable_Item__selected,
-                container: c.FileTable_Body,
-              }}
-              isSelected={node => selectedFiles.findIndex(n => n.id === node.id) >= 0}
-              defaultExpanded={isMultipart}
-            />
-          ) : (
-            <Body className={c.NoResultsFound}>No Results Found</Body>
-          )}
-        </>
-      ) : !hideDropzone ? (
+        {files.length > 0 || searchCase ? (
+          <>
+            <FileTableHeader sortedBy={sortedBy} onSort={handleSort} order={order} />
+            <Spacer size={'.5rem'} />
+            {files.length > 0 ? (
+              <TreeView
+                nodes={nodes}
+                subnodeField='parts'
+                renderNode={renderNode}
+                showDivider
+                showExpandIcon={false}
+                levelPadding={0}
+                classes={{
+                  item: c.FileTable_Item,
+                  itemSelected: c.FileTable_Item__selected,
+                  container: c.FileTable_Body,
+                }}
+                isSelected={node => selectedFiles.includes(node.id)}
+                defaultExpanded={isMultipart}
+              />
+            ) : (
+              <Body className={c.NoResultsFound}>No Results Found</Body>
+            )}
+          </>
+        ) : !hideDropzone ? (
           <div className={c.NoFilesMessage}>
             <Dropzone onDrop={onDrop} accept={MODEL_FILE_EXTS} maxFiles={25}>
               {({ getRootProps, getInputProps }) => (
