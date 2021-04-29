@@ -171,8 +171,8 @@ const OverlayWrapper = ({
                   {isLoading
                     ? 'Processing...'
                     : !onContinue
-                    ? 'Loading...'
-                    : continueText}
+                      ? 'Loading...'
+                      : continueText}
                 </Button>
               </>
             )}

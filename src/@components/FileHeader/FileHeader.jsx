@@ -14,7 +14,6 @@ import {
   ContainerColumn,
   ContainerRow,
   Contributors,
-  LikeFolderButton,
   Spacer,
   ModelActionToolbar,
 } from '@components'
@@ -22,7 +21,7 @@ import { useOverlay } from '@hooks'
 import { buildPath } from '@utilities'
 
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
-import { ReactComponent as PadlockIcon } from '@svg/icon-padlock.svg'
+import { ReactComponent as PrivateFolderIcon } from '@svg/icon-folder-private.svg'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -49,7 +48,7 @@ const FileHeader = ({ file = {}, folders = [] }) => {
   }, [folders, id])
 
   const folder = folders[id] || {}
-  const members = (folder && folder.members) || []
+  const { members = [] } = folder
 
   const handleInviteUsers = useCallback(() => {
     setOverlay({
@@ -65,52 +64,53 @@ const FileHeader = ({ file = {}, folders = [] }) => {
   }, [id, setOverlay])
 
   return (
-    <ContainerRow alignItems={'center'} justifyContent={'space-between'}>
-      <ContainerRow alignItems={'center'}>
-        <FolderIcon />
-        <Spacer size={'1rem'} />
-        <ContainerColumn>
-          <ContainerRow>
-            <Title headerLevel={HeaderLevel.tertiary}>{name}</Title>
+    <>
+      <ContainerRow justifyContent={'space-between'}>
+        <ContainerRow>
+          <ContainerColumn>
             <Spacer size={'.5rem'} />
-            {folder && folder.isPublic && (
+            {folder.isPublic ? <FolderIcon /> : <PrivateFolderIcon />}
+          </ContainerColumn>
+          <Spacer size={'1rem'} />
+          <ContainerColumn>
+            <ContainerRow alignItems={'center'}>
+              <div className={c.FolderView_RootLink}>
+                <Title headerLevel={HeaderLevel.tertiary}>{name}</Title>
+              </div>
+              <Spacer size={'2rem'} />
+            </ContainerRow>
+            {folderPath.length > 1 && (
               <>
-                <PadlockIcon className={c.PadlockIcon_Header} />
-                <Spacer size={'.25rem'} />
+                <Metadata type={MetadataType.primary}>
+                  {folderPath.map((pathObj, index) => {
+                    if (index === folderPath.length - 1) return null
+                    return (
+                      <React.Fragment key={`folderCrumb_${pathObj.id}`}>
+                        <Link
+                          to={`/mythangs/folder/${pathObj.id}`}
+                        >{`${pathObj.label}`}</Link>
+                        {index !== folderPath.length - 2 && (
+                          <>&nbsp;&nbsp;/&nbsp;&nbsp;</>
+                        )}
+                      </React.Fragment>
+                    )
+                  })}
+                </Metadata>
               </>
             )}
-            <LikeFolderButton folder={folder} onlyShowOwned />
-          </ContainerRow>
-          {folderPath.length > 1 && (
-            <>
-              <Spacer size={'.5rem'} />
-              <Metadata type={MetadataType.primary}>
-                {folderPath.map((pathObj, index) => {
-                  if (index === folderPath.length - 1) return null
-                  return (
-                    <React.Fragment key={`folderCrumb_${pathObj.id}`}>
-                      <Link
-                        to={`/mythangs/folder/${pathObj.id}`}
-                      >{`${pathObj.label}`}</Link>
-                      {index !== folderPath.length - 2 && <>&nbsp;&nbsp;/&nbsp;&nbsp;</>}
-                    </React.Fragment>
-                  )
-                })}
-              </Metadata>
-            </>
-          )}
-        </ContainerColumn>
+          </ContainerColumn>
+        </ContainerRow>
+        <ContainerRow alignItems={'center'}>
+          <Contributors
+            users={R.isEmpty(folder) ? [] : [folder.creator, ...members]}
+            displayLength='10'
+            onClick={handleInviteUsers}
+          />
+          <Spacer size={'1rem'} />
+          <ModelActionToolbar model={file} isExpandedOptions />
+        </ContainerRow>
       </ContainerRow>
-      <ContainerRow alignItems={'center'}>
-        <Contributors
-          users={R.isEmpty(folder) ? [] : [folder.creator, ...members]}
-          displayLength='10'
-          onClick={handleInviteUsers}
-        />
-        <Spacer size={'1rem'} />
-        <ModelActionToolbar model={file} isExpandedOptions />
-      </ContainerRow>
-    </ContainerRow>
+    </>
   )
 }
 

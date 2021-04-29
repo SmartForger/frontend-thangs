@@ -126,11 +126,11 @@ const useStyles = createUseStyles(theme => {
     },
     FileTable_ExpandIcon: {
       cursor: 'pointer',
-      marginRight: '0.75rem',
-      width: '0.75rem',
-      flex: 'none',
+      width: '.75rem',
+
       '& svg': {
         display: 'block',
+        flex: 'none',
         margin: 'auto',
         transition: 'transform 150ms ease-in-out',
       },
@@ -139,10 +139,6 @@ const useStyles = createUseStyles(theme => {
       '& svg': {
         transform: 'rotate(90deg)',
       },
-    },
-    FileTable_Icon: {
-      marginRight: '0.5rem',
-      flex: 'none',
     },
     FileTable_MissingFile: {
       color: theme.colors.errorTextColor,
@@ -491,7 +487,7 @@ const FileTable = ({
       const isSelected = selectedFiles.includes(node.id)
       const isLeaf = !node.parts || node.parts.length === 0
       const isFolder = level === 0 && !node.parts
-
+      const showExpand = hasSubtree && !isLeaf && level !== 0
       return (
         <ContextMenuTrigger holdToDisplay={-1} {...menuProps}>
           <div
@@ -507,32 +503,38 @@ const FileTable = ({
               className={cn(c.FileTable_FileName, c.FileTable_Cell)}
               style={{ paddingLeft: level * 24 }}
             >
-              <div
-                className={cn(c.FileTable_ExpandIcon, {
-                  [c.FileTable_ExpandIcon__expanded]: expanded && !isLeaf,
-                })}
-                onClick={ev => {
-                  ev.stopPropagation()
-                  toggleExpanded()
-                }}
-              >
-                {!isLeaf && <ArrowRight />}
-              </div>
-              {isFolder ? (
-                node.isPublic ? (
-                  <FolderIcon className={c.FileTable_Icon} />
-                ) : (
-                  <PrivateFolderIcon />
-                )
-              ) : node.nodeType === 'assembly' ? (
-                <AssemblyIcon className={c.FileTable_Icon} />
-              ) : node.nodeType === 'multipart' ? (
-                <MultipartIcon className={c.FileTable_Icon} />
-              ) : !isLeaf ? (
-                <FileIcon className={c.FileTable_Icon} />
-              ) : (
-                <ModelIcon className={c.FileTable_Icon} />
+              {showExpand && (
+                <ContainerRow
+                  className={cn(c.FileTable_ExpandIcon, {
+                    [c.FileTable_ExpandIcon__expanded]: expanded && !isLeaf,
+                  })}
+                  onClick={ev => {
+                    ev.stopPropagation()
+                    toggleExpanded()
+                  }}
+                >
+                  <ArrowRight />
+                  <Spacer size={'.5rem'} />
+                </ContainerRow>
               )}
+              <ContainerRow>
+                {isFolder ? (
+                  node.isPublic ? (
+                    <FolderIcon />
+                  ) : (
+                    <PrivateFolderIcon />
+                  )
+                ) : node.nodeType === 'assembly' ? (
+                  <AssemblyIcon />
+                ) : node.nodeType === 'multipart' ? (
+                  <MultipartIcon />
+                ) : !isLeaf ? (
+                  <FileIcon />
+                ) : (
+                  <ModelIcon />
+                )}
+                <Spacer size={'.5rem'} />
+              </ContainerRow>
               <Body>{node.name}</Body>
             </div>
             <Metadata
@@ -563,7 +565,15 @@ const FileTable = ({
         </ContextMenuTrigger>
       )
     },
-    [c, handleChangeFolder, history, selectedFiles, modelPageFeatureEnabled, onChange]
+    [
+      c,
+      handleChangeFolder,
+      history,
+      selectedFiles,
+      modelPageFeatureEnabled,
+      onChange,
+      hasSubtree,
+    ]
   )
 
   const isMultipart = files.length === 1 && files[0].parts && files[0].parts.length > 1

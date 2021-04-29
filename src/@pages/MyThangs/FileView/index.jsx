@@ -13,7 +13,6 @@ import {
   Spacer,
   Spinner,
   TabbedFileContent,
-  Tabs,
 } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
@@ -114,19 +113,6 @@ const FileView = ({ className, folders }) => {
   }, [])
 
   const { collaboratorCount, likeCount } = getCounts(modelData)
-  const handleViewerChange = useCallback(viewerType => {
-    setActiveViewer(viewerType)
-  }, [])
-  const viewerOptions = [
-    {
-      label: 'Single',
-      value: 'single',
-    },
-    {
-      label: 'Compare',
-      value: 'compare',
-    },
-  ]
 
   return (
     <>
@@ -149,17 +135,7 @@ const FileView = ({ className, folders }) => {
           <div className={c.FileView_Content}>
             <Spacer size='2rem' />
             <FileHeader file={modelData} folders={folders} />
-            {/* This needs to know the modelData and the names and ids of all parent folders of model */}
             <Spacer size='2rem' />
-            {historyData.length && (
-              <Tabs
-                className={c.FileView_Tabs}
-                onChange={handleViewerChange}
-                options={viewerOptions}
-                selectedValue={activeViewer}
-              />
-            )}
-            <Spacer size='1rem' />
             {activeViewer === 'single' && (
               <HoopsModelViewer
                 className={c.Model_ModelViewer}
