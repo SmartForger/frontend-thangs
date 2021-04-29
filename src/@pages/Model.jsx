@@ -17,7 +17,6 @@ import {
   ModelDetails,
   ModelPrints,
   ModelTitle,
-  ModelViewer as BackupViewer,
   ProgressText,
   RelatedModels,
   Revised,
@@ -158,9 +157,6 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       justifyContent: 'flex-end',
       marginTop: 0,
-    },
-    Model_BackupViewer: {
-      height: '38.5rem',
     },
     Model_TitleContainer: {
       display: 'flex',
@@ -529,7 +525,6 @@ const THUMBNAILS_HOST = process.env.REACT_APP_THUMBNAILS_HOST
 const ModelDetailPage = ({
   id,
   currentUser,
-  showBackupViewer,
   getTime,
   showExternalResults,
   preselectedPart,
@@ -678,15 +673,11 @@ const ModelDetailPage = ({
             openSignupOverlay={openSignupOverlay}
           />
           <div className={c.Model_Row}>
-            {showBackupViewer ? (
-              <BackupViewer className={c.Model_BackupViewer} model={modelData} />
-            ) : (
-              <HoopsModelViewer
-                className={c.Model_ModelViewer}
-                model={modelData}
-                preselectedPart={preselectedPart}
-              />
-            )}
+            <HoopsModelViewer
+              className={c.Model_ModelViewer}
+              model={modelData}
+              preselectedPart={preselectedPart}
+            />
           </div>
           <div className={c.Model_Row}>
             <div className={c.Model_LeftColumn}>
@@ -735,7 +726,6 @@ const Page = () => {
   const { id, modelString } = useParams()
   const preselectedPart = useQuery('part')
   const modelId = modelString ? modelString.split('-').pop() : id
-  const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [showExternalResults] = useLocalStorage('showExternalResults', false)
   const [currentUser] = useLocalStorage('currentUser', null)
   const { getTime, startTimer } = usePerformanceMetrics()
@@ -750,7 +740,6 @@ const Page = () => {
     <ModelDetailPage
       id={modelId}
       currentUser={currentUser}
-      showBackupViewer={showBackupViewer}
       showExternalResults={showExternalResults}
       getTime={getTime}
       preselectedPart={preselectedPart}
