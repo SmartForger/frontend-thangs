@@ -117,7 +117,7 @@ const ViewNativeARLink = ({
               </Button>
             </>
           )}
-          {downloadURL && primaryPart && (
+          {true && downloadURL && primaryPart && (
             <ContainerColumn>
               <Spacer size='0.5rem' />
               <Title headerLevel={HeaderLevel.secondary}>Static Tests</Title>
