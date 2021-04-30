@@ -126,7 +126,7 @@ const useStyles = createUseStyles(theme => {
     },
     FileTable_ExpandIcon: {
       cursor: 'pointer',
-      width: '.75rem',
+      width: '1.125rem',
 
       '& svg': {
         display: 'block',
@@ -416,18 +416,18 @@ const FileTable = ({
           size: calcFileSize(f),
           parts: hasSubtree
             ? addAdditionalInfoToSubparts(
-              f.parts.length === 1 ? f.parts[0].parts || [] : f.parts,
-              {
-                created: f.created,
-                contributors: [f.owner],
-              }
-            )
+                f.parts.length === 1 ? f.parts[0].parts || [] : f.parts,
+                {
+                  created: f.created,
+                  contributors: [f.owner],
+                }
+              )
             : [],
           nodeType: f.isAssembly
             ? 'assembly'
             : f.parts.length > 1
-              ? 'multipart'
-              : 'singlepart',
+            ? 'multipart'
+            : 'singlepart',
         }
       }
 
@@ -448,21 +448,21 @@ const FileTable = ({
     (node, level, expanded, toggleExpanded) => {
       const menuProps = node.isFolder
         ? {
-          id: 'Folder_Menu',
-          attributes: {
-            className: c.FileTable_FileRow,
-          },
-          collect: () => ({ folder: node }),
-        }
+            id: 'Folder_Menu',
+            attributes: {
+              className: c.FileTable_FileRow,
+            },
+            collect: () => ({ folder: node }),
+          }
         : level === 0
-          ? {
+        ? {
             id: 'File_Menu',
             attributes: {
               className: c.FileTable_FileRow,
             },
             collect: () => ({ model: node }),
           }
-          : {
+        : {
             id: 'Subpart_Menu',
             attributes: {
               className: c.FileTable_FileRow,
@@ -489,7 +489,7 @@ const FileTable = ({
       const isSelected = selectedFiles.includes(node.id)
       const isLeaf = !node.parts || node.parts.length === 0
       const isFolder = level === 0 && !node.parts
-      const showExpand = hasSubtree && !isLeaf && level !== 0
+      const showExpand = hasSubtree && !isLeaf
       return (
         <ContextMenuTrigger holdToDisplay={-1} {...menuProps}>
           <div
@@ -503,9 +503,9 @@ const FileTable = ({
             <Spacer size={'.5rem'} />
             <div
               className={cn(c.FileTable_FileName, c.FileTable_Cell)}
-              style={{ paddingLeft: level * 24 }}
+              style={{ paddingLeft: level * 22 }}
             >
-              {showExpand && (
+              {showExpand ? (
                 <ContainerRow
                   className={cn(c.FileTable_ExpandIcon, {
                     [c.FileTable_ExpandIcon__expanded]: expanded && !isLeaf,
@@ -518,6 +518,8 @@ const FileTable = ({
                   <ArrowRight />
                   <Spacer size={'.5rem'} />
                 </ContainerRow>
+              ) : (
+                <Spacer size={'1.125rem'} />
               )}
               <ContainerRow>
                 {isFolder ? (
@@ -594,8 +596,8 @@ const FileTable = ({
             title && selectedNode && isToolbarShown
               ? 'space-between'
               : title
-                ? 'flex-start'
-                : 'flex-end'
+              ? 'flex-start'
+              : 'flex-end'
           }
           elementRef={menuRef}
         >
