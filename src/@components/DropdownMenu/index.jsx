@@ -8,10 +8,6 @@ import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useExternalClick, useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
-  const {
-    mediaQueries: { md },
-  } = theme
-
   return {
     DropdownMenu: {
       background: theme.colors.white[400],

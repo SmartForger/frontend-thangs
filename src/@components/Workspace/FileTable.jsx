@@ -416,18 +416,18 @@ const FileTable = ({
           size: calcFileSize(f),
           parts: hasSubtree
             ? addAdditionalInfoToSubparts(
-                f.parts.length === 1 ? f.parts[0].parts || [] : f.parts,
-                {
-                  created: f.created,
-                  contributors: [f.owner],
-                }
-              )
+              f.parts.length === 1 ? f.parts[0].parts || [] : f.parts,
+              {
+                created: f.created,
+                contributors: [f.owner],
+              }
+            )
             : [],
           nodeType: f.isAssembly
             ? 'assembly'
             : f.parts.length > 1
-            ? 'multipart'
-            : 'singlepart',
+              ? 'multipart'
+              : 'singlepart',
         }
       }
 
@@ -448,21 +448,21 @@ const FileTable = ({
     (node, level, expanded, toggleExpanded) => {
       const menuProps = node.isFolder
         ? {
-            id: 'Folder_Menu',
-            attributes: {
-              className: c.FileTable_FileRow,
-            },
-            collect: () => ({ folder: node }),
-          }
+          id: 'Folder_Menu',
+          attributes: {
+            className: c.FileTable_FileRow,
+          },
+          collect: () => ({ folder: node }),
+        }
         : level === 0
-        ? {
+          ? {
             id: 'File_Menu',
             attributes: {
               className: c.FileTable_FileRow,
             },
             collect: () => ({ model: node }),
           }
-        : {
+          : {
             id: 'Subpart_Menu',
             attributes: {
               className: c.FileTable_FileRow,
@@ -596,8 +596,8 @@ const FileTable = ({
             title && selectedNode && isToolbarShown
               ? 'space-between'
               : title
-              ? 'flex-start'
-              : 'flex-end'
+                ? 'flex-start'
+                : 'flex-end'
           }
           elementRef={menuRef}
         >
