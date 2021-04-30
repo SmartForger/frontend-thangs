@@ -140,6 +140,7 @@ const MenuWrapper = ({
   anchorElement,
 }) => {
   const menuRef = useRef()
+  const [visible, setVisible] = useState(false)
 
   const styles = useMemo(() => {
     if (!menuRef.current || !anchorElement) {
@@ -160,7 +161,17 @@ const MenuWrapper = ({
       transform: `translate(${pos.x}px, ${pos.y}px)`,
     }
     // eslint-disable-next-line
-  }, [menuRef.current, anchorElement, isOpen])
+  }, [anchorElement, isOpen, visible])
+
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => {
+        setVisible(true)
+      })
+    } else {
+      setVisible(false)
+    }
+  }, [isOpen])
 
   if (!isOpen || !anchorElement) {
     return null
@@ -169,7 +180,7 @@ const MenuWrapper = ({
   return createPortal(
     <div
       className={classnames(className, c.DropdownMenu, c.DropdownMenu_Row, {
-        [c.DropdownMenu__isOpen]: isOpen,
+        [c.DropdownMenu__isOpen]: visible,
       })}
       ref={menuRef}
       style={styles}
