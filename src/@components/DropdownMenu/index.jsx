@@ -230,7 +230,9 @@ const DropdownMenu = ({
 
   const handleOnTargetClick = useCallback(
     e => {
-      e.stopPropagation()
+      if (e) {
+        e.stopPropagation()
+      }
       onTargetClick()
       toggleOpen(true)
     },

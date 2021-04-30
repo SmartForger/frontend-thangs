@@ -220,6 +220,7 @@ const PartInfo = props => {
     filesData,
     formData,
     isLoading,
+    isLastFile,
     multipartName,
     onContinue,
     setErrorMessage,
@@ -451,12 +452,14 @@ const PartInfo = props => {
           </div>
         )}
         <Spacer size={'.5rem'} />
-        <Toggle
-          name='applyRemaining'
-          label='Apply info to remaining models'
-          checked={applyRemaining}
-          onChange={ev => setApplyRemaining(ev.target.checked)}
-        />
+        {!isLastFile && (
+          <Toggle
+            name='applyRemaining'
+            label='Apply info to remaining models'
+            checked={applyRemaining}
+            onChange={ev => setApplyRemaining(ev.target.checked)}
+          />
+        )}
         {isRootPart && (
           <>
             <Spacer size={'1rem'} />

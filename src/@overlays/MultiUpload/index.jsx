@@ -18,6 +18,7 @@ const NewModelUpload = ({
   uploadFilesData,
   activeFormData,
   isLoading,
+  isLastFile,
   multipartName,
   handleContinue,
   handleUpdate,
@@ -41,6 +42,7 @@ const NewModelUpload = ({
       filesData={uploadFilesData}
       formData={activeFormData}
       isLoading={isLoading}
+      isLastFile={isLastFile}
       multipartName={multipartName}
       onContinue={handleContinue}
       onUpdate={handleUpdate}
@@ -562,6 +564,7 @@ const MultiUpload = ({
           uploadFilesData={uploadFilesData}
           activeFormData={activeFormData}
           isLoading={isLoading}
+          isLastFile={activeView === allTreeNodes.length - 1}
           multipartName={multipartName}
           handleContinue={handleContinue}
           handleUpdate={handleUpdate}
