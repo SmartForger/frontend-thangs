@@ -40,13 +40,8 @@ const useStyles = createUseStyles(theme => {
         minWidth: '34px',
       },
     },
-    ARDownloadTarget_Text: {
-      textAlign: 'left',
-      whiteSpace: 'pre-wrap',
-
-      [md_viewer]: {
-        whiteSpace: 'unset',
-      },
+    ARDownloadDropdown_Wrapper: {
+      width: '100% !important',
     },
     ARDownload_AndroidIcon: {
       marginTop: '-3px',
@@ -63,9 +58,7 @@ const ARDownloadTarget = ({ onClick = noop, isLoading }) => {
   const c = useStyles({})
   return (
     <Button secondary className={c.ARDownloadTarget} onClick={onClick}>
-      <span className={c.ARDownloadTarget_Text}>
-        {isLoading ? 'Downloading Augmented Reality...' : 'Download Augmented Reality'}
-      </span>
+      {isLoading ? 'Downloading Augmented Reality...' : 'Download Augmented Reality'}
     </Button>
   )
 }

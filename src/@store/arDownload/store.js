@@ -7,7 +7,6 @@ import { STATUSES, getStatusState } from '@store/constants'
 
 const getInitAtom = () => ({
   ...getStatusState(STATUSES.INIT),
-  data: {},
 })
 
 export const AR_MODE = {
@@ -20,31 +19,33 @@ export default store => {
     arDownload: getInitAtom(),
   }))
 
-  store.on(types.LOADING_AR_DOWNLOAD, (state, { mode }) => ({
+  store.on(types.LOADING_AR_DOWNLOAD, (state, { mode, id }) => ({
     arDownload: {
       ...state.arDownload,
       ...getStatusState(STATUSES.LOADING),
       isViewMode: AR_MODE.VIEW === mode,
       isDownloadMode: AR_MODE.DOWNLOAD === mode,
+      targetId: id ?? state.arDownload.targetId,
     },
   }))
 
-  store.on(types.LOADED_AR_DOWNLOAD, (state, { data, mode }) => ({
+  store.on(types.LOADED_AR_DOWNLOAD, (state, { mode, id }) => ({
     arDownload: {
       ...state.arDownload,
       ...getStatusState(STATUSES.LOADED),
       isViewMode: AR_MODE.VIEW === mode,
       isDownloadMode: AR_MODE.DOWNLOAD === mode,
-      data,
+      targetId: id ?? state.arDownload.targetId,
     },
   }))
 
-  store.on(types.FAILED_AR_DOWNLOAD, (state, { mode }) => ({
+  store.on(types.FAILED_AR_DOWNLOAD, (state, { mode, id }) => ({
     arDownload: {
       ...state.arDownload,
       ...getStatusState(STATUSES.FAILURE),
       isViewMode: AR_MODE.VIEW === mode,
       isDownloadMode: AR_MODE.DOWNLOAD === mode,
+      targetId: id ?? state.arDownload.targetId,
     },
   }))
 
@@ -57,7 +58,7 @@ export default store => {
       })
 
       if (error || data?.fileName === 'Error') {
-        store.dispatch(types.FAILED_AR_DOWNLOAD, { mode })
+        store.dispatch(types.FAILED_AR_DOWNLOAD, { mode, id })
       } else {
         onFinish(data && data.signedUrl)
       }
@@ -67,7 +68,7 @@ export default store => {
   store.on(
     types.DOWNLOAD_AR_MODEL,
     async (_, { id, fileName, format, trackingEvent = 'Download AR' }) => {
-      store.dispatch(types.LOADING_AR_DOWNLOAD, { mode: AR_MODE.DOWNLOAD })
+      store.dispatch(types.LOADING_AR_DOWNLOAD, { mode: AR_MODE.DOWNLOAD, id })
       store.dispatch(types.FETCH_AR_DOWNLOAD_URL, {
         id,
         format,
@@ -85,7 +86,7 @@ export default store => {
           document.body.appendChild(iframe)
 
           track(trackingEvent, { format, modelId: id, fileName })
-          store.dispatch(types.LOADED_AR_DOWNLOAD, { mode: AR_MODE.DOWNLOAD })
+          store.dispatch(types.LOADED_AR_DOWNLOAD, { mode: AR_MODE.DOWNLOAD, id })
         },
       })
     }
@@ -97,7 +98,7 @@ export default store => {
       const id = model.id ?? model.modelId
       const fileName = model.name ?? model.fileName
 
-      store.dispatch(types.LOADING_AR_DOWNLOAD, { mode: AR_MODE.VIEW })
+      store.dispatch(types.LOADING_AR_DOWNLOAD, { mode: AR_MODE.VIEW, id })
       store.dispatch(types.FETCH_AR_DOWNLOAD_URL, {
         id,
         format,
@@ -126,7 +127,7 @@ export default store => {
                 link.appendChild(document.createTextNode('Open intent'))
                 link.click()
               } else {
-                store.dispatch(types.FAILED_AR_DOWNLOAD, { mode: AR_MODE.VIEW })
+                store.dispatch(types.FAILED_AR_DOWNLOAD, { mode: AR_MODE.VIEW, id })
               }
             }
           } else if (format === 'ios') {
@@ -142,7 +143,7 @@ export default store => {
             link.click()
           }
 
-          store.dispatch(types.LOADED_AR_DOWNLOAD, { mode: AR_MODE.VIEW })
+          store.dispatch(types.LOADED_AR_DOWNLOAD, { mode: AR_MODE.VIEW, id })
           track(trackingEvent, {
             format,
             modelId: id,

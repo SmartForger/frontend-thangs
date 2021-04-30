@@ -42,10 +42,19 @@ const DownloadARLink = ({
     [dispatch, model.id, model.modelId, model.name, model.fileName, downloadTrackingEvent]
   )
 
-  const isLoading = useMemo(() => arDownload.isDownloadMode && arDownload.isLoading, [
-    arDownload.isDownloadMode,
-    arDownload.isLoading,
-  ])
+  const isLoading = useMemo(
+    () =>
+      arDownload.isDownloadMode &&
+      arDownload.isLoading &&
+      arDownload.targetId === (model.id ?? model.modelId),
+    [
+      arDownload.isDownloadMode,
+      arDownload.isLoading,
+      arDownload.targetId,
+      model.id,
+      model.modelId,
+    ]
+  )
 
   const handleClick = useCallback(
     format => {

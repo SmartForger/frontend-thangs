@@ -43,9 +43,14 @@ const SearchResultFooter = ({ model, onFindRelated }) => {
           openSignupOverlay={noop}
           downloadTrackingEvent='Download AR from Search'
           TargetComponent={({ onClick = noop, isLoading }) => (
-            <div onClick={onClick} className={c.SearchResultFooter_Link}>
-              {isLoading ? 'Downloading Augmented Reality' : 'Download Augmented Reality'}
-            </div>
+            <ContainerRow>
+              <div onClick={onClick} className={c.SearchResultFooter_Link}>
+                {isLoading
+                  ? 'Downloading Augmented Reality'
+                  : 'Download Augmented Reality'}
+              </div>
+              {!isLoading && <Spacer width={'1.5rem'} />}
+            </ContainerRow>
           )}
         />
       )}
