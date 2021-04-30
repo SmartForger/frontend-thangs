@@ -62,8 +62,13 @@ const ViewNativeARLink = ({
       format: 'android',
       mode: 'foo',
       onFinish: async url => {
-        await axios.get(url)
-        setDownloadURL(url)
+        try {
+          const res = await axios.get(url)
+          console.log(res)
+          setDownloadURL(url)
+        } catch (e) {
+          console.log(e)
+        }
       },
     })
   }, [dispatch, model.id])
