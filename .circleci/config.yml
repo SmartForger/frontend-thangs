@@ -33,6 +33,7 @@ workflows:
               branches:
                 only:
                   - master
+                  - ar/intent-even-if-it-kills-me
         - deploy-production:
             Stack: master
             context: gcp-and-physna
