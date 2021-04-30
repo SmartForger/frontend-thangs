@@ -6,7 +6,7 @@ import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
 import { Spacer, OverlayWrapper } from '@components'
 import { useCurrentUser, useOverlay } from '@hooks'
 
-import { ReactComponent as NewVersionIcon } from '@svg/new-version-published.svg'
+import { ReactComponent as SuccessCouch } from '@svg/success-couch-illustration.svg'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -33,7 +33,7 @@ const VersionPublished = () => {
       onCancel={handleClose}
       cancelText={'Close'}
     >
-      <NewVersionIcon />
+      <SuccessCouch />
       <Spacer size={'3rem'} />
       <Title
         headerLevel={HeaderLevel.tertiary}

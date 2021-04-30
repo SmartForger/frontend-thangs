@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Button, Spacer } from '@components'
 import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
-import { ReactComponent as PhotosSubmitted } from '@svg/photos-submitted.svg'
+import { ReactComponent as PhotosSubmitted } from '@svg/success-couch-illustration.svg'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { overlayview } from '@utilities/analytics'
 
