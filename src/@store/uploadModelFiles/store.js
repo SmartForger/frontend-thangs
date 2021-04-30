@@ -12,6 +12,7 @@ const getInitAtom = () => ({
   validating: false,
   validated: false,
   isAssembly: false,
+  isVersioningUpload: false,
   assemblyData: {},
 })
 
@@ -182,6 +183,15 @@ export default store => {
     }
   })
 
+  store.on(types.SET_IS_VERSIONING, (state, { isVersioningUpload }) => {
+    return {
+      uploadModelFiles: {
+        ...state.uploadModelFiles,
+        isVersioningUpload,
+      },
+    }
+  })
+
   store.on(types.SET_MODEL_INFO, (state, { id, formData }) => {
     return {
       uploadModelFiles: {
@@ -224,9 +234,9 @@ export default store => {
   }))
 
   store.on(types.VALIDATE_FILES, async state => {
-    const { data } = state.uploadModelFiles
+    const { data, isVersioningUpload } = state.uploadModelFiles
     const isLoading = Object.values(data).some(file => file.isLoading)
-    if (isLoading) {
+    if (isLoading || isVersioningUpload) {
       return
     }
 
