@@ -1,6 +1,6 @@
 import React from 'react'
-import { useActionMenuProvider } from '@hooks'
-import { MobileActionMenu } from '@components'
+import { useActionMenuProvider } from '@hooks/useActionMenu'
+import { MobileActionMenu } from './MobileActionMenu'
 
 let ActionMenuContext
 let { Provider } = (ActionMenuContext = React.createContext())

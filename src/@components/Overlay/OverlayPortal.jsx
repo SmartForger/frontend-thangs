@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import { useOverlay } from '@hooks'
+import { useOverlay } from '@hooks/useOverlay'
 
 const useStyles = createUseStyles(theme => {
   const {

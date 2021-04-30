@@ -1,5 +1,5 @@
 import { useContext, useMemo, useReducer } from 'react'
-import { ActionMenuContext } from '@components'
+import { ActionMenuContext } from '@components/ActionMenu/ActionMenuContext'
 
 const useActionMenuProvider = () => {
   const [actionMenu, dispatch] = useReducer(

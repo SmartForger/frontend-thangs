@@ -11,7 +11,8 @@ import {
 } from '@utilities/analytics'
 import ReactGA from 'react-ga'
 import ReactPixel from 'react-facebook-pixel'
-import { usePageMeta, useQuery } from '@hooks'
+import usePageMeta from '@hooks/usePageMeta'
+import useQuery from '@hooks/useQuery'
 import * as types from '@constants/storeEventTypes'
 
 const AppAnalytics = () => {

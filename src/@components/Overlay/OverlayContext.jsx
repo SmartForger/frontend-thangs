@@ -1,6 +1,6 @@
 import React from 'react'
-import { useOverlayProvider } from '@hooks'
-import { Overlay } from '@components'
+import { useOverlayProvider } from '@hooks/useOverlay'
+import { Overlay } from '@components/Overlay'
 
 let OverlayContext
 let { Provider } = (OverlayContext = React.createContext())
