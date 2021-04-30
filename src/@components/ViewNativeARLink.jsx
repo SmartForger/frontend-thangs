@@ -120,13 +120,40 @@ const ViewNativeARLink = ({
           {downloadURL && primaryPart && (
             <ContainerColumn>
               <Spacer size='0.5rem' />
+              <Title headerLevel={HeaderLevel.secondary}>Static Tests</Title>
+              <Spacer size='0.5rem' />
               <Link
                 to={
                   'intent://arvr.google.com/scene-viewer/1.1?file=https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF/Avocado.gltf#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;'
                 }
               >
-                Avocado Example (Khronos GH)
+                Avocado GLTF (Khronos GH)
               </Link>
+              <Spacer size='0.5rem' />
+              <Link
+                to={
+                  'intent://arvr.google.com/scene-viewer/1.1?file=https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF-Binary/Avocado.glb#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;'
+                }
+              >
+                Avocado GLB (Khronos GH)
+              </Link>
+              <Spacer size='0.5rem' />
+              <Link
+                to={
+                  'intent://arvr.google.com/scene-viewer/1.1?file=https://storage.googleapis.com/thangs-thumbnails/staging/ar-test/Avocado.gltf#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;'
+                }
+              >
+                Avocado GLTF (Thumbs)
+              </Link>
+              <Spacer size='0.5rem' />
+              <Link
+                to={
+                  'intent://arvr.google.com/scene-viewer/1.1?file=https://storage.googleapis.com/thangs-thumbnails/staging/ar-test/Avocado.glb#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;'
+                }
+              >
+                Avocado GLB (Thumbs)
+              </Link>
+              <Spacer size='0.5rem' />
               <Title headerLevel={HeaderLevel.secondary}>AR Core</Title>
               <Spacer size='0.5rem' />
               <Link
