@@ -10,6 +10,7 @@ import { useIsIOS, useIsAndroid, useLocalStorage } from '@hooks'
 import { Button, ContainerColumn, Spacer } from '@components'
 import { track } from '@utilities/analytics'
 import { Link, Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
+import axios from 'axios'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -60,7 +61,10 @@ const ViewNativeARLink = ({
       id: model.id,
       format: 'android',
       mode: 'foo',
-      onFinish: url => setDownloadURL(url),
+      onFinish: async url => {
+        await axios.get(url)
+        setDownloadURL(url)
+      },
     })
   }, [dispatch, model.id])
 
@@ -92,20 +96,32 @@ const ViewNativeARLink = ({
     <>
       {isNativeEnabled && (isIOS || isAndroid) && (
         <ContainerColumn className={c.ViewNativeARLink}>
-          <Spacer size='1rem' />
-          <Button secondary onClick={handleClick}>
-            <ContainerColumn>
-              {isLoading ? 'Loading Augmented Reality...' : 'Open Augmented Reality'}
-              <Metadata
-                type={MetadataType.secondary}
-                className={c.ViewNativeARLink_Subtext}
-              >
-                Mobile Only, No App Required
-              </Metadata>
-            </ContainerColumn>
-          </Button>
+          {false && (
+            <>
+              <Spacer size='1rem' />
+              <Button secondary onClick={handleClick}>
+                <ContainerColumn>
+                  {isLoading ? 'Loading Augmented Reality...' : 'Open Augmented Reality'}
+                  <Metadata
+                    type={MetadataType.secondary}
+                    className={c.ViewNativeARLink_Subtext}
+                  >
+                    Mobile Only, No App Required
+                  </Metadata>
+                </ContainerColumn>
+              </Button>
+            </>
+          )}
           {downloadURL && primaryPart && (
             <ContainerColumn>
+              <Spacer size='0.5rem' />
+              <Link
+                to={
+                  'intent://arvr.google.com/scene-viewer/1.1?file=https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF/Avocado.gltf#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;'
+                }
+              >
+                Avocado Example (Khronos GH)
+              </Link>
               <Title headerLevel={HeaderLevel.secondary}>AR Core</Title>
               <Spacer size='0.5rem' />
               <Link
