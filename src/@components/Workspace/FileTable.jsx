@@ -29,6 +29,7 @@ import {
 } from '@components'
 import { formatBytes } from '@utilities'
 import { MODEL_FILE_EXTS } from '@constants/fileUpload'
+import { MODEL_MENU_OPTIONS } from '@constants/menuOptions'
 import { useIsFeatureOn, useOverlay } from '@hooks'
 
 import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
@@ -563,7 +564,12 @@ const FileTable = ({
               {node.isFolder ? (
                 <FolderActionMenu folder={node} />
               ) : (
-                <ModelActionMenu model={node} isExpandedOptions />
+                // TODO: Enable new version button for assemblies when ready
+                <ModelActionMenu
+                  model={node}
+                  isExpandedOptions
+                  omitOptions={node?.isAssembly ? [MODEL_MENU_OPTIONS.NEW_VERSION] : []}
+                />
               )}
             </div>
           </div>
