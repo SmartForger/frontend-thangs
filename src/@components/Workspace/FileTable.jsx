@@ -423,11 +423,12 @@ const FileTable = ({
               }
             )
             : [],
-          nodeType: f.isAssembly
-            ? 'assembly'
-            : f.parts.length > 1
-              ? 'multipart'
-              : 'singlepart',
+          nodeType:
+            f.isAssembly || f.modelType === 'assembly'
+              ? 'assembly'
+              : f.parts.length > 1 || f.modelType === 'multi-part'
+                ? 'multipart'
+                : 'singlepart',
         }
       }
 
@@ -580,7 +581,10 @@ const FileTable = ({
     ]
   )
 
-  const isMultipart = files.length === 1 && files[0].parts && files[0].parts.length > 1
+  const isMultipart =
+    files.length === 1 &&
+    files[0].parts &&
+    (files[0].parts.length > 1 || files[0].modelType === 'multi-part')
   const selectedNode = nodes.find(node => node.id === selectedFiles[0])
   const isSelectedNodeModel = node => {
     if (!node) return false
