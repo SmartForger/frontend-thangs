@@ -121,6 +121,10 @@ const ReviewVersion = () => {
     })
   }, [modelId, setOverlay])
 
+  const handleClose = useCallback(() => {
+    dispatch(types.RESET_UPLOAD_FILES)
+  }, [dispatch])
+
   useEffect(() => {
     overlayview('ReviewVersion')
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -135,6 +139,7 @@ const ReviewVersion = () => {
       }
       isLoading={waiting || isLoadingModel}
       onCancel={handleBack}
+      onClose={handleClose}
       onContinue={onFormSubmit(formSubmit)}
       cancelText={'Back'}
       continueText={'Submit'}

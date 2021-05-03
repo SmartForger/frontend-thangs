@@ -96,6 +96,10 @@ const SelectVersionModel = ({ fileIndex }) => {
     setOverlay,
   ])
 
+  const handleClose = useCallback(() => {
+    dispatch(types.RESET_UPLOAD_FILES)
+  }, [dispatch])
+
   const handleCancel = useCallback(() => {
     if (fileIndex === 0) {
       setOverlay({
@@ -138,6 +142,7 @@ const SelectVersionModel = ({ fileIndex }) => {
         'You can select one or multiple parts to override with your new model version.'
       }
       onCancel={handleCancel}
+      onClose={handleClose}
       onContinue={handleContinue}
       cancelText={'Back'}
       continueText={'Continue'}
