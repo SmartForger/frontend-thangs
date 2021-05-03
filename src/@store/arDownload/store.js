@@ -121,8 +121,8 @@ export default store => {
                 const link = document.createElement('a')
                 // One
                 link.href = `intent://arvr.google.com/scene-viewer/1.1?file=${encodeURIComponent(
-                  encodeURIComponent(url)
-                )}&mode=ar_only#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`
+                  `${url}&cachebuster=${Date.now()}`
+                )}#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://developers.google.com/ar;end;`
 
                 link.appendChild(document.createTextNode('Open intent'))
                 link.click()
