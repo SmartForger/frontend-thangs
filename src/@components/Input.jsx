@@ -42,6 +42,10 @@ const Input = ({
   const c = useStyles()
   return (
     <div className={classnames(className, c.Input)}>
+      <label htmlFor={name}>
+        <Metadata type={MetadataType.secondary}>{label}</Metadata>
+      </label>
+      <Spacer size='0.5rem' />
       <TextInput
         autoComplete={autoComplete}
         className={c.TextInput}
@@ -51,7 +55,6 @@ const Input = ({
         maxLength={maxLength}
         name={name}
         onChange={e => onChange(name, e.target.value)}
-        placeholder={label}
         required={required}
         type={type}
         value={value}

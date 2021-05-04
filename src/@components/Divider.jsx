@@ -6,7 +6,7 @@ const useStyles = createUseStyles(theme => {
     Divider: {
       margin: ({ spacing }) => `${spacing} 0`,
       border: 'none',
-      borderTop: `1px solid ${theme.colors.white[900]}`,
+      borderTop: `1px solid ${theme.colors.white[600]}`,
     },
   }
 })
