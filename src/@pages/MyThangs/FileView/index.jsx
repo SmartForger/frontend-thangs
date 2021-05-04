@@ -96,7 +96,7 @@ const FileView = ({ className, folders }) => {
   const [activePart, setActivePart] = useState([id])
   const [activeViewer, setActiveViewer] = useState('single')
   const { dispatch, model = {}, modelHistory = {} } = useStoreon('model', 'modelHistory')
-  const { data: modelData, isLoading } = model
+  const { data: modelData, isLoading, isLoaded } = model
   const {
     isLoading: isLoadingHistory,
     isError: isErrorHistory,
@@ -116,7 +116,7 @@ const FileView = ({ className, folders }) => {
 
   return (
     <>
-      {isLoading ? (
+      {isLoading || !isLoaded ? (
         <Spinner isTopLevelView />
       ) : !modelData ? (
         <>

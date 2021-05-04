@@ -9,7 +9,7 @@ const useStyles = createUseStyles(theme => {
   return {
     Textarea: {
       borderColor: ({ invalid }) =>
-        invalid ? theme.colors.error : theme.colors.grey[100],
+        invalid ? theme.colors.error : theme.colors.grey[300],
       borderWidth: ({ invalid }) => (invalid ? '2px' : '1px'),
       color: ({ invalid }) =>
         invalid ? theme.colors.error : theme.variables.colors.textInput,
@@ -69,6 +69,10 @@ const Textarea = ({
 
   return (
     <div className={classnames(className)}>
+      <label htmlFor={name}>
+        <Metadata type={MetadataType.secondary}>{label}</Metadata>
+      </label>
+      <Spacer size='0.5rem' />
       <textarea
         autoComplete={autoComplete}
         className={c.Textarea}
@@ -79,7 +83,6 @@ const Textarea = ({
         name={name}
         onBlur={handleValidation}
         onChange={e => onChange(name, e.target.value)}
-        placeholder={label}
         required={required}
         type={type}
         value={value}

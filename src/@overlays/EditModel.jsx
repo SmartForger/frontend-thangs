@@ -1,12 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import {
-  EditModelForm,
-  HoopsModelViewer,
-  ModelViewer as BackupViewer,
-  Spacer,
-  Spinner,
-} from '@components'
-import { useLocalStorage } from '@hooks'
+import { EditModelForm, HoopsModelViewer, Spacer, Spinner } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
@@ -94,7 +87,6 @@ const useStyles = createUseStyles(theme => {
 
 const EditModel = ({ model, showViewer = false }) => {
   const c = useStyles()
-  const [showBackupViewer] = useLocalStorage('showBackupViewer', false)
   const [editModelErrorMessage, setEditModelErrorMessage] = useState(null)
   const { setOverlayOpen } = useOverlay()
   const { dispatch, [`model-${model.id}`]: modelAtom = {} } = useStoreon(
@@ -138,15 +130,11 @@ const EditModel = ({ model, showViewer = false }) => {
       <ExitIcon className={c.EditModel_ExitButton} onClick={closeOverlay} />
       {showViewer && (
         <div className={classnames(c.EditModel_Column, c.EditModel_ViewerWrapper)}>
-          {showBackupViewer ? (
-            <BackupViewer className={c.EditModel_Viewer} model={model} />
-          ) : (
-            <HoopsModelViewer
-              className={c.EditModel_Viewer}
-              model={model}
-              minimizeTools={true}
-            />
-          )}
+          <HoopsModelViewer
+            className={c.EditModel_Viewer}
+            model={model}
+            minimizeTools={true}
+          />
         </div>
       )}
       <div className={classnames(c.EditModel_Column, c.EditModel_EditForm)}>

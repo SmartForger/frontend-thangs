@@ -18,6 +18,7 @@ const NewModelUpload = ({
   uploadFilesData,
   activeFormData,
   isLoading,
+  isLastFile,
   multipartName,
   handleContinue,
   handleUpdate,
@@ -41,6 +42,7 @@ const NewModelUpload = ({
       filesData={uploadFilesData}
       formData={activeFormData}
       isLoading={isLoading}
+      isLastFile={isLastFile}
       multipartName={multipartName}
       onContinue={handleContinue}
       onUpdate={handleUpdate}
@@ -496,6 +498,7 @@ const MultiUpload = ({
   useEffect(() => {
     if (initData) onDrop(initData.acceptedFiles, initData.rejectedFile, initData.e)
     if (versionData && versionData.modelId) {
+      dispatch(types.SET_IS_VERSIONING, { isVersioningUpload: true })
       dispatch(types.FETCH_MODEL, { id: versionData.modelId })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -515,7 +518,7 @@ const MultiUpload = ({
 
   const isMultiple = useMemo(() => {
     if (versionData) {
-      if (versionData?.partId || modelData?.parts.length === 1) {
+      if (versionData?.partId || modelData?.parts?.length === 1) {
         return false
       }
     }
@@ -562,6 +565,7 @@ const MultiUpload = ({
           uploadFilesData={uploadFilesData}
           activeFormData={activeFormData}
           isLoading={isLoading}
+          isLastFile={activeView === allTreeNodes.length - 1}
           multipartName={multipartName}
           handleContinue={handleContinue}
           handleUpdate={handleUpdate}

@@ -9,7 +9,10 @@ import { removeModel, updateLike } from './updater'
 const noop = () => null
 export default store => {
   store.on(types.STORE_INIT, () => ({
-    model: {},
+    model: {
+      ...getStatusState(STATUSES.INIT),
+      data: {},
+    },
   }))
 
   store.on(types.UPDATE_MODELS, (state, event) => ({

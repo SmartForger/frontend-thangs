@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 import { Button, Spacer } from '@components'
@@ -8,10 +8,6 @@ import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useExternalClick, useOverlay } from '@hooks'
 
 const useStyles = createUseStyles(theme => {
-  const {
-    mediaQueries: { md },
-  } = theme
-
   return {
     DropdownMenu: {
       background: theme.colors.white[400],
@@ -19,7 +15,6 @@ const useStyles = createUseStyles(theme => {
       boxShadow: '0 1rem 2rem 0 rgba(0,0,0,0.15)',
       boxSizing: 'border-box',
       position: 'absolute',
-      right: '-4rem',
       marginTop: '.5rem',
       zIndex: '2',
       overflowY: 'auto',
@@ -27,10 +22,6 @@ const useStyles = createUseStyles(theme => {
       visibility: 'hidden',
       ...theme.mixins.scrollbar,
       ...theme.mixins.flexColumn,
-
-      [md]: {
-        right: '0rem',
-      },
     },
     DropdownMenu__isOpen: {
       opacity: '1',
@@ -148,6 +139,40 @@ const MenuWrapper = ({
   renderContent,
   anchorElement,
 }) => {
+  const menuRef = useRef()
+  const [visible, setVisible] = useState(false)
+
+  const styles = useMemo(() => {
+    if (!menuRef.current || !anchorElement) {
+      return null
+    }
+
+    const pos = { x: 0, y: 0 }
+    const rect = menuRef.current.getBoundingClientRect()
+
+    if (rect.right > window.innerWidth) {
+      pos.x = -rect.width + anchorElement.clientWidth
+    }
+    if (rect.bottom > window.innerHeight) {
+      pos.y = -rect.height - anchorElement.clientHeight - 20
+    }
+
+    return {
+      transform: `translate(${pos.x}px, ${pos.y}px)`,
+    }
+    // eslint-disable-next-line
+  }, [anchorElement, isOpen, visible])
+
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => {
+        setVisible(true)
+      })
+    } else {
+      setVisible(false)
+    }
+  }, [isOpen])
+
   if (!isOpen || !anchorElement) {
     return null
   }
@@ -155,8 +180,10 @@ const MenuWrapper = ({
   return createPortal(
     <div
       className={classnames(className, c.DropdownMenu, c.DropdownMenu_Row, {
-        [c.DropdownMenu__isOpen]: isOpen,
+        [c.DropdownMenu__isOpen]: visible,
       })}
+      ref={menuRef}
+      style={styles}
     >
       <Spacer size={borderSize} />
       <div className={c.DropdownMenu_FullWidth}>
@@ -201,10 +228,16 @@ const DropdownMenu = ({
   const isOpen = !isOpenExternal ? isOpenInternal : isOpenExternal
   const c = useStyles({ borderSize, isOpen, noIcons, myThangsMenu })
 
-  const handleOnTargetClick = useCallback(() => {
-    onTargetClick()
-    toggleOpen(true)
-  }, [onTargetClick, toggleOpen])
+  const handleOnTargetClick = useCallback(
+    e => {
+      if (e) {
+        e.stopPropagation()
+      }
+      onTargetClick()
+      toggleOpen(true)
+    },
+    [onTargetClick, toggleOpen]
+  )
 
   return (
     <div

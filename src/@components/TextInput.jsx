@@ -6,7 +6,7 @@ const useStyles = createUseStyles(theme => {
   return {
     TextInput: {
       borderColor: ({ invalid }) =>
-        invalid ? theme.colors.error : theme.colors.grey[100],
+        invalid ? theme.colors.error : theme.colors.grey[300],
       borderWidth: ({ invalid }) => (invalid ? '2px' : '1px'),
       color: ({ invalid }) =>
         invalid ? theme.colors.error : theme.variables.colors.textInput,

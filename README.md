@@ -97,6 +97,14 @@ REACT_APP_API_KEY=https://staging-api-platform-dot-gcp-and-physna.uc.r.appspot.c
 HTTPS=true
 ```
 
+## Webpack bundle analyzer
+
+To inspect the webpack generated js bundles run
+
+```bash
+yarn analyze
+```
+
 ## Local development with API Platform
 To have the Thangs React app work with your local version of [API Platform](https://github.com/physna/api-platform), start up the API Platform and set this key in .env.development.local:
 

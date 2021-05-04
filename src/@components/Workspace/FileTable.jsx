@@ -29,6 +29,7 @@ import {
 } from '@components'
 import { formatBytes } from '@utilities'
 import { MODEL_FILE_EXTS } from '@constants/fileUpload'
+import { MODEL_MENU_OPTIONS } from '@constants/menuOptions'
 import { useIsFeatureOn, useOverlay } from '@hooks'
 
 import { ReactComponent as ArrowRight } from '@svg/icon-arrow-right-sm.svg'
@@ -126,7 +127,7 @@ const useStyles = createUseStyles(theme => {
     },
     FileTable_ExpandIcon: {
       cursor: 'pointer',
-      width: '.75rem',
+      width: '1.125rem',
 
       '& svg': {
         display: 'block',
@@ -423,11 +424,12 @@ const FileTable = ({
               }
             )
             : [],
-          nodeType: f.isAssembly
-            ? 'assembly'
-            : f.parts.length > 1
-              ? 'multipart'
-              : 'singlepart',
+          nodeType:
+            f.isAssembly || f.modelType === 'assembly'
+              ? 'assembly'
+              : f.parts.length > 1 || f.modelType === 'multi-part'
+                ? 'multipart'
+                : 'singlepart',
         }
       }
 
@@ -489,7 +491,7 @@ const FileTable = ({
       const isSelected = selectedFiles.includes(node.id)
       const isLeaf = !node.parts || node.parts.length === 0
       const isFolder = level === 0 && !node.parts
-      const showExpand = hasSubtree && !isLeaf && level !== 0
+      const showExpand = hasSubtree && !isLeaf
       return (
         <ContextMenuTrigger holdToDisplay={-1} {...menuProps}>
           <div
@@ -503,9 +505,9 @@ const FileTable = ({
             <Spacer size={'.5rem'} />
             <div
               className={cn(c.FileTable_FileName, c.FileTable_Cell)}
-              style={{ paddingLeft: level * 24 }}
+              style={{ paddingLeft: level * 22 }}
             >
-              {showExpand && (
+              {showExpand ? (
                 <ContainerRow
                   className={cn(c.FileTable_ExpandIcon, {
                     [c.FileTable_ExpandIcon__expanded]: expanded && !isLeaf,
@@ -518,6 +520,8 @@ const FileTable = ({
                   <ArrowRight />
                   <Spacer size={'.5rem'} />
                 </ContainerRow>
+              ) : (
+                <Spacer size={'1.125rem'} />
               )}
               <ContainerRow>
                 {isFolder ? (
@@ -560,7 +564,12 @@ const FileTable = ({
               {node.isFolder ? (
                 <FolderActionMenu folder={node} />
               ) : (
-                <ModelActionMenu model={node} isExpandedOptions />
+                // TODO: Enable new version button for assemblies when ready
+                <ModelActionMenu
+                  model={node}
+                  isExpandedOptions
+                  omitOptions={node?.isAssembly ? [MODEL_MENU_OPTIONS.NEW_VERSION] : []}
+                />
               )}
             </div>
           </div>
@@ -578,7 +587,10 @@ const FileTable = ({
     ]
   )
 
-  const isMultipart = files.length === 1 && files[0].parts && files[0].parts.length > 1
+  const isMultipart =
+    files.length === 1 &&
+    files[0].parts &&
+    (files[0].parts.length > 1 || files[0].modelType === 'multi-part')
   const selectedNode = nodes.find(node => node.id === selectedFiles[0])
   const isSelectedNodeModel = node => {
     if (!node) return false

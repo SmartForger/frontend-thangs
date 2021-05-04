@@ -13,9 +13,12 @@ import { useIsFeatureOn } from '@hooks/useExperiments'
 const ModelActionToolbar = ({ model = {}, isExpandedOptions = false }) => {
   const newVersionFeatureEnabled = useIsFeatureOn('new_versions_feature')
 
+  // TODO: Enable new version button for assemblies when ready
   return (
     <ContainerRow alignItems={'center'}>
-      {newVersionFeatureEnabled && <NewVersionButton model={model} />}
+      {newVersionFeatureEnabled && !model.isAssembly && (
+        <NewVersionButton model={model} />
+      )}
       <Spacer size={'0.5rem'} />
       <EditModelButton model={model} />
       <Spacer size={'0.5rem'} />

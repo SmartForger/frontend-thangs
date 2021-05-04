@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Button, Spacer } from '@components'
 import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
-import { ReactComponent as PhotosSubmitted } from '@svg/photos-submitted.svg'
+import { ReactComponent as SuccessCouch } from '@svg/success-couch-illustration.svg'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { overlayview } from '@utilities/analytics'
 
@@ -36,7 +36,7 @@ const Submitted = ({ onClose = noop }) => {
     <>
       <Spacer size={'2rem'} />
       <div className={c.Submitted_IllustrationWrapper}>
-        <PhotosSubmitted />
+        <SuccessCouch />
       </div>
       <Spacer size={'2rem'} />
       <Title headerLevel={HeaderLevel.tertiary}>Your photos have been submitted!</Title>

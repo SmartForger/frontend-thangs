@@ -97,7 +97,7 @@ const ModelHistory = ({
                 prevPhynId={prevPhynId}
                 setActiveViewer={setActiveViewer}
               />
-              {changes.length - 1 === ind && <Spacer size={'.5rem'} />}
+              {changes.length - 1 !== ind && <Spacer size={'.5rem'} />}
             </React.Fragment>
           )
         })}
