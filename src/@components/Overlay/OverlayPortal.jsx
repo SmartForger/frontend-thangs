@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, Suspense } from 'react'
 import { createPortal } from 'react-dom'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
@@ -121,7 +121,9 @@ const OverlayPortal = ({ className, scrollTop }) => {
               <ExitIcon />
             </div>
           )}
-          <OverlayComponent {...overlayData} />
+          <Suspense fallback={<div>Loading...</div>}>
+            <OverlayComponent {...overlayData} />
+          </Suspense>
         </div>
       </div>,
       document.querySelector('#overlay-root')
