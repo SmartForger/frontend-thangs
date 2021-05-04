@@ -1,5 +1,6 @@
-import { useContext, useMemo, useReducer } from 'react'
-import { ActionMenuContext } from '@components/ActionMenu/ActionMenuContext'
+import React, { useMemo, useReducer } from 'react'
+import { MobileActionMenu } from '@components/ActionMenu/MobileActionMenu'
+import { ActionMenuContext } from './ActionMenu'
 
 const useActionMenuProvider = () => {
   const [actionMenu, dispatch] = useReducer(
@@ -61,8 +62,30 @@ const useActionMenuProvider = () => {
   }
 }
 
-const useActionMenu = () => {
-  return useContext(ActionMenuContext)
+export const ActionMenuProvider = ({ children }) => {
+  const {
+    setActionMenu,
+    setActionMenuOpen,
+    setActionMenuClose,
+    setActionMenuData,
+    ActionMenuComponent,
+    actionMenuData,
+    isActionMenuOpen,
+  } = useActionMenuProvider()
+  return (
+    <ActionMenuContext.Provider
+      value={{
+        setActionMenu,
+        setActionMenuOpen,
+        setActionMenuClose,
+        setActionMenuData,
+        ActionMenuComponent,
+        actionMenuData,
+        isActionMenuOpen,
+      }}
+    >
+      <MobileActionMenu {...actionMenuData} />
+      {children}
+    </ActionMenuContext.Provider>
+  )
 }
-
-export { useActionMenu, useActionMenuProvider }

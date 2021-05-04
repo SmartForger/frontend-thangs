@@ -18,9 +18,9 @@ import {
   TermsAndConditions,
 } from '@pages'
 import { ErrorBoundary } from './ErrorBoundary'
-import { ActionMenuProvider } from '@components/ActionMenu/ActionMenuContext'
+import { ActionMenuProvider } from '@contexts/ActionMenuProvider'
 import AppAnalytics from '@components/AppAnalytics'
-import { OverlayProvider } from '@components/Overlay/OverlayContext'
+import { OverlayProvider } from '@contexts/OverlayProvider'
 import { routeRequiresAuth, routeRedirectToProfile } from '@components/RouteComponent'
 import { StoreContext } from 'storeon/react'
 import { ThemeProvider, GlobalStyles } from '@physna/voxel-ui/@style'

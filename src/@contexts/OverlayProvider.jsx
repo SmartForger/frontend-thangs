@@ -1,4 +1,6 @@
-import { useContext, useMemo, useReducer } from 'react'
+import React, { useMemo, useReducer } from 'react'
+import { OverlayContext } from './Overlay'
+import { Overlay } from '@components/Overlay'
 import {
   AddFolder,
   AttachmentUpload,
@@ -24,7 +26,6 @@ import {
   Signup,
   VersionPublished,
 } from '@overlays'
-import { OverlayContext } from '@components/Overlay/OverlayContext'
 
 const overlayTemplates = {
   addFolder: AddFolder,
@@ -129,8 +130,36 @@ const useOverlayProvider = () => {
   }
 }
 
-const useOverlay = () => {
-  return useContext(OverlayContext) || {}
+export const OverlayProvider = ({ children }) => {
+  const {
+    setOverlay,
+    setOverlayOpen,
+    setOverlayHidden,
+    setOverlayTemplate,
+    setOverlayData,
+    toggleOverlayOpen,
+    OverlayComponent,
+    overlayData,
+    isOverlayOpen,
+    isOverlayHidden,
+  } = useOverlayProvider()
+  return (
+    <OverlayContext.Provider
+      value={{
+        setOverlay,
+        setOverlayOpen,
+        setOverlayHidden,
+        setOverlayTemplate,
+        setOverlayData,
+        toggleOverlayOpen,
+        OverlayComponent,
+        overlayData,
+        isOverlayOpen,
+        isOverlayHidden,
+      }}
+    >
+      <Overlay />
+      {children}
+    </OverlayContext.Provider>
+  )
 }
-
-export { useOverlay, useOverlayProvider }

@@ -9,7 +9,6 @@ import { DropdownMenu, DropdownItem, Spacer } from '@components'
 import { ReactComponent as ArrowRightIcon } from '@svg/icon-arrow-right.svg'
 import { useActionMenu, useIsMobile } from '@hooks'
 
-export * from './ActionMenuContext'
 export * from './ActionMenuPortal'
 export * from './MobileActionMenu'
 export * from './menus'
