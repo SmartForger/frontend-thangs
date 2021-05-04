@@ -45,7 +45,7 @@ const App = () => {
           <ScrollToTop />
           <ActionMenuProvider>
             <OverlayProvider>
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense>
                 <Switch>
                   <Route exact path='/' render={props => <Landing {...props} />} />
                   <Route

@@ -4,8 +4,10 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
 
-import { TextInput } from '@components'
-import { useOverlay, useQuery, useTranslations } from '@hooks'
+import TextInput from '@components/TextInput'
+import useTranslations from '@hooks/useTranslations'
+import useQuery from '@hooks/useQuery'
+import { useOverlay } from '@contexts/Overlay'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'

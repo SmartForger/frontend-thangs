@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
-import { AboutHero, LandingHero, UserNav } from '@components'
-import { useCurrentUser, useOverlay } from '@hooks'
+import AboutHero from '@components/Hero/AboutHero'
+// import LandingHero from '@components/Hero/LandingHero'
+import UserNav from '@components/UserNav'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import * as types from '@constants/storeEventTypes'
 
@@ -12,6 +13,8 @@ import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as LogoText } from '@svg/logo-text.svg'
 
 import SearchBar from './SearchBar'
+import { useOverlay } from '@contexts/Overlay'
+import useCurrentUser from '@hooks/useCurrentUser'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -95,12 +98,7 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const Header = ({
-  showSearchTextFlash,
-  showUser = true,
-  showNewHero = false,
-  showAboutHero = false,
-}) => {
+const Header = ({ showUser = true, showNewHero = false, showAboutHero = false }) => {
   const { dispatch } = useStoreon()
   const { setOverlayOpen } = useOverlay()
   const c = useStyles({ showNewHero })
@@ -152,9 +150,7 @@ const Header = ({
               </div>
               <UserNav c={c} isLoading={isLoading} user={user} showUser={showUser} />
             </div>
-            {showNewHero && (
-              <LandingHero showSearchTextFlash={showSearchTextFlash} user={user} />
-            )}
+            {showNewHero && null}
             {showAboutHero && <AboutHero user={user} />}
           </div>
           <div

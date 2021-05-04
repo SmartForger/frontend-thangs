@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
-import { LandingCarousel, LandingSearchBar, Spacer } from '@components'
-import { useOverlay } from '@hooks'
+import LandingCarousel from '@components/LandingCarousel'
+import LandingSearchBar from '@components/LandingSearchBar'
+import Spacer from '@components/Spacer'
+import { useOverlay } from '@contexts/Overlay'
 import { numberWithCommas } from '@utilities'
 
 const useStyles = createUseStyles(theme => {
