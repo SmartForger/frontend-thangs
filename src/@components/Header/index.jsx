@@ -4,9 +4,9 @@ import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
 import AboutHero from '@components/Hero/AboutHero'
-// import LandingHero from '@components/Hero/LandingHero'
+import LandingHero from '@components/Hero/LandingHero'
 import UserNav from '@components/UserNav'
-import { createUseStyles } from '@physna/voxel-ui/@style'
+import { createUseStyles, useTheme } from '@physna/voxel-ui/@style'
 import * as types from '@constants/storeEventTypes'
 
 import { ReactComponent as Logo } from '@svg/logo.svg'
@@ -39,12 +39,8 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Header_DesktopOnly: {
-      display: 'none',
-
-      [md]: {
-        display: 'flex',
-        justifyContent: 'center',
-      },
+      display: 'flex',
+      justifyContent: 'center',
     },
     Header_DesktopOnly_Curtain: {
       width: '100%',
@@ -62,10 +58,6 @@ const useStyles = createUseStyles(theme => {
       display: 'flex',
       justifyContent: 'center',
       flexDirection: 'column',
-
-      [md]: {
-        display: 'none',
-      },
     },
     Header_MobileBoundary: {
       margin: '1.5rem 2rem',
@@ -98,10 +90,16 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const Header = ({ showUser = true, showNewHero = false, showAboutHero = false }) => {
+const Header = ({
+  showSearchTextFlash,
+  showUser = true,
+  showNewHero = false,
+  showAboutHero = false,
+}) => {
   const { dispatch } = useStoreon()
   const { setOverlayOpen } = useOverlay()
   const c = useStyles({ showNewHero })
+  const { md } = useTheme().breakpoints
   const {
     atom: { isLoading, data: user },
   } = useCurrentUser()
@@ -123,41 +121,46 @@ const Header = ({ showUser = true, showNewHero = false, showAboutHero = false })
   return (
     <>
       <div className={c.Header}>
-        <div className={c.Header_MobileOnly}>
-          <div className={c.Header_MobileBoundary}>
-            <div className={classnames(c.Header_Row, c.Header_TopRow)}>
-              <Link to='/'>
-                <Logo className={c.Header_Logo} />
-              </Link>
-              <UserNav c={c} isLoading={isLoading} user={user} showUser={showUser} />
-            </div>
-          </div>
-          <SearchBar />
-        </div>
-        <div className={classnames(c.Header_DesktopOnly, c.Header_DesktopWrapper)}>
-          <div className={c.Header_DesktopBoundary}>
-            <div className={classnames(c.Header_Row, c.Header_TopRow)}>
-              <div className={c.Header_RowWrapper}>
-                <div className={c.Header_Row}>
-                  <div onClick={handleClick}>
-                    <Link className={c.Header_LogoWrapper} to='/'>
-                      <Logo className={c.Header_Logo} />
-                      <LogoText />
-                    </Link>
+        {md ? (
+          <div className={classnames(c.Header_DesktopOnly, c.Header_DesktopWrapper)}>
+            <div className={c.Header_DesktopBoundary}>
+              <div className={classnames(c.Header_Row, c.Header_TopRow)}>
+                <div className={c.Header_RowWrapper}>
+                  <div className={c.Header_Row}>
+                    <div onClick={handleClick}>
+                      <Link className={c.Header_LogoWrapper} to='/'>
+                        <Logo className={c.Header_Logo} />
+                        <LogoText />
+                      </Link>
+                    </div>
+                    {!showNewHero && <SearchBar />}
                   </div>
-                  {!showNewHero && <SearchBar />}
                 </div>
+                <UserNav c={c} isLoading={isLoading} user={user} showUser={showUser} />
               </div>
-              <UserNav c={c} isLoading={isLoading} user={user} showUser={showUser} />
+              {showNewHero && (
+                <LandingHero showSearchTextFlash={showSearchTextFlash} user={user} />
+              )}
+              {showAboutHero && <AboutHero user={user} />}
             </div>
-            {showNewHero && null}
-            {showAboutHero && <AboutHero user={user} />}
+            <div
+              id='HeaderDesktopOnlyCurtain'
+              className={classnames(c.Header_DesktopOnly_Curtain)}
+            ></div>
           </div>
-          <div
-            id='HeaderDesktopOnlyCurtain'
-            className={classnames(c.Header_DesktopOnly_Curtain)}
-          ></div>
-        </div>
+        ) : (
+          <div className={c.Header_MobileOnly}>
+            <div className={c.Header_MobileBoundary}>
+              <div className={classnames(c.Header_Row, c.Header_TopRow)}>
+                <Link to='/'>
+                  <Logo className={c.Header_Logo} />
+                </Link>
+                <UserNav c={c} isLoading={isLoading} user={user} showUser={showUser} />
+              </div>
+            </div>
+            <SearchBar />
+          </div>
+        )}
       </div>
     </>
   )

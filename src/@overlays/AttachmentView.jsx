@@ -8,12 +8,12 @@ import {
   Spacer,
   UserInline,
 } from '@components'
-import { createUseStyles } from '@physna/voxel-ui/@style'
+import { createUseStyles, useTheme } from '@physna/voxel-ui/@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import ArrowLeftIcon from '@svg/IconArrowLeft'
 import ArrowRightIcon from '@svg/IconArrowRight'
 import TrashCanIcon from '@svg/TrashCanIcon'
-import { useOverlay, useCurrentUserId, useIsMobile } from '@hooks'
+import { useOverlay, useCurrentUserId } from '@hooks'
 import { overlayview } from '@utilities/analytics'
 import classnames from 'classnames'
 
@@ -143,7 +143,7 @@ const AttachmentView = ({ initialAttachmentIndex, modelOwnerId, modelId }) => {
   const { modelAttachments = {} } = useStoreon('modelAttachments')
   const { data: attachments } = modelAttachments
   const { setOverlayOpen, setOverlay } = useOverlay()
-  const isMobile = useIsMobile(640)
+  const isMobile = !useTheme().breakpoints.md
 
   const closeOverlay = useCallback(() => {
     setOverlayOpen(false)

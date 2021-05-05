@@ -1,8 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import ToolbarDesktop from './ToolbarDesktop'
 import ToolbarMobile from './ToolbarMobile'
-import { createUseStyles } from '@physna/voxel-ui/@style'
-import { useIsMobile } from '@hooks'
+import { createUseStyles, useTheme } from '@physna/voxel-ui/@style'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -49,7 +48,7 @@ const Toolbar = ({
   const [orientation, setOrientation] = useState('TopLeftFront')
   const [color, setColor] = useState('#999')
   const [magnitude, setMagnitude] = useState(0)
-  const isMobile = useIsMobile()
+  const isMobile = !useTheme().breakpoints.md_viewer
 
   //These control the HOOPS viewer
   const {

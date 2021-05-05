@@ -2,12 +2,12 @@
 
 import React, { useCallback } from 'react'
 import classnames from 'classnames'
-import { createUseStyles } from '@physna/voxel-ui/@style'
+import { createUseStyles, useTheme } from '@physna/voxel-ui/@style'
 import { Label } from '@physna/voxel-ui/@atoms/Typography'
 
 import { DropdownMenu, DropdownItem, Spacer } from '@components'
 import { ReactComponent as ArrowRightIcon } from '@svg/icon-arrow-right.svg'
-import { useActionMenu, useIsMobile } from '@hooks'
+import { useActionMenu } from '@hooks'
 
 export * from './ActionMenuPortal'
 export * from './MobileActionMenu'
@@ -265,7 +265,7 @@ export const ActionMenu = props => {
     ...menuProps
   } = MenuComponentProps
   const { setActionMenu, setActionMenuClose } = useActionMenu()
-  const isMobile = useIsMobile(isMobileOnly ? 640 : 842)
+  const isMobile = !useTheme().breakpoints[isMobileOnly ? 'md' : 'md_viewer']
   const handleChange = useCallback(
     value => {
       onChange(value)
