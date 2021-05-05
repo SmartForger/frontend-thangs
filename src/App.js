@@ -22,6 +22,7 @@ import { ActionMenuProvider } from '@contexts/ActionMenuProvider'
 import AppAnalytics from '@components/AppAnalytics'
 import { OverlayProvider } from '@contexts/OverlayProvider'
 import { routeRequiresAuth, routeRedirectToProfile } from '@components/RouteComponent'
+import Spinner from '@components/Spinner'
 import { StoreContext } from 'storeon/react'
 import { ThemeProvider, GlobalStyles } from '@physna/voxel-ui/@style'
 import store from 'store'
@@ -45,7 +46,7 @@ const App = () => {
           <ScrollToTop />
           <ActionMenuProvider>
             <OverlayProvider>
-              <Suspense>
+              <Suspense fallback={<Spinner isTopLevelView />}>
                 <Switch>
                   <Route exact path='/' component={Landing} />
                   <Route

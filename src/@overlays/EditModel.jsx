@@ -130,7 +130,7 @@ const EditModel = ({ model, showViewer = false }) => {
       <ExitIcon className={c.EditModel_ExitButton} onClick={closeOverlay} />
       {showViewer && (
         <div className={classnames(c.EditModel_Column, c.EditModel_ViewerWrapper)}>
-          <Suspense>
+          <Suspense fallback={<Spinner />}>
             <HoopsModelViewer
               className={c.EditModel_Viewer}
               model={model}

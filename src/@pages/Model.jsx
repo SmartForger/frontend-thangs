@@ -673,7 +673,7 @@ const ModelDetailPage = ({
             openSignupOverlay={openSignupOverlay}
           />
           <div className={c.Model_Row}>
-            <Suspense>
+            <Suspense fallback={<Spinner />}>
               <HoopsModelViewer
                 className={c.Model_ModelViewer}
                 model={modelData}

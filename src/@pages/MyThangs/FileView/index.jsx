@@ -137,7 +137,7 @@ const FileView = ({ className, folders }) => {
             <FileHeader file={modelData} folders={folders} />
             <Spacer size='2rem' />
             {activeViewer === 'single' && (
-              <Suspense>
+              <Suspense fallback={<Spinner />}>
                 <HoopsModelViewer
                   className={c.Model_ModelViewer}
                   model={modelData}

@@ -4,6 +4,7 @@ import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useOverlay } from '@contexts/Overlay'
+import Spinner from '@components/Spinner'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -121,7 +122,7 @@ const OverlayPortal = ({ className, scrollTop }) => {
               <ExitIcon />
             </div>
           )}
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Spinner />}>
             <OverlayComponent {...overlayData} />
           </Suspense>
         </div>
