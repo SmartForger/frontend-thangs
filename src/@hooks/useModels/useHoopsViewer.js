@@ -4,7 +4,7 @@ import { colorHexStringToRGBArray, ensureScriptIsLoaded } from '@utilities'
 import axios from 'axios'
 import { track } from '@utilities/analytics'
 import * as path from 'path'
-import { throttle } from 'lodash'
+import throttle from 'lodash/throttle'
 
 const REACT_APP_MODEL_BUCKET = process.env.REACT_APP_MODEL_BUCKET
 

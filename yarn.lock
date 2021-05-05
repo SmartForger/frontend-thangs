@@ -2270,10 +2270,10 @@
     "@physna/voxel-ui" "^0.8.0"
     axios "^0.21.1"
 
-"@physna/voxel-ui@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@physna/voxel-ui/-/voxel-ui-0.8.0.tgz#3b8ea0f3e5d33161a5be835480483bf739f3dfa4"
-  integrity sha512-NxSMmAvL1GtEXvy2nqGrDblVDWfi3SjRsO7aT+rydnfdGuTlFqYH6jtVxYZRjA+hLcqjljyIBGXofcpZjBplEw==
+"@physna/voxel-ui@^0.8.0", "@physna/voxel-ui@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@physna/voxel-ui/-/voxel-ui-0.8.1.tgz#29d112969854a36907c9b99001e12520dbf6f53e"
+  integrity sha512-HIoeSqOzeXUakCPBfQUgLqJIIc1T6xfUprVpcRZG3T5mhBd8xVCcd810IVjbXo0CaqAHSRlZomEkI+lUWbbEYg==
   dependencies:
     axios "^0.21.1"
     classnames "^2.2.6"
