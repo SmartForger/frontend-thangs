@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import * as R from 'ramda'
@@ -673,11 +673,13 @@ const ModelDetailPage = ({
             openSignupOverlay={openSignupOverlay}
           />
           <div className={c.Model_Row}>
-            <HoopsModelViewer
-              className={c.Model_ModelViewer}
-              model={modelData}
-              preselectedPart={preselectedPart}
-            />
+            <Suspense>
+              <HoopsModelViewer
+                className={c.Model_ModelViewer}
+                model={modelData}
+                preselectedPart={preselectedPart}
+              />
+            </Suspense>
           </div>
           <div className={c.Model_Row}>
             <div className={c.Model_LeftColumn}>

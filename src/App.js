@@ -47,7 +47,7 @@ const App = () => {
             <OverlayProvider>
               <Suspense>
                 <Switch>
-                  <Route exact path='/' render={props => <Landing {...props} />} />
+                  <Route exact path='/' component={Landing} />
                   <Route
                     path='/authenticate/:provider'
                     render={props => <Auth {...props} />}

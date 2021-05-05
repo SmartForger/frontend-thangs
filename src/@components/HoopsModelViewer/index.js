@@ -1,4 +1,4 @@
-export { default as HoopsModelViewer } from './ModelViewer'
-export { default as Toolbar } from './Toolbar'
-export { default as ToolbarDesktop } from './ToolbarDesktop'
-export { default as ToolbarMobile } from './ToolbarMobile'
+import { lazy } from 'react'
+export const HoopsModelViewer = lazy(() =>
+  import(/* webpackChunkName: 'model-viewer', webpackPrefetch: true */ './ModelViewer')
+)
