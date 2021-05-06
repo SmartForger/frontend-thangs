@@ -28,7 +28,8 @@ const useStyles = createUseStyles(theme => {
             ? theme.colors.white[400]
             : theme.colors.black[900],
       lineHeight: '.5rem',
-      alignItems: 'flex-start',
+      alignItems: 'center',
+      display: 'flex',
     },
     Tag_TextWrapper: {
       display: 'flex',

@@ -118,7 +118,6 @@ const DropdownItem = ({
           className={classnames(className, c.DropdownMenu_Item)}
           onClick={e => {
             if (!disabled) {
-              setOverlayOpen(false)
               onClick && onClick(e)
             }
           }}

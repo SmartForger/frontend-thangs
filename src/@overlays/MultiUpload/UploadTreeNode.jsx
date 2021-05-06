@@ -72,10 +72,19 @@ const useStyles = createUseStyles(theme => {
       cursor: 'pointer',
       marginRight: '0.5rem',
       '& [fill]': {
-        fill: '#000',
+        fill: theme.colors.white[900],
       },
       '& [stroke]': {
-        stroke: '#000',
+        stroke: theme.colors.white[900],
+      },
+
+      '&:hover': {
+        '& [fill]': {
+          fill: theme.colors.grey[300],
+        },
+        '& [stroke]': {
+          stroke: theme.colors.grey[300],
+        },
       },
     },
   }

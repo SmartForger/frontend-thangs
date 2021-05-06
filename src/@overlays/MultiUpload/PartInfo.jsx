@@ -4,16 +4,12 @@ import Joi from '@hapi/joi'
 import classnames from 'classnames'
 
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import {
-  Body,
-  Title,
-  HeaderLevel,
-  Metadata,
-  MetadataType,
-} from '@physna/voxel-ui/@atoms/Typography'
+import { Body, Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
 
 import {
   Button,
+  ContainerColumn,
+  ContainerRow,
   Dropdown,
   Input,
   LicenseField,
@@ -163,12 +159,12 @@ const useStyles = createUseStyles(theme => {
       padding: '.625rem 1rem',
     },
     PartInfo_Thumbnail: {
-      border: `1px solid ${theme.colors.white[900]}`,
-      borderRadius: 4,
+      background: theme.colors.white[600],
+      borderRadius: '.5rem',
       flex: 'none',
-      height: '3.75rem !important',
+      height: '3rem !important',
       padding: '0px !important',
-      width: '3.75rem',
+      width: '3rem',
     },
     PartInfo_ModelInfo: {
       '& h3': {
@@ -314,7 +310,7 @@ const PartInfo = props => {
           <Spacer size={'1rem'} />
         </>
       )}
-      <div className={c.PartInfo_Row}>
+      <ContainerRow>
         {file && (
           <>
             <ModelThumbnail
@@ -324,24 +320,21 @@ const PartInfo = props => {
               mini={true}
               useThumbnailer={true}
             />
-            <Spacer size={'1rem'} />
+            <Spacer size={'.75rem'} />
           </>
         )}
-
-        <div className={c.PartInfo_ModelInfo}>
-          <Title headerLevel={HeaderLevel.tertiary} title={activeNode.name}>
-            {activeNode.name}
-          </Title>
+        <ContainerColumn justifyContent={'center'} alignItems={'flex-start'}>
+          <Body>{activeNode.name}</Body>
           {activeNode.size && (
             <>
               <Spacer size={'.5rem'} />
-              <Metadata type={MetadataType.primary}>
+              <Metadata type={MetadataType.secondary}>
                 {formatBytes(activeNode.size)}
               </Metadata>
             </>
           )}
-        </div>
-      </div>
+        </ContainerColumn>
+      </ContainerRow>
       <Spacer size={'1.5rem'} />
       {errorMessage && (
         <>

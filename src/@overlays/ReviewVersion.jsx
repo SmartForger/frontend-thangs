@@ -41,6 +41,22 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
+const getPartsByPartId = (files, formData, modelData = {}) =>
+  Object.keys(files)
+    .map(fileKey => {
+      return formData[fileKey].previousParts.map(partId => {
+        const previousPart =
+          (modelData.parts &&
+            modelData.parts.find(part => part.partIdentifier === partId)) ||
+          {}
+        return {
+          ...previousPart,
+          newFileKey: fileKey,
+        }
+      })
+    })
+    .flat()
+
 const ReviewVersion = () => {
   const c = useStyles()
   const { dispatch, uploadModelFiles = {}, model = {} } = useStoreon(
@@ -49,20 +65,25 @@ const ReviewVersion = () => {
   )
   const { data: files = {}, formData } = uploadModelFiles
   const { data: modelData = {}, isLoading: isLoadingModel } = model
+  const modelId = modelData && modelData.id
   const [waiting, setWaiting] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
   const { setOverlay } = useOverlay()
-  const modelId = modelData && modelData.id
+  const parts = getPartsByPartId(files, formData, modelData)
+
   const initialState = useMemo(() => {
     const partNames = Object.keys(files)
       .map(fileKey => {
-        return formData[fileKey].previousParts.map(part => part.name)
+        return formData[fileKey].previousParts.map(
+          partId =>
+            (modelData.parts.find(part => part.partIdentifier === partId) || {}).name
+        )
       })
       .flat()
     return {
       message: `Updated ${partNames.join(', ')}.`,
     }
-  }, [files, formData])
+  }, [files, formData, modelData.parts])
 
   const { onFormSubmit, onInputChange, inputState } = useForm({
     initialState,
@@ -130,6 +151,16 @@ const ReviewVersion = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const compareModels = useMemo(() => {
+    return parts.map(part => {
+      const { newFileKey, ...oldPart } = part
+      return {
+        model1: oldPart,
+        model2: files[newFileKey],
+      }
+    })
+  }, [files, parts])
+
   return (
     <OverlayWrapper
       overlayHeader={'Review & Confirm'}
@@ -150,16 +181,8 @@ const ReviewVersion = () => {
           <Spacer size='1rem' />
         </>
       )}
-      {Object.keys(files).map((fileKey, ind) => (
-        <React.Fragment key={`Compare_${ind}`}>
-          <Compare
-            key={`CompareViewer_${ind}`}
-            model1={formData && formData[fileKey] && formData[fileKey].previousParts}
-            model2={files[fileKey]}
-          />
-          <Spacer size={'1rem'} />
-        </React.Fragment>
-      ))}
+      <Compare models={compareModels} />
+      <Spacer size={'1rem'} />
       <form className={c.ReviewVersion_Form}>
         <Textarea
           className={c.ReviewVersion_TextArea}

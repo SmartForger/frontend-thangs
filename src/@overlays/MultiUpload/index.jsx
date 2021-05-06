@@ -401,7 +401,7 @@ const MultiUpload = ({
           //Multipart - no part pre-selected
           setOverlay({
             isOpen: true,
-            template: 'selectVersionModel',
+            template: 'selectPartToVersion',
             data: {
               animateIn: false,
               windowed: true,
@@ -555,7 +555,7 @@ const MultiUpload = ({
           uploadTreeData={uploadTreeData}
           validated={validated}
           validating={validating}
-          versionData={versionData}
+          versionData={versionData && modelData}
           warningMessage={warningMessage}
         />
       ) : (
