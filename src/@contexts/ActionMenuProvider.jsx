@@ -1,5 +1,5 @@
 import React, { useMemo, useReducer } from 'react'
-import { MobileActionMenu } from '@components/ActionMenu/MobileActionMenu'
+import { MobileActionMenu } from '@components'
 import { ActionMenuContext } from './ActionMenu'
 
 const useActionMenuProvider = () => {

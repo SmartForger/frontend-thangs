@@ -18,15 +18,14 @@ import {
   TermsAndConditions,
 } from '@pages'
 import { ErrorBoundary } from './ErrorBoundary'
+import { AppAnalytics, Spinner } from '@components'
 import { ActionMenuProvider } from '@contexts/ActionMenuProvider'
-import AppAnalytics from '@components/AppAnalytics'
 import { OverlayProvider } from '@contexts/OverlayProvider'
 import { routeRequiresAuth, routeRedirectToProfile } from '@components/RouteComponent'
-import Spinner from '@components/Spinner'
 import { StoreContext } from 'storeon/react'
 import { ThemeProvider, GlobalStyles } from '@physna/voxel-ui/@style'
 import store from 'store'
-import ScrollToTop from './@utilities/scrollToTop'
+import ScrollToTop from '@utilities/scrollToTop'
 
 export function AppFrame() {
   return (
@@ -49,10 +48,7 @@ const App = () => {
               <Suspense fallback={<Spinner isTopLevelView />}>
                 <Switch>
                   <Route exact path='/' component={Landing} />
-                  <Route
-                    path='/authenticate/:provider'
-                    render={props => <Auth {...props} />}
-                  />
+                  <Route path='/authenticate/:provider' component={Auth} />
                   <Route path='/explore/:id' component={Landing} />
                   <Route
                     path='/welcome'
@@ -81,10 +77,7 @@ const App = () => {
                   <Route path='/model/:modelId' component={RedirectModel} />
                   <Route path='/models/:modelId' component={RedirectModel} />
                   <Route path='/m/:modelId' component={RedirectModel} />
-                  <Route
-                    path='/:userName/:modelString'
-                    render={props => <ModelDetail {...props} />}
-                  />
+                  <Route path='/:userName/:modelString' component={ModelDetail} />
                   <Route path='/:userName' component={Profile} />
                   <Route path='/404' component={Page404} status={404} />
                   <Route path='*' component={Page404} status={404} />

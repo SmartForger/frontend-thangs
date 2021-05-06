@@ -4,9 +4,8 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
 
-import TextInput from '@components/TextInput'
-import useTranslations from '@hooks/useTranslations'
-import useQuery from '@hooks/useQuery'
+import { TextInput } from '@components'
+import { useQuery, useTranslations } from '@hooks'
 import { useOverlay } from '@contexts/Overlay'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 

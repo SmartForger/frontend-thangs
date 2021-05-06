@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { useOverlay } from '@contexts/Overlay'
-import Spinner from '@components/Spinner'
+import { Spinner } from '@components'
 
 const useStyles = createUseStyles(theme => {
   const {

@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import Header from '@components/Header'
-import Footer from '@components/Footer'
-import FeedbackTooltip from '@components/FeedbackTooltip'
+import { Header, Footer, FeedbackTooltip } from '@components'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import Banner from './Header/Banner'

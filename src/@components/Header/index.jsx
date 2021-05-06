@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
-import AboutHero from '@components/Hero/AboutHero'
-import LandingHero from '@components/Hero/LandingHero'
-import UserNav from '@components/UserNav'
+import { AboutHero, LandingHero, UserNav } from '@components'
+import { useCurrentUser } from '@hooks'
+import { useOverlay } from '@contexts/Overlay'
 import { createUseStyles, useTheme } from '@physna/voxel-ui/@style'
 import * as types from '@constants/storeEventTypes'
 
@@ -13,8 +13,6 @@ import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as LogoText } from '@svg/logo-text.svg'
 
 import SearchBar from './SearchBar'
-import { useOverlay } from '@contexts/Overlay'
-import useCurrentUser from '@hooks/useCurrentUser'
 
 const useStyles = createUseStyles(theme => {
   const {
