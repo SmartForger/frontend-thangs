@@ -129,7 +129,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     EditModelForm_FieldRow: {
-      alignItems: 'baseline',
+      alignItems: 'flex-end',
       display: 'flex',
       flexDirection: 'row',
     },
@@ -236,6 +236,7 @@ const EditModelForm = ({
             onChange={handleLicenseChange}
             value={inputState && inputState.license}
           />
+          <Spacer size='1rem' />
           <Textarea
             id='description-input'
             name='description'
@@ -286,6 +287,7 @@ const EditModelForm = ({
             onChange={e => {
               if (e) handleOnInputChange('category', e.value)
             }}
+            label='Category'
           />
           <Spacer size='2rem' />
           <Button type='submit'>Save Changes</Button>

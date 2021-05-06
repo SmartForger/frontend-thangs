@@ -93,7 +93,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     PartInfo_FieldRow: {
-      alignItems: 'baseline',
+      alignItems: 'flex-end',
       display: 'flex',
       flexDirection: 'row',
     },
@@ -369,12 +369,15 @@ const PartInfo = props => {
           />
         </div>
         {!activeNode.parentId && (
-          <LicenseField
-            model={file}
-            className={c.PartInfo_FieldRow}
-            onChange={handleLicenseChange}
-            value={inputState && inputState.license}
-          />
+          <>
+            <LicenseField
+              model={file}
+              className={c.PartInfo_FieldRow}
+              onChange={handleLicenseChange}
+              value={inputState && inputState.license}
+            />
+            <Spacer size='1rem' />
+          </>
         )}
         <div className={c.PartInfo_Field}>
           <Textarea
@@ -432,6 +435,7 @@ const PartInfo = props => {
             <Dropdown
               className={c.PartInfo_Select}
               name='category'
+              label='Category'
               placeholder='Select category'
               value={selectedCategory}
               isClearable

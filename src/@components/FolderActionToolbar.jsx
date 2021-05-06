@@ -83,6 +83,7 @@ const FolderActionToolbar = ({ folder = {}, isPrimaryActionHidden = false }) => 
         onClick={handleInviteUsers}
         users={[folder.creator, ...(folder?.members || [])]}
         displayLength='5'
+        size='2rem'
       />
     </ContainerRow>
   )

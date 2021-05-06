@@ -76,7 +76,7 @@ const ReviewVersion = () => {
       .map(fileKey => {
         return formData[fileKey].previousParts.map(
           partId =>
-            (modelData.parts.find(part => part.partIdentifier === partId) || {}).name
+            (modelData?.parts?.find(part => part.partIdentifier === partId) || {})?.name
         )
       })
       .flat()
@@ -186,11 +186,12 @@ const ReviewVersion = () => {
       <form className={c.ReviewVersion_Form}>
         <Textarea
           className={c.ReviewVersion_TextArea}
+          label={'Version message'}
           name='message'
-          value={inputState && inputState.message}
           onChange={handleOnInputChange}
           placeholder={'Add a message describing your changes'}
           required
+          value={inputState && inputState.message}
         />
       </form>
     </OverlayWrapper>

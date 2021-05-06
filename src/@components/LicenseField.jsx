@@ -11,7 +11,6 @@ const useStyles = createUseStyles(_theme => {
   return {
     LicenseField_Field: {
       flexGrow: 1,
-      marginBottom: '1rem',
       position: 'relative',
     },
     LicenseField_ClearButton: {

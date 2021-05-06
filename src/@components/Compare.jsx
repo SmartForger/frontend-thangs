@@ -9,7 +9,7 @@ const useStyles = createUseStyles(_theme => {
       flexDirection: 'row',
     },
     Compare_Tag: {
-      position: 'absolute',
+      position: 'absolute !important',
       top: '1rem',
       left: '1rem',
       zIndex: 1,
@@ -65,7 +65,7 @@ const Compare = ({ models: modelSets = [] }) => {
             maxWidth={'9.375rem'}
             lightText
           >
-            {activeSet?.model?.name}
+            {activeSet?.model1?.name}
           </Tag>
         ) : (
           <TagOptionActionMenu
