@@ -2,11 +2,27 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import Dropzone from 'react-dropzone'
 import * as R from 'ramda'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { Body, Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
-
-import { Pill, Spacer, Spinner, Toggle, Tooltip, TreeView } from '@components'
+import {
+  Body,
+  Title,
+  HeaderLevel,
+  Metadata,
+  MetadataType,
+} from '@physna/voxel-ui/@atoms/Typography'
+import {
+  ContainerColumn,
+  ContainerRow,
+  ModelThumbnail,
+  Pill,
+  Spacer,
+  Spinner,
+  Toggle,
+  Tooltip,
+  TreeView,
+} from '@components'
 import { FILE_SIZE_LIMITS, MODEL_FILE_EXTS } from '@constants/fileUpload'
 import { overlayview } from '@utilities/analytics'
+import { formatBytes } from '@utilities'
 import UploadTreeNode from './UploadTreeNode'
 import { isIOS } from '@utilities'
 
@@ -21,7 +37,8 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '.75rem',
       display: 'flex',
       flexDirection: 'column',
-      height: ({ hasFile }) => (hasFile ? '11rem' : '22.25rem'),
+      height: ({ hasFile, noIcon }) =>
+        hasFile ? '11rem' : noIcon ? '17.25rem' : '22.25rem',
       width: '100%',
 
       '& h3': {
@@ -128,8 +145,8 @@ const useStyles = createUseStyles(theme => {
       padding: '.625rem 1rem',
     },
     UploadAssemblyLabel: {
-      display: 'flex',
       alignItems: 'center',
+      display: 'flex',
     },
     UploadAssemblyLabel_Icon: {
       marginLeft: '.5rem',
@@ -153,6 +170,19 @@ const useStyles = createUseStyles(theme => {
     UploadModels_AssemblyText: {
       paddingTop: '1rem',
     },
+    UploadModels_Thumbnail: {
+      background: theme.colors.white[600],
+      borderRadius: '.5rem',
+      flex: 'none',
+      height: '3rem !important',
+      padding: '0px !important',
+      width: '3rem',
+
+      '& img': {
+        position: 'relative',
+        top: '.125rem',
+      },
+    },
   }
 })
 const noop = () => null
@@ -172,9 +202,11 @@ const UploadModels = ({
   validated = false,
   showAssemblyToggle,
   multiple = true,
+  versionData,
 }) => {
   const hasFile = Object.keys(uploadFiles).length > 0
-  const c = useStyles({ hasFile })
+  const noIcon = !!versionData
+  const c = useStyles({ hasFile, noIcon })
   const isLoadingFiles = useMemo(() => {
     const loadingFiles = Object.keys(uploadFiles).filter(id => uploadFiles[id].isLoading)
     return loadingFiles.length > 0
@@ -233,6 +265,17 @@ const UploadModels = ({
     } else {
       setWarningMessage(null)
     }
+
+    if (versionData?.parts?.length) {
+      const numFilesToRemove = Object.keys(uploadFiles).length - versionData.parts.length
+      if (numFilesToRemove > 0) {
+        setErrorMessage(
+          `The model you are versioning only has ${versionData.parts.length} parts. Please remove ${numFilesToRemove} of your files to proceed.`
+        )
+      } else {
+        setErrorMessage(null)
+      }
+    }
   }, [
     allTreeNodes,
     setErrorMessage,
@@ -241,6 +284,7 @@ const UploadModels = ({
     uploadTreeData,
     validated,
     validating,
+    versionData,
   ])
 
   const uploadAssemblyLabel = (
@@ -251,9 +295,42 @@ const UploadModels = ({
       </Tooltip>
     </span>
   )
+  const showTopSpinner = isLoadingFiles && uploadTreeData.length > 8
 
   return (
     <>
+      {versionData && (
+        <>
+          <ContainerRow>
+            {versionData?.parts?.length === 1 && (
+              <>
+                <ModelThumbnail
+                  className={c.UploadModels_Thumbnail}
+                  name={versionData.name}
+                  model={versionData}
+                  mini={true}
+                  useThumbnailer={false}
+                />
+                <Spacer size={'.75rem'} />
+              </>
+            )}
+            <ContainerColumn justifyContent={'center'} alignItems={'flex-start'}>
+              <Body>{versionData.name}</Body>
+              {versionData.parts ? (
+                <>
+                  <Spacer size={'.5rem'} />
+                  <Metadata type={MetadataType.secondary}>
+                    {versionData.parts.length > 1
+                      ? `${versionData.parts.length} Parts`
+                      : formatBytes(versionData.parts[0].size)}
+                  </Metadata>
+                </>
+              ) : null}
+            </ContainerColumn>
+          </ContainerRow>
+          <Spacer size={'1.5rem'} />
+        </>
+      )}
       {(multiple || (!multiple && !hasFile)) && (
         <Dropzone
           onDrop={onDrop}
@@ -268,14 +345,14 @@ const UploadModels = ({
                 <input {...getInputProps()} name='multi-upload' />
                 <div className={c.UploadModels_UploadRow}>
                   <div className={c.UploadModels_UploadColumn}>
-                    {R.isEmpty(uploadFiles) && <UploadCardIcon />}
+                    {R.isEmpty(uploadFiles) && !versionData && <UploadCardIcon />}
                     <Spacer size={'1rem'} />
                     <Title headerLevel={HeaderLevel.tertiary}>
                       {multiple ? 'Drag & Drop files' : 'Drag & Drop file'}
                     </Title>
                     <Body multiline>or browse to upload.</Body>
                     <Spacer size={'1rem'} />
-                    <Pill tertiary>Browse</Pill>
+                    <Pill secondary>Browse</Pill>
                     <Spacer size={'.75rem'} />
                   </div>
                 </div>
@@ -294,7 +371,7 @@ const UploadModels = ({
             <div className={c.UploadModels_FileTitle}>
               {fileLength > 1 ? `${fileLength} files` : 'File'}
               <Spacer size={'.5rem'} />
-              {isLoadingFiles && <Spinner size={'1rem'} />}
+              {showTopSpinner && <Spinner size={'1rem'} />}
             </div>
           </Title>
           <Spacer size='0.5rem' />
@@ -303,6 +380,7 @@ const UploadModels = ({
             nodes={uploadTreeData}
             levelPadding={28}
             defaultExpanded={uploadTreeData.length < 2}
+            showDivider={false}
             renderNode={(node, level) => (
               <UploadTreeNode
                 node={node}

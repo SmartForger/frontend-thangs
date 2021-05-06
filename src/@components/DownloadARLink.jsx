@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useStoreon } from 'storeon/react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 
@@ -29,19 +29,31 @@ const DownloadARLink = ({
   downloadTrackingEvent = 'Download AR',
 }) => {
   const c = useStyles()
-  const { dispatch } = useStoreon()
+  const { dispatch, arDownload } = useStoreon('arDownload')
   const downloadModel = useCallback(
     format => {
-      dispatch(types.FETCH_MODEL_DOWNLOAD_URL, {
+      dispatch(types.DOWNLOAD_AR_MODEL, {
         id: model.id ?? model.modelId,
+        fileName: model.name ?? model.fileName,
         format,
-        onFinish: downloadUrl => {
-          window.location.assign(downloadUrl)
-          track(downloadTrackingEvent, { format, modelId: model.id })
-        },
+        trackingEvent: downloadTrackingEvent,
       })
     },
-    [downloadTrackingEvent, dispatch, model.id, model.modelId]
+    [dispatch, model.id, model.modelId, model.name, model.fileName, downloadTrackingEvent]
+  )
+
+  const isLoading = useMemo(
+    () =>
+      arDownload.isDownloadMode &&
+      arDownload.isLoading &&
+      arDownload.targetId === (model.id ?? model.modelId),
+    [
+      arDownload.isDownloadMode,
+      arDownload.isLoading,
+      arDownload.targetId,
+      model.id,
+      model.modelId,
+    ]
   )
 
   const handleClick = useCallback(
@@ -58,7 +70,11 @@ const DownloadARLink = ({
 
   return (
     <div className={c.DownloadARLink}>
-      <ARDownloadActionMenu onChange={handleClick} TargetComponent={TargetComponent} />
+      <ARDownloadActionMenu
+        onChange={handleClick}
+        TargetComponent={TargetComponent}
+        isLoading={isLoading}
+      />
     </div>
   )
 }

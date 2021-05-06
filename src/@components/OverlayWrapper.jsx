@@ -166,11 +166,13 @@ const OverlayWrapper = ({
                 <Button tertiary onClick={onCancel}>
                   {cancelText}
                 </Button>
-                <Spacer size={'1rem'} className={c.OverlayWrapper_ButtonSpacer} />
                 {onContinue && (
-                  <Button onClick={onContinue} disabled={isLoading}>
-                    {isLoading ? 'Processing...' : continueText}
-                  </Button>
+                  <>
+                    <Spacer size={'1rem'} className={c.OverlayWrapper_ButtonSpacer} />
+                    <Button onClick={onContinue} disabled={isLoading}>
+                      {isLoading ? 'Processing...' : continueText}
+                    </Button>
+                  </>
                 )}
               </>
             )}

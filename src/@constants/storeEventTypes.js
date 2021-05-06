@@ -42,6 +42,13 @@ export const FETCH_MODEL_DOWNLOAD_URL = 'fetch-model-download-url'
 export const LOADING_MODEL_DOWNLOAD_URL = 'loading-model-download-url'
 export const LOADED_MODEL_DOWNLOAD_URL = 'loaded-model-download-url'
 export const FAILED_MODEL_DOWNLOAD_URL = 'failed-model-download-url'
+/* AR Download URL Store Events */
+export const DOWNLOAD_AR_MODEL = 'download-ar-model'
+export const VIEW_AR_MODEL = 'view-ar-model'
+export const FETCH_AR_DOWNLOAD_URL = 'fetch-ar-download-url'
+export const LOADING_AR_DOWNLOAD = 'loading-ar-download'
+export const LOADED_AR_DOWNLOAD = 'loaded-ar-download'
+export const FAILED_AR_DOWNLOAD = 'failed-ar-download'
 /* License Download URL Store Events */
 export const FETCH_LICENSE_DOWNLOAD_URL = 'fetch-license-download-url'
 export const LOADING_LICENSE_DOWNLOAD_URL = 'loading-license-download-url'

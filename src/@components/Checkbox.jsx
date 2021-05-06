@@ -4,6 +4,7 @@ import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Body } from '@physna/voxel-ui/@atoms/Typography'
 
 import { ReactComponent as Checkmark } from '@svg/checkbox-check.svg'
+import { ReactComponent as Checkline } from '@svg/checkbox-line.svg'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -74,23 +75,39 @@ const useStyles = createUseStyles(theme => {
         display: 'block',
       },
     },
+    Checkbox__disabled: {
+      opacity: '.25',
+    },
   }
 })
 
 const noop = () => null
-const Checkbox = ({ id, name, checked, onChange = noop }) => {
+const Checkbox = ({
+  className,
+  id,
+  name,
+  checked,
+  onChange = noop,
+  isIndeterminate = false,
+  disabled,
+}) => {
   const c = useStyles({ checked })
   return (
-    <label className={c.Container}>
+    <label className={classnames(className, c.Container)}>
       <input
-        className={classnames(c.Checkbox, { [c.Checkbox__checked]: checked })}
+        className={classnames(c.Checkbox, {
+          [c.Checkbox__checked]: checked,
+        })}
         type='checkbox'
         id={id}
         name={name}
         checked={checked}
         onChange={onChange}
+        disabled={disabled}
       />
-      <span className={c.Checkmark}>{checked && <Checkmark />}</span>
+      <span className={classnames(c.Checkmark, { [c.Checkbox__disabled]: disabled })}>
+        {checked ? isIndeterminate ? <Checkline /> : <Checkmark /> : null}
+      </span>
     </label>
   )
 }

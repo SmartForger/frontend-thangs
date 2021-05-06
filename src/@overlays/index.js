@@ -53,8 +53,8 @@ export const ReviewVersion = lazy(() =>
 export const SearchByUpload = lazy(() =>
   import(/* webpackChunkName: 'overlays' */ './SearchByUpload')
 )
-export const SelectVersionModel = lazy(() =>
-  import(/* webpackChunkName: 'overlays' */ './SelectVersionModel')
+export const SelectPartToVersion = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './SelectPartToVersion')
 )
 export const Signin = lazy(() => import(/* webpackChunkName: 'overlays' */ './Signin'))
 export const Signup = lazy(() => import(/* webpackChunkName: 'overlays' */ './Signup'))

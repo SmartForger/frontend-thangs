@@ -1,7 +1,10 @@
 import React, { useMemo } from 'react'
-import { ActionMenu, Button, Spacer } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
-import { ReactComponent as ARIcon } from '@svg/icon-ar.svg'
+
+import { ActionMenu, Button } from '@components'
+
+import { ReactComponent as AndroidIcon } from '@svg/icon-android.svg'
+import { ReactComponent as AppleIcon } from '@svg/icon-apple.svg'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -37,28 +40,25 @@ const useStyles = createUseStyles(theme => {
         minWidth: '34px',
       },
     },
-    ARDownloadTarget_Text: {
-      textAlign: 'left',
-      whiteSpace: 'pre-wrap',
-
-      [md_viewer]: {
-        whiteSpace: 'unset',
-      },
+    ARDownloadDropdown_Wrapper: {
+      width: '100% !important',
+    },
+    ARDownload_AndroidIcon: {
+      marginTop: '-3px',
+    },
+    ARDownload_AppleIcon: {
+      marginTop: '-5px',
     },
   }
 })
 
 const noop = () => null
 
-const ARDownloadTarget = ({ onClick = noop }) => {
+const ARDownloadTarget = ({ onClick = noop, isLoading }) => {
   const c = useStyles({})
   return (
     <Button secondary className={c.ARDownloadTarget} onClick={onClick}>
-      <ARIcon />
-      <Spacer size={'.5rem'} />
-      <span className={c.ARDownloadTarget_Text}>
-        Download GLB for AR Viewing (App&nbsp;Required)
-      </span>
+      {isLoading ? 'Downloading Augmented Reality...' : 'Download Augmented Reality'}
     </Button>
   )
 }
@@ -66,35 +66,52 @@ const ARDownloadTarget = ({ onClick = noop }) => {
 const ARDownloadActionMenu = ({
   onChange = noop,
   TargetComponent = ARDownloadTarget,
+  isLoading = false,
 }) => {
+  const c = useStyles({})
   const options = useMemo(
     () => [
       {
-        label: 'Download for Android',
+        label: 'Android',
         value: 'android',
+        Icon: function AndroidIconWithClass() {
+          return <AndroidIcon className={c.ARDownload_AndroidIcon} />
+        },
       },
       {
-        label: 'Download for iOS',
+        label: 'iOS',
         value: 'ios',
+        Icon: function AppleIconWithClass() {
+          return <AppleIcon className={c.ARDownload_AppleIcon} />
+        },
       },
     ],
-    []
+    [c.ARDownload_AndroidIcon, c.ARDownload_AppleIcon]
   )
 
   const menuProps = useMemo(() => {
     return {
       onChange,
-      actionBarTitle: 'Download AR Model',
+      actionBarTitle: 'Download Augmented Reality',
       options,
       tabletLayout: false,
       alignItems: 'center',
+      className: c.ARDownloadDropdown_Wrapper,
     }
-  }, [onChange, options])
+  }, [onChange, options, c.ARDownloadDropdown_Wrapper])
+
+  const targetProps = useMemo(
+    () => ({
+      isLoading,
+    }),
+    [isLoading]
+  )
 
   return (
     <ActionMenu
       MenuComponentProps={menuProps}
       TargetComponent={TargetComponent}
+      TargetComponentProps={targetProps}
       isCloseOnSelect={true}
       isMobileOnly={true}
     />
