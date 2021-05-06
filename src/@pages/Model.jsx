@@ -41,6 +41,8 @@ import {
   usePerformanceMetrics,
   useLocalStorage,
   useQuery,
+  useIsAndroid,
+  useIsIOS,
 } from '@hooks'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
@@ -469,6 +471,8 @@ const StatsActionsAndPrints = ({
 }) => {
   const isARSupported = useMemo(() => canDownloadAR(modelData), [modelData])
   const communityUploadEnabled = useIsFeatureOn('community_uploads_feature')
+  const isAndroid = useIsAndroid()
+  const isIOS = useIsIOS()
 
   return (
     <div className={classnames(className, c.Model_Column, c.Model_RightColumn)}>
@@ -491,7 +495,15 @@ const StatsActionsAndPrints = ({
                 isAuthedUser={isAuthedUser}
                 openSignupOverlay={openSignupOverlay}
               />
-              <ViewNativeARLink model={modelData} />
+              {isAndroid || isIOS ? (
+                <ViewNativeARLink
+                  model={modelData}
+                  isAuthedUser={isAuthedUser}
+                  openSignupOverlay={openSignupOverlay}
+                />
+              ) : (
+                <></>
+              )}
             </ContainerColumn>
           </>
         )}

@@ -173,6 +173,7 @@ const DefaultMenu = ({
                 [c.DefaultMenu_Item]: !isMobileOnly,
                 [c.DefaultMenu_Item__mobileOnly]: isMobileOnly,
               })}
+              disabled={option.disabled}
             >
               {' '}
               {wrapIfComponent({

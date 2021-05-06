@@ -24,18 +24,14 @@ const SearchResultFooter = ({ model, onFindRelated }) => {
   const isARSupported = useMemo(() => canDownloadAR(model), [model])
 
   return (
-    <ContainerRow>
+    <ContainerRow wrap='wrap'>
       {shouldShowViewRelated(model) && (
         <>
           <div
             className={c.SearchResultFooter_Link}
             onClick={() => onFindRelated({ model, matches: model?.nMatchedModels })}
           >
-            {model.nMatchedModels > 0
-              ? `View ${model?.nMatchedModels || ''} Related Model${
-                model?.nMatchedModels > 1 ? 's' : ''
-              }`
-              : 'Find Related Models'}
+            View Related Models
           </div>
           <Spacer size={'1rem'} />
         </>
@@ -46,10 +42,15 @@ const SearchResultFooter = ({ model, onFindRelated }) => {
           isAuthedUser={true}
           openSignupOverlay={noop}
           downloadTrackingEvent='Download AR from Search'
-          TargetComponent={({ onClick = noop }) => (
-            <div onClick={onClick} className={c.SearchResultFooter_Link}>
-              Download AR Model
-            </div>
+          TargetComponent={({ onClick = noop, isLoading }) => (
+            <ContainerRow>
+              <div onClick={onClick} className={c.SearchResultFooter_Link}>
+                {isLoading
+                  ? 'Downloading Augmented Reality'
+                  : 'Download Augmented Reality'}
+              </div>
+              {!isLoading && <Spacer width={'1.5rem'} />}
+            </ContainerRow>
           )}
         />
       )}

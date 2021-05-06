@@ -32,14 +32,14 @@ workflows:
             filters:
               branches:
                 only:
-                  - development
+                  - master
         - deploy-production:
             Stack: master
             context: gcp-and-physna
             filters:
               branches:
                 only:
-                  - development
+                  - master
         - deploy-development-thangs:
             context: thangs-context
             filters:
@@ -184,7 +184,7 @@ jobs:
             gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
             gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
-            gcloud app deploy --quiet <<parameters.Stack>>.yaml <<parameters.NoPromote>> <<parameters.Version>>
+            gcloud app deploy --quiet development.yaml <<parameters.NoPromote>> <<parameters.Version>>
   deploy-development-thangs:
     docker:
       - image: google/cloud-sdk:303.0.0

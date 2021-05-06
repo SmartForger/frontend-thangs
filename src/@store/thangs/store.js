@@ -21,7 +21,7 @@ export default store => {
     const { folders = [], models: rootModels } = event
     let models = [
       ...R.pathOr([], ['models', 'data'], state),
-      ...rootModels.map(m => ({ ...m, id: +m.id, isPublic: true })),
+      ...rootModels.map(m => ({ ...m, id: +m.id })),
     ]
 
     folders.forEach(folder => {
