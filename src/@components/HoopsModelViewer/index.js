@@ -1,4 +1,4 @@
 import { lazy } from 'react'
 export const HoopsModelViewer = lazy(() =>
-  import(/* webpackChunkName: 'model-viewer', webpackPrefetch: true */ './ModelViewer')
+  import(/* webpackChunkName: 'model-viewer' */ './ModelViewer')
 )
