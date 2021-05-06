@@ -59,6 +59,7 @@
   },
   "sideEffects": false,
   "scripts": {
+    "postinstall": "patch-package",
     "start": "serve -s build",
     "dev": "react-scripts start",
     "build": "react-scripts build",
@@ -113,6 +114,8 @@
     "enzyme-adapter-react-16": "^1.15.6",
     "husky": "4",
     "lint-staged": "^10.5.4",
+    "patch-package": "^6.4.7",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.1.1",
     "start-server-and-test": "^1.10.8",
     "webpack-bundle-analyzer": "^4.4.1",
