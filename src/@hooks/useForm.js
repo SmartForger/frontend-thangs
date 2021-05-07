@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef } from 'react'
 import { getErrorMessage, validate } from '@utilities/validation'
-import { useOverlay } from './useOverlay'
+import { useOverlay } from '@contexts/Overlay'
 
 const useForm = (opts = {}) => {
   const { initialValidationSchema, initialState } = opts
