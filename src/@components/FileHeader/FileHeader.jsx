@@ -20,8 +20,9 @@ import {
 import { useOverlay } from '@hooks'
 import { buildPath } from '@utilities'
 
-import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
-import { ReactComponent as PrivateFolderIcon } from '@svg/icon-folder-private.svg'
+import { ReactComponent as AssemblyIcon } from '@svg/icon-assembly.svg'
+import { ReactComponent as ModelIcon } from '@svg/icon-model.svg'
+import { ReactComponent as MultipartIcon } from '@svg/icon-multipart.svg'
 
 const useStyles = createUseStyles(_theme => {
   return {
@@ -69,7 +70,13 @@ const FileHeader = ({ file = {}, folders = [] }) => {
         <ContainerRow>
           <ContainerColumn>
             <Spacer size={'.5rem'} />
-            {folder.isPublic ? <FolderIcon /> : <PrivateFolderIcon />}
+            {file.isAssembly ? (
+              <AssemblyIcon />
+            ) : file.parts.length > 1 ? (
+              <MultipartIcon />
+            ) : (
+              <ModelIcon />
+            )}
           </ContainerColumn>
           <Spacer size={'1rem'} />
           <ContainerColumn>

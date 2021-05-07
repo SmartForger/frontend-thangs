@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react'
 import * as R from 'ramda'
-import Joi from '@hapi/joi'
 import classnames from 'classnames'
 
 import { createUseStyles } from '@physna/voxel-ui/@style'
@@ -22,6 +21,7 @@ import {
 import { useForm } from '@hooks'
 import { formatBytes } from '@utilities'
 import { CATEGORIES } from '@constants/fileUpload'
+import { VALIDATION_REQUIRED, VALIDATION_PATTERN } from '@utilities/validation'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -186,17 +186,25 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const PartInfoSchema = ({ isRootPart }) =>
-  Joi.object({
-    name: Joi.string().pattern(new RegExp('^[^/]+$')).required(),
-    description: isRootPart ? Joi.string().required() : Joi.string().allow(''),
-    folderId: Joi.string().allow(''),
-    material: Joi.string().allow(''),
-    height: Joi.string().allow(''),
-    weight: Joi.string().allow(''),
-    category: Joi.string().allow(''),
-    previousVersionModelId: Joi.string().allow(''),
-  }).unknown(true)
+const PartInfoSchema = ({ isRootPart }) => ({
+  name: {
+    label: 'Name',
+    rules: [
+      VALIDATION_REQUIRED,
+      {
+        type: VALIDATION_PATTERN,
+        pattern: new RegExp('^[^/]+$'),
+      },
+    ],
+    messages: {
+      [VALIDATION_PATTERN]: 'Name should not contain "/"',
+    },
+  },
+  description: {
+    label: 'Description',
+    rules: isRootPart ? [VALIDATION_REQUIRED] : [],
+  },
+})
 
 const initialState = {
   name: '',
@@ -266,10 +274,14 @@ const PartInfo = props => {
   )
 
   const handleSubmit = useCallback(
-    (data, isValid) => {
-      if (isValid) onContinue({ applyRemaining, data })
+    (data, isValid, errors) => {
+      if (!isValid) {
+        return setErrorMessage(errors?.[0]?.message)
+      }
+
+      onContinue({ applyRemaining, data })
     },
-    [applyRemaining, onContinue]
+    [applyRemaining, onContinue, setErrorMessage]
   )
 
   const selectedCategory = useMemo(() => {

@@ -1,43 +1,23 @@
 import { useState, useCallback, useRef } from 'react'
-import { useTranslations } from '@hooks'
+import { getErrorMessage, validate } from '@utilities/validation'
+import { useOverlay } from './useOverlay'
+
 const useForm = (opts = {}) => {
   const { initialValidationSchema, initialState } = opts
   const [inputState, setInputState] = useState(initialState || {})
-  const [inputErrors, setInputErrors] = useState([])
+  const [inputErrors, setInputErrors] = useState({})
   const validationSchema = useRef(initialValidationSchema)
-  const t = useTranslations({})
+  const { setOverlayData } = useOverlay()
 
-  const onInputChange = useCallback(
-    (key, value) => {
-      setInputErrors(inputErrors.filter(inputError => inputError.key !== key))
-      setInputState(inputState => {
-        return {
-          ...inputState,
-          [key]: value,
-        }
-      })
-    },
-    [inputErrors]
-  )
-
-  const onInputError = useCallback(
-    errors => {
-      const newInputErrors = Object.keys(errors).map(inputKey => {
-        const { type } = errors[inputKey]
-        return {
-          key: inputKey,
-          message:
-            type === 'string.pattern.base'
-              ? t(`input.${inputKey}.errors.pattern`)
-              : type
-                ? t(`input.${inputKey}.errors.required`)
-                : t(`input.${inputKey}.errors.invalid`),
-        }
-      })
-      setInputErrors(newInputErrors)
-    },
-    [t]
-  )
+  const onInputChange = useCallback((key, value) => {
+    setInputErrors(errors => ({ ...errors, [key]: undefined }))
+    setInputState(inputState => {
+      return {
+        ...inputState,
+        [key]: value,
+      }
+    })
+  }, [])
 
   const clearAllInputs = () => {
     Object.keys(inputState).forEach(key => {
@@ -49,23 +29,18 @@ const useForm = (opts = {}) => {
     const { current: schema } = validationSchema
 
     if (schema) {
-      const { error } = schema.validate(inputState)
-      const errors = error
-        ? /* eslint-disable indent */
-          error.details.reduce((previous, currentError) => {
-            return {
-              ...previous,
-              [currentError.path[0]]: currentError,
-            }
-          }, {})
-        : {}
-      /* eslint-enable indent */
-      const hasErrors = !!error
-      onInputError(errors)
-      return { isValid: !hasErrors, errors }
+      const { isValid, errors } = validate(schema, inputState)
+
+      const newErrors = {}
+      for (let k in errors) {
+        newErrors[k] = getErrorMessage(schema[k], errors[k][0])
+      }
+      setInputErrors(newErrors)
+
+      return { isValid, errors: Object.values(newErrors) }
     }
-    return { isValid: true, errors: {} }
-  }, [inputState, onInputError])
+    return { isValid: true, errors: [] }
+  }, [inputState])
 
   const onFormSubmit = callbackFn => event => {
     if (event) {
@@ -74,6 +49,13 @@ const useForm = (opts = {}) => {
     }
 
     const { isValid, errors } = validateState()
+
+    if (!isValid) {
+      setOverlayData({
+        shake: true,
+      })
+    }
+
     callbackFn(inputState, isValid, errors)
   }
 
@@ -83,7 +65,7 @@ const useForm = (opts = {}) => {
 
   const checkError = useCallback(
     field => {
-      return inputErrors.find(error => error.key === field) || {}
+      return inputErrors[field] || {}
     },
     [inputErrors]
   )

@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import * as EmailValidator from 'email-validator'
-import Joi from '@hapi/joi'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import {
@@ -26,6 +25,7 @@ import { ReactComponent as HeartIcon } from '@svg/icon-heart.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
 import { ReactComponent as FacebookLogo } from '@svg/facebook-logo.svg'
+import { VALIDATION_EMAIL, VALIDATION_REQUIRED } from '@utilities/validation'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -190,14 +190,25 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const signUpSchema = Joi.object({
-  email: Joi.string().email({ tlds: { allow: false } }),
-  password: Joi.string().required(),
-  registration_code: Joi.string().required(),
-  firstName: Joi.string().required(),
-  lastName: Joi.string().required(),
-  username: Joi.string().required(),
-})
+const signUpSchema = {
+  username: {
+    label: 'Username',
+    rules: [VALIDATION_REQUIRED],
+  },
+  email: {
+    label: 'Email',
+    rules: [VALIDATION_REQUIRED, VALIDATION_EMAIL],
+    messages: 'Please enter a valid e-mail address',
+  },
+  password: {
+    label: 'Password',
+    rules: [VALIDATION_REQUIRED],
+  },
+  confirmPass: {
+    label: 'Password',
+    rules: [VALIDATION_REQUIRED],
+  },
+}
 
 const SignUpPromo = ({ c, titleMessage }) => {
   return (
@@ -269,7 +280,7 @@ const SignUpPromo = ({ c, titleMessage }) => {
 }
 
 const SignUpForm = ({ c, setOverlayData, handleSignInClick, showPromo, source }) => {
-  const [waiting, setWaiting] = useState(false)
+  const [isWaiting, setIsWaiting] = useState(false)
   const [signupErrorMessage, setSignupErrorMessage] = useState(null)
   const [invalidFields, setInvalidFields] = useState([])
   const redirectUrl = useQuery('redirectUrl')
@@ -339,40 +350,48 @@ const SignUpForm = ({ c, setOverlayData, handleSignInClick, showPromo, source })
     }
   }, [setOverlayData, inputState, setFieldToValid])
 
-  const handleSignUp = useCallback(async () => {
-    setWaiting(true)
-    setSignupErrorMessage(null)
-    if (!validateEmail()) return setWaiting(false)
-    if (!validatePasswords()) return setWaiting(false)
+  const handleSignUp = useCallback(
+    async (_, isValid, errors) => {
+      if (!isValid) {
+        return setSignupErrorMessage(errors?.[0]?.message)
+      }
 
-    const { error } = await authenticationService.signup({
-      email: inputState.email,
-      password: inputState.password,
-      firstName: inputState.firstName,
-      lastName: inputState.lastName,
-      username: inputState.username,
-    })
+      setIsWaiting(true)
+      setSignupErrorMessage(null)
+      if (!validateEmail()) return setIsWaiting(false)
+      if (!validatePasswords()) return setIsWaiting(false)
 
-    setWaiting(false)
-    if (error) {
-      setOverlayData({
-        shake: true,
-      })
-      setSignupErrorMessage(error.message)
-    } else {
-      const { error: loginError } = await authenticationService.login({
+      const { error } = await authenticationService.signup({
         email: inputState.email,
         password: inputState.password,
+        firstName: inputState.firstName,
+        lastName: inputState.lastName,
+        username: inputState.username,
       })
-      if (loginError) return setSignupErrorMessage(error)
-      track('Overlay Sign Up Success', { source })
-      if (redirectUrl) return (window.location.href = redirectUrl)
-      if (window.location.href.includes('sessionExpired'))
-        return (window.location.href = '/')
-      if (window.location.href.includes('authFailed')) return (window.location.href = '/')
-      return (window.location.href = '/welcome')
-    }
-  }, [setOverlayData, inputState, redirectUrl, source, validateEmail, validatePasswords])
+
+      setIsWaiting(false)
+      if (error) {
+        setOverlayData({
+          shake: true,
+        })
+        setSignupErrorMessage(error.message)
+      } else {
+        const { error: loginError } = await authenticationService.login({
+          email: inputState.email,
+          password: inputState.password,
+        })
+        if (loginError) return setSignupErrorMessage(error)
+        track('Overlay Sign Up Success', { source })
+        if (redirectUrl) return (window.location.href = redirectUrl)
+        if (window.location.href.includes('sessionExpired'))
+          return (window.location.href = '/')
+        if (window.location.href.includes('authFailed'))
+          return (window.location.href = '/')
+        return (window.location.href = '/welcome')
+      }
+    },
+    [setOverlayData, inputState, redirectUrl, source, validateEmail, validatePasswords]
+  )
 
   return (
     <div className={classnames(c.Signup_Row, c.Signup_Wrapper)}>
@@ -427,7 +446,6 @@ const SignUpForm = ({ c, setOverlayData, handleSignInClick, showPromo, source })
               autoComplete='username'
               value={inputState && inputState.username}
               onChange={handleOnInputChange}
-              required
             />
             <Spacer size='1rem' />
             <Input
@@ -439,7 +457,6 @@ const SignUpForm = ({ c, setOverlayData, handleSignInClick, showPromo, source })
               value={inputState && inputState.email}
               onChange={handleOnInputChange}
               validator={validateEmail}
-              required
             />
             <Spacer size='1rem' />
             <Input
@@ -452,7 +469,6 @@ const SignUpForm = ({ c, setOverlayData, handleSignInClick, showPromo, source })
               value={inputState && inputState.password}
               onChange={handleOnInputChange}
               validator={validatePasswords}
-              required
             />
             <Spacer size='1rem' />
             <Input
@@ -465,13 +481,12 @@ const SignUpForm = ({ c, setOverlayData, handleSignInClick, showPromo, source })
               value={inputState && inputState.confirmPass}
               onChange={handleOnInputChange}
               validator={validatePasswords}
-              required
             />
             <Spacer size='1rem' />
           </div>
           <Spacer size='1rem' />
-          <Button className={c.Signup_Button} type='submit' disabled={waiting}>
-            {waiting ? 'Processing...' : 'Sign up'}
+          <Button className={c.Signup_Button} type='submit' disabled={isWaiting}>
+            {isWaiting ? 'Processing...' : 'Sign up'}
           </Button>
           <Spacer size='.75rem' />
           <Metadata type={MetadataType.secondary}>

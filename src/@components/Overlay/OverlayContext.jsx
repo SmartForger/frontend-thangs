@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useOverlayProvider } from '@hooks'
 import { Overlay } from '@components'
 
@@ -18,6 +18,25 @@ const OverlayProvider = ({ children }) => {
     isOverlayOpen,
     isOverlayHidden,
   } = useOverlayProvider()
+
+  useEffect(() => {
+    let timer
+    if (overlayData.shake) {
+      timer = setTimeout(() => {
+        setOverlayData({
+          shake: false,
+        })
+        timer = null
+      }, 900)
+    }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer)
+      }
+    }
+  }, [overlayData.shake, setOverlayData])
+
   return (
     <Provider
       value={{
@@ -33,7 +52,7 @@ const OverlayProvider = ({ children }) => {
         isOverlayHidden,
       }}
     >
-      <Overlay />
+      <Overlay shake={overlayData.shake} />
       {children}
     </Provider>
   )
