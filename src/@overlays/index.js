@@ -56,7 +56,8 @@ export const SearchByUpload = lazy(() =>
 export const SelectPartToVersion = lazy(() =>
   import(/* webpackChunkName: 'overlays' */ './SelectPartToVersion')
 )
-export const Signin = lazy(() => import(/* webpackChunkName: 'overlays' */ './Signin'))
+export const loadSignin = () => import(/* webpackChunkName: 'overlays' */ './Signin')
+export const Signin = lazy(loadSignin)
 export const Signup = lazy(() => import(/* webpackChunkName: 'overlays' */ './Signup'))
 export const VersionPublished = lazy(() =>
   import(/* webpackChunkName: 'overlays' */ './VersionPublished')

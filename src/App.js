@@ -26,6 +26,11 @@ import { StoreContext } from 'storeon/react'
 import { ThemeProvider, GlobalStyles } from '@physna/voxel-ui/@style'
 import store from 'store'
 import ScrollToTop from '@utilities/scrollToTop'
+import windowLoad from '@utilities/windowLoad'
+import { loadSignin } from '@overlays'
+
+// Preload 'overlays' bundle
+windowLoad.then(loadSignin)
 
 export function AppFrame() {
   return (
