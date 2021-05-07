@@ -1,13 +1,16 @@
 import React, { useCallback, useEffect, useRef } from 'react'
 import { useForm } from '@hooks'
-import Joi from '@hapi/joi'
 import * as R from 'ramda'
-import * as EmailValidator from 'email-validator'
 import { Button, Spinner, TextInput, Spacer } from '@components'
-import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { useStoreon } from 'storeon/react'
 import * as types from '@constants/storeEventTypes'
+import {
+  VALIDATION_ARRAY,
+  VALIDATION_MIN_LENGTH,
+  VALIDATION_REQUIRED,
+  VALIDATION_EMAIL,
+} from '@utilities/validation'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -107,67 +110,26 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const schemaWithoutName = Joi.object({
-  members: Joi.array()
-    .items(Joi.string().email({ tlds: { allow: false } }))
-    .min(1)
-    .required(),
-  emails: Joi.any(),
-})
+const schemaWithoutName = {
+  members: {
+    label: 'Members',
+    rules: [
+      VALIDATION_REQUIRED,
+      {
+        type: VALIDATION_ARRAY,
+        item: [VALIDATION_REQUIRED, VALIDATION_EMAIL],
+      },
+      {
+        type: VALIDATION_MIN_LENGTH,
+        length: 1,
+      },
+    ],
+    messages: 'Please enter valid e-mail addresses',
+  },
+}
 
 const parseEmails = R.pipe(R.split(/[ ,] */), R.filter(R.identity))
 const trimEmails = emails => emails.map(email => email.trim())
-
-const isEmptyMembers = ([key, info]) => {
-  return key === 'members' && info.type === 'array.min'
-}
-
-const isEmptyName = ([key, info]) => {
-  return key === 'name' && info.type === 'string.empty'
-}
-
-const isInvalidEmail = ([key, info]) => {
-  return key === 'members' && info.type === 'string.email'
-}
-
-const isServerError = ([key, _info]) => {
-  return key === 'server'
-}
-
-const DisplayInviteFormErrors = ({ errors, className, serverErrorMsg }) => {
-  const c = useStyles()
-  const messages = R.toPairs(errors)
-
-  return messages.map((error, i) => {
-    if (isEmptyMembers(error)) {
-      return (
-        <h4 className={classnames(className, c.InviteForm_ErrorText)} key={i}>
-          Please invite at least one other member
-        </h4>
-      )
-    } else if (isInvalidEmail(error)) {
-      return (
-        <h4 className={classnames(className, c.InviteForm_ErrorText)} key={i}>
-          Please check that you have provided valid emails
-        </h4>
-      )
-    } else if (isEmptyName(error)) {
-      return (
-        <h4 className={classnames(className, c.InviteForm_ErrorText)} key={i}>
-          Please provide a name for your folder
-        </h4>
-      )
-    } else if (isServerError(error)) {
-      return (
-        <h4 className={classnames(className, c.InviteForm_ErrorText)} key={i}>
-          {serverErrorMsg}
-        </h4>
-      )
-    } else {
-      return null
-    }
-  })
-}
 
 const InviteUsersForm = ({
   folderId,
@@ -200,13 +162,10 @@ const InviteUsersForm = ({
 
   const handleSave = useCallback(
     ({ members }, isValid, errors) => {
-      const emailValid = members.every(member => {
-        return EmailValidator.validate(member)
-      })
-      if (!emailValid) return onError('Please enter valid e-mail addresses')
       if (!isValid) {
-        return onError(errors)
+        return onError(errors?.[0]?.message)
       }
+
       const variables = { emails: members }
       dispatch(types.INVITE_TO_FOLDER, {
         data: variables,
@@ -265,4 +224,4 @@ const InviteUsersForm = ({
   )
 }
 
-export { InviteUsersForm, DisplayInviteFormErrors }
+export { InviteUsersForm }

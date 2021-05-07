@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as R from 'ramda'
-import Joi from '@hapi/joi'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import {
   Body,
@@ -21,6 +20,7 @@ import {
 } from '@components'
 import { useForm } from '@hooks'
 import { CATEGORIES } from '@constants/fileUpload'
+import { VALIDATION_PATTERN, VALIDATION_REQUIRED } from '@utilities/validation'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -34,7 +34,7 @@ const useStyles = createUseStyles(theme => {
       },
     },
     AssemblyInfo_FieldRow: {
-      alignItems: 'baseline',
+      alignItems: 'flex-end',
       display: 'flex',
       flexDirection: 'row',
     },
@@ -114,16 +114,29 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const assemblyInfoSchema = ({ isRootAssembly, isMultipart }) =>
-  Joi.object({
-    name: Joi.string().pattern(new RegExp('^[^/]+$')).required(),
-    description: isRootAssembly ? Joi.string().required() : Joi.string().allow(''),
-    folderId: Joi.string().allow(''),
-    primary: isMultipart ? Joi.string().required() : Joi.string().allow(''),
-    category: Joi.string().allow(''),
-    license: Joi.string().allow(''),
-    previousVersionModelId: Joi.string().allow(''),
-  })
+const assemblyInfoSchema = ({ isRootAssembly, isMultipart }) => ({
+  name: {
+    label: 'Name',
+    rules: [
+      VALIDATION_REQUIRED,
+      {
+        type: VALIDATION_PATTERN,
+        pattern: new RegExp('^[^/]+$'),
+      },
+    ],
+    messages: {
+      [VALIDATION_PATTERN]: 'Name should not contain "/"',
+    },
+  },
+  description: {
+    label: 'Description',
+    rules: isRootAssembly ? [VALIDATION_REQUIRED] : [],
+  },
+  primary: {
+    label: 'Primary Model',
+    rules: isMultipart ? [VALIDATION_REQUIRED] : [],
+  },
+})
 
 const INITIAL_STATE = {
   name: '',
@@ -205,10 +218,14 @@ const AssemblyInfo = ({
   )
 
   const handleSubmit = useCallback(
-    (data, isValid) => {
-      if (isValid) onContinue({ data })
+    (data, isValid, errors) => {
+      if (!isValid) {
+        return setErrorMessage(errors?.[0]?.message)
+      }
+
+      onContinue({ data })
     },
-    [onContinue]
+    [onContinue, setErrorMessage]
   )
 
   const metaText =
@@ -302,12 +319,15 @@ const AssemblyInfo = ({
         />
         <Spacer size={'1rem'} />
         {!activeNode.parentId && (
-          <LicenseField
-            model={file}
-            className={c.AssemblyInfo_FieldRow}
-            onChange={handleLicenseChange}
-            value={inputState && inputState.license}
-          />
+          <>
+            <LicenseField
+              model={file}
+              className={c.AssemblyInfo_FieldRow}
+              onChange={handleLicenseChange}
+              value={inputState && inputState.license}
+            />
+            <Spacer size='1rem' />
+          </>
         )}
         <Textarea
           className={c.AssemblyInfo_TextAreaInput}
@@ -326,7 +346,7 @@ const AssemblyInfo = ({
             <Dropdown
               className={c.AssemblyInfo_Select}
               name='primary'
-              placeholder='Select primary model *'
+              label='Select primary model *'
               options={fileOptions}
               value={selectedPrimaryModel}
               onChange={e => {
@@ -342,6 +362,7 @@ const AssemblyInfo = ({
           <Dropdown
             className={c.AssemblyInfo_Select}
             name='category'
+            label='Category'
             placeholder='Select category'
             isClearable
             options={CATEGORIES}

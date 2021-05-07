@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import * as EmailValidator from 'email-validator'
-import Joi from '@hapi/joi'
 import classnames from 'classnames'
 import { useHistory } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
@@ -22,6 +21,7 @@ import { useOverlay } from '@hooks'
 import { overlayview } from '@utilities/analytics'
 
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
+import { VALIDATION_REQUIRED, VALIDATION_EMAIL } from '@utilities/validation'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -147,10 +147,16 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const moreInfoSchema = Joi.object({
-  email: Joi.string().email({ tlds: { allow: false } }),
-  username: Joi.string().required(),
-})
+const moreInfoSchema = {
+  email: {
+    label: 'Email',
+    rules: [VALIDATION_REQUIRED, VALIDATION_EMAIL],
+  },
+  username: {
+    label: 'Username',
+    rules: [VALIDATION_REQUIRED],
+  },
+}
 
 const MoreInfoForm = ({
   c,
@@ -159,7 +165,7 @@ const MoreInfoForm = ({
   setOverlayData,
   setOverlayOpen,
 }) => {
-  const [waiting, setWaiting] = useState(false)
+  const [isWaiting, setIsWaiting] = useState(false)
   const [moreInfoErrorMessage, setMoreInfoErrorMessage] = useState(
     'Thank you for using SSO to sign up. We just need a little more information for your new account.'
   )
@@ -208,22 +214,29 @@ const MoreInfoForm = ({
     }
   }, [inputState.email, setFieldToValid, setOverlayData])
 
-  const handleUpdateEmail = useCallback(async () => {
-    setWaiting(true)
-    setMoreInfoErrorMessage(null)
-    const currentUserId = authenticationService.getCurrentUserId()
-    dispatch(types.UPDATE_USER, {
-      id: currentUserId,
-      user: { email: inputState.email },
-      onError: error => {
-        setMoreInfoErrorMessage(error)
-        setWaiting(false)
-      },
-      onFinish: () => {
-        setOverlayOpen(false)
-      },
-    })
-  }, [dispatch, inputState.email, setOverlayOpen])
+  const handleUpdateEmail = useCallback(
+    async (_, isValid, errors) => {
+      if (!isValid) {
+        return setMoreInfoErrorMessage(errors?.[0]?.message)
+      }
+
+      setIsWaiting(true)
+      setMoreInfoErrorMessage(null)
+      const currentUserId = authenticationService.getCurrentUserId()
+      dispatch(types.UPDATE_USER, {
+        id: currentUserId,
+        user: { email: inputState.email },
+        onError: error => {
+          setMoreInfoErrorMessage(error)
+          setIsWaiting(false)
+        },
+        onFinish: () => {
+          setOverlayOpen(false)
+        },
+      })
+    },
+    [dispatch, inputState.email, setOverlayOpen]
+  )
 
   return (
     <div className={classnames(c.MoreInfo_Row, c.MoreInfo_SignUpForm)}>
@@ -267,8 +280,8 @@ const MoreInfoForm = ({
             <Spacer size='1rem' />
           </div>
           <Spacer size='1rem' />
-          <Button className={c.MoreInfo_Button} type='submit' disabled={waiting}>
-            {waiting ? 'Processing...' : 'Finish'}
+          <Button className={c.MoreInfo_Button} type='submit' disabled={isWaiting}>
+            {isWaiting ? 'Processing...' : 'Finish'}
           </Button>
           <Spacer size='.75rem' />
           <Metadata type={MetadataType.secondary}>

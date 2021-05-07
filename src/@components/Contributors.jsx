@@ -31,7 +31,13 @@ const useStyles = createUseStyles(theme => {
 
 const noop = () => null
 
-const Contributors = ({ fileId, users = [], displayLength = 2, onClick = noop }) => {
+const Contributors = ({
+  fileId,
+  users = [],
+  displayLength = 2,
+  onClick = noop,
+  size = '1.875rem',
+}) => {
   const c = useStyles({})
   const filteredUsers = users.filter(user => user && (user.fullName || user.username))
   let confirmedContributors = filteredUsers.filter(user => user.fullName)
@@ -47,7 +53,7 @@ const Contributors = ({ fileId, users = [], displayLength = 2, onClick = noop })
           return (
             <div key={`${fileId}_${user.id}_${index}`} className={c.Contributors_Avatar}>
               <ProfilePicture
-                size='1.875rem'
+                size={size}
                 name={undisplayedUserCount}
                 title={undisplayedUserList}
                 bordered
@@ -59,7 +65,7 @@ const Contributors = ({ fileId, users = [], displayLength = 2, onClick = noop })
         return (
           <div key={`${fileId}_${user.id}_${index}`} className={c.Contributors_Avatar}>
             <ProfilePicture
-              size='1.875rem'
+              size={size}
               name={user.fullName}
               userName={user.username}
               src={user.profile && user.profile.avatarUrl}

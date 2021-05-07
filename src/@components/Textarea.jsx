@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
 
-import { Spacer } from '@components'
+import { ContainerRow, Spacer } from '@components'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -32,9 +32,7 @@ const useStyles = createUseStyles(theme => {
         borderColor: theme.colors.gold[500],
       },
     },
-    Textarea_ErrorWrapper: {
-      display: 'flex',
-    },
+    Textarea_ErrorWrapper: {},
     Textarea_ErrorMessage: {
       color: theme.colors.error,
     },
@@ -46,7 +44,6 @@ const Textarea = ({
   autoComplete,
   className,
   disabled,
-  error,
   errorMessage,
   id,
   label,
@@ -59,7 +56,7 @@ const Textarea = ({
   value = '',
 }) => {
   const [valid, setValid] = useState(true)
-  const c = useStyles({ invalid: !valid || error })
+  const c = useStyles({ invalid: !valid || errorMessage })
 
   const handleValidation = useCallback(() => {
     if (validator && typeof validator === 'function') {
@@ -69,9 +66,24 @@ const Textarea = ({
 
   return (
     <div className={classnames(className)}>
-      <label htmlFor={name}>
-        <Metadata type={MetadataType.secondary}>{label}</Metadata>
-      </label>
+      <ContainerRow alignItems='center'>
+        <label htmlFor={name}>
+          <Metadata
+            className={classnames({ [c.Textarea_ErrorMessage]: !!errorMessage })}
+            type={MetadataType.secondary}
+          >
+            {label}
+          </Metadata>
+        </label>
+        {!!errorMessage && (
+          <>
+            <Spacer size={'.5rem'} />
+            <Metadata type={MetadataType.secondary} className={c.Textarea_ErrorMessage}>
+              {errorMessage}
+            </Metadata>
+          </>
+        )}
+      </ContainerRow>
       <Spacer size='0.5rem' />
       <textarea
         autoComplete={autoComplete}
@@ -87,17 +99,6 @@ const Textarea = ({
         type={type}
         value={value}
       />
-      {errorMessage && (
-        <>
-          <Spacer size={'.5rem'} />
-          <div className={c.Textarea_ErrorWrapper}>
-            <Spacer size={'.25rem'} />
-            <Metadata type={MetadataType.secondary} className={c.Textarea_ErrorMessage}>
-              {errorMessage}
-            </Metadata>
-          </div>
-        </>
-      )}
     </div>
   )
 }

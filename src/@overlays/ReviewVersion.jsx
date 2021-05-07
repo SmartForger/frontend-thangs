@@ -66,7 +66,7 @@ const ReviewVersion = () => {
   const { data: files = {}, formData } = uploadModelFiles
   const { data: modelData = {}, isLoading: isLoadingModel } = model
   const modelId = modelData && modelData.id
-  const [waiting, setWaiting] = useState(false)
+  const [isWaiting, setIsWaiting] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
   const { setOverlay } = useOverlay()
   const parts = getPartsByPartId(files, formData, modelData)
@@ -76,7 +76,7 @@ const ReviewVersion = () => {
       .map(fileKey => {
         return formData[fileKey].previousParts.map(
           partId =>
-            (modelData.parts.find(part => part.partIdentifier === partId) || {}).name
+            (modelData?.parts?.find(part => part.partIdentifier === partId) || {})?.name
         )
       })
       .flat()
@@ -92,7 +92,7 @@ const ReviewVersion = () => {
   const formSubmit = useCallback(
     async (inputState, isValid, _errors) => {
       if (isValid) {
-        setWaiting(true)
+        setIsWaiting(true)
         dispatch(types.SUBMIT_NEW_VERSION, {
           modelId,
           message: inputState.message,
@@ -109,7 +109,7 @@ const ReviewVersion = () => {
             })
           },
           onError: () => {
-            setWaiting(false)
+            setIsWaiting(false)
             setErrorMessage(
               'Oh no! Something went wrong on our end. Sorry about that! Please try again later.'
             )
@@ -168,7 +168,7 @@ const ReviewVersion = () => {
       overlaySubTitle={
         'Review your model changes and write a message to keep track of your version history.'
       }
-      isLoading={waiting || isLoadingModel}
+      isLoading={isWaiting || isLoadingModel}
       onCancel={handleBack}
       onClose={handleClose}
       onContinue={onFormSubmit(formSubmit)}
@@ -186,11 +186,12 @@ const ReviewVersion = () => {
       <form className={c.ReviewVersion_Form}>
         <Textarea
           className={c.ReviewVersion_TextArea}
+          label={'Version message'}
           name='message'
-          value={inputState && inputState.message}
           onChange={handleOnInputChange}
           placeholder={'Add a message describing your changes'}
           required
+          value={inputState && inputState.message}
         />
       </form>
     </OverlayWrapper>

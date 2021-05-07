@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import Joi from '@hapi/joi'
 import * as EmailValidator from 'email-validator'
 import { authenticationService } from '@services'
 import { useForm } from '@hooks'
 import { TextInput, Spinner, Button, Layout } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { track, pageview } from '@utilities/analytics'
+import { VALIDATION_EMAIL, VALIDATION_REQUIRED } from '@utilities/validation'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -56,14 +56,23 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const resetSchema = Joi.object({
-  email: Joi.string().required(),
-})
+const resetSchema = {
+  email: {
+    label: 'Email',
+    rules: [VALIDATION_REQUIRED, VALIDATION_EMAIL],
+  },
+}
 
-const changePasswordSchema = Joi.object({
-  password: Joi.string().required(),
-  confirmPassword: Joi.string().required(),
-})
+const changePasswordSchema = {
+  password: {
+    label: 'Password',
+    rules: [VALIDATION_REQUIRED],
+  },
+  confirmPassword: {
+    label: 'Confirm Password',
+    rules: [VALIDATION_REQUIRED],
+  },
+}
 
 const ServerErrors = ({ errors }) => {
   return typeof errors !== 'object' ? (
@@ -78,7 +87,7 @@ const ServerErrors = ({ errors }) => {
 }
 
 const ResetPage = () => {
-  const [waiting, setWaiting] = useState(false)
+  const [isWaiting, setIsWaiting] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
   const [invalidFields, setInvalidFields] = useState([])
   const [isSuccess, setIsSuccess] = useState(false)
@@ -128,34 +137,41 @@ const ResetPage = () => {
     }
   }, [inputState, setFieldToValid])
 
-  const handleResetPassword = useCallback(async () => {
-    setWaiting(true)
-    setErrorMessage(null)
-    setIsSuccess(false)
+  const handleResetPassword = useCallback(
+    async (_, isValid, errors) => {
+      if (!isValid) {
+        return setErrorMessage(errors?.[0]?.message)
+      }
 
-    try {
-      await authenticationService.resetPasswordForEmail(inputState.email)
-      setIsSuccess(true)
-      const partialEmail = inputState.email.substring(0, 5)
-      track('Password Reset Page - email requested', { email: partialEmail })
-    } catch (e) {
-      setErrorMessage(
-        e && e.response && e.response.data ? (
-          <ServerErrors errors={e.response.data} />
-        ) : (
-          'Unknown error. Try again.'
+      setIsWaiting(true)
+      setErrorMessage(null)
+      setIsSuccess(false)
+
+      try {
+        await authenticationService.resetPasswordForEmail(inputState.email)
+        setIsSuccess(true)
+        const partialEmail = inputState.email.substring(0, 5)
+        track('Password Reset Page - email requested', { email: partialEmail })
+      } catch (e) {
+        setErrorMessage(
+          e?.response?.data ? (
+            <ServerErrors errors={e.response.data} />
+          ) : (
+            'Unknown error. Try again.'
+          )
         )
-      )
-    } finally {
-      setWaiting(false)
-    }
-  }, [inputState])
+      } finally {
+        setIsWaiting(false)
+      }
+    },
+    [inputState]
+  )
 
   return (
     <div className={c.PasswordReset}>
       <h1 className={c.PasswordReset_PageHeader}>
         Reset Password{' '}
-        {waiting && <Spinner className={c.PasswordReset_Spinner} size='30' />}
+        {isWaiting && <Spinner className={c.PasswordReset_Spinner} size='30' />}
       </h1>
       {!!errorMessage && (
         <h4 className={c.PasswordReset_ErrorText} data-cy='reset-error'>
@@ -172,7 +188,7 @@ const ResetPage = () => {
               Email
               <TextInput
                 className={c.PasswordReset_TextInput}
-                disabled={waiting}
+                disabled={isWaiting}
                 type='text'
                 name='email'
                 onChange={e => {
@@ -198,7 +214,7 @@ const ResetPage = () => {
 }
 
 const ConfirmResetPage = () => {
-  const [waiting, setWaiting] = useState(false)
+  const [isWaiting, setIsWaiting] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
   const history = useHistory()
   const { token } = useParams()
@@ -227,7 +243,7 @@ const ConfirmResetPage = () => {
   )
 
   const handleChangePassword = useCallback(async () => {
-    setWaiting(true)
+    setIsWaiting(true)
     setErrorMessage(null)
 
     try {
@@ -250,7 +266,7 @@ const ConfirmResetPage = () => {
         )
       )
     } finally {
-      setWaiting(false)
+      setIsWaiting(false)
     }
   }, [history, inputState, token])
 
@@ -258,7 +274,7 @@ const ConfirmResetPage = () => {
     <div className={c.PasswordReset}>
       <h1 className={c.PasswordReset_PageHeader}>
         Set New Password{' '}
-        {waiting && <Spinner className={c.PasswordReset_Spinner} size='30' />}
+        {isWaiting && <Spinner className={c.PasswordReset_Spinner} size='30' />}
       </h1>
       {!!errorMessage && (
         <h4 className={c.PasswordReset_ErrorText} data-cy='confirm-reset-error'>
@@ -272,7 +288,7 @@ const ConfirmResetPage = () => {
               Password
               <TextInput
                 className={c.PasswordReset_TextInput}
-                disabled={waiting}
+                disabled={isWaiting}
                 type='password'
                 name='password'
                 autoComplete='new-password'
@@ -289,7 +305,7 @@ const ConfirmResetPage = () => {
               Confirm Password
               <TextInput
                 className={c.PasswordReset_TextInput}
-                disabled={waiting}
+                disabled={isWaiting}
                 type='password'
                 name='confirmPassword'
                 autoComplete='new-password'

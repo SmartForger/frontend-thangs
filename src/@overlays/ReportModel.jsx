@@ -51,7 +51,7 @@ const useStyles = createUseStyles(theme => {
 })
 
 const ReportModel = ({ model, afterSend }) => {
-  const [waiting, setWaiting] = useState(false)
+  const [isWaiting, setIsWaiting] = useState(false)
   const [formErrorMessage, setFormErrorMessage] = useState(null)
   const [formSuccessMessage, setFormSuccessMessage] = useState(null)
   const [invalidFields, setInvalidFields] = useState([])
@@ -97,7 +97,7 @@ const ReportModel = ({ model, afterSend }) => {
   }, [inputState, setFieldToValid])
 
   const handleSubmit = async () => {
-    setWaiting(true)
+    setIsWaiting(true)
     setFormErrorMessage(null)
 
     const res = await api({
@@ -134,7 +134,7 @@ const ReportModel = ({ model, afterSend }) => {
     <div className={c.ReportModel_Body}>
       <ErrorIcon width={'4rem'} height={'4rem'} className={c.ReportModel_Icon} />
       <h1 className={c.ReportModel_PageHeader}>
-        Report a Model {waiting && <Spinner className={c.ReportModel_Spinner} />}
+        Report a Model {isWaiting && <Spinner className={c.ReportModel_Spinner} />}
       </h1>
       {!!formErrorMessage && (
         <h4 className={c.ReportModel_ErrorText}>{formErrorMessage}</h4>

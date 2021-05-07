@@ -377,9 +377,7 @@ const MultiUpload = ({
         if (modelData?.parts?.length === 1 || versionData?.partId) {
           const currentFileKey = Object.keys(uploadFilesData)[0]
           const currentFile = uploadFilesData[currentFileKey]
-          const singlePart = versionData?.partId
-            ? modelData.parts.find(part => part.partIdentifier === versionData?.partId)
-            : modelData.parts[0]
+          const singlePart = versionData?.partId || modelData?.parts[0].partIdentifier
 
           dispatch(types.SET_MODEL_INFO, {
             id: currentFile.id,

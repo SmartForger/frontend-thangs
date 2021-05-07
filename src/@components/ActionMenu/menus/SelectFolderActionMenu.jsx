@@ -75,12 +75,12 @@ const useStyles = createUseStyles(theme => {
     },
     SelectFolderTarget_Icon: {
       alignItems: 'center',
+      bottom: 0,
       cursor: 'pointer',
       display: 'flex',
       height: '2.5rem',
       position: 'absolute',
       right: '1rem',
-      top: 0,
 
       '& path': {
         fill: theme.colors.grey[300],

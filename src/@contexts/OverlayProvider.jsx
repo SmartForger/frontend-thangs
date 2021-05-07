@@ -1,4 +1,4 @@
-import React, { useMemo, useReducer } from 'react'
+import React, { useMemo, useReducer, useEffect } from 'react'
 import { OverlayContext } from './Overlay'
 import { Overlay } from '@components/Overlay'
 import {
@@ -143,6 +143,25 @@ export const OverlayProvider = ({ children }) => {
     isOverlayOpen,
     isOverlayHidden,
   } = useOverlayProvider()
+
+  useEffect(() => {
+    let timer
+    if (overlayData.shake) {
+      timer = setTimeout(() => {
+        setOverlayData({
+          shake: false,
+        })
+        timer = null
+      }, 900)
+    }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer)
+      }
+    }
+  }, [overlayData.shake, setOverlayData])
+
   return (
     <OverlayContext.Provider
       value={{
@@ -158,7 +177,7 @@ export const OverlayProvider = ({ children }) => {
         isOverlayHidden,
       }}
     >
-      <Overlay />
+      <Overlay shake={overlayData.shake} />
       {children}
     </OverlayContext.Provider>
   )

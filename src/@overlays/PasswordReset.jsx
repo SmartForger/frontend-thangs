@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import Joi from '@hapi/joi'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
@@ -10,6 +9,7 @@ import { authenticationService } from '@services'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { overlayview, track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
+import { VALIDATION_REQUIRED, VALIDATION_EMAIL } from '@utilities/validation'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -88,12 +88,15 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const emailSchema = Joi.object({
-  email: Joi.string().required(),
-})
+const emailSchema = {
+  email: {
+    label: 'Email',
+    rules: [VALIDATION_REQUIRED, VALIDATION_EMAIL],
+  },
+}
 
 const ResetForm = ({ c }) => {
-  const [waiting, setWaiting] = useState(false)
+  const [isWaiting, setIsWaiting] = useState(false)
   const [signupErrorMessage, setPasswordResetErrorMessage] = useState(null)
   const [signupSuccessMessage, setPasswordResetSuccessMessage] = useState(null)
   const initialState = {
@@ -112,21 +115,30 @@ const ResetForm = ({ c }) => {
     [onInputChange]
   )
 
-  const handlePasswordReset = useCallback(async () => {
-    setWaiting(true)
-    setPasswordResetErrorMessage(null)
+  const handlePasswordReset = useCallback(
+    async (_, isValid, errors) => {
+      if (!isValid) {
+        return setPasswordResetErrorMessage(errors?.[0]?.message)
+      }
 
-    const { error } = await authenticationService.resetPasswordForEmail(inputState.email)
+      setIsWaiting(true)
+      setPasswordResetErrorMessage(null)
 
-    setWaiting(false)
-    if (error) {
-      setPasswordResetErrorMessage(error.message)
-    } else {
-      const partialEmail = inputState.email.substring(0, 5)
-      track('Password Reset Overlay - email requested', { email: partialEmail })
-      setPasswordResetSuccessMessage('Email with reset link sent!')
-    }
-  }, [inputState])
+      const { error } = await authenticationService.resetPasswordForEmail(
+        inputState.email
+      )
+
+      setIsWaiting(false)
+      if (error) {
+        setPasswordResetErrorMessage(error.message)
+      } else {
+        const partialEmail = inputState.email.substring(0, 5)
+        track('Password Reset Overlay - email requested', { email: partialEmail })
+        setPasswordResetSuccessMessage('Email with reset link sent!')
+      }
+    },
+    [inputState]
+  )
 
   useEffect(() => {
     overlayview('PasswordReset')
@@ -171,8 +183,8 @@ const ResetForm = ({ c }) => {
             <Spacer size='1rem' />
           </div>
           {!signupSuccessMessage && (
-            <Button className={c.PasswordReset_Button} type='submit' disabled={waiting}>
-              {waiting ? 'Processing...' : 'Send Email'}
+            <Button className={c.PasswordReset_Button} type='submit' disabled={isWaiting}>
+              {isWaiting ? 'Processing...' : 'Send Email'}
             </Button>
           )}
         </form>

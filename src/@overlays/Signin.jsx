@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import Joi from '@hapi/joi'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import {
@@ -20,6 +19,7 @@ import { useOverlay } from '@hooks'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
 import { ReactComponent as FacebookLogo } from '@svg/facebook-logo.svg'
+import { VALIDATION_REQUIRED, VALIDATION_EMAIL } from '@utilities/validation'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -163,10 +163,16 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const signInSchema = Joi.object({
-  email: Joi.string().required(),
-  password: Joi.string().required(),
-})
+const signInSchema = {
+  email: {
+    label: 'Email',
+    rules: [VALIDATION_REQUIRED, VALIDATION_EMAIL],
+  },
+  password: {
+    label: 'Password',
+    rules: [VALIDATION_REQUIRED],
+  },
+}
 
 export const SigninGoogleButton = () => {
   const c = useStyles({})
@@ -200,7 +206,7 @@ const SignInForm = ({
   sessionExpired,
   authFailed,
 }) => {
-  const [waiting, setWaiting] = useState(false)
+  const [isWaiting, setIsWaiting] = useState(false)
   const [signinErrorMessage, setSigninErrorMessage] = useState(null)
   const showErrorMessage = useMemo(
     () => signinErrorMessage || sessionExpired || authFailed,
@@ -230,29 +236,37 @@ const SignInForm = ({
     [onInputChange]
   )
 
-  const handleSignIn = useCallback(async () => {
-    setWaiting(true)
-    setSigninErrorMessage(null)
+  const handleSignIn = useCallback(
+    async (_, isValid, errors) => {
+      if (!isValid) {
+        return setSigninErrorMessage(errors?.[0]?.message)
+      }
 
-    const { error } = await authenticationService.login({
-      email: inputState.email,
-      password: inputState.password,
-    })
+      setIsWaiting(true)
+      setSigninErrorMessage(null)
 
-    setWaiting(false)
-    if (error) {
-      setOverlayData({
-        shake: true,
+      const { error } = await authenticationService.login({
+        email: inputState.email,
+        password: inputState.password,
       })
-      setSigninErrorMessage(error.data && error.data.message)
-    } else {
-      if (redirectUrl) return (window.location.href = redirectUrl)
-      if (window.location.href.includes('sessionExpired'))
-        return (window.location.href = '/')
-      if (window.location.href.includes('authFailed')) return (window.location.href = '/')
-      return window.location.reload()
-    }
-  }, [setOverlayData, inputState, redirectUrl])
+
+      setIsWaiting(false)
+      if (error) {
+        setOverlayData({
+          shake: true,
+        })
+        setSigninErrorMessage(error.data && error.data.message)
+      } else {
+        if (redirectUrl) return (window.location.href = redirectUrl)
+        if (window.location.href.includes('sessionExpired'))
+          return (window.location.href = '/')
+        if (window.location.href.includes('authFailed'))
+          return (window.location.href = '/')
+        return window.location.reload()
+      }
+    },
+    [setOverlayData, inputState, redirectUrl]
+  )
 
   return (
     <div className={classnames(c.Signin_Row, c.Signin_SignInForm)}>
@@ -291,7 +305,6 @@ const SignInForm = ({
               autoComplete='email'
               value={inputState && inputState.email}
               onChange={handleOnInputChange}
-              required
             />
             <Spacer size='1rem' />
             <Input
@@ -303,12 +316,11 @@ const SignInForm = ({
               autoComplete='new-password'
               value={inputState && inputState.password}
               onChange={handleOnInputChange}
-              required
             />
             <Spacer size='1rem' />
           </div>
-          <Button className={c.Signin_Button} type='submit' disabled={waiting}>
-            {waiting ? 'Processing...' : 'Log in'}
+          <Button className={c.Signin_Button} type='submit' disabled={isWaiting}>
+            {isWaiting ? 'Processing...' : 'Log in'}
           </Button>
         </form>
         <Spacer size='.5rem' />

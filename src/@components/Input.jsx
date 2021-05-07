@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Metadata, MetadataType } from '@physna/voxel-ui/@atoms/Typography'
 
-import { TextInput, Spacer } from '@components'
+import { ContainerRow, TextInput, Spacer } from '@components'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -13,9 +13,7 @@ const useStyles = createUseStyles(theme => {
     TextInput: {
       width: '100%',
     },
-    Input_ErrorWrapper: {
-      display: 'flex',
-    },
+    Input_ErrorWrapper: {},
     Input_ErrorMessage: {
       color: theme.colors.error,
     },
@@ -42,9 +40,24 @@ const Input = ({
   const c = useStyles()
   return (
     <div className={classnames(className, c.Input)}>
-      <label htmlFor={name}>
-        <Metadata type={MetadataType.secondary}>{label}</Metadata>
-      </label>
+      <ContainerRow alignItems='center'>
+        <label htmlFor={name}>
+          <Metadata
+            className={classnames({ [c.Input_ErrorMessage]: !!errorMessage })}
+            type={MetadataType.secondary}
+          >
+            {label}
+          </Metadata>
+        </label>
+        {!!errorMessage && (
+          <>
+            <Spacer size={'.5rem'} />
+            <Metadata type={MetadataType.secondary} className={c.Input_ErrorMessage}>
+              {errorMessage}
+            </Metadata>
+          </>
+        )}
+      </ContainerRow>
       <Spacer size='0.5rem' />
       <TextInput
         autoComplete={autoComplete}
@@ -61,17 +74,6 @@ const Input = ({
         disabled={disabled}
         {...props}
       />
-      {errorMessage && (
-        <>
-          <Spacer size={'.5rem'} />
-          <div className={c.Input_ErrorWrapper}>
-            <Spacer size={'.25rem'} />
-            <Metadata type={MetadataType.secondary} className={c.Input_ErrorMessage}>
-              {errorMessage}
-            </Metadata>
-          </div>
-        </>
-      )}
     </div>
   )
 }
