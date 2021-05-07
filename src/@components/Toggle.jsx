@@ -1,9 +1,8 @@
 import React from 'react'
-import ReactTooltip from 'react-tooltip'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Body } from '@physna/voxel-ui/@atoms/Typography'
 
-import { Spacer } from '@components'
+import { Spacer, Tooltip } from '@components'
 
 const useStyles = createUseStyles(theme => {
   return {
@@ -17,12 +16,9 @@ const useStyles = createUseStyles(theme => {
       alignItems: 'center',
       width: '100%',
       justifyContent: 'space-between',
-      opacity: ({ disabled }) => (disabled ? '.6' : '1'),
     },
     Toggle_Checkbox: {
-      height: 0,
-      width: 0,
-      visibility: 'hidden',
+      display: 'none',
 
       '&:checked + label span': {
         left: 'calc(100% - .25rem)',
@@ -30,17 +26,18 @@ const useStyles = createUseStyles(theme => {
       },
     },
     Toggle_Label: {
-      display: 'flex',
       alignItems: 'center',
-      justifyContent: 'space-between',
-      cursor: 'pointer',
-      width: '2.4375rem',
-      height: '1.5rem',
       backgroundColor: ({ checked }) =>
         checked ? theme.colors.black[500] : theme.colors.grey[300],
       borderRadius: 100,
+      cursor: 'pointer',
+      display: 'flex',
+      height: '1.5rem',
+      justifyContent: 'space-between',
+      opacity: ({ disabled }) => (disabled ? '.6' : '1'),
       position: 'relative',
       transition: 'background-color .2s',
+      width: '2.4375rem',
 
       '&:active > span': {
         width: ({ disabled }) => (disabled ? '15px' : '1.5rem'),
@@ -58,11 +55,15 @@ const useStyles = createUseStyles(theme => {
       background: '#fff',
       boxShadow: '0 0 2px 0 rgba(10, 10, 10, 0.29)',
     },
+    Toggle_Tooltip: {
+      alignItems: 'center',
+      display: 'flex',
+    },
   }
 })
 
 const noop = () => null
-const Toggle = ({ name, checked, onChange = noop, disabled, hoverTooltip }) => {
+const Toggle = ({ name, checked, onChange = noop, disabled }) => {
   const c = useStyles({ checked, disabled })
   const handleKeyPress = e => {
     if (e.keyCode !== 32 || disabled) return
@@ -82,12 +83,7 @@ const Toggle = ({ name, checked, onChange = noop, disabled, hoverTooltip }) => {
         checked={checked}
         onChange={onChange}
       />
-      <label
-        className={c.Toggle_Label}
-        htmlFor={`toggle-switch-${name}`}
-        data-for={'disabled-toggle'}
-        data-tip={hoverTooltip}
-      >
+      <label className={c.Toggle_Label} htmlFor={`toggle-switch-${name}`}>
         <span onKeyDown={e => handleKeyPress(e)} className={c.Toggle_Button} />
       </label>
     </>
@@ -108,23 +104,17 @@ const ToggleSwitch = ({
       <Spacer size={'1rem'} />
       <div className={c.ToggleRow}>
         <Body>{label}</Body>
-        <Toggle
-          name={name}
-          checked={checked}
-          onChange={onChange}
-          label={label}
-          disabled={disabled}
-          hoverTooltip={hoverTooltip}
-        />
+        <Tooltip className={c.Toggle_Tooltip} title={hoverTooltip}>
+          <Toggle
+            name={name}
+            checked={checked}
+            onChange={onChange}
+            label={label}
+            disabled={disabled}
+            hoverTooltip={hoverTooltip}
+          />
+        </Tooltip>
       </div>
-      {hoverTooltip && (
-        <ReactTooltip
-          id={'disabled-toggle'}
-          className={c.FeedbackTooltip_Message}
-          place={'top'}
-          effect='solid'
-        />
-      )}
       <Spacer size={'1rem'} />
     </div>
   )

@@ -29,10 +29,11 @@ function useHover() {
 const useStyles = createUseStyles(theme => ({
   Tooltip: {
     filter: 'drop-shadow(0 0.125rem 0.75rem rgba(0, 0, 0, 0.2))',
-    position: 'absolute',
-    width: '18rem',
-    visibility: 'hidden',
+    height: '100%',
     opacity: 0,
+    position: 'absolute',
+    visibility: 'hidden',
+    width: '18rem',
     zIndex: '2',
   },
   Tooltip_Box: {
@@ -45,12 +46,12 @@ const useStyles = createUseStyles(theme => ({
   },
   Tooltip_Arrow: {
     background: theme.colors.white[400],
-    left: '0.1rem',
-    top: '0.25rem',
     height: '0.75rem',
-    width: '0.75rem',
+    left: '0.1rem',
     position: 'absolute',
+    top: '0.25rem',
     transform: 'rotate(45deg)',
+    width: '0.75rem',
   },
   Tooltip_Container: {
     position: 'relative',
@@ -62,7 +63,13 @@ const useStyles = createUseStyles(theme => ({
   },
 }))
 
-const TooltipOverlay = ({ anchorElement, isOpen, title, tooltipRef }) => {
+const TooltipOverlay = ({
+  anchorElement,
+  isOpen,
+  title,
+  tooltipRef,
+  arrowLocation = 'top',
+}) => {
   const c = useStyles()
   const [isVisible, setIsVisible] = useState(false)
 
@@ -74,12 +81,35 @@ const TooltipOverlay = ({ anchorElement, isOpen, title, tooltipRef }) => {
     const boxPos = { x: 0, y: 0 }
     const arrowPos = { x: 0, y: 0 }
     const rect = tooltipRef.current.getBoundingClientRect()
-
-    boxPos.x = -130 * (rect.width / 288)
-
-    if (rect.bottom > window.innerHeight) {
-      boxPos.y = -1 * (rect.height + 42)
-      arrowPos.y = -1 * 45
+    if (arrowLocation === 'top') {
+      boxPos.x = -1 * (rect.width / 2) + anchorElement.clientWidth / 2
+      boxPos.y = anchorElement.clientHeight / 2 + 16
+      arrowPos.x = anchorElement.clientWidth / 2 - 6
+      arrowPos.y = anchorElement.clientHeight / 2 + 14
+    }
+    if (
+      arrowLocation === 'bottom' ||
+      (arrowLocation === 'top' && rect.bottom > window.innerHeight)
+    ) {
+      boxPos.x = -1 * (rect.width / 2) + anchorElement.clientWidth / 2
+      boxPos.y = -1 * (rect.height + anchorElement.clientHeight)
+      arrowPos.x = anchorElement.clientWidth / 2 - 6
+      arrowPos.y = -1 * (anchorElement.clientHeight + 2)
+    }
+    if (arrowLocation === 'left') {
+      boxPos.x = anchorElement.clientWidth + 12
+      boxPos.y = -1 * (rect.height / 2) + 3
+      arrowPos.x = anchorElement.clientWidth + 5
+      arrowPos.y = anchorElement.clientHeight / 2 - 10
+    }
+    if (
+      arrowLocation === 'right' ||
+      (arrowLocation === 'left' && rect.right > window.innerWidth)
+    ) {
+      boxPos.x = -1 * rect.width - 11
+      boxPos.y = -1 * (rect.height / 2) + 3
+      arrowPos.x = -18
+      arrowPos.y = anchorElement.clientHeight / 2 - 10
     }
 
     return [
@@ -117,13 +147,13 @@ const TooltipOverlay = ({ anchorElement, isOpen, title, tooltipRef }) => {
   )
 }
 
-const Tooltip = ({ title, children }) => {
+const Tooltip = ({ className, title, children, arrowLocation }) => {
   const c = useStyles()
   const boxRef = useRef(null)
   const [targetRef, isOpen] = useHover()
 
   return (
-    <div ref={targetRef} className={c.Tooltip_Container}>
+    <div ref={targetRef} className={classnames(className, c.Tooltip_Container)}>
       {children}
       {targetRef.current && (
         <TooltipOverlay
@@ -131,6 +161,7 @@ const Tooltip = ({ title, children }) => {
           anchorElement={targetRef.current}
           tooltipRef={boxRef}
           isOpen={isOpen}
+          arrowLocation={arrowLocation}
         />
       )}
     </div>

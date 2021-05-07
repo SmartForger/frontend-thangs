@@ -1,8 +1,7 @@
 import React from 'react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as FeedbackIcon } from '@svg/icon-feedback.svg'
-import classnames from 'classnames'
-import ReactTooltip from 'react-tooltip'
+import { ContainerColumn, ContainerRow, Spacer, Tooltip } from '@components'
 
 const FEEDBACK_FORM_URL = 'https://forms.gle/7p7GhexnzCgZ4cVN6'
 
@@ -13,12 +12,16 @@ const useStyles = createUseStyles(theme => {
       borderRadius: '2rem',
       width: '2.5rem',
       height: '2.5rem',
+      position: 'fixed',
+      bottom: '3rem',
+      right: '2rem',
+      zIndex: '1',
     },
     FeedbackTooltip_Icon: {
       color: theme.colors.black[500],
-      position: 'absolute',
-      top: '0.75rem',
-      left: '0.75rem',
+    },
+    FeedbackTooltip_Link: {
+      height: '1rem',
     },
     FeedbackTooltip_Message: {
       backgroundColor: `${theme.colors.white[100]} !important`,
@@ -42,26 +45,33 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const FeedbackTooltip = ({ className }) => {
+const FeedbackTooltip = () => {
   const c = useStyles()
   return (
     <>
-      <a
-        href={FEEDBACK_FORM_URL}
-        target='_blank'
-        rel='noopener noreferrer'
-        className={classnames(className, c.FeedbackTooltip)}
-        data-for='custom-class'
-        data-tip='Help us improve! Give us your feedback.'
-      >
-        <FeedbackIcon className={c.FeedbackTooltip_Icon} />
-      </a>
-      <ReactTooltip
-        id='custom-class'
-        className={c.FeedbackTooltip_Message}
-        place={'top'}
-        effect='solid'
-      />
+      <div className={c.FeedbackTooltip}>
+        <Tooltip
+          title={'Help us improve! Give us your feedback.'}
+          arrowLocation={'right'}
+        >
+          <ContainerColumn alignItems='center'>
+            <Spacer size='.75rem' />
+            <ContainerRow alignItems='center'>
+              <Spacer size='.75rem' />
+              <a
+                href={FEEDBACK_FORM_URL}
+                target='_blank'
+                rel='noopener noreferrer'
+                className={c.FeedbackTooltip_Link}
+              >
+                <FeedbackIcon className={c.FeedbackTooltip_Icon} />
+              </a>
+              <Spacer size='.75rem' />
+            </ContainerRow>
+            <Spacer size='.75rem' />
+          </ContainerColumn>
+        </Tooltip>
+      </div>
     </>
   )
 }

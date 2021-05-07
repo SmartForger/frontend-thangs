@@ -95,12 +95,6 @@ const useStyles = createUseStyles(theme => {
       right: '.75rem',
       cursor: 'pointer',
     },
-    Layout_FeedbackTooltip: {
-      position: 'fixed',
-      bottom: '3rem',
-      right: '2rem',
-      zIndex: '1',
-    },
     BackToTop: {
       backgroundColor: theme.colors.gold[500],
       borderRadius: '2rem',
@@ -190,7 +184,7 @@ const Layout = ({
         <div className={c.Layout}>
           {children}
           <BackToTop />
-          <FeedbackTooltip className={c.Layout_FeedbackTooltip} />
+          <FeedbackTooltip />
         </div>
       </div>
       <Footer />
