@@ -52,7 +52,7 @@ const FeedbackTooltip = () => {
       <div className={c.FeedbackTooltip}>
         <Tooltip
           title={'Help us improve! Give us your feedback.'}
-          arrowLocation={'right'}
+          defaultPlacement={'left'}
         >
           <ContainerColumn alignItems='center'>
             <Spacer size='.75rem' />

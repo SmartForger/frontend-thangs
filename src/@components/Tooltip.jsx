@@ -5,25 +5,15 @@ import classnames from 'classnames'
 
 import { Body } from '@physna/voxel-ui/@atoms/Typography'
 
-import { ContainerRow, Spacer } from '@components'
+import { ContainerColumn, ContainerRow, Spacer } from '@components'
+import { useHover } from '@hooks'
+import IconTooltipArrow from '@svg/IconTooltipArrow'
 
-function useHover() {
-  const [value, setValue] = useState(false)
-  const ref = useRef(null)
-  useEffect(() => {
-    const handleMouseOver = () => setValue(true)
-    const handleMouseOut = () => setValue(false)
-    const element = ref && ref.current
-    if (element) {
-      element.addEventListener('mouseenter', handleMouseOver)
-      element.addEventListener('mouseleave', handleMouseOut)
-      return () => {
-        element.removeEventListener('mouseenter', handleMouseOver)
-        element.removeEventListener('mouseleave', handleMouseOut)
-      }
-    }
-  }, [ref])
-  return [ref, value]
+export const TooltipPlacements = {
+  top: 'top',
+  bottom: 'bottom',
+  left: 'left',
+  right: 'right',
 }
 
 const useStyles = createUseStyles(theme => ({
@@ -35,23 +25,25 @@ const useStyles = createUseStyles(theme => ({
     visibility: 'hidden',
     width: '18rem',
     zIndex: '2',
+    top: 0,
+    left: ({ placement }) => (placement === TooltipPlacements.right ? 0 : 'auto'),
+    right: ({ placement }) => (placement === TooltipPlacements.left ? 0 : 'auto'),
   },
   Tooltip_Box: {
     background: theme.colors.white[400],
     borderRadius: '.5rem',
     boxSizing: 'border-box',
     overflowY: 'auto',
-    position: 'absolute',
     whiteSpace: 'break-spaces',
   },
   Tooltip_Arrow: {
-    background: theme.colors.white[400],
-    height: '0.75rem',
-    left: '0.1rem',
-    position: 'absolute',
-    top: '0.25rem',
-    transform: 'rotate(45deg)',
-    width: '0.75rem',
+    flex: '0 0 auto',
+    transform: ({ placement }) =>
+      placement === TooltipPlacements.right
+        ? `translate(2px, 0px) rotate(270deg)`
+        : placement === TooltipPlacements.left
+        ? `translate(-2px, 0px) rotate(90deg)`
+        : `translate(0px, 0px) rotate(0deg)`,
   },
   Tooltip_Container: {
     position: 'relative',
@@ -68,10 +60,11 @@ const TooltipOverlay = ({
   isOpen,
   title,
   tooltipRef,
-  arrowLocation = 'top',
+  defaultPlacement = TooltipPlacements.bottom,
 }) => {
-  const c = useStyles()
   const [isVisible, setIsVisible] = useState(false)
+  const [placement, setPlacement] = useState(defaultPlacement)
+  const c = useStyles({ placement })
 
   const transformCalcs = useMemo(() => {
     if (!tooltipRef.current) {
@@ -79,47 +72,52 @@ const TooltipOverlay = ({
     }
 
     const boxPos = { x: 0, y: 0 }
-    const arrowPos = { x: 0, y: 0 }
     const rect = tooltipRef.current.getBoundingClientRect()
-    if (arrowLocation === 'top') {
-      boxPos.x = -1 * (rect.width / 2) + anchorElement.clientWidth / 2
-      boxPos.y = anchorElement.clientHeight / 2 + 16
-      arrowPos.x = anchorElement.clientWidth / 2 - 6
-      arrowPos.y = anchorElement.clientHeight / 2 + 14
-    }
-    if (
-      arrowLocation === 'bottom' ||
-      (arrowLocation === 'top' && rect.bottom > window.innerHeight)
-    ) {
-      boxPos.x = -1 * (rect.width / 2) + anchorElement.clientWidth / 2
-      boxPos.y = -1 * (rect.height + anchorElement.clientHeight)
-      arrowPos.x = anchorElement.clientWidth / 2 - 6
-      arrowPos.y = -1 * (anchorElement.clientHeight + 2)
-    }
-    if (arrowLocation === 'left') {
-      boxPos.x = anchorElement.clientWidth + 12
-      boxPos.y = -1 * (rect.height / 2) + 3
-      arrowPos.x = anchorElement.clientWidth + 5
-      arrowPos.y = anchorElement.clientHeight / 2 - 10
-    }
-    if (
-      arrowLocation === 'right' ||
-      (arrowLocation === 'left' && rect.right > window.innerWidth)
-    ) {
-      boxPos.x = -1 * rect.width - 11
-      boxPos.y = -1 * (rect.height / 2) + 3
-      arrowPos.x = -18
-      arrowPos.y = anchorElement.clientHeight / 2 - 10
+
+    if (defaultPlacement === TooltipPlacements.top && rect.top < 0) {
+      setPlacement(TooltipPlacements.bottom)
     }
 
-    return [
-      { transform: `translate(${boxPos.x}px, ${boxPos.y}px)` },
-      { transform: `translate(${arrowPos.x}px, ${arrowPos.y}px) rotate(45deg)` },
-    ]
+    if (
+      defaultPlacement === TooltipPlacements.bottom &&
+      rect.bottom > window.innerHeight
+    ) {
+      setPlacement(TooltipPlacements.top)
+    }
+
+    if (defaultPlacement === TooltipPlacements.left && rect.left < 0) {
+      setPlacement(TooltipPlacements.right)
+    }
+
+    if (defaultPlacement === TooltipPlacements.right && rect.right > window.innerWidth) {
+      setPlacement(TooltipPlacements.left)
+    }
+
+    if (placement === TooltipPlacements.bottom) {
+      boxPos.x = -1 * (rect.width / 2) - anchorElement.clientWidth / 2
+      boxPos.y = anchorElement.clientHeight
+    }
+    if (placement === TooltipPlacements.top) {
+      boxPos.x = -1 * (rect.width / 2) + anchorElement.clientWidth / 2
+      boxPos.y = -1 * (rect.height + anchorElement.clientHeight)
+    }
+    if (placement === TooltipPlacements.right) {
+      boxPos.x = anchorElement.clientWidth
+      boxPos.y = -1 * (rect.height / 2) + anchorElement.clientHeight / 2
+    }
+    if (placement === TooltipPlacements.left) {
+      boxPos.x = -1 * anchorElement.clientWidth
+      boxPos.y = -1 * (rect.height / 2) + anchorElement.clientHeight / 2
+    }
+
+    return {
+      transform: `translate(${boxPos.x}px, ${boxPos.y}px)`,
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible, anchorElement, tooltipRef])
 
-  const [boxStyle, arrowStyle] = transformCalcs || []
+  const boxStyle = transformCalcs || []
 
   useEffect(() => {
     if (isOpen) {
@@ -129,26 +127,54 @@ const TooltipOverlay = ({
     }
   }, [isOpen])
 
+  const TooltipWrapper = ({ children, style, ref }) => {
+    if (placement === TooltipPlacements.bottom || placement === TooltipPlacements.top) {
+      return (
+        <ContainerColumn
+          alignItems='center'
+          elementRef={ref}
+          reverse={placement === TooltipPlacements.top}
+          style={style}
+        >
+          {children}
+        </ContainerColumn>
+      )
+    } else {
+      return (
+        <ContainerRow
+          alignItems='center'
+          elementRef={ref}
+          reverse={placement === TooltipPlacements.left}
+          style={style}
+        >
+          {children}
+        </ContainerRow>
+      )
+    }
+  }
+  console.log(placement)
   return createPortal(
     <div className={classnames(c.Tooltip, { [c.Tooltip_isOpen]: isVisible })}>
-      <div style={arrowStyle} className={c.Tooltip_Arrow}></div>
-      <Spacer size='0.5rem' />
-      <div ref={tooltipRef} style={boxStyle} className={c.Tooltip_Box}>
-        <Spacer size='0.75rem' />
-        <ContainerRow>
-          <Spacer size='1rem' />
-          <Body multiline>{title}</Body>
-          <Spacer size='1rem' />
-        </ContainerRow>
-        <Spacer size='0.75rem' />
-      </div>
+      <TooltipWrapper style={boxStyle}>
+        <Spacer size='0.5rem' />
+        <IconTooltipArrow className={c.Tooltip_Arrow}></IconTooltipArrow>
+        <div className={c.Tooltip_Box} ref={tooltipRef}>
+          <Spacer size='0.75rem' />
+          <ContainerRow>
+            <Spacer size='1rem' />
+            <Body multiline>{title}</Body>
+            <Spacer size='1rem' />
+          </ContainerRow>
+          <Spacer size='0.75rem' />
+        </div>
+      </TooltipWrapper>
     </div>,
     anchorElement
   )
 }
 
-const Tooltip = ({ className, title, children, arrowLocation }) => {
-  const c = useStyles()
+const Tooltip = ({ className, title, children, defaultPlacement }) => {
+  const c = useStyles({})
   const boxRef = useRef(null)
   const [targetRef, isOpen] = useHover()
 
@@ -161,7 +187,7 @@ const Tooltip = ({ className, title, children, arrowLocation }) => {
           anchorElement={targetRef.current}
           tooltipRef={boxRef}
           isOpen={isOpen}
-          arrowLocation={arrowLocation}
+          defaultPlacement={defaultPlacement}
         />
       )}
     </div>

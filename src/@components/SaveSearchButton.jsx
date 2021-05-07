@@ -83,7 +83,7 @@ const AuthSaveSearchButton = ({
     <>
       <Tooltip
         title={saved ? 'Check myThangs for your subscriptions' : 'Save search'}
-        arrowLocation={'top'}
+        defaultPlacement={'bottom'}
       >
         <>
           {!iconOnly && (
@@ -185,7 +185,7 @@ const SaveSearchButton = ({
     )
   }
   return (
-    <Tooltip title={'Sign up to save your searches'} arrowLocation={'top'}>
+    <Tooltip title={'Sign up to save your searches'} defaultPlacement={'bottom'}>
       <UnauthSaveSearchButton
         c={c}
         openSignupOverlay={openSignupOverlay}
