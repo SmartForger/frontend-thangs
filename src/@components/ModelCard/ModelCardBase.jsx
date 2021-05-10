@@ -193,6 +193,7 @@ const CardContents = ({
         <ModelThumbnail
           name={model.name}
           model={model}
+          lazyLoad
           className={c.ModelCard_Thumbnail}
         />
 
