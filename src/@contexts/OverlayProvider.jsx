@@ -146,7 +146,7 @@ export const OverlayProvider = ({ children }) => {
 
   useEffect(() => {
     let timer
-    if (overlayData.shake) {
+    if (overlayData?.shake) {
       timer = setTimeout(() => {
         setOverlayData({
           shake: false,
