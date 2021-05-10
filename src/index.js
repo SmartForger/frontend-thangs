@@ -6,12 +6,19 @@ import App from './App'
 import * as serviceWorker from './serviceWorker'
 import TagManager from 'react-gtm-module'
 import { getWorker } from './@services/worker'
+import windowLoad from '@utilities/windowLoad'
+import { loadSignin } from '@overlays'
 
-const tagManagerArgs = {
-  gtmId: process.env.REACT_APP_GOOGLE_TAG_MANAGER_ID,
-}
+windowLoad.then(() => {
+  // Preload 'overlays' bundle
+  loadSignin()
 
-TagManager.initialize(tagManagerArgs)
+  // Load GTM
+  TagManager.initialize({
+    gtmId: process.env.REACT_APP_GOOGLE_TAG_MANAGER_ID,
+  })
+})
+
 // if (process.env.REACT_APP_SENTRY_ID) {
 //   Sentry.init({
 //     dsn: process.env.REACT_APP_SENTRY_ID,

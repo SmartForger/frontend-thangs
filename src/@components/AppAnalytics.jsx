@@ -13,6 +13,7 @@ import ReactGA from 'react-ga'
 import ReactPixel from 'react-facebook-pixel'
 import { usePageMeta, useQuery } from '@hooks'
 import * as types from '@constants/storeEventTypes'
+import windowLoad from '@utilities/windowLoad'
 
 const AppAnalytics = () => {
   const location = useLocation()
@@ -24,8 +25,10 @@ const AppAnalytics = () => {
   const { dispatch, experiments } = useStoreon('experiments')
 
   useEffect(() => {
-    ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID)
-    ReactPixel.init(process.env.REACT_APP_FACEBOOK_PIXEL_ID)
+    windowLoad.then(() => {
+      ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID)
+      ReactPixel.init(process.env.REACT_APP_FACEBOOK_PIXEL_ID)
+    })
     if (!analyticsInitialized.current) {
       initialize()
       analyticsInitialized.current = true
