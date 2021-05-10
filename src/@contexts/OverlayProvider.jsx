@@ -1,4 +1,6 @@
-import { useContext, useMemo, useReducer } from 'react'
+import React, { useMemo, useReducer, useEffect } from 'react'
+import { OverlayContext } from './Overlay'
+import { Overlay } from '@components/Overlay'
 import {
   AddFolder,
   AttachmentUpload,
@@ -24,7 +26,6 @@ import {
   Signup,
   VersionPublished,
 } from '@overlays'
-import { OverlayContext } from '@components'
 
 const overlayTemplates = {
   addFolder: AddFolder,
@@ -129,8 +130,55 @@ const useOverlayProvider = () => {
   }
 }
 
-const useOverlay = () => {
-  return useContext(OverlayContext) || {}
-}
+export const OverlayProvider = ({ children }) => {
+  const {
+    setOverlay,
+    setOverlayOpen,
+    setOverlayHidden,
+    setOverlayTemplate,
+    setOverlayData,
+    toggleOverlayOpen,
+    OverlayComponent,
+    overlayData,
+    isOverlayOpen,
+    isOverlayHidden,
+  } = useOverlayProvider()
 
-export { useOverlay, useOverlayProvider }
+  useEffect(() => {
+    let timer
+    if (overlayData?.shake) {
+      timer = setTimeout(() => {
+        setOverlayData({
+          shake: false,
+        })
+        timer = null
+      }, 900)
+    }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer)
+      }
+    }
+  }, [overlayData.shake, setOverlayData])
+
+  return (
+    <OverlayContext.Provider
+      value={{
+        setOverlay,
+        setOverlayOpen,
+        setOverlayHidden,
+        setOverlayTemplate,
+        setOverlayData,
+        toggleOverlayOpen,
+        OverlayComponent,
+        overlayData,
+        isOverlayOpen,
+        isOverlayHidden,
+      }}
+    >
+      <Overlay shake={overlayData.shake} />
+      {children}
+    </OverlayContext.Provider>
+  )
+}

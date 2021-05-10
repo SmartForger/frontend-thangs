@@ -4,7 +4,8 @@ import { useStoreon } from 'storeon/react'
 import classnames from 'classnames'
 
 import { AboutHero, LandingHero, UserNav } from '@components'
-import { useCurrentUser, useOverlay } from '@hooks'
+import { useCurrentUser } from '@hooks'
+import { useOverlay } from '@contexts/Overlay'
 import { createUseStyles, useTheme } from '@physna/voxel-ui/@style'
 import * as types from '@constants/storeEventTypes'
 

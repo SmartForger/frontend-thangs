@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import * as R from 'ramda'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Body, Title, HeaderLevel, Label } from '@physna/voxel-ui/@atoms/Typography'
-
 import { Button, Spacer } from '@components'
-import { useOverlay, useTranslations } from '@hooks'
+import { useTranslations } from '@hooks'
+import { useOverlay } from '@contexts/Overlay'
 
 const useStyles = createUseStyles(theme => {
   return {

@@ -6,7 +6,8 @@ import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
 
 import { Button, TextInput, Spacer } from '@components'
-import { useFileUpload, useOverlay, useTranslations } from '@hooks'
+import { useFileUpload, useTranslations } from '@hooks'
+import { useOverlay } from '@contexts/Overlay'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { track } from '@utilities/analytics'
 

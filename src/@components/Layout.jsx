@@ -4,7 +4,8 @@ import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import Banner from './Header/Banner'
 import { ReactComponent as ArrowUpIcon } from '@svg/icon-arrow-up.svg'
-import { useActionMenu, useOverlay } from '@hooks'
+import { useOverlay } from '@contexts/Overlay'
+import { useActionMenu } from '@contexts/ActionMenu'
 
 const useStyles = createUseStyles(theme => {
   const {

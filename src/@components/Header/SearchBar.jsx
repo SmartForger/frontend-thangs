@@ -5,7 +5,8 @@ import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
 
 import { TextInput } from '@components'
-import { useOverlay, useQuery, useTranslations } from '@hooks'
+import { useQuery, useTranslations } from '@hooks'
+import { useOverlay } from '@contexts/Overlay'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 
 import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'

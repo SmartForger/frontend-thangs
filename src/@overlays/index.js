@@ -1,23 +1,64 @@
-export { default as AddFolder } from './AddFolder'
-export { default as AttachmentUpload } from './AttachmentUpload'
-export { default as AttachmentView } from './AttachmentView'
-export { default as DeleteAttachment } from './DeleteAttachment'
-export { default as DeleteComment } from './DeleteComment'
-export { default as DeleteFolder } from './DeleteFolder'
-export { default as DeleteModel } from './DeleteModel'
-export { default as EditComment } from './EditComment'
-export { default as EditFolder } from './EditFolder'
-export { default as EditModel } from './EditModel'
-export { default as InviteUsers } from './InviteUsers'
-export { default as License } from './License'
-export { default as MoreInfo } from './MoreInfo'
-export { default as MultiUpload } from './MultiUpload'
-export { default as PasswordReset } from './PasswordReset'
-export { default as Report } from './Report'
-export { default as ReportModel } from './ReportModel'
-export { default as ReviewVersion } from './ReviewVersion'
-export { default as SearchByUpload } from './SearchByUpload'
-export { default as SelectPartToVersion } from './SelectPartToVersion'
-export { default as Signin, SigninFacebookButton, SigninGoogleButton } from './Signin'
-export { default as Signup } from './Signup'
-export { default as VersionPublished } from './VersionPublished'
+import { lazy } from 'react'
+
+export const AddFolder = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './AddFolder')
+)
+export const AttachmentUpload = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './AttachmentUpload')
+)
+export const AttachmentView = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './AttachmentView')
+)
+export const DeleteAttachment = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './DeleteAttachment')
+)
+export const DeleteComment = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './DeleteComment')
+)
+export const DeleteFolder = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './DeleteFolder')
+)
+export const DeleteModel = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './DeleteModel')
+)
+export const EditComment = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './EditComment')
+)
+export const EditFolder = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './EditFolder')
+)
+export const EditModel = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './EditModel')
+)
+export const InviteUsers = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './InviteUsers')
+)
+export const License = lazy(() => import(/* webpackChunkName: 'overlays' */ './License'))
+export const MoreInfo = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './MoreInfo')
+)
+export const MultiUpload = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './MultiUpload')
+)
+export const PasswordReset = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './PasswordReset')
+)
+export const Report = lazy(() => import(/* webpackChunkName: 'overlays' */ './Report'))
+export const ReportModel = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './ReportModel')
+)
+export const ReviewVersion = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './ReviewVersion')
+)
+export const SearchByUpload = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './SearchByUpload')
+)
+export const SelectPartToVersion = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './SelectPartToVersion')
+)
+export const loadSignin = () => import(/* webpackChunkName: 'overlays' */ './Signin')
+export const Signin = lazy(loadSignin)
+export const Signup = lazy(() => import(/* webpackChunkName: 'overlays' */ './Signup'))
+export const VersionPublished = lazy(() =>
+  import(/* webpackChunkName: 'overlays' */ './VersionPublished')
+)

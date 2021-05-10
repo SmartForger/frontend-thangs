@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { Suspense, useCallback, useEffect, useState } from 'react'
 import { EditModelForm, HoopsModelViewer, Spacer, Spinner } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import classnames from 'classnames'
@@ -130,11 +130,13 @@ const EditModel = ({ model, showViewer = false }) => {
       <ExitIcon className={c.EditModel_ExitButton} onClick={closeOverlay} />
       {showViewer && (
         <div className={classnames(c.EditModel_Column, c.EditModel_ViewerWrapper)}>
-          <HoopsModelViewer
-            className={c.EditModel_Viewer}
-            model={model}
-            minimizeTools={true}
-          />
+          <Suspense fallback={<Spinner />}>
+            <HoopsModelViewer
+              className={c.EditModel_Viewer}
+              model={model}
+              minimizeTools={true}
+            />
+          </Suspense>
         </div>
       )}
       <div className={classnames(c.EditModel_Column, c.EditModel_EditForm)}>

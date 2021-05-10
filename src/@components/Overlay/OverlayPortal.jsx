@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, Suspense } from 'react'
 import { createPortal } from 'react-dom'
 import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
-import { useOverlay } from '@hooks'
+import { useOverlay } from '@contexts/Overlay'
+import { Spinner } from '@components'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -121,7 +122,9 @@ const OverlayPortal = ({ className, scrollTop }) => {
               <ExitIcon />
             </div>
           )}
-          <OverlayComponent {...overlayData} />
+          <Suspense fallback={<Spinner />}>
+            <OverlayComponent {...overlayData} />
+          </Suspense>
         </div>
       </div>,
       document.querySelector('#overlay-root')

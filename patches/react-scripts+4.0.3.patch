@@ -1,0 +1,59 @@
+diff --git a/node_modules/react-scripts/config/webpack.config.js b/node_modules/react-scripts/config/webpack.config.js
+index 26c2a65..1c5fb59 100644
+--- a/node_modules/react-scripts/config/webpack.config.js
++++ b/node_modules/react-scripts/config/webpack.config.js
+@@ -87,6 +87,35 @@ const hasJsxRuntime = (() => {
+   }
+ })();
+ 
++/**
++ * These are the dependencies that go in the vendor js bundle. We lock the versions of these deps
++ * in package.json so we can update them all at once when needed. This way we can prolong the cache
++ * duration of the vendor bundle so users don't have to re-download it with every release.
++ */
++ const vendorDependencies = [
++  'amplitude-js',
++  'axios',
++  'classnames',
++  'core-js',
++  'fbjs',
++  'history',
++  'invariant',
++  'jss',
++  'lodash',
++  'object-assign',
++  'prop-types',
++  'ramda',
++  'react',
++  'react-dom',
++  'react-helmet',
++  'react-is',
++  'react-jss',
++  'react-router',
++  'react-router-dom',
++  'scheduler',
++  'storeon',
++];
++
+ // This is the production and development configuration.
+ // It is focused on developer experience, fast rebuilds, and a minimal bundle.
+ module.exports = function (webpackEnv) {
+@@ -307,6 +336,18 @@ module.exports = function (webpackEnv) {
+       // https://twitter.com/wSokra/status/969633336732905474
+       // https://medium.com/webpack/webpack-4-code-splitting-chunk-graph-and-the-splitchunks-optimization-be739a861366
+       splitChunks: {
++        cacheGroups: {
++          default: false,
++          // Note: "vendors" will need to change to "defaultVendors" once we upgrade to webpack 5
++          vendors: {
++            test(module) {
++              const nodeModules = new RegExp(`[\\/]node_modules[\\/](${vendorDependencies.join('|')})[\\/]`);
++              return nodeModules.test(module.resource);
++            },
++            name: 'vendors',
++            chunks: 'initial'
++          }
++        },
+         chunks: 'all',
+         name: isEnvDevelopment,
+       },

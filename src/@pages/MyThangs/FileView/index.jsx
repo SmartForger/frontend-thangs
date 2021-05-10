@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { Suspense, useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
 import {
@@ -137,12 +137,14 @@ const FileView = ({ className, folders }) => {
             <FileHeader file={modelData} folders={folders} />
             <Spacer size='2rem' />
             {activeViewer === 'single' && (
-              <HoopsModelViewer
-                className={c.Model_ModelViewer}
-                model={modelData}
-                minimizeTools={true}
-                initialSelectedModel={activePart}
-              />
+              <Suspense fallback={<Spinner />}>
+                <HoopsModelViewer
+                  className={c.Model_ModelViewer}
+                  model={modelData}
+                  minimizeTools={true}
+                  initialSelectedModel={activePart}
+                />
+              </Suspense>
             )}
             {historyData.length && activeViewer === 'compare' && <CompareViewer />}
             <Spacer size='2rem' />

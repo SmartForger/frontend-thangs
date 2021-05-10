@@ -3,8 +3,6 @@ import classnames from 'classnames'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import OverlayPortal from './OverlayPortal'
 
-export * from './OverlayContext'
-
 const useStyles = createUseStyles(_theme => {
   return {
     '@keyframes shake': {
