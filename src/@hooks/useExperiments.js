@@ -14,7 +14,12 @@ export const useExperiments = feature => {
 }
 
 export const useIsFeatureOn = feature => {
+  const liveFeatures = {
+    community_uploads_feature: true,
+    mythangs_model_page_feature: false,
+    new_versions_feature: true,
+  }
   const [storedValue] = useLocalStorage(feature)
-  const value = useExperiments(feature)
-  return typeof storedValue !== 'undefined' ? storedValue : !value // TODO: Flip before go-live
+  const value = liveFeatures[feature] || false
+  return typeof storedValue !== 'undefined' ? storedValue : value
 }
