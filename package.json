@@ -45,7 +45,9 @@
     "three": "^0.125.0",
     "ua-parser-js": "^0.7.27"
   },
-  "sideEffects": false,
+  "sideEffects": [
+    "./src/workers/*"
+  ],
   "scripts": {
     "postinstall": "patch-package",
     "start": "serve -s build",
