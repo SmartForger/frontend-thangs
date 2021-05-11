@@ -23,7 +23,7 @@ const EditModelButton = ({ model = {} }) => {
   }, [model, setOverlay])
 
   return (
-    <IconButton onClick={openEditOverlay}>
+    <IconButton className='EditModelIconButton' onClick={openEditOverlay}>
       <EditIcon />
     </IconButton>
   )

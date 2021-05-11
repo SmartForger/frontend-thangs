@@ -5,9 +5,7 @@ import {
   goTo,
   isElement,
   isElementContains,
-  uploadFile,
   urlShouldInclude,
-  urlShouldIncludeAfterTimeout,
 } from '../utils/common-methods'
 import {
   clearInput,
@@ -15,9 +13,8 @@ import {
   inputFocus,
   inputType,
   searchInput,
-  uploadInput,
 } from '../utils/inputs'
-import { CLASSES, MODEL, PATH, PROPS, TEXT } from '../utils/constants'
+import { CLASSES, PATH, PROPS, TEXT } from '../utils/constants'
 
 describe('The Landing Page', () => {
   beforeEach(() => {
@@ -59,18 +56,18 @@ describe('The Landing Page', () => {
 
   it('Click on filters', () => {
     isElement(CLASSES.LANDING_FILTER_BUTTON, PROPS.VISIBLE)
-    clickOnElement(CLASSES.LANDING_FILTER_BUTTON)
-    clickOnTextInsideClass(CLASSES.LANDING_FILTER_DROPDOWN, TEXT.DOWNLOADS)
-    isElementContains(CLASSES.LANDING_TITLE, 'Most Downloaded')
-    clickOnElement(CLASSES.LANDING_FILTER_BUTTON)
+    clickOnTextInsideClass(CLASSES.LANDING_FILTER_BUTTON, TEXT.TRENDING)
     clickOnTextInsideClass(CLASSES.LANDING_FILTER_DROPDOWN, TEXT.POPULAR)
     isElementContains(CLASSES.LANDING_TITLE, 'Popular Models')
-    clickOnElement(CLASSES.LANDING_FILTER_BUTTON)
-    clickOnTextInsideClass(CLASSES.LANDING_FILTER_DROPDOWN, TEXT.NEW)
-    isElementContains(CLASSES.LANDING_TITLE, 'New Models')
-    clickOnElement(CLASSES.LANDING_FILTER_BUTTON)
+    clickOnTextInsideClass(CLASSES.LANDING_FILTER_BUTTON, TEXT.POPULAR)
     clickOnTextInsideClass(CLASSES.LANDING_FILTER_DROPDOWN, TEXT.TRENDING)
     isElementContains(CLASSES.LANDING_TITLE, 'Trending Models')
+    clickOnTextInsideClass(CLASSES.LANDING_FILTER_BUTTON, TEXT.TRENDING)
+    clickOnTextInsideClass(CLASSES.LANDING_FILTER_DROPDOWN, TEXT.NEW)
+    isElementContains(CLASSES.LANDING_TITLE, 'New Models')
+    clickOnTextInsideClass(CLASSES.LANDING_FILTER_BUTTON, TEXT.NEW)
+    clickOnTextInsideClass(CLASSES.LANDING_FILTER_DROPDOWN, TEXT.DOWNLOADS)
+    isElementContains(CLASSES.LANDING_TITLE, 'Most Downloaded')
   })
 
   it('Landing search "#geotests" provides to results page', () => {
@@ -80,6 +77,10 @@ describe('The Landing Page', () => {
     cy.get(searchBar).focus().type('#geotests', { force: true })
     clickOnElement(CLASSES.SEARCH_BAR_BUTTON)
     urlShouldInclude(`${PATH.SEARCH}%23geotests`)
-    isElementContains('[class^=SearchResults_HeaderText]', 'results for #geotests')
+    isElement(CLASSES.RESULT_COUNT_TEXT, PROPS.VISIBLE)
+    isElementContains(
+      CLASSES.RESULT_COUNT_TEXT,
+      /At least (?:\d+) results for "#geotests".?/
+    )
   })
 })

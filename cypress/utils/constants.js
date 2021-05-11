@@ -50,6 +50,7 @@ export const PATH = {
   MY_THANGS: '/mythangs',
   PROFILE: `/${USER.NAME}`,
   MY_THANGS_ALL_FILES: '/mythangs/all-files',
+  MY_THANGS_MODEL: '/mythangs/file/',
 }
 
 export const MODEL = {
@@ -103,6 +104,7 @@ export const CLASSES = {
   SIGNUP_LOGIN_ERROR: '[class^=ErrorText]',
   CLOSE_LOGIN_FORM: '[class^=Signin_ExitButton]',
   CLOSE_SIGNUP_FORM: '[class^=Signup_ExitButton]',
+  EDIT_MODEL_BUTTON: '[class^=EditModelIconButton]',
   SIGNUP_LINK_ON_LOGIN: '[class^=Signin_HasAccountButton]',
   LOGIN_LINK_ON_SIGNUP: '[class^=Signup_HasAccountButton]',
   USER_NAVBAR: '[class^=ProfileDropdown_ClickableButton]',
@@ -114,6 +116,7 @@ export const CLASSES = {
   PROFILE_DROPDOWN:
     '[class^="ProfileDropdown_ClickableButton"] + [class*="DropdownMenu"]',
   SEARCH_BAR_BUTTON: '[class^=SearchBar_SearchButton]',
+  RESULT_COUNT_TEXT: '[class^=SearchResult_ResultCountText]',
   HEADER_DESKTOP: '[class^="Header_DesktopOnly"]',
   LANDING_SEARCH_BAR_UPLOAD: '[class^=LandingSearchBar_Upload]',
   LANDING_FILTER_BUTTON: '[class^=Pill]',
@@ -173,6 +176,7 @@ export const CLASSES = {
   MY_THANGS_NO_FILES: '[class^=NoFilesMessage]',
   MY_THANGS_ALL_FILES_ROW: '[class^=AllFilesView]',
   PILL_BUTTON: '[class^=Pill]',
+  TITLE: '[class^=Title]',
   UPLOAD_PRIVACY_HEADER: '[class^=BodyText]',
   UPLOAD_PRIVACY_TEXT: '[class^=PartInfo_PrivacyText]',
   UPLOAD_SELECT_FOLDER: '[class^=SelectFolderTarget]',
@@ -227,7 +231,6 @@ export const TEXT = {
   NEW_VERSION_UPLOADED: 'New Version Uploaded',
   REMOVE: 'Remove',
   DELETE: 'Delete',
-  EDIT_MODEL_BUTTON: 'Edit Model',
   DOWNLOAD_MODEL_BUTTON: 'Download Model',
   VIEW_MY_THANGS: 'View My Thangs',
   ADD_NEW: 'Add New',

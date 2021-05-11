@@ -2,7 +2,8 @@
   "env": {
     "browser": true,
     "es6": true,
-    "jest/globals": true
+    "jest/globals": true,
+    "cypress/globals": true
   },
   "extends": [
     "eslint:recommended",
@@ -25,6 +26,7 @@
     "sourceType": "module"
   },
   "plugins": [
+    "cypress",
     "jest",
     "react",
     "react-hooks"

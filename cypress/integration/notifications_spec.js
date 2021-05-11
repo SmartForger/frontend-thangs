@@ -62,6 +62,7 @@ describe('User notifications', () => {
     log('comment')
     enterValidValue(CLASSES.MODEL_ADD_COMMENT_FORM, commentInput)
     clickOnTextInsideClass(CLASSES.MODEL_ADD_COMMENT_FORM, TEXT.COMMENT)
+    cy.get(CLASSES.MODEL_COMMENT_FORM).first().scrollIntoView()
     isTextInsideClass(CLASSES.MODEL_COMMENT_FORM, MODEL.COMMENT, PROPS.VISIBLE)
 
     /*

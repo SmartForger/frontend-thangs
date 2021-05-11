@@ -3,7 +3,6 @@ import {
   isTextInsideClass,
   loginByUser,
   isElementContains,
-  clearModelsAndFolders,
 } from '../utils/common-methods'
 import { multiUpload } from '../utils/uploadMethods'
 
@@ -24,7 +23,7 @@ describe('Profile', () => {
     })
   })
 
-  it('Side user upploads model', () => {
+  it('Side user uploads model', () => {
     loginByUser({
       email: sideUser.EMAIL,
       password: sideUser.PASSWORD,
@@ -39,7 +38,7 @@ describe('Profile', () => {
     })
     goTo(`/${sideUser.NAME}`)
 
-    cy.intercept('/like').as('likeRequest')
+    cy.intercept(/models\/\d+\/like/).as('likeRequest')
     cy.get('[class^=ModelCard_ActivityCount][title=Like]').click()
 
     cy.wait('@likeRequest').its('response.statusCode').should('eq', 200)
@@ -52,7 +51,7 @@ describe('Profile', () => {
     })
     goTo(`/${activeUser.NAME}`)
 
-    cy.get('[class^=Home_Row] [class^=BodyText]')
+    cy.get('[class^=Home_Row] [class^=BodyBase]')
       .contains('Likes', { timeout: 10000 })
       .click()
 
@@ -79,7 +78,7 @@ describe('Profile', () => {
 
     isTextInsideClass(
       '[class^=EditProfile_TitleTertiary]',
-      `${FIRST_NAME_TEXT} ${LAST_NAME_TEXT}`
+      `${FIRST_NAME_TEXT} ${LAST_NAME_TEXT[0]}`
     )
 
     isTextInsideClass(

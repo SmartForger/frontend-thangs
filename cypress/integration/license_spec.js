@@ -9,7 +9,7 @@ import {
   uploadFile,
   clickOnElementByText,
 } from '../utils/common-methods'
-import { CLASSES, MODEL, MULTIPART_MODEL, PROPS, TEXT } from '../utils/constants'
+import { CLASSES, MODEL, MULTIPART_MODEL, PROPS } from '../utils/constants'
 import {
   licenseUpload,
   multipartLicenseUpload,
@@ -36,14 +36,13 @@ describe('The Model License', () => {
     clickOnElementByText('Public Portfolio')
     clickOnTextInsideClass(CLASSES.MODEL_CARD, MODEL.TITLE)
     isElement(CLASSES.MODEL_LICENSE, PROPS.INVISIBLE)
-    clickOnElementByText(TEXT.EDIT_MODEL_BUTTON)
-    cy.get('[class^=LicenseField_Field] [name=license]')
-      .invoke('attr', 'placeholder')
-      .should('contain', 'Attach license')
+    clickOnElement(CLASSES.EDIT_MODEL_BUTTON)
+    cy.get('label[for=license]').should('contain', 'Attach license')
     uploadFile(MODEL.LICENSE, licenseUploadInput)
-    cy.get('[class^=LicenseField_Field] [name=license]', { timeout: 5000 })
-      .invoke('attr', 'placeholder')
-      .should('contain', MODEL.LICENSE)
+    cy.get('[class^=LicenseField_Field] [name=license]', { timeout: 5000 }).should(
+      'contain',
+      MODEL.LICENSE
+    )
     clickOnElementByText('Save Changes')
     isElement(CLASSES.MODEL_LICENSE, PROPS.VISIBLE)
     clearModelsAndFolders()
@@ -121,14 +120,13 @@ describe('The Model License', () => {
     goTo(`/${activeUser.NAME}`)
     clickOnTextInsideClass(CLASSES.MODEL_CARD, MODEL.TITLE)
     isElement(CLASSES.MODEL_LICENSE, PROPS.INVISIBLE)
-    clickOnElementByText(TEXT.EDIT_MODEL_BUTTON)
-    cy.get('[class^=LicenseField_Field] [name=license]')
-      .invoke('attr', 'placeholder')
-      .should('contain', MODEL.LICENSE)
+    clickOnElement(CLASSES.EDIT_MODEL_BUTTON)
+    cy.get('label[for="license"]').should('contain', MODEL.LICENSE)
     uploadFile(MODEL.LICENSE_NEW, licenseUploadInput)
-    cy.get('[class^=LicenseField_Field] [name=license]', { timeout: 5000 })
-      .invoke('attr', 'placeholder')
-      .should('contain', MODEL.LICENSE_NEW)
+    cy.get('[class^=LicenseField_Field] [name=license]', { timeout: 5000 }).should(
+      'contain',
+      MODEL.LICENSE_NEW
+    )
     clickOnElementByText('Save Changes')
     isElement(CLASSES.MODEL_LICENSE, PROPS.VISIBLE)
     clickOnElement(CLASSES.MODEL_LICENSE_LINK)
