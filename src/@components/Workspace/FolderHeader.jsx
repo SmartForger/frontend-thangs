@@ -18,6 +18,7 @@ import {
   FolderActionToolbar,
   ModelActionToolbar,
   Spacer,
+  Tooltip,
 } from '@components'
 import { buildPath } from '@utilities'
 
@@ -145,7 +146,21 @@ const FolderHeader = ({ folder, folders, selectedModel, toolbarRef }) => {
         <ContainerRow>
           <ContainerColumn>
             <Spacer size={'.5rem'} />
-            {folder.isPublic ? <FolderIcon /> : <PrivateFolderIcon />}
+            {folder.isPublic ? (
+              <Tooltip
+                title={'This folder and its models are public.'}
+                defaultPlacement={'right'}
+              >
+                <FolderIcon />
+              </Tooltip>
+            ) : (
+              <Tooltip
+                title={'This folder and its models are private.'}
+                defaultPlacement={'right'}
+              >
+                <PrivateFolderIcon />
+              </Tooltip>
+            )}
           </ContainerColumn>
           <Spacer size={'1rem'} />
           <div className={c.FolderView_Col}>

@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react'
 
 import {
-  Contributors,
   ContainerRow,
+  Contributors,
+  IconButton,
   LikeFolderButton,
   Pill,
   Spacer,
-  IconButton,
+  Tooltip,
 } from '@components'
 import { ReactComponent as FolderIcon } from '@svg/icon-add-folder.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload-black.svg'
@@ -61,30 +62,38 @@ const FolderActionToolbar = ({ folder = {}, isPrimaryActionHidden = false }) => 
 
   return (
     <ContainerRow alignItems={'center'}>
-      {isPrimaryActionHidden ? (
-        <IconButton onClick={handleUpload}>
-          <UploadIcon />
+      <Tooltip title={'Upload a new model to folder'} defaultPlacement={'bottom'}>
+        {isPrimaryActionHidden ? (
+          <IconButton onClick={handleUpload}>
+            <UploadIcon />
+          </IconButton>
+        ) : (
+          <Pill primary onClick={handleUpload}>
+            <UploadIconSmall />
+            <Spacer size={'0.5rem'} />
+            Upload
+          </Pill>
+        )}
+      </Tooltip>
+      <Spacer size={'0.5rem'} />
+      <Tooltip title={'Create a new subfolder'} defaultPlacement={'bottom'}>
+        <IconButton onClick={handleAddFolder}>
+          <FolderIcon />
         </IconButton>
-      ) : (
-        <Pill primary onClick={handleUpload}>
-          <UploadIconSmall />
-          <Spacer size={'0.5rem'} />
-          Upload
-        </Pill>
-      )}
+      </Tooltip>
       <Spacer size={'0.5rem'} />
-      <IconButton onClick={handleAddFolder}>
-        <FolderIcon />
-      </IconButton>
+      <Tooltip title={'Star a folder'} defaultPlacement={'bottom'}>
+        <LikeFolderButton folder={folder} onlyShowOwned />
+      </Tooltip>
       <Spacer size={'0.5rem'} />
-      <LikeFolderButton folder={folder} onlyShowOwned />
-      <Spacer size={'0.5rem'} />
-      <Contributors
-        onClick={handleInviteUsers}
-        users={[folder.creator, ...(folder?.members || [])]}
-        displayLength='5'
-        size='2rem'
-      />
+      <Tooltip title={'Invite others to this folder'} defaultPlacement={'bottomLeft'}>
+        <Contributors
+          onClick={handleInviteUsers}
+          users={[folder.creator, ...(folder?.members || [])]}
+          displayLength='5'
+          size='2rem'
+        />
+      </Tooltip>
     </ContainerRow>
   )
 }

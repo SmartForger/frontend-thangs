@@ -12,6 +12,7 @@ import IconTooltipArrow from '@svg/IconTooltipArrow'
 export const TooltipPlacements = {
   top: 'top',
   bottom: 'bottom',
+  bottomLeft: 'bottomLeft',
   left: 'left',
   right: 'right',
 }
@@ -19,31 +20,29 @@ export const TooltipPlacements = {
 const useStyles = createUseStyles(theme => ({
   Tooltip: {
     filter: 'drop-shadow(0 0.125rem 0.75rem rgba(0, 0, 0, 0.2))',
-    height: '100%',
+    left: ({ placement }) => (placement === TooltipPlacements.right ? 0 : 'auto'),
     opacity: 0,
     position: 'absolute',
-    visibility: 'hidden',
-    width: '18rem',
-    zIndex: '2',
-    top: 0,
-    left: ({ placement }) => (placement === TooltipPlacements.right ? 0 : 'auto'),
     right: ({ placement }) => (placement === TooltipPlacements.left ? 0 : 'auto'),
+    top: 0,
+    visibility: 'hidden',
+    zIndex: '2',
   },
   Tooltip_Box: {
     background: theme.colors.white[400],
     borderRadius: '.5rem',
     boxSizing: 'border-box',
     overflowY: 'auto',
-    whiteSpace: 'break-spaces',
+    whiteSpace: 'nowrap',
   },
   Tooltip_Arrow: {
     flex: '0 0 auto',
     transform: ({ placement }) =>
       placement === TooltipPlacements.right
-        ? `translate(2px, 0px) rotate(270deg)`
+        ? 'translate(2px, 0px) rotate(270deg)'
         : placement === TooltipPlacements.left
-        ? `translate(-2px, 0px) rotate(90deg)`
-        : `translate(0px, 0px) rotate(0deg)`,
+          ? 'translate(-2px, 0px) rotate(90deg)'
+          : 'translate(0px, 0px) rotate(0deg)',
   },
   Tooltip_Container: {
     position: 'relative',
@@ -94,7 +93,11 @@ const TooltipOverlay = ({
     }
 
     if (placement === TooltipPlacements.bottom) {
-      boxPos.x = -1 * (rect.width / 2) - anchorElement.clientWidth / 2
+      boxPos.x = -1 * (rect.width / 2) + anchorElement.clientWidth / 2
+      boxPos.y = anchorElement.clientHeight
+    }
+    if (placement === TooltipPlacements.bottomLeft) {
+      boxPos.x = -1 * rect.width + anchorElement.clientWidth
       boxPos.y = anchorElement.clientHeight
     }
     if (placement === TooltipPlacements.top) {
@@ -128,10 +131,14 @@ const TooltipOverlay = ({
   }, [isOpen])
 
   const TooltipWrapper = ({ children, style, ref }) => {
-    if (placement === TooltipPlacements.bottom || placement === TooltipPlacements.top) {
+    if (
+      placement === TooltipPlacements.bottom ||
+      placement === TooltipPlacements.bottomLeft ||
+      placement === TooltipPlacements.top
+    ) {
       return (
         <ContainerColumn
-          alignItems='center'
+          alignItems={placement === TooltipPlacements.bottomLeft ? 'right' : 'center'}
           elementRef={ref}
           reverse={placement === TooltipPlacements.top}
           style={style}
@@ -152,10 +159,13 @@ const TooltipOverlay = ({
       )
     }
   }
-  console.log(placement)
+
   return createPortal(
-    <div className={classnames(c.Tooltip, { [c.Tooltip_isOpen]: isVisible })}>
-      <TooltipWrapper style={boxStyle}>
+    <div
+      className={classnames(c.Tooltip, { [c.Tooltip_isOpen]: isVisible })}
+      style={boxStyle}
+    >
+      <TooltipWrapper>
         <Spacer size='0.5rem' />
         <IconTooltipArrow className={c.Tooltip_Arrow}></IconTooltipArrow>
         <div className={c.Tooltip_Box} ref={tooltipRef}>

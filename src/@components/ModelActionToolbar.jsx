@@ -7,6 +7,7 @@ import {
   ModelActionMenu,
   NewVersionButton,
   Spacer,
+  Tooltip,
 } from '@components'
 import { useIsFeatureOn } from '@hooks/useExperiments'
 
@@ -17,10 +18,14 @@ const ModelActionToolbar = ({ model = {}, isExpandedOptions = false }) => {
   return (
     <ContainerRow alignItems={'center'}>
       {newVersionFeatureEnabled && !model.isAssembly && (
-        <NewVersionButton model={model} />
+        <Tooltip title={'Upload a new version'} defaultPlacement={'bottom'}>
+          <NewVersionButton model={model} />
+        </Tooltip>
       )}
       <Spacer size={'0.5rem'} />
-      <EditModelButton model={model} />
+      <Tooltip title={'Edit model details'} defaultPlacement={'bottom'}>
+        <EditModelButton model={model} />
+      </Tooltip>
       <Spacer size={'0.5rem'} />
       <ModelActionMenu
         model={model}
