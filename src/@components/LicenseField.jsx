@@ -18,7 +18,7 @@ const useStyles = createUseStyles(_theme => {
       marginBottom: '1rem',
       position: 'absolute',
       right: '1rem',
-      top: '1rem',
+      top: '2.5rem',
     },
   }
 })
@@ -89,9 +89,10 @@ const LicenseField = ({ className, onChange = noop, value, model = {} }) => {
           <Input
             disabled={true}
             name='license'
-            label={displayValue || 'Attach license'}
+            label={'Attach license'}
             errorMessage={isError && 'There has been an error, please try again'}
             error={isError}
+            value={displayValue || ''}
           />
         </div>
         {displayValue ? (
