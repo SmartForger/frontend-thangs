@@ -160,7 +160,7 @@ export const OverlayProvider = ({ children }) => {
         clearTimeout(timer)
       }
     }
-  }, [overlayData.shake, setOverlayData])
+  }, [overlayData?.shake, setOverlayData])
 
   return (
     <OverlayContext.Provider
