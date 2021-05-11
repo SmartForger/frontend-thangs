@@ -35,6 +35,7 @@ const useStyles = createUseStyles(theme => {
     },
     ExplodeDropdownMenu: {
       bottom: '3rem !important',
+      marginLeft: '-4rem',
     },
   }
 })
@@ -55,7 +56,7 @@ const ExplodeTarget = ({ onClick = noop }) => {
 }
 
 const ExplodeMenu = ({
-  onChange = noop,
+  onSliderChange = noop,
   onSliderEnd = noop,
   selectedValue: magnitude,
   key,
@@ -67,7 +68,7 @@ const ExplodeMenu = ({
       <Slider
         key={key}
         onChangeCommitted={(ev, value) => onSliderEnd(value)}
-        onChange={(ev, value) => onChange(value)}
+        onChange={(ev, value) => onSliderChange(value)}
         value={magnitude}
       />
     </div>
@@ -75,7 +76,7 @@ const ExplodeMenu = ({
 }
 
 const ExplodeActionMenu = ({
-  onChange = noop,
+  onSliderChange = noop,
   onSliderEnd = noop,
   selectedValue,
   key,
@@ -83,8 +84,14 @@ const ExplodeActionMenu = ({
   const c = useStyles({})
 
   const menuProps = useMemo(() => {
-    return { onChange, onSliderEnd, selectedValue, key, className: c.ExplodeDropdownMenu }
-  }, [c.ExplodeDropdownMenu, key, onChange, onSliderEnd, selectedValue])
+    return {
+      onSliderChange,
+      onSliderEnd,
+      selectedValue,
+      key,
+      className: c.ExplodeDropdownMenu,
+    }
+  }, [c.ExplodeDropdownMenu, key, onSliderChange, onSliderEnd, selectedValue])
 
   const targetProps = useMemo(() => {
     return { selectedValue }
