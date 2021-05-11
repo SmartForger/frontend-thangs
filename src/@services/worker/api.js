@@ -1,10 +1,11 @@
 import authenticationService from '../authentication.service'
 import { sendMessage, addMessageListener } from './worker'
+import * as types from '@constants/workerMessageTypes'
 
 /* Send messages to worker */
 
 export const setToken = token => {
-  sendMessage('api:setToken', {
+  sendMessage(types.API_SET_TOKEN, {
     token,
   })
 }
@@ -12,7 +13,7 @@ export const setToken = token => {
 /* Handle messages from worker */
 
 function apiMessageHandler(messageType) {
-  if (messageType === 'api:403') {
+  if (messageType === types.API_403) {
     authenticationService.logout()
     window.location.href = '/?sessionExpired=true'
   }

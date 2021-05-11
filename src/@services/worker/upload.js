@@ -1,5 +1,6 @@
 import store from '../../store'
 import * as types from '@constants/storeEventTypes'
+import * as workerMessageTypes from '@constants/workerMessageTypes'
 
 import { sendMessage, addMessageListener } from './worker'
 
@@ -7,7 +8,7 @@ import { sendMessage, addMessageListener } from './worker'
 
 /* Model files */
 export const uploadFiles = ({ files, directory, modelId }) => {
-  sendMessage('upload:upload', {
+  sendMessage(workerMessageTypes.UPLOAD_UPLOAD, {
     files,
     directory,
     modelId,
@@ -15,12 +16,12 @@ export const uploadFiles = ({ files, directory, modelId }) => {
 }
 
 export const cancelUpload = (nodeFileMap, shouldRemove) => {
-  sendMessage('upload:cancel', { nodeFileMap, shouldRemove })
+  sendMessage(workerMessageTypes.UPLOAD_CANCEL, { nodeFileMap, shouldRemove })
 }
 
 /* Attachment files */
 export const uploadAttachmentFiles = (files, directory) => {
-  sendMessage('uploadAttachments:upload', {
+  sendMessage(workerMessageTypes.UPLOAD_ATTACHMENTS_UPLOAD, {
     files,
     directory,
   })
@@ -29,7 +30,7 @@ export const uploadAttachmentFiles = (files, directory) => {
 /* Handle messages from worker */
 function uploadMessageHandler(messageType, data) {
   switch (messageType) {
-    case 'upload:success':
+    case workerMessageTypes.UPLOAD_SUCCESS:
       store.dispatch(types.CHANGE_UPLOAD_FILE, {
         id: data.id,
         data: data.uploadedUrlData,
@@ -38,10 +39,10 @@ function uploadMessageHandler(messageType, data) {
       })
       store.dispatch(types.VALIDATE_FILES)
       break
-    case 'upload:urls':
+    case workerMessageTypes.UPLOAD_URLS:
       store.dispatch(types.SET_UPLOADED_URLS, data)
       break
-    case 'upload:error':
+    case workerMessageTypes.UPLOAD_ERROR:
       store.dispatch(types.CHANGE_UPLOAD_FILE, {
         id: data.id,
         data: {
@@ -51,10 +52,10 @@ function uploadMessageHandler(messageType, data) {
         isError: true,
       })
       break
-    case 'upload:cancelled':
+    case workerMessageTypes.UPLOAD_CANCELLED:
       store.dispatch(types.REMOVE_UPLOAD_FILES, data)
       break
-    case 'uploadAttachments:success':
+    case workerMessageTypes.UPLOAD_ATTACHMENTS_SUCCESS:
       store.dispatch(types.CHANGE_UPLOAD_ATTACHMENT_FILE, {
         id: data.id,
         data: data.uploadedUrlData,
@@ -62,10 +63,10 @@ function uploadMessageHandler(messageType, data) {
         isError: false,
       })
       break
-    case 'uploadAttachments:urls':
+    case workerMessageTypes.UPLOAD_ATTACHMENTS_URLS:
       store.dispatch(types.SET_UPLOADED_ATTACHMENT_URLS, data)
       break
-    case 'uploadAttachments:error':
+    case workerMessageTypes.UPLOAD_ATTACHMENTS_ERROR:
       store.dispatch(types.CHANGE_UPLOAD_ATTACHMENT_FILE, {
         id: data.id,
         data: {
