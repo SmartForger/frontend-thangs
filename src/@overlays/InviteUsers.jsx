@@ -257,7 +257,7 @@ const InviteUsers = ({ folderId: id }) => {
           )}
           <Spacer size='2rem' />
         </div>
-        <Spacer className={c.InviteUsers} size='2rem' />
+        <Spacer size='2rem' />
       </div>
     </div>
   )

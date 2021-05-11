@@ -177,7 +177,7 @@ export const OverlayProvider = ({ children }) => {
         isOverlayHidden,
       }}
     >
-      <Overlay shake={overlayData.shake} />
+      <Overlay shake={overlayData?.shake} />
       {children}
     </OverlayContext.Provider>
   )
