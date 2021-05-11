@@ -17,12 +17,11 @@ async function uploadSingleFile({ id, file }, uploadedUrlData) {
     delete cancellationTokens[id]
 
     sendMessage('upload:success', {
-      // workerMessageTypes.UPLOAD_SUCCESS
       id,
       uploadedUrlData,
     })
   } catch (e) {
-    sendMessage('upload:error', { id, error: e.message }) // workerMessageTypes.UPLOAD_ERROR
+    sendMessage('upload:error', { id, error: e.message })
   }
 }
 
@@ -39,7 +38,6 @@ async function uploadMultipleFiles({ files, directory, modelId }) {
     })
 
     sendMessage('upload:urls', {
-      // workerMessageTypes.UPLOAD_URLS
       fileIds: files.map(f => f.id),
       uploadedUrlData,
     })
@@ -48,7 +46,7 @@ async function uploadMultipleFiles({ files, directory, modelId }) {
       uploadSingleFile(f, uploadedUrlData[i])
     })
   } catch (e) {
-    sendMessage('upload:error', { error: e.message }) // workerMessageTypes.UPLOAD_ERROR
+    sendMessage('upload:error', { error: e.message })
   }
 }
 
@@ -64,7 +62,7 @@ function cancelRequests({ nodeFileMap, shouldRemove }) {
   Object.values(nodeFileMap).forEach(fileId => {
     cancelRequest(fileId)
   })
-  sendMessage('upload:cancelled', { nodeFileMap, shouldRemove }) // workerMessageTypes.UPLOAD_CANCELLED
+  sendMessage('upload:cancelled', { nodeFileMap, shouldRemove })
 }
 
 /* Attachment files */
@@ -73,12 +71,11 @@ async function uploadSingleAttachmentFile({ id, file }, uploadedUrlData) {
     await storageService.uploadToSignedUrl(uploadedUrlData.signedUrl, file)
 
     sendMessage('uploadAttachments:success', {
-      // workerMessageTypes.UPLOAD_ATTACHMENTS_SUCCESS
       id,
       uploadedUrlData,
     })
   } catch (e) {
-    sendMessage('uploadAttachments:error', { id, error: e.message }) // workerMessageTypes.UPLOAD_ATTACHMENTS_ERROR
+    sendMessage('uploadAttachments:error', { id, error: e.message })
   }
 }
 
@@ -94,7 +91,6 @@ async function uploadMultipleAttachmentFiles({ files, directory }) {
     })
 
     sendMessage('uploadAttachments:urls', {
-      // workerMessageTypes.UPLOAD_ATTACHMENTS_URLS
       fileIds: files.map(f => f.id),
       uploadedUrlData,
     })
@@ -103,20 +99,20 @@ async function uploadMultipleAttachmentFiles({ files, directory }) {
       uploadSingleAttachmentFile(f, uploadedUrlData[i])
     })
   } catch (e) {
-    sendMessage('uploadAttachments:error', { error: e.message }) // workerMessageTypes.UPLOAD_ATTACHMENTS_ERROR
+    sendMessage('uploadAttachments:error', { error: e.message })
   }
 }
 
 /* Message handling */
 function uploadMessageHandler(messageType, data) {
   switch (messageType) {
-    case 'upload:upload': // workerMessageTypes.UPLOAD_UPLOAD
+    case 'upload:upload':
       uploadMultipleFiles(data)
       break
-    case 'upload:cancel': // workerMessageTypes.UPLOAD_CANCEL
+    case 'upload:cancel':
       cancelRequests(data)
       break
-    case 'uploadAttachments:upload': // workerMessageTypes.UPLOAD_ATTACHMENTS_UPLOAD
+    case 'uploadAttachments:upload':
       uploadMultipleAttachmentFiles(data)
       break
     default:

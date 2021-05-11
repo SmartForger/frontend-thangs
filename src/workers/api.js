@@ -25,7 +25,7 @@ const apiForChain = ({
     ...(params && { params }),
   }).catch(e => {
     if (e && e.response && e.response.status === 403) {
-      sendMessage('api:403') // workerMessageTypes.API_403
+      sendMessage('api:403')
     }
 
     return Promise.reject(e)
@@ -39,10 +39,8 @@ export default props =>
 
 function apiMessageHandler(messageType, data) {
   if (messageType === 'api:setToken') {
-    // workerMessageTypes.API_SET_TOKEN
     token = data.token
   } else if (messageType === 'api:setBaseUrl') {
-    // workerMessageTypes.API_SET_BASE_URL
     baseUrl = data.url
   }
 }

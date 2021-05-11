@@ -1,5 +1,3 @@
-import { logError } from './logger'
-
 const listeners = []
 
 export const sendMessage = (messageType, data) => {
@@ -14,16 +12,8 @@ export const addMessageListener = listener => {
 }
 
 export const initialize = () => {
-  onmessage = message => {
-    const { messageType, ...data } = message.data
+  onmessage = e => {
+    const { messageType, ...data } = e.data
     listeners.forEach(listener => listener(messageType, data))
-  }
-  onerror = error => {
-    logError('General error:')
-    logError(error)
-  }
-  onmessageerror = error => {
-    logError('Message error:')
-    logError(error)
   }
 }

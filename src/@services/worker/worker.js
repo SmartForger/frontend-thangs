@@ -1,5 +1,3 @@
-import * as types from '@constants/workerMessageTypes'
-
 let worker = null
 const listeners = []
 
@@ -14,10 +12,9 @@ export const getWorker = () => {
   return worker
 }
 
-export const sendMessage = async (messageType, data = {}) => {
+export const sendMessage = (messageType, data) => {
   const w = getWorker()
-  const message = { messageType, ...data }
-  await w.postMessage(message)
+  w.postMessage({ messageType, ...data })
 }
 
 export const addMessageListener = listener => {
@@ -25,7 +22,7 @@ export const addMessageListener = listener => {
 }
 
 function initialize() {
-  sendMessage(types.API_SET_BASE_URL, {
+  sendMessage('api:setBaseUrl', {
     url: process.env.REACT_APP_API_KEY,
   })
 }
@@ -36,18 +33,9 @@ function workerMessageHandler(e) {
 }
 
 function logMessageHandler(messageType, data) {
-  if (messageType === types.LOG_INFO) {
+  if (messageType === 'log') {
     // eslint-disable-next-line no-console
-    console.log('INFO from worker', data.logData)
-  } else if (messageType === types.LOG_WARN) {
-    // eslint-disable-next-line no-console
-    console.warn('WARNING from worker', data.logData)
-  } else if (messageType === types.LOG_ERROR) {
-    // eslint-disable-next-line no-console
-    console.error('ERROR from worker', data.logData)
-  } else if (messageType === types.LOG_ERROR_WITH_TRACE_DATA) {
-    // eslint-disable-next-line no-console
-    console.error('ERROR from worker', data.file, data.line, data.logData) // TODO: Also log file/line number if present?
+    console.log('Worker ', data.file, data.line, data.logData)
   }
 }
 

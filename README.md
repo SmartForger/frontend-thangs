@@ -5,7 +5,6 @@
   - [Usage](#usage)
   - [Tests](#tests)
     - [Cypress setup](#cypress-setup)
-  - [Webpack bundle analyzer](#webpack-bundle-analyzer)
   - [Local development with API Platform](#local-development-with-api-platform)
   - [Formatting (with Prettier)](#formatting-with-prettier)
     - [Editor configuration](#editor-configuration)
@@ -16,6 +15,7 @@
   - [GAE Routing](#gae-routing)
   - [Updating CORS rules on Google Cloud Storage buckets](#updating-cors-rules-on-google-cloud-storage-buckets)
   - [Circle Ci](#circle-ci)
+  - [Updating Query fragments](#updating-query-fragments)
   - [Storybook](#storybook)
     - [How to run](#how-to-run)
 
@@ -27,17 +27,17 @@
 ## Usage
 
 1. Clone the repository
-2. If you are currently not a part of Physna's private NPM org, reach out to Raul or Brandon for an invite
-3. If you are not currently logged into NPM in your terminal, run `npm adduser` on your machine and log in with your credentials
-4. Once you're logged in, run `npm token create` and follow the prompts to create your token
+1. If you are currently not a part of Physna's private NPM org, reach out to Raul or Brandon for an invite
+1. If you are not currently logged into NPM in your terminal, run `npm adduser` on your machine and log in with your credentials
+1. Once you're logged in, run `npm token create` and follow the prompts to create your token
     - For `thangs-react`, you only need a readonly token
-5. In your .bashrc/.zshrc/shell profile, add `export NPM_TOKEN=YOUR_TOKEN_HERE`
-6. Reload your terminal or manually export the token to your path
-7. Run the following command in the root directory:
+1. In your .bashrc/.zshrc/shell profile, add `export NPM_TOKEN=YOUR_TOKEN_HERE`
+1. Reload your terminal or manually export the token to your path
+1. Run the following command in the root directory:
     ```bash
     yarn install
     ```
-8. Create a file named `.env.development.local` in the root folder and make sure it contains the necessary details for your dev environment:
+1. Create a file named `.env.development.local` in the root folder and make sure it contains the necessary details for your dev environment:
     ```ini
     REACT_APP_WEBSITE_NAME=(The Document Title you wish to display)
     REACT_APP_API_KEY=https://development-api-platform-dot-thangs.uc.r.appspot.com/
@@ -58,12 +58,10 @@
     REACT_APP_FACEBOOK_OAUTH_REDIRECT_URI=https://development.thangs.com/authenticate/facebook
     REACT_APP_OPTIMIZELY_API_KEY=RnhiUtviYt3wbWKaEdpLN
     ```
-9. Run the following command in the terminal to start the app:
+1. Run the following command in the terminal to start the app:
     ```bash
     yarn run dev
     ```
-
-    *NOTE:* If updating the web worker files (src/workers/*), you'll need to run `yarn build:workers` after those changes and reload the app. This may change in the future (i.e. along with a future migration away from `create-react-app`).
 
 ## Tests
 
