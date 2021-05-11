@@ -9,10 +9,10 @@ const useHover = () => {
     const element = ref && ref.current
     if (element) {
       element.addEventListener('mouseenter', handleMouseOver)
-      // element.addEventListener('mouseleave', handleMouseOut)
+      element.addEventListener('mouseleave', handleMouseOut)
       return () => {
         element.removeEventListener('mouseenter', handleMouseOver)
-        // element.removeEventListener('mouseleave', handleMouseOut)
+        element.removeEventListener('mouseleave', handleMouseOut)
       }
     }
   }, [ref])
