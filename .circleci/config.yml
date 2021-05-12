@@ -46,7 +46,6 @@ workflows:
               branches:
                 only:
                   - development
-                  - reunited/again
 
 jobs:
   deploy-staging:
