@@ -109,7 +109,7 @@ export const ProfileDropdownMenuContainer = ({ user = {} }) => {
       </div>
       <Spacer size={'1rem'} />
       <Link to={'/mythangs'}>
-        <Pill tertiary>View My Thangs</Pill>
+        <Pill secondary>View My Thangs</Pill>
       </Link>
       <Spacer size={'1rem'} />
       <Divider spacing={0} />

@@ -33,7 +33,6 @@ export default store => {
           return model
         }),
       ]
-      delete folder.models
       delete folder.subfolders
     })
 
