@@ -36,7 +36,7 @@ export const clickOnElementByText = text => {
 }
 
 export const rightClickOnElement = el => {
-  cy.get(el, { timeout: 10000 }).rightclick()
+  cy.get(el, { timeout: 10000 }).first().rightclick()
 }
 
 export const clickOnElement = el => {
@@ -163,7 +163,7 @@ export const deleteModel = () => {
 export const deleteSingleFile = () => {
   goTo(PATH.MY_THANGS)
   rightClickOnElement(CLASSES.MY_THANGS_MENU_BUTTON)
-  clickOnElementByText(TEXT.REMOVE)
+  clickOnElementByText(TEXT.DELETE)
   isTextInsideClass(CLASSES.MY_THANGS_DELETE_FORM_BUTTON, TEXT.DELETE)
   clickOnTextInsideClass(CLASSES.MY_THANGS_DELETE_FORM_BUTTON, TEXT.DELETE)
   isElement(CLASSES.MY_THANGS_NO_FILES, PROPS.VISIBLE)
