@@ -19,7 +19,7 @@ import { useOverlay } from '@hooks'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as GoogleLogo } from '@svg/google-logo.svg'
 import { ReactComponent as FacebookLogo } from '@svg/facebook-logo.svg'
-import { VALIDATION_REQUIRED, VALIDATION_EMAIL } from '@utilities/validation'
+import { VALIDATION_REQUIRED } from '@utilities/validation'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -166,7 +166,8 @@ const useStyles = createUseStyles(theme => {
 const signInSchema = {
   email: {
     label: 'Email',
-    rules: [VALIDATION_REQUIRED, VALIDATION_EMAIL],
+    rules: [VALIDATION_REQUIRED],
+    messages: 'Email or username is required',
   },
   password: {
     label: 'Password',
