@@ -31,47 +31,47 @@ describe('My Thangs Page', () => {
     loginByUser({ email: activeUser.EMAIL, password: activeUser.PASSWORD })
   })
 
-  it('My Thangs page loaded successfully', () => {
+  xit('My Thangs page loaded successfully', () => {
     goTo(PATH.MY_THANGS)
     isElement(CLASSES.MY_THANGS_NAVBAR, PROPS.VISIBLE)
     isElement(CLASSES.MY_THANGS_RECENT_FILES, PROPS.VISIBLE)
   })
 
-  it('My Thangs page loaded successfully from profile dropdown', () => {
+  xit('My Thangs page loaded successfully from profile dropdown', () => {
     openMyThangs()
   })
 
-  it('Check Add new button', () => {
+  xit('Check Add new button', () => {
     openMyThangs()
     clickOnTextInsideClass(CLASSES.MY_THANGS_NAVBAR, TEXT.ADD_NEW)
     isElement(CLASSES.MY_THANGS_ADD_MENU, PROPS.VISIBLE)
   })
 
-  it('Check Shared', () => {
+  xit('Check Shared', () => {
     openMyThangs()
     clickOnTextInsideClass(CLASSES.MY_THANGS_NAVBAR, TEXT.SHARED)
     isElement(CLASSES.MY_THANGS_SHARED_FILES, PROPS.VISIBLE)
   })
 
-  it('Check Liked Models', () => {
+  xit('Check Liked Models', () => {
     openMyThangs()
     clickOnTextInsideClass(CLASSES.MY_THANGS_NAVBAR, TEXT.LIKED_MODELS)
     isElement(CLASSES.MY_THANGS_LIKED_MODELS, PROPS.VISIBLE)
   })
 
-  it('Check Saved Searches', () => {
+  xit('Check Saved Searches', () => {
     openMyThangs()
     clickOnTextInsideClass(CLASSES.MY_THANGS_NAVBAR, TEXT.SAVED_SEARCHES)
     isElement(CLASSES.MY_THANGS_SAVED_SEARCHES, PROPS.VISIBLE)
   })
 
-  it('Check Profile Settings', () => {
+  xit('Check Profile Settings', () => {
     openMyThangs()
     clickOnTextInsideClass(CLASSES.MY_THANGS_NAVBAR, TEXT.PROFILE_SETTINGS)
     isElement(CLASSES.MY_THANGS_EDIT_PROFILE, PROPS.VISIBLE)
   })
 
-  it('Check Sign Out', () => {
+  xit('Check Sign Out', () => {
     openMyThangs()
     clickOnTextInsideClass(CLASSES.MY_THANGS_NAVBAR, TEXT.SIGN_OUT)
     isElement(CLASSES.USER_NAVBAR, PROPS.INVISIBLE)

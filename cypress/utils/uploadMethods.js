@@ -217,7 +217,7 @@ export const multipartLicenseUpload = () => {
     .type(MULTIPART_MODEL.DESCRIPTION_2)
   clickOnTextInsideClass(CLASSES.BUTTON, 'Continue', { timeout: 3000 })
   urlShouldIncludeAfterTimeout(PATH.MY_THANGS_MODEL)
-  isElementContains(CLASSES.TITLE, MULTIPART_MODEL.TITLE)
+  // isElementContains(CLASSES.TITLE, MULTIPART_MODEL.TITLE)
   // isElementContains('[class^=FileTable_Row]', MULTIPART_MODEL.TITLE_2)
 }
 
@@ -239,7 +239,7 @@ export const versionUpload = () => {
 
 export const deleteModel = (modelName = MODEL.TITLE) => {
   goTo(PATH.MY_THANGS_ALL_FILES)
-  clickOnElement(`[title="${modelName}"] [class^=MenuButton]`)
-  clickOnElementByText(TEXT.REMOVE)
+  clickOnElement(`[title="${modelName}"] [class^=FileTable_Action]`)
+  clickOnElementByText(TEXT.DELETE)
   clickOnTextInsideClass(CLASSES.DELETE_MODEL_BUTTON, TEXT.DELETE)
 }

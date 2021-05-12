@@ -39,10 +39,7 @@ describe('The Model License', () => {
     clickOnElement(CLASSES.EDIT_MODEL_BUTTON)
     cy.get('label[for=license]').should('contain', 'Attach license')
     uploadFile(MODEL.LICENSE, licenseUploadInput)
-    cy.get('[class^=LicenseField_Field] [name=license]', { timeout: 5000 }).should(
-      'contain',
-      MODEL.LICENSE
-    )
+    cy.get('input[name=license]', { timeout: 5000 }).should('have.value', MODEL.LICENSE)
     clickOnElementByText('Save Changes')
     isElement(CLASSES.MODEL_LICENSE, PROPS.VISIBLE)
     clearModelsAndFolders()
@@ -121,10 +118,10 @@ describe('The Model License', () => {
     clickOnTextInsideClass(CLASSES.MODEL_CARD, MODEL.TITLE)
     isElement(CLASSES.MODEL_LICENSE, PROPS.INVISIBLE)
     clickOnElement(CLASSES.EDIT_MODEL_BUTTON)
-    cy.get('label[for="license"]').should('contain', MODEL.LICENSE)
+    cy.get('input[name="license"]').should('have.value', MODEL.LICENSE)
     uploadFile(MODEL.LICENSE_NEW, licenseUploadInput)
-    cy.get('[class^=LicenseField_Field] [name=license]', { timeout: 5000 }).should(
-      'contain',
+    cy.get('input[name="license"]', { timeout: 5000 }).should(
+      'have.value',
       MODEL.LICENSE_NEW
     )
     clickOnElementByText('Save Changes')
