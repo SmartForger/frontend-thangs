@@ -16,7 +16,6 @@ import { ReactComponent as DeleteIcon } from '@svg/icon-delete.svg'
 import { ReactComponent as DownloadIcon } from '@svg/icon-download.svg'
 import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
 import { ReactComponent as OpenIcon } from '@svg/external-link.svg'
-import { ReactComponent as ShareIcon } from '@svg/icon-sharedfolder.svg'
 import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
 import { ReactComponent as UploadIcon } from '@svg/icon-upload-black.svg'
 
@@ -186,12 +185,6 @@ const FileMenu = ({ model = {} }) => {
     [model]
   )
 
-  const handleShare = useCallback(e => {
-    e.preventDefault()
-    // eslint-disable-next-line no-console
-    console.log('Open an overlay')
-  }, [])
-
   return (
     <div className={c.FileMenu}>
       <Spacer size={'1rem'} />
@@ -206,16 +199,6 @@ const FileMenu = ({ model = {} }) => {
           </div>
         </MenuItem>
       )}
-      <Spacer size={'.5rem'} />
-      <MenuItem className={c.FileMenu_Item} onClick={handleShare}>
-        <div>
-          <Spacer size={'1.5rem'} />
-          <ShareIcon />
-          <Spacer size={'.5rem'} />
-          <Body>Invite</Body>
-          <Spacer size={'1.5rem'} />
-        </div>
-      </MenuItem>
       <Spacer size={'.5rem'} />
       <MenuItem className={c.FileMenu_Item} onClick={handleGoToModel}>
         <div>

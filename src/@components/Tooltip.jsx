@@ -63,6 +63,7 @@ const TooltipOverlay = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false)
   const [placement, setPlacement] = useState(defaultPlacement)
+  const [arrowOffset, setArrowOffset] = useState(0)
   const c = useStyles({ placement })
 
   const transformCalcs = useMemo(() => {
@@ -99,6 +100,7 @@ const TooltipOverlay = ({
     if (placement === TooltipPlacements.bottomLeft) {
       boxPos.x = -1 * rect.width + anchorElement.clientWidth
       boxPos.y = anchorElement.clientHeight
+      setArrowOffset(anchorElement.clientWidth / 2 - 6)
     }
     if (placement === TooltipPlacements.top) {
       boxPos.x = -1 * (rect.width / 2) + anchorElement.clientWidth / 2
@@ -118,7 +120,7 @@ const TooltipOverlay = ({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isVisible, anchorElement, tooltipRef])
+  }, [isVisible, anchorElement, tooltipRef, window.innerHeight, window.innerWidth])
 
   const boxStyle = transformCalcs || []
 
@@ -138,7 +140,7 @@ const TooltipOverlay = ({
     ) {
       return (
         <ContainerColumn
-          alignItems={placement === TooltipPlacements.bottomLeft ? 'right' : 'center'}
+          alignItems={placement === TooltipPlacements.bottomLeft ? 'left' : 'center'}
           elementRef={ref}
           reverse={placement === TooltipPlacements.top}
           style={style}
@@ -167,7 +169,11 @@ const TooltipOverlay = ({
     >
       <TooltipWrapper>
         <Spacer size='0.5rem' />
-        <IconTooltipArrow className={c.Tooltip_Arrow}></IconTooltipArrow>
+        <ContainerRow justifyContent={'flex-end'}>
+          <Spacer width={`${arrowOffset}px`} height={0} />
+          <IconTooltipArrow className={c.Tooltip_Arrow}></IconTooltipArrow>
+          <Spacer width={`${arrowOffset}px`} height={0} />
+        </ContainerRow>
         <div className={c.Tooltip_Box} ref={tooltipRef}>
           <Spacer size='0.75rem' />
           <ContainerRow>

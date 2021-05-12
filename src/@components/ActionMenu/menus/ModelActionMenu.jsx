@@ -4,16 +4,17 @@ import { useStoreon } from 'storeon/react'
 import { DotStackActionMenu } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as OpenIcon } from '@svg/external-link.svg'
+import { ReactComponent as EditIcon } from '@svg/icon-edit.svg'
 import { ReactComponent as ShareIcon } from '@svg/icon-sharedfolder.svg'
 import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
 import { ReactComponent as DownloadIcon } from '@svg/icon-download.svg'
 import { ReactComponent as DeleteIcon } from '@svg/icon-delete.svg'
+import { ReactComponent as UploadIcon } from '@svg/icon-upload-black.svg'
 import * as types from '@constants/storeEventTypes'
 import { authenticationService } from '@services'
 import { track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
 import { MODEL_MENU_OPTIONS } from '@constants/menuOptions'
-
 const useStyles = createUseStyles(theme => {
   const {
     mediaQueries: { md },
@@ -86,12 +87,17 @@ const ModelActionMenu = ({
     ...(isExpandedOptions
       ? [
         {
-          label: 'Go to Model',
+          label: 'Upload new version',
+          Icon: UploadIcon,
+          value: MODEL_MENU_OPTIONS.NEW_VERSION,
+        },
+        {
+          label: 'Go to model',
           Icon: OpenIcon,
           value: MODEL_MENU_OPTIONS.GO_TO_MODEL,
         },
         {
-          label: 'Add to Starred',
+          label: 'Add to starred',
           Icon: StarIcon,
           value: MODEL_MENU_OPTIONS.ADD_TO_STARRED,
         },
@@ -101,6 +107,11 @@ const ModelActionMenu = ({
           value: MODEL_MENU_OPTIONS.DOWNLOAD,
         },
         {
+          label: 'Edit',
+          Icon: EditIcon,
+          value: MODEL_MENU_OPTIONS.EDIT,
+        },
+        {
           label: 'Delete',
           Icon: DeleteIcon,
           value: MODEL_MENU_OPTIONS.DELETE,
@@ -108,6 +119,37 @@ const ModelActionMenu = ({
       ]
       : []),
   ].filter(opt => !omitOptions.includes(opt.value))
+
+  const handleNewVersion = useCallback(() => {
+    track('File Menu - New Verison')
+    setOverlay({
+      isOpen: true,
+      template: 'multiUpload',
+      data: {
+        animateIn: true,
+        windowed: true,
+        dialogue: true,
+        versionData: {
+          modelId: model.id,
+          actionType: 'update',
+        },
+      },
+    })
+  }, [model, setOverlay])
+
+  const handleEdit = useCallback(() => {
+    track('File Menu - Edit Model')
+    setOverlay({
+      isOpen: true,
+      template: 'editModel',
+      data: {
+        model,
+        type: 'model',
+        animateIn: true,
+        windowed: true,
+      },
+    })
+  }, [model, setOverlay])
 
   const handleGoToMyThangs = () => {
     history.push(`/mythangs/file/${model.id}`)
@@ -183,6 +225,10 @@ const ModelActionMenu = ({
         return handleDownloadModel()
       case MODEL_MENU_OPTIONS.DELETE:
         return handleDeleteFile()
+      case MODEL_MENU_OPTIONS.EDIT:
+        return handleEdit()
+      case MODEL_MENU_OPTIONS.NEW_VERSION:
+        return handleNewVersion()
       default:
         return onChange(value)
     }
