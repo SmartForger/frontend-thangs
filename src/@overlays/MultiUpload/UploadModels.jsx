@@ -337,7 +337,6 @@ const UploadModels = ({
           accept={isIOS() ? undefined : MODEL_FILE_EXTS}
           ref={dropzoneRef}
           multiple={multiple}
-          maxFiles={25}
         >
           {({ getRootProps, getInputProps }) => (
             <section className={c.UploadModels_UploadZone}>

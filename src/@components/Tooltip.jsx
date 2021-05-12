@@ -161,7 +161,7 @@ const TooltipOverlay = ({
       )
     }
   }
-
+  if (!title) return null
   return createPortal(
     <div
       className={classnames(c.Tooltip, { [c.Tooltip_isOpen]: isVisible })}

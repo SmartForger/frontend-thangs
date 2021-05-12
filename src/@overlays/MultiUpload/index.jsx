@@ -70,11 +70,12 @@ const MultiUpload = ({
   folderId = '', //preselected folder
   versionData, //actionType = string, modelId (req), partId (opt)
 }) => {
-  const { dispatch, license = {}, uploadModelFiles = {}, model = {} } = useStoreon(
-    'license',
-    'uploadModelFiles',
-    'model'
-  )
+  const {
+    dispatch,
+    license = {},
+    uploadModelFiles = {},
+    model = {},
+  } = useStoreon('license', 'uploadModelFiles', 'model')
   const {
     data: uploadFilesData = {},
     treeData,
@@ -100,9 +101,10 @@ const MultiUpload = ({
     () => Object.values(uploadFilesData).filter(file => file.name && !file.isError),
     [uploadFilesData]
   )
-  const allFilesUploaded = useMemo(() => uploadedFiles.every(file => !file.isLoading), [
-    uploadedFiles,
-  ])
+  const allFilesUploaded = useMemo(
+    () => uploadedFiles.every(file => !file.isLoading),
+    [uploadedFiles]
+  )
   const uploadTreeData = useMemo(() => {
     const keys = Object.keys(treeData)
     const newTreeData = {}
@@ -190,10 +192,10 @@ const MultiUpload = ({
 
     return trees
   }, [treeData, uploadedFiles, isAssembly, multipartName, dispatch])
-  const activeNode = useMemo(() => allTreeNodes[activeView] || null, [
-    allTreeNodes,
-    activeView,
-  ])
+  const activeNode = useMemo(
+    () => allTreeNodes[activeView] || null,
+    [allTreeNodes, activeView]
+  )
   const activeFormData = useMemo(() => {
     if (!activeNode) return null
 
