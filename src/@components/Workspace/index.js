@@ -1,5 +1,3 @@
-export { default as AddContextMenu } from './AddContextMenu'
-export { default as AddMenu } from './AddMenu'
 export { default as FileContextMenu } from './FileContextMenu'
 export { default as FileExplorer } from './FileExplorer'
 export { default as FileMenu } from './FileMenu'

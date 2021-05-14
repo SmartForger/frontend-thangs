@@ -16,3 +16,5 @@ export { default as SearchSourceFilterActionMenu } from './SearchSourceFilterAct
 export { default as SelectFolderActionMenu } from './SelectFolderActionMenu'
 export { default as CollaboratorActionMenu } from './CollaboratorActionMenu'
 export { default as TagOptionActionMenu } from './TagOptionActionMenu'
+export { default as ContextActionMenu } from './ContextActionMenu'
+export { default as AddActionMenu } from './AddActionMenu'

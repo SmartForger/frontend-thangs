@@ -217,6 +217,8 @@ const DropdownMenu = ({
   borderSize = '1rem',
   children,
   containerClassName,
+  containerStyle,
+  setContainerRef = noop,
   className,
   iconOnly,
   isAutoClosed = true,
@@ -230,6 +232,12 @@ const DropdownMenu = ({
   user,
 }) => {
   const dropdownRef = useRef(null)
+
+  const setRef = el => {
+    dropdownRef.current = el
+    setContainerRef(el)
+  }
+
   const [isOpenInternal, toggleOpen] = useDropdownMenuState({
     dropdownRef: isExternalClosed ? dropdownRef : null,
     isInitiallyOpen: isOpenExternal || isOpenByDefault,
@@ -252,7 +260,8 @@ const DropdownMenu = ({
   return (
     <div
       className={classnames(containerClassName, c.DropdownMenu_Container)}
-      ref={dropdownRef}
+      ref={setRef}
+      style={containerStyle}
     >
       {TargetComponent ? (
         <TargetComponent

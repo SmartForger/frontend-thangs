@@ -16,3 +16,8 @@ export const FOLDER_MENU_OPTIONS = {
   ADD_TO_STARRED: 'add-to-starred',
   DELETE: 'delete',
 }
+
+export const ADD_MENU_OPTIONS = {
+  CREATE_FOLDER: 'create-folder',
+  UPLOAD_MODELS: 'upload-models',
+}

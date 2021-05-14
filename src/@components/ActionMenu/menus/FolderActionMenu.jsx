@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { useStoreon } from 'storeon/react'
-import { DotStackActionMenu } from '@components'
+import { DotStackActionMenu, ContextActionMenu } from '@components'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { ReactComponent as OpenIcon } from '@svg/external-link.svg'
 import { ReactComponent as StarIcon } from '@svg/icon-star-outline.svg'
@@ -53,10 +53,12 @@ const FolderActionMenu = ({
   omitOptions = [],
   isStaticBackground = false,
   onChange = noop,
+  isContextMenu,
 }) => {
   const { setOverlay } = useOverlay()
   const { dispatch } = useStoreon()
   const c = useStyles({})
+  const ActionMenuComponent = isContextMenu ? ContextActionMenu : DotStackActionMenu
 
   const options = [
     {
@@ -146,7 +148,7 @@ const FolderActionMenu = ({
   }
 
   return (
-    <DotStackActionMenu
+    <ActionMenuComponent
       onChange={handleOnChange}
       actionMenuTitle='Select action'
       alignItems='left'

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
 import { Link, useHistory } from 'react-router-dom'
@@ -12,24 +12,15 @@ import {
   MetadataType,
 } from '@physna/voxel-ui/@atoms/Typography'
 
-import {
-  AddMenu,
-  Button,
-  Divider,
-  FileExplorer,
-  ProfilePicture,
-  NavLink,
-  Spacer,
-} from '@components'
+import { Divider, FileExplorer, ProfilePicture, NavLink, Spacer } from '@components'
 import { authenticationService } from '@services'
-import { useCurrentUser, useExternalClick } from '@hooks'
+import { useCurrentUser } from '@hooks'
 
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as ClockIcon } from '@svg/icon-clock.svg'
 import { ReactComponent as ExitIcon } from '@svg/icon-X.svg'
 import { ReactComponent as FolderIcon } from '@svg/icon-folder.svg'
 import { ReactComponent as HeartIcon } from '@svg/heart-icon.svg'
-import { ReactComponent as PlusIcon } from '@svg/icon-plus.svg'
 import { ReactComponent as PortfolioIcon } from '@svg/icon-portfolio.svg'
 import { ReactComponent as SearchIcon } from '@svg/icon-search.svg'
 import { ReactComponent as SettingsIcon } from '@svg/icon-settings.svg'
@@ -156,31 +147,7 @@ const useStyles = createUseStyles(theme => {
 })
 const noop = () => null
 
-const AddMenuDropdown = ({ folder = {} }) => {
-  const c = useStyles()
-  const addMenuRef = useRef(null)
-  const [showCreateMenu, setShowCreateMenu] = useState(false)
-  const handleClickCreate = useCallback(() => setShowCreateMenu(true), [])
-  useExternalClick(addMenuRef, () => setShowCreateMenu(false))
-
-  return (
-    <div className={c.WorkspaceNavbar_AddWrapper} ref={addMenuRef}>
-      <Button className={c.WorkspaceNavbar_AddButton} onClick={handleClickCreate}>
-        <PlusIcon />
-        <Spacer size={'.5rem'} />
-        Add New
-      </Button>
-      {showCreateMenu && (
-        <div className={c.WorkspaceNavbar_AddMenu}>
-          <AddMenu folder={folder} />
-        </div>
-      )}
-    </div>
-  )
-}
-
 const WorkspaceNavbar = ({
-  currentFolderId,
   folders,
   models,
   isLoadingThangs,
@@ -216,10 +183,10 @@ const WorkspaceNavbar = ({
   //   }
   // }, [dispatch, folders])
 
-  const shouldShowFileExplorer = useMemo(() => showFileExplorer || folderNav.files, [
-    folderNav.files,
-    showFileExplorer,
-  ])
+  const shouldShowFileExplorer = useMemo(
+    () => showFileExplorer || folderNav.files,
+    [folderNav.files, showFileExplorer]
+  )
 
   const handleAllFiles = useCallback(() => {
     closeMobileNav()
@@ -300,7 +267,6 @@ const WorkspaceNavbar = ({
           </div>
           <Spacer size={'.75rem'} />
         </div>
-        <AddMenuDropdown folder={folders[currentFolderId]} />
         <div className={c.WorkspaceNavbar_ScrollableFiles}>
           <div>
             <Title

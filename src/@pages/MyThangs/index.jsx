@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom'
-import { ContextMenuTrigger } from 'react-contextmenu'
 import { useStoreon } from 'storeon/react'
 import {
-  AddContextMenu,
+  AddActionMenu,
   FileContextMenu,
   FolderContextMenu,
   SubpartContextMenu,
@@ -111,11 +110,12 @@ const MyThangs = () => {
   const [currentFolderId, setCurrentFolderId] = useState(null)
   const [isMobileNavOpen, setMobileNavOpen] = useState(false)
   const currentUserId = authenticationService.getCurrentUserId()
-  const { dispatch, folders = {}, models = {}, thangs } = useStoreon(
-    'folders',
-    'models',
-    'thangs'
-  )
+  const {
+    dispatch,
+    folders = {},
+    models = {},
+    thangs,
+  } = useStoreon('folders', 'models', 'thangs')
   const { isLoading, isLoaded } = thangs
   const { data: modelData } = models
 
@@ -202,26 +202,17 @@ const MyThangs = () => {
   return (
     <>
       <div className={c.MyThangs}>
-        <ContextMenuTrigger
-          id='Add_Menu'
-          attributes={{
-            style: { height: '100%' },
-          }}
-          holdToDisplay={-1}
-          collect={() => ({ folder: folders[currentFolderId] })}
-        >
-          <WorkspaceNavbar
-            currentFolderId={currentFolderId}
-            folders={folders.data}
-            handleChangeFolder={handleChangeFolder}
-            handleEditModel={handleEditModel}
-            isLoadingThangs={isLoading}
-            models={modelData}
-            setCurrentView={handleCurrentView}
-            isMobileNavOpen={isMobileNavOpen}
-            closeMobileNav={closeMobileNav}
-          />
-        </ContextMenuTrigger>
+        <WorkspaceNavbar
+          currentFolderId={currentFolderId}
+          folders={folders.data}
+          handleChangeFolder={handleChangeFolder}
+          handleEditModel={handleEditModel}
+          isLoadingThangs={isLoading}
+          models={modelData}
+          setCurrentView={handleCurrentView}
+          isMobileNavOpen={isMobileNavOpen}
+          closeMobileNav={closeMobileNav}
+        />
         <div className={c.MyThangs_ContentWrapper}>
           <WorkspaceHeader
             setCurrentView={handleCurrentView}
@@ -231,64 +222,55 @@ const MyThangs = () => {
           {!isLoaded || isLoading ? (
             <Spinner isTopLevelView />
           ) : (
-            <ContextMenuTrigger
-              id='Add_Menu'
-              attributes={{
-                style: { height: '100%' },
-              }}
-              holdToDisplay={-1}
-              collect={() => ({ folder: folders[currentFolderId] })}
-            >
-              <Switch>
-                <Route
-                  exact
-                  path={path}
-                  render={() => <RecentFilesView {...viewProps} />}
-                />
-                <Route
-                  path={`${path}/recent-files`}
-                  render={() => <RecentFilesView {...viewProps} />}
-                />
-                <Route
-                  path={`${path}/all-files`}
-                  render={() => <AllFilesView {...viewProps} />}
-                />
-                <Route
-                  path={`${path}/edit-profile`}
-                  render={() => <EditProfileView {...viewProps} />}
-                />
-                <Route
-                  path={`${path}/folder/:folderId`}
-                  render={() => <FolderView {...viewProps} />}
-                />
-                <Route
-                  path={`${path}/file/:fileId`}
-                  render={() => <FileView {...viewProps} />}
-                />
-                <Route
-                  path={`${path}/liked-models`}
-                  render={() => <LikedModelsView {...viewProps} />}
-                />
-                <Route
-                  path={`${path}/shared-files`}
-                  render={() => <SharedFilesView {...viewProps} />}
-                />
-                <Route
-                  path={`${path}/saved-searches`}
-                  render={() => <SavedSearchesView {...viewProps} />}
-                />
-                <Route
-                  path={`${path}/searchFiles/:searchTerm`}
-                  render={() => <SearchView {...viewProps} />}
-                />
-                <Route component={() => 'Oops, Page Not Found'} />
-              </Switch>
-            </ContextMenuTrigger>
+            <Switch>
+              <Route
+                exact
+                path={path}
+                render={() => <RecentFilesView {...viewProps} />}
+              />
+              <Route
+                path={`${path}/recent-files`}
+                render={() => <RecentFilesView {...viewProps} />}
+              />
+              <Route
+                path={`${path}/all-files`}
+                render={() => <AllFilesView {...viewProps} />}
+              />
+              <Route
+                path={`${path}/edit-profile`}
+                render={() => <EditProfileView {...viewProps} />}
+              />
+              <Route
+                path={`${path}/folder/:folderId`}
+                render={() => <FolderView {...viewProps} />}
+              />
+              <Route
+                path={`${path}/file/:fileId`}
+                render={() => <FileView {...viewProps} />}
+              />
+              <Route
+                path={`${path}/liked-models`}
+                render={() => <LikedModelsView {...viewProps} />}
+              />
+              <Route
+                path={`${path}/shared-files`}
+                render={() => <SharedFilesView {...viewProps} />}
+              />
+              <Route
+                path={`${path}/saved-searches`}
+                render={() => <SavedSearchesView {...viewProps} />}
+              />
+              <Route
+                path={`${path}/searchFiles/:searchTerm`}
+                render={() => <SearchView {...viewProps} />}
+              />
+              <Route component={() => 'Oops, Page Not Found'} />
+            </Switch>
           )}
         </div>
+        <AddActionMenu folder={folders[currentFolderId] || {}} isContextMenu />
       </div>
 
-      <AddContextMenu />
       <FileContextMenu />
       <FolderContextMenu />
       <SubpartContextMenu />

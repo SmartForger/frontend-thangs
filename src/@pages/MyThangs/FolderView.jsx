@@ -3,7 +3,6 @@ import * as R from 'ramda'
 import classnames from 'classnames'
 import { useHistory, useParams } from 'react-router-dom'
 import { useStoreon } from 'storeon/react'
-import { ContextMenuTrigger } from 'react-contextmenu'
 
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import { Title, HeaderLevel } from '@physna/voxel-ui/@atoms/Typography'
@@ -200,65 +199,61 @@ const FolderView = ({
   const directSubFolders = getSubFolders(folders, id)
 
   return (
-    <>
-      <ContextMenuTrigger id='Add_Menu' holdToDisplay={-1} collect={() => ({ folder })}>
-        <main className={classnames(className, c.FolderView)}>
-          <div className={c.FolderView_Content}>
-            <FolderHeader
-              folder={folder}
-              folders={folders}
-              selectedModel={selectedModel}
-              toolbarRef={toolbarRef}
-            />
-            {directSubFolders.length > 0 && (
-              <div className={c.FolderView_FoldersSection}>
-                <Spacer size='4rem' />
-                <Title headerLevel={HeaderLevel.tertiary}>Folders</Title>
-                <div className={c.FolderView_Folders}>
-                  {directSubFolders.map((subfolder, index) => (
-                    <React.Fragment key={`folder=${subfolder.id}_${index}`}>
-                      <FolderCard
-                        folder={subfolder}
-                        handleClick={handleChangeFolder}
-                        disableStar={isSharedFolder}
-                      />
-                      <Spacer size={'2rem'} />
-                    </React.Fragment>
-                  ))}
-                </div>
-              </div>
-            )}
-            <Spacer size='2rem' />{' '}
-            <FileTable
-              className={c.FolderView_FileTable__desktop}
-              files={folderModels}
-              handleEditModel={handleEditModel}
-              handleChangeFolder={handleChangeFolder}
-              hideDropzone={directSubFolders.length > 0}
-              onDrop={onDrop}
-              heightOffset={8}
-              isToolbarShown={false}
-              onChange={handleOnChange}
-              title='Files'
-              toolbarRef={toolbarRef}
-              hasSubtree={false}
-            />
-            <FileTable
-              className={c.FolderView_FileTable__mobile}
-              files={[...directSubFolders, ...folderModels]}
-              handleEditModel={handleEditModel}
-              handleChangeFolder={handleChangeFolder}
-              hideDropzone={directSubFolders.length > 0}
-              onDrop={onDrop}
-              heightOffset={8}
-              title='Files'
-              hasSubtree={false}
-            />
+    <main className={classnames(className, c.FolderView)}>
+      <div className={c.FolderView_Content}>
+        <FolderHeader
+          folder={folder}
+          folders={folders}
+          selectedModel={selectedModel}
+          toolbarRef={toolbarRef}
+        />
+        {directSubFolders.length > 0 && (
+          <div className={c.FolderView_FoldersSection}>
+            <Spacer size='4rem' />
+            <Title headerLevel={HeaderLevel.tertiary}>Folders</Title>
+            <div className={c.FolderView_Folders}>
+              {directSubFolders.map((subfolder, index) => (
+                <React.Fragment key={`folder=${subfolder.id}_${index}`}>
+                  <FolderCard
+                    folder={subfolder}
+                    handleClick={handleChangeFolder}
+                    disableStar={isSharedFolder}
+                  />
+                  <Spacer size={'2rem'} />
+                </React.Fragment>
+              ))}
+            </div>
           </div>
-          <Spacer size='2rem' />
-        </main>
-      </ContextMenuTrigger>
-    </>
+        )}
+        <Spacer size='2rem' />{' '}
+        <FileTable
+          className={c.FolderView_FileTable__desktop}
+          files={folderModels}
+          handleEditModel={handleEditModel}
+          handleChangeFolder={handleChangeFolder}
+          hideDropzone={directSubFolders.length > 0}
+          onDrop={onDrop}
+          heightOffset={8}
+          isToolbarShown={false}
+          onChange={handleOnChange}
+          title='Files'
+          toolbarRef={toolbarRef}
+          hasSubtree={false}
+        />
+        <FileTable
+          className={c.FolderView_FileTable__mobile}
+          files={[...directSubFolders, ...folderModels]}
+          handleEditModel={handleEditModel}
+          handleChangeFolder={handleChangeFolder}
+          hideDropzone={directSubFolders.length > 0}
+          onDrop={onDrop}
+          heightOffset={8}
+          title='Files'
+          hasSubtree={false}
+        />
+      </div>
+      <Spacer size='2rem' />
+    </main>
   )
 }
 
