@@ -25,6 +25,7 @@ import SharedFilesView from './SharedFilesView'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 import * as types from '@constants/storeEventTypes'
 import { pageview, perfTrack } from '@utilities/analytics'
+import { FolderActionMenu } from '@components/ActionMenu'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -268,9 +269,13 @@ const MyThangs = () => {
             </Switch>
           )}
         </div>
-        <AddActionMenu folder={folders[currentFolderId] || {}} isContextMenu />
       </div>
 
+      <AddActionMenu menuId='Add_Menu' folder={folders.data[currentFolderId] || {}} />
+      <FolderActionMenu
+        menuId='Folder_Menu'
+        folder={folders.data[currentFolderId] || {}}
+      />
       <FileContextMenu />
       <FolderContextMenu />
       <SubpartContextMenu />

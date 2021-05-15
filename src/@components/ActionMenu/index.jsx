@@ -257,7 +257,6 @@ export const ActionMenu = props => {
     isOpenByDefault = false,
     isMobileOnly = false,
     showTop,
-    setContainerRef,
   } = props
   const c = useStyles({ showTop })
   const {
@@ -304,7 +303,6 @@ export const ActionMenu = props => {
       })}
       containerClassName={containerClassName}
       containerStyle={containerStyle}
-      setContainerRef={setContainerRef}
       TargetComponent={TargetComponent}
       TargetComponentProps={TargetComponentProps}
       isAutoClosed={isAutoClosed}

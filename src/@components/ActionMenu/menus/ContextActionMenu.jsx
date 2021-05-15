@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { createUseStyles } from '@physna/voxel-ui/@style'
 
 import { ActionMenu } from '@components'
+import { useActionMenu } from '@contexts/ActionMenu'
 
 const useStyles = createUseStyles(_ => {
   return {
@@ -31,10 +32,11 @@ const ContextActionMenu = ({
   menuComponentProps,
   onChange = noop,
   options = [],
+  menuId = '',
 }) => {
   const c = useStyles()
-  const [menuElement, setMenuElement] = useState(null)
   const [triggerOpen, setTriggerOpen] = useState(0)
+  const { contextMenuData } = useActionMenu()
   const [menuPosition, setMenuPosition] = useState({
     left: 0,
     top: 0,
@@ -69,36 +71,18 @@ const ContextActionMenu = ({
   )
 
   useEffect(() => {
-    if (!menuElement) {
-      return
-    }
-
-    const container = menuElement.parentElement
-
-    const contextMenuHandler = ev => {
-      ev.preventDefault()
-      ev.stopPropagation()
-      setTriggerOpen(n => n + 1)
+    if (menuId && contextMenuData[menuId]) {
+      const { x, y } = contextMenuData[menuId]
       setMenuPosition({
-        left: ev.pageX,
-        top: ev.pageY,
+        left: x,
+        top: y,
       })
+      setTriggerOpen(n => n + 1)
     }
-
-    if (container) {
-      container.addEventListener('contextmenu', contextMenuHandler)
-    }
-
-    return () => {
-      if (container) {
-        container.removeEventListener('contextmenu', contextMenuHandler)
-      }
-    }
-  }, [menuElement])
+  }, [contextMenuData, menuId])
 
   return (
     <ActionMenu
-      setContainerRef={setMenuElement}
       MenuComponentProps={menuProps}
       TargetComponent={TargetComponent}
       TargetComponentProps={targetComponentProps}

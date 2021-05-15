@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import classnames from 'classnames'
 import { useStoreon } from 'storeon/react'
 import { Link, useHistory } from 'react-router-dom'
@@ -14,7 +14,7 @@ import {
 
 import { Divider, FileExplorer, ProfilePicture, NavLink, Spacer } from '@components'
 import { authenticationService } from '@services'
-import { useCurrentUser } from '@hooks'
+import { useContextMenu, useCurrentUser } from '@hooks'
 
 import { ReactComponent as Logo } from '@svg/logo.svg'
 import { ReactComponent as ClockIcon } from '@svg/icon-clock.svg'
@@ -165,6 +165,7 @@ const WorkspaceNavbar = ({
   const history = useHistory()
   const path = history.location.pathname
   const [showFileExplorer, setShowFileExplorer] = useState(false)
+  const navbarRef = useRef()
 
   useEffect(() => {
     if (folderNav.files) {
@@ -227,11 +228,14 @@ const WorkspaceNavbar = ({
     history.push('/')
   }, [history])
 
+  useContextMenu(navbarRef, 'Add_Menu')
+
   return (
     <nav
       className={classnames(c.WorkspaceNavbar, {
         [c.WorkspaceNavbar__visible]: isMobileNavOpen,
       })}
+      ref={navbarRef}
     >
       <Spacer size={'1rem'} />
       <div className={c.WorkspaceNavbar_NavContainer}>

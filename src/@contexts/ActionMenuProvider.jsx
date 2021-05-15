@@ -12,11 +12,19 @@ const useActionMenuProvider = () => {
           return { ...state, isOpen: action.payload }
         case 'data':
           return { ...state, data: action.payload }
+        case 'context':
+          return {
+            ...state,
+            context: {
+              ...state.context,
+              [action.menuId]: action.payload,
+            },
+          }
         default:
           return state
       }
     },
-    { isOpen: false, Component: null, data: {} }
+    { isOpen: false, Component: null, data: {}, context: {} }
   )
 
   const setActionMenu = actionMenuObj => {
@@ -47,6 +55,14 @@ const useActionMenuProvider = () => {
     })
   }
 
+  const setContextMenuData = (menuId, data) => {
+    dispatch({
+      type: 'context',
+      menuId,
+      payload: data,
+    })
+  }
+
   const ActionMenuComponent = useMemo(() => {
     return (actionMenu.isOpen && actionMenu.Component) || null
   }, [actionMenu])
@@ -56,8 +72,10 @@ const useActionMenuProvider = () => {
     setActionMenuOpen,
     setActionMenuClose,
     setActionMenuData,
+    setContextMenuData,
     ActionMenuComponent,
     actionMenuData: actionMenu.data,
+    contextMenuData: actionMenu.context,
     isActionMenuOpen: actionMenu.isOpen,
   }
 }
@@ -68,8 +86,10 @@ export const ActionMenuProvider = ({ children }) => {
     setActionMenuOpen,
     setActionMenuClose,
     setActionMenuData,
+    setContextMenuData,
     ActionMenuComponent,
     actionMenuData,
+    contextMenuData,
     isActionMenuOpen,
   } = useActionMenuProvider()
   return (
@@ -79,8 +99,10 @@ export const ActionMenuProvider = ({ children }) => {
         setActionMenuOpen,
         setActionMenuClose,
         setActionMenuData,
+        setContextMenuData,
         ActionMenuComponent,
         actionMenuData,
+        contextMenuData,
         isActionMenuOpen,
       }}
     >

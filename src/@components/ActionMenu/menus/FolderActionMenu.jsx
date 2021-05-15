@@ -10,6 +10,7 @@ import { track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
 import { FOLDER_MENU_OPTIONS } from '@constants/menuOptions'
 import * as types from '@constants/storeEventTypes'
+import { useActionMenu } from '@contexts/ActionMenu'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -53,12 +54,14 @@ const FolderActionMenu = ({
   omitOptions = [],
   isStaticBackground = false,
   onChange = noop,
-  isContextMenu,
+  menuId = '',
 }) => {
   const { setOverlay } = useOverlay()
   const { dispatch } = useStoreon()
+  const { contextMenuData } = useActionMenu()
   const c = useStyles({})
-  const ActionMenuComponent = isContextMenu ? ContextActionMenu : DotStackActionMenu
+  const ActionMenuComponent = menuId ? ContextActionMenu : DotStackActionMenu
+  const currentFolder = contextMenuData[menuId]?.data || folder
 
   const options = [
     {
@@ -89,19 +92,19 @@ const FolderActionMenu = ({
       isOpen: true,
       template: 'editFolder',
       data: {
-        folder,
+        folder: currentFolder,
         type: 'folder',
         animateIn: true,
         windowed: true,
         dialogue: true,
       },
     })
-  }, [folder, setOverlay])
+  }, [currentFolder, setOverlay])
 
   const handleStarFolder = useCallback(() => {
     track('Folder Menu - Star Folder')
-    dispatch(types.LIKE_FOLDER, { id: folder.id, owner: folder.owner })
-  }, [dispatch, folder.id, folder.owner])
+    dispatch(types.LIKE_FOLDER, { id: currentFolder.id, owner: currentFolder.owner })
+  }, [dispatch, currentFolder])
 
   const handleAddFolder = useCallback(() => {
     track('Folder Menu - Create Folder')
@@ -109,13 +112,13 @@ const FolderActionMenu = ({
       isOpen: true,
       template: 'addFolder',
       data: {
-        folder,
+        folder: currentFolder,
         animateIn: true,
         windowed: true,
         dialogue: true,
       },
     })
-  }, [folder, setOverlay])
+  }, [currentFolder, setOverlay])
 
   const handleDeleteFolder = useCallback(() => {
     track('Folder Menu - Delete Folder')
@@ -123,14 +126,14 @@ const FolderActionMenu = ({
       isOpen: true,
       template: 'deleteFolder',
       data: {
-        folder,
+        folder: currentFolder,
         type: 'folder',
         animateIn: true,
         windowed: true,
         dialogue: true,
       },
     })
-  }, [folder, setOverlay])
+  }, [currentFolder, setOverlay])
 
   const handleOnChange = value => {
     switch (value) {
@@ -155,6 +158,7 @@ const FolderActionMenu = ({
       isStaticBackground={isStaticBackground}
       options={options}
       menuComponentProps={{ className: c.FolderActionMenu }}
+      menuId={menuId}
     />
   )
 }

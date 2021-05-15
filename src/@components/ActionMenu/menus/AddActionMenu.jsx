@@ -6,6 +6,7 @@ import { ReactComponent as UploadIcon } from '@svg/icon-upload.svg'
 import { track } from '@utilities/analytics'
 import { useOverlay } from '@hooks'
 import { ADD_MENU_OPTIONS } from '@constants/menuOptions'
+import { useActionMenu } from '@contexts/ActionMenu'
 
 const useStyles = createUseStyles(theme => {
   const {
@@ -42,10 +43,12 @@ const useStyles = createUseStyles(theme => {
   }
 })
 
-const AddActionMenu = ({ folder = {}, isContextMenu }) => {
+const AddActionMenu = ({ folder = {}, menuId = '' }) => {
   const { setOverlay } = useOverlay()
   const c = useStyles({})
-  const ActionMenuComponent = isContextMenu ? ContextActionMenu : DotStackActionMenu
+  const { contextMenuData } = useActionMenu()
+  const ActionMenuComponent = menuId ? ContextActionMenu : DotStackActionMenu
+  const currentFolder = contextMenuData[menuId]?.data || folder
 
   const options = [
     {
@@ -66,13 +69,13 @@ const AddActionMenu = ({ folder = {}, isContextMenu }) => {
       isOpen: true,
       template: 'addFolder',
       data: {
-        folder,
+        folder: currentFolder,
         animateIn: true,
         windowed: true,
         dialogue: true,
       },
     })
-  }, [folder, setOverlay])
+  }, [currentFolder, setOverlay])
 
   const handleUploadModels = useCallback(() => {
     track('Add Menu - Upload Models')
@@ -80,13 +83,13 @@ const AddActionMenu = ({ folder = {}, isContextMenu }) => {
       isOpen: true,
       template: 'multiUpload',
       data: {
-        folderId: folder.id,
+        folderId: currentFolder.id,
         animateIn: true,
         windowed: true,
         dialogue: true,
       },
     })
-  }, [folder, setOverlay])
+  }, [currentFolder, setOverlay])
 
   const handleOnChange = value => {
     switch (value) {
@@ -101,6 +104,7 @@ const AddActionMenu = ({ folder = {}, isContextMenu }) => {
 
   return (
     <ActionMenuComponent
+      menuId={menuId}
       onChange={handleOnChange}
       actionMenuTitle='Add'
       alignItems='left'
